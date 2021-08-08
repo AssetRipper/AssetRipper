@@ -4,36 +4,24 @@ using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Lz4;
 using AssetRipper.Core.Parser.Files.BundleFile.IO;
 using AssetRipper.Core.Parser.Files.BundleFile.Parser;
-using AssetRipper.Core.Parser.Files.BundleFile.Parser.Header;
 using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.Entries;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.GameStructure;
 using System;
 using System.IO;
+using AssetRipper.Core.Parser.Files.BundleFile.Header;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Parser.Files.BundleFile
 {
 	public sealed class BundleFileScheme : FileSchemeList
 	{
+		public BundleHeader Header { get; } = new BundleHeader();
+		public BundleMetadata Metadata { get; } = new BundleMetadata();
+		public override FileEntryType SchemeType => FileEntryType.Bundle;
+
 		private BundleFileScheme(string filePath, string fileName) : base(filePath, fileName) { }
-
-		internal static BundleFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
-		{
-			BundleFileScheme scheme = new BundleFileScheme(filePath, fileName);
-			using (MemoryStream stream = new MemoryStream(buffer, 0, buffer.Length, false))
-			{
-				scheme.ReadScheme(stream);
-			}
-			return scheme;
-		}
-
-		internal static BundleFileScheme ReadScheme(Stream stream, string filePath, string fileName)
-		{
-			BundleFileScheme scheme = new BundleFileScheme(filePath, fileName);
-			scheme.ReadScheme(stream);
-			return scheme;
-		}
 
 		internal BundleFile ReadFile(GameProcessorContext context)
 		{
@@ -45,6 +33,14 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 			return bundle;
 		}
 
+		internal static BundleFileScheme ReadScheme(byte[] buffer, string filePath, string fileName) => ReadScheme(new MemoryStream(buffer, 0, buffer.Length, false), filePath, fileName);
+		internal static BundleFileScheme ReadScheme(Stream stream, string filePath, string fileName)
+		{
+			BundleFileScheme scheme = new BundleFileScheme(filePath, fileName);
+			scheme.ReadScheme(stream);
+			return scheme;
+		}
+
 		private void ReadScheme(Stream stream)
 		{
 			long basePosition = stream.Position;
@@ -54,14 +50,14 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 			{
 				case BundleType.UnityRaw:
 				case BundleType.UnityWeb:
-					ReadRawWebMetadata(stream, out Stream dataStream, out long metadataOffset);
-					ReadRawWebData(dataStream, metadataOffset);
+					ReadRawWebMetadata(stream, out Stream dataStream, out long metadataOffset);//ReadBlocksAndDirectory
+					ReadRawWebData(dataStream, metadataOffset);//also ReadBlocksAndDirectory
 					break;
 
 				case BundleType.UnityFS:
 					long headerSize = stream.Position - basePosition;
-					ReadFileStreamMetadata(stream, basePosition);
-					ReadFileStreamData(stream, basePosition, headerSize);
+					ReadFileStreamMetadata(stream, basePosition);//ReadBlocksInfoAndDirectory
+					ReadFileStreamData(stream, basePosition, headerSize);//ReadBlocks and ReadFiles
 					break;
 
 				default:
@@ -79,7 +75,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 				{
 					if (stream.Position - headerPosition != Header.RawWeb.HeaderSize)
 					{
-						throw new Exception($"Read {stream.Position - headerPosition} but expected {Header.RawWeb.HeaderSize}");
+						throw new Exception($"Read {stream.Position - headerPosition} but expected {Header.RawWeb.HeaderSize} bytes while reading the raw/web bundle header.");
 					}
 				}
 			}
@@ -121,6 +117,10 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 		private void ReadFileStreamMetadata(Stream stream, long basePosition)
 		{
 			BundleFileStreamHeader header = Header.FileStream;
+			if(Header.Version >= BundleVersion.BF_Addressables)
+			{
+				stream.Align(16);
+			}
 			if (header.Flags.IsBlocksInfoAtTheEnd())
 			{
 				stream.Position = basePosition + (header.Size - header.CompressedBlocksInfoSize);
@@ -179,7 +179,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 			{
 				if (stream.Position - metadataPosition != metadataSize)
 				{
-					throw new Exception($"Read {stream.Position - metadataPosition} but expected {metadataSize}");
+					throw new Exception($"Read {stream.Position - metadataPosition} but expected {metadataSize} while reading bundle metadata");
 				}
 			}
 		}
@@ -213,10 +213,5 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 				}
 			}
 		}
-
-		public override FileEntryType SchemeType => FileEntryType.Bundle;
-
-		public BundleHeader Header { get; } = new BundleHeader();
-		public BundleMetadata Metadata { get; } = new BundleMetadata();
 	}
 }

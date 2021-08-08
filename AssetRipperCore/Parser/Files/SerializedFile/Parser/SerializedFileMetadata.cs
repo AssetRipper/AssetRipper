@@ -99,6 +99,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 #warning TODO: pass enableTypeTree as Read argument
 			Types = reader.ReadSerializedArray(() => new SerializedType(enableTypeTree));
+
 			if (HasLongFileID(reader.Generation))
 			{
 				LongFileID = reader.ReadUInt32();
@@ -106,11 +107,14 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 #warning TODO: pass LongFileID to ObjectInfo
 			Object = reader.ReadSerializedArray<ObjectInfo>();
+
 			if (HasScriptTypes(reader.Generation))
 			{
 				ScriptTypes = reader.ReadSerializedArray<LocalSerializedObjectIdentifier>();
 			}
+
 			Externals = reader.ReadSerializedArray<FileIdentifier>();
+
 			if (HasRefTypes(reader.Generation))
 			{
 				RefTypes = reader.ReadSerializedArray(() => new SerializedType(enableTypeTree));

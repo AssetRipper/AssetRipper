@@ -1,7 +1,7 @@
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.MultiFile;
+using AssetRipper.Core.Parser.Files.BundleFile.Header;
 using AssetRipper.Core.Parser.Files.BundleFile.Parser;
-using AssetRipper.Core.Parser.Files.BundleFile.Parser.Header;
 using AssetRipper.Core.Parser.Files.Entries;
 using System;
 using System.IO;
@@ -10,6 +10,9 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 {
 	public sealed class BundleFile : FileList
 	{
+		public BundleHeader Header { get; }
+		public BundleMetadata Metadata { get; }
+
 		internal BundleFile(BundleFileScheme scheme) : base(scheme.NameOrigin)
 		{
 			if (scheme == null)
@@ -21,29 +24,9 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 			Metadata = scheme.Metadata;
 		}
 
-		public static bool IsBundleFile(string filePath)
-		{
-			using (Stream stream = MultiFileStream.OpenRead(filePath))
-			{
-				return IsBundleFile(stream);
-			}
-		}
-
-		public static bool IsBundleFile(byte[] buffer, int offset, int size)
-		{
-			using (MemoryStream stream = new MemoryStream(buffer, offset, size, false))
-			{
-				return IsBundleFile(stream);
-			}
-		}
-
-		public static bool IsBundleFile(Stream stream)
-		{
-			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
-			{
-				return BundleHeader.IsBundleHeader(reader);
-			}
-		}
+		public static bool IsBundleFile(string filePath) => IsBundleFile(MultiFileStream.OpenRead(filePath));
+		public static bool IsBundleFile(byte[] buffer, int offset, int size) => IsBundleFile(new MemoryStream(buffer, offset, size, false));
+		public static bool IsBundleFile(Stream stream) => BundleHeader.IsBundleHeader(new EndianReader(stream, EndianType.BigEndian));
 
 		public static BundleFileScheme LoadScheme(string filePath)
 		{
@@ -54,17 +37,8 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 			}
 		}
 
-		public static BundleFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
-		{
-			return BundleFileScheme.ReadScheme(buffer, filePath, fileName);
-		}
+		public static BundleFileScheme ReadScheme(byte[] buffer, string filePath, string fileName) => BundleFileScheme.ReadScheme(buffer, filePath, fileName);
+		public static BundleFileScheme ReadScheme(Stream stream, string filePath, string fileName) => BundleFileScheme.ReadScheme(stream, filePath, fileName);
 
-		public static BundleFileScheme ReadScheme(Stream stream, string filePath, string fileName)
-		{
-			return BundleFileScheme.ReadScheme(stream, filePath, fileName);
-		}
-
-		public BundleHeader Header { get; }
-		public BundleMetadata Metadata { get; }
 	}
 }

@@ -1,8 +1,9 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Parser.Files.BundleFile.Parser;
 using System;
 
-namespace AssetRipper.Core.Parser.Files.BundleFile.Parser.Header
+namespace AssetRipper.Core.Parser.Files.BundleFile.Header
 {
 	public sealed class BundleHeader
 	{
@@ -31,13 +32,37 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser.Header
 		public BundleRawWebHeader RawWeb { get; set; }
 		public BundleFileStreamHeader FileStream { get; set; }
 
+		public void Read(EndianReader reader)
+		{
+			string signature = reader.ReadStringZeroTerm();
+			Signature = ParseSignature(signature);
+			Version = (BundleVersion)reader.ReadInt32();
+			UnityWebBundleVersion = reader.ReadStringZeroTerm();
+			string engineVersion = reader.ReadStringZeroTerm();
+			UnityWebMinimumRevision = UnityVersion.Parse(engineVersion);
+
+			switch (Signature)
+			{
+				case BundleType.UnityRaw:
+				case BundleType.UnityWeb:
+					RawWeb = new BundleRawWebHeader(reader, Version);//ReadHeaderAndBlocksInfo
+					break;
+				case BundleType.UnityFS:
+					FileStream = new BundleFileStreamHeader(reader);//ReadHeader
+					break;
+				case BundleType.UnityArchive:
+					throw new NotSupportedException("UnityArchives are not currently supported");
+				default:
+					throw new Exception($"Unknown bundle signature '{Signature}'");
+			}
+		}
+
 		public static BundleType ParseSignature(string signature)
 		{
 			if (TryParseSignature(signature, out BundleType bundleType))
-			{
 				return bundleType;
-			}
-			throw new ArgumentException($"Unsupported signature '{signature}'");
+			else
+				throw new ArgumentException($"Unsupported signature '{signature}'");
 		}
 
 		public static bool TryParseSignature(string signatureString, out BundleType type)
@@ -47,19 +72,15 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser.Header
 				case nameof(BundleType.UnityWeb):
 					type = BundleType.UnityWeb;
 					return true;
-
 				case nameof(BundleType.UnityRaw):
 					type = BundleType.UnityRaw;
 					return true;
-
 				case nameof(BundleType.UnityFS):
 					type = BundleType.UnityFS;
 					return true;
-
 				case nameof(BundleType.UnityArchive):
 					type = BundleType.UnityArchive;
 					return true;
-
 				default:
 					type = default;
 					return false;
@@ -80,36 +101,6 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser.Header
 				}
 			}
 			return false;
-		}
-
-		public void Read(EndianReader reader)
-		{
-			string signature = reader.ReadStringZeroTerm();
-			Signature = ParseSignature(signature);
-			Version = (BundleVersion)reader.ReadInt32();
-			UnityWebBundleVersion = reader.ReadStringZeroTerm();
-			string engineVersion = reader.ReadStringZeroTerm();
-			UnityWebMinimumRevision = Files.UnityVersion.Parse(engineVersion);
-
-			switch (Signature)
-			{
-				case BundleType.UnityRaw:
-				case BundleType.UnityWeb:
-					RawWeb = new BundleRawWebHeader();
-					RawWeb.Read(reader, Version);
-					break;
-
-				case BundleType.UnityFS:
-					FileStream = new BundleFileStreamHeader();
-					FileStream.Read(reader);
-					break;
-
-				case BundleType.UnityArchive:
-					throw new NotSupportedException("UnityArchives are not supported");
-
-				default:
-					throw new Exception($"Unknown bundle signature '{Signature}'");
-			}
 		}
 	}
 }

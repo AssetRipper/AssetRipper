@@ -28,6 +28,10 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		/// 5.0.1 to 5.5.0unk exclusive
 		/// </summary>
 		public static bool HasStripped(FormatVersion generation) => generation >= FormatVersion.SupportsStrippedObject && generation < FormatVersion.RefactorTypeData;
+		/// <summary>
+		/// 2020.1.0 and greater / Format Version 22 +
+		/// </summary>
+		public static bool HasLargeFilesSupport(FormatVersion generation) => generation >= FormatVersion.LargeFilesSupport;
 
 		public void Read(SerializedReader reader)
 		{
@@ -41,7 +45,15 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				FileID = reader.ReadInt32();
 			}
 
-			ByteStart = reader.ReadUInt32();
+			if (HasLargeFilesSupport(reader.Generation))
+			{
+				ByteStart = reader.ReadInt64();
+			}
+			else
+			{
+				ByteStart = reader.ReadUInt32();
+			}
+			
 			ByteSize = reader.ReadInt32();
 			TypeID = reader.ReadInt32();
 			if (HasClassID(reader.Generation))
@@ -74,7 +86,15 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				writer.Write((int)FileID);
 			}
 
-			writer.Write(ByteStart);
+			if (HasLargeFilesSupport(writer.Generation))
+			{
+				writer.Write(ByteStart);
+			}
+			else
+			{
+				writer.Write((uint)ByteStart);
+			}
+			
 			writer.Write(ByteSize);
 			writer.Write(TypeID);
 			if (HasClassID(writer.Generation))
@@ -109,7 +129,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		/// Offset to the object data.
 		/// Add to <see cref="SerializedFileHeader.DataOffset"> to get the absolute offset within the serialized file.
 		/// </summary>
-		public uint ByteStart { get; set; }
+		public long ByteStart { get; set; }
 		/// <summary>
 		/// Size of the object data.
 		/// </summary>

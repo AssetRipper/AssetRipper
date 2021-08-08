@@ -1,10 +1,11 @@
 ﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Files.BundleFile.Parser;
 
-namespace AssetRipper.Core.Parser.Files.BundleFile.Parser.Header
+namespace AssetRipper.Core.Parser.Files.BundleFile.Header
 {
 	public sealed class BundleFileStreamHeader
 	{
-		public void Read(EndianReader reader)
+		public BundleFileStreamHeader(EndianReader reader)
 		{
 			Size = reader.ReadInt64();
 			CompressedBlocksInfoSize = reader.ReadInt32();

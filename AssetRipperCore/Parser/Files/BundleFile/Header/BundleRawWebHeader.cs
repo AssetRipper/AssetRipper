@@ -1,24 +1,25 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Parser.Files.BundleFile.Parser;
 
-namespace AssetRipper.Core.Parser.Files.BundleFile.Parser.Header
+namespace AssetRipper.Core.Parser.Files.BundleFile.Header
 {
 	public sealed class BundleRawWebHeader
 	{
 		/// <summary>
-		/// 5.2.0 and greater
+		/// 5.2.0 and greater / Bundle Version 4 +
 		/// </summary>
 		public static bool HasHash(BundleVersion generation) => generation >= BundleVersion.BF_520a1;
 		/// <summary>
-		/// 2.6.0 and greater
+		/// 2.6.0 and greater / Bundle Version 2 +
 		/// </summary>
 		public static bool HasCompleteFileSize(BundleVersion generation) => generation >= BundleVersion.BF_260_340;
 		/// <summary>
-		/// 3.5.0 and greater
+		/// 3.5.0 and greater / Bundle Version 3 +
 		/// </summary>
 		public static bool HasUncompressedBlocksInfoSize(BundleVersion generation) => generation >= BundleVersion.BF_350_4x;
 
-		public void Read(EndianReader reader, BundleVersion generation)
+		public BundleRawWebHeader(EndianReader reader, BundleVersion generation)
 		{
 			if (HasHash(generation))
 			{

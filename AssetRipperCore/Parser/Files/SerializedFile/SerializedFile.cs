@@ -54,22 +54,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			}
 		}
 
-		public static bool IsSerializedFile(string filePath)
-		{
-			using (Stream stream = MultiFileStream.OpenRead(filePath))
-			{
-				return IsSerializedFile(stream);
-			}
-		}
-
-		public static bool IsSerializedFile(byte[] buffer, int offset, int size)
-		{
-			using (MemoryStream stream = new MemoryStream(buffer, offset, size, false))
-			{
-				return IsSerializedFile(stream);
-			}
-		}
-
+		public static bool IsSerializedFile(string filePath) => IsSerializedFile(MultiFileStream.OpenRead(filePath));
+		public static bool IsSerializedFile(byte[] buffer, int offset, int size) => IsSerializedFile(new MemoryStream(buffer, offset, size, false));
 		public static bool IsSerializedFile(Stream stream)
 		{
 			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))

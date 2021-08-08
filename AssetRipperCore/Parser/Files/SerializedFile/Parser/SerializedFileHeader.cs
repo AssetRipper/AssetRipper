@@ -11,11 +11,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		/// <summary>
 		/// Size of the metadata parts of the file
 		/// </summary>
-		public int MetadataSize { get; set; }
+		public long MetadataSize { get; set; }
 		/// <summary>
 		/// Size of the whole file
 		/// </summary>
-		public uint FileSize { get; set; }
+		public long FileSize { get; set; }
 		/// <summary>
 		/// File format version. The number is required for backward compatibility and is normally incremented after the file format has been changed in a major update
 		/// </summary>
@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		/// <summary>
 		/// Offset to the serialized object data. It starts at the data for the first object
 		/// </summary>
-		public uint DataOffset { get; set; }
+		public long DataOffset { get; set; }
 		/// <summary>
 		/// Presumably controls the byte order of the data structure. This field is normally set to 0, which may indicate a little endian byte order.
 		/// </summary>
@@ -33,9 +33,14 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 
 		/// <summary>
-		/// 3.5.0 and greater
+		/// 3.5.0 and greater / Format Version 9 +
 		/// </summary>
 		public static bool HasEndianess(FormatVersion generation) => generation >= FormatVersion.Unknown_9;
+
+		/// <summary>
+		/// 2020.1.0 and greater / Format Version 22 +
+		/// </summary>
+		public static bool HasLargeFilesSupport(FormatVersion generation) => generation >= FormatVersion.LargeFilesSupport;
 
 		public static bool IsSerializedFileHeader(EndianReader reader, uint fileSize)
 		{
@@ -91,8 +96,16 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				Endianess = reader.ReadBoolean();
 				reader.AlignStream();
 			}
+			if (HasLargeFilesSupport(Version))
+			{
+				MetadataSize = reader.ReadUInt32();
+				FileSize = reader.ReadInt64();
+				DataOffset = reader.ReadInt64();
+				reader.ReadInt64(); // unknown
+			}
 		}
 
+#warning TODO: Needs verified, especially the value byte sizes
 		public void Write(EndianWriter writer)
 		{
 			writer.Write(MetadataSize);
