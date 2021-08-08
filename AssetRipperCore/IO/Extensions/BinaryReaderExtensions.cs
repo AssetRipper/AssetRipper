@@ -35,28 +35,16 @@ namespace AssetRipper.Core.IO.Extensions
 			while (count > 0);
 		}
 
-		public static void AlignStream(this BinaryReader reader)
-		{
-			reader.AlignStream(4);
-		}
-
-		public static void AlignStream(this BinaryReader reader, int alignment)
-		{
-			var pos = reader.BaseStream.Position;
-			var mod = pos % alignment;
-			if (mod != 0)
-			{
-				reader.BaseStream.Position += alignment - mod;
-			}
-		}
+		public static void AlignStream(this BinaryReader reader) => reader.BaseStream.Align();
+		public static void AlignStream(this BinaryReader reader, int alignment) => reader.BaseStream.Align(alignment);
 
 		public static string ReadAlignedString(this BinaryReader reader)
 		{
-			var length = reader.ReadInt32();
+			int length = reader.ReadInt32();
 			if (length > 0 && length <= reader.BaseStream.Length - reader.BaseStream.Position)
 			{
-				var stringData = reader.ReadBytes(length);
-				var result = Encoding.UTF8.GetString(stringData);
+				byte[] stringData = reader.ReadBytes(length);
+				string result = Encoding.UTF8.GetString(stringData);
 				reader.AlignStream(4);
 				return result;
 			}

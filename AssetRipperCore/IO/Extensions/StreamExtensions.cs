@@ -6,6 +6,17 @@ namespace AssetRipper.Core.IO.Extensions
 	{
 		private const int BufferSize = 81920;
 
+		public static void Align(this Stream _this) => Align(_this, 4);
+		public static void Align(this Stream _this, int alignment)
+		{
+			long pos = _this.Position;
+			long mod = pos % alignment;
+			if (mod != 0)
+			{
+				_this.Position += alignment - mod;
+			}
+		}
+
 		public static void CopyTo(this Stream source, Stream destination, long size)
 		{
 			var buffer = new byte[BufferSize];

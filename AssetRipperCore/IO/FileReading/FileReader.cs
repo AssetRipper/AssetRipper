@@ -9,9 +9,9 @@ namespace AssetRipper.Core.IO.FileReading
 {
 	public class FileReader : EndianReader
 	{
-		public string FullPath;
-		public string FileName;
-		public FileType FileType;
+		public string FullPath { get; }
+		public string FileName { get; }
+		public FileType FileType { get; }
 
 		public FileReader(string path) : this(path, File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) { }
 
