@@ -17,6 +17,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v1
     - name: Restore dependencies
       run: dotnet restore
     - name: Build x64
