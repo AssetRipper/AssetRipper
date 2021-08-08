@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="Instruction">
+    <DisplayString>{{ id={id} op={eOpcode} o0={asOperands[0]}, o1={asOperands[1]}}}</DisplayString>
+  </Type>
+  <Type Name="Operand">
+    <DisplayString>{{ type={eType}, reg={ui32RegisterNumber} }}</DisplayString>
+  </Type>
+
+</AutoVisualizer>
