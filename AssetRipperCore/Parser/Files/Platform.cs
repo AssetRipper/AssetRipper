@@ -123,9 +123,20 @@ namespace AssetRipper.Core.Parser.Files
 		/// <summary>
 		/// Build a Nintendo Switch player
 		/// </summary>
-		Switch					= 38,
+		Switch					= 39,
+		Lumin					= 40,
+		Stadia					= 41,
+		CloudRendering			= 42,
+		GameCoreXboxSeries		= 43,
+		GameCoreXboxOne			= 44,
+		/// <summary>
+		/// Build a PS5 Standalone
+		/// </summary>
+		PS5 = 45,
 		PlayerTypeCount,
-		
+
+		UnknownPlatform = 9999,
+
 		/// <summary>
 		/// Editor
 		/// </summary>

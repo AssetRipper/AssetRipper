@@ -4,7 +4,7 @@
 	{
 		NoTarget = -2,
 		DashboardWidget = 1,
-		StandaloneOSX = 2,
+		StandaloneOSXUniversal = 2,
 		StandaloneOSXPPC = 3,
 		StandaloneOSXIntel = 4,
 		StandaloneWindows,

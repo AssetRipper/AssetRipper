@@ -70,8 +70,12 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		/// </summary>
 		SupportsRefObject				= 20,
 		/// <summary>
-		/// 2019.3 to x
+		/// 2019.3 to 2019.4
 		/// </summary>
 		StoresTypeDependencies			= 21,
+		/// <summary>
+		/// 2020.1 to x
+		/// </summary>
+		LargeFilesSupport				= 22,
 	}
 }
