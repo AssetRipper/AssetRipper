@@ -13,18 +13,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
     - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v1
+      uses: microsoft/setup-msbuild@v1.0.2
     - name: Restore dependencies
-      run: dotnet restore
+      run: nuget restore
     - name: Build x64
-      run: dotnet build /p:Configuration=Release /p:Platform=x64
+      run: msbuild /m /p:Configuration=Release /p:Platform=x64
     - name: Build x86
-      run: dotnet build /p:Configuration=Release /p:Platform=x86
+      run: msbuild /m /p:Configuration=Release /p:Platform=x86
     - name: Upload AssetRipperConsole x64
       uses: actions/upload-artifact@v2
       with:
@@ -49,8 +45,6 @@ jobs:
         name: AssetRipperGUI_win86
         path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x86\*
         if-no-files-found: error
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
   build_linux:
 
     runs-on: ubuntu-latest
