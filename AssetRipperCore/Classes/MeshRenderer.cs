@@ -15,6 +15,9 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public static bool HasVertex(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(5) && flags.IsRelease();
 
+		/// <summary>
+		/// 2020 and greater.
+		/// </summary>
 		public static bool HasEnlightenVertexStream(UnityVersion version) => version.IsGreaterEqual(2020);
 
 		public override void Read(AssetReader reader)
