@@ -148,6 +148,10 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// </summary>
 		public static bool HasRayTracingMode(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasRayTraceProcedural(UnityVersion version) => version.IsGreaterEqual(2020);
+		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
 		public static bool HasProbeAnchor(UnityVersion version) => version.IsGreaterEqual(3, 5);
@@ -327,6 +331,10 @@ namespace AssetRipper.Core.Classes.Renderer
 			if (HasRayTracingMode(reader.Version))
 			{
 				RayTracingMode = (RayTracingMode)reader.ReadByte();
+			}
+			if (HasRayTraceProcedural(reader.Version))
+			{
+				RayTraceProcedural = reader.ReadByte();
 			}
 			if (IsAlign2(reader.Version))
 			{
@@ -524,12 +532,20 @@ namespace AssetRipper.Core.Classes.Renderer
 			node.Add(CastShadowsName, (byte)GetCastShadows(container.Version));
 			node.Add(ReceiveShadowsName, GetReceiveShadows(container.Version));
 			node.Add(DynamicOccludeeName, GetDynamicOccludee(container.Version));
+			if (HasStaticShadowCaster(container.ExportVersion))
+			{
+				node.Add(StaticShadowCasterName, StaticShadowCaster);
+			}
 			node.Add(MotionVectorsName, (byte)GetMotionVectors(container.Version));
 			node.Add(LightProbeUsageName, (byte)LightProbeUsage);
 			node.Add(ReflectionProbeUsageName, (byte)GetReflectionProbeUsage(container.Version));
 			if (HasRayTracingMode(container.ExportVersion))
 			{
 				node.Add(RayTracingModeName, (byte)RayTracingMode);
+			}
+			if (HasRayTraceProcedural(container.ExportVersion))
+			{
+				node.Add(RayTraceProceduralName, RayTraceProcedural);
 			}
 			if (HasRenderingLayerMask(container.ExportVersion))
 			{
@@ -724,6 +740,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		public bool UseReflectionProbes => ReflectionProbeUsage != ReflectionProbeUsage.Off;
 		public ReflectionProbeUsage ReflectionProbeUsage { get; set; }
 		public RayTracingMode RayTracingMode { get; set; }
+		public byte RayTraceProcedural { get; set; }
 		public uint RenderingLayerMask { get; set; }
 		public int RendererPriority { get; set; }
 		public ushort LightmapIndex { get; set; }
@@ -759,6 +776,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		public const string LightProbeUsageName = "m_LightProbeUsage";
 		public const string ReflectionProbeUsageName = "m_ReflectionProbeUsage";
 		public const string RayTracingModeName = "m_RayTracingMode";
+		public const string RayTraceProceduralName = "m_RayTraceProcedural";
 		public const string RenderingLayerMaskName = "m_RenderingLayerMask";
 		public const string RendererPriorityName = "m_RendererPriority";
 		public const string MaterialsName = "m_Materials";
