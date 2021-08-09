@@ -44,53 +44,104 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 		public static bool IsSerializedFileHeader(EndianReader reader, uint fileSize)
 		{
-			long position = reader.BaseStream.Position;
+			long initialPosition = reader.BaseStream.Position;
+			
+			//Sanity check we have enough room here first.
 			if (reader.BaseStream.Position + HeaderMinSize > reader.BaseStream.Length)
 			{
 				return false;
 			}
-			int metadataSize = reader.ReadInt32();
-			if (metadataSize < SerializedFileMetadata.MetadataMinSize)
-			{
-				reader.BaseStream.Position = position;
-				return false;
-			}
-			uint hFileSize = reader.ReadUInt32();
-			if (hFileSize < HeaderMinSize + SerializedFileMetadata.MetadataMinSize)
-			{
-				reader.BaseStream.Position = position;
-				return false;
-			}
-			if (hFileSize != fileSize)
-			{
-				reader.BaseStream.Position = position;
-				return false;
-			}
+			
+			// Read generation first, the format changed hugely in gen 22 (unity 2020)
+			// Generation is always at [base + 0x8]
+			reader.BaseStream.Position += 8;
+			
 			int generation = reader.ReadInt32();
 			if (!Enum.IsDefined(typeof(FormatVersion), generation))
 			{
-				reader.BaseStream.Position = position;
+				reader.BaseStream.Position = initialPosition;
 				return false;
 			}
 
-			reader.BaseStream.Position = position;
+			reader.BaseStream.Position = initialPosition;
+			int metadataSize;
+			ulong headerDefinedFileSize;
+			if (generation < 22)
+			{
+				//Pre-2020 format: 
+				// - Metadata Size
+				// - File Size
+				// - Generation (already read)
+				//That's all we check here.
+
+				metadataSize = reader.ReadInt32();
+
+				headerDefinedFileSize = reader.ReadUInt32();
+			}
+			else
+			{
+				//2020 Format:
+				//First known value is at 0x14, and is metadata size as a 32-bit integer.
+				//Then the file size as a 64-bit integer.
+				reader.BaseStream.Position = initialPosition + 0x14;
+				metadataSize = reader.ReadInt32();
+				headerDefinedFileSize = reader.ReadUInt64();
+			}
+			
+			if (metadataSize < SerializedFileMetadata.MetadataMinSize)
+			{
+				reader.BaseStream.Position = initialPosition;
+				return false;
+			}
+			
+			if (headerDefinedFileSize < HeaderMinSize + SerializedFileMetadata.MetadataMinSize)
+			{
+				reader.BaseStream.Position = initialPosition;
+				return false;
+			}
+
+			if (headerDefinedFileSize != fileSize)
+			{
+				reader.BaseStream.Position = initialPosition;
+				return false;
+			}
+
+			reader.BaseStream.Position = initialPosition;
 			return true;
 		}
 
 		public void Read(EndianReader reader)
 		{
-			MetadataSize = reader.ReadInt32();
-			if (MetadataSize <= 0)
-			{
-				throw new Exception($"Invalid metadata size {MetadataSize}");
-			}
-			FileSize = reader.ReadUInt32();
+			//Read generation first.
+			reader.Position += 8;
 			Version = (FormatVersion)reader.ReadInt32();
-			if (!Enum.IsDefined(typeof(FormatVersion), Version))
+			
+			//Back to original position
+			reader.Position -= 12;
+
+			if (!HasLargeFilesSupport(Version))
 			{
-				throw new Exception($"Unsupported file generation {Version}'");
+				MetadataSize = reader.ReadInt32();
+				if (MetadataSize <= 0)
+				{
+					throw new Exception($"Invalid metadata size {MetadataSize}");
+				}
+
+				FileSize = reader.ReadUInt32();
+				if (!Enum.IsDefined(typeof(FormatVersion), Version))
+				{
+					throw new Exception($"Unsupported file generation {Version}'");
+				}
+				
+				reader.ReadUInt32(); //Skip over version
+
+				DataOffset = reader.ReadUInt32();
 			}
-			DataOffset = reader.ReadUInt32();
+			else
+			{
+				reader.Position += 16; //3 lots of uints we skipped above, plus generation.
+			}
+			
 			if (HasEndianess(Version))
 			{
 				Endianess = reader.ReadBoolean();
