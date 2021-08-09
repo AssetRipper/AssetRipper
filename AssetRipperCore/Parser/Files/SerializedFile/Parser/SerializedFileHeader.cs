@@ -132,10 +132,10 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				{
 					throw new Exception($"Unsupported file generation {Version}'");
 				}
-
-				DataOffset = reader.ReadUInt32();
 				
 				reader.ReadUInt32(); //Skip over version
+
+				DataOffset = reader.ReadUInt32();
 			}
 			else
 			{
