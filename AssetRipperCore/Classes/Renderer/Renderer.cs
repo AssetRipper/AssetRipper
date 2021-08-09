@@ -502,6 +502,12 @@ namespace AssetRipper.Core.Classes.Renderer
 			{
 				reader.AlignStream();
 			}
+
+#warning temp fix for missing 12 bytes until an official struct layout is obtained
+			if (reader.Version.IsGreaterEqual(2020))
+			{
+				reader.ReadBytes(12);
+			}
 		}
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
