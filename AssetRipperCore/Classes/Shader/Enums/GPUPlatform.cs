@@ -31,5 +31,9 @@ namespace AssetRipper.Core.Classes.Shader.Enums
 		vulkan			= 18,
 		@switch			= 19,
 		xboxone_d3d12	= 20,
+		GameCoreXboxOne = 21,
+		GameCoreScarlett = 22,
+		PS5				= 23,
+		PS5NGGC			= 24,
 	}
 }

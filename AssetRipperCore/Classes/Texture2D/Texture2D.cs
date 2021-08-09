@@ -34,6 +34,10 @@ namespace AssetRipper.Core.Classes.Texture2D
 		}
 
 		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasMipsStripped(UnityVersion version) => version.IsGreaterEqual(2020);
+		/// <summary>
 		/// Less than 5.2.0
 		/// </summary>
 		public static bool IsBoolMinMap(UnityVersion version) => version.IsLess(5, 2);
@@ -73,6 +77,10 @@ namespace AssetRipper.Core.Classes.Texture2D
 		/// 3.5.0 and greater
 		/// </summary>
 		public static bool HasColorSpace(UnityVersion version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// 2020.2 and greater
+		/// </summary>
+		public static bool HasPlatformBlob(UnityVersion version) => version.IsGreaterEqual(2020, 2);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
@@ -173,6 +181,10 @@ namespace AssetRipper.Core.Classes.Texture2D
 			Width = reader.ReadInt32();
 			Height = reader.ReadInt32();
 			CompleteImageSize = reader.ReadInt32();
+			if (HasMipsStripped(reader.Version))
+			{
+				var m_MipsStripped = reader.ReadInt32();
+			}
 			TextureFormat = (TextureFormat)reader.ReadInt32();
 
 			if (IsBoolMinMap(reader.Version))
@@ -245,6 +257,10 @@ namespace AssetRipper.Core.Classes.Texture2D
 			{
 				ColorSpace = (ColorSpace)reader.ReadInt32();
 			}
+			if (HasPlatformBlob(reader.Version))
+			{
+				var m_PlatformBlob = reader.ReadByteArray();
+			}
 
 			m_imageData = reader.ReadByteArray();
 			reader.AlignStream();
@@ -261,6 +277,10 @@ namespace AssetRipper.Core.Classes.Texture2D
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
 			node.Add(CompleteImageSizeName, CompleteImageSize);
+			if (HasMipsStripped(container.ExportVersion))
+			{
+				node.Add(MipsStrippedName, MipsStripped);
+			}
 			node.Add(TextureFormatName, (int)TextureFormat);
 			node.Add(MipCountName, MipCount);
 			node.Add(IsReadableName, IsReadable);
@@ -331,6 +351,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public int Width { get; set; }
 		public int Height { get; set; }
 		public int CompleteImageSize { get; set; }
+		public int MipsStripped { get; set; }
 		public TextureFormat TextureFormat { get; set; }
 		public int MipCount { get; set; }
 		public bool IsReadable { get; set; }
@@ -346,11 +367,13 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public TextureDimension TextureDimension { get; set; }
 		public TextureUsageMode LightmapFormat { get; set; }
 		public ColorSpace ColorSpace { get; set; }
+		public byte[] PlatformBlob { get; set; }
 		public IReadOnlyCollection<byte> ImageData => m_imageData;
 
 		public const string WidthName = "m_Width";
 		public const string HeightName = "m_Height";
 		public const string CompleteImageSizeName = "m_CompleteImageSize";
+		public const string MipsStrippedName = "m_MipsStripped";
 		public const string TextureFormatName = "m_TextureFormat";
 		public const string MipCountName = "m_MipCount";
 		public const string IsReadableName = "m_IsReadable";
@@ -364,6 +387,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public const string TextureSettingsName = "m_TextureSettings";
 		public const string LightmapFormatName = "m_LightmapFormat";
 		public const string ColorSpaceName = "m_ColorSpace";
+		public const string PlatformBlobName = "m_PlatformBlob";
 		public const string ImageDataName = "image data";
 		public const string StreamDataName = "m_StreamData";
 

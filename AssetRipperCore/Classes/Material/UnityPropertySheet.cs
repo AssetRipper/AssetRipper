@@ -26,6 +26,11 @@ namespace AssetRipper.Core.Classes.Material
 			return 2;
 		}
 
+		/// <summary>
+		/// 2021 and greater
+		/// </summary>
+		public static bool HasInts(UnityVersion version) => version.IsGreaterEqual(2021);
+
 		public string FindPropertyNameByCRC28(uint crc)
 		{
 			foreach (FastPropertyName property in TexEnvs.Keys)
@@ -70,6 +75,11 @@ namespace AssetRipper.Core.Classes.Material
 			m_colors = new Dictionary<FastPropertyName, ColorRGBAf>();
 
 			m_texEnvs.Read(reader);
+			if (HasInts(reader.Version))
+			{
+				m_ints = new Dictionary<FastPropertyName, int>();
+				m_ints.Read(reader);
+			}
 			m_floats.Read(reader);
 			m_colors.Read(reader);
 		}
@@ -79,6 +89,10 @@ namespace AssetRipper.Core.Classes.Material
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TexEnvsName, m_texEnvs.ExportYAML(container));
+			if (HasInts(container.ExportVersion))
+			{
+				node.Add(IntsName, m_ints.ExportYAML(container));
+			}
 			node.Add(FloatsName, m_floats.ExportYAML(container));
 			node.Add(ColorsName, m_colors.ExportYAML(container));
 			return node;
@@ -97,6 +111,7 @@ namespace AssetRipper.Core.Classes.Material
 		public IReadOnlyDictionary<FastPropertyName, ColorRGBAf> Colors => m_colors;
 
 		public const string TexEnvsName = "m_TexEnvs";
+		public const string IntsName = "m_Ints";
 		public const string FloatsName = "m_Floats";
 		public const string ColorsName = "m_Colors";
 
@@ -105,6 +120,7 @@ namespace AssetRipper.Core.Classes.Material
 		private const string TexelSizePostfixName = "_TexelSize";
 
 		private Dictionary<FastPropertyName, UnityTexEnv> m_texEnvs;
+		private Dictionary<FastPropertyName, int> m_ints;
 		private Dictionary<FastPropertyName, float> m_floats;
 		private Dictionary<FastPropertyName, ColorRGBAf> m_colors;
 	}

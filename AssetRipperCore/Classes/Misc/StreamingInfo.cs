@@ -10,6 +10,11 @@ namespace AssetRipper.Core.Classes.Misc
 {
 	public struct StreamingInfo : IAsset
 	{
+		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool IsOffsetInt64(UnityVersion version) => version.IsGreaterEqual(2020);
+
 		public StreamingInfo(bool _)
 		{
 			Offset = 0;
@@ -49,11 +54,17 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public void Read(AssetReader reader)
 		{
-			Offset = reader.ReadUInt32();
+			if (IsOffsetInt64(reader.Version))
+				Offset = reader.ReadInt64();
+			else
+				Offset = reader.ReadUInt32();
 			Size = reader.ReadUInt32();
 			Path = reader.ReadString();
 		}
 
+		/// <summary>
+		/// Exclusively for AudioClip in Unity versions less than 5
+		/// </summary>
 		public void Read(AssetReader reader, string path)
 		{
 			Size = reader.ReadUInt32();
@@ -63,7 +74,7 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public void Write(AssetWriter writer)
 		{
-			writer.Write(Offset);
+			writer.Write((uint)Offset);
 			writer.Write(Size);
 			writer.Write(Path);
 		}
@@ -71,7 +82,7 @@ namespace AssetRipper.Core.Classes.Misc
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(OffsetName, Offset);
+			node.Add(OffsetName, (uint)Offset);
 			node.Add(SizeName, Size);
 			node.Add(PathName, Path);
 			return node;
@@ -83,7 +94,7 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public bool IsSet => Path.Length > 0;
 
-		public uint Offset { get; set; }
+		public long Offset { get; set; }
 		public uint Size { get; set; }
 		public string Path { get; set; }
 	}

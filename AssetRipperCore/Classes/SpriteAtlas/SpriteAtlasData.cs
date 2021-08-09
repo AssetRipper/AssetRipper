@@ -1,7 +1,6 @@
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
@@ -17,6 +16,10 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 		/// 2017.2 and greater
 		/// </summary>
 		public static bool HasAtlasRectOffset(UnityVersion version) => version.IsGreaterEqual(2017, 2);
+		/// <summary>
+		/// 2020.2 and greater
+		/// </summary>
+		public static bool HasSecondaryTextures(UnityVersion version) => version.IsGreaterEqual(2020, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -31,6 +34,10 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			UVTransform.Read(reader);
 			DownscaleMultiplier = reader.ReadSingle();
 			SettingsRaw = reader.ReadUInt32();
+			if (HasSecondaryTextures(reader.Version))
+			{
+				SecondaryTextures = reader.ReadAssetArray<SecondarySpriteTexture>();
+			}
 		}
 
 		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
@@ -60,6 +67,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 
 		public float DownscaleMultiplier { get; set; }
 		public uint SettingsRaw { get; set; }
+		public SecondarySpriteTexture[] SecondaryTextures { get; set; }
 
 		public const string TextureName = "texture";
 		public const string AlphaTextureName = "alphaTexture";
@@ -69,6 +77,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 		public const string UVTransformName = "uvTransform";
 		public const string DownscaleMultiplierName = "downscaleMultiplier";
 		public const string SettingsRawName = "settingsRaw";
+		public const string SecondaryTexturesName = "secondaryTextures";
 
 		public PPtr<Texture2D.Texture2D> Texture;
 		public PPtr<Texture2D.Texture2D> AlphaTexture;

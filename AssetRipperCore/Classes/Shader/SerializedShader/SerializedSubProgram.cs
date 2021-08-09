@@ -23,10 +23,28 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			// return 1;
 		}
 
+
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		private static bool IsAlignKeywordIndices(UnityVersion version) => version.IsGreaterEqual(2017, 1);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
 		public static bool HasLocalKeywordIndices(UnityVersion version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 2020.3.0f2 to 2020.3.x<br/>
+		/// 2021.1.4 and greater
+		/// </summary>
+		public static bool HasUnifiedParameters(UnityVersion version)
+		{
+			if (version.Major == 2020 && version.IsGreaterEqual(2020, 3, 0, UnityVersionType.Final, 2))
+				return true;
+			else if (version.IsGreaterEqual(2021, 1, 4))
+				return true;
+			else
+				return false;
+		}
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
@@ -37,9 +55,9 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public static bool HasShaderRequirements(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 
 		/// <summary>
-		/// 2017.1 and greater
+		/// 2021 and greater
 		/// </summary>
-		private static bool IsAlignKeywordIndices(UnityVersion version) => version.IsGreaterEqual(2017, 1);
+		private static bool IsShaderRequirementsInt64(UnityVersion version) => version.IsGreaterEqual(2021);
 
 		public void Read(AssetReader reader)
 		{
@@ -60,13 +78,27 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			GpuProgramType = reader.ReadByte();
 			reader.AlignStream();
 
-			VectorParams = reader.ReadAssetArray<VectorParameter>();
-			MatrixParams = reader.ReadAssetArray<MatrixParameter>();
-			TextureParams = reader.ReadAssetArray<TextureParameter>();
-			BufferParams = reader.ReadAssetArray<BufferBinding>();
-			ConstantBuffers = reader.ReadAssetArray<ConstantBuffer>();
-			ConstantBufferBindings = reader.ReadAssetArray<BufferBinding>();
-			UAVParams = reader.ReadAssetArray<UAVParameter>();
+			if (HasUnifiedParameters(reader.Version))
+			{
+				Parameters = reader.ReadAsset<SerializedProgramParameters>();
+				VectorParams = Parameters.VectorParams;
+				MatrixParams = Parameters.MatrixParams;
+				TextureParams = Parameters.TextureParams;
+				BufferParams = Parameters.BufferParams;
+				ConstantBuffers = Parameters.ConstantBuffers;
+				ConstantBufferBindings = Parameters.ConstantBufferBindings;
+				UAVParams = Parameters.UAVParams;
+			}
+			else
+			{
+				VectorParams = reader.ReadAssetArray<VectorParameter>();
+				MatrixParams = reader.ReadAssetArray<MatrixParameter>();
+				TextureParams = reader.ReadAssetArray<TextureParameter>();
+				BufferParams = reader.ReadAssetArray<BufferBinding>();
+				ConstantBuffers = reader.ReadAssetArray<ConstantBuffer>();
+				ConstantBufferBindings = reader.ReadAssetArray<BufferBinding>();
+				UAVParams = reader.ReadAssetArray<UAVParameter>();
+			}
 
 			if (HasSamplers(reader.Version))
 			{
@@ -74,7 +106,10 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			}
 			if (HasShaderRequirements(reader.Version))
 			{
-				ShaderRequirements = reader.ReadInt32();
+				if (IsShaderRequirementsInt64(reader.Version))
+					ShaderRequirements = reader.ReadInt64();
+				else
+					ShaderRequirements = reader.ReadInt32();
 			}
 		}
 
@@ -120,6 +155,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public ushort[] LocalKeywordIndices { get; set; }
 		public byte ShaderHardwareTier { get; set; }
 		public byte GpuProgramType { get; set; }
+		public SerializedProgramParameters Parameters { get; set; }
 		public VectorParameter[] VectorParams { get; set; }
 		public MatrixParameter[] MatrixParams { get; set; }
 		public TextureParameter[] TextureParams { get; set; }
@@ -128,7 +164,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public BufferBinding[] ConstantBufferBindings { get; set; }
 		public UAVParameter[] UAVParams { get; set; }
 		public SamplerParameter[] Samplers { get; set; }
-		public int ShaderRequirements { get; set; }
+		public long ShaderRequirements { get; set; }
 
 		public ParserBindChannels Channels;
 	}

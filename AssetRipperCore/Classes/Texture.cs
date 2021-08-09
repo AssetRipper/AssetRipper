@@ -19,6 +19,10 @@ namespace AssetRipper.Core.Classes
 		/// 2017.3 and greater
 		/// </summary>
 		public static bool HasFallbackFormat(UnityVersion version) => version.IsGreaterEqual(2017, 3);
+		/// <summary>
+		/// 2020.2 and greater
+		/// </summary>
+		public static bool HasAlphaChannelOptional(UnityVersion version) => version.IsGreaterEqual(2020, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -34,6 +38,10 @@ namespace AssetRipper.Core.Classes
 			{
 				ForcedFallbackFormat = reader.ReadInt32();
 				DownscaleFallback = reader.ReadBoolean();
+				if (HasAlphaChannelOptional(reader.Version))
+				{
+					IsAlphaChannelOptional = reader.ReadBoolean();
+				}
 				reader.AlignStream();
 			}
 		}
@@ -50,6 +58,10 @@ namespace AssetRipper.Core.Classes
 				node.Add(ForcedFallbackFormatName, ForcedFallbackFormat);
 				node.Add(DownscaleFallbackName, DownscaleFallback);
 			}
+			if (HasAlphaChannelOptional(container.ExportVersion))
+			{
+				node.Add(IsAlphaChannelOptionalName, IsAlphaChannelOptional);
+			}
 			return node;
 		}
 
@@ -64,10 +76,12 @@ namespace AssetRipper.Core.Classes
 
 		public int ForcedFallbackFormat { get; set; }
 		public bool DownscaleFallback { get; set; }
+		public bool IsAlphaChannelOptional { get; set; }
 
 		public const string ImageContentsHashName = "m_ImageContentsHash";
 		public const string ForcedFallbackFormatName = "m_ForcedFallbackFormat";
 		public const string DownscaleFallbackName = "m_DownscaleFallback";
+		public const string IsAlphaChannelOptionalName = "m_IsAlphaChannelOptional";
 
 #if UNIVERSAL
 		public Hash128 ImageContentsHash;
