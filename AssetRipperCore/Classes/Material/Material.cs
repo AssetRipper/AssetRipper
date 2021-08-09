@@ -50,6 +50,10 @@ namespace AssetRipper.Core.Classes.Material
 		/// 5.6.0b5 and greater
 		/// </summary>
 		public static bool HasDisabledShaderPasses(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5);
+		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasBuildTextureStacks(UnityVersion version) => version.IsGreaterEqual(2020);
 
 		public string FindPropertyNameByCRC28(uint crc)
 		{
@@ -100,6 +104,12 @@ namespace AssetRipper.Core.Classes.Material
 			}
 
 			SavedProperties.Read(reader);
+
+#warning Temp struct mismatch fix
+			if (HasBuildTextureStacks(reader.Version))
+			{
+				reader.ReadInt32();
+			}
 		}
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
