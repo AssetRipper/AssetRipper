@@ -7,11 +7,16 @@ using AssetRipper.Core.IO.Extensions;
 using System;
 using System.Collections.Generic;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+using AssetRipper.Core.Classes.Misc;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
 	public struct SerializedPass : IAssetReadable
 	{
+		/// <summary>
+		/// 2020.2 and greater
+		/// </summary>
+		public static bool HasHash(UnityVersion version) => version.IsGreaterEqual(2020, 2);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
@@ -19,9 +24,21 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 
 		public void Read(AssetReader reader)
 		{
-			m_nameIndices = new Dictionary<string, int>();
+			if (HasHash(reader.Version))
+			{
+				EditorDataHash = reader.ReadAssetArray<Hash128>();
+				reader.AlignStream();
+				Platforms = reader.ReadUInt8Array();
+				reader.AlignStream();
+				LocalKeywordMask = reader.ReadUInt16Array();
+				reader.AlignStream();
+				GlobalKeywordMask = reader.ReadUInt16Array();
+				reader.AlignStream();
+			}
 
+			m_nameIndices = new Dictionary<string, int>();
 			m_nameIndices.Read(reader);
+
 			Type = (SerializedPassType)reader.ReadInt32();
 			State.Read(reader);
 			ProgramMask = reader.ReadUInt32();
@@ -105,6 +122,10 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			}
 		}
 
+		public Hash128[] EditorDataHash { get; set; }
+		public byte[] Platforms { get; set; }
+		public ushort[] LocalKeywordMask { get; set; }
+		public ushort[] GlobalKeywordMask { get; set; }
 		public IReadOnlyDictionary<string, int> NameIndices => m_nameIndices;
 		public SerializedPassType Type { get; set; }
 		public uint ProgramMask { get; set; }

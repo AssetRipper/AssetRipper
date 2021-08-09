@@ -28,6 +28,10 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// </summary>
 		public static bool HasDynamicOccludee(UnityVersion version) => version.IsGreaterEqual(2017, 2);
 		/// <summary>
+		/// 2021 and greater
+		/// </summary>
+		public static bool HasStaticShadowCaster(UnityVersion version) => version.IsGreaterEqual(2021);
+		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
 		public static bool HasMotionVector(UnityVersion version) => version.IsGreaterEqual(5, 4);
@@ -303,6 +307,10 @@ namespace AssetRipper.Core.Classes.Renderer
 			if (HasDynamicOccludee(reader.Version))
 			{
 				DynamicOccludee = reader.ReadByte();
+			}
+			if (HasStaticShadowCaster(reader.Version))
+			{
+				StaticShadowCaster = reader.ReadByte();
 			}
 			if (HasMotionVector(reader.Version))
 			{
@@ -709,6 +717,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		public ShadowCastingMode CastShadows { get; set; }
 		public byte ReceiveShadows { get; set; }
 		public byte DynamicOccludee { get; set; }
+		public byte StaticShadowCaster { get; set; }
 		public MotionVectorGenerationMode MotionVectors { get; set; }
 		public bool UseLightProbes => LightProbeUsage != LightProbeUsage.Off;
 		public LightProbeUsage LightProbeUsage { get; set; }
@@ -744,6 +753,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		public const string CastShadowsName = "m_CastShadows";
 		public const string ReceiveShadowsName = "m_ReceiveShadows";
 		public const string DynamicOccludeeName = "m_DynamicOccludee";
+		public const string StaticShadowCasterName = "m_StaticShadowCaster";
 		public const string MotionVectorsName = "m_MotionVectors";
 		public const string UseLightProbesName = "m_UseLightProbes";
 		public const string LightProbeUsageName = "m_LightProbeUsage";

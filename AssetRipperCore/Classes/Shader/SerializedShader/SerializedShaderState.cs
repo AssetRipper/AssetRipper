@@ -13,6 +13,10 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// 2017.2 and greater
 		/// </summary>
 		public static bool HasZClip(UnityVersion version) => version.IsGreaterEqual(2017, 2);
+		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasConservative(UnityVersion version) => version.IsGreaterEqual(2020);
 
 		public void Read(AssetReader reader)
 		{
@@ -35,6 +39,10 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			ZTest.Read(reader);
 			ZWrite.Read(reader);
 			Culling.Read(reader);
+			if (HasConservative(reader.Version))
+			{
+				Conservative.Read(reader);
+			}
 			OffsetFactor.Read(reader);
 			OffsetUnits.Read(reader);
 			AlphaToMask.Read(reader);
@@ -216,6 +224,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public SerializedShaderFloatValue ZTest;
 		public SerializedShaderFloatValue ZWrite;
 		public SerializedShaderFloatValue Culling;
+		public SerializedShaderFloatValue Conservative;
 		public SerializedShaderFloatValue OffsetFactor;
 		public SerializedShaderFloatValue OffsetUnits;
 		public SerializedShaderFloatValue AlphaToMask;
