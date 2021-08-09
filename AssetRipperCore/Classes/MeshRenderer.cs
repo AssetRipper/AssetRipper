@@ -15,6 +15,8 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public static bool HasVertex(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(5) && flags.IsRelease();
 
+		public static bool HasEnlightenVertexStream(UnityVersion version) => version.IsGreaterEqual(2020);
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -22,6 +24,11 @@ namespace AssetRipper.Core.Classes
 			if (HasVertex(reader.Version, reader.Flags))
 			{
 				AdditionalVertexStreams.Read(reader);
+			}
+
+			if (HasEnlightenVertexStream(reader.Version))
+			{
+				EnlightenVertexStream.Read(reader);
 			}
 		}
 
@@ -38,5 +45,7 @@ namespace AssetRipper.Core.Classes
 		public const string AdditionalVertexStreamsName = "m_AdditionalVertexStreams";
 
 		public PPtr<Mesh.Mesh> AdditionalVertexStreams;
+		
+		public PPtr<Mesh.Mesh> EnlightenVertexStream;
 	}
 }
