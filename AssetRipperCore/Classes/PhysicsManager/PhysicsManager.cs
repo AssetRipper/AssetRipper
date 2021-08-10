@@ -161,7 +161,7 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 			BounceThreshold = reader.ReadSingle();
 			if (HasDefaultMaxDepenetrationVelocity(reader.Version))
 			{
-				DefaultMaxDepenetrationValue = reader.ReadSingle();
+				DefaultMaxDepenetrationVelocity = reader.ReadSingle();
 			}
 			if (HasSleepThreshold(reader.Version))
 			{
@@ -397,7 +397,7 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 		}
 
 		public float BounceThreshold { get; set; }
-		public float DefaultMaxDepenetrationValue { get; set; }
+		public float DefaultMaxDepenetrationVelocity { get; set; }
 		public float SleepThreshold { get; set; }
 		public float SleepVelocity { get; set; }
 		public float SleepAngularVelocity { get; set; }
