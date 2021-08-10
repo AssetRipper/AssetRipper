@@ -100,6 +100,10 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// 5.6.0 and greater
 		/// </summary>
 		public static bool HasCustomDataModule(UnityVersion version) => version.IsGreaterEqual(5, 6);
+		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		private static bool HasLifetimeByEmitterSpeedModule(UnityVersion version) => version.IsGreaterEqual(2020);
 
 		/// <summary>
 		/// Less than 5.5.0
@@ -213,6 +217,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			{
 				InheritVelocityModule.Read(reader);
 			}
+
+			if (HasLifetimeByEmitterSpeedModule(reader.Version))
+			{
+				LifetimeByEmitterSpeedModule.Read(reader);
+			}
 			ForceModule.Read(reader);
 			if (HasExternalForcesModule(reader.Version))
 			{
@@ -288,6 +297,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			node.Add(UVModuleName, UVModule.ExportYAML(container));
 			node.Add(VelocityModuleName, VelocityModule.ExportYAML(container));
 			node.Add(InheritVelocityModuleName, GetInheritVelocityModule(container.Version).ExportYAML(container));
+			node.Add(LifetimeByEmitterSpeedModuleName, LifetimeByEmitterSpeedModule.ExportYAML(container));
 			node.Add(ForceModuleName, ForceModule.ExportYAML(container));
 			node.Add(ExternalForcesModuleName, GetExternalForcesModule(container.Version).ExportYAML(container));
 			node.Add(ClampVelocityModuleName, ClampVelocityModule.ExportYAML(container));
@@ -378,6 +388,8 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public VelocityModule VelocityModule { get; } = new VelocityModule();
 		public InheritVelocityModule InheritVelocityModule { get; } = new InheritVelocityModule();
 		public ForceModule ForceModule { get; } = new ForceModule();
+		
+		public LifetimeByEmitterSpeedModule LifetimeByEmitterSpeedModule { get; } = new LifetimeByEmitterSpeedModule();
 		public ExternalForcesModule ExternalForcesModule { get; } = new ExternalForcesModule();
 		public ClampVelocityModule ClampVelocityModule { get; } = new ClampVelocityModule();
 		public NoiseModule.NoiseModule NoiseModule { get; } = new NoiseModule.NoiseModule();
@@ -414,6 +426,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string UVModuleName = "UVModule";
 		public const string VelocityModuleName = "VelocityModule";
 		public const string InheritVelocityModuleName = "InheritVelocityModule";
+		public const string LifetimeByEmitterSpeedModuleName = "LifetimeByEmitterSpeedModule";
 		public const string ForceModuleName = "ForceModule";
 		public const string ExternalForcesModuleName = "ExternalForcesModule";
 		public const string ClampVelocityModuleName = "ClampVelocityModule";
