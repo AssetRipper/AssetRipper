@@ -38,6 +38,7 @@ namespace AssetRipper.Core.Classes
 				AdjacentEndPoint.Read(reader);
 				UseAdjacentStartPoint = reader.ReadBoolean();
 				UseAdjacentEndPoint = reader.ReadBoolean();
+				reader.AlignStream();
 			}
 		}
 
