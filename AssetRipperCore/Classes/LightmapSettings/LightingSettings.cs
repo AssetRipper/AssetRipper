@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 
@@ -18,10 +19,13 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			EnableBakedLightmaps = reader.ReadBoolean();
 			EnableRealtimeLightmaps = reader.ReadBoolean();
 			EnableRealtimeEnvironmentLighting = reader.ReadBoolean();
+			reader.AlignStream();
+			
 			BounceScale = reader.ReadSingle();
 			AlbedoBoost = reader.ReadSingle();
 			IndirectOutputScale = reader.ReadSingle();
 			UsingShadowmask = reader.ReadBoolean();
+			reader.AlignStream();
 		}
 
 		public int GIWorkflowMode { get; set; }
