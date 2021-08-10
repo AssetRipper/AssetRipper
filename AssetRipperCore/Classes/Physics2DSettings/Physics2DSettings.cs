@@ -75,9 +75,13 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		/// </summary>
 		public static bool HasJobOptions(UnityVersion version) => version.IsGreaterEqual(2018);
 		/// <summary>
-		/// 2017.1.0b2 and greater
+		/// 2017.1.0b2 and greater but less than 2020
 		/// </summary>
-		public static bool HasAutoSimulation(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
+		public static bool HasAutoSimulation(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2) && version.IsLess(2020);
+		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasSimulationMode(UnityVersion version) => version.IsGreaterEqual(2020);
 		/// <summary>
 		/// 4.6.1 and greater
 		/// </summary>
@@ -155,6 +159,12 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			{
 				AutoSimulation = reader.ReadBoolean();
 			}
+
+			if (HasSimulationMode(reader.Version))
+			{
+				SimulationMode = reader.ReadInt32();
+			}
+			
 			QueriesHitTriggers = reader.ReadBoolean();
 			if (HasQueriesStartInColliders(reader.Version))
 			{
@@ -403,6 +413,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 
 		public int VelocityIterations { get; set; }
 		public int PositionIterations { get; set; }
+		public int SimulationMode { get; set; }
 		public float VelocityThreshold { get; set; }
 		public float MaxLinearCorrection { get; set; }
 		public float MaxAngularCorrection { get; set; }

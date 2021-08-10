@@ -366,6 +366,7 @@ namespace AssetRipper.Core
 		AssemblyDefinitionReferenceAsset					= 662584278,
 		BuiltAssetBundleInfoSet								= 668709126,
 		SpriteAtlas											= 687078895,
+		LightingSettings                                    = 850595691,
 		PlatformModuleSetup									= 877146078,
 		AimConstraint										= 895512359,
 		VFXManager											= 937362698,
@@ -411,6 +412,7 @@ namespace AssetRipper.Core
 		VisualEffect										= 2083052967,
 		LocalizationAsset									= 2083778819,
 		ScriptedImporter									= 2089858483,
+		
 	}
 
 	public static class ClassIDTypeExtention

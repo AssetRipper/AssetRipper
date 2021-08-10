@@ -119,6 +119,10 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// </summary>
 		public static bool HasDepthNormals(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasVideoShadersIncludeMode(UnityVersion version) => version.IsGreaterEqual(2020);
+		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
 		public static bool HasAlwaysIncludedShaders(UnityVersion version) => version.IsGreaterEqual(4, 2);
@@ -214,9 +218,9 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			return version.IsGreaterEqual(2018, 4, 6);
 		}
 		/// <summary>
-		/// 2019.3 and greater
+		/// 2019.3 and greater but less than 2020
 		/// </summary>
-		public static bool HasAllowEnlightenSupportForUpgradedProject(UnityVersion version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasAllowEnlightenSupportForUpgradedProject(UnityVersion version) => version.IsGreaterEqual(2019, 3) && version.IsLess(2020);
 
 		/// <summary>
 		/// 5.3.0 to 5.5.0 exclusive
@@ -265,6 +269,11 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				MotionVectors.Read(reader);
 				LightHalo.Read(reader);
 				LensFlare.Read(reader);
+			}
+
+			if (HasVideoShadersIncludeMode(reader.Version))
+			{
+				VideoShadersIncludeMode = reader.ReadInt32();
 			}
 
 			if (HasAlwaysIncludedShaders(reader.Version))
@@ -856,6 +865,8 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public bool LightsUseColorTemperature { get; set; }
 		public bool LogWhenShaderIsCompiled { get; set; }
 		public bool AllowEnlightenSupportForUpgradedProject { get; set; }
+		
+		public int VideoShadersIncludeMode { get; set; }
 
 		public BuiltinShaderSettings Deferred = new();
 		public BuiltinShaderSettings DeferredReflections = new();

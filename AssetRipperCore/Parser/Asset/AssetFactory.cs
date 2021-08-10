@@ -326,6 +326,8 @@ namespace AssetRipper.Core.Parser.Asset
 					return new LightmapParameters(assetInfo);
 				case ClassIDType.LightingDataAsset:
 					return new LightingDataAsset(assetInfo);
+				case ClassIDType.LightingSettings:
+					return new LightingSettings(assetInfo);
 
 				case ClassIDType.SpriteAtlas:
 					return new SpriteAtlas(assetInfo);

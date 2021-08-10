@@ -41,6 +41,7 @@ namespace AssetRipper.Core.Reading.Classes
             var m_HasSplitAlpha = reader.ReadBoolean();
             if (version[0] >= 2020) //2020.1 and up
             {
+#warning A type dump from 2019.4 has this field in it, check version gate.
                 var m_sRGB = reader.ReadBoolean();
             }
 

@@ -36,6 +36,10 @@ namespace AssetRipper.Core.Classes.Texture2D
 		/// <summary>
 		/// 2020 and greater
 		/// </summary>
+		public static bool HasUnsignedCompleteImageSize(UnityVersion version) => version.IsGreaterEqual(2020);
+		/// <summary>
+		/// 2020 and greater
+		/// </summary>
 		public static bool HasMipsStripped(UnityVersion version) => version.IsGreaterEqual(2020);
 		/// <summary>
 		/// Less than 5.2.0
@@ -180,7 +184,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 #endif
 			Width = reader.ReadInt32();
 			Height = reader.ReadInt32();
-			CompleteImageSize = reader.ReadInt32();
+			CompleteImageSize = HasUnsignedCompleteImageSize(reader.Version) ? reader.ReadUInt32() : reader.ReadInt32();
 			if (HasMipsStripped(reader.Version))
 			{
 				var m_MipsStripped = reader.ReadInt32();
@@ -209,13 +213,16 @@ namespace AssetRipper.Core.Classes.Texture2D
 			{
 				IsReadable = reader.ReadBoolean();
 			}
-			if (HasIgnoreMasterTextureLimit(reader.Version))
-			{
-				IgnoreMasterTextureLimit = reader.ReadBoolean();
-			}
+			//NOTE: Original code by Mafaca claims IgnoreMasterTextureLimit comes first, and claims this field is present on 2019.4.9+
+			//AssetStudio, and a structure dump from 2020.1, show it is in this order.
+			//If this breaks, at all, check if it's different for some reason between 2019.4.9 and 2020 full release.
 			if (HasIsPreProcessed(reader.Version))
 			{
 				IsPreProcessed = reader.ReadBoolean();
+			}
+			if (HasIgnoreMasterTextureLimit(reader.Version))
+			{
+				IgnoreMasterTextureLimit = reader.ReadBoolean();
 			}
 			if (HasReadAllowed(reader.Version))
 			{
@@ -276,7 +283,16 @@ namespace AssetRipper.Core.Classes.Texture2D
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
-			node.Add(CompleteImageSizeName, CompleteImageSize);
+			
+			if(HasUnsignedCompleteImageSize(container.ExportVersion))
+			{
+				node.Add(CompleteImageSizeName,  (uint) CompleteImageSize);
+			}
+			else
+			{
+				node.Add(CompleteImageSizeName,  (int) CompleteImageSize);
+			}
+
 			if (HasMipsStripped(container.ExportVersion))
 			{
 				node.Add(MipsStrippedName, MipsStripped);
@@ -350,7 +366,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 
 		public int Width { get; set; }
 		public int Height { get; set; }
-		public int CompleteImageSize { get; set; }
+		public long CompleteImageSize { get; set; }
 		public int MipsStripped { get; set; }
 		public TextureFormat TextureFormat { get; set; }
 		public int MipCount { get; set; }

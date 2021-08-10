@@ -26,6 +26,8 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			ManualTileSize = 0;
 			TileSize = 256;
 			AccuratePlacement = 0;
+			MaxJobWorkers = 0;
+			PreserveTilesOutsideBounds = 0;
 			Debug = default;
 		}
 
@@ -60,6 +62,10 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		/// 2017.2 and greater
 		/// </summary>
 		public static bool HasDebug(UnityVersion version) => version.IsGreaterEqual(2017, 2);
+		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasMaxJobWorkersAndPreserveTilesOutsideBounds(UnityVersion version) => version.IsGreaterEqual(2020);
 
 		public void Read(AssetReader reader)
 		{
@@ -99,6 +105,12 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			else
 			{
 				AccuratePlacement = reader.ReadInt32();
+			}
+
+			if (HasMaxJobWorkersAndPreserveTilesOutsideBounds(reader.Version))
+			{
+				MaxJobWorkers = reader.ReadUInt32();
+				PreserveTilesOutsideBounds = reader.ReadInt32();
 			}
 			if (HasDebug(reader.Version))
 			{
@@ -156,6 +168,8 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			set => AccuratePlacement = value ? 1 : 0;
 		}
 		public int AccuratePlacement { get; set; }
+		public uint MaxJobWorkers { get; set; }
+		public int PreserveTilesOutsideBounds { get; set; }
 
 		public const string AgentTypeIDName = "agentTypeID";
 		public const string AgentRadiusName = "agentRadius";

@@ -17,6 +17,11 @@ namespace AssetRipper.Core.Classes
 		/// 5.6.0b5 and greater
 		/// </summary>
 		public static bool HasEdgeRadius(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 5);
+		
+		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasAdjacentPoints(UnityVersion version) => version.IsGreaterEqual(2020);
 
 		public override void Read(AssetReader reader)
 		{
@@ -27,6 +32,13 @@ namespace AssetRipper.Core.Classes
 				EdgeRadius = reader.ReadSingle();
 			}
 			Points = reader.ReadAssetArray<Vector2f>();
+			if (HasAdjacentPoints(reader.Version))
+			{
+				AdjacentStartPoint.Read(reader);
+				AdjacentEndPoint.Read(reader);
+				UseAdjacentStartPoint = reader.ReadBoolean();
+				UseAdjacentEndPoint = reader.ReadBoolean();
+			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -39,6 +51,14 @@ namespace AssetRipper.Core.Classes
 
 		public float EdgeRadius { get; set; }
 		public Vector2f[] Points { get; set; }
+		
+		public Vector2f AdjacentStartPoint { get; set; }
+		
+		public Vector2f AdjacentEndPoint { get; set; }
+		
+		public bool UseAdjacentStartPoint { get; set; }
+		
+		public bool UseAdjacentEndPoint { get; set; }
 
 		public const string EdgeRadiusName = "m_EdgeRadius";
 		public const string PointsName = "m_Points";

@@ -81,6 +81,10 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 		/// </summary>
 		public static bool HasAllowRoll(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasStretching(UnityVersion version) => version.IsGreaterEqual(2020);
+		/// <summary>
 		/// 5.5.0 to 5.6.0 exclusive
 		/// </summary>
 		public static bool HasVertexStreamMask(UnityVersion version) => version.IsGreaterEqual(5, 5) && version.IsLess(5, 6);
@@ -168,6 +172,12 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 				if (HasAllowRoll(reader.Version))
 				{
 					AllowRoll = reader.ReadBoolean();
+				}
+
+				if (HasStretching(reader.Version))
+				{
+					FreeformStretching = reader.ReadBoolean();
+					RotateWithStretchDirection = reader.ReadBoolean();
 				}
 				reader.AlignStream();
 
@@ -269,6 +279,8 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 		public bool EnableGPUInstancing { get; set; }
 		public bool ApplyActiveColorSpace { get; set; }
 		public bool AllowRoll { get; set; }
+		public bool FreeformStretching { get; set; }
+		public bool RotateWithStretchDirection { get; set; }
 		public byte[] VertexStreams { get; set; }
 		public SpriteMaskInteraction MaskInteraction { get; set; }
 

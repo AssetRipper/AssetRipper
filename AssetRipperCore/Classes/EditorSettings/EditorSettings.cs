@@ -6,6 +6,7 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
+using System;
 
 namespace AssetRipper.Core.Classes.EditorSettings
 {
@@ -97,6 +98,10 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		/// </summary>
 		public static bool HasExternalVersionControl(UnityVersion version) => version.IsLess(4);
 		/// <summary>
+		/// Less than 2020
+		/// </summary>
+		public static bool HasExternalVersionControlSupport(UnityVersion version) => version.IsLess(2020);
+		/// <summary>
 		/// 3.5.0 and greater
 		/// </summary>
 		public static bool HasSerializationMode(UnityVersion version) => version.IsGreaterEqual(3, 5);
@@ -137,9 +142,9 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		/// </summary>
 		public static bool HasUserGeneratedProjectSuffix(UnityVersion version) => version.IsLess(2018, 3) && version.IsGreaterEqual(5, 5);
 		/// <summary>
-		/// 2017.1 and greater
+		/// 2017.1 and up but less than 2020
 		/// </summary>
-		public static bool HasCollabEditorSettings(UnityVersion version) => version.IsGreaterEqual(2017, 1);
+		public static bool HasCollabEditorSettings(UnityVersion version) => version.IsGreaterEqual(2017, 1) && version.IsLess(2020);
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
@@ -153,21 +158,37 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		/// </summary>
 		public static bool HasAsyncShaderCompilation(UnityVersion version) => version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 6);
 		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasCachingShaderPreprocessor(UnityVersion version) => version.IsGreaterEqual(2020);
+		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
 		public static bool HasEnterPlayModeOptions(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
-		/// 2019.2 and greater
+		/// 2020 and greater
 		/// </summary>
-		public static bool HasShowLightmapResolutionOverlay(UnityVersion version) => version.IsGreaterEqual(2019, 2);
+		public static bool HasGameObjectAndAssetNamingOptions(UnityVersion version) => version.IsGreaterEqual(2020);
+		/// <summary>
+		/// 2019.2 and greater but less than 2020
+		/// </summary>
+		public static bool HasShowLightmapResolutionOverlay(UnityVersion version) => version.IsGreaterEqual(2019, 2) && version.IsLess(2020);
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
 		public static bool HasUseLegacyProbeSampleCount(UnityVersion version) => version.IsGreaterEqual(2019, 3);
 		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasSerializedMappingsOneLineAndDisableCookiesInLightmapper(UnityVersion version) => version.IsGreaterEqual(2020);
+		/// <summary>
 		/// 2019.3.0b7 and greater
 		/// </summary>
 		public static bool HasAssetPipelineMode(UnityVersion version) => version.IsGreaterEqual(2019, 3, 0, UnityVersionType.Beta, 7);
+		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasCacheServerAuthAndTls(UnityVersion version) => version.IsGreaterEqual(2020);
 
 		/// <summary>
 		/// 2018.2 and greater
@@ -207,8 +228,9 @@ namespace AssetRipper.Core.Classes.EditorSettings
 						break;
 				}
 			}
-			else
+			else if(HasExternalVersionControlSupport(reader.Version))
 			{
+				//Removed in 2020.
 				ExternalVersionControlSupport = reader.ReadString();
 				switch (ExternalVersionControlSupport)
 				{
@@ -286,6 +308,11 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			{
 				AsyncShaderCompilation = reader.ReadBoolean();
 			}
+
+			if (HasCachingShaderPreprocessor(reader.Version))
+			{
+				CachingShaderPreprocessor = reader.ReadBoolean();
+			}
 			if (IsAlign1(reader.Version))
 			{
 				reader.AlignStream();
@@ -297,6 +324,13 @@ namespace AssetRipper.Core.Classes.EditorSettings
 				reader.AlignStream();
 
 				EnterPlayModeOptions = (EnterPlayModeOptions)reader.ReadInt32();
+			}
+
+			if (HasGameObjectAndAssetNamingOptions(reader.Version))
+			{
+				GameObjectNamingDigits = reader.ReadInt32();
+				GameObjectNamingScheme = reader.ReadInt32();
+				AssetNamingUsesSpace = reader.ReadBoolean();
 			}
 			if (HasShowLightmapResolutionOverlay(reader.Version))
 			{
@@ -312,6 +346,13 @@ namespace AssetRipper.Core.Classes.EditorSettings
 				UseLegacyProbeSampleCount = reader.ReadInt32();
 				reader.AlignStream();
 			}
+
+			if (HasSerializedMappingsOneLineAndDisableCookiesInLightmapper(reader.Version))
+			{
+				SerializeInlineMappingsOnOneLine = reader.ReadBoolean();
+				DisableCookiesInLightmapper = reader.ReadBoolean();
+			}
+			
 			if (HasAssetPipelineMode(reader.Version))
 			{
 				AssetPipelineMode = (AssetPipelineMode)reader.ReadInt32();
@@ -320,6 +361,13 @@ namespace AssetRipper.Core.Classes.EditorSettings
 				CacheServerNamespacePrefix = reader.ReadString();
 				CacheServerEnableDownload = reader.ReadBoolean();
 				CacheServerEnableUpload = reader.ReadBoolean();
+
+				if (HasCacheServerAuthAndTls(reader.Version))
+				{
+					CacheServerEnableAuth = reader.ReadBoolean();
+					CacheServerEnableTls = reader.ReadBoolean();
+				}
+				
 				reader.AlignStream();
 			}
 		}
@@ -475,16 +523,24 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		public bool EnableTextureStreamingInEditMode { get; set; }
 		public bool EnableTextureStreamingInPlayMode { get; set; }
 		public bool AsyncShaderCompilation { get; set; }
+		public bool CachingShaderPreprocessor { get; set; }
 		public bool EnterPlayModeOptionsEnabled { get; set; }
 		public EnterPlayModeOptions EnterPlayModeOptions { get; set; }
+		public int GameObjectNamingDigits { get; set; }
+		public int GameObjectNamingScheme { get; set; }
+		public bool AssetNamingUsesSpace { get; set; }
 		public bool ShowLightmapResolutionOverlay { get; set; }
 		public int UseLegacyProbeSampleCount { get; set; }
+		public bool SerializeInlineMappingsOnOneLine { get; set; }
+		public bool DisableCookiesInLightmapper { get; set; }
 		public AssetPipelineMode AssetPipelineMode { get; set; }
 		public CacheServerMode CacheServerMode { get; set; }
 		public string CacheServerEndpoint { get; set; }
 		public string CacheServerNamespacePrefix { get; set; }
 		public bool CacheServerEnableDownload { get; set; }
 		public bool CacheServerEnableUpload { get; set; }
+		public bool CacheServerEnableAuth { get; set; }
+		public bool CacheServerEnableTls { get; set; }
 
 		public const string ExternalVersionControlSupportName = "m_ExternalVersionControlSupport";
 		public const string SerializationModeName = "m_SerializationMode";
