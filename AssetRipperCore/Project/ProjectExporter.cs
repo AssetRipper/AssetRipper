@@ -142,6 +142,7 @@ namespace AssetRipper.Core.Project
 			OverrideYamlExporter(ClassIDType.LightmapParameters);
 			OverrideYamlExporter(ClassIDType.SpriteAtlas);
 			OverrideYamlExporter(ClassIDType.TerrainLayer);
+			OverrideYamlExporter(ClassIDType.LightingSettings);
 
 			OverrideBinaryExporter(ClassIDType.Shader);
 			OverrideBinaryExporter(ClassIDType.AudioClip);

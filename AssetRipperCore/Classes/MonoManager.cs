@@ -2,6 +2,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
@@ -27,9 +28,21 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public static bool HasAssemblyIdentifiers(UnityVersion version) => version.IsLess(3);
 		/// <summary>
-		/// 2017.1 and greater
+		/// Less than 2020.2
 		/// </summary>
-		public static bool HasAssemblyTypes(UnityVersion version) => version.IsGreaterEqual(2017);
+		public static bool HasAssemblyNames(UnityVersion version) => version.IsLess(2020, 2);
+		/// <summary>
+		/// 2017.1 and greater but less than 2020.2
+		/// </summary>
+		public static bool HasAssemblyTypes(UnityVersion version) => version.IsGreaterEqual(2017) && version.IsLess(2020, 2);
+		/// <summary>
+		/// At least 2020.2
+		/// </summary>
+		public static bool HasScriptHashes(UnityVersion version) => version.IsGreaterEqual(2020, 2);
+		/// <summary>
+		/// At least 2020.2
+		/// </summary>
+		public static bool HasRuntimeClassHashes(UnityVersion version) => version.IsGreaterEqual(2020, 2);
 
 		/// <summary>
 		/// 2.1.0 and greater
@@ -49,6 +62,18 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
+			if (HasScriptHashes(reader.Version))
+			{
+				ScriptHashes = new Dictionary<Hash128, Hash128>();
+				ScriptHashes.Read(reader);
+			}
+
+			if (HasRuntimeClassHashes(reader.Version))
+			{
+				RuntimeClassHashes = new Dictionary<uint, Hash128>();
+				RuntimeClassHashes.Read(reader);
+			}
+
 			Scripts = reader.ReadAssetArray<PPtr<MonoScript>>();
 			if (HasHasCompileErrors(reader.Version))
 			{
@@ -64,7 +89,12 @@ namespace AssetRipper.Core.Classes
 			{
 				CustomDlls = reader.ReadStringArray();
 			}
-			AssemblyNames = reader.ReadStringArray();
+
+			if (HasAssemblyNames(reader.Version))
+			{
+				AssemblyNames = reader.ReadStringArray();
+			}
+
 			if (HasAssemblyIdentifiers(reader.Version))
 			{
 				AssemblyIdentifiers = reader.ReadStringArray();
@@ -99,6 +129,10 @@ namespace AssetRipper.Core.Classes
 		public string[] AssemblyNames { get; set; }
 		public string[] AssemblyIdentifiers { get; set; }
 		public int[] AssemblyTypes { get; set; }
+
+		public Dictionary<Hash128, Hash128> ScriptHashes { get; set; }
+		
+		public Dictionary<uint, Hash128> RuntimeClassHashes { get; set; }
 
 		public const string ScriptsName = "m_Scripts";
 
