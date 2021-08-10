@@ -134,6 +134,18 @@ namespace AssetRipper.Core.IO.Extensions
 				_this.Add(key, value);
 			}
 		}
+		
+		public static void Read<T>(this IDictionary<uint, T> _this, AssetReader reader) where T : IAssetReadable, new()
+		{
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+			{
+				uint key = reader.ReadUInt32();
+				T value = new T();
+				value.Read(reader);
+				_this.Add(key, value);
+			}
+		}
 
 		public static void Read<T>(this IDictionary<string, T> _this, AssetReader reader) where T : IAssetReadable, new()
 		{

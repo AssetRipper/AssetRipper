@@ -38,6 +38,10 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// 2019.1.0b6 and greater
 		/// </summary>
 		public static bool HasDetailBillboardShader(UnityVersion version) => version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 6);
+		/// <summary>
+		/// Less than 2020.2
+		/// </summary>
+		public static bool HasRandomRotations(UnityVersion version) => version.IsLess(2020, 2);
 
 		public DetailDatabase Convert(IExportContainer container)
 		{
@@ -50,7 +54,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 			DetailPrototypes = reader.ReadAssetArray<DetailPrototype>();
 			PatchCount = reader.ReadInt32();
 			PatchSamples = reader.ReadInt32();
-			RandomRotations = reader.ReadAssetArray<Vector3f>();
+			if (HasRandomRotations(reader.Version))
+			{
+				RandomRotations = reader.ReadAssetArray<Vector3f>();
+			}
+
 			if (HasAtlasTexture(reader.Version))
 			{
 				AtlasTexture.Read(reader);
@@ -80,7 +88,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 			DetailPrototypes.Write(writer);
 			writer.Write(PatchCount);
 			writer.Write(PatchSamples);
-			RandomRotations.Write(writer);
+			if (HasRandomRotations(writer.Version))
+			{
+				RandomRotations.Write(writer);
+			}
+
 			if (HasAtlasTexture(writer.Version))
 			{
 				AtlasTexture.Write(writer);
@@ -112,7 +124,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 			node.Add(DetailPrototypesName, DetailPrototypes.ExportYAML(container));
 			node.Add(PatchCountName, PatchCount);
 			node.Add(PatchSamplesName, PatchSamples);
-			node.Add(RandomRotationsName, RandomRotations.ExportYAML(container));
+			if (HasRandomRotations(container.ExportVersion))
+			{
+				node.Add(RandomRotationsName, RandomRotations.ExportYAML(container));
+			}
+
 			if (HasAtlasTexture(container.ExportVersion))
 			{
 				node.Add(AtlasTextureName, AtlasTexture.ExportYAML(container));

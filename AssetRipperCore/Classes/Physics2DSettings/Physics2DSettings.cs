@@ -99,6 +99,11 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		/// </summary>
 		public static bool HasCallbacksOnDisable(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Patch);
 		/// <summary>
+		/// At least 2019.4 and later.
+		/// </summary>
+#warning This might be present in earlier versions. Check.
+		public static bool HasReuseCollisionCallbacks(UnityVersion version) => version.IsGreaterEqual(2019, 4);
+		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
 		public static bool HasAutoSyncTransforms(UnityVersion version) => version.IsGreaterEqual(2017, 2);
@@ -181,6 +186,11 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			if (HasCallbacksOnDisable(reader.Version))
 			{
 				CallbacksOnDisable = reader.ReadBoolean();
+			}
+			if (HasReuseCollisionCallbacks(reader.Version))
+			{
+#warning This might be present prior to 2019.4. Check. 
+				ReuseCollisionCallbacks = reader.ReadBoolean();
 			}
 			if (HasAutoSyncTransforms(reader.Version))
 			{
@@ -438,6 +448,8 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		public bool DeleteStopsCallbacks { get; set; }
 		public bool ChangeStopsCallbacks { get; set; }
 		public bool CallbacksOnDisable { get; set; }
+		
+		public bool ReuseCollisionCallbacks { get; set; }
 		public bool AutoSyncTransforms { get; set; }
 #if UNIVERSAL
 		public bool AlwaysShowColliders { get; set; }

@@ -88,17 +88,17 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public static bool HasAuthToken(UnityVersion version) => version.IsGreaterEqual(3);
 		/// <summary>
-		/// 3.5.0 and greater
+		/// 3.5.0 and greater but less than 2020.2
 		/// </summary>
-		public static bool HasRuntimeClassHashes(UnityVersion version) => version.IsGreaterEqual(3, 5);
+		public static bool HasRuntimeClassHashes(UnityVersion version) => version.IsGreaterEqual(3, 5) && version.IsLess(2020, 2);
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
 		public static bool IsRuntimeClassHashesUInt32(UnityVersion version) => version.IsLess(5);
 		/// <summary>
-		/// 5.0.0 and greater
+		/// 5.0.0 and greater but less than 2020.2
 		/// </summary>
-		public static bool HasScriptHashes(UnityVersion version) => version.IsGreaterEqual(5);
+		public static bool HasScriptHashes(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLess(2020, 2);
 		/// <summary>
 		/// 5.1.0 and greater
 		/// </summary>
@@ -216,6 +216,7 @@ namespace AssetRipper.Core.Classes
 			if (HasScriptHashes(reader.Version))
 			{
 				ScriptHashes = new Dictionary<Hash128, Hash128>();
+				
 				ScriptHashes.Read(reader);
 			}
 			if (HasGraphicsAPIs(reader.Version))

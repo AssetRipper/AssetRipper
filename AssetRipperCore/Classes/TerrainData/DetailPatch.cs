@@ -2,6 +2,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 
@@ -9,9 +10,17 @@ namespace AssetRipper.Core.Classes.TerrainData
 {
 	public struct DetailPatch : IAsset
 	{
+		/// <summary>
+		/// Less than 2020.2
+		/// </summary>
+		public static bool HasBounds(UnityVersion version) => version.IsLess(2020, 2);
 		public void Read(AssetReader reader)
 		{
-			Bounds.Read(reader);
+			if (HasBounds(reader.Version))
+			{
+				Bounds.Read(reader);
+			}
+
 			LayerIndices = reader.ReadByteArray();
 			reader.AlignStream();
 			NumberOfObjects = reader.ReadByteArray();
@@ -20,7 +29,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 		public void Write(AssetWriter writer)
 		{
-			Bounds.Write(writer);
+			if (HasBounds(writer.Version))
+			{
+				Bounds.Write(writer);
+			}
+
 			LayerIndices.Write(writer);
 			writer.AlignStream();
 			NumberOfObjects.Write(writer);
@@ -30,7 +43,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(BoundsName, Bounds.ExportYAML(container));
+			if (HasBounds(container.ExportVersion))
+			{
+				node.Add(BoundsName, Bounds.ExportYAML(container));
+			}
+
 			node.Add(LayerIndicesName, LayerIndices.ExportYAML());
 			node.Add(NumberOfObjectsName, NumberOfObjects.ExportYAML());
 			return node;

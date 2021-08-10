@@ -36,6 +36,10 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public static bool HasDepth(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
+		/// 2020.2 and greater
+		/// </summary>
+		public static bool HasUsageMode(UnityVersion version) => version.IsGreaterEqual(2020, 2);
+		/// <summary>
 		/// 2.6.0 to 4.0.0 exclusize or 5.4.0 and greater
 		/// </summary>
 		public static bool HasIsReadable(UnityVersion version) => IsReadableFirst(version) || IsReadableSecond(version);
@@ -158,6 +162,11 @@ namespace AssetRipper.Core.Classes
 			}
 			TextureSettings.Read(reader);
 
+			if (HasUsageMode(reader.Version))
+			{
+				UsageMode = reader.ReadInt32();
+			}
+
 			if (IsReadableSecond(reader.Version))
 			{
 				IsReadable = reader.ReadBoolean();
@@ -197,6 +206,10 @@ namespace AssetRipper.Core.Classes
 			node.Add(MipCountName, MipCount);
 			node.Add(DataSizeName, DataSize);
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			if (HasUsageMode(container.ExportVersion))
+			{
+				node.Add(UsageModeName, UsageMode);
+			}
 			node.Add(IsReadableName, IsReadable);
 			byte[] imageData = GetImageData(container.Version);
 			node.Add(ImageDataName, imageData.Length);
@@ -241,6 +254,7 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public int MipCount { get; set; }
 		public int ImageCount { get; set; }
+		public int UsageMode { get; set; }
 		public TextureDimension TextureDimension { get; set; }
 		public TextureUsageMode LightmapFormat { get; set; }
 		public IReadOnlyCollection<byte> ImageData => m_imageData;
@@ -254,6 +268,7 @@ namespace AssetRipper.Core.Classes
 		public const string TextureFormatName = "m_TextureFormat";
 		public const string MipMapName = "m_MipMap";
 		public const string MipCountName = "m_MipCount";
+		public const string UsageModeName = "m_UsageMode";
 		public const string IsReadableName = "m_IsReadable";
 		public const string DataSizeName = "m_DataSize";
 		public const string ImageCountName = "m_ImageCount";

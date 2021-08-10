@@ -223,6 +223,11 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public static bool HasAllowEnlightenSupportForUpgradedProject(UnityVersion version) => version.IsGreaterEqual(2019, 3) && version.IsLess(2020);
 
 		/// <summary>
+		/// 2020.2 and greater
+		/// </summary>
+		public static bool HasDefaultRenderingLayerMask(UnityVersion version) => version.IsGreaterEqual(2020, 2);
+
+		/// <summary>
 		/// 5.3.0 to 5.5.0 exclusive
 		/// </summary>
 		private static bool HasPlatformSettings(UnityVersion version) => version.IsGreaterEqual(5, 3) && version.IsLess(5, 5);
@@ -431,6 +436,12 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			{
 				LightsUseLinearIntensity = reader.ReadBoolean();
 				LightsUseColorTemperature = reader.ReadBoolean();
+			}
+
+			if (HasDefaultRenderingLayerMask(reader.Version))
+			{
+				reader.AlignStream();
+				DefaultRenderingLayerMask = reader.ReadInt32();
 			}
 			if (HasLogWhenShaderIsCompiled(reader.Version))
 			{
@@ -863,6 +874,8 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// LightsUseCCT previously (before 5.6.0b10)
 		/// </summary>
 		public bool LightsUseColorTemperature { get; set; }
+		
+		public int DefaultRenderingLayerMask { get; set; }
 		public bool LogWhenShaderIsCompiled { get; set; }
 		public bool AllowEnlightenSupportForUpgradedProject { get; set; }
 		

@@ -128,7 +128,7 @@ namespace Smolv
 					output.Write(SpirVHeaderMagic);
 					input.BaseStream.Position += sizeof(uint);
 					uint version = input.ReadUInt32();
-					output.Write(version);
+					output.Write(version & 0x00FFFFFF);
 					uint generator = input.ReadUInt32();
 					output.Write(generator);
 					int bound = input.ReadInt32();
@@ -194,6 +194,73 @@ namespace Smolv
 							output.Write(zds);
 							prevDecorate = zds;
 							ioffs++;
+						}
+
+						bool isNewSmolV = false;
+						if (op == SpvOp.MemberDecorate && isNewSmolV)
+						{
+							if (input.BaseStream.Position >= inputEndPosition)
+								return false; //Broken input
+
+							long count = input.BaseStream.Position + 1;
+							uint prevIndex = 0;
+							uint prevOffset = 0;
+							for (int m = 0; m < count; m++)
+							{
+								//read member index
+								if (!ReadVarint(input, out uint memberIndex))
+									return false;
+
+								memberIndex += prevIndex;
+								prevIndex = memberIndex;
+								
+								//decoration (and length if not common/known)
+								if (!ReadVarint(input, out uint memberDec))
+									return false;
+
+								int knownExtraOps = DecorationExtraOps((int)memberDec);
+								uint memberLen;
+								if (knownExtraOps == -1)
+								{
+									if (!ReadVarint(input, out memberLen))
+										return false;
+
+									memberLen += 4;
+								}
+								else
+								{
+									memberLen = (uint)(4 + knownExtraOps);
+								}
+
+								// write SPIR-V op+length (unless it's first member decoration, in which case it was written before)
+								if (m != 0)
+								{
+									output.Write((memberLen << 16) | (uint)op);
+									output.Write(prevDecorate);
+								}
+								output.Write(memberIndex);
+								output.Write(memberDec);
+								
+								if (memberDec == 35) // Offset
+								{
+									if (memberLen != 5)
+										return false;
+									if (!ReadVarint(input, out uint val))
+										return false;
+									val += prevOffset;
+									output.Write(val);
+									prevOffset = val;
+								} else
+								{
+									for (uint i = 4; i < memberLen; ++i)
+									{
+										if (!ReadVarint(input, out uint val))
+											return false;
+										output.Write(val);
+									}
+								}
+							}
+							continue;
 						}
 
 						// Read this many IDs, that are relative to result ID

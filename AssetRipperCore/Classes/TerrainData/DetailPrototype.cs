@@ -24,6 +24,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// </summary>
 		public static bool HasGrayscaleLighting(UnityVersion version) => version.IsLess(3);
 
+		/// <summary>
+		/// At least 2020.2
+		/// </summary>
+		public static bool HasHoleTestRadiusInsteadOfBendFactor(UnityVersion version) => version.IsGreaterEqual(2020, 2);
+
 		public void Read(AssetReader reader)
 		{
 			Prototype.Read(reader);
@@ -33,7 +38,15 @@ namespace AssetRipper.Core.Classes.TerrainData
 			MinHeight = reader.ReadSingle();
 			MaxHeight = reader.ReadSingle();
 			NoiseSpread = reader.ReadSingle();
-			BendFactor = reader.ReadSingle();
+			if (HasHoleTestRadiusInsteadOfBendFactor(reader.Version))
+			{
+				HoleTestRadius = reader.ReadSingle();
+			}
+			else
+			{
+				BendFactor = reader.ReadSingle();
+			}
+
 			HealthyColor.Read(reader);
 			DryColor.Read(reader);
 			if (HasGrayscaleLighting(reader.Version))
@@ -54,8 +67,16 @@ namespace AssetRipper.Core.Classes.TerrainData
 			writer.Write(MinHeight);
 			writer.Write(MaxHeight);
 			writer.Write(NoiseSpread);
-			writer.Write(BendFactor);
-			writer.Write(BendFactor);
+			if (HasHoleTestRadiusInsteadOfBendFactor(writer.Version))
+			{
+				writer.Write(HoleTestRadius);
+			}
+			else
+			{
+				writer.Write(BendFactor);
+			}
+
+			// writer.Write(BendFactor);
 			HealthyColor.Write(writer);
 			DryColor.Write(writer);
 			if (HasGrayscaleLighting(writer.Version))
@@ -84,7 +105,15 @@ namespace AssetRipper.Core.Classes.TerrainData
 			node.Add(MinHeightName, MinHeight);
 			node.Add(MaxHeightName, MaxHeight);
 			node.Add(NoiseSpreadName, NoiseSpread);
-			node.Add(BendFactorName, BendFactor);
+			if (HasHoleTestRadiusInsteadOfBendFactor(container.ExportVersion))
+			{
+				node.Add(BendFactorName, HoleTestRadius);
+			}
+			else
+			{
+				node.Add(BendFactorName, BendFactor);
+			}
+
 			node.Add(HealthyColorName, HealthyColor.ExportYAML(container));
 			node.Add(DryColorName, DryColor.ExportYAML(container));
 			if (HasGrayscaleLighting(container.ExportVersion))
@@ -103,6 +132,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public float MaxHeight { get; set; }
 		public float NoiseSpread { get; set; }
 		public float BendFactor { get; set; }
+		public float HoleTestRadius { get; set; }
 		public int GrayscaleLighting { get; set; }
 		public float LightmapFactor { get; set; }
 		public DetailRenderMode RenderMode { get; set; }
@@ -116,6 +146,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public const string MaxHeightName = "maxHeight";
 		public const string NoiseSpreadName = "noiseSpread";
 		public const string BendFactorName = "bendFactor";
+		public const string HoleTestRadiusName = "holeTestRadius";
 		public const string HealthyColorName = "healthyColor";
 		public const string DryColorName = "dryColor";
 		public const string GrayscaleLightingName = "grayscaleLighting";

@@ -137,6 +137,10 @@ namespace AssetRipper.Core.Classes.Light
 		/// </summary>
 		public static bool HasBoundingSphereOverride(UnityVersion version) => version.IsGreaterEqual(2019, 1, 0, UnityVersionType.Beta, 4);
 		/// <summary>
+		/// 2020.2 and greater
+		/// </summary>
+		public static bool HasUseViewFrustumForShadowCasterCull(UnityVersion version) => version.IsGreaterEqual(2020, 2);
+		/// <summary>
 		/// Not Release (NOTE: unknown version)
 		/// </summary>
 		public static bool HasShadowRadius(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease();
@@ -246,6 +250,13 @@ namespace AssetRipper.Core.Classes.Light
 			{
 				BoundingSphereOverride.Read(reader);
 				UseBoundingSphereOverride = reader.ReadBoolean();
+				
+				if (HasUseViewFrustumForShadowCasterCull(reader.Version))
+				{
+					//2020.2
+					UseViewFrustumForShadowCasterCull = reader.ReadBoolean();
+				}
+				
 				reader.AlignStream();
 			}
 #if UNIVERSAL
@@ -361,6 +372,7 @@ namespace AssetRipper.Core.Classes.Light
 		public float ColorTemperature { get; set; }
 		public bool UseColorTemperature { get; set; }
 		public bool UseBoundingSphereOverride { get; set; }
+		public bool UseViewFrustumForShadowCasterCull { get; set; }
 #if UNIVERSAL
 		public float ShadowRadius { get; set; }
 		public float ShadowAngle { get; set; }

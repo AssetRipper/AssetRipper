@@ -5,6 +5,7 @@ using AssetRipper.Core.Classes.ParticleSystem.Curve;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 
@@ -61,6 +62,10 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 		/// 5.3.0 and greater
 		/// </summary>
 		public static bool HasCollidesWithDynamic(UnityVersion version) => version.IsGreaterEqual(5, 3);
+		/// <summary>
+		/// 2020.2 and greater
+		/// </summary>
+		public static bool HasPlaneListNotIndividual(UnityVersion version) => version.IsGreaterEqual(2020, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -80,12 +85,19 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 				reader.AlignStream();
 			}
 
-			Plane0.Read(reader);
-			Plane1.Read(reader);
-			Plane2.Read(reader);
-			Plane3.Read(reader);
-			Plane4.Read(reader);
-			Plane5.Read(reader);
+			if (HasPlaneListNotIndividual(reader.Version))
+			{
+				Planes = reader.ReadAssetArray<PPtr<Transform>>();
+			}
+			else
+			{
+				Plane0.Read(reader);
+				Plane1.Read(reader);
+				Plane2.Read(reader);
+				Plane3.Read(reader);
+				Plane4.Read(reader);
+				Plane5.Read(reader);
+			}
 
 			if (HasDampenSingle(reader.Version))
 			{
@@ -136,12 +148,24 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 
 		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			yield return context.FetchDependency(Plane0, Plane0Name);
-			yield return context.FetchDependency(Plane1, Plane1Name);
-			yield return context.FetchDependency(Plane2, Plane2Name);
-			yield return context.FetchDependency(Plane3, Plane3Name);
-			yield return context.FetchDependency(Plane4, Plane4Name);
-			yield return context.FetchDependency(Plane5, Plane5Name);
+			if (HasPlaneListNotIndividual(context.Version))
+			{
+				int i = 0;
+				foreach (PPtr<Transform> pPtr in Planes)
+				{
+					yield return context.FetchDependency(pPtr, $"planes[${i}]");
+					i++;
+				}
+			}
+			else
+			{
+				yield return context.FetchDependency(Plane0, Plane0Name);
+				yield return context.FetchDependency(Plane1, Plane1Name);
+				yield return context.FetchDependency(Plane2, Plane2Name);
+				yield return context.FetchDependency(Plane3, Plane3Name);
+				yield return context.FetchDependency(Plane4, Plane4Name);
+				yield return context.FetchDependency(Plane5, Plane5Name);
+			}
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
@@ -154,12 +178,22 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 			node.Add(MultiplyColliderForceByParticleSizeName, MultiplyColliderForceByParticleSize);
 			node.Add(MultiplyColliderForceByParticleSpeedName, MultiplyColliderForceByParticleSpeed);
 			node.Add(MultiplyColliderForceByCollisionAngleName, GetExportMultiplyColliderForceByCollisionAngle(container.Version));
-			node.Add(Plane0Name, Plane0.ExportYAML(container));
-			node.Add(Plane1Name, Plane1.ExportYAML(container));
-			node.Add(Plane2Name, Plane2.ExportYAML(container));
-			node.Add(Plane3Name, Plane3.ExportYAML(container));
-			node.Add(Plane4Name, Plane4.ExportYAML(container));
-			node.Add(Plane5Name, Plane5.ExportYAML(container));
+
+			if (HasPlaneListNotIndividual(container.ExportVersion))
+			{
+				node.Add(PlanesName, Planes.ExportYAML(container));
+			}
+			else
+			{
+#warning if we're exporting from a version which has a list to one which doesn't, need to convert here. 
+				node.Add(Plane0Name, Plane0.ExportYAML(container));
+				node.Add(Plane1Name, Plane1.ExportYAML(container));
+				node.Add(Plane2Name, Plane2.ExportYAML(container));
+				node.Add(Plane3Name, Plane3.ExportYAML(container));
+				node.Add(Plane4Name, Plane4.ExportYAML(container));
+				node.Add(Plane5Name, Plane5.ExportYAML(container));
+			}
+
 			node.Add(DampenName, Dampen.ExportYAML(container));
 			node.Add(BounceName, Bounce.ExportYAML(container));
 			node.Add(EnergyLossOnCollisionName, EnergyLossOnCollision.ExportYAML(container));
@@ -223,6 +257,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 		public bool CollisionMessages { get; set; }
 		public bool CollidesWithDynamic { get; set; }
 		public bool InteriorCollisions { get; set; }
+		public PPtr<Transform>[] Planes { get; set; }
 
 		public const string TypeName = "type";
 		public const string CollisionModeName = "collisionMode";
@@ -230,6 +265,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 		public const string MultiplyColliderForceByParticleSizeName = "multiplyColliderForceByParticleSize";
 		public const string MultiplyColliderForceByParticleSpeedName = "multiplyColliderForceByParticleSpeed";
 		public const string MultiplyColliderForceByCollisionAngleName = "multiplyColliderForceByCollisionAngle";
+		public const string PlanesName = "planes";
 		public const string Plane0Name = "plane0";
 		public const string Plane1Name = "plane1";
 		public const string Plane2Name = "plane2";
