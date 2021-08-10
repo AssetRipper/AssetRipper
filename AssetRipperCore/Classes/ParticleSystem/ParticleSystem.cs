@@ -388,7 +388,6 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public VelocityModule VelocityModule { get; } = new VelocityModule();
 		public InheritVelocityModule InheritVelocityModule { get; } = new InheritVelocityModule();
 		public ForceModule ForceModule { get; } = new ForceModule();
-		
 		public LifetimeByEmitterSpeedModule LifetimeByEmitterSpeedModule { get; } = new LifetimeByEmitterSpeedModule();
 		public ExternalForcesModule ExternalForcesModule { get; } = new ExternalForcesModule();
 		public ClampVelocityModule ClampVelocityModule { get; } = new ClampVelocityModule();
