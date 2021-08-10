@@ -162,6 +162,10 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		/// </summary>
 		public static bool HasCachingShaderPreprocessor(UnityVersion version) => version.IsGreaterEqual(2020);
 		/// <summary>
+		/// 2020.2 and greater
+		/// </summary>
+		public static bool HasPrefabModeAllowAutoSave(UnityVersion version) => version.IsGreaterEqual(2020, 2);
+		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
 		public static bool HasEnterPlayModeOptions(UnityVersion version) => version.IsGreaterEqual(2019, 3);
@@ -313,6 +317,11 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			{
 				CachingShaderPreprocessor = reader.ReadBoolean();
 			}
+
+			if (HasPrefabModeAllowAutoSave(reader.Version))
+			{
+				PrefabModeAllowAutoSave = reader.ReadBoolean();
+			}
 			if (IsAlign1(reader.Version))
 			{
 				reader.AlignStream();
@@ -410,6 +419,15 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			{
 				node.Add(AsyncShaderCompilationName, GetAsyncShaderCompilation(container.Version));
 			}
+			if (HasCachingShaderPreprocessor(container.ExportVersion))
+			{
+				node.Add(CachingShaderPreprocessorName, CachingShaderPreprocessor);
+			}
+
+			if (HasPrefabModeAllowAutoSave(container.ExportVersion))
+			{
+				node.Add(PrefabModeAllowAutoSaveName, PrefabModeAllowAutoSave);
+			}
 			if (HasEnterPlayModeOptions(container.ExportVersion))
 			{
 				node.Add(EnterPlayModeOptionsEnabledName, EnterPlayModeOptionsEnabled);
@@ -431,6 +449,12 @@ namespace AssetRipper.Core.Classes.EditorSettings
 				node.Add(CacheServerNamespacePrefixName, GetCacheServerNamespacePrefix(container.Version));
 				node.Add(CacheServerEnableDownloadName, CacheServerEnableDownload);
 				node.Add(CacheServerEnableUploadName, CacheServerEnableUpload);
+
+				if (HasCacheServerAuthAndTls(container.ExportVersion))
+				{
+					node.Add(CacheServerEnableAuthName, CacheServerEnableAuth);
+					node.Add(CacheServerEnableTlsName, CacheServerEnableTls);
+				}
 			}
 			return node;
 		}
@@ -524,6 +548,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		public bool EnableTextureStreamingInPlayMode { get; set; }
 		public bool AsyncShaderCompilation { get; set; }
 		public bool CachingShaderPreprocessor { get; set; }
+		public bool PrefabModeAllowAutoSave { get; set; }
 		public bool EnterPlayModeOptionsEnabled { get; set; }
 		public EnterPlayModeOptions EnterPlayModeOptions { get; set; }
 		public int GameObjectNamingDigits { get; set; }
@@ -561,6 +586,8 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		public const string EnableTextureStreamingInEditModeName = "m_EnableTextureStreamingInEditMode";
 		public const string EnableTextureStreamingInPlayModeName = "m_EnableTextureStreamingInPlayMode";
 		public const string AsyncShaderCompilationName = "m_AsyncShaderCompilation";
+		public const string CachingShaderPreprocessorName = "m_CachingShaderPreprocessor";
+		public const string PrefabModeAllowAutoSaveName = "m_PrefabModeAllowAutoSave";
 		public const string EnterPlayModeOptionsEnabledName = "m_EnterPlayModeOptionsEnabled";
 		public const string EnterPlayModeOptionsName = "m_EnterPlayModeOptions";
 		public const string ShowLightmapResolutionOverlayName = "m_ShowLightmapResolutionOverlay";
@@ -571,6 +598,8 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		public const string CacheServerNamespacePrefixName = "m_CacheServerNamespacePrefix";
 		public const string CacheServerEnableDownloadName = "m_CacheServerEnableDownload";
 		public const string CacheServerEnableUploadName = "m_CacheServerEnableUpload";
+		public const string CacheServerEnableAuthName = "m_CacheServerEnableAuth";
+		public const string CacheServerEnableTlsName = "m_CacheServerEnableTls";
 
 		public PPtr<SceneAsset> PrefabRegularEnvironment = new();
 		public PPtr<SceneAsset> PrefabUIEnvironment = new();
