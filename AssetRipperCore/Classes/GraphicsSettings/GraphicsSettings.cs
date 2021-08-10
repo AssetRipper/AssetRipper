@@ -841,7 +841,6 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public LightmapStrippingMode LightmapStripping { get; set; }
 		public LightmapStrippingMode FogStripping { get; set; }
 		public InstancingStrippingVariant InstancingStripping { get; set; }
-		public int VideoShadersIncludeMode { get; set; }
 		public bool LightmapKeepPlain { get; set; }
 		public bool LightmapKeepDirCombined { get; set; }
 		public bool LightmapKeepDirSeparate { get; set; }
@@ -866,6 +865,8 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public bool LightsUseColorTemperature { get; set; }
 		public bool LogWhenShaderIsCompiled { get; set; }
 		public bool AllowEnlightenSupportForUpgradedProject { get; set; }
+		
+		public int VideoShadersIncludeMode { get; set; }
 
 		public BuiltinShaderSettings Deferred = new();
 		public BuiltinShaderSettings DeferredReflections = new();
