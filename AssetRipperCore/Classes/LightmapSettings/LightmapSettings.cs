@@ -171,9 +171,13 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// </summary>
 		public static bool HasRuntimeCPUUsage(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 6);
 		/// <summary>
-		/// 5.6.0b2 and greater
+		/// 5.6.0b2 and greater but less than 2020
 		/// </summary>
-		public static bool HasUseShadowmask(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2);
+		public static bool HasUseShadowmask(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 2) && version.IsLess(2020);
+		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasLightingSettings(UnityVersion version) => version.IsGreaterEqual(2020);
 
 		/// <summary>
 		/// 2017.1 and (Release or Resource)
@@ -271,6 +275,11 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 				{
 					ShadowMaskMode = reader.ReadInt32();
 				}
+			}
+
+			if (HasLightingSettings(reader.Version))
+			{
+				LightingSettings.Read(reader);
 			}
 		}
 
@@ -516,11 +525,13 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		public ColorSpace BakedColorSpace { get; set; }
 		public bool UseDualLightmapsInForward { get; set; }
 		public int RuntimeCPUUsage { get; set; }
+		public PPtr<LightingSettings> LightingSettings { get; set; }
 		public bool UseShadowmask
 		{
 			get => ShadowMaskMode != 0;
 			set => ShadowMaskMode = value ? 1 : 0;
 		}
+
 		/// <summary>
 		/// 2017.1 - replaced by UseShadowmask
 		/// </summary>

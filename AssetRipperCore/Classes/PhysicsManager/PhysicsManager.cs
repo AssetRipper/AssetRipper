@@ -67,6 +67,10 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 		}
 
 		/// <summary>
+		/// 2020 and greater
+		/// </summary>
+		public static bool HasDefaultMaxDepenetrationVelocity(UnityVersion version) => version.IsGreaterEqual(2020);
+		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
 		public static bool HasSleepThreshold(UnityVersion version) => version.IsGreaterEqual(5);
@@ -155,6 +159,10 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 			Gravity.Read(reader);
 			DefaultMaterial.Read(reader);
 			BounceThreshold = reader.ReadSingle();
+			if (HasDefaultMaxDepenetrationVelocity(reader.Version))
+			{
+				DefaultMaxDepenetrationValue = reader.ReadSingle();
+			}
 			if (HasSleepThreshold(reader.Version))
 			{
 				SleepThreshold = reader.ReadSingle();
@@ -389,6 +397,7 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 		}
 
 		public float BounceThreshold { get; set; }
+		public float DefaultMaxDepenetrationValue { get; set; }
 		public float SleepThreshold { get; set; }
 		public float SleepVelocity { get; set; }
 		public float SleepAngularVelocity { get; set; }
