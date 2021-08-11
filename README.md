@@ -106,7 +106,7 @@ For advanced users, every commit is automatically built into an alpha build with
 
 
 ## Goals
- * Dummy and/or Better shader implementation
+ * Better shader implementation
  * NAudio implementation for exporting other audio formats
  * More Unity Component Exporters
  * Option to reference assemblies instead of scripts
@@ -129,6 +129,8 @@ Please be aware that distributing the output from this software may be against c
 This began as a fork of [mafaca](https://github.com/mafaca)'s [uTinyRipper](https://github.com/mafaca/UtinyRipper) project licensed under the [MIT license](Licenses/uTinyRipper.md).
 
 It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](https://github.com/Perfare/AssetStudio) project licensed under the [MIT license](Licenses/AssetStudio.md).
+
+It has borrowed code from [spacehamster](https://github.com/spacehamster)'s [uTinyRipperExporter](https://github.com/spacehamster/UtinyRipperExporter) project licensed under the [MIT license](Licenses/uTinyRipperExporter.md).
 
 [Brotli](https://github.com/google/brotli) is licensed under the [MIT license](Licenses/Brotli.md).
 

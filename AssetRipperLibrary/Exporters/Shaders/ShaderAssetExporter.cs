@@ -21,9 +21,25 @@ namespace AssetRipper.Library.Exporters.Shaders
 	[SupportedOSPlatform("windows")]
 	public sealed class ShaderAssetExporter : IAssetExporter
 	{
+		ShaderExportMode ExportMode { get; set; } = ShaderExportMode.Dummy;
+
 		public bool IsHandle(UnityObject asset, ExportOptions options)
 		{
 			return true;
+		}
+
+		public static bool IsDX11ExportMode(ShaderExportMode mode)
+		{
+			switch (mode)
+			{
+				case ShaderExportMode.GLSL:
+				case ShaderExportMode.Metal:
+				case ShaderExportMode.DXBytecode:
+				case ShaderExportMode.DXBytecodeRestored:
+					return true;
+				default:
+					return false;
+			}
 		}
 
 		public bool Export(IExportContainer container, UnityObject asset, string path)
@@ -31,7 +47,22 @@ namespace AssetRipper.Library.Exporters.Shaders
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
 				Shader shader = (Shader)asset;
-				shader.ExportBinary(container, fileStream, ShaderExporterInstantiator);
+				if (ExportMode == ShaderExportMode.Dummy)
+				{
+					DummyShaderTextExporter.ExportShader(shader, container, fileStream, DefaultShaderExporterInstantiator);
+				}
+				else if (IsDX11ExportMode(ExportMode))
+				{
+					shader.ExportBinary(container, fileStream, HLSLShaderExporterInstantiator);
+				}
+				else if (ExportMode == ShaderExportMode.Asm)
+				{
+					shader.ExportBinary(container, fileStream, AssemblyShaderExporterInstantiator);
+				}
+				else
+				{
+					shader.ExportBinary(container, fileStream, DefaultShaderExporterInstantiator);
+				}
 			}
 			return true;
 		}
@@ -69,6 +100,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			return true;
 		}
 
+		/*old instantiator
 		private static ShaderTextExporter ShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
 		{
 			switch (graphicApi)
@@ -87,6 +119,65 @@ namespace AssetRipper.Library.Exporters.Shaders
 					return Shader.DefaultShaderExporterInstantiator(version, graphicApi);
 			}
 		}
+		*/
 
+		private static ShaderTextExporter DefaultShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
+		{
+			switch (graphicApi)
+			{
+				case GPUPlatform.vulkan:
+					return new ShaderVulkanExporter();
+				default:
+					return Shader.DefaultShaderExporterInstantiator(version, graphicApi);
+			}
+		}
+
+		private ShaderTextExporter AssemblyShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
+		{
+			switch (graphicApi)
+			{
+				case GPUPlatform.d3d9:
+				case GPUPlatform.d3d11_9x:
+				case GPUPlatform.d3d11:
+					return new ShaderAsmExporter(graphicApi);
+				case GPUPlatform.vulkan:
+					return new ShaderVulkanExporter();
+				default:
+					return Shader.DefaultShaderExporterInstantiator(version, graphicApi);
+			}
+		}
+
+		private ShaderTextExporter HLSLShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
+		{
+			switch (graphicApi)
+			{
+				case GPUPlatform.d3d11:
+					if (ExportMode == ShaderExportMode.DXBytecode)
+					{
+						return new ShaderDxBytecodeExporter(graphicApi, restore: false);
+					}
+					if (ExportMode == ShaderExportMode.DXBytecodeRestored)
+					{
+						return new ShaderDxBytecodeExporter(graphicApi, restore: true);
+					}
+					if (ExportMode == ShaderExportMode.GLSL)
+					{
+						return new ShaderHLSLccExporter(graphicApi, HLSLccWrapper.WrappedGLLang.LANG_DEFAULT);
+					}
+					if (ExportMode == ShaderExportMode.Metal)
+					{
+						return new ShaderHLSLccExporter(graphicApi, HLSLccWrapper.WrappedGLLang.LANG_METAL);
+					}
+					throw new Exception($"Unexpected shader mode {ExportMode}");
+				case GPUPlatform.d3d9:
+				case GPUPlatform.d3d11_9x:
+					return new ShaderAsmExporter(graphicApi);
+				case GPUPlatform.vulkan:
+					return new ShaderVulkanExporter();
+
+				default:
+					return Shader.DefaultShaderExporterInstantiator(version, graphicApi);
+			}
+		}
 	}
 }

@@ -30,6 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\Smolv.md = Licenses\Smolv.md
 		Licenses\SpirV.md = Licenses\SpirV.md
 		Licenses\uTinyRipper.md = Licenses\uTinyRipper.md
+		Licenses\uTinyRipperExporter.md = Licenses\uTinyRipperExporter.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brotli", "Brotli\Brotli.csproj", "{DE764903-A3F8-4A04-80DF-BA487A26DF75}"
@@ -66,7 +67,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\stale.yml = .github\workflows\stale.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeTester", "CodeTester\CodeTester.csproj", "{D7D80881-42BB-473C-B7A2-EB1FEA5780A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeTester", "CodeTester\CodeTester.csproj", "{D7D80881-42BB-473C-B7A2-EB1FEA5780A4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Texture2DDecoderNative", "Texture2DDecoderNative\Texture2DDecoderNative.vcxproj", "{29356642-C46E-4144-83D8-22DC09D0D7FD}"
 EndProject

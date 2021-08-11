@@ -13,7 +13,12 @@ namespace AssetRipper.Library.Exporters.Shaders
 	[SupportedOSPlatform("windows")]
 	public class ShaderHLSLccExporter : ShaderDXExporter
 	{
-		public ShaderHLSLccExporter(GPUPlatform graphicApi) : base(graphicApi) { }
+		WrappedGLLang m_GLLang;
+
+		public ShaderHLSLccExporter(GPUPlatform graphicApi, WrappedGLLang lang) : base(graphicApi) 
+		{
+			m_GLLang = lang;
+		}
 
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
@@ -38,7 +43,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 						ext.ARB_shading_language_420pack = 0;
 						ext.OVR_multiview = 0;
 						ext.EXT_shader_framebuffer_fetch = 0;
-						Shader shader = Shader.TranslateFromMem(exportData, WrappedGLLang.LANG_DEFAULT, ext);
+						Shader shader = Shader.TranslateFromMem(exportData, m_GLLang, ext);
 						if (shader.OK == 0)
 						{
 							base.Export(writer, ref subProgram);
