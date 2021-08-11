@@ -38,9 +38,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Il2CppGameAssemblyPath = GetIl2CppGameAssemblyPath(LibPath);
 			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
 			UnityPlayerPath = null;
-			string globalGameManagersPath = Path.Combine(GameDataPath, "globalgamemanagers");
-			string unityVersion = (new AssetRipper.Core.SerializedFiles.SerializedFile(new FileReader(globalGameManagersPath), null)).unityVersion;
-			UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion.Parse(unityVersion).ToArray();
+			UnityVersion = GetUnityVersion(GameDataPath);
 
 			if (HasIl2CppFiles())
 				Backend = Assembly.ScriptingBackend.Il2Cpp;
@@ -169,11 +167,23 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return Directory.GetFiles(libDirectory, Il2CppGameAssemblyName, SearchOption.AllDirectories).FirstOrDefault();
 		}
 
-		private static string GetAndroidUnityPlayerPath(string libDirectory)
+		private static string GetAndroidUnityAssemblyPath(string libDirectory)
 		{
 			if (string.IsNullOrEmpty(libDirectory) || !Directory.Exists(libDirectory)) return null;
 
-			return Directory.GetFiles(libDirectory, AndroidUnityPlayerName, SearchOption.AllDirectories).FirstOrDefault();
+			return Directory.GetFiles(libDirectory, AndroidUnityAssemblyName, SearchOption.AllDirectories).FirstOrDefault();
+		}
+
+		private static int[] GetUnityVersion(string dataPath)
+		{
+			string globalGameManagersPath = Path.Combine(dataPath, GlobalGameManagersName);
+			string lz4bundlePath = Path.Combine(dataPath, Lz4BundleName);
+			if (File.Exists(globalGameManagersPath))
+				return GetUnityVersionFromSerializedFile(globalGameManagersPath);
+			else if (File.Exists(lz4bundlePath))
+				return GetUnityVersionFromBundleFile(dataPath);
+			else
+				return null;
 		}
 
 		private static bool IsMono(string managedDirectory)
@@ -190,7 +200,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		private const string MetaName = "META-INF";
 		private const string BinName = "bin";
 		private const string Il2CppGameAssemblyName = "libil2cpp.so";
-		private const string AndroidUnityPlayerName = "libunity.so";
+		private const string AndroidUnityAssemblyName = "libunity.so";
 
 		private readonly DirectoryInfo m_root;
 		private readonly DirectoryInfo m_obbRoot;

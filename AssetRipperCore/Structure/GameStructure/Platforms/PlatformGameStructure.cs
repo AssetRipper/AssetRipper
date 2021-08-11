@@ -1,3 +1,4 @@
+using AssetRipper.Core.IO.FileReading;
 using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Utils;
@@ -46,12 +47,13 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		protected const string DataName = "data";
 		protected const string MainDataName = "mainData";
-		protected const string GlobalGameManagerName = "globalgamemanagers";
+		protected const string GlobalGameManagersName = "globalgamemanagers";
 		protected const string GlobalGameManagerAssetsName = "globalgamemanagers.assets";
 		protected const string ResourcesAssetsName = "resources.assets";
 		protected const string LevelPrefix = "level";
 
 		protected const string AssetBundleExtension = ".unity3d";
+		protected const string Lz4BundleName = DataName + AssetBundleExtension;
 
 		public static bool IsPrimaryEngineFile(string fileName)
 		{
@@ -59,7 +61,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				return true;
 			}
-			if (fileName == GlobalGameManagerName || fileName == GlobalGameManagerAssetsName)
+			if (fileName == GlobalGameManagersName || fileName == GlobalGameManagerAssetsName)
 			{
 				return true;
 			}
@@ -149,10 +151,10 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		protected void CollectSerializedGameFiles(DirectoryInfo root, IDictionary<string, string> files)
 		{
-			string filePath = Path.Combine(root.FullName, GlobalGameManagerName);
+			string filePath = Path.Combine(root.FullName, GlobalGameManagersName);
 			if (MultiFileStream.Exists(filePath))
 			{
-				AddFile(files, GlobalGameManagerName, filePath);
+				AddFile(files, GlobalGameManagersName, filePath);
 			}
 			else
 			{
@@ -281,6 +283,18 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 			files.Add(uniqueName, path);
 			Logger.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found");
+		}
+
+		protected static int[] GetUnityVersionFromSerializedFile(string filePath)
+		{
+			string unityVersion = (new AssetRipper.Core.SerializedFiles.SerializedFile(new FileReader(filePath), null)).unityVersion;
+			return AssetRipper.Core.Parser.Files.UnityVersion.Parse(unityVersion).ToArray();
+		}
+
+		protected static int[] GetUnityVersionFromBundleFile(string filePath)
+		{
+			string unityVersion = (new AssetRipper.Core.Reading.BundleFile(new FileReader(filePath))).m_Header.unityRevision;
+			return AssetRipper.Core.Parser.Files.UnityVersion.Parse(unityVersion).ToArray();
 		}
 
 		protected static bool HasMonoAssemblies(string managedDirectory)
