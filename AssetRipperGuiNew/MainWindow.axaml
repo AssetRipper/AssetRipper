@@ -11,12 +11,25 @@
         <ar:MainWindowViewModel />
     </Design.DataContext>
     <Grid>
-        <TextBlock Text="Drag-and-Drop Your Game Folder Here"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open"></MenuItem>
+                <MenuItem Header="_Exit"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Export">
+                <MenuItem Header="_Export All Files"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <TextBlock Grid.Row="1" Text="Drag-and-Drop Your Game Folder Here"
                    TextAlignment="Center"
                    VerticalAlignment="Center"
                    IsVisible="{Binding !HasFile}">
         </TextBlock>
-        <TextBlock Text="{Binding LoadingText}"
+        <TextBlock Grid.Row="1" Text="{Binding LoadingText}"
                    TextAlignment="Center"
                    VerticalAlignment="Center">
             <TextBlock.IsVisible>
@@ -26,7 +39,30 @@
                 </MultiBinding>
             </TextBlock.IsVisible>
         </TextBlock>
-        <Grid IsVisible="{Binding HasLoaded}" RowDefinitions="*,150">
+        <Grid Grid.Row="1" IsVisible="{Binding HasLoaded}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="500" MinWidth="300"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MinWidth="800"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TreeView Grid.Column="0" Items="{Binding AssetFiles}">
+                <!--File browser-->
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate ItemsSource="{Binding SubItems}">
+                        <TextBlock Text="{Binding DisplayAs}" />
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <GridSplitter Grid.Column="1" 
+                          ResizeDirection="Columns" 
+                          Background="#ccc"
+                          Width="2" />
+            <Grid Grid.Column="2" RowDefinitions="*, 400">
+                <Grid Grid.Row="0">
+                    <!--File content-->
+                </Grid>
+                <TextBox Grid.Row="1" IsReadOnly="True" Text="{Binding LogText}" />
+            </Grid>
         </Grid>
     </Grid>
 </Window>

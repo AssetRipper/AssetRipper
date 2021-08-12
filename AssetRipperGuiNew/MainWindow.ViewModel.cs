@@ -1,5 +1,9 @@
-﻿using AssetRipperGuiNew.Exceptions;
+﻿using AssetRipper.Core.Logging;
+using AssetRipperGuiNew.Exceptions;
 using Avalonia.Input;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace AssetRipperGuiNew
@@ -9,6 +13,9 @@ namespace AssetRipperGuiNew
 		private bool _hasFile;
 		private bool _hasLoaded;
 		private string? _loadingText;
+		private string _logText = "";
+
+		public ObservableCollection<NewUiFileListItem> AssetFiles { get; } = new();
 
 		public bool HasFile
 		{
@@ -40,6 +47,23 @@ namespace AssetRipperGuiNew
 			}
 		}
 
+		public string LogText
+		{
+			get => _logText;
+			set
+			{
+				_logText = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public MainWindowViewModel()
+		{
+			Logger.Add(new ViewModelLogger(this));
+			Logger.Add(new FileLogger());
+			Logger.LogSystemInformation("AssetRipper GUI Version");
+		}
+
 		private void UpdateGamePathInUi(string path) => LoadingText = $"Loading Game Content from {path}...";
 
 		public void OnFileDropped(DragEventArgs e)
@@ -55,12 +79,15 @@ namespace AssetRipperGuiNew
 			
 			HasFile = true;
 			HasLoaded = false;
+			AssetFiles.Clear();
 
 			UpdateGamePathInUi(gamePath);
 
 			UiGameLoader.LoadFromPath(filesDropped, gameStructure =>
 			{
 				HasLoaded = true;
+				List<NewUiFileListItem> items = NewUiFileListing.GetItemsFromStructure(gameStructure);
+				items.ForEach(AssetFiles.Add);
 			}, error =>
 			{
 				HasFile = false;
