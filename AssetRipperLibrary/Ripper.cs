@@ -1,23 +1,25 @@
-﻿using AssetRipper.Core.Project.Exporters;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Textures;
 using System;
 using System.Collections.Generic;
-using AssetRipper.Core;
+using UnityObject = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library
 {
 	public class Ripper
 	{
 		private GameStructure GameStructure { get; set; }
+		private bool ExportersInitialized { get; set; }
 
 		public GameStructure Load(IReadOnlyList<string> paths)
 		{
+			ExportersInitialized = false;
 			if(paths.Count == 1)
 				Logger.Log(LogType.Info, LogCategory.General, $"Attempting to read files from {paths[0]}");
 			else
@@ -27,12 +29,44 @@ namespace AssetRipper.Library
 			return GameStructure;
 		}
 
+		public IEnumerable<UnityObject> FetchLoadedAssets()
+		{
+			if (GameStructure == null) throw new NullReferenceException("GameStructure cannot be null");
+			if (GameStructure.FileCollection == null) throw new NullReferenceException("FileCollection cannot be null");
+			return GameStructure.FileCollection.FetchAssets();
+		}
+
 		public void Export(string exportPath)
 		{
-			Logger.Log(LogType.Info, LogCategory.General, $"Attempting to export assets to {exportPath}...");
+			Logger.Log(LogType.Info, LogCategory.Export, $"Attempting to export assets to {exportPath}...");
+			InitializeExporters();
+			GameStructure.Export(exportPath);
+			Logger.Log(LogType.Info, LogCategory.Export, "Finished exporting assets");
+		}
+
+		public void Export(string exportPath, UnityObject asset) => Export(exportPath, new UnityObject[] { asset });
+		public void Export(string exportPath, IEnumerable<UnityObject> assets)
+		{
+			Logger.Log(LogType.Info, LogCategory.Export, $"Attempting to export assets to {exportPath}...");
+			InitializeExporters();
+			List<UnityObject> list = new List<UnityObject>(assets);
+			GameStructure.Export(exportPath,GetFilter(list));
+			Logger.Log(LogType.Info, LogCategory.Export, "Finished exporting assets");
+		}
+
+		private static Func<UnityObject, bool> GetFilter(List<UnityObject> assets)
+		{
+			if (assets == null) throw new ArgumentNullException(nameof(assets));
+			return (UnityObject obj) => assets.Contains(obj);
+		}
+
+		private void InitializeExporters()
+		{
 			if (GameStructure == null) throw new NullReferenceException("GameStructure cannot be null");
 			if (GameStructure.FileCollection == null) throw new NullReferenceException("FileCollection cannot be null");
 			if (GameStructure.FileCollection.Exporter == null) throw new NullReferenceException("Project Exporter cannot be null");
+			if (ExportersInitialized)
+				return;
 
 			//Core Exporters
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
@@ -60,8 +94,7 @@ namespace AssetRipper.Library
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, engineExporter);
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
 
-			GameStructure.Export(exportPath);
-			Logger.Log(LogType.Info, LogCategory.General, "Finished exporting assets");
+			ExportersInitialized = true;
 		}
 	}
 }
