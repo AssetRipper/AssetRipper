@@ -9,6 +9,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.Utils;
+using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Utils;
 using System;
 using System.Collections.Generic;
@@ -144,6 +145,10 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				Texture2D texture = (Texture2D)asset;
 				return texture.IsValidData;
+			}
+			if(asset.ClassID == ClassIDType.Sprite && options is LibraryConfiguration libOptions)
+			{
+				return libOptions.SpriteExportMode == SpriteExportMode.Texture2D;
 			}
 			return true;
 		}

@@ -1,8 +1,9 @@
 ﻿using AssetRipper.Core;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
-using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Textures;
@@ -14,7 +15,8 @@ namespace AssetRipper.Library
 {
 	public class Ripper
 	{
-		private GameStructure GameStructure { get; set; }
+		public GameStructure GameStructure { get; set; }
+		public LibraryConfiguration Settings { get; } = new();
 		private bool ExportersInitialized { get; set; }
 
 		public GameStructure Load(IReadOnlyList<string> paths)
@@ -39,8 +41,10 @@ namespace AssetRipper.Library
 		public void Export(string exportPath)
 		{
 			Logger.Log(LogType.Info, LogCategory.Export, $"Attempting to export assets to {exportPath}...");
+			Settings.ExportPath = exportPath;
+			Settings.Filter = LibraryConfiguration.DefaultFilter;
 			InitializeExporters();
-			GameStructure.Export(exportPath);
+			GameStructure.Export(Settings);
 			Logger.Log(LogType.Info, LogCategory.Export, "Finished exporting assets");
 		}
 
@@ -48,9 +52,11 @@ namespace AssetRipper.Library
 		public void Export(string exportPath, IEnumerable<UnityObject> assets)
 		{
 			Logger.Log(LogType.Info, LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			InitializeExporters();
 			List<UnityObject> list = new List<UnityObject>(assets);
-			GameStructure.Export(exportPath,GetFilter(list));
+			Settings.ExportPath = exportPath;
+			Settings.Filter = GetFilter(list);
+			InitializeExporters();
+			GameStructure.Export(Settings);
 			Logger.Log(LogType.Info, LogCategory.Export, "Finished exporting assets");
 		}
 
@@ -76,7 +82,7 @@ namespace AssetRipper.Library
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter());
+				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
 			}
 
 			//Engine Exporters

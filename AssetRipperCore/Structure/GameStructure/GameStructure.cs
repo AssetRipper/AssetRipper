@@ -91,19 +91,13 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 		}
 
-		public void Export(string exportPath) => Export(exportPath, null);
-		public void Export(string exportPath, Func<Object, bool> filter)
+		public void Export(CoreConfiguration options)
 		{
-			if (string.IsNullOrEmpty(exportPath))
-				throw new ArgumentNullException(nameof(exportPath));
 			UnityVersion maxFileVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
 			UnityVersion version = UnityVersion.Max(maxFileVersion, UnityVersion.DefaultVersion);
 			Logger.Log(LogType.Info, LogCategory.Export, $"Exporting to Unity version {version.ToString()}");
-			CoreConfiguration options = new();
 			options.SetProjectSettings(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
-			if(filter != null)
-				options.Filter = filter;
-			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchSerializedFiles(), options);
+			FileCollection.Exporter.Export(FileCollection, FileCollection.FetchSerializedFiles(), options);
 		}
 
 		/// <summary>Attempts to find the path for the dependency with that name.</summary>

@@ -24,6 +24,11 @@ namespace AssetRipper.Library.Exporters.Shaders
 	{
 		ShaderExportMode ExportMode { get; set; } = ShaderExportMode.Dummy;
 
+		public ShaderAssetExporter(LibraryConfiguration options)
+		{
+			ExportMode = options.ShaderExportMode;
+		}
+
 		public bool IsHandle(UnityObject asset, CoreConfiguration options)
 		{
 			return true;

@@ -44,7 +44,11 @@ namespace AssetRipper.Core.Configuration
 		public TransferInstructionFlags Flags { get; private set; }
 		#endregion
 
-		private static bool DefaultFilter(Classes.Object.Object asset) => true;
+		/// <summary>
+		/// The default filter that allows everything
+		/// </summary>
+		public static Func<Classes.Object.Object, bool> DefaultFilter { get; } = DefaultFilterMethod;
+		private static bool DefaultFilterMethod(Classes.Object.Object asset) => true;
 
 		internal void SetProjectSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{

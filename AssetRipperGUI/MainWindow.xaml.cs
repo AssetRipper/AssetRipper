@@ -8,6 +8,7 @@ using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Core.Utils;
 using AssetRipper.GUI.Properties;
 using AssetRipper.GUI.Windows;
+using AssetRipper.Library;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Textures;
@@ -27,6 +28,47 @@ namespace AssetRipper.GUI
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		public const string RepositoryPage = "https://github.com/ds5678/AssetRipper/";
+		public const string ReadMePage = RepositoryPage + "blob/master/README.md";
+		public const string IssuePage = RepositoryPage + "issues/new/choose";
+		public const string ArchivePage = RepositoryPage + "releases";
+
+		private readonly string m_initialIntroText;
+		private readonly string m_initialStatusText;
+		private string[] m_processingFiles;
+		private GameStructure m_gameStructure;
+
+		private Ripper RipperObject { get; set; }
+
+		private GameStructure GameStructure
+		{
+			get => m_gameStructure;
+			set
+			{
+				if (m_gameStructure == value)
+				{
+					return;
+				}
+				if (m_gameStructure != null && m_gameStructure.IsValid)
+				{
+					m_gameStructure.FileCollection.Exporter.EventExportFinished -= OnExportFinished;
+					m_gameStructure.FileCollection.Exporter.EventExportProgressUpdated -= OnExportProgressUpdated;
+					m_gameStructure.FileCollection.Exporter.EventExportStarted -= OnExportStarted;
+					m_gameStructure.FileCollection.Exporter.EventExportPreparationFinished -= OnExportPreparationFinished;
+					m_gameStructure.FileCollection.Exporter.EventExportPreparationStarted -= OnExportPreparationStarted;
+				}
+				m_gameStructure = value;
+				if (value != null && value.IsValid)
+				{
+					value.FileCollection.Exporter.EventExportPreparationStarted += OnExportPreparationStarted;
+					value.FileCollection.Exporter.EventExportPreparationFinished += OnExportPreparationFinished;
+					value.FileCollection.Exporter.EventExportStarted += OnExportStarted;
+					value.FileCollection.Exporter.EventExportProgressUpdated += OnExportProgressUpdated;
+					value.FileCollection.Exporter.EventExportFinished += OnExportFinished;
+				}
+			}
+		}
+
 		public MainWindow()
 		{
 			Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
@@ -35,6 +77,7 @@ namespace AssetRipper.GUI
 
 			m_initialIntroText = IntroText.Text;
 			m_initialStatusText = (string)StatusText.Content;
+			RipperObject = new();
 
 			string[] args = Environment.GetCommandLineArgs();
 			string[] files = args.Skip(1).ToArray();
@@ -95,7 +138,7 @@ namespace AssetRipper.GUI
 			try
 #endif
 			{
-				GameStructure = GameStructure.Load(files);
+				this.GameStructure = RipperObject.Load(files);
 			}
 #if !DEBUG
 			catch (SerializedFileException ex)
@@ -110,20 +153,20 @@ namespace AssetRipper.GUI
 			}
 #endif
 
-			if (GameStructure.IsValid)
+			if (RipperObject.GameStructure.IsValid)
 			{
 				Validate();
 			}
 			OnImportFinished();
 
-			if (GameStructure.IsValid)
+			if (RipperObject.GameStructure.IsValid)
 			{
 				Dispatcher.Invoke(() =>
 					{
 						IntroText.Text = "Files have been loaded";
 						ExportButton.Visibility = Visibility.Visible;
 
-						Fileview.AddItem(GameStructure.FileCollection);
+						Fileview.AddItem(RipperObject.GameStructure.FileCollection);
 						Fileview.Refresh();
 
 #if VIRTUAL
@@ -145,35 +188,14 @@ namespace AssetRipper.GUI
 
 		private void ExportFiles(object data)
 		{
-			m_exportPath = (string)data;
+			string m_exportPath = (string)data;
 			PrepareExportDirectory(m_exportPath);
-
-			//Library Exporters
-			if (OperatingSystem.IsWindows())
-			{
-				TextureAssetExporter textureExporter = new TextureAssetExporter();
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter());
-			}
-
-			//Engine Exporters
-			EngineAssetExporter engineExporter = new EngineAssetExporter();
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Material, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Mesh, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
 
 #if !DEBUG
 			try
 #endif
 			{
-				GameStructure.Export(m_exportPath);
+				RipperObject.Export(m_exportPath);
 			}
 #if !DEBUG
 			catch (SerializedFileException ex)
@@ -201,7 +223,7 @@ namespace AssetRipper.GUI
 
 		private void Validate()
 		{
-			UnityVersion[] versions = GameStructure.FileCollection.GameFiles.Values.Select(t => t.Version).Distinct().ToArray();
+			UnityVersion[] versions = RipperObject.GameStructure.FileCollection.GameFiles.Values.Select(t => t.Version).Distinct().ToArray();
 			if (versions.Length > 1)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Import, $"Asset collection has versions probably incompatible with each other. Here they are:");
@@ -347,6 +369,7 @@ namespace AssetRipper.GUI
 			OutputView.Clear();
 			m_processingFiles = null;
 
+			RipperObject = new();
 			GameStructure.Dispose();
 		}
 
@@ -386,7 +409,7 @@ namespace AssetRipper.GUI
 				using (System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog())
 				{
 					folderDialog.ShowNewFolderButton = true;
-					folderDialog.Description = $"Select export folder. New folder '{GameStructure.Name}' will be created inside selected one";
+					folderDialog.Description = $"Select export folder. New folder '{RipperObject.GameStructure.Name}' will be created inside selected one";
 					folderDialog.SelectedPath = Settings.Default.ExportFolderPath;
 #if VIRTUAL
 					System.Windows.Forms.DialogResult result = System.Windows.Forms.DialogResult.OK;
@@ -395,7 +418,7 @@ namespace AssetRipper.GUI
 #endif
 					if (result == System.Windows.Forms.DialogResult.OK)
 					{
-						string path = Path.Combine(folderDialog.SelectedPath, GameStructure.Name);
+						string path = Path.Combine(folderDialog.SelectedPath, RipperObject.GameStructure.Name);
 						if (File.Exists(path))
 						{
 							MessageBox.Show(this, "Unable to export assets into selected folder. Choose another one.",
@@ -429,51 +452,7 @@ namespace AssetRipper.GUI
 
 		private void OnPostExportButtonClicked(object sender, RoutedEventArgs e)
 		{
-			OpenExplorerSelectFile(m_exportPath);
+			OpenExplorerSelectFile(RipperObject.Settings.ExportPath);
 		}
-
-		// =====================================================
-		// Properties
-		// =====================================================
-
-		private GameStructure GameStructure
-		{
-			get => m_gameStructure;
-			set
-			{
-				if (m_gameStructure == value)
-				{
-					return;
-				}
-				if (m_gameStructure != null && m_gameStructure.IsValid)
-				{
-					m_gameStructure.FileCollection.Exporter.EventExportFinished -= OnExportFinished;
-					m_gameStructure.FileCollection.Exporter.EventExportProgressUpdated -= OnExportProgressUpdated;
-					m_gameStructure.FileCollection.Exporter.EventExportStarted -= OnExportStarted;
-					m_gameStructure.FileCollection.Exporter.EventExportPreparationFinished -= OnExportPreparationFinished;
-					m_gameStructure.FileCollection.Exporter.EventExportPreparationStarted -= OnExportPreparationStarted;
-				}
-				m_gameStructure = value;
-				if (value != null && value.IsValid)
-				{
-					value.FileCollection.Exporter.EventExportPreparationStarted += OnExportPreparationStarted;
-					value.FileCollection.Exporter.EventExportPreparationFinished += OnExportPreparationFinished;
-					value.FileCollection.Exporter.EventExportStarted += OnExportStarted;
-					value.FileCollection.Exporter.EventExportProgressUpdated += OnExportProgressUpdated;
-					value.FileCollection.Exporter.EventExportFinished += OnExportFinished;
-				}
-			}
-		}
-
-		public const string RepositoryPage = "https://github.com/ds5678/AssetRipper/";
-		public const string ReadMePage = RepositoryPage + "blob/master/README.md";
-		public const string IssuePage = RepositoryPage + "issues/new/choose";
-		public const string ArchivePage = RepositoryPage + "releases";
-
-		private GameStructure m_gameStructure;
-		private readonly string m_initialIntroText;
-		private readonly string m_initialStatusText;
-		private string m_exportPath;
-		private string[] m_processingFiles;
 	}
 }

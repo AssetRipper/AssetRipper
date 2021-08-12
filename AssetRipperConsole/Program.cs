@@ -101,7 +101,7 @@ namespace AssetRipper.Console
 			try
 			{
 				Ripper ripper = new Ripper();
-				GameStructure gameStructure = ripper.Load(options.FilesToExport);
+				ripper.Load(options.FilesToExport);
 				PrepareExportDirectory(options.OutputDirectory.FullName);
 				ripper.Export(options.OutputDirectory.FullName);
 			}

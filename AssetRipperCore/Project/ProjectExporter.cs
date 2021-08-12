@@ -187,12 +187,12 @@ namespace AssetRipper.Core.Project
 			OverrideExporter(classType, BinaryExporter);
 		}
 
-		public void Export(string path, GameCollection fileCollection, SerializedFile file, CoreConfiguration options)
+		public void Export(GameCollection fileCollection, SerializedFile file, CoreConfiguration options)
 		{
-			Export(path, fileCollection, new SerializedFile[] { file }, options);
+			Export(fileCollection, new SerializedFile[] { file }, options);
 		}
 
-		public void Export(string path, GameCollection fileCollection, IEnumerable<SerializedFile> files, CoreConfiguration options)
+		public void Export(GameCollection fileCollection, IEnumerable<SerializedFile> files, CoreConfiguration options)
 		{
 			EventExportPreparationStarted?.Invoke();
 
@@ -271,7 +271,7 @@ namespace AssetRipper.Core.Project
 			{
 				IExportCollection collection = collections[i];
 				container.CurrentCollection = collection;
-				bool isExported = collection.Export(container, path);
+				bool isExported = collection.Export(container, options.ExportPath);
 				if (isExported)
 				{
 					Logger.Log(LogType.Info, LogCategory.Export, $"'{collection.Name}' exported");
