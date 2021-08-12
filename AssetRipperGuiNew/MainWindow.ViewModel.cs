@@ -1,6 +1,5 @@
-﻿using Avalonia.Input;
-using MessageBox.Avalonia;
-using System.Collections.Generic;
+﻿using AssetRipperGuiNew.Exceptions;
+using Avalonia.Input;
 using System.Linq;
 
 namespace AssetRipperGuiNew
@@ -9,7 +8,7 @@ namespace AssetRipperGuiNew
 	{
 		private bool _hasFile;
 		private bool _hasLoaded;
-		private string _loadingText;
+		private string? _loadingText;
 
 		public bool HasFile
 		{
@@ -31,7 +30,7 @@ namespace AssetRipperGuiNew
 			}
 		}
 		
-		public string LoadingText
+		public string? LoadingText
 		{
 			get => _loadingText;
 			set
@@ -41,21 +40,40 @@ namespace AssetRipperGuiNew
 			}
 		}
 
-		private void SetGamePath(string path) => LoadingText = $"Loading Game Content from {path}...";
+		private void UpdateGamePathInUi(string path) => LoadingText = $"Loading Game Content from {path}...";
 
-		public void FileDropped(DragEventArgs e)
+		public void OnFileDropped(DragEventArgs e)
 		{
-			List<string>? filesDropped = e.Data.GetFileNames()?.ToList();
+			string[]? filesDropped = e.Data.GetFileNames()?.ToArray();
 
-			if (filesDropped == null || filesDropped.Count < 1)
+			if (filesDropped == null || filesDropped.Length < 1)
+			{
 				return;
+			}
 
-			var gamePath = filesDropped[0];
+			string gamePath = filesDropped[0];
 			
 			HasFile = true;
 			HasLoaded = false;
 
-			SetGamePath(gamePath);
+			UpdateGamePathInUi(gamePath);
+
+			UiGameLoader.LoadFromPath(filesDropped, gameStructure =>
+			{
+				HasLoaded = true;
+			}, error =>
+			{
+				HasFile = false;
+				HasLoaded = false;
+				
+				if (error is NewUiGameNotFoundException)
+				{
+					this.ShowPopup($"No Unity game was found in the dropped files.", "Error");
+					return;
+				}
+
+				this.ShowPopup($"Failed to load game content: {error.Message}", "Error");
+			});
 		}
 	}
 }

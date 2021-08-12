@@ -17,7 +17,7 @@ namespace AssetRipperGuiNew
             this.AttachDevTools();
 #endif
 	        
-	        AddHandler(DragDrop.DropEvent, (sender, args) => VM.FileDropped(args));
+	        AddHandler(DragDrop.DropEvent, (sender, args) => VM.OnFileDropped(args));
         }
 
 	    protected override void OnDataContextChanged(EventArgs e)

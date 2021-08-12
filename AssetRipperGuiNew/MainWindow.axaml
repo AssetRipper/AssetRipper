@@ -14,7 +14,8 @@
         <TextBlock Text="Drag-and-Drop Your Game Folder Here"
                    TextAlignment="Center"
                    VerticalAlignment="Center"
-                   IsVisible="{Binding !HasFile}" />
+                   IsVisible="{Binding !HasFile}">
+        </TextBlock>
         <TextBlock Text="{Binding LoadingText}"
                    TextAlignment="Center"
                    VerticalAlignment="Center">
@@ -25,5 +26,7 @@
                 </MultiBinding>
             </TextBlock.IsVisible>
         </TextBlock>
+        <Grid IsVisible="{Binding HasLoaded}" RowDefinitions="*,150">
+        </Grid>
     </Grid>
 </Window>
