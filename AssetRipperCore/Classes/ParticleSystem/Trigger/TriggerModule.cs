@@ -23,11 +23,14 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 		/// Less than 2020.2
 		/// </summary>
 		public static bool HasCollisionShapes(UnityVersion version) => version.IsLess(2020, 2);
-
 		/// <summary>
 		/// At least 2020.2
 		/// </summary>
 		public static bool HasColliderQueryMode(UnityVersion version) => version.IsGreaterEqual(2020, 2);
+		/// <summary>
+		/// At least 2020.2
+		/// </summary>
+		public static bool HasPrimitives(UnityVersion version) => version.IsGreaterEqual(2020, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -55,7 +58,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 
 			RadiusScale = reader.ReadSingle();
 
-			if (!HasCollisionShapes(reader.Version))
+			if (HasPrimitives(reader.Version))
 			{
 				Primitives = reader.ReadAssetArray<PPtr<Component>>();
 			}
@@ -72,7 +75,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 				yield return context.FetchDependency(CollisionShape4, CollisionShape4Name);
 				yield return context.FetchDependency(CollisionShape5, CollisionShape5Name);
 			}
-			else
+			if(HasPrimitives(context.Version))
 			{
 				int i = 0;
 				foreach (PPtr<Component> pPtr in Primitives)
@@ -108,7 +111,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 			
 			node.Add(RadiusScaleName, RadiusScale);
 			
-			if(!HasCollisionShapes(container.ExportVersion))
+			if(HasPrimitives(container.ExportVersion))
 			{
 				node.Add(PrimitivesName, Primitives.ExportYAML(container));
 			}

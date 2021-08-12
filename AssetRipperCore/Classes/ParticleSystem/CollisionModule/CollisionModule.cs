@@ -88,6 +88,13 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 			if (HasPlaneListNotIndividual(reader.Version))
 			{
 				Planes = reader.ReadAssetArray<PPtr<Transform>>();
+				int planeCount = Planes.Length;
+				if(0 < planeCount) Plane0 = Planes[0];
+				if (1 < planeCount) Plane1 = Planes[1];
+				if (2 < planeCount) Plane2 = Planes[2];
+				if (3 < planeCount) Plane3 = Planes[3];
+				if (4 < planeCount) Plane4 = Planes[4];
+				if (5 < planeCount) Plane5 = Planes[5];
 			}
 			else
 			{
@@ -97,6 +104,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 				Plane3.Read(reader);
 				Plane4.Read(reader);
 				Plane5.Read(reader);
+				Planes = new PPtr<Transform>[] { Plane0, Plane1, Plane2, Plane3, Plane4, Plane5 };
 			}
 
 			if (HasDampenSingle(reader.Version))
@@ -185,7 +193,6 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 			}
 			else
 			{
-#warning if we're exporting from a version which has a list to one which doesn't, need to convert here. 
 				node.Add(Plane0Name, Plane0.ExportYAML(container));
 				node.Add(Plane1Name, Plane1.ExportYAML(container));
 				node.Add(Plane2Name, Plane2.ExportYAML(container));

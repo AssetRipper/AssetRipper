@@ -107,7 +107,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			node.Add(NoiseSpreadName, NoiseSpread);
 			if (HasHoleTestRadiusInsteadOfBendFactor(container.ExportVersion))
 			{
-				node.Add(BendFactorName, HoleTestRadius);
+				node.Add(HoleTestRadiusName, HoleTestRadius);
 			}
 			else
 			{

@@ -297,7 +297,10 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			node.Add(UVModuleName, UVModule.ExportYAML(container));
 			node.Add(VelocityModuleName, VelocityModule.ExportYAML(container));
 			node.Add(InheritVelocityModuleName, GetInheritVelocityModule(container.Version).ExportYAML(container));
-			node.Add(LifetimeByEmitterSpeedModuleName, LifetimeByEmitterSpeedModule.ExportYAML(container));
+			if (HasLifetimeByEmitterSpeedModule(container.ExportVersion))
+			{
+				node.Add(LifetimeByEmitterSpeedModuleName, LifetimeByEmitterSpeedModule.ExportYAML(container));
+			}
 			node.Add(ForceModuleName, ForceModule.ExportYAML(container));
 			node.Add(ExternalForcesModuleName, GetExternalForcesModule(container.Version).ExportYAML(container));
 			node.Add(ClampVelocityModuleName, ClampVelocityModule.ExportYAML(container));
