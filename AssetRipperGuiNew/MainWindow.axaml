@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ar="using:AssetRipperGuiNew"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AssetRipperGuiNew.MainWindow"
+        DragDrop.AllowDrop="true"
+        Title="AssetRipperGuiNew">
+    <Design.DataContext>
+        <ar:MainWindowViewModel />
+    </Design.DataContext>
+    <Grid>
+        <TextBlock Text="Drag-and-Drop Your Game Folder Here"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"
+                   IsVisible="{Binding !HasFile}" />
+        <TextBlock Text="{Binding LoadingText}"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center">
+            <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="HasFile"/>
+                    <Binding Path="!HasLoaded"/>
+                </MultiBinding>
+            </TextBlock.IsVisible>
+        </TextBlock>
+    </Grid>
+</Window>
