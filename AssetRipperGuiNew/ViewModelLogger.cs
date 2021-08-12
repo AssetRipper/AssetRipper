@@ -33,6 +33,12 @@ namespace AssetRipperGuiNew
 
 		private void LogInner(LogType type, LogCategory category, string message)
 		{
+			if(category == LogCategory.ExportedFile)
+				//Don't log "Exported file" messages.
+				return;
+			
+			viewModel.LogText += $"{DateTime.Now:T}: ";
+			
 			if(category != LogCategory.None)
 				viewModel.LogText += $"{category.ToString()} ";
 			

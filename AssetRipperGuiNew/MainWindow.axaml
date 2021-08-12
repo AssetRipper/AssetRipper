@@ -5,45 +5,63 @@
         xmlns:ar="using:AssetRipperGuiNew"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AssetRipperGuiNew.MainWindow"
-        DragDrop.AllowDrop="true"
         Title="AssetRipperGuiNew">
+    <DragDrop.AllowDrop>
+        <MultiBinding Converter="{x:Static BoolConverters.And}">
+            <Binding Path="!IsExporting" />
+            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                <Binding Path="!HasFile" />
+                <Binding Path="HasLoaded" />
+            </MultiBinding>
+        </MultiBinding>
+    </DragDrop.AllowDrop>
     <Design.DataContext>
         <ar:MainWindowViewModel />
     </Design.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open"></MenuItem>
-                <MenuItem Header="_Exit"></MenuItem>
+                <MenuItem Header="_Open" Command="{Binding ShowOpenFileDialog}">
+                    <MenuItem.IsEnabled>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="!IsExporting" />
+                            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                                <Binding Path="!HasFile" />
+                                <Binding Path="HasLoaded" />
+                            </MultiBinding>
+                        </MultiBinding>
+                    </MenuItem.IsEnabled>
+                </MenuItem>
+                <MenuItem Header="_Exit" Click="ExitClicked" />
             </MenuItem>
-            <MenuItem Header="_Export">
-                <MenuItem Header="_Export All Files"></MenuItem>
+            <MenuItem Header="_Export" IsEnabled="{Binding !IsExporting}">
+                <MenuItem Header="_Export All Files" Click="ExportAllClicked" />
+                <MenuItem Header="_Export Selected Asset File" IsEnabled="False" />
             </MenuItem>
         </Menu>
         <TextBlock Grid.Row="1" Text="Drag-and-Drop Your Game Folder Here"
                    TextAlignment="Center"
                    VerticalAlignment="Center"
-                   IsVisible="{Binding !HasFile}">
-        </TextBlock>
+                   IsVisible="{Binding !HasFile}" />
         <TextBlock Grid.Row="1" Text="{Binding LoadingText}"
                    TextAlignment="Center"
                    VerticalAlignment="Center">
             <TextBlock.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-                    <Binding Path="HasFile"/>
-                    <Binding Path="!HasLoaded"/>
+                    <Binding Path="HasFile" />
+                    <Binding Path="!HasLoaded" />
                 </MultiBinding>
             </TextBlock.IsVisible>
         </TextBlock>
         <Grid Grid.Row="1" IsVisible="{Binding HasLoaded}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="500" MinWidth="300"/>
+                <ColumnDefinition Width="500" MinWidth="300" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" MinWidth="800"></ColumnDefinition>
+                <ColumnDefinition Width="*" MinWidth="800" />
             </Grid.ColumnDefinitions>
             <TreeView Grid.Column="0" Items="{Binding AssetFiles}">
                 <!--File browser-->
@@ -53,15 +71,21 @@
                     </TreeDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            <GridSplitter Grid.Column="1" 
-                          ResizeDirection="Columns" 
+            <GridSplitter Grid.Column="1"
+                          ResizeDirection="Columns"
                           Background="#ccc"
                           Width="2" />
             <Grid Grid.Column="2" RowDefinitions="*, 400">
                 <Grid Grid.Row="0">
                     <!--File content-->
+                    <TextBlock Text="Stuff Coming Soon™️" TextAlignment="Center" VerticalAlignment="Center"
+                               IsVisible="{Binding !IsExporting}" />
+
+                    <!--Export Progress-->
+                    <TextBlock FontSize="18" Text="{Binding ExportingText}" TextAlignment="Center"
+                               VerticalAlignment="Center" IsVisible="{Binding IsExporting}" />
                 </Grid>
-                <TextBox Grid.Row="1" IsReadOnly="True" Text="{Binding LogText}" />
+                <TextBox Name="LogText" Grid.Row="1" IsReadOnly="True" Text="{Binding LogText}" />
             </Grid>
         </Grid>
     </Grid>

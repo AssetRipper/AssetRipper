@@ -11,8 +11,13 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
     <PackageReference Include="MessageBox.Avalonia" Version="1.5.1" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="6.0.0-preview.5.21301.5" />
+    <PackageReference Include="System.Security.AccessControl" Version="6.0.0-preview.5.21301.5" />
    </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.IO.FileSystem" />
   </ItemGroup>
 </Project>

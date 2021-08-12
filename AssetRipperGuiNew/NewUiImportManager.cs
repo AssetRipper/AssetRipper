@@ -8,15 +8,15 @@ using System.Threading;
 
 namespace AssetRipperGuiNew
 {
-	public static class UiGameLoader
+	public static class NewUiImportManager
 	{
-		public static void LoadFromPath(string[] paths, Action<GameStructure> onComplete, Action<Exception> onError) => new Thread(() => LoadFromPathInternal(paths, onComplete, onError))
+		public static void ImportFromPath(string[] paths, Action<GameStructure> onComplete, Action<Exception> onError) => new Thread(() => ImportFromPathInternal(paths, onComplete, onError))
 		{
 			Name = "Background Game Load Thread",
 			IsBackground = true,
 		}.Start();
 
-		private static void LoadFromPathInternal(string[] paths, Action<GameStructure> onComplete, Action<Exception> onError)
+		private static void ImportFromPathInternal(string[] paths, Action<GameStructure> onComplete, Action<Exception> onError)
 		{
 			try
 			{

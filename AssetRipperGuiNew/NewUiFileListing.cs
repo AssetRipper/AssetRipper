@@ -13,6 +13,7 @@ using AssetRipper.Core.Classes.PhysicsManager;
 using AssetRipper.Core.Classes.QualitySettings;
 using AssetRipper.Core.Classes.RenderSettings;
 using AssetRipper.Core.Classes.ResourceManager;
+using AssetRipper.Core.Classes.Rigidbody;
 using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Classes.UI.Canvas;
 using AssetRipper.Core.Classes.UnityConnectSettings;
@@ -107,6 +108,8 @@ namespace AssetRipperGuiNew
 					return "Meshes";
 				case nameof(Canvas):
 					return "Canvases";
+				case nameof(Rigidbody):
+					return "Rigidbodies";
 				default:
 					//E.g. Materials, AudioClips, etc.
 					return $"{assetType.Name}s";

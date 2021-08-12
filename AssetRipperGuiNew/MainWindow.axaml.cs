@@ -1,6 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
 
@@ -8,17 +8,24 @@ namespace AssetRipperGuiNew
 {
     public partial class MainWindow : Window
     {
+	    public static MainWindow Instance;
+	    public TextBox LogText;
+
 	    private MainWindowViewModel VM => (MainWindowViewModel) DataContext!;
 	    
 	    public MainWindow()
-        {
-            InitializeComponent();
+	    {
+		    Instance = this;
+
+		    InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
 #endif
-	        
-	        AddHandler(DragDrop.DropEvent, (sender, args) => VM.OnFileDropped(args));
-        }
+
+		    LogText = this.Get<TextBox>("LogText");
+
+		    AddHandler(DragDrop.DropEvent, (sender, args) => VM.OnFileDropped(args));
+	    }
 
 	    protected override void OnDataContextChanged(EventArgs e)
 	    {
@@ -32,5 +39,9 @@ namespace AssetRipperGuiNew
         {
             AvaloniaXamlLoader.Load(this);
         }
+
+	    private void ExitClicked(object? sender, RoutedEventArgs e) => Close();
+
+	    private void ExportAllClicked(object? sender, RoutedEventArgs e) => VM.ExportAll();
     }
 }
