@@ -148,6 +148,10 @@ namespace AssetRipper.Core.Project
 			OverrideBinaryExporter(ClassIDType.AudioClip);
 
 			OverrideExporter(ClassIDType.MonoScript, ScriptExporter);
+
+			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
+			OverrideExporter(ClassIDType.Font, new FontAssetExporter());
+			OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
 		}
 
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>

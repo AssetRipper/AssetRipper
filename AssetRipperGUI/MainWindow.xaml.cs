@@ -100,13 +100,11 @@ namespace AssetRipper.GUI
 #if !DEBUG
 			catch (SerializedFileException ex)
 			{
-				Logger.Error(ex);
 				ReportCrash(ex);
 				return;
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(ex);
 				ReportCrash(ex);
 				return;
 			}
@@ -149,11 +147,6 @@ namespace AssetRipper.GUI
 		{
 			m_exportPath = (string)data;
 			PrepareExportDirectory(m_exportPath);
-
-			//Core Exporters
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, new FontAssetExporter());
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
 
 			//Library Exporters
 			if (OperatingSystem.IsWindows())
