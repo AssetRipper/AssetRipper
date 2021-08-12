@@ -1,9 +1,10 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Classes.AudioClip;
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.Utils;
 using System;
@@ -67,7 +68,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 		}
 
-		public bool IsHandle(UnityObject asset, ExportOptions options)
+		public bool IsHandle(UnityObject asset, CoreConfiguration options)
 		{
 			return true;
 		}

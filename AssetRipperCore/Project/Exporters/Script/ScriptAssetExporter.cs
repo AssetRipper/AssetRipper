@@ -1,7 +1,8 @@
-using AssetRipper.Core.Project.Exporters.Script.Elements;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes;
+using AssetRipper.Core.Configuration;
+using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project.Exporters.Script.Elements;
 using AssetRipper.Core.Structure.Collections;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace AssetRipper.Core.Project.Exporters.Script
 {
 	public class ScriptAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(Object asset, ExportOptions options)
+		public bool IsHandle(Object asset, CoreConfiguration options)
 		{
 			return true;
 		}

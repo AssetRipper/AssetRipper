@@ -1,3 +1,4 @@
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Structure.Collections;
@@ -9,7 +10,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 {
 	public class EngineAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(Object asset, ExportOptions options)
+		public bool IsHandle(Object asset, CoreConfiguration options)
 		{
 			return EngineExportCollection.IsEngineAsset(asset, options.Version);
 		}

@@ -1,3 +1,4 @@
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -12,7 +13,7 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{
-		public virtual bool IsHandle(Object asset, ExportOptions options)
+		public virtual bool IsHandle(Object asset, CoreConfiguration options)
 		{
 			return true;
 		}

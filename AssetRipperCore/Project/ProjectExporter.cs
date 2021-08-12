@@ -1,10 +1,11 @@
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Project.Exporters.Script;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Project.Exporters.Script;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.Collections;
 using System;
@@ -186,12 +187,12 @@ namespace AssetRipper.Core.Project
 			OverrideExporter(classType, BinaryExporter);
 		}
 
-		public void Export(string path, GameCollection fileCollection, SerializedFile file, ExportOptions options)
+		public void Export(string path, GameCollection fileCollection, SerializedFile file, CoreConfiguration options)
 		{
 			Export(path, fileCollection, new SerializedFile[] { file }, options);
 		}
 
-		public void Export(string path, GameCollection fileCollection, IEnumerable<SerializedFile> files, ExportOptions options)
+		public void Export(string path, GameCollection fileCollection, IEnumerable<SerializedFile> files, CoreConfiguration options)
 		{
 			EventExportPreparationStarted?.Invoke();
 
@@ -322,7 +323,7 @@ namespace AssetRipper.Core.Project
 			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{classID}'");
 		}
 
-		private IExportCollection CreateCollection(VirtualSerializedFile file, Object asset, ExportOptions options)
+		private IExportCollection CreateCollection(VirtualSerializedFile file, Object asset, CoreConfiguration options)
 		{
 			Stack<IAssetExporter> exporters = m_exporters[asset.ClassID];
 			foreach (IAssetExporter exporter in exporters)

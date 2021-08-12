@@ -1,20 +1,21 @@
-using AssetRipper.Core.Converters.Shader;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.Configuration;
+using AssetRipper.Core.Converters.Shader;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.Utils;
-using AssetRipper.Library.Exporters.Shaders.DirectX;
+using AssetRipper.Library.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Versioning;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
-using AssetRipper.Core;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
@@ -23,7 +24,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 	{
 		ShaderExportMode ExportMode { get; set; } = ShaderExportMode.Dummy;
 
-		public bool IsHandle(UnityObject asset, ExportOptions options)
+		public bool IsHandle(UnityObject asset, CoreConfiguration options)
 		{
 			return true;
 		}

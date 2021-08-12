@@ -1,10 +1,12 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Configuration;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Utils;
@@ -14,7 +16,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.Versioning;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
-using AssetRipper.Core;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -137,7 +138,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public bool IsHandle(UnityObject asset, ExportOptions options)
+		public bool IsHandle(UnityObject asset, CoreConfiguration options)
 		{
 			if (asset.ClassID == ClassIDType.Texture2D)
 			{

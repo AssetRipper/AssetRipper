@@ -1,6 +1,3 @@
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Layout;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AssetBundle;
 using AssetRipper.Core.Classes.Meta;
@@ -8,10 +5,14 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.ResourceManager;
 using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Classes.Utils;
+using AssetRipper.Core.Configuration;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Structure.Collections;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace AssetRipper.Core.Project
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
-		public ProjectAssetContainer(ProjectExporter exporter, ExportOptions options, VirtualSerializedFile file, IEnumerable<Object> assets,
+		public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<Object> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
@@ -376,7 +377,7 @@ namespace AssetRipper.Core.Project
 		private const string AssetBundleFullPath = AssetsDirectory + AssetBundleKeyword;
 
 		private readonly ProjectExporter m_exporter;
-		private readonly ExportOptions m_options;
+		private readonly CoreConfiguration m_options;
 		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
 		private readonly Dictionary<Object, ProjectAssetPath> m_pathAssets = new Dictionary<Object, ProjectAssetPath>();
 

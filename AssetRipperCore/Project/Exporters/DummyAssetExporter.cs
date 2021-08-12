@@ -1,3 +1,4 @@
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Structure.Collections;
@@ -15,7 +16,7 @@ namespace AssetRipper.Core.Project.Exporters
 			m_metaTypes[classType] = isMetaType;
 		}
 
-		public bool IsHandle(Object asset, ExportOptions options)
+		public bool IsHandle(Object asset, CoreConfiguration options)
 		{
 			return true;
 		}

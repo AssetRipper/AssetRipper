@@ -1,8 +1,9 @@
-﻿using AssetRipper.Core.Project;
+﻿using AssetRipper.Core.Configuration;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
 using System;
@@ -98,7 +99,8 @@ namespace AssetRipper.Core.Structure.GameStructure
 			UnityVersion maxFileVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
 			UnityVersion version = UnityVersion.Max(maxFileVersion, UnityVersion.DefaultVersion);
 			Logger.Log(LogType.Info, LogCategory.Export, $"Exporting to Unity version {version.ToString()}");
-			ExportOptions options = new ExportOptions(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
+			CoreConfiguration options = new();
+			options.SetProjectSettings(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			if(filter != null)
 				options.Filter = filter;
 			FileCollection.Exporter.Export(exportPath, FileCollection, FileCollection.FetchSerializedFiles(), options);

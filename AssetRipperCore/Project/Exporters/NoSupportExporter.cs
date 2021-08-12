@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Parser.Asset;
+﻿using AssetRipper.Core.Configuration;
+using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Structure.Collections;
 using System;
@@ -35,7 +36,7 @@ namespace AssetRipper.Core.Project.Exporters
 			throw new NotSupportedException();
 		}
 
-		public bool IsHandle(Object asset, ExportOptions options)
+		public bool IsHandle(Object asset, CoreConfiguration options)
 		{
 			throw new NotSupportedException();
 		}

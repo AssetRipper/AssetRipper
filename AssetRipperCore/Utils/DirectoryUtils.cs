@@ -15,11 +15,7 @@ namespace AssetRipper.Core.Utils
 
 		static DirectoryUtils()
 		{
-			string path = Assembly.GetEntryAssembly().Location;
-			if (string.IsNullOrEmpty(path))
-				ExecutingDirectoryInfo = new DirectoryInfo(System.AppContext.BaseDirectory);
-			else
-				ExecutingDirectoryInfo = new FileInfo(path).Directory;
+			ExecutingDirectoryInfo = new DirectoryInfo(System.AppContext.BaseDirectory);
 		}
 
 		public static bool Exists(string path)
