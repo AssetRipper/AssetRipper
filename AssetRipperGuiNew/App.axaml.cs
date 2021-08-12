@@ -1,27 +1,20 @@
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace AssetRipperGuiNew
 {
-    public class App : Application
-    {
-        public override void Initialize()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+	public class App : Application
+	{
 
-        public override void OnFrameworkInitializationCompleted()
-        {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                desktop.MainWindow = new MainWindow
-                {
-	                DataContext = new MainWindowViewModel()
-                };
-            }
+		public override void Initialize()
+		{
+			AvaloniaXamlLoader.Load(this);
+		}
 
-            base.OnFrameworkInitializationCompleted();
-        }
-    }
+		public static void AppMain(Application app, string[] args)
+		{
+			app.Run(new MainWindow { DataContext = new MainWindowViewModel() });
+		}
+	}
 }

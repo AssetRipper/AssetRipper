@@ -14,6 +14,7 @@ namespace AssetRipperGuiNew
 {
 	public class MainWindowViewModel : BaseViewModel
 	{
+		//Exposed-to-ui properties
 		private bool _hasFile;
 		private bool _hasLoaded;
 		private bool _isExporting;
@@ -23,6 +24,7 @@ namespace AssetRipperGuiNew
 
 		public ObservableCollection<NewUiFileListItem> AssetFiles { get; } = new();
 
+		//Not-exposed-to-UI properties
 		private GameStructure? _theStructure;
 		private string? _lastExportPath;
 
