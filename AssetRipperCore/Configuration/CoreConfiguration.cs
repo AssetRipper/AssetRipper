@@ -50,6 +50,7 @@ namespace AssetRipper.Core.Configuration
 		public static Func<Classes.Object.Object, bool> DefaultFilter { get; } = DefaultFilterMethod;
 		private static bool DefaultFilterMethod(Classes.Object.Object asset) => true;
 
+		internal void SetProjectSettings(Layout.LayoutInfo layout) => SetProjectSettings(layout.Version, layout.Platform, layout.Flags);
 		internal void SetProjectSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			Version = version;

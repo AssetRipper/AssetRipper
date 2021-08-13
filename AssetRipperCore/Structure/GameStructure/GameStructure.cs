@@ -74,7 +74,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 					//Setting the parameters for exporting
 					GameCollection.Parameters pars = new GameCollection.Parameters(layout);
-					pars.ScriptBackend = GetScriptingBackend();
+					pars.ScriptBackend = GetScriptingBackend(configuration.ScriptImportMode);
 					Logger.Log(LogType.Info, LogCategory.Import, $"Files use the '{pars.ScriptBackend}' scripting backend.");
 					pars.RequestAssemblyCallback = OnRequestAssembly;
 					pars.RequestResourceCallback = OnRequestResource;
@@ -176,8 +176,13 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 		}
 
-		private ScriptingBackend GetScriptingBackend()
+		private ScriptingBackend GetScriptingBackend(ScriptImportMode importMode)
 		{
+			if(importMode == ScriptImportMode.NoScripts)
+			{
+				Logger.Info(LogCategory.Import, "Script export disabled by settings.");
+				return ScriptingBackend.Unknown;
+			}
 			if (PlatformStructure != null)
 			{
 				ScriptingBackend backend = PlatformStructure.Backend;
