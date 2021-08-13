@@ -6,6 +6,7 @@ using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
@@ -19,7 +20,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 	/// <summary>
 	/// FileTexture previously
 	/// </summary>
-	public class Texture2D : Texture
+	public class Texture2D : Texture, IHasImageData
 	{
 		public Texture2D(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -160,9 +161,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			{
 				for (int i = 0; i < data.Length; i += 2)
 				{
-					byte b = data[i];
-					data[i] = data[i + 1];
-					data[i + 1] = b;
+					(data[i], data[i + 1]) = (data[i + 1], data[i]);
 				}
 			}
 
@@ -385,6 +384,8 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public ColorSpace ColorSpace { get; set; }
 		public byte[] PlatformBlob { get; set; }
 		public IReadOnlyCollection<byte> ImageData => m_imageData;
+
+		public byte[] ImageDataByteArray => GetImageData();
 
 		public const string WidthName = "m_Width";
 		public const string HeightName = "m_Height";
