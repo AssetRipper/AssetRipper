@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Library.Configuration;
@@ -16,6 +15,9 @@ namespace AssetRipper.Library
 	public class Ripper
 	{
 		public GameStructure GameStructure { get; private set; }
+		/// <summary>
+		/// Needs to be set before loading assets to ensure predictable behavior
+		/// </summary>
 		public LibraryConfiguration Settings { get; private set; } = new();
 		private bool ExportersInitialized { get; set; }
 
@@ -26,7 +28,7 @@ namespace AssetRipper.Library
 				Logger.Log(LogType.Info, LogCategory.General, $"Attempting to read files from {paths[0]}");
 			else
 				Logger.Log(LogType.Info, LogCategory.General, "Attempting to read files...");
-			GameStructure = GameStructure.Load(paths);
+			GameStructure = GameStructure.Load(paths, Settings);
 			Logger.Log(LogType.Info, LogCategory.General, "Finished reading files");
 			return GameStructure;
 		}

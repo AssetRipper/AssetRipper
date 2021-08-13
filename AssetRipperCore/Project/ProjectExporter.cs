@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Project
 		public event Action<int, int> EventExportProgressUpdated;
 		public event Action EventExportFinished;
 
-		public ProjectExporter(IFileCollection fileCollection)
+		public ProjectExporter(IFileCollection fileCollection, CoreConfiguration configuration)
 		{
 			m_fileCollection = fileCollection;
 
@@ -150,7 +150,7 @@ namespace AssetRipper.Core.Project
 
 			OverrideExporter(ClassIDType.MonoScript, ScriptExporter);
 
-			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
+			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter(configuration));
 			OverrideExporter(ClassIDType.Font, new FontAssetExporter());
 			OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
 		}

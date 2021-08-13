@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using MonoManager = AssetRipper.Core.Structure.Assembly.Managers.MonoManager;
 using Object = AssetRipper.Core.Classes.Object.Object;
+using AssetRipper.Core.Configuration;
 
 namespace AssetRipper.Core.Structure
 {
@@ -51,7 +52,7 @@ namespace AssetRipper.Core.Structure
 		private readonly Func<string, string> m_assemblyCallback;
 		private readonly Func<string, string> m_resourceCallback;
 
-		public GameCollection(Parameters pars) : base(nameof(GameCollection))
+		public GameCollection(Parameters pars, CoreConfiguration configuration) : base(nameof(GameCollection))
 		{
 			Layout = pars.Layout;
 			m_layouts.Add(Layout.Info, Layout);
@@ -71,7 +72,7 @@ namespace AssetRipper.Core.Structure
 
 			m_assemblyCallback = pars.RequestAssemblyCallback;
 			m_resourceCallback = pars.RequestResourceCallback;
-			Exporter = new ProjectExporter(this);
+			Exporter = new ProjectExporter(this, configuration);
 		}
 
 		public void LoadAssembly(string filePath)

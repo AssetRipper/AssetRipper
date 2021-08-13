@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Configuration
 		/// <summary>
 		/// How are text assets exported?
 		/// </summary>
-		public TextExportMode TextExportMode { get; set; } = TextExportMode.Bytes;
+		public TextExportMode TextExportMode { get; set; } = TextExportMode.Parse;
 		#endregion
 
 		#region Project Settings

@@ -24,8 +24,8 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private GameStructure() { }
 
-		public static GameStructure Load(IEnumerable<string> paths) => Load(paths, null);
-		public static GameStructure Load(IEnumerable<string> paths, LayoutInfo layinfo)
+		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration) => Load(paths, configuration, null);
+		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration, LayoutInfo layinfo)
 		{
 			List<string> toProcess = Preprocessor.Process(paths);
 			if (toProcess.Count == 0)
@@ -34,11 +34,11 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 
 			GameStructure structure = new GameStructure();//an empty constructor
-			structure.Load(toProcess, layinfo);
+			structure.Load(toProcess, configuration, layinfo);
 			return structure;
 		}
 
-		private void Load(List<string> paths, LayoutInfo layinfo)
+		private void Load(List<string> paths, CoreConfiguration configuration, LayoutInfo layinfo)
 		{
 			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure platformStructure, out MixedGameStructure mixedStructure);
 			PlatformStructure = platformStructure;
@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 					pars.RequestResourceCallback = OnRequestResource;
 
 					//Sets its fields and creates the Project Exporter
-					FileCollection = new GameCollection(pars);
+					FileCollection = new GameCollection(pars, configuration);
 
 					//Loads any Mono or IL2Cpp assemblies
 					FileCollection.AssemblyManager.Initialize(PlatformStructure);
