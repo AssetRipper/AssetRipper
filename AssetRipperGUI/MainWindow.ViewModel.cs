@@ -2,6 +2,7 @@
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.GUI.Exceptions;
+using AssetRipper.Library;
 using Avalonia.Controls;
 using Avalonia.Input;
 using System;
@@ -25,8 +26,8 @@ namespace AssetRipper.GUI
 		public ObservableCollection<NewUiFileListItem> AssetFiles { get; } = new();
 
 		//Not-exposed-to-UI properties
-		private GameStructure? _theStructure;
 		private string? _lastExportPath;
+		private readonly  Ripper _ripper = new();
 
 		public bool HasFile
 		{
@@ -113,6 +114,8 @@ namespace AssetRipper.GUI
 			{
 				return;
 			}
+			
+			_ripper.GameStructure?.Dispose();
 
 			string gamePath = filesDropped[0];
 
@@ -122,10 +125,9 @@ namespace AssetRipper.GUI
 
 			UpdateGamePathInUi(gamePath);
 
-			NewUiImportManager.ImportFromPath(filesDropped, gameStructure =>
+			NewUiImportManager.ImportFromPath(_ripper, filesDropped, gameStructure =>
 			{
 				HasLoaded = true;
-				_theStructure = gameStructure;
 				List<NewUiFileListItem> items = NewUiFileListing.GetItemsFromStructure(gameStructure);
 				items.ForEach(AssetFiles.Add);
 			}, error =>
@@ -145,7 +147,7 @@ namespace AssetRipper.GUI
 
 		public async void ExportAll()
 		{
-			if (_theStructure == null)
+			if (_ripper.GameStructure == null)
 			{
 				return;
 			}
@@ -162,19 +164,17 @@ namespace AssetRipper.GUI
 			IsExporting = true;
 			ExportingText = "Clearing out existing files...";
 
-			string exportPath = Path.Combine(chosenFolder, _theStructure.Name ?? "AssetRipperExport" + DateTime.Now.Ticks);
+			string exportPath = Path.Combine(chosenFolder, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
 			Logger.Log(LogType.Info, LogCategory.General, $"About to begin export to {exportPath}");
 
-			ProjectExporter exporter = _theStructure.FileCollection.Exporter;
-
 			Logger.Log(LogType.Info, LogCategory.General, $"Removing any files from a previous export...");
 
 			await NewUiExportManager.PrepareExportDirectory(exportPath);
-			NewUiExportManager.ConfigureExportEvents(exporter, this);
+			NewUiExportManager.ConfigureExportEvents(_ripper.GameStructure.FileCollection.Exporter, this);
 
-			NewUiExportManager.Export(_theStructure, exportPath, () =>
+			NewUiExportManager.Export(_ripper, exportPath, () =>
 			{
 				IsExporting = false;
 				this.ShowPopup("Export Complete!", "Success!");
