@@ -38,15 +38,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.6"/>
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.6"/>
-        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6"/>
-        <PackageReference Include="MessageBox.Avalonia" Version="1.5.1"/>
-        <PackageReference Include="System.IO.FileSystem" Version="4.3.0"/>
-        <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0"/>
-        <PackageReference Include="System.Security.AccessControl" Version="5.0.0"/>
+        <PackageReference Include="Avalonia" Version="0.10.6" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
+        <PackageReference Include="MessageBox.Avalonia" Version="1.5.1" />
+        <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+        <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
+        <PackageReference Include="System.Security.AccessControl" Version="5.0.0" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj"/>
+        <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
     </ItemGroup>
 </Project>

@@ -206,6 +206,6 @@ namespace AssetRipper.Core.YAML
 
 		public SequenceStyle Style { get; }
 
-		private readonly List<YAMLNode> m_children = new List<YAMLNode>();
+		public readonly List<YAMLNode> m_children = new List<YAMLNode>();
 	}
 }
