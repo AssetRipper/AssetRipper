@@ -1,79 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputType>WinExe</OutputType>
-    <AssemblyName>AssetRipper</AssemblyName>
-    <RootNamespace>AssetRipper.GUI</RootNamespace>
-    <OutputPath>..\Bins\AssetRipperGUI\$(Configuration)\$(Platform)\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <Platforms>x64;x86</Platforms>
-    <Configurations>Debug;Release;Virtual</Configurations>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>x86;x64</Platforms>
   </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Virtual' ">
-    <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Platform)'=='x64'">
-    <DefineConstants>PLATFORM_X64;WIN64</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Platform)'=='x86'">
-    <DefineConstants>PLATFORM_X86</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
-  </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.6" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
+    <PackageReference Include="MessageBox.Avalonia" Version="1.5.1" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="6.0.0-preview.5.21301.5" />
+    <PackageReference Include="System.Security.AccessControl" Version="6.0.0-preview.5.21301.5" />
+   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <Resource Include="Resources\GUI_Icon.ico" />
-    <Resource Include="Resources\alert-decagram-outline.png" />
+    <Reference Include="System.IO.FileSystem" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="obj\**" />
-    <Page Remove="obj\**" />
-  </ItemGroup>
-
 </Project>

@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperConsole", "Asset
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperCore", "AssetRipperCore\AssetRipperCore.csproj", "{CA9420F4-4B54-4727-91E6-CCE20916D795}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperGUI", "AssetRipperGUI\AssetRipperGUI.csproj", "{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{825F97E7-5A2D-4D93-81AD-292F54FE2AC7}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -75,6 +73,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texture2DDecoderWrapper", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HLSLccWrapper", "HLSLccWrapper\HLSLccWrapper.vcxproj", "{B812E249-4F57-4C35-B5A8-A8EC498627F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipperGUI", "AssetRipperGUI\AssetRipperGui.csproj", "{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,21 +121,6 @@ Global
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Virtual|x64.Build.0 = Virtual|Any CPU
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Virtual|x86.ActiveCfg = Virtual|Any CPU
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.Virtual|x86.Build.0 = Virtual|Any CPU
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Debug|x64.ActiveCfg = Debug|x64
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Debug|x64.Build.0 = Debug|x64
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Debug|x86.ActiveCfg = Debug|x86
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Debug|x86.Build.0 = Debug|x86
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Release|Any CPU.ActiveCfg = Release|x64
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Release|x64.ActiveCfg = Release|x64
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Release|x64.Build.0 = Release|x64
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Release|x86.ActiveCfg = Release|x86
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Release|x86.Build.0 = Release|x86
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|Any CPU.ActiveCfg = Virtual|x64
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x64.ActiveCfg = Virtual|x64
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x64.Build.0 = Virtual|x64
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x86.ActiveCfg = Virtual|x86
-		{ADEE41C3-2951-4CD7-99B8-6F542D4DB28D}.Virtual|x86.Build.0 = Virtual|x86
 		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -349,6 +334,24 @@ Global
 		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Virtual|x64.Build.0 = Release|x64
 		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Virtual|x86.ActiveCfg = Release|Win32
 		{B812E249-4F57-4C35-B5A8-A8EC498627F9}.Virtual|x86.Build.0 = Release|Win32
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Debug|x64.Build.0 = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Debug|x86.Build.0 = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x86.ActiveCfg = Release|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x86.Build.0 = Release|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|Any CPU.Build.0 = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x64.ActiveCfg = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x64.Build.0 = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x86.ActiveCfg = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x86.Build.0 = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x64.ActiveCfg = Release|x64
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

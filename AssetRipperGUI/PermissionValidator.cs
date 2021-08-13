@@ -11,7 +11,7 @@ namespace AssetRipper.GUI
 {
 	public static class PermissionValidator
 	{
-		public static void RestartAsAdministrator(string arguments)
+		public static void RestartAsAdministrator()
 		{
 			if (OperatingSystem.IsWindows())
 			{
@@ -28,7 +28,6 @@ namespace AssetRipper.GUI
 			Process proc = new Process();
 			string[] args = Environment.GetCommandLineArgs();
 			proc.StartInfo.FileName = args[0];
-			proc.StartInfo.Arguments = arguments;
 			proc.StartInfo.UseShellExecute = true;
 			proc.StartInfo.Verb = "runas";
 
@@ -54,42 +53,46 @@ namespace AssetRipper.GUI
 
 		public static bool CheckAccess(string path)
 		{
-			if (!OperatingSystem.IsWindows()) return false;
+			if (!OperatingSystem.IsWindows())
+			{
+				return true;
+			}
 
 			WindowsIdentity identity = WindowsIdentity.GetCurrent();
 			WindowsPrincipal principal = new WindowsPrincipal(identity);
 			bool isInRoleWithAccess = true;
 			try
 			{
-				DirectoryInfo di = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+				DirectoryInfo di = new(DirectoryUtils.ToLongPath(path));
 				DirectorySecurity ds = di.GetAccessControl();
 				AuthorizationRuleCollection rules = ds.GetAccessRules(true, true, typeof(NTAccount));
 
 				foreach (AuthorizationRule rule in rules)
 				{
-					FileSystemAccessRule fsAccessRule = rule as FileSystemAccessRule;
-					if (fsAccessRule == null)
+					if (rule is not FileSystemAccessRule fsAccessRule)
 					{
 						continue;
 					}
 
-					if ((fsAccessRule.FileSystemRights & FileSystemRights.CreateDirectories) != 0 ||
-						(fsAccessRule.FileSystemRights & FileSystemRights.DeleteSubdirectoriesAndFiles) != 0)
+					if ((fsAccessRule.FileSystemRights & FileSystemRights.CreateDirectories) == 0 && (fsAccessRule.FileSystemRights & FileSystemRights.DeleteSubdirectoriesAndFiles) == 0)
 					{
-						NTAccount ntAccount = rule.IdentityReference as NTAccount;
-						if (ntAccount == null)
-						{
-							continue;
-						}
+						continue;
+					}
 
-						if (principal.IsInRole(ntAccount.Value))
-						{
-							if (fsAccessRule.AccessControlType == AccessControlType.Deny)
-							{
-								isInRoleWithAccess = false;
-								break;
-							}
-						}
+					if (rule.IdentityReference is not NTAccount ntAccount)
+					{
+						continue;
+					}
+
+					if (!principal.IsInRole(ntAccount.Value))
+					{
+						continue;
+					}
+
+					if (fsAccessRule.AccessControlType == AccessControlType.Deny)
+					{
+						isInRoleWithAccess = false;
+						break;
 					}
 				}
 			}
