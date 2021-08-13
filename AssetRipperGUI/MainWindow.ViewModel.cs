@@ -161,7 +161,7 @@ namespace AssetRipper.GUI
 
 			string? chosenFolder = await openFolderDialog.ShowAsync(MainWindow.Instance);
 
-			if (chosenFolder == null)
+			if (string.IsNullOrEmpty(chosenFolder))
 			{
 				return;
 			}
@@ -196,7 +196,7 @@ namespace AssetRipper.GUI
 			OpenFolderDialog openFolderDialog = new();
 			string result = await openFolderDialog.ShowAsync(MainWindow.Instance);
 
-			if (result == null)
+			if (string.IsNullOrEmpty(result))
 				return;
 
 			DoLoad(new[] { result });
