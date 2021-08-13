@@ -5,6 +5,7 @@ using AssetRipper.GUI.Exceptions;
 using AssetRipper.Library;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -121,15 +122,19 @@ namespace AssetRipper.GUI
 
 			HasFile = true;
 			HasLoaded = false;
-			AssetFiles.Clear();
+			Dispatcher.UIThread.Post(() => AssetFiles.Clear(), DispatcherPriority.Send);
 
 			UpdateGamePathInUi(gamePath);
 
 			NewUiImportManager.ImportFromPath(_ripper, filesDropped, gameStructure =>
 			{
 				HasLoaded = true;
-				List<NewUiFileListItem> items = NewUiFileListing.GetItemsFromStructure(gameStructure);
-				items.ForEach(AssetFiles.Add);
+
+				Dispatcher.UIThread.Post(() =>
+				{
+					List<NewUiFileListItem> items = NewUiFileListing.GetItemsFromStructure(gameStructure);
+					items.ForEach(AssetFiles.Add);
+				}, DispatcherPriority.Send);
 			}, error =>
 			{
 				HasFile = false;
