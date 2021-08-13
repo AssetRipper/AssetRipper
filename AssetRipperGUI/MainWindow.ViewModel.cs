@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.Library;
 using Avalonia.Controls;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.GUI
 {
@@ -23,12 +25,14 @@ namespace AssetRipper.GUI
 		private string? _loadingText;
 		private string _logText = "";
 		private string _exportingText = "";
+		private SelectedAsset? _selectedAsset;
 
 		public ObservableCollection<NewUiFileListItem> AssetFiles { get; } = new();
 
 		//Not-exposed-to-UI properties
 		private string? _lastExportPath;
-		private readonly  Ripper _ripper = new();
+		private readonly Ripper _ripper = new();
+		private UIAssetContainer _assetContainer;
 
 		public bool HasFile
 		{
@@ -90,6 +94,16 @@ namespace AssetRipper.GUI
 			}
 		}
 
+		public SelectedAsset? SelectedAsset
+		{
+			get => _selectedAsset;
+			set
+			{
+				_selectedAsset = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public MainWindowViewModel()
 		{
 			Logger.Add(new ViewModelLogger(this));
@@ -117,6 +131,7 @@ namespace AssetRipper.GUI
 			}
 
 			_ripper.ResetData();
+			_assetContainer = null;
 
 			string gamePath = filesDropped[0];
 
@@ -129,6 +144,7 @@ namespace AssetRipper.GUI
 			NewUiImportManager.ImportFromPath(_ripper, filesDropped, gameStructure =>
 			{
 				HasLoaded = true;
+				_assetContainer = new UIAssetContainer(_ripper);
 
 				Dispatcher.UIThread.Post(() =>
 				{
@@ -200,6 +216,12 @@ namespace AssetRipper.GUI
 				return;
 
 			DoLoad(new[] { result });
+		}
+
+		public void OnAssetSelected(NewUiFileListItem selectedItem, Object selectedAsset)
+		{
+			_assetContainer.LastAccessedAsset = selectedAsset;
+			SelectedAsset = new SelectedAsset(selectedAsset, selectedItem.DisplayAs, _assetContainer);
 		}
 	}
 }

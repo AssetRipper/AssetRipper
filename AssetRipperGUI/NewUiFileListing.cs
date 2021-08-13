@@ -2,6 +2,7 @@
 using AssetRipper.Core.Classes.AudioManager;
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
+using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.GraphicsSettings;
 using AssetRipper.Core.Classes.InputManager;
 using AssetRipper.Core.Classes.LightmapSettings;
@@ -132,6 +133,9 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
+
+		public Object? AsObjectAsset => _associatedObject; 
+		
 		public ObservableCollection<NewUiFileListItem> SubItems { get; } = new();
 		
 		/// <summary>
@@ -156,10 +160,17 @@ namespace AssetRipper.GUI
 			{
 				_displayAs = no.ValidName;
 			}
-			else
+
+			if (_associatedObject is GameObject go)
+			{
+				_displayAs = go.Name;
+			}
+
+			if (string.IsNullOrEmpty(_displayAs))
 			{
 				_displayAs = _associatedObject.GetType().Name;
 			}
+
 		}
 
 		/// <summary>

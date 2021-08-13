@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
+using System.Diagnostics;
 
 namespace AssetRipper.GUI
 {
@@ -44,5 +45,17 @@ namespace AssetRipper.GUI
 	    private void ExitClicked(object? sender, RoutedEventArgs e) => Close();
 
 	    private void ExportAllClicked(object? sender, RoutedEventArgs e) => VM.ExportAll();
+
+	    private void OnAssetSelected(object? sender, SelectionChangedEventArgs e)
+	    {
+		    NewUiFileListItem selectedItem = (NewUiFileListItem) e.AddedItems[0]!;
+		    if (selectedItem.AsObjectAsset == null)
+		    {
+			    //Ignore non-asset files
+			    return;
+		    }
+
+		    VM.OnAssetSelected(selectedItem, selectedItem.AsObjectAsset);
+	    }
     }
 }

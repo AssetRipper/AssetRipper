@@ -98,7 +98,7 @@ namespace AssetRipper.Core.Project
 			return File.GetAsset(pathID);
 		}
 
-		public Object FindAsset(int fileIndex, long pathID)
+		public virtual Object FindAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Project
 			}
 		}
 
-		public Object GetAsset(int fileIndex, long pathID)
+		public virtual Object GetAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
@@ -127,7 +127,7 @@ namespace AssetRipper.Core.Project
 			return File.FindAsset(classID);
 		}
 
-		public Object FindAsset(ClassIDType classID, string name)
+		public virtual Object FindAsset(ClassIDType classID, string name)
 		{
 			return File.FindAsset(classID, name);
 		}
@@ -359,7 +359,7 @@ namespace AssetRipper.Core.Project
 
 		public IExportCollection CurrentCollection { get; set; }
 		public VirtualSerializedFile VirtualFile { get; }
-		public ISerializedFile File => CurrentCollection.File;
+		public virtual ISerializedFile File => CurrentCollection.File;
 		public string Name => File.Name;
 		public AssetLayout Layout => File.Layout;
 		public UnityVersion Version => File.Version;
@@ -368,8 +368,8 @@ namespace AssetRipper.Core.Project
 		public AssetLayout ExportLayout { get; }
 		public UnityVersion ExportVersion => ExportLayout.Info.Version;
 		public Platform ExportPlatform => ExportLayout.Info.Platform;
-		public TransferInstructionFlags ExportFlags => ExportLayout.Info.Flags | CurrentCollection.Flags;
-		public IReadOnlyList<FileIdentifier> Dependencies => File.Dependencies;
+		public virtual TransferInstructionFlags ExportFlags => ExportLayout.Info.Flags | CurrentCollection.Flags;
+		public virtual IReadOnlyList<FileIdentifier> Dependencies => File.Dependencies;
 
 		private const string ResourceKeyword = "Resources";
 		private const string AssetBundleKeyword = "AssetBundles";

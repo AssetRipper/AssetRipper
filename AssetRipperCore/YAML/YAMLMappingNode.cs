@@ -323,6 +323,6 @@ namespace AssetRipper.Core.YAML
 
 		public MappingStyle Style { get; set; }
 
-		private readonly List<KeyValuePair<YAMLNode, YAMLNode>> m_children = new List<KeyValuePair<YAMLNode, YAMLNode>>();
+		public readonly List<KeyValuePair<YAMLNode, YAMLNode>> m_children = new List<KeyValuePair<YAMLNode, YAMLNode>>();
 	}
 }

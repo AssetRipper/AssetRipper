@@ -64,7 +64,8 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MinWidth="800" />
             </Grid.ColumnDefinitions>
-            <TreeView Grid.Column="0" Items="{Binding AssetFiles}">
+            <TreeView Grid.Column="0" Items="{Binding AssetFiles}" SelectionMode="Single"
+                      SelectionChanged="OnAssetSelected">
                 <!--File browser-->
                 <TreeView.ItemTemplate>
                     <TreeDataTemplate ItemsSource="{Binding SubItems}">
@@ -79,8 +80,48 @@
             <Grid Grid.Column="2" RowDefinitions="*, 400">
                 <Grid Grid.Row="0">
                     <!--File content-->
-                    <TextBlock Text="Stuff Coming Soon™️" TextAlignment="Center" VerticalAlignment="Center"
-                               IsVisible="{Binding !IsExporting}" />
+                    
+                    <!--Placeholder for if no asset selected-->
+                    <TextBlock Text="Select an Asset on the left to view information about it" TextAlignment="Center"
+                               VerticalAlignment="Center" FontSize="18">
+                        <TextBlock.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="!IsExporting" />
+                                <Binding Path="HasFile" />
+                                <Binding Path="HasLoaded" />
+                                <Binding Path="SelectedAsset" Converter="{x:Static ObjectConverters.IsNull}" />
+                            </MultiBinding>
+                        </TextBlock.IsVisible>
+                    </TextBlock>
+
+                    <!--Tab list for when an asset is selected-->
+                    <TabControl>
+                        <TabControl.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="!IsExporting" />
+                                <Binding Path="HasFile" />
+                                <Binding Path="HasLoaded" />
+                                <Binding Path="SelectedAsset" Converter="{x:Static ObjectConverters.IsNotNull}" />
+                            </MultiBinding>
+                        </TabControl.IsVisible>
+                        
+                        <!--Basic Info Tab-->
+                        <TabItem Header="Basic Information">
+                            <TextBox Text="{Binding SelectedAsset.BasicInformation, FallbackValue='No Asset Selected'}" />
+                        </TabItem>
+                        
+                        <!--YAML Tab-->
+                        <TabItem Header="YAML Nodes">
+                            <TreeView Items="{Binding SelectedAsset.YamlTree, FallbackValue=[]}">
+                                <TreeView.ItemTemplate>
+                                    <TreeDataTemplate ItemsSource="{Binding Children}">
+                                        <TextBlock Text="{Binding DisplayName}" />
+                                    </TreeDataTemplate>
+                                </TreeView.ItemTemplate>
+                            </TreeView>
+                        </TabItem>
+                        
+                    </TabControl>
 
                     <!--Export Progress-->
                     <TextBlock FontSize="18" Text="{Binding ExportingText}" TextAlignment="Center"
