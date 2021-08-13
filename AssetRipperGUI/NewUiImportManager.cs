@@ -2,6 +2,7 @@
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.GUI.Exceptions;
+using AssetRipper.Library;
 using System;
 using System.Linq;
 using System.Threading;
@@ -10,17 +11,17 @@ namespace AssetRipper.GUI
 {
 	public static class NewUiImportManager
 	{
-		public static void ImportFromPath(string[] paths, Action<GameStructure> onComplete, Action<Exception> onError) => new Thread(() => ImportFromPathInternal(paths, onComplete, onError))
+		public static void ImportFromPath(Ripper ripper, string[] paths, Action<GameStructure> onComplete, Action<Exception> onError) => new Thread(() => ImportFromPathInternal(ripper, paths, onComplete, onError))
 		{
 			Name = "Background Game Load Thread",
 			IsBackground = true,
 		}.Start();
 
-		private static void ImportFromPathInternal(string[] paths, Action<GameStructure> onComplete, Action<Exception> onError)
+		private static void ImportFromPathInternal(Ripper ripper, string[] paths, Action<GameStructure> onComplete, Action<Exception> onError)
 		{
 			try
 			{
-				GameStructure gameStructure = GameStructure.Load(paths);
+				GameStructure gameStructure = ripper.Load(paths);
 
 				if (!gameStructure.IsValid)
 				{

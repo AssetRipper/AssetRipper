@@ -6,6 +6,8 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Core.Utils;
+using AssetRipper.Library;
+using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Textures;
@@ -48,7 +50,7 @@ namespace AssetRipper.GUI
 				exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
 				exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
 				exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
-				exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter());
+				exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(new LibraryConfiguration()));
 			}
 
 			//Engine Exporters
@@ -62,19 +64,17 @@ namespace AssetRipper.GUI
 			exporter.OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
 		}
 
-		public static void Export(GameStructure gameStructure, string toRoot, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(gameStructure, toRoot, onSuccess, onError))
+		public static void Export(Ripper ripper, string toRoot, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, onSuccess, onError))
 		{
 			Name = "Background Game Export Thread",
 			IsBackground = true,
 		}.Start();
 		
-		private static void ExportInternal(GameStructure gameStructure, string toRoot, Action onSuccess, Action<Exception> onError)
+		private static void ExportInternal(Ripper ripper, string toRoot, Action onSuccess, Action<Exception> onError)
 		{
-			ConfigureFileAssociations(gameStructure.FileCollection.Exporter);
-
 			try
 			{
-				gameStructure.Export(toRoot);
+				ripper.Export(toRoot);
 			}
 			catch (Exception ex)
 			{
