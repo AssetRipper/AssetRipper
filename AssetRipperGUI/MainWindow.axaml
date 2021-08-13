@@ -5,7 +5,8 @@
         xmlns:ar="using:AssetRipper.GUI"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AssetRipper.GUI.MainWindow"
-        Title="AssetRipperGuiNew">
+        Icon="/Resources/GUI_Icon.ico"
+        Title="Asset Ripper GUI">
     <DragDrop.AllowDrop>
         <MultiBinding Converter="{x:Static BoolConverters.And}">
             <Binding Path="!IsExporting" />
