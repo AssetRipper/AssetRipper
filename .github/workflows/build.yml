@@ -52,8 +52,6 @@ jobs:
         name: AssetRipperConsole_linux64
         path: /home/runner/work/AssetRipper/AssetRipper/Bins/AssetRipperConsole/Release/*
         if-no-files-found: error
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
   build_macos:
 
     runs-on: macos-latest
@@ -75,5 +73,3 @@ jobs:
         name: AssetRipperConsole_mac64
         path: /Users/runner/work/AssetRipper/AssetRipper/Bins/AssetRipperConsole/Release/*
         if-no-files-found: error
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
