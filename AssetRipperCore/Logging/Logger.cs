@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Logging
 	public static class Logger
 	{
 		private static readonly List<ILogger> loggers = new List<ILogger>();
-		public static bool Verbose { private get; set; }
+		public static bool AllowVerbose { private get; set; }
 
 		static Logger()
 		{
@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Logging
 #if !DEBUG
 			if (type == LogType.Debug) return;
 #endif
-			if (type == LogType.Verbose && !Verbose) return;
+			if (type == LogType.Verbose && !AllowVerbose) return;
 
 			if (message == null) throw new ArgumentNullException(nameof(message));
 			foreach (ILogger instance in loggers)
@@ -65,6 +65,10 @@ namespace AssetRipper.Core.Logging
 			sb.AppendLine(e.ToString());
 			Log(LogType.Error, category, sb.ToString());
 		}
+		public static void Verbose(string message) => Log(LogType.Verbose, LogCategory.None, message);
+		public static void Verbose(LogCategory category, string message) => Log(LogType.Verbose, category, message);
+		public static void Debug(string message) => Log(LogType.Debug, LogCategory.None, message);
+		public static void Debug(LogCategory category, string message) => Log(LogType.Debug, category, message);
 
 		private static void LogReleaseInformation()
 		{

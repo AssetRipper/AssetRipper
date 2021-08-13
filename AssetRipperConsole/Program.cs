@@ -93,7 +93,7 @@ namespace AssetRipper.Console
 
 		private static void Run(Options options)
 		{
-			Logger.Verbose = options.verbose;
+			Logger.AllowVerbose = options.verbose;
 			Logger.Add(new ConsoleLogger());
 			Logger.Add(new FileLogger(options.LogFile.FullName));
 			Logger.LogSystemInformation("AssetRipper Console Version");
