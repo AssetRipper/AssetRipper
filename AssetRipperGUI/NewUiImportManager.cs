@@ -1,12 +1,12 @@
 ﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Structure.GameStructure;
-using AssetRipperGuiNew.Exceptions;
+using AssetRipper.GUI.Exceptions;
 using System;
 using System.Linq;
 using System.Threading;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
 	public static class NewUiImportManager
 	{

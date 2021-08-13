@@ -1,7 +1,7 @@
 ﻿using Avalonia.Threading;
 using MessageBox.Avalonia;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
 	public static partial class Extensions
 	{

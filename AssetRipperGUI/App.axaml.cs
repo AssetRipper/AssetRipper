@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
 	public class App : Application
 	{

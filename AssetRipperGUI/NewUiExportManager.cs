@@ -15,7 +15,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
 	public static class NewUiExportManager
 	{

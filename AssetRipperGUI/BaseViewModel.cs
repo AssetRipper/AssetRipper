@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
 	public abstract class BaseViewModel : INotifyPropertyChanged
 	{

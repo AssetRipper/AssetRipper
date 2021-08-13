@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetRipperGuiNew.Exceptions
+namespace AssetRipper.GUI.Exceptions
 {
 	public class NewUiGameNotFoundException : Exception
 	{

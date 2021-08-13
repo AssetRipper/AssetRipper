@@ -25,7 +25,7 @@ using System.Linq;
 using Object = AssetRipper.Core.Classes.Object.Object;
 using SerializedFile = AssetRipper.Core.Parser.Files.SerializedFiles.SerializedFile;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
 	public static class NewUiFileListing
 	{

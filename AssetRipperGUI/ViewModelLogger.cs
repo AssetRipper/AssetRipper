@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using System;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
 	public sealed class ViewModelLogger : ILogger
 	{

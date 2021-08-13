@@ -4,7 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
     public partial class MainWindow : Window
     {

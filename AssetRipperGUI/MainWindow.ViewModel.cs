@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.GameStructure;
-using AssetRipperGuiNew.Exceptions;
+using AssetRipper.GUI.Exceptions;
 using Avalonia.Controls;
 using Avalonia.Input;
 using System;
@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
 	public class MainWindowViewModel : BaseViewModel
 	{

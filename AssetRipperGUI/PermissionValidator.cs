@@ -7,7 +7,7 @@ using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
 	public static class PermissionValidator
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia;
 
-namespace AssetRipperGuiNew
+namespace AssetRipper.GUI
 {
     class Program
     {
