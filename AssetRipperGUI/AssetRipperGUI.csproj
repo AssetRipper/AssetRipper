@@ -1,44 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <Nullable>enable</Nullable>
-	<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-	<OutputPath>..\Bins\AssetRipperGUI\$(Configuration)\$(Platform)</OutputPath>
-    <Configurations>Debug;Release;Virtual</Configurations>
-	<AssemblyName>AssetRipper</AssemblyName>
-	<RootNamespace>AssetRipper.GUI</RootNamespace>
-	<Copyright>Copyright ©  2021</Copyright>
-	<Authors>ds5678</Authors>
-    <Platforms>x86;x64</Platforms>
-	<DebugType>embedded</DebugType>
-	<DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <Nullable>enable</Nullable>
+        <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+        <OutputPath>..\Bins\AssetRipperGUI\$(Configuration)\$(Platform)</OutputPath>
+        <Configurations>Debug;Release;Virtual</Configurations>
+        <AssemblyName>AssetRipper</AssemblyName>
+        <RootNamespace>AssetRipper.GUI</RootNamespace>
+        <Copyright>Copyright © 2021</Copyright>
+        <Authors>ds5678</Authors>
+        <Platforms>x86;x64</Platforms>
+        <DebugType>embedded</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
-		<DefineConstants>DEBUG;TRACE;NET_CORE;UNIVERSAL</DefineConstants>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+        <DefineConstants>DEBUG;TRACE;NET_CORE;UNIVERSAL</DefineConstants>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)'=='Release'">
-		<DefineConstants>TRACE;NET_CORE</DefineConstants>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <DefineConstants>TRACE;NET_CORE</DefineConstants>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)'=='Virtual'">
-		<DefineConstants>DEBUG;TRACE;NET_CORE;VIRTUAL</DefineConstants>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='Virtual'">
+        <DefineConstants>DEBUG;TRACE;NET_CORE;VIRTUAL</DefineConstants>
+    </PropertyGroup>
 
-	<ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.6" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
-    <PackageReference Include="MessageBox.Avalonia" Version="1.5.1" />
-    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
-    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
-    <PackageReference Include="System.Security.AccessControl" Version="5.0.0" />
-   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Resources\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="0.10.6"/>
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.6"/>
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6"/>
+        <PackageReference Include="MessageBox.Avalonia" Version="1.5.1"/>
+        <PackageReference Include="System.IO.FileSystem" Version="4.3.0"/>
+        <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0"/>
+        <PackageReference Include="System.Security.AccessControl" Version="5.0.0"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj"/>
+    </ItemGroup>
 </Project>
