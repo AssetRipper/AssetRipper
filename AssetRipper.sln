@@ -342,13 +342,13 @@ Global
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|Any CPU.ActiveCfg = Release|x86
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x64.ActiveCfg = Release|x64
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x64.Build.0 = Release|x64
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x86.ActiveCfg = Release|Any CPU
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x86.Build.0 = Release|Any CPU
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|Any CPU.ActiveCfg = Debug|x86
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x64.ActiveCfg = Debug|Any CPU
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x64.Build.0 = Debug|Any CPU
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x86.ActiveCfg = Debug|Any CPU
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x86.Build.0 = Debug|Any CPU
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x86.ActiveCfg = Release|x86
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x86.Build.0 = Release|x86
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|Any CPU.ActiveCfg = Virtual|x86
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x64.ActiveCfg = Virtual|x86
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x64.Build.0 = Virtual|x86
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x86.ActiveCfg = Virtual|x86
+		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x86.Build.0 = Virtual|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
