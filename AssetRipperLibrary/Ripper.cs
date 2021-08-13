@@ -40,23 +40,25 @@ namespace AssetRipper.Library
 			return GameStructure.FileCollection.FetchAssets();
 		}
 
-		public void Export(string exportPath)
-		{
-			Logger.Log(LogType.Info, LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			Settings.ExportPath = exportPath;
-			Settings.Filter = LibraryConfiguration.DefaultFilter;
-			InitializeExporters();
-			GameStructure.Export(Settings);
-			Logger.Log(LogType.Info, LogCategory.Export, "Finished exporting assets");
-		}
+		public void ExportFile(string exportPath, UnityObject asset) => throw new NotImplementedException();
+		public void ExportFile(string exportPath, IEnumerable<UnityObject> assets) => throw new NotImplementedException();
 
-		public void Export(string exportPath, UnityObject asset) => Export(exportPath, new UnityObject[] { asset });
-		public void Export(string exportPath, IEnumerable<UnityObject> assets)
+		public void ExportProject(string exportPath, UnityObject asset) => ExportProject(exportPath, new UnityObject[] { asset });
+		public void ExportProject(string exportPath, IEnumerable<UnityObject> assets)
 		{
 			Logger.Log(LogType.Info, LogCategory.Export, $"Attempting to export assets to {exportPath}...");
 			List<UnityObject> list = new List<UnityObject>(assets);
 			Settings.ExportPath = exportPath;
 			Settings.Filter = GetFilter(list);
+			InitializeExporters();
+			GameStructure.Export(Settings);
+			Logger.Log(LogType.Info, LogCategory.Export, "Finished exporting assets");
+		}
+		public void ExportProject(string exportPath)
+		{
+			Logger.Log(LogType.Info, LogCategory.Export, $"Attempting to export assets to {exportPath}...");
+			Settings.ExportPath = exportPath;
+			Settings.Filter = LibraryConfiguration.DefaultFilter;
 			InitializeExporters();
 			GameStructure.Export(Settings);
 			Logger.Log(LogType.Info, LogCategory.Export, "Finished exporting assets");

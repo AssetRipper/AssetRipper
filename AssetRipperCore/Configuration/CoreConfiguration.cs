@@ -22,11 +22,11 @@ namespace AssetRipper.Core.Configuration
 		/// <summary>
 		/// Should objects get exported with dependencies or without?
 		/// </summary>
-		public bool ExportDependencies { get; set; }
+		public bool ExportDependencies { get; set; } = true;
 		/// <summary>
 		/// Export asset bundle content to its original path instead of AssetBundle directory
 		/// </summary>
-		public bool KeepAssetBundleContentPath { get; set; }
+		public bool KeepAssetBundleContentPath { get; set; } = true;
 		/// <summary>
 		/// A function to determine if an object is allowed to be exported.<br/>
 		/// Set by default to allow everything.

@@ -65,7 +65,7 @@ namespace UnitTester
 							Ripper ripper = new Ripper();
 							GameStructure gameStructure = ripper.Load(inputPaths);
 							PrepareExportDirectory(outputPath);
-							ripper.Export(outputPath);
+							ripper.ExportProject(outputPath);
 							Logger.Log(LogType.Info, LogCategory.General, $"Completed test: '{testName}' for Unity version: '{versionName}'");
 							Logger.BlankLine(2);
 							numSuccessful++;

@@ -103,7 +103,7 @@ namespace AssetRipper.Console
 				Ripper ripper = new Ripper();
 				ripper.Load(options.FilesToExport);
 				PrepareExportDirectory(options.OutputDirectory.FullName);
-				ripper.Export(options.OutputDirectory.FullName);
+				ripper.ExportProject(options.OutputDirectory.FullName);
 			}
 			catch (Exception ex)
 			{

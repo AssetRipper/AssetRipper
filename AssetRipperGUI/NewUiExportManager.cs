@@ -45,7 +45,7 @@ namespace AssetRipper.GUI
 		{
 			try
 			{
-				ripper.Export(toRoot);
+				ripper.ExportProject(toRoot);
 			}
 			catch (Exception ex)
 			{
