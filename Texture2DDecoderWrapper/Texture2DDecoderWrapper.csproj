@@ -4,8 +4,8 @@
     <TargetFrameworks>net5.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <OutputPath>..\Bins\Texture2DDecoderWrapper\$(Configuration)\$(Platform)\</OutputPath>
-    <Platforms>x64;x86</Platforms>
+    <OutputPath>..\Bins\Texture2DDecoderWrapper\$(Configuration)\</OutputPath>
+    <Platforms>x64</Platforms>
     <Configurations>Debug;Release;Virtual</Configurations>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>

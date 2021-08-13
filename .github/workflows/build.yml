@@ -19,31 +19,17 @@ jobs:
       run: nuget restore
     - name: Build x64
       run: msbuild /m /p:Configuration=Release /p:Platform=x64
-    - name: Build x86
-      run: msbuild /m /p:Configuration=Release /p:Platform=x86
     - name: Upload AssetRipperConsole x64
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperConsole_win64
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\x64\*
-        if-no-files-found: error
-    - name: Upload AssetRipperConsole x86
-      uses: actions/upload-artifact@v2
-      with:
-        name: AssetRipperConsole_win86
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\x86\*
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperConsole\Release\*
         if-no-files-found: error
     - name: Upload AssetRipperGUI x64
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperGUI_win64
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x64\*
-        if-no-files-found: error
-    - name: Upload AssetRipperGUI x86
-      uses: actions/upload-artifact@v2
-      with:
-        name: AssetRipperGUI_win86
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\x86\*
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipperGUI\Release\*
         if-no-files-found: error
   build_linux:
 
@@ -64,7 +50,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperConsole_linux64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/AssetRipperConsole/Release/x64/*
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/AssetRipperConsole/Release/*
         if-no-files-found: error
     - name: Test
       run: dotnet test --no-build --verbosity normal
@@ -87,7 +73,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperConsole_mac64
-        path: /Users/runner/work/AssetRipper/AssetRipper/Bins/AssetRipperConsole/Release/x64/*
+        path: /Users/runner/work/AssetRipper/AssetRipper/Bins/AssetRipperConsole/Release/*
         if-no-files-found: error
     - name: Test
       run: dotnet test --no-build --verbosity normal

@@ -8,8 +8,8 @@
     <RootNamespace>AssetRipper.Library</RootNamespace>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\$(Platform)\</OutputPath>
-    <Platforms>x64;x86</Platforms>
+    <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
+    <Platforms>x64</Platforms>
     <Configurations>Debug;Release;Virtual</Configurations>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -23,14 +23,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Virtual' ">
     <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Platform)'=='x64'">
-    <DefineConstants>PLATFORM_X64</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Platform)'=='x86'">
-    <DefineConstants>PLATFORM_X86</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

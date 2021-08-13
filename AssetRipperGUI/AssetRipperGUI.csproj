@@ -6,13 +6,13 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <Nullable>enable</Nullable>
         <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-        <OutputPath>..\Bins\AssetRipperGUI\$(Configuration)\$(Platform)</OutputPath>
+        <OutputPath>..\Bins\AssetRipperGUI\$(Configuration)\</OutputPath>
         <Configurations>Debug;Release;Virtual</Configurations>
         <AssemblyName>AssetRipper</AssemblyName>
         <RootNamespace>AssetRipper.GUI</RootNamespace>
         <Copyright>Copyright © 2021</Copyright>
         <Authors>ds5678</Authors>
-        <Platforms>x86;x64</Platforms>
+        <Platforms>x64</Platforms>
         <DebugType>embedded</DebugType>
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
