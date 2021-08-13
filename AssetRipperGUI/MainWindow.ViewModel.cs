@@ -115,8 +115,8 @@ namespace AssetRipper.GUI
 			{
 				return;
 			}
-			
-			_ripper.GameStructure?.Dispose();
+
+			_ripper.ResetData();
 
 			string gamePath = filesDropped[0];
 

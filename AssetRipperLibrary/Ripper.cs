@@ -15,13 +15,13 @@ namespace AssetRipper.Library
 {
 	public class Ripper
 	{
-		public GameStructure GameStructure { get; set; }
-		public LibraryConfiguration Settings { get; } = new();
+		public GameStructure GameStructure { get; private set; }
+		public LibraryConfiguration Settings { get; private set; } = new();
 		private bool ExportersInitialized { get; set; }
 
 		public GameStructure Load(IReadOnlyList<string> paths)
 		{
-			ExportersInitialized = false;
+			ResetData();
 			if(paths.Count == 1)
 				Logger.Log(LogType.Info, LogCategory.General, $"Attempting to read files from {paths[0]}");
 			else
@@ -59,6 +59,15 @@ namespace AssetRipper.Library
 			GameStructure.Export(Settings);
 			Logger.Log(LogType.Info, LogCategory.Export, "Finished exporting assets");
 		}
+
+		public void ResetData()
+		{
+			ExportersInitialized = false;
+			GameStructure?.Dispose();
+			GameStructure = null;
+		}
+
+		public void ResetSettings() => Settings = new();
 
 		private static Func<UnityObject, bool> GetFilter(List<UnityObject> assets)
 		{

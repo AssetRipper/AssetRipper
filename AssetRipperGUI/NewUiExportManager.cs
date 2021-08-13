@@ -35,35 +35,6 @@ namespace AssetRipper.GUI
 			}
 		}
 
-		private static void ConfigureFileAssociations(ProjectExporter exporter)
-		{
-			//Core Exporters
-			exporter.OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter());
-			exporter.OverrideExporter(ClassIDType.Font, new FontAssetExporter());
-			exporter.OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
-
-			//Library Exporters
-			if (OperatingSystem.IsWindows())
-			{
-				TextureAssetExporter textureExporter = new();
-				exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
-				exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
-				exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
-				exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
-				exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(new LibraryConfiguration()));
-			}
-
-			//Engine Exporters
-			EngineAssetExporter engineExporter = new();
-			exporter.OverrideExporter(ClassIDType.Material, engineExporter);
-			exporter.OverrideExporter(ClassIDType.Texture2D, engineExporter);
-			exporter.OverrideExporter(ClassIDType.Mesh, engineExporter);
-			exporter.OverrideExporter(ClassIDType.Shader, engineExporter);
-			exporter.OverrideExporter(ClassIDType.Font, engineExporter);
-			exporter.OverrideExporter(ClassIDType.Sprite, engineExporter);
-			exporter.OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
-		}
-
 		public static void Export(Ripper ripper, string toRoot, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, onSuccess, onError))
 		{
 			Name = "Background Game Export Thread",

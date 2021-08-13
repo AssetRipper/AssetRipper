@@ -29,7 +29,8 @@ namespace AssetRipper.Core.Project
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
-			m_options = options ?? throw new ArgumentNullException(nameof(options));
+			if(options == null) throw new ArgumentNullException(nameof(options));
+			m_KeepAssetBundleContentPath = options.KeepAssetBundleContentPath;
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			ExportLayout = file.Layout;
 
@@ -336,7 +337,7 @@ namespace AssetRipper.Core.Project
 					}
 				}
 
-				if (m_options.KeepAssetBundleContentPath)
+				if (m_KeepAssetBundleContentPath)
 				{
 					m_pathAssets.Add(asset, new ProjectAssetPath(string.Empty, assetPath));
 				}
@@ -377,7 +378,7 @@ namespace AssetRipper.Core.Project
 		private const string AssetBundleFullPath = AssetsDirectory + AssetBundleKeyword;
 
 		private readonly ProjectExporter m_exporter;
-		private readonly CoreConfiguration m_options;
+		private readonly bool m_KeepAssetBundleContentPath;
 		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
 		private readonly Dictionary<Object, ProjectAssetPath> m_pathAssets = new Dictionary<Object, ProjectAssetPath>();
 
