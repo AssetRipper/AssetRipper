@@ -4,12 +4,14 @@ using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
+using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.Utils;
 using System;
 using System.Collections.Generic;
@@ -31,34 +33,53 @@ namespace AssetRipper.Library.Exporters.Textures
 				return false;
 			}
 
-			using (DirectBitmap bitmap = ConvertToBitmap(texture, buffer))
+			int pvrtcBitCount = 0;
+			int astcBlockSize = 0;
+			KTXBaseInternalFormat baseInternalFormat = KTXBaseInternalFormat.RG;
+			try
 			{
-				if (bitmap == null)
-				{
-					return false;
-				}
-				else
-				{
-					// despite the name, this packing works for different formats
-					if (texture.LightmapFormat == TextureUsageMode.NormalmapDXT5nm)
-					{
-						TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
-					}
-
-					bitmap.Save(exportStream, ImageFormat.Png);
-					return true;
-				}
+				pvrtcBitCount = texture.PVRTCBitCount();
 			}
+			catch { /*Ignore*/ }
+			try
+			{
+				astcBlockSize = texture.ASTCBlockSize();
+			}
+			catch { /*Ignore*/ }
+			try
+			{
+				baseInternalFormat = texture.KTXBaseInternalFormat();
+			}
+			catch { /*Ignore*/ }
+
+			using DirectBitmap bitmap = ConvertToBitmap(texture.TextureFormat, texture.Width, texture.Height, texture.File.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
+			
+			if (bitmap == null)
+			{
+				return false;
+			}
+
+			// despite the name, this packing works for different formats
+			if (texture.LightmapFormat == TextureUsageMode.NormalmapDXT5nm)
+			{
+				TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
+			}
+
+			bitmap.Save(exportStream, ImageFormat.Png);
+			return true;
 		}
 
-		private static DirectBitmap ConvertToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data, int pvrtcBitCount, int astcBlockSize, KTXBaseInternalFormat ktxBaseInternalFormat)
 		{
-			switch (texture.TextureFormat)
+			if (width == 0 || height == 0)
+				return new DirectBitmap(1, 1);
+			
+			switch (textureFormat)
 			{
 				case TextureFormat.DXT1:
 				case TextureFormat.DXT3:
 				case TextureFormat.DXT5:
-					return TextureConverter.DXTTextureToBitmap(texture, data);
+					return TextureConverter.DXTTextureToBitmap(textureFormat, width, height, data);
 
 				case TextureFormat.Alpha8:
 				case TextureFormat.ARGB4444:
@@ -78,16 +99,16 @@ namespace AssetRipper.Library.Exporters.Textures
 				case TextureFormat.RGB9e5Float:
 				case TextureFormat.RG16:
 				case TextureFormat.R8:
-					return TextureConverter.RGBTextureToBitmap(texture, data);
+					return TextureConverter.RGBTextureToBitmap(textureFormat, width, height, data);
 
 				case TextureFormat.YUY2:
-					return TextureConverter.YUY2TextureToBitmap(texture, data);
+					return TextureConverter.YUY2TextureToBitmap(textureFormat, width, height, data);
 
 				case TextureFormat.PVRTC_RGB2:
 				case TextureFormat.PVRTC_RGBA2:
 				case TextureFormat.PVRTC_RGB4:
 				case TextureFormat.PVRTC_RGBA4:
-					return TextureConverter.PVRTCTextureToBitmap(texture, data);
+					return TextureConverter.PVRTCTextureToBitmap(pvrtcBitCount, textureFormat, width, height, data);
 
 				case TextureFormat.ETC_RGB4:
 				case TextureFormat.EAC_R:
@@ -99,11 +120,11 @@ namespace AssetRipper.Library.Exporters.Textures
 				case TextureFormat.ETC2_RGBA8:
 				case TextureFormat.ETC_RGB4_3DS:
 				case TextureFormat.ETC_RGBA8_3DS:
-					return TextureConverter.ETCTextureToBitmap(texture, data);
+					return TextureConverter.ETCTextureToBitmap(textureFormat, width, height, data);
 
 				case TextureFormat.ATC_RGB4:
 				case TextureFormat.ATC_RGBA8:
-					return TextureConverter.ATCTextureToBitmap(texture, data);
+					return TextureConverter.ATCTextureToBitmap(textureFormat, width, height, data);
 
 				case TextureFormat.ASTC_RGB_4x4:
 				case TextureFormat.ASTC_RGB_5x5:
@@ -117,24 +138,24 @@ namespace AssetRipper.Library.Exporters.Textures
 				case TextureFormat.ASTC_RGBA_8x8:
 				case TextureFormat.ASTC_RGBA_10x10:
 				case TextureFormat.ASTC_RGBA_12x12:
-					return TextureConverter.ASTCTextureToBitmap(texture, data);
+					return TextureConverter.ASTCTextureToBitmap(astcBlockSize, width, height, data);
 
 				case TextureFormat.BC4:
 				case TextureFormat.BC5:
 				case TextureFormat.BC6H:
 				case TextureFormat.BC7:
-					return TextureConverter.TexgenpackTextureToBitmap(texture, data);
+					return TextureConverter.TexgenpackTextureToBitmap(ktxBaseInternalFormat, textureFormat, width, height, data);
 
 				case TextureFormat.DXT1Crunched:
 				case TextureFormat.DXT5Crunched:
-					return TextureConverter.DXTCrunchedTextureToBitmap(texture, data);
+					return TextureConverter.DXTCrunchedTextureToBitmap(textureFormat, width, height, version, data);
 
 				case TextureFormat.ETC_RGB4Crunched:
 				case TextureFormat.ETC2_RGBA8Crunched:
-					return TextureConverter.ETCCrunchedTextureToBitmap(texture, data);
+					return TextureConverter.ETCCrunchedTextureToBitmap(textureFormat, width, height, version, data);
 
 				default:
-					Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{texture.TextureFormat}'");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{textureFormat}'");
 					return null;
 			}
 		}

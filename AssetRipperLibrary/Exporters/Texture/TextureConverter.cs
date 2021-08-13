@@ -36,14 +36,12 @@ namespace AssetRipper.Library.Exporters.Textures
 			return format == TextureFormat.ETC_RGB4Crunched || format == TextureFormat.ETC2_RGBA8Crunched;
 		}
 
-		public static DirectBitmap DXTTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap DXTTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
 		{
-			int width = texture.Width;
-			int height = texture.Height;
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				switch (texture.TextureFormat)
+				switch (textureFormat)
 				{
 					case TextureFormat.DXT1:
 					case TextureFormat.DXT1Crunched:
@@ -60,7 +58,7 @@ namespace AssetRipper.Library.Exporters.Textures
 						break;
 
 					default:
-						throw new Exception(texture.TextureFormat.ToString());
+						throw new Exception(textureFormat.ToString());
 
 				}
 				bitmap.FlipY();
@@ -73,20 +71,18 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static DirectBitmap DXTCrunchedTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap DXTCrunchedTextureToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
 		{
-			byte[] decompressed = DecompressCrunch(texture, data);
-			return DXTTextureToBitmap(texture, decompressed);
+			byte[] decompressed = DecompressCrunch(textureFormat, width, height, unityVersion, data);
+			return DXTTextureToBitmap(textureFormat, width, height, decompressed);
 		}
 
-		public static DirectBitmap RGBTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap RGBTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
 		{
-			int width = texture.Width;
-			int height = texture.Height;
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				switch (texture.TextureFormat)
+				switch (textureFormat)
 				{
 					case TextureFormat.Alpha8:
 						RgbConverter.A8ToBGRA32(data, width, height, bitmap.Bits);
@@ -144,7 +140,7 @@ namespace AssetRipper.Library.Exporters.Textures
 						break;
 
 					default:
-						throw new Exception(texture.TextureFormat.ToString());
+						throw new Exception(textureFormat.ToString());
 
 				}
 				bitmap.FlipY();
@@ -157,14 +153,12 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static DirectBitmap ETCTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap ETCTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
 		{
-			int width = texture.Width;
-			int height = texture.Height;
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				switch (texture.TextureFormat)
+				switch (textureFormat)
 				{
 					case TextureFormat.ETC_RGB4:
 					case TextureFormat.ETC_RGB4_3DS:
@@ -200,7 +194,7 @@ namespace AssetRipper.Library.Exporters.Textures
 						break;
 
 					default:
-						throw new Exception(texture.TextureFormat.ToString());
+						throw new Exception(textureFormat.ToString());
 
 				}
 				bitmap.FlipY();
@@ -213,20 +207,18 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static DirectBitmap ETCCrunchedTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap ETCCrunchedTextureToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
 		{
-			byte[] decompressed = DecompressCrunch(texture, data);
-			return ETCTextureToBitmap(texture, decompressed);
+			byte[] decompressed = DecompressCrunch(textureFormat, width, height, unityVersion, data);
+			return ETCTextureToBitmap(textureFormat, width, height, decompressed);
 		}
 
-		public static DirectBitmap ATCTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap ATCTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
 		{
-			int width = texture.Width;
-			int height = texture.Height;
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				switch (texture.TextureFormat)
+				switch (textureFormat)
 				{
 					case TextureFormat.ATC_RGB4:
 						AtcDecoder.DecompressAtcRgb4(data, width, height, bitmap.Bits);
@@ -237,7 +229,7 @@ namespace AssetRipper.Library.Exporters.Textures
 						break;
 
 					default:
-						throw new Exception(texture.TextureFormat.ToString());
+						throw new Exception(textureFormat.ToString());
 
 				}
 				bitmap.FlipY();
@@ -250,10 +242,8 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static DirectBitmap YUY2TextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap YUY2TextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
 		{
-			int width = texture.Width;
-			int height = texture.Height;
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
@@ -267,11 +257,8 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static DirectBitmap PVRTCTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap PVRTCTextureToBitmap(int bitCount, TextureFormat textureFormat, int width, int height, byte[] data)
 		{
-			int width = texture.Width;
-			int height = texture.Height;
-			int bitCount = texture.PVRTCBitCount();
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
@@ -286,11 +273,8 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static DirectBitmap ASTCTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap ASTCTextureToBitmap(int blockSize, int width, int height, byte[] data)
 		{
-			int width = texture.Width;
-			int height = texture.Height;
-			int blockSize = texture.ASTCBlockSize();
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
@@ -305,13 +289,13 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static DirectBitmap TexgenpackTextureToBitmap(Texture2D texture, byte[] data)
+		public static DirectBitmap TexgenpackTextureToBitmap(KTXBaseInternalFormat baseInternalFormat, TextureFormat textureFormat, int width, int height, byte[] data)
 		{
-			bool fixAlpha = texture.KTXBaseInternalFormat() == KTXBaseInternalFormat.RED || texture.KTXBaseInternalFormat() == KTXBaseInternalFormat.RG;
-			DirectBitmap bitmap = new DirectBitmap(texture.Width, texture.Height);
+			bool fixAlpha = baseInternalFormat is KTXBaseInternalFormat.RED or KTXBaseInternalFormat.RG;
+			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				texgenpackdecode((int)ToTexgenpackTexturetype(texture.TextureFormat), data, texture.Width, texture.Height, bitmap.BitsPtr, fixAlpha);
+				texgenpackdecode((int)ToTexgenpackTexturetype(textureFormat), data, width, height, bitmap.BitsPtr, fixAlpha);
 				bitmap.FlipY();
 				return bitmap;
 			}
@@ -344,12 +328,12 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		private static byte[] DecompressCrunch(Texture2D texture, byte[] data)
+		private static byte[] DecompressCrunch(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
 		{
 			IntPtr uncompressedData = default;
 			try
 			{
-				bool result = IsUseUnityCrunch(texture.File.Version, texture.TextureFormat) ?
+				bool result = IsUseUnityCrunch(unityVersion, textureFormat) ?
 					DecompressUnityCRN(data, data.Length, out uncompressedData, out int uncompressedSize) :
 					DecompressCRN(data, data.Length, out uncompressedData, out uncompressedSize);
 				if (result)
