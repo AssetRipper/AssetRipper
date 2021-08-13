@@ -3,6 +3,7 @@ using AssetRipper.Core.Classes.ParticleSystem.Curve;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Math;
 using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.ParticleSystem
@@ -34,6 +35,10 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// Less than 5.3.0
 		/// </summary>
 		public static bool HasInheritVelocity(UnityVersion version) => version.IsLess(5, 3);
+		/// <summary>
+		/// 2021 and greater
+		/// </summary>
+		public static bool HasCustomEmitterVelocity(UnityVersion version) => version.IsGreaterEqual(2021);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
@@ -85,6 +90,13 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 				InheritVelocity = reader.ReadSingle();
 			}
 			MaxNumParticles = reader.ReadInt32();
+
+			if (HasCustomEmitterVelocity(reader.Version))
+			{
+				CustomEmitterVelocity.Read(reader);
+			}
+			
+			
 			if (HasSize3D(reader.Version))
 			{
 				Size3D = reader.ReadBoolean();
@@ -116,6 +128,10 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			node.Add(StartRotationName, StartRotation.ExportYAML(container));
 			node.Add(RandomizeRotationDirectionName, RandomizeRotationDirection);
 			node.Add(MaxNumParticlesName, MaxNumParticles);
+			if (HasCustomEmitterVelocity(container.ExportVersion))
+			{
+				node.Add(CustomEmitterVelocityName, CustomEmitterVelocity.ExportYAML(container));
+			}
 			node.Add(Size3DName, Size3D);
 			node.Add(Rotation3DName, Rotation3D);
 			node.Add(GravityModifierName, GravityModifier.ExportYAML(container));
@@ -142,6 +158,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public float RandomizeRotationDirection { get; set; }
 		public float InheritVelocity { get; set; }
 		public int MaxNumParticles { get; set; }
+		public Vector3f CustomEmitterVelocity { get; set; }
 		public bool Size3D { get; set; }
 		public bool Rotation3D { get; set; }
 
@@ -156,6 +173,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string StartRotationName = "startRotation";
 		public const string RandomizeRotationDirectionName = "randomizeRotationDirection";
 		public const string MaxNumParticlesName = "maxNumParticles";
+		public const string CustomEmitterVelocityName = "customEmitterVelocity";
 		public const string Size3DName = "size3D";
 		public const string Rotation3DName = "rotation3D";
 		public const string GravityModifierName = "gravityModifier";

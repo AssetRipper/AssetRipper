@@ -128,6 +128,10 @@ namespace AssetRipper.Core.Classes.Terrain
 		/// 2019.3 and greater
 		/// </summary>
 		public static bool HasRenderingLayerMask(UnityVersion version) => version.IsGreaterEqual(2019, 3);
+		/// <summary>
+		/// 2021 and greater
+		/// </summary>
+		public static bool HasStaticShadowCaster(UnityVersion version) => version.IsGreaterEqual(2021);
 
 		/// <summary>
 		/// 5.0.0f1 and greater (NOTE: unknown version)
@@ -166,6 +170,12 @@ namespace AssetRipper.Core.Classes.Terrain
 				DrawInstanced = reader.ReadBoolean();
 			}
 			DrawTreesAndFoliage = reader.ReadBoolean();
+
+			if (HasStaticShadowCaster(reader.Version))
+			{
+				StaticShadowCaster = reader.ReadBoolean();
+			}
+			
 			reader.AlignStream();
 
 			if (HasReflectionProbeUsage(reader.Version))
@@ -278,6 +288,10 @@ namespace AssetRipper.Core.Classes.Terrain
 				node.Add(DrawInstancedName, DrawInstanced);
 			}
 			node.Add(DrawTreesAndFoliageName, DrawTreesAndFoliage);
+			if (HasStaticShadowCaster(container.ExportVersion))
+			{
+				node.Add(StaticShadowCasterName, StaticShadowCaster);
+			}
 			node.Add(ReflectionProbeUsageName, (int)ReflectionProbeUsage);
 			if (HasMaterialType(container.ExportVersion))
 			{
@@ -393,6 +407,7 @@ namespace AssetRipper.Core.Classes.Terrain
 		public bool DrawHeightmap { get; set; }
 		public bool DrawInstanced { get; set; }
 		public bool DrawTreesAndFoliage { get; set; }
+		public bool StaticShadowCaster { get; set; }
 		public ReflectionProbeUsage ReflectionProbeUsage { get; set; }
 		public MaterialType MaterialType { get; set; }
 		public float LegacyShininess { get; set; }
@@ -425,6 +440,7 @@ namespace AssetRipper.Core.Classes.Terrain
 		public const string DrawHeightmapName = "m_DrawHeightmap";
 		public const string DrawInstancedName = "m_DrawInstanced";
 		public const string DrawTreesAndFoliageName = "m_DrawTreesAndFoliage";
+		public const string StaticShadowCasterName = "m_StaticShadowCaster";
 		public const string ReflectionProbeUsageName = "m_ReflectionProbeUsage";
 		public const string MaterialTypeName = "m_MaterialType";
 		public const string LegacySpecularName = "m_LegacySpecular";

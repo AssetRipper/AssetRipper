@@ -56,6 +56,10 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// </summary>
 		public static bool HasTestConfigUrl(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
+		/// 2021 and greater
+		/// </summary>
+		public static bool HasDashboardUrl(UnityVersion version) => version.IsGreaterEqual(2021);
+		/// <summary>
 		/// 5.6.0b6 and greater
 		/// </summary>
 		public static bool HasTestInitMode(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 6);
@@ -276,6 +280,11 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			{
 				TestConfigUrl = reader.ReadString();
 			}
+
+			if (HasDashboardUrl(reader.Version))
+			{
+				DashboardUrl = reader.ReadString();
+			}
 			if (HasTestInitMode(reader.Version))
 			{
 				TestInitMode = reader.ReadInt32();
@@ -315,6 +324,10 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			node.Add(TestModeName, TestMode);
 			node.Add(TestEventUrlName, GetTestEventUrl(container.Version));
 			node.Add(TestConfigUrlName, GetTestConfigUrl(container.Version));
+			if (HasDashboardUrl(container.ExportVersion))
+			{
+				node.Add(DashboardUrlName, DashboardUrl);
+			}
 			node.Add(TestInitModeName, TestInitMode);
 			node.Add(CrashReportingSettingsName, GetCrashReportingSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
 			node.Add(UnityPurchasingSettingsName, UnityPurchasingSettings.ExportYAML(container));
@@ -356,12 +369,14 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// ConfigUrl since 2018.3 
 		/// </summary>
 		public string TestConfigUrl { get; set; }
+		public string DashboardUrl { get; set; }
 		public int TestInitMode { get; set; }
 
 		public const string EnabledName = "m_Enabled";
 		public const string TestModeName = "m_TestMode";
 		public const string TestEventUrlName = "m_TestEventUrl";
 		public const string TestConfigUrlName = "m_TestConfigUrl";
+		public const string DashboardUrlName = "m_DashboardUrl";
 		public const string TestInitModeName = "m_TestInitMode";
 		public const string CrashReportingSettingsName = "CrashReportingSettings";
 		public const string UnityPurchasingSettingsName = "UnityPurchasingSettings";

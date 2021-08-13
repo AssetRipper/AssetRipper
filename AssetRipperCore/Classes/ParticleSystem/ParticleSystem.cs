@@ -57,6 +57,10 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// </summary>
 		public static bool HasCullingMode(UnityVersion version) => version.IsGreaterEqual(2018, 3);
 		/// <summary>
+		/// 2021 and greater
+		/// </summary>
+		public static bool HasEmitterVelocityMode(UnityVersion version) => version.IsGreaterEqual(2021);
+		/// <summary>
 		/// 2017.1.0b2 and greater
 		/// </summary>
 		public static bool HasUseUnscaledTime(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
@@ -65,9 +69,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// </summary>
 		public static bool HasAutoRandomSeed(UnityVersion version) => version.IsGreaterEqual(5, 4, 0, UnityVersionType.Patch, 4);
 		/// <summary>
-		/// 2017.1.0f1 and greater
+		/// 2017.1.0f1 and greater but less than 2021
 		/// </summary>
-		public static bool HasUseRigidbodyForVelocity(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Final);
+		public static bool HasUseRigidbodyForVelocity(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Final) && version.IsLess(2021);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
@@ -155,6 +159,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 				CullingMode = (ParticleSystemCullingMode)reader.ReadInt32();
 				RingBufferMode = (ParticleSystemRingBufferMode)reader.ReadInt32();
 				RingBufferLoopRange.Read(reader);
+			}
+
+			if (HasEmitterVelocityMode(reader.Version))
+			{
+				EmitterVelocityMode = reader.ReadInt32();
 			}
 
 			Looping = reader.ReadBoolean();
@@ -277,6 +286,10 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			node.Add(LengthInSecName, LengthInSec);
 			node.Add(SimulationSpeedName, SimulationSpeed);
 			node.Add(StopActionName, (int)StopAction);
+			if (HasEmitterVelocityMode(container.ExportVersion))
+			{
+				node.Add(EmitterVelocityModeName, EmitterVelocityMode);
+			}
 			node.Add(LoopingName, Looping);
 			node.Add(PrewarmName, Prewarm);
 			node.Add(PlayOnAwakeName, PlayOnAwake);
@@ -372,6 +385,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public ParticleSystemCullingMode CullingMode { get; set; }
 		public ParticleSystemRingBufferMode RingBufferMode { get; set; }
 		public Vector2f RingBufferLoopRange { get; set; }
+		public int EmitterVelocityMode { get; set; }
 		public bool Looping { get; set; }
 		public bool Prewarm { get; set; }
 		public bool PlayOnAwake { get; set; }
@@ -408,6 +422,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string LengthInSecName = "lengthInSec";
 		public const string SimulationSpeedName = "simulationSpeed";
 		public const string StopActionName = "stopAction";
+		public const string EmitterVelocityModeName = "emitterVelocityMode";
 		public const string LoopingName = "looping";
 		public const string PrewarmName = "prewarm";
 		public const string PlayOnAwakeName = "playOnAwake";
