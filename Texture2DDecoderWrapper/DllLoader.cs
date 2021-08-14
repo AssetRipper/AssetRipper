@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Texture2DDecoderWrapper
+namespace Texture2DDecoder
 {
 	public static class DllLoader
 	{
@@ -12,7 +12,7 @@ namespace Texture2DDecoderWrapper
 		public static void PreloadDll(string dllName)
 		{
 			var dllDir = GetDirectedDllDirectory();
-
+			
 			// Not using OperatingSystem.Platform.
 			// See: https://www.mono-project.com/docs/faq/technical/#how-to-detect-the-execution-platform
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -30,9 +30,9 @@ namespace Texture2DDecoderWrapper
 			var localPath = Process.GetCurrentProcess().MainModule.FileName;
 			var localDir = Path.GetDirectoryName(localPath);
 
-			var subDir = Environment.Is64BitProcess ? "x64" : "x86";
+			//var subDir = Environment.Is64BitProcess ? "x64" : "x86";
 
-			var directedDllDir = Path.Combine(localDir, subDir);
+			var directedDllDir = localDir;// Path.Combine(localDir, subDir);
 
 			return directedDllDir;
 		}

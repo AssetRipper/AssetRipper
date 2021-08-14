@@ -1,4 +1,4 @@
-﻿namespace Texture2DDecoderWrapper
+﻿namespace Texture2DDecoder
 {
     internal static class T2DDll
     {

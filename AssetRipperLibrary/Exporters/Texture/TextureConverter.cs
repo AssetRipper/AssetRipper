@@ -11,7 +11,7 @@ using AssetRipper.Library.Utils;
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using Texture2DDecoderWrapper;
+using Texture2DDecoder;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Library.Exporters.Textures

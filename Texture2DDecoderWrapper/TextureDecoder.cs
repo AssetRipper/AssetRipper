@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Texture2DDecoderWrapper
+namespace Texture2DDecoder
 {
     public static unsafe partial class TextureDecoder
     {
