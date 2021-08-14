@@ -12,22 +12,8 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
-	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
-		<ContentWithTargetPath Include="..\Texture2DDecoderNative\bin\x64\Debug\Texture2DDecoderNative.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>Texture2DDecoderNative.dll</TargetPath>
-		</ContentWithTargetPath>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(Configuration)' == 'Release'">
-		<ContentWithTargetPath Include="..\Texture2DDecoderNative\bin\x64\Release\Texture2DDecoderNative.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>Texture2DDecoderNative.dll</TargetPath>
-		</ContentWithTargetPath>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(Configuration)' == 'Virtual'">
-		<ContentWithTargetPath Include="..\Texture2DDecoderNative\bin\x64\Debug\Texture2DDecoderNative.dll">
+	<ItemGroup>
+		<ContentWithTargetPath Include=".\Texture2DDecoderNative.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>Texture2DDecoderNative.dll</TargetPath>
 		</ContentWithTargetPath>
