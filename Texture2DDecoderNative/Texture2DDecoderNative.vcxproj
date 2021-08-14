@@ -48,6 +48,9 @@
   <ItemGroup>
     <ResourceCompile Include="Texture2DDecoderNative.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\assetripperlibrary\libraries\crunch_license.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

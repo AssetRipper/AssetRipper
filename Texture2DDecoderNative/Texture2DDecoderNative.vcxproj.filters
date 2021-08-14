@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Licenses">
+      <UniqueIdentifier>{3a2f18c2-799a-41c5-8227-28c57a990392}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pvrtc.h">
@@ -109,5 +112,10 @@
     <ResourceCompile Include="Texture2DDecoderNative.rc">
       <Filter>RC</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\assetripperlibrary\libraries\crunch_license.txt">
+      <Filter>Licenses</Filter>
+    </Text>
   </ItemGroup>
 </Project>

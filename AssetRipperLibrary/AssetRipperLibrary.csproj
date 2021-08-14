@@ -26,6 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
 
@@ -39,17 +40,10 @@
     <ProjectReference Include="..\FMOD\FMOD.csproj" />
     <ProjectReference Include="..\Smolv\Smolv.csproj" />
     <ProjectReference Include="..\SpirV\SpirV.csproj" />
+    <ProjectReference Include="..\Texture2DDecoderWrapper\Texture2DDecoderWrapper.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(Platform)' == 'x86' ">
-    <ContentWithTargetPath Include="Libraries\x86\crunch_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>crunch.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x86\crunchunity_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>crunchunity.dll</TargetPath>
-    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x86\texgenpack_x86.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>texgenpack.dll</TargetPath>
@@ -60,14 +54,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x64' ">
-    <ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>crunch.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Libraries\x64\crunchunity_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>crunchunity.dll</TargetPath>
-    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>texgenpack.dll</TargetPath>

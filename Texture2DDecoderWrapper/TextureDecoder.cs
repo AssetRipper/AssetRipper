@@ -5,7 +5,6 @@ namespace Texture2DDecoderWrapper
 {
     public static unsafe partial class TextureDecoder
     {
-
         static TextureDecoder()
         {
             DllLoader.PreloadDll(T2DDll.DllName);

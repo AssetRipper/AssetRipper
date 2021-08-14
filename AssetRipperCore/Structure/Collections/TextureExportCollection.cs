@@ -101,7 +101,7 @@ namespace AssetRipper.Core.Structure.Collections
 		{
 			if (m_convert)
 			{
-				return "png";
+				return FileExtension ?? "png";
 			}
 			return base.GetExportExtension(asset);
 		}
@@ -215,6 +215,8 @@ namespace AssetRipper.Core.Structure.Collections
 				}
 			}
 		}
+
+		public string FileExtension { get; set; }
 
 		public readonly Dictionary<Sprite, SpriteAtlas> m_sprites = new Dictionary<Sprite, SpriteAtlas>();
 

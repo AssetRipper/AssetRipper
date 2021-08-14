@@ -25,7 +25,14 @@ namespace AssetRipper.Library.Exporters.Textures
 	[SupportedOSPlatform("windows")]
 	public class TextureAssetExporter : IAssetExporter
 	{
-		public static bool ExportTexture(Texture2D texture, Stream exportStream)
+		private ImageExportFormat imageExportFormat { get; set; }
+
+		public TextureAssetExporter(LibraryConfiguration configuration)
+		{
+			imageExportFormat = configuration.ImageExportFormat;
+		}
+
+		public static bool ExportTexture(Texture2D texture, Stream exportStream, ImageExportFormat imageFormat)
 		{
 			byte[] buffer = texture.GetImageData();
 			if (buffer.Length == 0)
@@ -65,7 +72,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
 			}
 
-			bitmap.Save(exportStream, ImageFormat.Png);
+			bitmap.Save(exportStream, imageFormat.GetImageFormat());
 			return true;
 		}
 
@@ -185,7 +192,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				if (!ExportTexture(texture, fileStream))
+				if (!ExportTexture(texture, fileStream, imageExportFormat))
 				{
 					Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
 					return false;
@@ -216,7 +223,9 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				return TextureExportCollection.CreateExportCollection(this, (Sprite)asset);
 			}
-			return new TextureExportCollection(this, (Texture2D)asset, true);
+			var collection = new TextureExportCollection(this, (Texture2D)asset, true);
+			collection.FileExtension = imageExportFormat.GetFileExtension();
+			return collection;
 		}
 
 		public AssetType ToExportType(UnityObject asset)

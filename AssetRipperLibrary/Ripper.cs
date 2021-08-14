@@ -90,7 +90,7 @@ namespace AssetRipper.Library
 			//Library Exporters
 			if (OperatingSystem.IsWindows())
 			{
-				TextureAssetExporter textureExporter = new TextureAssetExporter();
+				TextureAssetExporter textureExporter = new TextureAssetExporter(Settings);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);

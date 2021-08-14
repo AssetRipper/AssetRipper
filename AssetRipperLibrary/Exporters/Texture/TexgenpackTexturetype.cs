@@ -2,7 +2,6 @@ using System.Runtime.Versioning;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
-	[SupportedOSPlatform("windows")]
 	public enum TexgenpackTexturetype
 	{
 		RGTC1,

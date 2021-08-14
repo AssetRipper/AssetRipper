@@ -11,6 +11,7 @@ using AssetRipper.Library.Utils;
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using Texture2DDecoderWrapper;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Library.Exporters.Textures
@@ -20,12 +21,6 @@ namespace AssetRipper.Library.Exporters.Textures
 	{
 		[DllImport("texgenpack", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void texgenpackdecode(int texturetype, byte[] texturedata, int width, int height, IntPtr bmp, bool fixAlpha);
-
-		[DllImport("crunch", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool DecompressCRN(byte[] pSrcFileData, int srcFileSize, out IntPtr uncompressedData, out int uncompressedSize);
-
-		[DllImport("crunchunity.dll", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool DecompressUnityCRN(byte[] pSrc_file_data, int src_file_size, out IntPtr uncompressedData, out int uncompressedSize);
 
 		private static bool IsUseUnityCrunch(UnityVersion version, TextureFormat format)
 		{
@@ -330,27 +325,29 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static byte[] DecompressCrunch(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
 		{
-			IntPtr uncompressedData = default;
-			try
+			bool result = IsUseUnityCrunch(unityVersion, textureFormat) ?
+					DecompressUnityCRN(data, out byte[] uncompressedBytes) :
+					DecompressCRN(data, out uncompressedBytes);
+			if (result)
 			{
-				bool result = IsUseUnityCrunch(unityVersion, textureFormat) ?
-					DecompressUnityCRN(data, data.Length, out uncompressedData, out int uncompressedSize) :
-					DecompressCRN(data, data.Length, out uncompressedData, out uncompressedSize);
-				if (result)
-				{
-					byte[] uncompressedBytes = new byte[uncompressedSize];
-					Marshal.Copy(uncompressedData, uncompressedBytes, 0, uncompressedSize);
-					return uncompressedBytes;
-				}
-				else
-				{
-					throw new Exception("Unable to decompress crunched texture");
-				}
+				return uncompressedBytes;
 			}
-			finally
+			else
 			{
-				Marshal.FreeHGlobal(uncompressedData);
+				throw new Exception("Unable to decompress crunched texture");
 			}
+		}
+
+		private static bool DecompressCRN(byte[] data, out byte[] uncompressedBytes)
+		{
+			uncompressedBytes = TextureDecoder.UnpackCrunch(data);
+			return uncompressedBytes != null;
+		}
+
+		private static bool DecompressUnityCRN(byte[] data, out byte[] uncompressedBytes)
+		{
+			uncompressedBytes = TextureDecoder.UnpackUnityCrunch(data);
+			return uncompressedBytes != null;
 		}
 
 		private static QFormat ToQFormat(TextureFormat format)

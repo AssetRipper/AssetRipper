@@ -17,6 +17,9 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
     - name: Restore dependencies
       run: nuget restore
+    - name: Build Native Texture2D Decoder
+      run: msbuild /m /p:Configuration=Release /p:Platform=x64
+      working-directory: ./Texture2DDecoderNative/
     - name: Build x64
       run: msbuild /m /p:Configuration=Release /p:Platform=x64
     - name: Upload AssetRipperConsole x64
@@ -37,14 +40,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v1.0.2
     - name: Restore dependencies
-      run: dotnet restore
+      run: nuget restore
+    - name: Build Native Texture2D Decoder
+      run: msbuild /m /p:Configuration=Release /p:Platform=x64
+      working-directory: ./Texture2DDecoderNative/
     - name: Build x64
-      run: dotnet build /p:Configuration=Release /p:Platform=x64
+      run: msbuild /m /p:Configuration=Release /p:Platform=x64
       working-directory: ./AssetRipperConsole/
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
@@ -58,14 +62,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v1.0.2
     - name: Restore dependencies
-      run: dotnet restore
+      run: nuget restore
+    - name: Build Native Texture2D Decoder
+      run: msbuild /m /p:Configuration=Release /p:Platform=x64
+      working-directory: ./Texture2DDecoderNative/
     - name: Build x64
-      run: dotnet build /p:Configuration=Release /p:Platform=x64
+      run: msbuild /m /p:Configuration=Release /p:Platform=x64
       working-directory: ./AssetRipperConsole/
     - name: Upload AssetRipperConsole
       uses: actions/upload-artifact@v2
