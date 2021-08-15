@@ -16,6 +16,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		{
 			TestEventUrl = string.Empty;
 			TestConfigUrl = string.Empty;
+			DashboardUrl = string.Empty;
 			CrashReportingSettings = new CrashReportingSettings(true);
 			UnityAnalyticsSettings = new UnityAnalyticsSettings(true);
 			UnityAdsSettings = new UnityAdsSettings(true);
@@ -56,9 +57,9 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// </summary>
 		public static bool HasTestConfigUrl(UnityVersion version) => version.IsGreaterEqual(5, 4);
 		/// <summary>
-		/// 2021 and greater
+		/// 2020.3.5 and greater
 		/// </summary>
-		public static bool HasDashboardUrl(UnityVersion version) => version.IsGreaterEqual(2021);
+		public static bool HasDashboardUrl(UnityVersion version) => version.IsGreaterEqual(2020, 3, 5);
 		/// <summary>
 		/// 5.6.0b6 and greater
 		/// </summary>
