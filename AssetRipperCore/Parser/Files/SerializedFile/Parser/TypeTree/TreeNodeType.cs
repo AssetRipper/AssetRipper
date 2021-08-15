@@ -137,6 +137,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		m_CorrespondingSourceObject	= 1093,
 		m_PrefabInstance			= 1121,
 		m_PrefabAsset				= 1138,
+		FileSize							= 1152,
+		Hash128							= 1161,
 	}
 
 	public static class TreeNodeTypeExtentions
