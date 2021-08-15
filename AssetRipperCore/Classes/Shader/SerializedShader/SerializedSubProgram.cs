@@ -81,6 +81,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 				ConstantBuffers = Parameters.ConstantBuffers;
 				ConstantBufferBindings = Parameters.ConstantBufferBindings;
 				UAVParams = Parameters.UAVParams;
+				Samplers = Parameters.Samplers;
 			}
 			else
 			{
