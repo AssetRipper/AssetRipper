@@ -2,17 +2,13 @@
 using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Converters.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.YAML;
 using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.TextureContainers.KTX;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using System;
-using System.IO;
 using System.Text;
 using Object = AssetRipper.Core.Classes.Object.Object;
 

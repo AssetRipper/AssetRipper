@@ -11,19 +11,9 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 		public static bool HasStructParams(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
 		/// <summary>
-		/// 2020.3.0f2 to 2020.3.x<br/>
-		/// 2021.1.4 and greater
+		/// 2020.3.2 and greater
 		/// </summary>
-		public static bool HasIsPartialCB(UnityVersion version)
-		{
-			if (version.Major == 2020 && version.IsGreaterEqual(2020, 3, 0, UnityVersionType.Final, 2))
-				return true;
-			else if (version.IsGreaterEqual(2021, 1, 4))
-				return true;
-			else
-				return false;
-		}
-
+		public static bool HasIsPartialCB(UnityVersion version) => version.IsGreaterEqual(2020, 3, 2);
 		public ConstantBuffer(string name, MatrixParameter[] matrices, VectorParameter[] vectors, StructParameter[] structs, int usedSize)
 		{
 			Name = name;

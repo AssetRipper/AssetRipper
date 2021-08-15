@@ -9,18 +9,9 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 	public struct SerializedProgram : IAssetReadable
 	{
 		/// <summary>
-		/// 2020.3.0f2 to 2020.3.x<br/>
-		/// 2021.1.4 and greater
+		/// 2020.3.2 and greater
 		/// </summary>
-		public static bool HasCommonParameters(UnityVersion version)
-		{
-			if (version.Major == 2020 && version.IsGreaterEqual(2020, 3, 0, UnityVersionType.Final, 2))
-				return true;
-			else if (version.IsGreaterEqual(2021, 1, 4))
-				return true;
-			else
-				return false;
-		}
+		public static bool HasCommonParameters(UnityVersion version) => version.IsGreaterEqual(2020, 3, 2);
 
 		public void Read(AssetReader reader)
 		{

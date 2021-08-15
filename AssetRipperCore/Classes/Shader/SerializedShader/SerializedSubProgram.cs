@@ -33,18 +33,10 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// </summary>
 		public static bool HasLocalKeywordIndices(UnityVersion version) => version.IsGreaterEqual(2019);
 		/// <summary>
-		/// 2020.3.0f2 to 2020.3.x<br/>
-		/// 2021.1.4 and greater
+		/// 2020.3.2 and greater
 		/// </summary>
-		public static bool HasUnifiedParameters(UnityVersion version)
-		{
-			if (version.Major == 2020 && version.IsGreaterEqual(2020, 3, 0, UnityVersionType.Final, 2))
-				return true;
-			else if (version.IsGreaterEqual(2021, 1, 4))
-				return true;
-			else
-				return false;
-		}
+		public static bool HasUnifiedParameters(UnityVersion version) => version.IsGreaterEqual(2020, 3, 2);
+
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
@@ -98,12 +90,13 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 				ConstantBuffers = reader.ReadAssetArray<ConstantBuffer>();
 				ConstantBufferBindings = reader.ReadAssetArray<BufferBinding>();
 				UAVParams = reader.ReadAssetArray<UAVParameter>();
+				
+				if (HasSamplers(reader.Version))
+				{
+					Samplers = reader.ReadAssetArray<SamplerParameter>();
+				}
 			}
-
-			if (HasSamplers(reader.Version))
-			{
-				Samplers = reader.ReadAssetArray<SamplerParameter>();
-			}
+			
 			if (HasShaderRequirements(reader.Version))
 			{
 				if (IsShaderRequirementsInt64(reader.Version))
