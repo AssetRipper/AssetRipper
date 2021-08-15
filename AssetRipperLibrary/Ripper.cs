@@ -3,7 +3,6 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Library.Configuration;
-using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Textures;
 using System;
@@ -94,7 +93,6 @@ namespace AssetRipper.Library
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter());
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
 			}
 

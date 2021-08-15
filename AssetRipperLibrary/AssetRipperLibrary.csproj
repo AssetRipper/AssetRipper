@@ -37,7 +37,6 @@
   <ItemGroup>
     <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
     <ProjectReference Include="..\DXShaderRestorer\DXShaderRestorer.csproj" />
-    <ProjectReference Include="..\FMOD\FMOD.csproj" />
     <ProjectReference Include="..\Smolv\Smolv.csproj" />
     <ProjectReference Include="..\SpirV\SpirV.csproj" />
     <ProjectReference Include="..\Texture2DDecoderWrapper\Texture2DDecoderWrapper.csproj" />

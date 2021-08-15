@@ -146,13 +146,14 @@ namespace AssetRipper.Core.Project
 			OverrideYamlExporter(ClassIDType.LightingSettings);
 
 			OverrideBinaryExporter(ClassIDType.Shader);
-			OverrideBinaryExporter(ClassIDType.AudioClip);
+			// OverrideBinaryExporter(ClassIDType.AudioClip);
 
 			OverrideExporter(ClassIDType.MonoScript, ScriptExporter);
 
 			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter(configuration));
 			OverrideExporter(ClassIDType.Font, new FontAssetExporter());
 			OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
+			OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter());
 		}
 
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>

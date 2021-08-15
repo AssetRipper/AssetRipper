@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Project.Exporters
 			return true;
 		}
 
-		public bool Export(IExportContainer container, Object asset, string path)
+		public virtual bool Export(IExportContainer container, Object asset, string path)
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{

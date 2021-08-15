@@ -1,6 +1,4 @@
 ﻿using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.Library;

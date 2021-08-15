@@ -5,9 +5,12 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
+using Fmod5Sharp;
+using Fmod5Sharp.FmodVorbis;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AudioClip
@@ -330,14 +333,15 @@ namespace AssetRipper.Core.Classes.AudioClip
 		{
 			if (HasLoadType(container.Version))
 			{
-				if (FSBResource.CheckIntegrity(File))
+				FmodSoundBank fsbData = FsbLoader.LoadFsbFromByteArray(GetAudioData().ToArray());
+				if (fsbData.Header.AudioType == FmodAudioType.VORBIS)
 				{
-					byte[] data = FSBResource.GetContent(File);
+					byte[] data = FmodVorbisRebuilder.RebuildOggFile(fsbData.Samples.Single());
 					stream.Write(data, 0, data.Length);
 				}
 				else
 				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because data can't be read from resources file '{FSBResource.Source}'");
+					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because audio type {fsbData.Header.AudioType} is not recognized");
 				}
 			}
 			else

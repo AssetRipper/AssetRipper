@@ -1,16 +1,7 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Project.Exporters.Engine;
-using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library;
-using AssetRipper.Library.Configuration;
-using AssetRipper.Library.Exporters.Audio;
-using AssetRipper.Library.Exporters.Shaders;
-using AssetRipper.Library.Exporters.Textures;
 using Avalonia.Threading;
 using System;
 using System.IO;
