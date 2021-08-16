@@ -112,6 +112,7 @@ namespace AssetRipper.Core.Project
 			OverrideYamlExporter(ClassIDType.TerrainData);
 			OverrideYamlExporter(ClassIDType.LightmapSettings);
 			OverrideYamlExporter(ClassIDType.AudioReverbZone);
+			OverrideYamlExporter(ClassIDType.WindZone);
 			OverrideYamlExporter(ClassIDType.OffMeshLink);
 			OverrideYamlExporter(ClassIDType.OcclusionArea);
 			OverrideYamlExporter(ClassIDType.NavMeshObsolete);

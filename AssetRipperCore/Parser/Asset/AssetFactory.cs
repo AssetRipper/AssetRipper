@@ -244,6 +244,8 @@ namespace AssetRipper.Core.Parser.Asset
 					return new EditorSettings(assetInfo);
 				case ClassIDType.AudioReverbZone:
 					return new AudioReverbZone(assetInfo);
+				case ClassIDType.WindZone:
+					return new WindZone(assetInfo);
 				case ClassIDType.OffMeshLink:
 					return new OffMeshLink(assetInfo);
 				case ClassIDType.OcclusionArea:
