@@ -7,7 +7,7 @@ using System.Runtime.Versioning;
 namespace AssetRipper.Library.Exporters.Audio
 {
 	[SupportedOSPlatform("windows")]
-	public static class AudioConverter
+	public static class FmodAudioConverter
 	{
 		public static byte[] ConvertToWav(byte[] data)
 		{

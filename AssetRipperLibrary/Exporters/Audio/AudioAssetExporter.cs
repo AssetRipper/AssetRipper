@@ -30,7 +30,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			{
 				return null;
 			}
-			return AudioConverter.ConvertToWav(data);
+			return FmodAudioConverter.ConvertToWav(data);
 		}
 
 		public static bool IsSupported(AudioClip audioClip)
