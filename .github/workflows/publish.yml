@@ -20,19 +20,19 @@ jobs:
         
         
     - name: Publish AssetRipperConsole Windows x64
-      run: dotnet publish /p:PublishProfile=windows_x64
+      run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=windows_x64
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI x64
-      run: dotnet publish /p:PublishProfile=GUI_x64
+      run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=GUI_x64
       working-directory: ./AssetRipperGUI/
       
     - name: Publish AssetRipperConsole Linux x64
-      run: dotnet publish /p:PublishProfile=linux_x64
+      run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=linux_x64
       working-directory: ./AssetRipperConsole/
 
     - name: Publish AssetRipperConsole Mac x64
-      run: dotnet publish /p:PublishProfile=mac_x64
+      run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=mac_x64
       working-directory: ./AssetRipperConsole/
       
     - name: Upload AssetRipperConsole Windows x64
