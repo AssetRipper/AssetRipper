@@ -11,7 +11,7 @@ namespace AssetRipper.Library.Exporters.Audio
 	{
 		public AudioExportCollection(IAssetExporter assetExporter, AudioClip asset) : base(assetExporter, asset) { }
 
-		protected override string GetExportExtension(Object asset)
+		protected override string GetExportExtension(Core.Classes.Object.Object asset)
 		{
 			AudioClip audioClip = (AudioClip)asset;
 			return AudioAssetExporter.IsSupported(audioClip) ? "wav" : audioClip.ExportExtension;

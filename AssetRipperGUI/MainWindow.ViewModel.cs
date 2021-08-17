@@ -141,7 +141,7 @@ namespace AssetRipper.GUI
 
 			UpdateGamePathInUi(gamePath);
 
-			NewUiImportManager.ImportFromPath(_ripper, filesDropped, gameStructure =>
+			UIImportManager.ImportFromPath(_ripper, filesDropped, gameStructure =>
 			{
 				HasLoaded = true;
 				_assetContainer = new UIAssetContainer(_ripper);
@@ -192,10 +192,10 @@ namespace AssetRipper.GUI
 
 			Logger.Log(LogType.Info, LogCategory.General, $"Removing any files from a previous export...");
 
-			await NewUiExportManager.PrepareExportDirectory(exportPath);
-			NewUiExportManager.ConfigureExportEvents(_ripper.GameStructure.FileCollection.Exporter, this);
+			await UIExportManager.PrepareExportDirectory(exportPath);
+			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.FileCollection.Exporter, this);
 
-			NewUiExportManager.Export(_ripper, exportPath, () =>
+			UIExportManager.Export(_ripper, exportPath, () =>
 			{
 				IsExporting = false;
 				this.ShowPopup("Export Complete!", "Success!");

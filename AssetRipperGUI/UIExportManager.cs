@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace AssetRipper.GUI
 {
-	public static class NewUiExportManager
+	public static class UIExportManager
 	{
 		public static async Task PrepareExportDirectory(string path)
 		{

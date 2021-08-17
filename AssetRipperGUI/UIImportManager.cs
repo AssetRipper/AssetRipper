@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace AssetRipper.GUI
 {
-	public static class NewUiImportManager
+	public static class UIImportManager
 	{
 		public static void ImportFromPath(Ripper ripper, string[] paths, Action<GameStructure> onComplete, Action<Exception> onError) => new Thread(() => ImportFromPathInternal(ripper, paths, onComplete, onError))
 		{

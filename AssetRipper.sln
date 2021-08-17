@@ -57,7 +57,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetAnalyzer", "AssetAnaly
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{88179FFC-0863-4C4F-9860-68EB1471E59F}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\build.yml = .github\workflows\build.yml
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
 		.github\workflows\publish.yml = .github\workflows\publish.yml
 		.github\workflows\stale.yml = .github\workflows\stale.yml
@@ -75,7 +74,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperGUI", "AssetRipp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HLSLccCsharpWrapper", "HLSLccCsharpWrapper\HLSLccCsharpWrapper.csproj", "{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinvoke", "Pinvoke\Pinvoke.csproj", "{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pinvoke", "Pinvoke\Pinvoke.csproj", "{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
