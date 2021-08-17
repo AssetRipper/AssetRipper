@@ -9,3 +9,7 @@ bin
 *.user
 .idea
 Texture2DDecoderNative/cmake-build-debug/
+
+HLSLccWrapper/cmake-build-debug/
+
+HLSLccWrapper/HLSLcc/cmake-build-debug/
