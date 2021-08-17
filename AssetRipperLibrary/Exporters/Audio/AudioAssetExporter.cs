@@ -13,12 +13,16 @@ using System.IO;
 using System.Runtime.Versioning;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
 using AssetRipper.Core;
+using AssetRipper.Library.Configuration;
 
 namespace AssetRipper.Library.Exporters.Audio
 {
 	[SupportedOSPlatform("windows")]
 	public class AudioAssetExporter : IAssetExporter
 	{
+		private AudioExportFormat AudioFormat { get; set; }
+		public AudioAssetExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
+
 		public static byte[] ExportAudio(AudioClip audioClip)
 		{
 			byte[] data = (byte[])audioClip.GetAudioData();
@@ -70,7 +74,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public bool IsHandle(UnityObject asset, CoreConfiguration options)
 		{
-			return true;
+			return AudioFormat != AudioExportFormat.Native;
 		}
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)

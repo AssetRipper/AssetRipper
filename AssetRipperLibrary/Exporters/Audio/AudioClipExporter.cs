@@ -7,6 +7,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.Utils;
+using AssetRipper.Library.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +16,9 @@ namespace AssetRipper.Library.Exporters.Audio
 {
 	public class AudioClipExporter : IAssetExporter
 	{
+		private AudioExportFormat AudioFormat { get; set; }
+		public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
+
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
 		{
 			return new OggFileExportCollection(this, (AudioClip)asset);
@@ -58,7 +62,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public bool IsHandle(Core.Classes.Object.Object asset, CoreConfiguration options)
 		{
-			return AudioClipDecoder.LibrariesLoaded;
+			return AudioClipDecoder.LibrariesLoaded && AudioFormat != AudioExportFormat.Native;
 		}
 
 		public AssetType ToExportType(Core.Classes.Object.Object asset)
