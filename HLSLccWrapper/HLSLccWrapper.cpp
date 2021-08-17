@@ -1,79 +1,64 @@
 #include "HLSLccWrapper.h"
-#include "HLSLcc.h"
+#include "hlslcc.h"
 
-using namespace System;
-using namespace System::Runtime::InteropServices;
+std::string ShaderTranslateFromFile(std::string filepath, GLLang language, WrappedGlExtensions extensions) {
+	const char* _filename = filepath.c_str();
+	unsigned int flags = HLSLCC_FLAG_UNIFORM_BUFFER_OBJECT;
 
-namespace HLSLccWrapper {
-	Shader^ Shader::TranslateFromFile(String^ filepath, WrappedGLLang lang, WrappedGlExtensions^ extensions) {
-		Shader^ shader = gcnew Shader();
-		
-		IntPtr p = Marshal::StringToHGlobalAnsi(filepath);
-		const char* _filename = static_cast<char*>(p.ToPointer());
-		unsigned int flags = HLSLCC_FLAG_UNIFORM_BUFFER_OBJECT;
-		GLLang language = (GLLang)lang;
-		GlExtensions ext;
-		ext.ARB_explicit_attrib_location = extensions->ARB_explicit_attrib_location;
-		ext.ARB_explicit_uniform_location = extensions->ARB_explicit_uniform_location;
-		ext.ARB_shading_language_420pack = extensions->ARB_shading_language_420pack;
-		ext.OVR_multiview = extensions->OVR_multiview;
-		ext.EXT_shader_framebuffer_fetch = extensions->EXT_shader_framebuffer_fetch;
+	GlExtensions ext;
+	ext.ARB_explicit_attrib_location = extensions.ARB_explicit_attrib_location;
+	ext.ARB_explicit_uniform_location = extensions.ARB_explicit_uniform_location;
+	ext.ARB_shading_language_420pack = extensions.ARB_shading_language_420pack;
+	ext.EXT_shader_framebuffer_fetch = extensions.EXT_shader_framebuffer_fetch;
+	ext.OVR_multiview = extensions.OVR_multiview;
 
-		HLSLccSamplerPrecisionInfo samplerPrecisions;
-		HLSLccReflection reflectionCallbacks;
-		GLSLCrossDependencyData dependencies;
-		GLSLShader result;
-		int compiledOK = TranslateHLSLFromFile(
-			_filename,
-			flags,
-			language,
-			&ext,
-			nullptr,
-			samplerPrecisions,
-			reflectionCallbacks,
-			&result
-		);
-		shader->OK = compiledOK;
-		if (compiledOK) {
-			shader->Text = gcnew String(result.sourceCode.c_str());
-		}
-		Marshal::FreeHGlobal(p);
-		return shader;
+	HLSLccSamplerPrecisionInfo samplerPrecisions;
+	HLSLccReflection reflectionCallbacks;
+	GLSLCrossDependencyData dependencies;
+	GLSLShader result;
+	int compiledOK = TranslateHLSLFromFile(
+		_filename,
+		flags,
+		language,
+		&ext,
+		nullptr,
+		samplerPrecisions,
+		reflectionCallbacks,
+		&result
+	);
+	if (compiledOK) {
+		return result.sourceCode;
 	}
-	Shader^ Shader::TranslateFromMem(array<unsigned char>^ data, WrappedGLLang lang, WrappedGlExtensions^ extensions) {
-		Shader^ shader = gcnew Shader();
+	return {};
+}
+std::string ShaderTranslateFromMem(unsigned char data[], GLLang lang, WrappedGlExtensions extensions) {
+	const char* unmanagedData = (char*)&data;//<=========================== I'm concerned about that cast
+	unsigned int flags = HLSLCC_FLAG_UNIFORM_BUFFER_OBJECT;
+	GLLang language = (GLLang)lang;
 
-		IntPtr p = Marshal::AllocHGlobal(data->Length);
-		Marshal::Copy(data, 0, p, data->Length);
-		const char* unmanagedData = static_cast<char*>(p.ToPointer());
-		unsigned int flags = HLSLCC_FLAG_UNIFORM_BUFFER_OBJECT;
-		GLLang language = (GLLang)lang;
-		GlExtensions ext;
-		ext.ARB_explicit_attrib_location = extensions->ARB_explicit_attrib_location;
-		ext.ARB_explicit_uniform_location = extensions->ARB_explicit_uniform_location;
-		ext.ARB_shading_language_420pack = extensions->ARB_shading_language_420pack;
-		ext.OVR_multiview = extensions->OVR_multiview;
-		ext.EXT_shader_framebuffer_fetch = extensions->EXT_shader_framebuffer_fetch;
+	GlExtensions ext;
+	ext.ARB_explicit_attrib_location = extensions.ARB_explicit_attrib_location;
+	ext.ARB_explicit_uniform_location = extensions.ARB_explicit_uniform_location;
+	ext.ARB_shading_language_420pack = extensions.ARB_shading_language_420pack;
+	ext.EXT_shader_framebuffer_fetch = extensions.EXT_shader_framebuffer_fetch;
+	ext.OVR_multiview = extensions.OVR_multiview;
 
-		HLSLccSamplerPrecisionInfo samplerPrecisions;
-		HLSLccReflection reflectionCallbacks;
-		GLSLCrossDependencyData dependencies;
-		GLSLShader result;
-		int compiledOK = TranslateHLSLFromMem(
-			unmanagedData,
-			flags,
-			language,
-			&ext,
-			nullptr,
-			samplerPrecisions,
-			reflectionCallbacks,
-			&result
-		);
-		shader->OK = compiledOK;
-		if (compiledOK) {
-			shader->Text = gcnew String(result.sourceCode.c_str());
-		}
-		Marshal::FreeHGlobal(p);
-		return shader;
+	HLSLccSamplerPrecisionInfo samplerPrecisions;
+	HLSLccReflection reflectionCallbacks;
+	GLSLCrossDependencyData dependencies;
+	GLSLShader result;
+	int compiledOK = TranslateHLSLFromMem(
+		unmanagedData,
+		flags,
+		language,
+		&ext,
+		nullptr,
+		samplerPrecisions,
+		reflectionCallbacks,
+		&result
+	);
+	if (compiledOK) {
+		return result.sourceCode;
 	}
+	return {};
 }

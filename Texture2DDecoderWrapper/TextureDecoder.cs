@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pinvoke;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Texture2DDecoder

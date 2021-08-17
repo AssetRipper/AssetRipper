@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Texture2DDecoder
+namespace Pinvoke
 {
 	public static class DllLoader
 	{

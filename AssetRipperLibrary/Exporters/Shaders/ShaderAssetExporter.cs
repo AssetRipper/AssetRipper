@@ -168,11 +168,11 @@ namespace AssetRipper.Library.Exporters.Shaders
 					}
 					if (ExportMode == ShaderExportMode.GLSL)
 					{
-						return new ShaderHLSLccExporter(graphicApi, HLSLccWrapper.WrappedGLLang.LANG_DEFAULT);
+						return new ShaderHLSLccExporter(graphicApi, HLSLccCsharpWrapper.GLLang.LANG_DEFAULT);
 					}
 					if (ExportMode == ShaderExportMode.Metal)
 					{
-						return new ShaderHLSLccExporter(graphicApi, HLSLccWrapper.WrappedGLLang.LANG_METAL);
+						return new ShaderHLSLccExporter(graphicApi, HLSLccCsharpWrapper.GLLang.LANG_METAL);
 					}
 					throw new Exception($"Unexpected shader mode {ExportMode}");
 				case GPUPlatform.d3d9:

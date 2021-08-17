@@ -19,4 +19,8 @@
 		</ContentWithTargetPath>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Pinvoke\Pinvoke.csproj" />
+	</ItemGroup>
+
 </Project>

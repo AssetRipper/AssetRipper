@@ -37,30 +37,17 @@
     <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
     <ProjectReference Include="..\DXShaderRestorer\DXShaderRestorer.csproj" />
     <ProjectReference Include="..\FMOD\FMOD.csproj" />
+    <ProjectReference Include="..\HLSLccCsharpWrapper\HLSLccCsharpWrapper.csproj" />
     <ProjectReference Include="..\Smolv\Smolv.csproj" />
     <ProjectReference Include="..\SpirV\SpirV.csproj" />
     <ProjectReference Include="..\Texture2DDecoderWrapper\Texture2DDecoderWrapper.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(Platform)' == 'x86' ">
-    <ContentWithTargetPath Include="Libraries\x86\texgenpack_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>texgenpack.dll</TargetPath>
-    </ContentWithTargetPath>
-    <Reference Include="HLSLccWrapper_x86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\x86\HLSLccWrapper_x86.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x64' ">
     <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>texgenpack.dll</TargetPath>
     </ContentWithTargetPath>
-    <Reference Include="HLSLccWrapper_x64, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\x64\HLSLccWrapper_x64.dll</HintPath>
-    </Reference>
   </ItemGroup>
   
   <ItemGroup>

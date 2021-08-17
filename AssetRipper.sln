@@ -73,6 +73,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HLSLccWrapper", "HLSLccWrap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperGUI", "AssetRipperGUI\AssetRipperGUI.csproj", "{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HLSLccCsharpWrapper", "HLSLccCsharpWrapper\HLSLccCsharpWrapper.csproj", "{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinvoke", "Pinvoke\Pinvoke.csproj", "{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -170,6 +174,18 @@ Global
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|x64.Build.0 = Release|x64
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x64.ActiveCfg = Virtual|x64
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x64.Build.0 = Virtual|x64
+		{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}.Debug|x64.ActiveCfg = Release|Any CPU
+		{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}.Debug|x64.Build.0 = Release|Any CPU
+		{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}.Release|x64.ActiveCfg = Release|Any CPU
+		{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}.Release|x64.Build.0 = Release|Any CPU
+		{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}.Virtual|x64.ActiveCfg = Release|Any CPU
+		{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}.Virtual|x64.Build.0 = Release|Any CPU
+		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Debug|x64.ActiveCfg = Release|Any CPU
+		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Debug|x64.Build.0 = Release|Any CPU
+		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Release|x64.ActiveCfg = Release|Any CPU
+		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Release|x64.Build.0 = Release|Any CPU
+		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Virtual|x64.ActiveCfg = Release|Any CPU
+		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Virtual|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
