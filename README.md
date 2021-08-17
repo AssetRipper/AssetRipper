@@ -140,6 +140,10 @@ It has borrowed code from [spacehamster](https://github.com/spacehamster)'s [uTi
 
 FMOD is licensed under a [non-commercial license](Licenses/FMOD.md).
 
+[HLSLcc](https://github.com/Unity-Technologies/HLSLcc) is licensed under the [MIT license](Licenses/HLSLcc.md).
+
+LibOgg and LibVorbis are licensed from [Xiph](https://www.xiph.org/) under the [BSD 3-Clause License](Licenses/Xiph.md).
+
 [Lz4](https://github.com/lz4/lz4) is licensed under the [MIT license and the BSD 2-Clause license](Licenses/Lz4.md).
 
 [Mono.Cecil](https://github.com/jbevain/cecil) is licensed under the [MIT license](Licenses/MonoCecil.md).
@@ -149,6 +153,8 @@ FMOD is licensed under a [non-commercial license](Licenses/FMOD.md).
 [Smolv](https://github.com/aras-p/smol-v) is licensed under the [MIT license](Licenses/Smolv.md).
 
 [SpirV](https://github.com/Anteru/csspv) is licensed under the [BSD 2-Clause license](Licenses/SpirV.md).
+
+[texgenpack](https://github.com/hglm/texgenpack) is licensed under a [permissive license](Licenses/texgenpack.md).
 
 
 ## Disclaimer
