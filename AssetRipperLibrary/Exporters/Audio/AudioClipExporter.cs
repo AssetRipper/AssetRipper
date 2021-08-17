@@ -58,7 +58,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public bool IsHandle(Core.Classes.Object.Object asset, CoreConfiguration options)
 		{
-			return true;
+			return AudioClipDecoder.LibrariesLoaded;
 		}
 
 		public AssetType ToExportType(Core.Classes.Object.Object asset)

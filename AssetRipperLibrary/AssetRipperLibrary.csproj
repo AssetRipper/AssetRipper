@@ -53,11 +53,11 @@
 	  </ContentWithTargetPath>
 	  <ContentWithTargetPath Include="Libraries\x64\libogg-x64.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>libogg.dll</TargetPath>
+		  <TargetPath>ogg.dll</TargetPath>
 	  </ContentWithTargetPath>
 	  <ContentWithTargetPath Include="Libraries\x64\libvorbis-x64.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>libvorbis.dll</TargetPath>
+		  <TargetPath>vorbis.dll</TargetPath>
 	  </ContentWithTargetPath>
   </ItemGroup>
   
