@@ -8,3 +8,4 @@ Test/
 bin
 *.user
 .idea
+Texture2DDecoderNative/cmake-build-debug/
