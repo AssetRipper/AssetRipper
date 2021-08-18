@@ -39,7 +39,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.6" />
+        <PackageReference Include="Avalonia" Version="0.10.7" />
         <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
         <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
         <PackageReference Include="MessageBox.Avalonia" Version="1.5.1" />
