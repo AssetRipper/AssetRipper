@@ -2,7 +2,7 @@
 #include "hlslcc.h"
 #include <cstring>
 
-std::string  ShaderTranslateFromFile(std::string filepath, GLLang language, WrappedGlExtensions extensions) {
+const char* ShaderTranslateFromFile(const char* filepath, GLLang language, WrappedGlExtensions extensions) {
 	unsigned int flags = HLSLCC_FLAG_UNIFORM_BUFFER_OBJECT;
 
 	GlExtensions ext;
@@ -17,7 +17,7 @@ std::string  ShaderTranslateFromFile(std::string filepath, GLLang language, Wrap
 	GLSLCrossDependencyData dependencies;
 	GLSLShader result;
 	int compiledOK = TranslateHLSLFromFile(
-		filepath.c_str(),
+		filepath,
 		flags,
 		language,
 		&ext,
@@ -27,11 +27,11 @@ std::string  ShaderTranslateFromFile(std::string filepath, GLLang language, Wrap
 		&result
 	);
 	if (compiledOK) {
-		return result.sourceCode;
+		return result.sourceCode.c_str();
 	}
 	return {};
 }
-std::string  ShaderTranslateFromMem(unsigned char data[], GLLang lang, WrappedGlExtensions extensions) {
+const char* ShaderTranslateFromMem(unsigned char data[], GLLang lang, WrappedGlExtensions extensions) {
 	const char* unmanagedData = (char*)&data;//<=========================== I'm concerned about that cast
 	unsigned int flags = HLSLCC_FLAG_UNIFORM_BUFFER_OBJECT;
 	GLLang language = (GLLang)lang;
@@ -58,7 +58,7 @@ std::string  ShaderTranslateFromMem(unsigned char data[], GLLang lang, WrappedGl
 		&result
 	);
 	if (compiledOK) {
-		return result.sourceCode;
+		return result.sourceCode.c_str();
 	}
 	return {};
 }

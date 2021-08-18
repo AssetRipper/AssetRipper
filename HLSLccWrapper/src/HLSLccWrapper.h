@@ -25,8 +25,8 @@ extern "C" {
 #  define MODULE_API
 #endif
 
-MODULE_API std::string ShaderTranslateFromFile(std::string filepath, GLLang language, WrappedGlExtensions extensions);
-MODULE_API std::string ShaderTranslateFromMem(unsigned char data[], GLLang lang, WrappedGlExtensions extensions);
+MODULE_API const char* ShaderTranslateFromFile(const char* filepath, GLLang language, WrappedGlExtensions extensions);
+MODULE_API const char* ShaderTranslateFromMem(unsigned char data[], GLLang lang, WrappedGlExtensions extensions);
 
 #ifdef __cplusplus
 }
