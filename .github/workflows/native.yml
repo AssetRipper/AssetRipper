@@ -40,13 +40,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Configure Texture2DDecoderNative
-      run: cmake -B ./build/
-      working-directory: ./Texture2DDecoderNative/
-    - name: Build Texture2DDecoderNative
-      run: cmake --build .
-      working-directory: ./Texture2DDecoderNative/build/
-
     - name: Configure HLSLccWrapper
       run: cmake -B ./build/
       working-directory: ./HLSLccWrapper/src/
@@ -54,6 +47,13 @@ jobs:
       run: cmake --build .
       working-directory: ./HLSLccWrapper/src/build/
       
+    - name: Configure Texture2DDecoderNative
+      run: cmake -B ./build/
+      working-directory: ./Texture2DDecoderNative/
+    - name: Build Texture2DDecoderNative
+      run: cmake --build .
+      working-directory: ./Texture2DDecoderNative/build/
+
     - name: Upload Binaries
       uses: actions/upload-artifact@v2
       with:
@@ -94,6 +94,6 @@ jobs:
       with:
         name: NativeLibraries_Windows
         path: |
-            #D:\a\AssetRipper\AssetRipper\HLSLccWrapper\build\HLSLccWrapper.dll
+            D:\a\AssetRipper\AssetRipper\HLSLccWrapper\bin\x64\Release\HLSLccWrapper_x64.dll
             D:\a\AssetRipper\AssetRipper\Texture2DDecoderNative\build\Texture2DDecoderNative.dll
         if-no-files-found: error
