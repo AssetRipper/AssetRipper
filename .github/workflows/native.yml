@@ -34,3 +34,59 @@ jobs:
             /home/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/build/libHLSLccWrapper.so
             /home/runner/work/AssetRipper/AssetRipper/Texture2DDecoderNative/build/libTexture2DDecoderNative.so
         if-no-files-found: error
+
+  BuildMac:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure HLSLccWrapper
+      run: cmake -B ./build/
+      working-directory: ./HLSLccWrapper/
+    - name: Build HLSLccWrapper
+      run: cmake --build ./build/
+      working-directory: ./HLSLccWrapper/
+
+    - name: Configure Texture2DDecoderNative
+      run: cmake -B ./build/
+      working-directory: ./Texture2DDecoderNative/
+    - name: Build Texture2DDecoderNative
+      run: cmake --build ./build/
+      working-directory: ./Texture2DDecoderNative/
+      
+    - name: Upload Binaries
+      uses: actions/upload-artifact@v2
+      with:
+        name: NativeLibraries_Mac
+        path: |
+            /Users/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/build/libHLSLccWrapper.so
+            /Users/runner/work/AssetRipper/AssetRipper/Texture2DDecoderNative/build/libTexture2DDecoderNative.so
+        if-no-files-found: error
+
+  BuildWindows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure HLSLccWrapper
+      run: cmake -B ./build/
+      working-directory: ./HLSLccWrapper/
+    - name: Build HLSLccWrapper
+      run: cmake --build ./build/
+      working-directory: ./HLSLccWrapper/
+
+    - name: Configure Texture2DDecoderNative
+      run: cmake -B ./build/
+      working-directory: ./Texture2DDecoderNative/
+    - name: Build Texture2DDecoderNative
+      run: cmake --build ./build/
+      working-directory: ./Texture2DDecoderNative/
+      
+    - name: Upload Binaries
+      uses: actions/upload-artifact@v2
+      with:
+        name: NativeLibraries_Windows
+        path: |
+            D:\a\AssetRipper\AssetRipper\HLSLccWrapper\build\libHLSLccWrapper.so
+            D:\a\AssetRipper\AssetRipper\Texture2DDecoderNative\build\libTexture2DDecoderNative.so
+        if-no-files-found: error
