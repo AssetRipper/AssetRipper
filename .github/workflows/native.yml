@@ -75,6 +75,13 @@ jobs:
       run: cmake --build .
       working-directory: ./Texture2DDecoderNative/build/
 
+    - name: Configure HLSLcc
+      run: cmake -B ./build/
+      working-directory: ./HLSLccWrapper/src/HLSLcc/
+    - name: Build HLSLcc
+      run: cmake --build .
+      working-directory: ./HLSLccWrapper/src/HLSLcc/build/
+
     - name: Configure HLSLccWrapper
       run: cmake -B ./build/
       working-directory: ./HLSLccWrapper/src/
