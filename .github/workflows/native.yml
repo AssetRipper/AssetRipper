@@ -11,16 +11,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Configure CMake
+
+    - name: Configure HLSLccWrapper
       run: cmake -B ./build/
       working-directory: ./HLSLccWrapper/
-    - name: Build
+    - name: Build HLSLccWrapper
       run: cmake --build ./build/
       working-directory: ./HLSLccWrapper/
+
+    - name: Configure Texture2DDecoderNative
+      run: cmake -B ./build/
+      working-directory: ./Texture2DDecoderNative/
+    - name: Build Texture2DDecoderNative
+      run: cmake --build ./build/
+      working-directory: ./Texture2DDecoderNative/
       
-    - name: Upload HLSLccWrapper Linux
+    - name: Upload Binaries
       uses: actions/upload-artifact@v2
       with:
-        name: HLSLccWrapper_Linux
-        path: /home/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/build/libHLSLccWrapper.so
+        name: NativeLibraries_Linux
+        path: |
+            /home/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/build/libHLSLccWrapper.so
+            /home/runner/work/AssetRipper/AssetRipper/Texture2DDecoderNative/build/libTexture2DDecoderNative.so
         if-no-files-found: error
