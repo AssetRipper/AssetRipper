@@ -59,8 +59,8 @@ jobs:
       with:
         name: NativeLibraries_Mac
         path: |
-            /Users/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/build/libHLSLccWrapper.so
-            /Users/runner/work/AssetRipper/AssetRipper/Texture2DDecoderNative/build/libTexture2DDecoderNative.so
+            /Users/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/build/libHLSLccWrapper.dylib
+            /Users/runner/work/AssetRipper/AssetRipper/Texture2DDecoderNative/build/libTexture2DDecoderNative.dylib
         if-no-files-found: error
 
   BuildWindows:
@@ -87,6 +87,6 @@ jobs:
       with:
         name: NativeLibraries_Windows
         path: |
-            D:\a\AssetRipper\AssetRipper\HLSLccWrapper\build\libHLSLccWrapper.so
-            D:\a\AssetRipper\AssetRipper\Texture2DDecoderNative\build\libTexture2DDecoderNative.so
+            D:\a\AssetRipper\AssetRipper\HLSLccWrapper\build\HLSLccWrapper.dll
+            D:\a\AssetRipper\AssetRipper\Texture2DDecoderNative\build\Texture2DDecoderNative.dll
         if-no-files-found: error
