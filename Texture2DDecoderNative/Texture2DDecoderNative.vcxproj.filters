@@ -117,5 +117,6 @@
     <Text Include="..\assetripperlibrary\libraries\crunch_license.txt">
       <Filter>Licenses</Filter>
     </Text>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
 </Project>

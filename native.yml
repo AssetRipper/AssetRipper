@@ -1,0 +1,16 @@
+name: NativeBuild
+
+on:
+   push:
+    branches: [ master ]
+   pull_request:
+    branches: [ master ]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure CMake
+      run: cmake -B ./HLSLccWrapper/build
+    - name: Build
+      run: cmake --build ./HLSLccWrapper/

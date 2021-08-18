@@ -89,4 +89,10 @@
   <ItemGroup>
     <ClInclude Include="HLSLccWrapper.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
+    <Text Include="HLSLcc\CMakeLists.txt">
+      <Filter>HLSLcc</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
