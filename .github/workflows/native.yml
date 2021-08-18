@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Configure CMake
-      run: cmake -B ./HLSLccWrapper/build
+      run: cmake -B ./build
+      with: 
+        working-directory: ./HLSLccWrapper/
     - name: Build
-      run: cmake --build ./HLSLccWrapper/
+      run: cmake --build ./build
+      with: 
+        working-directory: ./HLSLccWrapper/
