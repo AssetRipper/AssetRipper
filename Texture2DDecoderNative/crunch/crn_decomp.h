@@ -318,7 +318,7 @@ namespace crnd
 #ifdef _WIN32
 #include <memory.h>
 #else
-#include <stdlib.h>
+#include <malloc.h>
 #include <cstring>
 #endif
 #include <stdarg.h>
