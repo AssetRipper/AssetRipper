@@ -17,3 +17,10 @@ jobs:
     - name: Build
       run: cmake --build ./build/
       working-directory: ./HLSLccWrapper/
+      
+    - name: Upload HLSLccWrapper Linux
+      uses: actions/upload-artifact@v2
+      with:
+        name: HLSLccWrapper_Linux
+        path: /home/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/build/libHLSLccWrapper.so
+        if-no-files-found: error
