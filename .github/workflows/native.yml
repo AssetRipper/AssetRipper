@@ -7,12 +7,13 @@ on:
     branches: [ master ]
 
 jobs:
-  example:
+  BuildLinux:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Configure CMake
-      run: cmake -B ./build
+      run: cmake -B ./build/
       working-directory: ./HLSLccWrapper/
     - name: Build
-      run: cmake --build ./build
+      run: cmake --build ./build/
       working-directory: ./HLSLccWrapper/
