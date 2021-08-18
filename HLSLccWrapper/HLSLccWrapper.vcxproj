@@ -71,7 +71,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>HLSLcc;HLSLcc\include;HLSLcc\src;HLSLcc\src\cbstring;HLSLcc\src\internal_includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\HLSLcc;src\HLSLcc\include;src\HLSLcc\src;src\HLSLcc\src\cbstring;src\HLSLcc\src\internal_includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
@@ -84,7 +84,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>HLSLcc;HLSLcc\include;HLSLcc\src;HLSLcc\src\cbstring;HLSLcc\src\internal_includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\HLSLcc;src\HLSLcc\include;src\HLSLcc\src;src\HLSLcc\src\cbstring;src\HLSLcc\src\internal_includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
@@ -94,36 +94,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="HLSLccWrapper.h" />
+    <ClInclude Include="src\HLSLccWrapper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="HLSLccWrapper.cpp" />
-    <ClCompile Include="HLSLcc\src\cbstring\bsafe.c" />
-    <ClCompile Include="HLSLcc\src\cbstring\bstraux.c" />
-    <ClCompile Include="HLSLcc\src\cbstring\bstrlib.c" />
-    <ClCompile Include="HLSLcc\src\ControlFlowGraph.cpp" />
-    <ClCompile Include="HLSLcc\src\ControlFlowGraphUtils.cpp" />
-    <ClCompile Include="HLSLcc\src\DataTypeAnalysis.cpp" />
-    <ClCompile Include="HLSLcc\src\Declaration.cpp" />
-    <ClCompile Include="HLSLcc\src\decode.cpp" />
-    <ClCompile Include="HLSLcc\src\HLSLcc.cpp" />
-    <ClCompile Include="HLSLcc\src\HLSLccToolkit.cpp" />
-    <ClCompile Include="HLSLcc\src\HLSLCrossCompilerContext.cpp" />
-    <ClCompile Include="HLSLcc\src\Instruction.cpp" />
-    <ClCompile Include="HLSLcc\src\LoopTransform.cpp" />
-    <ClCompile Include="HLSLcc\src\Operand.cpp" />
-    <ClCompile Include="HLSLcc\src\reflect.cpp" />
-    <ClCompile Include="HLSLcc\src\Shader.cpp" />
-    <ClCompile Include="HLSLcc\src\ShaderInfo.cpp" />
-    <ClCompile Include="HLSLcc\src\toGLSL.cpp" />
-    <ClCompile Include="HLSLcc\src\toGLSLDeclaration.cpp" />
-    <ClCompile Include="HLSLcc\src\toGLSLInstruction.cpp" />
-    <ClCompile Include="HLSLcc\src\toGLSLOperand.cpp" />
-    <ClCompile Include="HLSLcc\src\toMetal.cpp" />
-    <ClCompile Include="HLSLcc\src\toMetalDeclaration.cpp" />
-    <ClCompile Include="HLSLcc\src\toMetalInstruction.cpp" />
-    <ClCompile Include="HLSLcc\src\toMetalOperand.cpp" />
-    <ClCompile Include="HLSLcc\src\UseDefineChains.cpp" />
+    <ClCompile Include="src\HLSLccWrapper.cpp" />
+    <ClCompile Include="src\HLSLcc\src\cbstring\bsafe.c" />
+    <ClCompile Include="src\HLSLcc\src\cbstring\bstraux.c" />
+    <ClCompile Include="src\HLSLcc\src\cbstring\bstrlib.c" />
+    <ClCompile Include="src\HLSLcc\src\ControlFlowGraph.cpp" />
+    <ClCompile Include="src\HLSLcc\src\ControlFlowGraphUtils.cpp" />
+    <ClCompile Include="src\HLSLcc\src\DataTypeAnalysis.cpp" />
+    <ClCompile Include="src\HLSLcc\src\Declaration.cpp" />
+    <ClCompile Include="src\HLSLcc\src\decode.cpp" />
+    <ClCompile Include="src\HLSLcc\src\HLSLcc.cpp" />
+    <ClCompile Include="src\HLSLcc\src\HLSLccToolkit.cpp" />
+    <ClCompile Include="src\HLSLcc\src\HLSLCrossCompilerContext.cpp" />
+    <ClCompile Include="src\HLSLcc\src\Instruction.cpp" />
+    <ClCompile Include="src\HLSLcc\src\LoopTransform.cpp" />
+    <ClCompile Include="src\HLSLcc\src\Operand.cpp" />
+    <ClCompile Include="src\HLSLcc\src\reflect.cpp" />
+    <ClCompile Include="src\HLSLcc\src\Shader.cpp" />
+    <ClCompile Include="src\HLSLcc\src\ShaderInfo.cpp" />
+    <ClCompile Include="src\HLSLcc\src\toGLSL.cpp" />
+    <ClCompile Include="src\HLSLcc\src\toGLSLDeclaration.cpp" />
+    <ClCompile Include="src\HLSLcc\src\toGLSLInstruction.cpp" />
+    <ClCompile Include="src\HLSLcc\src\toGLSLOperand.cpp" />
+    <ClCompile Include="src\HLSLcc\src\toMetal.cpp" />
+    <ClCompile Include="src\HLSLcc\src\toMetalDeclaration.cpp" />
+    <ClCompile Include="src\HLSLcc\src\toMetalInstruction.cpp" />
+    <ClCompile Include="src\HLSLcc\src\toMetalOperand.cpp" />
+    <ClCompile Include="src\HLSLcc\src\UseDefineChains.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -131,8 +131,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="CMakeLists.txt" />
-    <Text Include="HLSLcc\CMakeLists.txt" />
+    <Text Include="src\CMakeLists.txt" />
+    <Text Include="src\HLSLcc\CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

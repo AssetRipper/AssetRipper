@@ -21,10 +21,10 @@ jobs:
 
     - name: Configure HLSLccWrapper
       run: cmake -B ./build/
-      working-directory: ./HLSLccWrapper/
+      working-directory: ./HLSLccWrapper/src/
     - name: Build HLSLccWrapper
       run: cmake --build .
-      working-directory: ./HLSLccWrapper/build/
+      working-directory: ./HLSLccWrapper/src/build/
       
     - name: Upload Binaries
       uses: actions/upload-artifact@v2
@@ -49,10 +49,10 @@ jobs:
 
     - name: Configure HLSLccWrapper
       run: cmake -B ./build/
-      working-directory: ./HLSLccWrapper/
+      working-directory: ./HLSLccWrapper/src/
     - name: Build HLSLccWrapper
       run: cmake --build .
-      working-directory: ./HLSLccWrapper/build/
+      working-directory: ./HLSLccWrapper/src/build/
       
     - name: Upload Binaries
       uses: actions/upload-artifact@v2
@@ -77,10 +77,10 @@ jobs:
 
     - name: Configure HLSLccWrapper
       run: cmake -B ./build/
-      working-directory: ./HLSLccWrapper/
+      working-directory: ./HLSLccWrapper/src/
     - name: Build HLSLccWrapper
       run: cmake --build .
-      working-directory: ./HLSLccWrapper/build/
+      working-directory: ./HLSLccWrapper/src/build/
       
     - name: Upload Binaries
       uses: actions/upload-artifact@v2
