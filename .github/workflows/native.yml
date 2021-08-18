@@ -12,9 +12,7 @@ jobs:
     steps:
     - name: Configure CMake
       run: cmake -B ./build
-      with: 
-        working-directory: ./HLSLccWrapper/
+      working-directory: ./HLSLccWrapper/
     - name: Build
       run: cmake --build ./build
-      with: 
-        working-directory: ./HLSLccWrapper/
+      working-directory: ./HLSLccWrapper/
