@@ -12,19 +12,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Configure HLSLccWrapper
-      run: cmake -B ./build/
-      working-directory: ./HLSLccWrapper/
-    - name: Build HLSLccWrapper
-      run: cmake --build ./build/
-      working-directory: ./HLSLccWrapper/
-
     - name: Configure Texture2DDecoderNative
       run: cmake -B ./build/
       working-directory: ./Texture2DDecoderNative/
     - name: Build Texture2DDecoderNative
       run: cmake --build ./build/
       working-directory: ./Texture2DDecoderNative/
+
+    - name: Configure HLSLccWrapper
+      run: cmake -B ./build/
+      working-directory: ./HLSLccWrapper/
+    - name: Build HLSLccWrapper
+      run: cmake --build ./build/
+      working-directory: ./HLSLccWrapper/
       
     - name: Upload Binaries
       uses: actions/upload-artifact@v2
@@ -40,19 +40,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Configure HLSLccWrapper
-      run: cmake -B ./build/
-      working-directory: ./HLSLccWrapper/
-    - name: Build HLSLccWrapper
-      run: cmake --build ./build/
-      working-directory: ./HLSLccWrapper/
-
     - name: Configure Texture2DDecoderNative
       run: cmake -B ./build/
       working-directory: ./Texture2DDecoderNative/
     - name: Build Texture2DDecoderNative
       run: cmake --build ./build/
       working-directory: ./Texture2DDecoderNative/
+
+    - name: Configure HLSLccWrapper
+      run: cmake -B ./build/
+      working-directory: ./HLSLccWrapper/
+    - name: Build HLSLccWrapper
+      run: cmake --build ./build/
+      working-directory: ./HLSLccWrapper/
       
     - name: Upload Binaries
       uses: actions/upload-artifact@v2
@@ -68,19 +68,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Configure HLSLccWrapper
-      run: cmake -B ./build/
-      working-directory: ./HLSLccWrapper/
-    - name: Build HLSLccWrapper
-      run: cmake --build ./build/
-      working-directory: ./HLSLccWrapper/
-
     - name: Configure Texture2DDecoderNative
       run: cmake -B ./build/
       working-directory: ./Texture2DDecoderNative/
     - name: Build Texture2DDecoderNative
       run: cmake --build ./build/
       working-directory: ./Texture2DDecoderNative/
+
+    - name: Configure HLSLccWrapper
+      run: cmake -B ./build/
+      working-directory: ./HLSLccWrapper/
+    - name: Build HLSLccWrapper
+      run: cmake --build ./build/
+      working-directory: ./HLSLccWrapper/
       
     - name: Upload Binaries
       uses: actions/upload-artifact@v2
