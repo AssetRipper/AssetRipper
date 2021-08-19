@@ -53,6 +53,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		protected const string LevelPrefix = "level";
 
 		protected const string AssetBundleExtension = ".unity3d";
+		protected const string AlternateBundleExtension = ".bundle";
 		protected const string Lz4BundleName = DataName + AssetBundleExtension;
 
 		public static bool IsPrimaryEngineFile(string fileName)
@@ -189,7 +190,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
-				if (file.Extension == AssetBundleExtension)
+				if (file.Extension == AssetBundleExtension || file.Extension == AlternateBundleExtension)
 				{
 					string name = Path.GetFileNameWithoutExtension(file.Name).ToLowerInvariant();
 					AddAssetBundle(files, name, file.FullName);
