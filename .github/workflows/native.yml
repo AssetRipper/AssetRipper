@@ -56,7 +56,7 @@ jobs:
 #      uses: actions/upload-artifact@v2
 #      with:
 #        name: HLSLccWrapper_Mac
-#        path: /Users/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/build/libHLSLccWrapper.dylib
+#        path: /Users/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/src/build/libHLSLccWrapper.dylib
 #        if-no-files-found: error
       
 #    - name: Configure Texture2DDecoderNative
