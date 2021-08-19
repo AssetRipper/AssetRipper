@@ -4,14 +4,9 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Library.Exporters.Shaders.DirectX;
 using DotNetDxc;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {

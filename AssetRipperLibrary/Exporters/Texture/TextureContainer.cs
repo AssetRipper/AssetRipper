@@ -9,11 +9,9 @@ using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.TextureContainers.PVR;
 using System;
 using System.IO;
-using System.Runtime.Versioning;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
-	[SupportedOSPlatform("windows")]
 	public static class TextureContainer
 	{
 		public static void ExportBinary(Texture2D texture, Stream exportStream)

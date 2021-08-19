@@ -6,16 +6,11 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
-	[SupportedOSPlatform("windows")]
 	public class CustomShaderTextExporter : ShaderTextExporter
 	{
 		public virtual string Extension => ".txt";

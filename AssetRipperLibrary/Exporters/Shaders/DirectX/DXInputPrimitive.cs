@@ -1,8 +1,5 @@
-﻿using System.Runtime.Versioning;
-
-namespace AssetRipper.Library.Exporters.Shaders.DirectX
+﻿namespace AssetRipper.Library.Exporters.Shaders.DirectX
 {
-	[SupportedOSPlatform("windows")]
 	public enum DXInputPrimitive
 	{
 		None		= 0,

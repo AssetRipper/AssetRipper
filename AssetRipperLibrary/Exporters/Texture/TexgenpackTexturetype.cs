@@ -1,5 +1,3 @@
-using System.Runtime.Versioning;
-
 namespace AssetRipper.Library.Exporters.Textures
 {
 	public enum TexgenpackTexturetype

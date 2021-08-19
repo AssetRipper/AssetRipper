@@ -15,7 +15,6 @@ using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.Utils;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.Versioning;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;

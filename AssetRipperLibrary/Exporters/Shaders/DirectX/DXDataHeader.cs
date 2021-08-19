@@ -1,11 +1,9 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Parser.Files;
 using System.IO;
-using System.Runtime.Versioning;
 
 namespace AssetRipper.Library.Exporters.Shaders.DirectX
 {
-	[SupportedOSPlatform("windows")]
 	public struct DXDataHeader
 	{
 		/// <summary>

@@ -3,17 +3,10 @@ using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Library.Exporters.Shaders.DirectX;
 using DXShaderRestorer;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
-	[SupportedOSPlatform("windows")]
 	public class ShaderDxBytecodeExporter : CustomShaderTextExporter
 	{
 		public ShaderDxBytecodeExporter(GPUPlatform graphicApi, bool restore)

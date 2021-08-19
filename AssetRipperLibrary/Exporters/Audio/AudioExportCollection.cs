@@ -1,6 +1,5 @@
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Classes.AudioClip;
-using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Structure.Collections;
 using System.Runtime.Versioning;
 

@@ -3,14 +3,12 @@ using AssetRipper.Library.TextureContainers.DDS;
 using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.TextureContainers.PVR;
 using System;
-using System.Runtime.Versioning;
 using KTXBaseFormat = AssetRipper.Library.TextureContainers.KTX.KTXBaseInternalFormat;
 using KTXFormat = AssetRipper.Library.TextureContainers.KTX.KTXInternalFormat;
 using PVRFormat = AssetRipper.Library.TextureContainers.PVR.PVRPixelFormat;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
-	[SupportedOSPlatform("windows")]
 	public static class Texture2DExtensions
 	{
 		public static DDSCapsFlags DDSCaps(this Texture2D _this)
