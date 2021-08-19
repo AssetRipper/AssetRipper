@@ -78,8 +78,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperGUI", "AssetRipp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HLSLccCsharpWrapper", "HLSLccCsharpWrapper\HLSLccCsharpWrapper.csproj", "{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pinvoke", "Pinvoke\Pinvoke.csproj", "{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -183,12 +181,6 @@ Global
 		{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}.Release|x64.Build.0 = Release|Any CPU
 		{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}.Virtual|x64.ActiveCfg = Release|Any CPU
 		{8D67143A-A11C-49BA-9447-67B4A8B2FE7E}.Virtual|x64.Build.0 = Release|Any CPU
-		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Debug|x64.ActiveCfg = Release|Any CPU
-		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Debug|x64.Build.0 = Release|Any CPU
-		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Release|x64.ActiveCfg = Release|Any CPU
-		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Release|x64.Build.0 = Release|Any CPU
-		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Virtual|x64.ActiveCfg = Release|Any CPU
-		{47EAD1E1-3D31-4B5C-A09A-D708BBAF9747}.Virtual|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

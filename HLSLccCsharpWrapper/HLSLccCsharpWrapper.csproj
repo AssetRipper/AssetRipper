@@ -14,9 +14,9 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>HLSLccWrapper.dll</TargetPath>
 		</ContentWithTargetPath>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Pinvoke\Pinvoke.csproj" />
+		<ContentWithTargetPath Include="Native\libHLSLccWrapper.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>libHLSLccWrapper.so</TargetPath>
+		</ContentWithTargetPath>
 	</ItemGroup>
 </Project>

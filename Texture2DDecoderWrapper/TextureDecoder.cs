@@ -1,16 +1,10 @@
-﻿using Pinvoke;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
 namespace Texture2DDecoder
 {
     public static unsafe partial class TextureDecoder
     {
-        static TextureDecoder()
-        {
-            DllLoader.PreloadDll(T2DDll.DllName);
-        }
-
         public static bool DecodeDXT1(byte[] data, int width, int height, byte[] image)
         {
             fixed (byte* pData = data)

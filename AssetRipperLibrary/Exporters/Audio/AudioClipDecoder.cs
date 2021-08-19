@@ -14,8 +14,6 @@ namespace AssetRipper.Library.Exporters.Audio
 		public static bool LibrariesLoaded { get; private set; }
 		static AudioClipDecoder()
 		{
-			Pinvoke.DllLoader.PreloadDll("ogg");
-			Pinvoke.DllLoader.PreloadDll("vorbis");
 			LibrariesLoaded = IsVorbisLoaded() && IsOggLoaded();
 			if (!LibrariesLoaded)
 				Logger.Error(LogCategory.Export, "Either LibVorbis or LibOgg is missing from your system, so Ogg audio clips cannot be exported. This message will not repeat.");

@@ -13,14 +13,14 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<ContentWithTargetPath Include=".\Texture2DDecoderNative.dll">
+		<ContentWithTargetPath Include=".\Native\Texture2DDecoderNative.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>Texture2DDecoderNative.dll</TargetPath>
 		</ContentWithTargetPath>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Pinvoke\Pinvoke.csproj" />
+		<ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>libTexture2DDecoderNative.so</TargetPath>
+		</ContentWithTargetPath>
 	</ItemGroup>
 
 </Project>
