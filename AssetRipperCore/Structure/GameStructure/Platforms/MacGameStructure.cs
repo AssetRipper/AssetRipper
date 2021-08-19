@@ -18,15 +18,15 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
-			string dataPath = Path.Combine(m_root.FullName, ContentsName, DataFolderName);
-			if (!Directory.Exists(dataPath))
-			{
-				throw new Exception("Data directory wasn't found");
-			}
 			string resourcePath = Path.Combine(m_root.FullName, ContentsName, ResourcesName);
 			if (!Directory.Exists(resourcePath))
 			{
 				throw new Exception("Resources directory wasn't found");
+			}
+			string dataPath = Path.Combine(resourcePath, DataFolderName);
+			if (!Directory.Exists(dataPath))
+			{
+				throw new Exception("Data directory wasn't found");
 			}
 			DataPaths = new string[] { dataPath, resourcePath };
 
@@ -35,8 +35,9 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			RootPath = rootPath;
 			GameDataPath = dataPath;
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
-			UnityPlayerPath = Path.Combine(RootPath, DefaultUnityPlayerName);
+			UnityPlayerPath = Path.Combine(RootPath, FrameworksName, MacUnityPlayerName);
 			UnityVersion = null;
+#warning IL2Cpp paths are probably incorrect
 			Il2CppGameAssemblyPath = Path.Combine(RootPath, DefaultGameAssemblyName);
 			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
@@ -68,7 +69,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				return false;
 			}
 
-			string dataPath = Path.Combine(dinfo.FullName, ContentsName, DataFolderName);
+			string dataPath = Path.Combine(dinfo.FullName, ContentsName, ResourcesName, DataFolderName);
 			if (!Directory.Exists(dataPath))
 			{
 				return false;
@@ -84,6 +85,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		public override PlatformType Platform => PlatformType.Mac;
 
 		private const string ContentsName = "Contents";
+		private const string FrameworksName = "Frameworks";
+		private const string MacUnityPlayerName = "UnityPlayer.dylib";
 		private const string AppExtension = ".app";
 
 		private readonly DirectoryInfo m_root;
