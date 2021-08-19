@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using AssetRipper.Core.IO;
+using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Object
 {
@@ -23,6 +24,8 @@ namespace AssetRipper.Core.Classes.Object
 		public virtual string ExportExtension => AssetExtension;
 		public long PathID => AssetInfo.PathID;
 		public UnityGUID GUID => AssetInfo.GUID;
+
+		public UnityVersion BundleUnityVersion { get; set; }
 
 		public HideFlags ObjectHideFlags { get; set; }
 
@@ -44,6 +47,7 @@ namespace AssetRipper.Core.Classes.Object
 
 		public virtual void Read(AssetReader reader)
 		{
+			BundleUnityVersion = reader.Version;
 			ObjectLayout layout = reader.Layout.Object;
 			if (layout.HasHideFlag)
 			{
