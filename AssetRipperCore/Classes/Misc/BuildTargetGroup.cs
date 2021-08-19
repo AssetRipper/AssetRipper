@@ -180,7 +180,7 @@ namespace AssetRipper.Core.Classes.Misc
 					return BuildTargetGroup.Switch;
 
 				default:
-					throw new NotSupportedException();
+					throw new NotSupportedException($"Platform {_this} is not supported.");
 			}
 		}
 
