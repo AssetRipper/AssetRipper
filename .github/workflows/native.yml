@@ -33,15 +33,11 @@ jobs:
       run: cmake --build .
       working-directory: ./HLSLccWrapper/src/build/
      
-    - name: List Files
-      run: ls ./HLSLccWrapper/src/build/
-      shell: bash
-
     - name: Upload HLSLccWrapper
       uses: actions/upload-artifact@v2
       with:
         name: HLSLccWrapper_Linux
-        path: /home/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/build/libHLSLccWrapper.so
+        path: /home/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/src/build/libHLSLccWrapper.so
         if-no-files-found: error
 
 #  BuildMac:
