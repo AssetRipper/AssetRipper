@@ -3,7 +3,6 @@ using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Camera;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;

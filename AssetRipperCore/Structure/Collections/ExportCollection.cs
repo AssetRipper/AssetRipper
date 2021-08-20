@@ -14,7 +14,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Object = AssetRipper.Core.Classes.Object.Object;
+#if DEBUG
 using AssetRipper.Core.Extensions;
+#endif
 
 namespace AssetRipper.Core.Structure.Collections
 {

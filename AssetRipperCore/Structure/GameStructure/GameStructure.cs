@@ -3,13 +3,11 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Object = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Structure.GameStructure

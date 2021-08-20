@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Project;
 using AssetRipper.Core.Layout.Classes.AnimationClip.Curves;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;

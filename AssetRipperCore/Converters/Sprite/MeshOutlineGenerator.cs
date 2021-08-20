@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Classes.Misc.Serializable;
-using AssetRipper.Core.Math;
+﻿using AssetRipper.Core.Math;
 using System;
 using System.Collections.Generic;
 

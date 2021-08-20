@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files.BundleFile.Parser;
 using System;
 

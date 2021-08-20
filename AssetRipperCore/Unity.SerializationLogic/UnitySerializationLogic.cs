@@ -6,13 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
-using Mono.Collections.Generic;
 using Unity.CecilTools;
 using Unity.CecilTools.Extensions;
 
 namespace Unity.SerializationLogic
 {
-    internal class GenericInstanceHolder
+	internal class GenericInstanceHolder
     {
         public int Count;
         public IGenericInstance GenericInstance;

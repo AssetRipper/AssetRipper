@@ -13,7 +13,6 @@ using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssetRipper.Core.IO;
 
 namespace AssetRipper.Core.Classes.Animation
 {

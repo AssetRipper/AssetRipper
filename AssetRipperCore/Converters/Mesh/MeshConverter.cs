@@ -3,7 +3,6 @@ using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
 using AssetRipper.Core.Parser.Files;

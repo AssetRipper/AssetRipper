@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.Layout.Classes.Misc;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.IO.Asset;
 

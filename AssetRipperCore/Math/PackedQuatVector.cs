@@ -1,9 +1,7 @@
 ﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
-using System;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Extensions;
 

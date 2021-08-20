@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Project;
 using AssetRipper.Core.Classes.Meta.Importers.Texture;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.SpriteAtlas;
 using System;
 using AssetRipper.Core.Math;

@@ -3,7 +3,6 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.AnimatorController.Constants;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files.SerializedFiles;

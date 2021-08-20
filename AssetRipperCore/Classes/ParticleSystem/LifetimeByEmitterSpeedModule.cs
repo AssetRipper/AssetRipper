@@ -2,7 +2,6 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Reading.Classes;
 using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.ParticleSystem

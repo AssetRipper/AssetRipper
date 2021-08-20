@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
 using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Reading.Classes
 {

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Layout;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AnimationClip;
 using AssetRipper.Core.Classes.AnimationClip.Clip;
@@ -8,7 +7,6 @@ using AssetRipper.Core.Classes.AnimationClip.Editor;
 using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using SevenZip;
 using System;
 using System.Collections.Generic;

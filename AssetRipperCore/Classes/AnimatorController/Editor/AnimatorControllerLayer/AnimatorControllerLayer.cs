@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Project;
 using AssetRipper.Core.Classes.AnimatorController.Constants;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;

@@ -1,7 +1,6 @@
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.ParticleSystem.Curve;
 using AssetRipper.Core.Classes.ParticleSystem.Emission;
 using AssetRipper.Core.Classes.ParticleSystem.InheritVelocity;

@@ -2,7 +2,6 @@
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files;

@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Project;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;

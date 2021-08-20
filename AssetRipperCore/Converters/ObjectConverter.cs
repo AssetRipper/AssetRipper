@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Project;
 using AssetRipper.Core.Layout.Classes;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.IO.Asset;
 

@@ -3,7 +3,6 @@ using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Layout.Classes.AnimationClip;
 using AssetRipper.Core.Layout.Classes.GameObject;
 using AssetRipper.Core.Layout.Classes.PrefabInstance;
-using AssetRipper.Core.Parser.Asset;
 using System;
 using System.Collections.Generic;
 

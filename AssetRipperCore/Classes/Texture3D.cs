@@ -6,7 +6,6 @@ using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
-using System;
 using System.Collections.Generic;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 

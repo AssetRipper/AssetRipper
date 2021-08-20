@@ -6,7 +6,6 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
-using System;
 
 namespace AssetRipper.Core.Classes.EditorSettings
 {

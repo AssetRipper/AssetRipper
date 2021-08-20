@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.AnimationClip;
 using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Reading.Classes
 {

@@ -3,11 +3,6 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetRipper.Core.Classes
 {

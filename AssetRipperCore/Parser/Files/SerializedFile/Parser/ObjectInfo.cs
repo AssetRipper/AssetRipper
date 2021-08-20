@@ -1,4 +1,3 @@
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser

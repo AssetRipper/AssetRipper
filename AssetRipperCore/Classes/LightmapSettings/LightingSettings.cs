@@ -1,6 +1,4 @@
 ﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 
 namespace AssetRipper.Core.Classes.LightmapSettings

@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.IO;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;

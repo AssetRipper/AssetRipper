@@ -2,15 +2,11 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Mono.Cecil;
 
 namespace Unity.CecilTools.Extensions
 {
-    public static class TypeDefinitionExtensions
+	public static class TypeDefinitionExtensions
     {
         public static bool IsSubclassOf(this TypeDefinition type, string baseTypeName)
         {

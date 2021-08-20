@@ -3,7 +3,6 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Meta.Importers.Asset;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Classes.Utils.Extensions;

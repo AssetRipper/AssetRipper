@@ -2,7 +2,6 @@ using AssetRipper.Core.Converters.Sprite;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using System;

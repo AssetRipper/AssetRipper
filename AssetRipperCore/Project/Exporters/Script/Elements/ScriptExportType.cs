@@ -1,6 +1,5 @@
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Structure.Assembly.Mono;
-using AssetRipper.Core.Structure.Assembly.Serializable;
 using System.Collections.Generic;
 using System.IO;
 

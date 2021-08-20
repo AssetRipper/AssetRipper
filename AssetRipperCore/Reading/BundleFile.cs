@@ -5,7 +5,6 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.IO.FileReading;
 using AssetRipper.Core.Lz4;
 using AssetRipper.Core.Parser.Files.BundleFile;
-using AssetRipper.Core.Utils;
 
 namespace AssetRipper.Core.Reading
 {

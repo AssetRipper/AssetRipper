@@ -9,7 +9,6 @@ using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Object

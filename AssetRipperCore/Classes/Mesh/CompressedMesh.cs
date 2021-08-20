@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Converters.Mesh;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
