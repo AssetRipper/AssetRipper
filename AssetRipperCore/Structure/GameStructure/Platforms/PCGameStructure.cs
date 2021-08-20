@@ -26,6 +26,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Name = name;
 			RootPath = rootPath;
 			GameDataPath = dataPath;
+			StreamingAssetsPath = Path.Combine(GameDataPath, StreamingName);
+			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
 			UnityPlayerPath = Path.Combine(RootPath, DefaultUnityPlayerName);
 			UnityVersion = null;

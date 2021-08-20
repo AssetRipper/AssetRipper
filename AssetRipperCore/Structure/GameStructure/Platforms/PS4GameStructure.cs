@@ -37,12 +37,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Name = m_root.Name;
 			RootPath = DirectoryUtils.ToLongPath(rootPath);
 			GameDataPath = dataPath;
+			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
 			ModulesPath = Path.Combine(GameDataPath, ModulesName);
 			UnityPlayerPath = null;
-			string globalGameManagersPath = Path.Combine(GameDataPath, "globalgamemanagers");
-			string unityVersion = (new AssetRipper.Core.SerializedFiles.SerializedFile(new FileReader(globalGameManagersPath), null)).unityVersion;
-			UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion.Parse(unityVersion).ToArray();
+			string globalGameManagersPath = Path.Combine(GameDataPath, GlobalGameManagersName);
+			UnityVersion = GetUnityVersionFromSerializedFile(globalGameManagersPath);
 			Il2CppGameAssemblyPath = Path.Combine(ModulesPath, PS4IL2CppGameAssemblyName);
 			Il2CppMetaDataPath = Path.Combine(GameDataPath, MetadataName, DefaultGlobalMetadataName);
 

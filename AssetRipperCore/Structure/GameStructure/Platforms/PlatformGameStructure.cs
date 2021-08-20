@@ -17,6 +17,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		public string Name { get; protected set; }
 		public string RootPath { get; protected set; }
 		public string GameDataPath { get; protected set; }
+		public string StreamingAssetsPath { get; protected set; }
+		public string ResourcesPath { get; protected set; }
 		public ScriptingBackend Backend { get; protected set; } = ScriptingBackend.Unknown;
 		public abstract PlatformType Platform { get; }
 		public string ManagedPath { get; protected set; }
@@ -190,7 +192,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		protected void CollectStreamingAssets(DirectoryInfo root, IDictionary<string, string> files)
 		{
 			Logger.Info(LogCategory.Import, "Collecting Streaming Assets...");
-			string streamingPath = Path.Combine(root.FullName, StreamingName);
+			string streamingPath = StreamingAssetsPath ?? Path.Combine(root.FullName, StreamingName);
 			DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
 			if (streamingDirectory.Exists)
 			{
@@ -204,7 +206,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		protected void CollectResources(DirectoryInfo root, IDictionary<string, string> files)
 		{
 			Logger.Info(LogCategory.Import, "Collecting Resources...");
-			string resourcesPath = Path.Combine(root.FullName, ResourcesName);
+			string resourcesPath = ResourcesPath ?? Path.Combine(root.FullName, ResourcesName);
 			DirectoryInfo resourcesDirectory = new DirectoryInfo(resourcesPath);
 			if (resourcesDirectory.Exists)
 			{

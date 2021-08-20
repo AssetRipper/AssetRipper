@@ -34,6 +34,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Name = m_root.Name.Substring(0, m_root.Name.Length - AppExtension.Length);
 			RootPath = rootPath;
 			GameDataPath = dataPath;
+			StreamingAssetsPath = Path.Combine(GameDataPath, StreamingName);
+			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
 			UnityPlayerPath = Path.Combine(RootPath, FrameworksName, MacUnityPlayerName);
 			UnityVersion = null;

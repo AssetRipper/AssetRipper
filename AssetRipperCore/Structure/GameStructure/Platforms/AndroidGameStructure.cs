@@ -33,6 +33,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			RootPath = rootPath;
 			GameDataPath = apkDataPath;
+			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
 			LibPath = Path.Combine(RootPath, LibName);
 			Il2CppGameAssemblyPath = GetIl2CppGameAssemblyPath(LibPath);
