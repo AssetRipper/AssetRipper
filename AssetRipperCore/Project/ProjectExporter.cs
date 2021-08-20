@@ -275,7 +275,7 @@ namespace AssetRipper.Core.Project
 				bool isExported = collection.Export(container, options.ExportPath);
 				if (isExported)
 				{
-					Logger.Log(LogType.Info, LogCategory.ExportedFile, $"'{collection.Name}' exported");
+					Logger.Info(LogCategory.ExportedFile, $"'{collection.Name}' exported");
 				}
 				EventExportProgressUpdated?.Invoke(i, collections.Count);
 			}

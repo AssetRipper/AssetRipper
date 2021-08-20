@@ -91,6 +91,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 
 			CollectStreamingAssets(m_root, Files);
+			CollectResources(m_root, Files);
 		}
 
 		public static bool IsWebGLStructure(string path)

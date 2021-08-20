@@ -66,7 +66,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private static void DecompressZipArchive(string zipFilePath, string outputDirectory)
 		{
-			Logger.Log(LogType.Info, LogCategory.Import, $"Decompressing files...{Environment.NewLine}\tFrom: {zipFilePath}{Environment.NewLine}\tTo: {outputDirectory}");
+			Logger.Info(LogCategory.Import, $"Decompressing files...{Environment.NewLine}\tFrom: {zipFilePath}{Environment.NewLine}\tTo: {outputDirectory}");
 			using (ZipFile zipFile = new ZipFile(zipFilePath))
 			{
 				foreach (ZipEntry entry in zipFile)

@@ -61,13 +61,13 @@ namespace AssetRipper.GUI
 			exporter.EventExportPreparationStarted += () =>
 			{
 				vm.ExportingText = "Preparing for Export...\nThis might take a minute.";
-				Logger.Log(LogType.Info, LogCategory.Export, "Preparing for export...");
+				Logger.Info(LogCategory.Export, "Preparing for export...");
 			};
 
 			exporter.EventExportPreparationFinished += () =>
 			{
 				vm.ExportingText = "Exporting Asset Files\n0.0%\n?/?";
-				Logger.Log(LogType.Info, LogCategory.Export, "Preparation complete. Starting to export now...");
+				Logger.Info(LogCategory.Export, "Preparation complete. Starting to export now...");
 			};
 
 			exporter.EventExportProgressUpdated += (index, count) =>

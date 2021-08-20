@@ -25,11 +25,11 @@ namespace AssetRipper.Library
 		{
 			ResetData();
 			if(paths.Count == 1)
-				Logger.Log(LogType.Info, LogCategory.General, $"Attempting to read files from {paths[0]}");
+				Logger.Info(LogCategory.General, $"Attempting to read files from {paths[0]}");
 			else
-				Logger.Log(LogType.Info, LogCategory.General, "Attempting to read files...");
+				Logger.Info(LogCategory.General, "Attempting to read files...");
 			GameStructure = GameStructure.Load(paths, Settings);
-			Logger.Log(LogType.Info, LogCategory.General, "Finished reading files");
+			Logger.Info(LogCategory.General, "Finished reading files");
 			return GameStructure;
 		}
 
@@ -46,22 +46,22 @@ namespace AssetRipper.Library
 		public void ExportProject(string exportPath, UnityObject asset) => ExportProject(exportPath, new UnityObject[] { asset });
 		public void ExportProject(string exportPath, IEnumerable<UnityObject> assets)
 		{
-			Logger.Log(LogType.Info, LogCategory.Export, $"Attempting to export assets to {exportPath}...");
+			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
 			List<UnityObject> list = new List<UnityObject>(assets);
 			Settings.ExportPath = exportPath;
 			Settings.Filter = GetFilter(list);
 			InitializeExporters();
 			GameStructure.Export(Settings);
-			Logger.Log(LogType.Info, LogCategory.Export, "Finished exporting assets");
+			Logger.Info(LogCategory.Export, "Finished exporting assets");
 		}
 		public void ExportProject(string exportPath)
 		{
-			Logger.Log(LogType.Info, LogCategory.Export, $"Attempting to export assets to {exportPath}...");
+			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
 			Settings.ExportPath = exportPath;
 			Settings.Filter = LibraryConfiguration.DefaultFilter;
 			InitializeExporters();
 			GameStructure.Export(Settings);
-			Logger.Log(LogType.Info, LogCategory.Export, "Finished exporting assets");
+			Logger.Info(LogCategory.Export, "Finished exporting assets");
 		}
 
 		public void ResetData()

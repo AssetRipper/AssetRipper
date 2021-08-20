@@ -1,6 +1,7 @@
 using AssetRipper.Core.IO.FileReading;
 using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Files.BundleFile;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
@@ -136,11 +137,15 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		protected void CollectGameFiles(DirectoryInfo root, IDictionary<string, string> files)
 		{
-			CollectBundleGameFiles(root, files);
+			Logger.Info(LogCategory.Import, "Collecting game files...");
+			CollectCompressedGameFiles(root, files);
 			CollectSerializedGameFiles(root, files);
 		}
 
-		protected void CollectBundleGameFiles(DirectoryInfo root, IDictionary<string, string> files)
+		/// <summary>
+		/// Finds data.unity3d when Lz4 compressed
+		/// </summary>
+		protected void CollectCompressedGameFiles(DirectoryInfo root, IDictionary<string, string> files)
 		{
 			const string DataBundleName = DataName + AssetBundleExtension;
 			string dataBundlePath = Path.Combine(root.FullName, DataBundleName);
@@ -150,6 +155,9 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 		}
 
+		/// <summary>
+		/// Collects global game managers and all the level files
+		/// </summary>
 		protected void CollectSerializedGameFiles(DirectoryInfo root, IDictionary<string, string> files)
 		{
 			string filePath = Path.Combine(root.FullName, GlobalGameManagersName);
@@ -176,8 +184,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 		}
 
+		/// <summary>
+		/// Collect bundles from the Streaming Assets folder
+		/// </summary>
 		protected void CollectStreamingAssets(DirectoryInfo root, IDictionary<string, string> files)
 		{
+			Logger.Info(LogCategory.Import, "Collecting Streaming Assets...");
 			string streamingPath = Path.Combine(root.FullName, StreamingName);
 			DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
 			if (streamingDirectory.Exists)
@@ -186,11 +198,29 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 		}
 
+		/// <summary>
+		/// Collect bundles from the Resources folder
+		/// </summary>
+		protected void CollectResources(DirectoryInfo root, IDictionary<string, string> files)
+		{
+			Logger.Info(LogCategory.Import, "Collecting Resources...");
+			string resourcesPath = Path.Combine(root.FullName, ResourcesName);
+			DirectoryInfo resourcesDirectory = new DirectoryInfo(resourcesPath);
+			if (resourcesDirectory.Exists)
+			{
+				CollectAssetBundlesRecursivly(resourcesDirectory, files);
+			}
+		}
+
+		/// <summary>
+		/// Collect asset bundles only from this directory
+		/// </summary>
 		protected void CollectAssetBundles(DirectoryInfo root, IDictionary<string, string> files)
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
-				if (file.Extension == AssetBundleExtension || file.Extension == AlternateBundleExtension)
+				//if (file.Extension == AssetBundleExtension || file.Extension == AlternateBundleExtension)
+				if(BundleFile.IsBundleFile(file.FullName))
 				{
 					string name = Path.GetFileNameWithoutExtension(file.Name).ToLowerInvariant();
 					AddAssetBundle(files, name, file.FullName);
@@ -198,6 +228,9 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 		}
 
+		/// <summary>
+		/// Collect asset bundles from this directory and all subdirectories
+		/// </summary>
 		protected void CollectAssetBundlesRecursivly(DirectoryInfo root, IDictionary<string, string> files)
 		{
 			CollectAssetBundles(root, files);
@@ -225,9 +258,9 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				return;//If Il2Cpp, don't look for any other assemblies
 			}
-			else if (Directory.Exists(ManagedPath))
+			else if (Directory.Exists(managedPath))
 			{
-				DirectoryInfo managedDirectory = new DirectoryInfo(ManagedPath);
+				DirectoryInfo managedDirectory = new DirectoryInfo(managedPath);
 				CollectAssemblies(managedDirectory, assemblies);
 			}
 			else
@@ -267,10 +300,13 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return null;
 		}
 
+		/// <summary>
+		/// Add game file
+		/// </summary>
 		protected void AddFile(IDictionary<string, string> files, string name, string path)
 		{
 			files.Add(name, path);
-			Logger.Log(LogType.Info, LogCategory.Import, $"Game file '{name}' has been found");
+			Logger.Info(LogCategory.Import, $"Game file '{name}' has been found");
 		}
 
 		protected void AddAssetBundle(IDictionary<string, string> files, string name, string path)
@@ -283,7 +319,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				uniqueName = name + i++;
 			}
 			files.Add(uniqueName, path);
-			Logger.Log(LogType.Info, LogCategory.Import, $"Asset bundle '{name}' has been found");
+			Logger.Info(LogCategory.Import, $"Asset bundle '{name}' has been found");
 		}
 
 		protected static int[] GetUnityVersionFromSerializedFile(string filePath)

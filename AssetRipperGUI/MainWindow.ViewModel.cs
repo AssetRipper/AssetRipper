@@ -1,6 +1,4 @@
 ﻿using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.Library;
@@ -188,9 +186,9 @@ namespace AssetRipper.GUI
 			string exportPath = Path.Combine(chosenFolder, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
-			Logger.Log(LogType.Info, LogCategory.General, $"About to begin export to {exportPath}");
+			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
 
-			Logger.Log(LogType.Info, LogCategory.General, $"Removing any files from a previous export...");
+			Logger.Info(LogCategory.General, $"Removing any files from a previous export...");
 
 			await UIExportManager.PrepareExportDirectory(exportPath);
 			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.FileCollection.Exporter, this);
@@ -199,7 +197,7 @@ namespace AssetRipper.GUI
 			{
 				IsExporting = false;
 				this.ShowPopup("Export Complete!", "Success!");
-				Logger.Log(LogType.Info, LogCategory.General, "Export Complete!");
+				Logger.Info(LogCategory.General, "Export Complete!");
 			}, error =>
 			{
 				IsExporting = false;

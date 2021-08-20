@@ -46,7 +46,7 @@ namespace UnitTester
 				foreach(string testPath in Directory.GetDirectories(versionPath))
 				{
 					string testName = Path.GetRelativePath(versionPath, testPath);
-					Logger.Log(LogType.Info, LogCategory.General, $"Found test: '{testName}' for Unity version: '{versionName}'");
+					Logger.Info(LogCategory.General, $"Found test: '{testName}' for Unity version: '{versionName}'");
 					numTests++;
 					string inputPath = Path.Combine(testPath, "Input");
 					if (!DirectoryUtils.Exists(inputPath))
@@ -66,7 +66,7 @@ namespace UnitTester
 							GameStructure gameStructure = ripper.Load(inputPaths);
 							PrepareExportDirectory(outputPath);
 							ripper.ExportProject(outputPath);
-							Logger.Log(LogType.Info, LogCategory.General, $"Completed test: '{testName}' for Unity version: '{versionName}'");
+							Logger.Info(LogCategory.General, $"Completed test: '{testName}' for Unity version: '{versionName}'");
 							Logger.BlankLine(2);
 							numSuccessful++;
 						}
@@ -79,7 +79,7 @@ namespace UnitTester
 				}
 			}
 
-			Logger.Log(LogType.Info, LogCategory.General, $"{numSuccessful}/{numTests} tests successfully completed");
+			Logger.Info(LogCategory.General, $"{numSuccessful}/{numTests} tests successfully completed");
 		}
 
 		private static void PrepareExportDirectory(string path)

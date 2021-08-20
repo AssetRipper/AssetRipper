@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			CollectGameFiles(dataDirectory, Files);
 			CollectStreamingAssets(dataDirectory, Files);
-			
+			CollectResources(dataDirectory, Files);
 			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
 

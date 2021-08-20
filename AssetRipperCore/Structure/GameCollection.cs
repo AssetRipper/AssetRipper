@@ -112,7 +112,7 @@ namespace AssetRipper.Core.Structure
 				ResourceFile resourceFile = scheme.ReadFile();
 				AddResourceFile(resourceFile);
 			}
-			Logger.Log(LogType.Info, LogCategory.Import, $"Resource file '{resName}' has been loaded");
+			Logger.Info(LogCategory.Import, $"Resource file '{resName}' has been loaded");
 			return m_resources[fixedName];
 		}
 
@@ -249,7 +249,7 @@ namespace AssetRipper.Core.Structure
 				}
 				LoadAssembly(path);
 			}
-			Logger.Log(LogType.Info, LogCategory.Import, $"Assembly '{assembly}' has been loaded");
+			Logger.Info(LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 		}
 
 		private void Dispose(bool disposing)

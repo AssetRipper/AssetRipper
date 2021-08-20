@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			if (UnityVersion == null)
 				throw new NullReferenceException("gameStructure.UnityVersion and gameStructure.UnityPlayerPath cannot both be null");
 			else
-				Logger.Log(LogType.Info, LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
+				Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
 
 			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion, false);
 

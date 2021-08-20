@@ -39,7 +39,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			string abPath = Path.Combine(m_root.FullName, Name + AssetBundleExtension);
 			Files.Add(Name, abPath);
 			CollectStreamingAssets(m_root, Files);
-			
+			CollectResources(m_root, Files);
+
 			CollectMainAssemblies(m_root, Assemblies);
 		}
 

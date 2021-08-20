@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 			string[] assemblyFiles = Directory.GetFiles(ManagedPath, "*.dll");
 
-			Logger.Log(LogType.Info, LogCategory.Import, $"During Mono initialization, found {assemblyFiles.Length} assemblies");
+			Logger.Info(LogCategory.Import, $"During Mono initialization, found {assemblyFiles.Length} assemblies");
 			foreach (string assembly in assemblyFiles)
 			{
 				Load(assembly);

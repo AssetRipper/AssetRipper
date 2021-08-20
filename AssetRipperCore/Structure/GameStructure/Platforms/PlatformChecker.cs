@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					gameStructure = new PCGameStructure(path);
 					paths.Remove(path);
-					Logger.Log(LogType.Info, LogCategory.Import, $"PC game structure has been found at '{path}'");
+					Logger.Info(LogCategory.Import, $"PC game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					gameStructure = new LinuxGameStructure(path);
 					paths.Remove(path);
-					Logger.Log(LogType.Info, LogCategory.Import, $"Linux game structure has been found at '{path}'");
+					Logger.Info(LogCategory.Import, $"Linux game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -77,7 +77,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					gameStructure = new MacGameStructure(path);
 					paths.Remove(path);
-					Logger.Log(LogType.Info, LogCategory.Import, $"Mac game structure has been found at '{path}'");
+					Logger.Info(LogCategory.Import, $"Mac game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -119,11 +119,11 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				gameStructure = new AndroidGameStructure(androidStructure, obbStructure);
 				paths.Remove(androidStructure);
-				Logger.Log(LogType.Info, LogCategory.Import, $"Android game structure has been found at '{androidStructure}'");
+				Logger.Info(LogCategory.Import, $"Android game structure has been found at '{androidStructure}'");
 				if (obbStructure != null)
 				{
 					paths.Remove(obbStructure);
-					Logger.Log(LogType.Info, LogCategory.Import, $"Android obb game structure has been found at '{obbStructure}'");
+					Logger.Info(LogCategory.Import, $"Android obb game structure has been found at '{obbStructure}'");
 				}
 				return true;
 			}
@@ -140,7 +140,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					gameStructure = new iOSGameStructure(path);
 					paths.Remove(path);
-					Logger.Log(LogType.Info, LogCategory.Import, $"iOS game structure has been found at '{path}'");
+					Logger.Info(LogCategory.Import, $"iOS game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -156,7 +156,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					gameStructure = new PS4GameStructure(path);
 					paths.Remove(path);
-					Logger.Log(LogType.Info, LogCategory.Import, $"PS4 game structure has been found at '{path}'");
+					Logger.Info(LogCategory.Import, $"PS4 game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -172,7 +172,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					gameStructure = new SwitchGameStructure(path);
 					paths.Remove(path);
-					Logger.Log(LogType.Info, LogCategory.Import, $"Switch game structure has been found at '{path}'");
+					Logger.Info(LogCategory.Import, $"Switch game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -188,7 +188,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					gameStructure = new WebGLGameStructure(path);
 					paths.Remove(path);
-					Logger.Log(LogType.Info, LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
+					Logger.Info(LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -204,7 +204,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					gameStructure = new WebPlayerGameStructure(path);
 					paths.Remove(path);
-					Logger.Log(LogType.Info, LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
+					Logger.Info(LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
 					return true;
 				}
 			}
@@ -217,7 +217,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			if (paths.Count > 0)
 			{
 				gameStructure = new MixedGameStructure(paths);
-				Logger.Log(LogType.Info, LogCategory.Import, $"Mixed game structure has been found for {paths.Count} path(s)");
+				Logger.Info(LogCategory.Import, $"Mixed game structure has been found for {paths.Count} path(s)");
 				paths.Clear();
 				return true;
 			}
