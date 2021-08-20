@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Classes.BlendTree
 
 		public static int ToSerializedVersion(UnityVersion version)
 		{
-			// TODO:
+#warning TODO:
 			return 2;
 		}
 
@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Classes.BlendTree
 		public const string DirectBlendParameterName = "m_DirectBlendParameter";
 		public const string MirrorName = "m_Mirror";
 
-		public PPtr<Motion> Motion = new();
+		public PPtr<Motion> Motion;
 		public Vector2f Position;
 	}
 }

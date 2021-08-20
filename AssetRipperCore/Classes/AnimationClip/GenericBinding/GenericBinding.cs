@@ -6,10 +6,8 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
 {
-	public class GenericBinding : IAssetReadable, IYAMLExportable
+	public struct GenericBinding : IAssetReadable, IYAMLExportable
 	{
-		public GenericBinding() { }
-
 		/// <summary>
 		/// 5.6.0 an greater
 		/// </summary>
@@ -75,6 +73,6 @@ namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
 		public const string CustomTypeName = "customType";
 		public const string IsPPtrCurveName = "isPPtrCurve";
 
-		public PPtr<Object.Object> Script = new();
+		public PPtr<Object.Object> Script;
 	}
 }

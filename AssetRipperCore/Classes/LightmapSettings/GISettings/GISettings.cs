@@ -10,9 +10,8 @@ namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 	/// <summary>
 	/// First intriduced in 5.0.0
 	/// </summary>
-	public class GISettings : IAsset
+	public struct GISettings : IAsset
 	{
-		public GISettings() { }
 		public GISettings(bool _)
 		{
 #warning TODO:

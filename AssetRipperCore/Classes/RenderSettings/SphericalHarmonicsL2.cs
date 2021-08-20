@@ -8,9 +8,8 @@ namespace AssetRipper.Core.Classes.RenderSettings
 	/// <summary>
 	/// LightProbeCoefficients and SH9Coefficients previously
 	/// </summary>
-	public class SphericalHarmonicsL2 : IAssetReadable, IYAMLExportable
+	public struct SphericalHarmonicsL2 : IAssetReadable, IYAMLExportable
 	{
-		public SphericalHarmonicsL2() { }
 		/// <summary>
 		/// Not 5.0.0b
 		/// </summary>

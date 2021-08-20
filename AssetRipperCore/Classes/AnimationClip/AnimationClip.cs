@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 {
 	public sealed class AnimationClip : Motion
 	{
-		private class AnimationCurves
+		private struct AnimationCurves
 		{
 			public IEnumerable<QuaternionCurve> RotationCurves { get; set; }
 			public IEnumerable<CompressedAnimationCurve> CompressedRotationCurves { get; set; }
@@ -761,6 +761,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public const string EventsName = "m_Events";
 
 		public AABB Bounds;
-		public AnimationClipBindingConstant ClipBindingConstant = new AnimationClipBindingConstant();
+		public AnimationClipBindingConstant ClipBindingConstant;
 	}
 }

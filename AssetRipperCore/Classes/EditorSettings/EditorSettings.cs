@@ -600,9 +600,9 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		public const string CacheServerEnableAuthName = "m_CacheServerEnableAuth";
 		public const string CacheServerEnableTlsName = "m_CacheServerEnableTls";
 
-		public PPtr<SceneAsset> PrefabRegularEnvironment = new();
-		public PPtr<SceneAsset> PrefabUIEnvironment = new();
-		public CollabEditorSettings CollabEditorSettings = new();
+		public PPtr<SceneAsset> PrefabRegularEnvironment;
+		public PPtr<SceneAsset> PrefabUIEnvironment;
+		public CollabEditorSettings CollabEditorSettings;
 
 		private const string DefaultExtensions = "txt;xml;fnt;cd;asmdef;rsp";
 		private const string AsmrefExtension = "asmref";

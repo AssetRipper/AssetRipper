@@ -61,8 +61,8 @@ namespace AssetRipper.Core.Classes
 		public const string TopBorderName = "m_TopBorder";
 		public const string BottomBorderName = "m_BottomBorder";
 
-		public PPtr<Texture> Texture = new();
+		public PPtr<Texture> Texture;
 		public ColorRGBAf Color;
-		public Rectf PixelInset = new();
+		public Rectf PixelInset;
 	}
 }

@@ -8,10 +8,8 @@ using System.IO;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Clip
 {
-	public class StreamedClip : IAssetReadable
+	public struct StreamedClip : IAssetReadable
 	{
-		public StreamedClip() { }
-
 		public void Read(AssetReader reader)
 		{
 			Data = reader.ReadUInt32Array();

@@ -327,8 +327,8 @@ namespace AssetRipper.Core.Classes.Camera
 		public ColorRGBAf BackGroundColor;
 		public Vector2f SensorSize;
 		public Vector2f LensShift;
-		public Rectf NormalizedViewPortRect = new();
-		public BitField CullingMask = new();
-		public PPtr<RenderTexture.RenderTexture> TargetTexture = new();
+		public Rectf NormalizedViewPortRect;
+		public BitField CullingMask;
+		public PPtr<RenderTexture.RenderTexture> TargetTexture;
 	}
 }

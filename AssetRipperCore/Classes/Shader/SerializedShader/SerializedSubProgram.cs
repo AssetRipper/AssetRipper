@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 				return 3;
 			}
 
-			// TODO:
+#warning TODO:
 			return 2;
 			// return 1;
 		}

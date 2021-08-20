@@ -156,7 +156,7 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 		public Vector3f EntryPosition;
 		public Vector3f ExitPosition;
 		public Vector3f ParentStateMachinePosition;
-		public PPtr<AnimatorState> DefaultState = new();
+		public PPtr<AnimatorState> DefaultState;
 
 		public const string ChildStatesName = "m_ChildStates";
 		public const string ChildStateMachinesName = "m_ChildStateMachines";

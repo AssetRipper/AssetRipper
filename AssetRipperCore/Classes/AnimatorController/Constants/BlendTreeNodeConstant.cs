@@ -11,9 +11,8 @@ using AssetRipper.Core.IO;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public class BlendTreeNodeConstant : IAssetReadable, IYAMLExportable
+	public struct BlendTreeNodeConstant : IAssetReadable, IYAMLExportable
 	{
-		public BlendTreeNodeConstant() { }
 		/// <summary>
 		/// 4.1.0 and greater
 		/// </summary>
@@ -51,36 +50,40 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			{
 				BlendType = (BlendTreeType)reader.ReadUInt32();
 			}
+			else BlendType = default;
 			BlendEventID = reader.ReadUInt32();
 			if (version[0] > 4 || (version[0] == 4 && version[1] >= 1)) //4.1 and up
 			{
 				BlendEventYID = reader.ReadUInt32();
 			}
+			else BlendEventYID = 0;
 			ChildIndices = reader.ReadUInt32Array();
 			if (version[0] < 4 || (version[0] == 4 && version[1] < 1)) //4.1 down
 			{
 				ChildThresholdArray = reader.ReadSingleArray();
 			}
+			else ChildThresholdArray = new float[0];
 
 			if (version[0] > 4 || (version[0] == 4 && version[1] >= 1)) //4.1 and up
 			{
-				//Blend1dData = 
-					new Blend1dDataConstant(reader);
-				//Blend2dData = 
-					new Blend2dDataConstant(reader);
+				new Blend1dDataConstant(reader);
+				new Blend2dDataConstant(reader);
 			}
+			Blend1dData = default;
+			Blend2dData = default;
 
 			if (version[0] >= 5) //5.0 and up
 			{
-				//BlendDirectData = 
-					new BlendDirectDataConstant(reader);
+				new BlendDirectDataConstant(reader);
 			}
+			BlendDirectData = default;
 
 			ClipID = reader.ReadUInt32();
 			if (version[0] == 4 && version[1] >= 5) //4.5 - 5.0
 			{
 				ClipIndex = reader.ReadUInt32();
 			}
+			else ClipIndex = 0;
 
 			Duration = reader.ReadSingle();
 
@@ -91,6 +94,11 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 				CycleOffset = reader.ReadSingle();
 				Mirror = reader.ReadBoolean();
 				reader.AlignStream();
+			}
+			else
+			{
+				CycleOffset = 0;
+				Mirror = false;
 			}
 		}
 
@@ -214,8 +222,8 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		public float CycleOffset { get; set; }
 		public bool Mirror { get; set; }
 
-		public OffsetPtr<Blend1dDataConstant> Blend1dData = new();
-		public OffsetPtr<Blend2dDataConstant> Blend2dData = new();
-		public OffsetPtr<BlendDirectDataConstant> BlendDirectData = new();
+		public OffsetPtr<Blend1dDataConstant> Blend1dData;
+		public OffsetPtr<Blend2dDataConstant> Blend2dData;
+		public OffsetPtr<BlendDirectDataConstant> BlendDirectData;
 	}
 }

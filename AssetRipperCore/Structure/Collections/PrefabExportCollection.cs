@@ -58,7 +58,8 @@ namespace AssetRipper.Core.Structure.Collections
 		public override ISerializedFile File => m_file;
 		public override TransferInstructionFlags Flags => base.Flags | TransferInstructionFlags.SerializeForPrefabSystem;
 
-		// TODO: HACK: prefab's assets may be stored in different files
+#warning TODO:
+		// HACK: prefab's assets may be stored in different files
 		// Need to find a way to set a file for current asset nicely
 		public override IEnumerable<Object> Assets
 		{

@@ -12,7 +12,7 @@
 		/// <summary>
 		/// Updates the animator during the physic loop in order to have the animation system synchronized with the physics engine.
 		/// </summary>
-		AnimatePhysics		= 1,
+		AnimatePhysics	= 1,
 		/// <summary>
 		/// Animator updates independently of Time.timeScale.
 		/// </summary>

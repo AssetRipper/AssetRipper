@@ -84,7 +84,7 @@ namespace AssetRipper.Core.Classes
 
 		public static int ToSerializedVersion(UnityVersion version)
 		{
-			// TODO:
+#warning TODO:
 			return 5;
 		}
 

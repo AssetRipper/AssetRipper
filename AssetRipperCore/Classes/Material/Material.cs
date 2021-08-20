@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.Material
 
 		public static int ToSerializedVersion(UnityVersion version)
 		{
-			// TODO:
+#warning TODO:
 			return 6;
 		}
 
@@ -164,7 +164,7 @@ namespace AssetRipper.Core.Classes.Material
 		public const string DisabledShaderPassesName = "disabledShaderPasses";
 		public const string SavedPropertiesName = "m_SavedProperties";
 
-		public PPtr<Shader.Shader> Shader = new();
-		public UnityPropertySheet SavedProperties = new();
+		public PPtr<Shader.Shader> Shader;
+		public UnityPropertySheet SavedProperties;
 	}
 }

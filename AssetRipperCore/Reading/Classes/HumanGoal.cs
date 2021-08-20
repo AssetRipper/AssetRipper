@@ -7,7 +7,7 @@ namespace AssetRipper.Core.Reading.Classes
 {
 	public class HumanGoal
     {
-        public XForm m_X = new();
+        public XForm m_X;
 		public float m_WeightT;
         public float m_WeightR;
         public Vector3f m_HintT;

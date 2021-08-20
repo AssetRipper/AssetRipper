@@ -24,7 +24,7 @@ namespace DXShaderRestorer
 			MirrorOnce
 		};
 
-		//TODO: Move to seprate file
+# warning TODO: Move to seprate file
 		private class Sampler
 		{
 			public string Name;
@@ -77,6 +77,7 @@ namespace DXShaderRestorer
 
 		private static List<Sampler> CreateSamplers(ref ShaderSubProgram shaderSubprogram)
 		{
+#warning Needs work
 			/*
 			 * Unity supports three types of samplers
 			 * Coupled textures and sampler:
@@ -142,9 +143,12 @@ namespace DXShaderRestorer
 				writer.Write((uint)ResourceReturnType.Mixed);
 				//Resource view dimension
 				writer.Write((uint)ShaderResourceViewDimension.Buffer);
+
+# warning TODO: Check this
 				//Number of samples
-				writer.Write((uint)56); //TODO: Check this
-										//Bind point
+				writer.Write((uint)56);
+				
+				//Bind point
 				writer.Write((uint)bufferParam.Index);
 				//Bind count
 				writer.Write((uint)1);
@@ -254,6 +258,6 @@ namespace DXShaderRestorer
 		private readonly Dictionary<string, uint> m_nameLookup;
 		private readonly List<Sampler> m_Samplers;
 
-		private ShaderSubProgram m_shaderSubprogram = new();
+		private ShaderSubProgram m_shaderSubprogram;
 	}
 }

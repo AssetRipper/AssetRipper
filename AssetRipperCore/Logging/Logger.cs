@@ -43,7 +43,6 @@ namespace AssetRipper.Core.Logging
 		}
 
 		public static void BlankLine() => BlankLine(1);
-
 		public static void BlankLine(int numLines)
 		{
 			foreach (ILogger instance in loggers)

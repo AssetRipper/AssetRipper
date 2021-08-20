@@ -287,11 +287,11 @@ namespace AssetRipper.Core.Classes.AudioSource
 		public const string SpreadCustomCurveName = "spreadCustomCurve";
 		public const string ReverbZoneMixCustomCurveName = "reverbZoneMixCustomCurve";
 
-		public PPtr<AudioMixerGroup> OutputAudioMixerGroup = new();
-		public PPtr<AudioClip.AudioClip> AudioClip = new();
-		public AnimationCurveTpl<Float> RolloffCustomCurve = new();
-		public AnimationCurveTpl<Float> PanLevelCustomCurve = new();
-		public AnimationCurveTpl<Float> SpreadCustomCurve = new();
-		public AnimationCurveTpl<Float> ReverbZoneMixCustomCurve = new();
+		public PPtr<AudioMixerGroup> OutputAudioMixerGroup;
+		public PPtr<AudioClip.AudioClip> AudioClip;
+		public AnimationCurveTpl<Float> RolloffCustomCurve;
+		public AnimationCurveTpl<Float> PanLevelCustomCurve;
+		public AnimationCurveTpl<Float> SpreadCustomCurve;
+		public AnimationCurveTpl<Float> ReverbZoneMixCustomCurve;
 	}
 }

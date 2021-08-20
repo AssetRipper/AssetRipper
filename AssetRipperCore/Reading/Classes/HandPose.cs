@@ -5,7 +5,7 @@ namespace AssetRipper.Core.Reading.Classes
 {
 	public class HandPose
     {
-        public XForm m_GrabX = new();
+        public XForm m_GrabX;
 		public float[] m_DoFArray;
         public float m_Override;
         public float m_CloseOpen;

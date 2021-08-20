@@ -4,9 +4,8 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public class ControllerConstant : IAssetReadable
+	public struct ControllerConstant : IAssetReadable
 	{
-		public ControllerConstant() { }
 		public void Read(AssetReader reader)
 		{
 			LayerArray = reader.ReadAssetArray<OffsetPtr<LayerConstant>>();
@@ -60,7 +59,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		public OffsetPtr<LayerConstant>[] LayerArray { get; set; }
 		public OffsetPtr<StateMachineConstant>[] StateMachineArray { get; set; }
 
-		public OffsetPtr<ValueArrayConstant> Values = new();
-		public OffsetPtr<ValueArray> DefaultValues = new();
+		public OffsetPtr<ValueArrayConstant> Values;
+		public OffsetPtr<ValueArray> DefaultValues;
 	}
 }

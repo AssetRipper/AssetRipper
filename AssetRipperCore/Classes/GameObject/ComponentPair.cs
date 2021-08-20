@@ -8,9 +8,8 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.GameObject
 {
-	public class ComponentPair : IAsset, IDependent
+	public struct ComponentPair : IAsset, IDependent
 	{
-		public ComponentPair() { }
 		public void Read(AssetReader reader)
 		{
 			Component.Read(reader);
@@ -35,6 +34,6 @@ namespace AssetRipper.Core.Classes.GameObject
 			yield return context.FetchDependency(Component, layout.ComponentName);
 		}
 
-		public PPtr<Component> Component = new();
+		public PPtr<Component> Component;
 	}
 }

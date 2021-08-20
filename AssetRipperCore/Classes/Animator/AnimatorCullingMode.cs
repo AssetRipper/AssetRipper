@@ -8,7 +8,7 @@
 		/// <summary>
 		/// Always animate the entire character. Object is animated even when offscreen.
 		/// </summary>
-		AlwaysAnimate			= 0,
+		AlwaysAnimate				= 0,
 		/// <summary>
 		/// Retarget, IK and write of Transforms are disabled when renderers are not visible.
 		/// </summary>
@@ -17,6 +17,6 @@
 		/// <summary>
 		/// Animation is completely disabled when renderers are not visible.
 		/// </summary>
-		CullCompletely			= 2,
+		CullCompletely				= 2,
 	}
 }

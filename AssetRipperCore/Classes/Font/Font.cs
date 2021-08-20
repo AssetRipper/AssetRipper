@@ -416,7 +416,7 @@ namespace AssetRipper.Core.Classes.Font
 		public const string UseLegacyBoundsCalculationName = "m_UseLegacyBoundsCalculation";
 		public const string ShouldRoundAdvanceValueName = "m_ShouldRoundAdvanceValue";
 
-		public PPtr<Material.Material> DefaultMaterial = new();
-		public PPtr<Texture> Texture = new();
+		public PPtr<Material.Material> DefaultMaterial;
+		public PPtr<Texture> Texture;
 	}
 }

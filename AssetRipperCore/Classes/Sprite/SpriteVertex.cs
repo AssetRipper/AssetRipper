@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes.Sprite
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
-			// TODO:
+#warning TODO:
 			return 2;
 		}
 

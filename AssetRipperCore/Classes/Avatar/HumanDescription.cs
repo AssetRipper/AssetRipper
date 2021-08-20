@@ -7,9 +7,8 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public class HumanDescription : IAssetReadable, IYAMLExportable
+	public struct HumanDescription : IAssetReadable, IYAMLExportable
 	{
-		public HumanDescription() { }
 		public static int ToSerializedVersion(UnityVersion version)
 		{
 #warning TODO: To SerializedVersion

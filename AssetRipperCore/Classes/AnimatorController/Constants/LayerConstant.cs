@@ -12,9 +12,8 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 	/// <summary>
 	/// HumanLayerConstant in previous versions
 	/// </summary>
-	public class LayerConstant : IAssetReadable, IYAMLExportable
+	public struct LayerConstant : IAssetReadable, IYAMLExportable
 	{
-		public LayerConstant() { }
 		/// <summary>
 		/// 4.2.0 and greater
 		/// </summary>
@@ -53,12 +52,12 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		public int StateMachineIndex { get; set; }
 		public int StateMachineMotionSetIndex { get; set; }
 		public uint Binding { get; set; }
-		public AnimatorLayerBlendingMode LayerBlendingMode { get; set; } = new();
+		public AnimatorLayerBlendingMode LayerBlendingMode { get; set; }
 		public float DefaultWeight { get; set; }
 		public bool IKPass { get; set; }
 		public bool SyncedLayerAffectsTiming { get; set; }
 
-		public HumanPoseMask BodyMask = new();
-		public OffsetPtr<SkeletonMask> SkeletonMask = new();
+		public HumanPoseMask BodyMask;
+		public OffsetPtr<SkeletonMask> SkeletonMask;
 	}
 }

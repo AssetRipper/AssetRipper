@@ -41,7 +41,7 @@ namespace AssetRipper.Core.Classes
 		public const string AudioMixerName = "m_AudioMixer";
 		public const string SnapshotIDName = "m_SnapshotID";
 
-		public PPtr<AudioMixer.AudioMixer> AudioMixer = new();
-		public UnityGUID SnapshotID = new();
+		public PPtr<AudioMixer.AudioMixer> AudioMixer;
+		public UnityGUID SnapshotID;
 	}
 }

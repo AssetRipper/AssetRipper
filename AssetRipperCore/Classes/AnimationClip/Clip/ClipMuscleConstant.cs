@@ -167,14 +167,14 @@ namespace AssetRipper.Core.Classes.AnimationClip.Clip
 		public const string HeightFromFeetName = "m_HeightFromFeet";
 		public const string MirrorName = "m_Mirror";
 
-		public HumanPose DeltaPose = new();
-		public XForm StartX = new();
-		public XForm StopX = new();
-		public XForm LeftFootStartX = new();
-		public XForm RightFootStartX = new();
-		public XForm MotionStartX = new();
-		public XForm MotionStopX = new();
+		public HumanPose DeltaPose;
+		public XForm StartX;
+		public XForm StopX;
+		public XForm LeftFootStartX;
+		public XForm RightFootStartX;
+		public XForm MotionStartX;
+		public XForm MotionStopX;
 		public Vector4f AverageSpeed;
-		public Clip Clip = new Clip();
+		public Clip Clip;
 	}
 }

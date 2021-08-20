@@ -6,10 +6,8 @@ using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public class HumanPose : IAssetReadable
+	public struct HumanPose : IAssetReadable
 	{
-		public HumanPose() { }
-
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
@@ -53,10 +51,10 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public float[] DoFArray { get; set; }
 		public Vector4f[] TDoFArray { get; set; }
 
-		public XForm RootX = new();
+		public XForm RootX;
 		public Vector4f LookAtPosition;
 		public Vector4f LookAtWeight;
-		public HandPose LeftHandPose = new();
-		public HandPose RightHandPose = new();
+		public HandPose LeftHandPose;
+		public HandPose RightHandPose;
 	}
 }

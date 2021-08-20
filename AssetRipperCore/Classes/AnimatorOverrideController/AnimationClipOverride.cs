@@ -7,9 +7,8 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimatorOverrideController
 {
-	public class AnimationClipOverride : IAssetReadable, IYAMLExportable, IDependent
+	public struct AnimationClipOverride : IAssetReadable, IYAMLExportable, IDependent
 	{
-		public AnimationClipOverride() { }
 		public void Read(AssetReader reader)
 		{
 			OriginalClip.Read(reader);
@@ -33,7 +32,7 @@ namespace AssetRipper.Core.Classes.AnimatorOverrideController
 		public const string OriginalClipName = "m_OriginalClip";
 		public const string OverrideClipName = "m_OverrideClip";
 
-		public PPtr<AnimationClip.AnimationClip> OriginalClip = new();
-		public PPtr<AnimationClip.AnimationClip> OverrideClip = new();
+		public PPtr<AnimationClip.AnimationClip> OriginalClip;
+		public PPtr<AnimationClip.AnimationClip> OverrideClip;
 	}
 }

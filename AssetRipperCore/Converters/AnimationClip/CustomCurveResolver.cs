@@ -229,7 +229,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 				case BindingCustomType.ParticleSystem:
 					return "ParticleSystem_" + attribute;
 				/*{
-					// TODO: ordinal propertyName
+#warning TODO: ordinal propertyName
 				}
 				throw new ArgumentException($"Unknown attribute {attribute} for {_this}");*/
 
@@ -302,7 +302,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 							return ParametersWidthMultiplier;
 						}
 					}
-					// TODO: old versions animate all properties as custom curves
+#warning TODO: old versions animate all properties as custom curves
 					return "LineRenderer_" + attribute;
 
 #warning TODO:
@@ -314,7 +314,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 							return ParametersWidthMultiplier;
 						}
 					}
-					// TODO: old versions animate all properties as custom curves
+#warning TODO: old versions animate all properties as custom curves
 					return "TrailRenderer_" + attribute;
 
 #warning TODO:

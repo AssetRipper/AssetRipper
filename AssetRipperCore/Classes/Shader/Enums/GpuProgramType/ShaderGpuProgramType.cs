@@ -194,7 +194,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 							return GPUPlatform.xbox360;
 						case Platform.XboxOne:
 							return GPUPlatform.xboxone;
-						// TODO:
+#warning		 TODO:
 						//return GPUPlatform.xboxone_d3d12;
 
 						case Platform.WiiU:

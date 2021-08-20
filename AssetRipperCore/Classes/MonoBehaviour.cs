@@ -197,7 +197,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Whether this MonoBeh belongs to scene/prefab hierarchy or not
 		/// </summary>
-		// TODO: find out why GameObject may has value like PPtr(0, 894) but such game object doesn't exists
+#warning TODO: find out why GameObject may has value like PPtr(0, 894) but such game object doesn't exists
 		public bool IsSceneObject => !GameObject.IsNull;
 		public bool IsScriptableObject => Name.Length > 0;
 

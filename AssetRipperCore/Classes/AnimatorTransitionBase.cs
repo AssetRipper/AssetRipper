@@ -40,7 +40,7 @@ namespace AssetRipper.Core.Classes
 					else
 					{
 						SelectorStateConstant selectorState = StateMachine.SelectorStateConstantArray[stateIndex].Instance;
-						// HACK: take default Entry destination. TODO: child StateMachines
+#warning		HACK: take default Entry destination. TODO: child StateMachines
 						SelectorTransitionConstant selectorTransition = selectorState.TransitionConstantArray[selectorState.TransitionConstantArray.Length - 1].Instance;
 						return GetDestinationState(selectorTransition.Destination);
 					}
@@ -119,7 +119,7 @@ namespace AssetRipper.Core.Classes
 		public const string MuteName = "m_Mute";
 		public const string IsExitName = "m_IsExit";
 
-		public PPtr<AnimatorStateMachine.AnimatorStateMachine> DstStateMachine = new();
-		public PPtr<AnimatorState> DstState = new();
+		public PPtr<AnimatorStateMachine.AnimatorStateMachine> DstStateMachine;
+		public PPtr<AnimatorState> DstState;
 	}
 }

@@ -8,10 +8,8 @@ using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public class XForm : IAssetReadable, IYAMLExportable
+	public struct XForm : IAssetReadable, IYAMLExportable
 	{
-		public XForm() { }
-
 		public const string TName = "t";
 		public const string QName = "q";
 		public const string SName = "s";

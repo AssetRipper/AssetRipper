@@ -1,4 +1,5 @@
 using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Logging;
 using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.TextureDecoders.Astc;
 using AssetRipper.Library.TextureDecoders.Atc;
@@ -286,6 +287,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public static DirectBitmap TexgenpackTextureToBitmap(KTXBaseInternalFormat baseInternalFormat, TextureFormat textureFormat, int width, int height, byte[] data)
 		{
+			Logger.Info("Uses texgenpack!");
 			bool fixAlpha = baseInternalFormat is KTXBaseInternalFormat.RED or KTXBaseInternalFormat.RG;
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try

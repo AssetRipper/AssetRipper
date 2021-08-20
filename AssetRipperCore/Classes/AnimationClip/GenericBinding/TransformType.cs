@@ -5,8 +5,8 @@ namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
 	public enum TransformType
 	{
 		Translation		= 1,
-		Rotation		= 2,
-		Scaling			= 3,
+		Rotation			= 2,
+		Scaling				= 3,
 		EulerRotation	= 4,
 	}
 

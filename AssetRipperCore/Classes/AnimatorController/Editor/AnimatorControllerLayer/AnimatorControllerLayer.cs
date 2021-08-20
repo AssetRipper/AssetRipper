@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 
 		public static int ToSerializedVersion(UnityVersion version)
 		{
-			// TODO:
+#warning TODO:
 			return 5;
 		}
 
@@ -68,9 +68,9 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 		public bool IKPass { get; set; }
 		public bool SyncedLayerAffectsTiming { get; set; }
 
-		public PPtr<AnimatorStateMachine.AnimatorStateMachine> StateMachine = new();
-		public PPtr<AvatarMask.AvatarMask> Mask = new();
-		public PPtr<AnimatorController> Controller = new();
+		public PPtr<AnimatorStateMachine.AnimatorStateMachine> StateMachine;
+		public PPtr<AvatarMask.AvatarMask> Mask;
+		public PPtr<AnimatorController> Controller;
 
 		public const string NameName = "m_Name";
 		public const string StateMachineName = "m_StateMachine";

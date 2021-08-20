@@ -8,7 +8,7 @@ using AssetRipper.Core.IO;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public class SubMesh : IAsset
+	public struct SubMesh : IAsset
 	{
 		/// <summary>Offset in index buffer</summary>
 		public uint FirstByte { get; set; }
@@ -23,8 +23,6 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public uint IsTriStrip => (uint)Topology;
 
-		public SubMesh() { }
-
 		public SubMesh(ObjectReader reader)
 		{
 			var version = reader.version;
@@ -37,17 +35,25 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				TriangleCount = reader.ReadUInt32();
 			}
+			else TriangleCount = 0;
 
 			if (version[0] > 2017 || (version[0] == 2017 && version[1] >= 3)) //2017.3 and up
 			{
 				BaseVertex = reader.ReadUInt32();
 			}
+			else BaseVertex = 0;
 
 			if (version[0] >= 3) //3.0 and up
 			{
 				FirstVertex = reader.ReadUInt32();
 				VertexCount = reader.ReadUInt32();
 				LocalAABB = new AABB(reader);
+			}
+			else
+			{
+				FirstVertex = 0;
+				VertexCount = 0;
+				LocalAABB = default;
 			}
 		}
 

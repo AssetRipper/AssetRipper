@@ -7,7 +7,7 @@ using AssetRipper.Core.IO;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public class StreamInfo : IAsset
+	public struct StreamInfo : IAsset
 	{
 		public uint ChannelMask { get; set; }
 		public uint Offset { get; set; }
@@ -22,8 +22,6 @@ namespace AssetRipper.Core.Classes.Mesh
 		public const string AlignName = "align";
 		public const string DividerOpMaskName = "dividerOp";
 		public const string FrequencyMaskName = "frequency";
-
-		public StreamInfo() { }
 
 		public StreamInfo(uint mask, uint offset, uint stride)
 		{

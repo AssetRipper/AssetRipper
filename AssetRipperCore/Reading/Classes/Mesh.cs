@@ -618,9 +618,10 @@ namespace AssetRipper.Core.Reading.Classes
 
         private void GetTriangles()
         {
-            foreach (var m_SubMesh in m_SubMeshes)
+            for(int j = 0; j < m_SubMeshes.Length; j++)
             {
-                var firstIndex = m_SubMesh.FirstByte / 2;
+				var m_SubMesh = m_SubMeshes[j];
+				var firstIndex = m_SubMesh.FirstByte / 2;
                 if (!m_Use16BitIndices)
                 {
                     firstIndex /= 2;

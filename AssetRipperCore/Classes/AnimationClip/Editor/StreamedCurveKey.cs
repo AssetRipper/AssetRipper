@@ -7,10 +7,8 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Editor
 {
-	public class StreamedCurveKey : IAssetReadable
+	public struct StreamedCurveKey : IAssetReadable
 	{
-		public StreamedCurveKey() { }
-
 		public StreamedCurveKey(int index, float value, Vector3f coefs)
 		{
 			Index = index;

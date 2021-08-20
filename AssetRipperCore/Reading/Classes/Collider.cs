@@ -5,7 +5,7 @@ namespace AssetRipper.Core.Reading.Classes
 {
 	public class Collider
     {
-        public XForm m_X = new();
+        public XForm m_X;
 		public uint m_Type;
         public uint m_XMotionType;
         public uint m_YMotionType;

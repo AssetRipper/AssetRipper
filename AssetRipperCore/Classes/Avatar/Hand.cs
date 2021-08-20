@@ -5,9 +5,8 @@ using AssetRipper.Core.YAML.Extensions;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public class Hand : IAssetReadable, IYAMLExportable
+	public struct Hand : IAssetReadable, IYAMLExportable
 	{
-		public Hand() { }
 		public void Read(AssetReader reader)
 		{
 			HandBoneIndex = reader.ReadInt32Array();

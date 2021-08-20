@@ -5,7 +5,7 @@ namespace AssetRipper.Core.Reading.Classes
 {
 	public class Handle
     {
-        public XForm m_X = new();
+        public XForm m_X;
 		public uint m_ParentHumanIndex;
         public uint m_ID;
 

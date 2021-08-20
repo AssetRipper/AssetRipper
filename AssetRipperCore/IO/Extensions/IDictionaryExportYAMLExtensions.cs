@@ -35,7 +35,7 @@ namespace AssetRipper.Core.IO.Extensions
 		public static YAMLNode ExportYAML<T1, T2>(this IReadOnlyDictionary<Tuple<T1, long>, T2> _this, IExportContainer container) where T1 : IYAMLExportable
 			where T2 : IYAMLExportable
 		{
-			// TODO: test
+#warning TODO: test
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{

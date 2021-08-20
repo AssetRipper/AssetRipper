@@ -80,6 +80,6 @@ namespace AssetRipper.Core.Classes
 		public const string MovieDataName = "m_MovieData";
 		public const string ColorSpaceName = "m_ColorSpace";
 
-		public PPtr<AudioClip.AudioClip> AudioClip = new();
+		public PPtr<AudioClip.AudioClip> AudioClip;
 	}
 }

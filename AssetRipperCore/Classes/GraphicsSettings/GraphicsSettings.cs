@@ -863,16 +863,16 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		
 		public int VideoShadersIncludeMode { get; set; }
 
-		public BuiltinShaderSettings Deferred = new();
-		public BuiltinShaderSettings DeferredReflections = new();
-		public BuiltinShaderSettings ScreenSpaceShadows = new();
-		public BuiltinShaderSettings LegacyDeferred = new();
-		public BuiltinShaderSettings DepthNormals = new();
-		public BuiltinShaderSettings MotionVectors = new();
-		public BuiltinShaderSettings LightHalo = new();
-		public BuiltinShaderSettings LensFlare = new();
-		public PPtr<Material.Material> SpritesDefaultMaterial = new();
-		public PPtr<MonoBehaviour> CustomRenderPipeline = new();
+		public BuiltinShaderSettings Deferred;
+		public BuiltinShaderSettings DeferredReflections;
+		public BuiltinShaderSettings ScreenSpaceShadows;
+		public BuiltinShaderSettings LegacyDeferred;
+		public BuiltinShaderSettings DepthNormals;
+		public BuiltinShaderSettings MotionVectors;
+		public BuiltinShaderSettings LightHalo;
+		public BuiltinShaderSettings LensFlare;
+		public PPtr<Material.Material> SpritesDefaultMaterial;
+		public PPtr<MonoBehaviour> CustomRenderPipeline;
 		public Vector3f TransparencySortAxis;
 
 		public const string DeferredName = "m_Deferred";

@@ -33,7 +33,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 		public const string StateName = "m_State";
 		public const string MotionName = "m_Motion";
 
-		public PPtr<AnimatorState> State = new();
-		public PPtr<Motion> Motion = new();
+		public PPtr<AnimatorState> State;
+		public PPtr<Motion> Motion;
 	}
 }

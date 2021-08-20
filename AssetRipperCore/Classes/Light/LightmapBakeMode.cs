@@ -4,9 +4,8 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Light
 {
-	public class LightmapBakeMode : IAssetReadable, IYAMLExportable
+	public struct LightmapBakeMode : IAssetReadable, IYAMLExportable
 	{
-		public LightmapBakeMode() { }
 		public void Read(AssetReader reader)
 		{
 			LightmapBakeType = (LightmapBakeType)reader.ReadInt32();

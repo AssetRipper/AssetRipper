@@ -11,9 +11,8 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public class Human : IAssetReadable, IYAMLExportable
+	public struct Human : IAssetReadable, IYAMLExportable
 	{
-		public Human() { }
 		public static int ToSerializedVersion(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(5, 6, 0, UnityVersionType.Patch, 2))
@@ -195,10 +194,10 @@ namespace AssetRipper.Core.Classes.Avatar
 		public const string HasRightHandName = "m_HasRightHand";
 		public const string HasTDoFName = "m_HasTDoF";
 
-		public XForm RootX = new();
-		public OffsetPtr<Skeleton> Skeleton = new();
-		public OffsetPtr<SkeletonPose> SkeletonPose = new();
-		public OffsetPtr<Hand> LeftHand = new();
-		public OffsetPtr<Hand> RightHand = new();
+		public XForm RootX;
+		public OffsetPtr<Skeleton> Skeleton;
+		public OffsetPtr<SkeletonPose> SkeletonPose;
+		public OffsetPtr<Hand> LeftHand;
+		public OffsetPtr<Hand> RightHand;
 	}
 }
