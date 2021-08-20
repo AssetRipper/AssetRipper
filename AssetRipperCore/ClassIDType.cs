@@ -366,7 +366,7 @@ namespace AssetRipper.Core
 		AssemblyDefinitionReferenceAsset					= 662584278,
 		BuiltAssetBundleInfoSet								= 668709126,
 		SpriteAtlas											= 687078895,
-		LightingSettings                                    = 850595691,
+		LightingSettings									= 850595691,
 		PlatformModuleSetup									= 877146078,
 		AimConstraint										= 895512359,
 		VFXManager											= 937362698,

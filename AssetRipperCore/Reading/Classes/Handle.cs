@@ -4,16 +4,16 @@ using AssetRipper.Core.IO;
 namespace AssetRipper.Core.Reading.Classes
 {
 	public class Handle
-    {
-        public XForm m_X;
+	{
+		public XForm m_X;
 		public uint m_ParentHumanIndex;
-        public uint m_ID;
+		public uint m_ID;
 
-        public Handle(ObjectReader reader)
-        {
-            m_X = new XForm(reader);
-            m_ParentHumanIndex = reader.ReadUInt32();
-            m_ID = reader.ReadUInt32();
-        }
-    }
+		public Handle(ObjectReader reader)
+		{
+			m_X = new XForm(reader);
+			m_ParentHumanIndex = reader.ReadUInt32();
+			m_ID = reader.ReadUInt32();
+		}
+	}
 }

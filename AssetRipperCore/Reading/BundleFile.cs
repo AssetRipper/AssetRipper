@@ -123,7 +123,7 @@ namespace AssetRipper.Core.Reading
 			if (uncompressedSizeSum >= int.MaxValue)
 			{
 				/*var memoryMappedFile = MemoryMappedFile.CreateNew(null, uncompressedSizeSum);
-                assetsDataStream = memoryMappedFile.CreateViewStream();*/
+				assetsDataStream = memoryMappedFile.CreateViewStream();*/
 				blocksStream = new FileStream(path + ".temp", FileMode.Create, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose);
 			}
 			else
@@ -178,7 +178,7 @@ namespace AssetRipper.Core.Reading
 				if (node.size >= int.MaxValue)
 				{
 					/*var memoryMappedFile = MemoryMappedFile.CreateNew(null, entryinfo_size);
-                    file.stream = memoryMappedFile.CreateViewStream();*/
+					file.stream = memoryMappedFile.CreateViewStream();*/
 					var extractPath = path + "_unpacked" + Path.DirectorySeparatorChar;
 					Directory.CreateDirectory(extractPath);
 					file.stream = new FileStream(extractPath + file.fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);

@@ -297,7 +297,7 @@ namespace AssetRipper.Core.YAML
 					}
 					else if (c == '\n')
 					{
-						emitter.WriteRaw("\n    ");
+						emitter.WriteRaw("\n	");
 					}
 				}
 			}
