@@ -184,13 +184,11 @@ namespace AssetRipper.Core.Classes.QualitySettings
 				webPlayer.Name = "WebPlayer";
 			}
 
-#if UNIVERSAL
 			if (HasPerPlatformDefaultQuality(reader.Version, reader.Flags))
 			{
 				PerPlatformDefaultQuality = new Dictionary<string, int>();
 				PerPlatformDefaultQuality.Read(reader);
 			}
-#endif
 			if (HasStrippedMaximumLODLevel(reader.Version, reader.Flags))
 			{
 				StrippedMaximumLODLevel = reader.ReadInt32();
@@ -213,12 +211,10 @@ namespace AssetRipper.Core.Classes.QualitySettings
 			{
 				return PerPlatformDefaultQuality;
 			}
-#if UNIVERSAL
 			if (HasPerPlatformDefaultQuality(version, flags))
 			{
 				return PerPlatformDefaultQuality;
 			}
-#endif
 			Dictionary<string, int> quality = new Dictionary<string, int>();
 			SetDefaultPlatformQuality(quality);
 			return quality;

@@ -251,7 +251,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 				GISettings.Read(reader);
 			}
 
-#if UNIVERSAL
 			if (HasLightmapEditorSettings(reader.Version, reader.Flags))
 			{
 				LightmapEditorSettings.Read(reader);
@@ -260,7 +259,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			{
 				LightingDataAsset.Read(reader);
 			}
-#endif
 			if (HasRuntimeCPUUsage(reader.Version))
 			{
 				RuntimeCPUUsage = reader.ReadInt32();
@@ -338,7 +336,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 				GISettings.Write(writer);
 			}
 
-#if UNIVERSAL
 			if (HasLightmapEditorSettings(writer.Version, writer.Flags))
 			{
 				LightmapEditorSettings.Write(writer);
@@ -347,7 +344,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			{
 				LightingDataAsset.Write(writer);
 			}
-#endif
 			if (HasRuntimeCPUUsage(writer.Version))
 			{
 				writer.Write(RuntimeCPUUsage);
@@ -391,7 +387,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 					yield return asset;
 				}
 			}
-#if UNIVERSAL
 			if (HasLightmapEditorSettings(context.Version, context.Flags))
 			{
 				foreach (PPtr<Object.Object> asset in context.FetchDependencies(LightmapEditorSettings, LightmapEditorSettingsName))
@@ -403,7 +398,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			{
 				yield return context.FetchDependency(LightingDataAsset, LightingDataAssetName);
 			}
-#endif
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -451,7 +445,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 				node.Add(GISettingsName, GetExportGISettings(container.Version).ExportYAML(container));
 			}
 
-#if UNIVERSAL
 			if (HasLightmapEditorSettings(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(LightmapEditorSettingsName, GetExportLightmapEditorSettings(container).ExportYAML(container));
@@ -460,7 +453,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			{
 				node.Add(LightingDataAssetName, GetLightingDataAsset(container.Version, container.Flags).ExportYAML(container));
 			}
-#endif
 			if (HasRuntimeCPUUsage(container.ExportVersion))
 			{
 				node.Add(RuntimeCPUUsageName, RuntimeCPUUsage);
@@ -481,12 +473,10 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 
 		private GIWorkflowMode GetExportGIWorkflowMode(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
 			if (HasGIWorkflowMode(version, flags))
 			{
 				return GIWorkflowMode;
 			}
-#endif
 			return GIWorkflowMode.OnDemand;
 		}
 		private GISettings.GISettings GetExportGISettings(UnityVersion version)
@@ -495,22 +485,18 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		}
 		private LightmapEditorSettings GetExportLightmapEditorSettings(IExportContainer container)
 		{
-#if UNIVERSAL
 			if (HasLightmapEditorSettings(container.Version, container.Flags))
 			{
 				return LightmapEditorSettings;
 			}
-#endif
 			return new LightmapEditorSettings(container.ExportVersion);
 		}
 		private PPtr<LightingDataAsset.LightingDataAsset> GetLightingDataAsset(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
 			if (HasLightingDataAsset(version, flags))
 			{
 				return LightingDataAsset;
 			}
-#endif
 			return default;
 		}
 		private bool GetExportUseShadowmask(UnityVersion version)
@@ -536,16 +522,14 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		/// 2017.1 - replaced by UseShadowmask
 		/// </summary>
 		public int ShadowMaskMode { get; set; }
-#if UNIVERSAL
 		/// <summary>
-		/// 5.3.0 - renamed to LightingDataAsset
+		/// 5.3.0 - renamed to LightingDataAsset; Editor only
 		/// </summary>
 		public PPtr<LightingDataAsset.LightingDataAsset> LightmapSnapshot
 		{
 			get => LightingDataAsset;
 			set => LightingDataAsset = value;
 		}
-#endif
 
 		public const string EnlightenSceneMappingName = "m_EnlightenSceneMapping";
 		public const string LightProbesLegacyName = "m_LightProbesLegacy";
@@ -569,9 +553,9 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		public EnlightenSceneMapping EnlightenSceneMapping = new();
 		public PPtr<LightProbes.LightProbes> LightProbes = new();
 		public GISettings.GISettings GISettings = new();
-#if UNIVERSAL
+		/// <summary> Editor Only </summary>
 		public LightmapEditorSettings LightmapEditorSettings = new();
+		/// <summary> Editor Only </summary>
 		public PPtr<LightingDataAsset.LightingDataAsset> LightingDataAsset = new();
-#endif
 	}
 }

@@ -11,7 +11,6 @@ namespace AssetRipper.Core.Converters
 			EditorExtensionLayout layout = container.Layout.EditorExtension;
 			EditorExtensionLayout exlayout = container.ExportLayout.EditorExtension;
 			ObjectConverter.Convert(container, origin, instance);
-#if UNIVERSAL
 			if (exlayout.HasCorrespondingSourceObjectInvariant)
 			{
 				if (layout.HasCorrespondingSourceObjectInvariant)
@@ -32,7 +31,6 @@ namespace AssetRipper.Core.Converters
 			{
 				instance.PrefabAsset = origin.PrefabAsset;
 			}
-#endif
 		}
 	}
 }

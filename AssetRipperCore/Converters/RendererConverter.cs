@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Converters
 			instance.LightmapIndexDynamic = origin.LightmapIndexDynamic;
 			instance.Materials = origin.Materials;
 			instance.SubsetIndices = origin.SubsetIndices;
-#if UNIVERSAL
+
 			instance.ScaleInLightmap = origin.ScaleInLightmap;
 			instance.ReceiveGI = origin.ReceiveGI;
 			instance.PreserveUVs = origin.PreserveUVs;
@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Converters
 			instance.AutoUVMaxDistance = origin.AutoUVMaxDistance;
 			instance.AutoUVMaxAngle = origin.AutoUVMaxAngle;
 			instance.GIBackfaceCull = origin.GIBackfaceCull;
-#endif
+
 			instance.SortingLayerID = origin.SortingLayerID;
 			instance.SortingLayer = origin.SortingLayer;
 			instance.SortingOrder = origin.SortingOrder;
@@ -46,9 +46,8 @@ namespace AssetRipper.Core.Converters
 			instance.StaticBatchRoot = origin.StaticBatchRoot;
 			instance.ProbeAnchor = origin.ProbeAnchor;
 			instance.LightProbeVolumeOverride = origin.LightProbeVolumeOverride;
-#if UNIVERSAL
+
 			instance.LightmapParameters = origin.LightmapParameters;
-#endif
 		}
 	}
 }

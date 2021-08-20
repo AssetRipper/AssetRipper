@@ -8,11 +8,7 @@ namespace AssetRipper.Core.Parser.Utils
 	{
 		public static bool IsEngineResource(string fileName)
 		{
-#if UNIVERSAL
 			return IsDefaultResource(fileName) || IsEditorResource(fileName);
-#else
-			return IsDefaultResource(fileName);
-#endif
 		}
 
 		public static bool IsDefaultResource(string fileName)
@@ -20,12 +16,10 @@ namespace AssetRipper.Core.Parser.Utils
 			return fileName == DefaultResourceName1 || fileName == DefaultResourceName2;
 		}
 
-#if UNIVERSAL
 		public static bool IsEditorResource(string fileName)
 		{
 			return fileName == EditorResourceName;
 		}
-#endif
 
 		public static bool IsBuiltinExtra(string fileName)
 		{

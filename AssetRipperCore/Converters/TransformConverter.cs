@@ -1,10 +1,8 @@
 ﻿using AssetRipper.Core.Project;
 using AssetRipper.Core.Classes;
 using System.Linq;
-#if UNIVERSAL
 using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Math;
-#endif
 
 namespace AssetRipper.Core.Converters
 {
@@ -25,7 +23,7 @@ namespace AssetRipper.Core.Converters
 			instance.LocalScale = origin.LocalScale;
 			instance.Children = origin.Children.ToArray();
 			instance.Father = origin.Father;
-#if UNIVERSAL
+
 			TransformLayout exlayout = container.ExportLayout.Transform;
 			if (exlayout.HasRootOrder)
 			{
@@ -35,10 +33,8 @@ namespace AssetRipper.Core.Converters
 			{
 				instance.LocalEulerAnglesHint = GetLocalEulerAnglesHint(container, origin);
 			}
-#endif
 		}
 
-#if UNIVERSAL
 		private static int GetRootOrder(IExportContainer container, Transform origin)
 		{
 			if (container.Layout.Transform.HasRootOrder)
@@ -56,6 +52,5 @@ namespace AssetRipper.Core.Converters
 			}
 			return origin.LocalRotation.ToEuler();
 		}
-#endif
 	}
 }

@@ -130,9 +130,9 @@ namespace AssetRipper.Core.Converters.Mesh
 			{
 				instance.MeshMetrics = GetMeshMetrics(container, origin);
 			}
-#if UNIVERSAL
+
 			instance.MeshOptimizationFlags = origin.MeshOptimizationFlags;
-#endif
+
 			instance.StreamData = GetStreamData(container, origin);
 
 			if (AssetRipper.Core.Classes.Mesh.Mesh.HasLODData(container.ExportVersion))

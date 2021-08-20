@@ -268,7 +268,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			{
 				ClipBindingConstant.Read(reader);
 			}
-#if UNIVERSAL
 			if (HasAnimationClipSettings(reader.Version, reader.Flags))
 			{
 				AnimationClipSettings = new AnimationClipSettings();
@@ -279,7 +278,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				EditorCurves = reader.ReadAssetArray<FloatCurve>();
 				EulerEditorCurves = reader.ReadAssetArray<FloatCurve>();
 			}
-#endif
 
 			if (HasHasGenericRootTransform(reader.Version, reader.Flags))
 			{
@@ -289,7 +287,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			{
 				HasMotionFloatCurves = reader.ReadBoolean();
 			}
-#if UNIVERSAL
 			if (HasGenerateMotionCurves(reader.Version, reader.Flags))
 			{
 				GenerateMotionCurves = reader.ReadBoolean();
@@ -298,7 +295,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			{
 				IsEmpty = reader.ReadBoolean();
 			}
-#endif
 			if (HasHasGenericRootTransform(reader.Version, reader.Flags))
 			{
 				reader.AlignStream();
@@ -313,12 +309,10 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				reader.AlignStream();
 			}
 
-#if UNIVERSAL
 			if (HasRuntimeEvents(reader.Version, reader.Flags))
 			{
 				RunetimeEvents = reader.ReadAssetArray<AnimationEvent>();
 			}
-#endif
 		}
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
@@ -360,7 +354,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 					yield return asset;
 				}
 			}
-#if UNIVERSAL
 			if (HasAnimationClipSettings(context.Version, context.Flags))
 			{
 				foreach (PPtr<Object.Object> asset in context.FetchDependencies(AnimationClipSettings, AnimationClipSettingsName))
@@ -379,7 +372,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 					yield return asset;
 				}
 			}
-#endif
 			if (HasEvents(context.Version))
 			{
 				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Events, EventsName))
@@ -661,42 +653,34 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		}
 		private AnimationClipSettings GetAnimationClipSettings(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
 			if (HasAnimationClipSettings(version, flags))
 			{
 				return AnimationClipSettings;
 			}
-#endif
 			return HasMuscleClip(version, flags) ? new AnimationClipSettings(MuscleClip) : new AnimationClipSettings(true);
 		}
 		private IReadOnlyList<FloatCurve> GetEditorCurves(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
 			if (HasEditorCurves(version, flags))
 			{
 				return EditorCurves;
 			}
-#endif
 			return Array.Empty<FloatCurve>();
 		}
 		private IReadOnlyList<FloatCurve> GetEulerEditorCurves(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
 			if (HasEditorCurves(version, flags))
 			{
 				return EulerEditorCurves;
 			}
-#endif
 			return Array.Empty<FloatCurve>();
 		}
 		private bool GetGenerateMotionCurves(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
 			if (HasGenerateMotionCurves(version, flags))
 			{
 				return GenerateMotionCurves;
 			}
-#endif
 			return false;
 		}
 		private IReadOnlyList<AnimationEvent> GetEvents(UnityVersion version)
@@ -723,21 +707,33 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public WrapMode WrapMode { get; set; }
 		public uint MuscleClipSize { get; set; }
 		public ClipMuscleConstant MuscleClip { get; set; }
-#if UNIVERSAL
+		/// <summary>
+		/// Editor Only
+		/// </summary>
 		public AnimationClipSettings AnimationClipSettings { get; set; }
+		/// <summary>
+		/// Editor Only
+		/// </summary>
 		public FloatCurve[] EditorCurves { get; set; }
+		/// <summary>
+		/// Editor Only
+		/// </summary>
 		public FloatCurve[] EulerEditorCurves { get; set; }
-#endif
 		public bool HasGenericRootTransform { get; set; }
 		public bool HasMotionFloatCurves { get; set; }
-#if UNIVERSAL
+		/// <summary>
+		/// Editor Only
+		/// </summary>
 		public bool GenerateMotionCurves { get; set; }
+		/// <summary>
+		/// Editor Only
+		/// </summary>
 		public bool IsEmpty { get; set; }
-#endif
 		public AnimationEvent[] Events { get; set; }
-#if UNIVERSAL
+		/// <summary>
+		/// Editor Only
+		/// </summary>
 		public AnimationEvent[] RunetimeEvents { get; set; }
-#endif
 
 		public const string ClassIDToTrackName = "m_ClassIDToTrack";
 		public const string ChildTracksName = "m_ChildTracks";

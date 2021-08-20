@@ -236,7 +236,6 @@ namespace AssetRipper.Core.Classes.AudioClip
 				}
 				reader.AlignStream();
 
-#if UNIVERSAL
 				if (HasEditorResource(reader.Flags))
 				{
 					EditorResource.Read(reader);
@@ -245,7 +244,6 @@ namespace AssetRipper.Core.Classes.AudioClip
 						EditorCompressionFormat = (AudioCompressionFormat)reader.ReadInt32();
 					}
 				}
-#endif
 			}
 			else
 			{
@@ -459,9 +457,10 @@ namespace AssetRipper.Core.Classes.AudioClip
 		public bool PreloadAudioData { get; set; }
 		public bool LoadInBackground { get; set; }
 		public AudioCompressionFormat CompressionFormat { get; set; }
-#if UNIVERSAL
+		/// <summary>
+		/// Editor Only
+		/// </summary>
 		public AudioCompressionFormat EditorCompressionFormat { get; set; }
-#endif
 
 		public bool DecompressOnLoad { get; set; }
 		public FMODSoundFormat Format { get; set; }
@@ -500,9 +499,10 @@ namespace AssetRipper.Core.Classes.AudioClip
 		public const string EditorCompressionFormatName = "m_EditorCompressionFormat";
 
 		public StreamedResource FSBResource;
-#if UNIVERSAL
+		/// <summary>
+		/// Editor Only
+		/// </summary>
 		public StreamedResource EditorResource;
-#endif
 		public StreamingInfo StreamingInfo;
 	}
 }

@@ -159,7 +159,6 @@ namespace AssetRipper.Core.Classes.Shader
 				reader.AlignStream();
 			}
 
-#if UNIVERSAL
 			if (HasErrors(reader.Version, reader.Flags))
 			{
 				Errors = reader.ReadAssetArray<ShaderError>();
@@ -173,7 +172,6 @@ namespace AssetRipper.Core.Classes.Shader
 			{
 				CompileInfo.Read(reader);
 			}
-#endif
 		}
 
 		public override void ExportBinary(IExportContainer container, Stream stream)
@@ -311,10 +309,12 @@ namespace AssetRipper.Core.Classes.Shader
 		public PPtr<Shader>[] Dependencies { get; set; }
 		public Dictionary<string, PPtr<Texture>> NonModifiableTextures { get; set; }
 		public bool ShaderIsBaked { get; set; }
-#if UNIVERSAL
+
+		/// <summary> Editor Only </summary>
 		public ShaderError[] Errors { get; set; }
+		/// <summary> Editor Only </summary>
 		public Dictionary<string, PPtr<Texture>> DefaultTextures { get; set; }
-#endif
+
 
 		public const string ErrorsName = "errors";
 		public const string DependenciesName = "m_Dependencies";
@@ -323,8 +323,7 @@ namespace AssetRipper.Core.Classes.Shader
 		public PPtr<Shader> Fallback;
 		public UnityPropertySheet DefaultProperties;
 		public UnityPropertySheet StaticProperties;
-#if UNIVERSAL
+		/// <summary> Editor Only </summary>
 		public ShaderCompilationInfo CompileInfo;
-#endif
 	}
 }

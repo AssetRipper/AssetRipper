@@ -36,7 +36,6 @@ namespace AssetRipper.Core.Converters.GameObject
 			{
 				instance.TagString = GetTagString(container, origin);
 			}
-#if UNIVERSAL
 			if (layout.HasIcon)
 			{
 				instance.Icon = origin.Icon;
@@ -50,7 +49,6 @@ namespace AssetRipper.Core.Converters.GameObject
 			{
 				instance.IsStatic = origin.IsStatic;
 			}
-#endif
 			return instance;
 		}
 

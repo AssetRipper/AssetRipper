@@ -430,7 +430,6 @@ namespace AssetRipper.Core.Classes.Mesh
 				MeshMetrics[0] = reader.ReadSingle();
 				MeshMetrics[1] = reader.ReadSingle();
 			}
-#if UNIVERSAL
 			if (HasMeshOptimization(reader.Version, reader.Flags))
 			{
 				if (IsMeshOptimizationFlags(reader.Version))
@@ -442,7 +441,6 @@ namespace AssetRipper.Core.Classes.Mesh
 					MeshOptimized = reader.ReadBoolean();
 				}
 			}
-#endif
 			if (HasStreamData(reader.Version))
 			{
 				reader.AlignStream();
@@ -646,7 +644,6 @@ namespace AssetRipper.Core.Classes.Mesh
 				writer.Write(MeshMetrics[0]);
 				writer.Write(MeshMetrics[1]);
 			}
-#if UNIVERSAL
 			if (HasMeshOptimization(writer.Version, writer.Flags))
 			{
 				if (IsMeshOptimizationFlags(writer.Version))
@@ -658,7 +655,6 @@ namespace AssetRipper.Core.Classes.Mesh
 					writer.Write(MeshOptimized);
 				}
 			}
-#endif
 			if (HasStreamData(writer.Version))
 			{
 				writer.AlignStream();
@@ -989,17 +985,12 @@ namespace AssetRipper.Core.Classes.Mesh
 		public int MeshUsageFlags { get; set; }
 		public float[] MeshMetrics { get; set; }
 
-#if UNIVERSAL
 		public bool MeshOptimized
 		{
 			get => MeshOptimizationFlags == MeshOptimizationFlags.Everything;
 			set => MeshOptimizationFlags = value ? MeshOptimizationFlags.Everything : MeshOptimizationFlags.PolygonOrder;
 		}
-		public MeshOptimizationFlags MeshOptimizationFlags { get; set; }
-#else
-		public bool MeshOptimized => true;
-		public MeshOptimizationFlags MeshOptimizationFlags => MeshOptimizationFlags.Everything;
-#endif
+		public MeshOptimizationFlags MeshOptimizationFlags { get; set; } = MeshOptimizationFlags.Everything;
 
 		public const string LODDataName = "m_LODData";
 		public const string Use16BitIndicesName = "m_Use16BitIndices";

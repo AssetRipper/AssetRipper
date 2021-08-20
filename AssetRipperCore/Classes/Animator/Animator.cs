@@ -92,12 +92,10 @@ namespace AssetRipper.Core.Classes.Animator
 				reader.AlignStream();
 			}
 
-#if UNIVERSAL
 			if (HasWarningMessage(reader.Version, reader.Flags))
 			{
 				WarningMessage = reader.ReadString();
 			}
-#endif
 
 			if (HasHasTransformHierarchy(reader.Version))
 			{
@@ -174,12 +172,10 @@ namespace AssetRipper.Core.Classes.Animator
 
 		private string GetWarningMessage(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
 			if (HasWarningMessage(version, flags))
 			{
 				return WarningMessage;
 			}
-#endif
 			return string.Empty;
 		}
 
@@ -188,9 +184,10 @@ namespace AssetRipper.Core.Classes.Animator
 		public bool ApplyRootMotion { get; set; }
 		public bool AnimatePhisics { get; set; }
 		public bool LinearVelocityBlending { get; set; }
-#if UNIVERSAL
+		/// <summary>
+		/// Editor Only
+		/// </summary>
 		public string WarningMessage { get; set; }
-#endif
 		public bool HasTransformHierarchy { get; set; }
 		public bool AllowConstantClipSamplingOptimization { get; set; }
 		public bool KeepAnimatorControllerStateOnDisable { get; set; }

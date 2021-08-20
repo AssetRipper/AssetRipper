@@ -29,9 +29,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		{
 			List<string> toProcess = Preprocessor.Process(paths);
 			if (toProcess.Count == 0)
-			{
 				throw new ArgumentException("Game files not found", nameof(paths));
-			}
 
 			GameStructure structure = new GameStructure();//an empty constructor
 			structure.Load(toProcess, configuration, layinfo);
@@ -51,13 +49,9 @@ namespace AssetRipper.Core.Structure.GameStructure
 				//This block adds all the files to the processor
 				//It determines each of their file types, but still no extraction
 				if (PlatformStructure != null)
-				{
 					ProcessPlatformStructure(processor, PlatformStructure);
-				}
 				if (MixedStructure != null)
-				{
 					ProcessPlatformStructure(processor, MixedStructure);
-				}
 				processor.AddDependencySchemes(RequestDependency);
 
 				if (!processor.IsValid)
@@ -106,20 +100,13 @@ namespace AssetRipper.Core.Structure.GameStructure
 			if (PlatformStructure != null)
 			{
 				string path = PlatformStructure.RequestDependency(dependency);
-				if (path != null)
-				{
-					return path;
-				}
+				if (path != null) return path;
 			}
 			if (MixedStructure != null)
 			{
 				string path = MixedStructure.RequestDependency(dependency);
-				if (path != null)
-				{
-					return path;
-				}
+				if (path != null) return path;
 			}
-
 			return null;
 		}
 
@@ -128,20 +115,13 @@ namespace AssetRipper.Core.Structure.GameStructure
 			if (PlatformStructure != null)
 			{
 				string assemblyPath = PlatformStructure.RequestAssembly(assembly);
-				if (assemblyPath != null)
-				{
-					return assemblyPath;
-				}
+				if (assemblyPath != null) return assemblyPath;
 			}
 			if (MixedStructure != null)
 			{
 				string assemblyPath = MixedStructure.RequestAssembly(assembly);
-				if (assemblyPath != null)
-				{
-					return assemblyPath;
-				}
+				if (assemblyPath != null) return assemblyPath;
 			}
-
 			return null;
 		}
 
@@ -150,20 +130,13 @@ namespace AssetRipper.Core.Structure.GameStructure
 			if (PlatformStructure != null)
 			{
 				string path = PlatformStructure.RequestResource(resource);
-				if (path != null)
-				{
-					return path;
-				}
+				if (path != null) return path;
 			}
 			if (MixedStructure != null)
 			{
 				string path = MixedStructure.RequestResource(resource);
-				if (path != null)
-				{
-					return path;
-				}
+				if (path != null) return path;
 			}
-
 			return null;
 		}
 
@@ -186,18 +159,12 @@ namespace AssetRipper.Core.Structure.GameStructure
 			if (PlatformStructure != null)
 			{
 				ScriptingBackend backend = PlatformStructure.Backend;
-				if (backend != ScriptingBackend.Unknown)
-				{
-					return backend;
-				}
+				if (backend != ScriptingBackend.Unknown) return backend;
 			}
 			if (MixedStructure != null)
 			{
 				ScriptingBackend backend = MixedStructure.Backend;
-				if (backend != ScriptingBackend.Unknown)
-				{
-					return backend;
-				}
+				if (backend != ScriptingBackend.Unknown) return backend;
 			}
 			return ScriptingBackend.Unknown;
 		}
@@ -222,16 +189,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
-
-		private void Dispose(bool _)
-		{
-			FileCollection?.Dispose();
-		}
-
-		~GameStructure()
-		{
-			Dispose(false);
-		}
-
+		private void Dispose(bool _) => FileCollection?.Dispose();
+		~GameStructure() => Dispose(false);
 	}
 }

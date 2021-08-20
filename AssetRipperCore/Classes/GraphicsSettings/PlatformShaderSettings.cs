@@ -20,7 +20,6 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			UseScreenSpaceShadows = reader.ReadBoolean();
 			reader.AlignStream();
 
-#if UNIVERSAL
 			if (HasStandardShaderQuality(reader.Version, reader.Flags))
 			{
 				StandardShaderQuality = (ShaderQuality)reader.ReadInt32();
@@ -28,7 +27,6 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				UseReflectionProbeBlending = reader.ReadBoolean();
 				reader.AlignStream();
 			}
-#endif
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -43,41 +41,36 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 
 		public ShaderQuality GetStandardShaderQuality(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
 			if (HasStandardShaderQuality(version, flags))
 			{
 				return StandardShaderQuality;
 			}
-#endif
 			return ShaderQuality.High;
 		}
 		public bool GetUseReflectionProbeBoxProjection(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
 			if (HasStandardShaderQuality(version, flags))
 			{
 				return UseReflectionProbeBoxProjection;
 			}
-#endif
 			return true;
 		}
 		public bool GetUseReflectionProbeBlending(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
 			if (HasStandardShaderQuality(version, flags))
 			{
 				return UseReflectionProbeBlending;
 			}
-#endif
 			return true;
 		}
 
 		public bool UseScreenSpaceShadows { get; set; }
-#if UNIVERSAL
+		/// <summary> Editor Only </summary>
 		public ShaderQuality StandardShaderQuality { get; set; }
+		/// <summary> Editor Only </summary>
 		public bool UseReflectionProbeBoxProjection { get; set; }
+		/// <summary> Editor Only </summary>
 		public bool UseReflectionProbeBlending { get; set; }
-#endif
 
 		public const string UseScreenSpaceShadowsName = "useScreenSpaceShadows";
 		public const string StandardShaderQualityName = "standardShaderQuality";
