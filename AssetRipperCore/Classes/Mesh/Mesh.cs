@@ -10,6 +10,8 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using AssetRipper.Core.Math;
+using System.Collections.Generic;
+using AssetRipper.Core.Logging;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
@@ -336,7 +338,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (HasVertexData(reader.Version))
 			{
-				if (!IsOnlyVertexData(reader.Version))
+				if (!IsOnlyVertexData(reader.Version)) //3.5.0 only
 				{
 					if (MeshCompression != MeshCompression.Off)
 					{
@@ -344,27 +346,23 @@ namespace AssetRipper.Core.Classes.Mesh
 					}
 				}
 			}
-			else
+			else //lower than 3.5.0
 			{
 				Vertices = reader.ReadAssetArray<Vector3f>();
 			}
 
 			if (HasSkin(reader.Version))
-			{
 				Skin = reader.ReadAssetArray<BoneWeights4>();
-			}
 			if (HasBindPose(reader.Version) && !IsBindPoseFirst(reader.Version))
-			{
 				BindPose = reader.ReadAssetArray<Matrix4x4f>();
-			}
 
 			if (HasVertexData(reader.Version))
 			{
-				if (IsOnlyVertexData(reader.Version))
+				if (IsOnlyVertexData(reader.Version)) //3.5.1 and greater
 				{
 					VertexData.Read(reader);
 				}
-				else
+				else //3.5.0
 				{
 					if (MeshCompression == MeshCompression.Off)
 					{
@@ -380,7 +378,7 @@ namespace AssetRipper.Core.Classes.Mesh
 					}
 				}
 			}
-			else
+			else //less than 3.5.0
 			{
 				UV = reader.ReadAssetArray<Vector2f>();
 				if (HasUV1(reader.Version))
@@ -873,6 +871,78 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				return VertexData.Data;
 			}
+		}
+
+		public uint[] GetTriangles(int submeshNumber)
+		{
+			List<uint> m_Indices = new List<uint>();
+			var m_SubMesh = this.SubMeshes[submeshNumber];
+			var firstIndex = m_SubMesh.FirstByte / 2;
+			if (IndexFormat == IndexFormat.UInt16)
+			{
+				firstIndex /= 2;
+			}
+			var indexCount = m_SubMesh.IndexCount;
+			var topology = m_SubMesh.Topology;
+			if (topology == MeshTopology.Triangles)
+			{
+				for (int i = 0; i < indexCount; i += 3)
+				{
+					m_Indices.Add(IndexBuffer[firstIndex + i]);
+					m_Indices.Add(IndexBuffer[firstIndex + i + 1]);
+					m_Indices.Add(IndexBuffer[firstIndex + i + 2]);
+				}
+			}
+			else if (BundleUnityVersion.IsLess(4) || topology == MeshTopology.TriangleStrip)
+			{
+				// de-stripify :
+				uint triIndex = 0;
+				for (int i = 0; i < indexCount - 2; i++)
+				{
+					var a = IndexBuffer[firstIndex + i];
+					var b = IndexBuffer[firstIndex + i + 1];
+					var c = IndexBuffer[firstIndex + i + 2];
+
+					// skip degenerates
+					if (a == b || a == c || b == c)
+						continue;
+
+					// do the winding flip-flop of strips :
+					if ((i & 1) == 1)
+					{
+						m_Indices.Add(b);
+						m_Indices.Add(a);
+					}
+					else
+					{
+						m_Indices.Add(a);
+						m_Indices.Add(b);
+					}
+					m_Indices.Add(c);
+					triIndex += 3;
+				}
+				//fix indexCount
+				m_SubMesh.IndexCount = triIndex;
+			}
+			else if (topology == MeshTopology.Quads)
+			{
+				for (int q = 0; q < indexCount; q += 4)
+				{
+					m_Indices.Add(IndexBuffer[firstIndex + q]);
+					m_Indices.Add(IndexBuffer[firstIndex + q + 1]);
+					m_Indices.Add(IndexBuffer[firstIndex + q + 2]);
+					m_Indices.Add(IndexBuffer[firstIndex + q]);
+					m_Indices.Add(IndexBuffer[firstIndex + q + 2]);
+					m_Indices.Add(IndexBuffer[firstIndex + q + 3]);
+				}
+				//fix indexCount
+				m_SubMesh.IndexCount = indexCount / 2 * 3;
+			}
+			else
+			{
+				Logger.Error(LogCategory.General, "Failed getting triangles. Submesh topology is lines or points.");
+			}
+			return m_Indices.ToArray();
 		}
 
 		public LOD[] LODData { get; set; }
