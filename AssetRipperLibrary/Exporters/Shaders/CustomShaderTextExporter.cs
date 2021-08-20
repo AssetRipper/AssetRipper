@@ -7,7 +7,6 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Utils;
 using System;
 using System.IO;
-using System.Runtime.Versioning;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {

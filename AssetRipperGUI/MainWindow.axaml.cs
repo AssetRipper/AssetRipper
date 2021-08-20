@@ -4,11 +4,10 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
-using System.Diagnostics;
 
 namespace AssetRipper.GUI
 {
-    public partial class MainWindow : Window
+	public partial class MainWindow : Window
     {
 	    public static MainWindow Instance;
 	    public TextBox LogText;

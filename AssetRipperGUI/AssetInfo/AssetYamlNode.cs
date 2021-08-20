@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.YAML;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AssetRipper.GUI.AssetInfo
 {

@@ -1,8 +1,4 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes.Object;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout;
-using AssetRipper.Core.Parser.Files;
+﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Project;
@@ -10,7 +6,6 @@ using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Library;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace AssetRipper.GUI
 {

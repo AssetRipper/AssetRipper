@@ -1,6 +1,5 @@
 using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library;
 using CommandLine;
