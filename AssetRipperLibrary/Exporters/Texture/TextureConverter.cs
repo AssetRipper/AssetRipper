@@ -288,11 +288,14 @@ namespace AssetRipper.Library.Exporters.Textures
 		public static DirectBitmap TexgenpackTextureToBitmap(KTXBaseInternalFormat baseInternalFormat, TextureFormat textureFormat, int width, int height, byte[] data)
 		{
 			Logger.Info("Uses texgenpack!");
+			Logger.Info($"KTXBaseInternalFormat: {baseInternalFormat}");
 			bool fixAlpha = baseInternalFormat is KTXBaseInternalFormat.RED or KTXBaseInternalFormat.RG;
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
 				texgenpackdecode((int)ToTexgenpackTexturetype(textureFormat), data, width, height, bitmap.BitsPtr, fixAlpha);
+				Logger.Info($"Byte array length: {bitmap.Bits.Length} Width: {width} Height: {height}");
+				CheckEqual(DecodeBC(data, textureFormat, width, height), bitmap.Bits);
 				bitmap.FlipY();
 				return bitmap;
 			}
@@ -301,6 +304,58 @@ namespace AssetRipper.Library.Exporters.Textures
 				bitmap.Dispose();
 				throw;
 			}
+		}
+
+		private static byte[] DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height)
+		{
+			Logger.Info($"Performing alternate decoding for {textureFormat}");
+			byte[] result = new byte[4 * width * height];
+			switch (textureFormat)
+			{
+				case TextureFormat.BC4:
+					Texture2DDecoder.TextureDecoder.DecodeBC4(inputData, width, height, result);
+					break;
+				case TextureFormat.BC5:
+					Texture2DDecoder.TextureDecoder.DecodeBC5(inputData, width, height, result);
+					break;
+				case TextureFormat.BC6H:
+					Texture2DDecoder.TextureDecoder.DecodeBC6(inputData, width, height, result);
+					break;
+				case TextureFormat.BC7:
+					Texture2DDecoder.TextureDecoder.DecodeBC7(inputData, width, height, result);
+					break;
+			}
+			return result;
+		}
+
+		private static void CheckEqual(byte[] left, byte[] right)
+		{
+			if(left == null)
+			{
+				Logger.Info("In byte array comparison, left was null");
+				return;
+			}
+			if(right == null)
+			{
+				Logger.Info("In byte array comparison, left was null");
+				return;
+			}
+			if(left.Length != right.Length)
+			{
+				Logger.Info("In byte array comparison, lengths were inequal");
+				Logger.Info($"Left: {left.Length}");
+				Logger.Info($"Right: {right.Length}");
+				return;
+			}
+			for(int i = 0; i < left.Length; i++)
+			{
+				if (left[i] != right[i])
+				{
+					Logger.Info($"In byte array comparison, values were inequal at index {i}");
+					return;
+				}
+			}
+			Logger.Info("Byte arrays were equal at all indices!");
 		}
 
 		public unsafe static void UnpackNormal(IntPtr inputOutput, int length)
