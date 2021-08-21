@@ -11,6 +11,7 @@
 		Switch,
 		WebGL,
 		WebPlayer,
+		WiiU,
 
 		Mixed,
 		Unknown,
