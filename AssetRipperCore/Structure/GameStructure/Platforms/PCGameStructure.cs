@@ -15,13 +15,18 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			if (IsExecutableFile(rootPath))
 			{
 				m_root = (new FileInfo(rootPath)).Directory;
-				rootPath = m_root.FullName;
+			}
+			else if (IsUnityDataDirectory(rootPath))
+			{
+				m_root = (new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath))).Parent;
 			}
 			else
-				m_root = new DirectoryInfo(rootPath);
-			if (!m_root.Exists)
 			{
-				throw new Exception($"Directory '{rootPath}' doesn't exist");
+				m_root = new DirectoryInfo(rootPath);
+				if (!m_root.Exists)
+				{
+					throw new Exception($"Directory '{rootPath}' doesn't exist");
+				}
 			}
 
 			if (!GetDataPCDirectory(m_root, out string dataPath, out string name))
@@ -30,7 +35,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 
 			Name = name;
-			RootPath = rootPath;
+			RootPath = m_root.FullName;
 			GameDataPath = dataPath;
 			StreamingAssetsPath = Path.Combine(GameDataPath, StreamingName);
 			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
@@ -62,13 +67,38 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			DirectoryInfo dinfo;
 			if (IsExecutableFile(path))
 				dinfo = (new FileInfo(path)).Directory;
+			else if (IsUnityDataDirectory(path))
+				return true;
 			else
 				dinfo = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+			
 			if (!dinfo.Exists)
-			{
 				return false;
-			}
-			return IsRootPCDirectory(dinfo);
+			else
+				return IsRootPCDirectory(dinfo);
+		}
+
+		private static bool IsUnityDataDirectory(string folderPath)
+		{
+			if (string.IsNullOrEmpty(folderPath) || !folderPath.EndsWith($"_{DataFolderName}"))
+				return false;
+
+			DirectoryInfo directoryInfo = new DirectoryInfo(folderPath);
+			if (!directoryInfo.Exists || directoryInfo.Parent == null)
+				return false;
+
+			string folderName = directoryInfo.Name;
+			string gameName = folderName.Substring(0, folderName.IndexOf($"_{DataFolderName}"));
+			string rootPath = directoryInfo.Parent.FullName;
+			if (File.Exists(Path.Combine(rootPath, gameName + ExeExtension)))
+				return true;
+			else
+				return false;
+		}
+
+		private static bool IsExecutableFile(string filePath)
+		{
+			return !string.IsNullOrEmpty(filePath) && filePath.EndsWith(ExeExtension) && File.Exists(filePath);
 		}
 
 		private static bool IsRootPCDirectory(DirectoryInfo rootDiectory)
@@ -108,11 +138,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			name = null;
 			dataPath = null;
 			return false;
-		}
-
-		private static bool IsExecutableFile(string filePath)
-		{
-			return !string.IsNullOrEmpty(filePath) && filePath.EndsWith(ExeExtension) && File.Exists(filePath);
 		}
 
 		public override PlatformType Platform => PlatformType.PC;

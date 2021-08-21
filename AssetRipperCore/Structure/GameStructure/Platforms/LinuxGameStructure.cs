@@ -15,13 +15,18 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			if (IsExecutableFile(rootPath))
 			{
 				m_root = (new FileInfo(rootPath)).Directory;
-				rootPath = m_root.FullName;
+			}
+			else if (IsUnityDataDirectory(rootPath))
+			{
+				m_root = (new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath))).Parent;
 			}
 			else
-				m_root = new DirectoryInfo(rootPath);
-			if (!m_root.Exists)
 			{
-				throw new Exception($"Directory '{rootPath}' doesn't exist");
+				m_root = new DirectoryInfo(rootPath);
+				if (!m_root.Exists)
+				{
+					throw new Exception($"Directory '{rootPath}' doesn't exist");
+				}
 			}
 
 			if (!GetDataLinuxDirectory(m_root, out string dataPath, out string name))
@@ -30,7 +35,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 
 			Name = name;
-			RootPath = DirectoryUtils.ToLongPath(rootPath);
+			RootPath = m_root.FullName;
 			GameDataPath = dataPath;
 			StreamingAssetsPath = Path.Combine(GameDataPath, StreamingName);
 			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
@@ -62,13 +67,43 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			DirectoryInfo dinfo;
 			if (IsExecutableFile(path))
 				dinfo = (new FileInfo(path)).Directory;
+			else if (IsUnityDataDirectory(path))
+				return true;
 			else
 				dinfo = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+
 			if (!dinfo.Exists)
-			{
 				return false;
-			}
-			return IsRootLinuxDirectory(dinfo);
+			else
+				return IsRootLinuxDirectory(dinfo);
+		}
+
+		private static bool IsUnityDataDirectory(string folderPath)
+		{
+			if (string.IsNullOrEmpty(folderPath) || !folderPath.EndsWith($"_{DataFolderName}"))
+				return false;
+
+			DirectoryInfo directoryInfo = new DirectoryInfo(folderPath);
+			if (!directoryInfo.Exists || directoryInfo.Parent == null)
+				return false;
+
+			string folderName = directoryInfo.Name;
+			string gameName = folderName.Substring(0, folderName.IndexOf($"_{DataFolderName}"));
+			string rootPath = directoryInfo.Parent.FullName;
+			string x86Path = Path.Combine(rootPath, gameName + x86Extension);
+			string x64Path = Path.Combine(rootPath, gameName + x64Extension);
+			string x86_64Path = Path.Combine(rootPath, gameName + x86_64Extension);
+			if (File.Exists(x86Path) || File.Exists(x64Path) || File.Exists(x86_64Path))
+				return true;
+			else
+				return false;
+		}
+
+		private static bool IsExecutableFile(string filePath)
+		{
+			return !string.IsNullOrEmpty(filePath)
+				&& (filePath.EndsWith(x86Extension) || filePath.EndsWith(x64Extension) || filePath.EndsWith(x86_64Extension))
+				&& File.Exists(filePath);
 		}
 
 		private static bool IsRootLinuxDirectory(DirectoryInfo rootDiectory)
@@ -98,13 +133,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		}
 
 		public override PlatformType Platform => PlatformType.Linux;
-
-		private static bool IsExecutableFile(string filePath)
-		{
-			return !string.IsNullOrEmpty(filePath) 
-				&& (filePath.EndsWith(x86Extension) || filePath.EndsWith(x64Extension) || filePath.EndsWith(x86_64Extension))
-				&& File.Exists(filePath);
-		}
 
 		private const string x86Extension = ".x86";
 		private const string x64Extension = ".x64";
