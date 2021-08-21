@@ -12,7 +12,13 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				throw new ArgumentNullException(nameof(rootPath));
 			}
-			m_root = new DirectoryInfo(rootPath);
+			if (IsExecutableFile(rootPath))
+			{
+				m_root = (new FileInfo(rootPath)).Directory;
+				rootPath = m_root.FullName;
+			}
+			else
+				m_root = new DirectoryInfo(rootPath);
 			if (!m_root.Exists)
 			{
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
@@ -53,7 +59,11 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		public static bool IsPCStructure(string path)
 		{
-			DirectoryInfo dinfo = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+			DirectoryInfo dinfo;
+			if (IsExecutableFile(path))
+				dinfo = (new FileInfo(path)).Directory;
+			else
+				dinfo = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
 			if (!dinfo.Exists)
 			{
 				return false;
@@ -98,6 +108,11 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			name = null;
 			dataPath = null;
 			return false;
+		}
+
+		private static bool IsExecutableFile(string filePath)
+		{
+			return !string.IsNullOrEmpty(filePath) && filePath.EndsWith(ExeExtension) && File.Exists(filePath);
 		}
 
 		public override PlatformType Platform => PlatformType.PC;
