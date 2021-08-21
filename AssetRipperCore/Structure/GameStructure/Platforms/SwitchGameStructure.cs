@@ -82,7 +82,5 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		private const string ExecutableName = "exefs";
 		private const string RomName = "romfs";
-
-		private readonly DirectoryInfo m_root;
 	}
 }

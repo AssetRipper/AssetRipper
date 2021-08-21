@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
-	internal class MixedGameStructure : PlatformGameStructure
+	internal sealed class MixedGameStructure : PlatformGameStructure
 	{
 		public MixedGameStructure(IEnumerable<string> paths)
 		{

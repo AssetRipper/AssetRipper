@@ -90,7 +90,5 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		private const string FrameworksName = "Frameworks";
 		private const string MacUnityPlayerName = "UnityPlayer.dylib";
 		private const string AppExtension = ".app";
-
-		private readonly DirectoryInfo m_root;
 	}
 }

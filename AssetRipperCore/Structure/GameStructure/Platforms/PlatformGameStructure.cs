@@ -34,6 +34,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		/// <summary>AssemblyName : AssemblyPath</summary>
 		public Dictionary<string, string> Assemblies { get; } = new Dictionary<string, string>();
 
+		protected DirectoryInfo m_root { get; set; }
+
 		protected static readonly Regex s_levelTemplate = new Regex($@"^level(0|[1-9][0-9]*)({MultiFileStream.MultifileRegPostfix}0)?$", RegexOptions.Compiled);
 		protected static readonly Regex s_sharedAssetTemplate = new Regex(@"^sharedassets[0-9]+\.assets", RegexOptions.Compiled);
 

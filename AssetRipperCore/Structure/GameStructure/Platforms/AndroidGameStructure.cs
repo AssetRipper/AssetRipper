@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
-	internal class AndroidGameStructure : PlatformGameStructure
+	internal sealed class AndroidGameStructure : PlatformGameStructure
 	{
 		public AndroidGameStructure(string rootPath) : this(rootPath, string.Empty) { }
 
@@ -202,7 +202,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		private const string Il2CppGameAssemblyName = "libil2cpp.so";
 		private const string AndroidUnityAssemblyName = "libunity.so";
 
-		private readonly DirectoryInfo m_root;
 		private readonly DirectoryInfo m_obbRoot;
 	}
 }

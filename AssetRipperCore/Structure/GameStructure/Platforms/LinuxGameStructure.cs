@@ -137,7 +137,5 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		private const string x86Extension = ".x86";
 		private const string x64Extension = ".x64";
 		private const string x86_64Extension = ".x86_64";
-
-		private readonly DirectoryInfo m_root;
 	}
 }

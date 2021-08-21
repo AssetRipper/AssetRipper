@@ -13,8 +13,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		private string ModulesPath { get; set; }
 
-		private readonly DirectoryInfo m_root;
-
 		public PS4GameStructure(string rootPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))

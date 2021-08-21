@@ -165,7 +165,5 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		public const string DataGzExtension = ".datagz";
 		public const string UnityWebExtension = ".unityweb";
 		public const string DataWebExtension = DataExtension + UnityWebExtension;
-
-		private readonly DirectoryInfo m_root;
 	}
 }

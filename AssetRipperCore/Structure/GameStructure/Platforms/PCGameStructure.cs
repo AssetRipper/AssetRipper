@@ -4,7 +4,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
-	internal class PCGameStructure : PlatformGameStructure
+	internal sealed class PCGameStructure : PlatformGameStructure
 	{
 		public PCGameStructure(string rootPath)
 		{
@@ -143,7 +143,5 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		public override PlatformType Platform => PlatformType.PC;
 
 		private const string ExeExtension = ".exe";
-
-		private readonly DirectoryInfo m_root;
 	}
 }

@@ -76,7 +76,5 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		public override PlatformType Platform => PlatformType.WebPlayer;
 
 		private const string HtmlExtension = ".html";
-
-		private readonly DirectoryInfo m_root;
 	}
 }

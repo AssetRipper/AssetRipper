@@ -102,7 +102,5 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		private const string PayloadName = "Payload";
 		private const string AppExtension = ".app";
-
-		private readonly DirectoryInfo m_root;
 	}
 }
