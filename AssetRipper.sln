@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\CommandLineParser.md = Licenses\CommandLineParser.md
 		Licenses\Cpp2IL.md = Licenses\Cpp2IL.md
 		Licenses\FMOD.md = Licenses\FMOD.md
+		Licenses\Fmod5Sharp.md = Licenses\Fmod5Sharp.md
 		Licenses\HLSLcc.md = Licenses\HLSLcc.md
 		Licenses\Lz4.md = Licenses\Lz4.md
 		Licenses\MonoCecil.md = Licenses\MonoCecil.md

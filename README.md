@@ -142,6 +142,8 @@ It has borrowed code from [spacehamster](https://github.com/spacehamster)'s [uTi
 
 FMOD is licensed under a [non-commercial license](Licenses/FMOD.md).
 
+[Fmod5Sharp](https://github.com/SamboyCoding/Fmod5Sharp) is licensed under the [MIT license](Licenses/Fmod5Sharp.md).
+
 [HLSLcc](https://github.com/Unity-Technologies/HLSLcc) is licensed under the [MIT license](Licenses/HLSLcc.md).
 
 LibOgg and LibVorbis are licensed from [Xiph](https://www.xiph.org/) under the [BSD 3-Clause License](Licenses/Xiph.md).
