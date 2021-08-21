@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Utils;
+﻿using AssetRipper.Core.Logging;
+using AssetRipper.Core.Utils;
 using System;
 using System.IO;
 
@@ -14,10 +15,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 			if (IsExecutableFile(rootPath))
 			{
+				Logger.Info(LogCategory.Import, "PC executable found. Setting root to parent directory");
 				m_root = (new FileInfo(rootPath)).Directory;
 			}
 			else if (IsUnityDataDirectory(rootPath))
 			{
+				Logger.Info(LogCategory.Import, "PC data directory found. Setting root to parent directory");
 				m_root = (new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath))).Parent;
 			}
 			else
