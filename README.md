@@ -82,7 +82,9 @@ If you want to build a solution, you'll need:
 
  * [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0)
 
- * Compiler with C# 9 syntax support, such as [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/)
+ * [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0)
+
+ * Compiler with C# 10 syntax support, such as [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/)
 
 
 If you want to run binary files, you need to install:
@@ -97,21 +99,21 @@ The development of this project has a dedicated [Discord server](https://discord
 
 ## Build Actions
 
-For advanced users, every commit is automatically built into an alpha build with Github Actions. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions) if you're logged in with a github account. Note that these builds are framework dependent, i.e. you need [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0) installed to run them.
+For advanced users, every commit is automatically built into an alpha build with Github Actions. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions) if you're logged in with a github account.
 
 
 ## To Do
- * Unity 2020 and 2021 support
  * Predetermined GUID support
+ * Extend Windows-only features to Mac and Linux
+ * OBJ mesh export
+ * GUI settings page
 
 
 ## Goals
  * Better shader implementation
  * NAudio implementation for exporting other audio formats
- * More Unity Component Exporters
+ * Overhaul struct reading for universal version support
  * Option to reference assemblies instead of scripts
- * Better platform support
- * Port C++ dependencies to C# where possible
 
 
 ## License
