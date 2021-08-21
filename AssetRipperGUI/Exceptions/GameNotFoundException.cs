@@ -2,7 +2,7 @@
 
 namespace AssetRipper.GUI.Exceptions
 {
-	public class NewUiGameNotFoundException : Exception
+	public class GameNotFoundException : Exception
 	{
 		
 	}

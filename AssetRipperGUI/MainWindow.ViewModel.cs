@@ -1,6 +1,9 @@
 ﻿using AssetRipper.Core.Logging;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
+using AssetRipper.GUI.Extensions;
+using AssetRipper.GUI.Logging;
+using AssetRipper.GUI.Managers;
 using AssetRipper.Library;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -146,7 +149,7 @@ namespace AssetRipper.GUI
 
 				Dispatcher.UIThread.Post(() =>
 				{
-					List<NewUiFileListItem> items = NewUiFileListing.GetItemsFromStructure(gameStructure);
+					List<NewUiFileListItem> items = UIFileListing.GetItemsFromStructure(gameStructure);
 					items.ForEach(AssetFiles.Add);
 				}, DispatcherPriority.Send);
 			}, error =>
@@ -154,7 +157,7 @@ namespace AssetRipper.GUI
 				HasFile = false;
 				HasLoaded = false;
 
-				if (error is NewUiGameNotFoundException)
+				if (error is GameNotFoundException)
 				{
 					this.ShowPopup($"No Unity game was found in the dropped files.", "Error");
 					return;

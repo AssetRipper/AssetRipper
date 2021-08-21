@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
+using AssetRipper.GUI.Utils;
 using AssetRipper.Library;
 using Avalonia.Threading;
 using System;
@@ -8,7 +9,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AssetRipper.GUI
+namespace AssetRipper.GUI.Managers
 {
 	public static class UIExportManager
 	{
@@ -22,7 +23,7 @@ namespace AssetRipper.GUI
 
 			if (DirectoryUtils.Exists(path))
 			{
-				await Task.Factory.StartNew(path => Directory.Delete((string)path, true), path);
+				await Task.Factory.StartNew(s_path => Directory.Delete((string)s_path, true), path);
 			}
 		}
 
@@ -31,7 +32,7 @@ namespace AssetRipper.GUI
 			Name = "Background Game Export Thread",
 			IsBackground = true,
 		}.Start();
-		
+
 		private static void ExportInternal(Ripper ripper, string toRoot, Action onSuccess, Action<Exception> onError)
 		{
 			try
@@ -63,9 +64,9 @@ namespace AssetRipper.GUI
 
 			exporter.EventExportProgressUpdated += (index, count) =>
 			{
-				double progress = ((double)index / count) * 100.0;
+				double progress = (double)index / count * 100.0;
 				vm.ExportingText = $"Exporting Asset Files\n{progress:f1}%\n{index}/{count}";
-				
+
 				Dispatcher.UIThread.Post(() => MainWindow.Instance.LogText.CaretIndex = MainWindow.Instance.LogText.Text.Length - 1, DispatcherPriority.Background);
 			};
 		}

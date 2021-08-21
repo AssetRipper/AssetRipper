@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Threading;
 
-namespace AssetRipper.GUI
+namespace AssetRipper.GUI.Managers
 {
 	public static class UIImportManager
 	{
@@ -25,7 +25,7 @@ namespace AssetRipper.GUI
 
 				if (!gameStructure.IsValid)
 				{
-					onError(new NewUiGameNotFoundException());
+					onError(new GameNotFoundException());
 					return;
 				}
 
@@ -46,7 +46,7 @@ namespace AssetRipper.GUI
 				.Select(t => t.Version)
 				.Distinct()
 				.ToArray();
-			
+
 			if (versions.Length <= 1)
 			{
 				return;

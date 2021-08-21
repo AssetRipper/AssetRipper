@@ -57,10 +57,17 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			get
 			{
-				return _asset switch
+				switch(_asset)
 				{
-					IHasImageData img => AvaloniaBitmapFromDirectBitmap.Make(TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, _asset.File.Version, img.ImageDataByteArray, 0, 0, KTXBaseInternalFormat.RG)),
-					_ => null
+					case IHasImageData img:
+						{
+							if (!OperatingSystem.IsWindows())
+								return null;
+							var directBitmap = TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, _asset.File.Version, img.ImageDataByteArray, 0, 0, KTXBaseInternalFormat.RG);
+							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
+						}
+					default:
+						return null;
 				};
 			}
 		}

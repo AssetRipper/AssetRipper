@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Threading;
 using System;
 
-namespace AssetRipper.GUI
+namespace AssetRipper.GUI.Logging
 {
 	public sealed class ViewModelLogger : ILogger
 	{
@@ -32,15 +32,15 @@ namespace AssetRipper.GUI
 
 		private void LogInner(LogType type, LogCategory category, string message)
 		{
-			if(category == LogCategory.ExportedFile)
+			if (category == LogCategory.ExportedFile)
 				//Don't log "Exported file" messages.
 				return;
-			
+
 			viewModel.LogText += $"{DateTime.Now:T}: ";
-			
-			if(category != LogCategory.None)
+
+			if (category != LogCategory.None)
 				viewModel.LogText += $"{category.ToString()} ";
-			
+
 			switch (type)
 			{
 				case LogType.Warning:
@@ -56,7 +56,7 @@ namespace AssetRipper.GUI
 
 		public void BlankLine(int numLines)
 		{
-			for(int i = 0; i < numLines; i++)
+			for (int i = 0; i < numLines; i++)
 				viewModel.LogText += Environment.NewLine;
 		}
 	}

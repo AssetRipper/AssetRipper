@@ -28,7 +28,7 @@ using SerializedFile = AssetRipper.Core.Parser.Files.SerializedFiles.SerializedF
 
 namespace AssetRipper.GUI
 {
-	public static class NewUiFileListing
+	public static class UIFileListing
 	{
 		private static readonly Type[] SettingsClasses =
 		{
