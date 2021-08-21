@@ -23,12 +23,14 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				platformStructure = iosGameStructure;
 			else if (CheckSwitch(paths, out SwitchGameStructure switchGameStructure))
 				platformStructure = switchGameStructure;
+			else if (CheckPS4(paths, out PS4GameStructure ps4GameStructure))
+				platformStructure = ps4GameStructure;
 			else if (CheckWebGL(paths, out WebGLGameStructure webglGameStructure))
 				platformStructure = webglGameStructure;
 			else if (CheckWebPlayer(paths, out WebPlayerGameStructure webplayerGameStructure))
 				platformStructure = webplayerGameStructure;
-			else if (CheckPS4(paths, out PS4GameStructure ps4GameStructure))
-				platformStructure = ps4GameStructure;
+			else if (CheckWiiU(paths, out WiiUGameStructure wiiUGameStructure))
+				platformStructure = wiiUGameStructure;
 
 			if (CheckMixed(paths, out MixedGameStructure mixedGameStructure))
 				mixedStructure = mixedGameStructure;
@@ -205,6 +207,22 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 					gameStructure = new WebPlayerGameStructure(path);
 					paths.Remove(path);
 					Logger.Info(LogCategory.Import, $"WebPlayer game structure has been found at '{path}'");
+					return true;
+				}
+			}
+			gameStructure = null;
+			return false;
+		}
+
+		private static bool CheckWiiU(List<string> paths, out WiiUGameStructure gameStructure)
+		{
+			foreach (string path in paths)
+			{
+				if (WiiUGameStructure.IsWiiUStructure(path))
+				{
+					gameStructure = new WiiUGameStructure(path);
+					paths.Remove(path);
+					Logger.Info(LogCategory.Import, $"WiiU game structure has been found at '{path}'");
 					return true;
 				}
 			}
