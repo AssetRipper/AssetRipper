@@ -46,16 +46,21 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		{
 			long initialPosition = reader.BaseStream.Position;
 			
-			//Sanity check we have enough room here first.
+			//Sanity check that there is enough room here first.
 			if (reader.BaseStream.Position + HeaderMinSize > reader.BaseStream.Length)
 			{
 				return false;
 			}
-			
+
+			//Pre-22 format: 
+			// - Metadata Size
+			// - File Size
+			// - Generation
+			int metadataSize = reader.ReadInt32();
+			ulong headerDefinedFileSize = reader.ReadUInt32();
+
 			// Read generation first, the format changed hugely in gen 22 (unity 2020)
 			// Generation is always at [base + 0x8]
-			reader.BaseStream.Position += 8;
-			
 			int generation = reader.ReadInt32();
 			if (!Enum.IsDefined(typeof(FormatVersion), generation))
 			{
@@ -64,23 +69,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 			}
 
 			reader.BaseStream.Position = initialPosition;
-			int metadataSize;
-			ulong headerDefinedFileSize;
-			if (generation < 22)
+			if (generation >= 22)
 			{
-				//Pre-2020 format: 
-				// - Metadata Size
-				// - File Size
-				// - Generation (already read)
-				//That's all we check here.
-
-				metadataSize = reader.ReadInt32();
-
-				headerDefinedFileSize = reader.ReadUInt32();
-			}
-			else
-			{
-				//2020 Format:
+				//22 Format:
 				//First known value is at 0x14, and is metadata size as a 32-bit integer.
 				//Then the file size as a 64-bit integer.
 				reader.BaseStream.Position = initialPosition + 0x14;
@@ -112,36 +103,16 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 		public void Read(EndianReader reader)
 		{
-			//Read generation first.
-			reader.Position += 8;
+			//For gen 22+ these will be zero
+			MetadataSize = reader.ReadInt32();
+			FileSize = reader.ReadUInt32();
+
+			//Read generation
 			Version = (FormatVersion)reader.ReadInt32();
-			
-			//Back to original position
-			reader.Position -= 12;
 
-			if (!HasLargeFilesSupport(Version))
-			{
-				MetadataSize = reader.ReadInt32();
-				if (MetadataSize <= 0)
-				{
-					throw new Exception($"Invalid metadata size {MetadataSize}");
-				}
+			//For gen 22+ these will be zero
+			DataOffset = reader.ReadUInt32();
 
-				FileSize = reader.ReadUInt32();
-				if (!Enum.IsDefined(typeof(FormatVersion), Version))
-				{
-					throw new Exception($"Unsupported file generation {Version}'");
-				}
-				
-				reader.ReadUInt32(); //Skip over version
-
-				DataOffset = reader.ReadUInt32();
-			}
-			else
-			{
-				reader.Position += 16; //3 lots of uints we skipped above, plus generation.
-			}
-			
 			if (HasEndianess(Version))
 			{
 				Endianess = reader.ReadBoolean();
@@ -154,19 +125,55 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				DataOffset = reader.ReadInt64();
 				reader.ReadInt64(); // unknown
 			}
+
+			if (MetadataSize <= 0)
+			{
+				throw new Exception($"Invalid metadata size {MetadataSize}");
+			}
+
+			if (!Enum.IsDefined(typeof(FormatVersion), Version))
+			{
+				throw new Exception($"Unsupported file generation {Version}'");
+			}
 		}
 
-#warning TODO: Needs verified, especially the value byte sizes
 		public void Write(EndianWriter writer)
 		{
-			writer.Write(MetadataSize);
-			writer.Write(FileSize);
+			//0x00
+			if (HasLargeFilesSupport(Version))
+			{
+				writer.Write(0);
+				writer.Write(0);
+			}
+			else
+			{
+				writer.Write((int)MetadataSize);
+				writer.Write((uint)FileSize);
+			}
+
+			//0x08
 			writer.Write((int)Version);
-			writer.Write(DataOffset);
+
+			//0x0c
+			if (HasLargeFilesSupport(Version))
+				writer.Write(0); 
+			else
+				writer.Write((uint)DataOffset);
+
+			//0x10
 			if (HasEndianess(Version))
 			{
 				writer.Write(Endianess);
 				writer.AlignStream();
+			}
+
+			//0x14
+			if (HasLargeFilesSupport(Version))
+			{
+				writer.Write((uint)MetadataSize);
+				writer.Write((long)FileSize);
+				writer.Write((long)DataOffset);
+				writer.Write((long)0);
 			}
 		}
 	}
