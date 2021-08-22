@@ -12,68 +12,26 @@ AssetRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*
 
 Current supported versions: `1.x` to `2019.x` (support for later versions is in progress)
 
-## Export features
-* Scenes
-* Prefabs (GameObjects with transform components)
-* AnimationClips (legacy, generic, humanoid)
-* Meshes
-* Shaders (native listing)
-* Textures
-* Audio
-* Fonts
-* Movie textures
-* Materials
-* AnimatorControllers
-* Avatars
-* Terrains
-* TextAssets
-* Components:
-  * MeshRenderer
-  * SkinnedMeshRenderer
-  * Animation
-  * Animator
-  * Canvas
-  * Light
-  * ParticleSystem
-  * Colliders
-  * Rigidbody
-  * AudioSource
-  * Camera
-  * MonoBehaviour (Mono and Il2Cpp)
-  * MonoScript (Mono and Il2Cpp)
+
+## Donations
+
+Thank you for considering to support me. I have normal expenses like food, electric, internet, and rent. Your donations help to ensure that I can continue to afford developing this project. Anyone with a positive lifetime contribution is entitled to the Donator role on the [Discord server](https://discord.gg/XqXa53W2Yh).
+
+[Patreon](https://www.patreon.com/ds5678)
 
 ## Downloads
 
-Download links can be found on the [latest release page](https://github.com/ds5678/AssetRipper/releases/latest).
+Milestone download links can be found on the [latest release page](https://github.com/ds5678/AssetRipper/releases/latest).
 
-## Structure
 
-* [*AssetAnalyzer*](AssetAnalyzer/README.md) (Cross-Platform)
+## Alpha Builds
 
-   Simple program to investigate file header information.
+For advanced users, every commit is automatically built into an alpha build with Github Actions. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions) if you're logged in with a github account.
 
-* [*AssetRipperCore*](AssetRipperCore/README.md) (Cross-Platform)
 
-   Core library. It's designed as an single module without any third party dependencies.
-   
-* [*AssetRipperLibrary*](AssetRipperLibrary/README.md) (Cross-Platform)
+## Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
 
-   This is an expansion library for AssetRipperCore. It includes some third party dependencies and has some extra converters, so on Windows it additionally exports:
-   * AudioClip .wav export
-   * Texture2D .png export (with Sprites)
-   * Shader DirectX blob export
-
-* [*AssetRipperGUI*](AssetRipperGUI/README.md) (Windows-only)
-
-   Basic graphic interface application utilizing the AssetRipperLibrary.
-   
-* [*AssetRipperConsole*](AssetRipperConsole/README.md) (Cross-Platform)
-
-   Command line equivalent of AssetRipperGUI. Since it has no GUI, it can be cross-platform compatible.
-   
-* [*UnitTester*](UnitTester/README.md) (Cross-Platform)
-
-   Automated tester to verify project integrity while making changes.
+The development of this project has a dedicated [Discord server](https://discord.gg/XqXa53W2Yh). Feel free to come say hi. This is also an alternative location for people to post issues.
 
 
 ## Requirements:
@@ -81,37 +39,24 @@ Download links can be found on the [latest release page](https://github.com/ds56
 If you want to build a solution, you'll need:
 
  * [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0)
-
  * [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0)
-
  * Compiler with C# 10 syntax support, such as [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/)
-
 
 If you want to run binary files, you need to install:
 
  * [Unity 2017.3.0f3 or greater](https://unity3d.com/get-unity/download/archive) (NOTE: your editor version must be no less than the game's version)
  
 
-## Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
-
-The development of this project has a dedicated [Discord server](https://discord.gg/XqXa53W2Yh). Feel free to come say hi. This is also an alternative location for people to post issues.
-
-
-## Build Actions
-
-For advanced users, every commit is automatically built into an alpha build with Github Actions. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions) if you're logged in with a github account.
-
-
 ## To Do
  * Predetermined GUID support
  * Extend Windows-only features to Mac and Linux
  * OBJ mesh export
  * GUI settings page
+ * NAudio implementation for exporting other audio formats
 
 
 ## Goals
  * Better shader implementation
- * NAudio implementation for exporting other audio formats
  * Overhaul struct reading for universal version support
  * Option to reference assemblies instead of scripts
 
