@@ -9,35 +9,6 @@ namespace ShaderTextRestorer
 {
 	internal class ResourceBindingChunk
 	{
-		public enum SamplerFilterMode
-		{
-			Point,
-			Linear,
-			Trilinear
-		};
-
-		public enum SamplerWrapMode
-		{
-			Repeat,
-			Clamp,
-			Mirror,
-			MirrorOnce
-		};
-
-# warning TODO: Move to seprate file
-		private class Sampler
-		{
-			public string Name;
-			public uint BindPoint;
-			public bool IsComparisonSampler;
-			public Sampler(string name, uint bindPoint, bool isComparisonSampler)
-			{
-				this.Name = name;
-				this.BindPoint = bindPoint;
-				this.IsComparisonSampler = isComparisonSampler;
-			}
-		}
-
 		public ResourceBindingChunk(ref ShaderSubProgram shaderSubprogram, uint resourceBindingOffset, Dictionary<string, uint> nameLookup)
 		{
 			m_shaderSubprogram = shaderSubprogram;

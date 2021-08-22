@@ -1,1 +1,1 @@
-﻿# DX Shader Restorer
+﻿# Shader Text Restorer
