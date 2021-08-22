@@ -75,15 +75,11 @@ namespace AssetRipper.Core.Structure
 			Exporter = new ProjectExporter(this, configuration);
 		}
 
-		public void LoadAssembly(string filePath)
-		{
-			AssemblyManager.Load(filePath);
-		}
+		public void Export(CoreConfiguration options) => Exporter.Export(this, options);
 
-		public void ReadAssembly(Stream stream, string fileName)
-		{
-			AssemblyManager.Read(stream, fileName);
-		}
+		public void LoadAssembly(string filePath) => AssemblyManager.Load(filePath);
+
+		public void ReadAssembly(Stream stream, string fileName) => AssemblyManager.Read(stream, fileName);
 
 		public ISerializedFile FindSerializedFile(string fileName)
 		{
@@ -157,10 +153,7 @@ namespace AssetRipper.Core.Structure
 			}
 		}
 
-		public bool IsScene(ISerializedFile file)
-		{
-			return m_scenes.Contains(file);
-		}
+		public bool IsScene(ISerializedFile file) => m_scenes.Contains(file);
 
 		public AssetLayout GetLayout(LayoutInfo info)
 		{
@@ -213,20 +206,17 @@ namespace AssetRipper.Core.Structure
 		protected override void OnResourceFileAdded(ResourceFile file)
 		{
 			if (m_resources.ContainsKey(file.Name))
-			{
 				throw new ArgumentException($"{nameof(ResourceFile)} with name '{file.Name}' already presents in the collection", nameof(file));
-			}
-			m_resources.Add(file.Name, file);
+			else
+				m_resources.Add(file.Name, file);
 		}
 
 		private bool IsSceneSerializedFile(SerializedFile file)
 		{
 			foreach (ObjectInfo entry in file.Metadata.Object)
 			{
-				if (entry.ClassID.IsSceneSettings())
-				{
+				if (entry.ClassID.IsSceneSettings()) 
 					return true;
-				}
 			}
 			return false;
 		}
@@ -267,10 +257,6 @@ namespace AssetRipper.Core.Structure
 			GC.SuppressFinalize(this);
 		}
 
-		~GameCollection()
-		{
-			Dispose(false);
-		}
-
+		~GameCollection() => Dispose(false);
 	}
 }

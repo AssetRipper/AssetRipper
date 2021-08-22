@@ -178,21 +178,12 @@ namespace AssetRipper.Core.Project
 			OverrideExporter(classType, DummyExporter);
 		}
 
-		public void OverrideYamlExporter(ClassIDType classType)
-		{
-			OverrideExporter(classType, YamlExporter);
-		}
+		public void OverrideYamlExporter(ClassIDType classType) => OverrideExporter(classType, YamlExporter);
 
-		public void OverrideBinaryExporter(ClassIDType classType)
-		{
-			OverrideExporter(classType, BinaryExporter);
-		}
+		public void OverrideBinaryExporter(ClassIDType classType) => OverrideExporter(classType, BinaryExporter);
 
-		public void Export(GameCollection fileCollection, SerializedFile file, CoreConfiguration options)
-		{
-			Export(fileCollection, new SerializedFile[] { file }, options);
-		}
-
+		public void Export(GameCollection fileCollection, CoreConfiguration options) => Export(fileCollection, fileCollection.FetchSerializedFiles(), options);
+		public void Export(GameCollection fileCollection, SerializedFile file, CoreConfiguration options) => Export(fileCollection, new SerializedFile[] { file }, options);
 		public void Export(GameCollection fileCollection, IEnumerable<SerializedFile> files, CoreConfiguration options)
 		{
 			EventExportPreparationStarted?.Invoke();

@@ -87,9 +87,9 @@ namespace AssetRipper.Core.Structure.GameStructure
 		{
 			UnityVersion maxFileVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
 			UnityVersion version = UnityVersion.Max(maxFileVersion, UnityVersion.DefaultVersion);
-			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version.ToString()}");
+			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
 			options.SetProjectSettings(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
-			FileCollection.Exporter.Export(FileCollection, FileCollection.FetchSerializedFiles(), options);
+			FileCollection.Export(options);
 		}
 
 		/// <summary>Attempts to find the path for the dependency with that name.</summary>
