@@ -7,7 +7,7 @@ using SpirV;
 using System;
 using System.IO;
 
-namespace AssetRipper.Library.Exporters.Shaders
+namespace ShaderTextRestorer.Exporters
 {
 	public class ShaderVulkanExporter : ShaderTextExporter
 	{

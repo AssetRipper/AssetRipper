@@ -16,6 +16,7 @@ using System.IO;
 using System.Runtime.Versioning;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+using ShaderTextRestorer.Exporters;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {

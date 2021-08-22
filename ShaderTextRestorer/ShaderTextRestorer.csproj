@@ -30,6 +30,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
+    <ProjectReference Include="..\HLSLccCsharpWrapper\HLSLccCsharpWrapper.csproj" />
+    <ProjectReference Include="..\Smolv\Smolv.csproj" />
+    <ProjectReference Include="..\SpirV\SpirV.csproj" />
   </ItemGroup>
 
   <ItemGroup>

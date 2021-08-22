@@ -7,7 +7,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
-namespace AssetRipper.Library.Exporters.Shaders.DirectX
+namespace ShaderTextRestorer.Exporters.DirectX
 {
 	[SupportedOSPlatform("windows")]
 	public class ShaderDXExporter : ShaderTextExporter

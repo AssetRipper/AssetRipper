@@ -2,7 +2,7 @@
 using AssetRipper.Core.Parser.Files;
 using System.IO;
 
-namespace AssetRipper.Library.Exporters.Shaders.DirectX
+namespace ShaderTextRestorer.Exporters.DirectX
 {
 	public struct DXDataHeader
 	{
