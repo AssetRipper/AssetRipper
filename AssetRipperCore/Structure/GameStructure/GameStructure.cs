@@ -14,13 +14,26 @@ namespace AssetRipper.Core.Structure.GameStructure
 {
 	public sealed class GameStructure : IDisposable
 	{
-		public bool IsValid => FileCollection != null;
-
 		public GameCollection FileCollection { get; private set; }
 		public PlatformGameStructure PlatformStructure { get; private set; }
 		public PlatformGameStructure MixedStructure { get; private set; }
 
 		private GameStructure() { }
+
+		public bool IsValid => FileCollection != null;
+
+		public string Name
+		{
+			get
+			{
+				if (PlatformStructure != null)
+					return PlatformStructure.Name;
+				else if (MixedStructure != null)
+					return MixedStructure.Name;
+				else
+					return null;
+			}
+		}
 
 		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration) => Load(paths, configuration, null);
 		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration, LayoutInfo layinfo)
@@ -108,36 +121,6 @@ namespace AssetRipper.Core.Structure.GameStructure
 			return null;
 		}
 
-		public string RequestAssembly(string assembly)
-		{
-			if (PlatformStructure != null)
-			{
-				string assemblyPath = PlatformStructure.RequestAssembly(assembly);
-				if (assemblyPath != null) return assemblyPath;
-			}
-			if (MixedStructure != null)
-			{
-				string assemblyPath = MixedStructure.RequestAssembly(assembly);
-				if (assemblyPath != null) return assemblyPath;
-			}
-			return null;
-		}
-
-		public string RequestResource(string resource)
-		{
-			if (PlatformStructure != null)
-			{
-				string path = PlatformStructure.RequestResource(resource);
-				if (path != null) return path;
-			}
-			if (MixedStructure != null)
-			{
-				string path = MixedStructure.RequestResource(resource);
-				if (path != null) return path;
-			}
-			return null;
-		}
-
 		/// <summary>Processes all files, gets their file type, and adds it to one big list.</summary>
 		private void ProcessPlatformStructure(GameStructureProcessor processor, PlatformGameStructure structure)
 		{
@@ -171,15 +154,34 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private string OnRequestResource(string resource) => RequestResource(resource);
 
-		public string Name
+		public string RequestAssembly(string assembly)
 		{
-			get
+			if (PlatformStructure != null)
 			{
-				if (PlatformStructure == null)
-					return MixedStructure.Name;
-				else
-					return PlatformStructure.Name;
+				string assemblyPath = PlatformStructure.RequestAssembly(assembly);
+				if (assemblyPath != null) return assemblyPath;
 			}
+			if (MixedStructure != null)
+			{
+				string assemblyPath = MixedStructure.RequestAssembly(assembly);
+				if (assemblyPath != null) return assemblyPath;
+			}
+			return null;
+		}
+
+		public string RequestResource(string resource)
+		{
+			if (PlatformStructure != null)
+			{
+				string path = PlatformStructure.RequestResource(resource);
+				if (path != null) return path;
+			}
+			if (MixedStructure != null)
+			{
+				string path = MixedStructure.RequestResource(resource);
+				if (path != null) return path;
+			}
+			return null;
 		}
 
 		public void Dispose()
