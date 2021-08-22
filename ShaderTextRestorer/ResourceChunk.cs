@@ -5,7 +5,7 @@ using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DXShaderRestorer
+namespace ShaderTextRestorer
 {
 	internal class ResourceChunk
 	{

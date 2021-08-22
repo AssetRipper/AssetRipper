@@ -5,7 +5,7 @@ using AssetRipper.Core.Classes.Shader.Parameters;
 using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
 
-namespace DXShaderRestorer
+namespace ShaderTextRestorer
 {
 	internal class ConstantBufferChunk
 	{

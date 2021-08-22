@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DXShaderRestorer
+namespace ShaderTextRestorer
 {
 	[Flags]
 	internal enum ShaderVariableFlags

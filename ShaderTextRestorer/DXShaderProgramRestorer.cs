@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
-namespace DXShaderRestorer
+namespace ShaderTextRestorer
 {
 	public static class DXShaderProgramRestorer
 	{

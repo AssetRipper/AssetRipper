@@ -2,7 +2,7 @@ using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.IO;
 using AssetRipper.Library.Exporters.Shaders.DirectX;
-using DXShaderRestorer;
+using ShaderTextRestorer;
 using HLSLccCsharpWrapper;
 using System.IO;
 using System.Runtime.Versioning;

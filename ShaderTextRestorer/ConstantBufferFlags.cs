@@ -1,4 +1,4 @@
-namespace DXShaderRestorer
+namespace ShaderTextRestorer
 {
 	public enum ConstantBufferFlags
 	{

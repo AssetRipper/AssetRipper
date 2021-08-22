@@ -1,4 +1,4 @@
-﻿namespace DXShaderRestorer
+﻿namespace ShaderTextRestorer
 {
 	internal enum ShaderVariableClass
 	{

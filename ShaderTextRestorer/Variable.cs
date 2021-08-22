@@ -3,7 +3,7 @@ using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
 using System;
 
-namespace DXShaderRestorer
+namespace ShaderTextRestorer
 {
 	internal class Variable
 	{

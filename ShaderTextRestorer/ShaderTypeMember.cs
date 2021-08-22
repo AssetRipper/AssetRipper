@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
 
-namespace DXShaderRestorer
+namespace ShaderTextRestorer
 {
 	class ShaderTypeMember
 	{

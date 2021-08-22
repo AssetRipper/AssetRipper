@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DXShaderRestorer
+namespace ShaderTextRestorer
 {
 	internal class ShaderType
 	{
