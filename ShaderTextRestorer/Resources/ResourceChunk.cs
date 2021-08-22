@@ -4,8 +4,10 @@ using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
 using System.Text;
+using ShaderTextRestorer.ConstantBuffers;
+using ShaderTextRestorer.Extensions;
 
-namespace ShaderTextRestorer
+namespace ShaderTextRestorer.Resources
 {
 	internal class ResourceChunk
 	{
@@ -13,7 +15,7 @@ namespace ShaderTextRestorer
 		{
 			ShaderGpuProgramType programType = shaderSubprogram.GetProgramType(version);
 			m_majorVersion = (byte)programType.GetMajorDXVersion();
-			m_resourceBindingOffset = m_majorVersion >= 5 ? (uint)60 : (uint)28;
+			m_resourceBindingOffset = m_majorVersion >= 5 ? 60 : (uint)28;
 			m_resourceBindings = new ResourceBindingChunk(ref shaderSubprogram, m_resourceBindingOffset, m_nameLookup);
 			m_constantBufferOffset = m_resourceBindingOffset + m_resourceBindings.Size;
 			m_constantBuffers = new ConstantBufferChunk(version, ref shaderSubprogram, m_constantBufferOffset, m_nameLookup);

@@ -1,4 +1,4 @@
-namespace ShaderTextRestorer
+namespace ShaderTextRestorer.Resources
 {
 	internal enum ShaderFlags
 	{

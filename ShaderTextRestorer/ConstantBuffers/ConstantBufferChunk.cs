@@ -5,7 +5,7 @@ using AssetRipper.Core.Classes.Shader.Parameters;
 using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
 
-namespace ShaderTextRestorer
+namespace ShaderTextRestorer.ConstantBuffers
 {
 	internal class ConstantBufferChunk
 	{
@@ -16,7 +16,7 @@ namespace ShaderTextRestorer
 			m_nameLookup = nameLookup;
 
 			ShaderGpuProgramType programType = shaderSubprogram.GetProgramType(version);
-			uint headerSize = (uint)Count * 24;
+			uint headerSize = Count * 24;
 			uint variableOffset = contantBufferOffset + headerSize;
 			int constantBufferIndex = 0;
 			List<VariableChunk> variables = new List<VariableChunk>();
@@ -40,7 +40,7 @@ namespace ShaderTextRestorer
 
 		public void Write(EndianWriter writer)
 		{
-			uint headerSize = (uint)Count * 24;
+			uint headerSize = Count * 24;
 			uint variableOffset = m_contantBufferOffset + headerSize;
 			int variableIndex = 0;
 			for (int i = 0; i < m_shaderSubprogram.ConstantBuffers.Length; i++, variableIndex++)

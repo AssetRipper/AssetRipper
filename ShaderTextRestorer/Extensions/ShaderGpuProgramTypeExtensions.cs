@@ -1,7 +1,8 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+using ShaderTextRestorer.Resources;
 using System;
 
-namespace ShaderTextRestorer
+namespace ShaderTextRestorer.Extensions
 {
 	public static class ShaderGpuProgramTypeExtensions
 	{

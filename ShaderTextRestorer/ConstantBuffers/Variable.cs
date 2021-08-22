@@ -3,7 +3,7 @@ using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
 using System;
 
-namespace ShaderTextRestorer
+namespace ShaderTextRestorer.ConstantBuffers
 {
 	internal class Variable
 	{
@@ -13,7 +13,7 @@ namespace ShaderTextRestorer
 
 		public Variable(MatrixParameter param, ShaderGpuProgramType programType)
 		{
-			ShaderType = new ShaderType(param, programType);
+			ShaderType = new Types.ShaderType(param, programType);
 			Name = param.Name ?? throw new Exception("Variable name cannot be null");
 			NameIndex = param.NameIndex;
 			Index = param.Index;
@@ -23,7 +23,7 @@ namespace ShaderTextRestorer
 
 		public Variable(VectorParameter param, ShaderGpuProgramType programType)
 		{
-			ShaderType = new ShaderType(param, programType);
+			ShaderType = new Types.ShaderType(param, programType);
 			Name = param.Name ?? throw new Exception("Variable name cannot be null");
 			NameIndex = param.NameIndex;
 			Index = param.Index;
@@ -33,7 +33,7 @@ namespace ShaderTextRestorer
 
 		public Variable(StructParameter param, ShaderGpuProgramType programType)
 		{
-			ShaderType = new ShaderType(param, programType);
+			ShaderType = new Types.ShaderType(param, programType);
 			Name = param.Name ?? throw new Exception("Variable name cannot be null");
 			NameIndex = param.NameIndex;
 			Index = param.Index;
@@ -55,7 +55,7 @@ namespace ShaderTextRestorer
 
 			Variable variable = new Variable();
 			var param = new VectorParameter(name, ShaderParamType.Float, index, sizeToAdd / 16, 4);
-			variable.ShaderType = new ShaderType(param, programType);
+			variable.ShaderType = new Types.ShaderType(param, programType);
 			variable.Name = name ?? throw new Exception("Variable name cannot be null");
 			variable.NameIndex = -1;
 			variable.Index = index;
@@ -70,7 +70,7 @@ namespace ShaderTextRestorer
 			Variable variable = new Variable();
 			variable.Name = "$Element";
 			var param = new VectorParameter(variable.Name, ShaderParamType.UInt, 0, 1);
-			variable.ShaderType = new ShaderType(param, programType);
+			variable.ShaderType = new Types.ShaderType(param, programType);
 			variable.NameIndex = -1;
 			variable.Index = 0;
 			variable.ArraySize = param.ArraySize;
@@ -79,7 +79,7 @@ namespace ShaderTextRestorer
 			return variable;
 		}
 
-		public ShaderType ShaderType { get; private set; }
+		public Types.ShaderType ShaderType { get; private set; }
 		public string Name { get; private set; }
 		public int NameIndex { get; private set; }
 		public int Index { get; private set; }

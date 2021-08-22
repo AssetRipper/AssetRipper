@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AssemblyName>DXShaderRestorer</AssemblyName>
-    <RootNamespace>DXShaderRestorer</RootNamespace>
+    <AssemblyName>ShaderTextRestorer</AssemblyName>
+    <RootNamespace>ShaderTextRestorer</RootNamespace>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <OutputPath>..\Bins\DXShaderRestorer\$(Configuration)\</OutputPath>
+    <OutputPath>..\Bins\ShaderTextRestorer\$(Configuration)\</OutputPath>
     <Configurations>Debug;Release;Virtual</Configurations>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>

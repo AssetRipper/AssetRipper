@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ShaderTextRestorer
+namespace ShaderTextRestorer.Resources
 {
 	internal class ResourceBindingChunk
 	{
@@ -74,9 +74,9 @@ namespace ShaderTextRestorer
 			foreach (SamplerParameter samplerParam in shaderSubprogram.SamplerParameters ?? Array.Empty<SamplerParameter>())
 			{
 				SamplerFilterMode filterMode = (SamplerFilterMode)(samplerParam.Sampler & 0x3);
-				SamplerWrapMode wrapU = (SamplerWrapMode)((samplerParam.Sampler >> 2) & 0x3);
-				SamplerWrapMode wrapV = (SamplerWrapMode)((samplerParam.Sampler >> 4) & 0x3);
-				SamplerWrapMode wrapW = (SamplerWrapMode)((samplerParam.Sampler >> 6) & 0x3);
+				SamplerWrapMode wrapU = (SamplerWrapMode)(samplerParam.Sampler >> 2 & 0x3);
+				SamplerWrapMode wrapV = (SamplerWrapMode)(samplerParam.Sampler >> 4 & 0x3);
+				SamplerWrapMode wrapW = (SamplerWrapMode)(samplerParam.Sampler >> 6 & 0x3);
 				bool isComparisonSampler = (samplerParam.Sampler & 0x100) != 0;
 				string samplerName;
 				if (wrapU == wrapV && wrapU == wrapW)
@@ -115,10 +115,10 @@ namespace ShaderTextRestorer
 				//Resource view dimension
 				writer.Write((uint)ShaderResourceViewDimension.Buffer);
 
-# warning TODO: Check this
+#warning TODO: Check this
 				//Number of samples
 				writer.Write((uint)56);
-				
+
 				//Bind point
 				writer.Write((uint)bufferParam.Index);
 				//Bind count
@@ -140,7 +140,7 @@ namespace ShaderTextRestorer
 				//Number of samples
 				writer.Write((uint)0);
 				//Bind point
-				writer.Write((uint)sampler.BindPoint);
+				writer.Write(sampler.BindPoint);
 				//Bind count
 				writer.Write((uint)1);
 				//Shader input flags

@@ -1,4 +1,4 @@
-﻿namespace ShaderTextRestorer
+﻿namespace ShaderTextRestorer.ConstantBuffers
 {
 	internal enum ConstantBufferType
 	{

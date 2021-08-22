@@ -1,4 +1,4 @@
-﻿namespace ShaderTextRestorer
+﻿namespace ShaderTextRestorer.Resources
 {
 	internal class Sampler
 	{
@@ -7,9 +7,9 @@
 		public bool IsComparisonSampler;
 		public Sampler(string name, uint bindPoint, bool isComparisonSampler)
 		{
-			this.Name = name;
-			this.BindPoint = bindPoint;
-			this.IsComparisonSampler = isComparisonSampler;
+			Name = name;
+			BindPoint = bindPoint;
+			IsComparisonSampler = isComparisonSampler;
 		}
 	}
 }

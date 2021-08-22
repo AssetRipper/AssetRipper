@@ -1,4 +1,4 @@
-﻿namespace ShaderTextRestorer
+﻿namespace ShaderTextRestorer.Types
 {
 	internal enum ShaderVariableClass
 	{

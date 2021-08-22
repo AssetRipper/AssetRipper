@@ -4,17 +4,11 @@ using AssetRipper.Core.Classes.Shader.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShaderTextRestorer.Extensions;
+using ShaderTextRestorer.Types;
 
-namespace ShaderTextRestorer
+namespace ShaderTextRestorer.ConstantBuffers
 {
-	internal class VariableHeader
-	{
-		public uint NameOffset { get; set; }
-		public uint StartOffset { get; set; }
-		public uint TypeOffset { get; set; }
-		public Variable Variable { get; set; }
-	}
-
 	internal class VariableChunk
 	{
 		public VariableChunk(ref BufferBinding bufferBinding, int constantBufferIndex, uint variableOffset, ShaderGpuProgramType programType)
@@ -37,7 +31,7 @@ namespace ShaderTextRestorer
 		private void BuildVariableHeaders(uint variableOffset)
 		{
 			const int memberSize = 12;
-			uint variableSize = majorVersion >= 5 ? (uint)40 : (uint)24;
+			uint variableSize = majorVersion >= 5 ? 40 : (uint)24;
 			uint variableCount = (uint)m_variables.Length;
 			uint dataOffset = variableOffset + variableCount * variableSize;
 			foreach (Variable variable in m_variables)

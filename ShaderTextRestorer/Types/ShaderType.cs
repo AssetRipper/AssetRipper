@@ -1,11 +1,12 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
+using ShaderTextRestorer.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ShaderTextRestorer
+namespace ShaderTextRestorer.Types
 {
 	internal class ShaderType
 	{
@@ -112,7 +113,7 @@ namespace ShaderTextRestorer
 		public uint Size()
 		{
 			int majorVersion = m_programType.GetMajorDXVersion();
-			return majorVersion >= 5 ? (uint)36 : (uint)16;
+			return majorVersion >= 5 ? 36 : (uint)16;
 		}
 
 		public ShaderVariableClass ShaderVariableClass { get; }
