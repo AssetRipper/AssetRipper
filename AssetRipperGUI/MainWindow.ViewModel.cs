@@ -157,6 +157,8 @@ namespace AssetRipper.GUI
 				HasFile = false;
 				HasLoaded = false;
 
+				Logger.Error(error);
+
 				if (error is GameNotFoundException)
 				{
 					this.ShowPopup($"No Unity game was found in the dropped files.", "Error");
@@ -204,6 +206,7 @@ namespace AssetRipper.GUI
 			}, error =>
 			{
 				IsExporting = false;
+				Logger.Error(error);
 				this.ShowPopup($"Failed to export game content: {error.Message}", "Error");
 			});
 		}

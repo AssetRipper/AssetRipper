@@ -3,6 +3,7 @@ using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Library.Exporters.Textures;
@@ -44,7 +45,7 @@ namespace AssetRipper.GUI.AssetInfo
 					YamlTree = new[] { new AssetYamlNode("Asset Doesn't Support YAML Export", new YAMLScalarNode(true)) };
 					return;
 				}
-
+				Logger.Error(e);
 				YamlTree = new[] { new AssetYamlNode($"Asset Threw {e.GetType().Name} when exporting as YAML", new YAMLScalarNode(true)) };
 			}
 		}
