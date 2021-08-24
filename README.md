@@ -26,7 +26,7 @@ Milestone download links can be found on the [latest release page](https://githu
 
 ## Alpha Builds
 
-For advanced users, every commit is automatically built into an alpha build with Github Actions. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions) if you're logged in with a github account.
+For advanced users, every commit is automatically built into an alpha build with Github Actions. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions/workflows/publish.yml) if you're logged in with a github account.
 
 
 ## Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
