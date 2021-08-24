@@ -72,17 +72,22 @@ namespace AssetRipper.Core.Logging
 		private static void LogReleaseInformation()
 		{
 #if VIRTUAL
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Virtual {GetBuildArchitecture()}");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Virtual {GetBuildArchitecture()} {GetBuildType()}");
 #elif DEBUG
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Debug {GetBuildArchitecture()}");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Debug {GetBuildArchitecture()} {GetBuildType()}");
 #else
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Release {GetBuildArchitecture()}");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Release {GetBuildArchitecture()} {GetBuildType()}");
 #endif
 		}
 
 		private static string GetBuildArchitecture()
 		{
 			return Environment.Is64BitProcess ? "x64" : "x86";
+		}
+
+		private static string GetBuildType()
+		{
+			return FileUtils.Exists(DirectoryUtils.CombineWithExecutingDirectory("AssetRipperCore.dll")) ? "Compiled" : "Published";
 		}
 
 		private static void LogOperatingSystemInformation()

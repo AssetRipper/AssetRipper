@@ -52,7 +52,6 @@ If you want to run binary files, you need to install:
  * Extend Windows-only features to Mac and Linux
  * OBJ mesh export
  * GUI settings page
- * NAudio implementation for exporting other audio formats
 
 
 ## Goals
