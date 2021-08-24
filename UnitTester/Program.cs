@@ -10,13 +10,14 @@ namespace UnitTester
 	static class Program
 	{
 		private static GameStructure GameStructure { get; set; }
+		private const string TestsDirectory = "../../Tests";
 
 		static void Main(string[] args)
 		{
 			if (args.Length != 0)
 			{
 				Console.WriteLine("This program does not accept command line arguments.");
-				Console.ReadKey();
+				Console.ReadLine();
 				return;
 			}
 
@@ -26,23 +27,27 @@ namespace UnitTester
 			Logger.BlankLine();
 
 			RunTests();
-			Console.ReadKey();
+			Console.ReadLine();
 		}
 
 		static void RunTests()
 		{
-			if (!DirectoryUtils.Exists("Tests"))
+			if (!DirectoryUtils.Exists(TestsDirectory))
 			{
 				Logger.Log(LogType.Warning, LogCategory.General, "Tests folder did not exist. Creating...");
-				DirectoryUtils.CreateDirectory("Tests");
+				DirectoryUtils.CreateDirectory(TestsDirectory);
+				Logger.Info(LogCategory.General, "Created. Program will now exit.");
 				return;
 			}
 
+			Logger.Info(LogCategory.General, $"Running tests in {Path.GetFullPath(TestsDirectory)}");
+			Logger.BlankLine();
+
 			int numTests = 0;
 			int numSuccessful = 0;
-			foreach (string versionPath in Directory.GetDirectories("Tests"))
+			foreach (string versionPath in Directory.GetDirectories(TestsDirectory))
 			{
-				string versionName = Path.GetRelativePath("Tests", versionPath);
+				string versionName = Path.GetRelativePath(TestsDirectory, versionPath);
 				foreach(string testPath in Directory.GetDirectories(versionPath))
 				{
 					string testName = Path.GetRelativePath(versionPath, testPath);
