@@ -40,5 +40,9 @@
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DXDecompiler-ly" Version="0.0.1" />
+  </ItemGroup>
   
 </Project>

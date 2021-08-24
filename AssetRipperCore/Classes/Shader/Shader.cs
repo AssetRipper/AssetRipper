@@ -174,11 +174,7 @@ namespace AssetRipper.Core.Classes.Shader
 			}
 		}
 
-		public override void ExportBinary(IExportContainer container, Stream stream)
-		{
-			ExportBinary(container, stream, DefaultShaderExporterInstantiator);
-		}
-
+		public override void ExportBinary(IExportContainer container, Stream stream) => ExportBinary(container, stream, DefaultShaderExporterInstantiator);
 		public void ExportBinary(IExportContainer container, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
 		{
 			if (IsSerialized(container.Version))
@@ -207,6 +203,12 @@ namespace AssetRipper.Core.Classes.Shader
 			{
 				base.ExportBinary(container, stream);
 			}
+		}
+
+		public void ExportDummy(IExportContainer container, Stream stream) => ExportDummy(container, stream, DefaultShaderExporterInstantiator);
+		public void ExportDummy(IExportContainer container, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
+		{
+			DummyShaderTextExporter.ExportShader(this, container, stream, exporterInstantiator);
 		}
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)

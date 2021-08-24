@@ -48,7 +48,7 @@ namespace ShaderTextRestorer.Exporters
 						decodedStream.Position = 0;
 						Module module = Module.ReadFrom(decodedStream);
 						string listing = m_disassembler.Disassemble(module, DisassemblyOptions.Default);
-						ExportListing(writer, listing);
+						ExportListing(writer, "//ShaderVulkanExporter\n" + listing);
 					}
 					else
 					{

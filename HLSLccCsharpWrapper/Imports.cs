@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace HLSLccCsharpWrapper
 {
+	[SupportedOSPlatform("windows")]
+	[SupportedOSPlatform("linux")]
 	public unsafe static class Imports
 	{
 		public const string DllName = "HLSLccWrapper";

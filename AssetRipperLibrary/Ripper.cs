@@ -95,10 +95,10 @@ namespace AssetRipper.Library
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter(Settings));
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
 			}
 
 			//Cross-Platform exporters
+			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
 			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
 
 			//Engine Exporters

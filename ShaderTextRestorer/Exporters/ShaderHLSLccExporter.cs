@@ -5,10 +5,10 @@ using HLSLccCsharpWrapper;
 using System.IO;
 using System.Runtime.Versioning;
 using ShaderTextRestorer.Exporters.DirectX;
+using System;
 
 namespace ShaderTextRestorer.Exporters
 {
-	[SupportedOSPlatform("windows")]
 	public class ShaderHLSLccExporter : ShaderDXExporter
 	{
 		GLLang m_GLLang;
@@ -20,6 +20,12 @@ namespace ShaderTextRestorer.Exporters
 
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
+			if(!OperatingSystem.IsWindows() && !OperatingSystem.IsLinux())
+			{
+				base.Export(writer,ref subProgram);
+				return;
+			}
+
 			using (MemoryStream stream = new MemoryStream(subProgram.ProgramData))
 			{
 				using (BinaryReader reader = new BinaryReader(stream))
@@ -48,7 +54,7 @@ namespace ShaderTextRestorer.Exporters
 						}
 						else
 						{
-							ExportListing(writer, shaderText);
+							ExportListing(writer, "//ShaderHLSLccExporter\n" + shaderText);
 						}
 					}
 				}

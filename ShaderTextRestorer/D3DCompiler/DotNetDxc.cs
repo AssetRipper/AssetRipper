@@ -17,7 +17,7 @@ namespace DotNetDxc
 	[ComImport]
 	[Guid("8BA5FB08-5195-40e2-AC58-0D989C3A0102")]
 	[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-	public interface IDxcBlob
+	internal interface IDxcBlob
 	{
 		[PreserveSig]
 		IntPtr GetBufferPointer();

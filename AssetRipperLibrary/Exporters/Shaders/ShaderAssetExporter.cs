@@ -20,7 +20,6 @@ using ShaderTextRestorer.Exporters;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
-	[SupportedOSPlatform("windows")]
 	public sealed class ShaderAssetExporter : IAssetExporter
 	{
 		ShaderExportMode ExportMode { get; set; } = ShaderExportMode.Dummy;
@@ -54,9 +53,13 @@ namespace AssetRipper.Library.Exporters.Shaders
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
 				Shader shader = (Shader)asset;
+
+				//Importing Hidden/Internal shaders causes the unity editor screen to turn black
+				if (shader.ParsedForm.Name?.StartsWith("Hidden/") == true) return false;
+
 				if (ExportMode == ShaderExportMode.Dummy)
 				{
-					DummyShaderTextExporter.ExportShader(shader, container, fileStream, DefaultShaderExporterInstantiator);
+					shader.ExportDummy(container, fileStream, DefaultShaderExporterInstantiator);
 				}
 				else if (IsDX11ExportMode(ExportMode))
 				{
@@ -106,27 +109,6 @@ namespace AssetRipper.Library.Exporters.Shaders
 			assetType = AssetType.Meta;
 			return true;
 		}
-
-		/*old instantiator
-		private static ShaderTextExporter ShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
-		{
-			switch (graphicApi)
-			{
-				case GPUPlatform.d3d9:
-					return new ShaderDXExporter(graphicApi);
-
-				case GPUPlatform.d3d11_9x:
-				case GPUPlatform.d3d11:
-					return new ShaderHLSLccExporter(graphicApi);
-
-				case GPUPlatform.vulkan:
-					return new ShaderVulkanExporter();
-
-				default:
-					return Shader.DefaultShaderExporterInstantiator(version, graphicApi);
-			}
-		}
-		*/
 
 		private static ShaderTextExporter DefaultShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
 		{
