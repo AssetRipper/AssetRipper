@@ -21,7 +21,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
 		{
-			return new OggFileExportCollection(this, (AudioClip)asset);
+			return new AudioFileExportCollection(this, (AudioClip)asset, AudioFormat);
 		}
 
 		public bool Export(IExportContainer container, Core.Classes.Object.Object asset, string path)
@@ -30,6 +30,9 @@ namespace AssetRipper.Library.Exporters.Audio
 			byte[] decodedData = AudioClipDecoder.GetDecodedAudioClipData(audioClip);
 			if (decodedData == null)
 				return false;
+
+			if (AudioFormat == AudioExportFormat.Wav)
+				decodedData = AudioConverter.ConvertToWav(decodedData);
 
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
