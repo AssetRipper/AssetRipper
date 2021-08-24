@@ -84,8 +84,6 @@ It has borrowed code from [spacehamster](https://github.com/spacehamster)'s [uTi
 
 [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the [MIT license](Licenses/Cpp2IL.md).
 
-FMOD is licensed under a [non-commercial license](Licenses/FMOD.md).
-
 [Fmod5Sharp](https://github.com/SamboyCoding/Fmod5Sharp) is licensed under the [MIT license](Licenses/Fmod5Sharp.md).
 
 [HLSLcc](https://github.com/Unity-Technologies/HLSLcc) is licensed under the [MIT license](Licenses/HLSLcc.md).

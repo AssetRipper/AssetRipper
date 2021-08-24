@@ -62,7 +62,7 @@ namespace AssetRipper.GUI.AssetInfo
 				{
 					case IHasImageData img:
 						{
-							if (!OperatingSystem.IsWindows())
+							if (!OperatingSystem.IsWindows() && !OperatingSystem.IsLinux())
 								return null;
 							var directBitmap = TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, _asset.File.Version, img.ImageDataByteArray, 0, 0, KTXBaseInternalFormat.RG);
 							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
