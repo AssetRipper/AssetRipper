@@ -87,14 +87,14 @@ namespace AssetRipper.Library
 			if (ExportersInitialized)
 				return;
 
-			//Windows-only Exporters
-			if (OperatingSystem.IsWindows())
+			//Windows and Linux Exporters
+			if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
 			{
 				TextureAssetExporter textureExporter = new TextureAssetExporter(Settings);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
 				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
-				GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter(Settings));
+				//GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioAssetExporter(Settings));
 			}
 
 			//Cross-Platform exporters

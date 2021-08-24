@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace Texture2DDecoder
 {
-    public static unsafe partial class TextureDecoder
+	[SupportedOSPlatform("windows")]
+	[SupportedOSPlatform("linux")]
+	public static unsafe partial class TextureDecoder
     {
         public static bool DecodeDXT1(byte[] data, int width, int height, byte[] image)
         {

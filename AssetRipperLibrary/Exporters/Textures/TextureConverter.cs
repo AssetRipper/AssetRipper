@@ -18,11 +18,9 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 namespace AssetRipper.Library.Exporters.Textures
 {
 	[SupportedOSPlatform("windows")]
+	[SupportedOSPlatform("linux")]
 	public static class TextureConverter
 	{
-		[DllImport("texgenpack", CallingConvention = CallingConvention.Cdecl)]
-		private static extern void texgenpackdecode(int texturetype, byte[] texturedata, int width, int height, IntPtr bmp, bool fixAlpha);
-
 		private static bool IsUseUnityCrunch(UnityVersion version, TextureFormat format)
 		{
 			if (version.IsGreaterEqual(2017, 3))
@@ -290,12 +288,15 @@ namespace AssetRipper.Library.Exporters.Textures
 			Logger.Info("Uses texgenpack!");
 			Logger.Info($"KTXBaseInternalFormat: {baseInternalFormat}");
 			bool fixAlpha = baseInternalFormat is KTXBaseInternalFormat.RED or KTXBaseInternalFormat.RG;
+			Logger.Info($"Fix alpha: {fixAlpha}");
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				texgenpackdecode((int)ToTexgenpackTexturetype(textureFormat), data, width, height, bitmap.BitsPtr, fixAlpha);
-				Logger.Info($"Byte array length: {bitmap.Bits.Length} Width: {width} Height: {height}");
-				CheckEqual(DecodeBC(data, textureFormat, width, height), bitmap.Bits);
+				if(TexGenPackHandler.Decode(textureFormat, data, width, height, bitmap.BitsPtr, fixAlpha))
+				{
+					Logger.Info($"Byte array length: {bitmap.Bits.Length} Width: {width} Height: {height}");
+					CheckEqual(DecodeBC(data, textureFormat, width, height), bitmap.Bits);
+				}
 				bitmap.FlipY();
 				return bitmap;
 			}
@@ -309,6 +310,12 @@ namespace AssetRipper.Library.Exporters.Textures
 		private static byte[] DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height)
 		{
 			Logger.Info($"Performing alternate decoding for {textureFormat}");
+			if(!OperatingSystem.IsWindows() && !OperatingSystem.IsLinux())
+			{
+				Logger.Info("Mac. Returning null");
+				return null;
+			}
+
 			byte[] result = new byte[4 * width * height];
 			switch (textureFormat)
 			{
@@ -397,13 +404,19 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static bool DecompressCRN(byte[] data, out byte[] uncompressedBytes)
 		{
-			uncompressedBytes = TextureDecoder.UnpackCrunch(data);
+			//if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
+				uncompressedBytes = TextureDecoder.UnpackCrunch(data);
+			//else
+			//	uncompressedBytes = null;
 			return uncompressedBytes != null;
 		}
 
 		private static bool DecompressUnityCRN(byte[] data, out byte[] uncompressedBytes)
 		{
-			uncompressedBytes = TextureDecoder.UnpackUnityCrunch(data);
+			//if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
+				uncompressedBytes = TextureDecoder.UnpackUnityCrunch(data);
+			//else
+			//	uncompressedBytes = null;
 			return uncompressedBytes != null;
 		}
 
@@ -460,27 +473,6 @@ namespace AssetRipper.Library.Exporters.Textures
 
 				case TextureFormat.EAC_RG_SIGNED:
 					return QFormat.Q_FORMAT_EAC_RG_SIGNED;
-
-				default:
-					throw new NotSupportedException(format.ToString());
-			}
-		}
-
-		private static TexgenpackTexturetype ToTexgenpackTexturetype(TextureFormat format)
-		{
-			switch (format)
-			{
-				case TextureFormat.BC4:
-					return TexgenpackTexturetype.RGTC1;
-
-				case TextureFormat.BC5:
-					return TexgenpackTexturetype.RGTC2;
-
-				case TextureFormat.BC6H:
-					return TexgenpackTexturetype.BPTC_FLOAT;
-
-				case TextureFormat.BC7:
-					return TexgenpackTexturetype.BPTC;
 
 				default:
 					throw new NotSupportedException(format.ToString());
