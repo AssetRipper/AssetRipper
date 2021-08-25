@@ -49,7 +49,7 @@ If you want to run binary files, you need to install:
 
 ## Documentation
  * [Export Features](Docs/ExportFeatures.md)
- * [Development Roadmap](Docs/Roadmap.md)
+ * [Development Roadmap](Docs/RoadMap.md)
  * [Structure](Docs/Structure.md)
 
 ## License [![](https://img.shields.io/github/license/ds5678/AssetRipper?color=green)](License.md)
