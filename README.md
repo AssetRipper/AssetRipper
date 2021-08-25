@@ -19,12 +19,12 @@ Thank you for considering to support me. I have normal expenses like food, elect
 
 [Patreon](https://www.patreon.com/ds5678)
 
-## Downloads
+## Downloads [![](https://img.shields.io/github/v/release/ds5678/AssetRipper)](https://github.com/ds5678/AssetRipper/releases/latest)
 
 Milestone download links can be found on the [latest release page](https://github.com/ds5678/AssetRipper/releases/latest).
 
 
-## Alpha Builds
+## Alpha Builds [![](https://img.shields.io/github/workflow/status/ds5678/AssetRipper/Publish/master)](https://github.com/ds5678/AssetRipper/actions/workflows/publish.yml)
 
 For advanced users, every commit is automatically built into an alpha build with Github Actions. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions/workflows/publish.yml) if you're logged in with a github account.
 
@@ -47,27 +47,19 @@ If you want to run binary files, you need to install:
  * [Unity 2017.3.0f3 or greater](https://unity3d.com/get-unity/download/archive) (NOTE: your editor version must be no less than the game's version)
  
 
-## To Do
- * Predetermined GUID support
- * Extend Windows-only features to Mac and Linux
- * OBJ mesh export
- * GUI settings page
+## Other Pages
+ * [Export Features](Docs/ExportFeatures.md)
+ * [Development Roadmap](Docs/Roadmap.md)
+ * [Structure](Docs/Structure.md)
 
-
-## Goals
- * Better shader implementation
- * Overhaul struct reading for universal version support
- * Option to reference assemblies instead of scripts
-
-
-## License
+## License [![](https://img.shields.io/github/license/ds5678/AssetRipper?color=green)](License.md)
 
 AssetRipper is licensed under the GNU General Public License v3.0
 
 
-## Copyright Issues
+## Legal Issues
 
-Please be aware that distributing the output from this software may be against copyright legislation in your jurisdiction. You are responsible for ensuring that you're not breaking any laws.
+Please be aware that using or distributing the output from this software may be against copyright legislation in your jurisdiction. You are responsible for ensuring that you're not breaking any laws.
 
 
 ## Credits
@@ -106,3 +98,9 @@ LibOgg and LibVorbis are licensed from [Xiph](https://www.xiph.org/) under the [
 ## Disclaimer
 
 This software is not sponsored by or affiliated with Unity Technologies or its affiliates. "Unity" is a registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere.
+
+## Contact Information
+
+Any **organizations** wishing to contact me may use the email listed on my profile.
+
+Except in rare circumstances, **individuals** must use the appropriate public channels to reach me.

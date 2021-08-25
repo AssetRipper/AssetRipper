@@ -10,7 +10,7 @@
    
 * [*AssetRipperLibrary*](../AssetRipperLibrary/README.md)
 
-   This is an expansion library for AssetRipperCore. It includes some third party dependencies and has some extra converters, so on Windows it additionally exports:
+   This is an expansion library for AssetRipperCore. It includes some extra exporters:
    * AudioClip export
    * Texture2D export (with Sprites)
    * Shader DirectX blob export
