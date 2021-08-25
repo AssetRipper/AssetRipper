@@ -2,11 +2,14 @@ using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.IO;
 using System.IO;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core.Converters.Shader
 {
 	public class ShaderTextExporter
 	{
+		public virtual string Name => "ShaderTextExporter";
+
 		public virtual void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
 			byte[] exportData = subProgram.ProgramData;
@@ -14,19 +17,39 @@ namespace AssetRipper.Core.Converters.Shader
 			{
 				using (BinaryReader reader = new BinaryReader(memStream))
 				{
-					ExportText(writer, reader);
+					ExportText(writer, reader, Name);
 				}
 			}
 		}
 
-		protected static void ExportText(TextWriter writer, BinaryReader reader)
+		protected static void ExportText(TextWriter writer, BinaryReader reader) => ExportText(writer, reader, null);
+		protected static void ExportText(TextWriter writer, BinaryReader reader, string name)
 		{
+			List<char> characters = new List<char>();
+			if (!string.IsNullOrEmpty(name))
+			{
+				characters.Add('/');
+				characters.Add('/');
+				foreach (char c in name.ToCharArray())
+				{
+					characters.Add(c);
+				}
+				characters.Add('\n');
+			}
 			while (reader.BaseStream.Position != reader.BaseStream.Length)
 			{
-				char c = reader.ReadChar();
+				characters.Add(reader.ReadChar());
+			}
+			ExportText(writer, characters.ToArray());
+		}
+		protected static void ExportText(TextWriter writer, char[] array)
+		{
+			for(int i = 0; i < array.Length; i++)
+			{
+				char c = array[i];
 				if (c == '\n')
 				{
-					if (reader.BaseStream.Position == reader.BaseStream.Length)
+					if (i == array.Length - 1)
 					{
 						break;
 					}

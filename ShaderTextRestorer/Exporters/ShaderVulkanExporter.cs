@@ -11,6 +11,8 @@ namespace ShaderTextRestorer.Exporters
 {
 	public class ShaderVulkanExporter : ShaderTextExporter
 	{
+		public override string Name => "ShaderVulkanExporter";
+
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
 			using (MemoryStream ms = new MemoryStream(subProgram.ProgramData))

@@ -13,10 +13,10 @@ using AssetRipper.Library.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Versioning;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using ShaderTextRestorer.Exporters;
+using ShaderTextRestorer.Exporters.DirectX;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
@@ -40,8 +40,6 @@ namespace AssetRipper.Library.Exporters.Shaders
 			{
 				case ShaderExportMode.GLSL:
 				case ShaderExportMode.Metal:
-				case ShaderExportMode.DXBytecode:
-				case ShaderExportMode.DXBytecodeRestored:
 					return true;
 				default:
 					return false;
@@ -50,13 +48,14 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		public bool Export(IExportContainer container, UnityObject asset, string path)
 		{
+			Shader shader = (Shader)asset;
+
+			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
+			if (shader.ParsedForm.Name?.StartsWith("Hidden/") ?? false) 
+				return false;
+
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				Shader shader = (Shader)asset;
-
-				//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-				if (shader.ParsedForm.Name?.StartsWith("Hidden/") == true) return false;
-
 				if (ExportMode == ShaderExportMode.Dummy)
 				{
 					shader.ExportDummy(container, fileStream, DefaultShaderExporterInstantiator);
@@ -64,10 +63,6 @@ namespace AssetRipper.Library.Exporters.Shaders
 				else if (IsDX11ExportMode(ExportMode))
 				{
 					shader.ExportBinary(container, fileStream, HLSLShaderExporterInstantiator);
-				}
-				else if (ExportMode == ShaderExportMode.Asm)
-				{
-					shader.ExportBinary(container, fileStream, AssemblyShaderExporterInstantiator);
 				}
 				else
 				{
@@ -121,34 +116,12 @@ namespace AssetRipper.Library.Exporters.Shaders
 			}
 		}
 
-		private ShaderTextExporter AssemblyShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
-		{
-			switch (graphicApi)
-			{
-				case GPUPlatform.d3d9:
-				case GPUPlatform.d3d11_9x:
-				case GPUPlatform.d3d11:
-					return new ShaderAsmExporter(graphicApi);
-				case GPUPlatform.vulkan:
-					return new ShaderVulkanExporter();
-				default:
-					return Shader.DefaultShaderExporterInstantiator(version, graphicApi);
-			}
-		}
-
 		private ShaderTextExporter HLSLShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
 		{
 			switch (graphicApi)
 			{
+				case GPUPlatform.d3d11_9x:
 				case GPUPlatform.d3d11:
-					if (ExportMode == ShaderExportMode.DXBytecode)
-					{
-						return new ShaderDxBytecodeExporter(graphicApi, restore: false);
-					}
-					if (ExportMode == ShaderExportMode.DXBytecodeRestored)
-					{
-						return new ShaderDxBytecodeExporter(graphicApi, restore: true);
-					}
 					if (ExportMode == ShaderExportMode.GLSL)
 					{
 						return new ShaderHLSLccExporter(graphicApi, HLSLccCsharpWrapper.GLLang.LANG_DEFAULT);
@@ -159,8 +132,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 					}
 					throw new Exception($"Unexpected shader mode {ExportMode}");
 				case GPUPlatform.d3d9:
-				case GPUPlatform.d3d11_9x:
-					return new ShaderAsmExporter(graphicApi);
+					return new ShaderDXExporter(graphicApi);
 				case GPUPlatform.vulkan:
 					return new ShaderVulkanExporter();
 

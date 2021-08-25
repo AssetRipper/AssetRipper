@@ -3,7 +3,6 @@ using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.IO;
 using HLSLccCsharpWrapper;
 using System.IO;
-using System.Runtime.Versioning;
 using ShaderTextRestorer.Exporters.DirectX;
 using System;
 
@@ -11,6 +10,8 @@ namespace ShaderTextRestorer.Exporters
 {
 	public class ShaderHLSLccExporter : ShaderDXExporter
 	{
+		public override string Name => "ShaderHLSLccExporter";
+
 		GLLang m_GLLang;
 
 		public ShaderHLSLccExporter(GPUPlatform graphicApi, GLLang lang) : base(graphicApi)

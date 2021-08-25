@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Logging;
 using DXDecompiler;
+using DXDecompiler.Decompiler;
 using DXDecompiler.Util;
 using System;
 
@@ -37,6 +38,37 @@ namespace ShaderTextRestorer.Handlers
 			}
 
 			disassemblyText = null;
+			return false;
+		}
+
+		public static bool TryDecompile(byte[] data, int offset, out string decompiledText) => TryDecompile(GetRelevantData(data, offset), out decompiledText);
+		public static bool TryDecompile(byte[] data, out string decompiledText)
+		{
+			if (data == null)
+				throw new ArgumentNullException(nameof(data));
+			if (data.Length == 0)
+				throw new ArgumentException("inputData cannot have zero length");
+
+			try
+			{
+				var programType = GetProgramType(data);
+				switch (programType)
+				{
+					case DXProgramType.DXBC:
+						decompiledText = HLSLDecompiler.Decompile(data);
+						return !string.IsNullOrEmpty(decompiledText);
+					case DXProgramType.DX9:
+						decompiledText = DXDecompiler.DX9Shader.HlslWriter.Decompile(data);
+						return !string.IsNullOrEmpty(decompiledText);
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(LogCategory.Export, $"DXDecompilerly threw an exception while attempting to export a shader");
+				Logger.Verbose(LogCategory.Export, ex.ToString());
+			}
+
+			decompiledText = null;
 			return false;
 		}
 

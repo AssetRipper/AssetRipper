@@ -7,6 +7,8 @@ namespace AssetRipper.Core.Converters.Shader
 {
 	public class ShaderMetalExporter : ShaderTextExporter
 	{
+		public override string Name => "ShaderMetalExporter";
+
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
 			using (MemoryStream memStream = new MemoryStream(subProgram.ProgramData))
