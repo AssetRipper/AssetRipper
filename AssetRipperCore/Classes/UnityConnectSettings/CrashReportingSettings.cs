@@ -50,7 +50,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			node.Add(EventUrlName, EventUrl);
 			if (HasNativeEventUrl(container.ExportVersion))
 			{
-				node.Add(NativeEventUrlName, GetNativeEventUrl(container.Version));
+				node.Add(NativeEventUrlName, GetNativeEventUrl());
 			}
 			node.Add(EnabledName, Enabled);
 			if (HasLogBufferSize(container.ExportVersion))
@@ -61,10 +61,11 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			return node;
 		}
 
-		private string GetNativeEventUrl(UnityVersion version)
+		private string GetNativeEventUrl()
 		{
-			return HasNativeEventUrl(version) ? NativeEventUrl : "https://perf-events.cloud.unity3d.com/symbolicate";
+			return NativeEventUrl ?? "https://perf-events.cloud.unity3d.com/symbolicate"; //not sure where this url came from
 		}
+
 		private uint GetLogBufferSize(UnityVersion version)
 		{
 			// NOTE: editor has different value than player
