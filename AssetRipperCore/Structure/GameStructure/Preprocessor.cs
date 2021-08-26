@@ -9,18 +9,9 @@ namespace AssetRipper.Core.Structure.GameStructure
 {
 	internal static class Preprocessor
 	{
-		private static readonly string tempFolder;
 		public const string ZipExtension = ".zip";
 		public const string ApkExtension = ".apk";
 		public const string XapkExtension = ".xapk";
-		public const int NumberOfRandomCharacters = 10;
-
-		static Preprocessor()
-		{
-			tempFolder = DirectoryUtils.CombineWithExecutingDirectory("temp");
-			DeleteTempFolder();
-			DirectoryUtils.CreateDirectory(tempFolder);
-		}
 
 		internal static List<string> Process(IEnumerable<string> paths)
 		{
@@ -46,15 +37,15 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private static string ExtractZip(string zipFilePath)
 		{
-			string outputDirectory = GetNewRandomTempFolder();
+			string outputDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			DecompressZipArchive(zipFilePath, outputDirectory);
 			return outputDirectory;
 		}
 
 		private static string ExtractXapk(string xapkFilePath)
 		{
-			string intermediateDirectory = GetNewRandomTempFolder();
-			string outputDirectory = GetNewRandomTempFolder();
+			string intermediateDirectory = TempFolderManager.CreateNewRandomTempFolder();
+			string outputDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			DecompressZipArchive(xapkFilePath, intermediateDirectory);
 			foreach(var filePath in DirectoryUtils.GetFiles(intermediateDirectory))
 			{
@@ -97,20 +88,12 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 		}
 
-		private static string GetNewRandomTempFolder() => Path.Combine(tempFolder, GuidUtils.GetNewGuidString(NumberOfRandomCharacters));
-
 		private static string GetFileExtension(string path)
 		{
 			if (FileUtils.Exists(path))
 				return Path.GetExtension(path);
 			else
 				return null;
-		}
-
-		public static void DeleteTempFolder()
-		{
-			if (DirectoryUtils.Exists(tempFolder))
-				DirectoryUtils.Delete(tempFolder, true);
 		}
 	}
 }
