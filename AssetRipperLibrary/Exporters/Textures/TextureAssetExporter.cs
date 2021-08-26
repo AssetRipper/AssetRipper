@@ -25,11 +25,13 @@ namespace AssetRipper.Library.Exporters.Textures
 	[SupportedOSPlatform("linux")]
 	public class TextureAssetExporter : IAssetExporter
 	{
-		private ImageExportFormat imageExportFormat { get; set; }
+		private ImageExportFormat ImageExportFormat { get; set; }
+		private SpriteExportMode SpriteExportMode { get; set; }
 
 		public TextureAssetExporter(LibraryConfiguration configuration)
 		{
-			imageExportFormat = configuration.ImageExportFormat;
+			ImageExportFormat = configuration.ImageExportFormat;
+			SpriteExportMode = configuration.SpriteExportMode;
 		}
 
 		public static bool ExportTexture(Texture2D texture, Stream exportStream, ImageExportFormat imageFormat)
@@ -174,9 +176,9 @@ namespace AssetRipper.Library.Exporters.Textures
 				Texture2D texture = (Texture2D)asset;
 				return texture.IsValidData;
 			}
-			if(asset.ClassID == ClassIDType.Sprite && options is LibraryConfiguration libOptions)
+			if(asset.ClassID == ClassIDType.Sprite)
 			{
-				return libOptions.SpriteExportMode == SpriteExportMode.Texture2D;
+				return SpriteExportMode == SpriteExportMode.Texture2D;
 			}
 			return true;
 		}
@@ -192,7 +194,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				if (!ExportTexture(texture, fileStream, imageExportFormat))
+				if (!ExportTexture(texture, fileStream, ImageExportFormat))
 				{
 					Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
 					return false;
@@ -223,8 +225,8 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				return TextureExportCollection.CreateExportCollection(this, (Sprite)asset);
 			}
-			var collection = new TextureExportCollection(this, (Texture2D)asset, true);
-			collection.FileExtension = imageExportFormat.GetFileExtension();
+			var collection = new TextureExportCollection(this, (Texture2D)asset, SpriteExportMode != SpriteExportMode.Native);
+			collection.FileExtension = ImageExportFormat.GetFileExtension();
 			return collection;
 		}
 

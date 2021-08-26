@@ -8,6 +8,6 @@ namespace AssetRipper.Library.Configuration
 		public ImageExportFormat ImageExportFormat { get; set; } = ImageExportFormat.Png;
 		public MeshExportFormat MeshExportFormat { get; set; } = MeshExportFormat.Obj;
 		public ShaderExportMode ShaderExportMode { get; set; } = ShaderExportMode.Dummy;
-		public SpriteExportMode SpriteExportMode { get; set; } = SpriteExportMode.Texture2D;
+		public SpriteExportMode SpriteExportMode { get; set; } = SpriteExportMode.Native;
 	}
 }
