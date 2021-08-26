@@ -9,7 +9,9 @@ namespace AssetRipper.GUI.AssetInfo
 		//If key-value, display name is "key: value"
 		//If object/array, display name is "key", nested children are array elements.
 		
+		//Read from UI
 		public string DisplayName { get; }
+		//Read from UI
 		public List<AssetYamlNode> Children { get; } = new();
 
 		public AssetYamlNode(string key, YAMLScalarNode value)

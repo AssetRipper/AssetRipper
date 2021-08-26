@@ -225,7 +225,9 @@ namespace AssetRipper.GUI
 		public void OnAssetSelected(NewUiFileListItem selectedItem, Object selectedAsset)
 		{
 			_assetContainer.LastAccessedAsset = selectedAsset;
-			SelectedAsset = new SelectedAsset(selectedAsset, selectedItem.DisplayAs, _assetContainer);
+
+			SelectedAsset?.Dispose();
+			SelectedAsset = new(selectedAsset, _assetContainer);
 		}
 	}
 }
