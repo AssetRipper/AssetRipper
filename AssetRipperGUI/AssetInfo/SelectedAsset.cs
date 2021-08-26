@@ -64,7 +64,7 @@ namespace AssetRipper.GUI.AssetInfo
 			Logger.Log(level, LogCategory.LibVlc, $"[{e.Module ?? "General"}] [{e.Level}] {e.Message}");
 		}
 
-		public SelectedAsset(Object asset, IExportContainer uiAssetContainer)
+		public SelectedAsset(Object asset, IExportContainer? uiAssetContainer)
 		{
 			_asset = asset;
 
@@ -98,7 +98,7 @@ namespace AssetRipper.GUI.AssetInfo
 			}
 		}
 
-		private void BuildYamlTree(IExportContainer uiAssetContainer)
+		private void BuildYamlTree(IExportContainer? uiAssetContainer)
 		{
 			try
 			{
