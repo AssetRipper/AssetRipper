@@ -104,7 +104,7 @@ namespace AssetRipper.Core.Classes.Shader
 					byte[] compressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					UnpackSubProgramBlobs(reader.Layout, offsets, compressedLengths, decompressedLengths, compressedBlob);
+					UnpackSubProgramBlobs(reader.Layout(), offsets, compressedLengths, decompressedLengths, compressedBlob);
 				}
 				else
 				{
@@ -114,7 +114,7 @@ namespace AssetRipper.Core.Classes.Shader
 					byte[] compressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					UnpackSubProgramBlobs(reader.Layout, offsets, compressedLengths, decompressedLengths, compressedBlob);
+					UnpackSubProgramBlobs(reader.Layout(), offsets, compressedLengths, decompressedLengths, compressedBlob);
 				}
 			}
 			else
@@ -127,7 +127,7 @@ namespace AssetRipper.Core.Classes.Shader
 					byte[] compressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					UnpackSubProgramBlobs(reader.Layout, 0, (uint)compressedBlob.Length, decompressedSize, compressedBlob);
+					UnpackSubProgramBlobs(reader.Layout(), 0, (uint)compressedBlob.Length, decompressedSize, compressedBlob);
 				}
 
 				if (HasFallback(reader.Version))

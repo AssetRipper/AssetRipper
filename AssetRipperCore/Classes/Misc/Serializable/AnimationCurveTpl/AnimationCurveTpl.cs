@@ -84,7 +84,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 
 		public void Read(AssetReader reader)
 		{
-			AnimationCurveTplLayout layout = reader.Layout.Serialized.AnimationCurveTpl;
+			AnimationCurveTplLayout layout = reader.Layout().Serialized.AnimationCurveTpl;
 			Curve = reader.ReadAssetArray<KeyframeTpl<T>>();
 			reader.AlignStream();
 
@@ -98,7 +98,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 
 		public void Write(AssetWriter writer)
 		{
-			AnimationCurveTplLayout layout = writer.Layout.Serialized.AnimationCurveTpl;
+			AnimationCurveTplLayout layout = writer.Layout().Serialized.AnimationCurveTpl;
 			Curve.Write(writer);
 			writer.AlignStream();
 

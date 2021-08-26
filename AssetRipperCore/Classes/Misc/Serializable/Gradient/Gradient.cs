@@ -5,6 +5,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 {
@@ -27,7 +28,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 
 		public void Read(AssetReader reader)
 		{
-			GradientLayout layout = reader.Layout.Serialized.Gradient;
+			GradientLayout layout = reader.Layout().Serialized.Gradient;
 			if (layout.Version == 1)
 			{
 				Key0_32 = reader.ReadAsset<ColorRGBA32>();
@@ -79,7 +80,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 
 		public void Write(AssetWriter writer)
 		{
-			GradientLayout layout = writer.Layout.Serialized.Gradient;
+			GradientLayout layout = writer.Layout().Serialized.Gradient;
 			if (layout.Version == 1)
 			{
 				Key0_32.Write(writer);

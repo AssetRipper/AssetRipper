@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Clip
 			Buffer.BlockCopy(Data, 0, memStreamBuffer, 0, memStreamBuffer.Length);
 			using (MemoryStream stream = new MemoryStream(memStreamBuffer))
 			{
-				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout))
+				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout.Info))
 				{
 					while (reader.BaseStream.Position < reader.BaseStream.Length)
 					{

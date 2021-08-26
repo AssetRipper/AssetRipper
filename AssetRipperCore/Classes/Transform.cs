@@ -73,7 +73,7 @@ namespace AssetRipper.Core.Classes
 			LocalScale.Read(reader);
 			Children = reader.ReadAssetArray<PPtr<Transform>>();
 			Father.Read(reader);
-			TransformLayout layout = reader.Layout.Transform;
+			TransformLayout layout = reader.Layout().Transform;
 			if (layout.HasRootOrder)
 			{
 				RootOrder = reader.ReadInt32();
@@ -94,7 +94,7 @@ namespace AssetRipper.Core.Classes
 			Children.Write(writer);
 			Father.Write(writer);
 
-			TransformLayout layout = writer.Layout.Transform;
+			TransformLayout layout = writer.Layout().Transform;
 			if (layout.HasRootOrder)
 			{
 				writer.Write(RootOrder);

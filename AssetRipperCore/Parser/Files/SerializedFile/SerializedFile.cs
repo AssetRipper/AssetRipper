@@ -230,7 +230,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		internal void ReadData(Stream stream)
 		{
-			using (AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout))
+			using (AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout.Info))
 			{
 				if (SerializedFileMetadata.HasScriptTypes(Header.Version))
 				{

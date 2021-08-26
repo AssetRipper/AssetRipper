@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+using AssetRipper.Core.Layout.Classes;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 {
@@ -109,7 +110,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 			{
 				if (!IsFileIDToRecycleNameConditional(reader.Version) || IncludesIDToName)
 				{
-					if (reader.Layout.PPtr.IsLongID)
+					if ((new PPtrLayout(reader.Info)).IsLongID)
 					{
 						FileIDToRecycleName = new Dictionary<long, string>();
 						FileIDToRecycleName.Read(reader);
@@ -162,7 +163,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 			{
 				if (!IsFileIDToRecycleNameConditional(writer.Version) || IncludesIDToName)
 				{
-					if (writer.Layout.PPtr.IsLongID)
+					if ((new PPtrLayout(writer.Info)).IsLongID)
 					{
 						FileIDToRecycleName.Write(writer);
 					}

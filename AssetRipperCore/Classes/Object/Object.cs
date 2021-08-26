@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes.Object
 {
@@ -47,7 +48,7 @@ namespace AssetRipper.Core.Classes.Object
 		public virtual void Read(AssetReader reader)
 		{
 			BundleUnityVersion = reader.Version;
-			ObjectLayout layout = reader.Layout.Object;
+			ObjectLayout layout = reader.Layout().Object;
 			if (layout.HasHideFlag)
 			{
 				ObjectHideFlags = (HideFlags)reader.ReadUInt32();
@@ -56,7 +57,7 @@ namespace AssetRipper.Core.Classes.Object
 
 		public virtual void Write(AssetWriter writer)
 		{
-			ObjectLayout layout = writer.Layout.Object;
+			ObjectLayout layout = writer.Layout().Object;
 			if (layout.HasHideFlag)
 			{
 				writer.Write((uint)ObjectHideFlags);

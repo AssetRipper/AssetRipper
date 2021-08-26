@@ -85,7 +85,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 
 			using (MemoryStream blobMem = new MemoryStream(decompressedBuffer))
 			{
-				using (AssetReader blobReader = new AssetReader(blobMem, EndianType.LittleEndian, layout))
+				using (AssetReader blobReader = new AssetReader(blobMem, EndianType.LittleEndian, layout.Info))
 				{
 					if (segment == 0)
 					{
@@ -101,7 +101,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 		{
 			using (MemoryStream blobMem = new MemoryStream())
 			{
-				using (AssetWriter blobWriter = new AssetWriter(blobMem, EndianType.LittleEndian, layout))
+				using (AssetWriter blobWriter = new AssetWriter(blobMem, EndianType.LittleEndian, layout.Info))
 				{
 					if (segment == 0)
 					{

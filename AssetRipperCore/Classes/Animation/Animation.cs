@@ -54,7 +54,7 @@ namespace AssetRipper.Core.Classes.Animation
 		{
 			base.Read(reader);
 
-			AnimationLayout layout = reader.Layout.Animation;
+			AnimationLayout layout = reader.Layout().Animation;
 			DefaultAnimation.Read(reader);
 			if (layout.HasAnimations)
 			{
@@ -91,7 +91,7 @@ namespace AssetRipper.Core.Classes.Animation
 		{
 			base.Write(writer);
 
-			AnimationLayout layout = writer.Layout.Animation;
+			AnimationLayout layout = writer.Layout().Animation;
 			DefaultAnimation.Write(writer);
 			if (layout.HasAnimations)
 			{

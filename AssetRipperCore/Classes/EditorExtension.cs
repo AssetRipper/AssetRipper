@@ -7,6 +7,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes
 {
@@ -20,7 +21,7 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
-			EditorExtensionLayout layout = reader.Layout.EditorExtension;
+			EditorExtensionLayout layout = reader.Layout().EditorExtension;
 			if (layout.HasExtensionPtr)
 			{
 				ExtensionPtr = reader.ReadAsset<PPtr<Object.Object>>();
@@ -40,7 +41,7 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Write(writer);
 
-			EditorExtensionLayout layout = writer.Layout.EditorExtension;
+			EditorExtensionLayout layout = writer.Layout().EditorExtension;
 			if (layout.HasExtensionPtr)
 			{
 				ExtensionPtr.Write(writer);

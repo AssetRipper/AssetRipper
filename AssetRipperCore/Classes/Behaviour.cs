@@ -4,6 +4,7 @@ using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes
 {
@@ -20,7 +21,7 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
-			BehaviourLayout layout = reader.Layout.Behaviour;
+			BehaviourLayout layout = reader.Layout().Behaviour;
 			Enabled = reader.ReadByte();
 			if (layout.IsAlignEnabled)
 			{
@@ -32,7 +33,7 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Write(writer);
 
-			BehaviourLayout layout = writer.Layout.Behaviour;
+			BehaviourLayout layout = writer.Layout().Behaviour;
 			writer.Write(Enabled);
 			if (layout.IsAlignEnabled)
 			{

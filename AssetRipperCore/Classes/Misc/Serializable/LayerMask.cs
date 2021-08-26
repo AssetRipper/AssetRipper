@@ -3,6 +3,7 @@ using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable
 {
@@ -10,13 +11,13 @@ namespace AssetRipper.Core.Classes.Misc.Serializable
 	{
 		public void Read(AssetReader reader)
 		{
-			LayerMaskLayout layout = reader.Layout.Serialized.LayerMask;
+			LayerMaskLayout layout = reader.Layout().Serialized.LayerMask;
 			Bits = layout.Is32Bits ? reader.ReadUInt32() : reader.ReadUInt16();
 		}
 
 		public void Write(AssetWriter writer)
 		{
-			LayerMaskLayout layout = writer.Layout.Serialized.LayerMask;
+			LayerMaskLayout layout = writer.Layout().Serialized.LayerMask;
 			if (layout.Is32Bits)
 			{
 				writer.Write(Bits);

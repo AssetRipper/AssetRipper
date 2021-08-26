@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public void Read(AssetReader reader)
 		{
-			GUIStyleStateLayout layout = reader.Layout.Serialized.GUIStyle.GUIStyleState;
+			GUIStyleStateLayout layout = reader.Layout().Serialized.GUIStyle.GUIStyleState;
 			Background.Read(reader);
 			if (layout.HasScaledBackgrounds)
 			{
@@ -46,7 +46,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public void Write(AssetWriter writer)
 		{
-			GUIStyleStateLayout layout = writer.Layout.Serialized.GUIStyle.GUIStyleState;
+			GUIStyleStateLayout layout = writer.Layout().Serialized.GUIStyle.GUIStyleState;
 			Background.Write(writer);
 			if (layout.HasScaledBackgrounds)
 			{

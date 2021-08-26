@@ -7,6 +7,7 @@ using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
@@ -34,7 +35,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 
 		public void Read(AssetReader reader)
 		{
-			FloatCurveLayout layout = reader.Layout.AnimationClip.FloatCurve;
+			FloatCurveLayout layout = reader.Layout().AnimationClip.FloatCurve;
 			Curve.Read(reader);
 			Attribute = reader.ReadString();
 			Path = reader.ReadString();
@@ -47,7 +48,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 
 		public void Write(AssetWriter writer)
 		{
-			FloatCurveLayout layout = writer.Layout.AnimationClip.FloatCurve;
+			FloatCurveLayout layout = writer.Layout().AnimationClip.FloatCurve;
 			Curve.Write(writer);
 			writer.Write(Attribute);
 			writer.Write(Path);

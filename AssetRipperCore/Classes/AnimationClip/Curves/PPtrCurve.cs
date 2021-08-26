@@ -75,7 +75,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 
 		public void Read(AssetReader reader)
 		{
-			PPtrCurveLayout layout = reader.Layout.AnimationClip.PPtrCurve;
+			PPtrCurveLayout layout = reader.Layout().AnimationClip.PPtrCurve;
 			Curve = reader.ReadAssetArray<PPtrKeyframe>();
 			if (layout.IsAlignCurve)
 			{
@@ -90,7 +90,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 
 		public void Write(AssetWriter writer)
 		{
-			PPtrCurveLayout layout = writer.Layout.AnimationClip.PPtrCurve;
+			PPtrCurveLayout layout = writer.Layout().AnimationClip.PPtrCurve;
 			Curve.Write(writer);
 			if (layout.IsAlignCurve)
 			{

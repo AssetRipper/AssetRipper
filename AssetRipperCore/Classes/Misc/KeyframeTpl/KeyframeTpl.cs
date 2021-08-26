@@ -7,6 +7,7 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 {
@@ -39,7 +40,7 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 
 		public void Read(AssetReader reader)
 		{
-			KeyframeTplLayout layout = reader.Layout.Misc.KeyframeTpl;
+			KeyframeTplLayout layout = reader.Layout().Misc.KeyframeTpl;
 			Time = reader.ReadSingle();
 			Value.Read(reader);
 			InSlope.Read(reader);
@@ -58,7 +59,7 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 
 		public void Write(AssetWriter writer)
 		{
-			KeyframeTplLayout layout = writer.Layout.Misc.KeyframeTpl;
+			KeyframeTplLayout layout = writer.Layout().Misc.KeyframeTpl;
 			writer.Write(Time);
 			Value.Write(writer);
 			InSlope.Write(writer);

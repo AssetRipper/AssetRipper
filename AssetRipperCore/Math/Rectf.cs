@@ -5,6 +5,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System.Globalization;
 using System.IO;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Math
 {
@@ -97,7 +98,7 @@ namespace AssetRipper.Core.Math
 
 		public void Read(AssetReader reader)
 		{
-			RectfLayout layout = reader.Layout.Serialized.Rectf;
+			RectfLayout layout = reader.Layout().Serialized.Rectf;
 			if (layout.HasXMin)
 			{
 				XMin = reader.ReadSingle();
@@ -116,7 +117,7 @@ namespace AssetRipper.Core.Math
 
 		public void Write(AssetWriter writer)
 		{
-			RectfLayout layout = writer.Layout.Serialized.Rectf;
+			RectfLayout layout = writer.Layout().Serialized.Rectf;
 			if (layout.HasXMin)
 			{
 				writer.Write(XMin);

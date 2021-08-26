@@ -92,6 +92,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShaderTextRestorer", "ShaderTextRestorer\ShaderTextRestorer.csproj", "{DAB64EB2-BCF4-4854-A609-499E06A0F227}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperCommon", "AssetRipperCommon\AssetRipperCommon.csproj", "{676FEE4F-6353-4D8B-B8E6-D89801D25575}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -189,6 +191,12 @@ Global
 		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.Release|x64.Build.0 = Release|Any CPU
 		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.Virtual|x64.ActiveCfg = Virtual|Any CPU
 		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.Virtual|x64.Build.0 = Virtual|Any CPU
+		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.Debug|x64.Build.0 = Debug|Any CPU
+		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.Release|x64.ActiveCfg = Release|Any CPU
+		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.Release|x64.Build.0 = Release|Any CPU
+		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.Virtual|x64.ActiveCfg = Virtual|Any CPU
+		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.Virtual|x64.Build.0 = Virtual|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

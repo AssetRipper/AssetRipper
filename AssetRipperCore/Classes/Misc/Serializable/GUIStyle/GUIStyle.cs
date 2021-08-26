@@ -6,6 +6,7 @@ using AssetRipper.Core.Classes.GUIText;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 {
@@ -30,7 +31,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public void Read(AssetReader reader)
 		{
-			GUIStyleLayout layout = reader.Layout.Serialized.GUIStyle;
+			GUIStyleLayout layout = reader.Layout().Serialized.GUIStyle;
 			Name = reader.ReadString();
 			Normal.Read(reader);
 			Hover.Read(reader);
@@ -98,7 +99,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public void Write(AssetWriter writer)
 		{
-			GUIStyleLayout layout = writer.Layout.Serialized.GUIStyle;
+			GUIStyleLayout layout = writer.Layout().Serialized.GUIStyle;
 			writer.Write(Name);
 			Normal.Write(writer);
 			Hover.Write(writer);

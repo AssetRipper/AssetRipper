@@ -144,7 +144,7 @@ namespace AssetRipper.Core.Classes.GameObject
 		{
 			base.Read(reader);
 
-			GameObjectLayout layout = reader.Layout.GameObject;
+			GameObjectLayout layout = reader.Layout().GameObject;
 			if (layout.IsComponentTuple)
 			{
 				ComponentTuple = reader.ReadTupleEnum32TArray<ClassIDType, PPtr<Component>>((t) => (ClassIDType)t);
@@ -205,7 +205,7 @@ namespace AssetRipper.Core.Classes.GameObject
 		{
 			base.Write(writer);
 
-			GameObjectLayout layout = writer.Layout.GameObject;
+			GameObjectLayout layout = writer.Layout().GameObject;
 			if (layout.IsComponentTuple)
 			{
 				ComponentTuple.Write(writer, (t) => (int)t);

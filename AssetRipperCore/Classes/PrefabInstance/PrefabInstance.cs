@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		public override void Read(AssetReader reader)
 		{
-			PrefabInstanceLayout layout = reader.Layout.PrefabInstance;
+			PrefabInstanceLayout layout = reader.Layout().PrefabInstance;
 			if (layout.IsModificationFormat)
 			{
 				ReadObject(reader);
@@ -82,7 +82,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		public override void Write(AssetWriter writer)
 		{
-			PrefabInstanceLayout layout = writer.Layout.PrefabInstance;
+			PrefabInstanceLayout layout = writer.Layout().PrefabInstance;
 			if (layout.IsModificationFormat)
 			{
 				WriteObject(writer);

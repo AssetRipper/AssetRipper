@@ -478,7 +478,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			instance.Data = new byte[instance.VertexCount * stride];
 			using (MemoryStream stream = new MemoryStream(instance.Data))
 			{
-				using (AssetWriter writer = new AssetWriter(stream, EndianType.LittleEndian, container.ExportLayout))
+				using (AssetWriter writer = new AssetWriter(stream, EndianType.LittleEndian, container.ExportLayout.Info))
 				{
 					for (int i = 0; i < instance.VertexCount; i++)
 					{

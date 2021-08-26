@@ -304,7 +304,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			int begin = streamOffset + vertexOffset + channel.Offset;
 			using (MemoryStream stream = new MemoryStream(vertexData.Data))
 			{
-				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout))
+				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout.Info))
 				{
 					stream.Position = begin;
 					Vector3f dummyVertex = reader.ReadAsset<Vector3f>();

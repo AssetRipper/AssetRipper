@@ -10,6 +10,7 @@ using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 using System.IO;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes
 {
@@ -22,7 +23,7 @@ namespace AssetRipper.Core.Classes
 			long position = reader.BaseStream.Position;
 			base.Read(reader);
 
-			MonoBehaviourLayout layout = reader.Layout.MonoBehaviour;
+			MonoBehaviourLayout layout = reader.Layout().MonoBehaviour;
 			if (layout.HasEditorHideFlags)
 			{
 				EditorHideFlags = (HideFlags)reader.ReadUInt32();
@@ -51,7 +52,7 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Write(writer);
 
-			MonoBehaviourLayout layout = writer.Layout.MonoBehaviour;
+			MonoBehaviourLayout layout = writer.Layout().MonoBehaviour;
 			if (layout.HasEditorHideFlags)
 			{
 				writer.Write((uint)EditorHideFlags);

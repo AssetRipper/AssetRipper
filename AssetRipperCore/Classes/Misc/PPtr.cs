@@ -7,6 +7,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes.Misc
 {
@@ -41,13 +42,13 @@ namespace AssetRipper.Core.Classes.Misc
 		public void Read(AssetReader reader)
 		{
 			FileIndex = reader.ReadInt32();
-			PathID = reader.Layout.PPtr.IsLongID ? reader.ReadInt64() : reader.ReadInt32();
+			PathID = reader.Layout().PPtr.IsLongID ? reader.ReadInt64() : reader.ReadInt32();
 		}
 
 		public void Write(AssetWriter writer)
 		{
 			writer.Write(FileIndex);
-			if (writer.Layout.PPtr.IsLongID)
+			if (writer.Layout().PPtr.IsLongID)
 			{
 				writer.Write(PathID);
 			}
