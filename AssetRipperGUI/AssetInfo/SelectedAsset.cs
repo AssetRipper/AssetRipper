@@ -118,12 +118,16 @@ namespace AssetRipper.GUI.AssetInfo
 			}
 		}
 
+		//Read from UI
 		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", YAMLScalarNode.Empty) };
 
+		//Read from UI
 		public bool HasImageData => _asset is IHasImageData;
 
+		//Read from UI
 		public bool HasAudioData => _asset is AudioClip;
 
+		//Read from UI
 		public IImage? ImageData
 		{
 			get
@@ -225,6 +229,7 @@ namespace AssetRipper.GUI.AssetInfo
 			}
 		}
 
+		//Read from UI
 		public string BasicInformation
 		{
 			get
@@ -266,6 +271,7 @@ namespace AssetRipper.GUI.AssetInfo
 			_mediaPlayer?.Pause();
 		}
 
+		//Called from UI
 		public void TogglePause()
 		{
 			if(IsPaused)

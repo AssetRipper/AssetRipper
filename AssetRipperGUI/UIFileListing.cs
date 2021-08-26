@@ -124,6 +124,7 @@ namespace AssetRipper.GUI
 		private Object? _associatedObject;
 		private SerializedFile? _associatedFile;
 
+		//Read from UI
 		public string DisplayAs
 		{
 			get => _displayAs;
@@ -136,6 +137,7 @@ namespace AssetRipper.GUI
 
 		public Object? AsObjectAsset => _associatedObject; 
 		
+		//Read from UI
 		public ObservableCollection<NewUiFileListItem> SubItems { get; } = new();
 		
 		/// <summary>
