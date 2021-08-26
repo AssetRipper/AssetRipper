@@ -19,19 +19,15 @@
     <Design.DataContext>
         <ar:MainWindowViewModel />
     </Design.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        
+    <Grid RowDefinitions="20,*">
+
         <!--Top Menu-->
         <Menu Grid.Row="0">
             <!--File Menu-->
             <MenuItem Header="_File">
-                
-                <!--File->Open-->
-                <MenuItem Header="_Open" Command="{Binding ShowOpenFileDialog}">
+
+                <!--File->Open Folder-->
+                <MenuItem Header="_Open Folder" Command="{Binding ShowOpenFileDialog}">
                     <MenuItem.IsEnabled>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="!IsExporting" />
@@ -43,25 +39,36 @@
                     </MenuItem.IsEnabled>
                 </MenuItem>
                 
-                <!--File->Exit-->
+                <MenuItem Header="_Reset" Command="{Binding Reset}">
+                    <MenuItem.IsEnabled>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="HasFile" />
+                            <Binding Path="HasLoaded" />
+                            <Binding Path="!IsExporting" />
+                        </MultiBinding>
+                    </MenuItem.IsEnabled>
+                </MenuItem>
+                    
+
+                    <!--File->Exit-->
                 <MenuItem Header="_Exit" Click="ExitClicked" />
             </MenuItem>
-            
+
             <!--Export Menu-->
             <MenuItem Header="_Export" IsEnabled="{Binding !IsExporting}">
                 <MenuItem Header="_Export All Files" Click="ExportAllClicked" />
                 <MenuItem Header="_Export Selected Asset File" IsEnabled="False" />
             </MenuItem>
         </Menu>
-        
+
         <!--Introduction Screens-->
-        
+
         <!--Drag-drop prompt-->
         <TextBlock Grid.Row="1" Text="Drag-and-Drop Your Game Folder Here"
                    TextAlignment="Center"
                    VerticalAlignment="Center"
                    IsVisible="{Binding !HasFile}" />
-        
+
         <!--Loading prompt-->
         <TextBlock Grid.Row="1" Text="{Binding LoadingText}"
                    TextAlignment="Center"
@@ -73,7 +80,7 @@
                 </MultiBinding>
             </TextBlock.IsVisible>
         </TextBlock>
-        
+
         <!--Main content-->
         <Grid Grid.Row="1" IsVisible="{Binding HasLoaded}">
             <Grid.ColumnDefinitions>
@@ -81,10 +88,10 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MinWidth="800" />
             </Grid.ColumnDefinitions>
-            
-            
+
+
             <!--File browser-->
-            <TreeView Grid.Column="0" Items="{Binding AssetFiles}" 
+            <TreeView Grid.Column="0" Items="{Binding AssetFiles}"
                       SelectionMode="Single"
                       SelectionChanged="OnAssetSelected">
                 <TreeView.ItemTemplate>
@@ -93,18 +100,18 @@
                     </TreeDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            
+
             <!--Splitter-->
             <GridSplitter Grid.Column="1"
                           ResizeDirection="Columns"
                           Background="#ccc"
                           Width="2" />
-            
+
             <!--Right half of main content-->
             <Grid Grid.Column="2" RowDefinitions="*, 400">
                 <Grid Grid.Row="0">
                     <!--File content-->
-                    
+
                     <!--Placeholder for if no asset selected-->
                     <TextBlock Text="Select an Asset on the left to view information about it" TextAlignment="Center"
                                VerticalAlignment="Center" FontSize="18">
@@ -128,19 +135,35 @@
                                 <Binding Path="SelectedAsset" Converter="{x:Static ObjectConverters.IsNotNull}" />
                             </MultiBinding>
                         </TabControl.IsVisible>
-                        
+
                         <!--Basic Info Tab-->
                         <TabItem Header="Basic Information">
                             <TextBox Text="{Binding SelectedAsset.BasicInformation, FallbackValue='No Asset Selected'}" />
                         </TabItem>
-                        
+
                         <!--Image Tab-->
                         <TabItem Header="Image" IsVisible="{Binding SelectedAsset.HasImageData, FallbackValue=False}">
-                            <Image Source="{Binding SelectedAsset.ImageData, FallbackValue=null}" 
-                                    HorizontalAlignment="Center" 
-                                    VerticalAlignment="Center" />
+                            <Image Source="{Binding SelectedAsset.ImageData, FallbackValue=null}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
                         </TabItem>
-                        
+
+                        <!--Audio Tab-->
+                        <TabItem Header="Audio Clip"
+                                 IsVisible="{Binding SelectedAsset.HasAudioData, FallbackValue=False}">
+
+                            <Grid RowDefinitions="*, 40, 40, *">
+
+                                <Button Grid.Row="1" Command="{Binding SelectedAsset.TogglePause, FallbackValue=null}" IsEnabled="True" HorizontalAlignment="Center">
+                                    <Panel>
+                                        <Label IsVisible="{Binding SelectedAsset.IsPaused}">Play</Label>
+                                        <Label IsVisible="{Binding !SelectedAsset.IsPaused}">Pause</Label>
+                                    </Panel>
+                                </Button>
+                                <TextBlock Grid.Row="2" Text="{Binding SelectedAsset.PositionString}" VerticalAlignment="Center" TextAlignment="Center"></TextBlock>
+                            </Grid>
+                        </TabItem>
+
                         <!--YAML Tab-->
                         <TabItem Header="YAML Nodes">
                             <TreeView Items="{Binding SelectedAsset.YamlTree, FallbackValue=[]}">
@@ -157,7 +180,7 @@
                     <TextBlock FontSize="18" Text="{Binding ExportingText}" TextAlignment="Center"
                                VerticalAlignment="Center" IsVisible="{Binding IsExporting}" />
                 </Grid>
-                
+
                 <!--Log-->
                 <TextBox Name="LogText" Grid.Row="1" IsReadOnly="True" Text="{Binding LogText}" />
             </Grid>

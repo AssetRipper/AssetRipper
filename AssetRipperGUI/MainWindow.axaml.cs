@@ -41,8 +41,10 @@ namespace AssetRipper.GUI
             AvaloniaXamlLoader.Load(this);
         }
 
+	    //Called from UI
 	    private void ExitClicked(object? sender, RoutedEventArgs e) => Close();
 
+	    //Called from UI
 	    private void ExportAllClicked(object? sender, RoutedEventArgs e) => VM.ExportAll();
 
 	    private void OnAssetSelected(object? sender, SelectionChangedEventArgs e)

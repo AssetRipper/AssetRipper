@@ -8,6 +8,7 @@
 		ExportedFile,
 		Cpp2IL,
 		System,
+		LibVlc,
 
 		None,
 		Debug,
