@@ -33,7 +33,7 @@ namespace AssetRipper.GUI
 		//Not-exposed-to-UI properties
 		private string? _lastExportPath;
 		private readonly Ripper _ripper = new();
-		private UIAssetContainer _assetContainer;
+		private UIAssetContainer? _assetContainer;
 
 		public bool HasFile
 		{
@@ -132,6 +132,8 @@ namespace AssetRipper.GUI
 			}
 
 			_ripper.ResetData();
+			SelectedAsset?.Dispose();
+			SelectedAsset = null;
 			_assetContainer = null;
 
 			string gamePath = filesDropped[0];
@@ -211,6 +213,7 @@ namespace AssetRipper.GUI
 			});
 		}
 
+		//Called from UI
 		public async void ShowOpenFileDialog()
 		{
 			OpenFolderDialog openFolderDialog = new();
@@ -222,6 +225,27 @@ namespace AssetRipper.GUI
 			DoLoad(new[] { result });
 		}
 
+		//Called from UI
+		public void Reset()
+		{
+			if(!HasFile)
+				return;
+			
+			_ripper.ResetData();
+			AssetFiles.Clear();
+			_assetContainer = null;
+			HasFile = false;
+			HasLoaded = false;
+			IsExporting = false;
+			
+			SelectedAsset?.Dispose();
+			SelectedAsset = null;
+			
+			LogText = "";
+			Logger.Log(LogType.Info, LogCategory.General, "UI Reset");
+		}
+
+		//Called from UI indirectly
 		public void OnAssetSelected(NewUiFileListItem selectedItem, Object selectedAsset)
 		{
 			_assetContainer.LastAccessedAsset = selectedAsset;

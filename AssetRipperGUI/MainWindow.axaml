@@ -26,8 +26,8 @@
             <!--File Menu-->
             <MenuItem Header="_File">
 
-                <!--File->Open-->
-                <MenuItem Header="_Open" Command="{Binding ShowOpenFileDialog}">
+                <!--File->Open Folder-->
+                <MenuItem Header="_Open Folder" Command="{Binding ShowOpenFileDialog}">
                     <MenuItem.IsEnabled>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="!IsExporting" />
@@ -38,8 +38,19 @@
                         </MultiBinding>
                     </MenuItem.IsEnabled>
                 </MenuItem>
+                
+                <MenuItem Header="_Reset" Command="{Binding Reset}">
+                    <MenuItem.IsEnabled>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="HasFile" />
+                            <Binding Path="HasLoaded" />
+                            <Binding Path="!IsExporting" />
+                        </MultiBinding>
+                    </MenuItem.IsEnabled>
+                </MenuItem>
+                    
 
-                <!--File->Exit-->
+                    <!--File->Exit-->
                 <MenuItem Header="_Exit" Click="ExitClicked" />
             </MenuItem>
 
