@@ -3,7 +3,6 @@
 	public enum ShaderExportMode
 	{
 		Dummy,
-		GLSL,
-		Metal,
+		Disassembly,
 	}
 }

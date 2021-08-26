@@ -11,6 +11,9 @@
      * Spirv
      * Smolv
      * Brotli
+ * GUI improvements
+     * Audio player (#60)
+     * Reset Button (#61)
 
 ## 0.2.0.0
  * Overhaul struct reading, which would enable:
@@ -28,7 +31,6 @@
  * FBX export
  * GUI improvements
    * Settings page
-   * Audio player
    * Mesh preview
    * List shader properties
    * Different background color

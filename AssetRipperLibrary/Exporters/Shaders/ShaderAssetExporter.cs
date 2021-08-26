@@ -29,22 +29,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 			ExportMode = options.ShaderExportMode;
 		}
 
-		public bool IsHandle(UnityObject asset, CoreConfiguration options)
-		{
-			return true;
-		}
+		public bool IsHandle(UnityObject asset, CoreConfiguration options) => true;
 
-		public static bool IsDX11ExportMode(ShaderExportMode mode)
-		{
-			switch (mode)
-			{
-				case ShaderExportMode.GLSL:
-				case ShaderExportMode.Metal:
-					return true;
-				default:
-					return false;
-			}
-		}
+		public static bool IsDX11ExportMode(ShaderExportMode mode) => mode == ShaderExportMode.Disassembly;
 
 		public bool Export(IExportContainer container, UnityObject asset, string path)
 		{
@@ -122,15 +109,6 @@ namespace AssetRipper.Library.Exporters.Shaders
 			{
 				case GPUPlatform.d3d11_9x:
 				case GPUPlatform.d3d11:
-					if (ExportMode == ShaderExportMode.GLSL)
-					{
-						return new ShaderHLSLccExporter(graphicApi, HLSLccCsharpWrapper.GLLang.LANG_DEFAULT);
-					}
-					if (ExportMode == ShaderExportMode.Metal)
-					{
-						return new ShaderHLSLccExporter(graphicApi, HLSLccCsharpWrapper.GLLang.LANG_METAL);
-					}
-					throw new Exception($"Unexpected shader mode {ExportMode}");
 				case GPUPlatform.d3d9:
 					return new ShaderDXExporter(graphicApi);
 				case GPUPlatform.vulkan:

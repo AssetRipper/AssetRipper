@@ -26,38 +26,10 @@ jobs:
         path: /home/runner/work/AssetRipper/AssetRipper/Texture2DDecoderNative/build/libTexture2DDecoderNative.so
         if-no-files-found: error
 
-    - name: Configure HLSLccWrapper
-      run: cmake -B ./build/
-      working-directory: ./HLSLccWrapper/src/
-    - name: Build HLSLccWrapper
-      run: cmake --build .
-      working-directory: ./HLSLccWrapper/src/build/
-     
-    - name: Upload HLSLccWrapper
-      uses: actions/upload-artifact@v2
-      with:
-        name: HLSLccWrapper_Linux
-        path: /home/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/src/build/libHLSLccWrapper.so
-        if-no-files-found: error
-
 #  BuildMac:
 #    runs-on: macos-latest
 #    steps:
 #    - uses: actions/checkout@v2
-
-#    - name: Configure HLSLccWrapper
-#      run: cmake -B ./build/
-#      working-directory: ./HLSLccWrapper/src/
-#    - name: Build HLSLccWrapper
-#      run: cmake --build .
-#      working-directory: ./HLSLccWrapper/src/build/
-
-#    - name: Upload HLSLccWrapper
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: HLSLccWrapper_Mac
-#        path: /Users/runner/work/AssetRipper/AssetRipper/HLSLccWrapper/src/build/libHLSLccWrapper.dylib
-#        if-no-files-found: error
       
 #    - name: Configure Texture2DDecoderNative
 #      run: cmake -B ./build/
@@ -97,22 +69,4 @@ jobs:
       with:
         name: Texture2DDecoderNative_Windows
         path: D:\a\AssetRipper\AssetRipper\Texture2DDecoderNative\bin\x64\Release\Texture2DDecoderNative.dll
-        if-no-files-found: error
-      
-#    - name: Configure HLSLccWrapper
-#      run: cmake -B ./build/
-#      working-directory: ./HLSLccWrapper/src/
-#    - name: Build HLSLccWrapper
-#      run: cmake --build .
-#      working-directory: ./HLSLccWrapper/src/build/
-     
-    - name: Build HLSLccWrapper
-      run: msbuild /m /p:Configuration=Release /p:Platform=x64
-      working-directory: ./HLSLccWrapper/
-
-    - name: Upload HLSLccWrapper
-      uses: actions/upload-artifact@v2
-      with:
-        name: HLSLccWrapper_Windows
-        path: D:\a\AssetRipper\AssetRipper\HLSLccWrapper\bin\x64\Release\HLSLccWrapper_x64.dll
         if-no-files-found: error
