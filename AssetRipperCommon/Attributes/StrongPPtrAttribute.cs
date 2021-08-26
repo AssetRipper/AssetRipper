@@ -3,7 +3,7 @@
 namespace AssetRipper.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Field)]
-	public class StrongPPtrAttribute : Attribute
+	public sealed class StrongPPtrAttribute : Attribute
 	{
 	}
 }

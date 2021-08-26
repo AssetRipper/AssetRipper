@@ -3,7 +3,7 @@
 namespace AssetRipper.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Field)]
-	public class HideInEditorAttribute : Attribute
+	public sealed class HideInEditorAttribute : Attribute
 	{
 	}
 }

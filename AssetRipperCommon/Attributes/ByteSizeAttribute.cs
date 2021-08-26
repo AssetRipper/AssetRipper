@@ -3,9 +3,9 @@
 namespace AssetRipper.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field)]
-	public class ByteSizeAttribute : Attribute
+	public sealed class ByteSizeAttribute : Attribute
 	{
-		int Size { get; }
+		public int Size { get; }
 
 		public ByteSizeAttribute()
 		{

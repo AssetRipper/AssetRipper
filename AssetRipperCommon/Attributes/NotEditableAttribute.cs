@@ -3,7 +3,7 @@
 namespace AssetRipper.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Field)]
-	public class NotEditableAttribute : Attribute
+	public sealed class NotEditableAttribute : Attribute
 	{
 	}
 }

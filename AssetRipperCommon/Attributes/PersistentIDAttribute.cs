@@ -3,7 +3,7 @@
 namespace AssetRipper.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-	public class PersistentIDAttribute : Attribute
+	public sealed class PersistentIDAttribute : Attribute
 	{
 		public int ID { get; }
 

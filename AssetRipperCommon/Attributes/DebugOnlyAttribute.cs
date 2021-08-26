@@ -3,7 +3,7 @@
 namespace AssetRipper.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Field)]
-	public class DebugOnlyAttribute : Attribute
+	public sealed class DebugOnlyAttribute : Attribute
 	{
 	}
 }

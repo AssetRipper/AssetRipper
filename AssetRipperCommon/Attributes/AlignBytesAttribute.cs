@@ -3,7 +3,7 @@
 namespace AssetRipper.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Field)]
-	public class AlignBytesAttribute : Attribute
+	public sealed class AlignBytesAttribute : Attribute
 	{
 	}
 }
