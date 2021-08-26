@@ -71,7 +71,7 @@ namespace AssetRipper.Core.Classes.Object
 			root.Tag = ClassID.ToInt().ToString();
 			root.Anchor = container.GetExportID(this).ToString();
 			YAMLMappingNode node = ExportYAMLRoot(container);
-			root.Add(container.ExportLayout.ClassNames[ClassID], node);
+			root.Add(container.ExportLayout.GetClassName(ClassID), node);
 			return document;
 		}
 

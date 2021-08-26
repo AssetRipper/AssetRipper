@@ -10,6 +10,11 @@ namespace AssetRipper.Core.Layout
 {
 	public sealed class AssetLayout
 	{
+		static AssetLayout()
+		{
+			ClassNames = InitializeClassNames();
+		}
+
 		public AssetLayout(LayoutInfo info)
 		{
 			Info = info;
@@ -38,11 +43,9 @@ namespace AssetRipper.Core.Layout
 			PrefabInstance = new PrefabInstanceLayout(info);
 			Texture2D = new Texture2DLayout(info);
 			Transform = new TransformLayout(info);
-
-			ClassNames = CreateClassNames();
 		}
 
-		private Dictionary<ClassIDType, string> CreateClassNames()
+		private static Dictionary<ClassIDType, string> InitializeClassNames()
 		{
 			Dictionary<ClassIDType, string> names = new Dictionary<ClassIDType, string>();
 			ClassIDType[] classTypes = (ClassIDType[])Enum.GetValues(typeof(ClassIDType));
@@ -50,8 +53,17 @@ namespace AssetRipper.Core.Layout
 			{
 				names[classType] = classType.ToString();
 			}
-			names[ClassIDType.PrefabInstance] = PrefabInstance.Name;
 			return names;
+		}
+
+		public string GetClassName(ClassIDType classID)
+		{
+			if (classID == ClassIDType.PrefabInstance)
+				return PrefabInstance.Name;
+			else if (ClassNames.TryGetValue(classID, out string name))
+				return name;
+			else
+				return null;
 		}
 
 		public LayoutInfo Info { get; }
@@ -70,7 +82,7 @@ namespace AssetRipper.Core.Layout
 		/// </summary>
 		public bool IsStructSerializable { get; }
 
-		public IReadOnlyDictionary<ClassIDType, string> ClassNames { get; }
+		private static IReadOnlyDictionary<ClassIDType, string> ClassNames { get; }
 
 		public PPtrLayout PPtr { get; }
 
