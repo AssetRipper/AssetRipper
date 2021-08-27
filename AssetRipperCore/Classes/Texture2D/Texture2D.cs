@@ -110,6 +110,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			return false;
 		}
 
+#if UNIVERSAL
 		/// <summary>
 		/// <para>0 - less than 5.0.0</para>
 		/// <para>1 - less than 2018.2</para>
@@ -127,6 +128,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			}
 			return 2;
 		}
+#endif
 
 		public virtual TextureImporter GenerateTextureImporter(IExportContainer container)
 		{
@@ -170,6 +172,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 		{
 			base.Read(reader);
 
+#if UNIVERSAL
 			bool hasAlphaIsTransparency = HasAlphaIsTransparency(reader.Version, reader.Flags);
 			int alphaIsTransparencyOrder = GetAlphaIsTransparencyOrder(reader.Version);
 			if (hasAlphaIsTransparency && alphaIsTransparencyOrder == 0)
@@ -177,6 +180,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 				AlphaIsTransparency = reader.ReadBoolean();
 				reader.AlignStream();
 			}
+#endif
 
 			Width = reader.ReadInt32();
 			Height = reader.ReadInt32();
@@ -228,20 +232,24 @@ namespace AssetRipper.Core.Classes.Texture2D
 			{
 				StreamingMipmaps = reader.ReadBoolean();
 			}
+#if UNIVERSAL
 			if (hasAlphaIsTransparency && alphaIsTransparencyOrder == 1)
 			{
 				AlphaIsTransparency = reader.ReadBoolean();
 			}
+#endif
 			reader.AlignStream();
 
 			if (HasStreamingMipmapsPriority(reader.Version))
 			{
 				StreamingMipmapsPriority = reader.ReadInt32();
 
+#if UNIVERSAL
 				if (hasAlphaIsTransparency && alphaIsTransparencyOrder == 2)
 				{
 					AlphaIsTransparency = reader.ReadBoolean();
 				}
+#endif
 
 				reader.AlignStream();
 			}
@@ -326,7 +334,11 @@ namespace AssetRipper.Core.Classes.Texture2D
 
 		private bool GetAlphaIsTransparency(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			return HasAlphaIsTransparency(version, flags) ? AlphaIsTransparency : true;
+#else
+			return true;
+#endif
 		}
 		private byte[] GetExportImageData()
 		{
@@ -366,9 +378,10 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public bool ReadAllowed { get; set; }
 		public bool StreamingMipmaps { get; set; }
 		public int StreamingMipmapsPriority { get; set; }
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		public bool AlphaIsTransparency { get; set; }
-
+#endif
 		public int ImageCount { get; set; }
 		public TextureDimension TextureDimension { get; set; }
 		public TextureUsageMode LightmapFormat { get; set; }

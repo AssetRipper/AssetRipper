@@ -1,6 +1,7 @@
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -420,6 +421,7 @@ namespace AssetRipper.Core.Classes.Renderer
 			{
 				LightProbeVolumeOverride.Read(reader);
 			}
+#if UNIVERSAL
 			if (HasScaleInLightmap(reader.Version, reader.Flags))
 			{
 				ScaleInLightmap = reader.ReadSingle();
@@ -468,6 +470,7 @@ namespace AssetRipper.Core.Classes.Renderer
 				GIBackfaceCull = reader.ReadBoolean();
 				reader.AlignStream();
 			}
+#endif
 			if (HasSortingLayerID(reader.Version, reader.Flags))
 			{
 				if (IsSortingLayerIDFirst(reader.Version))
@@ -619,87 +622,111 @@ namespace AssetRipper.Core.Classes.Renderer
 		}
 		private float GetScaleInLightmap(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasScaleInLightmap(version, flags))
 			{
 				return ScaleInLightmap;
 			}
+#endif
 			return 1.0f;
 		}
 		private ReceiveGI GetReceiveGI(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasReceiveGI(version, flags))
 			{
 				return ReceiveGI;
 			}
+#endif
 			return ReceiveGI.Lightmaps;
 		}
 		private bool GetPreserveUVs(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasPreserveUVs(version, flags))
 			{
 				return PreserveUVs;
 			}
+#endif
 			return false;
 		}
 		private bool GetIgnoreNormalsForChartDetection(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasIgnoreNormalsForChartDetection(version, flags))
 			{
 				return IgnoreNormalsForChartDetection;
 			}
+#endif
 			return false;
 		}
 		private bool GetImportantGI(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasImportantGI(version, flags))
 			{
 				return ImportantGI;
 			}
+#endif
 			return false;
 		}
 		private bool GetStitchLightmapSeams(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasStitchLightmapSeams(version, flags))
 			{
 				return StitchLightmapSeams;
 			}
+#endif
 			return false;
 		}
 		private EditorSelectedRenderState GetSelectedEditorRenderState(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasSelectedEditorRenderState(version, flags))
 			{
 				return SelectedEditorRenderState;
 			}
+#endif
 			return (EditorSelectedRenderState)3;
 		}
 		private int GetMinimumChartSize(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasMinimumChartSize(version, flags))
 			{
 				return MinimumChartSize;
 			}
+#endif
 			return 4;
 		}
 		private float GetAutoUVMaxDistance(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasAutoUVMaxDistance(version, flags))
 			{
 				return AutoUVMaxDistance;
 			}
+#endif
 			return 0.5f;
 		}
 		private float GetAutoUVMaxAngle(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasAutoUVMaxDistance(version, flags))
 			{
 				return AutoUVMaxAngle;
 			}
+#endif
 			return 89.0f;
 		}
 		private PPtr<LightmapParameters> GetLightmapParameters()
 		{
+#if UNIVERSAL
 			return LightmapParameters;
+#else
+			return default;
+#endif
 		}
 
 		public bool Enabled { get; set; }
@@ -720,7 +747,8 @@ namespace AssetRipper.Core.Classes.Renderer
 		public ushort LightmapIndexDynamic { get; set; }
 		public PPtr<Material.Material>[] Materials { get; set; }
 		public uint[] SubsetIndices { get; set; }
-		
+
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		public float ScaleInLightmap { get; set; }
 		/// <summary> Editor Only </summary>
@@ -746,6 +774,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		public float AutoUVMaxAngle { get; set; }
 		/// <summary> Editor Only </summary>
 		public bool GIBackfaceCull { get; set; }
+#endif
 
 		public int SortingLayerID { get; set; }
 		public short SortingLayer { get; set; }
@@ -795,10 +824,12 @@ namespace AssetRipper.Core.Classes.Renderer
 		public PPtr<Transform> ProbeAnchor;
 		public PPtr<GameObject.GameObject> LightProbeVolumeOverride;
 
+#if UNIVERSAL
 		/// <summary>
 		/// EnlightenSystemBuildParameters previously; Editor Only
 		/// </summary>
 		public PPtr<LightmapParameters> LightmapParameters;
+#endif
 
 	}
 }

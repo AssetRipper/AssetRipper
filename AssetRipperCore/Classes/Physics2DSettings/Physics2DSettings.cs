@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Project;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -196,6 +197,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 				AutoSyncTransforms = reader.ReadBoolean();
 			}
 
+#if UNIVERSAL
 			if (HasAlwaysShowColliders(reader.Version, reader.Flags))
 			{
 				AlwaysShowColliders = reader.ReadBoolean();
@@ -206,9 +208,11 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			{
 				ShowColliderAABB = reader.ReadBoolean();
 			}
+#endif
 
 			reader.AlignStream();
 
+#if UNIVERSAL
 			if (HasContactArrowScale(reader.Version, reader.Flags))
 			{
 				ContactArrowScale = reader.ReadSingle();
@@ -220,6 +224,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			{
 				ColliderAABBColor.Read(reader);
 			}
+#endif
 
 			LayerCollisionMatrix = reader.ReadUInt32Array();
 		}
@@ -336,62 +341,86 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		}
 		private bool GetAlwaysShowColliders()
 		{
+#if UNIVERSAL
 			return AlwaysShowColliders;
+#else
+			return false;
+#endif
 		}
 		private bool GetShowColliderSleep(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasAlwaysShowColliders(version, flags))
 			{
 				return ShowColliderSleep;
 			}
+#endif
 			return true;
 		}
 		private bool GetShowColliderContacts()
 		{
+#if UNIVERSAL
 			return ShowColliderContacts;
+#else
+			return false;
+#endif
 		}
 		private bool GetShowColliderAABB()
 		{
+#if UNIVERSAL
 			return ShowColliderAABB;
+#else
+			return false;
+#endif
 		}
 		private float GetContactArrowScale(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
 			{
 				return ContactArrowScale;
 			}
+#endif
 			return 0.2f;
 		}
 		private ColorRGBAf GetColliderAwakeColorRGBAf(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
 			{
 				return ColliderAwakeColor;
 			}
+#endif
 			return new ColorRGBAf(0.5686275f, 0.95686275f, 0.54509807f, 0.7529412f);
 		}
 		private ColorRGBAf GetColliderAsleepColorRGBAf(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
 			{
 				return ColliderAsleepColor;
 			}
+#endif
 			return new ColorRGBAf(0.5686275f, 0.95686275f, 0.54509807f, 0.36078432f);
 		}
 		private ColorRGBAf GetColliderContactColorRGBAf(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
 			{
 				return ColliderContactColor;
 			}
+#endif
 			return new ColorRGBAf(1.0f, 0.0f, 1.0f, 0.6862745f);
 		}
 		private ColorRGBAf GetColliderAABBColorRGBAf(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasContactArrowScale(version, flags))
 			{
 				return ColliderAABBColor;
 			}
+#endif
 			return new ColorRGBAf(1.0f, 1.0f, 0.0f, 0.2509804f);
 		}
 
@@ -426,6 +455,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		public bool ReuseCollisionCallbacks { get; set; }
 		public bool AutoSyncTransforms { get; set; }
 
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		public bool AlwaysShowColliders { get; set; }
 		/// <summary> Editor Only </summary>
@@ -436,6 +466,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		public bool ShowColliderAABB { get; set; }
 		/// <summary> Editor Only </summary>
 		public float ContactArrowScale { get; set; }
+#endif
 
 		public uint[] LayerCollisionMatrix { get; set; }
 
@@ -475,6 +506,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		public PPtr<PhysicsMaterial2D> DefaultMaterial;
 		public PhysicsJobOptions2D JobOptions;
 
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		public ColorRGBAf ColliderAwakeColor;
 		/// <summary> Editor Only </summary>
@@ -483,5 +515,6 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		public ColorRGBAf ColliderContactColor;
 		/// <summary> Editor Only </summary>
 		public ColorRGBAf ColliderAABBColor;
+#endif
 	}
 }

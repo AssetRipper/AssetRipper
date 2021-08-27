@@ -114,10 +114,12 @@ namespace AssetRipper.Core.Classes.Camera
 					GateFitMode = (GateFitMode)reader.ReadInt32();
 				}
 			}
+#if UNIVERSAL
 			if (HasFOVAxisMode(reader.Version, reader.Flags))
 			{
 				FOVAxisMode = (FieldOfViewAxis)reader.ReadInt32();
 			}
+#endif
 			if (IsAlign1(reader.Version))
 			{
 				reader.AlignStream();
@@ -260,20 +262,24 @@ namespace AssetRipper.Core.Classes.Camera
 
 		private FieldOfViewAxis GetFOVAxisMode(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasFOVAxisMode(version, flags))
 			{
 				return FOVAxisMode;
 			}
+#endif
 			return FieldOfViewAxis.Vertical;
 		}
 
 		public uint ClearFlags { get; set; }
 		public ProjectionMatrixMode ProjectionMatrixMode { get; set; }
 		public GateFitMode GateFitMode { get; set; }
+#if UNIVERSAL
 		/// <summary>
 		/// Editor Only
 		/// </summary>
 		public FieldOfViewAxis FOVAxisMode { get; set; }
+#endif
 		public float FocalLength { get; set; }
 		public float NearClipPlane { get; set; }
 		public float FarClipPlane { get; set; }

@@ -73,6 +73,7 @@ namespace AssetRipper.Core.Classes
 			LocalScale.Read(reader);
 			Children = reader.ReadAssetArray<PPtr<Transform>>();
 			Father.Read(reader);
+#if UNIVERSAL
 			TransformLayout layout = reader.Layout().Transform;
 			if (layout.HasRootOrder)
 			{
@@ -82,6 +83,7 @@ namespace AssetRipper.Core.Classes
 			{
 				LocalEulerAnglesHint.Read(reader);
 			}
+#endif
 		}
 
 		public override void Write(AssetWriter writer)
@@ -94,6 +96,7 @@ namespace AssetRipper.Core.Classes
 			Children.Write(writer);
 			Father.Write(writer);
 
+#if UNIVERSAL
 			TransformLayout layout = writer.Layout().Transform;
 			if (layout.HasRootOrder)
 			{
@@ -103,6 +106,7 @@ namespace AssetRipper.Core.Classes
 			{
 				LocalEulerAnglesHint.Write(writer);
 			}
+#endif
 		}
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
@@ -153,34 +157,21 @@ namespace AssetRipper.Core.Classes
 		}
 
 		public PPtr<Transform>[] Children { get; set; }
+#if UNIVERSAL
+		public int RootOrder { get; set; }
+#else
+		private int RootOrder => GetSiblingIndex();
+		private Vector3f LocalEulerAnglesHint => LocalRotation.ToEuler();
+#endif
 
-		public int RootOrder 
-		{
-			get
-			{
-				if (m_RootOrder != default) return m_RootOrder;
-				else return GetSiblingIndex();
-			}
-			set => m_RootOrder = value;
-		}
-		private int m_RootOrder;
-		
 		public const char PathSeparator = '/';
 
 		public Quaternionf LocalRotation;
 		public Vector3f LocalPosition;
 		public Vector3f LocalScale;
 		public PPtr<Transform> Father;
-
-		public Vector3f LocalEulerAnglesHint
-		{
-			get
-			{
-				if (m_LocalEulerAnglesHint != default) return m_LocalEulerAnglesHint;
-				else return LocalRotation.ToEuler();
-			}
-			set => m_LocalEulerAnglesHint = value;
-		}
-		private Vector3f m_LocalEulerAnglesHint;
+#if UNIVERSAL
+		public Vector3f LocalEulerAnglesHint;
+#endif
 	}
 }

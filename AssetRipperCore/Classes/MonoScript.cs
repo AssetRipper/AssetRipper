@@ -136,6 +136,7 @@ namespace AssetRipper.Core.Classes
 		{
 			ReadNamedObject(reader);
 
+#if UNIVERSAL
 			if (HasScript(reader.Version, reader.Flags))
 			{
 				Script = reader.ReadByteArray();
@@ -158,6 +159,7 @@ namespace AssetRipper.Core.Classes
 			{
 				EditorGraphData.Read(reader);
 			}
+#endif
 
 			if (HasExecutionOrder(reader.Version))
 			{
@@ -203,6 +205,7 @@ namespace AssetRipper.Core.Classes
 				yield return asset;
 			}
 
+#if UNIVERSAL
 			if (HasDefaultProperties(context.Version, context.Flags))
 			{
 				yield return context.FetchDependency(DefaultProperties, DefaultReferencesName);
@@ -218,6 +221,7 @@ namespace AssetRipper.Core.Classes
 			{
 				yield return context.FetchDependency(Icon, IconName);
 			}
+#endif
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -236,28 +240,34 @@ namespace AssetRipper.Core.Classes
 
 		private byte[] GetScript(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasScript(version, flags))
 			{
 				return Script;
 			}
+#endif
 			return System.Array.Empty<byte>();
 		}
 
 		private IReadOnlyDictionary<string, PPtr<Object.Object>> GetDefaultReferences(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasDefaultReferences(version, flags))
 			{
 				return DefaultReferences;
 			}
+#endif
 			return new Dictionary<string, PPtr<Object.Object>>(0);
 		}
 
 		private PPtr<Object.Object> GetIcon(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasIcon(version, flags))
 			{
 				return Icon;
 			}
+#endif
 			return default;
 		}
 
@@ -274,8 +284,10 @@ namespace AssetRipper.Core.Classes
 		public override string ExportPath => Path.Combine(AssetsKeyword, "Scripts");
 		public override string ExportExtension => "cs";
 
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		public IReadOnlyDictionary<string, PPtr<Object.Object>> DefaultReferences => m_defaultReferences;
+#endif
 		public int ExecutionOrder { get; set; }
 		public string ClassName { get; set; }
 		public string Namespace { get; set; }
@@ -296,7 +308,7 @@ namespace AssetRipper.Core.Classes
 		public const string AssemblyIdentifierName = "m_AssemblyIdentifier";
 		public const string IsEditorScriptName = "m_IsEditorScript";
 
-
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		public PPtr<MonoBehaviour> DefaultProperties;
 		/// <summary>
@@ -307,9 +319,12 @@ namespace AssetRipper.Core.Classes
 		/// PPtr<MonoBehaviour> previously
 		/// </summary>
 		public PPtr<Object.Object> EditorGraphData;
+#endif
 		public Hash128 PropertiesHash;
 
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		private Dictionary<string, PPtr<Object.Object>> m_defaultReferences;
+#endif
 	}
 }

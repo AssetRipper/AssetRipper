@@ -23,6 +23,7 @@ namespace AssetRipper.Core.Classes
 			long position = reader.BaseStream.Position;
 			base.Read(reader);
 
+#if UNIVERSAL
 			MonoBehaviourLayout layout = reader.Layout().MonoBehaviour;
 			if (layout.HasEditorHideFlags)
 			{
@@ -32,14 +33,17 @@ namespace AssetRipper.Core.Classes
 			{
 				GeneratorAsset.Read(reader);
 			}
+#endif
 
 			Script.Read(reader);
 			Name = reader.ReadString();
 
+#if UNIVERSAL
 			if (layout.HasEditorClassIdentifier)
 			{
 				EditorClassIdentifier = reader.ReadString();
 			}
+#endif
 
 			if (!ReadStructure(reader))
 			{
@@ -52,6 +56,7 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Write(writer);
 
+#if UNIVERSAL
 			MonoBehaviourLayout layout = writer.Layout().MonoBehaviour;
 			if (layout.HasEditorHideFlags)
 			{
@@ -61,14 +66,17 @@ namespace AssetRipper.Core.Classes
 			{
 				GeneratorAsset.Write(writer);
 			}
+#endif
 
 			Script.Write(writer);
 			writer.Write(Name);
 
+#if UNIVERSAL
 			if (layout.HasEditorClassIdentifier)
 			{
 				writer.Write(EditorClassIdentifier);
 			}
+#endif
 
 			if (Structure != null)
 			{
@@ -84,7 +92,9 @@ namespace AssetRipper.Core.Classes
 			}
 
 			MonoBehaviourLayout layout = context.Layout.MonoBehaviour;
+#if UNIVERSAL
 			yield return context.FetchDependency(GeneratorAsset, layout.GeneratorAssetName);
+#endif
 			yield return context.FetchDependency(Script, layout.ScriptName);
 
 			if (Structure != null)
@@ -123,26 +133,32 @@ namespace AssetRipper.Core.Classes
 
 		private HideFlags GetEditorHideFlags(IExportContainer container)
 		{
+#if UNIVERSAL
 			if (container.Layout.MonoBehaviour.HasEditorHideFlags)
 			{
 				return EditorHideFlags;
 			}
+#endif
 			return HideFlags.None;
 		}
 		private PPtr<Object.Object> GetGeneratorAsset(IExportContainer container)
 		{
+#if UNIVERSAL
 			if (container.Layout.MonoBehaviour.HasGeneratorAsset)
 			{
 				return GeneratorAsset;
 			}
+#endif
 			return default;
 		}
 		private string GetEditorClassIdentifier(IExportContainer container)
 		{
+#if UNIVERSAL
 			if (container.Layout.MonoBehaviour.HasEditorClassIdentifier)
 			{
 				return EditorClassIdentifier;
 			}
+#endif
 			return string.Empty;
 		}
 
@@ -202,15 +218,21 @@ namespace AssetRipper.Core.Classes
 		public bool IsSceneObject => !GameObject.IsNull;
 		public bool IsScriptableObject => Name.Length > 0;
 
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		public HideFlags EditorHideFlags { get; set; }
+#endif
 		public string Name { get; set; }
 		public SerializableStructure Structure { get; set; }
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		public string EditorClassIdentifier { get; set; }
+#endif
 
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
-		public PPtr<Object.Object> GeneratorAsset { get; set; }
-		public PPtr<MonoScript> Script { get; set; }
+		public PPtr<Object.Object> GeneratorAsset;
+#endif
+		public PPtr<MonoScript> Script;
 	}
 }

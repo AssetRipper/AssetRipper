@@ -1,5 +1,6 @@
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
@@ -29,7 +30,9 @@ namespace AssetRipper.Core.Classes.QualitySettings
 			AsyncUploadTimeSlice = 2;
 			AsyncUploadBufferSize = 4;
 			ResolutionScalingFixedDPIFactor = 1.0f;
+#if UNIVERSAL
 			ExcludedTargetPlatforms = new string[0];
+#endif
 		}
 
 		public static int ToSerializedVersion(UnityVersion version)
@@ -216,10 +219,12 @@ namespace AssetRipper.Core.Classes.QualitySettings
 			{
 				CustomRenderPipeline = setting.CustomRenderPipeline;
 			}
+#if UNIVERSAL
 			if (!HasExcludedTargetPlatforms(version, flags))
 			{
 				ExcludedTargetPlatforms = setting.ExcludedTargetPlatforms;
 			}
+#endif
 		}
 
 		public void Read(AssetReader reader)
@@ -333,10 +338,12 @@ namespace AssetRipper.Core.Classes.QualitySettings
 				reader.AlignStream();
 			}
 
+#if UNIVERSAL
 			if (HasExcludedTargetPlatforms(reader.Version, reader.Flags))
 			{
 				ExcludedTargetPlatforms = reader.ReadStringArray();
 			}
+#endif
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -392,10 +399,12 @@ namespace AssetRipper.Core.Classes.QualitySettings
 
 		private IReadOnlyList<string> GetExcludedTargetPlatforms(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasExcludedTargetPlatforms(version, flags))
 			{
 				return ExcludedTargetPlatforms;
 			}
+#endif
 			return System.Array.Empty<string>();
 		}
 		private bool GetStreamingMipmapsAddAllCameras(UnityVersion version)
@@ -460,8 +469,10 @@ namespace AssetRipper.Core.Classes.QualitySettings
 		public int AsyncUploadBufferSize { get; set; }
 		public bool AsyncUploadPersistentBuffer { get; set; }
 		public float ResolutionScalingFixedDPIFactor { get; set; }
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		public string[] ExcludedTargetPlatforms { get; set; }
+#endif
 
 		public const string NameName = "name";
 		public const string PixelLightCountName = "pixelLightCount";

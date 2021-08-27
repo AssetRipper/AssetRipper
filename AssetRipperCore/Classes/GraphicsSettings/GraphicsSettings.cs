@@ -332,6 +332,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				}
 			}
 
+#if UNIVERSAL
 			if (HasEditorSettings(reader.Flags))
 			{
 				if (HasDefaultRenderingPath(reader.Version))
@@ -422,6 +423,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				}
 			}
 			else
+#endif
 			{
 				if (HasShaderDefinesPerShaderCompiler(reader.Version))
 				{
@@ -644,18 +646,22 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		}
 		private RenderingPath GetDefaultRenderingPath(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasDefaultRenderingPath(version))
 			{
 				return DefaultRenderingPath;
 			}
+#endif
 			return RenderingPath.Forward;
 		}
 		private RenderingPath GetDefaultMobileRenderingPath(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasDefaultRenderingPath(version))
 			{
 				return DefaultMobileRenderingPath;
 			}
+#endif
 			return RenderingPath.Forward;
 		}
 		private IReadOnlyList<TierSettings> GetTierSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
@@ -693,106 +699,132 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		}
 		private LightmapStrippingMode GetLightmapStripping(TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags))
 			{
 				return LightmapStripping;
 			}
+#endif
 			return LightmapStrippingMode.Automatic;
 		}
 		private LightmapStrippingMode GetFogStripping(TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags))
 			{
 				return FogStripping;
 			}
+#endif
 			return LightmapStrippingMode.Automatic;
 		}
 		private InstancingStrippingVariant GetInstancingStripping(TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags))
 			{
 				return InstancingStripping;
 			}
+#endif
 			return InstancingStrippingVariant.StripUnused;
 		}
 		private bool GetLightmapKeepPlain(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepPlain(version))
 			{
 				return LightmapKeepPlain;
 			}
+#endif
 			return true;
 		}
 		private bool GetLightmapKeepDirCombined(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepPlain(version))
 			{
 				return LightmapKeepDirCombined;
 			}
+#endif
 			return true;
 		}
 		private bool GetLightmapKeepDynamicPlain(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepDynamicPlain(version))
 			{
 				return LightmapKeepDynamicPlain;
 			}
+#endif
 			return true;
 		}
 		private bool GetLightmapKeepDynamicDirCombined(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepDynamicPlain(version))
 			{
 				return LightmapKeepDynamicDirCombined;
 			}
+#endif
 			return true;
 		}
 		private bool GetLightmapKeepShadowMask(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepShadowMask(version))
 			{
 				return LightmapKeepShadowMask;
 			}
+#endif
 			return true;
 		}
 		private bool GetLightmapKeepSubtractive(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasLightmapKeepShadowMask(version))
 			{
 				return LightmapKeepSubtractive;
 			}
+#endif
 			return true;
 		}
 		private bool GetFogKeepLinear(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasFogKeepLinear(version))
 			{
 				return FogKeepLinear;
 			}
+#endif
 			return true;
 		}
 		private bool GetFogKeepExp(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasFogKeepLinear(version))
 			{
 				return FogKeepExp;
 			}
+#endif
 			return true;
 		}
 		private bool GetFogKeepExp2(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasFogKeepLinear(version))
 			{
 				return FogKeepExp2;
 			}
+#endif
 			return true;
 		}
 		private IReadOnlyList<AlbedoSwatchInfo> GetAlbedoSwatchInfos(UnityVersion version, TransferInstructionFlags flags)
 		{
+#if UNIVERSAL
 			if (HasEditorSettings(flags) && HasAlbedoSwatchInfos(version))
 			{
 				return AlbedoSwatchInfos;
 			}
+#endif
 			return System.Array.Empty<AlbedoSwatchInfo>();
 		}
 
@@ -813,6 +845,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public PPtr<Shader.Shader>[] AlwaysIncludedShaders { get; set; }
 		public PPtr<ShaderVariantCollection.ShaderVariantCollection>[] PreloadedShaders { get; set; }
 		public TransparencySortMode TransparencySortMode { get; set; }
+#if UNIVERSAL
 		/// <summary> Editor Only </summary>
 		public RenderingPath DefaultRenderingPath { get; set; }
 		/// <summary> Editor Only </summary>
@@ -847,6 +880,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public bool FogKeepExp2 { get; set; }
 		/// <summary> Editor Only </summary>
 		public AlbedoSwatchInfo[] AlbedoSwatchInfos { get; set; }
+#endif
 		public PlatformShaderSettings[] PlatformSettings { get; set; }
 		public TierGraphicsSettings[] TierGraphicSettings { get; set; }
 		public TierSettings[] TierSettings { get; set; }
