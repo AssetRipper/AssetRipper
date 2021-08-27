@@ -85,8 +85,8 @@ namespace AssetAnalyzer
 				var bundleFile = new BundleFile(reader);
 				Logger.Info($"\tSignature: {bundleFile.m_Header.signature}");
 				Logger.Info($"\tBundle version: {bundleFile.m_Header.version}");
-				Logger.Info($"\tUnity version: {bundleFile.m_Header.unityVersion}");
-				Logger.Info($"\tUnity revision: {bundleFile.m_Header.unityRevision}");
+				Logger.Info($"\tUnity version: {bundleFile.m_Header.unityRevision}");//real unity version
+				Logger.Info(string.Format("\tFlags: 0x{0:X4}", bundleFile.m_Header.flags));
 				Logger.Info($"\tSub Files:");
 				foreach (var file in bundleFile.fileList)
 				{
