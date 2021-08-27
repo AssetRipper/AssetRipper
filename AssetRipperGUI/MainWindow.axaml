@@ -38,7 +38,7 @@
                         </MultiBinding>
                     </MenuItem.IsEnabled>
                 </MenuItem>
-                
+
                 <MenuItem Header="_Reset" Command="{Binding Reset}">
                     <MenuItem.IsEnabled>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -48,9 +48,9 @@
                         </MultiBinding>
                     </MenuItem.IsEnabled>
                 </MenuItem>
-                    
 
-                    <!--File->Exit-->
+
+                <!--File->Exit-->
                 <MenuItem Header="_Exit" Click="ExitClicked" />
             </MenuItem>
 
@@ -141,6 +141,12 @@
                             <TextBox Text="{Binding SelectedAsset.BasicInformation, FallbackValue='No Asset Selected'}" />
                         </TabItem>
 
+                        <!--Text Tab-->
+                        <TabItem Header="Text Asset" IsVisible="{Binding SelectedAsset.HasTextData, FallbackValue=False}">
+                            <TextBox IsReadOnly="True"
+                                     Text="{Binding SelectedAsset.TextAssetData, FallbackValue='No text asset found'}" />
+                        </TabItem>
+
                         <!--Image Tab-->
                         <TabItem Header="Image" IsVisible="{Binding SelectedAsset.HasImageData, FallbackValue=False}">
                             <Image Source="{Binding SelectedAsset.ImageData, FallbackValue=null}"
@@ -154,13 +160,15 @@
 
                             <Grid RowDefinitions="*, 40, 40, *">
 
-                                <Button Grid.Row="1" Command="{Binding SelectedAsset.TogglePause, FallbackValue=null}" IsEnabled="True" HorizontalAlignment="Center">
+                                <Button Grid.Row="1" Command="{Binding SelectedAsset.TogglePause, FallbackValue=null}"
+                                        IsEnabled="True" HorizontalAlignment="Center">
                                     <Panel>
                                         <Label IsVisible="{Binding SelectedAsset.IsPaused}">Play</Label>
                                         <Label IsVisible="{Binding !SelectedAsset.IsPaused}">Pause</Label>
                                     </Panel>
                                 </Button>
-                                <TextBlock Grid.Row="2" Text="{Binding SelectedAsset.PositionString}" VerticalAlignment="Center" TextAlignment="Center"></TextBlock>
+                                <TextBlock Grid.Row="2" Text="{Binding SelectedAsset.PositionString}"
+                                           VerticalAlignment="Center" TextAlignment="Center" />
                             </Grid>
                         </TabItem>
 
