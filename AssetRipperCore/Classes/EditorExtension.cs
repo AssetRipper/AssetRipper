@@ -21,6 +21,7 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
+#if UNIVERSAL
 			EditorExtensionLayout layout = reader.Layout().EditorExtension;
 			if (layout.HasExtensionPtr)
 			{
@@ -35,12 +36,14 @@ namespace AssetRipper.Core.Classes
 			{
 				PrefabAsset.Read(reader);
 			}
+#endif
 		}
 
 		public override void Write(AssetWriter writer)
 		{
 			base.Write(writer);
 
+#if UNIVERSAL
 			EditorExtensionLayout layout = writer.Layout().EditorExtension;
 			if (layout.HasExtensionPtr)
 			{
@@ -55,6 +58,7 @@ namespace AssetRipper.Core.Classes
 			{
 				PrefabAsset.Write(writer);
 			}
+#endif
 		}
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
@@ -64,6 +68,7 @@ namespace AssetRipper.Core.Classes
 				yield return asset;
 			}
 
+#if UNIVERSAL
 			EditorExtensionLayout layout = context.Layout.EditorExtension;
 			if (layout.HasExtensionPtr)
 			{
@@ -78,6 +83,7 @@ namespace AssetRipper.Core.Classes
 			{
 				yield return context.FetchDependency(PrefabAsset, layout.PrefabAssetName);
 			}
+#endif
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -125,11 +131,12 @@ namespace AssetRipper.Core.Classes
 
 		private PPtr<PrefabInstance.PrefabInstance> GetPrefabInstance(IExportContainer container)
 		{
+#if UNIVERSAL
 			if (container.ExportLayout.EditorExtension.HasPrefabInstanceInvariant)
 			{
 				return PrefabInstance;
 			}
-
+#endif
 #warning TODO: set PrefabInstance for all assets in PrefabContainer
 			if (container.ExportFlags.IsForPrefab())
 			{
@@ -139,17 +146,12 @@ namespace AssetRipper.Core.Classes
 			return default;
 		}
 
-		/// <summary>
-		/// Editor Only
-		/// </summary>
+#if UNIVERSAL
 		public PPtr<EditorExtension> PrefabParentObject
 		{
 			get => CorrespondingSourceObject;
 			set => CorrespondingSourceObject = value;
 		}
-		/// <summary>
-		/// Editor Only
-		/// </summary>
 		public PPtr<PrefabInstance.PrefabInstance> PrefabInternal
 		{
 			get => PrefabInstance;
@@ -157,21 +159,14 @@ namespace AssetRipper.Core.Classes
 		}
 
 #warning TODO: PPtr<EditorExtensionImpl>
-		/// <summary>
-		/// Editor Only
-		/// </summary>
-		public PPtr<Object.Object> ExtensionPtr { get; set; }
-		/// <summary>
-		/// Editor Only
-		/// </summary>
-		public PPtr<EditorExtension> CorrespondingSourceObject { get; set; }
-		/// <summary>
-		/// Editor Only
-		/// </summary>
-		public PPtr<PrefabInstance.PrefabInstance> PrefabInstance { get; set; }
-		/// <summary>
-		/// Editor Only
-		/// </summary>
-		public PPtr<Prefab> PrefabAsset { get; set; }
+		public PPtr<Object.Object> ExtensionPtr;
+		public PPtr<EditorExtension> CorrespondingSourceObject;
+		public PPtr<PrefabInstance.PrefabInstance> PrefabInstance;
+		public PPtr<Prefab> PrefabAsset;
+#else
+		private PPtr<Object.Object> ExtensionPtr => default;
+		private PPtr<EditorExtension> CorrespondingSourceObject => default;
+		private PPtr<Prefab> PrefabAsset => default;
+#endif
 	}
 }
