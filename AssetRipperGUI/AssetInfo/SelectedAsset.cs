@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.AudioClip;
+﻿using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
@@ -126,6 +127,18 @@ namespace AssetRipper.GUI.AssetInfo
 
 		//Read from UI
 		public bool HasAudioData => _asset is AudioClip;
+
+		public bool HasTextData => _asset switch
+		{
+			TextAsset => true,
+			_ => false,
+		};
+
+		public string? TextAssetData => (_asset switch
+		{
+			TextAsset txt => txt.TextScript,
+			_ => null
+		})?.Replace("\t", "    ");
 
 		//Read from UI
 		public IImage? ImageData
