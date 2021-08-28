@@ -27,6 +27,7 @@ namespace AssetRipper.GUI.AssetInfo
 		private static readonly LibVLC? LibVlc;
 		
 		private readonly Object _asset;
+		private readonly IExportContainer? _uiAssetContainer;
 
 		private readonly MemoryStream? _audioStream;
 		private readonly MediaPlayer? _mediaPlayer;
@@ -68,8 +69,9 @@ namespace AssetRipper.GUI.AssetInfo
 		public SelectedAsset(Object asset, IExportContainer? uiAssetContainer)
 		{
 			_asset = asset;
+			_uiAssetContainer = uiAssetContainer;
 
-			BuildYamlTree(uiAssetContainer);
+			BuildYamlTree();
 
 			if (asset is AudioClip clip && LibVlc != null)
 			{
@@ -99,16 +101,18 @@ namespace AssetRipper.GUI.AssetInfo
 			}
 		}
 
-		private void BuildYamlTree(IExportContainer? uiAssetContainer)
+		private void BuildYamlTree()
 		{
 			try
 			{
-				YAMLMappingNode yamlRoot = (YAMLMappingNode)_asset.ExportYAML(uiAssetContainer);
+				YAMLMappingNode yamlRoot = (YAMLMappingNode)_asset.ExportYAML(_uiAssetContainer);
 
 				YamlTree = new[] { new AssetYamlNode(Name ?? _asset.GetType().Name, yamlRoot) };
 			}
 			catch (Exception e)
 			{
+				YamlTreeIsSupported = false;
+				
 				if (e is NotImplementedException or NotSupportedException)
 				{
 					YamlTree = new[] { new AssetYamlNode("Asset Doesn't Support YAML Export", new YAMLScalarNode(true)) };
@@ -128,6 +132,9 @@ namespace AssetRipper.GUI.AssetInfo
 		//Read from UI
 		public bool HasAudioData => _asset is AudioClip;
 
+		//Read from UI
+		public bool YamlTreeIsSupported { get; private set; } = true;
+
 		public bool HasTextData => _asset switch
 		{
 			TextAsset => true,
@@ -136,11 +143,13 @@ namespace AssetRipper.GUI.AssetInfo
 
 		public string? TextAssetData => (_asset switch
 		{
+			Shader shader => DumpShaderDataAsText(shader),
 			TextAsset txt => txt.TextScript,
 			_ => null
 		})?.Replace("\t", "    ");
 
 		//Read from UI
+
 		public IImage? ImageData
 		{
 			get
@@ -187,13 +196,13 @@ namespace AssetRipper.GUI.AssetInfo
 			IHasImageData img => img.TextureFormat,
 			_ => TextureFormat.Automatic,
 		};
-		
+
 		private int ImageWidth => _asset switch
 		{
 			IHasImageData img => img.Width,
 			_ => -1,
 		};
-		
+
 		private int ImageHeight => _asset switch
 		{
 			IHasImageData img => img.Height,
@@ -243,6 +252,7 @@ namespace AssetRipper.GUI.AssetInfo
 		}
 
 		//Read from UI
+
 		public string BasicInformation
 		{
 			get
@@ -285,6 +295,7 @@ namespace AssetRipper.GUI.AssetInfo
 		}
 
 		//Called from UI
+
 		public void TogglePause()
 		{
 			if(IsPaused)
@@ -307,6 +318,14 @@ namespace AssetRipper.GUI.AssetInfo
 		private void UpdatePositionString()
 		{
 			PositionString = $"{TimeSpan.FromSeconds(AudioPositionSeconds):hh\\:mm\\:ss}/{TimeSpan.FromSeconds(AudioLengthSeconds):g}";
+		}
+
+		private string DumpShaderDataAsText(Shader shader)
+		{
+			using MemoryStream stream = new();
+			shader.ExportBinary(_uiAssetContainer, stream);
+
+			return Encoding.UTF8.GetString(stream.GetBuffer());
 		}
 	}
 }

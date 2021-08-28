@@ -173,7 +173,7 @@
                         </TabItem>
 
                         <!--YAML Tab-->
-                        <TabItem Header="YAML Nodes">
+                        <TabItem Header="YAML Nodes" IsVisible="{Binding SelectedAsset.YamlTreeIsSupported, FallbackValue=False}">
                             <TreeView Items="{Binding SelectedAsset.YamlTree, FallbackValue=[]}">
                                 <TreeView.ItemTemplate>
                                     <TreeDataTemplate ItemsSource="{Binding Children}">
