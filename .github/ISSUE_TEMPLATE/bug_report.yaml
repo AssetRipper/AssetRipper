@@ -25,9 +25,9 @@ body:
       description: Please select your environment for AssetRipper.
       options:
         - GUI Version Windows x64
-        - GUI Version Windows x86
+        - GUI Version MacOS x64
+        - GUI Version Linux x64
         - Console Version Windows x64
-        - Console Version Windows x86
         - Console Version MacOS x64
         - Console Version Linux x64
     validations:
