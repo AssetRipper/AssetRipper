@@ -2,18 +2,16 @@
 
 ## 0.1.6.0
  * Extend Windows-only features to Mac and Linux
-     * Shader exporter (done!)
      * Texture exporter (partially done)
      * Audio exporter (partially done)
  * OBJ mesh export
- * Better shader implementation (done!)
  * Move Third Party Dependencies to Nuget Packages
      * Spirv
      * Smolv
      * Brotli
  * GUI improvements
-     * Audio player (#60)
-     * Reset Button (#61)
+     * List shader properties (#63)
+     * Hide Yaml tab when unsupported (#63)
 
 ## 0.2.0.0
  * Overhaul struct reading, which would enable:
@@ -31,8 +29,9 @@
  * FBX export
  * GUI improvements
    * Settings page
+   * Search feature
+   * Performance enhancements for viewing asset types with large contents, such as 9000 game objects
    * Mesh preview
-   * List shader properties
    * Different background color
    * Export Selected object to project
    * Export Selected object to file
