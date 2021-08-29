@@ -1,6 +1,8 @@
+using AssetRipper.Core.Logging;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using System;
 
 namespace AssetRipper.GUI
 {
@@ -14,6 +16,18 @@ namespace AssetRipper.GUI
 
 		public static void AppMain(Application app, string[] args)
 		{
+			AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+			{
+				try
+				{
+					Logger.Error(LogCategory.General, "Unhandled app-level fatal exception!", e.ExceptionObject as Exception);
+				}
+				catch (Exception)
+				{
+					//Ignore, that's all we can do.
+				}
+			};
+			
 			app.Run(new MainWindow { DataContext = new MainWindowViewModel() });
 		}
 	}
