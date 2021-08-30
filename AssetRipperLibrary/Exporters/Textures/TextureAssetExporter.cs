@@ -225,7 +225,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				return TextureExportCollection.CreateExportCollection(this, (Sprite)asset);
 			}
-			var collection = new TextureExportCollection(this, (Texture2D)asset, SpriteExportMode != SpriteExportMode.Native);
+			var collection = new TextureExportCollection(this, (Texture2D)asset, true);
 			collection.FileExtension = ImageExportFormat.GetFileExtension();
 			return collection;
 		}
