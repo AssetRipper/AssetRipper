@@ -14,6 +14,7 @@ using AssetRipper.Core.YAML.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Mono.Cecil;
 
 namespace AssetRipper.Core.Classes
 {
@@ -125,6 +126,14 @@ namespace AssetRipper.Core.Classes
 				File.Collection.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
 				File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
 			return File.Collection.AssemblyManager.GetExportType(exportManager, scriptID);
+		}
+
+		public TypeDefinition GetTypeDefinition()
+		{
+			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
+				File.Collection.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
+				File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
+			return File.Collection.AssemblyManager.GetTypeDefinition(scriptID);
 		}
 
 		public ScriptIdentifier GetScriptID()

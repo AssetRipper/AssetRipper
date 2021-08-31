@@ -1,0 +1,146 @@
+﻿using AssetRipper.Core.IO;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Core.Structure.Assembly.Mono;
+using AssetRipper.Core.Utils;
+using Mono.Cecil;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+namespace AssetRipper.Core.Project.Exporters.Script
+{
+	public sealed class AltScriptManager
+	{
+		ScriptDecompiler Decompiler { get; }
+
+		public IEnumerable<TypeDefinition> Types => m_types.Values;
+
+		private readonly Dictionary<string, TypeDefinition> m_types = new Dictionary<string, TypeDefinition>();
+
+		private readonly HashSet<string> m_exported = new HashSet<string>();
+
+		private readonly string m_exportPath;
+
+		public AltScriptManager(IAssemblyManager assemblyManager, string exportPath)
+		{
+			if (string.IsNullOrEmpty(exportPath))
+			{
+				throw new ArgumentNullException(nameof(exportPath));
+			}
+			Decompiler = new ScriptDecompiler(assemblyManager);
+			m_exportPath = exportPath;
+		}
+
+		private static string GetExportSubPath(string assembly, string @namespace, string @class)
+		{
+			string assemblyFolder = BaseManager.ToAssemblyName(assembly);
+			string namespaceFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
+			string folderPath = Path.Combine(assemblyFolder, namespaceFolder);
+			string filePath = Path.Combine(folderPath, @class);
+			return $"{DirectoryUtils.FixInvalidPathCharacters(filePath)}.cs";
+		}
+
+		private static string GetExportSubPath(TypeDefinition type)
+		{
+			string typeName = type.Name;
+			int index = typeName.IndexOf('<');
+			if (index >= 0)
+			{
+				string normalName = typeName.Substring(0, index);
+				typeName = normalName + $".{typeName.Count(t => t == ',') + 1}";
+			}
+			return GetExportSubPath(type.Module.Name, type.Namespace, typeName);
+		}
+
+		public string Export(TypeDefinition exportType)
+		{
+			if (exportType.DeclaringType != null)
+			{
+				throw new NotSupportedException("You can export only topmost types");
+			}
+
+			if (IsBuiltInType(exportType))
+			{
+				return null;
+			}
+
+			string subPath = GetExportSubPath(exportType);
+			string filePath = Path.Combine(m_exportPath, subPath);
+			string uniqueFilePath = ToUniqueFileName(filePath);
+			string directory = Path.GetDirectoryName(uniqueFilePath);
+			if (!DirectoryUtils.Exists(directory))
+			{
+				DirectoryUtils.CreateVirtualDirectory(directory);
+			}
+
+			using (Stream fileStream = FileUtils.CreateVirtualFile(uniqueFilePath))
+			{
+				using (StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
+				{
+					writer.Write(Decompiler.Decompile(exportType));
+				}
+			}
+			AddExportedType(exportType);
+			return uniqueFilePath;
+		}
+
+		public void ExportRest()
+		{
+			foreach (TypeDefinition type in m_types.Values)
+			{
+				if (type.DeclaringType != null)
+				{
+					continue;
+				}
+				if (m_exported.Contains(type.FullName))
+				{
+					continue;
+				}
+
+				Export(type);
+			}
+		}
+
+		private void AddExportedType(TypeDefinition exportType)
+		{
+			m_exported.Add(exportType.FullName);
+
+			foreach (TypeDefinition nestedType in exportType.NestedTypes)
+			{
+				AddExportedType(nestedType);
+			}
+		}
+
+		private static string ToUniqueFileName(string filePath)
+		{
+			if (FileUtils.Exists(filePath))
+			{
+				string directory = Path.GetDirectoryName(filePath);
+				string fileName = Path.GetFileNameWithoutExtension(filePath);
+				string fileExtension = Path.GetExtension(filePath);
+				for (int i = 2; i < int.MaxValue; i++)
+				{
+					string newFilePath = Path.Combine(directory, $"{fileName}.{i}{fileExtension}");
+					if (!FileUtils.Exists(newFilePath))
+					{
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Found duplicate script file at {filePath}. Renamed to {newFilePath}");
+						return newFilePath;
+					}
+				}
+				throw new Exception($"Can't create unit file at {filePath}");
+			}
+			else
+			{
+				return filePath;
+			}
+		}
+
+		private static bool IsBuiltInType(TypeDefinition type)
+		{
+			return MonoUtils.IsBuiltinLibrary(type.Module.Name);
+		}
+	}
+}

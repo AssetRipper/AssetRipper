@@ -9,6 +9,7 @@ using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AssetRipper.Core.Structure.Assembly.Managers
 {
@@ -123,13 +124,19 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			return true;
 		}
 
-		public virtual ScriptExportType GetExportType(ScriptExportManager exportManager, ScriptIdentifier scriptID)
+		public virtual TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID)
 		{
 			TypeDefinition type = FindType(scriptID);
 			if (type == null)
 			{
 				throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
 			}
+			return type;
+		}
+
+		public virtual ScriptExportType GetExportType(ScriptExportManager exportManager, ScriptIdentifier scriptID)
+		{
+			TypeDefinition type = GetTypeDefinition(scriptID);
 			return exportManager.RetrieveType(type);
 		}
 
@@ -390,6 +397,11 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 				type = definition.BaseType;
 			}
 			return false;
+		}
+
+		public virtual AssemblyDefinition[] GetAssemblies()
+		{
+			return m_assemblies.Values.Where(x => x != null).ToArray();
 		}
 
 		public void Dispose()
