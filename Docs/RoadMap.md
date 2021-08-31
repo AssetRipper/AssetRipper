@@ -9,9 +9,6 @@
      * Spirv
      * Smolv
      * Brotli
- * GUI improvements
-     * List shader properties (#63)
-     * Hide Yaml tab when unsupported (#63)
 
 ## 0.2.0.0
  * Overhaul struct reading, which would enable:
