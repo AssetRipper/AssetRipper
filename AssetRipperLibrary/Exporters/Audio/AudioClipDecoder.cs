@@ -14,7 +14,9 @@ namespace AssetRipper.Library.Exporters.Audio
 		public static bool LibrariesLoaded { get; private set; }
 		static AudioClipDecoder()
 		{
-			LibrariesLoaded = IsVorbisLoaded() && IsOggLoaded();
+			bool vorbisLoaded = IsVorbisLoaded();
+			bool oggLoaded = IsOggLoaded();
+			LibrariesLoaded = vorbisLoaded && oggLoaded;
 			if (!LibrariesLoaded)
 				Logger.Error(LogCategory.Export, "Either LibVorbis or LibOgg is missing from your system, so Ogg audio clips cannot be exported. This message will not repeat.");
 		}
@@ -34,8 +36,9 @@ namespace AssetRipper.Library.Exporters.Audio
 		private unsafe static bool IsVorbisLoaded()
 		{
 			try { OggVorbisSharp.Vorbis.vorbis_version_string(); }
-			catch (DllNotFoundException)
+			catch (DllNotFoundException ex)
 			{
+				Logger.Error($"Could not find vorbis: {ex.Message}");
 				return false;
 			}
 			return true;
@@ -49,8 +52,9 @@ namespace AssetRipper.Library.Exporters.Audio
 			{
 				OggVorbisSharp.Ogg.ogg_stream_init(streamPtr, 1);
 			}
-			catch (DllNotFoundException)
+			catch (DllNotFoundException ex)
 			{
+				Logger.Error($"Could not find ogg: {ex.Message}");
 				result = false;
 			}
 			finally
