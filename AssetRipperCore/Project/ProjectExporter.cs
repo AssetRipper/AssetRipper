@@ -149,7 +149,6 @@ namespace AssetRipper.Core.Project
 			OverrideBinaryExporter(ClassIDType.Shader);
 			OverrideBinaryExporter(ClassIDType.AudioClip);
 
-			//OverrideExporter(ClassIDType.MonoScript, ScriptExporter);
 			OverrideExporter(ClassIDType.MonoScript, new AltScriptExporter(m_fileCollection.AssemblyManager));
 
 			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter(configuration));
@@ -332,7 +331,6 @@ namespace AssetRipper.Core.Project
 		private YAMLAssetExporter YamlExporter { get; } = new YAMLAssetExporter();
 		private BinaryAssetExporter BinaryExporter { get; } = new BinaryAssetExporter();
 		private DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
-		private ScriptAssetExporter ScriptExporter { get; } = new ScriptAssetExporter();
 
 		private readonly Dictionary<ClassIDType, Stack<IAssetExporter>> m_exporters = new Dictionary<ClassIDType, Stack<IAssetExporter>>();
 

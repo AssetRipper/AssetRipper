@@ -1,6 +1,4 @@
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Exporters.Script;
-using AssetRipper.Core.Project.Exporters.Script.Elements;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Parser.Files;
@@ -118,14 +116,6 @@ namespace AssetRipper.Core.Classes
 				return File.Collection.AssemblyManager.GetSerializableType(scriptID);
 			}
 			return null;
-		}
-
-		public ScriptExportType GetExportType(ScriptExportManager exportManager)
-		{
-			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
-				File.Collection.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
-				File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
-			return File.Collection.AssemblyManager.GetExportType(exportManager, scriptID);
 		}
 
 		public TypeDefinition GetTypeDefinition()

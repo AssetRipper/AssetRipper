@@ -1,5 +1,3 @@
-using AssetRipper.Core.Project.Exporters.Script;
-using AssetRipper.Core.Project.Exporters.Script.Elements;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
 using Mono.Cecil;
@@ -21,7 +19,6 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		SerializableType GetSerializableType(ScriptIdentifier scriptID);
 		TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID);
 		AssemblyDefinition[] GetAssemblies();
-		ScriptExportType GetExportType(ScriptExportManager exportManager, ScriptIdentifier scriptID);
 		ScriptIdentifier GetScriptID(string assembly, string name);
 		ScriptIdentifier GetScriptID(string assembly, string @namespace, string name);
 

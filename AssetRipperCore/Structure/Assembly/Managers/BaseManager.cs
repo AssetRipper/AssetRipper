@@ -1,6 +1,4 @@
-﻿using AssetRipper.Core.Project.Exporters.Script;
-using AssetRipper.Core.Project.Exporters.Script.Elements;
-using AssetRipper.Core.Layout;
+﻿using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.Structure.Assembly.Serializable;
@@ -132,12 +130,6 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 				throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
 			}
 			return type;
-		}
-
-		public virtual ScriptExportType GetExportType(ScriptExportManager exportManager, ScriptIdentifier scriptID)
-		{
-			TypeDefinition type = GetTypeDefinition(scriptID);
-			return exportManager.RetrieveType(type);
 		}
 
 		public virtual ScriptIdentifier GetScriptID(string assembly, string name)
