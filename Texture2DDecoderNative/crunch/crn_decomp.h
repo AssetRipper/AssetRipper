@@ -317,10 +317,8 @@ namespace crnd
 #include <stdio.h>
 #ifdef _WIN32
 #include <memory.h>
-#elif __APPLE__
-#include <cstring>
 #else
-#include <malloc.h>
+//#include <malloc.h>
 #include <cstring>
 #endif
 #include <stdarg.h>
