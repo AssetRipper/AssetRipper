@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.Classes.PrefabInstance;
+using AssetRipper.Core.Classes;
 
 namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 {
@@ -18,7 +19,7 @@ namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 			PrefabModificationLayout layout = context.Layout.PrefabInstance.PrefabModification;
 			context.AddNode(layout.Name, name);
 			context.BeginChildren();
-			context.AddPPtr(context.Layout.Transform.Name, layout.TransformParentName);
+			context.AddPPtr(Transform.TransformName, layout.TransformParentName);
 			context.AddArray(layout.ModificationsName, PropertyModificationLayout.GenerateTypeTree);
 			if (layout.IsComponentPointer)
 			{

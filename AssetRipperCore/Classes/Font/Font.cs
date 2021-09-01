@@ -394,6 +394,7 @@ namespace AssetRipper.Core.Classes.Font
 		public bool UseLegacyBoundsCalculation { get; set; }
 		public bool ShouldRoundAdvanceValue { get; set; }
 
+		public const string FontName = "Font";
 		public const string LineSpacingName = "m_LineSpacing";
 		public const string DefaultMaterialName = "m_DefaultMaterial";
 		public const string FontSizeName = "m_FontSize";

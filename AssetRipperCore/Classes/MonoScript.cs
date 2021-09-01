@@ -307,6 +307,7 @@ namespace AssetRipper.Core.Classes
 		public string AssemblyNameOrigin { get; set; }
 		public bool IsEditorScript { get; set; }
 
+		public const string MonoScriptName = "MonoScript";
 		public const string DefaultPropertiesName = "m_DefaultProperties";
 		public const string DefaultReferencesName = "m_DefaultReferences";
 		public const string IconName = "m_Icon";

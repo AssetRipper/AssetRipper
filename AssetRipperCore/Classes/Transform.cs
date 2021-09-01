@@ -10,11 +10,27 @@ using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes
 {
 	public class Transform : Component
 	{
+		/// <summary>
+		/// 4.5.0 and greater and Not Release
+		/// </summary>
+		public static bool HasRootOrder(UnityVersion version, TransferInstructionFlags flags)
+		{
+			return version.IsGreaterEqual(4, 5) && !flags.IsRelease();
+		}
+		/// <summary>
+		/// 5.0.0 and greater and Not Release
+		/// </summary>
+		public static bool HasLocalEulerAnglesHint(UnityVersion version, TransferInstructionFlags flags)
+		{
+			return version.IsGreaterEqual(5) && !flags.IsRelease();
+		}
+
 		public Transform(AssetLayout layout) : base(layout)
 		{
 			Children = Array.Empty<PPtr<Transform>>();
@@ -74,12 +90,11 @@ namespace AssetRipper.Core.Classes
 			Children = reader.ReadAssetArray<PPtr<Transform>>();
 			Father.Read(reader);
 #if UNIVERSAL
-			TransformLayout layout = reader.Layout().Transform;
-			if (layout.HasRootOrder)
+			if (HasRootOrder(reader.Version, reader.Flags))
 			{
 				RootOrder = reader.ReadInt32();
 			}
-			if (layout.HasLocalEulerAnglesHint)
+			if (HasLocalEulerAnglesHint(reader.Version, reader.Flags))
 			{
 				LocalEulerAnglesHint.Read(reader);
 			}
@@ -97,12 +112,11 @@ namespace AssetRipper.Core.Classes
 			Father.Write(writer);
 
 #if UNIVERSAL
-			TransformLayout layout = writer.Layout().Transform;
-			if (layout.HasRootOrder)
+			if (HasRootOrder(writer.Version, writer.Flags))
 			{
 				writer.Write(RootOrder);
 			}
-			if (layout.HasLocalEulerAnglesHint)
+			if (HasLocalEulerAnglesHint(writer.Version, writer.Flags))
 			{
 				LocalEulerAnglesHint.Write(writer);
 			}
@@ -116,25 +130,23 @@ namespace AssetRipper.Core.Classes
 				yield return asset;
 			}
 
-			TransformLayout layout = context.Layout.Transform;
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Children, layout.ChildrenName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Children, ChildrenName))
 			{
 				yield return asset;
 			}
-			yield return context.FetchDependency(Father, layout.FatherName);
+			yield return context.FetchDependency(Father, FatherName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			TransformLayout layout = container.Layout.Transform;
-			node.Add(layout.LocalRotationName, LocalRotation.ExportYAML(container));
-			node.Add(layout.LocalPositionName, LocalPosition.ExportYAML(container));
-			node.Add(layout.LocalScaleName, LocalScale.ExportYAML(container));
-			node.Add(layout.ChildrenName, Children.ExportYAML(container));
-			node.Add(layout.FatherName, Father.ExportYAML(container));
-			node.Add(layout.RootOrderName, RootOrder);
-			node.Add(layout.LocalEulerAnglesHintName, LocalEulerAnglesHint.ExportYAML(container));
+			node.Add(LocalRotationName, LocalRotation.ExportYAML(container));
+			node.Add(LocalPositionName, LocalPosition.ExportYAML(container));
+			node.Add(LocalScaleName, LocalScale.ExportYAML(container));
+			node.Add(ChildrenName, Children.ExportYAML(container));
+			node.Add(FatherName, Father.ExportYAML(container));
+			node.Add(RootOrderName, RootOrder);
+			node.Add(LocalEulerAnglesHintName, LocalEulerAnglesHint.ExportYAML(container));
 			return node;
 		}
 
@@ -173,5 +185,13 @@ namespace AssetRipper.Core.Classes
 #if UNIVERSAL
 		public Vector3f LocalEulerAnglesHint;
 #endif
+		public const string TransformName = "Transform";
+		public const string LocalRotationName = "m_LocalRotation";
+		public const string LocalPositionName = "m_LocalPosition";
+		public const string LocalScaleName = "m_LocalScale";
+		public const string ChildrenName = "m_Children";
+		public const string FatherName = "m_Father";
+		public const string RootOrderName = "m_RootOrder";
+		public const string LocalEulerAnglesHintName = "m_LocalEulerAnglesHint";
 	}
 }

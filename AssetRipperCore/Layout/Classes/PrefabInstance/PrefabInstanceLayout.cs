@@ -2,6 +2,7 @@
 using AssetRipper.Core.Layout.Classes.Misc;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Classes;
 
 namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 {
@@ -170,9 +171,15 @@ namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 				context.AddArray(layout.ObjectsName, (c, n) => c.AddPPtr(c.Layout.EditorExtension.Name, n));
 				context.AddPPtr(layout.Name, layout.FatherName);
 				context.AddBool(layout.IsDataTemplateName, TransferMetaFlags.AlignBytesFlag);
-				NamedObjectLayout.GenerateTypeTree(context);
+				GenerateNamedObjectTypeTree(context);
 			}
 			context.EndChildren();
+		}
+
+		public static void GenerateNamedObjectTypeTree(TypeTreeContext context)
+		{
+			EditorExtensionLayout.GenerateTypeTree(context);
+			context.AddString(NamedObject.NameName);
 		}
 
 		public PrefabModificationLayout PrefabModification { get; }

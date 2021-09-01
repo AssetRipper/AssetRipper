@@ -391,6 +391,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 
 		public byte[] ImageDataByteArray => GetImageData();
 
+		public const string Texture2DName = "Texture2D";
 		public const string WidthName = "m_Width";
 		public const string HeightName = "m_Height";
 		public const string CompleteImageSizeName = "m_CompleteImageSize";

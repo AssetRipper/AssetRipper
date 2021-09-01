@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 			{
 				if (!IsFileIDToRecycleNameConditional(reader.Version) || IncludesIDToName)
 				{
-					if ((new PPtrLayout(reader.Info)).IsLongID)
+					if (PPtr.IsLongID(reader.Version))
 					{
 						FileIDToRecycleName = new Dictionary<long, string>();
 						FileIDToRecycleName.Read(reader);
@@ -163,7 +163,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 			{
 				if (!IsFileIDToRecycleNameConditional(writer.Version) || IncludesIDToName)
 				{
-					if ((new PPtrLayout(writer.Info)).IsLongID)
+					if (PPtr.IsLongID(writer.Version))
 					{
 						FileIDToRecycleName.Write(writer);
 					}

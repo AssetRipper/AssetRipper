@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Layout;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Layout;
 using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
@@ -264,7 +265,18 @@ namespace AssetRipper.Core.Converters.Game
 
 		public void AddPPtr(string type, string name, TransferMetaFlags flags)
 		{
-			PPtrLayout.GenerateTypeTree(this, type, name);
+			AddNode($"PPtr<{type}>", name);
+			BeginChildren();
+			AddInt32(PPtr.FileIDName);
+			if (PPtr.IsLongID(Layout.Info.Version))
+			{
+				AddInt64(PPtr.PathIDName);
+			}
+			else
+			{
+				AddInt32(PPtr.PathIDName);
+			}
+			EndChildren();
 			Nodes[DepthIndex].MetaFlag = flags;
 		}
 

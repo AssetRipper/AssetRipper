@@ -8,9 +8,25 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Misc
 {
+	public static class PPtr
+	{
+		public const string FileIDName = "m_FileID";
+		public const string PathIDName = "m_PathID";
+
+		/// <summary>
+		/// At least version 5.0.0
+		/// </summary>
+		public static bool IsLongID(UnityVersion version)
+		{
+			// NOTE: unknown version SerializedFiles.FormatVersion.Unknown_14
+			return version.IsGreaterEqual(5);
+		}
+	}
+
 	public struct PPtr<T> : IAsset where T : Object.Object
 	{
 		public PPtr(int fileIndex, long pathID)
@@ -42,13 +58,13 @@ namespace AssetRipper.Core.Classes.Misc
 		public void Read(AssetReader reader)
 		{
 			FileIndex = reader.ReadInt32();
-			PathID = reader.Layout().PPtr.IsLongID ? reader.ReadInt64() : reader.ReadInt32();
+			PathID = PPtr.IsLongID(reader.Version) ? reader.ReadInt64() : reader.ReadInt32();
 		}
 
 		public void Write(AssetWriter writer)
 		{
 			writer.Write(FileIndex);
-			if (writer.Layout().PPtr.IsLongID)
+			if (PPtr.IsLongID(writer.Version))
 			{
 				writer.Write(PathID);
 			}

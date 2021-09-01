@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Converters.Game;
+﻿using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle
@@ -18,10 +19,10 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle
 			GUIStyleStateLayout layout = context.Layout.Serialized.GUIStyle.GUIStyleState;
 			context.AddNode(layout.Name, name);
 			context.BeginChildren();
-			context.AddPPtr(context.Layout.Texture2D.Name, layout.BackgroundName);
+			context.AddPPtr(Texture2D.Texture2DName, layout.BackgroundName);
 			if (layout.HasScaledBackgrounds)
 			{
-				context.AddArray(layout.ScaledBackgroundsName, (c, n) => c.AddPPtr(c.Layout.Texture2D.Name, n));
+				context.AddArray(layout.ScaledBackgroundsName, (c, n) => c.AddPPtr(Texture2D.Texture2DName, n));
 			}
 			ColorRGBAfLayout.GenerateTypeTree(context, layout.TextColorName);
 			context.EndChildren();

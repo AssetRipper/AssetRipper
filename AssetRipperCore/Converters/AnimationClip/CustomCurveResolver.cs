@@ -235,7 +235,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 				case BindingCustomType.RectTransform:
 					{
-						string LocalPositionZ = layout.Transform.LocalPositionName + "." + layout.Serialized.Vector3f.ZName;
+						string LocalPositionZ = Transform.LocalPositionName + "." + layout.Serialized.Vector3f.ZName;
 						if (attribute == CRC.CalculateDigestAscii(LocalPositionZ))
 						{
 							return LocalPositionZ;

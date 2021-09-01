@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Converters.Game;
+﻿using AssetRipper.Core.Classes.Font;
+using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle
@@ -52,7 +53,7 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle
 				RectOffsetLayout.GenerateTypeTree(context, layout.MarginName);
 			}
 			RectOffsetLayout.GenerateTypeTree(context, layout.OverflowName);
-			context.AddPPtr(context.Layout.Font.Name, layout.FontName);
+			context.AddPPtr(Font.FontName, layout.FontName);
 			if (layout.IsBuiltinFormat)
 			{
 				context.AddInt32(layout.FontSizeName);

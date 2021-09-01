@@ -38,13 +38,14 @@ namespace AssetRipper.Core.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode root = base.ExportYAMLRoot(container);
-			NamedObjectLayout layout = container.ExportLayout.NamedObject;
-			root.Add(layout.NameName, Name);
+			root.Add(NameName, Name);
 			return root;
 		}
 
 		public virtual string ValidName => Name.Length == 0 ? GetType().Name : Name;
 
 		public string Name { get; set; }
+
+		public const string NameName = "m_Name";
 	}
 }

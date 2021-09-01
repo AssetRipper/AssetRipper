@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Layout.Classes
 			{
 				context.AddPPtr(context.Layout.Object.Name, layout.GeneratorAssetName);
 			}
-			context.AddPPtr(context.Layout.MonoScript.Name, layout.ScriptName);
+			context.AddPPtr(MonoScript.MonoScriptName, layout.ScriptName);
 			context.AddString(layout.NameName);
 			if (layout.HasEditorClassIdentifier)
 			{

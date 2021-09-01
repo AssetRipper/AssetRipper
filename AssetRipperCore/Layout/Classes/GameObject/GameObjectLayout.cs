@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.Layout.Builtin;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Classes.Texture2D;
 
 namespace AssetRipper.Core.Layout.Classes.GameObject
 {
@@ -111,7 +112,7 @@ namespace AssetRipper.Core.Layout.Classes.GameObject
 			}
 			if (layout.HasIcon && layout.IsIconFirst)
 			{
-				context.AddPPtr(context.Layout.Texture2D.Name, layout.IconName);
+				context.AddPPtr(Texture2D.Texture2DName, layout.IconName);
 			}
 			if (layout.HasNavMeshLayer)
 			{
@@ -132,7 +133,7 @@ namespace AssetRipper.Core.Layout.Classes.GameObject
 			}
 			if (layout.HasIcon && !layout.IsIconFirst)
 			{
-				context.AddPPtr(context.Layout.Texture2D.Name, layout.IconName);
+				context.AddPPtr(Texture2D.Texture2DName, layout.IconName);
 			}
 			context.EndChildren();
 		}

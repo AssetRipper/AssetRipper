@@ -23,8 +23,6 @@ namespace AssetRipper.Core.Layout
 			IsAlignArrays = info.Version.IsGreaterEqual(2017);
 			IsStructSerializable = info.Version.IsGreaterEqual(4, 5);
 
-			PPtr = new PPtrLayout(info);
-
 			Misc = new MiscLayoutCategory(info);
 			Serialized = new SerializedLayoutCategory(info);
 
@@ -33,16 +31,11 @@ namespace AssetRipper.Core.Layout
 			Behaviour = new BehaviourLayout(info);
 			Component = new ComponentLayout(info);
 			EditorExtension = new EditorExtensionLayout(info);
-			Font = new FontLayout(info);
 			GameObject = new GameObjectLayout(info);
 			MonoBehaviour = new MonoBehaviourLayout(info);
-			MonoScript = new MonoScriptLayout(info);
-			NamedObject = new NamedObjectLayout(info);
 			Object = new ObjectLayout(info);
 			Prefab = new PrefabLayout(info);
 			PrefabInstance = new PrefabInstanceLayout(info);
-			Texture2D = new Texture2DLayout(info);
-			Transform = new TransformLayout(info);
 		}
 
 		private static Dictionary<ClassIDType, string> InitializeClassNames()
@@ -84,8 +77,6 @@ namespace AssetRipper.Core.Layout
 
 		private static IReadOnlyDictionary<ClassIDType, string> ClassNames { get; }
 
-		public PPtrLayout PPtr { get; }
-
 		public MiscLayoutCategory Misc { get; }
 		public SerializedLayoutCategory Serialized { get; }
 
@@ -94,16 +85,11 @@ namespace AssetRipper.Core.Layout
 		public BehaviourLayout Behaviour { get; }
 		public ComponentLayout Component { get; }
 		public EditorExtensionLayout EditorExtension { get; }
-		public FontLayout Font { get; }
 		public GameObjectLayout GameObject { get; }
 		public MonoBehaviourLayout MonoBehaviour { get; }
-		public MonoScriptLayout MonoScript { get; }
-		public NamedObjectLayout NamedObject { get; }
 		public ObjectLayout Object { get; }
 		public PrefabLayout Prefab { get; }
 		public PrefabInstanceLayout PrefabInstance { get; }
-		public Texture2DLayout Texture2D { get; }
-		public TransformLayout Transform { get; }
 
 		public string TypelessdataName => "_typelessdata";
 	}

@@ -27,12 +27,11 @@ namespace AssetRipper.Core.Converters
 			instance.Father = origin.Father;
 
 #if UNIVERSAL
-			TransformLayout exlayout = container.ExportLayout.Transform;
-			if (exlayout.HasRootOrder)
+			if (Transform.HasRootOrder(container.ExportVersion, container.ExportFlags))
 			{
 				instance.RootOrder = GetRootOrder(container, origin);
 			}
-			if (exlayout.HasLocalEulerAnglesHint)
+			if (Transform.HasLocalEulerAnglesHint(container.ExportVersion, container.ExportFlags))
 			{
 				instance.LocalEulerAnglesHint = GetLocalEulerAnglesHint(container, origin);
 			}
@@ -42,7 +41,7 @@ namespace AssetRipper.Core.Converters
 #if UNIVERSAL
 		private static int GetRootOrder(IExportContainer container, Transform origin)
 		{
-			if (container.Layout.Transform.HasRootOrder)
+			if (Transform.HasRootOrder(container.Version, container.Flags))
 			{
 				return origin.RootOrder;
 			}
@@ -51,7 +50,7 @@ namespace AssetRipper.Core.Converters
 
 		private static Vector3f GetLocalEulerAnglesHint(IExportContainer container, Transform origin)
 		{
-			if (container.Layout.Transform.HasLocalEulerAnglesHint)
+			if (Transform.HasLocalEulerAnglesHint(container.Version, container.Flags))
 			{
 				return origin.LocalEulerAnglesHint;
 			}

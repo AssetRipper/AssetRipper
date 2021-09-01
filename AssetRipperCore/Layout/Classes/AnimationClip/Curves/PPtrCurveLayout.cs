@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.Classes.AnimationClip;
 using AssetRipper.Core.Classes.AnimationClip.Curves;
+using AssetRipper.Core.Classes;
 
 namespace AssetRipper.Core.Layout.Classes.AnimationClip.Curves
 {
@@ -23,7 +24,7 @@ namespace AssetRipper.Core.Layout.Classes.AnimationClip.Curves
 			context.AddString(layout.AttributeName);
 			context.AddString(layout.PathName);
 			context.AddNode(TypeTreeUtils.TypeStarName, layout.ClassIDName, 1, sizeof(int));
-			context.AddPPtr(context.Layout.MonoScript.Name, layout.ScriptName);
+			context.AddPPtr(MonoScript.MonoScriptName, layout.ScriptName);
 			context.EndChildren();
 		}
 
