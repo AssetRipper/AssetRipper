@@ -27,9 +27,7 @@ namespace AssetRipper.Core.Project.Exporters.Script
 		public AltScriptManager(IAssemblyManager assemblyManager, string exportPath)
 		{
 			if (string.IsNullOrEmpty(exportPath))
-			{
 				throw new ArgumentNullException(nameof(exportPath));
-			}
 			Decompiler = new ScriptDecompiler(assemblyManager);
 			m_exportPath = exportPath;
 		}

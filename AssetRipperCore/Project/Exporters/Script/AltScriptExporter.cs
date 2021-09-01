@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Configuration;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Structure.Assembly.Managers;
@@ -48,6 +49,7 @@ namespace AssetRipper.Core.Project.Exporters.Script
 
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string dirPath, Action<IExportContainer, Object, string> callback)
 		{
+			Logger.Info(LogCategory.Export, "Exporting scripts...");
 			AltScriptManager scriptManager = new AltScriptManager(AssemblyManager, dirPath);
 			Dictionary<Object, TypeDefinition> exportTypes = new Dictionary<Object, TypeDefinition>();
 			foreach (Object asset in assets)
@@ -65,12 +67,10 @@ namespace AssetRipper.Core.Project.Exporters.Script
 				}
 			}
 			scriptManager.ExportRest();
+			Logger.Info(LogCategory.Export, "Finished exporting scripts");
 		}
 
-		public AssetType ToExportType(Object asset)
-		{
-			return AssetType.Meta;
-		}
+		public AssetType ToExportType(Object asset) => AssetType.Meta;
 
 		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
 		{
