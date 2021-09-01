@@ -18,11 +18,15 @@ namespace AssetRipper.Core.Project.Exporters.Script
 
 		public IEnumerable<TypeDefinition> Types => m_types.Values;
 
-		private readonly Dictionary<string, TypeDefinition> m_types = new Dictionary<string, TypeDefinition>();
+		private Dictionary<string, TypeDefinition> m_types { get; } 
 
 		private readonly HashSet<string> m_exported = new HashSet<string>();
 
 		private readonly string m_exportPath;
+
+		private static readonly string[] specialTypeNames = new string[] { "<Module>", "<PrivateImplementationDetails>", "Consts", "Locale" };
+		private static readonly string[] forbiddenNamespaces = new string[] { "Unity", "UnityEngine", "TMPro", "System", "Microsoft", "Mono"};
+		private static readonly string[] forbiddenAssemblies = new string[] { "mscorlib" };
 
 		public AltScriptManager(IAssemblyManager assemblyManager, string exportPath)
 		{
@@ -30,6 +34,30 @@ namespace AssetRipper.Core.Project.Exporters.Script
 				throw new ArgumentNullException(nameof(exportPath));
 			Decompiler = new ScriptDecompiler(assemblyManager);
 			m_exportPath = exportPath;
+			m_types = new Dictionary<string, TypeDefinition>();
+			AddTypes(assemblyManager);
+		}
+
+		private void AddTypes(IAssemblyManager assemblyManager)
+		{
+			foreach(var assembly in assemblyManager.GetAssemblies())
+			{
+				if (forbiddenAssemblies.Contains(assembly.Name.Name))
+					continue;
+				foreach(var module in assembly.Modules)
+				{
+					foreach(var type in module.Types)
+					{
+						if(!specialTypeNames.Contains(type.FullName) && !IsForbiddenNamespace(type.Namespace) && !m_types.ContainsKey(type.FullName))
+							m_types.Add(type.FullName, type);
+					}
+				}
+			}
+		}
+
+		private static bool IsForbiddenNamespace(string @namespace)
+		{
+			return !string.IsNullOrEmpty(@namespace) && forbiddenNamespaces.Contains(@namespace.Split('.').FirstOrDefault());
 		}
 
 		private static string GetExportSubPath(string assembly, string @namespace, string @class)
