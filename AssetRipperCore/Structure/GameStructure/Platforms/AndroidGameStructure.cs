@@ -181,7 +181,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			if (File.Exists(globalGameManagersPath))
 				return GetUnityVersionFromSerializedFile(globalGameManagersPath);
 			else if (File.Exists(lz4bundlePath))
-				return GetUnityVersionFromBundleFile(dataPath);
+				return GetUnityVersionFromBundleFile(lz4bundlePath);
 			else
 				return null;
 		}
