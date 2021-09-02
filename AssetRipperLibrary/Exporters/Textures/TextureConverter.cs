@@ -10,15 +10,11 @@ using AssetRipper.Library.TextureDecoders.Rgb;
 using AssetRipper.Library.TextureDecoders.Yuy2;
 using AssetRipper.Library.Utils;
 using System;
-using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using Texture2DDecoder;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
-	[SupportedOSPlatform("windows")]
-	[SupportedOSPlatform("linux")]
 	public static class TextureConverter
 	{
 		private static bool IsUseUnityCrunch(UnityVersion version, TextureFormat format)
@@ -404,19 +400,13 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static bool DecompressCRN(byte[] data, out byte[] uncompressedBytes)
 		{
-			//if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
-				uncompressedBytes = TextureDecoder.UnpackCrunch(data);
-			//else
-			//	uncompressedBytes = null;
+			uncompressedBytes = TextureDecoder.UnpackCrunch(data);
 			return uncompressedBytes != null;
 		}
 
 		private static bool DecompressUnityCRN(byte[] data, out byte[] uncompressedBytes)
 		{
-			//if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
-				uncompressedBytes = TextureDecoder.UnpackUnityCrunch(data);
-			//else
-			//	uncompressedBytes = null;
+			uncompressedBytes = TextureDecoder.UnpackUnityCrunch(data);
 			return uncompressedBytes != null;
 		}
 

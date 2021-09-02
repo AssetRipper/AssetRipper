@@ -1,11 +1,8 @@
 ﻿using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 
 namespace Texture2DDecoder
 {
-	[SupportedOSPlatform("windows")]
-	[SupportedOSPlatform("linux")]
-    unsafe partial class TextureDecoder
+	unsafe partial class TextureDecoder
 	{
 		internal const string DllName = "Texture2DDecoderNative";
 

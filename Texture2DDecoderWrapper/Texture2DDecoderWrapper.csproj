@@ -17,6 +17,10 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>Texture2DDecoderNative.dll</TargetPath>
 		</ContentWithTargetPath>
+		<ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.dylib">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>libTexture2DDecoderNative.dylib</TargetPath>
+		</ContentWithTargetPath>
 		<ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.so">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>libTexture2DDecoderNative.so</TargetPath>

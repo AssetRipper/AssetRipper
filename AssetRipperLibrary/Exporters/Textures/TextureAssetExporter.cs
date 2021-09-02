@@ -16,13 +16,10 @@ using AssetRipper.Library.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Versioning;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
-	[SupportedOSPlatform("windows")]
-	[SupportedOSPlatform("linux")]
 	public class TextureAssetExporter : IAssetExporter
 	{
 		private ImageExportFormat ImageExportFormat { get; set; }
