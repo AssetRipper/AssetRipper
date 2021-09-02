@@ -2,8 +2,9 @@
 
 ## 0.1.6.0
  * Extend Windows-only features to Mac and Linux
-     * Texture exporter (partially done)
+     * Texture exporter (done!)
      * Audio exporter (partially done)
+ * Full script decompilation (done!)
  * OBJ mesh export
  * Move Third Party Dependencies to Nuget Packages
      * Spirv
@@ -22,7 +23,6 @@
 
 ## Unscheduled
  * Option to reference assemblies instead of scripts
- * Full script decompilation
  * FBX export
  * GUI improvements
    * Settings page
