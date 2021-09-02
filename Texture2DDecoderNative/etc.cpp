@@ -38,7 +38,7 @@ static inline uint32_t applicate_color_raw(uint_fast8_t c[3]) {
 }
 
 static void decode_etc1_block(const uint8_t *data, uint32_t *outbuf) {
-    const uint_fast8_t code[2] = {data[3] >> 5, data[3] >> 2 & 7};  // Table codewords
+    const uint_fast8_t code[2] = { (uint_fast8_t)(data[3] >> 5), (uint_fast8_t)(data[3] >> 2 & 7)};  // Table codewords
     const uint_fast8_t *table = Etc1SubblockTable[data[3] & 1];
     uint_fast8_t c[2][3];
     if (data[3] & 2) {
@@ -145,7 +145,7 @@ static void decode_etc2_block(const uint8_t *data, uint32_t *outbuf) {
             }
         } else {
             // differential
-            const uint_fast8_t code[2] = {data[3] >> 5, data[3] >> 2 & 7};
+            const uint_fast8_t code[2] = { (uint_fast8_t)(data[3] >> 5), (uint_fast8_t)(data[3] >> 2 & 7)};
             const uint_fast8_t *table = Etc1SubblockTable[data[3] & 1];
             c[0][0] = r | r >> 5;
             c[0][1] = g | g >> 5;
@@ -164,7 +164,7 @@ static void decode_etc2_block(const uint8_t *data, uint32_t *outbuf) {
         }
     } else {
         // individual (diff bit == 0)
-        const uint_fast8_t code[2] = {data[3] >> 5, data[3] >> 2 & 7};
+        const uint_fast8_t code[2] = { (uint_fast8_t)(data[3] >> 5), (uint_fast8_t)(data[3] >> 2 & 7)};
         const uint_fast8_t *table = Etc1SubblockTable[data[3] & 1];
         c[0][0] = (data[0] & 0xf0) | data[0] >> 4;
         c[1][0] = (data[0] & 0x0f) | data[0] << 4;
@@ -260,7 +260,7 @@ static void decode_etc2a1_block(const uint8_t *data, uint32_t *outbuf) {
         }
     } else {
         // differential
-        const uint_fast8_t code[2] = {data[3] >> 5, data[3] >> 2 & 7};
+        const uint_fast8_t code[2] = { (uint_fast8_t)(data[3] >> 5), (uint_fast8_t)(data[3] >> 2 & 7)};
         const uint_fast8_t *table = Etc1SubblockTable[data[3] & 1];
         c[0][0] = r | r >> 5;
         c[0][1] = g | g >> 5;
