@@ -6,10 +6,6 @@
      * Audio exporter (partially done)
  * Full script decompilation (done!)
  * OBJ mesh export
- * Move Third Party Dependencies to Nuget Packages
-     * Spirv
-     * Smolv
-     * Brotli
 
 ## 0.2.0.0
  * Overhaul struct reading, which would enable:
@@ -24,6 +20,10 @@
 ## Unscheduled
  * Option to reference assemblies instead of scripts
  * FBX export
+ * Move Third Party Dependencies to Nuget Packages
+     * Spirv
+     * Smolv
+     * Brotli
  * GUI improvements
    * Settings page
    * Search feature
