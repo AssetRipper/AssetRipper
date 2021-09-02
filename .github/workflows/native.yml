@@ -26,24 +26,24 @@ jobs:
         path: /home/runner/work/AssetRipper/AssetRipper/Texture2DDecoderNative/build/libTexture2DDecoderNative.so
         if-no-files-found: error
 
-#  BuildMac:
-#    runs-on: macos-latest
-#    steps:
-#    - uses: actions/checkout@v2
+  BuildMac:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
       
-#    - name: Configure Texture2DDecoderNative
-#      run: cmake -B ./build/
-#      working-directory: ./Texture2DDecoderNative/
-#    - name: Build Texture2DDecoderNative
-#      run: cmake --build .
-#      working-directory: ./Texture2DDecoderNative/build/
+    - name: Configure Texture2DDecoderNative
+      run: cmake -B ./build/
+      working-directory: ./Texture2DDecoderNative/
+    - name: Build Texture2DDecoderNative
+      run: cmake --build .
+      working-directory: ./Texture2DDecoderNative/build/
 
-#    - name: Upload Texture2DDecoderNative
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: Texture2DDecoderNative_Mac
-#        path: /Users/runner/work/AssetRipper/AssetRipper/Texture2DDecoderNative/build/libTexture2DDecoderNative.dylib
-#        if-no-files-found: error
+    - name: Upload Texture2DDecoderNative
+      uses: actions/upload-artifact@v2
+      with:
+        name: Texture2DDecoderNative_Mac
+        path: /Users/runner/work/AssetRipper/AssetRipper/Texture2DDecoderNative/build/libTexture2DDecoderNative.dylib
+        if-no-files-found: error
 
   BuildWindows:
     runs-on: windows-latest
