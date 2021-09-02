@@ -293,6 +293,10 @@ namespace AssetRipper.Library.Exporters.Textures
 					Logger.Info($"Byte array length: {bitmap.Bits.Length} Width: {width} Height: {height}");
 					CheckEqual(DecodeBC(data, textureFormat, width, height), bitmap.Bits);
 				}
+				else
+				{
+					DecodeBC(data, textureFormat, width, height, bitmap.Bits);
+				}
 				bitmap.FlipY();
 				return bitmap;
 			}
@@ -306,12 +310,7 @@ namespace AssetRipper.Library.Exporters.Textures
 		private static byte[] DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height)
 		{
 			Logger.Info($"Performing alternate decoding for {textureFormat}");
-			if(!OperatingSystem.IsWindows() && !OperatingSystem.IsLinux())
-			{
-				Logger.Info("Mac. Returning null");
-				return null;
-			}
-
+			
 			byte[] result = new byte[4 * width * height];
 			switch (textureFormat)
 			{
@@ -329,6 +328,27 @@ namespace AssetRipper.Library.Exporters.Textures
 					break;
 			}
 			return result;
+		}
+
+		private static void DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
+		{
+			Logger.Info($"Performing alternate decoding for {textureFormat}");
+			
+			switch (textureFormat)
+			{
+				case TextureFormat.BC4:
+					Texture2DDecoder.TextureDecoder.DecodeBC4(inputData, width, height, outputData);
+					break;
+				case TextureFormat.BC5:
+					Texture2DDecoder.TextureDecoder.DecodeBC5(inputData, width, height, outputData);
+					break;
+				case TextureFormat.BC6H:
+					Texture2DDecoder.TextureDecoder.DecodeBC6(inputData, width, height, outputData);
+					break;
+				case TextureFormat.BC7:
+					Texture2DDecoder.TextureDecoder.DecodeBC7(inputData, width, height, outputData);
+					break;
+			}
 		}
 
 		private static void CheckEqual(byte[] left, byte[] right)
@@ -350,15 +370,19 @@ namespace AssetRipper.Library.Exporters.Textures
 				Logger.Info($"Right: {right.Length}");
 				return;
 			}
-			for(int i = 0; i < left.Length; i++)
+			int length = left.Length;
+			int count = 0;
+			for(int i = 0; i < length; i++)
 			{
 				if (left[i] != right[i])
 				{
-					Logger.Info($"In byte array comparison, values were inequal at index {i}");
-					return;
+					count++;
 				}
 			}
-			Logger.Info("Byte arrays were equal at all indices!");
+			if(count == 0)
+				Logger.Info("Byte arrays were equal at all indices!");
+			else
+				Logger.Info($"Byte arrays were inequal in {count}/{length} places!");
 		}
 
 		public unsafe static void UnpackNormal(IntPtr inputOutput, int length)
