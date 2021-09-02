@@ -4,9 +4,11 @@ namespace AssetRipper.Core.Logging
 {
 	public class ConsoleLogger : ILogger
 	{
-		public ConsoleLogger()
+		public ConsoleLogger() : this(false) { }
+		/// <param name="resizeConsole">If true, on Windows it will resize the console to 80% of the maximum size.</param>
+		public ConsoleLogger(bool resizeConsole)
 		{
-			if (OperatingSystem.IsWindows())
+			if (resizeConsole && OperatingSystem.IsWindows())
 			{
 				try
 				{

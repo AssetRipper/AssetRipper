@@ -21,7 +21,7 @@ namespace UnitTester
 				return;
 			}
 
-			Logger.Add(new ConsoleLogger());
+			Logger.Add(new ConsoleLogger(true));
 			Logger.Add(new FileLogger("UnitTester.log"));
 			Logger.LogSystemInformation("Unit Tester");
 			Logger.BlankLine();

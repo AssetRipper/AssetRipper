@@ -13,7 +13,7 @@ namespace AssetAnalyzer
 			}
 			else
 			{
-				Logger.Add(new ConsoleLogger());
+				Logger.Add(new ConsoleLogger(true));
 				Analyzer.LoadFiles(args);
 			}
 			Console.ReadKey();
