@@ -6,6 +6,7 @@
      * Audio exporter (partially done)
  * Full script decompilation (done!)
  * OBJ mesh export
+ * Handle exceptions while reading IL2Cpp assemblies
 
 ## 0.2.0.0
  * Overhaul struct reading, which would enable:

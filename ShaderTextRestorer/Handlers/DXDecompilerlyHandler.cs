@@ -33,7 +33,7 @@ namespace ShaderTextRestorer.Handlers
 			}
 			catch(Exception ex)
 			{
-				Logger.Error(LogCategory.Export, $"DXDecompilerly threw an exception while attempting to export a shader");
+				Logger.Error(LogCategory.Export, $"DXDecompilerly threw an exception while attempting to disassemble a shader");
 				Logger.Verbose(LogCategory.Export, ex.ToString());
 			}
 
@@ -56,15 +56,17 @@ namespace ShaderTextRestorer.Handlers
 				{
 					case DXProgramType.DXBC:
 						decompiledText = HLSLDecompiler.Decompile(data);
+						Logger.Info(LogCategory.Export, $"DXDecompilerly successfully decompiled a DXBC shader");
 						return !string.IsNullOrEmpty(decompiledText);
 					case DXProgramType.DX9:
 						decompiledText = DXDecompiler.DX9Shader.HlslWriter.Decompile(data);
+						Logger.Info(LogCategory.Export, $"DXDecompilerly successfully decompiled a DX9 shader");
 						return !string.IsNullOrEmpty(decompiledText);
 				}
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(LogCategory.Export, $"DXDecompilerly threw an exception while attempting to export a shader");
+				Logger.Verbose(LogCategory.Export, $"DXDecompilerly threw an exception while attempting to decompile a shader");
 				Logger.Verbose(LogCategory.Export, ex.ToString());
 			}
 
