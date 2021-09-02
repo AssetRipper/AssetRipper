@@ -25,6 +25,10 @@ jobs:
     - name: Publish AssetRipperGUI Windows x64
       run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=windows_gui
       working-directory: ./AssetRipperGUI/
+        
+    - name: List Console Files
+      shell: bash
+      run: ls -R ./Bins/Publish/AssetRipperConsole_win64
       
     - name: Upload AssetRipperConsole Windows x64
       uses: actions/upload-artifact@v2
@@ -32,6 +36,10 @@ jobs:
         name: AssetRipperConsole_win64
         path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_win64/*
         if-no-files-found: error
+        
+    - name: List GUI Files
+      shell: bash
+      run: ls -R ./Bins/Publish/AssetRipper_win64
 
     - name: Upload AssetRipperGUI Windows x64
       uses: actions/upload-artifact@v2
@@ -59,6 +67,10 @@ jobs:
     - name: Publish AssetRipperGUI Linux x64
       run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=linux_gui
       working-directory: ./AssetRipperGUI/
+        
+    - name: List Console Files
+      shell: bash
+      run: ls -R ./Bins/Publish/AssetRipperConsole_linux64
       
     - name: Upload AssetRipperConsole Linux x64
       uses: actions/upload-artifact@v2
@@ -66,6 +78,10 @@ jobs:
         name: AssetRipperConsole_linux64
         path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_linux64/*
         if-no-files-found: error
+        
+    - name: List GUI Files
+      shell: bash
+      run: ls -R ./Bins/Publish/AssetRipper_linux64
 
     - name: Upload AssetRipperGUI Linux x64
       uses: actions/upload-artifact@v2
@@ -93,6 +109,10 @@ jobs:
     - name: Publish AssetRipperGUI Mac x64
       run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=mac_gui
       working-directory: ./AssetRipperGUI/
+        
+    - name: List Console Files
+      shell: bash
+      run: ls -R ./Bins/Publish/AssetRipperConsole_mac64
       
     - name: Upload AssetRipperConsole Mac x64
       uses: actions/upload-artifact@v2
@@ -100,6 +120,10 @@ jobs:
         name: AssetRipperConsole_mac64
         path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_mac64/*
         if-no-files-found: error
+        
+    - name: List GUI Files
+      shell: bash
+      run: ls -R ./Bins/Publish/AssetRipper_mac64
 
     - name: Upload AssetRipperGUI Mac x64
       uses: actions/upload-artifact@v2
