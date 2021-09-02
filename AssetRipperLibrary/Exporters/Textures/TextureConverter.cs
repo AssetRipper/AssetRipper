@@ -309,28 +309,12 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static byte[] DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height)
 		{
-			Logger.Info($"Performing alternate decoding for {textureFormat}");
-			
 			byte[] result = new byte[4 * width * height];
-			switch (textureFormat)
-			{
-				case TextureFormat.BC4:
-					Texture2DDecoder.TextureDecoder.DecodeBC4(inputData, width, height, result);
-					break;
-				case TextureFormat.BC5:
-					Texture2DDecoder.TextureDecoder.DecodeBC5(inputData, width, height, result);
-					break;
-				case TextureFormat.BC6H:
-					Texture2DDecoder.TextureDecoder.DecodeBC6(inputData, width, height, result);
-					break;
-				case TextureFormat.BC7:
-					Texture2DDecoder.TextureDecoder.DecodeBC7(inputData, width, height, result);
-					break;
-			}
+			DecodeBC(inputData, textureFormat, width, height, result);
 			return result;
 		}
 
-		private static void DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
+		private static bool DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
 		{
 			Logger.Info($"Performing alternate decoding for {textureFormat}");
 			
@@ -338,16 +322,18 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				case TextureFormat.BC4:
 					Texture2DDecoder.TextureDecoder.DecodeBC4(inputData, width, height, outputData);
-					break;
+					return true;
 				case TextureFormat.BC5:
 					Texture2DDecoder.TextureDecoder.DecodeBC5(inputData, width, height, outputData);
-					break;
+					return true;
 				case TextureFormat.BC6H:
 					Texture2DDecoder.TextureDecoder.DecodeBC6(inputData, width, height, outputData);
-					break;
+					return true;
 				case TextureFormat.BC7:
 					Texture2DDecoder.TextureDecoder.DecodeBC7(inputData, width, height, outputData);
-					break;
+					return true;
+				default:
+					return false;
 			}
 		}
 
