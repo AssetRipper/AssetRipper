@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFramework>net5.0</TargetFramework>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <AssemblyName>AssetRipperCore</AssemblyName>
