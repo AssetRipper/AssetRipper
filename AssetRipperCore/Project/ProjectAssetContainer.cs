@@ -371,11 +371,12 @@ namespace AssetRipper.Core.Project
 		public virtual TransferInstructionFlags ExportFlags => ExportLayout.Info.Flags | CurrentCollection.Flags;
 		public virtual IReadOnlyList<FileIdentifier> Dependencies => File.Dependencies;
 
-		private const string ResourceKeyword = "Resources";
+		private const string ResourcesKeyword = "Resources";
 		private const string AssetBundleKeyword = "AssetBundles";
 		private const string AssetsDirectory = Object.AssetsKeyword + ObjectUtils.DirectorySeparator;
-		private const string ResourceFullPath = AssetsDirectory + ResourceKeyword;
-		private const string AssetBundleFullPath = AssetsDirectory + AssetBundleKeyword;
+		private const string ResourceFullPath = AssetsDirectory + ResourcesKeyword;
+		//private const string AssetBundleFullPath = AssetsDirectory + AssetBundleKeyword;
+		private const string AssetBundleFullPath = AssetsDirectory + "Asset_Bundles";
 
 		private readonly ProjectExporter m_exporter;
 		private readonly bool m_KeepAssetBundleContentPath;
