@@ -50,9 +50,9 @@ If you want to run binary files, you need to install:
  
 
 ## Documentation
- * [Export Features](Docs/ExportFeatures.md)
- * [Development Roadmap](Docs/RoadMap.md)
- * [Structure](Docs/Structure.md)
+ * [Export Features](docs/ExportFeatures.md)
+ * [Development Roadmap](docs/RoadMap.md)
+ * [Structure](docs/Structure.md)
 
 ## License [![](https://img.shields.io/github/license/ds5678/AssetRipper?color=green)](License.md)
 
@@ -66,7 +66,7 @@ Please be aware that using or distributing the output from this software may be 
 
 ## Credits
 
-The full list of licensed works can be found on the [Credits](Docs/Credits.md) page.
+The full list of licensed works can be found on the [Credits](docs/Credits.md) page.
 
 
 ## Disclaimer
