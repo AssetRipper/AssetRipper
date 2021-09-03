@@ -50,6 +50,7 @@
 
 ## Concept Ideas
 > Note: This is just a collection of ideas. These might not be desirable or feasible, so many of them might never be implemented. Do not interpret their inclusion here as any form of commitment.
+
 * GUI quality of life features
   * General Settings window
   * Adjustable background color
