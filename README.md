@@ -12,6 +12,7 @@ AssetRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*
 
 Current supported versions: `3.4.0` to `2021.1.x`
 
+[Website](https://ds5678.github.io/AssetRipper/)
 
 ## Donations
 
