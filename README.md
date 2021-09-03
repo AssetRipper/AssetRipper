@@ -38,9 +38,10 @@ The development of this project has a dedicated [Discord server](https://discord
 
 If you want to build a solution, you'll need:
 
- * [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0)
  * [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0)
  * Compiler with C# 10 syntax support, such as [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/)
+
+> If you have a preview installed of the requested .NET SDK version, you also need to set the option to enable previews in Visual Studio. Go to Tools > Options > Environment > Preview Features, and make sure that Use previews of the .NET Core SDK is checked.
 
 If you want to run binary files, you need to install:
 
