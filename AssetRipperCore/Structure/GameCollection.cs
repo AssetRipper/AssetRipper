@@ -169,7 +169,13 @@ namespace AssetRipper.Core.Structure
 		{
 			if (m_files.ContainsKey(file.Name))
 			{
-				throw new ArgumentException($"{nameof(SerializedFile)} with name '{file.Name}' already presents in the collection", nameof(file));
+				var existingFile = m_files[file.Name];
+				if (existingFile.FilePath == file.FilePath)
+				{
+					Logger.Error(LogCategory.Import, $"{nameof(SerializedFile)} with name '{file.Name}' and path '{file.FilePath}' was already added to this collection");
+					return;
+				}
+				throw new ArgumentException($"{nameof(SerializedFile)} with name '{file.Name}' and path '{file.FilePath}' conflicts with file at '{existingFile.FilePath}'", nameof(file));
 			}
 			if (file.Platform != Layout.Info.Platform)
 			{
