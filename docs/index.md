@@ -1,7 +1,5 @@
 # AssetRipper
 
-![](https://github.com/ds5678/AssetRipper/raw/master/Images/AssetRipperLogoBackground.png)
-
 [![](https://img.shields.io/github/downloads/ds5678/AssetRipper/total.svg)](https://github.com/ds5678/AssetRipper/releases)
 [![](https://img.shields.io/github/downloads/ds5678/AssetRipper/latest/total.svg)](https://github.com/ds5678/AssetRipper/releases/latest)
 [![](https://img.shields.io/github/v/release/ds5678/AssetRipper)](https://github.com/ds5678/AssetRipper/releases/latest)
