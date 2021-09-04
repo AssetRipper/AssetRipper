@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Project.Exporters
 			return true;
 		}
 
-		public bool Export(IExportContainer container, Object asset, string path)
+		public virtual bool Export(IExportContainer container, Object asset, string path)
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
@@ -30,18 +30,18 @@ namespace AssetRipper.Core.Project.Exporters
 			return true;
 		}
 
-		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		public virtual void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
 		{
 			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public virtual bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
+		public virtual void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
 		{
 			throw new NotSupportedException();
 		}

@@ -85,7 +85,7 @@ namespace AssetRipper.Core.Classes.Object
 		/// </summary>
 		public virtual void ExportBinary(IExportContainer container, Stream stream)
 		{
-			throw new NotSupportedException($"Type {GetType()} doesn't support binary export");
+			throw new NotSupportedException($"Type {GetType().FullName} doesn't support binary export");
 		}
 
 		public virtual IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)

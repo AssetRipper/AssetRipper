@@ -1,7 +1,5 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes.AudioClip;
+﻿using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
@@ -9,22 +7,21 @@ using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace AssetRipper.Library.Exporters.Audio
 {
-	public class AudioClipExporter : IAssetExporter
+	public class AudioClipExporter : BinaryAssetExporter
 	{
 		private AudioExportFormat AudioFormat { get; set; }
 		public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
 		{
 			return new AudioFileExportCollection(this, (AudioClip)asset, AudioFormat);
 		}
 
-		public bool Export(IExportContainer container, Core.Classes.Object.Object asset, string path)
+		public override bool Export(IExportContainer container, Core.Classes.Object.Object asset, string path)
 		{
 			AudioClip audioClip = (AudioClip)asset;
 			byte[] decodedData = AudioClipDecoder.GetDecodedAudioClipData(audioClip);
@@ -47,37 +44,15 @@ namespace AssetRipper.Library.Exporters.Audio
 			return true;
 		}
 
-		public void Export(IExportContainer container, Core.Classes.Object.Object asset, string path, Action<IExportContainer, Core.Classes.Object.Object, string> callback)
+		public override void Export(IExportContainer container, Core.Classes.Object.Object asset, string path, Action<IExportContainer, Core.Classes.Object.Object, string> callback)
 		{
 			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<Core.Classes.Object.Object> assets, string path)
-		{
-			throw new NotSupportedException();
-		}
-
-		public void Export(IExportContainer container, IEnumerable<Core.Classes.Object.Object> assets, string path, Action<IExportContainer, Core.Classes.Object.Object, string> callback)
-		{
-			throw new NotSupportedException();
-		}
-
-		public bool IsHandle(Core.Classes.Object.Object asset, CoreConfiguration options)
+		public override bool IsHandle(Core.Classes.Object.Object asset, CoreConfiguration options)
 		{
 			return AudioClipDecoder.LibrariesLoaded && AudioFormat != AudioExportFormat.Native;
-		}
-
-		public AssetType ToExportType(Core.Classes.Object.Object asset)
-		{
-			ToUnknownExportType(asset.ClassID, out AssetType assetType);
-			return assetType;
-		}
-
-		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
-		{
-			assetType = AssetType.Meta;
-			return true;
 		}
 	}
 }
