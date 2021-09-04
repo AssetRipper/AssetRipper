@@ -77,6 +77,19 @@ namespace AssetRipper.Core.Utils
 			File.Delete(ToLongPath(path));
 		}
 
+		/// <summary>
+		/// Reads a file to determine its length
+		/// </summary>
+		/// <param name="path">The path to the file being investigated</param>
+		/// <returns>The number of bytes in the file</returns>
+		public static long GetFileSize(string path)
+		{
+			using (var stream = OpenRead(path))
+			{
+				return stream.Length;
+			}
+		}
+
 		public static string ToLongPath(string path)
 		{
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

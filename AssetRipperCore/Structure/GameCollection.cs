@@ -18,6 +18,7 @@ using System.Linq;
 using MonoManager = AssetRipper.Core.Structure.Assembly.Managers.MonoManager;
 using Object = AssetRipper.Core.Classes.Object.Object;
 using AssetRipper.Core.Configuration;
+using AssetRipper.Core.Utils;
 
 namespace AssetRipper.Core.Structure
 {
@@ -174,6 +175,10 @@ namespace AssetRipper.Core.Structure
 				{
 					Logger.Error(LogCategory.Import, $"{nameof(SerializedFile)} with name '{file.Name}' and path '{file.FilePath}' was already added to this collection");
 					return;
+				}
+				else if(FileUtils.GetFileSize(file.FilePath) == FileUtils.GetFileSize(existingFile.FilePath))
+				{
+					return; //assume identical
 				}
 				throw new ArgumentException($"{nameof(SerializedFile)} with name '{file.Name}' and path '{file.FilePath}' conflicts with file at '{existingFile.FilePath}'", nameof(file));
 			}
