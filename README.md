@@ -1,6 +1,6 @@
 # AssetRipper
 
-![](Images/AssetRipperLogoBackground.png)
+[![AssetRipper Logo](https://github.com/ds5678/AssetRipper/raw/master/Images/AssetRipperLogoBackground.png)](https://github.com/ds5678/AssetRipper/raw/master/Images/AssetRipperLogoBackground.png)
 
 [![](https://img.shields.io/github/downloads/ds5678/AssetRipper/total.svg)](https://github.com/ds5678/AssetRipper/releases)
 [![](https://img.shields.io/github/downloads/ds5678/AssetRipper/latest/total.svg)](https://github.com/ds5678/AssetRipper/releases/latest)
@@ -14,28 +14,57 @@ Current supported versions: `3.4.0` to `2021.1.x`
 
 [Website](https://ds5678.github.io/AssetRipper/)
 
-## Donations
+# Donations
 
 Thank you for considering to support me. I have normal expenses like food, electric, internet, and rent. Your donations help to ensure that I can continue to afford developing this project. Anyone with a positive lifetime contribution is entitled to the Donator role on the [Discord server](https://discord.gg/XqXa53W2Yh).
 
 [Patreon](https://www.patreon.com/ds5678)
 
-## Downloads [![](https://img.shields.io/github/v/release/ds5678/AssetRipper)](https://github.com/ds5678/AssetRipper/releases/latest)
+# Downloads 
 
-Milestone download links can be found on the [latest release page](https://github.com/ds5678/AssetRipper/releases/latest).
+## Releases [![](https://img.shields.io/github/v/release/ds5678/AssetRipper)](https://github.com/ds5678/AssetRipper/releases/latest)
+
+Whenever I feel significant improvements have been made, I post an official release. 
+
+Release notes can be found on the [latest release page](https://github.com/ds5678/AssetRipper/releases/latest).
+
+### GUI Version
+* [Windows](https://github.com/ds5678/AssetRipper/releases/latest/download/AssetRipperGUI_win64.zip)
+* [Mac](https://github.com/ds5678/AssetRipper/releases/latest/download/AssetRipperGUI_mac64.zip)
+* [Linux](https://github.com/ds5678/AssetRipper/releases/latest/download/AssetRipperGUI_linux64.zip)
+
+### Console Version
+* [Windows](https://github.com/ds5678/AssetRipper/releases/latest/download/AssetRipperConsole_win64.zip)
+* [Mac](https://github.com/ds5678/AssetRipper/releases/latest/download/AssetRipperConsole_mac64.zip)
+* [Linux](https://github.com/ds5678/AssetRipper/releases/latest/download/AssetRipperConsole_linux64.zip)
+
+## Pre-Releases [![](https://img.shields.io/github/v/release/ds5678/AssetRipper?include_prereleases&label=pre-release)](https://github.com/ds5678/AssetRipper/releases)
+
+Occasionally, I'll do a pre-release when I want to showcase an experimental feature. 
+
+These pre-releases can be found in the list of [releases](https://github.com/ds5678/AssetRipper/releases).
+
+## Alpha Builds [![](https://img.shields.io/github/workflow/status/ds5678/AssetRipper/Publish/master)](https://nightly.link/ds5678/AssetRipper/workflows/publish/master)
+
+For advanced users, every commit is automatically built into an alpha build with Github Actions. 
+
+### GUI Version
+* [Windows](https://nightly.link/ds5678/AssetRipper/workflows/publish/master/AssetRipperGUI_win64.zip)
+* [Mac](https://nightly.link/ds5678/AssetRipper/workflows/publish/master/AssetRipperGUI_mac64.zip)
+* [Linux](https://nightly.link/ds5678/AssetRipper/workflows/publish/master/AssetRipperGUI_linux64.zip)
+
+### Console Version
+* [Windows](https://nightly.link/ds5678/AssetRipper/workflows/publish/master/AssetRipperConsole_win64.zip)
+* [Mac](https://nightly.link/ds5678/AssetRipper/workflows/publish/master/AssetRipperConsole_mac64.zip)
+* [Linux](https://nightly.link/ds5678/AssetRipper/workflows/publish/master/AssetRipperConsole_linux64.zip)
 
 
-## Alpha Builds [![](https://img.shields.io/github/workflow/status/ds5678/AssetRipper/Publish/master)](https://github.com/ds5678/AssetRipper/actions/workflows/publish.yml)
-
-For advanced users, every commit is automatically built into an alpha build with Github Actions. You can obtain these builds on the [actions page](https://github.com/ds5678/AssetRipper/actions/workflows/publish.yml) if you're logged in with a github account.
-
-
-## Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
+# Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
 
 The development of this project has a dedicated [Discord server](https://discord.gg/XqXa53W2Yh). Feel free to come say hi. This is also an alternative location for people to post issues.
 
 
-## Requirements:
+# Requirements:
 
 If you want to build a solution, you'll need:
 
@@ -49,31 +78,31 @@ If you want to run binary files, you need to install:
  * [Unity 2017.3.0f3 or greater](https://unity3d.com/get-unity/download/archive) (NOTE: your editor version must be no less than the game's version)
  
 
-## Documentation
+# Documentation
  * [Export Features](docs/ExportFeatures.md)
  * [Development Roadmap](docs/RoadMap.md)
  * [Structure](docs/Structure.md)
 
-## License [![](https://img.shields.io/github/license/ds5678/AssetRipper?color=green)](License.md)
+# License [![](https://img.shields.io/github/license/ds5678/AssetRipper?color=green)](License.md)
 
 AssetRipper is licensed under the GNU General Public License v3.0
 
 
-## Legal Issues
+# Legal Issues
 
 Please be aware that using or distributing the output from this software may be against copyright legislation in your jurisdiction. You are responsible for ensuring that you're not breaking any laws.
 
 
-## Credits
+# Credits
 
 The full list of licensed works can be found on the [Credits](docs/Credits.md) page.
 
 
-## Disclaimer
+# Disclaimer
 
 This software is not sponsored by or affiliated with Unity Technologies or its affiliates. "Unity" is a registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere.
 
-## Contact Information
+# Contact Information
 
 Any **organizations** wishing to contact me may use the email listed on my profile.
 
