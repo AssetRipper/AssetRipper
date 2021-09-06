@@ -26,8 +26,21 @@
             <!--File Menu-->
             <MenuItem Header="_File">
 
+				<!--File->Open File-->
+				<MenuItem Header="_Open File" Command="{Binding ShowOpenFileDialog}">
+					<MenuItem.IsEnabled>
+						<MultiBinding Converter="{x:Static BoolConverters.And}">
+							<Binding Path="!IsExporting" />
+							<MultiBinding Converter="{x:Static BoolConverters.Or}">
+								<Binding Path="!HasFile" />
+								<Binding Path="HasLoaded" />
+							</MultiBinding>
+						</MultiBinding>
+					</MenuItem.IsEnabled>
+				</MenuItem>
+
                 <!--File->Open Folder-->
-                <MenuItem Header="_Open Folder" Command="{Binding ShowOpenFileDialog}">
+                <MenuItem Header="_Open Folder" Command="{Binding ShowOpenFolderDialog}">
                     <MenuItem.IsEnabled>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="!IsExporting" />

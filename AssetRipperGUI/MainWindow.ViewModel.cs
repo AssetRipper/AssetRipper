@@ -216,6 +216,19 @@ namespace AssetRipper.GUI
 		//Called from UI
 		public async void ShowOpenFileDialog()
 		{
+			OpenFileDialog openFileDialog = new();
+			openFileDialog.AllowMultiple = true;
+			string[] result = await openFileDialog.ShowAsync(MainWindow.Instance);
+
+			if (result == null)
+				return;
+
+			DoLoad(result);
+		}
+
+		//Called from UI
+		public async void ShowOpenFolderDialog()
+		{
 			OpenFolderDialog openFolderDialog = new();
 			string result = await openFolderDialog.ShowAsync(MainWindow.Instance);
 

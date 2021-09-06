@@ -3,15 +3,16 @@
 ## 0.1.6.0
 * Extend Windows-only features to Mac and Linux
   * Texture exporter (done!)
-  * Audio exporter (partially done)
 * Full script decompilation (done!)
 * OBJ mesh export
 * Handle exceptions while reading IL2Cpp assemblies
 * GUI improvements
-  * Open file button
+  * Open file button (done!)
 
 ## 0.1.7.0
-* Undecided
+* Audio Exporter
+  * Build Native Binaries for Mac and Linux
+  * Allow other audio formats when not vorbis encoded
 
 ## 0.2.0.0
 * Overhaul struct reading, which would enable:
