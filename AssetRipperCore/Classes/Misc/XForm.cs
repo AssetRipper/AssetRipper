@@ -14,9 +14,9 @@ namespace AssetRipper.Core.Classes.Misc
 		public const string QName = "q";
 		public const string SName = "s";
 
-		public Vector4f T4 { get; set; }
-		public Quaternionf Q { get; set; }
-		public Vector4f S4 { get; set; }
+		public Vector4f T4;
+		public Vector4f Q;
+		public Vector4f S4;
 
 		//public XForm() { }
 
