@@ -4,6 +4,8 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace AssetRipper.GUI
 {
@@ -57,6 +59,33 @@ namespace AssetRipper.GUI
 		    }
 
 		    VM.OnAssetSelected(selectedItem, selectedItem.AsObjectAsset);
+	    }
+
+	    private void CheckforUpdateClicked(object? sender, RoutedEventArgs e)
+	    {
+		    
+	    }
+
+	    private void GithubClicked(object? sender, RoutedEventArgs e) =>
+		    OpenUrl("https://github.com/ds5678/AssetRipper");
+
+	    private void WebsiteClicked(object? sender, RoutedEventArgs e) =>
+		    OpenUrl("https://ds5678.github.io/AssetRipper/");
+
+	    private static void OpenUrl(string url)
+	    {
+		    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+		    {
+			    Process.Start(new ProcessStartInfo("cmd", $"/c start {url.Replace("&", "^&")}") { CreateNoWindow = true });
+		    }
+		    if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+		    {
+			    Process.Start("xdg-open", url);
+		    }
+		    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+		    {
+			    Process.Start("open", url);
+		    }
 	    }
     }
 }
