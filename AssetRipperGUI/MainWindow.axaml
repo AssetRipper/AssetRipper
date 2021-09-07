@@ -74,9 +74,9 @@
             </MenuItem>
             
             <MenuItem Header="_About">
-                <MenuItem Header="_Website" Click="WebsiteClicked"></MenuItem>
-                <MenuItem Header="_Github" Click="GithubClicked"></MenuItem>
-                <MenuItem Header="_Check for update" Click="CheckforUpdateClicked"/>
+                <MenuItem Header="_Website" Command="{Binding WebsiteClicked}"></MenuItem>
+                <MenuItem Header="_Github" Command="{Binding GithubClicked}"></MenuItem>
+                <MenuItem Header="_Check for update" Command="{Binding CheckforUpdates}"/>
             </MenuItem>
         </Menu>
 

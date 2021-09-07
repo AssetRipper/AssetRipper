@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Logging;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Logging;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.GUI.Extensions;
@@ -7,18 +8,27 @@ using AssetRipper.GUI.Managers;
 using AssetRipper.Library;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.GUI
 {
 	public class MainWindowViewModel : BaseViewModel
 	{
+		private const string websiteURL = "https://ds5678.github.io/AssetRipper/";
+		
 		//Exposed-to-ui properties
 		private bool _hasFile;
 		private bool _hasLoaded;
@@ -34,6 +44,7 @@ namespace AssetRipper.GUI
 		private string? _lastExportPath;
 		private readonly Ripper _ripper = new();
 		private UIAssetContainer? _assetContainer;
+		private HttpClient client = new HttpClient();
 
 		public bool HasFile
 		{
@@ -110,6 +121,11 @@ namespace AssetRipper.GUI
 			Logger.Add(new ViewModelLogger(this));
 			Logger.Add(new FileLogger());
 			Logger.LogSystemInformation("AssetRipper GUI Version");
+			
+			ProductInfoHeaderValue product = new (BuildInfo.Name, BuildInfo.Version);
+			ProductInfoHeaderValue comment = new ($"(+{websiteURL})");
+			client.DefaultRequestHeaders.UserAgent.Add(product);
+			client.DefaultRequestHeaders.UserAgent.Add(comment);
 		}
 
 		private void UpdateGamePathInUi(string path) => LoadingText = $"Loading Game Content from {path}...";
@@ -265,6 +281,53 @@ namespace AssetRipper.GUI
 
 			SelectedAsset?.Dispose();
 			SelectedAsset = new(selectedAsset, _assetContainer);
+		}
+		
+		// Called from UI
+		private async void CheckforUpdates()
+		{
+			const string url = "https://api.github.com/repos/ds5678/AssetRipper/releases";
+			string json = await client.GetStringAsync(url);
+			JArray array = JArray.Parse(json);
+			JToken latestRelease = array[0];
+
+			if (latestRelease["tag_name"] == null)
+				return;
+
+			Version release = Version.Parse(latestRelease["tag_name"].ToString());
+			Version current = Version.Parse(BuildInfo.Version);
+
+			if (release > current)
+			{
+				this.ShowPopup($"Update {release} is available.", "Update Available");
+				OpenUrl("https://github.com/ds5678/AssetRipper/releases");
+			}
+			else
+			{
+				this.ShowPopup($"You are already on the latest version ({current})", "No Updates Available");
+			}
+		}
+		
+		// Called from UI
+		private void GithubClicked() => OpenUrl("https://github.com/ds5678/AssetRipper");
+
+		// Called from UI
+		private void WebsiteClicked() => OpenUrl(websiteURL);
+
+		private static void OpenUrl(string url)
+		{
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				Process.Start(new ProcessStartInfo("cmd", $"/c start {url.Replace("&", "^&")}") { CreateNoWindow = true });
+			}
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+			{
+				Process.Start("xdg-open", url);
+			}
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			{
+				Process.Start("open", url);
+			}
 		}
 	}
 }
