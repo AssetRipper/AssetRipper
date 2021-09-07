@@ -65,7 +65,7 @@ namespace AssetRipper.Core.Configuration
 		public virtual void ResetToDefaultValues()
 		{
 			ScriptImportMode = ScriptImportMode.Default;
-			ExportPath = DirectoryUtils.CombineWithExecutingDirectory("Ripped");
+			ExportPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
 			KeepAssetBundleContentPath = false;
 			Filter = DefaultFilter;

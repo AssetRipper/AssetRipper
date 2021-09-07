@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Logging
 	{
 		private readonly string filePath;
 
-		public FileLogger() : this(DirectoryUtils.CombineWithExecutingDirectory("AssetRipper.log")) { }
+		public FileLogger() : this(ExecutingDirectory.Combine("AssetRipper.log")) { }
 
 		/// <param name="filePath">The absolute path to the log file</param>
 		public FileLogger(string filePath)
