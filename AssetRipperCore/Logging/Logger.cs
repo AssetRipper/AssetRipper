@@ -87,7 +87,7 @@ namespace AssetRipper.Core.Logging
 
 		private static string GetBuildType()
 		{
-			return FileUtils.Exists(DirectoryUtils.CombineWithExecutingDirectory("AssetRipperCore.dll")) ? "Compiled" : "Published";
+			return FileUtils.Exists(ExecutingDirectory.Combine("AssetRipperCore.dll")) ? "Compiled" : "Published";
 		}
 
 		private static void LogOperatingSystemInformation()

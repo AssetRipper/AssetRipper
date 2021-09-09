@@ -8,28 +8,9 @@ namespace AssetRipper.Core.Utils
 {
 	public static class DirectoryUtils
 	{
-		public static DirectoryInfo ExecutingDirectoryInfo { get; }
-		public static string ExecutingDirectoryName => ExecutingDirectoryInfo.Name;
-		public static string ExecutingDirectoryPath => ExecutingDirectoryInfo.FullName;
-
-		static DirectoryUtils()
-		{
-			ExecutingDirectoryInfo = new DirectoryInfo(System.AppContext.BaseDirectory);
-		}
-
 		public static bool Exists(string path)
 		{
 			return Directory.Exists(ToLongPath(path));
-		}
-
-		public static string CombineWithExecutingDirectory(string relativePath)
-		{
-			return Path.Combine(ExecutingDirectoryPath, relativePath);
-		}
-
-		public static string CombineWithExecutingDirectory(params string[] names)
-		{
-			return Path.Combine(ExecutingDirectoryPath, Path.Combine(names));
 		}
 
 		public static DirectoryInfo CreateDirectory(string path)

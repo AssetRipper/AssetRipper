@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Utils
 
 		static TempFolderManager()
 		{
-			TempFolderPath = DirectoryUtils.CombineWithExecutingDirectory("temp");
+			TempFolderPath = ExecutingDirectory.Combine("temp");
 			DeleteTempFolder();
 			DirectoryUtils.CreateDirectory(TempFolderPath);
 		}
