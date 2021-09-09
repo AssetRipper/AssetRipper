@@ -286,8 +286,6 @@ namespace AssetRipper.GUI
 		// Called from UI
 		private async void CheckforUpdates()
 		{
-			MessageBox.Popup("Title", "Message");
-			return;
 			const string url = "https://api.github.com/repos/ds5678/AssetRipper/releases";
 			string json = await client.GetStringAsync(url);
 			JArray array = JArray.Parse(json);
@@ -301,16 +299,26 @@ namespace AssetRipper.GUI
 			
 			if (release > current)
 			{
-				
-				this.ShowPopup($"Update {release} is available.", "Update Available");
-				OpenUrl("https://github.com/ds5678/AssetRipper/releases");
+				MessageBox.Popup(
+					"Update Available", 
+					$"Update {release} is available.\nDo you want to open the releases page?",
+					MessageBoxViewModel.Buttons.YesNo,
+					UpdatePopupClosed);
 			}
 			else
 			{
-				this.ShowPopup($"You are already on the latest version ({current})", "No Updates Available");
+				MessageBox.Popup("No Updates Available",$"You are already on the latest version ({current})");
 			}
 		}
-		
+
+		private void UpdatePopupClosed(MessageBoxViewModel.Result result)
+		{
+			if (result == MessageBoxViewModel.Result.Yes)
+			{
+				OpenUrl("https://github.com/ds5678/AssetRipper/releases");
+			}
+		}
+
 		// Called from UI
 		private void GithubClicked() => OpenUrl("https://github.com/ds5678/AssetRipper");
 
