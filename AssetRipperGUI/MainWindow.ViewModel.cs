@@ -3,6 +3,7 @@ using AssetRipper.Core.Logging;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.GUI.Extensions;
+using AssetRipper.GUI.Json;
 using AssetRipper.GUI.Logging;
 using AssetRipper.GUI.Managers;
 using AssetRipper.Library;
@@ -10,7 +11,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +19,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Object = AssetRipper.Core.Classes.Object.Object;
 
@@ -287,14 +289,14 @@ namespace AssetRipper.GUI
 		private async void CheckforUpdates()
 		{
 			const string url = "https://api.github.com/repos/ds5678/AssetRipper/releases";
-			string json = await client.GetStringAsync(url);
-			JArray array = JArray.Parse(json);
-			JToken latestRelease = array[0];
+			List<GithubRelease> releases = await client.GetFromJsonAsync<List<GithubRelease>>(url);
 
-			if (latestRelease["tag_name"] == null)
+			if (releases == null)
+			{
 				return;
+			}
 
-			Version release = Version.Parse(latestRelease["tag_name"].ToString());
+			Version release = Version.Parse(releases[0].TagName);
 			Version current = Version.Parse(BuildInfo.Version);
 			
 			if (release > current)
@@ -309,6 +311,7 @@ namespace AssetRipper.GUI
 			{
 				MessageBox.Popup("No Updates Available",$"You are already on the latest version ({current})");
 			}
+			
 		}
 
 		private void UpdatePopupClosed(MessageBoxViewModel.Result result)
