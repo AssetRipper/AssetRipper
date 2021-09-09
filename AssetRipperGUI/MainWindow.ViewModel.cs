@@ -315,30 +315,14 @@ namespace AssetRipper.GUI
 		{
 			if (result == MessageBoxViewModel.Result.Yes)
 			{
-				OpenUrl("https://github.com/ds5678/AssetRipper/releases");
+				Process.Start("https://github.com/ds5678/AssetRipper/releases");
 			}
 		}
 
 		// Called from UI
-		private void GithubClicked() => OpenUrl("https://github.com/ds5678/AssetRipper");
+		private void GithubClicked() => Process.Start("https://github.com/ds5678/AssetRipper");
 
 		// Called from UI
-		private void WebsiteClicked() => OpenUrl(websiteURL);
-
-		private static void OpenUrl(string url)
-		{
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-			{
-				Process.Start(new ProcessStartInfo("cmd", $"/c start {url.Replace("&", "^&")}") { CreateNoWindow = true });
-			}
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-			{
-				Process.Start("xdg-open", url);
-			}
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-			{
-				Process.Start("open", url);
-			}
-		}
+		private void WebsiteClicked() => Process.Start(websiteURL);
 	}
 }
