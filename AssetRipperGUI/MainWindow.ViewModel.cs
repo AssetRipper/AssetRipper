@@ -318,14 +318,17 @@ namespace AssetRipper.GUI
 		{
 			if (result == MessageBoxViewModel.Result.Yes)
 			{
-				Process.Start("https://github.com/ds5678/AssetRipper/releases");
+				OpenUrl("https://github.com/ds5678/AssetRipper/releases");
 			}
 		}
 
 		// Called from UI
-		private void GithubClicked() => Process.Start("https://github.com/ds5678/AssetRipper");
+		private void GithubClicked() => OpenUrl("https://github.com/ds5678/AssetRipper");
 
 		// Called from UI
-		private void WebsiteClicked() => Process.Start(websiteURL);
+		private void WebsiteClicked() => OpenUrl(websiteURL);
+		
+		private static void OpenUrl(string url) =>
+			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
 	}
 }
