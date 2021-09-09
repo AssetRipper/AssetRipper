@@ -1,0 +1,46 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gui="clr-namespace:AssetRipper.GUI"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="225"
+        x:Class="AssetRipper.GUI.MessageBox"
+        Title="Message" WindowStartupLocation="CenterScreen"
+        Icon="/Resources/GUI_Icon.ico"
+        Name="MessageBoxWindow"
+        SizeToContent="WidthAndHeight"
+        MinWidth="400" MinHeight="50"
+        MaxWidth="800" MaxHeight="500">
+    <Design.DataContext>
+        <gui:MessageBoxViewModel />
+    </Design.DataContext>
+    <StackPanel HorizontalAlignment="Center">
+        <TextBlock HorizontalAlignment="Center" 
+                   Text="{Binding BodyText}"
+                   TextWrapping="Wrap"/>
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Name="Buttons">
+            <StackPanel.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+            </StackPanel.Styles>
+            
+            <Button Content="Okay" 
+                    Command="{Binding OkayClicked}"
+                    CommandParameter="{Binding ElementName=MessageBoxWindow}"
+                    IsVisible="{Binding OkayVisible}"/>
+            <Button Content="Yes" 
+                    Command="{Binding YesClicked}"
+                    CommandParameter="{Binding ElementName=MessageBoxWindow}"
+                    IsVisible="{Binding YesVisible}"/>
+            <Button Content="No" 
+                    Command="{Binding NoClicked}"
+                    CommandParameter="{Binding ElementName=MessageBoxWindow}"
+                    IsVisible="{Binding NoVisible}"/>
+            <Button Content="Cancel" 
+                    Command="{Binding CancelClicked}"
+                    CommandParameter="{Binding ElementName=MessageBoxWindow}"
+                    IsVisible="{Binding CancelVisible}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

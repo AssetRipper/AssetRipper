@@ -286,6 +286,8 @@ namespace AssetRipper.GUI
 		// Called from UI
 		private async void CheckforUpdates()
 		{
+			MessageBox.Popup("Title", "Message");
+			return;
 			const string url = "https://api.github.com/repos/ds5678/AssetRipper/releases";
 			string json = await client.GetStringAsync(url);
 			JArray array = JArray.Parse(json);
@@ -296,9 +298,10 @@ namespace AssetRipper.GUI
 
 			Version release = Version.Parse(latestRelease["tag_name"].ToString());
 			Version current = Version.Parse(BuildInfo.Version);
-
+			
 			if (release > current)
 			{
+				
 				this.ShowPopup($"Update {release} is available.", "Update Available");
 				OpenUrl("https://github.com/ds5678/AssetRipper/releases");
 			}
