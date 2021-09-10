@@ -72,6 +72,13 @@
                 <MenuItem Header="_Export All Files" Click="ExportAllClicked" />
                 <MenuItem Header="_Export Selected Asset File" IsEnabled="False" />
             </MenuItem>
+            
+            <!--About Menu-->
+            <MenuItem Header="_About">
+                <MenuItem Header="_Website" Command="{Binding WebsiteClicked}"></MenuItem>
+                <MenuItem Header="_Github" Command="{Binding GithubClicked}"></MenuItem>
+                <MenuItem Header="_Check for update" Command="{Binding CheckforUpdates}"/>
+            </MenuItem>
         </Menu>
 
         <!--Introduction Screens-->
