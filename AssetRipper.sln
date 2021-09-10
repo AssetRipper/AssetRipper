@@ -68,7 +68,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
 		.github\workflows\native.yml = .github\workflows\native.yml
 		.github\workflows\publish.yml = .github\workflows\publish.yml
-		.github\workflows\stale.yml = .github\workflows\stale.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeTester", "CodeTester\CodeTester.csproj", "{D7D80881-42BB-473C-B7A2-EB1FEA5780A4}"
