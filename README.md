@@ -101,9 +101,3 @@ The full list of licensed works can be found on the [Credits](docs/Credits.md) p
 # Disclaimer
 
 This software is not sponsored by or affiliated with Unity Technologies or its affiliates. "Unity" is a registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere.
-
-# Contact Information
-
-Any **organizations** wishing to contact me may use the email listed on my profile.
-
-Except in rare circumstances, **individuals** must use the appropriate public channels to reach me.
