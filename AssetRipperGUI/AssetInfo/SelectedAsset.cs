@@ -26,7 +26,7 @@ namespace AssetRipper.GUI.AssetInfo
 	{
 		private static readonly LibVLC? LibVlc;
 		
-		private readonly Object _asset;
+		public Object Asset { get; }
 		private readonly IExportContainer? _uiAssetContainer;
 
 		private readonly MemoryStream? _audioStream;
@@ -68,7 +68,7 @@ namespace AssetRipper.GUI.AssetInfo
 
 		public SelectedAsset(Object asset, IExportContainer? uiAssetContainer)
 		{
-			_asset = asset;
+			Asset = asset;
 			_uiAssetContainer = uiAssetContainer;
 
 			BuildYamlTree();
@@ -105,9 +105,9 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			try
 			{
-				YAMLMappingNode yamlRoot = (YAMLMappingNode)_asset.ExportYAML(_uiAssetContainer);
+				YAMLMappingNode yamlRoot = (YAMLMappingNode)Asset.ExportYAML(_uiAssetContainer);
 
-				YamlTree = new[] { new AssetYamlNode(Name ?? _asset.GetType().Name, yamlRoot) };
+				YamlTree = new[] { new AssetYamlNode(Name ?? Asset.GetType().Name, yamlRoot) };
 			}
 			catch (Exception e)
 			{
@@ -127,21 +127,21 @@ namespace AssetRipper.GUI.AssetInfo
 		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", YAMLScalarNode.Empty) };
 
 		//Read from UI
-		public bool HasImageData => _asset is IHasImageData;
+		public bool HasImageData => Asset is IHasImageData;
 
 		//Read from UI
-		public bool HasAudioData => _asset is AudioClip;
+		public bool HasAudioData => Asset is AudioClip;
 
 		//Read from UI
 		public bool YamlTreeIsSupported { get; private set; } = true;
 
-		public bool HasTextData => _asset switch
+		public bool HasTextData => Asset switch
 		{
 			TextAsset => true,
 			_ => false,
 		};
 
-		public string? TextAssetData => (_asset switch
+		public string? TextAssetData => (Asset switch
 		{
 			Shader shader => DumpShaderDataAsText(shader),
 			TextAsset txt => txt.TextScript,
@@ -154,7 +154,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			get
 			{
-				switch(_asset)
+				switch(Asset)
 				{
 					case IHasImageData img:
 						{
@@ -163,7 +163,7 @@ namespace AssetRipper.GUI.AssetInfo
 								return null;
 							}
 
-							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, _asset.File.Version, img.ImageDataByteArray, 0, 0, KTXBaseInternalFormat.RG);
+							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, Asset.File.Version, img.ImageDataByteArray, 0, 0, KTXBaseInternalFormat.RG);
 							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
 						}
 					default:
@@ -173,9 +173,9 @@ namespace AssetRipper.GUI.AssetInfo
 		}
 
 
-		private bool SupportsName => _asset is Shader or GameObject or NamedObject;
+		private bool SupportsName => Asset is Shader or GameObject or NamedObject;
 
-		private bool HasName => _asset switch
+		private bool HasName => Asset switch
 		{
 			Shader s => !string.IsNullOrEmpty(s.ValidName),
 			GameObject go => !string.IsNullOrEmpty(go.Name),
@@ -183,7 +183,7 @@ namespace AssetRipper.GUI.AssetInfo
 			_ => false
 		};
 
-		private string? Name => _asset switch
+		private string? Name => Asset switch
 		{
 			Shader s => s.ValidName,
 			GameObject go => go.Name,
@@ -191,19 +191,19 @@ namespace AssetRipper.GUI.AssetInfo
 			_ => null
 		};
 
-		private TextureFormat TextureFormat => _asset switch
+		private TextureFormat TextureFormat => Asset switch
 		{
 			IHasImageData img => img.TextureFormat,
 			_ => TextureFormat.Automatic,
 		};
 
-		private int ImageWidth => _asset switch
+		private int ImageWidth => Asset switch
 		{
 			IHasImageData img => img.Width,
 			_ => -1,
 		};
 
-		private int ImageHeight => _asset switch
+		private int ImageHeight => Asset switch
 		{
 			IHasImageData img => img.Height,
 			_ => -1,
@@ -258,7 +258,7 @@ namespace AssetRipper.GUI.AssetInfo
 			get
 			{
 				StringBuilder builder = new StringBuilder();
-				builder.Append($"Asset Type: {_asset.GetType()}\n");
+				builder.Append($"Asset Type: {Asset.GetType()}\n");
 
 				builder.Append($"Supports Name: {SupportsName}\n");
 

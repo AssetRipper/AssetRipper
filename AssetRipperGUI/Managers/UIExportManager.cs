@@ -33,11 +33,32 @@ namespace AssetRipper.GUI.Managers
 			IsBackground = true,
 		}.Start();
 
+		public static void Export(Ripper ripper, string toRoot, Core.Classes.Object.Object asset, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, asset, onSuccess, onError))
+		{
+			Name = "Background Game Export Thread",
+			IsBackground = true,
+		}.Start();
+
 		private static void ExportInternal(Ripper ripper, string toRoot, Action onSuccess, Action<Exception> onError)
 		{
 			try
 			{
 				ripper.ExportProject(toRoot);
+			}
+			catch (Exception ex)
+			{
+				onError(ex);
+				return;
+			}
+
+			onSuccess();
+		}
+
+		private static void ExportInternal(Ripper ripper, string toRoot, Core.Classes.Object.Object asset, Action onSuccess, Action<Exception> onError)
+		{
+			try
+			{
+				ripper.ExportProject(toRoot, asset);
 			}
 			catch (Exception ex)
 			{

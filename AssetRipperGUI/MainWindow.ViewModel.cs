@@ -231,6 +231,48 @@ namespace AssetRipper.GUI
 			});
 		}
 
+		public async void ExportSelectedAssetToProject()
+		{
+			if (_ripper.GameStructure == null || SelectedAsset == null)
+			{
+				return;
+			}
+
+			OpenFolderDialog openFolderDialog = new();
+
+			string? chosenFolder = await openFolderDialog.ShowAsync(MainWindow.Instance);
+
+			if (string.IsNullOrEmpty(chosenFolder))
+			{
+				return;
+			}
+
+			IsExporting = true;
+			ExportingText = "Clearing out existing files...";
+
+			string exportPath = Path.Combine(chosenFolder, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			_lastExportPath = exportPath;
+
+			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
+
+			Logger.Info(LogCategory.General, $"Removing any files from a previous export...");
+
+			await UIExportManager.PrepareExportDirectory(exportPath);
+			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.FileCollection.Exporter, this);
+			
+			UIExportManager.Export(_ripper, exportPath, SelectedAsset.Asset, () =>
+			{
+				IsExporting = false;
+				this.ShowPopup("Export Complete!", "Success!");
+				Logger.Info(LogCategory.General, "Export Complete!");
+			}, error =>
+			{
+				IsExporting = false;
+				Logger.Error(error);
+				this.ShowPopup($"Failed to export game content: {error.Message}", "Error");
+			});
+		}
+
 		//Called from UI
 		public async void ShowOpenFileDialog()
 		{

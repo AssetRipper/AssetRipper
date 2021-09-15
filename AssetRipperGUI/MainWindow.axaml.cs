@@ -47,7 +47,10 @@ namespace AssetRipper.GUI
 	    //Called from UI
 	    private void ExportAllClicked(object? sender, RoutedEventArgs e) => VM.ExportAll();
 
-	    private void OnAssetSelected(object? sender, SelectionChangedEventArgs e)
+		//Called from UI
+		private void ExportSelectedAssetToProjectClicked(object? sender, RoutedEventArgs e) => VM.ExportSelectedAssetToProject();
+
+		private void OnAssetSelected(object? sender, SelectionChangedEventArgs e)
 	    {
 		    NewUiFileListItem selectedItem = (NewUiFileListItem) e.AddedItems[0]!;
 		    if (selectedItem.AsObjectAsset == null)

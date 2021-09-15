@@ -8,6 +8,7 @@
 * STL mesh export (done!)
 * GUI improvements
   * Open file button (done!)
+  * Export Selected object to project (done!)
 
 ## 0.1.7.0
 * Audio Exporter
@@ -42,7 +43,6 @@
     * Fast-forward and rewind
     * Seek-bar for selecting playback position
 * Selective Export
-  * Export Selected object to project
   * Export Selected object to folder
   * Export Selected object to compressed zip file
 * GUI improvements
