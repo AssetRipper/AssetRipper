@@ -11,6 +11,8 @@ namespace AssetRipper.Core.Classes.Misc
 	{
 		public BoneWeights4(float w0, float w1, float w2, float w3, int i0, int i1, int i2, int i3)
 		{
+			m_Weights = new float[4];
+			m_BoneIndices = new int[4];
 			Weight0 = w0;
 			Weight1 = w1;
 			Weight2 = w2;
@@ -59,14 +61,33 @@ namespace AssetRipper.Core.Classes.Misc
 			return node;
 		}
 
-		public float Weight0 { get; set; }
-		public float Weight1 { get; set; }
-		public float Weight2 { get; set; }
-		public float Weight3 { get; set; }
-		public int BoneIndex0 { get; set; }
-		public int BoneIndex1 { get; set; }
-		public int BoneIndex2 { get; set; }
-		public int BoneIndex3 { get; set; }
+		public float Weight0 { get => Weights[0]; set => Weights[0] = value; }
+		public float Weight1 { get => Weights[1]; set => Weights[1] = value; }
+		public float Weight2 { get => Weights[2]; set => Weights[2] = value; }
+		public float Weight3 { get => Weights[3]; set => Weights[3] = value; }
+		public int BoneIndex0 { get => BoneIndices[0]; set => BoneIndices[0] = value; }
+		public int BoneIndex1 { get => BoneIndices[1]; set => BoneIndices[1] = value; }
+		public int BoneIndex2 { get => BoneIndices[2]; set => BoneIndices[2] = value; }
+		public int BoneIndex3 { get => BoneIndices[3]; set => BoneIndices[3] = value; }
+		public float[] Weights 
+		{
+			get
+			{
+				if (m_Weights == null) m_Weights = new float[4];
+				return m_Weights;
+			}
+		} 
+		public int[] BoneIndices
+		{
+			get
+			{
+				if (m_BoneIndices == null) m_BoneIndices = new int[4];
+				return m_BoneIndices;
+			}
+		}
+		private float[] m_Weights;
+		private int[] m_BoneIndices;
+
 
 		public const string Weight0Name = "weight[0]";
 		public const string Weight1Name = "weight[1]";

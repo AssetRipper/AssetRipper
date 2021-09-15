@@ -7,7 +7,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
 using System;
-using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Misc
@@ -208,6 +207,9 @@ namespace AssetRipper.Core.Classes.Misc
 		}
 
 		public bool IsVirtual => FileIndex == VirtualSerializedFile.VirtualFileIndex;
+		/// <summary>
+		/// PathID == 0
+		/// </summary>
 		public bool IsNull => PathID == 0;
 
 		/// <summary>

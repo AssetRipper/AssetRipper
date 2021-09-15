@@ -46,6 +46,12 @@ namespace AssetRipper.Core.Classes.Avatar
 			return node;
 		}
 
+		public string FindBonePath(uint hash)
+		{
+			m_TOS.TryGetValue(hash, out string result);
+			return result;
+		}
+
 		public uint AvatarSize { get; set; }
 		public IReadOnlyDictionary<uint, string> TOS => m_TOS;
 

@@ -1,6 +1,7 @@
 using AssetRipper.Core.Classes.AnimatorController.Constants;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Clip
 {
@@ -47,6 +48,50 @@ namespace AssetRipper.Core.Classes.AnimationClip.Clip
 				}
 			}
 			return false;
+		}
+
+		public AnimationClipBindingConstant ConvertValueArrayToGenericBinding()
+		{
+			var bindings = new AnimationClipBindingConstant();
+			var genericBindings = new List<GenericBinding.GenericBinding>();
+			var values = Binding;
+			for (int i = 0; i < values.ValueArray.Length;)
+			{
+				var curveID = values.ValueArray[i].ID;
+				var curveTypeID = values.ValueArray[i].TypeID;
+				var binding = new GenericBinding.GenericBinding();
+				genericBindings.Add(binding);
+				if (curveTypeID == 4174552735) //CRC(PositionX))
+				{
+					binding.Path = curveID;
+					binding.Attribute = 1; //kBindTransformPosition
+					binding.ClassID = ClassIDType.Transform;
+					i += 3;
+				}
+				else if (curveTypeID == 2211994246) //CRC(QuaternionX))
+				{
+					binding.Path = curveID;
+					binding.Attribute = 2; //kBindTransformRotation
+					binding.ClassID = ClassIDType.Transform;
+					i += 4;
+				}
+				else if (curveTypeID == 1512518241) //CRC(ScaleX))
+				{
+					binding.Path = curveID;
+					binding.Attribute = 3; //kBindTransformScale
+					binding.ClassID = ClassIDType.Transform;
+					i += 3;
+				}
+				else
+				{
+					binding.ClassID = ClassIDType.Animator;
+					binding.Path = 0;
+					binding.Attribute = curveID;
+					i++;
+				}
+			}
+			bindings.GenericBindings = genericBindings.ToArray();
+			return bindings;
 		}
 
 		public StreamedClip StreamedClip;
