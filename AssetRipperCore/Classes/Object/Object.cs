@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.IO.Endian;
 
 namespace AssetRipper.Core.Classes.Object
 {
@@ -26,7 +27,7 @@ namespace AssetRipper.Core.Classes.Object
 		public UnityGUID GUID => AssetInfo.GUID;
 
 		public UnityVersion BundleUnityVersion { get; set; }
-
+		public EndianType EndianType { get; set; }
 		public HideFlags ObjectHideFlags { get; set; }
 
 		public const string AssetsKeyword = "Assets";
@@ -48,6 +49,7 @@ namespace AssetRipper.Core.Classes.Object
 		public virtual void Read(AssetReader reader)
 		{
 			BundleUnityVersion = reader.Version;
+			EndianType = reader.EndianType;
 			ObjectLayout layout = reader.Layout().Object;
 			if (layout.HasHideFlag)
 			{

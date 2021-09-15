@@ -81,7 +81,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 				sb.Append(string.Format("vn {0} {1} {2}\n", -v.X, -v.Y, v.Z));
 			}
 			sb.Append("\n");
-			foreach (Vector3f v in mesh.UV)
+			foreach (Vector3f v in mesh.UV0)
 			{
 				sb.Append(string.Format("vt {0} {1}\n", v.X, v.Y));
 			}
@@ -91,7 +91,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 				sb.Append("usemtl ").Append($"Material{material}").Append("\n");
 				sb.Append("usemap ").Append($"Material{material}").Append("\n");
 
-				uint[] triangles = mesh.GetTriangles(material);
+				uint[] triangles = null; // mesh.GetTriangles(material);
 				for (int i = 0; i < triangles.Length; i += 3)
 				{
 					sb.Append(string.Format("f {0}/{0}/{0} {1}/{1}/{1} {2}/{2}/{2}\n",

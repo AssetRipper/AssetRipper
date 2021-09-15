@@ -1,17 +1,22 @@
 using AssetRipper.Core.Converters.Mesh;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Utils.Extensions;
-using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using AssetRipper.Core.Math;
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using AssetRipper.Core.Logging;
+using System.Linq;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
@@ -20,6 +25,132 @@ namespace AssetRipper.Core.Classes.Mesh
 	/// </summary>
 	public sealed class Mesh : NamedObject
 	{
+		public BlendShapeData Shapes;
+		public VariableBoneCountWeights VariableBoneCountWeights;
+		public VertexData VertexData;
+		public CompressedMesh CompressedMesh;
+		public AABB LocalAABB;
+		public CollisionMeshData CollisionData;
+		public StreamingInfo StreamData;
+		public LOD[] LODData { get; set; }
+		public uint Use16BitIndices
+		{
+			get => IndexFormat == IndexFormat.UInt16 ? 1U : 0U;
+			set => IndexFormat = value == 0 ? IndexFormat.UInt32 : IndexFormat.UInt16;
+		}
+
+		public byte[] RawIndexBuffer
+		{
+			get => m_RawIndexBuffer;
+			set
+			{
+				m_RawIndexBuffer = value;
+				ProcessedIndexBufferFromRaw();
+			}
+		}
+		private byte[] m_RawIndexBuffer;
+		public uint[] ProcessedIndexBuffer
+		{
+			get => m_ProcessedIndexBuffer;
+			set
+			{
+				m_ProcessedIndexBuffer = value;
+				RawIndexBufferFromProcessed();
+			}
+		}
+		private uint[] m_ProcessedIndexBuffer;
+		private ushort[] UintToUshort(uint[] array)
+		{
+			ushort[] result = new ushort[array.Length];
+			for(int i = 0; i < array.Length; i++)
+			{
+				result[i] = (ushort)array[i];
+			}
+			return result;
+		}
+		private uint[] UshortToUint(ushort[] array)
+		{
+			uint[] result = new uint[array.Length];
+			for (int i = 0; i < array.Length; i++)
+			{
+				result[i] = array[i];
+			}
+			return result;
+		}
+		private void ProcessedIndexBufferFromRaw()
+		{
+			if(Use16BitIndices != 0)
+			{
+				var outputBuffer = new ushort[m_RawIndexBuffer.Length / sizeof(ushort)];
+				Buffer.BlockCopy(m_RawIndexBuffer, 0, outputBuffer, 0, m_RawIndexBuffer.Length);
+				m_ProcessedIndexBuffer = UshortToUint(outputBuffer);
+			}
+			else
+			{
+				m_ProcessedIndexBuffer = new uint[m_RawIndexBuffer.Length / sizeof(uint)];
+				Buffer.BlockCopy(m_RawIndexBuffer, 0, m_ProcessedIndexBuffer, 0, m_RawIndexBuffer.Length);
+			}
+		}
+		private void RawIndexBufferFromProcessed()
+		{
+			if (Use16BitIndices != 0)
+			{
+				m_RawIndexBuffer = new byte[m_ProcessedIndexBuffer.Length * sizeof(ushort)];
+				var inputBuffer = UintToUshort(m_ProcessedIndexBuffer);
+				Buffer.BlockCopy(inputBuffer, 0, m_RawIndexBuffer, 0, m_RawIndexBuffer.Length);
+			}
+			else
+			{
+				m_RawIndexBuffer = new byte[m_ProcessedIndexBuffer.Length * sizeof(uint)];
+				Buffer.BlockCopy(m_ProcessedIndexBuffer, 0, m_RawIndexBuffer, 0, m_RawIndexBuffer.Length);
+			}
+		}
+
+		public SubMesh[] SubMeshes { get; set; }
+		/// <summary>
+		/// Shapes - real name
+		/// </summary>
+		public BlendShape[] BlendShapes
+		{
+			get => Shapes.Shapes;
+			set => Shapes.Shapes = value;
+		}
+		public BlendShapeVertex[] ShapeVertices
+		{
+			get => Shapes.Vertices;
+			set => Shapes.Vertices = value;
+		}
+		public Matrix4x4f[] BindPose { get; set; }
+		public uint[] BoneNameHashes { get; set; }
+		public uint RootBoneNameHash { get; set; }
+		public MinMaxAABB[] BonesAABB { get; set; }
+		public MeshCompression MeshCompression { get; set; }
+		public byte StreamCompression { get; set; }
+		public bool IsReadable { get; set; }
+		public bool KeepVertices { get; set; }
+		public bool KeepIndices { get; set; }
+		public IndexFormat IndexFormat { get; set; }
+		public Vector3f[] Vertices { get; set; }
+		public int VertexCount { get; private set; }
+		public BoneWeights4[] Skin { get; set; }
+		public Vector2f[] UV0 { get; set; }
+		public Vector2f[] UV1 { get; set; }
+		public Vector2f[] UV2 { get; private set; }
+		public Vector2f[] UV3 { get; private set; }
+		public Vector2f[] UV4 { get; private set; }
+		public Vector2f[] UV5 { get; private set; }
+		public Vector2f[] UV6 { get; private set; }
+		public Vector2f[] UV7 { get; private set; }
+		public Tangent[] TangentSpace { get; set; }
+		public Vector4f[] Tangents { get; set; }
+		public Vector3f[] Normals { get; set; }
+		public ColorRGBA32[] Colors { get; set; }
+		public uint[] CollisionTriangles { get; set; }
+		public int CollisionVertexCount { get; set; }
+		public int MeshUsageFlags { get; set; }
+		public float[] MeshMetrics { get; set; }
+		public List<uint> Indices { get; set; } = new List<uint>();
+
 		public Mesh(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(UnityVersion version)
@@ -74,6 +205,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return 1;
 		}
 
+		#region Version Methods
 		/// <summary>
 		/// Less than 2.0.0
 		/// </summary>
@@ -191,6 +323,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// 2019.1 and greater and Not Release
 		/// </summary>
 		private static bool IsMeshOptimizationFlags(UnityVersion version) => version.IsGreaterEqual(2019);
+		#endregion
 
 		public bool CheckAssetIntegrity()
 		{
@@ -262,7 +395,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 				if (IsIndexBufferFirst(reader.Version))
 				{
-					IndexBuffer = reader.ReadByteArray();
+					RawIndexBuffer = reader.ReadByteArray();
 					reader.AlignStream();
 				}
 				SubMeshes = reader.ReadAssetArray<SubMesh>();
@@ -332,7 +465,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (!HasLODData(reader.Version) && !IsIndexBufferFirst(reader.Version))
 			{
-				IndexBuffer = reader.ReadByteArray();
+				RawIndexBuffer = reader.ReadByteArray();
 				reader.AlignStream();
 			}
 
@@ -370,7 +503,7 @@ namespace AssetRipper.Core.Classes.Mesh
 					}
 					else
 					{
-						UV = reader.ReadAssetArray<Vector2f>();
+						UV0 = reader.ReadAssetArray<Vector2f>();
 						UV1 = reader.ReadAssetArray<Vector2f>();
 						Tangents = reader.ReadAssetArray<Vector4f>();
 						Normals = reader.ReadAssetArray<Vector3f>();
@@ -380,7 +513,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 			else //less than 3.5.0
 			{
-				UV = reader.ReadAssetArray<Vector2f>();
+				UV0 = reader.ReadAssetArray<Vector2f>();
 				if (HasUV1(reader.Version))
 				{
 					UV1 = reader.ReadAssetArray<Vector2f>();
@@ -448,6 +581,8 @@ namespace AssetRipper.Core.Classes.Mesh
 				reader.AlignStream();
 				StreamData.Read(reader);
 			}
+
+			ProcessData(BundleUnityVersion);
 		}
 
 		public override void Write(AssetWriter writer)
@@ -466,7 +601,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 				if (IsIndexBufferFirst(writer.Version))
 				{
-					IndexBuffer.Write(writer);
+					RawIndexBuffer.Write(writer);
 					writer.AlignStream();
 				}
 				SubMeshes.Write(writer);
@@ -541,7 +676,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				if (!IsIndexBufferFirst(writer.Version))
 				{
-					IndexBuffer.Write(writer);
+					RawIndexBuffer.Write(writer);
 					writer.AlignStream();
 				}
 			}
@@ -587,7 +722,7 @@ namespace AssetRipper.Core.Classes.Mesh
 					}
 					else
 					{
-						UV.Write(writer);
+						UV0.Write(writer);
 						UV1.Write(writer);
 						Tangents.Write(writer);
 						Normals.Write(writer);
@@ -597,7 +732,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 			else
 			{
-				UV.Write(writer);
+				UV0.Write(writer);
 				if (HasUV1(writer.Version))
 				{
 					UV1.Write(writer);
@@ -682,7 +817,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 				if (IsIndexBufferFirst(container.ExportVersion))
 				{
-					node.Add(IndexBufferName, IndexBuffer.ExportYAML());
+					node.Add(IndexBufferName, RawIndexBuffer.ExportYAML());
 				}
 				node.Add(SubMeshesName, SubMeshes.ExportYAML(container));
 			}
@@ -741,7 +876,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				if (!IsIndexBufferFirst(container.ExportVersion))
 				{
-					node.Add(IndexBufferName, IndexBuffer.ExportYAML());
+					node.Add(IndexBufferName, RawIndexBuffer.ExportYAML());
 				}
 			}
 
@@ -786,7 +921,7 @@ namespace AssetRipper.Core.Classes.Mesh
 					}
 					else
 					{
-						node.Add(UVName, UV.ExportYAML(container));
+						node.Add(UVName, UV0.ExportYAML(container));
 						node.Add(UV1Name, UV1.ExportYAML(container));
 						node.Add(TangentsName, Tangents.ExportYAML(container));
 						node.Add(NormalsName, Normals.ExportYAML(container));
@@ -796,7 +931,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 			else
 			{
-				node.Add(UVName, UV.ExportYAML(container));
+				node.Add(UVName, UV0.ExportYAML(container));
 				if (HasUV1(container.ExportVersion))
 				{
 					node.Add(UV1Name, UV1.ExportYAML(container));
@@ -873,133 +1008,534 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		public uint[] GetTriangles(int submeshNumber)
+		private void ProcessData(UnityVersion version)
 		{
-			List<uint> m_Indices = new List<uint>();
-			var m_SubMesh = this.SubMeshes[submeshNumber];
-			var firstIndex = m_SubMesh.FirstByte / 2;
-			if (IndexFormat == IndexFormat.UInt16)
+			if (!string.IsNullOrEmpty(StreamData.Path))
 			{
-				firstIndex /= 2;
-			}
-			var indexCount = m_SubMesh.IndexCount;
-			var topology = m_SubMesh.Topology;
-			if (topology == MeshTopology.Triangles)
-			{
-				for (int i = 0; i < indexCount; i += 3)
+				if (VertexData.VertexCount > 0)
 				{
-					m_Indices.Add(IndexBuffer[firstIndex + i]);
-					m_Indices.Add(IndexBuffer[firstIndex + i + 1]);
-					m_Indices.Add(IndexBuffer[firstIndex + i + 2]);
+					//var resourceReader = new ResourceReader(StreamData.Path, //assetsFile 
+					//		null, StreamData.Offset, StreamData.Size);
+					//VertexData.Data = resourceReader.GetData();
+					VertexData.Data = StreamData.GetContent(this.AssetInfo.File);
 				}
 			}
-			else if (BundleUnityVersion.IsLess(4) || topology == MeshTopology.TriangleStrip)
+			if (version.IsGreaterEqual(3,5)) //3.5 and up
 			{
-				// de-stripify :
-				uint triIndex = 0;
-				for (int i = 0; i < indexCount - 2; i++)
+				ReadVertexData(version);
+			}
+
+			if (version.IsGreaterEqual(2, 6)) //2.6.0 and later
+			{
+				DecompressCompressedMesh(version);
+			}
+
+			ReadTriangles(version);
+		}
+
+		private void ReadVertexData(UnityVersion version)
+		{
+			VertexCount = (int)VertexData.VertexCount;
+
+			for (var chn = 0; chn < VertexData.Channels.Length; chn++)
+			{
+				var m_Channel = VertexData.Channels[chn];
+				if (m_Channel.Dimension > 0)
 				{
-					var a = IndexBuffer[firstIndex + i];
-					var b = IndexBuffer[firstIndex + i + 1];
-					var c = IndexBuffer[firstIndex + i + 2];
-
-					// skip degenerates
-					if (a == b || a == c || b == c)
-						continue;
-
-					// do the winding flip-flop of strips :
-					if ((i & 1) == 1)
+					var m_Stream = VertexData.Streams[m_Channel.Stream];
+					//var channelMask = new BitArray(new[] { (int)m_Stream.ChannelMask }); //original from AssetStudio
+					var channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask ));
+					if (channelMask.Get(chn))
 					{
-						m_Indices.Add(b);
-						m_Indices.Add(a);
+						if (version.IsLess(2018) && chn == 2 && m_Channel.Format == 2) //kShaderChannelColor && kChannelFormatColor
+						{
+							m_Channel.Dimension = 4;
+						}
+
+						var vertexFormat = MeshHelper.ToVertexFormat(m_Channel.Format, version);
+						var componentByteSize = (int)MeshHelper.GetFormatSize(vertexFormat);
+						var componentBytes = new byte[VertexCount * m_Channel.Dimension * componentByteSize];
+						for (int v = 0; v < VertexCount; v++)
+						{
+							var vertexOffset = (int)m_Stream.Offset + m_Channel.Offset + (int)m_Stream.Stride * v;
+							for (int d = 0; d < m_Channel.Dimension; d++)
+							{
+								var componentOffset = vertexOffset + componentByteSize * d;
+								Buffer.BlockCopy(VertexData.Data, componentOffset, componentBytes, componentByteSize * (v * m_Channel.Dimension + d), componentByteSize);
+							}
+						}
+						
+						if (this.EndianType == EndianType.BigEndian && componentByteSize > 1) //swap bytes
+						{
+							for (var i = 0; i < componentBytes.Length / componentByteSize; i++)
+							{
+								var buff = new byte[componentByteSize];
+								Buffer.BlockCopy(componentBytes, i * componentByteSize, buff, 0, componentByteSize);
+								buff = buff.Reverse().ToArray();
+								Buffer.BlockCopy(buff, 0, componentBytes, i * componentByteSize, componentByteSize);
+							}
+						}
+
+						int[] componentsIntArray = null;
+						float[] componentsFloatArray = null;
+						if (MeshHelper.IsIntFormat(vertexFormat))
+							componentsIntArray = MeshHelper.BytesToIntArray(componentBytes, vertexFormat);
+						else
+							componentsFloatArray = MeshHelper.BytesToFloatArray(componentBytes, vertexFormat);
+
+						if (version.IsGreaterEqual(2018))
+						{
+							switch (chn)
+							{
+								case 0: //kShaderChannelVertex
+									Vertices = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 1: //kShaderChannelNormal
+									Normals = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 2: //kShaderChannelTangent
+									Tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 3: //kShaderChannelColor
+									Colors = MeshHelper.FloatArrayToColorRGBA32(componentsFloatArray);
+									break;
+								case 4: //kShaderChannelTexCoord0
+									UV0 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 5: //kShaderChannelTexCoord1
+									UV1 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 6: //kShaderChannelTexCoord2
+									UV2 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 7: //kShaderChannelTexCoord3
+									UV3 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 8: //kShaderChannelTexCoord4
+									UV4 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 9: //kShaderChannelTexCoord5
+									UV5 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 10: //kShaderChannelTexCoord6
+									UV6 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 11: //kShaderChannelTexCoord7
+									UV7 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								//2018.2 and up
+								case 12: //kShaderChannelBlendWeight
+									if (Skin == null)
+									{
+										InitMSkin();
+									}
+									for (int i = 0; i < VertexCount; i++)
+									{
+										for (int j = 0; j < m_Channel.Dimension; j++)
+										{
+											Skin[i].Weights[j] = componentsFloatArray[i * m_Channel.Dimension + j];
+										}
+									}
+									break;
+								case 13: //kShaderChannelBlendIndices
+									if (Skin == null)
+									{
+										InitMSkin();
+									}
+									for (int i = 0; i < VertexCount; i++)
+									{
+										for (int j = 0; j < m_Channel.Dimension; j++)
+										{
+											Skin[i].BoneIndices[j] = componentsIntArray[i * m_Channel.Dimension + j];
+										}
+									}
+									break;
+							}
+						}
+						else
+						{
+							switch (chn)
+							{
+								case 0: //kShaderChannelVertex
+									Vertices = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 1: //kShaderChannelNormal
+									Normals = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 2: //kShaderChannelColor
+									Colors = MeshHelper.FloatArrayToColorRGBA32(componentsFloatArray);
+									break;
+								case 3: //kShaderChannelTexCoord0
+									UV0 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 4: //kShaderChannelTexCoord1
+									UV1 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 5:
+									if (version.IsGreaterEqual(5)) //kShaderChannelTexCoord2
+									{
+										UV2 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									}
+									else //kShaderChannelTangent
+									{
+										Tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, m_Channel.Dimension);
+									}
+									break;
+								case 6: //kShaderChannelTexCoord3
+									UV3 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.Dimension);
+									break;
+								case 7: //kShaderChannelTangent
+									Tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, m_Channel.Dimension);
+									break;
+							}
+						}
 					}
+				}
+			}
+		}
+
+		private void DecompressCompressedMesh(UnityVersion version)
+		{
+			//Vertex
+			if (CompressedMesh.Vertices.m_NumItems > 0)
+			{
+				VertexCount = (int)CompressedMesh.Vertices.m_NumItems / 3;
+				var vertices = CompressedMesh.Vertices.UnpackFloats(3, 3 * 4);
+				Vertices = MeshHelper.FloatArrayToVector3(vertices);
+			}
+			//UV
+			if (CompressedMesh.UV.m_NumItems > 0)
+			{
+				var m_UVInfo = CompressedMesh.UVInfo;
+				if (m_UVInfo != 0)
+				{
+					const int kInfoBitsPerUV = 4;
+					const int kUVDimensionMask = 3;
+					const int kUVChannelExists = 4;
+					const int kMaxTexCoordShaderChannels = 8;
+
+					int uvSrcOffset = 0;
+					for (int uv = 0; uv < kMaxTexCoordShaderChannels; uv++)
+					{
+						var texCoordBits = m_UVInfo >> (uv * kInfoBitsPerUV);
+						texCoordBits &= (1u << kInfoBitsPerUV) - 1u;
+						if ((texCoordBits & kUVChannelExists) != 0)
+						{
+							var uvDim = 1 + (int)(texCoordBits & kUVDimensionMask);
+							var m_UV = CompressedMesh.UV.UnpackFloats(uvDim, uvDim * 4, uvSrcOffset, VertexCount);
+							SetUV(uv, m_UV);
+							uvSrcOffset += uvDim * VertexCount;
+						}
+					}
+				}
+				else
+				{
+					UV0 = MeshHelper.FloatArrayToVector2(CompressedMesh.UV.UnpackFloats(2, 2 * 4, 0, VertexCount));
+					if (CompressedMesh.UV.m_NumItems >= VertexCount * 4)
+					{
+						UV1 = MeshHelper.FloatArrayToVector2(CompressedMesh.UV.UnpackFloats(2, 2 * 4, VertexCount * 2, VertexCount));
+					}
+				}
+			}
+			//BindPose
+			if (version.IsLess(5))
+			{
+				if (CompressedMesh.BindPoses.m_NumItems > 0)
+				{
+					BindPose = new Matrix4x4f[CompressedMesh.BindPoses.m_NumItems / 16];
+					var m_BindPoses_Unpacked = CompressedMesh.BindPoses.UnpackFloats(16, 4 * 16);
+					var buffer = new float[16];
+					for (int i = 0; i < BindPose.Length; i++)
+					{
+						Array.Copy(m_BindPoses_Unpacked, i * 16, buffer, 0, 16);
+						BindPose[i] = new Matrix4x4f(buffer);
+					}
+				}
+			}
+			//Normal
+			if (CompressedMesh.Normals.m_NumItems > 0)
+			{
+				var normalData = CompressedMesh.Normals.UnpackFloats(2, 4 * 2);
+				var signs = CompressedMesh.NormalSigns.Unpack();
+				Normals = new Vector3f[CompressedMesh.Normals.m_NumItems / 2];
+				for (int i = 0; i < CompressedMesh.Normals.m_NumItems / 2; ++i)
+				{
+					var x = normalData[i * 2 + 0];
+					var y = normalData[i * 2 + 1];
+					var zsqr = 1 - x * x - y * y;
+					float z;
+					if (zsqr >= 0f)
+						z = (float)System.Math.Sqrt(zsqr);
 					else
 					{
-						m_Indices.Add(a);
-						m_Indices.Add(b);
+						z = 0;
+						var normal = new Vector3f(x, y, z);
+						normal.Normalize();
+						x = normal.X;
+						y = normal.Y;
+						z = normal.Z;
 					}
-					m_Indices.Add(c);
-					triIndex += 3;
+					if (signs[i] == 0)
+						z = -z;
+					Normals[i] = new Vector3f(x, y, z);
 				}
-				//fix indexCount
-				m_SubMesh.IndexCount = triIndex;
 			}
-			else if (topology == MeshTopology.Quads)
+			//Tangent
+			if (CompressedMesh.Tangents.m_NumItems > 0)
 			{
-				for (int q = 0; q < indexCount; q += 4)
+				var tangentData = CompressedMesh.Tangents.UnpackFloats(2, 4 * 2);
+				var signs = CompressedMesh.TangentSigns.Unpack();
+				Tangents = new Vector4f[CompressedMesh.Tangents.m_NumItems / 2];
+				for (int i = 0; i < CompressedMesh.Tangents.m_NumItems / 2; ++i)
 				{
-					m_Indices.Add(IndexBuffer[firstIndex + q]);
-					m_Indices.Add(IndexBuffer[firstIndex + q + 1]);
-					m_Indices.Add(IndexBuffer[firstIndex + q + 2]);
-					m_Indices.Add(IndexBuffer[firstIndex + q]);
-					m_Indices.Add(IndexBuffer[firstIndex + q + 2]);
-					m_Indices.Add(IndexBuffer[firstIndex + q + 3]);
+					var x = tangentData[i * 2 + 0];
+					var y = tangentData[i * 2 + 1];
+					var zsqr = 1 - x * x - y * y;
+					float z;
+					if (zsqr >= 0f)
+						z = (float)System.Math.Sqrt(zsqr);
+					else
+					{
+						z = 0;
+						var vector3f = new Vector3f(x, y, z);
+						vector3f.Normalize();
+						x = vector3f.X;
+						y = vector3f.Y;
+						z = vector3f.Z;
+					}
+					if (signs[i * 2 + 0] == 0)
+						z = -z;
+					var w = signs[i * 2 + 1] > 0 ? 1.0f : -1.0f;
+					Tangents[i] = new Vector4f(x, y, z, w);
 				}
-				//fix indexCount
-				m_SubMesh.IndexCount = indexCount / 2 * 3;
 			}
-			else
+			//FloatColor
+			if (version.IsGreaterEqual(5))
 			{
-				Logger.Error(LogCategory.General, "Failed getting triangles. Submesh topology is lines or points.");
+				if (CompressedMesh.FloatColors.m_NumItems > 0)
+				{
+					Colors = MeshHelper.FloatArrayToColorRGBA32(CompressedMesh.FloatColors.UnpackFloats(1, 4));
+				}
 			}
-			return m_Indices.ToArray();
+			//Skin
+			if (CompressedMesh.Weights.m_NumItems > 0)
+			{
+				var weights = CompressedMesh.Weights.Unpack();
+				var boneIndices = CompressedMesh.BoneIndices.Unpack();
+
+				InitMSkin();
+
+				int bonePos = 0;
+				int boneIndexPos = 0;
+				int j = 0;
+				int sum = 0;
+
+				for (int i = 0; i < CompressedMesh.Weights.m_NumItems; i++)
+				{
+					//read bone index and weight.
+					Skin[bonePos].Weights[j] = weights[i] / 31.0f;
+					Skin[bonePos].BoneIndices[j] = boneIndices[boneIndexPos++];
+					j++;
+					sum += weights[i];
+
+					//the weights add up to one. fill the rest for this vertex with zero, and continue with next one.
+					if (sum >= 31)
+					{
+						for (; j < 4; j++)
+						{
+							Skin[bonePos].Weights[j] = 0;
+							Skin[bonePos].BoneIndices[j] = 0;
+						}
+						bonePos++;
+						j = 0;
+						sum = 0;
+					}
+					//we read three weights, but they don't add up to one. calculate the fourth one, and read
+					//missing bone index. continue with next vertex.
+					else if (j == 3)
+					{
+						Skin[bonePos].Weights[j] = (31 - sum) / 31.0f;
+						Skin[bonePos].BoneIndices[j] = boneIndices[boneIndexPos++];
+						bonePos++;
+						j = 0;
+						sum = 0;
+					}
+				}
+			}
+			//IndexBuffer
+			if (CompressedMesh.Triangles.m_NumItems > 0)
+			{
+				ProcessedIndexBuffer = Array.ConvertAll(CompressedMesh.Triangles.Unpack(), x => (uint)x);
+			}
+			//Color
+			if (CompressedMesh.Colors.m_NumItems > 0)
+			{
+				CompressedMesh.Colors.m_NumItems *= 4;
+				CompressedMesh.Colors.m_BitSize /= 4;
+				var tempColors = CompressedMesh.Colors.Unpack();
+				Colors = new ColorRGBA32[CompressedMesh.Colors.m_NumItems / 4];
+				for (int v = 0; v < CompressedMesh.Colors.m_NumItems / 4; v++)
+				{
+					Colors[v] = new ColorRGBA32((byte)tempColors[4 * v], (byte)tempColors[4 * v + 1], (byte)tempColors[4 * v + 2], (byte)tempColors[4 * v + 3]);
+				}
+				CompressedMesh.Colors.m_NumItems /= 4;
+				CompressedMesh.Colors.m_BitSize *= 4;
+			}
 		}
 
-		public LOD[] LODData { get; set; }
-		public uint Use16BitIndices
+		private void ReadTriangles(UnityVersion version)
 		{
-			get => IndexFormat == IndexFormat.UInt16 ? 1U : 0U;
-			set => IndexFormat = value == 0 ? IndexFormat.UInt32 : IndexFormat.UInt16;
-		}
-		public byte[] IndexBuffer { get; set; }
-		public SubMesh[] SubMeshes { get; set; }
-		/// <summary>
-		/// Shapes - real name
-		/// </summary>
-		public BlendShape[] BlendShapes
-		{
-			get => Shapes.Shapes;
-			set => Shapes.Shapes = value;
-		}
-		public BlendShapeVertex[] ShapeVertices
-		{
-			get => Shapes.Vertices;
-			set => Shapes.Vertices = value;
-		}
-		public Matrix4x4f[] BindPose { get; set; }
-		public uint[] BoneNameHashes { get; set; }
-		public uint RootBoneNameHash { get; set; }
-		public MinMaxAABB[] BonesAABB { get; set; }
-		public MeshCompression MeshCompression { get; set; }
-		public byte StreamCompression { get; set; }
-		public bool IsReadable { get; set; }
-		public bool KeepVertices { get; set; }
-		public bool KeepIndices { get; set; }
-		public IndexFormat IndexFormat { get; set; }
-		public Vector3f[] Vertices { get; set; }
-		public BoneWeights4[] Skin { get; set; }
-		public Vector2f[] UV { get; set; }
-		public Vector2f[] UV1 { get; set; }
-		public Tangent[] TangentSpace { get; set; }
-		public Vector4f[] Tangents { get; set; }
-		public Vector3f[] Normals { get; set; }
-		public ColorRGBA32[] Colors { get; set; }
-		public uint[] CollisionTriangles { get; set; }
-		public int CollisionVertexCount { get; set; }
-		public int MeshUsageFlags { get; set; }
-		public float[] MeshMetrics { get; set; }
+			foreach (var iter in SubMeshes)
+			{
+				var m_SubMesh = iter;
+				var firstIndex = m_SubMesh.FirstByte / 2;
+				if (Use16BitIndices == 0)
+				{
+					firstIndex /= 2;
+				}
+				var indexCount = m_SubMesh.IndexCount;
+				var topology = m_SubMesh.Topology;
+				//Logger.Info("Submesh information");
+				//Logger.Info($"\tFirst Index: {firstIndex}");
+				//Logger.Info($"\tIndex Count: {indexCount}");
+				//Logger.Info($"\tTopology: {topology}");
+				//Logger.Info($"\tUse 16 bit indices: {Use16BitIndices != 0}");
+				//Logger.Info($"\tProcessedIndexBuffer Length: {ProcessedIndexBuffer.Length}");
+				if (topology == MeshTopology.Triangles)
+				{
+					for (int i = 0; i < indexCount; i += 3)
+					{
+						Indices.Add(ProcessedIndexBuffer[firstIndex + i]);
+						Indices.Add(ProcessedIndexBuffer[firstIndex + i + 1]);
+						Indices.Add(ProcessedIndexBuffer[firstIndex + i + 2]);
+					}
+				}
+				else if (version.IsLess(4) || topology == MeshTopology.TriangleStrip)
+				{
+					// de-stripify :
+					uint triIndex = 0;
+					for (int i = 0; i < indexCount - 2; i++)
+					{
+						var a = ProcessedIndexBuffer[firstIndex + i];
+						var b = ProcessedIndexBuffer[firstIndex + i + 1];
+						var c = ProcessedIndexBuffer[firstIndex + i + 2];
 
-#if UNIVERSAL
+						// skip degenerates
+						if (a == b || a == c || b == c)
+							continue;
+
+						// do the winding flip-flop of strips :
+						if ((i & 1) == 1)
+						{
+							Indices.Add(b);
+							Indices.Add(a);
+						}
+						else
+						{
+							Indices.Add(a);
+							Indices.Add(b);
+						}
+						Indices.Add(c);
+						triIndex += 3;
+					}
+					//fix indexCount
+					m_SubMesh.IndexCount = triIndex;
+				}
+				else if (topology == MeshTopology.Quads)
+				{
+					for (int q = 0; q < indexCount; q += 4)
+					{
+						Indices.Add(ProcessedIndexBuffer[firstIndex + q]);
+						Indices.Add(ProcessedIndexBuffer[firstIndex + q + 1]);
+						Indices.Add(ProcessedIndexBuffer[firstIndex + q + 2]);
+						Indices.Add(ProcessedIndexBuffer[firstIndex + q]);
+						Indices.Add(ProcessedIndexBuffer[firstIndex + q + 2]);
+						Indices.Add(ProcessedIndexBuffer[firstIndex + q + 3]);
+					}
+					//fix indexCount
+					m_SubMesh.IndexCount = indexCount / 2 * 3;
+				}
+				else
+				{
+					throw new NotSupportedException("Failed getting triangles. Submesh topology is lines or points.");
+				}
+			}
+		}
+
+		private void InitMSkin()
+		{
+			Skin = new BoneWeights4[VertexCount];
+			for (int i = 0; i < VertexCount; i++)
+			{
+				Skin[i] = new BoneWeights4();
+			}
+		}
+
+		private void SetUV(int uv, float[] m_UV) => SetUV(uv, MeshHelper.FloatArrayToVector2(m_UV));
+		private void SetUV(int uv, Vector2f[] m_UV)
+		{
+			switch (uv)
+			{
+				case 0:
+					UV0 = m_UV;
+					break;
+				case 1:
+					UV1 = m_UV;
+					break;
+				case 2:
+					UV2 = m_UV;
+					break;
+				case 3:
+					UV3 = m_UV;
+					break;
+				case 4:
+					UV4 = m_UV;
+					break;
+				case 5:
+					UV5 = m_UV;
+					break;
+				case 6:
+					UV6 = m_UV;
+					break;
+				case 7:
+					UV7 = m_UV;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+		public Vector2f[] GetUV(int uv)
+		{
+			switch (uv)
+			{
+				case 0:
+					return UV0;
+				case 1:
+					return UV1;
+				case 2:
+					return UV2;
+				case 3:
+					return UV3;
+				case 4:
+					return UV4;
+				case 5:
+					return UV5;
+				case 6:
+					return UV6;
+				case 7:
+					return UV7;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
 		public bool MeshOptimized
 		{
 			get => MeshOptimizationFlags == MeshOptimizationFlags.Everything;
 			set => MeshOptimizationFlags = value ? MeshOptimizationFlags.Everything : MeshOptimizationFlags.PolygonOrder;
 		}
-		public MeshOptimizationFlags MeshOptimizationFlags { get; set; }
-#else
-		public bool MeshOptimized => true;
-		public MeshOptimizationFlags MeshOptimizationFlags => MeshOptimizationFlags.Everything;
-#endif
+		public MeshOptimizationFlags MeshOptimizationFlags { get; set; } = MeshOptimizationFlags.Everything;
 
 		public const string LODDataName = "m_LODData";
 		public const string Use16BitIndicesName = "m_Use16BitIndices";
@@ -1038,13 +1574,5 @@ namespace AssetRipper.Core.Classes.Mesh
 		public const string MeshOptimizedName = "m_MeshOptimized";
 		public const string MeshOptimizationFlagsName = "m_MeshOptimizationFlags";
 		public const string StreamDataName = "m_StreamData";
-
-		public BlendShapeData Shapes;
-		public VariableBoneCountWeights VariableBoneCountWeights;
-		public VertexData VertexData;
-		public CompressedMesh CompressedMesh;
-		public AABB LocalAABB;
-		public CollisionMeshData CollisionData;
-		public StreamingInfo StreamData;
 	}
 }

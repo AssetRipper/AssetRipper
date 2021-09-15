@@ -105,11 +105,11 @@ namespace AssetRipper.Core.Converters.Mesh
 
 			if (is16bits)
 			{
-				FindMinMax16Indices(mesh.IndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
+				FindMinMax16Indices(mesh.RawIndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
 			}
 			else
 			{
-				FindMinMax32Indices(mesh.IndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
+				FindMinMax32Indices(mesh.RawIndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
 			}
 		}
 

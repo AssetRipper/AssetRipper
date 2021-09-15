@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using AssetRipper.Core.Math;
+using System.Collections;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
@@ -160,6 +161,10 @@ namespace AssetRipper.Core.Classes.Mesh
 				Channels = reader.ReadAssetArray<ChannelInfo>();
 				reader.AlignStream();
 			}
+			else
+			{
+				GetChannels(reader.Version);
+			}
 			if (HasStreams(reader.Version))
 			{
 				if (IsStreamStatic(reader.Version))
@@ -174,6 +179,10 @@ namespace AssetRipper.Core.Classes.Mesh
 				{
 					Streams = reader.ReadAssetArray<StreamInfo>();
 				}
+			}
+			else
+			{
+				GetStreams(reader.Version);
 			}
 
 			Data = reader.ReadByteArray();
@@ -266,6 +275,87 @@ namespace AssetRipper.Core.Classes.Mesh
 				offset = (offset + (VertexStreamAlign - 1)) & ~(VertexStreamAlign - 1);
 			}
 			return offset;
+		}
+
+		private void GetStreams(UnityVersion version)
+		{
+			var streamCount = Channels.Max(x => x.Stream) + 1;
+			Streams = new StreamInfo[streamCount];
+			long offset = 0;
+			for (int s = 0; s < streamCount; s++)
+			{
+				uint chnMask = 0;
+				uint stride = 0;
+				for (int chn = 0; chn < Channels.Length; chn++)
+				{
+					var m_Channel = Channels[chn];
+					if (m_Channel.Stream == s)
+					{
+						if (m_Channel.Dimension > 0)
+						{
+							chnMask |= 1u << chn;
+							stride += m_Channel.Dimension * MeshHelper.GetFormatSize(MeshHelper.ToVertexFormat(m_Channel.Format, version));
+						}
+					}
+				}
+				Streams[s] = new StreamInfo
+				{
+					ChannelMask = chnMask,
+					Offset = (uint)offset,
+					Stride = stride,
+					DividerOp = 0,
+					Frequency = 0
+				};
+				offset += VertexCount * stride;
+				//static size_t AlignStreamSize (size_t size) { return (size + (kVertexStreamAlign-1)) & ~(kVertexStreamAlign-1); }
+				offset = (offset + (16u - 1u)) & ~(16u - 1u);
+			}
+		}
+
+		private void GetChannels(UnityVersion version)
+		{
+			Channels = new ChannelInfo[6];
+			for (int i = 0; i < 6; i++)
+			{
+				Channels[i] = new ChannelInfo();
+			}
+			for (var s = 0; s < Streams.Length; s++)
+			{
+				var m_Stream = Streams[s];
+				var channelMask = new BitArray(new[] { (int)m_Stream.ChannelMask });
+				byte offset = 0;
+				for (int i = 0; i < 6; i++)
+				{
+					if (channelMask.Get(i))
+					{
+						var m_Channel = Channels[i];
+						m_Channel.Stream = (byte)s;
+						m_Channel.Offset = offset;
+						switch (i)
+						{
+							case 0: //kShaderChannelVertex
+							case 1: //kShaderChannelNormal
+								m_Channel.Format = 0; //kChannelFormatFloat
+								m_Channel.Dimension = 3;
+								break;
+							case 2: //kShaderChannelColor
+								m_Channel.Format = 2; //kChannelFormatColor
+								m_Channel.Dimension = 4;
+								break;
+							case 3: //kShaderChannelTexCoord0
+							case 4: //kShaderChannelTexCoord1
+								m_Channel.Format = 0; //kChannelFormatFloat
+								m_Channel.Dimension = 2;
+								break;
+							case 5: //kShaderChannelTangent
+								m_Channel.Format = 0; //kChannelFormatFloat
+								m_Channel.Dimension = 4;
+								break;
+						}
+						offset += (byte)(m_Channel.Dimension * MeshHelper.GetFormatSize(MeshHelper.ToVertexFormat(m_Channel.Format, version)));
+					}
+				}
+			}
 		}
 
 		public bool IsSet => VertexCount > 0;

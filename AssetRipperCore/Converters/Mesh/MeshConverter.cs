@@ -82,7 +82,7 @@ namespace AssetRipper.Core.Converters.Mesh
 					else
 					{
 						instance.Vertices = origin.Vertices.ToArray();
-						instance.UV = origin.UV.ToArray();
+						instance.UV0 = origin.UV0.ToArray();
 						instance.UV1 = origin.UV1.ToArray();
 						instance.Tangents = origin.Tangents.ToArray();
 						instance.Normals = origin.Normals.ToArray();
@@ -93,7 +93,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			else
 			{
 				instance.Vertices = origin.Vertices.ToArray();
-				instance.UV = origin.UV.ToArray();
+				instance.UV0 = origin.UV0.ToArray();
 				if (Classes.Mesh.Mesh.HasUV1(container.ExportVersion))
 				{
 					instance.UV1 = GetUV1(container, origin);
@@ -150,7 +150,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				{
 					instance.IndexFormat = GetIndexFormat(container, origin);
 				}
-				instance.IndexBuffer = GetIndexBuffer(container, origin);
+				instance.RawIndexBuffer = GetIndexBuffer(container, origin);
 				// since this method uses instance, we need to call it last
 				instance.SubMeshes = GetSubMeshes(container, origin, instance);
 			}
@@ -276,12 +276,12 @@ namespace AssetRipper.Core.Converters.Mesh
 				if (container.Platform == container.ExportPlatform ||
 					container.Platform != Platform.XBox360 && container.ExportPlatform != Platform.XBox360)
 				{
-					return origin.IndexBuffer.ToArray();
+					return origin.RawIndexBuffer.ToArray();
 				}
 				else
 				{
 					int size = GetUse16bitIndices(container, origin) == 0 ? 4 : 2;
-					return origin.IndexBuffer.SwapBytes(size);
+					return origin.RawIndexBuffer.SwapBytes(size);
 				}
 			}
 		}
@@ -373,7 +373,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			bool hasVertices = origin.Vertices.Length > 0;
 			bool hasNormals = normals.Length > 0;
 			bool hasColors = origin.Colors.Length > 0;
-			bool hasUV0 = origin.UV.Length > 0;
+			bool hasUV0 = origin.UV0.Length > 0;
 			bool hasUV1 = Classes.Mesh.Mesh.HasUV1(container.Version) && origin.UV1.Length > 0;
 			bool hasTangents = tangents.Length > 0;
 			bool hasChannels = VertexData.HasChannels(container.ExportVersion);
@@ -498,7 +498,7 @@ namespace AssetRipper.Core.Converters.Mesh
 						}
 						if (hasUV0)
 						{
-							origin.UV[i].Write(writer);
+							origin.UV0[i].Write(writer);
 						}
 						if (hasUV1)
 						{

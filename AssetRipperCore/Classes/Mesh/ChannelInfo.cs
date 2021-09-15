@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			Stream = stream;
 			Offset = offset;
 			Format = format;
-			RawDimension = rawDimention;
+			m_RawDimension = rawDimention;
 		}
 
 		public byte GetStride(UnityVersion version)
@@ -90,12 +90,20 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// Data format: float, int, byte
 		/// </summary>
 		public byte Format { get; set; }
-		public byte RawDimension { get; set; }
+		private byte m_RawDimension;
+		public byte RawDimension 
+		{
+			get => m_RawDimension;
+			set => m_RawDimension = value;
+		}
 		/// <summary>
 		/// Data dimention: Vector3, Vector2, Vector1
 		/// </summary>
-		public byte Dimension => (byte)(RawDimension & 0xF);
-
+		public byte Dimension
+		{
+			get => (byte) (m_RawDimension & 0b00001111);
+			set => m_RawDimension = (byte)((m_RawDimension & 0b11110000) | (value & 0b00001111));
+		}
 		public const string StreamName = "stream";
 		public const string OffsetName = "offset";
 		public const string FormatName = "format";
