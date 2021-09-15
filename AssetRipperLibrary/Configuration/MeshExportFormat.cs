@@ -7,8 +7,16 @@
 		/// </summary>
 		Native,
 		/// <summary>
-		/// A common mesh format usuable in a variety of applications. However, this also breaks exported references to the mesh asset.
+		/// A common text format usuable in a variety of applications. However, this also breaks exported references to the mesh asset.
 		/// </summary>
 		Obj,
+		/// <summary>
+		/// A common text format used in the 3D printing industry. Unity does not support importing this format.
+		/// </summary>
+		StlAscii,
+		/// <summary>
+		/// A common binary format used in the 3D printing industry. Unity does not support importing this format.
+		/// </summary>
+		StlBinary,
 	}
 }

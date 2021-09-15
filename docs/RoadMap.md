@@ -5,6 +5,7 @@
   * Texture exporter (done!)
 * Full script decompilation (done!)
 * OBJ mesh export (done!)
+* STL mesh export (done!)
 * GUI improvements
   * Open file button (done!)
 
@@ -28,7 +29,7 @@
 * Option to reference assemblies instead of scripts
 * Mesh export options
   * FBX export
-  * STL export
+  * GLTF export
 * Move Third Party Dependencies to Nuget Packages
   * Spirv
   * Smolv

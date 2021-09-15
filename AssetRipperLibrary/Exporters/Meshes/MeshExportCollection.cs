@@ -5,13 +5,17 @@ using AssetRipper.Core.Structure.Collections;
 
 namespace AssetRipper.Library.Exporters.Meshes
 {
-	internal class ObjMeshCollection : AssetExportCollection
+	internal class MeshExportCollection : AssetExportCollection
 	{
-		public ObjMeshCollection(IAssetExporter assetExporter, Mesh asset) : base(assetExporter, asset) { }
+		private string fileExtension;
+		public MeshExportCollection(IAssetExporter assetExporter, Mesh asset, string extention) : base(assetExporter, asset)
+		{
+			fileExtension = extention;
+		}
 
 		protected override string GetExportExtension(Object asset)
 		{
-			return "obj";
+			return fileExtension;
 		}
 	}
 }

@@ -1,75 +1,30 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes.Mesh;
-using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Parser.Asset;
+﻿using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Collections;
-using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace AssetRipper.Library.Exporters.Meshes
 {
-	public class ObjMeshExporter : IAssetExporter
+	public class ObjMeshExporter : BaseMeshExporter
 	{
-		private MeshExportFormat ExportFormat { get; set; }
-		public ObjMeshExporter(LibraryConfiguration configuration) => ExportFormat = configuration.MeshExportFormat;
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
+		public ObjMeshExporter(LibraryConfiguration configuration) : base(configuration)
 		{
-			return new ObjMeshCollection(this, (Mesh)asset);
+			BinaryExport = false;
 		}
 
-		public bool Export(IExportContainer container, Core.Classes.Object.Object asset, string path)
+		public override bool IsHandle(Mesh mesh)
 		{
-			string objText = ObjConverter.ConvertToObjString((Mesh)asset, true);
-			if (string.IsNullOrEmpty(objText))
-				return false;
-
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
-			{
-				using (StreamWriter sw = new StreamWriter(fileStream))
-				{
-					sw.Write(objText);
-				}
-			}
-			return true;
+			return ExportFormat == MeshExportFormat.Obj && ObjConverter.CanConvert(mesh);
 		}
 
-		public void Export(IExportContainer container, Core.Classes.Object.Object asset, string path, Action<IExportContainer, Core.Classes.Object.Object, string> callback)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
 		{
-			Export(container, asset, path);
-			callback?.Invoke(container, asset, path);
+			return new MeshExportCollection(this, (Mesh)asset, "obj");
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<Core.Classes.Object.Object> assets, string path)
+		public override string ExportText(Mesh mesh)
 		{
-			throw new NotSupportedException();
-		}
-
-		public void Export(IExportContainer container, IEnumerable<Core.Classes.Object.Object> assets, string path, Action<IExportContainer, Core.Classes.Object.Object, string> callback)
-		{
-			throw new NotSupportedException();
-		}
-
-		public bool IsHandle(Core.Classes.Object.Object asset, CoreConfiguration options)
-		{
-			return ExportFormat == MeshExportFormat.Obj && ObjConverter.CanConvert((Mesh)asset);
-		}
-
-		public AssetType ToExportType(Core.Classes.Object.Object asset)
-		{
-			ToUnknownExportType(asset.ClassID, out AssetType assetType);
-			return assetType;
-		}
-
-		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
-		{
-			assetType = AssetType.Meta;
-			return true;
+			return ObjConverter.ConvertToObjString(mesh, true);
 		}
 	}
 }

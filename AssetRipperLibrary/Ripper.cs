@@ -96,6 +96,7 @@ namespace AssetRipper.Library
 			OverrideExporter(ClassIDType.Sprite, textureExporter);
 			OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
 			OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
+			OverrideExporter(ClassIDType.Mesh, new StlMeshExporter(Settings));
 			OverrideExporter(ClassIDType.Mesh, new ObjMeshExporter(Settings));
 
 			//Engine Exporters
