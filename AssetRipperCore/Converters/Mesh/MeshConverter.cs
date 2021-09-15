@@ -12,6 +12,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using AssetRipper.Core.Math;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core.Converters.Mesh
 {
@@ -67,33 +68,34 @@ namespace AssetRipper.Core.Converters.Mesh
 				instance.Skin = origin.Skin;
 			}
 
+			instance.Vertices = origin.Vertices?.ToArray();
+			instance.UV0 = origin.UV0?.ToArray();
+			instance.UV1 = origin.UV1?.ToArray();
+			instance.UV2 = origin.UV2?.ToArray();
+			instance.UV3 = origin.UV3?.ToArray();
+			instance.UV4 = origin.UV4?.ToArray();
+			instance.UV5 = origin.UV5?.ToArray();
+			instance.UV6 = origin.UV6?.ToArray();
+			instance.UV7 = origin.UV7?.ToArray();
+			instance.Tangents = origin.Tangents?.ToArray();
+			instance.Normals = origin.Normals?.ToArray();
+			instance.Colors = origin.Colors?.ToArray();
+			instance.Indices = new List<uint>(origin.Indices.ToArray());
+			instance.Triangles = new List<List<uint>>(origin.Triangles.ConvertAll(x => x.ToArray()).ConvertAll(y => new List<uint>(y)).ToArray());
+
 			if (Classes.Mesh.Mesh.HasVertexData(container.ExportVersion))
 			{
 				if (Classes.Mesh.Mesh.IsOnlyVertexData(container.ExportVersion))
 				{
 					instance.VertexData = GetVertexData(container, origin);
 				}
-				else
+				else if (instance.MeshCompression == MeshCompression.Off)
 				{
-					if (instance.MeshCompression == MeshCompression.Off)
-					{
-						instance.VertexData = GetVertexData(container, origin);
-					}
-					else
-					{
-						instance.Vertices = origin.Vertices.ToArray();
-						instance.UV0 = origin.UV0.ToArray();
-						instance.UV1 = origin.UV1.ToArray();
-						instance.Tangents = origin.Tangents.ToArray();
-						instance.Normals = origin.Normals.ToArray();
-						instance.Colors = origin.Colors.ToArray();
-					}
+					instance.VertexData = GetVertexData(container, origin);
 				}
 			}
 			else
 			{
-				instance.Vertices = origin.Vertices.ToArray();
-				instance.UV0 = origin.UV0.ToArray();
 				if (Classes.Mesh.Mesh.HasUV1(container.ExportVersion))
 				{
 					instance.UV1 = GetUV1(container, origin);
@@ -107,7 +109,6 @@ namespace AssetRipper.Core.Converters.Mesh
 					instance.Tangents = GetTangents(container, origin);
 					instance.Normals = GetNormals(container, origin);
 				}
-				instance.Colors = origin.Colors.ToArray();
 			}
 
 			if (Classes.Mesh.Mesh.HasCompressedMesh(container.ExportVersion))

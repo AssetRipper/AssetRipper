@@ -13,7 +13,7 @@ namespace AssetRipper.Library.Configuration
 		/// </summary>
 		public ImageExportFormat ImageExportFormat { get; set; }
 		/// <summary>
-		/// The format that meshes get exported in. Currently does nothing.
+		/// The format that meshes get exported in. Recommended: Native
 		/// </summary>
 		public MeshExportFormat MeshExportFormat { get; set; }
 		/// <summary>
@@ -31,7 +31,7 @@ namespace AssetRipper.Library.Configuration
 			base.ResetToDefaultValues();
 			AudioExportFormat = AudioExportFormat.Ogg;
 			ImageExportFormat = ImageExportFormat.Png;
-			MeshExportFormat = MeshExportFormat.Obj;
+			MeshExportFormat = MeshExportFormat.Native;
 			ShaderExportMode = ShaderExportMode.Dummy;
 			SpriteExportMode = SpriteExportMode.Native;
 		}

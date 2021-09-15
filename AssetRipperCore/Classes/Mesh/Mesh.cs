@@ -135,12 +135,12 @@ namespace AssetRipper.Core.Classes.Mesh
 		public BoneWeights4[] Skin { get; set; }
 		public Vector2f[] UV0 { get; set; }
 		public Vector2f[] UV1 { get; set; }
-		public Vector2f[] UV2 { get; private set; }
-		public Vector2f[] UV3 { get; private set; }
-		public Vector2f[] UV4 { get; private set; }
-		public Vector2f[] UV5 { get; private set; }
-		public Vector2f[] UV6 { get; private set; }
-		public Vector2f[] UV7 { get; private set; }
+		public Vector2f[] UV2 { get; set; }
+		public Vector2f[] UV3 { get; set; }
+		public Vector2f[] UV4 { get; set; }
+		public Vector2f[] UV5 { get; set; }
+		public Vector2f[] UV6 { get; set; }
+		public Vector2f[] UV7 { get; set; }
 		public Tangent[] TangentSpace { get; set; }
 		public Vector4f[] Tangents { get; set; }
 		public Vector3f[] Normals { get; set; }
@@ -150,6 +150,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public int MeshUsageFlags { get; set; }
 		public float[] MeshMetrics { get; set; }
 		public List<uint> Indices { get; set; } = new List<uint>();
+		public List<List<uint>> Triangles { get; set; } = new List<List<uint>>();
 
 		public Mesh(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -1014,9 +1015,6 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				if (VertexData.VertexCount > 0)
 				{
-					//var resourceReader = new ResourceReader(StreamData.Path, //assetsFile 
-					//		null, StreamData.Offset, StreamData.Size);
-					//VertexData.Data = resourceReader.GetData();
 					VertexData.Data = StreamData.GetContent(this.AssetInfo.File);
 				}
 			}
@@ -1031,6 +1029,19 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 
 			ReadTriangles(version);
+
+			if (Vertices == null)
+			{
+				Logger.Warning(LogCategory.Import, $"Null Vertices for {Name}");
+			}
+			if (UV0 == null)
+			{
+				Logger.Warning(LogCategory.Import, $"Null UV0 for {Name}");
+			}
+			if (Normals == null)
+			{
+				Logger.Warning(LogCategory.Import, $"Null Normals for {Name}");
+			}
 		}
 
 		private void ReadVertexData(UnityVersion version)
@@ -1043,7 +1054,6 @@ namespace AssetRipper.Core.Classes.Mesh
 				if (m_Channel.Dimension > 0)
 				{
 					var m_Stream = VertexData.Streams[m_Channel.Stream];
-					//var channelMask = new BitArray(new[] { (int)m_Stream.ChannelMask }); //original from AssetStudio
 					var channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask ));
 					if (channelMask.Get(chn))
 					{
@@ -1388,6 +1398,8 @@ namespace AssetRipper.Core.Classes.Mesh
 			foreach (var iter in SubMeshes)
 			{
 				var m_SubMesh = iter;
+				var m_Triangles = new List<uint>();
+				Triangles.Add(m_Triangles);
 				var firstIndex = m_SubMesh.FirstByte / 2;
 				if (Use16BitIndices == 0)
 				{
@@ -1395,12 +1407,6 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 				var indexCount = m_SubMesh.IndexCount;
 				var topology = m_SubMesh.Topology;
-				//Logger.Info("Submesh information");
-				//Logger.Info($"\tFirst Index: {firstIndex}");
-				//Logger.Info($"\tIndex Count: {indexCount}");
-				//Logger.Info($"\tTopology: {topology}");
-				//Logger.Info($"\tUse 16 bit indices: {Use16BitIndices != 0}");
-				//Logger.Info($"\tProcessedIndexBuffer Length: {ProcessedIndexBuffer.Length}");
 				if (topology == MeshTopology.Triangles)
 				{
 					for (int i = 0; i < indexCount; i += 3)
@@ -1408,6 +1414,9 @@ namespace AssetRipper.Core.Classes.Mesh
 						Indices.Add(ProcessedIndexBuffer[firstIndex + i]);
 						Indices.Add(ProcessedIndexBuffer[firstIndex + i + 1]);
 						Indices.Add(ProcessedIndexBuffer[firstIndex + i + 2]);
+						m_Triangles.Add(ProcessedIndexBuffer[firstIndex + i]);
+						m_Triangles.Add(ProcessedIndexBuffer[firstIndex + i + 1]);
+						m_Triangles.Add(ProcessedIndexBuffer[firstIndex + i + 2]);
 					}
 				}
 				else if (version.IsLess(4) || topology == MeshTopology.TriangleStrip)
@@ -1429,13 +1438,18 @@ namespace AssetRipper.Core.Classes.Mesh
 						{
 							Indices.Add(b);
 							Indices.Add(a);
+							m_Triangles.Add(b);
+							m_Triangles.Add(a);
 						}
 						else
 						{
 							Indices.Add(a);
 							Indices.Add(b);
+							m_Triangles.Add(a);
+							m_Triangles.Add(b);
 						}
 						Indices.Add(c);
+						m_Triangles.Add(c);
 						triIndex += 3;
 					}
 					//fix indexCount
@@ -1451,6 +1465,13 @@ namespace AssetRipper.Core.Classes.Mesh
 						Indices.Add(ProcessedIndexBuffer[firstIndex + q]);
 						Indices.Add(ProcessedIndexBuffer[firstIndex + q + 2]);
 						Indices.Add(ProcessedIndexBuffer[firstIndex + q + 3]);
+
+						m_Triangles.Add(ProcessedIndexBuffer[firstIndex + q]);
+						m_Triangles.Add(ProcessedIndexBuffer[firstIndex + q + 1]);
+						m_Triangles.Add(ProcessedIndexBuffer[firstIndex + q + 2]);
+						m_Triangles.Add(ProcessedIndexBuffer[firstIndex + q]);
+						m_Triangles.Add(ProcessedIndexBuffer[firstIndex + q + 2]);
+						m_Triangles.Add(ProcessedIndexBuffer[firstIndex + q + 3]);
 					}
 					//fix indexCount
 					m_SubMesh.IndexCount = indexCount / 2 * 3;

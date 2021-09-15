@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Math;
+using System.Collections.Generic;
 using System.Text;
 
 namespace AssetRipper.Library.Exporters.Meshes
@@ -8,7 +9,10 @@ namespace AssetRipper.Library.Exporters.Meshes
 	{
 		public static bool CanConvert(Mesh mesh)
 		{
-			if (mesh.BundleUnityVersion.IsLess(4)) return true;
+			if (mesh.Vertices == null || mesh.Normals == null || mesh.UV0 == null || mesh.Vertices.Length == 0 || mesh.Normals.Length == 0 || mesh.UV0.Length == 0)
+				return false;
+			if (mesh.BundleUnityVersion.IsLess(4)) 
+				return true;
 			foreach(var submesh in mesh.SubMeshes)
 			{
 				switch (submesh.Topology)
@@ -77,11 +81,10 @@ namespace AssetRipper.Library.Exporters.Meshes
 			sb.Append("\n");
 			foreach (Vector3f nn in mesh.Normals)
 			{
-				Vector3f v = nn;
-				sb.Append(string.Format("vn {0} {1} {2}\n", -v.X, -v.Y, v.Z));
+				sb.Append(string.Format("vn {0} {1} {2}\n", -nn.X, -nn.Y, nn.Z));
 			}
 			sb.Append("\n");
-			foreach (Vector3f v in mesh.UV0)
+			foreach (Vector2f v in mesh.UV0)
 			{
 				sb.Append(string.Format("vt {0} {1}\n", v.X, v.Y));
 			}
@@ -91,8 +94,8 @@ namespace AssetRipper.Library.Exporters.Meshes
 				sb.Append("usemtl ").Append($"Material{material}").Append("\n");
 				sb.Append("usemap ").Append($"Material{material}").Append("\n");
 
-				uint[] triangles = null; // mesh.GetTriangles(material);
-				for (int i = 0; i < triangles.Length; i += 3)
+				List<uint> triangles = mesh.Triangles[material];
+				for (int i = 0; i < triangles.Count; i += 3)
 				{
 					sb.Append(string.Format("f {0}/{0}/{0} {1}/{1}/{1} {2}/{2}/{2}\n",
 											triangles[i] + 1 + StartIndex, triangles[i + 1] + 1 + StartIndex, triangles[i + 2] + 1 + StartIndex));

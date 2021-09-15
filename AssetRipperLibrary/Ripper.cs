@@ -1,9 +1,11 @@
 ﻿using AssetRipper.Core;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Audio;
+using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Textures;
 using System;
@@ -71,7 +73,7 @@ namespace AssetRipper.Library
 			GameStructure = null;
 		}
 
-		public void ResetSettings() => Settings = new();
+		public void ResetSettings() => Settings.ResetToDefaultValues();
 
 		private static Func<UnityObject, bool> GetFilter(List<UnityObject> assets)
 		{
@@ -89,23 +91,26 @@ namespace AssetRipper.Library
 
 			//Cross-Platform exporters
 			TextureAssetExporter textureExporter = new TextureAssetExporter(Settings);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, textureExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Cubemap, textureExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, textureExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
+			OverrideExporter(ClassIDType.Texture2D, textureExporter);
+			OverrideExporter(ClassIDType.Cubemap, textureExporter);
+			OverrideExporter(ClassIDType.Sprite, textureExporter);
+			OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
+			OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
+			OverrideExporter(ClassIDType.Mesh, new ObjMeshExporter(Settings));
 
 			//Engine Exporters
 			EngineAssetExporter engineExporter = new EngineAssetExporter();
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Material, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Texture2D, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Mesh, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Shader, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Font, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.Sprite, engineExporter);
-			GameStructure.FileCollection.Exporter.OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
+			OverrideExporter(ClassIDType.Material, engineExporter);
+			OverrideExporter(ClassIDType.Texture2D, engineExporter);
+			OverrideExporter(ClassIDType.Mesh, engineExporter);
+			OverrideExporter(ClassIDType.Shader, engineExporter);
+			OverrideExporter(ClassIDType.Font, engineExporter);
+			OverrideExporter(ClassIDType.Sprite, engineExporter);
+			OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
 
 			ExportersInitialized = true;
 		}
+
+		private void OverrideExporter(ClassIDType classID, IAssetExporter exporter) => GameStructure.FileCollection.Exporter.OverrideExporter(classID, exporter);
 	}
 }
