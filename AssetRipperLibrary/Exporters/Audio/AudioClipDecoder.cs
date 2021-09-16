@@ -25,7 +25,7 @@ namespace AssetRipper.Library.Exporters.Audio
 				return false;
 
 			byte[] rawData = (byte[])audioClip.GetAudioData();
-			if (rawData == null || rawData.Length == 0)
+			if (rawData == null || rawData.Length < 4)//Needs to be at least as large as the magic number
 				return false;
 
 			using (MemoryStream input = new MemoryStream(rawData))
