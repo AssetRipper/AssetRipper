@@ -63,12 +63,15 @@ namespace AssetRipper.Core.Math
 		public static implicit operator Vector4f(Vector2i v2) => new Vector4f(v2.X, v2.Y, 0.0f, 0.0f);
 		public static implicit operator Vector4f(Vector3f v3) => new Vector4f(v3.X, v3.Y, v3.Z, 0.0f);
 		public static implicit operator Vector4f(Vector3i v3) => new Vector4f(v3.X, v3.Y, v3.Z, 0.0f);
-		public static implicit operator Vector4f(Quaternionf q) => new Vector4f(q.X, q.Y, q.Z, q.W);
 
-		public static implicit operator ColorRGBAf(Vector4f v)
+		public static explicit operator Vector4f(Quaternionf q) => new Vector4f(q.X, q.Y, q.Z, q.W);
+		public static explicit operator ColorRGBAf(Vector4f v)
 		{
 			return new ColorRGBAf(v.X, v.Y, v.Z, v.W);
 		}
+
+		public static implicit operator System.Numerics.Vector4(Vector4f v4) => new System.Numerics.Vector4(v4.X,v4.Y,v4.Z,v4.W);
+		public static implicit operator Vector4f(System.Numerics.Vector4 v4) => new Vector4f(v4.X, v4.Y, v4.Z, v4.W);
 
 		public static Vector4f operator -(Vector4f left)
 		{

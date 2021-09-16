@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 {
@@ -9,23 +10,12 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 		public static void GenerateTypeTree(TypeTreeContext context, string name)
 		{
 			ColorRGBA32Layout layout = context.Layout.Serialized.ColorRGBA32;
-			context.AddNode(layout.Name, name, layout.Version);
+			context.AddNode(layout.Name, name, ColorRGBA32.ToSerializedVersion());
 			context.BeginChildren();
-			context.AddUInt32(layout.RgbaName);
+			context.AddUInt32(ColorRGBA32.RgbaName);
 			context.EndChildren();
 		}
 
-		/// <summary>
-		/// NOTE: min version is 2
-		/// </summary>
-		public int Version => 2;
-
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasRGBA => true;
-
 		public string Name => TypeTreeUtils.ColorName;
-		public string RgbaName => "rgba";
 	}
 }

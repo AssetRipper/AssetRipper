@@ -28,18 +28,15 @@ namespace AssetRipper.Core.Math
 		{
 			ColorRGBAf color = new ColorRGBAf
 			{
-				R = ((color32.RGBA & 0x000000FF) >> 0) / 255.0f,
-				G = ((color32.RGBA & 0x0000FF00) >> 8) / 255.0f,
-				B = ((color32.RGBA & 0x00FF0000) >> 16) / 255.0f,
-				A = ((color32.RGBA & 0xFF000000) >> 24) / 255.0f
+				R = color32.R / 255.0f,
+				G = color32.G / 255.0f,
+				B = color32.B / 255.0f,
+				A = color32.A / 255.0f
 			};
 			return color;
 		}
 
-		public static implicit operator Vector4f(ColorRGBAf c)
-		{
-			return new Vector4f(c.R, c.G, c.B, c.A);
-		}
+		public static explicit operator Vector4f(ColorRGBAf c) => new Vector4f(c.R, c.G, c.B, c.A);
 
 		public void Read(AssetReader reader)
 		{

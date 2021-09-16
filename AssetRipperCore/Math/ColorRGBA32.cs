@@ -1,5 +1,4 @@
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.YAML;
@@ -35,12 +34,17 @@ namespace AssetRipper.Core.Math
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			ColorRGBA32Layout layout = container.ExportLayout.Serialized.ColorRGBA32;
-			node.AddSerializedVersion(layout.Version);
-			node.Add(layout.RgbaName, RGBA);
+			node.AddSerializedVersion(ToSerializedVersion());
+			node.Add(RgbaName, RGBA);
 			return node;
 		}
 
+		/// <summary>
+		/// NOTE: min version is 2
+		/// </summary>
+		public static int ToSerializedVersion() => 2;
+		
+		public static ColorRGBA32 Black => new ColorRGBA32(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 		public static ColorRGBA32 White => new ColorRGBA32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
 		public byte R => (byte)((RGBA >> 0) & 0xFF);
@@ -49,5 +53,7 @@ namespace AssetRipper.Core.Math
 		public byte A => (byte)((RGBA >> 24) & 0xFF);
 
 		public uint RGBA { get; set; }
+
+		public const string RgbaName = "rgba";
 	}
 }
