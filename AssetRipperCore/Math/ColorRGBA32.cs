@@ -14,11 +14,18 @@ namespace AssetRipper.Core.Math
 
 		public static explicit operator ColorRGBA32(ColorRGBAf color)
 		{
-			byte r = (byte)(color.R * 255.0f);
-			byte g = (byte)(color.G * 255.0f);
-			byte b = (byte)(color.B * 255.0f);
-			byte a = (byte)(color.A * 255.0f);
+			byte r = ConvertFloatToByte(color.R);
+			byte g = ConvertFloatToByte(color.G);
+			byte b = ConvertFloatToByte(color.B);
+			byte a = ConvertFloatToByte(color.A);
 			return new ColorRGBA32(r, g, b, a);
+		}
+
+		private static byte ConvertFloatToByte(float value)
+		{
+			if (value <= 0f) return byte.MinValue;
+			if (value >= 1f) return byte.MaxValue;
+			return (byte)(value * 255.0f);
 		}
 
 		public void Read(AssetReader reader)
