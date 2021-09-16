@@ -28,6 +28,11 @@ namespace AssetRipper.Core.Structure.Collections
 			Asset = asset;
 		}
 
+		public AssetExportCollection(IAssetExporter assetExporter, Object asset, string fileExtension) : this(assetExporter, asset)
+		{
+			this.fileExtension = fileExtension;
+		}
+
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
 			string subPath;
@@ -98,6 +103,15 @@ namespace AssetRipper.Core.Structure.Collections
 			return importer;
 		}
 
+		protected override string GetExportExtension(Object asset)
+		{
+			if (string.IsNullOrWhiteSpace(fileExtension))
+				return base.GetExportExtension(asset);
+			else
+				return fileExtension;
+		}
+
+		private string fileExtension;
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File => Asset.File;
 		public override IEnumerable<Object> Assets
