@@ -11,8 +11,8 @@ namespace AssetRipper.Core.Converters.Shader
 {
 	public static class DummyShaderTextExporter
 	{
-		public const string DummyShader = @"
-	//DummyShaderTextExporter
+		public const string OneSidedDummyShader = @"
+	//DummyShaderTextExporter - One Sided
 	SubShader{
 		Tags { ""RenderType"" = ""Opaque"" }
 		LOD 200
@@ -32,7 +32,35 @@ namespace AssetRipper.Core.Converters.Shader
 		ENDCG
 	}
 ";
+		public const string TwoSidedDummyShader = @"
+	//DummyShaderTextExporter - Two Sided
+	SubShader{
+		Tags { ""RenderType"" = ""Opaque"" }
+		LOD 200
+		Cull off
+		CGPROGRAM
+#pragma surface surf Standard fullforwardshadows
+#pragma target 3.0
+		sampler2D _MainTex;
+		struct Input
+		{
+			float2 uv_MainTex;
+		};
+		void surf(Input IN, inout SurfaceOutputStandard o)
+		{
+			fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
+			o.Albedo = c.rgb;
+		}
+		ENDCG
+	}
+";
+		/// <summary>
+		/// At least 5.5
+		/// </summary>
 		public static bool IsSerialized(UnityVersion version) => version.IsGreaterEqual(5, 5);
+		/// <summary>
+		/// At least 5.3
+		/// </summary>
 		public static bool IsEncoded(UnityVersion version) => version.IsGreaterEqual(5, 3);
 		public static void ExportShader(Classes.Shader.Shader shader, IExportContainer container, Stream stream,
 			Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
@@ -44,7 +72,8 @@ namespace AssetRipper.Core.Converters.Shader
 					writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm.Name);
 					shader.ParsedForm.PropInfo.Export(writer);
 					writer.WriteIndent(1);
-					writer.Write(DummyShader);
+					writer.Write(OneSidedDummyShader);
+					//writer.Write(TwoSidedDummyShader);
 					if (shader.ParsedForm.FallbackName != string.Empty)
 					{
 						writer.WriteIndent(1);
@@ -75,7 +104,8 @@ namespace AssetRipper.Core.Converters.Shader
 						var subshaderIndex = header.IndexOf("SubShader");
 						writer.WriteString(header, 0, subshaderIndex);
 						writer.WriteIndent(1);
-						writer.Write(DummyShader);
+						writer.Write(OneSidedDummyShader);
+						//writer.Write(TwoSidedDummyShader);
 						writer.Write('}');
 					}
 				}
