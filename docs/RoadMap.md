@@ -1,20 +1,26 @@
 # Development Roadmap
 
-## 0.1.6.0
-* Extend Windows-only features to Mac and Linux
-  * Texture exporter (done!)
-* Full script decompilation (done!)
-* OBJ mesh export (done!)
-* STL mesh export (done!)
-* GUI improvements
-  * Open file button (done!)
-  * Export Selected object to project (done!)
-
 ## 0.1.7.0
 * Audio Exporter
   * Build Native Binaries for Mac and Linux
   * Allow other audio formats when not vorbis encoded
 * Handle exceptions while reading IL2Cpp assemblies
+* Primitive GLTF mesh export
+* Merge mesh converter classes into their respective exporters
+* Reformat the shader export system to support two sided shaders
+* Remove Reading namespace
+* Remove remaining Layout classes
+* Implement package for LZ4
+* GUI improvements
+  * Configuration window for choosing import and export options
+  * Switch shader preview to use the library shader exporter
+  * Better Audio Playback control
+    * Fast-forward and rewind
+    * Seek-bar for selecting playback position
+* Move Third Party Dependencies to Nuget Packages
+  * Spirv
+  * Smolv
+  * Brotli
 
 ## 0.2.0.0
 * Overhaul struct reading, which would enable:
@@ -31,34 +37,33 @@
 * Mesh export options
   * FBX export
   * GLTF export
-* Move Third Party Dependencies to Nuget Packages
-  * Spirv
-  * Smolv
-  * Brotli
-* Implement package for LZ4
 * Asset Previews
   * Mesh preview
   * Material preview
-  * Better Audio Playback control
-    * Fast-forward and rewind
-    * Seek-bar for selecting playback position
 * Selective Export
   * Export Selected object to folder
   * Export Selected object to compressed zip file
 * GUI improvements
-  * Configuration window for choosing import and export options
   * Performance enhancements for viewing asset types with large contents, such as 9000 game objects
   * Hex Viewer
+  * General Settings window
+  * Localized text for the UI
+  * Adjustable background color/theme
+* Import Settings
+  * Ignore StreamingAssets directory option
+* Export Settings
+  * Replace all shaders on materials with a built-in shader (for example, the Standard shader)
+  * Script Export
+    * IL2Cpp method body reconstruction
+    * Stubbing/stripping options
 
 ## Concept Ideas
 > Note: This is just a collection of ideas. These might not be desirable or feasible, so many of them might never be implemented. Do not interpret their inclusion here as any form of commitment.
 
 * GUI quality of life features
-  * General Settings window
-  * Adjustable background color
   * Font setting
-  * Localized text for the UI
   * Configurable keybindings
+  * Window for licensed works
 * Console
   * In the GUI, have a separate window
   * Enterable commands
@@ -76,18 +81,19 @@
   * Option to group resources
 * Tabs
   * Inspector Tab
+    * Tag
+    * Layer
+    * ID
+    * File name
+    * Asset Specific Properties
+      * Sortable
+      * Selectable with indepth description below
   * Moveable Tabs
   * Error Tab
 * Import Settings
   * Ignore scenes option
-  * Ignore StreamingAssets directory option
   * Import bundle as level
   * Assembly de-obfuscation
-* Export Settings
-  * Replace all shaders on materials with a built-in shader (for example, the Standard shader)
-  * Script Export
-    * IL2Cpp method body reconstruction
-    * Stubbing/stripping options
 * Performance Improvements
   * Asynchronous import/export
 * Filtered Export
