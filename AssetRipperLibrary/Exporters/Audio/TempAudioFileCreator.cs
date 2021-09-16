@@ -25,7 +25,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			if (decodedData == null)
 				return null;
 
-			decodedData = AudioConverter.ConvertToWav(decodedData);
+			decodedData = AudioClipExporter.ConvertToWav(decodedData);
 
 			return TempFolderManager.WriteToTempFile(decodedData, WavExtension);
 		}

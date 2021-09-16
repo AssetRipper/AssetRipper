@@ -3,10 +3,10 @@
 ## 0.1.7.0
 * Audio Exporter
   * Build Native Binaries for Mac and Linux
-  * Allow other audio formats when not vorbis encoded
+  * Allow other audio formats when not vorbis encoded (done!)
 * Handle exceptions while reading IL2Cpp assemblies
 * Primitive GLTF mesh export
-* Merge mesh converter classes into their respective exporters
+* Merge mesh converter classes into their respective exporters (done!)
 * Reformat the shader export system to support two sided shaders
 * Remove Reading namespace
 * Remove remaining Layout classes

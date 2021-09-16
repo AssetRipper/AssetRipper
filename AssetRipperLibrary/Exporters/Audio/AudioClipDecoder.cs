@@ -4,6 +4,7 @@ using Fmod5Sharp;
 using Fmod5Sharp.FmodVorbis;
 using OggVorbisSharp;
 using System;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -17,6 +18,23 @@ namespace AssetRipper.Library.Exporters.Audio
 			LibrariesLoaded = IsVorbisLoaded() & IsOggLoaded();
 			if (!LibrariesLoaded)
 				Logger.Error(LogCategory.Export, "Either LibVorbis or LibOgg is missing from your system, so Ogg audio clips cannot be exported. This message will not repeat.");
+		}
+		public static bool CanDecode(AudioClip audioClip)
+		{
+			if (!LibrariesLoaded)
+				return false;
+
+			byte[] rawData = (byte[])audioClip.GetAudioData();
+			if (rawData == null || rawData.Length == 0)
+				return false;
+
+			using (MemoryStream input = new MemoryStream(rawData))
+			{
+				using (BinaryReader reader = new BinaryReader(input))
+				{
+					return new FmodAudioHeader(reader).AudioType == FmodAudioType.VORBIS;
+				}
+			}
 		}
 		public static byte[] GetDecodedAudioClipData(AudioClip audioClip)
 		{
