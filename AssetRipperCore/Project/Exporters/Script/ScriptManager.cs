@@ -12,7 +12,7 @@ using System.Text;
 
 namespace AssetRipper.Core.Project.Exporters.Script
 {
-	public sealed class AltScriptManager
+	public sealed class ScriptManager
 	{
 		ScriptDecompiler Decompiler { get; }
 
@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Project.Exporters.Script
 		private static readonly string[] forbiddenNamespaces = new string[] { "Unity", "UnityEngine", "TMPro", "System", "Microsoft", "Mono"};
 		private static readonly string[] forbiddenAssemblies = new string[] { "mscorlib" };
 
-		public AltScriptManager(IAssemblyManager assemblyManager, string exportPath)
+		public ScriptManager(IAssemblyManager assemblyManager, string exportPath)
 		{
 			if (string.IsNullOrEmpty(exportPath))
 				throw new ArgumentNullException(nameof(exportPath));

@@ -12,11 +12,11 @@ using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Project.Exporters.Script
 {
-	public class AltScriptExporter : IAssetExporter
+	public class ScriptExporter : IAssetExporter
 	{
 		private IAssemblyManager AssemblyManager { get; }
 
-		public AltScriptExporter(IAssemblyManager assemblyManager)
+		public ScriptExporter(IAssemblyManager assemblyManager)
 		{
 			AssemblyManager = assemblyManager;
 		}
@@ -50,7 +50,7 @@ namespace AssetRipper.Core.Project.Exporters.Script
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string dirPath, Action<IExportContainer, Object, string> callback)
 		{
 			Logger.Info(LogCategory.Export, "Exporting scripts...");
-			AltScriptManager scriptManager = new AltScriptManager(AssemblyManager, dirPath);
+			ScriptManager scriptManager = new ScriptManager(AssemblyManager, dirPath);
 			Dictionary<Object, TypeDefinition> exportTypes = new Dictionary<Object, TypeDefinition>();
 			foreach (Object asset in assets)
 			{

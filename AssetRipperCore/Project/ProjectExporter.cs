@@ -149,7 +149,7 @@ namespace AssetRipper.Core.Project
 			OverrideBinaryExporter(ClassIDType.Shader);
 			OverrideBinaryExporter(ClassIDType.AudioClip);
 
-			OverrideExporter(ClassIDType.MonoScript, new AltScriptExporter(m_fileCollection.AssemblyManager));
+			OverrideExporter(ClassIDType.MonoScript, new ScriptExporter(m_fileCollection.AssemblyManager));
 
 			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter(configuration));
 			OverrideExporter(ClassIDType.Font, new FontAssetExporter());
