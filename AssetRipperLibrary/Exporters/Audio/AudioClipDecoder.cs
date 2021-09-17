@@ -21,7 +21,7 @@ namespace AssetRipper.Library.Exporters.Audio
 		}
 		public static bool CanDecode(AudioClip audioClip)
 		{
-			if (!LibrariesLoaded)
+			if (!LibrariesLoaded || audioClip == null)
 				return false;
 
 			byte[] rawData = (byte[])audioClip.GetAudioData();
@@ -32,7 +32,16 @@ namespace AssetRipper.Library.Exporters.Audio
 			{
 				using (BinaryReader reader = new BinaryReader(input))
 				{
-					return new FmodAudioHeader(reader).AudioType == FmodAudioType.VORBIS;
+					FmodAudioType audioType = new FmodAudioHeader(reader).AudioType;
+					if (audioType == FmodAudioType.VORBIS)
+					{
+						return true;
+					}
+					else 
+					{
+						Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.Name}' with default decoder because it's '{audioType}' encoded.");
+						return false;
+					}
 				}
 			}
 		}
