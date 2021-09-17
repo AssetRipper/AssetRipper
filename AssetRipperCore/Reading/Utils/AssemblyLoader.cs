@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Core.Utils
+namespace AssetRipper.Core.Reading.Utils
 {
 	public class AssemblyLoader
 	{
