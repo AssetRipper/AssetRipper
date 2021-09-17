@@ -46,12 +46,6 @@ namespace AssetRipper.Library.Exporters.Audio
 			return true;
 		}
 
-		public override void Export(IExportContainer container, Core.Classes.Object.Object asset, string path, Action<IExportContainer, Core.Classes.Object.Object, string> callback)
-		{
-			Export(container, asset, path);
-			callback?.Invoke(container, asset, path);
-		}
-
 		public override bool IsHandle(Core.Classes.Object.Object asset, CoreConfiguration options)
 		{
 			return AudioClipDecoder.CanDecode((AudioClip)asset) && AudioFormat != AudioExportFormat.Native;

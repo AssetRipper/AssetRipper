@@ -16,6 +16,8 @@ It has borrowed code from [spacehamster](https://github.com/spacehamster)'s [uTi
 
 [DXDecompiler](https://github.com/lanyizi/DXDecompiler) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/DXDecompiler.md).
 
+FMOD is licensed under a [non-commercial license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/FMOD.md).
+
 [Fmod5Sharp](https://github.com/SamboyCoding/Fmod5Sharp) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Fmod5Sharp.md).
 
 [HLSLcc](https://github.com/Unity-Technologies/HLSLcc) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/HLSLcc.md).

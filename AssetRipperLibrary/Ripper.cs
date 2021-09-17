@@ -89,6 +89,12 @@ namespace AssetRipper.Library
 			if (ExportersInitialized)
 				return;
 
+			//Windows-only exporters
+			if (OperatingSystem.IsWindows())
+			{
+				OverrideExporter(ClassIDType.AudioClip, new FmodAudioExporter(Settings));
+			}
+
 			//Cross-Platform exporters
 			TextureAssetExporter textureExporter = new TextureAssetExporter(Settings);
 			OverrideExporter(ClassIDType.Texture2D, textureExporter);

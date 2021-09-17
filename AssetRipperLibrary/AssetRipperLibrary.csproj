@@ -56,6 +56,10 @@
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		  <TargetPath>vorbis.dll</TargetPath>
 	  </ContentWithTargetPath>
+	  <ContentWithTargetPath Include="Libraries\x64\fmod_x64.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>fmod.dll</TargetPath>
+	  </ContentWithTargetPath>
   </ItemGroup>
   
   <ItemGroup>
