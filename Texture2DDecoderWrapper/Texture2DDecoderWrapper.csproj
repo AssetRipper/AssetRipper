@@ -1,31 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net6.0</TargetFramework>
-	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+      <TargetFramework>net6.0</TargetFramework>
+      <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\Bins\Texture2DDecoderWrapper\$(Configuration)\</OutputPath>
     <Platforms>x64</Platforms>
-    <Configurations>Debug;Release;Virtual</Configurations>
+    <Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-
-	<ItemGroup>
-		<ContentWithTargetPath Include=".\Native\Texture2DDecoderNative.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>Texture2DDecoderNative.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.dylib">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libTexture2DDecoderNative.dylib</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.so">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libTexture2DDecoderNative.so</TargetPath>
-		</ContentWithTargetPath>
-	</ItemGroup>
+    
+    <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release' or '$(Configuration)'=='Virtual'">
+        <ContentWithTargetPath Include=".\Native\Texture2DDecoderNative.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>Texture2DDecoderNative.dll</TargetPath>
+        </ContentWithTargetPath>
+    </ItemGroup>
+    
+    <ItemGroup Condition="'$(Configuration)'=='ReleaseMac'">
+        <ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.dylib">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>libTexture2DDecoderNative.dylib</TargetPath>
+        </ContentWithTargetPath>
+    </ItemGroup>
+    
+    <ItemGroup Condition="'$(Configuration)'=='ReleaseLinux'">
+        <ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.so">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>libTexture2DDecoderNative.so</TargetPath>
+        </ContentWithTargetPath>
+    </ItemGroup>
 
 </Project>

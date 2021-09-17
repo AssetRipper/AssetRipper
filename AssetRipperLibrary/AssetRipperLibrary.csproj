@@ -1,29 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net6.0</TargetFramework>
-	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <AssemblyName>AssetRipperLibrary</AssemblyName>
-	  <RootNamespace>AssetRipper.Library</RootNamespace>
-	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	  <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
-	  <Platforms>x64</Platforms>
-	  <Configurations>Debug;Release;Virtual</Configurations>
-	  <DebugType>embedded</DebugType>
-	  <DebugSymbols>true</DebugSymbols>
+      <TargetFramework>net6.0</TargetFramework>
+      <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+      <AssemblyName>AssetRipperLibrary</AssemblyName>
+      <RootNamespace>AssetRipper.Library</RootNamespace>
+      <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
+      <Platforms>x64</Platforms>
+      <Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
+      <DebugType>embedded</DebugType>
+      <DebugSymbols>true</DebugSymbols>
+      <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Virtual' ">
-    <DefineConstants>TRACE;DEBUG;VIRTUAL</DefineConstants>
+    <DefineConstants>VIRTUAL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,26 +41,34 @@
     <ProjectReference Include="..\Texture2DDecoderWrapper\Texture2DDecoderWrapper.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(Platform)' == 'x64' ">
-	  <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>texgenpack.dll</TargetPath>
-	  </ContentWithTargetPath>
-	  <ContentWithTargetPath Include="Libraries\x64\libogg-x64.dll">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>ogg.dll</TargetPath>
-	  </ContentWithTargetPath>
-	  <ContentWithTargetPath Include="Libraries\x64\libvorbis-x64.dll">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>vorbis.dll</TargetPath>
-	  </ContentWithTargetPath>
-	  <ContentWithTargetPath Include="Libraries\x64\fmod_x64.dll">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>fmod.dll</TargetPath>
-	  </ContentWithTargetPath>
-  </ItemGroup>
-  
-  <ItemGroup>
+    <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release' or '$(Configuration)'=='Virtual'">
+        <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>texgenpack.dll</TargetPath>
+        </ContentWithTargetPath>
+        <ContentWithTargetPath Include="Libraries\x64\libogg-x64.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>ogg.dll</TargetPath>
+        </ContentWithTargetPath>
+        <ContentWithTargetPath Include="Libraries\x64\libvorbis-x64.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>vorbis.dll</TargetPath>
+        </ContentWithTargetPath>
+        <ContentWithTargetPath Include="Libraries\x64\fmod_x64.dll">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>fmod.dll</TargetPath>
+        </ContentWithTargetPath>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)'=='ReleaseMac'">
+        
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)'=='ReleaseLinux'">
+        
+    </ItemGroup>
+
+    <ItemGroup>
     <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
