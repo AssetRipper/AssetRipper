@@ -3,15 +3,15 @@
 	public enum AudioExportFormat
 	{
 		/// <summary>
-		/// A native exporter usually in the FSB (fmod sound bank) format. Not very usable.
+		/// For advanced users. This exports in a native format, usually FSB (FMOD Sound Bank). FSB files cannot be used in Unity Editor.
 		/// </summary>
 		Native,
 		/// <summary>
-		/// The compression used by FMOD. This is the recommended audio output format.
+		/// This is the recommended option. Audio assets are exported in the compression of the source, usually OGG.
 		/// </summary>
-		Ogg,
+		Default,
 		/// <summary>
-		/// A common lossless audio format. Not advised if rebundling.
+		/// Not advised if rebundling. This converts audio to the WAV format when possible
 		/// </summary>
 		Wav,
 	}

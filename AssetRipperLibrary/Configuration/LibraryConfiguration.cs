@@ -29,7 +29,7 @@ namespace AssetRipper.Library.Configuration
 		public override void ResetToDefaultValues()
 		{
 			base.ResetToDefaultValues();
-			AudioExportFormat = AudioExportFormat.Ogg;
+			AudioExportFormat = AudioExportFormat.Default;
 			ImageExportFormat = ImageExportFormat.Png;
 			MeshExportFormat = MeshExportFormat.Native;
 			ShaderExportMode = ShaderExportMode.Dummy;
