@@ -17,6 +17,7 @@ using FMOD;
 namespace AssetRipper.Library.Exporters.Audio
 {
 	[SupportedOSPlatform("windows")]
+	[SupportedOSPlatform("linux")]
 	public class FmodAudioExporter : BinaryAssetExporter
 	{
 		private AudioExportFormat AudioFormat { get; set; }

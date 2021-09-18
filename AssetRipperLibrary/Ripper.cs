@@ -89,23 +89,25 @@ namespace AssetRipper.Library
 			if (ExportersInitialized)
 				return;
 
-			//Windows-only exporters
-			if (OperatingSystem.IsWindows())
-			{
-				OverrideExporter(ClassIDType.AudioClip, new FmodAudioExporter(Settings));
-			}
-
-			//Cross-Platform exporters
+			//Texture exporters
 			TextureAssetExporter textureExporter = new TextureAssetExporter(Settings);
 			OverrideExporter(ClassIDType.Texture2D, textureExporter);
 			OverrideExporter(ClassIDType.Cubemap, textureExporter);
 			OverrideExporter(ClassIDType.Sprite, textureExporter);
+
+			//Shader exporters
 			OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
+
+			//Audio exporters
+			if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
+				OverrideExporter(ClassIDType.AudioClip, new FmodAudioExporter(Settings));
 			OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
+
+			//Mesh exporters
 			OverrideExporter(ClassIDType.Mesh, new StlMeshExporter(Settings));
 			OverrideExporter(ClassIDType.Mesh, new ObjMeshExporter(Settings));
 
-			//Engine Exporters
+			//Engine exporters
 			EngineAssetExporter engineExporter = new EngineAssetExporter();
 			OverrideExporter(ClassIDType.Material, engineExporter);
 			OverrideExporter(ClassIDType.Texture2D, engineExporter);

@@ -65,7 +65,10 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)'=='ReleaseLinux'">
-        
+        <ContentWithTargetPath Include="Libraries\linux\libfmod.so">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>libfmod.so</TargetPath>
+        </ContentWithTargetPath>
     </ItemGroup>
 
     <ItemGroup>
