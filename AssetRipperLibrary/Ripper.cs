@@ -29,7 +29,7 @@ namespace AssetRipper.Library
 			if(paths.Count == 1)
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths[0]}");
 			else
-				Logger.Info(LogCategory.General, "Attempting to read files...");
+				Logger.Info(LogCategory.General, $"Attempting to read files from {paths.Count} paths...");
 			GameStructure = GameStructure.Load(paths, Settings);
 			Logger.Info(LogCategory.General, "Finished reading files");
 			return GameStructure;

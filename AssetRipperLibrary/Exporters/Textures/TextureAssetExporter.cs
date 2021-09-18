@@ -71,8 +71,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
 			}
 
-			bitmap.Save(exportStream, imageFormat.GetImageFormat());
-			return true;
+			return bitmap.Save(exportStream, imageFormat.GetImageFormat());
 		}
 
 		public static DirectBitmap ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data, int pvrtcBitCount, int astcBlockSize, KTXBaseInternalFormat ktxBaseInternalFormat)

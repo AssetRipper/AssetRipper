@@ -1,3 +1,4 @@
+using AssetRipper.Core.Logging;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -8,13 +9,30 @@ namespace AssetRipper.Library.Utils
 {
 	public sealed class DirectBitmap : IDisposable
 	{
+		static DirectBitmap()
+		{
+			try
+			{
+				new Bitmap(16, 16, PixelFormat.Format32bppPArgb).Dispose();
+			}
+			catch(Exception ex)
+			{
+				Logger.Error($"Cannot use Bitmap from System.Drawing. This is probably caused by missing libgdiplus on a linux system.");
+				Logger.Error(ex);
+				DependenciesAvailable = false;
+				return;
+			}
+			DependenciesAvailable = true;
+		}
+
 		public DirectBitmap(int width, int height)
 		{
 			Width = width;
 			Height = height;
 			Bits = new byte[width * height * 4];
 			m_bitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
-			m_bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
+			if(DependenciesAvailable)
+				m_bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
 		}
 
 		~DirectBitmap()
@@ -57,14 +75,10 @@ namespace AssetRipper.Library.Utils
 			}
 		}
 
-		public void Save(string filename, ImageFormat format)
+		public bool Save(Stream stream, ImageFormat format)
 		{
-			m_bitmap.Save(filename, format);
-		}
-
-		public void Save(Stream stream, ImageFormat format)
-		{
-			m_bitmap.Save(stream, format);
+			m_bitmap?.Save(stream, format);
+			return DependenciesAvailable;
 		}
 
 		public void Dispose()
@@ -77,12 +91,13 @@ namespace AssetRipper.Library.Utils
 		{
 			if (!m_disposed)
 			{
-				m_bitmap.Dispose();
+				m_bitmap?.Dispose();
 				m_bitsHandle.Free();
 				m_disposed = true;
 			}
 		}
 
+		public static bool DependenciesAvailable { get; }
 		public int Height { get; }
 		public int Width { get; }
 		public int Stride => Width * 4;
