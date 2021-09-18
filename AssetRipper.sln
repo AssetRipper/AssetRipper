@@ -82,9 +82,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1
 	ProjectSection(SolutionItems) = preProject
 		docs\_config.yml = docs\_config.yml
 		docs\Credits.md = docs\Credits.md
+		docs\Downloads.md = docs\Downloads.md
 		docs\ExportFeatures.md = docs\ExportFeatures.md
 		docs\index.md = docs\index.md
+		docs\Requirements.md = docs\Requirements.md
 		docs\RoadMap.md = docs\RoadMap.md
+		docs\SiteMap.md = docs\SiteMap.md
 		docs\Structure.md = docs\Structure.md
 	EndProjectSection
 EndProject
