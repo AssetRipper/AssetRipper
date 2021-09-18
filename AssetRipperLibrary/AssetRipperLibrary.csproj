@@ -61,7 +61,10 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)'=='ReleaseMac'">
-        
+        <ContentWithTargetPath Include="Libraries\linux\libfmod.dylib">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>libfmod.dylib</TargetPath>
+        </ContentWithTargetPath>
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)'=='ReleaseLinux'">

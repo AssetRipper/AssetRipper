@@ -8,7 +8,6 @@ using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.Utils;
 using System;
 using System.IO;
-using System.Runtime.Versioning;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
 using AssetRipper.Library.Configuration;
 using System.Runtime.InteropServices;
@@ -16,8 +15,6 @@ using FMOD;
 
 namespace AssetRipper.Library.Exporters.Audio
 {
-	[SupportedOSPlatform("windows")]
-	[SupportedOSPlatform("linux")]
 	public class FmodAudioExporter : BinaryAssetExporter
 	{
 		private AudioExportFormat AudioFormat { get; set; }

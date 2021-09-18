@@ -99,9 +99,8 @@ namespace AssetRipper.Library
 			OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
 
 			//Audio exporters
-			if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
-				OverrideExporter(ClassIDType.AudioClip, new FmodAudioExporter(Settings));
-			OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
+			OverrideExporter(ClassIDType.AudioClip, new FmodAudioExporter(Settings));
+			//OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
 
 			//Mesh exporters
 			OverrideExporter(ClassIDType.Mesh, new StlMeshExporter(Settings));
