@@ -2,7 +2,7 @@ using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Project.Exporters
 {

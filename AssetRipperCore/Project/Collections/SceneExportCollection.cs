@@ -18,9 +18,9 @@ using System.Text.RegularExpressions;
 using Object = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
-	public sealed class SceneExportCollection : ExportCollection, IComparer<AssetRipper.Core.Classes.Object.Object>
+	public sealed class SceneExportCollection : ExportCollection, IComparer<Object>
 	{
 		public SceneExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, ISerializedFile file)
 		{

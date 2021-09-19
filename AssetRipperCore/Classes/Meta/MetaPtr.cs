@@ -2,8 +2,8 @@
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.YAML;
+using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Classes.Meta
 {

@@ -16,7 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{

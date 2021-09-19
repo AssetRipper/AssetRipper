@@ -2,7 +2,7 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Object;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class MovieTextureExportCollection : AssetExportCollection
 	{

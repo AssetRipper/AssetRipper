@@ -7,7 +7,7 @@ using System;
 using System.IO;
 using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public class ManagerExportCollection : AssetExportCollection
 	{

@@ -7,7 +7,6 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
 using System;
@@ -17,6 +16,7 @@ using UnityObject = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 using ShaderTextRestorer.Exporters;
 using ShaderTextRestorer.Exporters.DirectX;
+using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {

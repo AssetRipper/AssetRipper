@@ -13,7 +13,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Project.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;

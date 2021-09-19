@@ -3,7 +3,7 @@ using AssetRipper.Core.Classes.Font;
 using System;
 using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class FontExportCollection : AssetExportCollection
 	{
@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Structure.Collections
 		protected override string GetExportExtension(Object asset)
 		{
 			Font font = (Font)asset;
-			byte[] fontData = (byte[])font.FontData;
+			byte[] fontData = font.FontData;
 			uint type = BitConverter.ToUInt32(fontData, 0);
 			return type == OttoAsciiFourCC ? "otf" : "ttf";
 		}

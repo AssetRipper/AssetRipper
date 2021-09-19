@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using Object = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public class EngineExportCollection : IExportCollection
 	{

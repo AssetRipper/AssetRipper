@@ -4,10 +4,10 @@ using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Classes
 {

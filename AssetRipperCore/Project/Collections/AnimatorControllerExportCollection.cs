@@ -10,7 +10,7 @@ using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using System.Collections.Generic;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public class AnimatorControllerExportCollection : AssetsExportCollection
 	{

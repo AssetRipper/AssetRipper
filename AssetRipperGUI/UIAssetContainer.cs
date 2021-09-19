@@ -2,7 +2,7 @@
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Project.Collections;
 using AssetRipper.Library;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

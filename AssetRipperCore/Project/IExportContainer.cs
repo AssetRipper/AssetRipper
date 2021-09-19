@@ -4,7 +4,7 @@ using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Project
 {

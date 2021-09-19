@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public class FailExportCollection : IExportCollection
 	{

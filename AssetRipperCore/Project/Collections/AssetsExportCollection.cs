@@ -6,7 +6,7 @@ using AssetRipper.Core.Classes.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public abstract class AssetsExportCollection : AssetExportCollection
 	{

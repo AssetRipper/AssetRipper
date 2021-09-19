@@ -4,7 +4,7 @@ using AssetRipper.Core.Configuration;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
 using System;

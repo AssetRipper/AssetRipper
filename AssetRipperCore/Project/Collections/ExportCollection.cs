@@ -18,7 +18,7 @@ using Object = AssetRipper.Core.Classes.Object.Object;
 using AssetRipper.Core.Extensions;
 #endif
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public abstract class ExportCollection : IExportCollection
 	{
@@ -67,12 +67,12 @@ namespace AssetRipper.Core.Structure.Collections
 
 #if DEBUG
 			int digits = BitConverterExtensions.GetDigitsCount(value);
-			if(digits > 5)
+			if (digits > 5)
 			{
 				throw new ArgumentException($"Value {value} for main export ID must have no more than 5 digits");
 			}
 #endif
-			return (classID * 100000) + value;
+			return classID * 100000 + value;
 		}
 
 		public abstract bool Export(ProjectAssetContainer container, string dirPath);

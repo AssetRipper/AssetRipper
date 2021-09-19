@@ -9,7 +9,7 @@ using AssetRipper.Core.IO.Asset;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class PrefabExportCollection : AssetsExportCollection
 	{

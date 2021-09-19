@@ -4,9 +4,9 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
+using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 {

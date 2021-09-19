@@ -1,7 +1,7 @@
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Project.Exporters
 {

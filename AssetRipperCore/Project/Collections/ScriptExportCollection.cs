@@ -15,7 +15,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public class ScriptExportCollection : ExportCollection
 	{

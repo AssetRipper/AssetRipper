@@ -9,11 +9,11 @@ using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Classes.AnimatorController
 {

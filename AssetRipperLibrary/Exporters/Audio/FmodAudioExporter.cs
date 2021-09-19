@@ -4,7 +4,6 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Structure.Collections;
 using AssetRipper.Core.Utils;
 using System;
 using System.IO;
@@ -12,6 +11,7 @@ using UnityObject = AssetRipper.Core.Classes.Object.Object;
 using AssetRipper.Library.Configuration;
 using System.Runtime.InteropServices;
 using FMOD;
+using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Library.Exporters.Audio
 {

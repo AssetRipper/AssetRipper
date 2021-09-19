@@ -4,7 +4,7 @@ using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Project.Exporters;
 using System.Text.Json;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class TextAssetExportCollection : AssetExportCollection
 	{
@@ -40,7 +40,7 @@ namespace AssetRipper.Core.Structure.Collections
 		{
 			try
 			{
-				using(var parsed = JsonDocument.Parse(text))
+				using (var parsed = JsonDocument.Parse(text))
 				{
 					return parsed != null;
 				}

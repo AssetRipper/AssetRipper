@@ -13,7 +13,7 @@ using System.Linq;
 using Object = AssetRipper.Core.Classes.Object.Object;
 using AssetRipper.Core.Math;
 
-namespace AssetRipper.Core.Structure.Collections
+namespace AssetRipper.Core.Project.Collections
 {
 	public class TextureExportCollection : AssetsExportCollection
 	{

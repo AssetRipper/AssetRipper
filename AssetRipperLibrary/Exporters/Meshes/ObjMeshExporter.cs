@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Structure.Collections;
+using AssetRipper.Core.Project.Collections;
 using AssetRipper.Library.Configuration;
 using System.Collections.Generic;
 using System.Text;
