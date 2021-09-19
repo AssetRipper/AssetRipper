@@ -53,6 +53,8 @@ namespace AssetRipper.Core.Structure
 		private readonly Func<string, string> m_assemblyCallback;
 		private readonly Func<string, string> m_resourceCallback;
 
+		private readonly Dictionary<ClassIDType, List<Object>> _cachedAssetsByType = new();
+
 		public GameCollection(Parameters pars, CoreConfiguration configuration) : base(nameof(GameCollection))
 		{
 			Layout = pars.Layout;
@@ -152,6 +154,17 @@ namespace AssetRipper.Core.Structure
 					yield return asset;
 				}
 			}
+		}
+
+		public IEnumerable<Object> FetchAssetsOfType(ClassIDType type)
+		{
+			if (_cachedAssetsByType.TryGetValue(type, out List<Object> list))
+				return list;
+
+			List<Object> objects = FetchAssets().Where(o => o.ClassID == type).ToList();
+			_cachedAssetsByType.TryAdd(type, objects);
+			
+			return objects;
 		}
 
 		public bool IsScene(ISerializedFile file) => m_scenes.Contains(file);

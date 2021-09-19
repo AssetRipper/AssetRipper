@@ -25,43 +25,36 @@ namespace AssetRipper.Library.Exporters.Textures
 			m_convert = convert;
 			if (convert)
 			{
-				foreach (Object asset in texture.File.Collection.FetchAssets())
+				bool found = false;
+				foreach (Object asset in texture.File.Collection.FetchAssetsOfType(ClassIDType.Sprite))
 				{
-					switch (asset.ClassID)
+					Sprite sprite = (Sprite)asset;
+					if (sprite.RD.Texture.IsAsset(sprite.File, texture))
 					{
-						case ClassIDType.Sprite:
+						SpriteAtlas atlas = Sprite.HasRendererData(sprite.File.Version) ? sprite.SpriteAtlas.FindAsset(sprite.File) : null;
+						m_sprites.Add(sprite, atlas);
+						AddAsset(sprite);
+					}
+				}
+
+				foreach (Object asset in texture.File.Collection.FetchAssetsOfType(ClassIDType.SpriteAtlas))
+				{
+					SpriteAtlas atlas = (SpriteAtlas)asset;
+					if (atlas.RenderDataMap.Count > 0)
+					{
+						foreach (PPtr<Sprite> spritePtr in atlas.PackedSprites)
+						{
+							Sprite sprite = spritePtr.FindAsset(atlas.File);
+							if (sprite != null)
 							{
-								Sprite sprite = (Sprite)asset;
-								if (sprite.RD.Texture.IsAsset(sprite.File, texture))
+								SpriteAtlasData atlasData = atlas.RenderDataMap[sprite.RenderDataKey];
+								if (atlasData.Texture.IsAsset(atlas.File, texture))
 								{
-									SpriteAtlas atlas = Sprite.HasRendererData(sprite.File.Version) ? sprite.SpriteAtlas.FindAsset(sprite.File) : null;
 									m_sprites.Add(sprite, atlas);
 									AddAsset(sprite);
 								}
 							}
-							break;
-
-						case ClassIDType.SpriteAtlas:
-							{
-								SpriteAtlas atlas = (SpriteAtlas)asset;
-								if (atlas.RenderDataMap.Count > 0)
-								{
-									foreach (PPtr<Sprite> spritePtr in atlas.PackedSprites)
-									{
-										Sprite sprite = spritePtr.FindAsset(atlas.File);
-										if (sprite != null)
-										{
-											SpriteAtlasData atlasData = atlas.RenderDataMap[sprite.RenderDataKey];
-											if (atlasData.Texture.IsAsset(atlas.File, texture))
-											{
-												m_sprites.Add(sprite, atlas);
-												AddAsset(sprite);
-											}
-										}
-									}
-								}
-							}
-							break;
+						}
 					}
 				}
 			}
