@@ -113,6 +113,8 @@ namespace AssetRipper.Core.Classes.TerrainData
 			if (HasResolution(reader.Version))
 			{
 				Resolution = reader.ReadInt32();
+				Width = Resolution;
+				Height = Resolution;
 			}
 
 			Levels = reader.ReadInt32();

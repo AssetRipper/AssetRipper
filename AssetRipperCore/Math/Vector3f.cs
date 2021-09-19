@@ -111,6 +111,11 @@ namespace AssetRipper.Core.Math
 			return left.X != right.X || left.Y != right.Y || left.Z != right.Z;
 		}
 
+		public static Vector3f Scale(Vector3f left, Vector3f right)
+		{
+			return new Vector3f(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+		}
+
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadSingle();

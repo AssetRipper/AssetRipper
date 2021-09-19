@@ -86,6 +86,11 @@ namespace AssetRipper.Core.Math
 			return left.X != right.X || left.Y != right.Y;
 		}
 
+		public static Vector2f Scale(Vector2f left, Vector2f right)
+		{
+			return new Vector2f(left.X * right.X, left.Y * right.Y);
+		}
+
 		/// <summary>
 		/// Angle increase when 2nd line is moving in clockwise direction
 		/// </summary>
