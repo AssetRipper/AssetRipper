@@ -25,7 +25,6 @@ namespace AssetRipper.Library.Exporters.Textures
 			m_convert = convert;
 			if (convert)
 			{
-				bool found = false;
 				foreach (Object asset in texture.File.Collection.FetchAssetsOfType(ClassIDType.Sprite))
 				{
 					Sprite sprite = (Sprite)asset;
