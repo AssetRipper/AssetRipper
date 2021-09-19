@@ -7,7 +7,7 @@ using KTXBaseFormat = AssetRipper.Library.TextureContainers.KTX.KTXBaseInternalF
 using KTXFormat = AssetRipper.Library.TextureContainers.KTX.KTXInternalFormat;
 using PVRFormat = AssetRipper.Library.TextureContainers.PVR.PVRPixelFormat;
 
-namespace AssetRipper.Library.Exporters.Textures
+namespace AssetRipper.Library.Exporters.Textures.Extensions
 {
 	public static class Texture2DExtensions
 	{
@@ -308,7 +308,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static KTXInternalFormat KTXInternalFormat(this Texture2D _this)
+		public static KTXFormat KTXInternalFormat(this Texture2D _this)
 		{
 			switch (_this.TextureFormat)
 			{
@@ -393,7 +393,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static KTXBaseInternalFormat KTXBaseInternalFormat(this Texture2D _this)
+		public static KTXBaseFormat KTXBaseInternalFormat(this Texture2D _this)
 		{
 			switch (_this.TextureFormat)
 			{
@@ -438,7 +438,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static PVRPixelFormat PVRPixelFormat(this Texture2D _this)
+		public static PVRFormat PVRPixelFormat(this Texture2D _this)
 		{
 			switch (_this.TextureFormat)
 			{

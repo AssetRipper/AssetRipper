@@ -9,6 +9,7 @@ using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.TextureContainers.PVR;
 using System;
 using System.IO;
+using AssetRipper.Library.Exporters.Textures.Extensions;
 
 namespace AssetRipper.Library.Exporters.Textures
 {

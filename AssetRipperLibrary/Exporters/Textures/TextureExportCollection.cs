@@ -1,5 +1,4 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core;
 using AssetRipper.Core.Classes.Meta.Importers.Asset;
 using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Misc;
@@ -7,13 +6,16 @@ using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.SpriteAtlas;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Classes.Utils;
+using AssetRipper.Core.Math;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Collections;
+using AssetRipper.Core.Project.Exporters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Object = AssetRipper.Core.Classes.Object.Object;
-using AssetRipper.Core.Math;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Library.Exporters.Textures
 {
 	public class TextureExportCollection : AssetsExportCollection
 	{

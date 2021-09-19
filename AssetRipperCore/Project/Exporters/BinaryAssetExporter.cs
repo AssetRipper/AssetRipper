@@ -48,15 +48,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public virtual IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
-			switch (asset.ClassID)
-			{
-				case ClassIDType.Texture2D:
-				case ClassIDType.Cubemap:
-					return new TextureExportCollection(this, (Texture2D)asset, false);
-
-				default:
-					return new AssetExportCollection(this, asset);
-			}
+			return new AssetExportCollection(this, asset);
 		}
 
 		public AssetType ToExportType(Object asset)

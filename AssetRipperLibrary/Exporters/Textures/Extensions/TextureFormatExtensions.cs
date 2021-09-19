@@ -2,7 +2,7 @@ using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Library.TextureContainers;
 using System;
 
-namespace AssetRipper.Library.Exporters.Textures
+namespace AssetRipper.Library.Exporters.Textures.Extensions
 {
 	public static class TextureFormatExtensions
 	{

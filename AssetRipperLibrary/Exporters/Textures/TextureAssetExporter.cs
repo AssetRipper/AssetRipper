@@ -3,7 +3,6 @@ using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -11,16 +10,15 @@ using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
+using AssetRipper.Library.Exporters.Textures.Extensions;
 using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.Utils;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
-	public class TextureAssetExporter : IAssetExporter
+	public class TextureAssetExporter : BinaryAssetExporter
 	{
 		private ImageExportFormat ImageExportFormat { get; set; }
 		private SpriteExportMode SpriteExportMode { get; set; }
@@ -165,7 +163,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public bool IsHandle(UnityObject asset, CoreConfiguration options)
+		public override bool IsHandle(UnityObject asset, CoreConfiguration options)
 		{
 			if (!DirectBitmap.DependenciesAvailable)
 			{
@@ -183,7 +181,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return true;
 		}
 
-		public bool Export(IExportContainer container, UnityObject asset, string path)
+		public override bool Export(IExportContainer container, UnityObject asset, string path)
 		{
 			Texture2D texture = (Texture2D)asset;
 			if (!texture.CheckAssetIntegrity())
@@ -203,23 +201,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return true;
 		}
 
-		public void Export(IExportContainer container, UnityObject asset, string path, Action<IExportContainer, UnityObject, string> callback)
-		{
-			Export(container, asset, path);
-			callback?.Invoke(container, asset, path);
-		}
-
-		public bool Export(IExportContainer container, IEnumerable<UnityObject> assets, string path)
-		{
-			throw new NotSupportedException();
-		}
-
-		public void Export(IExportContainer container, IEnumerable<UnityObject> assets, string path, Action<IExportContainer, UnityObject, string> callback)
-		{
-			throw new NotSupportedException();
-		}
-
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
 		{
 			if (asset.ClassID == ClassIDType.Sprite)
 			{
@@ -228,18 +210,6 @@ namespace AssetRipper.Library.Exporters.Textures
 			var collection = new TextureExportCollection(this, (Texture2D)asset, true);
 			collection.FileExtension = ImageExportFormat.GetFileExtension();
 			return collection;
-		}
-
-		public AssetType ToExportType(UnityObject asset)
-		{
-			ToUnknownExportType(asset.ClassID, out AssetType assetType);
-			return assetType;
-		}
-
-		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
-		{
-			assetType = AssetType.Meta;
-			return true;
 		}
 	}
 }
