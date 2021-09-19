@@ -4,13 +4,13 @@
 * Audio Exporter
   * Add FMOD cross-platform backup exporter (done!)
   * Allow other audio formats when not vorbis encoded (done!)
+  * Implement newer Fmod5Sharp for additional audio export (done!)
 * Handle exceptions while reading IL2Cpp assemblies
 * Primitive GLB mesh export (done!)
 * Merge mesh converter classes into their respective exporters (done!)
 * Reformat the shader export system to support two sided shaders
 * Remove Reading namespace
 * Remove remaining Layout classes
-* Implement package for LZ4
 * GUI improvements
   * Configuration window for choosing import and export options
   * Switch shader preview to use the library shader exporter
@@ -35,6 +35,7 @@
 ## Planned But Unscheduled
 * Option to reference assemblies instead of scripts
 * Build Ogg and Vorbis Native Binaries for Mac and Linux
+* Implement package for LZ4
 * Mesh export options
   * FBX export
   * GLB export (full)

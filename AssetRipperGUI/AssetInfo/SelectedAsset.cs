@@ -76,8 +76,8 @@ namespace AssetRipper.GUI.AssetInfo
 			if (asset is AudioClip clip && LibVlc != null)
 			{
 				DateTime start = DateTime.Now;
-				byte[] rawClipAudioData = AudioClipDecoder.GetDecodedAudioClipData(clip);
-				if(rawClipAudioData == null)
+				bool success = AudioClipDecoder.TryGetDecodedAudioClipData(clip, out byte[] rawClipAudioData, out string _);
+				if(!success || rawClipAudioData == null)
 				{
 					//Unsupported sound type
 					return;

@@ -6,9 +6,6 @@ using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
-using NAudio.Vorbis;
-using NAudio.Wave;
-using System;
 using System.IO;
 
 namespace AssetRipper.Library.Exporters.Audio
@@ -20,18 +17,18 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
 		{
-			return new AssetExportCollection(this, asset, AudioFormat == AudioExportFormat.Wav ? "wav" : "ogg");
+			return new AssetExportCollection(this, asset, GetFileExtension((AudioClip)asset));
 		}
 
 		public override bool Export(IExportContainer container, Core.Classes.Object.Object asset, string path)
 		{
 			AudioClip audioClip = (AudioClip)asset;
-			byte[] decodedData = AudioClipDecoder.GetDecodedAudioClipData(audioClip);
-			if (decodedData == null)
+			bool success = AudioClipDecoder.TryGetDecodedAudioClipData(audioClip, out byte[] decodedData, out string fileExtension);
+			if (!success)
 				return false;
 
-			if (AudioFormat == AudioExportFormat.Wav)
-				decodedData = ConvertToWav(decodedData);
+			if (fileExtension == "ogg" && AudioFormat == AudioExportFormat.Wav)
+				decodedData = AudioClipDecoder.ConvertOggToWav(decodedData);
 
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
@@ -51,16 +48,13 @@ namespace AssetRipper.Library.Exporters.Audio
 			return AudioClipDecoder.CanDecode((AudioClip)asset) && AudioFormat != AudioExportFormat.Native;
 		}
 
-		public static byte[] ConvertToWav(byte[] oggData)
+		private string GetFileExtension(AudioClip audioClip)
 		{
-			using (VorbisWaveReader vorbisStream = new VorbisWaveReader(new MemoryStream(oggData), true))
-			{
-				using (MemoryStream writeStream = new MemoryStream())
-				{
-					WaveFileWriter.WriteWavFileToStream(writeStream, vorbisStream);
-					return writeStream.ToArray();
-				}
-			}
+			string defaultExtension = AudioClipDecoder.GetFileExtension(audioClip);
+			if (AudioFormat == AudioExportFormat.Wav && defaultExtension == "ogg")
+				return "wav";
+			else
+				return defaultExtension;
 		}
 	}
 }

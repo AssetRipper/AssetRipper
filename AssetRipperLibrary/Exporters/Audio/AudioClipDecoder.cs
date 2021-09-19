@@ -2,6 +2,8 @@
 using AssetRipper.Core.Logging;
 using Fmod5Sharp;
 using Fmod5Sharp.FmodVorbis;
+using NAudio.Vorbis;
+using NAudio.Wave;
 using OggVorbisSharp;
 using System;
 using System.IO;
@@ -12,52 +14,139 @@ namespace AssetRipper.Library.Exporters.Audio
 {
 	public static class AudioClipDecoder
 	{
+		/// <summary>
+		/// Are Ogg and Vorbis loaded?
+		/// </summary>
 		public static bool LibrariesLoaded { get; private set; }
+		/// <summary>
+		/// Size of the magic number currently
+		/// </summary>
+		private const int MinimumFsbSize = 4;
+
 		static AudioClipDecoder()
 		{
 			LibrariesLoaded = IsVorbisLoaded() & IsOggLoaded();
 			if (!LibrariesLoaded)
 				Logger.Error(LogCategory.Export, "Either LibVorbis or LibOgg is missing from your system, so Ogg audio clips cannot be exported. This message will not repeat.");
 		}
+
 		public static bool CanDecode(AudioClip audioClip)
 		{
-			if (!LibrariesLoaded || audioClip == null)
+			byte[] rawData = (byte[])audioClip?.GetAudioData();
+			if (!IsDataUsable(rawData))
 				return false;
 
-			byte[] rawData = (byte[])audioClip.GetAudioData();
-			if (rawData == null || rawData.Length < 4)//Needs to be at least as large as the magic number
+			FmodAudioType audioType = GetAudioType(rawData);
+			if (audioType == FmodAudioType.VORBIS && !LibrariesLoaded)
+			{
 				return false;
+			}
+			else if (FmodAudioTypeExtensions.IsSupported(audioType))
+			{
+				return true;
+			}
+			else
+			{
+				Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.Name}' with default decoder because it's '{audioType}' encoded.");
+				return false;
+			}
+		}
+
+		public static bool TryGetDecodedAudioClipData(AudioClip audioClip, out byte[] decodedData, out string fileExtension)
+		{
+			return TryGetDecodedAudioClipData((byte[])audioClip?.GetAudioData(), out decodedData, out fileExtension);
+		}
+		public static bool TryGetDecodedAudioClipData(byte[] rawData, out byte[] decodedData, out string fileExtension)
+		{
+			decodedData = null;
+			fileExtension = null;
+
+			if (!IsDataUsable(rawData))
+				return false;
+
+			FmodSoundBank fsbData = FsbLoader.LoadFsbFromByteArray(rawData);
+
+			var audioType = fsbData.Header.AudioType;
+			if (audioType == FmodAudioType.VORBIS && !LibrariesLoaded)
+				return false;
+			else if (audioType.IsSupported() && fsbData.Samples.Single().RebuildAsStandardFileFormat(out decodedData, out fileExtension))
+				return true;
+			else
+				return false;
+		}
+
+		/// <summary>
+		/// Decodes WAV data from an AudioClip
+		/// </summary>
+		/// <param name="audioClip">The audio clip to extract the data from</param>
+		/// <param name="decodedData">The decoded data in the wav audio format</param>
+		/// <returns>True if the audio could be exported in the wav format</returns>
+		public static bool TryGetDecodedWavData(AudioClip audioClip, out byte[] decodedData)
+		{
+			return TryGetDecodedWavData((byte[])audioClip?.GetAudioData(), out decodedData);
+		}
+		/// <summary>
+		/// Decodes WAV data from FSB data
+		/// </summary>
+		/// <param name="fsbData">The data from an FSB file</param>
+		/// <param name="decodedData">The decoded data in the wav audio format</param>
+		/// <returns>True if the audio could be exported in the wav format</returns>
+		public static bool TryGetDecodedWavData(byte[] fsbData, out byte[] decodedData)
+		{
+			if(TryGetDecodedAudioClipData(fsbData, out decodedData, out string fileExtension))
+			{
+				if (fileExtension == "ogg")
+				{
+					decodedData = ConvertOggToWav(decodedData);
+					return true;
+				}
+				else
+					return fileExtension == "wav";
+			}
+			else
+			{
+				decodedData = null;
+				return false;
+			}
+		}
+
+		public static byte[] ConvertOggToWav(byte[] oggData)
+		{
+			using (VorbisWaveReader vorbisStream = new VorbisWaveReader(new MemoryStream(oggData), true))
+			{
+				using (MemoryStream writeStream = new MemoryStream())
+				{
+					WaveFileWriter.WriteWavFileToStream(writeStream, vorbisStream);
+					return writeStream.ToArray();
+				}
+			}
+		}
+
+		public static FmodAudioType GetAudioType(byte[] rawData)
+		{
+			if (!IsDataUsable(rawData))
+				return FmodAudioType.NONE;
 
 			using (MemoryStream input = new MemoryStream(rawData))
 			{
 				using (BinaryReader reader = new BinaryReader(input))
 				{
-					FmodAudioType audioType = new FmodAudioHeader(reader).AudioType;
-					if (audioType == FmodAudioType.VORBIS)
-					{
-						return true;
-					}
-					else 
-					{
-						Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.Name}' with default decoder because it's '{audioType}' encoded.");
-						return false;
-					}
+					return new FmodAudioHeader(reader).AudioType;
 				}
 			}
 		}
-		public static byte[] GetDecodedAudioClipData(AudioClip audioClip)
+
+		public static string GetFileExtension(AudioClip audioClip) => GetFileExtension(audioClip.GetAudioData()?.ToArray());
+		public static string GetFileExtension(byte[] rawData)
 		{
-			if (!LibrariesLoaded)
-				return null;
-
-			byte[] rawData = (byte[])audioClip.GetAudioData();
-			FmodSoundBank fsbData = FsbLoader.LoadFsbFromByteArray(rawData);
-
-			if (fsbData.Header.AudioType == FmodAudioType.VORBIS)
-				return FmodVorbisRebuilder.RebuildOggFile(fsbData.Samples.Single());
-			else
-				return null;
+			return GetAudioType(rawData).FileExtension();
 		}
+
+		/// <summary>
+		/// Not null and at least the minimum size
+		/// </summary>
+		private static bool IsDataUsable(byte[] data) => data != null && data.Length >= MinimumFsbSize;
+
 		private unsafe static bool IsVorbisLoaded()
 		{
 			try { OggVorbisSharp.Vorbis.vorbis_version_string(); }
@@ -68,6 +157,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 			return true;
 		}
+
 		private unsafe static bool IsOggLoaded()
 		{
 			bool result = true;
