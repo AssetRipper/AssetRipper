@@ -34,6 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		docs\Licenses\NAudioVorbis.md = docs\Licenses\NAudioVorbis.md
 		docs\Licenses\NVorbis.md = docs\Licenses\NVorbis.md
 		docs\Licenses\SevenZipCsharp.md = docs\Licenses\SevenZipCsharp.md
+		Licenses\SharpGLTF.md = Licenses\SharpGLTF.md
 		docs\Licenses\SharpZipLib.md = docs\Licenses\SharpZipLib.md
 		docs\Licenses\Smolv.md = docs\Licenses\Smolv.md
 		docs\Licenses\SpirV.md = docs\Licenses\SpirV.md

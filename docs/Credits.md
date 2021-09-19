@@ -38,6 +38,8 @@ LibOgg and LibVorbis are licensed from [Xiph](https://www.xiph.org/) under the [
 
 [SevenZipCsharp](https://github.com/ds5678/SevenZipCsharp) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/SevenZipCsharp.md).
 
+[SharpGLTF](https://github.com/vpenades/SharpGLTF) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/SharpGLTF.md).
+
 [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/SharpZipLib.md).
 
 [Smolv](https://github.com/aras-p/smol-v) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Smolv.md).
