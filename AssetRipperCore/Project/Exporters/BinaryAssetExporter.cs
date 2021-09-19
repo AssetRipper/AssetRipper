@@ -1,6 +1,5 @@
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Utils;
 using System;
