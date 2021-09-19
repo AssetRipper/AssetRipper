@@ -9,9 +9,9 @@ namespace AssetRipper.Core.Configuration
 	{
 		#region Import Settings
 		/// <summary>
-		/// How do scripts get imported?
+		/// Disabling scripts can allow some games to export when they previously did not.
 		/// </summary>
-		public ScriptImportMode ScriptImportMode { get; set; }
+		public bool DisableScriptImport { get; set; }
 		#endregion
 
 		#region Export Settings
@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Configuration
 
 		public virtual void ResetToDefaultValues()
 		{
-			ScriptImportMode = ScriptImportMode.Default;
+			DisableScriptImport = false;
 			ExportPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
 			KeepAssetBundleContentPath = false;
