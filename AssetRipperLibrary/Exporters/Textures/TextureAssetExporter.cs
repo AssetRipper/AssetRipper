@@ -167,6 +167,10 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public bool IsHandle(UnityObject asset, CoreConfiguration options)
 		{
+			if (!DirectBitmap.DependenciesAvailable)
+			{
+				return false;
+			}
 			if (asset.ClassID == ClassIDType.Texture2D)
 			{
 				Texture2D texture = (Texture2D)asset;
