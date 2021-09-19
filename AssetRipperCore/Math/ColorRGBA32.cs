@@ -23,9 +23,11 @@ namespace AssetRipper.Core.Math
 
 		private static byte ConvertFloatToByte(float value)
 		{
-			if (value <= 0f) return byte.MinValue;
-			if (value >= 1f) return byte.MaxValue;
-			return (byte)(value * 255.0f);
+			if (float.IsNaN(value)) return byte.MinValue;
+			float scaledValue = value * 255.0f;
+			if (scaledValue <= 0f) return byte.MinValue;
+			if (scaledValue >= 255f) return byte.MaxValue;
+			return (byte)scaledValue;
 		}
 
 		public void Read(AssetReader reader)
