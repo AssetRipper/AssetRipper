@@ -17,6 +17,8 @@ namespace AssetRipper.Core.Structure
 		T FindAsset<T>(string name) where T : NamedObject;
 		IEnumerable<Object> FetchAssets();
 
+		IEnumerable<Object> FetchAssetsOfType(ClassIDType type);
+
 		bool IsScene(ISerializedFile file);
 
 		AssetFactory AssetFactory { get; }
