@@ -100,7 +100,7 @@ namespace AssetRipper.Library
 
 			//Audio exporters
 			OverrideExporter(ClassIDType.AudioClip, new FmodAudioExporter(Settings));
-			//OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
+			OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
 
 			//Mesh exporters
 			OverrideExporter(ClassIDType.Mesh, new GlbMeshExporter(Settings));

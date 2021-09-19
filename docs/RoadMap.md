@@ -2,7 +2,7 @@
 
 ## 0.1.7.0
 * Audio Exporter
-  * Build Native Binaries for Mac and Linux
+  * Add FMOD cross-platform backup exporter (done!)
   * Allow other audio formats when not vorbis encoded (done!)
 * Handle exceptions while reading IL2Cpp assemblies
 * Primitive GLB mesh export (done!)
@@ -34,6 +34,7 @@
 
 ## Planned But Unscheduled
 * Option to reference assemblies instead of scripts
+* Build Ogg and Vorbis Native Binaries for Mac and Linux
 * Mesh export options
   * FBX export
   * GLB export (full)
