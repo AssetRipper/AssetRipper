@@ -9,7 +9,9 @@ using SharpGLTF.Scenes;
 
 namespace AssetRipper.Library.Exporters.Meshes
 {
-	using VERTEX = VertexBuilder<VertexPosition, VertexEmpty, VertexEmpty>;
+	using VERTEX_P = VertexBuilder<VertexPosition, VertexEmpty, VertexEmpty>;
+	using VERTEX_PN = VertexBuilder<VertexPositionNormal, VertexEmpty, VertexEmpty>;
+	using VERTEX_PNT = VertexBuilder<VertexPositionNormalTangent, VertexEmpty, VertexEmpty>;
 
 	public class GlbMeshExporter : BaseMeshExporter
 	{
@@ -32,17 +34,42 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public override byte[] ExportBinary(Mesh mesh)
 		{
-			var meshBuilder = VERTEX.CreateCompatibleMesh(mesh.Name);
-			var material = new MaterialBuilder("material");
-			var primitiveBuilder = meshBuilder.UsePrimitive(material);
-			for (int j = 0; j < mesh.Indices.Count; j += 3)
-			{
-				primitiveBuilder.AddTriangle(GetVertex(mesh, mesh.Indices[j]), GetVertex(mesh, mesh.Indices[j + 1]), GetVertex(mesh, mesh.Indices[j + 2]));
-			}
-
+			bool hasNormals = mesh.Normals != null && mesh.Normals.Length == mesh.Vertices.Length;
+			bool hasTangents = hasNormals && mesh.Tangents != null && mesh.Tangents.Length == mesh.Vertices.Length;
+			
 			var sceneBuilder = new SceneBuilder();
+			var material = new MaterialBuilder("material");
 
-			sceneBuilder.AddRigidMesh(meshBuilder, System.Numerics.Matrix4x4.Identity);
+			if (hasTangents)
+			{
+				var meshBuilder = VERTEX_PNT.CreateCompatibleMesh(mesh.Name);
+				var primitiveBuilder = meshBuilder.UsePrimitive(material);
+				for (int j = 0; j < mesh.Indices.Count; j += 3)
+				{
+					primitiveBuilder.AddTriangle(GetVertex_PNT(mesh, mesh.Indices[j]), GetVertex_PNT(mesh, mesh.Indices[j + 1]), GetVertex_PNT(mesh, mesh.Indices[j + 2]));
+				}
+				sceneBuilder.AddRigidMesh(meshBuilder, System.Numerics.Matrix4x4.Identity);
+			}
+			else if (hasNormals)
+			{
+				var meshBuilder = VERTEX_PN.CreateCompatibleMesh(mesh.Name);
+				var primitiveBuilder = meshBuilder.UsePrimitive(material);
+				for (int j = 0; j < mesh.Indices.Count; j += 3)
+				{
+					primitiveBuilder.AddTriangle(GetVertex_PN(mesh, mesh.Indices[j]), GetVertex_PN(mesh, mesh.Indices[j + 1]), GetVertex_PN(mesh, mesh.Indices[j + 2]));
+				}
+				sceneBuilder.AddRigidMesh(meshBuilder, System.Numerics.Matrix4x4.Identity);
+			}
+			else
+			{
+				var meshBuilder = VERTEX_P.CreateCompatibleMesh(mesh.Name);
+				var primitiveBuilder = meshBuilder.UsePrimitive(material);
+				for (int j = 0; j < mesh.Indices.Count; j += 3)
+				{
+					primitiveBuilder.AddTriangle(GetVertex_P(mesh, mesh.Indices[j]), GetVertex_P(mesh, mesh.Indices[j + 1]), GetVertex_P(mesh, mesh.Indices[j + 2]));
+				}
+				sceneBuilder.AddRigidMesh(meshBuilder, System.Numerics.Matrix4x4.Identity);
+			}
 
 			var model = sceneBuilder.ToGltf2();
 
@@ -52,9 +79,17 @@ namespace AssetRipper.Library.Exporters.Meshes
 			return model.WriteGLB().ToArray();
 		}
 
-		private static VERTEX GetVertex(Mesh mesh, uint index)
+		private static VERTEX_P GetVertex_P(Mesh mesh, uint index)
 		{
-			return new VERTEX(new VertexPosition(mesh.Vertices[index]));
+			return new VERTEX_P(new VertexPosition(mesh.Vertices[index]));
+		}
+		private static VERTEX_PN GetVertex_PN(Mesh mesh, uint index)
+		{
+			return new VERTEX_PN(new VertexPositionNormal(mesh.Vertices[index], mesh.Normals[index]));
+		}
+		private static VERTEX_PNT GetVertex_PNT(Mesh mesh, uint index)
+		{
+			return new VERTEX_PNT(new VertexPositionNormalTangent(mesh.Vertices[index], mesh.Normals[index], mesh.Tangents[index]));
 		}
 	}
 }
