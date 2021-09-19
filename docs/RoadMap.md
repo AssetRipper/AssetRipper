@@ -5,7 +5,7 @@
   * Build Native Binaries for Mac and Linux
   * Allow other audio formats when not vorbis encoded (done!)
 * Handle exceptions while reading IL2Cpp assemblies
-* Primitive GLTF mesh export
+* Primitive GLB mesh export (done!)
 * Merge mesh converter classes into their respective exporters (done!)
 * Reformat the shader export system to support two sided shaders
 * Remove Reading namespace
@@ -36,7 +36,7 @@
 * Option to reference assemblies instead of scripts
 * Mesh export options
   * FBX export
-  * GLTF export
+  * GLB export (full)
 * Asset Previews
   * Mesh preview
   * Material preview

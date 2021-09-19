@@ -103,6 +103,7 @@ namespace AssetRipper.Library
 			//OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
 
 			//Mesh exporters
+			OverrideExporter(ClassIDType.Mesh, new GlbMeshExporter(Settings));
 			OverrideExporter(ClassIDType.Mesh, new StlMeshExporter(Settings));
 			OverrideExporter(ClassIDType.Mesh, new ObjMeshExporter(Settings));
 

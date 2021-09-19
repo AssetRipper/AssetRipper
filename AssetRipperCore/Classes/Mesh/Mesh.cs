@@ -2,7 +2,6 @@ using AssetRipper.Core.Converters.Mesh;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Utils.Extensions;
-using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
@@ -39,6 +38,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			set => IndexFormat = value == 0 ? IndexFormat.UInt32 : IndexFormat.UInt16;
 		}
 
+		#region IndexBuffer
 		public byte[] RawIndexBuffer
 		{
 			get => m_RawIndexBuffer;
@@ -105,6 +105,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				Buffer.BlockCopy(m_ProcessedIndexBuffer, 0, m_RawIndexBuffer, 0, m_RawIndexBuffer.Length);
 			}
 		}
+		#endregion
 
 		public SubMesh[] SubMeshes { get; set; }
 		/// <summary>
