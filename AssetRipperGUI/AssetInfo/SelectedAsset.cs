@@ -135,12 +135,15 @@ namespace AssetRipper.GUI.AssetInfo
 		//Read from UI
 		public bool YamlTreeIsSupported { get; private set; } = true;
 
+		//Read from UI
 		public bool HasTextData => Asset switch
 		{
-			TextAsset => true,
+			Shader => true,
+			TextAsset txt=> txt.Script != null && txt.Script.Length > 0,
 			_ => false,
 		};
 
+		//Read from UI
 		public string? TextAssetData => (Asset switch
 		{
 			Shader shader => DumpShaderDataAsText(shader),
@@ -149,7 +152,6 @@ namespace AssetRipper.GUI.AssetInfo
 		})?.Replace("\t", "    ");
 
 		//Read from UI
-
 		public IImage? ImageData
 		{
 			get
