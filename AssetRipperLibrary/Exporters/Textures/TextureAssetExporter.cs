@@ -29,6 +29,55 @@ namespace AssetRipper.Library.Exporters.Textures
 			SpriteExportMode = configuration.SpriteExportMode;
 		}
 
+		public override bool IsHandle(UnityObject asset, CoreConfiguration options)
+		{
+			if (!DirectBitmap.DependenciesAvailable)
+			{
+				return false;
+			}
+			if (asset.ClassID == ClassIDType.Texture2D)
+			{
+				Texture2D texture = (Texture2D)asset;
+				return texture.IsValidData;
+			}
+			if (asset.ClassID == ClassIDType.Sprite)
+			{
+				return SpriteExportMode == SpriteExportMode.Texture2D;
+			}
+			return true;
+		}
+
+		public override bool Export(IExportContainer container, UnityObject asset, string path)
+		{
+			Texture2D texture = (Texture2D)asset;
+			if (!texture.CheckAssetIntegrity())
+			{
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{texture.StreamData.Path}' hasn't been found");
+				return false;
+			}
+
+			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+			{
+				if (!ExportTexture(texture, fileStream, ImageExportFormat))
+				{
+					Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
+		{
+			if (asset.ClassID == ClassIDType.Sprite)
+			{
+				return TextureExportCollection.CreateExportCollection(this, (Sprite)asset);
+			}
+			var collection = new TextureExportCollection(this, (Texture2D)asset, true);
+			collection.FileExtension = ImageExportFormat.GetFileExtension();
+			return collection;
+		}
+
 		public static bool ExportTexture(Texture2D texture, Stream exportStream, ImageExportFormat imageFormat)
 		{
 			byte[] buffer = texture.GetImageData();
@@ -161,55 +210,6 @@ namespace AssetRipper.Library.Exporters.Textures
 					Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{textureFormat}'");
 					return null;
 			}
-		}
-
-		public override bool IsHandle(UnityObject asset, CoreConfiguration options)
-		{
-			if (!DirectBitmap.DependenciesAvailable)
-			{
-				return false;
-			}
-			if (asset.ClassID == ClassIDType.Texture2D)
-			{
-				Texture2D texture = (Texture2D)asset;
-				return texture.IsValidData;
-			}
-			if(asset.ClassID == ClassIDType.Sprite)
-			{
-				return SpriteExportMode == SpriteExportMode.Texture2D;
-			}
-			return true;
-		}
-
-		public override bool Export(IExportContainer container, UnityObject asset, string path)
-		{
-			Texture2D texture = (Texture2D)asset;
-			if (!texture.CheckAssetIntegrity())
-			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{texture.StreamData.Path}' hasn't been found");
-				return false;
-			}
-
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
-			{
-				if (!ExportTexture(texture, fileStream, ImageExportFormat))
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
-		{
-			if (asset.ClassID == ClassIDType.Sprite)
-			{
-				return TextureExportCollection.CreateExportCollection(this, (Sprite)asset);
-			}
-			var collection = new TextureExportCollection(this, (Texture2D)asset, true);
-			collection.FileExtension = ImageExportFormat.GetFileExtension();
-			return collection;
 		}
 	}
 }
