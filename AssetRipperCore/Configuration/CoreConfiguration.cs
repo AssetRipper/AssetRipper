@@ -12,6 +12,10 @@ namespace AssetRipper.Core.Configuration
 		/// Disabling scripts can allow some games to export when they previously did not.
 		/// </summary>
 		public bool DisableScriptImport { get; set; }
+		/// <summary>
+		/// Including the streaming assets directory can cause some games to fail while exporting. Currently does nothing.
+		/// </summary>
+		public bool IgnoreStreamingAssets { get; set; }
 		#endregion
 
 		#region Export Settings
@@ -65,6 +69,7 @@ namespace AssetRipper.Core.Configuration
 		public virtual void ResetToDefaultValues()
 		{
 			DisableScriptImport = false;
+			IgnoreStreamingAssets = true;
 			ExportPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
 			KeepAssetBundleContentPath = false;
