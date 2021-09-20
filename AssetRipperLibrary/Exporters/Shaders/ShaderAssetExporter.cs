@@ -1,7 +1,6 @@
 using AssetRipper.Core;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Converters.Shader;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;

@@ -1,4 +1,3 @@
-using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Classes;

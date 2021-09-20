@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Exporters;
+﻿using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers.Asset;

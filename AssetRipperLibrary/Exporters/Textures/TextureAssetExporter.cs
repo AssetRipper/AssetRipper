@@ -1,7 +1,6 @@
 using AssetRipper.Core;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;

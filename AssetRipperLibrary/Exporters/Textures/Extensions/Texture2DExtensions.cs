@@ -1,7 +1,5 @@
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Library.TextureContainers.DDS;
-using AssetRipper.Library.TextureContainers.KTX;
-using AssetRipper.Library.TextureContainers.PVR;
 using System;
 using KTXBaseFormat = AssetRipper.Library.TextureContainers.KTX.KTXBaseInternalFormat;
 using KTXFormat = AssetRipper.Library.TextureContainers.KTX.KTXInternalFormat;

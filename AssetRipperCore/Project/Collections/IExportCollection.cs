@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.Meta;
+﻿using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;

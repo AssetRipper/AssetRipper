@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Structure.Assembly.Mono;

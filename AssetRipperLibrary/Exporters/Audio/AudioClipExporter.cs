@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.AudioClip;
-using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;

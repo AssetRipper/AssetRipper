@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Parser.Asset;
+﻿using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using System;

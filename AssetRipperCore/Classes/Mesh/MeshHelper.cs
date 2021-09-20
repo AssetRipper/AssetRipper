@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Math;
 using System;
-using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Core.Classes.Mesh
 {

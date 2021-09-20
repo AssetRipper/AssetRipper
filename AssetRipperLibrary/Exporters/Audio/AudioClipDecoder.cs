@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Logging;
 using Fmod5Sharp;
-using Fmod5Sharp.FmodVorbis;
 using NAudio.Vorbis;
 using NAudio.Wave;
 using OggVorbisSharp;

@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
-using AssetRipper.Core.Layout.Classes;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 {
