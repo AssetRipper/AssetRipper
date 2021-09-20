@@ -8,6 +8,7 @@
 * Mesh Export
   * Primitive GLB mesh export (done!)
   * Merge mesh converter classes into their respective exporters (done!)
+  * Experimental OBJ export for terrains (done!)
 * Shader Export
   * Reformat the shader export system to support two sided shaders
 * Script Export

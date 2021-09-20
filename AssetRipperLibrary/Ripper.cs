@@ -110,7 +110,7 @@ namespace AssetRipper.Library
 
 			//Terrain exporters
 			OverrideExporter(ClassIDType.TerrainData, new TerrainHeatmapExporter(Settings));
-			OverrideExporter(ClassIDType.TerrainData, new ObjTerrainExporter(Settings));
+			OverrideExporter(ClassIDType.TerrainData, new TerrainObjExporter(Settings));
 
 			//Engine exporters
 			EngineAssetExporter engineExporter = new EngineAssetExporter();

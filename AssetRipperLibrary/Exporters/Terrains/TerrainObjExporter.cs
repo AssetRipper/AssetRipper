@@ -12,10 +12,10 @@ using System.Text;
 
 namespace AssetRipper.Library.Exporters.Terrains
 {
-	public class ObjTerrainExporter : BinaryAssetExporter
+	public class TerrainObjExporter : BinaryAssetExporter
 	{
 		public TerrainExportMode ExportMode;
-		public ObjTerrainExporter(LibraryConfiguration configuration)
+		public TerrainObjExporter(LibraryConfiguration configuration)
 		{
 			ExportMode = configuration.TerrainExportMode;
 		}
