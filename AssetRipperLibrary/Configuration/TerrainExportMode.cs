@@ -7,7 +7,7 @@
 		/// </summary>
 		Native,
 		/// <summary>
-		/// This mode converts the terrain data into an OBJ mesh.
+		/// This experimental mode converts the terrain data into an OBJ mesh. Exported mesh size, position, and proportions may not be correct.
 		/// </summary>
 		Obj,
 		/// <summary>
