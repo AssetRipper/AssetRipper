@@ -410,14 +410,14 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static bool DecompressCRN(byte[] data, out byte[] uncompressedBytes)
 		{
-			Logger.Warning("About to unpack normal crunch...");
+			Logger.Info("About to unpack normal crunch...");
 			uncompressedBytes = TextureDecoder.UnpackCrunch(data);
 			return uncompressedBytes != null;
 		}
 
 		private static bool DecompressUnityCRN(byte[] data, out byte[] uncompressedBytes)
 		{
-			Logger.Warning("About to unpack unity crunch...");
+			Logger.Info("About to unpack unity crunch...");
 			uncompressedBytes = TextureDecoder.UnpackUnityCrunch(data);
 			return uncompressedBytes != null;
 		}

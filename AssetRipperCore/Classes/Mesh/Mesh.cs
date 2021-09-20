@@ -1037,11 +1037,11 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 			if (UV0 == null)
 			{
-				Logger.Warning(LogCategory.Import, $"Null UV0 for {Name}");
+				Logger.Verbose(LogCategory.Import, $"Null UV0 for {Name}");
 			}
 			if (Normals == null)
 			{
-				Logger.Warning(LogCategory.Import, $"Null Normals for {Name}");
+				Logger.Verbose(LogCategory.Import, $"Null Normals for {Name}");
 			}
 		}
 

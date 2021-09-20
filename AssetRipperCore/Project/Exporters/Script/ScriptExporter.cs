@@ -57,6 +57,9 @@ namespace AssetRipper.Core.Project.Exporters.Script
 				TypeDefinition exportType = script.GetTypeDefinition();
 				exportTypes.Add(asset, exportType);
 			}
+			int primaryTotal = exportTypes.Count;
+			int count = 0;
+			Logger.Info(LogCategory.Export, $"Exporting {primaryTotal} primary scripts...");
 			foreach (KeyValuePair<Object, TypeDefinition> exportType in exportTypes)
 			{
 				string path = scriptManager.Export(exportType.Value);
@@ -64,7 +67,13 @@ namespace AssetRipper.Core.Project.Exporters.Script
 				{
 					callback?.Invoke(container, exportType.Key, path);
 				}
+				count++;
+				if(count % 100 == 0)
+				{
+					Logger.Info(LogCategory.Export, $"Exported {count}/{primaryTotal} primary scripts");
+				}
 			}
+			Logger.Info(LogCategory.Export, "Primary script export finished. Exporting the rest...");
 			scriptManager.ExportRest();
 			Logger.Info(LogCategory.Export, "Finished exporting scripts");
 		}
