@@ -63,7 +63,7 @@ namespace AssetRipper.GUI.Utils
 			bool isInRoleWithAccess = true;
 			try
 			{
-				DirectoryInfo di = new(DirectoryUtils.ToLongPath(path));
+				DirectoryInfo di = new(path);
 				DirectorySecurity ds = di.GetAccessControl();
 				AuthorizationRuleCollection rules = ds.GetAccessRules(true, true, typeof(NTAccount));
 

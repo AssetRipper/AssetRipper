@@ -12,13 +12,13 @@ namespace AssetRipper.Core.Utils
 		{
 			TempFolderPath = ExecutingDirectory.Combine("temp");
 			DeleteTempFolder();
-			DirectoryUtils.CreateDirectory(TempFolderPath);
+			Directory.CreateDirectory(TempFolderPath);
 		}
 
 		private static void DeleteTempFolder()
 		{
-			if (DirectoryUtils.Exists(TempFolderPath))
-				DirectoryUtils.Delete(TempFolderPath, true);
+			if (Directory.Exists(TempFolderPath))
+				Directory.Delete(TempFolderPath, true);
 		}
 
 		private static string GetNewRandomTempFolder() => Path.Combine(TempFolderPath, GetRandomString());
@@ -36,14 +36,14 @@ namespace AssetRipper.Core.Utils
 		/// Make a temporary file
 		/// </summary>
 		/// <param name="data"></param>
-		/// <param name="fileExtention">The file extension with the dot</param>
+		/// <param name="fileExtension">The file extension with the dot</param>
 		/// <returns>The path to the file</returns>
-		public static string WriteToTempFile(byte[] data, string fileExtention)
+		public static string WriteToTempFile(byte[] data, string fileExtension)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
 
-			string fileName = GetRandomString() + (fileExtention ?? "");
+			string fileName = GetRandomString() + (fileExtension ?? "");
 			string filePath = Path.Combine(TempFolderPath, fileName);
 			File.WriteAllBytes(filePath, data);
 			return filePath;

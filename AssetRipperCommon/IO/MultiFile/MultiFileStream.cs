@@ -56,7 +56,7 @@ namespace AssetRipper.Core.IO.MultiFile
 				SplitPathWithoutExtension(path, out string directory, out string file);
 				return Exists(directory, file);
 			}
-			if (FileUtils.Exists(path))
+			if (File.Exists(path))
 			{
 				return true;
 			}
@@ -77,9 +77,9 @@ namespace AssetRipper.Core.IO.MultiFile
 				SplitPathWithoutExtension(path, out string directory, out string file);
 				return OpenRead(directory, file);
 			}
-			if (FileUtils.Exists(path))
+			if (File.Exists(path))
 			{
-				return FileUtils.OpenRead(path);
+				return File.OpenRead(path);
 			}
 
 			{
@@ -115,7 +115,7 @@ namespace AssetRipper.Core.IO.MultiFile
 				return GetFiles(directory, file);
 			}
 
-			if (FileUtils.Exists(path))
+			if (File.Exists(path))
 			{
 				return new[] { path };
 			}
@@ -152,13 +152,13 @@ namespace AssetRipper.Core.IO.MultiFile
 
 		private static string[] GetFiles(string dirPath, string fileName)
 		{
-			if (!DirectoryUtils.Exists(dirPath))
+			if (!Directory.Exists(dirPath))
 			{
 				return Array.Empty<string>();
 			}
 
 			string filePatern = fileName + ".split*";
-			return DirectoryUtils.GetFiles(dirPath, filePatern);
+			return Directory.GetFiles(dirPath, filePatern);
 		}
 
 		private static Stream OpenRead(string dirPath, string fileName)
@@ -182,7 +182,7 @@ namespace AssetRipper.Core.IO.MultiFile
 			{
 				for (int i = 0; i < splitFiles.Length; i++)
 				{
-					Stream stream = FileUtils.OpenRead(splitFiles[i]);
+					Stream stream = File.OpenRead(splitFiles[i]);
 					streams[i] = stream;
 				}
 

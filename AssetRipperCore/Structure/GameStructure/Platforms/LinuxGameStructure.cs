@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			else if (IsUnityDataDirectory(rootPath))
 			{
 				Logger.Info(LogCategory.Import, "Linux data directory found. Setting root to parent directory");
-				m_root = (new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath))).Parent;
+				m_root = (new DirectoryInfo(rootPath)).Parent;
 			}
 			else
 			{
@@ -57,7 +57,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			DataPaths = new string[] { dataPath };
 
-			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
+			DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
 
 			CollectGameFiles(dataDirectory, Files);
 			CollectStreamingAssets(dataDirectory, Files);
@@ -73,7 +73,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			else if (IsUnityDataDirectory(path))
 				return true;
 			else
-				dinfo = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+				dinfo = new DirectoryInfo(path);
 
 			if (!dinfo.Exists)
 				return false;
@@ -123,7 +123,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 					name = Path.GetFileNameWithoutExtension(finfo.Name);
 					string dataFolder = $"{name}_{DataFolderName}";
 					dataPath = Path.Combine(rootDiectory.FullName, dataFolder);
-					if (DirectoryUtils.Exists(dataPath))
+					if (Directory.Exists(dataPath))
 					{
 						return true;
 					}

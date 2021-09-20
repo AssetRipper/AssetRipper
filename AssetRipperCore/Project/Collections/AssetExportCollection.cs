@@ -52,7 +52,7 @@ namespace AssetRipper.Core.Project.Collections
 				fileName = GetUniqueFileName(container.File, Asset, subPath);
 			}
 
-			if (!DirectoryUtils.Exists(subPath))
+			if (!Directory.Exists(subPath))
 			{
 				DirectoryUtils.CreateVirtualDirectory(subPath);
 			}

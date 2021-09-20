@@ -97,7 +97,7 @@ namespace AssetRipper.Core.Project.Exporters.Script
 			string filePath = Path.Combine(m_exportPath, subPath);
 			string uniqueFilePath = ToUniqueFileName(filePath);
 			string directory = Path.GetDirectoryName(uniqueFilePath);
-			if (!DirectoryUtils.Exists(directory))
+			if (!Directory.Exists(directory))
 			{
 				DirectoryUtils.CreateVirtualDirectory(directory);
 			}
@@ -152,7 +152,7 @@ namespace AssetRipper.Core.Project.Exporters.Script
 
 		private static string ToUniqueFileName(string filePath)
 		{
-			if (FileUtils.Exists(filePath))
+			if (File.Exists(filePath))
 			{
 				string directory = Path.GetDirectoryName(filePath);
 				string fileName = Path.GetFileNameWithoutExtension(filePath);
@@ -160,7 +160,7 @@ namespace AssetRipper.Core.Project.Exporters.Script
 				for (int i = 2; i < int.MaxValue; i++)
 				{
 					string newFilePath = Path.Combine(directory, $"{fileName}.{i}{fileExtension}");
-					if (!FileUtils.Exists(newFilePath))
+					if (!File.Exists(newFilePath))
 					{
 						Logger.Log(LogType.Warning, LogCategory.Export, $"Found duplicate script file at {filePath}. Renamed to {newFilePath}");
 						return newFilePath;

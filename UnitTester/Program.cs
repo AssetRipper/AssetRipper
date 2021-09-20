@@ -32,10 +32,10 @@ namespace UnitTester
 
 		static void RunTests()
 		{
-			if (!DirectoryUtils.Exists(TestsDirectory))
+			if (!Directory.Exists(TestsDirectory))
 			{
 				Logger.Log(LogType.Warning, LogCategory.General, "Tests folder did not exist. Creating...");
-				DirectoryUtils.CreateDirectory(TestsDirectory);
+				Directory.CreateDirectory(TestsDirectory);
 				Logger.Info(LogCategory.General, "Created. Program will now exit.");
 				return;
 			}
@@ -54,7 +54,7 @@ namespace UnitTester
 					Logger.Info(LogCategory.General, $"Found test: '{testName}' for Unity version: '{versionName}'");
 					numTests++;
 					string inputPath = Path.Combine(testPath, "Input");
-					if (!DirectoryUtils.Exists(inputPath))
+					if (!Directory.Exists(inputPath))
 					{
 						Logger.Log(LogType.Error, LogCategory.General, $"No input folder for '{testName}' on Unity version '{versionName}'");
 					}
@@ -89,9 +89,9 @@ namespace UnitTester
 
 		private static void PrepareExportDirectory(string path)
 		{
-			if (DirectoryUtils.Exists(path))
+			if (Directory.Exists(path))
 			{
-				DirectoryUtils.Delete(path, true);
+				Directory.Delete(path, true);
 			}
 		}
 	}

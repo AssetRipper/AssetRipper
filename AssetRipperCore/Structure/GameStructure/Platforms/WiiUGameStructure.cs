@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Name = m_root.Name;
 			RootPath = m_root.FullName;
 			GameDataPath = Path.Combine(RootPath, ContentName, DataFolderName);
-			if (!DirectoryUtils.Exists(GameDataPath))
+			if (!Directory.Exists(GameDataPath))
 			{
 				throw new Exception($"Data directory wasn't found");
 			}
@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			DataPaths = new string[] { GameDataPath };
 
-			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(GameDataPath));
+			DirectoryInfo dataDirectory = new DirectoryInfo(GameDataPath);
 
 			CollectGameFiles(dataDirectory, Files);
 			CollectStreamingAssets(dataDirectory, Files);
@@ -53,7 +53,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		public static bool IsWiiUStructure(string rootPath)
 		{
 			string gameDataPath = Path.Combine(rootPath, ContentName, DataFolderName);
-			return DirectoryUtils.Exists(gameDataPath);
+			return Directory.Exists(gameDataPath);
 		}
 
 		public override PlatformType Platform => PlatformType.WiiU;

@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				throw new ArgumentNullException(nameof(rootPath));
 			}
-			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
+			m_root = new DirectoryInfo(rootPath);
 			if (!m_root.Exists)
 			{
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
@@ -96,7 +96,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		public static bool IsWebGLStructure(string path)
 		{
-			DirectoryInfo root = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+			DirectoryInfo root = new DirectoryInfo(path);
 			if (!root.Exists)
 			{
 				return false;

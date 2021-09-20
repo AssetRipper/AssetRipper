@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				throw new ArgumentNullException(nameof(rootPath));
 			}
-			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
+			m_root = new DirectoryInfo(rootPath);
 			if (!m_root.Exists)
 			{
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 #warning TODO: PS4 paths
 			Name = m_root.Name;
-			RootPath = DirectoryUtils.ToLongPath(rootPath);
+			RootPath = rootPath;
 			GameDataPath = dataPath;
 			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
@@ -52,7 +52,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			DataPaths = new string[] { dataPath };
 
-			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
+			DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
 
 			CollectGameFiles(dataDirectory, Files);
 			CollectStreamingAssets(dataDirectory, Files);
@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		public static bool IsPS4Structure(string path)
 		{
-			DirectoryInfo dinfo = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+			DirectoryInfo dinfo = new DirectoryInfo(path);
 			if (!dinfo.Exists)
 			{
 				return false;
@@ -84,7 +84,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				if (finfo.Name == PS4ExecutableName)
 				{
 					dataPath = Path.Combine(rootDiectory.FullName, PS4DataFolderName);
-					if (DirectoryUtils.Exists(dataPath))
+					if (Directory.Exists(dataPath))
 					{
 						return true;
 					}

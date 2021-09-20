@@ -53,7 +53,7 @@ namespace AssetRipper.Core.Project.Collections
 			string fileName = $"{EditorBuildSettings.ClassID.ToString()}.asset";
 			string filePath = Path.Combine(subPath, fileName);
 
-			if (!DirectoryUtils.Exists(subPath))
+			if (!Directory.Exists(subPath))
 			{
 				DirectoryUtils.CreateVirtualDirectory(subPath);
 			}

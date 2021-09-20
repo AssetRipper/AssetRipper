@@ -16,14 +16,14 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				throw new ArgumentNullException(nameof(rootPath));
 			}
-			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
+			m_root = new DirectoryInfo(rootPath);
 			if (!m_root.Exists)
 			{
 				throw new Exception($"Root directory '{rootPath}' doesn't exist");
 			}
 
 			string apkDataPath = Path.Combine(rootPath, AssetName, BinName, DataFolderName);
-			DirectoryInfo apkDataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(apkDataPath));
+			DirectoryInfo apkDataDirectory = new DirectoryInfo(apkDataPath);
 			if (!apkDataDirectory.Exists)
 			{
 				throw new Exception($"Data directory hasn't been found");
@@ -50,14 +50,14 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			DirectoryInfo obbDataDirectory = null;
 			if (obbPath != null)
 			{
-				m_obbRoot = new DirectoryInfo(DirectoryUtils.ToLongPath(obbPath));
+				m_obbRoot = new DirectoryInfo(obbPath);
 				if (!m_obbRoot.Exists)
 				{
 					throw new Exception($"Obb directory '{obbPath}' doesn't exist");
 				}
 
 				string obbDataPath = Path.Combine(obbPath, AssetName, BinName, DataFolderName);
-				if (!DirectoryUtils.Exists(obbDataPath))
+				if (!Directory.Exists(obbDataPath))
 				{
 					throw new Exception($"Obb data directory '{obbDataPath}' wasn't found");
 				}
@@ -77,7 +77,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		public static bool IsAndroidStructure(string path)
 		{
-			DirectoryInfo directory = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+			DirectoryInfo directory = new DirectoryInfo(path);
 			if (!directory.Exists)
 			{
 				return false;
@@ -90,7 +90,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 
 			string dataPath = Path.Combine(path, AssetName, BinName, DataFolderName);
-			if (!DirectoryUtils.Exists(dataPath))
+			if (!Directory.Exists(dataPath))
 			{
 				return false;
 			}
@@ -100,7 +100,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		public static bool IsAndroidObbStructure(string path)
 		{
-			DirectoryInfo directory = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+			DirectoryInfo directory = new DirectoryInfo(path);
 			if (!directory.Exists)
 			{
 				return false;
@@ -113,7 +113,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 
 			string dataPath = Path.Combine(path, AssetName, BinName, DataFolderName);
-			if (!DirectoryUtils.Exists(dataPath))
+			if (!Directory.Exists(dataPath))
 			{
 				return false;
 			}

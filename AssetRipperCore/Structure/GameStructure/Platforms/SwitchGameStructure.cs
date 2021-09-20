@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				throw new ArgumentNullException(nameof(rootPath));
 			}
-			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
+			m_root = new DirectoryInfo(rootPath);
 			if (!m_root.Exists)
 			{
 				throw new Exception($"Root directory '{rootPath}' doesn't exist");
@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			DataPaths = new string[] { dataPath };
 
-			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
+			DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
 
 			CollectGameFiles(dataDirectory, Files);
 
@@ -45,12 +45,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		public static bool IsSwitchStructure(string path)
 		{
-			DirectoryInfo rootInfo = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+			DirectoryInfo rootInfo = new DirectoryInfo(path);
 			if (!rootInfo.Exists)
 			{
 				return false;
 			}
-			if (!DirectoryUtils.Exists(Path.Combine(rootInfo.FullName, ExecutableName)))
+			if (!Directory.Exists(Path.Combine(rootInfo.FullName, ExecutableName)))
 			{
 				return false;
 			}
@@ -63,13 +63,13 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		{
 			dataPath = null;
 			string romPath = Path.Combine(rootDirectory.FullName, RomName);
-			if (!DirectoryUtils.Exists(romPath))
+			if (!Directory.Exists(romPath))
 			{
 				return false;
 			}
 
 			string ldataPath = Path.Combine(romPath, DataFolderName);
-			if (!DirectoryUtils.Exists(ldataPath))
+			if (!Directory.Exists(ldataPath))
 			{
 				return false;
 			}

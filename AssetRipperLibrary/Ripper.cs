@@ -79,7 +79,7 @@ namespace AssetRipper.Library
 		private static Func<UnityObject, bool> GetFilter(List<UnityObject> assets)
 		{
 			if (assets == null) throw new ArgumentNullException(nameof(assets));
-			return (UnityObject obj) => assets.Contains(obj);
+			return assets.Contains;
 		}
 
 		private void InitializeExporters()

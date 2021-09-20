@@ -47,7 +47,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			string intermediateDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			string outputDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			DecompressZipArchive(xapkFilePath, intermediateDirectory);
-			foreach(var filePath in DirectoryUtils.GetFiles(intermediateDirectory))
+			foreach(var filePath in Directory.GetFiles(intermediateDirectory))
 			{
 				if (GetFileExtension(filePath) == ApkExtension)
 					DecompressZipArchive(filePath, outputDirectory);
@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 							}
 							string fullFilePath = Path.Combine(outputDirectory, internalPath);
 							string fullDirectoryPath = (new FileInfo(fullFilePath)).Directory.FullName;
-							DirectoryUtils.CreateDirectory(fullDirectoryPath);
+							Directory.CreateDirectory(fullDirectoryPath);
 							File.WriteAllBytes(fullFilePath, unzippedFileStream.ToArray());
 						}
 					}
@@ -90,7 +90,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private static string GetFileExtension(string path)
 		{
-			if (FileUtils.Exists(path))
+			if (File.Exists(path))
 				return Path.GetExtension(path);
 			else
 				return null;

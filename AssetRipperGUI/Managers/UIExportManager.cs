@@ -21,7 +21,7 @@ namespace AssetRipper.GUI.Managers
 				PermissionValidator.RestartAsAdministrator();
 			}
 
-			if (DirectoryUtils.Exists(path))
+			if (Directory.Exists(path))
 			{
 				await Task.Factory.StartNew(s_path => Directory.Delete((string)s_path, true), path);
 			}

@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Project.Collections
 			string fileName = $"{Asset.ExportPath}.asset";
 			string filePath = Path.Combine(subPath, fileName);
 
-			if (!DirectoryUtils.Exists(subPath))
+			if (!Directory.Exists(subPath))
 			{
 				DirectoryUtils.CreateVirtualDirectory(subPath);
 			}

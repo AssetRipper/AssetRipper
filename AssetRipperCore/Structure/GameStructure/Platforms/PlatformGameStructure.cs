@@ -282,14 +282,14 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		private string FindEngineDependency(string path, string dependency)
 		{
 			string filePath = Path.Combine(path, dependency);
-			if (FileUtils.Exists(filePath))
+			if (File.Exists(filePath))
 			{
 				return filePath;
 			}
 
 			string resourcePath = Path.Combine(path, ResourcesName);
 			filePath = Path.Combine(resourcePath, dependency);
-			if (FileUtils.Exists(filePath))
+			if (File.Exists(filePath))
 			{
 				return filePath;
 			}
@@ -297,7 +297,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			// really old versions contains file in this directory
 			string unityPath = Path.Combine(path, UnityName);
 			filePath = Path.Combine(unityPath, dependency);
-			if (FileUtils.Exists(filePath))
+			if (File.Exists(filePath))
 			{
 				return filePath;
 			}
@@ -349,8 +349,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		{
 			return Il2CppGameAssemblyPath != null &&
 				Il2CppMetaDataPath != null &&
-				FileUtils.Exists(Il2CppGameAssemblyPath) &&
-				FileUtils.Exists(Il2CppMetaDataPath);
+				File.Exists(Il2CppGameAssemblyPath) &&
+				File.Exists(Il2CppMetaDataPath);
 		}
 	}
 }

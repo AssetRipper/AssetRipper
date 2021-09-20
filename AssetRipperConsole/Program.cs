@@ -61,7 +61,7 @@ namespace AssetRipper.Console
 					continue;
 				}
 
-				if (DirectoryUtils.Exists(arg))
+				if (Directory.Exists(arg))
 				{
 					continue;
 				}
@@ -112,9 +112,9 @@ namespace AssetRipper.Console
 
 		private static void PrepareExportDirectory(string path)
 		{
-			if (DirectoryUtils.Exists(path))
+			if (Directory.Exists(path))
 			{
-				DirectoryUtils.Delete(path, true);
+				Directory.Delete(path, true);
 			}
 		}
 	}

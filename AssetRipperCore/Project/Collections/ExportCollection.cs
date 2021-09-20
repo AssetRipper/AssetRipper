@@ -81,7 +81,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected void ExportAsset(ProjectAssetContainer container, AssetImporter importer, Object asset, string path, string name)
 		{
-			if (!DirectoryUtils.Exists(path))
+			if (!Directory.Exists(path))
 			{
 				DirectoryUtils.CreateVirtualDirectory(path);
 			}

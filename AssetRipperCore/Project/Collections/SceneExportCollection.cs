@@ -121,7 +121,7 @@ namespace AssetRipper.Core.Project.Collections
 
 			if (IsDuplicate(container))
 			{
-				if (FileUtils.Exists(filePath))
+				if (System.IO.File.Exists(filePath))
 				{
 					Logger.Log(LogType.Warning, LogCategory.Export, $"Duplicate scene '{sceneSubPath}' has been found. Skipping");
 					return false;
@@ -129,7 +129,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 
 			folderPath = Path.GetDirectoryName(filePath);
-			if (!DirectoryUtils.Exists(folderPath))
+			if (!Directory.Exists(folderPath))
 			{
 				DirectoryUtils.CreateVirtualDirectory(folderPath);
 			}

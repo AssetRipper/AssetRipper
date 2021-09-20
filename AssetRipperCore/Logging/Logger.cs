@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace AssetRipper.Core.Logging
@@ -87,15 +88,14 @@ namespace AssetRipper.Core.Logging
 
 		private static string GetBuildType()
 		{
-			return FileUtils.Exists(ExecutingDirectory.Combine("AssetRipperCore.dll")) ? "Compiled" : "Published";
+			return File.Exists(ExecutingDirectory.Combine("AssetRipperCore.dll")) ? "Compiled" : "Published";
 		}
 
 		private static void LogOperatingSystemInformation()
 		{
 			Log(LogType.Info, LogCategory.System, $"System Version: {Environment.OSVersion.VersionString}");
 			string architecture = Environment.Is64BitOperatingSystem ? "x64" : "x86";
-			string operatingSystem = RunetimeUtils.RuntimeOS.ToString();
-			Log(LogType.Info, LogCategory.System, $"Operating System: {operatingSystem} {architecture}");
+			Log(LogType.Info, LogCategory.System, $"Operating System: {GetOsName()} {architecture}");
 		}
 
 		public static void LogSystemInformation(string programName)
@@ -107,6 +107,14 @@ namespace AssetRipper.Core.Logging
 			Log(LogType.Info, LogCategory.System, $"Current UTC Time: {System.DateTime.UtcNow.ToString()}");
 		}
 
+		private static string GetOsName()
+		{
+			if (OperatingSystem.IsWindows()) return "Windows";
+			else if (OperatingSystem.IsLinux()) return "Linux";
+			else if (OperatingSystem.IsMacOS()) return "MacOS";
+			else return "Other";
+		}
+		
 		public static void Add(ILogger logger) => loggers.Add(logger);
 
 		public static void Remove(ILogger logger) => loggers.Remove(logger);

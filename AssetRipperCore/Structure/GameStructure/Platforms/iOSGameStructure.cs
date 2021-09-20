@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				throw new ArgumentNullException(nameof(rootPath));
 			}
-			m_root = new DirectoryInfo(DirectoryUtils.ToLongPath(rootPath));
+			m_root = new DirectoryInfo(rootPath);
 			if (!m_root.Exists)
 			{
 				throw new Exception($"Root directory '{rootPath}' doesn't exist");
@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			DataPaths = new string[] { dataPath };
 
-			DirectoryInfo dataDirectory = new DirectoryInfo(DirectoryUtils.ToLongPath(dataPath));
+			DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
 
 			CollectGameFiles(dataDirectory, Files);
 			CollectiOSStreamingAssets(dataDirectory, Files);
@@ -47,7 +47,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		public static bool IsiOSStructure(string path)
 		{
-			DirectoryInfo root = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+			DirectoryInfo root = new DirectoryInfo(path);
 			if (!root.Exists)
 			{
 				return false;
@@ -74,7 +74,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					appName = dinfo.Name.Substring(0, dinfo.Name.Length - AppExtension.Length);
 					dataPath = Path.Combine(dinfo.FullName, DataFolderName);
-					if (DirectoryUtils.Exists(dataPath))
+					if (Directory.Exists(dataPath))
 					{
 						return true;
 					}

@@ -23,9 +23,9 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 					string directory = Path.GetDirectoryName(path);
 					dataPaths.Add(directory);
 				}
-				else if (DirectoryUtils.Exists(path))
+				else if (Directory.Exists(path))
 				{
-					DirectoryInfo directory = new DirectoryInfo(DirectoryUtils.ToLongPath(path));
+					DirectoryInfo directory = new DirectoryInfo(path);
 					CollectFromDirectory(directory, Files, Assemblies, dataPaths);
 				}
 				else
