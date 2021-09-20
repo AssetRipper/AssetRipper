@@ -439,43 +439,40 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public IReadOnlyDictionary<uint, string> FindTOS()
 		{
 			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
-			foreach (Object.Object asset in File.Collection.FetchAssets())
+			
+			foreach (Object.Object asset in File.Collection.FetchAssetsOfType(ClassIDType.Avatar))
 			{
-				switch (asset.ClassID)
+				Avatar.Avatar avatar = (Avatar.Avatar)asset;
+				if (AddAvatarTOS(avatar, tos))
 				{
-					case ClassIDType.Avatar:
-						{
-							Avatar.Avatar avatar = (Avatar.Avatar)asset;
-							if (AddAvatarTOS(avatar, tos))
-							{
-								return tos;
-							}
-						}
-						break;
-
-					case ClassIDType.Animator:
-						Animator.Animator animator = (Animator.Animator)asset;
-						if (IsAnimatorContainsClip(animator))
-						{
-							if (AddAnimatorTOS(animator, tos))
-							{
-								return tos;
-							}
-						}
-						break;
-
-					case ClassIDType.Animation:
-						Animation.Animation animation = (Animation.Animation)asset;
-						if (IsAnimationContainsClip(animation))
-						{
-							if (AddAnimationTOS(animation, tos))
-							{
-								return tos;
-							}
-						}
-						break;
+					return tos;
 				}
 			}
+
+			foreach (Object.Object asset in File.Collection.FetchAssetsOfType(ClassIDType.Animator))
+			{
+				Animator.Animator animator = (Animator.Animator)asset;
+				if (IsAnimatorContainsClip(animator))
+				{
+					if (AddAnimatorTOS(animator, tos))
+					{
+						return tos;
+					}
+				}
+			}
+
+			foreach (Object.Object asset in File.Collection.FetchAssetsOfType(ClassIDType.Animation))
+			{
+				Animation.Animation animation = (Animation.Animation)asset;
+				if (IsAnimationContainsClip(animation))
+				{
+					if (AddAnimationTOS(animation, tos))
+					{
+						return tos;
+					}
+				}
+			}
+
 			return tos;
 		}
 
