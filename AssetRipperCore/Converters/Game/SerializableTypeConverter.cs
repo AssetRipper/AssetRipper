@@ -1,16 +1,16 @@
-﻿using AssetRipper.Core.Layout;
+﻿using AssetRipper.Core.Classes;
+using AssetRipper.Core.Layout;
 using AssetRipper.Core.Layout.Builtin;
 using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Layout.Classes.AnimationClip.Curves;
 using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 using AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle;
-using AssetRipper.Core.Classes;
+using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using System;
 using System.Linq;
-using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Converters.Game
 {

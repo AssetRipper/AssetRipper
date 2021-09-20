@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.Converters.Game;
+﻿using AssetRipper.Core.Classes;
+using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout.Classes.Misc;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Classes;
 
 namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 {

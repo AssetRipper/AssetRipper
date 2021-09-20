@@ -1,10 +1,10 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.AnimationClip.Curves;
+﻿using AssetRipper.Core.Classes.AnimationClip.Curves;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl;
 using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.YAML;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {

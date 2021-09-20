@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.Meta.Importers;
+﻿using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Project;
 
 namespace AssetRipper.Core.Converters.Texture2D
 {

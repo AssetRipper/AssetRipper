@@ -1,12 +1,12 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using Object = AssetRipper.Core.Classes.Object.Object;
-using AssetRipper.Core.Structure.Assembly.Mono;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable
 {

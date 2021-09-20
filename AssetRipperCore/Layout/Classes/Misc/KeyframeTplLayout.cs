@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Converters.Game;
-using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
+﻿using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
+using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Layout.Classes.Misc

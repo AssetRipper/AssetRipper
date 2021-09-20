@@ -1,9 +1,9 @@
-using AssetRipper.Core.Layout;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Object;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Project

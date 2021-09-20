@@ -1,6 +1,6 @@
 using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.Entries;
+using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Files.WebFiles;
 using AssetRipper.Core.Structure.GameStructure;

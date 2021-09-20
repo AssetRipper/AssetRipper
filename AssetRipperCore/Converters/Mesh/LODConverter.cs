@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Project;
+﻿using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using System.IO;
 using System.Linq;
 

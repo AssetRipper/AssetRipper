@@ -1,12 +1,12 @@
-﻿using AssetRipper.Core.Project;
+﻿using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Extensions;
+using System.Linq;
 
 namespace AssetRipper.Core.Math
 {

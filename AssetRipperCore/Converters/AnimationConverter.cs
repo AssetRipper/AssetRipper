@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Layout.Classes;
-using AssetRipper.Core.Classes.Animation;
+﻿using AssetRipper.Core.Classes.Animation;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Layout.Classes;
+using AssetRipper.Core.Project;
 using System.Linq;
 
 namespace AssetRipper.Core.Converters

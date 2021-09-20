@@ -1,14 +1,14 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Layout;
-using AssetRipper.Core.Classes.Mesh;
+﻿using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Math;
+using AssetRipper.Core.Project;
 using System;
 using System.IO;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
-using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Converters.Mesh
 {

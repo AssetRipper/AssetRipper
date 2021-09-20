@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Layout.Classes.GameObject;
-using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Layout.Classes.GameObject;
+using AssetRipper.Core.Project;
 using System;
 using System.Linq;
 

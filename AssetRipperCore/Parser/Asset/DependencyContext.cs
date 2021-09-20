@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.Layout;
-using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Object;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Parser.Asset

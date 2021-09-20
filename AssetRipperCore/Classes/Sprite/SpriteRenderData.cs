@@ -1,13 +1,13 @@
-using AssetRipper.Core.Converters.Sprite;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Converters.Sprite;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using System;
 using System.Collections.Generic;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
-using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.Sprite
 {

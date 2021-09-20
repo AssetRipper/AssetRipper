@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Project;
 using System;
 using System.Linq;
 

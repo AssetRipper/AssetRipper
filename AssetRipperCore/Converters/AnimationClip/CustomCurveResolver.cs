@@ -1,10 +1,10 @@
-using AssetRipper.Core.Layout;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Camera;
 using AssetRipper.Core.Classes.Light;
 using AssetRipper.Core.Classes.Renderer;
 using AssetRipper.Core.Classes.SpriteRenderer;
+using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using SevenZip;
 using System;

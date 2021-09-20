@@ -1,12 +1,12 @@
-﻿using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers.Asset;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project.Exporters;
 using System;
 using System.Collections.Generic;
 using Object = AssetRipper.Core.Classes.Object.Object;

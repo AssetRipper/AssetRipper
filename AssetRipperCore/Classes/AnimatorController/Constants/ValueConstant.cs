@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerParameter;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {

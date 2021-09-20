@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Parser.Files.BundleFile.Parser;
 
 namespace AssetRipper.Core.Parser.Files.BundleFile.Header

@@ -1,5 +1,5 @@
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
 using System;
 using System.Globalization;

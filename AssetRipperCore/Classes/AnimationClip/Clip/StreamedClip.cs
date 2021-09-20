@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Layout;
-using AssetRipper.Core.Classes.AnimationClip.Editor;
+﻿using AssetRipper.Core.Classes.AnimationClip.Editor;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Layout;
 using System;
 using System.Collections.Generic;
 using System.IO;

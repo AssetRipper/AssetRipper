@@ -1,8 +1,8 @@
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 
 namespace AssetRipper.Core.Converters.Shader
 {

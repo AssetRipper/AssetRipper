@@ -1,24 +1,24 @@
-using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Parser.Files.Entries;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Utils;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MonoManager = AssetRipper.Core.Structure.Assembly.Managers.MonoManager;
 using Object = AssetRipper.Core.Classes.Object.Object;
-using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Utils;
 
 namespace AssetRipper.Core.Structure
 {

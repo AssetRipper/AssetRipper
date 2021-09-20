@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Converters.Game;
-using AssetRipper.Core.Layout.Builtin;
+﻿using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Layout.Builtin;
 
 namespace AssetRipper.Core.Layout.Classes.GameObject
 {

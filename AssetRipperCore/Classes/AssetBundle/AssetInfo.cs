@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Parser.Files;
+﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AssetBundle

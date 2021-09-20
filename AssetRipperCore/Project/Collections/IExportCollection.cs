@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Object;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Collections

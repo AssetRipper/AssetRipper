@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.AnimatorTransition;
+﻿using AssetRipper.Core.Classes.AnimatorTransition;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 

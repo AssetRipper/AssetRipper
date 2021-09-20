@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Converters.Game;
+﻿using AssetRipper.Core.Classes.Animation;
+using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.Layout.Builtin;
 using AssetRipper.Core.Layout.Classes.Misc.Serializable;
-using AssetRipper.Core.Classes.Animation;
 
 namespace AssetRipper.Core.Layout.Classes
 {

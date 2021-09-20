@@ -1,10 +1,10 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System;
 
 namespace AssetRipper.Core.Math
 {

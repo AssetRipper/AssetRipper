@@ -1,9 +1,9 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System.Collections.Generic;

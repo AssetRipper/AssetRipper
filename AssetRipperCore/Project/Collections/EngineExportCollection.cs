@@ -1,5 +1,3 @@
-using AssetRipper.Core.Project.Exporters.Engine;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.Material;
@@ -9,9 +7,11 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Utils;
+using AssetRipper.Core.Project.Exporters.Engine;
 using System;
 using System.Collections.Generic;
 using Object = AssetRipper.Core.Classes.Object.Object;

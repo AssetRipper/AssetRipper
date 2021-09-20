@@ -1,5 +1,5 @@
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;

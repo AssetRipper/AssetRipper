@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.Renderer;
+﻿using AssetRipper.Core.Classes.Renderer;
+using AssetRipper.Core.Project;
 
 namespace AssetRipper.Core.Converters
 {

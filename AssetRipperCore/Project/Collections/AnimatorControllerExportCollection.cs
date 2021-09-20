@@ -1,4 +1,3 @@
-using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AnimatorController;
 using AssetRipper.Core.Classes.AnimatorController.Constants;
@@ -8,6 +7,7 @@ using AssetRipper.Core.Classes.BlendTree;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project.Exporters;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Collections

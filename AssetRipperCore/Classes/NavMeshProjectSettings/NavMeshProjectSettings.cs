@@ -1,11 +1,11 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.NavMeshData;
 using AssetRipper.Core.Classes.Utils.Extensions;
-using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System.Collections.Generic;

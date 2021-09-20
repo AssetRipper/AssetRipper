@@ -1,11 +1,11 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.Math;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
-using AssetRipper.Core.Math;
-using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 {

@@ -1,15 +1,15 @@
+using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
+using AssetRipper.Library.Exporters.Textures.Extensions;
 using AssetRipper.Library.TextureContainers;
 using AssetRipper.Library.TextureContainers.DDS;
 using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.TextureContainers.PVR;
 using System;
 using System.IO;
-using AssetRipper.Library.Exporters.Textures.Extensions;
 
 namespace AssetRipper.Library.Exporters.Textures
 {

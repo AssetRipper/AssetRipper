@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.TrailRenderer;
+﻿using AssetRipper.Core.Classes.TrailRenderer;
+using AssetRipper.Core.Project;
 
 namespace AssetRipper.Core.Converters.TrailRenderer
 {

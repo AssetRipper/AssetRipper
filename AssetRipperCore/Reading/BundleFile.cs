@@ -1,10 +1,10 @@
-﻿using System.IO;
-using System.Linq;
-using AssetRipper.Core.IO.Endian;
+﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.IO.FileReading;
 using AssetRipper.Core.Lz4;
 using AssetRipper.Core.Parser.Files.BundleFile;
+using System.IO;
+using System.Linq;
 
 namespace AssetRipper.Core.Reading
 {

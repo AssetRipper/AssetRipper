@@ -1,17 +1,17 @@
-using AssetRipper.Core.Project;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.IO.Endian;
 
 namespace AssetRipper.Core.Classes.Object
 {

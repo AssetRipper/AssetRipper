@@ -1,8 +1,8 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;

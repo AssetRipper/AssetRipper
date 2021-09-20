@@ -1,12 +1,12 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Layout;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.AnimatorController.Constants;
 using AssetRipper.Core.Classes.AnimatorTransition;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;

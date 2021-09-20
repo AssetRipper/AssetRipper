@@ -1,7 +1,7 @@
 using AssetRipper.Core.Parser.Files.ArchiveFiles;
 using AssetRipper.Core.Parser.Files.BundleFile;
-using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
+using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.WebFiles;
 using AssetRipper.Core.Structure.GameStructure;

@@ -1,19 +1,19 @@
-using AssetRipper.Core.Converters.Mesh;
-using AssetRipper.Core.Project;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
 using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Converters.Mesh;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Math;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
-using AssetRipper.Core.Math;
-using System.Collections;
 
 namespace AssetRipper.Core.Classes.Mesh
 {

@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.ParticleSystem.Curve;
-using AssetRipper.Core.Parser.Files;
+﻿using AssetRipper.Core.Classes.ParticleSystem.Curve;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.ParticleSystem

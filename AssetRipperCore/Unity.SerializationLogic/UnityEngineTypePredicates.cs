@@ -2,9 +2,9 @@
 // Copyright (c) Unity Technologies. For terms of use, see
 // https://unity3d.com/legal/licenses/Unity_Reference_Only_License
 
+using Mono.Cecil;
 using System.Collections.Generic;
 using Unity.CecilTools.Extensions;
-using Mono.Cecil;
 
 namespace Unity.SerializationLogic
 {

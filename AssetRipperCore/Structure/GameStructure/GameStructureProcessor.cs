@@ -1,18 +1,18 @@
-﻿using AssetRipper.Core.Layout;
+﻿using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.ArchiveFiles;
 using AssetRipper.Core.Parser.Files.BundleFile;
-using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.Entries;
-using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Structure.GameStructure.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
-using AssetRipper.Core.Structure.GameStructure.Platforms;
 
 namespace AssetRipper.Core.Structure.GameStructure
 {

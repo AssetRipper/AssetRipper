@@ -1,10 +1,10 @@
-﻿using AssetRipper.Core.Layout;
-using AssetRipper.Core.Classes.Object;
+﻿using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Core.IO.Asset;
 using System.Collections.Generic;
-using AssetRipper.Core.Classes.Utils.Extensions;
 
 namespace AssetRipper.Core.Parser.Asset
 {

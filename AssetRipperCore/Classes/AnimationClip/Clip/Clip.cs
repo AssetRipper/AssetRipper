@@ -1,6 +1,6 @@
 using AssetRipper.Core.Classes.AnimatorController.Constants;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Clip

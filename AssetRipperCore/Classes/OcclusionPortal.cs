@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.YAML;
+﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes
 {

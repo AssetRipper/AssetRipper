@@ -1,11 +1,11 @@
-﻿using AssetRipper.Core.Project;
+﻿using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Math;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
-using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 {

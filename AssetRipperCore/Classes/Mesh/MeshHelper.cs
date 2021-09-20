@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.Math;
+﻿using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Files;
 using System;
 
 namespace AssetRipper.Core.Classes.Mesh

@@ -1,17 +1,17 @@
-using AssetRipper.Core.Converters.Sprite;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.SpriteAtlas;
-using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Converters.Sprite;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
-using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.Sprite
 {

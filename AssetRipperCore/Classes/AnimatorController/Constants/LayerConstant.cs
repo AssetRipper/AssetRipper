@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer;
+﻿using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer;
 using AssetRipper.Core.Classes.AnimatorController.Mask;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;

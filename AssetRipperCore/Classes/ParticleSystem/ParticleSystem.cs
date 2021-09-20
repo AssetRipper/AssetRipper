@@ -1,5 +1,3 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.ParticleSystem.Curve;
 using AssetRipper.Core.Classes.ParticleSystem.Emission;
@@ -9,11 +7,13 @@ using AssetRipper.Core.Classes.ParticleSystem.SubEmitter;
 using AssetRipper.Core.Classes.ParticleSystem.Trigger;
 using AssetRipper.Core.Classes.ParticleSystem.UV;
 using AssetRipper.Core.Classes.Utils.Extensions;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
-using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Classes.ParticleSystem
 {

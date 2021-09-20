@@ -1,7 +1,7 @@
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using System;

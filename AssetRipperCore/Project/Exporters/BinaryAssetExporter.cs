@@ -1,11 +1,11 @@
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Object = AssetRipper.Core.Classes.Object.Object;
-using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Project.Exporters
 {

@@ -1,13 +1,13 @@
-﻿using AssetRipper.Core.Converters.TrailRenderer;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl;
 using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
 using AssetRipper.Core.Classes.Utils.Extensions;
-using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Converters.TrailRenderer;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.YAML;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.TrailRenderer
 {

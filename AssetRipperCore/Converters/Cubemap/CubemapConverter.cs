@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Converters.Texture2D;
+﻿using AssetRipper.Core.Classes.Meta.Importers.Texture;
+using AssetRipper.Core.Converters.Texture2D;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.Meta.Importers.Texture;
 
 namespace AssetRipper.Core.Converters.Cubemap
 {

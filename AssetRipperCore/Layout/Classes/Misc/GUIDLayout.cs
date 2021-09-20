@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Converters.Game;
-using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Converters.Game;
 
 namespace AssetRipper.Core.Layout.Classes.Misc
 {

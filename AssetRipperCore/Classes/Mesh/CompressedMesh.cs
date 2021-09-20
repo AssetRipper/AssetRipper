@@ -1,9 +1,9 @@
 ﻿using AssetRipper.Core.Converters.Mesh;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.YAML;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {

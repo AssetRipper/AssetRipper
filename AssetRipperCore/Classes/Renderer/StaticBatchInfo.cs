@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Project;
+﻿using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using AssetRipper.Core.IO;
 
 namespace AssetRipper.Core.Classes.Renderer
 {

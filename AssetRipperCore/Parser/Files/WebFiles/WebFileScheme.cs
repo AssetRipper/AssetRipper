@@ -1,7 +1,7 @@
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.Entries;
+using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.GameStructure;
 using System.IO;

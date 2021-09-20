@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
-using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.YAML;
+﻿using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.IO;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {

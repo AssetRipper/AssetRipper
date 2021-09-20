@@ -1,6 +1,4 @@
-﻿using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
 using AssetRipper.Core.Classes.NavMeshProjectSettings;
@@ -8,7 +6,9 @@ using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Classes.Physics2DSettings;
 using AssetRipper.Core.Classes.QualitySettings;
 using AssetRipper.Core.Classes.UnityConnectSettings;
+using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
 using System.Collections.Generic;
 using System.IO;

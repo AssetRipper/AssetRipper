@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {

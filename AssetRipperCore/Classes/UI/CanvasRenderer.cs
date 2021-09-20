@@ -1,9 +1,9 @@
 ﻿//using AssetRipper.AssetExporters;
 //using AssetRipper.YAML;
 
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.UI
 {

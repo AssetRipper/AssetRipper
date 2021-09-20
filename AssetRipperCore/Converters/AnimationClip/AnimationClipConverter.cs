@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Layout;
-using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AnimationClip;
 using AssetRipper.Core.Classes.AnimationClip.Clip;
 using AssetRipper.Core.Classes.AnimationClip.Curves;
@@ -7,13 +6,14 @@ using AssetRipper.Core.Classes.AnimationClip.Editor;
 using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl;
+using AssetRipper.Core.Layout;
+using AssetRipper.Core.Math;
 using SevenZip;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Object = AssetRipper.Core.Classes.Object.Object;
-using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Converters.AnimationClip
 {

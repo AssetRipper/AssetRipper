@@ -1,11 +1,11 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Classes.Mesh;
+﻿using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using System;
 using System.Collections;
 using System.IO;

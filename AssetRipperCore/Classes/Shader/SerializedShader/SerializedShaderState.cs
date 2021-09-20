@@ -1,7 +1,7 @@
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
-using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files;
 using System.Globalization;
 using System.IO;
 

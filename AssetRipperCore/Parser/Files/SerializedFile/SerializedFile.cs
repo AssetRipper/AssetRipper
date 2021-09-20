@@ -1,12 +1,12 @@
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure;
 using System;

@@ -1,13 +1,13 @@
-using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using System;
 using System.Collections.Generic;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
-using AssetRipper.Core.Classes.Misc;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {

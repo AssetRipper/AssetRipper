@@ -1,17 +1,17 @@
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Lz4;
+using AssetRipper.Core.Parser.Files.BundleFile.Header;
 using AssetRipper.Core.Parser.Files.BundleFile.IO;
 using AssetRipper.Core.Parser.Files.BundleFile.Parser;
-using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.Entries;
+using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.GameStructure;
 using System;
 using System.IO;
-using AssetRipper.Core.Parser.Files.BundleFile.Header;
-using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Parser.Files.BundleFile
 {

@@ -1,7 +1,7 @@
-using AssetRipper.Core.Project;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 

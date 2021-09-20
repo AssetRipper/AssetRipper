@@ -1,19 +1,19 @@
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.AnimatorController.Constants;
 using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer;
 using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerParameter;
 using AssetRipper.Core.Classes.AnimatorController.State;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Utils.Extensions;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
-using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Classes.AnimatorController
 {

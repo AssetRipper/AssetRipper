@@ -1,13 +1,13 @@
-﻿using AssetRipper.Core.Converters.Game;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Classes.Meta;
+﻿using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Utils.Extensions;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
-using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Misc
 {

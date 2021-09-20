@@ -1,18 +1,18 @@
-﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Classes.Mesh;
+﻿using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
-using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AssetRipper.Core.Math;
-using System.Collections.Generic;
 
 namespace AssetRipper.Core.Converters.Mesh
 {

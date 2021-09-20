@@ -1,7 +1,7 @@
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Classes.Utils;
+using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Project.Exporters;
 using System.Collections.Generic;
 using System.Linq;
 

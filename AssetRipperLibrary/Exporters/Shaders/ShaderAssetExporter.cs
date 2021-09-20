@@ -3,19 +3,19 @@ using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Converters.Shader;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Collections;
+using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
+using ShaderTextRestorer.Exporters;
+using ShaderTextRestorer.Exporters.DirectX;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
-using ShaderTextRestorer.Exporters;
-using ShaderTextRestorer.Exporters.DirectX;
-using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
