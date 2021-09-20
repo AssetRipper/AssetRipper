@@ -30,10 +30,6 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public override bool IsHandle(UnityObject asset)
 		{
-			if (!DirectBitmap.DependenciesAvailable)
-			{
-				return false;
-			}
 			if (asset.ClassID == ClassIDType.Texture2D)
 			{
 				Texture2D texture = (Texture2D)asset;
@@ -117,7 +113,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
 			}
 
-			return bitmap.Save(exportStream, imageFormat.GetImageFormat());
+			return bitmap.Save(exportStream, imageFormat);
 		}
 
 		public static DirectBitmap ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data, int pvrtcBitCount, int astcBlockSize, KTXBaseInternalFormat ktxBaseInternalFormat)

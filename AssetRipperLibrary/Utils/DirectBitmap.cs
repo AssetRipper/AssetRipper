@@ -1,4 +1,6 @@
-using AssetRipper.Core.Logging;
+using AssetRipper.Library.Configuration;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -9,55 +11,17 @@ namespace AssetRipper.Library.Utils
 {
 	public sealed class DirectBitmap : IDisposable
 	{
-		static DirectBitmap()
-		{
-			try
-			{
-				new Bitmap(16, 16, PixelFormat.Format32bppPArgb).Dispose();
-			}
-			catch(Exception ex)
-			{
-				Logger.Error($"Cannot use Bitmap from System.Drawing. This is probably caused by missing libgdiplus on a linux or mac system.");
-				Logger.Error(ex);
-				DependenciesAvailable = false;
-				return;
-			}
-			DependenciesAvailable = true;
-		}
-
 		public DirectBitmap(int width, int height)
 		{
 			Width = width;
 			Height = height;
 			Bits = new byte[width * height * 4];
 			m_bitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
-			if(DependenciesAvailable)
-				m_bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
 		}
 
 		~DirectBitmap()
 		{
 			Dispose(false);
-		}
-
-		public void SetPixel(int x, int y, Color color)
-		{
-			int index = (x + (y * Width)) * 4;
-			unchecked
-			{
-				uint value = (uint)color.ToArgb();
-				Bits[index + 0] = (byte)(value >> 0);
-				Bits[index + 1] = (byte)(value >> 8);
-				Bits[index + 2] = (byte)(value >> 16);
-				Bits[index + 3] = (byte)(value >> 24);
-			}
-		}
-
-		public Color GetPixel(int x, int y)
-		{
-			int index = (x + (y * Width)) * 4;
-			uint col = BitConverter.ToUInt32(Bits, index);
-			return Color.FromArgb(unchecked((int)col));
 		}
 
 		public unsafe void FlipY()
@@ -75,10 +39,40 @@ namespace AssetRipper.Library.Utils
 			}
 		}
 
-		public bool Save(Stream stream, ImageFormat format)
+		public bool Save(Stream stream, ImageExportFormat format)
 		{
-			m_bitmap?.Save(stream, format);
-			return DependenciesAvailable;
+			if (OperatingSystem.IsWindows())
+			{
+				var bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
+				bitmap.Save(stream, format.GetImageFormat());
+				bitmap.Dispose();
+				return true;
+			}
+			else
+			{
+				var image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
+				switch (format)
+				{
+					case ImageExportFormat.Bmp:
+						image.SaveAsBmp(stream);
+						image.Dispose();
+						return true;
+					case ImageExportFormat.Gif:
+						image.SaveAsGif(stream);
+						image.Dispose();
+						return true;
+					case ImageExportFormat.Jpeg:
+						image.SaveAsJpeg(stream);
+						image.Dispose();
+						return true;
+					case ImageExportFormat.Png:
+						image.SaveAsPng(stream);
+						image.Dispose();
+						return true;
+					default:
+						return false;
+				}
+			}
 		}
 
 		public void Dispose()
@@ -91,13 +85,11 @@ namespace AssetRipper.Library.Utils
 		{
 			if (!m_disposed)
 			{
-				m_bitmap?.Dispose();
 				m_bitsHandle.Free();
 				m_disposed = true;
 			}
 		}
 
-		public static bool DependenciesAvailable { get; }
 		public int Height { get; }
 		public int Width { get; }
 		public int Stride => Width * 4;
@@ -105,7 +97,6 @@ namespace AssetRipper.Library.Utils
 		public IntPtr BitsPtr => m_bitsHandle.AddrOfPinnedObject();
 
 		private readonly GCHandle m_bitsHandle;
-		private readonly Bitmap m_bitmap;
 		private bool m_disposed;
 	}
 }

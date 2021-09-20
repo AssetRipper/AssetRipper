@@ -14,6 +14,9 @@
 * Script Export
   * Optimize script exporter (done!)
   * Handle exceptions while reading IL2Cpp assemblies
+* Texture Export
+  * Optimized by SamboyCoding!
+  * Remove libgdiplus dependency for linux and mac users (done!)
 * Import Settings
   * Ignore StreamingAssets directory option
 * GUI improvements

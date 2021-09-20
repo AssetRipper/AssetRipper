@@ -16,8 +16,8 @@ namespace AssetRipper.Library.Exporters.Terrains
 {
 	public class TerrainHeatmapExporter : BinaryAssetExporter
 	{
-		public TerrainExportMode ExportMode;
-		public ImageExportFormat ImageFormat;
+		TerrainExportMode ExportMode { get; }
+		ImageExportFormat ImageFormat { get; }
 		public TerrainHeatmapExporter(LibraryConfiguration configuration)
 		{
 			ExportMode = configuration.TerrainExportMode;
@@ -55,7 +55,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			{
 				return false;
 			}
-			return bitmap.Save(exportStream, ImageFormat.GetImageFormat());
+			return bitmap.Save(exportStream, ImageFormat);
 		}
 
 		public static DirectBitmap GetBitmap(TerrainData terrain)
