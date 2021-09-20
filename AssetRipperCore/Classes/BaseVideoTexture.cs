@@ -28,14 +28,6 @@ namespace AssetRipper.Core.Classes
 			ColorSpace = (ColorSpace)reader.ReadInt32();
 		}
 
-		public override void ExportBinary(IExportContainer container, Stream stream)
-		{
-			using (BinaryWriter writer = new BinaryWriter(stream))
-			{
-				writer.Write(MovieData, 0, MovieData.Length);
-			}
-		}
-
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))

@@ -100,6 +100,7 @@ namespace AssetRipper.Library
 			OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
 
 			//Audio exporters
+			OverrideExporter(ClassIDType.AudioClip, new NativeAudioExporter());
 			OverrideExporter(ClassIDType.AudioClip, new FmodAudioExporter(Settings));
 			OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
 

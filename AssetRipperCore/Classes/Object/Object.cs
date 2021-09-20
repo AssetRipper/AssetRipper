@@ -105,7 +105,5 @@ namespace AssetRipper.Core.Classes.Object
 			}
 			return node;
 		}
-
-
 	}
 }

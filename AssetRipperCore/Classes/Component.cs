@@ -43,11 +43,6 @@ namespace AssetRipper.Core.Classes
 			GameObject.Write(writer);
 		}
 
-		public sealed override void ExportBinary(IExportContainer container, Stream stream)
-		{
-			base.ExportBinary(container, stream);
-		}
-
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))

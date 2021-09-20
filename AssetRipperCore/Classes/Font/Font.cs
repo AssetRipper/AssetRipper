@@ -287,17 +287,6 @@ namespace AssetRipper.Core.Classes.Font
 			}
 		}
 
-		public override void ExportBinary(IExportContainer container, Stream stream)
-		{
-			if (HasFontData(container.Version))
-			{
-				using (BinaryWriter writer = new BinaryWriter(stream))
-				{
-					writer.Write(FontData);
-				}
-			}
-		}
-
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))

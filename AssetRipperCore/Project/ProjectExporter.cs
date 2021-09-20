@@ -147,7 +147,6 @@ namespace AssetRipper.Core.Project
 			OverrideYamlExporter(ClassIDType.LightingSettings);
 
 			OverrideBinaryExporter(ClassIDType.Shader);
-			OverrideBinaryExporter(ClassIDType.AudioClip);
 
 			OverrideExporter(ClassIDType.MonoScript, new ScriptExporter(m_fileCollection.AssemblyManager));
 

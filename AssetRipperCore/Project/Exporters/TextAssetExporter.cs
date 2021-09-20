@@ -3,6 +3,8 @@ using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.Core.Utils;
+using System.IO;
 using System.Text.Json;
 
 namespace AssetRipper.Core.Project.Exporters
@@ -18,6 +20,18 @@ namespace AssetRipper.Core.Project.Exporters
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			return new AssetExportCollection(this, asset, GetExportExtension(asset));
+		}
+
+		public override bool Export(IExportContainer container, Object asset, string path)
+		{
+			using (Stream stream = FileUtils.CreateVirtualFile(path))
+			{
+				using (BinaryWriter writer = new BinaryWriter(stream))
+				{
+					writer.Write(((TextAsset)asset).Script);
+				}
+			}
+			return true;
 		}
 
 		private string GetExportExtension(Object asset)

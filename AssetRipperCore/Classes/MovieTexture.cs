@@ -17,11 +17,11 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		private static bool HasData(UnityVersion version) => version.IsLess(5);
+		public static bool HasData(UnityVersion version) => version.IsLess(5);
 		/// <summary>
 		/// 5.0.0 to 2019.3 exclusive
 		/// </summary>
-		private static bool IsInherited(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLess(2019, 3);
+		public static bool IsInherited(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLess(2019, 3);
 
 		public override void Read(AssetReader reader)
 		{
@@ -32,18 +32,6 @@ namespace AssetRipper.Core.Classes
 			else
 			{
 				ReadTexture(reader);
-			}
-		}
-
-		public override void ExportBinary(IExportContainer container, Stream stream)
-		{
-			if (HasData(container.Version) || IsInherited(container.Version))
-			{
-				base.ExportBinary(container, stream);
-			}
-			else
-			{
-				Logger.Log(LogType.Warning, LogCategory.Export, "Movie texture doesn't have any data");
 			}
 		}
 

@@ -203,7 +203,10 @@ namespace AssetRipper.Core.Classes.Shader
 			}
 			else
 			{
-				base.ExportBinary(container, stream);
+				using (BinaryWriter writer = new BinaryWriter(stream))
+				{
+					writer.Write(Script);
+				}
 			}
 		}
 

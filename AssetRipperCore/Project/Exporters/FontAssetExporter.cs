@@ -2,6 +2,8 @@ using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.Core.Utils;
+using System.IO;
 
 namespace AssetRipper.Core.Project.Exporters
 {
@@ -18,6 +20,25 @@ namespace AssetRipper.Core.Project.Exporters
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			return new AssetExportCollection(this, asset, GetExportExtension((Font)asset));
+		}
+
+		public override bool Export(IExportContainer container, Object asset, string path)
+		{
+			using (Stream stream = FileUtils.CreateVirtualFile(path))
+			{
+				if (Font.HasFontData(container.Version))
+				{
+					using (BinaryWriter writer = new BinaryWriter(stream))
+					{
+						writer.Write(((Font)asset).FontData);
+					}
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
 		}
 
 		string GetExportExtension(Font font)

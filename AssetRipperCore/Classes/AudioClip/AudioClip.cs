@@ -1,13 +1,11 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AudioClip
@@ -326,41 +324,6 @@ namespace AssetRipper.Core.Classes.AudioClip
 			}
 		}
 
-		public override void ExportBinary(IExportContainer container, Stream stream)
-		{
-			if (HasLoadType(container.Version))
-			{
-				if (FSBResource.CheckIntegrity(File))
-				{
-					byte[] data = FSBResource.GetContent(File);
-					stream.Write(data, 0, data.Length);
-				}
-				else
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because data can't be read from resources file '{FSBResource.Source}'");
-				}
-			}
-			else
-			{
-				if (HasStreamingInfo(container.Version) && LoadType == AudioClipLoadType.Streaming && AudioData == null)
-				{
-					if (StreamingInfo.CheckIntegrity(File))
-					{
-						byte[] data = StreamingInfo.GetContent(File);
-						stream.Write(data, 0, data.Length);
-					}
-					else
-					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamingInfo.Path}' hasn't been found");
-					}
-				}
-				else
-				{
-					stream.Write(AudioData, 0, AudioData.Length);
-				}
-			}
-		}
-
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
@@ -382,68 +345,6 @@ namespace AssetRipper.Core.Classes.AudioClip
 			node.Add(EditorResourceName, EditorResource.ExportYAML(container));
 			node.Add(EditorCompressionFormatName, (int)EditorCompressionFormat);
 			return node;*/
-		}
-
-		public override string ExportExtension
-		{
-			get
-			{
-				if (HasType(File.Version))
-				{
-					switch (Type)
-					{
-						case FMODSoundType.ACC:
-							return "m4a";
-						case FMODSoundType.AIFF:
-							return "aif";
-						case FMODSoundType.IT:
-							return "it";
-						case FMODSoundType.MOD:
-							return "mod";
-						case FMODSoundType.MPEG:
-							return "mp3";
-						case FMODSoundType.OGGVORBIS:
-							return "ogg";
-						case FMODSoundType.S3M:
-							return "s3m";
-						case FMODSoundType.WAV:
-							return "wav";
-						case FMODSoundType.XM:
-							return "xm";
-						case FMODSoundType.XMA:
-							return "wav";
-						case FMODSoundType.VAG:
-							return "vag";
-						case FMODSoundType.AUDIOQUEUE:
-							return "fsb";
-						default:
-							return "audioClip";
-					}
-				}
-				else
-				{
-					switch (CompressionFormat)
-					{
-						case AudioCompressionFormat.PCM:
-						case AudioCompressionFormat.ADPCM:
-						case AudioCompressionFormat.Vorbis:
-						case AudioCompressionFormat.MP3:
-						case AudioCompressionFormat.GCADPCM:
-							return "fsb";
-						case AudioCompressionFormat.VAG:
-						case AudioCompressionFormat.HEVAG:
-							return "vag";
-						case AudioCompressionFormat.XMA:
-							return "wav";
-						case AudioCompressionFormat.AAC:
-							return "m4a";
-						case AudioCompressionFormat.ATRAC9:
-							return "at9";
-						default:
-							return "audioClip";
-					}
-				}
-			}
 		}
 
 		/// <summary>

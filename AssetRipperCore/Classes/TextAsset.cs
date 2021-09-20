@@ -34,14 +34,6 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		public override void ExportBinary(IExportContainer container, Stream stream)
-		{
-			using (BinaryWriter writer = new BinaryWriter(stream))
-			{
-				writer.Write(Script);
-			}
-		}
-
 		protected void ReadNamedObject(AssetReader reader)
 		{
 			base.Read(reader);
