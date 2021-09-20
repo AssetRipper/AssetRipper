@@ -69,7 +69,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 		}
 
-		public override bool IsHandle(UnityObject asset, CoreConfiguration options)
+		public override bool IsHandle(UnityObject asset)
 		{
 			return AudioFormat != AudioExportFormat.Native && IsSupported((AudioClip)asset);
 		}

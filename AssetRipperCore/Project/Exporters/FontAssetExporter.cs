@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public sealed class FontAssetExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(Object asset, CoreConfiguration options)
+		public override bool IsHandle(Object asset)
 		{
 			if (asset is Font font)
 				return font.IsValidData;

@@ -113,7 +113,7 @@ namespace AssetRipper.Library
 			OverrideExporter(ClassIDType.TerrainData, new TerrainObjExporter(Settings));
 
 			//Engine exporters
-			EngineAssetExporter engineExporter = new EngineAssetExporter();
+			EngineAssetExporter engineExporter = new EngineAssetExporter(Settings);
 			OverrideExporter(ClassIDType.Material, engineExporter);
 			OverrideExporter(ClassIDType.Texture2D, engineExporter);
 			OverrideExporter(ClassIDType.Mesh, engineExporter);

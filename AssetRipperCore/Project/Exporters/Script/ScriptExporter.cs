@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -21,7 +20,7 @@ namespace AssetRipper.Core.Project.Exporters.Script
 			AssemblyManager = assemblyManager;
 		}
 
-		public bool IsHandle(Object asset, CoreConfiguration options)
+		public bool IsHandle(Object asset)
 		{
 			return true;
 		}

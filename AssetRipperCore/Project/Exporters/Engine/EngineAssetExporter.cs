@@ -1,5 +1,6 @@
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using System;
@@ -10,9 +11,12 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 {
 	public class EngineAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(Object asset, CoreConfiguration options)
+		private UnityVersion Version { get; }
+		public EngineAssetExporter(CoreConfiguration configuration) => Version = configuration.Version;
+
+		public bool IsHandle(Object asset)
 		{
-			return EngineExportCollection.IsEngineAsset(asset, options.Version);
+			return EngineExportCollection.IsEngineAsset(asset, Version);
 		}
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)

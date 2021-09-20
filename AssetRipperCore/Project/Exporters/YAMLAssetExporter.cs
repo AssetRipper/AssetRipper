@@ -1,6 +1,5 @@
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.OcclusionCullingSettings;
-using AssetRipper.Core.Configuration;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -17,7 +16,7 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public class YAMLAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(Object asset, CoreConfiguration options)
+		public bool IsHandle(Object asset)
 		{
 			return true;
 		}

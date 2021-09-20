@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.TerrainData;
-using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -20,7 +19,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			ExportMode = configuration.TerrainExportMode;
 		}
 
-		public override bool IsHandle(Core.Classes.Object.Object asset, CoreConfiguration options)
+		public override bool IsHandle(Core.Classes.Object.Object asset)
 		{
 			return ExportMode == TerrainExportMode.Obj;
 		}

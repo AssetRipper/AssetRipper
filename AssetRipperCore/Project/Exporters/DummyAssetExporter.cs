@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Project.Exporters
 			m_metaTypes[classType] = isMetaType;
 		}
 
-		public bool IsHandle(Object asset, CoreConfiguration options)
+		public bool IsHandle(Object asset)
 		{
 			return true;
 		}

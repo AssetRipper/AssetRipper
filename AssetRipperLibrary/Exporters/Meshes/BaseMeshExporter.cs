@@ -23,7 +23,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 		protected bool BinaryExport { get; set; }
 		public BaseMeshExporter(LibraryConfiguration configuration) => ExportFormat = configuration.MeshExportFormat;
 
-		public bool IsHandle(Core.Classes.Object.Object asset, CoreConfiguration options)
+		public bool IsHandle(Core.Classes.Object.Object asset)
 		{
 			if (asset is Mesh mesh)
 				return IsHandle(mesh);

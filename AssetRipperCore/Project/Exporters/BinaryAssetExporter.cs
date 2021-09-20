@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{
-		public virtual bool IsHandle(Object asset, CoreConfiguration options)
+		public virtual bool IsHandle(Object asset)
 		{
 			return true;
 		}

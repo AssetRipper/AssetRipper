@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Project.Exporters
 			throw new NotSupportedException();
 		}
 
-		public bool IsHandle(Object asset, CoreConfiguration options)
+		public bool IsHandle(Object asset)
 		{
 			throw new NotSupportedException();
 		}

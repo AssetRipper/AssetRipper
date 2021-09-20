@@ -25,7 +25,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			ImageFormat = configuration.ImageExportFormat;
 		}
 
-		public override bool IsHandle(Object asset, CoreConfiguration options)
+		public override bool IsHandle(Object asset)
 		{
 			return ExportMode == TerrainExportMode.Heatmap;
 		}

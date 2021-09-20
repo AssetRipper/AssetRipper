@@ -1,4 +1,3 @@
-using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
@@ -10,7 +9,7 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public interface IAssetExporter
 	{
-		bool IsHandle(Object asset, CoreConfiguration options);
+		bool IsHandle(Object asset);
 
 		bool Export(IExportContainer container, Object asset, string path);
 		void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback);

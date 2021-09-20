@@ -29,7 +29,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			SpriteExportMode = configuration.SpriteExportMode;
 		}
 
-		public override bool IsHandle(UnityObject asset, CoreConfiguration options)
+		public override bool IsHandle(UnityObject asset)
 		{
 			if (!DirectBitmap.DependenciesAvailable)
 			{

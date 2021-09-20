@@ -43,7 +43,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			return true;
 		}
 
-		public override bool IsHandle(Core.Classes.Object.Object asset, CoreConfiguration options)
+		public override bool IsHandle(Core.Classes.Object.Object asset)
 		{
 			return AudioClipDecoder.CanDecode((AudioClip)asset) && AudioFormat != AudioExportFormat.Native;
 		}

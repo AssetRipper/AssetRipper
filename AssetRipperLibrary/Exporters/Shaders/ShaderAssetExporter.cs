@@ -29,7 +29,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			ExportMode = options.ShaderExportMode;
 		}
 
-		public bool IsHandle(UnityObject asset, CoreConfiguration options) => true;
+		public bool IsHandle(UnityObject asset) => true;
 
 		public static bool IsDX11ExportMode(ShaderExportMode mode) => mode == ShaderExportMode.Disassembly;
 

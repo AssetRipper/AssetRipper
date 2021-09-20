@@ -218,7 +218,7 @@ namespace AssetRipper.Core.Project
 				Object asset = depList[i];
 				if (!queued.Contains(asset))
 				{
-					IExportCollection collection = CreateCollection(virtualFile, asset, options);
+					IExportCollection collection = CreateCollection(virtualFile, asset);
 					foreach (Object element in collection.Assets)
 					{
 						queued.Add(element);
@@ -315,12 +315,12 @@ namespace AssetRipper.Core.Project
 			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{classID}'");
 		}
 
-		private IExportCollection CreateCollection(VirtualSerializedFile file, Object asset, CoreConfiguration options)
+		private IExportCollection CreateCollection(VirtualSerializedFile file, Object asset)
 		{
 			Stack<IAssetExporter> exporters = m_exporters[asset.ClassID];
 			foreach (IAssetExporter exporter in exporters)
 			{
-				if (exporter.IsHandle(asset, options))
+				if (exporter.IsHandle(asset))
 				{
 					return exporter.CreateCollection(file, asset);
 				}
