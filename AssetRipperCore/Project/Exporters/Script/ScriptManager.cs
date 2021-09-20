@@ -102,15 +102,25 @@ namespace AssetRipper.Core.Project.Exporters.Script
 				DirectoryUtils.CreateVirtualDirectory(directory);
 			}
 
-			using (Stream fileStream = FileUtils.CreateVirtualFile(uniqueFilePath))
+			try
 			{
-				using (StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
+				string decompiledText = Decompiler.Decompile(exportType);
+				using (Stream fileStream = FileUtils.CreateVirtualFile(uniqueFilePath))
 				{
-					writer.Write(Decompiler.Decompile(exportType));
+					using (StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
+					{
+						writer.Write(decompiledText);
+					}
 				}
+				AddExportedType(exportType);
+				return uniqueFilePath;
 			}
-			AddExportedType(exportType);
-			return uniqueFilePath;
+			catch(Exception ex)
+			{
+				Logger.Error($"Error while decompiling {exportType.FullName}:", ex);
+				AddExportedType(exportType);
+				return null;
+			}
 		}
 
 		public void ExportRest()
