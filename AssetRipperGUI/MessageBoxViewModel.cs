@@ -52,11 +52,12 @@ namespace AssetRipper.GUI
 		}
 
 
-		private string _bodyText;
+		private string _bodyText = "<null>";
 		private Buttons _currentButtons;
-		private readonly Action<Result> _callback;
+		private readonly Action<Result>? _callback;
 
-		public MessageBoxViewModel(string body, Buttons buttons = Buttons.Okay, Action<Result> callback = null)
+		public MessageBoxViewModel() : this("<null>") { }
+		public MessageBoxViewModel(string body, Buttons buttons = Buttons.Okay, Action<Result>? callback = null)
 		{
 			BodyText = body;
 			_currentButtons = buttons;
