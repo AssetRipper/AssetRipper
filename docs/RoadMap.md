@@ -1,26 +1,34 @@
 # Development Roadmap
 
 ## 0.1.7.0
-* Audio Exporter
+* Audio Export
   * Add FMOD cross-platform backup exporter (done!)
   * Allow other audio formats when not vorbis encoded (done!)
   * Implement newer Fmod5Sharp for additional audio export (done!)
-* Handle exceptions while reading IL2Cpp assemblies
-* Primitive GLB mesh export (done!)
-* Merge mesh converter classes into their respective exporters (done!)
-* Reformat the shader export system to support two sided shaders
-* Remove Reading namespace
-* Remove remaining Layout classes
+* Mesh Export
+  * Primitive GLB mesh export (done!)
+  * Merge mesh converter classes into their respective exporters (done!)
+* Shader Export
+  * Reformat the shader export system to support two sided shaders
+* Script Export
+  * Optimize script exporter (done!)
+  * Handle exceptions while reading IL2Cpp assemblies
+* Import Settings
+  * Ignore StreamingAssets directory option
 * GUI improvements
+  * Heatmap preview for terrains in the GUI (done!)
   * Configuration window for choosing import and export options
   * Switch shader preview to use the library shader exporter
   * Better Audio Playback control
     * Fast-forward and rewind
     * Seek-bar for selecting playback position
-* Move Third Party Dependencies to Nuget Packages
-  * Spirv
-  * Smolv
-  * Brotli
+* Code Cleanup
+  * Remove Reading namespace
+  * Remove remaining Layout classes
+  * Move Third Party Dependencies to Nuget Packages
+    * Spirv
+    * Smolv
+    * Brotli
 
 ## 0.2.0.0
 * Overhaul struct reading, which would enable:
@@ -51,8 +59,6 @@
   * General Settings window
   * Localized text for the UI
   * Adjustable background color/theme
-* Import Settings
-  * Ignore StreamingAssets directory option
 * Export Settings
   * Replace all shaders on materials with a built-in shader (for example, the Standard shader)
   * Script Export

@@ -17,7 +17,7 @@ namespace AssetRipper.Library.Utils
 			}
 			catch(Exception ex)
 			{
-				Logger.Error($"Cannot use Bitmap from System.Drawing. This is probably caused by missing libgdiplus on a linux system.");
+				Logger.Error($"Cannot use Bitmap from System.Drawing. This is probably caused by missing libgdiplus on a linux or mac system.");
 				Logger.Error(ex);
 				DependenciesAvailable = false;
 				return;

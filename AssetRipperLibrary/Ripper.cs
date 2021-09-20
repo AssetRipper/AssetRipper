@@ -7,6 +7,7 @@ using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Shaders;
+using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
 using System;
 using System.Collections.Generic;
@@ -106,6 +107,9 @@ namespace AssetRipper.Library
 			OverrideExporter(ClassIDType.Mesh, new GlbMeshExporter(Settings));
 			OverrideExporter(ClassIDType.Mesh, new StlMeshExporter(Settings));
 			OverrideExporter(ClassIDType.Mesh, new ObjMeshExporter(Settings));
+
+			//Terrain exporters
+			OverrideExporter(ClassIDType.TerrainData, new TerrainHeatmapExporter(Settings));
 
 			//Engine exporters
 			EngineAssetExporter engineExporter = new EngineAssetExporter();

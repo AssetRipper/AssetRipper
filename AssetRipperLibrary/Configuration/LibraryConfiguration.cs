@@ -25,6 +25,10 @@ namespace AssetRipper.Library.Configuration
 		/// Should sprites be exported as a texture? Recommended: Native
 		/// </summary>
 		public SpriteExportMode SpriteExportMode { get; set; } 
+		/// <summary>
+		/// How terrain data is exported. Recommended: Native
+		/// </summary>
+		public TerrainExportMode TerrainExportMode { get; set; }
 
 		public override void ResetToDefaultValues()
 		{
@@ -34,6 +38,7 @@ namespace AssetRipper.Library.Configuration
 			MeshExportFormat = MeshExportFormat.Native;
 			ShaderExportMode = ShaderExportMode.Dummy;
 			SpriteExportMode = SpriteExportMode.Native;
+			TerrainExportMode = TerrainExportMode.Native;
 		}
 	}
 }

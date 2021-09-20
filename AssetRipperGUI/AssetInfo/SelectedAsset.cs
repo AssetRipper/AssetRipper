@@ -1,11 +1,13 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioClip;
+using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Library.Exporters.Audio;
+using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.Utils;
@@ -127,7 +129,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", YAMLScalarNode.Empty) };
 
 		//Read from UI
-		public bool HasImageData => Asset is IHasImageData;
+		public bool HasImageData => Asset is IHasImageData or TerrainData;
 
 		//Read from UI
 		public bool HasAudioData => Asset is AudioClip;
@@ -163,6 +165,11 @@ namespace AssetRipper.GUI.AssetInfo
 							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, Asset.File.Version, img.ImageDataByteArray, 0, 0, KTXBaseInternalFormat.RG);
 							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
 						}
+					case Core.Classes.TerrainData.TerrainData terrain:
+						{
+							DirectBitmap? directBitmap = TerrainHeatmapExporter.GetBitmap(terrain);
+							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
+						}
 					default:
 						return null;
 				}
@@ -191,18 +198,21 @@ namespace AssetRipper.GUI.AssetInfo
 		private TextureFormat TextureFormat => Asset switch
 		{
 			IHasImageData img => img.TextureFormat,
+			TerrainData terrain => TextureFormat.RGBA32,
 			_ => TextureFormat.Automatic,
 		};
 
 		private int ImageWidth => Asset switch
 		{
 			IHasImageData img => img.Width,
+			TerrainData terrain => terrain.Heightmap.Width,
 			_ => -1,
 		};
 
 		private int ImageHeight => Asset switch
 		{
 			IHasImageData img => img.Height,
+			TerrainData terrain => terrain.Heightmap.Height,
 			_ => -1,
 		};
 
