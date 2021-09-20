@@ -36,10 +36,6 @@ namespace AssetRipper.Core.Configuration
 		/// Set by default to allow everything.
 		/// </summary>
 		public Func<Classes.Object.Object, bool> Filter { get; set; }
-		/// <summary>
-		/// How are text assets exported?
-		/// </summary>
-		public TextExportMode TextExportMode { get; set; }
 		#endregion
 
 		#region Project Settings
@@ -74,7 +70,6 @@ namespace AssetRipper.Core.Configuration
 			ExportDependencies = false;
 			KeepAssetBundleContentPath = false;
 			Filter = DefaultFilter;
-			TextExportMode = TextExportMode.Parse;
 		}
 	}
 }

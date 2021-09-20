@@ -29,6 +29,10 @@ namespace AssetRipper.Library.Configuration
 		/// How terrain data is exported. Recommended: Native
 		/// </summary>
 		public TerrainExportMode TerrainExportMode { get; set; }
+		/// <summary>
+		/// How are text assets exported?
+		/// </summary>
+		public TextExportMode TextExportMode { get; set; }
 
 		public override void ResetToDefaultValues()
 		{
@@ -39,6 +43,7 @@ namespace AssetRipper.Library.Configuration
 			ShaderExportMode = ShaderExportMode.Dummy;
 			SpriteExportMode = SpriteExportMode.Native;
 			TerrainExportMode = TerrainExportMode.Native;
+			TextExportMode = TextExportMode.Parse;
 		}
 	}
 }

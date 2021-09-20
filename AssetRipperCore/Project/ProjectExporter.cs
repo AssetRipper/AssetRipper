@@ -149,10 +149,6 @@ namespace AssetRipper.Core.Project
 			OverrideBinaryExporter(ClassIDType.Shader);
 
 			OverrideExporter(ClassIDType.MonoScript, new ScriptExporter(m_fileCollection.AssemblyManager));
-
-			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter(configuration));
-			OverrideExporter(ClassIDType.Font, new FontAssetExporter());
-			OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
 		}
 
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>

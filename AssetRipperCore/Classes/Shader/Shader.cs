@@ -32,6 +32,7 @@ namespace AssetRipper.Core.Classes.Shader
 			return 1;
 		}
 
+		#region Version methods
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
@@ -82,11 +83,11 @@ namespace AssetRipper.Core.Classes.Shader
 		{
 			return !flags.IsRelease() && !flags.IsBuiltinResources() && version.IsGreaterEqual(4, 5);
 		}
-
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
 		private static bool IsDoubleArray(UnityVersion version) => version.IsGreaterEqual(2019, 3);
+		#endregion
 
 		public override void Read(AssetReader reader)
 		{
