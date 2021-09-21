@@ -1,18 +1,12 @@
-using AssetRipper.Core;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Collections;
-using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
 using ShaderTextRestorer.Exporters;
 using ShaderTextRestorer.Exporters.DirectX;
 using ShaderTextRestorer.IO;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
@@ -20,7 +14,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
-	public sealed class ShaderAssetExporter : IAssetExporter
+	public sealed class ShaderAssetExporter : BinaryAssetExporter
 	{
 		ShaderExportMode ExportMode { get; set; }
 
@@ -29,11 +23,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 			ExportMode = options.ShaderExportMode;
 		}
 
-		public bool IsHandle(UnityObject asset) => true;
-
 		public static bool IsDX11ExportMode(ShaderExportMode mode) => mode == ShaderExportMode.Disassembly;
 
-		public bool Export(IExportContainer container, UnityObject asset, string path)
+		public override bool Export(IExportContainer container, UnityObject asset, string path)
 		{
 			Shader shader = (Shader)asset;
 
@@ -43,7 +35,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
-				if (ExportMode == ShaderExportMode.Dummy)
+				if (ExportMode == ShaderExportMode.Dummy && DummyShaderTextExporter.IsEncoded(container.Version))
 				{
 					DummyShaderTextExporter.ExportShader(shader, container, fileStream, DefaultShaderExporterInstantiator);
 				}
@@ -56,39 +48,6 @@ namespace AssetRipper.Library.Exporters.Shaders
 					ExportBinary(shader, container, fileStream, DefaultShaderExporterInstantiator);
 				}
 			}
-			return true;
-		}
-
-		public void Export(IExportContainer container, UnityObject asset, string path, Action<IExportContainer, UnityObject, string> callback)
-		{
-			Export(container, asset, path);
-			callback?.Invoke(container, asset, path);
-		}
-
-		public bool Export(IExportContainer container, IEnumerable<UnityObject> assets, string path)
-		{
-			throw new NotSupportedException();
-		}
-
-		public void Export(IExportContainer container, IEnumerable<UnityObject> assets, string path, Action<IExportContainer, UnityObject, string> callback)
-		{
-			throw new NotSupportedException();
-		}
-
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
-		{
-			return new AssetExportCollection(this, asset);
-		}
-
-		public AssetType ToExportType(UnityObject asset)
-		{
-			ToUnknownExportType(asset.ClassID, out AssetType assetType);
-			return assetType;
-		}
-
-		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
-		{
-			assetType = AssetType.Meta;
 			return true;
 		}
 
