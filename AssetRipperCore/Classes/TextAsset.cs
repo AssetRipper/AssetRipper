@@ -4,7 +4,6 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
-using System.IO;
 using System.Text;
 
 namespace AssetRipper.Core.Classes

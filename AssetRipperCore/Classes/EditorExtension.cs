@@ -1,6 +1,8 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
+#if UNIVERSAL
 using AssetRipper.Core.IO.Extensions;
+#endif
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Asset;

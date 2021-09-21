@@ -1,7 +1,6 @@
-using AssetRipper.Core.Converters.Shader;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.IO;
+using ShaderTextRestorer.IO;
 
 namespace ShaderTextRestorer.Exporters.DirectX
 {

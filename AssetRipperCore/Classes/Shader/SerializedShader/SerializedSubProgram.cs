@@ -1,8 +1,5 @@
-using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 
@@ -106,28 +103,6 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 				else
 					ShaderRequirements = reader.ReadInt32();
 			}
-		}
-
-		public void Export(ShaderWriter writer, ShaderType type, bool isTier)
-		{
-			writer.WriteIndent(4);
-#warning TODO: convertion (DX to HLSL)
-			ShaderGpuProgramType programType = GetProgramType(writer.Version);
-			GPUPlatform graphicApi = programType.ToGPUPlatform(writer.Platform);
-			writer.Write("SubProgram \"{0} ", graphicApi);
-			if (isTier)
-			{
-				writer.Write("hw_tier{0} ", ShaderHardwareTier.ToString("00"));
-			}
-			writer.Write("\" {\n");
-			writer.WriteIndent(5);
-
-			int platformIndex = writer.Shader.Platforms.IndexOf(graphicApi);
-			writer.Shader.Blobs[platformIndex].SubPrograms[BlobIndex].Export(writer, type);
-
-			writer.Write('\n');
-			writer.WriteIndent(4);
-			writer.Write("}\n");
 		}
 
 		public ShaderGpuProgramType GetProgramType(UnityVersion version)

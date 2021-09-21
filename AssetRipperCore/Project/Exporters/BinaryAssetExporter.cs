@@ -18,11 +18,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public virtual bool Export(IExportContainer container, Object asset, string path)
 		{
-			using (Stream stream = FileUtils.CreateVirtualFile(path))
-			{
-				asset.ExportBinary(container, stream);
-			}
-			return true;
+			throw new NotSupportedException();
 		}
 
 		public virtual void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)

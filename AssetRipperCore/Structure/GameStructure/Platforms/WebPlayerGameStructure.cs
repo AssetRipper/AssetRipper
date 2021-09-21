@@ -1,4 +1,3 @@
-using AssetRipper.Core.Utils;
 using System;
 using System.IO;
 

@@ -5,7 +5,6 @@ using AssetRipper.Core.Parser.Files.BundleFile;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
-using AssetRipper.Core.Utils;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;

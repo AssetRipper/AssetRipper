@@ -1,6 +1,8 @@
 # Development Roadmap
 
 ## 0.1.7.0
+* Animation Export
+  * Optimized by SamboyCoding!
 * Audio Export
   * Add FMOD cross-platform backup exporter (done!)
   * Allow other audio formats when not vorbis encoded (done!)
@@ -10,6 +12,7 @@
   * Merge mesh converter classes into their respective exporters (done!)
   * Experimental OBJ export for terrains (done!)
 * Shader Export
+  * Move shader export classes out of the core project for cleaner and clearer code. (done!)
   * Reformat the shader export system to support two sided shaders
 * Script Export
   * Optimize script exporter (done!)

@@ -146,8 +146,6 @@ namespace AssetRipper.Core.Project
 			OverrideYamlExporter(ClassIDType.TerrainLayer);
 			OverrideYamlExporter(ClassIDType.LightingSettings);
 
-			OverrideBinaryExporter(ClassIDType.Shader);
-
 			OverrideExporter(ClassIDType.MonoScript, new ScriptExporter(m_fileCollection.AssemblyManager));
 		}
 
@@ -174,8 +172,6 @@ namespace AssetRipper.Core.Project
 		}
 
 		public void OverrideYamlExporter(ClassIDType classType) => OverrideExporter(classType, YamlExporter);
-
-		public void OverrideBinaryExporter(ClassIDType classType) => OverrideExporter(classType, BinaryExporter);
 
 		public void Export(GameCollection fileCollection, CoreConfiguration options) => Export(fileCollection, fileCollection.FetchSerializedFiles(), options);
 		public void Export(GameCollection fileCollection, SerializedFile file, CoreConfiguration options) => Export(fileCollection, new SerializedFile[] { file }, options);
@@ -324,7 +320,6 @@ namespace AssetRipper.Core.Project
 		}
 
 		private YAMLAssetExporter YamlExporter { get; } = new YAMLAssetExporter();
-		private BinaryAssetExporter BinaryExporter { get; } = new BinaryAssetExporter();
 		private DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
 
 		private readonly Dictionary<ClassIDType, Stack<IAssetExporter>> m_exporters = new Dictionary<ClassIDType, Stack<IAssetExporter>>();

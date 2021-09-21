@@ -2,8 +2,6 @@ using AssetRipper.Core.Classes.Material;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Shader.Blob;
 using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Converters.Shader;
-using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
@@ -13,7 +11,6 @@ using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader
@@ -177,46 +174,6 @@ namespace AssetRipper.Core.Classes.Shader
 #endif
 		}
 
-		public override void ExportBinary(IExportContainer container, Stream stream) => ExportBinary(container, stream, DefaultShaderExporterInstantiator);
-		public void ExportBinary(IExportContainer container, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
-		{
-			if (IsSerialized(container.Version))
-			{
-				using (ShaderWriter writer = new ShaderWriter(stream, this, exporterInstantiator))
-				{
-					ParsedForm.Export(writer);
-				}
-			}
-			else if (HasBlob(container.Version))
-			{
-				using (ShaderWriter writer = new ShaderWriter(stream, this, exporterInstantiator))
-				{
-					string header = Encoding.UTF8.GetString(Script);
-					if (Blobs.Length == 0)
-					{
-						writer.Write(header);
-					}
-					else
-					{
-						Blobs[0].Export(writer, header);
-					}
-				}
-			}
-			else
-			{
-				using (BinaryWriter writer = new BinaryWriter(stream))
-				{
-					writer.Write(Script);
-				}
-			}
-		}
-
-		public void ExportDummy(IExportContainer container, Stream stream) => ExportDummy(container, stream, DefaultShaderExporterInstantiator);
-		public void ExportDummy(IExportContainer container, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
-		{
-			DummyShaderTextExporter.ExportShader(this, container, stream, exporterInstantiator);
-		}
-
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
@@ -230,27 +187,6 @@ namespace AssetRipper.Core.Classes.Shader
 				{
 					yield return asset;
 				}
-			}
-		}
-
-		public static ShaderTextExporter DefaultShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
-		{
-			switch (graphicApi)
-			{
-				case GPUPlatform.unknown:
-					return new ShaderTextExporter();
-
-				case GPUPlatform.openGL:
-				case GPUPlatform.gles:
-				case GPUPlatform.gles3:
-				case GPUPlatform.glcore:
-					return new ShaderGLESExporter();
-
-				case GPUPlatform.metal:
-					return new ShaderMetalExporter();
-
-				default:
-					return new ShaderUnknownExporter(graphicApi);
 			}
 		}
 

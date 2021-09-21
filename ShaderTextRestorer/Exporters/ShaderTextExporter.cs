@@ -1,10 +1,10 @@
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Extensions;
-using AssetRipper.Core.IO;
+using ShaderTextRestorer.IO;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Core.Converters.Shader
+namespace ShaderTextRestorer.Exporters
 {
 	public class ShaderTextExporter
 	{
@@ -44,7 +44,7 @@ namespace AssetRipper.Core.Converters.Shader
 		}
 		protected static void ExportText(TextWriter writer, char[] array)
 		{
-			for(int i = 0; i < array.Length; i++)
+			for (int i = 0; i < array.Length; i++)
 			{
 				char c = array[i];
 				if (c == '\n')

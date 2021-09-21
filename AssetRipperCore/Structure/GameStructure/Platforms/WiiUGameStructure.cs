@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Utils;
-using System;
+﻿using System;
 using System.IO;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms

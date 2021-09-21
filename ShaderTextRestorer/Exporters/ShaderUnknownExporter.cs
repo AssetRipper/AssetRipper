@@ -1,8 +1,8 @@
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.IO;
+using ShaderTextRestorer.IO;
 
-namespace AssetRipper.Core.Converters.Shader
+namespace ShaderTextRestorer.Exporters
 {
 	public class ShaderUnknownExporter : ShaderTextExporter
 	{

@@ -1,7 +1,5 @@
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
-using System.IO;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
@@ -15,18 +13,6 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			Comp.Read(reader);
 		}
 
-		public void Export(TextWriter writer, StencilType type)
-		{
-			writer.WriteIndent(4);
-			writer.Write("Comp{0} {1}\n", type.ToSuffixString(), CompValue);
-			writer.WriteIndent(4);
-			writer.Write("Pass{0} {1}\n", type.ToSuffixString(), PassValue);
-			writer.WriteIndent(4);
-			writer.Write("Fail{0} {1}\n", type.ToSuffixString(), FailValue);
-			writer.WriteIndent(4);
-			writer.Write("ZFail{0} {1}\n", type.ToSuffixString(), ZFailValue);
-		}
-
 		public bool IsDefault => PassValue.IsKeep() && FailValue.IsKeep() && ZFailValue.IsKeep() && CompValue.IsAlways();
 
 		public SerializedShaderFloatValue Pass;
@@ -34,9 +20,9 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public SerializedShaderFloatValue ZFail;
 		public SerializedShaderFloatValue Comp;
 
-		private StencilOp PassValue => (StencilOp)Pass.Val;
-		private StencilOp FailValue => (StencilOp)Fail.Val;
-		private StencilOp ZFailValue => (StencilOp)ZFail.Val;
-		private StencilComp CompValue => (StencilComp)Comp.Val;
+		public StencilOp PassValue => (StencilOp)Pass.Val;
+		public StencilOp FailValue => (StencilOp)Fail.Val;
+		public StencilOp ZFailValue => (StencilOp)ZFail.Val;
+		public StencilComp CompValue => (StencilComp)Comp.Val;
 	}
 }

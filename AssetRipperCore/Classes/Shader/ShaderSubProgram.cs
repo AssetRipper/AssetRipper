@@ -1,8 +1,6 @@
 using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using System;
 using System.Collections.Generic;
@@ -309,39 +307,6 @@ namespace AssetRipper.Core.Classes.Shader
 		{
 #warning TODO:
 			throw new NotImplementedException();
-		}
-
-		public void Export(ShaderWriter writer, ShaderType type)
-		{
-			if (GlobalKeywords.Length > 0)
-			{
-				writer.Write("Keywords { ");
-				foreach (string keyword in GlobalKeywords)
-				{
-					writer.Write("\"{0}\" ", keyword);
-				}
-				if (HasLocalKeywords(writer.Version))
-				{
-					foreach (string keyword in LocalKeywords)
-					{
-						writer.Write("\"{0}\" ", keyword);
-					}
-				}
-				writer.Write("}\n");
-				writer.WriteIndent(5);
-			}
-
-#warning TODO: convertion (DX to HLSL)
-			ShaderGpuProgramType programType = GetProgramType(writer.Version);
-			writer.Write("\"{0}", programType.ToProgramDataKeyword(writer.Platform, type));
-			if (ProgramData.Length > 0)
-			{
-				writer.Write("\n");
-				writer.WriteIndent(5);
-
-				writer.WriteShaderData(ref this);
-			}
-			writer.Write('"');
 		}
 
 		public ShaderGpuProgramType GetProgramType(UnityVersion version)

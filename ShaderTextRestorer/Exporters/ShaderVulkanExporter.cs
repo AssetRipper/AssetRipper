@@ -1,4 +1,3 @@
-using AssetRipper.Core.Converters.Shader;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.SerializedShader;
@@ -6,6 +5,7 @@ using Smolv;
 using SpirV;
 using System;
 using System.IO;
+using ShaderTextRestorer.IO;
 
 namespace ShaderTextRestorer.Exporters
 {

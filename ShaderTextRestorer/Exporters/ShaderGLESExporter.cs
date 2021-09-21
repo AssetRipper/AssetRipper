@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Core.Converters.Shader
+﻿namespace ShaderTextRestorer.Exporters
 {
 	public class ShaderGLESExporter : ShaderTextExporter
 	{

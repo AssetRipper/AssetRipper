@@ -1,11 +1,7 @@
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using System;
 using System.Collections.Generic;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
@@ -58,68 +54,6 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			Name = reader.ReadString();
 			TextureName = reader.ReadString();
 			Tags.Read(reader);
-		}
-
-		public void Export(ShaderWriter writer)
-		{
-			writer.WriteIndent(2);
-			writer.Write("{0} ", Type.ToString());
-
-			if (Type == SerializedPassType.UsePass)
-			{
-				writer.Write("\"{0}\"\n", UseName);
-			}
-			else
-			{
-				writer.Write("{\n");
-
-				if (Type == SerializedPassType.GrabPass)
-				{
-					if (TextureName.Length > 0)
-					{
-						writer.WriteIndent(3);
-						writer.Write("\"{0}\"\n", TextureName);
-					}
-				}
-				else if (Type == SerializedPassType.Pass)
-				{
-					State.Export(writer);
-
-					if ((ProgramMask & ShaderType.Vertex.ToProgramMask()) != 0)
-					{
-						ProgVertex.Export(writer, ShaderType.Vertex);
-					}
-					if ((ProgramMask & ShaderType.Fragment.ToProgramMask()) != 0)
-					{
-						ProgFragment.Export(writer, ShaderType.Fragment);
-					}
-					if ((ProgramMask & ShaderType.Geometry.ToProgramMask()) != 0)
-					{
-						ProgGeometry.Export(writer, ShaderType.Geometry);
-					}
-					if ((ProgramMask & ShaderType.Hull.ToProgramMask()) != 0)
-					{
-						ProgHull.Export(writer, ShaderType.Hull);
-					}
-					if ((ProgramMask & ShaderType.Domain.ToProgramMask()) != 0)
-					{
-						ProgDomain.Export(writer, ShaderType.Domain);
-					}
-					if ((ProgramMask & ShaderType.RayTracing.ToProgramMask()) != 0)
-					{
-						ProgDomain.Export(writer, ShaderType.RayTracing);
-					}
-
-#warning HasInstancingVariant?
-				}
-				else
-				{
-					throw new NotSupportedException($"Unsupported pass type {Type}");
-				}
-
-				writer.WriteIndent(2);
-				writer.Write("}\n");
-			}
 		}
 
 		public Hash128[] EditorDataHash { get; set; }

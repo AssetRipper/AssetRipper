@@ -7,7 +7,6 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace AssetRipper.Core.Classes
 {

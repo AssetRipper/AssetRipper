@@ -12,7 +12,9 @@ using AssetRipper.Core.YAML.Extensions;
 using Mono.Cecil;
 using System.Collections.Generic;
 using System.IO;
+#if UNIVERSAL
 using System.Linq;
+#endif
 
 namespace AssetRipper.Core.Classes
 {

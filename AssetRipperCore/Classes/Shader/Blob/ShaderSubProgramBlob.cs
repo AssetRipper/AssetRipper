@@ -1,7 +1,4 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Lz4;
@@ -41,38 +38,6 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 				compressedLengths[i] = compressedLength;
 				decompressedLengths[i] = decompressedLength;
 			}
-		}
-
-		public void Export(ShaderWriter writer, string header)
-		{
-			int j = 0;
-			while (true)
-			{
-				int index = header.IndexOf(GpuProgramIndexName, j);
-				if (index == -1)
-				{
-					break;
-				}
-
-				int length = index - j;
-				writer.WriteString(header, j, length);
-				j += length + GpuProgramIndexName.Length + 1;
-
-				int subIndex = -1;
-				for (int startIndex = j; j < header.Length; j++)
-				{
-					if (!char.IsDigit(header[j]))
-					{
-						string numberStr = header.Substring(startIndex, j - startIndex);
-						subIndex = int.Parse(numberStr);
-						break;
-					}
-				}
-
-				// we don't know shader type so pass vertex
-				SubPrograms[subIndex].Export(writer, ShaderType.Vertex);
-			}
-			writer.WriteString(header, j, header.Length - j);
 		}
 
 		private void ReadBlob(AssetLayout layout, MemoryStream memStream, uint compressedLength, uint decompressedLength, int segment)
@@ -155,6 +120,6 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 		public ShaderSubProgramEntry[] Entries { get; set; }
 		public ShaderSubProgram[] SubPrograms { get; set; }
 
-		private const string GpuProgramIndexName = "GpuProgramIndex";
+		public const string GpuProgramIndexName = "GpuProgramIndex";
 	}
 }

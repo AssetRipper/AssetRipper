@@ -1,7 +1,6 @@
 using AssetRipper.Core;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Converters.Shader;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -11,9 +10,11 @@ using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
 using ShaderTextRestorer.Exporters;
 using ShaderTextRestorer.Exporters.DirectX;
+using ShaderTextRestorer.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
@@ -21,7 +22,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 {
 	public sealed class ShaderAssetExporter : IAssetExporter
 	{
-		ShaderExportMode ExportMode { get; set; } = ShaderExportMode.Dummy;
+		ShaderExportMode ExportMode { get; set; }
 
 		public ShaderAssetExporter(LibraryConfiguration options)
 		{
@@ -44,15 +45,15 @@ namespace AssetRipper.Library.Exporters.Shaders
 			{
 				if (ExportMode == ShaderExportMode.Dummy)
 				{
-					shader.ExportDummy(container, fileStream, DefaultShaderExporterInstantiator);
+					DummyShaderTextExporter.ExportShader(shader, container, fileStream, DefaultShaderExporterInstantiator);
 				}
 				else if (IsDX11ExportMode(ExportMode))
 				{
-					shader.ExportBinary(container, fileStream, HLSLShaderExporterInstantiator);
+					ExportBinary(shader, container, fileStream, HLSLShaderExporterInstantiator);
 				}
 				else
 				{
-					shader.ExportBinary(container, fileStream, DefaultShaderExporterInstantiator);
+					ExportBinary(shader, container, fileStream, DefaultShaderExporterInstantiator);
 				}
 			}
 			return true;
@@ -91,14 +92,27 @@ namespace AssetRipper.Library.Exporters.Shaders
 			return true;
 		}
 
-		private static ShaderTextExporter DefaultShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
+		public static ShaderTextExporter DefaultShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
 		{
 			switch (graphicApi)
 			{
+				case GPUPlatform.unknown:
+					return new ShaderTextExporter();
+
+				case GPUPlatform.openGL:
+				case GPUPlatform.gles:
+				case GPUPlatform.gles3:
+				case GPUPlatform.glcore:
+					return new ShaderGLESExporter();
+
+				case GPUPlatform.metal:
+					return new ShaderMetalExporter();
+
 				case GPUPlatform.vulkan:
 					return new ShaderVulkanExporter();
+
 				default:
-					return Shader.DefaultShaderExporterInstantiator(version, graphicApi);
+					return new ShaderUnknownExporter(graphicApi);
 			}
 		}
 
@@ -114,7 +128,41 @@ namespace AssetRipper.Library.Exporters.Shaders
 					return new ShaderVulkanExporter();
 
 				default:
-					return Shader.DefaultShaderExporterInstantiator(version, graphicApi);
+					return DefaultShaderExporterInstantiator(version, graphicApi);
+			}
+		}
+
+		public void ExportBinary(Shader shader, IExportContainer container, Stream stream) => ExportBinary(shader, container, stream, DefaultShaderExporterInstantiator);
+		public void ExportBinary(Shader shader, IExportContainer container, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
+		{
+			if (Shader.IsSerialized(container.Version))
+			{
+				using (ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator))
+				{
+					shader.ParsedForm.Export(writer);
+				}
+			}
+			else if (Shader.HasBlob(container.Version))
+			{
+				using (ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator))
+				{
+					string header = Encoding.UTF8.GetString(shader.Script);
+					if (shader.Blobs.Length == 0)
+					{
+						writer.Write(header);
+					}
+					else
+					{
+						shader.Blobs[0].Export(writer, header);
+					}
+				}
+			}
+			else
+			{
+				using (BinaryWriter writer = new BinaryWriter(stream))
+				{
+					writer.Write(shader.Script);
+				}
 			}
 		}
 	}

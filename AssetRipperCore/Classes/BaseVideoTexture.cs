@@ -6,7 +6,6 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System.Collections.Generic;
-using System.IO;
 
 namespace AssetRipper.Core.Classes
 {

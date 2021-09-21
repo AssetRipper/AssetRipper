@@ -82,14 +82,6 @@ namespace AssetRipper.Core.Classes.Object
 			return ExportYAMLRoot(container);
 		}
 
-		/// <summary>
-		/// Export object's content in such formats as txt or png
-		/// </summary>
-		public virtual void ExportBinary(IExportContainer container, Stream stream)
-		{
-			throw new NotSupportedException($"Type {GetType().FullName} doesn't support binary export");
-		}
-
 		public virtual IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield break;

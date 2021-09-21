@@ -7,6 +7,7 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Library.Exporters.Audio;
+using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.TextureContainers.KTX;
@@ -302,7 +303,6 @@ namespace AssetRipper.GUI.AssetInfo
 		}
 
 		//Called from UI
-
 		public void TogglePause()
 		{
 			if(IsPaused)
@@ -330,7 +330,7 @@ namespace AssetRipper.GUI.AssetInfo
 		private string DumpShaderDataAsText(Shader shader)
 		{
 			using MemoryStream stream = new();
-			shader.ExportBinary(_uiAssetContainer, stream);
+			DummyShaderTextExporter.ExportShader(shader, _uiAssetContainer, stream, ShaderAssetExporter.DefaultShaderExporterInstantiator);
 
 			return Encoding.UTF8.GetString(stream.GetBuffer());
 		}

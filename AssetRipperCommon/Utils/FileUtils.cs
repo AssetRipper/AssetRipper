@@ -48,7 +48,6 @@ namespace AssetRipper.Core.Utils
 				validFileName = name + ext;
 			}
 
-			dirPath = dirPath;
 			if (!Directory.Exists(dirPath))
 			{
 				return validFileName;
