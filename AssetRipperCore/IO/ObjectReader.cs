@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Reading;
 using AssetRipper.Core.SerializedFiles;
 using System;
@@ -13,7 +14,7 @@ namespace AssetRipper.Core.IO
 		public uint byteSize;
 		public ClassIDType type;
 		public SerializedType serializedType;
-		public BuildTarget platform;
+		public Platform platform;
 		public SerializedFileFormatVersion m_Version;
 
 		public int[] version => assetsFile.version;

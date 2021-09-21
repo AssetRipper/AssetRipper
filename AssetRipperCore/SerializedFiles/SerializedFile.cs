@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.IO.FileReading;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Reading;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace AssetRipper.Core.SerializedFiles
 		public SerializedFileHeader header;
 		private byte m_FileEndianess;
 		public string unityVersion = "2.5.0f5";
-		public BuildTarget m_TargetPlatform = BuildTarget.UnknownPlatform;
+		public Platform m_TargetPlatform = Platform.UnknownPlatform;
 		private bool m_EnableTypeTree = true;
 		public List<SerializedType> m_Types;
 		public int bigIDEnabled = 0;
@@ -81,10 +82,10 @@ namespace AssetRipper.Core.SerializedFiles
 			}
 			if (header.m_Version >= SerializedFileFormatVersion.kUnknown_8)
 			{
-				m_TargetPlatform = (BuildTarget)reader.ReadInt32();
-				if (!Enum.IsDefined(typeof(BuildTarget), m_TargetPlatform))
+				m_TargetPlatform = (Platform)reader.ReadInt32();
+				if (!Enum.IsDefined(typeof(Platform), m_TargetPlatform))
 				{
-					m_TargetPlatform = BuildTarget.UnknownPlatform;
+					m_TargetPlatform = Platform.UnknownPlatform;
 				}
 			}
 			if (header.m_Version >= SerializedFileFormatVersion.kHasTypeTreeHashes)

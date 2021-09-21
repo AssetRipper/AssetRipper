@@ -8,8 +8,9 @@ namespace AssetRipper.Core.Parser.Files
 		Beta,
 		Final,
 		Patch,
+		Experimental,
 
-		MaxValue = Patch,
+		MaxValue = Experimental,
 	}
 
 	public static class UnityVersionTypeExtentions
@@ -29,6 +30,9 @@ namespace AssetRipper.Core.Parser.Files
 
 				case UnityVersionType.Patch:
 					return "p";
+
+				case UnityVersionType.Experimental:
+					return "e";
 
 				default:
 					throw new Exception($"Unsupported vertion type {_this}");

@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Core.IO.Asset
+namespace AssetRipper.Core.Interfaces
 {
 	public interface IYAMLExportableNew
 	{

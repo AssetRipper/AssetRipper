@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.IO;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.SerializedFiles;
 using System.Collections.Specialized;
 
@@ -11,7 +12,7 @@ namespace AssetRipper.Core.Reading.Classes
 		public long m_PathID;
 		public int[] version;
 		protected BuildType buildType;
-		public BuildTarget platform;
+		public Platform platform;
 		public ClassIDType type;
 		public SerializedType serializedType;
 		public uint byteSize;
@@ -29,7 +30,7 @@ namespace AssetRipper.Core.Reading.Classes
 			serializedType = reader.serializedType;
 			byteSize = reader.byteSize;
 
-			if (platform == BuildTarget.NoTarget)
+			if (platform == Platform.NoTarget)
 			{
 				var m_ObjectHideFlags = reader.ReadUInt32();
 			}

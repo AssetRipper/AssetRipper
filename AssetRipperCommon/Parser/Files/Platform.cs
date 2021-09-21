@@ -1,5 +1,6 @@
 namespace AssetRipper.Core.Parser.Files
 {
+	//TODO: rename to build target
 	public enum Platform : uint
 	{
 		ValidPlayer				= 1,

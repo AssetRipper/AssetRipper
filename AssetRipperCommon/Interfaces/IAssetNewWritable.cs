@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Core.IO.Asset
+﻿using AssetRipper.Core.IO.Asset;
+
+namespace AssetRipper.Core.Interfaces
 {
 	public interface IAssetNewWritable
 	{

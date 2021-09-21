@@ -1,4 +1,4 @@
-using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
