@@ -30,8 +30,8 @@ namespace AssetRipper.Core.Converters.Game
 		public TypeTreeContext(AssetLayout layout)
 		{
 			Layout = layout;
-			DefaultStringFlag = Layout.IsAlign ? TransferMetaFlags.AlignBytesFlag : TransferMetaFlags.NoTransferFlags;
-			DefaultArrayFlag = Layout.IsAlignArrays ? TransferMetaFlags.AlignBytesFlag : TransferMetaFlags.NoTransferFlags;
+			DefaultStringFlag = Layout.IsAlign ? TransferMetaFlags.AlignBytes : TransferMetaFlags.NoTransferFlags;
+			DefaultArrayFlag = Layout.IsAlignArrays ? TransferMetaFlags.AlignBytes : TransferMetaFlags.NoTransferFlags;
 		}
 
 		public void AddNode(string type, string name)
@@ -329,7 +329,7 @@ namespace AssetRipper.Core.Converters.Game
 
 		public void Align()
 		{
-			Nodes[DepthIndex].MetaFlag |= TransferMetaFlags.AlignBytesFlag;
+			Nodes[DepthIndex].MetaFlag |= TransferMetaFlags.AlignBytes;
 		}
 
 		private void BeginArrayInner(string type, string name, TransferMetaFlags flags)

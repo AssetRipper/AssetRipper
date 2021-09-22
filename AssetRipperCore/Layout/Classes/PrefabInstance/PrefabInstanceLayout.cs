@@ -170,7 +170,7 @@ namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 				}
 				context.AddArray(layout.ObjectsName, (c, n) => c.AddPPtr(c.Layout.EditorExtension.Name, n));
 				context.AddPPtr(layout.Name, layout.FatherName);
-				context.AddBool(layout.IsDataTemplateName, TransferMetaFlags.AlignBytesFlag);
+				context.AddBool(layout.IsDataTemplateName, TransferMetaFlags.AlignBytes);
 				GenerateNamedObjectTypeTree(context);
 			}
 			context.EndChildren();
