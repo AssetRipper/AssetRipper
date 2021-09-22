@@ -7,13 +7,13 @@ namespace AssetRipper.Core.Attributes
 	{
 		public string TypeName { get; }
 		public int IdNumber { get; }
-		public string FullName { get; } //TODO: Replace with System.Type?
+		public Type Type { get; }
 
-		public RegisterAssetTypeAttribute(string typeName, int idNumber, string fullName)
+		public RegisterAssetTypeAttribute(string typeName, int idNumber, Type type)
 		{
 			TypeName = typeName;
 			IdNumber = idNumber;
-			FullName = fullName;
+			Type = type;
 		}
 	}
 }
