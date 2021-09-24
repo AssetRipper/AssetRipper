@@ -9,10 +9,6 @@ using SharpGLTF.Scenes;
 
 namespace AssetRipper.Library.Exporters.Meshes
 {
-	using VERTEX_P = VertexBuilder<VertexPosition, VertexEmpty, VertexEmpty>;
-	using VERTEX_PN = VertexBuilder<VertexPositionNormal, VertexEmpty, VertexEmpty>;
-	using VERTEX_PNT = VertexBuilder<VertexPositionNormalTangent, VertexEmpty, VertexEmpty>;
-
 	public class GlbMeshExporter : BaseMeshExporter
 	{
 		public GlbMeshExporter(LibraryConfiguration configuration) : base(configuration) => BinaryExport = true;
@@ -36,39 +32,38 @@ namespace AssetRipper.Library.Exporters.Meshes
 		{
 			bool hasNormals = mesh.Normals != null && mesh.Normals.Length == mesh.Vertices.Length;
 			bool hasTangents = hasNormals && mesh.Tangents != null && mesh.Tangents.Length == mesh.Vertices.Length;
+			bool hasUV0 = mesh.UV0 != null && mesh.UV0.Length == mesh.Vertices.Length;
+			bool hasUV1 = hasUV0 && mesh.UV1 != null && mesh.UV1.Length == mesh.Vertices.Length;
 			
 			var sceneBuilder = new SceneBuilder();
 			var material = new MaterialBuilder("material");
 
 			if (hasTangents)
 			{
-				var meshBuilder = VERTEX_PNT.CreateCompatibleMesh(mesh.Name);
-				var primitiveBuilder = meshBuilder.UsePrimitive(material);
-				for (int j = 0; j < mesh.Indices.Count; j += 3)
-				{
-					primitiveBuilder.AddTriangle(GetVertex_PNT(mesh, mesh.Indices[j]), GetVertex_PNT(mesh, mesh.Indices[j + 1]), GetVertex_PNT(mesh, mesh.Indices[j + 2]));
-				}
-				sceneBuilder.AddRigidMesh(meshBuilder, System.Numerics.Matrix4x4.Identity);
+				if(hasUV1)
+					AddMeshToScene<VertexPositionNormalTangent, VertexTexture2>(mesh, sceneBuilder, material);
+				else if(hasUV0)
+					AddMeshToScene<VertexPositionNormalTangent, VertexTexture1>(mesh, sceneBuilder, material);
+				else
+					AddMeshToScene<VertexPositionNormalTangent, VertexEmpty>(mesh, sceneBuilder, material);
 			}
 			else if (hasNormals)
 			{
-				var meshBuilder = VERTEX_PN.CreateCompatibleMesh(mesh.Name);
-				var primitiveBuilder = meshBuilder.UsePrimitive(material);
-				for (int j = 0; j < mesh.Indices.Count; j += 3)
-				{
-					primitiveBuilder.AddTriangle(GetVertex_PN(mesh, mesh.Indices[j]), GetVertex_PN(mesh, mesh.Indices[j + 1]), GetVertex_PN(mesh, mesh.Indices[j + 2]));
-				}
-				sceneBuilder.AddRigidMesh(meshBuilder, System.Numerics.Matrix4x4.Identity);
+				if (hasUV1)
+					AddMeshToScene<VertexPositionNormal, VertexTexture2>(mesh, sceneBuilder, material);
+				else if (hasUV0)
+					AddMeshToScene<VertexPositionNormal, VertexTexture1>(mesh, sceneBuilder, material);
+				else
+					AddMeshToScene<VertexPositionNormal, VertexEmpty>(mesh, sceneBuilder, material);
 			}
 			else
 			{
-				var meshBuilder = VERTEX_P.CreateCompatibleMesh(mesh.Name);
-				var primitiveBuilder = meshBuilder.UsePrimitive(material);
-				for (int j = 0; j < mesh.Indices.Count; j += 3)
-				{
-					primitiveBuilder.AddTriangle(GetVertex_P(mesh, mesh.Indices[j]), GetVertex_P(mesh, mesh.Indices[j + 1]), GetVertex_P(mesh, mesh.Indices[j + 2]));
-				}
-				sceneBuilder.AddRigidMesh(meshBuilder, System.Numerics.Matrix4x4.Identity);
+				if (hasUV1)
+					AddMeshToScene<VertexPosition, VertexTexture2>(mesh, sceneBuilder, material);
+				else if (hasUV0)
+					AddMeshToScene<VertexPosition, VertexTexture1>(mesh, sceneBuilder, material);
+				else
+					AddMeshToScene<VertexPosition, VertexEmpty>(mesh, sceneBuilder, material);
 			}
 
 			var model = sceneBuilder.ToGltf2();
@@ -79,17 +74,52 @@ namespace AssetRipper.Library.Exporters.Meshes
 			return model.WriteGLB().ToArray();
 		}
 
-		private static VERTEX_P GetVertex_P(Mesh mesh, uint index)
+		private static void AddMeshToScene<TvG, TvM>(Mesh mesh, SceneBuilder sceneBuilder, MaterialBuilder material) where TvG : struct, IVertexGeometry where TvM : struct, IVertexMaterial
 		{
-			return new VERTEX_P(new VertexPosition(mesh.Vertices[index]));
+			var meshBuilder = VertexBuilder<TvG, TvM, VertexEmpty>.CreateCompatibleMesh(mesh.Name);
+			var primitiveBuilder = meshBuilder.UsePrimitive(material);
+			for (int j = 0; j < mesh.Indices.Count; j += 3)
+			{
+				primitiveBuilder.AddTriangle(GetVertex<TvG, TvM>(mesh, mesh.Indices[j]), GetVertex<TvG, TvM>(mesh, mesh.Indices[j + 1]), GetVertex<TvG, TvM>(mesh, mesh.Indices[j + 2]));
+			}
+			sceneBuilder.AddRigidMesh(meshBuilder, System.Numerics.Matrix4x4.Identity);
 		}
-		private static VERTEX_PN GetVertex_PN(Mesh mesh, uint index)
+
+		private static VertexBuilder<TvG, TvM, VertexEmpty> GetVertex<TvG, TvM>(Mesh mesh, uint index) where TvG : struct, IVertexGeometry where TvM : struct, IVertexMaterial
 		{
-			return new VERTEX_PN(new VertexPositionNormal(mesh.Vertices[index], mesh.Normals[index]));
-		}
-		private static VERTEX_PNT GetVertex_PNT(Mesh mesh, uint index)
-		{
-			return new VERTEX_PNT(new VertexPositionNormalTangent(mesh.Vertices[index], mesh.Normals[index], mesh.Tangents[index]));
+			IVertexGeometry geometry;
+			if(typeof(TvG) == typeof(VertexPosition))
+			{
+				geometry = new VertexPosition(mesh.Vertices[index]);
+			}
+			else if(typeof(TvG) == typeof(VertexPositionNormal))
+			{
+				geometry = new VertexPositionNormal(mesh.Vertices[index], mesh.Normals[index]);
+			}
+			else if(typeof(TvG) == typeof(VertexPositionNormalTangent))
+			{
+				geometry = new VertexPositionNormalTangent(mesh.Vertices[index], mesh.Normals[index], mesh.Tangents[index]);
+			}
+			else
+			{
+				geometry = default(TvG);
+			}
+
+			IVertexMaterial material;
+			if(typeof(TvM) == typeof(VertexTexture1))
+			{
+				material = new VertexTexture1(mesh.UV0[index]);
+			}
+			else if(typeof(TvM) == typeof(VertexTexture2))
+			{
+				material = new VertexTexture2(mesh.UV0[index], mesh.UV1[index]);
+			}
+			else
+			{
+				material = default(TvM);
+			}
+			
+			return new VertexBuilder<TvG, TvM, VertexEmpty>((TvG)geometry, (TvM)material);
 		}
 	}
 }
