@@ -38,15 +38,21 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 				throw new NullReferenceException("gameStructure.UnityVersion and gameStructure.UnityPlayerPath cannot both be null");
 			else
 				Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
+			
+			Logger.SendStatusChange("Parsing IL2CPP Metadata");
 
 			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion, false);
+			
+			Logger.SendStatusChange("Generating Mono Assemblies from IL2CPP");
 
 			Cpp2IlApi.MakeDummyDLLs(true);
 
 			if(LibCpp2IL.LibCpp2IlMain.Binary is LibCpp2IL.PE.PE)
 			{
+				Logger.SendStatusChange("Scanning IL2CPP Binary for library functions");
 				var keyFunctionAddresses = Cpp2IlApi.ScanForKeyFunctionAddresses();
 
+				Logger.SendStatusChange("Restoring Attributes on Generated Assemblies");
 				Cpp2IlApi.RunAttributeRestorationForAllAssemblies(keyFunctionAddresses);
 			}
 

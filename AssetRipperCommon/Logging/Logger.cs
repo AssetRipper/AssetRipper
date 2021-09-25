@@ -11,6 +11,8 @@ namespace AssetRipper.Core.Logging
 		private static readonly List<ILogger> loggers = new List<ILogger>();
 		public static bool AllowVerbose { private get; set; }
 
+		public static event Action<string> OnStatusChanged = _ => { };
+
 		static Logger()
 		{
 			Cpp2IL.Core.Logger.InfoLog += (string message, string source) => LogCpp2IL(LogType.Info, message);
@@ -120,5 +122,7 @@ namespace AssetRipper.Core.Logging
 		public static void Remove(ILogger logger) => loggers.Remove(logger);
 
 		public static void Clear() => loggers.Clear();
+
+		public static void SendStatusChange(string newStatus) => OnStatusChanged(newStatus);
 	}
 }
