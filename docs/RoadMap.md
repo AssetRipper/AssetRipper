@@ -32,10 +32,7 @@
 * Code Cleanup
   * Remove Reading namespace
   * Remove remaining Layout classes
-  * Move Third Party Dependencies to Nuget Packages
-    * Spirv
-    * Smolv
-    * Brotli
+  * Move more code to the Common and Library projects
 
 ## 0.2.0.0
 * Overhaul struct reading, which would enable:
@@ -137,6 +134,8 @@
     * FPS meter
     * Corner cube for orientation
     * XYZ axis for orientation
+    * Toggle face cull
+    * Wireframe option
   * Textures
     * Background options (for example: checkers, white, black, default)
     * Disable alpha channel option

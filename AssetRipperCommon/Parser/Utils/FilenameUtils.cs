@@ -1,4 +1,3 @@
-using AssetRipper.Core.Structure.Assembly.Managers;
 using System;
 using System.IO;
 
@@ -20,12 +19,10 @@ namespace AssetRipper.Core.Parser.Utils
 			return fileName == DefaultResourceName1 || fileName == DefaultResourceName2;
 		}
 
-#if UNIVERSAL
 		public static bool IsEditorResource(string fileName)
 		{
 			return fileName == EditorResourceName;
 		}
-#endif
 
 		public static bool IsBuiltinExtra(string fileName)
 		{
@@ -88,9 +85,9 @@ namespace AssetRipper.Core.Parser.Utils
 
 		public static string FixAssemblyEndian(string assembly)
 		{
-			if (assembly.EndsWith(MonoManager.AssemblyExtension, StringComparison.Ordinal))
+			if (assembly.EndsWith(AssemblyExtension, StringComparison.Ordinal))
 			{
-				return assembly.Substring(0, assembly.Length - MonoManager.AssemblyExtension.Length);
+				return assembly.Substring(0, assembly.Length - AssemblyExtension.Length);
 			}
 			return assembly;
 		}
@@ -126,5 +123,6 @@ namespace AssetRipper.Core.Parser.Utils
 		public const string BuiltinExtraName1 = "unity builtin extra";
 		public const string BuiltinExtraName2 = "unity_builtin_extra";
 		public const string EngineGeneratedF = "0000000000000000f000000000000000";
+		public const string AssemblyExtension = ".dll";
 	}
 }

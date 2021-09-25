@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Reading;
 using System;
 using System.IO;
 using System.Linq;
@@ -12,6 +11,9 @@ namespace AssetRipper.Core.IO.FileReading
 		public string FullPath { get; }
 		public string FileName { get; }
 		public FileType FileType { get; }
+
+		private static byte[] gzipMagic = { 0x1f, 0x8b };
+		private static byte[] brotliMagic = { 0x62, 0x72, 0x6F, 0x74, 0x6C, 0x69 };
 
 		public FileReader(string path) : this(path, File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) { }
 
@@ -39,14 +41,14 @@ namespace AssetRipper.Core.IO.FileReading
 					{
 						var magic = ReadBytes(2);
 						Position = 0;
-						if (WebFile.gzipMagic.SequenceEqual(magic))
+						if (gzipMagic.SequenceEqual(magic))
 						{
 							return FileType.WebFile;
 						}
 						Position = 0x20;
 						magic = ReadBytes(6);
 						Position = 0;
-						if (WebFile.brotliMagic.SequenceEqual(magic))
+						if (brotliMagic.SequenceEqual(magic))
 						{
 							return FileType.WebFile;
 						}
