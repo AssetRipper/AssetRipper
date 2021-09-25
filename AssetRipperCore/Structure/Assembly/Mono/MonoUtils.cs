@@ -4,6 +4,7 @@ using Mono.Cecil;
 using Mono.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AssetRipper.Core.Structure.Assembly.Mono
@@ -881,7 +882,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			return type.IsArray || IsList(type);
 		}
 
-		public static bool IsSerializableGeneric(TypeReference type)
+		public static bool IsSerializableGeneric(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
 		{
 			if (type.IsGenericInstance)
 			{
@@ -891,6 +892,33 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				TypeDefinition definition = type.Resolve();
 				if (definition.IsEnum)
 					return true;
+
+				if (definition.IsSerializable && type is GenericInstanceType git)
+				{
+					var allSerializableArgs = git.GenericArguments.All(t =>
+					{
+						if (t is GenericParameter p && arguments.TryGetValue(p, out TypeReference resolved))
+							t = resolved;
+						
+						if (t.IsGenericInstance)
+							return IsSerializableGeneric(t, arguments);
+
+						var resolvedType = t.Resolve();
+
+						if (resolvedType == null)
+							return false;
+
+						if (resolvedType.IsSerializable)
+							return true;
+
+						if (resolvedType.BaseType?.Resolve()?.IsSerializable == true)
+							return true;
+
+						return false;
+					});
+					
+					return allSerializableArgs;
+				}
 			}
 			return false;
 		}
@@ -1075,10 +1103,10 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				{
 					return false;
 				}
-				// array of serializable generics isn't serializable
-				if (IsSerializableGeneric(elementType))
+				// array of serializable generics is serializable
+				if (IsSerializableGeneric(elementType, context.Arguments))
 				{
-					return false;
+					return true;
 				}
 				// check if array element is serializable
 				MonoFieldContext elementScope = new MonoFieldContext(context, elementType, true);
@@ -1129,7 +1157,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			if (fieldType.IsGenericInstance)
 			{
 				// even monobehaviour derived generic instances aren't serialiable
-				return IsSerializableGeneric(fieldType);
+				return IsSerializableGeneric(fieldType, context.Arguments);
 			}
 			if (IsMonoDerived(fieldType))
 			{

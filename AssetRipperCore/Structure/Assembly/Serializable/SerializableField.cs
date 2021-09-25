@@ -2,6 +2,7 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
@@ -172,6 +173,10 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 					if (etalon.IsArray)
 					{
 						int count = reader.ReadInt32();
+
+						if (count > 1_000_000)
+							Logger.Warning($"Unreasonable count for complex array: {count} for field {etalon.Name} of type {etalon.Type}. Probably means there's a bug in serializable detection. Expecting to deadlock here.");
+						
 						IAsset[] structures = new IAsset[count];
 						for (int i = 0; i < count; i++)
 						{
