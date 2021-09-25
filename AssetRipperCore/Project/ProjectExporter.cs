@@ -6,7 +6,6 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Project.Exporters.Script;
 using AssetRipper.Core.Structure;
 using System;
 using System.Collections.Generic;
@@ -145,8 +144,6 @@ namespace AssetRipper.Core.Project
 			OverrideYamlExporter(ClassIDType.SpriteAtlas);
 			OverrideYamlExporter(ClassIDType.TerrainLayer);
 			OverrideYamlExporter(ClassIDType.LightingSettings);
-
-			OverrideExporter(ClassIDType.MonoScript, new ScriptExporter(m_fileCollection.AssemblyManager));
 		}
 
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>

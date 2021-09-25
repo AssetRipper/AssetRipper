@@ -1,8 +1,11 @@
+using AssetRipper.Core;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Utils;
@@ -14,7 +17,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Library.Exporters.Scripts
 {
 	public class ScriptExportCollection : ExportCollection
 	{

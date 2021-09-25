@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AssetRipper.Core.Project.Exporters.Script
+namespace AssetRipper.Library.Exporters.Scripts
 {
 	internal class AssemblyResolver : ICSharpCode.Decompiler.Metadata.IAssemblyResolver
 	{

@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace AssetRipper.Core.Project.Exporters.Script
+namespace AssetRipper.Library.Exporters.Scripts
 {
 	public sealed class ScriptManager
 	{

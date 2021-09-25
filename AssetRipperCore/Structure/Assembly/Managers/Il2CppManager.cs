@@ -8,7 +8,7 @@ using Cpp2IlApi = Cpp2IL.Core.Cpp2IlApi;
 
 namespace AssetRipper.Core.Structure.Assembly.Managers
 {
-	internal sealed class Il2CppManager : BaseManager
+	public sealed class Il2CppManager : BaseManager
 	{
 		public string GameAssemblyPath { get; private set; }
 		public string UnityPlayerPath { get; private set; }

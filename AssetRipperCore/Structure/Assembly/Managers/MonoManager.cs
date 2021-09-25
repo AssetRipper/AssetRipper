@@ -6,7 +6,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Structure.Assembly.Managers
 {
-	internal sealed class MonoManager : BaseManager
+	public sealed class MonoManager : BaseManager
 	{
 		public const string AssemblyExtension = ".dll";
 		public string GameDataPath { get; private set; }

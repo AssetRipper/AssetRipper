@@ -1,15 +1,18 @@
-﻿using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using Object = AssetRipper.Core.Classes.Object.Object;
 
-namespace AssetRipper.Core.Project.Exporters.Script
+namespace AssetRipper.Library.Exporters.Scripts
 {
 	public class ScriptExporter : IAssetExporter
 	{

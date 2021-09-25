@@ -5,7 +5,7 @@ using ICSharpCode.Decompiler.TypeSystem;
 using Mono.Cecil;
 using System.Collections.Generic;
 
-namespace AssetRipper.Core.Project.Exporters.Script
+namespace AssetRipper.Library.Exporters.Scripts
 {
 	public class ScriptDecompiler
 	{

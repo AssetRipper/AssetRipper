@@ -7,6 +7,7 @@ using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Miscellaneous;
+using AssetRipper.Library.Exporters.Scripts;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
@@ -113,6 +114,9 @@ namespace AssetRipper.Library
 			//Terrain exporters
 			OverrideExporter(ClassIDType.TerrainData, new TerrainHeatmapExporter(Settings));
 			OverrideExporter(ClassIDType.TerrainData, new TerrainObjExporter(Settings));
+
+			//Script exporters
+			OverrideExporter(ClassIDType.MonoScript, new ScriptExporter(GameStructure.FileCollection.AssemblyManager));
 
 			//Miscellaneous exporters
 			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter(Settings));

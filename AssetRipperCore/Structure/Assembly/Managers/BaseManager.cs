@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Structure.Assembly.Managers
 {
-	internal class BaseManager : IAssemblyManager, IAssemblyResolver
+	public class BaseManager : IAssemblyManager, IAssemblyResolver
 	{
 		public virtual bool IsSet => false;
 
