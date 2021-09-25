@@ -7,7 +7,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 	{
 		NoTransferFlags						= 0x0,
 		HideInEditor								= 0x1,
-		Unknown1								= 0x2,
+		Unknown1									= 0x2,
 		Unknown2								= 0x4,
 		Unknown3								= 0x8,
 		NotEditable								= 0x10,
