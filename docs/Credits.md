@@ -6,6 +6,8 @@ It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](
 
 It has borrowed code from [spacehamster](https://github.com/spacehamster)'s [uTinyRipperExporter](https://github.com/spacehamster/UtinyRipperExporter) project licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/uTinyRipperExporter.md).
 
+Some code from Unity is licensed under the [Unity Reference-Only License](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Unity.md).
+
 [Avalonia](https://github.com/AvaloniaUI/Avalonia) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Avalonia.md).
 
 [Brotli](https://github.com/google/brotli) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Brotli.md).
