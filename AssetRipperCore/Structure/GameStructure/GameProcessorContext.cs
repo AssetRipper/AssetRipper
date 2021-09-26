@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,11 @@ namespace AssetRipper.Core.Structure.GameStructure
 		{
 			while (m_files.Count > 0)
 			{
-				SerializedFile file = m_files.First().Key;
+				(SerializedFile file, SerializedFileScheme scheme) = m_files.First();
+				if(scheme.Stream.Length > 100 * 1024)
+					//Don't update status for files less than 100kb because they'll be read so quickly that they're just clutter. 
+					Logger.SendStatusChange($"Loading assets from {file.Name}");
+				
 				ReadFile(file);
 			}
 		}

@@ -49,6 +49,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private void Load(List<string> paths, CoreConfiguration configuration, LayoutInfo layinfo)
 		{
+			Logger.SendStatusChange("Collecting files and detecting game structure");
 			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure platformStructure, out MixedGameStructure mixedStructure);
 			PlatformStructure = platformStructure;
 			MixedStructure = mixedStructure;
@@ -71,8 +72,10 @@ namespace AssetRipper.Core.Structure.GameStructure
 				}
 				else
 				{
+					Logger.SendStatusChange("Initializing asset layout...");
+					
 					//Assigns a layout if one wasn't already provided
-					layinfo = layinfo ?? processor.GetLayoutInfo();
+					layinfo ??= processor.GetLayoutInfo();
 
 					//Initializes all the component layouts
 					AssetLayout layout = new AssetLayout(layinfo);
@@ -83,13 +86,19 @@ namespace AssetRipper.Core.Structure.GameStructure
 					Logger.Info(LogCategory.Import, $"Files use the '{pars.ScriptBackend}' scripting backend.");
 					pars.RequestAssemblyCallback = OnRequestAssembly;
 					pars.RequestResourceCallback = OnRequestResource;
+					
+					Logger.SendStatusChange("Creating file collection");
 
 					//Sets its fields and creates the Project Exporter
 					FileCollection = new GameCollection(pars, configuration);
 
+					Logger.SendStatusChange("Loading assemblies");
+					
 					//Loads any Mono or IL2Cpp assemblies
 					FileCollection.AssemblyManager.Initialize(PlatformStructure);
 
+					Logger.SendStatusChange("Starting scheme processing");
+					
 					//Creates new objects for each scheme in the collection
 					processor.ProcessSchemes(FileCollection);
 				}

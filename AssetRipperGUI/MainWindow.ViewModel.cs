@@ -47,6 +47,8 @@ namespace AssetRipper.GUI
 		private readonly Ripper _ripper = new();
 		private UIAssetContainer? _assetContainer;
 		private HttpClient client = new HttpClient();
+		private string? _importingFrom;
+		private bool _updatingLoadingText = false;
 
 		public bool HasFile
 		{
@@ -123,6 +125,8 @@ namespace AssetRipper.GUI
 			Logger.Add(new ViewModelLogger(this));
 			Logger.Add(new FileLogger());
 			Logger.LogSystemInformation("AssetRipper GUI Version");
+
+			Logger.OnStatusChanged += OnImportStatusUpdated;
 			
 			ProductInfoHeaderValue product = new (BuildInfo.Name, BuildInfo.Version);
 			ProductInfoHeaderValue comment = new ($"(+{websiteURL})");
@@ -130,7 +134,23 @@ namespace AssetRipper.GUI
 			client.DefaultRequestHeaders.UserAgent.Add(comment);
 		}
 
-		private void UpdateGamePathInUi(string path) => LoadingText = $"Loading Game Content from {path}...";
+		private void UpdateGamePathInUi(string path)
+		{
+			LoadingText = $"Loading Game Content from {path}...";
+			_importingFrom = path;
+		}
+		
+		private void OnImportStatusUpdated(string newStatus)
+		{
+			// Logger.Log(LogType.Info, LogCategory.System, $"{newStatus} at {DateTime.Now:hh:mm:ss.fff}");
+
+			if(_updatingLoadingText)
+				return;
+
+			_updatingLoadingText = true;
+			LoadingText = $"Loading Game Content from {_importingFrom}...\n{newStatus}...";
+			_updatingLoadingText = false;
+		}
 
 		public void OnFileDropped(DragEventArgs e)
 		{
