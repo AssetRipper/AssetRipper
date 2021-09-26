@@ -34,7 +34,7 @@ LibOgg and LibVorbis are licensed from [Xiph](https://www.xiph.org/) under the [
 
 [NAudio](https://github.com/naudio/NAudio) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/NAudio.md).
 
-[NAudio.Vorbis](https://github.com/naudio/Vorbis) is licensed under the [Microsoft Public License](https://github.com/ds5678/AssetRipper/blob/master/Licenses/NAudioVorbis.md).
+[NAudio.Vorbis](https://github.com/naudio/Vorbis) is licensed under the [MIT License](https://github.com/ds5678/AssetRipper/blob/master/Licenses/NAudioVorbis.md).
 
 [NVorbis](https://github.com/NVorbis/NVorbis) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/NVorbis.md).
 
