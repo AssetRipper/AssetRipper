@@ -1,51 +1,10 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.YAML;
-using System;
-
-namespace AssetRipper.Core
+﻿namespace AssetRipper.Core
 {
 	/// <summary>
-	/// The artificial base class for all generated Unity classes
+	/// The artificial base class for all generated Unity classes with Type ID numbers<br/>
+	/// In other words, the classes that inherit from Object
 	/// </summary>
-	public class UnityObjectBase : IAssetNew
+	public class UnityObjectBase : UnityAssetBase
 	{
-		public void ReadDebug(AssetReader reader)
-		{
-			throw new NotSupportedException();
-		}
-
-		public void ReadRelease(AssetReader reader)
-		{
-			throw new NotSupportedException();
-		}
-
-		public void WriteDebug(AssetWriter writer)
-		{
-			throw new NotSupportedException();
-		}
-
-		public void WriteRelease(AssetWriter writer)
-		{
-			throw new NotSupportedException();
-		}
-
-		public YAMLNode ExportYAML(bool release)
-		{
-			if (release)
-				return ExportYAMLRelease();
-			else
-				return ExportYAMLDebug();
-		}
-
-		public virtual YAMLNode ExportYAMLDebug()
-		{
-			throw new NotSupportedException();
-		}
-
-		public YAMLNode ExportYAMLRelease()
-		{
-			throw new NotSupportedException();
-		}
 	}
 }
