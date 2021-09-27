@@ -55,8 +55,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return Directory.Exists(gameDataPath);
 		}
 
-		public override PlatformType Platform => PlatformType.WiiU;
-
 		private const string ContentName = "content";
 	}
 }

@@ -72,8 +72,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return false;
 		}
 
-		public override PlatformType Platform => PlatformType.WebPlayer;
-
 		private const string HtmlExtension = ".html";
 	}
 }

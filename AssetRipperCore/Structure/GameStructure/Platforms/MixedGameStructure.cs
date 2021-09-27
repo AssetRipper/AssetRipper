@@ -113,7 +113,5 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				}
 			}
 		}
-
-		public override PlatformType Platform => PlatformType.Mixed;
 	}
 }

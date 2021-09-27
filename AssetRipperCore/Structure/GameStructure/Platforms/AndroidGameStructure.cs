@@ -192,7 +192,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
 		}
 
-		public override PlatformType Platform => PlatformType.Android;
 		public string LibPath { get; protected set; }
 
 		private const string AssetName = "assets";

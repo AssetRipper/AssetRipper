@@ -95,7 +95,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 		}
 
-		public override PlatformType Platform => PlatformType.iOS;
 
 		private const string iOSStreamingName = "Raw";
 

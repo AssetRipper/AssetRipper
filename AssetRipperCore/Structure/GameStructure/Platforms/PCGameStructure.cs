@@ -142,7 +142,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return false;
 		}
 
-		public override PlatformType Platform => PlatformType.PC;
 
 		private const string ExeExtension = ".exe";
 	}

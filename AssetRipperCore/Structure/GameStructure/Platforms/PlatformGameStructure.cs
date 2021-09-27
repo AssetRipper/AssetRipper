@@ -19,7 +19,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		public string StreamingAssetsPath { get; protected set; }
 		public string ResourcesPath { get; protected set; }
 		public ScriptingBackend Backend { get; protected set; } = ScriptingBackend.Unknown;
-		public abstract PlatformType Platform { get; }
 		public string ManagedPath { get; protected set; }
 		public string Il2CppGameAssemblyPath { get; protected set; }
 		public string Il2CppMetaDataPath { get; protected set; }

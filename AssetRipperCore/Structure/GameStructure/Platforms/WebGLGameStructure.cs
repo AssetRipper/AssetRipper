@@ -153,8 +153,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return false;
 		}
 
-		public override PlatformType Platform => PlatformType.WebGL;
-
 		private const string DevelopmentName = "Development";
 		private const string ReleaseName = "Release";
 		private const string BuildName = "Build";

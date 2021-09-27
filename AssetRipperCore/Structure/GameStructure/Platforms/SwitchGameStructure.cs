@@ -77,8 +77,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return true;
 		}
 
-		public override PlatformType Platform => PlatformType.Switch;
-
 		private const string ExecutableName = "exefs";
 		private const string RomName = "romfs";
 	}

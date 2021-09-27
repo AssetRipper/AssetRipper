@@ -29,7 +29,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				throw new Exception($"Data directory wasn't found");
 			}
 
-#warning TODO: PS4 paths
 			Name = m_root.Name;
 			RootPath = rootPath;
 			GameDataPath = dataPath;
@@ -58,8 +57,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			CollectResources(dataDirectory, Files);
 			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
-
-		public override PlatformType Platform => PlatformType.PS4;
 
 		public static bool IsPS4Structure(string path)
 		{

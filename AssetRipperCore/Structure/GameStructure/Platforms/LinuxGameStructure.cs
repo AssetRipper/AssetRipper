@@ -134,7 +134,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return false;
 		}
 
-		public override PlatformType Platform => PlatformType.Linux;
 
 		private const string x86Extension = ".x86";
 		private const string x64Extension = ".x64";

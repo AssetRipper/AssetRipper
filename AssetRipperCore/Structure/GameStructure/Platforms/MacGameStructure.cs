@@ -83,7 +83,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return true;
 		}
 
-		public override PlatformType Platform => PlatformType.Mac;
 
 		private const string ContentsName = "Contents";
 		private const string FrameworksName = "Frameworks";
