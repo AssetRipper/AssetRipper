@@ -1,4 +1,5 @@
 using AssetRipper.Core.Logging;
+using AssetRipper.GUI.Logging;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -16,6 +17,8 @@ namespace AssetRipper.GUI
 
 		public static void AppMain(Application app, string[] args)
 		{
+			Avalonia.Logging.Logger.Sink = new RipperAvaloniaSink();
+			
 			AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
 			{
 				try
@@ -28,7 +31,7 @@ namespace AssetRipper.GUI
 				}
 			};
 			
-			app.Run(new MainWindow { DataContext = new MainWindowViewModel() });
+			app.Run(new MainWindow());
 		}
 	}
 }

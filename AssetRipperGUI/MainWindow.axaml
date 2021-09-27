@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ar="using:AssetRipper.GUI"
+        xmlns:cc="using:AssetRipper.GUI.Components"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AssetRipper.GUI.MainWindow"
         Icon="/Resources/GUI_Icon.ico"
@@ -26,18 +27,18 @@
             <!--File Menu-->
             <MenuItem Header="_File">
 
-				<!--File->Open File-->
-				<MenuItem Header="_Open File" Command="{Binding ShowOpenFileDialog}">
-					<MenuItem.IsEnabled>
-						<MultiBinding Converter="{x:Static BoolConverters.And}">
-							<Binding Path="!IsExporting" />
-							<MultiBinding Converter="{x:Static BoolConverters.Or}">
-								<Binding Path="!HasFile" />
-								<Binding Path="HasLoaded" />
-							</MultiBinding>
-						</MultiBinding>
-					</MenuItem.IsEnabled>
-				</MenuItem>
+                <!--File->Open File-->
+                <MenuItem Header="_Open File" Command="{Binding ShowOpenFileDialog}">
+                    <MenuItem.IsEnabled>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="!IsExporting" />
+                            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                                <Binding Path="!HasFile" />
+                                <Binding Path="HasLoaded" />
+                            </MultiBinding>
+                        </MultiBinding>
+                    </MenuItem.IsEnabled>
+                </MenuItem>
 
                 <!--File->Open Folder-->
                 <MenuItem Header="_Open Folder" Command="{Binding ShowOpenFolderDialog}">
@@ -72,22 +73,91 @@
                 <MenuItem Header="_Export All Files" Click="ExportAllClicked" />
                 <MenuItem Header="_Export Selected Asset As Project" Click="ExportSelectedAssetToProjectClicked" />
             </MenuItem>
-            
+
             <!--About Menu-->
             <MenuItem Header="_About">
-                <MenuItem Header="_Website" Command="{Binding WebsiteClicked}"></MenuItem>
-                <MenuItem Header="_Github" Command="{Binding GithubClicked}"></MenuItem>
-                <MenuItem Header="_Check for update" Command="{Binding CheckforUpdates}"/>
+                <MenuItem Header="_Website" Command="{Binding WebsiteClicked}" />
+                <MenuItem Header="_Github" Command="{Binding GithubClicked}" />
+                <MenuItem Header="_Check for update" Command="{Binding CheckforUpdates}" />
             </MenuItem>
         </Menu>
 
         <!--Introduction Screens-->
 
         <!--Drag-drop prompt-->
-        <TextBlock Grid.Row="1" Text="Drag-and-Drop Your Game Folder Here"
-                   TextAlignment="Center"
-                   VerticalAlignment="Center"
-                   IsVisible="{Binding !HasFile}" />
+        <Grid Grid.Row="1"
+              IsVisible="{Binding !HasFile}"
+              RowDefinitions="50, 50, 650, *">
+
+            <TextBlock Text="Welcome To AssetRipper"
+                       FontSize="24"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center" />
+            
+            <TextBlock Grid.Row="1" Text="Configuration Options"
+                       FontSize="20"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center" />
+
+            <Grid Grid.Row="2" RowDefinitions="50, 200, 200, 200" ColumnDefinitions="*, 400, 400, *" Margin="100, 0, 100, 0">
+                <WrapPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="20, 0">
+                    <CheckBox IsChecked="{Binding DisableScriptImport, Mode=TwoWay}" />
+                    <TextBlock Text="Disable Script Processing" Margin="10, 7, 0, 10" />
+                </WrapPanel>
+                <WrapPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Margin="20, 0">
+                    <CheckBox IsChecked="{Binding IgnoreStreamingAssets, Mode=TwoWay}" />
+                    <TextBlock Text="Skip StreamingAssets Folder" Margin="10, 7, 00, 10" />
+                </WrapPanel>
+                <cc:MeshExportConfigDropdown 
+                    Grid.Column="1" 
+                    Grid.Row="1"
+                    OptionTitle="Mesh Export Format"
+                    SelectedValue="{Binding MeshExportFormat, Mode=TwoWay}"
+                    Margin="0, 0, 20, 0">
+                </cc:MeshExportConfigDropdown>
+                <cc:AudioExportConfigDropdown 
+                    Grid.Column="2" 
+                    Grid.Row="1"
+                    OptionTitle="Audio Export Format"
+                    SelectedValue="{Binding AudioExportFormat, Mode=TwoWay}"
+                    Margin="20, 0, 0, 0">
+                </cc:AudioExportConfigDropdown>
+                <cc:ImageExportConfigDropdown 
+                    Grid.Column="1" 
+                    Grid.Row="2"
+                    OptionTitle="Image Export Format"
+                    SelectedValue="{Binding ImageExportFormat, Mode=TwoWay}"
+                    Margin="0, 0, 20, 0">
+                </cc:ImageExportConfigDropdown>
+                <cc:SpriteExportConfigDropdown 
+                    Grid.Column="2" 
+                    Grid.Row="2"
+                    OptionTitle="Sprite Export Format"
+                    SelectedValue="{Binding SpriteExportMode, Mode=TwoWay}"
+                    Margin="20, 0, 0, 0">
+                </cc:SpriteExportConfigDropdown>
+                <cc:TerrainExportConfigDropdown 
+                    Grid.Column="1" 
+                    Grid.Row="3"
+                    OptionTitle="Terrain Export Format"
+                    SelectedValue="{Binding TerrainExportMode, Mode=TwoWay}"
+                    Margin="0, 0, 20, 0">
+                </cc:TerrainExportConfigDropdown>
+                <cc:TextExportConfigDropdown 
+                    Grid.Column="2" 
+                    Grid.Row="3"
+                    OptionTitle="TextAsset Export Format"
+                    SelectedValue="{Binding TextExportMode, Mode=TwoWay}"
+                    Margin="20, 0, 0, 0">
+                </cc:TextExportConfigDropdown>
+            </Grid>
+
+            <TextBlock Grid.Row="3"
+                       Text="Once you're ready, drag-and-drop your game folder onto this window, or use the file menu to open something."
+                       TextAlignment="Center" 
+                       VerticalAlignment="Bottom"
+                       Margin="0, 0, 0, 50"/>
+        </Grid>
 
         <!--Loading prompt-->
         <TextBlock Grid.Row="1" Text="{Binding LoadingText}"
@@ -162,7 +232,8 @@
                         </TabItem>
 
                         <!--Text Tab-->
-                        <TabItem Header="Text Asset" IsVisible="{Binding SelectedAsset.HasTextData, FallbackValue=False}">
+                        <TabItem Header="Text Asset"
+                                 IsVisible="{Binding SelectedAsset.HasTextData, FallbackValue=False}">
                             <TextBox IsReadOnly="True"
                                      Text="{Binding SelectedAsset.TextAssetData, FallbackValue='No text asset found'}" />
                         </TabItem>
@@ -193,7 +264,8 @@
                         </TabItem>
 
                         <!--YAML Tab-->
-                        <TabItem Header="YAML Nodes" IsVisible="{Binding SelectedAsset.YamlTreeIsSupported, FallbackValue=False}">
+                        <TabItem Header="YAML Nodes"
+                                 IsVisible="{Binding SelectedAsset.YamlTreeIsSupported, FallbackValue=False}">
                             <TreeView Items="{Binding SelectedAsset.YamlTree, FallbackValue=[]}">
                                 <TreeView.ItemTemplate>
                                     <TreeDataTemplate ItemsSource="{Binding Children}">

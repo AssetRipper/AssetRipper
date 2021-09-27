@@ -9,6 +9,7 @@
 		Cpp2IL,
 		System,
 		LibVlc,
+		Avalonia,
 
 		None,
 		Debug,
