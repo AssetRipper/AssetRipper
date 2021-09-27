@@ -1,0 +1,55 @@
+name: Auxiliary
+
+on:
+   push:
+    branches: [ master ]
+   pull_request:
+    branches: [ master ]
+
+jobs:
+   publish_windows:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+        
+    - name: Build AssetAnalyzer Windows x64
+      run: dotnet build /p:Configuration=Release  /p:Platform=x64
+      working-directory: ./AssetAnalyzer/
+      
+    - name: Build UnitTester Windows x64
+      run: dotnet build /p:Configuration=Release  /p:Platform=x64
+      working-directory: ./UnitTester/
+      
+    - name: List Analyzer Files
+      shell: bash
+      run: |
+        mkdir -p ./Bins/AssetAnalyzer/Release/Licenses
+        cp ./Licenses/*.md ./Bins/AssetAnalyzer/Release/Licenses/
+        ls -R ./Bins/AssetAnalyzer/Release
+      
+    - name: Upload AssetAnalyzer Windows x64
+      uses: actions/upload-artifact@v2
+      with:
+        name: AssetAnalyzer_win64
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/AssetAnalyzer/Release/*
+        if-no-files-found: error
+        
+    - name: List UnitTester Files
+      shell: bash
+      run: |
+        mkdir -p ./Bins/UnitTester/Release/Licenses
+        cp ./Licenses/*.md ./Bins/UnitTester/Release/Licenses/
+        ls -R ./Bins/UnitTester/Release
+
+    - name: Upload UnitTester Windows x64
+      uses: actions/upload-artifact@v2
+      with:
+        name: UnitTester_win64
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/UnitTester/Release/*
+        if-no-files-found: error
