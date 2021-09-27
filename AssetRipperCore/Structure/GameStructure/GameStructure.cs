@@ -83,6 +83,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 					//Setting the parameters for exporting
 					GameCollection.Parameters pars = new GameCollection.Parameters(layout);
 					pars.ScriptBackend = GetScriptingBackend(configuration.DisableScriptImport);
+					pars.PlatformStructure = PlatformStructure;
 					Logger.Info(LogCategory.Import, $"Files use the '{pars.ScriptBackend}' scripting backend.");
 					pars.RequestAssemblyCallback = OnRequestAssembly;
 					pars.RequestResourceCallback = OnRequestResource;
@@ -91,11 +92,6 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 					//Sets its fields and creates the Project Exporter
 					FileCollection = new GameCollection(pars, configuration);
-
-					Logger.SendStatusChange("Loading assemblies");
-					
-					//Loads any Mono or IL2Cpp assemblies
-					FileCollection.AssemblyManager.Initialize(PlatformStructure);
 
 					Logger.SendStatusChange("Starting scheme processing");
 					

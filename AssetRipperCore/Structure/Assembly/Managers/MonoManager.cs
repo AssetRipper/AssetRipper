@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			if (string.IsNullOrWhiteSpace(gameDataPath)) return;//Mixed Game Structures don't necessarily have a managed folder
 
 			GameDataPath = Path.GetFullPath(gameDataPath);
-			ManagedPath = Path.Combine(GameDataPath, "Managed");
+			ManagedPath = gameStructure.ManagedPath ?? throw new ArgumentException("Managed Path cannot be null");
 
 			string[] assemblyFiles = Directory.GetFiles(ManagedPath, "*.dll");
 

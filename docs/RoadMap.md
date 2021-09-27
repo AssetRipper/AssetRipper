@@ -16,7 +16,7 @@
   * Reformat the shader export system to support two sided shaders
 * Script Export
   * Optimize script exporter (done!)
-  * Handle exceptions while reading IL2Cpp assemblies
+  * Handle exceptions while reading IL2Cpp assemblies (done!)
 * Texture Export
   * Optimized by SamboyCoding!
   * Remove libgdiplus dependency for linux and mac users (done!)
@@ -24,12 +24,15 @@
   * Ignore StreamingAssets directory option
 * GUI improvements
   * Heatmap preview for terrains in the GUI (done!)
-  * Configuration window for choosing import and export options
+  * Configuration window for choosing import and export options (done by SamboyCoding!)
   * Switch shader preview to use the library shader exporter
   * Better Audio Playback control
     * Fast-forward and rewind
     * Seek-bar for selecting playback position
+
+## 0.1.8.0
 * Code Cleanup
+  * Remove Shader disassembly code
   * Remove Reading namespace
   * Remove remaining Layout classes
   * Move more code to the Common and Library projects

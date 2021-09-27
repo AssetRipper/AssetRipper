@@ -12,6 +12,7 @@ using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Core.Structure.GameStructure.Platforms;
 using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace AssetRipper.Core.Structure
 
 			public AssetLayout Layout { get; }
 			public ScriptingBackend ScriptBackend { get; set; }
+			public PlatformGameStructure PlatformStructure { get; set; }
 			public Func<string, string> RequestAssemblyCallback { get; set; }
 			public Func<string, string> RequestResourceCallback { get; set; }
 		}
@@ -75,6 +77,21 @@ namespace AssetRipper.Core.Structure
 
 			m_assemblyCallback = pars.RequestAssemblyCallback;
 			m_resourceCallback = pars.RequestResourceCallback;
+
+			Logger.SendStatusChange("Loading assemblies");
+
+			try
+			{
+				//Loads any Mono or IL2Cpp assemblies
+				AssemblyManager.Initialize(pars.PlatformStructure);
+			}
+			catch(Exception ex)
+			{
+				Logger.Error(LogCategory.Import, "Could not initialize assembly manager. Switching to the 'Unknown' scripting backend.");
+				Logger.Verbose(ex.ToString());
+				AssemblyManager = new BaseManager(Layout, OnRequestAssembly);
+			}
+
 			Exporter = new ProjectExporter(this, configuration);
 		}
 

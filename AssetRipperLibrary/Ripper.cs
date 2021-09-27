@@ -23,7 +23,7 @@ namespace AssetRipper.Library
 		/// <summary>
 		/// Needs to be set before loading assets to ensure predictable behavior
 		/// </summary>
-		public LibraryConfiguration Settings { get; private set; } = new();
+		public LibraryConfiguration Settings { get; } = new();
 		private bool ExportersInitialized { get; set; }
 
 		public GameStructure Load(IReadOnlyList<string> paths)
