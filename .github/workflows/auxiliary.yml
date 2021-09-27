@@ -37,7 +37,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: AssetAnalyzer_win64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/AssetAnalyzer/Release/*
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetAnalyzer\Release\*
         if-no-files-found: error
         
     - name: List UnitTester Files
@@ -51,5 +51,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: UnitTester_win64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/UnitTester/Release/*
+        path: D:\a\AssetRipper\AssetRipper\Bins\UnitTester\Release\*
         if-no-files-found: error
