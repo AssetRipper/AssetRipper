@@ -10,27 +10,27 @@ namespace AssetRipper.Core
 	/// </summary>
 	public class UnityAssetBase : IAssetNew
 	{
-		public void ReadDebug(AssetReader reader)
+		public virtual void ReadDebug(AssetReader reader)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void ReadRelease(AssetReader reader)
+		public virtual void ReadRelease(AssetReader reader)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void WriteDebug(AssetWriter writer)
+		public virtual void WriteDebug(AssetWriter writer)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void WriteRelease(AssetWriter writer)
+		public virtual void WriteRelease(AssetWriter writer)
 		{
 			throw new NotSupportedException();
 		}
 
-		public YAMLNode ExportYAML(bool release)
+		public virtual YAMLNode ExportYAML(bool release)
 		{
 			if (release)
 				return ExportYAMLRelease();
@@ -43,7 +43,7 @@ namespace AssetRipper.Core
 			throw new NotSupportedException();
 		}
 
-		public YAMLNode ExportYAMLRelease()
+		public virtual YAMLNode ExportYAMLRelease()
 		{
 			throw new NotSupportedException();
 		}
