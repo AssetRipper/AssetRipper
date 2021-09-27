@@ -35,6 +35,10 @@ namespace AssetRipper.GUI.Logging
 			if (category == LogCategory.ExportedFile)
 				//Don't log "Exported file" messages.
 				return;
+			
+			if(type == LogType.Verbose)
+				//don't log verbose to gui
+				return;
 
 			viewModel.LogText += $"{DateTime.Now:T}: ";
 

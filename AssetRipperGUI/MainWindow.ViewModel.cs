@@ -27,7 +27,7 @@ using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.GUI
 {
-	public class MainWindowViewModel : BaseViewModel
+	public partial class MainWindowViewModel : BaseViewModel
 	{
 		private const string websiteURL = "https://ds5678.github.io/AssetRipper/";
 		
@@ -132,6 +132,8 @@ namespace AssetRipper.GUI
 			ProductInfoHeaderValue comment = new ($"(+{websiteURL})");
 			client.DefaultRequestHeaders.UserAgent.Add(product);
 			client.DefaultRequestHeaders.UserAgent.Add(comment);
+			
+			OnPropertyChanged(nameof(AudioExportFormat));
 		}
 
 		private void UpdateGamePathInUi(string path)

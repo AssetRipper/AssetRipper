@@ -4,6 +4,8 @@ namespace AssetRipper.Library.Configuration
 {
 	public class LibraryConfiguration : CoreConfiguration
 	{
+		public LibraryConfiguration() => ResetToDefaultValues();
+		
 		/// <summary>
 		/// The file format that audio clips get exported in. Recommended: Ogg
 		/// </summary>

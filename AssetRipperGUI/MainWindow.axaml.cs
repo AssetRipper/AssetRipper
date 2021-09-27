@@ -1,3 +1,5 @@
+using AssetRipper.GUI.Components;
+using AssetRipper.Library.Configuration;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -12,11 +14,12 @@ namespace AssetRipper.GUI
 	    public static MainWindow Instance;
 	    public TextBox LogText;
 
-	    private MainWindowViewModel VM => (MainWindowViewModel) DataContext!;
+	    private MainWindowViewModel VM;
 	    
 	    public MainWindow()
 	    {
 		    Instance = this;
+		    DataContext = VM = new();
 
 		    InitializeComponent();
 #if DEBUG
