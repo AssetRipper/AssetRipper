@@ -87,7 +87,7 @@
         <!--Drag-drop prompt-->
         <Grid Grid.Row="1"
               IsVisible="{Binding !HasFile}"
-              RowDefinitions="50, 50, *, 50">
+              RowDefinitions="50, 50, 650, *">
 
             <TextBlock Text="Welcome To AssetRipper"
                        FontSize="24"
@@ -154,7 +154,9 @@
 
             <TextBlock Grid.Row="3"
                        Text="Once you're ready, drag-and-drop your game folder onto this window, or use the file menu to open something."
-                       TextAlignment="Center" />
+                       TextAlignment="Center" 
+                       VerticalAlignment="Bottom"
+                       Margin="0, 0, 0, 50"/>
         </Grid>
 
         <!--Loading prompt-->
