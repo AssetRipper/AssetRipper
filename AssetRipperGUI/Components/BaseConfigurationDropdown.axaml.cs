@@ -35,7 +35,6 @@ namespace AssetRipper.GUI.Components
 			get => _selectedValue;
 			set
 			{
-				Logger.Verbose(LogCategory.Avalonia, $"Set RawSelectedValue for dropdown of type {typeof(T).Name} to {value.Item} ({value})");
 				var oldValue = _selectedValue?.Item;
 				_selectedValue = value;
 				OnPropertyChanged();
