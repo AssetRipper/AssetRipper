@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Logging
 	public static class Logger
 	{
 		private static readonly List<ILogger> loggers = new List<ILogger>();
-		public static bool AllowVerbose { private get; set; } = true;
+		public static bool AllowVerbose { private get; set; }
 
 		public static event Action<string> OnStatusChanged = _ => { };
 
