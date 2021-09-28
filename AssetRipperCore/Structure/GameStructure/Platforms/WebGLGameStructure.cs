@@ -76,7 +76,9 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 #warning TODO: WebGL paths
 			Name = m_root.Name;
 			RootPath = rootPath;
-			GameDataPath = null;
+			GameDataPath = rootPath;
+			StreamingAssetsPath = rootPath;
+			ResourcesPath = null;
 			ManagedPath = null;
 			UnityPlayerPath = null;
 			UnityVersion = null;
@@ -88,9 +90,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				throw new Exception("No files were found");
 			}
-
-			CollectStreamingAssets(m_root, Files);
-			CollectResources(m_root, Files);
 		}
 
 		public static bool IsWebGLStructure(string path)

@@ -49,6 +49,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		protected const string DefaultGlobalMetadataName = "global-metadata.dat";
 
 		protected const string DataName = "data";
+		protected const string DataBundleName = DataName + AssetBundleExtension;
 		protected const string MainDataName = "mainData";
 		protected const string GlobalGameManagersName = "globalgamemanagers";
 		protected const string GlobalGameManagerAssetsName = "globalgamemanagers.assets";
@@ -61,23 +62,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		public static bool IsPrimaryEngineFile(string fileName)
 		{
-			if (fileName == MainDataName)
-			{
-				return true;
-			}
-			if (fileName == GlobalGameManagersName || fileName == GlobalGameManagerAssetsName)
-			{
-				return true;
-			}
-			if (fileName == ResourcesAssetsName)
-			{
-				return true;
-			}
-			if (s_levelTemplate.IsMatch(fileName))
-			{
-				return true;
-			}
-			if (s_sharedAssetTemplate.IsMatch(fileName))
+			if (fileName == MainDataName || 
+				fileName == GlobalGameManagersName || 
+				fileName == GlobalGameManagerAssetsName || 
+				fileName == ResourcesAssetsName || 
+				s_levelTemplate.IsMatch(fileName) || 
+				s_sharedAssetTemplate.IsMatch(fileName))
 			{
 				return true;
 			}
@@ -137,6 +127,20 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return null;
 		}
 
+		public virtual void CollectFiles(bool skipStreamingAssets)
+		{
+			if (this is MixedGameStructure)
+				return;
+			foreach(string dataPath in DataPaths)
+			{
+				DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
+				CollectGameFiles(dataDirectory, Files);
+			}
+			CollectMainAssemblies(new DirectoryInfo(GameDataPath), Assemblies);
+			if (!skipStreamingAssets)
+				CollectStreamingAssets(Files);
+		}
+
 		protected void CollectGameFiles(DirectoryInfo root, IDictionary<string, string> files)
 		{
 			Logger.Info(LogCategory.Import, "Collecting game files...");
@@ -149,7 +153,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		/// </summary>
 		protected void CollectCompressedGameFiles(DirectoryInfo root, IDictionary<string, string> files)
 		{
-			const string DataBundleName = DataName + AssetBundleExtension;
 			string dataBundlePath = Path.Combine(root.FullName, DataBundleName);
 			if (MultiFileStream.Exists(dataBundlePath))
 			{
@@ -189,28 +192,15 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		/// <summary>
 		/// Collect bundles from the Streaming Assets folder
 		/// </summary>
-		protected void CollectStreamingAssets(DirectoryInfo root, IDictionary<string, string> files)
+		protected void CollectStreamingAssets(IDictionary<string, string> files)
 		{
+			if (string.IsNullOrWhiteSpace(StreamingAssetsPath))
+				return;
 			Logger.Info(LogCategory.Import, "Collecting Streaming Assets...");
-			string streamingPath = StreamingAssetsPath ?? Path.Combine(root.FullName, StreamingName);
-			DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
+			DirectoryInfo streamingDirectory = new DirectoryInfo(StreamingAssetsPath);
 			if (streamingDirectory.Exists)
 			{
-				CollectAssetBundlesRecursivly(streamingDirectory, files);
-			}
-		}
-
-		/// <summary>
-		/// Collect bundles from the Resources folder
-		/// </summary>
-		protected void CollectResources(DirectoryInfo root, IDictionary<string, string> files)
-		{
-			Logger.Info(LogCategory.Import, "Collecting Resources...");
-			string resourcesPath = ResourcesPath ?? Path.Combine(root.FullName, ResourcesName);
-			DirectoryInfo resourcesDirectory = new DirectoryInfo(resourcesPath);
-			if (resourcesDirectory.Exists)
-			{
-				CollectAssetBundlesRecursivly(resourcesDirectory, files);
+				CollectAssetBundlesRecursively(streamingDirectory, files);
 			}
 		}
 
@@ -233,12 +223,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		/// <summary>
 		/// Collect asset bundles from this directory and all subdirectories
 		/// </summary>
-		protected void CollectAssetBundlesRecursivly(DirectoryInfo root, IDictionary<string, string> files)
+		protected void CollectAssetBundlesRecursively(DirectoryInfo root, IDictionary<string, string> files)
 		{
 			CollectAssetBundles(root, files);
 			foreach (DirectoryInfo directory in root.EnumerateDirectories())
 			{
-				CollectAssetBundlesRecursivly(directory, files);
+				CollectAssetBundlesRecursively(directory, files);
 			}
 		}
 
@@ -255,14 +245,13 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		protected void CollectMainAssemblies(DirectoryInfo dataDirectory, IDictionary<string, string> assemblies)
 		{
-			string managedPath = ManagedPath ?? Path.Combine(dataDirectory.FullName, ManagedName);
-			if (Backend == ScriptingBackend.Il2Cpp)
+			if (Backend != ScriptingBackend.Mono)
 			{
-				return;//If Il2Cpp, don't look for any other assemblies
+				return;//Only needed for Mono
 			}
-			else if (Directory.Exists(managedPath))
+			else if (!string.IsNullOrWhiteSpace(ManagedPath) && Directory.Exists(ManagedPath))
 			{
-				DirectoryInfo managedDirectory = new DirectoryInfo(managedPath);
+				DirectoryInfo managedDirectory = new DirectoryInfo(ManagedPath);
 				CollectAssemblies(managedDirectory, assemblies);
 			}
 			else

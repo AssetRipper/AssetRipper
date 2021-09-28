@@ -22,18 +22,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		public bool IsValid => FileCollection != null;
 
-		public string Name
-		{
-			get
-			{
-				if (PlatformStructure != null)
-					return PlatformStructure.Name;
-				else if (MixedStructure != null)
-					return MixedStructure.Name;
-				else
-					return null;
-			}
-		}
+		public string Name => PlatformStructure?.Name ?? MixedStructure?.Name;
 
 		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration) => Load(paths, configuration, null);
 		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration, LayoutInfo layinfo)
@@ -52,6 +41,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			Logger.SendStatusChange("Collecting files and detecting game structure");
 			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure platformStructure, out MixedGameStructure mixedStructure);
 			PlatformStructure = platformStructure;
+			PlatformStructure?.CollectFiles(configuration.IgnoreStreamingAssets);
 			MixedStructure = mixedStructure;
 			//The PlatformGameStructure constructor adds all the paths to the Assemblies and Files dictionaries
 			//No bundles or assemblies have been loaded yet

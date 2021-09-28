@@ -55,13 +55,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				Backend = Assembly.ScriptingBackend.Unknown;
 
 			DataPaths = new string[] { dataPath };
-
-			DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
-
-			CollectGameFiles(dataDirectory, Files);
-			CollectStreamingAssets(dataDirectory, Files);
-			CollectResources(dataDirectory, Files);
-			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
 
 		public static bool IsPCStructure(string path)

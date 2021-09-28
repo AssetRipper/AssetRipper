@@ -48,14 +48,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				Backend = Assembly.ScriptingBackend.Mono;
 			else
 				Backend = Assembly.ScriptingBackend.Unknown;
-
-
-			DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
-
-			CollectGameFiles(dataDirectory, Files);
-			CollectStreamingAssets(dataDirectory, Files);
-			CollectResources(dataDirectory, Files);
-			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
 
 		public static bool IsMacStructure(string path)

@@ -27,6 +27,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Name = name;
 			RootPath = rootPath;
 			GameDataPath = dataPath;
+			StreamingAssetsPath = Path.Combine(m_root.FullName, iOSStreamingName);
 			ManagedPath = null;
 			UnityPlayerPath = null;
 			UnityVersion = null;
@@ -35,13 +36,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Backend = Assembly.ScriptingBackend.Unknown;
 
 			DataPaths = new string[] { dataPath };
-
-			DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
-
-			CollectGameFiles(dataDirectory, Files);
-			CollectiOSStreamingAssets(dataDirectory, Files);
-
-			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
 
 		public static bool IsiOSStructure(string path)
@@ -91,7 +85,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
 			if (streamingDirectory.Exists)
 			{
-				CollectAssetBundlesRecursivly(root, files);
+				CollectAssetBundlesRecursively(root, files);
 			}
 		}
 

@@ -26,6 +26,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Name = m_root.Name;
 			RootPath = rootPath;
 			GameDataPath = dataPath;
+			StreamingAssetsPath = null;
+			ResourcesPath = null;
 			ManagedPath = null;
 			UnityPlayerPath = null;
 			UnityVersion = null;
@@ -34,12 +36,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Backend = Assembly.ScriptingBackend.Unknown;
 
 			DataPaths = new string[] { dataPath };
-
-			DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
-
-			CollectGameFiles(dataDirectory, Files);
-
-			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
 
 		public static bool IsSwitchStructure(string path)
@@ -53,7 +49,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				return false;
 			}
-
 
 			return GetDataSwitchDirectory(rootInfo, out string _);
 		}

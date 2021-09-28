@@ -31,6 +31,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			RootPath = rootPath;
 			GameDataPath = apkDataPath;
+			StreamingAssetsPath = null;
 			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
 			LibPath = Path.Combine(RootPath, LibName);
@@ -46,7 +47,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			else
 				Backend = Assembly.ScriptingBackend.Unknown;
 
-			DirectoryInfo obbDataDirectory = null;
 			if (obbPath != null)
 			{
 				m_obbRoot = new DirectoryInfo(obbPath);
@@ -63,15 +63,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				dataPaths.Add(obbDataPath);
 			}
 			DataPaths = dataPaths.ToArray();
+		}
 
-			CollectGameFiles(apkDataDirectory, Files);
-			if (obbDataDirectory != null)
-			{
-				CollectGameFiles(obbDataDirectory, Files);
-			}
+		public override void CollectFiles(bool skipStreamingAssets)
+		{
+			base.CollectFiles(skipStreamingAssets);
 			CollectApkAssetBundles(Files);
-
-			CollectMainAssemblies(apkDataDirectory, Assemblies);
 		}
 
 		public static bool IsAndroidStructure(string path)
@@ -89,12 +86,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 
 			string dataPath = Path.Combine(path, AssetName, BinName, DataFolderName);
-			if (!Directory.Exists(dataPath))
-			{
-				return false;
-			}
 
-			return true;
+			return Directory.Exists(dataPath);
 		}
 
 		public static bool IsAndroidObbStructure(string path)
@@ -112,12 +105,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 
 			string dataPath = Path.Combine(path, AssetName, BinName, DataFolderName);
-			if (!Directory.Exists(dataPath))
-			{
-				return false;
-			}
 
-			return true;
+			return Directory.Exists(dataPath);
 		}
 
 		private static int GetRootAndroidDirectoryMatch(DirectoryInfo directory)
@@ -155,7 +144,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					continue;
 				}
-				CollectAssetBundles(subDirectory, files);
+				CollectAssetBundlesRecursively(subDirectory, files);
 			}
 		}
 

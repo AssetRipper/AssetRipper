@@ -40,13 +40,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				Backend = Assembly.ScriptingBackend.Unknown;
 
 			DataPaths = new string[] { GameDataPath };
-
-			DirectoryInfo dataDirectory = new DirectoryInfo(GameDataPath);
-
-			CollectGameFiles(dataDirectory, Files);
-			CollectStreamingAssets(dataDirectory, Files);
-			CollectResources(dataDirectory, Files);
-			CollectMainAssemblies(dataDirectory, Assemblies);
 		}
 
 		public static bool IsWiiUStructure(string rootPath)
