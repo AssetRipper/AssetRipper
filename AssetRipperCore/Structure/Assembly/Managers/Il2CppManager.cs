@@ -47,14 +47,15 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 			Cpp2IlApi.MakeDummyDLLs(true);
 
+			Cpp2IL.Core.KeyFunctionAddresses keyFunctionAddresses = null;
 			if(LibCpp2IL.LibCpp2IlMain.Binary is LibCpp2IL.PE.PE)
 			{
 				Logger.SendStatusChange("Scanning IL2CPP Binary for library functions");
-				var keyFunctionAddresses = Cpp2IlApi.ScanForKeyFunctionAddresses();
-
-				Logger.SendStatusChange("Restoring Attributes on Generated Assemblies");
-				Cpp2IlApi.RunAttributeRestorationForAllAssemblies(keyFunctionAddresses);
+				keyFunctionAddresses = Cpp2IlApi.ScanForKeyFunctionAddresses();
 			}
+
+			Logger.SendStatusChange("Restoring Attributes on Generated Assemblies");
+			Cpp2IlApi.RunAttributeRestorationForAllAssemblies(keyFunctionAddresses);
 
 			//Cpp2IlApi.SaveAssemblies("ExtractedScripts");
 

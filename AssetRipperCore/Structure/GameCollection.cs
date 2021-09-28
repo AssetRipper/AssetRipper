@@ -88,7 +88,7 @@ namespace AssetRipper.Core.Structure
 			catch(Exception ex)
 			{
 				Logger.Error(LogCategory.Import, "Could not initialize assembly manager. Switching to the 'Unknown' scripting backend.");
-				Logger.Verbose(ex.ToString());
+				Logger.Error(ex);
 				AssemblyManager = new BaseManager(Layout, OnRequestAssembly);
 			}
 
