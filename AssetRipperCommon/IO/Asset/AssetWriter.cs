@@ -14,8 +14,8 @@ namespace AssetRipper.Core.IO.Asset
 	{
 		private static MethodInfo WritePrimitiveInfo = typeof(AssetWriter).GetMethod(nameof(WritePrimitive));
 		private static MethodInfo WriteAssetInfo = typeof(AssetWriter).GetMethod(nameof(WriteAsset));
-		private static MethodInfo WriteKeyValuePairInfo = typeof(AssetWriter).GetMethod(nameof(WriteKeyValuePair));		
-		private static MethodInfo WriteDictionaryInfo = typeof(AssetWriter).GetMethod(nameof(WriteDictionary));		
+		private static MethodInfo WriteKeyValuePairInfo = typeof(AssetWriter).GetMethod(nameof(WriteKeyValuePair));
+		private static MethodInfo WriteDictionaryInfo = typeof(AssetWriter).GetMethod(nameof(WriteDictionary));
 		private static MethodInfo WriteGenericArrayInfo = typeof(AssetWriter).GetMethods().Single(m => m.Name == nameof(WriteArray) && m.ContainsGenericParameters);
 
 		public AssetWriter(Stream stream, EndianType endian, LayoutInfo info) : base(stream, endian, info.IsAlignArrays)
@@ -72,36 +72,34 @@ namespace AssetRipper.Core.IO.Asset
 
 		public void WritePrimitive<T>(T value) where T : IConvertible
 		{
-			var type = typeof(T);
-
 			//Due to generic optimisations, this method should be reduced down to be very simple.
 			//All the Convert.ToBlah operations should be trivial as T will be the actual type being converted to.
-			if (type == typeof(bool))
-				Write(Convert.ToBoolean(value));
-			else if (type == typeof(byte))
-				Write(Convert.ToByte(value));
-			else if (type == typeof(sbyte))
-				Write(Convert.ToSByte(value));
-			else if (type == typeof(char))
-				Write(Convert.ToChar(value));
-			else if (type == typeof(short))
-				Write(Convert.ToInt16(value));
-			else if (type == typeof(int))
-				Write(Convert.ToInt32(value));
-			else if (type == typeof(long))
-				Write(Convert.ToInt64(value));
-			else if (type == typeof(ushort))
-				Write(Convert.ToUInt16(value));
-			else if (type == typeof(uint))
-				Write(Convert.ToUInt32(value));
-			else if (type == typeof(ulong))
-				Write(Convert.ToUInt64(value));
-			else if (type == typeof(float))
-				Write(Convert.ToSingle(value));
-			else if (type == typeof(double))
-				Write(Convert.ToDouble(value));
+			if (value is bool bo)
+				Write(bo);
+			else if (value is byte b)
+				Write(b);
+			else if (value is sbyte sb)
+				Write(sb);
+			else if (value is char c)
+				Write(c);
+			else if (value is short sh)
+				Write(sh);
+			else if (value is int i)
+				Write(i);
+			else if (value is long lo)
+				Write(lo);
+			else if (value is ushort ush)
+				Write(ush);
+			else if (value is uint ui)
+				Write(ui);
+			else if (value is ulong ulo)
+				Write(ulo);
+			else if (value is float f)
+				Write(f);
+			else if (value is double d)
+				Write(d);
 			else
-				throw new ArgumentException($"Cannot write a primitive of type {type}", nameof(value));
+				throw new ArgumentException($"Cannot write a primitive of type {typeof(T)}", nameof(value));
 		}
 
 		public void WriteAsset<T>(T value) where T : IAssetWritable
@@ -144,10 +142,10 @@ namespace AssetRipper.Core.IO.Asset
 		public void WriteArray<T>(T[] value)
 		{
 			var writer = GetWriter(typeof(T));
-			
+
 			FillInnerBuffer(value.Length);
 			Write(m_buffer, 0, sizeof(int));
-			
+
 			foreach (T nestedValue in value)
 			{
 				writer.Invoke(this, new object[] { nestedValue });
@@ -158,7 +156,7 @@ namespace AssetRipper.Core.IO.Asset
 		{
 			MethodInfo valueWriter = GetWriter<TValue>();
 			MethodInfo keyWriter = GetWriter<TKey>();
-			
+
 			return (keyWriter, valueWriter);
 		}
 
@@ -174,9 +172,9 @@ namespace AssetRipper.Core.IO.Asset
 				return WriteGenericArrayInfo.MakeGenericMethod(type);
 			if (type.FullName!.StartsWith("System.Collections.Generic.KeyValuePair"))
 				return WriteKeyValuePairInfo.MakeGenericMethod(type.GetGenericArguments()[0], type.GetGenericArguments()[1]);
-			if(type.FullName!.StartsWith("System.Collections.Generic.Dictionary"))
+			if (type.FullName!.StartsWith("System.Collections.Generic.Dictionary"))
 				return WriteDictionaryInfo.MakeGenericMethod(type.GetGenericArguments()[0], type.GetGenericArguments()[1]);
-			
+
 			throw new ArgumentException($"Generic Parameter must implement either IConvertible or IAssetWritable, or be an Array, KeyValuePair, or Dictionary for which the parameters also follow this rule. {type} does not.", nameof(type));
 		}
 
