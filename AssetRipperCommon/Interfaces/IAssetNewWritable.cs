@@ -2,9 +2,9 @@
 
 namespace AssetRipper.Core.Interfaces
 {
-	public interface IAssetNewWritable
+	public interface IAssetNewWritable : IAssetWritable
 	{
 		void WriteRelease(AssetWriter writer);
-		void WriteDebug(AssetWriter writer);
+		void WriteEditor(AssetWriter writer);
 	}
 }

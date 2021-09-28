@@ -2,9 +2,9 @@
 
 namespace AssetRipper.Core.Interfaces
 {
-	public interface IAssetNewReadable
+	public interface IAssetNewReadable : IAssetReadable
 	{
 		void ReadRelease(AssetReader reader);
-		void ReadDebug(AssetReader reader);
+		void ReadEditor(AssetReader reader);
 	}
 }
