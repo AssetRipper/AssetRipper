@@ -6,7 +6,7 @@ namespace AssetRipper.GUI.Components
 	{
 		protected override string? GetValueDescription(ImageExportFormat value)  => value switch
 		{
-			_ => "", //No descriptions here
+			_ => "Affects all exported images",
 		};
 	}
 }

@@ -153,7 +153,7 @@
             </Grid>
 
             <TextBlock Grid.Row="3"
-                       Text="Once you're ready, drag-and-drop your game folder onto this window, or use the file menu to open something."
+                       Text="Note: some setting changes may cause or prevent errors. Once you're ready, drag-and-drop your game folder onto this window, or use the file menu to open something."
                        TextAlignment="Center" 
                        VerticalAlignment="Bottom"
                        Margin="0, 0, 0, 50"/>

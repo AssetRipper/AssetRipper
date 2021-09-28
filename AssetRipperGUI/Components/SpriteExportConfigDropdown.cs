@@ -14,7 +14,7 @@ namespace AssetRipper.GUI.Components
 		protected override string? GetValueDescription(SpriteExportMode value)  => value switch
 		{
 			SpriteExportMode.Native => "Export in the unity sprite format. Cannot be viewed outside of unity.",
-			SpriteExportMode.Texture2D => "Export as a PNG of the Sprite Sheet. Can be viewed outside of unity, but slower to export.",
+			SpriteExportMode.Texture2D => "Export as an image of the Sprite Sheet. Can be viewed outside of unity, but slower to export.",
 			_ => null,
 		};
 	}
