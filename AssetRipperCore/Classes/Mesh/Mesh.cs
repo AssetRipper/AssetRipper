@@ -1479,7 +1479,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 				else
 				{
-					throw new NotSupportedException("Failed getting triangles. Submesh topology is lines or points.");
+					//throw new NotSupportedException("Failed getting triangles. Submesh topology is lines or points.");
 				}
 			}
 		}
