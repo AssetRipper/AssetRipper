@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Logging;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml;
@@ -12,11 +11,23 @@ namespace AssetRipper.GUI.Components
 	public abstract class BaseConfigurationDropdown<T> : UserControlWithPropChange where T : struct, Enum
 	{
 		private string _optionTitle = $"<Missing Title##{typeof(T).Name}>";
-		private ItemWrapper _selectedValue;
+		private ItemWrapper? _selectedValue;
 		private string? _selectedValueDesc;
 
+		public static DirectProperty<BaseConfigurationDropdown<T>, List<ItemWrapper>> ValuesProperty = 
+			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, List<ItemWrapper>>(nameof(Values), obj => obj.Values);
+		
+		public static DirectProperty<BaseConfigurationDropdown<T>, ItemWrapper> RawSelectedValueProperty = 
+			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, ItemWrapper>(nameof(RawSelectedValue), obj => obj.RawSelectedValue, (obj, val) => obj.RawSelectedValue = val);
+		
 		public static DirectProperty<BaseConfigurationDropdown<T>, T> SelectedValueProperty = 
 			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, T>(nameof(SelectedValue), obj => obj.SelectedValue, (obj, val) => obj.SelectedValue = val);
+		
+		public static DirectProperty<BaseConfigurationDropdown<T>, string> OptionTitleProperty = 
+			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, string>(nameof(OptionTitle), obj => obj.OptionTitle, (obj, val) => obj.OptionTitle = val);
+		
+		public static DirectProperty<BaseConfigurationDropdown<T>, string?> SelectedValueDescriptionProperty = 
+			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, string?>(nameof(SelectedValueDescription), obj => obj.SelectedValueDescription, (obj, val) => obj.SelectedValueDescription = val);
 
 		public List<ItemWrapper> Values { get; }
 
@@ -25,20 +36,23 @@ namespace AssetRipper.GUI.Components
 			get => _optionTitle;
 			set
 			{
+				var oldValue = _optionTitle;
 				_optionTitle = value;
 				OnPropertyChanged();
+				RaisePropertyChanged(OptionTitleProperty, oldValue, value);
 			}
 		}
 
 		public ItemWrapper RawSelectedValue
 		{
-			get => _selectedValue;
+			get => _selectedValue!;
 			set
 			{
-				var oldValue = _selectedValue?.Item;
+				var oldValue = _selectedValue;
 				_selectedValue = value;
 				OnPropertyChanged();
-				RaisePropertyChanged(SelectedValueProperty, oldValue.HasValue ? new(oldValue.Value) : Optional<T>.Empty, value.Item);
+				RaisePropertyChanged(RawSelectedValueProperty, oldValue, value);
+				RaisePropertyChanged(SelectedValueProperty, oldValue == null ? Optional<T>.Empty : oldValue.Item, value.Item);
 				SelectedValueDescription = GetValueDescription(value.Item);
 			}
 		}
@@ -48,8 +62,10 @@ namespace AssetRipper.GUI.Components
 			get => _selectedValueDesc;
 			set
 			{
+				var oldValue = _selectedValueDesc;
 				_selectedValueDesc = value;
 				OnPropertyChanged();
+				RaisePropertyChanged(SelectedValueDescriptionProperty, oldValue, value);
 			}
 		}
 		
@@ -63,6 +79,15 @@ namespace AssetRipper.GUI.Components
 		{
 			Values = Enum.GetValues<T>().Select(e => new ItemWrapper(e, GetValueDisplayName(e))).ToList();
 			InitializeComponent();
+
+			MainWindow.Instance.LanguageManager.OnLanguageChanged += () =>
+			{
+				//Reload all localized strings
+				Values.ForEach(v => v.DisplayName = GetValueDisplayName(v.Item));
+				RaisePropertyChanged(ValuesProperty, Optional<List<ItemWrapper>>.Empty, Values);
+				
+				RawSelectedValue = new(RawSelectedValue.Item, GetValueDisplayName(RawSelectedValue.Item));
+			};
 		}
 
 		private void InitializeComponent()

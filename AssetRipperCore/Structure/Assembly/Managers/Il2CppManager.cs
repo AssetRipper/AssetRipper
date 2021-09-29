@@ -39,22 +39,22 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			else
 				Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
 			
-			Logger.SendStatusChange("Parsing IL2CPP Metadata");
+			Logger.SendStatusChange("loading_step_parse_il2cpp_metadata");
 
 			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion, false);
 			
-			Logger.SendStatusChange("Generating Mono Assemblies from IL2CPP");
+			Logger.SendStatusChange("loading_step_generate_dummy_dll");
 
 			Cpp2IlApi.MakeDummyDLLs(true);
 
 			Cpp2IL.Core.KeyFunctionAddresses keyFunctionAddresses = null;
 			if(LibCpp2IL.LibCpp2IlMain.Binary is LibCpp2IL.PE.PE)
 			{
-				Logger.SendStatusChange("Scanning IL2CPP Binary for library functions");
+				Logger.SendStatusChange("loading_step_locate_key_functions");
 				keyFunctionAddresses = Cpp2IlApi.ScanForKeyFunctionAddresses();
 			}
 
-			Logger.SendStatusChange("Restoring Attributes on Generated Assemblies");
+			Logger.SendStatusChange("loading_step_restore_attributes");
 			Cpp2IlApi.RunAttributeRestorationForAllAssemblies(keyFunctionAddresses);
 
 			//Cpp2IlApi.SaveAssemblies("ExtractedScripts");

@@ -7,20 +7,21 @@ namespace AssetRipper.GUI.Components
 	{
 		protected override string GetValueDisplayName(MeshExportFormat value) => value switch
 		{
-			MeshExportFormat.GlbPrimitive => "GLB Primitive",
-			MeshExportFormat.StlAscii => "STL (Ascii)",
-			MeshExportFormat.StlBinary => "STL (Binary)",
-			MeshExportFormat.Obj => "OBJ",
+			MeshExportFormat.Native => MainWindow.Instance.LanguageManager["mesh_format_native"],
+			MeshExportFormat.Obj => MainWindow.Instance.LanguageManager["mesh_format_obj"],
+			MeshExportFormat.StlAscii => MainWindow.Instance.LanguageManager["mesh_format_stl_ascii"],
+			MeshExportFormat.StlBinary => MainWindow.Instance.LanguageManager["mesh_format_stl_binary"],
+			MeshExportFormat.GlbPrimitive => MainWindow.Instance.LanguageManager["mesh_format_glb_primitive"],
 			_ => base.GetValueDisplayName(value),
 		};
 
 		protected override string? GetValueDescription(MeshExportFormat value) => value switch
 		{
-			MeshExportFormat.Native => "A robust format for using meshes in the editor. Can be converted to other formats by a variety of unity packages.",
-			MeshExportFormat.Obj => "Widely-used text-based format, usable in almost all 3d editing software. However, this breaks exported references to the mesh asset.",
-			MeshExportFormat.StlAscii => "3D object format commonly used for 3D printing. Unity cannot import assets of this type. Text-based variant.",
-			MeshExportFormat.StlBinary => "3D object format commonly used for 3D printing. Unity cannot import assets of this type. Binary variant.",
-			MeshExportFormat.GlbPrimitive => "A high-quality, open-source alternative to FBX. Binary version of GLTF. Only contains mesh data. Can cause errors. Unity cannot import assets of this type.",
+			MeshExportFormat.Native => MainWindow.Instance.LanguageManager["mesh_format_native_description"],
+			MeshExportFormat.Obj => MainWindow.Instance.LanguageManager["mesh_format_obj_description"],
+			MeshExportFormat.StlAscii => MainWindow.Instance.LanguageManager["mesh_format_stl_ascii_description"],
+			MeshExportFormat.StlBinary => MainWindow.Instance.LanguageManager["mesh_format_stl_binary_description"],
+			MeshExportFormat.GlbPrimitive => MainWindow.Instance.LanguageManager["mesh_format_glb_primitive_description"],
 			_ => null,
 		};
 	}

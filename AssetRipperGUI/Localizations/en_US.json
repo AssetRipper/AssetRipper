@@ -51,6 +51,7 @@
     "menu_export": "Export",
     "menu_export_all": "Export all Files",
     "menu_export_selected": "Export Selected File",
+    "menu_language": "Language",
     "menu_about": "About",
     "menu_about_website": "Website",
     "menu_about_github": "Github",
@@ -81,8 +82,19 @@
     "asset_tab_basic": "Basic Information",
     "asset_tab_yaml": "YAML",
     "asset_tab_image": "Image",
+    "asset_tab_text": "Text",
     "asset_tab_audio": "Audio",
     "asset_tab_audio_play": "Play",
     "asset_tab_audio_pause": "Pause",
-    "asset_tab_audio_duration_unknown": "<Unknown>"
+    "asset_tab_audio_duration_unknown": "<Unknown>",
+    "error": "Error",
+    "success": "Success!",
+    "export_complete": "Export Complete!",
+    "no_game_files_found": "No Unity game or asset bundle was found in the dropped files.",
+    "export_deleting_old_files": "Clearing out existing files...",
+    "export_preparing": "Preparing for Export...\nThis might take a minute.",
+    "export_in_progress_no_file_count_yet": "Exporting Asset Files\n0.0%\n?/?",
+    "export_in_progress": "Exporting Asset Files\n{0}%\n{1}/{2}",
+    "error_exporting_with_reason": "Failed to export game content: {0}",
+    "error_importing_with_reason": "Failed to load game content: {0}"
 }
