@@ -1,7 +1,7 @@
 ﻿{
-    "welcome_title": "",
-    "config_options": "",
-    "disable_scripts": "",
+    "welcome_title": "Bienvenido a AssetRipper",
+    "config_options": "Ajustes",
+    "disable_scripts": "Desactivar Procesamiento de Scripts",
     "skip_streaming_assets": "",
     "mesh_export_title": "",
     "audio_export_title": "",
