@@ -6,7 +6,7 @@ namespace AssetRipper.GUI.Components
 	{
 		protected override string? GetValueDescription(ImageExportFormat value)  => value switch
 		{
-			_ => MainWindow.Instance.LanguageManager["image_format_description"],
+			_ => MainWindow.Instance.LocalizationManager["image_format_description"],
 		};
 	}
 }

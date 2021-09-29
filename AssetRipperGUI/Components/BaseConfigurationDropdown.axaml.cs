@@ -80,7 +80,7 @@ namespace AssetRipper.GUI.Components
 			Values = Enum.GetValues<T>().Select(e => new ItemWrapper(e, GetValueDisplayName(e))).ToList();
 			InitializeComponent();
 
-			MainWindow.Instance.LanguageManager.OnLanguageChanged += () =>
+			MainWindow.Instance.LocalizationManager.OnLanguageChanged += () =>
 			{
 				//Reload all localized strings
 				Values.ForEach(v => v.DisplayName = GetValueDisplayName(v.Item));

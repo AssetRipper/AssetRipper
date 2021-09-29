@@ -42,7 +42,7 @@
     "text_asset_format_text_description": "Export as a plain text file (.txt)",
     "text_asset_format_parse": "Parse",
     "text_asset_format_parse_description": "Export as a plain text file, but try to guess the correct file extension (e.g. JSON files get the .json extension)",
-    "config_screen_drag_drop_prompt": "Please note that some setting changes may cause or prevent errors. Once you're ready, drag-and-drop your game file/folder onto this window, or use the menu in the upper-left to open something manually.",
+    "config_screen_drag_drop_prompt": "Please note that some setting changes may cause or prevent errors.\nOnce you're ready, drag-and-drop your game file/folder onto this window, or use the menu in the upper-left to open something manually.",
     "menu_file": "File",
     "menu_file_open_file": "Open File",
     "menu_file_open_folder": "Open Folder",

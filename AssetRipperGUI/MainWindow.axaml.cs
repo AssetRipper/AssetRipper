@@ -17,16 +17,16 @@ namespace AssetRipper.GUI
 	    public TextBox LogText;
 
 	    private MainWindowViewModel VM;
-	    public readonly LanguageManager LanguageManager;
+	    public readonly LocalizationManager LocalizationManager = new();
 	    
 	    public MainWindow()
 	    {
 		    Instance = this;
 		    DataContext = VM = new();
-		    
-		    LanguageManager = new();
 
-		    Logger.Info(LogCategory.System, $"Available languages: {string.Join(", ", LanguageManager.SupportedLanguages.Select(l => l.LanguageCode))}");
+		    LocalizationManager.Init();
+
+		    Logger.Info(LogCategory.System, $"Available languages: {string.Join(", ", LocalizationManager.SupportedLanguages.Select(l => l.LanguageCode))}");
 
 		    InitializeComponent();
 #if DEBUG
@@ -74,7 +74,7 @@ namespace AssetRipper.GUI
 
 		private void LanguageMenuItemClicked(object? sender, RoutedEventArgs e)
 		{
-			if(sender is not MenuItem {SelectedItem: LanguageManager.SupportedLanguage language})
+			if(sender is not MenuItem {SelectedItem: LocalizationManager.SupportedLanguage language})
 				return;
 
 			Logger.Info(LogCategory.System, $"User selected language {language}");
