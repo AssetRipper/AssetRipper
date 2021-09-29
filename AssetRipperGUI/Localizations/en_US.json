@@ -2,7 +2,7 @@
     "welcome_title": "Welcome To AssetRipper",
     "config_options": "Configuration Options",
     "disable_scripts": "Disable Script Processing",
-    "skip_streaming_assets": "Skip StreamingAssetsFolder",
+    "skip_streaming_assets": "Skip StreamingAssets Folder",
     "mesh_export_title": "Mesh Export Format",
     "audio_export_title": "Audio Export Format",
     "image_export_title": "Image Export Format",
