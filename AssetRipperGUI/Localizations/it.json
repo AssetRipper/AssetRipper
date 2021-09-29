@@ -17,7 +17,7 @@
     "mesh_format_stl_ascii_description": "Formato di modelli 3D comunemente usato per la stampa 3D. Unity non può importare questo formato. Questa variante è basata su file di testo.",
     "mesh_format_stl_binary": "STL (Binario)",
     "mesh_format_stl_binary_description": "Formato di modelli 3D comunemente usato per la stampa 3D. Unity non può importare questo formato. Questa variante è basata su file binari.",
-    "mesh_format_glb_primitive": "GLB semplice",
+    "mesh_format_glb_primitive": "GLB Semplice",
     "mesh_format_glb_primitive_description": "Un'alternativa open source di alta qualità al formato FBX. Questa è la versione binaria del formato GLTF. Contiene solo dati della mesh. Può causare degli errori, inoltre Unity non può importare questo tipo di formato.",
     "audio_format_native": "Nativo",
     "audio_format_native_description": "Formato audio FSB nativo. Non può esser importato su Unity, quindi usalo solo se sei un esperto.",
@@ -84,5 +84,17 @@
     "asset_tab_audio": "File Audio",
     "asset_tab_audio_play": "Avvia",
     "asset_tab_audio_pause": "Metti in pausa",
-    "asset_tab_audio_duration_unknown": "<Sconosciuto>"
+    "asset_tab_audio_duration_unknown": "<Sconosciuto>",
+    "menu_language": "Lingua",
+    "success": "Successo!",
+    "asset_tab_text": "Testo",
+    "error": "Errore",
+    "export_complete": "Esportazione completata!",
+    "export_deleting_old_files": "Eliminazione dei file esistenti...",
+    "export_preparing": "Preparazione all'esportazione...\nPotrebbero volerci alcuni minuti.",
+    "no_game_files_found": "Nessun gioco creato con Unity o asset bundle è stato trovato nei file caricati.",
+    "export_in_progress_no_file_count_yet": "Esportazione dei file\n0.0%\n?/?",
+    "export_in_progress": "Esportazione dei file\n{0}%\n{1}/{2}",
+    "error_exporting_with_reason": "Impossibile esportare i contenuti del gioco: {0}",
+    "error_importing_with_reason": "Impossibile caricare i contenuti del gioco: {0}"
 }
