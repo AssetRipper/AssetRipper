@@ -120,7 +120,7 @@ namespace AssetRipper.GUI
 			}
 		}
 
-		public LanguageManager LanguageManager => MainWindow.Instance.LanguageManager;
+		public LocalizationManager LocalizationManager => MainWindow.Instance.LocalizationManager;
 
 		public MainWindowViewModel()
 		{
@@ -140,7 +140,7 @@ namespace AssetRipper.GUI
 
 		private void UpdateGamePathInUi(string path)
 		{
-			LoadingText = string.Format(MainWindow.Instance.LanguageManager["loading_game_content_from"], _importingFrom, "");
+			LoadingText = string.Format(MainWindow.Instance.LocalizationManager["loading_game_content_from"], _importingFrom, "");
 			_importingFrom = path;
 		}
 
@@ -151,10 +151,10 @@ namespace AssetRipper.GUI
 			if (_updatingLoadingText)
 				return;
 
-			var newStatus = context == null ? MainWindow.Instance.LanguageManager[statusKey] : string.Format(MainWindow.Instance.LanguageManager[statusKey], context); 
+			var newStatus = context == null ? MainWindow.Instance.LocalizationManager[statusKey] : string.Format(MainWindow.Instance.LocalizationManager[statusKey], context); 
 
 			_updatingLoadingText = true;
-			LoadingText = string.Format(MainWindow.Instance.LanguageManager["loading_game_content_from"], _importingFrom, newStatus);
+			LoadingText = string.Format(MainWindow.Instance.LocalizationManager["loading_game_content_from"], _importingFrom, newStatus);
 			_updatingLoadingText = false;
 		}
 
@@ -207,11 +207,11 @@ namespace AssetRipper.GUI
 
 				if (error is GameNotFoundException)
 				{
-					this.ShowPopup(MainWindow.Instance.LanguageManager["no_game_files_found"], MainWindow.Instance.LanguageManager["error"]);
+					this.ShowPopup(MainWindow.Instance.LocalizationManager["no_game_files_found"], MainWindow.Instance.LocalizationManager["error"]);
 					return;
 				}
 
-				this.ShowPopup(string.Format(MainWindow.Instance.LanguageManager["error_importing_with_reason"], error.Message), MainWindow.Instance.LanguageManager["error"]);
+				this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_importing_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
 			});
 		}
 
@@ -247,13 +247,13 @@ namespace AssetRipper.GUI
 			UIExportManager.Export(_ripper, exportPath, () =>
 			{
 				IsExporting = false;
-				this.ShowPopup(MainWindow.Instance.LanguageManager["export_complete"], MainWindow.Instance.LanguageManager["success"]);
+				this.ShowPopup(MainWindow.Instance.LocalizationManager["export_complete"], MainWindow.Instance.LocalizationManager["success"]);
 				Logger.Info(LogCategory.General, "Export Complete!");
 			}, error =>
 			{
 				IsExporting = false;
 				Logger.Error(error);
-				this.ShowPopup(string.Format(MainWindow.Instance.LanguageManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LanguageManager["error"]);
+				this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
 			});
 		}
 
@@ -274,7 +274,7 @@ namespace AssetRipper.GUI
 			}
 
 			IsExporting = true;
-			ExportingText = MainWindow.Instance.LanguageManager["export_deleting_old_files"];
+			ExportingText = MainWindow.Instance.LocalizationManager["export_deleting_old_files"];
 
 			string exportPath = Path.Combine(chosenFolder, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
@@ -289,13 +289,13 @@ namespace AssetRipper.GUI
 			UIExportManager.Export(_ripper, exportPath, SelectedAsset.Asset, () =>
 			{
 				IsExporting = false;
-				this.ShowPopup(MainWindow.Instance.LanguageManager["export_complete"], MainWindow.Instance.LanguageManager["success"]);
+				this.ShowPopup(MainWindow.Instance.LocalizationManager["export_complete"], MainWindow.Instance.LocalizationManager["success"]);
 				Logger.Info(LogCategory.General, "Export Complete!");
 			}, error =>
 			{
 				IsExporting = false;
 				Logger.Error(error);
-				this.ShowPopup(string.Format(MainWindow.Instance.LanguageManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LanguageManager["error"]);
+				this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
 			});
 		}
 
@@ -370,16 +370,16 @@ namespace AssetRipper.GUI
 			if (release > current)
 			{
 				MessageBox.Popup(
-					MainWindow.Instance.LanguageManager["menu_about_check_for_update_available_title"],
-					string.Format(MainWindow.Instance.LanguageManager["menu_about_check_for_update_available"], release),
+					MainWindow.Instance.LocalizationManager["menu_about_check_for_update_available_title"],
+					string.Format(MainWindow.Instance.LocalizationManager["menu_about_check_for_update_available"], release),
 					MessageBoxViewModel.Buttons.YesNo,
 					UpdatePopupClosed);
 			}
 			else
 			{
 				MessageBox.Popup(
-					MainWindow.Instance.LanguageManager["menu_about_check_for_update_up_to_date_title"],
-					string.Format(MainWindow.Instance.LanguageManager["menu_about_check_for_update_up_to_date"], current)
+					MainWindow.Instance.LocalizationManager["menu_about_check_for_update_up_to_date_title"],
+					string.Format(MainWindow.Instance.LocalizationManager["menu_about_check_for_update_up_to_date"], current)
 				);
 			}
 		}

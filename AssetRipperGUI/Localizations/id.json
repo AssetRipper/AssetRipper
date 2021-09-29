@@ -42,7 +42,7 @@
     "text_asset_format_text_description": "Ekspor sebagai file teks biasa (.txt)",
     "text_asset_format_parse": "Mengurai",
     "text_asset_format_parse_description": "Ekspor sebagai file teks biasa, tapi tetap mencoba untuk mencari ekstensi file yang benar (mis. File JSON akan mendapatkan ekstensi .json)",
-    "config_screen_drag_drop_prompt": "Harap dicatat bahwa beberapa perubahan pengaturan dapat menyebabkan atau mencegah error. Setelah Anda siap,drag-and-drop file/folder game Anda ke jendela ini, atau gunakan menu di kiri atas untuk membuka sesuatu secara manual.",
+    "config_screen_drag_drop_prompt": "Harap dicatat bahwa beberapa perubahan pengaturan dapat menyebabkan atau mencegah error.\nSetelah Anda siap,drag-and-drop file/folder game Anda ke jendela ini, atau gunakan menu di kiri atas untuk membuka sesuatu secara manual.",
     "menu_file": "File",
     "menu_file_open_file": "Buka File",
     "menu_file_open_folder": "Buka Folder",

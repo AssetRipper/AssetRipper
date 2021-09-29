@@ -25,7 +25,7 @@ namespace AssetRipper.GUI
 			var binding = new ReflectionBindingExtension($"[{keyToUse}]")
 			{
 				Mode = BindingMode.OneWay,
-				Source = MainWindow.Instance.LanguageManager,
+				Source = MainWindow.Instance.LocalizationManager,
 			};
 
 			return binding.ProvideValue(serviceProvider);

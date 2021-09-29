@@ -76,11 +76,13 @@
             </MenuItem>
             
             <!--Language Menu-->
-            <MenuItem Header="{i18n:Localize menu_language}" Items="{Binding LanguageManager.SupportedLanguages}" Click="LanguageMenuItemClicked">
+            <MenuItem Header="{i18n:Localize menu_language}" Items="{Binding LocalizationManager.SupportedLanguages}" Click="LanguageMenuItemClicked">
                 <MenuItem.ItemTemplate>
                     <DataTemplate>
-                        <MenuItem Command="{Binding Apply}" CommandParameter="{Binding}">
-                            <TextBlock Text="{Binding DisplayName}"></TextBlock>
+                        <MenuItem Command="{Binding Apply}" CommandParameter="{Binding}" Header="{Binding DisplayName}">
+                            <MenuItem.IsEnabled>
+                                <Binding Converter="{x:Static BoolConverters.Not}" Path="IsActive"></Binding>
+                            </MenuItem.IsEnabled>
                         </MenuItem>
                     </DataTemplate>
                 </MenuItem.ItemTemplate>

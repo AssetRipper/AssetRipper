@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Extensions;
+﻿using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Logging;
 using System;
 using System.Collections.Generic;
@@ -7,22 +8,29 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace AssetRipper.GUI
 {
-	public class LanguageManager : BaseViewModel
+	public class LocalizationManager : BaseViewModel
 	{
 		private const string LocalizationFilePrefix = "AssetRipper.GUI.Localizations.";
+		private static readonly Regex SortOrderRegex = new("\\(Sort Order=([A-Z]+)\\)", RegexOptions.Compiled);
 
 		// ReSharper disable once MemberInitializerValueIgnored
 		private Dictionary<string, string> CurrentLocale = null!; //To suppress warning as it's initialized indirectly in constructor
 		private Dictionary<string, string> FallbackLocale;
-		private string? _lastLoadedLang;
-		public SupportedLanguage[] SupportedLanguages { get; }
+		private string? CurrentLang;
+		public SupportedLanguage[] SupportedLanguages { get; private set; }
 
 		public event Action OnLanguageChanged = () => { };
 
-		public LanguageManager()
+		public LocalizationManager()
+		{
+			
+		}
+
+		public void Init()
 		{
 			LoadLanguage("en_US");
 			FallbackLocale = CurrentLocale;
@@ -33,7 +41,7 @@ namespace AssetRipper.GUI
 				.Select(l => l[LocalizationFilePrefix.Length..^5])
 				.ToArray();
 
-			var supportedLanguageNames = supportedLanguageCodes.Select(code => new CultureInfo(code)).Select(culture => culture.DisplayName).ToArray();
+			var supportedLanguageNames = supportedLanguageCodes.Select(code => new CultureInfo(code)).Select(ExtractCultureName).ToArray();
 
 			List<SupportedLanguage> languages = new();
 			for (int i = 0; i < supportedLanguageNames.Length; i++)
@@ -44,10 +52,15 @@ namespace AssetRipper.GUI
 			SupportedLanguages = languages.ToArray();
 		}
 
+		private static string ExtractCultureName(CultureInfo culture)
+		{
+			return SortOrderRegex.Replace(culture.NativeName, match => $"({match.Groups[1].Value})");
+		}
+
 		[SuppressMessage("ReSharper", "NotResolvedInText")]
 		public void LoadLanguage(string code)
 		{
-			_lastLoadedLang = code;
+			CurrentLang = code;
 			Logger.Info(LogCategory.System, $"Loading locale {code}.json");
 			using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(LocalizationFilePrefix + code + ".json") ?? throw new Exception($"Could not load language file {code}.json");
 			
@@ -69,29 +82,38 @@ namespace AssetRipper.GUI
 
 				if (FallbackLocale.TryGetValue(key, out ret))
 				{
-					Logger.Warning(LogCategory.System, $"Locale {_lastLoadedLang} is missing a definition for {key}. Using fallback language (en_US)");
+					Logger.Warning(LogCategory.System, $"Locale {CurrentLang} is missing a definition for {key}. Using fallback language (en_US)");
 					return ret;
 				}
 
-				Logger.Error(LogCategory.System, $"Locale {_lastLoadedLang} is missing a definition for {key}, and it also could not be found in the fallback language (en_US)");
+				Logger.Error(LogCategory.System, $"Locale {CurrentLang} is missing a definition for {key}, and it also could not be found in the fallback language (en_US)");
 				return $"__{key}__?";
 			}
 		}
 
-		public class SupportedLanguage
+		public class SupportedLanguage : BaseViewModel
 		{
 			public string DisplayName { get; }
 			public string LanguageCode { get; }
+
+			public bool IsActive
+			{
+				get => MainWindow.Instance.LocalizationManager.CurrentLang == LanguageCode;
+			}
 
 			public SupportedLanguage(string displayName, string languageCode)
 			{
 				DisplayName = displayName;
 				LanguageCode = languageCode;
+				
+				Logger.Info($"Language {displayName} isActive {IsActive}");
+
+				MainWindow.Instance.LocalizationManager.OnLanguageChanged += () => OnPropertyChanged(nameof(IsActive));
 			}
 
 			public void Apply()
 			{
-				MainWindow.Instance.LanguageManager.LoadLanguage(LanguageCode);
+				MainWindow.Instance.LocalizationManager.LoadLanguage(LanguageCode);
 			}
 
 			public override string ToString() => DisplayName;

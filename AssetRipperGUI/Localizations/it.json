@@ -42,7 +42,7 @@
     "text_asset_format_text_description": "Esporta come file di testo normali (.txt)",
     "text_asset_format_parse": "Analizza",
     "text_asset_format_parse_description": "Esporta come file di testo normali, ma prova ad indovinare l'estensione corretta dei file (ad esempio: i file JSON avranno l'estensione .json)",
-    "config_screen_drag_drop_prompt": "Si prega di notare che alcune modifiche alle impostazioni possono causare o prevenire errori. Quando sei pronto, trascina e rilascia i file o la cartella del gioco su questa finestra o usa il menu in alto a sinistra per aprire qualcosa manualmente.",
+    "config_screen_drag_drop_prompt": "Si prega di notare che alcune modifiche alle impostazioni possono causare o prevenire errori.\nQuando sei pronto, trascina e rilascia i file o la cartella del gioco su questa finestra o usa il menu in alto a sinistra per aprire qualcosa manualmente.",
     "menu_file": "File",
     "menu_file_open_file": "Apri un file",
     "menu_file_open_folder": "Apri una cartella",
