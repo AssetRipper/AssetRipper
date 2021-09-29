@@ -9,9 +9,9 @@ namespace AssetRipper.Core.Logging
 	public static class Logger
 	{
 		private static readonly List<ILogger> loggers = new List<ILogger>();
-		public static bool AllowVerbose { private get; set; }
+		public static bool AllowVerbose { private get; set; } = true;
 
-		public static event Action<string> OnStatusChanged = _ => { };
+		public static event Action<string, object> OnStatusChanged = (_,_) => { };
 
 		static Logger()
 		{
@@ -123,6 +123,6 @@ namespace AssetRipper.Core.Logging
 
 		public static void Clear() => loggers.Clear();
 
-		public static void SendStatusChange(string newStatus) => OnStatusChanged(newStatus);
+		public static void SendStatusChange(string newStatus, object context = null) => OnStatusChanged(newStatus, context);
 	}
 }

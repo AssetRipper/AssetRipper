@@ -73,20 +73,20 @@ namespace AssetRipper.GUI.Managers
 		{
 			exporter.EventExportPreparationStarted += () =>
 			{
-				vm.ExportingText = "Preparing for Export...\nThis might take a minute.";
+				vm.ExportingText = MainWindow.Instance.LanguageManager["export_preparing"];
 				Logger.Info(LogCategory.Export, "Preparing for export...");
 			};
 
 			exporter.EventExportPreparationFinished += () =>
 			{
-				vm.ExportingText = "Exporting Asset Files\n0.0%\n?/?";
+				vm.ExportingText = MainWindow.Instance.LanguageManager["export_in_progress_no_file_count_yet"];
 				Logger.Info(LogCategory.Export, "Preparation complete. Starting to export now...");
 			};
 
 			exporter.EventExportProgressUpdated += (index, count) =>
 			{
 				double progress = (double)index / count * 100.0;
-				vm.ExportingText = $"Exporting Asset Files\n{progress:f1}%\n{index}/{count}";
+				vm.ExportingText = string.Format(MainWindow.Instance.LanguageManager["export_in_progress"], progress.ToString("f0"), index, count);
 
 				Dispatcher.UIThread.Post(() => MainWindow.Instance.LogText.CaretIndex = MainWindow.Instance.LogText.Text.Length - 1, DispatcherPriority.Background);
 			};

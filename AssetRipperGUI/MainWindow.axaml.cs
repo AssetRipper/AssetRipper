@@ -1,3 +1,4 @@
+using AssetRipper.Core.Logging;
 using AssetRipper.GUI.Components;
 using AssetRipper.Library.Configuration;
 using Avalonia;
@@ -6,6 +7,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
+using System.Linq;
 
 namespace AssetRipper.GUI
 {
@@ -15,11 +17,16 @@ namespace AssetRipper.GUI
 	    public TextBox LogText;
 
 	    private MainWindowViewModel VM;
+	    public readonly LanguageManager LanguageManager;
 	    
 	    public MainWindow()
 	    {
 		    Instance = this;
 		    DataContext = VM = new();
+		    
+		    LanguageManager = new();
+
+		    Logger.Info(LogCategory.System, $"Available languages: {string.Join(", ", LanguageManager.SupportedLanguages.Select(l => l.LanguageCode))}");
 
 		    InitializeComponent();
 #if DEBUG
@@ -64,5 +71,15 @@ namespace AssetRipper.GUI
 
 		    VM.OnAssetSelected(selectedItem, selectedItem.AsObjectAsset);
 	    }
+
+		private void LanguageMenuItemClicked(object? sender, RoutedEventArgs e)
+		{
+			if(sender is not MenuItem {SelectedItem: LanguageManager.SupportedLanguage language})
+				return;
+
+			Logger.Info(LogCategory.System, $"User selected language {language}");
+			
+			language.Apply();
+		}
     }
 }

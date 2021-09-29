@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private void Load(List<string> paths, CoreConfiguration configuration, LayoutInfo layinfo)
 		{
-			Logger.SendStatusChange("Collecting files and detecting game structure");
+			Logger.SendStatusChange("loading_step_detect_platform");
 			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure platformStructure, out MixedGameStructure mixedStructure);
 			PlatformStructure = platformStructure;
 			PlatformStructure?.CollectFiles(configuration.IgnoreStreamingAssets);
@@ -62,7 +62,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				}
 				else
 				{
-					Logger.SendStatusChange("Initializing asset layout...");
+					Logger.SendStatusChange("loading_step_initialize_layout");
 					
 					//Assigns a layout if one wasn't already provided
 					layinfo ??= processor.GetLayoutInfo();
@@ -78,12 +78,12 @@ namespace AssetRipper.Core.Structure.GameStructure
 					pars.RequestAssemblyCallback = OnRequestAssembly;
 					pars.RequestResourceCallback = OnRequestResource;
 					
-					Logger.SendStatusChange("Creating file collection");
+					Logger.SendStatusChange("loading_step_create_file_collection");
 
 					//Sets its fields and creates the Project Exporter
 					FileCollection = new GameCollection(pars, configuration);
 
-					Logger.SendStatusChange("Starting scheme processing");
+					Logger.SendStatusChange("loading_step_begin_scheme_processing");
 					
 					//Creates new objects for each scheme in the collection
 					processor.ProcessSchemes(FileCollection);

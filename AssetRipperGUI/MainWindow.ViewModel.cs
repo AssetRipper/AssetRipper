@@ -30,7 +30,7 @@ namespace AssetRipper.GUI
 	public partial class MainWindowViewModel : BaseViewModel
 	{
 		private const string websiteURL = "https://ds5678.github.io/AssetRipper/";
-		
+
 		//Exposed-to-ui properties
 		private bool _hasFile;
 		private bool _hasLoaded;
@@ -120,6 +120,8 @@ namespace AssetRipper.GUI
 			}
 		}
 
+		public LanguageManager LanguageManager => MainWindow.Instance.LanguageManager;
+
 		public MainWindowViewModel()
 		{
 			Logger.Add(new ViewModelLogger(this));
@@ -127,30 +129,32 @@ namespace AssetRipper.GUI
 			Logger.LogSystemInformation("AssetRipper GUI Version");
 
 			Logger.OnStatusChanged += OnImportStatusUpdated;
-			
-			ProductInfoHeaderValue product = new (BuildInfo.Name, BuildInfo.Version);
-			ProductInfoHeaderValue comment = new ($"(+{websiteURL})");
+
+			ProductInfoHeaderValue product = new(BuildInfo.Name, BuildInfo.Version);
+			ProductInfoHeaderValue comment = new($"(+{websiteURL})");
 			client.DefaultRequestHeaders.UserAgent.Add(product);
 			client.DefaultRequestHeaders.UserAgent.Add(comment);
-			
+
 			OnPropertyChanged(nameof(AudioExportFormat));
 		}
 
 		private void UpdateGamePathInUi(string path)
 		{
-			LoadingText = $"Loading Game Content from {path}...";
+			LoadingText = string.Format(MainWindow.Instance.LanguageManager["loading_game_content_from"], _importingFrom, "");
 			_importingFrom = path;
 		}
-		
-		private void OnImportStatusUpdated(string newStatus)
+
+		private void OnImportStatusUpdated(string statusKey, object? context)
 		{
 			// Logger.Log(LogType.Info, LogCategory.System, $"{newStatus} at {DateTime.Now:hh:mm:ss.fff}");
 
-			if(_updatingLoadingText)
+			if (_updatingLoadingText)
 				return;
 
+			var newStatus = context == null ? MainWindow.Instance.LanguageManager[statusKey] : string.Format(MainWindow.Instance.LanguageManager[statusKey], context); 
+
 			_updatingLoadingText = true;
-			LoadingText = $"Loading Game Content from {_importingFrom}...\n{newStatus}...";
+			LoadingText = string.Format(MainWindow.Instance.LanguageManager["loading_game_content_from"], _importingFrom, newStatus);
 			_updatingLoadingText = false;
 		}
 
@@ -203,11 +207,11 @@ namespace AssetRipper.GUI
 
 				if (error is GameNotFoundException)
 				{
-					this.ShowPopup($"No Unity game was found in the dropped files.", "Error");
+					this.ShowPopup(MainWindow.Instance.LanguageManager["no_game_files_found"], MainWindow.Instance.LanguageManager["error"]);
 					return;
 				}
 
-				this.ShowPopup($"Failed to load game content: {error.Message}", "Error");
+				this.ShowPopup(string.Format(MainWindow.Instance.LanguageManager["error_importing_with_reason"], error.Message), MainWindow.Instance.LanguageManager["error"]);
 			});
 		}
 
@@ -243,13 +247,13 @@ namespace AssetRipper.GUI
 			UIExportManager.Export(_ripper, exportPath, () =>
 			{
 				IsExporting = false;
-				this.ShowPopup("Export Complete!", "Success!");
+				this.ShowPopup(MainWindow.Instance.LanguageManager["export_complete"], MainWindow.Instance.LanguageManager["success"]);
 				Logger.Info(LogCategory.General, "Export Complete!");
 			}, error =>
 			{
 				IsExporting = false;
 				Logger.Error(error);
-				this.ShowPopup($"Failed to export game content: {error.Message}", "Error");
+				this.ShowPopup(string.Format(MainWindow.Instance.LanguageManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LanguageManager["error"]);
 			});
 		}
 
@@ -270,7 +274,7 @@ namespace AssetRipper.GUI
 			}
 
 			IsExporting = true;
-			ExportingText = "Clearing out existing files...";
+			ExportingText = MainWindow.Instance.LanguageManager["export_deleting_old_files"];
 
 			string exportPath = Path.Combine(chosenFolder, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
@@ -281,17 +285,17 @@ namespace AssetRipper.GUI
 
 			await UIExportManager.PrepareExportDirectory(exportPath);
 			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.FileCollection.Exporter, this);
-			
+
 			UIExportManager.Export(_ripper, exportPath, SelectedAsset.Asset, () =>
 			{
 				IsExporting = false;
-				this.ShowPopup("Export Complete!", "Success!");
+				this.ShowPopup(MainWindow.Instance.LanguageManager["export_complete"], MainWindow.Instance.LanguageManager["success"]);
 				Logger.Info(LogCategory.General, "Export Complete!");
 			}, error =>
 			{
 				IsExporting = false;
 				Logger.Error(error);
-				this.ShowPopup($"Failed to export game content: {error.Message}", "Error");
+				this.ShowPopup(string.Format(MainWindow.Instance.LanguageManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LanguageManager["error"]);
 			});
 		}
 
@@ -323,19 +327,19 @@ namespace AssetRipper.GUI
 		//Called from UI
 		public void Reset()
 		{
-			if(!HasFile)
+			if (!HasFile)
 				return;
-			
+
 			_ripper.ResetData();
 			AssetFiles.Clear();
 			_assetContainer = null;
 			HasFile = false;
 			HasLoaded = false;
 			IsExporting = false;
-			
+
 			SelectedAsset?.Dispose();
 			SelectedAsset = null;
-			
+
 			LogText = "";
 			Logger.Log(LogType.Info, LogCategory.General, "UI Reset");
 		}
@@ -348,7 +352,7 @@ namespace AssetRipper.GUI
 			SelectedAsset?.Dispose();
 			SelectedAsset = new(selectedAsset, _assetContainer);
 		}
-		
+
 		// Called from UI
 		private async void CheckforUpdates()
 		{
@@ -362,20 +366,22 @@ namespace AssetRipper.GUI
 
 			Version release = Version.Parse(releases[0].TagName);
 			Version current = Version.Parse(BuildInfo.Version);
-			
+
 			if (release > current)
 			{
 				MessageBox.Popup(
-					"Update Available", 
-					$"Update {release} is available.\nDo you want to open the releases page?",
+					MainWindow.Instance.LanguageManager["menu_about_check_for_update_available_title"],
+					string.Format(MainWindow.Instance.LanguageManager["menu_about_check_for_update_available"], release),
 					MessageBoxViewModel.Buttons.YesNo,
 					UpdatePopupClosed);
 			}
 			else
 			{
-				MessageBox.Popup("No Updates Available",$"You are already on the latest version ({current})");
+				MessageBox.Popup(
+					MainWindow.Instance.LanguageManager["menu_about_check_for_update_up_to_date_title"],
+					string.Format(MainWindow.Instance.LanguageManager["menu_about_check_for_update_up_to_date"], current)
+				);
 			}
-			
 		}
 
 		private void UpdatePopupClosed(MessageBoxViewModel.Result result)
@@ -389,9 +395,12 @@ namespace AssetRipper.GUI
 		// Called from UI
 		private void GithubClicked() => OpenUrl("https://github.com/ds5678/AssetRipper");
 
+		//Called from UI
+		private void TranslateClicked() => OpenUrl("https://weblate.samboy.dev/engage/assetripper/");
+
 		// Called from UI
 		private void WebsiteClicked() => OpenUrl(websiteURL);
-		
+
 		private static void OpenUrl(string url) =>
 			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
 	}

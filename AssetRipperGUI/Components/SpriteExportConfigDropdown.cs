@@ -6,15 +6,15 @@ namespace AssetRipper.GUI.Components
 	{
 		protected override string GetValueDisplayName(SpriteExportMode value) => value switch
 		{
-			SpriteExportMode.Native => "Unity",
-			SpriteExportMode.Texture2D => "Texture",
+			SpriteExportMode.Native => MainWindow.Instance.LanguageManager["sprite_format_native"],
+			SpriteExportMode.Texture2D => MainWindow.Instance.LanguageManager["sprite_format_texture"],
 			_ => base.GetValueDisplayName(value),
 		};
 
 		protected override string? GetValueDescription(SpriteExportMode value)  => value switch
 		{
-			SpriteExportMode.Native => "Export in the unity sprite format. Cannot be viewed outside of unity.",
-			SpriteExportMode.Texture2D => "Export as an image of the Sprite Sheet. Can be viewed outside of unity, but slower to export.",
+			SpriteExportMode.Native => MainWindow.Instance.LanguageManager["sprite_format_native_description"],
+			SpriteExportMode.Texture2D => MainWindow.Instance.LanguageManager["sprite_format_texture_description"],
 			_ => null,
 		};
 	}

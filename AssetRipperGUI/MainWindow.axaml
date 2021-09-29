@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ar="using:AssetRipper.GUI"
         xmlns:cc="using:AssetRipper.GUI.Components"
+        xmlns:i18n="clr-namespace:AssetRipper.GUI" 
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AssetRipper.GUI.MainWindow"
         Icon="/Resources/GUI_Icon.ico"
@@ -25,10 +26,10 @@
         <!--Top Menu-->
         <Menu Grid.Row="0">
             <!--File Menu-->
-            <MenuItem Header="_File">
+            <MenuItem Header="{i18n:Localize menu_file}">
 
                 <!--File->Open File-->
-                <MenuItem Header="_Open File" Command="{Binding ShowOpenFileDialog}">
+                <MenuItem Header="{i18n:Localize menu_file_open_file}" Command="{Binding ShowOpenFileDialog}">
                     <MenuItem.IsEnabled>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="!IsExporting" />
@@ -41,7 +42,7 @@
                 </MenuItem>
 
                 <!--File->Open Folder-->
-                <MenuItem Header="_Open Folder" Command="{Binding ShowOpenFolderDialog}">
+                <MenuItem Header="{i18n:Localize menu_file_open_folder}" Command="{Binding ShowOpenFolderDialog}">
                     <MenuItem.IsEnabled>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="!IsExporting" />
@@ -53,7 +54,7 @@
                     </MenuItem.IsEnabled>
                 </MenuItem>
 
-                <MenuItem Header="_Reset" Command="{Binding Reset}">
+                <MenuItem Header="{i18n:Localize menu_file_reset}" Command="{Binding Reset}">
                     <MenuItem.IsEnabled>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="HasFile" />
@@ -65,20 +66,32 @@
 
 
                 <!--File->Exit-->
-                <MenuItem Header="_Exit" Click="ExitClicked" />
+                <MenuItem Header="{i18n:Localize menu_file_exit}" Click="ExitClicked" />
             </MenuItem>
 
             <!--Export Menu-->
-            <MenuItem Header="_Export" IsEnabled="{Binding !IsExporting}">
-                <MenuItem Header="_Export All Files" Click="ExportAllClicked" />
-                <MenuItem Header="_Export Selected Asset As Project" Click="ExportSelectedAssetToProjectClicked" />
+            <MenuItem Header="{i18n:Localize menu_export}" IsEnabled="{Binding !IsExporting}">
+                <MenuItem Header="{i18n:Localize menu_export_all}" Click="ExportAllClicked" />
+                <MenuItem Header="{i18n:Localize menu_export_selected}" Click="ExportSelectedAssetToProjectClicked" />
+            </MenuItem>
+            
+            <!--Language Menu-->
+            <MenuItem Header="{i18n:Localize menu_language}" Items="{Binding LanguageManager.SupportedLanguages}" Click="LanguageMenuItemClicked">
+                <MenuItem.ItemTemplate>
+                    <DataTemplate>
+                        <MenuItem Command="{Binding Apply}" CommandParameter="{Binding}">
+                            <TextBlock Text="{Binding DisplayName}"></TextBlock>
+                        </MenuItem>
+                    </DataTemplate>
+                </MenuItem.ItemTemplate>
             </MenuItem>
 
             <!--About Menu-->
-            <MenuItem Header="_About">
-                <MenuItem Header="_Website" Command="{Binding WebsiteClicked}" />
-                <MenuItem Header="_Github" Command="{Binding GithubClicked}" />
-                <MenuItem Header="_Check for update" Command="{Binding CheckforUpdates}" />
+            <MenuItem Header="{i18n:Localize menu_about}">
+                <MenuItem Header="{i18n:Localize menu_about_website}" Command="{Binding WebsiteClicked}" />
+                <MenuItem Header="{i18n:Localize menu_about_github}" Command="{Binding GithubClicked}" />
+                <MenuItem Header="{i18n:Localize menu_about_check_for_update}" Command="{Binding CheckforUpdates}" />
+                <MenuItem Header="{i18n:Localize menu_about_translate}" Command="{Binding TranslateClicked}"></MenuItem>
             </MenuItem>
         </Menu>
 
@@ -89,71 +102,71 @@
               IsVisible="{Binding !HasFile}"
               RowDefinitions="50, 50, 650, *">
 
-            <TextBlock Text="Welcome To AssetRipper"
+            <TextBlock Text="{i18n:Localize welcome_title}"
                        FontSize="24"
                        TextAlignment="Center"
                        VerticalAlignment="Center" />
             
-            <TextBlock Grid.Row="1" Text="Configuration Options"
+            <TextBlock Grid.Row="1" Text="{i18n:Localize config_options}"
                        FontSize="20"
                        TextAlignment="Center"
                        VerticalAlignment="Center" />
 
-            <Grid Grid.Row="2" RowDefinitions="50, 200, 200, 200" ColumnDefinitions="*, 400, 400, *" Margin="100, 0, 100, 0">
+            <Grid Grid.Row="2" RowDefinitions="50, 200, 200, 200" ColumnDefinitions="*, 500, 500, *" Margin="100, 0, 100, 0">
                 <WrapPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="20, 0">
                     <CheckBox IsChecked="{Binding DisableScriptImport, Mode=TwoWay}" />
-                    <TextBlock Text="Disable Script Processing" Margin="10, 7, 0, 10" />
+                    <TextBlock Text="{i18n:Localize disable_scripts}" Margin="0, 7, 0, 10" />
                 </WrapPanel>
                 <WrapPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Margin="20, 0">
                     <CheckBox IsChecked="{Binding IgnoreStreamingAssets, Mode=TwoWay}" />
-                    <TextBlock Text="Skip StreamingAssets Folder" Margin="10, 7, 00, 10" />
+                    <TextBlock Text="{i18n:Localize skip_streaming_assets}" Margin="0, 7, 00, 10" />
                 </WrapPanel>
                 <cc:MeshExportConfigDropdown 
                     Grid.Column="1" 
                     Grid.Row="1"
-                    OptionTitle="Mesh Export Format"
+                    OptionTitle="{i18n:Localize mesh_export_title}"
                     SelectedValue="{Binding MeshExportFormat, Mode=TwoWay}"
                     Margin="0, 0, 20, 0">
                 </cc:MeshExportConfigDropdown>
                 <cc:AudioExportConfigDropdown 
                     Grid.Column="2" 
                     Grid.Row="1"
-                    OptionTitle="Audio Export Format"
+                    OptionTitle="{i18n:Localize audio_export_title}"
                     SelectedValue="{Binding AudioExportFormat, Mode=TwoWay}"
                     Margin="20, 0, 0, 0">
                 </cc:AudioExportConfigDropdown>
                 <cc:ImageExportConfigDropdown 
                     Grid.Column="1" 
                     Grid.Row="2"
-                    OptionTitle="Image Export Format"
+                    OptionTitle="{i18n:Localize image_export_title}"
                     SelectedValue="{Binding ImageExportFormat, Mode=TwoWay}"
                     Margin="0, 0, 20, 0">
                 </cc:ImageExportConfigDropdown>
                 <cc:SpriteExportConfigDropdown 
                     Grid.Column="2" 
                     Grid.Row="2"
-                    OptionTitle="Sprite Export Format"
+                    OptionTitle="{i18n:Localize sprite_export_title}"
                     SelectedValue="{Binding SpriteExportMode, Mode=TwoWay}"
                     Margin="20, 0, 0, 0">
                 </cc:SpriteExportConfigDropdown>
                 <cc:TerrainExportConfigDropdown 
                     Grid.Column="1" 
                     Grid.Row="3"
-                    OptionTitle="Terrain Export Format"
+                    OptionTitle="{i18n:Localize terrain_export_title}"
                     SelectedValue="{Binding TerrainExportMode, Mode=TwoWay}"
                     Margin="0, 0, 20, 0">
                 </cc:TerrainExportConfigDropdown>
                 <cc:TextExportConfigDropdown 
                     Grid.Column="2" 
                     Grid.Row="3"
-                    OptionTitle="TextAsset Export Format"
+                    OptionTitle="{i18n:Localize text_asset_export_title}"
                     SelectedValue="{Binding TextExportMode, Mode=TwoWay}"
                     Margin="20, 0, 0, 0">
                 </cc:TextExportConfigDropdown>
             </Grid>
 
             <TextBlock Grid.Row="3"
-                       Text="Note: some setting changes may cause or prevent errors. Once you're ready, drag-and-drop your game folder onto this window, or use the file menu to open something."
+                       Text="{i18n:Localize config_screen_drag_drop_prompt}"
                        TextAlignment="Center" 
                        VerticalAlignment="Bottom"
                        Margin="0, 0, 0, 50"/>
@@ -203,7 +216,7 @@
                     <!--File content-->
 
                     <!--Placeholder for if no asset selected-->
-                    <TextBlock Text="Select an Asset on the left to view information about it" TextAlignment="Center"
+                    <TextBlock Text="{i18n:Localize select_asset_to_view_info}" TextAlignment="Center"
                                VerticalAlignment="Center" FontSize="18">
                         <TextBlock.IsVisible>
                             <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -227,26 +240,26 @@
                         </TabControl.IsVisible>
 
                         <!--Basic Info Tab-->
-                        <TabItem Header="Basic Information">
+                        <TabItem Header="{i18n:Localize asset_tab_basic}">
                             <TextBox Text="{Binding SelectedAsset.BasicInformation, FallbackValue='No Asset Selected'}" />
                         </TabItem>
 
                         <!--Text Tab-->
-                        <TabItem Header="Text Asset"
+                        <TabItem Header="{i18n:Localize asset_tab_text}"
                                  IsVisible="{Binding SelectedAsset.HasTextData, FallbackValue=False}">
                             <TextBox IsReadOnly="True"
                                      Text="{Binding SelectedAsset.TextAssetData, FallbackValue='No text asset found'}" />
                         </TabItem>
 
                         <!--Image Tab-->
-                        <TabItem Header="Image" IsVisible="{Binding SelectedAsset.HasImageData, FallbackValue=False}">
+                        <TabItem Header="{i18n:Localize asset_tab_image}" IsVisible="{Binding SelectedAsset.HasImageData, FallbackValue=False}">
                             <Image Source="{Binding SelectedAsset.ImageData, FallbackValue=null}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
                         </TabItem>
 
                         <!--Audio Tab-->
-                        <TabItem Header="Audio Clip"
+                        <TabItem Header="{i18n:Localize asset_tab_audio}"
                                  IsVisible="{Binding SelectedAsset.HasAudioData, FallbackValue=False}">
 
                             <Grid RowDefinitions="*, 40, 40, *">
@@ -254,8 +267,8 @@
                                 <Button Grid.Row="1" Command="{Binding SelectedAsset.TogglePause, FallbackValue=null}"
                                         IsEnabled="True" HorizontalAlignment="Center">
                                     <Panel>
-                                        <Label IsVisible="{Binding SelectedAsset.IsPaused}">Play</Label>
-                                        <Label IsVisible="{Binding !SelectedAsset.IsPaused}">Pause</Label>
+                                        <TextBlock IsVisible="{Binding SelectedAsset.IsPaused}" Text="{i18n:Localize asset_tab_audio_play}"></TextBlock>
+                                        <TextBlock IsVisible="{Binding !SelectedAsset.IsPaused}" Text="{i18n:Localize asset_tab_audio_pause}"></TextBlock>
                                     </Panel>
                                 </Button>
                                 <TextBlock Grid.Row="2" Text="{Binding SelectedAsset.PositionString}"
@@ -264,7 +277,7 @@
                         </TabItem>
 
                         <!--YAML Tab-->
-                        <TabItem Header="YAML Nodes"
+                        <TabItem Header="{i18n:Localize asset_tab_yaml}"
                                  IsVisible="{Binding SelectedAsset.YamlTreeIsSupported, FallbackValue=False}">
                             <TreeView Items="{Binding SelectedAsset.YamlTree, FallbackValue=[]}">
                                 <TreeView.ItemTemplate>

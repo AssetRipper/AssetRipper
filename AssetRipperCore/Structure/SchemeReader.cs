@@ -49,26 +49,26 @@ namespace AssetRipper.Core.Structure
 		{
 			if (BundleFile.IsBundleFile(stream))
 			{
-				Logger.SendStatusChange($"Parsing Bundle {fileName}");
+				Logger.SendStatusChange($"loading_step_parse_bundle", fileName);
 				return BundleFileScheme.ReadScheme(stream, filePath, fileName);
 			}
 			if (ArchiveFile.IsArchiveFile(stream))
 			{
-				Logger.SendStatusChange($"Parsing Archive File {fileName}");
+				Logger.SendStatusChange($"loading_step_parse_archive", fileName);
 				return ArchiveFile.ReadScheme(stream, filePath, fileName);
 			}
 			if (WebFile.IsWebFile(stream))
 			{
-				Logger.SendStatusChange($"Parsing Web File {fileName}");
+				Logger.SendStatusChange($"loading_step_parse_web", fileName);
 				return WebFile.ReadScheme(stream, filePath);
 			}
 			if (SerializedFile.IsSerializedFile(stream))
 			{
-				Logger.SendStatusChange($"Parsing Serialized File {fileName}");
+				Logger.SendStatusChange($"loading_step_parse_serialized", fileName);
 				return SerializedFile.ReadScheme(stream, filePath, fileName);
 			}
 			
-			Logger.SendStatusChange($"Parsing Resource File {fileName}");
+			Logger.SendStatusChange($"loading_step_parse_resource", fileName);
 			return ResourceFile.ReadScheme(stream, filePath, fileName);
 		}
 	}

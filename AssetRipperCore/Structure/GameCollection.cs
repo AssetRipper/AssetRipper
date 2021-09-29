@@ -78,7 +78,7 @@ namespace AssetRipper.Core.Structure
 			m_assemblyCallback = pars.RequestAssemblyCallback;
 			m_resourceCallback = pars.RequestResourceCallback;
 
-			Logger.SendStatusChange("Loading assemblies");
+			Logger.SendStatusChange("loading_step_load_assemblies");
 
 			try
 			{
