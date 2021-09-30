@@ -40,10 +40,10 @@ namespace AssetRipper.Core.Classes.Object
 		/// The object will not be saved to the Scene. It will not be destroyed when a new Scene is loaded.
 		/// It is a shortcut for HideFlags.DontSaveInBuild | HideFlags.DontSaveInEditor | HideFlags.DontUnloadUnusedAsset.
 		/// </summary>
-		DontSave				= 52,
+		DontSave				= DontSaveInEditor | DontSaveInBuild | DontUnloadUnusedAsset, //52
 		/// <summary>
 		/// The GameObject is not shown in the Hierarchy, not saved to to Scenes, and not unloaded by Resources.UnloadUnusedAssets.
 		/// </summary>
-		HideAndDontSave			= 61
+		HideAndDontSave			= HideInHierarchy | DontSaveInEditor | NotEditable | DontSaveInBuild | DontUnloadUnusedAsset, //61
 	}
 }
