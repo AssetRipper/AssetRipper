@@ -23,7 +23,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\Brotli.md = Licenses\Brotli.md
 		Licenses\CommandLineParser.md = Licenses\CommandLineParser.md
 		Licenses\Cpp2IL.md = Licenses\Cpp2IL.md
-		Licenses\DXDecompiler.md = Licenses\DXDecompiler.md
 		Licenses\FMOD.md = Licenses\FMOD.md
 		Licenses\Fmod5Sharp.md = Licenses\Fmod5Sharp.md
 		Licenses\HLSLcc.md = Licenses\HLSLcc.md
@@ -36,8 +35,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\SevenZipCsharp.md = Licenses\SevenZipCsharp.md
 		Licenses\SharpGLTF.md = Licenses\SharpGLTF.md
 		Licenses\SharpZipLib.md = Licenses\SharpZipLib.md
-		Licenses\Smolv.md = Licenses\Smolv.md
-		Licenses\SpirV.md = Licenses\SpirV.md
 		Licenses\texgenpack.md = Licenses\texgenpack.md
 		Licenses\Unity.md = Licenses\Unity.md
 		Licenses\uTinyRipper.md = Licenses\uTinyRipper.md
@@ -46,10 +43,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brotli", "Brotli\Brotli.csproj", "{DE764903-A3F8-4A04-80DF-BA487A26DF75}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpirV", "SpirV\SpirV.csproj", "{EEC07247-C8CC-40F0-AD1A-C6780F01D659}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smolv", "Smolv\Smolv.csproj", "{17649F08-1065-4956-A810-A35A5C75E7E6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperLibrary", "AssetRipperLibrary\AssetRipperLibrary.csproj", "{36C3C081-547B-4C0C-98D0-BB90BA07B976}"
 EndProject
@@ -96,8 +89,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1
 		docs\Structure.md = docs\Structure.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShaderTextRestorer", "ShaderTextRestorer\ShaderTextRestorer.csproj", "{DAB64EB2-BCF4-4854-A609-499E06A0F227}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperCommon", "AssetRipperCommon\AssetRipperCommon.csproj", "{676FEE4F-6353-4D8B-B8E6-D89801D25575}"
 EndProject
 Global
@@ -139,26 +130,6 @@ Global
 		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.ReleaseMac|x64.Build.0 = Release|Any CPU
 		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.Virtual|x64.ActiveCfg = Virtual|Any CPU
 		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.Virtual|x64.Build.0 = Virtual|Any CPU
-		{EEC07247-C8CC-40F0-AD1A-C6780F01D659}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{EEC07247-C8CC-40F0-AD1A-C6780F01D659}.Debug|x64.Build.0 = Debug|Any CPU
-		{EEC07247-C8CC-40F0-AD1A-C6780F01D659}.Release|x64.ActiveCfg = Release|Any CPU
-		{EEC07247-C8CC-40F0-AD1A-C6780F01D659}.Release|x64.Build.0 = Release|Any CPU
-		{EEC07247-C8CC-40F0-AD1A-C6780F01D659}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
-		{EEC07247-C8CC-40F0-AD1A-C6780F01D659}.ReleaseLinux|x64.Build.0 = Release|Any CPU
-		{EEC07247-C8CC-40F0-AD1A-C6780F01D659}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
-		{EEC07247-C8CC-40F0-AD1A-C6780F01D659}.ReleaseMac|x64.Build.0 = Release|Any CPU
-		{EEC07247-C8CC-40F0-AD1A-C6780F01D659}.Virtual|x64.ActiveCfg = Virtual|Any CPU
-		{EEC07247-C8CC-40F0-AD1A-C6780F01D659}.Virtual|x64.Build.0 = Virtual|Any CPU
-		{17649F08-1065-4956-A810-A35A5C75E7E6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{17649F08-1065-4956-A810-A35A5C75E7E6}.Debug|x64.Build.0 = Debug|Any CPU
-		{17649F08-1065-4956-A810-A35A5C75E7E6}.Release|x64.ActiveCfg = Release|Any CPU
-		{17649F08-1065-4956-A810-A35A5C75E7E6}.Release|x64.Build.0 = Release|Any CPU
-		{17649F08-1065-4956-A810-A35A5C75E7E6}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
-		{17649F08-1065-4956-A810-A35A5C75E7E6}.ReleaseLinux|x64.Build.0 = Release|Any CPU
-		{17649F08-1065-4956-A810-A35A5C75E7E6}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
-		{17649F08-1065-4956-A810-A35A5C75E7E6}.ReleaseMac|x64.Build.0 = Release|Any CPU
-		{17649F08-1065-4956-A810-A35A5C75E7E6}.Virtual|x64.ActiveCfg = Virtual|Any CPU
-		{17649F08-1065-4956-A810-A35A5C75E7E6}.Virtual|x64.Build.0 = Virtual|Any CPU
 		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Debug|x64.ActiveCfg = Debug|x64
 		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Debug|x64.Build.0 = Debug|x64
 		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Release|x64.ActiveCfg = Release|x64
@@ -229,16 +200,6 @@ Global
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.ReleaseMac|x64.Build.0 = ReleaseMac|x64
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x64.ActiveCfg = Virtual|x64
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Virtual|x64.Build.0 = Virtual|x64
-		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.Debug|x64.Build.0 = Debug|Any CPU
-		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.Release|x64.ActiveCfg = Release|Any CPU
-		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.Release|x64.Build.0 = Release|Any CPU
-		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
-		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.ReleaseLinux|x64.Build.0 = Release|Any CPU
-		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
-		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.ReleaseMac|x64.Build.0 = Release|Any CPU
-		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.Virtual|x64.ActiveCfg = Virtual|Any CPU
-		{DAB64EB2-BCF4-4854-A609-499E06A0F227}.Virtual|x64.Build.0 = Virtual|Any CPU
 		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.Debug|x64.Build.0 = Debug|Any CPU
 		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.Release|x64.ActiveCfg = Release|Any CPU

@@ -16,8 +16,6 @@ Some code from Unity is licensed under the [Unity Reference-Only License](https:
 
 [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Cpp2IL.md).
 
-[DXDecompiler](https://github.com/lanyizi/DXDecompiler) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/DXDecompiler.md).
-
 FMOD is licensed under a [non-commercial license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/FMOD.md).
 
 [Fmod5Sharp](https://github.com/SamboyCoding/Fmod5Sharp) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Fmod5Sharp.md).
@@ -43,9 +41,5 @@ LibOgg and LibVorbis are licensed from [Xiph](https://www.xiph.org/) under the [
 [SharpGLTF](https://github.com/vpenades/SharpGLTF) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/SharpGLTF.md).
 
 [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/SharpZipLib.md).
-
-[Smolv](https://github.com/aras-p/smol-v) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Smolv.md).
-
-[SpirV](https://github.com/Anteru/csspv) is licensed under the [BSD 2-Clause license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/SpirV.md).
 
 [texgenpack](https://github.com/hglm/texgenpack) is licensed under a [permissive license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/texgenpack.md).
