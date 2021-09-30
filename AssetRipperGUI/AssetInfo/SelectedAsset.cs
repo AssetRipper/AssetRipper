@@ -330,7 +330,7 @@ namespace AssetRipper.GUI.AssetInfo
 		private string DumpShaderDataAsText(Shader shader)
 		{
 			using MemoryStream stream = new();
-			DummyShaderTextExporter.ExportShader(shader, _uiAssetContainer, stream, ShaderAssetExporter.DefaultShaderExporterInstantiator);
+			DummyShaderTextExporter.ExportShader(shader, _uiAssetContainer, stream);
 
 			return Encoding.UTF8.GetString(stream.GetBuffer());
 		}
