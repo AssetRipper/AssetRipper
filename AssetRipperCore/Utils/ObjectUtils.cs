@@ -1,15 +1,14 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading;
 
-namespace AssetRipper.Core.Classes.Utils
+namespace AssetRipper.Core.Utils
 {
 	public static class ObjectUtils
 	{
-		public static long GenerateExportID(Object.Object asset, Func<long, bool> duplicateChecker)
+		public static long GenerateExportID(Classes.Object.Object asset, Func<long, bool> duplicateChecker)
 		{
 			if (asset == null)
 			{
@@ -45,10 +44,10 @@ namespace AssetRipper.Core.Classes.Utils
 			return BitConverter.ToInt64(s_idBuffer.Value, 0);
 		}
 
-		public static UnityGUID CalculateAssetsGUID(IEnumerable<Object.Object> assets)
+		public static UnityGUID CalculateAssetsGUID(IEnumerable<Classes.Object.Object> assets)
 		{
 			List<uint> hashList = new List<uint>();
-			foreach (Object.Object asset in assets)
+			foreach (Classes.Object.Object asset in assets)
 			{
 				hashList.Add(asset.GUID.Data0);
 				hashList.Add(asset.GUID.Data1);
