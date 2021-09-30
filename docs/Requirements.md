@@ -16,4 +16,3 @@ If you want to run binary files, you need to install:
 If you're running AssetRipper on Linux, there are a few additional dependencies:
 
 * [VLC Media Player](https://www.videolan.org/)
-* [libgdiplus](https://github.com/mono/libgdiplus)

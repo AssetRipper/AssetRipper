@@ -2,8 +2,8 @@
 * Scenes
 * Prefabs (GameObjects with transform components)
 * AnimationClips (legacy, generic, humanoid)
-* Meshes
-* Shaders (native listing)
+* Meshes (various formats)
+* Shaders (dummy)
 * Textures
 * Audio
 * Fonts

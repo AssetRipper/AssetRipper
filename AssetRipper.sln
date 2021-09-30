@@ -85,6 +85,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1C4D-430F-A1BA-BFC5671181D4}"
 	ProjectSection(SolutionItems) = preProject
 		docs\_config.yml = docs\_config.yml
+		docs\CONTRIBUTING.md = docs\CONTRIBUTING.md
 		docs\Credits.md = docs\Credits.md
 		docs\Downloads.md = docs\Downloads.md
 		docs\ExportFeatures.md = docs\ExportFeatures.md

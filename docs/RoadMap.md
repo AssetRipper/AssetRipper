@@ -1,43 +1,21 @@
 # Development Roadmap
 
-## 0.1.7.0
-* Animation Export
-  * Optimized by SamboyCoding!
-* Audio Export
-  * Add FMOD cross-platform backup exporter (done!)
-  * Allow other audio formats when not vorbis encoded (done!)
-  * Implement newer Fmod5Sharp for additional audio export (done!)
-* Mesh Export
-  * Primitive GLB mesh export (done!)
-  * Merge mesh converter classes into their respective exporters (done!)
-  * Experimental OBJ export for terrains (done!)
-* Shader Export
-  * Move shader export classes out of the core project for cleaner and clearer code. (done!)
-* Script Export
-  * Optimize script exporter (done!)
-  * Handle exceptions while reading IL2Cpp assemblies (done!)
-* Texture Export
-  * Optimized by SamboyCoding!
-  * Remove libgdiplus dependency for linux and mac users (done!)
-* Import Settings
-  * Ignore StreamingAssets directory option (done!)
-* GUI improvements
-  * Heatmap preview for terrains in the GUI (done!)
-  * Configuration window for choosing import and export options (done by SamboyCoding!)
-  * Switch shader preview to use the library shader exporter (done!)
-
 ## 0.1.8.0
+* Localization Support
+  * Interface for Localization contributions (done by SamboyCoding!)
+  * Localization support in the GUI (done by SamboyCoding!)
 * Shader Export
   * Remove Shader disassembly code
   * Reformat the shader export system to support two sided shaders
 * GUI improvements
-  * Better Audio Playback control
+  * Better Audio Playback control?
     * Fast-forward and rewind
     * Seek-bar for selecting playback position
 * Code Cleanup
   * Remove Reading namespace
   * Remove remaining Layout classes
   * Move more code to the Common and Library projects
+    * Move all enum classes (done!)
 
 ## 0.2.0.0
 * Overhaul struct reading, which would enable:

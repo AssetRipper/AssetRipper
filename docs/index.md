@@ -5,6 +5,7 @@
 [![](https://img.shields.io/github/downloads/ds5678/AssetRipper/total.svg)](https://github.com/ds5678/AssetRipper/releases)
 [![](https://img.shields.io/github/downloads/ds5678/AssetRipper/latest/total.svg)](https://github.com/ds5678/AssetRipper/releases/latest)
 [![](https://img.shields.io/github/v/release/ds5678/AssetRipper)](https://github.com/ds5678/AssetRipper/releases/latest)
+[![](https://weblate.samboy.dev/widgets/assetripper/-/gui/svg-badge.svg)](http://weblate.samboy.dev/engage/assetripper/)
 
 AssetRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and assets bundles (*\*.unity3d*, *\*.bundle*, etc.) and converting them into the native Unity engine format.
 
@@ -26,21 +27,12 @@ Thank you for considering to support me. I have normal expenses like food, elect
 The development of this project has a dedicated [Discord server](https://discord.gg/XqXa53W2Yh). Feel free to come say hi. This is also an alternative location for people to post issues.
 
 
-# License [![](https://img.shields.io/github/license/ds5678/AssetRipper?color=green)](https://github.com/ds5678/AssetRipper/blob/master/LICENSE.md)
+# Legal Disclaimers
 
-AssetRipper is licensed under the GNU General Public License v3.0
-
-
-# Legal Issues
+AssetRipper is licensed under the [GNU General Public License v3.0](https://github.com/ds5678/AssetRipper/blob/master/LICENSE.md)
 
 Please be aware that using or distributing the output from this software may be against copyright legislation in your jurisdiction. You are responsible for ensuring that you're not breaking any laws.
 
-
-# Credits
-
 The full list of licensed works can be found on the [Credits](Credits.md) page.
-
-
-# Disclaimer
 
 This software is not sponsored by or affiliated with Unity Technologies or its affiliates. "Unity" is a registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere.
