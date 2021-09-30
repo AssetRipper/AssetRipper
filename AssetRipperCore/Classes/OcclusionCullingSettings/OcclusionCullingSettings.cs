@@ -83,28 +83,6 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 		/// </summary>
 		private static bool IsOcclusionBakeSettingsFirst(UnityVersion version) => version.IsGreaterEqual(5, 5);
 
-		public static bool IsSceneCompatible(Object.Object asset)
-		{
-			if (asset.ClassID == ClassIDType.GameObject)
-			{
-				return true;
-			}
-			if (asset.ClassID.IsSceneSettings())
-			{
-				return true;
-			}
-			if (asset.ClassID == ClassIDType.MonoBehaviour)
-			{
-				MonoBehaviour monoBeh = (MonoBehaviour)asset;
-				if (!monoBeh.IsSceneObject)
-				{
-					return false;
-				}
-			}
-
-			return asset is Component;
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);

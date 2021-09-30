@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Project.Collections
 			List<Object> components = new List<Object>();
 			foreach (Object asset in file.FetchAssets())
 			{
-				if (OcclusionCullingSettings.IsSceneCompatible(asset))
+				if (IsSceneCompatible(asset))
 				{
 					components.Add(asset);
 					m_cexportIDs.Add(asset.AssetInfo, asset.PathID);
@@ -280,6 +280,29 @@ namespace AssetRipper.Core.Project.Collections
 				}
 			}
 		}
+
+		public static bool IsSceneCompatible(Classes.Object.Object asset)
+		{
+			if (asset.ClassID == ClassIDType.GameObject)
+			{
+				return true;
+			}
+			if (asset.ClassID.IsSceneSettings())
+			{
+				return true;
+			}
+			if (asset.ClassID == ClassIDType.MonoBehaviour)
+			{
+				MonoBehaviour monoBeh = (MonoBehaviour)asset;
+				if (!monoBeh.IsSceneObject)
+				{
+					return false;
+				}
+			}
+
+			return asset is Component;
+		}
+
 		public override string Name { get; }
 		public override ISerializedFile File => m_file;
 

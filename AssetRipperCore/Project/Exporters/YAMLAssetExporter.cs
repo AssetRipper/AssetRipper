@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.OcclusionCullingSettings;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -74,7 +73,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
-			if (OcclusionCullingSettings.IsSceneCompatible(asset))
+			if (SceneExportCollection.IsSceneCompatible(asset))
 			{
 				if (asset.File.Collection.IsScene(asset.File))
 				{
