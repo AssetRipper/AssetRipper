@@ -1,16 +1,17 @@
-﻿using System;
+﻿using AssetRipper.Core.Classes;
+using System;
 
-namespace AssetRipper.Core.Classes.Utils.Extensions
+namespace AssetRipper.Core.Extensions
 {
 	public static class ObjectExtensions
 	{
-		public static string GetOriginalName(this Object.Object _this)
+		public static string GetOriginalName(this Classes.Object.Object _this)
 		{
 			if (_this is NamedObject named)
 			{
 				return named.Name;
 			}
-			else if (_this is GameObject.GameObject gameObject)
+			else if (_this is Classes.GameObject.GameObject gameObject)
 			{
 				return gameObject.Name;
 			}
@@ -24,13 +25,13 @@ namespace AssetRipper.Core.Classes.Utils.Extensions
 			}
 		}
 
-		public static string TryGetName(this Object.Object _this)
+		public static string TryGetName(this Classes.Object.Object _this)
 		{
 			if (_this is NamedObject named)
 			{
 				return named.ValidName;
 			}
-			else if (_this is GameObject.GameObject gameObject)
+			else if (_this is Classes.GameObject.GameObject gameObject)
 			{
 				return gameObject.Name;
 			}

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
-using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Converters.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;

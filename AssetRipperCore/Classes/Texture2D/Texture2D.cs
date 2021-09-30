@@ -1,10 +1,10 @@
 using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Converters.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;

@@ -1,6 +1,4 @@
-﻿using AssetRipper.Core.Classes.Utils.Extensions;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Logging;
+﻿using AssetRipper.Core.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

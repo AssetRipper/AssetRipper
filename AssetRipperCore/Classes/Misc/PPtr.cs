@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Converters.Game;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;

@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Utils;
-using AssetRipper.Core.Classes.Utils.Extensions;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Utils;
 using System;
 using System.IO;

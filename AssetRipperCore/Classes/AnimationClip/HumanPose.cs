@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files;
@@ -38,13 +37,24 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			{
 				if (IsVector3f(reader.Version))
 				{
-					TDoFArray = reader.ReadVector3Array();
+					TDoFArray = ReadVector3Array(reader);
 				}
 				else
 				{
 					TDoFArray = reader.ReadAssetArray<Vector4f>();
 				}
 			}
+		}
+
+		private static Vector4f[] ReadVector3Array(AssetReader reader)
+		{
+			int count = reader.ReadInt32();
+			Vector4f[] array = new Vector4f[count];
+			for (int i = 0; i < count; i++)
+			{
+				array[i] = reader.ReadAsset<Vector3f>();
+			}
+			return array;
 		}
 
 		public HumanGoal[] GoalArray { get; set; }

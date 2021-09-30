@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.ParticleSystem.Curve;
-using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;

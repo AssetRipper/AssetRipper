@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Core.Classes.Utils.Extensions
+namespace AssetRipper.Core.IO.Extensions
 {
-	public static class YAMLMappingNodeExtensions
+	public static class SerializedVersionYAMLExtensions
 	{
 		public static void AddSerializedVersion(this YAMLMappingNode _this, int version)
 		{

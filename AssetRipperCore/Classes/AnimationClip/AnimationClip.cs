@@ -2,7 +2,6 @@ using AssetRipper.Core.Classes.AnimationClip.Clip;
 using AssetRipper.Core.Classes.AnimationClip.Curves;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.Serializable;
-using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Converters.AnimationClip;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;

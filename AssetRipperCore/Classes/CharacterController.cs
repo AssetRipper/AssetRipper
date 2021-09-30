@@ -1,5 +1,5 @@
-using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;

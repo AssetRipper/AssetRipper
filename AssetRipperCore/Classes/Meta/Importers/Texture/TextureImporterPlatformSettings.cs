@@ -1,6 +1,6 @@
 using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;

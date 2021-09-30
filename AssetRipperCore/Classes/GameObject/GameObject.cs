@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Utils.Extensions;
 using AssetRipper.Core.Converters.GameObject;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -314,7 +313,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 			else
 			{
-				node.Add(layout.ComponentName, Component.ExportYAML(container));
+				node.Add(layout.ComponentName, ExportYAML(Component, container));
 			}
 
 			if (layout.IsActiveFirst)
@@ -360,6 +359,19 @@ namespace AssetRipper.Core.Classes.GameObject
 			if (layout.HasIcon && !layout.IsIconFirst)
 			{
 				node.Add(layout.IconName, Icon.ExportYAML(container));
+			}
+			return node;
+		}
+
+		private static YAMLNode ExportYAML(IEnumerable<ComponentPair> _this, IExportContainer container)
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			foreach (ComponentPair pair in _this)
+			{
+				if (pair.Component.IsValid(container))
+				{
+					node.Add(pair.ExportYAML(container));
+				}
 			}
 			return node;
 		}
