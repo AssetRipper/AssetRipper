@@ -37,7 +37,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			{
 				if (ExportMode == ShaderExportMode.Dummy && DummyShaderTextExporter.IsEncoded(container.Version))
 				{
-					DummyShaderTextExporter.ExportShader(shader, container, fileStream, DefaultShaderExporterInstantiator);
+					DummyShaderTextExporter.ExportShader(shader, container, fileStream);
 				}
 				else if (IsDX11ExportMode(ExportMode))
 				{

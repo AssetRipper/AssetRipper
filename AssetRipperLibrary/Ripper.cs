@@ -99,7 +99,7 @@ namespace AssetRipper.Library
 			OverrideExporter(ClassIDType.Sprite, textureExporter);
 
 			//Shader exporters
-			OverrideExporter(ClassIDType.Shader, new ShaderAssetExporter(Settings));
+			OverrideExporter(ClassIDType.Shader, new DummyShaderTextExporter());
 
 			//Audio exporters
 			OverrideExporter(ClassIDType.AudioClip, new NativeAudioExporter());

@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 
 	public static class SerializedPropertyFlagExtensions
 	{
-		public static bool IsHideInEnspector(this SerializedPropertyFlag _this)
+		public static bool IsHideInInspector(this SerializedPropertyFlag _this)
 		{
 			return (_this & SerializedPropertyFlag.HideInInspector) != 0;
 		}

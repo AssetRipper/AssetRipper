@@ -112,7 +112,7 @@ namespace ShaderTextRestorer.IO
 			{
 				writer.Write("[{0}] ", attribute);
 			}
-			if (_this.Flags.IsHideInEnspector())
+			if (_this.Flags.IsHideInInspector())
 			{
 				writer.Write("[HideInInspector] ");
 			}
