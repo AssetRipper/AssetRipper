@@ -116,7 +116,8 @@ namespace AssetRipper.Library
 			OverrideExporter(ClassIDType.TerrainData, new TerrainObjExporter(Settings));
 
 			//Script exporters
-			OverrideExporter(ClassIDType.MonoScript, new ScriptExporter(GameStructure.FileCollection.AssemblyManager));
+			OverrideExporter(ClassIDType.MonoScript, new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
+			OverrideExporter(ClassIDType.MonoScript, new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));
 
 			//Miscellaneous exporters
 			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter(Settings));

@@ -17,10 +17,9 @@ namespace AssetRipper.Library.Configuration
 		/// </summary>
 		public MeshExportFormat MeshExportFormat { get; set; }
 		/// <summary>
-		/// Dummy shaders compile in the editor. <br/>
-		/// Disassembled shaders provide insight into their precompiled state, but don't compile in the editor.
+		/// How are MonoScripts exported? Recommended: Decompiled
 		/// </summary>
-		public ShaderExportMode ShaderExportMode { get; set; } 
+		public ScriptExportMode ScriptExportMode { get; set; } 
 		/// <summary>
 		/// Should sprites be exported as a texture? Recommended: Native
 		/// </summary>
@@ -40,7 +39,7 @@ namespace AssetRipper.Library.Configuration
 			AudioExportFormat = AudioExportFormat.Default;
 			ImageExportFormat = ImageExportFormat.Png;
 			MeshExportFormat = MeshExportFormat.Native;
-			ShaderExportMode = ShaderExportMode.Dummy;
+			ScriptExportMode = ScriptExportMode.Decompiled;
 			SpriteExportMode = SpriteExportMode.Native;
 			TerrainExportMode = TerrainExportMode.Native;
 			TextExportMode = TextExportMode.Parse;
