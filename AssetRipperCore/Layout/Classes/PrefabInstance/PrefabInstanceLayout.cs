@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout.Classes.Misc;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
@@ -119,67 +118,6 @@ namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 			{
 				IsPrefabAssetInvariantName = IsDataTemplateName;
 			}
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			PrefabInstanceLayout layout = context.Layout.PrefabInstance;
-			context.AddNode(layout.Name, name, layout.Version);
-			context.BeginChildren();
-			if (layout.IsModificationFormat)
-			{
-				ObjectLayout.GenerateTypeTree(context);
-				if (layout.HasRootGameObject && layout.IsRootGameObjectFirst)
-				{
-					context.AddPPtr(context.Layout.GameObject.Name, layout.RootGameObjectName);
-				}
-
-				PrefabModificationLayout.GenerateTypeTree(context, layout.ModificationName);
-				if (layout.HasSourcePrefab)
-				{
-					context.AddPPtr(layout.Name, layout.SourcePrefabName);
-				}
-				else
-				{
-					context.AddPPtr(layout.Name, layout.ParentPrefabName);
-				}
-				if (!layout.IsRootGameObjectFirst)
-				{
-					context.AddPPtr(context.Layout.GameObject.Name, layout.RootGameObjectName);
-				}
-				if (layout.HasIsPrefabAsset)
-				{
-					context.AddBool(layout.IsPrefabAssetName);
-				}
-				else
-				{
-					context.AddBool(layout.IsPrefabParentName);
-				}
-				if (layout.HasIsExploded)
-				{
-					context.AddBool(layout.IsExplodedName);
-				}
-				context.Align();
-			}
-			else
-			{
-				GUIDLayout.GenerateTypeTree(context, layout.LastMergeIdentifierName);
-				if (layout.HasLastTemplateIdentifier)
-				{
-					GUIDLayout.GenerateTypeTree(context, layout.LastTemplateIdentifierName);
-				}
-				context.AddArray(layout.ObjectsName, (c, n) => c.AddPPtr(c.Layout.EditorExtension.Name, n));
-				context.AddPPtr(layout.Name, layout.FatherName);
-				context.AddBool(layout.IsDataTemplateName, TransferMetaFlags.AlignBytes);
-				GenerateNamedObjectTypeTree(context);
-			}
-			context.EndChildren();
-		}
-
-		public static void GenerateNamedObjectTypeTree(TypeTreeContext context)
-		{
-			EditorExtensionLayout.GenerateTypeTree(context);
-			context.AddString(NamedObject.NameName);
 		}
 
 		public PrefabModificationLayout PrefabModification { get; }

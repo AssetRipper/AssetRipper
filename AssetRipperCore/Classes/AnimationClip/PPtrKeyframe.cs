@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
@@ -14,15 +13,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		{
 			Time = time;
 			Value = script;
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			context.AddNode(nameof(PPtrKeyframe), name);
-			context.BeginChildren();
-			context.AddSingle(TimeName);
-			context.AddPPtr(nameof(Object.Object), ValueName);
-			context.EndChildren();
 		}
 
 		public void Read(AssetReader reader)

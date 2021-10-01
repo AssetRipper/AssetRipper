@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Converters.Game;
-
+﻿
 namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 {
 	/// <summary>
@@ -45,70 +44,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 			{
 				HasMode = true;
 			}
-
-			if (info.Version.IsGreaterEqual(5, 6))
-			{
-				Name = TypeTreeUtils.GradientName;
-			}
-			else
-			{
-				Name = TypeTreeUtils.GradientNEWName;
-			}
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			GradientLayout layout = context.Layout.Serialized.Gradient;
-			context.AddNode(layout.Name, name, layout.Version);
-			context.BeginChildren();
-			if (layout.Version == 1)
-			{
-				ColorRGBA32Layout.GenerateTypeTree(context, layout.Key0Name);
-				ColorRGBA32Layout.GenerateTypeTree(context, layout.Key1Name);
-				ColorRGBA32Layout.GenerateTypeTree(context, layout.Key2Name);
-				ColorRGBA32Layout.GenerateTypeTree(context, layout.Key3Name);
-				ColorRGBA32Layout.GenerateTypeTree(context, layout.Key4Name);
-				ColorRGBA32Layout.GenerateTypeTree(context, layout.Key5Name);
-				ColorRGBA32Layout.GenerateTypeTree(context, layout.Key6Name);
-				ColorRGBA32Layout.GenerateTypeTree(context, layout.Key7Name);
-			}
-			else
-			{
-				ColorRGBAfLayout.GenerateTypeTree(context, layout.Key0Name);
-				ColorRGBAfLayout.GenerateTypeTree(context, layout.Key1Name);
-				ColorRGBAfLayout.GenerateTypeTree(context, layout.Key2Name);
-				ColorRGBAfLayout.GenerateTypeTree(context, layout.Key3Name);
-				ColorRGBAfLayout.GenerateTypeTree(context, layout.Key4Name);
-				ColorRGBAfLayout.GenerateTypeTree(context, layout.Key5Name);
-				ColorRGBAfLayout.GenerateTypeTree(context, layout.Key6Name);
-				ColorRGBAfLayout.GenerateTypeTree(context, layout.Key7Name);
-			}
-
-			context.AddInt16(layout.Ctime0Name);
-			context.AddInt16(layout.Ctime1Name);
-			context.AddInt16(layout.Ctime2Name);
-			context.AddInt16(layout.Ctime3Name);
-			context.AddInt16(layout.Ctime4Name);
-			context.AddInt16(layout.Ctime5Name);
-			context.AddInt16(layout.Ctime6Name);
-			context.AddInt16(layout.Ctime7Name);
-
-			context.AddInt16(layout.Atime0Name);
-			context.AddInt16(layout.Atime1Name);
-			context.AddInt16(layout.Atime2Name);
-			context.AddInt16(layout.Atime3Name);
-			context.AddInt16(layout.Atime4Name);
-			context.AddInt16(layout.Atime5Name);
-			context.AddInt16(layout.Atime6Name);
-			context.AddInt16(layout.Atime7Name);
-
-			if (layout.HasMode)
-			{
-				context.AddInt32(layout.ModeName);
-			}
-			context.AddByte(layout.NumColorKeysName);
-			context.AddByte(layout.NumAlphaKeysName);
-			context.EndChildren();
 		}
 
 		public int Version { get; }
@@ -286,7 +221,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 		/// </summary>
 		public bool HasNumAlphaKeys => true;
 
-		public string Name { get; }
 		public string Key0Name = "key0";
 		public string Key1Name = "key1";
 		public string Key2Name = "key2";

@@ -3,7 +3,6 @@ using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
 using AssetRipper.Core.Classes.Misc.Serializable.Gradient;
 using AssetRipper.Core.Classes.Misc.Serializable.GUIStyle;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math;
@@ -88,11 +87,6 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 				default:
 					throw new NotImplementedException(name);
 			}
-		}
-
-		public TypeTree GenerateTypeTree(AssetLayout layout)
-		{
-			return SerializableTypeConverter.GenerateTypeTree(layout, this);
 		}
 
 		public SerializableStructure CreateSerializableStructure()

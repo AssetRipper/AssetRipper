@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AnimationClip.Curves;
-using AssetRipper.Core.Converters.Game;
-using AssetRipper.Core.Layout.Builtin;
 using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 
 namespace AssetRipper.Core.Layout.Classes.AnimationClip.Curves
@@ -16,37 +14,6 @@ namespace AssetRipper.Core.Layout.Classes.AnimationClip.Curves
 			}
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			FloatCurveLayout layout = context.Layout.AnimationClip.FloatCurve;
-			context.AddNode(layout.Name, name);
-			context.BeginChildren();
-			AnimationCurveTplLayout.GenerateTypeTree(context, name, SingleLayout.GenerateTypeTree);
-			context.AddString(layout.AttributeName);
-			context.AddString(layout.PathName);
-			context.AddNode(TypeTreeUtils.TypeStarName, layout.ClassIDName, 1, sizeof(int));
-			context.AddPPtr(MonoScript.MonoScriptName, layout.ScriptName);
-			context.EndChildren();
-		}
-
-		public int Version => 1;
-
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasCurve => true;
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasAttribute => true;
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasPath => true;
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasClassID => true;
 		/// <summary>
 		/// 2.0.0 and greater
 		/// </summary>

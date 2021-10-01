@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout.Builtin;
 
 namespace AssetRipper.Core.Layout.Classes.GameObject
 {
@@ -78,82 +76,10 @@ namespace AssetRipper.Core.Layout.Classes.GameObject
 			}
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context)
-		{
-			GameObjectLayout layout = context.Layout.GameObject;
-			context.AddNode(layout.Name, TypeTreeUtils.BaseName);
-			context.BeginChildren();
-			ObjectLayout.GenerateTypeTree(context);
-			if (layout.IsComponentTuple)
-			{
-				context.AddArray(layout.ComponentName, TupleLayout.GenerateTypeTree, Int32Layout.GenerateTypeTree,
-					(c, n) => c.AddPPtr(c.Layout.Component.Name, n));
-			}
-			else
-			{
-				context.AddArray(layout.ComponentName, ComponentPairLayout.GenerateTypeTree);
-			}
-			if (layout.IsActiveFirst)
-			{
-				context.AddBool(layout.IsActiveName);
-			}
-			context.AddUInt32(layout.LayerName);
-			if (layout.IsNameFirst)
-			{
-				context.AddString(layout.NameName);
-			}
-			if (layout.HasTag)
-			{
-				context.AddUInt16(layout.TagName);
-			}
-			if (layout.HasTagString)
-			{
-				context.AddString(layout.TagStringName);
-			}
-			if (layout.HasIcon && layout.IsIconFirst)
-			{
-				context.AddPPtr(Texture2D.Texture2DName, layout.IconName);
-			}
-			if (layout.HasNavMeshLayer)
-			{
-				context.AddUInt32(layout.NavMeshLayerName);
-				context.AddUInt32(layout.StaticEditorFlagsName);
-			}
-			if (!layout.IsNameFirst)
-			{
-				context.AddString(layout.NameName);
-			}
-			if (!layout.IsActiveFirst)
-			{
-				context.AddBool(layout.IsActiveName);
-			}
-			if (layout.HasIsStatic)
-			{
-				context.AddBool(layout.IsStaticName);
-			}
-			if (layout.HasIcon && !layout.IsIconFirst)
-			{
-				context.AddPPtr(Texture2D.Texture2DName, layout.IconName);
-			}
-			context.EndChildren();
-		}
-
 		public ComponentPairLayout ComponentPair { get; }
 
 		public int Version { get; }
 
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasComponent => true;
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasLayer => true;
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasName => true;
 		/// <summary>
 		/// Release or less than 2.1.0
 		/// </summary>

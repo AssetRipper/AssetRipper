@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Converters.Game;
 
 namespace AssetRipper.Core.Layout.Classes
 {
@@ -22,21 +21,6 @@ namespace AssetRipper.Core.Layout.Classes
 			}
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context)
-		{
-			BehaviourLayout layout = context.Layout.Behaviour;
-			ComponentLayout.GenerateTypeTree(context);
-			context.AddByte(layout.EnabledName);
-			if (layout.IsAlignEnabled)
-			{
-				context.Align();
-			}
-		}
-
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasEnabledInvariant => true;
 		/// <summary>
 		/// 3.0.0 and greater
 		/// </summary>

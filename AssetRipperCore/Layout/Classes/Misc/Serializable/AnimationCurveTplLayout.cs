@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Converters.Game;
-
+﻿
 namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 {
 	public sealed class AnimationCurveTplLayout
@@ -22,25 +21,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 			}
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name, TypeTreeGenerator generator)
-		{
-			AnimationCurveTplLayout layout = context.Layout.Serialized.AnimationCurveTpl;
-			context.AddNode(layout.Name, name, layout.Version);
-			context.BeginChildren();
-			context.AddArray(layout.CurveName, (c, n) => KeyframeTplLayout.GenerateTypeTree(c, n, generator));
-			if (context.Layout.IsAlign)
-			{
-				context.Align();
-			}
-			context.AddInt32(layout.PreInfinityName);
-			context.AddInt32(layout.PostInfinityName);
-			if (layout.HasRotationOrder)
-			{
-				context.AddInt32(layout.RotationOrderName);
-			}
-			context.EndChildren();
-		}
-
 		public int Version { get; }
 
 		/// <summary>
@@ -60,7 +40,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 		/// </summary>
 		public bool HasRotationOrder { get; }
 
-		public string Name => TypeTreeUtils.AnimationCurveName;
 		public string CurveName => "m_Curve";
 		public string PreInfinityName => "m_PreInfinity";
 		public string PostInfinityName => "m_PostInfinity";

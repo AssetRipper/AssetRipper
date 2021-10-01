@@ -2,7 +2,6 @@
 
 namespace AssetRipper.Core.Layout.Classes.AnimationClip
 {
-#warning TODO:
 	public sealed class AnimationClipLayout
 	{
 		public AnimationClipLayout(LayoutInfo info)
@@ -12,8 +11,6 @@ namespace AssetRipper.Core.Layout.Classes.AnimationClip
 			QuaternionCurve = new QuaternionCurveLayout(info);
 			Vector3Curve = new Vector3CurveLayout(info);
 		}
-
-		public string Name => nameof(AssetRipper.Core.Classes.AnimationClip.AnimationClip);
 
 		public FloatCurveLayout FloatCurve { get; }
 		public PPtrCurveLayout PPtrCurve { get; }

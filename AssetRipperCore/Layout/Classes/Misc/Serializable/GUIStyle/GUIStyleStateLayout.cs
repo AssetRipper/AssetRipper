@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle
@@ -14,22 +13,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle
 			}
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			GUIStyleStateLayout layout = context.Layout.Serialized.GUIStyle.GUIStyleState;
-			context.AddNode(layout.Name, name);
-			context.BeginChildren();
-			context.AddPPtr(Texture2D.Texture2DName, layout.BackgroundName);
-			if (layout.HasScaledBackgrounds)
-			{
-				context.AddArray(layout.ScaledBackgroundsName, (c, n) => c.AddPPtr(Texture2D.Texture2DName, n));
-			}
-			ColorRGBAfLayout.GenerateTypeTree(context, layout.TextColorName);
-			context.EndChildren();
-		}
-
-		public int Version => 1;
-
 		/// <summary>
 		/// All versions
 		/// </summary>
@@ -43,7 +26,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle
 		/// </summary>
 		public bool HasTextColor => true;
 
-		public string Name => TypeTreeUtils.GUIStyleStateName;
 		public string BackgroundName => "m_Background";
 		public string ScaledBackgroundsName => "m_ScaledBackgrounds";
 		public string TextColorName => "m_TextColor";

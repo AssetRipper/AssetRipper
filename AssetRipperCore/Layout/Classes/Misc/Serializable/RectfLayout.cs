@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Converters.Game;
-
+﻿
 namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 {
 	public sealed class RectfLayout
@@ -30,28 +29,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 				HasWidth = true;
 				HasHeight = true;
 			}
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			RectfLayout layout = context.Layout.Serialized.Rectf;
-			context.AddNode(layout.Name, name, layout.Version);
-			context.BeginChildren();
-			if (layout.Version == 1)
-			{
-				context.AddSingle(layout.XMinName);
-				context.AddSingle(layout.YMinName);
-				context.AddSingle(layout.XMaxName);
-				context.AddSingle(layout.YMaxName);
-			}
-			else
-			{
-				context.AddSingle(layout.XName);
-				context.AddSingle(layout.YName);
-				context.AddSingle(layout.WidthName);
-				context.AddSingle(layout.HeightName);
-			}
-			context.EndChildren();
 		}
 
 		public int Version { get; }
@@ -89,7 +66,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 		/// </summary>
 		public bool HasHeight { get; }
 
-		public string Name => TypeTreeUtils.RectName;
 		public string XMinName => "xmin";
 		public string YMinName => "ymin";
 		public string XMaxName => "xmax";

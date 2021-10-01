@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Layout.Classes.Misc
@@ -33,28 +32,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc
 				HasInWeight = true;
 				HasOutWeight = true;
 			}
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name, TypeTreeGenerator generator)
-		{
-			KeyframeTplLayout layout = context.Layout.Misc.KeyframeTpl;
-			context.AddNode(layout.Name, name, layout.Version);
-			context.BeginChildren();
-			context.AddSingle(layout.TimeName);
-			generator.Invoke(context, layout.ValueName);
-			generator.Invoke(context, layout.InSlopeName);
-			generator.Invoke(context, layout.OutSlopeName);
-			if (layout.HasTangentMode)
-			{
-				context.AddInt32(layout.TangentModeName);
-			}
-			if (layout.HasWeightedMode)
-			{
-				context.AddInt32(layout.WeightedModeName);
-				generator.Invoke(context, layout.InWeightName);
-				generator.Invoke(context, layout.OutWeightName);
-			}
-			context.EndChildren();
 		}
 
 		public int Version { get; }
@@ -92,7 +69,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc
 		/// </summary>
 		public bool HasOutWeight { get; }
 
-		public string Name => TypeTreeUtils.KeyframeName;
 		public string TimeName => "time";
 		public string ValueName => "value";
 		public string InSlopeName => "inSlope";

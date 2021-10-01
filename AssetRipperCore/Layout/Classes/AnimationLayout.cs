@@ -1,6 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Animation;
-using AssetRipper.Core.Converters.Game;
-using AssetRipper.Core.Layout.Builtin;
 using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 
 namespace AssetRipper.Core.Layout.Classes
@@ -73,46 +71,6 @@ namespace AssetRipper.Core.Layout.Classes
 			{
 				AnimatePhysicsInvariantName = PlayFixedFrameRateName;
 			}
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			AnimationLayout layout = context.Layout.Animation;
-			context.AddNode(layout.Name, name, layout.Version);
-			context.BeginChildren();
-			BehaviourLayout.GenerateTypeTree(context);
-			context.AddPPtr(context.Layout.AnimationClip.Name, layout.AnimationName);
-			if (layout.HasAnimations)
-			{
-				context.AddArray(layout.AnimationName, (c, n) => c.AddPPtr(c.Layout.AnimationClip.Name, n));
-			}
-			else
-			{
-				context.AddArray(layout.AnimationName, TupleLayout.GenerateTypeTree, StringLayout.GenerateTypeTree,
-					(c, n) => c.AddPPtr(c.Layout.AnimationClip.Name, n));
-			}
-
-			context.AddInt32(layout.WrapModeName);
-			context.AddBool(layout.PlayAutomaticallyName);
-			context.AddBool(layout.AnimatePhysicsInvariantName);
-			if (layout.HasAnimateOnlyIfVisible)
-			{
-				context.AddBool(layout.AnimateOnlyIfVisibleName);
-			}
-			if (layout.IsAlign)
-			{
-				context.Align();
-			}
-
-			if (layout.HasCullingType)
-			{
-				context.AddInt32(layout.CullingTypeName);
-			}
-			if (layout.HasUserAABB)
-			{
-				AABBLayout.GenerateTypeTree(context, layout.UserAABBName);
-			}
-			context.EndChildren();
 		}
 
 		public int Version { get; }

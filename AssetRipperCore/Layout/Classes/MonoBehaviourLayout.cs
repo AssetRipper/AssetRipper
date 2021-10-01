@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 
@@ -23,27 +22,6 @@ namespace AssetRipper.Core.Layout.Classes
 			}
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context)
-		{
-			BehaviourLayout.GenerateTypeTree(context);
-
-			MonoBehaviourLayout layout = context.Layout.MonoBehaviour;
-			if (layout.HasEditorHideFlags)
-			{
-				context.AddUInt32(layout.EditorHideFlagsName);
-			}
-			if (layout.HasGeneratorAsset)
-			{
-				context.AddPPtr(context.Layout.Object.Name, layout.GeneratorAssetName);
-			}
-			context.AddPPtr(MonoScript.MonoScriptName, layout.ScriptName);
-			context.AddString(layout.NameName);
-			if (layout.HasEditorClassIdentifier)
-			{
-				context.AddString(layout.EditorClassIdentifierName);
-			}
-		}
-
 		/// <summary>
 		/// Not Release
 		/// </summary>
@@ -52,14 +30,6 @@ namespace AssetRipper.Core.Layout.Classes
 		/// 2019.1 to 2019.1.0b4 exclusive and Not Release
 		/// </summary>
 		public bool HasGeneratorAsset { get; }
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasScript => true;
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasName => true;
 		/// <summary>
 		/// 4.2.0 and greater and Not Release
 		/// </summary>

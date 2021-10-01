@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Converters.Game;
-
+﻿
 namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 {
 	public sealed class LayerMaskLayout
@@ -19,22 +18,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 			Is32Bits = info.Version.IsGreaterEqual(2);
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			LayerMaskLayout layout = context.Layout.Serialized.LayerMask;
-			context.AddNode(layout.Name, name, layout.Version);
-			context.BeginChildren();
-			if (layout.Is32Bits)
-			{
-				context.AddUInt32(layout.BitsName);
-			}
-			else
-			{
-				context.AddUInt16(layout.BitsName);
-			}
-			context.EndChildren();
-		}
-
 		public int Version { get; }
 
 		/// <summary>
@@ -42,7 +25,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable
 		/// </summary>
 		public bool Is32Bits { get; }
 
-		public string Name => TypeTreeUtils.BitFieldName;
 		public string BitsName => "m_Bits";
 	}
 }

@@ -1,22 +1,9 @@
-﻿using AssetRipper.Core.Converters.Game;
-
+﻿
 namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 {
 	public sealed class PropertyModificationLayout
 	{
 		public PropertyModificationLayout(LayoutInfo info) { }
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			PropertyModificationLayout layout = context.Layout.PrefabInstance.PropertyModification;
-			context.AddNode(layout.Name, name);
-			context.BeginChildren();
-			context.AddPPtr(context.Layout.Object.Name, layout.TargetName);
-			context.AddString(layout.PropertyPathName);
-			context.AddString(layout.ValueName);
-			context.AddPPtr(context.Layout.Object.Name, layout.ObjectReferenceName);
-			context.EndChildren();
-		}
 
 		public int Version = 1;
 

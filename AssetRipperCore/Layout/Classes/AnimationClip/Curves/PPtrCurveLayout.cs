@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AnimationClip;
 using AssetRipper.Core.Classes.AnimationClip.Curves;
-using AssetRipper.Core.Converters.Game;
 
 namespace AssetRipper.Core.Layout.Classes.AnimationClip.Curves
 {
@@ -15,41 +14,6 @@ namespace AssetRipper.Core.Layout.Classes.AnimationClip.Curves
 			}
 		}
 
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			PPtrCurveLayout layout = context.Layout.AnimationClip.PPtrCurve;
-			context.AddNode(layout.Name, name);
-			context.BeginChildren();
-			context.AddArray(layout.CurveName, PPtrKeyframe.GenerateTypeTree);
-			context.AddString(layout.AttributeName);
-			context.AddString(layout.PathName);
-			context.AddNode(TypeTreeUtils.TypeStarName, layout.ClassIDName, 1, sizeof(int));
-			context.AddPPtr(MonoScript.MonoScriptName, layout.ScriptName);
-			context.EndChildren();
-		}
-
-		public int Version => 1;
-
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasCurve => true;
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasAttribute => true;
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasPath => true;
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasClassID => true;
-		/// <summary>
-		/// All versions
-		/// </summary>
-		public bool HasScript => true;
 
 		/// <summary>
 		/// 2017.1 and greater

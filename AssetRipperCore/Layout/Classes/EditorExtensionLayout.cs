@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Layout.Classes
@@ -42,27 +41,6 @@ namespace AssetRipper.Core.Layout.Classes
 			CorrespondingSourceObjectInvariantName = HasCorrespondingSourceObject ? CorrespondingSourceObjectName : PrefabParentObjectName;
 			PrefabInstanceInvariantName = HasPrefabInstance ? PrefabInstanceName : PrefabInternalName;
 		}
-
-		public static void GenerateTypeTree(TypeTreeContext context)
-		{
-			ObjectLayout.GenerateTypeTree(context);
-			EditorExtensionLayout layout = context.Layout.EditorExtension;
-			if (layout.HasExtensionPtr)
-			{
-				context.AddPPtr(context.Layout.Object.Name, layout.ExtensionPtrName);
-			}
-			if (layout.HasCorrespondingSourceObject)
-			{
-				context.AddPPtr(layout.Name, layout.CorrespondingSourceObjectInvariantName);
-				context.AddPPtr(context.Layout.PrefabInstance.Name, layout.PrefabInstanceInvariantName);
-			}
-			if (layout.HasPrefabAsset)
-			{
-				context.AddPPtr(context.Layout.Prefab.Name, layout.PrefabAssetName);
-			}
-		}
-
-		public int Version => 1;
 
 		/// <summary>
 		/// Less than 3.5.0 and Not Release

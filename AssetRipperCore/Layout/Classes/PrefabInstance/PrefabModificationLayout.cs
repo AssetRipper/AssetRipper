@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.PrefabInstance;
-using AssetRipper.Core.Converters.Game;
 
 namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 {
@@ -12,24 +11,6 @@ namespace AssetRipper.Core.Layout.Classes.PrefabInstance
 			{
 				IsComponentPointer = true;
 			}
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			PrefabModificationLayout layout = context.Layout.PrefabInstance.PrefabModification;
-			context.AddNode(layout.Name, name);
-			context.BeginChildren();
-			context.AddPPtr(Transform.TransformName, layout.TransformParentName);
-			context.AddArray(layout.ModificationsName, PropertyModificationLayout.GenerateTypeTree);
-			if (layout.IsComponentPointer)
-			{
-				context.AddArray(layout.RemovedComponentsName, (c, n) => c.AddPPtr(c.Layout.Component.Name, n));
-			}
-			else
-			{
-				context.AddArray(layout.RemovedComponentsName, (c, n) => c.AddPPtr(c.Layout.Object.Name, n));
-			}
-			context.EndChildren();
 		}
 
 		/// <summary>

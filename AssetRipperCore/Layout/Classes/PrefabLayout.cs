@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Converters.Game;
 
 namespace AssetRipper.Core.Layout.Classes
 {
@@ -9,18 +8,6 @@ namespace AssetRipper.Core.Layout.Classes
 	public sealed class PrefabLayout
 	{
 		public PrefabLayout(LayoutInfo info) { }
-
-		public static void GenerateTypeTree(TypeTreeContext context)
-		{
-			PrefabLayout layout = context.Layout.Prefab;
-			context.AddNode(layout.Name, TypeTreeUtils.BaseName);
-			context.BeginChildren();
-			ObjectLayout.GenerateTypeTree(context);
-			context.AddPPtr(context.Layout.GameObject.Name, layout.RootGameObjectName);
-			context.EndChildren();
-		}
-
-		public bool HasRootGameObject => true;
 
 		public string Name => nameof(Prefab);
 		public string RootGameObjectName => "m_RootGameObject";

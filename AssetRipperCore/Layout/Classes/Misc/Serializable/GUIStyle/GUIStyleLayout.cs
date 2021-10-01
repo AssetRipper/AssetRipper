@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Font;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.Math;
 
 namespace AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle
@@ -25,69 +24,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle
 			}
 
 			IsBuiltinFormat = info.Version.IsGreaterEqual(4);
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string name)
-		{
-			GUIStyleLayout layout = context.Layout.Serialized.GUIStyle;
-			context.AddNode(layout.Name, name);
-			context.BeginChildren();
-			context.AddString(layout.NameName);
-			GUIStyleStateLayout.GenerateTypeTree(context, layout.NormalName);
-			GUIStyleStateLayout.GenerateTypeTree(context, layout.HoverName);
-			GUIStyleStateLayout.GenerateTypeTree(context, layout.ActiveName);
-			GUIStyleStateLayout.GenerateTypeTree(context, layout.FocusedName);
-			GUIStyleStateLayout.GenerateTypeTree(context, layout.OnNormalName);
-			GUIStyleStateLayout.GenerateTypeTree(context, layout.OnHoverName);
-			GUIStyleStateLayout.GenerateTypeTree(context, layout.OnActiveName);
-			GUIStyleStateLayout.GenerateTypeTree(context, layout.OnFocusedName);
-			RectOffsetLayout.GenerateTypeTree(context, layout.BorderName);
-			if (layout.IsBuiltinFormat)
-			{
-				RectOffsetLayout.GenerateTypeTree(context, layout.MarginName);
-				RectOffsetLayout.GenerateTypeTree(context, layout.PaddingName);
-			}
-			else
-			{
-				RectOffsetLayout.GenerateTypeTree(context, layout.PaddingName);
-				RectOffsetLayout.GenerateTypeTree(context, layout.MarginName);
-			}
-			RectOffsetLayout.GenerateTypeTree(context, layout.OverflowName);
-			context.AddPPtr(Font.FontName, layout.FontName);
-			if (layout.IsBuiltinFormat)
-			{
-				context.AddInt32(layout.FontSizeName);
-				context.AddInt32(layout.FontStyleName);
-				context.AddInt32(layout.AlignmentName);
-				context.AddBool(layout.WordWrapName);
-				context.AddBool(layout.RichTextName);
-				context.AddInt32(layout.TextClippingName);
-				context.AddInt32(layout.ImagePositionName);
-				Vector2fLayout.GenerateTypeTree(context, layout.ContentOffsetName);
-				context.AddSingle(layout.FixedWidthName);
-				context.AddSingle(layout.FixedHeightName);
-				context.AddBool(layout.StretchWidthName);
-				context.AddBool(layout.StretchHeightName);
-			}
-			else
-			{
-				context.AddInt32(layout.ImagePositionName);
-				context.AddInt32(layout.AlignmentName);
-				context.AddBool(layout.WordWrapName);
-				context.AddInt32(layout.TextClippingName);
-				Vector2fLayout.GenerateTypeTree(context, layout.ContentOffsetName);
-				Vector2fLayout.GenerateTypeTree(context, layout.ClipOffsetName);
-				context.AddSingle(layout.FixedWidthName);
-				context.AddSingle(layout.FixedHeightName);
-				if (layout.HasFontSize)
-				{
-					context.AddInt32(layout.FontSizeName);
-					context.AddInt32(layout.FontStyleName);
-				}
-				context.AddBool(layout.StretchWidthName);
-				context.AddBool(layout.StretchHeightName);
-			}
-			context.EndChildren();
 		}
 
 		public GUIStyleStateLayout GUIStyleState { get; }
@@ -209,7 +145,6 @@ namespace AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle
 		/// </summary>
 		public bool IsBuiltinFormat { get; }
 
-		public string Name => TypeTreeUtils.GUIStyleName;
 		public string NameName => "m_Name";
 		public string NormalName => "m_Normal";
 		public string HoverName => "m_Hover";

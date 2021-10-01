@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Object;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Layout.Classes
@@ -11,15 +10,6 @@ namespace AssetRipper.Core.Layout.Classes
 			if (info.Version.IsGreaterEqual(2) && !info.Flags.IsRelease())
 			{
 				HasHideFlag = true;
-			}
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context)
-		{
-			ObjectLayout layout = context.Layout.Object;
-			if (layout.HasHideFlag)
-			{
-				context.AddUInt32(layout.ObjectHideFlagsName);
 			}
 		}
 

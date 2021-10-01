@@ -1,5 +1,4 @@
 using AssetRipper.Core.Attributes;
-using AssetRipper.Core.Converters.Game;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -117,7 +116,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		UInt32						= 914,
 		UInt64						= 921,
 		UInt8						= 928,
-		[EnumName(TypeTreeUtils.UnsignedIntName)]
+		[EnumName("unsigned int")]
 		unsignedint					= 934,
 		[EnumName("unsigned long long")]
 		unsignedlonglong			= 947,
@@ -129,7 +128,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		Vector4f					= 1006,
 		m_ScriptingClassIdentifier	= 1015,
 		Gradient					= 1042,
-		[EnumName(TypeTreeUtils.TypeStarName)]
+		[EnumName("Type*")]
 		TypeStar					= 1051,
 		int2_storage				= 1057,
 		int3_storage				= 1070,

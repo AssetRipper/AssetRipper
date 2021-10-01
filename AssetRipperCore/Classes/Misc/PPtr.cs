@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Converters.Game;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
@@ -47,11 +46,6 @@ namespace AssetRipper.Core.Classes.Misc
 		public PPtr<T1> CastTo<T1>() where T1 : Object.Object
 		{
 			return new PPtr<T1>(FileIndex, PathID);
-		}
-
-		public static void GenerateTypeTree(TypeTreeContext context, string type, string name)
-		{
-			context.AddPPtr(type, name);
 		}
 
 		public void Read(AssetReader reader)
