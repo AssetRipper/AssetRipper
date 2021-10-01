@@ -113,7 +113,6 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			return count;
 		}
 
-#if DEBUG
 		public string Dump
 		{
 			get
@@ -123,7 +122,28 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 				return sb.ToString();
 			}
 		}
-#endif
+
+		public void SetNamesFromBuffer()
+		{
+			if(StringBuffer != null && StringBuffer.Length > 0)
+			{
+				foreach (var node in Nodes)
+				{
+					node.Name = GetString(node.NameStrOffset);
+					node.Type = GetString(node.TypeStrOffset);
+				}
+			}
+		}
+
+		private string GetString(uint offset)
+		{
+			string str = "";
+			for (uint i = offset; i < StringBuffer.Length && StringBuffer[i] != 0; i++)
+			{
+				str += (char)StringBuffer[i];
+			}
+			return str;
+		}
 
 		public TypeTreeNode[] Nodes { get; set; }
 		public byte[] StringBuffer { get; set; }
