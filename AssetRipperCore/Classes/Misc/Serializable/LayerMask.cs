@@ -1,6 +1,6 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
@@ -10,14 +10,12 @@ namespace AssetRipper.Core.Classes.Misc.Serializable
 	{
 		public void Read(AssetReader reader)
 		{
-			LayerMaskLayout layout = reader.Layout().Serialized.LayerMask;
-			Bits = layout.Is32Bits ? reader.ReadUInt32() : reader.ReadUInt16();
+			Bits = Is32Bits(reader.Version) ? reader.ReadUInt32() : reader.ReadUInt16();
 		}
 
 		public void Write(AssetWriter writer)
 		{
-			LayerMaskLayout layout = writer.Layout().Serialized.LayerMask;
-			if (layout.Is32Bits)
+			if (Is32Bits(writer.Version))
 			{
 				writer.Write(Bits);
 			}
@@ -30,12 +28,31 @@ namespace AssetRipper.Core.Classes.Misc.Serializable
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			LayerMaskLayout layout = container.ExportLayout.Serialized.LayerMask;
-			node.AddSerializedVersion(layout.Version);
-			node.Add(layout.BitsName, Bits);
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(BitsName, Bits);
 			return node;
 		}
 
+		public static int ToSerializedVersion(UnityVersion version)
+		{
+			if (version.IsGreaterEqual(2))
+			{
+				// Bits size has been changed to 32
+				return 2;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+
+		/// <summary>
+		/// 2.0.0 and greater
+		/// </summary>
+		public bool Is32Bits(UnityVersion version) => version.IsGreaterEqual(2);
+
 		public uint Bits { get; set; }
+
+		public const string BitsName = "m_Bits";
 	}
 }

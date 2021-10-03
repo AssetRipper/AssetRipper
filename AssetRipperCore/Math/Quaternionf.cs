@@ -14,6 +14,10 @@ namespace AssetRipper.Core.Math
 		public float Y;
 		public float Z;
 		public float W;
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string ZName = "z";
+		public const string WName = "w";
 
 		public Quaternionf(float x, float y, float z, float w)
 		{
@@ -88,12 +92,11 @@ namespace AssetRipper.Core.Math
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			QuaternionfLayout layout = container.ExportLayout.Serialized.Quaternionf;
 			node.Style = MappingStyle.Flow;
-			node.Add(layout.XName, X);
-			node.Add(layout.YName, Y);
-			node.Add(layout.ZName, Z);
-			node.Add(layout.WName, W);
+			node.Add(XName, X);
+			node.Add(YName, Y);
+			node.Add(ZName, Z);
+			node.Add(WName, W);
 			return node;
 		}
 

@@ -1,11 +1,8 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
-#if UNIVERSAL
-using AssetRipper.Core.IO.Extensions;
-#endif
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.YAML;
@@ -19,22 +16,54 @@ namespace AssetRipper.Core.Classes
 
 		protected EditorExtension(AssetInfo assetInfo) : base(assetInfo) { }
 
+		/// <summary>
+		/// Less than 3.5.0 and Not Release
+		/// </summary>
+		public static bool HasExtensionPtr(UnityVersion version, TransferInstructionFlags flags) => version.IsLess(3, 5) && !flags.IsRelease();
+		/// <summary>
+		/// 3.5.0 and greater and Not Release
+		/// </summary>
+		public static bool HasCorrespondingSourceObjectInvariant(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && !flags.IsRelease();
+		/// <summary>
+		/// 2018.2 and greater and Not Release
+		/// </summary>
+		public static bool HasCorrespondingSourceObject(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2018, 2) && !flags.IsRelease();
+		/// <summary>
+		/// 3.5.0 to 2018.2 exclusive and Not Release
+		/// </summary>
+		public static bool HasPrefabParentObject(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && version.IsLess(2018, 2) && !flags.IsRelease();
+		/// <summary>
+		/// 3.5.0 and greater and Not Release
+		/// </summary>
+		public static bool HasPrefabInstanceInvariant(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && !flags.IsRelease();
+		/// <summary>
+		/// 2018.3 and greater and Not Release
+		/// </summary>
+		public static bool HasPrefabInstance(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2018, 3) && !flags.IsRelease();
+		/// <summary>
+		/// 3.5.0 to 2018.3 exclusive and Not Release
+		/// </summary>
+		public static bool HasPrefabInternal(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && version.IsLess(2018, 3) && !flags.IsRelease();
+		/// <summary>
+		/// 2018.3 and greater and Not Release
+		/// </summary>
+		public static bool HasPrefabAsset(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2018, 3) && !flags.IsRelease();
+
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
 
 #if UNIVERSAL
-			EditorExtensionLayout layout = reader.Layout().EditorExtension;
-			if (layout.HasExtensionPtr)
+			if (HasExtensionPtr(reader.Version, reader.Flags))
 			{
 				ExtensionPtr = reader.ReadAsset<PPtr<Object.Object>>();
 			}
-			if (layout.HasCorrespondingSourceObject)
+			if (HasCorrespondingSourceObject(reader.Version, reader.Flags))
 			{
 				CorrespondingSourceObject.Read(reader);
 				PrefabInstance.Read(reader);
 			}
-			if (layout.HasPrefabAsset)
+			if (HasPrefabAsset(reader.Version, reader.Flags))
 			{
 				PrefabAsset.Read(reader);
 			}
@@ -46,17 +75,16 @@ namespace AssetRipper.Core.Classes
 			base.Write(writer);
 
 #if UNIVERSAL
-			EditorExtensionLayout layout = writer.Layout().EditorExtension;
-			if (layout.HasExtensionPtr)
+			if (HasExtensionPtr(writer.Version, writer.Flags))
 			{
 				ExtensionPtr.Write(writer);
 			}
-			if (layout.HasCorrespondingSourceObject)
+			if (HasCorrespondingSourceObject(writer.Version, writer.Flags))
 			{
 				CorrespondingSourceObject.Write(writer);
 				PrefabInstance.Write(writer);
 			}
-			if (layout.HasPrefabAsset)
+			if (HasPrefabAsset(writer.Version, writer.Flags))
 			{
 				PrefabAsset.Write(writer);
 			}
@@ -71,19 +99,18 @@ namespace AssetRipper.Core.Classes
 			}
 
 #if UNIVERSAL
-			EditorExtensionLayout layout = context.Layout.EditorExtension;
-			if (layout.HasExtensionPtr)
+			if (HasExtensionPtr(context.Version, context.Flags))
 			{
-				yield return context.FetchDependency(ExtensionPtr, layout.ExtensionPtrName);
+				yield return context.FetchDependency(ExtensionPtr, ExtensionPtrName);
 			}
-			if (layout.HasCorrespondingSourceObject)
+			if (HasCorrespondingSourceObject(context.Version, context.Flags))
 			{
-				yield return context.FetchDependency(CorrespondingSourceObject, layout.CorrespondingSourceObjectInvariantName);
-				yield return context.FetchDependency(PrefabInstance, layout.PrefabInstanceInvariantName);
+				yield return context.FetchDependency(CorrespondingSourceObject, CorrespondingSourceObjectInvariantName(context.Version, context.Flags));
+				yield return context.FetchDependency(PrefabInstance, PrefabInstanceInvariantName(context.Version, context.Flags));
 			}
-			if (layout.HasPrefabAsset)
+			if (HasPrefabAsset(context.Version, context.Flags))
 			{
-				yield return context.FetchDependency(PrefabAsset, layout.PrefabAssetName);
+				yield return context.FetchDependency(PrefabAsset, PrefabAssetName);
 			}
 #endif
 		}
@@ -91,19 +118,18 @@ namespace AssetRipper.Core.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			EditorExtensionLayout layout = container.ExportLayout.EditorExtension;
-			if (layout.HasExtensionPtr)
+			if (HasExtensionPtr(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(layout.ExtensionPtrName, ExtensionPtr.ExportYAML(container));
+				node.Add(ExtensionPtrName, ExtensionPtr.ExportYAML(container));
 			}
-			if (layout.HasCorrespondingSourceObject)
+			if (HasCorrespondingSourceObject(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(layout.CorrespondingSourceObjectInvariantName, CorrespondingSourceObject.ExportYAML(container));
-				node.Add(layout.PrefabInstanceInvariantName, GetPrefabInstance(container).ExportYAML(container));
+				node.Add(CorrespondingSourceObjectInvariantName(container.ExportVersion, container.ExportFlags), CorrespondingSourceObject.ExportYAML(container));
+				node.Add(PrefabInstanceInvariantName(container.ExportVersion, container.ExportFlags), GetPrefabInstance(container).ExportYAML(container));
 			}
-			if (layout.HasPrefabAsset)
+			if (HasPrefabAsset(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(layout.PrefabAssetName, PrefabAsset.ExportYAML(container));
+				node.Add(PrefabAssetName, PrefabAsset.ExportYAML(container));
 			}
 			return node;
 		}
@@ -134,7 +160,7 @@ namespace AssetRipper.Core.Classes
 		private PPtr<PrefabInstance.PrefabInstance> GetPrefabInstance(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (container.ExportLayout.EditorExtension.HasPrefabInstanceInvariant)
+			if (HasPrefabInstanceInvariant(container.ExportVersion, container.ExportFlags))
 			{
 				return PrefabInstance;
 			}
@@ -146,6 +172,15 @@ namespace AssetRipper.Core.Classes
 				return prefabCollection.Asset.File.CreatePPtr((PrefabInstance.PrefabInstance)prefabCollection.Asset);
 			}
 			return default;
+		}
+
+		public static string CorrespondingSourceObjectInvariantName(UnityVersion version, TransferInstructionFlags flags)
+		{
+			return HasCorrespondingSourceObject(version, flags) ? CorrespondingSourceObjectName : PrefabParentObjectName;
+		}
+		public static string PrefabInstanceInvariantName(UnityVersion version, TransferInstructionFlags flags)
+		{
+			return HasPrefabInstance(version, flags) ? PrefabInstanceName : PrefabInternalName;
 		}
 
 #if UNIVERSAL
@@ -170,5 +205,12 @@ namespace AssetRipper.Core.Classes
 		private PPtr<EditorExtension> CorrespondingSourceObject => default;
 		private PPtr<Prefab> PrefabAsset => default;
 #endif
+
+		public const string ExtensionPtrName = "m_ExtensionPtr";
+		public const string CorrespondingSourceObjectName = "m_CorrespondingSourceObject";
+		public const string PrefabParentObjectName = "m_PrefabParentObject";
+		public const string PrefabInstanceName = "m_PrefabInstance";
+		public const string PrefabInternalName = "m_PrefabInternal";
+		public const string PrefabAssetName = "m_PrefabAsset";
 	}
 }

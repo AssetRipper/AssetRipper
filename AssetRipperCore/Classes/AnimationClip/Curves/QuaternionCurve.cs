@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Misc.KeyframeTpl;
 using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout.Classes.AnimationClip.Curves;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
@@ -46,9 +45,8 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			QuaternionCurveLayout layout = container.ExportLayout.AnimationClip.QuaternionCurve;
-			node.Add(layout.CurveName, Curve.ExportYAML(container));
-			node.Add(layout.PathName, Path);
+			node.Add(CurveName, Curve.ExportYAML(container));
+			node.Add(PathName, Path);
 			return node;
 		}
 
@@ -65,5 +63,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 		public string Path { get; set; }
 
 		public AnimationCurveTpl<Quaternionf> Curve;
+		public const string CurveName = "curve";
+		public const string PathName = "path";
 	}
 }

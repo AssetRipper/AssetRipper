@@ -1,22 +1,20 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Layout.Classes.GameObject;
 using AssetRipper.Core.Project;
 using System;
 using System.Linq;
+using GObject = AssetRipper.Core.Classes.GameObject.GameObject;
 
 namespace AssetRipper.Core.Converters.GameObject
 {
 	public static class GameObjectConverter
 	{
-		public static AssetRipper.Core.Classes.GameObject.GameObject Convert(IExportContainer container, AssetRipper.Core.Classes.GameObject.GameObject origin)
+		public static GObject Convert(IExportContainer container, GObject origin)
 		{
-			GameObjectLayout layout = container.Layout.GameObject;
-			GameObjectLayout exlayout = container.ExportLayout.GameObject;
-			AssetRipper.Core.Classes.GameObject.GameObject instance = new AssetRipper.Core.Classes.GameObject.GameObject(container.ExportLayout);
+			GObject instance = new GObject(container.ExportLayout);
 			EditorExtensionConverter.Convert(container, origin, instance);
-			if (exlayout.IsComponentTuple)
+			if (GObject.IsComponentTuple(container.ExportVersion))
 			{
 				instance.ComponentTuple = origin.ComponentTuple.ToArray();
 			}
@@ -27,25 +25,25 @@ namespace AssetRipper.Core.Converters.GameObject
 			instance.IsActive = GetIsActive(container, origin);
 			instance.Layer = origin.Layer;
 			instance.Name = origin.Name;
-			if (exlayout.HasTag)
+			if (GObject.HasTag(container.ExportVersion, container.ExportFlags))
 			{
 				instance.Tag = GetTag(container, origin);
 			}
-			if (exlayout.HasTagString)
+			if (GObject.HasTagString(container.ExportVersion, container.ExportFlags))
 			{
 				instance.TagString = GetTagString(container, origin);
 			}
 #if UNIVERSAL
-			if (layout.HasIcon)
+			if (GObject.HasIcon(container.Version, container.Flags))
 			{
 				instance.Icon = origin.Icon;
 			}
-			if (layout.HasNavMeshLayer)
+			if (GObject.HasNavMeshLayer(container.Version, container.Flags))
 			{
 				instance.NavMeshLayer = origin.NavMeshLayer;
 				instance.StaticEditorFlags = origin.StaticEditorFlags;
 			}
-			else if (exlayout.HasIsStatic && layout.HasIsStatic)
+			else if (GObject.HasIsStatic(container.ExportVersion, container.ExportFlags) && GObject.HasIsStatic(container.Version, container.Flags))
 			{
 				instance.IsStatic = origin.IsStatic;
 			}
@@ -53,9 +51,9 @@ namespace AssetRipper.Core.Converters.GameObject
 			return instance;
 		}
 
-		private static ComponentPair[] GetComponent(IExportContainer container, AssetRipper.Core.Classes.GameObject.GameObject origin)
+		private static ComponentPair[] GetComponent(IExportContainer container, GObject origin)
 		{
-			if (container.Layout.GameObject.IsComponentTuple)
+			if (GObject.IsComponentTuple(container.Version))
 			{
 				Tuple<ClassIDType, PPtr<Component>>[] originComponent = origin.ComponentTuple;
 				ComponentPair[] pairs = new ComponentPair[originComponent.Length];
@@ -73,27 +71,27 @@ namespace AssetRipper.Core.Converters.GameObject
 			}
 		}
 
-		private static bool GetIsActive(IExportContainer container, AssetRipper.Core.Classes.GameObject.GameObject origin)
+		private static bool GetIsActive(IExportContainer container, GObject origin)
 		{
-			if (container.Layout.GameObject.IsActiveInherited)
+			if (GObject.IsActiveInherited(container.Version))
 			{
 				return origin.File.Collection.IsScene(origin.File) ? origin.IsActive : true;
 			}
 			return origin.IsActive;
 		}
 
-		private static ushort GetTag(IExportContainer container, AssetRipper.Core.Classes.GameObject.GameObject origin)
+		private static ushort GetTag(IExportContainer container, GObject origin)
 		{
-			if (container.Layout.GameObject.HasTag)
+			if (GObject.HasTag(container.Version, container.Flags))
 			{
 				return origin.Tag;
 			}
 			return container.TagNameToID(origin.TagString);
 		}
 
-		private static string GetTagString(IExportContainer container, AssetRipper.Core.Classes.GameObject.GameObject origin)
+		private static string GetTagString(IExportContainer container, GObject origin)
 		{
-			if (container.Layout.GameObject.HasTagString)
+			if (GObject.HasTagString(container.Version, container.Flags))
 			{
 				return origin.TagString;
 			}

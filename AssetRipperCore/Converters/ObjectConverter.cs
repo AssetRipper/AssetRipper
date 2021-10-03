@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Project;
 
 namespace AssetRipper.Core.Converters
@@ -10,8 +9,7 @@ namespace AssetRipper.Core.Converters
 		public static void Convert(IExportContainer container, Object origin, Object instance)
 		{
 			instance.AssetInfo = origin.AssetInfo;
-			ObjectLayout exlayout = container.ExportLayout.Object;
-			if (exlayout.HasHideFlag)
+			if (Object.HasHideFlag(container.ExportVersion, container.ExportFlags))
 			{
 				instance.ObjectHideFlags = GetObjectHideFlags(container, origin);
 			}
@@ -19,7 +17,7 @@ namespace AssetRipper.Core.Converters
 
 		private static HideFlags GetObjectHideFlags(IExportContainer container, Object origin)
 		{
-			if (container.Layout.Object.HasHideFlag)
+			if (Object.HasHideFlag(container.Version, container.Flags))
 			{
 				return origin.ObjectHideFlags;
 			}

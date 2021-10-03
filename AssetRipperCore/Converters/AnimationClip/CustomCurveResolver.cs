@@ -5,6 +5,7 @@ using AssetRipper.Core.Classes.Light;
 using AssetRipper.Core.Classes.Renderer;
 using AssetRipper.Core.Classes.SpriteRenderer;
 using AssetRipper.Core.Layout;
+using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using SevenZip;
 using System;
@@ -136,31 +137,31 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 				case BindingCustomType.MonoBehaviour:
 					{
-						if (attribute == CRC.CalculateDigestAscii(layout.Behaviour.EnabledName))
+						if (attribute == CRC.CalculateDigestAscii(Behaviour.EnabledName))
 						{
-							return layout.Behaviour.EnabledName;
+							return Behaviour.EnabledName;
 						}
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
 				case BindingCustomType.Light:
 					{
-						string ColorR = Light.ColorName + "." + layout.Serialized.ColorRGBAf.RName;
+						const string ColorR = Light.ColorName + "." + ColorRGBAf.RName;
 						if (attribute == CRC.CalculateDigestAscii(ColorR))
 						{
 							return ColorR;
 						}
-						string ColorG = Light.ColorName + "." + layout.Serialized.ColorRGBAf.GName;
+						const string ColorG = Light.ColorName + "." + ColorRGBAf.GName;
 						if (attribute == CRC.CalculateDigestAscii(ColorG))
 						{
 							return ColorG;
 						}
-						string ColorB = Light.ColorName + "." + layout.Serialized.ColorRGBAf.BName;
+						const string ColorB = Light.ColorName + "." + ColorRGBAf.BName;
 						if (attribute == CRC.CalculateDigestAscii(ColorB))
 						{
 							return ColorB;
 						}
-						string ColorA = Light.ColorName + "." + layout.Serialized.ColorRGBAf.AName;
+						const string ColorA = Light.ColorName + "." + ColorRGBAf.AName;
 						if (attribute == CRC.CalculateDigestAscii(ColorA))
 						{
 							return ColorA;
@@ -235,57 +236,57 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 				case BindingCustomType.RectTransform:
 					{
-						string LocalPositionZ = Transform.LocalPositionName + "." + layout.Serialized.Vector3f.ZName;
+						string LocalPositionZ = Transform.LocalPositionName + "." + Vector3f.ZName;
 						if (attribute == CRC.CalculateDigestAscii(LocalPositionZ))
 						{
 							return LocalPositionZ;
 						}
-						string AnchoredPositionX = RectTransform.AnchoredPositionName + "." + layout.Serialized.Vector2f.XName;
+						string AnchoredPositionX = RectTransform.AnchoredPositionName + "." + Vector2f.XName;
 						if (attribute == CRC.CalculateDigestAscii(AnchoredPositionX))
 						{
 							return AnchoredPositionX;
 						}
-						string AnchoredPositionY = RectTransform.AnchoredPositionName + "." + layout.Serialized.Vector2f.YName;
+						string AnchoredPositionY = RectTransform.AnchoredPositionName + "." + Vector2f.YName;
 						if (attribute == CRC.CalculateDigestAscii(AnchoredPositionY))
 						{
 							return AnchoredPositionY;
 						}
-						string AnchorMinX = RectTransform.AnchorMinName + "." + layout.Serialized.Vector2f.XName;
+						string AnchorMinX = RectTransform.AnchorMinName + "." + Vector2f.XName;
 						if (attribute == CRC.CalculateDigestAscii(AnchorMinX))
 						{
 							return AnchorMinX;
 						}
-						string AnchorMinY = RectTransform.AnchorMinName + "." + layout.Serialized.Vector2f.YName;
+						string AnchorMinY = RectTransform.AnchorMinName + "." + Vector2f.YName;
 						if (attribute == CRC.CalculateDigestAscii(AnchorMinY))
 						{
 							return AnchorMinY;
 						}
-						string AnchorMaxX = RectTransform.AnchorMaxName + "." + layout.Serialized.Vector2f.XName;
+						string AnchorMaxX = RectTransform.AnchorMaxName + "." + Vector2f.XName;
 						if (attribute == CRC.CalculateDigestAscii(AnchorMaxX))
 						{
 							return AnchorMaxX;
 						}
-						string AnchorMaxY = RectTransform.AnchorMaxName + "." + layout.Serialized.Vector2f.YName;
+						string AnchorMaxY = RectTransform.AnchorMaxName + "." + Vector2f.YName;
 						if (attribute == CRC.CalculateDigestAscii(AnchorMaxY))
 						{
 							return AnchorMaxY;
 						}
-						string SizeDeltaX = RectTransform.SizeDeltaName + "." + layout.Serialized.Vector2f.XName;
+						string SizeDeltaX = RectTransform.SizeDeltaName + "." + Vector2f.XName;
 						if (attribute == CRC.CalculateDigestAscii(SizeDeltaX))
 						{
 							return SizeDeltaX;
 						}
-						string SizeDeltaY = RectTransform.SizeDeltaName + "." + layout.Serialized.Vector2f.YName;
+						string SizeDeltaY = RectTransform.SizeDeltaName + "." + Vector2f.YName;
 						if (attribute == CRC.CalculateDigestAscii(SizeDeltaY))
 						{
 							return SizeDeltaY;
 						}
-						string PivotX = RectTransform.PivotName + "." + layout.Serialized.Vector2f.XName;
+						string PivotX = RectTransform.PivotName + "." + Vector2f.XName;
 						if (attribute == CRC.CalculateDigestAscii(PivotX))
 						{
 							return PivotX;
 						}
-						string PivotY = RectTransform.PivotName + "." + layout.Serialized.Vector2f.YName;
+						string PivotY = RectTransform.PivotName + "." + Vector2f.YName;
 						if (attribute == CRC.CalculateDigestAscii(PivotY))
 						{
 							return PivotY;

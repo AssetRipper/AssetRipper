@@ -126,10 +126,9 @@ namespace AssetRipper.Core.Math
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			Vector2fLayout layout = container.ExportLayout.Serialized.Vector2f;
 			node.Style = MappingStyle.Flow;
-			node.Add(layout.XName, X);
-			node.Add(layout.YName, Y);
+			node.Add(XName, X);
+			node.Add(YName, Y);
 			return node;
 		}
 
@@ -186,5 +185,8 @@ namespace AssetRipper.Core.Math
 		public static Vector2f Zero { get; } = new Vector2f();
 
 		private const float kEpsilon = 0.00001F;
+
+		public const string XName = "x";
+		public const string YName = "y";
 	}
 }

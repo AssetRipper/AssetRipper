@@ -1,7 +1,7 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
@@ -27,8 +27,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 
 		public void Read(AssetReader reader)
 		{
-			GradientLayout layout = reader.Layout().Serialized.Gradient;
-			if (layout.Version == 1)
+			if (!UsesColorRBGAf(reader.Version))
 			{
 				Key0_32 = reader.ReadAsset<ColorRGBA32>();
 				Key1_32 = reader.ReadAsset<ColorRGBA32>();
@@ -67,7 +66,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 			Atime5 = reader.ReadUInt16();
 			Atime6 = reader.ReadUInt16();
 			Atime7 = reader.ReadUInt16();
-			if (layout.HasMode)
+			if (HasMode(reader.Version))
 			{
 				Mode = (GradientMode)reader.ReadInt32();
 			}
@@ -79,8 +78,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 
 		public void Write(AssetWriter writer)
 		{
-			GradientLayout layout = writer.Layout().Serialized.Gradient;
-			if (layout.Version == 1)
+			if (!UsesColorRBGAf(writer.Version))
 			{
 				Key0_32.Write(writer);
 				Key1_32.Write(writer);
@@ -119,7 +117,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 			writer.Write(Atime5);
 			writer.Write(Atime6);
 			writer.Write(Atime7);
-			if (layout.HasMode)
+			if (HasMode(writer.Version))
 			{
 				writer.Write((int)Mode);
 			}
@@ -132,56 +130,78 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			GradientLayout layout = container.ExportLayout.Serialized.Gradient;
-			node.AddSerializedVersion(layout.Version);
-			if (layout.Version == 1)
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			if (!UsesColorRBGAf(container.ExportVersion))
 			{
-				node.Add(layout.Key0Name, Key0_32.ExportYAML(container));
-				node.Add(layout.Key1Name, Key1_32.ExportYAML(container));
-				node.Add(layout.Key2Name, Key2_32.ExportYAML(container));
-				node.Add(layout.Key3Name, Key3_32.ExportYAML(container));
-				node.Add(layout.Key4Name, Key4_32.ExportYAML(container));
-				node.Add(layout.Key5Name, Key5_32.ExportYAML(container));
-				node.Add(layout.Key6Name, Key6_32.ExportYAML(container));
-				node.Add(layout.Key7Name, Key7_32.ExportYAML(container));
+				node.Add(Key0Name, Key0_32.ExportYAML(container));
+				node.Add(Key1Name, Key1_32.ExportYAML(container));
+				node.Add(Key2Name, Key2_32.ExportYAML(container));
+				node.Add(Key3Name, Key3_32.ExportYAML(container));
+				node.Add(Key4Name, Key4_32.ExportYAML(container));
+				node.Add(Key5Name, Key5_32.ExportYAML(container));
+				node.Add(Key6Name, Key6_32.ExportYAML(container));
+				node.Add(Key7Name, Key7_32.ExportYAML(container));
 			}
 			else
 			{
-				node.Add(layout.Key0Name, Key0.ExportYAML(container));
-				node.Add(layout.Key1Name, Key1.ExportYAML(container));
-				node.Add(layout.Key2Name, Key2.ExportYAML(container));
-				node.Add(layout.Key3Name, Key3.ExportYAML(container));
-				node.Add(layout.Key4Name, Key4.ExportYAML(container));
-				node.Add(layout.Key5Name, Key5.ExportYAML(container));
-				node.Add(layout.Key6Name, Key6.ExportYAML(container));
-				node.Add(layout.Key7Name, Key7.ExportYAML(container));
+				node.Add(Key0Name, Key0.ExportYAML(container));
+				node.Add(Key1Name, Key1.ExportYAML(container));
+				node.Add(Key2Name, Key2.ExportYAML(container));
+				node.Add(Key3Name, Key3.ExportYAML(container));
+				node.Add(Key4Name, Key4.ExportYAML(container));
+				node.Add(Key5Name, Key5.ExportYAML(container));
+				node.Add(Key6Name, Key6.ExportYAML(container));
+				node.Add(Key7Name, Key7.ExportYAML(container));
 			}
 
-			node.Add(layout.Ctime0Name, Ctime0);
-			node.Add(layout.Ctime1Name, Ctime1);
-			node.Add(layout.Ctime2Name, Ctime2);
-			node.Add(layout.Ctime3Name, Ctime3);
-			node.Add(layout.Ctime4Name, Ctime4);
-			node.Add(layout.Ctime5Name, Ctime5);
-			node.Add(layout.Ctime6Name, Ctime6);
-			node.Add(layout.Ctime7Name, Ctime7);
-			node.Add(layout.Atime0Name, Atime0);
-			node.Add(layout.Atime1Name, Atime1);
-			node.Add(layout.Atime2Name, Atime2);
-			node.Add(layout.Atime3Name, Atime3);
-			node.Add(layout.Atime4Name, Atime4);
-			node.Add(layout.Atime5Name, Atime5);
-			node.Add(layout.Atime6Name, Atime6);
-			node.Add(layout.Atime7Name, Atime7);
-			if (layout.HasMode)
+			node.Add(Ctime0Name, Ctime0);
+			node.Add(Ctime1Name, Ctime1);
+			node.Add(Ctime2Name, Ctime2);
+			node.Add(Ctime3Name, Ctime3);
+			node.Add(Ctime4Name, Ctime4);
+			node.Add(Ctime5Name, Ctime5);
+			node.Add(Ctime6Name, Ctime6);
+			node.Add(Ctime7Name, Ctime7);
+			node.Add(Atime0Name, Atime0);
+			node.Add(Atime1Name, Atime1);
+			node.Add(Atime2Name, Atime2);
+			node.Add(Atime3Name, Atime3);
+			node.Add(Atime4Name, Atime4);
+			node.Add(Atime5Name, Atime5);
+			node.Add(Atime6Name, Atime6);
+			node.Add(Atime7Name, Atime7);
+			if (HasMode(container.ExportVersion))
 			{
-				node.Add(layout.ModeName, (int)Mode);
+				node.Add(ModeName, (int)Mode);
 			}
 
-			node.Add(layout.NumColorKeysName, NumColorKeys);
-			node.Add(layout.NumAlphaKeysName, NumAlphaKeys);
+			node.Add(NumColorKeysName, NumColorKeys);
+			node.Add(NumAlphaKeysName, NumAlphaKeys);
 			return node;
 		}
+
+		public static int ToSerializedVersion(UnityVersion version)
+		{
+			if (UsesColorRBGAf(version))
+			{
+				// ColorRBGA32 has been replaced by ColorRBGAf
+				return 2;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+
+		/// <summary>
+		/// 5.6 and greater
+		/// </summary>
+		public static bool UsesColorRBGAf(UnityVersion version) => version.IsGreaterEqual(5, 6);
+
+		/// <summary>
+		/// 5.5 and greater
+		/// </summary>
+		public static bool HasMode(UnityVersion version) => version.IsGreaterEqual(5, 5);
 
 		public void Add(ushort time, ColorRGBA32 color)
 		{
@@ -346,5 +366,33 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 		public ColorRGBAf Key5;
 		public ColorRGBAf Key6;
 		public ColorRGBAf Key7;
+
+		public const string Key0Name = "key0";
+		public const string Key1Name = "key1";
+		public const string Key2Name = "key2";
+		public const string Key3Name = "key3";
+		public const string Key4Name = "key4";
+		public const string Key5Name = "key5";
+		public const string Key6Name = "key6";
+		public const string Key7Name = "key7";
+		public const string Ctime0Name = "ctime0";
+		public const string Ctime1Name = "ctime1";
+		public const string Ctime2Name = "ctime2";
+		public const string Ctime3Name = "ctime3";
+		public const string Ctime4Name = "ctime4";
+		public const string Ctime5Name = "ctime5";
+		public const string Ctime6Name = "ctime6";
+		public const string Ctime7Name = "ctime7";
+		public const string Atime0Name = "atime0";
+		public const string Atime1Name = "atime1";
+		public const string Atime2Name = "atime2";
+		public const string Atime3Name = "atime3";
+		public const string Atime4Name = "atime4";
+		public const string Atime5Name = "atime5";
+		public const string Atime6Name = "atime6";
+		public const string Atime7Name = "atime7";
+		public const string ModeName = "m_Mode";
+		public const string NumColorKeysName = "m_NumColorKeys";
+		public const string NumAlphaKeysName = "m_NumAlphaKeys";
 	}
 }

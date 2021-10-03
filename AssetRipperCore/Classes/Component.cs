@@ -1,7 +1,6 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
@@ -49,20 +48,20 @@ namespace AssetRipper.Core.Classes
 				yield return asset;
 			}
 
-			ComponentLayout layout = context.Layout.Component;
-			yield return context.FetchDependency(GameObject, layout.GameObjectName);
+			yield return context.FetchDependency(GameObject, GameObjectName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			ComponentLayout layout = container.ExportLayout.Component;
-			node.Add(layout.GameObjectName, GameObject.ExportYAML(container));
+			node.Add(GameObjectName, GameObject.ExportYAML(container));
 			return node;
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();
 
 		public PPtr<GameObject.GameObject> GameObject;
+
+		public const string GameObjectName = "m_GameObject";
 	}
 }

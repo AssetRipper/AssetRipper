@@ -3,8 +3,8 @@ using AssetRipper.Core.Converters.GameObject;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes.GameObject;
 using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using SevenZip;
@@ -18,8 +18,7 @@ namespace AssetRipper.Core.Classes.GameObject
 	{
 		public GameObject(AssetLayout layout) : base(layout)
 		{
-			GameObjectLayout classLayout = layout.GameObject;
-			if (classLayout.IsComponentTuple)
+			if (IsComponentTuple(layout.Info.Version))
 			{
 				ComponentTuple = Array.Empty<Tuple<ClassIDType, PPtr<Component>>>();
 			}
@@ -33,6 +32,31 @@ namespace AssetRipper.Core.Classes.GameObject
 		}
 
 		public GameObject(AssetInfo assetInfo) : base(assetInfo) { }
+
+		public static int ToSerializedVersion(UnityVersion version)
+		{
+			if (version.IsGreaterEqual(5, 5))
+			{
+				// unknown
+				return 5;
+			}
+			else if (version.IsGreaterEqual(4))
+			{
+				// active state inheritance
+				return 4;
+			}
+			else
+			{
+				// min is 3
+				// tag is ushort for Release, otherwise string. For later versions for yaml only string left
+				return 3;
+
+				// tag is string
+				// Version = 2;
+				// tag is ushort
+				// Version = 1;
+			}
+		}
 
 		public T GetComponent<T>() where T : Component
 		{
@@ -143,8 +167,7 @@ namespace AssetRipper.Core.Classes.GameObject
 		{
 			base.Read(reader);
 
-			GameObjectLayout layout = reader.Layout().GameObject;
-			if (layout.IsComponentTuple)
+			if (IsComponentTuple(reader.Version))
 			{
 				ComponentTuple = reader.ReadTupleEnum32TArray<ClassIDType, PPtr<Component>>((t) => (ClassIDType)t);
 			}
@@ -153,17 +176,10 @@ namespace AssetRipper.Core.Classes.GameObject
 				Component = reader.ReadAssetArray<ComponentPair>();
 			}
 
-			if (layout.IsActiveFirst)
-			{
-				IsActive = reader.ReadBoolean();
-			}
 			Layer = reader.ReadUInt32();
-			if (layout.IsNameFirst)
-			{
-				Name = reader.ReadString();
-			}
+			Name = reader.ReadString();
 
-			if (layout.HasTag)
+			if (HasTag(reader.Version, reader.Flags))
 			{
 				Tag = reader.ReadUInt16();
 			}
@@ -172,32 +188,24 @@ namespace AssetRipper.Core.Classes.GameObject
 			{
 				TagString = reader.ReadString();
 			}
-			if (layout.HasIcon && layout.IsIconFirst)
+			if (HasIcon(reader.Version, reader.Flags) && IsIconFirst(reader.Version))
 			{
 				Icon.Read(reader);
 			}
-			if (layout.HasNavMeshLayer)
+			if (HasNavMeshLayer(reader.Version, reader.Flags))
 			{
 				NavMeshLayer = reader.ReadUInt32();
 				StaticEditorFlags = reader.ReadUInt32();
 			}
 #endif
-			if (!layout.IsNameFirst)
-			{
-				Name = reader.ReadString();
-			}
-			if (!layout.IsActiveFirst)
-			{
-				IsActive = reader.ReadBoolean();
-			}
-
+			IsActive = reader.ReadBoolean();
 
 #if UNIVERSAL
-			if (layout.HasIsStatic)
+			if (HasIsStatic(reader.Version, reader.Flags))
 			{
 				IsStatic = reader.ReadBoolean();
 			}
-			if (layout.HasIcon && !layout.IsIconFirst)
+			if (HasIcon(reader.Version, reader.Flags) && !IsIconFirst(reader.Version))
 			{
 				Icon.Read(reader);
 			}
@@ -208,8 +216,7 @@ namespace AssetRipper.Core.Classes.GameObject
 		{
 			base.Write(writer);
 
-			GameObjectLayout layout = writer.Layout().GameObject;
-			if (layout.IsComponentTuple)
+			if (IsComponentTuple(writer.Version))
 			{
 				ComponentTuple.Write(writer, (t) => (int)t);
 			}
@@ -218,17 +225,10 @@ namespace AssetRipper.Core.Classes.GameObject
 				Component.Write(writer);
 			}
 
-			if (layout.IsActiveFirst)
-			{
-				writer.Write(IsActive);
-			}
 			writer.Write(Layer);
-			if (layout.IsNameFirst)
-			{
-				writer.Write(Name);
-			}
+			writer.Write(Name);
 
-			if (layout.HasTag)
+			if (HasTag(writer.Version, writer.Flags))
 			{
 				writer.Write(Tag);
 			}
@@ -237,32 +237,25 @@ namespace AssetRipper.Core.Classes.GameObject
 			{
 				writer.Write(TagString);
 			}
-			if (layout.HasIcon && layout.IsIconFirst)
+			if (HasIcon(writer.Version, writer.Flags) && IsIconFirst(writer.Version))
 			{
 				Icon.Write(writer);
 			}
-			if (layout.HasNavMeshLayer)
+			if (HasNavMeshLayer(writer.Version, writer.Flags))
 			{
 				writer.Write(NavMeshLayer);
 				writer.Write(StaticEditorFlags);
 			}
 #endif
-			if (!layout.IsNameFirst)
-			{
-				writer.Write(Name);
-			}
-			if (!layout.IsActiveFirst)
-			{
-				writer.Write(IsActive);
-			}
+			writer.Write(IsActive);
 
 
 #if UNIVERSAL
-			if (layout.HasIsStatic)
+			if (HasIsStatic(writer.Version, writer.Flags))
 			{
 				writer.Write(IsStatic);
 			}
-			if (layout.HasIcon && !layout.IsIconFirst)
+			if (HasIcon(writer.Version, writer.Flags) && !IsIconFirst(writer.Version))
 			{
 				Icon.Write(writer);
 			}
@@ -276,17 +269,16 @@ namespace AssetRipper.Core.Classes.GameObject
 				yield return asset;
 			}
 
-			GameObjectLayout layout = context.Layout.GameObject;
-			if (layout.IsComponentTuple)
+			if (IsComponentTuple(context.Version))
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ComponentTuple.Select(t => t.Item2), layout.ComponentName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ComponentTuple.Select(t => t.Item2), ComponentName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Component, layout.ComponentName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Component, ComponentName))
 				{
 					yield return asset;
 				}
@@ -305,60 +297,44 @@ namespace AssetRipper.Core.Classes.GameObject
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			GameObjectLayout layout = container.ExportLayout.GameObject;
-			node.AddSerializedVersion(layout.Version);
-			if (layout.IsComponentTuple)
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			if (IsComponentTuple(container.ExportVersion))
 			{
-				node.Add(layout.ComponentName, ComponentTuple.ExportYAML(container, (t) => (int)t));
+				node.Add(ComponentName, ComponentTuple.ExportYAML(container, (t) => (int)t));
 			}
 			else
 			{
-				node.Add(layout.ComponentName, ExportYAML(Component, container));
+				node.Add(ComponentName, ExportYAML(Component, container));
 			}
 
-			if (layout.IsActiveFirst)
+			node.Add(LayerName, Layer);
+			node.Add(NameName, Name);
+			if (HasTag(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(layout.IsActiveName, IsActive);
-			}
-
-			node.Add(layout.LayerName, Layer);
-			if (layout.IsNameFirst)
-			{
-				node.Add(layout.NameName, Name);
-			}
-			if (layout.HasTag)
-			{
-				node.Add(layout.TagName, Tag);
+				node.Add(TagName, Tag);
 			}
 			else
 			{
-				node.Add(layout.TagStringName, TagString);
+				node.Add(TagStringName, TagString);
 			}
 
-			if (layout.HasIcon && layout.IsIconFirst)
+			if (HasIcon(container.ExportVersion, container.ExportFlags) && IsIconFirst(container.ExportVersion))
 			{
-				node.Add(layout.IconName, Icon.ExportYAML(container));
+				node.Add(IconName, Icon.ExportYAML(container));
 			}
-			if (layout.HasNavMeshLayer)
+			if (HasNavMeshLayer(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(layout.NavMeshLayerName, NavMeshLayer);
-				node.Add(layout.StaticEditorFlagsName, StaticEditorFlags);
+				node.Add(NavMeshLayerName, NavMeshLayer);
+				node.Add(StaticEditorFlagsName, StaticEditorFlags);
 			}
-			if (!layout.IsNameFirst)
+			node.Add(IsActiveName, IsActive);
+			if (HasIsStatic(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(layout.NameName, Name);
+				node.Add(IsStaticName, IsStatic);
 			}
-			if (!layout.IsActiveFirst)
+			if (HasIcon(container.ExportVersion, container.ExportFlags) && !IsIconFirst(container.ExportVersion))
 			{
-				node.Add(layout.IsActiveName, IsActive);
-			}
-			if (layout.HasIsStatic)
-			{
-				node.Add(layout.IsStaticName, IsStatic);
-			}
-			if (layout.HasIcon && !layout.IsIconFirst)
-			{
-				node.Add(layout.IconName, Icon.ExportYAML(container));
+				node.Add(IconName, Icon.ExportYAML(container));
 			}
 			return node;
 		}
@@ -409,7 +385,7 @@ namespace AssetRipper.Core.Classes.GameObject
 
 		private IEnumerable<PPtr<Component>> FetchComponents()
 		{
-			if (File.Layout.GameObject.IsComponentTuple)
+			if (IsComponentTuple(File.Version))
 			{
 				return ComponentTuple.Select(t => t.Item2);
 			}
@@ -435,6 +411,43 @@ namespace AssetRipper.Core.Classes.GameObject
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();
+
+		/// <summary>
+		/// Release or less than 2.1.0
+		/// </summary>
+		public static bool HasTag(UnityVersion version, TransferInstructionFlags flags) => flags.IsRelease() || version.IsLess(2, 1);
+		/// <summary>
+		/// 2.1.0 and greater and Not Release
+		/// </summary>
+		public static bool HasTagString(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2, 1) && !flags.IsRelease();
+		/// <summary>
+		/// 3.5.0 and greater and Not Release
+		/// </summary>
+		public static bool HasNavMeshLayer(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && !flags.IsRelease();
+		/// <summary>
+		/// 3.5.0 and greater and Not Release
+		/// </summary>
+		public static bool HasStaticEditorFlags(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 5) && !flags.IsRelease();
+		/// <summary>
+		/// 3.0.0 to 3.5.0 exclusive and Not Release
+		/// </summary>
+		public static bool HasIsStatic(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(3) && version.IsLess(3, 5) && !flags.IsRelease();
+		/// <summary>
+		/// At least 3.4.0 and Not Release
+		/// </summary>
+		public static bool HasIcon(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(3, 4) && !flags.IsRelease();
+		/// <summary>
+		/// Less than 5.5.0
+		/// </summary>
+		public static bool IsComponentTuple(UnityVersion version) => version.IsLess(5, 5);
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		public static bool IsIconFirst(UnityVersion version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// Less than 4.0.0
+		/// </summary>
+		public static bool IsActiveInherited(UnityVersion version) => version.IsLess(4);
 
 		public ComponentPair[] Component
 		{
@@ -477,5 +490,16 @@ namespace AssetRipper.Core.Classes.GameObject
 #endif
 
 		private object m_component;
+
+		public const string ComponentName = "m_Component";
+		public const string LayerName = "m_Layer";
+		public const string NameName = "m_Name";
+		public const string TagName = "m_Tag";
+		public const string TagStringName = "m_TagString";
+		public const string NavMeshLayerName = "m_NavMeshLayer";
+		public const string StaticEditorFlagsName = "m_StaticEditorFlags";
+		public const string IsActiveName = "m_IsActive";
+		public const string IsStaticName = "m_IsStatic";
+		public const string IconName = "m_Icon";
 	}
 }

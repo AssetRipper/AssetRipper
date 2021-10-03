@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes.PrefabInstance;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
@@ -38,19 +37,17 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			PropertyModificationLayout layout = container.Layout.PrefabInstance.PropertyModification;
-			node.Add(layout.TargetName, Target.ExportYAML(container));
-			node.Add(layout.PropertyPathName, PropertyPath);
-			node.Add(layout.ValueName, Value);
-			node.Add(layout.ObjectReferenceName, ObjectReference.ExportYAML(container));
+			node.Add(TargetName, Target.ExportYAML(container));
+			node.Add(PropertyPathName, PropertyPath);
+			node.Add(ValueName, Value);
+			node.Add(ObjectReferenceName, ObjectReference.ExportYAML(container));
 			return node;
 		}
 
 		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			PropertyModificationLayout layout = context.Layout.PrefabInstance.PropertyModification;
-			yield return context.FetchDependency(Target, layout.TargetName);
-			yield return context.FetchDependency(ObjectReference, layout.ObjectReferenceName);
+			yield return context.FetchDependency(Target, TargetName);
+			yield return context.FetchDependency(ObjectReference, ObjectReferenceName);
 		}
 
 		public string PropertyPath { get; set; }
@@ -58,5 +55,10 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		public PPtr<Object.Object> Target;
 		public PPtr<Object.Object> ObjectReference;
+
+		public const string TargetName = "target";
+		public const string PropertyPathName = "propertyPath";
+		public const string ValueName = "value";
+		public const string ObjectReferenceName = "objectReference";
 	}
 }

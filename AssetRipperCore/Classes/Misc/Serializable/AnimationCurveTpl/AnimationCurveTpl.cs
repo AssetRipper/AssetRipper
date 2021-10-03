@@ -2,7 +2,7 @@ using AssetRipper.Core.Classes.Misc.KeyframeTpl;
 using AssetRipper.Core.Converters.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
@@ -83,13 +83,12 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 
 		public void Read(AssetReader reader)
 		{
-			AnimationCurveTplLayout layout = reader.Layout().Serialized.AnimationCurveTpl;
 			Curve = reader.ReadAssetArray<KeyframeTpl<T>>();
 			reader.AlignStream();
 
 			PreInfinity = (CurveLoopTypes)reader.ReadInt32();
 			PostInfinity = (CurveLoopTypes)reader.ReadInt32();
-			if (layout.HasRotationOrder)
+			if (HasRotationOrder(reader.Version))
 			{
 				RotationOrder = (RotationOrder)reader.ReadInt32();
 			}
@@ -97,13 +96,12 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 
 		public void Write(AssetWriter writer)
 		{
-			AnimationCurveTplLayout layout = writer.Layout().Serialized.AnimationCurveTpl;
 			Curve.Write(writer);
 			writer.AlignStream();
 
 			writer.Write((int)PreInfinity);
 			writer.Write((int)PostInfinity);
-			if (layout.HasRotationOrder)
+			if (HasRotationOrder(writer.Version))
 			{
 				writer.Write((int)RotationOrder);
 			}
@@ -112,26 +110,48 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			AnimationCurveTplLayout layout = container.ExportLayout.Serialized.AnimationCurveTpl;
-			node.AddSerializedVersion(layout.Version);
-			node.Add(layout.CurveName, Curve.ExportYAML(container));
-			node.Add(layout.PreInfinityName, (int)PreInfinity);
-			node.Add(layout.PostInfinityName, (int)PostInfinity);
-			if (layout.HasRotationOrder)
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(CurveName, Curve.ExportYAML(container));
+			node.Add(PreInfinityName, (int)PreInfinity);
+			node.Add(PostInfinityName, (int)PostInfinity);
+			if (HasRotationOrder(container.ExportVersion))
 			{
-				node.Add(layout.RotationOrderName, (int)GetExportRotationOrder(layout));
+				node.Add(RotationOrderName, (int)GetExportRotationOrder(container.Version));
 			}
 			return node;
 		}
 
-		private RotationOrder GetExportRotationOrder(AnimationCurveTplLayout layout)
+		private RotationOrder GetExportRotationOrder(UnityVersion version)
 		{
-			return layout.HasRotationOrder ? RotationOrder : RotationOrder.OrderZXY;
+			return HasRotationOrder(version) ? RotationOrder : RotationOrder.OrderZXY;
 		}
+
+		public static int ToSerializedVersion(UnityVersion version)
+		{
+			if (version.IsGreaterEqual(2, 1))
+			{
+				// unknown conversion
+				return 2;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasRotationOrder(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
 		public KeyframeTpl<T>[] Curve { get; set; }
 		public CurveLoopTypes PreInfinity { get; set; }
 		public CurveLoopTypes PostInfinity { get; set; }
 		public RotationOrder RotationOrder { get; set; }
+
+		public const string CurveName = "m_Curve";
+		public const string PreInfinityName = "m_PreInfinity";
+		public const string PostInfinityName = "m_PostInfinity";
+		public const string RotationOrderName = "m_RotationOrder";
 	}
 }

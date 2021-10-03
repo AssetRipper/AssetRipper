@@ -81,11 +81,10 @@ namespace AssetRipper.Core.Math
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			Vector3iLayout layout = container.ExportLayout.Serialized.Vector3i;
 			node.Style = MappingStyle.Flow;
-			node.Add(layout.XName, X);
-			node.Add(layout.YName, Y);
-			node.Add(layout.ZName, Z);
+			node.Add(XName, X);
+			node.Add(YName, Y);
+			node.Add(ZName, Z);
 			return node;
 		}
 
@@ -122,5 +121,9 @@ namespace AssetRipper.Core.Math
 		public int X { get; set; }
 		public int Y { get; set; }
 		public int Z { get; set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string ZName = "z";
 	}
 }

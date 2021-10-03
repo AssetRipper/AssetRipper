@@ -2,7 +2,6 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes.PrefabInstance;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
@@ -37,30 +36,35 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			PrefabModificationLayout layout = container.Layout.PrefabInstance.PrefabModification;
-			node.Add(layout.TransformParentName, TransformParent.ExportYAML(container));
-			node.Add(layout.ModificationsName, Modifications.ExportYAML(container));
-			node.Add(layout.RemovedComponentsName, RemovedComponents.ExportYAML(container));
+			node.Add(TransformParentName, TransformParent.ExportYAML(container));
+			node.Add(ModificationsName, Modifications.ExportYAML(container));
+			node.Add(RemovedComponentsName, RemovedComponents.ExportYAML(container));
 			return node;
 		}
 
 		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			PrefabModificationLayout layout = context.Layout.PrefabInstance.PrefabModification;
-			yield return context.FetchDependency(TransformParent, layout.TransformParentName);
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Modifications, layout.ModificationsName))
+			yield return context.FetchDependency(TransformParent, TransformParentName);
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Modifications, ModificationsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(RemovedComponents, layout.RemovedComponentsName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(RemovedComponents, RemovedComponentsName))
 			{
 				yield return asset;
 			}
 		}
 
 		public PropertyModification[] Modifications { get; set; }
+		/// <summary>
+		/// PPtr Object [] before 2018.3
+		/// </summary>
 		public PPtr<Component>[] RemovedComponents { get; set; }
 
 		public PPtr<Transform> TransformParent;
+
+		public const string TransformParentName = "m_TransformParent";
+		public const string ModificationsName = "m_Modifications";
+		public const string RemovedComponentsName = "m_RemovedComponents";
 	}
 }

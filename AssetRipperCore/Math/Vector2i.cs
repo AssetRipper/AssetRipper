@@ -37,10 +37,9 @@ namespace AssetRipper.Core.Math
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			Vector2iLayout layout = container.ExportLayout.Serialized.Vector2i;
 			node.Style = MappingStyle.Flow;
-			node.Add(layout.XName, X);
-			node.Add(layout.YName, Y);
+			node.Add(XName, X);
+			node.Add(YName, Y);
 			return node;
 		}
 
@@ -75,5 +74,8 @@ namespace AssetRipper.Core.Math
 
 		public int X { get; set; }
 		public int Y { get; set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
 	}
 }

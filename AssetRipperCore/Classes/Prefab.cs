@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
@@ -52,15 +51,13 @@ namespace AssetRipper.Core.Classes
 				yield return asset;
 			}
 
-			PrefabLayout layout = context.Layout.Prefab;
-			yield return context.FetchDependency(RootGameObject, layout.RootGameObjectName);
+			yield return context.FetchDependency(RootGameObject, RootGameObjectName);
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			PrefabLayout layout = container.ExportLayout.Prefab;
-			node.Add(layout.RootGameObjectName, RootGameObject.ExportYAML(container));
+			node.Add(RootGameObjectName, RootGameObject.ExportYAML(container));
 			return node;
 		}
 
@@ -68,5 +65,6 @@ namespace AssetRipper.Core.Classes
 
 		public PPtr<GameObject.GameObject> RootGameObject;
 		public int HideFlagsBehavior { get; set; }
+		public const string RootGameObjectName = "m_RootGameObject";
 	}
 }

@@ -1,5 +1,4 @@
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
@@ -15,6 +14,11 @@ namespace AssetRipper.Core.Math
 		public float G;
 		public float B;
 		public float A;
+
+		public const string RName = "r";
+		public const string GName = "g";
+		public const string BName = "b";
+		public const string AName = "a";
 
 		public ColorRGBAf(float r, float g, float b, float a)
 		{
@@ -64,12 +68,11 @@ namespace AssetRipper.Core.Math
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			ColorRGBAfLayout layout = container.Layout.Serialized.ColorRGBAf;
 			node.Style = MappingStyle.Flow;
-			node.Add(layout.RName, R);
-			node.Add(layout.GName, G);
-			node.Add(layout.BName, B);
-			node.Add(layout.AName, A);
+			node.Add(RName, R);
+			node.Add(GName, G);
+			node.Add(BName, B);
+			node.Add(AName, A);
 			return node;
 		}
 

@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
@@ -21,31 +20,22 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
-			BehaviourLayout layout = reader.Layout().Behaviour;
 			Enabled = reader.ReadByte();
-			if (layout.IsAlignEnabled)
-			{
-				reader.AlignStream();
-			}
+			reader.AlignStream();
 		}
 
 		public override void Write(AssetWriter writer)
 		{
 			base.Write(writer);
 
-			BehaviourLayout layout = writer.Layout().Behaviour;
 			writer.Write(Enabled);
-			if (layout.IsAlignEnabled)
-			{
-				writer.AlignStream();
-			}
+			writer.AlignStream();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			BehaviourLayout layout = container.ExportLayout.Behaviour;
-			node.Add(layout.EnabledName, Enabled);
+			node.Add(EnabledName, Enabled);
 			return node;
 		}
 
@@ -71,5 +61,7 @@ namespace AssetRipper.Core.Classes
 		}
 
 		public byte Enabled { get; set; }
+
+		public const string EnabledName = "m_Enabled";
 	}
 }

@@ -1,10 +1,9 @@
 using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.GUIText;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
@@ -31,7 +30,6 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public void Read(AssetReader reader)
 		{
-			GUIStyleLayout layout = reader.Layout().Serialized.GUIStyle;
 			Name = reader.ReadString();
 			Normal.Read(reader);
 			Hover.Read(reader);
@@ -42,7 +40,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 			OnActive.Read(reader);
 			OnFocused.Read(reader);
 			Border.Read(reader);
-			if (layout.IsBuiltinFormat)
+			if (IsBuiltinFormat(reader.Version))
 			{
 				Margin.Read(reader);
 				Padding.Read(reader);
@@ -55,7 +53,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 			Overflow.Read(reader);
 			Font.Read(reader);
-			if (layout.IsBuiltinFormat)
+			if (IsBuiltinFormat(reader.Version))
 			{
 				FontSize = reader.ReadInt32();
 				FontStyle = (FontStyle)reader.ReadInt32();
@@ -85,7 +83,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 				ClipOffset.Read(reader);
 				FixedWidth = reader.ReadSingle();
 				FixedHeight = reader.ReadSingle();
-				if (layout.HasFontSize)
+				if (HasFontSize(reader.Version))
 				{
 					FontSize = reader.ReadInt32();
 					FontStyle = (FontStyle)reader.ReadInt32();
@@ -99,7 +97,6 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public void Write(AssetWriter writer)
 		{
-			GUIStyleLayout layout = writer.Layout().Serialized.GUIStyle;
 			writer.Write(Name);
 			Normal.Write(writer);
 			Hover.Write(writer);
@@ -110,7 +107,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 			OnActive.Write(writer);
 			OnFocused.Write(writer);
 			Border.Write(writer);
-			if (layout.IsBuiltinFormat)
+			if (IsBuiltinFormat(writer.Version))
 			{
 				Margin.Write(writer);
 				Padding.Write(writer);
@@ -123,7 +120,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 			Overflow.Write(writer);
 			Font.Write(writer);
-			if (layout.IsBuiltinFormat)
+			if (IsBuiltinFormat(writer.Version))
 			{
 				writer.Write(FontSize);
 				writer.Write((int)FontStyle);
@@ -153,7 +150,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 				ClipOffset.Write(writer);
 				writer.Write(FixedWidth);
 				writer.Write(FixedHeight);
-				if (layout.HasFontSize)
+				if (HasFontSize(writer.Version))
 				{
 					writer.Write(FontSize);
 					writer.Write((int)FontStyle);
@@ -168,65 +165,87 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			GUIStyleLayout layout = container.ExportLayout.Serialized.GUIStyle;
-			node.Add(layout.NameName, Name);
-			node.Add(layout.NormalName, Normal.ExportYAML(container));
-			node.Add(layout.HoverName, Hover.ExportYAML(container));
-			node.Add(layout.ActiveName, Active.ExportYAML(container));
-			node.Add(layout.FocusedName, Focused.ExportYAML(container));
-			node.Add(layout.OnNormalName, OnNormal.ExportYAML(container));
-			node.Add(layout.OnHoverName, OnHover.ExportYAML(container));
-			node.Add(layout.OnActiveName, OnActive.ExportYAML(container));
-			node.Add(layout.OnFocusedName, OnFocused.ExportYAML(container));
-			node.Add(layout.BorderName, Border.ExportYAML(container));
-			if (layout.IsBuiltinFormat)
+			node.Add(NameName, Name);
+			node.Add(NormalName, Normal.ExportYAML(container));
+			node.Add(HoverName, Hover.ExportYAML(container));
+			node.Add(ActiveName, Active.ExportYAML(container));
+			node.Add(FocusedName, Focused.ExportYAML(container));
+			node.Add(OnNormalName, OnNormal.ExportYAML(container));
+			node.Add(OnHoverName, OnHover.ExportYAML(container));
+			node.Add(OnActiveName, OnActive.ExportYAML(container));
+			node.Add(OnFocusedName, OnFocused.ExportYAML(container));
+			node.Add(BorderName, Border.ExportYAML(container));
+			if (IsBuiltinFormat(container.ExportVersion))
 			{
-				node.Add(layout.MarginName, Margin.ExportYAML(container));
-				node.Add(layout.PaddingName, Padding.ExportYAML(container));
+				node.Add(MarginName, Margin.ExportYAML(container));
+				node.Add(PaddingName, Padding.ExportYAML(container));
 			}
 			else
 			{
-				node.Add(layout.PaddingName, Padding.ExportYAML(container));
-				node.Add(layout.MarginName, Margin.ExportYAML(container));
+				node.Add(PaddingName, Padding.ExportYAML(container));
+				node.Add(MarginName, Margin.ExportYAML(container));
 			}
 
-			node.Add(layout.OverflowName, Overflow.ExportYAML(container));
-			node.Add(layout.FontName, Font.ExportYAML(container));
-			if (layout.IsBuiltinFormat)
+			node.Add(OverflowName, Overflow.ExportYAML(container));
+			node.Add(FontName, Font.ExportYAML(container));
+			if (IsBuiltinFormat(container.ExportVersion))
 			{
-				node.Add(layout.FontSizeName, FontSize);
-				node.Add(layout.FontStyleName, (int)FontStyle);
-				node.Add(layout.AlignmentName, (int)Alignment);
-				node.Add(layout.WordWrapName, WordWrap);
-				node.Add(layout.RichTextName, RichText);
-				node.Add(layout.TextClippingName, (int)TextClipping);
-				node.Add(layout.ImagePositionName, (int)ImagePosition);
-				node.Add(layout.ContentOffsetName, ContentOffset.ExportYAML(container));
-				node.Add(layout.FixedWidthName, FixedWidth);
-				node.Add(layout.FixedHeightName, FixedHeight);
-				node.Add(layout.StretchWidthName, StretchWidth);
-				node.Add(layout.StretchHeightName, StretchHeight);
+				node.Add(FontSizeName, FontSize);
+				node.Add(FontStyleName, (int)FontStyle);
+				node.Add(AlignmentName, (int)Alignment);
+				node.Add(WordWrapName, WordWrap);
+				node.Add(RichTextName, RichText);
+				node.Add(TextClippingName, (int)TextClipping);
+				node.Add(ImagePositionName, (int)ImagePosition);
+				node.Add(ContentOffsetName, ContentOffset.ExportYAML(container));
+				node.Add(FixedWidthName, FixedWidth);
+				node.Add(FixedHeightName, FixedHeight);
+				node.Add(StretchWidthName, StretchWidth);
+				node.Add(StretchHeightName, StretchHeight);
 			}
 			else
 			{
-				node.Add(layout.ImagePositionName, (int)ImagePosition);
-				node.Add(layout.AlignmentName, (int)Alignment);
-				node.Add(layout.WordWrapName, WordWrap);
-				node.Add(layout.TextClippingName, (int)TextClipping);
-				node.Add(layout.ContentOffsetName, ContentOffset.ExportYAML(container));
-				node.Add(layout.ClipOffsetName, ClipOffset.ExportYAML(container));
-				node.Add(layout.FixedWidthName, FixedWidth);
-				node.Add(layout.FixedHeightName, FixedHeight);
-				if (layout.HasFontSize)
+				node.Add(ImagePositionName, (int)ImagePosition);
+				node.Add(AlignmentName, (int)Alignment);
+				node.Add(WordWrapName, WordWrap);
+				node.Add(TextClippingName, (int)TextClipping);
+				node.Add(ContentOffsetName, ContentOffset.ExportYAML(container));
+				node.Add(ClipOffsetName, ClipOffset.ExportYAML(container));
+				node.Add(FixedWidthName, FixedWidth);
+				node.Add(FixedHeightName, FixedHeight);
+				if (HasFontSize(container.ExportVersion))
 				{
-					node.Add(layout.FontSizeName, FontSize);
-					node.Add(layout.FontStyleName, (int)FontStyle);
+					node.Add(FontSizeName, FontSize);
+					node.Add(FontStyleName, (int)FontStyle);
 				}
-				node.Add(layout.StretchWidthName, StretchWidth);
-				node.Add(layout.StretchHeightName, StretchHeight);
+				node.Add(StretchWidthName, StretchWidth);
+				node.Add(StretchHeightName, StretchHeight);
 			}
 			return node;
 		}
+
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasFontSize(UnityVersion version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasFontStyle(UnityVersion version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// 4.0.0 and greater
+		/// </summary>
+		public static bool HasRichText(UnityVersion version) => version.IsGreaterEqual(4);
+		/// <summary>
+		/// Less than 4.0.0
+		/// </summary>
+		public static bool HasClipOffset(UnityVersion version) => version.IsLess(4);
+
+		/// <summary>
+		/// 4.0.0 and greater
+		/// GUIStyle became builtin serializable only in v4.0.0
+		/// </summary>
+		public static bool IsBuiltinFormat(UnityVersion version) => version.IsGreaterEqual(4);
 
 		public string Name { get; set; }
 		public int FontSize { get; set; }
@@ -256,5 +275,33 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public PPtr<Font.Font> Font;
 		public Vector2f ContentOffset;
 		public Vector2f ClipOffset;
+
+		public const string NameName = "m_Name";
+		public const string NormalName = "m_Normal";
+		public const string HoverName = "m_Hover";
+		public const string ActiveName = "m_Active";
+		public const string FocusedName = "m_Focused";
+		public const string OnNormalName = "m_OnNormal";
+		public const string OnHoverName = "m_OnHover";
+		public const string OnActiveName = "m_OnActive";
+		public const string OnFocusedName = "m_OnFocused";
+		public const string BorderName = "m_Border";
+		public const string MarginName = "m_Margin";
+		public const string PaddingName = "m_Padding";
+		public const string OverflowName = "m_Overflow";
+		public const string FontName = "m_Font";
+		public const string FontSizeName = "m_FontSize";
+		public const string FontStyleName = "m_FontStyle";
+		public const string AlignmentName = "m_Alignment";
+		public const string WordWrapName = "m_WordWrap";
+		public const string RichTextName = "m_RichText";
+		public const string TextClippingName = "m_TextClipping";
+		public const string ImagePositionName = "m_ImagePosition";
+		public const string ContentOffsetName = "m_ContentOffset";
+		public const string ClipOffsetName = "m_ClipOffset";
+		public const string FixedWidthName = "m_FixedWidth";
+		public const string FixedHeightName = "m_FixedHeight";
+		public const string StretchWidthName = "m_StretchWidth";
+		public const string StretchHeightName = "m_StretchHeight";
 	}
 }

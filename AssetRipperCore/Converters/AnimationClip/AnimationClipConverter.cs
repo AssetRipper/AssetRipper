@@ -363,9 +363,9 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 		private void AddGameObjectCurve(GenericBinding binding, string path, float time, float value)
 		{
-			if (binding.Attribute == CRC.CalculateDigestAscii(Layout.GameObject.IsActiveName))
+			if (binding.Attribute == CRC.CalculateDigestAscii(Classes.GameObject.GameObject.IsActiveName))
 			{
-				FloatCurve curve = new FloatCurve(path, Layout.GameObject.IsActiveName, ClassIDType.GameObject, default);
+				FloatCurve curve = new FloatCurve(path, Classes.GameObject.GameObject.IsActiveName, ClassIDType.GameObject, default);
 				AddFloatKeyframe(curve, time, value);
 				return;
 			}

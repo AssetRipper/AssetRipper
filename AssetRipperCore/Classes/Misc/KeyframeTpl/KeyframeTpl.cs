@@ -2,7 +2,6 @@
 using AssetRipper.Core.Converters.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Layout.Classes.Misc;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
@@ -39,16 +38,15 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 
 		public void Read(AssetReader reader)
 		{
-			KeyframeTplLayout layout = reader.Layout().Misc.KeyframeTpl;
 			Time = reader.ReadSingle();
 			Value.Read(reader);
 			InSlope.Read(reader);
 			OutSlope.Read(reader);
-			if (layout.HasTangentMode)
+			if (HasTangentMode(reader.Version, reader.Flags))
 			{
 				TangentMode = reader.ReadInt32();
 			}
-			if (layout.HasWeightedMode)
+			if (HasWeightedMode(reader.Version))
 			{
 				WeightedMode = (WeightedMode)reader.ReadInt32();
 				InWeight.Read(reader);
@@ -58,16 +56,15 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 
 		public void Write(AssetWriter writer)
 		{
-			KeyframeTplLayout layout = writer.Layout().Misc.KeyframeTpl;
 			writer.Write(Time);
 			Value.Write(writer);
 			InSlope.Write(writer);
 			OutSlope.Write(writer);
-			if (layout.HasTangentMode)
+			if (HasTangentMode(writer.Version, writer.Flags))
 			{
 				writer.Write(TangentMode);
 			}
-			if (layout.HasWeightedMode)
+			if (HasWeightedMode(writer.Version))
 			{
 				writer.Write((int)WeightedMode);
 				InWeight.Write(writer);
@@ -77,22 +74,21 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-			KeyframeTplLayout layout = container.ExportLayout.Misc.KeyframeTpl;
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(layout.Version);
-			node.Add(layout.TimeName, Time);
-			node.Add(layout.ValueName, Value.ExportYAML(container));
-			node.Add(layout.InSlopeName, InSlope.ExportYAML(container));
-			node.Add(layout.OutSlopeName, OutSlope.ExportYAML(container));
-			if (layout.HasTangentMode)
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(TimeName, Time);
+			node.Add(ValueName, Value.ExportYAML(container));
+			node.Add(InSlopeName, InSlope.ExportYAML(container));
+			node.Add(OutSlopeName, OutSlope.ExportYAML(container));
+			if (HasTangentMode(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(layout.TangentModeName, TangentMode);
+				node.Add(TangentModeName, TangentMode);
 			}
-			if (layout.HasWeightedMode)
+			if (HasWeightedMode(container.ExportVersion))
 			{
-				node.Add(layout.WeightedModeName, (int)WeightedMode);
-				node.Add(layout.InWeightName, InWeight.ExportYAML(container));
-				node.Add(layout.OutWeightName, OutWeight.ExportYAML(container));
+				node.Add(WeightedModeName, (int)WeightedMode);
+				node.Add(InWeightName, InWeight.ExportYAML(container));
+				node.Add(OutWeightName, OutWeight.ExportYAML(container));
 			}
 			return node;
 		}
@@ -109,6 +105,41 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 			}
 		}
 
+		public static int ToSerializedVersion(UnityVersion version)
+		{
+			if (version.IsGreaterEqual(2018))
+			{
+				// unknown conversion
+				return 3;
+			}
+			else if (TangentModeExtensions.TangentMode5Relevant(version))
+			{
+				// TangentMode enum has been changed
+				return 2;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+
+		/// <summary>
+		/// 2.1.0 and greater and Not Release
+		/// </summary>
+		public static bool HasTangentMode(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2, 1) && !flags.IsRelease();
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool HasWeightedMode(UnityVersion version) => version.IsGreaterEqual(2018);
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool HasInWeight(UnityVersion version) => version.IsGreaterEqual(2018);
+		/// <summary>
+		/// 2018.1 and greater
+		/// </summary>
+		public static bool HasOutWeight(UnityVersion version) => version.IsGreaterEqual(2018);
+
 		public float Time { get; set; }
 		public int TangentMode { get; set; }
 		public WeightedMode WeightedMode { get; set; }
@@ -122,5 +153,14 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 		public T OutSlope;
 		public T InWeight;
 		public T OutWeight;
+
+		public const string TimeName = "time";
+		public const string ValueName = "value";
+		public const string InSlopeName = "inSlope";
+		public const string OutSlopeName = "outSlope";
+		public const string TangentModeName = "tangentMode";
+		public const string WeightedModeName = "weightedMode";
+		public const string InWeightName = "inWeight";
+		public const string OutWeightName = "outWeight";
 	}
 }

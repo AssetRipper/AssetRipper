@@ -1,5 +1,4 @@
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
@@ -26,11 +25,10 @@ namespace AssetRipper.Core.Classes.Misc.Serializable
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			RectOffsetLayout layout = container.ExportLayout.Serialized.RectOffset;
-			node.Add(layout.LeftName, Left);
-			node.Add(layout.RightName, Right);
-			node.Add(layout.TopName, Top);
-			node.Add(layout.BottomName, Bottom);
+			node.Add(LeftName, Left);
+			node.Add(RightName, Right);
+			node.Add(TopName, Top);
+			node.Add(BottomName, Bottom);
 			return node;
 		}
 
@@ -38,5 +36,10 @@ namespace AssetRipper.Core.Classes.Misc.Serializable
 		public int Right { get; set; }
 		public int Top { get; set; }
 		public int Bottom { get; set; }
+
+		public const string LeftName = "m_Left";
+		public const string RightName = "m_Right";
+		public const string TopName = "m_Top";
+		public const string BottomName = "m_Bottom";
 	}
 }

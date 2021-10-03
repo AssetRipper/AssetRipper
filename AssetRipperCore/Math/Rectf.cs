@@ -1,6 +1,6 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System.Globalization;
@@ -14,6 +14,11 @@ namespace AssetRipper.Core.Math
 		public float Y { get; set; }
 		public float Width { get; set; }
 		public float Height { get; set; }
+
+		public const string XName = "x";
+		public const string YName = "y";
+		public const string WidthName = "width";
+		public const string HeightName = "height";
 
 		public Rectf(float x, float y, float width, float height)
 		{
@@ -32,6 +37,11 @@ namespace AssetRipper.Core.Math
 		}
 
 		public Rectf(Vector2f positon, Vector2f size) : this(positon.X, positon.Y, size.X, size.Y) { }
+
+		public static int ToSerializedVersion(UnityVersion version)
+		{
+			return 2; //2.0.0 and higher
+		}
 
 		public static bool operator ==(Rectf left, Rectf right)
 		{
@@ -97,61 +107,28 @@ namespace AssetRipper.Core.Math
 
 		public void Read(AssetReader reader)
 		{
-			RectfLayout layout = reader.Layout().Serialized.Rectf;
-			if (layout.HasXMin)
-			{
-				XMin = reader.ReadSingle();
-				YMin = reader.ReadSingle();
-				XMax = reader.ReadSingle();
-				YMax = reader.ReadSingle();
-			}
-			else
-			{
-				X = reader.ReadSingle();
-				Y = reader.ReadSingle();
-				Width = reader.ReadSingle();
-				Height = reader.ReadSingle();
-			}
+			X = reader.ReadSingle();
+			Y = reader.ReadSingle();
+			Width = reader.ReadSingle();
+			Height = reader.ReadSingle();
 		}
 
 		public void Write(AssetWriter writer)
 		{
-			RectfLayout layout = writer.Layout().Serialized.Rectf;
-			if (layout.HasXMin)
-			{
-				writer.Write(XMin);
-				writer.Write(YMin);
-				writer.Write(XMax);
-				writer.Write(YMax);
-			}
-			else
-			{
-				writer.Write(X);
-				writer.Write(Y);
-				writer.Write(Width);
-				writer.Write(Height);
-			}
+			writer.Write(X);
+			writer.Write(Y);
+			writer.Write(Width);
+			writer.Write(Height);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			RectfLayout layout = container.ExportLayout.Serialized.Rectf;
-			node.AddSerializedVersion(layout.Version);
-			if (layout.HasXMin)
-			{
-				node.Add(layout.XMinName, XMin);
-				node.Add(layout.YMinName, YMin);
-				node.Add(layout.XMaxName, XMax);
-				node.Add(layout.YMaxName, YMax);
-			}
-			else
-			{
-				node.Add(layout.XName, X);
-				node.Add(layout.YName, Y);
-				node.Add(layout.WidthName, Width);
-				node.Add(layout.HeightName, Height);
-			}
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+			node.Add(XName, X);
+			node.Add(YName, Y);
+			node.Add(WidthName, Width);
+			node.Add(HeightName, Height);
 			return node;
 		}
 

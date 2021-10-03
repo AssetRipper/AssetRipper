@@ -1,12 +1,9 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.IO.Asset;
-#if UNIVERSAL
-using AssetRipper.Core.IO.Extensions;
-#endif
-using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly.Serializable;
@@ -26,12 +23,11 @@ namespace AssetRipper.Core.Classes
 			base.Read(reader);
 
 #if UNIVERSAL
-			MonoBehaviourLayout layout = reader.Layout().MonoBehaviour;
-			if (layout.HasEditorHideFlags)
+			if (HasEditorHideFlags(reader.Flags))
 			{
 				EditorHideFlags = (HideFlags)reader.ReadUInt32();
 			}
-			if (layout.HasGeneratorAsset)
+			if (HasGeneratorAsset(reader.Version, reader.Flags))
 			{
 				GeneratorAsset.Read(reader);
 			}
@@ -41,7 +37,7 @@ namespace AssetRipper.Core.Classes
 			Name = reader.ReadString();
 
 #if UNIVERSAL
-			if (layout.HasEditorClassIdentifier)
+			if (HasEditorClassIdentifier(reader.Version, reader.Flags))
 			{
 				EditorClassIdentifier = reader.ReadString();
 			}
@@ -59,12 +55,11 @@ namespace AssetRipper.Core.Classes
 			base.Write(writer);
 
 #if UNIVERSAL
-			MonoBehaviourLayout layout = writer.Layout().MonoBehaviour;
-			if (layout.HasEditorHideFlags)
+			if (HasEditorHideFlags(writer.Flags))
 			{
 				writer.Write((uint)EditorHideFlags);
 			}
-			if (layout.HasGeneratorAsset)
+			if (HasGeneratorAsset(writer.Version, writer.Flags))
 			{
 				GeneratorAsset.Write(writer);
 			}
@@ -74,7 +69,7 @@ namespace AssetRipper.Core.Classes
 			writer.Write(Name);
 
 #if UNIVERSAL
-			if (layout.HasEditorClassIdentifier)
+			if (HasEditorClassIdentifier(writer.Version, writer.Flags))
 			{
 				writer.Write(EditorClassIdentifier);
 			}
@@ -93,11 +88,10 @@ namespace AssetRipper.Core.Classes
 				yield return asset;
 			}
 
-			MonoBehaviourLayout layout = context.Layout.MonoBehaviour;
 #if UNIVERSAL
-			yield return context.FetchDependency(GeneratorAsset, layout.GeneratorAssetName);
+			yield return context.FetchDependency(GeneratorAsset, GeneratorAssetName);
 #endif
-			yield return context.FetchDependency(Script, layout.ScriptName);
+			yield return context.FetchDependency(Script, ScriptName);
 
 			if (Structure != null)
 			{
@@ -116,15 +110,14 @@ namespace AssetRipper.Core.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			MonoBehaviourLayout layout = container.ExportLayout.MonoBehaviour;
-			node.Add(layout.EditorHideFlagsName, (uint)GetEditorHideFlags(container));
-			if (layout.HasGeneratorAsset)
+			node.Add(EditorHideFlagsName, (uint)GetEditorHideFlags(container));
+			if (HasGeneratorAsset(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(layout.GeneratorAssetName, GetGeneratorAsset(container).ExportYAML(container));
+				node.Add(GeneratorAssetName, GetGeneratorAsset(container).ExportYAML(container));
 			}
-			node.Add(layout.ScriptName, Script.ExportYAML(container));
-			node.Add(layout.NameName, Name);
-			node.Add(layout.EditorClassIdentifierName, GetEditorClassIdentifier(container));
+			node.Add(ScriptName, Script.ExportYAML(container));
+			node.Add(NameName, Name);
+			node.Add(EditorClassIdentifierName, GetEditorClassIdentifier(container));
 			if (Structure != null)
 			{
 				YAMLMappingNode structureNode = (YAMLMappingNode)Structure.ExportYAML(container);
@@ -136,7 +129,7 @@ namespace AssetRipper.Core.Classes
 		private HideFlags GetEditorHideFlags(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (container.Layout.MonoBehaviour.HasEditorHideFlags)
+			if (HasEditorHideFlags(container.Flags))
 			{
 				return EditorHideFlags;
 			}
@@ -146,7 +139,7 @@ namespace AssetRipper.Core.Classes
 		private PPtr<Object.Object> GetGeneratorAsset(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (container.Layout.MonoBehaviour.HasGeneratorAsset)
+			if (HasGeneratorAsset(container.Version, container.Flags))
 			{
 				return GeneratorAsset;
 			}
@@ -156,7 +149,7 @@ namespace AssetRipper.Core.Classes
 		private string GetEditorClassIdentifier(IExportContainer container)
 		{
 #if UNIVERSAL
-			if (container.Layout.MonoBehaviour.HasEditorClassIdentifier)
+			if (HasEditorClassIdentifier(container.Version, container.Flags))
 			{
 				return EditorClassIdentifier;
 			}
@@ -209,6 +202,19 @@ namespace AssetRipper.Core.Classes
 #endif
 		}
 
+		/// <summary>
+		/// Not Release
+		/// </summary>
+		public static bool HasEditorHideFlags(TransferInstructionFlags flags) => !flags.IsRelease();
+		/// <summary>
+		/// 2019.1 to 2019.1.0b4 exclusive and Not Release
+		/// </summary>
+		public static bool HasGeneratorAsset(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2019) && version.IsLess(2019, 1, 0, UnityVersionType.Beta, 4) && !flags.IsRelease();
+		/// <summary>
+		/// 4.2.0 and greater and Not Release
+		/// </summary>
+		public static bool HasEditorClassIdentifier(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(4, 2) && !flags.IsRelease();
+
 		public override string ExportPath => Path.Combine(AssetsKeyword, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
 
@@ -236,5 +242,11 @@ namespace AssetRipper.Core.Classes
 		public PPtr<Object.Object> GeneratorAsset;
 #endif
 		public PPtr<MonoScript> Script;
+
+		public const string EditorHideFlagsName = "m_EditorHideFlags";
+		public const string GeneratorAssetName = "m_GeneratorAsset";
+		public const string ScriptName = "m_Script";
+		public const string NameName = "m_Name";
+		public const string EditorClassIdentifierName = "m_EditorClassIdentifier";
 	}
 }

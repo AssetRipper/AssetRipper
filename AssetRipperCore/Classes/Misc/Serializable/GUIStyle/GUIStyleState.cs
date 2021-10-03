@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
@@ -31,9 +31,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public void Read(AssetReader reader)
 		{
-			GUIStyleStateLayout layout = reader.Layout().Serialized.GUIStyle.GUIStyleState;
 			Background.Read(reader);
-			if (layout.HasScaledBackgrounds)
+			if (HasScaledBackgrounds(reader.Version, reader.Flags))
 			{
 				ScaledBackgrounds = reader.ReadAssetArray<PPtr<Texture2D.Texture2D>>();
 			}
@@ -46,9 +45,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public void Write(AssetWriter writer)
 		{
-			GUIStyleStateLayout layout = writer.Layout().Serialized.GUIStyle.GUIStyleState;
 			Background.Write(writer);
-			if (layout.HasScaledBackgrounds)
+			if (HasScaledBackgrounds(writer.Version, writer.Flags))
 			{
 				writer.WriteAssetArray(ScaledBackgrounds);
 			}
@@ -58,19 +56,27 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			GUIStyleStateLayout layout = container.ExportLayout.Serialized.GUIStyle.GUIStyleState;
-			node.Add(layout.BackgroundName, Background.ExportYAML(container));
-			if (layout.HasScaledBackgrounds)
+			node.Add(BackgroundName, Background.ExportYAML(container));
+			if (HasScaledBackgrounds(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(layout.ScaledBackgroundsName, ScaledBackgrounds.ExportYAML(container));
+				node.Add(ScaledBackgroundsName, ScaledBackgrounds.ExportYAML(container));
 			}
-			node.Add(layout.TextColorName, TextColor.ExportYAML(container));
+			node.Add(TextColorName, TextColor.ExportYAML(container));
 			return node;
 		}
+
+		/// <summary>
+		/// 5.4.0 and greater and Not Release
+		/// </summary>
+		public static bool HasScaledBackgrounds(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(5, 4) && !flags.IsRelease();
 
 		public PPtr<Texture2D.Texture2D>[] ScaledBackgrounds { get; set; }
 
 		public PPtr<Texture2D.Texture2D> Background;
 		public ColorRGBAf TextColor;
+
+		public const string BackgroundName = "m_Background";
+		public const string ScaledBackgroundsName = "m_ScaledBackgrounds";
+		public const string TextColorName = "m_TextColor";
 	}
 }

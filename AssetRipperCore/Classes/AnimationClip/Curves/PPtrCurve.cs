@@ -1,8 +1,8 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Layout.Classes.AnimationClip.Curves;
 using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
@@ -75,9 +75,8 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 
 		public void Read(AssetReader reader)
 		{
-			PPtrCurveLayout layout = reader.Layout().AnimationClip.PPtrCurve;
 			Curve = reader.ReadAssetArray<PPtrKeyframe>();
-			if (layout.IsAlignCurve)
+			if (IsAlignCurve(reader.Version))
 			{
 				reader.AlignStream();
 			}
@@ -90,9 +89,8 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 
 		public void Write(AssetWriter writer)
 		{
-			PPtrCurveLayout layout = writer.Layout().AnimationClip.PPtrCurve;
 			Curve.Write(writer);
-			if (layout.IsAlignCurve)
+			if (IsAlignCurve(writer.Version))
 			{
 				writer.AlignStream();
 			}
@@ -106,23 +104,21 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			PPtrCurveLayout layout = container.ExportLayout.AnimationClip.PPtrCurve;
-			node.Add(layout.CurveName, Curve.ExportYAML(container));
-			node.Add(layout.AttributeName, Attribute);
-			node.Add(layout.PathName, Path);
-			node.Add(layout.ClassIDName, (int)ClassID);
-			node.Add(layout.ScriptName, Script.ExportYAML(container));
+			node.Add(CurveName, Curve.ExportYAML(container));
+			node.Add(AttributeName, Attribute);
+			node.Add(PathName, Path);
+			node.Add(ClassIDName, (int)ClassID);
+			node.Add(ScriptName, Script.ExportYAML(container));
 			return node;
 		}
 
 		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			PPtrCurveLayout layout = context.Layout.AnimationClip.PPtrCurve;
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Curve, layout.CurveName))
+			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Curve, CurveName))
 			{
 				yield return asset;
 			}
-			yield return context.FetchDependency(Script, layout.ScriptName);
+			yield return context.FetchDependency(Script, ScriptName);
 		}
 
 		public override bool Equals(object obj)
@@ -147,11 +143,22 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 			return hash;
 		}
 
+		/// <summary>
+		/// 2017.1 and greater
+		/// </summary>
+		public static bool IsAlignCurve(UnityVersion version) => version.IsGreaterEqual(2017);
+
 		public PPtrKeyframe[] Curve { get; set; }
 		public string Attribute { get; set; }
 		public string Path { get; set; }
 		public ClassIDType ClassID { get; set; }
 
 		public PPtr<MonoScript> Script;
+
+		public const string CurveName = "curve";
+		public const string AttributeName = "attribute";
+		public const string PathName = "path";
+		public const string ClassIDName = "classID";
+		public const string ScriptName = "script";
 	}
 }

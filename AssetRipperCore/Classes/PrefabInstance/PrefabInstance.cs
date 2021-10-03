@@ -3,8 +3,8 @@ using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes.PrefabInstance;
 using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
@@ -35,29 +35,41 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			return instance;
 		}
 
+		public static int ToSerializedVersion(UnityVersion version)
+		{
+			if (version.IsGreaterEqual(3, 5))
+			{
+				// NOTE: unknown conversion
+				return 2;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+
 		public override void Read(AssetReader reader)
 		{
-			PrefabInstanceLayout layout = reader.Layout().PrefabInstance;
-			if (layout.IsModificationFormat)
+			if (IsModificationFormat(reader.Version))
 			{
 				ReadObject(reader);
 
-				if (layout.HasRootGameObject && layout.IsRootGameObjectFirst)
+				if (HasRootGameObject(reader.Version, reader.Flags) && IsRootGameObjectFirst(reader.Version))
 				{
 					RootGameObject.Read(reader);
 				}
 
 				Modification.Read(reader);
 				SourcePrefab.Read(reader);
-				if (!layout.IsRootGameObjectFirst)
+				if (!IsRootGameObjectFirst(reader.Version))
 				{
 					RootGameObject.Read(reader);
 				}
-				if (layout.HasIsPrefabAsset)
+				if (HasIsPrefabAsset(reader.Version))
 				{
 					IsPrefabAsset = reader.ReadBoolean();
 				}
-				if (layout.HasIsExploded)
+				if (HasIsExploded(reader.Version))
 				{
 					IsExploded = reader.ReadBoolean();
 				}
@@ -66,7 +78,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			else
 			{
 				LastMergeIdentifier.Read(reader);
-				if (layout.HasLastTemplateIdentifier)
+				if (HasLastTemplateIdentifier(reader.Version))
 				{
 					LastTemplateIdentifier.Read(reader);
 				}
@@ -81,27 +93,26 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		public override void Write(AssetWriter writer)
 		{
-			PrefabInstanceLayout layout = writer.Layout().PrefabInstance;
-			if (layout.IsModificationFormat)
+			if (IsModificationFormat(writer.Version))
 			{
 				WriteObject(writer);
 
-				if (layout.HasRootGameObject && layout.IsRootGameObjectFirst)
+				if (HasRootGameObject(writer.Version, writer.Flags) && IsRootGameObjectFirst(writer.Version))
 				{
 					RootGameObject.Write(writer);
 				}
 
 				Modification.Write(writer);
 				SourcePrefab.Write(writer);
-				if (!layout.IsRootGameObjectFirst)
+				if (!IsRootGameObjectFirst(writer.Version))
 				{
 					RootGameObject.Write(writer);
 				}
-				if (layout.HasIsPrefabAsset)
+				if (HasIsPrefabAsset(writer.Version))
 				{
 					writer.Write(IsPrefabAsset);
 				}
-				if (layout.HasIsExploded)
+				if (HasIsExploded(writer.Version))
 				{
 					writer.Write(IsExploded);
 				}
@@ -110,7 +121,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			else
 			{
 				LastMergeIdentifier.Write(writer);
-				if (layout.HasLastTemplateIdentifier)
+				if (HasLastTemplateIdentifier(writer.Version))
 				{
 					LastTemplateIdentifier.Write(writer);
 				}
@@ -144,31 +155,30 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
-			PrefabInstanceLayout layout = context.Layout.PrefabInstance;
-			if (layout.IsModificationFormat)
+			if (IsModificationFormat(context.Version))
 			{
 				foreach (PPtr<Object.Object> asset in FetchDependenciesObject(context))
 				{
 					yield return asset;
 				}
 
-				if (layout.HasRootGameObject)
+				if (HasRootGameObject(context.Version, context.Flags))
 				{
-					yield return context.FetchDependency(RootGameObject, layout.RootGameObjectName);
+					yield return context.FetchDependency(RootGameObject, RootGameObjectName);
 				}
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Modification, layout.ModificationName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Modification, ModificationName))
 				{
 					yield return asset;
 				}
-				yield return context.FetchDependency(SourcePrefab, layout.SourcePrefabName);
+				yield return context.FetchDependency(SourcePrefab, SourcePrefabName);
 			}
 			else
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Objects, layout.ObjectsName))
+				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Objects, ObjectsName))
 				{
 					yield return asset;
 				}
-				yield return context.FetchDependency(Father, layout.FatherName);
+				yield return context.FetchDependency(Father, FatherName);
 
 				foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 				{
@@ -179,7 +189,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		public string GetName(IAssetContainer file)
 		{
-			if (file.Layout.PrefabInstance.IsModificationFormat)
+			if (IsModificationFormat(file.Version))
 			{
 				return RootGameObject.GetAsset(file).Name;
 			}
@@ -200,49 +210,155 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			PrefabInstanceLayout layout = container.ExportLayout.PrefabInstance;
-			if (layout.IsModificationFormat)
+			if (IsModificationFormat(container.ExportVersion))
 			{
 				YAMLMappingNode node = ExportYAMLRootObject(container);
-				node.AddSerializedVersion(layout.Version);
-				if (layout.HasRootGameObject && layout.IsRootGameObjectFirst)
+				node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
+				if (HasRootGameObject(container.ExportVersion, container.ExportFlags) && IsRootGameObjectFirst(container.ExportVersion))
 				{
-					node.Add(layout.RootGameObjectName, RootGameObject.ExportYAML(container));
+					node.Add(RootGameObjectName, RootGameObject.ExportYAML(container));
 				}
 
-				node.Add(layout.ModificationName, Modification.ExportYAML(container));
-				node.Add(layout.SourcePrefabInvariantName, SourcePrefab.ExportYAML(container));
-				if (!layout.IsRootGameObjectFirst)
+				node.Add(ModificationName, Modification.ExportYAML(container));
+				node.Add(SourcePrefabInvariantName(container.ExportVersion), SourcePrefab.ExportYAML(container));
+				if (!IsRootGameObjectFirst(container.ExportVersion))
 				{
-					node.Add(layout.RootGameObjectName, RootGameObject.ExportYAML(container));
+					node.Add(RootGameObjectName, RootGameObject.ExportYAML(container));
 				}
-				if (layout.HasIsPrefabAssetInvariant)
+				if (HasIsPrefabAssetInvariant(container.ExportVersion))
 				{
-					node.Add(layout.IsPrefabAssetInvariantName, IsPrefabAsset);
+					node.Add(IsPrefabAssetInvariantName(container.ExportVersion), IsPrefabAsset);
 				}
-				if (layout.HasIsExploded)
+				if (HasIsExploded(container.ExportVersion))
 				{
-					node.Add(layout.IsExplodedName, IsExploded);
+					node.Add(IsExplodedName, IsExploded);
 				}
 				return node;
 			}
 			else
 			{
 				YAMLMappingNode node = new YAMLMappingNode();
-				node.Add(layout.LastMergeIdentifierName, LastMergeIdentifier.ExportYAML(container));
-				if (layout.HasLastTemplateIdentifier)
+				node.Add(LastMergeIdentifierName, LastMergeIdentifier.ExportYAML(container));
+				if (HasLastTemplateIdentifier(container.ExportVersion))
 				{
-					node.Add(layout.LastTemplateIdentifierName, LastTemplateIdentifier.ExportYAML(container));
+					node.Add(LastTemplateIdentifierName, LastTemplateIdentifier.ExportYAML(container));
 				}
-				node.Add(layout.ObjectsName, Objects.ExportYAML(container));
-				node.Add(layout.FatherName, Father.ExportYAML(container));
-				node.Add(layout.IsDataTemplateName, IsDataTemplate);
+				node.Add(ObjectsName, Objects.ExportYAML(container));
+				node.Add(FatherName, Father.ExportYAML(container));
+				node.Add(IsDataTemplateName, IsDataTemplate);
 
 				YAMLMappingNode baseNode = base.ExportYAMLRoot(container);
 				node.Append(baseNode);
 				return node;
 			}
 		}
+
+		public string SourcePrefabInvariantName(UnityVersion version)
+		{
+			if (version.IsGreaterEqual(2018, 2))
+			{
+				return SourcePrefabName;
+			}
+			else if (version.IsGreaterEqual(3, 5))
+			{
+				return ParentPrefabName;
+			}
+			else
+			{
+				return FatherName;
+			}
+		}
+
+		public string IsPrefabAssetInvariantName(UnityVersion version)
+		{
+			if (version.IsGreaterEqual(2018, 2))
+			{
+				return IsPrefabAssetName;
+			}
+			else if (version.IsGreaterEqual(3, 5))
+			{
+				return IsPrefabParentName;
+			}
+			else
+			{
+				return IsDataTemplateName;
+			}
+		}
+
+		/// <summary>
+		/// Less than 3.5.0
+		/// </summary>
+		public static bool HasLastMergeIdentifier(UnityVersion version) => version.IsLess(3, 5);
+		/// <summary>
+		/// Less than 2.6.0
+		/// </summary>
+		public static bool HasLastTemplateIdentifier(UnityVersion version) => version.IsLess(2, 6);
+		/// <summary>
+		/// Less than 3.5.0
+		/// </summary>
+		public static bool HasObjects(UnityVersion version) => version.IsLess(3, 5);
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		public static bool HasModification(UnityVersion version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool HasSourcePrefab(UnityVersion version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 3.5.0 to 2018.2 exclusive
+		/// </summary>
+		public static bool HasParentPrefab(UnityVersion version) => version.IsGreaterEqual(3, 5) && version.IsLess(2018, 2);
+		/// <summary>
+		/// Less than 3.5.0
+		/// </summary>
+		public static bool HasFather(UnityVersion version) => version.IsLess(3, 5);
+		/// <summary>
+		/// (3.5.0 to 2018.3 exclusive) or (2018.3 and greater and Editor Scene)
+		/// </summary>
+		public static bool HasRootGameObject(UnityVersion version, TransferInstructionFlags flags)
+		{
+			return (version.IsGreaterEqual(3, 5) && version.IsLess(2018, 3)) ||
+				(flags.IsEditorScene() && version.IsGreaterEqual(2018, 3));
+		}
+		/// <summary>
+		/// Less than 2018.3
+		/// </summary>
+		public static bool HasIsPrefabAssetInvariant(UnityVersion version) => version.IsLess(2018, 3);
+		/// <summary>
+		/// 2018.2 and greater
+		/// </summary>
+		public static bool HasIsPrefabAsset(UnityVersion version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 3.5.0 to 2018.2 exclusive
+		/// </summary>
+		public static bool HasIsPrefabParent(UnityVersion version) => version.IsGreaterEqual(3, 5) && version.IsLess(2018, 2);
+		/// <summary>
+		/// Less than 3.5.0
+		/// </summary>
+		public static bool HasIsDataTemplate(UnityVersion version) => version.IsLess(3, 5);
+		/// <summary>
+		/// Less than 3.5.0
+		/// </summary>
+		public static bool HasIsExploded(UnityVersion version) => version.IsLess(3, 5);
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		public static bool IsModificationFormat(UnityVersion version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// 3.5.0 and greater
+		/// </summary>
+		public static bool IsInheritedFromObject(UnityVersion version) => version.IsGreaterEqual(3, 5);
+		/// <summary>
+		/// Less than 3.5.0
+		/// </summary>
+		public static bool IsInheritedFromNamedObject(UnityVersion version) => version.IsLess(3, 5);
+		/// <summary>
+		/// 2018.3 and greater
+		/// </summary>
+		public static bool IsRootGameObjectFirst(UnityVersion version) => version.IsGreaterEqual(2018, 3);
+
+
 
 		public override string ExportExtension => PrefabKeyword;
 
@@ -283,5 +399,18 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		public PrefabModification Modification;
 		public PPtr<PrefabInstance> SourcePrefab;
 		public PPtr<GameObject.GameObject> RootGameObject;
+
+		public const string LastMergeIdentifierName = "m_LastMergeIdentifier";
+		public const string LastTemplateIdentifierName = "m_LastTemplateIdentifier";
+		public const string ObjectsName = "m_Objects";
+		public const string ModificationName = "m_Modification";
+		public const string SourcePrefabName = "m_SourcePrefab";
+		public const string ParentPrefabName = "m_ParentPrefab";
+		public const string FatherName = "m_Father";
+		public const string RootGameObjectName = "m_RootGameObject";
+		public const string IsPrefabAssetName = "m_IsPrefabAsset";
+		public const string IsPrefabParentName = "m_IsPrefabParent";
+		public const string IsDataTemplateName = "m_IsDataTemplate";
+		public const string IsExplodedName = "m_IsExploded";
 	}
 }

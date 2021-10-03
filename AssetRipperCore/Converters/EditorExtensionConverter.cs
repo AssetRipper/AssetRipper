@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Project;
 
 namespace AssetRipper.Core.Converters
@@ -8,13 +7,11 @@ namespace AssetRipper.Core.Converters
 	{
 		public static void Convert(IExportContainer container, EditorExtension origin, EditorExtension instance)
 		{
-			EditorExtensionLayout layout = container.Layout.EditorExtension;
-			EditorExtensionLayout exlayout = container.ExportLayout.EditorExtension;
 			ObjectConverter.Convert(container, origin, instance);
 #if UNIVERSAL
-			if (exlayout.HasCorrespondingSourceObjectInvariant)
+			if (EditorExtension.HasCorrespondingSourceObjectInvariant(container.ExportVersion, container.ExportFlags))
 			{
-				if (layout.HasCorrespondingSourceObjectInvariant)
+				if (EditorExtension.HasCorrespondingSourceObjectInvariant(container.Version, container.Flags))
 				{
 					instance.CorrespondingSourceObject = origin.CorrespondingSourceObject;
 					instance.PrefabInstance = origin.PrefabInstance;
@@ -28,7 +25,7 @@ namespace AssetRipper.Core.Converters
 			{
 				instance.ExtensionPtr = origin.ExtensionPtr;
 			}
-			if (exlayout.HasPrefabAsset && layout.HasPrefabAsset)
+			if (EditorExtension.HasPrefabAsset(container.ExportVersion, container.ExportFlags) && EditorExtension.HasPrefabAsset(container.Version, container.Flags))
 			{
 				instance.PrefabAsset = origin.PrefabAsset;
 			}

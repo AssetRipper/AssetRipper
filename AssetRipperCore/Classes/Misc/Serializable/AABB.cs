@@ -1,7 +1,6 @@
 using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Layout.Classes.Misc.Serializable;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
@@ -37,9 +36,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			AABBLayout layout = container.ExportLayout.Serialized.AABB;
-			node.Add(layout.CenterName, m_Center.ExportYAML(container));
-			node.Add(layout.ExtentName, m_Extent.ExportYAML(container));
+			node.Add(CenterName, m_Center.ExportYAML(container));
+			node.Add(ExtentName, m_Extent.ExportYAML(container));
 			return node;
 		}
 
@@ -50,5 +48,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable
 
 		public Vector3f m_Center;
 		public Vector3f m_Extent;
+
+		public const string CenterName = "m_Center";
+		public const string ExtentName = "m_Extent";
 	}
 }

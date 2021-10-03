@@ -1,15 +1,12 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Layout.Classes;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -50,8 +47,7 @@ namespace AssetRipper.Core.Classes.Object
 		{
 			BundleUnityVersion = reader.Version;
 			EndianType = reader.EndianType;
-			ObjectLayout layout = reader.Layout().Object;
-			if (layout.HasHideFlag)
+			if (HasHideFlag(reader.Version, reader.Flags))
 			{
 				ObjectHideFlags = (HideFlags)reader.ReadUInt32();
 			}
@@ -59,8 +55,7 @@ namespace AssetRipper.Core.Classes.Object
 
 		public virtual void Write(AssetWriter writer)
 		{
-			ObjectLayout layout = writer.Layout().Object;
-			if (layout.HasHideFlag)
+			if (HasHideFlag(writer.Version, writer.Flags))
 			{
 				writer.Write((uint)ObjectHideFlags);
 			}
@@ -90,12 +85,20 @@ namespace AssetRipper.Core.Classes.Object
 		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			ObjectLayout layout = container.Layout.Object;
-			if (layout.HasHideFlag)
+			if (HasHideFlag(container.Version,container.Flags))
 			{
-				node.Add(layout.ObjectHideFlagsName, (uint)ObjectHideFlags);
+				node.Add(ObjectHideFlagsName, (uint)ObjectHideFlags);
 			}
 			return node;
 		}
+
+		/// <summary>
+		/// greater than 2.0.0 and Not Release
+		/// </summary>
+		public static bool HasHideFlag(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2) && !flags.IsRelease();
+
+		public const string ObjectHideFlagsName = "m_ObjectHideFlags";
+		public const string InstanceIDName = "m_InstanceID";
+		public const string LocalIdentfierInFileName = "m_LocalIdentfierInFile";
 	}
 }
