@@ -331,103 +331,9 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				}
 			}
 
-#if UNIVERSAL
-			if (HasEditorSettings(reader.Flags))
+			if (HasShaderDefinesPerShaderCompiler(reader.Version))
 			{
-				if (HasDefaultRenderingPath(reader.Version))
-				{
-					DefaultRenderingPath = (RenderingPath)reader.ReadInt32();
-					DefaultMobileRenderingPath = (RenderingPath)reader.ReadInt32();
-				}
-				if (HasTierSettings(reader.Version))
-				{
-					TierSettings = reader.ReadAssetArray<TierSettings>();
-				}
-
-				if (HasLightmapStripping(reader.Version))
-				{
-					LightmapStripping = (LightmapStrippingMode)reader.ReadInt32();
-				}
-				if (HasFogStripping(reader.Version))
-				{
-					if (IsFogStrippingFirst(reader.Version))
-					{
-						FogStripping = (LightmapStrippingMode)reader.ReadInt32();
-					}
-				}
-				if (HasInstancingStripping(reader.Version))
-				{
-					InstancingStripping = (InstancingStrippingVariant)reader.ReadInt32();
-				}
-
-				if (HasLightmapKeepPlain(reader.Version))
-				{
-					LightmapKeepPlain = reader.ReadBoolean();
-					LightmapKeepDirCombined = reader.ReadBoolean();
-				}
-				if (HasLightmapKeepDirSeparate(reader.Version))
-				{
-					LightmapKeepDirSeparate = reader.ReadBoolean();
-				}
-
-				if (HasLightmapKeepDynamicPlain(reader.Version))
-				{
-					if (HasLightmapKeepDynamic(reader.Version))
-					{
-						bool lightmapKeepDynamic = reader.ReadBoolean();
-						reader.AlignStream();
-
-						LightmapKeepDynamicPlain = lightmapKeepDynamic;
-						LightmapKeepDynamicDirCombined = lightmapKeepDynamic;
-						LightmapKeepDynamicDirSeparate = lightmapKeepDynamic;
-					}
-					else
-					{
-						LightmapKeepDynamicPlain = reader.ReadBoolean();
-						LightmapKeepDynamicDirCombined = reader.ReadBoolean();
-					}
-				}
-				if (HasLightmapKeepDynamicDirSeparate(reader.Version))
-				{
-					LightmapKeepDynamicDirSeparate = reader.ReadBoolean();
-				}
-				if (IsAlign(reader.Version))
-				{
-					reader.AlignStream();
-				}
-
-				if (HasLightmapKeepShadowMask(reader.Version))
-				{
-					LightmapKeepShadowMask = reader.ReadBoolean();
-					LightmapKeepSubtractive = reader.ReadBoolean();
-				}
-				if (HasFogStripping(reader.Version))
-				{
-					if (!IsFogStrippingFirst(reader.Version))
-					{
-						FogStripping = (LightmapStrippingMode)reader.ReadInt32();
-					}
-				}
-				if (HasFogKeepLinear(reader.Version))
-				{
-					FogKeepLinear = reader.ReadBoolean();
-					FogKeepExp = reader.ReadBoolean();
-					FogKeepExp2 = reader.ReadBoolean();
-					reader.AlignStream();
-				}
-
-				if (HasAlbedoSwatchInfos(reader.Version))
-				{
-					AlbedoSwatchInfos = reader.ReadAssetArray<AlbedoSwatchInfo>();
-				}
-			}
-			else
-#endif
-			{
-				if (HasShaderDefinesPerShaderCompiler(reader.Version))
-				{
-					ShaderDefinesPerShaderCompiler = reader.ReadAssetArray<PlatformShaderDefines>();
-				}
+				ShaderDefinesPerShaderCompiler = reader.ReadAssetArray<PlatformShaderDefines>();
 			}
 
 			if (HasLightsUseLinearIntensity(reader.Version))
@@ -527,22 +433,22 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			node.Add(CustomRenderPipelineName, CustomRenderPipeline.ExportYAML(container));
 			node.Add(TransparencySortModeName, (int)TransparencySortMode);
 			node.Add(TransparencySortAxisName, GetTransparencySortAxis(container.Version).ExportYAML(container));
-			node.Add(DefaultRenderingPathName, (int)GetDefaultRenderingPath(container.Version, container.Flags));
-			node.Add(DefaultMobileRenderingPathName, (int)GetDefaultMobileRenderingPath(container.Version, container.Flags));
+			node.Add(DefaultRenderingPathName, (int)RenderingPath.Forward);
+			node.Add(DefaultMobileRenderingPathName, (int)RenderingPath.Forward);
 			node.Add(TierSettingsName, GetTierSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
-			node.Add(LightmapStrippingName, (int)GetLightmapStripping(container.Flags));
-			node.Add(FogStrippingName, (int)GetFogStripping(container.Flags));
-			node.Add(InstancingStrippingName, (int)GetInstancingStripping(container.Flags));
-			node.Add(LightmapKeepPlainName, GetLightmapKeepPlain(container.Version, container.Flags));
-			node.Add(LightmapKeepDirCombinedName, GetLightmapKeepDirCombined(container.Version, container.Flags));
-			node.Add(LightmapKeepDynamicPlainName, GetLightmapKeepDynamicPlain(container.Version, container.Flags));
-			node.Add(LightmapKeepDynamicDirCombinedName, GetLightmapKeepDynamicDirCombined(container.Version, container.Flags));
-			node.Add(LightmapKeepShadowMaskName, GetLightmapKeepShadowMask(container.Version, container.Flags));
-			node.Add(LightmapKeepSubtractiveName, GetLightmapKeepSubtractive(container.Version, container.Flags));
-			node.Add(FogKeepLinearName, GetFogKeepLinear(container.Version, container.Flags));
-			node.Add(FogKeepExpName, GetFogKeepExp(container.Version, container.Flags));
-			node.Add(FogKeepExp2Name, GetFogKeepExp2(container.Version, container.Flags));
-			node.Add(AlbedoSwatchInfosName, GetAlbedoSwatchInfos(container.Version, container.Flags).ExportYAML(container));
+			node.Add(LightmapStrippingName, (int)LightmapStrippingMode.Automatic);
+			node.Add(FogStrippingName, (int)LightmapStrippingMode.Automatic);
+			node.Add(InstancingStrippingName, (int)InstancingStrippingVariant.StripUnused);
+			node.Add(LightmapKeepPlainName, true);
+			node.Add(LightmapKeepDirCombinedName, true);
+			node.Add(LightmapKeepDynamicPlainName, true);
+			node.Add(LightmapKeepDynamicDirCombinedName, true);
+			node.Add(LightmapKeepShadowMaskName, true);
+			node.Add(LightmapKeepSubtractiveName, true);
+			node.Add(FogKeepLinearName, true);
+			node.Add(FogKeepExpName, true);
+			node.Add(FogKeepExp2Name, true);
+			node.Add(AlbedoSwatchInfosName, System.Array.Empty<AlbedoSwatchInfo>().ExportYAML(container));
 			node.Add(LightsUseLinearIntensityName, LightsUseLinearIntensity);
 			node.Add(LightsUseColorTemperatureName, LightsUseColorTemperature);
 			if (HasLogWhenShaderIsCompiled(container.ExportVersion))
@@ -643,26 +549,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		{
 			return HasTransparencySortMode(version) ? TransparencySortAxis : new Vector3f(0.0f, 0.0f, 1.0f);
 		}
-		private RenderingPath GetDefaultRenderingPath(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasDefaultRenderingPath(version))
-			{
-				return DefaultRenderingPath;
-			}
-#endif
-			return RenderingPath.Forward;
-		}
-		private RenderingPath GetDefaultMobileRenderingPath(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasDefaultRenderingPath(version))
-			{
-				return DefaultMobileRenderingPath;
-			}
-#endif
-			return RenderingPath.Forward;
-		}
+
 		private IReadOnlyList<TierSettings> GetTierSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
 			if (!HasTierSettings(version))
@@ -696,136 +583,6 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				return settings;
 			}
 		}
-		private LightmapStrippingMode GetLightmapStripping(TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags))
-			{
-				return LightmapStripping;
-			}
-#endif
-			return LightmapStrippingMode.Automatic;
-		}
-		private LightmapStrippingMode GetFogStripping(TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags))
-			{
-				return FogStripping;
-			}
-#endif
-			return LightmapStrippingMode.Automatic;
-		}
-		private InstancingStrippingVariant GetInstancingStripping(TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags))
-			{
-				return InstancingStripping;
-			}
-#endif
-			return InstancingStrippingVariant.StripUnused;
-		}
-		private bool GetLightmapKeepPlain(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasLightmapKeepPlain(version))
-			{
-				return LightmapKeepPlain;
-			}
-#endif
-			return true;
-		}
-		private bool GetLightmapKeepDirCombined(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasLightmapKeepPlain(version))
-			{
-				return LightmapKeepDirCombined;
-			}
-#endif
-			return true;
-		}
-		private bool GetLightmapKeepDynamicPlain(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasLightmapKeepDynamicPlain(version))
-			{
-				return LightmapKeepDynamicPlain;
-			}
-#endif
-			return true;
-		}
-		private bool GetLightmapKeepDynamicDirCombined(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasLightmapKeepDynamicPlain(version))
-			{
-				return LightmapKeepDynamicDirCombined;
-			}
-#endif
-			return true;
-		}
-		private bool GetLightmapKeepShadowMask(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasLightmapKeepShadowMask(version))
-			{
-				return LightmapKeepShadowMask;
-			}
-#endif
-			return true;
-		}
-		private bool GetLightmapKeepSubtractive(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasLightmapKeepShadowMask(version))
-			{
-				return LightmapKeepSubtractive;
-			}
-#endif
-			return true;
-		}
-		private bool GetFogKeepLinear(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasFogKeepLinear(version))
-			{
-				return FogKeepLinear;
-			}
-#endif
-			return true;
-		}
-		private bool GetFogKeepExp(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasFogKeepLinear(version))
-			{
-				return FogKeepExp;
-			}
-#endif
-			return true;
-		}
-		private bool GetFogKeepExp2(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasFogKeepLinear(version))
-			{
-				return FogKeepExp2;
-			}
-#endif
-			return true;
-		}
-		private IReadOnlyList<AlbedoSwatchInfo> GetAlbedoSwatchInfos(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasEditorSettings(flags) && HasAlbedoSwatchInfos(version))
-			{
-				return AlbedoSwatchInfos;
-			}
-#endif
-			return System.Array.Empty<AlbedoSwatchInfo>();
-		}
 
 		private void ExportShaderPointer(IExportContainer container, YAMLSequenceNode node, HashSet<string> shaderNames, string name)
 		{
@@ -844,42 +601,6 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public PPtr<Shader.Shader>[] AlwaysIncludedShaders { get; set; }
 		public PPtr<ShaderVariantCollection.ShaderVariantCollection>[] PreloadedShaders { get; set; }
 		public TransparencySortMode TransparencySortMode { get; set; }
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public RenderingPath DefaultRenderingPath { get; set; }
-		/// <summary> Editor Only </summary>
-		public RenderingPath DefaultMobileRenderingPath { get; set; }
-		/// <summary> Editor Only </summary>
-		public LightmapStrippingMode LightmapStripping { get; set; }
-		/// <summary> Editor Only </summary>
-		public LightmapStrippingMode FogStripping { get; set; }
-		/// <summary> Editor Only </summary>
-		public InstancingStrippingVariant InstancingStripping { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool LightmapKeepPlain { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool LightmapKeepDirCombined { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool LightmapKeepDirSeparate { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool LightmapKeepDynamicPlain { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool LightmapKeepDynamicDirCombined { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool LightmapKeepDynamicDirSeparate { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool LightmapKeepShadowMask { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool LightmapKeepSubtractive { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool FogKeepLinear { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool FogKeepExp { get; set; }
-		/// <summary> Editor Only </summary>
-		public bool FogKeepExp2 { get; set; }
-		/// <summary> Editor Only </summary>
-		public AlbedoSwatchInfo[] AlbedoSwatchInfos { get; set; }
-#endif
 		public PlatformShaderSettings[] PlatformSettings { get; set; }
 		public TierGraphicsSettings[] TierGraphicSettings { get; set; }
 		public TierSettings[] TierSettings { get; set; }

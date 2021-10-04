@@ -177,13 +177,6 @@ namespace AssetRipper.Core.Classes.Sprite
 				IsPolygon = reader.ReadBoolean();
 				reader.AlignStream();
 			}
-#if UNIVERSAL
-			if (HasAtlasName(reader.Flags))
-			{
-				AtlasName = reader.ReadString();
-				PackingTag = reader.ReadString();
-			}
-#endif
 
 			if (HasRendererData(reader.Version))
 			{
@@ -192,12 +185,7 @@ namespace AssetRipper.Core.Classes.Sprite
 				SpriteAtlas.Read(reader);
 			}
 			RD.Read(reader);
-#if UNIVERSAL
-			if (HasAtlasRD(reader.Version, reader.Flags))
-			{
-				AtlasRD.Read(reader);
-			}
-#endif
+
 			reader.AlignStream();
 
 			if (HasPhysicsShape(reader.Version))
@@ -209,12 +197,6 @@ namespace AssetRipper.Core.Classes.Sprite
 			{
 				Bones = reader.ReadAssetArray<SpriteBone>();
 			}
-#if UNIVERSAL
-			if (HasSpriteID(reader.Version, reader.Flags))
-			{
-				SpriteID = reader.ReadString();
-			}
-#endif
 		}
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
@@ -310,19 +292,9 @@ namespace AssetRipper.Core.Classes.Sprite
 		public float PixelsToUnits { get; set; }
 		public uint Extrude { get; set; }
 		public bool IsPolygon { get; set; }
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public string AtlasName { get; set; }
-		/// <summary> Editor Only </summary>
-		public string PackingTag { get; set; }
-#endif
 		public string[] AtlasTags { get; set; }
 		public Vector2f[][] PhysicsShape { get; set; }
 		public SpriteBone[] Bones { get; set; }
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public string SpriteID { get; set; }
-#endif
 
 		/// <summary>
 		/// Rectangle of the sprite in the source image (image, that was used to create an atlas)
@@ -343,10 +315,6 @@ namespace AssetRipper.Core.Classes.Sprite
 		public Tuple<UnityGUID, long> RenderDataKey;
 		public PPtr<SpriteAtlas.SpriteAtlas> SpriteAtlas;
 		public SpriteRenderData RD;
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public SpriteRenderData AtlasRD;
-#endif
 
 		public const string SpriteAtlasName = "m_SpriteAtlas";
 		public const string RDName = "m_RD";

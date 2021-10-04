@@ -156,22 +156,6 @@ namespace AssetRipper.Core.Classes.Shader
 				ShaderIsBaked = reader.ReadBoolean();
 				reader.AlignStream();
 			}
-
-#if UNIVERSAL
-			if (HasErrors(reader.Version, reader.Flags))
-			{
-				Errors = reader.ReadAssetArray<ShaderError>();
-			}
-			if (HasDefaultTextures(reader.Version, reader.Flags))
-			{
-				DefaultTextures = new Dictionary<string, PPtr<Texture>>();
-				DefaultTextures.Read(reader);
-			}
-			if (HasCompileInfo(reader.Version, reader.Flags))
-			{
-				CompileInfo.Read(reader);
-			}
-#endif
 		}
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
@@ -254,14 +238,6 @@ namespace AssetRipper.Core.Classes.Shader
 		public Dictionary<string, PPtr<Texture>> NonModifiableTextures { get; set; }
 		public bool ShaderIsBaked { get; set; }
 
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public ShaderError[] Errors { get; set; }
-		/// <summary> Editor Only </summary>
-		public Dictionary<string, PPtr<Texture>> DefaultTextures { get; set; }
-#endif
-
-
 		public const string ErrorsName = "errors";
 		public const string DependenciesName = "m_Dependencies";
 
@@ -269,9 +245,5 @@ namespace AssetRipper.Core.Classes.Shader
 		public PPtr<Shader> Fallback;
 		public UnityPropertySheet DefaultProperties;
 		public UnityPropertySheet StaticProperties;
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public ShaderCompilationInfo CompileInfo;
-#endif
 	}
 }

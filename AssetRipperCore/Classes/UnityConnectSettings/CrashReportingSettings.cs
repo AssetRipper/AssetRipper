@@ -37,12 +37,6 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			{
 				LogBufferSize = reader.ReadUInt32();
 			}
-#if UNIVERSAL
-			if (HasCaptureEditorExceptions(reader.Version, reader.Flags))
-			{
-				CaptureEditorExceptions = reader.ReadBoolean();
-			}
-#endif
 			reader.AlignStream();
 		}
 
@@ -76,12 +70,6 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		}
 		private bool GetCaptureEditorExceptions(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
-			if (HasCaptureEditorExceptions(version, flags))
-			{
-				return CaptureEditorExceptions;
-			}
-#endif
 			return true;
 		}
 
@@ -89,10 +77,6 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		public string NativeEventUrl { get; set; }
 		public bool Enabled { get; set; }
 		public uint LogBufferSize { get; set; }
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public bool CaptureEditorExceptions { get; set; }
-#endif
 
 		public const string EventUrlName = "m_EventUrl";
 		public const string NativeEventUrlName = "m_NativeEventUrl";

@@ -221,13 +221,6 @@ namespace AssetRipper.Core.Classes.Terrain
 			{
 				reader.AlignStream();
 			}
-#if UNIVERSAL
-			if (HasScaleInLightmap(reader.Flags))
-			{
-				ScaleInLightmap = reader.ReadSingle();
-				LightmapParameters.Read(reader);
-			}
-#endif
 			if (HasDynamicUVST(reader.Version, reader.Flags))
 			{
 				DynamicUVST.Read(reader);
@@ -369,22 +362,10 @@ namespace AssetRipper.Core.Classes.Terrain
 		}
 		private float GetScaleInLightmap(TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
-			if (HasScaleInLightmap(flags))
-			{
-				return ScaleInLightmap;
-			}
-#endif
 			return 0.0512f;
 		}
 		private PPtr<LightmapParameters> GetLightmapParameters(TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
-			if (HasScaleInLightmap(flags))
-			{
-				return LightmapParameters;
-			}
-#endif
 			return default;
 		}
 		private uint GetRenderingLayerMask(UnityVersion version)
@@ -417,12 +398,6 @@ namespace AssetRipper.Core.Classes.Terrain
 		public bool BakeLightProbesForTrees { get; set; }
 		public bool PreserveTreePrototypeLayers { get; set; }
 		public bool DeringLightProbesForTrees { get; set; }
-
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public float ScaleInLightmap { get; set; }
-#endif
-
 		public int GroupingID { get; set; }
 		public uint RenderingLayerMask { get; set; }
 		public bool AllowAutoConnect { get; set; }
@@ -463,12 +438,6 @@ namespace AssetRipper.Core.Classes.Terrain
 		public Vector4f LightmapTilingOffset;
 		public Vector4f LightmapTilingOffsetDynamic;
 		public Hash128 ExplicitProbeSetHash;
-
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public PPtr<LightmapParameters> LightmapParameters;
-#endif
-
 		public Vector4f DynamicUVST;
 		public Vector4f ChunkDynamicUVST;
 	}

@@ -258,13 +258,6 @@ namespace AssetRipper.Core.Classes.Light
 				
 				reader.AlignStream();
 			}
-#if UNIVERSAL
-			if (HasShadowRadius(reader.Version, reader.Flags))
-			{
-				ShadowRadius = reader.ReadSingle();
-				ShadowAngle = reader.ReadSingle();
-			}
-#endif
 		}
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
@@ -327,22 +320,10 @@ namespace AssetRipper.Core.Classes.Light
 
 		private float GetShadowRadius(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
-			if (HasShadowRadius(version, flags))
-			{
-				return ShadowRadius;
-			}
-#endif
 			return 0.0f;
 		}
 		private float GetShadowAngle(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
-			if (HasShadowRadius(version, flags))
-			{
-				return ShadowAngle;
-			}
-#endif
 			return 0.0f;
 		}
 
@@ -372,12 +353,6 @@ namespace AssetRipper.Core.Classes.Light
 		public bool UseColorTemperature { get; set; }
 		public bool UseBoundingSphereOverride { get; set; }
 		public bool UseViewFrustumForShadowCasterCull { get; set; }
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public float ShadowRadius { get; set; }
-		/// <summary> Editor Only </summary>
-		public float ShadowAngle { get; set; }
-#endif
 
 		public const string TypeName = "m_Type";
 		public const string ShapeName = "m_Shape";

@@ -7,7 +7,6 @@ namespace AssetRipper.Core.Converters
 	{
 		public static void Convert(IExportContainer container, Renderer origin, Renderer instance)
 		{
-#warning TODO:
 			ComponentConverter.Convert(container, origin, instance);
 			instance.Enabled = origin.Enabled;
 			instance.CastShadows = origin.CastShadows;
@@ -23,21 +22,6 @@ namespace AssetRipper.Core.Converters
 			instance.Materials = origin.Materials;
 			instance.SubsetIndices = origin.SubsetIndices;
 
-#if UNIVERSAL
-			instance.ScaleInLightmap = origin.ScaleInLightmap;
-			instance.ReceiveGI = origin.ReceiveGI;
-			instance.PreserveUVs = origin.PreserveUVs;
-			instance.IgnoreNormalsForChartDetection = origin.IgnoreNormalsForChartDetection;
-			instance.ImportantGI = origin.ImportantGI;
-			instance.SelectedWireframeHidden = origin.SelectedWireframeHidden;
-			instance.StitchLightmapSeams = origin.StitchLightmapSeams;
-			instance.SelectedEditorRenderState = origin.SelectedEditorRenderState;
-			instance.MinimumChartSize = origin.MinimumChartSize;
-			instance.AutoUVMaxDistance = origin.AutoUVMaxDistance;
-			instance.AutoUVMaxAngle = origin.AutoUVMaxAngle;
-			instance.GIBackfaceCull = origin.GIBackfaceCull;
-#endif
-
 			instance.SortingLayerID = origin.SortingLayerID;
 			instance.SortingLayer = origin.SortingLayer;
 			instance.SortingOrder = origin.SortingOrder;
@@ -48,10 +32,6 @@ namespace AssetRipper.Core.Converters
 			instance.StaticBatchRoot = origin.StaticBatchRoot;
 			instance.ProbeAnchor = origin.ProbeAnchor;
 			instance.LightProbeVolumeOverride = origin.LightProbeVolumeOverride;
-
-#if UNIVERSAL
-			instance.LightmapParameters = origin.LightmapParameters;
-#endif
 		}
 	}
 }

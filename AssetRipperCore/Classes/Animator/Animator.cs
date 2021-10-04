@@ -92,13 +92,6 @@ namespace AssetRipper.Core.Classes.Animator
 				reader.AlignStream();
 			}
 
-#if UNIVERSAL
-			if (HasWarningMessage(reader.Version, reader.Flags))
-			{
-				WarningMessage = reader.ReadString();
-			}
-#endif
-
 			if (HasHasTransformHierarchy(reader.Version))
 			{
 				HasTransformHierarchy = reader.ReadBoolean();
@@ -161,7 +154,7 @@ namespace AssetRipper.Core.Classes.Animator
 			node.Add(LinearVelocityBlendingName, LinearVelocityBlending);
 			if (HasWarningMessage(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(WarningMessageName, GetWarningMessage(container.Version, container.Flags));
+				node.Add(WarningMessageName, "");
 			}
 			node.Add(HasTransformHierarchyName, HasTransformHierarchy);
 			node.Add(AllowConstantClipSamplingOptimizationName, AllowConstantClipSamplingOptimization);
@@ -172,28 +165,11 @@ namespace AssetRipper.Core.Classes.Animator
 			return node;
 		}
 
-		private string GetWarningMessage(UnityVersion version, TransferInstructionFlags flags)
-		{
-#if UNIVERSAL
-			if (HasWarningMessage(version, flags))
-			{
-				return WarningMessage;
-			}
-#endif
-			return string.Empty;
-		}
-
 		public AnimatorCullingMode CullingMode { get; set; }
 		public AnimatorUpdateMode UpdateMode { get; set; }
 		public bool ApplyRootMotion { get; set; }
 		public bool AnimatePhisics { get; set; }
 		public bool LinearVelocityBlending { get; set; }
-#if UNIVERSAL
-		/// <summary>
-		/// Editor Only
-		/// </summary>
-		public string WarningMessage { get; set; }
-#endif
 		public bool HasTransformHierarchy { get; set; }
 		public bool AllowConstantClipSamplingOptimization { get; set; }
 		public bool KeepAnimatorControllerStateOnDisable { get; set; }

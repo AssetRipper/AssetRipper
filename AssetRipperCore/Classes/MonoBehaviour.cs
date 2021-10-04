@@ -22,26 +22,8 @@ namespace AssetRipper.Core.Classes
 			long position = reader.BaseStream.Position;
 			base.Read(reader);
 
-#if UNIVERSAL
-			if (HasEditorHideFlags(reader.Flags))
-			{
-				EditorHideFlags = (HideFlags)reader.ReadUInt32();
-			}
-			if (HasGeneratorAsset(reader.Version, reader.Flags))
-			{
-				GeneratorAsset.Read(reader);
-			}
-#endif
-
 			Script.Read(reader);
 			Name = reader.ReadString();
-
-#if UNIVERSAL
-			if (HasEditorClassIdentifier(reader.Version, reader.Flags))
-			{
-				EditorClassIdentifier = reader.ReadString();
-			}
-#endif
 
 			if (!ReadStructure(reader))
 			{
@@ -54,26 +36,8 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Write(writer);
 
-#if UNIVERSAL
-			if (HasEditorHideFlags(writer.Flags))
-			{
-				writer.Write((uint)EditorHideFlags);
-			}
-			if (HasGeneratorAsset(writer.Version, writer.Flags))
-			{
-				GeneratorAsset.Write(writer);
-			}
-#endif
-
 			Script.Write(writer);
 			writer.Write(Name);
-
-#if UNIVERSAL
-			if (HasEditorClassIdentifier(writer.Version, writer.Flags))
-			{
-				writer.Write(EditorClassIdentifier);
-			}
-#endif
 
 			if (Structure != null)
 			{
@@ -88,9 +52,6 @@ namespace AssetRipper.Core.Classes
 				yield return asset;
 			}
 
-#if UNIVERSAL
-			yield return context.FetchDependency(GeneratorAsset, GeneratorAssetName);
-#endif
 			yield return context.FetchDependency(Script, ScriptName);
 
 			if (Structure != null)
@@ -128,32 +89,14 @@ namespace AssetRipper.Core.Classes
 
 		private HideFlags GetEditorHideFlags(IExportContainer container)
 		{
-#if UNIVERSAL
-			if (HasEditorHideFlags(container.Flags))
-			{
-				return EditorHideFlags;
-			}
-#endif
 			return HideFlags.None;
 		}
 		private PPtr<Object.Object> GetGeneratorAsset(IExportContainer container)
 		{
-#if UNIVERSAL
-			if (HasGeneratorAsset(container.Version, container.Flags))
-			{
-				return GeneratorAsset;
-			}
-#endif
 			return default;
 		}
 		private string GetEditorClassIdentifier(IExportContainer container)
 		{
-#if UNIVERSAL
-			if (HasEditorClassIdentifier(container.Version, container.Flags))
-			{
-				return EditorClassIdentifier;
-			}
-#endif
 			return string.Empty;
 		}
 
@@ -226,21 +169,9 @@ namespace AssetRipper.Core.Classes
 		public bool IsSceneObject => !GameObject.IsNull;
 		public bool IsScriptableObject => Name.Length > 0;
 
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public HideFlags EditorHideFlags { get; set; }
-#endif
 		public string Name { get; set; }
 		public SerializableStructure Structure { get; set; }
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public string EditorClassIdentifier { get; set; }
-#endif
 
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public PPtr<Object.Object> GeneratorAsset;
-#endif
 		public PPtr<MonoScript> Script;
 
 		public const string EditorHideFlagsName = "m_EditorHideFlags";

@@ -28,12 +28,6 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
-#if UNIVERSAL
-			if (HasImageContentsHash(reader.Version, reader.Flags))
-			{
-				ImageContentsHash.Read(reader);
-			}
-#endif
 			if (HasFallbackFormat(reader.Version))
 			{
 				ForcedFallbackFormat = reader.ReadInt32();
@@ -67,11 +61,7 @@ namespace AssetRipper.Core.Classes
 
 		private Hash128 GetImageContentsHash(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
-			return HasImageContentsHash(version, flags) ? ImageContentsHash : default;
-#else
 			return default;
-#endif
 		}
 
 		public int ForcedFallbackFormat { get; set; }
@@ -82,10 +72,5 @@ namespace AssetRipper.Core.Classes
 		public const string ForcedFallbackFormatName = "m_ForcedFallbackFormat";
 		public const string DownscaleFallbackName = "m_DownscaleFallback";
 		public const string IsAlphaChannelOptionalName = "m_IsAlphaChannelOptional";
-
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public Hash128 ImageContentsHash;
-#endif
 	}
 }

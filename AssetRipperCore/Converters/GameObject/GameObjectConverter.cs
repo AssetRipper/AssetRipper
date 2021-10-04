@@ -33,21 +33,6 @@ namespace AssetRipper.Core.Converters.GameObject
 			{
 				instance.TagString = GetTagString(container, origin);
 			}
-#if UNIVERSAL
-			if (GObject.HasIcon(container.Version, container.Flags))
-			{
-				instance.Icon = origin.Icon;
-			}
-			if (GObject.HasNavMeshLayer(container.Version, container.Flags))
-			{
-				instance.NavMeshLayer = origin.NavMeshLayer;
-				instance.StaticEditorFlags = origin.StaticEditorFlags;
-			}
-			else if (GObject.HasIsStatic(container.ExportVersion, container.ExportFlags) && GObject.HasIsStatic(container.Version, container.Flags))
-			{
-				instance.IsStatic = origin.IsStatic;
-			}
-#endif
 			return instance;
 		}
 

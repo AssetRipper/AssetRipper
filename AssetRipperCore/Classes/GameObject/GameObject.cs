@@ -183,33 +183,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			{
 				Tag = reader.ReadUInt16();
 			}
-#if UNIVERSAL
-			else
-			{
-				TagString = reader.ReadString();
-			}
-			if (HasIcon(reader.Version, reader.Flags) && IsIconFirst(reader.Version))
-			{
-				Icon.Read(reader);
-			}
-			if (HasNavMeshLayer(reader.Version, reader.Flags))
-			{
-				NavMeshLayer = reader.ReadUInt32();
-				StaticEditorFlags = reader.ReadUInt32();
-			}
-#endif
 			IsActive = reader.ReadBoolean();
-
-#if UNIVERSAL
-			if (HasIsStatic(reader.Version, reader.Flags))
-			{
-				IsStatic = reader.ReadBoolean();
-			}
-			if (HasIcon(reader.Version, reader.Flags) && !IsIconFirst(reader.Version))
-			{
-				Icon.Read(reader);
-			}
-#endif
 		}
 
 		public override void Write(AssetWriter writer)
@@ -232,34 +206,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			{
 				writer.Write(Tag);
 			}
-#if UNIVERSAL
-			else
-			{
-				writer.Write(TagString);
-			}
-			if (HasIcon(writer.Version, writer.Flags) && IsIconFirst(writer.Version))
-			{
-				Icon.Write(writer);
-			}
-			if (HasNavMeshLayer(writer.Version, writer.Flags))
-			{
-				writer.Write(NavMeshLayer);
-				writer.Write(StaticEditorFlags);
-			}
-#endif
 			writer.Write(IsActive);
-
-
-#if UNIVERSAL
-			if (HasIsStatic(writer.Version, writer.Flags))
-			{
-				writer.Write(IsStatic);
-			}
-			if (HasIcon(writer.Version, writer.Flags) && !IsIconFirst(writer.Version))
-			{
-				Icon.Write(writer);
-			}
-#endif
 		}
 
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
@@ -464,30 +411,12 @@ namespace AssetRipper.Core.Classes.GameObject
 		public ushort Tag { get; set; }
 		public string TagString { get; set; }
 
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public uint NavMeshLayer { get; set; }
-		/// <summary> Editor Only </summary>
-		public uint StaticEditorFlags { get; set; }
-#else
 		private uint NavMeshLayer => 0;
 		private uint StaticEditorFlags => 0;
-#endif
 		public bool IsActive { get; set; }
 
-#if UNIVERSAL
-		public bool IsStatic
-		{
-			get => StaticEditorFlags != 0;
-			set => StaticEditorFlags = value ? uint.MaxValue : 0;
-		}
-
-		/// <summary> Editor Only </summary>
-		public PPtr<Texture2D.Texture2D> Icon;
-#else
 		private bool IsStatic => false;
 		private PPtr<Texture2D.Texture2D> Icon => default;
-#endif
 
 		private object m_component;
 

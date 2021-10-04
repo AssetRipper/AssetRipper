@@ -49,70 +49,12 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public static bool HasPrefabAsset(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2018, 3) && !flags.IsRelease();
 
-		public override void Read(AssetReader reader)
-		{
-			base.Read(reader);
-
-#if UNIVERSAL
-			if (HasExtensionPtr(reader.Version, reader.Flags))
-			{
-				ExtensionPtr = reader.ReadAsset<PPtr<Object.Object>>();
-			}
-			if (HasCorrespondingSourceObject(reader.Version, reader.Flags))
-			{
-				CorrespondingSourceObject.Read(reader);
-				PrefabInstance.Read(reader);
-			}
-			if (HasPrefabAsset(reader.Version, reader.Flags))
-			{
-				PrefabAsset.Read(reader);
-			}
-#endif
-		}
-
-		public override void Write(AssetWriter writer)
-		{
-			base.Write(writer);
-
-#if UNIVERSAL
-			if (HasExtensionPtr(writer.Version, writer.Flags))
-			{
-				ExtensionPtr.Write(writer);
-			}
-			if (HasCorrespondingSourceObject(writer.Version, writer.Flags))
-			{
-				CorrespondingSourceObject.Write(writer);
-				PrefabInstance.Write(writer);
-			}
-			if (HasPrefabAsset(writer.Version, writer.Flags))
-			{
-				PrefabAsset.Write(writer);
-			}
-#endif
-		}
-
 		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
 		{
 			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
-
-#if UNIVERSAL
-			if (HasExtensionPtr(context.Version, context.Flags))
-			{
-				yield return context.FetchDependency(ExtensionPtr, ExtensionPtrName);
-			}
-			if (HasCorrespondingSourceObject(context.Version, context.Flags))
-			{
-				yield return context.FetchDependency(CorrespondingSourceObject, CorrespondingSourceObjectInvariantName(context.Version, context.Flags));
-				yield return context.FetchDependency(PrefabInstance, PrefabInstanceInvariantName(context.Version, context.Flags));
-			}
-			if (HasPrefabAsset(context.Version, context.Flags))
-			{
-				yield return context.FetchDependency(PrefabAsset, PrefabAssetName);
-			}
-#endif
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -159,12 +101,6 @@ namespace AssetRipper.Core.Classes
 
 		private PPtr<PrefabInstance.PrefabInstance> GetPrefabInstance(IExportContainer container)
 		{
-#if UNIVERSAL
-			if (HasPrefabInstanceInvariant(container.ExportVersion, container.ExportFlags))
-			{
-				return PrefabInstance;
-			}
-#endif
 #warning TODO: set PrefabInstance for all assets in PrefabContainer
 			if (container.ExportFlags.IsForPrefab())
 			{
@@ -183,28 +119,9 @@ namespace AssetRipper.Core.Classes
 			return HasPrefabInstance(version, flags) ? PrefabInstanceName : PrefabInternalName;
 		}
 
-#if UNIVERSAL
-		public PPtr<EditorExtension> PrefabParentObject
-		{
-			get => CorrespondingSourceObject;
-			set => CorrespondingSourceObject = value;
-		}
-		public PPtr<PrefabInstance.PrefabInstance> PrefabInternal
-		{
-			get => PrefabInstance;
-			set => PrefabInstance = value;
-		}
-
-#warning TODO: PPtr<EditorExtensionImpl>
-		public PPtr<Object.Object> ExtensionPtr;
-		public PPtr<EditorExtension> CorrespondingSourceObject;
-		public PPtr<PrefabInstance.PrefabInstance> PrefabInstance;
-		public PPtr<Prefab> PrefabAsset;
-#else
 		private PPtr<Object.Object> ExtensionPtr => default;
 		private PPtr<EditorExtension> CorrespondingSourceObject => default;
 		private PPtr<Prefab> PrefabAsset => default;
-#endif
 
 		public const string ExtensionPtrName = "m_ExtensionPtr";
 		public const string CorrespondingSourceObjectName = "m_CorrespondingSourceObject";

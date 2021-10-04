@@ -15,9 +15,6 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			InitializeOnStartup = true;
 			IosGameId = string.Empty;
 			AndroidGameId = string.Empty;
-#if UNIVERSAL
-			m_gameIds = new Dictionary<string, string>();
-#endif
 			GameId = string.Empty;
 		}
 
@@ -54,13 +51,6 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 				IosGameId = reader.ReadString();
 				AndroidGameId = reader.ReadString();
 			}
-#if UNIVERSAL
-			if (HasGameIds(reader.Version, reader.Flags))
-			{
-				m_gameIds = new Dictionary<string, string>();
-				m_gameIds.Read(reader);
-			}
-#endif
 			if (HasGameId(reader.Version))
 			{
 				GameId = reader.ReadString();
@@ -98,12 +88,6 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		}
 		private IReadOnlyDictionary<string, string> GetGameIds(UnityVersion version, TransferInstructionFlags flags)
 		{
-#if UNIVERSAL
-			if (HasGameIds(version, flags))
-			{
-				return GameIds;
-			}
-#endif
 			return new Dictionary<string, string>();
 		}
 		private string GetGameId(UnityVersion version)
@@ -117,10 +101,6 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		public int EnabledPlatforms { get; set; }
 		public string IosGameId { get; set; }
 		public string AndroidGameId { get; set; }
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		public IReadOnlyDictionary<string,string> GameIds => m_gameIds;
-#endif
 		public string GameId { get; set; }
 
 		public const string EnabledName = "m_Enabled";
@@ -130,10 +110,5 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		public const string AndroidGameIdName = "m_AndroidGameId";
 		public const string GameIdsName = "m_GameIds";
 		public const string GameIdName = "m_GameId";
-
-#if UNIVERSAL
-		/// <summary> Editor Only </summary>
-		private Dictionary<string,string> m_gameIds;
-#endif
 	}
 }
