@@ -20,7 +20,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-        <DefineConstants>DEBUG;UNIVERSAL</DefineConstants>
+        <DefineConstants>DEBUG</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Virtual'">

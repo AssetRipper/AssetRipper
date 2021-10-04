@@ -1,18 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+	  <OutputType>Exe</OutputType>
 	  <TargetFramework>net6.0</TargetFramework>
 	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	<OutputPath>..\Bins\CodeTester\$(Configuration)\</OutputPath>
-	<Configurations>Debug;Release;Virtual</Configurations>
-	<Platforms>x64</Platforms>
-	<DebugType>embedded</DebugType>
-	<DebugSymbols>true</DebugSymbols>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <OutputPath>..\Bins\CodeTester\$(Configuration)\</OutputPath>
+	  <Configurations>Debug;Release;Virtual</Configurations>
+	  <Platforms>x64</Platforms>
+	  <DebugType>embedded</DebugType>
+	  <DebugSymbols>true</DebugSymbols>
+	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>DEBUG</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
+		<DefineConstants>DEBUG;VIRTUAL</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
     <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
   </ItemGroup>
 

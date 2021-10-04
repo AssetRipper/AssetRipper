@@ -1,27 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>net6.0</TargetFramework>
-      <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-      <AssemblyName>AssetRipperLibrary</AssemblyName>
-      <RootNamespace>AssetRipper.Library</RootNamespace>
-      <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
-      <Platforms>x64</Platforms>
-      <Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
-      <DebugType>embedded</DebugType>
-      <DebugSymbols>true</DebugSymbols>
-      <DefineConstants>TRACE</DefineConstants>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <AssemblyName>AssetRipperLibrary</AssemblyName>
+	  <RootNamespace>AssetRipper.Library</RootNamespace>
+	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
+	  <Platforms>x64</Platforms>
+	  <Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
+	  <DebugType>embedded</DebugType>
+	  <DebugSymbols>true</DebugSymbols>
+	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Virtual' ">
-    <DefineConstants>VIRTUAL</DefineConstants>
+    <DefineConstants>DEBUG;VIRTUAL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

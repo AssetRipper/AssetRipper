@@ -13,7 +13,16 @@
 	  <Configurations>Debug;Release;Virtual</Configurations>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
+	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
   </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
+		<DefineConstants>DEBUG</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)'=='Virtual'">
+		<DefineConstants>DEBUG;VIRTUAL</DefineConstants>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Mono.Cecil" Version="0.11.4" />

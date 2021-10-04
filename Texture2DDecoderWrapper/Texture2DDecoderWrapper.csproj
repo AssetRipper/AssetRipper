@@ -1,19 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>net6.0</TargetFramework>
-      <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\Bins\Texture2DDecoderWrapper\$(Configuration)\</OutputPath>
-    <Platforms>x64</Platforms>
-    <Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <OutputPath>..\Bins\Texture2DDecoderWrapper\$(Configuration)\</OutputPath>
+	  <Platforms>x64</Platforms>
+	  <Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
+	  <DebugType>embedded</DebugType>
+	  <DebugSymbols>true</DebugSymbols>
+	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
   </PropertyGroup>
-    
-    <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release' or '$(Configuration)'=='Virtual'">
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>DEBUG</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
+		<DefineConstants>DEBUG;VIRTUAL</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release' or '$(Configuration)'=='Virtual'">
         <ContentWithTargetPath Include=".\Native\Texture2DDecoderNative.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Texture2DDecoderNative.dll</TargetPath>

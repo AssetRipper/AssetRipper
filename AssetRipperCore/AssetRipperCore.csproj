@@ -3,29 +3,26 @@
   <PropertyGroup>
 	  <TargetFramework>net6.0</TargetFramework>
 	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <AssemblyName>AssetRipperCore</AssemblyName>
 	  <RootNamespace>AssetRipper.Core</RootNamespace>
-	<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-	<OutputPath>..\Bins\AssetRipperCore\$(Configuration)\</OutputPath>
+	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+	  <OutputPath>..\Bins\AssetRipperCore\$(Configuration)\</OutputPath>
 	  <Copyright>Copyright ©  2021</Copyright>
 	  <Authors>ds5678</Authors>
 	  <Configurations>Debug;Release;Virtual</Configurations>
-	<DebugType>embedded</DebugType>
-	<DebugSymbols>true</DebugSymbols>
+	  <DebugType>embedded</DebugType>
+	  <DebugSymbols>true</DebugSymbols>
+	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-	<DefineConstants>DEBUG;TRACE;NET_CORE;UNIVERSAL</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-	<DefineConstants>TRACE;NET_CORE</DefineConstants>
+	<DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Virtual'">
-	<DefineConstants>DEBUG;TRACE;NET_CORE;VIRTUAL</DefineConstants>
+	<DefineConstants>DEBUG;VIRTUAL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
