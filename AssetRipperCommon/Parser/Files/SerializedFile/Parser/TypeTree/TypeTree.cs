@@ -12,21 +12,19 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			{
 				int nodesCount = reader.ReadInt32();
 				int stringBufferSize = reader.ReadInt32();
-				Nodes = new TypeTreeNode[nodesCount];
+				Nodes = new List<TypeTreeNode>(nodesCount);
 				for (int i = 0; i < nodesCount; i++)
 				{
 					TypeTreeNode node = new TypeTreeNode();
 					node.Read(reader);
-					Nodes[i] = node;
+					Nodes.Add(node);
 				}
 				StringBuffer = new byte[stringBufferSize];
 				reader.Read(StringBuffer, 0, StringBuffer.Length);
 			}
 			else
 			{
-				List<TypeTreeNode> nodes = new List<TypeTreeNode>();
-				ReadTreeNode(reader, nodes, 0);
-				Nodes = nodes.ToArray();
+				ReadTreeNode(reader, Nodes, 0);
 			}
 		}
 
@@ -34,11 +32,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		{
 			if (TypeTreeNode.IsFormat5(writer.Generation))
 			{
-				writer.Write(Nodes.Length);
+				writer.Write(Nodes.Count);
 				writer.Write(StringBuffer.Length);
-				for (int i = 0; i < Nodes.Length; i++)
+				foreach(var node in Nodes)
 				{
-					Nodes[i].Write(writer);
+					node.Write(writer);
 				}
 				writer.Write(StringBuffer, 0, StringBuffer.Length);
 			}
@@ -98,7 +96,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		{
 			int count = 0;
 			int depth = Nodes[index].Level + 1;
-			for (int i = index + 1; i < Nodes.Length; i++)
+			for (int i = index + 1; i < Nodes.Count; i++)
 			{
 				int nodeDepth = Nodes[i].Level;
 				if (nodeDepth < depth)
@@ -145,7 +143,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			return str;
 		}
 
-		public TypeTreeNode[] Nodes { get; set; }
+		public List<TypeTreeNode> Nodes { get; set; }
 		public byte[] StringBuffer { get; set; }
 	}
 }

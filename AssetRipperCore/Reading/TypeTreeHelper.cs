@@ -1,5 +1,7 @@
 ﻿using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
@@ -13,7 +15,7 @@ namespace AssetRipper.Core.Reading
 		{
 			reader.Reset();
 			var sb = new StringBuilder();
-			var m_Nodes = m_Type.m_Nodes;
+			var m_Nodes = m_Type.Nodes;
 			for (int i = 0; i < m_Nodes.Count; i++)
 			{
 				ReadStringValue(sb, m_Nodes, reader, ref i);
@@ -29,12 +31,12 @@ namespace AssetRipper.Core.Reading
 		private static void ReadStringValue(StringBuilder sb, List<TypeTreeNode> m_Nodes, BinaryReader reader, ref int i)
 		{
 			var m_Node = m_Nodes[i];
-			var level = m_Node.m_Level;
-			var varTypeStr = m_Node.m_Type;
-			var varNameStr = m_Node.m_Name;
+			var level = m_Node.Level;
+			var varTypeStr = m_Node.Type;
+			var varNameStr = m_Node.Name;
 			object value = null;
 			var append = true;
-			var align = (m_Node.m_MetaFlag & 0x4000) != 0;
+			var align = m_Node.MetaFlag.IsAlignBytes();
 			switch (varTypeStr)
 			{
 				case "SInt8":
@@ -87,7 +89,7 @@ namespace AssetRipper.Core.Reading
 					break;
 				case "map":
 					{
-						if ((m_Nodes[i + 1].m_MetaFlag & 0x4000) != 0)
+						if ((m_Nodes[i + 1].MetaFlag.IsAlignBytes()))
 							align = true;
 						append = false;
 						sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
@@ -122,9 +124,9 @@ namespace AssetRipper.Core.Reading
 					}
 				default:
 					{
-						if (i < m_Nodes.Count - 1 && m_Nodes[i + 1].m_Type == "Array") //Array
+						if (i < m_Nodes.Count - 1 && m_Nodes[i + 1].Type == "Array") //Array
 						{
-							if ((m_Nodes[i + 1].m_MetaFlag & 0x4000) != 0)
+							if (m_Nodes[i + 1].MetaFlag.IsAlignBytes())
 								align = true;
 							append = false;
 							sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
@@ -165,11 +167,11 @@ namespace AssetRipper.Core.Reading
 		{
 			reader.Reset();
 			var obj = new OrderedDictionary();
-			var m_Nodes = m_Types.m_Nodes;
+			var m_Nodes = m_Types.Nodes;
 			for (int i = 1; i < m_Nodes.Count; i++)
 			{
 				var m_Node = m_Nodes[i];
-				var varNameStr = m_Node.m_Name;
+				var varNameStr = m_Node.Name;
 				obj[varNameStr] = ReadValue(m_Nodes, reader, ref i);
 			}
 			var readed = reader.Position - reader.byteStart;
@@ -183,9 +185,9 @@ namespace AssetRipper.Core.Reading
 		private static object ReadValue(List<TypeTreeNode> m_Nodes, BinaryReader reader, ref int i)
 		{
 			var m_Node = m_Nodes[i];
-			var varTypeStr = m_Node.m_Type;
+			var varTypeStr = m_Node.Type;
 			object value;
-			var align = (m_Node.m_MetaFlag & 0x4000) != 0;
+			var align = (m_Node.MetaFlag.IsAlignBytes());
 			switch (varTypeStr)
 			{
 				case "SInt8":
@@ -236,7 +238,7 @@ namespace AssetRipper.Core.Reading
 					break;
 				case "map":
 					{
-						if ((m_Nodes[i + 1].m_MetaFlag & 0x4000) != 0)
+						if (m_Nodes[i + 1].MetaFlag.IsAlignBytes())
 							align = true;
 						var map = GetNodes(m_Nodes, i);
 						i += map.Count - 1;
@@ -263,9 +265,9 @@ namespace AssetRipper.Core.Reading
 					}
 				default:
 					{
-						if (i < m_Nodes.Count - 1 && m_Nodes[i + 1].m_Type == "Array") //Array
+						if (i < m_Nodes.Count - 1 && m_Nodes[i + 1].Type == "Array") //Array
 						{
-							if ((m_Nodes[i + 1].m_MetaFlag & 0x4000) != 0)
+							if ((m_Nodes[i + 1].MetaFlag.IsAlignBytes()))
 								align = true;
 							var vector = GetNodes(m_Nodes, i);
 							i += vector.Count - 1;
@@ -287,7 +289,7 @@ namespace AssetRipper.Core.Reading
 							for (int j = 1; j < @class.Count; j++)
 							{
 								var classmember = @class[j];
-								var name = classmember.m_Name;
+								var name = classmember.Name;
 								obj[name] = ReadValue(@class, reader, ref j);
 							}
 							value = obj;
@@ -304,11 +306,11 @@ namespace AssetRipper.Core.Reading
 		{
 			var nodes = new List<TypeTreeNode>();
 			nodes.Add(m_Nodes[index]);
-			var level = m_Nodes[index].m_Level;
+			var level = m_Nodes[index].Level;
 			for (int i = index + 1; i < m_Nodes.Count; i++)
 			{
 				var member = m_Nodes[i];
-				var level2 = member.m_Level;
+				var level2 = member.Level;
 				if (level2 <= level)
 				{
 					return nodes;

@@ -1,4 +1,5 @@
-﻿using Mono.Cecil;
+﻿using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Linq;

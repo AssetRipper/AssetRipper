@@ -2,6 +2,7 @@
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.IO.FileReading;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Reading;
 using System;
 using System.Collections.Generic;
@@ -266,7 +267,7 @@ namespace AssetRipper.Core.SerializedFiles
 			if (m_EnableTypeTree)
 			{
 				type.m_Type = new TypeTree();
-				type.m_Type.m_Nodes = new List<TypeTreeNode>();
+				type.m_Type.Nodes = new List<TypeTreeNode>();
 				if (header.m_Version >= SerializedFileFormatVersion.kUnknown_12 || header.m_Version == SerializedFileFormatVersion.kUnknown_10)
 				{
 					TypeTreeBlobRead(type.m_Type);
@@ -296,24 +297,24 @@ namespace AssetRipper.Core.SerializedFiles
 		private void ReadTypeTree(TypeTree m_Type, int level = 0)
 		{
 			var typeTreeNode = new TypeTreeNode();
-			m_Type.m_Nodes.Add(typeTreeNode);
-			typeTreeNode.m_Level = level;
-			typeTreeNode.m_Type = reader.ReadStringToNull();
-			typeTreeNode.m_Name = reader.ReadStringToNull();
-			typeTreeNode.m_ByteSize = reader.ReadInt32();
+			m_Type.Nodes.Add(typeTreeNode);
+			typeTreeNode.Level = (byte)level;
+			typeTreeNode.Type = reader.ReadStringToNull();
+			typeTreeNode.Name = reader.ReadStringToNull();
+			typeTreeNode.ByteSize = reader.ReadInt32();
 			if (header.m_Version == SerializedFileFormatVersion.kUnknown_2)
 			{
 				var variableCount = reader.ReadInt32();
 			}
 			if (header.m_Version != SerializedFileFormatVersion.kUnknown_3)
 			{
-				typeTreeNode.m_Index = reader.ReadInt32();
+				typeTreeNode.Index = reader.ReadInt32();
 			}
-			typeTreeNode.m_TypeFlags = reader.ReadInt32();
-			typeTreeNode.m_Version = reader.ReadInt32();
+			typeTreeNode.TypeFlags = reader.ReadInt32();
+			typeTreeNode.Version = reader.ReadInt32();
 			if (header.m_Version != SerializedFileFormatVersion.kUnknown_3)
 			{
-				typeTreeNode.m_MetaFlag = reader.ReadInt32();
+				typeTreeNode.MetaFlag = (Parser.Files.SerializedFiles.Parser.TransferMetaFlags)reader.ReadInt32();
 			}
 
 			int childrenCount = reader.ReadInt32();
@@ -330,29 +331,29 @@ namespace AssetRipper.Core.SerializedFiles
 			for (int i = 0; i < numberOfNodes; i++)
 			{
 				var typeTreeNode = new TypeTreeNode();
-				m_Type.m_Nodes.Add(typeTreeNode);
-				typeTreeNode.m_Version = reader.ReadUInt16();
-				typeTreeNode.m_Level = reader.ReadByte();
-				typeTreeNode.m_TypeFlags = reader.ReadByte();
-				typeTreeNode.m_TypeStrOffset = reader.ReadUInt32();
-				typeTreeNode.m_NameStrOffset = reader.ReadUInt32();
-				typeTreeNode.m_ByteSize = reader.ReadInt32();
-				typeTreeNode.m_Index = reader.ReadInt32();
-				typeTreeNode.m_MetaFlag = reader.ReadInt32();
+				m_Type.Nodes.Add(typeTreeNode);
+				typeTreeNode.Version = reader.ReadUInt16();
+				typeTreeNode.Level = reader.ReadByte();
+				typeTreeNode.TypeFlags = reader.ReadByte();
+				typeTreeNode.TypeStrOffset = reader.ReadUInt32();
+				typeTreeNode.NameStrOffset = reader.ReadUInt32();
+				typeTreeNode.ByteSize = reader.ReadInt32();
+				typeTreeNode.Index = reader.ReadInt32();
+				typeTreeNode.MetaFlag = (Parser.Files.SerializedFiles.Parser.TransferMetaFlags)reader.ReadInt32();
 				if (header.m_Version >= SerializedFileFormatVersion.kTypeTreeNodeWithTypeFlags)
 				{
-					typeTreeNode.m_RefTypeHash = reader.ReadUInt64();
+					typeTreeNode.RefTypeHash = reader.ReadUInt64();
 				}
 			}
-			m_Type.m_StringBuffer = reader.ReadBytes(stringBufferSize);
+			m_Type.StringBuffer = reader.ReadBytes(stringBufferSize);
 
-			using (var stringBufferReader = new BinaryReader(new MemoryStream(m_Type.m_StringBuffer)))
+			using (var stringBufferReader = new BinaryReader(new MemoryStream(m_Type.StringBuffer)))
 			{
 				for (int i = 0; i < numberOfNodes; i++)
 				{
-					var m_Node = m_Type.m_Nodes[i];
-					m_Node.m_Type = ReadString(stringBufferReader, m_Node.m_TypeStrOffset);
-					m_Node.m_Name = ReadString(stringBufferReader, m_Node.m_NameStrOffset);
+					var m_Node = m_Type.Nodes[i];
+					m_Node.Type = ReadString(stringBufferReader, m_Node.TypeStrOffset);
+					m_Node.Name = ReadString(stringBufferReader, m_Node.NameStrOffset);
 				}
 			}
 

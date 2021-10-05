@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.SerializedFiles;
 using System.Collections.Specialized;
 

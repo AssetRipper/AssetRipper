@@ -13,6 +13,16 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		/// 2019.1 and greater
 		/// </summary>
 		public static bool HasRefTypeHash(FormatVersion generation) => generation >= FormatVersion.TypeTreeNodeWithTypeFlags;
+		
+		public TypeTreeNode() { }
+
+		public TypeTreeNode(string type, string name, int level, bool align)
+		{
+			Type = type;
+			Name = name;
+			Level = (byte)level;
+			MetaFlag = align ? TransferMetaFlags.AlignBytes : TransferMetaFlags.NoTransferFlags;
+		}
 
 		public void Read(SerializedReader reader)
 		{

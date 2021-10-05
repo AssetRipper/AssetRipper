@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core.Reading.Utils
 {

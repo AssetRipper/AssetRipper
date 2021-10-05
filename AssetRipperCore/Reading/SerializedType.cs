@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Core.Reading
+﻿using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
+
+namespace AssetRipper.Core.Reading
 {
 	public class SerializedType
 	{
