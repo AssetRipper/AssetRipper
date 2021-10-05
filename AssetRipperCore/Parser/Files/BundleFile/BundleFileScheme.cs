@@ -201,6 +201,10 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 			if (Header.FileStream.Flags.IsBlocksInfoAtTheEnd())
 			{
 				stream.Position = basePosition + headerSize;
+				if (Header.Version >= BundleVersion.BF_Addressables)
+				{
+					stream.Align(16);
+				}
 			}
 
 			using (BundleFileBlockReader blockReader = new BundleFileBlockReader(stream, Metadata.BlocksInfo))
