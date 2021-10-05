@@ -8,12 +8,13 @@
   * Remove Shader disassembly code (done!)
   * Reformat the shader export system to support two sided shaders
 * GUI improvements
+  * Unknown Object Type display with hex viewer (done!)
   * Better Audio Playback control?
     * Fast-forward and rewind
     * Seek-bar for selecting playback position
 * Code Cleanup
   * Remove Reading namespace
-  * Remove remaining Layout classes
+  * Remove remaining Layout classes (done!)
   * Move more code to the Common and Library projects
     * Move all enum classes (done!)
 

@@ -6,9 +6,9 @@ namespace AssetRipper.Core.Parser.Asset
 {
 	public class AssetInfo
 	{
-		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID) : this(serializedFile, pathID, classID, new UnityGUID(Guid.NewGuid())) { }
-
-		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID, UnityGUID guid)
+		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID) : this(serializedFile, pathID, classID, -1, new UnityGUID(Guid.NewGuid())) { }
+		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID, int byteSize) : this(serializedFile, pathID, classID, byteSize, new UnityGUID(Guid.NewGuid())) { }
+		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID, int byteSize, UnityGUID guid)
 		{
 			if (serializedFile == null)
 			{
@@ -18,6 +18,7 @@ namespace AssetRipper.Core.Parser.Asset
 
 			PathID = pathID;
 			ClassID = classID;
+			ByteSize = byteSize;
 			GUID = guid;
 		}
 
@@ -25,7 +26,7 @@ namespace AssetRipper.Core.Parser.Asset
 
 		public long PathID { get; }
 		public ClassIDType ClassID { get; }
-
 		public UnityGUID GUID;
+		public int ByteSize { get; }
 	}
 }

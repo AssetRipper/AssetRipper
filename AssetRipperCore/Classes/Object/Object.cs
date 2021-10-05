@@ -29,7 +29,6 @@ namespace AssetRipper.Core.Classes.Object
 
 		public const string AssetsKeyword = "Assets";
 		protected const string AssetExtension = "asset";
-		internal long m_PathID;
 
 		protected Object(AssetLayout layout) { }
 

@@ -100,6 +100,8 @@ namespace AssetRipper.Core.Classes.Misc
 					return null;
 				case T t:
 					return t;
+				case UnknownObject:
+					return null;
 				default:
 					throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
 			}

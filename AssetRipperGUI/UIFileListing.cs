@@ -168,6 +168,11 @@ namespace AssetRipper.GUI
 				_displayAs = go.Name;
 			}
 
+			if (_associatedObject is UnknownObject)
+			{
+				_displayAs = asset.ClassID.ToString();
+			}
+
 			if (string.IsNullOrEmpty(_displayAs))
 			{
 				_displayAs = _associatedObject.GetType().Name;

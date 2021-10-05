@@ -307,7 +307,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		private void ReadAsset(AssetReader reader, ref ObjectInfo info)
 		{
-			AssetInfo assetInfo = new AssetInfo(this, info.FileID, info.ClassID);
+			AssetInfo assetInfo = new AssetInfo(this, info.FileID, info.ClassID, info.ByteSize);
 			Object asset = ReadAsset(reader, assetInfo, Header.DataOffset + info.ByteStart, info.ByteSize);
 			if (asset != null)
 			{

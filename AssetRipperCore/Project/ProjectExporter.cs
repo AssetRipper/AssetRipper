@@ -25,6 +25,8 @@ namespace AssetRipper.Core.Project
 		{
 			m_fileCollection = fileCollection;
 
+			OverrideDefaultExport();
+
 			OverrideDummyExporter(ClassIDType.MonoManager, true, false);
 			OverrideDummyExporter(ClassIDType.BuildSettings, false, false);
 			OverrideDummyExporter(ClassIDType.AssetBundle, true, false);
@@ -166,6 +168,16 @@ namespace AssetRipper.Core.Project
 		{
 			DummyExporter.SetUpClassType(classType, isEmptyCollection, isMetaType);
 			OverrideExporter(classType, DummyExporter);
+		}
+
+		private void OverrideDefaultExport()
+		{
+			var exporter = new DummyAssetExporter();
+			foreach(var value in Enum.GetValues<ClassIDType>())
+			{
+				DummyExporter.SetUpClassType(value, false, true);
+				OverrideExporter(value, DummyExporter);
+			}
 		}
 
 		public void OverrideYamlExporter(ClassIDType classType) => OverrideExporter(classType, YamlExporter);

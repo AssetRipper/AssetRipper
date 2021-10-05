@@ -142,6 +142,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public bool HasTextData => Asset switch
 		{
 			Shader => true,
+			UnknownObject unk => unk.Data.Length > 0,
 			TextAsset txt=> txt.Script != null && txt.Script.Length > 0,
 			_ => false,
 		};
@@ -150,6 +151,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public string? TextAssetData => (Asset switch
 		{
 			Shader shader => DumpShaderDataAsText(shader),
+			UnknownObject unk => unk.ToFormattedHex(),
 			TextAsset txt => txt.TextScript,
 			_ => null
 		})?.Replace("\t", "    ");
@@ -266,7 +268,9 @@ namespace AssetRipper.GUI.AssetInfo
 			get
 			{
 				StringBuilder builder = new StringBuilder();
-				builder.Append($"Asset Type: {Asset.GetType()}\n");
+				builder.Append($"Asset Class: {Asset.GetType()}\n");
+
+				builder.Append($"Asset Type: {Asset.ClassID}\n");
 
 				builder.Append($"Supports Name: {SupportsName}\n");
 
