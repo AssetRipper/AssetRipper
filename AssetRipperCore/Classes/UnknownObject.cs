@@ -17,7 +17,8 @@ namespace AssetRipper.Core.Classes
 
 		public override void Read(AssetReader reader)
 		{
-			Data = reader.ReadBytes(AssetInfo.ByteSize);
+			if(AssetInfo.ByteSize > 0)
+				Data = reader.ReadBytes(AssetInfo.ByteSize);
 		}
 
 		public override void Write(AssetWriter writer)
