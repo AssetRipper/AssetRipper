@@ -22,6 +22,10 @@
 		/// An opensource alternative to FBX. It is the binary version of GLTF. Primitive export only contains mesh data. Unity does not support importing this format.
 		/// </summary>
 		GlbPrimitive,
+		/// <summary>
+		/// FBX. Primitive export only contains mesh data. This option breaks exported references to the mesh asset.
+		/// </summary>
+		FbxPrimitive,
 	}
 
 	/* Unity supported mesh import formats: (https://docs.unity3d.com/2019.3/Documentation/Manual/3D-formats.html)

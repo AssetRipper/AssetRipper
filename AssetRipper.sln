@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\Fmod5Sharp.md = Licenses\Fmod5Sharp.md
 		Licenses\HLSLcc.md = Licenses\HLSLcc.md
 		Licenses\Lz4.md = Licenses\Lz4.md
+		Licenses\MeshIO.md = Licenses\MeshIO.md
 		Licenses\MessageBoxAvalonia.md = Licenses\MessageBoxAvalonia.md
 		Licenses\MonoCecil.md = Licenses\MonoCecil.md
 		Licenses\NAudio.md = Licenses\NAudio.md
