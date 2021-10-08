@@ -25,17 +25,21 @@ namespace AssetRipper.Library.Exporters.Audio
 			if (!success)
 				return false;
 
-			if (fileExtension == "ogg" && AudioFormat == AudioExportFormat.Wav)
-				decodedData = AudioClipDecoder.ConvertOggToWav(decodedData);
-
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+			if (AudioFormat == AudioExportFormat.Wav || AudioFormat == AudioExportFormat.Mp3)
 			{
-				using (BufferedStream stream = new BufferedStream(fileStream))
+				if (fileExtension == "ogg")
+					decodedData = AudioConverter.OggToWav(decodedData);
+
+				if (AudioFormat == AudioExportFormat.Mp3 && System.OperatingSystem.IsWindows() && (fileExtension == "ogg" || fileExtension == "wav"))
+					decodedData = AudioConverter.WavToMp3(decodedData);
+			}
+				
+
+			using (Stream stream = FileUtils.CreateVirtualFile(path))
+			{
+				using (BinaryWriter writer = new BinaryWriter(stream))
 				{
-					using (BinaryWriter writer = new BinaryWriter(stream))
-					{
-						writer.Write(decodedData);
-					}
+					writer.Write(decodedData);
 				}
 			}
 			return true;
@@ -51,6 +55,8 @@ namespace AssetRipper.Library.Exporters.Audio
 			string defaultExtension = AudioClipDecoder.GetFileExtension(audioClip);
 			if (AudioFormat == AudioExportFormat.Wav && defaultExtension == "ogg")
 				return "wav";
+			if (AudioFormat == AudioExportFormat.Mp3 && System.OperatingSystem.IsWindows() && (defaultExtension == "ogg" || defaultExtension == "wav"))
+				return "mp3";
 			else
 				return defaultExtension;
 		}

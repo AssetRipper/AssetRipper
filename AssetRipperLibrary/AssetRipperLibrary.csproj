@@ -28,6 +28,7 @@
     <PackageReference Include="Fmod5Sharp" Version="1.2.0" />
     <PackageReference Include="MeshIO.FBX" Version="1.0.1-alpha" />
     <PackageReference Include="NAudio.Core" Version="2.0.0" />
+    <PackageReference Include="NAudio.Lame" Version="2.0.0" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0023" />
     <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0023" />
@@ -82,5 +83,9 @@
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
   </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="C:\Users\jrpri\.nuget\packages\naudio.lame\2.0.0\build\libmp3lame.32.dll" />
+    </ItemGroup>
   
 </Project>

@@ -4,6 +4,10 @@
 * Localization Support
   * Interface for Localization contributions (done by SamboyCoding!)
   * Localization support in the GUI (done by SamboyCoding!)
+* Audio Export
+  * MP3 Export on Windows (done!)
+* Mesh Export
+  * Primitive FBX Export
 * Shader Export
   * Remove Shader disassembly code (done!)
   * Reformat the shader export system to support two sided shaders
@@ -33,7 +37,7 @@
 * Build Ogg and Vorbis Native Binaries for Mac and Linux
 * Implement package for LZ4
 * Mesh export options
-  * FBX export
+  * FBX export (full)
   * GLB export (full)
 * Asset Previews
   * Mesh preview

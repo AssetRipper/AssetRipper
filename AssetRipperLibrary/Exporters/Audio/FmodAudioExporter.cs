@@ -18,7 +18,7 @@ namespace AssetRipper.Library.Exporters.Audio
 		private AudioExportFormat AudioFormat { get; set; }
 		public FmodAudioExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
 
-		public static byte[] ExportAudio(AudioClip audioClip)
+		public static byte[] ExportWavAudio(AudioClip audioClip)
 		{
 			byte[] data = (byte[])audioClip.GetAudioData();
 			if (data.Length == 0)
@@ -74,7 +74,10 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
 		{
-			return new AssetExportCollection(this, asset, "wav");
+			if(AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows())
+				return new AssetExportCollection(this, asset, "mp3");
+			else
+				return new AssetExportCollection(this, asset, "wav");
 		}
 
 		public override bool Export(IExportContainer container, UnityObject asset, string path)
@@ -86,12 +89,15 @@ namespace AssetRipper.Library.Exporters.Audio
 				return false;
 			}
 
-			byte[] data = ExportAudio(audioClip);
+			byte[] data = ExportWavAudio(audioClip);
 			if (data == null)
 			{
 				Logger.Warning(LogCategory.Export, $"Unable to convert '{audioClip.ValidName}' to wav");
 				return false;
 			}
+
+			if (AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows())
+				data = AudioConverter.WavToMp3(data);
 
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
@@ -99,17 +105,8 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 			return true;
 		}
-		/*
-		public void Export(IExportContainer container, UnityObject asset, string path, Action<IExportContainer, UnityObject, string> callback)
-		{
-			if (Export(container, asset, path))
-			{
-				callback?.Invoke(container, asset, path);
-			}
-		}
-		*/
 
-		private static byte[] ConvertToWav(byte[] data)
+		private static byte[] ConvertToWav(byte[] fmodData)
 		{
 			RESULT result = Factory.System_Create(out FMOD.System system);
 			if (result != RESULT.OK)
@@ -127,8 +124,8 @@ namespace AssetRipper.Library.Exporters.Audio
 
 				CREATESOUNDEXINFO exinfo = new CREATESOUNDEXINFO();
 				exinfo.cbsize = Marshal.SizeOf(exinfo);
-				exinfo.length = (uint)data.Length;
-				result = system.createSound(data, MODE.OPENMEMORY, ref exinfo, out Sound sound);
+				exinfo.length = (uint)fmodData.Length;
+				result = system.createSound(fmodData, MODE.OPENMEMORY, ref exinfo, out Sound sound);
 				if (result != RESULT.OK)
 				{
 					return null;

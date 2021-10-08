@@ -1,8 +1,6 @@
 ﻿using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Logging;
 using Fmod5Sharp;
-using NAudio.Vorbis;
-using NAudio.Wave;
 using OggVorbisSharp;
 using System;
 using System.IO;
@@ -96,7 +94,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			{
 				if (fileExtension == "ogg")
 				{
-					decodedData = ConvertOggToWav(decodedData);
+					decodedData = AudioConverter.OggToWav(decodedData);
 					return true;
 				}
 				else
@@ -106,18 +104,6 @@ namespace AssetRipper.Library.Exporters.Audio
 			{
 				decodedData = null;
 				return false;
-			}
-		}
-
-		public static byte[] ConvertOggToWav(byte[] oggData)
-		{
-			using (VorbisWaveReader vorbisStream = new VorbisWaveReader(new MemoryStream(oggData), true))
-			{
-				using (MemoryStream writeStream = new MemoryStream())
-				{
-					WaveFileWriter.WriteWavFileToStream(writeStream, vorbisStream);
-					return writeStream.ToArray();
-				}
 			}
 		}
 

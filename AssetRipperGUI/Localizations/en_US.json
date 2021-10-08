@@ -25,6 +25,8 @@
     "audio_format_default_description": "Export assets as the content type embedded inside the FSB. Most audio types are exported as WAV, some are exported as OGG.",
     "audio_format_force_wav": "Convert to WAV",
     "audio_format_force_wav_description": "Convert all audio files to WAV files. Not recommended if importing into unity, as it may recompress files, causing a loss of quality.",
+    "audio_format_force_mp3": "Convert to MP3",
+    "audio_format_force_mp3_description": "Convert all audio files to MP3 files. Not recommended because it will recompress files, causing a loss of quality. Windows only.",
     "image_format_description": "Affects all exported images",
     "sprite_format_native": "Unity",
     "sprite_format_native_description": "Export in the unity sprite format. Cannot be viewed outside of unity.",
