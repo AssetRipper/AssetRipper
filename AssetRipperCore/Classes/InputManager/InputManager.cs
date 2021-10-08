@@ -10,6 +10,11 @@ namespace AssetRipper.Core.Classes.InputManager
 {
 	public sealed class InputManager : GlobalGameManager
 	{
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasUsePhysicalKeys(UnityVersion version) => version.IsGreaterEqual(2021, 2);
+		
 		public InputManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(UnityVersion version)
@@ -27,6 +32,12 @@ namespace AssetRipper.Core.Classes.InputManager
 			base.Read(reader);
 
 			Axes = reader.ReadAssetArray<InputAxis>();
+
+			if (HasUsePhysicalKeys(reader.Version))
+			{
+				reader.ReadBoolean();
+				reader.AlignStream();
+			}
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

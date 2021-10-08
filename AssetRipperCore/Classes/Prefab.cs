@@ -19,6 +19,10 @@ namespace AssetRipper.Core.Classes
 		/// 2020 and greater
 		/// </summary>
 		public static bool HasHideFlagsBehavior(UnityVersion version) => version.IsGreaterEqual(2020);
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasContainsMissingSerializeReferenceTypes(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
 		public override void Read(AssetReader reader)
 		{
@@ -29,6 +33,11 @@ namespace AssetRipper.Core.Classes
 			if (HasHideFlagsBehavior(reader.Version))
 			{
 				HideFlagsBehavior = reader.ReadInt32();
+			}
+
+			if (HasContainsMissingSerializeReferenceTypes(reader.Version))
+			{
+				reader.ReadBoolean();
 			}
 		}
 

@@ -129,6 +129,14 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		/// </summary>
 		public static bool HasSpritePackerPaddingPower(UnityVersion version) => version.IsGreaterEqual(5, 1);
 		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasBc7TextureCompressor(UnityVersion version) => version.IsGreaterEqual(2021, 2);
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasRefreshImportMode(UnityVersion version) => version.IsGreaterEqual(2021, 2);
+		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
 		public static bool HasEtcTextureCompressorBehavior(UnityVersion version) => version.IsGreaterEqual(2017, 2);
@@ -279,6 +287,11 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			{
 				SpritePackerPaddingPower = reader.ReadInt32();
 			}
+
+			if (HasBc7TextureCompressor(reader.Version))
+			{
+				reader.ReadInt32();
+			}
 			if (HasEtcTextureCompressorBehavior(reader.Version))
 			{
 				EtcTextureCompressorBehavior = reader.ReadInt32();
@@ -364,6 +377,12 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			if (HasAssetPipelineMode(reader.Version))
 			{
 				AssetPipelineMode = (AssetPipelineMode)reader.ReadInt32();
+
+				if (HasRefreshImportMode(reader.Version))
+				{
+					reader.ReadInt32();
+				}
+				
 				CacheServerMode = (CacheServerMode)reader.ReadInt32();
 				CacheServerEndpoint = reader.ReadString();
 				CacheServerNamespacePrefix = reader.ReadString();

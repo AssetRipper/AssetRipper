@@ -129,6 +129,10 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// </summary>
 		public static bool HasPreloadedShaders(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Beta, 2);
 		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasPreloadShadersBatchTimeLimit(UnityVersion version) => version.IsGreaterEqual(2021, 2);
+		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
 		public static bool HasSpritesDefaultMaterial(UnityVersion version) => version.IsGreaterEqual(5, 4);
@@ -238,6 +242,10 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// </summary>
 		private static bool HasLightmapKeepDynamic(UnityVersion version) => version.IsLess(5, 2);
 		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasSRPDefaultSettings(UnityVersion version) => version.IsGreaterEqual(2021, 2);
+		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
 		private static bool IsFogStrippingFirst(UnityVersion version) => version.IsGreaterEqual(5, 3);
@@ -287,6 +295,11 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			if (HasPreloadedShaders(reader.Version))
 			{
 				PreloadedShaders = reader.ReadAssetArray<PPtr<ShaderVariantCollection.ShaderVariantCollection>>();
+			}
+
+			if (HasPreloadShadersBatchTimeLimit(reader.Version))
+			{
+				reader.ReadInt32();
 			}
 			if (HasSpritesDefaultMaterial(reader.Version))
 			{
@@ -354,6 +367,11 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			if (HasAllowEnlightenSupportForUpgradedProject(reader.Version))
 			{
 				AllowEnlightenSupportForUpgradedProject = reader.ReadBoolean();
+			}
+
+			if (HasSRPDefaultSettings(reader.Version))
+			{
+				srpDefaultSettings.Read(reader);
 			}
 		}
 
@@ -616,6 +634,8 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public bool AllowEnlightenSupportForUpgradedProject { get; set; }
 		
 		public int VideoShadersIncludeMode { get; set; }
+
+		public Dictionary<string, PPtr<Object.Object>> srpDefaultSettings { get; set; }
 
 		public BuiltinShaderSettings Deferred;
 		public BuiltinShaderSettings DeferredReflections;

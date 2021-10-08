@@ -54,6 +54,10 @@ namespace AssetRipper.Core.Classes.Animator
 		/// 2018.1 and greater
 		/// </summary>
 		public static bool HasKeepAnimatorControllerStateOnDisable(UnityVersion version) => version.IsGreaterEqual(2018);
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasStabilizeFeet(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
 		/// <summary>
 		/// 4.5.0 and greater
@@ -86,6 +90,11 @@ namespace AssetRipper.Core.Classes.Animator
 			if (HasLinearVelocityBlending(reader.Version))
 			{
 				LinearVelocityBlending = reader.ReadBoolean();
+			}
+
+			if (HasStabilizeFeet(reader.Version))
+			{
+				StabilizeFeet = reader.ReadBoolean();
 			}
 			if (IsAlignMiddle(reader.Version))
 			{
@@ -152,6 +161,10 @@ namespace AssetRipper.Core.Classes.Animator
 			node.Add(UpdateModeName, (int)UpdateMode);
 			node.Add(ApplyRootMotionName, ApplyRootMotion);
 			node.Add(LinearVelocityBlendingName, LinearVelocityBlending);
+			if (HasStabilizeFeet(container.ExportVersion))
+			{
+				node.Add(StabilizeFeetName, StabilizeFeet);
+			}
 			if (HasWarningMessage(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(WarningMessageName, "");
@@ -170,6 +183,7 @@ namespace AssetRipper.Core.Classes.Animator
 		public bool ApplyRootMotion { get; set; }
 		public bool AnimatePhisics { get; set; }
 		public bool LinearVelocityBlending { get; set; }
+		public bool StabilizeFeet { get; set; }
 		public bool HasTransformHierarchy { get; set; }
 		public bool AllowConstantClipSamplingOptimization { get; set; }
 		public bool KeepAnimatorControllerStateOnDisable { get; set; }
@@ -180,6 +194,7 @@ namespace AssetRipper.Core.Classes.Animator
 		public const string UpdateModeName = "m_UpdateMode";
 		public const string ApplyRootMotionName = "m_ApplyRootMotion";
 		public const string LinearVelocityBlendingName = "m_LinearVelocityBlending";
+		public const string StabilizeFeetName = "m_StabilizeFeet";
 		public const string WarningMessageName = "m_WarningMessage";
 		public const string HasTransformHierarchyName = "m_HasTransformHierarchy";
 		public const string AllowConstantClipSamplingOptimizationName = "m_AllowConstantClipSamplingOptimization";

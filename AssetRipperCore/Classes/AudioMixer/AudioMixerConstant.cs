@@ -1,6 +1,7 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
@@ -15,6 +16,11 @@ namespace AssetRipper.Core.Classes.AudioMixer
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			return 2;
 		}*/
+		
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasGroupConnections(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -36,6 +42,11 @@ namespace AssetRipper.Core.Classes.AudioMixer
 
 			ExposedParameterNames = reader.ReadUInt32Array();
 			ExposedParameterIndices = reader.ReadUInt32Array();
+
+			if (HasGroupConnections(reader.Version))
+			{
+				reader.ReadAssetArray<GroupConnection>();
+			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
