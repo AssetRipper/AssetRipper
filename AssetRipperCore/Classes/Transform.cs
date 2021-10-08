@@ -29,6 +29,11 @@ namespace AssetRipper.Core.Classes
 		{
 			return version.IsGreaterEqual(5) && !flags.IsRelease();
 		}
+		
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasConstrainProportionsScale(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
 		public Transform(AssetLayout layout) : base(layout)
 		{
@@ -86,6 +91,17 @@ namespace AssetRipper.Core.Classes
 			LocalRotation.Read(reader);
 			LocalPosition.Read(reader);
 			LocalScale.Read(reader);
+
+			if (HasConstrainProportionsScale(reader.Version))
+			{
+				if (!reader.Flags.IsRelease())
+				{
+					reader.ReadBoolean(); //ConstraintProportionsScale
+				}
+
+				reader.AlignStream(); //Either way we have to align here.
+			}
+			
 			Children = reader.ReadAssetArray<PPtr<Transform>>();
 			Father.Read(reader);
 		}

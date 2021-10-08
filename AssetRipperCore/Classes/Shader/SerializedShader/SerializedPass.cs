@@ -17,6 +17,11 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// 2019.3 and greater
 		/// </summary>
 		public static bool HasProgRayTracing(UnityVersion version) => version.IsGreaterEqual(2019, 3);
+		
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasKeywordStateMaskInsteadOfKeywordMasks(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
 		public void Read(AssetReader reader)
 		{
@@ -26,10 +31,13 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 				reader.AlignStream();
 				Platforms = reader.ReadUInt8Array();
 				reader.AlignStream();
-				LocalKeywordMask = reader.ReadUInt16Array();
-				reader.AlignStream();
-				GlobalKeywordMask = reader.ReadUInt16Array();
-				reader.AlignStream();
+				if (!HasKeywordStateMaskInsteadOfKeywordMasks(reader.Version))
+				{
+					LocalKeywordMask = reader.ReadUInt16Array();
+					reader.AlignStream();
+					GlobalKeywordMask = reader.ReadUInt16Array();
+					reader.AlignStream();
+				}
 			}
 
 			m_nameIndices = new Dictionary<string, int>();
@@ -54,6 +62,11 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			Name = reader.ReadString();
 			TextureName = reader.ReadString();
 			Tags.Read(reader);
+
+			if (HasKeywordStateMaskInsteadOfKeywordMasks(reader.Version))
+			{
+				reader.ReadUInt16Array(); //m_SerializedKeywordStateMask
+			}
 		}
 
 		public Hash128[] EditorDataHash { get; set; }

@@ -43,6 +43,11 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// 2017.2 and greater
 		/// </summary>
 		public static bool HasShaderRequirements(UnityVersion version) => version.IsGreaterEqual(2017, 2);
+		
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasMergedKeywordIndices(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
 		/// <summary>
 		/// 2021 and greater
@@ -53,15 +58,24 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		{
 			BlobIndex = reader.ReadUInt32();
 			Channels.Read(reader);
-			GlobalKeywordIndices = reader.ReadUInt16Array();
-			if (IsAlignKeywordIndices(reader.Version))
+			if (HasMergedKeywordIndices(reader.Version))
 			{
+				reader.ReadUInt16Array(); //KeywordIndices
 				reader.AlignStream();
 			}
-			if (HasLocalKeywordIndices(reader.Version))
+			else
 			{
-				LocalKeywordIndices = reader.ReadUInt16Array();
-				reader.AlignStream();
+				GlobalKeywordIndices = reader.ReadUInt16Array();
+				if (IsAlignKeywordIndices(reader.Version))
+				{
+					reader.AlignStream();
+				}
+
+				if (HasLocalKeywordIndices(reader.Version))
+				{
+					LocalKeywordIndices = reader.ReadUInt16Array();
+					reader.AlignStream();
+				}
 			}
 
 			ShaderHardwareTier = reader.ReadByte();

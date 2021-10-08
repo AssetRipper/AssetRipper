@@ -14,6 +14,11 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 {
 	public sealed class PhysicsManager : GlobalGameManager
 	{
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasImprovedPatchFriction(UnityVersion version) => version.IsGreaterEqual(2021, 2);
+		
 		public PhysicsManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(UnityVersion version)
@@ -252,6 +257,11 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 				FrictionType = (FrictionType)reader.ReadInt32();
 				EnableEnhancedDeterminism = reader.ReadBoolean();
 				EnableUnifiedHeightmaps = reader.ReadBoolean();
+
+				if (HasImprovedPatchFriction(reader.Version))
+				{
+					reader.ReadBoolean();
+				}
 			}
 			if (IsAlign2(reader.Version))
 			{

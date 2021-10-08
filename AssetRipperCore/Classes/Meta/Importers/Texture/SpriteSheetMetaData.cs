@@ -29,6 +29,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			Edges = Array.Empty<Int2Storage>();
 			Weights = Array.Empty<BoneWeights4>();
 			SecondaryTextures = Array.Empty<SecondarySpriteTexture>();
+			NameFileIdTable = new();
 		}
 
 		public SpriteSheetMetaData(ref SpriteMetaData metadata)
@@ -44,6 +45,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			Edges = metadata.Edges;
 			Weights = metadata.Weights;
 			SecondaryTextures = Array.Empty<SecondarySpriteTexture>();
+			NameFileIdTable = new();
 		}
 
 		public static int ToSerializedVersion(UnityVersion version)
@@ -60,6 +62,10 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// 2019.1 and greater
 		/// </summary>
 		public static bool HasSecondaryTextures(UnityVersion version) => version.IsGreaterEqual(2019);
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasNameFileIdTable(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
 		public ref SpriteMetaData GetSpriteMetaData(string name)
 		{
@@ -106,6 +112,11 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			if (HasSecondaryTextures(reader.Version))
 			{
 				SecondaryTextures = reader.ReadAssetArray<SecondarySpriteTexture>();
+			}
+
+			if (HasNameFileIdTable(reader.Version))
+			{
+				NameFileIdTable.Read(reader);
 			}
 		}
 
@@ -200,6 +211,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		public Int2Storage[] Edges { get; set; }
 		public BoneWeights4[] Weights { get; set; }
 		public SecondarySpriteTexture[] SecondaryTextures { get; set; }
+		public Dictionary<string, long> NameFileIdTable { get; set; }
 
 		public const string SpritesName = "m_Sprites";
 		public const string OutlineName = "m_Outline";

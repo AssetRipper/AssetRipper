@@ -18,11 +18,23 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// 2021 and greater
 		/// </summary>
 		public static bool HasCustomEditor(UnityVersion version) => version.IsGreaterEqual(2021);
+		
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasKeywordData(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
 		public void Read(AssetReader reader)
 		{
 			PropInfo.Read(reader);
 			SubShaders = reader.ReadAssetArray<SerializedSubShader>();
+			if (HasKeywordData(reader.Version))
+			{
+				reader.ReadStringArray(); //KeywordNames
+				reader.AlignStream();
+				reader.ReadByteArray(); //KeywordFlags
+				reader.AlignStream();
+			}
 			Name = reader.ReadString();
 			CustomEditorName = reader.ReadString();
 			FallbackName = reader.ReadString();

@@ -100,6 +100,15 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 		/// 2017.1.0b2 and greater
 		/// </summary>
 		public static bool HasMaskInteraction(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
+		
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasMeshDistribution(UnityVersion version) => version.IsGreaterEqual(2021, 2);
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasMeshWeighting(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
 		/// <summary>
 		/// 5.3.0 and greater
@@ -115,7 +124,13 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 			base.Read(reader);
 
 			RenderMode = IsModeShort(reader.Version) ? (ParticleSystemRenderMode)reader.ReadUInt16() : (ParticleSystemRenderMode)reader.ReadInt32();
-			if (IsSortModeFirst(reader.Version))
+
+			if (HasMeshDistribution(reader.Version))
+			{
+				reader.ReadByte(); //meshdistribution
+				SortMode = (ParticleSystemSortMode)reader.ReadByte();
+			}
+			else if (IsSortModeFirst(reader.Version))
 			{
 				SortMode = (ParticleSystemSortMode)reader.ReadUInt16();
 			}
@@ -206,6 +221,14 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 				Mesh1.Read(reader);
 				Mesh2.Read(reader);
 				Mesh3.Read(reader);
+			}
+
+			if (HasMeshWeighting(reader.Version))
+			{
+				reader.ReadSingle(); //0
+				reader.ReadSingle(); //1
+				reader.ReadSingle(); //2
+				reader.ReadSingle(); //3
 			}
 			if (HasMaskInteraction(reader.Version))
 			{
