@@ -42,6 +42,10 @@ namespace AssetRipper.Core.Classes.Shader
 		/// 2018.2 and greater
 		/// </summary>
 		private static bool HasNewTextureParams(UnityVersion version) => version.IsGreaterEqual(2018, 2);
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public static bool HasMergedKeywords(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 		private static int GetExpectedProgramVersion(UnityVersion version)
 		{
 			if (version.IsEqual(5, 3))
@@ -95,11 +99,19 @@ namespace AssetRipper.Core.Classes.Shader
 				StatsTempRegister = reader.ReadInt32();
 			}
 
-			GlobalKeywords = reader.ReadStringArray();
-			if (HasLocalKeywords(reader.Version))
+			if (HasMergedKeywords(reader.Version))
 			{
-				LocalKeywords = reader.ReadStringArray();
+				reader.ReadStringArray();
 			}
+			else
+			{
+				GlobalKeywords = reader.ReadStringArray();
+				if (HasLocalKeywords(reader.Version))
+				{
+					LocalKeywords = reader.ReadStringArray();
+				}
+			}
+
 			ProgramData = reader.ReadByteArray();
 			reader.AlignStream();
 
