@@ -371,6 +371,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 
 			if (HasSRPDefaultSettings(reader.Version))
 			{
+				reader.AlignStream();
 				srpDefaultSettings.Read(reader);
 			}
 		}
