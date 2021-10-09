@@ -1,4 +1,5 @@
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
@@ -8,8 +9,10 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class MovieTexture : BaseVideoTexture
+	public sealed class MovieTexture : BaseVideoTexture, IMovieTexture
 	{
+		public byte[] RawData => MovieData;
+
 		public MovieTexture(AssetInfo assetInfo) : base(assetInfo) { }
 
 		/// <summary>

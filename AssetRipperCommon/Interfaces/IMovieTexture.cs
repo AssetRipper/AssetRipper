@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.Core.Interfaces
 {
-	interface IMovieTexture : IHasRawData
+	public interface IMovieTexture : IHasRawData
 	{
 	}
 }

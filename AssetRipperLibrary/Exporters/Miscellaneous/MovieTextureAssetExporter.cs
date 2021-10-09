@@ -43,6 +43,11 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			}
 		}
 
+		/// <summary>
+		/// Less than 2019.3
+		/// </summary>
+		/// <param name="version"></param>
+		/// <returns></returns>
 		private static bool HasData(UnityVersion version) => MovieTexture.HasData(version) || MovieTexture.IsInherited(version);
 	}
 }

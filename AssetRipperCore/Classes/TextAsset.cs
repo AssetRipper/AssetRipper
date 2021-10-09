@@ -1,3 +1,4 @@
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
@@ -11,7 +12,7 @@ namespace AssetRipper.Core.Classes
 	/// <summary>
 	/// Script previously
 	/// </summary>
-	public class TextAsset : NamedObject
+	public class TextAsset : NamedObject, ITextAsset
 	{
 		public TextAsset(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -50,7 +51,7 @@ namespace AssetRipper.Core.Classes
 			return node;
 		}
 
-		public string TextScript => Encoding.UTF8.GetString(Script);
+		public string Text => Encoding.UTF8.GetString(Script);
 
 		// NOTE: originaly, it is a string. but, since binary files are serialized as TextAsset, we have to sctore its content as byte array
 		public byte[] Script { get; protected set; }

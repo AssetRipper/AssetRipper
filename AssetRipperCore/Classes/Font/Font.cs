@@ -1,4 +1,5 @@
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
@@ -12,7 +13,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Font
 {
-	public sealed class Font : NamedObject
+	public sealed class Font : NamedObject, IFontAsset
 	{
 		public Font(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -380,6 +381,8 @@ namespace AssetRipper.Core.Classes.Font
 		public FontRenderingMode FontRenderingMode { get; set; }
 		public bool UseLegacyBoundsCalculation { get; set; }
 		public bool ShouldRoundAdvanceValue { get; set; }
+
+		public byte[] RawData => FontData;
 
 		public const string FontName = "Font";
 		public const string LineSpacingName = "m_LineSpacing";

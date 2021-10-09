@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.Core.Interfaces
 {
-	interface IFontAsset : IHasRawData
+	public interface IFontAsset : IHasRawData
 	{
 	}
 }

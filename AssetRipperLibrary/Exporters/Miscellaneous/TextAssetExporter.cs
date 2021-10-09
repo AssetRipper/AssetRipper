@@ -51,7 +51,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		private static string GetExtension(TextAsset asset)
 		{
-			if (IsValidJson(asset.TextScript))
+			if (IsValidJson(asset.Text))
 				return "json";
 			else
 				return "txt";

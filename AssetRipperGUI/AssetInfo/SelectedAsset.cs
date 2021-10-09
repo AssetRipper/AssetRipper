@@ -152,7 +152,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			Shader shader => DumpShaderDataAsText(shader),
 			UnknownObject unk => unk.ToFormattedHex(),
-			TextAsset txt => txt.TextScript,
+			TextAsset txt => txt.Text,
 			_ => null
 		})?.Replace("\t", "    ");
 
