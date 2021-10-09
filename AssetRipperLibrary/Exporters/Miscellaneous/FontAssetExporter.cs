@@ -1,5 +1,5 @@
-using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
@@ -12,42 +12,37 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 	{
 		public override bool IsHandle(Object asset)
 		{
-			if (asset is Font font)
-				return font.IsValidData;
+			if (asset is IFontAsset font)
+				return IsValidData(font.RawData);
 			else
 				return false;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
-			return new AssetExportCollection(this, asset, GetExportExtension((Font)asset));
+			return new AssetExportCollection(this, asset, GetExportExtension((IFontAsset)asset));
 		}
 
 		public override bool Export(IExportContainer container, Object asset, string path)
 		{
 			using (Stream stream = FileUtils.CreateVirtualFile(path))
 			{
-				if (Font.HasFontData(container.Version))
+				using (BinaryWriter writer = new BinaryWriter(stream))
 				{
-					using (BinaryWriter writer = new BinaryWriter(stream))
-					{
-						writer.Write(((Font)asset).FontData);
-					}
-					return true;
+					writer.Write(((IFontAsset)asset).RawData);
 				}
-				else
-				{
-					return false;
-				}
+				return true;
 			}
 		}
 
-		string GetExportExtension(Font font)
+		string GetExportExtension(IFontAsset font)
 		{
-			byte[] fontData = font.FontData;
+			byte[] fontData = font.RawData;
 			uint type = System.BitConverter.ToUInt32(fontData, 0);
 			return type == OttoAsciiFourCC ? "otf" : "ttf";
 		}
+
+		static bool IsValidData(byte[] data) => data != null && data.Length > 0;
 
 		/// <summary>
 		/// OTTO ascii
