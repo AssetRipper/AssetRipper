@@ -1,5 +1,5 @@
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
@@ -18,6 +18,14 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			exportMode = configuration.TextExportMode;
 		}
 
+		public override bool IsHandle(Object asset)
+		{
+			if (asset is ITextAsset textAsset)
+				return IsValidData(textAsset.RawData);
+			else
+				return false;
+		}
+
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
 		{
 			return new AssetExportCollection(this, asset, GetExportExtension(asset));
@@ -29,7 +37,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			{
 				using (BinaryWriter writer = new BinaryWriter(stream))
 				{
-					writer.Write(((TextAsset)asset).Script);
+					writer.Write(((ITextAsset)asset).RawData);
 				}
 			}
 			return true;
@@ -42,14 +50,14 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 				case TextExportMode.Txt:
 					return "txt";
 				case TextExportMode.Parse:
-					return GetExtension((TextAsset)asset);
+					return GetExtension((ITextAsset)asset);
 				case TextExportMode.Bytes:
 				default:
 					return "bytes";
 			}
 		}
 
-		private static string GetExtension(TextAsset asset)
+		private static string GetExtension(ITextAsset asset)
 		{
 			if (IsValidJson(asset.Text))
 				return "json";

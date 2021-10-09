@@ -42,8 +42,6 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			return type == OttoAsciiFourCC ? "otf" : "ttf";
 		}
 
-		static bool IsValidData(byte[] data) => data != null && data.Length > 0;
-
 		/// <summary>
 		/// OTTO ascii
 		/// </summary>

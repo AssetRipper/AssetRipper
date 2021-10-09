@@ -34,7 +34,5 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 				return true;
 			}
 		}
-
-		static bool IsValidData(byte[] data) => data != null && data.Length > 0;
 	}
 }

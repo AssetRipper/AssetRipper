@@ -54,5 +54,7 @@ namespace AssetRipper.Library.Exporters
 			assetType = AssetType.Meta;
 			return true;
 		}
+
+		protected static bool IsValidData(byte[] data) => data != null && data.Length > 0;
 	}
 }

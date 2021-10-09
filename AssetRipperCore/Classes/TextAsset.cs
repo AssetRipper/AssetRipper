@@ -52,6 +52,7 @@ namespace AssetRipper.Core.Classes
 		}
 
 		public string Text => Encoding.UTF8.GetString(Script);
+		public byte[] RawData => Script;
 
 		// NOTE: originaly, it is a string. but, since binary files are serialized as TextAsset, we have to sctore its content as byte array
 		public byte[] Script { get; protected set; }

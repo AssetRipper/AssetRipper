@@ -1,7 +1,6 @@
 ﻿namespace AssetRipper.Core.Interfaces
 {
-	public interface ITextAsset : IHasText
+	public interface ITextAsset : IHasText, IHasRawData
 	{
-		byte[] Script { get; }
 	}
 }
