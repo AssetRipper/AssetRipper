@@ -96,5 +96,7 @@
     "export_in_progress_no_file_count_yet": "Esportazione dei file\n0.0%\n?/?",
     "export_in_progress": "Esportazione dei file\n{0}%\n{1}/{2}",
     "error_exporting_with_reason": "Impossibile esportare i contenuti del gioco: {0}",
-    "error_importing_with_reason": "Impossibile caricare i contenuti del gioco: {0}"
+    "error_importing_with_reason": "Impossibile caricare i contenuti del gioco: {0}",
+    "audio_format_force_mp3": "Converti in MP3",
+    "audio_format_force_mp3_description": "Converti tutti i file audio in file MP3. Non raccomandato perché i file verranno ricompressi, causando così perdita di qualità. Solo Windows."
 }
