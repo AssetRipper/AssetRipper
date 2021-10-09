@@ -1,7 +1,5 @@
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Object;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
@@ -14,7 +12,10 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 	{
 		public override bool IsHandle(Object asset)
 		{
-			return HasData(asset.BundleUnityVersion);
+			if (asset is IMovieTexture texture)
+				return IsValidData(texture.RawData);
+			else
+				return false;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
@@ -26,28 +27,14 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		{
 			using (Stream stream = FileUtils.CreateVirtualFile(path))
 			{
-				if (HasData(container.Version))
+				using (BinaryWriter writer = new BinaryWriter(stream))
 				{
-					MovieTexture movieTexture = (MovieTexture)asset;
-					using (BinaryWriter writer = new BinaryWriter(stream))
-					{
-						writer.Write(movieTexture.MovieData, 0, movieTexture.MovieData.Length);
-					}
-					return true;
+					writer.Write(((IMovieTexture)asset).RawData);
 				}
-				else
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, "Movie texture doesn't have any data");
-					return false;
-				}
+				return true;
 			}
 		}
 
-		/// <summary>
-		/// Less than 2019.3
-		/// </summary>
-		/// <param name="version"></param>
-		/// <returns></returns>
-		private static bool HasData(UnityVersion version) => MovieTexture.HasData(version) || MovieTexture.IsInherited(version);
+		static bool IsValidData(byte[] data) => data != null && data.Length > 0;
 	}
 }
