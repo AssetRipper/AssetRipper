@@ -3,6 +3,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Interfaces
 {
+	//Might remove
 	public interface IPPtr<T> where T : UnityObjectBase
 	{
 		bool IsNull { get; }
