@@ -636,7 +636,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		
 		public int VideoShadersIncludeMode { get; set; }
 
-		public Dictionary<string, PPtr<Object.Object>> srpDefaultSettings { get; set; }
+		public Dictionary<string, PPtr<Object.Object>> srpDefaultSettings { get; set; } = new();
 
 		public BuiltinShaderSettings Deferred;
 		public BuiltinShaderSettings DeferredReflections;
