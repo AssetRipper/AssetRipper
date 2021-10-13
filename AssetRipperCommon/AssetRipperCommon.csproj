@@ -26,7 +26,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Mono.Cecil" Version="0.11.4" />
-		<PackageReference Include="Samboy063.Cpp2IL.Core" Version="2021.4.0" />
+		<PackageReference Include="Samboy063.Cpp2IL.Core" Version="2021.4.1" />
 		<PackageReference Include="SevenZipCsharp" Version="1.0.0" />
 	</ItemGroup>
 
