@@ -96,5 +96,7 @@
     "export_in_progress_no_file_count_yet": "Mengekspor File Aset\n0.0%\n?/?",
     "export_in_progress": "Mengekspor File Aset\n{0}%\n{1}/{2}",
     "error_exporting_with_reason": "Gagal mengekspor konten game: {0}",
-    "error_importing_with_reason": "Gagal memuat konten game: {0}"
+    "error_importing_with_reason": "Gagal memuat konten game: {0}",
+    "audio_format_force_mp3_description": "Konversikan semua file audio ke file MP3. Tidak disarankan karena akan mengkompres ulang file, menyebabkan penurunan kualitas. Windows saja.",
+    "audio_format_force_mp3": "Konversikan ke MP3"
 }
