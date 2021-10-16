@@ -20,7 +20,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				PEFile peFile = CreatePEFile(assembly);
 				if (!peAssemblies.TryAdd(assembly.FullName, peFile))
 				{
-					throw new Exception("Could not add pe assembly to name dictionary!");
+					throw new Exception($"Could not add pe assembly: {assembly.FullName} to name dictionary!");
 				}
 			}
 		}
