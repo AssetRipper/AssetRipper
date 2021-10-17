@@ -113,6 +113,7 @@ namespace AssetRipper.Core.Project.Collections
 					fileName = asset.GetType().Name;
 					break;
 			}
+			fileName = FileUtils.RemoveCloneSuffixes(fileName);
 			fileName = FileUtils.FixInvalidNameCharacters(fileName);
 
 			fileName = $"{fileName}.{GetExportExtension(asset)}";

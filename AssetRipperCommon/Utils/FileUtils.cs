@@ -35,6 +35,11 @@ namespace AssetRipper.Core.Utils
 			return FileNameRegex.Replace(path, string.Empty);
 		}
 
+		public static string RemoveCloneSuffixes(string path)
+		{
+			return path.Replace("(Clone)", string.Empty);
+		}
+
 		public static string GetUniqueName(string dirPath, string fileName, int maxNameLength)
 		{
 			string ext = null;
