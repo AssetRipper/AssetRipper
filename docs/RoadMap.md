@@ -1,21 +1,11 @@
 # Development Roadmap
 
 ## 0.1.8.0
-* Localization Support
-  * Interface for Localization contributions (done by SamboyCoding!)
-  * Localization support in the GUI (done by SamboyCoding!)
-* Audio Export
-  * MP3 Export on Windows (done!)
 * Shader Export
-  * Remove Shader disassembly code (done!)
   * Reformat the shader export system to support two sided shaders
-* GUI improvements
-  * Unknown Object Type display with hex viewer (done!)
 * Code Cleanup
   * Remove Reading namespace
-  * Remove remaining Layout classes (done!)
   * Move more code to the Common and Library projects
-    * Move all enum classes (done!)
 
 ## 0.2.0.0
 * Overhaul struct reading, which would enable:
