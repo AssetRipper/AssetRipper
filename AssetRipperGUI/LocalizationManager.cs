@@ -39,7 +39,7 @@ namespace AssetRipper.GUI
 				.Select(l => l[LocalizationFilePrefix.Length..^5])
 				.ToArray();
 
-			var supportedLanguageNames = supportedLanguageCodes.Select(code => new CultureInfo(code)).Select(ExtractCultureName).ToArray();
+			var supportedLanguageNames = supportedLanguageCodes.Select(code => new CultureInfo(code.Replace('_', '-'))).Select(ExtractCultureName).ToArray();
 
 			List<SupportedLanguage> languages = new();
 			for (int i = 0; i < supportedLanguageNames.Length; i++)
