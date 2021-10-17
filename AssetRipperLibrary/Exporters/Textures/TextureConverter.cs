@@ -281,16 +281,16 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public static DirectBitmap TexgenpackTextureToBitmap(KTXBaseInternalFormat baseInternalFormat, TextureFormat textureFormat, int width, int height, byte[] data)
 		{
-			Logger.Info("Uses texgenpack!");
-			Logger.Info($"KTXBaseInternalFormat: {baseInternalFormat}");
+			Logger.Verbose("Uses texgenpack!");
+			Logger.Verbose($"KTXBaseInternalFormat: {baseInternalFormat}");
 			bool fixAlpha = baseInternalFormat is KTXBaseInternalFormat.RED or KTXBaseInternalFormat.RG;
-			Logger.Info($"Fix alpha: {fixAlpha}");
+			Logger.Verbose($"Fix alpha: {fixAlpha}");
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
 				if(TexGenPackHandler.Decode(textureFormat, data, width, height, bitmap.BitsPtr, fixAlpha))
 				{
-					Logger.Info($"Byte array length: {bitmap.Bits.Length} Width: {width} Height: {height}");
+					Logger.Verbose($"Byte array length: {bitmap.Bits.Length} Width: {width} Height: {height}");
 					CheckEqual(DecodeBC(data, textureFormat, width, height), bitmap.Bits);
 				}
 				else
@@ -316,7 +316,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static bool DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
 		{
-			Logger.Info($"Performing alternate decoding for {textureFormat}");
+			Logger.Verbose($"Performing alternate decoding for {textureFormat}");
 			
 			switch (textureFormat)
 			{
@@ -341,19 +341,19 @@ namespace AssetRipper.Library.Exporters.Textures
 		{
 			if(left == null)
 			{
-				Logger.Info("In byte array comparison, left was null");
+				Logger.Verbose("In byte array comparison, left was null");
 				return;
 			}
 			if(right == null)
 			{
-				Logger.Info("In byte array comparison, left was null");
+				Logger.Verbose("In byte array comparison, left was null");
 				return;
 			}
 			if(left.Length != right.Length)
 			{
-				Logger.Info("In byte array comparison, lengths were inequal");
-				Logger.Info($"Left: {left.Length}");
-				Logger.Info($"Right: {right.Length}");
+				Logger.Verbose("In byte array comparison, lengths were inequal");
+				Logger.Verbose($"Left: {left.Length}");
+				Logger.Verbose($"Right: {right.Length}");
 				return;
 			}
 			int length = left.Length;
@@ -366,9 +366,9 @@ namespace AssetRipper.Library.Exporters.Textures
 				}
 			}
 			if(count == 0)
-				Logger.Info("Byte arrays were equal at all indices!");
+				Logger.Verbose("Byte arrays were equal at all indices!");
 			else
-				Logger.Info($"Byte arrays were inequal in {count}/{length} places!");
+				Logger.Verbose($"Byte arrays were inequal in {count}/{length} places!");
 		}
 
 		public unsafe static void UnpackNormal(IntPtr inputOutput, int length)
