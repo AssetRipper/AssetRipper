@@ -6,16 +6,11 @@
   * Localization support in the GUI (done by SamboyCoding!)
 * Audio Export
   * MP3 Export on Windows (done!)
-* Mesh Export
-  * Primitive FBX Export
 * Shader Export
   * Remove Shader disassembly code (done!)
   * Reformat the shader export system to support two sided shaders
 * GUI improvements
   * Unknown Object Type display with hex viewer (done!)
-  * Better Audio Playback control?
-    * Fast-forward and rewind
-    * Seek-bar for selecting playback position
 * Code Cleanup
   * Remove Reading namespace
   * Remove remaining Layout classes (done!)
@@ -37,6 +32,7 @@
 * Build Ogg and Vorbis Native Binaries for Mac and Linux
 * Implement package for LZ4
 * Mesh export options
+  * Primitive FBX Export
   * FBX export (full)
   * GLB export (full)
 * Asset Previews
@@ -51,6 +47,9 @@
   * General Settings window
   * Localized text for the UI
   * Adjustable background color/theme
+  * Better Audio Playback control
+    * Fast-forward and rewind
+    * Seek-bar for selecting playback position
 * Export Settings
   * Replace all shaders on materials with a built-in shader (for example, the Standard shader)
   * Script Export
@@ -109,7 +108,8 @@
   * Prefab Creation
 * Asset Exporting
   * Video Export (avi, mp4, etc)
-  * MP3 audio export
+  * WWise audio extract (and preview)
+  * Copying nonbundled streaming assets (such as audio or video files)
   * Allow saving any text information to a text file
     * Alternatively, ensure that all text can be selected and copied
   * Export as Prefab
@@ -126,7 +126,9 @@
     * Wireframe option
   * Textures
     * Background options (for example: checkers, white, black, default)
-    * Disable alpha channel option
+    * Select the color channels to display
+      * For example, disable the alpha channel
+      * Or show only the blue channel
   * Font Assets
   * Video Display
   * Animations
