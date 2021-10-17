@@ -94,7 +94,7 @@
     "export_complete": "导出成功！",
     "no_game_files_found": "在丢弃的文件中未找到Unity游戏或资产包。",
     "export_deleting_old_files": "清除现有文件...",
-    "export_preparing": "准备导出...\n这可能需要一分钟。",
+    "export_preparing": "准备导出...\n这可能需要几分钟。",
     "export_in_progress_no_file_count_yet": "导出资产文件\n0.0%\n?/?",
     "export_in_progress": "导出资产文件\n{0}%\n{1}/{2}",
     "error_exporting_with_reason": "导出游戏内容失败: {0}",
