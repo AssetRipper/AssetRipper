@@ -1,8 +1,11 @@
 # Development Roadmap
 
 ## 0.1.8.0
+* Plugin Support
+  * Implement generic plugin support (done!)
+  * Copying nonbundled streaming assets (such as audio or video files) (done in a plugin!)
 * Shader Export
-  * Reformat the shader export system to support two sided shaders
+  * Reformat the shader export system
 * Code Cleanup
   * Remove Reading namespace
   * Move more code to the Common and Library projects
@@ -99,7 +102,6 @@
 * Asset Exporting
   * Video Export (avi, mp4, etc)
   * WWise audio extract (and preview)
-  * Copying nonbundled streaming assets (such as audio or video files)
   * Allow saving any text information to a text file
     * Alternatively, ensure that all text can be selected and copied
   * Export as Prefab

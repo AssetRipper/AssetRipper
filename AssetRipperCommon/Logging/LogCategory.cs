@@ -10,6 +10,7 @@
 		System,
 		LibVlc,
 		Avalonia,
+		Plugin,
 
 		None,
 		Debug,

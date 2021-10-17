@@ -3,6 +3,8 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Core.Utils;
+using AssetRipper.Library.Attributes;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Meshes;
@@ -13,18 +15,67 @@ using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using UnityObject = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library
 {
 	public class Ripper
 	{
+		public Ripper() => LoadPlugins();
+
 		public GameStructure GameStructure { get; private set; }
 		/// <summary>
 		/// Needs to be set before loading assets to ensure predictable behavior
 		/// </summary>
 		public LibraryConfiguration Settings { get; } = new();
 		private bool ExportersInitialized { get; set; }
+
+		public event Action OnStartLoadingGameStructure;
+		public event Action OnFinishLoadingGameStructure;
+		public event Action OnInitializingExporters;
+		public event Action OnStartExporting;
+		public event Action OnFinishExporting;
+
+		private void LoadPlugins()
+		{
+			Logger.Info(LogCategory.Plugin, "Loading plugins...");
+			string pluginsDirectory = ExecutingDirectory.Combine("Plugins");
+			Directory.CreateDirectory(pluginsDirectory);
+			var pluginTypes = new List<Type>();
+			foreach(string dllFile in Directory.GetFiles(pluginsDirectory, "*.dll"))
+			{
+				try
+				{
+					Logger.Info(LogCategory.Plugin, $"Found assembly at {dllFile}");
+					var assembly = Assembly.LoadFile(dllFile);
+					foreach(var pluginAttr in assembly.GetCustomAttributes<RegisterPluginAttribute>())
+					{
+						pluginTypes.Add(pluginAttr.PluginType);
+					}
+				}
+				catch(Exception ex)
+				{
+					Logger.Error(LogCategory.Plugin, $"Exception thrown while loading plugin assembly: {dllFile}", ex);
+				}
+			}
+			foreach(var type in pluginTypes)
+			{
+				try
+				{
+					var plugin = (PluginBase)Activator.CreateInstance(type);
+					plugin.CurrentRipper = this;
+					plugin.Initialize();
+					Logger.Info(LogCategory.Plugin, $"Initialized plugin: {plugin.Name}");
+				}
+				catch (Exception ex)
+				{
+					Logger.Error(LogCategory.Plugin, $"Exception thrown while initializing plugin: {type?.FullName ?? "<null>"}", ex);
+				}
+			}
+			Logger.Info(LogCategory.Plugin, "Finished loading plugins.");
+		}
 
 		public GameStructure Load(IReadOnlyList<string> paths)
 		{
@@ -33,8 +84,10 @@ namespace AssetRipper.Library
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths[0]}");
 			else
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths.Count} paths...");
+			OnStartLoadingGameStructure?.Invoke();
 			GameStructure = GameStructure.Load(paths, Settings);
 			Logger.Info(LogCategory.General, "Finished reading files");
+			OnFinishLoadingGameStructure?.Invoke();
 			return GameStructure;
 		}
 
@@ -48,25 +101,22 @@ namespace AssetRipper.Library
 		public void ExportFile(string exportPath, UnityObject asset) => throw new NotImplementedException();
 		public void ExportFile(string exportPath, IEnumerable<UnityObject> assets) => throw new NotImplementedException();
 
+		public void ExportProject(string exportPath) => ExportProject(exportPath, new UnityObject[0]);
 		public void ExportProject(string exportPath, UnityObject asset) => ExportProject(exportPath, new UnityObject[] { asset });
 		public void ExportProject(string exportPath, IEnumerable<UnityObject> assets)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			List<UnityObject> list = new List<UnityObject>(assets);
+			List<UnityObject> list = new List<UnityObject>(assets ?? new UnityObject[0]);
 			Settings.ExportPath = exportPath;
-			Settings.Filter = GetFilter(list);
+			Settings.Filter = list.Count == 0 ? LibraryConfiguration.DefaultFilter : GetFilter(list);
 			InitializeExporters();
+			Logger.Info(LogCategory.Export, "Starting pre-export");
+			OnStartExporting?.Invoke();
+			Logger.Info(LogCategory.Export, "Starting export");
 			GameStructure.Export(Settings);
 			Logger.Info(LogCategory.Export, "Finished exporting assets");
-		}
-		public void ExportProject(string exportPath)
-		{
-			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			Settings.ExportPath = exportPath;
-			Settings.Filter = LibraryConfiguration.DefaultFilter;
-			InitializeExporters();
-			GameStructure.Export(Settings);
-			Logger.Info(LogCategory.Export, "Finished exporting assets");
+			OnFinishExporting?.Invoke();
+			Logger.Info(LogCategory.Export, "Finished post-export");
 		}
 
 		public void ResetData()
@@ -92,6 +142,15 @@ namespace AssetRipper.Library
 			if (ExportersInitialized)
 				return;
 
+			OverrideNormalExporters();
+			OnInitializingExporters?.Invoke();
+			OverrideEngineExporters();
+
+			ExportersInitialized = true;
+		}
+
+		private void OverrideNormalExporters()
+		{
 			//Texture exporters
 			TextureAssetExporter textureExporter = new TextureAssetExporter(Settings);
 			OverrideExporter(ClassIDType.Texture2D, textureExporter);
@@ -123,8 +182,10 @@ namespace AssetRipper.Library
 			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter(Settings));
 			OverrideExporter(ClassIDType.Font, new FontAssetExporter());
 			OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
+		}
 
-			//Engine exporters
+		private void OverrideEngineExporters()
+		{
 			EngineAssetExporter engineExporter = new EngineAssetExporter(Settings);
 			OverrideExporter(ClassIDType.Material, engineExporter);
 			OverrideExporter(ClassIDType.Texture2D, engineExporter);
@@ -133,8 +194,6 @@ namespace AssetRipper.Library
 			OverrideExporter(ClassIDType.Font, engineExporter);
 			OverrideExporter(ClassIDType.Sprite, engineExporter);
 			OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
-
-			ExportersInitialized = true;
 		}
 
 		private void OverrideExporter(ClassIDType classID, IAssetExporter exporter) => GameStructure.FileCollection.Exporter.OverrideExporter(classID, exporter);
