@@ -1,9 +1,6 @@
 # Development Roadmap
 
 ## 0.1.8.0
-* Plugin Support
-  * Implement generic plugin support (done!)
-  * Copying nonbundled streaming assets (such as audio or video files) (done in a plugin!)
 * Shader Export
   * Reformat the shader export system
 * Code Cleanup
@@ -17,37 +14,42 @@
   * a cleaner, smaller codebase
   * exporting to the original unity version
 
-## Elusive But High Priority
-* Predetermined GUID support
-
 ## Planned But Unscheduled
-* Option to reference assemblies instead of scripts
-* Build Ogg and Vorbis Native Binaries for Mac and Linux
-* Implement package for LZ4
-* Mesh export options
-  * Primitive FBX Export
-  * FBX export (full)
-  * GLB export (full)
-* Asset Previews
-  * Mesh preview
-  * Material preview
-* Selective Export
-  * Export Selected object to folder
-  * Export Selected object to compressed zip file
+* Predetermined GUID support
+* Dependencies
+    * Build Ogg and Vorbis Native Binaries for Mac and Linux
+    * Remove native dependency on Texture2DDecoder by porting essential code to C#
+    * Implement package for LZ4
+    * Implement package for Brotli
 * GUI improvements
   * Performance enhancements for viewing asset types with large contents, such as 9000 game objects
-  * Hex Viewer
-  * General Settings window
-  * Localized text for the UI
-  * Adjustable background color/theme
+  * Asset Previews
+    * Mesh preview
+    * Material preview
+    * Hex Viewer
+    * Preview decompiled script
+  * Preferences window
+    * Adjustable background color/theme
   * Better Audio Playback control
     * Fast-forward and rewind
     * Seek-bar for selecting playback position
-* Export Settings
-  * Replace all shaders on materials with a built-in shader (for example, the Standard shader)
+* Export
+  * Audio Export
+    * WWise audio extract (and preview)
+  * Mesh Export
+    * Primitive FBX Export
+    * FBX export (full)
+    * GLB export (full)
+    * PLY export
   * Script Export
+    * Option to reference assemblies instead of scripts
     * IL2Cpp method body reconstruction
     * Stubbing/stripping options
+  * Selective Export
+    * Export Selected object to folder
+    * Export Selected object to compressed zip file
+  * Shader Export
+    * Replace all shaders on materials with a built-in shader (for example, the Standard shader)
 
 ## Concept Ideas
 > Note: This is just a collection of ideas. These might not be desirable or feasible, so many of them might never be implemented. Do not interpret their inclusion here as any form of commitment.
@@ -101,7 +103,6 @@
   * Prefab Creation
 * Asset Exporting
   * Video Export (avi, mp4, etc)
-  * WWise audio extract (and preview)
   * Allow saving any text information to a text file
     * Alternatively, ensure that all text can be selected and copied
   * Export as Prefab
@@ -116,6 +117,8 @@
     * XYZ axis for orientation
     * Toggle face cull
     * Wireframe option
+  * Audio
+    * Waveform Render
   * Textures
     * Background options (for example: checkers, white, black, default)
     * Select the color channels to display
