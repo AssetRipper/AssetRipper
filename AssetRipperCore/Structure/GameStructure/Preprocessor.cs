@@ -58,34 +58,8 @@ namespace AssetRipper.Core.Structure.GameStructure
 		private static void DecompressZipArchive(string zipFilePath, string outputDirectory)
 		{
 			Logger.Info(LogCategory.Import, $"Decompressing files...{Environment.NewLine}\tFrom: {zipFilePath}{Environment.NewLine}\tTo: {outputDirectory}");
-			using (ZipFile zipFile = new ZipFile(zipFilePath))
-			{
-				foreach (ZipEntry entry in zipFile)
-				{
-					string internalPath = entry.Name;
-
-					using (var zipInputStream = zipFile.GetInputStream(entry))
-					{
-						using (var unzippedFileStream = new MemoryStream())
-						{
-							int size = 0;
-							byte[] buffer = new byte[4096];
-							while (true)
-							{
-								size = zipInputStream.Read(buffer, 0, buffer.Length);
-								if (size > 0)
-									unzippedFileStream.Write(buffer, 0, size);
-								else
-									break;
-							}
-							string fullFilePath = Path.Combine(outputDirectory, internalPath);
-							string fullDirectoryPath = (new FileInfo(fullFilePath)).Directory.FullName;
-							Directory.CreateDirectory(fullDirectoryPath);
-							File.WriteAllBytes(fullFilePath, unzippedFileStream.ToArray());
-						}
-					}
-				}
-			}
+			FastZip zipper = new FastZip();
+			zipper.ExtractZip(zipFilePath, outputDirectory, null);
 		}
 
 		private static string GetFileExtension(string path)

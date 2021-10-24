@@ -9,3 +9,4 @@ bin
 *.user
 .idea
 **/build/
+.vscode
