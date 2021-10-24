@@ -1,6 +1,5 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
@@ -8,27 +7,17 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
-using System.IO;
 
 namespace AssetRipper.Core.Classes.Object
 {
-	public abstract class Object : IAsset, IDependent
+	public abstract class Object : UnityObjectBase, IAsset, IDependent
 	{
-#warning TODO: remove this whole block
 		public AssetInfo AssetInfo { get; set; }
 		public ISerializedFile File => AssetInfo.File;
-		public virtual ClassIDType ClassID => AssetInfo.ClassID;
-		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
-		public virtual string ExportExtension => AssetExtension;
-		public long PathID => AssetInfo.PathID;
+		public override ClassIDType ClassID => AssetInfo.ClassID;
+		public override long PathID => AssetInfo.PathID;
 		public UnityGUID GUID => AssetInfo.GUID;
 
-		public UnityVersion BundleUnityVersion { get; set; }
-		public EndianType EndianType { get; set; }
-		public HideFlags ObjectHideFlags { get; set; }
-
-		public const string AssetsKeyword = "Assets";
-		protected const string AssetExtension = "asset";
 
 		protected Object(AssetLayout layout) { }
 
@@ -42,7 +31,7 @@ namespace AssetRipper.Core.Classes.Object
 			return this;
 		}
 
-		public virtual void Read(AssetReader reader)
+		public override void Read(AssetReader reader)
 		{
 			BundleUnityVersion = reader.Version;
 			EndianType = reader.EndianType;
@@ -52,7 +41,7 @@ namespace AssetRipper.Core.Classes.Object
 			}
 		}
 
-		public virtual void Write(AssetWriter writer)
+		public override void Write(AssetWriter writer)
 		{
 			if (HasHideFlag(writer.Version, writer.Flags))
 			{

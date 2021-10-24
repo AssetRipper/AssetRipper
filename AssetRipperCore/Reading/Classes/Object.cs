@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Reading.Classes
 	{
 		public SerializedFile assetsFile;
 		public ObjectReader reader;
-		public long m_PathID;
+		public long PathID;
 		public int[] version;
 		protected BuildType buildType;
 		public Platform platform;
@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Reading.Classes
 			reader.Reset();
 			assetsFile = reader.assetsFile;
 			type = reader.type;
-			m_PathID = reader.m_PathID;
+			PathID = reader.m_PathID;
 			version = reader.version;
 			buildType = reader.buildType;
 			platform = reader.platform;

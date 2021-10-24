@@ -377,7 +377,7 @@ namespace AssetRipper.Core.SerializedFiles
 		public void AddObject(Reading.Classes.Object obj)
 		{
 			Objects.Add(obj);
-			ObjectsDic.Add(obj.m_PathID, obj);
+			ObjectsDic.Add(obj.PathID, obj);
 		}
 
 		public bool IsVersionStripped => unityVersion == strippedVersion;

@@ -125,7 +125,7 @@ namespace AssetRipper.Core.Reading.Classes
 				assetsFileIndexCache.Add(name, index);
 			}
 
-			m_PathID = m_Object.m_PathID;
+			m_PathID = m_Object.PathID;
 		}
 
 		public bool IsNull => m_PathID == 0 || m_FileID < 0;
