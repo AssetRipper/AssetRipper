@@ -143,6 +143,9 @@ namespace AssetRipper.Core.Classes.Misc
 		public uint Data2 { get; set; }
 		public uint Data3 { get; set; }
 
+		/// <summary>
+		/// 0x0000000DEADBEEF15DEADF00D0000000
+		/// </summary>
 		public static readonly UnityGUID MissingReference = new UnityGUID(0xD0000000, 0x1FEEBDAE, 0x00FDAED5, 0x0000000D);
 
 		[ThreadStatic]

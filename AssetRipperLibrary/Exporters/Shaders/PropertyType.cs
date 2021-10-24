@@ -1,0 +1,15 @@
+﻿using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
+
+public enum PropertyType
+{
+	Color = 0,
+	Vector = 1,
+	Single = 2,
+	Range = 3,
+	Texture = 4,
+}
+
+public static class PropertyTypeExtensions
+{
+	public static bool IsMatch(this PropertyType _this, SerializedPropertyType type) => (int)_this == (int)type;
+}
