@@ -10,12 +10,14 @@ namespace AssetRipper.Library.Exporters.Scripts
 	public class ScriptDecompiler
 	{
 		private AssemblyResolver assemblyResolver;
+		private LanguageVersion languageVersion;
 
-		public ScriptDecompiler(IAssemblyManager assemblyManager) : this(assemblyManager.GetAssemblies()) { }
-		public ScriptDecompiler(AssemblyDefinition assembly) : this(new AssemblyDefinition[] { assembly }) { }
-		public ScriptDecompiler(AssemblyDefinition[] assemblies)
+		public ScriptDecompiler(IAssemblyManager assemblyManager, LanguageVersion langVersion) : this(assemblyManager.GetAssemblies(), langVersion) { }
+		public ScriptDecompiler(AssemblyDefinition assembly, LanguageVersion langVersion) : this(new AssemblyDefinition[] { assembly }, langVersion) { }
+		public ScriptDecompiler(AssemblyDefinition[] assemblies, LanguageVersion langVersion)
 		{
 			assemblyResolver = new AssemblyResolver(assemblies);
+			languageVersion = langVersion;
 		}
 
 		private Dictionary<AssemblyDefinition, CSharpDecompiler> decompilers = new Dictionary<AssemblyDefinition, CSharpDecompiler>();
@@ -57,7 +59,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private CSharpDecompiler MakeDecompiler(AssemblyDefinition assembly)
 		{
 			DecompilerSettings settings = new DecompilerSettings();
-			settings.SetLanguageVersion(LanguageVersion.CSharp7_3);
+			settings.SetLanguageVersion(languageVersion);
 			settings.ShowXmlDocumentation = true;
 			settings.LoadInMemory = true; //pulled from ILSpy code for reading a pe file from a stream
 			return new CSharpDecompiler(assemblyResolver.Resolve(assembly.FullName), assemblyResolver, settings);

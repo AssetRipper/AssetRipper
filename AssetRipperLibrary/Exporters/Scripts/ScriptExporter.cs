@@ -19,11 +19,13 @@ namespace AssetRipper.Library.Exporters.Scripts
 	{
 		private IAssemblyManager AssemblyManager { get; }
 		public ScriptExportMode ScriptExportMode { get; }
+		public ICSharpCode.Decompiler.CSharp.LanguageVersion LanguageVersion { get; }
 
 		public ScriptExporter(IAssemblyManager assemblyManager, LibraryConfiguration configuration)
 		{
 			AssemblyManager = assemblyManager;
 			ScriptExportMode = configuration.ScriptExportMode;
+			LanguageVersion = configuration.ScriptLanguageVersion;
 		}
 
 		public bool IsHandle(Object asset)
@@ -55,7 +57,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public void Export(IExportContainer container, IEnumerable<Object> assets, string dirPath, Action<IExportContainer, Object, string> callback)
 		{
 			Logger.Info(LogCategory.Export, "Exporting scripts...");
-			ScriptManager scriptManager = new ScriptManager(AssemblyManager, dirPath);
+			ScriptManager scriptManager = new ScriptManager(AssemblyManager, dirPath, LanguageVersion);
 			Dictionary<Object, TypeDefinition> exportTypes = new Dictionary<Object, TypeDefinition>();
 			foreach (Object asset in assets)
 			{

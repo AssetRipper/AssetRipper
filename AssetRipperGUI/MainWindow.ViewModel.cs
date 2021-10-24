@@ -357,7 +357,7 @@ namespace AssetRipper.GUI
 		private async void CheckforUpdates()
 		{
 			const string url = "https://api.github.com/repos/ds5678/AssetRipper/releases";
-			List<GithubRelease> releases = await client.GetFromJsonAsync<List<GithubRelease>>(url);
+			List<GithubRelease>? releases = await client.GetFromJsonAsync<List<GithubRelease>>(url);
 
 			if (releases == null)
 			{

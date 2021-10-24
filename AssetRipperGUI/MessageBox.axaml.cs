@@ -24,7 +24,7 @@ namespace AssetRipper.GUI
         
         public static void Popup(string title, string body, 
 	        MessageBoxViewModel.Buttons buttons = MessageBoxViewModel.Buttons.Okay,
-	        Action<MessageBoxViewModel.Result> callback = null)
+	        Action<MessageBoxViewModel.Result>? callback = null)
         {
 	        MessageBox messageBox = new ()
 	        {

@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Configuration;
+using ICSharpCode.Decompiler.CSharp;
 
 namespace AssetRipper.Library.Configuration
 {
@@ -21,6 +22,10 @@ namespace AssetRipper.Library.Configuration
 		/// </summary>
 		public ScriptExportMode ScriptExportMode { get; set; } 
 		/// <summary>
+		/// The C# language version of decompiled scripts.
+		/// </summary>
+		public LanguageVersion ScriptLanguageVersion { get; set; } 
+		/// <summary>
 		/// Should sprites be exported as a texture? Recommended: Native
 		/// </summary>
 		public SpriteExportMode SpriteExportMode { get; set; } 
@@ -40,6 +45,7 @@ namespace AssetRipper.Library.Configuration
 			ImageExportFormat = ImageExportFormat.Png;
 			MeshExportFormat = MeshExportFormat.Native;
 			ScriptExportMode = ScriptExportMode.Decompiled;
+			ScriptLanguageVersion = LanguageVersion.CSharp7_3;
 			SpriteExportMode = SpriteExportMode.Native;
 			TerrainExportMode = TerrainExportMode.Native;
 			TextExportMode = TextExportMode.Parse;

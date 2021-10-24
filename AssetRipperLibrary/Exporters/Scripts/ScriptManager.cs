@@ -28,11 +28,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private static readonly string[] forbiddenNamespaces = new string[] { "Unity", "UnityEngine", "TMPro", "System", "Microsoft", "Mono"};
 		private static readonly string[] forbiddenAssemblies = new string[] { "mscorlib" };
 
-		public ScriptManager(IAssemblyManager assemblyManager, string exportPath)
+		public ScriptManager(IAssemblyManager assemblyManager, string exportPath,ICSharpCode.Decompiler.CSharp.LanguageVersion langVersion)
 		{
 			if (string.IsNullOrEmpty(exportPath))
 				throw new ArgumentNullException(nameof(exportPath));
-			Decompiler = new ScriptDecompiler(assemblyManager);
+			Decompiler = new ScriptDecompiler(assemblyManager, langVersion);
 			m_exportPath = exportPath;
 			m_types = new Dictionary<string, TypeDefinition>();
 			AddTypes(assemblyManager);
