@@ -33,7 +33,7 @@ namespace AssetRipper.Core.Classes.Object
 
 		public override void Read(AssetReader reader)
 		{
-			BundleUnityVersion = reader.Version;
+			AssetUnityVersion = reader.Version;
 			EndianType = reader.EndianType;
 			if (HasHideFlag(reader.Version, reader.Flags))
 			{

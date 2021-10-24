@@ -47,7 +47,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 		{
 			if (mesh.Vertices == null || mesh.Normals == null || mesh.Indices == null || mesh.Vertices.Length == 0 || mesh.Normals.Length == 0 || mesh.Indices.Count == 0)
 				return false;
-			if (mesh.BundleUnityVersion.IsLess(4))
+			if (mesh.AssetUnityVersion.IsLess(4))
 				return true;
 			foreach (var submesh in mesh.SubMeshes)
 			{

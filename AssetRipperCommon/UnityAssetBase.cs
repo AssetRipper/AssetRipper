@@ -1,5 +1,7 @@
 ﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.YAML;
 using System;
 
@@ -10,6 +12,9 @@ namespace AssetRipper.Core
 	/// </summary>
 	public class UnityAssetBase : IAssetNew
 	{
+		public UnityVersion AssetUnityVersion { get; set; }
+		public EndianType EndianType { get; set; }
+		
 		public virtual void ReadEditor(AssetReader reader)
 		{
 			throw new NotSupportedException();
@@ -22,6 +27,8 @@ namespace AssetRipper.Core
 
 		public virtual void Read(AssetReader reader)
 		{
+			AssetUnityVersion = reader.Version;
+			EndianType = reader.EndianType;
 			if (reader.Flags.IsRelease())
 				ReadRelease(reader);
 			else

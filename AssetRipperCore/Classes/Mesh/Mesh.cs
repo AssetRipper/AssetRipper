@@ -570,7 +570,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				StreamData.Read(reader);
 			}
 
-			ProcessData(BundleUnityVersion);
+			ProcessData(AssetUnityVersion);
 		}
 
 		public override void Write(AssetWriter writer)

@@ -1,6 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Object;
-using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Parser.Files;
 using System.IO;
 
 namespace AssetRipper.Core
@@ -15,8 +13,6 @@ namespace AssetRipper.Core
 		public virtual ClassIDType ClassID => ClassIDType.UnknownType;
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
 		public virtual string ExportExtension => AssetExtension;
-		public UnityVersion BundleUnityVersion { get; set; }
-		public EndianType EndianType { get; set; }
 		public HideFlags ObjectHideFlags { get; set; }
 
 		public const string AssetsKeyword = "Assets";
