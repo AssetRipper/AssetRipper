@@ -112,7 +112,7 @@ namespace AssetRipper.Core.Classes
 				File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
 			if (File.Collection.AssemblyManager.IsValid(scriptID))
 			{
-				return File.Collection.AssemblyManager.GetSerializableType(scriptID);
+				return File.Collection.AssemblyManager.GetSerializableType(scriptID) as SerializableType;
 			}
 			return null;
 		}

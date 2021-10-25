@@ -12,7 +12,7 @@ using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable
 {
-	public abstract class SerializableType
+	public abstract class SerializableType : ISerializableType
 	{
 		public readonly struct Field
 		{

@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		bool IsAssemblyLoaded(string assembly);
 		bool IsPresent(ScriptIdentifier scriptID);
 		bool IsValid(ScriptIdentifier scriptID);
-		SerializableType GetSerializableType(ScriptIdentifier scriptID);
+		ISerializableType GetSerializableType(ScriptIdentifier scriptID);
 		TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID);
 		AssemblyDefinition[] GetAssemblies();
 		ScriptIdentifier GetScriptID(string assembly, string name);
