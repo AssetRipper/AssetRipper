@@ -44,10 +44,10 @@ namespace AssetRipper.Core.Utils
 			return BitConverter.ToInt64(s_idBuffer.Value, 0);
 		}
 
-		public static UnityGUID CalculateAssetsGUID(IEnumerable<Classes.Object.Object> assets)
+		public static UnityGUID CalculateAssetsGUID(IEnumerable<UnityObjectBase> assets)
 		{
 			List<uint> hashList = new List<uint>();
-			foreach (Classes.Object.Object asset in assets)
+			foreach (UnityObjectBase asset in assets)
 			{
 				hashList.Add(asset.GUID.Data0);
 				hashList.Add(asset.GUID.Data1);

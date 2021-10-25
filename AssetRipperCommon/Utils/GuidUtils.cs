@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Utils
 {
@@ -21,7 +20,7 @@ namespace AssetRipper.Core.Utils
 			else
 				return guid.Substring(0, numCharacters);
 		}
-		public static void RandomizeAssetGuid(IEnumerable<Object> assets)
+		public static void RandomizeAssetGuid(IEnumerable<UnityObjectBase> assets)
 		{
 			foreach (var asset in assets)
 			{
@@ -29,7 +28,7 @@ namespace AssetRipper.Core.Utils
 			}
 		}
 
-		public static void SetGUID(Object asset, byte[] guid)
+		public static void SetGUID(UnityObjectBase asset, byte[] guid)
 		{
 			var swapped = new byte[guid.Length];
 			for (int i = 0; i < guid.Length; i++)
