@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected override bool ExportInner(IProjectAssetContainer container, string filePath)
 		{
-			return AssetExporter.Export(container, Assets.Select(t => (t as Object).Convert(container)), filePath);
+			return AssetExporter.Export(container, Assets.Select(t => t.Convert(container)), filePath);
 		}
 
 		public override IEnumerable<UnityObjectBase> Assets

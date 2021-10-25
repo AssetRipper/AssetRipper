@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes.Animation
 
 		public Animation(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public override Object.Object Convert(IExportContainer container)
+		public override UnityObjectBase Convert(IExportContainer container)
 		{
 			return AnimationConverter.Convert(container, this);
 		}

@@ -92,7 +92,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected virtual bool ExportInner(IProjectAssetContainer container, string filePath)
 		{
-			return AssetExporter.Export(container, (Asset as Object).Convert(container), filePath);
+			return AssetExporter.Export(container, Asset.Convert(container), filePath);
 		}
 
 		protected virtual AssetImporter CreateImporter(IExportContainer container)

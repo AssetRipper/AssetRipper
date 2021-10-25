@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.Object
 
 		protected Object(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public virtual Object Convert(IExportContainer container)
+		public override UnityObjectBase Convert(IExportContainer container)
 		{
 			return this;
 		}

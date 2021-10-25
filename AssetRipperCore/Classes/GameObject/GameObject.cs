@@ -159,7 +159,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			return tos;
 		}
 
-		public override Object.Object Convert(IExportContainer container)
+		public override UnityObjectBase Convert(IExportContainer container)
 		{
 			return GameObjectConverter.Convert(container, this);
 		}

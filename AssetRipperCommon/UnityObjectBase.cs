@@ -55,5 +55,10 @@ namespace AssetRipper.Core
 			YAMLMappingNode node = new YAMLMappingNode();
 			return node;
 		}
+
+		public virtual UnityObjectBase Convert(IExportContainer container)
+		{
+			return this;
+		}
 	}
 }

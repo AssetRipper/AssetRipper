@@ -79,7 +79,7 @@ namespace AssetRipper.Core.Classes
 			return FindChild(path, 0);
 		}
 
-		public override Object.Object Convert(IExportContainer container)
+		public override UnityObjectBase Convert(IExportContainer container)
 		{
 			return TransformConverter.Convert(container, this);
 		}
