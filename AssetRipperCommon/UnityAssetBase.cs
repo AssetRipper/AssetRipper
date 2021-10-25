@@ -54,27 +54,22 @@ namespace AssetRipper.Core
 				WriteEditor(writer);
 		}
 
-		public virtual YAMLNode ExportYAML(bool release)
-		{
-			if (release)
-				return ExportYAMLRelease();
-			else
-				return ExportYAMLDebug();
-		}
-
-		public virtual YAMLNode ExportYAMLDebug()
+		public virtual YAMLNode ExportYAMLDebug(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}
 
-		public virtual YAMLNode ExportYAMLRelease()
+		public virtual YAMLNode ExportYAMLRelease(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}
 
 		public virtual YAMLNode ExportYAML(IExportContainer container)
 		{
-			throw new NotImplementedException();
+			if (container.ExportFlags.IsRelease())
+				return ExportYAMLRelease(container);
+			else
+				return ExportYAMLDebug(container);
 		}
 	}
 }
