@@ -110,6 +110,16 @@ namespace AssetRipper.Core.Classes.Misc
 			return node;
 		}
 
+		public static bool operator ==(Hash128 left, Hash128 right)
+		{
+			return left.Data0 == right.Data0 && left.Data1 == right.Data1 && left.Data2 == right.Data2 && left.Data3 == right.Data3;
+		}
+
+		public static bool operator !=(Hash128 left, Hash128 right)
+		{
+			return left.Data0 != right.Data0 || left.Data1 != right.Data1 || left.Data2 != right.Data2 || left.Data3 != right.Data3;
+		}
+
 		public override int GetHashCode()
 		{
 			int hash = 311;
