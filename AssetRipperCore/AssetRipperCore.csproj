@@ -31,7 +31,6 @@
 
   <ItemGroup>
 	<ProjectReference Include="..\AssetRipperCommon\AssetRipperCommon.csproj" />
-	<ProjectReference Include="..\Brotli\Brotli.csproj" />
   </ItemGroup>
 
   <ItemGroup>

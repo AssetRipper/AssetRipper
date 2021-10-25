@@ -30,4 +30,8 @@
 		<PackageReference Include="SevenZipCsharp" Version="1.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Brotli\Brotli.csproj" />
+	</ItemGroup>
+
 </Project>
