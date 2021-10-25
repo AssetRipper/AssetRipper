@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Classes;
+using AssetRipper.Core.Interfaces;
 using System;
 
 namespace AssetRipper.Core.Extensions
@@ -7,17 +8,9 @@ namespace AssetRipper.Core.Extensions
 	{
 		public static string GetOriginalName(this UnityObjectBase _this)
 		{
-			if (_this is NamedObject named)
+			if (_this is IHasName named)
 			{
 				return named.Name;
-			}
-			else if (_this is Classes.GameObject.GameObject gameObject)
-			{
-				return gameObject.Name;
-			}
-			else if (_this is MonoBehaviour monoBeh)
-			{
-				return monoBeh.Name;
 			}
 			else
 			{
@@ -27,17 +20,13 @@ namespace AssetRipper.Core.Extensions
 
 		public static string TryGetName(this UnityObjectBase _this)
 		{
-			if (_this is NamedObject named)
+			if (_this is INamedObject named)
 			{
 				return named.ValidName;
 			}
-			else if (_this is Classes.GameObject.GameObject gameObject)
+			else if (_this is IHasName named2)
 			{
-				return gameObject.Name;
-			}
-			else if (_this is MonoBehaviour monoBeh)
-			{
-				return monoBeh.Name;
+				return named2.Name;
 			}
 			else
 			{

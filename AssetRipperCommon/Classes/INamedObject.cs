@@ -1,8 +1,9 @@
-﻿namespace AssetRipper.Core.Classes
+﻿using AssetRipper.Core.Interfaces;
+
+namespace AssetRipper.Core.Classes
 {
-	public interface INamedObject
+	public interface INamedObject : IHasName
 	{
-		string Name { get; set; }
 		string ValidName { get; }
 	}
 }

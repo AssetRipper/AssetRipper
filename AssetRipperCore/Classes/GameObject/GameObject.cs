@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Converters.GameObject;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
@@ -14,7 +15,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.GameObject
 {
-	public sealed class GameObject : EditorExtension
+	public sealed class GameObject : EditorExtension, IHasName
 	{
 		public GameObject(AssetLayout layout) : base(layout)
 		{

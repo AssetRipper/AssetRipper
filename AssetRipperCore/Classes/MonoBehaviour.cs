@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
@@ -13,7 +14,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class MonoBehaviour : Behaviour
+	public sealed class MonoBehaviour : Behaviour, IHasName
 	{
 		public MonoBehaviour(AssetInfo assetInfo) : base(assetInfo) { }
 
