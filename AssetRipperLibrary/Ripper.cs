@@ -98,11 +98,11 @@ namespace AssetRipper.Library
 			return GameStructure.FileCollection.FetchAssets();
 		}
 
-		public void ExportFile(string exportPath, UnityObject asset) => throw new NotImplementedException();
-		public void ExportFile(string exportPath, IEnumerable<UnityObject> assets) => throw new NotImplementedException();
+		public void ExportFile(string exportPath, UnityObjectBase asset) => throw new NotImplementedException();
+		public void ExportFile(string exportPath, IEnumerable<UnityObjectBase> assets) => throw new NotImplementedException();
 
-		public void ExportProject(string exportPath) => ExportProject(exportPath, new UnityObject[0]);
-		public void ExportProject(string exportPath, UnityObject asset) => ExportProject(exportPath, new UnityObject[] { asset });
+		public void ExportProject(string exportPath) => ExportProject(exportPath, new UnityObjectBase[0]);
+		public void ExportProject(string exportPath, UnityObjectBase asset) => ExportProject(exportPath, new UnityObjectBase[] { asset });
 		public void ExportProject(string exportPath, IEnumerable<UnityObjectBase> assets)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");

@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Classes.Texture2D;
@@ -29,7 +30,7 @@ namespace AssetRipper.GUI.AssetInfo
 	{
 		private static readonly LibVLC? LibVlc;
 		
-		public Object Asset { get; }
+		public UnityObjectBase Asset { get; }
 		private readonly IExportContainer? _uiAssetContainer;
 
 		private readonly MemoryStream? _audioStream;
