@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Structure
 		public AssetLayout Layout { get; }
 
 		public ProjectExporter Exporter { get; }
-		public AssetFactory AssetFactory { get; } = new AssetFactory();
+		public IAssetFactory AssetFactory { get; } = new AssetFactory();
 		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
 		public IAssemblyManager AssemblyManager { get; }
 

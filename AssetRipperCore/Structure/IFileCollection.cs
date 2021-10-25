@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Structure
 
 		bool IsScene(ISerializedFile file);
 
-		AssetFactory AssetFactory { get; }
+		IAssetFactory AssetFactory { get; }
 		IAssemblyManager AssemblyManager { get; }
 	}
 }

@@ -71,7 +71,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Parser.Asset
 {
-	public class AssetFactory
+	public class AssetFactory : IAssetFactory
 	{
 		public UnityObjectBase CreateAsset(AssetInfo assetInfo)
 		{
