@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO.Extensions
 {
-	public static class IDictionaryExportYAMLExtensions
+	public static class IDictionaryExportNewYAMLExtensions
 	{
 		public static YAMLNode ExportYAML<T>(this IReadOnlyDictionary<int, T> _this, bool release) where T : IYAMLExportableNew
 		{
