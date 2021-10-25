@@ -2,18 +2,16 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
 using System;
 using System.Text;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct UnityGUID : IAsset, ISerializedReadable, ISerializedWritable
+	public struct UnityGuidNoYaml : IAssetReadable, IAssetWritable, ISerializedReadable, ISerializedWritable
 	{
-		public UnityGUID(Guid guid) : this(guid.ToByteArray()) { }
+		public UnityGuidNoYaml(Guid guid) : this(guid.ToByteArray()) { }
 
-		public UnityGUID(byte[] guidData)
+		public UnityGuidNoYaml(byte[] guidData)
 		{
 			Data0 = BitConverter.ToUInt32(guidData, 0);
 			Data1 = BitConverter.ToUInt32(guidData, 4);
@@ -21,7 +19,7 @@ namespace AssetRipper.Core.Classes.Misc
 			Data3 = BitConverter.ToUInt32(guidData, 12);
 		}
 
-		public UnityGUID(uint dword0, uint dword1, uint dword2, uint dword3)
+		public UnityGuidNoYaml(uint dword0, uint dword1, uint dword2, uint dword3)
 		{
 			Data0 = dword0;
 			Data1 = dword1;
@@ -29,15 +27,12 @@ namespace AssetRipper.Core.Classes.Misc
 			Data3 = dword3;
 		}
 
-		public static implicit operator UnityGuidNoYaml(UnityGUID guid) => new UnityGuidNoYaml(guid.Data0, guid.Data1, guid.Data2, guid.Data3);
-		public static implicit operator UnityGUID(UnityGuidNoYaml guid) => new UnityGUID(guid.Data0, guid.Data1, guid.Data2, guid.Data3);
-
-		public static bool operator ==(UnityGUID left, UnityGUID right)
+		public static bool operator ==(UnityGuidNoYaml left, UnityGuidNoYaml right)
 		{
 			return left.Data0 == right.Data0 && left.Data1 == right.Data1 && left.Data2 == right.Data2 && left.Data3 == right.Data3;
 		}
 
-		public static bool operator !=(UnityGUID left, UnityGUID right)
+		public static bool operator !=(UnityGuidNoYaml left, UnityGuidNoYaml right)
 		{
 			return left.Data0 != right.Data0 || left.Data1 != right.Data1 || left.Data2 != right.Data2 || left.Data3 != right.Data3;
 		}
@@ -78,14 +73,9 @@ namespace AssetRipper.Core.Classes.Misc
 			writer.Write(Data3);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
-		{
-			return new YAMLScalarNode(ToString());
-		}
-
 		public override bool Equals(object obj)
 		{
-			if (obj is UnityGUID guid)
+			if (obj is UnityGuidNoYaml guid)
 			{
 				return this == guid;
 			}
@@ -149,7 +139,7 @@ namespace AssetRipper.Core.Classes.Misc
 		/// <summary>
 		/// 0x0000000DEADBEEF15DEADF00D0000000
 		/// </summary>
-		public static readonly UnityGUID MissingReference = new UnityGUID(0xD0000000, 0x1FEEBDAE, 0x00FDAED5, 0x0000000D);
+		public static readonly UnityGuidNoYaml MissingReference = new UnityGuidNoYaml(0xD0000000, 0x1FEEBDAE, 0x00FDAED5, 0x0000000D);
 
 		[ThreadStatic]
 		private static StringBuilder s_sb = null;
