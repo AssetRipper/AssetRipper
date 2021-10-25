@@ -36,12 +36,6 @@ namespace AssetRipper.Core.Classes.Renderer
 			}
 		}
 
-		public StaticBatchInfo(ObjectReader reader)
-		{
-			FirstSubMesh = reader.ReadUInt16();
-			SubMeshCount = reader.ReadUInt16();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			FirstSubMesh = reader.ReadUInt16();

@@ -15,12 +15,6 @@ namespace AssetRipper.Core.Classes.Misc.Serializable
 			m_Extent = extent;
 		}
 
-		public AABB(ObjectReader reader)
-		{
-			m_Center = reader.ReadVector3f();
-			m_Extent = reader.ReadVector3f();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			m_Center.Read(reader);

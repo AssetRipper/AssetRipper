@@ -20,14 +20,6 @@ namespace AssetRipper.Core.Classes.Misc
 
 		//public XForm() { }
 
-		public XForm(ObjectReader reader)
-		{
-			var version = reader.version;
-			T4 = version[0] > 5 || (version[0] == 5 && version[1] >= 4) ? reader.ReadVector3f() : reader.ReadVector4f();//5.4 and up
-			Q = (Vector4f)reader.ReadQuaternionf();
-			S4 = version[0] > 5 || (version[0] == 5 && version[1] >= 4) ? reader.ReadVector3f() : reader.ReadVector4f();//5.4 and up
-		}
-
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>

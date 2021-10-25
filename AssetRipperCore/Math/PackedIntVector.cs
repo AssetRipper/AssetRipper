@@ -26,18 +26,6 @@ namespace AssetRipper.Core.Math
 			m_Data = Array.Empty<byte>();
 		}
 		
-		public PackedIntVector(ObjectReader reader)
-		{
-			m_NumItems = reader.ReadUInt32();
-
-			int numData = reader.ReadInt32();
-			m_Data = reader.ReadBytes(numData);
-			reader.AlignStream();
-
-			m_BitSize = reader.ReadByte();
-			reader.AlignStream();
-		}
-		
 #warning TODO: Pack method
 
 		public int[] Unpack()

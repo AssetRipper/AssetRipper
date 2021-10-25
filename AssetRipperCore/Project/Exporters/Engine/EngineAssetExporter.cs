@@ -5,7 +5,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Project.Exporters.Engine
 {

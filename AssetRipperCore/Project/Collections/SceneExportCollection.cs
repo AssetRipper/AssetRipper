@@ -36,8 +36,8 @@ namespace AssetRipper.Core.Project.Collections
 			Name = file.Name;
 			m_file = file;
 
-			List<Object> components = new List<Object>();
-			foreach (Object asset in file.FetchAssets())
+			List<UnityObjectBase> components = new List<UnityObjectBase>();
+			foreach (UnityObjectBase asset in file.FetchAssets())
 			{
 				if (IsSceneCompatible(asset))
 				{

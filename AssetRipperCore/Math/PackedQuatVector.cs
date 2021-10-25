@@ -15,16 +15,6 @@ namespace AssetRipper.Core.Math
 		public uint m_NumItems;
 		public byte[] m_Data;
 
-		public PackedQuatVector(ObjectReader reader)
-		{
-			m_NumItems = reader.ReadUInt32();
-
-			int numData = reader.ReadInt32();
-			m_Data = reader.ReadBytes(numData);
-
-			reader.AlignStream();
-		}
-
 		public Quaternionf[] Unpack()
 		{
 			int bitIndex = 0;

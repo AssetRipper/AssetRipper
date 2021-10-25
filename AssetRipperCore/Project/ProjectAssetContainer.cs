@@ -59,7 +59,7 @@ namespace AssetRipper.Core.Project
 			List<SceneExportCollection> scenes = new List<SceneExportCollection>();
 			foreach (IExportCollection collection in collections)
 			{
-				foreach (Object asset in collection.Assets)
+				foreach (UnityObjectBase asset in collection.Assets)
 				{
 #warning TODO: unique asset:collection (m_assetCollections.Add)
 					m_assetCollections[asset.AssetInfo] = collection;

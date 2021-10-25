@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Core.IO.FileReading;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Reading;
-using AssetRipper.Core.SerializedFiles;
 using System;
 using System.IO;
 
@@ -50,7 +48,7 @@ namespace AssetAnalyzer
 			Logger.Info($"Loading {reader.FileName}");
 			try
 			{
-				var assetsFile = new SerializedFile(reader, null);
+				var assetsFile = new SerializedFile(reader);
 				if (assetsFile.IsVersionStripped)
 					Logger.Info("\tUnity version: stripped");
 				else

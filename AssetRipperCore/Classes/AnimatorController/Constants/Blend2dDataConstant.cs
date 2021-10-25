@@ -10,21 +10,6 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
 	public struct Blend2dDataConstant : IAssetReadable, IYAMLExportable
 	{
-		public Blend2dDataConstant(ObjectReader reader)
-		{
-			m_ChildPositionArray = reader.ReadVector2Array();
-			m_ChildMagnitudeArray = reader.ReadSingleArray();
-			m_ChildPairVectorArray = reader.ReadVector2Array();
-			m_ChildPairAvgMagInvArray = reader.ReadSingleArray();
-
-			int numNeighbours = reader.ReadInt32();
-			m_ChildNeighborListArray = new MotionNeighborList[numNeighbours];
-			for (int i = 0; i < numNeighbours; i++)
-			{
-				m_ChildNeighborListArray[i] = new MotionNeighborList(reader);
-			}
-		}
-
 		public void Read(AssetReader reader)
 		{
 			m_ChildPositionArray = reader.ReadAssetArray<Vector2f>();

@@ -31,20 +31,6 @@ namespace AssetRipper.Core.Math
 			m_Data = Array.Empty<byte>();
 		}
 
-		public PackedFloatVector(ObjectReader reader)
-		{
-			m_NumItems = reader.ReadUInt32();
-			m_Range = reader.ReadSingle();
-			m_Start = reader.ReadSingle();
-
-			int numData = reader.ReadInt32();
-			m_Data = reader.ReadBytes(numData);
-			reader.AlignStream();
-
-			m_BitSize = reader.ReadByte();
-			reader.AlignStream();
-		}
-
 #warning TODO: Pack method
 
 		public float[] Unpack()

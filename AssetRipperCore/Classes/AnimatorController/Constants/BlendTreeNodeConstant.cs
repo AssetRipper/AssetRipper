@@ -42,66 +42,6 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		/// </summary>
 		public static bool HasCycleOffset(UnityVersion version) => version.IsGreaterEqual(4, 1, 3);
 
-		public BlendTreeNodeConstant(ObjectReader reader)
-		{
-			var version = reader.version;
-
-			if (version[0] > 4 || (version[0] == 4 && version[1] >= 1)) //4.1 and up
-			{
-				BlendType = (BlendTreeType)reader.ReadUInt32();
-			}
-			else BlendType = default;
-			BlendEventID = reader.ReadUInt32();
-			if (version[0] > 4 || (version[0] == 4 && version[1] >= 1)) //4.1 and up
-			{
-				BlendEventYID = reader.ReadUInt32();
-			}
-			else BlendEventYID = 0;
-			ChildIndices = reader.ReadUInt32Array();
-			if (version[0] < 4 || (version[0] == 4 && version[1] < 1)) //4.1 down
-			{
-				ChildThresholdArray = reader.ReadSingleArray();
-			}
-			else ChildThresholdArray = new float[0];
-
-			if (version[0] > 4 || (version[0] == 4 && version[1] >= 1)) //4.1 and up
-			{
-				new Blend1dDataConstant(reader);
-				new Blend2dDataConstant(reader);
-			}
-			Blend1dData = default;
-			Blend2dData = default;
-
-			if (version[0] >= 5) //5.0 and up
-			{
-				new BlendDirectDataConstant(reader);
-			}
-			BlendDirectData = default;
-
-			ClipID = reader.ReadUInt32();
-			if (version[0] == 4 && version[1] >= 5) //4.5 - 5.0
-			{
-				ClipIndex = reader.ReadUInt32();
-			}
-			else ClipIndex = 0;
-
-			Duration = reader.ReadSingle();
-
-			if (version[0] > 4
-				|| (version[0] == 4 && version[1] > 1)
-				|| (version[0] == 4 && version[1] == 1 && version[2] >= 3)) //4.1.3 and up
-			{
-				CycleOffset = reader.ReadSingle();
-				Mirror = reader.ReadBoolean();
-				reader.AlignStream();
-			}
-			else
-			{
-				CycleOffset = 0;
-				Mirror = false;
-			}
-		}
-
 		public void Read(AssetReader reader)
 		{
 			if (HasBlendType(reader.Version))

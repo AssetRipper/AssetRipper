@@ -8,13 +8,6 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
 	public struct BlendDirectDataConstant : IAssetReadable, IYAMLExportable
 	{
-		public BlendDirectDataConstant(ObjectReader reader)
-		{
-			m_ChildBlendEventIDArray = reader.ReadUInt32Array();
-			m_NormalizedBlendValues = reader.ReadBoolean();
-			reader.AlignStream();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			m_ChildBlendEventIDArray = reader.ReadUInt32Array();

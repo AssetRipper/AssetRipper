@@ -33,29 +33,6 @@ namespace AssetRipper.Core.Classes.Mesh
 			Frequency = 0;
 		}
 
-		public StreamInfo(ObjectReader reader)
-		{
-			var version = reader.version;
-
-			ChannelMask = reader.ReadUInt32();
-			Offset = reader.ReadUInt32();
-
-			if (version[0] < 4) //4.0 down
-			{
-				Stride = reader.ReadUInt32();
-				Align = reader.ReadUInt32();
-				DividerOp = 0;
-				Frequency = 0;
-			}
-			else
-			{
-				Stride = reader.ReadByte();
-				Align = 0;
-				DividerOp = reader.ReadByte();
-				Frequency = reader.ReadUInt16();
-			}
-		}
-
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>

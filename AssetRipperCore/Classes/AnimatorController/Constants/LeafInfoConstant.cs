@@ -8,12 +8,6 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		public uint[] m_IDArray;
 		public uint m_IndexOffset;
 
-		public LeafInfoConstant(ObjectReader reader)
-		{
-			m_IDArray = reader.ReadUInt32Array();
-			m_IndexOffset = reader.ReadUInt32();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			m_IDArray = reader.ReadUInt32Array();

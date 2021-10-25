@@ -4,7 +4,7 @@
 * Shader Export
   * Reformat the shader export system
 * Code Cleanup
-  * Remove Reading namespace
+  * Remove Reading namespace (done!)
   * Move more code to the Common and Library projects
 
 ## 0.2.0.0

@@ -194,13 +194,13 @@ namespace AssetRipper.Core.Project
 			List<IExportCollection> collections = new List<IExportCollection>();
 
 			// speed up fetching
-			List<Object> depList = new List<Object>();
-			HashSet<Object> depSet = new HashSet<Object>();
-			HashSet<Object> queued = new HashSet<Object>();
+			List<UnityObjectBase> depList = new List<UnityObjectBase>();
+			HashSet<UnityObjectBase> depSet = new HashSet<UnityObjectBase>();
+			HashSet<UnityObjectBase> queued = new HashSet<UnityObjectBase>();
 
 			foreach (SerializedFile file in files)
 			{
-				foreach (Object asset in file.FetchAssets())
+				foreach (UnityObjectBase asset in file.FetchAssets())
 				{
 					if (!options.Filter(asset))
 					{
@@ -215,21 +215,21 @@ namespace AssetRipper.Core.Project
 
 			for (int i = 0; i < depList.Count; i++)
 			{
-				Object asset = depList[i];
+				UnityObjectBase asset = depList[i];
 				if (!queued.Contains(asset))
 				{
 					IExportCollection collection = CreateCollection(virtualFile, asset);
-					foreach (Object element in collection.Assets)
+					foreach (UnityObjectBase element in collection.Assets)
 					{
 						queued.Add(element);
 					}
 					collections.Add(collection);
 				}
 
-				if (options.ExportDependencies)
+				if (options.ExportDependencies && asset is IDependent dependent)
 				{
 					DependencyContext context = new DependencyContext(exportLayout, true);
-					foreach (PPtr<Object> pointer in asset.FetchDependencies(context))
+					foreach (PPtr<Object> pointer in dependent.FetchDependencies(context))
 					{
 						if (pointer.IsNull)
 						{
@@ -315,7 +315,7 @@ namespace AssetRipper.Core.Project
 			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{classID}'");
 		}
 
-		private IExportCollection CreateCollection(VirtualSerializedFile file, Object asset)
+		private IExportCollection CreateCollection(VirtualSerializedFile file, UnityObjectBase asset)
 		{
 			Stack<IAssetExporter> exporters = m_exporters[asset.ClassID];
 			foreach (IAssetExporter exporter in exporters)

@@ -428,7 +428,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		public IEnumerable<GameObject.GameObject> FindRoots()
 		{
-			foreach (Object.Object asset in File.Collection.FetchAssets())
+			foreach (UnityObjectBase asset in File.Collection.FetchAssets())
 			{
 				switch (asset.ClassID)
 				{

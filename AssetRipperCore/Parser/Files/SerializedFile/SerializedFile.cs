@@ -64,8 +64,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			}
 		}
 
-		public static SerializedFileScheme LoadScheme(string filePath, string fileName)
+		public static SerializedFileScheme LoadScheme(string filePath)
 		{
+			string fileName = Path.GetFileNameWithoutExtension(filePath);
 			using (SmartStream fileStream = SmartStream.OpenRead(filePath))
 			{
 				return ReadScheme(fileStream, filePath, fileName);

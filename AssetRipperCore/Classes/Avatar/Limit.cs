@@ -15,21 +15,6 @@ namespace AssetRipper.Core.Classes.Avatar
 		/// </summary>
 		public static bool IsVector3f(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
-		public Limit(ObjectReader reader)
-		{
-			var version = reader.version;
-			if (version[0] > 5 || (version[0] == 5 && version[1] >= 4))//5.4 and up
-			{
-				Min4 = reader.ReadVector3f();
-				Max4 = reader.ReadVector3f();
-			}
-			else
-			{
-				Min4 = reader.ReadVector4f();
-				Max4 = reader.ReadVector4f();
-			}
-		}
-
 		public void Read(AssetReader reader)
 		{
 			if (IsVector3f(reader.Version))

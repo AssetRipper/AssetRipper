@@ -315,14 +315,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		protected static int[] GetUnityVersionFromSerializedFile(string filePath)
 		{
-			string unityVersion = (new AssetRipper.Core.SerializedFiles.SerializedFile(new FileReader(filePath), null)).unityVersion;
-			return AssetRipper.Core.Parser.Files.UnityVersion.Parse(unityVersion).ToArray();
+			return AssetRipper.Core.Parser.Files.SerializedFiles.SerializedFile.LoadScheme(filePath).Metadata.UnityVersion.ToArray();
 		}
 
 		protected static int[] GetUnityVersionFromBundleFile(string filePath)
 		{
-			string unityVersion = (new AssetRipper.Core.Reading.BundleFile(new FileReader(filePath))).m_Header.unityRevision;
-			return AssetRipper.Core.Parser.Files.UnityVersion.Parse(unityVersion).ToArray();
+			return AssetRipper.Core.Parser.Files.BundleFile.BundleFile.LoadScheme(filePath).Header.UnityWebMinimumRevision.ToArray();
 		}
 
 		protected static bool HasMonoAssemblies(string managedDirectory)

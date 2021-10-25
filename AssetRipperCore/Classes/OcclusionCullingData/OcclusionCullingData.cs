@@ -96,7 +96,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 
 			// if >= 5.5.0 and Release this asset doesn't containt renderers data so we need to create it
 			List<OcclusionCullingSettings.OcclusionCullingSettings> cullingSettings = new List<OcclusionCullingSettings.OcclusionCullingSettings>();
-			foreach (Object.Object asset in File.Collection.FetchAssets())
+			foreach (UnityObjectBase asset in File.Collection.FetchAssets())
 			{
 				if (asset.ClassID == ClassIDType.OcclusionCullingSettings)
 				{

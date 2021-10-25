@@ -17,24 +17,6 @@ namespace AssetRipper.Core.Classes.Avatar
 		public float m_Length { get; set; }
 		public uint m_Type { get; set; }
 
-		public Axes(ObjectReader reader)
-		{
-			var version = reader.version;
-			m_PreQ = reader.ReadVector4f();
-			m_PostQ = reader.ReadVector4f();
-			if (version[0] > 5 || (version[0] == 5 && version[1] >= 4)) //5.4 and up
-			{
-				m_Sgn = reader.ReadVector3f();
-			}
-			else
-			{
-				m_Sgn = reader.ReadVector4f();
-			}
-			m_Limit = new Limit(reader);
-			m_Length = reader.ReadSingle();
-			m_Type = reader.ReadUInt32();
-		}
-
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>

@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Project.Collections
 			m_version = version;
 			if (IsEngineFile(asset.File.Name))
 			{
-				foreach (Object builtInAsset in File.FetchAssets())
+				foreach (UnityObjectBase builtInAsset in File.FetchAssets())
 				{
 					if (IsEngineAsset(builtInAsset, version))
 					{
