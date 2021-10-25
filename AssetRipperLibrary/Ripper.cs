@@ -103,10 +103,10 @@ namespace AssetRipper.Library
 
 		public void ExportProject(string exportPath) => ExportProject(exportPath, new UnityObject[0]);
 		public void ExportProject(string exportPath, UnityObject asset) => ExportProject(exportPath, new UnityObject[] { asset });
-		public void ExportProject(string exportPath, IEnumerable<UnityObject> assets)
+		public void ExportProject(string exportPath, IEnumerable<UnityObjectBase> assets)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			List<UnityObject> list = new List<UnityObject>(assets ?? new UnityObject[0]);
+			List<UnityObjectBase> list = new List<UnityObjectBase>(assets ?? new UnityObjectBase[0]);
 			Settings.ExportPath = exportPath;
 			Settings.Filter = list.Count == 0 ? LibraryConfiguration.DefaultFilter : GetFilter(list);
 			InitializeExporters();
@@ -128,7 +128,7 @@ namespace AssetRipper.Library
 
 		public void ResetSettings() => Settings.ResetToDefaultValues();
 
-		private static Func<UnityObject, bool> GetFilter(List<UnityObject> assets)
+		private static Func<UnityObjectBase, bool> GetFilter(List<UnityObjectBase> assets)
 		{
 			if (assets == null) throw new ArgumentNullException(nameof(assets));
 			return assets.Contains;
