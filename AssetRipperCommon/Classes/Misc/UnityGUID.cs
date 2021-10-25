@@ -29,9 +29,6 @@ namespace AssetRipper.Core.Classes.Misc
 			Data3 = dword3;
 		}
 
-		public static implicit operator UnityGuidNoYaml(UnityGUID guid) => new UnityGuidNoYaml(guid.Data0, guid.Data1, guid.Data2, guid.Data3);
-		public static implicit operator UnityGUID(UnityGuidNoYaml guid) => new UnityGUID(guid.Data0, guid.Data1, guid.Data2, guid.Data3);
-
 		public static bool operator ==(UnityGUID left, UnityGUID right)
 		{
 			return left.Data0 == right.Data0 && left.Data1 == right.Data1 && left.Data2 == right.Data2 && left.Data3 == right.Data3;

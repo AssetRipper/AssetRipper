@@ -8,7 +8,7 @@ using System.Text;
 
 namespace AssetRipper.Core.Classes
 {
-	public class UnknownObject : Object.Object
+	public class UnknownObject : UnityObjectBase
 	{
 		public byte[] Data { get; private set; } = new byte[0];
 

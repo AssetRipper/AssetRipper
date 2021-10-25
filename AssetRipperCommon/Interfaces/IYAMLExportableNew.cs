@@ -1,8 +1,9 @@
-﻿using AssetRipper.Core.YAML;
+﻿using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Interfaces
 {
-	public interface IYAMLExportableNew
+	public interface IYAMLExportableNew : IYAMLExportable
 	{
 		YAMLNode ExportYAMLRelease();
 		YAMLNode ExportYAMLDebug();

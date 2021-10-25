@@ -2,6 +2,7 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 
@@ -69,6 +70,11 @@ namespace AssetRipper.Core
 		public virtual YAMLNode ExportYAMLRelease()
 		{
 			throw new NotSupportedException();
+		}
+
+		public virtual YAMLNode ExportYAML(IExportContainer container)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

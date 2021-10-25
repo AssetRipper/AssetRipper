@@ -38,28 +38,12 @@ namespace AssetRipper.Core.Classes.Object
 			}
 		}
 
-		public YAMLDocument ExportYAMLDocument(IExportContainer container)
-		{
-			YAMLDocument document = new YAMLDocument();
-			YAMLMappingNode root = document.CreateMappingRoot();
-			root.Tag = ClassID.ToInt().ToString();
-			root.Anchor = container.GetExportID(this).ToString();
-			YAMLMappingNode node = ExportYAMLRoot(container);
-			root.Add(container.ExportLayout.GetClassName(ClassID), node);
-			return document;
-		}
-
-		public YAMLNode ExportYAML(IExportContainer container)
-		{
-			return ExportYAMLRoot(container);
-		}
-
 		public virtual IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
 		{
 			yield break;
 		}
 
-		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			if (HasHideFlag(container.Version,container.Flags))

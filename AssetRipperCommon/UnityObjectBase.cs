@@ -3,6 +3,8 @@ using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 using System.IO;
 
 namespace AssetRipper.Core
@@ -17,7 +19,7 @@ namespace AssetRipper.Core
 		public ISerializedFile File => AssetInfo.File;
 		public virtual ClassIDType ClassID => AssetInfo.ClassID;
 		public long PathID => AssetInfo.PathID;
-		public UnityGuidNoYaml GUID => AssetInfo.GUID;
+		public UnityGUID GUID => AssetInfo.GUID;
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
 		public virtual string ExportExtension => AssetExtension;
 		public HideFlags ObjectHideFlags { get; set; }
@@ -30,6 +32,28 @@ namespace AssetRipper.Core
 		public UnityObjectBase(AssetInfo assetInfo)
 		{
 			AssetInfo = assetInfo;
+		}
+
+		public YAMLDocument ExportYAMLDocument(IExportContainer container)
+		{
+			YAMLDocument document = new YAMLDocument();
+			YAMLMappingNode root = document.CreateMappingRoot();
+			root.Tag = ClassID.ToInt().ToString();
+			root.Anchor = container.GetExportID(this).ToString();
+			YAMLMappingNode node = ExportYAMLRoot(container);
+			root.Add(container.ExportLayout.GetClassName(ClassID), node);
+			return document;
+		}
+
+		public override YAMLNode ExportYAML(IExportContainer container)
+		{
+			return ExportYAMLRoot(container);
+		}
+
+		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			return node;
 		}
 	}
 }

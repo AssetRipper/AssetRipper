@@ -93,11 +93,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return m_assets[pathID].ClassID;
 		}
 
-		public PPtrNoYaml<T> CreatePPtr<T>(T asset) where T : UnityObjectBase
+		public PPtr<T> CreatePPtr<T>(T asset) where T : UnityObjectBase
 		{
 			if (asset.File == this)
 			{
-				return new PPtrNoYaml<T>(VirtualFileIndex, asset.PathID);
+				return new PPtr<T>(VirtualFileIndex, asset.PathID);
 			}
 			throw new Exception($"Asset '{asset}' doesn't belong to {nameof(VirtualSerializedFile)}");
 		}

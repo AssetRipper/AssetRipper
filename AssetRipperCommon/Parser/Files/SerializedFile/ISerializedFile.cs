@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		ObjectInfo GetAssetEntry(long pathID);
 
-		PPtrNoYaml<T> CreatePPtr<T>(T asset) where T : UnityObjectBase;
+		PPtr<T> CreatePPtr<T>(T asset) where T : UnityObjectBase;
 
 		IEnumerable<UnityObjectBase> FetchAssets();
 

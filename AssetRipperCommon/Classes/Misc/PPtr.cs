@@ -33,9 +33,6 @@ namespace AssetRipper.Core.Classes.Misc
 			PathID = pathID;
 		}
 
-		public static implicit operator PPtr<T>(PPtrNoYaml<T> ptr) => new PPtr<T>(ptr.FileIndex, ptr.PathID);
-		public static implicit operator PPtrNoYaml<T>(PPtr<T> ptr) => new PPtrNoYaml<T>(ptr.FileIndex, ptr.PathID);
-
 		public static bool operator ==(PPtr<T> left, PPtr<T> right)
 		{
 			return left.FileIndex == right.FileIndex && left.PathID == right.PathID;
@@ -134,7 +131,7 @@ namespace AssetRipper.Core.Classes.Misc
 			throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
 		}
 
-		public bool IsAsset(Object.Object asset)
+		public bool IsAsset(UnityObjectBase asset)
 		{
 			if (FileIndex == 0)
 			{
@@ -146,7 +143,7 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 		}
 
-		public bool IsAsset(IAssetContainer file, Object.Object asset)
+		public bool IsAsset(IAssetContainer file, UnityObjectBase asset)
 		{
 			if (FileIndex == 0)
 			{

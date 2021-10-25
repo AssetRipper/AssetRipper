@@ -198,14 +198,14 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return Metadata.Object[m_assetEntryLookup[pathID]].ClassID;
 		}
 
-		public PPtrNoYaml<T> CreatePPtr<T>(T obj) where T : UnityObjectBase
+		public PPtr<T> CreatePPtr<T>(T obj) where T : UnityObjectBase
 		{
 			if (obj is not Object asset)
 				throw new NotSupportedException();
 
 			if (asset.File == this)
 			{
-				return new PPtrNoYaml<T>(0, asset.PathID);
+				return new PPtr<T>(0, asset.PathID);
 			}
 
 			for (int i = 0; i < Metadata.Externals.Length; i++)
@@ -214,7 +214,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (asset.File == file)
 				{
-					return new PPtrNoYaml<T>(i + 1, asset.PathID);
+					return new PPtr<T>(i + 1, asset.PathID);
 				}
 			}
 
