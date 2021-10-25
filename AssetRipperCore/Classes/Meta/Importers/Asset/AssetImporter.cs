@@ -15,7 +15,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 {
 	// NOTE: unknown layout for all importers for versions < 2.5.0
-	public abstract class AssetImporter : NamedObject
+	public abstract class AssetImporter : NamedObject, IAssetImporter
 	{
 		protected AssetImporter(AssetLayout layout) : base(layout)
 		{

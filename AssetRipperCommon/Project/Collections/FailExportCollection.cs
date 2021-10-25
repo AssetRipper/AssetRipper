@@ -1,19 +1,20 @@
-﻿using AssetRipper.Core.Classes.Meta;
+﻿using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Project.Collections
 {
-	public sealed class SkipExportCollection : IExportCollection
+	public class FailExportCollection : IExportCollection
 	{
-		public SkipExportCollection(IAssetExporter assetExporter, UnityObjectBase asset)
+		public FailExportCollection(IAssetExporter assetExporter, UnityObjectBase asset)
 		{
 			if (assetExporter == null)
 			{
@@ -30,6 +31,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public bool Export(IProjectAssetContainer container, string dirPath)
 		{
+			Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to export asset {Name}");
 			return false;
 		}
 
@@ -71,8 +73,8 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			get { yield return m_asset; }
 		}
-		public string Name => m_asset.GetType().Name;
-		public AssetImporter MetaImporter => throw new NotSupportedException();
+		public string Name => m_asset is INamedObject namedAsset ? namedAsset.ValidName : m_asset.GetType().Name;
+		public IAssetImporter MetaImporter => throw new NotSupportedException();
 
 		private readonly UnityObjectBase m_asset;
 	}

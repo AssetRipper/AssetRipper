@@ -203,6 +203,8 @@ namespace AssetRipper.Core.Classes.Misc
 			return FindAsset(container) != null;
 		}
 
+		public Type AssetType => typeof(T);
+
 		public bool IsVirtual => FileIndex == VirtualSerializedFile.VirtualFileIndex;
 		/// <summary>
 		/// PathID == 0

@@ -68,7 +68,7 @@ namespace AssetRipper.Core.Project.Collections
 				m_file = m_exportIDs.Keys.First().File;
 				yield return Asset;
 
-				foreach (Object asset in m_assets)
+				foreach (UnityObjectBase asset in m_assets)
 				{
 					m_file = asset.File;
 					yield return asset;

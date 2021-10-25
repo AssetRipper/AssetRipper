@@ -5,7 +5,6 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Project.Collections
 {
@@ -43,6 +42,6 @@ namespace AssetRipper.Core.Project.Collections
 			get { yield break; }
 		}
 		public string Name => throw new NotSupportedException();
-		public AssetImporter MetaImporter => throw new NotSupportedException();
+		public IAssetImporter MetaImporter => throw new NotSupportedException();
 	}
 }

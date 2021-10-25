@@ -2,7 +2,6 @@
 using AssetRipper.Core.Utils;
 using System;
 using System.IO;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Project
 {
