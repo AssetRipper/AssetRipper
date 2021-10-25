@@ -145,10 +145,10 @@ namespace AssetRipper.Core.Structure
 			return null;
 		}
 
-		public T FindAsset<T>(string name) where T : NamedObject
+		public T FindAsset<T>(string name) where T : UnityObjectBase, INamedObject
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
-			foreach (Object asset in FetchAssets())
+			foreach (UnityObjectBase asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{

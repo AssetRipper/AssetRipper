@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Structure
 		IResourceFile FindResourceFile(string fileName);
 
 		T FindAsset<T>() where T : UnityObjectBase;
-		T FindAsset<T>(string name) where T : NamedObject;
+		T FindAsset<T>(string name) where T : UnityObjectBase, INamedObject;
 		IEnumerable<UnityObjectBase> FetchAssets();
 
 		IEnumerable<UnityObjectBase> FetchAssetsOfType(ClassIDType type);

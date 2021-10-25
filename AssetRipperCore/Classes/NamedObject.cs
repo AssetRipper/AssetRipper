@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes
 {
-	public abstract class NamedObject : EditorExtension
+	public abstract class NamedObject : EditorExtension, INamedObject
 	{
 		protected NamedObject(AssetLayout layout) : base(layout)
 		{

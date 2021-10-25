@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
-	public abstract class PlatformGameStructure
+	public abstract class PlatformGameStructure : IPlatformGameStructure
 	{
 		public string Name { get; protected set; }
 		public string RootPath { get; protected set; }
@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		public string Il2CppMetaDataPath { get; protected set; }
 		public string UnityPlayerPath { get; protected set; }
 		public int[] UnityVersion { get; protected set; }
-		
+
 		public IReadOnlyList<string> DataPaths { get; protected set; }
 
 		/// <summary>Name : FullName</summary>
@@ -62,11 +62,11 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		public static bool IsPrimaryEngineFile(string fileName)
 		{
-			if (fileName == MainDataName || 
-				fileName == GlobalGameManagersName || 
-				fileName == GlobalGameManagerAssetsName || 
-				fileName == ResourcesAssetsName || 
-				s_levelTemplate.IsMatch(fileName) || 
+			if (fileName == MainDataName ||
+				fileName == GlobalGameManagersName ||
+				fileName == GlobalGameManagerAssetsName ||
+				fileName == ResourcesAssetsName ||
+				s_levelTemplate.IsMatch(fileName) ||
 				s_sharedAssetTemplate.IsMatch(fileName))
 			{
 				return true;
@@ -131,7 +131,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		{
 			if (this is MixedGameStructure)
 				return;
-			foreach(string dataPath in DataPaths)
+			foreach (string dataPath in DataPaths)
 			{
 				DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
 				CollectGameFiles(dataDirectory, Files);
@@ -212,7 +212,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
 				//if (file.Extension == AssetBundleExtension || file.Extension == AlternateBundleExtension)
-				if(BundleFile.IsBundleFile(file.FullName))
+				if (BundleFile.IsBundleFile(file.FullName))
 				{
 					string name = Path.GetFileNameWithoutExtension(file.Name).ToLowerInvariant();
 					AddAssetBundle(files, name, file.FullName);
