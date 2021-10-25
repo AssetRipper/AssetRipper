@@ -373,7 +373,7 @@ namespace AssetRipper.Core.Project
 
 		private const string ResourcesKeyword = "Resources";
 		private const string AssetBundleKeyword = "AssetBundles";
-		private const string AssetsDirectory = Object.AssetsKeyword + ObjectUtils.DirectorySeparator;
+		private const string AssetsDirectory = UnityObjectBase.AssetsKeyword + ObjectUtils.DirectorySeparator;
 		private const string ResourceFullPath = AssetsDirectory + ResourcesKeyword;
 		//private const string AssetBundleFullPath = AssetsDirectory + AssetBundleKeyword;
 		private const string AssetBundleFullPath = AssetsDirectory + "Asset_Bundles";

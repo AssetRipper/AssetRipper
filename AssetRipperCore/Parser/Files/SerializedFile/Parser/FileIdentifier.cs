@@ -5,7 +5,6 @@ using AssetRipper.Core.Parser.Utils;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 {
-#warning TODO: move to classes
 	/// <summary>
 	/// A serialized file may be linked with other serialized files to create shared dependencies.
 	/// </summary>

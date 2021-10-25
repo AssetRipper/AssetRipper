@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Classes.Misc
 		}
 	}
 
-	public struct PPtr<T> : IAsset where T : Object.Object
+	public struct PPtr<T> : IAsset where T : UnityObjectBase
 	{
 		public PPtr(int fileIndex, long pathID)
 		{
@@ -43,7 +43,7 @@ namespace AssetRipper.Core.Classes.Misc
 			return left.FileIndex != right.FileIndex || left.PathID != right.PathID;
 		}
 
-		public PPtr<T1> CastTo<T1>() where T1 : Object.Object
+		public PPtr<T1> CastTo<T1>() where T1 : UnityObjectBase
 		{
 			return new PPtr<T1>(FileIndex, PathID);
 		}
@@ -83,7 +83,8 @@ namespace AssetRipper.Core.Classes.Misc
 				return pointer.ExportYAML(container);
 			}
 
-			MetaPtr exPointer = container.CreateExportPointer(asset);
+#warning todo: switch to UnityObjectBase here
+			MetaPtr exPointer = container.CreateExportPointer(asset as Object.Object);
 			return exPointer.ExportYAML(container);
 		}
 
