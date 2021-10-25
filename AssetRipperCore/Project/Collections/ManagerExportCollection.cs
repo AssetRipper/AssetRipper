@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public ManagerExportCollection(IAssetExporter assetExporter, GlobalGameManager asset) : base(assetExporter, asset) { }
 
-		public override bool Export(ProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			string subPath = Path.Combine(dirPath, ProjectSettingsName);
 			string fileName = $"{Asset.ExportPath}.asset";

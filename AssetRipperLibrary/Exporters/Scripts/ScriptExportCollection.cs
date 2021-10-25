@@ -68,7 +68,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 		}
 
-		public override bool Export(ProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			if (m_export.Count == 0)
 			{
@@ -89,7 +89,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		public override long GetExportID(UnityObjectBase asset)
 		{
-			return GetMainExportID(asset);
+			return ExportIdHandler.GetMainExportID(asset);
 		}
 
 		public override MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal)

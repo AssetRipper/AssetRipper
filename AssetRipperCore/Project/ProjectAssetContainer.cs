@@ -23,13 +23,13 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Project
 {
-	public class ProjectAssetContainer : IExportContainer
+	public class ProjectAssetContainer : IProjectAssetContainer
 	{
 		public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<UnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
-			if(options == null) throw new ArgumentNullException(nameof(options));
+			if (options == null) throw new ArgumentNullException(nameof(options));
 			m_KeepAssetBundleContentPath = options.KeepAssetBundleContentPath;
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			ExportLayout = file.Layout;
@@ -137,14 +137,14 @@ namespace AssetRipper.Core.Project
 			return File.GetAssetType(pathID);
 		}
 
-		public long GetExportID(Object asset)
+		public long GetExportID(UnityObjectBase asset)
 		{
 			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
 			{
 				return collection.GetExportID(asset);
 			}
 
-			return ExportCollection.GetMainExportID(asset);
+			return ExportIdHandler.GetMainExportID(asset);
 		}
 
 		public AssetType ToExportType(ClassIDType classID)
@@ -159,7 +159,7 @@ namespace AssetRipper.Core.Project
 				return collection.CreateExportPointer(asset, collection == CurrentCollection);
 			}
 
-			long exportID = ExportCollection.GetMainExportID(asset);
+			long exportID = ExportIdHandler.GetMainExportID(asset);
 			return new MetaPtr(exportID, UnityGUID.MissingReference, AssetType.Meta);
 		}
 

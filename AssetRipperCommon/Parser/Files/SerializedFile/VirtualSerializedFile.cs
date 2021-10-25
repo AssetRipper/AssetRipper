@@ -9,7 +9,6 @@ using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {
@@ -73,14 +72,12 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		{
 			foreach (UnityObjectBase asset in FetchAssets())
 			{
-				if (asset.ClassID == classID)
+				if (asset.ClassID == classID && asset is INamedObject namedAsset)
 				{
-					NamedObject namedAsset = (NamedObject)asset;
 					if (namedAsset.ValidName == name)
 					{
-						return namedAsset;
+						return asset;
 					}
-					return asset;
 				}
 			}
 			return null;
@@ -96,14 +93,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return m_assets[pathID].ClassID;
 		}
 
-		public PPtrNoYaml<T> CreatePPtr<T>(T obj) where T : UnityObjectBase
+		public PPtrNoYaml<T> CreatePPtr<T>(T asset) where T : UnityObjectBase
 		{
-			if (obj is not Object asset)
-				throw new NotSupportedException();
-
 			if (asset.File == this)
 			{
-				return new PPtr<T>(VirtualFileIndex, asset.PathID);
+				return new PPtrNoYaml<T>(VirtualFileIndex, asset.PathID);
 			}
 			throw new Exception($"Asset '{asset}' doesn't belong to {nameof(VirtualSerializedFile)}");
 		}

@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
@@ -10,7 +9,7 @@ namespace AssetRipper.Core.Project
 {
 	public interface IExportContainer : IAssetContainer
 	{
-		long GetExportID(Object asset);
+		long GetExportID(UnityObjectBase asset);
 		AssetType ToExportType(ClassIDType classID);
 		MetaPtr CreateExportPointer(UnityObjectBase asset);
 

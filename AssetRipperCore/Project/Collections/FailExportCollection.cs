@@ -30,7 +30,7 @@ namespace AssetRipper.Core.Project.Collections
 			m_asset = asset;
 		}
 
-		public bool Export(ProjectAssetContainer container, string dirPath)
+		public bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to export asset {Name}");
 			return false;
@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			if (asset == m_asset)
 			{
-				return ExportCollection.GetMainExportID(m_asset);
+				return ExportIdHandler.GetMainExportID(m_asset);
 			}
 			throw new ArgumentException(nameof(asset));
 		}

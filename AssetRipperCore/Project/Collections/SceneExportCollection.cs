@@ -112,7 +112,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public override bool Export(ProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			string folderPath = Path.Combine(dirPath, Object.AssetsKeyword, OcclusionCullingSettings.SceneKeyword);
 			string sceneSubPath = GetSceneName(container);
@@ -161,7 +161,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override long GetExportID(UnityObjectBase asset)
 		{
-			return IsComponent(asset) ? m_cexportIDs[asset.AssetInfo] : GetMainExportID(asset);
+			return IsComponent(asset) ? m_cexportIDs[asset.AssetInfo] : ExportIdHandler.GetMainExportID(asset);
 		}
 
 		public override MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal)
@@ -209,7 +209,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		private void ExportAsset(ProjectAssetContainer container, NamedObject asset, string path)
+		private void ExportAsset(IProjectAssetContainer container, NamedObject asset, string path)
 		{
 			NativeFormatImporter importer = new NativeFormatImporter(container.ExportLayout);
 			importer.MainObjectFileID = GetExportID(asset);

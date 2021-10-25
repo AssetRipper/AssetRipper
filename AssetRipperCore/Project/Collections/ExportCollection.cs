@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Object = AssetRipper.Core.Classes.Object.Object;
 #if DEBUG
 using AssetRipper.Core.Extensions;
 #endif
@@ -38,48 +37,12 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public static long GetMainExportID(UnityObjectBase asset)
-		{
-			return GetMainExportID((uint)asset.ClassID, 0);
-		}
-
-		public static long GetMainExportID(uint classID)
-		{
-			return GetMainExportID(classID, 0);
-		}
-
-		public static long GetMainExportID(UnityObjectBase asset, uint value)
-		{
-			return GetMainExportID((uint)asset.ClassID, value);
-		}
-
-		public static long GetMainExportID(uint classID, uint value)
-		{
-			if (classID > 100100)
-			{
-				if (value != 0)
-				{
-					throw new ArgumentException("Unique asset type with non unique modifier", nameof(value));
-				}
-				return classID;
-			}
-
-#if DEBUG
-			int digits = BitConverterExtensions.GetDigitsCount(value);
-			if (digits > 5)
-			{
-				throw new ArgumentException($"Value {value} for main export ID must have no more than 5 digits");
-			}
-#endif
-			return classID * 100000 + value;
-		}
-
-		public abstract bool Export(ProjectAssetContainer container, string dirPath);
+		public abstract bool Export(IProjectAssetContainer container, string dirPath);
 		public abstract bool IsContains(UnityObjectBase asset);
 		public abstract long GetExportID(UnityObjectBase asset);
 		public abstract MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal);
 
-		protected void ExportAsset(ProjectAssetContainer container, AssetImporter importer, UnityObjectBase asset, string path, string name)
+		protected void ExportAsset(IProjectAssetContainer container, AssetImporter importer, UnityObjectBase asset, string path, string name)
 		{
 			if (!Directory.Exists(path))
 			{

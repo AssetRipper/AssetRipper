@@ -83,7 +83,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		protected override bool ExportInner(ProjectAssetContainer container, string filePath)
+		protected override bool ExportInner(IProjectAssetContainer container, string filePath)
 		{
 			return AssetExporter.Export(container, Asset, filePath);
 		}
@@ -99,7 +99,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		protected override long GenerateExportID(Object asset)
 		{
-			long exportID = GetMainExportID(asset, m_nextExportID);
+			long exportID = ExportIdHandler.GetMainExportID(asset, m_nextExportID);
 			m_nextExportID += 2;
 			return exportID;
 		}

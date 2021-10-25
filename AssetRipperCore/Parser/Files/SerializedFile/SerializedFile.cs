@@ -158,7 +158,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			{
 				if (asset.ClassID == classID)
 				{
-					NamedObject namedAsset = (NamedObject)asset;
+					INamedObject namedAsset = (INamedObject)asset;
 					if (namedAsset.ValidName == name)
 					{
 						return asset;
@@ -173,11 +173,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				{
 					continue;
 				}
-				foreach (Object asset in file.FetchAssets())
+				foreach (UnityObjectBase asset in file.FetchAssets())
 				{
 					if (asset.ClassID == classID)
 					{
-						NamedObject namedAsset = (NamedObject)asset;
+						INamedObject namedAsset = (INamedObject)asset;
 						if (namedAsset.Name == name)
 						{
 							return asset;
@@ -205,7 +205,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 			if (asset.File == this)
 			{
-				return new PPtr<T>(0, asset.PathID);
+				return new PPtrNoYaml<T>(0, asset.PathID);
 			}
 
 			for (int i = 0; i < Metadata.Externals.Length; i++)
@@ -214,7 +214,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (asset.File == file)
 				{
-					return new PPtr<T>(i + 1, asset.PathID);
+					return new PPtrNoYaml<T>(i + 1, asset.PathID);
 				}
 			}
 
