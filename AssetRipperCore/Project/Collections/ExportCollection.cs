@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public static long GetMainExportID(Object asset)
+		public static long GetMainExportID(UnityObjectBase asset)
 		{
 			return GetMainExportID((uint)asset.ClassID, 0);
 		}
@@ -48,7 +48,7 @@ namespace AssetRipper.Core.Project.Collections
 			return GetMainExportID(classID, 0);
 		}
 
-		public static long GetMainExportID(Object asset, uint value)
+		public static long GetMainExportID(UnityObjectBase asset, uint value)
 		{
 			return GetMainExportID((uint)asset.ClassID, value);
 		}
@@ -75,11 +75,11 @@ namespace AssetRipper.Core.Project.Collections
 		}
 
 		public abstract bool Export(ProjectAssetContainer container, string dirPath);
-		public abstract bool IsContains(Object asset);
-		public abstract long GetExportID(Object asset);
-		public abstract MetaPtr CreateExportPointer(Object asset, bool isLocal);
+		public abstract bool IsContains(UnityObjectBase asset);
+		public abstract long GetExportID(UnityObjectBase asset);
+		public abstract MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal);
 
-		protected void ExportAsset(ProjectAssetContainer container, AssetImporter importer, Object asset, string path, string name)
+		protected void ExportAsset(ProjectAssetContainer container, AssetImporter importer, UnityObjectBase asset, string path, string name)
 		{
 			if (!Directory.Exists(path))
 			{
@@ -94,7 +94,7 @@ namespace AssetRipper.Core.Project.Collections
 			ExportMeta(container, meta, filePath);
 		}
 
-		protected string GetUniqueFileName(ISerializedFile file, Object asset, string dirPath)
+		protected string GetUniqueFileName(ISerializedFile file, UnityObjectBase asset, string dirPath)
 		{
 			string fileName;
 			switch (asset)
@@ -125,7 +125,7 @@ namespace AssetRipper.Core.Project.Collections
 			return FileUtils.GetUniqueName(directoryPath, fileName, FileUtils.MaxFileNameLength - MetaExtension.Length);
 		}
 
-		protected virtual string GetExportExtension(Object asset)
+		protected virtual string GetExportExtension(UnityObjectBase asset)
 		{
 			return asset.ExportExtension;
 		}
@@ -133,7 +133,7 @@ namespace AssetRipper.Core.Project.Collections
 		public abstract IAssetExporter AssetExporter { get; }
 		public abstract ISerializedFile File { get; }
 		public virtual TransferInstructionFlags Flags => TransferInstructionFlags.NoTransferInstructionFlags;
-		public abstract IEnumerable<Object> Assets { get; }
+		public abstract IEnumerable<UnityObjectBase> Assets { get; }
 		public abstract string Name { get; }
 
 		private const string MetaExtension = ".meta";

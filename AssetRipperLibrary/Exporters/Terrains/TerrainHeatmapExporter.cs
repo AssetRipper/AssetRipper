@@ -29,12 +29,12 @@ namespace AssetRipper.Library.Exporters.Terrains
 			return ExportMode == TerrainExportMode.Heatmap;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, ImageFormat.GetFileExtension());
 		}
 
-		public override bool Export(IExportContainer container, Object asset, string path)
+		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			TerrainData terrain = (TerrainData)asset;
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))

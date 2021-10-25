@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Mesh;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
@@ -20,7 +21,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			return ExportFormat == MeshExportFormat.Obj && CanConvert(mesh);
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, "obj");
 		}

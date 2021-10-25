@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Project.Exporters
 			return true;
 		}
 
-		public bool Export(IExportContainer container, Object asset, string path)
+		public bool Export(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Project.Exporters
 					using (InvariantStreamWriter streamWriter = new InvariantStreamWriter(stream, UTF8))
 					{
 						YAMLWriter writer = new YAMLWriter();
-						YAMLDocument doc = asset.ExportYAMLDocument(container);
+						YAMLDocument doc = (asset as Object).ExportYAMLDocument(container);
 						writer.AddDocument(doc);
 						writer.Write(streamWriter);
 					}
@@ -38,13 +38,13 @@ namespace AssetRipper.Core.Project.Exporters
 			return true;
 		}
 
-		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		public void Export(IExportContainer container, UnityObjectBase asset, string path, Action<IExportContainer, UnityObjectBase, string> callback)
 		{
 			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path)
 		{
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
 			{
@@ -66,12 +66,12 @@ namespace AssetRipper.Core.Project.Exporters
 			return true;
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
+		public void Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path, Action<IExportContainer, UnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException("YAML supports only single file export");
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			if (SceneExportCollection.IsSceneCompatible(asset))
 			{

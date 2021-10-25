@@ -32,13 +32,13 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public abstract bool IsHandle(Mesh mesh);
 
-		public abstract IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset);
+		public abstract IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset);
 
 		public virtual byte[] ExportBinary(Mesh mesh) => null;
 
 		public virtual string ExportText(Mesh mesh) => null;
 
-		public bool Export(IExportContainer container, Core.Classes.Object.Object asset, string path)
+		public bool Export(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			if (BinaryExport)
 			{
@@ -69,18 +69,18 @@ namespace AssetRipper.Library.Exporters.Meshes
 			}
 		}
 
-		public void Export(IExportContainer container, Core.Classes.Object.Object asset, string path, Action<IExportContainer, Core.Classes.Object.Object, string> callback)
+		public void Export(IExportContainer container, UnityObjectBase asset, string path, Action<IExportContainer, UnityObjectBase, string> callback)
 		{
 			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<Core.Classes.Object.Object> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Core.Classes.Object.Object> assets, string path, Action<IExportContainer, Core.Classes.Object.Object, string> callback)
+		public void Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path, Action<IExportContainer, UnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException();
 		}

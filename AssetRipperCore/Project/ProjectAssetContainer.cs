@@ -73,13 +73,13 @@ namespace AssetRipper.Core.Project
 		}
 
 #warning TODO: get rid of IEnumerable. pass only main asset (issues: prefab, texture with sprites, animatorController)
-		public bool TryGetAssetPathFromAssets(IEnumerable<Object> assets, out Object selectedAsset, out string assetPath)
+		public bool TryGetAssetPathFromAssets(IEnumerable<UnityObjectBase> assets, out UnityObjectBase selectedAsset, out string assetPath)
 		{
 			selectedAsset = null;
 			assetPath = string.Empty;
 			if (m_pathAssets.Count > 0)
 			{
-				foreach (Object asset in assets)
+				foreach (UnityObjectBase asset in assets)
 				{
 					if (m_pathAssets.TryGetValue(asset, out ProjectAssetPath projectPath))
 					{
@@ -152,7 +152,7 @@ namespace AssetRipper.Core.Project
 			return m_exporter.ToExportType(classID);
 		}
 
-		public MetaPtr CreateExportPointer(Object asset)
+		public MetaPtr CreateExportPointer(UnityObjectBase asset)
 		{
 			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
 			{
@@ -381,7 +381,7 @@ namespace AssetRipper.Core.Project
 		private readonly ProjectExporter m_exporter;
 		private readonly bool m_KeepAssetBundleContentPath;
 		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
-		private readonly Dictionary<Object, ProjectAssetPath> m_pathAssets = new Dictionary<Object, ProjectAssetPath>();
+		private readonly Dictionary<UnityObjectBase, ProjectAssetPath> m_pathAssets = new Dictionary<UnityObjectBase, ProjectAssetPath>();
 
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;

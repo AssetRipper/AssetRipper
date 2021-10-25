@@ -2,7 +2,6 @@
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
 using AssetRipper.Core.Classes.NavMeshProjectSettings;
-using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Classes.Physics2DSettings;
 using AssetRipper.Core.Classes.QualitySettings;
 using AssetRipper.Core.Classes.UnityConnectSettings;
@@ -19,7 +18,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{
-		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, Object asset) : this(assetExporter, file, (BuildSettings)asset) { }
+		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, UnityObjectBase asset) : this(assetExporter, file, (BuildSettings)asset) { }
 
 		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, BuildSettings asset) : base(assetExporter, asset)
 		{
@@ -117,7 +116,7 @@ namespace AssetRipper.Core.Project.Collections
 			return true;
 		}
 
-		public override bool IsContains(Object asset)
+		public override bool IsContains(UnityObjectBase asset)
 		{
 			switch (asset.ClassID)
 			{
@@ -141,12 +140,12 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public override long GetExportID(Object asset)
+		public override long GetExportID(UnityObjectBase asset)
 		{
 			return 1;
 		}
 
-		public override IEnumerable<Object> Assets
+		public override IEnumerable<UnityObjectBase> Assets
 		{
 			get
 			{

@@ -19,27 +19,27 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			return EngineExportCollection.IsEngineAsset(asset, Version);
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			return new EngineExportCollection(asset, virtualFile.Version);
 		}
 
-		public bool Export(IExportContainer container, Object asset, string path)
+		public bool Export(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		public void Export(IExportContainer container, UnityObjectBase asset, string path, Action<IExportContainer, UnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
+		public void Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path, Action<IExportContainer, UnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException();
 		}

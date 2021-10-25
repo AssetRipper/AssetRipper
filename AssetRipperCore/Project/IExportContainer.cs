@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Project
 	{
 		long GetExportID(Object asset);
 		AssetType ToExportType(ClassIDType classID);
-		MetaPtr CreateExportPointer(Object asset);
+		MetaPtr CreateExportPointer(UnityObjectBase asset);
 
 		string SceneIndexToName(int sceneID);
 		bool IsSceneDuplicate(int sceneID);

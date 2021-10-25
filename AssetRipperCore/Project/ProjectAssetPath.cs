@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Project
 			AssetPath = path;
 		}
 
-		public string SubstituteExportPath(Object asset)
+		public string SubstituteExportPath(UnityObjectBase asset)
 		{
 			string projectPath = SubstitutePath(asset.GetOriginalName());
 			projectPath = DirectoryUtils.FixInvalidPathCharacters(projectPath);

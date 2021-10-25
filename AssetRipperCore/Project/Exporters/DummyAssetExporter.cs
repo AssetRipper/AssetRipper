@@ -20,27 +20,27 @@ namespace AssetRipper.Core.Project.Exporters
 			return true;
 		}
 
-		public bool Export(IExportContainer container, Object asset, string path)
+		public bool Export(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback)
+		public void Export(IExportContainer container, UnityObjectBase asset, string path, Action<IExportContainer, UnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<Object> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback)
+		public void Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path, Action<IExportContainer, UnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			if (m_emptyTypes.TryGetValue(asset.ClassID, out bool isEmptyCollection))
 			{

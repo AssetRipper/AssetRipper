@@ -73,7 +73,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			return AudioFormat != AudioExportFormat.Native && IsSupported((AudioClip)asset);
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObject asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			if(AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows())
 				return new AssetExportCollection(this, asset, "mp3");
@@ -81,7 +81,7 @@ namespace AssetRipper.Library.Exporters.Audio
 				return new AssetExportCollection(this, asset, "wav");
 		}
 
-		public override bool Export(IExportContainer container, UnityObject asset, string path)
+		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			AudioClip audioClip = (AudioClip)asset;
 			if (!audioClip.CheckAssetIntegrity())

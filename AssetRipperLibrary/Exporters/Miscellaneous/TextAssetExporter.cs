@@ -27,12 +27,12 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 				return false;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, GetExportExtension(asset));
 		}
 
-		public override bool Export(IExportContainer container, Object asset, string path)
+		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			using (Stream stream = FileUtils.CreateVirtualFile(path))
 			{
@@ -44,7 +44,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			return true;
 		}
 
-		private string GetExportExtension(Object asset)
+		private string GetExportExtension(UnityObjectBase asset)
 		{
 			switch (exportMode)
 			{

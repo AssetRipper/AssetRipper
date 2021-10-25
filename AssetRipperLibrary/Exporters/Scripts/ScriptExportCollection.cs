@@ -28,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			File = script.File;
 
 			// find copies in whole project and skip them
-			foreach (Object asset in script.File.Collection.FetchAssets())
+			foreach (UnityObjectBase asset in script.File.Collection.FetchAssets())
 			{
 				if (asset.ClassID != ClassIDType.MonoScript)
 				{
@@ -82,17 +82,17 @@ namespace AssetRipper.Library.Exporters.Scripts
 			return true;
 		}
 
-		public override bool IsContains(Object asset)
+		public override bool IsContains(UnityObjectBase asset)
 		{
 			return m_scripts.ContainsKey(asset);
 		}
 
-		public override long GetExportID(Object asset)
+		public override long GetExportID(UnityObjectBase asset)
 		{
 			return GetMainExportID(asset);
 		}
 
-		public override MetaPtr CreateExportPointer(Object asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -141,7 +141,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 		}
 
-		private void OnScriptExported(IExportContainer container, Object asset, string path)
+		private void OnScriptExported(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			MonoScript script = (MonoScript)asset;
 			MonoImporter importer = new MonoImporter(container.ExportLayout);
@@ -152,7 +152,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File { get; }
-		public override IEnumerable<Object> Assets => m_scripts.Keys;
+		public override IEnumerable<UnityObjectBase> Assets => m_scripts.Keys;
 		public override string Name => nameof(ScriptExportCollection);
 
 		private static readonly UnityGUID UnityEngineGUID = new UnityGUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
@@ -160,6 +160,6 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		private readonly List<MonoScript> m_export = new List<MonoScript>();
 		private readonly HashSet<MonoScript> m_unique = new HashSet<MonoScript>();
-		private readonly Dictionary<Object, MonoScript> m_scripts = new Dictionary<Object, MonoScript>();
+		private readonly Dictionary<UnityObjectBase, MonoScript> m_scripts = new Dictionary<UnityObjectBase, MonoScript>();
 	}
 }

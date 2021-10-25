@@ -3,7 +3,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Project.Exporters
 {
@@ -11,12 +10,12 @@ namespace AssetRipper.Core.Project.Exporters
 	{
 		bool IsHandle(UnityObjectBase asset);
 
-		bool Export(IExportContainer container, Object asset, string path);
-		void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback);
-		bool Export(IExportContainer container, IEnumerable<Object> assets, string path);
-		void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback);
+		bool Export(IExportContainer container, UnityObjectBase asset, string path);
+		void Export(IExportContainer container, UnityObjectBase asset, string path, Action<IExportContainer, UnityObjectBase, string> callback);
+		bool Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path);
+		void Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path, Action<IExportContainer, UnityObjectBase, string> callback);
 
-		IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset);
+		IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset);
 		AssetType ToExportType(UnityObjectBase asset);
 		bool ToUnknownExportType(ClassIDType classID, out AssetType assetType);
 	}

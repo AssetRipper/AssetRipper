@@ -24,12 +24,12 @@ namespace AssetRipper.Library.Exporters.Terrains
 			return ExportMode == TerrainExportMode.Obj;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, "obj");
 		}
 
-		public override bool Export(IExportContainer container, Core.Classes.Object.Object asset, string path)
+		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			string text = ExportTerrainToObj((TerrainData)asset);
 			if (string.IsNullOrEmpty(text))

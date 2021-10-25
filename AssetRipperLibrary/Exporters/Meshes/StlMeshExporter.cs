@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Mesh;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -18,7 +19,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			BinaryExport = ExportFormat == MeshExportFormat.StlBinary;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, "stl");
 		}

@@ -88,7 +88,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return AssetExporter.Export(container, Asset, filePath);
 		}
 
-		protected override string GetExportExtension(Object asset)
+		protected override string GetExportExtension(UnityObjectBase asset)
 		{
 			if (m_convert)
 			{

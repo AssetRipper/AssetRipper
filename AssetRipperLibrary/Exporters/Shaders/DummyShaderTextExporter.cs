@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Shader;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.SerializedShader;
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.Extensions;
@@ -69,7 +70,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 		/// </summary>
 		public static bool IsEncoded(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
-		public override bool Export(IExportContainer container, UnityObject asset, string path)
+		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			Shader shader = (Shader)asset;
 

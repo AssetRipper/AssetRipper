@@ -5,7 +5,6 @@ using AssetRipper.Core.Classes.AnimatorStateMachine;
 using AssetRipper.Core.Classes.AnimatorTransition;
 using AssetRipper.Core.Classes.BlendTree;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public class AnimatorControllerExportCollection : AssetsExportCollection
 	{
-		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, Object asset) : this(assetExporter, virtualFile, (AnimatorController)asset) { }
+		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, UnityObjectBase asset) : this(assetExporter, virtualFile, (AnimatorController)asset) { }
 
 		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, AnimatorController asset) : base(assetExporter, asset)
 		{

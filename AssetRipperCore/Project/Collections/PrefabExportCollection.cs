@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class PrefabExportCollection : AssetsExportCollection
 	{
-		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, Object asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
+		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, UnityObjectBase asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
 
 		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, GameObject root) : this(assetExporter, root.File, PrefabInstance.CreateVirtualInstance(virtualFile, root)) { }
 
@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public static bool IsValidAsset(Object asset)
+		public static bool IsValidAsset(UnityObjectBase asset)
 		{
 			if (asset.ClassID == ClassIDType.GameObject)
 			{
@@ -35,12 +35,12 @@ namespace AssetRipper.Core.Project.Collections
 			return component.GameObject.FindAsset(component.File) != null;
 		}
 
-		protected override string GetExportExtension(Object asset)
+		protected override string GetExportExtension(UnityObjectBase asset)
 		{
 			return PrefabInstance.PrefabKeyword;
 		}
 
-		private static GameObject GetAssetRoot(Object asset)
+		private static GameObject GetAssetRoot(UnityObjectBase asset)
 		{
 			GameObject go;
 			if (asset.ClassID == ClassIDType.GameObject)
@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Project.Collections
 #warning TODO:
 		// HACK: prefab's assets may be stored in different files
 		// Need to find a way to set a file for current asset nicely
-		public override IEnumerable<Object> Assets
+		public override IEnumerable<UnityObjectBase> Assets
 		{
 			get
 			{

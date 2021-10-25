@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Project.Collections
 	{
 		public AssetsExportCollection(IAssetExporter assetExporter, Object asset) : base(assetExporter, asset) { }
 
-		public override bool IsContains(Object asset)
+		public override bool IsContains(UnityObjectBase asset)
 		{
 			if (base.IsContains(asset))
 			{
@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Project.Collections
 			return m_exportIDs.ContainsKey(asset.AssetInfo);
 		}
 
-		public override long GetExportID(Object asset)
+		public override long GetExportID(UnityObjectBase asset)
 		{
 			if (asset.AssetInfo == Asset.AssetInfo)
 			{
@@ -31,18 +31,18 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected override bool ExportInner(ProjectAssetContainer container, string filePath)
 		{
-			return AssetExporter.Export(container, Assets.Select(t => t.Convert(container)), filePath);
+			return AssetExporter.Export(container, Assets.Select(t => (t as Object).Convert(container)), filePath);
 		}
 
-		public override IEnumerable<Object> Assets
+		public override IEnumerable<UnityObjectBase> Assets
 		{
 			get
 			{
-				foreach (Object asset in base.Assets)
+				foreach (UnityObjectBase asset in base.Assets)
 				{
 					yield return asset;
 				}
-				foreach (Object asset in m_assets)
+				foreach (UnityObjectBase asset in m_assets)
 				{
 					yield return asset;
 				}
@@ -66,7 +66,7 @@ namespace AssetRipper.Core.Project.Collections
 			return m_exportIDs.ContainsValue(id);
 		}
 
-		protected readonly List<Object> m_assets = new List<Object>();
+		protected readonly List<UnityObjectBase> m_assets = new List<UnityObjectBase>();
 		protected readonly Dictionary<AssetInfo, long> m_exportIDs = new Dictionary<AssetInfo, long>();
 	}
 }

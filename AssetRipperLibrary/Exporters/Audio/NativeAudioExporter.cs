@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.AudioClip;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -10,12 +11,12 @@ namespace AssetRipper.Library.Exporters.Audio
 {
 	public class NativeAudioExporter : BinaryAssetExporter
 	{
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, GetExportExtension((AudioClip)asset));
 		}
 
-		public override bool Export(IExportContainer container, Core.Classes.Object.Object asset, string path)
+		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
 		{
 			AudioClip audioClip = (AudioClip)asset;
 

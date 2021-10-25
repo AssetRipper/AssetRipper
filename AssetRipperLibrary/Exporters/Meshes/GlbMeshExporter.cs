@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Mesh;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Library.Configuration;
@@ -13,7 +14,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 	{
 		public GlbMeshExporter(LibraryConfiguration configuration) : base(configuration) => BinaryExport = true;
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Core.Classes.Object.Object asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, "glb");
 		}
