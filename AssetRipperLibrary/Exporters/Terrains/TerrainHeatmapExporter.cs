@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Object;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math;
@@ -23,7 +24,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			ImageFormat = configuration.ImageExportFormat;
 		}
 
-		public override bool IsHandle(Object asset)
+		public override bool IsHandle(UnityObjectBase asset)
 		{
 			return ExportMode == TerrainExportMode.Heatmap;
 		}

@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public class YAMLAssetExporter : IAssetExporter
 	{
-		public bool IsHandle(Object asset)
+		public bool IsHandle(UnityObjectBase asset)
 		{
 			return true;
 		}
@@ -131,7 +131,7 @@ namespace AssetRipper.Core.Project.Exporters
 			}
 		}
 
-		public AssetType ToExportType(Object asset)
+		public AssetType ToExportType(UnityObjectBase asset)
 		{
 			ToUnknownExportType(asset.ClassID, out AssetType assetType);
 			return assetType;

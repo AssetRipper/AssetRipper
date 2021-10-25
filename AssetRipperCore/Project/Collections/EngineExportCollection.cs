@@ -46,13 +46,13 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public static bool IsEngineAsset(Object asset, UnityVersion version)
+		public static bool IsEngineAsset(UnityObjectBase asset, UnityVersion version)
 		{
 			if (!GetEngineBuildInAsset(asset, version, out EngineBuiltInAsset builtinAsset))
 			{
 				return false;
 			}
-			if (IsEngineFile(asset.File.Name))
+			if (IsEngineFile((asset as Object)?.File.Name))
 			{
 				return true;
 			}
@@ -116,7 +116,7 @@ namespace AssetRipper.Core.Project.Collections
 			return false;
 		}
 
-		private static bool GetEngineBuildInAsset(Object asset, UnityVersion version, out EngineBuiltInAsset engineAsset)
+		private static bool GetEngineBuildInAsset(UnityObjectBase asset, UnityVersion version, out EngineBuiltInAsset engineAsset)
 		{
 			switch (asset.ClassID)
 			{

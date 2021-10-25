@@ -1,3 +1,4 @@
+using AssetRipper.Core;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -18,7 +19,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			exportMode = configuration.TextExportMode;
 		}
 
-		public override bool IsHandle(Object asset)
+		public override bool IsHandle(UnityObjectBase asset)
 		{
 			if (asset is ITextAsset textAsset)
 				return IsValidData(textAsset.RawData);

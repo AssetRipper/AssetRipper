@@ -24,7 +24,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			ScriptExportMode = configuration.ScriptExportMode;
 		}
 
-		public bool IsHandle(Object asset)
+		public bool IsHandle(UnityObjectBase asset)
 		{
 			return ScriptExportMode == ScriptExportMode.Package;
 		}
@@ -54,7 +54,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			throw new NotSupportedException("Assemblies are exported inside the export collection");
 		}
 
-		public AssetType ToExportType(Object asset) => AssetType.Meta;
+		public AssetType ToExportType(UnityObjectBase asset) => AssetType.Meta;
 
 		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
 		{

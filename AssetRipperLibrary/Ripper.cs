@@ -91,7 +91,7 @@ namespace AssetRipper.Library
 			return GameStructure;
 		}
 
-		public IEnumerable<UnityObject> FetchLoadedAssets()
+		public IEnumerable<UnityObjectBase> FetchLoadedAssets()
 		{
 			if (GameStructure == null) throw new NullReferenceException("GameStructure cannot be null");
 			if (GameStructure.FileCollection == null) throw new NullReferenceException("FileCollection cannot be null");

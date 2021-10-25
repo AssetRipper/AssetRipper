@@ -22,7 +22,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 		protected bool BinaryExport { get; set; }
 		public BaseMeshExporter(LibraryConfiguration configuration) => ExportFormat = configuration.MeshExportFormat;
 
-		public bool IsHandle(Core.Classes.Object.Object asset)
+		public bool IsHandle(UnityObjectBase asset)
 		{
 			if (asset is Mesh mesh)
 				return IsHandle(mesh);
@@ -85,7 +85,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			throw new NotSupportedException();
 		}
 
-		public AssetType ToExportType(Core.Classes.Object.Object asset)
+		public AssetType ToExportType(UnityObjectBase asset)
 		{
 			return AssetType.Meta;
 		}

@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.AudioClip;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -67,7 +68,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 		}
 
-		public override bool IsHandle(UnityObject asset)
+		public override bool IsHandle(UnityObjectBase asset)
 		{
 			return AudioFormat != AudioExportFormat.Native && IsSupported((AudioClip)asset);
 		}

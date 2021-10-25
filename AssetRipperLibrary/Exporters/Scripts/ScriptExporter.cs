@@ -28,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			LanguageVersion = configuration.ScriptLanguageVersion;
 		}
 
-		public bool IsHandle(Object asset)
+		public bool IsHandle(UnityObjectBase asset)
 		{
 			return ScriptExportMode == ScriptExportMode.Decompiled;
 		}
@@ -86,7 +86,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			Logger.Info(LogCategory.Export, "Finished exporting scripts");
 		}
 
-		public AssetType ToExportType(Object asset) => AssetType.Meta;
+		public AssetType ToExportType(UnityObjectBase asset) => AssetType.Meta;
 
 		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
 		{

@@ -177,7 +177,5 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		public FileIdentifier[] Externals { get; set; }
 		public string UserInformation { get; set; }
 		public SerializedType[] RefTypes { get; set; }
-
-		public const int MetadataMinSize = 16;
 	}
 }

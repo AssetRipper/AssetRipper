@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Project
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
-		public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<Object> assets,
+		public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<UnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Project
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			ExportLayout = file.Layout;
 
-			foreach (Object asset in assets)
+			foreach (UnityObjectBase asset in assets)
 			{
 				switch (asset.ClassID)
 				{

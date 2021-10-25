@@ -12,7 +12,7 @@ namespace AssetRipper.Library.Exporters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{
-		public virtual bool IsHandle(Object asset)
+		public virtual bool IsHandle(UnityObjectBase asset)
 		{
 			return true;
 		}
@@ -43,7 +43,7 @@ namespace AssetRipper.Library.Exporters
 			return new AssetExportCollection(this, asset);
 		}
 
-		public AssetType ToExportType(Object asset)
+		public AssetType ToExportType(UnityObjectBase asset)
 		{
 			ToUnknownExportType(asset.ClassID, out AssetType assetType);
 			return assetType;

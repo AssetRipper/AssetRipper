@@ -27,7 +27,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			SpriteExportMode = configuration.SpriteExportMode;
 		}
 
-		public override bool IsHandle(UnityObject asset)
+		public override bool IsHandle(UnityObjectBase asset)
 		{
 			if (asset.ClassID == ClassIDType.Texture2D)
 			{

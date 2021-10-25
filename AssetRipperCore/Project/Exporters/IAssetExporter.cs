@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public interface IAssetExporter
 	{
-		bool IsHandle(Object asset);
+		bool IsHandle(UnityObjectBase asset);
 
 		bool Export(IExportContainer container, Object asset, string path);
 		void Export(IExportContainer container, Object asset, string path, Action<IExportContainer, Object, string> callback);
@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Project.Exporters
 		void Export(IExportContainer container, IEnumerable<Object> assets, string path, Action<IExportContainer, Object, string> callback);
 
 		IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Object asset);
-		AssetType ToExportType(Object asset);
+		AssetType ToExportType(UnityObjectBase asset);
 		bool ToUnknownExportType(ClassIDType classID, out AssetType assetType);
 	}
 }

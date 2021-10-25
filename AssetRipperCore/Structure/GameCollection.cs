@@ -55,7 +55,7 @@ namespace AssetRipper.Core.Structure
 		private readonly Func<string, string> m_assemblyCallback;
 		private readonly Func<string, string> m_resourceCallback;
 
-		private readonly Dictionary<ClassIDType, List<Object>> _cachedAssetsByType = new();
+		private readonly Dictionary<ClassIDType, List<UnityObjectBase>> _cachedAssetsByType = new();
 
 		public GameCollection(Parameters pars, CoreConfiguration configuration) : base(nameof(GameCollection))
 		{
@@ -132,10 +132,10 @@ namespace AssetRipper.Core.Structure
 			return m_resources[fixedName];
 		}
 
-		public T FindAsset<T>() where T : Object
+		public T FindAsset<T>() where T : UnityObjectBase
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
-			foreach (Object asset in FetchAssets())
+			foreach (UnityObjectBase asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{
@@ -162,23 +162,23 @@ namespace AssetRipper.Core.Structure
 			return null;
 		}
 
-		public IEnumerable<Object> FetchAssets()
+		public IEnumerable<UnityObjectBase> FetchAssets()
 		{
 			foreach (SerializedFile file in m_files.Values)
 			{
-				foreach (Object asset in file.FetchAssets())
+				foreach (UnityObjectBase asset in file.FetchAssets())
 				{
 					yield return asset;
 				}
 			}
 		}
 
-		public IEnumerable<Object> FetchAssetsOfType(ClassIDType type)
+		public IEnumerable<UnityObjectBase> FetchAssetsOfType(ClassIDType type)
 		{
-			if (_cachedAssetsByType.TryGetValue(type, out List<Object> list))
+			if (_cachedAssetsByType.TryGetValue(type, out List<UnityObjectBase> list))
 				return list;
 
-			List<Object> objects = FetchAssets().Where(o => o.ClassID == type).ToList();
+			List<UnityObjectBase> objects = FetchAssets().Where(o => o.ClassID == type).ToList();
 			_cachedAssetsByType.TryAdd(type, objects);
 			
 			return objects;

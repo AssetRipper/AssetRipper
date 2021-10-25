@@ -96,8 +96,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return m_assets[pathID].ClassID;
 		}
 
-		public PPtr<T> CreatePPtr<T>(T asset) where T : Object
+		public PPtr<T> CreatePPtr<T>(T obj) where T : UnityObjectBase
 		{
+			if (obj is not Object asset)
+				throw new NotSupportedException();
+
 			if (asset.File == this)
 			{
 				return new PPtr<T>(VirtualFileIndex, asset.PathID);

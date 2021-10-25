@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 		private UnityVersion Version { get; }
 		public EngineAssetExporter(CoreConfiguration configuration) => Version = configuration.Version;
 
-		public bool IsHandle(Object asset)
+		public bool IsHandle(UnityObjectBase asset)
 		{
 			return EngineExportCollection.IsEngineAsset(asset, Version);
 		}
@@ -44,7 +44,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			throw new NotSupportedException();
 		}
 
-		public AssetType ToExportType(Object asset)
+		public AssetType ToExportType(UnityObjectBase asset)
 		{
 			return AssetType.Internal;
 		}

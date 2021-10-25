@@ -31,6 +31,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 		public const int HeaderMinSize = 16;
 
+		public const int MetadataMinSize = 16;
+
 
 		/// <summary>
 		/// 3.5.0 and greater / Format Version 9 +
@@ -79,13 +81,13 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				headerDefinedFileSize = reader.ReadUInt64();
 			}
 			
-			if (metadataSize < SerializedFileMetadata.MetadataMinSize)
+			if (metadataSize < MetadataMinSize)
 			{
 				reader.BaseStream.Position = initialPosition;
 				return false;
 			}
 			
-			if (headerDefinedFileSize < HeaderMinSize + SerializedFileMetadata.MetadataMinSize)
+			if (headerDefinedFileSize < HeaderMinSize + MetadataMinSize)
 			{
 				reader.BaseStream.Position = initialPosition;
 				return false;
