@@ -52,7 +52,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return false;
 			}
-			if (IsEngineFile((asset as Object)?.File.Name))
+			if (IsEngineFile(asset?.File.Name))
 			{
 				return true;
 			}

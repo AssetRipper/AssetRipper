@@ -8,7 +8,6 @@ using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Project
 {
-#warning TODO: remove
 	public interface IExportContainer : IAssetContainer
 	{
 		long GetExportID(Object asset);

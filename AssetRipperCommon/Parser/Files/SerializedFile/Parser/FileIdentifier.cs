@@ -91,6 +91,6 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		/// </summary>
 		public string PathNameOrigin { get; set; }
 
-		public UnityGUID Guid;
+		public UnityGuidNoYaml Guid;
 	}
 }

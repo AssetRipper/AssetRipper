@@ -33,6 +33,9 @@ namespace AssetRipper.Core.Classes.Misc
 			PathID = pathID;
 		}
 
+		public static implicit operator PPtr<T>(PPtrNoYaml<T> ptr) => new PPtr<T>(ptr.FileIndex, ptr.PathID);
+		public static implicit operator PPtrNoYaml<T>(PPtr<T> ptr) => new PPtrNoYaml<T>(ptr.FileIndex, ptr.PathID);
+
 		public static bool operator ==(PPtr<T> left, PPtr<T> right)
 		{
 			return left.FileIndex == right.FileIndex && left.PathID == right.PathID;

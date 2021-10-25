@@ -198,7 +198,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return Metadata.Object[m_assetEntryLookup[pathID]].ClassID;
 		}
 
-		public PPtr<T> CreatePPtr<T>(T obj) where T : UnityObjectBase
+		public PPtrNoYaml<T> CreatePPtr<T>(T obj) where T : UnityObjectBase
 		{
 			if (obj is not Object asset)
 				throw new NotSupportedException();
