@@ -93,12 +93,12 @@ namespace AssetRipper.Core.Project
 			return false;
 		}
 
-		public Object GetAsset(long pathID)
+		public UnityObjectBase GetAsset(long pathID)
 		{
 			return File.GetAsset(pathID);
 		}
 
-		public virtual Object FindAsset(int fileIndex, long pathID)
+		public virtual UnityObjectBase FindAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Project
 			}
 		}
 
-		public virtual Object GetAsset(int fileIndex, long pathID)
+		public virtual UnityObjectBase GetAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
@@ -122,12 +122,12 @@ namespace AssetRipper.Core.Project
 			}
 		}
 
-		public Object FindAsset(ClassIDType classID)
+		public UnityObjectBase FindAsset(ClassIDType classID)
 		{
 			return File.FindAsset(classID);
 		}
 
-		public virtual Object FindAsset(ClassIDType classID, string name)
+		public virtual UnityObjectBase FindAsset(ClassIDType classID, string name)
 		{
 			return File.FindAsset(classID, name);
 		}

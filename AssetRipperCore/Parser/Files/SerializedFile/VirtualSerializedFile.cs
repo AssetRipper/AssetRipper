@@ -23,9 +23,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			Layout = layout;
 		}
 
-		public Object GetAsset(long pathID)
+		public UnityObjectBase GetAsset(long pathID)
 		{
-			Object asset = FindAsset(pathID);
+			UnityObjectBase asset = FindAsset(pathID);
 			if (asset == null)
 			{
 				throw new Exception($"Object with path ID {pathID} wasn't found");
@@ -33,7 +33,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return asset;
 		}
 
-		public Object GetAsset(int fileIndex, long pathID)
+		public UnityObjectBase GetAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualFileIndex)
 			{
@@ -42,13 +42,13 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			throw new NotSupportedException();
 		}
 
-		public Object FindAsset(long pathID)
+		public UnityObjectBase FindAsset(long pathID)
 		{
-			m_assets.TryGetValue(pathID, out Object asset);
+			m_assets.TryGetValue(pathID, out UnityObjectBase asset);
 			return asset;
 		}
 
-		public Object FindAsset(int fileIndex, long pathID)
+		public UnityObjectBase FindAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualFileIndex)
 			{
@@ -57,9 +57,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			throw new NotSupportedException();
 		}
 
-		public Object FindAsset(ClassIDType classID)
+		public UnityObjectBase FindAsset(ClassIDType classID)
 		{
-			foreach (Object asset in FetchAssets())
+			foreach (UnityObjectBase asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{
@@ -69,9 +69,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return null;
 		}
 
-		public Object FindAsset(ClassIDType classID, string name)
+		public UnityObjectBase FindAsset(ClassIDType classID, string name)
 		{
-			foreach (Object asset in FetchAssets())
+			foreach (UnityObjectBase asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{
@@ -105,12 +105,12 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			throw new Exception($"Asset '{asset}' doesn't belong to {nameof(VirtualSerializedFile)}");
 		}
 
-		public IEnumerable<Object> FetchAssets()
+		public IEnumerable<UnityObjectBase> FetchAssets()
 		{
 			return m_assets.Values;
 		}
 
-		public T CreateAsset<T>(Func<AssetInfo, T> instantiator) where T : Object
+		public T CreateAsset<T>(Func<AssetInfo, T> instantiator) where T : UnityObjectBase
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
 			AssetInfo assetInfo = new AssetInfo(this, ++m_nextId, classID);
@@ -133,7 +133,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public const int VirtualFileIndex = -1;
 
-		private readonly Dictionary<long, Object> m_assets = new Dictionary<long, Object>();
+		private readonly Dictionary<long, UnityObjectBase> m_assets = new Dictionary<long, UnityObjectBase>();
 
 		private long m_nextId;
 	}

@@ -93,7 +93,7 @@ namespace AssetRipper.Core.Classes.Misc
 			{
 				return null;
 			}
-			Object.Object asset = file.FindAsset(FileIndex, PathID);
+			UnityObjectBase asset = file.FindAsset(FileIndex, PathID);
 			switch (asset)
 			{
 				case null:
@@ -122,7 +122,7 @@ namespace AssetRipper.Core.Classes.Misc
 			{
 				throw new Exception("Can't get null PPtr");
 			}
-			Object.Object asset = file.GetAsset(FileIndex, PathID);
+			UnityObjectBase asset = file.GetAsset(FileIndex, PathID);
 			if (asset is T t)
 			{
 				return t;

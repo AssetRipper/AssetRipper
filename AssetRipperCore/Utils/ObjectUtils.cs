@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Utils
 {
 	public static class ObjectUtils
 	{
-		public static long GenerateExportID(Classes.Object.Object asset, Func<long, bool> duplicateChecker)
+		public static long GenerateExportID(UnityObjectBase asset, Func<long, bool> duplicateChecker)
 		{
 			if (asset == null)
 			{

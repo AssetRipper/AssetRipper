@@ -14,13 +14,13 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		/// </summary>
 		/// <param name="pathID">Path ID of the asset</param>
 		/// <returns>Found asset or null</returns>
-		Object FindAsset(long pathID);
+		UnityObjectBase FindAsset(long pathID);
 
 		ObjectInfo GetAssetEntry(long pathID);
 
 		PPtr<T> CreatePPtr<T>(T asset) where T : Object;
 
-		IEnumerable<Object> FetchAssets();
+		IEnumerable<UnityObjectBase> FetchAssets();
 
 		IFileCollection Collection { get; }
 	}
