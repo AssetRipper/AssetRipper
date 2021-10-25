@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="Fmod5Sharp" Version="1.2.0" />
+	<PackageReference Include="ICSharpCode.Decompiler" Version="7.1.0.6543" />
     <PackageReference Include="MeshIO.FBX" Version="1.0.1-alpha" />
     <PackageReference Include="NAudio.Core" Version="2.0.0" />
     <PackageReference Include="NAudio.Lame" Version="2.0.0" />

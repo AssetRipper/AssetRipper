@@ -39,9 +39,4 @@
 	<None Remove="obj\**" />
   </ItemGroup>
 
-  <ItemGroup>
-	<PackageReference Include="ICSharpCode.Decompiler" Version="7.1.0.6543" />
-	<PackageReference Include="SharpZipLib" Version="1.3.3" />
-  </ItemGroup>
-
 </Project>
