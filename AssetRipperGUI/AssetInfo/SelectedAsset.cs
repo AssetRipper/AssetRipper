@@ -70,7 +70,7 @@ namespace AssetRipper.GUI.AssetInfo
 			Logger.Log(level, LogCategory.LibVlc, $"[{e.Module ?? "General"}] [{e.Level}] {e.Message}");
 		}
 
-		public SelectedAsset(Object asset, IExportContainer? uiAssetContainer)
+		public SelectedAsset(UnityObjectBase asset, IExportContainer? uiAssetContainer)
 		{
 			Asset = asset;
 			_uiAssetContainer = uiAssetContainer;

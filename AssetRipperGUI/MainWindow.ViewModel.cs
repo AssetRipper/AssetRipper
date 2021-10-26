@@ -341,7 +341,7 @@ namespace AssetRipper.GUI
 		}
 
 		//Called from UI indirectly
-		public void OnAssetSelected(NewUiFileListItem selectedItem, Object selectedAsset)
+		public void OnAssetSelected(NewUiFileListItem selectedItem, UnityObjectBase selectedAsset)
 		{
 			_assetContainer.LastAccessedAsset = selectedAsset;
 

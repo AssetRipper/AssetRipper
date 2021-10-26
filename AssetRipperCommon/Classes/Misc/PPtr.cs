@@ -83,7 +83,6 @@ namespace AssetRipper.Core.Classes.Misc
 				return pointer.ExportYAML(container);
 			}
 
-#warning todo: switch to UnityObjectBase here
 			MetaPtr exPointer = container.CreateExportPointer(asset);
 			return exPointer.ExportYAML(container);
 		}

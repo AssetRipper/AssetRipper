@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioManager;
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
@@ -121,7 +122,7 @@ namespace AssetRipper.GUI
 	public class NewUiFileListItem : BaseViewModel
 	{
 		private string _displayAs;
-		private Object? _associatedObject;
+		private UnityObjectBase? _associatedObject;
 		private SerializedFile? _associatedFile;
 
 		//Read from UI
@@ -135,7 +136,7 @@ namespace AssetRipper.GUI
 			}
 		}
 
-		public Object? AsObjectAsset => _associatedObject; 
+		public UnityObjectBase? AsObjectAsset => _associatedObject; 
 		
 		//Read from UI
 		public ObservableCollection<NewUiFileListItem> SubItems { get; } = new();
@@ -154,7 +155,7 @@ namespace AssetRipper.GUI
 		/// Creates a sub-level tree view item from an individual asset. Inherits the name of the asset if it is a NamedObject,
 		/// otherwise takes the name of the asset's class.
 		/// </summary>
-		public NewUiFileListItem(Object asset)
+		public NewUiFileListItem(UnityObjectBase asset)
 		{
 			_associatedObject = asset;
 			

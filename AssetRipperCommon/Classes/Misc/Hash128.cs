@@ -6,11 +6,13 @@ using AssetRipper.Core.Parser.Files.BundleFile.IO;
 using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct Hash128 : IAsset, ISerializedReadable, ISerializedWritable, IBundleReadable
+	public struct Hash128 : IAsset, ISerializedReadable, ISerializedWritable, IBundleReadable, IEquatable<Hash128>
 	{
 		public Hash128(uint v) : this(v, 0, 0, 0) { }
 
@@ -110,15 +112,22 @@ namespace AssetRipper.Core.Classes.Misc
 			return node;
 		}
 
-		public static bool operator ==(Hash128 left, Hash128 right)
+		public override bool Equals([NotNullWhen(true)] object obj)
 		{
-			return left.Data0 == right.Data0 && left.Data1 == right.Data1 && left.Data2 == right.Data2 && left.Data3 == right.Data3;
+			if (obj is Hash128 hash)
+				return Equals(hash);
+			else
+				return false;
 		}
 
-		public static bool operator !=(Hash128 left, Hash128 right)
+		public bool Equals(Hash128 other)
 		{
-			return left.Data0 != right.Data0 || left.Data1 != right.Data1 || left.Data2 != right.Data2 || left.Data3 != right.Data3;
+			return this.Data0 == other.Data0 && this.Data1 == other.Data1 && this.Data2 == other.Data2 && this.Data3 == other.Data3;
 		}
+
+		public static bool operator ==(Hash128 left, Hash128 right) => left.Equals(right);
+
+		public static bool operator !=(Hash128 left, Hash128 right) => !left.Equals(right);
 
 		public override int GetHashCode()
 		{

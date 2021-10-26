@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Project;
@@ -22,7 +23,7 @@ namespace AssetRipper.GUI
 		}
 		public override IReadOnlyList<FileIdentifier> Dependencies => new List<FileIdentifier>();
 
-		internal Core.Classes.Object.Object LastAccessedAsset { get; set; }
+		internal UnityObjectBase LastAccessedAsset { get; set; }
 
 		public override ISerializedFile File => LastAccessedAsset.File;
 
