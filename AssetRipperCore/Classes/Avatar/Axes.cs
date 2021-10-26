@@ -1,6 +1,4 @@
-﻿using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Extensions;
+﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;

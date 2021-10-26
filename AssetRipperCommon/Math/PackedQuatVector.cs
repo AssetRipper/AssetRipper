@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;

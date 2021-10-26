@@ -17,7 +17,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using UnityObject = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library
 {

@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.GameObject;
-using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Classes.PrefabInstance;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;

@@ -1,13 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
-using System.Threading.Tasks;
 
 namespace AssetRipper.GUI
 {
-    public partial class MessageBox : Window
+	public partial class MessageBox : Window
     {
 	    public MessageBox()
         {

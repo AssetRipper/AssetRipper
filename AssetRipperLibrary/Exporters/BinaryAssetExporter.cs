@@ -6,7 +6,6 @@ using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters
 {

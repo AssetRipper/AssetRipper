@@ -11,7 +11,6 @@ using AssetRipper.Library.Configuration;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {

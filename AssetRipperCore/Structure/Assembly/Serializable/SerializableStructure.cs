@@ -6,7 +6,6 @@ using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable
 {

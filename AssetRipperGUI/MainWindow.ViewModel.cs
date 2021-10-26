@@ -9,7 +9,6 @@ using AssetRipper.GUI.Managers;
 using AssetRipper.Library;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
@@ -20,9 +19,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Runtime.InteropServices;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.GUI

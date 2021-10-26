@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
-using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;

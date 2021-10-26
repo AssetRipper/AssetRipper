@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Utils;
 using AssetRipper.GUI.Utils;
 using AssetRipper.Library;
 using Avalonia.Threading;

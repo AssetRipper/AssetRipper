@@ -10,7 +10,6 @@ using FMOD;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using UnityObject = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters.Audio
 {

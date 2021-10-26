@@ -1,4 +1,3 @@
-using AssetRipper.Core.IO.FileReading;
 using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.BundleFile;

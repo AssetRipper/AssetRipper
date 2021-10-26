@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Library.Configuration;
-using System;
 
 namespace AssetRipper.GUI.Components
 {

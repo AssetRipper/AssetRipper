@@ -11,7 +11,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using UnityObject = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {

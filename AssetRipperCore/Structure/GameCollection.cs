@@ -9,7 +9,6 @@ using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Utils;
-using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.GameStructure.Platforms;

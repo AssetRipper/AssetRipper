@@ -8,12 +8,10 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 #if DEBUG
-using AssetRipper.Core.Extensions;
 #endif
 
 namespace AssetRipper.Core.Project.Collections

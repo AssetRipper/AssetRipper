@@ -9,7 +9,6 @@ using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Library.Configuration;
 using System;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {

@@ -1,6 +1,5 @@
 using AssetRipper.Core.Classes.BlendTree;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;

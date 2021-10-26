@@ -1,6 +1,4 @@
 using AssetRipper.Core.Logging;
-using AssetRipper.GUI.Components;
-using AssetRipper.Library.Configuration;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;

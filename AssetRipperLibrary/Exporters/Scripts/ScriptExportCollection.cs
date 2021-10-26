@@ -15,7 +15,6 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {

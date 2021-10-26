@@ -12,7 +12,6 @@ using AssetRipper.Library.Exporters.Textures.Extensions;
 using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.Utils;
 using System.IO;
-using UnityObject = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
