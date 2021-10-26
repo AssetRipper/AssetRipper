@@ -1,6 +1,4 @@
-﻿using AssetRipper.Core.IO.Asset;
-
-namespace AssetRipper.Core.Interfaces
+﻿namespace AssetRipper.Core.IO.Asset
 {
 	public interface IAssetNew : IAssetNewReadable, IAssetNewWritable, IYAMLExportableNew, IAsset
 	{
