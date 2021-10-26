@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes;
-using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
@@ -9,39 +8,21 @@ using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Utils;
-using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
-using AssetRipper.Core.Structure.GameStructure.Platforms;
 using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using MonoManager = AssetRipper.Core.Structure.Assembly.Managers.MonoManager;
 
 namespace AssetRipper.Core.Structure
 {
 	public sealed class GameCollection : FileList, IFileCollection, IDisposable
 	{
-		public sealed class Parameters
-		{
-			public Parameters(AssetLayout layout)
-			{
-				Layout = layout;
-			}
-
-			public AssetLayout Layout { get; }
-			public ScriptingBackend ScriptBackend { get; set; }
-			public PlatformGameStructure PlatformStructure { get; set; }
-			public Func<string, string> RequestAssemblyCallback { get; set; }
-			public Func<string, string> RequestResourceCallback { get; set; }
-		}
-
 		public AssetLayout Layout { get; }
 
-		public IAssetFactory AssetFactory { get; } = new AssetFactory();
+		public IAssetFactory AssetFactory { get; set; }
 		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
-		public IAssemblyManager AssemblyManager { get; }
+		public IAssemblyManager AssemblyManager { get; set; }
 
 		private readonly Dictionary<string, SerializedFile> m_files = new Dictionary<string, SerializedFile>();
 		private readonly Dictionary<string, ResourceFile> m_resources = new Dictionary<string, ResourceFile>();
@@ -49,50 +30,15 @@ namespace AssetRipper.Core.Structure
 
 		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
 
-		private readonly Func<string, string> m_assemblyCallback;
-		private readonly Func<string, string> m_resourceCallback;
+		public event Func<string, string> ResourceCallback;
 
 		private readonly Dictionary<ClassIDType, List<UnityObjectBase>> _cachedAssetsByType = new();
 
-		public GameCollection(Parameters pars, CoreConfiguration configuration) : base(nameof(GameCollection))
+		public GameCollection(AssetLayout layout) : base(nameof(GameCollection))
 		{
-			Layout = pars.Layout;
+			Layout = layout;
 			m_layouts.Add(Layout.Info, Layout);
-
-			switch (pars.ScriptBackend)
-			{
-				case ScriptingBackend.Mono:
-					AssemblyManager = new MonoManager(Layout, OnRequestAssembly);
-					break;
-				case ScriptingBackend.Il2Cpp:
-					AssemblyManager = new Il2CppManager(Layout, OnRequestAssembly);
-					break;
-				case ScriptingBackend.Unknown:
-					AssemblyManager = new BaseManager(Layout, OnRequestAssembly);
-					break;
-			}
-
-			m_assemblyCallback = pars.RequestAssemblyCallback;
-			m_resourceCallback = pars.RequestResourceCallback;
-
-			Logger.SendStatusChange("loading_step_load_assemblies");
-
-			try
-			{
-				//Loads any Mono or IL2Cpp assemblies
-				AssemblyManager.Initialize(pars.PlatformStructure);
-			}
-			catch(Exception ex)
-			{
-				Logger.Error(LogCategory.Import, "Could not initialize assembly manager. Switching to the 'Unknown' scripting backend.");
-				Logger.Error(ex);
-				AssemblyManager = new BaseManager(Layout, OnRequestAssembly);
-			}
 		}
-
-		public void LoadAssembly(string filePath) => AssemblyManager.Load(filePath);
-
-		public void ReadAssembly(Stream stream, string fileName) => AssemblyManager.Read(stream, fileName);
 
 		public ISerializedFile FindSerializedFile(string fileName)
 		{
@@ -108,7 +54,7 @@ namespace AssetRipper.Core.Structure
 				return file;
 			}
 
-			string resPath = m_resourceCallback?.Invoke(fixedName);
+			string resPath = ResourceCallback?.Invoke(fixedName);
 			if (resPath == null)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Import, $"Resource file '{resName}' hasn't been found");
@@ -255,30 +201,9 @@ namespace AssetRipper.Core.Structure
 			return false;
 		}
 
-		private void OnRequestAssembly(string assembly)
-		{
-			string assemblyName = $"{assembly}{MonoManager.AssemblyExtension}";
-			if (m_resources.TryGetValue(assemblyName, out ResourceFile resFile))
-			{
-				resFile.Stream.Position = 0;
-				ReadAssembly(resFile.Stream, assemblyName);
-			}
-			else
-			{
-				string path = m_assemblyCallback?.Invoke(assembly);
-				if (path == null)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
-					return;
-				}
-				LoadAssembly(path);
-			}
-			Logger.Info(LogCategory.Import, $"Assembly '{assembly}' has been loaded");
-		}
-
 		private void Dispose(bool disposing)
 		{
-			AssemblyManager.Dispose();
+			AssemblyManager?.Dispose();
 			foreach (ResourceFile res in m_resources.Values)
 			{
 				res?.Dispose();
