@@ -1,11 +1,9 @@
-using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
-using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Object
 {
@@ -35,7 +33,7 @@ namespace AssetRipper.Core.Classes.Object
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			if (HasHideFlag(container.Version,container.Flags))
 			{
 				node.Add(ObjectHideFlagsName, (uint)ObjectHideFlags);

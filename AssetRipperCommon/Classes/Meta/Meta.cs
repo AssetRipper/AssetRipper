@@ -10,11 +10,11 @@ namespace AssetRipper.Core.Classes.Meta
 {
 	public struct Meta
 	{
-		public Meta(UnityGUID guid, AssetImporter importer) : this(guid, true, importer) { }
+		public Meta(UnityGUID guid, IAssetImporter importer) : this(guid, true, importer) { }
 
-		public Meta(UnityGUID guid, bool hasLicense, AssetImporter importer) : this(guid, hasLicense, false, importer) { }
+		public Meta(UnityGUID guid, bool hasLicense, IAssetImporter importer) : this(guid, hasLicense, false, importer) { }
 
-		public Meta(UnityGUID guid, bool hasLicense, bool isFolder, AssetImporter importer)
+		public Meta(UnityGUID guid, bool hasLicense, bool isFolder, IAssetImporter importer)
 		{
 			if (guid.IsZero)
 			{
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.Classes.Meta
 		public UnityGUID GUID { get; }
 		public bool IsFolderAsset { get; }
 		public bool HasLicenseData { get; }
-		public AssetImporter Importer { get; }
+		public IAssetImporter Importer { get; }
 
 		private long CurrentTick => (DateTime.Now.Ticks - 0x089f7ff5f7b58000) / 10000000;
 
