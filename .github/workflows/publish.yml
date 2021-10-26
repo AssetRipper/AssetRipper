@@ -37,7 +37,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperConsole_win64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_win64/*
+        path: ./Bins/Publish/AssetRipperConsole_win64/*
         if-no-files-found: error
         
     - name: List GUI Files
@@ -51,7 +51,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: AssetRipperGUI_win64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_win64/*
+        path: ./Bins/Publish/AssetRipper_win64/*
         if-no-files-found: error
       
 
