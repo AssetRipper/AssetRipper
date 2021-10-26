@@ -210,23 +210,23 @@ namespace AssetRipper.Core.Classes.GameObject
 			writer.Write(IsActive);
 		}
 
-		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (IsComponentTuple(context.Version))
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ComponentTuple.Select(t => t.Item2), ComponentName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(ComponentTuple.Select(t => t.Item2), ComponentName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Component, ComponentName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Component, ComponentName))
 				{
 					yield return asset;
 				}

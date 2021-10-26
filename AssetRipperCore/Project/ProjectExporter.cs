@@ -229,14 +229,14 @@ namespace AssetRipper.Core.Project
 				if (options.ExportDependencies && asset is IDependent dependent)
 				{
 					DependencyContext context = new DependencyContext(exportLayout, true);
-					foreach (PPtr<Object> pointer in dependent.FetchDependencies(context))
+					foreach (PPtr<UnityObjectBase> pointer in dependent.FetchDependencies(context))
 					{
 						if (pointer.IsNull)
 						{
 							continue;
 						}
 
-						Object dependency = pointer.FindAsset(asset.File);
+						UnityObjectBase dependency = pointer.FindAsset(asset.File);
 						if (dependency == null)
 						{
 							string hierarchy = $"[{asset.File.Name}]" + asset.File.GetAssetLogString(asset.PathID) + "." + context.GetPointerPath();

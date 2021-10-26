@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			Pointer.Write(writer);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Pointer, string.Empty);
 		}

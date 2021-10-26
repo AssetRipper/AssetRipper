@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 		}
 
-		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Renderer, RendererName);
 		}

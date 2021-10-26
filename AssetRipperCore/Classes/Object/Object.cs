@@ -9,16 +9,11 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Object
 {
-	public abstract class Object : UnityObjectBase, IAsset, IDependent
+	public abstract class Object : UnityObjectBase, IDependent
 	{
 		protected Object(AssetLayout layout) : base(layout) { }
 
 		protected Object(AssetInfo assetInfo) : base(assetInfo) { }
-
-		public override UnityObjectBase Convert(IExportContainer container)
-		{
-			return this;
-		}
 
 		public override void Read(AssetReader reader)
 		{
@@ -38,7 +33,7 @@ namespace AssetRipper.Core.Classes.Object
 			}
 		}
 
-		public virtual IEnumerable<PPtr<Object>> FetchDependencies(DependencyContext context)
+		public virtual IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield break;
 		}

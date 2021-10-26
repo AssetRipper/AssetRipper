@@ -156,9 +156,9 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 		}
 
-		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
 			{
 				yield return asset;
 			}

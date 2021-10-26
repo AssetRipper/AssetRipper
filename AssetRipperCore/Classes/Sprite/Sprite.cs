@@ -199,15 +199,15 @@ namespace AssetRipper.Core.Classes.Sprite
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(SpriteAtlas, SpriteAtlasName);
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(RD, RDName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(RD, RDName))
 			{
 				yield return asset;
 			}

@@ -42,14 +42,14 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			return node;
 		}
 
-		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(TransformParent, TransformParentName);
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Modifications, ModificationsName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Modifications, ModificationsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(RemovedComponents, RemovedComponentsName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(RemovedComponents, RemovedComponentsName))
 			{
 				yield return asset;
 			}

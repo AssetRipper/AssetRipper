@@ -74,22 +74,22 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(SplatDatabase, SplatDatabaseName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(SplatDatabase, SplatDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(DetailDatabase, DetailDatabaseName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(DetailDatabase, DetailDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Heightmap, HeightmapName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Heightmap, HeightmapName))
 			{
 				yield return asset;
 			}
@@ -100,7 +100,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 			if (HasPreloadShaders(context.Version))
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(PreloadShaders, PreloadShadersName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(PreloadShaders, PreloadShadersName))
 				{
 					yield return asset;
 				}

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Files;
@@ -16,13 +15,13 @@ namespace AssetRipper.Core.Parser.Asset
 			m_hierarchy = log ? new Stack<string>() : null;
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(T dependent, string name) where T : IDependent
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies<T>(T dependent, string name) where T : IDependent
 		{
 			if (IsLog)
 			{
 				m_hierarchy.Push(name);
 			}
-			foreach (PPtr<Object> pointer in dependent.FetchDependencies(this))
+			foreach (PPtr<UnityObjectBase> pointer in dependent.FetchDependencies(this))
 			{
 				if (!pointer.IsNull)
 				{
@@ -35,17 +34,17 @@ namespace AssetRipper.Core.Parser.Asset
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(T[] dependents, string name) where T : IDependent
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies<T>(T[] dependents, string name) where T : IDependent
 		{
 			return FetchDependencies((IEnumerable<T>)dependents, name);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IReadOnlyList<T> dependents, string name) where T : IDependent
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies<T>(IReadOnlyList<T> dependents, string name) where T : IDependent
 		{
 			return FetchDependencies((IEnumerable<T>)dependents, name);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IEnumerable<T> dependents, string name) where T : IDependent
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies<T>(IEnumerable<T> dependents, string name) where T : IDependent
 		{
 			if (IsLog)
 			{
@@ -53,7 +52,7 @@ namespace AssetRipper.Core.Parser.Asset
 			}
 			foreach (T dependent in dependents)
 			{
-				foreach (PPtr<Object> pointer in dependent.FetchDependencies(this))
+				foreach (PPtr<UnityObjectBase> pointer in dependent.FetchDependencies(this))
 				{
 					if (!pointer.IsNull)
 					{
@@ -67,17 +66,17 @@ namespace AssetRipper.Core.Parser.Asset
 			}
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(PPtr<T>[] pointers, string name) where T : Object
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies<T>(PPtr<T>[] pointers, string name) where T : UnityObjectBase
 		{
 			return FetchDependencies((IEnumerable<PPtr<T>>)pointers, name);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IReadOnlyList<PPtr<T>> pointers, string name) where T : Object
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies<T>(IReadOnlyList<PPtr<T>> pointers, string name) where T : UnityObjectBase
 		{
 			return FetchDependencies((IEnumerable<PPtr<T>>)pointers, name);
 		}
 
-		public IEnumerable<PPtr<Object>> FetchDependencies<T>(IEnumerable<PPtr<T>> pointers, string name) where T : Object
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies<T>(IEnumerable<PPtr<T>> pointers, string name) where T : UnityObjectBase
 		{
 			foreach (PPtr<T> pointer in pointers)
 			{
@@ -88,13 +87,13 @@ namespace AssetRipper.Core.Parser.Asset
 			}
 		}
 
-		public PPtr<Object> FetchDependency<T>(PPtr<T> pointer, string name) where T : Object
+		public PPtr<UnityObjectBase> FetchDependency<T>(PPtr<T> pointer, string name) where T : UnityObjectBase
 		{
 			if (IsLog)
 			{
 				PointerName = name;
 			}
-			return pointer.CastTo<Object>();
+			return pointer.CastTo<UnityObjectBase>();
 		}
 
 		public string GetPointerPath()

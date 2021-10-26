@@ -20,15 +20,15 @@ namespace AssetRipper.Core.Classes.AnimatorOverrideController
 			Clips = reader.ReadAssetArray<AnimationClipOverride>();
 		}
 
-		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(Controller, ControllerName);
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Clips, ClipsName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Clips, ClipsName))
 			{
 				yield return asset;
 			}

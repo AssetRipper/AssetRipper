@@ -291,48 +291,48 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (HasClassIDToTrack(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies((IEnumerable<PPtr<BaseAnimationTrack>>)ClassIDToTrack.Values, ClassIDToTrackName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies((IEnumerable<PPtr<BaseAnimationTrack>>)ClassIDToTrack.Values, ClassIDToTrackName))
 				{
 					yield return asset;
 				}
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ChildTracks, ChildTracksName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(ChildTracks, ChildTracksName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasCurves(context.Version))
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(FloatCurves, FloatCurvesName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(FloatCurves, FloatCurvesName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasPPtrCurves(context.Version))
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(PPtrCurves, PPtrCurvesName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(PPtrCurves, PPtrCurvesName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasClipBindingConstant(context.Version))
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(ClipBindingConstant, ClipBindingConstantName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(ClipBindingConstant, ClipBindingConstantName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasEvents(context.Version))
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Events, EventsName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Events, EventsName))
 				{
 					yield return asset;
 				}

@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes
 			throw new System.NotImplementedException();
 		}
 
-		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			throw new System.NotImplementedException();
 		}

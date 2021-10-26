@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 			}
 		}
 
-		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			if (HasCollisionShapes(context.Version))
 			{

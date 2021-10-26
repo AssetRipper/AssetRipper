@@ -344,9 +344,9 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -357,7 +357,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			if (HasEnlightenSceneMapping(context.Version, context.Flags))
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
 				{
 					yield return asset;
 				}
@@ -365,7 +365,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			if (HasLightProbes(context.Version, context.Flags))
 			{
 				yield return context.FetchDependency(LightProbes, LightProbesName);
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Lightmaps, LightmapsName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Lightmaps, LightmapsName))
 				{
 					yield return asset;
 				}

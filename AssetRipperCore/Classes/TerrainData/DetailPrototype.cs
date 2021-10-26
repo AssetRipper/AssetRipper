@@ -87,7 +87,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			writer.Write(UsePrototypeMesh);
 		}
 
-		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Prototype, PrototypeName);
 			yield return context.FetchDependency(PrototypeTexture, PrototypeTextureName);

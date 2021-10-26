@@ -245,7 +245,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 			}
 		}
 
-		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Mesh, MeshName);
 			yield return context.FetchDependency(MeshRenderer, MeshRendererName);

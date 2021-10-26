@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			Shader.Read(reader);
 		}
 
-		public IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Shader, ShaderName);
 		}

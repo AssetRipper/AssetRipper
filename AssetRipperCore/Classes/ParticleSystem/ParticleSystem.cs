@@ -260,19 +260,19 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			}
 		}
 
-		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(MoveWithCustomTransform, MoveWithCustomTransformName);
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(SubModule, SubModuleName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(SubModule, SubModuleName))
 			{
 				yield return asset;
 			}

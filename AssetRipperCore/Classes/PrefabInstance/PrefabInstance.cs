@@ -153,11 +153,11 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			}*/
 		}
 
-		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			if (IsModificationFormat(context.Version))
 			{
-				foreach (PPtr<Object.Object> asset in FetchDependenciesObject(context))
+				foreach (PPtr<UnityObjectBase> asset in FetchDependenciesObject(context))
 				{
 					yield return asset;
 				}
@@ -166,7 +166,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 				{
 					yield return context.FetchDependency(RootGameObject, RootGameObjectName);
 				}
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Modification, ModificationName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Modification, ModificationName))
 				{
 					yield return asset;
 				}
@@ -174,13 +174,13 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			}
 			else
 			{
-				foreach (PPtr<Object.Object> asset in context.FetchDependencies(Objects, ObjectsName))
+				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Objects, ObjectsName))
 				{
 					yield return asset;
 				}
 				yield return context.FetchDependency(Father, FatherName);
 
-				foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
+				foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
 				{
 					yield return asset;
 				}

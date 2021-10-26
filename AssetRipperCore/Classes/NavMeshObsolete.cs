@@ -26,14 +26,14 @@ namespace AssetRipper.Core.Classes
 			Heightmaps = reader.ReadAssetArray<HeightmapData>();
 		}
 
-		public override IEnumerable<PPtr<Object.Object>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<Object.Object> asset in base.FetchDependencies(context))
+			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<Object.Object> asset in context.FetchDependencies(Heightmaps, HeightmapsName))
+			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Heightmaps, HeightmapsName))
 			{
 				yield return asset;
 			}
