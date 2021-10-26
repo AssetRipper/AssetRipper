@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MonoManager = AssetRipper.Core.Structure.Assembly.Managers.MonoManager;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Structure
 {
@@ -41,7 +40,6 @@ namespace AssetRipper.Core.Structure
 
 		public AssetLayout Layout { get; }
 
-		public ProjectExporter Exporter { get; }
 		public IAssetFactory AssetFactory { get; } = new AssetFactory();
 		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
 		public IAssemblyManager AssemblyManager { get; }
@@ -91,11 +89,7 @@ namespace AssetRipper.Core.Structure
 				Logger.Error(ex);
 				AssemblyManager = new BaseManager(Layout, OnRequestAssembly);
 			}
-
-			Exporter = new ProjectExporter(this, configuration);
 		}
-
-		public void Export(CoreConfiguration options) => Exporter.Export(this, options);
 
 		public void LoadAssembly(string filePath) => AssemblyManager.Load(filePath);
 

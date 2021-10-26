@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project
 {
-	public class ProjectExporter
+	public class ProjectExporter : IProjectExporter
 	{
 		public event Action EventExportPreparationStarted;
 		public event Action EventExportPreparationFinished;
@@ -20,10 +20,8 @@ namespace AssetRipper.Core.Project
 		public event Action<int, int> EventExportProgressUpdated;
 		public event Action EventExportFinished;
 
-		public ProjectExporter(IFileCollection fileCollection, CoreConfiguration configuration)
+		public ProjectExporter()
 		{
-			m_fileCollection = fileCollection;
-
 			OverrideDefaultExport();
 
 			OverrideDummyExporter(ClassIDType.MonoManager, true, false);
@@ -172,7 +170,7 @@ namespace AssetRipper.Core.Project
 		private void OverrideDefaultExport()
 		{
 			var exporter = new DummyAssetExporter();
-			foreach(var value in Enum.GetValues<ClassIDType>())
+			foreach (var value in Enum.GetValues<ClassIDType>())
 			{
 				DummyExporter.SetUpClassType(value, false, true);
 				OverrideExporter(value, DummyExporter);
@@ -331,7 +329,5 @@ namespace AssetRipper.Core.Project
 		private DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
 
 		private readonly Dictionary<ClassIDType, Stack<IAssetExporter>> m_exporters = new Dictionary<ClassIDType, Stack<IAssetExporter>>();
-
-		private readonly IFileCollection m_fileCollection;
 	}
 }

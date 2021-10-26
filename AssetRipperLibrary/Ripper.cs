@@ -137,8 +137,7 @@ namespace AssetRipper.Library
 		private void InitializeExporters()
 		{
 			if (GameStructure == null) throw new NullReferenceException("GameStructure cannot be null");
-			if (GameStructure.FileCollection == null) throw new NullReferenceException("FileCollection cannot be null");
-			if (GameStructure.FileCollection.Exporter == null) throw new NullReferenceException("Project Exporter cannot be null");
+			if (GameStructure.Exporter == null) throw new NullReferenceException("Project Exporter cannot be null");
 			if (ExportersInitialized)
 				return;
 
@@ -196,6 +195,6 @@ namespace AssetRipper.Library
 			OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
 		}
 
-		private void OverrideExporter(ClassIDType classID, IAssetExporter exporter) => GameStructure.FileCollection.Exporter.OverrideExporter(classID, exporter);
+		private void OverrideExporter(ClassIDType classID, IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter(classID, exporter);
 	}
 }

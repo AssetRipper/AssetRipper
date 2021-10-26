@@ -3,6 +3,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
 using System;
@@ -15,6 +16,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 	public sealed class GameStructure : IDisposable
 	{
 		public GameCollection FileCollection { get; private set; }
+		public ProjectExporter Exporter { get; private set; } = new ProjectExporter();
 		public PlatformGameStructure PlatformStructure { get; private set; }
 		public PlatformGameStructure MixedStructure { get; private set; }
 
@@ -72,8 +74,8 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 					//Setting the parameters for exporting
 					GameCollection.Parameters pars = new GameCollection.Parameters(layout);
-					pars.ScriptBackend = GetScriptingBackend(configuration.DisableScriptImport);
 					pars.PlatformStructure = PlatformStructure;
+					pars.ScriptBackend = GetScriptingBackend(configuration.DisableScriptImport);
 					Logger.Info(LogCategory.Import, $"Files use the '{pars.ScriptBackend}' scripting backend.");
 					pars.RequestAssemblyCallback = OnRequestAssembly;
 					pars.RequestResourceCallback = OnRequestResource;
@@ -97,7 +99,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			UnityVersion version = UnityVersion.Max(maxFileVersion, UnityVersion.DefaultVersion);
 			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
 			options.SetProjectSettings(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
-			FileCollection.Export(options);
+			Exporter.Export(FileCollection, options);
 		}
 
 		/// <summary>Attempts to find the path for the dependency with that name.</summary>

@@ -10,7 +10,6 @@ using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable
 {

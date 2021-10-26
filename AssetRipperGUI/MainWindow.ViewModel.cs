@@ -242,7 +242,7 @@ namespace AssetRipper.GUI
 			Logger.Info(LogCategory.General, $"Removing any files from a previous export...");
 
 			await UIExportManager.PrepareExportDirectory(exportPath);
-			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.FileCollection.Exporter, this);
+			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.Exporter, this);
 
 			UIExportManager.Export(_ripper, exportPath, () =>
 			{
@@ -284,7 +284,7 @@ namespace AssetRipper.GUI
 			Logger.Info(LogCategory.General, $"Removing any files from a previous export...");
 
 			await UIExportManager.PrepareExportDirectory(exportPath);
-			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.FileCollection.Exporter, this);
+			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.Exporter, this);
 
 			UIExportManager.Export(_ripper, exportPath, SelectedAsset.Asset, () =>
 			{

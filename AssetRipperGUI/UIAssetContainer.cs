@@ -13,7 +13,7 @@ namespace AssetRipper.GUI
 	{
 
 		public UIAssetContainer(Ripper ripper) : base(
-			ripper.GameStructure.FileCollection.Exporter,
+			ripper.GameStructure.Exporter,
 			ripper.Settings,
 			new VirtualSerializedFile(ripper.GameStructure.FileCollection.Layout),
 			ripper.GameStructure.FileCollection.FetchAssets(),
