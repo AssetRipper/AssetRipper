@@ -1,4 +1,3 @@
-using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
@@ -9,7 +8,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public abstract class AssetsExportCollection : AssetExportCollection
 	{
-		public AssetsExportCollection(IAssetExporter assetExporter, Object asset) : base(assetExporter, asset) { }
+		public AssetsExportCollection(IAssetExporter assetExporter, UnityObjectBase asset) : base(assetExporter, asset) { }
 
 		public override bool IsContains(UnityObjectBase asset)
 		{
@@ -49,12 +48,12 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		protected virtual long GenerateExportID(Object asset)
+		protected virtual long GenerateExportID(UnityObjectBase asset)
 		{
 			return ObjectUtils.GenerateExportID(asset, ContainsID);
 		}
 
-		protected void AddAsset(Object asset)
+		protected void AddAsset(UnityObjectBase asset)
 		{
 			long exportID = GenerateExportID(asset);
 			m_assets.Add(asset);

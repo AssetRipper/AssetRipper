@@ -65,7 +65,7 @@ namespace AssetRipper.GUI
 				//Create a dictionary to hold the sub-categories.
 				Dictionary<string, NewUiFileListItem> categories = new();
 				
-				foreach (Object asset in resourceFile.FetchAssets())
+				foreach (UnityObjectBase asset in resourceFile.FetchAssets())
 				{
 					//Get the name of the category this asset should go in.
 					string categoryName = GetCategoryName(asset.GetType());

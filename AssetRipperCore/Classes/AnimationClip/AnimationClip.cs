@@ -390,7 +390,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		{
 			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
 			
-			foreach (Object.Object asset in File.Collection.FetchAssetsOfType(ClassIDType.Avatar))
+			foreach (UnityObjectBase asset in File.Collection.FetchAssetsOfType(ClassIDType.Avatar))
 			{
 				Avatar.Avatar avatar = (Avatar.Avatar)asset;
 				if (AddAvatarTOS(avatar, tos))
@@ -399,7 +399,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				}
 			}
 
-			foreach (Object.Object asset in File.Collection.FetchAssetsOfType(ClassIDType.Animator))
+			foreach (UnityObjectBase asset in File.Collection.FetchAssetsOfType(ClassIDType.Animator))
 			{
 				Animator.Animator animator = (Animator.Animator)asset;
 				if (IsAnimatorContainsClip(animator))
@@ -411,7 +411,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				}
 			}
 
-			foreach (Object.Object asset in File.Collection.FetchAssetsOfType(ClassIDType.Animation))
+			foreach (UnityObjectBase asset in File.Collection.FetchAssetsOfType(ClassIDType.Animation))
 			{
 				Animation.Animation animation = (Animation.Animation)asset;
 				if (IsAnimationContainsClip(animation))

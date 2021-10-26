@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Object = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Project.Collections
@@ -62,7 +61,7 @@ namespace AssetRipper.Core.Project.Collections
 
 			if (OcclusionCullingSettings.HasReadPVSData(File.Version))
 			{
-				foreach (Object comp in Components)
+				foreach (UnityObjectBase comp in Components)
 				{
 					if (comp.ClassID == ClassIDType.OcclusionCullingSettings)
 					{
@@ -114,7 +113,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
-			string folderPath = Path.Combine(dirPath, Object.AssetsKeyword, OcclusionCullingSettings.SceneKeyword);
+			string folderPath = Path.Combine(dirPath, UnityObjectBase.AssetsKeyword, OcclusionCullingSettings.SceneKeyword);
 			string sceneSubPath = GetSceneName(container);
 			string fileName = $"{sceneSubPath}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
@@ -270,7 +269,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			get
 			{
-				foreach (Object asset in Components)
+				foreach (UnityObjectBase asset in Components)
 				{
 					yield return asset;
 				}

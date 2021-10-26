@@ -44,7 +44,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			File = script.File;
 
 			// find copies in whole project and skip them
-			foreach (Object asset in script.File.Collection.FetchAssets())
+			foreach (UnityObjectBase asset in script.File.Collection.FetchAssets())
 			{
 				if (asset.ClassID != ClassIDType.MonoScript)
 				{
