@@ -91,6 +91,7 @@ namespace UnitTester
 		{
 			if (Directory.Exists(path))
 			{
+				Logger.Info(LogCategory.Export, "Clearing export directory...");
 				Directory.Delete(path, true);
 			}
 		}

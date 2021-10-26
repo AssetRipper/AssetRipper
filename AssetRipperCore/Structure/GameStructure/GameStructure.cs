@@ -2,9 +2,12 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly;
+using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
 using System;
 using System.Collections.Generic;
@@ -69,21 +72,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 					//Assigns a layout if one wasn't already provided
 					layinfo ??= processor.GetLayoutInfo();
 
-					//Initializes all the component layouts
-					AssetLayout layout = new AssetLayout(layinfo);
-
-					//Setting the parameters for exporting
-					GameCollection.Parameters pars = new GameCollection.Parameters(layout);
-					pars.PlatformStructure = PlatformStructure;
-					pars.ScriptBackend = GetScriptingBackend(configuration.DisableScriptImport);
-					Logger.Info(LogCategory.Import, $"Files use the '{pars.ScriptBackend}' scripting backend.");
-					pars.RequestAssemblyCallback = OnRequestAssembly;
-					pars.RequestResourceCallback = OnRequestResource;
-					
-					Logger.SendStatusChange("loading_step_create_file_collection");
-
-					//Sets its fields and creates the Project Exporter
-					FileCollection = new GameCollection(pars, configuration);
+					InitializeGameCollection(configuration, layinfo);
 
 					Logger.SendStatusChange("loading_step_begin_scheme_processing");
 					
@@ -127,6 +116,52 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 		}
 
+		private void InitializeGameCollection(CoreConfiguration configuration, LayoutInfo layinfo)
+		{
+			//Initializes all the component layouts
+			AssetLayout layout = new AssetLayout(layinfo);
+
+			Logger.SendStatusChange("loading_step_create_file_collection");
+
+			//Sets its fields and creates the Project Exporter
+			FileCollection = new GameCollection(layout);
+
+			//Setting the parameters for exporting
+			FileCollection.AssetFactory = new AssetFactory();
+
+			FileCollection.ResourceCallback += RequestResource;
+
+			var scriptBackend = GetScriptingBackend(configuration.DisableScriptImport);
+			Logger.Info(LogCategory.Import, $"Files use the '{scriptBackend}' scripting backend.");
+
+			switch (scriptBackend)
+			{
+				case ScriptingBackend.Mono:
+					FileCollection.AssemblyManager = new MonoManager(layout, OnRequestAssembly);
+					break;
+				case ScriptingBackend.Il2Cpp:
+					FileCollection.AssemblyManager = new Il2CppManager(layout, OnRequestAssembly);
+					break;
+				case ScriptingBackend.Unknown:
+					FileCollection.AssemblyManager = new BaseManager(layout, OnRequestAssembly);
+					break;
+			}
+
+			Logger.SendStatusChange("loading_step_load_assemblies");
+
+			try
+			{
+				//Loads any Mono or IL2Cpp assemblies
+				FileCollection.AssemblyManager.Initialize(PlatformStructure);
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(LogCategory.Import, "Could not initialize assembly manager. Switching to the 'Unknown' scripting backend.");
+				Logger.Error(ex);
+				FileCollection.AssemblyManager = new BaseManager(layout, OnRequestAssembly);
+			}
+		}
+
 		private ScriptingBackend GetScriptingBackend(bool disableScriptImport)
 		{
 			if(disableScriptImport)
@@ -147,9 +182,27 @@ namespace AssetRipper.Core.Structure.GameStructure
 			return ScriptingBackend.Unknown;
 		}
 
-		private string OnRequestAssembly(string assembly) => RequestAssembly(assembly);
-
-		private string OnRequestResource(string resource) => RequestResource(resource);
+		private void OnRequestAssembly(string assembly)
+		{
+			string assemblyName = $"{assembly}.dll";
+			IResourceFile resFile = FileCollection.FindResourceFile(assemblyName);
+			if (resFile != null)
+			{
+				resFile.Stream.Position = 0;
+				FileCollection.AssemblyManager.Read(resFile.Stream, assemblyName);
+			}
+			else
+			{
+				string path = RequestAssembly(assembly);
+				if (path == null)
+				{
+					Logger.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
+					return;
+				}
+				FileCollection.AssemblyManager.Load(path);
+			}
+			Logger.Info(LogCategory.Import, $"Assembly '{assembly}' has been loaded");
+		}
 
 		public string RequestAssembly(string assembly)
 		{
