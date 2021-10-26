@@ -12,7 +12,6 @@ using AssetRipper.Core.Structure;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {
@@ -199,11 +198,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return Metadata.Object[m_assetEntryLookup[pathID]].ClassID;
 		}
 
-		public PPtr<T> CreatePPtr<T>(T obj) where T : UnityObjectBase
+		public PPtr<T> CreatePPtr<T>(T asset) where T : UnityObjectBase
 		{
-			if (obj is not Object asset)
-				throw new NotSupportedException();
-
 			if (asset.File == this)
 			{
 				return new PPtr<T>(0, asset.PathID);
@@ -348,11 +344,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		{
 			if (!SerializedFileMetadata.HasSignature(Header.Version) && BuildSettings.HasVersion(Version))
 			{
-				foreach (Object asset in FetchAssets())
+				foreach (UnityObjectBase asset in FetchAssets())
 				{
 					if (asset.ClassID == ClassIDType.BuildSettings)
 					{
-						BuildSettings settings = (BuildSettings)asset;
+						IBuildSettings settings = (IBuildSettings)asset;
 						Metadata.UnityVersion = UnityVersion.Parse(settings.Version);
 						return;
 					}

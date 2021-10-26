@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class BuildSettings : GlobalGameManager
+	public sealed class BuildSettings : GlobalGameManager, IBuildSettings
 	{
 		public BuildSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -216,7 +216,7 @@ namespace AssetRipper.Core.Classes
 			if (HasScriptHashes(reader.Version))
 			{
 				ScriptHashes = new Dictionary<Hash128, Hash128>();
-				
+
 				ScriptHashes.Read(reader);
 			}
 			if (HasGraphicsAPIs(reader.Version))
