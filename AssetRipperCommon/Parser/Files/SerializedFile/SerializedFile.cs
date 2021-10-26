@@ -342,13 +342,12 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		private void UpdateFileVersion()
 		{
-			if (!SerializedFileMetadata.HasSignature(Header.Version) && BuildSettings.HasVersion(Version))
+			if (!SerializedFileMetadata.HasSignature(Header.Version))
 			{
 				foreach (UnityObjectBase asset in FetchAssets())
 				{
-					if (asset.ClassID == ClassIDType.BuildSettings)
+					if (asset is IBuildSettings settings && settings.Version != null)
 					{
-						IBuildSettings settings = (IBuildSettings)asset;
 						Metadata.UnityVersion = UnityVersion.Parse(settings.Version);
 						return;
 					}
