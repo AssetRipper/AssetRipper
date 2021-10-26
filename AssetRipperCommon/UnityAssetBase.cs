@@ -1,17 +1,20 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core
 {
 	/// <summary>
 	/// The artificial base class for all generated Unity classes
 	/// </summary>
-	public class UnityAssetBase : IAssetNew
+	public class UnityAssetBase : IAssetNew, IDependent
 	{
 		public UnityVersion AssetUnityVersion { get; set; }
 		public EndianType EndianType { get; set; }
@@ -70,6 +73,11 @@ namespace AssetRipper.Core
 				return ExportYAMLRelease(container);
 			else
 				return ExportYAMLDebug(container);
+		}
+
+		public virtual IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		{
+			yield break;
 		}
 	}
 }

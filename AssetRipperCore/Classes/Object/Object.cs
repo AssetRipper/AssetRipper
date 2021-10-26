@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Object
 {
-	public abstract class Object : UnityObjectBase, IDependent
+	public abstract class Object : UnityObjectBase
 	{
 		protected Object(AssetLayout layout) : base(layout) { }
 
@@ -31,11 +31,6 @@ namespace AssetRipper.Core.Classes.Object
 			{
 				writer.Write((uint)ObjectHideFlags);
 			}
-		}
-
-		public virtual IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)

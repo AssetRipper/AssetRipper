@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Project.Exporters
 					using (InvariantStreamWriter streamWriter = new InvariantStreamWriter(stream, UTF8))
 					{
 						YAMLWriter writer = new YAMLWriter();
-						YAMLDocument doc = (asset as Object).ExportYAMLDocument(container);
+						YAMLDocument doc = asset.ExportYAMLDocument(container);
 						writer.AddDocument(doc);
 						writer.Write(streamWriter);
 					}
