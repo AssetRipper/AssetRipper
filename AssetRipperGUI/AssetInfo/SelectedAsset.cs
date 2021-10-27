@@ -143,6 +143,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public bool HasTextData => Asset switch
 		{
 			Shader => true,
+			DummyAssetForLooseResourceFile => true,
 			UnknownObject unk => unk.Data.Length > 0,
 			TextAsset txt=> txt.Script != null && txt.Script.Length > 0,
 			_ => false,
@@ -153,6 +154,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			Shader shader => DumpShaderDataAsText(shader),
 			UnknownObject unk => unk.ToFormattedHex(),
+			DummyAssetForLooseResourceFile da => da.IsProbablyPlainText ? da.DataAsString : da.ToFormattedHex(),
 			TextAsset txt => txt.Text,
 			_ => null
 		})?.Replace("\t", "    ");

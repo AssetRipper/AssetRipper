@@ -24,6 +24,8 @@ namespace AssetRipper.Core.Structure
 		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
 		public IAssemblyManager AssemblyManager { get; set; }
 
+		public List<ResourceFile> GameResourceFiles => m_resources.Values.ToList();
+
 		private readonly Dictionary<string, SerializedFile> m_files = new Dictionary<string, SerializedFile>();
 		private readonly Dictionary<string, ResourceFile> m_resources = new Dictionary<string, ResourceFile>();
 		private readonly Dictionary<LayoutInfo, AssetLayout> m_layouts = new Dictionary<LayoutInfo, AssetLayout>();
