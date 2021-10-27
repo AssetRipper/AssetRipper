@@ -19,6 +19,7 @@ using AssetRipper.Core.Classes.Rigidbody;
 using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Classes.UI.Canvas;
 using AssetRipper.Core.Classes.UnityConnectSettings;
+using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Structure.GameStructure;
 using System;
 using System.Collections.Generic;
@@ -95,6 +96,15 @@ namespace AssetRipper.GUI
 				//Add the top-level entry to our result
 				ret.Add(topLevelEntry);
 			}
+			
+			//Create a top-level tree view entry for any loose resource files
+			NewUiFileListItem? looseFiles = new("Loose Resource Files");
+			foreach (ResourceFile resourceFile in structure.FileCollection.GameResourceFiles)
+			{
+				looseFiles.SubItems.Add(new(new DummyAssetForLooseResourceFile(resourceFile)));
+			}
+
+			ret.Add(looseFiles);
 
 			return ret;
 		}
@@ -172,6 +182,11 @@ namespace AssetRipper.GUI
 			if (_associatedObject is UnknownObject)
 			{
 				_displayAs = asset.ClassID.ToString();
+			}
+
+			if (_associatedObject is DummyAssetForLooseResourceFile da)
+			{
+				_displayAs = da.AssociatedFile.Name;
 			}
 
 			if (string.IsNullOrEmpty(_displayAs))

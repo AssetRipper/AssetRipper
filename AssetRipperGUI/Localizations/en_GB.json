@@ -98,5 +98,6 @@
     "export_in_progress_no_file_count_yet": "Exporting Asset Files\n0.0%\n?/?",
     "export_in_progress": "Exporting Asset Files\n{0}%\n{1}/{2}",
     "error_exporting_with_reason": "Failed to export game content: {0}",
-    "error_importing_with_reason": "Failed to load game content: {0}"
+    "error_importing_with_reason": "Failed to load game content: {0}",
+    "loose_file_saved_at": "Loose file saved at {0}"
 }

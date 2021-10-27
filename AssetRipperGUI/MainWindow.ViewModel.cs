@@ -148,6 +148,8 @@ namespace AssetRipper.GUI
 				return;
 
 			var newStatus = context == null ? MainWindow.Instance.LocalizationManager[statusKey] : string.Format(MainWindow.Instance.LocalizationManager[statusKey], context); 
+			
+			Logger.Info(newStatus);
 
 			_updatingLoadingText = true;
 			LoadingText = string.Format(MainWindow.Instance.LocalizationManager["loading_game_content_from"], _importingFrom, newStatus);
@@ -257,6 +259,25 @@ namespace AssetRipper.GUI
 		{
 			if (_ripper.GameStructure == null || SelectedAsset == null)
 			{
+				return;
+			}
+
+			if (SelectedAsset.Asset is DummyAssetForLooseResourceFile da)
+			{
+				SaveFileDialog saveFileDialog = new();
+				string fileName = Path.GetFileName(da.AssociatedFile.Name);
+				saveFileDialog.DefaultExtension = Path.GetExtension(fileName);
+				saveFileDialog.InitialFileName = fileName;
+
+				string? saveLoc = await saveFileDialog.ShowAsync(MainWindow.Instance);
+				
+				if(saveLoc == null)
+					return;
+				
+				await File.WriteAllBytesAsync(saveLoc, da.RawData);
+				MessageBox.Popup(
+					MainWindow.Instance.LocalizationManager["success"],
+					string.Format(MainWindow.Instance.LocalizationManager["loose_file_saved_at"], saveLoc));
 				return;
 			}
 

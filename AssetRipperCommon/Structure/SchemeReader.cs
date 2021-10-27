@@ -27,20 +27,25 @@ namespace AssetRipper.Core.Structure
 			{
 				if (BundleFile.IsBundleFile(stream))
 				{
+					Logger.SendStatusChange($"loading_step_parse_bundle", fileName);
 					return BundleFileScheme.ReadScheme(buffer, filePath, fileName);
 				}
 				if (ArchiveFile.IsArchiveFile(stream))
 				{
+					Logger.SendStatusChange($"loading_step_parse_archive", fileName);
 					return ArchiveFile.ReadScheme(buffer, filePath, fileName);
 				}
 				if (WebFile.IsWebFile(stream))
 				{
+					Logger.SendStatusChange($"loading_step_parse_web", fileName);
 					return WebFile.ReadScheme(buffer, filePath);
 				}
 				if (SerializedFile.IsSerializedFile(stream))
 				{
+					Logger.SendStatusChange($"loading_step_parse_serialized", fileName);
 					return SerializedFile.ReadScheme(buffer, filePath, fileName);
 				}
+				Logger.SendStatusChange($"loading_step_parse_resource", fileName);
 				return ResourceFile.ReadScheme(buffer, filePath, fileName);
 			}
 		}
