@@ -147,9 +147,7 @@ namespace AssetRipper.GUI
 			if (_updatingLoadingText)
 				return;
 
-			var newStatus = context == null ? MainWindow.Instance.LocalizationManager[statusKey] : string.Format(MainWindow.Instance.LocalizationManager[statusKey], context); 
-			
-			Logger.Info(newStatus);
+			var newStatus = context == null ? MainWindow.Instance.LocalizationManager[statusKey] : string.Format(MainWindow.Instance.LocalizationManager[statusKey], context);
 
 			_updatingLoadingText = true;
 			LoadingText = string.Format(MainWindow.Instance.LocalizationManager["loading_game_content_from"], _importingFrom, newStatus);
