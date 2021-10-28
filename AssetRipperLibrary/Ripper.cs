@@ -1,4 +1,12 @@
 ﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.AudioClip;
+using AssetRipper.Core.Classes.Font;
+using AssetRipper.Core.Classes.Material;
+using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Classes.Sprite;
+using AssetRipper.Core.Classes.TerrainData;
+using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
@@ -151,49 +159,49 @@ namespace AssetRipper.Library
 		{
 			//Texture exporters
 			TextureAssetExporter textureExporter = new TextureAssetExporter(Settings);
-			OverrideExporter(ClassIDType.Texture2D, textureExporter);
-			OverrideExporter(ClassIDType.Cubemap, textureExporter);
-			OverrideExporter(ClassIDType.Sprite, textureExporter);
+			OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
+			OverrideExporter<ISprite>(textureExporter);
 
 			//Shader exporters
-			OverrideExporter(ClassIDType.Shader, new DummyShaderTextExporter());
+			OverrideExporter<IShader>(new DummyShaderTextExporter());
 
 			//Audio exporters
-			OverrideExporter(ClassIDType.AudioClip, new NativeAudioExporter());
-			OverrideExporter(ClassIDType.AudioClip, new FmodAudioExporter(Settings));
-			OverrideExporter(ClassIDType.AudioClip, new AudioClipExporter(Settings));
+			OverrideExporter<IAudioClip>(new NativeAudioExporter());
+			OverrideExporter<IAudioClip>(new FmodAudioExporter(Settings));
+			OverrideExporter<IAudioClip>(new AudioClipExporter(Settings));
 
 			//Mesh exporters
-			OverrideExporter(ClassIDType.Mesh, new GlbMeshExporter(Settings));
-			OverrideExporter(ClassIDType.Mesh, new StlMeshExporter(Settings));
-			OverrideExporter(ClassIDType.Mesh, new ObjMeshExporter(Settings));
+			OverrideExporter<IMesh>(new GlbMeshExporter(Settings));
+			OverrideExporter<IMesh>(new StlMeshExporter(Settings));
+			OverrideExporter<IMesh>(new ObjMeshExporter(Settings));
 
 			//Terrain exporters
-			OverrideExporter(ClassIDType.TerrainData, new TerrainHeatmapExporter(Settings));
-			OverrideExporter(ClassIDType.TerrainData, new TerrainObjExporter(Settings));
+			OverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings));
+			OverrideExporter<ITerrainData>(new TerrainObjExporter(Settings));
 
 			//Script exporters
-			OverrideExporter(ClassIDType.MonoScript, new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
-			OverrideExporter(ClassIDType.MonoScript, new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));
+			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
+			OverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));
 
 			//Miscellaneous exporters
-			OverrideExporter(ClassIDType.TextAsset, new TextAssetExporter(Settings));
-			OverrideExporter(ClassIDType.Font, new FontAssetExporter());
-			OverrideExporter(ClassIDType.MovieTexture, new MovieTextureAssetExporter());
+			OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
+			OverrideExporter<IFont>(new FontAssetExporter());
+			OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
 		}
 
 		private void OverrideEngineExporters()
 		{
 			EngineAssetExporter engineExporter = new EngineAssetExporter(Settings);
-			OverrideExporter(ClassIDType.Material, engineExporter);
-			OverrideExporter(ClassIDType.Texture2D, engineExporter);
-			OverrideExporter(ClassIDType.Mesh, engineExporter);
-			OverrideExporter(ClassIDType.Shader, engineExporter);
-			OverrideExporter(ClassIDType.Font, engineExporter);
-			OverrideExporter(ClassIDType.Sprite, engineExporter);
-			OverrideExporter(ClassIDType.MonoBehaviour, engineExporter);
+			OverrideExporter<IMaterial>(engineExporter);
+			OverrideExporter<ITexture2D>(engineExporter);
+			OverrideExporter<IMesh>(engineExporter);
+			OverrideExporter<IShader>(engineExporter);
+			OverrideExporter<IFont>(engineExporter);
+			OverrideExporter<ISprite>(engineExporter);
+			OverrideExporter<IMonoBehaviour>(engineExporter);
 		}
 
-		private void OverrideExporter(ClassIDType classID, IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter(classID, exporter);
+		private void OverrideExporter<T>(IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter<T>(exporter, true);
+		private void OverrideExporter<T>(IAssetExporter exporter, bool allowInheritance) => GameStructure.Exporter.OverrideExporter<T>(exporter, allowInheritance);
 	}
 }

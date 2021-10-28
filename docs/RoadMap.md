@@ -1,10 +1,12 @@
 # Development Roadmap
 
 ## 0.1.8.0
+* Loose File Export (done by SamboyCoding!)
 * Shader Export
   * Reformat the shader export system
 * Code Cleanup
   * Remove Reading namespace (done!)
+  * Rework the Project Exporter to better support future plans of not relying on ClassIDType (done!)
   * Move more code to the Common and Library projects
 
 ## 0.2.0.0
