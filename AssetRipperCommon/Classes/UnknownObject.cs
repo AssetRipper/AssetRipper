@@ -4,6 +4,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
+using System.IO;
 using System.Text;
 
 namespace AssetRipper.Core.Classes
@@ -32,6 +33,8 @@ namespace AssetRipper.Core.Classes
 		}
 
 		public override string ExportExtension => "bytes";
+
+		public override string ExportPath => Path.Combine("UnknownAssets", ClassID.ToString());
 
 		public string ToFormattedHex()
 		{

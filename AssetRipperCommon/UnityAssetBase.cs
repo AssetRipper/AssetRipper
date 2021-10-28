@@ -17,6 +17,7 @@ namespace AssetRipper.Core
 	{
 		public UnityVersion AssetUnityVersion { get; set; }
 		public EndianType EndianType { get; set; }
+		public TransferInstructionFlags TransferInstructionFlags { get; set; }
 		
 		public virtual void ReadEditor(AssetReader reader)
 		{
@@ -32,6 +33,7 @@ namespace AssetRipper.Core
 		{
 			AssetUnityVersion = reader.Version;
 			EndianType = reader.EndianType;
+			TransferInstructionFlags = reader.Flags;
 			if (reader.Flags.IsRelease())
 				ReadRelease(reader);
 			else
