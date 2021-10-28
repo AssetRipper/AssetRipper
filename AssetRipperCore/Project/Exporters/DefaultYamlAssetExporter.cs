@@ -4,7 +4,7 @@ using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Project.Exporters
 {
-	internal class DefaultYamlAssetExporter : YamlAssetExporterBase
+	public class DefaultYamlAssetExporter : YamlAssetExporterBase
 	{
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{

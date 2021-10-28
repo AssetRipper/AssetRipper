@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Exporters
 {
-	internal class DummyAssetExporter : IAssetExporter
+	public class DummyAssetExporter : IAssetExporter
 	{
 		public void SetUpClassType(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
 		{
