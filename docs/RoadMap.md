@@ -4,6 +4,7 @@
 * Loose File Export (done by SamboyCoding!)
 * Shader Export
   * Reformat the shader export system
+  * Export shader source code when available (done!)
 * Code Cleanup
   * Remove Reading namespace (done!)
   * Rework the Project Exporter to better support future plans of not relying on ClassIDType (done!)

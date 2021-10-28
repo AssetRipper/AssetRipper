@@ -157,6 +157,11 @@ namespace AssetRipper.Library
 
 		private void OverrideNormalExporters()
 		{
+			//Miscellaneous exporters
+			OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
+			OverrideExporter<IFont>(new FontAssetExporter());
+			OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
+
 			//Texture exporters
 			TextureAssetExporter textureExporter = new TextureAssetExporter(Settings);
 			OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
@@ -164,6 +169,7 @@ namespace AssetRipper.Library
 
 			//Shader exporters
 			OverrideExporter<IShader>(new DummyShaderTextExporter());
+			OverrideExporter<IShader>(new SimpleShaderExporter());
 
 			//Audio exporters
 			OverrideExporter<IAudioClip>(new NativeAudioExporter());
@@ -182,11 +188,6 @@ namespace AssetRipper.Library
 			//Script exporters
 			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
 			OverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));
-
-			//Miscellaneous exporters
-			OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
-			OverrideExporter<IFont>(new FontAssetExporter());
-			OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
 		}
 
 		private void OverrideEngineExporters()

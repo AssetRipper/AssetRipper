@@ -20,7 +20,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override bool IsHandle(UnityObjectBase asset)
 		{
-			if (asset is ITextAsset textAsset && asset is not IShader)
+			if (asset is ITextAsset textAsset)
 				return IsValidData(textAsset.RawData);
 			else
 				return false;
