@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Project
 {
 	public class ProjectAssetContainer : IProjectAssetContainer
 	{
-		public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<UnityObjectBase> assets,
+		public ProjectAssetContainer(ProjectExporterBase exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<UnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
@@ -378,7 +378,7 @@ namespace AssetRipper.Core.Project
 		//private const string AssetBundleFullPath = AssetsDirectory + AssetBundleKeyword;
 		private const string AssetBundleFullPath = AssetsDirectory + "Asset_Bundles";
 
-		private readonly ProjectExporter m_exporter;
+		private readonly ProjectExporterBase m_exporter;
 		private readonly bool m_KeepAssetBundleContentPath;
 		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
 		private readonly Dictionary<UnityObjectBase, ProjectAssetPath> m_pathAssets = new Dictionary<UnityObjectBase, ProjectAssetPath>();

@@ -68,7 +68,7 @@ namespace AssetRipper.GUI.Managers
 			onSuccess();
 		}
 
-		public static void ConfigureExportEvents(ProjectExporter exporter, MainWindowViewModel vm)
+		public static void ConfigureExportEvents(ProjectExporterBase exporter, MainWindowViewModel vm)
 		{
 			exporter.EventExportPreparationStarted += () =>
 			{
