@@ -280,6 +280,9 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
+		/// <summary>
+		/// GameObject, Classes Inherited From Level Game Manager, Monobehaviours with GameObjects, Components
+		/// </summary>
 		public static bool IsSceneCompatible(UnityObjectBase asset)
 		{
 			if (asset.ClassID == ClassIDType.GameObject)

@@ -11,7 +11,7 @@ using System.Text;
 
 namespace AssetRipper.Core.Project.Exporters
 {
-	public abstract class YamlAssetExporterBase : IAssetExporter
+	public abstract class YamlExporterBase : IAssetExporter
 	{
 		public virtual bool IsHandle(UnityObjectBase asset)
 		{

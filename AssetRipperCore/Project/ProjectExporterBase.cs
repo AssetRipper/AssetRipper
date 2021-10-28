@@ -19,7 +19,14 @@ namespace AssetRipper.Core.Project
 		public event Action EventExportStarted;
 		public event Action<int, int> EventExportProgressUpdated;
 		public event Action EventExportFinished;
-		protected DefaultYamlAssetExporter YamlExporter { get; } = new DefaultYamlAssetExporter();
+
+		//Exporters
+		protected DefaultYamlExporter DefaultExporter { get; } = new DefaultYamlExporter();
+		protected SceneYamlExporter SceneExporter { get; } = new SceneYamlExporter();
+		protected ManagerAssetExporter ManagerExporter { get; } = new ManagerAssetExporter();
+		protected BuildSettingsExporter BuildSettingsExporter { get; } = new BuildSettingsExporter();
+		protected ScriptableObjectExporter ScriptableExporter { get; } = new ScriptableObjectExporter();
+		protected AnimatorControllerExporter AnimatorControllerExporter { get; } = new AnimatorControllerExporter();
 		protected DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
 
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
@@ -41,7 +48,15 @@ namespace AssetRipper.Core.Project
 		public abstract AssetType ToExportType(ClassIDType classID);
 		protected abstract IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset);
 
-		protected void OverrideYamlExporter(ClassIDType classType) => OverrideExporter(classType, YamlExporter);
+		protected void OverrideYamlExporter(ClassIDType classType)
+		{
+			OverrideExporter(classType, DefaultExporter);
+			OverrideExporter(classType, AnimatorControllerExporter);
+			OverrideExporter(classType, ScriptableExporter);
+			OverrideExporter(classType, ManagerExporter);
+			OverrideExporter(classType, BuildSettingsExporter);
+			OverrideExporter(classType, SceneExporter);
+		}
 
 		protected void OverrideDummyExporter(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
 		{
