@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.PrefabInstance
 {
-	public sealed class PrefabInstance : NamedObject
+	public sealed class PrefabInstance : NamedObject, IPrefabInstance
 	{
 		public PrefabInstance(AssetLayout layout) : base(layout)
 		{
