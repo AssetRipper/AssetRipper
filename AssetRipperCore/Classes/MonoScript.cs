@@ -9,7 +9,6 @@ using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
-using Mono.Cecil;
 using System.Collections.Generic;
 using System.IO;
 
@@ -97,14 +96,6 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		private static bool IsUInt32Hash(UnityVersion version) => version.IsLess(5);
 
-		public bool IsScriptPresents()
-		{
-			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
-				File.Collection.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
-				File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
-			return File.Collection.AssemblyManager.IsPresent(scriptID);
-		}
-
 		public SerializableType GetBehaviourType()
 		{
 			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
@@ -115,19 +106,6 @@ namespace AssetRipper.Core.Classes
 				return File.Collection.AssemblyManager.GetSerializableType(scriptID) as SerializableType;
 			}
 			return null;
-		}
-
-		public TypeDefinition GetTypeDefinition()
-		{
-			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
-				File.Collection.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
-				File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
-			return File.Collection.AssemblyManager.GetTypeDefinition(scriptID);
-		}
-
-		public ScriptIdentifier GetScriptID()
-		{
-			return File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
 		}
 
 		public override void Read(AssetReader reader)

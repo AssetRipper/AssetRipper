@@ -29,7 +29,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		public bool IsHandle(UnityObjectBase asset)
 		{
-			return ScriptExportMode == ScriptExportMode.Decompiled;
+			return ScriptExportMode == ScriptExportMode.Decompiled && asset is IMonoScript;
 		}
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
@@ -60,7 +60,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			Dictionary<UnityObjectBase, TypeDefinition> exportTypes = new Dictionary<UnityObjectBase, TypeDefinition>();
 			foreach (UnityObjectBase asset in assets)
 			{
-				MonoScript script = (MonoScript)asset;
+				IMonoScript script = (IMonoScript)asset;
 				TypeDefinition exportType = script.GetTypeDefinition();
 				exportTypes.Add(asset, exportType);
 			}
