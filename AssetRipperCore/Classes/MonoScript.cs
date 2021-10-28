@@ -15,7 +15,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class MonoScript : TextAsset
+	public sealed class MonoScript : TextAsset, IMonoScript
 	{
 		public MonoScript(AssetInfo assetInfo) : base(assetInfo) { }
 

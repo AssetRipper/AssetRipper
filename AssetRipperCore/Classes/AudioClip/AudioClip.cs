@@ -10,7 +10,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AudioClip
 {
-	public sealed class AudioClip : NamedObject
+	public sealed class AudioClip : NamedObject, IAudioClip
 	{
 		public AudioClip(AssetInfo assetInfo) : base(assetInfo) { }
 

@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes
 {
-	public abstract class GameManager : EditorExtension
+	public abstract class GameManager : EditorExtension, IGameManager
 	{
 		protected GameManager(AssetInfo assetInfo) : base(assetInfo) { }
 

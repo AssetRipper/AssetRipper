@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public abstract class Component : EditorExtension
+	public abstract class Component : EditorExtension, IComponent
 	{
 		protected Component(AssetLayout layout) : base(layout) { }
 

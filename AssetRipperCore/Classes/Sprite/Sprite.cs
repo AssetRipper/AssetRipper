@@ -15,7 +15,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Sprite
 {
-	public sealed class Sprite : NamedObject
+	public sealed class Sprite : NamedObject, ISprite
 	{
 		public Sprite(AssetInfo assetInfo) : base(assetInfo) { }
 

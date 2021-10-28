@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Classes.Mesh
 	/// <summary>
 	/// LodMesh previously
 	/// </summary>
-	public sealed class Mesh : NamedObject
+	public sealed class Mesh : NamedObject, IMesh
 	{
 		public BlendShapeData Shapes;
 		public VariableBoneCountWeights VariableBoneCountWeights;

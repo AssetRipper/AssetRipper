@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
@@ -13,7 +12,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Font
 {
-	public sealed class Font : NamedObject, IFontAsset
+	public sealed class Font : NamedObject, IFont
 	{
 		public Font(AssetInfo assetInfo) : base(assetInfo) { }
 

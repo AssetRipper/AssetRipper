@@ -1,5 +1,5 @@
 using AssetRipper.Core;
-using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
@@ -12,7 +12,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 	{
 		public override bool IsHandle(UnityObjectBase asset)
 		{
-			if (asset is IFontAsset font)
+			if (asset is IFont font)
 				return IsValidData(font.RawData);
 			else
 				return false;
@@ -20,7 +20,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, GetExportExtension((IFontAsset)asset));
+			return new AssetExportCollection(this, asset, GetExportExtension((IFont)asset));
 		}
 
 		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
@@ -29,13 +29,13 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			{
 				using (BinaryWriter writer = new BinaryWriter(stream))
 				{
-					writer.Write(((IFontAsset)asset).RawData);
+					writer.Write(((IFont)asset).RawData);
 				}
 				return true;
 			}
 		}
 
-		string GetExportExtension(IFontAsset font)
+		string GetExportExtension(IFont font)
 		{
 			byte[] fontData = font.RawData;
 			uint type = System.BitConverter.ToUInt32(fontData, 0);

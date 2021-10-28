@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.GameObject
 {
-	public sealed class GameObject : EditorExtension, IHasName
+	public sealed class GameObject : EditorExtension, IHasName, IGameObject
 	{
 		public GameObject(AssetLayout layout) : base(layout)
 		{

@@ -15,7 +15,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public sealed class Shader : TextAsset
+	public sealed class Shader : TextAsset, IShader
 	{
 		public Shader(AssetInfo assetInfo) : base(assetInfo) { }
 

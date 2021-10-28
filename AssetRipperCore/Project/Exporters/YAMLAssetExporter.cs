@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Project.Exporters
 {
@@ -54,7 +53,7 @@ namespace AssetRipper.Core.Project.Exporters
 					{
 						YAMLWriter writer = new YAMLWriter();
 						writer.WriteHead(streamWriter);
-						foreach (Object asset in assets)
+						foreach (UnityObjectBase asset in assets)
 						{
 							YAMLDocument doc = asset.ExportYAMLDocument(container);
 							writer.WriteDocument(doc);

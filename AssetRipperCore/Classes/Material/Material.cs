@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace AssetRipper.Core.Classes.Material
 {
 #warning possible vector m_BuildTextureStacks 2020 and up
-	public sealed class Material : NamedObject
+	public sealed class Material : NamedObject, IMaterial
 	{
 		public Material(AssetInfo assetInfo) : base(assetInfo) { }
 

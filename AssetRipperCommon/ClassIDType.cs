@@ -422,11 +422,17 @@ namespace AssetRipper.Core
 			return (int)_this;
 		}
 
+		/// <summary>
+		/// Transform and RectTransform
+		/// </summary>
 		public static bool IsTransform(this ClassIDType _this)
 		{
 			return _this == ClassIDType.Transform || _this == ClassIDType.RectTransform;
 		}
 
+		/// <summary>
+		/// Classes that inherit from LevelGameManager
+		/// </summary>
 		public static bool IsSceneSettings(this ClassIDType _this)
 		{
 			switch (_this)

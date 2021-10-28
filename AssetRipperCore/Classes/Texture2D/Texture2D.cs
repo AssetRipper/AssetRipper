@@ -2,7 +2,6 @@ using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Converters.Texture2D;
-using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Logging;
@@ -20,7 +19,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 	/// <summary>
 	/// FileTexture previously
 	/// </summary>
-	public class Texture2D : Texture, IHasImageData
+	public class Texture2D : Texture, ITexture2D
 	{
 		public Texture2D(AssetInfo assetInfo) : base(assetInfo) { }
 

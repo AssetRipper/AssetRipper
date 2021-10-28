@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.SpriteAtlas
 {
-	public sealed class SpriteAtlas : NamedObject
+	public sealed class SpriteAtlas : NamedObject, ISpriteAtlas
 	{
 		public SpriteAtlas(AssetInfo assetInfo) : base(assetInfo) { }
 

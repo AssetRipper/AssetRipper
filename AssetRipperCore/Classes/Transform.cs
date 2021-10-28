@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public class Transform : Component
+	public class Transform : Component, ITransform
 	{
 		/// <summary>
 		/// 4.5.0 and greater and Not Release
