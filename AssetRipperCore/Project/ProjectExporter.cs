@@ -1,172 +1,53 @@
+﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace AssetRipper.Core.Project
 {
 	public class ProjectExporter : ProjectExporterBase
 	{
+		/// <summary>
+		/// Exact type to the exporters that handle that type
+		/// </summary>
+		private readonly Dictionary<Type, Stack<IAssetExporter>> typeMap = new Dictionary<Type, Stack<IAssetExporter>>();
+		/// <summary>
+		/// List of type-exporter-allow pairs<br/>
+		/// Type: the asset type<br/>
+		/// IAssetExporter: the exporter that can handle that asset type<br/>
+		/// Bool: allow the exporter to apply on inherited asset types?
+		/// </summary>
+		private readonly List<(Type, IAssetExporter, bool)> registeredExporters = new List<(Type, IAssetExporter, bool)>();
+		/// <summary>
+		/// All the unity types from before the 2.0 update
+		/// </summary>
+		private static readonly Type[] unityTypes = GetAllUnityTypesSafe();
+
 		public ProjectExporter()
 		{
-			OverrideDefaultExport();
-
-			OverrideDummyExporter(ClassIDType.MonoManager, true, false);
-			OverrideDummyExporter(ClassIDType.BuildSettings, false, false);
-			OverrideDummyExporter(ClassIDType.AssetBundle, true, false);
-			OverrideDummyExporter(ClassIDType.ResourceManager, true, false);
-			OverrideDummyExporter(ClassIDType.PreloadData, true, false);
-			OverrideDummyExporter(ClassIDType.EditorSettings, false, false);
-			OverrideDummyExporter(ClassIDType.Sprite, false, true);
-			OverrideDummyExporter(ClassIDType.TextureImporter, false, false);
-			OverrideDummyExporter(ClassIDType.DefaultAsset, false, false);
-			OverrideDummyExporter(ClassIDType.DefaultImporter, false, false);
-			OverrideDummyExporter(ClassIDType.NativeFormatImporter, false, false);
-			OverrideDummyExporter(ClassIDType.MonoImporter, false, false);
-			OverrideDummyExporter(ClassIDType.DDSImporter, false, false);
-			OverrideDummyExporter(ClassIDType.PVRImporter, false, false);
-			OverrideDummyExporter(ClassIDType.ASTCImporter, false, false);
-			OverrideDummyExporter(ClassIDType.KTXImporter, false, false);
-			OverrideDummyExporter(ClassIDType.IHVImageFormatImporter, false, false);
-			OverrideDummyExporter(ClassIDType.SpriteAtlas, false, false);
-
-			OverrideYamlExporter(ClassIDType.GameObject);
-			OverrideYamlExporter(ClassIDType.Transform);
-			OverrideYamlExporter(ClassIDType.TimeManager);
-			OverrideYamlExporter(ClassIDType.AudioManager);
-			OverrideYamlExporter(ClassIDType.InputManager);
-			OverrideYamlExporter(ClassIDType.Physics2DSettings);
-			OverrideYamlExporter(ClassIDType.Camera);
-			OverrideYamlExporter(ClassIDType.Material);
-			OverrideYamlExporter(ClassIDType.MeshRenderer);
-			OverrideYamlExporter(ClassIDType.Texture2D);
-			OverrideYamlExporter(ClassIDType.OcclusionCullingSettings);
-			OverrideYamlExporter(ClassIDType.GraphicsSettings);
-			OverrideYamlExporter(ClassIDType.MeshFilter);
-			OverrideYamlExporter(ClassIDType.OcclusionPortal);
-			OverrideYamlExporter(ClassIDType.Mesh);
-			OverrideYamlExporter(ClassIDType.Skybox);
-			OverrideYamlExporter(ClassIDType.QualitySettings);
-			OverrideYamlExporter(ClassIDType.TextAsset);
-			OverrideYamlExporter(ClassIDType.Rigidbody2D);
-			OverrideYamlExporter(ClassIDType.Collider2D);
-			OverrideYamlExporter(ClassIDType.Rigidbody);
-			OverrideYamlExporter(ClassIDType.PhysicsManager);
-			OverrideYamlExporter(ClassIDType.CircleCollider2D);
-			OverrideYamlExporter(ClassIDType.PolygonCollider2D);
-			OverrideYamlExporter(ClassIDType.BoxCollider2D);
-			OverrideYamlExporter(ClassIDType.PhysicsMaterial2D);
-			OverrideYamlExporter(ClassIDType.MeshCollider);
-			OverrideYamlExporter(ClassIDType.BoxCollider);
-			OverrideYamlExporter(ClassIDType.CompositeCollider2D);
-			OverrideYamlExporter(ClassIDType.EdgeCollider2D);
-			OverrideYamlExporter(ClassIDType.CapsuleCollider2D);
-			OverrideYamlExporter(ClassIDType.AnimationClip);
-			OverrideYamlExporter(ClassIDType.TagManager);
-			OverrideYamlExporter(ClassIDType.AudioListener);
-			OverrideYamlExporter(ClassIDType.AudioSource);
-			OverrideYamlExporter(ClassIDType.RenderTexture);
-			OverrideYamlExporter(ClassIDType.Cubemap);
-			OverrideYamlExporter(ClassIDType.Avatar);
-			OverrideYamlExporter(ClassIDType.AnimatorController);
-			OverrideYamlExporter(ClassIDType.GUILayer);
-			OverrideYamlExporter(ClassIDType.Animator);
-			OverrideYamlExporter(ClassIDType.TextMesh);
-			OverrideYamlExporter(ClassIDType.RenderSettings);
-			OverrideYamlExporter(ClassIDType.Light);
-			OverrideYamlExporter(ClassIDType.Animation);
-			OverrideYamlExporter(ClassIDType.TrailRenderer);
-			OverrideYamlExporter(ClassIDType.MonoBehaviour);
-			OverrideYamlExporter(ClassIDType.Texture3D);
-			OverrideYamlExporter(ClassIDType.NewAnimationTrack);
-			OverrideYamlExporter(ClassIDType.FlareLayer);
-			OverrideYamlExporter(ClassIDType.NavMeshProjectSettings);
-			OverrideYamlExporter(ClassIDType.Font);
-			OverrideYamlExporter(ClassIDType.GUITexture);
-			OverrideYamlExporter(ClassIDType.GUIText);
-			OverrideYamlExporter(ClassIDType.PhysicMaterial);
-			OverrideYamlExporter(ClassIDType.SphereCollider);
-			OverrideYamlExporter(ClassIDType.CapsuleCollider);
-			OverrideYamlExporter(ClassIDType.SkinnedMeshRenderer);
-			OverrideYamlExporter(ClassIDType.BuildSettings);
-			OverrideYamlExporter(ClassIDType.CharacterController);
-			OverrideYamlExporter(ClassIDType.WheelCollider);
-			OverrideYamlExporter(ClassIDType.NetworkManager);
-			OverrideYamlExporter(ClassIDType.MovieTexture);
-			OverrideYamlExporter(ClassIDType.TerrainCollider);
-			OverrideYamlExporter(ClassIDType.TerrainData);
-			OverrideYamlExporter(ClassIDType.LightmapSettings);
-			OverrideYamlExporter(ClassIDType.AudioReverbZone);
-			OverrideYamlExporter(ClassIDType.WindZone);
-			OverrideYamlExporter(ClassIDType.OffMeshLink);
-			OverrideYamlExporter(ClassIDType.OcclusionArea);
-			OverrideYamlExporter(ClassIDType.NavMeshObsolete);
-			OverrideYamlExporter(ClassIDType.NavMeshAgent);
-			OverrideYamlExporter(ClassIDType.NavMeshSettings);
-			OverrideYamlExporter(ClassIDType.ParticleSystem);
-			OverrideYamlExporter(ClassIDType.ParticleSystemRenderer);
-			OverrideYamlExporter(ClassIDType.ShaderVariantCollection);
-			OverrideYamlExporter(ClassIDType.LODGroup);
-			OverrideYamlExporter(ClassIDType.NavMeshObstacle);
-			OverrideYamlExporter(ClassIDType.SortingGroup);
-			OverrideYamlExporter(ClassIDType.SpriteRenderer);
-			OverrideYamlExporter(ClassIDType.ReflectionProbe);
-			OverrideYamlExporter(ClassIDType.Terrain);
-			OverrideYamlExporter(ClassIDType.AnimatorOverrideController);
-			OverrideYamlExporter(ClassIDType.CanvasRenderer);
-			OverrideYamlExporter(ClassIDType.Canvas);
-			OverrideYamlExporter(ClassIDType.RectTransform);
-			OverrideYamlExporter(ClassIDType.CanvasGroup);
-			OverrideYamlExporter(ClassIDType.ClusterInputManager);
-			OverrideYamlExporter(ClassIDType.NavMeshData);
-			OverrideYamlExporter(ClassIDType.UnityConnectSettings);
-			OverrideYamlExporter(ClassIDType.AvatarMask);
-			OverrideYamlExporter(ClassIDType.ParticleSystemForceField);
-			OverrideYamlExporter(ClassIDType.OcclusionCullingData);
-			OverrideYamlExporter(ClassIDType.PrefabInstance);
-			OverrideYamlExporter(ClassIDType.AvatarMaskOld);
-			OverrideYamlExporter(ClassIDType.SceneAsset);
-			OverrideYamlExporter(ClassIDType.LightmapParameters);
-			OverrideYamlExporter(ClassIDType.SpriteAtlas);
-			OverrideYamlExporter(ClassIDType.TerrainLayer);
-			OverrideYamlExporter(ClassIDType.LightingSettings);
+			OverrideExporter<UnknownObject>(new UnknownObjectExporter(), false);
 		}
 
-		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
-		/// <param name="classType">The class id for this asset type</param>
-		/// <param name="exporter">The new exporter. If it doesn't work, the next one in the stack is used.</param>
+		/// <inheritdoc/>
 		public override void OverrideExporter(ClassIDType classType, IAssetExporter exporter)
 		{
+			OverrideExporter(GetTypeForID(classType), exporter, false);
+		}
+
+		/// <inheritdoc/>
+		public override void OverrideExporter(Type type, IAssetExporter exporter, bool allowInheritance)
+		{
 			if (exporter == null)
-			{
 				throw new ArgumentNullException(nameof(exporter));
-			}
-			if (!m_exporters.ContainsKey(classType))
-			{
-				m_exporters[classType] = new Stack<IAssetExporter>(2);
-			}
-			m_exporters[classType].Push(exporter);
+			registeredExporters.Add((type, exporter, allowInheritance));
+			if(typeMap.Count > 0)//Just in case an exporter gets added after CreateCollection or ToExportType have already been used
+				RecalculateTypeMap();
 		}
-
-		public void OverrideDummyExporter(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
-		{
-			DummyExporter.SetUpClassType(classType, isEmptyCollection, isMetaType);
-			OverrideExporter(classType, DummyExporter);
-		}
-
-		private void OverrideDefaultExport()
-		{
-			var exporter = new DummyAssetExporter();
-			foreach (var value in Enum.GetValues<ClassIDType>())
-			{
-				DummyExporter.SetUpClassType(value, false, true);
-				OverrideExporter(value, DummyExporter);
-			}
-		}
-
-		public void OverrideYamlExporter(ClassIDType classType) => OverrideExporter(classType, YamlExporter);
 
 		public override AssetType ToExportType(ClassIDType classID)
 		{
@@ -195,11 +76,7 @@ namespace AssetRipper.Core.Project
 					return AssetType.Serialized;
 			}
 
-			if (!m_exporters.ContainsKey(classID))
-			{
-				throw new NotImplementedException($"Export type for class {classID} is undefined");
-			}
-			Stack<IAssetExporter> exporters = m_exporters[classID];
+			Stack<IAssetExporter> exporters = GetExporterStack(GetTypeForID(classID));
 			foreach (IAssetExporter exporter in exporters)
 			{
 				if (exporter.ToUnknownExportType(classID, out AssetType assetType))
@@ -212,7 +89,7 @@ namespace AssetRipper.Core.Project
 
 		protected override IExportCollection CreateCollection(VirtualSerializedFile file, UnityObjectBase asset)
 		{
-			Stack<IAssetExporter> exporters = m_exporters[asset.ClassID];
+			Stack<IAssetExporter> exporters = GetExporterStack(asset);
 			foreach (IAssetExporter exporter in exporters)
 			{
 				if (exporter.IsHandle(asset))
@@ -223,8 +100,85 @@ namespace AssetRipper.Core.Project
 			throw new Exception($"There is no exporter that can handle '{asset}'");
 		}
 
-		private DefaultYamlAssetExporter YamlExporter { get; } = new DefaultYamlAssetExporter();
-		private DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
-		private readonly Dictionary<ClassIDType, Stack<IAssetExporter>> m_exporters = new Dictionary<ClassIDType, Stack<IAssetExporter>>();
+		private Stack<IAssetExporter> GetExporterStack(UnityObjectBase asset) => GetExporterStack(asset.GetType());
+		private Stack<IAssetExporter> GetExporterStack(Type type)
+		{
+			if(!typeMap.TryGetValue(type, out Stack<IAssetExporter> exporters))
+			{
+				exporters = CalculateAssetExporterStack(type);
+				typeMap.Add(type, exporters);
+			}
+			return exporters;
+		}
+
+		private void RecalculateTypeMap()
+		{
+			foreach(var type in typeMap.Keys)
+			{
+				typeMap[type] = CalculateAssetExporterStack(type);
+			}
+		}
+
+		private Stack<IAssetExporter> CalculateAssetExporterStack(Type type)
+		{
+			var result = new Stack<IAssetExporter>();
+			foreach((Type baseType, IAssetExporter exporter, bool allowInheritance) in registeredExporters)
+			{
+				if (type == baseType || (allowInheritance && type.IsAssignableTo(baseType)))
+					result.Push(exporter);
+			}
+			return result;
+		}
+
+		private static Type GetTypeForID(ClassIDType classID)
+		{
+			return TryGetTypeForID(classID, out Type type) ? type : throw new NotSupportedException($"The {classID} ClassIDType does not have an associated Type.");
+		}
+		private static bool TryGetTypeForID(ClassIDType classID, out Type type)
+		{
+			if (classID == ClassIDType.AvatarMaskOld)
+				classID = ClassIDType.AvatarMask;
+			else if (classID == ClassIDType.VideoClipOld)
+				classID = ClassIDType.VideoClip;
+			
+			if (classID == ClassIDType.UnknownType)
+			{
+				type = typeof(UnknownObject);
+				return true;
+			}
+			
+			string className = classID.ToString();
+			type = unityTypes.FirstOrDefault(t => t.Name == className);
+			return type != null;
+		}
+
+		private static ClassIDType GetIDForType(Type type)
+		{
+			return TryGetIDForType(type, out ClassIDType result) ? result : throw new NotSupportedException($"The {type.Name} Type does not have an associated ClassIDType.");
+		}
+		private static bool TryGetIDForType(Type type, out ClassIDType classID)
+		{
+			if(type == typeof(UnknownObject))
+			{
+				classID = ClassIDType.UnknownType;
+				return true;
+			}
+			return Enum.TryParse<ClassIDType>(type.Name, out classID);
+		}
+
+		private static Type[] GetAllUnityTypesSafe()
+		{
+			Type[] types;
+			Type objectType = typeof(AssetRipper.Core.Classes.Object.Object);
+			try
+			{
+				types = objectType.Assembly.GetTypes();
+			}
+			catch (ReflectionTypeLoadException re)
+			{
+				types = re.Types.Where(t => t != null).ToArray();
+			}
+			return types.Where(type => type.IsAssignableTo(objectType)).ToArray();
+		}
 	}
 }
