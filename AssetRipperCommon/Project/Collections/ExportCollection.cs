@@ -40,7 +40,7 @@ namespace AssetRipper.Core.Project.Collections
 		public abstract long GetExportID(UnityObjectBase asset);
 		public abstract MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal);
 
-		protected void ExportAsset(IProjectAssetContainer container, AssetImporter importer, UnityObjectBase asset, string path, string name)
+		protected void ExportAsset(IProjectAssetContainer container, IAssetImporter importer, UnityObjectBase asset, string path, string name)
 		{
 			if (!Directory.Exists(path))
 			{
@@ -60,13 +60,13 @@ namespace AssetRipper.Core.Project.Collections
 			string fileName;
 			switch (asset)
 			{
-				case PrefabInstance prefab:
+				case IPrefabInstance prefab:
 					fileName = prefab.GetName(file);
 					break;
-				case MonoBehaviour monoBehaviour:
+				case IMonoBehaviour monoBehaviour:
 					fileName = monoBehaviour.Name;
 					break;
-				case NamedObject named:
+				case INamedObject named:
 					fileName = named.ValidName;
 					break;
 
