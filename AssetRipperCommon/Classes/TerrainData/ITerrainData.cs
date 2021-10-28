@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
 	//Not implemented
-	public interface ITerrainData : IAsset
+	public interface ITerrainData : IUnityObjectBase
 	{
 	}
 }

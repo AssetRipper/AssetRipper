@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes.Sprite
 {
-	public interface ISprite : IAsset
+	public interface ISprite : IUnityObjectBase
 	{
 	}
 }

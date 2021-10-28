@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes.AudioClip
 {
 	//Not implemented
-	public interface IAudioClip : IAsset
+	public interface IAudioClip : IUnityObjectBase
 	{
 	}
 }

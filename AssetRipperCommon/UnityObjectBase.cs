@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Object;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -13,7 +14,7 @@ namespace AssetRipper.Core
 	/// The artificial base class for all generated Unity classes with Type ID numbers<br/>
 	/// In other words, the classes that inherit from Object
 	/// </summary>
-	public class UnityObjectBase : UnityAssetBase
+	public class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	{
 		public AssetInfo AssetInfo { get; set; }
 		public ISerializedFile File => AssetInfo.File;

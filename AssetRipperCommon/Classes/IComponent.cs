@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes
 {
-	public interface IComponent : IAsset
+	public interface IComponent : IUnityObjectBase
 	{
 	}
 }

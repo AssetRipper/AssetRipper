@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes
 {
-	public interface ILevelGameManager : IAsset
+	public interface ILevelGameManager : IUnityObjectBase
 	{
 	}
 }

@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes
 {
 	//Not Implemented yet
-	public interface IMonoScript : IAsset
+	public interface IMonoScript : IUnityObjectBase
 	{
 	}
 }

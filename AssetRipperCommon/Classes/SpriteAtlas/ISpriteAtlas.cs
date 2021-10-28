@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes.SpriteAtlas
 {
-	public interface ISpriteAtlas : IAsset
+	public interface ISpriteAtlas : IUnityObjectBase
 	{
 	}
 }

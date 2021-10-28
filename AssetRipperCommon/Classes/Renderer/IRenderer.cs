@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes.Renderer
 {
-	public interface IRenderer : IAsset
+	public interface IRenderer : IUnityObjectBase
 	{
 	}
 }
