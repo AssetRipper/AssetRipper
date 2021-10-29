@@ -26,20 +26,24 @@ namespace AssetRipper.Core.Logging
 		public void BlankLine(int numLines)
 		{
 			for (int i = 0; i < numLines; i++)
-				Console.WriteLine("");
+				Console.WriteLine();
 		}
 
 		public void Log(LogType type, LogCategory category, string message)
 		{
-			ConsoleColor backColor = Console.BackgroundColor;
+			if(type == LogType.Info)
+			{
+				if (category == LogCategory.None) 
+					Console.WriteLine(message);
+				else 
+					Console.WriteLine($"{category} : {message}");
+				return;
+			}
+
 			ConsoleColor foreColor = Console.ForegroundColor;
 
 			switch (type)
 			{
-				case LogType.Info:
-					Console.ForegroundColor = ConsoleColor.Gray;
-					break;
-
 				case LogType.Debug:
 					Console.ForegroundColor = ConsoleColor.DarkBlue;
 					break;
@@ -60,7 +64,6 @@ namespace AssetRipper.Core.Logging
 			if (category == LogCategory.None) Console.WriteLine(message);
 			else Console.WriteLine($"{category} : {message}");
 
-			Console.BackgroundColor = backColor;
 			Console.ForegroundColor = foreColor;
 		}
 	}
