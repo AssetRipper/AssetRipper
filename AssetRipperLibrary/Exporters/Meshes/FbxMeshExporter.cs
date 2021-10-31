@@ -4,16 +4,19 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Library.Configuration;
-using MeshIO;
-using MeshIO.Elements;
-using MeshIO.FBX.Converters;
+using MeshSharp;
+using MeshSharp.Elements;
+using MeshSharp.FBX;
 using System.IO;
 
 namespace AssetRipper.Library.Exporters.Meshes
 {
 	class FbxMeshExporter : BaseMeshExporter
 	{
-		public FbxMeshExporter(LibraryConfiguration configuration) : base(configuration) { }
+		public FbxMeshExporter(LibraryConfiguration configuration) : base(configuration)
+		{
+			BinaryExport = true; //Technically this exports in the ascii format right now, but a memory stream was easier to use.
+		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
 		{
@@ -28,17 +31,14 @@ namespace AssetRipper.Library.Exporters.Meshes
 		public override byte[] ExportBinary(Mesh mesh)
 		{
 			Scene scene = ConvertToScene(mesh);
-			IFbxConverter converter = FbxConverterBase.GetConverter(scene, MeshIO.FBX.FbxVersion.v7400);
-			var rootNode = converter.ToRootNode();
 			using MemoryStream memoryStream = new MemoryStream();
-			//using (FbxBinaryWriter writer = new FbxBinaryWriter(memoryStream));
-			//writer.Write(rootNode);
-			return base.ExportBinary(mesh);
+			FbxWriter.WriteAscii(memoryStream, scene, MeshSharp.FBX.FbxVersion.v7400);
+			return memoryStream.ToArray();
 		}
 
 		private static Scene ConvertToScene(Mesh unityMesh)
 		{
-			var outputMesh = new MeshIO.Elements.Geometries.Mesh();
+			var outputMesh = new MeshSharp.Elements.Geometries.Mesh();
 			outputMesh.Name = unityMesh.Name;
 			foreach(var vertex in unityMesh.Vertices)
 			{
@@ -48,7 +48,13 @@ namespace AssetRipper.Library.Exporters.Meshes
 			{
 				outputMesh.Polygons.Add(new Triangle(unityMesh.Indices[i], unityMesh.Indices[i + 1], unityMesh.Indices[i + 2]));
 			}
-			return default;
+			Scene scene = new Scene();
+			scene.Name = unityMesh.Name;
+			Node node = new Node();
+			node.Name = unityMesh.Name;
+			node.Children.Add(outputMesh);
+			scene.Nodes.Add(node);
+			return scene;
 		}
 
 		private static XYZ Convert(Vector3f vector) => new XYZ(vector.X, vector.Y, vector.Z);

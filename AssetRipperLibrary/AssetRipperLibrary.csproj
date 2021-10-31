@@ -27,7 +27,6 @@
   <ItemGroup>
     <PackageReference Include="Fmod5Sharp" Version="1.2.0" />
 	<PackageReference Include="ICSharpCode.Decompiler" Version="7.1.0.6543" />
-    <PackageReference Include="MeshIO.FBX" Version="1.0.1-alpha" />
     <PackageReference Include="NAudio.Core" Version="2.0.0" />
     <PackageReference Include="NAudio.Lame" Version="2.0.0" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
@@ -36,6 +35,17 @@
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
   </ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="MeshSharp">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>Libraries\MeshSharp.dll</HintPath>
+		</Reference>
+		<Reference Include="MeshSharp.FBX">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>Libraries\MeshSharp.FBX.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 
   <ItemGroup>
     <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />

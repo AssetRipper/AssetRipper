@@ -11,6 +11,7 @@ namespace AssetRipper.GUI.Components
 			MeshExportFormat.StlAscii => MainWindow.Instance.LocalizationManager["mesh_format_stl_ascii"],
 			MeshExportFormat.StlBinary => MainWindow.Instance.LocalizationManager["mesh_format_stl_binary"],
 			MeshExportFormat.GlbPrimitive => MainWindow.Instance.LocalizationManager["mesh_format_glb_primitive"],
+			MeshExportFormat.FbxPrimitive => MainWindow.Instance.LocalizationManager["mesh_format_fbx_primitive"],
 			_ => base.GetValueDisplayName(value),
 		};
 
@@ -21,7 +22,7 @@ namespace AssetRipper.GUI.Components
 			MeshExportFormat.StlAscii => MainWindow.Instance.LocalizationManager["mesh_format_stl_ascii_description"],
 			MeshExportFormat.StlBinary => MainWindow.Instance.LocalizationManager["mesh_format_stl_binary_description"],
 			MeshExportFormat.GlbPrimitive => MainWindow.Instance.LocalizationManager["mesh_format_glb_primitive_description"],
-			MeshExportFormat.FbxPrimitive => "Don't use. Not fully implemented",
+			MeshExportFormat.FbxPrimitive => MainWindow.Instance.LocalizationManager["mesh_format_fbx_primitive_description"],
 			_ => null,
 		};
 	}

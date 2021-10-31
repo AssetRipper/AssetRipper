@@ -26,6 +26,8 @@ LibOgg and LibVorbis are licensed from [Xiph](https://www.xiph.org/) under the [
 
 [Lz4](https://github.com/lz4/lz4) is licensed under the [MIT license and the BSD 2-Clause license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Lz4.md).
 
+[MeshSharp](https://github.com/ds5678/MeshSharp) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/MeshSharp.md).
+
 [MessageBox.Avalonia](https://github.com/AvaloniaCommunity/MessageBox.Avalonia) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/MessageBoxAvalonia.md).
 
 [Mono.Cecil](https://github.com/jbevain/cecil) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/MonoCecil.md).
