@@ -18,6 +18,7 @@ namespace AssetRipper.Core.Parser.Asset
 
 			PathID = pathID;
 			ClassID = classID;
+			ClassNumber = (int)classID;
 			ByteSize = byteSize;
 			GUID = guid;
 		}
@@ -26,6 +27,7 @@ namespace AssetRipper.Core.Parser.Asset
 
 		public long PathID { get; }
 		public ClassIDType ClassID { get; }
+		public int ClassNumber { get; }
 		public UnityGUID GUID { get; set; }
 		public int ByteSize { get; }
 	}

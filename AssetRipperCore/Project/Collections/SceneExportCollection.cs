@@ -1,4 +1,5 @@
 using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
@@ -77,6 +78,9 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
+		/// <summary>
+		/// Less than 5.3.0
+		/// </summary>
 		public static bool HasMainData(UnityVersion version) => version.IsLess(5, 3);
 
 		public static string SceneIndexToFileName(int index, UnityVersion version)
@@ -285,15 +289,15 @@ namespace AssetRipper.Core.Project.Collections
 		/// </summary>
 		public static bool IsSceneCompatible(UnityObjectBase asset)
 		{
-			if (asset.ClassID == ClassIDType.GameObject)
+			if (asset is IGameObject)
 			{
 				return true;
 			}
-			if (asset.ClassID.IsSceneSettings())
+			if (asset is ILevelGameManager)
 			{
 				return true;
 			}
-			if (asset.ClassID == ClassIDType.MonoBehaviour)
+			if (asset is IMonoBehaviour)
 			{
 				MonoBehaviour monoBeh = (MonoBehaviour)asset;
 				if (!monoBeh.IsSceneObject)
@@ -302,7 +306,7 @@ namespace AssetRipper.Core.Project.Collections
 				}
 			}
 
-			return asset is Component;
+			return asset is IComponent;
 		}
 
 		public override string Name { get; }

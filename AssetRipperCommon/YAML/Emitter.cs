@@ -8,11 +8,7 @@ namespace AssetRipper.Core.YAML
 	{
 		public Emitter(TextWriter writer, bool formatKeys)
 		{
-			if (writer == null)
-			{
-				throw new ArgumentNullException(nameof(writer));
-			}
-			m_stream = writer;
+			m_stream = writer ?? throw new ArgumentNullException(nameof(writer));
 			IsFormatKeys = formatKeys;
 			if (formatKeys)
 			{
