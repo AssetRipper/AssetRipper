@@ -45,6 +45,10 @@
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>Libraries\MeshSharp.FBX.dll</HintPath>
 		</Reference>
+		<Reference Include="MeshSharp.STL">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>Libraries\MeshSharp.STL.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
   <ItemGroup>
