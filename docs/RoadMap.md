@@ -2,6 +2,10 @@
 
 ## 0.1.8.0
 * Loose File Export (done by SamboyCoding!)
+* Audio Export
+  * WWise audio extraction
+* Mesh Export
+  * Primitive FBX export (done!)
 * Shader Export
   * Reformat the shader export system
   * Export shader source code when available (done!)
@@ -9,6 +13,7 @@
   * Remove Reading namespace (done!)
   * Rework the Project Exporter to better support future plans of not relying on ClassIDType (done!)
   * Move more code to the Common and Library projects
+  * Improve Console logging performance (done!)
 
 ## 0.2.0.0
 * Overhaul struct reading, which would enable:
@@ -16,31 +21,45 @@
   * support for exporting any unity component
   * a cleaner, smaller codebase
   * exporting to the original unity version
+ 
+## 0.2.1.0
+This release will be primarily focused on cleaning up and refactoring the project. Such cleanup may include:
+* Implement package for LZ4
+* Implement package for Brotli
+* Unified mesh export
 
-## Planned But Unscheduled
+Other priorities for this release:
+* Improving plugin support
 * Predetermined GUID support
-* Dependencies
-    * Build Ogg and Vorbis Native Binaries for Mac and Linux
-    * Remove native dependency on Texture2DDecoder by porting essential code to C#
-    * Implement package for LZ4
-    * Implement package for Brotli
-* GUI improvements
-  * Performance enhancements for viewing asset types with large contents, such as 9000 game objects
-  * Asset Previews
-    * Mesh preview
-    * Material preview
-    * Hex Viewer
-    * Preview decompiled script
-  * Preferences window
-    * Adjustable background color/theme
-  * Better Audio Playback control
+
+## 0.2.2.0
+This release will likely focus on removing the native texture dependency by porting essential code to C#.
+
+Other tentative inclusions in this release:
+* Build Ogg and Vorbis Native Binaries for Mac and Linux
+
+## 0.2.3.0
+This release will likely focus on improving the user experience in the GUI
+
+* Improved Asset previews
+  * Preview decompiled script
+  * Add a Mesh preview
+  * Add a Material preview
+  * Add a Hex Viewer
+  * Add a TypeTree Viewer
+  * Improve the Audio preview
     * Fast-forward and rewind
     * Seek-bar for selecting playback position
+    * Visual wave form display
+* Preferences window
+  * Adjustable background color/theme
+* Window for licensed works
+
+## Planned But Unscheduled
+* GUI improvements
+  * Performance enhancements for viewing asset types with large contents, such as 9000 game objects
 * Export
-  * Audio Export
-    * WWise audio extract (and preview)
   * Mesh Export
-    * Primitive FBX Export
     * FBX export (full)
     * GLB export (full)
     * PLY export
@@ -57,10 +76,10 @@
 ## Concept Ideas
 > Note: This is just a collection of ideas. These might not be desirable or feasible, so many of them might never be implemented. Do not interpret their inclusion here as any form of commitment.
 
+* Convert TypeTree to MonoScripts?
 * GUI quality of life features
   * Font setting
   * Configurable keybindings
-  * Window for licensed works
 * Console
   * In the GUI, have a separate window
   * Enterable commands
@@ -120,8 +139,6 @@
     * XYZ axis for orientation
     * Toggle face cull
     * Wireframe option
-  * Audio
-    * Waveform Render
   * Textures
     * Background options (for example: checkers, white, black, default)
     * Select the color channels to display
