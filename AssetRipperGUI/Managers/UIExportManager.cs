@@ -32,7 +32,7 @@ namespace AssetRipper.GUI.Managers
 			IsBackground = true,
 		}.Start();
 
-		public static void Export(Ripper ripper, string toRoot, Core.UnityObjectBase asset, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, asset, onSuccess, onError))
+		public static void Export(Ripper ripper, string toRoot, Core.IUnityObjectBase asset, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, asset, onSuccess, onError))
 		{
 			Name = "Background Game Export Thread",
 			IsBackground = true,
@@ -53,7 +53,7 @@ namespace AssetRipper.GUI.Managers
 			onSuccess();
 		}
 
-		private static void ExportInternal(Ripper ripper, string toRoot, Core.UnityObjectBase asset, Action onSuccess, Action<Exception> onError)
+		private static void ExportInternal(Ripper ripper, string toRoot, Core.IUnityObjectBase asset, Action onSuccess, Action<Exception> onError)
 		{
 			try
 			{

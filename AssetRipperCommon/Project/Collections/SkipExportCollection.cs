@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class SkipExportCollection : IExportCollection
 	{
-		public SkipExportCollection(IAssetExporter assetExporter, UnityObjectBase asset)
+		public SkipExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset)
 		{
 			if (assetExporter == null)
 			{
@@ -32,12 +32,12 @@ namespace AssetRipper.Core.Project.Collections
 			return false;
 		}
 
-		public bool IsContains(UnityObjectBase asset)
+		public bool IsContains(IUnityObjectBase asset)
 		{
 			return asset == m_asset;
 		}
 
-		public long GetExportID(UnityObjectBase asset)
+		public long GetExportID(IUnityObjectBase asset)
 		{
 			if (asset == m_asset)
 			{
@@ -46,12 +46,12 @@ namespace AssetRipper.Core.Project.Collections
 			throw new ArgumentException(nameof(asset));
 		}
 
-		public UnityGUID GetExportGUID(UnityObjectBase _)
+		public UnityGUID GetExportGUID(IUnityObjectBase _)
 		{
 			throw new NotSupportedException();
 		}
 
-		public MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal)
+		public MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -66,13 +66,13 @@ namespace AssetRipper.Core.Project.Collections
 		public IAssetExporter AssetExporter { get; }
 		public ISerializedFile File => m_asset.File;
 		public TransferInstructionFlags Flags => File.Flags;
-		public IEnumerable<UnityObjectBase> Assets
+		public IEnumerable<IUnityObjectBase> Assets
 		{
 			get { yield return m_asset; }
 		}
 		public string Name => m_asset.GetType().Name;
 		public IAssetImporter MetaImporter => throw new NotSupportedException();
 
-		private readonly UnityObjectBase m_asset;
+		private readonly IUnityObjectBase m_asset;
 	}
 }

@@ -6,7 +6,7 @@ namespace AssetRipper.Core.Parser.Asset
 	{
 		public static string GetAssetLogString(this IAssetContainer _this, long pathID)
 		{
-			UnityObjectBase asset = _this.GetAsset(pathID);
+			IUnityObjectBase asset = _this.GetAsset(pathID);
 			string name = asset.TryGetName();
 			if (name == null)
 			{

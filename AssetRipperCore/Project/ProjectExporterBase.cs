@@ -46,7 +46,7 @@ namespace AssetRipper.Core.Project
 		public abstract void OverrideExporter(Type type, IAssetExporter exporter, bool allowInheritance);
 
 		public abstract AssetType ToExportType(ClassIDType classID);
-		protected abstract IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset);
+		protected abstract IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset);
 
 		protected void OverrideYamlExporter(ClassIDType classType)
 		{
@@ -76,13 +76,13 @@ namespace AssetRipper.Core.Project
 			List<IExportCollection> collections = new List<IExportCollection>();
 
 			// speed up fetching
-			List<UnityObjectBase> depList = new List<UnityObjectBase>();
-			HashSet<UnityObjectBase> depSet = new HashSet<UnityObjectBase>();
-			HashSet<UnityObjectBase> queued = new HashSet<UnityObjectBase>();
+			List<IUnityObjectBase> depList = new List<IUnityObjectBase>();
+			HashSet<IUnityObjectBase> depSet = new HashSet<IUnityObjectBase>();
+			HashSet<IUnityObjectBase> queued = new HashSet<IUnityObjectBase>();
 
 			foreach (SerializedFile file in files)
 			{
-				foreach (UnityObjectBase asset in file.FetchAssets())
+				foreach (IUnityObjectBase asset in file.FetchAssets())
 				{
 					if (!options.Filter(asset))
 					{
@@ -97,11 +97,11 @@ namespace AssetRipper.Core.Project
 
 			for (int i = 0; i < depList.Count; i++)
 			{
-				UnityObjectBase asset = depList[i];
+				IUnityObjectBase asset = depList[i];
 				if (!queued.Contains(asset))
 				{
 					IExportCollection collection = CreateCollection(virtualFile, asset);
-					foreach (UnityObjectBase element in collection.Assets)
+					foreach (IUnityObjectBase element in collection.Assets)
 					{
 						queued.Add(element);
 					}
@@ -111,14 +111,14 @@ namespace AssetRipper.Core.Project
 				if (options.ExportDependencies && asset is IDependent dependent)
 				{
 					DependencyContext context = new DependencyContext(exportLayout, true);
-					foreach (PPtr<UnityObjectBase> pointer in dependent.FetchDependencies(context))
+					foreach (PPtr<IUnityObjectBase> pointer in dependent.FetchDependencies(context))
 					{
 						if (pointer.IsNull)
 						{
 							continue;
 						}
 
-						UnityObjectBase dependency = pointer.FindAsset(asset.File);
+						IUnityObjectBase dependency = pointer.FindAsset(asset.File);
 						if (dependency == null)
 						{
 							string hierarchy = $"[{asset.File.Name}]" + asset.File.GetAssetLogString(asset.PathID) + "." + context.GetPointerPath();

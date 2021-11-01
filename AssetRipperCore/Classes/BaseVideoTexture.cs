@@ -27,9 +27,9 @@ namespace AssetRipper.Core.Classes
 			ColorSpace = (ColorSpace)reader.ReadInt32();
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -52,7 +52,7 @@ namespace AssetRipper.Core.Classes
 			base.Read(reader);
 		}
 
-		protected IEnumerable<PPtr<UnityObjectBase>> FetchDependenciesTexture(DependencyContext context)
+		protected IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesTexture(DependencyContext context)
 		{
 			return base.FetchDependencies(context);
 		}

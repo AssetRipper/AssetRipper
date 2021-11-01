@@ -25,14 +25,14 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override TransferInstructionFlags Flags => Asset.TransferInstructionFlags;
 
-		public override IEnumerable<UnityObjectBase> Assets
+		public override IEnumerable<IUnityObjectBase> Assets
 		{
 			get { yield return Asset; }
 		}
 
 		public override string Name => $"UnknownObject_{Asset.ClassID}";
 
-		public override MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}
@@ -47,12 +47,12 @@ namespace AssetRipper.Core.Project.Collections
 			return AssetExporter.Export(container, Asset, filePath);
 		}
 
-		public override long GetExportID(UnityObjectBase asset)
+		public override long GetExportID(IUnityObjectBase asset)
 		{
 			throw new NotSupportedException();
 		}
 
-		public override bool IsContains(UnityObjectBase asset)
+		public override bool IsContains(IUnityObjectBase asset)
 		{
 			return asset == Asset;
 		}

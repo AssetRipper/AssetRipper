@@ -112,9 +112,9 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 			return node;
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Curve, CurveName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Curve, CurveName))
 			{
 				yield return asset;
 			}

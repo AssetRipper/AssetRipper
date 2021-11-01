@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class PrefabExportCollection : AssetsExportCollection
 	{
-		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, UnityObjectBase asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
+		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IUnityObjectBase asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
 
 		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, GameObject root) : this(assetExporter, root.File, PrefabInstance.CreateVirtualInstance(virtualFile, root)) { }
 
@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public static bool IsValidAsset(UnityObjectBase asset)
+		public static bool IsValidAsset(IUnityObjectBase asset)
 		{
 			if (asset.ClassID == ClassIDType.GameObject)
 			{
@@ -34,12 +34,12 @@ namespace AssetRipper.Core.Project.Collections
 			return component.GameObject.FindAsset(component.File) != null;
 		}
 
-		protected override string GetExportExtension(UnityObjectBase asset)
+		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
 			return PrefabInstance.PrefabKeyword;
 		}
 
-		private static GameObject GetAssetRoot(UnityObjectBase asset)
+		private static GameObject GetAssetRoot(IUnityObjectBase asset)
 		{
 			GameObject go;
 			if (asset.ClassID == ClassIDType.GameObject)
@@ -60,14 +60,14 @@ namespace AssetRipper.Core.Project.Collections
 #warning TODO:
 		// HACK: prefab's assets may be stored in different files
 		// Need to find a way to set a file for current asset nicely
-		public override IEnumerable<UnityObjectBase> Assets
+		public override IEnumerable<IUnityObjectBase> Assets
 		{
 			get
 			{
 				m_file = m_exportIDs.Keys.First().File;
 				yield return Asset;
 
-				foreach (UnityObjectBase asset in m_assets)
+				foreach (IUnityObjectBase asset in m_assets)
 				{
 					m_file = asset.File;
 					yield return asset;

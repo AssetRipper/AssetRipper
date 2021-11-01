@@ -26,7 +26,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			SpriteExportMode = configuration.SpriteExportMode;
 		}
 
-		public override bool IsHandle(UnityObjectBase asset)
+		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset.ClassID == ClassIDType.Texture2D)
 			{
@@ -40,7 +40,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return true;
 		}
 
-		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			Texture2D texture = (Texture2D)asset;
 			if (!texture.CheckAssetIntegrity())
@@ -60,7 +60,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return true;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			if (asset.ClassID == ClassIDType.Sprite)
 			{

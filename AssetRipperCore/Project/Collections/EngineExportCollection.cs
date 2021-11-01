@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public class EngineExportCollection : IExportCollection
 	{
-		public EngineExportCollection(UnityObjectBase asset, UnityVersion version)
+		public EngineExportCollection(IUnityObjectBase asset, UnityVersion version)
 		{
 			if (asset == null)
 			{
@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Project.Collections
 			m_version = version;
 			if (IsEngineFile(asset.File.Name))
 			{
-				foreach (UnityObjectBase builtInAsset in File.FetchAssets())
+				foreach (IUnityObjectBase builtInAsset in File.FetchAssets())
 				{
 					if (IsEngineAsset(builtInAsset, version))
 					{
@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public static bool IsEngineAsset(UnityObjectBase asset, UnityVersion version)
+		public static bool IsEngineAsset(IUnityObjectBase asset, UnityVersion version)
 		{
 			if (!GetEngineBuildInAsset(asset, version, out EngineBuiltInAsset builtinAsset))
 			{
@@ -115,7 +115,7 @@ namespace AssetRipper.Core.Project.Collections
 			return false;
 		}
 
-		private static bool GetEngineBuildInAsset(UnityObjectBase asset, UnityVersion version, out EngineBuiltInAsset engineAsset)
+		private static bool GetEngineBuildInAsset(IUnityObjectBase asset, UnityVersion version, out EngineBuiltInAsset engineAsset)
 		{
 			switch (asset.ClassID)
 			{
@@ -211,18 +211,18 @@ namespace AssetRipper.Core.Project.Collections
 			return false;
 		}
 
-		public bool IsContains(UnityObjectBase asset)
+		public bool IsContains(IUnityObjectBase asset)
 		{
 			return m_assets.Contains(asset);
 		}
 
-		public long GetExportID(UnityObjectBase asset)
+		public long GetExportID(IUnityObjectBase asset)
 		{
 			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engneAsset);
 			return engneAsset.ExportID;
 		}
 
-		public MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal)
+		public MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -240,10 +240,10 @@ namespace AssetRipper.Core.Project.Collections
 
 		public ISerializedFile File { get; }
 		public TransferInstructionFlags Flags => File.Flags;
-		public IEnumerable<UnityObjectBase> Assets => m_assets;
+		public IEnumerable<IUnityObjectBase> Assets => m_assets;
 		public string Name => "Engine 2017.3.0f3";
 
-		private readonly HashSet<UnityObjectBase> m_assets = new HashSet<UnityObjectBase>();
+		private readonly HashSet<IUnityObjectBase> m_assets = new HashSet<IUnityObjectBase>();
 
 		private readonly UnityVersion m_version;
 	}

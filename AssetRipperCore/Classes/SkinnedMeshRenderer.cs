@@ -185,9 +185,9 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -197,7 +197,7 @@ namespace AssetRipper.Core.Classes
 				yield return context.FetchDependency(DisableAnimationWhenOffscreen, DisableAnimationWhenOffscreenName);
 			}
 			yield return context.FetchDependency(Mesh, MeshName);
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Bones, BonesName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Bones, BonesName))
 			{
 				yield return asset;
 			}

@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.CompositeCollider2D
 			reader.AlignStream();
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Collider, ColliderName);
 		}

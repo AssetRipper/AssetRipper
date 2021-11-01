@@ -23,7 +23,7 @@ namespace AssetRipper.GUI
 		}
 		public override IReadOnlyList<FileIdentifier> Dependencies => new List<FileIdentifier>();
 
-		internal UnityObjectBase LastAccessedAsset { get; set; }
+		internal IUnityObjectBase LastAccessedAsset { get; set; }
 
 		public override ISerializedFile File => LastAccessedAsset.File;
 

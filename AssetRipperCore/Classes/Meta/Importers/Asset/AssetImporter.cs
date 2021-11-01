@@ -196,9 +196,9 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 			}
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -209,7 +209,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 			}
 			if (HasExternalObjects(context.Version))
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(ExternalObjects.Select(t => t.Value), ExternalObjectsName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(ExternalObjects.Select(t => t.Value), ExternalObjectsName))
 				{
 					yield return asset;
 				}

@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.AssetBundle
 			Asset.Read(reader);
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Asset, "asset");
 		}

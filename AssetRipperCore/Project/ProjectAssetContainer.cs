@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Project
 {
 	public class ProjectAssetContainer : IProjectAssetContainer
 	{
-		public ProjectAssetContainer(ProjectExporterBase exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<UnityObjectBase> assets,
+		public ProjectAssetContainer(ProjectExporterBase exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<IUnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Project
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			ExportLayout = file.Layout;
 
-			foreach (UnityObjectBase asset in assets)
+			foreach (IUnityObjectBase asset in assets)
 			{
 				switch (asset.ClassID)
 				{
@@ -59,7 +59,7 @@ namespace AssetRipper.Core.Project
 			List<SceneExportCollection> scenes = new List<SceneExportCollection>();
 			foreach (IExportCollection collection in collections)
 			{
-				foreach (UnityObjectBase asset in collection.Assets)
+				foreach (IUnityObjectBase asset in collection.Assets)
 				{
 #warning TODO: unique asset:collection (m_assetCollections.Add)
 					m_assetCollections[asset.AssetInfo] = collection;
@@ -73,13 +73,13 @@ namespace AssetRipper.Core.Project
 		}
 
 #warning TODO: get rid of IEnumerable. pass only main asset (issues: prefab, texture with sprites, animatorController)
-		public bool TryGetAssetPathFromAssets(IEnumerable<UnityObjectBase> assets, out UnityObjectBase selectedAsset, out string assetPath)
+		public bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, out IUnityObjectBase selectedAsset, out string assetPath)
 		{
 			selectedAsset = null;
 			assetPath = string.Empty;
 			if (m_pathAssets.Count > 0)
 			{
-				foreach (UnityObjectBase asset in assets)
+				foreach (IUnityObjectBase asset in assets)
 				{
 					if (m_pathAssets.TryGetValue(asset, out ProjectAssetPath projectPath))
 					{
@@ -93,12 +93,12 @@ namespace AssetRipper.Core.Project
 			return false;
 		}
 
-		public UnityObjectBase GetAsset(long pathID)
+		public IUnityObjectBase GetAsset(long pathID)
 		{
 			return File.GetAsset(pathID);
 		}
 
-		public virtual UnityObjectBase FindAsset(int fileIndex, long pathID)
+		public virtual IUnityObjectBase FindAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Project
 			}
 		}
 
-		public virtual UnityObjectBase GetAsset(int fileIndex, long pathID)
+		public virtual IUnityObjectBase GetAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
@@ -122,12 +122,12 @@ namespace AssetRipper.Core.Project
 			}
 		}
 
-		public UnityObjectBase FindAsset(ClassIDType classID)
+		public IUnityObjectBase FindAsset(ClassIDType classID)
 		{
 			return File.FindAsset(classID);
 		}
 
-		public virtual UnityObjectBase FindAsset(ClassIDType classID, string name)
+		public virtual IUnityObjectBase FindAsset(ClassIDType classID, string name)
 		{
 			return File.FindAsset(classID, name);
 		}
@@ -137,7 +137,7 @@ namespace AssetRipper.Core.Project
 			return File.GetAssetType(pathID);
 		}
 
-		public long GetExportID(UnityObjectBase asset)
+		public long GetExportID(IUnityObjectBase asset)
 		{
 			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
 			{
@@ -152,7 +152,7 @@ namespace AssetRipper.Core.Project
 			return m_exporter.ToExportType(classID);
 		}
 
-		public MetaPtr CreateExportPointer(UnityObjectBase asset)
+		public MetaPtr CreateExportPointer(IUnityObjectBase asset)
 		{
 			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
 			{
@@ -381,7 +381,7 @@ namespace AssetRipper.Core.Project
 		private readonly ProjectExporterBase m_exporter;
 		private readonly bool m_KeepAssetBundleContentPath;
 		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
-		private readonly Dictionary<UnityObjectBase, ProjectAssetPath> m_pathAssets = new Dictionary<UnityObjectBase, ProjectAssetPath>();
+		private readonly Dictionary<IUnityObjectBase, ProjectAssetPath> m_pathAssets = new Dictionary<IUnityObjectBase, ProjectAssetPath>();
 
 		private readonly BuildSettings m_buildSettings;
 		private readonly TagManager m_tagManager;

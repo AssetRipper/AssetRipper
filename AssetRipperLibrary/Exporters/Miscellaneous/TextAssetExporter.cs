@@ -18,7 +18,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			exportMode = configuration.TextExportMode;
 		}
 
-		public override bool IsHandle(UnityObjectBase asset)
+		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is ITextAsset textAsset)
 				return IsValidData(textAsset.RawData);
@@ -26,12 +26,12 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 				return false;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, GetExportExtension(asset));
 		}
 
-		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			using (Stream stream = FileUtils.CreateVirtualFile(path))
 			{
@@ -43,7 +43,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			return true;
 		}
 
-		private string GetExportExtension(UnityObjectBase asset)
+		private string GetExportExtension(IUnityObjectBase asset)
 		{
 			switch (exportMode)
 			{

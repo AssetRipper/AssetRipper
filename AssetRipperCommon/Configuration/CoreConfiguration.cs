@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Configuration
 		/// A function to determine if an object is allowed to be exported.<br/>
 		/// Set by default to allow everything.
 		/// </summary>
-		public Func<UnityObjectBase, bool> Filter { get; set; }
+		public Func<IUnityObjectBase, bool> Filter { get; set; }
 		#endregion
 
 		#region Project Settings
@@ -48,8 +48,8 @@ namespace AssetRipper.Core.Configuration
 		/// <summary>
 		/// The default filter that allows everything
 		/// </summary>
-		public static Func<UnityObjectBase, bool> DefaultFilter { get; } = DefaultFilterMethod;
-		private static bool DefaultFilterMethod(UnityObjectBase asset) => true;
+		public static Func<IUnityObjectBase, bool> DefaultFilter { get; } = DefaultFilterMethod;
+		private static bool DefaultFilterMethod(IUnityObjectBase asset) => true;
 		#endregion
 
 		public CoreConfiguration() => ResetToDefaultValues();
@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Configuration
 
 		public virtual void ResetToDefaultValues()
 		{
-			DisableScriptImport = false;
+			DisableScriptImport = true;
 			IgnoreStreamingAssets = false;
 			ExportPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;

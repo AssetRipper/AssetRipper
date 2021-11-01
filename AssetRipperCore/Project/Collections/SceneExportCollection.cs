@@ -19,7 +19,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Project.Collections
 {
-	public sealed class SceneExportCollection : ExportCollection, IComparer<UnityObjectBase>
+	public sealed class SceneExportCollection : ExportCollection, IComparer<IUnityObjectBase>
 	{
 		public SceneExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, ISerializedFile file)
 		{
@@ -36,8 +36,8 @@ namespace AssetRipper.Core.Project.Collections
 			Name = file.Name;
 			m_file = file;
 
-			List<UnityObjectBase> components = new List<UnityObjectBase>();
-			foreach (UnityObjectBase asset in file.FetchAssets())
+			List<IUnityObjectBase> components = new List<IUnityObjectBase>();
+			foreach (IUnityObjectBase asset in file.FetchAssets())
 			{
 				if (IsSceneCompatible(asset))
 				{
@@ -62,7 +62,7 @@ namespace AssetRipper.Core.Project.Collections
 
 			if (OcclusionCullingSettings.HasReadPVSData(File.Version))
 			{
-				foreach (UnityObjectBase comp in Components)
+				foreach (IUnityObjectBase comp in Components)
 				{
 					if (comp.ClassID == ClassIDType.OcclusionCullingSettings)
 					{
@@ -153,7 +153,7 @@ namespace AssetRipper.Core.Project.Collections
 			return true;
 		}
 
-		public override bool IsContains(UnityObjectBase asset)
+		public override bool IsContains(IUnityObjectBase asset)
 		{
 			if (asset == OcclusionCullingData)
 			{
@@ -162,12 +162,12 @@ namespace AssetRipper.Core.Project.Collections
 			return m_cexportIDs.ContainsKey(asset.AssetInfo);
 		}
 
-		public override long GetExportID(UnityObjectBase asset)
+		public override long GetExportID(IUnityObjectBase asset)
 		{
 			return IsComponent(asset) ? m_cexportIDs[asset.AssetInfo] : ExportIdHandler.GetMainExportID(asset);
 		}
 
-		public override MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
 			long exportID = GetExportID(asset);
 			if (isLocal && IsComponent(asset))
@@ -181,7 +181,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public int Compare(UnityObjectBase obj1, UnityObjectBase obj2)
+		public int Compare(IUnityObjectBase obj1, IUnityObjectBase obj2)
 		{
 			if (obj1.ClassID == obj2.ClassID)
 			{
@@ -219,7 +219,7 @@ namespace AssetRipper.Core.Project.Collections
 			ExportAsset(container, importer, asset, path, asset.Name);
 		}
 
-		private bool IsComponent(UnityObjectBase asset)
+		private bool IsComponent(IUnityObjectBase asset)
 		{
 			return asset != OcclusionCullingData;
 		}
@@ -269,11 +269,11 @@ namespace AssetRipper.Core.Project.Collections
 		private bool IsSceneName => Name == MainSceneName || s_sceneNameFormat.IsMatch(Name);
 
 		public override IAssetExporter AssetExporter { get; }
-		public override IEnumerable<UnityObjectBase> Assets
+		public override IEnumerable<IUnityObjectBase> Assets
 		{
 			get
 			{
-				foreach (UnityObjectBase asset in Components)
+				foreach (IUnityObjectBase asset in Components)
 				{
 					yield return asset;
 				}
@@ -287,7 +287,7 @@ namespace AssetRipper.Core.Project.Collections
 		/// <summary>
 		/// GameObject, Classes Inherited From Level Game Manager, Monobehaviours with GameObjects, Components
 		/// </summary>
-		public static bool IsSceneCompatible(UnityObjectBase asset)
+		public static bool IsSceneCompatible(IUnityObjectBase asset)
 		{
 			if (asset is IGameObject)
 			{
@@ -315,7 +315,7 @@ namespace AssetRipper.Core.Project.Collections
 		public OcclusionCullingData OcclusionCullingData { get; }
 		public UnityGUID GUID { get; }
 
-		private IEnumerable<UnityObjectBase> Components => m_components;
+		private IEnumerable<IUnityObjectBase> Components => m_components;
 
 		private const string AssetsName = "Assets/";
 		private const string LevelName = "level";
@@ -323,7 +323,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		private static readonly Regex s_sceneNameFormat = new Regex($"^{LevelName}(0|[1-9][0-9]*)$");
 
-		private readonly UnityObjectBase[] m_components;
+		private readonly IUnityObjectBase[] m_components;
 		private readonly Dictionary<AssetInfo, long> m_cexportIDs = new Dictionary<AssetInfo, long>();
 		private readonly ISerializedFile m_file;
 		private readonly OcclusionCullingSettings m_occlusionCullingSettings;

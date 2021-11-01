@@ -49,9 +49,9 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public static bool HasPrefabAsset(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2018, 3) && !flags.IsRelease();
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -91,9 +91,9 @@ namespace AssetRipper.Core.Classes
 			return base.ExportYAMLRoot(container);
 		}
 
-		protected IEnumerable<PPtr<UnityObjectBase>> FetchDependenciesObject(DependencyContext context)
+		protected IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesObject(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}

@@ -16,7 +16,6 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {
@@ -24,7 +23,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 	{
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File { get; }
-		public override IEnumerable<UnityObjectBase> Assets => m_scripts.Keys;
+		public override IEnumerable<IUnityObjectBase> Assets => m_scripts.Keys;
 		public override string Name => nameof(ScriptExportCollection);
 
 		private static readonly UnityGUID UnityEngineGUID = new UnityGUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
@@ -32,7 +31,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		private readonly List<MonoScript> m_export = new List<MonoScript>();
 		private readonly HashSet<MonoScript> m_unique = new HashSet<MonoScript>();
-		private readonly Dictionary<UnityObjectBase, MonoScript> m_scripts = new Dictionary<UnityObjectBase, MonoScript>();
+		private readonly Dictionary<IUnityObjectBase, MonoScript> m_scripts = new Dictionary<IUnityObjectBase, MonoScript>();
 		private readonly Dictionary<string, long> ScriptId = new Dictionary<string, long>();
 		private readonly Dictionary<string, UnityGUID> AssemblyHash = new Dictionary<string, UnityGUID>();
 
@@ -44,7 +43,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			File = script.File;
 
 			// find copies in whole project and skip them
-			foreach (UnityObjectBase asset in script.File.Collection.FetchAssets())
+			foreach (IUnityObjectBase asset in script.File.Collection.FetchAssets())
 			{
 				if (asset.ClassID != ClassIDType.MonoScript)
 				{
@@ -136,17 +135,17 @@ namespace AssetRipper.Library.Exporters.Scripts
 			return false;
 		}
 
-		public override bool IsContains(UnityObjectBase asset)
+		public override bool IsContains(IUnityObjectBase asset)
 		{
 			return m_scripts.ContainsKey(asset);
 		}
 
-		public override long GetExportID(UnityObjectBase asset)
+		public override long GetExportID(IUnityObjectBase asset)
 		{
 			return ExportIdHandler.GetMainExportID(asset);
 		}
 
-		public override MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
 			if (isLocal)
 			{

@@ -5,12 +5,12 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public class SceneYamlExporter : YamlExporterBase
 	{
-		public override bool IsHandle(UnityObjectBase asset)
+		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			return SceneExportCollection.IsSceneCompatible(asset);
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			if (asset.File.Collection.IsScene(asset.File))
 			{

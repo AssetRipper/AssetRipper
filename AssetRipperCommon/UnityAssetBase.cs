@@ -76,7 +76,7 @@ namespace AssetRipper.Core
 				return ExportYAMLDebug(container);
 		}
 
-		public virtual IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public virtual IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield break;
 		}

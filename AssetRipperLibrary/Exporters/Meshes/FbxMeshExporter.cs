@@ -18,7 +18,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			BinaryExport = true; //Technically this exports in the ascii format right now, but a memory stream was easier to use.
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, "fbx");
 		}

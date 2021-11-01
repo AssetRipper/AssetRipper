@@ -1,4 +1,5 @@
 using AssetRipper.Core.Classes.Meta;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
@@ -9,9 +10,9 @@ namespace AssetRipper.Core.Project
 {
 	public interface IExportContainer : IAssetContainer
 	{
-		long GetExportID(UnityObjectBase asset);
+		long GetExportID(IUnityObjectBase asset);
 		AssetType ToExportType(ClassIDType classID);
-		MetaPtr CreateExportPointer(UnityObjectBase asset);
+		MetaPtr CreateExportPointer(IUnityObjectBase asset);
 
 		string SceneIndexToName(int sceneID);
 		bool IsSceneDuplicate(int sceneID);

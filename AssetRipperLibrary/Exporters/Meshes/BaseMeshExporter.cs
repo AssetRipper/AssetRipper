@@ -22,7 +22,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 		protected bool BinaryExport { get; set; }
 		public BaseMeshExporter(LibraryConfiguration configuration) => ExportFormat = configuration.MeshExportFormat;
 
-		public bool IsHandle(UnityObjectBase asset)
+		public bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is Mesh mesh)
 				return IsHandle(mesh);
@@ -32,13 +32,13 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public abstract bool IsHandle(Mesh mesh);
 
-		public abstract IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset);
+		public abstract IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset);
 
 		public virtual byte[] ExportBinary(Mesh mesh) => null;
 
 		public virtual string ExportText(Mesh mesh) => null;
 
-		public bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			if (BinaryExport)
 			{
@@ -69,23 +69,23 @@ namespace AssetRipper.Library.Exporters.Meshes
 			}
 		}
 
-		public void Export(IExportContainer container, UnityObjectBase asset, string path, Action<IExportContainer, UnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
 			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path, Action<IExportContainer, UnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public AssetType ToExportType(UnityObjectBase asset)
+		public AssetType ToExportType(IUnityObjectBase asset)
 		{
 			return AssetType.Meta;
 		}

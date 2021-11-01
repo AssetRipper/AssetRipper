@@ -62,7 +62,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			}
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			return context.FetchDependencies(PPtrCurveMapping, PptrCurveMappingName);
 		}

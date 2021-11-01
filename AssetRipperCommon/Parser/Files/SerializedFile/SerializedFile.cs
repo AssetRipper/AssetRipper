@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public IFileCollection Collection { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
 
-		private readonly Dictionary<long, UnityObjectBase> m_assets = new Dictionary<long, UnityObjectBase>();
+		private readonly Dictionary<long, IUnityObjectBase> m_assets = new Dictionary<long, IUnityObjectBase>();
 		private readonly Dictionary<long, int> m_assetEntryLookup = new Dictionary<long, int>();
 		internal SerializedFile(GameCollection collection, SerializedFileScheme scheme)
 		{
@@ -97,9 +97,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return collection.GetLayout(info);
 		}
 
-		public UnityObjectBase GetAsset(long pathID)
+		public IUnityObjectBase GetAsset(long pathID)
 		{
-			UnityObjectBase asset = FindAsset(pathID);
+			IUnityObjectBase asset = FindAsset(pathID);
 			if (asset == null)
 			{
 				throw new Exception($"Object with path ID {pathID} wasn't found");
@@ -108,25 +108,25 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return asset;
 		}
 
-		public UnityObjectBase GetAsset(int fileIndex, long pathID)
+		public IUnityObjectBase GetAsset(int fileIndex, long pathID)
 		{
 			return FindAsset(fileIndex, pathID, false);
 		}
 
-		public UnityObjectBase FindAsset(long pathID)
+		public IUnityObjectBase FindAsset(long pathID)
 		{
-			m_assets.TryGetValue(pathID, out UnityObjectBase asset);
+			m_assets.TryGetValue(pathID, out IUnityObjectBase asset);
 			return asset;
 		}
 
-		public UnityObjectBase FindAsset(int fileIndex, long pathID)
+		public IUnityObjectBase FindAsset(int fileIndex, long pathID)
 		{
 			return FindAsset(fileIndex, pathID, true);
 		}
 
-		public UnityObjectBase FindAsset(ClassIDType classID)
+		public IUnityObjectBase FindAsset(ClassIDType classID)
 		{
-			foreach (UnityObjectBase asset in FetchAssets())
+			foreach (IUnityObjectBase asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{
@@ -141,7 +141,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				{
 					continue;
 				}
-				foreach (UnityObjectBase asset in file.FetchAssets())
+				foreach (IUnityObjectBase asset in file.FetchAssets())
 				{
 					if (asset.ClassID == classID)
 					{
@@ -152,9 +152,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return null;
 		}
 
-		public UnityObjectBase FindAsset(ClassIDType classID, string name)
+		public IUnityObjectBase FindAsset(ClassIDType classID, string name)
 		{
-			foreach (UnityObjectBase asset in FetchAssets())
+			foreach (IUnityObjectBase asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{
@@ -173,7 +173,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				{
 					continue;
 				}
-				foreach (UnityObjectBase asset in file.FetchAssets())
+				foreach (IUnityObjectBase asset in file.FetchAssets())
 				{
 					if (asset.ClassID == classID)
 					{
@@ -198,7 +198,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return Metadata.Object[m_assetEntryLookup[pathID]].ClassID;
 		}
 
-		public PPtr<T> CreatePPtr<T>(T asset) where T : UnityObjectBase
+		public PPtr<T> CreatePPtr<T>(T asset) where T : IUnityObjectBase
 		{
 			if (asset.File == this)
 			{
@@ -218,7 +218,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			throw new Exception("Asset doesn't belong to this serialized file or its dependencies");
 		}
 
-		public IEnumerable<UnityObjectBase> FetchAssets()
+		public IEnumerable<IUnityObjectBase> FetchAssets()
 		{
 			return m_assets.Values;
 		}
@@ -265,7 +265,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			}
 		}
 
-		private UnityObjectBase FindAsset(int fileIndex, long pathID, bool isSafe)
+		private IUnityObjectBase FindAsset(int fileIndex, long pathID, bool isSafe)
 		{
 			ISerializedFile file;
 			if (fileIndex == 0)
@@ -293,7 +293,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				throw new Exception($"{nameof(SerializedFile)} with index {fileIndex} was not found in collection");
 			}
 
-			UnityObjectBase asset = file.FindAsset(pathID);
+			IUnityObjectBase asset = file.FindAsset(pathID);
 			if (asset == null)
 			{
 				if (isSafe)
@@ -308,16 +308,16 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		private void ReadAsset(AssetReader reader, ref ObjectInfo info)
 		{
 			AssetInfo assetInfo = new AssetInfo(this, info.FileID, info.ClassID, info.ByteSize);
-			UnityObjectBase asset = ReadAsset(reader, assetInfo, Header.DataOffset + info.ByteStart, info.ByteSize);
+			IUnityObjectBase asset = ReadAsset(reader, assetInfo, Header.DataOffset + info.ByteStart, info.ByteSize);
 			if (asset != null)
 			{
 				AddAsset(info.FileID, asset);
 			}
 		}
 
-		private UnityObjectBase ReadAsset(AssetReader reader, AssetInfo assetInfo, long offset, int size)
+		private IUnityObjectBase ReadAsset(AssetReader reader, AssetInfo assetInfo, long offset, int size)
 		{
-			UnityObjectBase asset = Collection.AssetFactory.CreateAsset(assetInfo);
+			IUnityObjectBase asset = Collection.AssetFactory.CreateAsset(assetInfo);
 			if (asset == null)
 			{
 				return null;
@@ -344,7 +344,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		{
 			if (!SerializedFileMetadata.HasSignature(Header.Version))
 			{
-				foreach (UnityObjectBase asset in FetchAssets())
+				foreach (IUnityObjectBase asset in FetchAssets())
 				{
 					if (asset is IBuildSettings settings && settings.Version != null)
 					{
@@ -355,7 +355,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			}
 		}
 
-		private void AddAsset(long pathID, UnityObjectBase asset)
+		private void AddAsset(long pathID, IUnityObjectBase asset)
 		{
 			m_assets.Add(pathID, asset);
 		}

@@ -40,7 +40,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			}
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);

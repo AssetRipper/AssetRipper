@@ -5,7 +5,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Core.Interfaces
+namespace AssetRipper.Core
 {
 	public interface IUnityObjectBase : IAssetNew
 	{
@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Interfaces
 		UnityGUID GUID { get; }
 		long PathID { get; }
 
-		UnityObjectBase Convert(IExportContainer container);
+		IUnityObjectBase Convert(IExportContainer container);
 		YAMLDocument ExportYAMLDocument(IExportContainer container);
 	}
 }

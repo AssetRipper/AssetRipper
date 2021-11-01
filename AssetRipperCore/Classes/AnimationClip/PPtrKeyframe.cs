@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			return node;
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Value, ValueName);
 		}

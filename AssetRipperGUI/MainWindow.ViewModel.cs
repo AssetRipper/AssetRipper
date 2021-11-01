@@ -19,7 +19,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.GUI
 {
@@ -360,7 +359,7 @@ namespace AssetRipper.GUI
 		}
 
 		//Called from UI indirectly
-		public void OnAssetSelected(NewUiFileListItem selectedItem, UnityObjectBase selectedAsset)
+		public void OnAssetSelected(NewUiFileListItem selectedItem, IUnityObjectBase selectedAsset)
 		{
 			_assetContainer.LastAccessedAsset = selectedAsset;
 

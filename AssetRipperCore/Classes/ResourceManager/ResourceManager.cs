@@ -30,20 +30,20 @@ namespace AssetRipper.Core.Classes.ResourceManager
 			}
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
 			{
 				yield return asset;
 			}
 			if (HasDependentAssets(context.Version, context.Flags))
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
 				{
 					yield return asset;
 				}

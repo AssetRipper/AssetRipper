@@ -87,7 +87,7 @@ namespace AssetRipper.Core.Project
 			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{classID}'");
 		}
 
-		protected override IExportCollection CreateCollection(VirtualSerializedFile file, UnityObjectBase asset)
+		protected override IExportCollection CreateCollection(VirtualSerializedFile file, IUnityObjectBase asset)
 		{
 			Stack<IAssetExporter> exporters = GetExporterStack(asset);
 			foreach (IAssetExporter exporter in exporters)
@@ -100,7 +100,7 @@ namespace AssetRipper.Core.Project
 			throw new Exception($"There is no exporter that can handle '{asset}'");
 		}
 
-		private Stack<IAssetExporter> GetExporterStack(UnityObjectBase asset) => GetExporterStack(asset.GetType());
+		private Stack<IAssetExporter> GetExporterStack(IUnityObjectBase asset) => GetExporterStack(asset.GetType());
 		private Stack<IAssetExporter> GetExporterStack(Type type)
 		{
 			if(!typeMap.TryGetValue(type, out Stack<IAssetExporter> exporters))

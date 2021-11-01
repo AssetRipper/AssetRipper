@@ -15,29 +15,29 @@ namespace AssetRipper.Core.Project.Collections
 			return false;
 		}
 
-		public bool IsContains(UnityObjectBase asset)
+		public bool IsContains(IUnityObjectBase asset)
 		{
 			return false;
 		}
 
-		public long GetExportID(UnityObjectBase asset)
+		public long GetExportID(IUnityObjectBase asset)
 		{
 			throw new NotSupportedException();
 		}
 
-		public UnityGUID GetExportGUID(UnityObjectBase asset)
+		public UnityGUID GetExportGUID(IUnityObjectBase asset)
 		{
 			throw new NotSupportedException();
 		}
 
-		public MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal)
+		public MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}
 
 		public ISerializedFile File => throw new NotSupportedException();
 		public TransferInstructionFlags Flags => throw new NotSupportedException();
-		public IEnumerable<UnityObjectBase> Assets
+		public IEnumerable<IUnityObjectBase> Assets
 		{
 			get { yield break; }
 		}

@@ -8,9 +8,9 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public abstract class AssetsExportCollection : AssetExportCollection
 	{
-		public AssetsExportCollection(IAssetExporter assetExporter, UnityObjectBase asset) : base(assetExporter, asset) { }
+		public AssetsExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset) { }
 
-		public override bool IsContains(UnityObjectBase asset)
+		public override bool IsContains(IUnityObjectBase asset)
 		{
 			if (base.IsContains(asset))
 			{
@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Project.Collections
 			return m_exportIDs.ContainsKey(asset.AssetInfo);
 		}
 
-		public override long GetExportID(UnityObjectBase asset)
+		public override long GetExportID(IUnityObjectBase asset)
 		{
 			if (asset.AssetInfo == Asset.AssetInfo)
 			{
@@ -33,27 +33,27 @@ namespace AssetRipper.Core.Project.Collections
 			return AssetExporter.Export(container, Assets.Select(t => t.Convert(container)), filePath);
 		}
 
-		public override IEnumerable<UnityObjectBase> Assets
+		public override IEnumerable<IUnityObjectBase> Assets
 		{
 			get
 			{
-				foreach (UnityObjectBase asset in base.Assets)
+				foreach (IUnityObjectBase asset in base.Assets)
 				{
 					yield return asset;
 				}
-				foreach (UnityObjectBase asset in m_assets)
+				foreach (IUnityObjectBase asset in m_assets)
 				{
 					yield return asset;
 				}
 			}
 		}
 
-		protected virtual long GenerateExportID(UnityObjectBase asset)
+		protected virtual long GenerateExportID(IUnityObjectBase asset)
 		{
 			return ObjectUtils.GenerateExportID(asset, ContainsID);
 		}
 
-		protected void AddAsset(UnityObjectBase asset)
+		protected void AddAsset(IUnityObjectBase asset)
 		{
 			long exportID = GenerateExportID(asset);
 			m_assets.Add(asset);
@@ -65,7 +65,7 @@ namespace AssetRipper.Core.Project.Collections
 			return m_exportIDs.ContainsValue(id);
 		}
 
-		protected readonly List<UnityObjectBase> m_assets = new List<UnityObjectBase>();
+		protected readonly List<IUnityObjectBase> m_assets = new List<IUnityObjectBase>();
 		protected readonly Dictionary<AssetInfo, long> m_exportIDs = new Dictionary<AssetInfo, long>();
 	}
 }

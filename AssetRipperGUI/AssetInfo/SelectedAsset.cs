@@ -21,7 +21,6 @@ using System.Text;
 using System.Threading;
 using GameObject = AssetRipper.Core.Classes.GameObject.GameObject;
 using NamedObject = AssetRipper.Core.Classes.NamedObject;
-using Object = AssetRipper.Core.Classes.Object.Object;
 using Shader = AssetRipper.Core.Classes.Shader.Shader;
 
 namespace AssetRipper.GUI.AssetInfo
@@ -30,7 +29,7 @@ namespace AssetRipper.GUI.AssetInfo
 	{
 		private static readonly LibVLC? LibVlc;
 		
-		public UnityObjectBase Asset { get; }
+		public IUnityObjectBase Asset { get; }
 		private readonly IExportContainer? _uiAssetContainer;
 
 		private readonly MemoryStream? _audioStream;
@@ -70,7 +69,7 @@ namespace AssetRipper.GUI.AssetInfo
 			Logger.Log(level, LogCategory.LibVlc, $"[{e.Module ?? "General"}] [{e.Level}] {e.Message}");
 		}
 
-		public SelectedAsset(UnityObjectBase asset, IExportContainer? uiAssetContainer)
+		public SelectedAsset(IUnityObjectBase asset, IExportContainer? uiAssetContainer)
 		{
 			Asset = asset;
 			_uiAssetContainer = uiAssetContainer;

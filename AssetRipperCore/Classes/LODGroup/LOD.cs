@@ -34,9 +34,9 @@ namespace AssetRipper.Core.Classes.LODGroup
 			Renderers = reader.ReadAssetArray<LODRenderer>();
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Renderers, RenderersName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Renderers, RenderersName))
 			{
 				yield return asset;
 			}

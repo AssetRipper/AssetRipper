@@ -6,7 +6,7 @@ namespace AssetRipper.Core.Extensions
 {
 	public static class ObjectExtensions
 	{
-		public static string GetOriginalName(this UnityObjectBase _this)
+		public static string GetOriginalName(this IUnityObjectBase _this)
 		{
 			if (_this is IHasName named)
 			{
@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Extensions
 			}
 		}
 
-		public static string TryGetName(this UnityObjectBase _this)
+		public static string TryGetName(this IUnityObjectBase _this)
 		{
 			if (_this is INamedObject named)
 			{

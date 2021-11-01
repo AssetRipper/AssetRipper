@@ -14,12 +14,12 @@ namespace AssetRipper.Library.Exporters.Audio
 		private AudioExportFormat AudioFormat { get; set; }
 		public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, GetFileExtension((AudioClip)asset));
 		}
 
-		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			AudioClip audioClip = (AudioClip)asset;
 			bool success = AudioClipDecoder.TryGetDecodedAudioClipData(audioClip, out byte[] decodedData, out string fileExtension);
@@ -46,7 +46,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			return true;
 		}
 
-		public override bool IsHandle(UnityObjectBase asset)
+		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			return AudioClipDecoder.CanDecode((AudioClip)asset) && AudioFormat != AudioExportFormat.Native;
 		}

@@ -145,14 +145,14 @@ namespace AssetRipper.Core.Classes.Sprite
 			}
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);
 
 			if (HasSecondaryTextures(context.Version))
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
 				{
 					yield return asset;
 				}

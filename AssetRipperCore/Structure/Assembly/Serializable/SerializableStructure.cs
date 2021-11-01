@@ -56,14 +56,14 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			return node;
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.GetField(i);
 				if (IsAvailable(etalon))
 				{
-					foreach (PPtr<UnityObjectBase> asset in Fields[i].FetchDependencies(context, etalon))
+					foreach (PPtr<IUnityObjectBase> asset in Fields[i].FetchDependencies(context, etalon))
 					{
 						yield return asset;
 					}

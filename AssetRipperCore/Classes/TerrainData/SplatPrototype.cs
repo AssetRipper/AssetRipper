@@ -107,7 +107,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			return node;
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Texture, TextureName);
 			if (HasNormalMap(context.Version))

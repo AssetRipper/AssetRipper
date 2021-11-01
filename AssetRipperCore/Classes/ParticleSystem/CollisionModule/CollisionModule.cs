@@ -153,7 +153,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 			}
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			if (HasPlaneListNotIndividual(context.Version))
 			{

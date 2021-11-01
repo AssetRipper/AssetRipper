@@ -69,7 +69,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 		/// </summary>
 		public static bool IsEncoded(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
-		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			Shader shader = (Shader)asset;
 

@@ -12,11 +12,11 @@ namespace AssetRipper.Core.Structure
 		ISerializedFile FindSerializedFile(string fileName);
 		IResourceFile FindResourceFile(string fileName);
 
-		T FindAsset<T>() where T : UnityObjectBase;
-		T FindAsset<T>(string name) where T : UnityObjectBase, INamedObject;
-		IEnumerable<UnityObjectBase> FetchAssets();
+		T FindAsset<T>() where T : IUnityObjectBase;
+		T FindAsset<T>(string name) where T : IUnityObjectBase, INamedObject;
+		IEnumerable<IUnityObjectBase> FetchAssets();
 
-		IEnumerable<UnityObjectBase> FetchAssetsOfType(ClassIDType type);
+		IEnumerable<IUnityObjectBase> FetchAssetsOfType(ClassIDType type);
 
 		bool IsScene(ISerializedFile file);
 

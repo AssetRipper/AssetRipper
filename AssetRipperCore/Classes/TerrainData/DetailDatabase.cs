@@ -150,9 +150,9 @@ namespace AssetRipper.Core.Classes.TerrainData
 			return node;
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(DetailPrototypes, DetailPrototypesName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DetailPrototypes, DetailPrototypesName))
 			{
 				yield return asset;
 			}
@@ -160,13 +160,13 @@ namespace AssetRipper.Core.Classes.TerrainData
 			{
 				yield return context.FetchDependency(AtlasTexture, AtlasTextureName);
 			}
-			foreach (PPtr<UnityObjectBase> asset in TreeDatabase.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in TreeDatabase.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 			if (!HasAtlasTexture(context.Version))
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(PreloadTextureAtlasData, PreloadTextureAtlasDataName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(PreloadTextureAtlasData, PreloadTextureAtlasDataName))
 				{
 					yield return asset;
 				}

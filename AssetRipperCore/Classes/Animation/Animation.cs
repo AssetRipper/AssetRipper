@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes.Animation
 
 		public Animation(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public override UnityObjectBase Convert(IExportContainer container)
+		public override IUnityObjectBase Convert(IExportContainer container)
 		{
 			return AnimationConverter.Convert(container, this);
 		}
@@ -87,16 +87,16 @@ namespace AssetRipper.Core.Classes.Animation
 			}
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			yield return context.FetchDependency(DefaultAnimation, AnimationName);
 
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Animations, AnimationsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Animations, AnimationsName))
 			{
 				yield return asset;
 			}

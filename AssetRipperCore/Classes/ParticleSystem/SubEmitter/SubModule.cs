@@ -90,9 +90,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 			}
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(SubEmitters, SubEmittersName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(SubEmitters, SubEmittersName))
 			{
 				yield return asset;
 			}

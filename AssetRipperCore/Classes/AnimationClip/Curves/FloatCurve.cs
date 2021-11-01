@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 			Script.Write(writer);
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Script, ScriptName);
 		}

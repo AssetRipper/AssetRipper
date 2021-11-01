@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Utils
 {
 	public static class ObjectUtils
 	{
-		public static long GenerateExportID(UnityObjectBase asset, Func<long, bool> duplicateChecker)
+		public static long GenerateExportID(IUnityObjectBase asset, Func<long, bool> duplicateChecker)
 		{
 			if (asset == null)
 			{
@@ -44,10 +44,10 @@ namespace AssetRipper.Core.Utils
 			return BitConverter.ToInt64(s_idBuffer.Value, 0);
 		}
 
-		public static UnityGUID CalculateAssetsGUID(IEnumerable<UnityObjectBase> assets)
+		public static UnityGUID CalculateAssetsGUID(IEnumerable<IUnityObjectBase> assets)
 		{
 			List<uint> hashList = new List<uint>();
-			foreach (UnityObjectBase asset in assets)
+			foreach (IUnityObjectBase asset in assets)
 			{
 				hashList.Add(asset.GUID.Data0);
 				hashList.Add(asset.GUID.Data1);

@@ -35,18 +35,18 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			if (HasData(context.Version) || IsInherited(context.Version))
 			{
-				foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+				foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<UnityObjectBase> asset in FetchDependenciesTexture(context))
+				foreach (PPtr<IUnityObjectBase> asset in FetchDependenciesTexture(context))
 				{
 					yield return asset;
 				}

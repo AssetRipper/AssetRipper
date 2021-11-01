@@ -13,7 +13,6 @@ using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -24,7 +23,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			m_convert = convert;
 			if (convert)
 			{
-				foreach (UnityObjectBase asset in texture.File.Collection.FetchAssetsOfType(ClassIDType.Sprite))
+				foreach (IUnityObjectBase asset in texture.File.Collection.FetchAssetsOfType(ClassIDType.Sprite))
 				{
 					Sprite sprite = (Sprite)asset;
 					if (sprite.RD.Texture.IsAsset(sprite.File, texture))
@@ -35,7 +34,7 @@ namespace AssetRipper.Library.Exporters.Textures
 					}
 				}
 
-				foreach (UnityObjectBase asset in texture.File.Collection.FetchAssetsOfType(ClassIDType.SpriteAtlas))
+				foreach (IUnityObjectBase asset in texture.File.Collection.FetchAssetsOfType(ClassIDType.SpriteAtlas))
 				{
 					SpriteAtlas atlas = (SpriteAtlas)asset;
 					if (atlas.RenderDataMap.Count > 0)
@@ -88,7 +87,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return AssetExporter.Export(container, Asset, filePath);
 		}
 
-		protected override string GetExportExtension(UnityObjectBase asset)
+		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
 			if (m_convert)
 			{
@@ -97,7 +96,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return base.GetExportExtension(asset);
 		}
 
-		protected override long GenerateExportID(UnityObjectBase asset)
+		protected override long GenerateExportID(IUnityObjectBase asset)
 		{
 			long exportID = ExportIdHandler.GetMainExportID(asset, m_nextExportID);
 			m_nextExportID += 2;

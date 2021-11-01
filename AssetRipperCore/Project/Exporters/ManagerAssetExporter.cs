@@ -6,12 +6,12 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public class ManagerAssetExporter : YamlExporterBase
 	{
-		public override bool IsHandle(UnityObjectBase asset)
+		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			return asset is IGlobalGameManager && asset is not IBuildSettings;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new ManagerExportCollection(this, asset);
 		}

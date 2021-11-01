@@ -11,38 +11,38 @@ namespace AssetRipper.Library.Exporters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{
-		public virtual bool IsHandle(UnityObjectBase asset)
+		public virtual bool IsHandle(IUnityObjectBase asset)
 		{
 			return true;
 		}
 
-		public virtual bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public virtual bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public virtual void Export(IExportContainer container, UnityObjectBase asset, string path, Action<IExportContainer, UnityObjectBase, string> callback)
+		public virtual void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
 			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
 		}
 
-		public virtual bool Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path)
+		public virtual bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public virtual void Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path, Action<IExportContainer, UnityObjectBase, string> callback)
+		public virtual void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public virtual IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public virtual IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset);
 		}
 
-		public AssetType ToExportType(UnityObjectBase asset)
+		public AssetType ToExportType(IUnityObjectBase asset)
 		{
 			ToUnknownExportType(asset.ClassID, out AssetType assetType);
 			return assetType;

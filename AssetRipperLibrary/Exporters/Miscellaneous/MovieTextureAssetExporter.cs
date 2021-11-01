@@ -10,7 +10,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 {
 	public sealed class MovieTextureAssetExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(UnityObjectBase asset)
+		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is IMovieTexture texture)
 				return IsValidData(texture.RawData);
@@ -18,12 +18,12 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 				return false;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, "ogv");
 		}
 
-		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			using (Stream stream = FileUtils.CreateVirtualFile(path))
 			{

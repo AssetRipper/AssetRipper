@@ -13,7 +13,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 	/// </summary>
 	public class SimpleShaderExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(UnityObjectBase asset)
+		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is ITextAsset textAsset && asset is IShader)
 				return HasDecompiledShaderText(textAsset.RawData);
@@ -21,7 +21,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				return false;
 		}
 
-		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			using (Stream stream = FileUtils.CreateVirtualFile(path))
 			{

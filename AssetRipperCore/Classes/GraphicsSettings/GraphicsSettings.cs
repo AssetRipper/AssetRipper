@@ -376,56 +376,56 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			}
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Deferred, DeferredName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Deferred, DeferredName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(DeferredReflections, DeferredReflectionsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DeferredReflections, DeferredReflectionsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(ScreenSpaceShadows, ScreenSpaceShadowsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(ScreenSpaceShadows, ScreenSpaceShadowsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(LegacyDeferred, LegacyDeferredName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LegacyDeferred, LegacyDeferredName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(DepthNormals, DepthNormalsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DepthNormals, DepthNormalsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(MotionVectors, MotionVectorsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(MotionVectors, MotionVectorsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(LightHalo, LightHaloName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LightHalo, LightHaloName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(LensFlare, LensFlareName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LensFlare, LensFlareName))
 			{
 				yield return asset;
 			}
 
 			if (HasAlwaysIncludedShaders(context.Version))
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(AlwaysIncludedShaders, AlwaysIncludedShadersName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(AlwaysIncludedShaders, AlwaysIncludedShadersName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasPreloadedShaders(context.Version))
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(PreloadedShaders, PreloadedShadersName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(PreloadedShaders, PreloadedShadersName))
 				{
 					yield return asset;
 				}

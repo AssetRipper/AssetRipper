@@ -79,9 +79,9 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			reader.AlignStream();
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Packables, PackablesName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Packables, PackablesName))
 			{
 				yield return asset;
 			}

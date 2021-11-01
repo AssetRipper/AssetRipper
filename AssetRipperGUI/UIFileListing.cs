@@ -25,7 +25,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Object = AssetRipper.Core.Classes.Object.Object;
 using SerializedFile = AssetRipper.Core.Parser.Files.SerializedFiles.SerializedFile;
 
 namespace AssetRipper.GUI
@@ -66,7 +65,7 @@ namespace AssetRipper.GUI
 				//Create a dictionary to hold the sub-categories.
 				Dictionary<string, NewUiFileListItem> categories = new();
 				
-				foreach (UnityObjectBase asset in resourceFile.FetchAssets())
+				foreach (IUnityObjectBase asset in resourceFile.FetchAssets())
 				{
 					//Get the name of the category this asset should go in.
 					string categoryName = GetCategoryName(asset.GetType());
@@ -132,7 +131,7 @@ namespace AssetRipper.GUI
 	public class NewUiFileListItem : BaseViewModel
 	{
 		private string _displayAs;
-		private UnityObjectBase? _associatedObject;
+		private IUnityObjectBase? _associatedObject;
 		private SerializedFile? _associatedFile;
 
 		//Read from UI
@@ -146,7 +145,7 @@ namespace AssetRipper.GUI
 			}
 		}
 
-		public UnityObjectBase? AsObjectAsset => _associatedObject; 
+		public IUnityObjectBase? AsObjectAsset => _associatedObject; 
 		
 		//Read from UI
 		public ObservableCollection<NewUiFileListItem> SubItems { get; } = new();
@@ -165,7 +164,7 @@ namespace AssetRipper.GUI
 		/// Creates a sub-level tree view item from an individual asset. Inherits the name of the asset if it is a NamedObject,
 		/// otherwise takes the name of the asset's class.
 		/// </summary>
-		public NewUiFileListItem(UnityObjectBase asset)
+		public NewUiFileListItem(IUnityObjectBase asset)
 		{
 			_associatedObject = asset;
 			

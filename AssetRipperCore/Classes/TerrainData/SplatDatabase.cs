@@ -107,24 +107,24 @@ namespace AssetRipper.Core.Classes.TerrainData
 			return node;
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			if (HasTerrainLayers(context.Version))
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(TerrainLayers, TerrainLayersName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(TerrainLayers, TerrainLayersName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Splats, SplatsName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Splats, SplatsName))
 				{
 					yield return asset;
 				}
 			}
 
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(AlphaTextures, AlphaTexturesName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(AlphaTextures, AlphaTexturesName))
 			{
 				yield return asset;
 			}

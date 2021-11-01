@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Utils
 			else
 				return guid.Substring(0, numCharacters);
 		}
-		public static void RandomizeAssetGuid(IEnumerable<UnityObjectBase> assets)
+		public static void RandomizeAssetGuid(IEnumerable<IUnityObjectBase> assets)
 		{
 			foreach (var asset in assets)
 			{
@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Utils
 			}
 		}
 
-		public static void SetGUID(UnityObjectBase asset, byte[] guid)
+		public static void SetGUID(IUnityObjectBase asset, byte[] guid)
 		{
 			var swapped = new byte[guid.Length];
 			for (int i = 0; i < guid.Length; i++)

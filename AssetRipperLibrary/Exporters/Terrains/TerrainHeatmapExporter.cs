@@ -23,17 +23,17 @@ namespace AssetRipper.Library.Exporters.Terrains
 			ImageFormat = configuration.ImageExportFormat;
 		}
 
-		public override bool IsHandle(UnityObjectBase asset)
+		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			return ExportMode == TerrainExportMode.Heatmap;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, ImageFormat.GetFileExtension());
 		}
 
-		public override bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			TerrainData terrain = (TerrainData)asset;
 			using (Stream fileStream = FileUtils.CreateVirtualFile(path))

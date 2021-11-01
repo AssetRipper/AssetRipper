@@ -14,32 +14,32 @@ namespace AssetRipper.Core.Project.Exporters
 			m_metaTypes[classType] = isMetaType;
 		}
 
-		public bool IsHandle(UnityObjectBase asset)
+		public bool IsHandle(IUnityObjectBase asset)
 		{
 			return true;
 		}
 
-		public bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, UnityObjectBase asset, string path, Action<IExportContainer, UnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path, Action<IExportContainer, UnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			if (m_emptyTypes.TryGetValue(asset.ClassID, out bool isEmptyCollection))
 			{
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.Project.Exporters
 			}
 		}
 
-		public AssetType ToExportType(UnityObjectBase asset)
+		public AssetType ToExportType(IUnityObjectBase asset)
 		{
 			ToUnknownExportType(asset.ClassID, out AssetType assetType);
 			return assetType;

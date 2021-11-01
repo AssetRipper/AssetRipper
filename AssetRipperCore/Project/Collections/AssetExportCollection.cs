@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public class AssetExportCollection : ExportCollection
 	{
-		public AssetExportCollection(IAssetExporter assetExporter, UnityObjectBase asset)
+		public AssetExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset)
 		{
 			if (assetExporter == null)
 			{
@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Project.Collections
 			Asset = asset;
 		}
 
-		public AssetExportCollection(IAssetExporter assetExporter, UnityObjectBase asset, string fileExtension) : this(assetExporter, asset)
+		public AssetExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset, string fileExtension) : this(assetExporter, asset)
 		{
 			this.fileExtension = fileExtension;
 		}
@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			string subPath;
 			string fileName;
-			if (container.TryGetAssetPathFromAssets(Assets, out UnityObjectBase asset, out string assetPath))
+			if (container.TryGetAssetPathFromAssets(Assets, out IUnityObjectBase asset, out string assetPath))
 			{
 				string resourcePath = Path.Combine(dirPath, $"{assetPath}.{GetExportExtension(asset)}");
 				subPath = Path.GetDirectoryName(resourcePath);
@@ -67,12 +67,12 @@ namespace AssetRipper.Core.Project.Collections
 			return false;
 		}
 
-		public override bool IsContains(UnityObjectBase asset)
+		public override bool IsContains(IUnityObjectBase asset)
 		{
 			return Asset.AssetInfo == asset.AssetInfo;
 		}
 
-		public override long GetExportID(UnityObjectBase asset)
+		public override long GetExportID(IUnityObjectBase asset)
 		{
 			if (asset.AssetInfo == Asset.AssetInfo)
 			{
@@ -81,7 +81,7 @@ namespace AssetRipper.Core.Project.Collections
 			throw new ArgumentException(nameof(asset));
 		}
 
-		public override MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
 			long exportID = GetExportID(asset);
 			return isLocal ?
@@ -101,7 +101,7 @@ namespace AssetRipper.Core.Project.Collections
 			return importer;
 		}
 
-		protected override string GetExportExtension(UnityObjectBase asset)
+		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
 			if (string.IsNullOrWhiteSpace(fileExtension))
 				return base.GetExportExtension(asset);
@@ -112,11 +112,11 @@ namespace AssetRipper.Core.Project.Collections
 		private string fileExtension;
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File => Asset.File;
-		public override IEnumerable<UnityObjectBase> Assets
+		public override IEnumerable<IUnityObjectBase> Assets
 		{
 			get { yield return Asset; }
 		}
 		public override string Name => Asset.ToString();
-		public UnityObjectBase Asset { get; }
+		public IUnityObjectBase Asset { get; }
 	}
 }

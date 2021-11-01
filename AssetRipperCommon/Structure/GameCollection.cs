@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Structure
 
 		public event Func<string, string> ResourceCallback;
 
-		private readonly Dictionary<ClassIDType, List<UnityObjectBase>> _cachedAssetsByType = new();
+		private readonly Dictionary<ClassIDType, List<IUnityObjectBase>> _cachedAssetsByType = new();
 
 		public GameCollection(AssetLayout layout) : base(nameof(GameCollection))
 		{
@@ -73,23 +73,23 @@ namespace AssetRipper.Core.Structure
 			return m_resources[fixedName];
 		}
 
-		public T FindAsset<T>() where T : UnityObjectBase
+		public T FindAsset<T>() where T : IUnityObjectBase
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
-			foreach (UnityObjectBase asset in FetchAssets())
+			foreach (IUnityObjectBase asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{
 					return (T)asset;
 				}
 			}
-			return null;
+			return default;
 		}
 
-		public T FindAsset<T>(string name) where T : UnityObjectBase, INamedObject
+		public T FindAsset<T>(string name) where T : IUnityObjectBase, INamedObject
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
-			foreach (UnityObjectBase asset in FetchAssets())
+			foreach (IUnityObjectBase asset in FetchAssets())
 			{
 				if (asset.ClassID == classID)
 				{
@@ -100,26 +100,26 @@ namespace AssetRipper.Core.Structure
 					}
 				}
 			}
-			return null;
+			return default;
 		}
 
-		public IEnumerable<UnityObjectBase> FetchAssets()
+		public IEnumerable<IUnityObjectBase> FetchAssets()
 		{
 			foreach (SerializedFile file in m_files.Values)
 			{
-				foreach (UnityObjectBase asset in file.FetchAssets())
+				foreach (IUnityObjectBase asset in file.FetchAssets())
 				{
 					yield return asset;
 				}
 			}
 		}
 
-		public IEnumerable<UnityObjectBase> FetchAssetsOfType(ClassIDType type)
+		public IEnumerable<IUnityObjectBase> FetchAssetsOfType(ClassIDType type)
 		{
-			if (_cachedAssetsByType.TryGetValue(type, out List<UnityObjectBase> list))
+			if (_cachedAssetsByType.TryGetValue(type, out List<IUnityObjectBase> list))
 				return list;
 
-			List<UnityObjectBase> objects = FetchAssets().Where(o => o.ClassID == type).ToList();
+			List<IUnityObjectBase> objects = FetchAssets().Where(o => o.ClassID == type).ToList();
 			_cachedAssetsByType.TryAdd(type, objects);
 			
 			return objects;

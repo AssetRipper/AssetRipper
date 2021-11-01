@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public class AnimatorControllerExportCollection : AssetsExportCollection
 	{
-		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, UnityObjectBase asset) : this(assetExporter, virtualFile, (AnimatorController)asset) { }
+		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IUnityObjectBase asset) : this(assetExporter, virtualFile, (AnimatorController)asset) { }
 
 		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, AnimatorController asset) : base(assetExporter, asset)
 		{

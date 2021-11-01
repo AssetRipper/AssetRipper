@@ -27,38 +27,38 @@ namespace AssetRipper.Library.Exporters.Scripts
 			LanguageVersion = configuration.ScriptLanguageVersion;
 		}
 
-		public bool IsHandle(UnityObjectBase asset)
+		public bool IsHandle(IUnityObjectBase asset)
 		{
 			return ScriptExportMode == ScriptExportMode.Decompiled && asset is IMonoScript;
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new ScriptExportCollection(this, (MonoScript)asset);
 		}
 
-		public bool Export(IExportContainer container, UnityObjectBase asset, string path)
+		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			throw new NotSupportedException("Need to export all scripts at once");
 		}
 
-		public void Export(IExportContainer container, UnityObjectBase asset, string path, Action<IExportContainer, UnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
 			throw new NotSupportedException("Need to export all scripts at once");
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string dirPath)
+		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string dirPath)
 		{
 			Export(container, assets, dirPath, null);
 			return true;
 		}
 
-		public void Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string dirPath, Action<IExportContainer, UnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string dirPath, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
 			Logger.Info(LogCategory.Export, "Exporting scripts...");
 			ScriptManager scriptManager = new ScriptManager(AssemblyManager, dirPath, LanguageVersion);
-			Dictionary<UnityObjectBase, TypeDefinition> exportTypes = new Dictionary<UnityObjectBase, TypeDefinition>();
-			foreach (UnityObjectBase asset in assets)
+			Dictionary<IUnityObjectBase, TypeDefinition> exportTypes = new Dictionary<IUnityObjectBase, TypeDefinition>();
+			foreach (IUnityObjectBase asset in assets)
 			{
 				IMonoScript script = (IMonoScript)asset;
 				TypeDefinition exportType = script.GetTypeDefinition();
@@ -67,7 +67,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			int primaryTotal = exportTypes.Count;
 			int count = 0;
 			Logger.Info(LogCategory.Export, $"Exporting {primaryTotal} primary scripts...");
-			foreach (KeyValuePair<UnityObjectBase, TypeDefinition> exportType in exportTypes)
+			foreach (KeyValuePair<IUnityObjectBase, TypeDefinition> exportType in exportTypes)
 			{
 				string path = scriptManager.Export(exportType.Value);
 				if (path != null)
@@ -85,7 +85,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			Logger.Info(LogCategory.Export, "Finished exporting scripts");
 		}
 
-		public AssetType ToExportType(UnityObjectBase asset) => AssetType.Meta;
+		public AssetType ToExportType(IUnityObjectBase asset) => AssetType.Meta;
 
 		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
 		{

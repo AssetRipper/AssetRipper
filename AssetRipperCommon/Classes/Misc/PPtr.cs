@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
@@ -25,7 +26,7 @@ namespace AssetRipper.Core.Classes.Misc
 		}
 	}
 
-	public struct PPtr<T> : IAsset where T : UnityObjectBase
+	public struct PPtr<T> : IAsset where T : IUnityObjectBase
 	{
 		public PPtr(int fileIndex, long pathID)
 		{
@@ -43,7 +44,7 @@ namespace AssetRipper.Core.Classes.Misc
 			return left.FileIndex != right.FileIndex || left.PathID != right.PathID;
 		}
 
-		public PPtr<T1> CastTo<T1>() where T1 : UnityObjectBase
+		public PPtr<T1> CastTo<T1>() where T1 : IUnityObjectBase
 		{
 			return new PPtr<T1>(FileIndex, PathID);
 		}
@@ -91,17 +92,17 @@ namespace AssetRipper.Core.Classes.Misc
 		{
 			if (IsNull)
 			{
-				return null;
+				return default;
 			}
-			UnityObjectBase asset = file.FindAsset(FileIndex, PathID);
+			IUnityObjectBase asset = file.FindAsset(FileIndex, PathID);
 			switch (asset)
 			{
 				case null:
-					return null;
+					return default;
 				case T t:
 					return t;
 				case UnknownObject:
-					return null;
+					return default;
 				default:
 					throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
 			}
@@ -111,7 +112,7 @@ namespace AssetRipper.Core.Classes.Misc
 		{
 			if (IsNull)
 			{
-				return null;
+				return default;
 			}
 			return GetAsset(file);
 		}
@@ -122,7 +123,7 @@ namespace AssetRipper.Core.Classes.Misc
 			{
 				throw new Exception("Can't get null PPtr");
 			}
-			UnityObjectBase asset = file.GetAsset(FileIndex, PathID);
+			IUnityObjectBase asset = file.GetAsset(FileIndex, PathID);
 			if (asset is T t)
 			{
 				return t;
@@ -130,7 +131,7 @@ namespace AssetRipper.Core.Classes.Misc
 			throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
 		}
 
-		public bool IsAsset(UnityObjectBase asset)
+		public bool IsAsset(IUnityObjectBase asset)
 		{
 			if (FileIndex == 0)
 			{
@@ -142,7 +143,7 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 		}
 
-		public bool IsAsset(IAssetContainer file, UnityObjectBase asset)
+		public bool IsAsset(IAssetContainer file, IUnityObjectBase asset)
 		{
 			if (FileIndex == 0)
 			{

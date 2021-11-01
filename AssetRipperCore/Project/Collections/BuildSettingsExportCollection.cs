@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{
-		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, UnityObjectBase asset) : this(assetExporter, file, (BuildSettings)asset) { }
+		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, IUnityObjectBase asset) : this(assetExporter, file, (BuildSettings)asset) { }
 
 		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, BuildSettings asset) : base(assetExporter, asset)
 		{
@@ -116,7 +116,7 @@ namespace AssetRipper.Core.Project.Collections
 			return true;
 		}
 
-		public override bool IsContains(UnityObjectBase asset)
+		public override bool IsContains(IUnityObjectBase asset)
 		{
 			switch (asset.ClassID)
 			{
@@ -140,12 +140,12 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public override long GetExportID(UnityObjectBase asset)
+		public override long GetExportID(IUnityObjectBase asset)
 		{
 			return 1;
 		}
 
-		public override IEnumerable<UnityObjectBase> Assets
+		public override IEnumerable<IUnityObjectBase> Assets
 		{
 			get
 			{

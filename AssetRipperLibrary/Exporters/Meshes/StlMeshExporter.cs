@@ -19,7 +19,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			BinaryExport = ExportFormat == MeshExportFormat.StlBinary;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, "stl");
 		}

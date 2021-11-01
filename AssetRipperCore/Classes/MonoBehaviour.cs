@@ -45,9 +45,9 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
@@ -56,7 +56,7 @@ namespace AssetRipper.Core.Classes
 
 			if (Structure != null)
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Structure, Structure.Type.Name))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Structure, Structure.Type.Name))
 				{
 					yield return asset;
 				}

@@ -8,15 +8,15 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public interface IAssetExporter
 	{
-		bool IsHandle(UnityObjectBase asset);
+		bool IsHandle(IUnityObjectBase asset);
 
-		bool Export(IExportContainer container, UnityObjectBase asset, string path);
-		void Export(IExportContainer container, UnityObjectBase asset, string path, Action<IExportContainer, UnityObjectBase, string> callback);
-		bool Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path);
-		void Export(IExportContainer container, IEnumerable<UnityObjectBase> assets, string path, Action<IExportContainer, UnityObjectBase, string> callback);
+		bool Export(IExportContainer container, IUnityObjectBase asset, string path);
+		void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback);
+		bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path);
+		void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback);
 
-		IExportCollection CreateCollection(VirtualSerializedFile virtualFile, UnityObjectBase asset);
-		AssetType ToExportType(UnityObjectBase asset);
+		IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset);
+		AssetType ToExportType(IUnityObjectBase asset);
 		bool ToUnknownExportType(ClassIDType classID, out AssetType assetType);
 	}
 }

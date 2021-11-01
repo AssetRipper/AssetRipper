@@ -5,7 +5,7 @@ namespace AssetRipper.Core.Project
 {
 	public static class ExportIdHandler
 	{
-		public static long GetMainExportID(UnityObjectBase asset)
+		public static long GetMainExportID(IUnityObjectBase asset)
 		{
 			return GetMainExportID((uint)asset.ClassID, 0);
 		}
@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Project
 			return GetMainExportID(classID, 0);
 		}
 
-		public static long GetMainExportID(UnityObjectBase asset, uint value)
+		public static long GetMainExportID(IUnityObjectBase asset, uint value)
 		{
 			return GetMainExportID((uint)asset.ClassID, value);
 		}

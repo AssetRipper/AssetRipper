@@ -99,22 +99,22 @@ namespace AssetRipper.Library
 			return GameStructure;
 		}
 
-		public IEnumerable<UnityObjectBase> FetchLoadedAssets()
+		public IEnumerable<IUnityObjectBase> FetchLoadedAssets()
 		{
 			if (GameStructure == null) throw new NullReferenceException("GameStructure cannot be null");
 			if (GameStructure.FileCollection == null) throw new NullReferenceException("FileCollection cannot be null");
 			return GameStructure.FileCollection.FetchAssets();
 		}
 
-		public void ExportFile(string exportPath, UnityObjectBase asset) => throw new NotImplementedException();
-		public void ExportFile(string exportPath, IEnumerable<UnityObjectBase> assets) => throw new NotImplementedException();
+		public void ExportFile(string exportPath, IUnityObjectBase asset) => throw new NotImplementedException();
+		public void ExportFile(string exportPath, IEnumerable<IUnityObjectBase> assets) => throw new NotImplementedException();
 
-		public void ExportProject(string exportPath) => ExportProject(exportPath, new UnityObjectBase[0]);
-		public void ExportProject(string exportPath, UnityObjectBase asset) => ExportProject(exportPath, new UnityObjectBase[] { asset });
-		public void ExportProject(string exportPath, IEnumerable<UnityObjectBase> assets)
+		public void ExportProject(string exportPath) => ExportProject(exportPath, new IUnityObjectBase[0]);
+		public void ExportProject(string exportPath, IUnityObjectBase asset) => ExportProject(exportPath, new IUnityObjectBase[] { asset });
+		public void ExportProject(string exportPath, IEnumerable<IUnityObjectBase> assets)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			List<UnityObjectBase> list = new List<UnityObjectBase>(assets ?? new UnityObjectBase[0]);
+			List<IUnityObjectBase> list = new List<IUnityObjectBase>(assets ?? new IUnityObjectBase[0]);
 			Settings.ExportPath = exportPath;
 			Settings.Filter = list.Count == 0 ? LibraryConfiguration.DefaultFilter : GetFilter(list);
 			InitializeExporters();
@@ -136,7 +136,7 @@ namespace AssetRipper.Library
 
 		public void ResetSettings() => Settings.ResetToDefaultValues();
 
-		private static Func<UnityObjectBase, bool> GetFilter(List<UnityObjectBase> assets)
+		private static Func<IUnityObjectBase, bool> GetFilter(List<IUnityObjectBase> assets)
 		{
 			if (assets == null) throw new ArgumentNullException(nameof(assets));
 			return assets.Contains;

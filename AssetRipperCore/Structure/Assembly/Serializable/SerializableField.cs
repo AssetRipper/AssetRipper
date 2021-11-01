@@ -494,7 +494,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			}
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context, SerializableType.Field etalon)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context, SerializableType.Field etalon)
 		{
 			if (etalon.Type.Type == PrimitiveType.Complex)
 			{
@@ -503,7 +503,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 					IAsset[] structures = (IAsset[])CValue;
 					if (structures.Length > 0 && structures[0] is IDependent)
 					{
-						foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(structures.Cast<IDependent>(), etalon.Name))
+						foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(structures.Cast<IDependent>(), etalon.Name))
 						{
 							yield return asset;
 						}
@@ -514,7 +514,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 					IAsset structure = (IAsset)CValue;
 					if (structure is IDependent dependent)
 					{
-						foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(dependent, etalon.Name))
+						foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(dependent, etalon.Name))
 						{
 							yield return asset;
 						}

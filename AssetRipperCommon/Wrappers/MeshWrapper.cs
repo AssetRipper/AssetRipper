@@ -5,8 +5,8 @@
 	/// </summary>
 	public class MeshWrapper
 	{
-		private UnityObjectBase NativeMesh { get; }
-		internal MeshWrapper(UnityObjectBase nativeMesh) => NativeMesh = nativeMesh;
+		private IUnityObjectBase NativeMesh { get; }
+		internal MeshWrapper(IUnityObjectBase nativeMesh) => NativeMesh = nativeMesh;
 		
 
 	}

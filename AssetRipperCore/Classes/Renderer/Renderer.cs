@@ -453,14 +453,14 @@ namespace AssetRipper.Core.Classes.Renderer
 			}
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Materials, MaterialsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Materials, MaterialsName))
 			{
 				yield return asset;
 			}

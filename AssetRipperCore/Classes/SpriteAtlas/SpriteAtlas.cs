@@ -43,26 +43,26 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			reader.AlignStream();
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (HasEditorData(context.Flags))
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(EditorData, EditorDataName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(EditorData, EditorDataName))
 				{
 					yield return asset;
 				}
 				yield return context.FetchDependency(MasterAtlas, MasterAtlasName);
 			}
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(PackedSprites, PackedSpritesName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(PackedSprites, PackedSpritesName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies((IEnumerable<SpriteAtlasData>)RenderDataMap.Values, RenderDataMapName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies((IEnumerable<SpriteAtlasData>)RenderDataMap.Values, RenderDataMapName))
 			{
 				yield return asset;
 			}

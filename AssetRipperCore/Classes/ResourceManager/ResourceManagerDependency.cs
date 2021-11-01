@@ -16,10 +16,10 @@ namespace AssetRipper.Core.Classes.ResourceManager
 			Dependencies = reader.ReadAssetArray<PPtr<Object.Object>>();
 		}
 
-		public IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Object, ObjectName);
-			foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Dependencies, DependenciesName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Dependencies, DependenciesName))
 			{
 				yield return asset;
 			}

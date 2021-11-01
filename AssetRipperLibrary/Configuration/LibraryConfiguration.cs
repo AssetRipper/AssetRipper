@@ -43,11 +43,11 @@ namespace AssetRipper.Library.Configuration
 			base.ResetToDefaultValues();
 			AudioExportFormat = AudioExportFormat.Default;
 			ImageExportFormat = ImageExportFormat.Png;
-			MeshExportFormat = MeshExportFormat.Native;
+			MeshExportFormat = MeshExportFormat.Obj;
 			ScriptExportMode = ScriptExportMode.Decompiled;
 			ScriptLanguageVersion = LanguageVersion.CSharp7_3;
 			SpriteExportMode = SpriteExportMode.Native;
-			TerrainExportMode = TerrainExportMode.Native;
+			TerrainExportMode = TerrainExportMode.Obj;
 			TextExportMode = TextExportMode.Parse;
 		}
 	}

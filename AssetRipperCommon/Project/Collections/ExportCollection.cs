@@ -36,11 +36,11 @@ namespace AssetRipper.Core.Project.Collections
 		}
 
 		public abstract bool Export(IProjectAssetContainer container, string dirPath);
-		public abstract bool IsContains(UnityObjectBase asset);
-		public abstract long GetExportID(UnityObjectBase asset);
-		public abstract MetaPtr CreateExportPointer(UnityObjectBase asset, bool isLocal);
+		public abstract bool IsContains(IUnityObjectBase asset);
+		public abstract long GetExportID(IUnityObjectBase asset);
+		public abstract MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal);
 
-		protected void ExportAsset(IProjectAssetContainer container, IAssetImporter importer, UnityObjectBase asset, string path, string name)
+		protected void ExportAsset(IProjectAssetContainer container, IAssetImporter importer, IUnityObjectBase asset, string path, string name)
 		{
 			if (!Directory.Exists(path))
 			{
@@ -55,7 +55,7 @@ namespace AssetRipper.Core.Project.Collections
 			ExportMeta(container, meta, filePath);
 		}
 
-		protected string GetUniqueFileName(ISerializedFile file, UnityObjectBase asset, string dirPath)
+		protected string GetUniqueFileName(ISerializedFile file, IUnityObjectBase asset, string dirPath)
 		{
 			string fileName;
 			switch (asset)
@@ -86,7 +86,7 @@ namespace AssetRipper.Core.Project.Collections
 			return FileUtils.GetUniqueName(directoryPath, fileName, FileUtils.MaxFileNameLength - MetaExtension.Length);
 		}
 
-		protected virtual string GetExportExtension(UnityObjectBase asset)
+		protected virtual string GetExportExtension(IUnityObjectBase asset)
 		{
 			return asset.ExportExtension;
 		}
@@ -94,7 +94,7 @@ namespace AssetRipper.Core.Project.Collections
 		public abstract IAssetExporter AssetExporter { get; }
 		public abstract ISerializedFile File { get; }
 		public virtual TransferInstructionFlags Flags => TransferInstructionFlags.NoTransferInstructionFlags;
-		public abstract IEnumerable<UnityObjectBase> Assets { get; }
+		public abstract IEnumerable<IUnityObjectBase> Assets { get; }
 		public abstract string Name { get; }
 
 		private const string MetaExtension = ".meta";

@@ -73,16 +73,16 @@ namespace AssetRipper.Core.Parser.Asset
 {
 	public class AssetFactory : IAssetFactory
 	{
-		public UnityObjectBase CreateAsset(AssetInfo assetInfo)
+		public IUnityObjectBase CreateAsset(AssetInfo assetInfo)
 		{
-			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<AssetInfo, UnityObjectBase> instantiator))
+			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<AssetInfo, IUnityObjectBase> instantiator))
 			{
 				return instantiator(assetInfo);
 			}
 			return DefaultInstantiator(assetInfo);
 		}
 
-		public void OverrideInstantiator(ClassIDType classType, Func<AssetInfo, UnityObjectBase> instantiator)
+		public void OverrideInstantiator(ClassIDType classType, Func<AssetInfo, IUnityObjectBase> instantiator)
 		{
 			if (instantiator == null)
 			{
@@ -91,7 +91,7 @@ namespace AssetRipper.Core.Parser.Asset
 			m_instantiators[classType] = instantiator;
 		}
 
-		private static UnityObjectBase DefaultInstantiator(AssetInfo assetInfo)
+		private static IUnityObjectBase DefaultInstantiator(AssetInfo assetInfo)
 		{
 			switch (assetInfo.ClassID)
 			{
@@ -339,6 +339,6 @@ namespace AssetRipper.Core.Parser.Asset
 			}
 		}
 
-		private readonly Dictionary<ClassIDType, Func<AssetInfo, UnityObjectBase>> m_instantiators = new Dictionary<ClassIDType, Func<AssetInfo, UnityObjectBase>>();
+		private readonly Dictionary<ClassIDType, Func<AssetInfo, IUnityObjectBase>> m_instantiators = new Dictionary<ClassIDType, Func<AssetInfo, IUnityObjectBase>>();
 	}
 }

@@ -9,6 +9,6 @@ namespace AssetRipper.Core.Project
 		ISerializedFile File { get; }
 		VirtualSerializedFile VirtualFile { get; }
 		UnityGUID SceneNameToGUID(string name);
-		bool TryGetAssetPathFromAssets(IEnumerable<UnityObjectBase> assets, out UnityObjectBase selectedAsset, out string assetPath);
+		bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, out IUnityObjectBase selectedAsset, out string assetPath);
 	}
 }

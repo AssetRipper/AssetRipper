@@ -159,7 +159,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			return tos;
 		}
 
-		public override UnityObjectBase Convert(IExportContainer container)
+		public override IUnityObjectBase Convert(IExportContainer container)
 		{
 			return GameObjectConverter.Convert(container, this);
 		}
@@ -210,23 +210,23 @@ namespace AssetRipper.Core.Classes.GameObject
 			writer.Write(IsActive);
 		}
 
-		public override IEnumerable<PPtr<UnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<UnityObjectBase> asset in base.FetchDependencies(context))
+			foreach (PPtr<IUnityObjectBase> asset in base.FetchDependencies(context))
 			{
 				yield return asset;
 			}
 
 			if (IsComponentTuple(context.Version))
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(ComponentTuple.Select(t => t.Item2), ComponentName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(ComponentTuple.Select(t => t.Item2), ComponentName))
 				{
 					yield return asset;
 				}
 			}
 			else
 			{
-				foreach (PPtr<UnityObjectBase> asset in context.FetchDependencies(Component, ComponentName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Component, ComponentName))
 				{
 					yield return asset;
 				}
