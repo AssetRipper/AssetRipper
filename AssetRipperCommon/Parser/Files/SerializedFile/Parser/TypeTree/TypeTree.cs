@@ -24,6 +24,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			}
 			else
 			{
+				Nodes = new List<TypeTreeNode>();
 				ReadTreeNode(reader, Nodes, 0);
 			}
 		}
