@@ -11,7 +11,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public sealed class TerrainData : NamedObject
+	public sealed class TerrainData : NamedObject, ITerrainData
 	{
 		public TerrainData(AssetInfo assetInfo) : base(assetInfo) { }
 
