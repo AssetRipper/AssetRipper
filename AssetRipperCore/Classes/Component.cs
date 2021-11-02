@@ -63,6 +63,8 @@ namespace AssetRipper.Core.Classes
 
 		public PPtr<GameObject.GameObject> GameObject;
 
+		public PPtr<GameObject.IGameObject> GameObjectPtr => GameObject.CastTo<GameObject.IGameObject>();
+
 		public const string GameObjectName = "m_GameObject";
 	}
 }

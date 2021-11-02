@@ -301,7 +301,7 @@ namespace AssetRipper.Core.Project.Collections
 			if (asset is IMonoBehaviour)
 			{
 				MonoBehaviour monoBeh = (MonoBehaviour)asset;
-				if (!monoBeh.IsSceneObject)
+				if (!monoBeh.IsSceneObject())
 				{
 					return false;
 				}

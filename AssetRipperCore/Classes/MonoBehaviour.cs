@@ -163,12 +163,7 @@ namespace AssetRipper.Core.Classes
 		public override string ExportExtension => AssetExtension;
 
 		public string ValidName => Name.Length == 0 ? nameof(MonoBehaviour) : Name;
-		/// <summary>
-		/// Whether this MonoBeh belongs to scene/prefab hierarchy or not
-		/// </summary>
-#warning TODO: find out why GameObject may has value like PPtr(0, 894) but such game object doesn't exists
-		public bool IsSceneObject => !GameObject.IsNull;
-		public bool IsScriptableObject => Name.Length > 0;
+		
 
 		public string Name { get; set; }
 		public SerializableStructure Structure { get; set; }

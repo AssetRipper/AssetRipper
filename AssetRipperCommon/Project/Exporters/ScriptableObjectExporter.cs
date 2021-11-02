@@ -14,8 +14,8 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			MonoBehaviour monoBehaviour = (MonoBehaviour)asset;
-			if (monoBehaviour.IsScriptableObject)
+			IMonoBehaviour monoBehaviour = (IMonoBehaviour)asset;
+			if (monoBehaviour.IsScriptableObject())
 			{
 				return new AssetExportCollection(this, asset);
 			}
