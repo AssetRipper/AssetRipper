@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-    <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
-  </ItemGroup>
+	  <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
+	</ItemGroup>
 
 </Project>

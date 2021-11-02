@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\uTinyRipper.md = Licenses\uTinyRipper.md
 		Licenses\uTinyRipperExporter.md = Licenses\uTinyRipperExporter.md
 		Licenses\Xiph.md = Licenses\Xiph.md
+		Licenses\YamlDotNet.md = Licenses\YamlDotNet.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brotli", "Brotli\Brotli.csproj", "{DE764903-A3F8-4A04-80DF-BA487A26DF75}"

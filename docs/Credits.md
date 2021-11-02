@@ -45,3 +45,5 @@ LibOgg and LibVorbis are licensed from [Xiph](https://www.xiph.org/) under the [
 [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/SharpZipLib.md).
 
 [texgenpack](https://github.com/hglm/texgenpack) is licensed under a [permissive license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/texgenpack.md).
+
+[YamlDotNet](https://github.com/aaubry/YamlDotNet) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/YamlDotNet.md).

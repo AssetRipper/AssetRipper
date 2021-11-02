@@ -10,7 +10,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Structure
 {
-	internal static class SchemeReader
+	public static class SchemeReader
 	{
 		/// <summary>Returns some information about the file including its type</summary>
 		public static FileScheme LoadScheme(string filePath, string fileName)
