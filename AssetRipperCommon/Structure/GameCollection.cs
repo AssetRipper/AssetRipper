@@ -3,7 +3,6 @@ using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.Entries;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -21,7 +20,6 @@ namespace AssetRipper.Core.Structure
 	{
 		public AssetLayout Layout { get; }
 
-		public IAssetFactory AssetFactory { get; set; }
 		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
 		public IAssemblyManager AssemblyManager { get; set; }
 

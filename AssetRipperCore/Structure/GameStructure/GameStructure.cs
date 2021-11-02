@@ -126,9 +126,6 @@ namespace AssetRipper.Core.Structure.GameStructure
 			//Sets its fields and creates the Project Exporter
 			FileCollection = new GameCollection(layout);
 
-			//Setting the parameters for exporting
-			FileCollection.AssetFactory = new AssetFactory();
-
 			FileCollection.ResourceCallback += RequestResource;
 
 			var scriptBackend = GetScriptingBackend(configuration.DisableScriptImport);

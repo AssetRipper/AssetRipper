@@ -21,7 +21,6 @@ namespace AssetRipper.Core.Structure
 
 		bool IsScene(ISerializedFile file);
 
-		IAssetFactory AssetFactory { get; }
 		IAssemblyManager AssemblyManager { get; }
 	}
 }

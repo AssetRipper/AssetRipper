@@ -10,6 +10,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure;
+using AssetRipper.Core.VersionHandling;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -318,7 +319,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		private IUnityObjectBase ReadAsset(AssetReader reader, AssetInfo assetInfo, long offset, int size)
 		{
-			IUnityObjectBase asset = Collection.AssetFactory.CreateAsset(assetInfo);
+			IUnityObjectBase asset = VersionManager.GetHandler(Version).AssetFactory.CreateAsset(assetInfo);
 			if (asset == null)
 			{
 				return null;

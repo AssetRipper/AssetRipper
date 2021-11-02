@@ -13,6 +13,7 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Core.Utils;
+using AssetRipper.Core.VersionHandling;
 using AssetRipper.Library.Attributes;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Audio;
@@ -31,6 +32,11 @@ namespace AssetRipper.Library
 {
 	public class Ripper
 	{
+		static Ripper()
+		{
+			VersionManager.LegacyHandler = new LegacyHandler();
+		}
+
 		public Ripper() => LoadPlugins();
 
 		public GameStructure GameStructure { get; private set; }
