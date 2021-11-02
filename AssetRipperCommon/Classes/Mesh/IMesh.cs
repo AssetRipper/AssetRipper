@@ -3,7 +3,7 @@
 namespace AssetRipper.Core.Classes.Mesh
 {
 	//Not Yet Implemented
-	public interface IMesh : IHasMeshData, IUnityObjectBase
+	public interface IMesh : IHasMeshData, INamedObject
 	{
 	}
 }

@@ -3,7 +3,7 @@
 namespace AssetRipper.Core.Classes.Shader
 {
 	//Not Implemented yet
-	public interface IShader : IUnityObjectBase
+	public interface IShader : INamedObject
 	{
 	}
 }

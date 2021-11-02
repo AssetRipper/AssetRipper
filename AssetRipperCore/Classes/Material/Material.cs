@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -153,6 +154,8 @@ namespace AssetRipper.Core.Classes.Material
 		public bool DoubleSidedGI { get; set; }
 		public string[] DisabledShaderPasses { get; set; }
 		public Dictionary<string, string> StringTagMap { get; set; }
+
+		public PPtr<IShader> ShaderPtr => Shader.CastTo<IShader>();
 
 		public const string ShaderName = "m_Shader";
 		public const string ShaderKeywordsName = "m_ShaderKeywords";

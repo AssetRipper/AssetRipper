@@ -57,45 +57,39 @@ namespace AssetRipper.Core.Project.Collections
 				return true;
 			}
 
-			switch (asset.ClassID)
+			if(asset is IMaterial material)
 			{
-				case ClassIDType.Material:
-					{
-						Material material = (Material)asset;
-						if (material.Name == EngineBuiltInAssets.FontMaterialName)
-						{
-							return false;
-						}
-						Shader shader = material.Shader.FindAsset(material.File);
-						if (shader == null)
-						{
-							return true;
-						}
-						return IsEngineAsset(shader, version);
-					}
-
-				case ClassIDType.Texture2D:
-					{
-						Texture2D texture = (Texture2D)asset;
-						return builtinAsset.Parameter == texture.CompleteImageSize;
-					}
-
-				case ClassIDType.Shader:
-					return true;
-
-				case ClassIDType.Sprite:
-					{
-						Sprite sprite = (Sprite)asset;
-						Texture2D texture = sprite.RD.Texture.FindAsset(sprite.File);
-						if (texture == null)
-						{
-							return false;
-						}
-						return IsEngineAsset(texture, version);
-					}
-
-				default:
+				if (material.Name == EngineBuiltInAssets.FontMaterialName)
+				{
 					return false;
+				}
+				IShader shader = material.ShaderPtr.FindAsset(material.File);
+				if (shader == null)
+				{
+					return true;
+				}
+				return IsEngineAsset(shader, version);
+			}
+			else if(asset is IShader)
+			{
+				return true;
+			}
+			else if(asset is ITexture2D texture)
+			{
+				return builtinAsset.Parameter == texture.CompleteImageSize;
+			}
+			else if (asset is ISprite sprite)
+			{
+				ITexture2D spriteTexture = sprite.TexturePtr.FindAsset(sprite.File);
+				if (spriteTexture == null)
+				{
+					return false;
+				}
+				return IsEngineAsset(spriteTexture, version);
+			}
+			else
+			{
+				return false;
 			}
 		}
 
@@ -118,91 +112,66 @@ namespace AssetRipper.Core.Project.Collections
 
 		private static bool GetEngineBuildInAsset(IUnityObjectBase asset, UnityVersion version, out EngineBuiltInAsset engineAsset)
 		{
-			switch (asset.ClassID)
+			if (asset is IMaterial material)
 			{
-				case ClassIDType.Material:
-					{
-						Material material = (Material)asset;
-						if (EngineBuiltInAssets.TryGetMaterial(material.Name, version, out engineAsset))
-						{
-							return true;
-						}
-					}
-					break;
-
-				case ClassIDType.Texture2D:
-					{
-						Texture2D texture = (Texture2D)asset;
-						if (EngineBuiltInAssets.TryGetTexture(texture.Name, version, out engineAsset))
-						{
-							return true;
-						}
-					}
-					break;
-
-				case ClassIDType.Mesh:
-					{
-						Mesh mesh = (Mesh)asset;
-						if (EngineBuiltInAssets.TryGetMesh(mesh.Name, version, out engineAsset))
-						{
-							return true;
-						}
-					}
-					break;
-
-				case ClassIDType.Shader:
-					{
-						Shader shader = (Shader)asset;
-						if (EngineBuiltInAssets.TryGetShader(shader.ValidName, version, out engineAsset))
-						{
-							return true;
-						}
-					}
-					break;
-
-				case ClassIDType.Font:
-					{
-						Font font = (Font)asset;
-						if (EngineBuiltInAssets.TryGetFont(font.Name, version, out engineAsset))
-						{
-							return true;
-						}
-					}
-					break;
-
-				case ClassIDType.Sprite:
-					{
-						Sprite sprite = (Sprite)asset;
-						if (EngineBuiltInAssets.TryGetSprite(sprite.Name, version, out engineAsset))
-						{
-							return true;
-						}
-					}
-					break;
-
-				case ClassIDType.LightmapParameters:
-					{
-						LightmapParameters lightParams = (LightmapParameters)asset;
-						if (EngineBuiltInAssets.TryGetLightmapParams(lightParams.Name, version, out engineAsset))
-						{
-							return true;
-						}
-					}
-					break;
-
-				case ClassIDType.MonoBehaviour:
-					{
-						MonoBehaviour behaviour = (MonoBehaviour)asset;
-						if (behaviour.Name != string.Empty)
-						{
-							if (EngineBuiltInAssets.TryGetBehaviour(behaviour.Name, version, out engineAsset))
-							{
-								return true;
-							}
-						}
-					}
-					break;
+				if (EngineBuiltInAssets.TryGetMaterial(material.Name, version, out engineAsset))
+				{
+					return true;
+				}
 			}
+			else if (asset is ITexture2D texture)
+			{
+				if (EngineBuiltInAssets.TryGetTexture(texture.Name, version, out engineAsset))
+				{
+					return true;
+				}
+			}
+			else if (asset is IMesh mesh)
+			{
+				if (EngineBuiltInAssets.TryGetMesh(mesh.Name, version, out engineAsset))
+				{
+					return true;
+				}
+			}
+			else if (asset is IShader shader)
+			{
+				if (EngineBuiltInAssets.TryGetShader(shader.ValidName, version, out engineAsset))
+				{
+					return true;
+				}
+			}
+			else if (asset is IFont font)
+			{
+				if (EngineBuiltInAssets.TryGetFont(font.Name, version, out engineAsset))
+				{
+					return true;
+				}
+			}
+			else if (asset is ISprite sprite)
+			{
+				if (EngineBuiltInAssets.TryGetSprite(sprite.Name, version, out engineAsset))
+				{
+					return true;
+				}
+			}
+			else if (asset is ILightmapParameters lightParams)
+			{
+				if (EngineBuiltInAssets.TryGetLightmapParams(lightParams.Name, version, out engineAsset))
+				{
+					return true;
+				}
+			}
+			else if (asset is IMonoBehaviour behaviour)
+			{
+				if (behaviour.Name != string.Empty)
+				{
+					if (EngineBuiltInAssets.TryGetBehaviour(behaviour.Name, version, out engineAsset))
+					{
+						return true;
+					}
+				}
+			}
+			
 			engineAsset = default;
 			return false;
 		}

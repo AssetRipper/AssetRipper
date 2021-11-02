@@ -1,6 +1,7 @@
 using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.SpriteAtlas;
+using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Converters.Sprite;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
@@ -290,6 +291,7 @@ namespace AssetRipper.Core.Classes.Sprite
 			return outlines;
 		}
 
+		public PPtr<ITexture2D> TexturePtr => RD.Texture.CastTo<ITexture2D>();
 		public float PixelsToUnits { get; set; }
 		public uint Extrude { get; set; }
 		public bool IsPolygon { get; set; }
