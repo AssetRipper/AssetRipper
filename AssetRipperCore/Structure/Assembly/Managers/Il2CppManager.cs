@@ -47,8 +47,11 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 			Cpp2IlApi.MakeDummyDLLs(true);
 
+			LibCpp2IL.InstructionSet instructionSet = LibCpp2IL.LibCpp2IlMain.Binary.InstructionSet;
+			Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found {instructionSet} instruction set.");
+
 			Cpp2IL.Core.BaseKeyFunctionAddresses keyFunctionAddresses = null;
-			if(IsAnalysisSupported(LibCpp2IL.LibCpp2IlMain.Binary.InstructionSet))
+			if(IsAddressScanSupported(instructionSet))
 			{
 				Logger.SendStatusChange("loading_step_locate_key_functions");
 				keyFunctionAddresses = Cpp2IlApi.ScanForKeyFunctionAddresses();
@@ -89,7 +92,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			return builder.ToString();
 		}
 
-		private static bool IsAnalysisSupported(LibCpp2IL.InstructionSet set) => set switch
+		private static bool IsAddressScanSupported(LibCpp2IL.InstructionSet set) => set switch
 		{
 			LibCpp2IL.InstructionSet.X86_32 => true,
 			LibCpp2IL.InstructionSet.X86_64 => true,
