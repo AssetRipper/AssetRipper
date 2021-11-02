@@ -1,13 +1,12 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files;
 using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 {
-	public interface IAssetImporter : IAsset
+	public interface IAssetImporter : IUnityObjectBase
 	{
-		ClassIDType ClassID { get; }
 		string AssetBundleName { get; set; }
 		string AssetBundleVariant { get; set; }
 		Dictionary<long, string> FileIDToRecycleName { get; set; }

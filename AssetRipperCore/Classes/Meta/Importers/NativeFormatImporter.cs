@@ -8,7 +8,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Meta.Importers
 {
-	public sealed class NativeFormatImporter : AssetImporter
+	public sealed class NativeFormatImporter : AssetImporter, INativeFormatImporter
 	{
 		public NativeFormatImporter(AssetLayout layout) : base(layout) { }
 
