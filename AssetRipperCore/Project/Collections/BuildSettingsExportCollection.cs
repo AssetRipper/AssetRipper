@@ -5,6 +5,7 @@ using AssetRipper.Core.Classes.NavMeshProjectSettings;
 using AssetRipper.Core.Classes.Physics2DSettings;
 using AssetRipper.Core.Classes.QualitySettings;
 using AssetRipper.Core.Classes.UnityConnectSettings;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;

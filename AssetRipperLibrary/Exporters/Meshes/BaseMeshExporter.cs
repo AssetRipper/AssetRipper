@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core;
 using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;

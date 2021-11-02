@@ -5,6 +5,7 @@ using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.OcclusionCullingData;
 using AssetRipper.Core.Classes.OcclusionCullingSettings;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;

@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Meta;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
 using System;

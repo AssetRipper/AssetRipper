@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Classes.Texture2D;

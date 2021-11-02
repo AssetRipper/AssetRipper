@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes.TerrainData;
+﻿using AssetRipper.Core.Classes.TerrainData;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles;

@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.Material;
@@ -8,6 +7,7 @@ using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;

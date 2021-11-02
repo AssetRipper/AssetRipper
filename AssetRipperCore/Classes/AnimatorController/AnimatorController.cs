@@ -3,6 +3,7 @@ using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer
 using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerParameter;
 using AssetRipper.Core.Classes.AnimatorController.State;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;

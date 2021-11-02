@@ -66,6 +66,7 @@ using AssetRipper.Core.Classes.UI;
 using AssetRipper.Core.Classes.UI.Canvas;
 using AssetRipper.Core.Classes.UnityConnectSettings;
 using AssetRipper.Core.Classes.WheelCollider;
+using AssetRipper.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 

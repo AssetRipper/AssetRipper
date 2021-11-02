@@ -5,7 +5,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Core
+namespace AssetRipper.Core.Interfaces
 {
 	public interface IUnityObjectBase : IAssetNew
 	{

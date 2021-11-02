@@ -2,6 +2,7 @@ using AssetRipper.Core.Classes.Material;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Shader.Blob;
 using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;

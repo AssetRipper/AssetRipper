@@ -5,6 +5,7 @@ using AssetRipper.Core.Classes.AnimatorStateMachine;
 using AssetRipper.Core.Classes.AnimatorTransition;
 using AssetRipper.Core.Classes.BlendTree;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using System.Collections.Generic;

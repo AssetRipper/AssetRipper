@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
 using System.IO;

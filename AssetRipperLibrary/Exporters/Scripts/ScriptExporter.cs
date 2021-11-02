@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core;
 using AssetRipper.Core.Classes;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;

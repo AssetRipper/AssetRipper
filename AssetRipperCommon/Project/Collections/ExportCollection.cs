@@ -11,6 +11,7 @@ using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using AssetRipper.Core.Interfaces;
 #if DEBUG
 #endif
 

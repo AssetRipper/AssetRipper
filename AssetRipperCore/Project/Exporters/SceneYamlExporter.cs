@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Project.Exporters

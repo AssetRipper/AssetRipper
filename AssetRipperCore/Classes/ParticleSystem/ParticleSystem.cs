@@ -6,6 +6,7 @@ using AssetRipper.Core.Classes.ParticleSystem.Shape;
 using AssetRipper.Core.Classes.ParticleSystem.SubEmitter;
 using AssetRipper.Core.Classes.ParticleSystem.Trigger;
 using AssetRipper.Core.Classes.ParticleSystem.UV;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math;

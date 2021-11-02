@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioManager;
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
@@ -19,6 +18,7 @@ using AssetRipper.Core.Classes.Rigidbody;
 using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Classes.UI.Canvas;
 using AssetRipper.Core.Classes.UnityConnectSettings;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Structure.GameStructure;
 using System;

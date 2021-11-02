@@ -2,6 +2,7 @@ using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.SpriteAtlas;
 using AssetRipper.Core.Converters.Sprite;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math;
