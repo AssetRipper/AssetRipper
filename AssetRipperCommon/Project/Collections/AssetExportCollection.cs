@@ -5,6 +5,7 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
+using AssetRipper.Core.VersionHandling;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -95,9 +96,9 @@ namespace AssetRipper.Core.Project.Collections
 			return AssetExporter.Export(container, Asset.Convert(container), filePath);
 		}
 
-		protected virtual AssetImporter CreateImporter(IExportContainer container)
+		protected virtual IAssetImporter CreateImporter(IExportContainer container)
 		{
-			NativeFormatImporter importer = new NativeFormatImporter(container.ExportLayout);
+			INativeFormatImporter importer = VersionManager.GetHandler(container.ExportVersion).ImporterFactory.CreateNativeFormatImporter(container.ExportLayout);
 			importer.MainObjectFileID = GetExportID(Asset);
 			return importer;
 		}

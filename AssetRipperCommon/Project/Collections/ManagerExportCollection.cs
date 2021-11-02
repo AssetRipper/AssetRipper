@@ -10,9 +10,9 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public class ManagerExportCollection : AssetExportCollection
 	{
-		public ManagerExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : this(assetExporter, (GlobalGameManager)asset) { }
+		public ManagerExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : this(assetExporter, (IGlobalGameManager)asset) { }
 
-		public ManagerExportCollection(IAssetExporter assetExporter, GlobalGameManager asset) : base(assetExporter, asset) { }
+		public ManagerExportCollection(IAssetExporter assetExporter, IGlobalGameManager asset) : base(assetExporter, asset) { }
 
 		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
