@@ -65,7 +65,7 @@ namespace AssetRipper.Core.Configuration
 
 		public virtual void ResetToDefaultValues()
 		{
-			DisableScriptImport = true;
+			DisableScriptImport = false;
 			IgnoreStreamingAssets = false;
 			ExportPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
