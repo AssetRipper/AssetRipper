@@ -40,7 +40,7 @@ namespace AssetRipper.Library.Configuration
 			AudioExportFormat = AudioExportFormat.Default;
 			ImageExportFormat = ImageExportFormat.Png;
 			MeshExportFormat = MeshExportFormat.Native;
-			ShaderExportMode = ShaderExportMode.Dummy;
+			ShaderExportMode = ShaderExportMode.Disassembly;
 			SpriteExportMode = SpriteExportMode.Native;
 			TerrainExportMode = TerrainExportMode.Native;
 			TextExportMode = TextExportMode.Parse;
