@@ -98,5 +98,8 @@
     "export_in_progress": "Exportando Assets\n{0}%\n{1}/{2}",
     "error_exporting_with_reason": "No se pudo exportar el contenido del juego: {0}",
     "audio_format_force_mp3": "Convertir a MP3",
-    "audio_format_force_mp3_description": "Convertir todos los archivos de audio a archivos MP3. No se recomienda porque volverá a comprimir archivos y provocará una pérdida de calidad. Solo Windows."
+    "audio_format_force_mp3_description": "Convertir todos los archivos de audio a archivos MP3. No se recomienda porque volverá a comprimir archivos y provocará una pérdida de calidad. Solo Windows.",
+    "loose_file_saved_at": "Archivo suelto guardado en {0}",
+    "mesh_format_fbx_primitive_description": "Formato estándar de la industria que se puede utilizar en casi todos los programas de edición 3D, incluido Unity. Solo contiene datos de malla. Esto rompe las referencias de exportación al activo de malla.",
+    "mesh_format_fbx_primitive": "Simple FBX (Primitivo)"
 }
