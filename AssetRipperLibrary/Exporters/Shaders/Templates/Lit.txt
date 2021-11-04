@@ -35,8 +35,6 @@ SubShader
 		float2 uv_AO = i.uv_texcoord * _AO_ST.xy + _AO_ST.zw;
 		o.Occlusion = tex2D( _AO, uv_AO ).r;
 		o.Alpha = 1;
-		}
-		ENDCG
 	}
-	Fallback "Diffuse"
+	ENDCG
 }

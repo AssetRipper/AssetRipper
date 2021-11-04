@@ -177,6 +177,4 @@ SubShader
 		}
 		UsePass "Hidden/Nature/Terrain/Utilities/PICKING"
 		UsePass "Hidden/Nature/Terrain/Utilities/SELECTION"
-		}
-	Fallback "Diffuse"
 }

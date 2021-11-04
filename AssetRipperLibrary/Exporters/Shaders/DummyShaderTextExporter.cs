@@ -75,7 +75,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				else
 				{
 					writer.WriteIndent(1);
-					writer.Write(FallbackDummyShader);
+					writer.Write(FallbackDummyShader.Replace("\r", ""));
 				}
 				writer.Write('\n');
 
@@ -100,7 +100,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 				writer.Write("\t//DummyShaderTextExporter\n");
 				writer.WriteIndent(1);
-				writer.Write(FallbackDummyShader);
+				writer.Write(FallbackDummyShader.Replace("\r", ""));
 
 				writer.Write('}');
 			}
