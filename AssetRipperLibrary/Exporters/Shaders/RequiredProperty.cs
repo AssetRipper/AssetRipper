@@ -5,18 +5,24 @@ namespace AssetRipper.Library.Exporters.Shaders
 {
 	public class RequiredProperty
 	{
+		public RequiredProperty() { }
 		public RequiredProperty(string name, PropertyType type)
 		{
-			Name = name ?? throw new ArgumentNullException(nameof(name));
-			Type = type;
+			PropertyName = name ?? throw new ArgumentNullException(nameof(name));
+			PropertyType = type;
 		}
 
-		public string Name { get; set; }
-		public PropertyType Type { get; set; }
+		public string PropertyName { get; set; }
+		public string PropertyTypeName
+		{
+			get => PropertyType.ToString();
+			set => PropertyType = Enum.Parse<PropertyType>(value);
+		}
+		public PropertyType PropertyType { get; set; }
 
 		public bool IsMatch(SerializedProperty property)
 		{
-			return this.Name == property.Name && Type.IsMatch(property.Type);
+			return this.PropertyName == property.Name && PropertyType.IsMatch(property.Type);
 		}
 	}
 }

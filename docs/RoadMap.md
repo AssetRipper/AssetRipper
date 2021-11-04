@@ -7,7 +7,7 @@
 * Mesh Export
   * Primitive FBX export (done!)
 * Shader Export
-  * Reformat the shader export system
+  * Reformat the shader export system (done!)
   * Export shader source code when available (done!)
 * Code Cleanup
   * Remove Reading namespace (done!)

@@ -1,0 +1,95 @@
+{
+	"Templates" : [
+		{
+			"TemplateName" : "Default",
+			"RequiredProperties" : []
+		},
+		{
+			"TemplateName" : "SingleTexture",
+			"RequiredProperties" : [
+				{
+					"PropertyName" : "_MainTex",
+					"PropertyTypeName" : "Texture"
+				}]
+		},
+		{
+			"TemplateName" : "SingleColor",
+			"RequiredProperties" : [
+				{
+					"PropertyName" : "_Color",
+					"PropertyTypeName" : "Color"
+				}]
+		},
+		{
+			"TemplateName" : "TransparentDiffuse",
+			"RequiredProperties" : [
+				{
+					"PropertyName" : "_MainTex",
+					"PropertyTypeName" : "Texture"
+				},
+				{
+					"PropertyName" : "_Color",
+					"PropertyTypeName" : "Color"
+				}]
+		},
+		{
+			"TemplateName" : "Billboard",
+			"RequiredProperties" : [
+				{
+					"PropertyName" : "_MainTex",
+					"PropertyTypeName" : "Texture"
+				},
+				{
+					"PropertyName" : "_Clipping",
+					"PropertyTypeName" : "Range"
+				},
+				{
+					"PropertyName" : "_texcoord",
+					"PropertyTypeName" : "Texture"
+				},
+				{
+					"PropertyName" : "__dirty",
+					"PropertyTypeName" : "Single"
+				}
+			]
+		},
+		{
+			"TemplateName" : "ParticlesLit",
+			"RequiredProperties" : [
+				{
+					"PropertyName" : "_MainTex",
+					"PropertyTypeName" : "Texture"
+				},
+				{
+					"PropertyName" : "_InvFade",
+					"PropertyTypeName" : "Range"
+				},
+				{
+					"PropertyName" : "_TintColor",
+					"PropertyTypeName" : "Color"
+				}
+			]
+		},
+		{
+			"TemplateName" : "Unlit",
+			"RequiredProperties" : [
+				{
+					"PropertyName" : "_MainTex",
+					"PropertyTypeName" : "Texture"
+				},
+				{
+					"PropertyName" : "_Culling",
+					"PropertyTypeName" : "Range"
+				},
+				{
+					"PropertyName" : "_texcoord",
+					"PropertyTypeName" : "Texture"
+				},
+				{
+					"PropertyName" : "__dirty",
+					"PropertyTypeName" : "Single"
+				}
+			]
+		}
+	]
+}

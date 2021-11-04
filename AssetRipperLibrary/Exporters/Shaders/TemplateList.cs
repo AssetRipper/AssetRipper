@@ -1,45 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Logging;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.Json;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
 	public static class TemplateList
 	{
+		public const string ShaderTemplatePrefix = "AssetRipper.Library.Exporters.Shaders.Templates.";
+		public const string ShaderTemplateExtension = ".txt";
+		public const string TemplatesJsonPath = ShaderTemplatePrefix + "Templates.json";
 		public static List<TemplateShader> Templates { get; }
-
-		private static List<T> ListFromSingle<T>(T element) => new List<T>(new[] { element });
 
 		static TemplateList()
 		{
-			Templates = new List<TemplateShader>();
-			Templates.Add(new TemplateShader()
+			Templates = LoadTemplates();
+		}
+
+		public static TemplateShader GetBestTemplate(Shader shader)
+		{
+			return Templates.Where(tmp => tmp.IsMatch(shader)).MaxBy(matchedTmp => matchedTmp.RequiredProperties.Count);
+		}
+
+		private static List<TemplateShader> LoadTemplates()
+		{
+			Logger.Verbose("Loading shader templates");
+			string jsonText = GetTextFromResource(TemplatesJsonPath);
+			
+			List<TemplateShader> templates = JsonSerializer.Deserialize<TemplateJson>(jsonText).Templates;
+			foreach(TemplateShader template in templates)
 			{
-				ShaderText =
-					"\t\tsampler2D _MainTex;\n" +
-					"\t\tstruct Input\n" +
-					"\t\t{\n" +
-					"\t\t\tfloat2 uv_MainTex;\n" +
-					"\t\t};\n" +
-					"\t\tvoid surf(Input IN, inout SurfaceOutputStandard o)\n" +
-					"\t\t{\n" +
-					"\t\t\tfixed4 c = tex2D(_MainTex, IN.uv_MainTex);\n" +
-					"\t\t\to.Albedo = c.rgb;\n" +
-					"\t\t}\n"
-			});
-			Templates.Add(new TemplateShader()
-			{
-				RequiredProperties = ListFromSingle(new RequiredProperty("_MainTex", PropertyType.Texture)),
-				ShaderText = 
-					"\t\tsampler2D _MainTex;\n" +
-					"\t\tstruct Input\n" +
-					"\t\t{\n" +
-					"\t\t\tfloat2 uv_MainTex;\n" +
-					"\t\t};\n" +
-					"\t\tvoid surf(Input IN, inout SurfaceOutputStandard o)\n" +
-					"\t\t{\n" +
-					"\t\t\tfixed4 c = tex2D(_MainTex, IN.uv_MainTex);\n" +
-					"\t\t\to.Albedo = c.rgb;\n" +
-					"\t\t}\n",
-			});
+				string path = ShaderTemplatePrefix + template.TemplateName + ShaderTemplateExtension;
+				template.ShaderText = GetTextFromResource(path);
+			}
+			return templates;
+		}
+
+		private static string GetTextFromResource(string path)
+		{
+			Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
+			using StreamReader reader = new(stream);
+			return reader.ReadToEnd().Replace("\r","");
 		}
 	}
 }

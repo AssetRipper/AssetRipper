@@ -99,9 +99,10 @@
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
   </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="C:\Users\jrpri\.nuget\packages\naudio.lame\2.0.0\build\libmp3lame.32.dll" />
-    </ItemGroup>
-  
+	
+	<ItemGroup>
+		<None Remove="Exporters\Shaders\Templates\*" />
+		<EmbeddedResource Include="Exporters\Shaders\Templates\*" />
+	</ItemGroup>
+	
 </Project>

@@ -16,34 +16,10 @@ namespace AssetRipper.Library.Exporters.Shaders
 {
 	public class DummyShaderTextExporter : BinaryAssetExporter
 	{
-		private static bool preferGles = false;
-		public const string OneSidedDummyShader = @"
-	//DummyShaderTextExporter - One Sided
+		public const string FallbackDummyShader = @"
 	SubShader{
 		Tags { ""RenderType"" = ""Opaque"" }
 		LOD 200
-		CGPROGRAM
-#pragma surface surf Standard fullforwardshadows
-#pragma target 3.0
-		sampler2D _MainTex;
-		struct Input
-		{
-			float2 uv_MainTex;
-		};
-		void surf(Input IN, inout SurfaceOutputStandard o)
-		{
-			fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
-			o.Albedo = c.rgb;
-		}
-		ENDCG
-	}
-";
-		public const string TwoSidedDummyShader = @"
-	//DummyShaderTextExporter - Two Sided
-	SubShader{
-		Tags { ""RenderType"" = ""Opaque"" }
-		LOD 200
-		Cull off
 		CGPROGRAM
 #pragma surface surf Standard fullforwardshadows
 #pragma target 3.0
@@ -64,10 +40,8 @@ namespace AssetRipper.Library.Exporters.Shaders
 		/// At least 5.5
 		/// </summary>
 		public static bool IsSerialized(UnityVersion version) => version.IsGreaterEqual(5, 5);
-		/// <summary>
-		/// At least 5.3
-		/// </summary>
-		public static bool IsEncoded(UnityVersion version) => version.IsGreaterEqual(5, 3);
+
+		public override bool IsHandle(IUnityObjectBase asset) => asset is Shader;
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
@@ -91,9 +65,20 @@ namespace AssetRipper.Library.Exporters.Shaders
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
 				writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm.Name);
 				Export(shader.ParsedForm.PropInfo, writer);
-				writer.WriteIndent(1);
-				writer.Write(OneSidedDummyShader);
-				//writer.Write(TwoSidedDummyShader);
+				
+				TemplateShader templateShader = TemplateList.GetBestTemplate(shader);
+				writer.Write("\t//DummyShaderTextExporter\n");
+				if (templateShader != null)
+				{
+					writer.Write(templateShader.ShaderText);
+				}
+				else
+				{
+					writer.WriteIndent(1);
+					writer.Write(FallbackDummyShader);
+				}
+				writer.Write('\n');
+
 				if (shader.ParsedForm.FallbackName != string.Empty)
 				{
 					writer.WriteIndent(1);
@@ -106,23 +91,18 @@ namespace AssetRipper.Library.Exporters.Shaders
 				}
 				writer.Write('}');
 			}
-			else if (!preferGles)
+			else
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
 				string header = Encoding.UTF8.GetString(shader.Script);
 				var subshaderIndex = header.IndexOf("SubShader");
 				writer.WriteString(header, 0, subshaderIndex);
+
+				writer.Write("\t//DummyShaderTextExporter\n");
 				writer.WriteIndent(1);
-				writer.Write(OneSidedDummyShader);
-				//writer.Write(TwoSidedDummyShader);
+				writer.Write(FallbackDummyShader);
+
 				writer.Write('}');
-			}
-			else
-			{
-				using (BinaryWriter writer = new BinaryWriter(stream))
-				{
-					writer.Write(shader.Script);
-				}
 			}
 		}
 
