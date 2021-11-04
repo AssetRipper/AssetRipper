@@ -155,18 +155,15 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 			VertexCount = (int)reader.ReadUInt32();
 
-			if (HasChannels(reader.Version))
+			if (HasChannels(reader.Version)) // 4 and greater
 			{
 				Channels = reader.ReadAssetArray<ChannelInfo>();
 				reader.AlignStream();
 			}
-			else
+			
+			if (HasStreams(reader.Version)) // less than 5
 			{
-				GetChannels(reader.Version);
-			}
-			if (HasStreams(reader.Version))
-			{
-				if (IsStreamStatic(reader.Version))
+				if (IsStreamStatic(reader.Version)) // less than 4
 				{
 					Streams = new StreamInfo[StaticStreamCount];
 					for (int i = 0; i < StaticStreamCount; i++)
@@ -174,14 +171,21 @@ namespace AssetRipper.Core.Classes.Mesh
 						Streams[i] = reader.ReadAsset<StreamInfo>();
 					}
 				}
-				else
+				else // 4.x.x
 				{
 					Streams = reader.ReadAssetArray<StreamInfo>();
 				}
 			}
-			else
+			else //5 and higher
 			{
+				//Uses channels to get streams
 				GetStreams(reader.Version);
+			}
+
+			if (!HasChannels(reader.Version)) //less than 4
+			{
+				//Uses streams to get channels
+				GetChannels(reader.Version);
 			}
 
 			Data = reader.ReadByteArray();
