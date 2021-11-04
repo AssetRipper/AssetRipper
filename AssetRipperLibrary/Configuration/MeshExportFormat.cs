@@ -35,4 +35,18 @@
 	 * .dxf
 	 * .obj
 	 */
+
+	public static class MeshExportFormatExtensions
+	{
+		public static string GetFileExtension(this MeshExportFormat format) => format switch
+		{
+			MeshExportFormat.Native => "asset",
+			MeshExportFormat.Obj => "obj",
+			MeshExportFormat.StlAscii => "stl",
+			MeshExportFormat.StlBinary => "stl",
+			MeshExportFormat.GlbPrimitive => "glb",
+			MeshExportFormat.FbxPrimitive => "fbx",
+			_ => null,
+		};
+	}
 }
