@@ -1,33 +1,22 @@
-Shader "Asset Ripper/Tri-Planar"
+SubShader
 {
-	Properties
-	{
-		_MainTex("Main Texture", 2D) = "white" {}
-		_SecTex("Secondary Texture", 2D) = "white" {}
-		_ThiTex("Bottom Texture", 2D) = "white" {}
-		_Falloff("Falloff", Float) = 1
-		_Tiling("Tiling", Float) = 1
-		[HideInInspector] __dirty( "", Int ) = 1
-	}
-	SubShader
-	{
-		Tags{ "RenderType" = "Opaque"  "Queue" = "Geometry+0" }
-		LOD 500
-		Cull Off
-		CGINCLUDE
-		#include "UnityPBSLighting.cginc"
-		#include "Lighting.cginc"
-		#pragma target 3.0
-		#pragma multi_compile_instancing
-		#pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
-		#ifdef UNITY_PASS_SHADOWCASTER
+	Tags{ "RenderType" = "Opaque"  "Queue" = "Geometry+0" }
+	LOD 500
+	Cull Off
+	CGINCLUDE
+	#include "UnityPBSLighting.cginc"
+	#include "Lighting.cginc"
+	#pragma target 3.0
+	#pragma multi_compile_instancing
+	#pragma instancing_options assumeuniformscaling nomatrices nolightprobe nolightmap forwardadd
+	#ifdef UNITY_PASS_SHADOWCASTER
 			#undef INTERNAL_DATA
 			#undef WorldReflectionVector
 			#undef WorldNormalVector
 			#define INTERNAL_DATA half3 internalSurfaceTtoW0; half3 internalSurfaceTtoW1; half3 internalSurfaceTtoW2;
 			#define WorldReflectionVector(data,normal) reflect (data.worldRefl, half3(dot(data.internalSurfaceTtoW0,normal), dot(data.internalSurfaceTtoW1,normal), dot(data.internalSurfaceTtoW2,normal)))
 			#define WorldNormalVector(data,normal) half3(dot(data.internalSurfaceTtoW0,normal), dot(data.internalSurfaceTtoW1,normal), dot(data.internalSurfaceTtoW2,normal))
-		#endif
+	#endif
 		struct Input
 		{
 			float3 worldPos;
@@ -188,6 +177,6 @@ Shader "Asset Ripper/Tri-Planar"
 		}
 		UsePass "Hidden/Nature/Terrain/Utilities/PICKING"
 		UsePass "Hidden/Nature/Terrain/Utilities/SELECTION"
-	}
+		}
 	Fallback "Diffuse"
 }
