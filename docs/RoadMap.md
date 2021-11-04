@@ -1,26 +1,36 @@
 # Development Roadmap
 
-## 0.1.8.0
-* Loose File Export (done by SamboyCoding!)
+## 0.2.0.0
 * Audio Export
   * WWise audio extraction
-* Mesh Export
-  * Primitive FBX export (done!)
-* Shader Export
-  * Reformat the shader export system (done!)
-  * Export shader source code when available (done!)
-* Code Cleanup
-  * Remove Reading namespace (done!)
-  * Rework the Project Exporter to better support future plans of not relying on ClassIDType (done!)
-  * Move more code to the Common and Library projects
-  * Improve Console logging performance (done!)
-
-## 0.2.0.0
-* Overhaul struct reading, which would enable:
-  * universal version support
-  * support for exporting any unity component
-  * a cleaner, smaller codebase
-  * exporting to the original unity version
+* Plugin Support
+  * Add support for injecting custom asset types
+  * Add support for reading alternative file formats
+* Convert Exporters to the new Interface System
+  * BuildSettings exporter
+  * Scene and Prefab exporter
+  * Audio Clip exporters
+  * Mesh exporters
+  * Script exporter
+  * Shader exporter
+  * Terrain exporter
+  * Texture exporter
+* Move more classes to the Common project
+  * Move ProjectAssetContainer
+  * Move ProjectExporter and ProjectExporterBase
+  * Move the platform classes
+  * Move the assembly management classes
+  * Move GameStructureProcessor
+  * Move GameStructure
+* Struct Reading Overhaul
+  * Yaml method generation in the AssemblyDumper project
+  * Apply interfaces in the generated assemblies
+  * Implement generation of version specific Asset Factories
+  * Implement a system for loading the assemblies on demand
+* Finishing touches
+  * Remove the `Classes` and `Converters` namespaces
+  * Remove any additional legacy code
+  * Merge the common project back into the core project
  
 ## 0.2.1.0
 This release will be primarily focused on cleaning up and refactoring the project. Such cleanup may include:
@@ -58,11 +68,13 @@ This release will likely focus on improving the user experience in the GUI
 ## Planned But Unscheduled
 * GUI improvements
   * Performance enhancements for viewing asset types with large contents, such as 9000 game objects
+  * Check for updates automatically on launch
 * Export
   * Mesh Export
     * FBX export (full)
     * GLB export (full)
     * PLY export
+    * PMX export
   * Script Export
     * Option to reference assemblies instead of scripts
     * IL2Cpp method body reconstruction
