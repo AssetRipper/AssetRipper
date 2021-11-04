@@ -1,0 +1,56 @@
+Shader "Asset Ripper/Lit"
+{
+	Properties
+	{
+		[HDR]_MainTex("Albedo (RGBA)", 2D) = "white" {}
+		_Metallic("Metallic (RGB)", 2D) = "black" {}
+		_Roughness("Smoothness", Range( 0 , 1)) = 0.3
+		_AO("Ambient Occlusion (Grayscale)", 2D) = "white" {}
+		_BumpMap("Normal (RB)", 2D) = "bump" {}
+		[HDR]_Emission("Emission", Color) = (0,0,0,0)
+		_Culling("Culling", Range( 0 , 2)) = 2
+		[HideInInspector] _texcoord( "", 2D ) = "white" {}
+		[HideInInspector] __dirty( "", Int ) = 1
+	}
+	SubShader
+	{
+		Tags{ "RenderType" = "Opaque"  "Queue" = "Geometry+0" "IsEmissive" = "true"  }
+		LOD 200
+		Cull [_Culling]
+		CGPROGRAM
+		#pragma target 3.0
+		#pragma multi_compile_instancing
+		#pragma surface surf Standard keepalpha addshadow fullforwardshadows dithercrossfade 
+		struct Input
+		{
+			float2 uv_texcoord;
+		};
+		uniform float _Culling;
+		uniform sampler2D _BumpMap;
+		uniform float4 _BumpMap_ST;
+		uniform sampler2D _MainTex;
+		uniform float4 _MainTex_ST;
+		uniform float4 _Emission;
+		uniform sampler2D _Metallic;
+		uniform float4 _Metallic_ST;
+		uniform float _Roughness;
+		uniform sampler2D _AO;
+		uniform float4 _AO_ST;
+		void surf( Input i , inout SurfaceOutputStandard o )
+		{
+			float2 uv_BumpMap = i.uv_texcoord * _BumpMap_ST.xy + _BumpMap_ST.zw;
+			o.Normal = UnpackNormal( tex2D( _BumpMap, uv_BumpMap ) );
+			float2 uv_MainTex = i.uv_texcoord * _MainTex_ST.xy + _MainTex_ST.zw;
+			o.Albedo = tex2D( _MainTex, uv_MainTex ).rgb;
+			o.Emission = _Emission.rgb;
+			float2 uv_Metallic = i.uv_texcoord * _Metallic_ST.xy + _Metallic_ST.zw;
+			o.Metallic = tex2D( _Metallic, uv_Metallic ).r;
+			o.Smoothness = _Roughness;
+			float2 uv_AO = i.uv_texcoord * _AO_ST.xy + _AO_ST.zw;
+			o.Occlusion = tex2D( _AO, uv_AO ).r;
+			o.Alpha = 1;
+		}
+		ENDCG
+	}
+	Fallback "Diffuse"
+}
