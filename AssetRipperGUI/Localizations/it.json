@@ -98,5 +98,8 @@
     "error_exporting_with_reason": "Impossibile esportare i contenuti del gioco: {0}",
     "error_importing_with_reason": "Impossibile caricare i contenuti del gioco: {0}",
     "audio_format_force_mp3": "Converti in MP3",
-    "audio_format_force_mp3_description": "Converti tutti i file audio in file MP3. Non raccomandato perché i file verranno ricompressi, causando così perdita di qualità. Solo Windows."
+    "audio_format_force_mp3_description": "Converti tutti i file audio in file MP3. Non raccomandato perché i file verranno ricompressi, causando così perdita di qualità. Solo Windows.",
+    "mesh_format_fbx_primitive_description": "Formato standard del settore utilizzabile in quasi tutti i software di editing 3D, incluso Unity. Contiene solo i dati delle mesh. Ciò rompe i riferimenti alla mesh esportati.",
+    "loose_file_saved_at": "File non compresso salvato in {0}",
+    "mesh_format_fbx_primitive": "FBX Semplice"
 }
