@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TagManager
 {
-	public sealed class TagManager : GlobalGameManager
+	public sealed class TagManager : GlobalGameManager, ITagManager
 	{
 		public TagManager(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -78,14 +78,6 @@ namespace AssetRipper.Core.Classes.TagManager
 		public string[] Tags { get; set; }
 		public string[] Layers { get; set; }
 		public SortingLayerEntry[] SortingLayers { get; set; }
-
-		public const string UntaggedTag = "Untagged";
-		public const string RespawnTag = "Respawn";
-		public const string FinishTag = "Finish";
-		public const string EditorOnlyTag = "EditorOnly";
-		public const string MainCameraTag = "MainCamera";
-		public const string PlayerTag = "Player";
-		public const string GameControllerTag = "GameController";
 
 		public const string TagsName = "tags";
 		public const string LayersName = "layers";

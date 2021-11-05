@@ -37,23 +37,21 @@ namespace AssetRipper.Core.Project
 
 			foreach (IUnityObjectBase asset in assets)
 			{
-				switch (asset.ClassID)
+				if(asset is IBuildSettings buildSettings)
 				{
-					case ClassIDType.BuildSettings:
-						m_buildSettings = (BuildSettings)asset;
-						break;
-
-					case ClassIDType.TagManager:
-						m_tagManager = (TagManager)asset;
-						break;
-
-					case ClassIDType.ResourceManager:
-						AddResources((ResourceManager)asset);
-						break;
-
-					case ClassIDType.AssetBundle:
-						AddBundleAssets((AssetBundle)asset);
-						break;
+					m_buildSettings = buildSettings;
+				}
+				else if (asset is ITagManager tagManager)
+				{
+					m_tagManager = tagManager;
+				}
+				else if (asset is IAssetBundle assetBundle)
+				{
+					AddBundleAssets(assetBundle);
+				}
+				else if (asset is IResourceManager resourceManager)
+				{
+					AddResources(resourceManager);
 				}
 			}
 
@@ -219,20 +217,20 @@ namespace AssetRipper.Core.Project
 			switch (tagID)
 			{
 				case 0:
-					return TagManager.UntaggedTag;
+					return TagManagerConstants.UntaggedTag;
 				case 1:
-					return TagManager.RespawnTag;
+					return TagManagerConstants.RespawnTag;
 				case 2:
-					return TagManager.FinishTag;
+					return TagManagerConstants.FinishTag;
 				case 3:
-					return TagManager.EditorOnlyTag;
+					return TagManagerConstants.EditorOnlyTag;
 				//case 4:
 				case 5:
-					return TagManager.MainCameraTag;
+					return TagManagerConstants.MainCameraTag;
 				case 6:
-					return TagManager.PlayerTag;
+					return TagManagerConstants.PlayerTag;
 				case 7:
-					return TagManager.GameControllerTag;
+					return TagManagerConstants.GameControllerTag;
 			}
 			if (m_tagManager != null)
 			{
@@ -257,19 +255,19 @@ namespace AssetRipper.Core.Project
 		{
 			switch (tagName)
 			{
-				case TagManager.UntaggedTag:
+				case TagManagerConstants.UntaggedTag:
 					return 0;
-				case TagManager.RespawnTag:
+				case TagManagerConstants.RespawnTag:
 					return 1;
-				case TagManager.FinishTag:
+				case TagManagerConstants.FinishTag:
 					return 2;
-				case TagManager.EditorOnlyTag:
+				case TagManagerConstants.EditorOnlyTag:
 					return 3;
-				case TagManager.MainCameraTag:
+				case TagManagerConstants.MainCameraTag:
 					return 5;
-				case TagManager.PlayerTag:
+				case TagManagerConstants.PlayerTag:
 					return 6;
-				case TagManager.GameControllerTag:
+				case TagManagerConstants.GameControllerTag:
 					return 7;
 			}
 			if (m_tagManager != null)
@@ -285,11 +283,11 @@ namespace AssetRipper.Core.Project
 			return 0;
 		}
 
-		private void AddResources(ResourceManager manager)
+		private void AddResources(IResourceManager manager)
 		{
-			foreach (KeyValuePair<string, PPtr<Object>> kvp in manager.Container)
+			foreach (KeyValuePair<string, PPtr<IUnityObjectBase>> kvp in manager.GetAssets())
 			{
-				Object asset = kvp.Value.FindAsset(manager.File);
+				IUnityObjectBase asset = kvp.Value.FindAsset(manager.File);
 				if (asset == null)
 				{
 					continue;
@@ -309,19 +307,19 @@ namespace AssetRipper.Core.Project
 			}
 		}
 
-		private void AddBundleAssets(AssetBundle bundle)
+		private void AddBundleAssets(IAssetBundle bundle)
 		{
 			string bundleName = AssetBundle.HasAssetBundleName(bundle.File.Version) ? bundle.AssetBundleName : bundle.File.Name;
 			string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
 			string directory = Path.Combine(AssetBundleFullPath, bundleName);
-			foreach (KeyValuePair<string, AssetInfo> kvp in bundle.Container)
+			foreach (KeyValuePair<string, IAssetInfo> kvp in bundle.GetAssets())
 			{
 				// skip shared bundle assets, because we need to export them in their bundle directory
-				if (kvp.Value.Asset.FileIndex != 0)
+				if (kvp.Value.AssetPtr.FileIndex != 0)
 				{
 					continue;
 				}
-				Object asset = kvp.Value.Asset.FindAsset(bundle.File);
+				IUnityObjectBase asset = kvp.Value.AssetPtr.FindAsset(bundle.File);
 				if (asset == null)
 				{
 					continue;
@@ -384,8 +382,8 @@ namespace AssetRipper.Core.Project
 		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
 		private readonly Dictionary<IUnityObjectBase, ProjectAssetPath> m_pathAssets = new Dictionary<IUnityObjectBase, ProjectAssetPath>();
 
-		private readonly BuildSettings m_buildSettings;
-		private readonly TagManager m_tagManager;
+		private readonly IBuildSettings m_buildSettings;
+		private readonly ITagManager m_tagManager;
 		private readonly SceneExportCollection[] m_scenes;
 	}
 }

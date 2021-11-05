@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.ResourceManager
 {
-	public sealed class ResourceManager : GlobalGameManager
+	public sealed class ResourceManager : GlobalGameManager, IResourceManager
 	{
 		public ResourceManager(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -60,6 +60,11 @@ namespace AssetRipper.Core.Classes.ResourceManager
 				node.Add(DependentAssetsName, DependentAssets.ExportYAML(container));
 			}
 			return node;
+		}
+
+		public KeyValuePair<string, PPtr<IUnityObjectBase>>[] GetAssets()
+		{
+			return Container.Select(t => new KeyValuePair<string, PPtr<IUnityObjectBase>>(t.Key, t.Value.CastTo<IUnityObjectBase>())).ToArray();
 		}
 
 		public KeyValuePair<string, PPtr<Object.Object>>[] Container { get; set; }

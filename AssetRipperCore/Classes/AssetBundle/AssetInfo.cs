@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AssetBundle
 {
-	public struct AssetInfo : IAssetReadable, IDependent
+	public struct AssetInfo : IAssetReadable, IDependent, IAssetInfo
 	{
 		/// <summary>
 		/// 2.5.0 and greater
@@ -32,6 +32,11 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		public int PreloadIndex { get; set; }
 		public int PreloadSize { get; set; }
 
+		/// <summary>
+		/// Needs to stay a field
+		/// </summary>
 		public PPtr<Object.Object> Asset;
+
+		public PPtr<IUnityObjectBase> AssetPtr => Asset.CastTo<IUnityObjectBase>();
 	}
 }

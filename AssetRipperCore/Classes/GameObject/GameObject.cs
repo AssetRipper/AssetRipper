@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Classes.GameObject
 				Component = Array.Empty<ComponentPair>();
 			}
 			Name = string.Empty;
-			TagString = TagManager.TagManager.UntaggedTag;
+			TagString = TagManager.TagManagerConstants.UntaggedTag;
 			IsActive = true;
 		}
 

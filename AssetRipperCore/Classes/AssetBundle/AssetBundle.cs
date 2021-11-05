@@ -13,7 +13,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AssetBundle
 {
-	public sealed class AssetBundle : NamedObject
+	public sealed class AssetBundle : NamedObject, IAssetBundle
 	{
 		public AssetBundle(Parser.Asset.AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -150,6 +150,11 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
+		}
+
+		public KeyValuePair<string, IAssetInfo>[] GetAssets()
+		{
+			return Container.Select(t => new KeyValuePair<string, IAssetInfo>(t.Key, t.Value)).ToArray();
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();
