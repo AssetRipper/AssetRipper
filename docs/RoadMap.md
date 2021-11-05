@@ -18,7 +18,7 @@
 * Move more classes to the Common project
   * Move ProjectAssetContainer
   * Move ProjectExporter and ProjectExporterBase
-  * Move the platform classes
+  * Move the platform classes (done!)
   * Move the assembly management classes (done!)
   * Move GameStructureProcessor
   * Move GameStructure
