@@ -5,7 +5,9 @@ using AssetRipper.Core.Classes.Misc.Serializable.Gradient;
 using AssetRipper.Core.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Structure.Assembly.Mono;
+using AssetRipper.Core.VersionHandling;
 using System;
 using System.Collections.Generic;
 using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
@@ -40,61 +42,22 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			Name = name ?? throw new ArgumentNullException(nameof(name));
 		}
 
-		public static IAsset CreateEngineAsset(string name)
-		{
-			switch (name)
-			{
-				case Vector2Name:
-					return new Vector2f();
-				case Vector2IntName:
-					return new Vector2i();
-				case Vector3Name:
-					return new Vector3f();
-				case Vector3IntName:
-					return new Vector3i();
-				case Vector4Name:
-					return new Vector4f();
-				case RectName:
-					return new Rectf();
-				case BoundsName:
-					return new AABB();
-				case BoundsIntName:
-					return new AABBi();
-				case QuaternionName:
-					return new Quaternionf();
-				case Matrix4x4Name:
-					return new Matrix4x4f();
-				case ColorName:
-					return new ColorRGBAf();
-				case Color32Name:
-					return new ColorRGBA32();
-				case LayerMaskName:
-					return new LayerMask();
-				case AnimationCurveName:
-					return new AnimationCurveTpl<Float>();
-				case GradientName:
-					return new Gradient();
-				case RectOffsetName:
-					return new RectOffset();
-				case GUIStyleName:
-					return new GUIStyle();
-
-				case PropertyNameName:
-					return new PropertyName();
-
-				default:
-					throw new NotImplementedException(name);
-			}
-		}
-
 		public SerializableStructure CreateSerializableStructure()
 		{
 			return new SerializableStructure(this, 0);
 		}
 
-		public IAsset CreateInstance(int depth)
+		public IAsset CreateInstance(int depth, UnityVersion version)
 		{
-			return CreateInstance(this, depth);
+			if (MonoUtils.IsEngineStruct(this.Namespace, this.Name))
+			{
+				return VersionManager.GetHandler(version).AssetFactory.CreateEngineAsset(this.Name);
+			}
+			if (this.IsEnginePointer())
+			{
+				return new SerializablePointer();
+			}
+			return new SerializableStructure(this, depth);
 		}
 
 		public Field GetField(int index)
@@ -141,19 +104,6 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 		public override string ToString()
 		{
 			return Namespace.Length == 0 ? Name : $"{Namespace}.{Name}";
-		}
-
-		private static IAsset CreateInstance(SerializableType type, int depth)
-		{
-			if (MonoUtils.IsEngineStruct(type.Namespace, type.Name))
-			{
-				return CreateEngineAsset(type.Name);
-			}
-			if (type.IsEnginePointer())
-			{
-				return new SerializablePointer();
-			}
-			return new SerializableStructure(type, depth);
 		}
 
 		public string Namespace { get; }

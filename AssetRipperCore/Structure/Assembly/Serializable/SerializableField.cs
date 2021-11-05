@@ -180,7 +180,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 						IAsset[] structures = new IAsset[count];
 						for (int i = 0; i < count; i++)
 						{
-							IAsset structure = etalon.Type.CreateInstance(depth + 1);
+							IAsset structure = etalon.Type.CreateInstance(depth + 1, reader.Version);
 							structure.Read(reader);
 							structures[i] = structure;
 						}
@@ -188,7 +188,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 					}
 					else
 					{
-						IAsset structure = etalon.Type.CreateInstance(depth + 1);
+						IAsset structure = etalon.Type.CreateInstance(depth + 1, reader.Version);
 						structure.Read(reader);
 						CValue = structure;
 					}
