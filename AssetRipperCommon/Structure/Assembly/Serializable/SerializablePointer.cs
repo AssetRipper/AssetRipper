@@ -5,7 +5,6 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
-using Object = AssetRipper.Core.Classes.Object.Object;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable
 {
@@ -31,6 +30,6 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			return Pointer.ExportYAML(container);
 		}
 
-		public PPtr<Object> Pointer;
+		public PPtr<IUnityObjectBase> Pointer;
 	}
 }

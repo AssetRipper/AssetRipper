@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetRipper.Core.Interfaces;
+using System;
 
 namespace AssetRipper.Core.Extensions
 {
@@ -6,6 +7,9 @@ namespace AssetRipper.Core.Extensions
 	{
 		public static ClassIDType ToClassIDType(this Type _this)
 		{
+			if (_this == typeof(IUnityObjectBase))
+				return ClassIDType.Object;
+
 			if (Enum.TryParse(_this.Name, out ClassIDType classID))
 			{
 				return classID;
