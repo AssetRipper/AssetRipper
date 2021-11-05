@@ -100,7 +100,8 @@ namespace AssetRipper.GUI
 			NewUiFileListItem? looseFiles = new("Loose Resource Files");
 			foreach (ResourceFile resourceFile in structure.FileCollection.GameResourceFiles)
 			{
-				looseFiles.SubItems.Add(new(new DummyAssetForLooseResourceFile(resourceFile)));
+				if(resourceFile != null)
+					looseFiles.SubItems.Add(new(new DummyAssetForLooseResourceFile(resourceFile)));
 			}
 
 			ret.Add(looseFiles);
