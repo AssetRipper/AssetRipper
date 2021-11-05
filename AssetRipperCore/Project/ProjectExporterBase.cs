@@ -27,7 +27,6 @@ namespace AssetRipper.Core.Project
 		protected ManagerAssetExporter ManagerExporter { get; } = new ManagerAssetExporter();
 		protected BuildSettingsExporter BuildSettingsExporter { get; } = new BuildSettingsExporter();
 		protected ScriptableObjectExporter ScriptableExporter { get; } = new ScriptableObjectExporter();
-		protected AnimatorControllerExporter AnimatorControllerExporter { get; } = new AnimatorControllerExporter();
 		protected DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
 
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
@@ -52,7 +51,6 @@ namespace AssetRipper.Core.Project
 		protected void OverrideYamlExporter(ClassIDType classType)
 		{
 			OverrideExporter(classType, DefaultExporter);
-			OverrideExporter(classType, AnimatorControllerExporter);
 			OverrideExporter(classType, ScriptableExporter);
 			OverrideExporter(classType, ManagerExporter);
 			OverrideExporter(classType, BuildSettingsExporter);
@@ -215,7 +213,6 @@ namespace AssetRipper.Core.Project
 			OverrideYamlExporter(ClassIDType.RenderTexture);
 			OverrideYamlExporter(ClassIDType.Cubemap);
 			OverrideYamlExporter(ClassIDType.Avatar);
-			OverrideYamlExporter(ClassIDType.AnimatorController);
 			OverrideYamlExporter(ClassIDType.GUILayer);
 			OverrideYamlExporter(ClassIDType.Animator);
 			OverrideYamlExporter(ClassIDType.TextMesh);

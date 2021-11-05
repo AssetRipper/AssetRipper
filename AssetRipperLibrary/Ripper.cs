@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.AnimatorController;
 using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.Material;
@@ -196,6 +197,9 @@ namespace AssetRipper.Library
 			//Script exporters
 			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
 			OverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));
+
+			//Animator Controller - Temporary
+			OverrideExporter<AnimatorController>(new AnimatorControllerExporter());
 		}
 
 		private void OverrideEngineExporters()
