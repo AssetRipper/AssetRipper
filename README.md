@@ -11,7 +11,7 @@ AssetRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*
 
 > Important note: This project is currently in an experimental state. Expect bugs and many changes.
 
-Current supported versions: `3.4.0` to `2021.1.x`
+Current supported versions: `3.4.0` to `2021.2.x`
 
 
 # Donations
@@ -35,7 +35,7 @@ The development of this project has a dedicated [Discord server](https://discord
 
 # Legal Disclaimers
 
-AssetRipper is licensed under the [GNU General Public License v3.0](License.md)
+AssetRipper is licensed under the [GNU General Public License v3.0](License.md).
 
 Please be aware that using or distributing the output from this software may be against copyright legislation in your jurisdiction. You are responsible for ensuring that you're not breaking any laws.
 
