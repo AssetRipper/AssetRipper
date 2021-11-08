@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
@@ -13,7 +14,7 @@ namespace AssetRipper.Core.Utils
 #if VIRTUAL
 			return new MemoryStream();
 #else
-			return File.Open(path, FileMode.CreateNew, FileAccess.Write);
+			return File.Create(path);
 #endif
 		}
 
@@ -90,9 +91,23 @@ namespace AssetRipper.Core.Utils
 
 		private static Regex GenerateFileNameRegex()
 		{
-			string invalidChars = new string(Path.GetInvalidFileNameChars());
+			string invalidChars = GetInvalidFileNameChars();
 			string escapedChars = Regex.Escape(invalidChars);
 			return new Regex($"[{escapedChars}]");
+		}
+
+		/// <summary>
+		/// Gets all the invalid characters including the colon on Linux
+		/// </summary>
+		/// <returns></returns>
+		private static string GetInvalidFileNameChars()
+		{
+			char[] defaultBadCharacters = Path.GetInvalidFileNameChars();
+			string result = new string(defaultBadCharacters);
+			if(defaultBadCharacters.Contains(':'))
+				return result;
+			else
+				return result + ':';
 		}
 
 		public const int MaxFileNameLength = 256;
