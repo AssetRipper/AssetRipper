@@ -7,7 +7,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
-using AssetRipper.Library.TextureDecoders.Rgb;
+using AssetRipper.Library.TextureDecoders;
 using AssetRipper.Library.Utils;
 using System.IO;
 

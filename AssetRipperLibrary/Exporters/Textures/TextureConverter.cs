@@ -1,13 +1,7 @@
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Logging;
 using AssetRipper.Library.TextureContainers.KTX;
-using AssetRipper.Library.TextureDecoders.Astc;
-using AssetRipper.Library.TextureDecoders.Atc;
-using AssetRipper.Library.TextureDecoders.Dxt;
-using AssetRipper.Library.TextureDecoders.Etc;
-using AssetRipper.Library.TextureDecoders.Pvrtc;
-using AssetRipper.Library.TextureDecoders.Rgb;
-using AssetRipper.Library.TextureDecoders.Yuy2;
+using AssetRipper.Library.TextureDecoders;
 using AssetRipper.Library.Utils;
 using System;
 using Texture2DDecoder;

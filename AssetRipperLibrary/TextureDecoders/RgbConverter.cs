@@ -1,7 +1,7 @@
 using AssetRipper.Core.Utils;
 using System;
 
-namespace AssetRipper.Library.TextureDecoders.Rgb
+namespace AssetRipper.Library.TextureDecoders
 {
 	public static class RgbConverter
 	{

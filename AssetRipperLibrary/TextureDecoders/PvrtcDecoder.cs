@@ -4,7 +4,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace AssetRipper.Library.TextureDecoders.Pvrtc
+namespace AssetRipper.Library.TextureDecoders
 {
 	public class PvrtcDecoder
 	{
