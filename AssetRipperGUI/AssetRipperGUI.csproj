@@ -44,7 +44,7 @@
         <PackageReference Include="MessageBox.Avalonia" Version="1.5.5" />
         <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
         <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
-        <PackageReference Include="System.Security.AccessControl" Version="5.0.0" />
+        <PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release' or '$(Configuration)'=='Virtual'">
         <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.16" />
