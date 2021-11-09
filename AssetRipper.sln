@@ -79,16 +79,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperGUI", "AssetRipp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1C4D-430F-A1BA-BFC5671181D4}"
 	ProjectSection(SolutionItems) = preProject
-		docs\_config.yml = docs\_config.yml
-		docs\CONTRIBUTING.md = docs\CONTRIBUTING.md
-		docs\Credits.md = docs\Credits.md
-		docs\Downloads.md = docs\Downloads.md
-		docs\ExportFeatures.md = docs\ExportFeatures.md
+		CONTRIBUTING.md = CONTRIBUTING.md
+		docs\articles\Credits.md = docs\articles\Credits.md
+		docs\articles\Downloads.md = docs\articles\Downloads.md
+		docs\articles\ExportFeatures.md = docs\articles\ExportFeatures.md
 		docs\index.md = docs\index.md
-		docs\Requirements.md = docs\Requirements.md
-		docs\RoadMap.md = docs\RoadMap.md
-		docs\SiteMap.md = docs\SiteMap.md
-		docs\Structure.md = docs\Structure.md
+		docs\articles\Requirements.md = docs\articles\Requirements.md
+		docs\articles\RoadMap.md = docs\articles\RoadMap.md
+		docs\articles\Structure.md = docs\articles\Structure.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperCommon", "AssetRipperCommon\AssetRipperCommon.csproj", "{676FEE4F-6353-4D8B-B8E6-D89801D25575}"
