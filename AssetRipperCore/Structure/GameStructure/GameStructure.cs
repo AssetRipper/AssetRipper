@@ -126,7 +126,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			//Sets its fields and creates the Project Exporter
 			FileCollection = new GameCollection(layout);
 
-			FileCollection.ResourceCallback += RequestResource;
+			FileCollection.ResourceCallback = RequestResource;
 
 			var scriptBackend = GetScriptingBackend(configuration.DisableScriptImport);
 			Logger.Info(LogCategory.Import, $"Files use the '{scriptBackend}' scripting backend.");
@@ -182,8 +182,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		private void OnRequestAssembly(string assembly)
 		{
 			string assemblyName = $"{assembly}.dll";
-			IResourceFile resFile = FileCollection.FindResourceFile(assemblyName);
-			if (resFile != null)
+			if (FileCollection.TryGetResourceFile(assemblyName, out ResourceFile resFile) && resFile != null)
 			{
 				resFile.Stream.Position = 0;
 				FileCollection.AssemblyManager.Read(resFile.Stream, assemblyName);

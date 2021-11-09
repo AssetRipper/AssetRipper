@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Structure
 
 		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
 
-		public event Func<string, string> ResourceCallback;
+		public Func<string, string> ResourceCallback;
 
 		private readonly Dictionary<ClassIDType, List<IUnityObjectBase>> _cachedAssetsByType = new();
 
@@ -45,6 +45,11 @@ namespace AssetRipper.Core.Structure
 		{
 			m_files.TryGetValue(fileName, out SerializedFile file);
 			return file;
+		}
+
+		public bool TryGetResourceFile(string resourceName, out ResourceFile file)
+		{
+			return m_resources.TryGetValue(resourceName, out file);
 		}
 
 		public IResourceFile FindResourceFile(string resName)
