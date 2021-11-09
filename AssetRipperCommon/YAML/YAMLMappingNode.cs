@@ -14,169 +14,169 @@ namespace AssetRipper.Core.YAML
 
 		public void Add(int key, long value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(int key, string value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(int key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key);
+			YAMLScalarNode keyNode = new(key);
 			InsertEnd(keyNode, value);
 		}
 
 		public void Add(uint key, string value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(uint key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key);
+			YAMLScalarNode keyNode = new(key);
 			InsertEnd(keyNode, value);
 		}
 
 		public void Add(long key, string value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(long key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key);
+			YAMLScalarNode keyNode = new(key);
 			InsertEnd(keyNode, value);
 		}
 
 		public void Add(string key, bool value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, byte value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, short value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, ushort value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, int value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, uint value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, long value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, ulong value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, float value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, string value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key, true);
+			YAMLScalarNode keyNode = new(key, true);
 			InsertEnd(keyNode, value);
 		}
 
 		public void Add(YAMLNode key, bool value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YAMLNode key, byte value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YAMLNode key, short value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YAMLNode key, ushort value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YAMLNode key, int value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YAMLNode key, uint value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YAMLNode key, long value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YAMLNode key, ulong value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YAMLNode key, float value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YAMLNode key, string value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			Add(key, valueNode);
 		}
 
@@ -200,13 +200,13 @@ namespace AssetRipper.Core.YAML
 
 		public void InsertBegin(string key, int value)
 		{
-			YAMLScalarNode valueNode = new YAMLScalarNode(value);
+			YAMLScalarNode valueNode = new(value);
 			InsertBegin(key, valueNode);
 		}
 
 		public void InsertBegin(string key, YAMLNode value)
 		{
-			YAMLScalarNode keyNode = new YAMLScalarNode(key, true);
+			YAMLScalarNode keyNode = new(key, true);
 			InsertBegin(keyNode, value);
 		}
 
@@ -216,7 +216,7 @@ namespace AssetRipper.Core.YAML
 			{
 				throw new ArgumentNullException(nameof(value));
 			}
-			KeyValuePair<YAMLNode, YAMLNode> pair = new KeyValuePair<YAMLNode, YAMLNode>(key, value);
+			KeyValuePair<YAMLNode, YAMLNode> pair = new(key, value);
 			m_children.Insert(0, pair);
 		}
 
@@ -225,7 +225,7 @@ namespace AssetRipper.Core.YAML
 			base.Emit(emitter);
 
 			StartChildren(emitter);
-			foreach (var kvp in m_children)
+			foreach (KeyValuePair<YAMLNode, YAMLNode> kvp in m_children)
 			{
 				YAMLNode key = kvp.Key;
 				YAMLNode value = kvp.Value;
@@ -311,7 +311,7 @@ namespace AssetRipper.Core.YAML
 			{
 				throw new ArgumentNullException(nameof(value));
 			}
-			KeyValuePair<YAMLNode, YAMLNode> pair = new KeyValuePair<YAMLNode, YAMLNode>(key, value);
+			KeyValuePair<YAMLNode, YAMLNode> pair = new(key, value);
 			m_children.Add(pair);
 		}
 
@@ -323,6 +323,6 @@ namespace AssetRipper.Core.YAML
 
 		public MappingStyle Style { get; set; }
 
-		public readonly List<KeyValuePair<YAMLNode, YAMLNode>> m_children = new List<KeyValuePair<YAMLNode, YAMLNode>>();
+		public readonly List<KeyValuePair<YAMLNode, YAMLNode>> m_children = new();
 	}
 }

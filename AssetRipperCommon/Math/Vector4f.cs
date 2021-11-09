@@ -40,14 +40,14 @@ namespace AssetRipper.Core.Math
 		{
 			get
 			{
-				switch (index)
+				return index switch
 				{
-					case 0: return X;
-					case 1: return Y;
-					case 2: return Z;
-					case 3: return W;
-					default: throw new ArgumentOutOfRangeException(nameof(index), "Invalid Vector4 index!");
-				}
+					0 => X,
+					1 => Y,
+					2 => Z,
+					3 => W,
+					_ => throw new ArgumentOutOfRangeException(nameof(index), "Invalid Vector4 index!"),
+				};
 			}
 
 			set
@@ -63,19 +63,16 @@ namespace AssetRipper.Core.Math
 			}
 		}
 
-		public static implicit operator Vector4f(Vector2f v2) => new Vector4f(v2.X, v2.Y, 0.0f, 0.0f);
-		public static implicit operator Vector4f(Vector2i v2) => new Vector4f(v2.X, v2.Y, 0.0f, 0.0f);
-		public static implicit operator Vector4f(Vector3f v3) => new Vector4f(v3.X, v3.Y, v3.Z, 0.0f);
-		public static implicit operator Vector4f(Vector3i v3) => new Vector4f(v3.X, v3.Y, v3.Z, 0.0f);
+		public static implicit operator Vector4f(Vector2f v2) => new(v2.X, v2.Y, 0.0f, 0.0f);
+		public static implicit operator Vector4f(Vector2i v2) => new(v2.X, v2.Y, 0.0f, 0.0f);
+		public static implicit operator Vector4f(Vector3f v3) => new(v3.X, v3.Y, v3.Z, 0.0f);
+		public static implicit operator Vector4f(Vector3i v3) => new(v3.X, v3.Y, v3.Z, 0.0f);
 
-		public static explicit operator Vector4f(Quaternionf q) => new Vector4f(q.X, q.Y, q.Z, q.W);
-		public static explicit operator ColorRGBAf(Vector4f v)
-		{
-			return new ColorRGBAf(v.X, v.Y, v.Z, v.W);
-		}
+		public static explicit operator Vector4f(Quaternionf q) => new(q.X, q.Y, q.Z, q.W);
+		public static explicit operator ColorRGBAf(Vector4f v) => new(v.X, v.Y, v.Z, v.W);
 
-		public static implicit operator System.Numerics.Vector4(Vector4f v4) => new System.Numerics.Vector4(v4.X,v4.Y,v4.Z,v4.W);
-		public static implicit operator Vector4f(System.Numerics.Vector4 v4) => new Vector4f(v4.X, v4.Y, v4.Z, v4.W);
+		public static implicit operator System.Numerics.Vector4(Vector4f v4) => new(v4.X,v4.Y,v4.Z,v4.W);
+		public static implicit operator Vector4f(System.Numerics.Vector4 v4) => new(v4.X, v4.Y, v4.Z, v4.W);
 
 		public static Vector4f operator -(Vector4f left)
 		{
@@ -135,7 +132,7 @@ namespace AssetRipper.Core.Math
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode(MappingStyle.Flow);
+			YAMLMappingNode node = new(MappingStyle.Flow);
 			node.Add(XName, X);
 			node.Add(YName, Y);
 			node.Add(ZName, Z);
@@ -145,7 +142,7 @@ namespace AssetRipper.Core.Math
 
 		public override bool Equals(object other)
 		{
-			if (!(other is Vector4f))
+			if (other is not Vector4f)
 				return false;
 			return Equals((Vector4f)other);
 		}
@@ -167,10 +164,10 @@ namespace AssetRipper.Core.Math
 
 		public void Normalize()
 		{
-			var length = Length();
+			float length = Length();
 			if (length > kEpsilon)
 			{
-				var invNorm = 1.0f / length;
+				float invNorm = 1.0f / length;
 				X *= invNorm;
 				Y *= invNorm;
 				Z *= invNorm;
@@ -195,7 +192,7 @@ namespace AssetRipper.Core.Math
 			return X * X + Y * Y + Z * Z + W * W;
 		}
 
-		public static Vector4f Zero => new Vector4f();
+		public static Vector4f Zero => new();
 
 		private const float kEpsilon = 0.00001F;
 	}

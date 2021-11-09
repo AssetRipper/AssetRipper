@@ -27,7 +27,8 @@ namespace AssetRipper.Library.Utils
 			foreach (string file in AllFilesInFolder(gameDir))
 			{
 				string ext = Path.GetExtension(file);
-				if (ext != "" && ext != ".assets" && ext != ".unity3d" && ext != ".bundle") continue;
+				if (ext != "" && ext != ".assets" && ext != ".unity3d" && ext != ".bundle")
+					continue;
 				string relPath = Util.GetRelativePath(file, gameDir);
 				relPath = Path.GetDirectoryName(relPath);
 				if (Directory.Exists(file))
@@ -41,25 +42,23 @@ namespace AssetRipper.Library.Utils
 		{
 			Console.WriteLine($"Dumping container {container.Name }");
 			Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
-			using (StreamWriter sw = new StreamWriter($"{exportPath}.txt"))
+			using StreamWriter sw = new($"{exportPath}.txt");
+			WriteFileInfo(container, sw);
+			sw.WriteLine("");
+			DumpObjectInfo(container, sw);
+			if (container.Name == "globalgamemanagers")
 			{
-				WriteFileInfo(container, sw);
-				sw.WriteLine("");
-				DumpObjectInfo(container, sw);
-				if (container.Name == "globalgamemanagers")
+				BuildSettings buildSettings = (BuildSettings)container.FetchAssets().FirstOrDefault(asset => asset is BuildSettings);
+				if (buildSettings != null)
 				{
-					BuildSettings buildSettings = (BuildSettings)container.FetchAssets().FirstOrDefault(asset => asset is BuildSettings);
-					if (buildSettings != null)
-					{
-						sw.WriteLine("");
-						DumpBuildSettings(buildSettings, sw);
-					}
-					MonoManager monoManager = (MonoManager)container.FetchAssets().FirstOrDefault(asset => asset is MonoManager);
-					if (monoManager != null)
-					{
-						sw.WriteLine("");
-						DumpMonoManager(monoManager, sw);
-					}
+					sw.WriteLine("");
+					DumpBuildSettings(buildSettings, sw);
+				}
+				MonoManager monoManager = (MonoManager)container.FetchAssets().FirstOrDefault(asset => asset is MonoManager);
+				if (monoManager != null)
+				{
+					sw.WriteLine("");
+					DumpMonoManager(monoManager, sw);
 				}
 			}
 		}
@@ -67,36 +66,34 @@ namespace AssetRipper.Library.Utils
 		{
 			Console.WriteLine($"Dumping FileList {Path.GetFileName(exportPath)}");
 			Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
-			using (StreamWriter sw = new StreamWriter($"{exportPath}.txt"))
+			using StreamWriter sw = new($"{exportPath}.txt");
+			if (fileList is BundleFile bf)
 			{
-				if (fileList is BundleFile bf)
-				{
-					DumpBundleFileInfo(bf, sw);
-				}
-				if (fileList is ArchiveFile af)
-				{
-					//TODO
-					sw.WriteLine($"ArchiveFile");
-				}
-				if (fileList is WebFile wf)
-				{
-					//TODO
-					sw.WriteLine($"WebFile");
-				}
-				sw.WriteLine($"ResourceFile count {fileList.ResourceFiles.Count}");
-				foreach (ResourceFile resourceFile in fileList.ResourceFiles)
-				{
-					sw.WriteLine($"ResourceFile: Name {resourceFile.Name}");
-				}
-				sw.WriteLine($"");
-				sw.WriteLine($"SerializedFile count {fileList.SerializedFiles.Count}");
-				foreach (SerializedFile serializedFile in fileList.SerializedFiles)
-				{
-					sw.WriteLine("");
-					WriteFileInfo(serializedFile, sw);
-					sw.WriteLine("");
-					DumpObjectInfo(serializedFile, sw);
-				}
+				DumpBundleFileInfo(bf, sw);
+			}
+			if (fileList is ArchiveFile af)
+			{
+				//TODO
+				sw.WriteLine($"ArchiveFile");
+			}
+			if (fileList is WebFile wf)
+			{
+				//TODO
+				sw.WriteLine($"WebFile");
+			}
+			sw.WriteLine($"ResourceFile count {fileList.ResourceFiles.Count}");
+			foreach (ResourceFile resourceFile in fileList.ResourceFiles)
+			{
+				sw.WriteLine($"ResourceFile: Name {resourceFile.Name}");
+			}
+			sw.WriteLine($"");
+			sw.WriteLine($"SerializedFile count {fileList.SerializedFiles.Count}");
+			foreach (SerializedFile serializedFile in fileList.SerializedFiles)
+			{
+				sw.WriteLine("");
+				WriteFileInfo(serializedFile, sw);
+				sw.WriteLine("");
+				DumpObjectInfo(serializedFile, sw);
 			}
 		}
 		static void DumpBundleFileInfo(BundleFile bundleFile, StreamWriter sw)
@@ -284,27 +281,27 @@ namespace AssetRipper.Library.Utils
 			sw.WriteLine($"  HasCompileErrors {monoManager.HasCompileErrors}");
 			sw.WriteLine($"  EngineDllModDate {monoManager.EngineDllModDate}");
 			sw.WriteLine($"  CustomDlls {monoManager.CustomDlls?.Length}");
-			foreach (string dll in monoManager.CustomDlls ?? new string[] { })
+			foreach (string dll in monoManager.CustomDlls ?? Array.Empty<string>())
 			{
 				sw.WriteLine($"    {dll}");
 			}
 			sw.WriteLine($"  AssemblyIdentifiers {monoManager.AssemblyIdentifiers?.Length}");
-			foreach (string dll in monoManager.AssemblyIdentifiers ?? new string[] { })
+			foreach (string dll in monoManager.AssemblyIdentifiers ?? Array.Empty<string>())
 			{
 				sw.WriteLine($"    {dll}");
 			}
 			sw.WriteLine($"  AssemblyNames {monoManager.AssemblyNames?.Length}");
-			foreach (string dll in monoManager.AssemblyNames ?? new string[] { })
+			foreach (string dll in monoManager.AssemblyNames ?? Array.Empty<string>())
 			{
 				sw.WriteLine($"    {dll}");
 			}
 			sw.WriteLine($"  AssemblyTypes {monoManager.AssemblyTypes?.Length}");
-			foreach (int dll in monoManager.AssemblyTypes ?? new int[] { })
+			foreach (int dll in monoManager.AssemblyTypes ?? Array.Empty<int>())
 			{
 				sw.WriteLine($"    {dll}");
 			}
 			sw.WriteLine($"  Scripts {monoManager.Scripts.Length}");
-			foreach (PPtr<MonoScript> dll in monoManager.Scripts ?? new PPtr<MonoScript>[] { })
+			foreach (PPtr<MonoScript> dll in monoManager.Scripts ?? Array.Empty<PPtr<MonoScript>>())
 			{
 				sw.WriteLine($"    {dll}");
 			}

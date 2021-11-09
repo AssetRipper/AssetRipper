@@ -58,14 +58,14 @@ namespace AssetRipper.Library
 			Logger.Info(LogCategory.Plugin, "Loading plugins...");
 			string pluginsDirectory = ExecutingDirectory.Combine("Plugins");
 			Directory.CreateDirectory(pluginsDirectory);
-			var pluginTypes = new List<Type>();
+			List<Type> pluginTypes = new();
 			foreach(string dllFile in Directory.GetFiles(pluginsDirectory, "*.dll"))
 			{
 				try
 				{
 					Logger.Info(LogCategory.Plugin, $"Found assembly at {dllFile}");
-					var assembly = Assembly.LoadFile(dllFile);
-					foreach(var pluginAttr in assembly.GetCustomAttributes<RegisterPluginAttribute>())
+					Assembly assembly = Assembly.LoadFile(dllFile);
+					foreach(RegisterPluginAttribute pluginAttr in assembly.GetCustomAttributes<RegisterPluginAttribute>())
 					{
 						pluginTypes.Add(pluginAttr.PluginType);
 					}
@@ -75,11 +75,11 @@ namespace AssetRipper.Library
 					Logger.Error(LogCategory.Plugin, $"Exception thrown while loading plugin assembly: {dllFile}", ex);
 				}
 			}
-			foreach(var type in pluginTypes)
+			foreach(Type type in pluginTypes)
 			{
 				try
 				{
-					var plugin = (PluginBase)Activator.CreateInstance(type);
+					PluginBase plugin = (PluginBase)Activator.CreateInstance(type);
 					plugin.CurrentRipper = this;
 					plugin.Initialize();
 					Logger.Info(LogCategory.Plugin, $"Initialized plugin: {plugin.Name}");
@@ -116,12 +116,12 @@ namespace AssetRipper.Library
 		public void ExportFile(string exportPath, IUnityObjectBase asset) => throw new NotImplementedException();
 		public void ExportFile(string exportPath, IEnumerable<IUnityObjectBase> assets) => throw new NotImplementedException();
 
-		public void ExportProject(string exportPath) => ExportProject(exportPath, new IUnityObjectBase[0]);
+		public void ExportProject(string exportPath) => ExportProject(exportPath, Array.Empty<IUnityObjectBase>());
 		public void ExportProject(string exportPath, IUnityObjectBase asset) => ExportProject(exportPath, new IUnityObjectBase[] { asset });
 		public void ExportProject(string exportPath, IEnumerable<IUnityObjectBase> assets)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			List<IUnityObjectBase> list = new List<IUnityObjectBase>(assets ?? new IUnityObjectBase[0]);
+			List<IUnityObjectBase> list = new(assets ?? Array.Empty<IUnityObjectBase>());
 			Settings.ExportPath = exportPath;
 			Settings.Filter = list.Count == 0 ? LibraryConfiguration.DefaultFilter : GetFilter(list);
 			InitializeExporters();
@@ -171,7 +171,7 @@ namespace AssetRipper.Library
 			OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
 
 			//Texture exporters
-			TextureAssetExporter textureExporter = new TextureAssetExporter(Settings);
+			TextureAssetExporter textureExporter = new(Settings);
 			OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
 			OverrideExporter<ISprite>(textureExporter);
 
@@ -204,7 +204,7 @@ namespace AssetRipper.Library
 
 		private void OverrideEngineExporters()
 		{
-			EngineAssetExporter engineExporter = new EngineAssetExporter(Settings);
+			EngineAssetExporter engineExporter = new(Settings);
 			OverrideExporter<IMaterial>(engineExporter);
 			OverrideExporter<ITexture2D>(engineExporter);
 			OverrideExporter<IMesh>(engineExporter);
@@ -214,7 +214,7 @@ namespace AssetRipper.Library
 			OverrideExporter<IMonoBehaviour>(engineExporter);
 		}
 
-		private void OverrideExporter<T>(IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter<T>(exporter, true);
-		private void OverrideExporter<T>(IAssetExporter exporter, bool allowInheritance) => GameStructure.Exporter.OverrideExporter<T>(exporter, allowInheritance);
+		public void OverrideExporter<T>(IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter<T>(exporter, true);
+		public void OverrideExporter<T>(IAssetExporter exporter, bool allowInheritance) => GameStructure.Exporter.OverrideExporter<T>(exporter, allowInheritance);
 	}
 }

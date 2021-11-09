@@ -62,7 +62,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			int width = terrain.Heightmap.Width;
 			int height = terrain.Heightmap.Height;
 			byte[] data = GetRGBA32Data(terrain);
-			DirectBitmap bitmap = new DirectBitmap(width, height);
+			DirectBitmap bitmap = new(width, height);
 			RgbConverter.RGBA32ToBGRA32(data, width, height, bitmap.Bits);
 			bitmap.FlipY();
 			return bitmap;
@@ -115,10 +115,10 @@ namespace AssetRipper.Library.Exporters.Terrains
 			return (1 - normalized) * minColor + normalized * maxColor;
 		}
 
-		private static ColorRGBAf zero = new ColorRGBAf(0, 0, .4f, 1);
-		private static ColorRGBAf q1 = new ColorRGBAf(0, 0, 1, 1);
-		private static ColorRGBAf q2 = new ColorRGBAf(0, 1, 0, 1);
-		private static ColorRGBAf q3 = new ColorRGBAf(1, 0, 0, 1);
+		private static ColorRGBAf zero = new(0, 0, .4f, 1);
+		private static ColorRGBAf q1 = new(0, 0, 1, 1);
+		private static ColorRGBAf q2 = new(0, 1, 0, 1);
+		private static ColorRGBAf q3 = new(1, 0, 0, 1);
 		private static ColorRGBAf one = ColorRGBAf.White;
 
 		private const float q1point = .15f;

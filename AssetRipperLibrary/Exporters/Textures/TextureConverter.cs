@@ -418,61 +418,26 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static QFormat ToQFormat(TextureFormat format)
 		{
-			switch (format)
+			return format switch
 			{
-				case TextureFormat.DXT1:
-				case TextureFormat.DXT1Crunched:
-					return QFormat.Q_FORMAT_S3TC_DXT1_RGB;
-
-				case TextureFormat.DXT3:
-					return QFormat.Q_FORMAT_S3TC_DXT3_RGBA;
-
-				case TextureFormat.DXT5:
-				case TextureFormat.DXT5Crunched:
-					return QFormat.Q_FORMAT_S3TC_DXT5_RGBA;
-
-				case TextureFormat.RHalf:
-					return QFormat.Q_FORMAT_R_16F;
-
-				case TextureFormat.RGHalf:
-					return QFormat.Q_FORMAT_RG_HF;
-
-				case TextureFormat.RGBAHalf:
-					return QFormat.Q_FORMAT_RGBA_HF;
-
-				case TextureFormat.RFloat:
-					return QFormat.Q_FORMAT_R_F;
-
-				case TextureFormat.RGFloat:
-					return QFormat.Q_FORMAT_RG_F;
-
-				case TextureFormat.RGBAFloat:
-					return QFormat.Q_FORMAT_RGBA_F;
-
-				case TextureFormat.RGB9e5Float:
-					return QFormat.Q_FORMAT_RGB9_E5;
-
-				case TextureFormat.ATC_RGB4:
-					return QFormat.Q_FORMAT_ATITC_RGB;
-
-				case TextureFormat.ATC_RGBA8:
-					return QFormat.Q_FORMAT_ATC_RGBA_INTERPOLATED_ALPHA;
-
-				case TextureFormat.EAC_R:
-					return QFormat.Q_FORMAT_EAC_R_UNSIGNED;
-
-				case TextureFormat.EAC_R_SIGNED:
-					return QFormat.Q_FORMAT_EAC_R_SIGNED;
-
-				case TextureFormat.EAC_RG:
-					return QFormat.Q_FORMAT_EAC_RG_UNSIGNED;
-
-				case TextureFormat.EAC_RG_SIGNED:
-					return QFormat.Q_FORMAT_EAC_RG_SIGNED;
-
-				default:
-					throw new NotSupportedException(format.ToString());
-			}
+				TextureFormat.DXT1 or TextureFormat.DXT1Crunched => QFormat.Q_FORMAT_S3TC_DXT1_RGB,
+				TextureFormat.DXT3 => QFormat.Q_FORMAT_S3TC_DXT3_RGBA,
+				TextureFormat.DXT5 or TextureFormat.DXT5Crunched => QFormat.Q_FORMAT_S3TC_DXT5_RGBA,
+				TextureFormat.RHalf => QFormat.Q_FORMAT_R_16F,
+				TextureFormat.RGHalf => QFormat.Q_FORMAT_RG_HF,
+				TextureFormat.RGBAHalf => QFormat.Q_FORMAT_RGBA_HF,
+				TextureFormat.RFloat => QFormat.Q_FORMAT_R_F,
+				TextureFormat.RGFloat => QFormat.Q_FORMAT_RG_F,
+				TextureFormat.RGBAFloat => QFormat.Q_FORMAT_RGBA_F,
+				TextureFormat.RGB9e5Float => QFormat.Q_FORMAT_RGB9_E5,
+				TextureFormat.ATC_RGB4 => QFormat.Q_FORMAT_ATITC_RGB,
+				TextureFormat.ATC_RGBA8 => QFormat.Q_FORMAT_ATC_RGBA_INTERPOLATED_ALPHA,
+				TextureFormat.EAC_R => QFormat.Q_FORMAT_EAC_R_UNSIGNED,
+				TextureFormat.EAC_R_SIGNED => QFormat.Q_FORMAT_EAC_R_SIGNED,
+				TextureFormat.EAC_RG => QFormat.Q_FORMAT_EAC_RG_UNSIGNED,
+				TextureFormat.EAC_RG_SIGNED => QFormat.Q_FORMAT_EAC_RG_SIGNED,
+				_ => throw new NotSupportedException(format.ToString()),
+			};
 		}
 	}
 }

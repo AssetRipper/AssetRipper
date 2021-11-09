@@ -30,7 +30,7 @@ namespace AssetRipper.Core.Math
 
 		public static explicit operator ColorRGBAf(ColorRGBA32 color32)
 		{
-			ColorRGBAf color = new ColorRGBAf
+			ColorRGBAf color = new()
 			{
 				R = color32.R / 255.0f,
 				G = color32.G / 255.0f,
@@ -40,7 +40,7 @@ namespace AssetRipper.Core.Math
 			return color;
 		}
 
-		public static explicit operator Vector4f(ColorRGBAf c) => new Vector4f(c.R, c.G, c.B, c.A);
+		public static explicit operator Vector4f(ColorRGBAf c) => new(c.R, c.G, c.B, c.A);
 
 		public void Read(AssetReader reader)
 		{
@@ -52,7 +52,7 @@ namespace AssetRipper.Core.Math
 
 		public void Read32(AssetReader reader)
 		{
-			ColorRGBA32 color32 = new ColorRGBA32();
+			ColorRGBA32 color32 = new();
 			color32.Read(reader);
 			this = (ColorRGBAf)color32;
 		}
@@ -67,7 +67,7 @@ namespace AssetRipper.Core.Math
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YAMLMappingNode node = new();
 			node.Style = MappingStyle.Flow;
 			node.Add(RName, R);
 			node.Add(GName, G);
@@ -88,7 +88,7 @@ namespace AssetRipper.Core.Math
 
 		public override bool Equals(object other)
 		{
-			if (!(other is ColorRGBAf))
+			if (other is not ColorRGBAf)
 				return false;
 			return Equals((ColorRGBAf)other);
 		}
@@ -138,7 +138,7 @@ namespace AssetRipper.Core.Math
 			return !(lhs == rhs);
 		}
 
-		public static ColorRGBAf Black => new ColorRGBAf(0.0f, 0.0f, 0.0f, 1.0f);
-		public static ColorRGBAf White => new ColorRGBAf(1.0f, 1.0f, 1.0f, 1.0f);
+		public static ColorRGBAf Black => new(0.0f, 0.0f, 0.0f, 1.0f);
+		public static ColorRGBAf White => new(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }

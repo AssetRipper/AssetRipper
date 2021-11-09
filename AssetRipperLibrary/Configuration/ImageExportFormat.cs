@@ -28,36 +28,26 @@ namespace AssetRipper.Library.Configuration
 		[SupportedOSPlatform("windows")]
 		public static ImageFormat GetImageFormat(this ImageExportFormat _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case ImageExportFormat.Bmp:
-					return ImageFormat.Bmp;
-				case ImageExportFormat.Gif:
-					return ImageFormat.Gif;
-				case ImageExportFormat.Jpeg:
-					return ImageFormat.Jpeg;
-				case ImageExportFormat.Png:
-					return ImageFormat.Png;
-				default:
-					return ImageFormat.Png;
-			}
+				ImageExportFormat.Bmp => ImageFormat.Bmp,
+				ImageExportFormat.Gif => ImageFormat.Gif,
+				ImageExportFormat.Jpeg => ImageFormat.Jpeg,
+				ImageExportFormat.Png => ImageFormat.Png,
+				_ => ImageFormat.Png,
+			};
 		}
 
 		public static string GetFileExtension(this ImageExportFormat _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case ImageExportFormat.Bmp:
-					return "bmp";
-				case ImageExportFormat.Gif:
-					return "gif";
-				case ImageExportFormat.Jpeg:
-					return "jpeg";
-				case ImageExportFormat.Png:
-					return "png";
-				default:
-					return "png";
-			}
+				ImageExportFormat.Bmp => "bmp",
+				ImageExportFormat.Gif => "gif",
+				ImageExportFormat.Jpeg => "jpeg",
+				ImageExportFormat.Png => "png",
+				_ => "png",
+			};
 		}
 	}
 }

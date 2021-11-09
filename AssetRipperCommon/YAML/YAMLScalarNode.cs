@@ -188,59 +188,36 @@ namespace AssetRipper.Core.YAML
 		{
 			if (Style == ScalarStyle.Hex)
 			{
-				switch (m_objectType)
+				return m_objectType switch
 				{
-					case ScalarType.Byte:
-						return emitter.WriteHex((byte)m_value);
-					case ScalarType.Int16:
-						return emitter.WriteHex(unchecked((short)m_value));
-					case ScalarType.UInt16:
-						return emitter.WriteHex((ushort)m_value);
-					case ScalarType.Int32:
-						return emitter.WriteHex(unchecked((int)m_value));
-					case ScalarType.UInt32:
-						return emitter.WriteHex((uint)m_value);
-					case ScalarType.Int64:
-						return emitter.WriteHex(unchecked((long)m_value));
-					case ScalarType.UInt64:
-						return emitter.WriteHex(m_value);
-					case ScalarType.Single:
-						return emitter.WriteHex((uint)m_value);
-					case ScalarType.Double:
-						return emitter.WriteHex(m_value);
-					default:
-						throw new NotImplementedException(m_objectType.ToString());
-				}
+					ScalarType.Byte => emitter.WriteHex((byte)m_value),
+					ScalarType.Int16 => emitter.WriteHex(unchecked((short)m_value)),
+					ScalarType.UInt16 => emitter.WriteHex((ushort)m_value),
+					ScalarType.Int32 => emitter.WriteHex(unchecked((int)m_value)),
+					ScalarType.UInt32 => emitter.WriteHex((uint)m_value),
+					ScalarType.Int64 => emitter.WriteHex(unchecked((long)m_value)),
+					ScalarType.UInt64 => emitter.WriteHex(m_value),
+					ScalarType.Single => emitter.WriteHex((uint)m_value),
+					ScalarType.Double => emitter.WriteHex(m_value),
+					_ => throw new NotImplementedException(m_objectType.ToString()),
+				};
 			}
 
-			switch (m_objectType)
+			return m_objectType switch
 			{
-				case ScalarType.Boolean:
-					return emitter.Write(m_value);
-				case ScalarType.Byte:
-					return emitter.Write(m_value);
-				case ScalarType.Int16:
-					return emitter.Write(unchecked((short)m_value));
-				case ScalarType.UInt16:
-					return emitter.Write(m_value);
-				case ScalarType.Int32:
-					return emitter.Write(unchecked((int)m_value));
-				case ScalarType.UInt32:
-					return emitter.Write(m_value);
-				case ScalarType.Int64:
-					return emitter.Write(unchecked((long)m_value));
-				case ScalarType.UInt64:
-					return emitter.Write(m_value);
-				case ScalarType.Single:
-					return emitter.Write(BitConverterExtensions.ToSingle((uint)m_value));
-				case ScalarType.Double:
-					return emitter.Write(BitConverterExtensions.ToDouble(m_value));
-				case ScalarType.String:
-					return WriteString(emitter);
-
-				default:
-					throw new NotImplementedException(m_objectType.ToString());
-			}
+				ScalarType.Boolean => emitter.Write(m_value),
+				ScalarType.Byte => emitter.Write(m_value),
+				ScalarType.Int16 => emitter.Write(unchecked((short)m_value)),
+				ScalarType.UInt16 => emitter.Write(m_value),
+				ScalarType.Int32 => emitter.Write(unchecked((int)m_value)),
+				ScalarType.UInt32 => emitter.Write(m_value),
+				ScalarType.Int64 => emitter.Write(unchecked((long)m_value)),
+				ScalarType.UInt64 => emitter.Write(m_value),
+				ScalarType.Single => emitter.Write(BitConverterExtensions.ToSingle((uint)m_value)),
+				ScalarType.Double => emitter.Write(BitConverterExtensions.ToDouble(m_value)),
+				ScalarType.String => WriteString(emitter),
+				_ => throw new NotImplementedException(m_objectType.ToString()),
+			};
 		}
 
 		internal override void Emit(Emitter emitter)
@@ -359,65 +336,42 @@ namespace AssetRipper.Core.YAML
 			{
 				if (Style == ScalarStyle.Hex)
 				{
-					switch (m_objectType)
+					return m_objectType switch
 					{
-						case ScalarType.Byte:
-							return unchecked((byte)m_value).ToHexString();
-						case ScalarType.Int16:
-							return unchecked((short)m_value).ToHexString();
-						case ScalarType.UInt16:
-							return unchecked((ushort)m_value).ToHexString();
-						case ScalarType.Int32:
-							return unchecked((int)m_value).ToHexString();
-						case ScalarType.UInt32:
-							return unchecked((uint)m_value).ToHexString();
-						case ScalarType.Int64:
-							return unchecked((long)m_value).ToHexString();
-						case ScalarType.UInt64:
-							return m_value.ToHexString();
-						case ScalarType.Single:
-							return BitConverterExtensions.ToSingle((uint)m_value).ToHexString();
-						case ScalarType.Double:
-							return BitConverterExtensions.ToDouble(m_value).ToHexString();
-						default:
-							throw new NotImplementedException(m_objectType.ToString());
-					}
+						ScalarType.Byte => unchecked((byte)m_value).ToHexString(),
+						ScalarType.Int16 => unchecked((short)m_value).ToHexString(),
+						ScalarType.UInt16 => unchecked((ushort)m_value).ToHexString(),
+						ScalarType.Int32 => unchecked((int)m_value).ToHexString(),
+						ScalarType.UInt32 => unchecked((uint)m_value).ToHexString(),
+						ScalarType.Int64 => unchecked((long)m_value).ToHexString(),
+						ScalarType.UInt64 => m_value.ToHexString(),
+						ScalarType.Single => BitConverterExtensions.ToSingle((uint)m_value).ToHexString(),
+						ScalarType.Double => BitConverterExtensions.ToDouble(m_value).ToHexString(),
+						_ => throw new NotImplementedException(m_objectType.ToString()),
+					};
 				}
 
-				switch (m_objectType)
+				return m_objectType switch
 				{
-					case ScalarType.Boolean:
-						return m_value == 1 ? "true" : "false";
-					case ScalarType.Byte:
-						return m_value.ToString();
-					case ScalarType.Int16:
-						return unchecked((short)m_value).ToString();
-					case ScalarType.UInt16:
-						return m_value.ToString();
-					case ScalarType.Int32:
-						return unchecked((int)m_value).ToString();
-					case ScalarType.UInt32:
-						return m_value.ToString();
-					case ScalarType.Int64:
-						return unchecked((long)m_value).ToString();
-					case ScalarType.UInt64:
-						return m_value.ToString();
-					case ScalarType.Single:
-						return BitConverterExtensions.ToSingle((uint)m_value).ToString(CultureInfo.InvariantCulture);
-					case ScalarType.Double:
-						return BitConverterExtensions.ToDouble(m_value).ToString(CultureInfo.InvariantCulture);
-					case ScalarType.String:
-						return m_string;
-
-					default:
-						throw new NotImplementedException(m_objectType.ToString());
-				}
+					ScalarType.Boolean => m_value == 1 ? "true" : "false",
+					ScalarType.Byte => m_value.ToString(),
+					ScalarType.Int16 => unchecked((short)m_value).ToString(),
+					ScalarType.UInt16 => m_value.ToString(),
+					ScalarType.Int32 => unchecked((int)m_value).ToString(),
+					ScalarType.UInt32 => m_value.ToString(),
+					ScalarType.Int64 => unchecked((long)m_value).ToString(),
+					ScalarType.UInt64 => m_value.ToString(),
+					ScalarType.Single => BitConverterExtensions.ToSingle((uint)m_value).ToString(CultureInfo.InvariantCulture),
+					ScalarType.Double => BitConverterExtensions.ToDouble(m_value).ToString(CultureInfo.InvariantCulture),
+					ScalarType.String => m_string,
+					_ => throw new NotImplementedException(m_objectType.ToString()),
+				};
 			}
 			set => m_string = value;
 		}
 		public ScalarStyle Style { get; }
 
-		private static readonly Regex s_illegal = new Regex("(^\\s)|(^-\\s)|(^-$)|(^[\\:\\[\\]'\"*&!@#%{}?<>,\\`])|([:@]\\s)|([\\n\\r])|([:\\s]$)", RegexOptions.Compiled);
+		private static readonly Regex s_illegal = new("(^\\s)|(^-\\s)|(^-$)|(^[\\:\\[\\]'\"*&!@#%{}?<>,\\`])|([:@]\\s)|([\\n\\r])|([:\\s]$)", RegexOptions.Compiled);
 
 		private ScalarType m_objectType = ScalarType.String;
 		private string m_string = string.Empty;
