@@ -3,13 +3,13 @@ using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace UnitTester
 {
 	static class Program
 	{
-		private static GameStructure GameStructure { get; set; }
 		private const string TestsDirectory = "../../Tests";
 
 		static void Main(string[] args)
@@ -45,10 +45,12 @@ namespace UnitTester
 
 			int numTests = 0;
 			int numSuccessful = 0;
+			List<(string, string)> successfulTests = new();
+			List<(string, string)> unsuccessfulTests = new();
 			foreach (string versionPath in Directory.GetDirectories(TestsDirectory))
 			{
 				string versionName = Path.GetRelativePath(TestsDirectory, versionPath);
-				foreach(string testPath in Directory.GetDirectories(versionPath))
+				foreach (string testPath in Directory.GetDirectories(versionPath))
 				{
 					string testName = Path.GetRelativePath(versionPath, testPath);
 					Logger.Info(LogCategory.General, $"Found test: '{testName}' for Unity version: '{versionName}'");
@@ -57,6 +59,7 @@ namespace UnitTester
 					if (!Directory.Exists(inputPath))
 					{
 						Logger.Log(LogType.Error, LogCategory.General, $"No input folder for '{testName}' on Unity version '{versionName}'");
+						unsuccessfulTests.Add((versionName, testName));
 					}
 					else
 					{
@@ -74,17 +77,35 @@ namespace UnitTester
 							Logger.Info(LogCategory.General, $"Completed test: '{testName}' for Unity version: '{versionName}'");
 							Logger.BlankLine(2);
 							numSuccessful++;
+							successfulTests.Add((versionName, testName));
 						}
 						catch (Exception ex)
 						{
 							Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
 							Logger.BlankLine(2);
+							unsuccessfulTests.Add((versionName, testName));
 						}
 					}
 				}
 			}
 
 			Logger.Info(LogCategory.General, $"{numSuccessful}/{numTests} tests successfully completed");
+			if (numSuccessful > 0)
+			{
+				Logger.Info(LogCategory.General, "Successful:");
+				foreach ((string version, string test) in successfulTests)
+				{
+					Logger.Info(LogCategory.General, $"\t{version,-12} {test}");
+				}
+			}
+			if (numSuccessful < numTests)
+			{
+				Logger.Info(LogCategory.General, "Unsuccessful:");
+				foreach ((string version, string test) in unsuccessfulTests)
+				{
+					Logger.Info(LogCategory.General, $"\t{version,-12} {test}");
+				}
+			}
 		}
 
 		private static void PrepareExportDirectory(string path)
