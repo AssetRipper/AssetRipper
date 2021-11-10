@@ -16,13 +16,13 @@ namespace AssetRipper.Core
 	/// <summary>
 	/// The artificial base class for all generated Unity classes
 	/// </summary>
-	public class UnityAssetBase : IAssetNew, IDependent
+	public class UnityAssetBase : IUnityAssetBase
 	{
-		private const BindingFlags fieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance; 
+		private const BindingFlags fieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		public UnityVersion AssetUnityVersion { get; set; }
 		public EndianType EndianType { get; set; }
 		public TransferInstructionFlags TransferInstructionFlags { get; set; }
-		
+
 		public virtual void ReadEditor(AssetReader reader)
 		{
 			throw new NotSupportedException();
@@ -119,7 +119,7 @@ namespace AssetRipper.Core
 		public bool TrySetFieldValue<T>(string fieldName, T value)
 		{
 			FieldInfo fieldInfo = TryGetFieldInfo(fieldName);
-			if(fieldInfo == null)
+			if (fieldInfo == null)
 			{
 				return false;
 			}
