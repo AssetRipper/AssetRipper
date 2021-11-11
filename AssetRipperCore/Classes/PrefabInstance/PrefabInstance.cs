@@ -255,7 +255,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			}
 		}
 
-		public string SourcePrefabInvariantName(UnityVersion version)
+		public static string SourcePrefabInvariantName(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2018, 2))
 			{
@@ -271,7 +271,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			}
 		}
 
-		public string IsPrefabAssetInvariantName(UnityVersion version)
+		public static string IsPrefabAssetInvariantName(UnityVersion version)
 		{
 			if (version.IsGreaterEqual(2018, 2))
 			{
