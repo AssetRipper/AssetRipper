@@ -274,6 +274,10 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			{
 				file = this;
 			}
+			else if(fileIndex < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(fileIndex), $"File index cannot have negative index: {fileIndex}");
+			}
 			else
 			{
 				fileIndex--;
