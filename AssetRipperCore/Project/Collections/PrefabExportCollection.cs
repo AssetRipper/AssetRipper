@@ -15,11 +15,11 @@ namespace AssetRipper.Core.Project.Collections
 	{
 		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IUnityObjectBase asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, GameObject root) : this(assetExporter, root.File, PrefabInstance.CreateVirtualInstance(virtualFile, root)) { }
+		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IGameObject root) : this(assetExporter, root.File, PrefabInstance.CreateVirtualInstance(virtualFile, root)) { }
 
 		private PrefabExportCollection(IAssetExporter assetExporter, IAssetContainer file, PrefabInstance prefab) : base(assetExporter, prefab)
 		{
-			foreach (EditorExtension asset in prefab.FetchObjects(file))
+			foreach (IEditorExtension asset in prefab.FetchObjects(file))
 			{
 				AddAsset(asset);
 			}
@@ -27,12 +27,15 @@ namespace AssetRipper.Core.Project.Collections
 
 		public static bool IsValidAsset(IUnityObjectBase asset)
 		{
-			if (asset.ClassID == ClassIDType.GameObject)
+			if(asset is IGameObject)
 			{
 				return true;
 			}
-			Component component = (Component)asset;
-			return component.GameObject.FindAsset(component.File) != null;
+			else if(asset is IComponent component)
+			{
+				return component.GameObjectPtr.FindAsset(component.File) != null;
+			}
+			return false;
 		}
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
@@ -40,20 +43,21 @@ namespace AssetRipper.Core.Project.Collections
 			return PrefabInstance.PrefabKeyword;
 		}
 
-		private static GameObject GetAssetRoot(IUnityObjectBase asset)
+		private static IGameObject GetAssetRoot(IUnityObjectBase asset)
 		{
-			GameObject go;
-			if (asset.ClassID == ClassIDType.GameObject)
+			if (asset is IGameObject gameObject)
 			{
-				go = (GameObject)asset;
+				return gameObject.GetRoot();
+			}
+			else if(asset is IComponent component)
+			{
+				IGameObject go = component.GameObjectPtr.GetAsset(component.File);
+				return go.GetRoot();
 			}
 			else
 			{
-				Component component = (Component)asset;
-				go = component.GameObject.GetAsset(component.File);
+				return default;
 			}
-
-			return go.GetRoot();
 		}
 		public override ISerializedFile File => m_file;
 		public override TransferInstructionFlags Flags => base.Flags | TransferInstructionFlags.SerializeForPrefabSystem;

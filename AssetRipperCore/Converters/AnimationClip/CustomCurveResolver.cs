@@ -1,6 +1,7 @@
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Camera;
+using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Light;
 using AssetRipper.Core.Classes.Renderer;
 using AssetRipper.Core.Classes.SpriteRenderer;
@@ -39,13 +40,13 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 						foreach (AssetRipper.Core.Classes.GameObject.GameObject root in Roots)
 						{
-							Transform rootTransform = root.GetTransform();
-							Transform child = rootTransform.FindChild(path);
+							ITransform rootTransform = root.GetTransform();
+							ITransform child = rootTransform.FindChild(path);
 							if (child == null)
 							{
 								continue;
 							}
-							SkinnedMeshRenderer skin = child.GameObject.FindAsset(child.File).FindComponent<SkinnedMeshRenderer>();
+							SkinnedMeshRenderer skin = child.GetGameObject().FindComponent<SkinnedMeshRenderer>();
 							if (skin == null)
 							{
 								continue;
@@ -79,15 +80,15 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 						foreach (AssetRipper.Core.Classes.GameObject.GameObject root in Roots)
 						{
-							Transform rootTransform = root.GetTransform();
-							Transform child = rootTransform.FindChild(path);
+							ITransform rootTransform = root.GetTransform();
+							ITransform child = rootTransform.FindChild(path);
 							if (child == null)
 							{
 								continue;
 							}
 
 							uint crc28 = attribute & 0xFFFFFFF;
-							Renderer renderer = child.GameObject.FindAsset(child.File).FindComponent<Renderer>();
+							Renderer renderer = child.GetGameObject().FindComponent<Renderer>();
 							if (renderer == null)
 							{
 								continue;

@@ -16,18 +16,6 @@ namespace AssetRipper.Core.Classes
 
 		protected Component(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public GameObject.GameObject GetRoot()
-		{
-			GameObject.GameObject go = GameObject.GetAsset(File);
-			return go.GetRoot();
-		}
-
-		public int GetRootDepth()
-		{
-			GameObject.GameObject go = GameObject.GetAsset(File);
-			return go.GetRootDepth();
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);

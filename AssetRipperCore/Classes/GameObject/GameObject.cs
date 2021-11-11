@@ -59,99 +59,6 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 		}
 
-		public T GetComponent<T>() where T : Component
-		{
-			T component = FindComponent<T>();
-			if (component == null)
-			{
-				throw new Exception($"Component of type {nameof(T)} hasn't been found");
-			}
-			return component;
-		}
-
-		public T FindComponent<T>() where T : Component
-		{
-			foreach (PPtr<Component> ptr in FetchComponents())
-			{
-				// component could has not impelemented asset type
-				Component comp = ptr.FindAsset(File);
-				if (comp is T t)
-				{
-					return t;
-				}
-			}
-			return null;
-		}
-
-		public Transform GetTransform()
-		{
-			foreach (PPtr<Component> ptr in FetchComponents())
-			{
-				Component comp = ptr.FindAsset(File);
-				if (comp == null)
-				{
-					continue;
-				}
-
-				if (comp.ClassID.IsTransform())
-				{
-					return (Transform)comp;
-				}
-			}
-			throw new Exception("Can't find transform component");
-		}
-
-		public GameObject GetRoot()
-		{
-			Transform root = GetTransform();
-			while (true)
-			{
-				Transform parent = root.Father.TryGetAsset(root.File);
-				if (parent == null)
-				{
-					break;
-				}
-				else
-				{
-					root = parent;
-				}
-			}
-			return root.GameObject.GetAsset(root.File);
-		}
-
-		public int GetRootDepth()
-		{
-			Transform root = GetTransform();
-			int depth = 0;
-			while (true)
-			{
-				Transform parent = root.Father.TryGetAsset(root.File);
-				if (parent == null)
-				{
-					break;
-				}
-
-				root = parent;
-				depth++;
-			}
-			return depth;
-		}
-
-		public IEnumerable<EditorExtension> FetchHierarchy()
-		{
-			foreach (EditorExtension element in FetchHierarchy(this))
-			{
-				yield return element;
-			}
-		}
-
-		public List<EditorExtension> CollectHierarchy()
-		{
-			List<EditorExtension> hierarchy = new List<EditorExtension>();
-			hierarchy.AddRange(FetchHierarchy(this));
-			return hierarchy;
-		}
-
 		public IReadOnlyDictionary<uint, string> BuildTOS()
 		{
 			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
@@ -300,56 +207,25 @@ namespace AssetRipper.Core.Classes.GameObject
 			return node;
 		}
 
-		private static IEnumerable<EditorExtension> FetchHierarchy(GameObject root)
-		{
-			yield return root;
-
-			Transform transform = null;
-			foreach (PPtr<Component> ptr in root.FetchComponents())
-			{
-				Component component = ptr.FindAsset(root.File);
-				if (component == null)
-				{
-					continue;
-				}
-
-				yield return component;
-				if (component.ClassID.IsTransform())
-				{
-					transform = (Transform)component;
-				}
-			}
-
-			foreach (PPtr<Transform> pchild in transform.Children)
-			{
-				Transform child = pchild.GetAsset(transform.File);
-				GameObject childGO = child.GameObject.GetAsset(root.File);
-				foreach (EditorExtension childElement in FetchHierarchy(childGO))
-				{
-					yield return childElement;
-				}
-			}
-		}
-
-		private IEnumerable<PPtr<Component>> FetchComponents()
+		public PPtr<IComponent>[] FetchComponents()
 		{
 			if (IsComponentTuple(File.Version))
 			{
-				return ComponentTuple.Select(t => t.Item2);
+				return ComponentTuple.Select(t => t.Item2.CastTo<IComponent>()).ToArray();
 			}
 			else
 			{
-				return Component.Select(t => t.Component);
+				return Component.Select(t => t.Component.CastTo<IComponent>()).ToArray();
 			}
 		}
 
-		private void BuildTOS(GameObject parent, string parentPath, Dictionary<uint, string> tos)
+		private void BuildTOS(IGameObject parent, string parentPath, Dictionary<uint, string> tos)
 		{
-			Transform transform = parent.GetTransform();
-			foreach (PPtr<Transform> childPtr in transform.Children)
+			ITransform transform = parent.GetTransform();
+			foreach (PPtr<ITransform> childPtr in transform.ChildrenPtrs)
 			{
-				Transform childTransform = childPtr.GetAsset(File);
-				GameObject child = childTransform.GameObject.GetAsset(File);
+				ITransform childTransform = childPtr.GetAsset(File);
+				IGameObject child = childTransform.GameObjectPtr.GetAsset(File);
 				string path = parentPath != string.Empty ? parentPath + Transform.PathSeparator + child.Name : child.Name;
 				uint pathHash = CRC.CalculateDigestUTF8(path);
 				tos[pathHash] = path;

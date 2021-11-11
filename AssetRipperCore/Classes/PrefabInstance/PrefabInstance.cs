@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.GameObject;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
@@ -24,13 +25,13 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		public PrefabInstance(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public static PrefabInstance CreateVirtualInstance(VirtualSerializedFile virtualFile, GameObject.GameObject root)
+		public static PrefabInstance CreateVirtualInstance(VirtualSerializedFile virtualFile, GameObject.IGameObject root)
 		{
 			PrefabInstance instance = virtualFile.CreateAsset((assetInfo) => new PrefabInstance(assetInfo));
 			instance.ObjectHideFlags = HideFlags.HideInHierarchy;
 			instance.Objects = Array.Empty<PPtr<EditorExtension>>();
 			instance.Modification = new PrefabModification(virtualFile.Layout);
-			instance.RootGameObject = root.File.CreatePPtr(root);
+			instance.RootGameObject = root.File.CreatePPtr(root).CastTo<GameObject.GameObject>();
 			instance.IsPrefabAsset = true;
 			instance.Name = root.Name;
 			return instance;
@@ -135,12 +136,12 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			}
 		}
 
-		public IEnumerable<EditorExtension> FetchObjects(IAssetContainer file)
+		public IEnumerable<IEditorExtension> FetchObjects(IAssetContainer file)
 		{
 #warning TEMP HACK:
 			//if (file.Layout.PrefabInstance.IsModificationFormat)
 			{
-				foreach (EditorExtension asset in RootGameObject.GetAsset(file).FetchHierarchy())
+				foreach (IEditorExtension asset in RootGameObject.GetAsset(file).FetchHierarchy())
 				{
 					yield return asset;
 				}

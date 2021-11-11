@@ -11,6 +11,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Core.Classes
 {
@@ -42,43 +43,6 @@ namespace AssetRipper.Core.Classes
 		}
 
 		public Transform(AssetInfo assetInfo) : base(assetInfo) { }
-
-		public string GetRootPath()
-		{
-			string pre = string.Empty;
-			if (!Father.IsNull)
-			{
-				pre = Father.GetAsset(File).GetRootPath() + PathSeparator;
-			}
-			return pre + GameObject.GetAsset(File).Name;
-		}
-
-		public int GetSiblingIndex()
-		{
-			if (Father.IsNull)
-			{
-				return 0;
-			}
-			Transform father = Father.GetAsset(File);
-			for (int i = 0; i < father.Children.Length; i++)
-			{
-				PPtr<Transform> child = father.Children[i];
-				if (child.PathID == PathID)
-				{
-					return i;
-				}
-			}
-			throw new Exception("Transorm hasn't been found among father's children");
-		}
-
-		public Transform FindChild(string path)
-		{
-			if (path.Length == 0)
-			{
-				return this;
-			}
-			return FindChild(path, 0);
-		}
 
 		public override IUnityObjectBase Convert(IExportContainer container)
 		{
@@ -145,26 +109,11 @@ namespace AssetRipper.Core.Classes
 			return node;
 		}
 
-		private Transform FindChild(string path, int startIndex)
-		{
-			int separatorIndex = path.IndexOf(PathSeparator, startIndex);
-			string childName = separatorIndex == -1 ?
-				path.Substring(startIndex, path.Length - startIndex) :
-				path.Substring(startIndex, separatorIndex - startIndex);
-			foreach (PPtr<Transform> childPtr in Children)
-			{
-				Transform child = childPtr.GetAsset(File);
-				GameObject.GameObject childGO = child.GameObject.GetAsset(File);
-				if (childGO.Name == childName)
-				{
-					return separatorIndex == -1 ? child : child.FindChild(path, separatorIndex + 1);
-				}
-			}
-			return null;
-		}
+		public PPtr<ITransform> FatherPtr => Father.CastTo<ITransform>();
+		public PPtr<ITransform>[] ChildrenPtrs => Children.Select(child => child.CastTo<ITransform>()).ToArray();
 
 		public PPtr<Transform>[] Children { get; set; }
-		private int RootOrder => GetSiblingIndex();
+		private int RootOrder => this.GetSiblingIndex();
 		private Vector3f LocalEulerAnglesHint => LocalRotation.ToEuler();
 
 		public const char PathSeparator = '/';

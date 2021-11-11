@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes
 {
-	public interface INamedObject : IHasName, IUnityObjectBase
+	public interface INamedObject : IHasName, IEditorExtension
 	{
 		string ValidName { get; }
 	}

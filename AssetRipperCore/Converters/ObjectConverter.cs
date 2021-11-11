@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Object;
+﻿using AssetRipper.Core.Classes.GameObject;
+using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
 
