@@ -102,7 +102,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 				if (asset.ClassID == ClassIDType.OcclusionCullingSettings)
 				{
 					OcclusionCullingSettings.OcclusionCullingSettings cullingSetting = (OcclusionCullingSettings.OcclusionCullingSettings)asset;
-					if (cullingSetting.OcclusionCullingData.IsAsset(cullingSetting.File, this))
+					if (cullingSetting.m_OcclusionCullingData.IsAsset(cullingSetting.File, this))
 					{
 						cullingSettings.Add(cullingSetting);
 					}

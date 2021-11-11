@@ -19,6 +19,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 	{
 		public OcclusionCullingSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
+		#region Static Version Methods
 		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// min version is 2nd
@@ -83,6 +84,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 		/// 5.5.0 and greater
 		/// </summary>
 		private static bool IsOcclusionBakeSettingsFirst(UnityVersion version) => version.IsGreaterEqual(5, 5);
+		#endregion
 
 		public override void Read(AssetReader reader)
 		{
@@ -109,7 +111,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			if (HasSceneGUID(reader.Version))
 			{
 				SceneGUID.Read(reader);
-				OcclusionCullingData.Read(reader);
+				m_OcclusionCullingData.Read(reader);
 			}
 			if (HasStaticRenderers(reader.Version, reader.Flags))
 			{
@@ -139,7 +141,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 				yield return asset;
 			}
 
-			yield return context.FetchDependency(OcclusionCullingData, OcclusionCullingDataName);
+			yield return context.FetchDependency(m_OcclusionCullingData, OcclusionCullingDataName);
 			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(StaticRenderers, StaticRenderersName))
 			{
 				yield return asset;
@@ -200,7 +202,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			}
 			if (HasSceneGUID(container.Version))
 			{
-				return OcclusionCullingData;
+				return m_OcclusionCullingData;
 			}
 			return default;
 		}
@@ -223,7 +225,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 
 		public OcclusionBakeSettings OcclusionBakeSettings;
 		public UnityGUID SceneGUID;
-		public PPtr<OcclusionCullingData.OcclusionCullingData> OcclusionCullingData;
+		public PPtr<OcclusionCullingData.OcclusionCullingData> m_OcclusionCullingData;
 
 		public const string SceneKeyword = nameof(ClassIDType.Scene);
 
