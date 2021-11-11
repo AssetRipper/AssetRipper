@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 	/// <summary>
 	/// First introduced in 2.6.0
 	/// </summary>
-	public sealed class EditorSettings : Object.Object
+	public sealed class EditorSettings : Object.Object, IEditorSettings
 	{
 		public EditorSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -42,9 +42,13 @@ namespace AssetRipper.Core.Classes.EditorSettings
 
 		public static EditorSettings CreateVirtualInstance(VirtualSerializedFile virtualFile)
 		{
-			return virtualFile.CreateAsset((assetInfo) => new EditorSettings(assetInfo, true));
+			//return virtualFile.CreateAsset((assetInfo) => new EditorSettings(assetInfo, true));
+			var result = virtualFile.CreateAsset((assetInfo) => new EditorSettings(assetInfo));
+			result.SetToDefaults();
+			return result;
 		}
 
+		#region Static Version Methods
 		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// UseLegacyProbeSampleCount default value has been changed from 1 to custom?
@@ -209,6 +213,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		/// 2019.2 and greater
 		/// </summary>
 		private static bool IsAlign2(UnityVersion version) => version.IsGreaterEqual(2019, 2);
+		#endregion
 
 		public override void Read(AssetReader reader)
 		{
@@ -239,7 +244,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 						break;
 				}
 			}
-			else if(HasExternalVersionControlSupport(reader.Version))
+			else if (HasExternalVersionControlSupport(reader.Version))
 			{
 				//Removed in 2020.
 				ExternalVersionControlSupport = reader.ReadString();
@@ -373,7 +378,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 				SerializeInlineMappingsOnOneLine = reader.ReadBoolean();
 				DisableCookiesInLightmapper = reader.ReadBoolean();
 			}
-			
+
 			if (HasAssetPipelineMode(reader.Version))
 			{
 				AssetPipelineMode = (AssetPipelineMode)reader.ReadInt32();
@@ -382,7 +387,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 				{
 					reader.ReadInt32();
 				}
-				
+
 				CacheServerMode = (CacheServerMode)reader.ReadInt32();
 				CacheServerEndpoint = reader.ReadString();
 				CacheServerNamespacePrefix = reader.ReadString();
@@ -394,7 +399,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 					CacheServerEnableAuth = reader.ReadBoolean();
 					CacheServerEnableTls = reader.ReadBoolean();
 				}
-				
+
 				reader.AlignStream();
 			}
 		}
@@ -477,6 +482,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			return node;
 		}
 
+		#region GetMethods
 		private int GetSpritePackerPaddingPower(UnityVersion version)
 		{
 			return HasSpritePackerPaddingPower(version) ? SpritePackerPaddingPower : 1;
@@ -546,25 +552,34 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		{
 			return HasAssetPipelineMode(version) ? CacheServerNamespacePrefix : "default";
 		}
-
-		public string ExternalVersionControlSupport { get; set; }
-		public SerializationMode SerializationMode { get; set; }
+		#endregion
+		
+		public string ExternalVersionControlSupport
+		{
+			get => m_ExternalVersionControlSupport;
+			set => m_ExternalVersionControlSupport = value;
+		}
+		public SerializationMode SerializationMode
+		{
+			get => (SerializationMode)m_SerializationMode;
+			set => m_SerializationMode = (int)value;
+		}
 		public int WebSecurityEmulationEnabled { get; set; }
 		public string WebSecurityEmulationHostUrl { get; set; }
 		public LineEndingsMode LineEndingsForNewScripts { get; set; }
 		public EditorBehaviorMode DefaultBehaviorMode { get; set; }
 		public SpritePackerMode SpritePackerMode { get; set; }
-		public int SpritePackerPaddingPower { get; set; }
-		public int EtcTextureCompressorBehavior { get; set; }
-		public int EtcTextureFastCompressor { get; set; }
-		public int EtcTextureNormalCompressor { get; set; }
-		public int EtcTextureBestCompressor { get; set; }
-		public string ProjectGenerationIncludedExtensions { get; set; }
-		public string ProjectGenerationRootNamespace { get; set; }
-		public string UserGeneratedProjectSuffix { get; set; }
-		public bool EnableTextureStreamingInEditMode { get; set; }
-		public bool EnableTextureStreamingInPlayMode { get; set; }
-		public bool AsyncShaderCompilation { get; set; }
+		public int SpritePackerPaddingPower { get => m_SpritePackerPaddingPower; set => m_SpritePackerPaddingPower = value; }
+		public int EtcTextureCompressorBehavior { get => m_EtcTextureCompressorBehavior; set => m_EtcTextureCompressorBehavior = value; }
+		public int EtcTextureFastCompressor { get => m_EtcTextureFastCompressor; set => m_EtcTextureFastCompressor = value; }
+		public int EtcTextureNormalCompressor { get => m_EtcTextureNormalCompressor; set => m_EtcTextureNormalCompressor = value; }
+		public int EtcTextureBestCompressor { get => m_EtcTextureBestCompressor; set => m_EtcTextureBestCompressor = value; }
+		public string ProjectGenerationIncludedExtensions { get => m_ProjectGenerationIncludedExtensions; set => m_ProjectGenerationIncludedExtensions = value; }
+		public string ProjectGenerationRootNamespace { get => m_ProjectGenerationRootNamespace; set => m_ProjectGenerationRootNamespace = value; }
+		public string UserGeneratedProjectSuffix { get => m_UserGeneratedProjectSuffix; set => m_UserGeneratedProjectSuffix = value; }
+		public bool EnableTextureStreamingInEditMode { get => m_EnableTextureStreamingInEditMode; set => m_EnableTextureStreamingInEditMode = value; }
+		public bool EnableTextureStreamingInPlayMode { get => m_EnableTextureStreamingInPlayMode; set => m_EnableTextureStreamingInPlayMode = value; }
+		public bool AsyncShaderCompilation { get => m_AsyncShaderCompilation; set => m_AsyncShaderCompilation = value; }
 		public bool CachingShaderPreprocessor { get; set; }
 		public bool PrefabModeAllowAutoSave { get; set; }
 		public bool EnterPlayModeOptionsEnabled { get; set; }
@@ -576,12 +591,12 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		public int UseLegacyProbeSampleCount { get; set; }
 		public bool SerializeInlineMappingsOnOneLine { get; set; }
 		public bool DisableCookiesInLightmapper { get; set; }
-		public AssetPipelineMode AssetPipelineMode { get; set; }
-		public CacheServerMode CacheServerMode { get; set; }
-		public string CacheServerEndpoint { get; set; }
-		public string CacheServerNamespacePrefix { get; set; }
-		public bool CacheServerEnableDownload { get; set; }
-		public bool CacheServerEnableUpload { get; set; }
+		public AssetPipelineMode AssetPipelineMode { get => (AssetPipelineMode)m_AssetPipelineMode; set => m_AssetPipelineMode = (int)value; }
+		public CacheServerMode CacheServerMode { get => (CacheServerMode)m_CacheServerMode; set => m_CacheServerMode = (int)value; }
+		public string CacheServerEndpoint { get => m_CacheServerEndpoint; set => m_CacheServerEndpoint = value; }
+		public string CacheServerNamespacePrefix { get => m_CacheServerNamespacePrefix; set => m_CacheServerNamespacePrefix = value; }
+		public bool CacheServerEnableDownload { get => m_CacheServerEnableDownload; set => m_CacheServerEnableDownload = value; }
+		public bool CacheServerEnableUpload { get => m_CacheServerEnableUpload; set => m_CacheServerEnableUpload = value; }
 		public bool CacheServerEnableAuth { get; set; }
 		public bool CacheServerEnableTls { get; set; }
 
@@ -622,7 +637,25 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		public PPtr<SceneAsset> PrefabRegularEnvironment;
 		public PPtr<SceneAsset> PrefabUIEnvironment;
 		public CollabEditorSettings CollabEditorSettings;
-
+		private int m_EtcTextureCompressorBehavior;
+		private int m_EtcTextureFastCompressor;
+		private int m_EtcTextureNormalCompressor;
+		private int m_EtcTextureBestCompressor;
+		private string m_ProjectGenerationIncludedExtensions;
+		private string m_ProjectGenerationRootNamespace;
+		private string m_UserGeneratedProjectSuffix;
+		private bool m_EnableTextureStreamingInEditMode;
+		private bool m_EnableTextureStreamingInPlayMode;
+		private bool m_AsyncShaderCompilation;
+		private int m_AssetPipelineMode;
+		private int m_CacheServerMode;
+		private string m_CacheServerEndpoint;
+		private string m_CacheServerNamespacePrefix;
+		private bool m_CacheServerEnableDownload;
+		private bool m_CacheServerEnableUpload;
+		private int m_SerializationMode;
+		private int m_SpritePackerPaddingPower;
+		private string m_ExternalVersionControlSupport;
 		private const string DefaultExtensions = "txt;xml;fnt;cd;asmdef;rsp";
 		private const string AsmrefExtension = "asmref";
 		private const string HiddenMeta = "Hidden Meta Files";
