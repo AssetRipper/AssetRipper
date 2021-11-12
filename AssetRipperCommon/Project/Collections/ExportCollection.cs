@@ -22,18 +22,16 @@ namespace AssetRipper.Core.Project.Collections
 		protected static void ExportMeta(IExportContainer container, Meta meta, string filePath)
 		{
 			string metaPath = $"{filePath}{MetaExtension}";
-			using (var fileStream = System.IO.File.Create(metaPath))
-			using (var stream = new BufferedStream(fileStream))
-			using (var streamWriter = new InvariantStreamWriter(stream, new UTF8Encoding(false)))
-			{
-				YAMLWriter writer = new YAMLWriter();
-				writer.IsWriteDefaultTag = false;
-				writer.IsWriteVersion = false;
-				writer.IsFormatKeys = true;
-				YAMLDocument doc = meta.ExportYAMLDocument(container);
-				writer.AddDocument(doc);
-				writer.Write(streamWriter);
-			}
+			using var fileStream = System.IO.File.Create(metaPath);
+			using var streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
+
+			YAMLWriter writer = new YAMLWriter();
+			writer.IsWriteDefaultTag = false;
+			writer.IsWriteVersion = false;
+			writer.IsFormatKeys = true;
+			YAMLDocument doc = meta.ExportYAMLDocument(container);
+			writer.AddDocument(doc);
+			writer.Write(streamWriter);
 		}
 
 		public abstract bool Export(IProjectAssetContainer container, string dirPath);
