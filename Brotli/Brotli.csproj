@@ -7,13 +7,12 @@
     <AssemblyName>Brotli</AssemblyName>
     <RootNamespace>Brotli</RootNamespace>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <OutputPath>..\Bins\$(Platform)\Brotli\$(Configuration)\</OutputPath>
-	  <IntermediateOutputPath>..\Bins\obj\$(Platform)\Brotli\$(Configuration)\</IntermediateOutputPath>
-    <Configurations>Debug;Release;Virtual</Configurations>
+    <OutputPath>..\Bins\Brotli\$(Configuration)\</OutputPath>
+	<IntermediateOutputPath>..\Bins\obj\Brotli\$(Configuration)\</IntermediateOutputPath>
+	<Configurations>Debug;Release;Virtual</Configurations>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>TRACE;NET_CORE</DefineConstants>
-    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

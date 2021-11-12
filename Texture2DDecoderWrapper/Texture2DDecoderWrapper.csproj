@@ -6,10 +6,10 @@
 	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <OutputPath>..\Bins\$(Platform)\Texture2DDecoderWrapper\$(Configuration)\</OutputPath>
-	  <IntermediateOutputPath>..\Bins\obj\$(Platform)\Texture2DDecoderWrapper\$(Configuration)\</IntermediateOutputPath>
-	  <Platforms>Windows;Mac;Linux</Platforms>
-	  <Configurations>Debug;Release;Virtual</Configurations>
+	  <OutputPath>..\Bins\Texture2DDecoderWrapper\$(Configuration)\</OutputPath>
+	  <IntermediateOutputPath>..\Bins\obj\Texture2DDecoderWrapper\$(Configuration)\</IntermediateOutputPath>
+	  <Platforms>x64</Platforms>
+	  <Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
@@ -23,21 +23,21 @@
 		<DefineConstants>DEBUG;VIRTUAL</DefineConstants>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(Platform)'=='Windows'">
+	<ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release' or '$(Configuration)'=='Virtual'">
         <ContentWithTargetPath Include=".\Native\Texture2DDecoderNative.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Texture2DDecoderNative.dll</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
     
-    <ItemGroup Condition="'$(Platform)'=='Mac'">
+    <ItemGroup Condition="'$(Configuration)'=='ReleaseMac'">
         <ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.dylib">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>libTexture2DDecoderNative.dylib</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
     
-    <ItemGroup Condition="'$(Platform)'=='Linux'">
+    <ItemGroup Condition="'$(Configuration)'=='ReleaseLinux'">
         <ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>libTexture2DDecoderNative.so</TargetPath>

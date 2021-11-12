@@ -10,7 +10,7 @@ namespace UnitTester
 {
 	static class Program
 	{
-		private const string TestsDirectory = "../../../Tests";
+		private const string TestsDirectory = "../../Tests";
 
 		static void Main(string[] args)
 		{

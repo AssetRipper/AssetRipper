@@ -5,10 +5,10 @@
 	  <TargetFramework>net6.0</TargetFramework>
 	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <OutputPath>..\Bins\$(Platform)\UnitTester\$(Configuration)\</OutputPath>
-	  <IntermediateOutputPath>..\Bins\obj\$(Platform)\UnitTester\$(Configuration)\</IntermediateOutputPath>
+	  <OutputPath>..\Bins\UnitTester\$(Configuration)\</OutputPath>
+	  <IntermediateOutputPath>..\Bins\obj\UnitTester\$(Configuration)\</IntermediateOutputPath>
 	  <Configurations>Debug;Release;Virtual</Configurations>
-	  <Platforms>Windows;Mac;Linux</Platforms>
+	  <Platforms>x64</Platforms>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
