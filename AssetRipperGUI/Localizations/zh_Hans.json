@@ -98,5 +98,8 @@
     "export_in_progress_no_file_count_yet": "导出资产文件\n0.0%\n?/?",
     "export_in_progress": "导出资产文件\n{0}%\n{1}/{2}",
     "error_exporting_with_reason": "导出游戏内容失败: {0}",
-    "error_importing_with_reason": "加载游戏内容失败: {0}"
+    "error_importing_with_reason": "加载游戏内容失败: {0}",
+    "loose_file_saved_at": "在 {0} 释放并保存文件",
+    "mesh_format_fbx_primitive_description": "几乎所有3d编辑软件（包括Unity）都使用的行业标准格式。因为只包含网格数据，所以这会破坏对网格素材的导出引用。",
+    "mesh_format_fbx_primitive": "Simple FBX"
 }
