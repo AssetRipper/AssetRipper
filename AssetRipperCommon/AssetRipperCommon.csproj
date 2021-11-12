@@ -12,7 +12,7 @@
 	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
 	  <Copyright>Copyright ©  2021</Copyright>
 	  <Authors>ds5678</Authors>
-	  <Configurations>Debug;Release;Virtual</Configurations>
+	  <Configurations>Debug;Release</Configurations>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
@@ -20,10 +20,6 @@
 
 	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
 		<DefineConstants>DEBUG</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)'=='Virtual'">
-		<DefineConstants>DEBUG;VIRTUAL</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -35,6 +31,10 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Brotli\Brotli.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
 	</ItemGroup>
 
 </Project>

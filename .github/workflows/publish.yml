@@ -18,11 +18,11 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Publish AssetRipperConsole Windows x64
-      run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=windows_console
+      run: dotnet publish /p:Configuration=ReleaseWindows  /p:Platform=x64 /p:PublishProfile=windows_console
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI Windows x64
-      run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=windows_gui
+      run: dotnet publish /p:Configuration=ReleaseWindows  /p:Platform=x64 /p:PublishProfile=windows_gui
       working-directory: ./AssetRipperGUI/
       
     - name: List Console Files

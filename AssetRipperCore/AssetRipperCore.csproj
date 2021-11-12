@@ -12,7 +12,7 @@
 	  <IntermediateOutputPath>..\Bins\obj\AssetRipperCore\$(Configuration)\</IntermediateOutputPath>
 	  <Copyright>Copyright ©  2021</Copyright>
 	  <Authors>ds5678</Authors>
-	  <Configurations>Debug;Release;Virtual</Configurations>
+	  <Configurations>Debug;Release</Configurations>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
@@ -21,10 +21,6 @@
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
 	<DefineConstants>DEBUG</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Virtual'">
-	<DefineConstants>DEBUG;VIRTUAL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

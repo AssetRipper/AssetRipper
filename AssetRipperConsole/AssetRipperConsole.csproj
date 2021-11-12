@@ -10,19 +10,16 @@
 	  <RootNamespace>AssetRipper.Console</RootNamespace>
 	  <OutputPath>..\Bins\AssetRipperConsole\$(Configuration)\</OutputPath>
 	  <IntermediateOutputPath>..\Bins\obj\AssetRipperConsole\$(Configuration)\</IntermediateOutputPath>
-	  <Configurations>Debug;Release;Virtual</Configurations>
+	  <Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
+	  <Platforms>x64</Platforms>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
 	  <ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+  <PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
     <DefineConstants>DEBUG</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Virtual'">
-    <DefineConstants>DEBUG;VIRTUAL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

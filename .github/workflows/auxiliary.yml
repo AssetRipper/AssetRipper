@@ -18,37 +18,37 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Build AssetAnalyzer Windows x64
-      run: dotnet build /p:Configuration=Release  /p:Platform=x64
+      run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
       working-directory: ./AssetAnalyzer/
       
     - name: Build UnitTester Windows x64
-      run: dotnet build /p:Configuration=Release  /p:Platform=x64
+      run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
       working-directory: ./UnitTester/
       
     - name: List Analyzer Files
       shell: bash
       run: |
-        mkdir -p ./Bins/AssetAnalyzer/Release/Licenses
-        cp ./Licenses/*.md ./Bins/AssetAnalyzer/Release/Licenses/
-        ls -R ./Bins/AssetAnalyzer/Release
+        mkdir -p ./Bins/AssetAnalyzer/ReleaseWindows/Licenses
+        cp ./Licenses/*.md ./Bins/AssetAnalyzer/ReleaseWindows/Licenses/
+        ls -R ./Bins/AssetAnalyzer/ReleaseWindows
       
     - name: Upload AssetAnalyzer Windows x64
       uses: actions/upload-artifact@v2
       with:
         name: AssetAnalyzer_win64
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetAnalyzer\Release\*
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetAnalyzer\ReleaseWindows\*
         if-no-files-found: error
         
     - name: List UnitTester Files
       shell: bash
       run: |
-        mkdir -p ./Bins/UnitTester/Release/Licenses
-        cp ./Licenses/*.md ./Bins/UnitTester/Release/Licenses/
-        ls -R ./Bins/UnitTester/Release
+        mkdir -p ./Bins/UnitTester/ReleaseWindows/Licenses
+        cp ./Licenses/*.md ./Bins/UnitTester/ReleaseWindows/Licenses/
+        ls -R ./Bins/UnitTester/ReleaseWindows
 
     - name: Upload UnitTester Windows x64
       uses: actions/upload-artifact@v2
       with:
         name: UnitTester_win64
-        path: D:\a\AssetRipper\AssetRipper\Bins\UnitTester\Release\*
+        path: D:\a\AssetRipper\AssetRipper\Bins\UnitTester\ReleaseWindows\*
         if-no-files-found: error

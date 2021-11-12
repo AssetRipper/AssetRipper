@@ -12,17 +12,14 @@
 	  <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
 	  <IntermediateOutputPath>..\Bins\obj\AssetRipperLibrary\$(Configuration)\</IntermediateOutputPath>
 	  <Platforms>x64</Platforms>
-	  <Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
+	  <Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+  <PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
     <DefineConstants>DEBUG</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Virtual' ">
-    <DefineConstants>DEBUG;VIRTUAL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -62,7 +59,7 @@
     <ProjectReference Include="..\Texture2DDecoderWrapper\Texture2DDecoderWrapper.csproj" />
   </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release' or '$(Configuration)'=='Virtual'">
+    <ItemGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='ReleaseWindows'">
         <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>texgenpack.dll</TargetPath>
@@ -81,14 +78,14 @@
         </ContentWithTargetPath>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='ReleaseMac'">
+    <ItemGroup Condition="'$(Configuration)'=='DebugMac' or '$(Configuration)'=='ReleaseMac'">
         <ContentWithTargetPath Include="Libraries\mac\libfmod.dylib">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>libfmod.dylib</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='ReleaseLinux'">
+    <ItemGroup Condition="'$(Configuration)'=='DebugLinux' or '$(Configuration)'=='ReleaseLinux'">
         <ContentWithTargetPath Include="Libraries\linux\libfmod.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>libfmod.so</TargetPath>

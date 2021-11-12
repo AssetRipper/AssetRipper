@@ -9,7 +9,7 @@
         <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
         <OutputPath>..\Bins\AssetRipperGUI\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipperGUI\$(Configuration)\</IntermediateOutputPath>
-		<Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
+		<Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
         <AssemblyName>AssetRipper</AssemblyName>
         <RootNamespace>AssetRipper.GUI</RootNamespace>
         <DefineConstants>TRACE;NET_CORE</DefineConstants>
@@ -20,12 +20,8 @@
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
         <DefineConstants>DEBUG</DefineConstants>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)'=='Virtual'">
-        <DefineConstants>DEBUG;VIRTUAL</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -47,10 +43,10 @@
         <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
         <PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
     </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release' or '$(Configuration)'=='Virtual'">
+    <ItemGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='ReleaseWindows'">
         <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.16" />
     </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)'=='ReleaseMac'">
+    <ItemGroup Condition="'$(Configuration)'=='DebugMac' or '$(Configuration)'=='ReleaseMac'">
         <PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
     </ItemGroup>
     <ItemGroup>
