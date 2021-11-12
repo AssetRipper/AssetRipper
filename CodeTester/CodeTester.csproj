@@ -5,19 +5,19 @@
 	  <TargetFramework>net6.0</TargetFramework>
 	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <OutputPath>..\Bins\CodeTester\$(Configuration)\</OutputPath>
+	  <OutputPath>..\Bins\$(Platform)\CodeTester\$(Configuration)\</OutputPath>
 	  <Configurations>Debug;Release;Virtual</Configurations>
-	  <Platforms>x64</Platforms>
+	  <Platforms>Windows;Mac;Linux</Platforms>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
   </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
 		<DefineConstants>DEBUG</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)'=='Virtual'">
 		<DefineConstants>DEBUG;VIRTUAL</DefineConstants>
 	</PropertyGroup>
 

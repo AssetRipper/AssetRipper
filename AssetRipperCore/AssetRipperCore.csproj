@@ -8,13 +8,14 @@
 	  <AssemblyName>AssetRipperCore</AssemblyName>
 	  <RootNamespace>AssetRipper.Core</RootNamespace>
 	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-	  <OutputPath>..\Bins\AssetRipperCore\$(Configuration)\</OutputPath>
+	  <OutputPath>..\Bins\$(Platform)\AssetRipperCore\$(Configuration)\</OutputPath>
 	  <Copyright>Copyright ©  2021</Copyright>
 	  <Authors>ds5678</Authors>
 	  <Configurations>Debug;Release;Virtual</Configurations>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
+	  <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">

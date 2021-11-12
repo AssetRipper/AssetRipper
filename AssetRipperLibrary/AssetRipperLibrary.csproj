@@ -9,9 +9,9 @@
 	  <RootNamespace>AssetRipper.Library</RootNamespace>
 	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	  <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
-	  <Platforms>x64</Platforms>
-	  <Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
+	  <OutputPath>..\Bins\$(Platform)\AssetRipperLibrary\$(Configuration)\</OutputPath>
+	  <Configurations>Debug;Release;Virtual</Configurations>
+	  <Platforms>Windows;Mac;Linux</Platforms>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
@@ -61,7 +61,7 @@
     <ProjectReference Include="..\Texture2DDecoderWrapper\Texture2DDecoderWrapper.csproj" />
   </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release' or '$(Configuration)'=='Virtual'">
+    <ItemGroup Condition="'$(Platform)'=='Windows'">
         <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>texgenpack.dll</TargetPath>
@@ -80,14 +80,14 @@
         </ContentWithTargetPath>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='ReleaseMac'">
+    <ItemGroup Condition="'$(Platform)'=='Mac'">
         <ContentWithTargetPath Include="Libraries\mac\libfmod.dylib">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>libfmod.dylib</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='ReleaseLinux'">
+    <ItemGroup Condition="'$(Platform)'=='Linux'">
         <ContentWithTargetPath Include="Libraries\linux\libfmod.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>libfmod.so</TargetPath>

@@ -6,37 +6,37 @@
 	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <OutputPath>..\Bins\Texture2DDecoderWrapper\$(Configuration)\</OutputPath>
-	  <Platforms>x64</Platforms>
-	  <Configurations>Debug;Release;ReleaseMac;ReleaseLinux;Virtual</Configurations>
+	  <OutputPath>..\Bins\$(Platform)\Texture2DDecoderWrapper\$(Configuration)\</OutputPath>
+	  <Platforms>Windows;Mac;Linux</Platforms>
+	  <Configurations>Debug;Release;Virtual</Configurations>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
   </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
 		<DefineConstants>DEBUG</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Virtual|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)'=='Virtual'">
 		<DefineConstants>DEBUG;VIRTUAL</DefineConstants>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release' or '$(Configuration)'=='Virtual'">
+	<ItemGroup Condition="'$(Platform)'=='Windows'">
         <ContentWithTargetPath Include=".\Native\Texture2DDecoderNative.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Texture2DDecoderNative.dll</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
     
-    <ItemGroup Condition="'$(Configuration)'=='ReleaseMac'">
+    <ItemGroup Condition="'$(Platform)'=='Mac'">
         <ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.dylib">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>libTexture2DDecoderNative.dylib</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
     
-    <ItemGroup Condition="'$(Configuration)'=='ReleaseLinux'">
+    <ItemGroup Condition="'$(Platform)'=='Linux'">
         <ContentWithTargetPath Include=".\Native\libTexture2DDecoderNative.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>libTexture2DDecoderNative.so</TargetPath>

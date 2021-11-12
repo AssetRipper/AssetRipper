@@ -8,9 +8,9 @@
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <AssemblyName>AssetRipperConsole</AssemblyName>
 	  <RootNamespace>AssetRipper.Console</RootNamespace>
-	  <OutputPath>..\Bins\AssetRipperConsole\$(Configuration)\</OutputPath>
+	  <OutputPath>..\Bins\$(Platform)\AssetRipperConsole\$(Configuration)\</OutputPath>
 	  <Configurations>Debug;Release;Virtual</Configurations>
-	  <Platforms>x64</Platforms>
+	  <Platforms>Windows;Mac;Linux</Platforms>
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>

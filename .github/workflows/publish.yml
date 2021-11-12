@@ -19,11 +19,11 @@ jobs:
         include-prerelease: true
         
     - name: Publish AssetRipperConsole Windows x64
-      run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=windows_console
+      run: dotnet publish /p:Configuration=Release  /p:Platform=Windows /p:PublishProfile=windows_console
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI Windows x64
-      run: dotnet publish /p:Configuration=Release  /p:Platform=x64 /p:PublishProfile=windows_gui
+      run: dotnet publish /p:Configuration=Release  /p:Platform=Windows /p:PublishProfile=windows_gui
       working-directory: ./AssetRipperGUI/
       
     - name: List Console Files
@@ -67,11 +67,11 @@ jobs:
         include-prerelease: true
         
     - name: Publish AssetRipperConsole Linux x64
-      run: dotnet publish /p:Configuration=ReleaseLinux  /p:Platform=x64 /p:PublishProfile=linux_console
+      run: dotnet publish /p:Configuration=Release  /p:Platform=Linux /p:PublishProfile=linux_console
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI Linux x64
-      run: dotnet publish /p:Configuration=ReleaseLinux  /p:Platform=x64 /p:PublishProfile=linux_gui
+      run: dotnet publish /p:Configuration=Release  /p:Platform=Linux /p:PublishProfile=linux_gui
       working-directory: ./AssetRipperGUI/
         
     - name: List Console Files
@@ -115,11 +115,11 @@ jobs:
         include-prerelease: true
         
     - name: Publish AssetRipperConsole Mac x64
-      run: dotnet publish /p:Configuration=ReleaseMac  /p:Platform=x64 /p:PublishProfile=mac_console
+      run: dotnet publish /p:Configuration=Release  /p:Platform=Mac /p:PublishProfile=mac_console
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI Mac x64
-      run: dotnet publish /p:Configuration=ReleaseMac  /p:Platform=x64 /p:PublishProfile=mac_gui
+      run: dotnet publish /p:Configuration=Release  /p:Platform=Mac /p:PublishProfile=mac_gui
       working-directory: ./AssetRipperGUI/
         
     - name: List Console Files

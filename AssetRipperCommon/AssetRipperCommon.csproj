@@ -4,6 +4,7 @@
 	  <TargetFramework>net6.0</TargetFramework>
 	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <OutputPath>..\Bins\$(Platform)\AssetRipperCommon\$(Configuration)\</OutputPath>
 	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	  <AssemblyName>AssetRipperCommon</AssemblyName>
 	  <RootNamespace>AssetRipper.Core</RootNamespace>
@@ -14,6 +15,7 @@
 	  <DebugType>embedded</DebugType>
 	  <DebugSymbols>true</DebugSymbols>
 	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
+	  <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
