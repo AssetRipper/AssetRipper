@@ -16,7 +16,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-        include-prerelease: true
         
     - name: Publish AssetRipperConsole Windows x64
       run: dotnet publish /p:Configuration=Release  /p:Platform=Windows /p:PublishProfile=windows_console
@@ -64,7 +63,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-        include-prerelease: true
         
     - name: Publish AssetRipperConsole Linux x64
       run: dotnet publish /p:Configuration=Release  /p:Platform=Linux /p:PublishProfile=linux_console
@@ -112,7 +110,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-        include-prerelease: true
         
     - name: Publish AssetRipperConsole Mac x64
       run: dotnet publish /p:Configuration=Release  /p:Platform=Mac /p:PublishProfile=mac_console

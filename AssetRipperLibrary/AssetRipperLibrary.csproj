@@ -10,6 +10,7 @@
 	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	  <OutputPath>..\Bins\$(Platform)\AssetRipperLibrary\$(Configuration)\</OutputPath>
+	  <IntermediateOutputPath>..\Bins\obj\$(Platform)\AssetRipperLibrary\$(Configuration)\</IntermediateOutputPath>
 	  <Configurations>Debug;Release;Virtual</Configurations>
 	  <Platforms>Windows;Mac;Linux</Platforms>
 	  <DebugType>embedded</DebugType>

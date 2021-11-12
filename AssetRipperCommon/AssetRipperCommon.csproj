@@ -5,6 +5,7 @@
 	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <OutputPath>..\Bins\$(Platform)\AssetRipperCommon\$(Configuration)\</OutputPath>
+	  <IntermediateOutputPath>..\Bins\obj\$(Platform)\AssetRipperCommon\$(Configuration)\</IntermediateOutputPath>
 	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	  <AssemblyName>AssetRipperCommon</AssemblyName>
 	  <RootNamespace>AssetRipper.Core</RootNamespace>

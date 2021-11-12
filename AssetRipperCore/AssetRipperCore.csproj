@@ -9,6 +9,7 @@
 	  <RootNamespace>AssetRipper.Core</RootNamespace>
 	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
 	  <OutputPath>..\Bins\$(Platform)\AssetRipperCore\$(Configuration)\</OutputPath>
+	  <IntermediateOutputPath>..\Bins\obj\$(Platform)\AssetRipperCore\$(Configuration)\</IntermediateOutputPath>
 	  <Copyright>Copyright ©  2021</Copyright>
 	  <Authors>ds5678</Authors>
 	  <Configurations>Debug;Release;Virtual</Configurations>

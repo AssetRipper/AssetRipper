@@ -8,6 +8,7 @@
     <RootNamespace>Brotli</RootNamespace>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <OutputPath>..\Bins\$(Platform)\Brotli\$(Configuration)\</OutputPath>
+	  <IntermediateOutputPath>..\Bins\obj\$(Platform)\Brotli\$(Configuration)\</IntermediateOutputPath>
     <Configurations>Debug;Release;Virtual</Configurations>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>

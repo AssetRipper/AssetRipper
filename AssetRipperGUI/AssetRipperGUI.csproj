@@ -8,6 +8,7 @@
         <Nullable>enable</Nullable>
         <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
         <OutputPath>..\Bins\$(Platform)\AssetRipperGUI\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\$(Platform)\AssetRipperGUI\$(Configuration)\</IntermediateOutputPath>
         <Configurations>Debug;Release;Virtual</Configurations>
 		<Platforms>Windows;Mac;Linux</Platforms>
         <AssemblyName>AssetRipper</AssemblyName>
@@ -47,7 +48,7 @@
         <PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='Windows'">
-        <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.16" />
+		<PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.16" />
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='Mac'">
         <PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />

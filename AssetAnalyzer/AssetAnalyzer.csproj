@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,6 +8,7 @@
     <AssemblyName>AssetAnalyzer</AssemblyName>
     <RootNamespace>AssetAnalyzer</RootNamespace>
     <OutputPath>..\Bins\$(Platform)\AssetAnalyzer\$(Configuration)\</OutputPath>
+	  <IntermediateOutputPath>..\Bins\obj\$(Platform)\AssetAnalyzer\$(Configuration)\</IntermediateOutputPath>
     <Configurations>Debug;Release;Virtual</Configurations>
 	  <Platforms>Windows;Mac;Linux</Platforms>
     <DebugType>embedded</DebugType>
