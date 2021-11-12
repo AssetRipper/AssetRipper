@@ -53,10 +53,7 @@ namespace AssetRipper.Core.Project.Collections
 			string fileName = $"{EditorBuildSettings.ClassID.ToString()}.asset";
 			string filePath = Path.Combine(subPath, fileName);
 
-			if (!Directory.Exists(subPath))
-			{
-				DirectoryUtils.CreateVirtualDirectory(subPath);
-			}
+			Directory.CreateDirectory(subPath);
 
 			BuildSettings asset = (BuildSettings)Asset;
 			IEnumerable<Scene> scenes = asset.Scenes.Select(t => new Scene(t, container.SceneNameToGUID(t)));
@@ -107,7 +104,7 @@ namespace AssetRipper.Core.Project.Collections
 			fileName = $"ProjectVersion.txt";
 			filePath = Path.Combine(subPath, fileName);
 
-			using (Stream fileStream = FileUtils.CreateVirtualFile(filePath))
+			using (Stream fileStream = System.IO.File.Create(filePath))
 			{
 				using (StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 				{

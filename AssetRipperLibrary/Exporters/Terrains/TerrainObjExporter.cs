@@ -35,7 +35,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			if (string.IsNullOrEmpty(text))
 				return false;
 
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+			using (FileStream fileStream = File.Create(path))
 			{
 				using (StreamWriter sw = new StreamWriter(fileStream))
 				{

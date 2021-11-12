@@ -106,8 +106,8 @@ namespace AssetRipper.Library.Exporters.Scripts
 					continue;
 
 				string path = System.IO.Path.Combine(scriptPath, assemblyName);
-				DirectoryUtils.CreateVirtualDirectory(scriptPath);
-				using var file = FileUtils.CreateVirtualFile(path);
+				Directory.CreateDirectory(scriptPath);
+				using var file = System.IO.File.Create(path);
 				assembly.Write(file);
 				OnAssemblyExported(container, path);
 			}

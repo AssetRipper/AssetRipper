@@ -36,7 +36,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			TerrainData terrain = (TerrainData)asset;
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+			using (FileStream fileStream = File.Create(path))
 			{
 				if (!ExportImage(terrain, fileStream))
 				{

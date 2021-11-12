@@ -74,9 +74,7 @@ namespace AssetRipper.Core.Logging
 
 		private static void LogReleaseInformation()
 		{
-#if VIRTUAL
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Virtual {GetBuildArchitecture()} {GetBuildType()}");
-#elif DEBUG
+#if DEBUG
 			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Debug {GetBuildArchitecture()} {GetBuildType()}");
 #else
 			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Release {GetBuildArchitecture()} {GetBuildType()}");

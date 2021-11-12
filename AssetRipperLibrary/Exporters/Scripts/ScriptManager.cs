@@ -97,15 +97,12 @@ namespace AssetRipper.Library.Exporters.Scripts
 			string filePath = Path.Combine(m_exportPath, subPath);
 			string uniqueFilePath = ToUniqueFileName(filePath);
 			string directory = Path.GetDirectoryName(uniqueFilePath);
-			if (!Directory.Exists(directory))
-			{
-				DirectoryUtils.CreateVirtualDirectory(directory);
-			}
+			Directory.CreateDirectory(directory);
 
 			try
 			{
 				string decompiledText = Decompiler.Decompile(exportType);
-				using (Stream fileStream = FileUtils.CreateVirtualFile(uniqueFilePath))
+				using (FileStream fileStream = File.Create(uniqueFilePath))
 				{
 					using (StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
 					{

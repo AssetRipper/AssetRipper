@@ -25,14 +25,10 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			using (Stream stream = FileUtils.CreateVirtualFile(path))
-			{
-				using (BinaryWriter writer = new BinaryWriter(stream))
-				{
-					writer.Write(((IFont)asset).RawData);
-				}
-				return true;
-			}
+			using FileStream stream = File.Create(path);
+			using BinaryWriter writer = new BinaryWriter(stream);
+			writer.Write(((IFont)asset).RawData);
+			return true;
 		}
 
 		string GetExportExtension(IFont font)

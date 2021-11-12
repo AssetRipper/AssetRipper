@@ -53,10 +53,7 @@ namespace AssetRipper.Core.Project.Collections
 				fileName = GetUniqueFileName(container.File, Asset, subPath);
 			}
 
-			if (!Directory.Exists(subPath))
-			{
-				DirectoryUtils.CreateVirtualDirectory(subPath);
-			}
+			Directory.CreateDirectory(subPath);
 
 			string filePath = Path.Combine(subPath, fileName);
 			bool result = ExportInner(container, filePath);

@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			string subFolder = Asset.ExportPath;
 			string subPath = Path.Combine(dirPath, subFolder);
-			DirectoryUtils.CreateVirtualDirectory(subPath);
+			Directory.CreateDirectory(subPath);
 			string fileName = GetUniqueFileName(container.File, Asset, subPath);
 			string filePath = Path.Combine(subPath, fileName);
 			return AssetExporter.Export(container, Asset, filePath);

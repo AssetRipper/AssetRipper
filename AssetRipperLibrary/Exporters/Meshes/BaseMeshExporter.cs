@@ -47,10 +47,8 @@ namespace AssetRipper.Library.Exporters.Meshes
 				if (data == null || data.Length == 0)
 					return false;
 
-				using (Stream fileStream = FileUtils.CreateVirtualFile(path))
-				{
-					fileStream.Write(data);
-				}
+				using FileStream fileStream = File.Create(path);
+				fileStream.Write(data);
 				return true;
 			}
 			else
@@ -59,13 +57,9 @@ namespace AssetRipper.Library.Exporters.Meshes
 				if (string.IsNullOrEmpty(text))
 					return false;
 
-				using (Stream fileStream = FileUtils.CreateVirtualFile(path))
-				{
-					using (StreamWriter sw = new StreamWriter(fileStream))
-					{
-						sw.Write(text);
-					}
-				}
+				using FileStream fileStream = File.Create(path);
+				using StreamWriter sw = new StreamWriter(fileStream);
+				sw.Write(text);
 				return true;
 			}
 		}

@@ -50,7 +50,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				return false;
 			}
 
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+			using (FileStream fileStream = File.Create(path))
 			{
 				if (!ExportTexture(texture, fileStream, ImageExportFormat))
 				{

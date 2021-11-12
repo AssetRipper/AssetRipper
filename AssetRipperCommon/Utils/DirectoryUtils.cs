@@ -7,13 +7,6 @@ namespace AssetRipper.Core.Utils
 {
 	public static class DirectoryUtils
 	{
-		public static void CreateVirtualDirectory(string path)
-		{
-#if !VIRTUAL
-			Directory.CreateDirectory(path);
-#endif
-		}
-
 		public static string FixInvalidPathCharacters(string path)
 		{
 			return PathRegex.Replace(path, string.Empty);

@@ -23,13 +23,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			using (Stream stream = FileUtils.CreateVirtualFile(path))
-			{
-				using (BinaryWriter writer = new BinaryWriter(stream))
-				{
-					writer.Write(((ITextAsset)asset).RawData);
-				}
-			}
+			File.WriteAllBytes(path, ((ITextAsset)asset).RawData);
 			return true;
 		}
 

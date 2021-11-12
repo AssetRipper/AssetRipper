@@ -133,10 +133,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 
 			folderPath = Path.GetDirectoryName(filePath);
-			if (!Directory.Exists(folderPath))
-			{
-				DirectoryUtils.CreateVirtualDirectory(folderPath);
-			}
+			Directory.CreateDirectory(folderPath);
 
 			AssetExporter.Export(container, Components.Select(t => t.Convert(container)), filePath);
 			DefaultImporter sceneImporter = new DefaultImporter(container.ExportLayout);

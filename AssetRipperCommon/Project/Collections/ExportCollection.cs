@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Project.Collections
 		protected static void ExportMeta(IExportContainer container, Meta meta, string filePath)
 		{
 			string metaPath = $"{filePath}{MetaExtension}";
-			using (var fileStream = FileUtils.CreateVirtualFile(metaPath))
+			using (var fileStream = System.IO.File.Create(metaPath))
 			using (var stream = new BufferedStream(fileStream))
 			using (var streamWriter = new InvariantStreamWriter(stream, new UTF8Encoding(false)))
 			{
@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			if (!Directory.Exists(path))
 			{
-				DirectoryUtils.CreateVirtualDirectory(path);
+				Directory.CreateDirectory(path);
 			}
 
 			string fullName = $"{name}.{GetExportExtension(asset)}";

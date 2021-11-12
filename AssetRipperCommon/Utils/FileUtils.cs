@@ -9,15 +9,6 @@ namespace AssetRipper.Core.Utils
 {
 	public static class FileUtils
 	{
-		public static Stream CreateVirtualFile(string path)
-		{
-#if VIRTUAL
-			return new MemoryStream();
-#else
-			return File.Create(path);
-#endif
-		}
-
 		/// <summary>
 		/// Reads a file to determine its length
 		/// </summary>

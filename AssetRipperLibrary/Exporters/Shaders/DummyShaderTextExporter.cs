@@ -51,7 +51,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			if (shader.ParsedForm.Name?.StartsWith("Hidden/") ?? false)
 				return false;
 
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+			using (FileStream fileStream = File.Create(path))
 			{
 				ExportShader(shader, container, fileStream);
 			}

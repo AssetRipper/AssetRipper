@@ -20,7 +20,7 @@ namespace AssetRipper.Library.Exporters.Audio
 		{
 			AudioClip audioClip = (AudioClip)asset;
 
-			using Stream stream = FileUtils.CreateVirtualFile(path);
+			using FileStream stream = File.Create(path);
 
 			if (AudioClip.HasLoadType(container.Version))
 			{

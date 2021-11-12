@@ -34,15 +34,11 @@ namespace AssetRipper.Library.Exporters.Audio
 				if (AudioFormat == AudioExportFormat.Mp3 && System.OperatingSystem.IsWindows() && (fileExtension == "ogg" || fileExtension == "wav"))
 					decodedData = AudioConverter.WavToMp3(decodedData);
 			}
-				
 
-			using (Stream stream = FileUtils.CreateVirtualFile(path))
-			{
-				using (BinaryWriter writer = new BinaryWriter(stream))
-				{
-					writer.Write(decodedData);
-				}
-			}
+
+			using FileStream stream = File.Create(path);
+			using BinaryWriter writer = new BinaryWriter(stream);
+			writer.Write(decodedData);
 			return true;
 		}
 

@@ -99,7 +99,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			if (AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows())
 				data = AudioConverter.WavToMp3(data);
 
-			using (Stream fileStream = FileUtils.CreateVirtualFile(path))
+			using (FileStream fileStream = File.Create(path))
 			{
 				fileStream.Write(data, 0, data.Length);
 			}
