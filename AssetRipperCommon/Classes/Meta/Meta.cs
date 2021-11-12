@@ -8,7 +8,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Meta
 {
-	public struct Meta
+	public class Meta
 	{
 		public Meta(UnityGUID guid, IAssetImporter importer) : this(guid, true, importer) { }
 
