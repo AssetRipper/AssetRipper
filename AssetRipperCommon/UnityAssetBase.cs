@@ -2,6 +2,7 @@
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
@@ -22,6 +23,13 @@ namespace AssetRipper.Core
 		public UnityVersion AssetUnityVersion { get; set; }
 		public EndianType EndianType { get; set; }
 		public TransferInstructionFlags TransferInstructionFlags { get; set; }
+
+		public UnityAssetBase() { }
+		public UnityAssetBase(AssetLayout layout)
+		{
+			AssetUnityVersion = layout.Info.Version;
+			TransferInstructionFlags = layout.Info.Flags;
+		}
 
 		public virtual void ReadEditor(AssetReader reader)
 		{
