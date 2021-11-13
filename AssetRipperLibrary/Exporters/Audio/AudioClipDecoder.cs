@@ -22,6 +22,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		static AudioClipDecoder()
 		{
+			NativeLibrary.SetDllImportResolver(typeof(Ogg).Assembly, DllImportResolver);
 			LibrariesLoaded = IsVorbisLoaded() & IsOggLoaded();
 			if (!LibrariesLoaded)
 				Logger.Error(LogCategory.Export, "Either LibVorbis or LibOgg is missing from your system, so Ogg audio clips cannot be exported. This message will not repeat.");
@@ -162,6 +163,21 @@ namespace AssetRipper.Library.Exporters.Audio
 				Marshal.FreeHGlobal((IntPtr)streamPtr);
 			}
 			return result;
+		}
+
+		private static IntPtr DllImportResolver(string libraryName, System.Reflection.Assembly assembly, DllImportSearchPath? searchPath)
+		{
+			// On linux, try .so.0
+			if (System.OperatingSystem.IsLinux())
+			{
+				if (libraryName == "ogg" || libraryName == "vorbis")
+				{
+					return NativeLibrary.Load(libraryName + ".so.0", assembly, searchPath);
+				}
+			}
+
+			// Otherwise, fallback to default import resolver.
+			return IntPtr.Zero;
 		}
 	}
 }
