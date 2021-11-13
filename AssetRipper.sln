@@ -64,6 +64,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\auxiliary.yml = .github\workflows\auxiliary.yml
 		.github\workflows\codeql.yml = .github\workflows\codeql.yml
+		.github\workflows\docfx_build.yml = .github\workflows\docfx_build.yml
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
 		.github\workflows\native.yml = .github\workflows\native.yml
 		.github\workflows\publish.yml = .github\workflows\publish.yml

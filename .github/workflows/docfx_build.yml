@@ -3,8 +3,6 @@ name: DocFX Build and Publish
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
     
 jobs:
   generate-docs:
@@ -17,7 +15,6 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.x
-          include-prerelease: true
       - name: Setup DocFX
         uses: crazy-max/ghaction-chocolatey@v1
         with:
