@@ -70,7 +70,7 @@ namespace AssetRipper.Core
 				WriteEditor(writer);
 		}
 
-		public virtual YAMLNode ExportYAMLDebug(IExportContainer container)
+		public virtual YAMLNode ExportYAMLEditor(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}
@@ -85,7 +85,7 @@ namespace AssetRipper.Core
 			if (container.ExportFlags.IsRelease())
 				return ExportYAMLRelease(container);
 			else
-				return ExportYAMLDebug(container);
+				return ExportYAMLEditor(container);
 		}
 
 		public virtual IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
