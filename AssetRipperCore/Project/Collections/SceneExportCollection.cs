@@ -43,14 +43,14 @@ namespace AssetRipper.Core.Project.Collections
 				if (IsSceneCompatible(asset))
 				{
 					components.Add(asset);
-					m_cexportIDs.Add(asset.AssetInfo, asset.PathID);
+					m_exportIDs.Add(asset.AssetInfo, asset.PathID);
 				}
 			}
 			m_components = components.OrderBy(t => t, this).ToArray();
 
 			if (OcclusionCullingSettings.HasSceneGUID(file.Version))
 			{
-				OcclusionCullingSettings sceneSettings = Components.Where(t => t.ClassID == ClassIDType.OcclusionCullingSettings).Select(t => (OcclusionCullingSettings)t).FirstOrDefault();
+				ISceneSettings sceneSettings = Components.Where(t => t is ISceneSettings).Select(t => (ISceneSettings)t).FirstOrDefault();
 				if (sceneSettings != null)
 				{
 					GUID = sceneSettings.SceneGUID;
@@ -157,12 +157,12 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return true;
 			}
-			return m_cexportIDs.ContainsKey(asset.AssetInfo);
+			return m_exportIDs.ContainsKey(asset.AssetInfo);
 		}
 
 		public override long GetExportID(IUnityObjectBase asset)
 		{
-			return IsComponent(asset) ? m_cexportIDs[asset.AssetInfo] : ExportIdHandler.GetMainExportID(asset);
+			return IsComponent(asset) ? m_exportIDs[asset.AssetInfo] : ExportIdHandler.GetMainExportID(asset);
 		}
 
 		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
@@ -210,7 +210,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		private void ExportAsset(IProjectAssetContainer container, NamedObject asset, string path)
+		private void ExportAsset(IProjectAssetContainer container, INamedObject asset, string path)
 		{
 			NativeFormatImporter importer = new NativeFormatImporter(container.ExportLayout);
 			importer.MainObjectFileID = GetExportID(asset);
@@ -295,9 +295,8 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return true;
 			}
-			if (asset is IMonoBehaviour)
+			if (asset is IMonoBehaviour monoBeh)
 			{
-				MonoBehaviour monoBeh = (MonoBehaviour)asset;
 				if (!monoBeh.IsSceneObject())
 				{
 					return false;
@@ -322,7 +321,7 @@ namespace AssetRipper.Core.Project.Collections
 		private static readonly Regex s_sceneNameFormat = new Regex($"^{LevelName}(0|[1-9][0-9]*)$");
 
 		private readonly IUnityObjectBase[] m_components;
-		private readonly Dictionary<AssetInfo, long> m_cexportIDs = new Dictionary<AssetInfo, long>();
+		private readonly Dictionary<AssetInfo, long> m_exportIDs = new Dictionary<AssetInfo, long>();
 		private readonly ISerializedFile m_file;
 		private readonly OcclusionCullingSettings m_occlusionCullingSettings;
 	}

@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 	/// 5.5.0 - SceneSettings has been renamed to OcclusionCullingSettings
 	/// 4.0.0 - Scene has been renamed to SceneSettings
 	/// </summary>
-	public sealed class OcclusionCullingSettings : LevelGameManager
+	public sealed class OcclusionCullingSettings : LevelGameManager, ISceneSettings
 	{
 		public OcclusionCullingSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 
 			if (HasSceneGUID(reader.Version))
 			{
-				SceneGUID.Read(reader);
+				m_SceneGUID.Read(reader);
 				m_OcclusionCullingData.Read(reader);
 			}
 			if (HasStaticRenderers(reader.Version, reader.Flags))
@@ -186,7 +186,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			}
 			else
 			{
-				return SceneGUID;
+				return m_SceneGUID;
 			}
 		}
 		private PPtr<OcclusionCullingData.OcclusionCullingData> GetExportOcclusionCullingData(IExportContainer container)
@@ -207,6 +207,8 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			return default;
 		}
 
+		public UnityGUID SceneGUID { get; }
+
 		public byte[] PVSData { get; set; }
 		public int QueryMode { get; set; }
 		/// <summary>
@@ -224,7 +226,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 		public PPtr<OcclusionPortal>[] Portals { get; set; }
 
 		public OcclusionBakeSettings OcclusionBakeSettings;
-		public UnityGUID SceneGUID;
+		public UnityGUID m_SceneGUID;
 		public PPtr<OcclusionCullingData.OcclusionCullingData> m_OcclusionCullingData;
 
 		public const string SceneKeyword = nameof(ClassIDType.Scene);

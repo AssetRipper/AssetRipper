@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			PVSData = (byte[])cullingSetting.PVSData;
 			int renderCount = cullingSetting.StaticRenderers.Length;
 			int portalCount = cullingSetting.Portals.Length;
-			OcclusionScene scene = new OcclusionScene(cullingSetting.SceneGUID, renderCount, portalCount);
+			OcclusionScene scene = new OcclusionScene(cullingSetting.m_SceneGUID, renderCount, portalCount);
 			Scenes = new OcclusionScene[] { scene };
 
 			StaticRenderers = new SceneObjectIdentifier[scene.SizeRenderers];
@@ -116,10 +116,10 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 
 			foreach (OcclusionCullingSettings.OcclusionCullingSettings cullingSetting in cullingSettings)
 			{
-				int sceneIndex = Scenes.IndexOf(t => t.Scene == cullingSetting.SceneGUID);
+				int sceneIndex = Scenes.IndexOf(t => t.Scene == cullingSetting.m_SceneGUID);
 				if (sceneIndex == -1)
 				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Unable to find scene data with GUID {cullingSetting.SceneGUID} in {ValidName}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Unable to find scene data with GUID {cullingSetting.m_SceneGUID} in {ValidName}");
 					continue;
 				}
 
