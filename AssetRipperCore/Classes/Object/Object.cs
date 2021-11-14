@@ -31,9 +31,14 @@ namespace AssetRipper.Core.Classes.Object
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		public sealed override YAMLNode ExportYAML(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			return ExportYAMLRoot(container);
+		}
+
+		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
 			if (HasHideFlag(container.Version,container.Flags))
 			{
 				node.Add(ObjectHideFlagsName, (uint)ObjectHideFlags);

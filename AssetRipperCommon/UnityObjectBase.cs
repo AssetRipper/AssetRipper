@@ -41,20 +41,9 @@ namespace AssetRipper.Core
 			YAMLMappingNode root = document.CreateMappingRoot();
 			root.Tag = ClassID.ToInt().ToString();
 			root.Anchor = container.GetExportID(this).ToString();
-			YAMLMappingNode node = ExportYAMLRoot(container);
+			YAMLNode node = ExportYAML(container);
 			root.Add(container.ExportLayout.GetClassName(ClassID), node);
 			return document;
-		}
-
-		public override YAMLNode ExportYAML(IExportContainer container)
-		{
-			return ExportYAMLRoot(container);
-		}
-
-		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
-		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			return node;
 		}
 
 		public virtual IUnityObjectBase Convert(IExportContainer container)

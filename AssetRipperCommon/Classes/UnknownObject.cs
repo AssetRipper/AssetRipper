@@ -27,11 +27,6 @@ namespace AssetRipper.Core.Classes
 			writer.Write(Data);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
-		{
-			throw new NotSupportedException("Unknown YAML format");
-		}
-
 		public override string ExportExtension => "bytes";
 
 		public override string ExportPath => Path.Combine("UnknownAssets", ClassID.ToString());

@@ -108,6 +108,12 @@ namespace AssetRipper.Core.YAML
 			Add(key, valueNode);
 		}
 
+		public void Add(string key, double value)
+		{
+			YAMLScalarNode valueNode = new(value);
+			Add(key, valueNode);
+		}
+
 		public void Add(string key, string value)
 		{
 			YAMLScalarNode valueNode = new(value);
