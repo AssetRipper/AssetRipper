@@ -11,8 +11,7 @@
 		/// </summary>
 		Clamp = 1,
 		/// <summary>
-		/// Tiles the texture, creating a repeating pattern by mirroring it at every integer
-		//	 boundary.
+		/// Tiles the texture, creating a repeating pattern by mirroring it at every integer boundary.
 		/// </summary>
 		Mirror = 2,
 		/// <summary>

@@ -167,7 +167,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		public bool EnableTypeTree { get; set; }
 		public SerializedType[] Types { get; set; }
 		/// <summary>
-		/// Indicate that <see cref="ObjectInfo.FileID"> is 8 bytes size
+		/// Indicate that <see cref="ObjectInfo.FileID"/> is 8 bytes size<br/>
 		/// Serialized files with this enabled field doesn't exist
 		/// </summary>
 		public uint LongFileID { get; set; }

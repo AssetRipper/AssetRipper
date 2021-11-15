@@ -120,13 +120,13 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		}
 
 		/// <summary>
-		/// ObjectID
+		/// ObjectID<br/>
 		/// Unique ID that identifies the object. Can be used as a key for a map.
 		/// </summary>
 		public long FileID { get; set; }
 		/// <summary>
-		/// Offset to the object data.
-		/// Add to <see cref="SerializedFileHeader.DataOffset"> to get the absolute offset within the serialized file.
+		/// Offset to the object data.<br/>
+		/// Add to <see cref="SerializedFileHeader.DataOffset"/> to get the absolute offset within the serialized file.
 		/// </summary>
 		public long ByteStart { get; set; }
 		/// <summary>
@@ -134,11 +134,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		/// </summary>
 		public int ByteSize { get; set; }
 		/// <summary>
-		/// New versions:
-		///		Type index in <see cref="SerializedFileMetadata.Types"/> array
-		/// Old versions:
-		///		Type ID of the object, which is mapped to <see cref="SerializedType.TypeID">
-		///		Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour">
+		/// New versions:<br/>
+		///		Type index in <see cref="SerializedFileMetadata.Types"/> array<br/>
+		/// Old versions:<br/>
+		///		Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/><br/>
+		///		Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
 		/// </summary>
 		public int TypeID { get; set; }
 		/// <summary>

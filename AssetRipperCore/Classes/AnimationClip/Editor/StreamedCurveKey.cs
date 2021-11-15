@@ -50,7 +50,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Editor
 		}
 
 		/// <summary>
-		/// Calculate value between two KeyframeTpl<Float> at given time
+		/// Calculate value between two KeyframeTpl Float at given time
 		/// </summary>
 		/// <param name="deltaTimeFraction">(time - leftTime) / (rightTime - leftTime)</param>
 		/// <param name="leftVaue">lhs.Value</param>

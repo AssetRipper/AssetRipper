@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Classes.ShaderVariantCollection
 		/// </summary>
 		LightPrePassFinal		= 7,
 		/// <summary>
-		/// Shadow caster & depth texure shader pass.
+		/// Shadow caster and depth texure shader pass.
 		/// </summary>
 		ShadowCaster			= 8,
 		/// <summary>

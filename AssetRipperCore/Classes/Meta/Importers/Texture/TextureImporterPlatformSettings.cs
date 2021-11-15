@@ -9,8 +9,8 @@ using AssetRipper.Core.YAML;
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	/// <summary>
-	/// PlatformSettings in version < 2017.3
-	/// BuildTargetSettings in version < 5.5.0
+	/// PlatformSettings in versions less than 2017.3<br/>
+	/// BuildTargetSettings in versions less than 5.5.0
 	/// </summary>
 	public struct TextureImporterPlatformSettings : IAsset
 	{

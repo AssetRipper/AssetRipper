@@ -132,11 +132,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		/// </summary>
 		public int TypeFlags { get; set; }
 		/// <summary>
-		/// Type offset in <see cref="TypeTree.StringBuffer">
+		/// Type offset in <see cref="TypeTree.StringBuffer"/>
 		/// </summary>
 		public uint TypeStrOffset { get; set; }
 		/// <summary>
-		/// Name offset in <see cref="TypeTree.StringBuffer">
+		/// Name offset in <see cref="TypeTree.StringBuffer"/>
 		/// </summary>
 		public uint NameStrOffset { get; set; }
 		/// <summary>

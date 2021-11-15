@@ -6,9 +6,8 @@ See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
 namespace Brotli
 {
 	/// <summary>
-	/// <see cref="System.IO.Stream"/>
-	/// decorator that decompresses brotli data.
-	/// <p> Not thread-safe.
+	/// <see cref="System.IO.Stream"/> decorator that decompresses brotli data.<br/>
+	/// Not thread-safe.
 	/// </summary>
 	public class BrotliInputStream : System.IO.Stream
 	{
@@ -29,13 +28,13 @@ namespace Brotli
 		/// <summary>
 		/// Creates a
 		/// <see cref="System.IO.Stream"/>
-		/// wrapper that decompresses brotli data.
-		/// <p> For byte-by-byte reading (
+		/// wrapper that decompresses brotli data.<br/>
+		/// For byte-by-byte reading (
 		/// <see cref="ReadByte()"/>
 		/// ) internal buffer with
 		/// <see cref="DefaultInternalBufferSize"/>
-		/// size is allocated and used.
-		/// <p> Will block the thread until first kilobyte of data of source is available.
+		/// size is allocated and used.<br/>
+		/// Will block the thread until first kilobyte of data of source is available.
 		/// </summary>
 		/// <param name="source">underlying data source</param>
 		/// <exception cref="System.IO.IOException">in case of corrupted data or source stream problems</exception>
@@ -47,12 +46,12 @@ namespace Brotli
 		/// <summary>
 		/// Creates a
 		/// <see cref="System.IO.Stream"/>
-		/// wrapper that decompresses brotli data.
-		/// <p> For byte-by-byte reading (
+		/// wrapper that decompresses brotli data.<br/>
+		/// For byte-by-byte reading (
 		/// <see cref="ReadByte()"/>
 		/// ) internal buffer of specified size is
-		/// allocated and used.
-		/// <p> Will block the thread until first kilobyte of data of source is available.
+		/// allocated and used.<br/>
+		/// Will block the thread until first kilobyte of data of source is available.
 		/// </summary>
 		/// <param name="source">compressed data source</param>
 		/// <param name="byteReadBufferSize">
@@ -68,22 +67,19 @@ namespace Brotli
 		/// <summary>
 		/// Creates a
 		/// <see cref="System.IO.Stream"/>
-		/// wrapper that decompresses brotli data.
-		/// <p> For byte-by-byte reading (
+		/// wrapper that decompresses brotli data.<br/>
+		/// For byte-by-byte reading (
 		/// <see cref="ReadByte()"/>
 		/// ) internal buffer of specified size is
-		/// allocated and used.
-		/// <p> Will block the thread until first kilobyte of data of source is available.
+		/// allocated and used.<br/>
+		/// Will block the thread until first kilobyte of data of source is available.
 		/// </summary>
 		/// <param name="source">compressed data source</param>
 		/// <param name="byteReadBufferSize">
-		/// size of internal buffer used in case of
-		/// byte-by-byte reading
+		/// size of internal buffer used in case of byte-by-byte reading
 		/// </param>
 		/// <param name="customDictionary">
-		/// custom dictionary data;
-		/// <see langword="null"/>
-		/// if not used
+		/// custom dictionary data; <see langword="null"/> if not used
 		/// </param>
 		/// <exception cref="System.IO.IOException">in case of corrupted data or source stream problems</exception>
 		public BrotliInputStream(System.IO.Stream source, int byteReadBufferSize, byte[] customDictionary)
