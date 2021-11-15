@@ -1,5 +1,8 @@
-﻿using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
+﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
@@ -10,6 +13,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		{
 			if (TypeTreeNode.IsFormat5(reader.Generation))
 			{
+				IsFormat5 = true;
 				int nodesCount = reader.ReadInt32();
 				int stringBufferSize = reader.ReadInt32();
 				Nodes = new List<TypeTreeNode>(nodesCount);
@@ -24,6 +28,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			}
 			else
 			{
+				IsFormat5 = false;
 				Nodes = new List<TypeTreeNode>();
 				ReadTreeNode(reader, Nodes, 0);
 			}
@@ -122,29 +127,57 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			}
 		}
 
-		public void SetNamesFromBuffer()
+		public void MaybeSetNamesFromBuffer()
 		{
-			if(StringBuffer != null && StringBuffer.Length > 0)
+			if (IsFormat5)
 			{
-				foreach (var node in Nodes)
+				Dictionary<uint, string> customTypes = new Dictionary<uint, string>();
+				using (MemoryStream stream = new MemoryStream(StringBuffer))
 				{
-					node.Name = GetString(node.NameStrOffset);
-					node.Type = GetString(node.TypeStrOffset);
+					using (EndianReader reader = new EndianReader(stream, EndianType.LittleEndian))
+					{
+						while (stream.Position < stream.Length)
+						{
+							uint position = (uint)stream.Position;
+							string name = reader.ReadStringZeroTerm();
+							customTypes.Add(position, name);
+						}
+					}
+				}
+
+				foreach (TypeTreeNode node in Nodes)
+				{
+					node.Type = GetTypeName(customTypes, node.TypeStrOffset);
+					node.Name = GetTypeName(customTypes, node.NameStrOffset);
 				}
 			}
 		}
 
-		private string GetString(uint offset)
+		private static string GetTypeName(Dictionary<uint, string> customTypes, uint value)
 		{
-			string str = "";
-			for (uint i = offset; i < StringBuffer.Length && StringBuffer[i] != 0; i++)
+			bool isCustomType = (value & 0x80000000) == 0;
+			if (isCustomType)
 			{
-				str += (char)StringBuffer[i];
+				return customTypes[value];
 			}
-			return str;
+			else
+			{
+				uint offset = value & ~0x80000000;
+				TreeNodeType nodeType = (TreeNodeType)offset;
+				if (!Enum.IsDefined(typeof(TreeNodeType), nodeType))
+				{
+					throw new Exception($"Unsupported asset class type name '{nodeType}''");
+				}
+				return nodeType.ToTypeString();
+			}
 		}
 
 		public List<TypeTreeNode> Nodes { get; set; }
 		public byte[] StringBuffer { get; set; }
+		/// <summary>
+		/// 5.0.0a1 and greater<br/>
+		/// Generation 10
+		/// </summary>
+		private bool IsFormat5 { get; set; }
 	}
 }

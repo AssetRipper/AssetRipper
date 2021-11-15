@@ -17,6 +17,7 @@ using AssetRipper.Core.Utils;
 using AssetRipper.Core.VersionHandling;
 using AssetRipper.Library.Attributes;
 using AssetRipper.Library.Configuration;
+using AssetRipper.Library.Exporters;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Miscellaneous;
@@ -24,6 +25,7 @@ using AssetRipper.Library.Exporters.Scripts;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
+using AssetRipper.Library.Exporters.TypeTrees;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,6 +48,7 @@ namespace AssetRipper.Library
 		/// </summary>
 		public LibraryConfiguration Settings { get; } = new();
 		private bool ExportersInitialized { get; set; }
+		private List<IPostExporter> PostExporters { get; } = new();
 
 		public event Action OnStartLoadingGameStructure;
 		public event Action OnFinishLoadingGameStructure;
@@ -131,11 +134,16 @@ namespace AssetRipper.Library
 			GameStructure.Export(Settings);
 			Logger.Info(LogCategory.Export, "Finished exporting assets");
 			OnFinishExporting?.Invoke();
+			foreach(var postExporter in PostExporters)
+			{
+				postExporter.DoPostExport(this);
+			}
 			Logger.Info(LogCategory.Export, "Finished post-export");
 		}
 
 		public void ResetData()
 		{
+			PostExporters.Clear();
 			ExportersInitialized = false;
 			GameStructure?.Dispose();
 			GameStructure = null;
@@ -200,6 +208,8 @@ namespace AssetRipper.Library
 
 			//Animator Controller - Temporary
 			OverrideExporter<AnimatorController>(new AnimatorControllerExporter());
+
+			AddPostExporter(new TypeTreeExporter());
 		}
 
 		private void OverrideEngineExporters()
@@ -216,5 +226,6 @@ namespace AssetRipper.Library
 
 		public void OverrideExporter<T>(IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter<T>(exporter, true);
 		public void OverrideExporter<T>(IAssetExporter exporter, bool allowInheritance) => GameStructure.Exporter.OverrideExporter<T>(exporter, allowInheritance);
+		public void AddPostExporter(IPostExporter exporter) => PostExporters.Add(exporter);
 	}
 }

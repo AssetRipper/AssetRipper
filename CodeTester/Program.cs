@@ -15,12 +15,19 @@ namespace CodeTester
 				return;
 			}
 
-			Logger.Add(new ConsoleLogger(true));
-			Logger.Add(new FileLogger(ExecutingDirectory.Combine("CodeTester.log")));
-			Logger.LogSystemInformation("Code Tester");
-			Logger.BlankLine();
-			AssetRipper.Library.Ripper ripper = new();
-			AssetRipper.Library.Utils.DumpInfo.DumpAllFileInfo(args[0], ExecutingDirectory.Combine("FileInfoDump"));
+			try
+			{
+				Logger.Add(new ConsoleLogger(true));
+				Logger.Add(new FileLogger(ExecutingDirectory.Combine("CodeTester.log")));
+				Logger.LogSystemInformation("Code Tester");
+				Logger.BlankLine();
+				AssetRipper.Library.Ripper ripper = new();
+				AssetRipper.Library.Utils.DumpInfo.DumpAllFileInfo(args[0], ExecutingDirectory.Combine("FileInfoDump"));
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex);
+			}
 
 			Console.WriteLine("Done!");
 			Console.ReadLine();

@@ -6,11 +6,13 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 	public class TypeTreeNode : ISerializedReadable, ISerializedWritable
 	{
 		/// <summary>
-		/// 5.0.0a1 and greater
+		/// 5.0.0a1 and greater<br/>
+		/// Generation 10
 		/// </summary>
 		public static bool IsFormat5(FormatVersion generation) => generation >= FormatVersion.Unknown_10;
 		/// <summary>
-		/// 2019.1 and greater
+		/// 2019.1 and greater<br/>
+		/// Generation 19
 		/// </summary>
 		public static bool HasRefTypeHash(FormatVersion generation) => generation >= FormatVersion.TypeTreeNodeWithTypeFlags;
 		

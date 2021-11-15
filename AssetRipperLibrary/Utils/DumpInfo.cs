@@ -113,7 +113,7 @@ namespace AssetRipper.Library.Utils
 				string name = Util.GetName(asset);
 				PPtr<Core.Interfaces.IUnityObjectBase> pptr = asset.File.CreatePPtr(asset);
 				string extra = "";
-				if (asset is MonoScript ms)
+				if (asset is IMonoScript ms)
 				{
 					string scriptName = $"[{ms.AssemblyName}]";
 					if (!string.IsNullOrEmpty(ms.Namespace)) scriptName += $"{ms.Namespace}.";
@@ -366,18 +366,12 @@ namespace AssetRipper.Library.Utils
 				}
 			}
 		}
-		static bool CompareHash(Hash128 hash1, Hash128 hash2)
-		{
-			return hash1.Data0 == hash2.Data0 &&
-			hash1.Data1 == hash2.Data1 &&
-			hash1.Data2 == hash2.Data2 &&
-			hash1.Data3 == hash2.Data3;
-		}
+		
 		internal static void DumpTypeInfo(SerializedFile serializedFile, StreamWriter sw)
 		{
-			foreach (Core.Interfaces.IUnityObjectBase asset in serializedFile.FetchAssets().Where(asset => asset is MonoScript))
+			foreach (Core.Interfaces.IUnityObjectBase asset in serializedFile.FetchAssets().Where(asset => asset is IMonoScript))
 			{
-				MonoScript monoScript = asset as MonoScript;
+				IMonoScript monoScript = asset as IMonoScript;
 				sw.WriteLine($"\t[{monoScript.AssemblyName}]{monoScript.Namespace}.{monoScript.ClassName} - {HashToString(monoScript.PropertiesHash)}");
 
 			}
@@ -407,7 +401,7 @@ namespace AssetRipper.Library.Utils
 				Hash128 ScriptHash = type.ScriptID;
 				Hash128 TypeHash = type.OldTypeHash;
 
-				MonoScript monoScript = serializedFile.FetchAssets().FirstOrDefault(asset => asset is MonoScript ms && CompareHash(ms.PropertiesHash, TypeHash)) as MonoScript;
+				IMonoScript monoScript = serializedFile.FetchAssets().FirstOrDefault(asset => asset is IMonoScript ms && ms.PropertiesHash == TypeHash) as IMonoScript;
 				string scriptType = monoScript == null ? "\tNo Script" : $"\tMonoScript is [{monoScript.AssemblyName}]{monoScript.Namespace}.{monoScript.ClassName}";
 				sw.WriteLine(scriptType);
 				sw.WriteLine($"\tType: ClassID {ClassID}, ScriptID {ScriptID}, IsStrippedType {IsStrippedType}, ScriptHash {HashToString(ScriptHash)}, TypeHash {HashToString(TypeHash)}");

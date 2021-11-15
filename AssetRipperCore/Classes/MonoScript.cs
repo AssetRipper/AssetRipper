@@ -122,11 +122,11 @@ namespace AssetRipper.Core.Classes
 				if (IsUInt32Hash(reader.Version))
 				{
 					uint hash = reader.ReadUInt32();
-					PropertiesHash = new Hash128(hash);
+					m_PropertiesHash = new Hash128(hash);
 				}
 				else
 				{
-					PropertiesHash.Read(reader);
+					m_PropertiesHash.Read(reader);
 				}
 			}
 
@@ -221,6 +221,7 @@ namespace AssetRipper.Core.Classes
 		public const string AssemblyIdentifierName = "m_AssemblyIdentifier";
 		public const string IsEditorScriptName = "m_IsEditorScript";
 
-		public Hash128 PropertiesHash;
+		private Hash128 m_PropertiesHash;
+		public Hash128 PropertiesHash => m_PropertiesHash;
 	}
 }

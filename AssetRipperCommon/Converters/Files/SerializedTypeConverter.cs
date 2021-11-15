@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Converters.Files
 		{
 			if (origin.OldType != null)
 			{
-				TypeTreeConverter.CombineFormats(generation, origin.OldType);
+				origin.OldType.MaybeSetNamesFromBuffer();
 			}
 		}
 	}

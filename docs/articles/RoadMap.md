@@ -1,9 +1,11 @@
 # Development Roadmap
 
 ## 0.2.0.0
-* Audio Export
+* Export
   * WWise audio extraction
+  * ~~Type Tree Dump export~~
 * Plugin Support
+  * ~~Add support for custom post exporters~~
   * Add support for injecting custom asset types
   * Add support for reading alternative file formats
 * Convert Exporters to the new Interface System
