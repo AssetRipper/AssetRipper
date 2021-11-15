@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		public override bool IsSet => true;
 
-		public MonoManager(AssetLayout layout, Action<string> requestAssemblyCallback) : base(layout, requestAssemblyCallback) { }
+		public MonoManager(LayoutInfo layout, Action<string> requestAssemblyCallback) : base(layout, requestAssemblyCallback) { }
 
 		public override void Initialize(IPlatformGameStructure gameStructure)
 		{

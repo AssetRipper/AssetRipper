@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Classes.Object
 {
 	public abstract class Object : UnityObjectBase
 	{
-		protected Object(AssetLayout layout) : base(layout) { }
+		protected Object(LayoutInfo layout) : base(layout) { }
 
 		protected Object(AssetInfo assetInfo) : base(assetInfo) { }
 

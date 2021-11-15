@@ -60,7 +60,7 @@ namespace AssetRipper.Core.Classes
 			public abstract IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstants { get; }
 		}
 
-		protected AnimatorTransitionBase(AssetLayout layout, AssetInfo assetInfo, BaseParameters parameters) : base(layout)
+		protected AnimatorTransitionBase(LayoutInfo layout, AssetInfo assetInfo, BaseParameters parameters) : base(layout)
 		{
 			AssetInfo = assetInfo;
 			ObjectHideFlags = HideFlags.HideInHierarchy;

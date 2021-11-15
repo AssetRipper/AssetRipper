@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 			m_clip = clip;
 		}
 
-		public string ToAttributeName(AssetLayout layout, BindingCustomType type, uint attribute, string path)
+		public string ToAttributeName(LayoutInfo layout, BindingCustomType type, uint attribute, string path)
 		{
 			switch (type)
 			{

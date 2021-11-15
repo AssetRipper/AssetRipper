@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		public string GameDataPath { get; private set; }
 		public string MetaDataPath { get; private set; }
 		public int[] UnityVersion { get; private set; }
-		public Il2CppManager(AssetLayout layout, Action<string> requestAssemblyCallback) : base(layout, requestAssemblyCallback) { }
+		public Il2CppManager(LayoutInfo layout, Action<string> requestAssemblyCallback) : base(layout, requestAssemblyCallback) { }
 
 		public override bool IsSet => true;
 

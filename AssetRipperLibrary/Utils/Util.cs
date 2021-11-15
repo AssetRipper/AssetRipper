@@ -282,8 +282,7 @@ namespace AssetRipper.Library.Utils
 		public static GameCollection CreateGameCollection()
 		{
 			var layoutInfo = new LayoutInfo(new Version(), Platform.StandaloneWin64Player, TransferInstructionFlags.NoTransferInstructionFlags);
-			var layout = new AssetLayout(layoutInfo);
-			var gameCollection = new GameCollection(layout);
+			var gameCollection = new GameCollection(layoutInfo);
 			return gameCollection;
 		}
 		public static object LoadFile(string filepath)
@@ -331,9 +330,8 @@ namespace AssetRipper.Library.Utils
 					serializedFileScheme.Metadata.UnityVersion
 					: new Version();
 				var layoutInfo = new LayoutInfo(version, platform, serializedFileScheme.Flags);
-				var layout = new AssetLayout(layoutInfo);
-				var collection = new GameCollection(layout);
-				collection.AssemblyManager = new Core.Structure.Assembly.Managers.BaseManager(layout, new Action<string>(str => str.GetType()));
+				var collection = new GameCollection(layoutInfo);
+				collection.AssemblyManager = new Core.Structure.Assembly.Managers.BaseManager(layoutInfo, new Action<string>(str => str.GetType()));
 				file = Util.CreateInstance<SerializedFile>(collection, scheme);
 				typeof(SerializedFile).GetMethod("ReadData", AllBindingFlags)
 					.Invoke(file, new object[] { serializedFileScheme.Stream });

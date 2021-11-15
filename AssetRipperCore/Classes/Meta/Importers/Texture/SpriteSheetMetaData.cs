@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	public struct SpriteSheetMetaData : IAsset, IDependent
 	{
-		public SpriteSheetMetaData(AssetLayout layout)
+		public SpriteSheetMetaData(LayoutInfo layout)
 		{
 			Sprites = Array.Empty<SpriteMetaData>();
 			Outline = Array.Empty<Vector2f[]>();

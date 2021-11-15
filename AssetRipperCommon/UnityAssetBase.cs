@@ -25,10 +25,10 @@ namespace AssetRipper.Core
 		public TransferInstructionFlags TransferInstructionFlags { get; set; }
 
 		public UnityAssetBase() { }
-		public UnityAssetBase(AssetLayout layout)
+		public UnityAssetBase(LayoutInfo layout)
 		{
-			AssetUnityVersion = layout.Info.Version;
-			TransferInstructionFlags = layout.Info.Flags;
+			AssetUnityVersion = layout.Version;
+			TransferInstructionFlags = layout.Flags;
 		}
 
 		public virtual void ReadEditor(AssetReader reader)

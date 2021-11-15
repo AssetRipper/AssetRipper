@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	public sealed class TextureImporter : AssetImporter
 	{
-		public TextureImporter(AssetLayout layout) : base(layout)
+		public TextureImporter(LayoutInfo layout) : base(layout)
 		{
 			EnableMipMap = 1;
 			SRGBTexture = 1;

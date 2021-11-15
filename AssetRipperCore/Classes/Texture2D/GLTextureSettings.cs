@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 {
 	public struct GLTextureSettings : IAsset
 	{
-		public GLTextureSettings(AssetLayout layout)
+		public GLTextureSettings(LayoutInfo layout)
 		{
 			FilterMode = (FilterMode)(-1);
 			Aniso = -1;

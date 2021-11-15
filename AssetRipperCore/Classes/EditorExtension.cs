@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 {
 	public abstract class EditorExtension : Object.Object
 	{
-		protected EditorExtension(AssetLayout layout) : base(layout) { }
+		protected EditorExtension(LayoutInfo layout) : base(layout) { }
 
 		protected EditorExtension(AssetInfo assetInfo) : base(assetInfo) { }
 

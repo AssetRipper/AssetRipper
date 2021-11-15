@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	public struct TextureImportOutput : IAsset
 	{
-		public TextureImportOutput(AssetLayout layout)
+		public TextureImportOutput(LayoutInfo layout)
 		{
 			TextureImportInstructions = new TextureImportInstructions(layout);
 			SourceTextureInformation = new SourceTextureInformation(layout);

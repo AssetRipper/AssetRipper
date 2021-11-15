@@ -18,12 +18,12 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		protected readonly Dictionary<string, AssemblyDefinition> m_assemblies = new Dictionary<string, AssemblyDefinition>();
 		protected readonly Dictionary<string, bool> m_validTypes = new Dictionary<string, bool>();
 
-		public AssetLayout Layout { get; }
+		public LayoutInfo Layout { get; }
 
 		private event Action<string> m_requestAssemblyCallback;
 		private readonly Dictionary<string, SerializableType> m_serializableTypes = new Dictionary<string, SerializableType>();
 
-		public BaseManager(AssetLayout layout, Action<string> requestAssemblyCallback)
+		public BaseManager(LayoutInfo layout, Action<string> requestAssemblyCallback)
 		{
 			Layout = layout;
 			m_requestAssemblyCallback = requestAssemblyCallback ?? throw new ArgumentNullException(nameof(requestAssemblyCallback));

@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes
 {
 	public sealed class Prefab : Object.Object
 	{
-		public Prefab(AssetLayout layout) : base(layout) { }
+		public Prefab(LayoutInfo layout) : base(layout) { }
 
 		public Prefab(AssetInfo assetInfo) : base(assetInfo) { }
 		

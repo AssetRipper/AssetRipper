@@ -6,9 +6,9 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 {
 	public readonly struct MonoFieldContext
 	{
-		public MonoFieldContext(FieldDefinition field, AssetLayout layout) : this(field, null, layout) { }
+		public MonoFieldContext(FieldDefinition field, LayoutInfo layout) : this(field, null, layout) { }
 
-		public MonoFieldContext(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments, AssetLayout layout)
+		public MonoFieldContext(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments, LayoutInfo layout)
 		{
 			Layout = layout;
 			Definition = field;
@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			Arguments = copy.Arguments;
 		}
 
-		public AssetLayout Layout { get; }
+		public LayoutInfo Layout { get; }
 		public FieldDefinition Definition { get; }
 		public TypeReference DeclaringType => Definition.DeclaringType;
 		public TypeReference ElementType { get; }

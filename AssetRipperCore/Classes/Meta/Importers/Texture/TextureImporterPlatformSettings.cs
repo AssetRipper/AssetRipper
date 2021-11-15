@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 	/// </summary>
 	public struct TextureImporterPlatformSettings : IAsset
 	{
-		public TextureImporterPlatformSettings(AssetLayout layout)
+		public TextureImporterPlatformSettings(LayoutInfo layout)
 		{
 			BuildTarget = DefaultTexturePlatformName;
 			MaxTextureSize = 2048;

@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 {
 	public struct GUIStyle : IAsset
 	{
-		public GUIStyle(AssetLayout layout) : this()
+		public GUIStyle(LayoutInfo layout) : this()
 		{
 			Name = string.Empty;
 			Normal = new GUIStyleState(layout);
@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 			OnFocused = new GUIStyleState(layout);
 			FontSize = 33;
 			RichText = true;
-			TextClipping = layout.Info.Version.IsGreaterEqual(4) ? TextClipping.Overflow : TextClipping.Clip;
+			TextClipping = layout.Version.IsGreaterEqual(4) ? TextClipping.Overflow : TextClipping.Clip;
 			StretchWidth = true;
 		}
 

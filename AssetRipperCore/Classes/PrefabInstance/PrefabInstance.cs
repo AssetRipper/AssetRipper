@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 {
 	public sealed class PrefabInstance : NamedObject, IPrefabInstance
 	{
-		public PrefabInstance(AssetLayout layout) : base(layout)
+		public PrefabInstance(LayoutInfo layout) : base(layout)
 		{
 			Objects = Array.Empty<PPtr<EditorExtension>>();
 			Modification = new PrefabModification(layout);

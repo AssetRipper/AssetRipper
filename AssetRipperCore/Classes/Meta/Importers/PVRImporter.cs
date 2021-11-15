@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 	/// </summary>
 	public sealed class PVRImporter : AssetImporter
 	{
-		public PVRImporter(AssetLayout layout) : base(layout) { }
+		public PVRImporter(LayoutInfo layout) : base(layout) { }
 
 		public PVRImporter(AssetInfo assetInfo) : base(assetInfo) { }
 

@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.Animation
 {
 	public sealed class Animation : Behaviour
 	{
-		public Animation(AssetLayout layout) : base(layout)
+		public Animation(LayoutInfo layout) : base(layout)
 		{
 			Animations = Array.Empty<PPtr<AnimationClip.AnimationClip>>();
 			PlayAutomatically = true;

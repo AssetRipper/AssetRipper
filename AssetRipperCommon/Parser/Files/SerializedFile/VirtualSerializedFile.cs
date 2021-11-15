@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 	/// </summary>
 	public class VirtualSerializedFile : ISerializedFile
 	{
-		public VirtualSerializedFile(AssetLayout layout)
+		public VirtualSerializedFile(LayoutInfo layout)
 		{
 			Layout = layout;
 		}
@@ -118,13 +118,13 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		}
 
 		public string Name => nameof(VirtualSerializedFile);
-		public Platform Platform => Layout.Info.Platform;
-		public UnityVersion Version => Layout.Info.Version;
-		public TransferInstructionFlags Flags => Layout.Info.Flags;
+		public Platform Platform => Layout.Platform;
+		public UnityVersion Version => Layout.Version;
+		public TransferInstructionFlags Flags => Layout.Flags;
 
 		public bool IsScene => throw new NotSupportedException();
 
-		public AssetLayout Layout { get; }
+		public LayoutInfo Layout { get; }
 		public IFileCollection Collection => throw new NotSupportedException();
 		public IAssemblyManager AssemblyManager => throw new NotSupportedException();
 		public IReadOnlyList<FileIdentifier> Dependencies => throw new NotSupportedException();

@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 {
 	public sealed class DefaultImporter : AssetImporter
 	{
-		public DefaultImporter(AssetLayout layout) : base(layout) { }
+		public DefaultImporter(LayoutInfo layout) : base(layout) { }
 
 		public DefaultImporter(AssetInfo assetInfo) : base(assetInfo) { }
 

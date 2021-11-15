@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core.Layout
 {
@@ -8,6 +9,11 @@ namespace AssetRipper.Core.Layout
 	/// </summary>
 	public sealed class LayoutInfo
 	{
+		static LayoutInfo()
+		{
+			ClassNames = InitializeClassNames();
+		}
+
 		/// <summary>
 		/// 2.1.0 and greater
 		/// The alignment concept was first introduced only in v2.1.0
@@ -96,5 +102,47 @@ namespace AssetRipper.Core.Layout
 			return $"v{Version} {Platform} [{Flags}]";
 		}
 
+		private static Dictionary<ClassIDType, string> InitializeClassNames()
+		{
+			Dictionary<ClassIDType, string> names = new Dictionary<ClassIDType, string>();
+			ClassIDType[] classTypes = (ClassIDType[])System.Enum.GetValues(typeof(ClassIDType));
+			foreach (ClassIDType classType in classTypes)
+			{
+				names[classType] = classType.ToString();
+			}
+			return names;
+		}
+
+		public string GetClassName(ClassIDType classID)
+		{
+			if (classID == ClassIDType.PrefabInstance)
+				return GetPrefabClassName(Version);
+			else if (ClassNames.TryGetValue(classID, out string name))
+				return name;
+			else
+				return null;
+		}
+
+
+		private static IReadOnlyDictionary<ClassIDType, string> ClassNames { get; }
+
+		private static string GetPrefabClassName(UnityVersion version)
+		{
+			if (version.IsGreaterEqual(2018, 3))
+			{
+				return nameof(ClassIDType.PrefabInstance);
+			}
+			else if (version.IsGreaterEqual(3, 5))
+			{
+				return nameof(ClassIDType.Prefab);
+			}
+			else
+			{
+				return nameof(ClassIDType.DataTemplate);
+			}
+		}
+
+
+		public const string TypelessdataName = "_typelessdata";
 	}
 }

@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes
 {
 	public class WindZone : Behaviour
 	{
-		public WindZone(AssetLayout layout) : base(layout) { }
+		public WindZone(LayoutInfo layout) : base(layout) { }
 		public WindZone(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)

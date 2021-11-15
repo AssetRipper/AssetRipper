@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Classes
 {
 	public class DefaultAsset : NamedObject
 	{
-		public DefaultAsset(AssetLayout layout) : base(layout)
+		public DefaultAsset(LayoutInfo layout) : base(layout)
 		{
 			Message = string.Empty;
 		}

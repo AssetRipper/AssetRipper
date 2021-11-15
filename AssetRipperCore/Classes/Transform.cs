@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public static bool HasConstrainProportionsScale(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
-		public Transform(AssetLayout layout) : base(layout)
+		public Transform(LayoutInfo layout) : base(layout)
 		{
 			Children = Array.Empty<PPtr<Transform>>();
 		}

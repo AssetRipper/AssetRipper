@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public byte[] Data { get; private set; } = new byte[0];
 
-		public UnknownObject(AssetLayout layout) : base(layout) { }
+		public UnknownObject(LayoutInfo layout) : base(layout) { }
 		public UnknownObject(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)

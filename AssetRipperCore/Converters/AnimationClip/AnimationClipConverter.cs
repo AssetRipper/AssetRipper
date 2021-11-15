@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 			ProcessStreams(streamedFrames, bindings, tos, clip.DenseClip.SampleRate);
 			ProcessDenses(clip, bindings, tos);
-			if (Clip.HasConstantClip(Layout.Info.Version))
+			if (Clip.HasConstantClip(Layout.Version))
 			{
 				ProcessConstant(clip, bindings, tos, lastFrame);
 			}
@@ -393,7 +393,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 		private void AddAnimatorMuscleCurve(GenericBinding binding, float time, float value)
 		{
-			FloatCurve curve = new FloatCurve(string.Empty, binding.GetHumanoidMuscle(Layout.Info.Version).ToAttributeString(), ClassIDType.Animator, default);
+			FloatCurve curve = new FloatCurve(string.Empty, binding.GetHumanoidMuscle(Layout.Version).ToAttributeString(), ClassIDType.Animator, default);
 			AddFloatKeyframe(curve, time, value);
 		}
 
@@ -473,7 +473,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 		public FloatCurve[] Floats { get; private set; }
 		public PPtrCurve[] PPtrs { get; private set; }
 
-		private AssetLayout Layout => m_clip.File.Layout;
+		private LayoutInfo Layout => m_clip.File.Layout;
 
 		public static readonly Regex UnknownPathRegex = new Regex($@"^{UnknownPathPrefix}[0-9]{{1,10}}$", RegexOptions.Compiled);
 

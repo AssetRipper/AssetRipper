@@ -360,14 +360,14 @@ namespace AssetRipper.Core.Project
 		public VirtualSerializedFile VirtualFile { get; }
 		public virtual ISerializedFile File => CurrentCollection.File;
 		public string Name => File.Name;
-		public AssetLayout Layout => File.Layout;
+		public LayoutInfo Layout => File.Layout;
 		public UnityVersion Version => File.Version;
 		public Platform Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
-		public AssetLayout ExportLayout { get; }
-		public UnityVersion ExportVersion => ExportLayout.Info.Version;
-		public Platform ExportPlatform => ExportLayout.Info.Platform;
-		public virtual TransferInstructionFlags ExportFlags => ExportLayout.Info.Flags | CurrentCollection.Flags;
+		public LayoutInfo ExportLayout { get; }
+		public UnityVersion ExportVersion => ExportLayout.Version;
+		public Platform ExportPlatform => ExportLayout.Platform;
+		public virtual TransferInstructionFlags ExportFlags => ExportLayout.Flags | CurrentCollection.Flags;
 		public virtual IReadOnlyList<FileIdentifier> Dependencies => File.Dependencies;
 
 		private const string ResourcesKeyword = "Resources";

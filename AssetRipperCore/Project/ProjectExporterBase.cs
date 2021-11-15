@@ -69,8 +69,7 @@ namespace AssetRipper.Core.Project
 		{
 			EventExportPreparationStarted?.Invoke();
 
-			LayoutInfo info = new LayoutInfo(options.Version, options.Platform, options.Flags);
-			AssetLayout exportLayout = new AssetLayout(info);
+			LayoutInfo exportLayout = new LayoutInfo(options.Version, options.Platform, options.Flags);
 			VirtualSerializedFile virtualFile = new VirtualSerializedFile(exportLayout);
 			List<IExportCollection> collections = new List<IExportCollection>();
 

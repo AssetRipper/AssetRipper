@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Parser.Asset
 		ClassIDType GetAssetType(long pathID);
 
 		string Name { get; }
-		AssetLayout Layout { get; }
+		LayoutInfo Layout { get; }
 		UnityVersion Version { get; }
 		Platform Platform { get; }
 		TransferInstructionFlags Flags { get; }

@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes
 {
 	public sealed class AnimatorState : NamedObject
 	{
-		private AnimatorState(AssetLayout layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position) : base(layout)
+		private AnimatorState(LayoutInfo layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position) : base(layout)
 		{
 			AssetInfo = assetInfo;
 			ObjectHideFlags = HideFlags.HideInHierarchy;

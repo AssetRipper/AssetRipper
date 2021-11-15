@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 {
 	public struct ShaderSubProgramBlob
 	{
-		public void Read(AssetLayout layout, MemoryStream memStream, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths)
+		public void Read(LayoutInfo layout, MemoryStream memStream, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths)
 		{
 			for (int i = 0; i < offsets.Length; i++)
 			{
@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 			}
 		}
 
-		public void Write(AssetLayout layout, MemoryStream memStream, out uint[] offsets, out uint[] compressedLengths, out uint[] decompressedLengths)
+		public void Write(LayoutInfo layout, MemoryStream memStream, out uint[] offsets, out uint[] compressedLengths, out uint[] decompressedLengths)
 		{
 			int segmentCount = Entries.Length == 0 ? 0 : Entries.Max(t => t.Segment) + 1;
 			offsets = new uint[segmentCount];
@@ -40,7 +40,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 			}
 		}
 
-		private void ReadBlob(AssetLayout layout, MemoryStream memStream, uint compressedLength, uint decompressedLength, int segment)
+		private void ReadBlob(LayoutInfo layout, MemoryStream memStream, uint compressedLength, uint decompressedLength, int segment)
 		{
 			byte[] decompressedBuffer = new byte[decompressedLength];
 			using (Lz4DecodeStream lz4Stream = new Lz4DecodeStream(memStream, compressedLength))
@@ -50,7 +50,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 
 			using (MemoryStream blobMem = new MemoryStream(decompressedBuffer))
 			{
-				using (AssetReader blobReader = new AssetReader(blobMem, EndianType.LittleEndian, layout.Info))
+				using (AssetReader blobReader = new AssetReader(blobMem, EndianType.LittleEndian, layout))
 				{
 					if (segment == 0)
 					{
@@ -62,11 +62,11 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 			}
 		}
 
-		private void WriteBlob(AssetLayout layout, MemoryStream memStream, out uint compressedLength, out uint decompressedLength, int segment)
+		private void WriteBlob(LayoutInfo layout, MemoryStream memStream, out uint compressedLength, out uint decompressedLength, int segment)
 		{
 			using (MemoryStream blobMem = new MemoryStream())
 			{
-				using (AssetWriter blobWriter = new AssetWriter(blobMem, EndianType.LittleEndian, layout.Info))
+				using (AssetWriter blobWriter = new AssetWriter(blobMem, EndianType.LittleEndian, layout))
 				{
 					if (segment == 0)
 					{

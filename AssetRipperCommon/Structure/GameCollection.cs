@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Structure
 {
 	public sealed class GameCollection : FileList, IFileCollection, IDisposable
 	{
-		public AssetLayout Layout { get; }
+		public LayoutInfo Layout { get; }
 
 		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
 		public IAssemblyManager AssemblyManager { get; set; }
@@ -27,7 +27,6 @@ namespace AssetRipper.Core.Structure
 
 		private readonly Dictionary<string, SerializedFile> m_files = new Dictionary<string, SerializedFile>();
 		private readonly Dictionary<string, ResourceFile> m_resources = new Dictionary<string, ResourceFile>();
-		private readonly Dictionary<LayoutInfo, AssetLayout> m_layouts = new Dictionary<LayoutInfo, AssetLayout>();
 
 		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
 
@@ -35,10 +34,9 @@ namespace AssetRipper.Core.Structure
 
 		private readonly Dictionary<ClassIDType, List<IUnityObjectBase>> _cachedAssetsByType = new();
 
-		public GameCollection(AssetLayout layout) : base(nameof(GameCollection))
+		public GameCollection(LayoutInfo layout) : base(nameof(GameCollection))
 		{
 			Layout = layout;
-			m_layouts.Add(Layout.Info, Layout);
 		}
 
 		public ISerializedFile FindSerializedFile(string fileName)
@@ -131,16 +129,6 @@ namespace AssetRipper.Core.Structure
 
 		public bool IsScene(ISerializedFile file) => m_scenes.Contains(file);
 
-		public AssetLayout GetLayout(LayoutInfo info)
-		{
-			if (!m_layouts.TryGetValue(info, out AssetLayout value))
-			{
-				value = new AssetLayout(info);
-				m_layouts.Add(info, value);
-			}
-			return value;
-		}
-
 		protected override void OnSerializedFileAdded(SerializedFile file)
 		{
 			if (m_files.ContainsKey(file.Name))
@@ -157,11 +145,11 @@ namespace AssetRipper.Core.Structure
 				}
 				throw new ArgumentException($"{nameof(SerializedFile)} with name '{file.Name}' and path '{file.FilePath}' conflicts with file at '{existingFile.FilePath}'", nameof(file));
 			}
-			if (file.Platform != Layout.Info.Platform)
+			if (file.Platform != Layout.Platform)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Import, $"'{file.Name}' is incompatible with platform of the game collection");
 			}
-			if (file.Version != Layout.Info.Version)
+			if (file.Version != Layout.Version)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Import, $"'{file.Name}' is incompatible with version of the game collection");
 			}

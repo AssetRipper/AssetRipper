@@ -14,9 +14,9 @@ namespace AssetRipper.Core.Converters.Mesh
 {
 	public static class SubMeshConverter
 	{
-		public static void CalculateSubMeshVertexRangeAndBounds(AssetLayout layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
+		public static void CalculateSubMeshVertexRangeAndBounds(LayoutInfo layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
 		{
-			UpdateSubMeshVertexRange(layout.Info.Version, mesh, ref submesh);
+			UpdateSubMeshVertexRange(layout.Version, mesh, ref submesh);
 			RecalculateSubmeshBounds(layout, mesh, ref submesh);
 		}
 
@@ -170,7 +170,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 		}
 
-		private static void RecalculateSubmeshBounds(AssetLayout layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
+		private static void RecalculateSubmeshBounds(LayoutInfo layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
 		{
 			if (submesh.VertexCount == 0)
 			{
@@ -184,9 +184,9 @@ namespace AssetRipper.Core.Converters.Mesh
 			submesh.LocalAABB = new AABB(center, extent);
 		}
 
-		private static void FindMinMaxBounds(AssetLayout layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(LayoutInfo layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh, out Vector3f min, out Vector3f max)
 		{
-			if (AssetRipper.Core.Classes.Mesh.Mesh.HasCompressedMesh(layout.Info.Version))
+			if (AssetRipper.Core.Classes.Mesh.Mesh.HasCompressedMesh(layout.Version))
 			{
 				if (mesh.CompressedMesh.Vertices.IsSet)
 				{
@@ -196,9 +196,9 @@ namespace AssetRipper.Core.Converters.Mesh
 				}
 			}
 
-			if (AssetRipper.Core.Classes.Mesh.Mesh.HasVertexData(layout.Info.Version))
+			if (AssetRipper.Core.Classes.Mesh.Mesh.HasVertexData(layout.Version))
 			{
-				if (AssetRipper.Core.Classes.Mesh.Mesh.IsOnlyVertexData(layout.Info.Version))
+				if (AssetRipper.Core.Classes.Mesh.Mesh.IsOnlyVertexData(layout.Version))
 				{
 					FindMinMaxBounds(layout, ref mesh.VertexData, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 				}
@@ -294,17 +294,17 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 		}
 
-		private static void FindMinMaxBounds(AssetLayout layout, ref VertexData vertexData, int firstVertex, int vertexCount, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(LayoutInfo layout, ref VertexData vertexData, int firstVertex, int vertexCount, out Vector3f min, out Vector3f max)
 		{
-			ChannelInfo channel = vertexData.GetChannel(layout.Info.Version, ShaderChannel.Vertex);
-			int streamOffset = vertexData.GetStreamOffset(layout.Info.Version, channel.Stream);
-			int streamStride = vertexData.GetStreamStride(layout.Info.Version, channel.Stream);
-			int extraStride = streamStride - ShaderChannel.Vertex.GetStride(layout.Info.Version);
+			ChannelInfo channel = vertexData.GetChannel(layout.Version, ShaderChannel.Vertex);
+			int streamOffset = vertexData.GetStreamOffset(layout.Version, channel.Stream);
+			int streamStride = vertexData.GetStreamStride(layout.Version, channel.Stream);
+			int extraStride = streamStride - ShaderChannel.Vertex.GetStride(layout.Version);
 			int vertexOffset = firstVertex * streamStride;
 			int begin = streamOffset + vertexOffset + channel.Offset;
 			using (MemoryStream stream = new MemoryStream(vertexData.Data))
 			{
-				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout.Info))
+				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout))
 				{
 					stream.Position = begin;
 					Vector3f dummyVertex = reader.ReadAsset<Vector3f>();

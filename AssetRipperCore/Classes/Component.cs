@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes
 {
 	public abstract class Component : EditorExtension, IComponent
 	{
-		protected Component(AssetLayout layout) : base(layout) { }
+		protected Component(LayoutInfo layout) : base(layout) { }
 
 		protected Component(AssetInfo assetInfo) : base(assetInfo) { }
 

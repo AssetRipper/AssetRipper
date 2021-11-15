@@ -28,10 +28,10 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public string FilePath { get; }
 		public SerializedFileHeader Header { get; }
 		public SerializedFileMetadata Metadata { get; }
-		public AssetLayout Layout { get; }
-		public UnityVersion Version => Layout.Info.Version;
-		public Platform Platform => Layout.Info.Platform;
-		public TransferInstructionFlags Flags => Layout.Info.Flags;
+		public LayoutInfo Layout { get; }
+		public UnityVersion Version => Layout.Version;
+		public Platform Platform => Layout.Platform;
+		public TransferInstructionFlags Flags => Layout.Flags;
 
 		public IFileCollection Collection { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
@@ -84,7 +84,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return SerializedFileScheme.ReadSceme(stream, filePath, fileName);
 		}
 
-		private static AssetLayout GetLayout(GameCollection collection, SerializedFileScheme scheme, string name)
+		private static LayoutInfo GetLayout(GameCollection collection, SerializedFileScheme scheme, string name)
 		{
 			if (!SerializedFileMetadata.HasPlatform(scheme.Header.Version))
 			{
@@ -95,8 +95,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				return collection.Layout;
 			}
 
-			LayoutInfo info = new LayoutInfo(scheme.Metadata.UnityVersion, scheme.Metadata.TargetPlatform, scheme.Flags);
-			return collection.GetLayout(info);
+			return new LayoutInfo(scheme.Metadata.UnityVersion, scheme.Metadata.TargetPlatform, scheme.Flags);
 		}
 
 		public IUnityObjectBase GetAsset(long pathID)
@@ -232,7 +231,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		internal void ReadData(Stream stream)
 		{
-			using (AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout.Info))
+			using (AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout))
 			{
 				if (SerializedFileMetadata.HasScriptTypes(Header.Version))
 				{

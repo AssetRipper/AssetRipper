@@ -17,9 +17,9 @@ namespace AssetRipper.Core.Classes.GameObject
 {
 	public sealed class GameObject : EditorExtension, IHasName, IGameObject
 	{
-		public GameObject(AssetLayout layout) : base(layout)
+		public GameObject(LayoutInfo layout) : base(layout)
 		{
-			if (IsComponentTuple(layout.Info.Version))
+			if (IsComponentTuple(layout.Version))
 			{
 				ComponentTuple = Array.Empty<Tuple<ClassIDType, PPtr<Component>>>();
 			}

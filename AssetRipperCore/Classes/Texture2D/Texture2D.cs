@@ -282,7 +282,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			node.Add(ColorSpaceName, (int)ColorSpace);
 			byte[] imageData = GetExportImageData();
 			node.Add(ImageDataName, imageData.Length);
-			node.Add(Layout.AssetLayout.TypelessdataName, imageData.ExportYAML());
+			node.Add(Layout.LayoutInfo.TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);
 			node.Add(StreamDataName, streamData.ExportYAML(container));
 			return node;

@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes
 			public override IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstants => Transition.ConditionConstantArray;
 		}
 
-		private AnimatorStateTransition(AssetLayout layout, AssetInfo assetInfo, Parameters parameters) : base(layout, assetInfo, parameters)
+		private AnimatorStateTransition(LayoutInfo layout, AssetInfo assetInfo, Parameters parameters) : base(layout, assetInfo, parameters)
 		{
 			TransitionDuration = parameters.Transition.TransitionDuration;
 			TransitionOffset = parameters.Transition.TransitionOffset;

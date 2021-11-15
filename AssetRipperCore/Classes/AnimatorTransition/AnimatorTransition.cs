@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.AnimatorTransition
 			public override IReadOnlyList<OffsetPtr<ConditionConstant>> ConditionConstants => Transition.ConditionConstantArray;
 		}
 
-		private AnimatorTransition(AssetLayout layout, AssetInfo assetInfo, Parameters parameters) :
+		private AnimatorTransition(LayoutInfo layout, AssetInfo assetInfo, Parameters parameters) :
 			   base(layout, assetInfo, parameters) { }
 
 		public static AnimatorTransition CreateVirtualInstance(VirtualSerializedFile virtualFile, Parameters parameters)

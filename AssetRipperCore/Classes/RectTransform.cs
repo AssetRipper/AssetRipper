@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes
 {
 	public sealed class RectTransform : Transform
 	{
-		public RectTransform(AssetLayout layout) : base(layout) { }
+		public RectTransform(LayoutInfo layout) : base(layout) { }
 
 		public RectTransform(AssetInfo assetInfo) : base(assetInfo) { }
 

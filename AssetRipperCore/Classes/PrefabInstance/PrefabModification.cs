@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 {
 	public struct PrefabModification : IAsset, IDependent
 	{
-		public PrefabModification(AssetLayout layout)
+		public PrefabModification(LayoutInfo layout)
 		{
 			TransformParent = default;
 			Modifications = Array.Empty<PropertyModification>();

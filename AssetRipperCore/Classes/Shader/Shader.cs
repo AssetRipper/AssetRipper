@@ -103,7 +103,7 @@ namespace AssetRipper.Core.Classes.Shader
 					byte[] compressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					UnpackSubProgramBlobs(reader.Layout(), offsets, compressedLengths, decompressedLengths, compressedBlob);
+					UnpackSubProgramBlobs(reader.Info, offsets, compressedLengths, decompressedLengths, compressedBlob);
 				}
 				else
 				{
@@ -113,7 +113,7 @@ namespace AssetRipper.Core.Classes.Shader
 					byte[] compressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					UnpackSubProgramBlobs(reader.Layout(), offsets, compressedLengths, decompressedLengths, compressedBlob);
+					UnpackSubProgramBlobs(reader.Info, offsets, compressedLengths, decompressedLengths, compressedBlob);
 				}
 			}
 			else
@@ -126,7 +126,7 @@ namespace AssetRipper.Core.Classes.Shader
 					byte[] compressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					UnpackSubProgramBlobs(reader.Layout(), 0, (uint)compressedBlob.Length, decompressedSize, compressedBlob);
+					UnpackSubProgramBlobs(reader.Info, 0, (uint)compressedBlob.Length, decompressedSize, compressedBlob);
 				}
 
 				if (HasFallback(reader.Version))
@@ -180,7 +180,7 @@ namespace AssetRipper.Core.Classes.Shader
 			throw new NotSupportedException();
 		}
 
-		private void UnpackSubProgramBlobs(AssetLayout layout, uint offset, uint compressedLength, uint decompressedLength, byte[] compressedBlob)
+		private void UnpackSubProgramBlobs(LayoutInfo layout, uint offset, uint compressedLength, uint decompressedLength, byte[] compressedBlob)
 		{
 			if (compressedBlob.Length == 0)
 			{
@@ -199,7 +199,7 @@ namespace AssetRipper.Core.Classes.Shader
 			}
 		}
 
-		private void UnpackSubProgramBlobs(AssetLayout layout, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths, byte[] compressedBlob)
+		private void UnpackSubProgramBlobs(LayoutInfo layout, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths, byte[] compressedBlob)
 		{
 			Blobs = new ShaderSubProgramBlob[offsets.Length];
 			using (MemoryStream memStream = new MemoryStream(compressedBlob))
@@ -214,7 +214,7 @@ namespace AssetRipper.Core.Classes.Shader
 			}
 		}
 
-		private void UnpackSubProgramBlobs(AssetLayout layout, uint[][] offsets, uint[][] compressedLengths, uint[][] decompressedLengths, byte[] compressedBlob)
+		private void UnpackSubProgramBlobs(LayoutInfo layout, uint[][] offsets, uint[][] compressedLengths, uint[][] decompressedLengths, byte[] compressedBlob)
 		{
 			Blobs = new ShaderSubProgramBlob[offsets.Length];
 			using (MemoryStream memStream = new MemoryStream(compressedBlob))

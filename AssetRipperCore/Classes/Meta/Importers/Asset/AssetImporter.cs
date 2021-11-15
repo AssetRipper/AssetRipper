@@ -18,24 +18,24 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 	// NOTE: unknown layout for all importers for versions < 2.5.0
 	public abstract class AssetImporter : NamedObject, IAssetImporter
 	{
-		protected AssetImporter(AssetLayout layout) : base(layout)
+		protected AssetImporter(LayoutInfo layout) : base(layout)
 		{
 			if (IncludesIDToName)
 			{
-				if (HasInternalIDToNameTable(layout.Info.Version))
+				if (HasInternalIDToNameTable(layout.Version))
 				{
 					InternalIDToNameTable = new Dictionary<Tuple<ClassIDType, long>, string>();
 				}
-				else if (FileIDToRecycleNameRelevant(layout.Info.Version))
+				else if (FileIDToRecycleNameRelevant(layout.Version))
 				{
 					FileIDToRecycleName = new Dictionary<long, string>();
 				}
 			}
-			if (HasExternalObjects(layout.Info.Version))
+			if (HasExternalObjects(layout.Version))
 			{
 				ExternalObjects = new Dictionary<SourceAssetIdentifier, PPtr<Object.Object>>();
 			}
-			if (HasUsedFileIDs(layout.Info.Version))
+			if (HasUsedFileIDs(layout.Version))
 			{
 				UsedFileIDs = Array.Empty<long>();
 			}

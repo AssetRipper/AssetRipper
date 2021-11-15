@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 	/// </summary>
 	public sealed class ASTCImporter : AssetImporter
 	{
-		public ASTCImporter(AssetLayout layout) : base(layout) { }
+		public ASTCImporter(LayoutInfo layout) : base(layout) { }
 
 		public ASTCImporter(AssetInfo assetInfo) : base(assetInfo) { }
 

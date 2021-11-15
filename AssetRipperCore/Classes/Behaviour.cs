@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes
 {
 	public abstract class Behaviour : Component
 	{
-		protected Behaviour(AssetLayout layout) : base(layout)
+		protected Behaviour(LayoutInfo layout) : base(layout)
 		{
 			Enabled = 1;
 		}

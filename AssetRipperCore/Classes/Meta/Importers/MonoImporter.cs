@@ -13,9 +13,9 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 {
 	public class MonoImporter : AssetImporter
 	{
-		public MonoImporter(AssetLayout layout) : base(layout)
+		public MonoImporter(LayoutInfo layout) : base(layout)
 		{
-			if (HasDefaultReferences(layout.Info.Version))
+			if (HasDefaultReferences(layout.Version))
 			{
 				DefaultReferences = new Dictionary<string, PPtr<Object.Object>>();
 			}

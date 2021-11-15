@@ -116,11 +116,8 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 		}
 
-		private void InitializeGameCollection(CoreConfiguration configuration, LayoutInfo layinfo)
+		private void InitializeGameCollection(CoreConfiguration configuration, LayoutInfo layout)
 		{
-			//Initializes all the component layouts
-			AssetLayout layout = new AssetLayout(layinfo);
-
 			Logger.SendStatusChange("loading_step_create_file_collection");
 
 			//Sets its fields and creates the Project Exporter

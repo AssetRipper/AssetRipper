@@ -29,7 +29,7 @@ namespace AssetRipper.Core
 		protected const string AssetExtension = "asset";
 
 		public UnityObjectBase() { }
-		public UnityObjectBase(AssetLayout layout) { }
+		public UnityObjectBase(LayoutInfo layout) { }
 		public UnityObjectBase(AssetInfo assetInfo)
 		{
 			AssetInfo = assetInfo;

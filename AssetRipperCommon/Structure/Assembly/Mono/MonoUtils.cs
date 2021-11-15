@@ -1196,7 +1196,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				{
 					return false;
 				}
-				if (definition.IsValueType && !context.Layout.Info.IsStructSerializable)
+				if (definition.IsValueType && !context.Layout.IsStructSerializable)
 				{
 					return false;
 				}

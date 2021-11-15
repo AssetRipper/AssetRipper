@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes
 {
 	public abstract class NamedObject : EditorExtension, INamedObject
 	{
-		protected NamedObject(AssetLayout layout) : base(layout)
+		protected NamedObject(LayoutInfo layout) : base(layout)
 		{
 			Name = string.Empty;
 		}

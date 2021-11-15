@@ -254,7 +254,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 
 			node.Add(DataSizeName, Data.Length);
-			node.Add(Layout.AssetLayout.TypelessdataName, Data.ExportYAML());
+			node.Add(Layout.LayoutInfo.TypelessdataName, Data.ExportYAML());
 			return node;
 		}
 

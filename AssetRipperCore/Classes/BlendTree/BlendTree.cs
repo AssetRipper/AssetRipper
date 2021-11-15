@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.BlendTree
 {
 	public sealed class BlendTree : Motion
 	{
-		private BlendTree(AssetLayout layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, StateConstant state, int nodeIndex) : base(layout)
+		private BlendTree(LayoutInfo layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, StateConstant state, int nodeIndex) : base(layout)
 		{
 			AssetInfo = assetInfo;
 			ObjectHideFlags = HideFlags.HideInHierarchy;

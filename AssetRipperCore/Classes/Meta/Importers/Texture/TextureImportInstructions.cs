@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	public struct TextureImportInstructions : IAsset
 	{
-		public TextureImportInstructions(AssetLayout layout) : this()
+		public TextureImportInstructions(LayoutInfo layout) : this()
 		{
 #warning TODO: default values
 		}

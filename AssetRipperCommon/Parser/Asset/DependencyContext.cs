@@ -9,9 +9,9 @@ namespace AssetRipper.Core.Parser.Asset
 {
 	public sealed class DependencyContext
 	{
-		public DependencyContext(AssetLayout layout, bool log)
+		public DependencyContext(LayoutInfo layout, bool log)
 		{
-			Layout = layout;
+			Info = layout;
 			IsLog = log;
 			m_hierarchy = log ? new Stack<string>() : null;
 		}
@@ -121,10 +121,10 @@ namespace AssetRipper.Core.Parser.Asset
 			return hierarchy;
 		}
 
-		public AssetLayout Layout { get; }
-		public UnityVersion Version => Layout.Info.Version;
-		public Platform Platform => Layout.Info.Platform;
-		public TransferInstructionFlags Flags => Layout.Info.Flags;
+		public LayoutInfo Info { get; }
+		public UnityVersion Version => Info.Version;
+		public Platform Platform => Info.Platform;
+		public TransferInstructionFlags Flags => Info.Flags;
 		public bool IsLog { get; }
 		public string PointerName { get; private set; }
 

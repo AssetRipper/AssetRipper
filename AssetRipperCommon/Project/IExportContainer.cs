@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Project
 		ushort TagNameToID(string tagName);
 
 		IExportCollection CurrentCollection { get; }
-		AssetLayout ExportLayout { get; }
+		LayoutInfo ExportLayout { get; }
 		UnityVersion ExportVersion { get; }
 		Platform ExportPlatform { get; }
 		TransferInstructionFlags ExportFlags { get; }

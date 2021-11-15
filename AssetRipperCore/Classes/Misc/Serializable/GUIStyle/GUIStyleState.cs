@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 {
 	public struct GUIStyleState : IAsset
 	{
-		public GUIStyleState(AssetLayout layout)
+		public GUIStyleState(LayoutInfo layout)
 		{
 			Background = default;
 			ScaledBackgrounds = Array.Empty<PPtr<Texture2D.Texture2D>>();

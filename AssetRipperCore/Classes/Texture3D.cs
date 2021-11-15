@@ -212,7 +212,7 @@ namespace AssetRipper.Core.Classes
 			node.Add(IsReadableName, IsReadable);
 			byte[] imageData = GetImageData(container.Version);
 			node.Add(ImageDataName, imageData.Length);
-			node.Add(Layout.AssetLayout.TypelessdataName, imageData.ExportYAML());
+			node.Add(Layout.LayoutInfo.TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo(true);
 			node.Add(StreamDataName, streamData.ExportYAML(container));
 			return node;

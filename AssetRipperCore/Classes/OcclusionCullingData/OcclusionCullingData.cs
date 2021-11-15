@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 	{
 		public OcclusionCullingData(AssetInfo assetInfo) : base(assetInfo) { }
 
-		private OcclusionCullingData(AssetLayout layout, AssetInfo assetInfo) : base(layout)
+		private OcclusionCullingData(LayoutInfo layout, AssetInfo assetInfo) : base(layout)
 		{
 			AssetInfo = assetInfo;
 			Name = nameof(OcclusionCullingData);

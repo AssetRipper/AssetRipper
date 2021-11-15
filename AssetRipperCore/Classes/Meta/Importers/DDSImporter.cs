@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 	/// </summary>
 	public sealed class DDSImporter : AssetImporter
 	{
-		public DDSImporter(AssetLayout layout) : base(layout) { }
+		public DDSImporter(LayoutInfo layout) : base(layout) { }
 
 		public DDSImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
