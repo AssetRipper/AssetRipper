@@ -27,7 +27,7 @@ namespace AssetRipper.GUI
 
 		public override ISerializedFile File => LastAccessedAsset.File;
 
-		public override TransferInstructionFlags ExportFlags => ExportLayout.Info.Flags;
+		public override TransferInstructionFlags ExportFlags => ExportLayout.Flags;
 	}
 	
 }
