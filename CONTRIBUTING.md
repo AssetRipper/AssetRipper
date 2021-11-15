@@ -6,7 +6,7 @@ You can find a list of "good first issues" [here](https://github.com/ds5678/Asse
 
 
 ## Pull Requests
-I welcome contributions to AssetRipper and have accepted many patches, but if you want your code to be included, please familiarise yourself with the following guidelines:
+I welcome contributions to AssetRipper and have accepted many patches, but if you want your code to be included, please familiarize yourself with the following guidelines:
 * Your submission must be your own work, and able to be released under the GPL license.
 * You will need to make sure your code conforms to the layout and naming conventions used elsewhere in AssetRipper.
 * Try to write "clean code" - avoid long functions and long classes. Try to add a new feature by creating a new class rather than putting loads of extra code inside an existing one.

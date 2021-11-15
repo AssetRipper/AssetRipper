@@ -20,7 +20,9 @@
   * Move ProjectExporter and ProjectExporterBase
   * Move GameStructure
 * Struct Reading Overhaul
-  * Yaml method generation in the AssemblyDumper project
+  * Yaml method generation
+  * ~~Type Tree method generation~~
+  * Fetch Dependency method generation
   * Apply interfaces in the generated assemblies
   * Implement generation of version specific Asset Factories
   * Implement a system for loading the assemblies on demand
@@ -28,6 +30,7 @@
   * Remove the `Classes` and `Converters` namespaces
   * Remove any additional legacy code
   * Merge the common project back into the core project
+  * Add newer Unity versions to the TypeTreeDumps repository
  
 ## 0.2.1.0
 This release will be primarily focused on cleaning up and refactoring the project. Such cleanup may include:

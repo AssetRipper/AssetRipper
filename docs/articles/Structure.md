@@ -1,28 +1,33 @@
 ## Structure
 
-* [*AssetAnalyzer*](../AssetAnalyzer/README.md)
+* [*AssetAnalyzer*](https://github.com/ds5678/AssetRipper/blob/master/AssetAnalyzer/README.md)
 
    Simple program to investigate file header information.
 
-* [*AssetRipperCore*](../AssetRipperCore/README.md)
+* [*AssetRipperCore*](https://github.com/ds5678/AssetRipper/blob/master/AssetRipperCore/README.md)
 
-   Core library. It's designed as an single module without any third party dependencies.
+   Core library. It's designed as an single module without any native dependencies.
    
-* [*AssetRipperLibrary*](../AssetRipperLibrary/README.md)
+* [*AssetRipperLibrary*](https://github.com/ds5678/AssetRipper/blob/master/AssetRipperLibrary/README.md)
 
    This is an expansion library for AssetRipperCore. It includes some extra exporters:
    * AudioClip export
    * Texture2D export (with Sprites)
-   * Shader DirectX blob export
+   * Dummy Shader Export
+   * Text Asset Export
+   * Font Export
+   * Movie Texture Export
+   * Mesh Export
+   * Script Export (Mono and IL2Cpp)
 
-* [*AssetRipperGUI*](../AssetRipperGUI/README.md)
+* [*AssetRipperGUI*](https://github.com/ds5678/AssetRipper/blob/master/AssetRipperGUI/README.md)
 
-   Basic graphic interface application utilizing the AssetRipperLibrary.
+   Basic cross-platform graphical interface application utilizing the AssetRipperLibrary.
    
-* [*AssetRipperConsole*](../AssetRipperConsole/README.md)
+* [*AssetRipperConsole*](https://github.com/ds5678/AssetRipper/blob/master/AssetRipperConsole/README.md)
 
-   Command line equivalent of AssetRipperGUI. Since it has no GUI, it can be cross-platform compatible.
+   Command line equivalent of AssetRipperGUI.
    
-* [*UnitTester*](../UnitTester/README.md)
+* [*UnitTester*](https://github.com/ds5678/AssetRipper/blob/master/UnitTester/README.md)
 
    Automated tester to verify project integrity while making changes.
