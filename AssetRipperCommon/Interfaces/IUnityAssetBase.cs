@@ -5,7 +5,7 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Interfaces
 {
-	public interface IUnityAssetBase : IAsset, IDependent
+	public interface IUnityAssetBase : IAsset, IDependent, ITypeTreeSerializable
 	{
 		UnityVersion AssetUnityVersion { get; set; }
 		EndianType EndianType { get; set; }

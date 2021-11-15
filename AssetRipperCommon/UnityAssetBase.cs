@@ -5,6 +5,7 @@ using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
@@ -31,15 +32,9 @@ namespace AssetRipper.Core
 			TransferInstructionFlags = layout.Flags;
 		}
 
-		public virtual void ReadEditor(AssetReader reader)
-		{
-			throw new NotSupportedException();
-		}
+		public virtual void ReadEditor(AssetReader reader) => throw new NotSupportedException();
 
-		public virtual void ReadRelease(AssetReader reader)
-		{
-			throw new NotSupportedException();
-		}
+		public virtual void ReadRelease(AssetReader reader) => throw new NotSupportedException();
 
 		public virtual void Read(AssetReader reader)
 		{
@@ -52,15 +47,9 @@ namespace AssetRipper.Core
 				ReadEditor(reader);
 		}
 
-		public virtual void WriteEditor(AssetWriter writer)
-		{
-			throw new NotSupportedException();
-		}
+		public virtual void WriteEditor(AssetWriter writer) => throw new NotSupportedException();
 
-		public virtual void WriteRelease(AssetWriter writer)
-		{
-			throw new NotSupportedException();
-		}
+		public virtual void WriteRelease(AssetWriter writer) => throw new NotSupportedException();
 
 		public virtual void Write(AssetWriter writer)
 		{
@@ -70,15 +59,9 @@ namespace AssetRipper.Core
 				WriteEditor(writer);
 		}
 
-		public virtual YAMLNode ExportYAMLEditor(IExportContainer container)
-		{
-			throw new NotSupportedException();
-		}
+		public virtual YAMLNode ExportYAMLEditor(IExportContainer container) => throw new NotSupportedException();
 
-		public virtual YAMLNode ExportYAMLRelease(IExportContainer container)
-		{
-			throw new NotSupportedException();
-		}
+		public virtual YAMLNode ExportYAMLRelease(IExportContainer container) => throw new NotSupportedException();
 
 		public virtual YAMLNode ExportYAML(IExportContainer container)
 		{
@@ -92,6 +75,10 @@ namespace AssetRipper.Core
 		{
 			yield break;
 		}
+
+		public virtual List<TypeTreeNode> MakeReleaseTypeTreeNodes(int depth, int startingIndex) => throw new NotSupportedException();
+
+		public virtual List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex) => throw new NotSupportedException();
 
 		private FieldInfo TryGetFieldInfo(string fieldName) => this.GetType().GetFields(fieldBindingFlags).Where(fieldInfo => fieldInfo.Name == fieldName).FirstOrDefault();
 

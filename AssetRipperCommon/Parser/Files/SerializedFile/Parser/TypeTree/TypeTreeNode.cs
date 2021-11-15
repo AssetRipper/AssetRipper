@@ -24,6 +24,18 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			MetaFlag = align ? TransferMetaFlags.AlignBytes : TransferMetaFlags.NoTransferFlags;
 		}
 
+		public TypeTreeNode(string type, string name, int level, int byteSize, int index, int version, int typeFlags, TransferMetaFlags metaFlag)
+		{
+			Type = type;
+			Name = name;
+			Level = (byte)level;
+			ByteSize = byteSize;
+			Index = index;
+			Version = version;
+			TypeFlags = typeFlags;
+			MetaFlag = metaFlag;
+		}
+
 		public void Read(SerializedReader reader)
 		{
 			if (IsFormat5(reader.Generation))
@@ -58,7 +70,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			if (IsFormat5(writer.Generation))
 			{
 				writer.Write((ushort)Version);
-				writer.Write(Level);
+				writer.Write((byte)Level);
 				writer.Write((byte)TypeFlags);
 				writer.Write(TypeStrOffset);
 				writer.Write(NameStrOffset);
@@ -107,7 +119,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		}
 
 		/// <summary>
-		/// Field type version, starts with 1 and is incremented after the type information has been significantly updated in a new release.
+		/// Field type version, starts with 1 and is incremented after the type information has been significantly updated in a new release.<br/>
 		/// Equal to serializedVersion in YAML format files
 		/// </summary>
 		public int Version { get; set; }
@@ -136,12 +148,12 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		/// </summary>
 		public string Name { get; set; }
 		/// <summary>
-		/// Size of the data value in bytes, e.g. 4 for int. -1 means that there is an array somewhere inside its hierarchy
+		/// Size of the data value in bytes, e.g. 4 for int. -1 means that there is an array somewhere inside its hierarchy<br/>
 		/// Note: The padding for the alignment is not included in the size.
 		/// </summary>
 		public int ByteSize { get; set; }
 		/// <summary>
-		/// Index of the field that is unique within a tree.
+		/// Index of the field that is unique within a tree.<br/>
 		/// Normally starts with 0 and is incremented with each additional field.
 		/// </summary>
 		public int Index { get; set; }
