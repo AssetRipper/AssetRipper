@@ -137,13 +137,13 @@ namespace AssetRipper.Core.Parser.Asset
 			}
 		}
 
-		public void OverrideInstantiator(ClassIDType classType, Func<AssetInfo, IUnityObjectBase> instantiator)
+		public void OverrideInstantiator(int classType, Func<AssetInfo, IUnityObjectBase> instantiator)
 		{
 			if (instantiator == null)
 			{
 				throw new ArgumentNullException(nameof(instantiator));
 			}
-			m_instantiators[classType] = instantiator;
+			m_instantiators[(ClassIDType)classType] = instantiator;
 		}
 
 		private static IUnityObjectBase DefaultInstantiator(AssetInfo assetInfo)
