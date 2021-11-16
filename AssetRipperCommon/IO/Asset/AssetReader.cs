@@ -62,7 +62,8 @@ namespace AssetRipper.Core.IO.Asset
 			return t;
 		}
 
-		public T[] ReadAssetArray<T>() where T : IAssetReadable, new()
+		public T[] ReadAssetArray<T>() where T : IAssetReadable, new() => ReadAssetArray<T>(true);
+		public T[] ReadAssetArray<T>(bool allowAlignment) where T : IAssetReadable, new()
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -82,7 +83,8 @@ namespace AssetRipper.Core.IO.Asset
 			return array;
 		}
 
-		public T[][] ReadAssetArrayArray<T>() where T : IAssetReadable, new()
+		public T[][] ReadAssetArrayArray<T>() where T : IAssetReadable, new() => ReadAssetArrayArray<T>(true);
+		public T[][] ReadAssetArrayArray<T>(bool allowAlignment) where T : IAssetReadable, new()
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -94,7 +96,7 @@ namespace AssetRipper.Core.IO.Asset
 				T[] innerArray = ReadAssetArray<T>();
 				array[i] = innerArray;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}

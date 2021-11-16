@@ -350,7 +350,8 @@ namespace AssetRipper.Core.IO.Endian
 			return count;
 		}
 
-		public bool[] ReadBooleanArray()
+		public bool[] ReadBooleanArray() => ReadBooleanArray(true);
+		public bool[] ReadBooleanArray(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -365,14 +366,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public char[] ReadCharArray()
+		public char[] ReadCharArray() => ReadCharArray(true);
+		public char[] ReadCharArray(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -387,14 +389,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public byte[] ReadByteArray()
+		public byte[] ReadByteArray() => ReadByteArray(true);
+		public byte[] ReadByteArray(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -409,14 +412,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public short[] ReadInt16Array()
+		public short[] ReadInt16Array() => ReadInt16Array(true);
+		public short[] ReadInt16Array(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -431,14 +435,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public ushort[] ReadUInt16Array()
+		public ushort[] ReadUInt16Array() => ReadUInt16Array(true);
+		public ushort[] ReadUInt16Array(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -453,14 +458,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public int[] ReadInt32Array()
+		public int[] ReadInt32Array() => ReadInt32Array(true);
+		public int[] ReadInt32Array(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -475,14 +481,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public uint[] ReadUInt32Array()
+		public uint[] ReadUInt32Array() => ReadUInt32Array(true);
+		public uint[] ReadUInt32Array(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -497,14 +504,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public long[] ReadInt64Array()
+		public long[] ReadInt64Array() => ReadInt64Array(true);
+		public long[] ReadInt64Array(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -519,14 +527,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public ulong[] ReadUInt64Array()
+		public ulong[] ReadUInt64Array() => ReadUInt64Array(true);
+		public ulong[] ReadUInt64Array(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -541,14 +550,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public float[] ReadSingleArray()
+		public float[] ReadSingleArray() => ReadSingleArray(true);
+		public float[] ReadSingleArray(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -563,14 +573,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public double[] ReadDoubleArray()
+		public double[] ReadDoubleArray() => ReadDoubleArray(true);
+		public double[] ReadDoubleArray(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -585,14 +596,15 @@ namespace AssetRipper.Core.IO.Endian
 				}
 				index += read;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
 			return array;
 		}
 
-		public string[] ReadStringArray()
+		public string[] ReadStringArray() => ReadStringArray(true);
+		public string[] ReadStringArray(bool allowAlignment)
 		{
 			FillInnerBuffer(sizeof(int));
 			int count = BufferToInt32();
@@ -602,7 +614,7 @@ namespace AssetRipper.Core.IO.Endian
 				string value = ReadString();
 				array[i] = value;
 			}
-			if (IsAlignArray)
+			if (allowAlignment && IsAlignArray)
 			{
 				AlignStream();
 			}
