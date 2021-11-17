@@ -5,6 +5,7 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Library.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -228,14 +229,18 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		private static Vector3f ToCoordinateSpace(Vector3f point, CoordinateSpace space)
 		{
-			if (space == CoordinateSpace.Left)
-				return new Vector3f(-point.Y, point.Z, point.X);
-
-			return new Vector3f(point.Z, -point.X, point.Y);
+			return space switch
+			{
+				CoordinateSpace.Left => new Vector3f(-point.Y, point.Z, point.X),
+				CoordinateSpace.Right => new Vector3f(point.Z, -point.X, point.Y),
+				CoordinateSpace.Unchanged => point,
+				_ => throw new ArgumentOutOfRangeException(nameof(space)),
+			};
 		}
 
 		private enum CoordinateSpace
 		{
+			Unchanged,
 			Left,
 			Right
 		}
