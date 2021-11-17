@@ -24,12 +24,16 @@ namespace AssetRipper.Core.Classes.Misc
 			Data3 = v3;
 		}
 
-		public Hash128(BinaryReader reader)
+		public Hash128(byte[] data)
 		{
-			Data0 = reader.ReadUInt32();
-			Data1 = reader.ReadUInt32();
-			Data2 = reader.ReadUInt32();
-			Data3 = reader.ReadUInt32();
+			if(data == null)
+				throw new ArgumentNullException(nameof(data));
+			if(data.Length != 16)
+				throw new ArgumentException("Length must be exactly 16", nameof(data));
+			Data0 = BitConverter.ToUInt32(data, 0);
+			Data1 = BitConverter.ToUInt32(data, 4);
+			Data2 = BitConverter.ToUInt32(data, 8);
+			Data3 = BitConverter.ToUInt32(data, 12);
 		}
 
 		public static int ToSerializedVersion(UnityVersion version)
