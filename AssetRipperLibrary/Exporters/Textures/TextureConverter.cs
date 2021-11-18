@@ -404,6 +404,8 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static bool DecompressCRN(byte[] data, out byte[] uncompressedBytes)
 		{
+			if (data is null) throw new ArgumentNullException(nameof(data));
+			if (data.Length == 0) throw new ArgumentException(nameof(data));
 			Logger.Info("About to unpack normal crunch...");
 			uncompressedBytes = TextureDecoder.UnpackCrunch(data);
 			return uncompressedBytes != null;
@@ -411,6 +413,8 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static bool DecompressUnityCRN(byte[] data, out byte[] uncompressedBytes)
 		{
+			if (data is null) throw new ArgumentNullException(nameof(data));
+			if (data.Length == 0) throw new ArgumentException(nameof(data));
 			Logger.Info("About to unpack unity crunch...");
 			uncompressedBytes = TextureDecoder.UnpackUnityCrunch(data);
 			return uncompressedBytes != null;
