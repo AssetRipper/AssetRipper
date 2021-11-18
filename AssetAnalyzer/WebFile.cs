@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
-using Brotli;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,16 +28,12 @@ namespace AssetAnalyzer
 			reader.Position = 0;
 			if (gzipMagic.SequenceEqual(magic))
 			{
-				var stream = new MemoryStream();
-				using (var gs = new GZipStream(reader.BaseStream, CompressionMode.Decompress))
-				{
-					gs.CopyTo(stream);
-				}
+				using GZipStream gzipStream = new GZipStream(reader.BaseStream, CompressionMode.Decompress);
+				using MemoryStream stream = new MemoryStream();
+				gzipStream.CopyTo(stream);
 				stream.Position = 0;
-				using (var binaryReader = new BinaryReader(stream))
-				{
-					ReadWebData(binaryReader);
-				}
+				using BinaryReader binaryReader = new BinaryReader(stream);
+				ReadWebData(binaryReader);
 			}
 			else
 			{
@@ -47,14 +42,12 @@ namespace AssetAnalyzer
 				reader.Position = 0;
 				if (brotliMagic.SequenceEqual(magic))
 				{
-					var brotliStream = new BrotliInputStream(reader.BaseStream);
-					var stream = new MemoryStream();
+					using BrotliStream brotliStream = new BrotliStream(reader.BaseStream, CompressionMode.Decompress);
+					using MemoryStream stream = new MemoryStream();
 					brotliStream.CopyTo(stream);
 					stream.Position = 0;
-					using (var binaryReader = new BinaryReader(stream))
-					{
-						ReadWebData(binaryReader);
-					}
+					using BinaryReader binaryReader = new BinaryReader(stream);
+					ReadWebData(binaryReader);
 				}
 				else
 				{

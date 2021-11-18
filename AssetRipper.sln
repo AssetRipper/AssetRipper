@@ -44,8 +44,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\YamlDotNet.md = Licenses\YamlDotNet.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brotli", "Brotli\Brotli.csproj", "{DE764903-A3F8-4A04-80DF-BA487A26DF75}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperLibrary", "AssetRipperLibrary\AssetRipperLibrary.csproj", "{36C3C081-547B-4C0C-98D0-BB90BA07B976}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTester", "UnitTester\UnitTester.csproj", "{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}"
@@ -126,18 +124,6 @@ Global
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.ReleaseMac|x64.Build.0 = Release|Any CPU
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
 		{CA9420F4-4B54-4727-91E6-CCE20916D795}.ReleaseWindows|x64.Build.0 = Release|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.DebugLinux|x64.ActiveCfg = Debug|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.DebugLinux|x64.Build.0 = Debug|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.DebugMac|x64.ActiveCfg = Debug|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.DebugMac|x64.Build.0 = Debug|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.DebugWindows|x64.ActiveCfg = Debug|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.DebugWindows|x64.Build.0 = Debug|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.ReleaseLinux|x64.Build.0 = Release|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.ReleaseMac|x64.Build.0 = Release|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
-		{DE764903-A3F8-4A04-80DF-BA487A26DF75}.ReleaseWindows|x64.Build.0 = Release|Any CPU
 		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.DebugLinux|x64.ActiveCfg = DebugLinux|x64
 		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.DebugLinux|x64.Build.0 = DebugLinux|x64
 		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.DebugMac|x64.ActiveCfg = DebugMac|x64

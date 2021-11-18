@@ -4,7 +4,6 @@ using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Files.WebFiles;
 using AssetRipper.Core.Structure.GameStructure;
-using Brotli;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -70,31 +69,18 @@ namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 
 		private byte[] ReadGZip(EndianReader reader)
 		{
-			using (MemoryStream stream = new MemoryStream())
-			{
-				using (GZipStream gzipStream = new GZipStream(reader.BaseStream, CompressionMode.Decompress))
-				{
-					gzipStream.CopyTo(stream);
-				}
-				return stream.ToArray();
-			}
+			using MemoryStream stream = new MemoryStream();
+			using GZipStream gzipStream = new GZipStream(reader.BaseStream, CompressionMode.Decompress);
+			gzipStream.CopyTo(stream);
+			return stream.ToArray();
 		}
 
 		private byte[] ReadBrotli(EndianReader reader)
 		{
-			using (MemoryStream stream = new MemoryStream())
-			{
-				using (BrotliInputStream brotliStream = new BrotliInputStream(reader.BaseStream))
-				{
-					int count;
-					byte[] buffer = new byte[81920];
-					while ((count = brotliStream.Read(buffer, 0, buffer.Length)) > 0)
-					{
-						stream.Write(buffer, 0, count);
-					}
-				}
-				return stream.ToArray();
-			}
+			using MemoryStream stream = new MemoryStream();
+			using BrotliStream brotliStream = new BrotliStream(reader.BaseStream, CompressionMode.Decompress);
+			brotliStream.CopyTo(stream);
+			return stream.ToArray();
 		}
 
 		public override FileEntryType SchemeType => FileEntryType.Archive;

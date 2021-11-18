@@ -33,11 +33,12 @@
   * Remove any additional legacy code
   * Merge the common project back into the core project
   * Add newer Unity versions to the TypeTreeDumps repository
+* Cleanup
+  * ~~Implement package for Brotli~~
  
 ## 0.2.1.0
 This release will be primarily focused on cleaning up and refactoring the project. Such cleanup may include:
 * Implement package for LZ4
-* Implement package for Brotli
 * Unified mesh export
 
 Other priorities for this release:
