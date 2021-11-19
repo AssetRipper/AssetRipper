@@ -140,11 +140,19 @@ namespace AssetRipper.Core.Structure
 					Logger.Error(LogCategory.Import, $"{nameof(SerializedFile)} with name '{file.Name}' and path '{file.FilePath}' was already added to this collection");
 					return;
 				}
-				else if(FileUtils.GetFileSize(file.FilePath) == FileUtils.GetFileSize(existingFile.FilePath))
+				else if (FileUtils.GetFileSize(file.FilePath) == FileUtils.GetFileSize(existingFile.FilePath))
 				{
 					return; //assume identical
 				}
-				throw new ArgumentException($"{nameof(SerializedFile)} with name '{file.Name}' and path '{file.FilePath}' conflicts with file at '{existingFile.FilePath}'", nameof(file));
+				else
+				{
+#if DEBUG
+					throw new ArgumentException($"{nameof(SerializedFile)} with name '{file.Name}' and path '{file.FilePath}' conflicts with file at '{existingFile.FilePath}'", nameof(file));
+#else
+					Logger.Warning(LogCategory.Import, $"{nameof(SerializedFile)} with name '{file.Name}' and path '{file.FilePath}' conflicts with file at '{existingFile.FilePath}'");
+					return;
+#endif
+				}
 			}
 			if (file.Platform != Layout.Platform)
 			{
@@ -155,7 +163,7 @@ namespace AssetRipper.Core.Structure
 				Logger.Log(LogType.Warning, LogCategory.Import, $"'{file.Name}' is incompatible with version of the game collection");
 			}
 
-			m_files.Add(file.Name, file);
+			m_files[file.Name] = file;
 			if (IsSceneSerializedFile(file))
 			{
 				m_scenes.Add(file);
@@ -181,7 +189,11 @@ namespace AssetRipper.Core.Structure
 		protected override void OnResourceFileAdded(ResourceFile file)
 		{
 			if (m_resources.ContainsKey(file.Name))
+#if DEBUG
 				throw new ArgumentException($"{nameof(ResourceFile)} with name '{file.Name}' already presents in the collection", nameof(file));
+#else
+				Logger.Warning(LogCategory.Import, $"{nameof(ResourceFile)} with name '{file.Name}' already presents in the collection");
+#endif
 			else
 				m_resources.Add(file.Name, file);
 		}
