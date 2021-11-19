@@ -17,10 +17,10 @@ namespace AssetRipper.GUI
 		
 		public bool IgnoreStreamingAssets
 		{
-			get => _ripper.Settings.DisableScriptImport;
+			get => _ripper.Settings.IgnoreStreamingAssets;
 			set
 			{
-				_ripper.Settings.DisableScriptImport = value;
+				_ripper.Settings.IgnoreStreamingAssets = value;
 				OnPropertyChanged();
 			}
 		}
