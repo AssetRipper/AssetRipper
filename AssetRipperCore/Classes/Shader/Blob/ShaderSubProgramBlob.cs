@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Lz4;
 using System;
 using System.IO;
 using System.Linq;
@@ -10,7 +9,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 {
 	public struct ShaderSubProgramBlob
 	{
-		public void Read(LayoutInfo layout, MemoryStream memStream, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths)
+		public void Read(LayoutInfo layout, byte[] compressedBlob, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths)
 		{
 			for (int i = 0; i < offsets.Length; i++)
 			{
@@ -18,8 +17,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 				uint compressedLength = compressedLengths[i];
 				uint decompressedLength = decompressedLengths[i];
 
-				memStream.Position = offset;
-				ReadBlob(layout, memStream, compressedLength, decompressedLength, i);
+				ReadBlob(layout, compressedBlob, offset, compressedLength, decompressedLength, i);
 			}
 		}
 
@@ -40,13 +38,10 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 			}
 		}
 
-		private void ReadBlob(LayoutInfo layout, MemoryStream memStream, uint compressedLength, uint decompressedLength, int segment)
+		private void ReadBlob(LayoutInfo layout, byte[] compressedBlob, uint offset, uint compressedLength, uint decompressedLength, int segment)
 		{
 			byte[] decompressedBuffer = new byte[decompressedLength];
-			using (Lz4DecodeStream lz4Stream = new Lz4DecodeStream(memStream, compressedLength))
-			{
-				lz4Stream.ReadBuffer(decompressedBuffer, 0, decompressedBuffer.Length);
-			}
+			K4os.Compression.LZ4.LZ4Codec.Decode(compressedBlob, (int)offset, (int)compressedLength, decompressedBuffer, 0, (int)decompressedLength);
 
 			using (MemoryStream blobMem = new MemoryStream(decompressedBuffer))
 			{

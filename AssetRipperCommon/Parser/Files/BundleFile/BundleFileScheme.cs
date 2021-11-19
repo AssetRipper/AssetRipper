@@ -2,7 +2,6 @@ using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.IO.Smart;
-using AssetRipper.Core.Lz4;
 using AssetRipper.Core.Parser.Files.BundleFile.Header;
 using AssetRipper.Core.Parser.Files.BundleFile.IO;
 using AssetRipper.Core.Parser.Files.BundleFile.Parser;
@@ -10,6 +9,7 @@ using AssetRipper.Core.Parser.Files.Entries;
 using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.GameStructure;
+using K4os.Compression.LZ4;
 using System;
 using System.IO;
 
@@ -150,16 +150,15 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 				case CompressionType.Lz4:
 				case CompressionType.Lz4HC:
 					{
-						using (MemoryStream uncompressedStream = new MemoryStream(new byte[header.UncompressedBlocksInfoSize]))
+						int uncompressedSize = header.UncompressedBlocksInfoSize;
+						byte[] uncompressedBytes = new byte[uncompressedSize];
+						byte[] compressedBytes = new BinaryReader(stream).ReadBytes(header.CompressedBlocksInfoSize);
+						int bytesWritten = LZ4Codec.Decode(compressedBytes, uncompressedBytes);
+						if (bytesWritten != uncompressedSize)
 						{
-							using (Lz4DecodeStream decodeStream = new Lz4DecodeStream(stream, header.CompressedBlocksInfoSize))
-							{
-								decodeStream.ReadBuffer(uncompressedStream, header.UncompressedBlocksInfoSize);
-							}
-
-							uncompressedStream.Position = 0;
-							ReadMetadata(uncompressedStream, header.UncompressedBlocksInfoSize);
+							throw new System.Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize}");
 						}
+						ReadMetadata(new MemoryStream(uncompressedBytes), uncompressedSize);
 					}
 					break;
 

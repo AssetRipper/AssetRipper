@@ -11,7 +11,6 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader
@@ -189,43 +188,34 @@ namespace AssetRipper.Core.Classes.Shader
 			else
 			{
 				Blobs = new ShaderSubProgramBlob[1];
-				using (MemoryStream memStream = new MemoryStream(compressedBlob))
-				{
-					uint[] offsets = new uint[] { offset };
-					uint[] compressedLengths = new uint[] { compressedLength };
-					uint[] decompressedLengths = new uint[] { decompressedLength };
-					Blobs[0].Read(layout, memStream, offsets, compressedLengths, decompressedLengths);
-				}
+				uint[] offsets = new uint[] { offset };
+				uint[] compressedLengths = new uint[] { compressedLength };
+				uint[] decompressedLengths = new uint[] { decompressedLength };
+				Blobs[0].Read(layout, compressedBlob, offsets, compressedLengths, decompressedLengths);
 			}
 		}
 
 		private void UnpackSubProgramBlobs(LayoutInfo layout, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths, byte[] compressedBlob)
 		{
 			Blobs = new ShaderSubProgramBlob[offsets.Length];
-			using (MemoryStream memStream = new MemoryStream(compressedBlob))
+			for (int i = 0; i < Blobs.Length; i++)
 			{
-				for (int i = 0; i < Blobs.Length; i++)
-				{
-					uint[] blobOffsets = new uint[] { offsets[i] };
-					uint[] blobCompressedLengths = new uint[] { compressedLengths[i] };
-					uint[] blobDecompressedLengths = new uint[] { decompressedLengths[i] };
-					Blobs[i].Read(layout, memStream, blobOffsets, blobCompressedLengths, blobDecompressedLengths);
-				}
+				uint[] blobOffsets = new uint[] { offsets[i] };
+				uint[] blobCompressedLengths = new uint[] { compressedLengths[i] };
+				uint[] blobDecompressedLengths = new uint[] { decompressedLengths[i] };
+				Blobs[i].Read(layout, compressedBlob, blobOffsets, blobCompressedLengths, blobDecompressedLengths);
 			}
 		}
 
 		private void UnpackSubProgramBlobs(LayoutInfo layout, uint[][] offsets, uint[][] compressedLengths, uint[][] decompressedLengths, byte[] compressedBlob)
 		{
 			Blobs = new ShaderSubProgramBlob[offsets.Length];
-			using (MemoryStream memStream = new MemoryStream(compressedBlob))
+			for (int i = 0; i < Platforms.Length; i++)
 			{
-				for (int i = 0; i < Platforms.Length; i++)
-				{
-					uint[] blobOffsets = offsets[i];
-					uint[] blobCompressedLengths = compressedLengths[i];
-					uint[] blobDecompressedLengths = decompressedLengths[i];
-					Blobs[i].Read(layout, memStream, blobOffsets, blobCompressedLengths, blobDecompressedLengths);
-				}
+				uint[] blobOffsets = offsets[i];
+				uint[] blobCompressedLengths = compressedLengths[i];
+				uint[] blobDecompressedLengths = decompressedLengths[i];
+				Blobs[i].Read(layout, compressedBlob, blobOffsets, blobCompressedLengths, blobDecompressedLengths);
 			}
 		}
 

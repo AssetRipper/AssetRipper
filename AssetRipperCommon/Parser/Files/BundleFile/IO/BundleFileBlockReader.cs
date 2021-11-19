@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Smart;
-using AssetRipper.Core.Lz4;
 using AssetRipper.Core.Parser.Files.BundleFile.Parser;
+using K4os.Compression.LZ4;
 using System;
 using System.IO;
 
@@ -85,10 +85,19 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.IO
 
 								case CompressionType.Lz4:
 								case CompressionType.Lz4HC:
-									using (Lz4DecodeStream lzStream = new Lz4DecodeStream(m_stream, block.CompressedSize))
+									uint uncompressedSize = block.UncompressedSize;
+									byte[] uncompressedBytes = new byte[uncompressedSize];
+									byte[] compressedBytes = new BinaryReader(m_stream).ReadBytes((int)block.CompressedSize);
+									int bytesWritten = LZ4Codec.Decode(compressedBytes, uncompressedBytes);
+									if (bytesWritten != uncompressedSize)
 									{
-										lzStream.ReadBuffer(m_cachedBlockStream, block.UncompressedSize);
+										throw new System.Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize}");
 									}
+									//using (Lz4DecodeStream lzStream = new Lz4DecodeStream(m_stream, block.CompressedSize))
+									//{
+									//	lzStream.ReadBuffer(m_cachedBlockStream, block.UncompressedSize);
+									//}
+									new MemoryStream(uncompressedBytes).CopyTo(m_cachedBlockStream);
 									break;
 
 								default:

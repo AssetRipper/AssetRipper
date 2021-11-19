@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.IO.FileReading;
-using AssetRipper.Core.Lz4;
 using AssetRipper.Core.Parser.Files.BundleFile;
+using K4os.Compression.LZ4;
 using System.IO;
 using System.Linq;
 
@@ -223,17 +223,17 @@ namespace AssetAnalyzer
 			{
 				blocksInfoBytes = reader.ReadBytes((int)m_Header.compressedBlocksInfoSize);
 			}
-			var blocksInfoCompressedStream = new MemoryStream(blocksInfoBytes);
 			MemoryStream blocksInfoUncompresseddStream;
 			switch (m_Header.flags & 0x3F) //kArchiveCompressionTypeMask
 			{
 				default: //None
 					{
-						blocksInfoUncompresseddStream = blocksInfoCompressedStream;
+						blocksInfoUncompresseddStream = new MemoryStream(blocksInfoBytes);
 						break;
 					}
 				case 1: //LZMA
 					{
+						var blocksInfoCompressedStream = new MemoryStream(blocksInfoBytes);
 						blocksInfoUncompresseddStream = new MemoryStream((int)(m_Header.uncompressedBlocksInfoSize));
 						SevenZipHelper.StreamDecompress(blocksInfoCompressedStream, blocksInfoUncompresseddStream, m_Header.compressedBlocksInfoSize, m_Header.uncompressedBlocksInfoSize);
 						blocksInfoUncompresseddStream.Position = 0;
@@ -243,10 +243,12 @@ namespace AssetAnalyzer
 				case 2: //LZ4
 				case 3: //LZ4HC
 					{
-						var uncompressedBytes = new byte[m_Header.uncompressedBlocksInfoSize];
-						using (var decoder = new Lz4DecodeStream(blocksInfoCompressedStream))
+						uint uncompressedSize = m_Header.uncompressedBlocksInfoSize;
+						var uncompressedBytes = new byte[uncompressedSize];
+						int bytesWritten = LZ4Codec.Decode(blocksInfoBytes, uncompressedBytes);
+						if(bytesWritten != uncompressedSize)
 						{
-							decoder.Read(uncompressedBytes, 0, uncompressedBytes.Length);
+							throw new System.Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize}");
 						}
 						blocksInfoUncompresseddStream = new MemoryStream(uncompressedBytes);
 						break;
@@ -301,11 +303,16 @@ namespace AssetAnalyzer
 					case 2: //LZ4
 					case 3: //LZ4HC
 						{
-							var compressedStream = new MemoryStream(reader.ReadBytes((int)blockInfo.compressedSize));
-							using (var lz4Stream = new Lz4DecodeStream(compressedStream))
+							byte[] compressedBytes = reader.ReadBytes((int)blockInfo.compressedSize);
+							uint uncompressedSize = blockInfo.uncompressedSize;
+							byte[] uncompressedBytes = new byte[uncompressedSize];
+							int bytesWritten = LZ4Codec.Decode(compressedBytes, uncompressedBytes);
+							compressedBytes = null;
+							if (bytesWritten != uncompressedSize)
 							{
-								lz4Stream.CopyTo(blocksStream, blockInfo.uncompressedSize);
+								throw new System.Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize}");
 							}
+							blocksStream.Write(uncompressedBytes);
 							break;
 						}
 				}

@@ -38,11 +38,12 @@
   * Add newer Unity versions to the TypeTreeDumps repository
 * Cleanup
   * ~~Implement package for Brotli~~
+  * ~~Implement package for LZ4~~
  
 ## 0.2.1.0
 This release will be primarily focused on cleaning up and refactoring the project. Such cleanup may include:
-* Implement package for LZ4
 * Unified mesh export
+* Implement new package for LZMA
 
 Other priorities for this release:
 * Improving plugin support
