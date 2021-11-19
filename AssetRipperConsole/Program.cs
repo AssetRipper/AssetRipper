@@ -101,6 +101,7 @@ namespace AssetRipper.Console
 			try
 			{
 				Ripper ripper = new Ripper();
+				ripper.Settings.LogConfigurationValues();
 				ripper.Load(options.FilesToExport);
 				PrepareExportDirectory(options.OutputDirectory.FullName);
 				ripper.ExportProject(options.OutputDirectory.FullName);

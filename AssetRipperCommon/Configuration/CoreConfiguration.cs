@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Utils;
 using System;
@@ -71,6 +72,16 @@ namespace AssetRipper.Core.Configuration
 			ExportDependencies = false;
 			KeepAssetBundleContentPath = false;
 			Filter = DefaultFilter;
+		}
+
+		public virtual void LogConfigurationValues()
+		{
+			Logger.Info(LogCategory.General, $"Configuration Settings:");
+			Logger.Info(LogCategory.General, $"DisableScriptImport: {DisableScriptImport}");
+			Logger.Info(LogCategory.General, $"IgnoreStreamingAssets: {IgnoreStreamingAssets}");
+			Logger.Info(LogCategory.General, $"ExportPath: {ExportPath}");
+			Logger.Info(LogCategory.General, $"ExportDependencies: {ExportDependencies}");
+			Logger.Info(LogCategory.General, $"KeepAssetBundleContentPath: {KeepAssetBundleContentPath}");
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Configuration;
+using AssetRipper.Core.Logging;
 using ICSharpCode.Decompiler.CSharp;
 
 namespace AssetRipper.Library.Configuration
@@ -54,6 +55,20 @@ namespace AssetRipper.Library.Configuration
 			SpriteExportMode = SpriteExportMode.Native;
 			TerrainExportMode = TerrainExportMode.Native;
 			TextExportMode = TextExportMode.Parse;
+		}
+
+		public override void LogConfigurationValues()
+		{
+			base.LogConfigurationValues();
+			Logger.Info(LogCategory.General, $"AudioExportFormat: {AudioExportFormat}");
+			Logger.Info(LogCategory.General, $"ImageExportFormat: {ImageExportFormat}");
+			Logger.Info(LogCategory.General, $"MeshCoordinateSpace: {MeshCoordinateSpace}");
+			Logger.Info(LogCategory.General, $"MeshExportFormat: {MeshExportFormat}");
+			Logger.Info(LogCategory.General, $"ScriptExportMode: {ScriptExportMode}");
+			Logger.Info(LogCategory.General, $"ScriptLanguageVersion: {ScriptLanguageVersion}");
+			Logger.Info(LogCategory.General, $"SpriteExportMode: {SpriteExportMode}");
+			Logger.Info(LogCategory.General, $"TerrainExportMode: {TerrainExportMode}");
+			Logger.Info(LogCategory.General, $"TextExportMode: {TextExportMode}");
 		}
 	}
 }

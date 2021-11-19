@@ -172,6 +172,8 @@ namespace AssetRipper.GUI
 			HasLoaded = false;
 			Dispatcher.UIThread.Post(() => AssetFiles.Clear(), DispatcherPriority.Send);
 
+			_ripper.Settings.LogConfigurationValues();
+
 			UpdateGamePathInUi(gamePath);
 
 			UIImportManager.ImportFromPath(_ripper, filesDropped, gameStructure =>
