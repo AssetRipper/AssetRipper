@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace AssetRipper.GUI.Json
+namespace AssetRipper.Core.Updating
 {
 	public class GithubRelease
 	{

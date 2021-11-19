@@ -96,6 +96,7 @@ namespace AssetRipper.Console
 			Logger.Add(new ConsoleLogger(false));
 			Logger.Add(new FileLogger(options.LogFile.FullName));
 			Logger.LogSystemInformation("AssetRipper Console Version");
+			Core.Updating.UpdateManager.LogUpdateCheck();
 
 			try
 			{

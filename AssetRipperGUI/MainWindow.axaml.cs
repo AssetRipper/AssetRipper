@@ -20,13 +20,15 @@ namespace AssetRipper.GUI
 	    public MainWindow()
 	    {
 		    Instance = this;
-		    DataContext = VM = new();
+			DataContext = VM = new();
 
-		    LocalizationManager.Init();
+			LocalizationManager.Init();
 
 		    Logger.Info(LogCategory.System, $"Available languages: {string.Join(", ", LocalizationManager.SupportedLanguages.Select(l => l.LanguageCode))}");
 
-		    InitializeComponent();
+			Opened += (_, _) => VM.CheckForUpdates(false);
+
+			InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
 #endif
@@ -36,7 +38,7 @@ namespace AssetRipper.GUI
 		    AddHandler(DragDrop.DropEvent, (sender, args) => VM.OnFileDropped(args));
 	    }
 
-	    protected override void OnDataContextChanged(EventArgs e)
+		protected override void OnDataContextChanged(EventArgs e)
 	    {
 		    base.OnDataContextChanged(e);
 		    

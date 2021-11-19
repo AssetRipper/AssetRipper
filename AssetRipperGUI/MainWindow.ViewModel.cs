@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Core;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.Updating;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.GUI.Extensions;
-using AssetRipper.GUI.Json;
 using AssetRipper.GUI.Logging;
 using AssetRipper.GUI.Managers;
 using AssetRipper.Library;
@@ -17,15 +17,11 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace AssetRipper.GUI
 {
 	public partial class MainWindowViewModel : BaseViewModel
 	{
-		private const string websiteURL = "https://ds5678.github.io/AssetRipper/";
 
 		//Exposed-to-ui properties
 		private bool _hasFile;
@@ -42,7 +38,6 @@ namespace AssetRipper.GUI
 		private string? _lastExportPath;
 		private readonly Ripper _ripper = new();
 		private UIAssetContainer? _assetContainer;
-		private HttpClient client = new HttpClient();
 		private string? _importingFrom;
 		private bool _updatingLoadingText = false;
 
@@ -125,11 +120,6 @@ namespace AssetRipper.GUI
 			Logger.LogSystemInformation("AssetRipper GUI Version");
 
 			Logger.OnStatusChanged += OnImportStatusUpdated;
-
-			ProductInfoHeaderValue product = new(BuildInfo.Name, BuildInfo.Version);
-			ProductInfoHeaderValue comment = new($"(+{websiteURL})");
-			client.DefaultRequestHeaders.UserAgent.Add(product);
-			client.DefaultRequestHeaders.UserAgent.Add(comment);
 
 			OnPropertyChanged(nameof(AudioExportFormat));
 		}
@@ -319,7 +309,7 @@ namespace AssetRipper.GUI
 		{
 			OpenFileDialog openFileDialog = new();
 			openFileDialog.AllowMultiple = true;
-			string[] result = await openFileDialog.ShowAsync(MainWindow.Instance);
+			string[]? result = await openFileDialog.ShowAsync(MainWindow.Instance);
 
 			if (result == null)
 				return;
@@ -331,7 +321,7 @@ namespace AssetRipper.GUI
 		public async void ShowOpenFolderDialog()
 		{
 			OpenFolderDialog openFolderDialog = new();
-			string result = await openFolderDialog.ShowAsync(MainWindow.Instance);
+			string? result = await openFolderDialog.ShowAsync(MainWindow.Instance);
 
 			if (string.IsNullOrEmpty(result))
 				return;
@@ -369,18 +359,16 @@ namespace AssetRipper.GUI
 		}
 
 		// Called from UI
-		private async void CheckforUpdates()
+		private void CheckForUpdates() => CheckForUpdates(true);
+
+		/// <summary>
+		/// Checks Github for a more recent release
+		/// </summary>
+		/// <param name="showUpToDateMessage">Should this show a message notifying the user in the event their software doesn't need updated.</param>
+		internal void CheckForUpdates(bool showUpToDateMessage)
 		{
-			const string url = "https://api.github.com/repos/ds5678/AssetRipper/releases";
-			List<GithubRelease>? releases = await client.GetFromJsonAsync<List<GithubRelease>>(url);
-
-			if (releases == null)
-			{
+			if (!UpdateManager.CheckForUpdates(out Version current, out Version release))
 				return;
-			}
-
-			Version release = Version.Parse(releases[0].TagName);
-			Version current = Version.Parse(BuildInfo.Version);
 
 			if (release > current)
 			{
@@ -390,7 +378,7 @@ namespace AssetRipper.GUI
 					MessageBoxViewModel.Buttons.YesNo,
 					UpdatePopupClosed);
 			}
-			else
+			else if (showUpToDateMessage)
 			{
 				MessageBox.Popup(
 					MainWindow.Instance.LocalizationManager["menu_about_check_for_update_up_to_date_title"],
@@ -403,18 +391,18 @@ namespace AssetRipper.GUI
 		{
 			if (result == MessageBoxViewModel.Result.Yes)
 			{
-				OpenUrl("https://github.com/ds5678/AssetRipper/releases");
+				OpenUrl(BuildInfo.ReleasesURL);
 			}
 		}
 
 		// Called from UI
-		private void GithubClicked() => OpenUrl("https://github.com/ds5678/AssetRipper");
+		private void GithubClicked() => OpenUrl(BuildInfo.RepositoryURL);
 
 		//Called from UI
-		private void TranslateClicked() => OpenUrl("https://weblate.samboy.dev/engage/assetripper/");
+		private void TranslateClicked() => OpenUrl(BuildInfo.TranslationURL);
 
 		// Called from UI
-		private void WebsiteClicked() => OpenUrl(websiteURL);
+		private void WebsiteClicked() => OpenUrl(BuildInfo.WebsiteURL);
 
 		private static void OpenUrl(string url) =>
 			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });

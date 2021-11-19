@@ -4,10 +4,13 @@
 * Export
   * WWise audio extraction
   * ~~Type Tree Dump export~~
+  * ~~Improved FBX export~~
 * Plugin Support
   * ~~Add support for custom post exporters~~
   * Add support for injecting custom asset types
   * Add support for reading alternative file formats
+* General Improvements
+  * ~~Check For Updates On Application Start~~
 * Convert Exporters to the new Interface System
   * BuildSettings exporter
   * Scene and Prefab exporter
