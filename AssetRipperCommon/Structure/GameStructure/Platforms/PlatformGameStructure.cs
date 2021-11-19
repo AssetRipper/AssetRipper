@@ -322,6 +322,21 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return AssetRipper.Core.Parser.Files.BundleFile.BundleFile.LoadScheme(filePath).Header.UnityWebMinimumRevision.ToArray();
 		}
 
+		protected static int[] GetUnityVersionFromDataDirectory(string dataDirectoryPath)
+		{
+			string globalGameManagersPath = Path.Combine(dataDirectoryPath, GlobalGameManagersName);
+			if (File.Exists(globalGameManagersPath))
+			{
+				return GetUnityVersionFromSerializedFile(globalGameManagersPath);
+			}
+			string dataBundlePath = Path.Combine(dataDirectoryPath, DataBundleName);
+			if (File.Exists(dataBundlePath))
+			{
+				return GetUnityVersionFromBundleFile(dataBundlePath);
+			}
+			return null;
+		}
+
 		protected static bool HasMonoAssemblies(string managedDirectory)
 		{
 			if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory)) return false;

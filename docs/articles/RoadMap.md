@@ -11,6 +11,7 @@
   * Add support for reading alternative file formats
 * General Improvements
   * ~~Check For Updates On Application Start~~
+  * ~~IL2Cpp Support for Switch games~~
 * Convert Exporters to the new Interface System
   * BuildSettings exporter
   * Scene and Prefab exporter

@@ -5,6 +5,10 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
 	internal sealed class SwitchGameStructure : PlatformGameStructure
 	{
+		private const string ExefsName = "exefs";
+		private const string RomName = "romfs";
+		private const string MainName = "main";
+
 		public SwitchGameStructure(string rootPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))
@@ -22,18 +26,17 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				throw new Exception($"Data directory wasn't found");
 			}
 
-#warning TODO: Switch paths
 			Name = m_root.Name;
 			RootPath = rootPath;
 			GameDataPath = dataPath;
-			StreamingAssetsPath = null;
-			ResourcesPath = null;
-			ManagedPath = null;
+			StreamingAssetsPath = Path.Combine(dataPath, StreamingName);
+			ResourcesPath = Path.Combine(dataPath, ResourcesName);
+			ManagedPath = Path.Combine(dataPath, ManagedName);
 			UnityPlayerPath = null;
-			UnityVersion = null;
-			Il2CppGameAssemblyPath = null;
-			Il2CppMetaDataPath = null;
-			Backend = Assembly.ScriptingBackend.Unknown;
+			UnityVersion = GetUnityVersionFromDataDirectory(dataPath);
+			Il2CppGameAssemblyPath = Path.Combine(rootPath, ExefsName, MainName);
+			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
+			Backend = HasIl2CppFiles() ? Assembly.ScriptingBackend.Il2Cpp : Assembly.ScriptingBackend.Unknown;
 
 			DataPaths = new string[] { dataPath };
 		}
@@ -45,7 +48,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				return false;
 			}
-			if (!Directory.Exists(Path.Combine(rootInfo.FullName, ExecutableName)))
+			if (!Directory.Exists(Path.Combine(rootInfo.FullName, ExefsName)))
 			{
 				return false;
 			}
@@ -71,8 +74,5 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			dataPath = ldataPath;
 			return true;
 		}
-
-		private const string ExecutableName = "exefs";
-		private const string RomName = "romfs";
 	}
 }
