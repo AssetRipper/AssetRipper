@@ -2,8 +2,8 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
-using SevenZip;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
@@ -95,7 +95,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public bool IsCRCMatch(uint crc)
 		{
-			return CRC.VerifyDigestUTF8(Name, crc);
+			return CrcUtils.VerifyDigestUTF8(Name, crc);
 		}
 
 		public string Name { get; set; }

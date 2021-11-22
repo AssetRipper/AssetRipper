@@ -1,7 +1,7 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
-using SevenZip;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public BlendShapeChannel(string name, int frameIndex, int frameCount)
 		{
 			Name = name;
-			NameHash = CRC.CalculateDigestUTF8(Name);
+			NameHash = CrcUtils.CalculateDigestUTF8(Name);
 			FrameIndex = frameIndex;
 			FrameCount = frameCount;
 		}

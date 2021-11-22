@@ -8,7 +8,7 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math;
-using SevenZip;
+using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -363,7 +363,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 		private void AddGameObjectCurve(GenericBinding binding, string path, float time, float value)
 		{
-			if (binding.Attribute == CRC.CalculateDigestAscii(Classes.GameObject.GameObject.IsActiveName))
+			if (binding.Attribute == CrcUtils.CalculateDigestAscii(Classes.GameObject.GameObject.IsActiveName))
 			{
 				FloatCurve curve = new FloatCurve(path, Classes.GameObject.GameObject.IsActiveName, ClassIDType.GameObject, default);
 				AddFloatKeyframe(curve, time, value);

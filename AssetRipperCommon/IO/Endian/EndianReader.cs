@@ -621,7 +621,7 @@ namespace AssetRipper.Core.IO.Endian
 			return array;
 		}
 
-		public T ReadEnadian<T>() where T : IEndianReadable, new()
+		public T ReadEndian<T>() where T : IEndianReadable, new()
 		{
 			T t = new T();
 			t.Read(this);

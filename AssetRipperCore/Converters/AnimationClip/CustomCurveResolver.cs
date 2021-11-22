@@ -8,7 +8,7 @@ using AssetRipper.Core.Classes.SpriteRenderer;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
-using SevenZip;
+using AssetRipper.Core.Utils;
 using System;
 using System.Linq;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
@@ -138,7 +138,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 				case BindingCustomType.MonoBehaviour:
 					{
-						if (attribute == CRC.CalculateDigestAscii(Behaviour.EnabledName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Behaviour.EnabledName))
 						{
 							return Behaviour.EnabledName;
 						}
@@ -148,66 +148,66 @@ namespace AssetRipper.Core.Converters.AnimationClip
 				case BindingCustomType.Light:
 					{
 						const string ColorR = Light.ColorName + "." + ColorRGBAf.RName;
-						if (attribute == CRC.CalculateDigestAscii(ColorR))
+						if (attribute == CrcUtils.CalculateDigestAscii(ColorR))
 						{
 							return ColorR;
 						}
 						const string ColorG = Light.ColorName + "." + ColorRGBAf.GName;
-						if (attribute == CRC.CalculateDigestAscii(ColorG))
+						if (attribute == CrcUtils.CalculateDigestAscii(ColorG))
 						{
 							return ColorG;
 						}
 						const string ColorB = Light.ColorName + "." + ColorRGBAf.BName;
-						if (attribute == CRC.CalculateDigestAscii(ColorB))
+						if (attribute == CrcUtils.CalculateDigestAscii(ColorB))
 						{
 							return ColorB;
 						}
 						const string ColorA = Light.ColorName + "." + ColorRGBAf.AName;
-						if (attribute == CRC.CalculateDigestAscii(ColorA))
+						if (attribute == CrcUtils.CalculateDigestAscii(ColorA))
 						{
 							return ColorA;
 						}
-						if (attribute == CRC.CalculateDigestAscii(Light.CookieSizeName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Light.CookieSizeName))
 						{
 							return Light.CookieSizeName;
 						}
-						if (attribute == CRC.CalculateDigestAscii(Light.DrawHaloName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Light.DrawHaloName))
 						{
 							return Light.DrawHaloName;
 						}
-						if (attribute == CRC.CalculateDigestAscii(Light.IntensityName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Light.IntensityName))
 						{
 							return Light.IntensityName;
 						}
-						if (attribute == CRC.CalculateDigestAscii(Light.RangeName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Light.RangeName))
 						{
 							return Light.RangeName;
 						}
 						const string ShadowsStrength = Light.ShadowsName + "." + ShadowSettings.StrengthName;
-						if (attribute == CRC.CalculateDigestAscii(ShadowsStrength))
+						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsStrength))
 						{
 							return ShadowsStrength;
 						}
 						const string ShadowsBias = Light.ShadowsName + "." + ShadowSettings.BiasName;
-						if (attribute == CRC.CalculateDigestAscii(ShadowsBias))
+						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsBias))
 						{
 							return ShadowsBias;
 						}
 						const string ShadowsNormalBias = Light.ShadowsName + "." + ShadowSettings.NormalBiasName;
-						if (attribute == CRC.CalculateDigestAscii(ShadowsNormalBias))
+						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsNormalBias))
 						{
 							return ShadowsNormalBias;
 						}
 						const string ShadowsNearPlane = Light.ShadowsName + "." + ShadowSettings.NearPlaneName;
-						if (attribute == CRC.CalculateDigestAscii(ShadowsNearPlane))
+						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsNearPlane))
 						{
 							return ShadowsNearPlane;
 						}
-						if (attribute == CRC.CalculateDigestAscii(Light.SpotAngleName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Light.SpotAngleName))
 						{
 							return Light.SpotAngleName;
 						}
-						if (attribute == CRC.CalculateDigestAscii(Light.ColorTemperatureName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Light.ColorTemperatureName))
 						{
 							return Light.ColorTemperatureName;
 						}
@@ -216,11 +216,11 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 				case BindingCustomType.RendererShadows:
 					{
-						if (attribute == CRC.CalculateDigestAscii(Renderer.ReceiveShadowsName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Renderer.ReceiveShadowsName))
 						{
 							return Renderer.ReceiveShadowsName;
 						}
-						if (attribute == CRC.CalculateDigestAscii(Renderer.SortingOrderName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Renderer.SortingOrderName))
 						{
 							return Renderer.SortingOrderName;
 						}
@@ -238,57 +238,57 @@ namespace AssetRipper.Core.Converters.AnimationClip
 				case BindingCustomType.RectTransform:
 					{
 						string LocalPositionZ = Transform.LocalPositionName + "." + Vector3f.ZName;
-						if (attribute == CRC.CalculateDigestAscii(LocalPositionZ))
+						if (attribute == CrcUtils.CalculateDigestAscii(LocalPositionZ))
 						{
 							return LocalPositionZ;
 						}
 						string AnchoredPositionX = RectTransform.AnchoredPositionName + "." + Vector2f.XName;
-						if (attribute == CRC.CalculateDigestAscii(AnchoredPositionX))
+						if (attribute == CrcUtils.CalculateDigestAscii(AnchoredPositionX))
 						{
 							return AnchoredPositionX;
 						}
 						string AnchoredPositionY = RectTransform.AnchoredPositionName + "." + Vector2f.YName;
-						if (attribute == CRC.CalculateDigestAscii(AnchoredPositionY))
+						if (attribute == CrcUtils.CalculateDigestAscii(AnchoredPositionY))
 						{
 							return AnchoredPositionY;
 						}
 						string AnchorMinX = RectTransform.AnchorMinName + "." + Vector2f.XName;
-						if (attribute == CRC.CalculateDigestAscii(AnchorMinX))
+						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMinX))
 						{
 							return AnchorMinX;
 						}
 						string AnchorMinY = RectTransform.AnchorMinName + "." + Vector2f.YName;
-						if (attribute == CRC.CalculateDigestAscii(AnchorMinY))
+						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMinY))
 						{
 							return AnchorMinY;
 						}
 						string AnchorMaxX = RectTransform.AnchorMaxName + "." + Vector2f.XName;
-						if (attribute == CRC.CalculateDigestAscii(AnchorMaxX))
+						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMaxX))
 						{
 							return AnchorMaxX;
 						}
 						string AnchorMaxY = RectTransform.AnchorMaxName + "." + Vector2f.YName;
-						if (attribute == CRC.CalculateDigestAscii(AnchorMaxY))
+						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMaxY))
 						{
 							return AnchorMaxY;
 						}
 						string SizeDeltaX = RectTransform.SizeDeltaName + "." + Vector2f.XName;
-						if (attribute == CRC.CalculateDigestAscii(SizeDeltaX))
+						if (attribute == CrcUtils.CalculateDigestAscii(SizeDeltaX))
 						{
 							return SizeDeltaX;
 						}
 						string SizeDeltaY = RectTransform.SizeDeltaName + "." + Vector2f.YName;
-						if (attribute == CRC.CalculateDigestAscii(SizeDeltaY))
+						if (attribute == CrcUtils.CalculateDigestAscii(SizeDeltaY))
 						{
 							return SizeDeltaY;
 						}
 						string PivotX = RectTransform.PivotName + "." + Vector2f.XName;
-						if (attribute == CRC.CalculateDigestAscii(PivotX))
+						if (attribute == CrcUtils.CalculateDigestAscii(PivotX))
 						{
 							return PivotX;
 						}
 						string PivotY = RectTransform.PivotName + "." + Vector2f.YName;
-						if (attribute == CRC.CalculateDigestAscii(PivotY))
+						if (attribute == CrcUtils.CalculateDigestAscii(PivotY))
 						{
 							return PivotY;
 						}
@@ -299,7 +299,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 				case BindingCustomType.LineRenderer:
 					{
 						const string ParametersWidthMultiplier = "m_Parameters" + "." + "widthMultiplier";
-						if (attribute == CRC.CalculateDigestAscii(ParametersWidthMultiplier))
+						if (attribute == CrcUtils.CalculateDigestAscii(ParametersWidthMultiplier))
 						{
 							return ParametersWidthMultiplier;
 						}
@@ -311,7 +311,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 				case BindingCustomType.TrailRenderer:
 					{
 						const string ParametersWidthMultiplier = "m_Parameters" + "." + "widthMultiplier";
-						if (attribute == CRC.CalculateDigestAscii(ParametersWidthMultiplier))
+						if (attribute == CrcUtils.CalculateDigestAscii(ParametersWidthMultiplier))
 						{
 							return ParametersWidthMultiplier;
 						}
@@ -519,11 +519,11 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 				case BindingCustomType.Camera:
 					{
-						if (attribute == CRC.CalculateDigestAscii(Camera.FieldOfViewName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Camera.FieldOfViewName))
 						{
 							return Camera.FieldOfViewName;
 						}
-						if (attribute == CRC.CalculateDigestAscii(Camera.FocalLengthName))
+						if (attribute == CrcUtils.CalculateDigestAscii(Camera.FocalLengthName))
 						{
 							return Camera.FocalLengthName;
 						}

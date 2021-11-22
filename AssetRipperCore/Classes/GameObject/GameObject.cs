@@ -7,8 +7,8 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
-using SevenZip;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -227,7 +227,7 @@ namespace AssetRipper.Core.Classes.GameObject
 				ITransform childTransform = childPtr.GetAsset(File);
 				IGameObject child = childTransform.GameObjectPtr.GetAsset(File);
 				string path = parentPath != string.Empty ? parentPath + Transform.PathSeparator + child.Name : child.Name;
-				uint pathHash = CRC.CalculateDigestUTF8(path);
+				uint pathHash = CrcUtils.CalculateDigestUTF8(path);
 				tos[pathHash] = path;
 
 				BuildTOS(child, path, tos);

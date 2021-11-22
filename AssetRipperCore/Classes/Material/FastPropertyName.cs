@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
-using SevenZip;
 
 namespace AssetRipper.Core.Classes.Material
 {
@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.Material
 
 		public bool IsCRC28Match(uint crc)
 		{
-			return CRC.Verify28DigestUTF8(Value, crc);
+			return CrcUtils.Verify28DigestUTF8(Value, crc);
 		}
 
 		public void Read(AssetReader reader)

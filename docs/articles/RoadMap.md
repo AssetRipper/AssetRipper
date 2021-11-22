@@ -13,6 +13,7 @@
   * ~~Check For Updates On Application Start~~
   * ~~IL2Cpp Support for Switch games~~
   * ~~Fix Ignore Streaming Assets Button Not Applying~~
+  * ~~Use SharpZipLib for faster CRC calculation~~
 * Convert Exporters to the new Interface System
   * BuildSettings exporter
   * Scene and Prefab exporter

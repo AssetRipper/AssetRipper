@@ -6,8 +6,8 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
-using SevenZip;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Material
@@ -34,17 +34,17 @@ namespace AssetRipper.Core.Classes.Material
 			foreach (FastPropertyName property in TexEnvs.Keys)
 			{
 				string hdrName = property.Value + HDRPostfixName;
-				if (CRC.Verify28DigestUTF8(hdrName, crc))
+				if (CrcUtils.Verify28DigestUTF8(hdrName, crc))
 				{
 					return hdrName;
 				}
 				string stName = property.Value + STPostfixName;
-				if (CRC.Verify28DigestUTF8(stName, crc))
+				if (CrcUtils.Verify28DigestUTF8(stName, crc))
 				{
 					return stName;
 				}
 				string texelName = property.Value + TexelSizePostfixName;
-				if (CRC.Verify28DigestUTF8(texelName, crc))
+				if (CrcUtils.Verify28DigestUTF8(texelName, crc))
 				{
 					return texelName;
 				}
