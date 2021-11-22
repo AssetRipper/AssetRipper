@@ -137,18 +137,18 @@ namespace AssetAnalyzer
 		{
 			foreach (var blockInfo in m_BlocksInfo)
 			{
-				var uncompressedBytes = reader.ReadBytes((int)blockInfo.compressedSize);
-				if (blockInfo.flags == 1)
+				byte[] compressedBytes = reader.ReadBytes((int)blockInfo.compressedSize);
+				if (blockInfo.flags == 1)//LZMA
 				{
-					using (var memoryStream = new MemoryStream(uncompressedBytes))
+					using (var memoryStream = new MemoryStream(compressedBytes))
 					{
-						using (var decompressStream = SevenZipHelper.StreamDecompress(memoryStream))
-						{
-							uncompressedBytes = decompressStream.ToArray();
-						}
+						SevenZipHelper.DecompressLZMASizeStream(memoryStream, compressedBytes.Length, blocksStream);
 					}
 				}
-				blocksStream.Write(uncompressedBytes, 0, uncompressedBytes.Length);
+				else
+				{
+					blocksStream.Write(compressedBytes, 0, compressedBytes.Length);
+				}
 			}
 			blocksStream.Position = 0;
 			var blocksReader = new EndianReader(blocksStream, EndianType.BigEndian);
@@ -235,7 +235,7 @@ namespace AssetAnalyzer
 					{
 						var blocksInfoCompressedStream = new MemoryStream(blocksInfoBytes);
 						blocksInfoUncompresseddStream = new MemoryStream((int)(m_Header.uncompressedBlocksInfoSize));
-						SevenZipHelper.StreamDecompress(blocksInfoCompressedStream, blocksInfoUncompresseddStream, m_Header.compressedBlocksInfoSize, m_Header.uncompressedBlocksInfoSize);
+						SevenZipHelper.DecompressLZMAStream(blocksInfoCompressedStream, m_Header.compressedBlocksInfoSize, blocksInfoUncompresseddStream, m_Header.uncompressedBlocksInfoSize);
 						blocksInfoUncompresseddStream.Position = 0;
 						blocksInfoCompressedStream.Close();
 						break;
@@ -297,7 +297,7 @@ namespace AssetAnalyzer
 						}
 					case 1: //LZMA
 						{
-							SevenZipHelper.StreamDecompress(reader.BaseStream, blocksStream, blockInfo.compressedSize, blockInfo.uncompressedSize);
+							SevenZipHelper.DecompressLZMAStream(reader.BaseStream, blockInfo.compressedSize, blocksStream, blockInfo.uncompressedSize);
 							break;
 						}
 					case 2: //LZ4

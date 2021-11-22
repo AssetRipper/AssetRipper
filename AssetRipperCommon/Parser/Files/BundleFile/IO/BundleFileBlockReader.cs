@@ -93,10 +93,6 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.IO
 									{
 										throw new System.Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize}");
 									}
-									//using (Lz4DecodeStream lzStream = new Lz4DecodeStream(m_stream, block.CompressedSize))
-									//{
-									//	lzStream.ReadBuffer(m_cachedBlockStream, block.UncompressedSize);
-									//}
 									new MemoryStream(uncompressedBytes).CopyTo(m_cachedBlockStream);
 									break;
 
