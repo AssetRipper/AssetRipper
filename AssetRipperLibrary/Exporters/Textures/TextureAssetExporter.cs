@@ -1,4 +1,3 @@
-using AssetRipper.Core;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
@@ -29,12 +28,12 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset.ClassID == ClassIDType.Texture2D)
+			if (asset is Texture2D)
 			{
 				Texture2D texture = (Texture2D)asset;
 				return texture.IsValidData;
 			}
-			if (asset.ClassID == ClassIDType.Sprite)
+			if (asset is Sprite)
 			{
 				return SpriteExportMode == SpriteExportMode.Texture2D;
 			}
@@ -50,20 +49,18 @@ namespace AssetRipper.Library.Exporters.Textures
 				return false;
 			}
 
-			using (FileStream fileStream = File.Create(path))
+			using DirectBitmap bitmap = ConvertToBitmap(texture);
+			if (bitmap == null)
 			{
-				if (!ExportTexture(texture, fileStream, ImageExportFormat))
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
-					return false;
-				}
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
+				return false;
 			}
-			return true;
+			return bitmap.Save(path, ImageExportFormat);
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			if (asset.ClassID == ClassIDType.Sprite)
+			if (asset is Sprite)
 			{
 				return TextureExportCollection.CreateExportCollection(this, (Sprite)asset);
 			}
@@ -72,38 +69,23 @@ namespace AssetRipper.Library.Exporters.Textures
 			return collection;
 		}
 
-		public static bool ExportTexture(Texture2D texture, Stream exportStream, ImageExportFormat imageFormat)
+		public static DirectBitmap ConvertToBitmap(Texture2D texture)
 		{
 			byte[] buffer = texture.GetImageData();
 			if (buffer.Length == 0)
 			{
-				return false;
+				return null;
 			}
 
-			int pvrtcBitCount = 0;
-			int astcBlockSize = 0;
-			KTXBaseInternalFormat baseInternalFormat = KTXBaseInternalFormat.RG;
-			try
-			{
-				pvrtcBitCount = texture.PVRTCBitCount();
-			}
-			catch { /*Ignore*/ }
-			try
-			{
-				astcBlockSize = texture.ASTCBlockSize();
-			}
-			catch { /*Ignore*/ }
-			try
-			{
-				baseInternalFormat = texture.KTXBaseInternalFormat();
-			}
-			catch { /*Ignore*/ }
+			int pvrtcBitCount = texture.PVRTCBitCount(true);
+			int astcBlockSize = texture.ASTCBlockSize(true);
+			KTXBaseInternalFormat baseInternalFormat = texture.KTXBaseInternalFormat(true);
 
-			using DirectBitmap bitmap = ConvertToBitmap(texture.TextureFormat, texture.Width, texture.Height, texture.File.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
-			
+			DirectBitmap bitmap = ConvertToBitmap(texture.TextureFormat, texture.Width, texture.Height, texture.File.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
+
 			if (bitmap == null)
 			{
-				return false;
+				return null;
 			}
 
 			// despite the name, this packing works for different formats
@@ -112,7 +94,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
 			}
 
-			return bitmap.Save(exportStream, imageFormat);
+			return bitmap;
 		}
 
 		public static DirectBitmap ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data, int pvrtcBitCount, int astcBlockSize, KTXBaseInternalFormat ktxBaseInternalFormat)

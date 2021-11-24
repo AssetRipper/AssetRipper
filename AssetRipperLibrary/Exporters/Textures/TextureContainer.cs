@@ -122,7 +122,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				DataLength = length,
 				InternalFormat = texture.KTXInternalFormat(),
-				BaseInternalFormat = texture.KTXBaseInternalFormat(),
+				BaseInternalFormat = texture.KTXBaseInternalFormat(false),
 				Width = texture.Width,
 				Height = texture.Height,
 			};
