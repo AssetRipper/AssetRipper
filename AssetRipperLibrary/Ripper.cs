@@ -194,7 +194,6 @@ namespace AssetRipper.Library
 
 			//Mesh exporters
 			OverrideExporter<IMesh>(new GlbMeshExporter(Settings));
-			OverrideExporter<IMesh>(new ObjMeshExporter(Settings));
 			OverrideExporter<IMesh>(new UnifiedMeshExporter(Settings));
 
 			//Terrain exporters
