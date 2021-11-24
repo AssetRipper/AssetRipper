@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioClip;
+using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
@@ -18,8 +19,6 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading;
-using GameObject = AssetRipper.Core.Classes.GameObject.GameObject;
-using NamedObject = AssetRipper.Core.Classes.NamedObject;
 using Shader = AssetRipper.Core.Classes.Shader.Shader;
 
 namespace AssetRipper.GUI.AssetInfo
@@ -121,7 +120,7 @@ namespace AssetRipper.GUI.AssetInfo
 					return;
 				}
 				Logger.Error(e);
-				YamlTree = new[] { new AssetYamlNode($"Asset Threw {e.GetType().Name} when exporting as YAML", new YAMLScalarNode(true)) };
+				YamlTree = new[] { new AssetYamlNode($"Asset threw {e.GetType().Name} when exporting as YAML", new YAMLScalarNode(true)) };
 			}
 		}
 
@@ -143,7 +142,7 @@ namespace AssetRipper.GUI.AssetInfo
 			Shader => true,
 			DummyAssetForLooseResourceFile => true,
 			UnknownObject unk => unk.Data.Length > 0,
-			TextAsset txt=> txt.Script != null && txt.Script.Length > 0,
+			ITextAsset txt=> txt.RawData != null && txt.RawData.Length > 0,
 			_ => false,
 		};
 
@@ -153,7 +152,7 @@ namespace AssetRipper.GUI.AssetInfo
 			Shader shader => DumpShaderDataAsText(shader),
 			UnknownObject unk => unk.ToFormattedHex(),
 			DummyAssetForLooseResourceFile da => da.IsProbablyPlainText ? da.DataAsString : da.ToFormattedHex(),
-			TextAsset txt => txt.Text,
+			ITextAsset txt => txt.Text,
 			_ => null
 		})?.Replace("\t", "    ");
 
@@ -164,12 +163,17 @@ namespace AssetRipper.GUI.AssetInfo
 			{
 				switch(Asset)
 				{
+					case Texture2D texture:
+						{
+							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(texture);
+							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
+						}
 					case IHasImageData img:
 						{
 							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, Asset.File.Version, img.ImageDataByteArray, 0, 0, KTXBaseInternalFormat.RG);
 							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
 						}
-					case Core.Classes.TerrainData.TerrainData terrain:
+					case TerrainData terrain:
 						{
 							DirectBitmap? directBitmap = TerrainHeatmapExporter.GetBitmap(terrain);
 							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
@@ -186,23 +190,23 @@ namespace AssetRipper.GUI.AssetInfo
 		private bool HasName => Asset switch
 		{
 			Shader s => !string.IsNullOrEmpty(s.ValidName),
-			GameObject go => !string.IsNullOrEmpty(go.Name),
-			NamedObject no => !string.IsNullOrEmpty(no.Name),
+			IGameObject go => !string.IsNullOrEmpty(go.Name),
+			INamedObject no => !string.IsNullOrEmpty(no.Name),
 			_ => false
 		};
 
 		private string? Name => Asset switch
 		{
 			Shader s => s.ValidName,
-			GameObject go => go.Name,
-			NamedObject no => no.Name,
+			IGameObject go => go.Name,
+			INamedObject no => no.Name,
 			_ => null
 		};
 
 		private TextureFormat TextureFormat => Asset switch
 		{
 			IHasImageData img => img.TextureFormat,
-			TerrainData terrain => TextureFormat.RGBA32,
+			TerrainData => TextureFormat.RGBA32,
 			_ => TextureFormat.Automatic,
 		};
 
@@ -271,7 +275,7 @@ namespace AssetRipper.GUI.AssetInfo
 				StringBuilder builder = new StringBuilder();
 				builder.Append($"Asset Class: {Asset.GetType()}\n");
 
-				builder.Append($"Asset Type: {Asset.ClassID}\n");
+				builder.Append($"Asset Type ID: {Asset.ClassID}\n");
 
 				builder.Append($"Supports Name: {SupportsName}\n");
 

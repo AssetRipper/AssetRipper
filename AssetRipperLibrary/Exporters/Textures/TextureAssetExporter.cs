@@ -6,12 +6,10 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
-using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Textures.Extensions;
 using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.Utils;
-using System.IO;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
