@@ -229,8 +229,7 @@ namespace AssetRipper.Library.TextureContainers.DDS
 			long pixelCount = @params.BitMapDepth * @params.Height * @params.Width;
 			for (int i = 0; i < pixelCount; i++)
 			{
-				ushort pixel = sourceReader.ReadUInt16();
-				float f = (float)HalfUtils.ToHalf(pixel);
+				float f = (float)sourceReader.ReadHalf();
 				byte R = (byte)Math.Ceiling(f * 255.0);
 				destination.WriteByte(0);       // B
 				destination.WriteByte(0);       // G

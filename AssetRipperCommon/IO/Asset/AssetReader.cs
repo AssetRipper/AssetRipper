@@ -16,16 +16,9 @@ namespace AssetRipper.Core.IO.Asset
 			IsAlignString = info.IsAlign;
 		}
 
-		public override char ReadChar()
-		{
-			FillInnerBuffer(sizeof(char));
-			return (char)BufferToUInt16();
-		}
-
 		public override string ReadString()
 		{
-			FillInnerBuffer(sizeof(int));
-			int length = BufferToInt32();
+			int length = ReadInt32();
 			if (length == 0)
 			{
 				return string.Empty;
@@ -40,21 +33,6 @@ namespace AssetRipper.Core.IO.Asset
 			return result;
 		}
 
-		public override int Read(char[] buffer, int index, int count)
-		{
-			count += index;
-			while (index < count)
-			{
-				int toRead = System.Math.Min((count - index) * sizeof(char), BufferSize);
-				FillInnerBuffer(toRead);
-				for (int i = 0; i < toRead; i += sizeof(char), index++)
-				{
-					buffer[index] = (char)BufferToUInt16(i);
-				}
-			}
-			return count;
-		}
-
 		public T ReadAsset<T>() where T : IAssetReadable, new()
 		{
 			T t = new T();
@@ -65,8 +43,7 @@ namespace AssetRipper.Core.IO.Asset
 		public T[] ReadAssetArray<T>() where T : IAssetReadable, new() => ReadAssetArray<T>(true);
 		public T[] ReadAssetArray<T>(bool allowAlignment) where T : IAssetReadable, new()
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			if (count < 0)
 				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
 			T[] array = count == 0 ? Array.Empty<T>() : new T[count];
@@ -86,8 +63,7 @@ namespace AssetRipper.Core.IO.Asset
 		public T[][] ReadAssetArrayArray<T>() where T : IAssetReadable, new() => ReadAssetArrayArray<T>(true);
 		public T[][] ReadAssetArrayArray<T>(bool allowAlignment) where T : IAssetReadable, new()
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			if (count < 0)
 				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
 			T[][] array = count == 0 ? Array.Empty<T[]>() : new T[count][];

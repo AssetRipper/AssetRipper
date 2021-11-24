@@ -1,5 +1,6 @@
 using AssetRipper.Core.Extensions;
 using System;
+using System.Buffers.Binary;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -8,7 +9,12 @@ namespace AssetRipper.Core.IO.Endian
 {
 	public class EndianReader : BinaryReader
 	{
-		public EndianType EndianType { get; set; }
+		private bool isBigEndian = false;
+		public EndianType EndianType 
+		{ 
+			get => isBigEndian ? EndianType.BigEndian : EndianType.LittleEndian;
+			set => isBigEndian = value == EndianType.BigEndian;
+		}
 
 		protected bool IsAlignArray { get; }
 
@@ -35,58 +41,94 @@ namespace AssetRipper.Core.IO.Endian
 			Dispose(false);
 		}
 
+		public override char ReadChar()
+		{
+			return (char)ReadUInt16();
+		}
+
 		public override short ReadInt16()
 		{
-			FillInnerBuffer(sizeof(short));
-			return unchecked((short)BufferToUInt16());
+			if (isBigEndian)
+				return BinaryPrimitives.ReadInt16BigEndian(base.ReadBytes(2));
+			else
+				return base.ReadInt16();
 		}
 
 		public override ushort ReadUInt16()
 		{
-			FillInnerBuffer(sizeof(ushort));
-			return BufferToUInt16();
+			if (isBigEndian)
+				return BinaryPrimitives.ReadUInt16BigEndian(base.ReadBytes(2));
+			else
+				return base.ReadUInt16();
 		}
 
 		public override int ReadInt32()
 		{
-			FillInnerBuffer(sizeof(int));
-			return BufferToInt32();
+			if (isBigEndian)
+				return BinaryPrimitives.ReadInt32BigEndian(base.ReadBytes(4));
+			else
+				return base.ReadInt32();
 		}
 
 		public override uint ReadUInt32()
 		{
-			FillInnerBuffer(sizeof(uint));
-			return BufferToUInt32();
+			if (isBigEndian)
+				return BinaryPrimitives.ReadUInt32BigEndian(base.ReadBytes(4));
+			else
+				return base.ReadUInt32();
 		}
 
 		public override long ReadInt64()
 		{
-			FillInnerBuffer(sizeof(long));
-			return unchecked((long)BufferToUInt64());
+			if (isBigEndian)
+				return BinaryPrimitives.ReadInt64BigEndian(base.ReadBytes(8));
+			else
+				return base.ReadInt64();
 		}
 
 		public override ulong ReadUInt64()
 		{
-			FillInnerBuffer(sizeof(ulong));
-			return BufferToUInt64();
+			if (isBigEndian)
+				return BinaryPrimitives.ReadUInt64BigEndian(base.ReadBytes(8));
+			else
+				return base.ReadUInt64();
+		}
+
+		public override Half ReadHalf()
+		{
+			if (isBigEndian)
+				return BinaryPrimitives.ReadHalfBigEndian(base.ReadBytes(2));
+			else
+				return base.ReadHalf();
 		}
 
 		public override float ReadSingle()
 		{
-			FillInnerBuffer(sizeof(float));
-			return BitConverterExtensions.ToSingle(BufferToUInt32());
+			if (isBigEndian)
+				return BinaryPrimitives.ReadSingleBigEndian(base.ReadBytes(4));
+			else
+				return base.ReadSingle();
 		}
 
 		public override double ReadDouble()
 		{
-			FillInnerBuffer(sizeof(double));
-			return BitConverterExtensions.ToDouble(BufferToUInt64());
+			if (isBigEndian)
+				return BinaryPrimitives.ReadDoubleBigEndian(base.ReadBytes(8));
+			else
+				return base.ReadDouble();
+		}
+
+		public override decimal ReadDecimal()
+		{
+			if (isBigEndian)
+				throw new NotSupportedException();
+			else
+				return base.ReadDecimal();
 		}
 
 		public override string ReadString()
 		{
-			FillInnerBuffer(sizeof(int));
-			int length = BufferToInt32();
+			int length = ReadInt32();
 			byte[] buffer = ReadStringBuffer(length);
 			return Encoding.UTF8.GetString(buffer, 0, length);
 		}
@@ -134,237 +176,23 @@ namespace AssetRipper.Core.IO.Endian
 			return false;
 		}
 
-		public int Read(bool[] buffer, int index, int count)
-		{
-			int byteIndex = 0;
-			int byteCount = count;
-			int first = index;
-			int last = index + count;
-			while (index < last)
-			{
-				int left = byteCount - byteIndex;
-				int toRead = left < BufferSize ? left : BufferSize;
-				int read = Read(m_buffer, 0, toRead);
-				for (int i = 0; i < read; i++, index++)
-				{
-					buffer[index] = m_buffer[i] > 0;
-				}
-				byteIndex += read;
-				if (read < toRead)
-				{
-					return index - first;
-				}
-			}
-			return count;
-		}
-
-		public int Read(short[] buffer, int index, int count)
-		{
-			int byteIndex = 0;
-			int byteCount = count * sizeof(short);
-			int first = index;
-			int last = index + count;
-			while (index < last)
-			{
-				int left = byteCount - byteIndex;
-				int toRead = left < BufferSize ? left : BufferSize;
-				int read = Read(m_buffer, 0, toRead);
-				for (int i = 0; i < read; i += sizeof(short), index++)
-				{
-					buffer[index] = unchecked((short)BufferToUInt16(i));
-				}
-				byteIndex += read;
-				if (read < toRead)
-				{
-					return index - first;
-				}
-			}
-			return count;
-		}
-
-		public int Read(ushort[] buffer, int index, int count)
-		{
-			int byteIndex = 0;
-			int byteCount = count * sizeof(ushort);
-			int first = index;
-			int last = index + count;
-			while (index < last)
-			{
-				int left = byteCount - byteIndex;
-				int toRead = left < BufferSize ? left : BufferSize;
-				int read = Read(m_buffer, 0, toRead);
-				for (int i = 0; i < read; i += sizeof(ushort), index++)
-				{
-					buffer[index] = BufferToUInt16(i);
-				}
-				byteIndex += read;
-				if (read < toRead)
-				{
-					return index - first;
-				}
-			}
-			return count;
-		}
-
-		public int Read(int[] buffer, int index, int count)
-		{
-			int byteIndex = 0;
-			int byteCount = count * sizeof(int);
-			int first = index;
-			int last = index + count;
-			while (index < last)
-			{
-				int left = byteCount - byteIndex;
-				int toRead = left < BufferSize ? left : BufferSize;
-				int read = Read(m_buffer, 0, toRead);
-				for (int i = 0; i < read; i += sizeof(int), index++)
-				{
-					buffer[index] = unchecked((int)BufferToUInt32(i));
-				}
-				byteIndex += read;
-				if (read < toRead)
-				{
-					return index - first;
-				}
-			}
-			return count;
-		}
-
-		public int Read(uint[] buffer, int index, int count)
-		{
-			int byteIndex = 0;
-			int byteCount = count * sizeof(uint);
-			int first = index;
-			int last = index + count;
-			while (index < last)
-			{
-				int left = byteCount - byteIndex;
-				int toRead = left < BufferSize ? left : BufferSize;
-				int read = Read(m_buffer, 0, toRead);
-				for (int i = 0; i < read; i += sizeof(uint), index++)
-				{
-					buffer[index] = BufferToUInt32(i);
-				}
-				byteIndex += read;
-				if (read < toRead)
-				{
-					return index - first;
-				}
-			}
-			return count;
-		}
-
-		public int Read(long[] buffer, int index, int count)
-		{
-			int byteIndex = 0;
-			int byteCount = count * sizeof(long);
-			int first = index;
-			int last = index + count;
-			while (index < last)
-			{
-				int left = byteCount - byteIndex;
-				int toRead = left < BufferSize ? left : BufferSize;
-				int read = Read(m_buffer, 0, toRead);
-				for (int i = 0; i < read; i += sizeof(long), index++)
-				{
-					buffer[index] = unchecked((long)BufferToUInt64(i));
-				}
-				byteIndex += read;
-				if (read < toRead)
-				{
-					return index - first;
-				}
-			}
-			return count;
-		}
-
-		public int Read(ulong[] buffer, int index, int count)
-		{
-			int byteIndex = 0;
-			int byteCount = count * sizeof(ulong);
-			int first = index;
-			int last = index + count;
-			while (index < last)
-			{
-				int left = byteCount - byteIndex;
-				int toRead = left < BufferSize ? left : BufferSize;
-				int read = Read(m_buffer, 0, toRead);
-				for (int i = 0; i < read; i += sizeof(ulong), index++)
-				{
-					buffer[index] = BufferToUInt64(i);
-				}
-				byteIndex += read;
-				if (read < toRead)
-				{
-					return index - first;
-				}
-			}
-			return count;
-		}
-
-		public int Read(float[] buffer, int index, int count)
-		{
-			int byteIndex = 0;
-			int byteCount = count * sizeof(float);
-			int first = index;
-			int last = index + count;
-			while (index < last)
-			{
-				int left = byteCount - byteIndex;
-				int toRead = left < BufferSize ? left : BufferSize;
-				int read = Read(m_buffer, 0, toRead);
-				for (int i = 0; i < read; i += sizeof(float), index++)
-				{
-					buffer[index] = BitConverterExtensions.ToSingle(BufferToUInt32(i));
-				}
-				byteIndex += read;
-				if (read < toRead)
-				{
-					return index - first;
-				}
-			}
-			return count;
-		}
-
-		public int Read(double[] buffer, int index, int count)
-		{
-			int byteIndex = 0;
-			int byteCount = count * sizeof(double);
-			int first = index;
-			int last = index + count;
-			while (index < last)
-			{
-				int left = byteCount - byteIndex;
-				int toRead = left < BufferSize ? left : BufferSize;
-				int read = Read(m_buffer, 0, toRead);
-				for (int i = 0; i < read; i += sizeof(double), index++)
-				{
-					buffer[index] = BitConverterExtensions.ToDouble(BufferToUInt64(i));
-				}
-				byteIndex += read;
-				if (read < toRead)
-				{
-					return index - first;
-				}
-			}
-			return count;
-		}
-
 		public bool[] ReadBooleanArray() => ReadBooleanArray(true);
 		public bool[] ReadBooleanArray(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			bool[] array = count == 0 ? Array.Empty<bool>() : new bool[count];
 			while (index < count)
 			{
-				int read = Read(array, index, count - index);
-				if (read == 0)
+				try
 				{
-					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+					array[index] = ReadBoolean();
 				}
-				index += read;
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index ++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{
@@ -376,18 +204,20 @@ namespace AssetRipper.Core.IO.Endian
 		public char[] ReadCharArray() => ReadCharArray(true);
 		public char[] ReadCharArray(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			char[] array = count == 0 ? Array.Empty<char>() : new char[count];
 			while (index < count)
 			{
-				int read = Read(array, index, count - index);
-				if (read == 0)
+				try
 				{
-					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+					array[index] = ReadChar();
 				}
-				index += read;
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{
@@ -399,8 +229,7 @@ namespace AssetRipper.Core.IO.Endian
 		public byte[] ReadByteArray() => ReadByteArray(true);
 		public byte[] ReadByteArray(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			byte[] array = count == 0 ? Array.Empty<byte>() : new byte[count];
 			while (index < count)
@@ -422,18 +251,20 @@ namespace AssetRipper.Core.IO.Endian
 		public short[] ReadInt16Array() => ReadInt16Array(true);
 		public short[] ReadInt16Array(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			short[] array = count == 0 ? Array.Empty<short>() : new short[count];
 			while (index < count)
 			{
-				int read = Read(array, index, count - index);
-				if (read == 0)
+				try
 				{
-					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+					array[index] = ReadInt16();
 				}
-				index += read;
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{
@@ -445,18 +276,20 @@ namespace AssetRipper.Core.IO.Endian
 		public ushort[] ReadUInt16Array() => ReadUInt16Array(true);
 		public ushort[] ReadUInt16Array(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			ushort[] array = count == 0 ? Array.Empty<ushort>() : new ushort[count];
 			while (index < count)
 			{
-				int read = Read(array, index, count - index);
-				if (read == 0)
+				try
 				{
-					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+					array[index] = ReadUInt16();
 				}
-				index += read;
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{
@@ -468,18 +301,20 @@ namespace AssetRipper.Core.IO.Endian
 		public int[] ReadInt32Array() => ReadInt32Array(true);
 		public int[] ReadInt32Array(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			int[] array = count == 0 ? Array.Empty<int>() : new int[count];
 			while (index < count)
 			{
-				int read = Read(array, index, count - index);
-				if (read == 0)
+				try
 				{
-					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+					array[index] = ReadInt32();
 				}
-				index += read;
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{
@@ -491,18 +326,20 @@ namespace AssetRipper.Core.IO.Endian
 		public uint[] ReadUInt32Array() => ReadUInt32Array(true);
 		public uint[] ReadUInt32Array(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			uint[] array = count == 0 ? Array.Empty<uint>() : new uint[count];
 			while (index < count)
 			{
-				int read = Read(array, index, count - index);
-				if (read == 0)
+				try
 				{
-					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+					array[index] = ReadUInt32();
 				}
-				index += read;
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{
@@ -514,18 +351,20 @@ namespace AssetRipper.Core.IO.Endian
 		public long[] ReadInt64Array() => ReadInt64Array(true);
 		public long[] ReadInt64Array(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			long[] array = count == 0 ? Array.Empty<long>() : new long[count];
 			while (index < count)
 			{
-				int read = Read(array, index, count - index);
-				if (read == 0)
+				try
 				{
-					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+					array[index] = ReadInt64();
 				}
-				index += read;
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{
@@ -537,18 +376,20 @@ namespace AssetRipper.Core.IO.Endian
 		public ulong[] ReadUInt64Array() => ReadUInt64Array(true);
 		public ulong[] ReadUInt64Array(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			ulong[] array = count == 0 ? Array.Empty<ulong>() : new ulong[count];
 			while (index < count)
 			{
-				int read = Read(array, index, count - index);
-				if (read == 0)
+				try
 				{
-					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+					array[index] = ReadUInt64();
 				}
-				index += read;
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{
@@ -560,18 +401,20 @@ namespace AssetRipper.Core.IO.Endian
 		public float[] ReadSingleArray() => ReadSingleArray(true);
 		public float[] ReadSingleArray(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			float[] array = count == 0 ? Array.Empty<float>() : new float[count];
 			while (index < count)
 			{
-				int read = Read(array, index, count - index);
-				if (read == 0)
+				try
 				{
-					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+					array[index] = ReadSingle();
 				}
-				index += read;
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{
@@ -583,18 +426,20 @@ namespace AssetRipper.Core.IO.Endian
 		public double[] ReadDoubleArray() => ReadDoubleArray(true);
 		public double[] ReadDoubleArray(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			int index = 0;
 			double[] array = count == 0 ? Array.Empty<double>() : new double[count];
 			while (index < count)
 			{
-				int read = Read(array, index, count - index);
-				if (read == 0)
+				try
 				{
-					throw new Exception($"End of stream. Read {index}, expected {count} elements");
+					array[index] = ReadDouble();
 				}
-				index += read;
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{
@@ -606,8 +451,7 @@ namespace AssetRipper.Core.IO.Endian
 		public string[] ReadStringArray() => ReadStringArray(true);
 		public string[] ReadStringArray(bool allowAlignment)
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			string[] array = count == 0 ? Array.Empty<string>() : new string[count];
 			for (int i = 0; i < count; i++)
 			{
@@ -630,8 +474,7 @@ namespace AssetRipper.Core.IO.Endian
 
 		public T[] ReadEndianArray<T>() where T : IEndianReadable, new()
 		{
-			FillInnerBuffer(4);
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			T[] array = count == 0 ? Array.Empty<T>() : new T[count];
 			for (int i = 0; i < count; i++)
 			{
@@ -648,8 +491,7 @@ namespace AssetRipper.Core.IO.Endian
 
 		public T[][] ReadEndianArrayArray<T>() where T : IEndianReadable, new()
 		{
-			FillInnerBuffer(sizeof(int));
-			int count = BufferToInt32();
+			int count = ReadInt32();
 			T[][] array = count == 0 ? Array.Empty<T[]>() : new T[count][];
 			for (int i = 0; i < count; i++)
 			{
@@ -666,47 +508,6 @@ namespace AssetRipper.Core.IO.Endian
 		public void AlignStream()
 		{
 			BaseStream.Position = (BaseStream.Position + 3) & ~3;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		protected ushort BufferToUInt16(int offset = 0)
-		{
-			return EndianType == EndianType.LittleEndian ?
-				unchecked((ushort)((m_buffer[offset + 0] << 0) | (m_buffer[offset + 1] << 8))) :
-				unchecked((ushort)((m_buffer[offset + 1] << 0) | (m_buffer[offset + 0] << 8)));
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		protected int BufferToInt32(int offset = 0)
-		{
-			return EndianType == EndianType.LittleEndian ?
-				(m_buffer[offset + 0] << 0) | (m_buffer[offset + 1] << 8) | (m_buffer[offset + 2] << 16) | (m_buffer[offset + 3] << 24) :
-				(m_buffer[offset + 3] << 0) | (m_buffer[offset + 2] << 8) | (m_buffer[offset + 1] << 16) | (m_buffer[offset + 0] << 24);
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		protected uint BufferToUInt32(int offset = 0)
-		{
-			return EndianType == EndianType.LittleEndian ?
-				unchecked((uint)((m_buffer[offset + 0] << 0) | (m_buffer[offset + 1] << 8) | (m_buffer[offset + 2] << 16) | (m_buffer[offset + 3] << 24))) :
-				unchecked((uint)((m_buffer[offset + 3] << 0) | (m_buffer[offset + 2] << 8) | (m_buffer[offset + 1] << 16) | (m_buffer[offset + 0] << 24)));
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		protected ulong BufferToUInt64(int offset = 0)
-		{
-			if (EndianType == EndianType.LittleEndian)
-			{
-				uint value1 = unchecked((uint)((m_buffer[offset + 0] << 0) | (m_buffer[offset + 1] << 8) | (m_buffer[offset + 2] << 16) | (m_buffer[offset + 3] << 24)));
-				uint value2 = unchecked((uint)((m_buffer[offset + 4] << 0) | (m_buffer[offset + 5] << 8) | (m_buffer[offset + 6] << 16) | (m_buffer[offset + 7] << 24)));
-				return ((ulong)value1 << 0) | ((ulong)value2 << 32);
-			}
-			else
-			{
-				uint value1 = unchecked((uint)((m_buffer[offset + 7] << 0) | (m_buffer[offset + 6] << 8) | (m_buffer[offset + 5] << 16) | (m_buffer[offset + 4] << 24)));
-				uint value2 = unchecked((uint)((m_buffer[offset + 3] << 0) | (m_buffer[offset + 2] << 8) | (m_buffer[offset + 1] << 16) | (m_buffer[offset + 0] << 24)));
-				return ((ulong)value1 << 0) | ((ulong)value2 << 32);
-			}
 		}
 
 		protected byte[] ReadStringBuffer(int size)
