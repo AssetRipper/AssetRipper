@@ -1,4 +1,5 @@
-﻿using System.Drawing.Imaging;
+﻿using System;
+using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
 namespace AssetRipper.Library.Configuration
@@ -34,7 +35,7 @@ namespace AssetRipper.Library.Configuration
 				ImageExportFormat.Gif => ImageFormat.Gif,
 				ImageExportFormat.Jpeg => ImageFormat.Jpeg,
 				ImageExportFormat.Png => ImageFormat.Png,
-				_ => ImageFormat.Png,
+				_ => throw new ArgumentOutOfRangeException(nameof(_this)),
 			};
 		}
 
@@ -46,7 +47,7 @@ namespace AssetRipper.Library.Configuration
 				ImageExportFormat.Gif => "gif",
 				ImageExportFormat.Jpeg => "jpeg",
 				ImageExportFormat.Png => "png",
-				_ => "png",
+				_ => throw new ArgumentOutOfRangeException(nameof(_this)),
 			};
 		}
 	}

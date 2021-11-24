@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace AssetRipper.Library.Utils
 {
@@ -17,11 +18,6 @@ namespace AssetRipper.Library.Utils
 			Height = height;
 			Bits = new byte[width * height * 4];
 			m_bitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
-		}
-
-		~DirectBitmap()
-		{
-			Dispose(false);
 		}
 
 		public unsafe void FlipY()
@@ -43,35 +39,105 @@ namespace AssetRipper.Library.Utils
 		{
 			if (OperatingSystem.IsWindows())
 			{
-				var bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
+				using Bitmap bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
 				bitmap.Save(stream, format.GetImageFormat());
-				bitmap.Dispose();
 				return true;
 			}
 			else
 			{
-				var image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
+				using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 				switch (format)
 				{
 					case ImageExportFormat.Bmp:
 						image.SaveAsBmp(stream);
-						image.Dispose();
 						return true;
 					case ImageExportFormat.Gif:
 						image.SaveAsGif(stream);
-						image.Dispose();
 						return true;
 					case ImageExportFormat.Jpeg:
 						image.SaveAsJpeg(stream);
-						image.Dispose();
 						return true;
 					case ImageExportFormat.Png:
 						image.SaveAsPng(stream);
-						image.Dispose();
 						return true;
 					default:
-						return false;
+						throw new ArgumentOutOfRangeException(nameof(format));
 				}
+			}
+		}
+
+		public bool Save(string path, ImageExportFormat format)
+		{
+			if (OperatingSystem.IsWindows())
+			{
+				using Bitmap bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
+				bitmap.Save(path, format.GetImageFormat());
+				return true;
+			}
+			else
+			{
+				using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
+				switch (format)
+				{
+					case ImageExportFormat.Bmp:
+						image.SaveAsBmp(path);
+						return true;
+					case ImageExportFormat.Gif:
+						image.SaveAsGif(path);
+						return true;
+					case ImageExportFormat.Jpeg:
+						image.SaveAsJpeg(path);
+						return true;
+					case ImageExportFormat.Png:
+						image.SaveAsPng(path);
+						return true;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(format));
+				}
+			}
+		}
+
+		public async Task SaveAsync(Stream stream, ImageExportFormat format)
+		{
+			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
+			switch (format)
+			{
+				case ImageExportFormat.Bmp:
+					await image.SaveAsBmpAsync(stream);
+					break;
+				case ImageExportFormat.Gif:
+					await image.SaveAsGifAsync(stream);
+					break;
+				case ImageExportFormat.Jpeg:
+					await image.SaveAsJpegAsync(stream);
+					break;
+				case ImageExportFormat.Png:
+					await image.SaveAsPngAsync(stream);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(format));
+			}
+		}
+
+		public async Task SaveAsync(string path, ImageExportFormat format)
+		{
+			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
+			switch (format)
+			{
+				case ImageExportFormat.Bmp:
+					await image.SaveAsBmpAsync(path);
+					break;
+				case ImageExportFormat.Gif:
+					await image.SaveAsGifAsync(path);
+					break;
+				case ImageExportFormat.Jpeg:
+					await image.SaveAsJpegAsync(path);
+					break;
+				case ImageExportFormat.Png:
+					await image.SaveAsPngAsync(path);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(format));
 			}
 		}
 
@@ -88,6 +154,11 @@ namespace AssetRipper.Library.Utils
 				m_bitsHandle.Free();
 				m_disposed = true;
 			}
+		}
+
+		~DirectBitmap()
+		{
+			Dispose(false);
 		}
 
 		public int Height { get; }
