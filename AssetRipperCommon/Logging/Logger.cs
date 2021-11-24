@@ -9,16 +9,16 @@ namespace AssetRipper.Core.Logging
 	public static class Logger
 	{
 		private static readonly List<ILogger> loggers = new List<ILogger>();
-		public static bool AllowVerbose { private get; set; }
+		public static bool AllowVerbose { get; set; }
 
 		public static event Action<string, object> OnStatusChanged = (_,_) => { };
 
 		static Logger()
 		{
 			Cpp2IL.Core.Logger.InfoLog += (string message, string source) => LogCpp2IL(LogType.Info, message);
-			Cpp2IL.Core.Logger.WarningLog += (string message, string source) => LogCpp2IL(LogType.Warning, message);
+			Cpp2IL.Core.Logger.WarningLog += (string message, string source) => LogCpp2IL(LogType.Verbose, message);
 			Cpp2IL.Core.Logger.ErrorLog += (string message, string source) => LogCpp2IL(LogType.Error, message);
-			Cpp2IL.Core.Logger.VerboseLog += (string message, string source) => LogCpp2IL(LogType.Debug, message);
+			Cpp2IL.Core.Logger.VerboseLog += (string message, string source) => LogCpp2IL(LogType.Verbose, message);
 		}
 
 		private static void LogCpp2IL(LogType logType, string message)
@@ -112,6 +112,10 @@ namespace AssetRipper.Core.Logging
 			if (OperatingSystem.IsWindows()) return "Windows";
 			else if (OperatingSystem.IsLinux()) return "Linux";
 			else if (OperatingSystem.IsMacOS()) return "MacOS";
+			else if (OperatingSystem.IsBrowser()) return "Browser";
+			else if (OperatingSystem.IsAndroid()) return "Android";
+			else if (OperatingSystem.IsIOS()) return "iOS";
+			else if (OperatingSystem.IsFreeBSD()) return "FreeBSD";
 			else return "Other";
 		}
 		
