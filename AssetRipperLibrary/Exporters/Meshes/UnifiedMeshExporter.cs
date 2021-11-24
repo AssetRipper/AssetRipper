@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Mesh;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math;
@@ -84,7 +85,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			if (data == null || data.Length == 0)
 				return false;
 
-			File.WriteAllBytes(path, data);
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, data));
 			return true;
 		}
 

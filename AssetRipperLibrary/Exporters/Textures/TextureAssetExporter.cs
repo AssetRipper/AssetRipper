@@ -1,3 +1,4 @@
+using AssetRipper.Core;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
@@ -53,7 +54,8 @@ namespace AssetRipper.Library.Exporters.Textures
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
 				return false;
 			}
-			return bitmap.Save(path, ImageExportFormat);
+			TaskManager.AddTask(bitmap.SaveAsync(path, ImageExportFormat));
+			return true;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)

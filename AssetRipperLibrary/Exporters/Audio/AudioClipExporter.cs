@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.AudioClip;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -36,9 +37,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 
 
-			using FileStream stream = File.Create(path);
-			using BinaryWriter writer = new BinaryWriter(stream);
-			writer.Write(decodedData);
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, decodedData));
 			return true;
 		}
 

@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.AudioClip;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -20,14 +21,12 @@ namespace AssetRipper.Library.Exporters.Audio
 		{
 			AudioClip audioClip = (AudioClip)asset;
 
-			using FileStream stream = File.Create(path);
-
 			if (AudioClip.HasLoadType(container.Version))
 			{
 				if (audioClip.FSBResource.CheckIntegrity(audioClip.File))
 				{
 					byte[] data = audioClip.FSBResource.GetContent(audioClip.File);
-					stream.Write(data, 0, data.Length);
+					TaskManager.AddTask(File.WriteAllBytesAsync(path, data));
 				}
 				else
 				{
@@ -42,7 +41,7 @@ namespace AssetRipper.Library.Exporters.Audio
 					if (audioClip.StreamingInfo.CheckIntegrity(audioClip.File))
 					{
 						byte[] data = audioClip.StreamingInfo.GetContent(audioClip.File);
-						stream.Write(data, 0, data.Length);
+						TaskManager.AddTask(File.WriteAllBytesAsync(path, data));
 					}
 					else
 					{
@@ -52,7 +51,7 @@ namespace AssetRipper.Library.Exporters.Audio
 				}
 				else
 				{
-					stream.Write(audioClip.AudioData, 0, audioClip.AudioData.Length);
+					TaskManager.AddTask(File.WriteAllBytesAsync(path, audioClip.AudioData));
 				}
 			}
 			return true;

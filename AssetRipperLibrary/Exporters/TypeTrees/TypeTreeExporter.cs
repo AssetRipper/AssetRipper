@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Logging;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +41,7 @@ namespace AssetRipper.Library.Exporters.TypeTrees
 				{
 					Directory.CreateDirectory(outputDirectory);
 					string filePath = Path.Combine(outputDirectory, serializedFile.Name + ".txt");
-					File.WriteAllText(filePath, text);
+					TaskManager.AddTask(File.WriteAllTextAsync(filePath, text));
 				}
 			}
 		}

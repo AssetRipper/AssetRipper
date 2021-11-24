@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.AudioClip;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -99,10 +100,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			if (AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows())
 				data = AudioConverter.WavToMp3(data);
 
-			using (FileStream fileStream = File.Create(path))
-			{
-				fileStream.Write(data, 0, data.Length);
-			}
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, data));
 			return true;
 		}
 

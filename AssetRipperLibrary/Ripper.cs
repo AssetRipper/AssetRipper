@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AnimatorController;
 using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Classes.Font;
@@ -103,9 +104,14 @@ namespace AssetRipper.Library
 			else
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths.Count} paths...");
 			OnStartLoadingGameStructure?.Invoke();
+			TaskManager.WaitUntilAllCompleted();
+
 			GameStructure = GameStructure.Load(paths, Settings);
+			TaskManager.WaitUntilAllCompleted();
 			Logger.Info(LogCategory.General, "Finished reading files");
+
 			OnFinishLoadingGameStructure?.Invoke();
+			TaskManager.WaitUntilAllCompleted();
 			return GameStructure;
 		}
 
@@ -128,16 +134,25 @@ namespace AssetRipper.Library
 			Settings.ExportPath = exportPath;
 			Settings.Filter = list.Count == 0 ? LibraryConfiguration.DefaultFilter : GetFilter(list);
 			InitializeExporters();
+			TaskManager.WaitUntilAllCompleted();
+
 			Logger.Info(LogCategory.Export, "Starting pre-export");
 			OnStartExporting?.Invoke();
+			TaskManager.WaitUntilAllCompleted();
+
 			Logger.Info(LogCategory.Export, "Starting export");
 			GameStructure.Export(Settings);
+			TaskManager.WaitUntilAllCompleted();
+
 			Logger.Info(LogCategory.Export, "Finished exporting assets");
 			OnFinishExporting?.Invoke();
-			foreach(var postExporter in PostExporters)
+			TaskManager.WaitUntilAllCompleted();
+
+			foreach (var postExporter in PostExporters)
 			{
 				postExporter.DoPostExport(this);
 			}
+			TaskManager.WaitUntilAllCompleted();
 			Logger.Info(LogCategory.Export, "Finished post-export");
 		}
 

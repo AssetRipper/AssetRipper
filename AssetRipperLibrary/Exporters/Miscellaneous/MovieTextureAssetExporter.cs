@@ -1,3 +1,4 @@
+using AssetRipper.Core;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -25,7 +26,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			File.WriteAllBytes(path, ((IMovieTexture)asset).RawData);
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((IMovieTexture)asset).RawData));
 			return true;
 		}
 	}

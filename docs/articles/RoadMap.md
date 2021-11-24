@@ -5,7 +5,7 @@
   * WWise audio extraction
   * ~~Type Tree Dump export~~
   * ~~Improved FBX export~~
-  * ~~Texture Export Performance Enhancement~~
+  * ~~Parallel export for several asset types~~
 * Plugin Support
   * ~~Add support for custom post exporters~~
   * Add support for injecting custom asset types

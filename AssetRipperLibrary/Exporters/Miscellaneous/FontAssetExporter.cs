@@ -1,3 +1,4 @@
+using AssetRipper.Core;
 using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -25,9 +26,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			using FileStream stream = File.Create(path);
-			using BinaryWriter writer = new BinaryWriter(stream);
-			writer.Write(((IFont)asset).RawData);
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((IFont)asset).RawData));
 			return true;
 		}
 

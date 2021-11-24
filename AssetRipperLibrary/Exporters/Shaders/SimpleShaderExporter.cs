@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project;
@@ -23,7 +24,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			File.WriteAllBytes(path, ((ITextAsset)asset).RawData);
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).RawData));
 			return true;
 		}
 

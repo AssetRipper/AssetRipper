@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.TerrainData;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math;
@@ -36,25 +37,14 @@ namespace AssetRipper.Library.Exporters.Terrains
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			TerrainData terrain = (TerrainData)asset;
-			using (FileStream fileStream = File.Create(path))
-			{
-				if (!ExportImage(terrain, fileStream))
-				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{terrain.Name}' to bitmap");
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private bool ExportImage(TerrainData terrain, Stream exportStream)
-		{
 			using DirectBitmap bitmap = GetBitmap(terrain);
 			if (bitmap == null)
 			{
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{terrain.Name}' to bitmap");
 				return false;
 			}
-			return bitmap.Save(exportStream, ImageFormat);
+			TaskManager.AddTask(bitmap.SaveAsync(path, ImageFormat));
+			return true;
 		}
 
 		public static DirectBitmap GetBitmap(TerrainData terrain)
