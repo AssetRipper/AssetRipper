@@ -37,8 +37,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 			byte[] buffer = GetBuffer();
 			long basePosition = compressedStream.Position;
 
-			if (compressedStream.Read(buffer, 0, PropertiesSize) != PropertiesSize)
-				throw new Exception("input .lzma is too short");
+			compressedStream.ReadBuffer(buffer, 0, PropertiesSize);
 			decoder.SetDecoderProperties(buffer);
 
 			long headSize = compressedStream.Position - basePosition;
