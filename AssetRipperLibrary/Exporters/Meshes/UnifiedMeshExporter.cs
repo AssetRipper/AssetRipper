@@ -74,7 +74,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			MeshExportFormat.FbxPrimitive => true,
 			MeshExportFormat.StlBinary => true,
 			MeshExportFormat.StlAscii => true,
-			//MeshExportFormat.Obj => true,
+			MeshExportFormat.Obj => true,
 			_ => false,
 		};
 
