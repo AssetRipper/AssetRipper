@@ -9,6 +9,8 @@ namespace AssetRipper.Core.Utils
 {
 	public static class FileUtils
 	{
+		private static readonly Dictionary<string, int> UniqueNamesByInitialPath = new();
+
 		/// <summary>
 		/// Reads a file to determine its length
 		/// </summary>
@@ -60,11 +62,17 @@ namespace AssetRipper.Core.Utils
 			}
 
 			ext = ext ?? Path.GetExtension(validFileName);
-			for (int counter = 0; counter < int.MaxValue; counter++)
+
+			var initial = 0;
+			var key = Path.Combine(dirPath, $"{name}{ext}");
+			UniqueNamesByInitialPath.TryGetValue(key, out initial);
+			
+			for (int counter = initial; counter < int.MaxValue; counter++)
 			{
 				string proposedName = $"{name}_{counter}{ext}";
 				if (!File.Exists(Path.Combine(dirPath, proposedName)))
 				{
+					UniqueNamesByInitialPath[key] = counter;
 					return proposedName;
 				}
 			}
