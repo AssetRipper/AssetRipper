@@ -1,25 +1,36 @@
 ﻿using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Library.Configuration;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
+using System.IO;
 
 namespace AssetRipper.Library.Exporters.Meshes
 {
-	public class GlbMeshExporter : BaseMeshExporter
+	public class GlbMeshExporter : BinaryAssetExporter
 	{
-		public GlbMeshExporter(LibraryConfiguration configuration) : base(configuration) => BinaryExport = true;
+		protected MeshExportFormat ExportFormat { get; set; }
+		public GlbMeshExporter(LibraryConfiguration configuration) : base() => ExportFormat = configuration.MeshExportFormat;
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, "glb");
 		}
 
-		public override bool IsHandle(Mesh mesh)
+		public override bool IsHandle(IUnityObjectBase asset)
+		{
+			if (asset is Mesh mesh)
+				return IsHandle(mesh);
+			else
+				return false;
+		}
+
+		public bool IsHandle(Mesh mesh)
 		{
 			return ExportFormat == MeshExportFormat.GlbPrimitive && 
 				mesh.Vertices != null && 
@@ -29,7 +40,18 @@ namespace AssetRipper.Library.Exporters.Meshes
 				mesh.Indices.Count % 3 == 0;
 		}
 
-		public override byte[] ExportBinary(Mesh mesh)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		{
+			byte[] data = ExportBinary((Mesh)asset);
+			if (data == null || data.Length == 0)
+				return false;
+
+			using FileStream fileStream = File.Create(path);
+			fileStream.Write(data);
+			return true;
+		}
+
+		private byte[] ExportBinary(Mesh mesh)
 		{
 			bool hasNormals = mesh.Normals != null && mesh.Normals.Length == mesh.Vertices.Length;
 			bool hasTangents = hasNormals && mesh.Tangents != null && mesh.Tangents.Length == mesh.Vertices.Length;
