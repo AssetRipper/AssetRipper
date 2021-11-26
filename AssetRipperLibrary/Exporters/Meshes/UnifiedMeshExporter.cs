@@ -12,6 +12,7 @@ using MeshSharp.Elements;
 using MeshSharp.Elements.Geometries.Layers;
 using MeshSharp.FBX;
 using MeshSharp.OBJ;
+using MeshSharp.PLY;
 using MeshSharp.STL;
 using System;
 using System.IO;
@@ -76,6 +77,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			MeshExportFormat.StlBinary => true,
 			MeshExportFormat.StlAscii => true,
 			MeshExportFormat.Obj => true,
+			MeshExportFormat.PlyAscii => true,
 			_ => false,
 		};
 
@@ -106,6 +108,9 @@ namespace AssetRipper.Library.Exporters.Meshes
 					break;
 				case MeshExportFormat.Obj:
 					ObjWriter.Write(memoryStream, scene);
+					break;
+				case MeshExportFormat.PlyAscii:
+					PlyWriter.WriteAscii(memoryStream, scene);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(ExportFormat));

@@ -19,6 +19,10 @@
 		/// </summary>
 		StlBinary,
 		/// <summary>
+		/// Stanford Triangle Format for storing mesh data as text. Unity does not support importing this format.
+		/// </summary>
+		PlyAscii,
+		/// <summary>
 		/// An opensource alternative to FBX. It is the binary version of GLTF. Primitive export only contains mesh data. Unity does not support importing this format.
 		/// </summary>
 		GlbPrimitive,
@@ -44,6 +48,7 @@
 			MeshExportFormat.Obj => "obj",
 			MeshExportFormat.StlAscii => "stl",
 			MeshExportFormat.StlBinary => "stl",
+			MeshExportFormat.PlyAscii => "ply",
 			MeshExportFormat.GlbPrimitive => "glb",
 			MeshExportFormat.FbxPrimitive => "fbx",
 			_ => null,
@@ -52,6 +57,7 @@
 		public static bool IsFBX(this MeshExportFormat format) => format == MeshExportFormat.FbxPrimitive;
 		public static bool IsGLB(this MeshExportFormat format) => format == MeshExportFormat.GlbPrimitive;
 		public static bool IsOBJ(this MeshExportFormat format) => format == MeshExportFormat.Obj;
+		public static bool IsPLY(this MeshExportFormat format) => format == MeshExportFormat.PlyAscii;
 		public static bool IsSTL(this MeshExportFormat format) => format == MeshExportFormat.StlAscii || format == MeshExportFormat.StlBinary;
 		public static bool IsYaml(this MeshExportFormat format) => format == MeshExportFormat.Native;
 	}

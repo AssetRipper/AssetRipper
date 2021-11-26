@@ -19,6 +19,8 @@
   "mesh_format_stl_ascii_description": "3D object format commonly used for 3D printing. Unity cannot import assets of this type. Text-based variant.",
   "mesh_format_stl_binary": "STL (Binary)",
   "mesh_format_stl_binary_description": "3D object format commonly used for 3D printing. Unity cannot import assets of this type. Binary variant.",
+  "mesh_format_ply_ascii": "PLY (ASCII)",
+  "mesh_format_ply_ascii_description": "Stanford Triangle Format. Unity cannot import assets of this type. Text-based variant.",
   "mesh_format_glb_primitive": "Simple GLB",
   "mesh_format_glb_primitive_description": "A high-quality, open-source alternative to FBX. Binary version of GLTF. Only contains mesh data. Can cause errors. Unity cannot import assets of this type.",
   "mesh_format_fbx_primitive": "Simple FBX",

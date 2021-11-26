@@ -48,6 +48,10 @@
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>Libraries\MeshSharp.OBJ.dll</HintPath>
 		</Reference>
+		<Reference Include="MeshSharp.PLY">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>Libraries\MeshSharp.PLY.dll</HintPath>
+		</Reference>
 		<Reference Include="MeshSharp.STL">
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>Libraries\MeshSharp.STL.dll</HintPath>
