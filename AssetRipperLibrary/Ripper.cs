@@ -216,8 +216,9 @@ namespace AssetRipper.Library
 			OverrideExporter<ITerrainData>(new TerrainObjExporter(Settings));
 
 			//Script exporters
-			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
 			OverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));
+			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
+			OverrideExporter<IMonoScript>(new SkipScriptExporter(Settings));
 
 			//Animator Controller - Temporary
 			OverrideExporter<AnimatorController>(new AnimatorControllerExporter());

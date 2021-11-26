@@ -13,7 +13,21 @@ namespace AssetRipper.Core.Configuration
 		/// <summary>
 		/// Disabling scripts can allow some games to export when they previously did not.
 		/// </summary>
-		public bool DisableScriptImport { get; set; }
+		public bool DisableScriptImport 
+		{
+			get => ScriptContentLevel == ScriptContentLevel.Level0;
+			set
+			{
+				if (value && ScriptContentLevel != ScriptContentLevel.Level0)
+					ScriptContentLevel = ScriptContentLevel.Level0;
+				else if (!value && ScriptContentLevel == ScriptContentLevel.Level0)
+					ScriptContentLevel = ScriptContentLevel.Level2;
+			}
+		}
+		/// <summary>
+		/// The level of scripts to export
+		/// </summary>
+		public ScriptContentLevel ScriptContentLevel { get; set; }
 		/// <summary>
 		/// Including the streaming assets directory can cause some games to fail while exporting.
 		/// </summary>
@@ -66,7 +80,7 @@ namespace AssetRipper.Core.Configuration
 
 		public virtual void ResetToDefaultValues()
 		{
-			DisableScriptImport = false;
+			ScriptContentLevel = ScriptContentLevel.Level2;
 			IgnoreStreamingAssets = false;
 			ExportPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
@@ -77,7 +91,7 @@ namespace AssetRipper.Core.Configuration
 		public virtual void LogConfigurationValues()
 		{
 			Logger.Info(LogCategory.General, $"Configuration Settings:");
-			Logger.Info(LogCategory.General, $"DisableScriptImport: {DisableScriptImport}");
+			Logger.Info(LogCategory.General, $"ScriptContentLevel: {ScriptContentLevel}");
 			Logger.Info(LogCategory.General, $"IgnoreStreamingAssets: {IgnoreStreamingAssets}");
 			Logger.Info(LogCategory.General, $"ExportPath: {ExportPath}");
 			Logger.Info(LogCategory.General, $"ExportDependencies: {ExportDependencies}");

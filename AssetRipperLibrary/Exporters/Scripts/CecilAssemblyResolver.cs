@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {
-	internal class AssemblyResolver : ICSharpCode.Decompiler.Metadata.IAssemblyResolver
+	internal class CecilAssemblyResolver : ICSharpCode.Decompiler.Metadata.IAssemblyResolver
 	{
 		private readonly ConcurrentDictionary<string, PEFile> peAssemblies = new ConcurrentDictionary<string, PEFile>();
-		public AssemblyResolver(IAssemblyManager manager) : this(manager.GetAssemblies()) { }
-		public AssemblyResolver(ReadOnlySpan<AssemblyDefinition> assemblies)
+		public CecilAssemblyResolver(IAssemblyManager manager) : this(manager.GetAssemblies()) { }
+		public CecilAssemblyResolver(ReadOnlySpan<AssemblyDefinition> assemblies)
 		{
 			foreach (var assembly in assemblies)
 			{
@@ -22,6 +22,14 @@ namespace AssetRipper.Library.Exporters.Scripts
 				{
 					throw new Exception($"Could not add pe assembly: {assembly.FullName} to name dictionary!");
 				}
+			}
+		}
+		public CecilAssemblyResolver(AssemblyDefinition loneAssembly)
+		{
+			PEFile peFile = CreatePEFile(loneAssembly);
+			if (!peAssemblies.TryAdd(loneAssembly.FullName, peFile))
+			{
+				throw new Exception($"Could not add pe assembly: {loneAssembly.FullName} to name dictionary!");
 			}
 		}
 

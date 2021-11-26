@@ -1,3 +1,4 @@
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
@@ -15,7 +16,12 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		public string GameDataPath { get; private set; }
 		public string MetaDataPath { get; private set; }
 		public int[] UnityVersion { get; private set; }
-		public Il2CppManager(LayoutInfo layout, Action<string> requestAssemblyCallback) : base(layout, requestAssemblyCallback) { }
+		private readonly ScriptContentLevel contentLevel;
+
+		public Il2CppManager(LayoutInfo layout, Action<string> requestAssemblyCallback, ScriptContentLevel level) : base(layout, requestAssemblyCallback)
+		{
+			contentLevel = level;
+		}
 
 		public override bool IsSet => true;
 
@@ -59,6 +65,15 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 			Logger.SendStatusChange("loading_step_restore_attributes");
 			Cpp2IlApi.RunAttributeRestorationForAllAssemblies(keyFunctionAddresses);
+
+			if(contentLevel >= ScriptContentLevel.Level3)
+			{
+				bool unsafeAnalysis = contentLevel == ScriptContentLevel.Level4;
+				foreach(var assembly in Cpp2IlApi.GeneratedAssemblies)
+				{
+					Cpp2IlApi.AnalyseAssembly(Cpp2IL.Core.AnalysisLevel.IL_ONLY, assembly, keyFunctionAddresses, null, true, unsafeAnalysis);
+				}
+			}
 
 			//Cpp2IlApi.SaveAssemblies("ExtractedScripts");
 

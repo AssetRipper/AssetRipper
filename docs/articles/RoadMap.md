@@ -10,9 +10,12 @@
   * ~~Add support for custom post exporters~~
   * Add support for injecting custom asset types
   * Add support for reading alternative file formats
+* Script Export
+  * ~~Customizable level of content in decompiled scripts~~
+  * ~~IL2Cpp code recovery options~~
+  * ~~IL2Cpp Support for Switch games~~
 * General Improvements
   * ~~Check For Updates On Application Start~~
-  * ~~IL2Cpp Support for Switch games~~
   * ~~Fix Ignore Streaming Assets Button Not Applying~~
   * ~~Use SharpZipLib for faster CRC calculation~~
 * Convert Exporters to the new Interface System
@@ -88,8 +91,6 @@ This release will likely focus on improving the user experience in the GUI
     * PMX export
   * Script Export
     * Option to reference assemblies instead of scripts
-    * IL2Cpp method body reconstruction
-    * Stubbing/stripping options
   * Selective Export
     * Export Selected object to folder
     * Export Selected object to compressed zip file

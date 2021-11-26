@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Structure.Assembly.Managers;
+﻿using AssetRipper.Core.Configuration;
+using AssetRipper.Core.Structure.Assembly.Managers;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.TypeSystem;
@@ -7,21 +8,44 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {
-	public class ScriptDecompiler
+	internal class ScriptDecompiler
 	{
-		private AssemblyResolver assemblyResolver;
-		private LanguageVersion languageVersion;
+		private readonly Dictionary<AssemblyDefinition, CSharpDecompiler> decompilers = new Dictionary<AssemblyDefinition, CSharpDecompiler>();
+		private readonly CecilAssemblyResolver assemblyResolver;
+		private LanguageVersion m_languageVersion = LanguageVersion.CSharp7_3;
+		private ScriptContentLevel m_ScriptContentLevel = ScriptContentLevel.Level2;
 
-		public ScriptDecompiler(IAssemblyManager assemblyManager, LanguageVersion langVersion) : this(assemblyManager.GetAssemblies(), langVersion) { }
-		public ScriptDecompiler(AssemblyDefinition assembly, LanguageVersion langVersion) : this(new AssemblyDefinition[] { assembly }, langVersion) { }
-		public ScriptDecompiler(AssemblyDefinition[] assemblies, LanguageVersion langVersion)
+		public ScriptDecompiler(IAssemblyManager assemblyManager) : this(new CecilAssemblyResolver(assemblyManager)) { }
+		public ScriptDecompiler(AssemblyDefinition assembly) : this(new CecilAssemblyResolver(assembly)) { }
+		public ScriptDecompiler(AssemblyDefinition[] assemblies) : this(new CecilAssemblyResolver(assemblies)) { }
+		private ScriptDecompiler(CecilAssemblyResolver cecilAssemblyResolver) => assemblyResolver = cecilAssemblyResolver;
+
+		public LanguageVersion LanguageVersion
 		{
-			assemblyResolver = new AssemblyResolver(assemblies);
-			languageVersion = langVersion;
+			get => m_languageVersion;
+			set
+			{
+				if (value != m_languageVersion)
+				{
+					m_languageVersion = value;
+					decompilers.Clear();
+				}
+			}
 		}
 
-		private Dictionary<AssemblyDefinition, CSharpDecompiler> decompilers = new Dictionary<AssemblyDefinition, CSharpDecompiler>();
-		
+		public ScriptContentLevel ScriptContentLevel
+		{
+			get => m_ScriptContentLevel;
+			set
+			{
+				if (m_ScriptContentLevel != value)
+				{
+					m_ScriptContentLevel = value;
+					decompilers.Clear();
+				}
+			}
+		}
+
 		public string Decompile(TypeDefinition definition)
 		{
 			var decompiler = GetOrMakeDecompiler(definition.Module.Assembly);
@@ -59,10 +83,15 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private CSharpDecompiler MakeDecompiler(AssemblyDefinition assembly)
 		{
 			DecompilerSettings settings = new DecompilerSettings();
-			settings.SetLanguageVersion(languageVersion);
+			settings.SetLanguageVersion(m_languageVersion);
 			settings.ShowXmlDocumentation = true;
 			settings.LoadInMemory = true; //pulled from ILSpy code for reading a pe file from a stream
-			return new CSharpDecompiler(assemblyResolver.Resolve(assembly.FullName), assemblyResolver, settings);
+			var decompiler = new CSharpDecompiler(assemblyResolver.Resolve(assembly.FullName), assemblyResolver, settings);
+			if(ScriptContentLevel == ScriptContentLevel.Level1)
+			{
+				decompiler.AstTransforms.Insert(0, new MethodStripper());
+			}
+			return decompiler;
 		}
 	}
 }
