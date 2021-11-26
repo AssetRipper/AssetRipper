@@ -6,6 +6,7 @@
   * ~~Type Tree Dump export~~
   * ~~Improved FBX export~~
   * ~~Parallel export for several asset types~~
+  * ~~Added option to ignore internal asset bundle paths~~
 * Plugin Support
   * ~~Add support for custom post exporters~~
   * Add support for injecting custom asset types
@@ -14,6 +15,7 @@
   * ~~Customizable level of content in decompiled scripts~~
   * ~~IL2Cpp code recovery options~~
   * ~~IL2Cpp Support for Switch games~~
+  * ~~C# language version selection~~
 * General Improvements
   * ~~Check For Updates On Application Start~~
   * ~~Fix Ignore Streaming Assets Button Not Applying~~

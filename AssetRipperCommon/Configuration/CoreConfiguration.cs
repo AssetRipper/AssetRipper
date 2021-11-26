@@ -13,17 +13,7 @@ namespace AssetRipper.Core.Configuration
 		/// <summary>
 		/// Disabling scripts can allow some games to export when they previously did not.
 		/// </summary>
-		public bool DisableScriptImport 
-		{
-			get => ScriptContentLevel == ScriptContentLevel.Level0;
-			set
-			{
-				if (value && ScriptContentLevel != ScriptContentLevel.Level0)
-					ScriptContentLevel = ScriptContentLevel.Level0;
-				else if (!value && ScriptContentLevel == ScriptContentLevel.Level0)
-					ScriptContentLevel = ScriptContentLevel.Level2;
-			}
-		}
+		public bool DisableScriptImport => ScriptContentLevel == ScriptContentLevel.Level0;
 		/// <summary>
 		/// The level of scripts to export
 		/// </summary>
@@ -44,9 +34,9 @@ namespace AssetRipper.Core.Configuration
 		/// </summary>
 		public bool ExportDependencies { get; set; }
 		/// <summary>
-		/// Export asset bundle content to its original path instead of AssetBundle directory
+		/// Export asset bundle content to its original path instead of the Asset_Bundle directory
 		/// </summary>
-		public bool KeepAssetBundleContentPath { get; set; }
+		public bool IgnoreAssetBundleContentPaths { get; set; }
 		/// <summary>
 		/// A function to determine if an object is allowed to be exported.<br/>
 		/// Set by default to allow everything.
@@ -84,18 +74,18 @@ namespace AssetRipper.Core.Configuration
 			IgnoreStreamingAssets = false;
 			ExportPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
-			KeepAssetBundleContentPath = false;
+			IgnoreAssetBundleContentPaths = false;
 			Filter = DefaultFilter;
 		}
 
 		public virtual void LogConfigurationValues()
 		{
 			Logger.Info(LogCategory.General, $"Configuration Settings:");
-			Logger.Info(LogCategory.General, $"ScriptContentLevel: {ScriptContentLevel}");
-			Logger.Info(LogCategory.General, $"IgnoreStreamingAssets: {IgnoreStreamingAssets}");
-			Logger.Info(LogCategory.General, $"ExportPath: {ExportPath}");
-			Logger.Info(LogCategory.General, $"ExportDependencies: {ExportDependencies}");
-			Logger.Info(LogCategory.General, $"KeepAssetBundleContentPath: {KeepAssetBundleContentPath}");
+			Logger.Info(LogCategory.General, $"{nameof(ScriptContentLevel)}: {ScriptContentLevel}");
+			Logger.Info(LogCategory.General, $"{nameof(IgnoreStreamingAssets)}: {IgnoreStreamingAssets}");
+			Logger.Info(LogCategory.General, $"{nameof(ExportPath)}: {ExportPath}");
+			Logger.Info(LogCategory.General, $"{nameof(ExportDependencies)}: {ExportDependencies}");
+			Logger.Info(LogCategory.General, $"{nameof(IgnoreAssetBundleContentPaths)}: {IgnoreAssetBundleContentPaths}");
 		}
 	}
 }

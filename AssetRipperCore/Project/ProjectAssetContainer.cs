@@ -18,8 +18,6 @@ using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using AssetInfo = AssetRipper.Core.Classes.AssetBundle.AssetInfo;
-using Object = AssetRipper.Core.Classes.Object.Object;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Project
@@ -31,7 +29,7 @@ namespace AssetRipper.Core.Project
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
 			if (options == null) throw new ArgumentNullException(nameof(options));
-			m_KeepAssetBundleContentPath = options.KeepAssetBundleContentPath;
+			m_IgnoreAssetBundleContentPaths = options.IgnoreAssetBundleContentPaths;
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			ExportLayout = file.Layout;
 
@@ -336,7 +334,7 @@ namespace AssetRipper.Core.Project
 					}
 				}
 
-				if (m_KeepAssetBundleContentPath)
+				if (m_IgnoreAssetBundleContentPaths)
 				{
 					m_pathAssets.Add(asset, new ProjectAssetPath(string.Empty, assetPath));
 				}
@@ -378,7 +376,7 @@ namespace AssetRipper.Core.Project
 		private const string AssetBundleFullPath = AssetsDirectory + "Asset_Bundles";
 
 		private readonly ProjectExporterBase m_exporter;
-		private readonly bool m_KeepAssetBundleContentPath;
+		private readonly bool m_IgnoreAssetBundleContentPaths;
 		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
 		private readonly Dictionary<IUnityObjectBase, ProjectAssetPath> m_pathAssets = new Dictionary<IUnityObjectBase, ProjectAssetPath>();
 

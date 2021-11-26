@@ -1,16 +1,17 @@
-﻿using AssetRipper.Library.Configuration;
+﻿using AssetRipper.Core.Configuration;
+using AssetRipper.Library.Configuration;
 using Avalonia.Data;
 
 namespace AssetRipper.GUI
 {
 	public partial class MainWindowViewModel
 	{
-		public bool DisableScriptImport
+		public bool IgnoreAssetBundleContentPaths
 		{
-			get => _ripper.Settings.DisableScriptImport;
+			get => _ripper.Settings.IgnoreAssetBundleContentPaths;
 			set
 			{
-				_ripper.Settings.DisableScriptImport = value;
+				_ripper.Settings.IgnoreAssetBundleContentPaths = value;
 				OnPropertyChanged();
 			}
 		}
@@ -84,7 +85,27 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
-		
+
+		public ScriptContentLevel ScriptContentLevel
+		{
+			get => _ripper.Settings.ScriptContentLevel;
+			set
+			{
+				_ripper.Settings.ScriptContentLevel = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public ICSharpCode.Decompiler.CSharp.LanguageVersion ScriptLanguageVersion
+		{
+			get => _ripper.Settings.ScriptLanguageVersion;
+			set
+			{
+				_ripper.Settings.ScriptLanguageVersion = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public Binding MeshExportModeBinding { get; set; }
 	}
 }
