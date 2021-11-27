@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		public void Read(AssetReader reader)
 		{
 			ConditionConstantArray = reader.ReadAssetArray<OffsetPtr<ConditionConstant>>();
-			DestinationState = (int)reader.ReadUInt32();
+			DestinationState = unchecked((int)reader.ReadUInt32());
 			if (HasPathID(reader.Version))
 			{
 				FullPathID = reader.ReadUInt32();
