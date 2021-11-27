@@ -370,6 +370,5 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			bool swapEndianess = SerializedFileHeader.HasEndianess(Header.Version) ? Header.Endianess : Metadata.SwapEndianess;
 			return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 		}
-
 	}
 }

@@ -25,7 +25,7 @@ namespace AssetAnalyzer
 		public WebFile(EndianReader reader)
 		{
 			var magic = reader.ReadBytes(2);
-			reader.Position = 0;
+			reader.BaseStream.Position = 0;
 			if (gzipMagic.SequenceEqual(magic))
 			{
 				using GZipStream gzipStream = new GZipStream(reader.BaseStream, CompressionMode.Decompress);
@@ -37,9 +37,9 @@ namespace AssetAnalyzer
 			}
 			else
 			{
-				reader.Position = 0x20;
+				reader.BaseStream.Position = 0x20;
 				magic = reader.ReadBytes(6);
-				reader.Position = 0;
+				reader.BaseStream.Position = 0;
 				if (brotliMagic.SequenceEqual(magic))
 				{
 					using BrotliStream brotliStream = new BrotliStream(reader.BaseStream, CompressionMode.Decompress);

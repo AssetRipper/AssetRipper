@@ -1,8 +1,6 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
 using System;
 using System.IO;
 using System.Text;
@@ -11,7 +9,7 @@ namespace AssetRipper.Core.Classes
 {
 	public class UnknownObject : UnityObjectBase
 	{
-		public byte[] Data { get; private set; } = new byte[0];
+		public byte[] Data { get; private set; } = Array.Empty<byte>();
 
 		public UnknownObject(LayoutInfo layout) : base(layout) { }
 		public UnknownObject(AssetInfo assetInfo) : base(assetInfo) { }

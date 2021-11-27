@@ -27,7 +27,7 @@ namespace AssetRipper.Core.IO.FileReading
 		private FileType CheckFileType()
 		{
 			var signature = this.ReadStringToNull(20);
-			Position = 0;
+			BaseStream.Position = 0;
 			switch (signature)
 			{
 				case "UnityWeb":
@@ -40,14 +40,14 @@ namespace AssetRipper.Core.IO.FileReading
 				default:
 					{
 						var magic = ReadBytes(2);
-						Position = 0;
+						BaseStream.Position = 0;
 						if (gzipMagic.SequenceEqual(magic))
 						{
 							return FileType.WebFile;
 						}
-						Position = 0x20;
+						BaseStream.Position = 0x20;
 						magic = ReadBytes(6);
-						Position = 0;
+						BaseStream.Position = 0;
 						if (brotliMagic.SequenceEqual(magic))
 						{
 							return FileType.WebFile;
@@ -81,14 +81,14 @@ namespace AssetRipper.Core.IO.FileReading
 			{
 				if (fileSize < 48)
 				{
-					Position = 0;
+					BaseStream.Position = 0;
 					return false;
 				}
 				m_MetadataSize = ReadUInt32();
 				m_FileSize = ReadInt64();
 				m_DataOffset = ReadInt64();
 			}
-			Position = 0;
+			BaseStream.Position = 0;
 			if (m_FileSize != fileSize)
 			{
 				return false;

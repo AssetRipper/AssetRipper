@@ -3,6 +3,9 @@ using System.IO;
 
 namespace AssetRipper.Core.IO
 {
+	/// <summary>
+	/// A stream implementation for accessing a subset of another stream
+	/// </summary>
 	public class PartialStream : Stream
 	{
 		public PartialStream(Stream baseStream, long offset, long length) : this(baseStream, offset, length, true) { }
@@ -23,11 +26,13 @@ namespace AssetRipper.Core.IO
 			Dispose(false);
 		}
 
+		/// <inheritdoc/>
 		public override void Flush()
 		{
 			m_stream.Flush();
 		}
 
+		/// <inheritdoc/>
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			count = (int)System.Math.Max(System.Math.Min(count, Length - Position), 0);
@@ -35,6 +40,7 @@ namespace AssetRipper.Core.IO
 			return read;
 		}
 
+		/// <inheritdoc/>
 		public override long Seek(long offset, SeekOrigin origin)
 		{
 			if (origin == SeekOrigin.Begin)
@@ -51,11 +57,13 @@ namespace AssetRipper.Core.IO
 			}
 		}
 
+		/// <inheritdoc/>
 		public override void SetLength(long value)
 		{
 			throw new NotSupportedException();
 		}
 
+		/// <inheritdoc/>
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			if (Position + count > Length)
@@ -65,6 +73,7 @@ namespace AssetRipper.Core.IO
 			m_stream.Write(buffer, offset, count);
 		}
 
+		/// <inheritdoc/>
 		protected override void Dispose(bool disposing)
 		{
 			if (m_leaveOpen)
@@ -82,11 +91,16 @@ namespace AssetRipper.Core.IO
 			base.Dispose(disposing);
 		}
 
+		/// <inheritdoc/>
 		public override bool CanRead => m_stream.CanRead;
+		/// <inheritdoc/>
 		public override bool CanSeek => m_stream.CanSeek;
+		/// <inheritdoc/>
 		public override bool CanWrite => m_stream.CanWrite;
+		/// <inheritdoc/>
 		public override long Length { get; }
 
+		/// <inheritdoc/>
 		public override long Position
 		{
 			get => m_stream.Position - m_baseOffset;

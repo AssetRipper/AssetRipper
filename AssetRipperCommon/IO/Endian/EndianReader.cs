@@ -22,12 +22,6 @@ namespace AssetRipper.Core.IO.Endian
 
 		private readonly byte[] m_buffer = new byte[BufferSize];
 
-		public long Position
-		{
-			get => BaseStream.Position;
-			set => BaseStream.Position = value;
-		}
-
 		public EndianReader(Stream stream, EndianType endianess) : this(stream, endianess, false) { }
 
 		protected EndianReader(Stream stream, EndianType endianess, bool alignArray) : base(stream, Encoding.UTF8, true)

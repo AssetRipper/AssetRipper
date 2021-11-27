@@ -113,7 +113,7 @@ namespace AssetAnalyzer
 			{
 				var fileInfoHeaderSize = reader.ReadUInt32();
 			}
-			reader.Position = m_Header.size;
+			reader.BaseStream.Position = m_Header.size;
 		}
 
 		private Stream CreateBlocksStream(string path)
@@ -214,10 +214,10 @@ namespace AssetAnalyzer
 			}
 			if ((m_Header.flags & 0x80) != 0) //kArchiveBlocksInfoAtTheEnd
 			{
-				var position = reader.Position;
-				reader.Position = reader.BaseStream.Length - m_Header.compressedBlocksInfoSize;
+				var position = reader.BaseStream.Position;
+				reader.BaseStream.Position = reader.BaseStream.Length - m_Header.compressedBlocksInfoSize;
 				blocksInfoBytes = reader.ReadBytes((int)m_Header.compressedBlocksInfoSize);
-				reader.Position = position;
+				reader.BaseStream.Position = position;
 			}
 			else //0x40 kArchiveBlocksAndDirectoryInfoCombined
 			{

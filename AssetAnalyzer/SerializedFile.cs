@@ -54,7 +54,7 @@ namespace AssetAnalyzer
 			}
 			else
 			{
-				reader.Position = header.m_FileSize - header.m_MetadataSize;
+				reader.BaseStream.Position = header.m_FileSize - header.m_MetadataSize;
 				m_FileEndianess = reader.ReadByte();
 			}
 
