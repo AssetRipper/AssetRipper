@@ -45,7 +45,7 @@ Modified assemblies almost always cause read errors when used in AssetRipper. He
 
 The most common cause of this is not upgrading your project's Unity version. Currently, AssetRipper exports everything as a `2017.3.0` project, but if the game used a newer Unity version, this needs to be upgraded in UnityHub before launching the editor.
 
-You should be promted with confirmation box beginning with `Your project was last saved with a different version of Unity.`. Click `Continue`.
+You should be prompted with confirmation box beginning with `Your project was last saved with a different version of Unity.`. Click `Continue`.
 
 Other possible causes of this issue include: 
 * Exporting engine assets as normal assets
