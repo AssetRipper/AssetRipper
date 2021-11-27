@@ -80,11 +80,11 @@ namespace AssetRipper.GUI
 
 				if (FallbackLocale.TryGetValue(key, out ret))
 				{
-					Logger.Warning(LogCategory.System, $"Locale {CurrentLang} is missing a definition for {key}. Using fallback language (en_US)");
+					Logger.Info(LogCategory.System, $"Locale {CurrentLang} is missing a definition for {key}. Using fallback language (en_US)");
 					return ret;
 				}
 
-				Logger.Error(LogCategory.System, $"Locale {CurrentLang} is missing a definition for {key}, and it also could not be found in the fallback language (en_US)");
+				Logger.Warning(LogCategory.System, $"Locale {CurrentLang} is missing a definition for {key}, and it also could not be found in the fallback language (en_US)");
 				return $"__{key}__?";
 			}
 		}
@@ -104,7 +104,7 @@ namespace AssetRipper.GUI
 				DisplayName = displayName;
 				LanguageCode = languageCode;
 				
-				Logger.Info($"Language {displayName} isActive {IsActive}");
+				Logger.Verbose(LogCategory.System, $"Language {displayName} isActive {IsActive}");
 
 				MainWindow.Instance.LocalizationManager.OnLanguageChanged += () => OnPropertyChanged(nameof(IsActive));
 			}

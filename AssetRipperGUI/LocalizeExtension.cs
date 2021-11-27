@@ -14,7 +14,7 @@ namespace AssetRipper.GUI
 
 		public string Key { get; set; }
 
-		public string Context { get; set; }
+		public string? Context { get; set; }
 
 		public override object ProvideValue(IServiceProvider serviceProvider)
 		{

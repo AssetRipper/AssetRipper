@@ -24,7 +24,7 @@ namespace AssetRipper.GUI
 
 			LocalizationManager.Init();
 
-		    Logger.Info(LogCategory.System, $"Available languages: {string.Join(", ", LocalizationManager.SupportedLanguages.Select(l => l.LanguageCode))}");
+		    Logger.Verbose(LogCategory.System, $"Available languages: {string.Join(", ", LocalizationManager.SupportedLanguages.Select(l => l.LanguageCode))}");
 
 			Opened += (_, _) => VM.CheckForUpdates(false);
 
