@@ -26,11 +26,9 @@ namespace AssetRipper.Core.Classes
 			Script.Read(reader);
 			Name = reader.ReadString();
 
-			if (!ReadStructure(reader))
-			{
-				ObjectInfo info = File.GetAssetEntry(PathID);
-				reader.BaseStream.Position = position + info.ByteSize;
-			}
+			ReadStructure(reader);
+			ObjectInfo info = File.GetAssetEntry(PathID);
+			reader.BaseStream.Position = position + info.ByteSize;
 		}
 
 		public override void Write(AssetWriter writer)
@@ -102,48 +100,38 @@ namespace AssetRipper.Core.Classes
 		}
 
 		/// <summary>Reads the structure with an AssetReader</summary>
-		/// <returns>
-		/// Returns true if the position does not need reset.<br/>
-		/// Returns false if the position does need reset. 
-		/// </returns>
-		private bool ReadStructure(AssetReader reader)
+		private void ReadStructure(AssetReader reader)
 		{
 			if (!File.Collection.AssemblyManager.IsSet)
 			{
-				return false;
+				return;
 			}
 
 			MonoScript script = Script.FindAsset(File);
 			if (script == null)
 			{
-				return false;
+				return;
 			}
 
 			SerializableType behaviourType = script.GetBehaviourType();
 			if (behaviourType == null)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Import, $"Unable to read {ValidName}, because valid definition for script {script.ValidName} wasn't found");
-				return false;
+				return;
 			}
 
 			Structure = behaviourType.CreateSerializableStructure();
-#if !DEBUG
 			try
-#endif
 			{
 				Structure.Read(reader);
 			}
-#if !DEBUG
 			catch(System.Exception ex)
 			{
 				Structure = null;
 				Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {ValidName}, because script layout {script.ValidName} mismatch binary content");
 				Logger.Log(LogType.Debug, LogCategory.Import, $"Stack trace: {ex.ToString()}");
 			}
-			return false;//In a Release Build, always recalculate the position.
-#else
-			return true;//In a Debug Build, let the position stay as is.
-#endif
+			return;
 		}
 
 		/// <summary>
