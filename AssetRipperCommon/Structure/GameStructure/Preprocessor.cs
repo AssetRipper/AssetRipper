@@ -12,6 +12,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		public const string ZipExtension = ".zip";
 		public const string ApkExtension = ".apk";
 		public const string XapkExtension = ".xapk";
+		public const string VpkExtension = ".vpk";
 
 		internal static List<string> Process(IEnumerable<string> paths)
 		{
@@ -22,6 +23,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				{
 					case ZipExtension:
 					case ApkExtension:
+					case VpkExtension:
 						result.Add(ExtractZip(path));
 						break;
 					case XapkExtension:
