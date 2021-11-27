@@ -9,10 +9,13 @@ namespace AssetRipper.Core.Structure.GameStructure
 {
 	internal static class Preprocessor
 	{
-		public const string ZipExtension = ".zip";
-		public const string ApkExtension = ".apk";
-		public const string XapkExtension = ".xapk";
-		public const string VpkExtension = ".vpk";
+		private const string ZipExtension = ".zip";
+		private const string ApkExtension = ".apk";
+		private const string XapkExtension = ".xapk";
+		private const string VpkExtension = ".vpk";
+		private const uint ZipNormalMagic = 0x04034B50;
+		private const uint ZipEmptyMagic = 0x06054B50;
+		private const uint ZipSpannedMagic = 0x08074B50;
 
 		internal static List<string> Process(IEnumerable<string> paths)
 		{
@@ -39,6 +42,9 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private static string ExtractZip(string zipFilePath)
 		{
+			if (!HasCompatibleMagic(zipFilePath))
+				return zipFilePath;
+
 			string outputDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			DecompressZipArchive(zipFilePath, outputDirectory);
 			return outputDirectory;
@@ -46,6 +52,9 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private static string ExtractXapk(string xapkFilePath)
 		{
+			if (!HasCompatibleMagic(xapkFilePath))
+				return xapkFilePath;
+
 			string intermediateDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			string outputDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			DecompressZipArchive(xapkFilePath, intermediateDirectory);
@@ -70,6 +79,17 @@ namespace AssetRipper.Core.Structure.GameStructure
 				return Path.GetExtension(path);
 			else
 				return null;
+		}
+
+		private static bool HasCompatibleMagic(string path)
+		{
+			uint magic = GetMagicNumber(path);
+			return magic == ZipNormalMagic || magic == ZipEmptyMagic || magic == ZipSpannedMagic;
+		}
+
+		private static uint GetMagicNumber(string path)
+		{
+			return new BinaryReader(File.OpenRead(path)).ReadUInt32();
 		}
 	}
 }
