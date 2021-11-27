@@ -25,6 +25,12 @@ namespace AssetRipper.Core.Classes
 			return pre + transform.GetGameObject().Name;
 		}
 
+		/// <summary>
+		/// Find the sibling index (aka the root order) of the transform
+		/// </summary>
+		/// <param name="transform">The relevant transform</param>
+		/// <returns>The sibling index of the transform</returns>
+		/// <exception cref="Exception">if the transform cannot be found among the father's children</exception>
 		public static int GetSiblingIndex(this ITransform transform)
 		{
 			if (transform.FatherPtr.IsNull)
@@ -32,15 +38,16 @@ namespace AssetRipper.Core.Classes
 				return 0;
 			}
 			ITransform father = transform.FatherPtr.GetAsset(transform.File);
-			for (int i = 0; i < father.ChildrenPtrs.Length; i++)
+			PPtr<ITransform>[] children = father.ChildrenPtrs;
+			for (int i = 0; i < children.Length; i++)
 			{
-				PPtr<ITransform> child = father.ChildrenPtrs[i];
+				PPtr<ITransform> child = children[i];
 				if (child.PathID == transform.PathID)
 				{
 					return i;
 				}
 			}
-			throw new Exception("Transorm hasn't been found among father's children");
+			throw new Exception("Transform hasn't been found among father's children");
 		}
 
 		public static ITransform FindChild(this ITransform transform, string path)

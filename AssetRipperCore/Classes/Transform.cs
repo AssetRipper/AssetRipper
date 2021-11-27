@@ -113,7 +113,29 @@ namespace AssetRipper.Core.Classes
 		public PPtr<ITransform>[] ChildrenPtrs => Children.Select(child => child.CastTo<ITransform>()).ToArray();
 
 		public PPtr<Transform>[] Children { get; set; }
-		private int RootOrder => this.GetSiblingIndex();
+
+		private int RootOrder
+		{
+			get
+			{
+				if (this.Father.IsNull)
+				{
+					return 0;
+				}
+				Transform father = Father.GetAsset(File);
+				PPtr<Transform>[] children = father.Children;
+				for (int i = 0; i < children.Length; i++)
+				{
+					PPtr<Transform> child = children[i];
+					if (child.PathID == PathID)
+					{
+						return i;
+					}
+				}
+				throw new Exception("Transform hasn't been found among father's children");
+			}
+		}
+		
 		private Vector3f LocalEulerAnglesHint => LocalRotation.ToEuler();
 
 		public const char PathSeparator = '/';
