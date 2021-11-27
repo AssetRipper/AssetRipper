@@ -2,6 +2,8 @@
   href: intro.md
 - name: Downloads
   href: Downloads.md
+- name: Common Issues
+  href: CommonIssues.md
 - name: Export Features
   href: ExportFeatures.md
 - name: Requirements

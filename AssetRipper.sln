@@ -88,6 +88,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1
 		docs\articles\Requirements.md = docs\articles\Requirements.md
 		docs\articles\RoadMap.md = docs\articles\RoadMap.md
 		docs\articles\Structure.md = docs\articles\Structure.md
+		docs\articles\toc.yml = docs\articles\toc.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperCommon", "AssetRipperCommon\AssetRipperCommon.csproj", "{676FEE4F-6353-4D8B-B8E6-D89801D25575}"
