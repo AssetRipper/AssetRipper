@@ -101,5 +101,15 @@
     "audio_format_force_mp3_description": "Converti tutti i file audio in file MP3. Non raccomandato perché i file verranno ricompressi, causando così perdita di qualità. Solo Windows.",
     "mesh_format_fbx_primitive_description": "Formato standard del settore utilizzabile in quasi tutti i software di editing 3D, incluso Unity. Contiene solo i dati delle mesh. Ciò rompe i riferimenti alla mesh esportati.",
     "loose_file_saved_at": "File non compresso salvato in {0}",
-    "mesh_format_fbx_primitive": "FBX Semplice"
+    "mesh_format_fbx_primitive": "FBX Semplice",
+    "mesh_format_ply_ascii": "PLY (ASCII)",
+    "mesh_format_ply_ascii_description": "Stanford Triangle Format. Unity non può importare asset di questo tipo. Variante basata su testo.",
+    "script_content_level_0": "Livello 0",
+    "script_content_level_1": "Livello 1",
+    "script_content_level_2": "Livello 2",
+    "script_content_level_3": "Livello 3",
+    "script_content_level_4": "Livello 4",
+    "ignore_asset_bundle_content_paths": "Ignora i percorsi dei contenuti degli Asset Bundle",
+    "script_content_level_title": "Livello dei contenuti degli script",
+    "script_language_version_title": "Versione del linguaggio C#"
 }
