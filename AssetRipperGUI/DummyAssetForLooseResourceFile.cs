@@ -29,7 +29,7 @@ namespace AssetRipper.GUI
 		
 		public string DataAsString => Encoding.UTF8.GetString(RawData);
 
-		public bool IsProbablyPlainText => DataAsString.Take(32).All(c => char.IsAscii(c) && !char.IsControl(c));
+		public bool IsProbablyPlainText => DataAsString.Take(32).All(c => char.IsWhiteSpace(c) || !char.IsControl(c));
 		
 		public string ToFormattedHex()
 		{

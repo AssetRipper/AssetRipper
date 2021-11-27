@@ -4,15 +4,18 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
-using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 namespace AssetRipper.Library.Exporters.Miscellaneous
 {
 	public sealed class TextAssetExporter : BinaryAssetExporter
 	{
+		private const string JsonExtension = "json";
+		private const string TxtExtension = "txt";
+		private const string BytesExtension = "bytes";
 		private TextExportMode exportMode;
 		public TextAssetExporter(LibraryConfiguration configuration)
 		{
@@ -43,21 +46,24 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			switch (exportMode)
 			{
 				case TextExportMode.Txt:
-					return "txt";
+					return TxtExtension;
 				case TextExportMode.Parse:
 					return GetExtension((ITextAsset)asset);
 				case TextExportMode.Bytes:
 				default:
-					return "bytes";
+					return BytesExtension;
 			}
 		}
 
 		private static string GetExtension(ITextAsset asset)
 		{
-			if (IsValidJson(asset.Text))
-				return "json";
+			string text = asset.Text;
+			if (IsValidJson(text))
+				return JsonExtension;
+			else if (IsProbablyPlainText(text))
+				return TxtExtension;
 			else
-				return "txt";
+				return BytesExtension;
 		}
 
 		private static bool IsValidJson(string text)
@@ -72,5 +78,8 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			catch { }
 			return false;
 		}
+
+		private static bool IsProbablyPlainText(string text) => text.Take(32).All(c => !char.IsControl(c) || char.IsWhiteSpace(c));
+		//Note: take returns at most 32 elements, so it's safe to use on smaller strings
 	}
 }
