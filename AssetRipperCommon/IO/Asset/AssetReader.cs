@@ -10,10 +10,12 @@ namespace AssetRipper.Core.IO.Asset
 {
 	public sealed class AssetReader : EndianReader
 	{
-		public AssetReader(Stream stream, EndianType endian, LayoutInfo info) : base(stream, endian, info.IsAlignArrays)
+		public AssetReader(Stream stream, EndianType endian, LayoutInfo info) : this(new AdjustableStream(stream), endian, info) { }
+		private AssetReader(AdjustableStream stream, EndianType endian, LayoutInfo info) : base(stream, endian, info.IsAlignArrays)
 		{
 			Info = info;
 			IsAlignString = info.IsAlign;
+			AdjustableStream = stream;
 		}
 
 		public override string ReadString()
@@ -88,6 +90,7 @@ namespace AssetRipper.Core.IO.Asset
 		public UnityVersion Version => Info.Version;
 		public Platform Platform => Info.Platform;
 		public TransferInstructionFlags Flags => Info.Flags;
+		public AdjustableStream AdjustableStream { get; }
 
 		private bool IsAlignString { get; }
 	}

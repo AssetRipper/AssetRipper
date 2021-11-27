@@ -328,7 +328,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				return null;
 			}
 
-			reader.BaseStream.Position = offset;
+			//reader.BaseStream.Position = offset;
+			reader.AdjustableStream.SetPositionBoundaries(offset, offset + size, offset);
 			try
 			{
 				asset.Read(reader);
@@ -342,6 +343,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			{
 				throw new SerializedFileException($"Read {read} but expected {size} for asset type {asset.ClassID}", Version, Platform, asset.ClassID, Name, FilePath);
 			}
+			reader.AdjustableStream.ResetPositionBoundaries();
 			return asset;
 		}
 
