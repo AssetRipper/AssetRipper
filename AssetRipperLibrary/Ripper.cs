@@ -224,6 +224,7 @@ namespace AssetRipper.Library
 			OverrideExporter<AnimatorController>(new AnimatorControllerExporter());
 
 			AddPostExporter(new TypeTreeExporter());
+			AddPostExporter(new DllPostExporter());
 		}
 
 		private void OverrideEngineExporters()

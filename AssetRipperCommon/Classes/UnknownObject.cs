@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Classes
 
 		public override string ExportExtension => "bytes";
 
-		public override string ExportPath => Path.Combine("UnknownAssets", ClassID.ToString());
+		public override string ExportPath => Path.Combine("AssetRipper", "UnknownAssets", ClassID.ToString());
 
 		public string ToFormattedHex()
 		{

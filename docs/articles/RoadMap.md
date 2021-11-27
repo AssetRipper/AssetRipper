@@ -16,6 +16,7 @@
   * ~~IL2Cpp code recovery options~~
   * ~~IL2Cpp Support for Switch games~~
   * ~~C# language version selection~~
+  * ~~Dll assembly post export~~
 * General Improvements
   * ~~Check For Updates On Application Start~~
   * ~~Fix Ignore Streaming Assets Button Not Applying~~
