@@ -9,31 +9,31 @@ using System.IO;
 
 namespace AssetRipper.Core.Project.Exporters
 {
-	public sealed class UnknownObjectExporter : IAssetExporter
+	internal class UnreadableObjectExporter : IAssetExporter
 	{
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new UnknownExportCollection(this, (UnknownObject)asset);
+			return new UnreadableExportCollection(this, (UnreadableObject)asset);
 		}
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			using var fileStream = File.Create(path);
 			using BinaryWriter writer = new BinaryWriter(fileStream);
-			writer.Write(((UnknownObject)asset).RawData);
+			writer.Write(((UnreadableObject)asset).RawData);
 			return true;
 		}
 
 		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
-			if(Export(container, asset, path))
+			if (Export(container, asset, path))
 				callback?.Invoke(container, asset, path);
 		}
 
 		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
 		{
 			bool success = true;
-			foreach(var asset in assets)
+			foreach (var asset in assets)
 			{
 				success &= Export(container, asset, path);
 			}
@@ -50,7 +50,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is UnknownObject;
+			return asset is UnreadableObject;
 		}
 
 		public AssetType ToExportType(IUnityObjectBase asset)

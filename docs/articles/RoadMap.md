@@ -21,6 +21,7 @@
   * ~~Check For Updates On Application Start~~
   * ~~Fix Ignore Streaming Assets Button Not Applying~~
   * ~~Use SharpZipLib for faster CRC calculation~~
+  * ~~Safely handle asset reading errors~~
 * Convert Exporters to the new Interface System
   * BuildSettings exporter
   * Scene and Prefab exporter

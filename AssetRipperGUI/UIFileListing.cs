@@ -169,14 +169,14 @@ namespace AssetRipper.GUI
 		{
 			_associatedObject = asset;
 			
-			if (_associatedObject is NamedObject no)
+			if (_associatedObject is INamedObject no)
 			{
 				_displayAs = no.ValidName;
 			}
 
-			if (_associatedObject is GameObject go)
+			if (_associatedObject is IHasName hasName)
 			{
-				_displayAs = go.Name;
+				_displayAs = hasName.Name;
 			}
 
 			if (_associatedObject is UnknownObject)

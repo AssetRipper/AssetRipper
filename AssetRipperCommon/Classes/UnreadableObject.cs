@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
@@ -7,16 +8,17 @@ using System.IO;
 
 namespace AssetRipper.Core.Classes
 {
-	public class UnknownObject : UnityObjectBase
+	public class UnreadableObject : UnityObjectBase, IHasName, IHasRawData
 	{
 		public byte[] RawData { get; private set; } = Array.Empty<byte>();
+		public string Name { get; set; }
 
-		public UnknownObject(LayoutInfo layout) : base(layout) { }
-		public UnknownObject(AssetInfo assetInfo) : base(assetInfo) { }
+		public UnreadableObject(LayoutInfo layout) : base(layout) { }
+		public UnreadableObject(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{
-			if(AssetInfo.ByteSize > 0)
+			if (AssetInfo.ByteSize > 0)
 				RawData = reader.ReadBytes(AssetInfo.ByteSize);
 		}
 
@@ -27,6 +29,6 @@ namespace AssetRipper.Core.Classes
 
 		public override string ExportExtension => "bytes";
 
-		public override string ExportPath => Path.Combine("AssetRipper", "UnknownAssets", ClassID.ToString());
+		public override string ExportPath => Path.Combine("AssetRipper", "UnreadableAssets", ClassID.ToString());
 	}
 }

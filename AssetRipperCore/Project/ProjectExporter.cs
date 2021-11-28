@@ -32,6 +32,7 @@ namespace AssetRipper.Core.Project
 		public ProjectExporter()
 		{
 			OverrideExporter<UnknownObject>(new UnknownObjectExporter(), false);
+			OverrideExporter<UnreadableObject>(new UnreadableObjectExporter(), false);
 		}
 
 		/// <inheritdoc/>

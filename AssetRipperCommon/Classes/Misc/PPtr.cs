@@ -99,7 +99,7 @@ namespace AssetRipper.Core.Classes.Misc
 			{
 				case null:
 					return default;
-				case UnknownObject:
+				case UnknownObject or UnreadableObject:
 					return default;
 				case T t:
 					return t;

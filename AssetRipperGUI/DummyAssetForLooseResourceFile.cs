@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
@@ -9,10 +10,10 @@ using System.Text;
 
 namespace AssetRipper.GUI
 {
-	public class DummyAssetForLooseResourceFile : UnityObjectBase
+	public class DummyAssetForLooseResourceFile : UnityObjectBase, IHasRawData
 	{
 		public ResourceFile AssociatedFile;
-		public byte[] RawData;
+		public byte[] RawData { get; set; }
 
 		public DummyAssetForLooseResourceFile(ResourceFile associatedFile) {
 			AssociatedFile = associatedFile;
@@ -30,30 +31,5 @@ namespace AssetRipper.GUI
 		public string DataAsString => Encoding.UTF8.GetString(RawData);
 
 		public bool IsProbablyPlainText => DataAsString.Take(32).All(c => char.IsWhiteSpace(c) || !char.IsControl(c));
-		
-		public string ToFormattedHex()
-		{
-			StringBuilder sb = new StringBuilder();
-			int count = 0;
-			foreach(byte b in RawData)
-			{
-				sb.Append(b.ToString("X2"));
-				count++;
-				if(count >= 16)
-				{
-					sb.AppendLine();
-					count = 0;
-				}
-				else if(count % 4 == 0)
-				{
-					sb.Append('\t');
-				}
-				else
-				{
-					sb.Append(' ');
-				}
-			}
-			return sb.ToString();
-		}
 	}
 }

@@ -68,6 +68,9 @@ namespace AssetRipper.Core.Project.Collections
 				case INamedObject named:
 					fileName = named.ValidName;
 					break;
+				case IHasName hasName:
+					fileName = hasName.Name;
+					break;
 
 				default:
 					fileName = asset.GetType().Name;

@@ -3,6 +3,7 @@ using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
@@ -140,9 +141,9 @@ namespace AssetRipper.GUI.AssetInfo
 		public bool HasTextData => Asset switch
 		{
 			Shader => true,
-			DummyAssetForLooseResourceFile => true,
-			UnknownObject unk => unk.Data.Length > 0,
+			DummyAssetForLooseResourceFile da => da.RawData.Length > 0,
 			ITextAsset txt=> txt.RawData != null && txt.RawData.Length > 0,
+			IHasRawData rawDataAsset => rawDataAsset.RawData.Length > 0,
 			_ => false,
 		};
 
@@ -150,9 +151,9 @@ namespace AssetRipper.GUI.AssetInfo
 		public string? TextAssetData => (Asset switch
 		{
 			Shader shader => DumpShaderDataAsText(shader),
-			UnknownObject unk => unk.ToFormattedHex(),
-			DummyAssetForLooseResourceFile da => da.IsProbablyPlainText ? da.DataAsString : da.ToFormattedHex(),
+			DummyAssetForLooseResourceFile da => da.IsProbablyPlainText ? da.DataAsString : da.RawData.ToFormattedHex(),
 			ITextAsset txt => txt.Text,
+			IHasRawData rawDataAsset => rawDataAsset.RawData.ToFormattedHex(),
 			_ => null
 		})?.Replace("\t", "    ");
 
@@ -184,14 +185,12 @@ namespace AssetRipper.GUI.AssetInfo
 			}
 		}
 
-
-		private bool SupportsName => Asset is Shader or GameObject or NamedObject;
-
 		private bool HasName => Asset switch
 		{
 			Shader s => !string.IsNullOrEmpty(s.ValidName),
 			IGameObject go => !string.IsNullOrEmpty(go.Name),
 			INamedObject no => !string.IsNullOrEmpty(no.Name),
+			IHasName hasName => !string.IsNullOrEmpty(hasName.Name),
 			_ => false
 		};
 
@@ -200,6 +199,7 @@ namespace AssetRipper.GUI.AssetInfo
 			Shader s => s.ValidName,
 			IGameObject go => go.Name,
 			INamedObject no => no.Name,
+			IHasName hasName => hasName.Name,
 			_ => null
 		};
 
@@ -277,16 +277,9 @@ namespace AssetRipper.GUI.AssetInfo
 
 				builder.Append($"Asset Type ID: {Asset.ClassID}\n");
 
-				builder.Append($"Supports Name: {SupportsName}\n");
-
-				if (SupportsName)
+				if (HasName)
 				{
-					builder.Append($"Has Name: {HasName}\n");
-
-					if (HasName)
-					{
-						builder.Append($"Name: {Name}\n");
-					}
+					builder.Append($"Name: {Name}\n");
 				}
 
 				if (HasImageData)

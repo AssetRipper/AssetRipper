@@ -31,7 +31,16 @@ namespace AssetRipper.Core.IO
 
 
 		/// <inheritdoc/>
-		public override long Position { get => m_stream.Position; set => m_stream.Position = value; }
+		public override long Position 
+		{ 
+			get => m_stream.Position; 
+			set
+			{
+				if (value < m_minPosition || m_maxPosition < value)
+					throw new ArgumentOutOfRangeException(nameof(value), "New position must be between the minimum and maximum positions, inclusive");
+				m_stream.Position = value;
+			} 
+		}
 		/// <inheritdoc/>
 		public override long Length => System.Math.Min(m_maxPosition, m_stream.Length) - m_minPosition;
 		public long MinPosition => m_minPosition;

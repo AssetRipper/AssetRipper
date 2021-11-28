@@ -6,6 +6,7 @@ using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Layout;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Utils;
@@ -328,7 +329,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				return null;
 			}
 
-			//reader.BaseStream.Position = offset;
+			bool replaceWithUnreadableObject = false;
 			reader.AdjustableStream.SetPositionBoundaries(offset, offset + size, offset);
 			try
 			{
@@ -336,13 +337,33 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			}
 			catch (Exception ex)
 			{
+#if DEBUG
 				throw new SerializedFileException($"Error during reading of asset type {asset.ClassID}", ex, Version, Platform, asset.ClassID, Name, FilePath);
+#else
+				replaceWithUnreadableObject = true;
+				Logger.Error($"Error during reading of asset type {asset.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}", ex);
+#endif
 			}
 			long read = reader.BaseStream.Position - offset;
-			if (read != size)
+			if (!replaceWithUnreadableObject && read != size)
 			{
+#if DEBUG
 				throw new SerializedFileException($"Read {read} but expected {size} for asset type {asset.ClassID}", Version, Platform, asset.ClassID, Name, FilePath);
+#else
+				replaceWithUnreadableObject = true;
+				Logger.Error($"Read {read} but expected {size} for asset type {asset.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}");
+#endif
 			}
+
+			if (replaceWithUnreadableObject)
+			{
+				reader.AdjustableStream.Position = offset;
+				UnreadableObject unreadable = new UnreadableObject(assetInfo);
+				unreadable.Read(reader);
+				unreadable.Name = asset is IHasName hasName ? hasName.Name : asset.GetType().Name;
+				asset = unreadable;
+			}
+			
 			reader.AdjustableStream.ResetPositionBoundaries();
 			return asset;
 		}
