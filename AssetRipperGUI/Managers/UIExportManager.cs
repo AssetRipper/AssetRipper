@@ -87,8 +87,6 @@ namespace AssetRipper.GUI.Managers
 			{
 				double progress = (double)index / count * 100.0;
 				vm.ExportingText = string.Format(MainWindow.Instance.LocalizationManager["export_in_progress"], progress.ToString("f0"), index, count);
-
-				Dispatcher.UIThread.Post(() => MainWindow.Instance.LogText.CaretIndex = MainWindow.Instance.LogText.Text.Length - 1, DispatcherPriority.Background);
 			};
 		}
 	}

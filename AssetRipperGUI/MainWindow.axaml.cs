@@ -12,7 +12,6 @@ namespace AssetRipper.GUI
 	public partial class MainWindow : Window
     {
 	    public static MainWindow Instance;
-	    public TextBox LogText;
 
 	    private MainWindowViewModel VM;
 	    public readonly LocalizationManager LocalizationManager = new();
@@ -32,8 +31,6 @@ namespace AssetRipper.GUI
 #if DEBUG
             this.AttachDevTools();
 #endif
-
-		    LogText = this.Get<TextBox>("LogText");
 
 		    AddHandler(DragDrop.DropEvent, (sender, args) => VM.OnFileDropped(args));
 	    }

@@ -4,7 +4,8 @@
 * Export
   * WWise audio extraction
   * ~~Type Tree Dump export~~
-  * ~~Improved FBX export~~
+  * ~~Improved FBX mesh export~~
+  * ~~PLY mesh export~~
   * ~~Parallel export for several asset types~~
   * ~~Added option to ignore internal asset bundle paths~~
 * Plugin Support
@@ -22,6 +23,7 @@
   * ~~Fix Ignore Streaming Assets Button Not Applying~~
   * ~~Use SharpZipLib for faster CRC calculation~~
   * ~~Safely handle asset reading errors~~
+  * ~~Move GUI logging into a separate window for better performance~~
 * Convert Exporters to the new Interface System
   * BuildSettings exporter
   * Scene and Prefab exporter
@@ -86,12 +88,10 @@ This release will likely focus on improving the user experience in the GUI
 ## Planned But Unscheduled
 * GUI improvements
   * Performance enhancements for viewing asset types with large contents, such as 9000 game objects
-  * Check for updates automatically on launch
 * Export
   * Mesh Export
     * FBX export (full)
     * GLB export (full)
-    * PLY export
     * PMX export
   * Script Export
     * Option to reference assemblies instead of scripts
@@ -109,7 +109,6 @@ This release will likely focus on improving the user experience in the GUI
   * Font setting
   * Configurable keybindings
 * Console
-  * In the GUI, have a separate window
   * Enterable commands
 * Find all references
 * Search Window

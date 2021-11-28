@@ -227,7 +227,7 @@
                           Width="2" />
 
             <!--Right half of main content-->
-            <Grid Grid.Column="2" RowDefinitions="*, 400">
+            <Grid Grid.Column="2" RowDefinitions="*">
                 <Grid Grid.Row="0">
                     <!--File content-->
 
@@ -309,9 +309,6 @@
                     <TextBlock FontSize="18" Text="{Binding ExportingText}" TextAlignment="Center"
                                VerticalAlignment="Center" IsVisible="{Binding IsExporting}" />
                 </Grid>
-
-                <!--Log-->
-                <TextBox Name="LogText" Grid.Row="1" IsReadOnly="True" Text="{Binding LogText}" />
             </Grid>
         </Grid>
     </Grid>

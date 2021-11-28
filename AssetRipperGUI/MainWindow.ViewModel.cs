@@ -115,8 +115,8 @@ namespace AssetRipper.GUI
 
 		public MainWindowViewModel()
 		{
-			Logger.Add(new ViewModelLogger(this));
 			Logger.Add(new FileLogger());
+			Logger.Add(new ConsoleLogger());
 			Logger.LogSystemInformation("AssetRipper GUI Version");
 
 			Logger.OnStatusChanged += OnImportStatusUpdated;

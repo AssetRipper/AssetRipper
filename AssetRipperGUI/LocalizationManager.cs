@@ -80,7 +80,7 @@ namespace AssetRipper.GUI
 
 				if (FallbackLocale.TryGetValue(key, out ret))
 				{
-					Logger.Info(LogCategory.System, $"Locale {CurrentLang} is missing a definition for {key}. Using fallback language (en_US)");
+					Logger.Verbose(LogCategory.System, $"Locale {CurrentLang} is missing a definition for {key}. Using fallback language (en_US)");
 					return ret;
 				}
 
