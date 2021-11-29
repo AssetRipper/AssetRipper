@@ -43,6 +43,11 @@ namespace AssetRipper.Core.IO.MultiFile
 			Dispose(false);
 		}
 
+		/// <summary>
+		/// Determines if the path could be part of a multi file
+		/// </summary>
+		/// <param name="path">The path to check</param>
+		/// <returns>True if the path matches the multi file regex</returns>
 		public static bool IsMultiFile(string path)
 		{
 			return s_splitCheck.IsMatch(path);
@@ -127,6 +132,12 @@ namespace AssetRipper.Core.IO.MultiFile
 			return fileName == compare;
 		}
 
+		/// <summary>
+		/// Determines if a multi file exists
+		/// </summary>
+		/// <param name="dirPath">The directory containing the multi file</param>
+		/// <param name="fileName">The name of the multi file without the split extension</param>
+		/// <returns>True if a valid multi file exists in that directory with that name</returns>
 		private static bool Exists(string dirPath, string fileName)
 		{
 			string filePath = Path.Combine(dirPath, fileName);

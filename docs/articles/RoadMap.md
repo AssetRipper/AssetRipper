@@ -24,6 +24,7 @@
   * ~~Use SharpZipLib for faster CRC calculation~~
   * ~~Safely handle asset reading errors~~
   * ~~Move GUI logging into a separate window for better performance~~
+  * ~~Improved file path determination on Mac games~~
 * Convert Exporters to the new Interface System
   * BuildSettings exporter
   * Scene and Prefab exporter

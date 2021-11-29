@@ -36,10 +36,10 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			StreamingAssetsPath = Path.Combine(GameDataPath, StreamingName);
 			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
-			UnityPlayerPath = Path.Combine(RootPath, FrameworksName, MacUnityPlayerName);
+			UnityPlayerPath = Path.Combine(RootPath, ContentsName, FrameworksName, MacUnityPlayerName);
 			UnityVersion = null;
-#warning IL2Cpp paths are probably incorrect
-			Il2CppGameAssemblyPath = Path.Combine(RootPath, DefaultGameAssemblyName);
+
+			Il2CppGameAssemblyPath = Path.Combine(RootPath, ContentsName, FrameworksName, "GameAssembly.dylib");
 			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
