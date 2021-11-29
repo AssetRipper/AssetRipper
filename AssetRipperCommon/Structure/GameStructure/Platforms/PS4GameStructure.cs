@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			ModulesPath = Path.Combine(GameDataPath, ModulesName);
 			UnityPlayerPath = null;
 			string globalGameManagersPath = Path.Combine(GameDataPath, GlobalGameManagersName);
-			UnityVersion = GetUnityVersionFromSerializedFile(globalGameManagersPath);
+			UnityVersion = GetUnityVersionFromDataDirectory(globalGameManagersPath);
 			Il2CppGameAssemblyPath = Path.Combine(ModulesPath, PS4IL2CppGameAssemblyName);
 			Il2CppMetaDataPath = Path.Combine(GameDataPath, MetadataName, DefaultGlobalMetadataName);
 

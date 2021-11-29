@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Il2CppGameAssemblyPath = GetIl2CppGameAssemblyPath(LibPath);
 			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
 			UnityPlayerPath = null;
-			UnityVersion = GetUnityVersion(GameDataPath);
+			UnityVersion = GetUnityVersionFromDataDirectory(GameDataPath);
 
 			if (HasIl2CppFiles())
 				Backend = Assembly.ScriptingBackend.Il2Cpp;
@@ -160,18 +160,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			if (string.IsNullOrEmpty(libDirectory) || !Directory.Exists(libDirectory)) return null;
 
 			return Directory.GetFiles(libDirectory, AndroidUnityAssemblyName, SearchOption.AllDirectories).FirstOrDefault();
-		}
-
-		private static int[] GetUnityVersion(string dataPath)
-		{
-			string globalGameManagersPath = Path.Combine(dataPath, GlobalGameManagersName);
-			string lz4bundlePath = Path.Combine(dataPath, Lz4BundleName);
-			if (File.Exists(globalGameManagersPath))
-				return GetUnityVersionFromSerializedFile(globalGameManagersPath);
-			else if (File.Exists(lz4bundlePath))
-				return GetUnityVersionFromBundleFile(lz4bundlePath);
-			else
-				return null;
 		}
 
 		private static bool IsMono(string managedDirectory)

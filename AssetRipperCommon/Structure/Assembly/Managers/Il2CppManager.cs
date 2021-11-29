@@ -37,11 +37,11 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 			if (gameStructure.UnityVersion != null)
 				UnityVersion = gameStructure.UnityVersion;
-			else if (gameStructure.UnityPlayerPath != null)
+			else
 				UnityVersion = Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath, GameDataPath);
 
 			if (UnityVersion == null)
-				throw new NullReferenceException("gameStructure.UnityVersion and gameStructure.UnityPlayerPath cannot both be null");
+				throw new NullReferenceException("Could not determine the unity version");
 			else
 				Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
 			

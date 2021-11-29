@@ -18,22 +18,28 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				throw new Exception($"Root directory '{rootPath}' doesn't exist");
 			}
 
-			if (!GetDataiOSDirectory(m_root, out string dataPath, out string name))
+			if (!GetDataiOSDirectory(m_root, out string dataPath, out string appPath, out string name))
 			{
 				throw new Exception($"Data directory wasn't found");
 			}
 
-#warning TODO: ios script support
 			Name = name;
 			RootPath = rootPath;
 			GameDataPath = dataPath;
 			StreamingAssetsPath = Path.Combine(m_root.FullName, iOSStreamingName);
-			ManagedPath = null;
+			ResourcesPath = Path.Combine(dataPath, ResourcesName);
+			ManagedPath = Path.Combine(dataPath, ManagedName);
 			UnityPlayerPath = null;
-			UnityVersion = null;
-			Il2CppGameAssemblyPath = null;
-			Il2CppMetaDataPath = null;
-			Backend = Assembly.ScriptingBackend.Unknown;
+			UnityVersion = GetUnityVersionFromDataDirectory(GameDataPath);
+			Il2CppGameAssemblyPath = Path.Combine(appPath, name);
+			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
+
+			if (HasIl2CppFiles())
+				Backend = Assembly.ScriptingBackend.Il2Cpp;
+			else if (HasMonoAssemblies(ManagedPath))
+				Backend = Assembly.ScriptingBackend.Mono;
+			else
+				Backend = Assembly.ScriptingBackend.Unknown;
 
 			DataPaths = new string[] { dataPath };
 		}
@@ -46,12 +52,13 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				return false;
 			}
 
-			return GetDataiOSDirectory(root, out string _, out string _);
+			return GetDataiOSDirectory(root, out string _, out string _, out string _);
 		}
 
-		private static bool GetDataiOSDirectory(DirectoryInfo rootDirectory, out string dataPath, out string appName)
+		private static bool GetDataiOSDirectory(DirectoryInfo rootDirectory, out string dataPath, out string appPath, out string appName)
 		{
 			dataPath = null;
+			appPath = null;
 			appName = null;
 
 			string payloadPath = Path.Combine(rootDirectory.FullName, PayloadName);
@@ -65,6 +72,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			{
 				if (dinfo.Name.EndsWith(AppExtension, StringComparison.Ordinal))
 				{
+					appPath = dinfo.FullName;
 					appName = dinfo.Name.Substring(0, dinfo.Name.Length - AppExtension.Length);
 					dataPath = Path.Combine(dinfo.FullName, DataFolderName);
 					if (Directory.Exists(dataPath))
@@ -75,6 +83,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 
 			dataPath = null;
+			appPath = null;
 			appName = null;
 			return false;
 		}
