@@ -31,10 +31,10 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			UnityVersion = null;
 			Il2CppGameAssemblyPath = null;
 			Il2CppMetaDataPath = null;
+			//WiiU doesn't support IL2Cpp
+			//See https://docs.unity3d.com/2017.4/Documentation/Manual/ScriptingRestrictions.html
 
-			if (HasIl2CppFiles())
-				Backend = Assembly.ScriptingBackend.Il2Cpp;
-			else if (HasMonoAssemblies(ManagedPath))
+			if (HasMonoAssemblies(ManagedPath))
 				Backend = Assembly.ScriptingBackend.Mono;
 			else
 				Backend = Assembly.ScriptingBackend.Unknown;
