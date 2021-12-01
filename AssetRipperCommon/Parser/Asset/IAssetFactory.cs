@@ -8,6 +8,5 @@ namespace AssetRipper.Core.Parser.Asset
 	{
 		IUnityObjectBase CreateAsset(AssetInfo assetInfo);
 		IAsset CreateEngineAsset(string name);
-		//void OverrideInstantiator(int classID, Func<AssetInfo, IUnityObjectBase> instantiator);
 	}
 }

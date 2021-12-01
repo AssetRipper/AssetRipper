@@ -93,6 +93,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperCommon", "AssetRipperCommon\AssetRipperCommon.csproj", "{676FEE4F-6353-4D8B-B8E6-D89801D25575}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipperTests", "AssetRipperTests\AssetRipperTests.csproj", "{365C791E-431B-40E5-B724-BE375126AA11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		DebugLinux|x64 = DebugLinux|x64
@@ -223,6 +225,18 @@ Global
 		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.ReleaseMac|x64.Build.0 = Release|Any CPU
 		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
 		{676FEE4F-6353-4D8B-B8E6-D89801D25575}.ReleaseWindows|x64.Build.0 = Release|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.DebugLinux|x64.ActiveCfg = Debug|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.DebugLinux|x64.Build.0 = Debug|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.DebugMac|x64.ActiveCfg = Debug|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.DebugMac|x64.Build.0 = Debug|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.DebugWindows|x64.ActiveCfg = Debug|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.DebugWindows|x64.Build.0 = Debug|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.ReleaseLinux|x64.Build.0 = Release|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.ReleaseMac|x64.Build.0 = Release|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
+		{365C791E-431B-40E5-B724-BE375126AA11}.ReleaseWindows|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
