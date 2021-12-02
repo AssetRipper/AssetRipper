@@ -157,6 +157,7 @@ namespace AssetRipper.Core.Classes
 		public SerializableStructure Structure { get; set; }
 
 		public PPtr<MonoScript> Script;
+		public PPtr<IMonoScript> ScriptPtr => Script.CastTo<IMonoScript>();
 
 		public const string EditorHideFlagsName = "m_EditorHideFlags";
 		public const string GeneratorAssetName = "m_GeneratorAsset";

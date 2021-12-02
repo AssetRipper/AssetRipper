@@ -1,9 +1,11 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes
 {
 	public interface IMonoBehaviour : IComponent, IHasName
 	{
+		PPtr<IMonoScript> ScriptPtr { get; }
 	}
 
 	public static class IMonoBehaviourExtensions
