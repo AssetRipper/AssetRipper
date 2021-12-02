@@ -1,14 +1,18 @@
 ﻿using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.Math;
 using System;
 
 namespace AssetRipper.Core.Classes
 {
 	public interface ITransform : IComponent
 	{
-		public PPtr<ITransform> FatherPtr { get; }
-		public PPtr<ITransform>[] ChildrenPtrs { get; }
+		PPtr<ITransform> FatherPtr { get; }
+		PPtr<ITransform>[] ChildrenPtrs { get; }
+		Vector3f LocalPosition { get; set; }
+		Quaternionf LocalRotation { get; set; }
+		Vector3f LocalScale { get; set; }
 	}
 
 	public static class TransformExtensions

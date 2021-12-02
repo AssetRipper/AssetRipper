@@ -16,9 +16,9 @@ namespace AssetRipper.Core.Converters
 		public static void Convert(IExportContainer container, Transform origin, Transform instance)
 		{
 			ComponentConverter.Convert(container, origin, instance);
-			instance.LocalRotation = origin.LocalRotation;
-			instance.LocalPosition = origin.LocalPosition;
-			instance.LocalScale = origin.LocalScale;
+			instance.m_LocalRotation = origin.m_LocalRotation;
+			instance.m_LocalPosition = origin.m_LocalPosition;
+			instance.m_LocalScale = origin.m_LocalScale;
 			instance.Children = origin.Children.ToArray();
 			instance.Father = origin.Father;
 		}

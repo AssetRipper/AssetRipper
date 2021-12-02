@@ -53,9 +53,9 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
-			LocalRotation.Read(reader);
-			LocalPosition.Read(reader);
-			LocalScale.Read(reader);
+			m_LocalRotation.Read(reader);
+			m_LocalPosition.Read(reader);
+			m_LocalScale.Read(reader);
 
 			if (HasConstrainProportionsScale(reader.Version))
 			{
@@ -75,9 +75,9 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Write(writer);
 
-			LocalRotation.Write(writer);
-			LocalPosition.Write(writer);
-			LocalScale.Write(writer);
+			m_LocalRotation.Write(writer);
+			m_LocalPosition.Write(writer);
+			m_LocalScale.Write(writer);
 			Children.Write(writer);
 			Father.Write(writer);
 		}
@@ -99,9 +99,9 @@ namespace AssetRipper.Core.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(LocalRotationName, LocalRotation.ExportYAML(container));
-			node.Add(LocalPositionName, LocalPosition.ExportYAML(container));
-			node.Add(LocalScaleName, LocalScale.ExportYAML(container));
+			node.Add(LocalRotationName, m_LocalRotation.ExportYAML(container));
+			node.Add(LocalPositionName, m_LocalPosition.ExportYAML(container));
+			node.Add(LocalScaleName, m_LocalScale.ExportYAML(container));
 			node.Add(ChildrenName, Children.ExportYAML(container));
 			node.Add(FatherName, Father.ExportYAML(container));
 			node.Add(RootOrderName, RootOrder);
@@ -136,13 +136,17 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 		
-		private Vector3f LocalEulerAnglesHint => LocalRotation.ToEuler();
+		private Vector3f LocalEulerAnglesHint => m_LocalRotation.ToEuler();
+
+		public Vector3f LocalPosition { get => m_LocalPosition; set => m_LocalPosition = value; }
+		public Quaternionf LocalRotation { get => m_LocalRotation; set => m_LocalRotation = value; }
+		public Vector3f LocalScale { get => m_LocalScale; set => m_LocalScale = value; }
 
 		public const char PathSeparator = '/';
 
-		public Quaternionf LocalRotation;
-		public Vector3f LocalPosition;
-		public Vector3f LocalScale;
+		public Quaternionf m_LocalRotation;
+		public Vector3f m_LocalPosition;
+		public Vector3f m_LocalScale;
 		public PPtr<Transform> Father;
 
 		public const string TransformName = "Transform";
