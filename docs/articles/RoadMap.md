@@ -43,7 +43,7 @@
   * ~~Type Tree method generation~~
   * Fetch Dependency method generation
   * Apply interfaces in the generated assemblies
-  * Implement generation of version specific Asset Factories
+  * ~Implement generation of version specific Asset Factories~
   * Implement a system for loading the assemblies on demand
 * Finishing touches
   * Remove the `Classes` and `Converters` namespaces

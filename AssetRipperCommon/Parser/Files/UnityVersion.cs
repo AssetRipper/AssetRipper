@@ -154,6 +154,10 @@ namespace AssetRipper.Core.Parser.Files
 								versionType = UnityVersionType.Final;
 								break;
 
+							case 'e':
+								versionType = UnityVersionType.Experimental;
+								break;
+
 							default:
 								throw new Exception($"Unsupported version type {c} for version '{version}'");
 						}
