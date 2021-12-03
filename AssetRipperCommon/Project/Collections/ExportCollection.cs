@@ -73,9 +73,15 @@ namespace AssetRipper.Core.Project.Collections
 					break;
 
 				default:
-					fileName = asset.GetType().Name;
+					fileName = null;
 					break;
 			}
+
+			if (string.IsNullOrWhiteSpace(fileName))
+			{
+				fileName = asset.GetType().Name;
+			}
+
 			fileName = FileUtils.RemoveCloneSuffixes(fileName);
 			fileName = FileUtils.FixInvalidNameCharacters(fileName);
 

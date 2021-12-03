@@ -98,6 +98,8 @@ namespace AssetRipper.Core.IO.Asset
 				Write(f);
 			else if (value is double d)
 				Write(d);
+			else if (value is string s)
+				Write(s);
 			else
 				throw new ArgumentException($"Cannot write a primitive of type {typeof(T)}", nameof(value));
 		}
@@ -169,7 +171,7 @@ namespace AssetRipper.Core.IO.Asset
 			if (type.IsAssignableTo(typeof(IAssetWritable)))
 				return WriteAssetInfo.MakeGenericMethod(type);
 			if (type.IsArray)
-				return WriteGenericArrayInfo.MakeGenericMethod(type);
+				return WriteGenericArrayInfo.MakeGenericMethod(type.GetElementType());
 			if (type.FullName!.StartsWith("System.Collections.Generic.KeyValuePair"))
 				return WriteKeyValuePairInfo.MakeGenericMethod(type.GetGenericArguments()[0], type.GetGenericArguments()[1]);
 			if (type.FullName!.StartsWith("System.Collections.Generic.Dictionary"))
