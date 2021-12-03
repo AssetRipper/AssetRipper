@@ -390,7 +390,7 @@ namespace AssetRipper.Core.Parser.Asset
 				case ClassIDType.TerrainLayer:
 					return new TerrainLayer(assetInfo);
 				default:
-					return new UnknownObject(assetInfo);
+					return null;
 			}
 		}
 

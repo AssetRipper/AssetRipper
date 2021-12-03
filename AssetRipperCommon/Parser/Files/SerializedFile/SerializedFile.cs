@@ -326,7 +326,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			IUnityObjectBase asset = VersionManager.GetHandler(Version).AssetFactory.CreateAsset(assetInfo);
 			if (asset == null)
 			{
-				return null;
+				asset = new UnknownObject(assetInfo);
 			}
 
 			bool replaceWithUnreadableObject = false;
