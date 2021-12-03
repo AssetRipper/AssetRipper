@@ -9,7 +9,7 @@ using System.Text;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct UnityGUID : IAsset, ISerializedReadable, ISerializedWritable
+	public struct UnityGUID : IAsset, ISerializedReadable, ISerializedWritable, IEquatable<UnityGUID>
 	{
 		public UnityGUID(Guid guid) : this(guid.ToByteArray()) { }
 
@@ -29,6 +29,8 @@ namespace AssetRipper.Core.Classes.Misc
 			Data3 = dword3;
 		}
 
+		public static UnityGUID NewGuid() => new UnityGUID(Guid.NewGuid());
+
 		public static bool operator ==(UnityGUID left, UnityGUID right)
 		{
 			return left.Data0 == right.Data0 && left.Data1 == right.Data1 && left.Data2 == right.Data2 && left.Data3 == right.Data3;
@@ -39,16 +41,8 @@ namespace AssetRipper.Core.Classes.Misc
 			return left.Data0 != right.Data0 || left.Data1 != right.Data1 || left.Data2 != right.Data2 || left.Data3 != right.Data3;
 		}
 
-		public void Read(SerializedReader reader)
-		{
-			Read((EndianReader)reader);
-		}
-
-		public void Read(AssetReader reader)
-		{
-			Read((EndianReader)reader);
-		}
-
+		public void Read(SerializedReader reader) => Read((EndianReader)reader);
+		public void Read(AssetReader reader) => Read((EndianReader)reader);
 		public void Read(EndianReader reader)
 		{
 			Data0 = reader.ReadUInt32();
@@ -57,16 +51,8 @@ namespace AssetRipper.Core.Classes.Misc
 			Data3 = reader.ReadUInt32();
 		}
 
-		public void Write(SerializedWriter writer)
-		{
-			Write((EndianWriter)writer);
-		}
-
-		public void Write(AssetWriter writer)
-		{
-			Write((EndianWriter)writer);
-		}
-
+		public void Write(SerializedWriter writer) => Write((EndianWriter)writer);
+		public void Write(AssetWriter writer) => Write((EndianWriter)writer);
 		public void Write(EndianWriter writer)
 		{
 			writer.Write(Data0);
@@ -80,6 +66,16 @@ namespace AssetRipper.Core.Classes.Misc
 			return new YAMLScalarNode(ToString());
 		}
 
+		public byte[] ToByteArray()
+		{
+			byte[] result = new byte[16];
+			BitConverter.GetBytes(Data0).CopyTo(result, 0);
+			BitConverter.GetBytes(Data1).CopyTo(result, 4);
+			BitConverter.GetBytes(Data2).CopyTo(result, 8);
+			BitConverter.GetBytes(Data3).CopyTo(result, 12);
+			return result;
+		}
+
 		public override bool Equals(object obj)
 		{
 			if (obj is UnityGUID guid)
@@ -88,6 +84,8 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 			return false;
 		}
+
+		public bool Equals(UnityGUID other) => this == other;
 
 		public override int GetHashCode()
 		{
