@@ -142,7 +142,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			Shader => true,
 			DummyAssetForLooseResourceFile da => da.RawData.Length > 0,
-			ITextAsset txt=> txt.RawData != null && txt.RawData.Length > 0,
+			ITextAsset txt=> !string.IsNullOrEmpty(txt.Script),
 			IHasRawData rawDataAsset => rawDataAsset.RawData.Length > 0,
 			_ => false,
 		};
@@ -152,7 +152,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			Shader shader => DumpShaderDataAsText(shader),
 			DummyAssetForLooseResourceFile da => da.IsProbablyPlainText ? da.DataAsString : da.RawData.ToFormattedHex(),
-			ITextAsset txt => txt.Text,
+			ITextAsset txt => txt.Script,
 			IHasRawData rawDataAsset => rawDataAsset.RawData.ToFormattedHex(),
 			_ => null
 		})?.Replace("\t", "    ");

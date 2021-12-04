@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.Font
 {
-	public interface IFont : IHasRawData, INamedObject
+	public interface IFont : IHasRawData, IHasName
 	{
 	}
 }

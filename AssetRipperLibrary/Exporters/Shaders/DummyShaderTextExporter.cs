@@ -95,7 +95,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			else
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
-				string header = Encoding.UTF8.GetString(shader.Script);
+				string header = shader.Script ?? "";
 				var subshaderIndex = header.IndexOf("SubShader");
 				writer.WriteString(header, 0, subshaderIndex);
 

@@ -26,7 +26,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is ITextAsset textAsset)
-				return IsValidData(textAsset.RawData);
+				return !string.IsNullOrEmpty(textAsset.Script);
 			else
 				return false;
 		}
@@ -38,7 +38,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).RawData));
+			TaskManager.AddTask(File.WriteAllTextAsync(path, ((ITextAsset)asset).Script, System.Text.Encoding.UTF8));
 			return true;
 		}
 
@@ -58,7 +58,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		private static string GetExtension(ITextAsset asset)
 		{
-			string text = asset.Text;
+			string text = asset.Script;
 			if (IsValidJson(text))
 				return JsonExtension;
 			else if (IsProbablyPlainText(text))

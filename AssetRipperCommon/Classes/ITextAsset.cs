@@ -2,7 +2,8 @@
 
 namespace AssetRipper.Core.Classes
 {
-	public interface ITextAsset : IHasText, IHasRawData, IUnityObjectBase
+	public interface ITextAsset : IUnityObjectBase
 	{
+		string Script { get; }
 	}
 }

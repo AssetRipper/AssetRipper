@@ -4,7 +4,6 @@ using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
 using System.IO;
 using System.Text;
 
@@ -18,23 +17,22 @@ namespace AssetRipper.Library.Exporters.Shaders
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is ITextAsset textAsset && asset is IShader)
-				return HasDecompiledShaderText(textAsset.RawData);
+				return HasDecompiledShaderText(textAsset.Script);
 			else
 				return false;
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).RawData));
+			TaskManager.AddTask(File.WriteAllTextAsync(path, ((ITextAsset)asset).Script, Encoding.UTF8));
 			return true;
 		}
 
-		private static bool HasDecompiledShaderText(byte[] data)
+		private static bool HasDecompiledShaderText(string text)
 		{
-			if(!IsValidData(data))
+			if(string.IsNullOrEmpty(text))
 				return false;
 
-			string text = Encoding.UTF8.GetString(data);
 			return !text.Contains("Program") && !text.Contains("SubProgram");
 		}
 	}

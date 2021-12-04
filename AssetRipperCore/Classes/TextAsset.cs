@@ -1,3 +1,4 @@
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
@@ -11,7 +12,7 @@ namespace AssetRipper.Core.Classes
 	/// <summary>
 	/// Script previously
 	/// </summary>
-	public class TextAsset : NamedObject, ITextAsset
+	public class TextAsset : NamedObject, IHasRawData, ITextAsset
 	{
 		public TextAsset(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -24,7 +25,7 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
-			Script = reader.ReadByteArray();
+			RawData = reader.ReadByteArray();
 			reader.AlignStream();
 
 			if (HasPath(reader.Version))
@@ -46,17 +47,16 @@ namespace AssetRipper.Core.Classes
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(ScriptName, Script.ExportYAML());
+			node.Add(ScriptName, RawData.ExportYAML());
 			return node;
 		}
-
-		public string Text => Encoding.UTF8.GetString(Script);
-		public byte[] RawData => Script;
 
 		/// <summary>
 		/// NOTE: originally, it is a string, but since binary files are serialized as TextAsset, we have to store its content as byte array
 		/// </summary>
-		public byte[] Script { get; protected set; }
+		public byte[] RawData { get; protected set; }
+
+		public string Script => RawData == null ? null : Encoding.UTF8.GetString(RawData);
 		public string PathName { get; protected set; } = string.Empty;
 
 		public const string ScriptName = "m_Script";
