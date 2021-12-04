@@ -48,7 +48,7 @@ namespace AssetRipper.Core.Classes.Meta
 				root.Add(TimeCreatedName, CurrentTick);
 				root.Add(LicenseTypeName, "Free");
 			}
-			if (Importer.IncludesImporter(container.ExportVersion))
+			//if (Importer.IncludesImporter(container.ExportVersion)) //For now, assume true
 			{
 				root.Add(Importer.ClassID.ToString(), Importer.ExportYAML(container));
 			}
