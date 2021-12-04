@@ -28,16 +28,15 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is Texture2D)
+			if (asset is Texture2D texture)
 			{
-				Texture2D texture = (Texture2D)asset;
 				return texture.IsValidData;
 			}
 			if (asset is Sprite)
 			{
 				return SpriteExportMode == SpriteExportMode.Texture2D;
 			}
-			return true;
+			return false;
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

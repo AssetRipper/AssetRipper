@@ -22,7 +22,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return ExportMode == TerrainExportMode.Obj;
+			return ExportMode == TerrainExportMode.Obj && asset is TerrainData;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)

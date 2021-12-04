@@ -70,7 +70,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return AudioFormat != AudioExportFormat.Native && IsSupported((AudioClip)asset);
+			return AudioFormat != AudioExportFormat.Native && asset is AudioClip audio && IsSupported(audio);
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)

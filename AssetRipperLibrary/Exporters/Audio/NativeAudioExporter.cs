@@ -12,6 +12,11 @@ namespace AssetRipper.Library.Exporters.Audio
 {
 	public class NativeAudioExporter : BinaryAssetExporter
 	{
+		public override bool IsHandle(IUnityObjectBase asset)
+		{
+			return asset is AudioClip;
+		}
+
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset, GetExportExtension((AudioClip)asset));

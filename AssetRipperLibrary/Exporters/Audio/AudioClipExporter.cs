@@ -43,7 +43,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return AudioClipDecoder.CanDecode((AudioClip)asset) && AudioFormat != AudioExportFormat.Native;
+			return asset is AudioClip audio && AudioClipDecoder.CanDecode(audio) && AudioFormat != AudioExportFormat.Native;
 		}
 
 		private string GetFileExtension(AudioClip audioClip)

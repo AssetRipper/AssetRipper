@@ -49,7 +49,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private static readonly string[] forbiddenAssemblies = new string[] { "mscorlib" };
 
 
-		public bool IsHandle(IUnityObjectBase asset) => Enabled && asset is IMonoScript;
+		public bool IsHandle(IUnityObjectBase asset) => Enabled && asset is MonoScript;
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
