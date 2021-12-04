@@ -7,9 +7,9 @@ using AssetRipper.Core.Classes.QualitySettings;
 using AssetRipper.Core.Classes.UnityConnectSettings;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,9 +19,9 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{
-		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, IUnityObjectBase asset) : this(assetExporter, file, (BuildSettings)asset) { }
+		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, IUnityObjectBase asset) : this(assetExporter, file, (IBuildSettings)asset) { }
 
-		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, BuildSettings asset) : base(assetExporter, asset)
+		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IBuildSettings asset) : base(assetExporter, asset)
 		{
 			EditorBuildSettings = EditorBuildSettings.CreateVirtualInstance(virtualFile);
 			EditorSettings = EditorSettings.CreateVirtualInstance(virtualFile);
@@ -50,17 +50,17 @@ namespace AssetRipper.Core.Project.Collections
 		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			string subPath = Path.Combine(dirPath, ProjectSettingsName);
-			string fileName = $"{EditorBuildSettings.ClassID.ToString()}.asset";
+			string fileName = $"{EditorBuildSettings.ClassID}.asset";
 			string filePath = Path.Combine(subPath, fileName);
 
 			Directory.CreateDirectory(subPath);
 
-			BuildSettings asset = (BuildSettings)Asset;
+			IBuildSettings asset = (IBuildSettings)Asset;
 			IEnumerable<Scene> scenes = asset.Scenes.Select(t => new Scene(t, container.SceneNameToGUID(t)));
 			EditorBuildSettings.Initialize(scenes);
 			AssetExporter.Export(container, EditorBuildSettings, filePath);
 
-			fileName = $"{EditorSettings.ClassID.ToString()}.asset";
+			fileName = $"{EditorSettings.ClassID}.asset";
 			filePath = Path.Combine(subPath, fileName);
 
 			AssetExporter.Export(container, EditorSettings, filePath);
@@ -101,17 +101,19 @@ namespace AssetRipper.Core.Project.Collections
 				AssetExporter.Export(container, QualitySettings, filePath);
 			}
 
-			fileName = $"ProjectVersion.txt";
-			filePath = Path.Combine(subPath, fileName);
-
-			using (Stream fileStream = System.IO.File.Create(filePath))
-			{
-				using (StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
-				{
-					writer.Write("m_EditorVersion: 2017.3.0f3");
-				}
-			}
+			SaveProjectVersion(subPath);
 			return true;
+		}
+
+		private static void SaveProjectVersion(string projectSettingsDirectory)
+		{
+			SaveProjectVersion(projectSettingsDirectory, new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3));
+		}
+		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version)
+		{
+			using Stream fileStream = System.IO.File.Create(Path.Combine(projectSettingsDirectory, "ProjectVersion.txt"));
+			using StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
+			writer.Write($"m_EditorVersion: {version}");
 		}
 
 		public override bool IsContains(IUnityObjectBase asset)

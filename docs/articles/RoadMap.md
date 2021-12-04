@@ -44,7 +44,7 @@
   * Fetch Dependency method generation
   * Apply interfaces in the generated assemblies
   * ~Implement generation of version specific Asset Factories~
-  * Implement a system for loading the assemblies on demand
+  * Implement a system for downloading the assemblies on demand
 * Finishing touches
   * Remove the `Classes` and `Converters` namespaces
   * Remove any additional legacy code
