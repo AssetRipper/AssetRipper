@@ -4,6 +4,7 @@ namespace AssetRipper.Core.YAML
 	{
 		Boolean,
 		Byte,
+		SByte,
 		UInt16,
 		Int16,
 		UInt32,

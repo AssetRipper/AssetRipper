@@ -12,6 +12,12 @@
 			return _this.ToString("x2");
 		}
 
+		public static string ToHexString(this sbyte _this)
+		{
+			byte value = unchecked((byte)_this);
+			return ToHexString(value);
+		}
+
 		public static string ToHexString(this short _this)
 		{
 			ushort value = unchecked((ushort)_this);

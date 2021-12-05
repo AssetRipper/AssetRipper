@@ -28,6 +28,14 @@ namespace AssetRipper.Core.YAML
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
+		public YAMLScalarNode(sbyte value) : this(value, false) { }
+
+		public YAMLScalarNode(sbyte value, bool isHex)
+		{
+			SetValue(value);
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
+		}
+
 		public YAMLScalarNode(short value) : this(value, false) { }
 
 		public YAMLScalarNode(short value, bool isHex)
@@ -191,6 +199,7 @@ namespace AssetRipper.Core.YAML
 				return m_objectType switch
 				{
 					ScalarType.Byte => emitter.WriteHex((byte)m_value),
+					ScalarType.SByte => emitter.WriteHex(unchecked((sbyte)m_value)),
 					ScalarType.Int16 => emitter.WriteHex(unchecked((short)m_value)),
 					ScalarType.UInt16 => emitter.WriteHex((ushort)m_value),
 					ScalarType.Int32 => emitter.WriteHex(unchecked((int)m_value)),
@@ -207,6 +216,7 @@ namespace AssetRipper.Core.YAML
 			{
 				ScalarType.Boolean => emitter.Write(m_value),
 				ScalarType.Byte => emitter.Write(m_value),
+				ScalarType.SByte => emitter.Write(unchecked((sbyte)m_value)),
 				ScalarType.Int16 => emitter.Write(unchecked((short)m_value)),
 				ScalarType.UInt16 => emitter.Write(m_value),
 				ScalarType.Int32 => emitter.Write(unchecked((int)m_value)),
@@ -339,6 +349,7 @@ namespace AssetRipper.Core.YAML
 					return m_objectType switch
 					{
 						ScalarType.Byte => unchecked((byte)m_value).ToHexString(),
+						ScalarType.SByte => unchecked((sbyte)m_value).ToHexString(),
 						ScalarType.Int16 => unchecked((short)m_value).ToHexString(),
 						ScalarType.UInt16 => unchecked((ushort)m_value).ToHexString(),
 						ScalarType.Int32 => unchecked((int)m_value).ToHexString(),
@@ -355,6 +366,7 @@ namespace AssetRipper.Core.YAML
 				{
 					ScalarType.Boolean => m_value == 1 ? "true" : "false",
 					ScalarType.Byte => m_value.ToString(),
+					ScalarType.SByte => unchecked((sbyte)m_value).ToString(),
 					ScalarType.Int16 => unchecked((short)m_value).ToString(),
 					ScalarType.UInt16 => m_value.ToString(),
 					ScalarType.Int32 => unchecked((int)m_value).ToString(),
