@@ -24,6 +24,11 @@ namespace AssetRipper.Core.Classes.Misc
 			// NOTE: unknown version SerializedFiles.FormatVersion.Unknown_14
 			return version.IsGreaterEqual(5);
 		}
+
+		public static YAMLNode ExportYAML<T>(IExportContainer container, int fileIndex, long pathID) where T : IUnityObjectBase
+		{
+			return new PPtr<T>(fileIndex, pathID).ExportYAML(container);
+		}
 	}
 
 	public struct PPtr<T> : IAsset where T : IUnityObjectBase
