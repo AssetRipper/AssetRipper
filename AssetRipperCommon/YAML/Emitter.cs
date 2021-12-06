@@ -110,7 +110,7 @@ namespace AssetRipper.Core.YAML
 
 		public Emitter Write(string value)
 		{
-			if (value.Length > 0)
+			if (!string.IsNullOrEmpty(value))
 			{
 				WriteDelayed();
 				m_stream.Write(value);

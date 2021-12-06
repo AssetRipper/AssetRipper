@@ -156,6 +156,7 @@ namespace AssetRipper.Core.Project
 		public ProjectExporterBase()
 		{
 			OverrideExporter<IUnityObjectBase>(new RawAssetExporter(), true);
+			OverrideExporter<IUnityObjectBase>(DefaultExporter, true);
 			OverrideDummyExporter(ClassIDType.MonoManager, true, false);
 			OverrideDummyExporter(ClassIDType.BuildSettings, false, false);
 			OverrideDummyExporter(ClassIDType.AssetBundle, true, false);

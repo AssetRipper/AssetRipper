@@ -327,7 +327,7 @@ namespace AssetRipper.Core.YAML
 
 		private static ScalarStyle GetStringStyle(string value)
 		{
-			if (s_illegal.IsMatch(value))
+			if (!string.IsNullOrEmpty(value) && s_illegal.IsMatch(value))
 			{
 				return value.Contains("\n ") ? ScalarStyle.DoubleQuoted : ScalarStyle.SingleQuoted;
 			}

@@ -7,8 +7,8 @@ namespace AssetRipper.Core.IO
 	/// </summary>
 	/// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
 	/// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
-	public class AssetDictionary<TKey, TValue> : List<KeyValuePair<TKey, TValue>>
+	public class AssetDictionary<TKey, TValue> : List<NullableKeyValuePair<TKey, TValue>>
 	{
-		public void Add(TKey key, TValue value) => Add(new KeyValuePair<TKey, TValue>(key, value));
+		public void Add(TKey key, TValue value) => Add(new NullableKeyValuePair<TKey, TValue>(key, value));
 	}
 }
