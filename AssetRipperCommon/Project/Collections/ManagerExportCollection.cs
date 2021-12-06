@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Project.Collections
 		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			string subPath = Path.Combine(dirPath, ProjectSettingsName);
-			string fileName = $"{Asset.ExportPath}.asset";
+			string fileName = $"{Asset.GetType().Name}.asset";
 			string filePath = Path.Combine(subPath, fileName);
 
 			Directory.CreateDirectory(subPath);

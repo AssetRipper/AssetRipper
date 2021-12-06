@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Layout;
@@ -157,6 +158,7 @@ namespace AssetRipper.Core.Project
 		{
 			OverrideExporter<IUnityObjectBase>(new RawAssetExporter(), true);
 			OverrideExporter<IUnityObjectBase>(DefaultExporter, true);
+			OverrideExporter<IGlobalGameManager>(ManagerExporter, true);
 			OverrideDummyExporter(ClassIDType.MonoManager, true, false);
 			OverrideDummyExporter(ClassIDType.BuildSettings, false, false);
 			OverrideDummyExporter(ClassIDType.AssetBundle, true, false);
