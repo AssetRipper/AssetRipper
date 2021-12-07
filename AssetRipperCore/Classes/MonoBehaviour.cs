@@ -2,7 +2,6 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
@@ -26,7 +25,7 @@ namespace AssetRipper.Core.Classes
 			Script.Read(reader);
 			Name = reader.ReadString();
 
-			ReadStructure(reader);
+			this.ReadStructure(reader);
 			ObjectInfo info = File.GetAssetEntry(PathID);
 			reader.BaseStream.Position = position + info.ByteSize;
 		}
@@ -38,10 +37,7 @@ namespace AssetRipper.Core.Classes
 			Script.Write(writer);
 			writer.Write(Name);
 
-			if (Structure != null)
-			{
-				Structure.Write(writer);
-			}
+			this.MaybeWriteStructure(writer);
 		}
 
 		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
@@ -78,11 +74,7 @@ namespace AssetRipper.Core.Classes
 			node.Add(ScriptName, Script.ExportYAML(container));
 			node.Add(NameName, Name);
 			node.Add(EditorClassIdentifierName, GetEditorClassIdentifier(container));
-			if (Structure != null)
-			{
-				YAMLMappingNode structureNode = (YAMLMappingNode)Structure.ExportYAML(container);
-				node.Append(structureNode);
-			}
+			this.MaybeExportYamlForStructure(node, container);
 			return node;
 		}
 
@@ -97,41 +89,6 @@ namespace AssetRipper.Core.Classes
 		private string GetEditorClassIdentifier(IExportContainer container)
 		{
 			return string.Empty;
-		}
-
-		/// <summary>Reads the structure with an AssetReader</summary>
-		private void ReadStructure(AssetReader reader)
-		{
-			if (!File.Collection.AssemblyManager.IsSet)
-			{
-				return;
-			}
-
-			MonoScript script = Script.FindAsset(File);
-			if (script == null)
-			{
-				return;
-			}
-
-			SerializableType behaviourType = script.GetBehaviourType();
-			if (behaviourType == null)
-			{
-				Logger.Log(LogType.Warning, LogCategory.Import, $"Unable to read {ValidName}, because valid definition for script {script.GetValidName()} wasn't found");
-				return;
-			}
-
-			Structure = behaviourType.CreateSerializableStructure();
-			try
-			{
-				Structure.Read(reader);
-			}
-			catch(System.Exception ex)
-			{
-				Structure = null;
-				Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {ValidName}, because script layout {script.GetValidName()} mismatch binary content");
-				Logger.Log(LogType.Debug, LogCategory.Import, $"Stack trace: {ex.ToString()}");
-			}
-			return;
 		}
 
 		/// <summary>
@@ -149,9 +106,6 @@ namespace AssetRipper.Core.Classes
 
 		public override string ExportPath => Path.Combine(AssetsKeyword, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
-
-		public string ValidName => string.IsNullOrEmpty(Name) ? nameof(MonoBehaviour) : Name;
-		
 
 		public string Name { get; set; }
 		public SerializableStructure Structure { get; set; }

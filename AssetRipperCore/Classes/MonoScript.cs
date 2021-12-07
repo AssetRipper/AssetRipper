@@ -6,8 +6,6 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Structure.Assembly;
-using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System.Collections.Generic;
@@ -96,18 +94,6 @@ namespace AssetRipper.Core.Classes
 		/// Less than 5.0.0
 		/// </summary>
 		private static bool IsUInt32Hash(UnityVersion version) => version.IsLess(5);
-
-		public SerializableType GetBehaviourType()
-		{
-			ScriptIdentifier scriptID = HasNamespace(File.Version) ?
-				File.Collection.AssemblyManager.GetScriptID(AssemblyName, Namespace, ClassName) :
-				File.Collection.AssemblyManager.GetScriptID(AssemblyName, ClassName);
-			if (File.Collection.AssemblyManager.IsValid(scriptID))
-			{
-				return File.Collection.AssemblyManager.GetSerializableType(scriptID) as SerializableType;
-			}
-			return null;
-		}
 
 		public override void Read(AssetReader reader)
 		{
