@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
@@ -35,7 +36,7 @@ namespace AssetRipper.Library.Exporters.Audio
 				}
 				else
 				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{audioClip.ValidName}' because data can't be read from resources file '{audioClip.FSBResource.Source}'");
+					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{audioClip.GetValidName()}' because data can't be read from resources file '{audioClip.FSBResource.Source}'");
 					return false;
 				}
 			}
@@ -50,7 +51,7 @@ namespace AssetRipper.Library.Exporters.Audio
 					}
 					else
 					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{audioClip.ValidName}' because resources file '{audioClip.StreamingInfo.Path}' hasn't been found");
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{audioClip.GetValidName()}' because resources file '{audioClip.StreamingInfo.Path}' hasn't been found");
 						return false;
 					}
 				}

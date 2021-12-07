@@ -116,7 +116,7 @@ namespace AssetRipper.Core.Classes
 			SerializableType behaviourType = script.GetBehaviourType();
 			if (behaviourType == null)
 			{
-				Logger.Log(LogType.Warning, LogCategory.Import, $"Unable to read {ValidName}, because valid definition for script {script.ValidName} wasn't found");
+				Logger.Log(LogType.Warning, LogCategory.Import, $"Unable to read {ValidName}, because valid definition for script {script.GetValidName()} wasn't found");
 				return;
 			}
 
@@ -128,7 +128,7 @@ namespace AssetRipper.Core.Classes
 			catch(System.Exception ex)
 			{
 				Structure = null;
-				Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {ValidName}, because script layout {script.ValidName} mismatch binary content");
+				Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {ValidName}, because script layout {script.GetValidName()} mismatch binary content");
 				Logger.Log(LogType.Debug, LogCategory.Import, $"Stack trace: {ex.ToString()}");
 			}
 			return;
@@ -150,7 +150,7 @@ namespace AssetRipper.Core.Classes
 		public override string ExportPath => Path.Combine(AssetsKeyword, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
 
-		public string ValidName => Name.Length == 0 ? nameof(MonoBehaviour) : Name;
+		public string ValidName => string.IsNullOrEmpty(Name) ? nameof(MonoBehaviour) : Name;
 		
 
 		public string Name { get; set; }

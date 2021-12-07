@@ -299,7 +299,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 				return GetImageData();
 			}
 
-			Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamData.Path}' wasn't found");
+			Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{this.GetValidName()}' because resources file '{StreamData.Path}' wasn't found");
 			return Array.Empty<byte>();
 		}
 

@@ -232,7 +232,7 @@ namespace AssetRipper.Library.Utils
 		{
 			if (asset is INamedObject no)
 			{
-				return no.ValidName;
+				return no.GetValidName();
 			}
 			if (asset is IMonoBehaviour mb && mb.IsScriptableObject())
 			{

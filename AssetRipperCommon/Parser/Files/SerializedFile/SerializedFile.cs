@@ -161,7 +161,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				if (asset.ClassID == classID)
 				{
 					INamedObject namedAsset = (INamedObject)asset;
-					if (namedAsset.ValidName == name)
+					if (namedAsset.GetValidName() == name)
 					{
 						return asset;
 					}

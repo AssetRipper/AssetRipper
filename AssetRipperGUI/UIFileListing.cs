@@ -171,7 +171,7 @@ namespace AssetRipper.GUI
 			
 			if (_associatedObject is INamedObject no)
 			{
-				_displayAs = no.ValidName;
+				_displayAs = no.GetValidName();
 			}
 
 			if (_associatedObject is IHasName hasName)

@@ -119,7 +119,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 				int sceneIndex = Scenes.IndexOf(t => t.Scene == cullingSetting.m_SceneGUID);
 				if (sceneIndex == -1)
 				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Unable to find scene data with GUID {cullingSetting.m_SceneGUID} in {ValidName}");
+					Logger.Log(LogType.Error, LogCategory.Export, $"Unable to find scene data with GUID {cullingSetting.m_SceneGUID} in {this.GetValidName()}");
 					continue;
 				}
 

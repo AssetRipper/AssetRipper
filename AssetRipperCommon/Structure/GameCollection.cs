@@ -97,7 +97,7 @@ namespace AssetRipper.Core.Structure
 				if (asset.ClassID == classID)
 				{
 					T namedAsset = (T)asset;
-					if (namedAsset.ValidName == name)
+					if (namedAsset.GetValidName() == name)
 					{
 						return namedAsset;
 					}

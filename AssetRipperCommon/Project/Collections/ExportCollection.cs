@@ -66,7 +66,7 @@ namespace AssetRipper.Core.Project.Collections
 					fileName = monoBehaviour.Name;
 					break;
 				case INamedObject named:
-					fileName = named.ValidName;
+					fileName = named.GetValidName();
 					break;
 				case IHasName hasName:
 					fileName = hasName.Name;

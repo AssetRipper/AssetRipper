@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Classes
 
 		public override string ToString()
 		{
-			return $"{ValidName}({GetType().Name})";
+			return $"{this.GetValidName()}({GetType().Name})";
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -40,8 +40,6 @@ namespace AssetRipper.Core.Classes
 			root.Add(NameName, Name);
 			return root;
 		}
-
-		public virtual string ValidName => Name.Length == 0 ? GetType().Name : Name;
 
 		public string Name { get; set; }
 

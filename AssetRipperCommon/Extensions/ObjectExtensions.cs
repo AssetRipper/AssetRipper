@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Extensions
 		{
 			if (_this is INamedObject named)
 			{
-				return named.ValidName;
+				return named.GetValidName();
 			}
 			else if (_this is IHasName named2)
 			{

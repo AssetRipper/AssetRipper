@@ -221,7 +221,7 @@ namespace AssetRipper.Core.Classes.Shader
 
 		public override string ExportExtension => "shader";
 
-		public override string ValidName => IsSerialized(File.Version) ? ParsedForm.Name : base.ValidName;
+		public string ValidName => IsSerialized(File.Version) ? ParsedForm.Name : this.GetNameNotEmpty();
 
 		public GPUPlatform[] Platforms { get; set; }
 		public ShaderSubProgramBlob[] Blobs { get; set; }

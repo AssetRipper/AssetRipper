@@ -74,7 +74,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			get { yield return m_asset; }
 		}
-		public string Name => m_asset is INamedObject namedAsset ? namedAsset.ValidName : m_asset.GetType().Name;
+		public string Name => m_asset is INamedObject namedAsset ? namedAsset.GetValidName() : m_asset.GetType().Name;
 		public IAssetImporter MetaImporter => throw new NotSupportedException();
 
 		private readonly IUnityObjectBase m_asset;

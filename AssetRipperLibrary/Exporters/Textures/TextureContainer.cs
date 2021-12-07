@@ -1,3 +1,4 @@
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Endian;
@@ -35,7 +36,7 @@ namespace AssetRipper.Library.Exporters.Textures
 					IResourceFile res = texture.File.Collection.FindResourceFile(path);
 					if (res == null)
 					{
-						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.ValidName}' because resources file '{path}' wasn't found");
+						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.GetValidName()}' because resources file '{path}' wasn't found");
 					}
 					else
 					{

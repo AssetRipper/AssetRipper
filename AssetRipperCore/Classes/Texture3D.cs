@@ -225,7 +225,7 @@ namespace AssetRipper.Core.Classes
 				byte[] data = StreamData.GetContent(File);
 				if (data == null)
 				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{ValidName}' because resources file '{StreamData.Path}' wasn't found");
+					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{this.GetValidName()}' because resources file '{StreamData.Path}' wasn't found");
 					return m_imageData;
 				}
 				return data;

@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
@@ -93,7 +94,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			byte[] data = ExportWavAudio(audioClip);
 			if (data == null)
 			{
-				Logger.Warning(LogCategory.Export, $"Unable to convert '{audioClip.ValidName}' to wav");
+				Logger.Warning(LogCategory.Export, $"Unable to convert '{audioClip.GetValidName()}' to wav");
 				return false;
 			}
 
