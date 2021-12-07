@@ -13,13 +13,19 @@ namespace AssetRipper.Core.Classes.Object
 
 		protected Object(AssetInfo assetInfo) : base(assetInfo) { }
 
+		public override HideFlags ObjectHideFlags 
+		{ 
+			get => (HideFlags)m_ObjectHideFlags; 
+			set => m_ObjectHideFlags = (uint)value; 
+		}
+
 		public override void Read(AssetReader reader)
 		{
 			AssetUnityVersion = reader.Version;
 			EndianType = reader.EndianType;
 			if (HasHideFlag(reader.Version, reader.Flags))
 			{
-				ObjectHideFlags = (HideFlags)reader.ReadUInt32();
+				m_ObjectHideFlags = reader.ReadUInt32();
 			}
 		}
 
@@ -27,7 +33,7 @@ namespace AssetRipper.Core.Classes.Object
 		{
 			if (HasHideFlag(writer.Version, writer.Flags))
 			{
-				writer.Write((uint)ObjectHideFlags);
+				writer.Write(m_ObjectHideFlags);
 			}
 		}
 
@@ -41,7 +47,7 @@ namespace AssetRipper.Core.Classes.Object
 			YAMLMappingNode node = new YAMLMappingNode();
 			if (HasHideFlag(container.Version,container.Flags))
 			{
-				node.Add(ObjectHideFlagsName, (uint)ObjectHideFlags);
+				node.Add(ObjectHideFlagsName, m_ObjectHideFlags);
 			}
 			return node;
 		}
@@ -50,6 +56,8 @@ namespace AssetRipper.Core.Classes.Object
 		/// greater than 2.0.0 and Not Release
 		/// </summary>
 		public static bool HasHideFlag(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2) && !flags.IsRelease();
+
+		private uint m_ObjectHideFlags;
 
 		public const string ObjectHideFlagsName = "m_ObjectHideFlags";
 		public const string InstanceIDName = "m_InstanceID";

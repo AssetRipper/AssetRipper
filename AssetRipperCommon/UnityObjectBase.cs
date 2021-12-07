@@ -6,6 +6,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System;
 using System.IO;
 
 namespace AssetRipper.Core
@@ -21,9 +22,14 @@ namespace AssetRipper.Core
 		public virtual ClassIDType ClassID => AssetInfo?.ClassID ?? ClassIDType.UnknownType;
 		public long PathID => AssetInfo.PathID;
 		public UnityGUID GUID => AssetInfo.GUID;
-		public virtual string ExportPath => Path.Combine(AssetsKeyword, ClassID.ToString());
+		public virtual string ExportPath => Path.Combine(AssetsKeyword, GetType().Name);
 		public virtual string ExportExtension => AssetExtension;
-		public HideFlags ObjectHideFlags { get; set; }
+
+		public virtual HideFlags ObjectHideFlags 
+		{
+			get => HideFlags.None;
+			set => throw new NotSupportedException();
+		}
 
 		public const string AssetsKeyword = "Assets";
 		protected const string AssetExtension = "asset";
