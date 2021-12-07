@@ -69,6 +69,7 @@ namespace AssetRipper.Core.Project.Collections
 			instance.ObjectHideFlags = HideFlags.HideInHierarchy;
 			instance.RootGameObjectPtr = root.File.CreatePPtr(root);
 			instance.IsPrefabAsset = true;
+			instance.TrySetFieldValue<string>("m_Name", root.Name);
 			return instance;
 		}
 
