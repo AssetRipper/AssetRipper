@@ -40,14 +40,6 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			CacheServerEnableUpload = false;
 		}
 
-		public static EditorSettings CreateVirtualInstance(VirtualSerializedFile virtualFile)
-		{
-			//return virtualFile.CreateAsset((assetInfo) => new EditorSettings(assetInfo, true));
-			var result = virtualFile.CreateAsset((assetInfo) => new EditorSettings(assetInfo));
-			result.SetToDefaults();
-			return result;
-		}
-
 		#region Static Version Methods
 		public static int ToSerializedVersion(UnityVersion version)
 		{

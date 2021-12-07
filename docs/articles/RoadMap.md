@@ -26,7 +26,7 @@
   * ~~Move GUI logging into a separate window for better performance~~
   * ~~Improved file path determination on Mac and iOS games~~
 * Convert Exporters to the new Interface System
-  * BuildSettings exporter
+  * ~~BuildSettings exporter~~
   * Scene exporter
   * ~~Prefab exporter~~
   * Audio Clip exporters
@@ -44,7 +44,7 @@
   * ~~Type Tree method generation~~
   * Fetch Dependency method generation
   * Apply interfaces in the generated assemblies
-  * ~Implement generation of version specific Asset Factories~
+  * ~~Implement generation of version specific Asset Factories~~
   * Implement a system for downloading the assemblies on demand
 * Finishing touches
   * Remove the `Classes` and `Converters` namespaces

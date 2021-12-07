@@ -12,14 +12,9 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
-	public sealed class EditorBuildSettings : Object.Object
+	public sealed class EditorBuildSettings : Object.Object, IEditorBuildSettings
 	{
 		public EditorBuildSettings(AssetInfo assetInfo) : base(assetInfo) { }
-
-		public static EditorBuildSettings CreateVirtualInstance(VirtualSerializedFile virtualFile)
-		{
-			return virtualFile.CreateAsset((assetInfo) => new EditorBuildSettings(assetInfo));
-		}
 
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -48,8 +43,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 			{
 				throw new ArgumentNullException(nameof(scenes));
 			}
-			Scenes = scenes.ToArray();
-			ConfigObjects = new Dictionary<string, PPtr<Object.Object>>();
+			m_Scenes = scenes.ToArray();
 		}
 
 		public override void Read(AssetReader reader)
@@ -58,12 +52,12 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 
 			if (HasScenes(reader.Version))
 			{
-				Scenes = reader.ReadAssetArray<Scene>();
+				m_Scenes = reader.ReadAssetArray<Scene>();
 			}
 			else
 			{
 				Tuple<bool, string>[] scenes = reader.ReadTupleBoolStringArray();
-				Scenes = scenes.Select(t => new Scene(t.Item1, t.Item2)).ToArray();
+				m_Scenes = scenes.Select(t => new Scene(t.Item1, t.Item2)).ToArray();
 			}
 			if (HasConfigObjects(reader.Version))
 			{
@@ -76,7 +70,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(ScenesName, Scenes.ExportYAML(container));
+			node.Add(ScenesName, m_Scenes.ExportYAML(container));
 			if (HasConfigObjects(container.ExportVersion))
 			{
 				node.Add(ConfigObjectsName, GetConfigObjects(container.Version).ExportYAML(container));
@@ -89,8 +83,22 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 			return HasConfigObjects(version) ? ConfigObjects : new Dictionary<string, PPtr<Object.Object>>(0);
 		}
 
-		public Scene[] Scenes { get; set; }
-		public Dictionary<string, PPtr<Object.Object>> ConfigObjects { get; set; }
+		public void InitializeScenesArray(int length)
+		{
+			m_Scenes = new Scene[length];
+			for(int i = 0; i < length; i++)
+			{
+				m_Scenes[i] = new Scene();
+			}
+		}
+
+		public Scene[] m_Scenes;
+		public IScene[] Scenes
+		{
+			get => m_Scenes;
+		}
+
+		public Dictionary<string, PPtr<Object.Object>> ConfigObjects { get; set; } = new Dictionary<string, PPtr<Object.Object>>();
 
 		public const string ScenesName = "m_Scenes";
 		public const string ConfigObjectsName = "m_configObjects";

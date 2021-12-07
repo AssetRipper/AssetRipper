@@ -15,6 +15,7 @@ using AssetRipper.Core.Classes.Camera;
 using AssetRipper.Core.Classes.CapsuleCollider2D;
 using AssetRipper.Core.Classes.ClusterInputManager;
 using AssetRipper.Core.Classes.CompositeCollider2D;
+using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
 using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.GameObject;
@@ -368,6 +369,8 @@ namespace AssetRipper.Core.Parser.Asset
 					return new NativeFormatImporter(assetInfo);
 				case ClassIDType.MonoImporter:
 					return new MonoImporter(assetInfo);
+				case ClassIDType.EditorBuildSettings:
+					return new EditorBuildSettings(assetInfo);
 				case ClassIDType.DDSImporter:
 					return new DDSImporter(assetInfo);
 				case ClassIDType.PVRImporter:

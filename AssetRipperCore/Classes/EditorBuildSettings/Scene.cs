@@ -8,8 +8,10 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
-	public struct Scene : IAssetReadable, IYAMLExportable
+	public class Scene : UnityAssetBase, IScene
 	{
+		public Scene() { }
+
 		public Scene(bool enabled, string path)
 		{
 			if (string.IsNullOrEmpty(path))
@@ -19,7 +21,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 
 			Enabled = enabled;
 			Path = path;
-			GUID = default;
+			m_GUID = default;
 		}
 
 		public Scene(string path, UnityGUID guid)
@@ -31,7 +33,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 
 			Enabled = true;
 			Path = path;
-			GUID = guid;
+			m_GUID = guid;
 		}
 
 		/// <summary>
@@ -39,7 +41,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 		/// </summary>
 		public static bool HasGuid(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 10);
 
-		public void Read(AssetReader reader)
+		public override void Read(AssetReader reader)
 		{
 			Enabled = reader.ReadBoolean();
 			reader.AlignStream();
@@ -47,16 +49,16 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 			Path = reader.ReadString();
 			if (HasGuid(reader.Version))
 			{
-				GUID.Read(reader);
+				m_GUID.Read(reader);
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(EnabledName, Enabled);
 			node.Add(PathName, Path);
-			node.Add(GuidName, GUID.ExportYAML(container));
+			node.Add(GuidName, m_GUID.ExportYAML(container));
 			return node;
 		}
 
@@ -67,6 +69,12 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 		public const string PathName = "path";
 		public const string GuidName = "guid";
 
-		public UnityGUID GUID;
+		public UnityGUID m_GUID;
+
+		public UnityGUID GUID
+		{
+			get => m_GUID;
+			set => m_GUID = value;
+		}
 	}
 }

@@ -2,6 +2,9 @@
 
 namespace AssetRipper.Core.Classes.EditorSettings
 {
+	/// <summary>
+	/// First introduced in 2.6.0
+	/// </summary>
 	public interface IEditorSettings : IUnityObjectBase
 	{
 	}
@@ -16,6 +19,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		public static void SetToDefaults(this IEditorSettings settings)
 		{
 			settings.TrySetFieldValue("m_ExternalVersionControlSupport", VisibleMeta);
+			settings.TrySetFieldValue("m_ExternalVersionControl", 0); //ExternalVersionControl.Disabled
 			settings.TrySetFieldValue("m_SerializationMode", (int)SerializationMode.ForceText);
 			settings.TrySetFieldValue("m_SpritePackerPaddingPower", 1);
 			settings.TrySetFieldValue("m_EtcTextureCompressorBehavior", 1);
