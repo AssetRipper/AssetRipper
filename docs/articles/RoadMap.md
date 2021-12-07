@@ -27,7 +27,8 @@
   * ~~Improved file path determination on Mac and iOS games~~
 * Convert Exporters to the new Interface System
   * BuildSettings exporter
-  * Scene and Prefab exporter
+  * Scene exporter
+  * ~~Prefab exporter~~
   * Audio Clip exporters
   * Mesh exporters
   * Script exporter
@@ -39,7 +40,7 @@
   * Move ProjectExporter and ProjectExporterBase
   * Move GameStructure
 * Struct Reading Overhaul
-  * Yaml method generation
+  * ~~Yaml method generation~~
   * ~~Type Tree method generation~~
   * Fetch Dependency method generation
   * Apply interfaces in the generated assemblies

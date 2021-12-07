@@ -23,18 +23,10 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			Modification = new PrefabModification(layout);
 		}
 
-		public PrefabInstance(AssetInfo assetInfo) : base(assetInfo) { }
-
-		public static PrefabInstance CreateVirtualInstance(VirtualSerializedFile virtualFile, GameObject.IGameObject root)
+		public PrefabInstance(AssetInfo assetInfo) : base(assetInfo)
 		{
-			PrefabInstance instance = virtualFile.CreateAsset((assetInfo) => new PrefabInstance(assetInfo));
-			instance.ObjectHideFlags = HideFlags.HideInHierarchy;
-			instance.Objects = Array.Empty<PPtr<EditorExtension>>();
-			instance.Modification = new PrefabModification(virtualFile.Layout);
-			instance.RootGameObject = root.File.CreatePPtr(root).CastTo<GameObject.GameObject>();
-			instance.IsPrefabAsset = true;
-			instance.Name = root.Name;
-			return instance;
+			Objects = Array.Empty<PPtr<EditorExtension>>();
+			Modification = new PrefabModification(null);
 		}
 
 		public static int ToSerializedVersion(UnityVersion version)
@@ -136,25 +128,6 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			}
 		}
 
-		public IEnumerable<IEditorExtension> FetchObjects(IAssetContainer file)
-		{
-#warning TEMP HACK:
-			//if (file.Layout.PrefabInstance.IsModificationFormat)
-			{
-				foreach (IEditorExtension asset in RootGameObject.GetAsset(file).FetchHierarchy())
-				{
-					yield return asset;
-				}
-			}
-			/*else
-			{
-				foreach (PPtr<EditorExtension> asset in Objects)
-				{
-					yield return asset.GetAsset(file);
-				}
-			}*/
-		}
-
 		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			if (IsModificationFormat(context.Version))
@@ -186,18 +159,6 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 				{
 					yield return asset;
 				}
-			}
-		}
-
-		public string GetName(IAssetContainer file)
-		{
-			if (IsModificationFormat(file.Version))
-			{
-				return RootGameObject.GetAsset(file).Name;
-			}
-			else
-			{
-				return Name;
 			}
 		}
 
@@ -287,6 +248,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			}
 		}
 
+		#region VersionMethods
 		/// <summary>
 		/// Less than 3.5.0
 		/// </summary>
@@ -359,7 +321,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		/// 2018.3 and greater
 		/// </summary>
 		public static bool IsRootGameObjectFirst(UnityVersion version) => version.IsGreaterEqual(2018, 3);
-
+		#endregion
 
 
 		public override string ExportExtension => PrefabKeyword;
@@ -401,6 +363,17 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		public PrefabModification Modification;
 		public PPtr<PrefabInstance> SourcePrefab;
 		public PPtr<GameObject.GameObject> RootGameObject;
+
+		public PPtr<IGameObject> RootGameObjectPtr
+		{
+			get => RootGameObject.CastTo<IGameObject>();
+			set => RootGameObject = value.CastTo<GameObject.GameObject>();
+		}
+		public PPtr<IPrefabInstance> SourcePrefabPtr
+		{
+			get => SourcePrefab.CastTo<IPrefabInstance>();
+			set => SourcePrefab = value.CastTo<PrefabInstance>();
+		}
 
 		public const string LastMergeIdentifierName = "m_LastMergeIdentifier";
 		public const string LastTemplateIdentifierName = "m_LastTemplateIdentifier";

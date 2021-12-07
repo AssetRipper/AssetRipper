@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.GameObject;
+using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Classes.PrefabInstance;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
@@ -15,9 +16,9 @@ namespace AssetRipper.Core.Project.Collections
 	{
 		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IUnityObjectBase asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IGameObject root) : this(assetExporter, root.File, PrefabInstance.CreateVirtualInstance(virtualFile, root)) { }
+		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IGameObject root) : this(assetExporter, root.File, CreateVirtualPrefab(virtualFile, root)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, IAssetContainer file, PrefabInstance prefab) : base(assetExporter, prefab)
+		private PrefabExportCollection(IAssetExporter assetExporter, IAssetContainer file, IPrefabInstance prefab) : base(assetExporter, prefab)
 		{
 			foreach (IEditorExtension asset in prefab.FetchObjects(file))
 			{
@@ -40,7 +41,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			return PrefabInstance.PrefabKeyword;
+			return PrefabKeyword;
 		}
 
 		private static IGameObject GetAssetRoot(IUnityObjectBase asset)
@@ -62,6 +63,15 @@ namespace AssetRipper.Core.Project.Collections
 		public override ISerializedFile File => m_file;
 		public override TransferInstructionFlags Flags => base.Flags | TransferInstructionFlags.SerializeForPrefabSystem;
 
+		private static IPrefabInstance CreateVirtualPrefab(VirtualSerializedFile virtualFile, IGameObject root)
+		{
+			IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance);
+			instance.ObjectHideFlags = HideFlags.HideInHierarchy;
+			instance.RootGameObjectPtr = root.File.CreatePPtr(root);
+			instance.IsPrefabAsset = true;
+			return instance;
+		}
+
 #warning TODO:
 		// HACK: prefab's assets may be stored in different files
 		// Need to find a way to set a file for current asset nicely
@@ -79,6 +89,8 @@ namespace AssetRipper.Core.Project.Collections
 				}
 			}
 		}
+
+		public const string PrefabKeyword = "prefab";
 
 		private ISerializedFile m_file;
 	}

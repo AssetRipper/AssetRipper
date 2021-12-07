@@ -8,6 +8,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Core.VersionHandling;
 using System;
 using System.Collections.Generic;
 
@@ -115,6 +116,25 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			T instance = instantiator(assetInfo);
 			m_assets.Add(instance.PathID, instance);
 			return instance;
+		}
+
+		public T CreateAsset<T>(ClassIDType classID) where T : IUnityObjectBase
+		{
+			AssetInfo assetInfo = new AssetInfo(this, ++m_nextId, classID);
+			IUnityObjectBase asset = VersionManager.GetHandler(Version).AssetFactory.CreateAsset(assetInfo);
+			if(asset == null)
+			{
+				throw new ArgumentException($"Could not create asset with id: {classID}", nameof(classID));
+			}
+			if(asset is T instance)
+			{
+				m_assets.Add(instance.PathID, instance);
+				return instance;
+			}
+			else
+			{
+				throw new ArgumentException($"Asset type {asset.GetType()} is not assignable to {typeof(T)}",nameof(classID));
+			}
 		}
 
 		public string Name => nameof(VirtualSerializedFile);

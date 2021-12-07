@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -16,6 +16,7 @@ namespace AssetRipper.Core.Interfaces
 		ISerializedFile File { get; }
 		UnityGUID GUID { get; }
 		long PathID { get; }
+		HideFlags ObjectHideFlags { get; set; }
 
 		IUnityObjectBase Convert(IExportContainer container);
 		YAMLDocument ExportYAMLDocument(IExportContainer container);
