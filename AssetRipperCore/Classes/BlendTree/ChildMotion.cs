@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Classes.BlendTree
 			Motion = state.CreateMotion(file, controller, childNodeIndex);
 
 			Threshold = node.GetThreshold(controller.File.Version, childIndex);
-			Position = default;
+			Position = node.GetPosition(controller.File.Version, childIndex);
 			TimeScale = 1.0f;
 			CycleOffset = node.CycleOffset;
 
