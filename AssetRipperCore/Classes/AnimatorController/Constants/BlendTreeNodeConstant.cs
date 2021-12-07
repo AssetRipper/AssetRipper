@@ -1,6 +1,7 @@
 using AssetRipper.Core.Classes.BlendTree;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
@@ -112,6 +113,18 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			return 0.0f;
 		}
 
+		public Vector2f GetPosition(UnityVersion version, int index)
+		{
+			if (HasBlendData(version))
+			{
+				if (BlendType != BlendTreeType.Simple1D)
+				{
+					return Blend2dData.Instance.m_ChildPositionArray[index];
+				}
+			}
+			return default;
+		}
+		
 		public float GetMinThreshold(UnityVersion version)
 		{
 			if (HasBlendData(version))
