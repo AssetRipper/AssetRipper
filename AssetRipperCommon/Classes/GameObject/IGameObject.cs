@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 
@@ -118,6 +119,28 @@ namespace AssetRipper.Core.Classes.GameObject
 				{
 					yield return childElement;
 				}
+			}
+		}
+
+		public static IReadOnlyDictionary<uint, string> BuildTOS(this IGameObject gameObject)
+		{
+			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
+			gameObject.BuildTOS(gameObject, string.Empty, tos);
+			return tos;
+		}
+
+		private static void BuildTOS(this IGameObject gameObject, IGameObject parent, string parentPath, Dictionary<uint, string> tos)
+		{
+			ITransform transform = parent.GetTransform();
+			foreach (PPtr<ITransform> childPtr in transform.ChildrenPtrs)
+			{
+				ITransform childTransform = childPtr.GetAsset(gameObject.File);
+				IGameObject child = childTransform.GameObjectPtr.GetAsset(gameObject.File);
+				string path = string.IsNullOrEmpty(parentPath) ? child.Name : $"{parentPath}/{child.Name}";
+				uint pathHash = CrcUtils.CalculateDigestUTF8(path);
+				tos[pathHash] = path;
+
+				gameObject.BuildTOS(child, path, tos);
 			}
 		}
 	}

@@ -59,13 +59,6 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 		}
 
-		public IReadOnlyDictionary<uint, string> BuildTOS()
-		{
-			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
-			BuildTOS(this, string.Empty, tos);
-			return tos;
-		}
-
 		public override IUnityObjectBase Convert(IExportContainer container)
 		{
 			return GameObjectConverter.Convert(container, this);
@@ -216,21 +209,6 @@ namespace AssetRipper.Core.Classes.GameObject
 			else
 			{
 				return Component.Select(t => t.Component.CastTo<IComponent>()).ToArray();
-			}
-		}
-
-		private void BuildTOS(IGameObject parent, string parentPath, Dictionary<uint, string> tos)
-		{
-			ITransform transform = parent.GetTransform();
-			foreach (PPtr<ITransform> childPtr in transform.ChildrenPtrs)
-			{
-				ITransform childTransform = childPtr.GetAsset(File);
-				IGameObject child = childTransform.GameObjectPtr.GetAsset(File);
-				string path = parentPath != string.Empty ? parentPath + Transform.PathSeparator + child.Name : child.Name;
-				uint pathHash = CrcUtils.CalculateDigestUTF8(path);
-				tos[pathHash] = path;
-
-				BuildTOS(child, path, tos);
 			}
 		}
 
