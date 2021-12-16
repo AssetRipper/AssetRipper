@@ -8,6 +8,8 @@
 
 [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Cpp2IL.md).
 
+Crunch is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/Crunch.md).
+
 [darkfx](https://github.com/steffen-wilke/darkfx) is licensed under the [MIT License](https://github.com/ds5678/AssetRipper/blob/master/Licenses/darkfx.md).
 
 FMOD is licensed under a [non-commercial license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/FMOD.md).

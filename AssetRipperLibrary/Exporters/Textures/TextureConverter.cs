@@ -11,15 +11,6 @@ namespace AssetRipper.Library.Exporters.Textures
 {
 	public static class TextureConverter
 	{
-		private static bool IsUseUnityCrunch(UnityVersion version, TextureFormat format)
-		{
-			if (version.IsGreaterEqual(2017, 3))
-			{
-				return true;
-			}
-			return format == TextureFormat.ETC_RGB4Crunched || format == TextureFormat.ETC2_RGBA8Crunched;
-		}
-
 		public static DirectBitmap DXTTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
 		{
 			DirectBitmap bitmap = new DirectBitmap(width, height);
@@ -57,7 +48,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public static DirectBitmap DXTCrunchedTextureToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
 		{
-			byte[] decompressed = DecompressCrunch(textureFormat, width, height, unityVersion, data);
+			byte[] decompressed = CrunchHandler.DecompressCrunch(textureFormat, width, height, unityVersion, data);
 			return DXTTextureToBitmap(textureFormat, width, height, decompressed);
 		}
 
@@ -193,7 +184,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public static DirectBitmap ETCCrunchedTextureToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
 		{
-			byte[] decompressed = DecompressCrunch(textureFormat, width, height, unityVersion, data);
+			byte[] decompressed = CrunchHandler.DecompressCrunch(textureFormat, width, height, unityVersion, data);
 			return ETCTextureToBitmap(textureFormat, width, height, decompressed);
 		}
 
@@ -385,39 +376,6 @@ namespace AssetRipper.Library.Exporters.Textures
 				double b = (System.Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
 				dataPtr[0] = (byte)b;
 			}
-		}
-
-		private static byte[] DecompressCrunch(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
-		{
-			bool result = IsUseUnityCrunch(unityVersion, textureFormat) ?
-					DecompressUnityCRN(data, out byte[] uncompressedBytes) :
-					DecompressCRN(data, out uncompressedBytes);
-			if (result)
-			{
-				return uncompressedBytes;
-			}
-			else
-			{
-				throw new Exception("Unable to decompress crunched texture");
-			}
-		}
-
-		private static bool DecompressCRN(byte[] data, out byte[] uncompressedBytes)
-		{
-			if (data is null) throw new ArgumentNullException(nameof(data));
-			if (data.Length == 0) throw new ArgumentException(nameof(data));
-			Logger.Info("About to unpack normal crunch...");
-			uncompressedBytes = TextureDecoder.UnpackCrunch(data);
-			return uncompressedBytes != null;
-		}
-
-		private static bool DecompressUnityCRN(byte[] data, out byte[] uncompressedBytes)
-		{
-			if (data is null) throw new ArgumentNullException(nameof(data));
-			if (data.Length == 0) throw new ArgumentException(nameof(data));
-			Logger.Info("About to unpack unity crunch...");
-			uncompressedBytes = TextureDecoder.UnpackUnityCrunch(data);
-			return uncompressedBytes != null;
 		}
 
 		private static QFormat ToQFormat(TextureFormat format)

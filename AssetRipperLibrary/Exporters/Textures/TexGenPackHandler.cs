@@ -5,7 +5,7 @@ using System.Runtime.Versioning;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
-	public static class TexGenPackHandler
+	internal static class TexGenPackHandler
 	{
 		[SupportedOSPlatform("windows")]
 		[DllImport("texgenpack", CallingConvention = CallingConvention.Cdecl)]
