@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Fmod5Sharp" Version="1.2.0" />
-	<PackageReference Include="ICSharpCode.Decompiler" Version="7.1.0.6543" />
+	<PackageReference Include="ICSharpCode.Decompiler" Version="7.2.0.6791-preview3" />
     <PackageReference Include="NAudio.Core" Version="2.0.0" />
     <PackageReference Include="NAudio.Lame" Version="2.0.0" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
