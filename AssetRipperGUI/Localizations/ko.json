@@ -130,5 +130,7 @@
     "c_sharp_langage_version_config_8_0": "C# 8",
     "c_sharp_language_version_config_description": "스크립트를 디컴파일할 때 사용할 C# 언어 버전입니다.",
     "c_sharp_langage_version_config_latest": "C# 최신",
-    "c_sharp_langage_version_config_preview": "C# 프리뷰"
+    "c_sharp_langage_version_config_preview": "C# 프리뷰",
+    "c_sharp_langage_version_config_9_0": "C# 9",
+    "c_sharp_langage_version_config_10_0": "C# 10"
 }
