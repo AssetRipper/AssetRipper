@@ -55,11 +55,12 @@
 * Cleanup
   * ~~Implement package for Brotli~~
   * ~~Implement package for LZ4~~
+  * ~~Implement package for LZMA~~
  
 ## 0.2.1.0
 This release will be primarily focused on cleaning up and refactoring the project. Such cleanup may include:
 * Unified mesh export
-* Implement new package for LZMA
+* Implement package for Yaml
 
 Other priorities for this release:
 * Improving plugin support

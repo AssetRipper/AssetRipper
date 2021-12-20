@@ -40,7 +40,7 @@ LibOgg and LibVorbis are licensed from [Xiph](https://www.xiph.org/) under the [
 
 [NVorbis](https://github.com/NVorbis/NVorbis) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/NVorbis.md).
 
-[SevenZipCsharp](https://github.com/ds5678/SevenZipCsharp) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/SevenZipCsharp.md).
+[SharpCompress](https://github.com/adamhathcock/sharpcompress) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/SharpCompress.md).
 
 [SharpGLTF](https://github.com/vpenades/SharpGLTF) is licensed under the [MIT license](https://github.com/ds5678/AssetRipper/blob/master/Licenses/SharpGLTF.md).
 
