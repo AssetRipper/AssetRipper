@@ -160,7 +160,7 @@ namespace AssetRipper.Core.Classes.Mesh
 						result[i] = inputBytes[i] / 255f;
 						break;
 					case VertexFormat.kVertexFormatSNorm8:
-						result[i] = System.Math.Max((sbyte)inputBytes[i] / 127f, -1f);
+						result[i] = System.Math.Max(unchecked((sbyte)inputBytes[i]) / 127f, -1f);
 						break;
 					case VertexFormat.kVertexFormatUNorm16:
 						result[i] = BitConverter.ToUInt16(inputBytes, i * 2) / 65535f;
