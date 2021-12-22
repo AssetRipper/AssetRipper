@@ -33,7 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.10" />
+        <PackageReference Include="Avalonia" Version="0.10.11" />
         <PackageReference Include="Avalonia.Desktop" Version="0.10.10" />
         <PackageReference Include="Avalonia.Diagnostics" Version="0.10.10" />
         <PackageReference Include="LibVLCSharp" Version="3.6.4" />
