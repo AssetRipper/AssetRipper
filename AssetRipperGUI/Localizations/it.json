@@ -130,5 +130,7 @@
     "c_sharp_langage_version_config_preview": "Versione Anteprima C#",
     "c_sharp_language_version_config_description": "La versione del linguaggio C# da utilizzare durante la decompilazione degli script.",
     "c_sharp_langage_version_config_7_2": "C# 7.2",
-    "c_sharp_langage_version_config_7_3": "C# 7.3"
+    "c_sharp_langage_version_config_7_3": "C# 7.3",
+    "c_sharp_langage_version_config_9_0": "C# 9",
+    "c_sharp_langage_version_config_10_0": "C# 10"
 }
