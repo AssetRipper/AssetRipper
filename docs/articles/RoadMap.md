@@ -29,6 +29,7 @@
   * ~~BuildSettings exporter~~
   * Scene exporter
   * ~~Prefab exporter~~
+  * Animator Controller exporter
   * Audio Clip exporters
   * Mesh exporters
   * Script exporter
@@ -54,11 +55,12 @@
 * Cleanup
   * ~~Implement package for Brotli~~
   * ~~Implement package for LZ4~~
+  * ~~Implement package for LZMA~~
  
 ## 0.2.1.0
 This release will be primarily focused on cleaning up and refactoring the project. Such cleanup may include:
 * Unified mesh export
-* Implement new package for LZMA
+* Implement package for Yaml
 
 Other priorities for this release:
 * Improving plugin support
@@ -91,10 +93,12 @@ This release will likely focus on improving the user experience in the GUI
 * GUI improvements
   * Performance enhancements for viewing asset types with large contents, such as 9000 game objects
 * Export
-  * Mesh Export
-    * FBX export (full)
-    * GLB export (full)
-    * PMX export
+  * Model Export
+    * FBX (full)
+    * GLB (full)
+    * PMX
+    * DAE (aka Collada)
+    * Split combined meshes back into the original set of static meshes
   * Script Export
     * Option to reference assemblies instead of scripts
   * Selective Export

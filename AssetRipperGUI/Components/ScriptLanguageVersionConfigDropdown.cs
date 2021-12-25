@@ -17,8 +17,9 @@ namespace AssetRipper.GUI.Components
 			LanguageVersion.CSharp7_2 => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_7_2"],
 			LanguageVersion.CSharp7_3 => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_7_3"],
 			LanguageVersion.CSharp8_0 => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_8_0"],
+			LanguageVersion.CSharp9_0 => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_9_0"],
+			LanguageVersion.CSharp10_0 => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_10_0"],
 			LanguageVersion.Latest => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_latest"],
-			LanguageVersion.Preview => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_preview"],
 			_ => base.GetValueDisplayName(value),
 		};
 

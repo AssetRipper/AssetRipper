@@ -24,12 +24,12 @@
 
   <ItemGroup>
     <PackageReference Include="Fmod5Sharp" Version="1.2.0" />
-	<PackageReference Include="ICSharpCode.Decompiler" Version="7.1.0.6543" />
+	<PackageReference Include="ICSharpCode.Decompiler" Version="7.2.0.6791-preview3" />
     <PackageReference Include="NAudio.Core" Version="2.0.0" />
     <PackageReference Include="NAudio.Lame" Version="2.0.0" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
-    <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0023" />
-    <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0023" />
+    <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0025" />
+    <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0025" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
@@ -72,6 +72,14 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>texgenpack.dll</TargetPath>
         </ContentWithTargetPath>
+		<ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>crunch.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="Libraries\x64\crunchunity_x64.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>crunchunity.dll</TargetPath>
+		</ContentWithTargetPath>
         <ContentWithTargetPath Include="Libraries\x64\libogg-x64.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>ogg.dll</TargetPath>

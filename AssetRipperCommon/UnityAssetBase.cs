@@ -65,8 +65,8 @@ namespace AssetRipper.Core
 
 		public virtual YAMLNode ExportYAML(IExportContainer container)
 		{
-			//if (container.ExportFlags.IsRelease())
-			if(this.TransferInstructionFlags.IsRelease())
+			if (container.ExportFlags.IsRelease())
+			//if(this.TransferInstructionFlags.IsRelease())
 				return ExportYAMLRelease(container);
 			else
 				return ExportYAMLEditor(container);

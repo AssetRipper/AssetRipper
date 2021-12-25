@@ -323,7 +323,21 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		private IUnityObjectBase ReadAsset(AssetReader reader, AssetInfo assetInfo, long offset, int size)
 		{
-			IUnityObjectBase asset = VersionManager.GetHandler(Version).AssetFactory.CreateAsset(assetInfo);
+			IUnityObjectBase asset;
+			try
+			{
+				asset = VersionManager.GetHandler(Version).AssetFactory.CreateAsset(assetInfo);
+			}
+			catch (TypeLoadException typeLoadException)
+			{
+#if DEBUG
+				throw new SerializedFileException($"Could not load {typeLoadException.TypeName} with id number {assetInfo.ClassNumber}", typeLoadException, Version, Platform, assetInfo.ClassID, Name, FilePath);
+#else
+				Logger.Error($"Could not load {typeLoadException.TypeName} with id number {assetInfo.ClassNumber}");
+				asset = null;
+#endif
+			}
+
 			if (asset == null)
 			{
 				asset = new UnknownObject(assetInfo);
@@ -338,20 +352,20 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			catch (Exception ex)
 			{
 #if DEBUG
-				throw new SerializedFileException($"Error during reading of asset type {asset.ClassID}", ex, Version, Platform, asset.ClassID, Name, FilePath);
+				throw new SerializedFileException($"Error during reading of asset type {assetInfo.ClassID}", ex, Version, Platform, assetInfo.ClassID, Name, FilePath);
 #else
 				replaceWithUnreadableObject = true;
-				Logger.Error($"Error during reading of asset type {asset.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}", ex);
+				Logger.Error($"Error during reading of asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}", ex);
 #endif
 			}
 			long read = reader.BaseStream.Position - offset;
 			if (!replaceWithUnreadableObject && read != size)
 			{
 #if DEBUG
-				throw new SerializedFileException($"Read {read} but expected {size} for asset type {asset.ClassID}", Version, Platform, asset.ClassID, Name, FilePath);
+				throw new SerializedFileException($"Read {read} but expected {size} for asset type {assetInfo.ClassID}", Version, Platform, assetInfo.ClassID, Name, FilePath);
 #else
 				replaceWithUnreadableObject = true;
-				Logger.Error($"Read {read} but expected {size} for asset type {asset.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}");
+				Logger.Error($"Read {read} but expected {size} for asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}");
 #endif
 			}
 

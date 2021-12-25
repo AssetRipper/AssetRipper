@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\Avalonia.md = Licenses\Avalonia.md
 		Licenses\CommandLineParser.md = Licenses\CommandLineParser.md
 		Licenses\Cpp2IL.md = Licenses\Cpp2IL.md
+		Licenses\Crunch.md = Licenses\Crunch.md
 		Licenses\FMOD.md = Licenses\FMOD.md
 		Licenses\Fmod5Sharp.md = Licenses\Fmod5Sharp.md
 		Licenses\ILSpy.md = Licenses\ILSpy.md
@@ -34,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\NAudioLame.md = Licenses\NAudioLame.md
 		Licenses\NAudioVorbis.md = Licenses\NAudioVorbis.md
 		Licenses\NVorbis.md = Licenses\NVorbis.md
-		Licenses\SevenZipCsharp.md = Licenses\SevenZipCsharp.md
+		Licenses\SharpCompress.md = Licenses\SharpCompress.md
 		Licenses\SharpGLTF.md = Licenses\SharpGLTF.md
 		Licenses\SharpZipLib.md = Licenses\SharpZipLib.md
 		Licenses\texgenpack.md = Licenses\texgenpack.md
@@ -93,7 +94,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperCommon", "AssetRipperCommon\AssetRipperCommon.csproj", "{676FEE4F-6353-4D8B-B8E6-D89801D25575}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipperTests", "AssetRipperTests\AssetRipperTests.csproj", "{365C791E-431B-40E5-B724-BE375126AA11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperTests", "AssetRipperTests\AssetRipperTests.csproj", "{365C791E-431B-40E5-B724-BE375126AA11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

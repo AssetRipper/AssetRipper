@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Attributes
 {
-	[AttributeUsage(AttributeTargets.Field)]
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field)]
 	public sealed class ReleaseOnlyAttribute : Attribute
 	{
 	}
