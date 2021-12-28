@@ -26,12 +26,12 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		public bool IsHandle(IUnityObjectBase asset)
 		{
-			return ScriptExportMode == ScriptExportMode.TotalDllExport && asset is MonoScript;
+			return ScriptExportMode == ScriptExportMode.TotalDllExport && asset is IMonoScript;
 		}
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssemblyExportCollection(this, (MonoScript)asset);
+			return new AssemblyExportCollection(this, (IMonoScript)asset);
 		}
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)

@@ -75,7 +75,7 @@ namespace AssetRipper.Core.Classes
 				RuntimeClassHashes.Read(reader);
 			}
 
-			Scripts = reader.ReadAssetArray<PPtr<MonoScript>>();
+			Scripts = reader.ReadAssetArray<PPtr<IMonoScript>>();
 			if (HasHasCompileErrors(reader.Version))
 			{
 				HasCompileErrors = reader.ReadBoolean();
@@ -124,7 +124,7 @@ namespace AssetRipper.Core.Classes
 			throw new NotSupportedException();
 		}
 
-		public PPtr<MonoScript>[] Scripts { get; set; }
+		public PPtr<IMonoScript>[] Scripts { get; set; }
 		public bool HasCompileErrors { get; set; }
 		public string[] CustomDlls { get; set; }
 		public string[] AssemblyNames { get; set; }

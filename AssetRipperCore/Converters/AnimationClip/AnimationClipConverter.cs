@@ -198,12 +198,12 @@ namespace AssetRipper.Core.Converters.AnimationClip
 					string attribute = m_customCurveResolver.ToAttributeName(Layout, binding.CustomType, binding.Attribute, path);
 					if (binding.IsPPtrCurve)
 					{
-						PPtrCurve curve = new PPtrCurve(path, attribute, binding.ClassID, binding.Script.CastTo<MonoScript>());
+						PPtrCurve curve = new PPtrCurve(path, attribute, binding.ClassID, binding.Script.CastTo<IMonoScript>());
 						AddPPtrKeyframe(curve, bindings, time, (int)value);
 					}
 					else
 					{
-						FloatCurve curve = new FloatCurve(path, attribute, binding.ClassID, binding.Script.CastTo<MonoScript>());
+						FloatCurve curve = new FloatCurve(path, attribute, binding.ClassID, binding.Script.CastTo<IMonoScript>());
 						AddFloatKeyframe(curve, time, value);
 					}
 					break;
@@ -380,7 +380,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 		private void AddScriptCurve(GenericBinding binding, string path, float time, float value)
 		{
 #warning TODO:
-			FloatCurve curve = new FloatCurve(path, ScriptPropertyPrefix + binding.Attribute, ClassIDType.MonoBehaviour, binding.Script.CastTo<MonoScript>());
+			FloatCurve curve = new FloatCurve(path, ScriptPropertyPrefix + binding.Attribute, ClassIDType.MonoBehaviour, binding.Script.CastTo<IMonoScript>());
 			AddFloatKeyframe(curve, time, value);
 		}
 

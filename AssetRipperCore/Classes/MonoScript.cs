@@ -127,8 +127,7 @@ namespace AssetRipper.Core.Classes
 			}
 			if (HasAssemblyName(reader.Version, reader.Flags))
 			{
-				AssemblyNameOrigin = reader.ReadString();
-				AssemblyName = FilenameUtils.FixAssemblyName(AssemblyNameOrigin);
+				AssemblyName = reader.ReadString();
 			}
 			if (HasIsEditorScript(reader.Version))
 			{
@@ -180,7 +179,7 @@ namespace AssetRipper.Core.Classes
 
 		private string GetAssemblyName(UnityVersion version, TransferInstructionFlags flags)
 		{
-			return HasAssemblyName(version, flags) ? AssemblyNameOrigin : string.Empty;
+			return HasAssemblyName(version, flags) ? AssemblyName : string.Empty;
 		}
 
 		public override string ExportPath => Path.Combine(AssetsKeyword, "Scripts");
@@ -193,7 +192,6 @@ namespace AssetRipper.Core.Classes
 		/// AssemblyIdentifier previously
 		/// </summary>
 		public string AssemblyName { get; set; }
-		public string AssemblyNameOrigin { get; set; }
 		public bool IsEditorScript { get; set; }
 
 		public const string MonoScriptName = "MonoScript";
