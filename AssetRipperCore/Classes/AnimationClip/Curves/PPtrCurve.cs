@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 	{
 		public PPtrCurve(PPtrCurve copy, IReadOnlyList<PPtrKeyframe> keyframes) : this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes) { }
 
-		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script)
+		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<IMonoScript> script)
 		{
 			Attribute = attribute;
 			Path = path;
@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 			Curve = null;
 		}
 
-		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script, IReadOnlyList<PPtrKeyframe> keyframes) : this(path, attribute, classID, script)
+		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<IMonoScript> script, IReadOnlyList<PPtrKeyframe> keyframes) : this(path, attribute, classID, script)
 		{
 			Curve = new PPtrKeyframe[keyframes.Count];
 			for (int i = 0; i < keyframes.Count; i++)
@@ -154,7 +154,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 		public string Path { get; set; }
 		public ClassIDType ClassID { get; set; }
 
-		public PPtr<MonoScript> Script;
+		public PPtr<IMonoScript> Script;
 
 		public const string CurveName = "curve";
 		public const string AttributeName = "attribute";

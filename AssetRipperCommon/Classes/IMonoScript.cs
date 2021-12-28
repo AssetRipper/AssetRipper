@@ -1,6 +1,8 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using Mono.Cecil;
@@ -12,7 +14,7 @@ namespace AssetRipper.Core.Classes
 		string ClassName { get; }
 		string Namespace { get; }
 		/// <summary>
-		/// AssemblyIdentifier previously; Currently, it is being fixed in the MonoScript Read method
+		/// AssemblyIdentifier previously
 		/// </summary>
 		string AssemblyName { get; }
 		int ExecutionOrder { get; }
@@ -21,6 +23,14 @@ namespace AssetRipper.Core.Classes
 
 	public static class MonoScriptExtensions
 	{
+		/// <summary>
+		/// 3.0.0 and greater
+		/// </summary>
+		public static bool HasNamespace(UnityVersion version) => version.IsGreaterEqual(3);
+		/// <summary>
+		/// Less than 2018.1.2 or Release
+		/// </summary>
+		public static bool HasAssemblyName(UnityVersion version, TransferInstructionFlags flags) => flags.IsRelease() || version.IsLess(2018, 1, 2);
 		/*
 		public static bool HasAssemblyName(this IMonoScript monoScript) => !string.IsNullOrEmpty(monoScript.AssemblyName);
 
@@ -33,11 +43,16 @@ namespace AssetRipper.Core.Classes
 		}
 		*/
 
+		public static string GetAssemblyNameFixed(this IMonoScript monoScript)
+		{
+			return FilenameUtils.FixAssemblyName(monoScript.AssemblyName);
+		}
+
 		public static SerializableType GetBehaviourType(this IMonoScript monoScript)
 		{
 			ScriptIdentifier scriptID = HasNamespace(monoScript.File.Version) ?
-				monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.AssemblyName, monoScript.Namespace, monoScript.ClassName) :
-				monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.AssemblyName, monoScript.ClassName);
+				monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName) :
+				monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName);
 			if (monoScript.File.Collection.AssemblyManager.IsValid(scriptID))
 			{
 				return monoScript.File.Collection.AssemblyManager.GetSerializableType(scriptID) as SerializableType;
@@ -56,8 +71,8 @@ namespace AssetRipper.Core.Classes
 		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript, bool includeNamespace)
 		{
 			bool useNamespace = includeNamespace && monoScript.Namespace != null;
-			return useNamespace ? monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.AssemblyName, monoScript.Namespace, monoScript.ClassName)
-				: monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.AssemblyName, monoScript.ClassName);
+			return useNamespace ? monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName)
+				: monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName);
 		}
 
 		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript) => monoScript.GetScriptID(false);
@@ -73,10 +88,5 @@ namespace AssetRipper.Core.Classes
 			ScriptIdentifier scriptID = monoScript.GetScriptID(true);
 			return monoScript.File.Collection.AssemblyManager.IsPresent(scriptID);
 		}
-
-		/// <summary>
-		/// 3.0.0 and greater
-		/// </summary>
-		private static bool HasNamespace(UnityVersion version) => version.IsGreaterEqual(3);
 	}
 }

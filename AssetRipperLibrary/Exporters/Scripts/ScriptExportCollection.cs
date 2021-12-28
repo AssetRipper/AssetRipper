@@ -21,7 +21,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 {
 	public class ScriptExportCollection : ExportCollection
 	{
-		public ScriptExportCollection(IAssetExporter assetExporter, MonoScript script)
+		public ScriptExportCollection(IAssetExporter assetExporter, IMonoScript script)
 		{
 			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
 
@@ -30,14 +30,14 @@ namespace AssetRipper.Library.Exporters.Scripts
 			// find copies in whole project and skip them
 			foreach (IUnityObjectBase asset in script.File.Collection.FetchAssets())
 			{
-				if (asset.ClassID != ClassIDType.MonoScript)
+				if (asset is not IMonoScript assetScript)
 				{
 					continue;
 				}
 
-				MonoScript assetScript = (MonoScript)asset;
-				MonoScript unique = assetScript;
-				foreach (MonoScript export in m_unique)
+				//MonoScript assetScript = (MonoScript)asset;
+				IMonoScript unique = assetScript;
+				foreach (IMonoScript export in m_unique)
 				{
 					if (assetScript.ClassName != export.ClassName)
 					{
@@ -47,7 +47,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 					{
 						continue;
 					}
-					if (assetScript.AssemblyName != export.AssemblyName)
+					if (assetScript.GetAssemblyNameFixed() != export.GetAssemblyNameFixed())
 					{
 						continue;
 					}
@@ -99,10 +99,10 @@ namespace AssetRipper.Library.Exporters.Scripts
 				throw new NotSupportedException();
 			}
 
-			MonoScript script = m_scripts[asset];
-			if (!MonoScript.HasAssemblyName(script.File.Version, script.File.Flags) || s_unityEngine.IsMatch(script.AssemblyName))
+			IMonoScript script = m_scripts[asset];
+			if (!MonoScriptExtensions.HasAssemblyName(script.File.Version, script.File.Flags) || s_unityEngine.IsMatch(script.GetAssemblyNameFixed()))
 			{
-				if (MonoScript.HasNamespace(script.File.Version))
+				if (MonoScriptExtensions.HasNamespace(script.File.Version))
 				{
 					int fileID = Compute(script.Namespace, script.ClassName);
 					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
@@ -143,7 +143,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		private void OnScriptExported(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			MonoScript script = (MonoScript)asset;
+			IMonoScript script = (IMonoScript)asset;
 			MonoImporter importer = new MonoImporter(container.ExportLayout);
 			importer.ExecutionOrder = (short)script.ExecutionOrder;
 			Meta meta = new Meta(script.GUID, importer);
@@ -158,8 +158,8 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private static readonly UnityGUID UnityEngineGUID = new UnityGUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
 		private static readonly Regex s_unityEngine = new Regex(@"^UnityEngine(\.[0-9a-zA-Z]+)*(\.dll)?$", RegexOptions.Compiled);
 
-		private readonly List<MonoScript> m_export = new List<MonoScript>();
-		private readonly HashSet<MonoScript> m_unique = new HashSet<MonoScript>();
-		private readonly Dictionary<IUnityObjectBase, MonoScript> m_scripts = new Dictionary<IUnityObjectBase, MonoScript>();
+		private readonly List<IMonoScript> m_export = new List<IMonoScript>();
+		private readonly HashSet<IMonoScript> m_unique = new HashSet<IMonoScript>();
+		private readonly Dictionary<IUnityObjectBase, IMonoScript> m_scripts = new Dictionary<IUnityObjectBase, IMonoScript>();
 	}
 }

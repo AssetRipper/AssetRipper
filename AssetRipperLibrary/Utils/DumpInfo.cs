@@ -115,7 +115,7 @@ namespace AssetRipper.Library.Utils
 				string extra = "";
 				if (asset is IMonoScript ms)
 				{
-					string scriptName = $"[{ms.AssemblyName}]";
+					string scriptName = $"[{ms.GetAssemblyNameFixed()}]";
 					if (!string.IsNullOrEmpty(ms.Namespace)) scriptName += $"{ms.Namespace}.";
 					scriptName += $"{ms.ClassName}:{HashToString(ms.PropertiesHash)}";
 					extra = scriptName;
@@ -301,7 +301,7 @@ namespace AssetRipper.Library.Utils
 				sw.WriteLine($"    {dll}");
 			}
 			sw.WriteLine($"  Scripts {monoManager.Scripts.Length}");
-			foreach (PPtr<MonoScript> dll in monoManager.Scripts ?? Array.Empty<PPtr<MonoScript>>())
+			foreach (PPtr<IMonoScript> dll in monoManager.Scripts ?? Array.Empty<PPtr<IMonoScript>>())
 			{
 				sw.WriteLine($"    {dll}");
 			}
@@ -372,7 +372,7 @@ namespace AssetRipper.Library.Utils
 			foreach (Core.Interfaces.IUnityObjectBase asset in serializedFile.FetchAssets().Where(asset => asset is IMonoScript))
 			{
 				IMonoScript monoScript = asset as IMonoScript;
-				sw.WriteLine($"\t[{monoScript.AssemblyName}]{monoScript.Namespace}.{monoScript.ClassName} - {HashToString(monoScript.PropertiesHash)}");
+				sw.WriteLine($"\t[{monoScript.GetAssemblyNameFixed()}]{monoScript.Namespace}.{monoScript.ClassName} - {HashToString(monoScript.PropertiesHash)}");
 
 			}
 			sw.WriteLine($"SerializedFile");
@@ -402,7 +402,7 @@ namespace AssetRipper.Library.Utils
 				Hash128 TypeHash = type.OldTypeHash;
 
 				IMonoScript monoScript = serializedFile.FetchAssets().FirstOrDefault(asset => asset is IMonoScript ms && ms.PropertiesHash == TypeHash) as IMonoScript;
-				string scriptType = monoScript == null ? "\tNo Script" : $"\tMonoScript is [{monoScript.AssemblyName}]{monoScript.Namespace}.{monoScript.ClassName}";
+				string scriptType = monoScript == null ? "\tNo Script" : $"\tMonoScript is [{monoScript.GetAssemblyNameFixed()}]{monoScript.Namespace}.{monoScript.ClassName}";
 				sw.WriteLine(scriptType);
 				sw.WriteLine($"\tType: ClassID {ClassID}, ScriptID {ScriptID}, IsStrippedType {IsStrippedType}, ScriptHash {HashToString(ScriptHash)}, TypeHash {HashToString(TypeHash)}");
 				string Dump = Tree.Dump;

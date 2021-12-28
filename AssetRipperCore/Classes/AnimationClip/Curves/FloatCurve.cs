@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 	{
 		public FloatCurve(FloatCurve copy, IReadOnlyList<KeyframeTpl<Float>> keyframes) : this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes) { }
 
-		public FloatCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script)
+		public FloatCurve(string path, string attribute, ClassIDType classID, PPtr<IMonoScript> script)
 		{
 			Path = path;
 			Attribute = attribute;
@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 			Curve = new AnimationCurveTpl<Float>(false);
 		}
 
-		public FloatCurve(string path, string attribute, ClassIDType classID, PPtr<MonoScript> script, IReadOnlyList<KeyframeTpl<Float>> keyframes)
+		public FloatCurve(string path, string attribute, ClassIDType classID, PPtr<IMonoScript> script, IReadOnlyList<KeyframeTpl<Float>> keyframes)
 		{
 			Path = path;
 			Attribute = attribute;
@@ -71,7 +71,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 		public ClassIDType ClassID { get; set; }
 
 		public AnimationCurveTpl<Float> Curve;
-		public PPtr<MonoScript> Script;
+		public PPtr<IMonoScript> Script;
 
 		public const string CurveName = "curve";
 		public const string AttributeName = "attribute";

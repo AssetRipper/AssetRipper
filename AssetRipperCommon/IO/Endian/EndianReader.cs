@@ -242,6 +242,31 @@ namespace AssetRipper.Core.IO.Endian
 			return array;
 		}
 
+		public sbyte[] ReadSByteArray() => ReadSByteArray(true);
+		public sbyte[] ReadSByteArray(bool allowAlignment)
+		{
+			int count = ReadInt32();
+			int index = 0;
+			sbyte[] array = count == 0 ? Array.Empty<sbyte>() : new sbyte[count];
+			while (index < count)
+			{
+				try
+				{
+					array[index] = ReadSByte();
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
+				}
+				index++;
+			}
+			if (allowAlignment && IsAlignArray)
+			{
+				AlignStream();
+			}
+			return array;
+		}
+
 		public short[] ReadInt16Array() => ReadInt16Array(true);
 		public short[] ReadInt16Array(bool allowAlignment)
 		{

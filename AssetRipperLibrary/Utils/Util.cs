@@ -252,16 +252,16 @@ namespace AssetRipper.Library.Utils
 				asset.AssetInfo.GUID = new UnityGUID(Guid.NewGuid());
 			}
 		}
-		public static void FixScript(MonoScript script)
+		public static void FixScript(IMonoScript script)
 		{
 			using (MD5 md5 = MD5.Create())
 			{
-				var fullName = $"{script.AssemblyName}.{script.Namespace}.{script.ClassName}";
+				var fullName = $"{script.GetAssemblyNameFixed()}.{script.Namespace}.{script.ClassName}";
 				var data = md5.ComputeHash(Encoding.UTF8.GetBytes(fullName));
 				SetGUID(script, data);
 			}
 		}
-		public static void SetGUID(AssetRipper.Core.Classes.Object.Object asset, byte[] guid)
+		public static void SetGUID(IUnityObjectBase asset, byte[] guid)
 		{
 			var swapped = new byte[guid.Length];
 			for (int i = 0; i < guid.Length; i++)
