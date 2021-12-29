@@ -130,5 +130,7 @@
     "script_content_level_0_description": "Скрипты не экспортированы.",
     "script_content_level_1_description": "Методы удаляются из декомпилированного экспорта.",
     "script_content_level_2_description": "По умолчанию. Это экспортирует полные методы для игр Mono и пустышки для игр IL2Cpp.",
-    "script_content_level_3_description": "Методы IL2Cpp безопасно восстанавливаются там, где это возможно."
+    "script_content_level_3_description": "Методы IL2Cpp безопасно восстанавливаются там, где это возможно.",
+    "c_sharp_langage_version_config_9_0": "С# 9",
+    "c_sharp_langage_version_config_10_0": "C# 10"
 }
