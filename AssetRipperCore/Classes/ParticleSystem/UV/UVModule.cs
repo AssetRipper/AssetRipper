@@ -131,7 +131,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Sprites, SpritesName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Sprites, SpritesName))
 			{
 				yield return asset;
 			}

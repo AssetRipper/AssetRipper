@@ -86,7 +86,7 @@ namespace AssetRipper.Core.Classes.LODGroup
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LODs, LODsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(LODs, LODsName))
 			{
 				yield return asset;
 			}

@@ -2,9 +2,11 @@
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.Core.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
@@ -74,6 +76,17 @@ namespace AssetRipper.Core.Classes
 			{
 				YAMLMappingNode structureNode = (YAMLMappingNode)monoBehaviour.Structure.ExportYAML(container);
 				node.Append(structureNode);
+			}
+		}
+
+		public static IEnumerable<PPtr<IUnityObjectBase>> MaybeFetchDependenciesForStructure(this IMonoBehaviour monoBehaviour, DependencyContext context)
+		{
+			if (monoBehaviour.Structure != null)
+			{
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(monoBehaviour.Structure, monoBehaviour.Structure.Type.Name))
+				{
+					yield return asset;
+				}
 			}
 		}
 	}

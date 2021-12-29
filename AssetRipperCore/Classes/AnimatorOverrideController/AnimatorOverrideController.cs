@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Classes.AnimatorOverrideController
 			}
 
 			yield return context.FetchDependency(Controller, ControllerName);
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Clips, ClipsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Clips, ClipsName))
 			{
 				yield return asset;
 			}

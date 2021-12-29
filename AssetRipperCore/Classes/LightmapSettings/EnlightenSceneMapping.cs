@@ -92,7 +92,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Renderers, RenderersName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Renderers, RenderersName))
 			{
 				yield return asset;
 			}

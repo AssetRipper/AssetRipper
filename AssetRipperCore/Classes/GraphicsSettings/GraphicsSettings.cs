@@ -384,35 +384,35 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Deferred, DeferredName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(Deferred, DeferredName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DeferredReflections, DeferredReflectionsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(DeferredReflections, DeferredReflectionsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(ScreenSpaceShadows, ScreenSpaceShadowsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(ScreenSpaceShadows, ScreenSpaceShadowsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LegacyDeferred, LegacyDeferredName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(LegacyDeferred, LegacyDeferredName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DepthNormals, DepthNormalsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(DepthNormals, DepthNormalsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(MotionVectors, MotionVectorsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(MotionVectors, MotionVectorsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LightHalo, LightHaloName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(LightHalo, LightHaloName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LensFlare, LensFlareName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(LensFlare, LensFlareName))
 			{
 				yield return asset;
 			}

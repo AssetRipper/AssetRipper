@@ -54,7 +54,7 @@ namespace AssetRipper.Core.Classes.CompositeCollider2D
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(ColliderPaths, ColliderPathsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(ColliderPaths, ColliderPathsName))
 			{
 				yield return asset;
 			}

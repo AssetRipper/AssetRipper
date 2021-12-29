@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Parser.Asset
 			m_hierarchy = log ? new Stack<string>() : null;
 		}
 
-		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies<T>(T dependent, string name) where T : IDependent
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesFromDependent<T>(T dependent, string name) where T : IDependent
 		{
 			if (IsLog)
 			{
@@ -35,17 +35,7 @@ namespace AssetRipper.Core.Parser.Asset
 			}
 		}
 
-		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies<T>(T[] dependents, string name) where T : IDependent
-		{
-			return FetchDependencies((IEnumerable<T>)dependents, name);
-		}
-
-		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies<T>(IReadOnlyList<T> dependents, string name) where T : IDependent
-		{
-			return FetchDependencies((IEnumerable<T>)dependents, name);
-		}
-
-		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies<T>(IEnumerable<T> dependents, string name) where T : IDependent
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesFromArray<T>(IEnumerable<T> dependents, string name) where T : IDependent
 		{
 			if (IsLog)
 			{
@@ -67,14 +57,16 @@ namespace AssetRipper.Core.Parser.Asset
 			}
 		}
 
-		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies<T>(PPtr<T>[] pointers, string name) where T : IUnityObjectBase
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesFromArrayArray<T>(IEnumerable<T> dependents, string name) where T : IEnumerable<IDependent>
 		{
-			return FetchDependencies((IEnumerable<PPtr<T>>)pointers, name);
-		}
-
-		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies<T>(IReadOnlyList<PPtr<T>> pointers, string name) where T : IUnityObjectBase
-		{
-			return FetchDependencies((IEnumerable<PPtr<T>>)pointers, name);
+			//Logging not required here because FetchDependenciesFromArray handles it
+			foreach (T subArray in dependents)
+			{
+				foreach (PPtr<IUnityObjectBase> pointer in this.FetchDependenciesFromArray(subArray, name))
+				{
+					yield return pointer; //this pointer is not null because FetchDependenciesFromArray already checks for that 
+				}
+			}
 		}
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies<T>(IEnumerable<PPtr<T>> pointers, string name) where T : IUnityObjectBase

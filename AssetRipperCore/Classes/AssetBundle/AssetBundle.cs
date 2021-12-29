@@ -141,7 +141,7 @@ namespace AssetRipper.Core.Classes.AssetBundle
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Container.Select(t => t.Value), ContainerName))
 			{
 				yield return asset;
 			}

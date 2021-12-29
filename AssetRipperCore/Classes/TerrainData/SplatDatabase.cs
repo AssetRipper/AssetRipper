@@ -119,7 +119,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 			else
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Splats, SplatsName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Splats, SplatsName))
 				{
 					yield return asset;
 				}

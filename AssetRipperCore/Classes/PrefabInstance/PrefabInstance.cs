@@ -141,7 +141,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 				{
 					yield return context.FetchDependency(RootGameObject, RootGameObjectName);
 				}
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Modification, ModificationName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(Modification, ModificationName))
 				{
 					yield return asset;
 				}

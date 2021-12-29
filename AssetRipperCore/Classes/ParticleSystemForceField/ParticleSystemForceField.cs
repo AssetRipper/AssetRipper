@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.ParticleSystemForceField
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Parameters, ParametersName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(Parameters, ParametersName))
 			{
 				yield return asset;
 			}

@@ -209,7 +209,7 @@ namespace AssetRipper.Core.Classes.Sprite
 			}
 
 			yield return context.FetchDependency(SpriteAtlas, SpriteAtlasName);
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(RD, RDName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(RD, RDName))
 			{
 				yield return asset;
 			}

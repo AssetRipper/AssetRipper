@@ -82,15 +82,15 @@ namespace AssetRipper.Core.Classes.TerrainData
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(SplatDatabase, SplatDatabaseName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(SplatDatabase, SplatDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DetailDatabase, DetailDatabaseName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(DetailDatabase, DetailDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Heightmap, HeightmapName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(Heightmap, HeightmapName))
 			{
 				yield return asset;
 			}

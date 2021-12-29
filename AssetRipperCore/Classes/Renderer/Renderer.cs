@@ -15,6 +15,7 @@ namespace AssetRipper.Core.Classes.Renderer
 	{
 		protected Renderer(AssetInfo assetInfo) : base(assetInfo) { }
 
+		#region Versioning Methods
 		/// <summary>
 		/// 1.5.0 and greater
 		/// </summary>
@@ -269,6 +270,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// 4.5.0 and greater
 		/// </summary>
 		private static bool IsAlign4(UnityVersion version) => version.IsGreaterEqual(4, 5);
+		#endregion
 
 		public string FindMaterialPropertyNameByCRC28(uint crc)
 		{

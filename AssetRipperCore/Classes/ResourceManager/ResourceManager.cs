@@ -44,7 +44,7 @@ namespace AssetRipper.Core.Classes.ResourceManager
 			}
 			if (HasDependentAssets(context.Version, context.Flags))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(DependentAssets, DependentAssetsName))
 				{
 					yield return asset;
 				}

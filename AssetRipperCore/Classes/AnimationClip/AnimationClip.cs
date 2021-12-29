@@ -306,35 +306,35 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				{
 					yield return asset;
 				}
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(ChildTracks, ChildTracksName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(ChildTracks, ChildTracksName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasCurves(context.Version))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(FloatCurves, FloatCurvesName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(FloatCurves, FloatCurvesName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasPPtrCurves(context.Version))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(PPtrCurves, PPtrCurvesName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(PPtrCurves, PPtrCurvesName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasClipBindingConstant(context.Version))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(ClipBindingConstant, ClipBindingConstantName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(ClipBindingConstant, ClipBindingConstantName))
 				{
 					yield return asset;
 				}
 			}
 			if (HasEvents(context.Version))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Events, EventsName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Events, EventsName))
 				{
 					yield return asset;
 				}

@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Classes
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Heightmaps, HeightmapsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Heightmaps, HeightmapsName))
 			{
 				yield return asset;
 			}

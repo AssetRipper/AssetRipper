@@ -126,7 +126,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 			else
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Component, ComponentName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Component, ComponentName))
 				{
 					yield return asset;
 				}
