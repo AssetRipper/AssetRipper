@@ -43,10 +43,10 @@ namespace AssetRipper.Core.Parser.Files
 		#endregion
 
 		#region Properties
-		public static UnityVersion MinVersion => new UnityVersion(0UL);
-		public static UnityVersion MaxVersion => new UnityVersion(ulong.MaxValue);
+		public static UnityVersion MinVersion { get; } = new UnityVersion(0UL);
+		public static UnityVersion MaxVersion { get; } = new UnityVersion(ulong.MaxValue);
 		/// <summary> 2017.3.0f3 </summary>
-		public static UnityVersion DefaultVersion => new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3);
+		public static UnityVersion DefaultVersion { get; } = new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3);
 
 		public int Major => unchecked((int)((m_data >> 48) & 0xFFFFUL));
 		public int Minor => unchecked((int)((m_data >> 40) & 0xFFUL));

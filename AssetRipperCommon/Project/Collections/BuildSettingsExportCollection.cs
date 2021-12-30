@@ -30,8 +30,8 @@ namespace AssetRipper.Core.Project.Collections
 
 			Directory.CreateDirectory(subPath);
 
-			IBuildSettings asset = (IBuildSettings)Asset;
-			InitializeEditorBuildSettings(EditorBuildSettings, asset, container);
+			IBuildSettings buildSettings = (IBuildSettings)Asset;
+			InitializeEditorBuildSettings(EditorBuildSettings, buildSettings, container);
 			AssetExporter.Export(container, EditorBuildSettings, filePath);
 
 			fileName = $"{EditorSettings.ClassID}.asset";
@@ -39,13 +39,22 @@ namespace AssetRipper.Core.Project.Collections
 
 			AssetExporter.Export(container, EditorSettings, filePath);
 
-			SaveProjectVersion(subPath);
+			SaveMaxProjectVersion(subPath, buildSettings);
 			return true;
 		}
 
-		private static void SaveProjectVersion(string projectSettingsDirectory)
+		private static void SaveDefaultProjectVersion(string projectSettingsDirectory)
 		{
-			SaveProjectVersion(projectSettingsDirectory, new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3));
+			SaveProjectVersion(projectSettingsDirectory, UnityVersion.DefaultVersion);
+		}
+		private static void SaveMaxProjectVersion(string projectSettingsDirectory, IBuildSettings buildSettings)
+		{
+			UnityVersion projectVersion = UnityVersion.Max(UnityVersion.DefaultVersion, buildSettings.File.Version);
+			SaveProjectVersion(projectSettingsDirectory, projectVersion);
+		}
+		private static void SaveExactProjectVersion(string projectSettingsDirectory, IBuildSettings buildSettings)
+		{
+			SaveProjectVersion(projectSettingsDirectory, buildSettings.File.Version);
 		}
 		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version)
 		{
