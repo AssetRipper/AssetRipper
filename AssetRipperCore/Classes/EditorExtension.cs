@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public abstract class EditorExtension : Object.Object
+	public abstract class EditorExtension : Object.Object, IEditorExtension
 	{
 		protected EditorExtension(LayoutInfo layout) : base(layout) { }
 

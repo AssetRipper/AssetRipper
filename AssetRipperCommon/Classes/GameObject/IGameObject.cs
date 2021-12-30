@@ -8,6 +8,10 @@ namespace AssetRipper.Core.Classes.GameObject
 {
 	public interface IGameObject : IEditorExtension, IHasName
 	{
+		ushort Tag { get; set; }
+		string TagString { get; set; }
+		bool IsActive { get; set; }
+		uint Layer { get; set; }
 		PPtr<IComponent>[] FetchComponents();
 	}
 
