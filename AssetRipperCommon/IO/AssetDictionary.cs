@@ -12,17 +12,24 @@ namespace AssetRipper.Core.IO
 	/// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
 	public class AssetDictionary<TKey, TValue> : List<NullableKeyValuePair<TKey, TValue>>, IDependent
 	{
+		private static readonly bool isDependentType = NullableKeyValuePair<TKey, TValue>.IsDependentType;
 		public void Add(TKey key, TValue value) => Add(new NullableKeyValuePair<TKey, TValue>(key, value));
+
+		public AssetDictionary() { }
+		public AssetDictionary(int capacity) : base(capacity) { }
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach(NullableKeyValuePair<TKey, TValue> keyValuePair in this)
+			if (isDependentType)
 			{
-				if(keyValuePair != null)
+				foreach (NullableKeyValuePair<TKey, TValue> keyValuePair in this)
 				{
-					foreach (PPtr<IUnityObjectBase> dependency in keyValuePair.FetchDependencies(context))
+					if (keyValuePair != null)
 					{
-						yield return dependency;
+						foreach (PPtr<IUnityObjectBase> dependency in keyValuePair.FetchDependencies(context))
+						{
+							yield return dependency;
+						}
 					}
 				}
 			}

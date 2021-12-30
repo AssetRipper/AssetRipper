@@ -7,6 +7,16 @@ namespace AssetRipper.Core.IO
 {
 	public class NullableKeyValuePair<TKey, TValue> : IDependent
 	{
+		static NullableKeyValuePair()
+		{
+			hasDependentKeys = typeof(IDependent).IsAssignableFrom(typeof(TKey));
+			hasDependentValues = typeof(IDependent).IsAssignableFrom(typeof(TValue));
+			IsDependentType = hasDependentKeys || hasDependentValues;
+		}
+
+		private static readonly bool hasDependentKeys;
+		private static readonly bool hasDependentValues;
+		public static bool IsDependentType { get; }
 		public TKey Key { get; set; }
 		public TValue Value { get; set; }
 		
@@ -36,14 +46,14 @@ namespace AssetRipper.Core.IO
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			if(Key != null && Key is IDependent keyDependent)
+			if(hasDependentKeys && Key != null && Key is IDependent keyDependent)
 			{
 				foreach (PPtr<IUnityObjectBase> dependency in keyDependent.FetchDependencies(context))
 				{
 					yield return dependency;
 				}
 			}
-			if (Value != null && Value is IDependent valueDependent)
+			if (hasDependentValues && Value != null && Value is IDependent valueDependent)
 			{
 				foreach (PPtr<IUnityObjectBase> dependency in valueDependent.FetchDependencies(context))
 				{
