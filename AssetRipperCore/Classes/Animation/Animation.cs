@@ -21,6 +21,7 @@ namespace AssetRipper.Core.Classes.Animation
 		{
 			Animations = Array.Empty<PPtr<AnimationClip.AnimationClip>>();
 			PlayAutomatically = true;
+			Enabled = true;
 		}
 
 		public Animation(AssetInfo assetInfo) : base(assetInfo) { }
