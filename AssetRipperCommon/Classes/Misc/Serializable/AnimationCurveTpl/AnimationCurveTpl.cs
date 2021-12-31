@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Misc.KeyframeTpl;
-using AssetRipper.Core.Converters.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
@@ -74,11 +73,6 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 			{
 				Curve[i] = keyframes[i];
 			}
-		}
-
-		public AnimationCurveTpl<T> Convert(IExportContainer container)
-		{
-			return AnimationCurveTplConverter.Convert(container, ref this);
 		}
 
 		public void Read(AssetReader reader)

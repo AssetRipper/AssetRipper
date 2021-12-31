@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
-using AssetRipper.Core.Converters.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math;
@@ -29,11 +28,6 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 			WeightedMode = WeightedMode.None;
 			InWeight = weight;
 			OutWeight = weight;
-		}
-
-		public KeyframeTpl<T> Convert(IExportContainer container)
-		{
-			return KeyframeTplConverter.Convert(container, ref this);
 		}
 
 		public void Read(AssetReader reader)

@@ -80,62 +80,15 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Parser.Asset
 {
-	public class AssetFactory : IAssetFactory
+	public class AssetFactory : AssetFactoryBase
 	{
-		public IUnityObjectBase CreateAsset(AssetInfo assetInfo)
+		public override IUnityObjectBase CreateAsset(AssetInfo assetInfo)
 		{
 			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<AssetInfo, IUnityObjectBase> instantiator))
 			{
 				return instantiator(assetInfo);
 			}
 			return DefaultInstantiator(assetInfo);
-		}
-
-		public IAsset CreateEngineAsset(string name)
-		{
-			switch (name)
-			{
-				case MonoUtils.Vector2Name:
-					return new Vector2f();
-				case MonoUtils.Vector2IntName:
-					return new Vector2i();
-				case MonoUtils.Vector3Name:
-					return new Vector3f();
-				case MonoUtils.Vector3IntName:
-					return new Vector3i();
-				case MonoUtils.Vector4Name:
-					return new Vector4f();
-				case MonoUtils.RectName:
-					return new Rectf();
-				case MonoUtils.BoundsName:
-					return new AABB();
-				case MonoUtils.BoundsIntName:
-					return new AABBi();
-				case MonoUtils.QuaternionName:
-					return new Quaternionf();
-				case MonoUtils.Matrix4x4Name:
-					return new Matrix4x4f();
-				case MonoUtils.ColorName:
-					return new ColorRGBAf();
-				case MonoUtils.Color32Name:
-					return new ColorRGBA32();
-				case MonoUtils.LayerMaskName:
-					return new LayerMask();
-				case MonoUtils.AnimationCurveName:
-					return new AnimationCurveTpl<Float>();
-				case MonoUtils.GradientName:
-					return new Gradient();
-				case MonoUtils.RectOffsetName:
-					return new RectOffset();
-				case MonoUtils.GUIStyleName:
-					return new GUIStyle();
-
-				case MonoUtils.PropertyNameName:
-					return new PropertyName();
-
-				default:
-					throw new NotImplementedException(name);
-			}
 		}
 
 		public void OverrideInstantiator(int classType, Func<AssetInfo, IUnityObjectBase> instantiator)

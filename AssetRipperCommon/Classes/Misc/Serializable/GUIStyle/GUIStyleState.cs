@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public GUIStyleState(LayoutInfo layout)
 		{
 			Background = default;
-			ScaledBackgrounds = Array.Empty<PPtr<Texture2D.Texture2D>>();
+			ScaledBackgrounds = Array.Empty<PPtr<Texture2D.ITexture2D>>();
 			TextColor = ColorRGBAf.Black;
 		}
 
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		{
 			Background = copy.Background;
 			TextColor = copy.TextColor;
-			ScaledBackgrounds = new PPtr<Texture2D.Texture2D>[copy.ScaledBackgrounds.Length];
+			ScaledBackgrounds = new PPtr<Texture2D.ITexture2D>[copy.ScaledBackgrounds.Length];
 			for (int i = 0; i < copy.ScaledBackgrounds.Length; i++)
 			{
 				ScaledBackgrounds[i] = copy.ScaledBackgrounds[i];
@@ -34,11 +34,11 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 			Background.Read(reader);
 			if (HasScaledBackgrounds(reader.Version, reader.Flags))
 			{
-				ScaledBackgrounds = reader.ReadAssetArray<PPtr<Texture2D.Texture2D>>();
+				ScaledBackgrounds = reader.ReadAssetArray<PPtr<Texture2D.ITexture2D>>();
 			}
 			else
 			{
-				ScaledBackgrounds = Array.Empty<PPtr<Texture2D.Texture2D>>();
+				ScaledBackgrounds = Array.Empty<PPtr<Texture2D.ITexture2D>>();
 			}
 			TextColor.Read(reader);
 		}
@@ -70,9 +70,9 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		/// </summary>
 		public static bool HasScaledBackgrounds(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(5, 4) && !flags.IsRelease();
 
-		public PPtr<Texture2D.Texture2D>[] ScaledBackgrounds { get; set; }
+		public PPtr<Texture2D.ITexture2D>[] ScaledBackgrounds { get; set; }
 
-		public PPtr<Texture2D.Texture2D> Background;
+		public PPtr<Texture2D.ITexture2D> Background;
 		public ColorRGBAf TextColor;
 
 		public const string BackgroundName = "m_Background";

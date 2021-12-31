@@ -272,7 +272,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public RectOffset Margin;
 		public RectOffset Padding;
 		public RectOffset Overflow;
-		public PPtr<Font.Font> Font;
+		public PPtr<IFont> Font;
 		public Vector2f ContentOffset;
 		public Vector2f ClipOffset;
 

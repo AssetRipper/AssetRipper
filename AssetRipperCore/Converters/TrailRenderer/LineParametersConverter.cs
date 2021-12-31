@@ -1,4 +1,7 @@
-﻿using AssetRipper.Core.Classes.TrailRenderer;
+﻿using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Core.Classes.TrailRenderer;
+using AssetRipper.Core.Converters.Misc;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
 
 namespace AssetRipper.Core.Converters.TrailRenderer
@@ -19,6 +22,11 @@ namespace AssetRipper.Core.Converters.TrailRenderer
 		private static float GetShadowBias(IExportContainer container, ref LineParameters origin)
 		{
 			return LineParameters.HasShadowBias(container.Version) ? origin.ShadowBias : 0.5f;
+		}
+
+		private static AnimationCurveTpl<T> Convert<T>(this AnimationCurveTpl<T> _this, IExportContainer container) where T : struct, IAsset, IYAMLExportable
+		{
+			return AnimationCurveTplConverter.Convert(container, ref _this);
 		}
 	}
 }
