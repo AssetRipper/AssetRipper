@@ -17,7 +17,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.OcclusionCullingData
 {
-	public sealed class OcclusionCullingData : NamedObject
+	public sealed class OcclusionCullingData : NamedObject, IOcclusionCullingData
 	{
 		public OcclusionCullingData(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -40,19 +40,6 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			return !flags.IsRelease();
 		}
 
-		public void Initialize(IExportContainer container, OcclusionCullingSettings.OcclusionCullingSettings cullingSetting)
-		{
-			PVSData = (byte[])cullingSetting.PVSData;
-			int renderCount = cullingSetting.StaticRenderers.Length;
-			int portalCount = cullingSetting.Portals.Length;
-			OcclusionScene scene = new OcclusionScene(cullingSetting.m_SceneGUID, renderCount, portalCount);
-			Scenes = new OcclusionScene[] { scene };
-
-			StaticRenderers = new SceneObjectIdentifier[scene.SizeRenderers];
-			Portals = new SceneObjectIdentifier[scene.SizePortals];
-			SetIDs(container, cullingSetting, scene);
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -73,99 +60,18 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(PVSDataName, PVSData.ExportYAML());
 			node.Add(ScenesName, Scenes.ExportYAML(container));
-			SetExportData(container);
+			this.SetExportData(container);
 			node.Add(StaticRenderersName, StaticRenderers.ExportYAML(container));
 			node.Add(PortalsName, Portals.ExportYAML(container));
 			return node;
 		}
 
-		private void SetExportData(IExportContainer container)
-		{
-			// if < 3.0.0 this asset doesn't exist
-
-			// 3.0.0 to 5.5.0 this asset is created by culling settings so it has set data already
-			if (OcclusionCullingSettings.OcclusionCullingSettings.HasReadPVSData(container.Version))
-			{
-				return;
-			}
-
-			// if >= 5.5.0 and !Release this asset containts renderer data
-			if (HasStaticRenderers(container.Flags))
-			{
-				return;
-			}
-
-			// if >= 5.5.0 and Release this asset doesn't containt renderers data so we need to create it
-			List<OcclusionCullingSettings.OcclusionCullingSettings> cullingSettings = new List<OcclusionCullingSettings.OcclusionCullingSettings>();
-			foreach (IUnityObjectBase asset in File.Collection.FetchAssets())
-			{
-				if (asset.ClassID == ClassIDType.OcclusionCullingSettings)
-				{
-					OcclusionCullingSettings.OcclusionCullingSettings cullingSetting = (OcclusionCullingSettings.OcclusionCullingSettings)asset;
-					if (cullingSetting.m_OcclusionCullingData.IsAsset(cullingSetting.File, this))
-					{
-						cullingSettings.Add(cullingSetting);
-					}
-				}
-			}
-
-			int maxRenderer = Scenes.Max(j => j.IndexRenderers + j.SizeRenderers);
-			StaticRenderers = new SceneObjectIdentifier[maxRenderer];
-			int maxPortal = Scenes.Max(j => j.IndexPortals + j.SizePortals);
-			Portals = new SceneObjectIdentifier[maxPortal];
-
-			foreach (OcclusionCullingSettings.OcclusionCullingSettings cullingSetting in cullingSettings)
-			{
-				int sceneIndex = Scenes.IndexOf(t => t.Scene == cullingSetting.m_SceneGUID);
-				if (sceneIndex == -1)
-				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Unable to find scene data with GUID {cullingSetting.m_SceneGUID} in {this.GetValidName()}");
-					continue;
-				}
-
-				OcclusionScene scene = Scenes[sceneIndex];
-				if (scene.SizeRenderers != cullingSetting.StaticRenderers.Length)
-				{
-					throw new Exception($"Scene renderer count {scene.SizeRenderers} doesn't match with given {cullingSetting.StaticRenderers.Length}");
-				}
-				if (scene.SizePortals != cullingSetting.Portals.Length)
-				{
-					throw new Exception($"Scene portal count {scene.SizePortals} doesn't match with given {cullingSetting.Portals.Length}");
-				}
-				SetIDs(container, cullingSetting, scene);
-			}
-		}
-
-		private void SetIDs(IExportContainer container, OcclusionCullingSettings.OcclusionCullingSettings cullingSetting, OcclusionScene scene)
-		{
-			for (int i = 0; i < cullingSetting.StaticRenderers.Length; i++)
-			{
-				PPtr<Renderer.Renderer> prenderer = cullingSetting.StaticRenderers[i];
-				Renderer.Renderer renderer = prenderer.FindAsset(cullingSetting.File);
-				StaticRenderers[scene.IndexRenderers + i] = CreateObjectID(container, renderer);
-			}
-
-			for (int i = 0; i < cullingSetting.Portals.Length; i++)
-			{
-				PPtr<OcclusionPortal> pportal = cullingSetting.Portals[i];
-				OcclusionPortal portal = pportal.FindAsset(cullingSetting.File);
-				Portals[scene.IndexPortals + i] = CreateObjectID(container, portal);
-			}
-		}
-
-		private static SceneObjectIdentifier CreateObjectID(IExportContainer container, Object.Object asset)
-		{
-			long lid = asset == null ? 0 : container.GetExportID(asset);
-			SceneObjectIdentifier soId = new SceneObjectIdentifier(lid, 0);
-			return soId;
-		}
-
 		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
 
 		public byte[] PVSData { get; set; }
-		public OcclusionScene[] Scenes { get; set; }
-		public SceneObjectIdentifier[] StaticRenderers { get; set; } = Array.Empty<SceneObjectIdentifier>();
-		public SceneObjectIdentifier[] Portals { get; set; } = Array.Empty<SceneObjectIdentifier>();
+		public IOcclusionScene[] Scenes { get; set; }
+		public ISceneObjectIdentifier[] StaticRenderers { get; set; } = Array.Empty<ISceneObjectIdentifier>();
+		public ISceneObjectIdentifier[] Portals { get; set; } = Array.Empty<ISceneObjectIdentifier>();
 
 		public const string PVSDataName = "m_PVSData";
 		public const string ScenesName = "m_Scenes";

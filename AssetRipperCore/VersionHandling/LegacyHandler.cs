@@ -1,6 +1,4 @@
 ﻿using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files;
-using System;
 
 namespace AssetRipper.Core.VersionHandling
 {
@@ -11,6 +9,7 @@ namespace AssetRipper.Core.VersionHandling
 			this.AssetFactory = new AssetFactory();
 			this.ImporterFactory = new LegacyImporterFactory();
 			ClassIDTypeEnum = typeof(ClassIDType);
+			SceneObjectFactory = new SceneObjectFactory();
 		}
 	}
 }

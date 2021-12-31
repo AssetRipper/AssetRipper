@@ -24,6 +24,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		/// </summary>
 		PPtr<IPrefabInstance> SourcePrefabPtr { get; set; }
 		/// <summary>
+		/// Only on versions &lt; 2018.3<br/>
 		/// m_IsPrefabAsset - versions &gt;= 2018.2<br/>
 		/// m_IsPrefabParent - versions &gt;= 3.5<br/>
 		/// m_IsDataTemplate - versions &lt; 3.5

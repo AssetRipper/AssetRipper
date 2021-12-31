@@ -48,9 +48,9 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			m_components = components.OrderBy(t => t, this).ToArray();
 
-			if (OcclusionCullingSettings.HasSceneGUID(file.Version))
+			if (OcclusionCullingSettingsExtensions.HasSceneGUID(file.Version))
 			{
-				ISceneSettings sceneSettings = Components.Where(t => t is ISceneSettings).Select(t => (ISceneSettings)t).FirstOrDefault();
+				IOcclusionCullingSettings sceneSettings = Components.Where(t => t is IOcclusionCullingSettings).Select(t => (IOcclusionCullingSettings)t).FirstOrDefault();
 				if (sceneSettings != null)
 				{
 					GUID = sceneSettings.SceneGUID;
@@ -58,20 +58,20 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			if (GUID.IsZero)
 			{
-				GUID = new UnityGUID(Guid.NewGuid());
+				GUID = UnityGUID.NewGuid();
 			}
 
-			if (OcclusionCullingSettings.HasReadPVSData(File.Version))
+			if (OcclusionCullingSettingsExtensions.HasReadPVSData(File.Version))
 			{
 				foreach (IUnityObjectBase comp in Components)
 				{
 					if (comp.ClassID == ClassIDType.OcclusionCullingSettings)
 					{
-						OcclusionCullingSettings settings = (OcclusionCullingSettings)comp;
+						IOcclusionCullingSettings settings = (IOcclusionCullingSettings)comp;
 						if (settings.PVSData.Length > 0)
 						{
 							m_occlusionCullingSettings = settings;
-							OcclusionCullingData = OcclusionCullingData.CreateVirtualInstance(virtualFile);
+							//OcclusionCullingData = OcclusionCullingData.CreateVirtualInstance(virtualFile);
 							break;
 						}
 					}
@@ -118,7 +118,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
-			string folderPath = Path.Combine(dirPath, UnityObjectBase.AssetsKeyword, OcclusionCullingSettings.SceneKeyword);
+			string folderPath = Path.Combine(dirPath, UnityObjectBase.AssetsKeyword, "Scene");
 			string sceneSubPath = GetSceneName(container);
 			string fileName = $"{sceneSubPath}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
@@ -136,7 +136,7 @@ namespace AssetRipper.Core.Project.Collections
 			Directory.CreateDirectory(folderPath);
 
 			AssetExporter.Export(container, Components.Select(t => t.Convert(container)), filePath);
-			DefaultImporter sceneImporter = new DefaultImporter(container.ExportLayout);
+			IDefaultImporter sceneImporter = container.GetExportHandler().ImporterFactory.CreateDefaultImporter(container.ExportLayout);
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);
 
@@ -212,7 +212,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		private void ExportAsset(IProjectAssetContainer container, INamedObject asset, string path)
 		{
-			NativeFormatImporter importer = new NativeFormatImporter(container.ExportLayout);
+			INativeFormatImporter importer = container.GetExportHandler().ImporterFactory.CreateNativeFormatImporter(container.ExportLayout);
 			importer.MainObjectFileID = GetExportID(asset);
 			ExportAsset(container, importer, asset, path, asset.Name);
 		}
@@ -309,7 +309,7 @@ namespace AssetRipper.Core.Project.Collections
 		public override string Name { get; }
 		public override ISerializedFile File => m_file;
 
-		public OcclusionCullingData OcclusionCullingData { get; }
+		public IOcclusionCullingData OcclusionCullingData { get; }
 		public UnityGUID GUID { get; }
 
 		private IEnumerable<IUnityObjectBase> Components => m_components;
@@ -323,6 +323,6 @@ namespace AssetRipper.Core.Project.Collections
 		private readonly IUnityObjectBase[] m_components;
 		private readonly Dictionary<AssetInfo, long> m_exportIDs = new Dictionary<AssetInfo, long>();
 		private readonly ISerializedFile m_file;
-		private readonly OcclusionCullingSettings m_occlusionCullingSettings;
+		private readonly IOcclusionCullingSettings m_occlusionCullingSettings;
 	}
 }

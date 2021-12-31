@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class OcclusionPortal : Component
+	public sealed class OcclusionPortal : Component, IOcclusionPortal
 	{
 		public OcclusionPortal(AssetInfo assetInfo) : base(assetInfo) { }
 

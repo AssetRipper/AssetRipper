@@ -12,6 +12,7 @@ namespace AssetRipper.Core.VersionHandling
 		public AssetFactoryBase AssetFactory { get; protected set; }
 		public IAssetImporterFactory ImporterFactory { get; protected set; }
 		protected Dictionary<uint, string> CommonStringDictionary { get; set; }
+		public SceneObjectFactoryBase SceneObjectFactory { get; protected set; }
 
 		public string GetCommonString(uint index)
 		{

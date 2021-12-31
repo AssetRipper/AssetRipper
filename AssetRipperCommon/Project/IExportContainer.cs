@@ -5,6 +5,7 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.Core.VersionHandling;
 
 namespace AssetRipper.Core.Project
 {
@@ -24,5 +25,13 @@ namespace AssetRipper.Core.Project
 		UnityVersion ExportVersion { get; }
 		Platform ExportPlatform { get; }
 		TransferInstructionFlags ExportFlags { get; }
+	}
+
+	public static class ExportContainerExtensions
+	{
+		public static UnityHandlerBase GetExportHandler(this IExportContainer container)
+		{
+			return VersionManager.GetHandler(container.ExportVersion);
+		}
 	}
 }
