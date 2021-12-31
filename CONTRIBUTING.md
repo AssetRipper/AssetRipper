@@ -2,7 +2,7 @@
 
 ## First Time Contributors
 
-You can find a list of "good first issues" [here](https://github.com/ds5678/AssetRipper/contribute). These issues are selected for their relative approachability to first-time contributors.
+You can find a list of "good first issues" [here](https://github.com/AssetRipper/AssetRipper/contribute). These issues are selected for their relative approachability to first-time contributors.
 
 
 ## Pull Requests
@@ -28,6 +28,6 @@ You'll need to sign up to start translating to a new localization, or you can su
 
 Posting well-written issues is an excellent way to report bugs and share ideas about how AssetRipper can be improved.
 
-Before posting an issue, make sure it hasn't already been addressed in the [frequently asked questions](https://github.com/ds5678/AssetRipper/issues?q=is%3Aissue+is%3Aopen+label%3Afaq).
+Before posting an issue, make sure it hasn't already been addressed in the [previously posted issues](https://github.com/AssetRipper/AssetRipper/issues?q=is%3Aissue).
 
 If posting a bug report, please be sure to include your log file. It is in the same folder as the `exe` file and will be called `AssetRipper.log`.

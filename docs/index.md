@@ -1,10 +1,10 @@
 # AssetRipper
 
-[![AssetRipper Logo](https://github.com/ds5678/AssetRipper/raw/master/Media/Images/2D_Logo/AssetRipperLogoBackground.png)](https://github.com/ds5678/AssetRipper/raw/master/Media/Images/2D_Logo/AssetRipperLogoBackground.png)
+[![AssetRipper Logo](https://github.com/AssetRipper/AssetRipper/raw/master/Media/Images/2D_Logo/AssetRipperLogoBackground.png)](https://github.com/AssetRipper/AssetRipper/raw/master/Media/Images/2D_Logo/AssetRipperLogoBackground.png)
 
-[![](https://img.shields.io/github/downloads/ds5678/AssetRipper/total.svg)](https://github.com/ds5678/AssetRipper/releases)
-[![](https://img.shields.io/github/downloads/ds5678/AssetRipper/latest/total.svg)](https://github.com/ds5678/AssetRipper/releases/latest)
-[![](https://img.shields.io/github/v/release/ds5678/AssetRipper)](https://github.com/ds5678/AssetRipper/releases/latest)
+[![](https://img.shields.io/github/downloads/AssetRipper/AssetRipper/total.svg)](https://github.com/AssetRipper/AssetRipper/releases)
+[![](https://img.shields.io/github/downloads/AssetRipper/AssetRipper/latest/total.svg)](https://github.com/AssetRipper/AssetRipper/releases/latest)
+[![](https://img.shields.io/github/v/release/AssetRipper/AssetRipper)](https://github.com/AssetRipper/AssetRipper/releases/latest)
 [![](https://weblate.samboy.dev/widgets/assetripper/-/gui/svg-badge.svg)](http://weblate.samboy.dev/engage/assetripper/)
 
 AssetRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and assets bundles (*\*.unity3d*, *\*.bundle*, etc.) and converting them into the native Unity engine format.
@@ -28,7 +28,7 @@ The development of this project has a dedicated [Discord server](https://discord
 
 # Legal Disclaimers
 
-AssetRipper is licensed under the [GNU General Public License v3.0](https://github.com/ds5678/AssetRipper/blob/master/LICENSE.md)
+AssetRipper is licensed under the [GNU General Public License v3.0](https://github.com/AssetRipper/AssetRipper/blob/master/LICENSE.md)
 
 Please be aware that using or distributing the output from this software may be against copyright legislation in your jurisdiction. You are responsible for ensuring that you're not breaking any laws.
 
