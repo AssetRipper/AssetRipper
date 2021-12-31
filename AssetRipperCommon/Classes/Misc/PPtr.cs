@@ -29,9 +29,21 @@ namespace AssetRipper.Core.Classes.Misc
 		{
 			return new PPtr<T>(fileIndex, pathID).ExportYAML(container);
 		}
+
+		public static void SetValues(this IPPtr destination, IPPtr source)
+		{
+			destination.FileIndex = source.FileIndex;
+			destination.PathID = source.PathID;
+		}
 	}
 
-	public struct PPtr<T> : IAsset where T : IUnityObjectBase
+	public interface IPPtr
+	{
+		int FileIndex { get; set; }
+		long PathID { get; set; }
+	}
+
+	public struct PPtr<T> : IAsset, IPPtr where T : IUnityObjectBase
 	{
 		public PPtr(int fileIndex, long pathID)
 		{
