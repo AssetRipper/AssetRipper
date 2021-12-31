@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Core.Interfaces;
-using System.Collections.Generic;
+using AssetRipper.Core.IO;
 
 namespace AssetRipper.Core.Classes.AssetBundle
 {
 	public interface IAssetBundle : IUnityObjectBase
 	{
 		string AssetBundleName { get; set; }
-		KeyValuePair<string, IAssetInfo>[] GetAssets();
+		NullableKeyValuePair<string, IAssetInfo>[] GetAssets();
 	}
 }

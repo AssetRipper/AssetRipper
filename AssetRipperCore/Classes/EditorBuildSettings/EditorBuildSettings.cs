@@ -93,7 +93,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 		}
 
 		public Scene[] m_Scenes;
-		public IScene[] Scenes
+		public IEditorScene[] Scenes
 		{
 			get => m_Scenes;
 		}

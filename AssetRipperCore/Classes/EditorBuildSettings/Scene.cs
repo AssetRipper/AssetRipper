@@ -8,7 +8,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
-	public class Scene : UnityAssetBase, IScene
+	public class Scene : UnityAssetBase, IEditorScene
 	{
 		public Scene() { }
 

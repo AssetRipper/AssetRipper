@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
@@ -152,9 +153,9 @@ namespace AssetRipper.Core.Classes.AssetBundle
 			throw new NotSupportedException();
 		}
 
-		public KeyValuePair<string, IAssetInfo>[] GetAssets()
+		public NullableKeyValuePair<string, IAssetInfo>[] GetAssets()
 		{
-			return Container.Select(t => new KeyValuePair<string, IAssetInfo>(t.Key, t.Value)).ToArray();
+			return Container.Select(t => new NullableKeyValuePair<string, IAssetInfo>(t.Key, t.Value)).ToArray();
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();

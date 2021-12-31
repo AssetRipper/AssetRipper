@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
-using System.Collections.Generic;
+using AssetRipper.Core.IO;
 
 namespace AssetRipper.Core.Classes.ResourceManager
 {
 	public interface IResourceManager : IUnityObjectBase
 	{
-		KeyValuePair<string, PPtr<IUnityObjectBase>>[] GetAssets();
+		NullableKeyValuePair<string, PPtr<IUnityObjectBase>>[] GetAssets();
 	}
 }

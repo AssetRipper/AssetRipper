@@ -79,11 +79,11 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			int numScenes = buildSettings.Scenes.Length;
 			editorBuildSettings.InitializeScenesArray(numScenes);
-			IScene[] scenes = editorBuildSettings.Scenes;
+			IEditorScene[] scenes = editorBuildSettings.Scenes;
 			for(int i = 0; i < numScenes; i++)
 			{
 				string scenePath = buildSettings.Scenes[i];
-				IScene scene = scenes[i];
+				IEditorScene scene = scenes[i];
 				scene.Enabled = true;
 				scene.Path = scenePath;
 				scene.GUID = container.SceneNameToGUID(scenePath);

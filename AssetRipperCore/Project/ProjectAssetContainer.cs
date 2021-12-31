@@ -7,6 +7,7 @@ using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
@@ -283,7 +284,7 @@ namespace AssetRipper.Core.Project
 
 		private void AddResources(IResourceManager manager)
 		{
-			foreach (KeyValuePair<string, PPtr<IUnityObjectBase>> kvp in manager.GetAssets())
+			foreach (NullableKeyValuePair<string, PPtr<IUnityObjectBase>> kvp in manager.GetAssets())
 			{
 				IUnityObjectBase asset = kvp.Value.FindAsset(manager.File);
 				if (asset == null)
@@ -310,7 +311,7 @@ namespace AssetRipper.Core.Project
 			string bundleName = AssetBundle.HasAssetBundleName(bundle.File.Version) ? bundle.AssetBundleName : bundle.File.Name;
 			string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
 			string directory = Path.Combine(AssetBundleFullPath, bundleName);
-			foreach (KeyValuePair<string, IAssetInfo> kvp in bundle.GetAssets())
+			foreach (NullableKeyValuePair<string, IAssetInfo> kvp in bundle.GetAssets())
 			{
 				// skip shared bundle assets, because we need to export them in their bundle directory
 				if (kvp.Value.AssetPtr.FileIndex != 0)
