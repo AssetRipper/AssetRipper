@@ -4,7 +4,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
 	/// <summary>
 	/// 2.5.0 and greater (NOTE: unknown version)<br/>
-	/// Actually called Scene, but name conflicts with a different class in later unity versions
+	/// Actually called Scene, but name conflicts with a different class in older unity versions
 	/// </summary>
 	public interface IEditorScene
 	{
