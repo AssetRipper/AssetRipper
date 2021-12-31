@@ -1,5 +1,8 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
@@ -17,6 +20,46 @@ namespace AssetRipper.Core.Classes.GameObject
 
 	public static class GameObjectExtensions
 	{
+		/// <summary>
+		/// Release or less than 2.1.0
+		/// </summary>
+		public static bool HasTag(UnityVersion version, TransferInstructionFlags flags) => flags.IsRelease() || version.IsLess(2, 1);
+		/// <summary>
+		/// 2.1.0 and greater and Not Release
+		/// </summary>
+		public static bool HasTagString(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2, 1) && !flags.IsRelease();
+		/// <summary>
+		/// Less than 4.0.0
+		/// </summary>
+		public static bool IsActiveInherited(UnityVersion version) => version.IsLess(4);
+
+		public static bool GetIsActive(this IGameObject gameObject)
+		{
+			if (IsActiveInherited(gameObject.AssetUnityVersion))
+			{
+				return gameObject.File.Collection.IsScene(gameObject.File) ? gameObject.IsActive : true;
+			}
+			return gameObject.IsActive;
+		}
+
+		public static ushort GetTag(this IGameObject gameObject, IExportContainer container)
+		{
+			if (HasTag(gameObject.AssetUnityVersion, gameObject.TransferInstructionFlags))
+			{
+				return gameObject.Tag;
+			}
+			return container.TagNameToID(gameObject.TagString);
+		}
+
+		public static string GetTagString(this IGameObject gameObject, IExportContainer container)
+		{
+			if (HasTagString(gameObject.AssetUnityVersion, gameObject.TransferInstructionFlags))
+			{
+				return gameObject.TagString;
+			}
+			return container.TagIDToName(gameObject.Tag);
+		}
+
 		public static T FindComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
 			foreach (PPtr<IComponent> ptr in gameObject.FetchComponents())
