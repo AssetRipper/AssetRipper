@@ -51,6 +51,8 @@ namespace AssetRipper.Core.Classes.Misc
 			PathID = pathID;
 		}
 
+		public PPtr(IPPtr other) : this(other.FileIndex, other.PathID) { }
+
 		public static bool operator ==(PPtr<T> left, PPtr<T> right)
 		{
 			return left.FileIndex == right.FileIndex && left.PathID == right.PathID;
