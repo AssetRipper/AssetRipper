@@ -39,7 +39,15 @@ namespace AssetRipper.Core.Project.Collections
 
 			AssetExporter.Export(container, EditorSettings, filePath);
 
-			SaveMaxProjectVersion(subPath, buildSettings);
+			if(buildSettings.GetType().FullName == "AssetRipper.Core.Classes.BuildSettings")
+			{
+				//SaveDefaultProjectVersion(subPath);
+				SaveMaxProjectVersion(subPath, buildSettings);
+			}
+			else
+			{
+				SaveExactProjectVersion(subPath, buildSettings);
+			}
 			return true;
 		}
 
