@@ -8,15 +8,15 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 	public interface IOcclusionCullingSettings : IUnityObjectBase
 	{
 		public byte[] PVSData { get; set; }
-		UnityGUID SceneGUID { get; }
+		UnityGUID SceneGUID { get; set; }
 		/// <summary>
-		/// PVSObjectsArray/m_PVSObjectsArray previously
+		/// m_PVSObjectsArray previously
 		/// </summary>
 		PPtr<Renderer.IRenderer>[] StaticRenderers { get; }
 		/// <summary>
-		/// PVSPortalsArray previously
+		/// m_PVSPortalsArray previously
 		/// </summary>
-		PPtr<IOcclusionPortal>[] Portals { get; set; }
+		PPtr<IOcclusionPortal>[] Portals { get; }
 		PPtr<IOcclusionCullingData> OcclusionCullingData { get; }
 	}
 

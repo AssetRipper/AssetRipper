@@ -47,11 +47,11 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			PVSData = reader.ReadByteArray();
 			reader.AlignStream();
 
-			Scenes = reader.ReadAssetArray<OcclusionScene>();
+			m_Scenes = reader.ReadAssetArray<OcclusionScene>();
 			if (HasStaticRenderers(reader.Flags))
 			{
-				StaticRenderers = reader.ReadAssetArray<SceneObjectIdentifier>();
-				Portals = reader.ReadAssetArray<SceneObjectIdentifier>();
+				m_StaticRenderers = reader.ReadAssetArray<SceneObjectIdentifier>();
+				m_Portals = reader.ReadAssetArray<SceneObjectIdentifier>();
 			}
 		}
 
@@ -59,19 +59,50 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(PVSDataName, PVSData.ExportYAML());
-			node.Add(ScenesName, Scenes.ExportYAML(container));
+			node.Add(ScenesName, m_Scenes.ExportYAML(container));
 			this.SetExportData(container);
-			node.Add(StaticRenderersName, StaticRenderers.ExportYAML(container));
-			node.Add(PortalsName, Portals.ExportYAML(container));
+			node.Add(StaticRenderersName, m_StaticRenderers.ExportYAML(container));
+			node.Add(PortalsName, m_Portals.ExportYAML(container));
 			return node;
+		}
+
+		public void InitializeScenes(int count)
+		{
+			m_Scenes = new OcclusionScene[count];
+			for (int i = 0; i < count; i++)
+			{
+				m_Scenes[i] = new OcclusionScene();
+			}
+		}
+
+		public void InitializeStaticRenderers(int count)
+		{
+			m_StaticRenderers = new SceneObjectIdentifier[count];
+			for(int i = 0; i < count; ++i)
+			{
+				m_StaticRenderers[i] = new SceneObjectIdentifier();
+			}
+		}
+
+		public void InitializePortals(int count)
+		{
+			m_Portals = new SceneObjectIdentifier[count];
+			for(int i = 0; i < count; i++)
+			{
+				m_Portals[i] = new SceneObjectIdentifier();
+			}
 		}
 
 		public override string ExportPath => Path.Combine(AssetsKeyword, OcclusionCullingSettings.OcclusionCullingSettings.SceneKeyword, ClassID.ToString());
 
+		private OcclusionScene[] m_Scenes = Array.Empty<OcclusionScene>();
+		private SceneObjectIdentifier[] m_StaticRenderers = Array.Empty<SceneObjectIdentifier>();
+		private SceneObjectIdentifier[] m_Portals = Array.Empty<SceneObjectIdentifier>();
+
 		public byte[] PVSData { get; set; }
-		public IOcclusionScene[] Scenes { get; set; }
-		public ISceneObjectIdentifier[] StaticRenderers { get; set; } = Array.Empty<ISceneObjectIdentifier>();
-		public ISceneObjectIdentifier[] Portals { get; set; } = Array.Empty<ISceneObjectIdentifier>();
+		public IOcclusionScene[] Scenes => m_Scenes;
+		public ISceneObjectIdentifier[] StaticRenderers => m_StaticRenderers;
+		public ISceneObjectIdentifier[] Portals => m_Portals;
 
 		public const string PVSDataName = "m_PVSData";
 		public const string ScenesName = "m_Scenes";

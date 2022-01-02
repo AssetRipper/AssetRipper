@@ -9,7 +9,6 @@ namespace AssetRipper.Core.VersionHandling
 			this.AssetFactory = new AssetFactory();
 			this.ImporterFactory = new LegacyImporterFactory();
 			ClassIDTypeEnum = typeof(ClassIDType);
-			SceneObjectFactory = new SceneObjectFactory();
 		}
 	}
 }

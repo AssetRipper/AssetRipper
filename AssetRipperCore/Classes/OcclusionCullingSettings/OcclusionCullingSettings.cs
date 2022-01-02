@@ -207,7 +207,11 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			return default;
 		}
 
-		public UnityGUID SceneGUID { get; }
+		public UnityGUID SceneGUID 
+		{ 
+			get => m_SceneGUID;
+			set => m_SceneGUID = value;
+		}
 
 		public byte[] PVSData { get; set; }
 		public int QueryMode { get; set; }

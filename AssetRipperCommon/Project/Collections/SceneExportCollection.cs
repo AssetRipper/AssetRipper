@@ -10,7 +10,6 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -65,10 +64,9 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				foreach (IUnityObjectBase comp in Components)
 				{
-					if (comp.ClassID == ClassIDType.OcclusionCullingSettings)
+					if (comp is IOcclusionCullingSettings settings)
 					{
-						IOcclusionCullingSettings settings = (IOcclusionCullingSettings)comp;
-						if (settings.PVSData.Length > 0)
+						if (settings.PVSData?.Length > 0)
 						{
 							m_occlusionCullingSettings = settings;
 							//OcclusionCullingData = OcclusionCullingData.CreateVirtualInstance(virtualFile);

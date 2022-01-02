@@ -13,9 +13,12 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 	public interface IOcclusionCullingData : INamedObject
 	{
 		byte[] PVSData { get; set; }
-		IOcclusionScene[] Scenes { get; set; }
-		ISceneObjectIdentifier[] StaticRenderers { get; set; }
-		ISceneObjectIdentifier[] Portals { get; set; }
+		IOcclusionScene[] Scenes { get; }
+		ISceneObjectIdentifier[] StaticRenderers { get; }
+		ISceneObjectIdentifier[] Portals { get; }
+		void InitializeScenes(int count);
+		void InitializeStaticRenderers(int count);
+		void InitializePortals(int count);
 	}
 
 	public static class OcclusionCullingDataExtensions
@@ -33,12 +36,12 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			occlusionCullingData.PVSData = (byte[])cullingSetting.PVSData;
 			int renderCount = cullingSetting.StaticRenderers.Length;
 			int portalCount = cullingSetting.Portals.Length;
-			IOcclusionScene scene = VersionHandling.VersionManager.GetHandler(container.ExportVersion).SceneObjectFactory.CreateOcclusionScene();
+			occlusionCullingData.InitializeScenes(1);
+			IOcclusionScene scene = occlusionCullingData.Scenes[0];
 			scene.Initialize(cullingSetting.SceneGUID, renderCount, portalCount);
-			occlusionCullingData.Scenes = new IOcclusionScene[] { scene };
 
-			occlusionCullingData.StaticRenderers = new ISceneObjectIdentifier[scene.SizeRenderers];
-			occlusionCullingData.Portals = new ISceneObjectIdentifier[scene.SizePortals];
+			occlusionCullingData.InitializeStaticRenderers(scene.SizeRenderers);
+			occlusionCullingData.InitializePortals(scene.SizePortals);
 			occlusionCullingData.SetIDs(container, cullingSetting, scene);
 		}
 
@@ -73,9 +76,9 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			}
 
 			int maxRenderer = occlusionCullingData.Scenes.Max(j => j.IndexRenderers + j.SizeRenderers);
-			occlusionCullingData.StaticRenderers = new ISceneObjectIdentifier[maxRenderer];
+			occlusionCullingData.InitializeStaticRenderers(maxRenderer);
 			int maxPortal = occlusionCullingData.Scenes.Max(j => j.IndexPortals + j.SizePortals);
-			occlusionCullingData.Portals = new ISceneObjectIdentifier[maxPortal];
+			occlusionCullingData.InitializePortals(maxPortal);
 
 			foreach (OcclusionCullingSettings.IOcclusionCullingSettings cullingSetting in cullingSettings)
 			{
@@ -105,22 +108,23 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			{
 				PPtr<Renderer.IRenderer> prenderer = cullingSetting.StaticRenderers[i];
 				Renderer.IRenderer renderer = prenderer.FindAsset(cullingSetting.File);
-				occlusionCullingData.StaticRenderers[scene.IndexRenderers + i] = CreateObjectID(container, renderer);
+				occlusionCullingData.StaticRenderers[scene.IndexRenderers + i].SetObjectID(container, renderer);
 			}
 
 			for (int i = 0; i < cullingSetting.Portals.Length; i++)
 			{
 				PPtr<IOcclusionPortal> pportal = cullingSetting.Portals[i];
 				IOcclusionPortal portal = pportal.FindAsset(cullingSetting.File);
-				occlusionCullingData.Portals[scene.IndexPortals + i] = CreateObjectID(container, portal);
+				occlusionCullingData.Portals[scene.IndexPortals + i].SetObjectID(container, portal);
 			}
 		}
 
-		private static ISceneObjectIdentifier CreateObjectID(IExportContainer container, IUnityObjectBase asset)
+		private static void SetObjectID(this ISceneObjectIdentifier sceneObjectIdentifier, IExportContainer container, IUnityObjectBase asset)
 		{
+			if (sceneObjectIdentifier is null) throw new ArgumentNullException(nameof(sceneObjectIdentifier));
 			long lid = asset == null ? 0 : container.GetExportID(asset);
-			ISceneObjectIdentifier sceneObjectIdentifier = VersionHandling.VersionManager.GetHandler(container.ExportVersion).SceneObjectFactory.CreateSceneObjectIdentifier(lid, 0);
-			return sceneObjectIdentifier;
+			sceneObjectIdentifier.TargetObject = lid;
+			sceneObjectIdentifier.TargetPrefab = 0;
 		}
 	}
 }

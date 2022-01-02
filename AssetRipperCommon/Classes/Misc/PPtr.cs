@@ -35,6 +35,16 @@ namespace AssetRipper.Core.Classes.Misc
 			destination.FileIndex = source.FileIndex;
 			destination.PathID = source.PathID;
 		}
+
+		public static PPtr<T>[] CastArray<T>(IPPtr[] array) where T : IUnityObjectBase
+		{
+			var result = new PPtr<T>[array.Length];
+			for (int i = 0; i < array.Length; i++)
+			{
+				result[i] = new PPtr<T>(array[i]);
+			}
+			return result;
+		}
 	}
 
 	public interface IPPtr
@@ -114,17 +124,13 @@ namespace AssetRipper.Core.Classes.Misc
 				return default;
 			}
 			IUnityObjectBase asset = file.FindAsset(FileIndex, PathID);
-			switch (asset)
+			return asset switch
 			{
-				case null:
-					return default;
-				case UnknownObject or UnreadableObject:
-					return default;
-				case T t:
-					return t;
-				default:
-					throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
-			}
+				null => default,
+				UnknownObject or UnreadableObject => default,
+				T t => t,
+				_ => throw new Exception($"Object's type {asset.GetType().Name} isn't assignable from {typeof(T).Name}"),
+			};
 		}
 
 		public T TryGetAsset(IAssetContainer file)
