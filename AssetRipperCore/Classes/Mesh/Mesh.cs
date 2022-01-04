@@ -974,7 +974,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public byte[] GetChannelsData()
 		{
-			if (HasStreamData(File.Version) && StreamData.IsSet)
+			if (HasStreamData(File.Version) && StreamData.IsSet())
 			{
 				return StreamData.GetContent(File);
 			}

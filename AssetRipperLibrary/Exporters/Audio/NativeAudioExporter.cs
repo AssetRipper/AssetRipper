@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioClip;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;

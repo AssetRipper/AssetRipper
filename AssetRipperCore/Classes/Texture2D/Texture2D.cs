@@ -131,7 +131,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public byte[] GetImageData()
 		{
 			byte[] data = m_imageData;
-			if (HasStreamData(File.Version) && StreamData.IsSet)
+			if (HasStreamData(File.Version) && StreamData.IsSet())
 			{
 				data = StreamData.GetContent(File) ?? m_imageData;
 			}
@@ -309,7 +309,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			{
 				if (HasStreamData(File.Version))
 				{
-					if (StreamData.IsSet)
+					if (StreamData.IsSet())
 					{
 						return true;
 					}

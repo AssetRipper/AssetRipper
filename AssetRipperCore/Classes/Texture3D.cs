@@ -220,7 +220,7 @@ namespace AssetRipper.Core.Classes
 
 		private byte[] GetImageData(UnityVersion version)
 		{
-			if (HasStreamData(version) && StreamData.IsSet)
+			if (HasStreamData(version) && StreamData.IsSet())
 			{
 				byte[] data = StreamData.GetContent(File);
 				if (data == null)
