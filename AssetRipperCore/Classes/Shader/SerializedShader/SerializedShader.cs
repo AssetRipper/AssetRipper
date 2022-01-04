@@ -3,9 +3,10 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedShader : IAssetReadable
+	public class SerializedShader : IAssetReadable, ISerializedShader
 	{
-		public SerializedProperties PropInfo;
+		public ISerializedProperties PropInfo => m_PropInfo;
+		private SerializedProperties m_PropInfo = new();
 		public SerializedSubShader[] SubShaders { get; set; }
 		public string Name { get; set; }
 		public string CustomEditorName { get; set; }
@@ -17,7 +18,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// <summary>
 		/// 2021 and greater
 		/// </summary>
-		public static bool HasCustomEditor(UnityVersion version) => version.IsGreaterEqual(2021);
+		public static bool HasCustomEditorForRenderPipelines(UnityVersion version) => version.IsGreaterEqual(2021);
 		
 		/// <summary>
 		/// 2021.2 and greater
@@ -26,7 +27,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 
 		public void Read(AssetReader reader)
 		{
-			PropInfo.Read(reader);
+			m_PropInfo.Read(reader);
 			SubShaders = reader.ReadAssetArray<SerializedSubShader>();
 			if (HasKeywordData(reader.Version))
 			{
@@ -39,7 +40,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			CustomEditorName = reader.ReadString();
 			FallbackName = reader.ReadString();
 			Dependencies = reader.ReadAssetArray<SerializedShaderDependency>();
-			if (HasCustomEditor(reader.Version))
+			if (HasCustomEditorForRenderPipelines(reader.Version))
 			{
 				CustomEditorForRenderPipelines = reader.ReadAssetArray<SerializedCustomEditorForRenderPipeline>();
 			}

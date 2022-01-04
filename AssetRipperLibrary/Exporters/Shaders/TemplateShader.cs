@@ -12,7 +12,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 		public string ShaderText { get; set; }
 
 
-		public bool IsMatch(Shader shader)
+		public bool IsMatch(IShader shader)
 		{
 			if (RequiredProperties == null)
 				throw new System.NullReferenceException("requiredProperties cannot be null");

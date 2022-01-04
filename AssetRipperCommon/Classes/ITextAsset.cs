@@ -1,8 +1,6 @@
-﻿using AssetRipper.Core.Interfaces;
-
-namespace AssetRipper.Core.Classes
+﻿namespace AssetRipper.Core.Classes
 {
-	public interface ITextAsset : IUnityObjectBase
+	public interface ITextAsset : INamedObject
 	{
 		string Script { get; }
 	}

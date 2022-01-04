@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Classes.GameObject;
+using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Extensions;
@@ -20,7 +21,6 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading;
-using Shader = AssetRipper.Core.Classes.Shader.Shader;
 
 namespace AssetRipper.GUI.AssetInfo
 {
@@ -140,7 +140,7 @@ namespace AssetRipper.GUI.AssetInfo
 		//Read from UI
 		public bool HasTextData => Asset switch
 		{
-			Shader => true,
+			IShader => true,
 			DummyAssetForLooseResourceFile da => da.RawData.Length > 0,
 			ITextAsset txt=> !string.IsNullOrEmpty(txt.Script),
 			IHasRawData rawDataAsset => rawDataAsset.RawData.Length > 0,
@@ -150,7 +150,7 @@ namespace AssetRipper.GUI.AssetInfo
 		//Read from UI
 		public string? TextAssetData => (Asset switch
 		{
-			Shader shader => DumpShaderDataAsText(shader),
+			IShader shader => DumpShaderDataAsText(shader),
 			DummyAssetForLooseResourceFile da => da.IsProbablyPlainText ? da.DataAsString : da.RawData.ToFormattedHex(),
 			ITextAsset txt => txt.Script,
 			IHasRawData rawDataAsset => rawDataAsset.RawData.ToFormattedHex(),
@@ -187,7 +187,7 @@ namespace AssetRipper.GUI.AssetInfo
 
 		private bool HasName => Asset switch
 		{
-			Shader s => !string.IsNullOrEmpty(s.ValidName),
+			IShader s => !string.IsNullOrEmpty(s.GetValidShaderName()),
 			IGameObject go => !string.IsNullOrEmpty(go.Name),
 			INamedObject no => !string.IsNullOrEmpty(no.Name),
 			IHasName hasName => !string.IsNullOrEmpty(hasName.Name),
@@ -196,7 +196,7 @@ namespace AssetRipper.GUI.AssetInfo
 
 		private string? Name => Asset switch
 		{
-			Shader s => s.ValidName,
+			IShader s => s.GetValidShaderName(),
 			IGameObject go => go.Name,
 			INamedObject no => no.Name,
 			IHasName hasName => hasName.Name,
@@ -329,7 +329,7 @@ namespace AssetRipper.GUI.AssetInfo
 			PositionString = $"{TimeSpan.FromSeconds(AudioPositionSeconds):hh\\:mm\\:ss}/{TimeSpan.FromSeconds(AudioLengthSeconds):g}";
 		}
 
-		private string DumpShaderDataAsText(Shader shader)
+		private string DumpShaderDataAsText(IShader shader)
 		{
 			using MemoryStream stream = new();
 			DummyShaderTextExporter.ExportShader(shader, _uiAssetContainer, stream);

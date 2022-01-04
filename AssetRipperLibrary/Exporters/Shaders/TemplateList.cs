@@ -20,7 +20,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			Templates = LoadTemplates();
 		}
 
-		public static TemplateShader GetBestTemplate(Shader shader)
+		public static TemplateShader GetBestTemplate(IShader shader)
 		{
 			return Templates.Where(tmp => tmp.IsMatch(shader)).MaxBy(matchedTmp => matchedTmp.RequiredProperties.Count);
 		}

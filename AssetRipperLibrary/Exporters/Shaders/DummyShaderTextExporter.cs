@@ -4,14 +4,11 @@ using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
 using System;
 using System.Globalization;
 using System.IO;
-using System.Text;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
@@ -37,16 +34,12 @@ namespace AssetRipper.Library.Exporters.Shaders
 		ENDCG
 	}
 ";
-		/// <summary>
-		/// At least 5.5
-		/// </summary>
-		public static bool IsSerialized(UnityVersion version) => version.IsGreaterEqual(5, 5);
 
-		public override bool IsHandle(IUnityObjectBase asset) => asset is Shader;
+		public override bool IsHandle(IUnityObjectBase asset) => asset is IShader;
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			Shader shader = (Shader)asset;
+			IShader shader = (IShader)asset;
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
 			if (shader.ParsedForm.Name?.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
@@ -59,9 +52,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 			return true;
 		}
 
-		public static void ExportShader(Shader shader, IExportContainer container, Stream stream)
+		public static void ExportShader(IShader shader, IExportContainer container, Stream stream)
 		{
-			if (IsSerialized(container.Version))
+			if (shader.HasParsedForm)
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
 				writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm.Name);
@@ -107,11 +100,11 @@ namespace AssetRipper.Library.Exporters.Shaders
 			}
 		}
 
-		private static void Export(SerializedProperties _this, TextWriter writer)
+		private static void Export(ISerializedProperties _this, TextWriter writer)
 		{
 			writer.WriteIndent(1);
 			writer.Write("Properties {\n");
-			foreach (SerializedProperty prop in _this.Props)
+			foreach (ISerializedProperty prop in _this.Props)
 			{
 				Export(prop, writer);
 			}
@@ -119,7 +112,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			writer.Write("}\n");
 		}
 
-		private static void Export(SerializedProperty _this, TextWriter writer)
+		private static void Export(ISerializedProperty _this, TextWriter writer)
 		{
 			writer.WriteIndent(2);
 			foreach (string attribute in _this.Attributes)

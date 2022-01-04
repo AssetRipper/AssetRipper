@@ -2,13 +2,15 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedProperties : IAssetReadable
+	public class SerializedProperties : IAssetReadable, ISerializedProperties
 	{
 		public void Read(AssetReader reader)
 		{
-			Props = reader.ReadAssetArray<SerializedProperty>();
+			m_Props = reader.ReadAssetArray<SerializedProperty>();
 		}
 
-		public SerializedProperty[] Props { get; set; }
+		private SerializedProperty[] m_Props;
+
+		public ISerializedProperty[] Props => m_Props;
 	}
 }

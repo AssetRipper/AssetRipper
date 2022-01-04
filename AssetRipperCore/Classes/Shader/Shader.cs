@@ -92,7 +92,7 @@ namespace AssetRipper.Core.Classes.Shader
 			{
 				ReadNamedObject(reader);
 
-				ParsedForm.Read(reader);
+				m_ParsedForm.Read(reader);
 				Platforms = reader.ReadArray((t) => (GPUPlatform)t);
 				if (IsDoubleArray(reader.Version))
 				{
@@ -221,7 +221,7 @@ namespace AssetRipper.Core.Classes.Shader
 
 		public override string ExportExtension => "shader";
 
-		public string ValidName => IsSerialized(File.Version) ? ParsedForm.Name : this.GetNameNotEmpty();
+		public bool HasParsedForm => IsSerialized(File.Version);
 
 		public GPUPlatform[] Platforms { get; set; }
 		public ShaderSubProgramBlob[] Blobs { get; set; }
@@ -232,7 +232,8 @@ namespace AssetRipper.Core.Classes.Shader
 		public const string ErrorsName = "errors";
 		public const string DependenciesName = "m_Dependencies";
 
-		public SerializedShader.SerializedShader ParsedForm;
+		public SerializedShader.ISerializedShader ParsedForm => m_ParsedForm;
+		private SerializedShader.SerializedShader m_ParsedForm = new();
 		public PPtr<Shader> Fallback;
 		public UnityPropertySheet DefaultProperties;
 		public UnityPropertySheet StaticProperties;

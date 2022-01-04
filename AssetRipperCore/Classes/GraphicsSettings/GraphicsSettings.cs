@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Camera;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -539,7 +540,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 					Shader.Shader shader = shaderPtr.FindAsset(container);
 					if (shader != null)
 					{
-						shaderNames.Add(shader.ValidName);
+						shaderNames.Add(shader.GetValidShaderName());
 					}
 				}
 			}

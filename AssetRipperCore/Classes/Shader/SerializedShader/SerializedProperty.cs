@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedProperty : IAssetReadable
+	public class SerializedProperty : IAssetReadable, ISerializedProperty
 	{
 		public void Read(AssetReader reader)
 		{
@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			DefValue1 = reader.ReadSingle();
 			DefValue2 = reader.ReadSingle();
 			DefValue3 = reader.ReadSingle();
-			DefTexture.Read(reader);
+			m_DefTexture.Read(reader);
 		}
 
 		public string Name { get; set; }
@@ -29,6 +29,8 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public float DefValue2 { get; set; }
 		public float DefValue3 { get; set; }
 
-		public SerializedTextureProperty DefTexture;
+		public ISerializedTextureProperty DefTexture => m_DefTexture;
+
+		private SerializedTextureProperty m_DefTexture = new();
 	}
 }

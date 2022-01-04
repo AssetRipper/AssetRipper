@@ -135,7 +135,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is IShader shader)
 			{
-				if (EngineBuiltInAssets.TryGetShader(shader.ValidName, version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetShader(shader.GetValidShaderName(), version, out engineAsset))
 				{
 					return true;
 				}
