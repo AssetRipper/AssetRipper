@@ -84,19 +84,21 @@ namespace AssetRipper.Core
 		private FieldInfo TryGetFieldInfo(string fieldName) => this.GetType().GetFields(fieldBindingFlags).Where(fieldInfo => fieldInfo.Name == fieldName).FirstOrDefault();
 
 		/// <summary>
-		/// Try using reflection to get the value of a field.
+		/// Try using reflection to get the value of a field.<br/>
+		/// Warning: reflection seems to fail on generated assemblies
 		/// </summary>
 		/// <param name="fieldName">The name of the field.</param>
 		/// <returns>The boxed value of that field if it exists.</returns>
-		public object TryGetFieldValue(string fieldName) => TryGetFieldInfo(fieldName)?.GetValue(this);
+		private object TryGetFieldValue(string fieldName) => TryGetFieldInfo(fieldName)?.GetValue(this);
 
 		/// <summary>
-		/// Try using reflection to get the value of a field.
+		/// Try using reflection to get the value of a field.<br/>
+		/// Warning: reflection seems to fail on generated assemblies
 		/// </summary>
 		/// <typeparam name="T">The type to cast the boxed value to.</typeparam>
 		/// <param name="fieldName">The name of the field.</param>
 		/// <returns>The value of that field if it exists and is castable to the specified type.</returns>
-		public T TryGetFieldValue<T>(string fieldName)
+		private T TryGetFieldValue<T>(string fieldName)
 		{
 			object value = TryGetFieldValue(fieldName);
 			if (value is T result)
@@ -106,13 +108,14 @@ namespace AssetRipper.Core
 		}
 
 		/// <summary>
-		/// Try using reflection to set the value of a field.
+		/// Try using reflection to set the value of a field.<br/>
+		/// Warning: reflection seems to fail on generated assemblies
 		/// </summary>
 		/// <typeparam name="T">The type of the value being assigned.</typeparam>
 		/// <param name="fieldName">The name of the field.</param>
 		/// <param name="value">The value to assign.</param>
 		/// <returns>True if successful, false otherwise</returns>
-		public bool TrySetFieldValue<T>(string fieldName, T value)
+		private bool TrySetFieldValue<T>(string fieldName, T value)
 		{
 			FieldInfo fieldInfo = TryGetFieldInfo(fieldName);
 			if (fieldInfo == null)
