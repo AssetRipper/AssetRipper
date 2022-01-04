@@ -30,6 +30,26 @@ namespace AssetRipper.Core.Classes.Misc
 			return new PPtr<T>(fileIndex, pathID).ExportYAML(container);
 		}
 
+		public static YAMLNode ExportYAML<T>(this IPPtr<T> pptr, IExportContainer container) where T : IUnityObjectBase
+		{
+			if (pptr.IsNull())
+			{
+				return MetaPtr.NullPtr.ExportYAML(container);
+			}
+
+			T asset = pptr.FindAsset(container);
+			if (asset == null)
+			{
+				ClassIDType classType = typeof(T).ToClassIDType();
+				AssetType assetType = container.ToExportType(classType);
+				MetaPtr pointer = new MetaPtr(classType, assetType);
+				return pointer.ExportYAML(container);
+			}
+
+			MetaPtr exPointer = container.CreateExportPointer(asset);
+			return exPointer.ExportYAML(container);
+		}
+
 		public static void SetValues(this IPPtr destination, IPPtr source)
 		{
 			destination.FileIndex = source.FileIndex;
@@ -45,15 +65,112 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 			return result;
 		}
+
+		public static T FindAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
+		{
+			if (pptr.IsNull())
+			{
+				return default;
+			}
+			IUnityObjectBase asset = file.FindAsset(pptr.FileIndex, pptr.PathID);
+			return asset switch
+			{
+				null => default,
+				UnknownObject or UnreadableObject => default,
+				T t => t,
+				_ => throw new Exception($"Object's type {asset.GetType().Name} isn't assignable from {typeof(T).Name}"),
+			};
+		}
+
+		public static T TryGetAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
+		{
+			if (pptr.IsNull())
+			{
+				return default;
+			}
+			return pptr.GetAsset(file);
+		}
+
+		public static T GetAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
+		{
+			if (pptr.IsNull())
+			{
+				throw new Exception("Can't get null PPtr");
+			}
+			IUnityObjectBase asset = file.GetAsset(pptr.FileIndex, pptr.PathID);
+			if (asset is T t)
+			{
+				return t;
+			}
+			throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
+		}
+
+		public static bool IsAsset<T>(this IPPtr<T> pptr, IUnityObjectBase asset) where T : IUnityObjectBase
+		{
+			if (pptr.FileIndex == 0)
+			{
+				return asset.PathID == pptr.PathID;
+			}
+			else
+			{
+				throw new NotSupportedException("Need to specify file where to find");
+			}
+		}
+
+		public static bool IsAsset<T>(this IPPtr<T> pptr, IAssetContainer file, IUnityObjectBase asset) where T : IUnityObjectBase
+		{
+			if (pptr.FileIndex == 0)
+			{
+				if (file == asset.File)
+				{
+					return asset.PathID == pptr.PathID;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return asset.PathID == pptr.PathID && file.Dependencies[pptr.FileIndex - 1].IsFile(asset.File);
+			}
+		}
+
+		public static bool IsValid<T>(this IPPtr<T> pptr, IExportContainer container) where T : IUnityObjectBase
+		{
+			return pptr.FindAsset(container) != null;
+		}
+
+		public static string ToLogString<T>(this IPPtr<T> pptr, IAssetContainer container) where T : IUnityObjectBase
+		{
+			string depName = pptr.FileIndex == 0 ? container.Name : container.Dependencies[pptr.FileIndex - 1].PathNameOrigin;
+			return $"[{depName}]{typeof(T).Name}_{pptr.PathID}";
+		}
+
+		public static bool IsVirtual(this IPPtr pptr) => pptr.FileIndex == VirtualSerializedFile.VirtualFileIndex;
+		/// <summary>
+		/// PathID == 0
+		/// </summary>
+		public static bool IsNull(this IPPtr pptr) => pptr.PathID == 0;
 	}
 
 	public interface IPPtr
 	{
+		/// <summary>
+		/// 0 means current file
+		/// </summary>
 		int FileIndex { get; set; }
+		/// <summary>
+		/// It is acts more like a hash in some cases
+		/// </summary>
 		long PathID { get; set; }
 	}
 
-	public struct PPtr<T> : IAsset, IPPtr where T : IUnityObjectBase
+	public interface IPPtr<T> : IPPtr where T : IUnityObjectBase
+	{
+	}
+
+	public struct PPtr<T> : IAsset, IPPtr<T> where T : IUnityObjectBase
 	{
 		public PPtr(int fileIndex, long pathID)
 		{
@@ -99,104 +216,12 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
-			if (IsNull)
-			{
-				return MetaPtr.NullPtr.ExportYAML(container);
-			}
-
-			T asset = FindAsset(container);
-			if (asset == null)
-			{
-				ClassIDType classType = typeof(T).ToClassIDType();
-				AssetType assetType = container.ToExportType(classType);
-				MetaPtr pointer = new MetaPtr(classType, assetType);
-				return pointer.ExportYAML(container);
-			}
-
-			MetaPtr exPointer = container.CreateExportPointer(asset);
-			return exPointer.ExportYAML(container);
-		}
-
-		public T FindAsset(IAssetContainer file)
-		{
-			if (IsNull)
-			{
-				return default;
-			}
-			IUnityObjectBase asset = file.FindAsset(FileIndex, PathID);
-			return asset switch
-			{
-				null => default,
-				UnknownObject or UnreadableObject => default,
-				T t => t,
-				_ => throw new Exception($"Object's type {asset.GetType().Name} isn't assignable from {typeof(T).Name}"),
-			};
-		}
-
-		public T TryGetAsset(IAssetContainer file)
-		{
-			if (IsNull)
-			{
-				return default;
-			}
-			return GetAsset(file);
-		}
-
-		public T GetAsset(IAssetContainer file)
-		{
-			if (IsNull)
-			{
-				throw new Exception("Can't get null PPtr");
-			}
-			IUnityObjectBase asset = file.GetAsset(FileIndex, PathID);
-			if (asset is T t)
-			{
-				return t;
-			}
-			throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
-		}
-
-		public bool IsAsset(IUnityObjectBase asset)
-		{
-			if (FileIndex == 0)
-			{
-				return asset.PathID == PathID;
-			}
-			else
-			{
-				throw new NotSupportedException("Need to specify file where to find");
-			}
-		}
-
-		public bool IsAsset(IAssetContainer file, IUnityObjectBase asset)
-		{
-			if (FileIndex == 0)
-			{
-				if (file == asset.File)
-				{
-					return asset.PathID == PathID;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			else
-			{
-				return asset.PathID == PathID && file.Dependencies[FileIndex - 1].IsFile(asset.File);
-			}
+			return PPtr.ExportYAML(this, container);
 		}
 
 		public override string ToString()
 		{
 			return $"[{FileIndex}, {PathID}]";
-		}
-
-		public string ToLogString(IAssetContainer container)
-		{
-			string depName = FileIndex == 0 ? container.Name : container.Dependencies[FileIndex - 1].PathNameOrigin;
-			ClassIDType classID = typeof(T).ToClassIDType();
-			return $"[{depName}]{classID}_{PathID}";
 		}
 
 		public override bool Equals(object obj)
@@ -223,26 +248,14 @@ namespace AssetRipper.Core.Classes.Misc
 			return hash;
 		}
 
-		public bool IsValid(IExportContainer container)
-		{
-			return FindAsset(container) != null;
-		}
-
-		public Type AssetType => typeof(T);
-
-		public bool IsVirtual => FileIndex == VirtualSerializedFile.VirtualFileIndex;
+		public bool IsVirtual => this.IsVirtual();
 		/// <summary>
 		/// PathID == 0
 		/// </summary>
-		public bool IsNull => PathID == 0;
-
-		/// <summary>
-		/// 0 means current file
-		/// </summary>
+		public bool IsNull => this.IsNull();
+		/// <inheritdoc/>
 		public int FileIndex { get; set; }
-		/// <summary>
-		/// It is acts more like a hash in some cases
-		/// </summary>
+		/// <inheritdoc/>
 		public long PathID { get; set; }
 	}
 }

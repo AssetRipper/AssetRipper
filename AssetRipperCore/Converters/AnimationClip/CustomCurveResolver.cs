@@ -3,6 +3,7 @@ using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Camera;
 using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Light;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Renderer;
 using AssetRipper.Core.Classes.SpriteRenderer;
 using AssetRipper.Core.Layout;
