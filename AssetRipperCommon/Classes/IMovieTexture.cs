@@ -2,7 +2,8 @@
 
 namespace AssetRipper.Core.Classes
 {
-	public interface IMovieTexture : IHasRawData, IUnityObjectBase
+	public interface IMovieTexture : IUnityObjectBase
 	{
+		byte[] MovieData { get; set; }
 	}
 }

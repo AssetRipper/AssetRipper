@@ -14,7 +14,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is IFont font)
-				return IsValidData(font.RawData);
+				return IsValidData(font.FontData);
 			else
 				return false;
 		}
@@ -26,13 +26,13 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((IFont)asset).RawData));
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((IFont)asset).FontData));
 			return true;
 		}
 
 		string GetExportExtension(IFont font)
 		{
-			byte[] fontData = font.RawData;
+			byte[] fontData = font.FontData;
 			uint type = System.BitConverter.ToUInt32(fontData, 0);
 			return type == OttoAsciiFourCC ? "otf" : "ttf";
 		}
