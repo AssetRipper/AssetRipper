@@ -5,7 +5,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
 using System.IO;
 using System.Text;
@@ -22,7 +21,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return ExportMode == TerrainExportMode.Obj && asset is TerrainData;
+			return ExportMode == TerrainExportMode.Obj && asset is ITerrainData;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
@@ -32,7 +31,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			string text = ExportTerrainToObj((TerrainData)asset);
+			string text = ExportTerrainToObj((ITerrainData)asset);
 			if (string.IsNullOrEmpty(text))
 				return false;
 
@@ -46,7 +45,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			return true;
 		}
 
-		private static string ExportTerrainToObj(TerrainData terrain)
+		private static string ExportTerrainToObj(ITerrainData terrain)
 		{
 			StringBuilder sb = new StringBuilder();
 			int tw = terrain.Heightmap.Width;
@@ -110,7 +109,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			return sb.ToString();
 		}
 
-		private static float[,] GetHeights(TerrainData terrain)
+		private static float[,] GetHeights(ITerrainData terrain)
 		{
 			int width = terrain.Heightmap.Width;
 			int height = terrain.Heightmap.Height;

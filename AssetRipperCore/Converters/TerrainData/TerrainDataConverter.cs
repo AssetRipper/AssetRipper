@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Converters.TerrainData
 			NamedObjectConverter.Convert(container, origin, instance);
 			instance.SplatDatabase = origin.SplatDatabase.Convert(container);
 			instance.DetailDatabase = origin.DetailDatabase.Convert(container);
-			instance.Heightmap = origin.Heightmap.Convert(container);
+			instance.m_Heightmap = origin.m_Heightmap.Convert(container);
 			if (AssetRipper.Core.Classes.TerrainData.TerrainData.HasLightmap(container.ExportVersion))
 			{
 				instance.Lightmap = origin.Lightmap;

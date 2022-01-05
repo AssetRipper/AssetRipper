@@ -7,11 +7,9 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.TextureDecoders;
 using AssetRipper.Library.Utils;
-using System.IO;
 
 namespace AssetRipper.Library.Exporters.Terrains
 {
@@ -27,7 +25,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return ExportMode == TerrainExportMode.Heatmap && asset is TerrainData;
+			return ExportMode == TerrainExportMode.Heatmap && asset is ITerrainData;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
@@ -37,7 +35,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TerrainData terrain = (TerrainData)asset;
+			ITerrainData terrain = (ITerrainData)asset;
 			using DirectBitmap bitmap = GetBitmap(terrain);
 			if (bitmap == null)
 			{
@@ -48,7 +46,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			return true;
 		}
 
-		public static DirectBitmap GetBitmap(TerrainData terrain)
+		public static DirectBitmap GetBitmap(ITerrainData terrain)
 		{
 			int width = terrain.Heightmap.Width;
 			int height = terrain.Heightmap.Height;
@@ -59,7 +57,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			return bitmap;
 		}
 
-		public static byte[] GetRGBA32Data(TerrainData terrain)
+		public static byte[] GetRGBA32Data(ITerrainData terrain)
 		{
 			short[] heights = terrain.Heightmap.Heights;
 			byte[] result = new byte[heights.Length * 4];

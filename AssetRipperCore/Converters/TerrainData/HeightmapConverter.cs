@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Converters.TerrainData
 				instance.Thickness = GetThickness(container, ref origin);
 			}
 			instance.Levels = origin.Levels;
-			instance.Scale = origin.Scale;
+			instance.m_Scale = origin.m_Scale;
 			return instance;
 		}
 

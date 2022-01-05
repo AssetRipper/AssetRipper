@@ -129,7 +129,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", YAMLScalarNode.Empty) };
 
 		//Read from UI
-		public bool HasImageData => Asset is IHasImageData or TerrainData;
+		public bool HasImageData => Asset is IHasImageData or ITerrainData;
 
 		//Read from UI
 		public bool HasAudioData => Asset is AudioClip;
@@ -174,7 +174,7 @@ namespace AssetRipper.GUI.AssetInfo
 							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, Asset.File.Version, img.ImageDataByteArray, 0, 0, KTXBaseInternalFormat.RG);
 							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
 						}
-					case TerrainData terrain:
+					case ITerrainData terrain:
 						{
 							DirectBitmap? directBitmap = TerrainHeatmapExporter.GetBitmap(terrain);
 							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
@@ -206,21 +206,21 @@ namespace AssetRipper.GUI.AssetInfo
 		private TextureFormat TextureFormat => Asset switch
 		{
 			IHasImageData img => img.TextureFormat,
-			TerrainData => TextureFormat.RGBA32,
+			ITerrainData => TextureFormat.RGBA32,
 			_ => TextureFormat.Automatic,
 		};
 
 		private int ImageWidth => Asset switch
 		{
 			IHasImageData img => img.Width,
-			TerrainData terrain => terrain.Heightmap.Width,
+			ITerrainData terrain => terrain.Heightmap.Width,
 			_ => -1,
 		};
 
 		private int ImageHeight => Asset switch
 		{
 			IHasImageData img => img.Height,
-			TerrainData terrain => terrain.Heightmap.Height,
+			ITerrainData terrain => terrain.Heightmap.Height,
 			_ => -1,
 		};
 
