@@ -84,6 +84,7 @@ namespace AssetRipper.Core.Project
 			{
 				foreach (IUnityObjectBase asset in file.FetchAssets())
 				{
+					//StaticMeshConverter.MaybeReplaceStaticMesh(asset, file, virtualFile);
 					if (!options.Filter(asset))
 					{
 						continue;

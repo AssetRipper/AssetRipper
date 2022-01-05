@@ -16,6 +16,11 @@ namespace AssetRipper.Core.Classes
 			return component.GameObjectPtr.GetAsset(component.File);
 		}
 
+		public static IGameObject TryGetGameObject(this IComponent component)
+		{
+			return component.GameObjectPtr.TryGetAsset(component.File);
+		}
+
 		public static IGameObject GetRoot(this IComponent component)
 		{
 			return component.GetGameObject().GetRoot();

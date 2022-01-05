@@ -112,7 +112,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public T CreateAsset<T>(Func<AssetInfo, T> instantiator) where T : IUnityObjectBase
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
-			AssetInfo assetInfo = new AssetInfo(this, ++m_nextId, classID);
+			AssetInfo assetInfo = CreateAssetInfo(classID);
 			T instance = instantiator(assetInfo);
 			m_assets.Add(instance.PathID, instance);
 			return instance;
@@ -120,7 +120,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public T CreateAsset<T>(ClassIDType classID) where T : IUnityObjectBase
 		{
-			AssetInfo assetInfo = new AssetInfo(this, ++m_nextId, classID);
+			AssetInfo assetInfo = CreateAssetInfo(classID);
 			IUnityObjectBase asset = VersionManager.GetHandler(Version).AssetFactory.CreateAsset(assetInfo);
 			if(asset == null)
 			{
@@ -135,6 +135,17 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			{
 				throw new ArgumentException($"Asset type {asset.GetType()} is not assignable to {typeof(T)}",nameof(classID));
 			}
+		}
+
+		public void AddAsset(IUnityObjectBase asset, ClassIDType classID)
+		{
+			asset.AssetInfo = CreateAssetInfo(classID);
+			m_assets.Add(asset.PathID, asset);
+		}
+
+		private AssetInfo CreateAssetInfo(ClassIDType classID)
+		{
+			return new AssetInfo(this, ++m_nextId, classID);
 		}
 
 		public string Name => nameof(VirtualSerializedFile);

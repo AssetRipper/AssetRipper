@@ -560,7 +560,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		{
 			return HasRenderingLayerMask(version) ? RenderingLayerMask : 1;
 		}
-		private StaticBatchInfo GetStaticBatchInfo(UnityVersion version)
+		public StaticBatchInfo GetStaticBatchInfo(UnityVersion version)
 		{
 			if (HasStaticBatchInfo(version))
 			{
