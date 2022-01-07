@@ -76,6 +76,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 			// first (index [0]) stream frame is for slope calculation for the first real frame (index [1])
 			// last one (index [count - 1]) is +Infinity
 			// it is made for slope processing, but we don't need them
+			bool frameIndex0 = true;
 			for (int frameIndex = 0; frameIndex < streamFrames.Count - 1; frameIndex++)
 			{
 				StreamedFrame frame = streamFrames[frameIndex];
@@ -87,7 +88,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 					string path = GetCurvePath(tos, binding.Path);
 					if (binding.IsTransform)
 					{
-						if (frameIndex == 0) goto SkipFrameIndex0;
+						if (frameIndex0) { curveIndex = GetNextCurve(frame, curveIndex); continue; }
 						GetPreviousFrame(streamFrames, curve.Index, frameIndex, out int prevFrameIndex, out int prevCurveIndex);
 						int dimension = binding.TransformType.GetDimension();
 						for (int key = 0; key < dimension; key++)
@@ -106,7 +107,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 					}
 					else if (binding.CustomType == BindingCustomType.None)
 					{
-						if (frameIndex == 0) goto SkipFrameIndex0;
+						if (frameIndex0) { curveIndex = GetNextCurve(frame, curveIndex); continue; }
 						AddDefaultCurve(binding, path, frame.Time, frame.Curves[curveIndex].Value);
 						curveIndex = GetNextCurve(frame, curveIndex);
 					}
@@ -116,7 +117,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 						curveIndex = GetNextCurve(frame, curveIndex);
 					}
 				}
-			SkipFrameIndex0:;
+				if (frameIndex0) frameIndex0 = false;
 			}
 		}
 
@@ -191,7 +192,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 		private void AddCustomCurve(AnimationClipBindingConstant bindings, GenericBinding binding, string path, float time, float value)
 		{
-			bool ProcessStreams_frameIndex0 = (double)time != -3.4028234663852886E+38;
+			bool ProcessStreams_frameIndex0 = time != FrameIndex0Time;
 			switch (binding.CustomType)
 			{
 				case BindingCustomType.AnimatorMuscle:
@@ -485,6 +486,11 @@ namespace AssetRipper.Core.Converters.AnimationClip
 		private const string MissedPropertyPrefix = "missed_";
 		private const string ScriptPropertyPrefix = "script_";
 		private const string TypeTreePropertyPrefix = "typetree_";
+
+		/// <summary>
+		/// Used to detect when a StreamedFrame is from index 0.
+		/// </summary>
+		private const float FrameIndex0Time = float.MinValue;
 
 		private readonly Dictionary<Vector3Curve, List<KeyframeTpl<Vector3f>>> m_translations = new Dictionary<Vector3Curve, List<KeyframeTpl<Vector3f>>>();
 		private readonly Dictionary<QuaternionCurve, List<KeyframeTpl<Quaternionf>>> m_rotations = new Dictionary<QuaternionCurve, List<KeyframeTpl<Quaternionf>>>();
