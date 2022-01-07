@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AnimationClip;
 using AssetRipper.Core.Classes.AnimationClip.Clip;
 using AssetRipper.Core.Classes.AnimationClip.Curves;
@@ -76,7 +76,8 @@ namespace AssetRipper.Core.Converters.AnimationClip
 			// first (index [0]) stream frame is for slope calculation for the first real frame (index [1])
 			// last one (index [count - 1]) is +Infinity
 			// it is made for slope processing, but we don't need them
-			for (int frameIndex = 1; frameIndex < streamFrames.Count - 1; frameIndex++)
+			bool frameIndex0 = true;
+			for (int frameIndex = 0; frameIndex < streamFrames.Count - 1; frameIndex++)
 			{
 				StreamedFrame frame = streamFrames[frameIndex];
 				for (int curveIndex = 0; curveIndex < frame.Curves.Length;)
@@ -87,6 +88,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 					string path = GetCurvePath(tos, binding.Path);
 					if (binding.IsTransform)
 					{
+						if (frameIndex0) { curveIndex = GetNextCurve(frame, curveIndex); continue; }
 						GetPreviousFrame(streamFrames, curve.Index, frameIndex, out int prevFrameIndex, out int prevCurveIndex);
 						int dimension = binding.TransformType.GetDimension();
 						for (int key = 0; key < dimension; key++)
@@ -105,6 +107,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 					}
 					else if (binding.CustomType == BindingCustomType.None)
 					{
+						if (frameIndex0) { curveIndex = GetNextCurve(frame, curveIndex); continue; }
 						AddDefaultCurve(binding, path, frame.Time, frame.Curves[curveIndex].Value);
 						curveIndex = GetNextCurve(frame, curveIndex);
 					}
@@ -114,6 +117,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 						curveIndex = GetNextCurve(frame, curveIndex);
 					}
 				}
+				if (frameIndex0) frameIndex0 = false;
 			}
 		}
 
@@ -188,20 +192,22 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 		private void AddCustomCurve(AnimationClipBindingConstant bindings, GenericBinding binding, string path, float time, float value)
 		{
+			bool ProcessStreams_frameIndex0 = time != FrameIndex0Time;
 			switch (binding.CustomType)
 			{
 				case BindingCustomType.AnimatorMuscle:
-					AddAnimatorMuscleCurve(binding, time, value);
+					if (ProcessStreams_frameIndex0) AddAnimatorMuscleCurve(binding, time, value);
 					break;
 
 				default:
 					string attribute = m_customCurveResolver.ToAttributeName(Layout, binding.CustomType, binding.Attribute, path);
 					if (binding.IsPPtrCurve)
 					{
+						if (!ProcessStreams_frameIndex0) time = 0.0f;
 						PPtrCurve curve = new PPtrCurve(path, attribute, binding.ClassID, binding.Script.CastTo<IMonoScript>());
 						AddPPtrKeyframe(curve, bindings, time, (int)value);
 					}
-					else
+					else if (ProcessStreams_frameIndex0)
 					{
 						FloatCurve curve = new FloatCurve(path, attribute, binding.ClassID, binding.Script.CastTo<IMonoScript>());
 						AddFloatKeyframe(curve, time, value);
@@ -415,7 +421,6 @@ namespace AssetRipper.Core.Converters.AnimationClip
 			{
 				pptrCurve = new List<PPtrKeyframe>();
 				m_pptrs.Add(curve, pptrCurve);
-				AddPPtrKeyframe(curve, bindings, 0.0f, index - 1);
 			}
 
 			PPtr<Object> value = bindings.PPtrCurveMapping[index];
@@ -481,6 +486,11 @@ namespace AssetRipper.Core.Converters.AnimationClip
 		private const string MissedPropertyPrefix = "missed_";
 		private const string ScriptPropertyPrefix = "script_";
 		private const string TypeTreePropertyPrefix = "typetree_";
+
+		/// <summary>
+		/// Used to detect when a StreamedFrame is from index 0.
+		/// </summary>
+		private const float FrameIndex0Time = float.MinValue;
 
 		private readonly Dictionary<Vector3Curve, List<KeyframeTpl<Vector3f>>> m_translations = new Dictionary<Vector3Curve, List<KeyframeTpl<Vector3f>>>();
 		private readonly Dictionary<QuaternionCurve, List<KeyframeTpl<Quaternionf>>> m_rotations = new Dictionary<QuaternionCurve, List<KeyframeTpl<Quaternionf>>>();
