@@ -2,8 +2,12 @@
 
 namespace AssetRipper.Core.Classes.AudioClip
 {
-	//Not implemented
 	public interface IAudioClip : IUnityObjectBase
 	{
+	}
+
+	public static class AudioClipExtensions
+	{
+
 	}
 }

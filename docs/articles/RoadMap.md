@@ -34,8 +34,9 @@
   * Terrain exporter
   * Texture exporter
 * Move more classes to the Common project
-  * Move ProjectAssetContainer
-  * Move ProjectExporter and ProjectExporterBase
+  * ~~Move ProjectAssetContainer~~
+  * ~~Move ProjectExporterBase~~
+  * Move ProjectExporter
   * Move GameStructure
 * Struct Reading Overhaul
   * ~~Yaml method generation~~

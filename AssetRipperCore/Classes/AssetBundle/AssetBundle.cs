@@ -72,11 +72,6 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		/// </summary>
 		public static bool HasSceneHashes(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool HasPathExtension(UnityVersion version) => version.IsGreaterEqual(5);
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -172,6 +167,8 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		public int ExplicitDataLayout { get; set; }
 		public int PathFlags { get; set; }
 		public Dictionary<string, string> SceneHashes { get; set; }
+
+		bool IAssetBundle.HasAssetBundleName => HasAssetBundleName(File.Version);
 
 		public const string ContainerName = "m_Container";
 
