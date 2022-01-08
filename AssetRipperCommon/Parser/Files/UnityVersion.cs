@@ -75,11 +75,22 @@ namespace AssetRipper.Core.Parser.Files
 			else return right;
 		}
 
+		public static UnityVersion ParseFromDllName(string dllName)
+		{
+			if (string.IsNullOrEmpty(dllName))
+			{
+				throw new ArgumentNullException(nameof(dllName));
+			}
+			if(dllName[0] == '_')
+				dllName = dllName.Substring(1);
+			return Parse(dllName.Replace('_', '.').Replace(".dll", ""));
+		}
+
 		public static UnityVersion Parse(string version)
 		{
 			if (string.IsNullOrEmpty(version))
 			{
-				throw new Exception($"Invalid version number {version}");
+				throw new ArgumentNullException(nameof(version));
 			}
 
 			int major = 0;
@@ -146,15 +157,19 @@ namespace AssetRipper.Core.Parser.Files
 								versionType = UnityVersionType.Beta;
 								break;
 
-							case 'p':
-								versionType = UnityVersionType.Patch;
+							case 'c':
+								versionType = UnityVersionType.China;
 								break;
 
 							case 'f':
 								versionType = UnityVersionType.Final;
 								break;
 
-							case 'e':
+							case 'p':
+								versionType = UnityVersionType.Patch;
+								break;
+
+							case 'x':
 								versionType = UnityVersionType.Experimental;
 								break;
 

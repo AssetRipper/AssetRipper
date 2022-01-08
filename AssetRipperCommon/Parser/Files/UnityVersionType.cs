@@ -6,6 +6,7 @@ namespace AssetRipper.Core.Parser.Files
 	{
 		Alpha = 0,
 		Beta,
+		China,
 		Final,
 		Patch,
 		Experimental,
@@ -25,6 +26,9 @@ namespace AssetRipper.Core.Parser.Files
 				case UnityVersionType.Beta:
 					return "b";
 
+				case UnityVersionType.China:
+					return "c";
+
 				case UnityVersionType.Final:
 					return "f";
 
@@ -32,7 +36,7 @@ namespace AssetRipper.Core.Parser.Files
 					return "p";
 
 				case UnityVersionType.Experimental:
-					return "e";
+					return "x";
 
 				default:
 					throw new Exception($"Unsupported vertion type {_this}");

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-
+    <RootNamespace>AssetRipper.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
