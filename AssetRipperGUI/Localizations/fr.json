@@ -123,12 +123,12 @@
     "error": "Erreur",
     "success": "",
     "export_complete": "",
-    "no_game_files_found": "",
+    "no_game_files_found": "Aucun bundle ou asset Unity n'a été trouvé dans les fichiers.",
     "export_deleting_old_files": "",
     "export_preparing": "",
     "export_in_progress_no_file_count_yet": "",
     "export_in_progress": "",
-    "error_exporting_with_reason": "",
-    "error_importing_with_reason": "",
+    "error_exporting_with_reason": "Le contenu de jeu suivant n'a pu être exporté : {0}",
+    "error_importing_with_reason": "Le contenu de jeu suivant n'a pu être chargé : {0}",
     "loose_file_saved_at": ""
 }
