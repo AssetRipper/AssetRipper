@@ -361,12 +361,19 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			long read = reader.BaseStream.Position - offset;
 			if (!replaceWithUnreadableObject && read != size)
 			{
+				if(asset is IMonoBehaviour monoBehaviour && monoBehaviour.Structure == null)
+				{
+					reader.BaseStream.Position = offset + size;
+				}
+				else
+				{
 #if DEBUG
-				throw new SerializedFileException($"Read {read} but expected {size} for asset type {assetInfo.ClassID}", Version, Platform, assetInfo.ClassID, Name, FilePath);
+					throw new SerializedFileException($"Read {read} but expected {size} for asset type {assetInfo.ClassID}", Version, Platform, assetInfo.ClassID, Name, FilePath);
 #else
-				replaceWithUnreadableObject = true;
-				Logger.Error($"Read {read} but expected {size} for asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}");
+					replaceWithUnreadableObject = true;
+					Logger.Error($"Read {read} but expected {size} for asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}");
 #endif
+				}
 			}
 
 			if (replaceWithUnreadableObject)
