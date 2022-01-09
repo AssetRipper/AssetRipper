@@ -115,7 +115,16 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			get { yield return Asset; }
 		}
-		public override string Name => Asset.ToString();
+		public override string Name
+		{
+			get
+			{
+				if (Asset is IHasName hasName)
+					return hasName.Name;
+				else
+					return Asset.ToString();
+			}
+		}
 		public IUnityObjectBase Asset { get; }
 	}
 }
