@@ -36,7 +36,7 @@ namespace AssetRipper.Core.VersionHandling
 			}
 			else
 			{
-				throw new NotSupportedException("No handler for that version");
+				throw new NotSupportedException($"No handler for {version}");
 			}
 		}
 

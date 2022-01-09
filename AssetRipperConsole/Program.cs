@@ -116,6 +116,7 @@ namespace AssetRipper.Console
 		{
 			if (Directory.Exists(path))
 			{
+				Logger.Info("Clearing export directory...");
 				Directory.Delete(path, true);
 			}
 		}

@@ -331,9 +331,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			catch (TypeLoadException typeLoadException)
 			{
 #if DEBUG
-				throw new SerializedFileException($"Could not load {typeLoadException.TypeName} with id number {assetInfo.ClassNumber}", typeLoadException, Version, Platform, assetInfo.ClassID, Name, FilePath);
+				throw new SerializedFileException($"Could not load {typeLoadException.TypeName}", typeLoadException, Version, Platform, assetInfo.ClassID, Name, FilePath);
 #else
-				Logger.Error($"Could not load {typeLoadException.TypeName} with id number {assetInfo.ClassNumber}");
+				Logger.Error($"Could not load {typeLoadException.TypeName} : {typeLoadException.Message}");
 				asset = null;
 #endif
 			}
