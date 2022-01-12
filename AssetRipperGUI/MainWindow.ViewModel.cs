@@ -196,10 +196,12 @@ namespace AssetRipper.GUI
 				if (error is GameNotFoundException)
 				{
 					this.ShowPopup(MainWindow.Instance.LocalizationManager["no_game_files_found"], MainWindow.Instance.LocalizationManager["error"]);
-					return;
 				}
-
-				this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_importing_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
+				else
+				{
+					//this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_importing_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
+					this.ShowPopup(MainWindow.Instance.LocalizationManager["check_log_for_more_details"], MainWindow.Instance.LocalizationManager["error"]);
+				}
 			});
 		}
 
@@ -241,7 +243,8 @@ namespace AssetRipper.GUI
 			{
 				IsExporting = false;
 				Logger.Error(error);
-				this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
+				//this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
+				this.ShowPopup(MainWindow.Instance.LocalizationManager["check_log_for_more_details"], MainWindow.Instance.LocalizationManager["error"]);
 			});
 		}
 
