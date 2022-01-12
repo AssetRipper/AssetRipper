@@ -42,12 +42,12 @@ namespace AssetRipper.Core.VersionHandling
 
 		private static void LoadHandlers()
 		{
-			Logger.Info(LogCategory.VersionHandler, "Loading version handlers...");
-			string handlerDirectory = ExecutingDirectory.Combine("VersionHandlerAssemblies");
+			Logger.Info(LogCategory.VersionManager, "Loading version handlers...");
+			string handlerDirectory = ExecutingDirectory.Combine("VersionSpecificAssemblies");
 			if (!Directory.Exists(handlerDirectory))
 			{
 				Directory.CreateDirectory(handlerDirectory);
-				Logger.Info(LogCategory.VersionHandler, "Finished loading version handlers.");
+				Logger.Info(LogCategory.VersionManager, "No assemblies to load.");
 				return;
 			}
 
@@ -56,7 +56,7 @@ namespace AssetRipper.Core.VersionHandling
 			{
 				try
 				{
-					Logger.Info(LogCategory.VersionHandler, $"Found assembly at {filePath}");
+					Logger.Info(LogCategory.VersionManager, $"Found assembly at {filePath}");
 					Assembly assembly = Assembly.LoadFile(filePath);
 					foreach (RegisterVersionHandlerAttribute handlerAttr in assembly.GetCustomAttributes<RegisterVersionHandlerAttribute>())
 					{
@@ -65,7 +65,7 @@ namespace AssetRipper.Core.VersionHandling
 				}
 				catch (Exception ex)
 				{
-					Logger.Error(LogCategory.VersionHandler, $"Exception thrown while loading version handler assembly: {filePath}", ex);
+					Logger.Error(LogCategory.VersionManager, $"Exception thrown while loading version specific assembly: {filePath}", ex);
 				}
 			}
 			foreach (Type type in handlerTypes)
@@ -74,14 +74,14 @@ namespace AssetRipper.Core.VersionHandling
 				{
 					UnityHandlerBase versionHandler = (UnityHandlerBase)Activator.CreateInstance(type);
 					handlers.Add(versionHandler.UnityVersion, versionHandler);
-					Logger.Info(LogCategory.VersionHandler, $"Found version handler: {versionHandler.UnityVersion}");
+					Logger.Info(LogCategory.VersionManager, $"Found version handler: {versionHandler.UnityVersion}");
 				}
 				catch (Exception ex)
 				{
-					Logger.Error(LogCategory.VersionHandler, $"Exception thrown while initializing version handler: {type?.FullName ?? "<null>"}", ex);
+					Logger.Error(LogCategory.VersionManager, $"Exception thrown while initializing version handler: {type?.FullName ?? "<null>"}", ex);
 				}
 			}
-			Logger.Info(LogCategory.VersionHandler, "Finished loading version handlers.");
+			Logger.Info(LogCategory.VersionManager, "Finished loading version handlers.");
 		}
 	}
 }
