@@ -16,7 +16,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 	{
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is ITextAsset textAsset && asset is IShader)
+			if (asset is IShader && asset is ITextAsset textAsset)
 				return HasDecompiledShaderText(textAsset.Script);
 			else
 				return false;

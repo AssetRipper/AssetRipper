@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Shader;
+﻿using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.SerializedShader;
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.Extensions;
@@ -35,7 +36,10 @@ namespace AssetRipper.Library.Exporters.Shaders
 	}
 ";
 
-		public override bool IsHandle(IUnityObjectBase asset) => asset is IShader;
+		public override bool IsHandle(IUnityObjectBase asset)
+		{
+			return asset is IShader shader && (shader.HasParsedForm || asset is ITextAsset);
+		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
@@ -85,10 +89,10 @@ namespace AssetRipper.Library.Exporters.Shaders
 				}
 				writer.Write('}');
 			}
-			else
+			else if (shader is ITextAsset textAsset)
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
-				string header = shader.Script ?? "";
+				string header = textAsset.Script ?? "";
 				var subshaderIndex = header.IndexOf("SubShader");
 				writer.WriteString(header, 0, subshaderIndex);
 
@@ -97,6 +101,10 @@ namespace AssetRipper.Library.Exporters.Shaders
 				writer.Write(FallbackDummyShader.Replace("\r", ""));
 
 				writer.Write('}');
+			}
+			else
+			{
+				throw new NotSupportedException();
 			}
 		}
 

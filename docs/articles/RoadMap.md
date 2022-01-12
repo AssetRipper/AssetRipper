@@ -30,7 +30,7 @@
   * Audio Clip exporters
   * Mesh exporters
   * ~~Script exporter~~
-  * Shader exporter
+  * ~~Shader exporter~~
   * Terrain exporter
   * Texture exporter
 * Move more classes to the Common project
@@ -49,7 +49,7 @@
   * Remove the `Classes` and `Converters` namespaces
   * Remove any additional legacy code
   * Merge the common project back into the core project
-  * Add newer Unity versions to the TypeTreeDumps repository
+  * ~~Add newer Unity versions to the TypeTreeDumps repository~~
 * Cleanup
   * ~~Implement package for Brotli~~
   * ~~Implement package for LZ4~~

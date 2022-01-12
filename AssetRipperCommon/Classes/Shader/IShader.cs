@@ -3,7 +3,7 @@ using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public interface IShader : ITextAsset
+	public interface IShader : INamedObject
 	{
 		bool HasParsedForm { get; }
 		ISerializedShader ParsedForm { get; }
