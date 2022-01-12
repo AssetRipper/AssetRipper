@@ -26,12 +26,17 @@ namespace AssetRipper.Core.VersionHandling
 			return Enum.GetName(ClassIDTypeEnum, idNumber);
 		}
 
-		public int GetIDNumber(string className)
+		public int GetIdNumber(string className)
 		{
 			if (Enum.TryParse(ClassIDTypeEnum, className, out var result))
 				return (int)result;
 			else
 				return -1;
+		}
+
+		public int[] GetAllValidIdNumbers()
+		{
+			return (int[])Enum.GetValues(ClassIDTypeEnum);
 		}
 	}
 }
