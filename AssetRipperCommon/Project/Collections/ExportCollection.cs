@@ -12,8 +12,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using AssetRipper.Core.Interfaces;
-#if DEBUG
-#endif
+using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Classes.Material;
 
 namespace AssetRipper.Core.Project.Collections
 {
@@ -96,7 +96,12 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected virtual string GetExportExtension(IUnityObjectBase asset)
 		{
-			return asset.ExportExtension;
+			if (asset is IShader)
+				return "shader";
+			else if (asset is IMaterial)
+				return "mat";
+			else
+				return asset.ExportExtension;
 		}
 
 		public abstract IAssetExporter AssetExporter { get; }
