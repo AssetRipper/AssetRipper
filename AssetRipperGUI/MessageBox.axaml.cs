@@ -1,6 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using System;
+#if DEBUG
+using Avalonia;
+#endif
 
 namespace AssetRipper.GUI
 {
