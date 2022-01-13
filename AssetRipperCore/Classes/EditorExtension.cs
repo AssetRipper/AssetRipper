@@ -1,4 +1,5 @@
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.PrefabInstance;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
@@ -68,7 +69,7 @@ namespace AssetRipper.Core.Classes
 			if (HasCorrespondingSourceObject(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(CorrespondingSourceObjectInvariantName(container.ExportVersion, container.ExportFlags), CorrespondingSourceObject.ExportYAML(container));
-				node.Add(PrefabInstanceInvariantName(container.ExportVersion, container.ExportFlags), GetPrefabInstance(container).ExportYAML(container));
+				node.Add(PrefabInstanceInvariantName(container.ExportVersion, container.ExportFlags), m_PrefabInstance.ExportYAML(container));
 			}
 			if (HasPrefabAsset(container.ExportVersion, container.ExportFlags))
 			{
@@ -100,17 +101,6 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		private PPtr<PrefabInstance.PrefabInstance> GetPrefabInstance(IExportContainer container)
-		{
-#warning TODO: set PrefabInstance for all assets in PrefabContainer
-			if (container.ExportFlags.IsForPrefab())
-			{
-				PrefabExportCollection prefabCollection = (PrefabExportCollection)container.CurrentCollection;
-				return prefabCollection.Asset.File.CreatePPtr((PrefabInstance.PrefabInstance)prefabCollection.Asset);
-			}
-			return default;
-		}
-
 		public static string CorrespondingSourceObjectInvariantName(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return HasCorrespondingSourceObject(version, flags) ? CorrespondingSourceObjectName : PrefabParentObjectName;
@@ -123,6 +113,13 @@ namespace AssetRipper.Core.Classes
 		private PPtr<Object.Object> ExtensionPtr => default;
 		private PPtr<EditorExtension> CorrespondingSourceObject => default;
 		private PPtr<Prefab> PrefabAsset => default;
+		private PPtr<IPrefabInstance> m_PrefabInstance;
+
+		public PPtr<IPrefabInstance> PrefabInstance 
+		{
+			get => m_PrefabInstance;
+			set => m_PrefabInstance = value;
+		}
 
 		public const string ExtensionPtrName = "m_ExtensionPtr";
 		public const string CorrespondingSourceObjectName = "m_CorrespondingSourceObject";

@@ -1,6 +1,8 @@
-﻿namespace AssetRipper.Core.Classes
+﻿using AssetRipper.Core.Interfaces;
+
+namespace AssetRipper.Core.Classes
 {
-	public interface IGameManager : IEditorExtension
+	public interface IGameManager : IUnityObjectBase
 	{
 	}
 }

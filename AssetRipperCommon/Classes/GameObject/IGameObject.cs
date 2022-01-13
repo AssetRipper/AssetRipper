@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
@@ -136,6 +137,13 @@ namespace AssetRipper.Core.Classes.GameObject
 				depth++;
 			}
 			return depth;
+		}
+
+		public static void SetHideFlagsFromDepth(this IGameObject gameObject)
+		{
+			int depth = gameObject.GetRootDepth();
+			gameObject.ObjectHideFlags = depth > 1 ? HideFlags.HideInHierarchy : HideFlags.None;
+#warning Investigate further. 2019.4.3 appears to have hide flags set to none for everything
 		}
 
 		public static IEnumerable<IEditorExtension> FetchHierarchy(this IGameObject root)

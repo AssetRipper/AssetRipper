@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			}
 			else
 			{
-				return prefab.RootGameObjectPtr.GetAsset(file)?.Name;
+				return prefab.RootGameObjectPtr.TryGetAsset(file)?.Name;
 			}
 		}
 

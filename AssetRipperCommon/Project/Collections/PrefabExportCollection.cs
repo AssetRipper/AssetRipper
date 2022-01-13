@@ -24,6 +24,17 @@ namespace AssetRipper.Core.Project.Collections
 			foreach (IEditorExtension asset in prefab.FetchObjects(file))
 			{
 				AddAsset(asset);
+
+				//This section might not be necessary. This seems to be quite different from normal prefab files
+				asset.PrefabInstance = prefab.File.CreatePPtr(prefab);
+				if(asset is IGameObject gameObject)
+				{
+					gameObject.SetHideFlagsFromDepth();
+				}
+				else
+				{
+					asset.ObjectHideFlags = HideFlags.HideInHierarchy;
+				}
 			}
 		}
 
@@ -64,6 +75,7 @@ namespace AssetRipper.Core.Project.Collections
 		public override ISerializedFile File => m_file;
 		public override TransferInstructionFlags Flags => base.Flags | TransferInstructionFlags.SerializeForPrefabSystem;
 
+		//This might not be necessary. 2019.4.3 doesn't use this in normally created prefabs
 		private static IPrefabInstance CreateVirtualPrefab(VirtualSerializedFile virtualFile, IGameObject root)
 		{
 			IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance);

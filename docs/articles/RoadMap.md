@@ -31,7 +31,7 @@
   * Mesh exporters
   * ~~Script exporter~~
   * ~~Shader exporter~~
-  * Terrain exporter
+  * ~~Terrain exporter~~
   * Texture exporter
 * Move more classes to the Common project
   * ~~Move ProjectAssetContainer~~
