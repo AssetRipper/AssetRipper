@@ -97,7 +97,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public PPtr<T> CreatePPtr<T>(T asset) where T : IUnityObjectBase
 		{
-			if (asset.File == this)
+			if (asset.SerializedFile == this)
 			{
 				return new PPtr<T>(VirtualFileIndex, asset.PathID);
 			}

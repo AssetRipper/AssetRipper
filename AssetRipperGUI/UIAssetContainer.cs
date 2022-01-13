@@ -25,7 +25,7 @@ namespace AssetRipper.GUI
 
 		internal IUnityObjectBase LastAccessedAsset { get; set; }
 
-		public override ISerializedFile File => LastAccessedAsset.File;
+		public override ISerializedFile File => LastAccessedAsset.SerializedFile;
 
 		public override TransferInstructionFlags ExportFlags => ExportLayout.Flags;
 	}

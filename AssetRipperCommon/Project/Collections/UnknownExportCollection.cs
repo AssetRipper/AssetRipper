@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Project.Collections
 			AssetExporter = exporter;
 		}
 
-		public override ISerializedFile File => Asset.File;
+		public override ISerializedFile File => Asset.SerializedFile;
 
 		public override TransferInstructionFlags Flags => Asset.TransferInstructionFlags;
 

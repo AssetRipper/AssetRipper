@@ -378,13 +378,13 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			AnimationClipConverter converter = AnimationClipConverter.Process(this);
 			return new AnimationCurves()
 			{
-				RotationCurves = converter.Rotations.Union(GetRotationCurves(File.Version)),
-				CompressedRotationCurves = GetCompressedRotationCurves(File.Version),
-				EulerCurves = converter.Eulers.Union(GetEulerCurves(File.Version)),
-				PositionCurves = converter.Translations.Union(GetPositionCurves(File.Version)),
-				ScaleCurves = converter.Scales.Union(GetScaleCurves(File.Version)),
-				FloatCurves = converter.Floats.Union(GetFloatCurves(File.Version)),
-				PPtrCurves = converter.PPtrs.Union(GetPPtrCurves(File.Version)),
+				RotationCurves = converter.Rotations.Union(GetRotationCurves(SerializedFile.Version)),
+				CompressedRotationCurves = GetCompressedRotationCurves(SerializedFile.Version),
+				EulerCurves = converter.Eulers.Union(GetEulerCurves(SerializedFile.Version)),
+				PositionCurves = converter.Translations.Union(GetPositionCurves(SerializedFile.Version)),
+				ScaleCurves = converter.Scales.Union(GetScaleCurves(SerializedFile.Version)),
+				FloatCurves = converter.Floats.Union(GetFloatCurves(SerializedFile.Version)),
+				PPtrCurves = converter.PPtrs.Union(GetPPtrCurves(SerializedFile.Version)),
 			};
 		}
 
@@ -392,7 +392,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		{
 			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
 			
-			foreach (IUnityObjectBase asset in File.Collection.FetchAssetsOfType(ClassIDType.Avatar))
+			foreach (IUnityObjectBase asset in SerializedFile.Collection.FetchAssetsOfType(ClassIDType.Avatar))
 			{
 				Avatar.Avatar avatar = (Avatar.Avatar)asset;
 				if (AddAvatarTOS(avatar, tos))
@@ -401,7 +401,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				}
 			}
 
-			foreach (IUnityObjectBase asset in File.Collection.FetchAssetsOfType(ClassIDType.Animator))
+			foreach (IUnityObjectBase asset in SerializedFile.Collection.FetchAssetsOfType(ClassIDType.Animator))
 			{
 				Animator.Animator animator = (Animator.Animator)asset;
 				if (IsAnimatorContainsClip(animator))
@@ -413,7 +413,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				}
 			}
 
-			foreach (IUnityObjectBase asset in File.Collection.FetchAssetsOfType(ClassIDType.Animation))
+			foreach (IUnityObjectBase asset in SerializedFile.Collection.FetchAssetsOfType(ClassIDType.Animation))
 			{
 				Animation.Animation animation = (Animation.Animation)asset;
 				if (IsAnimationContainsClip(animation))
@@ -430,7 +430,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		public IEnumerable<GameObject.GameObject> FindRoots()
 		{
-			foreach (IUnityObjectBase asset in File.Collection.FetchAssets())
+			foreach (IUnityObjectBase asset in SerializedFile.Collection.FetchAssets())
 			{
 				switch (asset.ClassID)
 				{
@@ -438,7 +438,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 						Animator.Animator animator = (Animator.Animator)asset;
 						if (IsAnimatorContainsClip(animator))
 						{
-							yield return animator.GameObject.GetAsset(animator.File);
+							yield return animator.GameObject.GetAsset(animator.SerializedFile);
 						}
 						break;
 
@@ -446,7 +446,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 						Animation.Animation animation = (Animation.Animation)asset;
 						if (IsAnimationContainsClip(animation))
 						{
-							yield return animation.GameObject.GetAsset(animation.File);
+							yield return animation.GameObject.GetAsset(animation.SerializedFile);
 						}
 						break;
 				}
@@ -457,7 +457,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		private bool IsAnimatorContainsClip(Animator.Animator animator)
 		{
-			RuntimeAnimatorController runetime = animator.Controller.FindAsset(animator.File);
+			RuntimeAnimatorController runetime = animator.Controller.FindAsset(animator.SerializedFile);
 			if (runetime == null)
 			{
 				return false;
@@ -480,7 +480,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		private bool AddAnimatorTOS(Animator.Animator animator, Dictionary<uint, string> tos)
 		{
-			Avatar.Avatar avatar = animator.Avatar.FindAsset(animator.File);
+			Avatar.Avatar avatar = animator.Avatar.FindAsset(animator.SerializedFile);
 			if (avatar != null)
 			{
 				if (AddAvatarTOS(avatar, tos))
@@ -495,7 +495,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		private bool AddAnimationTOS(Animation.Animation animation, Dictionary<uint, string> tos)
 		{
-			GameObject.GameObject go = animation.GameObject.GetAsset(animation.File);
+			GameObject.GameObject go = animation.GameObject.GetAsset(animation.SerializedFile);
 			IReadOnlyDictionary<uint, string> animationTOS = go.BuildTOS();
 			return AddTOS(animationTOS, tos);
 		}
@@ -565,13 +565,13 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			{
 				return new AnimationCurves()
 				{
-					RotationCurves = GetRotationCurves(File.Version),
-					CompressedRotationCurves = GetCompressedRotationCurves(File.Version),
-					EulerCurves = GetEulerCurves(File.Version),
-					PositionCurves = GetPositionCurves(File.Version),
-					ScaleCurves = GetScaleCurves(File.Version),
-					FloatCurves = GetFloatCurves(File.Version),
-					PPtrCurves = GetPPtrCurves(File.Version),
+					RotationCurves = GetRotationCurves(SerializedFile.Version),
+					CompressedRotationCurves = GetCompressedRotationCurves(SerializedFile.Version),
+					EulerCurves = GetEulerCurves(SerializedFile.Version),
+					PositionCurves = GetPositionCurves(SerializedFile.Version),
+					ScaleCurves = GetScaleCurves(SerializedFile.Version),
+					FloatCurves = GetFloatCurves(SerializedFile.Version),
+					PPtrCurves = GetPPtrCurves(SerializedFile.Version),
 				};
 			}
 		}

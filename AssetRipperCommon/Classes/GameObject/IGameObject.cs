@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Classes.GameObject
 		{
 			if (IsActiveInherited(gameObject.AssetUnityVersion))
 			{
-				return gameObject.File.Collection.IsScene(gameObject.File) ? gameObject.IsActive : true;
+				return gameObject.SerializedFile.Collection.IsScene(gameObject.SerializedFile) ? gameObject.IsActive : true;
 			}
 			return gameObject.IsActive;
 		}
@@ -66,7 +66,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			foreach (PPtr<IComponent> ptr in gameObject.FetchComponents())
 			{
 				// component could have not implemented asset type
-				IComponent comp = ptr.FindAsset(gameObject.File);
+				IComponent comp = ptr.FindAsset(gameObject.SerializedFile);
 				if (comp is T t)
 				{
 					return t;
@@ -89,7 +89,7 @@ namespace AssetRipper.Core.Classes.GameObject
 		{
 			foreach (PPtr<IComponent> ptr in gameObject.FetchComponents())
 			{
-				IComponent comp = ptr.FindAsset(gameObject.File);
+				IComponent comp = ptr.FindAsset(gameObject.SerializedFile);
 				if (comp == null)
 				{
 					continue;
@@ -108,7 +108,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			ITransform root = gameObject.GetTransform();
 			while (true)
 			{
-				ITransform parent = root.FatherPtr.TryGetAsset(root.File);
+				ITransform parent = root.FatherPtr.TryGetAsset(root.SerializedFile);
 				if (parent == null)
 				{
 					break;
@@ -118,7 +118,7 @@ namespace AssetRipper.Core.Classes.GameObject
 					root = parent;
 				}
 			}
-			return root.GameObjectPtr.GetAsset(root.File);
+			return root.GameObjectPtr.GetAsset(root.SerializedFile);
 		}
 
 		public static int GetRootDepth(this IGameObject gameObject)
@@ -127,7 +127,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			int depth = 0;
 			while (true)
 			{
-				ITransform parent = root.FatherPtr.TryGetAsset(root.File);
+				ITransform parent = root.FatherPtr.TryGetAsset(root.SerializedFile);
 				if (parent == null)
 				{
 					break;
@@ -153,7 +153,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			ITransform transform = null;
 			foreach (PPtr<IComponent> ptr in root.FetchComponents())
 			{
-				IComponent component = ptr.FindAsset(root.File);
+				IComponent component = ptr.FindAsset(root.SerializedFile);
 				if (component == null)
 				{
 					continue;
@@ -168,8 +168,8 @@ namespace AssetRipper.Core.Classes.GameObject
 
 			foreach (PPtr<ITransform> pchild in transform.ChildrenPtrs)
 			{
-				ITransform child = pchild.GetAsset(transform.File);
-				IGameObject childGO = child.GameObjectPtr.GetAsset(root.File);
+				ITransform child = pchild.GetAsset(transform.SerializedFile);
+				IGameObject childGO = child.GameObjectPtr.GetAsset(root.SerializedFile);
 				foreach (IEditorExtension childElement in FetchHierarchy(childGO))
 				{
 					yield return childElement;
@@ -189,8 +189,8 @@ namespace AssetRipper.Core.Classes.GameObject
 			ITransform transform = parent.GetTransform();
 			foreach (PPtr<ITransform> childPtr in transform.ChildrenPtrs)
 			{
-				ITransform childTransform = childPtr.GetAsset(gameObject.File);
-				IGameObject child = childTransform.GameObjectPtr.GetAsset(gameObject.File);
+				ITransform childTransform = childPtr.GetAsset(gameObject.SerializedFile);
+				IGameObject child = childTransform.GameObjectPtr.GetAsset(gameObject.SerializedFile);
 				string path = string.IsNullOrEmpty(parentPath) ? child.Name : $"{parentPath}/{child.Name}";
 				uint pathHash = CrcUtils.CalculateDigestUTF8(path);
 				tos[pathHash] = path;

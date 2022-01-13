@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 								Version = parameters.Version,
 							};
 							AnimatorTransition.AnimatorTransition transition = AnimatorTransition.AnimatorTransition.CreateVirtualInstance(file, transParameters);
-							transitions[i] = transition.File.CreatePPtr(transition);
+							transitions[i] = transition.SerializedFile.CreatePPtr(transition);
 						}
 						return transitions;
 					}

@@ -63,12 +63,12 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 
 			// if >= 5.5.0 and Release this asset doesn't containt renderers data so we need to create it
 			List<OcclusionCullingSettings.IOcclusionCullingSettings> cullingSettings = new List<OcclusionCullingSettings.IOcclusionCullingSettings>();
-			foreach (IUnityObjectBase asset in occlusionCullingData.File.Collection.FetchAssets())
+			foreach (IUnityObjectBase asset in occlusionCullingData.SerializedFile.Collection.FetchAssets())
 			{
 				if (asset.ClassID == ClassIDType.OcclusionCullingSettings)
 				{
 					OcclusionCullingSettings.IOcclusionCullingSettings cullingSetting = (OcclusionCullingSettings.IOcclusionCullingSettings)asset;
-					if (cullingSetting.OcclusionCullingData.IsAsset(cullingSetting.File, occlusionCullingData))
+					if (cullingSetting.OcclusionCullingData.IsAsset(cullingSetting.SerializedFile, occlusionCullingData))
 					{
 						cullingSettings.Add(cullingSetting);
 					}
@@ -107,14 +107,14 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			for (int i = 0; i < cullingSetting.StaticRenderers.Length; i++)
 			{
 				PPtr<Renderer.IRenderer> prenderer = cullingSetting.StaticRenderers[i];
-				Renderer.IRenderer renderer = prenderer.FindAsset(cullingSetting.File);
+				Renderer.IRenderer renderer = prenderer.FindAsset(cullingSetting.SerializedFile);
 				occlusionCullingData.StaticRenderers[scene.IndexRenderers + i].SetObjectID(container, renderer);
 			}
 
 			for (int i = 0; i < cullingSetting.Portals.Length; i++)
 			{
 				PPtr<IOcclusionPortal> pportal = cullingSetting.Portals[i];
-				IOcclusionPortal portal = pportal.FindAsset(cullingSetting.File);
+				IOcclusionPortal portal = pportal.FindAsset(cullingSetting.SerializedFile);
 				occlusionCullingData.Portals[scene.IndexPortals + i].SetObjectID(container, portal);
 			}
 		}

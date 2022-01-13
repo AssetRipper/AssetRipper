@@ -111,7 +111,7 @@ namespace AssetRipper.Library.Utils
 			foreach (Core.Interfaces.IUnityObjectBase asset in file.FetchAssets())
 			{
 				string name = Util.GetName(asset);
-				PPtr<Core.Interfaces.IUnityObjectBase> pptr = asset.File.CreatePPtr(asset);
+				PPtr<Core.Interfaces.IUnityObjectBase> pptr = asset.SerializedFile.CreatePPtr(asset);
 				string extra = "";
 				if (asset is IMonoScript ms)
 				{

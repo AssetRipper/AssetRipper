@@ -52,7 +52,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 							{
 								continue;
 							}
-							AssetRipper.Core.Classes.Mesh.Mesh mesh = skin.Mesh.FindAsset(skin.File);
+							AssetRipper.Core.Classes.Mesh.Mesh mesh = skin.Mesh.FindAsset(skin.SerializedFile);
 							if (mesh == null)
 							{
 								continue;
@@ -549,7 +549,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 			}
 		}
 
-		private UnityVersion Version => m_clip.File.Version;
+		private UnityVersion Version => m_clip.SerializedFile.Version;
 
 		private readonly AssetRipper.Core.Classes.AnimationClip.AnimationClip m_clip = null;
 

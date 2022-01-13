@@ -19,12 +19,12 @@ namespace AssetRipper.Core.Classes.BlendTree
 			int childNodeIndex = (int)node.ChildIndices[childIndex];
 			Motion = state.CreateMotion(file, controller, childNodeIndex);
 
-			Threshold = node.GetThreshold(controller.File.Version, childIndex);
-			Position = node.GetPosition(controller.File.Version, childIndex);
+			Threshold = node.GetThreshold(controller.SerializedFile.Version, childIndex);
+			Position = node.GetPosition(controller.SerializedFile.Version, childIndex);
 			TimeScale = 1.0f;
 			CycleOffset = node.CycleOffset;
 
-			uint directID = node.GetDirectBlendParameter(controller.File.Version, childIndex);
+			uint directID = node.GetDirectBlendParameter(controller.SerializedFile.Version, childIndex);
 			DirectBlendParameter = controller.TOS[directID];
 
 			Mirror = node.Mirror;

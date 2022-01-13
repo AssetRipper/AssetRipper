@@ -276,7 +276,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		{
 			foreach (PPtr<Material.Material> materialPtr in Materials)
 			{
-				Material.Material material = materialPtr.FindAsset(File);
+				Material.Material material = materialPtr.FindAsset(SerializedFile);
 				if (material == null)
 				{
 					continue;

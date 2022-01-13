@@ -478,7 +478,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 		public FloatCurve[] Floats { get; private set; }
 		public PPtrCurve[] PPtrs { get; private set; }
 
-		private LayoutInfo Layout => m_clip.File.Layout;
+		private LayoutInfo Layout => m_clip.SerializedFile.Layout;
 
 		public static readonly Regex UnknownPathRegex = new Regex($@"^{UnknownPathPrefix}[0-9]{{1,10}}$", RegexOptions.Compiled);
 

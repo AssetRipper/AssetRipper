@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes
 			string pre = string.Empty;
 			if (!transform.FatherPtr.IsNull)
 			{
-				pre = transform.FatherPtr.GetAsset(transform.File).GetRootPath() + PathSeparator;
+				pre = transform.FatherPtr.GetAsset(transform.SerializedFile).GetRootPath() + PathSeparator;
 			}
 			return pre + transform.GetGameObject().Name;
 		}
@@ -41,7 +41,7 @@ namespace AssetRipper.Core.Classes
 			{
 				return 0;
 			}
-			ITransform father = transform.FatherPtr.GetAsset(transform.File);
+			ITransform father = transform.FatherPtr.GetAsset(transform.SerializedFile);
 			PPtr<ITransform>[] children = father.ChildrenPtrs;
 			for (int i = 0; i < children.Length; i++)
 			{
@@ -71,7 +71,7 @@ namespace AssetRipper.Core.Classes
 				path.Substring(startIndex, separatorIndex - startIndex);
 			foreach (PPtr<ITransform> childPtr in transform.ChildrenPtrs)
 			{
-				ITransform child = childPtr.GetAsset(transform.File);
+				ITransform child = childPtr.GetAsset(transform.SerializedFile);
 				IGameObject childGO = child.GetGameObject();
 				if (childGO.Name == childName)
 				{

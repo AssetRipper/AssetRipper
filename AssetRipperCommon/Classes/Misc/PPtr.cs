@@ -121,7 +121,7 @@ namespace AssetRipper.Core.Classes.Misc
 		{
 			if (pptr.FileIndex == 0)
 			{
-				if (file == asset.File)
+				if (file == asset.SerializedFile)
 				{
 					return asset.PathID == pptr.PathID;
 				}
@@ -132,7 +132,7 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 			else
 			{
-				return asset.PathID == pptr.PathID && file.Dependencies[pptr.FileIndex - 1].IsFile(asset.File);
+				return asset.PathID == pptr.PathID && file.Dependencies[pptr.FileIndex - 1].IsFile(asset.SerializedFile);
 			}
 		}
 

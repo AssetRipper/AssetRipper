@@ -57,12 +57,12 @@ namespace AssetRipper.Core.Project.Collections
 		}
 		private static void SaveMaxProjectVersion(string projectSettingsDirectory, IBuildSettings buildSettings)
 		{
-			UnityVersion projectVersion = UnityVersion.Max(UnityVersion.DefaultVersion, buildSettings.File.Version);
+			UnityVersion projectVersion = UnityVersion.Max(UnityVersion.DefaultVersion, buildSettings.SerializedFile.Version);
 			SaveProjectVersion(projectSettingsDirectory, projectVersion);
 		}
 		private static void SaveExactProjectVersion(string projectSettingsDirectory, IBuildSettings buildSettings)
 		{
-			SaveProjectVersion(projectSettingsDirectory, buildSettings.File.Version);
+			SaveProjectVersion(projectSettingsDirectory, buildSettings.SerializedFile.Version);
 		}
 		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version)
 		{

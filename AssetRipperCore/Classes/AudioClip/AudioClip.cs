@@ -137,17 +137,17 @@ namespace AssetRipper.Core.Classes.AudioClip
 
 		public bool CheckAssetIntegrity()
 		{
-			if (HasLoadType(File.Version))
+			if (HasLoadType(SerializedFile.Version))
 			{
-				return FSBResource.CheckIntegrity(File);
+				return FSBResource.CheckIntegrity(SerializedFile);
 			}
-			else if (HasStreamingInfo(File.Version))
+			else if (HasStreamingInfo(SerializedFile.Version))
 			{
 				if (LoadType == AudioClipLoadType.Streaming)
 				{
 					if (AudioData == null)
 					{
-						return StreamingInfo.CheckIntegrity(File);
+						return StreamingInfo.CheckIntegrity(SerializedFile);
 					}
 				}
 			}
@@ -156,19 +156,19 @@ namespace AssetRipper.Core.Classes.AudioClip
 
 		public IReadOnlyList<byte> GetAudioData()
 		{
-			if (HasLoadType(File.Version))
+			if (HasLoadType(SerializedFile.Version))
 			{
-				return FSBResource.GetContent(File) ?? Array.Empty<byte>();
+				return FSBResource.GetContent(SerializedFile) ?? Array.Empty<byte>();
 			}
 			else
 			{
-				if (HasStreamingInfo(File.Version))
+				if (HasStreamingInfo(SerializedFile.Version))
 				{
 					if (LoadType == AudioClipLoadType.Streaming)
 					{
 						if (AudioData == null)
 						{
-							return StreamingInfo.GetContent(File) ?? Array.Empty<byte>();
+							return StreamingInfo.GetContent(SerializedFile) ?? Array.Empty<byte>();
 						}
 					}
 				}
@@ -278,7 +278,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 
 				if (HasStreamingInfo(reader.Version))
 				{
-					bool isInnerData = LoadType == AudioClipLoadType.Streaming ? File.Collection.FindResourceFile(StreamingFileName) == null : true;
+					bool isInnerData = LoadType == AudioClipLoadType.Streaming ? SerializedFile.Collection.FindResourceFile(StreamingFileName) == null : true;
 					if (isInnerData)
 					{
 						AudioData = reader.ReadByteArray();
@@ -366,7 +366,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 		public bool UseHardware { get; set; }
 		public byte[] AudioData { get; set; }
 
-		private string StreamingFileName => File.Name + "." + StreamingFileExtension;
+		private string StreamingFileName => SerializedFile.Name + "." + StreamingFileExtension;
 
 		public const string StreamingFileExtension = "resS";
 

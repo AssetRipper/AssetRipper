@@ -23,7 +23,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				return;
 			}
 
-			if (Texture2D.HasStreamData(texture.File.Version))
+			if (Texture2D.HasStreamData(texture.SerializedFile.Version))
 			{
 				string path = texture.StreamData.Path;
 				if (path != string.Empty)
@@ -33,7 +33,7 @@ namespace AssetRipper.Library.Exporters.Textures
 						throw new Exception("Texture contains data and resource path");
 					}
 
-					IResourceFile res = texture.File.Collection.FindResourceFile(path);
+					IResourceFile res = texture.SerializedFile.Collection.FindResourceFile(path);
 					if (res == null)
 					{
 						Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.GetValidName()}' because resources file '{path}' wasn't found");
@@ -97,7 +97,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				Caps = texture.DDSCaps(),
 			};
 
-			EndianType endianess = Texture2D.IsSwapBytes(texture.File.Platform, texture.TextureFormat) ? EndianType.BigEndian : EndianType.LittleEndian;
+			EndianType endianess = Texture2D.IsSwapBytes(texture.SerializedFile.Platform, texture.TextureFormat) ? EndianType.BigEndian : EndianType.LittleEndian;
 			using (EndianReader sourceReader = new EndianReader(source, endianess))
 			{
 				DDSContainer.ExportDDS(sourceReader, destination, @params);

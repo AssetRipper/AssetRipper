@@ -108,7 +108,7 @@ namespace AssetRipper.Core.Classes.Animation
 		{
 			foreach (PPtr<AnimationClip.AnimationClip> clipPtr in Animations)
 			{
-				if (clipPtr.IsAsset(File, clip))
+				if (clipPtr.IsAsset(SerializedFile, clip))
 				{
 					return true;
 				}

@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Project.Collections
 	{
 		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IUnityObjectBase asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IGameObject root) : this(assetExporter, root.File, CreateVirtualPrefab(virtualFile, root)) { }
+		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IGameObject root) : this(assetExporter, root.SerializedFile, CreateVirtualPrefab(virtualFile, root)) { }
 
 		private PrefabExportCollection(IAssetExporter assetExporter, IAssetContainer file, IPrefabInstance prefab) : base(assetExporter, prefab)
 		{
@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Project.Collections
 				AddAsset(asset);
 
 				//This section might not be necessary. This seems to be quite different from normal prefab files
-				asset.PrefabInstance = prefab.File.CreatePPtr(prefab);
+				asset.PrefabInstance = prefab.SerializedFile.CreatePPtr(prefab);
 				if(asset is IGameObject gameObject)
 				{
 					gameObject.SetHideFlagsFromDepth();
@@ -46,7 +46,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if(asset is IComponent component)
 			{
-				return component.GameObjectPtr.FindAsset(component.File) != null;
+				return component.GameObjectPtr.FindAsset(component.SerializedFile) != null;
 			}
 			return false;
 		}
@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if(asset is IComponent component)
 			{
-				IGameObject go = component.GameObjectPtr.GetAsset(component.File);
+				IGameObject go = component.GameObjectPtr.GetAsset(component.SerializedFile);
 				return go.GetRoot();
 			}
 			else
@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance);
 			instance.ObjectHideFlags = HideFlags.HideInHierarchy;
-			instance.RootGameObjectPtr = root.File.CreatePPtr(root);
+			instance.RootGameObjectPtr = root.SerializedFile.CreatePPtr(root);
 			instance.IsPrefabAsset = true;
 			if(instance is IHasName hasName)
 			{
@@ -101,7 +101,7 @@ namespace AssetRipper.Core.Project.Collections
 
 				foreach (IUnityObjectBase asset in m_assets)
 				{
-					m_file = asset.File;
+					m_file = asset.SerializedFile;
 					yield return asset;
 				}
 			}

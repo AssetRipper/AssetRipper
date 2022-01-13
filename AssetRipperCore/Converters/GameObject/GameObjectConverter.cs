@@ -60,7 +60,7 @@ namespace AssetRipper.Core.Converters.GameObject
 		{
 			if (GObject.IsActiveInherited(container.Version))
 			{
-				return origin.File.Collection.IsScene(origin.File) ? origin.IsActive : true;
+				return origin.SerializedFile.Collection.IsScene(origin.SerializedFile) ? origin.IsActive : true;
 			}
 			return origin.IsActive;
 		}

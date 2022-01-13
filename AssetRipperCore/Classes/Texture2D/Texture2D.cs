@@ -121,9 +121,9 @@ namespace AssetRipper.Core.Classes.Texture2D
 
 		public bool CheckAssetIntegrity()
 		{
-			if (HasStreamData(File.Version))
+			if (HasStreamData(SerializedFile.Version))
 			{
-				return StreamData.CheckIntegrity(File);
+				return StreamData.CheckIntegrity(SerializedFile);
 			}
 			return true;
 		}
@@ -131,12 +131,12 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public byte[] GetImageData()
 		{
 			byte[] data = m_imageData;
-			if (HasStreamData(File.Version) && StreamData.IsSet())
+			if (HasStreamData(SerializedFile.Version) && StreamData.IsSet())
 			{
-				data = StreamData.GetContent(File) ?? m_imageData;
+				data = StreamData.GetContent(SerializedFile) ?? m_imageData;
 			}
 
-			if (IsSwapBytes(File.Platform, TextureFormat))
+			if (IsSwapBytes(SerializedFile.Platform, TextureFormat))
 			{
 				for (int i = 0; i < data.Length; i += 2)
 				{
@@ -307,7 +307,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 		{
 			get
 			{
-				if (HasStreamData(File.Version))
+				if (HasStreamData(SerializedFile.Version))
 				{
 					if (StreamData.IsSet())
 					{

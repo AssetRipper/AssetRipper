@@ -119,11 +119,11 @@ namespace AssetRipper.Core.Project
 							continue;
 						}
 
-						IUnityObjectBase dependency = pointer.FindAsset(asset.File);
+						IUnityObjectBase dependency = pointer.FindAsset(asset.SerializedFile);
 						if (dependency == null)
 						{
-							string hierarchy = $"[{asset.File.Name}]" + asset.File.GetAssetLogString(asset.PathID) + "." + context.GetPointerPath();
-							Logger.Log(LogType.Warning, LogCategory.Export, $"{hierarchy}'s dependency {context.PointerName} = {pointer.ToLogString(asset.File)} wasn't found");
+							string hierarchy = $"[{asset.SerializedFile.Name}]" + asset.SerializedFile.GetAssetLogString(asset.PathID) + "." + context.GetPointerPath();
+							Logger.Log(LogType.Warning, LogCategory.Export, $"{hierarchy}'s dependency {context.PointerName} = {pointer.ToLogString(asset.SerializedFile)} wasn't found");
 							continue;
 						}
 

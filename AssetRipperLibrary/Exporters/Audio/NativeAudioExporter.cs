@@ -30,9 +30,9 @@ namespace AssetRipper.Library.Exporters.Audio
 
 			if (AudioClip.HasLoadType(container.Version))
 			{
-				if (audioClip.FSBResource.CheckIntegrity(audioClip.File))
+				if (audioClip.FSBResource.CheckIntegrity(audioClip.SerializedFile))
 				{
-					byte[] data = audioClip.FSBResource.GetContent(audioClip.File);
+					byte[] data = audioClip.FSBResource.GetContent(audioClip.SerializedFile);
 					TaskManager.AddTask(File.WriteAllBytesAsync(path, data));
 				}
 				else
@@ -45,9 +45,9 @@ namespace AssetRipper.Library.Exporters.Audio
 			{
 				if (AudioClip.HasStreamingInfo(container.Version) && audioClip.LoadType == AudioClipLoadType.Streaming && audioClip.AudioData == null)
 				{
-					if (audioClip.StreamingInfo.CheckIntegrity(audioClip.File))
+					if (audioClip.StreamingInfo.CheckIntegrity(audioClip.SerializedFile))
 					{
-						byte[] data = audioClip.StreamingInfo.GetContent(audioClip.File);
+						byte[] data = audioClip.StreamingInfo.GetContent(audioClip.SerializedFile);
 						TaskManager.AddTask(File.WriteAllBytesAsync(path, data));
 					}
 					else
@@ -66,7 +66,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		private static string GetExportExtension(AudioClip audioClip)
 		{
-			if (AudioClip.HasType(audioClip.File.Version))
+			if (AudioClip.HasType(audioClip.SerializedFile.Version))
 			{
 				switch (audioClip.Type)
 				{

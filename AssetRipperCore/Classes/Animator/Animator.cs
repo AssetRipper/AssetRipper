@@ -134,11 +134,11 @@ namespace AssetRipper.Core.Classes.Animator
 
 		public IReadOnlyDictionary<uint, string> BuildTOS()
 		{
-			if (HasHasTransformHierarchy(File.Version))
+			if (HasHasTransformHierarchy(SerializedFile.Version))
 			{
 				if (HasTransformHierarchy)
 				{
-					GameObject.GameObject go = GameObject.GetAsset(File);
+					GameObject.GameObject go = GameObject.GetAsset(SerializedFile);
 					return go.BuildTOS();
 				}
 				else
@@ -148,7 +148,7 @@ namespace AssetRipper.Core.Classes.Animator
 			}
 			else
 			{
-				GameObject.GameObject go = GameObject.GetAsset(File);
+				GameObject.GameObject go = GameObject.GetAsset(SerializedFile);
 				return go.BuildTOS();
 			}
 		}

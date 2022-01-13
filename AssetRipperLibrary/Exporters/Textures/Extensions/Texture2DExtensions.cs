@@ -11,7 +11,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 	{
 		public static DDSCapsFlags DDSCaps(this Texture2D _this)
 		{
-			if (Texture2D.IsBoolMinMap(_this.File.Version))
+			if (Texture2D.IsBoolMinMap(_this.SerializedFile.Version))
 			{
 				if (_this.MipCount <= 1)
 				{

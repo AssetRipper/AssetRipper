@@ -28,9 +28,9 @@ namespace AssetRipper.Core.Project.Collections
 				throw new ArgumentNullException(nameof(asset));
 			}
 
-			File = asset.File;
+			File = asset.SerializedFile;
 			m_version = version;
-			if (IsEngineFile(asset.File.Name))
+			if (IsEngineFile(asset.SerializedFile.Name))
 			{
 				foreach (IUnityObjectBase builtInAsset in File.FetchAssets())
 				{
@@ -52,7 +52,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return false;
 			}
-			if (IsEngineFile(asset?.File.Name))
+			if (IsEngineFile(asset?.SerializedFile.Name))
 			{
 				return true;
 			}
@@ -63,7 +63,7 @@ namespace AssetRipper.Core.Project.Collections
 				{
 					return false;
 				}
-				IShader shader = material.ShaderPtr.FindAsset(material.File);
+				IShader shader = material.ShaderPtr.FindAsset(material.SerializedFile);
 				if (shader == null)
 				{
 					return true;
@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is ISprite sprite)
 			{
-				ITexture2D spriteTexture = sprite.TexturePtr.FindAsset(sprite.File);
+				ITexture2D spriteTexture = sprite.TexturePtr.FindAsset(sprite.SerializedFile);
 				if (spriteTexture == null)
 				{
 					return false;
@@ -201,7 +201,7 @@ namespace AssetRipper.Core.Project.Collections
 			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engneAsset);
 			if (!engneAsset.IsValid)
 			{
-				throw new NotImplementedException($"Unknown ExportID for asset {asset.PathID} from file {asset.File.Name}");
+				throw new NotImplementedException($"Unknown ExportID for asset {asset.PathID} from file {asset.SerializedFile.Name}");
 			}
 			long exportID = engneAsset.ExportID;
 			UnityGUID guid = engneAsset.GUID;

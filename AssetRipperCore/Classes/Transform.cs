@@ -122,7 +122,7 @@ namespace AssetRipper.Core.Classes
 				{
 					return 0;
 				}
-				Transform father = Father.GetAsset(File);
+				Transform father = Father.GetAsset(SerializedFile);
 				PPtr<Transform>[] children = father.Children;
 				for (int i = 0; i < children.Length; i++)
 				{

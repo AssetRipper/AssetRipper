@@ -30,12 +30,12 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public static void ReadStructure(this IMonoBehaviour monoBehaviour, AssetReader reader)
 		{
-			if (!monoBehaviour.File.Collection.AssemblyManager.IsSet)
+			if (!monoBehaviour.SerializedFile.Collection.AssemblyManager.IsSet)
 			{
 				return;
 			}
 
-			IMonoScript script = monoBehaviour.ScriptPtr.FindAsset(monoBehaviour.File);
+			IMonoScript script = monoBehaviour.ScriptPtr.FindAsset(monoBehaviour.SerializedFile);
 			if (script == null)
 			{
 				return;

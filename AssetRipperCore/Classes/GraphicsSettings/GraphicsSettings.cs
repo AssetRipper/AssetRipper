@@ -563,8 +563,8 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			{
 				return SpritesDefaultMaterial;
 			}
-			Material.Material material = (Material.Material)File.FindAsset(ClassIDType.Material, "Sprites-Default");
-			return material == null ? default : File.CreatePPtr(material);
+			Material.Material material = (Material.Material)SerializedFile.FindAsset(ClassIDType.Material, "Sprites-Default");
+			return material == null ? default : SerializedFile.CreatePPtr(material);
 		}
 		private Vector3f GetTransparencySortAxis(UnityVersion version)
 		{

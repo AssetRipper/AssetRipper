@@ -65,7 +65,7 @@ namespace AssetRipper.Core.Project.Collections
 		}
 
 		public IAssetExporter AssetExporter { get; }
-		public ISerializedFile File => m_asset.File;
+		public ISerializedFile File => m_asset.SerializedFile;
 		public TransferInstructionFlags Flags => File.Flags;
 		public IEnumerable<IUnityObjectBase> Assets
 		{

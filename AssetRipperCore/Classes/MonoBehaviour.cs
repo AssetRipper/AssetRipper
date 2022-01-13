@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes
 			Name = reader.ReadString();
 
 			this.ReadStructure(reader);
-			ObjectInfo info = File.GetAssetEntry(PathID);
+			ObjectInfo info = SerializedFile.GetAssetEntry(PathID);
 			reader.BaseStream.Position = position + info.ByteSize;
 		}
 

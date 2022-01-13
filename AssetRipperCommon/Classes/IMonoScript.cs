@@ -50,12 +50,12 @@ namespace AssetRipper.Core.Classes
 
 		public static SerializableType GetBehaviourType(this IMonoScript monoScript)
 		{
-			ScriptIdentifier scriptID = HasNamespace(monoScript.File.Version) ?
-				monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName) :
-				monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName);
-			if (monoScript.File.Collection.AssemblyManager.IsValid(scriptID))
+			ScriptIdentifier scriptID = HasNamespace(monoScript.SerializedFile.Version) ?
+				monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName) :
+				monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName);
+			if (monoScript.SerializedFile.Collection.AssemblyManager.IsValid(scriptID))
 			{
-				return monoScript.File.Collection.AssemblyManager.GetSerializableType(scriptID) as SerializableType;
+				return monoScript.SerializedFile.Collection.AssemblyManager.GetSerializableType(scriptID) as SerializableType;
 			}
 			return null;
 		}
@@ -71,8 +71,8 @@ namespace AssetRipper.Core.Classes
 		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript, bool includeNamespace)
 		{
 			bool useNamespace = includeNamespace && monoScript.Namespace != null;
-			return useNamespace ? monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName)
-				: monoScript.File.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName);
+			return useNamespace ? monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName)
+				: monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName);
 		}
 
 		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript) => monoScript.GetScriptID(false);
@@ -80,13 +80,13 @@ namespace AssetRipper.Core.Classes
 		public static TypeDefinition GetTypeDefinition(this IMonoScript monoScript)
 		{
 			ScriptIdentifier scriptID = monoScript.GetScriptID(true);
-			return monoScript.File.Collection.AssemblyManager.GetTypeDefinition(scriptID);
+			return monoScript.SerializedFile.Collection.AssemblyManager.GetTypeDefinition(scriptID);
 		}
 
 		public static bool IsScriptPresents(this IMonoScript monoScript)
 		{
 			ScriptIdentifier scriptID = monoScript.GetScriptID(true);
-			return monoScript.File.Collection.AssemblyManager.IsPresent(scriptID);
+			return monoScript.SerializedFile.Collection.AssemblyManager.IsPresent(scriptID);
 		}
 	}
 }

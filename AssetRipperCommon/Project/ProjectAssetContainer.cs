@@ -286,7 +286,7 @@ namespace AssetRipper.Core.Project
 		{
 			foreach (NullableKeyValuePair<string, PPtr<IUnityObjectBase>> kvp in manager.GetAssets())
 			{
-				IUnityObjectBase asset = kvp.Value.FindAsset(manager.File);
+				IUnityObjectBase asset = kvp.Value.FindAsset(manager.SerializedFile);
 				if (asset == null)
 				{
 					continue;
@@ -318,7 +318,7 @@ namespace AssetRipper.Core.Project
 				{
 					continue;
 				}
-				IUnityObjectBase asset = kvp.Value.AssetPtr.FindAsset(bundle.File);
+				IUnityObjectBase asset = kvp.Value.AssetPtr.FindAsset(bundle.SerializedFile);
 				if (asset == null)
 				{
 					continue;

@@ -329,11 +329,11 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public bool CheckAssetIntegrity()
 		{
-			if (HasStreamData(File.Version))
+			if (HasStreamData(SerializedFile.Version))
 			{
 				if (VertexData.IsSet)
 				{
-					return StreamData.CheckIntegrity(File);
+					return StreamData.CheckIntegrity(SerializedFile);
 				}
 			}
 			return true;
@@ -341,7 +341,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public string FindBlendShapeNameByCRC(uint crc)
 		{
-			if (HasBlendChannels(File.Version))
+			if (HasBlendChannels(SerializedFile.Version))
 			{
 				return Shapes.FindShapeNameByCRC(crc);
 			}
@@ -974,9 +974,9 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public byte[] GetChannelsData()
 		{
-			if (HasStreamData(File.Version) && StreamData.IsSet())
+			if (HasStreamData(SerializedFile.Version) && StreamData.IsSet())
 			{
-				return StreamData.GetContent(File);
+				return StreamData.GetContent(SerializedFile);
 			}
 			else
 			{

@@ -25,10 +25,10 @@ namespace AssetRipper.Library.Exporters.Scripts
 		{
 			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
 
-			File = script.File;
+			File = script.SerializedFile;
 
 			// find copies in whole project and skip them
-			foreach (IUnityObjectBase asset in script.File.Collection.FetchAssets())
+			foreach (IUnityObjectBase asset in script.SerializedFile.Collection.FetchAssets())
 			{
 				if (asset is not IMonoScript assetScript)
 				{
@@ -100,9 +100,9 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 
 			IMonoScript script = m_scripts[asset];
-			if (!MonoScriptExtensions.HasAssemblyName(script.File.Version, script.File.Flags) || s_unityEngine.IsMatch(script.GetAssemblyNameFixed()))
+			if (!MonoScriptExtensions.HasAssemblyName(script.SerializedFile.Version, script.SerializedFile.Flags) || s_unityEngine.IsMatch(script.GetAssemblyNameFixed()))
 			{
-				if (MonoScriptExtensions.HasNamespace(script.File.Version))
+				if (MonoScriptExtensions.HasNamespace(script.SerializedFile.Version))
 				{
 					int fileID = Compute(script.Namespace, script.ClassName);
 					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));

@@ -202,7 +202,7 @@ namespace AssetRipper.Core.Classes.GameObject
 
 		public PPtr<IComponent>[] FetchComponents()
 		{
-			if (IsComponentTuple(File.Version))
+			if (IsComponentTuple(SerializedFile.Version))
 			{
 				return ComponentTuple.Select(t => t.Item2.CastTo<IComponent>()).ToArray();
 			}

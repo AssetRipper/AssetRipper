@@ -202,7 +202,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public PPtr<T> CreatePPtr<T>(T asset) where T : IUnityObjectBase
 		{
-			if (asset.File == this)
+			if (asset.SerializedFile == this)
 			{
 				return new PPtr<T>(0, asset.PathID);
 			}
@@ -211,7 +211,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			{
 				FileIdentifier identifier = Metadata.Externals[i];
 				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
-				if (asset.File == file)
+				if (asset.SerializedFile == file)
 				{
 					return new PPtr<T>(i + 1, asset.PathID);
 				}

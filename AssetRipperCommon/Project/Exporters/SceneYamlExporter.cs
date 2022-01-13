@@ -13,9 +13,9 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			if (asset.File.Collection.IsScene(asset.File))
+			if (asset.SerializedFile.Collection.IsScene(asset.SerializedFile))
 			{
-				return new SceneExportCollection(this, virtualFile, asset.File);
+				return new SceneExportCollection(this, virtualFile, asset.SerializedFile);
 			}
 			else if (PrefabExportCollection.IsValidAsset(asset))
 			{

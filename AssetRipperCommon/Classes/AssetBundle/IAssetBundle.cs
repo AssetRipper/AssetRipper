@@ -21,11 +21,11 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasPathExtension(this IAssetBundle bundle) => HasPathExtension(bundle.File.Version);
+		public static bool HasPathExtension(this IAssetBundle bundle) => HasPathExtension(bundle.SerializedFile.Version);
 
 		public static string GetAssetBundleName(this IAssetBundle bundle)
 		{
-			return bundle.HasAssetBundleName ? bundle.AssetBundleName : bundle.File.Name;
+			return bundle.HasAssetBundleName ? bundle.AssetBundleName : bundle.SerializedFile.Name;
 		}
 	}
 }

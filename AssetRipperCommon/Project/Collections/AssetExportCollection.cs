@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		private string fileExtension;
 		public override IAssetExporter AssetExporter { get; }
-		public override ISerializedFile File => Asset.File;
+		public override ISerializedFile File => Asset.SerializedFile;
 		public override IEnumerable<IUnityObjectBase> Assets
 		{
 			get { yield return Asset; }

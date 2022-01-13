@@ -198,7 +198,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 				{
 					return default;
 				}
-				return scene.OcclusionCullingData.File.CreatePPtr(scene.OcclusionCullingData);
+				return scene.OcclusionCullingData.SerializedFile.CreatePPtr(scene.OcclusionCullingData);
 			}
 			if (HasSceneGUID(container.Version))
 			{

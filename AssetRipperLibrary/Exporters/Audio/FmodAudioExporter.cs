@@ -32,7 +32,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public static bool IsSupported(AudioClip audioClip)
 		{
-			if (AudioClip.HasType(audioClip.File.Version))
+			if (AudioClip.HasType(audioClip.SerializedFile.Version))
 			{
 				switch (audioClip.Type)
 				{

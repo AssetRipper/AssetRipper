@@ -168,7 +168,7 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		public int PathFlags { get; set; }
 		public Dictionary<string, string> SceneHashes { get; set; }
 
-		bool IAssetBundle.HasAssetBundleName => HasAssetBundleName(File.Version);
+		bool IAssetBundle.HasAssetBundleName => HasAssetBundleName(SerializedFile.Version);
 
 		public const string ContainerName = "m_Container";
 
