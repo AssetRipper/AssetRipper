@@ -42,7 +42,14 @@ namespace AssetRipper.Library.Exporters.Terrains
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{terrain.Name}' to bitmap");
 				return false;
 			}
-			TaskManager.AddTask(bitmap.SaveAsync(path, ImageFormat));
+			if (System.OperatingSystem.IsWindows())
+			{
+				bitmap.Save(path, ImageFormat);
+			}
+			else
+			{
+				TaskManager.AddTask(bitmap.SaveAsync(path, ImageFormat));
+			}
 			return true;
 		}
 

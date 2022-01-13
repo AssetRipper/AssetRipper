@@ -54,7 +54,14 @@ namespace AssetRipper.Library.Exporters.Textures
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
 				return false;
 			}
-			TaskManager.AddTask(bitmap.SaveAsync(path, ImageExportFormat));
+			if (System.OperatingSystem.IsWindows())
+			{
+				bitmap.Save(path, ImageExportFormat);
+			}
+			else
+			{
+				TaskManager.AddTask(bitmap.SaveAsync(path, ImageExportFormat));
+			}
 			return true;
 		}
 
