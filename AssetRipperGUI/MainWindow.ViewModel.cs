@@ -266,8 +266,8 @@ namespace AssetRipper.GUI
 				
 				if(saveLoc == null)
 					return;
-				
-				await File.WriteAllBytesAsync(saveLoc, da.RawData);
+
+				await da.SaveToFileAsync(saveLoc);
 				MessageBox.Popup(
 					MainWindow.Instance.LocalizationManager["success"],
 					string.Format(MainWindow.Instance.LocalizationManager["loose_file_saved_at"], saveLoc));

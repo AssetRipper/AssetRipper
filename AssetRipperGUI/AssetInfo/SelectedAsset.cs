@@ -141,7 +141,6 @@ namespace AssetRipper.GUI.AssetInfo
 		public bool HasTextData => Asset switch
 		{
 			IShader => true,
-			DummyAssetForLooseResourceFile da => da.RawData.Length > 0,
 			ITextAsset txt=> !string.IsNullOrEmpty(txt.Script),
 			IHasRawData rawDataAsset => rawDataAsset.RawData.Length > 0,
 			_ => false,
@@ -151,7 +150,6 @@ namespace AssetRipper.GUI.AssetInfo
 		public string? TextAssetData => (Asset switch
 		{
 			IShader shader => DumpShaderDataAsText(shader),
-			DummyAssetForLooseResourceFile da => da.IsProbablyPlainText ? da.DataAsString : da.RawData.ToFormattedHex(),
 			ITextAsset txt => txt.Script,
 			IHasRawData rawDataAsset => rawDataAsset.RawData.ToFormattedHex(),
 			_ => null

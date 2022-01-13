@@ -184,11 +184,6 @@ namespace AssetRipper.GUI
 				_displayAs = asset.ClassID.ToString();
 			}
 
-			if (_associatedObject is DummyAssetForLooseResourceFile da)
-			{
-				_displayAs = da.AssociatedFile.Name;
-			}
-
 			if (string.IsNullOrEmpty(_displayAs))
 			{
 				_displayAs = _associatedObject.GetType().Name;
