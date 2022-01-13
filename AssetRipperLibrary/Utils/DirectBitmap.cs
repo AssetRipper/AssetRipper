@@ -37,7 +37,12 @@ namespace AssetRipper.Library.Utils
 
 		public bool Save(Stream stream, ImageExportFormat format)
 		{
-			if (OperatingSystem.IsWindows())
+			if (format == ImageExportFormat.Bmp)
+			{
+				BmpWriter.WriteBmp(Bits, Width, Height, stream);
+				return true;
+			}
+			else if (OperatingSystem.IsWindows())
 			{
 				using Bitmap bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
 				bitmap.Save(stream, format.GetImageFormat());
