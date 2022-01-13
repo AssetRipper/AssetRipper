@@ -111,14 +111,14 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 				return false;
 			if (type.IsAbstract)
 				return false;
-			
+
 			MonoTypeContext context = new MonoTypeContext(type);
 			if (!IsTypeValid(context))
 				return false;
-			
+
 			if (!IsInheritanceValid(type))
 				return false;
-			
+
 			return true;
 		}
 

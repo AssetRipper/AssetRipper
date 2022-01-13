@@ -72,7 +72,7 @@ namespace AssetRipper.Core.Classes.Shader
 			{
 				return 201802150;
 			}
-			else if(version.IsLess(2021, 2))
+			else if (version.IsLess(2021, 2))
 			{
 				return 201806140;
 			}

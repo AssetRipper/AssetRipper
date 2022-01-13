@@ -132,7 +132,7 @@ namespace AssetRipper.Core.Classes
 		public int[] AssemblyTypes { get; set; }
 
 		public Dictionary<Hash128, Hash128> ScriptHashes { get; set; }
-		
+
 		public Dictionary<uint, Hash128> RuntimeClassHashes { get; set; }
 
 		public const string ScriptsName = "m_Scripts";

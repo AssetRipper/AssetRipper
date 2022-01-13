@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Project.Collections
 
 			AssetExporter.Export(container, EditorSettings, filePath);
 
-			if(buildSettings.GetType().FullName == "AssetRipper.Core.Classes.BuildSettings")
+			if (buildSettings.GetType().FullName == "AssetRipper.Core.Classes.BuildSettings")
 			{
 				//SaveDefaultProjectVersion(subPath);
 				SaveMaxProjectVersion(subPath, buildSettings);
@@ -88,7 +88,7 @@ namespace AssetRipper.Core.Project.Collections
 			int numScenes = buildSettings.Scenes.Length;
 			editorBuildSettings.InitializeScenesArray(numScenes);
 			IEditorScene[] scenes = editorBuildSettings.Scenes;
-			for(int i = 0; i < numScenes; i++)
+			for (int i = 0; i < numScenes; i++)
 			{
 				string scenePath = buildSettings.Scenes[i];
 				IEditorScene scene = scenes[i];

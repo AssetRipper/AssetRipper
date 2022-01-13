@@ -1,4 +1,3 @@
-using AssetRipper.Core.Extensions;
 using System;
 using System.Buffers.Binary;
 using System.IO;
@@ -10,8 +9,8 @@ namespace AssetRipper.Core.IO.Endian
 	public class EndianReader : BinaryReader
 	{
 		private bool isBigEndian = false;
-		public EndianType EndianType 
-		{ 
+		public EndianType EndianType
+		{
 			get => isBigEndian ? EndianType.BigEndian : EndianType.LittleEndian;
 			set => isBigEndian = value == EndianType.BigEndian;
 		}
@@ -186,7 +185,7 @@ namespace AssetRipper.Core.IO.Endian
 				{
 					throw new Exception($"End of stream. Read {index}, expected {count} elements", ex);
 				}
-				index ++;
+				index++;
 			}
 			if (allowAlignment && IsAlignArray)
 			{

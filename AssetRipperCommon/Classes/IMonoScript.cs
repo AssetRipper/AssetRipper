@@ -62,7 +62,7 @@ namespace AssetRipper.Core.Classes
 
 		public static string GetFullName(this IMonoScript monoScript)
 		{
-			if(string.IsNullOrEmpty(monoScript.Namespace))
+			if (string.IsNullOrEmpty(monoScript.Namespace))
 				return new string(monoScript.ClassName);
 			else
 				return $"{monoScript.Namespace}.{monoScript.ClassName}";

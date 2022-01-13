@@ -1,16 +1,14 @@
 using AssetRipper.Core.Classes.Misc;
 using NUnit.Framework;
-using System;
-using System.Text;
 
 namespace AssetRipper.Tests
 {
 	public class GuidTests
-    {
-        [SetUp]
-        public void Setup()
-        {
-        }
+	{
+		[SetUp]
+		public void Setup()
+		{
+		}
 
 		[Test]
 		public void MissingReferenceSerializedCorrectly()

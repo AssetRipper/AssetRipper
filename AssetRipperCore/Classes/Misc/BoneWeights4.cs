@@ -69,14 +69,14 @@ namespace AssetRipper.Core.Classes.Misc
 		public int BoneIndex1 { get => BoneIndices[1]; set => BoneIndices[1] = value; }
 		public int BoneIndex2 { get => BoneIndices[2]; set => BoneIndices[2] = value; }
 		public int BoneIndex3 { get => BoneIndices[3]; set => BoneIndices[3] = value; }
-		public float[] Weights 
+		public float[] Weights
 		{
 			get
 			{
 				if (m_Weights == null) m_Weights = new float[4];
 				return m_Weights;
 			}
-		} 
+		}
 		public int[] BoneIndices
 		{
 			get

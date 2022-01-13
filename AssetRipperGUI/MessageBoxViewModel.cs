@@ -5,22 +5,22 @@ namespace AssetRipper.GUI
 {
 	public class MessageBoxViewModel : BaseViewModel
 	{
-		
+
 		public enum Buttons
 		{
 			Okay,
 			YesNoCancel,
 			YesNo
 		}
-		
+
 		public enum Result
 		{
-			Okay, 
-			Yes, 
-			No, 
+			Okay,
+			Yes,
+			No,
 			Cancel
 		}
-		
+
 		public string BodyText
 		{
 			get => _bodyText;
@@ -35,17 +35,17 @@ namespace AssetRipper.GUI
 		{
 			get => _currentButtons == Buttons.Okay;
 		}
-		
+
 		public bool YesVisible
 		{
 			get => _currentButtons == Buttons.YesNo | _currentButtons == Buttons.YesNoCancel;
 		}
-		
+
 		public bool NoVisible
 		{
 			get => _currentButtons == Buttons.YesNo | _currentButtons == Buttons.YesNoCancel;
 		}
-		
+
 		public bool CancelVisible
 		{
 			get => _currentButtons == Buttons.YesNoCancel;
@@ -70,21 +70,21 @@ namespace AssetRipper.GUI
 			_callback?.Invoke(Result.Cancel);
 			window.Close();
 		}
-		
+
 		// Called by UI
 		private void NoClicked(Window window)
 		{
 			_callback?.Invoke(Result.No);
 			window.Close();
 		}
-		
+
 		// Called by UI
 		private void YesClicked(Window window)
 		{
 			_callback?.Invoke(Result.Yes);
 			window.Close();
 		}
-		
+
 		// Called by UI
 		private void OkayClicked(Window window)
 		{

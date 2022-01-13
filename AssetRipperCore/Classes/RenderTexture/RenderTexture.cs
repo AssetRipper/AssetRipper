@@ -74,7 +74,7 @@ namespace AssetRipper.Core.Classes.RenderTexture
 		/// Less than 2.1.0
 		/// </summary>
 		public static bool HasIsPowerOfTwoFirst(UnityVersion version) => version.IsLess(2, 1);
-		
+
 		/// <summary>
 		/// 2021.2 and greater
 		/// </summary>

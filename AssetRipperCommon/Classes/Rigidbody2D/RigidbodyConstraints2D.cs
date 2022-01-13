@@ -8,19 +8,19 @@ namespace AssetRipper.Core.Classes.Rigidbody2D
 		/// <summary>
 		/// No constraints
 		/// </summary>
-		None				= 0,
+		None = 0,
 		/// <summary>
 		/// Freeze motion along the X-axis.
 		/// </summary>
-		FreezePositionX		= 1,
+		FreezePositionX = 1,
 		/// <summary>
 		/// Freeze motion along the Y-axis.
 		/// </summary>
-		FreezePositionY		= 2,
+		FreezePositionY = 2,
 		/// <summary>
 		/// Freeze rotation along the Z-axis.
 		/// </summary>
-		FreezeRotation		= 4,
+		FreezeRotation = 4,
 
 		/// <summary>
 		/// Freeze motion along all axes.

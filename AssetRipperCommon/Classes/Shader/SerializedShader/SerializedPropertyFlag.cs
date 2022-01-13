@@ -5,12 +5,12 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 	[Flags]
 	public enum SerializedPropertyFlag : uint
 	{
-		HideInInspector		= 0x1,
-		PerRendererData		= 0x2,
-		NoScaleOffset		= 0x4,
-		Normal				= 0x8,
-		HDR					= 0x10,
-		Gamma				= 0x20,
+		HideInInspector = 0x1,
+		PerRendererData = 0x2,
+		NoScaleOffset = 0x4,
+		Normal = 0x8,
+		HDR = 0x10,
+		Gamma = 0x20,
 	}
 
 	public static class SerializedPropertyFlagExtensions

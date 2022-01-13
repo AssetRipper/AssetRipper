@@ -5,7 +5,6 @@ using AssetRipper.Core.Updating;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.GUI.Extensions;
-using AssetRipper.GUI.Logging;
 using AssetRipper.GUI.Managers;
 using AssetRipper.Library;
 using Avalonia.Controls;
@@ -263,8 +262,8 @@ namespace AssetRipper.GUI
 				saveFileDialog.InitialFileName = fileName;
 
 				string? saveLoc = await saveFileDialog.ShowAsync(MainWindow.Instance);
-				
-				if(saveLoc == null)
+
+				if (saveLoc == null)
 					return;
 
 				await da.SaveToFileAsync(saveLoc);

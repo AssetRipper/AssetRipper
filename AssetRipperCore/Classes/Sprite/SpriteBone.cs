@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.Sprite
 		/// 2021 and greater
 		/// </summary>
 		public static bool HasColor(UnityVersion version) => version.IsGreaterEqual(2021);
-		
+
 		public void Read(AssetReader reader)
 		{
 			Name = reader.ReadString();

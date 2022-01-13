@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			EnableRealtimeLightmaps = reader.ReadBoolean();
 			EnableRealtimeEnvironmentLighting = reader.ReadBoolean();
 			reader.AlignStream();
-			
+
 			BounceScale = reader.ReadSingle();
 			AlbedoBoost = reader.ReadSingle();
 			IndirectOutputScale = reader.ReadSingle();

@@ -8,10 +8,10 @@
 		/// <summary>
 		/// Uses RenderTextureFormat.ARGBHalf.
 		/// </summary>
-		FP16		= 1,
+		FP16 = 1,
 		/// <summary>
 		/// Uses RenderTextureFormat.RGB111110Float.
 		/// </summary>
-		R11G11B10	= 2,
+		R11G11B10 = 2,
 	}
 }

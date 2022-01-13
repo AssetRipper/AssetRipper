@@ -25,7 +25,7 @@ namespace AssetRipper.GUI
 
 		public LocalizationManager()
 		{
-			
+
 		}
 
 		public void Init()
@@ -61,9 +61,9 @@ namespace AssetRipper.GUI
 			CurrentLang = code;
 			Logger.Info(LogCategory.System, $"Loading locale {code}.json");
 			using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(LocalizationFilePrefix + code + ".json") ?? throw new Exception($"Could not load language file {code}.json");
-			
+
 			CurrentLocale = JsonSerializer.Deserialize<Dictionary<string, string>>(stream) ?? throw new Exception($"Could not parse language file {code}.json");
-			
+
 			OnPropertyChanged("Item");
 			OnPropertyChanged("Item[]");
 			OnLanguageChanged();
@@ -103,7 +103,7 @@ namespace AssetRipper.GUI
 			{
 				DisplayName = displayName;
 				LanguageCode = languageCode;
-				
+
 				Logger.Verbose(LogCategory.System, $"Language {displayName} isActive {IsActive}");
 
 				MainWindow.Instance.LocalizationManager.OnLanguageChanged += () => OnPropertyChanged(nameof(IsActive));

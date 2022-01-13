@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct OffsetPtr<T> : IAsset where T :  IAssetReadable, IYAMLExportable, new()
+	public struct OffsetPtr<T> : IAsset where T : IAssetReadable, IYAMLExportable, new()
 	{
 		public OffsetPtr(T instance)
 		{

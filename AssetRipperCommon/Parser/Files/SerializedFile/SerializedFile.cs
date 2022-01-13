@@ -274,7 +274,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			{
 				file = this;
 			}
-			else if(fileIndex < 0)
+			else if (fileIndex < 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(fileIndex), $"File index cannot have negative index: {fileIndex}");
 			}
@@ -361,7 +361,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			long read = reader.BaseStream.Position - offset;
 			if (!replaceWithUnreadableObject && read != size)
 			{
-				if(asset is IMonoBehaviour monoBehaviour && monoBehaviour.Structure == null)
+				if (asset is IMonoBehaviour monoBehaviour && monoBehaviour.Structure == null)
 				{
 					reader.BaseStream.Position = offset + size;
 				}
@@ -384,7 +384,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				unreadable.Name = asset is IHasName hasName ? hasName.Name : asset.GetType().Name;
 				asset = unreadable;
 			}
-			
+
 			reader.AdjustableStream.ResetPositionBoundaries();
 			return asset;
 		}

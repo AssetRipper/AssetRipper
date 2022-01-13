@@ -5,14 +5,14 @@
 		/// <summary>
 		/// Dynamic body.
 		/// </summary>
-		Dynamic		= 0,
+		Dynamic = 0,
 		/// <summary>
 		/// Kinematic body.
 		/// </summary>
-		Kinematic	= 1,
+		Kinematic = 1,
 		/// <summary>
 		/// Static body.
 		/// </summary>
-		Static		= 2,
+		Static = 2,
 	}
 }

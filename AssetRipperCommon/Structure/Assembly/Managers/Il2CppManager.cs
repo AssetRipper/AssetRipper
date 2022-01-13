@@ -44,11 +44,11 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 				throw new NullReferenceException("Could not determine the unity version");
 			else
 				Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
-			
+
 			Logger.SendStatusChange("loading_step_parse_il2cpp_metadata");
 
 			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion, false);
-			
+
 			Logger.SendStatusChange("loading_step_generate_dummy_dll");
 
 			Cpp2IlApi.MakeDummyDLLs(true);
@@ -57,7 +57,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found {instructionSet} instruction set.");
 
 			Cpp2IL.Core.BaseKeyFunctionAddresses keyFunctionAddresses = null;
-			if(IsAddressScanSupported(instructionSet))
+			if (IsAddressScanSupported(instructionSet))
 			{
 				Logger.SendStatusChange("loading_step_locate_key_functions");
 				keyFunctionAddresses = Cpp2IlApi.ScanForKeyFunctionAddresses();
@@ -66,10 +66,10 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			Logger.SendStatusChange("loading_step_restore_attributes");
 			Cpp2IlApi.RunAttributeRestorationForAllAssemblies(keyFunctionAddresses);
 
-			if(contentLevel >= ScriptContentLevel.Level3)
+			if (contentLevel >= ScriptContentLevel.Level3)
 			{
 				bool unsafeAnalysis = contentLevel == ScriptContentLevel.Level4;
-				foreach(var assembly in Cpp2IlApi.GeneratedAssemblies)
+				foreach (var assembly in Cpp2IlApi.GeneratedAssemblies)
 				{
 					Cpp2IlApi.AnalyseAssembly(Cpp2IL.Core.AnalysisLevel.IL_ONLY, assembly, keyFunctionAddresses, null, true, unsafeAnalysis);
 				}

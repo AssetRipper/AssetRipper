@@ -90,7 +90,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 					tPolys[index++] = (y * w) + x + 1;
 				}
 			}
-			
+
 			for (int i = 0; i < tVertices.Length; i++)
 			{
 				sb.AppendFormat("v {0} {1} {2}\n", tVertices[i].X, tVertices[i].Y, tVertices[i].Z);

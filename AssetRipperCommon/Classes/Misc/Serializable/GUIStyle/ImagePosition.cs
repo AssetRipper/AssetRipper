@@ -2,9 +2,9 @@
 {
 	public enum ImagePosition
 	{
-		ImageLeft	= 0,
-		ImageAbove	= 1,
-		ImageOnly	= 2,
-		TextOnly	= 3,
+		ImageLeft = 0,
+		ImageAbove = 1,
+		ImageOnly = 2,
+		TextOnly = 3,
 	}
 }

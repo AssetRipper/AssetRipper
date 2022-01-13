@@ -391,7 +391,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public IReadOnlyDictionary<uint, string> FindTOS()
 		{
 			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
-			
+
 			foreach (IUnityObjectBase asset in SerializedFile.Collection.FetchAssetsOfType(ClassIDType.Avatar))
 			{
 				Avatar.Avatar avatar = (Avatar.Avatar)asset;

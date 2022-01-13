@@ -31,11 +31,11 @@ namespace AssetRipper.Core.Logging
 
 		public void Log(LogType type, LogCategory category, string message)
 		{
-			if(type == LogType.Info)
+			if (type == LogType.Info)
 			{
-				if (category == LogCategory.None) 
+				if (category == LogCategory.None)
 					Console.WriteLine(message);
-				else 
+				else
 					Console.WriteLine($"{category} : {message}");
 				return;
 			}

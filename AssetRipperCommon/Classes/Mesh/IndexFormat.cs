@@ -8,10 +8,10 @@
 		/// <summary>
 		/// 16 bit mesh index buffer format
 		/// </summary>
-		UInt16	= 0,
+		UInt16 = 0,
 		/// <summary>
 		/// 32 bit mesh index buffer format
 		/// </summary>
-		UInt32	= 1,
+		UInt32 = 1,
 	}
 }

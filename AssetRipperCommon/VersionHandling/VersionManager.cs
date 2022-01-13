@@ -11,7 +11,7 @@ namespace AssetRipper.Core.VersionHandling
 {
 	public static class VersionManager
 	{
-		private static readonly Dictionary<UnityVersion, UnityHandlerBase> handlers = new(); 
+		private static readonly Dictionary<UnityVersion, UnityHandlerBase> handlers = new();
 		public static UnityHandlerBase LegacyHandler { get; set; }
 		public static UnityHandlerBase SpecialHandler { get; set; }
 
@@ -22,15 +22,15 @@ namespace AssetRipper.Core.VersionHandling
 
 		public static UnityHandlerBase GetHandler(UnityVersion version)
 		{
-			if(SpecialHandler != null)
+			if (SpecialHandler != null)
 			{
 				return SpecialHandler;
 			}
-			else if(handlers.TryGetValue(version, out UnityHandlerBase handler))
+			else if (handlers.TryGetValue(version, out UnityHandlerBase handler))
 			{
 				return handler;
 			}
-			else if(LegacyHandler != null)
+			else if (LegacyHandler != null)
 			{
 				return LegacyHandler;
 			}

@@ -3,7 +3,6 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
@@ -545,7 +544,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			return HasAssetPipelineMode(version) ? CacheServerNamespacePrefix : "default";
 		}
 		#endregion
-		
+
 		public string ExternalVersionControlSupport
 		{
 			get => m_ExternalVersionControlSupport;

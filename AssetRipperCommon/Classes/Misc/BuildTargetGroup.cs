@@ -8,85 +8,85 @@ namespace AssetRipper.Core.Classes.Misc
 		/// <summary>
 		/// Unknown target.
 		/// </summary>
-		Unknown			= 0,
+		Unknown = 0,
 		/// <summary>
 		/// Mac/PC standalone target.
 		/// </summary>
-		Standalone		= 1,
+		Standalone = 1,
 		/// <summary>
 		/// Mac/PC webplayer target.
 		/// </summary>
-		WebPlayer		= 2,
-		Wii				= 3,
+		WebPlayer = 2,
+		Wii = 3,
 		/// <summary>
 		/// Apple iOS target.
 		/// </summary>
-		iPhone			= 4,
+		iPhone = 4,
 		/// <summary>
 		/// Apple iOS target.
 		/// </summary>
-		iOS				= 4,
-		PS3				= 5,
-		XBOX360			= 6,
+		iOS = 4,
+		PS3 = 5,
+		XBOX360 = 6,
 		/// <summary>
 		/// Android target.
 		/// </summary>
-		Android			= 7,
-		GLESEmu			= 9,
+		Android = 7,
+		GLESEmu = 9,
 		/// <summary>
 		/// Google Native Client
 		/// </summary>
-		NaCl			= 11,
-		FlashPlayer		= 12,
+		NaCl = 11,
+		FlashPlayer = 12,
 		/// <summary>
 		/// WebGL.
 		/// </summary>
-		WebGL			= 13,
+		WebGL = 13,
 		/// <summary>
 		/// Windows Store Apps target.
 		/// </summary>
-		WSA				= 14,
-		Metro			= 14,
-		WP8				= 15,
-		BlackBerry		= 16,
+		WSA = 14,
+		Metro = 14,
+		WP8 = 15,
+		BlackBerry = 16,
 		/// <summary>
 		/// Samsung Tizen target.
 		/// </summary>
-		Tizen			= 17,
+		Tizen = 17,
 		/// <summary>
 		/// Sony PS Vita target.
 		/// </summary>
-		PSP2			= 18,
+		PSP2 = 18,
 		/// <summary>
 		/// Sony Playstation 4 target.
 		/// </summary>
-		PS4				= 19,
-		PSM				= 20,
+		PS4 = 19,
+		PSM = 20,
 		/// <summary>
 		/// Microsoft Xbox One target.
 		/// </summary>
-		XboxOne			= 21,
-		SamsungTV		= 22,
+		XboxOne = 21,
+		SamsungTV = 22,
 		/// <summary>
 		/// Nintendo 3DS target.
 		/// </summary>
-		N3DS			= 23,
+		N3DS = 23,
 		/// <summary>
 		/// Nintendo Wii U target.
 		/// </summary>
-		WiiU			= 24,
+		WiiU = 24,
 		/// <summary>
 		/// Apple's tvOS target.
 		/// </summary>
-		tvOS			= 25,
+		tvOS = 25,
 		/// <summary>
 		/// Facebook target.
 		/// </summary>
-		Facebook		= 26,
+		Facebook = 26,
 		/// <summary>
 		/// Nintendo Switch target.
 		/// </summary>
-		Switch			= 27,
+		Switch = 27,
 	}
 
 	public static class BuildTargetGroupExtensions

@@ -8,10 +8,10 @@
 		/// <summary>
 		/// Specifies the field of view as vertical
 		/// </summary>
-		Vertical	= 0,
+		Vertical = 0,
 		/// <summary>
 		/// Specifies the field of view as horizontal
 		/// </summary>
-		Horizontal	= 1,
+		Horizontal = 1,
 	}
 }

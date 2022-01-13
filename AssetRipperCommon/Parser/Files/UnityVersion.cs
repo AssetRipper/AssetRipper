@@ -81,7 +81,7 @@ namespace AssetRipper.Core.Parser.Files
 			{
 				throw new ArgumentNullException(nameof(dllName));
 			}
-			if(dllName[0] == '_')
+			if (dllName[0] == '_')
 				dllName = dllName.Substring(1);
 			return Parse(dllName.Replace('_', '.').Replace(".dll", ""));
 		}
@@ -249,9 +249,9 @@ namespace AssetRipper.Core.Parser.Files
 
 		public override bool Equals(object obj)
 		{
-			if (obj is UnityVersion version) 
+			if (obj is UnityVersion version)
 				return this == version;
-			else 
+			else
 				return false;
 		}
 

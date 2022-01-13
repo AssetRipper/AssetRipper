@@ -21,10 +21,10 @@ namespace AssetRipper.Library.Exporters.TypeTrees
 				{
 					Logger.Info(LogCategory.Export, serializedFile.Name);
 				}
-				
+
 				List<IMonoScript> monoScripts = serializedFile.FetchAssets().Where(asset => asset is IMonoScript).Select(asset => (IMonoScript)asset).ToList();
 				StringBuilder sb = new StringBuilder();
-				foreach(var type in serializedFile.Metadata.Types)
+				foreach (var type in serializedFile.Metadata.Types)
 				{
 					//Logger.Info(LogCategory.Export, $"\t\tID: {type.TypeID.ToString()} Node Count: {type.OldType?.Nodes?.Count ?? 0}");
 					string typeTreeText = type.OldType?.Dump;

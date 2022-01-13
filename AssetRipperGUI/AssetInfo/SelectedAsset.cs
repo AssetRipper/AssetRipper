@@ -27,7 +27,7 @@ namespace AssetRipper.GUI.AssetInfo
 	public sealed class SelectedAsset : BaseViewModel, IDisposable
 	{
 		private static readonly LibVLC? LibVlc;
-		
+
 		public IUnityObjectBase Asset { get; }
 		private readonly IExportContainer? _uiAssetContainer;
 
@@ -79,7 +79,7 @@ namespace AssetRipper.GUI.AssetInfo
 			{
 				DateTime start = DateTime.Now;
 				bool success = AudioClipDecoder.TryGetDecodedAudioClipData(clip, out byte[] rawClipAudioData, out string _);
-				if(!success || rawClipAudioData == null)
+				if (!success || rawClipAudioData == null)
 				{
 					//Unsupported sound type
 					return;
@@ -89,7 +89,7 @@ namespace AssetRipper.GUI.AssetInfo
 
 				_media = new(LibVlc, new StreamMediaInput(_audioStream));
 				_mediaPlayer = new(_media);
-				
+
 				_mediaPlayer.LengthChanged += (_, e) => AudioLengthSeconds = e.Length / 1000f;
 				_mediaPlayer.PositionChanged += (_, e) => AudioPositionSeconds = e.Position * AudioLengthSeconds;
 				_mediaPlayer.EndReached += (_, _) => ThreadPool.QueueUserWorkItem(_ => _mediaPlayer.Stop());
@@ -114,7 +114,7 @@ namespace AssetRipper.GUI.AssetInfo
 			catch (Exception e)
 			{
 				YamlTreeIsSupported = false;
-				
+
 				if (e is NotImplementedException or NotSupportedException)
 				{
 					YamlTree = new[] { new AssetYamlNode("Asset Doesn't Support YAML Export", new YAMLScalarNode(true)) };
@@ -141,7 +141,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public bool HasTextData => Asset switch
 		{
 			IShader => true,
-			ITextAsset txt=> !string.IsNullOrEmpty(txt.Script),
+			ITextAsset txt => !string.IsNullOrEmpty(txt.Script),
 			IHasRawData rawDataAsset => rawDataAsset.RawData.Length > 0,
 			_ => false,
 		};
@@ -160,7 +160,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			get
 			{
-				switch(Asset)
+				switch (Asset)
 				{
 					case Texture2D texture:
 						{
@@ -305,7 +305,7 @@ namespace AssetRipper.GUI.AssetInfo
 		//Called from UI
 		public void TogglePause()
 		{
-			if(IsPaused)
+			if (IsPaused)
 			{
 				PlayClip();
 			}

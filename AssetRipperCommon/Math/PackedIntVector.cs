@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Math
 		{
 			m_Data = Array.Empty<byte>();
 		}
-		
+
 		public static PackedIntVector Pack(int[] values)
 		{
 			throw new NotImplementedException();

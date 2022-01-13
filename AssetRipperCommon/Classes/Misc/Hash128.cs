@@ -8,7 +8,6 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
 namespace AssetRipper.Core.Classes.Misc
 {
@@ -26,9 +25,9 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public Hash128(byte[] data)
 		{
-			if(data == null)
+			if (data == null)
 				throw new ArgumentNullException(nameof(data));
-			if(data.Length != 16)
+			if (data.Length != 16)
 				throw new ArgumentException("Length must be exactly 16", nameof(data));
 			Data0 = BitConverter.ToUInt32(data, 0);
 			Data1 = BitConverter.ToUInt32(data, 4);

@@ -9,7 +9,7 @@ namespace AssetRipper.Library.Configuration
 		/// <summary>
 		/// The file format that audio clips get exported in. Recommended: Ogg
 		/// </summary>
-		public AudioExportFormat AudioExportFormat { get; set; } 
+		public AudioExportFormat AudioExportFormat { get; set; }
 		/// <summary>
 		/// The file format that images (like textures) get exported in.
 		/// </summary>
@@ -25,15 +25,15 @@ namespace AssetRipper.Library.Configuration
 		/// <summary>
 		/// How are MonoScripts exported? Recommended: Decompiled
 		/// </summary>
-		public ScriptExportMode ScriptExportMode { get; set; } 
+		public ScriptExportMode ScriptExportMode { get; set; }
 		/// <summary>
 		/// The C# language version of decompiled scripts.
 		/// </summary>
-		public LanguageVersion ScriptLanguageVersion { get; set; } 
+		public LanguageVersion ScriptLanguageVersion { get; set; }
 		/// <summary>
 		/// Should sprites be exported as a texture? Recommended: Native
 		/// </summary>
-		public SpriteExportMode SpriteExportMode { get; set; } 
+		public SpriteExportMode SpriteExportMode { get; set; }
 		/// <summary>
 		/// How terrain data is exported. Recommended: Native
 		/// </summary>

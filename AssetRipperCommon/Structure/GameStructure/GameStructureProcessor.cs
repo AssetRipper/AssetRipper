@@ -79,9 +79,9 @@ namespace AssetRipper.Core.Structure.GameStructure
 		{
 			//Initializes it with a reference to the file collection
 			GameProcessorContext context = new GameProcessorContext(fileCollection);
-			
+
 			Logger.SendStatusChange("loading_step_pre_processing");
-			
+
 			foreach (FileScheme scheme in m_schemes)
 			{
 				//Not just a simple add

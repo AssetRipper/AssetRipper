@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Classes
 		{
 			return version.IsGreaterEqual(5) && !flags.IsRelease();
 		}
-		
+
 		/// <summary>
 		/// 2021.2 and greater
 		/// </summary>
@@ -66,7 +66,7 @@ namespace AssetRipper.Core.Classes
 
 				reader.AlignStream(); //Either way we have to align here.
 			}
-			
+
 			Children = reader.ReadAssetArray<PPtr<Transform>>();
 			Father.Read(reader);
 		}
@@ -135,7 +135,7 @@ namespace AssetRipper.Core.Classes
 				throw new Exception("Transform hasn't been found among father's children");
 			}
 		}
-		
+
 		private Vector3f LocalEulerAnglesHint => m_LocalRotation.ToEuler();
 
 		public Vector3f LocalPosition { get => m_LocalPosition; set => m_LocalPosition = value; }

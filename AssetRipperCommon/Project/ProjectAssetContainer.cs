@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Project
 
 			foreach (IUnityObjectBase asset in assets)
 			{
-				if(asset is IBuildSettings buildSettings)
+				if (asset is IBuildSettings buildSettings)
 				{
 					m_buildSettings = buildSettings;
 				}

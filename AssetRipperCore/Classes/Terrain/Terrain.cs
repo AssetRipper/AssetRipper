@@ -176,7 +176,7 @@ namespace AssetRipper.Core.Classes.Terrain
 			{
 				StaticShadowCaster = reader.ReadBoolean();
 			}
-			
+
 			reader.AlignStream();
 
 			if (HasReflectionProbeUsage(reader.Version))

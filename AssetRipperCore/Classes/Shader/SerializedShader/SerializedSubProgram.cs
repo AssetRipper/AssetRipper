@@ -43,7 +43,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// 2017.2 and greater
 		/// </summary>
 		public static bool HasShaderRequirements(UnityVersion version) => version.IsGreaterEqual(2017, 2);
-		
+
 		/// <summary>
 		/// 2021.2 and greater
 		/// </summary>
@@ -103,13 +103,13 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 				ConstantBuffers = reader.ReadAssetArray<ConstantBuffer>();
 				ConstantBufferBindings = reader.ReadAssetArray<BufferBinding>();
 				UAVParams = reader.ReadAssetArray<UAVParameter>();
-				
+
 				if (HasSamplers(reader.Version))
 				{
 					Samplers = reader.ReadAssetArray<SamplerParameter>();
 				}
 			}
-			
+
 			if (HasShaderRequirements(reader.Version))
 			{
 				if (IsShaderRequirementsInt64(reader.Version))

@@ -66,7 +66,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				return true;
 			else
 				dinfo = new DirectoryInfo(path);
-			
+
 			if (!dinfo.Exists)
 				return false;
 			else

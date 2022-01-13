@@ -63,7 +63,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
 				writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm.Name);
 				Export(shader.ParsedForm.PropInfo, writer);
-				
+
 				TemplateShader templateShader = TemplateList.GetBestTemplate(shader);
 				writer.Write("\t//DummyShaderTextExporter\n");
 				if (templateShader != null)

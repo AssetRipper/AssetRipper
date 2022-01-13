@@ -8,14 +8,14 @@
 		/// <summary>
 		/// Low quality 1D noise.
 		/// </summary>
-		Low		= 0,
+		Low = 0,
 		/// <summary>
 		/// Medium quality 2D noise.
 		/// </summary>
-		Medium	= 1,
+		Medium = 1,
 		/// <summary>
 		/// High quality 3D noise.
 		/// </summary>
-		High	= 2,
+		High = 2,
 	}
 }

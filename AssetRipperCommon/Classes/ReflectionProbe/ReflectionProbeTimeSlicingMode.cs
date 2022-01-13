@@ -9,14 +9,14 @@
 		/// <summary>
 		/// Instructs Unity to use time-slicing by first rendering all faces at once, then spreading the remaining work over the next 8 frames. Using this option, updating the probe will take 9 frames.
 		/// </summary>
-		AllFacesAtOnce		= 0,
+		AllFacesAtOnce = 0,
 		/// <summary>
 		/// Instructs Unity to spread the rendering of each face over several frames. Using this option, updating the cubemap will take 14 frames. This option greatly reduces the impact on frame rate, however it may produce incorrect results, especially in Scenes where lighting conditions change over these 14 frames.
 		/// </summary>
-		IndividualFaces		= 1,
+		IndividualFaces = 1,
 		/// <summary>
 		/// Unity will render the probe entirely in one frame.
 		/// </summary>
-		NoTimeSlicing		= 2,
+		NoTimeSlicing = 2,
 	}
 }

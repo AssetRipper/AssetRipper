@@ -2,7 +2,6 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Project;
@@ -68,14 +67,14 @@ namespace AssetRipper.Core.Structure.GameStructure
 				else
 				{
 					Logger.SendStatusChange("loading_step_initialize_layout");
-					
+
 					//Assigns a layout if one wasn't already provided
 					layinfo ??= processor.GetLayoutInfo();
 
 					InitializeGameCollection(configuration, layinfo);
 
 					Logger.SendStatusChange("loading_step_begin_scheme_processing");
-					
+
 					//Creates new objects for each scheme in the collection
 					processor.ProcessSchemes(FileCollection);
 				}
@@ -158,7 +157,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private ScriptingBackend GetScriptingBackend(bool disableScriptImport)
 		{
-			if(disableScriptImport)
+			if (disableScriptImport)
 			{
 				Logger.Info(LogCategory.Import, "Script import disabled by settings.");
 				return ScriptingBackend.Unknown;

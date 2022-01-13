@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 		/// 2021.2 and greater
 		/// </summary>
 		public static bool HasImprovedPatchFriction(UnityVersion version) => version.IsGreaterEqual(2021, 2);
-		
+
 		public PhysicsManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(UnityVersion version)

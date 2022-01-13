@@ -8,34 +8,34 @@
 		/// <summary>
 		/// Not a lightmap
 		/// </summary>
-		Default					= 0,
+		Default = 0,
 		/// <summary>
 		/// Range [0;2] packed to [0;1] with loss of precision
 		/// </summary>
-		BakedLightmapDoubleLDR	= 1,
+		BakedLightmapDoubleLDR = 1,
 		/// <summary>
 		/// Range [0;kLightmapRGBMMax] packed to [0;1] with multiplier stored in the alpha channel
 		/// </summary>
-		BakedLightmapRGBM		= 2,
+		BakedLightmapRGBM = 2,
 		/// <summary>
 		/// Compressed DXT5 normal map
 		/// </summary>
-		NormalmapDXT5nm			= 3,
+		NormalmapDXT5nm = 3,
 		/// <summary>
 		/// Plain RGB normal map
 		/// </summary>
-		NormalmapPlain			= 4,
-		RGBMEncoded				= 5,
+		NormalmapPlain = 4,
+		RGBMEncoded = 5,
 		/// <summary>
 		/// Texture is always padded if NPOT and on low-end hardware
 		/// </summary>
-		AlwaysPadded			= 6,
-		DoubleLDR				= 7,
+		AlwaysPadded = 6,
+		DoubleLDR = 7,
 		/// <summary>
 		/// Baked lightmap without any encoding
 		/// </summary>
-		BakedLightmapFullHDR	= 8,
-		RealtimeLightmapRGBM	= 9,
+		BakedLightmapFullHDR = 8,
+		RealtimeLightmapRGBM = 9,
 	}
 
 	public static class TextureUsageModeExtensions

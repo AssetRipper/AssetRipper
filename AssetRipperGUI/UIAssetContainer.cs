@@ -29,5 +29,5 @@ namespace AssetRipper.GUI
 
 		public override TransferInstructionFlags ExportFlags => ExportLayout.Flags;
 	}
-	
+
 }

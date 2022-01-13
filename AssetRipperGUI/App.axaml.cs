@@ -18,7 +18,7 @@ namespace AssetRipper.GUI
 		public static void AppMain(Application app, string[] args)
 		{
 			Avalonia.Logging.Logger.Sink = new RipperAvaloniaSink();
-			
+
 			AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
 			{
 				try
@@ -30,7 +30,7 @@ namespace AssetRipper.GUI
 					//Ignore, that's all we can do.
 				}
 			};
-			
+
 			app.Run(new MainWindow());
 		}
 	}

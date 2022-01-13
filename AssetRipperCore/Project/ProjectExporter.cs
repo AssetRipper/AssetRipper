@@ -47,7 +47,7 @@ namespace AssetRipper.Core.Project
 			if (exporter == null)
 				throw new ArgumentNullException(nameof(exporter));
 			registeredExporters.Add((type, exporter, allowInheritance));
-			if(typeMap.Count > 0)//Just in case an exporter gets added after CreateCollection or ToExportType have already been used
+			if (typeMap.Count > 0)//Just in case an exporter gets added after CreateCollection or ToExportType have already been used
 				RecalculateTypeMap();
 		}
 
@@ -105,7 +105,7 @@ namespace AssetRipper.Core.Project
 		private Stack<IAssetExporter> GetExporterStack(IUnityObjectBase asset) => GetExporterStack(asset.GetType());
 		private Stack<IAssetExporter> GetExporterStack(Type type)
 		{
-			if(!typeMap.TryGetValue(type, out Stack<IAssetExporter> exporters))
+			if (!typeMap.TryGetValue(type, out Stack<IAssetExporter> exporters))
 			{
 				exporters = CalculateAssetExporterStack(type);
 				typeMap.Add(type, exporters);
@@ -115,7 +115,7 @@ namespace AssetRipper.Core.Project
 
 		private void RecalculateTypeMap()
 		{
-			foreach(var type in typeMap.Keys)
+			foreach (var type in typeMap.Keys)
 			{
 				typeMap[type] = CalculateAssetExporterStack(type);
 			}
@@ -124,7 +124,7 @@ namespace AssetRipper.Core.Project
 		private Stack<IAssetExporter> CalculateAssetExporterStack(Type type)
 		{
 			var result = new Stack<IAssetExporter>();
-			foreach((Type baseType, IAssetExporter exporter, bool allowInheritance) in registeredExporters)
+			foreach ((Type baseType, IAssetExporter exporter, bool allowInheritance) in registeredExporters)
 			{
 				if (type == baseType || (allowInheritance && type.IsAssignableTo(baseType)))
 					result.Push(exporter);
@@ -142,13 +142,13 @@ namespace AssetRipper.Core.Project
 				classID = ClassIDType.AvatarMask;
 			else if (classID == ClassIDType.VideoClipOld)
 				classID = ClassIDType.VideoClip;
-			
+
 			if (classID == ClassIDType.UnknownType)
 			{
 				type = typeof(UnknownObject);
 				return true;
 			}
-			
+
 			string className = classID.ToString();
 			type = unityTypes.FirstOrDefault(t => t.Name == className);
 			return type != null;
@@ -160,7 +160,7 @@ namespace AssetRipper.Core.Project
 		}
 		private static bool TryGetIDForType(Type type, out ClassIDType classID)
 		{
-			if(type == typeof(UnknownObject))
+			if (type == typeof(UnknownObject))
 			{
 				classID = ClassIDType.UnknownType;
 				return true;

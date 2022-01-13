@@ -2,9 +2,9 @@
 {
 	public enum ColorSpace
 	{
-		Gamma			= 0,
-		Linear			= 1,
+		Gamma = 0,
+		Linear = 1,
 
-		Uninitialized	= -1,
+		Uninitialized = -1,
 	}
 }

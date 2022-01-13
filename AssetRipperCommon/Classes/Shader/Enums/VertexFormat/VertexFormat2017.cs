@@ -7,19 +7,19 @@ namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 	/// </summary>
 	public enum VertexFormat2017 : byte
 	{
-		Float		= 0,
-		Float16		= 1,
-		Color		= 2,
-		UNorm8		= 3,
-		SNorm8		= 4,
-		UNorm16		= 5,
-		SNorm16		= 6,
-		UInt8		= 7,
-		SInt8		= 8,
-		UInt16		= 9,
-		SInt16		= 10,
-		UInt32		= 11,
-		SInt32		= 12,
+		Float = 0,
+		Float16 = 1,
+		Color = 2,
+		UNorm8 = 3,
+		SNorm8 = 4,
+		UNorm16 = 5,
+		SNorm16 = 6,
+		UInt8 = 7,
+		SInt8 = 8,
+		UInt16 = 9,
+		SInt16 = 10,
+		UInt32 = 11,
+		SInt32 = 12,
 	}
 
 	public static class VertexFormatV5Extension

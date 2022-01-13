@@ -6,7 +6,6 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 
@@ -115,7 +114,7 @@ namespace AssetRipper.Core.Classes
 		private PPtr<Prefab> PrefabAsset => default;
 		private PPtr<IPrefabInstance> m_PrefabInstance;
 
-		public PPtr<IPrefabInstance> PrefabInstance 
+		public PPtr<IPrefabInstance> PrefabInstance
 		{
 			get => m_PrefabInstance;
 			set => m_PrefabInstance = value;

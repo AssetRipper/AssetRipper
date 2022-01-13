@@ -19,7 +19,7 @@ namespace AssetRipper.Core.IO
 		public static bool IsDependentType { get; }
 		public TKey Key { get; set; }
 		public TValue Value { get; set; }
-		
+
 		public NullableKeyValuePair() { }
 
 		public NullableKeyValuePair(TKey key, TValue value)
@@ -28,7 +28,7 @@ namespace AssetRipper.Core.IO
 			Value = value;
 		}
 
-		public NullableKeyValuePair(KeyValuePair<TKey,TValue> pair)
+		public NullableKeyValuePair(KeyValuePair<TKey, TValue> pair)
 		{
 			Key = pair.Key;
 			Value = pair.Value;
@@ -46,7 +46,7 @@ namespace AssetRipper.Core.IO
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			if(hasDependentKeys && Key != null && Key is IDependent keyDependent)
+			if (hasDependentKeys && Key != null && Key is IDependent keyDependent)
 			{
 				foreach (PPtr<IUnityObjectBase> dependency in keyDependent.FetchDependencies(context))
 				{

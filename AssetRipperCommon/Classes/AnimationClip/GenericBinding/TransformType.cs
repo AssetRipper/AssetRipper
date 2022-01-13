@@ -4,10 +4,10 @@ namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
 {
 	public enum TransformType
 	{
-		Translation		= 1,
-		Rotation			= 2,
-		Scaling				= 3,
-		EulerRotation	= 4,
+		Translation = 1,
+		Rotation = 2,
+		Scaling = 3,
+		EulerRotation = 4,
 	}
 
 	public static class BindingTypeExtensions
@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
 
 		public static int GetDimension(this TransformType _this)
 		{
-			switch(_this)
+			switch (_this)
 			{
 				case TransformType.Translation:
 				case TransformType.Scaling:

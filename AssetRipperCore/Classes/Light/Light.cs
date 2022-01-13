@@ -250,13 +250,13 @@ namespace AssetRipper.Core.Classes.Light
 			{
 				BoundingSphereOverride.Read(reader);
 				UseBoundingSphereOverride = reader.ReadBoolean();
-				
+
 				if (HasUseViewFrustumForShadowCasterCull(reader.Version))
 				{
 					//2020.2
 					UseViewFrustumForShadowCasterCull = reader.ReadBoolean();
 				}
-				
+
 				reader.AlignStream();
 			}
 		}

@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Extensions;
-using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using System;
@@ -16,7 +15,7 @@ namespace AssetRipper.Core.Classes
 
 		public override void Read(AssetReader reader)
 		{
-			if(AssetInfo.ByteSize > 0)
+			if (AssetInfo.ByteSize > 0)
 				RawData = reader.ReadBytes(AssetInfo.ByteSize);
 		}
 

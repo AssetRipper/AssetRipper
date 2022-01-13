@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// 2019.3 and greater
 		/// </summary>
 		public static bool HasProgRayTracing(UnityVersion version) => version.IsGreaterEqual(2019, 3);
-		
+
 		/// <summary>
 		/// 2021.2 and greater
 		/// </summary>

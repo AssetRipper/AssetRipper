@@ -2,8 +2,8 @@
 {
 	public enum TriggerAction
 	{
-		Ignore		= 0,
-		Kill		= 1,
-		Callback	= 2,
+		Ignore = 0,
+		Kill = 1,
+		Callback = 2,
 	}
 }

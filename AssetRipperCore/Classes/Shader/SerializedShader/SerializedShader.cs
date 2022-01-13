@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// 2021 and greater
 		/// </summary>
 		public static bool HasCustomEditorForRenderPipelines(UnityVersion version) => version.IsGreaterEqual(2021);
-		
+
 		/// <summary>
 		/// 2021.2 and greater
 		/// </summary>

@@ -2,8 +2,8 @@
 {
 	public enum BuiltinShaderMode
 	{
-		None		= 0,
-		Builtin		= 1,
-		Custom		= 2,
+		None = 0,
+		Builtin = 1,
+		Custom = 2,
 	}
 }

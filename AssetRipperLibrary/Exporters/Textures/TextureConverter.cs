@@ -4,7 +4,6 @@ using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.TextureDecoders;
 using AssetRipper.Library.Utils;
 using System;
-using Texture2DDecoder;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Library.Exporters.Textures
@@ -273,7 +272,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				if(TexGenPackHandler.Decode(textureFormat, data, width, height, bitmap.BitsPtr, fixAlpha))
+				if (TexGenPackHandler.Decode(textureFormat, data, width, height, bitmap.BitsPtr, fixAlpha))
 				{
 					Logger.Verbose($"Byte array length: {bitmap.Bits.Length} Width: {width} Height: {height}");
 					CheckEqual(DecodeBC(data, textureFormat, width, height), bitmap.Bits);
@@ -302,7 +301,7 @@ namespace AssetRipper.Library.Exporters.Textures
 		private static bool DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
 		{
 			Logger.Verbose($"Performing alternate decoding for {textureFormat}");
-			
+
 			switch (textureFormat)
 			{
 				case TextureFormat.BC4:
@@ -324,17 +323,17 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static void CheckEqual(byte[] left, byte[] right)
 		{
-			if(left == null)
+			if (left == null)
 			{
 				Logger.Verbose("In byte array comparison, left was null");
 				return;
 			}
-			if(right == null)
+			if (right == null)
 			{
 				Logger.Verbose("In byte array comparison, left was null");
 				return;
 			}
-			if(left.Length != right.Length)
+			if (left.Length != right.Length)
 			{
 				Logger.Verbose("In byte array comparison, lengths were inequal");
 				Logger.Verbose($"Left: {left.Length}");
@@ -343,14 +342,14 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 			int length = left.Length;
 			int count = 0;
-			for(int i = 0; i < length; i++)
+			for (int i = 0; i < length; i++)
 			{
 				if (left[i] != right[i])
 				{
 					count++;
 				}
 			}
-			if(count == 0)
+			if (count == 0)
 				Logger.Verbose("Byte arrays were equal at all indices!");
 			else
 				Logger.Verbose($"Byte arrays were inequal in {count}/{length} places!");

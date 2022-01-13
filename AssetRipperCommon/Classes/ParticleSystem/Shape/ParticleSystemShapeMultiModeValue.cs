@@ -8,18 +8,18 @@
 		/// <summary>
 		/// Generate points randomly.
 		/// </summary>
-		Random			= 0,
+		Random = 0,
 		/// <summary>
 		/// Animate the emission point around the shape.
 		/// </summary>
-		Loop			= 1,
+		Loop = 1,
 		/// <summary>
 		/// Animate the emission point around the shape, alternating between clockwise and counter-clockwise directions.
 		/// </summary>
-		PingPong		= 2,
+		PingPong = 2,
 		/// <summary>
 		/// Distribute new particles around the shape evenly.
 		/// </summary>
-		BurstSpread		= 3,
+		BurstSpread = 3,
 	}
 }

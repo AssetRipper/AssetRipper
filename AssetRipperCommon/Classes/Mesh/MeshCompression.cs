@@ -8,19 +8,19 @@
 		/// <summary>
 		/// No mesh compression (default).
 		/// </summary>
-		Off		= 0,
+		Off = 0,
 		/// <summary>
 		/// Low amount of mesh compression.
 		/// </summary>
-		Low		= 1,
+		Low = 1,
 		/// <summary>
 		/// Medium amount of mesh compression.
 		/// </summary>
-		Med		= 2,
+		Med = 2,
 		/// <summary>
 		/// High amount of mesh compression.
 		/// </summary>
-		High	= 3,
+		High = 3,
 		Count,
 	}
 }

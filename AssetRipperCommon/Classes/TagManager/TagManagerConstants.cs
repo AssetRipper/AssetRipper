@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AssetRipper.Core.Classes.TagManager
+﻿namespace AssetRipper.Core.Classes.TagManager
 {
 	public static class TagManagerConstants
 	{

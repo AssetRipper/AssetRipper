@@ -24,7 +24,8 @@ namespace AssetRipper.Core.Classes.AnimatorTransition
 		}
 
 		private AnimatorTransition(LayoutInfo layout, AssetInfo assetInfo, Parameters parameters) :
-			   base(layout, assetInfo, parameters) { }
+			   base(layout, assetInfo, parameters)
+		{ }
 
 		public static AnimatorTransition CreateVirtualInstance(VirtualSerializedFile virtualFile, Parameters parameters)
 		{

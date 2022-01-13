@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Shader;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
@@ -19,9 +18,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 			if (RequiredProperties.Count == 0)
 				return true;
 			var properties = shader.ParsedForm.PropInfo.Props;
-			if(properties == null || properties.Length == 0)
+			if (properties == null || properties.Length == 0)
 				return false;
-			foreach(var reqProp in RequiredProperties)
+			foreach (var reqProp in RequiredProperties)
 			{
 				int matches = properties.Where(prop => reqProp.IsMatch(prop)).Count();
 				if (matches == 0)

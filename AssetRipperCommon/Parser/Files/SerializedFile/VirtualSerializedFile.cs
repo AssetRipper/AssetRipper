@@ -122,18 +122,18 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		{
 			AssetInfo assetInfo = CreateAssetInfo(classID);
 			IUnityObjectBase asset = VersionManager.GetHandler(Version).AssetFactory.CreateAsset(assetInfo);
-			if(asset == null)
+			if (asset == null)
 			{
 				throw new ArgumentException($"Could not create asset with id: {classID}", nameof(classID));
 			}
-			if(asset is T instance)
+			if (asset is T instance)
 			{
 				m_assets.Add(instance.PathID, instance);
 				return instance;
 			}
 			else
 			{
-				throw new ArgumentException($"Asset type {asset.GetType()} is not assignable to {typeof(T)}",nameof(classID));
+				throw new ArgumentException($"Asset type {asset.GetType()} is not assignable to {typeof(T)}", nameof(classID));
 			}
 		}
 

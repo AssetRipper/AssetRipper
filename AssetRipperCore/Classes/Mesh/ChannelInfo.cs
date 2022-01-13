@@ -91,7 +91,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// </summary>
 		public byte Format { get; set; }
 		private byte m_RawDimension;
-		public byte RawDimension 
+		public byte RawDimension
 		{
 			get => m_RawDimension;
 			set => m_RawDimension = value;
@@ -101,7 +101,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// </summary>
 		public byte Dimension
 		{
-			get => (byte) (m_RawDimension & 0b00001111);
+			get => (byte)(m_RawDimension & 0b00001111);
 			set => m_RawDimension = (byte)((m_RawDimension & 0b11110000) | (value & 0b00001111));
 		}
 		public const string StreamName = "stream";

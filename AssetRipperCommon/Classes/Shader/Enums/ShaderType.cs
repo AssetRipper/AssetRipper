@@ -4,16 +4,16 @@ namespace AssetRipper.Core.Classes.Shader.Enums
 {
 	public enum ShaderType
 	{
-		None		= 0,
-		Vertex		= 1,
-		Fragment	= 2,
-		Geometry	= 3,
-		Hull		= 4,
-		Domain		= 5,
+		None = 0,
+		Vertex = 1,
+		Fragment = 2,
+		Geometry = 3,
+		Hull = 4,
+		Domain = 5,
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		RayTracing	= 6,
+		RayTracing = 6,
 
 		TypeCount,
 	}

@@ -42,7 +42,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			assembly.Write(memoryStream);
 			memoryStream.Position = 0;
 
-			 return new PEFile(assembly.Name.Name, memoryStream);
+			return new PEFile(assembly.Name.Name, memoryStream);
 		}
 
 		public PEFile Resolve(IAssemblyReference reference) => Resolve(reference.FullName);

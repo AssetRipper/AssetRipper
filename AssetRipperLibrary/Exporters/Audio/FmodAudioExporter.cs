@@ -76,7 +76,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			if(AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows())
+			if (AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows())
 				return new AssetExportCollection(this, asset, "mp3");
 			else
 				return new AssetExportCollection(this, asset, "wav");

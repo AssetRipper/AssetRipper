@@ -8,14 +8,14 @@
 		/// <summary>
 		/// Disable Shadows.
 		/// </summary>
-		Disable		= 0,
+		Disable = 0,
 		/// <summary>
 		/// Hard Shadows Only.
 		/// </summary>
-		HardOnly	= 1,
+		HardOnly = 1,
 		/// <summary>
 		/// Hard and Soft Shadows.
 		/// </summary>
-		All			= 2,
+		All = 2,
 	}
 }

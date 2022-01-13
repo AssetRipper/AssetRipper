@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Extensions
 
 		public static string[] SplitLines(this string _this)
 		{
-			return _this.Split( new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None );
+			return _this.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 		}
 	}
 }

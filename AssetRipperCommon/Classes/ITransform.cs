@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Math;
 using System;
 

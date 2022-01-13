@@ -2,7 +2,6 @@
 using AssetRipper.Core.Classes.AudioManager;
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
-using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.GraphicsSettings;
 using AssetRipper.Core.Classes.InputManager;
 using AssetRipper.Core.Classes.LightmapSettings;
@@ -35,9 +34,9 @@ namespace AssetRipper.GUI
 		{
 			typeof(AudioManager),
 			typeof(BuildSettings),
-			typeof(EditorBuildSettings), 
-			typeof(EditorSettings), 
-			typeof(GraphicsSettings), 
+			typeof(EditorBuildSettings),
+			typeof(EditorSettings),
+			typeof(GraphicsSettings),
 			typeof(InputManager),
 			typeof(LightingSettings),
 			typeof(LightmapSettings),
@@ -49,11 +48,11 @@ namespace AssetRipper.GUI
 			typeof(QualitySettings),
 			typeof(RenderSettings),
 			typeof(ResourceManager),
-			typeof(TagManager), 
-			typeof(TimeManager), 
+			typeof(TagManager),
+			typeof(TimeManager),
 			typeof(UnityConnectSettings),
 		};
-		
+
 		public static List<NewUiFileListItem> GetItemsFromStructure(GameStructure structure)
 		{
 			List<NewUiFileListItem> ret = new();
@@ -64,12 +63,12 @@ namespace AssetRipper.GUI
 
 				//Create a dictionary to hold the sub-categories.
 				Dictionary<string, NewUiFileListItem> categories = new();
-				
+
 				foreach (IUnityObjectBase asset in resourceFile.FetchAssets())
 				{
 					//Get the name of the category this asset should go in.
 					string categoryName = GetCategoryName(asset.GetType());
-					
+
 					//Get or create the category.
 					NewUiFileListItem category;
 					if (!categories.TryGetValue(categoryName, out category!))
@@ -80,27 +79,27 @@ namespace AssetRipper.GUI
 
 					//Create the asset tree view item
 					NewUiFileListItem assetListItem = new(asset);
-					
+
 					//Add it to the category.
 					category.SubItems.Add(assetListItem);
 				}
-				
+
 				//Add categories to the top-level file.
 				categories.Values.ToList().ForEach(item =>
 				{
 					item.UpdateOnceAllAssetsAdded();
 					topLevelEntry.SubItems.Add(item);
 				});
-				
+
 				//Add the top-level entry to our result
 				ret.Add(topLevelEntry);
 			}
-			
+
 			//Create a top-level tree view entry for any loose resource files
 			NewUiFileListItem? looseFiles = new("Loose Resource Files");
 			foreach (ResourceFile resourceFile in structure.FileCollection.GameResourceFiles)
 			{
-				if(resourceFile != null)
+				if (resourceFile != null)
 					looseFiles.SubItems.Add(new(new DummyAssetForLooseResourceFile(resourceFile)));
 			}
 
@@ -146,11 +145,11 @@ namespace AssetRipper.GUI
 			}
 		}
 
-		public IUnityObjectBase? AsObjectAsset => _associatedObject; 
-		
+		public IUnityObjectBase? AsObjectAsset => _associatedObject;
+
 		//Read from UI
 		public ObservableCollection<NewUiFileListItem> SubItems { get; } = new();
-		
+
 		/// <summary>
 		/// Creates a top-level tree view item from a SerializedFile and the given display name.
 		/// </summary>
@@ -168,7 +167,7 @@ namespace AssetRipper.GUI
 		public NewUiFileListItem(IUnityObjectBase asset)
 		{
 			_associatedObject = asset;
-			
+
 			if (_associatedObject is INamedObject no)
 			{
 				_displayAs = no.GetValidName();
@@ -202,7 +201,7 @@ namespace AssetRipper.GUI
 		public void UpdateOnceAllAssetsAdded()
 		{
 			DisplayAs += $" ({SubItems.Count})";
-			
+
 			//Sort alphabetically
 			List<NewUiFileListItem> itemsCopy = SubItems.ToList();
 			itemsCopy.Sort((a, b) => string.Compare(a.DisplayAs, b.DisplayAs, StringComparison.Ordinal));

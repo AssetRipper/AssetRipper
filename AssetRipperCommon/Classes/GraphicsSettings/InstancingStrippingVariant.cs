@@ -2,8 +2,8 @@
 {
 	public enum InstancingStrippingVariant
 	{
-		StripUnused		= 0,
-		StripAll		= 1,
-		KeepAll			= 2,
+		StripUnused = 0,
+		StripAll = 1,
+		KeepAll = 2,
 	}
 }

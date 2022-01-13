@@ -8,18 +8,18 @@
 		/// <summary>
 		/// Low shadow map resolution.
 		/// </summary>
-		Low			= 0,
+		Low = 0,
 		/// <summary>
 		/// Medium shadow map resolution.
 		/// </summary>
-		Medium		= 1,
+		Medium = 1,
 		/// <summary>
 		/// High shadow map resolution.
 		/// </summary>
-		High		= 2,
+		High = 2,
 		/// <summary>
 		/// Very high shadow map resolution.
 		/// </summary>
-		VeryHigh	= 3,
+		VeryHigh = 3,
 	}
 }

@@ -9,18 +9,18 @@
 		/// <summary>
 		/// One bone affects each vertex.
 		/// </summary>
-		OneBone		= 1,
+		OneBone = 1,
 		/// <summary>
 		/// Two bones affect each vertex.
 		/// </summary>
-		TwoBones	= 2,
+		TwoBones = 2,
 		/// <summary>
 		/// Four bones affect each vertex.
 		/// </summary>
-		FourBones	= 4,
+		FourBones = 4,
 		/// <summary>
 		/// An unlimited number of bones affect each vertex
 		/// </summary>
-		Unlimited	= 255,
+		Unlimited = 255,
 	}
 }

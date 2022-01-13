@@ -2,7 +2,7 @@
 {
 	public enum LineAlignment
 	{
-		View	= 0,
-		Local	= 1
+		View = 0,
+		Local = 1
 	}
 }

@@ -16,15 +16,16 @@ namespace AssetRipper.GUI
 
 		public ResourceFile AssociatedFile { get; }
 
-		public string Name 
+		public string Name
 		{
 			get => AssociatedFile.Name;
-			set => throw new NotSupportedException(); 
+			set => throw new NotSupportedException();
 		}
 
 		private readonly SmartStream smartStream;
 
-		public DummyAssetForLooseResourceFile(ResourceFile associatedFile) {
+		public DummyAssetForLooseResourceFile(ResourceFile associatedFile)
+		{
 			AssociatedFile = associatedFile;
 			smartStream = SmartStream.CreateTemp();
 			AssociatedFile.Stream.CopyTo(smartStream);

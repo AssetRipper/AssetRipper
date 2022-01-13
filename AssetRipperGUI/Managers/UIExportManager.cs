@@ -3,7 +3,6 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.GUI.Utils;
 using AssetRipper.Library;
-using Avalonia.Threading;
 using System;
 using System.IO;
 using System.Threading;

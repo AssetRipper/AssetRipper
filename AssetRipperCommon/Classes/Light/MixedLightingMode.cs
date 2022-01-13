@@ -5,8 +5,8 @@
 	/// </summary>
 	public enum MixedLightingMode
 	{
-		IndirectOnly	= 0,
-		Subtractive		= 1,
-		Shadowmask		= 2,
+		IndirectOnly = 0,
+		Subtractive = 1,
+		Shadowmask = 2,
 	}
 }

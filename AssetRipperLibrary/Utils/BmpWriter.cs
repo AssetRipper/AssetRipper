@@ -109,7 +109,7 @@ namespace AssetRipper.Library.Utils
 			writer.WriteZeroBytes(4); // Unknown
 			writer.WriteZeroBytes(4); // Unknown
 
-			if(flip)
+			if (flip)
 			{
 				writer.WriteFlippedY(bgra32Data, width, height);
 			}
@@ -121,7 +121,7 @@ namespace AssetRipper.Library.Utils
 
 		private static void WriteFlippedY(this BinaryWriter writer, byte[] data, int width, int height)
 		{
-			for(int r = height - 1; r >= 0; r--)
+			for (int r = height - 1; r >= 0; r--)
 			{
 				writer.Write(data.AsSpan(r * 4, width * 4));
 			}

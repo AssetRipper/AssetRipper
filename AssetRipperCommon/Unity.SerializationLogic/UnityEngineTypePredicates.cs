@@ -131,7 +131,7 @@ namespace Unity.SerializationLogic
 
 		public static bool IsUnityEngineObject(TypeReference type)
 		{
-# warning todo: somehow solve this elegantly. CheckedResolve() drops the [] of a type.
+#warning todo: somehow solve this elegantly. CheckedResolve() drops the [] of a type.
 			if (type.IsArray)
 				return false;
 

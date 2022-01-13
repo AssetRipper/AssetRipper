@@ -124,7 +124,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			}
 			return default;
 		}
-		
+
 		public float GetMinThreshold(UnityVersion version)
 		{
 			if (HasBlendData(version))

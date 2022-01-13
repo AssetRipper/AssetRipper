@@ -76,7 +76,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 				yield return context.FetchDependency(CollisionShape4, CollisionShape4Name);
 				yield return context.FetchDependency(CollisionShape5, CollisionShape5Name);
 			}
-			if(HasPrimitives(context.Version))
+			if (HasPrimitives(context.Version))
 			{
 				int i = 0;
 				foreach (PPtr<Component> pPtr in Primitives)
@@ -109,14 +109,14 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 			{
 				node.Add(ColliderQueryModeName, ColliderQueryMode);
 			}
-			
+
 			node.Add(RadiusScaleName, RadiusScale);
-			
-			if(HasPrimitives(container.ExportVersion))
+
+			if (HasPrimitives(container.ExportVersion))
 			{
 				node.Add(PrimitivesName, Primitives.ExportYAML(container));
 			}
-			
+
 			return node;
 		}
 

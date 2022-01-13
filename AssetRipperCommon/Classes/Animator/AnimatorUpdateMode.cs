@@ -8,14 +8,14 @@
 		/// <summary>
 		/// Normal update of the animator.
 		/// </summary>
-		Normal				= 0,
+		Normal = 0,
 		/// <summary>
 		/// Updates the animator during the physic loop in order to have the animation system synchronized with the physics engine.
 		/// </summary>
-		AnimatePhysics	= 1,
+		AnimatePhysics = 1,
 		/// <summary>
 		/// Animator updates independently of Time.timeScale.
 		/// </summary>
-		UnscaledTime		= 2,
+		UnscaledTime = 2,
 	}
 }

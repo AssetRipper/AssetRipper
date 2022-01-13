@@ -160,7 +160,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				Channels = reader.ReadAssetArray<ChannelInfo>();
 				reader.AlignStream();
 			}
-			
+
 			if (HasStreams(reader.Version)) // less than 5
 			{
 				if (IsStreamStatic(reader.Version)) // less than 4

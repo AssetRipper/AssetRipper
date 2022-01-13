@@ -30,7 +30,7 @@ namespace Unity.CecilTools.Extensions
 				return typeRef.CheckedResolve().IsSubclassOf(typeName);
 			}
 			catch (AssemblyResolutionException) // If we can't resolve our typeref or one of its base types,
-			{								   // let's assume it is not assignable to our target type
+			{                                  // let's assume it is not assignable to our target type
 				return false;
 			}
 		}

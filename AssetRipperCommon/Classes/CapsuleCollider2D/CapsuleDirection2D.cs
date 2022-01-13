@@ -5,10 +5,10 @@
 		/// <summary>
 		/// Vertical (radii top/bottom)
 		/// </summary>
-		Vertical		= 0,
+		Vertical = 0,
 		/// <summary>
 		/// Horizontal (radii left/right)
 		/// </summary>
-		Horizontal		= 1,
+		Horizontal = 1,
 	}
 }

@@ -2,7 +2,7 @@
 {
 	public enum EditorBehaviorMode
 	{
-		Mode3D	= 0,
-		Mode2D	= 1,
+		Mode3D = 0,
+		Mode2D = 1,
 	}
 }

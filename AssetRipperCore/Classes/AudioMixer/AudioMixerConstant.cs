@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.AudioMixer
 #warning TODO: serialized version acording to read version (current 2017.3.0f3)
 			return 2;
 		}*/
-		
+
 		/// <summary>
 		/// 2021.2 and greater
 		/// </summary>

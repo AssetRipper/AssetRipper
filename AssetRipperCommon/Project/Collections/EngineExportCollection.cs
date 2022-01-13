@@ -57,7 +57,7 @@ namespace AssetRipper.Core.Project.Collections
 				return true;
 			}
 
-			if(asset is IMaterial material)
+			if (asset is IMaterial material)
 			{
 				if (material.Name == EngineBuiltInAssets.FontMaterialName)
 				{
@@ -70,11 +70,11 @@ namespace AssetRipper.Core.Project.Collections
 				}
 				return IsEngineAsset(shader, version);
 			}
-			else if(asset is IShader)
+			else if (asset is IShader)
 			{
 				return true;
 			}
-			else if(asset is ITexture2D texture)
+			else if (asset is ITexture2D texture)
 			{
 				return builtinAsset.Parameter == texture.CompleteImageSize;
 			}
@@ -171,7 +171,7 @@ namespace AssetRipper.Core.Project.Collections
 					}
 				}
 			}
-			
+
 			engineAsset = default;
 			return false;
 		}

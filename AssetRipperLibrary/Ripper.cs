@@ -63,23 +63,23 @@ namespace AssetRipper.Library
 			string pluginsDirectory = ExecutingDirectory.Combine("Plugins");
 			Directory.CreateDirectory(pluginsDirectory);
 			List<Type> pluginTypes = new();
-			foreach(string dllFile in Directory.GetFiles(pluginsDirectory, "*.dll"))
+			foreach (string dllFile in Directory.GetFiles(pluginsDirectory, "*.dll"))
 			{
 				try
 				{
 					Logger.Info(LogCategory.Plugin, $"Found assembly at {dllFile}");
 					Assembly assembly = Assembly.LoadFile(dllFile);
-					foreach(RegisterPluginAttribute pluginAttr in assembly.GetCustomAttributes<RegisterPluginAttribute>())
+					foreach (RegisterPluginAttribute pluginAttr in assembly.GetCustomAttributes<RegisterPluginAttribute>())
 					{
 						pluginTypes.Add(pluginAttr.PluginType);
 					}
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					Logger.Error(LogCategory.Plugin, $"Exception thrown while loading plugin assembly: {dllFile}", ex);
 				}
 			}
-			foreach(Type type in pluginTypes)
+			foreach (Type type in pluginTypes)
 			{
 				try
 				{
@@ -99,7 +99,7 @@ namespace AssetRipper.Library
 		public GameStructure Load(IReadOnlyList<string> paths)
 		{
 			ResetData();
-			if(paths.Count == 1)
+			if (paths.Count == 1)
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths[0]}");
 			else
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths.Count} paths...");

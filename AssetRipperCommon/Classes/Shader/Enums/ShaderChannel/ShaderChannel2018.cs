@@ -7,20 +7,20 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 	/// </summary>
 	public enum ShaderChannel2018
 	{
-		Vertex			= 0,
-		Normal			= 1,
-		Tangent			= 2,
-		Color			= 3,
-		UV0				= 4,
-		UV1				= 5,
-		UV2				= 6,
-		UV3				= 7,
-		UV4				= 8,
-		UV5				= 9,
-		UV6				= 10,
-		UV7				= 11,
-		SkinWeight		= 12,
-		SkinBoneIndex	= 13,
+		Vertex = 0,
+		Normal = 1,
+		Tangent = 2,
+		Color = 3,
+		UV0 = 4,
+		UV1 = 5,
+		UV2 = 6,
+		UV3 = 7,
+		UV4 = 8,
+		UV5 = 9,
+		UV6 = 10,
+		UV7 = 11,
+		SkinWeight = 12,
+		SkinBoneIndex = 13,
 	}
 
 	public static class ShaderChannelV2018Extensions

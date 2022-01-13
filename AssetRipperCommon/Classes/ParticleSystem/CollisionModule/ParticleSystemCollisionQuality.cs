@@ -8,14 +8,14 @@
 		/// <summary>
 		/// The most accurate world collisions.
 		/// </summary>
-		High		= 0,
+		High = 0,
 		/// <summary>
 		/// Approximate world collisions.
 		/// </summary>
-		Medium		= 1,
+		Medium = 1,
 		/// <summary>
 		/// Fastest and most approximate world collisions.
 		/// </summary>
-		Low			= 2,
+		Low = 2,
 	}
 }

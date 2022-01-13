@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core;
 using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -38,7 +37,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if(asset is Mesh mesh)
+			if (asset is Mesh mesh)
 				return IsSupported(ExportFormat) && HasValidMeshData(mesh);
 			else
 				return false;
@@ -155,7 +154,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			//Polygons
 			for (int i = 0; i + 2 < unityMesh.Indices.Count; i += 3)
 			{
-				if(ExportSpace == MeshCoordinateSpace.Right) //Switching to a right handed coordinate system requires reversing the polygon vertex order
+				if (ExportSpace == MeshCoordinateSpace.Right) //Switching to a right handed coordinate system requires reversing the polygon vertex order
 					outputMesh.Polygons.Add(new Triangle(unityMesh.Indices[i + 2], unityMesh.Indices[i + 1], unityMesh.Indices[i]));
 				else
 					outputMesh.Polygons.Add(new Triangle(unityMesh.Indices[i], unityMesh.Indices[i + 1], unityMesh.Indices[i + 2]));
@@ -168,9 +167,9 @@ namespace AssetRipper.Library.Exporters.Meshes
 			{
 				normalElement.MappingInformationType = MappingMode.ByPolygonVertex;
 				normalElement.ReferenceInformationType = ReferenceMode.Direct;
-				foreach(var polygon in outputMesh.Polygons)
+				foreach (var polygon in outputMesh.Polygons)
 				{
-					foreach(uint index in polygon.Indices)
+					foreach (uint index in polygon.Indices)
 					{
 						normalElement.Normals.Add(Convert(ToCoordinateSpace(unityMesh.Normals[index], ExportSpace)));
 					}

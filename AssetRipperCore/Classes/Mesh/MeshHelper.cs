@@ -136,7 +136,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			return format >= VertexFormat.kVertexFormatUInt8;
 		}
-		
+
 		public static float[] BytesToFloatArray(byte[] inputBytes, VertexFormat format)
 		{
 			if (inputBytes == null)
@@ -154,7 +154,7 @@ namespace AssetRipper.Core.Classes.Mesh
 						result[i] = BitConverter.ToSingle(inputBytes, i * 4);
 						break;
 					case VertexFormat.kVertexFormatFloat16:
-						result[i] = (float) BitConverter.ToHalf(inputBytes, i * 2);
+						result[i] = (float)BitConverter.ToHalf(inputBytes, i * 2);
 						break;
 					case VertexFormat.kVertexFormatUNorm8:
 						result[i] = inputBytes[i] / 255f;
@@ -210,7 +210,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by dimension {dimension}", nameof(input));
 
 			Vector2f[] result = new Vector2f[input.Length / dimension];
-			for(int i = 0; i < result.Length; i++)
+			for (int i = 0; i < result.Length; i++)
 			{
 				switch (dimension)
 				{

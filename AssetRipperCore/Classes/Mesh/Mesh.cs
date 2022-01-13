@@ -62,7 +62,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		private ushort[] UintToUshort(uint[] array)
 		{
 			ushort[] result = new ushort[array.Length];
-			for(int i = 0; i < array.Length; i++)
+			for (int i = 0; i < array.Length; i++)
 			{
 				result[i] = (ushort)array[i];
 			}
@@ -79,7 +79,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		}
 		private void ProcessedIndexBufferFromRaw()
 		{
-			if(Use16BitIndices != 0)
+			if (Use16BitIndices != 0)
 			{
 				var outputBuffer = new ushort[m_RawIndexBuffer.Length / sizeof(ushort)];
 				Buffer.BlockCopy(m_RawIndexBuffer, 0, outputBuffer, 0, m_RawIndexBuffer.Length);
@@ -993,7 +993,7 @@ namespace AssetRipper.Core.Classes.Mesh
 					VertexData.Data = StreamData.GetContent(this.AssetInfo.File);
 				}
 			}
-			if (version.IsGreaterEqual(3,5)) //3.5 and up
+			if (version.IsGreaterEqual(3, 5)) //3.5 and up
 			{
 				ReadVertexData(version);
 			}
@@ -1029,7 +1029,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				if (m_Channel.Dimension > 0)
 				{
 					var m_Stream = VertexData.Streams[m_Channel.Stream];
-					var channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask ));
+					var channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask));
 					if (channelMask.Get(chn))
 					{
 						if (version.IsLess(2018) && chn == 2 && m_Channel.Format == 2) //kShaderChannelColor && kChannelFormatColor
@@ -1049,7 +1049,7 @@ namespace AssetRipper.Core.Classes.Mesh
 								Buffer.BlockCopy(VertexData.Data, componentOffset, componentBytes, componentByteSize * (v * m_Channel.Dimension + d), componentByteSize);
 							}
 						}
-						
+
 						if (this.EndianType == EndianType.BigEndian && componentByteSize > 1) //swap bytes
 						{
 							for (var i = 0; i < componentBytes.Length / componentByteSize; i++)

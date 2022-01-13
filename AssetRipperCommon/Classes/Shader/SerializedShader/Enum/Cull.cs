@@ -2,12 +2,12 @@
 {
 	public enum Cull
 	{
-		Off		= 0,
-		Front	= 1,
-		Back	= 2,
+		Off = 0,
+		Front = 1,
+		Back = 2,
 		Count,
 
-		Unknown	= -1,
+		Unknown = -1,
 	}
 
 	public static class CullExtensions

@@ -5,13 +5,13 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader.Enum
 	[Flags]
 	public enum ColorMask
 	{
-		None	= 0x0,
-		A		= 0x1,
-		R		= 0x2,
-		G		= 0x4,
-		B		= 0x8,
+		None = 0x0,
+		A = 0x1,
+		R = 0x2,
+		G = 0x4,
+		B = 0x8,
 
-		RGBA	= R | G | B | A,
+		RGBA = R | G | B | A,
 	}
 
 	public static class ColorMaskExtensions
@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader.Enum
 		{
 			return (_this & ColorMask.R) != 0;
 		}
-		
+
 		public static bool IsGreen(this ColorMask _this)
 		{
 			return (_this & ColorMask.G) != 0;

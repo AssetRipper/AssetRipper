@@ -2,8 +2,8 @@
 {
 	public enum ShadowCascades
 	{
-		NoCascades		= 1,
-		TwoCascades		= 2,
-		FourCascades	= 4,
+		NoCascades = 1,
+		TwoCascades = 2,
+		FourCascades = 4,
 	}
 }

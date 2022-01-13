@@ -8,10 +8,10 @@
 		/// <summary>
 		/// Close fit shadow maps with linear fadeout.
 		/// </summary>
-		CloseFit	= 0,
+		CloseFit = 0,
 		/// <summary>
 		/// Stable shadow maps with spherical fadeout.
 		/// </summary>
-		StableFit	= 1,
+		StableFit = 1,
 	}
 }

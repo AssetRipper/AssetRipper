@@ -631,11 +631,11 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// LightsUseCCT previously (before 5.6.0b10)
 		/// </summary>
 		public bool LightsUseColorTemperature { get; set; }
-		
+
 		public int DefaultRenderingLayerMask { get; set; }
 		public bool LogWhenShaderIsCompiled { get; set; }
 		public bool AllowEnlightenSupportForUpgradedProject { get; set; }
-		
+
 		public int VideoShadersIncludeMode { get; set; }
 
 		public Dictionary<string, PPtr<Object.Object>> srpDefaultSettings { get; set; } = new();

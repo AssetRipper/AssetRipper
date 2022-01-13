@@ -2,7 +2,7 @@
 {
 	public enum DenoiserType
 	{
-		None	= 0,
-		Optix	= 1,
+		None = 0,
+		Optix = 1,
 	}
 }

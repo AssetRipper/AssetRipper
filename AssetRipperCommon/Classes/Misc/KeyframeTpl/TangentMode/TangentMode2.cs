@@ -5,20 +5,20 @@
 	/// </summary>
 	public enum TangentMode2
 	{
-		Free			= 0,
-		Broken			= 1,
-		Auto			= 2,
-		Linear			= 4,
-		Constant		= 6,
-		
-		LFree			= Free,
-		HFree			= Free,
-		LAuto			= Auto,
-		HAuto			= Auto << 2,
-		LLinear			= Linear,
-		HLinear			= Linear << 2,
-		LConstant		= Constant,
-		HConstant		= Constant << 2,
+		Free = 0,
+		Broken = 1,
+		Auto = 2,
+		Linear = 4,
+		Constant = 6,
+
+		LFree = Free,
+		HFree = Free,
+		LAuto = Auto,
+		HAuto = Auto << 2,
+		LLinear = Linear,
+		HLinear = Linear << 2,
+		LConstant = Constant,
+		HConstant = Constant << 2,
 	}
 
 	public static class TangentMode2Extensions

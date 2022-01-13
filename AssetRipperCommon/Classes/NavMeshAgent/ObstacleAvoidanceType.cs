@@ -8,22 +8,22 @@ namespace AssetRipper.Core.Classes.NavMeshAgent
 		/// <summary>
 		/// Disable avoidance.
 		/// </summary>
-		NoObstacleAvoidance				= 0,
+		NoObstacleAvoidance = 0,
 		/// <summary>
 		/// Enable simple avoidance. Low performance impact.
 		/// </summary>
-		LowQualityObstacleAvoidance		= 1,
+		LowQualityObstacleAvoidance = 1,
 		/// <summary>
 		/// Medium avoidance. Medium performance impact.
 		/// </summary>
-		MedQualityObstacleAvoidance		= 2,
+		MedQualityObstacleAvoidance = 2,
 		/// <summary>
 		/// Good avoidance. High performance impact.
 		/// </summary>
-		GoodQualityObstacleAvoidance	= 3,
+		GoodQualityObstacleAvoidance = 3,
 		/// <summary>
 		/// Enable highest precision. Highest performance impact.
 		/// </summary>
-		HighQualityObstacleAvoidance	= 4
+		HighQualityObstacleAvoidance = 4
 	}
 }

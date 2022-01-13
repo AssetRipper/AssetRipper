@@ -241,14 +241,14 @@ namespace AssetRipper.Core.Classes.Texture2D
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
-			
-			if(HasUnsignedCompleteImageSize(container.ExportVersion))
+
+			if (HasUnsignedCompleteImageSize(container.ExportVersion))
 			{
-				node.Add(CompleteImageSizeName,  (uint) CompleteImageSize);
+				node.Add(CompleteImageSizeName, (uint)CompleteImageSize);
 			}
 			else
 			{
-				node.Add(CompleteImageSizeName,  (int) CompleteImageSize);
+				node.Add(CompleteImageSizeName, (int)CompleteImageSize);
 			}
 
 			if (HasMipsStripped(container.ExportVersion))

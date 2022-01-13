@@ -578,7 +578,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 
 				default:
 					{
-						if(safe)
+						if (safe)
 							return 0;
 						else
 							throw new NotSupportedException(_this.TextureFormat.ToString());

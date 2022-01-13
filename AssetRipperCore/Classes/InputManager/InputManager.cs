@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.InputManager
 		/// 2021.2 and greater
 		/// </summary>
 		public static bool HasUsePhysicalKeys(UnityVersion version) => version.IsGreaterEqual(2021, 2);
-		
+
 		public InputManager(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public static int ToSerializedVersion(UnityVersion version)

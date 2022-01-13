@@ -1,4 +1,3 @@
-using AssetRipper.Core;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers;

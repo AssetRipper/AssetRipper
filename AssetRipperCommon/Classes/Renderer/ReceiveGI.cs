@@ -9,7 +9,7 @@
 		/// <summary>
 		/// Makes the GameObject use lightmaps to receive Global Illumination
 		/// </summary>
-		Lightmaps	= 1,
+		Lightmaps = 1,
 		/// <summary>
 		/// The object will have the option to use Light Probes to receive Global Illumination. See LightProbeUsage
 		/// </summary>

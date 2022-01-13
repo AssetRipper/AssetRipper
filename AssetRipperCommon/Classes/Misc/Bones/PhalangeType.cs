@@ -4,9 +4,9 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 {
 	public enum PhalangeType
 	{
-		Proximal		= 0,
-		Intermediate	= 1,
-		Distal			= 2,
+		Proximal = 0,
+		Intermediate = 1,
+		Distal = 2,
 
 		Last,
 	}

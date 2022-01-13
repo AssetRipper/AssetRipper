@@ -108,7 +108,7 @@ namespace AssetRipper.Library.Exporters.Textures
 		{
 			if (width == 0 || height == 0)
 				return new DirectBitmap(1, 1);
-			
+
 			switch (textureFormat)
 			{
 				case TextureFormat.DXT1:

@@ -207,8 +207,8 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			return default;
 		}
 
-		public UnityGUID SceneGUID 
-		{ 
+		public UnityGUID SceneGUID
+		{
 			get => m_SceneGUID;
 			set => m_SceneGUID = value;
 		}

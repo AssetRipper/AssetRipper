@@ -91,7 +91,7 @@ namespace AssetRipper.Library.Exporters.Audio
 		/// <returns>True if the audio could be exported in the wav format</returns>
 		public static bool TryGetDecodedWavData(byte[] fsbData, out byte[] decodedData)
 		{
-			if(TryGetDecodedAudioClipData(fsbData, out decodedData, out string fileExtension))
+			if (TryGetDecodedAudioClipData(fsbData, out decodedData, out string fileExtension))
 			{
 				if (fileExtension == "ogg")
 				{

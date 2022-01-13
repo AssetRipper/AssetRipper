@@ -1,19 +1,14 @@
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace AssetRipper.Core.Classes.OcclusionCullingData
 {
@@ -78,7 +73,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 		public void InitializeStaticRenderers(int count)
 		{
 			m_StaticRenderers = new SceneObjectIdentifier[count];
-			for(int i = 0; i < count; ++i)
+			for (int i = 0; i < count; ++i)
 			{
 				m_StaticRenderers[i] = new SceneObjectIdentifier();
 			}
@@ -87,7 +82,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 		public void InitializePortals(int count)
 		{
 			m_Portals = new SceneObjectIdentifier[count];
-			for(int i = 0; i < count; i++)
+			for (int i = 0; i < count; i++)
 			{
 				m_Portals[i] = new SceneObjectIdentifier();
 			}

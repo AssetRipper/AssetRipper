@@ -11,7 +11,7 @@
 	{
 		public static string ToSuffixString(this StencilType _this)
 		{
-			if(_this == StencilType.Base)
+			if (_this == StencilType.Base)
 			{
 				return string.Empty;
 			}

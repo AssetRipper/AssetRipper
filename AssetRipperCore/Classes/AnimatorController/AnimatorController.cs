@@ -157,12 +157,12 @@ namespace AssetRipper.Core.Classes.AnimatorController
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			if (container is null) 
+			if (container is null)
 				throw new ArgumentNullException(nameof(container));
 
 			AnimatorControllerExportCollection collection = container.CurrentCollection as AnimatorControllerExportCollection;
 
-			if(collection == null)
+			if (collection == null)
 				throw new NotSupportedException($"Container is of type {container.GetType()}. It must be an animator controller export collection.");
 
 			AnimatorControllerParameter[] @params = new AnimatorControllerParameter[Controller.Values.Instance.ValueArray.Length];

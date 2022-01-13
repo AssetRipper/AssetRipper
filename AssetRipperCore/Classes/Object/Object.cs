@@ -13,10 +13,10 @@ namespace AssetRipper.Core.Classes.Object
 
 		protected Object(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public override HideFlags ObjectHideFlags 
-		{ 
-			get => (HideFlags)m_ObjectHideFlags; 
-			set => m_ObjectHideFlags = (uint)value; 
+		public override HideFlags ObjectHideFlags
+		{
+			get => (HideFlags)m_ObjectHideFlags;
+			set => m_ObjectHideFlags = (uint)value;
 		}
 
 		public override void Read(AssetReader reader)

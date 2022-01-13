@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Project.Collections
 
 				//This section might not be necessary. This seems to be quite different from normal prefab files
 				asset.PrefabInstance = prefab.SerializedFile.CreatePPtr(prefab);
-				if(asset is IGameObject gameObject)
+				if (asset is IGameObject gameObject)
 				{
 					gameObject.SetHideFlagsFromDepth();
 				}
@@ -40,11 +40,11 @@ namespace AssetRipper.Core.Project.Collections
 
 		public static bool IsValidAsset(IUnityObjectBase asset)
 		{
-			if(asset is IGameObject)
+			if (asset is IGameObject)
 			{
 				return true;
 			}
-			else if(asset is IComponent component)
+			else if (asset is IComponent component)
 			{
 				return component.GameObjectPtr.FindAsset(component.SerializedFile) != null;
 			}
@@ -62,7 +62,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return gameObject.GetRoot();
 			}
-			else if(asset is IComponent component)
+			else if (asset is IComponent component)
 			{
 				IGameObject go = component.GameObjectPtr.GetAsset(component.SerializedFile);
 				return go.GetRoot();
@@ -82,7 +82,7 @@ namespace AssetRipper.Core.Project.Collections
 			instance.ObjectHideFlags = HideFlags.HideInHierarchy;
 			instance.RootGameObjectPtr = root.SerializedFile.CreatePPtr(root);
 			instance.IsPrefabAsset = true;
-			if(instance is IHasName hasName)
+			if (instance is IHasName hasName)
 			{
 				hasName.Name = root.Name;
 			}

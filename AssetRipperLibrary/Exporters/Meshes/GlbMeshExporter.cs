@@ -33,11 +33,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public bool IsHandle(Mesh mesh)
 		{
-			return ExportFormat == MeshExportFormat.GlbPrimitive && 
-				mesh.Vertices != null && 
-				mesh.Vertices.Length > 0 && 
-				mesh.Indices != null && 
-				mesh.Indices.Count > 0 && 
+			return ExportFormat == MeshExportFormat.GlbPrimitive &&
+				mesh.Vertices != null &&
+				mesh.Vertices.Length > 0 &&
+				mesh.Indices != null &&
+				mesh.Indices.Count > 0 &&
 				mesh.Indices.Count % 3 == 0;
 		}
 
@@ -58,15 +58,15 @@ namespace AssetRipper.Library.Exporters.Meshes
 			bool hasTangents = hasNormals && mesh.Tangents != null && mesh.Tangents.Length == mesh.Vertices.Length;
 			bool hasUV0 = mesh.UV0 != null && mesh.UV0.Length == mesh.Vertices.Length;
 			bool hasUV1 = hasUV0 && mesh.UV1 != null && mesh.UV1.Length == mesh.Vertices.Length;
-			
+
 			var sceneBuilder = new SceneBuilder();
 			var material = new MaterialBuilder("material");
 
 			if (hasTangents)
 			{
-				if(hasUV1)
+				if (hasUV1)
 					AddMeshToScene<VertexPositionNormalTangent, VertexTexture2>(mesh, sceneBuilder, material);
-				else if(hasUV0)
+				else if (hasUV0)
 					AddMeshToScene<VertexPositionNormalTangent, VertexTexture1>(mesh, sceneBuilder, material);
 				else
 					AddMeshToScene<VertexPositionNormalTangent, VertexEmpty>(mesh, sceneBuilder, material);
@@ -94,7 +94,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 			//Write settings can be used in the write glb method if desired
 			//var writeSettings = new SharpGLTF.Schema2.WriteSettings();
-			
+
 			return model.WriteGLB().ToArray();
 		}
 
@@ -112,15 +112,15 @@ namespace AssetRipper.Library.Exporters.Meshes
 		private static VertexBuilder<TvG, TvM, VertexEmpty> GetVertex<TvG, TvM>(Mesh mesh, uint index) where TvG : struct, IVertexGeometry where TvM : struct, IVertexMaterial
 		{
 			IVertexGeometry geometry;
-			if(typeof(TvG) == typeof(VertexPosition))
+			if (typeof(TvG) == typeof(VertexPosition))
 			{
 				geometry = new VertexPosition(mesh.Vertices[index]);
 			}
-			else if(typeof(TvG) == typeof(VertexPositionNormal))
+			else if (typeof(TvG) == typeof(VertexPositionNormal))
 			{
 				geometry = new VertexPositionNormal(mesh.Vertices[index], mesh.Normals[index]);
 			}
-			else if(typeof(TvG) == typeof(VertexPositionNormalTangent))
+			else if (typeof(TvG) == typeof(VertexPositionNormalTangent))
 			{
 				geometry = new VertexPositionNormalTangent(mesh.Vertices[index], mesh.Normals[index], mesh.Tangents[index]);
 			}
@@ -130,11 +130,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 			}
 
 			IVertexMaterial material;
-			if(typeof(TvM) == typeof(VertexTexture1))
+			if (typeof(TvM) == typeof(VertexTexture1))
 			{
 				material = new VertexTexture1(mesh.UV0[index]);
 			}
-			else if(typeof(TvM) == typeof(VertexTexture2))
+			else if (typeof(TvM) == typeof(VertexTexture2))
 			{
 				material = new VertexTexture2(mesh.UV0[index], mesh.UV1[index]);
 			}
@@ -142,7 +142,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			{
 				material = default(TvM);
 			}
-			
+
 			return new VertexBuilder<TvG, TvM, VertexEmpty>((TvG)geometry, (TvM)material);
 		}
 	}

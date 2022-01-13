@@ -2,7 +2,7 @@
 {
 	public enum TextClipping
 	{
-		Overflow	= 0,
-		Clip		= 1,
+		Overflow = 0,
+		Clip = 1,
 	}
 }

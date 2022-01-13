@@ -101,7 +101,7 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 		/// 2017.1.0b2 and greater
 		/// </summary>
 		public static bool HasMaskInteraction(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 2);
-		
+
 		/// <summary>
 		/// 2021.2 and greater
 		/// </summary>

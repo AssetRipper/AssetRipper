@@ -52,7 +52,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 			{
 				ByteStart = reader.ReadUInt32();
 			}
-			
+
 			ByteSize = reader.ReadInt32();
 			TypeID = reader.ReadInt32();
 			if (HasClassID(reader.Generation))
@@ -93,7 +93,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 			{
 				writer.Write((uint)ByteStart);
 			}
-			
+
 			writer.Write(ByteSize);
 			writer.Write(TypeID);
 			if (HasClassID(writer.Generation))

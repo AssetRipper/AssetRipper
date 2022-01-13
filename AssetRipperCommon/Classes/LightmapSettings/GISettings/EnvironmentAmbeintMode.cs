@@ -2,7 +2,7 @@
 {
 	public enum EnvironmentAmbeintMode
 	{
-		Realtime	= 0,
-		Baked		= 1,
+		Realtime = 0,
+		Baked = 1,
 	}
 }

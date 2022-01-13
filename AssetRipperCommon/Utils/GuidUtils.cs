@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Utils
 	{
 		public static Guid GetNewGuid() => Guid.NewGuid();
 		/// <returns>A new guid in hexadecimal characters without any dashes</returns>
-		public static string GetNewGuidString() => Guid.NewGuid().ToString().Replace("-","");
+		public static string GetNewGuidString() => Guid.NewGuid().ToString().Replace("-", "");
 		/// <summary> Get the first characters of a new random guid </summary>
 		/// <param name="numCharacters">The number of characters to return up to 32</param>
 		/// <returns>A new string of pseudorandom hexadecimal characters</returns>

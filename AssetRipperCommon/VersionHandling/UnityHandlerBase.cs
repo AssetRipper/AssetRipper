@@ -15,7 +15,7 @@ namespace AssetRipper.Core.VersionHandling
 
 		public string GetCommonString(uint index)
 		{
-			if(CommonStringDictionary?.TryGetValue(index, out string result) ?? false)
+			if (CommonStringDictionary?.TryGetValue(index, out string result) ?? false)
 				return result;
 			else
 				return null;

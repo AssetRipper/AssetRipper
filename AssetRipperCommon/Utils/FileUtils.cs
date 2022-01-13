@@ -66,7 +66,7 @@ namespace AssetRipper.Core.Utils
 			var initial = 0;
 			var key = Path.Combine(dirPath, $"{name}{ext}");
 			UniqueNamesByInitialPath.TryGetValue(key, out initial);
-			
+
 			for (int counter = initial; counter < int.MaxValue; counter++)
 			{
 				string proposedName = $"{name}_{counter}{ext}";
@@ -103,7 +103,7 @@ namespace AssetRipper.Core.Utils
 		{
 			char[] defaultBadCharacters = Path.GetInvalidFileNameChars();
 			string result = new string(defaultBadCharacters);
-			if(defaultBadCharacters.Contains(':'))
+			if (defaultBadCharacters.Contains(':'))
 				return result;
 			else
 				return result + ':';

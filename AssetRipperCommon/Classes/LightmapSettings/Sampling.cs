@@ -2,7 +2,7 @@
 {
 	public enum Sampling
 	{
-		Auto	= 0,
-		Fixed	= 1,
+		Auto = 0,
+		Fixed = 1,
 	}
 }

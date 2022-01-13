@@ -5,7 +5,7 @@ namespace AssetRipper.Library.TextureContainers.PVR
 	[Flags]
 	public enum PVRFlag : uint
 	{
-		NoFlag			= 0,
-		PreMultiplied	= 2,
+		NoFlag = 0,
+		PreMultiplied = 2,
 	}
 }

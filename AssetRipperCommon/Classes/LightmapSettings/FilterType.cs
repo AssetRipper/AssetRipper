@@ -2,8 +2,8 @@
 {
 	public enum FilterType
 	{
-		Gaussian	= 0,
-		ATrous		= 1,
-		None		= 2,
+		Gaussian = 0,
+		ATrous = 1,
+		None = 2,
 	}
 }

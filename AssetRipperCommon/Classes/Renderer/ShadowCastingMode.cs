@@ -8,18 +8,18 @@
 		/// <summary>
 		/// No shadows are cast from this object.
 		/// </summary>
-		Off				= 0,
+		Off = 0,
 		/// <summary>
 		/// Shadows are cast from this object.
 		/// </summary>
-		On				= 1,
+		On = 1,
 		/// <summary>
 		/// Shadows are cast from this object, treating it as two-sided.
 		/// </summary>
-		TwoSided		= 2,
+		TwoSided = 2,
 		/// <summary>
 		/// Object casts shadows, but is otherwise invisible in the scene.
 		/// </summary>
-		ShadowsOnly		= 3,
+		ShadowsOnly = 3,
 	}
 }

@@ -124,7 +124,7 @@ namespace AssetRipper.Core.Structure
 
 			List<IUnityObjectBase> objects = FetchAssets().Where(o => o.ClassID == type).ToList();
 			_cachedAssetsByType.TryAdd(type, objects);
-			
+
 			return objects;
 		}
 
@@ -202,7 +202,7 @@ namespace AssetRipper.Core.Structure
 		{
 			foreach (ObjectInfo entry in file.Metadata.Object)
 			{
-				if (entry.ClassID.IsSceneSettings()) 
+				if (entry.ClassID.IsSceneSettings())
 					return true;
 			}
 			return false;

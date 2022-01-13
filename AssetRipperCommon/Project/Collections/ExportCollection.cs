@@ -1,19 +1,19 @@
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.IO;
 using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Material;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers.Asset;
 using AssetRipper.Core.Classes.PrefabInstance;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Classes.Shader;
-using AssetRipper.Core.Classes.Material;
 
 namespace AssetRipper.Core.Project.Collections
 {

@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes
 	{
 		public static string GetValidName(this INamedObject named)
 		{
-			if(named is IShader shader)
+			if (named is IShader shader)
 			{
 				return shader.GetValidShaderName();
 			}

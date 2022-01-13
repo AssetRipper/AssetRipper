@@ -2,8 +2,8 @@
 {
 	public enum FilterMode
 	{
-		None		= 0,
-		Auto		= 1,
-		Advanced	= 2,
+		None = 0,
+		Auto = 1,
+		Advanced = 2,
 	}
 }
