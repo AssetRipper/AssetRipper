@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Classes.Object
 		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			if (HasHideFlag(container.Version,container.Flags))
+			if (HasHideFlag(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(ObjectHideFlagsName, m_ObjectHideFlags);
 			}
