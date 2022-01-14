@@ -137,7 +137,7 @@ namespace AssetRipper.Core.Project.Collections
 			folderPath = Path.GetDirectoryName(filePath);
 			Directory.CreateDirectory(folderPath);
 
-			AssetExporter.Export(container, Components.Select(t => t.Convert(container)), filePath);
+			AssetExporter.Export(container, Components.Select(t => t.ConvertLegacy(container)), filePath);
 			IDefaultImporter sceneImporter = container.GetExportHandler().ImporterFactory.CreateDefaultImporter(container.ExportLayout);
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);

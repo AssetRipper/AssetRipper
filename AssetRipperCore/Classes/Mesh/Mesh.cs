@@ -376,7 +376,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return true;
 		}
 
-		public override IUnityObjectBase Convert(IExportContainer container)
+		public override IUnityObjectBase ConvertLegacy(IExportContainer container)
 		{
 			return MeshConverter.Convert(container, this);
 		}

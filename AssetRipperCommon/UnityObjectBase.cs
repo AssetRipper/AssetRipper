@@ -54,7 +54,7 @@ namespace AssetRipper.Core
 			return document;
 		}
 
-		public virtual IUnityObjectBase Convert(IExportContainer container)
+		public virtual IUnityObjectBase ConvertLegacy(IExportContainer container)
 		{
 			return this;
 		}

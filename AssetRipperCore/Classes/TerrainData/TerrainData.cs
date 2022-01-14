@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			return false;
 		}
 
-		public override IUnityObjectBase Convert(IExportContainer container)
+		public override IUnityObjectBase ConvertLegacy(IExportContainer container)
 		{
 			return TerrainDataConverter.Convert(container, this);
 		}

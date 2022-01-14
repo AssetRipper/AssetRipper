@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes
 
 		public RectTransform(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public override IUnityObjectBase Convert(IExportContainer container)
+		public override IUnityObjectBase ConvertLegacy(IExportContainer container)
 		{
 			return RectTransformConverter.Convert(container, this);
 		}

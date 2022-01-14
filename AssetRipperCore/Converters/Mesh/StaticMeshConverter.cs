@@ -44,7 +44,7 @@ namespace AssetRipper.Core
 
 			IExportContainer container = new DummyExportContainer(serializedFile, virtualSerializedFile);
 
-			Mesh newMesh = (Mesh)mesh.Convert(container);
+			Mesh newMesh = (Mesh)mesh.ConvertLegacy(container);
 			virtualSerializedFile.AddAsset(newMesh, ClassIDType.Mesh);
 			newMesh.Name = new string(gameObject.Name);
 

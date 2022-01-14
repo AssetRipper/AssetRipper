@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Interfaces
 		long PathID { get; }
 		HideFlags ObjectHideFlags { get; set; }
 
-		IUnityObjectBase Convert(IExportContainer container);
+		IUnityObjectBase ConvertLegacy(IExportContainer container);
 		YAMLDocument ExportYAMLDocument(IExportContainer container);
 	}
 }
