@@ -58,5 +58,9 @@ namespace AssetRipper.Core
 		{
 			return this;
 		}
+
+		public virtual void ConvertToEditor()
+		{
+		}
 	}
 }

@@ -75,6 +75,15 @@ namespace AssetRipper.Core.Project
 			VirtualSerializedFile virtualFile = new VirtualSerializedFile(exportLayout);
 			List<IExportCollection> collections = new List<IExportCollection>();
 
+			foreach (SerializedFile file in files)
+			{
+				foreach (IUnityObjectBase asset in file.FetchAssets())
+				{
+					asset.ConvertToEditor();
+					//StaticMeshConverter.MaybeReplaceStaticMesh(asset, file, virtualFile);
+				}
+			}
+
 			// speed up fetching
 			List<IUnityObjectBase> depList = new List<IUnityObjectBase>();
 			HashSet<IUnityObjectBase> depSet = new HashSet<IUnityObjectBase>();
@@ -84,7 +93,6 @@ namespace AssetRipper.Core.Project
 			{
 				foreach (IUnityObjectBase asset in file.FetchAssets())
 				{
-					//StaticMeshConverter.MaybeReplaceStaticMesh(asset, file, virtualFile);
 					if (!options.Filter(asset))
 					{
 						continue;

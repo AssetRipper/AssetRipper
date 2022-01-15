@@ -7,7 +7,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Interfaces
 {
-	public interface IUnityObjectBase : IUnityAssetBase
+	public interface IUnityObjectBase : IUnityAssetBase, IConvertToEditor
 	{
 		AssetInfo AssetInfo { get; set; }
 		ClassIDType ClassID { get; }
