@@ -113,12 +113,16 @@ namespace AssetRipper.Library.Exporters.Audio
 			if (!IsDataUsable(rawData))
 				return FmodAudioType.NONE;
 
-			using (MemoryStream input = new MemoryStream(rawData))
+			using MemoryStream input = new MemoryStream(rawData);
+			using BinaryReader reader = new BinaryReader(input);
+			try
 			{
-				using (BinaryReader reader = new BinaryReader(input))
-				{
-					return new FmodAudioHeader(reader).AudioType;
-				}
+				return new FmodAudioHeader(reader).AudioType;
+			}
+			catch (Exception ex)
+			{
+				Logger.Warning($"An exception was thrown while attempting to determine the audio type:{Environment.NewLine}{ex.Message}");
+				return FmodAudioType.NONE;
 			}
 		}
 
