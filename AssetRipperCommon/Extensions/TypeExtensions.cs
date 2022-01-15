@@ -14,6 +14,10 @@ namespace AssetRipper.Core.Extensions
 			{
 				return classID;
 			}
+			else if (_this.IsInterface && Enum.TryParse(_this.Name.Substring(1), out classID))
+			{
+				return classID;
+			}
 
 			throw new Exception($"{_this} is not Engine's class type");
 		}
