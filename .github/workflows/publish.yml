@@ -30,6 +30,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipperConsole_win64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_win64/Licenses/
+        date -u > ./Bins/Publish/AssetRipperConsole_win64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipperConsole_win64
       
     - name: Upload AssetRipperConsole Windows x64
@@ -44,6 +45,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipper_win64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipper_win64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_win64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipper_win64
 
     - name: Upload AssetRipperGUI Windows x64
@@ -77,6 +79,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipperConsole_linux64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_linux64/Licenses/
+        date -u > ./Bins/Publish/AssetRipperConsole_linux64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipperConsole_linux64
       
     - name: Upload AssetRipperConsole Linux x64
@@ -91,6 +94,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipper_linux64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipper_linux64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_linux64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipper_linux64
 
     - name: Upload AssetRipperGUI Linux x64
@@ -124,6 +128,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipperConsole_mac64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_mac64/Licenses/
+        date -u > ./Bins/Publish/AssetRipperConsole_mac64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipperConsole_mac64
       
     - name: Upload AssetRipperConsole Mac x64
@@ -138,6 +143,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipper_mac64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipper_mac64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_mac64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipper_mac64
 
     - name: Upload AssetRipperGUI Mac x64

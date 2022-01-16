@@ -104,7 +104,21 @@ namespace AssetRipper.Core.Logging
 			LogOperatingSystemInformation();
 			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {BuildInfo.Version}");
 			LogReleaseInformation();
-			Log(LogType.Info, LogCategory.System, $"Current UTC Time: {System.DateTime.UtcNow.ToString()}");
+			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {System.DateTime.UtcNow.ToString()}");
+			Log(LogType.Info, LogCategory.System, $"UTC Compile Time: {GetCompileTime()}");
+		}
+
+		private static string GetCompileTime()
+		{
+			string path = ExecutingDirectory.Combine("compile_time.txt");
+			if (File.Exists(path))
+			{
+				return File.ReadAllText(path).Trim();
+			}
+			else
+			{
+				return "Unknown";
+			}
 		}
 
 		private static string GetOsName()
