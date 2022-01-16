@@ -599,12 +599,12 @@ namespace AssetRipper.Library.TextureDecoders
 				{
 					uint value = *sinput;
 					double scale = Math.Pow(2, unchecked((int)(value >> 27) - 24));
-					byte r = Convert.ToByte(Math.Round((value >> 0 & 0x1FF) * scale * 255.0));
-					byte g = Convert.ToByte(Math.Round((value >> 9 & 0x1FF) * scale * 255.0));
-					byte b = Convert.ToByte(Math.Round((value >> 18 & 0x1FF) * scale * 255.0));
-					output[0] = b;             // b
-					output[1] = g;             // g
-					output[2] = r;             // r
+					double r = Clamp255(Math.Round((value >> 0 & 0x1FF) * scale * 255.0));
+					double g = Clamp255(Math.Round((value >> 9 & 0x1FF) * scale * 255.0));
+					double b = Clamp255(Math.Round((value >> 18 & 0x1FF) * scale * 255.0));
+					output[0] = Convert.ToByte(b);             // b
+					output[1] = Convert.ToByte(g);            // g
+					output[2] = Convert.ToByte(r);            // r
 					output[3] = 255;           // a
 					sinput += 1;
 					output += 4;
