@@ -1,5 +1,6 @@
 ﻿using NAudio.Vorbis;
 using NAudio.Wave;
+using System;
 using System.IO;
 using System.Runtime.Versioning;
 
@@ -9,6 +10,11 @@ namespace AssetRipper.Library.Exporters.Audio
 	{
 		public static byte[] OggToWav(byte[] oggData)
 		{
+			if (oggData == null)
+				throw new ArgumentNullException(nameof(oggData));
+			if (oggData.Length == 0)
+				return Array.Empty<byte>();
+
 			using (VorbisWaveReader vorbisStream = new VorbisWaveReader(new MemoryStream(oggData), true))
 			{
 				using (MemoryStream writeStream = new MemoryStream())
@@ -22,6 +28,11 @@ namespace AssetRipper.Library.Exporters.Audio
 		[SupportedOSPlatform("windows")] //NAudio.Lame is Windows-only
 		public static byte[] WavToMp3(byte[] wavData)
 		{
+			if (wavData == null)
+				throw new ArgumentNullException(nameof(wavData));
+			if (wavData.Length == 0)
+				return Array.Empty<byte>();
+
 			using MemoryStream readStream = new MemoryStream(wavData);
 			using WaveFileReader reader = new WaveFileReader(readStream);
 			using MemoryStream writeStream = new MemoryStream();
