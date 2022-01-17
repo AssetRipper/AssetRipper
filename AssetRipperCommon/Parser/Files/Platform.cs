@@ -1,6 +1,9 @@
 namespace AssetRipper.Core.Parser.Files
 {
-	//TODO: rename to build target
+	/// <summary>
+	/// TODO: rename to build target<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/BuildTarget.cs"/>
+	/// </summary>
 	public enum Platform : uint
 	{
 		ValidPlayer = 1,
@@ -134,9 +137,8 @@ namespace AssetRipper.Core.Parser.Files
 		/// Build a PS5 Standalone
 		/// </summary>
 		PS5 = 44,
-		PlayerTypeCount,
-
-		UnknownPlatform = 9999,
+		EmbeddedLinux = 45,
+		QNX = 46,
 
 		/// <summary>
 		/// Editor
