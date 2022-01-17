@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Animator
 {
 	/// <summary>
-	/// Culling mode for the Animator.
+	/// Culling mode for the Animator.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/Animation/ScriptBindings/Animator.bindings.cs"/>
 	/// </summary>
 	public enum AnimatorCullingMode
 	{
