@@ -1,5 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Misc.Bones
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/Animation/ScriptBindings/Avatar.bindings.cs"/>
+	/// </summary>
 	public enum HumanBodyBones
 	{
 		Hips = 0,

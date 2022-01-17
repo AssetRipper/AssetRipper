@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 	{
 		public static string GetName(this IPrefabInstance prefab, IAssetContainer file)
 		{
-			if (prefab is IHasName hasName)
+			if (prefab is IHasName hasName && string.IsNullOrEmpty(hasName.Name))
 			{
 				return hasName.Name;
 			}
