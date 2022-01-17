@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	/// <summary>
-	/// Select the kind of compression you want for your texture.
+	/// Select the kind of compression you want for your texture.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/AssetPipeline/TextureImporterEnums.cs"/>
 	/// </summary>
 	public enum TextureImporterCompression
 	{

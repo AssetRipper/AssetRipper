@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	/// <summary>
-	/// Texture importer modes for Sprite import.
+	/// Texture importer modes for Sprite import.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/AssetPipeline/TextureImporterEnums.cs"/>
 	/// </summary>
 	public enum SpriteImportMode
 	{
