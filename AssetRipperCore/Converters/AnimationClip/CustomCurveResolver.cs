@@ -531,8 +531,12 @@ namespace AssetRipper.Core.Converters.AnimationClip
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
+#warning TODO: Find the actual name of this custom type and implement its attribute names
+				case BindingCustomType.Unknown38:
+					return "Unknown38_" + attribute;
+
 				default:
-					throw new ArgumentException(type.ToString());
+					throw new ArgumentException($"Binding type {type} not implemented", nameof(type));
 			}
 		}
 

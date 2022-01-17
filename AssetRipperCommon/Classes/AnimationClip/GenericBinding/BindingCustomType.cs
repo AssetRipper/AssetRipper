@@ -24,5 +24,7 @@
 		ParentConstraint = 35,
 		LookAtConstraint = 36,
 		Camera = 37,
+#warning TODO:
+		Unknown38 = 38,
 	}
 }
