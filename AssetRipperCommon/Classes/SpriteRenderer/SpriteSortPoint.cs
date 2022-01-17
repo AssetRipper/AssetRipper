@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.SpriteRenderer
 {
 	/// <summary>
-	/// Determines the position of the Sprite used for sorting the Renderer.
+	/// Determines the position of the Sprite used for sorting the Renderer.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/2D/Common/ScriptBindings/SpriteRenderer.bindings.cs"/>
 	/// </summary>
 	public enum SpriteSortPoint
 	{
