@@ -1,7 +1,8 @@
 namespace AssetRipper.Core.Classes.TerrainData
 {
 	/// <summary>
-	/// Render mode for detail prototypes.
+	/// Render mode for detail prototypes.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/Terrain/Public/TerrainData.bindings.cs"/>
 	/// </summary>
 	public enum DetailRenderMode
 	{

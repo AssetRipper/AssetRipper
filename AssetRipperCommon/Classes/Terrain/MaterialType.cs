@@ -1,7 +1,8 @@
 namespace AssetRipper.Core.Classes.Terrain
 {
 	/// <summary>
-	/// The type of the material used to render a terrain object. Could be one of the built-in types or custom.
+	/// The type of the material used to render a terrain object. Could be one of the built-in types or custom.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/Terrain/Public/Terrain.deprecated.cs"/>
 	/// </summary>
 	public enum MaterialType
 	{
