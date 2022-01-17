@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.EditorSettings
 {
 	/// <summary>
-	/// Selects the cache server configuration mode.
+	/// Selects the cache server configuration mode.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/EditorSettings.bindings.cs"/>
 	/// </summary>
 	public enum CacheServerMode
 	{

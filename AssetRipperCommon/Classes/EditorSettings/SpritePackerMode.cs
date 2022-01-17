@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.EditorSettings
 {
 	/// <summary>
-	/// Sprite Packer mode for the current project.
+	/// Sprite Packer mode for the current project.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/EditorSettings.bindings.cs"/>
 	/// </summary>
 	public enum SpritePackerMode
 	{
@@ -25,5 +26,7 @@
 		/// Always pack all the SpriteAtlas.
 		/// </summary>
 		AlwaysOnAtlas = 4,
+		SpriteAtlasV2 = 5,
+		SpriteAtlasV2Build = 6,
 	}
 }
