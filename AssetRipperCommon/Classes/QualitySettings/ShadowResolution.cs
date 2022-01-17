@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.QualitySettings
 {
 	/// <summary>
-	/// Default shadow resolution.
+	/// Default shadow resolution.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum ShadowResolution
 	{

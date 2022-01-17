@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Renderer
 {
 	/// <summary>
-	/// Light probe interpolation type.
+	/// Light probe interpolation type.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum LightProbeUsage : byte
 	{
@@ -17,6 +18,10 @@
 		/// Uses a 3D grid of interpolated light probes.
 		/// </summary>
 		UseProxyVolume = 2,
+		/// <summary>
+		/// Internal use only
+		/// </summary>
+		ExplicitIndex = 3,
 		/// <summary>
 		/// The light probe shader uniform values are extracted from the material property block set on the renderer.
 		/// </summary>

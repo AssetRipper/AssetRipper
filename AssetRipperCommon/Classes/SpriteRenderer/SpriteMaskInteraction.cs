@@ -1,5 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.SpriteRenderer
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/2D/Common/ScriptBindings/SpriteRenderer.bindings.cs"/>
+	/// </summary>
 	public enum SpriteMaskInteraction
 	{
 		/// <summary>

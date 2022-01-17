@@ -1,5 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Shader.SerializedShader.Enum
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Shaders/ShaderProperties.cs"/>
+	/// </summary>
 	public enum SerializedPropertyType
 	{
 		Color = 0,

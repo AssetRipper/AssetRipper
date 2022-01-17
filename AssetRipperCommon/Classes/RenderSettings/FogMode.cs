@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.RenderSettings
 {
 	/// <summary>
-	/// Fog mode to use.
+	/// Fog mode to use.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum FogMode
 	{

@@ -2,7 +2,8 @@
 namespace AssetRipper.Core.Classes.ShaderVariantCollection
 {
 	/// <summary>
-	/// Shader pass type for Unity's lighting pipeline.
+	/// Shader pass type for Unity's lighting pipeline.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum PassType
 	{
@@ -42,6 +43,10 @@ namespace AssetRipper.Core.Classes.ShaderVariantCollection
 		/// Shadow caster and depth texure shader pass.
 		/// </summary>
 		ShadowCaster = 8,
+		/// <summary>
+		/// Not needed starting with 5.0
+		/// </summary>
+		ShadowCollector = 9,
 		/// <summary>
 		/// Deferred Shading shader pass.
 		/// </summary>

@@ -210,7 +210,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 							return GPUPlatform.flash;
 
 						case Platform.Switch:
-							return GPUPlatform.@switch;
+							return GPUPlatform.Switch;
 
 						default:
 							throw new NotSupportedException($"Unsupported console platform {platform}");

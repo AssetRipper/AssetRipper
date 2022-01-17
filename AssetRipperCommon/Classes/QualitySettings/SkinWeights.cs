@@ -2,7 +2,8 @@
 {
 	/// <summary>
 	/// How many bones affect each vertex.
-	/// BlendWeights previously
+	/// BlendWeights previously<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum SkinWeights
 	{

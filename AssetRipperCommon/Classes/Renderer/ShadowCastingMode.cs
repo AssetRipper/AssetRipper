@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Renderer
 {
 	/// <summary>
-	/// How shadows are cast from this object.
+	/// How shadows are cast from this object.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum ShadowCastingMode : byte
 	{

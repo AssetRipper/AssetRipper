@@ -1,5 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Shader.SerializedShader.Enum
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
+	/// </summary>
 	public enum BlendOp
 	{
 		Add = 0,
@@ -18,11 +21,26 @@
 		LogicalOr = 13,
 		LogicalNor = 14,
 		LogicalXor = 15,
-		LogicalEquiv = 16,
+		LogicalEquivalence = 16,
 		LogicalAndReverse = 17,
 		LogicalAndInverted = 18,
 		LogicalOrReverse = 19,
 		LogicalOrInverted = 20,
+		Multiply = 21,
+		Screen = 22,
+		Overlay = 23,
+		Darken = 24,
+		Lighten = 25,
+		ColorDodge = 26,
+		ColorBurn = 27,
+		HardLight = 28,
+		SoftLight = 29,
+		Difference = 30,
+		Exclusion = 31,
+		HSLHue = 32,
+		HSLSaturation = 33,
+		HSLColor = 34,
+		HSLLuminosity = 35,
 		Count,
 	}
 

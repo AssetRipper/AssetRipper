@@ -1,5 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.RenderSettings
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
+	/// </summary>
 	public enum AmbientMode
 	{
 		/// <summary>

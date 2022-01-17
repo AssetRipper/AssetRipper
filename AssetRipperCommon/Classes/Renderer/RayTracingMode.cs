@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Renderer
 {
 	/// <summary>
-	/// Indicates how a Renderer is updated
+	/// Indicates how a Renderer is updated<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum RayTracingMode
 	{

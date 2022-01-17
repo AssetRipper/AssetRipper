@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Texture2D
 {
 	/// <summary>
-	/// TextureDimension enum as it present in Engine 2017.3
+	/// TextureDimension enum as it present in Engine 2017.3<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum TextureDimension
 	{

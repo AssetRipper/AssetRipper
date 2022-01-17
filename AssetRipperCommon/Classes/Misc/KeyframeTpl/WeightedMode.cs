@@ -1,5 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Animation/AnimationCurve.bindings.cs"/>
+	/// </summary>
 	public enum WeightedMode
 	{
 		/// <summary>

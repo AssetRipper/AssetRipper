@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.QualitySettings
 {
 	/// <summary>
-	/// The rendering mode of Shadowmask.
+	/// The rendering mode of Shadowmask.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum ShadowmaskMode
 	{

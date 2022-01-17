@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Mesh
 {
 	/// <summary>
-	/// Topology of Mesh faces.
+	/// Topology of Mesh faces.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum MeshTopology
 	{

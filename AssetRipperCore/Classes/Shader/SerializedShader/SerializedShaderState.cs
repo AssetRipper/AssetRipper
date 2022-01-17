@@ -72,7 +72,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public ZClip ZClipValue => (ZClip)ZClip.Val;
 		public ZTest ZTestValue => (ZTest)ZTest.Val;
 		public ZWrite ZWriteValue => (ZWrite)ZWrite.Val;
-		public Cull CullingValue => (Cull)Culling.Val;
+		public CullMode CullingValue => (CullMode)Culling.Val;
 		public bool AlphaToMaskValue => AlphaToMask.Val > 0;
 		public string LightingValue => Lighting ? "On" : "Off";
 

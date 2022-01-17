@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.QualitySettings
 {
 	/// <summary>
-	/// Shadow projection type for Quality Settings.
+	/// Shadow projection type for Quality Settings.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum ShadowProjection
 	{

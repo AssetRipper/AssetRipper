@@ -2,7 +2,8 @@ namespace AssetRipper.Core.Classes.LODGroup
 {
 	/// <summary>
 	/// The LOD fade modes. Modes other than LODFadeMode.None will result in Unity calculating a blend factor
-	/// for blending/interpolating between two neighbouring LODs and pass it to your shader.
+	/// for blending/interpolating between two neighbouring LODs and pass it to your shader.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/LOD.bindings.cs"/>
 	/// </summary>
 	public enum LODFadeMode
 	{

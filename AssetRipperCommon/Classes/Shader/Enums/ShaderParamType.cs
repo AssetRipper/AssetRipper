@@ -1,5 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Shader.Enums
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
+	/// </summary>
 	public enum ShaderParamType
 	{
 		Float = 0x0,

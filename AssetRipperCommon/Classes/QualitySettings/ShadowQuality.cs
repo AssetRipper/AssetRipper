@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.QualitySettings
 {
 	/// <summary>
-	/// Determines which type of shadows should be used.
+	/// Determines which type of shadows should be used.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum ShadowQuality
 	{

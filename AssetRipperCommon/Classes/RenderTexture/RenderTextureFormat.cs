@@ -1,5 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.RenderTexture
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
+	/// </summary>
 	public enum RenderTextureFormat
 	{
 		ARGB32 = 0,
@@ -30,5 +33,6 @@
 		RG16 = 25,
 		BGRA10101010_XR = 26,
 		BGR101010_XR = 27,
+		R16 = 28,
 	}
 }

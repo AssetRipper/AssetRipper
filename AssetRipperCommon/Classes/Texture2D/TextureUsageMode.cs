@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Texture2D
 {
 	/// <summary>
-	/// Lightmap format of a [[Texture2D|texture]]
+	/// Lightmap format of a [[Texture2D|texture]]<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/AssetPipeline/TextureImporterEnums.cs"/>
 	/// </summary>
 	public enum TextureUsageMode
 	{
@@ -36,13 +37,16 @@
 		/// </summary>
 		BakedLightmapFullHDR = 8,
 		RealtimeLightmapRGBM = 9,
+		NormalmapASTCnm = 10,
+		SingleChannelRed = 11,
+		SingleChannelAlpha = 12,
 	}
 
 	public static class TextureUsageModeExtensions
 	{
 		public static bool IsNormalmap(this TextureUsageMode _this)
 		{
-			return _this == TextureUsageMode.NormalmapDXT5nm || _this == TextureUsageMode.NormalmapPlain;
+			return _this == TextureUsageMode.NormalmapDXT5nm || _this == TextureUsageMode.NormalmapPlain || _this == TextureUsageMode.NormalmapASTCnm;
 		}
 	}
 }

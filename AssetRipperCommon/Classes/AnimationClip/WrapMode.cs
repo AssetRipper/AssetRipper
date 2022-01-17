@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.AnimationClip
 {
 	/// <summary>
-	/// Determines how time is treated outside of the keyframed range of an AnimationClip or AnimationCurve.
+	/// Determines how time is treated outside of the keyframed range of an AnimationClip or AnimationCurve.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Animation/AnimationCurve.bindings.cs"/>
 	/// </summary>
 	public enum WrapMode
 	{

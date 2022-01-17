@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Renderer
 {
 	/// <summary>
-	/// Reflection Probe usage.
+	/// Reflection Probe usage.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum ReflectionProbeUsage
 	{

@@ -2,15 +2,22 @@
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Shaders/ShaderProperties.cs"/>
+	/// </summary>
 	[Flags]
 	public enum SerializedPropertyFlag : uint
 	{
-		HideInInspector = 0x1,
-		PerRendererData = 0x2,
-		NoScaleOffset = 0x4,
-		Normal = 0x8,
-		HDR = 0x10,
-		Gamma = 0x20,
+		None = 0,
+		HideInInspector = 1 << 0,
+		PerRendererData = 1 << 1,
+		NoScaleOffset = 1 << 2,
+		Normal = 1 << 3,
+		HDR = 1 << 4,
+		Gamma = 1 << 5,
+		NonModifiableTextureData = 1 << 6,
+		MainTexture = 1 << 7,
+		MainColor = 1 << 8,
 	}
 
 	public static class SerializedPropertyFlagExtensions

@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.QualitySettings
 {
 	/// <summary>
-	/// Anisotropic filtering mode.
+	/// Anisotropic filtering mode.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum AnisotropicFiltering
 	{

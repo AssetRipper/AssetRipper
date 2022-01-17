@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Mesh
 {
 	/// <summary>
-	/// Format of the mesh index buffer data
+	/// Format of the mesh index buffer data<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
 	/// </summary>
 	public enum IndexFormat
 	{

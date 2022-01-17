@@ -1,6 +1,9 @@
 ﻿namespace AssetRipper.Core.Classes.Shader.SerializedShader.Enum
 {
-	public enum BlendFactor
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
+	/// </summary>
+	public enum BlendMode
 	{
 		Zero = 0,
 		One = 1,
@@ -18,14 +21,14 @@
 
 	public static class BlendFactorExtensions
 	{
-		public static bool IsZero(this BlendFactor _this)
+		public static bool IsZero(this BlendMode _this)
 		{
-			return _this == BlendFactor.Zero;
+			return _this == BlendMode.Zero;
 		}
 
-		public static bool IsOne(this BlendFactor _this)
+		public static bool IsOne(this BlendMode _this)
 		{
-			return _this == BlendFactor.One;
+			return _this == BlendMode.One;
 		}
 	}
 }

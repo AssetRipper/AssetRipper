@@ -1,15 +1,18 @@
 ﻿namespace AssetRipper.Core.Classes.Shader.SerializedShader.Enum
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
+	/// </summary>
 	public enum StencilOp
 	{
 		Keep = 0,
 		Zero = 1,
 		Replace = 2,
-		IncrSat = 3,
-		DecrSat = 4,
+		IncrementSaturate = 3,
+		DecrementSaturate = 4,
 		Invert = 5,
-		IncrWrap = 6,
-		DecrWrap = 7,
+		IncrementWrap = 6,
+		DecrementWrap = 7,
 		Count,
 	}
 
