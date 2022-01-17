@@ -9,6 +9,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/IMGUI/GUIStyle.cs"/>
+	/// </summary>
 	public struct GUIStyle : IAsset
 	{
 		public GUIStyle(LayoutInfo layout) : this()
