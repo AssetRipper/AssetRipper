@@ -1,6 +1,6 @@
 ﻿{
     "welcome_title": "Добро пожаловать в AssetRipper",
-    "config_options": "Настройки",
+    "config_options": "Настройки Конфигураций",
     "disable_scripts": "Выключить декомпиляцию скриптов",
     "skip_streaming_assets": "Пропускать папку StreamingAssets",
     "mesh_export_title": "Формат экспорта Mesh",
@@ -16,7 +16,7 @@
     "mesh_format_stl_ascii": "STL (ASCII)",
     "mesh_format_stl_ascii_description": "Формат 3D-объектов, обычно используемый для 3D-печати. Unity не может импортировать активы этого типа. Текстовый вариант.",
     "mesh_format_stl_binary": "STL (Бинарный)",
-    "mesh_format_stl_binary_description": "Формат 3D-объектов, обычно используемый для 3D-печати. Unity не может импортировать активы этого типа. Бинарный вариант.",
+    "mesh_format_stl_binary_description": "Формат 3D-объектов, обычно используемый для 3D-печати. Unity не может импортировать наборы ресурсов этого типа. Бинарный вариант.",
     "mesh_format_glb_primitive": "Простой GLB",
     "mesh_format_glb_primitive_description": "Высококачественная альтернатива FBX с открытым исходным кодом. Бинарная версия GLTF. Содержит только данные сетки. Может вызывать ошибки. Unity не может импортировать активы этого типа.",
     "mesh_format_fbx_primitive": "Простой FBX",
@@ -94,11 +94,11 @@
     "error": "Ошибка",
     "success": "Успех!",
     "export_complete": "Экспорт завершен!",
-    "no_game_files_found": "В выгруженных файлах не было обнаружено ни одной игры Unity или пакета ресурсов.",
+    "no_game_files_found": "Не найдено игр Unity или пакетов ресурс загруженный вами.",
     "export_deleting_old_files": "Очистка существующих файлов...",
     "export_preparing": "Подготовка к экспорту...\nЭто может занять минуту.",
-    "export_in_progress_no_file_count_yet": "Экспорт файлов ресурсов\n0.0%\n?/?",
-    "export_in_progress": "Экспорт файлов ресурсов\n{0}%\n{1}/{2}",
+    "export_in_progress_no_file_count_yet": "Экспортируем файлы ресурсов\n0.0%\n?/?",
+    "export_in_progress": "Экспортируем файлы ресурсов\n{0}%\n{1}/{2}",
     "error_exporting_with_reason": "Не удалось экспортировать содержимое игры: {0}",
     "error_importing_with_reason": "Не удалось загрузить содержимое игры: {0}",
     "loose_file_saved_at": "Свободный файл сохранен по адресу {0}",
@@ -132,5 +132,6 @@
     "script_content_level_2_description": "По умолчанию. Это экспортирует полные методы для игр Mono и пустышки для игр IL2Cpp.",
     "script_content_level_3_description": "Методы IL2Cpp безопасно восстанавливаются там, где это возможно.",
     "c_sharp_langage_version_config_9_0": "С# 9",
-    "c_sharp_langage_version_config_10_0": "C# 10"
+    "c_sharp_langage_version_config_10_0": "C# 10",
+    "check_log_for_more_details": "Просмотрите журнал для получение подробной информаций"
 }
