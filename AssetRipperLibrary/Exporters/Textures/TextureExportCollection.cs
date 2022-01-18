@@ -24,9 +24,8 @@ namespace AssetRipper.Library.Exporters.Textures
 			m_convert = convert;
 			if (convert)
 			{
-				foreach (IUnityObjectBase asset in texture.SerializedFile.Collection.FetchAssetsOfType(ClassIDType.Sprite))
+				foreach (Sprite sprite in texture.SerializedFile.Collection.FetchAssetsOfType<Sprite>())
 				{
-					Sprite sprite = (Sprite)asset;
 					if (sprite.RD.Texture.IsAsset(sprite.SerializedFile, texture))
 					{
 						SpriteAtlas atlas = Sprite.HasRendererData(sprite.SerializedFile.Version) ? sprite.SpriteAtlas.FindAsset(sprite.SerializedFile) : null;
@@ -35,9 +34,8 @@ namespace AssetRipper.Library.Exporters.Textures
 					}
 				}
 
-				foreach (IUnityObjectBase asset in texture.SerializedFile.Collection.FetchAssetsOfType(ClassIDType.SpriteAtlas))
+				foreach (SpriteAtlas atlas in texture.SerializedFile.Collection.FetchAssetsOfType<SpriteAtlas>())
 				{
-					SpriteAtlas atlas = (SpriteAtlas)asset;
 					if (atlas.RenderDataMap.Count > 0)
 					{
 						foreach (PPtr<Sprite> spritePtr in atlas.PackedSprites)

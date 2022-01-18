@@ -17,6 +17,7 @@ namespace AssetRipper.Core.Structure
 		IEnumerable<IUnityObjectBase> FetchAssets();
 
 		IEnumerable<IUnityObjectBase> FetchAssetsOfType(ClassIDType type);
+		IEnumerable<IUnityObjectBase> FetchAssetsOfType<T>() where T : IUnityObjectBase;
 
 		bool IsScene(ISerializedFile file);
 
