@@ -20,9 +20,9 @@ namespace AssetRipper.Library.Exporters.Audio
 		private AudioExportFormat AudioFormat { get; set; }
 		public FmodAudioExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
 
-		public static byte[] ExportWavAudio(AudioClip audioClip)
+		public static byte[] ExportWavAudio(IAudioClip audioClip)
 		{
-			byte[] data = (byte[])audioClip.GetAudioData();
+			byte[] data = audioClip.GetAudioData();
 			if (data.Length == 0)
 			{
 				return null;
@@ -30,9 +30,9 @@ namespace AssetRipper.Library.Exporters.Audio
 			return ConvertToWav(data);
 		}
 
-		public static bool IsSupported(AudioClip audioClip)
+		public static bool IsSupported(IAudioClip audioClip)
 		{
-			if (AudioClip.HasType(audioClip.SerializedFile.Version))
+			if (audioClip.HasType)
 			{
 				switch (audioClip.Type)
 				{
@@ -71,20 +71,20 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return AudioFormat != AudioExportFormat.Native && asset is AudioClip audio && IsSupported(audio);
+			return AudioFormat != AudioExportFormat.Native && asset is IAudioClip audio && IsSupported(audio);
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			if (AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows())
-				return new AssetExportCollection(this, asset, "mp3");
+				return new AssetExportCollection(this, asset, Mp3Extension);
 			else
-				return new AssetExportCollection(this, asset, "wav");
+				return new AssetExportCollection(this, asset, WavExtension);
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			AudioClip audioClip = (AudioClip)asset;
+			IAudioClip audioClip = (IAudioClip)asset;
 			if (!audioClip.CheckAssetIntegrity())
 			{
 				Logger.Warning(LogCategory.Export, $"Can't export '{audioClip.Name}' because resources file hasn't been found");
@@ -218,5 +218,7 @@ namespace AssetRipper.Library.Exporters.Audio
 		/// 'data' ascii
 		/// </summary>
 		private const uint DataFourCC = 0x61746164;
+		private const string Mp3Extension = "mp3";
+		private const string WavExtension = "wav";
 	}
 }

@@ -75,7 +75,7 @@ namespace AssetRipper.GUI.AssetInfo
 
 			BuildYamlTree();
 
-			if (asset is AudioClip clip && LibVlc != null)
+			if (asset is IAudioClip clip && LibVlc != null)
 			{
 				DateTime start = DateTime.Now;
 				bool success = AudioClipDecoder.TryGetDecodedAudioClipData(clip, out byte[] rawClipAudioData, out string _);
@@ -132,7 +132,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public bool HasImageData => Asset is IHasImageData or ITerrainData;
 
 		//Read from UI
-		public bool HasAudioData => Asset is AudioClip;
+		public bool HasAudioData => Asset is IAudioClip;
 
 		//Read from UI
 		public bool YamlTreeIsSupported { get; private set; } = true;

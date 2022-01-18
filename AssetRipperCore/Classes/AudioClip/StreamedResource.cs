@@ -1,4 +1,5 @@
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
@@ -10,7 +11,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 		{
 			Source = reader.ReadString();
 			Offset = reader.ReadUInt64();
-			if (StreamedResourceExtensions.HasSize(reader.Version))
+			if (HasSize(reader.Version))
 			{
 				Size = reader.ReadUInt64();
 			}
@@ -24,7 +25,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 		{
 			writer.Write(Source);
 			writer.Write(Offset);
-			if (StreamedResourceExtensions.HasSize(writer.Version))
+			if (HasSize(writer.Version))
 			{
 				writer.Write(Size);
 			}
@@ -46,6 +47,14 @@ namespace AssetRipper.Core.Classes.AudioClip
 		public string Source { get; set; }
 		public ulong Offset { get; set; }
 		public ulong Size { get; set; }
+
+		/// <summary>
+		/// 5.0.0f1 and greater (unknown version)
+		/// </summary>
+		public static bool HasSize(UnityVersion version)
+		{
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
+		}
 
 		public const string SourceName = "m_Source";
 		public const string OffsetName = "m_Offset";

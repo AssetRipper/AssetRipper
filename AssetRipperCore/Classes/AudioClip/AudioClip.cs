@@ -70,7 +70,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 		/// <summary>
 		/// 2.6.0 to 5.0.0bx (NOTE: unknown version)
 		/// </summary>
-		public static bool HasType(UnityVersion version) => version.IsGreaterEqual(2, 6) && version.IsLessEqual(5, 0, 0, UnityVersionType.Beta);
+		public static bool HasTypeField(UnityVersion version) => version.IsGreaterEqual(2, 6) && version.IsLessEqual(5, 0, 0, UnityVersionType.Beta);
 		/// <summary>
 		/// Less than 2.6.0
 		/// </summary>
@@ -135,47 +135,6 @@ namespace AssetRipper.Core.Classes.AudioClip
 		/// </summary>
 		private static bool IsAlignAudioData(UnityVersion version) => version.IsGreaterEqual(2, 1) && version.IsLess(3) || version.IsGreaterEqual(3, 2);
 
-		public bool CheckAssetIntegrity()
-		{
-			if (HasLoadType(SerializedFile.Version))
-			{
-				return FSBResource.CheckIntegrity(SerializedFile);
-			}
-			else if (HasStreamingInfo(SerializedFile.Version))
-			{
-				if (LoadType == AudioClipLoadType.Streaming)
-				{
-					if (AudioData == null)
-					{
-						return StreamingInfo.CheckIntegrity(SerializedFile);
-					}
-				}
-			}
-			return true;
-		}
-
-		public IReadOnlyList<byte> GetAudioData()
-		{
-			if (HasLoadType(SerializedFile.Version))
-			{
-				return FSBResource.GetContent(SerializedFile) ?? Array.Empty<byte>();
-			}
-			else
-			{
-				if (HasStreamingInfo(SerializedFile.Version))
-				{
-					if (LoadType == AudioClipLoadType.Streaming)
-					{
-						if (AudioData == null)
-						{
-							return StreamingInfo.GetContent(SerializedFile) ?? Array.Empty<byte>();
-						}
-					}
-				}
-				return AudioData;
-			}
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -224,7 +183,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 					FSBResource.Read(reader);
 				}
 
-				if (HasType(reader.Version))
+				if (HasTypeField(reader.Version))
 				{
 					Type = (FMODSoundType)reader.ReadInt32();
 				}
@@ -243,7 +202,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 				}
 
 				Format = (FMODSoundFormat)reader.ReadInt32();
-				if (HasType(reader.Version))
+				if (HasTypeField(reader.Version))
 				{
 					Type = (FMODSoundType)reader.ReadInt32();
 				}
@@ -286,7 +245,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 					}
 					else
 					{
-						StreamingInfo.Read(reader, StreamingFileName);
+						streamingInfo.Read(reader, StreamingFileName);
 					}
 				}
 				else
@@ -355,7 +314,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 		/// <summary>
 		/// SoundType in some versions
 		/// </summary>
-		public FMODSoundType Type { get; private set; }
+		public FMODSoundType Type { get; set; }
 		public float Length { get; set; }
 		public int Frequency { get; set; }
 		public int Size { get; set; }
@@ -366,7 +325,22 @@ namespace AssetRipper.Core.Classes.AudioClip
 		public bool UseHardware { get; set; }
 		public byte[] AudioData { get; set; }
 
+		/// <summary>
+		/// SerializedFile.Name + "." + StreamingFileExtension;
+		/// </summary>
 		private string StreamingFileName => SerializedFile.Name + "." + StreamingFileExtension;
+
+		public IStreamedResource Resource
+		{
+			get => HasLoadType(SerializedFile.Version) ? FSBResource : null;
+		}
+
+		public IStreamingInfo StreamingInfo
+		{
+			get => HasStreamingInfo(SerializedFile.Version) ? streamingInfo : null;
+		}
+
+		public bool HasType => HasTypeField(SerializedFile.Version);
 
 		public const string StreamingFileExtension = "resS";
 
@@ -387,6 +361,6 @@ namespace AssetRipper.Core.Classes.AudioClip
 		public const string EditorCompressionFormatName = "m_EditorCompressionFormat";
 
 		public StreamedResource FSBResource;
-		public StreamingInfo StreamingInfo;
+		public StreamingInfo streamingInfo;
 	}
 }

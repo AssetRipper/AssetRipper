@@ -18,13 +18,6 @@ namespace AssetRipper.Core.Classes.AudioClip
 
 	public static class StreamedResourceExtensions
 	{
-		/// <summary>
-		/// 5.0.0f1 and greater (unknown version)
-		/// </summary>
-		public static bool HasSize(UnityVersion version)
-		{
-			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
-		}
 
 		public static bool CheckIntegrity(this IStreamedResource streamedResource, ISerializedFile file)
 		{
@@ -32,7 +25,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 			{
 				return true;
 			}
-			if (!HasSize(file.Version))
+			if (streamedResource.Size == 0)
 			{
 				// I think they read data by its type for this verison, so I can't even export raw data :/
 				return false;

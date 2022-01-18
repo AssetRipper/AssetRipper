@@ -28,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Audio
 				Logger.Error(LogCategory.Export, "Either LibVorbis or LibOgg is missing from your system, so Ogg audio clips cannot be exported. This message will not repeat.");
 		}
 
-		public static bool CanDecode(AudioClip audioClip)
+		public static bool CanDecode(IAudioClip audioClip)
 		{
 			byte[] rawData = (byte[])audioClip?.GetAudioData();
 			if (!IsDataUsable(rawData))
@@ -50,7 +50,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 		}
 
-		public static bool TryGetDecodedAudioClipData(AudioClip audioClip, out byte[] decodedData, out string fileExtension)
+		public static bool TryGetDecodedAudioClipData(IAudioClip audioClip, out byte[] decodedData, out string fileExtension)
 		{
 			return TryGetDecodedAudioClipData((byte[])audioClip?.GetAudioData(), out decodedData, out fileExtension);
 		}
@@ -79,9 +79,9 @@ namespace AssetRipper.Library.Exporters.Audio
 		/// <param name="audioClip">The audio clip to extract the data from</param>
 		/// <param name="decodedData">The decoded data in the wav audio format</param>
 		/// <returns>True if the audio could be exported in the wav format</returns>
-		public static bool TryGetDecodedWavData(AudioClip audioClip, out byte[] decodedData)
+		public static bool TryGetDecodedWavData(IAudioClip audioClip, out byte[] decodedData)
 		{
-			return TryGetDecodedWavData((byte[])audioClip?.GetAudioData(), out decodedData);
+			return TryGetDecodedWavData(audioClip?.GetAudioData(), out decodedData);
 		}
 		/// <summary>
 		/// Decodes WAV data from FSB data
@@ -126,7 +126,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 		}
 
-		public static string GetFileExtension(AudioClip audioClip) => GetFileExtension(audioClip.GetAudioData()?.ToArray());
+		public static string GetFileExtension(IAudioClip audioClip) => GetFileExtension(audioClip.GetAudioData()?.ToArray());
 		public static string GetFileExtension(byte[] rawData)
 		{
 			return GetAudioType(rawData).FileExtension();

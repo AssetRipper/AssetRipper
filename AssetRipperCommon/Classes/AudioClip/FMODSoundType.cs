@@ -35,4 +35,24 @@
 		MAX = 0x1E,
 		FORCEINT = 0x10000,
 	}
+
+	public static class FMODSoundTypeExtensions
+	{
+		public static string ToRawExtension(this FMODSoundType soundType) => soundType switch
+		{
+			FMODSoundType.ACC => "m4a",
+			FMODSoundType.AIFF => "aif",
+			FMODSoundType.IT => "it",
+			FMODSoundType.MOD => "mod",
+			FMODSoundType.MPEG => "mp3",
+			FMODSoundType.OGGVORBIS => "ogg",
+			FMODSoundType.S3M => "s3m",
+			FMODSoundType.WAV => "wav",
+			FMODSoundType.XM => "xm",
+			FMODSoundType.XMA => "wav",
+			FMODSoundType.VAG => "vag",
+			FMODSoundType.AUDIOQUEUE => "fsb",
+			_ => "audioClip",
+		};
+	}
 }
