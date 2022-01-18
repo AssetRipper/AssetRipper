@@ -26,7 +26,7 @@
     <PackageReference Include="Fmod5Sharp" Version="1.2.0" />
 	<PackageReference Include="ICSharpCode.Decompiler" Version="7.2.0.6791-preview3" />
     <PackageReference Include="NAudio.Core" Version="2.0.0" />
-    <PackageReference Include="NAudio.Lame" Version="2.0.0" />
+    <PackageReference Include="NAudio.Lame" Version="2.0.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0025" />
     <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0025" />
