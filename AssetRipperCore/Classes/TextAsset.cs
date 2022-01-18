@@ -5,6 +5,7 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
+using System;
 using System.Text;
 
 namespace AssetRipper.Core.Classes
@@ -56,7 +57,7 @@ namespace AssetRipper.Core.Classes
 		/// </summary>
 		public byte[] RawData { get; protected set; }
 
-		public string Script => RawData == null ? null : Encoding.UTF8.GetString(RawData);
+		public byte[] Script => RawData ?? Array.Empty<byte>();
 		public string PathName { get; protected set; } = string.Empty;
 
 		public const string ScriptName = "m_Script";

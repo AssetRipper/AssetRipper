@@ -2,6 +2,6 @@
 {
 	public interface ITextAsset : INamedObject
 	{
-		string Script { get; }
+		byte[] Script { get; }
 	}
 }
