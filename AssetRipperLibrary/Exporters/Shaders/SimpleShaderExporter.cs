@@ -17,14 +17,14 @@ namespace AssetRipper.Library.Exporters.Shaders
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is IShader && asset is ITextAsset textAsset)
-				return HasDecompiledShaderText(textAsset.Script);
+				return HasDecompiledShaderText(textAsset.ParseWithUTF8());
 			else
 				return false;
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllTextAsync(path, ((ITextAsset)asset).Script, Encoding.UTF8));
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).Script));
 			return true;
 		}
 

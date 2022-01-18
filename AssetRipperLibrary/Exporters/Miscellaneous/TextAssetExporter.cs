@@ -60,7 +60,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		private static string GetExtension(ITextAsset asset)
 		{
-			string text = Encoding.UTF8.GetString(asset.Script);
+			string text = asset.ParseWithUTF8();
 			if (IsValidJson(text))
 				return JsonExtension;
 			else if (IsPlainText(text))

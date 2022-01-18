@@ -141,7 +141,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public bool HasTextData => Asset switch
 		{
 			IShader => true,
-			ITextAsset txt => !string.IsNullOrEmpty(txt.Script),
+			ITextAsset txt => !txt.Script.IsNullOrEmpty(),
 			IHasRawData rawDataAsset => rawDataAsset.RawData.Length > 0,
 			_ => false,
 		};
@@ -150,7 +150,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public string? TextAssetData => (Asset switch
 		{
 			IShader shader => DumpShaderDataAsText(shader),
-			ITextAsset txt => txt.Script,
+			ITextAsset txt => txt.ParseWithUTF8(),
 			IHasRawData rawDataAsset => rawDataAsset.RawData.ToFormattedHex(),
 			_ => null
 		})?.Replace("\t", "    ");

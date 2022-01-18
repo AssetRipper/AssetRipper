@@ -92,7 +92,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			else if (shader is ITextAsset textAsset)
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
-				string header = textAsset.Script ?? "";
+				string header = textAsset.ParseWithUTF8();
 				var subshaderIndex = header.IndexOf("SubShader");
 				writer.WriteString(header, 0, subshaderIndex);
 
