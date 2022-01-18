@@ -276,14 +276,30 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			}
 			else if (fileIndex < 0)
 			{
-				throw new ArgumentOutOfRangeException(nameof(fileIndex), $"File index cannot have negative index: {fileIndex}");
+				if (isSafe)
+				{
+					Logger.Error($"File index cannot be negative: {fileIndex}");
+					return null;
+				}
+				else
+				{
+					throw new ArgumentOutOfRangeException(nameof(fileIndex), $"File index cannot be negative: {fileIndex}");
+				}
 			}
 			else
 			{
 				fileIndex--;
 				if (fileIndex >= Metadata.Externals.Length)
 				{
-					throw new Exception($"{nameof(SerializedFile)} with index {fileIndex} was not found in dependencies");
+					if (isSafe)
+					{
+						Logger.Error($"{nameof(SerializedFile)} with index {fileIndex} was not found in dependencies");
+						return null;
+					}
+					else
+					{
+						throw new ArgumentException($"{nameof(SerializedFile)} with index {fileIndex} was not found in dependencies", nameof(fileIndex));
+					}
 				}
 
 				FileIdentifier identifier = Metadata.Externals[fileIndex];
