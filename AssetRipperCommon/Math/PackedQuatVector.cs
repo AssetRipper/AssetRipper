@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Math
 				{
 					if ((flags & 3) != j)
 					{
-						int bitSize = ((flags & 3) + 1) % 4 == j ? 9 : 10;
+						int bitSize = ((flags + 1) & 3) == j ? 9 : 10;
 						float halfMaxValue = 0.5f * ((1 << bitSize) - 1);
 
 						int value = 0;
