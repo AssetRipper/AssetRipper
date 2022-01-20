@@ -385,7 +385,7 @@ namespace AssetRipper.Core.Classes.Light
 		public ShadowSettings Shadows;
 		public PPtr<Texture> Cookie;
 		public LightBakingOutput BakingOutput;
-		public PPtr<Flare> Flare;
+		public PPtr<Flare.Flare> Flare;
 		public BitField CullingMask;
 		public Vector2f AreaSize;
 		public FalloffTable FalloffTable;

@@ -17,6 +17,7 @@ using AssetRipper.Core.Classes.ClusterInputManager;
 using AssetRipper.Core.Classes.CompositeCollider2D;
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
+using AssetRipper.Core.Classes.Flare;
 using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.GraphicsSettings;
@@ -201,6 +202,8 @@ namespace AssetRipper.Core.Parser.Asset
 					return new Texture3D(assetInfo);
 				case ClassIDType.NewAnimationTrack:
 					return new NewAnimationTrack(assetInfo);
+				case ClassIDType.Flare:
+					return new Flare(assetInfo);
 				case ClassIDType.FlareLayer:
 					return new FlareLayer(assetInfo);
 				case ClassIDType.NavMeshProjectSettings:
