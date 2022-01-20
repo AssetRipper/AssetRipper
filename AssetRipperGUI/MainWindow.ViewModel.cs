@@ -363,7 +363,7 @@ namespace AssetRipper.GUI
 		}
 
 		// Called from UI
-		private void CheckForUpdates() => CheckForUpdates(true);
+		private void CheckForUpdatesUI() => CheckForUpdates(true);
 
 		/// <summary>
 		/// Checks Github for a more recent release
