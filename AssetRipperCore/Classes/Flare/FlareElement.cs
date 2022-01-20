@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Flare
 {
-	public struct FlareElements : IAssetReadable, IYAMLExportable
+	public struct FlareElement : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
