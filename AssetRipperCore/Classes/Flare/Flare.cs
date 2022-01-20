@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Classes.Flare
 			base.Read(reader);
 			FlareTexture.Read(reader);
 			TextureLayout = (TextureLayout)reader.ReadInt32();
-			Elements = reader.ReadAssetArray<FlareElements>();
+			Elements = reader.ReadAssetArray<FlareElement>();
 			UseFog = reader.ReadBoolean();
 		}
 
@@ -43,7 +43,7 @@ namespace AssetRipper.Core.Classes.Flare
 		}
 
 		public TextureLayout TextureLayout { get; set; }
-		public FlareElements[] Elements { get; set; }
+		public FlareElement[] Elements { get; set; }
 		public bool UseFog { get; set; }
 
 		public const string FlareTextureName = "m_FlareTexture";
