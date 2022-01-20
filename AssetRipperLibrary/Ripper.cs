@@ -41,13 +41,19 @@ namespace AssetRipper.Library
 			VersionManager.LegacyHandler = new LegacyHandler();
 		}
 
-		public Ripper() => LoadPlugins();
+		public Ripper() : this(new()) { }
+
+		public Ripper(LibraryConfiguration configuration)
+		{
+			Settings = configuration;
+			LoadPlugins();
+		}
 
 		public GameStructure GameStructure { get; private set; }
 		/// <summary>
 		/// Needs to be set before loading assets to ensure predictable behavior
 		/// </summary>
-		public LibraryConfiguration Settings { get; } = new();
+		public LibraryConfiguration Settings { get; }
 		private bool ExportersInitialized { get; set; }
 		private List<IPostExporter> PostExporters { get; } = new();
 
