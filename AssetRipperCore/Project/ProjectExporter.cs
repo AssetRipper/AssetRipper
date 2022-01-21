@@ -70,8 +70,6 @@ namespace AssetRipper.Core.Project
 					return AssetType.Serialized;
 
 				// not implemented yet
-				case ClassIDType.Flare:
-					return AssetType.Serialized;
 				case ClassIDType.AudioMixerGroup:
 					return AssetType.Serialized;
 				case ClassIDType.EditorExtension:
