@@ -27,6 +27,7 @@ using AssetRipper.Core.Classes.InputManager;
 using AssetRipper.Core.Classes.Light;
 using AssetRipper.Core.Classes.LightingDataAsset;
 using AssetRipper.Core.Classes.LightmapSettings;
+using AssetRipper.Core.Classes.LightProbes;
 using AssetRipper.Core.Classes.LODGroup;
 using AssetRipper.Core.Classes.Material;
 using AssetRipper.Core.Classes.Mesh;
@@ -194,6 +195,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.Sprite => new Sprite(assetInfo),
 				ClassIDType.ReflectionProbe => new ReflectionProbe(assetInfo),
 				ClassIDType.Terrain => new Terrain(assetInfo),
+				ClassIDType.LightProbeGroup => new LightProbeGroup(assetInfo),
 				ClassIDType.AnimatorOverrideController => new AnimatorOverrideController(assetInfo),
 				ClassIDType.CanvasRenderer => new CanvasRenderer(assetInfo),
 				ClassIDType.Canvas => new Canvas(assetInfo),
@@ -201,6 +203,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.CanvasGroup => new CanvasGroup(assetInfo),
 				ClassIDType.ClusterInputManager => new ClusterInputManager(assetInfo),
 				ClassIDType.NavMeshData => new NavMeshData(assetInfo),
+				ClassIDType.LightProbes => new LightProbes(assetInfo),
 				ClassIDType.UnityConnectSettings => new UnityConnectSettings(assetInfo),
 				ClassIDType.ParticleSystemForceField => new ParticleSystemForceField(assetInfo),
 				ClassIDType.OcclusionCullingData => new OcclusionCullingData(assetInfo),
