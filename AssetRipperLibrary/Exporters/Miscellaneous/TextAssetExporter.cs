@@ -83,6 +83,5 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		}
 
 		private static bool IsPlainText(string text) => text.All(c => !char.IsControl(c) || char.IsWhiteSpace(c));
-		//Note: take returns at most 32 elements, so it's safe to use on smaller strings
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
+using K4os.Compression.LZ4;
 using System;
 using System.IO;
 using System.Linq;
@@ -21,6 +22,38 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 			}
 		}
 
+		private void ReadBlob(LayoutInfo layout, byte[] compressedBlob, uint offset, uint compressedLength, uint decompressedLength, int segment)
+		{
+			byte[] decompressedBuffer = new byte[decompressedLength];
+			LZ4Codec.Decode(compressedBlob, (int)offset, (int)compressedLength, decompressedBuffer, 0, (int)decompressedLength);
+
+			using MemoryStream blobMem = new MemoryStream(decompressedBuffer);
+			using AssetReader blobReader = new AssetReader(blobMem, EndianType.LittleEndian, layout);
+			if (segment == 0)
+			{
+				Entries = blobReader.ReadAssetArray<ShaderSubProgramEntry>();
+				SubPrograms = new ShaderSubProgram[Entries.Length];
+			}
+			ReadSegment(blobReader, segment);
+		}
+
+		private void ReadSegment(AssetReader reader, int segment)
+		{
+			for (int i = 0; i < Entries.Length; i++)
+			{
+				ref ShaderSubProgramEntry entry = ref Entries[i];
+				if (entry.Segment == segment)
+				{
+					reader.BaseStream.Position = entry.Offset;
+					SubPrograms[i].Read(reader);
+					if (reader.BaseStream.Position != entry.Offset + entry.Length)
+					{
+						throw new Exception($"Read {reader.BaseStream.Position - entry.Offset} less than expected {entry.Length}");
+					}
+				}
+			}
+		}
+
 		public void Write(LayoutInfo layout, MemoryStream memStream, out uint[] offsets, out uint[] compressedLengths, out uint[] decompressedLengths)
 		{
 			int segmentCount = Entries.Length == 0 ? 0 : Entries.Max(t => t.Segment) + 1;
@@ -38,64 +71,32 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 			}
 		}
 
-		private void ReadBlob(LayoutInfo layout, byte[] compressedBlob, uint offset, uint compressedLength, uint decompressedLength, int segment)
-		{
-			byte[] decompressedBuffer = new byte[decompressedLength];
-			K4os.Compression.LZ4.LZ4Codec.Decode(compressedBlob, (int)offset, (int)compressedLength, decompressedBuffer, 0, (int)decompressedLength);
-
-			using (MemoryStream blobMem = new MemoryStream(decompressedBuffer))
-			{
-				using (AssetReader blobReader = new AssetReader(blobMem, EndianType.LittleEndian, layout))
-				{
-					if (segment == 0)
-					{
-						Entries = blobReader.ReadAssetArray<ShaderSubProgramEntry>();
-						SubPrograms = new ShaderSubProgram[Entries.Length];
-					}
-					ReadSegment(blobReader, segment);
-				}
-			}
-		}
-
 		private void WriteBlob(LayoutInfo layout, MemoryStream memStream, out uint compressedLength, out uint decompressedLength, int segment)
 		{
-			using (MemoryStream blobMem = new MemoryStream())
+			using MemoryStream blobMem = new MemoryStream();
+			using (AssetWriter blobWriter = new AssetWriter(blobMem, EndianType.LittleEndian, layout))
 			{
-				using (AssetWriter blobWriter = new AssetWriter(blobMem, EndianType.LittleEndian, layout))
+				if (segment == 0)
 				{
-					if (segment == 0)
-					{
-						blobWriter.WriteAssetArray(Entries);
-					}
-					WriteSegment(blobWriter, segment);
+					blobWriter.WriteAssetArray(Entries);
 				}
-				decompressedLength = (uint)blobMem.Length;
-
-				blobMem.Position = 0;
-#warning TODO:
-				compressedLength = 0;
-				/*using (Lz4EncodeStream lz4Stream = new Lz4EncodeStream(blobMem, blobMem.Length))
-				{
-					lz4Stream.Write(memStream);
-					compressedLength = lz4Stream.Length;
-				}*/
+				WriteSegment(blobWriter, segment);
 			}
-		}
+			decompressedLength = (uint)blobMem.Length;
 
-		private void ReadSegment(AssetReader reader, int segment)
-		{
-			for (int i = 0; i < Entries.Length; i++)
+			byte[] source = blobMem.ToArray();
+
+			byte[] target = new byte[LZ4Codec.MaximumOutputSize(source.Length)];
+			int encodedLength = LZ4Codec.Encode(source, 0, source.Length, target, 0, target.Length);
+
+			if (encodedLength < 0)
 			{
-				ref ShaderSubProgramEntry entry = ref Entries[i];
-				if (entry.Segment == segment)
-				{
-					reader.BaseStream.Position = entry.Offset;
-					SubPrograms[i].Read(reader);
-					if (reader.BaseStream.Position != entry.Offset + entry.Length)
-					{
-						throw new Exception($"Read {reader.BaseStream.Position - entry.Offset} less than expected {entry.Length}");
-					}
-				}
+				throw new Exception("Unable to compress sub program blob");
+			}
+			else
+			{
+				compressedLength = (uint)encodedLength;
+				memStream.Write(target, 0, encodedLength);
 			}
 		}
 
