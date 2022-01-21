@@ -73,7 +73,11 @@ namespace AssetRipper.Core.Classes.LightProbes
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(DataName, Data.ExportYAML(container));
 			node.Add(BakedCoefficientsName, BakedCoefficients.ExportYAML(container));
-			node.Add(BakedLightOcclusionName, BakedLightOcclusion.ExportYAML(container));
+			if (HasBakedLightOcclusion(container.Version))
+			{
+				node.Add(BakedLightOcclusionName, BakedLightOcclusion.ExportYAML(container));
+			}
+
 			return node;
 		}
 
