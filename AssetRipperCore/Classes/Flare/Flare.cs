@@ -35,6 +35,7 @@ namespace AssetRipper.Core.Classes.Flare
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			node.AddSerializedVersion(1);
 			node.Add(FlareTextureName, FlareTexture.ExportYAML(container));
 			node.Add(TextureLayoutName, (int)TextureLayout);
 			node.Add(ElementseName, Elements.ExportYAML(container));

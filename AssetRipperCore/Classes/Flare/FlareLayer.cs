@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Parser.Asset;
 
-namespace AssetRipper.Core.Classes
+namespace AssetRipper.Core.Classes.Flare
 {
 	public sealed class FlareLayer : Behaviour
 	{
