@@ -27,14 +27,6 @@ namespace AssetRipper.Core.Project.Collections
 
 				//This section might not be necessary. This seems to be quite different from normal prefab files
 				asset.PrefabInstance = prefab.SerializedFile.CreatePPtr(prefab);
-				if (asset is IGameObject gameObject)
-				{
-					gameObject.SetHideFlagsFromDepth();
-				}
-				else
-				{
-					asset.ObjectHideFlags = HideFlags.HideInHierarchy;
-				}
 			}
 		}
 
@@ -79,7 +71,6 @@ namespace AssetRipper.Core.Project.Collections
 		private static IPrefabInstance CreateVirtualPrefab(VirtualSerializedFile virtualFile, IGameObject root)
 		{
 			IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance);
-			instance.ObjectHideFlags = HideFlags.HideInHierarchy;
 			instance.RootGameObjectPtr = root.SerializedFile.CreatePPtr(root);
 			instance.IsPrefabAsset = true;
 			if (instance is IHasName hasName)

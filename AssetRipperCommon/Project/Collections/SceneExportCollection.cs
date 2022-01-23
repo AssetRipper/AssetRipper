@@ -41,10 +41,6 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				if (IsSceneCompatible(asset))
 				{
-					if (asset is IGameObject gameObject)
-					{
-						gameObject.SetHideFlagsFromDepth();
-					}
 					components.Add(asset);
 					m_exportIDs.Add(asset.AssetInfo, asset.PathID);
 				}
