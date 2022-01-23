@@ -60,10 +60,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public static bool IsSerializedFile(byte[] buffer, int offset, int size) => IsSerializedFile(new MemoryStream(buffer, offset, size, false));
 		public static bool IsSerializedFile(Stream stream)
 		{
-			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
-			{
-				return SerializedFileHeader.IsSerializedFileHeader(reader, (uint)stream.Length);
-			}
+			using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
+			return SerializedFileHeader.IsSerializedFileHeader(reader, stream.Length);
 		}
 
 		public static SerializedFileScheme LoadScheme(string filePath)
