@@ -30,6 +30,7 @@ using AssetRipper.Library.Exporters.TypeTrees;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace AssetRipper.Library
@@ -128,17 +129,16 @@ namespace AssetRipper.Library
 			return GameStructure.FileCollection.FetchAssets();
 		}
 
-		public void ExportFile(string exportPath, IUnityObjectBase asset) => throw new NotImplementedException();
-		public void ExportFile(string exportPath, IEnumerable<IUnityObjectBase> assets) => throw new NotImplementedException();
-
-		public void ExportProject(string exportPath) => ExportProject(exportPath, Array.Empty<IUnityObjectBase>());
+		public void ExportProject(string exportPath) => ExportProject(exportPath, LibraryConfiguration.DefaultFilter);
 		public void ExportProject(string exportPath, IUnityObjectBase asset) => ExportProject(exportPath, new IUnityObjectBase[] { asset });
-		public void ExportProject(string exportPath, IEnumerable<IUnityObjectBase> assets)
+		public void ExportProject(string exportPath, IEnumerable<IUnityObjectBase> assets) => ExportProject(exportPath, GetFilter(assets));
+		public void ExportProject<T>(string exportPath) => ExportProject(exportPath, GetFilter<T>());
+		public void ExportProject(string exportPath, IEnumerable<Type> types) => ExportProject(exportPath, GetFilter(types));
+		private void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			List<IUnityObjectBase> list = new(assets ?? Array.Empty<IUnityObjectBase>());
 			Settings.ExportPath = exportPath;
-			Settings.Filter = list.Count == 0 ? LibraryConfiguration.DefaultFilter : GetFilter(list);
+			Settings.Filter = filter;
 			InitializeExporters();
 			TaskManager.WaitUntilAllCompleted();
 
@@ -172,10 +172,23 @@ namespace AssetRipper.Library
 
 		public void ResetSettings() => Settings.ResetToDefaultValues();
 
-		private static Func<IUnityObjectBase, bool> GetFilter(List<IUnityObjectBase> assets)
+		private static Func<IUnityObjectBase, bool> GetFilter(IEnumerable<IUnityObjectBase> assets)
 		{
-			if (assets == null) throw new ArgumentNullException(nameof(assets));
-			return assets.Contains;
+			if (assets == null || !assets.Any())
+				return LibraryConfiguration.DefaultFilter;
+			else
+				return assets.Contains;
+		}
+		private static Func<IUnityObjectBase, bool> GetFilter<T>()
+		{
+			return asset => asset is T;
+		}
+		private static Func<IUnityObjectBase, bool> GetFilter(IEnumerable<Type> types)
+		{
+			if (types == null || !types.Any())
+				return LibraryConfiguration.DefaultFilter;
+			else
+				return asset => types.Any(t => asset.GetType().IsAssignableTo(t));
 		}
 
 		private void InitializeExporters()
