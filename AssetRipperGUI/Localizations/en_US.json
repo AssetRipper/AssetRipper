@@ -84,6 +84,7 @@
   "menu_export": "Export",
   "menu_export_all": "Export all Files",
   "menu_export_selected": "Export Selected File",
+  "menu_export_selected_type": "Export all Files of Selected Type",
   "menu_language": "Language",
   "menu_about": "About",
   "menu_about_website": "Website",
