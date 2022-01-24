@@ -73,6 +73,7 @@
             <MenuItem Header="{i18n:Localize menu_export}" IsEnabled="{Binding !IsExporting}">
                 <MenuItem Header="{i18n:Localize menu_export_all}" Click="ExportAllClicked" />
                 <MenuItem Header="{i18n:Localize menu_export_selected}" Click="ExportSelectedAssetToProjectClicked" />
+                <MenuItem Header="{i18n:Localize menu_export_selected_type}" Click="ExportSelectedAssetTypeToProjectClicked" />
             </MenuItem>
             
             <!--Language Menu-->

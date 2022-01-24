@@ -1,9 +1,13 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core;
+using AssetRipper.Core.Classes.Sprite;
+using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.GUI.Utils;
 using AssetRipper.Library;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,13 +33,19 @@ namespace AssetRipper.GUI.Managers
 		public static void Export(Ripper ripper, string toRoot, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, onSuccess, onError))
 		{
 			Name = "Background Game Export Thread",
-			IsBackground = true,
+			IsBackground = true
 		}.Start();
 
 		public static void Export(Ripper ripper, string toRoot, IUnityObjectBase asset, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, asset, onSuccess, onError))
 		{
 			Name = "Background Game Export Thread",
-			IsBackground = true,
+			IsBackground = true
+		}.Start();
+
+		public static void Export(Ripper ripper, string toRoot, Type assetType, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, assetType, onSuccess, onError))
+		{
+			Name = "Background Game Export Thread",
+			IsBackground = true
 		}.Start();
 
 		private static void ExportInternal(Ripper ripper, string toRoot, Action onSuccess, Action<Exception> onError)
@@ -58,6 +68,24 @@ namespace AssetRipper.GUI.Managers
 			try
 			{
 				ripper.ExportProject(toRoot, asset);
+			}
+			catch (Exception ex)
+			{
+				onError(ex);
+				return;
+			}
+
+			onSuccess();
+		}
+
+		private static void ExportInternal(Ripper ripper, string toRoot, Type assetType, Action onSuccess, Action<Exception> onError)
+		{
+			try
+			{
+				if (assetType == typeof(Sprite)) // Sprite wont be exported as it's a form of Texture2D
+					assetType = typeof(Texture2D);
+
+				ripper.ExportProject(toRoot, new List<Type> { assetType });
 			}
 			catch (Exception ex)
 			{

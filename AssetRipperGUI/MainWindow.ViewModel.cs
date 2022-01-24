@@ -308,6 +308,48 @@ namespace AssetRipper.GUI
 			});
 		}
 
+		public async void ExportSelectedAssetTypeToProject()
+		{
+			if (_ripper.GameStructure == null || SelectedAsset == null || SelectedAsset.Asset is DummyAssetForLooseResourceFile)
+			{
+				return;
+			}
+
+			OpenFolderDialog openFolderDialog = new();
+
+			string? chosenFolder = await openFolderDialog.ShowAsync(MainWindow.Instance);
+
+			if (string.IsNullOrEmpty(chosenFolder))
+			{
+				return;
+			}
+
+			IsExporting = true;
+			ExportingText = MainWindow.Instance.LocalizationManager["export_deleting_old_files"];
+
+			string exportPath = Path.Combine(chosenFolder, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			_lastExportPath = exportPath;
+
+			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
+
+			Logger.Info(LogCategory.General, $"Removing any files from a previous export...");
+
+			await UIExportManager.PrepareExportDirectory(exportPath);
+			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.Exporter, this);
+
+			UIExportManager.Export(_ripper, exportPath, SelectedAsset.Asset.GetType(), () =>
+			{
+				IsExporting = false;
+				this.ShowPopup(MainWindow.Instance.LocalizationManager["export_complete"], MainWindow.Instance.LocalizationManager["success"]);
+				Logger.Info(LogCategory.General, "Export Complete!");
+			}, error =>
+			{
+				IsExporting = false;
+				Logger.Error(error);
+				this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
+			});
+		}
+
 		//Called from UI
 		public async void ShowOpenFileDialog()
 		{
