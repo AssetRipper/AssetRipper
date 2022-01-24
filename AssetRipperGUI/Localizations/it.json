@@ -132,5 +132,6 @@
     "c_sharp_langage_version_config_7_2": "C# 7.2",
     "c_sharp_langage_version_config_7_3": "C# 7.3",
     "c_sharp_langage_version_config_9_0": "C# 9",
-    "c_sharp_langage_version_config_10_0": "C# 10"
+    "c_sharp_langage_version_config_10_0": "C# 10",
+    "check_log_for_more_details": "Controlla i log per maggiori dettagli"
 }
