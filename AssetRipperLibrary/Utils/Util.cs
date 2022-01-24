@@ -249,7 +249,7 @@ namespace AssetRipper.Library.Utils
 		{
 			foreach (var asset in assets)
 			{
-				asset.AssetInfo.GUID = new UnityGUID(Guid.NewGuid());
+				asset.AssetInfo.GUID = UnityGUID.NewGuid();
 			}
 		}
 		public static void FixScript(IMonoScript script)

@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Utils
 		{
 			foreach (var asset in assets)
 			{
-				asset.AssetInfo.GUID = new UnityGUID(Guid.NewGuid());
+				asset.AssetInfo.GUID = UnityGUID.NewGuid();
 			}
 		}
 
