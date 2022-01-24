@@ -9,8 +9,8 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
+using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Exporters.Textures.Extensions;
-using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.Utils;
 
 namespace AssetRipper.Library.Exporters.Textures
@@ -86,7 +86,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 			int pvrtcBitCount = texture.PVRTCBitCount(true);
 			int astcBlockSize = texture.ASTCBlockSize(true);
-			KTXBaseInternalFormat baseInternalFormat = texture.KTXBaseInternalFormat(true);
+			KTXBaseInternalFormat baseInternalFormat = texture.GetKTXBaseInternalFormat(true);
 
 			DirectBitmap bitmap = ConvertToBitmap(texture.TextureFormat, texture.Width, texture.Height, texture.SerializedFile.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
 

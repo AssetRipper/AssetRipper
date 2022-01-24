@@ -4,7 +4,6 @@ using AssetRipper.Core.Parser.Files;
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using Texture2DDecoder;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -85,7 +84,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			if (data is null) throw new ArgumentNullException(nameof(data));
 			if (data.Length == 0) throw new ArgumentException(nameof(data));
 			Logger.Info("About to unpack normal crunch...");
-			uncompressedBytes = TextureDecoder.UnpackCrunch(data);
+			uncompressedBytes = Texture2DDecoder.TextureDecoder.UnpackCrunch(data);
 			return uncompressedBytes != null;
 		}
 
@@ -94,7 +93,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			if (data is null) throw new ArgumentNullException(nameof(data));
 			if (data.Length == 0) throw new ArgumentException(nameof(data));
 			Logger.Info("About to unpack unity crunch...");
-			uncompressedBytes = TextureDecoder.UnpackUnityCrunch(data);
+			uncompressedBytes = Texture2DDecoder.TextureDecoder.UnpackUnityCrunch(data);
 			return uncompressedBytes != null;
 		}
 	}

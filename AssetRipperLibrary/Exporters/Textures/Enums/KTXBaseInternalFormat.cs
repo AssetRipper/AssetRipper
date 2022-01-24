@@ -1,4 +1,4 @@
-namespace AssetRipper.Library.TextureContainers.KTX
+namespace AssetRipper.Library.Exporters.Textures.Enums
 {
 	public enum KTXBaseInternalFormat : uint
 	{

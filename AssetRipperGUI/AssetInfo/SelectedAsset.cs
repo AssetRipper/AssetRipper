@@ -13,7 +13,7 @@ using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
-using AssetRipper.Library.TextureContainers.KTX;
+using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Utils;
 using Avalonia.Media;
 using LibVLCSharp.Shared;

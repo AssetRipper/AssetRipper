@@ -7,7 +7,7 @@ namespace AssetRipper.Core.Converters.Texture2D
 {
 	public static class Texture2DConverter
 	{
-		public static TextureImporter GenerateTextureImporter(IExportContainer container, AssetRipper.Core.Classes.Texture2D.Texture2D origin)
+		public static TextureImporter GenerateTextureImporter(IExportContainer container, Classes.Texture2D.Texture2D origin)
 		{
 			TextureImporter instance = new TextureImporter(container.ExportLayout);
 			instance.EnableMipMap = origin.MipCount > 1 ? 1 : 0;

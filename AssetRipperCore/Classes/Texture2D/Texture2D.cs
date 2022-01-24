@@ -90,25 +90,6 @@ namespace AssetRipper.Core.Classes.Texture2D
 		/// </summary>
 		public static bool HasStreamData(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
-		public static bool IsSwapBytes(Platform platform, TextureFormat format)
-		{
-			if (platform == Platform.XBox360)
-			{
-				switch (format)
-				{
-					case TextureFormat.ARGB4444:
-					case TextureFormat.RGB565:
-					case TextureFormat.DXT1:
-					case TextureFormat.DXT1Crunched:
-					case TextureFormat.DXT3:
-					case TextureFormat.DXT5:
-					case TextureFormat.DXT5Crunched:
-						return true;
-				}
-			}
-			return false;
-		}
-
 		public virtual TextureImporter GenerateTextureImporter(IExportContainer container)
 		{
 			return Texture2DConverter.GenerateTextureImporter(container, this);
@@ -117,34 +98,6 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public virtual IHVImageFormatImporter GenerateIHVImporter(IExportContainer container)
 		{
 			return Texture2DConverter.GenerateIHVImporter(container, this);
-		}
-
-		public bool CheckAssetIntegrity()
-		{
-			if (HasStreamData(SerializedFile.Version))
-			{
-				return StreamData.CheckIntegrity(SerializedFile);
-			}
-			return true;
-		}
-
-		public byte[] GetImageData()
-		{
-			byte[] data = m_imageData;
-			if (HasStreamData(SerializedFile.Version) && StreamData.IsSet())
-			{
-				data = StreamData.GetContent(SerializedFile) ?? m_imageData;
-			}
-
-			if (IsSwapBytes(SerializedFile.Platform, TextureFormat))
-			{
-				for (int i = 0; i < data.Length; i += 2)
-				{
-					(data[i], data[i + 1]) = (data[i + 1], data[i]);
-				}
-			}
-
-			return data;
 		}
 
 		public override void Read(AssetReader reader)
@@ -227,11 +180,11 @@ namespace AssetRipper.Core.Classes.Texture2D
 				var m_PlatformBlob = reader.ReadByteArray();
 			}
 
-			m_imageData = reader.ReadByteArray();
+			ImageData = reader.ReadByteArray();
 			reader.AlignStream();
 			if (HasStreamData(reader.Version))
 			{
-				StreamData.Read(reader);
+				m_StreamData.Read(reader);
 			}
 		}
 
@@ -294,9 +247,9 @@ namespace AssetRipper.Core.Classes.Texture2D
 		}
 		private byte[] GetExportImageData()
 		{
-			if (CheckAssetIntegrity())
+			if (this.CheckAssetIntegrity())
 			{
-				return GetImageData();
+				return this.GetImageData();
 			}
 
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{this.GetValidName()}' because resources file '{StreamData.Path}' wasn't found");
@@ -314,7 +267,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 						return true;
 					}
 				}
-				return ImageData.Count > 0;
+				return ImageData.Length > 0;
 			}
 		}
 
@@ -330,14 +283,14 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public bool ReadAllowed { get; set; }
 		public bool StreamingMipmaps { get; set; }
 		public int StreamingMipmapsPriority { get; set; }
+		public bool AlphaIsTransparency { get; set; }
 		public int ImageCount { get; set; }
 		public TextureDimension TextureDimension { get; set; }
 		public TextureUsageMode LightmapFormat { get; set; }
 		public ColorSpace ColorSpace { get; set; }
 		public byte[] PlatformBlob { get; set; }
-		public IReadOnlyCollection<byte> ImageData => m_imageData;
-
-		public byte[] ImageDataByteArray => GetImageData();
+		public byte[] ImageData { get; set; }
+		public IStreamingInfo StreamData => m_StreamData;
 
 		public const string Texture2DName = "Texture2D";
 		public const string WidthName = "m_Width";
@@ -362,8 +315,6 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public const string StreamDataName = "m_StreamData";
 
 		public GLTextureSettings TextureSettings;
-		public StreamingInfo StreamData;
-
-		private byte[] m_imageData;
+		private StreamingInfo m_StreamData;
 	}
 }

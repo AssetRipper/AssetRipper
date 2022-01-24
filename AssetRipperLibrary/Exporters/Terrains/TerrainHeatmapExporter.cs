@@ -8,8 +8,8 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
-using AssetRipper.Library.TextureDecoders;
 using AssetRipper.Library.Utils;
+using TextureDecoder.Rgb;
 
 namespace AssetRipper.Library.Exporters.Terrains
 {

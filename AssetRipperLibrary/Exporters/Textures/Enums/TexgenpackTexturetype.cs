@@ -1,4 +1,4 @@
-namespace AssetRipper.Library.Exporters.Textures
+namespace AssetRipper.Library.Exporters.Textures.Enums
 {
 	public enum TexgenpackTexturetype
 	{
