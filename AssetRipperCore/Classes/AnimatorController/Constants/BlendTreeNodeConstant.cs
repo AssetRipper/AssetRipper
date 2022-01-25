@@ -117,7 +117,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		{
 			if (HasBlendData(version))
 			{
-				if (BlendType != BlendTreeType.Simple1D)
+				if (BlendType != BlendTreeType.Simple1D && BlendType != BlendTreeType.Direct)
 				{
 					return Blend2dData.Instance.m_ChildPositionArray[index];
 				}
