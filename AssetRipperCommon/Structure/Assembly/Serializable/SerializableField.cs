@@ -176,7 +176,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 
 						if (count > 1_000_000)
 							Logger.Warning($"Unreasonable count for complex array: {count} for field {etalon.Name} of type {etalon.Type}. Probably means there's a bug in serializable detection. Expecting to deadlock here.");
-						
+
 						IAsset[] structures = new IAsset[count];
 						for (int i = 0; i < count; i++)
 						{
@@ -504,7 +504,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 					IAsset[] structures = (IAsset[])CValue;
 					if (structures.Length > 0 && structures[0] is IDependent)
 					{
-						foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(structures.Cast<IDependent>(), etalon.Name))
+						foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(structures.Cast<IDependent>(), etalon.Name))
 						{
 							yield return asset;
 						}
@@ -515,7 +515,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 					IAsset structure = (IAsset)CValue;
 					if (structure is IDependent dependent)
 					{
-						foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(dependent, etalon.Name))
+						foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(dependent, etalon.Name))
 						{
 							yield return asset;
 						}

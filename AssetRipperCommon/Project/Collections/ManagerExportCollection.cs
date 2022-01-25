@@ -2,7 +2,6 @@
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
 using System;
 using System.IO;
 
@@ -17,7 +16,10 @@ namespace AssetRipper.Core.Project.Collections
 		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			string subPath = Path.Combine(dirPath, ProjectSettingsName);
-			string fileName = $"{Asset.GetType().Name}.asset";
+			string name = Asset.GetType().Name;
+			if (name == "PlayerSettings")
+				name = ProjectSettingsName;
+			string fileName = $"{name}.asset";
 			string filePath = Path.Combine(subPath, fileName);
 
 			Directory.CreateDirectory(subPath);

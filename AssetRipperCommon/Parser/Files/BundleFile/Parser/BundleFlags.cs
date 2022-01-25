@@ -5,11 +5,11 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 	[Flags]
 	public enum BundleFlags
 	{
-		CompressionTypeMask					= 0x3F,
+		CompressionTypeMask = 0x3F,
 
-		BlocksAndDirectoryInfoCombined		= 0x40,
-		BlocksInfoAtTheEnd					= 0x80,
-		OldWebPluginCompatibility			= 0x100,
+		BlocksAndDirectoryInfoCombined = 0x40,
+		BlocksInfoAtTheEnd = 0x80,
+		OldWebPluginCompatibility = 0x100,
 	}
 
 	public static class BundleFlagsExtensions
@@ -18,12 +18,12 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 		{
 			return (CompressionType)(_this & BundleFlags.CompressionTypeMask);
 		}
-		
+
 		public static bool IsBlocksAndDirectoryInfoCombined(this BundleFlags _this)
 		{
 			return (_this & BundleFlags.BlocksAndDirectoryInfoCombined) != 0;
 		}
-		
+
 		public static bool IsBlocksInfoAtTheEnd(this BundleFlags _this)
 		{
 			return (_this & BundleFlags.BlocksInfoAtTheEnd) != 0;

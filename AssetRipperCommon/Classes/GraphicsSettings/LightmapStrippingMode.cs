@@ -2,7 +2,7 @@
 {
 	public enum LightmapStrippingMode
 	{
-		Automatic	= 0,
-		Custom		= 1,
+		Automatic = 0,
+		Custom = 1,
 	}
 }

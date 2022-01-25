@@ -4,8 +4,8 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 {
 	public enum ArmType
 	{
-		LeftHand	= 0,
-		RightHand	= 1,
+		LeftHand = 0,
+		RightHand = 1,
 
 		Last,
 	}

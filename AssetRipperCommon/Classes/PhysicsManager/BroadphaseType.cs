@@ -2,7 +2,7 @@
 {
 	public enum BroadphaseType
 	{
-		SweepAndPruneBroadphase		= 0,
-		MultiboxPruningBroadphase	= 1,
+		SweepAndPruneBroadphase = 0,
+		MultiboxPruningBroadphase = 1,
 	}
 }

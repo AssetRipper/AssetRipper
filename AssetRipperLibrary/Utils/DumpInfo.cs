@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using AssetRipper.Core;
+﻿using AssetRipper.Core;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Shader;
@@ -16,6 +11,10 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Parser.Files.WebFiles;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace AssetRipper.Library.Utils
 {
@@ -111,7 +110,7 @@ namespace AssetRipper.Library.Utils
 			foreach (Core.Interfaces.IUnityObjectBase asset in file.FetchAssets())
 			{
 				string name = Util.GetName(asset);
-				PPtr<Core.Interfaces.IUnityObjectBase> pptr = asset.File.CreatePPtr(asset);
+				PPtr<Core.Interfaces.IUnityObjectBase> pptr = asset.SerializedFile.CreatePPtr(asset);
 				string extra = "";
 				if (asset is IMonoScript ms)
 				{
@@ -366,7 +365,7 @@ namespace AssetRipper.Library.Utils
 				}
 			}
 		}
-		
+
 		internal static void DumpTypeInfo(SerializedFile serializedFile, StreamWriter sw)
 		{
 			foreach (Core.Interfaces.IUnityObjectBase asset in serializedFile.FetchAssets().Where(asset => asset is IMonoScript))
@@ -380,7 +379,7 @@ namespace AssetRipper.Library.Utils
 			sw.WriteLine($"NameOrigin {serializedFile.NameOrigin}");
 			sw.WriteLine($"Platform {serializedFile.Platform}");
 			sw.WriteLine($"Version {serializedFile.Version}");
-			
+
 			sw.WriteLine($"Preloads:");
 			foreach (var ptr in serializedFile.Metadata.Externals)
 			{

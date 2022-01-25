@@ -2,7 +2,7 @@
 {
 	public enum ContactsGeneration
 	{
-		LegacyContactsGeneration	= 0,
-		PersistentContactManifold	= 1,
+		LegacyContactsGeneration = 0,
+		PersistentContactManifold = 1,
 	}
 }

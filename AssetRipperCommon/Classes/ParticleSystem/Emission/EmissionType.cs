@@ -2,7 +2,7 @@
 {
 	public enum EmissionType
 	{
-		Time		= 0,
-		Distance	= 1,
+		Time = 0,
+		Distance = 1,
 	}
 }

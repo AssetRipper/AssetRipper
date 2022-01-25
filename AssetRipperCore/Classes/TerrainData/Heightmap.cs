@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct Heightmap : IAsset, IDependent
+	public struct Heightmap : IAsset, IDependent, IHeightmap
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -118,7 +118,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 
 			Levels = reader.ReadInt32();
-			Scale.Read(reader);
+			m_Scale.Read(reader);
 		}
 
 		public void Write(AssetWriter writer)
@@ -162,7 +162,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 
 			writer.Write(Levels);
-			Scale.Write(writer);
+			m_Scale.Write(writer);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -203,7 +203,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 
 			node.Add(LevelsName, Levels);
-			node.Add(ScaleName, Scale.ExportYAML(container));
+			node.Add(ScaleName, m_Scale.ExportYAML(container));
 			return node;
 		}
 
@@ -231,6 +231,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			set => Width = value;
 		}
 		public int Levels { get; set; }
+		public Vector3f Scale { get; }
 
 		public const string HeightsName = "m_Heights";
 		public const string HolesName = "m_Holes";
@@ -248,6 +249,6 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public const string ScaleName = "m_Scale";
 
 		public PPtr<PhysicMaterial.PhysicMaterial> DefaultPhysicMaterial;
-		public Vector3f Scale;
+		public Vector3f m_Scale;
 	}
 }

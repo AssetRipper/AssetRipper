@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes
 {
@@ -13,7 +12,12 @@ namespace AssetRipper.Core.Classes
 	{
 		public static IGameObject GetGameObject(this IComponent component)
 		{
-			return component.GameObjectPtr.GetAsset(component.File);
+			return component.GameObjectPtr.GetAsset(component.SerializedFile);
+		}
+
+		public static IGameObject TryGetGameObject(this IComponent component)
+		{
+			return component.GameObjectPtr.TryGetAsset(component.SerializedFile);
 		}
 
 		public static IGameObject GetRoot(this IComponent component)

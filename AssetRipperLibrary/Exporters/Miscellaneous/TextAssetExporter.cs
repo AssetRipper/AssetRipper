@@ -1,5 +1,6 @@
 using AssetRipper.Core;
 using AssetRipper.Core.Classes;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -8,6 +9,7 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 
 namespace AssetRipper.Library.Exporters.Miscellaneous
@@ -26,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is ITextAsset textAsset)
-				return !string.IsNullOrEmpty(textAsset.Script);
+				return !textAsset.Script.IsNullOrEmpty();
 			else
 				return false;
 		}
@@ -38,7 +40,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllTextAsync(path, ((ITextAsset)asset).Script, System.Text.Encoding.UTF8));
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).Script));
 			return true;
 		}
 
@@ -58,10 +60,10 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		private static string GetExtension(ITextAsset asset)
 		{
-			string text = asset.Script;
+			string text = asset.ParseWithUTF8();
 			if (IsValidJson(text))
 				return JsonExtension;
-			else if (IsProbablyPlainText(text))
+			else if (IsPlainText(text))
 				return TxtExtension;
 			else
 				return BytesExtension;
@@ -80,7 +82,6 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			return false;
 		}
 
-		private static bool IsProbablyPlainText(string text) => text.Take(32).All(c => !char.IsControl(c) || char.IsWhiteSpace(c));
-		//Note: take returns at most 32 elements, so it's safe to use on smaller strings
+		private static bool IsPlainText(string text) => text.All(c => !char.IsControl(c) || char.IsWhiteSpace(c));
 	}
 }

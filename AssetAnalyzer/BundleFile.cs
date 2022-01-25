@@ -246,7 +246,7 @@ namespace AssetAnalyzer
 						uint uncompressedSize = m_Header.uncompressedBlocksInfoSize;
 						var uncompressedBytes = new byte[uncompressedSize];
 						int bytesWritten = LZ4Codec.Decode(blocksInfoBytes, uncompressedBytes);
-						if(bytesWritten != uncompressedSize)
+						if (bytesWritten != uncompressedSize)
 						{
 							throw new System.Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize}");
 						}

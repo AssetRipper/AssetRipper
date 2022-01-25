@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 		{
 			NameIndex = reader.ReadInt32();
 			Index = reader.ReadInt32();
-			if(HasArraySize(reader.Version))
+			if (HasArraySize(reader.Version))
 			{
 				ArraySize = reader.ReadInt32();
 			}

@@ -269,11 +269,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			}
 
 			yield return context.FetchDependency(MoveWithCustomTransform, MoveWithCustomTransformName);
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(CollisionModule, CollisionModuleName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(CollisionModule, CollisionModuleName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(SubModule, SubModuleName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(SubModule, SubModuleName))
 			{
 				yield return asset;
 			}

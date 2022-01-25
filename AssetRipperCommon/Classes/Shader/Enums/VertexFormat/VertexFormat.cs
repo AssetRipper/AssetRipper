@@ -4,6 +4,10 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 {
+	/// <summary>
+	/// Also called VertexAttributeFormat<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
+	/// </summary>
 	public enum VertexFormat
 	{
 		Float,

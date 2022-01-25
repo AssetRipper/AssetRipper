@@ -1,10 +1,4 @@
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Misc.Serializable;
-using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
-using AssetRipper.Core.Classes.Misc.Serializable.Gradient;
-using AssetRipper.Core.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.VersionHandling;

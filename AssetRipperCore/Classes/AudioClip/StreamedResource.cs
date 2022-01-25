@@ -1,68 +1,37 @@
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.Parser.Files.ResourceFiles;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.AudioClip
 {
-	public struct StreamedResource : IAssetReadable, IYAMLExportable
+	public struct StreamedResource : IStreamedResource
 	{
-		/// <summary>
-		/// 5.0.0f1 and greater
-		/// </summary>
-		public static bool HasSize(UnityVersion version)
-		{
-			// unknown version
-			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
-		}
-
-		public bool CheckIntegrity(ISerializedFile file)
-		{
-			if (!IsSet)
-			{
-				return true;
-			}
-			if (!HasSize(file.Version))
-			{
-				// I think they read data by its type for this verison, so I can't even export raw data :/
-				return false;
-			}
-
-			return file.Collection.FindResourceFile(Source) != null;
-		}
-
-		public byte[] GetContent(ISerializedFile file)
-		{
-			IResourceFile res = file.Collection.FindResourceFile(Source);
-			if (res == null)
-			{
-				return null;
-			}
-			if (Size == 0)
-			{
-				return null;
-			}
-
-			byte[] data = new byte[Size];
-			res.Stream.Position = Offset;
-			res.Stream.ReadBuffer(data, 0, data.Length);
-			return data;
-		}
-
 		public void Read(AssetReader reader)
 		{
 			Source = reader.ReadString();
-			Offset = (long)reader.ReadUInt64();
+			Offset = reader.ReadUInt64();
 			if (HasSize(reader.Version))
 			{
-				Size = (long)reader.ReadUInt64();
+				Size = reader.ReadUInt64();
 			}
 			else
 			{
 				reader.AlignStream();
+			}
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Source);
+			writer.Write(Offset);
+			if (HasSize(writer.Version))
+			{
+				writer.Write(Size);
+			}
+			else
+			{
+				writer.AlignStream();
 			}
 		}
 
@@ -75,11 +44,17 @@ namespace AssetRipper.Core.Classes.AudioClip
 			return node;
 		}
 
-		public bool IsSet => Source != string.Empty;
-
 		public string Source { get; set; }
-		public long Offset { get; set; }
-		public long Size { get; set; }
+		public ulong Offset { get; set; }
+		public ulong Size { get; set; }
+
+		/// <summary>
+		/// 5.0.0f1 and greater (unknown version)
+		/// </summary>
+		public static bool HasSize(UnityVersion version)
+		{
+			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
+		}
 
 		public const string SourceName = "m_Source";
 		public const string OffsetName = "m_Offset";

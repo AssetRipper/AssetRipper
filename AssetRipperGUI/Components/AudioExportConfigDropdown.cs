@@ -13,7 +13,7 @@ namespace AssetRipper.GUI.Components
 			_ => base.GetValueDisplayName(value),
 		};
 
-		protected override string? GetValueDescription(AudioExportFormat value)  => value switch
+		protected override string? GetValueDescription(AudioExportFormat value) => value switch
 		{
 			AudioExportFormat.Native => MainWindow.Instance.LocalizationManager["audio_format_native_description"],
 			AudioExportFormat.Wav => MainWindow.Instance.LocalizationManager["audio_format_force_wav_description"],

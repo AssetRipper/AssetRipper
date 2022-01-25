@@ -2,15 +2,15 @@
 {
 	public enum ZTest
 	{
-		None		= 0,
-		Unknown		= 1,
-		Less		= 2,
-		Equal		= 3,
-		LEqual		= 4,
-		Greater		= 5,
-		NotEqual	= 6,
-		GEqual		= 7,
-		Always		= 8,
+		None = 0,
+		Unknown = 1,
+		Less = 2,
+		Equal = 3,
+		LEqual = 4,
+		Greater = 5,
+		NotEqual = 6,
+		GEqual = 7,
+		Always = 8,
 	}
 
 	public static class ZTestExtensions

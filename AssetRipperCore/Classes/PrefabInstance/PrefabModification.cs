@@ -46,7 +46,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(TransformParent, TransformParentName);
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Modifications, ModificationsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Modifications, ModificationsName))
 			{
 				yield return asset;
 			}

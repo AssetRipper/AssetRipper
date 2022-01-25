@@ -24,29 +24,27 @@ namespace AssetRipper.Library.Exporters.Textures
 			m_convert = convert;
 			if (convert)
 			{
-				foreach (IUnityObjectBase asset in texture.File.Collection.FetchAssetsOfType(ClassIDType.Sprite))
+				foreach (Sprite sprite in texture.SerializedFile.Collection.FetchAssetsOfType<Sprite>())
 				{
-					Sprite sprite = (Sprite)asset;
-					if (sprite.RD.Texture.IsAsset(sprite.File, texture))
+					if (sprite.RD.Texture.IsAsset(sprite.SerializedFile, texture))
 					{
-						SpriteAtlas atlas = Sprite.HasRendererData(sprite.File.Version) ? sprite.SpriteAtlas.FindAsset(sprite.File) : null;
+						SpriteAtlas atlas = Sprite.HasRendererData(sprite.SerializedFile.Version) ? sprite.SpriteAtlas.FindAsset(sprite.SerializedFile) : null;
 						m_sprites.Add(sprite, atlas);
 						AddAsset(sprite);
 					}
 				}
 
-				foreach (IUnityObjectBase asset in texture.File.Collection.FetchAssetsOfType(ClassIDType.SpriteAtlas))
+				foreach (SpriteAtlas atlas in texture.SerializedFile.Collection.FetchAssetsOfType<SpriteAtlas>())
 				{
-					SpriteAtlas atlas = (SpriteAtlas)asset;
 					if (atlas.RenderDataMap.Count > 0)
 					{
 						foreach (PPtr<Sprite> spritePtr in atlas.PackedSprites)
 						{
-							Sprite sprite = spritePtr.FindAsset(atlas.File);
+							Sprite sprite = spritePtr.FindAsset(atlas.SerializedFile);
 							if (sprite != null)
 							{
 								SpriteAtlasData atlasData = atlas.RenderDataMap[sprite.RenderDataKey];
-								if (atlasData.Texture.IsAsset(atlas.File, texture))
+								if (atlasData.Texture.IsAsset(atlas.SerializedFile, texture))
 								{
 									m_sprites.Add(sprite, atlas);
 									AddAsset(sprite);
@@ -60,7 +58,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public static IExportCollection CreateExportCollection(IAssetExporter assetExporter, Sprite asset)
 		{
-			Texture2D texture = asset.RD.Texture.FindAsset(asset.File);
+			Texture2D texture = asset.RD.Texture.FindAsset(asset.SerializedFile);
 			if (texture == null)
 			{
 				return new FailExportCollection(assetExporter, asset);

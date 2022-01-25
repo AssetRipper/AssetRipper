@@ -11,7 +11,7 @@
 		LibVlc,
 		Avalonia,
 		Plugin,
-		VersionHandler,
+		VersionManager,
 
 		None,
 		Debug,

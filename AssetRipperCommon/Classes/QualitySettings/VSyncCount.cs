@@ -2,8 +2,8 @@
 {
 	public enum VSyncCount
 	{
-		DontSync			= 0,
-		EveryVBlank			= 1,
-		EverySecondVBlank	= 2,
+		DontSync = 0,
+		EveryVBlank = 1,
+		EverySecondVBlank = 2,
 	}
 }

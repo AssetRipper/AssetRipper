@@ -33,7 +33,8 @@ namespace AssetRipper.Core.Structure
 
 		public Func<string, string> ResourceCallback;
 
-		private readonly Dictionary<ClassIDType, List<IUnityObjectBase>> _cachedAssetsByType = new();
+		private readonly Dictionary<ClassIDType, List<IUnityObjectBase>> _cachedAssetsByClassID = new();
+		private readonly Dictionary<Type, List<IUnityObjectBase>> _cachedAssetsByType = new();
 
 		public GameCollection(LayoutInfo layout) : base(nameof(GameCollection))
 		{
@@ -119,12 +120,23 @@ namespace AssetRipper.Core.Structure
 
 		public IEnumerable<IUnityObjectBase> FetchAssetsOfType(ClassIDType type)
 		{
-			if (_cachedAssetsByType.TryGetValue(type, out List<IUnityObjectBase> list))
+			if (_cachedAssetsByClassID.TryGetValue(type, out List<IUnityObjectBase> list))
 				return list;
 
 			List<IUnityObjectBase> objects = FetchAssets().Where(o => o.ClassID == type).ToList();
-			_cachedAssetsByType.TryAdd(type, objects);
-			
+			_cachedAssetsByClassID.TryAdd(type, objects);
+
+			return objects;
+		}
+
+		public IEnumerable<IUnityObjectBase> FetchAssetsOfType<T>() where T : IUnityObjectBase
+		{
+			if (_cachedAssetsByType.TryGetValue(typeof(T), out List<IUnityObjectBase> list))
+				return list;
+
+			List<IUnityObjectBase> objects = FetchAssets().Where(o => o is T).ToList();
+			_cachedAssetsByType.TryAdd(typeof(T), objects);
+
 			return objects;
 		}
 
@@ -202,7 +214,7 @@ namespace AssetRipper.Core.Structure
 		{
 			foreach (ObjectInfo entry in file.Metadata.Object)
 			{
-				if (entry.ClassID.IsSceneSettings()) 
+				if (entry.ClassID.IsSceneSettings())
 					return true;
 			}
 			return false;

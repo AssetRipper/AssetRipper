@@ -12,7 +12,7 @@ namespace AssetRipper.GUI.Components
 			_ => base.GetValueDisplayName(value),
 		};
 
-		protected override string? GetValueDescription(TerrainExportMode value)  => value switch
+		protected override string? GetValueDescription(TerrainExportMode value) => value switch
 		{
 			TerrainExportMode.Native => MainWindow.Instance.LocalizationManager["terrain_format_native_description"],
 			TerrainExportMode.Obj => MainWindow.Instance.LocalizationManager["terrain_format_obj_description"],

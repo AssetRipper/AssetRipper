@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Classes.AnimatorOverrideController
 			}
 
 			yield return context.FetchDependency(Controller, ControllerName);
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Clips, ClipsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Clips, ClipsName))
 			{
 				yield return asset;
 			}
@@ -39,16 +39,16 @@ namespace AssetRipper.Core.Classes.AnimatorOverrideController
 		{
 			foreach (AnimationClipOverride overClip in Clips)
 			{
-				if (overClip.OriginalClip.IsAsset(File, clip))
+				if (overClip.OriginalClip.IsAsset(SerializedFile, clip))
 				{
 					return true;
 				}
-				else if (overClip.OverrideClip.IsAsset(File, clip))
+				else if (overClip.OverrideClip.IsAsset(SerializedFile, clip))
 				{
 					return true;
 				}
 			}
-			RuntimeAnimatorController baseController = Controller.FindAsset(File);
+			RuntimeAnimatorController baseController = Controller.FindAsset(SerializedFile);
 			if (baseController != null)
 			{
 				return baseController.IsContainsAnimationClip(clip);

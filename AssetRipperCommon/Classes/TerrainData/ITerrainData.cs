@@ -2,8 +2,8 @@
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	//Not implemented
-	public interface ITerrainData : IUnityObjectBase
+	public interface ITerrainData : IUnityObjectBase, IHasName
 	{
+		IHeightmap Heightmap { get; }
 	}
 }

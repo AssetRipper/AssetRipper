@@ -43,10 +43,10 @@ namespace AssetRipper.Core.Parser.Files
 		#endregion
 
 		#region Properties
-		public static UnityVersion MinVersion => new UnityVersion(0UL);
-		public static UnityVersion MaxVersion => new UnityVersion(ulong.MaxValue);
+		public static UnityVersion MinVersion { get; } = new UnityVersion(0UL);
+		public static UnityVersion MaxVersion { get; } = new UnityVersion(ulong.MaxValue);
 		/// <summary> 2017.3.0f3 </summary>
-		public static UnityVersion DefaultVersion => new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3);
+		public static UnityVersion DefaultVersion { get; } = new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3);
 
 		public int Major => unchecked((int)((m_data >> 48) & 0xFFFFUL));
 		public int Minor => unchecked((int)((m_data >> 40) & 0xFFUL));
@@ -75,11 +75,22 @@ namespace AssetRipper.Core.Parser.Files
 			else return right;
 		}
 
+		public static UnityVersion ParseFromDllName(string dllName)
+		{
+			if (string.IsNullOrEmpty(dllName))
+			{
+				throw new ArgumentNullException(nameof(dllName));
+			}
+			if (dllName[0] == '_')
+				dllName = dllName.Substring(1);
+			return Parse(dllName.Replace('_', '.').Replace(".dll", ""));
+		}
+
 		public static UnityVersion Parse(string version)
 		{
 			if (string.IsNullOrEmpty(version))
 			{
-				throw new Exception($"Invalid version number {version}");
+				throw new ArgumentNullException(nameof(version));
 			}
 
 			int major = 0;
@@ -146,15 +157,19 @@ namespace AssetRipper.Core.Parser.Files
 								versionType = UnityVersionType.Beta;
 								break;
 
-							case 'p':
-								versionType = UnityVersionType.Patch;
+							case 'c':
+								versionType = UnityVersionType.China;
 								break;
 
 							case 'f':
 								versionType = UnityVersionType.Final;
 								break;
 
-							case 'e':
+							case 'p':
+								versionType = UnityVersionType.Patch;
+								break;
+
+							case 'x':
 								versionType = UnityVersionType.Experimental;
 								break;
 
@@ -234,9 +249,9 @@ namespace AssetRipper.Core.Parser.Files
 
 		public override bool Equals(object obj)
 		{
-			if (obj is UnityVersion version) 
+			if (obj is UnityVersion version)
 				return this == version;
-			else 
+			else
 				return false;
 		}
 

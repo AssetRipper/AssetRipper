@@ -57,7 +57,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 		public string Path { get; set; }
 
 		public AnimationCurveTpl<Vector3f> Curve;
-		public const  string CurveName = "curve";
+		public const string CurveName = "curve";
 		public const string PathName = "path";
 	}
 }

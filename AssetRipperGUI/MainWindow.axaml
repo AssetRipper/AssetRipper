@@ -73,6 +73,7 @@
             <MenuItem Header="{i18n:Localize menu_export}" IsEnabled="{Binding !IsExporting}">
                 <MenuItem Header="{i18n:Localize menu_export_all}" Click="ExportAllClicked" />
                 <MenuItem Header="{i18n:Localize menu_export_selected}" Click="ExportSelectedAssetToProjectClicked" />
+                <MenuItem Header="{i18n:Localize menu_export_selected_type}" Click="ExportSelectedAssetTypeToProjectClicked" />
             </MenuItem>
             
             <!--Language Menu-->
@@ -92,7 +93,7 @@
             <MenuItem Header="{i18n:Localize menu_about}">
                 <MenuItem Header="{i18n:Localize menu_about_website}" Command="{Binding WebsiteClicked}" />
                 <MenuItem Header="{i18n:Localize menu_about_github}" Command="{Binding GithubClicked}" />
-                <MenuItem Header="{i18n:Localize menu_about_check_for_update}" Command="{Binding CheckForUpdates}" />
+                <MenuItem Header="{i18n:Localize menu_about_check_for_update}" Command="{Binding CheckForUpdatesUI}" />
                 <MenuItem Header="{i18n:Localize menu_about_translate}" Command="{Binding TranslateClicked}"></MenuItem>
             </MenuItem>
         </Menu>

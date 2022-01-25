@@ -7,6 +7,25 @@ namespace AssetRipper.Core.Classes.EditorSettings
 	/// </summary>
 	public interface IEditorSettings : IUnityObjectBase
 	{
+		string ExternalVersionControlSupport { get; set; }
+		int SerializationMode { get; set; }
+		int SpritePackerPaddingPower { get; set; }
+		int EtcTextureCompressorBehavior { get; set; }
+		int EtcTextureFastCompressor { get; set; }
+		int EtcTextureNormalCompressor { get; set; }
+		int EtcTextureBestCompressor { get; set; }
+		string ProjectGenerationIncludedExtensions { get; set; }
+		string ProjectGenerationRootNamespace { get; set; }
+		string UserGeneratedProjectSuffix { get; set; }
+		bool EnableTextureStreamingInEditMode { get; set; }
+		bool EnableTextureStreamingInPlayMode { get; set; }
+		bool AsyncShaderCompilation { get; set; }
+		int AssetPipelineMode { get; set; }
+		int CacheServerMode { get; set; }
+		string CacheServerEndpoint { get; set; }
+		string CacheServerNamespacePrefix { get; set; }
+		bool CacheServerEnableDownload { get; set; }
+		bool CacheServerEnableUpload { get; set; }
 	}
 
 	public static class IEditorSettingsExtensions
@@ -18,27 +37,25 @@ namespace AssetRipper.Core.Classes.EditorSettings
 
 		public static void SetToDefaults(this IEditorSettings settings)
 		{
-			settings.TrySetFieldValue("m_ExternalVersionControlSupport", VisibleMeta);
-			settings.TrySetFieldValue("m_ExternalVersionControl", 0); //ExternalVersionControl.Disabled
-			settings.TrySetFieldValue("m_SerializationMode", (int)SerializationMode.ForceText);
-			settings.TrySetFieldValue("m_SpritePackerPaddingPower", 1);
-			settings.TrySetFieldValue("m_EtcTextureCompressorBehavior", 1);
-			settings.TrySetFieldValue("m_EtcTextureFastCompressor", 1);
-			settings.TrySetFieldValue("m_EtcTextureNormalCompressor", 2);
-			settings.TrySetFieldValue("m_EtcTextureBestCompressor", 4);
-			settings.TrySetFieldValue("m_ProjectGenerationIncludedExtensions", DefaultExtensions);
-			settings.TrySetFieldValue("m_ProjectGenerationRootNamespace", string.Empty);
-			settings.TrySetFieldValue("m_UserGeneratedProjectSuffix", string.Empty);
-			//settings.TrySetFieldValue("m_", "");//CollabEditorSettings, but I don't think it's necessary
-			settings.TrySetFieldValue("m_EnableTextureStreamingInEditMode", true);
-			settings.TrySetFieldValue("m_EnableTextureStreamingInPlayMode", true);
-			settings.TrySetFieldValue("m_AsyncShaderCompilation", true);
-			settings.TrySetFieldValue("m_AssetPipelineMode", (int)AssetPipelineMode.Version1);
-			settings.TrySetFieldValue("m_CacheServerMode", (int)CacheServerMode.AsPreferences);
-			settings.TrySetFieldValue("m_CacheServerEndpoint", string.Empty);
-			settings.TrySetFieldValue("m_CacheServerNamespacePrefix", "default");
-			settings.TrySetFieldValue("m_CacheServerEnableDownload", false);
-			settings.TrySetFieldValue("m_CacheServerEnableUpload", false);
+			settings.ExternalVersionControlSupport = VisibleMeta;
+			settings.SerializationMode = (int)SerializationMode.ForceText;
+			settings.SpritePackerPaddingPower = 1;
+			settings.EtcTextureCompressorBehavior = 1;
+			settings.EtcTextureFastCompressor = 1;
+			settings.EtcTextureNormalCompressor = 2;
+			settings.EtcTextureBestCompressor = 4;
+			settings.ProjectGenerationIncludedExtensions = DefaultExtensions;
+			settings.ProjectGenerationRootNamespace = string.Empty;
+			settings.UserGeneratedProjectSuffix = string.Empty;
+			settings.EnableTextureStreamingInEditMode = true;
+			settings.EnableTextureStreamingInPlayMode = true;
+			settings.AsyncShaderCompilation = true;
+			settings.AssetPipelineMode = (int)AssetPipelineMode.Version1;
+			settings.CacheServerMode = (int)CacheServerMode.AsPreferences;
+			settings.CacheServerEndpoint = string.Empty;
+			settings.CacheServerNamespacePrefix = "default";
+			settings.CacheServerEnableDownload = false;
+			settings.CacheServerEnableUpload = false;
 		}
 	}
 }

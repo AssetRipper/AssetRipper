@@ -6,14 +6,14 @@ namespace AssetRipper.Core.Classes.AnimationClip
 {
 	public enum HumanoidMuscleType
 	{
-		Motion		= 0,
-		Root		= Motion + 7,
-		Limbs		= Root + 7,
-		Muscles		= Limbs + LimbType.Last * 7,
-		Fingers		= Muscles + MuscleType.Last,
-		TDoFBones	= Fingers + ArmType.Last * FingerType.Last * FingerDoFType.Last,
+		Motion = 0,
+		Root = Motion + 7,
+		Limbs = Root + 7,
+		Muscles = Limbs + LimbType.Last * 7,
+		Fingers = Muscles + MuscleType.Last,
+		TDoFBones = Fingers + ArmType.Last * FingerType.Last * FingerDoFType.Last,
 
-		Last		= TDoFBones + TDoFBoneType.Last * 3,
+		Last = TDoFBones + TDoFBoneType.Last * 3,
 	}
 
 	public static class AnimationMuscleTypeExtensions
@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			MuscleType muscle = (MuscleType)(_this - HumanoidMuscleType.Muscles);
 			MuscleType fixedMuscle = muscle.Update(version);
 			_this = HumanoidMuscleType.Muscles + (int)fixedMuscle;
-			if(_this < HumanoidMuscleType.TDoFBones)
+			if (_this < HumanoidMuscleType.TDoFBones)
 			{
 				return _this;
 			}
@@ -41,7 +41,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		public static string ToAttributeString(this HumanoidMuscleType _this)
 		{
-			if(_this < HumanoidMuscleType.Root)
+			if (_this < HumanoidMuscleType.Root)
 			{
 				int delta = _this - HumanoidMuscleType.Motion;
 				return nameof(HumanoidMuscleType.Motion) + GetTransformPostfix(delta % 7);
@@ -75,7 +75,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				FingerDoFType dof = (FingerDoFType)delta;
 				return $"{arm.ToBoneType().ToAttributeString()}.{finger.ToAttributeString()}.{dof.ToAttributeString()}";
 			}
-			if(_this < HumanoidMuscleType.Last)
+			if (_this < HumanoidMuscleType.Last)
 			{
 				int delta = _this - HumanoidMuscleType.TDoFBones;
 				TDoFBoneType tdof = (TDoFBoneType)(delta / 3);
@@ -86,7 +86,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		private static string GetTransformPostfix(int index)
 		{
-			switch(index)
+			switch (index)
 			{
 				case 0:
 					return "T.x";

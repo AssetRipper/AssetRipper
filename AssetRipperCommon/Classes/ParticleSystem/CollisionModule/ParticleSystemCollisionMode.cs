@@ -8,10 +8,10 @@
 		/// <summary>
 		/// Use 3D colliders to collide particles against.
 		/// </summary>
-		Collision3D		= 0,
+		Collision3D = 0,
 		/// <summary>
 		/// Use 2D colliders to collide particles against.
 		/// </summary>
-		Collision2D		= 1,
+		Collision2D = 1,
 	}
 }

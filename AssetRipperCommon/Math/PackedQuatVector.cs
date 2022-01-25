@@ -3,6 +3,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
+using System;
 
 namespace AssetRipper.Core.Math
 {
@@ -13,6 +14,11 @@ namespace AssetRipper.Core.Math
 
 		public uint m_NumItems;
 		public byte[] m_Data;
+
+		public static PackedQuatVector Pack(Quaternionf[] values)
+		{
+			throw new NotImplementedException();
+		}
 
 		public Quaternionf[] Unpack()
 		{
@@ -43,7 +49,7 @@ namespace AssetRipper.Core.Math
 				{
 					if ((flags & 3) != j)
 					{
-						int bitSize = ((flags & 3) + 1) % 4 == j ? 9 : 10;
+						int bitSize = ((flags + 1) & 3) == j ? 9 : 10;
 						float halfMaxValue = 0.5f * ((1 << bitSize) - 1);
 
 						int value = 0;
@@ -85,7 +91,7 @@ namespace AssetRipper.Core.Math
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YAMLNode ExportYAML(IExportContainer _)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(NumItemsName, m_NumItems);

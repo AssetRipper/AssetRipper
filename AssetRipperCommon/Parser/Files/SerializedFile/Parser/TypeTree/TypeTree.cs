@@ -40,7 +40,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			{
 				writer.Write(Nodes.Count);
 				writer.Write(StringBuffer.Length);
-				foreach(var node in Nodes)
+				foreach (var node in Nodes)
 				{
 					node.Write(writer);
 				}

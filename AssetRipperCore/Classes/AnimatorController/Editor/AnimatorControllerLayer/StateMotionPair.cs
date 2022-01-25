@@ -18,8 +18,8 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 			{
 				throw new ArgumentNullException(nameof(motion));
 			}
-			State = state.File.CreatePPtr(state);
-			Motion = motion.File.CreatePPtr(motion);
+			State = state.SerializedFile.CreatePPtr(state);
+			Motion = motion.SerializedFile.CreatePPtr(motion);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

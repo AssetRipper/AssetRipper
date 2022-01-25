@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Project.Exporters
 			sb.AppendLine("Raw export currently has issues. Dumping instead...");
 			sb.AppendLine();
 			sb.AppendLine("Asset Information:");
-			if(asset is IHasName hasName)
+			if (asset is IHasName hasName)
 			{
 				sb.AppendLine($"Name: {hasName.Name}");
 			}
@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Project.Exporters
 			sb.AppendLine($"Unity Version: {asset.AssetUnityVersion}");
 			sb.AppendLine($"Endianess: {asset.EndianType}");
 			sb.AppendLine($"GUID: {asset.GUID}");
-			sb.AppendLine($"File: {asset.File.Name}");
+			sb.AppendLine($"File: {asset.SerializedFile.Name}");
 			sb.AppendLine($"Path ID: {asset.PathID}");
 			sb.AppendLine();
 			sb.AppendLine("Container Information:");

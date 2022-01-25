@@ -3,6 +3,7 @@ using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Camera;
 using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Light;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Renderer;
 using AssetRipper.Core.Classes.SpriteRenderer;
 using AssetRipper.Core.Layout;
@@ -51,7 +52,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 							{
 								continue;
 							}
-							AssetRipper.Core.Classes.Mesh.Mesh mesh = skin.Mesh.FindAsset(skin.File);
+							AssetRipper.Core.Classes.Mesh.Mesh mesh = skin.Mesh.FindAsset(skin.SerializedFile);
 							if (mesh == null)
 							{
 								continue;
@@ -530,8 +531,12 @@ namespace AssetRipper.Core.Converters.AnimationClip
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
+#warning TODO: Find the actual name of this custom type and implement its attribute names
+				case BindingCustomType.Unknown38:
+					return "Unknown38_" + attribute;
+
 				default:
-					throw new ArgumentException(type.ToString());
+					throw new ArgumentException($"Binding type {type} not implemented", nameof(type));
 			}
 		}
 
@@ -548,7 +553,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 			}
 		}
 
-		private UnityVersion Version => m_clip.File.Version;
+		private UnityVersion Version => m_clip.SerializedFile.Version;
 
 		private readonly AssetRipper.Core.Classes.AnimationClip.AnimationClip m_clip = null;
 

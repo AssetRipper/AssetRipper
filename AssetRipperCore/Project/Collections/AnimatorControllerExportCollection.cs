@@ -88,7 +88,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			foreach (PPtr<MonoBehaviour> pbehaviour in behaviours)
 			{
-				MonoBehaviour behaviour = pbehaviour.FindAsset(asset.File);
+				MonoBehaviour behaviour = pbehaviour.FindAsset(asset.SerializedFile);
 				if (behaviour != null)
 				{
 #warning HACK: skip duplicates. remove it when AnimatorStateMachine's child StateMachines has been implemented

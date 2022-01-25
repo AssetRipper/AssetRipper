@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono.Extensions
 
 		static bool initialized;
 		static FieldInfo etypeFieldInfo;
-		
+
 		private static void Initialize()
 		{
 			etypeFieldInfo = typeof(TypeReference).GetField("etype", BindingFlags.NonPublic | BindingFlags.Instance);

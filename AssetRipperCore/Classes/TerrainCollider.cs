@@ -63,7 +63,7 @@ namespace AssetRipper.Core.Classes
 
 		public PPtr<TerrainData.TerrainData> TerrainData;
 
-		protected override bool IncludesMaterial => HasTerrainMaterial(File.Version);
+		protected override bool IncludesMaterial => HasTerrainMaterial(SerializedFile.Version);
 		protected override bool IncludesIsTrigger => false;
 	}
 }

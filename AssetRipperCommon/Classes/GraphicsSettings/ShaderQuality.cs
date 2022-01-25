@@ -8,14 +8,14 @@
 		/// <summary>
 		/// Low quality shader preset.
 		/// </summary>
-		Low			= 0,
+		Low = 0,
 		/// <summary>
 		/// Medium quality shader preset.
 		/// </summary>
-		Medium		= 1,
+		Medium = 1,
 		/// <summary>
 		/// High quality shader preset.
 		/// </summary>
-		High		= 2,
+		High = 2,
 	}
 }

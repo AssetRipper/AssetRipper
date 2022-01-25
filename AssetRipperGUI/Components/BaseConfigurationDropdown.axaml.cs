@@ -14,19 +14,19 @@ namespace AssetRipper.GUI.Components
 		private ItemWrapper? _selectedValue;
 		private string? _selectedValueDesc;
 
-		public static DirectProperty<BaseConfigurationDropdown<T>, List<ItemWrapper>> ValuesProperty = 
+		public static DirectProperty<BaseConfigurationDropdown<T>, List<ItemWrapper>> ValuesProperty =
 			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, List<ItemWrapper>>(nameof(Values), obj => obj.Values);
-		
-		public static DirectProperty<BaseConfigurationDropdown<T>, ItemWrapper> RawSelectedValueProperty = 
+
+		public static DirectProperty<BaseConfigurationDropdown<T>, ItemWrapper> RawSelectedValueProperty =
 			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, ItemWrapper>(nameof(RawSelectedValue), obj => obj.RawSelectedValue, (obj, val) => obj.RawSelectedValue = val);
-		
-		public static DirectProperty<BaseConfigurationDropdown<T>, T> SelectedValueProperty = 
+
+		public static DirectProperty<BaseConfigurationDropdown<T>, T> SelectedValueProperty =
 			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, T>(nameof(SelectedValue), obj => obj.SelectedValue, (obj, val) => obj.SelectedValue = val);
-		
-		public static DirectProperty<BaseConfigurationDropdown<T>, string> OptionTitleProperty = 
+
+		public static DirectProperty<BaseConfigurationDropdown<T>, string> OptionTitleProperty =
 			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, string>(nameof(OptionTitle), obj => obj.OptionTitle, (obj, val) => obj.OptionTitle = val);
-		
-		public static DirectProperty<BaseConfigurationDropdown<T>, string?> SelectedValueDescriptionProperty = 
+
+		public static DirectProperty<BaseConfigurationDropdown<T>, string?> SelectedValueDescriptionProperty =
 			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, string?>(nameof(SelectedValueDescription), obj => obj.SelectedValueDescription, (obj, val) => obj.SelectedValueDescription = val);
 
 		public List<ItemWrapper> Values { get; }
@@ -68,7 +68,7 @@ namespace AssetRipper.GUI.Components
 				RaisePropertyChanged(SelectedValueDescriptionProperty, oldValue, value);
 			}
 		}
-		
+
 		public T SelectedValue
 		{
 			get => RawSelectedValue.Item;
@@ -85,7 +85,7 @@ namespace AssetRipper.GUI.Components
 				//Reload all localized strings
 				Values.ForEach(v => v.DisplayName = GetValueDisplayName(v.Item));
 				RaisePropertyChanged(ValuesProperty, Optional<List<ItemWrapper>>.Empty, Values);
-				
+
 				RawSelectedValue = new(RawSelectedValue.Item, GetValueDisplayName(RawSelectedValue.Item));
 			};
 		}
@@ -93,7 +93,7 @@ namespace AssetRipper.GUI.Components
 		private void InitializeComponent()
 		{
 			Content = AvaloniaXamlLoader.Load(new Uri("avares://AssetRipper/Components/BaseConfigurationDropdown.axaml"));
-			((UserControl) Content).DataContext = this;
+			((UserControl)Content).DataContext = this;
 		}
 
 		protected virtual string GetValueDisplayName(T value) => Enum.GetName(typeof(T), value) ?? throw new($"Value {value} is not defined in the enum {typeof(T)}, but has ended up in a dropdown?");

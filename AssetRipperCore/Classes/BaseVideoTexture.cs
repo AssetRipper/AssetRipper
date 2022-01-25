@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes
 			reader.AlignStream();
 
 			AudioClip.Read(reader);
-			MovieData = reader.ReadByteArray();
+			m_MovieData = reader.ReadByteArray();
 			reader.AlignStream();
 
 			ColorSpace = (ColorSpace)reader.ReadInt32();
@@ -43,7 +43,7 @@ namespace AssetRipper.Core.Classes
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(LoopName, IsLoop);
 			node.Add(AudioClipName, AudioClip.ExportYAML(container));
-			node.Add(MovieDataName, MovieData.ExportYAML());
+			node.Add(MovieDataName, m_MovieData.ExportYAML());
 			node.Add(ColorSpaceName, (int)ColorSpace);
 			return node;
 		}
@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Classes
 		}
 
 		public bool IsLoop { get; set; }
-		public byte[] MovieData { get; set; }
+		public byte[] m_MovieData { get; set; }
 		public ColorSpace ColorSpace { get; set; }
 
 		public const string LoopName = "m_Loop";

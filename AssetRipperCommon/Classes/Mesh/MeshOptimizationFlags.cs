@@ -11,14 +11,14 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Optimize the order of polygons in the mesh to make better use of the GPUs internal caches to improve rendering performance
 		/// </summary>
-		PolygonOrder	= 1,
+		PolygonOrder = 1,
 		/// <summary>
 		/// Optimize the order of vertices in the mesh to make better use of the GPUs internal caches to improve rendering performance
 		/// </summary>
-		VertexOrder		= 2,
+		VertexOrder = 2,
 		/// <summary>
 		/// Perform maximum optimization of the mesh data, enables all optimization options
 		/// </summary>
-		Everything		= -1,
+		Everything = -1,
 	}
 }

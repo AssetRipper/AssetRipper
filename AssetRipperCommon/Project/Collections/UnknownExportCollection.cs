@@ -4,7 +4,6 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +21,7 @@ namespace AssetRipper.Core.Project.Collections
 			AssetExporter = exporter;
 		}
 
-		public override ISerializedFile File => Asset.File;
+		public override ISerializedFile File => Asset.SerializedFile;
 
 		public override TransferInstructionFlags Flags => Asset.TransferInstructionFlags;
 

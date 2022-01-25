@@ -30,6 +30,7 @@ using AssetRipper.Library.Exporters.TypeTrees;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace AssetRipper.Library
@@ -41,13 +42,19 @@ namespace AssetRipper.Library
 			VersionManager.LegacyHandler = new LegacyHandler();
 		}
 
-		public Ripper() => LoadPlugins();
+		public Ripper() : this(new()) { }
+
+		public Ripper(LibraryConfiguration configuration)
+		{
+			Settings = configuration;
+			LoadPlugins();
+		}
 
 		public GameStructure GameStructure { get; private set; }
 		/// <summary>
 		/// Needs to be set before loading assets to ensure predictable behavior
 		/// </summary>
-		public LibraryConfiguration Settings { get; } = new();
+		public LibraryConfiguration Settings { get; }
 		private bool ExportersInitialized { get; set; }
 		private List<IPostExporter> PostExporters { get; } = new();
 
@@ -63,23 +70,23 @@ namespace AssetRipper.Library
 			string pluginsDirectory = ExecutingDirectory.Combine("Plugins");
 			Directory.CreateDirectory(pluginsDirectory);
 			List<Type> pluginTypes = new();
-			foreach(string dllFile in Directory.GetFiles(pluginsDirectory, "*.dll"))
+			foreach (string dllFile in Directory.GetFiles(pluginsDirectory, "*.dll"))
 			{
 				try
 				{
 					Logger.Info(LogCategory.Plugin, $"Found assembly at {dllFile}");
 					Assembly assembly = Assembly.LoadFile(dllFile);
-					foreach(RegisterPluginAttribute pluginAttr in assembly.GetCustomAttributes<RegisterPluginAttribute>())
+					foreach (RegisterPluginAttribute pluginAttr in assembly.GetCustomAttributes<RegisterPluginAttribute>())
 					{
 						pluginTypes.Add(pluginAttr.PluginType);
 					}
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					Logger.Error(LogCategory.Plugin, $"Exception thrown while loading plugin assembly: {dllFile}", ex);
 				}
 			}
-			foreach(Type type in pluginTypes)
+			foreach (Type type in pluginTypes)
 			{
 				try
 				{
@@ -99,7 +106,7 @@ namespace AssetRipper.Library
 		public GameStructure Load(IReadOnlyList<string> paths)
 		{
 			ResetData();
-			if(paths.Count == 1)
+			if (paths.Count == 1)
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths[0]}");
 			else
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths.Count} paths...");
@@ -122,17 +129,17 @@ namespace AssetRipper.Library
 			return GameStructure.FileCollection.FetchAssets();
 		}
 
-		public void ExportFile(string exportPath, IUnityObjectBase asset) => throw new NotImplementedException();
-		public void ExportFile(string exportPath, IEnumerable<IUnityObjectBase> assets) => throw new NotImplementedException();
-
-		public void ExportProject(string exportPath) => ExportProject(exportPath, Array.Empty<IUnityObjectBase>());
+		public void ExportProject(string exportPath) => ExportProject(exportPath, LibraryConfiguration.DefaultFilter);
 		public void ExportProject(string exportPath, IUnityObjectBase asset) => ExportProject(exportPath, new IUnityObjectBase[] { asset });
-		public void ExportProject(string exportPath, IEnumerable<IUnityObjectBase> assets)
+		public void ExportProject(string exportPath, IEnumerable<IUnityObjectBase> assets) => ExportProject(exportPath, GetFilter(assets));
+		public void ExportProject<T>(string exportPath) => ExportProject(exportPath, GetFilter<T>());
+		public void ExportProject(string exportPath, Type type) => ExportProject(exportPath, GetFilter(type));
+		public void ExportProject(string exportPath, IEnumerable<Type> types) => ExportProject(exportPath, GetFilter(types));
+		private void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			List<IUnityObjectBase> list = new(assets ?? Array.Empty<IUnityObjectBase>());
 			Settings.ExportPath = exportPath;
-			Settings.Filter = list.Count == 0 ? LibraryConfiguration.DefaultFilter : GetFilter(list);
+			Settings.Filter = filter;
 			InitializeExporters();
 			TaskManager.WaitUntilAllCompleted();
 
@@ -166,10 +173,27 @@ namespace AssetRipper.Library
 
 		public void ResetSettings() => Settings.ResetToDefaultValues();
 
-		private static Func<IUnityObjectBase, bool> GetFilter(List<IUnityObjectBase> assets)
+		private static Func<IUnityObjectBase, bool> GetFilter(IEnumerable<IUnityObjectBase> assets)
 		{
-			if (assets == null) throw new ArgumentNullException(nameof(assets));
-			return assets.Contains;
+			if (assets == null || !assets.Any())
+				return LibraryConfiguration.DefaultFilter;
+			else
+				return assets.Contains;
+		}
+		private static Func<IUnityObjectBase, bool> GetFilter<T>()
+		{
+			return asset => asset is T;
+		}
+		private static Func<IUnityObjectBase, bool> GetFilter(Type type)
+		{
+			return asset => asset.GetType().IsAssignableTo(type);
+		}
+		private static Func<IUnityObjectBase, bool> GetFilter(IEnumerable<Type> types)
+		{
+			if (types == null || !types.Any())
+				return LibraryConfiguration.DefaultFilter;
+			else
+				return asset => types.Any(t => asset.GetType().IsAssignableTo(t));
 		}
 
 		private void InitializeExporters()

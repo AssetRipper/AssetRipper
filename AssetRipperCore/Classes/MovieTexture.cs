@@ -11,7 +11,11 @@ namespace AssetRipper.Core.Classes
 {
 	public sealed class MovieTexture : BaseVideoTexture, IMovieTexture
 	{
-		public byte[] RawData => MovieData;
+		public byte[] MovieData
+		{
+			get => m_MovieData;
+			set => m_MovieData = value;
+		}
 
 		public MovieTexture(AssetInfo assetInfo) : base(assetInfo) { }
 

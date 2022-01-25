@@ -12,7 +12,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 			Logger.Info(LogCategory.Export, "Saving game assemblies...");
 			AssemblyDefinition[] assemblies = ripper.GameStructure.FileCollection.AssemblyManager.GetAssemblies();
-			if(assemblies.Length != 0)
+			if (assemblies.Length != 0)
 			{
 				Directory.CreateDirectory(outputDirectory);
 				foreach (var assembly in assemblies)

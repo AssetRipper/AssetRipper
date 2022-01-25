@@ -10,9 +10,5 @@ namespace AssetRipper.Core.Interfaces
 		UnityVersion AssetUnityVersion { get; set; }
 		EndianType EndianType { get; set; }
 		TransferInstructionFlags TransferInstructionFlags { get; set; }
-
-		object TryGetFieldValue(string fieldName);
-		T TryGetFieldValue<T>(string fieldName);
-		bool TrySetFieldValue<T>(string fieldName, T value);
 	}
 }

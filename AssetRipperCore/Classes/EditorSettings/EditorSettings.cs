@@ -3,7 +3,6 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
@@ -19,7 +18,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		private EditorSettings(AssetInfo assetInfo, bool _) : base(assetInfo)
 		{
 			ExternalVersionControlSupport = VisibleMeta;
-			SerializationMode = SerializationMode.ForceText;
+			SerializationMode = (int)Classes.EditorSettings.SerializationMode.ForceText;
 			SpritePackerPaddingPower = 1;
 			EtcTextureCompressorBehavior = 1;
 			EtcTextureFastCompressor = 1;
@@ -32,8 +31,8 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			EnableTextureStreamingInEditMode = true;
 			EnableTextureStreamingInPlayMode = true;
 			AsyncShaderCompilation = true;
-			AssetPipelineMode = AssetPipelineMode.Version1;
-			CacheServerMode = CacheServerMode.AsPreferences;
+			AssetPipelineMode = (int)Classes.EditorSettings.AssetPipelineMode.Version1;
+			CacheServerMode = (int)Classes.EditorSettings.CacheServerMode.AsPreferences;
 			CacheServerEndpoint = string.Empty;
 			CacheServerNamespacePrefix = "default";
 			CacheServerEnableDownload = false;
@@ -253,7 +252,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			}
 			if (HasSerializationMode(reader.Version))
 			{
-				SerializationMode = (SerializationMode)reader.ReadInt32();
+				SerializationMode = reader.ReadInt32();
 			}
 			if (HasWebSecurityEmulationEnabled(reader.Version))
 			{
@@ -373,14 +372,14 @@ namespace AssetRipper.Core.Classes.EditorSettings
 
 			if (HasAssetPipelineMode(reader.Version))
 			{
-				AssetPipelineMode = (AssetPipelineMode)reader.ReadInt32();
+				AssetPipelineMode = reader.ReadInt32();
 
 				if (HasRefreshImportMode(reader.Version))
 				{
 					reader.ReadInt32();
 				}
 
-				CacheServerMode = (CacheServerMode)reader.ReadInt32();
+				CacheServerMode = reader.ReadInt32();
 				CacheServerEndpoint = reader.ReadString();
 				CacheServerNamespacePrefix = reader.ReadString();
 				CacheServerEnableDownload = reader.ReadBoolean();
@@ -545,16 +544,16 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			return HasAssetPipelineMode(version) ? CacheServerNamespacePrefix : "default";
 		}
 		#endregion
-		
+
 		public string ExternalVersionControlSupport
 		{
 			get => m_ExternalVersionControlSupport;
 			set => m_ExternalVersionControlSupport = value;
 		}
-		public SerializationMode SerializationMode
+		public int SerializationMode
 		{
-			get => (SerializationMode)m_SerializationMode;
-			set => m_SerializationMode = (int)value;
+			get => (int)m_SerializationMode;
+			set => m_SerializationMode = (SerializationMode)value;
 		}
 		public int WebSecurityEmulationEnabled { get; set; }
 		public string WebSecurityEmulationHostUrl { get; set; }
@@ -583,8 +582,8 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		public int UseLegacyProbeSampleCount { get; set; }
 		public bool SerializeInlineMappingsOnOneLine { get; set; }
 		public bool DisableCookiesInLightmapper { get; set; }
-		public AssetPipelineMode AssetPipelineMode { get => (AssetPipelineMode)m_AssetPipelineMode; set => m_AssetPipelineMode = (int)value; }
-		public CacheServerMode CacheServerMode { get => (CacheServerMode)m_CacheServerMode; set => m_CacheServerMode = (int)value; }
+		public int AssetPipelineMode { get => (int)m_AssetPipelineMode; set => m_AssetPipelineMode = (AssetPipelineMode)value; }
+		public int CacheServerMode { get => (int)m_CacheServerMode; set => m_CacheServerMode = (CacheServerMode)value; }
 		public string CacheServerEndpoint { get => m_CacheServerEndpoint; set => m_CacheServerEndpoint = value; }
 		public string CacheServerNamespacePrefix { get => m_CacheServerNamespacePrefix; set => m_CacheServerNamespacePrefix = value; }
 		public bool CacheServerEnableDownload { get => m_CacheServerEnableDownload; set => m_CacheServerEnableDownload = value; }
@@ -639,13 +638,13 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		private bool m_EnableTextureStreamingInEditMode;
 		private bool m_EnableTextureStreamingInPlayMode;
 		private bool m_AsyncShaderCompilation;
-		private int m_AssetPipelineMode;
-		private int m_CacheServerMode;
+		private AssetPipelineMode m_AssetPipelineMode;
+		private CacheServerMode m_CacheServerMode;
 		private string m_CacheServerEndpoint;
 		private string m_CacheServerNamespacePrefix;
 		private bool m_CacheServerEnableDownload;
 		private bool m_CacheServerEnableUpload;
-		private int m_SerializationMode;
+		private SerializationMode m_SerializationMode;
 		private int m_SpritePackerPaddingPower;
 		private string m_ExternalVersionControlSupport;
 		private const string DefaultExtensions = "txt;xml;fnt;cd;asmdef;rsp";

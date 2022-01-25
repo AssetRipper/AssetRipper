@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 	/// 5.5.0 - SceneSettings has been renamed to OcclusionCullingSettings
 	/// 4.0.0 - Scene has been renamed to SceneSettings
 	/// </summary>
-	public sealed class OcclusionCullingSettings : LevelGameManager, ISceneSettings
+	public sealed class OcclusionCullingSettings : LevelGameManager, IOcclusionCullingSettings
 	{
 		public OcclusionCullingSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -115,11 +115,11 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			}
 			if (HasStaticRenderers(reader.Version, reader.Flags))
 			{
-				StaticRenderers = reader.ReadAssetArray<PPtr<Renderer.Renderer>>();
+				StaticRenderers = reader.ReadAssetArray<PPtr<Renderer.IRenderer>>();
 			}
 			if (HasPortals(reader.Version, reader.Flags))
 			{
-				Portals = reader.ReadAssetArray<PPtr<OcclusionPortal>>();
+				Portals = reader.ReadAssetArray<PPtr<IOcclusionPortal>>();
 			}
 			if (HasViewCellSize(reader.Version, reader.Flags))
 			{
@@ -189,7 +189,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 				return m_SceneGUID;
 			}
 		}
-		private PPtr<OcclusionCullingData.OcclusionCullingData> GetExportOcclusionCullingData(IExportContainer container)
+		private PPtr<OcclusionCullingData.IOcclusionCullingData> GetExportOcclusionCullingData(IExportContainer container)
 		{
 			if (HasReadPVSData(container.Version))
 			{
@@ -198,7 +198,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 				{
 					return default;
 				}
-				return scene.OcclusionCullingData.File.CreatePPtr(scene.OcclusionCullingData);
+				return scene.OcclusionCullingData.SerializedFile.CreatePPtr(scene.OcclusionCullingData);
 			}
 			if (HasSceneGUID(container.Version))
 			{
@@ -207,14 +207,18 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			return default;
 		}
 
-		public UnityGUID SceneGUID { get; }
+		public UnityGUID SceneGUID
+		{
+			get => m_SceneGUID;
+			set => m_SceneGUID = value;
+		}
 
 		public byte[] PVSData { get; set; }
 		public int QueryMode { get; set; }
 		/// <summary>
 		/// PVSObjectsArray/m_PVSObjectsArray previously
 		/// </summary>
-		public PPtr<Renderer.Renderer>[] StaticRenderers { get; set; }
+		public PPtr<Renderer.IRenderer>[] StaticRenderers { get; set; }
 		public float ViewCellSize
 		{
 			get => OcclusionBakeSettings.ViewCellSize;
@@ -223,11 +227,13 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 		/// <summary>
 		/// PVSPortalsArray previously
 		/// </summary>
-		public PPtr<OcclusionPortal>[] Portals { get; set; }
+		public PPtr<IOcclusionPortal>[] Portals { get; set; }
 
 		public OcclusionBakeSettings OcclusionBakeSettings;
 		public UnityGUID m_SceneGUID;
-		public PPtr<OcclusionCullingData.OcclusionCullingData> m_OcclusionCullingData;
+		public PPtr<OcclusionCullingData.IOcclusionCullingData> m_OcclusionCullingData;
+
+		public PPtr<OcclusionCullingData.IOcclusionCullingData> OcclusionCullingData => m_OcclusionCullingData;
 
 		public const string SceneKeyword = nameof(ClassIDType.Scene);
 

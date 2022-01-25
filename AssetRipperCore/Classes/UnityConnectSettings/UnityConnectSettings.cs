@@ -63,7 +63,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		{
 			if (version.IsGreaterEqual(2021))
 				return version.IsGreaterEqual(2021, 1, 0, UnityVersionType.Final);
-			
+
 			return version.IsGreaterEqual(2020, 3, 5);
 		}
 

@@ -24,12 +24,12 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public SerializedShaderFloatValue BlendOpAlpha;
 		public SerializedShaderFloatValue ColMask;
 
-		public BlendFactor SrcBlendValue => (BlendFactor)SrcBlend.Val;
-		public BlendFactor DestBlendValue => (BlendFactor)DestBlend.Val;
-		public BlendFactor SrcBlendAlphaValue => (BlendFactor)SrcBlendAlpha.Val;
-		public BlendFactor DestBlendAlphaValue => (BlendFactor)DestBlendAlpha.Val;
+		public BlendMode SrcBlendValue => (BlendMode)SrcBlend.Val;
+		public BlendMode DestBlendValue => (BlendMode)DestBlend.Val;
+		public BlendMode SrcBlendAlphaValue => (BlendMode)SrcBlendAlpha.Val;
+		public BlendMode DestBlendAlphaValue => (BlendMode)DestBlendAlpha.Val;
 		public BlendOp BlendOpValue => (BlendOp)BlendOp.Val;
 		public BlendOp BlendOpAlphaValue => (BlendOp)BlendOpAlpha.Val;
-		public ColorMask ColMaskValue => (ColorMask)ColMask.Val;
+		public ColorWriteMask ColMaskValue => (ColorWriteMask)ColMask.Val;
 	}
 }

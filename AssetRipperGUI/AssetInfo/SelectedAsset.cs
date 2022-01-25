@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Classes.GameObject;
+using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Extensions;
@@ -12,7 +13,7 @@ using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
-using AssetRipper.Library.TextureContainers.KTX;
+using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Utils;
 using Avalonia.Media;
 using LibVLCSharp.Shared;
@@ -20,14 +21,13 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading;
-using Shader = AssetRipper.Core.Classes.Shader.Shader;
 
 namespace AssetRipper.GUI.AssetInfo
 {
 	public sealed class SelectedAsset : BaseViewModel, IDisposable
 	{
 		private static readonly LibVLC? LibVlc;
-		
+
 		public IUnityObjectBase Asset { get; }
 		private readonly IExportContainer? _uiAssetContainer;
 
@@ -75,11 +75,11 @@ namespace AssetRipper.GUI.AssetInfo
 
 			BuildYamlTree();
 
-			if (asset is AudioClip clip && LibVlc != null)
+			if (asset is IAudioClip clip && LibVlc != null)
 			{
 				DateTime start = DateTime.Now;
 				bool success = AudioClipDecoder.TryGetDecodedAudioClipData(clip, out byte[] rawClipAudioData, out string _);
-				if(!success || rawClipAudioData == null)
+				if (!success || rawClipAudioData == null)
 				{
 					//Unsupported sound type
 					return;
@@ -89,7 +89,7 @@ namespace AssetRipper.GUI.AssetInfo
 
 				_media = new(LibVlc, new StreamMediaInput(_audioStream));
 				_mediaPlayer = new(_media);
-				
+
 				_mediaPlayer.LengthChanged += (_, e) => AudioLengthSeconds = e.Length / 1000f;
 				_mediaPlayer.PositionChanged += (_, e) => AudioPositionSeconds = e.Position * AudioLengthSeconds;
 				_mediaPlayer.EndReached += (_, _) => ThreadPool.QueueUserWorkItem(_ => _mediaPlayer.Stop());
@@ -114,7 +114,7 @@ namespace AssetRipper.GUI.AssetInfo
 			catch (Exception e)
 			{
 				YamlTreeIsSupported = false;
-				
+
 				if (e is NotImplementedException or NotSupportedException)
 				{
 					YamlTree = new[] { new AssetYamlNode("Asset Doesn't Support YAML Export", new YAMLScalarNode(true)) };
@@ -129,10 +129,10 @@ namespace AssetRipper.GUI.AssetInfo
 		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", YAMLScalarNode.Empty) };
 
 		//Read from UI
-		public bool HasImageData => Asset is IHasImageData or TerrainData;
+		public bool HasImageData => Asset is IHasImageData or ITerrainData;
 
 		//Read from UI
-		public bool HasAudioData => Asset is AudioClip;
+		public bool HasAudioData => Asset is IAudioClip;
 
 		//Read from UI
 		public bool YamlTreeIsSupported { get; private set; } = true;
@@ -140,9 +140,8 @@ namespace AssetRipper.GUI.AssetInfo
 		//Read from UI
 		public bool HasTextData => Asset switch
 		{
-			Shader => true,
-			DummyAssetForLooseResourceFile da => da.RawData.Length > 0,
-			ITextAsset txt=> !string.IsNullOrEmpty(txt.Script),
+			IShader => true,
+			ITextAsset txt => !txt.Script.IsNullOrEmpty(),
 			IHasRawData rawDataAsset => rawDataAsset.RawData.Length > 0,
 			_ => false,
 		};
@@ -150,9 +149,8 @@ namespace AssetRipper.GUI.AssetInfo
 		//Read from UI
 		public string? TextAssetData => (Asset switch
 		{
-			Shader shader => DumpShaderDataAsText(shader),
-			DummyAssetForLooseResourceFile da => da.IsProbablyPlainText ? da.DataAsString : da.RawData.ToFormattedHex(),
-			ITextAsset txt => txt.Script,
+			IShader shader => DumpShaderDataAsText(shader),
+			ITextAsset txt => txt.ParseWithUTF8(),
 			IHasRawData rawDataAsset => rawDataAsset.RawData.ToFormattedHex(),
 			_ => null
 		})?.Replace("\t", "    ");
@@ -162,7 +160,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			get
 			{
-				switch(Asset)
+				switch (Asset)
 				{
 					case Texture2D texture:
 						{
@@ -171,10 +169,10 @@ namespace AssetRipper.GUI.AssetInfo
 						}
 					case IHasImageData img:
 						{
-							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, Asset.File.Version, img.ImageDataByteArray, 0, 0, KTXBaseInternalFormat.RG);
+							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, Asset.SerializedFile.Version, img.ImageDataByteArray, 0, 0, KTXBaseInternalFormat.RG);
 							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
 						}
-					case TerrainData terrain:
+					case ITerrainData terrain:
 						{
 							DirectBitmap? directBitmap = TerrainHeatmapExporter.GetBitmap(terrain);
 							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
@@ -187,7 +185,7 @@ namespace AssetRipper.GUI.AssetInfo
 
 		private bool HasName => Asset switch
 		{
-			Shader s => !string.IsNullOrEmpty(s.ValidName),
+			IShader s => !string.IsNullOrEmpty(s.GetValidShaderName()),
 			IGameObject go => !string.IsNullOrEmpty(go.Name),
 			INamedObject no => !string.IsNullOrEmpty(no.Name),
 			IHasName hasName => !string.IsNullOrEmpty(hasName.Name),
@@ -196,7 +194,7 @@ namespace AssetRipper.GUI.AssetInfo
 
 		private string? Name => Asset switch
 		{
-			Shader s => s.ValidName,
+			IShader s => s.GetValidShaderName(),
 			IGameObject go => go.Name,
 			INamedObject no => no.Name,
 			IHasName hasName => hasName.Name,
@@ -206,21 +204,21 @@ namespace AssetRipper.GUI.AssetInfo
 		private TextureFormat TextureFormat => Asset switch
 		{
 			IHasImageData img => img.TextureFormat,
-			TerrainData => TextureFormat.RGBA32,
+			ITerrainData => TextureFormat.RGBA32,
 			_ => TextureFormat.Automatic,
 		};
 
 		private int ImageWidth => Asset switch
 		{
 			IHasImageData img => img.Width,
-			TerrainData terrain => terrain.Heightmap.Width,
+			ITerrainData terrain => terrain.Heightmap.Width,
 			_ => -1,
 		};
 
 		private int ImageHeight => Asset switch
 		{
 			IHasImageData img => img.Height,
-			TerrainData terrain => terrain.Heightmap.Height,
+			ITerrainData terrain => terrain.Heightmap.Height,
 			_ => -1,
 		};
 
@@ -307,7 +305,7 @@ namespace AssetRipper.GUI.AssetInfo
 		//Called from UI
 		public void TogglePause()
 		{
-			if(IsPaused)
+			if (IsPaused)
 			{
 				PlayClip();
 			}
@@ -329,7 +327,7 @@ namespace AssetRipper.GUI.AssetInfo
 			PositionString = $"{TimeSpan.FromSeconds(AudioPositionSeconds):hh\\:mm\\:ss}/{TimeSpan.FromSeconds(AudioLengthSeconds):g}";
 		}
 
-		private string DumpShaderDataAsText(Shader shader)
+		private string DumpShaderDataAsText(IShader shader)
 		{
 			using MemoryStream stream = new();
 			DummyShaderTextExporter.ExportShader(shader, _uiAssetContainer, stream);

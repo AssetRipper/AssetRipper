@@ -66,10 +66,10 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 						States = states,
 						TOS = controller.TOS,
 						Transition = transitionConstant,
-						Version = controller.File.Version,
+						Version = controller.SerializedFile.Version,
 					};
 					AnimatorStateTransition transition = AnimatorStateTransition.CreateVirtualInstance(virtualFile, parameters);
-					transitions[j] = transition.File.CreatePPtr(transition);
+					transitions[j] = transition.SerializedFile.CreatePPtr(transition);
 				}
 				state.Transitions = transitions;
 			}
@@ -84,10 +84,10 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 					States = states,
 					TOS = controller.TOS,
 					Transition = transitionConstant,
-					Version = controller.File.Version,
+					Version = controller.SerializedFile.Version,
 				};
 				AnimatorStateTransition transition = AnimatorStateTransition.CreateVirtualInstance(virtualFile, parameters);
-				AnyStateTransitions[i] = transition.File.CreatePPtr(transition);
+				AnyStateTransitions[i] = transition.SerializedFile.CreatePPtr(transition);
 			}
 
 			StateMachineConstant.Parameters stateParameters = new StateMachineConstant.Parameters
@@ -95,7 +95,7 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 				ID = layer.Binding,
 				States = states,
 				TOS = controller.TOS,
-				Version = controller.File.Version,
+				Version = controller.SerializedFile.Version,
 			};
 			EntryTransitions = stateMachine.CreateEntryTransitions(virtualFile, stateParameters);
 #warning TEMP: remove comment when AnimatorStateMachine's child StateMachines has been implemented

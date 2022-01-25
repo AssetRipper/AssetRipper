@@ -8,15 +8,15 @@
 		/// <summary>
 		/// Don't generate any data.
 		/// </summary>
-		Disabled	= 0,
+		Disabled = 0,
 		/// <summary>
 		/// Generate data using ParticleSystem.MinMaxCurve.
 		/// </summary>
 		// Token: 0x04000412 RID: 1042
-		Vector		= 1,
+		Vector = 1,
 		/// <summary>
 		/// Generate data using ParticleSystem.MinMaxGradient.
 		/// </summary>
-		Color		= 2,
+		Color = 2,
 	}
 }

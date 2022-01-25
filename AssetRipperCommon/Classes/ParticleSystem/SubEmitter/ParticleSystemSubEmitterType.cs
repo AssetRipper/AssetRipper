@@ -2,8 +2,8 @@
 {
 	public enum ParticleSystemSubEmitterType
 	{
-		Birth		= 0,
-		Collision	= 1,
-		Death		= 2,
+		Birth = 0,
+		Collision = 1,
+		Death = 2,
 	}
 }

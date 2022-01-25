@@ -5,7 +5,6 @@ using AssetRipper.Core.Updating;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.GUI.Extensions;
-using AssetRipper.GUI.Logging;
 using AssetRipper.GUI.Managers;
 using AssetRipper.Library;
 using Avalonia.Controls;
@@ -196,10 +195,12 @@ namespace AssetRipper.GUI
 				if (error is GameNotFoundException)
 				{
 					this.ShowPopup(MainWindow.Instance.LocalizationManager["no_game_files_found"], MainWindow.Instance.LocalizationManager["error"]);
-					return;
 				}
-
-				this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_importing_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
+				else
+				{
+					//this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_importing_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
+					this.ShowPopup(MainWindow.Instance.LocalizationManager["check_log_for_more_details"], MainWindow.Instance.LocalizationManager["error"]);
+				}
 			});
 		}
 
@@ -241,7 +242,8 @@ namespace AssetRipper.GUI
 			{
 				IsExporting = false;
 				Logger.Error(error);
-				this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
+				//this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
+				this.ShowPopup(MainWindow.Instance.LocalizationManager["check_log_for_more_details"], MainWindow.Instance.LocalizationManager["error"]);
 			});
 		}
 
@@ -260,11 +262,11 @@ namespace AssetRipper.GUI
 				saveFileDialog.InitialFileName = fileName;
 
 				string? saveLoc = await saveFileDialog.ShowAsync(MainWindow.Instance);
-				
-				if(saveLoc == null)
+
+				if (saveLoc == null)
 					return;
-				
-				await File.WriteAllBytesAsync(saveLoc, da.RawData);
+
+				await da.SaveToFileAsync(saveLoc);
 				MessageBox.Popup(
 					MainWindow.Instance.LocalizationManager["success"],
 					string.Format(MainWindow.Instance.LocalizationManager["loose_file_saved_at"], saveLoc));
@@ -294,6 +296,48 @@ namespace AssetRipper.GUI
 			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.Exporter, this);
 
 			UIExportManager.Export(_ripper, exportPath, SelectedAsset.Asset, () =>
+			{
+				IsExporting = false;
+				this.ShowPopup(MainWindow.Instance.LocalizationManager["export_complete"], MainWindow.Instance.LocalizationManager["success"]);
+				Logger.Info(LogCategory.General, "Export Complete!");
+			}, error =>
+			{
+				IsExporting = false;
+				Logger.Error(error);
+				this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
+			});
+		}
+
+		public async void ExportSelectedAssetTypeToProject()
+		{
+			if (_ripper.GameStructure == null || SelectedAsset == null || SelectedAsset.Asset is DummyAssetForLooseResourceFile)
+			{
+				return;
+			}
+
+			OpenFolderDialog openFolderDialog = new();
+
+			string? chosenFolder = await openFolderDialog.ShowAsync(MainWindow.Instance);
+
+			if (string.IsNullOrEmpty(chosenFolder))
+			{
+				return;
+			}
+
+			IsExporting = true;
+			ExportingText = MainWindow.Instance.LocalizationManager["export_deleting_old_files"];
+
+			string exportPath = Path.Combine(chosenFolder, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			_lastExportPath = exportPath;
+
+			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
+
+			Logger.Info(LogCategory.General, $"Removing any files from a previous export...");
+
+			await UIExportManager.PrepareExportDirectory(exportPath);
+			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.Exporter, this);
+
+			UIExportManager.Export(_ripper, exportPath, SelectedAsset.Asset.GetType(), () =>
 			{
 				IsExporting = false;
 				this.ShowPopup(MainWindow.Instance.LocalizationManager["export_complete"], MainWindow.Instance.LocalizationManager["success"]);
@@ -361,7 +405,7 @@ namespace AssetRipper.GUI
 		}
 
 		// Called from UI
-		private void CheckForUpdates() => CheckForUpdates(true);
+		private void CheckForUpdatesUI() => CheckForUpdates(true);
 
 		/// <summary>
 		/// Checks Github for a more recent release

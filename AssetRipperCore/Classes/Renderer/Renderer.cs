@@ -15,6 +15,7 @@ namespace AssetRipper.Core.Classes.Renderer
 	{
 		protected Renderer(AssetInfo assetInfo) : base(assetInfo) { }
 
+		#region Versioning Methods
 		/// <summary>
 		/// 1.5.0 and greater
 		/// </summary>
@@ -269,12 +270,13 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// 4.5.0 and greater
 		/// </summary>
 		private static bool IsAlign4(UnityVersion version) => version.IsGreaterEqual(4, 5);
+		#endregion
 
 		public string FindMaterialPropertyNameByCRC28(uint crc)
 		{
 			foreach (PPtr<Material.Material> materialPtr in Materials)
 			{
-				Material.Material material = materialPtr.FindAsset(File);
+				Material.Material material = materialPtr.FindAsset(SerializedFile);
 				if (material == null)
 				{
 					continue;
@@ -558,7 +560,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		{
 			return HasRenderingLayerMask(version) ? RenderingLayerMask : 1;
 		}
-		private StaticBatchInfo GetStaticBatchInfo(UnityVersion version)
+		public StaticBatchInfo GetStaticBatchInfo(UnityVersion version)
 		{
 			if (HasStaticBatchInfo(version))
 			{

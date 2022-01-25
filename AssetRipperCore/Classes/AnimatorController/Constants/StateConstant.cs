@@ -149,12 +149,12 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 				if (node.IsBlendTree)
 				{
 					BlendTree.BlendTree blendTree = BlendTree.BlendTree.CreateVirtualInstance(file, controller, this, nodeIndex);
-					return blendTree.File.CreatePPtr(blendTree).CastTo<Motion>();
+					return blendTree.SerializedFile.CreatePPtr(blendTree).CastTo<Motion>();
 				}
 				else
 				{
 					int clipIndex = -1;
-					if (HasLeafInfo(controller.File.Version))
+					if (HasLeafInfo(controller.SerializedFile.Version))
 					{
 						for (int i = 0; i < LeafInfoArray.Length; i++)
 						{

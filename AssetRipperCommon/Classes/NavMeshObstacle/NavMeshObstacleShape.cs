@@ -8,10 +8,10 @@ namespace AssetRipper.Core.Classes.NavMeshObstacle
 		/// <summary>
 		/// Capsule shaped obstacle.
 		/// </summary>
-		Capsule		= 0,
+		Capsule = 0,
 		/// <summary>
 		/// Box shaped obstacle.
 		/// </summary>
-		Box			= 1,
+		Box = 1,
 	}
 }

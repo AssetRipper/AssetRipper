@@ -18,14 +18,14 @@ namespace AssetRipper.Core
 	public class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	{
 		public AssetInfo AssetInfo { get; set; }
-		public ISerializedFile File => AssetInfo?.File;
+		public ISerializedFile SerializedFile => AssetInfo?.File;
 		public virtual ClassIDType ClassID => AssetInfo?.ClassID ?? ClassIDType.UnknownType;
 		public long PathID => AssetInfo.PathID;
 		public UnityGUID GUID => AssetInfo.GUID;
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, GetType().Name);
 		public virtual string ExportExtension => AssetExtension;
 
-		public virtual HideFlags ObjectHideFlags 
+		public virtual HideFlags ObjectHideFlags
 		{
 			get => HideFlags.None;
 			set => throw new NotSupportedException();
@@ -39,6 +39,8 @@ namespace AssetRipper.Core
 		public UnityObjectBase(AssetInfo assetInfo)
 		{
 			AssetInfo = assetInfo;
+			AssetUnityVersion = assetInfo.File.Version;
+			TransferInstructionFlags = assetInfo.File.Flags;
 		}
 
 		public YAMLDocument ExportYAMLDocument(IExportContainer container)
@@ -52,9 +54,13 @@ namespace AssetRipper.Core
 			return document;
 		}
 
-		public virtual IUnityObjectBase Convert(IExportContainer container)
+		public virtual IUnityObjectBase ConvertLegacy(IExportContainer container)
 		{
 			return this;
+		}
+
+		public virtual void ConvertToEditor()
+		{
 		}
 	}
 }

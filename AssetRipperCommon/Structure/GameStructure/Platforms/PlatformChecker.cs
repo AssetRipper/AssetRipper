@@ -235,7 +235,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			if (paths.Count > 0)
 			{
 				gameStructure = new MixedGameStructure(paths);
-				if(paths.Count == 1)
+				if (paths.Count == 1)
 					Logger.Info(LogCategory.Import, $"Mixed game structure has been found at {paths[0]}");
 				else
 					Logger.Info(LogCategory.Import, $"Mixed game structure has been found for {paths.Count} paths");

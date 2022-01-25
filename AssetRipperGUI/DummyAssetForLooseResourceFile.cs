@@ -1,35 +1,74 @@
 ﻿using AssetRipper.Core;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.IO;
-using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace AssetRipper.GUI
 {
-	public class DummyAssetForLooseResourceFile : UnityObjectBase, IHasRawData
+	public class DummyAssetForLooseResourceFile : UnityObjectBase, IDisposable, IHasName
 	{
-		public ResourceFile AssociatedFile;
-		public byte[] RawData { get; set; }
+		private bool disposedValue;
 
-		public DummyAssetForLooseResourceFile(ResourceFile associatedFile) {
+		public ResourceFile AssociatedFile { get; }
+
+		public string Name
+		{
+			get => AssociatedFile.Name;
+			set => throw new NotSupportedException();
+		}
+
+		private readonly SmartStream smartStream;
+
+		public DummyAssetForLooseResourceFile(ResourceFile associatedFile)
+		{
 			AssociatedFile = associatedFile;
-			
-			using MemoryStream memStream = new();
-			AssociatedFile.Stream.CopyTo(memStream);
-			RawData = memStream.ToArray();
+			smartStream = SmartStream.CreateTemp();
+			AssociatedFile.Stream.CopyTo(smartStream);
 		}
 
 		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}
-		
-		public string DataAsString => Encoding.UTF8.GetString(RawData);
 
-		public bool IsProbablyPlainText => DataAsString.Take(32).All(c => char.IsWhiteSpace(c) || !char.IsControl(c));
+		public void SaveToFile(string path)
+		{
+			using FileStream fileStream = System.IO.File.Create(path);
+			smartStream.Position = 0;
+			smartStream.CopyTo(fileStream);
+		}
+
+		public async Task SaveToFileAsync(string path)
+		{
+			FileStream fileStream = System.IO.File.Create(path);
+			smartStream.Position = 0;
+			await smartStream.CopyToAsync(fileStream);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposedValue)
+			{
+				if (disposing)
+				{
+					smartStream?.Dispose();
+				}
+
+				AssociatedFile?.Dispose();
+				disposedValue = true;
+			}
+		}
+
+		public void Dispose()
+		{
+			// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+			Dispose(disposing: true);
+			GC.SuppressFinalize(this);
+		}
 	}
 }

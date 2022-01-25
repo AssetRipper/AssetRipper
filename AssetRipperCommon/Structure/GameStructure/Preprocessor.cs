@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		internal static List<string> Process(IEnumerable<string> paths)
 		{
 			List<string> result = new List<string>();
-			foreach(string path in paths)
+			foreach (string path in paths)
 			{
 				switch (GetFileExtension(path))
 				{
@@ -60,7 +60,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			string intermediateDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			string outputDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			DecompressZipArchive(xapkFilePath, intermediateDirectory);
-			foreach(var filePath in Directory.GetFiles(intermediateDirectory))
+			foreach (var filePath in Directory.GetFiles(intermediateDirectory))
 			{
 				if (GetFileExtension(filePath) == ApkExtension)
 					DecompressZipArchive(filePath, outputDirectory);

@@ -79,7 +79,7 @@ namespace AssetRipper.Core.Classes
 
 			AnimatorState state = parameters.GetDestinationState();
 			DstStateMachine = default;
-			DstState = state == null ? default : state.File.CreatePPtr(state);
+			DstState = state == null ? default : state.SerializedFile.CreatePPtr(state);
 
 			Name = parameters.Name;
 			Solo = false;

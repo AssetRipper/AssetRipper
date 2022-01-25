@@ -8,7 +8,7 @@ namespace AssetRipper.GUI.AssetInfo
 		//Nodes can be either key-value (YamlScalarNode) or object (YamlMappingNode)/array (YamlSequenceNode).
 		//If key-value, display name is "key: value"
 		//If object/array, display name is "key", nested children are array elements.
-		
+
 		//Read from UI
 		public string DisplayName { get; }
 		//Read from UI
@@ -22,7 +22,7 @@ namespace AssetRipper.GUI.AssetInfo
 				DisplayName = $"{key}: <Byte Array of length {value.Value.Length / 2}>";
 				return;
 			}
-			
+
 			DisplayName = $"{key}: {value.Value}";
 
 			if (string.IsNullOrEmpty(value.Value))
@@ -38,7 +38,7 @@ namespace AssetRipper.GUI.AssetInfo
 
 				AppendChild(subKey, valueNode);
 			}
-			
+
 			if (value.m_children.Count == 0)
 			{
 				DisplayName += ": <Empty Dictionary>";
@@ -78,10 +78,12 @@ namespace AssetRipper.GUI.AssetInfo
 			if (valueNode is YAMLScalarNode scalarNode)
 			{
 				child = new AssetYamlNode(subKey, scalarNode);
-			} else if (valueNode is YAMLMappingNode mappingNode)
+			}
+			else if (valueNode is YAMLMappingNode mappingNode)
 			{
 				child = new AssetYamlNode(subKey, mappingNode);
-			} else if (valueNode is YAMLSequenceNode sequenceNode)
+			}
+			else if (valueNode is YAMLSequenceNode sequenceNode)
 			{
 				child = new AssetYamlNode(subKey, sequenceNode);
 			}

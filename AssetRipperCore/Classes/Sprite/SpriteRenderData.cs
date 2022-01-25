@@ -153,7 +153,7 @@ namespace AssetRipper.Core.Classes.Sprite
 
 			if (HasSecondaryTextures(context.Version))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(SecondaryTextures, SecondaryTexturesName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(SecondaryTextures, SecondaryTexturesName))
 				{
 					yield return asset;
 				}

@@ -24,8 +24,11 @@ namespace AssetRipper.Core.Math
 		{
 			m_Data = Array.Empty<byte>();
 		}
-		
-#warning TODO: Pack method
+
+		public static PackedIntVector Pack(int[] values)
+		{
+			throw new NotImplementedException();
+		}
 
 		public int[] Unpack()
 		{
@@ -53,7 +56,7 @@ namespace AssetRipper.Core.Math
 			return buffer;
 		}
 
-		public PackedIntVector Convert(IExportContainer container)
+		public PackedIntVector Convert(IExportContainer _)
 		{
 			PackedIntVector instance = this;
 			instance.m_Data = m_Data.ToArray();
@@ -78,7 +81,7 @@ namespace AssetRipper.Core.Math
 			writer.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YAMLNode ExportYAML(IExportContainer _)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(NumItemsName, m_NumItems);

@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes
 			Name = reader.ReadString();
 
 			this.ReadStructure(reader);
-			ObjectInfo info = File.GetAssetEntry(PathID);
+			ObjectInfo info = SerializedFile.GetAssetEntry(PathID);
 			reader.BaseStream.Position = position + info.ByteSize;
 		}
 
@@ -49,12 +49,9 @@ namespace AssetRipper.Core.Classes
 
 			yield return context.FetchDependency(Script, ScriptName);
 
-			if (Structure != null)
+			foreach (PPtr<IUnityObjectBase> asset in this.MaybeFetchDependenciesForStructure(context))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Structure, Structure.Type.Name))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 

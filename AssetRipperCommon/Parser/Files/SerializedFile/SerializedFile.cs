@@ -60,10 +60,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public static bool IsSerializedFile(byte[] buffer, int offset, int size) => IsSerializedFile(new MemoryStream(buffer, offset, size, false));
 		public static bool IsSerializedFile(Stream stream)
 		{
-			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
-			{
-				return SerializedFileHeader.IsSerializedFileHeader(reader, (uint)stream.Length);
-			}
+			using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
+			return SerializedFileHeader.IsSerializedFileHeader(reader, stream.Length);
 		}
 
 		public static SerializedFileScheme LoadScheme(string filePath)
@@ -202,7 +200,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public PPtr<T> CreatePPtr<T>(T asset) where T : IUnityObjectBase
 		{
-			if (asset.File == this)
+			if (asset.SerializedFile == this)
 			{
 				return new PPtr<T>(0, asset.PathID);
 			}
@@ -211,7 +209,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			{
 				FileIdentifier identifier = Metadata.Externals[i];
 				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
-				if (asset.File == file)
+				if (asset.SerializedFile == file)
 				{
 					return new PPtr<T>(i + 1, asset.PathID);
 				}
@@ -274,16 +272,32 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			{
 				file = this;
 			}
-			else if(fileIndex < 0)
+			else if (fileIndex < 0)
 			{
-				throw new ArgumentOutOfRangeException(nameof(fileIndex), $"File index cannot have negative index: {fileIndex}");
+				if (isSafe)
+				{
+					Logger.Error($"File index cannot be negative: {fileIndex}");
+					return null;
+				}
+				else
+				{
+					throw new ArgumentOutOfRangeException(nameof(fileIndex), $"File index cannot be negative: {fileIndex}");
+				}
 			}
 			else
 			{
 				fileIndex--;
 				if (fileIndex >= Metadata.Externals.Length)
 				{
-					throw new Exception($"{nameof(SerializedFile)} with index {fileIndex} was not found in dependencies");
+					if (isSafe)
+					{
+						Logger.Error($"{nameof(SerializedFile)} with index {fileIndex} was not found in dependencies");
+						return null;
+					}
+					else
+					{
+						throw new ArgumentException($"{nameof(SerializedFile)} with index {fileIndex} was not found in dependencies", nameof(fileIndex));
+					}
 				}
 
 				FileIdentifier identifier = Metadata.Externals[fileIndex];
@@ -331,9 +345,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			catch (TypeLoadException typeLoadException)
 			{
 #if DEBUG
-				throw new SerializedFileException($"Could not load {typeLoadException.TypeName} with id number {assetInfo.ClassNumber}", typeLoadException, Version, Platform, assetInfo.ClassID, Name, FilePath);
+				throw new SerializedFileException($"Could not load {typeLoadException.TypeName}", typeLoadException, Version, Platform, assetInfo.ClassID, Name, FilePath);
 #else
-				Logger.Error($"Could not load {typeLoadException.TypeName} with id number {assetInfo.ClassNumber}");
+				Logger.Error($"Could not load {typeLoadException.TypeName} : {typeLoadException.Message}");
 				asset = null;
 #endif
 			}
@@ -361,12 +375,19 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			long read = reader.BaseStream.Position - offset;
 			if (!replaceWithUnreadableObject && read != size)
 			{
+				if (asset is IMonoBehaviour monoBehaviour && monoBehaviour.Structure == null)
+				{
+					reader.BaseStream.Position = offset + size;
+				}
+				else
+				{
 #if DEBUG
-				throw new SerializedFileException($"Read {read} but expected {size} for asset type {assetInfo.ClassID}", Version, Platform, assetInfo.ClassID, Name, FilePath);
+					throw new SerializedFileException($"Read {read} but expected {size} for asset type {assetInfo.ClassID}", Version, Platform, assetInfo.ClassID, Name, FilePath);
 #else
-				replaceWithUnreadableObject = true;
-				Logger.Error($"Read {read} but expected {size} for asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}");
+					replaceWithUnreadableObject = true;
+					Logger.Error($"Read {read} but expected {size} for asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}");
 #endif
+				}
 			}
 
 			if (replaceWithUnreadableObject)
@@ -377,7 +398,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				unreadable.Name = asset is IHasName hasName ? hasName.Name : asset.GetType().Name;
 				asset = unreadable;
 			}
-			
+
 			reader.AdjustableStream.ResetPositionBoundaries();
 			return asset;
 		}

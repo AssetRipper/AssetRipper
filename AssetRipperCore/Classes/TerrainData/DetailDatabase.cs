@@ -153,7 +153,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DetailPrototypes, DetailPrototypesName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(DetailPrototypes, DetailPrototypesName))
 			{
 				yield return asset;
 			}

@@ -4,11 +4,11 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 {
 	public enum FingerType
 	{
-		Thumb		= 0,
-		Index		= 1,
-		Middle		= 2,
-		Ring		= 3,
-		Little		= 4,
+		Thumb = 0,
+		Index = 1,
+		Middle = 2,
+		Ring = 3,
+		Little = 4,
 
 		Last,
 	}

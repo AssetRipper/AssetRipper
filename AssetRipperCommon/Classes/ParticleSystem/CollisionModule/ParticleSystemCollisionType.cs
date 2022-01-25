@@ -8,10 +8,10 @@
 		/// <summary>
 		/// Collide with a list of planes.
 		/// </summary>
-		Planes	= 0,
+		Planes = 0,
 		/// <summary>
 		/// Collide with the world geometry.
 		/// </summary>
-		World	= 1,
+		World = 1,
 	}
 }

@@ -2,7 +2,7 @@
 {
 	public enum GeometryType
 	{
-		Outlines	= 0,
-		Polygons	= 1,
+		Outlines = 0,
+		Polygons = 1,
 	}
 }

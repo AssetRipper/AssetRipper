@@ -4,10 +4,10 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 {
 	public enum FingerDoFType
 	{
-		_1Stretched		= 0,
-		Spread			= 1,
-		_2Stretched		= 2,
-		_3Stretched		= 3,
+		_1Stretched = 0,
+		Spread = 1,
+		_2Stretched = 2,
+		_3Stretched = 3,
 
 		Last,
 	}

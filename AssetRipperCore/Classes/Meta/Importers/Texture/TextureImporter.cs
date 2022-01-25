@@ -730,7 +730,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(SpriteSheet, SpriteSheetName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(SpriteSheet, SpriteSheetName))
 			{
 				yield return asset;
 			}

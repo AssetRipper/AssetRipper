@@ -2,7 +2,6 @@
 
 ## 0.2.0.0
 * Export
-  * WWise audio extraction
   * ~~Type Tree Dump export~~
   * ~~Improved FBX mesh export~~
   * ~~PLY mesh export~~
@@ -10,8 +9,6 @@
   * ~~Added option to ignore internal asset bundle paths~~
 * Plugin Support
   * ~~Add support for custom post exporters~~
-  * Add support for injecting custom asset types
-  * Add support for reading alternative file formats
 * Script Export
   * ~~Customizable level of content in decompiled scripts~~
   * ~~IL2Cpp code recovery options~~
@@ -27,23 +24,24 @@
   * ~~Improved file path determination on Mac and iOS games~~
 * Convert Exporters to the new Interface System
   * ~~BuildSettings exporter~~
-  * Scene exporter
+  * ~~Scene exporter~~
   * ~~Prefab exporter~~
   * Animator Controller exporter
   * Audio Clip exporters
   * Mesh exporters
-  * Script exporter
-  * Shader exporter
-  * Terrain exporter
+  * ~~Script exporter~~
+  * ~~Shader exporter~~
+  * ~~Terrain exporter~~
   * Texture exporter
 * Move more classes to the Common project
-  * Move ProjectAssetContainer
-  * Move ProjectExporter and ProjectExporterBase
+  * ~~Move ProjectAssetContainer~~
+  * ~~Move ProjectExporterBase~~
+  * Move ProjectExporter
   * Move GameStructure
 * Struct Reading Overhaul
   * ~~Yaml method generation~~
   * ~~Type Tree method generation~~
-  * Fetch Dependency method generation
+  * ~~Fetch Dependency method generation~~
   * Apply interfaces in the generated assemblies
   * ~~Implement generation of version specific Asset Factories~~
   * Implement a system for downloading the assemblies on demand
@@ -51,20 +49,19 @@
   * Remove the `Classes` and `Converters` namespaces
   * Remove any additional legacy code
   * Merge the common project back into the core project
-  * Add newer Unity versions to the TypeTreeDumps repository
+  * ~~Add newer Unity versions to the TypeTreeDumps repository~~
 * Cleanup
   * ~~Implement package for Brotli~~
   * ~~Implement package for LZ4~~
   * ~~Implement package for LZMA~~
  
 ## 0.2.1.0
-This release will be primarily focused on cleaning up and refactoring the project. Such cleanup may include:
+This release will be primarily focused on cleaning up and refactoring the project. This release may include:
 * Unified mesh export
 * Implement package for Yaml
-
-Other priorities for this release:
-* Improving plugin support
-* Predetermined GUID support
+* WWise audio extraction
+* Add support for injecting custom asset types
+* Add support for reading alternative file formats
 
 ## 0.2.2.0
 This release will likely focus on removing the native texture dependency by porting essential code to C#.

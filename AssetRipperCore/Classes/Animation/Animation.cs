@@ -21,11 +21,12 @@ namespace AssetRipper.Core.Classes.Animation
 		{
 			Animations = Array.Empty<PPtr<AnimationClip.AnimationClip>>();
 			PlayAutomatically = true;
+			Enabled = true;
 		}
 
 		public Animation(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public override IUnityObjectBase Convert(IExportContainer container)
+		public override IUnityObjectBase ConvertLegacy(IExportContainer container)
 		{
 			return AnimationConverter.Convert(container, this);
 		}
@@ -107,7 +108,7 @@ namespace AssetRipper.Core.Classes.Animation
 		{
 			foreach (PPtr<AnimationClip.AnimationClip> clipPtr in Animations)
 			{
-				if (clipPtr.IsAsset(File, clip))
+				if (clipPtr.IsAsset(SerializedFile, clip))
 				{
 					return true;
 				}

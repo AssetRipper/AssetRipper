@@ -4,21 +4,15 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.OcclusionCullingData
 {
-	public struct SceneObjectIdentifier : IAssetReadable, IYAMLExportable
+	public class SceneObjectIdentifier : UnityAssetBase, ISceneObjectIdentifier
 	{
-		public SceneObjectIdentifier(long targetObject, long targetPrefab)
-		{
-			TargetObject = targetObject;
-			TargetPrefab = targetPrefab;
-		}
-
-		public void Read(AssetReader reader)
+		public override void Read(AssetReader reader)
 		{
 			TargetObject = reader.ReadInt64();
 			TargetPrefab = reader.ReadInt64();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(TargetObjectName, TargetObject);

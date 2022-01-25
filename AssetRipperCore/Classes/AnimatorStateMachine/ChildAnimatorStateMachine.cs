@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 			{
 				throw new ArgumentNullException(nameof(stateMachine));
 			}
-			StateMachine = stateMachine.File.CreatePPtr(stateMachine);
+			StateMachine = stateMachine.SerializedFile.CreatePPtr(stateMachine);
 			Position = position;
 		}
 

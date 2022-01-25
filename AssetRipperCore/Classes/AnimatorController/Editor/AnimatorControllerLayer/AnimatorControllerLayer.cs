@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 
 			Name = controller.TOS[layer.Binding];
 
-			StateMachine = stateMachine.File.CreatePPtr(stateMachine);
+			StateMachine = stateMachine.SerializedFile.CreatePPtr(stateMachine);
 
 #warning TODO: animator
 			Mask = default;
@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 			DefaultWeight = layer.DefaultWeight;
 			IKPass = layer.IKPass;
 			SyncedLayerAffectsTiming = layer.SyncedLayerAffectsTiming;
-			Controller = controller.File.CreatePPtr(controller);
+			Controller = controller.SerializedFile.CreatePPtr(controller);
 		}
 
 		public static int ToSerializedVersion(UnityVersion version)

@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes
 		public Prefab(LayoutInfo layout) : base(layout) { }
 
 		public Prefab(AssetInfo assetInfo) : base(assetInfo) { }
-		
+
 		/// <summary>
 		/// 2020 and greater
 		/// </summary>
@@ -47,7 +47,7 @@ namespace AssetRipper.Core.Classes
 			base.Write(writer);
 
 			RootGameObject.Write(writer);
-			
+
 			if (HasHideFlagsBehavior(writer.Version))
 			{
 				writer.Write(HideFlagsBehavior);

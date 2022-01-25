@@ -11,12 +11,12 @@ namespace AssetRipper.Core.Classes.TerrainData
 {
 	public struct TreePrototype : IAsset, IDependent
 	{
-		
+
 		/// <summary>
 		/// 2020.2 and greater
 		/// </summary>
 		public static bool HasNavMeshLod(UnityVersion version) => version.IsGreaterEqual(2020, 2);
-		
+
 		public void Read(AssetReader reader)
 		{
 			Prefab.Read(reader);

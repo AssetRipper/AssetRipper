@@ -53,7 +53,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 
 			if (HasEditorData(context.Flags))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(EditorData, EditorDataName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(EditorData, EditorDataName))
 				{
 					yield return asset;
 				}
@@ -63,7 +63,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies((IEnumerable<SpriteAtlasData>)RenderDataMap.Values, RenderDataMapName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray((IEnumerable<SpriteAtlasData>)RenderDataMap.Values, RenderDataMapName))
 			{
 				yield return asset;
 			}

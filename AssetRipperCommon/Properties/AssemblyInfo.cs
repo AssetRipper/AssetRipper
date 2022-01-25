@@ -1,6 +1,5 @@
-﻿using System.Runtime.CompilerServices;
-
-using System.Reflection;
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle(AssetRipper.Core.BuildInfo.CommonName)]

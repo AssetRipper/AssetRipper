@@ -7,11 +7,11 @@ namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 	/// </summary>
 	public enum VertexChannelFormat : byte
 	{
-		Float		= 0,
-		Float16		= 1,
-		Color		= 2,
-		Byte		= 3,
-		UInt		= 4,
+		Float = 0,
+		Float16 = 1,
+		Color = 2,
+		Byte = 3,
+		UInt = 4,
 	}
 
 	public static class VertexChannelFormatV4Extension

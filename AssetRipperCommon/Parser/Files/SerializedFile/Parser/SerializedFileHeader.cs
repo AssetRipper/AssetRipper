@@ -44,10 +44,10 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		/// </summary>
 		public static bool HasLargeFilesSupport(FormatVersion generation) => generation >= FormatVersion.LargeFilesSupport;
 
-		public static bool IsSerializedFileHeader(EndianReader reader, uint fileSize)
+		public static bool IsSerializedFileHeader(EndianReader reader, long fileSize)
 		{
 			long initialPosition = reader.BaseStream.Position;
-			
+
 			//Sanity check that there is enough room here first.
 			if (reader.BaseStream.Position + HeaderMinSize > reader.BaseStream.Length)
 			{
@@ -80,20 +80,20 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				metadataSize = reader.ReadInt32();
 				headerDefinedFileSize = reader.ReadUInt64();
 			}
-			
+
 			if (metadataSize < MetadataMinSize)
 			{
 				reader.BaseStream.Position = initialPosition;
 				return false;
 			}
-			
+
 			if (headerDefinedFileSize < HeaderMinSize + MetadataMinSize)
 			{
 				reader.BaseStream.Position = initialPosition;
 				return false;
 			}
 
-			if (headerDefinedFileSize != fileSize)
+			if (fileSize < 0 || headerDefinedFileSize != (ulong)fileSize)
 			{
 				reader.BaseStream.Position = initialPosition;
 				return false;
@@ -158,7 +158,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 			//0x0c
 			if (HasLargeFilesSupport(Version))
-				writer.Write(0); 
+				writer.Write(0);
 			else
 				writer.Write((uint)DataOffset);
 

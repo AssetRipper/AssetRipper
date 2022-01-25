@@ -24,6 +24,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		/// </summary>
 		PPtr<IPrefabInstance> SourcePrefabPtr { get; set; }
 		/// <summary>
+		/// Only on versions &lt; 2018.3<br/>
 		/// m_IsPrefabAsset - versions &gt;= 2018.2<br/>
 		/// m_IsPrefabParent - versions &gt;= 3.5<br/>
 		/// m_IsDataTemplate - versions &lt; 3.5
@@ -35,13 +36,13 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 	{
 		public static string GetName(this IPrefabInstance prefab, IAssetContainer file)
 		{
-			if(prefab is IHasName hasName)
+			if (prefab is IHasName hasName && string.IsNullOrEmpty(hasName.Name))
 			{
 				return hasName.Name;
 			}
 			else
 			{
-				return prefab.RootGameObjectPtr.GetAsset(file)?.Name;
+				return prefab.RootGameObjectPtr.TryGetAsset(file)?.Name;
 			}
 		}
 

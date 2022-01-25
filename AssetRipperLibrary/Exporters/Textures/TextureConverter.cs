@@ -1,10 +1,15 @@
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Logging;
-using AssetRipper.Library.TextureContainers.KTX;
-using AssetRipper.Library.TextureDecoders;
+using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Utils;
 using System;
-using Texture2DDecoder;
+using TextureDecoder.Astc;
+using TextureDecoder.Atc;
+using TextureDecoder.Dxt;
+using TextureDecoder.Etc;
+using TextureDecoder.Pvrtc;
+using TextureDecoder.Rgb;
+using TextureDecoder.Yuy2;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Library.Exporters.Textures
@@ -273,7 +278,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				if(TexGenPackHandler.Decode(textureFormat, data, width, height, bitmap.BitsPtr, fixAlpha))
+				if (TexGenPackHandler.Decode(textureFormat, data, width, height, bitmap.BitsPtr, fixAlpha))
 				{
 					Logger.Verbose($"Byte array length: {bitmap.Bits.Length} Width: {width} Height: {height}");
 					CheckEqual(DecodeBC(data, textureFormat, width, height), bitmap.Bits);
@@ -302,7 +307,7 @@ namespace AssetRipper.Library.Exporters.Textures
 		private static bool DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
 		{
 			Logger.Verbose($"Performing alternate decoding for {textureFormat}");
-			
+
 			switch (textureFormat)
 			{
 				case TextureFormat.BC4:
@@ -324,17 +329,17 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static void CheckEqual(byte[] left, byte[] right)
 		{
-			if(left == null)
+			if (left == null)
 			{
 				Logger.Verbose("In byte array comparison, left was null");
 				return;
 			}
-			if(right == null)
+			if (right == null)
 			{
 				Logger.Verbose("In byte array comparison, left was null");
 				return;
 			}
-			if(left.Length != right.Length)
+			if (left.Length != right.Length)
 			{
 				Logger.Verbose("In byte array comparison, lengths were inequal");
 				Logger.Verbose($"Left: {left.Length}");
@@ -343,14 +348,14 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 			int length = left.Length;
 			int count = 0;
-			for(int i = 0; i < length; i++)
+			for (int i = 0; i < length; i++)
 			{
 				if (left[i] != right[i])
 				{
 					count++;
 				}
 			}
-			if(count == 0)
+			if (count == 0)
 				Logger.Verbose("Byte arrays were equal at all indices!");
 			else
 				Logger.Verbose($"Byte arrays were inequal in {count}/{length} places!");
@@ -376,30 +381,6 @@ namespace AssetRipper.Library.Exporters.Textures
 				double b = (System.Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
 				dataPtr[0] = (byte)b;
 			}
-		}
-
-		private static QFormat ToQFormat(TextureFormat format)
-		{
-			return format switch
-			{
-				TextureFormat.DXT1 or TextureFormat.DXT1Crunched => QFormat.Q_FORMAT_S3TC_DXT1_RGB,
-				TextureFormat.DXT3 => QFormat.Q_FORMAT_S3TC_DXT3_RGBA,
-				TextureFormat.DXT5 or TextureFormat.DXT5Crunched => QFormat.Q_FORMAT_S3TC_DXT5_RGBA,
-				TextureFormat.RHalf => QFormat.Q_FORMAT_R_16F,
-				TextureFormat.RGHalf => QFormat.Q_FORMAT_RG_HF,
-				TextureFormat.RGBAHalf => QFormat.Q_FORMAT_RGBA_HF,
-				TextureFormat.RFloat => QFormat.Q_FORMAT_R_F,
-				TextureFormat.RGFloat => QFormat.Q_FORMAT_RG_F,
-				TextureFormat.RGBAFloat => QFormat.Q_FORMAT_RGBA_F,
-				TextureFormat.RGB9e5Float => QFormat.Q_FORMAT_RGB9_E5,
-				TextureFormat.ATC_RGB4 => QFormat.Q_FORMAT_ATITC_RGB,
-				TextureFormat.ATC_RGBA8 => QFormat.Q_FORMAT_ATC_RGBA_INTERPOLATED_ALPHA,
-				TextureFormat.EAC_R => QFormat.Q_FORMAT_EAC_R_UNSIGNED,
-				TextureFormat.EAC_R_SIGNED => QFormat.Q_FORMAT_EAC_R_SIGNED,
-				TextureFormat.EAC_RG => QFormat.Q_FORMAT_EAC_RG_UNSIGNED,
-				TextureFormat.EAC_RG_SIGNED => QFormat.Q_FORMAT_EAC_RG_SIGNED,
-				_ => throw new NotSupportedException(format.ToString()),
-			};
 		}
 	}
 }

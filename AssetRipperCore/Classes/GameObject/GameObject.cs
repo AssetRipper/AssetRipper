@@ -7,7 +7,6 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
@@ -59,7 +58,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 		}
 
-		public override IUnityObjectBase Convert(IExportContainer container)
+		public override IUnityObjectBase ConvertLegacy(IExportContainer container)
 		{
 			return GameObjectConverter.Convert(container, this);
 		}
@@ -126,7 +125,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 			else
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Component, ComponentName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Component, ComponentName))
 				{
 					yield return asset;
 				}
@@ -202,7 +201,7 @@ namespace AssetRipper.Core.Classes.GameObject
 
 		public PPtr<IComponent>[] FetchComponents()
 		{
-			if (IsComponentTuple(File.Version))
+			if (IsComponentTuple(SerializedFile.Version))
 			{
 				return ComponentTuple.Select(t => t.Item2.CastTo<IComponent>()).ToArray();
 			}

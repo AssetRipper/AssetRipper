@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			return false;
 		}
 
-		public override IUnityObjectBase Convert(IExportContainer container)
+		public override IUnityObjectBase ConvertLegacy(IExportContainer container)
 		{
 			return TerrainDataConverter.Convert(container, this);
 		}
@@ -47,7 +47,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 			SplatDatabase.Read(reader);
 			DetailDatabase.Read(reader);
-			Heightmap.Read(reader);
+			m_Heightmap.Read(reader);
 			if (HasLightmap(reader.Version))
 			{
 				Lightmap.Read(reader);
@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 			SplatDatabase.Write(writer);
 			DetailDatabase.Write(writer);
-			Heightmap.Write(writer);
+			m_Heightmap.Write(writer);
 			if (HasLightmap(writer.Version))
 			{
 				Lightmap.Write(writer);
@@ -82,15 +82,15 @@ namespace AssetRipper.Core.Classes.TerrainData
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(SplatDatabase, SplatDatabaseName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(SplatDatabase, SplatDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DetailDatabase, DetailDatabaseName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(DetailDatabase, DetailDatabaseName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Heightmap, HeightmapName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(m_Heightmap, HeightmapName))
 			{
 				yield return asset;
 			}
@@ -113,7 +113,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.Add(SplatDatabaseName, SplatDatabase.ExportYAML(container));
 			node.Add(DetailDatabaseName, DetailDatabase.ExportYAML(container));
-			node.Add(HeightmapName, Heightmap.ExportYAML(container));
+			node.Add(HeightmapName, m_Heightmap.ExportYAML(container));
 			if (HasLightmap(container.ExportVersion))
 			{
 				node.Add(LightmapName, Lightmap.ExportYAML(container));
@@ -129,6 +129,8 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 		public PPtr<Shader.Shader>[] PreloadShaders { get; set; }
 
+		public IHeightmap Heightmap => m_Heightmap;
+
 		public const string SplatDatabaseName = "m_SplatDatabase";
 		public const string DetailDatabaseName = "m_DetailDatabase";
 		public const string HeightmapName = "m_Heightmap";
@@ -137,7 +139,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 		public SplatDatabase SplatDatabase;
 		public DetailDatabase DetailDatabase;
-		public Heightmap Heightmap;
+		public Heightmap m_Heightmap;
 		public PPtr<Texture2D.Texture2D> Lightmap;
 	}
 }

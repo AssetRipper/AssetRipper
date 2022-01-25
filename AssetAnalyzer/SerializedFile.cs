@@ -23,7 +23,7 @@ namespace AssetAnalyzer
 		public SerializedFileHeader header;
 		private byte m_FileEndianess;
 		public string unityVersion = "2.5.0f5";
-		public Platform m_TargetPlatform = Platform.UnknownPlatform;
+		public Platform m_TargetPlatform = Platform.AnyPlayer;
 		private bool m_EnableTypeTree = true;
 		public List<SerializedType> m_Types;
 		public int bigIDEnabled = 0;
@@ -79,10 +79,6 @@ namespace AssetAnalyzer
 			if (header.m_Version >= SerializedFileFormatVersion.kUnknown_8)
 			{
 				m_TargetPlatform = (Platform)reader.ReadInt32();
-				if (!Enum.IsDefined(typeof(Platform), m_TargetPlatform))
-				{
-					m_TargetPlatform = Platform.UnknownPlatform;
-				}
 			}
 			if (header.m_Version >= SerializedFileFormatVersion.kHasTypeTreeHashes)
 			{

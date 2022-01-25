@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		/// Generation 19
 		/// </summary>
 		public static bool HasRefTypeHash(FormatVersion generation) => generation >= FormatVersion.TypeTreeNodeWithTypeFlags;
-		
+
 		public TypeTreeNode() { }
 
 		public TypeTreeNode(string type, string name, int level, bool align)

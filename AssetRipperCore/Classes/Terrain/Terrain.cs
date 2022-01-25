@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Renderer;
+using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -13,7 +14,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Terrain
 {
-	public sealed class Terrain : Behaviour
+	public sealed class Terrain : Behaviour, ITerrain
 	{
 		public Terrain(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -142,7 +143,7 @@ namespace AssetRipper.Core.Classes.Terrain
 		{
 			base.Read(reader);
 
-			TerrainData.Read(reader);
+			m_TerrainData.Read(reader);
 			TreeDistance = reader.ReadSingle();
 			TreeBillboardDistance = reader.ReadSingle();
 			TreeCrossFadeLength = reader.ReadSingle();
@@ -175,7 +176,7 @@ namespace AssetRipper.Core.Classes.Terrain
 			{
 				StaticShadowCaster = reader.ReadBoolean();
 			}
-			
+
 			reader.AlignStream();
 
 			if (HasReflectionProbeUsage(reader.Version))
@@ -249,7 +250,7 @@ namespace AssetRipper.Core.Classes.Terrain
 				yield return asset;
 			}
 
-			yield return context.FetchDependency(TerrainData, TerrainDataName);
+			yield return context.FetchDependency(m_TerrainData, TerrainDataName);
 			yield return context.FetchDependency(MaterialTemplate, MaterialTemplateName);
 		}
 
@@ -257,7 +258,7 @@ namespace AssetRipper.Core.Classes.Terrain
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(TerrainDataName, TerrainData.ExportYAML(container));
+			node.Add(TerrainDataName, m_TerrainData.ExportYAML(container));
 			node.Add(TreeDistanceName, TreeDistance);
 			node.Add(TreeBillboardDistanceName, TreeBillboardDistance);
 			node.Add(TreeCrossFadeLengthName, TreeCrossFadeLength);
@@ -403,6 +404,8 @@ namespace AssetRipper.Core.Classes.Terrain
 		public uint RenderingLayerMask { get; set; }
 		public bool AllowAutoConnect { get; set; }
 
+		public PPtr<ITerrainData> TerrainData => m_TerrainData.CastTo<ITerrainData>();
+
 		public const string TerrainDataName = "m_TerrainData";
 		public const string TreeDistanceName = "m_TreeDistance";
 		public const string TreeBillboardDistanceName = "m_TreeBillboardDistance";
@@ -433,7 +436,7 @@ namespace AssetRipper.Core.Classes.Terrain
 		public const string RenderingLayerMaskName = "m_RenderingLayerMask";
 		public const string AllowAutoConnectName = "m_AllowAutoConnect";
 
-		public PPtr<TerrainData.TerrainData> TerrainData;
+		public PPtr<TerrainData.TerrainData> m_TerrainData;
 		public ColorRGBA32 LegacySpecular;
 		public PPtr<Material.Material> MaterialTemplate;
 		public Vector4f LightmapTilingOffset;

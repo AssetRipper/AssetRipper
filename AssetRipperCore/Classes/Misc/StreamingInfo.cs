@@ -1,14 +1,16 @@
-using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.Parser.Files.ResourceFiles;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct StreamingInfo : IAsset
+	public struct StreamingInfo : IStreamingInfo
 	{
 		/// <summary>
 		/// 2020 and greater
@@ -27,29 +29,6 @@ namespace AssetRipper.Core.Classes.Misc
 			Offset = 0;
 			Size = 0;
 			Path = string.Empty;
-		}
-
-		public bool CheckIntegrity(ISerializedFile file)
-		{
-			if (!IsSet)
-			{
-				return true;
-			}
-			return file.Collection.FindResourceFile(Path) != null;
-		}
-
-		public byte[] GetContent(ISerializedFile file)
-		{
-			IResourceFile res = file.Collection.FindResourceFile(Path);
-			if (res == null)
-			{
-				return null;
-			}
-
-			byte[] data = new byte[Size];
-			res.Stream.Position = Offset;
-			res.Stream.ReadBuffer(data, 0, data.Length);
-			return data;
 		}
 
 		public void Read(AssetReader reader)
@@ -88,14 +67,30 @@ namespace AssetRipper.Core.Classes.Misc
 			return node;
 		}
 
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
+		{
+			yield break;
+		}
+
+		public List<TypeTreeNode> MakeReleaseTypeTreeNodes(int depth, int startingIndex)
+		{
+			throw new System.NotSupportedException();
+		}
+
+		public List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex)
+		{
+			throw new System.NotSupportedException();
+		}
+
 		public const string OffsetName = "offset";
 		public const string SizeName = "size";
 		public const string PathName = "path";
 
-		public bool IsSet => Path.Length > 0;
-
 		public long Offset { get; set; }
 		public uint Size { get; set; }
 		public string Path { get; set; }
+		public UnityVersion AssetUnityVersion { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }
+		public EndianType EndianType { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }
+		public TransferInstructionFlags TransferInstructionFlags { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }
 	}
 }

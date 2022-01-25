@@ -8,18 +8,18 @@
 		/// <summary>
 		/// No sorting.
 		/// </summary>
-		None				= 0,
+		None = 0,
 		/// <summary>
 		/// Sort based on distance.
 		/// </summary>
-		Distance			= 1,
+		Distance = 1,
 		/// <summary>
 		/// Sort the oldest particles to the front.
 		/// </summary>
-		OldestInFront		= 2,
+		OldestInFront = 2,
 		/// <summary>
 		/// Sort the youngest particles to the front.
 		/// </summary>
-		YoungestInFront		= 3,
+		YoungestInFront = 3,
 	}
 }

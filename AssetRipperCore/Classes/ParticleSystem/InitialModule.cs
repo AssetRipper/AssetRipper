@@ -95,8 +95,8 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			{
 				CustomEmitterVelocity.Read(reader);
 			}
-			
-			
+
+
 			if (HasSize3D(reader.Version))
 			{
 				Size3D = reader.ReadBoolean();

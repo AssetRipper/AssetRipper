@@ -2,9 +2,9 @@
 {
 	public enum TextureQuality
 	{
-		FullRes		= 0,
-		HalfRes		= 1,
-		QuarterRes	= 2,
-		EighthRes	= 3,
+		FullRes = 0,
+		HalfRes = 1,
+		QuarterRes = 2,
+		EighthRes = 3,
 	}
 }

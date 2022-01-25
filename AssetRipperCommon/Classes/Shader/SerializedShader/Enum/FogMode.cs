@@ -1,14 +1,18 @@
 ﻿namespace AssetRipper.Core.Classes.Shader.SerializedShader.Enum
 {
+	/// <summary>
+	/// Duplicate of RenderSettings FogMode<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
+	/// </summary>
 	public enum FogMode
 	{
-		Off		= 0,
-		Linear	= 1,
-		Exp		= 2,
-		Exp2	= 3,
+		Off = 0,
+		Linear = 1,
+		Exp = 2,
+		Exp2 = 3,
 		Count,
 
-		Unknown	= -1,
+		Unknown = -1,
 	}
 
 	public static class FogModeExtensions

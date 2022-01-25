@@ -9,8 +9,8 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
+using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Exporters.Textures.Extensions;
-using AssetRipper.Library.TextureContainers.KTX;
 using AssetRipper.Library.Utils;
 
 namespace AssetRipper.Library.Exporters.Textures
@@ -54,7 +54,14 @@ namespace AssetRipper.Library.Exporters.Textures
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
 				return false;
 			}
-			TaskManager.AddTask(bitmap.SaveAsync(path, ImageExportFormat));
+			if (System.OperatingSystem.IsWindows())
+			{
+				bitmap.Save(path, ImageExportFormat);
+			}
+			else
+			{
+				TaskManager.AddTask(bitmap.SaveAsync(path, ImageExportFormat));
+			}
 			return true;
 		}
 
@@ -79,9 +86,9 @@ namespace AssetRipper.Library.Exporters.Textures
 
 			int pvrtcBitCount = texture.PVRTCBitCount(true);
 			int astcBlockSize = texture.ASTCBlockSize(true);
-			KTXBaseInternalFormat baseInternalFormat = texture.KTXBaseInternalFormat(true);
+			KTXBaseInternalFormat baseInternalFormat = texture.GetKTXBaseInternalFormat(true);
 
-			DirectBitmap bitmap = ConvertToBitmap(texture.TextureFormat, texture.Width, texture.Height, texture.File.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
+			DirectBitmap bitmap = ConvertToBitmap(texture.TextureFormat, texture.Width, texture.Height, texture.SerializedFile.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
 
 			if (bitmap == null)
 			{
@@ -101,7 +108,7 @@ namespace AssetRipper.Library.Exporters.Textures
 		{
 			if (width == 0 || height == 0)
 				return new DirectBitmap(1, 1);
-			
+
 			switch (textureFormat)
 			{
 				case TextureFormat.DXT1:

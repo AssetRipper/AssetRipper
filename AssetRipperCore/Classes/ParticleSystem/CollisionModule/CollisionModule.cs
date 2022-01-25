@@ -89,7 +89,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 			{
 				Planes = reader.ReadAssetArray<PPtr<Transform>>();
 				int planeCount = Planes.Length;
-				if(0 < planeCount) Plane0 = Planes[0];
+				if (0 < planeCount) Plane0 = Planes[0];
 				if (1 < planeCount) Plane1 = Planes[1];
 				if (2 < planeCount) Plane2 = Planes[2];
 				if (3 < planeCount) Plane3 = Planes[3];

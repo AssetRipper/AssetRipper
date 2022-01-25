@@ -17,12 +17,12 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, GetFileExtension((AudioClip)asset));
+			return new AssetExportCollection(this, asset, GetFileExtension((IAudioClip)asset));
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			AudioClip audioClip = (AudioClip)asset;
+			IAudioClip audioClip = (IAudioClip)asset;
 			bool success = AudioClipDecoder.TryGetDecodedAudioClipData(audioClip, out byte[] decodedData, out string fileExtension);
 			if (!success)
 				return false;
@@ -43,10 +43,10 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is AudioClip audio && AudioClipDecoder.CanDecode(audio) && AudioFormat != AudioExportFormat.Native;
+			return asset is IAudioClip audio && AudioClipDecoder.CanDecode(audio) && AudioFormat != AudioExportFormat.Native;
 		}
 
-		private string GetFileExtension(AudioClip audioClip)
+		private string GetFileExtension(IAudioClip audioClip)
 		{
 			string defaultExtension = AudioClipDecoder.GetFileExtension(audioClip);
 			if (AudioFormat == AudioExportFormat.Wav && defaultExtension == "ogg")

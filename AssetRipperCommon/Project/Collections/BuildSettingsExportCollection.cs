@@ -30,8 +30,8 @@ namespace AssetRipper.Core.Project.Collections
 
 			Directory.CreateDirectory(subPath);
 
-			IBuildSettings asset = (IBuildSettings)Asset;
-			InitializeEditorBuildSettings(EditorBuildSettings, asset, container);
+			IBuildSettings buildSettings = (IBuildSettings)Asset;
+			InitializeEditorBuildSettings(EditorBuildSettings, buildSettings, container);
 			AssetExporter.Export(container, EditorBuildSettings, filePath);
 
 			fileName = $"{EditorSettings.ClassID}.asset";
@@ -39,13 +39,30 @@ namespace AssetRipper.Core.Project.Collections
 
 			AssetExporter.Export(container, EditorSettings, filePath);
 
-			SaveProjectVersion(subPath);
+			if (buildSettings.GetType().FullName == "AssetRipper.Core.Classes.BuildSettings")
+			{
+				//SaveDefaultProjectVersion(subPath);
+				SaveMaxProjectVersion(subPath, buildSettings);
+			}
+			else
+			{
+				SaveExactProjectVersion(subPath, buildSettings);
+			}
 			return true;
 		}
 
-		private static void SaveProjectVersion(string projectSettingsDirectory)
+		private static void SaveDefaultProjectVersion(string projectSettingsDirectory)
 		{
-			SaveProjectVersion(projectSettingsDirectory, new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3));
+			SaveProjectVersion(projectSettingsDirectory, UnityVersion.DefaultVersion);
+		}
+		private static void SaveMaxProjectVersion(string projectSettingsDirectory, IBuildSettings buildSettings)
+		{
+			UnityVersion projectVersion = UnityVersion.Max(UnityVersion.DefaultVersion, buildSettings.SerializedFile.Version);
+			SaveProjectVersion(projectSettingsDirectory, projectVersion);
+		}
+		private static void SaveExactProjectVersion(string projectSettingsDirectory, IBuildSettings buildSettings)
+		{
+			SaveProjectVersion(projectSettingsDirectory, buildSettings.SerializedFile.Version);
 		}
 		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version)
 		{
@@ -70,11 +87,11 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			int numScenes = buildSettings.Scenes.Length;
 			editorBuildSettings.InitializeScenesArray(numScenes);
-			IScene[] scenes = editorBuildSettings.Scenes;
-			for(int i = 0; i < numScenes; i++)
+			IEditorScene[] scenes = editorBuildSettings.Scenes;
+			for (int i = 0; i < numScenes; i++)
 			{
 				string scenePath = buildSettings.Scenes[i];
-				IScene scene = scenes[i];
+				IEditorScene scene = scenes[i];
 				scene.Enabled = true;
 				scene.Path = scenePath;
 				scene.GUID = container.SceneNameToGUID(scenePath);

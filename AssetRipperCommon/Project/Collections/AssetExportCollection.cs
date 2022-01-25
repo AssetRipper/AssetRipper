@@ -4,7 +4,6 @@ using AssetRipper.Core.Classes.Meta.Importers.Asset;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
 using AssetRipper.Core.VersionHandling;
 using System;
 using System.Collections.Generic;
@@ -90,7 +89,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected virtual bool ExportInner(IProjectAssetContainer container, string filePath)
 		{
-			return AssetExporter.Export(container, Asset.Convert(container), filePath);
+			return AssetExporter.Export(container, Asset.ConvertLegacy(container), filePath);
 		}
 
 		protected virtual IAssetImporter CreateImporter(IExportContainer container)
@@ -110,12 +109,21 @@ namespace AssetRipper.Core.Project.Collections
 
 		private string fileExtension;
 		public override IAssetExporter AssetExporter { get; }
-		public override ISerializedFile File => Asset.File;
+		public override ISerializedFile File => Asset.SerializedFile;
 		public override IEnumerable<IUnityObjectBase> Assets
 		{
 			get { yield return Asset; }
 		}
-		public override string Name => Asset.ToString();
+		public override string Name
+		{
+			get
+			{
+				if (Asset is IHasName hasName)
+					return hasName.Name;
+				else
+					return Asset.ToString();
+			}
+		}
 		public IUnityObjectBase Asset { get; }
 	}
 }

@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
@@ -44,7 +45,7 @@ namespace AssetRipper.Core.Classes.ResourceManager
 			}
 			if (HasDependentAssets(context.Version, context.Flags))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DependentAssets, DependentAssetsName))
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(DependentAssets, DependentAssetsName))
 				{
 					yield return asset;
 				}
@@ -62,9 +63,9 @@ namespace AssetRipper.Core.Classes.ResourceManager
 			return node;
 		}
 
-		public KeyValuePair<string, PPtr<IUnityObjectBase>>[] GetAssets()
+		public NullableKeyValuePair<string, PPtr<IUnityObjectBase>>[] GetAssets()
 		{
-			return Container.Select(t => new KeyValuePair<string, PPtr<IUnityObjectBase>>(t.Key, t.Value.CastTo<IUnityObjectBase>())).ToArray();
+			return Container.Select(t => new NullableKeyValuePair<string, PPtr<IUnityObjectBase>>(t.Key, t.Value.CastTo<IUnityObjectBase>())).ToArray();
 		}
 
 		public KeyValuePair<string, PPtr<Object.Object>>[] Container { get; set; }

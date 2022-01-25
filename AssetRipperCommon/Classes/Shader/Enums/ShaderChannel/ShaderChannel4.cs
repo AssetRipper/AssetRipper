@@ -7,19 +7,19 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 	/// </summary>
 	public enum ShaderChannel4
 	{
-		Vertex	= 0,
-		Normal	= 1,
-		Color	= 2,
-		UV0		= 3,
-		UV1		= 4,
-		Tangent	= 5,
+		Vertex = 0,
+		Normal = 1,
+		Color = 2,
+		UV0 = 3,
+		UV1 = 4,
+		Tangent = 5,
 	}
 
 	public static class ShaderChannelV4Extensions
 	{
 		public static ShaderChannel ToShaderChannel(this ShaderChannel4 _this)
 		{
-			switch(_this)
+			switch (_this)
 			{
 				case ShaderChannel4.Vertex:
 					return ShaderChannel.Vertex;

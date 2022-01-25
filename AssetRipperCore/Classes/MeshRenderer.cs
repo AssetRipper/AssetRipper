@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Classes
 		public const string AdditionalVertexStreamsName = "m_AdditionalVertexStreams";
 
 		public PPtr<Mesh.Mesh> AdditionalVertexStreams;
-		
+
 		public PPtr<Mesh.Mesh> EnlightenVertexStream;
 	}
 }

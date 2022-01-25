@@ -101,7 +101,7 @@ namespace AssetRipper.Core.Classes.Sprite
 			cropTopRight = new Vector2f(sizeDelta.X - cropBotLeft.X, sizeDelta.Y - cropBotLeft.Y);
 
 			Vector2f pivot = Pivot;
-			if (!HasPivot(File.Version))
+			if (!HasPivot(SerializedFile.Version))
 			{
 				Vector2f center = new Vector2f(Rect.Size.X / 2.0f, Rect.Size.Y / 2.0f);
 				Vector2f pivotOffset = center + Offset;
@@ -121,7 +121,7 @@ namespace AssetRipper.Core.Classes.Sprite
 
 		public Vector2f[][] GenerateOutline(SpriteAtlas.SpriteAtlas atlas, Rectf rect, Vector2f pivot)
 		{
-			Vector2f[][] outlines = RD.GenerateOutline(File.Version);
+			Vector2f[][] outlines = RD.GenerateOutline(SerializedFile.Version);
 			float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
 			float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
 			Vector2f pivotShift = new Vector2f(pivotShiftX, pivotShiftY);
@@ -209,7 +209,7 @@ namespace AssetRipper.Core.Classes.Sprite
 			}
 
 			yield return context.FetchDependency(SpriteAtlas, SpriteAtlasName);
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(RD, RDName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(RD, RDName))
 			{
 				yield return asset;
 			}

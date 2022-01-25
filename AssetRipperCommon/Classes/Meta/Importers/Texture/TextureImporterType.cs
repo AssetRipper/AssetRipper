@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
 	/// <summary>
-	/// Select this to set basic parameters depending on the purpose of your texture.
+	/// Select this to set basic parameters depending on the purpose of your texture.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/AssetPipeline/TextureImporterEnums.cs"/>
 	/// </summary>
 	public enum TextureImporterType
 	{
@@ -46,5 +47,7 @@
 		/// Use this for texture containing a single channel.
 		/// </summary>
 		SingleChannel = 10,
+		Shadowmask = 11,
+		DirectionalLightmap = 12,
 	}
 }

@@ -18,11 +18,11 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Publish AssetRipperConsole Windows x64
-      run: dotnet publish /p:Configuration=ReleaseWindows  /p:Platform=x64 /p:PublishProfile=windows_console
+      run: dotnet publish /p:Configuration=ReleaseWindows  /p:Platform=x64 /p:PublishProfile=windows_console /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI Windows x64
-      run: dotnet publish /p:Configuration=ReleaseWindows  /p:Platform=x64 /p:PublishProfile=windows_gui
+      run: dotnet publish /p:Configuration=ReleaseWindows  /p:Platform=x64 /p:PublishProfile=windows_gui /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperGUI/
       
     - name: List Console Files
@@ -30,6 +30,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipperConsole_win64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_win64/Licenses/
+        date -u > ./Bins/Publish/AssetRipperConsole_win64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipperConsole_win64
       
     - name: Upload AssetRipperConsole Windows x64
@@ -44,6 +45,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipper_win64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipper_win64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_win64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipper_win64
 
     - name: Upload AssetRipperGUI Windows x64
@@ -65,11 +67,11 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Publish AssetRipperConsole Linux x64
-      run: dotnet publish /p:Configuration=ReleaseLinux  /p:Platform=x64 /p:PublishProfile=linux_console
+      run: dotnet publish /p:Configuration=ReleaseLinux  /p:Platform=x64 /p:PublishProfile=linux_console /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI Linux x64
-      run: dotnet publish /p:Configuration=ReleaseLinux  /p:Platform=x64 /p:PublishProfile=linux_gui
+      run: dotnet publish /p:Configuration=ReleaseLinux  /p:Platform=x64 /p:PublishProfile=linux_gui /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperGUI/
         
     - name: List Console Files
@@ -77,6 +79,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipperConsole_linux64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_linux64/Licenses/
+        date -u > ./Bins/Publish/AssetRipperConsole_linux64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipperConsole_linux64
       
     - name: Upload AssetRipperConsole Linux x64
@@ -91,6 +94,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipper_linux64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipper_linux64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_linux64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipper_linux64
 
     - name: Upload AssetRipperGUI Linux x64
@@ -112,11 +116,11 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Publish AssetRipperConsole Mac x64
-      run: dotnet publish /p:Configuration=ReleaseMac  /p:Platform=x64 /p:PublishProfile=mac_console
+      run: dotnet publish /p:Configuration=ReleaseMac  /p:Platform=x64 /p:PublishProfile=mac_console /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI Mac x64
-      run: dotnet publish /p:Configuration=ReleaseMac  /p:Platform=x64 /p:PublishProfile=mac_gui
+      run: dotnet publish /p:Configuration=ReleaseMac  /p:Platform=x64 /p:PublishProfile=mac_gui /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperGUI/
         
     - name: List Console Files
@@ -124,6 +128,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipperConsole_mac64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_mac64/Licenses/
+        date -u > ./Bins/Publish/AssetRipperConsole_mac64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipperConsole_mac64
       
     - name: Upload AssetRipperConsole Mac x64
@@ -138,6 +143,7 @@ jobs:
       run: |
         mkdir -p ./Bins/Publish/AssetRipper_mac64/Licenses
         cp ./Licenses/*.md ./Bins/Publish/AssetRipper_mac64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_mac64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipper_mac64
 
     - name: Upload AssetRipperGUI Mac x64

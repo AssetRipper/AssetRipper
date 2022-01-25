@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Logging
 		private static readonly List<ILogger> loggers = new List<ILogger>();
 		public static bool AllowVerbose { get; set; }
 
-		public static event Action<string, object> OnStatusChanged = (_,_) => { };
+		public static event Action<string, object> OnStatusChanged = (_, _) => { };
 
 		static Logger()
 		{
@@ -63,7 +63,7 @@ namespace AssetRipper.Core.Logging
 		public static void Error(LogCategory category, string message, Exception e)
 		{
 			var sb = new StringBuilder();
-			if(message != null) sb.AppendLine(message);
+			if (message != null) sb.AppendLine(message);
 			sb.AppendLine(e.ToString());
 			Log(LogType.Error, category, sb.ToString());
 		}
@@ -104,7 +104,21 @@ namespace AssetRipper.Core.Logging
 			LogOperatingSystemInformation();
 			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {BuildInfo.Version}");
 			LogReleaseInformation();
-			Log(LogType.Info, LogCategory.System, $"Current UTC Time: {System.DateTime.UtcNow.ToString()}");
+			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {System.DateTime.UtcNow.ToString()}");
+			Log(LogType.Info, LogCategory.System, $"UTC Compile Time: {GetCompileTime()}");
+		}
+
+		private static string GetCompileTime()
+		{
+			string path = ExecutingDirectory.Combine("compile_time.txt");
+			if (File.Exists(path))
+			{
+				return File.ReadAllText(path).Trim();
+			}
+			else
+			{
+				return "Unknown";
+			}
 		}
 
 		private static string GetOsName()
@@ -118,7 +132,7 @@ namespace AssetRipper.Core.Logging
 			else if (OperatingSystem.IsFreeBSD()) return "FreeBSD";
 			else return "Other";
 		}
-		
+
 		public static void Add(ILogger logger) => loggers.Add(logger);
 
 		public static void Remove(ILogger logger) => loggers.Remove(logger);

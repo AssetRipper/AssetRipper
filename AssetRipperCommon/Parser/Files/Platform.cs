@@ -1,148 +1,150 @@
 namespace AssetRipper.Core.Parser.Files
 {
-	//TODO: rename to build target
+	/// <summary>
+	/// TODO: rename to build target<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/BuildTarget.cs"/>
+	/// </summary>
 	public enum Platform : uint
 	{
-		ValidPlayer				= 1,
+		ValidPlayer = 1,
 		/// <summary>
 		/// Build a universal macOS standalone
 		/// </summary>
-		StandaloneOSXUniversal	= 2,
+		StandaloneOSXUniversal = 2,
 		/// <summary>
 		/// Build a macOS standalone (PowerPC only)
 		/// </summary>
-		StandaloneOSXPPC			= 3,
+		StandaloneOSXPPC = 3,
 		/// <summary>
 		/// Build a macOS standalone (Intel only)
 		/// </summary>
-		StandaloneOSXIntel			= 4,
+		StandaloneOSXIntel = 4,
 		/// <summary>
 		/// Build a Windows standalone
 		/// </summary>
-		StandaloneWinPlayer			= 5,
+		StandaloneWinPlayer = 5,
 		/// <summary>
 		/// Build a web player.
 		/// </summary>
-		WebPlayerLZMA					= 6,
+		WebPlayerLZMA = 6,
 		/// <summary>
 		/// Build a streamed web player
 		/// </summary>
-		WebPlayerLZMAStreamed	= 7,
-		Wii										= 8,
+		WebPlayerLZMAStreamed = 7,
+		Wii = 8,
 		/// <summary>
 		/// Build an iOS player
 		/// </summary>
-		iOS										= 9,
-		PS3										= 10,
-		XBox360								= 11,
-		Broadcom							= 12,
+		iOS = 9,
+		PS3 = 10,
+		XBox360 = 11,
+		Broadcom = 12,
 		/// <summary>
 		/// Build an Android .apk standalone app
 		/// </summary>
-		Android								= 13,
-		WinGLESEmu						= 14,
-		WinGLES20Emu					= 15,
+		Android = 13,
+		WinGLESEmu = 14,
+		WinGLES20Emu = 15,
 		/// <summary>
 		/// Google Native Client
 		/// </summary>
-		GoogleNaCl						= 16,
+		GoogleNaCl = 16,
 		/// <summary>
 		/// Build a Linux standalone
 		/// </summary>
-		StandaloneLinux					= 17,
-		Flash									= 18,
+		StandaloneLinux = 17,
+		Flash = 18,
 		/// <summary>
 		/// Build a Windows 64-bit standalone
 		/// </summary>
-		StandaloneWin64Player	= 19,
+		StandaloneWin64Player = 19,
 		/// <summary>
 		/// WebGL
 		/// </summary>
-		WebGL								= 20,
+		WebGL = 20,
 		/// <summary>
 		/// Build an Windows Store Apps player
 		/// </summary>
-		MetroPlayerX86					= 21,
+		MetroPlayerX86 = 21,
 		/// <summary>
 		/// Build an Windows Store Apps player
 		/// </summary>
-		MetroPlayerX64					= 22,
+		MetroPlayerX64 = 22,
 		/// <summary>
 		/// Build an Windows Store Apps player
 		/// </summary>
-		MetroPlayerARM				= 23,
+		MetroPlayerARM = 23,
 		/// <summary>
 		/// Build a Linux 64-bit standalone
 		/// </summary>
-		StandaloneLinux64			= 24,
+		StandaloneLinux64 = 24,
 		/// <summary>
 		/// Build a Linux universal standalone
 		/// </summary>
 		StandaloneLinuxUniversal = 25,
-		WP8Player							= 26,
+		WP8Player = 26,
 		/// <summary>
 		/// Build a macOS Intel 64-bit standalone
 		/// </summary>
-		StandaloneOSXIntel64		= 27,
+		StandaloneOSXIntel64 = 27,
 		/// <summary>
 		/// BlackBerry
 		/// </summary>
-		BB10									= 28,
+		BB10 = 28,
 		/// <summary>
 		/// Build a Tizen player
 		/// </summary>
-		Tizen									= 29,
+		Tizen = 29,
 		/// <summary>
 		/// Build a PS Vita Standalone
 		/// </summary>
-		PSP2									= 30,
+		PSP2 = 30,
 		/// <summary>
 		/// Build a PS4 Standalone
 		/// </summary>
-		PS4										= 31,
-		PSM										= 32,
+		PS4 = 31,
+		PSM = 32,
 		/// <summary>
 		/// Build a Xbox One Standalone
 		/// </summary>
-		XboxOne								= 33,
+		XboxOne = 33,
 		/// <summary>
 		/// Build to Samsung Smart TV platform
 		/// </summary>
-		SamsungTV						= 34,
+		SamsungTV = 34,
 		/// <summary>
 		/// Build to Nintendo 3DS platform
 		/// </summary>
-		N3DS									= 35,
+		N3DS = 35,
 		/// <summary>
 		/// Build a Wii U standalone
 		/// </summary>
-		WiiU									= 36,
+		WiiU = 36,
 		/// <summary>
 		/// Build to Apple's tvOS platform
 		/// </summary>
-		tvOS									= 37,
+		tvOS = 37,
 		/// <summary>
 		/// Build a Nintendo Switch player
 		/// </summary>
-		Switch									= 38,
-		Lumin									= 39,
-		Stadia									= 40,
-		CloudRendering					= 41,
-		GameCoreXboxSeries		= 42,
-		GameCoreXboxOne			= 43,
+		Switch = 38,
+		Lumin = 39,
+		Stadia = 40,
+		CloudRendering = 41,
+		GameCoreXboxSeries = 42,
+		GameCoreXboxOne = 43,
 		/// <summary>
 		/// Build a PS5 Standalone
 		/// </summary>
-		PS5										= 44,
-		PlayerTypeCount,
-
-		UnknownPlatform = 9999,
+		PS5 = 44,
+		EmbeddedLinux = 45,
+		QNX = 46,
 
 		/// <summary>
 		/// Editor
 		/// </summary>
-		NoTarget					= 0xFFFFFFFE,
-		AnyPlayer				= 0xFFFFFFFF,
+		NoTarget = 0xFFFFFFFE,
+		AnyPlayer = 0xFFFFFFFF,
 	}
 
 	public static class PlatformExtensions
@@ -167,7 +169,7 @@ namespace AssetRipper.Core.Parser.Files
 
 		public static bool IsStandalone(this Platform _this)
 		{
-			switch(_this)
+			switch (_this)
 			{
 				case Platform.StandaloneWinPlayer:
 				case Platform.StandaloneWin64Player:

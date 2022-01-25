@@ -121,7 +121,7 @@ namespace AssetRipper.Core.Classes.Material
 			}
 
 			yield return context.FetchDependency(Shader, ShaderName);
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(SavedProperties, SavedPropertiesName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(SavedProperties, SavedPropertiesName))
 			{
 				yield return asset;
 			}

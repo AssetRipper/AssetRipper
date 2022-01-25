@@ -80,7 +80,7 @@ namespace AssetRipper.Console
 				if (options.OutputDirectory == null)
 					options.OutputDirectory = new DirectoryInfo(ExecutingDirectory.Combine("Ripped"));
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				System.Console.WriteLine($"Failed to initialize the output and log paths.");
 				System.Console.WriteLine(ex.ToString());
@@ -116,6 +116,7 @@ namespace AssetRipper.Console
 		{
 			if (Directory.Exists(path))
 			{
+				Logger.Info("Clearing export directory...");
 				Directory.Delete(path, true);
 			}
 		}

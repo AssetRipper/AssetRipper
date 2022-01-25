@@ -59,7 +59,7 @@ namespace AssetRipper.Core.Classes
 
 			Position = position;
 			IKOnFeet = state.IKOnFeet;
-			WriteDefaultValues = state.GetWriteDefaultValues(controller.File.Version);
+			WriteDefaultValues = state.GetWriteDefaultValues(controller.SerializedFile.Version);
 			Mirror = state.Mirror;
 			SpeedParameterActive = state.SpeedParamID > 0;
 			MirrorParameterActive = state.MirrorParamID > 0;

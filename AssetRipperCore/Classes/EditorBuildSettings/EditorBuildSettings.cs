@@ -2,7 +2,6 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
@@ -86,14 +85,14 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 		public void InitializeScenesArray(int length)
 		{
 			m_Scenes = new Scene[length];
-			for(int i = 0; i < length; i++)
+			for (int i = 0; i < length; i++)
 			{
 				m_Scenes[i] = new Scene();
 			}
 		}
 
 		public Scene[] m_Scenes;
-		public IScene[] Scenes
+		public IEditorScene[] Scenes
 		{
 			get => m_Scenes;
 		}

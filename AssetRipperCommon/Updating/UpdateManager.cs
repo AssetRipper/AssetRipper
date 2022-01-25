@@ -54,7 +54,7 @@ namespace AssetRipper.Core.Updating
 
 		public static void LogUpdateCheck()
 		{
-			if(CheckForUpdates(out Version localVersion, out Version githubVersion))
+			if (CheckForUpdates(out Version localVersion, out Version githubVersion))
 			{
 				if (githubVersion > localVersion)
 					Logger.Info(LogCategory.System, $"A updated version is available ({githubVersion}) at {BuildInfo.LatestReleaseURL}");

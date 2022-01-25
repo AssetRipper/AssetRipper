@@ -250,13 +250,13 @@ namespace AssetRipper.Core.Classes.Light
 			{
 				BoundingSphereOverride.Read(reader);
 				UseBoundingSphereOverride = reader.ReadBoolean();
-				
+
 				if (HasUseViewFrustumForShadowCasterCull(reader.Version))
 				{
 					//2020.2
 					UseViewFrustumForShadowCasterCull = reader.ReadBoolean();
 				}
-				
+
 				reader.AlignStream();
 			}
 		}
@@ -385,7 +385,7 @@ namespace AssetRipper.Core.Classes.Light
 		public ShadowSettings Shadows;
 		public PPtr<Texture> Cookie;
 		public LightBakingOutput BakingOutput;
-		public PPtr<Flare> Flare;
+		public PPtr<Flare.Flare> Flare;
 		public BitField CullingMask;
 		public Vector2f AreaSize;
 		public FalloffTable FalloffTable;

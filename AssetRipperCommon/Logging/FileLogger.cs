@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Logging
 			{
 				File.AppendAllText(filePath, stringBuilder.ToString());
 			}
-			catch(System.IO.IOException)
+			catch (System.IO.IOException)
 			{
 				//Could not log to file
 			}

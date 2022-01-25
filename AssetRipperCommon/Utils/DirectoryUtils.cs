@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Utils
 			string escapedChars = Regex.Escape(invalidChars);
 			return new Regex($"[{escapedChars}]");
 		}
-		
+
 		public static string GetRelativePath(string filePath, string folder)
 		{
 			Uri pathUri = new Uri(filePath);

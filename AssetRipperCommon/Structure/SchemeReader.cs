@@ -72,7 +72,7 @@ namespace AssetRipper.Core.Structure
 				Logger.SendStatusChange($"loading_step_parse_serialized", fileName);
 				return SerializedFile.ReadScheme(stream, filePath, fileName);
 			}
-			
+
 			Logger.SendStatusChange($"loading_step_parse_resource", fileName);
 			return ResourceFile.ReadScheme(stream, filePath, fileName);
 		}

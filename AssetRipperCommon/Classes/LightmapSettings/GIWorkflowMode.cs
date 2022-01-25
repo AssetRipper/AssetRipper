@@ -2,8 +2,8 @@
 {
 	public enum GIWorkflowMode
 	{
-		Iterative	= 0,
-		OnDemand	= 1,
-		Legacy		= 2,
+		Iterative = 0,
+		OnDemand = 1,
+		Legacy = 2,
 	}
 }

@@ -1,5 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.UI.Canvas
 {
+	/// <summary>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/UI/ScriptBindings/UICanvas.bindings.cs"/>
+	/// </summary>
 	public enum RenderMode
 	{
 		/// <summary>

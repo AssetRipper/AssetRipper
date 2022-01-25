@@ -38,7 +38,7 @@ namespace AssetAnalyzer
 						break;
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Logger.Error(ex);
 			}
@@ -56,7 +56,7 @@ namespace AssetAnalyzer
 				Logger.Info($"\tSerialied version: {(int)assetsFile.header.m_Version}");
 				Logger.Info($"\tEndianess: {(assetsFile.header.m_Endianess == 0 ? "Little Endian" : "Big Endian")}");
 
-				if(assetsFile.m_Externals.Count > 0)
+				if (assetsFile.m_Externals.Count > 0)
 					Logger.Info("\tShared files:");
 
 				foreach (var sharedFile in assetsFile.m_Externals)

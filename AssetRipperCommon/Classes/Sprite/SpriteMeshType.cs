@@ -1,7 +1,8 @@
 ﻿namespace AssetRipper.Core.Classes.Sprite
 {
 	/// <summary>
-	/// Defines the type of mesh generated for a sprite.
+	/// Defines the type of mesh generated for a sprite.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/2D/Common/ScriptBindings/Sprites.bindings.cs"/>
 	/// </summary>
 	public enum SpriteMeshType
 	{

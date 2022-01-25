@@ -169,7 +169,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			{
 				SimulationMode = reader.ReadInt32();
 			}
-			
+
 			QueriesHitTriggers = reader.ReadBoolean();
 			if (HasQueriesStartInColliders(reader.Version))
 			{
@@ -376,7 +376,7 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		public bool DeleteStopsCallbacks { get; set; }
 		public bool ChangeStopsCallbacks { get; set; }
 		public bool CallbacksOnDisable { get; set; }
-		
+
 		public bool ReuseCollisionCallbacks { get; set; }
 		public bool AutoSyncTransforms { get; set; }
 

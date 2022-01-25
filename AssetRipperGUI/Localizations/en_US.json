@@ -84,6 +84,7 @@
   "menu_export": "Export",
   "menu_export_all": "Export all Files",
   "menu_export_selected": "Export Selected File",
+  "menu_export_selected_type": "Export all Files of Selected Type",
   "menu_language": "Language",
   "menu_about": "About",
   "menu_about_website": "Website",
@@ -130,5 +131,6 @@
   "export_in_progress": "Exporting Asset Files\n{0}%\n{1}/{2}",
   "error_exporting_with_reason": "Failed to export game content: {0}",
   "error_importing_with_reason": "Failed to load game content: {0}",
+  "check_log_for_more_details":  "Check log for more details",
   "loose_file_saved_at": "Loose file saved at {0}"
 }

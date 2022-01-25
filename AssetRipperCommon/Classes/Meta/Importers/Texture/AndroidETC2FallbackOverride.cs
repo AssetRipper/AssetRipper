@@ -2,7 +2,8 @@
 {
 	/// <summary>
 	/// This enumeration has values for different qualities to decompress an ETC2 texture on Android devices
-	/// that don't support the ETC2 texture format.
+	/// that don't support the ETC2 texture format.<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/AssetPipeline/TextureImporterEnums.cs"/>
 	/// </summary>
 	public enum AndroidETC2FallbackOverride
 	{

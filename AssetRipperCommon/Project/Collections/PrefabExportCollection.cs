@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.GameObject;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Classes.PrefabInstance;
 using AssetRipper.Core.Interfaces;
@@ -16,25 +17,28 @@ namespace AssetRipper.Core.Project.Collections
 	{
 		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IUnityObjectBase asset) : this(assetExporter, virtualFile, GetAssetRoot(asset)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IGameObject root) : this(assetExporter, root.File, CreateVirtualPrefab(virtualFile, root)) { }
+		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IGameObject root) : this(assetExporter, root.SerializedFile, CreateVirtualPrefab(virtualFile, root)) { }
 
 		private PrefabExportCollection(IAssetExporter assetExporter, IAssetContainer file, IPrefabInstance prefab) : base(assetExporter, prefab)
 		{
 			foreach (IEditorExtension asset in prefab.FetchObjects(file))
 			{
 				AddAsset(asset);
+
+				//This section might not be necessary. This seems to be quite different from normal prefab files
+				asset.PrefabInstance = prefab.SerializedFile.CreatePPtr(prefab);
 			}
 		}
 
 		public static bool IsValidAsset(IUnityObjectBase asset)
 		{
-			if(asset is IGameObject)
+			if (asset is IGameObject)
 			{
 				return true;
 			}
-			else if(asset is IComponent component)
+			else if (asset is IComponent component)
 			{
-				return component.GameObjectPtr.FindAsset(component.File) != null;
+				return component.GameObjectPtr.FindAsset(component.SerializedFile) != null;
 			}
 			return false;
 		}
@@ -50,9 +54,9 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return gameObject.GetRoot();
 			}
-			else if(asset is IComponent component)
+			else if (asset is IComponent component)
 			{
-				IGameObject go = component.GameObjectPtr.GetAsset(component.File);
+				IGameObject go = component.GameObjectPtr.GetAsset(component.SerializedFile);
 				return go.GetRoot();
 			}
 			else
@@ -63,13 +67,16 @@ namespace AssetRipper.Core.Project.Collections
 		public override ISerializedFile File => m_file;
 		public override TransferInstructionFlags Flags => base.Flags | TransferInstructionFlags.SerializeForPrefabSystem;
 
+		//This might not be necessary. 2019.4.3 doesn't use this in normally created prefabs
 		private static IPrefabInstance CreateVirtualPrefab(VirtualSerializedFile virtualFile, IGameObject root)
 		{
 			IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance);
-			instance.ObjectHideFlags = HideFlags.HideInHierarchy;
-			instance.RootGameObjectPtr = root.File.CreatePPtr(root);
+			instance.RootGameObjectPtr = root.SerializedFile.CreatePPtr(root);
 			instance.IsPrefabAsset = true;
-			instance.TrySetFieldValue<string>("m_Name", root.Name);
+			if (instance is IHasName hasName)
+			{
+				hasName.Name = root.Name;
+			}
 			return instance;
 		}
 
@@ -85,7 +92,7 @@ namespace AssetRipper.Core.Project.Collections
 
 				foreach (IUnityObjectBase asset in m_assets)
 				{
-					m_file = asset.File;
+					m_file = asset.SerializedFile;
 					yield return asset;
 				}
 			}

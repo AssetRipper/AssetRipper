@@ -28,9 +28,9 @@ namespace AssetRipper.Core.Project.Collections
 				throw new ArgumentNullException(nameof(asset));
 			}
 
-			File = asset.File;
+			File = asset.SerializedFile;
 			m_version = version;
-			if (IsEngineFile(asset.File.Name))
+			if (IsEngineFile(asset.SerializedFile.Name))
 			{
 				foreach (IUnityObjectBase builtInAsset in File.FetchAssets())
 				{
@@ -52,35 +52,35 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return false;
 			}
-			if (IsEngineFile(asset?.File.Name))
+			if (IsEngineFile(asset?.SerializedFile.Name))
 			{
 				return true;
 			}
 
-			if(asset is IMaterial material)
+			if (asset is IMaterial material)
 			{
 				if (material.Name == EngineBuiltInAssets.FontMaterialName)
 				{
 					return false;
 				}
-				IShader shader = material.ShaderPtr.FindAsset(material.File);
+				IShader shader = material.ShaderPtr.FindAsset(material.SerializedFile);
 				if (shader == null)
 				{
 					return true;
 				}
 				return IsEngineAsset(shader, version);
 			}
-			else if(asset is IShader)
+			else if (asset is IShader)
 			{
 				return true;
 			}
-			else if(asset is ITexture2D texture)
+			else if (asset is ITexture2D texture)
 			{
 				return builtinAsset.Parameter == texture.CompleteImageSize;
 			}
 			else if (asset is ISprite sprite)
 			{
-				ITexture2D spriteTexture = sprite.TexturePtr.FindAsset(sprite.File);
+				ITexture2D spriteTexture = sprite.TexturePtr.FindAsset(sprite.SerializedFile);
 				if (spriteTexture == null)
 				{
 					return false;
@@ -135,7 +135,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is IShader shader)
 			{
-				if (EngineBuiltInAssets.TryGetShader(shader.ValidName, version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetShader(shader.GetValidShaderName(), version, out engineAsset))
 				{
 					return true;
 				}
@@ -171,7 +171,7 @@ namespace AssetRipper.Core.Project.Collections
 					}
 				}
 			}
-			
+
 			engineAsset = default;
 			return false;
 		}
@@ -201,7 +201,7 @@ namespace AssetRipper.Core.Project.Collections
 			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engneAsset);
 			if (!engneAsset.IsValid)
 			{
-				throw new NotImplementedException($"Unknown ExportID for asset {asset.PathID} from file {asset.File.Name}");
+				throw new NotImplementedException($"Unknown ExportID for asset {asset.PathID} from file {asset.SerializedFile.Name}");
 			}
 			long exportID = engneAsset.ExportID;
 			UnityGUID guid = engneAsset.GUID;

@@ -20,7 +20,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			Templates = LoadTemplates();
 		}
 
-		public static TemplateShader GetBestTemplate(Shader shader)
+		public static TemplateShader GetBestTemplate(IShader shader)
 		{
 			return Templates.Where(tmp => tmp.IsMatch(shader)).MaxBy(matchedTmp => matchedTmp.RequiredProperties.Count);
 		}
@@ -29,9 +29,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 		{
 			Logger.Verbose("Loading shader templates");
 			string jsonText = GetTextFromResource(TemplatesJsonPath);
-			
+
 			List<TemplateShader> templates = JsonSerializer.Deserialize<TemplateJson>(jsonText).Templates;
-			foreach(TemplateShader template in templates)
+			foreach (TemplateShader template in templates)
 			{
 				string path = ShaderTemplatePrefix + template.TemplateName + ShaderTemplateExtension;
 				template.ShaderText = GetTextFromResource(path);
@@ -43,7 +43,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 		{
 			Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
 			using StreamReader reader = new(stream);
-			return reader.ReadToEnd().Replace("\r","");
+			return reader.ReadToEnd().Replace("\r", "");
 		}
 	}
 }

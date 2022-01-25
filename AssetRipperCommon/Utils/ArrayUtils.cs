@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Utils
 		{
 			if (array1 == null) throw new ArgumentNullException(nameof(array1));
 			if (array2 == null) throw new ArgumentNullException(nameof(array2));
-			
+
 			List<T> result = new List<T>(array1.Length + array2.Length);
 			foreach (var item1 in array1)
 				result.Add(item1);

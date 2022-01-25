@@ -217,11 +217,11 @@ namespace AssetRipper.Library.Utils
 			{
 				foreach (var asset in shaderBundle.FetchAssets())
 				{
-					if (asset is Shader shader)
+					if (asset is IShader shader)
 					{
 						using (MD5 md5 = MD5.Create())
 						{
-							byte[] md5Hash = md5.ComputeHash(Encoding.ASCII.GetBytes(shader.ValidName));
+							byte[] md5Hash = md5.ComputeHash(Encoding.ASCII.GetBytes(shader.GetValidShaderName()));
 							asset.AssetInfo.GUID = new UnityGUID(md5Hash);
 						}
 					}
@@ -249,7 +249,7 @@ namespace AssetRipper.Library.Utils
 		{
 			foreach (var asset in assets)
 			{
-				asset.AssetInfo.GUID = new UnityGUID(Guid.NewGuid());
+				asset.AssetInfo.GUID = UnityGUID.NewGuid();
 			}
 		}
 		public static void FixScript(IMonoScript script)

@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
@@ -71,11 +72,6 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		/// </summary>
 		public static bool HasSceneHashes(UnityVersion version) => version.IsGreaterEqual(2017, 3);
 
-		/// <summary>
-		/// 5.0.0 and greater
-		/// </summary>
-		public static bool HasPathExtension(UnityVersion version) => version.IsGreaterEqual(5);
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -141,7 +137,7 @@ namespace AssetRipper.Core.Classes.AssetBundle
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Container.Select(t => t.Value), ContainerName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Container.Select(t => t.Value), ContainerName))
 			{
 				yield return asset;
 			}
@@ -152,9 +148,9 @@ namespace AssetRipper.Core.Classes.AssetBundle
 			throw new NotSupportedException();
 		}
 
-		public KeyValuePair<string, IAssetInfo>[] GetAssets()
+		public NullableKeyValuePair<string, IAssetInfo>[] GetAssets()
 		{
-			return Container.Select(t => new KeyValuePair<string, IAssetInfo>(t.Key, t.Value)).ToArray();
+			return Container.Select(t => new NullableKeyValuePair<string, IAssetInfo>(t.Key, t.Value)).ToArray();
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();
@@ -171,6 +167,8 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		public int ExplicitDataLayout { get; set; }
 		public int PathFlags { get; set; }
 		public Dictionary<string, string> SceneHashes { get; set; }
+
+		bool IAssetBundle.HasAssetBundleName => HasAssetBundleName(SerializedFile.Version);
 
 		public const string ContainerName = "m_Container";
 

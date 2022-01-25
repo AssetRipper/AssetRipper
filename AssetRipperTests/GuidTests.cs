@@ -1,16 +1,18 @@
 using AssetRipper.Core.Classes.Misc;
 using NUnit.Framework;
 using System;
-using System.Text;
 
 namespace AssetRipper.Tests
 {
 	public class GuidTests
-    {
-        [SetUp]
-        public void Setup()
-        {
-        }
+	{
+		private const string randomGuidString = "352a5b3897136ed2702a283243520538";
+		private const string sequentialGuidString = "0123456789abcdef0fedcba987654321";
+
+		[SetUp]
+		public void Setup()
+		{
+		}
 
 		[Test]
 		public void MissingReferenceSerializedCorrectly()
@@ -27,7 +29,7 @@ namespace AssetRipper.Tests
 			Assert.AreEqual(guid, fromBytes);
 			Assert.AreEqual(guid.ToString(), fromBytes.ToString());
 		}
-		/*
+		
 		[Test]
 		public void ConversionFromSystemGuidToUnityGuidProducesSameString()
 		{
@@ -37,17 +39,33 @@ namespace AssetRipper.Tests
 		}
 
 		[Test]
-		public void UnityGuidToStringIsSameAsByteArrayToHex()
+		public void IsZeroReturnsTrueForTheZeroGuid()
+		{
+			UnityGUID unityGUID = new UnityGUID(0, 0, 0, 0);
+			Assert.IsTrue(unityGUID.IsZero);
+		}
+
+		[Test]
+		public void IsZeroReturnsFalseForRandomGuid()
 		{
 			UnityGUID unityGUID = UnityGUID.NewGuid();
-			byte[] data = unityGUID.ToByteArray();
-			StringBuilder sb = new StringBuilder();
-			foreach(byte b in data)
-			{
-				sb.Append(b.ToString("x2"));
-			}
-			Assert.AreEqual(sb.ToString(), unityGUID.ToString());
+			Assert.IsFalse(unityGUID.IsZero);
 		}
-		*/
+
+		[Test]
+		public void ParsedGuidOutputsSameString()
+		{
+			UnityGUID parsedGUID = UnityGUID.Parse(randomGuidString);
+			string outputedString = parsedGUID.ToString();
+			Assert.AreEqual(randomGuidString, outputedString);
+		}
+
+		[Test]
+		public void ConversionsAreInverses()
+		{
+			UnityGUID unityGuid = UnityGUID.NewGuid();
+			Guid systemGuid = (Guid)unityGuid;
+			Assert.AreEqual(unityGuid, (UnityGUID)systemGuid);
+		}
 	}
 }

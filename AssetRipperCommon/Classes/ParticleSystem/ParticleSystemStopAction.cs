@@ -8,18 +8,18 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		/// <summary>
 		/// Do nothing.
 		/// </summary>
-		None		= 0,
+		None = 0,
 		/// <summary>
 		/// Disable the GameObject containing the Particle System.
 		/// </summary>
-		Disable		= 1,
+		Disable = 1,
 		/// <summary>
 		/// Destroy the GameObject containing the Particle System.
 		/// </summary>
-		Destroy		= 2,
+		Destroy = 2,
 		/// <summary>
 		/// Call OnParticleSystemStopped on the ParticleSystem script.
 		/// </summary>
-		Callback	= 3,
+		Callback = 3,
 	}
 }

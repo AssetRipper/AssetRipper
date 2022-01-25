@@ -8,14 +8,14 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 		/// <summary>
 		/// Select animation frames based on the particle ages.
 		/// </summary>
-		Lifetime	= 0,
+		Lifetime = 0,
 		/// <summary>
 		/// Select animation frames based on the particle speeds.
 		/// </summary>
-		Speed		= 1,
+		Speed = 1,
 		/// <summary>
 		/// Select animation frames sequentially at a constant rate of the specified frames per second.
 		/// </summary>
-		FPS			= 2,
+		FPS = 2,
 	}
 }

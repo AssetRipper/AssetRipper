@@ -585,7 +585,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				return true;
 			else if (type == null || checkType == null)
 				return false;
-			
+
 			MonoTypeContext context = new MonoTypeContext(checkType, checkContext);
 			MonoTypeContext resolvedContext = context.Resolve();
 			return MetadataResolverExtensions.AreSame(type, resolvedContext.Type);
@@ -899,7 +899,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 					{
 						if (t is GenericParameter p && arguments.TryGetValue(p, out TypeReference resolved))
 							t = resolved;
-						
+
 						if (t.IsGenericInstance)
 							return IsSerializableGeneric(t, arguments);
 
@@ -916,7 +916,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 
 						return false;
 					});
-					
+
 					return allSerializableArgs;
 				}
 			}

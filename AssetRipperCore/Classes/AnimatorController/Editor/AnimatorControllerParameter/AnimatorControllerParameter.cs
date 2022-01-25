@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerP
 		{
 			ValueConstant value = controller.Controller.Values.Instance.ValueArray[paramIndex];
 			Name = controller.TOS[value.ID];
-			Type = value.GetTypeValue(controller.File.Version);
+			Type = value.GetTypeValue(controller.SerializedFile.Version);
 			switch (Type)
 			{
 				case AnimatorControllerParameterType.Trigger:
@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerP
 				default:
 					throw new NotSupportedException($"Parameter type '{Type}' isn't supported");
 			}
-			DefaultController = controller.File.CreatePPtr(controller);
+			DefaultController = controller.SerializedFile.CreatePPtr(controller);
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)

@@ -7,7 +7,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 	{
 		CompressionTypeMask = 0x3F,
 
-		Streamed			= 0x40,
+		Streamed = 0x40,
 	}
 
 	public static class StorageBlockFlagsExtensions

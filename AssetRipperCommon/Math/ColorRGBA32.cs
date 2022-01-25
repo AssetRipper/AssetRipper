@@ -52,7 +52,7 @@ namespace AssetRipper.Core.Math
 		/// NOTE: min version is 2
 		/// </summary>
 		public static int ToSerializedVersion() => 2;
-		
+
 		public static ColorRGBA32 Black => new ColorRGBA32(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 		public static ColorRGBA32 White => new ColorRGBA32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 

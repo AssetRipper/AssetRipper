@@ -20,13 +20,13 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 				throw new ArgumentNullException(nameof(behaviours));
 			}
 
-			State = state.File.CreatePPtr(state);
+			State = state.SerializedFile.CreatePPtr(state);
 
 			StateMachineBehaviours = new PPtr<MonoBehaviour>[behaviours.Length];
 			for (int i = 0; i < behaviours.Length; i++)
 			{
 				MonoBehaviour behaviour = behaviours[i];
-				PPtr<MonoBehaviour> behaviourPtr = behaviour.File.CreatePPtr(behaviour);
+				PPtr<MonoBehaviour> behaviourPtr = behaviour.SerializedFile.CreatePPtr(behaviour);
 				StateMachineBehaviours[i] = behaviourPtr;
 			}
 		}

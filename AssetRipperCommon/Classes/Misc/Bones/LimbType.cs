@@ -4,10 +4,10 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 {
 	public enum LimbType
 	{
-		LeftFoot	= 0,
-		RightFoot	= 1,
-		LeftHand	= 2,
-		RightHand	= 3,
+		LeftFoot = 0,
+		RightFoot = 1,
+		LeftHand = 2,
+		RightHand = 3,
 
 		Last,
 	}

@@ -7,14 +7,14 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 	/// </summary>
 	public enum ShaderChannel5
 	{
-		Vertex	= 0,
-		Normal	= 1,
-		Color	= 2,
-		UV0		= 3,
-		UV1		= 4,
-		UV2		= 5,
-		UV3		= 6,
-		Tangent	= 7,
+		Vertex = 0,
+		Normal = 1,
+		Color = 2,
+		UV0 = 3,
+		UV1 = 4,
+		UV2 = 5,
+		UV3 = 6,
+		Tangent = 7,
 	}
 
 	public static class ShaderChannelV5Extensions

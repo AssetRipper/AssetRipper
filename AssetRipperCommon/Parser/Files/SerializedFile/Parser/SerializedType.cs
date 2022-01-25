@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				OldType = new TypeTree.TypeTree();
 			}
 		}
-		
+
 		/// <summary>
 		/// 5.5.0a and greater
 		/// </summary>

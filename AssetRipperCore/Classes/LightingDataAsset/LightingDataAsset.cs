@@ -113,16 +113,16 @@ namespace AssetRipper.Core.Classes.LightingDataAsset
 			}
 
 			yield return context.FetchDependency(Scene, SceneName);
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Lightmaps, LightmapsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Lightmaps, LightmapsName))
 			{
 				yield return asset;
 			}
 			yield return context.FetchDependency(LightProbes, LightProbesName);
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LightmappedRendererData, LightmappedRendererDataName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(LightmappedRendererData, LightmappedRendererDataName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(EnlightenSceneMapping, EnlightenSceneMappingName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(EnlightenSceneMapping, EnlightenSceneMappingName))
 			{
 				yield return asset;
 			}

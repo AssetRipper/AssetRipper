@@ -72,7 +72,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private CSharpDecompiler GetOrMakeDecompiler(AssemblyDefinition assembly)
 		{
 			CSharpDecompiler result;
-			if(!decompilers.TryGetValue(assembly, out result))
+			if (!decompilers.TryGetValue(assembly, out result))
 			{
 				result = MakeDecompiler(assembly);
 				decompilers.Add(assembly, result);
@@ -87,7 +87,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			settings.ShowXmlDocumentation = true;
 			settings.LoadInMemory = true; //pulled from ILSpy code for reading a pe file from a stream
 			var decompiler = new CSharpDecompiler(assemblyResolver.Resolve(assembly.FullName), assemblyResolver, settings);
-			if(ScriptContentLevel == ScriptContentLevel.Level1)
+			if (ScriptContentLevel == ScriptContentLevel.Level1)
 			{
 				decompiler.AstTransforms.Insert(0, new MethodStripper());
 			}

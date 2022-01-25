@@ -114,7 +114,7 @@ namespace AssetRipper.Core.Classes.AnimatorController
 
 		public PPtr<MonoBehaviour>[] GetStateBehaviours(int layerIndex)
 		{
-			if (HasStateMachineBehaviourVectorDescription(File.Version))
+			if (HasStateMachineBehaviourVectorDescription(SerializedFile.Version))
 			{
 				uint layerID = Controller.LayerArray[layerIndex].Instance.Binding;
 				StateKey key = new StateKey(layerIndex, layerID);
@@ -128,12 +128,12 @@ namespace AssetRipper.Core.Classes.AnimatorController
 
 		public PPtr<MonoBehaviour>[] GetStateBehaviours(int stateMachineIndex, int stateIndex)
 		{
-			if (HasStateMachineBehaviourVectorDescription(File.Version))
+			if (HasStateMachineBehaviourVectorDescription(SerializedFile.Version))
 			{
 				int layerIndex = Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
 				StateMachineConstant stateMachine = Controller.StateMachineArray[stateMachineIndex].Instance;
 				StateConstant state = stateMachine.StateConstantArray[stateIndex].Instance;
-				uint stateID = state.GetID(File.Version);
+				uint stateID = state.GetID(SerializedFile.Version);
 				StateKey key = new StateKey(layerIndex, stateID);
 				if (StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange range))
 				{
@@ -147,7 +147,7 @@ namespace AssetRipper.Core.Classes.AnimatorController
 		{
 			foreach (PPtr<AnimationClip.AnimationClip> clipPtr in AnimationClips)
 			{
-				if (clipPtr.IsAsset(File, clip))
+				if (clipPtr.IsAsset(SerializedFile, clip))
 				{
 					return true;
 				}
@@ -157,12 +157,12 @@ namespace AssetRipper.Core.Classes.AnimatorController
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
-			if (container is null) 
+			if (container is null)
 				throw new ArgumentNullException(nameof(container));
 
 			AnimatorControllerExportCollection collection = container.CurrentCollection as AnimatorControllerExportCollection;
 
-			if(collection == null)
+			if (collection == null)
 				throw new NotSupportedException($"Container is of type {container.GetType()}. It must be an animator controller export collection.");
 
 			AnimatorControllerParameter[] @params = new AnimatorControllerParameter[Controller.Values.Instance.ValueArray.Length];

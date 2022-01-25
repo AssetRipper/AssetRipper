@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 		/// 2021 and greater
 		/// </summary>
 		public static bool HasEnableAlphaDilation(UnityVersion version) => version.IsGreaterEqual(2021);
-		
+
 		public PackingSettings(bool _)
 		{
 			Padding = 2;
@@ -48,7 +48,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			{
 				EnableAlphaDilation = reader.ReadBoolean();
 			}
-			
+
 			reader.AlignStream();
 		}
 

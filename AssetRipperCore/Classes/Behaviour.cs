@@ -6,11 +6,11 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes
 {
-	public abstract class Behaviour : Component
+	public abstract class Behaviour : Component, IBehaviour
 	{
 		protected Behaviour(LayoutInfo layout) : base(layout)
 		{
-			Enabled = 1;
+			Enabled = true;
 		}
 
 		protected Behaviour(AssetInfo assetInfo) : base(assetInfo) { }
@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
-			Enabled = reader.ReadByte();
+			m_Enabled = reader.ReadByte();
 			reader.AlignStream();
 		}
 
@@ -27,14 +27,14 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Write(writer);
 
-			writer.Write(Enabled);
+			writer.Write(m_Enabled);
 			writer.AlignStream();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(EnabledName, Enabled);
+			node.Add(EnabledName, m_Enabled);
 			return node;
 		}
 
@@ -53,13 +53,13 @@ namespace AssetRipper.Core.Classes
 			return base.ExportYAMLRoot(container);
 		}
 
-		public bool EnabledBool
+		public bool Enabled
 		{
-			get => Enabled != 0;
-			set => Enabled = value ? (byte)1 : (byte)0;
+			get => m_Enabled != 0;
+			set => m_Enabled = value ? (byte)1 : (byte)0;
 		}
 
-		public byte Enabled { get; set; }
+		public byte m_Enabled { get; set; }
 
 		public const string EnabledName = "m_Enabled";
 	}

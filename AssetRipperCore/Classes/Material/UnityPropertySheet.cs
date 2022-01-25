@@ -98,7 +98,7 @@ namespace AssetRipper.Core.Classes.Material
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(TexEnvs.Values, TexEnvsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(TexEnvs.Values, TexEnvsName))
 			{
 				yield return asset;
 			}

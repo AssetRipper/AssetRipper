@@ -5,34 +5,25 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.OcclusionCullingData
 {
-	public struct OcclusionScene : IAssetReadable, IYAMLExportable
+	public class OcclusionScene : UnityAssetBase, IOcclusionScene
 	{
-		public OcclusionScene(UnityGUID scene, int renderSize, int portalSize)
-		{
-			Scene = scene;
-			IndexRenderers = 0;
-			SizeRenderers = renderSize;
-			IndexPortals = 0;
-			SizePortals = portalSize;
-		}
-
-		public void Read(AssetReader reader)
+		public override void Read(AssetReader reader)
 		{
 			IndexRenderers = reader.ReadInt32();
 			SizeRenderers = reader.ReadInt32();
 			IndexPortals = reader.ReadInt32();
 			SizePortals = reader.ReadInt32();
-			Scene.Read(reader);
+			scene.Read(reader);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(IndexRenderersName, IndexRenderers);
 			node.Add(SizeRenderersName, SizeRenderers);
 			node.Add(IndexPortalsName, IndexPortals);
 			node.Add(SizePortalsName, SizePortals);
-			node.Add(SceneName, Scene.ExportYAML(container));
+			node.Add(SceneName, scene.ExportYAML(container));
 			return node;
 		}
 
@@ -47,6 +38,12 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 		public const string SizePortalsName = "sizePortals";
 		public const string SceneName = "scene";
 
-		public UnityGUID Scene;
+		public UnityGUID scene;
+
+		public UnityGUID Scene
+		{
+			get { return scene; }
+			set { scene = value; }
+		}
 	}
 }

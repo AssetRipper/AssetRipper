@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Camera;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -384,35 +385,35 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				yield return asset;
 			}
 
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(Deferred, DeferredName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(Deferred, DeferredName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DeferredReflections, DeferredReflectionsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(DeferredReflections, DeferredReflectionsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(ScreenSpaceShadows, ScreenSpaceShadowsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(ScreenSpaceShadows, ScreenSpaceShadowsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LegacyDeferred, LegacyDeferredName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(LegacyDeferred, LegacyDeferredName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(DepthNormals, DepthNormalsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(DepthNormals, DepthNormalsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(MotionVectors, MotionVectorsName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(MotionVectors, MotionVectorsName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LightHalo, LightHaloName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(LightHalo, LightHaloName))
 			{
 				yield return asset;
 			}
-			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(LensFlare, LensFlareName))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(LensFlare, LensFlareName))
 			{
 				yield return asset;
 			}
@@ -539,7 +540,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 					Shader.Shader shader = shaderPtr.FindAsset(container);
 					if (shader != null)
 					{
-						shaderNames.Add(shader.ValidName);
+						shaderNames.Add(shader.GetValidShaderName());
 					}
 				}
 			}
@@ -562,8 +563,8 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			{
 				return SpritesDefaultMaterial;
 			}
-			Material.Material material = (Material.Material)File.FindAsset(ClassIDType.Material, "Sprites-Default");
-			return material == null ? default : File.CreatePPtr(material);
+			Material.Material material = (Material.Material)SerializedFile.FindAsset(ClassIDType.Material, "Sprites-Default");
+			return material == null ? default : SerializedFile.CreatePPtr(material);
 		}
 		private Vector3f GetTransparencySortAxis(UnityVersion version)
 		{
@@ -630,11 +631,11 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		/// LightsUseCCT previously (before 5.6.0b10)
 		/// </summary>
 		public bool LightsUseColorTemperature { get; set; }
-		
+
 		public int DefaultRenderingLayerMask { get; set; }
 		public bool LogWhenShaderIsCompiled { get; set; }
 		public bool AllowEnlightenSupportForUpgradedProject { get; set; }
-		
+
 		public int VideoShadersIncludeMode { get; set; }
 
 		public Dictionary<string, PPtr<Object.Object>> srpDefaultSettings { get; set; } = new();

@@ -220,9 +220,9 @@ namespace AssetRipper.Core.Classes
 
 		private byte[] GetImageData(UnityVersion version)
 		{
-			if (HasStreamData(version) && StreamData.IsSet)
+			if (HasStreamData(version) && StreamData.IsSet())
 			{
-				byte[] data = StreamData.GetContent(File);
+				byte[] data = StreamData.GetContent(SerializedFile);
 				if (data == null)
 				{
 					Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{this.GetValidName()}' because resources file '{StreamData.Path}' wasn't found");

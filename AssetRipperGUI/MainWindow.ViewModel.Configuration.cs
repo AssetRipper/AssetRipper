@@ -15,7 +15,7 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
-		
+
 		public bool IgnoreStreamingAssets
 		{
 			get => _ripper.Settings.IgnoreStreamingAssets;
@@ -25,7 +25,7 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
-		
+
 		public AudioExportFormat AudioExportFormat
 		{
 			get => _ripper.Settings.AudioExportFormat;
@@ -35,7 +35,7 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
-		
+
 		public ImageExportFormat ImageExportFormat
 		{
 			get => _ripper.Settings.ImageExportFormat;
@@ -45,7 +45,7 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
-		
+
 		public MeshExportFormat MeshExportFormat
 		{
 			get => _ripper.Settings.MeshExportFormat;
@@ -55,7 +55,7 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
-		
+
 		public SpriteExportMode SpriteExportMode
 		{
 			get => _ripper.Settings.SpriteExportMode;
@@ -65,7 +65,7 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
-		
+
 		public TerrainExportMode TerrainExportMode
 		{
 			get => _ripper.Settings.TerrainExportMode;
@@ -75,7 +75,7 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
-		
+
 		public TextExportMode TextExportMode
 		{
 			get => _ripper.Settings.TextExportMode;

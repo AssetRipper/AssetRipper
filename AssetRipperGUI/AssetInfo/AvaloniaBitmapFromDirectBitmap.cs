@@ -13,7 +13,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public static Bitmap? Make(DirectBitmap directBitmap)
 		{
 			MemoryStream resultStream = new();
-			if(directBitmap.Save(resultStream, ImageExportFormat.Png))
+			if (directBitmap.Save(resultStream, ImageExportFormat.Png))
 			{
 				directBitmap.Dispose();
 				resultStream.Seek(0, SeekOrigin.Begin);

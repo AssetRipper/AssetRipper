@@ -4,11 +4,21 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 {
+	/// <summary>
+	/// Changed several times. Also called VertexAttribute<br/>
+	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>
+	/// </summary>
 	public enum ShaderChannel
 	{
+		/// <summary>
+		/// Also called Position
+		/// </summary>
 		Vertex,
 		Normal,
 		Tangent,
+		/// <summary>
+		/// Vertex Color
+		/// </summary>
 		Color,
 		UV0,
 		UV1,
@@ -18,7 +28,13 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 		UV5,
 		UV6,
 		UV7,
+		/// <summary>
+		/// Also called BlendWeight
+		/// </summary>
 		SkinWeight,
+		/// <summary>
+		/// Also called BlendIndices
+		/// </summary>
 		SkinBoneIndex,
 	}
 

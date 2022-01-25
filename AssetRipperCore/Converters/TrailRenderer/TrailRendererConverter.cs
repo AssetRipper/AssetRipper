@@ -1,4 +1,7 @@
-﻿using AssetRipper.Core.Classes.TrailRenderer;
+﻿using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Core.Classes.TrailRenderer;
+using AssetRipper.Core.Converters.Misc;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
 
 namespace AssetRipper.Core.Converters.TrailRenderer
@@ -38,6 +41,11 @@ namespace AssetRipper.Core.Converters.TrailRenderer
 		private static bool GetEmitting(IExportContainer container, bool origin)
 		{
 			return AssetRipper.Core.Classes.TrailRenderer.TrailRenderer.HasEmitting(container.Version) ? origin : true;
+		}
+
+		private static AnimationCurveTpl<T> Convert<T>(this AnimationCurveTpl<T> _this, IExportContainer container) where T : struct, IAsset, IYAMLExportable
+		{
+			return AnimationCurveTplConverter.Convert(container, ref _this);
 		}
 	}
 }

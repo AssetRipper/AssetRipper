@@ -14,7 +14,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is IMovieTexture texture)
-				return IsValidData(texture.RawData);
+				return IsValidData(texture.MovieData);
 			else
 				return false;
 		}
@@ -26,7 +26,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((IMovieTexture)asset).RawData));
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((IMovieTexture)asset).MovieData));
 			return true;
 		}
 	}

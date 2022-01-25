@@ -11,7 +11,7 @@ namespace AssetRipper.GUI.Components
 			_ => base.GetValueDisplayName(value),
 		};
 
-		protected override string? GetValueDescription(SpriteExportMode value)  => value switch
+		protected override string? GetValueDescription(SpriteExportMode value) => value switch
 		{
 			SpriteExportMode.Native => MainWindow.Instance.LocalizationManager["sprite_format_native_description"],
 			SpriteExportMode.Texture2D => MainWindow.Instance.LocalizationManager["sprite_format_texture_description"],

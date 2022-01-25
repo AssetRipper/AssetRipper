@@ -16,21 +16,21 @@ namespace AssetRipper.Library.Exporters.Shaders
 	{
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is ITextAsset textAsset && asset is IShader)
-				return HasDecompiledShaderText(textAsset.Script);
+			if (asset is IShader && asset is ITextAsset textAsset)
+				return HasDecompiledShaderText(textAsset.ParseWithUTF8());
 			else
 				return false;
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllTextAsync(path, ((ITextAsset)asset).Script, Encoding.UTF8));
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).Script));
 			return true;
 		}
 
 		private static bool HasDecompiledShaderText(string text)
 		{
-			if(string.IsNullOrEmpty(text))
+			if (string.IsNullOrEmpty(text))
 				return false;
 
 			return !text.Contains("Program") && !text.Contains("SubProgram");

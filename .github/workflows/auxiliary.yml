@@ -25,6 +25,14 @@ jobs:
       run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
       working-directory: ./UnitTester/
       
+    - name: Build Tests Windows x64
+      run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
+      working-directory: ./AssetRipperTests/
+      
+    - name: Run Tests
+      run: dotnet test
+      working-directory: ./AssetRipperTests/
+      
     - name: List Analyzer Files
       shell: bash
       run: |
