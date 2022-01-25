@@ -133,6 +133,7 @@ namespace AssetRipper.Library
 		public void ExportProject(string exportPath, IUnityObjectBase asset) => ExportProject(exportPath, new IUnityObjectBase[] { asset });
 		public void ExportProject(string exportPath, IEnumerable<IUnityObjectBase> assets) => ExportProject(exportPath, GetFilter(assets));
 		public void ExportProject<T>(string exportPath) => ExportProject(exportPath, GetFilter<T>());
+		public void ExportProject(string exportPath, Type type) => ExportProject(exportPath, GetFilter(type));
 		public void ExportProject(string exportPath, IEnumerable<Type> types) => ExportProject(exportPath, GetFilter(types));
 		private void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter)
 		{
@@ -182,6 +183,10 @@ namespace AssetRipper.Library
 		private static Func<IUnityObjectBase, bool> GetFilter<T>()
 		{
 			return asset => asset is T;
+		}
+		private static Func<IUnityObjectBase, bool> GetFilter(Type type)
+		{
+			return asset => asset.GetType().IsAssignableTo(type);
 		}
 		private static Func<IUnityObjectBase, bool> GetFilter(IEnumerable<Type> types)
 		{

@@ -82,10 +82,10 @@ namespace AssetRipper.GUI.Managers
 		{
 			try
 			{
-				if (assetType == typeof(Sprite)) // Sprite wont be exported as it's a form of Texture2D
-					assetType = typeof(Texture2D);
+				if (assetType.IsAssignableTo(typeof(ISprite))) // Sprite wont be exported as it's a form of Texture2D
+					assetType = typeof(ITexture2D);
 
-				ripper.ExportProject(toRoot, new List<Type> { assetType });
+				ripper.ExportProject(toRoot, assetType);
 			}
 			catch (Exception ex)
 			{
