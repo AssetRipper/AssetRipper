@@ -197,7 +197,7 @@ namespace AssetRipper.Core.Classes.Animation
 		public AnimationCullingType CullingType { get; set; }
 
 		public PPtr<AnimationClip.AnimationClip> DefaultAnimation;
-		public AABB UserAABB;
+		public AABB UserAABB = new AABB();
 
 		public const string AnimationName = "m_Animation";
 		public const string AnimationsName = "m_Animations";

@@ -37,6 +37,6 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		public const string BoundsName = "m_Bounds";
 		public const string NodesName = "m_Nodes";
 
-		public AABB Bounds;
+		public AABB Bounds = new AABB();
 	}
 }

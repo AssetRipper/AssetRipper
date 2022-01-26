@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public VariableBoneCountWeights VariableBoneCountWeights;
 		public VertexData VertexData;
 		public CompressedMesh CompressedMesh { get; set; } = new();
-		public AABB LocalAABB;
+		public AABB LocalAABB = new AABB();
 		public CollisionMeshData CollisionData;
 		public StreamingInfo StreamData;
 		public LOD[] LODData { get; set; }

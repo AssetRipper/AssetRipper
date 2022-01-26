@@ -18,10 +18,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>Offset in Vertices</summary>
 		public uint FirstVertex { get; set; }
 		public uint VertexCount { get; set; }
-		/// <summary>
-		/// This has to be a field
-		/// </summary>
-		public AABB LocalAABB;
+		public AABB LocalAABB = new AABB();
 
 		public uint IsTriStrip => (uint)Topology;
 

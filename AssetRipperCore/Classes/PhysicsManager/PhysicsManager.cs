@@ -392,7 +392,7 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 			{
 				return WorldBounds;
 			}
-			return new AABB(default, new Vector3f(250.0f, 250.0f, 250.0f));
+			return new AABB(new Vector3f(), new Vector3f(250.0f, 250.0f, 250.0f));
 		}
 		private int GetWorldSubdivisions(UnityVersion version)
 		{
@@ -483,6 +483,6 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 		public Vector3f Gravity;
 		public PPtr<PhysicMaterial.PhysicMaterial> DefaultMaterial;
 		public Vector3f ClothGravity;
-		public AABB WorldBounds;
+		public AABB WorldBounds = new AABB();
 	}
 }

@@ -677,7 +677,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public const string IsEmptyName = "m_IsEmpty";
 		public const string EventsName = "m_Events";
 
-		public AABB Bounds;
+		public AABB Bounds = new AABB();
 		public AnimationClipBindingConstant ClipBindingConstant;
 	}
 }

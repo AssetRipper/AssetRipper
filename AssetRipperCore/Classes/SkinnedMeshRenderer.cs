@@ -249,6 +249,6 @@ namespace AssetRipper.Core.Classes
 		public PPtr<Animation.Animation> Animation;
 		public Matrix4x4f CurrentPose;
 		public PPtr<Transform> RootBone;
-		public AABB AABB;
+		public AABB AABB = new AABB();
 	}
 }

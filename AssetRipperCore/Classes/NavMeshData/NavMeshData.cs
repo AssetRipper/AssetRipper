@@ -121,7 +121,7 @@ namespace AssetRipper.Core.Classes.NavMeshData
 
 		public NavMeshParams NavMeshParams;
 		public NavMeshBuildSettings NavMeshBuildSettings;
-		public AABB SourceBounds;
+		public AABB SourceBounds = new AABB();
 		public Quaternionf Rotation;
 		public Vector3f Position;
 	}

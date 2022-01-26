@@ -60,6 +60,6 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public const string LayerIndicesName = "layerIndices";
 		public const string NumberOfObjectsName = "numberOfObjects";
 
-		public AABB Bounds;
+		public AABB Bounds = new AABB();
 	}
 }
