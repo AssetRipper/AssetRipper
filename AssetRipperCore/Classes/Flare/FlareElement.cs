@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.Flare
 			ImageIndex = reader.ReadInt32();
 			Position = reader.ReadSingle();
 			Size = reader.ReadSingle();
-			Color = reader.ReadColor4();
+			Color.Read(reader);
 			UseLightColor = reader.ReadBoolean();
 			Rotate = reader.ReadBoolean();
 			Zoom = reader.ReadBoolean();
@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Classes.Flare
 		public int ImageIndex { get; set; }
 		public float Position { get; set; }
 		public float Size { get; set; }
-		public ColorRGBAf Color { get; set; }
+		public ColorRGBAf Color;
 		public bool UseLightColor { get; set; }
 		public bool Rotate { get; set; }
 		public bool Zoom { get; set; }
