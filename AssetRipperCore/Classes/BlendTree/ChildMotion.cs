@@ -2,7 +2,7 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;

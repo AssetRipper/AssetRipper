@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 using System;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.Vectors
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 4)]
 	public struct Vector4f : IAsset, IEquatable<Vector4f>
@@ -155,7 +155,7 @@ namespace AssetRipper.Core.Math
 
 		public override int GetHashCode()
 		{
-			return X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2) ^ (W.GetHashCode() >> 1);
+			return X.GetHashCode() ^ Y.GetHashCode() << 2 ^ Z.GetHashCode() >> 2 ^ W.GetHashCode() >> 1;
 		}
 
 		public override string ToString()

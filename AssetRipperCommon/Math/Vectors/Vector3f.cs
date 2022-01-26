@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.Vectors
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 4)]
 	public struct Vector3f : IAsset, IEquatable<Vector3f>
@@ -56,7 +56,7 @@ namespace AssetRipper.Core.Math
 
 		public override int GetHashCode()
 		{
-			return X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2);
+			return X.GetHashCode() ^ Y.GetHashCode() << 2 ^ Z.GetHashCode() >> 2;
 		}
 
 		public override bool Equals(object other)

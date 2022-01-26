@@ -9,6 +9,7 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.PackedBitVectors;
+using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;

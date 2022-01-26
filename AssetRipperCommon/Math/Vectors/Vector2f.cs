@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.Vectors
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 4)]
 	public struct Vector2f : IAsset, IEquatable<Vector2f>
@@ -105,9 +105,7 @@ namespace AssetRipper.Core.Math
 
 			double angle = angleToP1 - angleToP2;
 			if (angle < 0)
-			{
-				angle += (2 * System.Math.PI);
-			}
+				angle += 2 * System.Math.PI;
 			return (float)(360.0 * angle / (2.0 * System.Math.PI));
 		}
 
@@ -160,7 +158,7 @@ namespace AssetRipper.Core.Math
 
 		public override int GetHashCode()
 		{
-			return X.GetHashCode() ^ (Y.GetHashCode() << 2);
+			return X.GetHashCode() ^ Y.GetHashCode() << 2;
 		}
 
 		public override bool Equals(object other)

@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes.PhysicMaterial;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;

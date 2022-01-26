@@ -3,7 +3,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.Vectors
 {
 	public struct Vector3i : IAsset
 	{
@@ -28,39 +28,27 @@ namespace AssetRipper.Core.Math
 		{
 			member %= 3;
 			if (member == 0)
-			{
 				return X;
-			}
 			if (member == 1)
-			{
 				return Y;
-			}
 			return Z;
 		}
 
 		public int GetMemberByValue(int value)
 		{
 			if (X == value)
-			{
 				return 0;
-			}
 			if (Y == value)
-			{
 				return 1;
-			}
 			if (Z == value)
-			{
 				return 2;
-			}
 			throw new ArgumentException($"Member with value {value} wasn't found");
 		}
 
 		public bool ContainsValue(int value)
 		{
 			if (X == value || Y == value || Z == value)
-			{
 				return true;
-			}
 			return false;
 		}
 
@@ -91,13 +79,9 @@ namespace AssetRipper.Core.Math
 		public override bool Equals(object obj)
 		{
 			if (obj == null)
-			{
 				return false;
-			}
 			if (obj.GetType() != typeof(Vector3i))
-			{
 				return false;
-			}
 			return this == (Vector3i)obj;
 		}
 

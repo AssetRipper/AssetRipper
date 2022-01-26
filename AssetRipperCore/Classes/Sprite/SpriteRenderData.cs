@@ -4,6 +4,7 @@ using AssetRipper.Core.Converters.Sprite;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using System;

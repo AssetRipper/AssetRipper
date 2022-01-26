@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.Vectors
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 4)]
 	public struct Quaternionf : IAsset, IEquatable<Quaternionf>
@@ -41,7 +41,7 @@ namespace AssetRipper.Core.Math
 			double[,] M = new double[4, 4];
 
 			double Nq = qx * qx + qy * qy + qz * qz + qw * qw;
-			double s = (Nq > 0.0) ? (2.0 / Nq) : 0.0;
+			double s = Nq > 0.0 ? 2.0 / Nq : 0.0;
 			double xs = qx * s, ys = qy * s, zs = qz * s;
 			double wx = qw * xs, wy = qw * ys, wz = qw * zs;
 			double xx = qx * xs, xy = qx * ys, xz = qx * zs;
@@ -166,7 +166,7 @@ namespace AssetRipper.Core.Math
 
 		public override int GetHashCode()
 		{
-			return X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2) ^ (W.GetHashCode() >> 1);
+			return X.GetHashCode() ^ Y.GetHashCode() << 2 ^ Z.GetHashCode() >> 2 ^ W.GetHashCode() >> 1;
 		}
 
 		public override bool Equals(object other)

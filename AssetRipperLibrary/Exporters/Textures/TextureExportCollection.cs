@@ -7,6 +7,7 @@ using AssetRipper.Core.Classes.SpriteAtlas;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;

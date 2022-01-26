@@ -2,7 +2,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.Vectors
 {
 	public struct Vector2i : IAsset
 	{
@@ -46,13 +46,9 @@ namespace AssetRipper.Core.Math
 		public override bool Equals(object obj)
 		{
 			if (obj == null)
-			{
 				return false;
-			}
 			if (obj.GetType() != typeof(Vector2i))
-			{
 				return false;
-			}
 			return this == (Vector2i)obj;
 		}
 

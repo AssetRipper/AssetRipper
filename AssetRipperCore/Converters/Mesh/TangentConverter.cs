@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Mesh;
-using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.Vectors;
 
 namespace AssetRipper.Core.Converters.Mesh
 {

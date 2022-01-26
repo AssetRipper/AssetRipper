@@ -2,7 +2,7 @@ using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.GUIText;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;

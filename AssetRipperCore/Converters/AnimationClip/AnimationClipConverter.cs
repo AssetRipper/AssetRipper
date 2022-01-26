@@ -7,7 +7,7 @@ using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
