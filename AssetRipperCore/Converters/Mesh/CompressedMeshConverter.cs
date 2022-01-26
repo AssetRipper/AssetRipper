@@ -7,7 +7,7 @@ namespace AssetRipper.Core.Converters.Mesh
 {
 	public static class CompressedMeshConverter
 	{
-		public static CompressedMesh Convert(IExportContainer container, ref CompressedMesh origin)
+		public static CompressedMesh Convert(IExportContainer container, CompressedMesh origin)
 		{
 			CompressedMesh instance = new CompressedMesh();
 			instance.Vertices = origin.Vertices.Convert(container);
@@ -23,22 +23,22 @@ namespace AssetRipper.Core.Converters.Mesh
 			instance.TangentSigns = origin.TangentSigns.Convert(container);
 			if (CompressedMesh.HasFloatColors(container.ExportVersion))
 			{
-				instance.FloatColors = GetFloatColors(container, ref origin);
+				instance.FloatColors = GetFloatColors(container, origin);
 			}
 			instance.BoneIndices = origin.BoneIndices.Convert(container);
 			instance.Triangles = origin.Triangles.Convert(container);
 			if (CompressedMesh.HasColors(container.ExportVersion))
 			{
-				instance.Colors = GetColors(container, ref origin);
+				instance.Colors = GetColors(container, origin);
 			}
 			if (CompressedMesh.HasUVInfo(container.ExportVersion))
 			{
-				instance.UVInfo = GetUVInfo(container, ref origin);
+				instance.UVInfo = GetUVInfo(container, origin);
 			}
 			return instance;
 		}
 
-		private static PackedFloatVector GetFloatColors(IExportContainer container, ref CompressedMesh origin)
+		private static PackedFloatVector GetFloatColors(IExportContainer container, CompressedMesh origin)
 		{
 			if (CompressedMesh.HasFloatColors(container.Version))
 			{
@@ -55,7 +55,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 		}
 
-		private static PackedIntVector GetColors(IExportContainer container, ref CompressedMesh origin)
+		private static PackedIntVector GetColors(IExportContainer container, CompressedMesh origin)
 		{
 			if (CompressedMesh.HasColors(container.Version))
 			{
@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			return new PackedIntVector(true);
 		}
 
-		private static uint GetUVInfo(IExportContainer container, ref CompressedMesh origin)
+		private static uint GetUVInfo(IExportContainer container, CompressedMesh origin)
 		{
 			if (CompressedMesh.HasUVInfo(container.Version))
 			{

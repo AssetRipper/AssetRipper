@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public BlendShapeData Shapes;
 		public VariableBoneCountWeights VariableBoneCountWeights;
 		public VertexData VertexData;
-		public CompressedMesh CompressedMesh;
+		public CompressedMesh CompressedMesh { get; set; } = new();
 		public AABB LocalAABB;
 		public CollisionMeshData CollisionData;
 		public StreamingInfo StreamData;

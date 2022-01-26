@@ -338,7 +338,7 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static CompressedMesh GetCompressedMesh(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
-			return Classes.Mesh.Mesh.HasCompressedMesh(container.Version) ? origin.CompressedMesh.Convert(container) : new CompressedMesh(container.ExportVersion);
+			return Classes.Mesh.Mesh.HasCompressedMesh(container.Version) ? origin.CompressedMesh.Convert(container) : new CompressedMesh();
 		}
 
 		private static CollisionMeshData GetCollisionData(IExportContainer container, Classes.Mesh.Mesh origin)

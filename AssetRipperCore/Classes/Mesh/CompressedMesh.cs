@@ -7,45 +7,22 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct CompressedMesh : IAsset
+	public class CompressedMesh : IAsset
 	{
-		public CompressedMesh(UnityVersion version)
-		{
-			Vertices = new PackedFloatVector(true);
-			UV = new PackedFloatVector(true);
-			if (HasBindPoses(version))
-			{
-				BindPoses = new PackedFloatVector(true);
-			}
-			else
-			{
-				BindPoses = default;
-			}
-			Normals = new PackedFloatVector(true);
-			Tangents = new PackedFloatVector(true);
-			Weights = new PackedIntVector(true);
-			NormalSigns = new PackedIntVector(true);
-			TangentSigns = new PackedIntVector(true);
-			if (HasFloatColors(version))
-			{
-				FloatColors = new PackedFloatVector(true);
-			}
-			else
-			{
-				FloatColors = default;
-			}
-			BoneIndices = new PackedIntVector(true);
-			Triangles = new PackedIntVector(true);
-			if (HasColors(version))
-			{
-				Colors = new PackedIntVector(true);
-			}
-			else
-			{
-				Colors = default;
-			}
-			UVInfo = default;
-		}
+		public PackedFloatVector Vertices = new PackedFloatVector(true);
+		public PackedFloatVector UV = new PackedFloatVector(true);
+		public PackedFloatVector BindPoses = new PackedFloatVector(true);
+		public PackedFloatVector Normals = new PackedFloatVector(true);
+		public PackedFloatVector Tangents = new PackedFloatVector(true);
+		public PackedIntVector Weights = new PackedIntVector(true);
+		public PackedIntVector NormalSigns = new PackedIntVector(true);
+		public PackedIntVector TangentSigns = new PackedIntVector(true);
+		public PackedFloatVector FloatColors = new PackedFloatVector(true);
+		public PackedIntVector BoneIndices = new PackedIntVector(true);
+		public PackedIntVector Triangles = new PackedIntVector(true);
+		public PackedIntVector Colors = new PackedIntVector(true);
+
+		public uint UVInfo { get; set; }
 
 		/// <summary>
 		/// Less than 5.0.0
@@ -66,7 +43,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public CompressedMesh Convert(IExportContainer container)
 		{
-			return CompressedMeshConverter.Convert(container, ref this);
+			return CompressedMeshConverter.Convert(container, this);
 		}
 
 		public void Read(AssetReader reader)
@@ -164,8 +141,6 @@ namespace AssetRipper.Core.Classes.Mesh
 			return node;
 		}
 
-		public uint UVInfo { get; set; }
-
 		public const string VerticesName = "m_Vertices";
 		public const string UVName = "m_UV";
 		public const string BindPosesName = "m_BindPoses";
@@ -179,18 +154,5 @@ namespace AssetRipper.Core.Classes.Mesh
 		public const string TrianglesName = "m_Triangles";
 		public const string ColorsName = "m_Colors";
 		public const string UVInfoName = "m_UVInfo";
-
-		public PackedFloatVector Vertices;
-		public PackedFloatVector UV;
-		public PackedFloatVector BindPoses;
-		public PackedFloatVector Normals;
-		public PackedFloatVector Tangents;
-		public PackedIntVector Weights;
-		public PackedIntVector NormalSigns;
-		public PackedIntVector TangentSigns;
-		public PackedFloatVector FloatColors;
-		public PackedIntVector BoneIndices;
-		public PackedIntVector Triangles;
-		public PackedIntVector Colors;
 	}
 }
