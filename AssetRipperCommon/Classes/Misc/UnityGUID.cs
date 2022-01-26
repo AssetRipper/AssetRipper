@@ -6,13 +6,14 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Buffers.Binary;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace AssetRipper.Core.Classes.Misc
 {
 	public struct UnityGUID : IAsset, ISerializedReadable, ISerializedWritable, IEquatable<UnityGUID>
 	{
-		public UnityGUID(Guid guid) : this(ConvertSystemBytesToUnityBytes(guid.ToByteArray())) { }
+		public UnityGUID(Guid guid) : this(ConvertSystemOrUnityBytes(guid.ToByteArray())) { }
 
 		public UnityGUID(byte[] guidData)
 		{
@@ -34,7 +35,7 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public static explicit operator UnityGUID(Guid systemGuid) => new UnityGUID(systemGuid);
 
-		public static explicit operator Guid(UnityGUID unityGuid) => Guid.Parse(unityGuid.ToString());
+		public static explicit operator Guid(UnityGUID unityGuid) => new Guid(ConvertSystemOrUnityBytes(unityGuid.ToByteArray()));
 
 		public static bool operator ==(UnityGUID left, UnityGUID right)
 		{
@@ -139,39 +140,64 @@ namespace AssetRipper.Core.Classes.Misc
 			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value >> 20) & 0xF0) | unchecked((int)(value >> 28) & 0xF)]);
 		}
 
-		private static byte[] ConvertSystemBytesToUnityBytes(byte[] systemBytes)
+		/// <summary>
+		/// Converts system bytes to unity bytes, or the reverse
+		/// </summary>
+		/// <param name="originalBytes">A 16 byte input array</param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentNullException">Array is null</exception>
+		/// <exception cref="ArgumentException">Array doesn't have 16 elements</exception>
+		private static byte[] ConvertSystemOrUnityBytes(byte[] originalBytes)
 		{
-			if (systemBytes is null)
-				throw new ArgumentNullException(nameof(systemBytes));
-			if (systemBytes.Length != 16)
-				throw new ArgumentException($"Invalid length: {systemBytes.Length}", nameof(systemBytes));
+			if (originalBytes is null)
+				throw new ArgumentNullException(nameof(originalBytes));
+			if (originalBytes.Length != 16)
+				throw new ArgumentException($"Invalid length: {originalBytes.Length}", nameof(originalBytes));
 
-			byte[] unityBytes = new byte[16];
+			byte[] newBytes = new byte[16];
 			for (int i = 0; i < 4; i++)
 			{
-				unityBytes[i] = systemBytes[3 - i];
+				newBytes[i] = originalBytes[3 - i];
 			}
-			unityBytes[4] = systemBytes[5];
-			unityBytes[5] = systemBytes[4];
-			unityBytes[6] = systemBytes[7];
-			unityBytes[7] = systemBytes[6];
+			newBytes[4] = originalBytes[5];
+			newBytes[5] = originalBytes[4];
+			newBytes[6] = originalBytes[7];
+			newBytes[7] = originalBytes[6];
 			for (int i = 8; i < 16; i++)
 			{
-				unityBytes[i] = systemBytes[i];
+				newBytes[i] = originalBytes[i];
 			}
 			for (int i = 0; i < 16; i++)
 			{
 				//AB becomes BA
-				byte value = unityBytes[i];
-				unityBytes[i] = (byte)(unchecked((int)(value << 4) & 0xF0) | unchecked((int)(value >> 4) & 0xF));
+				byte value = newBytes[i];
+				newBytes[i] = (byte)(unchecked((int)(value << 4) & 0xF0) | unchecked((int)(value >> 4) & 0xF));
 			}
 
-			return unityBytes;
+			return newBytes;
 		}
 
 		public static UnityGUID Parse(string guidString)
 		{
 			return new UnityGUID(Guid.Parse(guidString));
+		}
+
+		public static UnityGUID Md5Hash(string str) => Md5Hash(Encoding.UTF8.GetBytes(str));
+		public static UnityGUID Md5Hash(byte[] inputBytes)
+		{
+			const byte VersionMask = 0xF0;
+			const byte Md5GuidVersion = 0x30;
+			const byte ClockSeqHiAndReservedMask = 0xC0;
+			const byte ClockSeqHiAndReservedValue = 0x80;
+
+			byte[] hashBytes = MD5.HashData(inputBytes);
+
+			// time_hi_and_version
+			hashBytes[7] = (byte)((hashBytes[7] & ~VersionMask) | Md5GuidVersion);
+			// clock_seq_hi_and_reserved
+			hashBytes[8] = (byte)((hashBytes[8] & ~ClockSeqHiAndReservedMask) | ClockSeqHiAndReservedValue);
+
+			return new UnityGUID(ConvertSystemOrUnityBytes(hashBytes));
 		}
 
 		public bool IsZero => Data0 == 0 && Data1 == 0 && Data2 == 0 && Data3 == 0;
