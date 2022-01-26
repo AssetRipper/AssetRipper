@@ -8,7 +8,7 @@ using AssetRipper.Core.YAML.Extensions;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
-	public struct HeightMeshData : IAssetReadable, IYAMLExportable
+	public sealed class HeightMeshData : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

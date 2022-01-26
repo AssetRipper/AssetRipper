@@ -8,7 +8,7 @@ using AssetRipper.Core.YAML.Extensions;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct DetailPatch : IAsset
+	public sealed class DetailPatch : IAsset
 	{
 		/// <summary>
 		/// Less than 2020.2
