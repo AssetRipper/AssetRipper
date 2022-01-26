@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.PackedBitVectors
 {
 	public struct PackedQuatVector : IAssetReadable, IYAMLExportable
 	{
@@ -46,10 +46,9 @@ namespace AssetRipper.Core.Math
 				float sum = 0;
 				Quaternionf quaternion = new Quaternionf();
 				for (int j = 0; j < 4; j++)
-				{
 					if ((flags & 3) != j)
 					{
-						int bitSize = ((flags + 1) & 3) == j ? 9 : 10;
+						int bitSize = (flags + 1 & 3) == j ? 9 : 10;
 						float halfMaxValue = 0.5f * ((1 << bitSize) - 1);
 
 						int value = 0;
@@ -71,14 +70,11 @@ namespace AssetRipper.Core.Math
 						quaternion[j] = value / halfMaxValue - 1.0f;
 						sum += quaternion[j] * quaternion[j];
 					}
-				}
 
 				int lastComponent = flags & 3;
 				quaternion[lastComponent] = (float)System.Math.Sqrt(1.0f - sum);
 				if ((flags & 4) != 0)
-				{
 					quaternion[lastComponent] = -quaternion[lastComponent];
-				}
 				buffer[i] = quaternion;
 			}
 			return buffer;

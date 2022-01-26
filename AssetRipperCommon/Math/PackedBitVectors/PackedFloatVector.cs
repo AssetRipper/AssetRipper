@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.PackedBitVectors
 {
 	public struct PackedFloatVector : IAsset
 	{
@@ -88,7 +88,6 @@ namespace AssetRipper.Core.Math
 			var end = chunkStride * numChunks / 4;
 			var data = new List<float>();
 			for (var index = 0; index != end; index += chunkStride / 4)
-			{
 				for (int i = 0; i < itemCountInChunk; ++i)
 				{
 					uint x = 0;
@@ -96,7 +95,7 @@ namespace AssetRipper.Core.Math
 					int bits = 0;
 					while (bits < m_BitSize)
 					{
-						x |= (uint)((m_Data[indexPos] >> bitPos) << bits);
+						x |= (uint)(m_Data[indexPos] >> bitPos << bits);
 						int num = System.Math.Min(m_BitSize - bits, 8 - bitPos);
 						bitPos += num;
 						bits += num;
@@ -109,7 +108,6 @@ namespace AssetRipper.Core.Math
 					x &= (uint)(1 << m_BitSize) - 1u;
 					data.Add(x / (scale * ((1 << m_BitSize) - 1)) + m_Start);
 				}
-			}
 
 			return data.ToArray();
 		}

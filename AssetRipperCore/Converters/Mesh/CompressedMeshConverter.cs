@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.PackedBitVectors;
 using AssetRipper.Core.Project;
 
 namespace AssetRipper.Core.Converters.Mesh

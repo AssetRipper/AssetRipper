@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML.Extensions;
 using System;
 using System.Linq;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.PackedBitVectors
 {
 	public struct PackedIntVector : IAsset
 	{

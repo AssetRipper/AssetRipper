@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Math;
+﻿using AssetRipper.Core.Math.PackedBitVectors;
 
 namespace AssetRipperTests.PackedBitVectorTests
 {
