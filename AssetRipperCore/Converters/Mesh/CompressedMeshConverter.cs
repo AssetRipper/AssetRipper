@@ -51,7 +51,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				{
 					Logger.Log(LogType.Warning, LogCategory.Export, "Color conversion isn't implemented");
 				}
-				return new PackedFloatVector(true);
+				return new PackedFloatVector();
 			}
 		}
 

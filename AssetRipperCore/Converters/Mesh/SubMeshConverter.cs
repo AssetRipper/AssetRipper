@@ -189,7 +189,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 			if (AssetRipper.Core.Classes.Mesh.Mesh.HasCompressedMesh(layout.Version))
 			{
-				if (mesh.CompressedMesh.Vertices.IsSet)
+				if (mesh.CompressedMesh.Vertices.IsSet())
 				{
 					float[] vertices = mesh.CompressedMesh.Vertices.Unpack();
 					FindMinMaxBounds(vertices, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);

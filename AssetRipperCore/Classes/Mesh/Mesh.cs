@@ -1183,14 +1183,14 @@ namespace AssetRipper.Core.Classes.Mesh
 		private void DecompressCompressedMesh(UnityVersion version)
 		{
 			//Vertex
-			if (CompressedMesh.Vertices.m_NumItems > 0)
+			if (CompressedMesh.Vertices.NumItems > 0)
 			{
-				VertexCount = (int)CompressedMesh.Vertices.m_NumItems / 3;
+				VertexCount = (int)CompressedMesh.Vertices.NumItems / 3;
 				var vertices = CompressedMesh.Vertices.UnpackFloats(3, 3 * 4);
 				Vertices = MeshHelper.FloatArrayToVector3(vertices);
 			}
 			//UV
-			if (CompressedMesh.UV.m_NumItems > 0)
+			if (CompressedMesh.UV.NumItems > 0)
 			{
 				var m_UVInfo = CompressedMesh.UVInfo;
 				if (m_UVInfo != 0)
@@ -1217,7 +1217,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				else
 				{
 					UV0 = MeshHelper.FloatArrayToVector2(CompressedMesh.UV.UnpackFloats(2, 2 * 4, 0, VertexCount));
-					if (CompressedMesh.UV.m_NumItems >= VertexCount * 4)
+					if (CompressedMesh.UV.NumItems >= VertexCount * 4)
 					{
 						UV1 = MeshHelper.FloatArrayToVector2(CompressedMesh.UV.UnpackFloats(2, 2 * 4, VertexCount * 2, VertexCount));
 					}
@@ -1226,9 +1226,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			//BindPose
 			if (version.IsLess(5))
 			{
-				if (CompressedMesh.BindPoses.m_NumItems > 0)
+				if (CompressedMesh.BindPoses.NumItems > 0)
 				{
-					BindPose = new Matrix4x4f[CompressedMesh.BindPoses.m_NumItems / 16];
+					BindPose = new Matrix4x4f[CompressedMesh.BindPoses.NumItems / 16];
 					var m_BindPoses_Unpacked = CompressedMesh.BindPoses.UnpackFloats(16, 4 * 16);
 					var buffer = new float[16];
 					for (int i = 0; i < BindPose.Length; i++)
@@ -1239,12 +1239,12 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 			}
 			//Normal
-			if (CompressedMesh.Normals.m_NumItems > 0)
+			if (CompressedMesh.Normals.NumItems > 0)
 			{
 				var normalData = CompressedMesh.Normals.UnpackFloats(2, 4 * 2);
 				var signs = CompressedMesh.NormalSigns.Unpack();
-				Normals = new Vector3f[CompressedMesh.Normals.m_NumItems / 2];
-				for (int i = 0; i < CompressedMesh.Normals.m_NumItems / 2; ++i)
+				Normals = new Vector3f[CompressedMesh.Normals.NumItems / 2];
+				for (int i = 0; i < CompressedMesh.Normals.NumItems / 2; ++i)
 				{
 					var x = normalData[i * 2 + 0];
 					var y = normalData[i * 2 + 1];
@@ -1267,12 +1267,12 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 			}
 			//Tangent
-			if (CompressedMesh.Tangents.m_NumItems > 0)
+			if (CompressedMesh.Tangents.NumItems > 0)
 			{
 				var tangentData = CompressedMesh.Tangents.UnpackFloats(2, 4 * 2);
 				var signs = CompressedMesh.TangentSigns.Unpack();
-				Tangents = new Vector4f[CompressedMesh.Tangents.m_NumItems / 2];
-				for (int i = 0; i < CompressedMesh.Tangents.m_NumItems / 2; ++i)
+				Tangents = new Vector4f[CompressedMesh.Tangents.NumItems / 2];
+				for (int i = 0; i < CompressedMesh.Tangents.NumItems / 2; ++i)
 				{
 					var x = tangentData[i * 2 + 0];
 					var y = tangentData[i * 2 + 1];
@@ -1298,7 +1298,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			//FloatColor
 			if (version.IsGreaterEqual(5))
 			{
-				if (CompressedMesh.FloatColors.m_NumItems > 0)
+				if (CompressedMesh.FloatColors.NumItems > 0)
 				{
 					Colors = MeshHelper.FloatArrayToColorRGBA32(CompressedMesh.FloatColors.UnpackFloats(1, 4));
 				}
