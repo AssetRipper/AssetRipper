@@ -5,8 +5,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 {
-	public struct AABBi : IAsset
+	public class AABBi : IAsset
 	{
+		public AABBi() : this(new Vector3i(), new Vector3i()) { }
 		public AABBi(Vector3i center, Vector3i extent)
 		{
 			Center = center;
