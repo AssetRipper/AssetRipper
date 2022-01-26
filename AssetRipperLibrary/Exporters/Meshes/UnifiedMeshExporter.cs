@@ -2,6 +2,7 @@
 using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;

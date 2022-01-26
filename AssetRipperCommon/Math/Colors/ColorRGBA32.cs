@@ -3,13 +3,13 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.Colors
 {
 	public struct ColorRGBA32 : IAsset
 	{
 		public ColorRGBA32(byte r, byte g, byte b, byte a)
 		{
-			RGBA = unchecked((uint)(r | (g << 8) | (b << 16) | (a << 24)));
+			RGBA = unchecked((uint)(r | g << 8 | b << 16 | a << 24));
 		}
 
 		public static explicit operator ColorRGBA32(ColorRGBAf color)
@@ -56,10 +56,10 @@ namespace AssetRipper.Core.Math
 		public static ColorRGBA32 Black => new ColorRGBA32(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 		public static ColorRGBA32 White => new ColorRGBA32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
-		public byte R => (byte)((RGBA >> 0) & 0xFF);
-		public byte G => (byte)((RGBA >> 8) & 0xFF);
-		public byte B => (byte)((RGBA >> 16) & 0xFF);
-		public byte A => (byte)((RGBA >> 24) & 0xFF);
+		public byte R => (byte)(RGBA >> 0 & 0xFF);
+		public byte G => (byte)(RGBA >> 8 & 0xFF);
+		public byte B => (byte)(RGBA >> 16 & 0xFF);
+		public byte A => (byte)(RGBA >> 24 & 0xFF);
 
 		public uint RGBA { get; set; }
 

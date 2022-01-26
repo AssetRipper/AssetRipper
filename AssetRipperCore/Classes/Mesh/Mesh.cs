@@ -7,6 +7,7 @@ using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.PackedBitVectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;

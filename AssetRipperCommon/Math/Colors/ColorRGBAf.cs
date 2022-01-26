@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Math.Colors
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 4)]
 	public struct ColorRGBAf : IAsset, IEquatable<ColorRGBAf>
