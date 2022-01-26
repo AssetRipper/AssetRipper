@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Math.PackedBitVectors
 {
-	public struct PackedFloatVector : IAsset
+	public struct PackedFloatVector : IAsset, IPackedFloatVector
 	{
 		public const string NumItemsName = "m_NumItems";
 		public const string RangeName = "m_Range";
