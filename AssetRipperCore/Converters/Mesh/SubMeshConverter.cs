@@ -5,6 +5,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.PackedBitVectors;
 using AssetRipper.Core.Project;
 using System;
 using System.IO;
@@ -94,7 +95,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			bool is16bits = mesh.Is16BitIndices(version);
 			if (AssetRipper.Core.Classes.Mesh.Mesh.HasCompressedMesh(version))
 			{
-				if (mesh.CompressedMesh.Triangles.IsSet)
+				if (mesh.CompressedMesh.Triangles.IsSet())
 				{
 					int[] triangles = mesh.CompressedMesh.Triangles.Unpack();
 					int firstByte = (int)(is16bits ? submesh.FirstByte * 2 : submesh.FirstByte);

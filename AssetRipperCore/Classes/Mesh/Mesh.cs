@@ -7,6 +7,7 @@ using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math;
+using AssetRipper.Core.Math.PackedBitVectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
@@ -1303,7 +1304,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 			}
 			//Skin
-			if (CompressedMesh.Weights.m_NumItems > 0)
+			if (CompressedMesh.Weights.NumItems > 0)
 			{
 				var weights = CompressedMesh.Weights.Unpack();
 				var boneIndices = CompressedMesh.BoneIndices.Unpack();
@@ -1315,7 +1316,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				int j = 0;
 				int sum = 0;
 
-				for (int i = 0; i < CompressedMesh.Weights.m_NumItems; i++)
+				for (int i = 0; i < CompressedMesh.Weights.NumItems; i++)
 				{
 					//read bone index and weight.
 					Skin[bonePos].Weights[j] = weights[i] / 31.0f;
@@ -1348,23 +1349,23 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 			}
 			//IndexBuffer
-			if (CompressedMesh.Triangles.m_NumItems > 0)
+			if (CompressedMesh.Triangles.NumItems > 0)
 			{
 				ProcessedIndexBuffer = Array.ConvertAll(CompressedMesh.Triangles.Unpack(), x => (uint)x);
 			}
 			//Color
-			if (CompressedMesh.Colors.m_NumItems > 0)
+			if (CompressedMesh.Colors.NumItems > 0)
 			{
-				CompressedMesh.Colors.m_NumItems *= 4;
-				CompressedMesh.Colors.m_BitSize /= 4;
+				CompressedMesh.Colors.NumItems *= 4;
+				CompressedMesh.Colors.BitSize /= 4;
 				var tempColors = CompressedMesh.Colors.Unpack();
-				Colors = new ColorRGBA32[CompressedMesh.Colors.m_NumItems / 4];
-				for (int v = 0; v < CompressedMesh.Colors.m_NumItems / 4; v++)
+				Colors = new ColorRGBA32[CompressedMesh.Colors.NumItems / 4];
+				for (int v = 0; v < CompressedMesh.Colors.NumItems / 4; v++)
 				{
 					Colors[v] = new ColorRGBA32((byte)tempColors[4 * v], (byte)tempColors[4 * v + 1], (byte)tempColors[4 * v + 2], (byte)tempColors[4 * v + 3]);
 				}
-				CompressedMesh.Colors.m_NumItems /= 4;
-				CompressedMesh.Colors.m_BitSize *= 4;
+				CompressedMesh.Colors.NumItems /= 4;
+				CompressedMesh.Colors.BitSize *= 4;
 			}
 		}
 

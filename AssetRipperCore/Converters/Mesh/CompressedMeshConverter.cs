@@ -47,7 +47,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			else
 			{
 #warning TODO: convert Colors to FloatColors
-				if (origin.Colors.IsSet)
+				if (origin.Colors.IsSet())
 				{
 					Logger.Log(LogType.Warning, LogCategory.Export, "Color conversion isn't implemented");
 				}
@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			{
 				return origin.Colors.Convert(container);
 			}
-			return new PackedIntVector(true);
+			return new PackedIntVector();
 		}
 
 		private static uint GetUVInfo(IExportContainer container, CompressedMesh origin)

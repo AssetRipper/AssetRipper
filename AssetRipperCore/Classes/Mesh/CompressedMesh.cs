@@ -14,13 +14,13 @@ namespace AssetRipper.Core.Classes.Mesh
 		public PackedFloatVector BindPoses = new PackedFloatVector(true);
 		public PackedFloatVector Normals = new PackedFloatVector(true);
 		public PackedFloatVector Tangents = new PackedFloatVector(true);
-		public PackedIntVector Weights = new PackedIntVector(true);
-		public PackedIntVector NormalSigns = new PackedIntVector(true);
-		public PackedIntVector TangentSigns = new PackedIntVector(true);
+		public PackedIntVector Weights = new PackedIntVector();
+		public PackedIntVector NormalSigns = new PackedIntVector();
+		public PackedIntVector TangentSigns = new PackedIntVector();
 		public PackedFloatVector FloatColors = new PackedFloatVector(true);
-		public PackedIntVector BoneIndices = new PackedIntVector(true);
-		public PackedIntVector Triangles = new PackedIntVector(true);
-		public PackedIntVector Colors = new PackedIntVector(true);
+		public PackedIntVector BoneIndices = new PackedIntVector();
+		public PackedIntVector Triangles = new PackedIntVector();
+		public PackedIntVector Colors = new PackedIntVector();
 
 		public uint UVInfo { get; set; }
 
