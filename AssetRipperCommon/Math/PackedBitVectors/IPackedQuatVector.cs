@@ -10,11 +10,6 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 
 	public static class PackedQuatVectorExtensions
 	{
-		public static PackedQuatVector Pack(this Quaternionf[] values)
-		{
-			throw new NotImplementedException();
-		}
-
 		public static Quaternionf[] Unpack(this IPackedQuatVector packedVector)
 		{
 			int bitIndex = 0;

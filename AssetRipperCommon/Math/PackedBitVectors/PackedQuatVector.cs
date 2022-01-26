@@ -3,6 +3,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
+using System;
 
 namespace AssetRipper.Core.Math.PackedBitVectors
 {
@@ -12,7 +13,7 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 		public const string DataName = "m_Data";
 
 		public uint NumItems { get; set; }
-		public byte[] Data { get; set; }
+		public byte[] Data { get; set; } = Array.Empty<byte>();
 		
 		public void Read(AssetReader reader)
 		{
@@ -29,5 +30,9 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 			return node;
 		}
 
+		public static PackedQuatVector Pack(Quaternionf[] values)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
