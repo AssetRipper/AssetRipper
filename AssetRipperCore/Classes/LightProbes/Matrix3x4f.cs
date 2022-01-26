@@ -2,7 +2,7 @@
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Core.Math
+namespace AssetRipper.Core.Classes.LightProbes
 {
 	public struct Matrix3x4f : IAssetReadable, IYAMLExportable
 	{
