@@ -9,7 +9,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public struct CompressedAnimationCurve : IAssetReadable, IYAMLExportable
+	public class CompressedAnimationCurve : IAssetReadable, IYAMLExportable
 	{
 		public QuaternionCurve Unpack()
 		{
@@ -68,8 +68,8 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public const string PreInfinityName = "m_PreInfinity";
 		public const string PostInfinityName = "m_PostInfinity";
 
-		public PackedIntVector Times;
-		public PackedQuatVector Values;
-		public PackedFloatVector Slopes;
+		public PackedIntVector Times = new();
+		public PackedQuatVector Values = new();
+		public PackedFloatVector Slopes = new();
 	}
 }
