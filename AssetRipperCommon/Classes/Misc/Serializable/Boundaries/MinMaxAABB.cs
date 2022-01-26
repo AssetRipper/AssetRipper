@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 {
-	public class MinMaxAABB : IAsset
+	public sealed class MinMaxAABB : IAsset
 	{
 		public const string MinName = "m_Min";
 		public const string MaxName = "m_Max";

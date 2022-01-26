@@ -7,7 +7,7 @@ using System;
 
 namespace AssetRipper.Core.Math.PackedBitVectors
 {
-	public class PackedQuatVector : IAssetReadable, IYAMLExportable, IPackedQuatVector
+	public sealed class PackedQuatVector : IAssetReadable, IYAMLExportable, IPackedQuatVector
 	{
 		public const string NumItemsName = "m_NumItems";
 		public const string DataName = "m_Data";
