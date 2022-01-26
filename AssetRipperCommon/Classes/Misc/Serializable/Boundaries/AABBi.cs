@@ -3,7 +3,7 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Core.Classes.Misc.Serializable
+namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 {
 	public struct AABBi : IAsset
 	{

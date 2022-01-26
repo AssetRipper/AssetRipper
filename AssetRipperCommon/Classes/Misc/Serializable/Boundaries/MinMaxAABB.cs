@@ -5,7 +5,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System.IO;
 
-namespace AssetRipper.Core.Classes.Misc
+namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 {
 	public struct MinMaxAABB : IAsset
 	{

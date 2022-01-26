@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
+using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
 using AssetRipper.Core.Classes.Misc.Serializable.Gradient;
 using AssetRipper.Core.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Core.Interfaces;

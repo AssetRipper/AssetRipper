@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
 using AssetRipper.Core.Extensions;
