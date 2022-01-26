@@ -54,7 +54,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				}
 				if (SubMesh.HasVertex(container.ExportVersion))
 				{
-					SubMeshConverter.CalculateSubMeshVertexRangeAndBounds(container.ExportLayout, instanceMesh, ref instance);
+					SubMeshConverter.CalculateSubMeshVertexRangeAndBounds(container.ExportLayout, instanceMesh, instance);
 				}
 				instances[i] = instance;
 				offset += indexCount * sizeof(ushort);

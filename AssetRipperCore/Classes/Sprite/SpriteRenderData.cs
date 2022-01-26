@@ -75,8 +75,8 @@ namespace AssetRipper.Core.Classes.Sprite
 					List<Vector2f[]> outlines = new List<Vector2f[]>();
 					for (int i = 0; i < SubMeshes.Length; i++)
 					{
-						Vector3f[] vertices = VertexData.GenerateVertices(version, ref SubMeshes[i]);
-						VertexDataToOutline(outlines, vertices, ref SubMeshes[i]);
+						Vector3f[] vertices = VertexData.GenerateVertices(version, SubMeshes[i]);
+						VertexDataToOutline(outlines, vertices, SubMeshes[i]);
 					}
 					return outlines.ToArray();
 				}
@@ -181,7 +181,7 @@ namespace AssetRipper.Core.Classes.Sprite
 			return outlineGenerator.GenerateOutlines();
 		}
 
-		private void VertexDataToOutline(List<Vector2f[]> outlines, Vector3f[] vertices, ref SubMesh submesh)
+		private void VertexDataToOutline(List<Vector2f[]> outlines, Vector3f[] vertices, SubMesh submesh)
 		{
 			Vector3i[] triangles = new Vector3i[submesh.IndexCount / 3];
 			for (int o = (int)submesh.FirstByte, ti = 0; ti < triangles.Length; o += 6, ti++)

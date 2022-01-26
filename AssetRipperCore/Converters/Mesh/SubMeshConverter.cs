@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Mesh;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.IO.Asset;
@@ -16,10 +15,10 @@ namespace AssetRipper.Core.Converters.Mesh
 {
 	public static class SubMeshConverter
 	{
-		public static void CalculateSubMeshVertexRangeAndBounds(LayoutInfo layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
+		public static void CalculateSubMeshVertexRangeAndBounds(LayoutInfo layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, SubMesh submesh)
 		{
-			UpdateSubMeshVertexRange(layout.Version, mesh, ref submesh);
-			RecalculateSubmeshBounds(layout, mesh, ref submesh);
+			UpdateSubMeshVertexRange(layout.Version, mesh, submesh);
+			RecalculateSubmeshBounds(layout, mesh, submesh);
 		}
 
 		public static SubMesh[] Convert(IExportContainer container, AssetRipper.Core.Classes.Mesh.Mesh instanceMesh, SubMesh[] origin)
@@ -27,12 +26,12 @@ namespace AssetRipper.Core.Converters.Mesh
 			SubMesh[] instances = new SubMesh[origin.Length];
 			for (int i = 0; i < origin.Length; i++)
 			{
-				instances[i] = Convert(container, instanceMesh, ref origin[i]);
+				instances[i] = Convert(container, instanceMesh, origin[i]);
 			}
 			return instances;
 		}
 
-		private static SubMesh Convert(IExportContainer container, AssetRipper.Core.Classes.Mesh.Mesh instanceMesh, ref SubMesh origin)
+		private static SubMesh Convert(IExportContainer container, AssetRipper.Core.Classes.Mesh.Mesh instanceMesh, SubMesh origin)
 		{
 			SubMesh instance = new SubMesh();
 			instance.FirstByte = origin.FirstByte;
@@ -44,16 +43,16 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 			if (SubMesh.HasBaseVertex(container.ExportVersion))
 			{
-				instance.BaseVertex = (uint)GetBaseVertex(container, ref origin);
+				instance.BaseVertex = (uint)GetBaseVertex(container, origin);
 			}
 			if (SubMesh.HasVertex(container.ExportVersion))
 			{
-				SetVertex(container, instanceMesh, ref origin, ref instance);
+				SetVertex(container, instanceMesh, origin, instance);
 			}
 			return instance;
 		}
 
-		private static int GetBaseVertex(IExportContainer container, ref SubMesh origin)
+		private static int GetBaseVertex(IExportContainer container, SubMesh origin)
 		{
 			if (SubMesh.HasBaseVertex(container.Version))
 			{
@@ -63,7 +62,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			return 0;
 		}
 
-		private static void SetVertex(IExportContainer container, AssetRipper.Core.Classes.Mesh.Mesh instanceMesh, ref SubMesh origin, ref SubMesh instance)
+		private static void SetVertex(IExportContainer container, AssetRipper.Core.Classes.Mesh.Mesh instanceMesh, SubMesh origin, SubMesh instance)
 		{
 			if (SubMesh.HasVertex(container.Version))
 			{
@@ -73,11 +72,11 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 			else
 			{
-				CalculateSubMeshVertexRangeAndBounds(container.ExportLayout, instanceMesh, ref instance);
+				CalculateSubMeshVertexRangeAndBounds(container.ExportLayout, instanceMesh, instance);
 			}
 		}
 
-		private static void UpdateSubMeshVertexRange(UnityVersion version, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
+		private static void UpdateSubMeshVertexRange(UnityVersion version, AssetRipper.Core.Classes.Mesh.Mesh mesh, SubMesh submesh)
 		{
 			if (submesh.IndexCount == 0)
 			{
@@ -86,12 +85,12 @@ namespace AssetRipper.Core.Converters.Mesh
 				return;
 			}
 
-			FindMinMaxIndices(version, mesh, ref submesh, out int minIndex, out int maxIndex);
+			FindMinMaxIndices(version, mesh, submesh, out int minIndex, out int maxIndex);
 			submesh.FirstVertex = (uint)minIndex;
 			submesh.VertexCount = (uint)(maxIndex - minIndex + 1);
 		}
 
-		private static void FindMinMaxIndices(UnityVersion version, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh, out int min, out int max)
+		private static void FindMinMaxIndices(UnityVersion version, AssetRipper.Core.Classes.Mesh.Mesh mesh, SubMesh submesh, out int min, out int max)
 		{
 			bool is16bits = mesh.Is16BitIndices(version);
 			if (AssetRipper.Core.Classes.Mesh.Mesh.HasCompressedMesh(version))
@@ -172,7 +171,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 		}
 
-		private static void RecalculateSubmeshBounds(LayoutInfo layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh)
+		private static void RecalculateSubmeshBounds(LayoutInfo layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, SubMesh submesh)
 		{
 			if (submesh.VertexCount == 0)
 			{
@@ -180,13 +179,13 @@ namespace AssetRipper.Core.Converters.Mesh
 				return;
 			}
 
-			FindMinMaxBounds(layout, mesh, ref submesh, out Vector3f min, out Vector3f max);
+			FindMinMaxBounds(layout, mesh, submesh, out Vector3f min, out Vector3f max);
 			Vector3f center = (min + max) / 2.0f;
 			Vector3f extent = max - center;
 			submesh.LocalAABB = new AABB(center, extent);
 		}
 
-		private static void FindMinMaxBounds(LayoutInfo layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, ref SubMesh submesh, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(LayoutInfo layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, SubMesh submesh, out Vector3f min, out Vector3f max)
 		{
 			if (AssetRipper.Core.Classes.Mesh.Mesh.HasCompressedMesh(layout.Version))
 			{

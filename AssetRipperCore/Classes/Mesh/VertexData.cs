@@ -111,7 +111,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return skin;
 		}
 
-		public Vector3f[] GenerateVertices(UnityVersion version, ref SubMesh submesh)
+		public Vector3f[] GenerateVertices(UnityVersion version, SubMesh submesh)
 		{
 			ChannelInfo channel = GetChannel(version, ShaderChannel.Vertex);
 			if (!channel.IsSet)

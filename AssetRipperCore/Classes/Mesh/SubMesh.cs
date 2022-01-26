@@ -7,7 +7,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct SubMesh : IAsset
+	public sealed class SubMesh : IAsset
 	{
 		/// <summary>Offset in index buffer</summary>
 		public uint FirstByte { get; set; }
