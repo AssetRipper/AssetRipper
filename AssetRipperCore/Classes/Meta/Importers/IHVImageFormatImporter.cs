@@ -119,6 +119,6 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		public const string StreamingMipmapsName = "m_StreamingMipmaps";
 		public const string StreamingMipmapsPriorityName = "m_StreamingMipmapsPriority";
 
-		public GLTextureSettings TextureSettings;
+		public GLTextureSettings TextureSettings = new();
 	}
 }

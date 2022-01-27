@@ -6,6 +6,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
+using System;
 using System.Collections.Generic;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
@@ -276,9 +277,9 @@ namespace AssetRipper.Core.Classes
 		public const string ImageDataName = "image data";
 		public const string StreamDataName = "m_StreamData";
 
-		public GLTextureSettings TextureSettings;
-		public StreamingInfo StreamData;
+		public GLTextureSettings TextureSettings = new();
+		public StreamingInfo StreamData = new();
 
-		private byte[] m_imageData;
+		private byte[] m_imageData = Array.Empty<byte>();
 	}
 }

@@ -6,12 +6,10 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
-using System.Collections.Generic;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Texture2D
@@ -314,7 +312,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public const string ImageDataName = "image data";
 		public const string StreamDataName = "m_StreamData";
 
-		public GLTextureSettings TextureSettings;
-		private StreamingInfo m_StreamData;
+		public GLTextureSettings TextureSettings = new();
+		private StreamingInfo m_StreamData = new();
 	}
 }

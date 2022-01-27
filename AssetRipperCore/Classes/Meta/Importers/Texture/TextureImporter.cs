@@ -1087,10 +1087,10 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		public const string PSDRemoveMatteName = "m_PSDRemoveMatte";
 		public const string PSDShowRemoveMatteOptionName = "m_PSDShowRemoveMatteOption";
 
-		public GLTextureSettings TextureSettings;
-		public Vector2f SpritePivot;
-		public Vector4f SpriteBorder;
-		public SpriteSheetMetaData SpriteSheet;
-		public TextureImportOutput Output;
+		public GLTextureSettings TextureSettings = new();
+		public Vector2f SpritePivot = new();
+		public Vector4f SpriteBorder = new();
+		public SpriteSheetMetaData SpriteSheet = new();
+		public TextureImportOutput Output = new();
 	}
 }

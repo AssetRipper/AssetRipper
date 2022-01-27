@@ -232,6 +232,6 @@ namespace AssetRipper.Core.Classes.RenderTexture
 		public const string DimensionName = "m_Dimension";
 		public const string VolumeDepthName = "m_VolumeDepth";
 
-		public GLTextureSettings TextureSettings;
+		public GLTextureSettings TextureSettings = new();
 	}
 }

@@ -7,8 +7,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Texture2D
 {
-	public struct GLTextureSettings : IAsset
+	public sealed class GLTextureSettings : IAsset
 	{
+		public GLTextureSettings() { }
 		public GLTextureSettings(LayoutInfo layout)
 		{
 			FilterMode = (FilterMode)(-1);
