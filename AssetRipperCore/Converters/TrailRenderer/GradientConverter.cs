@@ -5,7 +5,7 @@ namespace AssetRipper.Core.Converters.TrailRenderer
 {
 	public static class GradientConverter
 	{
-		public static Gradient GenerateGradient(IExportContainer container, ref AssetRipper.Core.Classes.TrailRenderer.Gradient origin)
+		public static Gradient GenerateGradient(IExportContainer container, AssetRipper.Core.Classes.TrailRenderer.Gradient origin)
 		{
 			Gradient instance = new Gradient();
 			instance.Add(0 * ushort.MaxValue / 4, origin.Color0);

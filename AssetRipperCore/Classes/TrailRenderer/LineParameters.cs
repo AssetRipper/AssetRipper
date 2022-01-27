@@ -11,8 +11,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.TrailRenderer
 {
-	public struct LineParameters : IAsset
+	public sealed class LineParameters : IAsset
 	{
+		public LineParameters() { }
 		public LineParameters(UnityVersion version)
 		{
 			WidthMultiplier = 1.0f;
@@ -25,6 +26,21 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 			TextureMode = LineTextureMode.Stretch;
 			ShadowBias = 0.5f;
 			GenerateLightingData = false;
+		}
+
+		public LineParameters Clone()
+		{
+			LineParameters result = new LineParameters();
+			result.WidthMultiplier = WidthMultiplier;
+			result.WidthCurve = WidthCurve;
+			result.ColorGradient = ColorGradient;
+			result.NumCornerVertices = NumCornerVertices;
+			result.NumCapVertices = NumCapVertices;
+			result.Alignment = Alignment;
+			result.TextureMode = TextureMode;
+			result.ShadowBias = ShadowBias;
+			result.GenerateLightingData = GenerateLightingData;
+			return result;
 		}
 
 		public static int ToSerializedVersion(UnityVersion version)
@@ -49,7 +65,7 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 
 		public LineParameters Convert(IExportContainer container)
 		{
-			return LineParametersConverter.Convert(container, ref this);
+			return LineParametersConverter.Convert(container, this);
 		}
 
 		public void Read(AssetReader reader)
@@ -132,7 +148,7 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 		public const string ShadowBiasName = "shadowBias";
 		public const string GenerateLightingDataName = "generateLightingData";
 
-		public AnimationCurveTpl<Float> WidthCurve;
-		public Misc.Serializable.Gradient.Gradient ColorGradient;
+		public AnimationCurveTpl<Float> WidthCurve = new();
+		public Misc.Serializable.Gradient.Gradient ColorGradient = new();
 	}
 }

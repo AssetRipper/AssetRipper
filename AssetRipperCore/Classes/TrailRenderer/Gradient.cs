@@ -6,11 +6,11 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.TrailRenderer
 {
-	public struct Gradient : IAsset
+	public sealed class Gradient : IAsset
 	{
 		public Misc.Serializable.Gradient.Gradient GenerateGragient(IExportContainer container)
 		{
-			return GradientConverter.GenerateGradient(container, ref this);
+			return GradientConverter.GenerateGradient(container, this);
 		}
 
 		public void Read(AssetReader reader)

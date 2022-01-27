@@ -8,18 +8,18 @@ namespace AssetRipper.Core.Converters.TrailRenderer
 {
 	public static class LineParametersConverter
 	{
-		public static LineParameters Convert(IExportContainer container, ref LineParameters origin)
+		public static LineParameters Convert(IExportContainer container, LineParameters origin)
 		{
-			LineParameters instance = origin;
+			LineParameters instance = origin.Clone();
 			instance.WidthCurve = origin.WidthCurve.Convert(container);
 			if (LineParameters.HasShadowBias(container.ExportVersion))
 			{
-				instance.ShadowBias = GetShadowBias(container, ref origin);
+				instance.ShadowBias = GetShadowBias(container, origin);
 			}
 			return instance;
 		}
 
-		private static float GetShadowBias(IExportContainer container, ref LineParameters origin)
+		private static float GetShadowBias(IExportContainer container, LineParameters origin)
 		{
 			return LineParameters.HasShadowBias(container.Version) ? origin.ShadowBias : 0.5f;
 		}

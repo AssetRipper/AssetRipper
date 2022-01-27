@@ -159,6 +159,6 @@ namespace AssetRipper.Core.Classes.UI.Canvas
 		public const string SortingOrderName = "m_SortingOrder";
 		public const string TargetDisplayName = "m_TargetDisplay";
 
-		public PPtr<Camera.Camera> Camera;
+		public PPtr<Camera.Camera> Camera = new();
 	}
 }
