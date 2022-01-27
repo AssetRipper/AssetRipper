@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Classes
 		public const string DirectionName = "m_Direction";
 		public const string CenterName = "m_Center";
 
-		public Vector3f Center;
+		public Vector3f Center = new();
 
 		protected override bool IncludesIsTrigger => true;
 		protected override bool IncludesMaterial => true;

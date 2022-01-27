@@ -22,12 +22,12 @@ namespace AssetRipper.Core.Classes
 			Curves6.Read(reader);
 		}
 
-		public AnimationCurveTpl<Float> Curves0;
-		public AnimationCurveTpl<Float> Curves1;
-		public AnimationCurveTpl<Float> Curves2;
-		public AnimationCurveTpl<Float> Curves3;
-		public AnimationCurveTpl<Float> Curves4;
-		public AnimationCurveTpl<Float> Curves5;
-		public AnimationCurveTpl<Float> Curves6;
+		public AnimationCurveTpl<Float> Curves0 = new();
+		public AnimationCurveTpl<Float> Curves1 = new();
+		public AnimationCurveTpl<Float> Curves2 = new();
+		public AnimationCurveTpl<Float> Curves3 = new();
+		public AnimationCurveTpl<Float> Curves4 = new();
+		public AnimationCurveTpl<Float> Curves5 = new();
+		public AnimationCurveTpl<Float> Curves6 = new();
 	}
 }

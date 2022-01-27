@@ -107,7 +107,7 @@ namespace AssetRipper.Core.Classes
 		public string Name { get; set; }
 		public SerializableStructure Structure { get; set; }
 
-		public PPtr<IMonoScript> Script;
+		public PPtr<IMonoScript> Script = new();
 		public PPtr<IMonoScript> ScriptPtr => Script;
 
 		public const string EditorHideFlagsName = "m_EditorHideFlags";

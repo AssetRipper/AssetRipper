@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ParticleSystemForceField
 {
-	public struct ParticleSystemForceFieldParameters : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class ParticleSystemForceFieldParameters : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -91,16 +91,16 @@ namespace AssetRipper.Core.Classes.ParticleSystemForceField
 		public const string MultiplyDragByParticleSizeName = "m_MultiplyDragByParticleSize";
 		public const string MultiplyDragByParticleVelocityName = "m_MultiplyDragByParticleVelocity";
 
-		public Vector2f RotationRandomness;
-		public MinMaxCurve DirectionCurveX;
-		public MinMaxCurve DirectionCurveY;
-		public MinMaxCurve DirectionCurveZ;
-		public MinMaxCurve GravityCurve;
-		public MinMaxCurve RotationSpeedCurve;
-		public MinMaxCurve RotationAttractionCurve;
-		public MinMaxCurve DragCurve;
-		public PPtr<Texture3D> VectorField;
-		public MinMaxCurve VectorFieldSpeedCurve;
-		public MinMaxCurve VectorFieldAttractionCurve;
+		public Vector2f RotationRandomness = new();
+		public MinMaxCurve DirectionCurveX = new();
+		public MinMaxCurve DirectionCurveY = new();
+		public MinMaxCurve DirectionCurveZ = new();
+		public MinMaxCurve GravityCurve = new();
+		public MinMaxCurve RotationSpeedCurve = new();
+		public MinMaxCurve RotationAttractionCurve = new();
+		public MinMaxCurve DragCurve = new();
+		public PPtr<Texture3D> VectorField = new();
+		public MinMaxCurve VectorFieldSpeedCurve = new();
+		public MinMaxCurve VectorFieldAttractionCurve = new();
 	}
 }

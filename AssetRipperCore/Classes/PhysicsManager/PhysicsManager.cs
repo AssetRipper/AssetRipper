@@ -480,9 +480,9 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 		public const string DefaultMaxAngluarSpeedName = "m_DefaultMaxAngluarSpeed";
 		public const string DefaultMaxAngularSpeedName = "m_DefaultMaxAngularSpeed";
 
-		public Vector3f Gravity;
-		public PPtr<PhysicMaterial.PhysicMaterial> DefaultMaterial;
-		public Vector3f ClothGravity;
+		public Vector3f Gravity = new();
+		public PPtr<PhysicMaterial.PhysicMaterial> DefaultMaterial = new();
+		public Vector3f ClothGravity = new();
 		public AABB WorldBounds = new AABB();
 	}
 }

@@ -69,7 +69,7 @@ namespace AssetRipper.Core.Classes.PhysicMaterial
 		public const string FrictionCombineName = "frictionCombine";
 		public const string BounceCombineName = "bounceCombine";
 
-		public Vector3f FrictionDirection2;
-		public JointSpring Spring;
+		public Vector3f FrictionDirection2 = new();
+		public JointSpring Spring = new();
 	}
 }

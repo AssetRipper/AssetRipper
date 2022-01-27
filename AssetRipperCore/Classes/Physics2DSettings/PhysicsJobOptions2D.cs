@@ -6,8 +6,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Physics2DSettings
 {
-	public struct PhysicsJobOptions2D : IAssetReadable, IYAMLExportable
+	public sealed class PhysicsJobOptions2D : IAssetReadable, IYAMLExportable
 	{
+		public PhysicsJobOptions2D() { }
 		public PhysicsJobOptions2D(bool _)
 		{
 			UseMultithreading = false;

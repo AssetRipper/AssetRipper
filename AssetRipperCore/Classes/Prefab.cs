@@ -73,7 +73,7 @@ namespace AssetRipper.Core.Classes
 
 		public override ClassIDType ClassID => ClassIDType.Prefab;
 
-		public PPtr<GameObject.GameObject> RootGameObject;
+		public PPtr<GameObject.GameObject> RootGameObject = new();
 		public int HideFlagsBehavior { get; set; }
 		public const string RootGameObjectName = "m_RootGameObject";
 	}

@@ -49,6 +49,6 @@ namespace AssetRipper.Core.Classes
 
 		public const string RadiusName = "m_Radius";
 
-		public Vector2f Center;
+		public Vector2f Center = new();
 	}
 }

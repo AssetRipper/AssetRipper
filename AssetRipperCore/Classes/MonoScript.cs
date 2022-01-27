@@ -204,7 +204,7 @@ namespace AssetRipper.Core.Classes
 		public const string AssemblyIdentifierName = "m_AssemblyIdentifier";
 		public const string IsEditorScriptName = "m_IsEditorScript";
 
-		private Hash128 m_PropertiesHash;
+		private Hash128 m_PropertiesHash = new();
 		public Hash128 PropertiesHash => m_PropertiesHash;
 	}
 }

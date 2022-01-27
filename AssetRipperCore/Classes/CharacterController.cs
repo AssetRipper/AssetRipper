@@ -92,6 +92,6 @@ namespace AssetRipper.Core.Classes
 		public const string MinMoveDistanceName = "m_MinMoveDistance";
 		public const string CenterName = "m_Center";
 
-		public Vector3f Center;
+		public Vector3f Center = new();
 	}
 }

@@ -326,11 +326,11 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 		public const string Mesh3Name = "m_Mesh3";
 		public const string MaskInteractionName = "m_MaskInteraction";
 
-		public Vector3f Pivot;
-		public Vector3f Flip;
-		public PPtr<Mesh.Mesh> Mesh;
-		public PPtr<Mesh.Mesh> Mesh1;
-		public PPtr<Mesh.Mesh> Mesh2;
-		public PPtr<Mesh.Mesh> Mesh3;
+		public Vector3f Pivot = new();
+		public Vector3f Flip = new();
+		public PPtr<Mesh.Mesh> Mesh = new();
+		public PPtr<Mesh.Mesh> Mesh1 = new();
+		public PPtr<Mesh.Mesh> Mesh2 = new();
+		public PPtr<Mesh.Mesh> Mesh3 = new();
 	}
 }

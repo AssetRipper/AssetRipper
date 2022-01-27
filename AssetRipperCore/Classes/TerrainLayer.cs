@@ -86,15 +86,15 @@ namespace AssetRipper.Core.Classes
 		public const string MaskMapRemapMinName = "m_MaskMapRemapMin";
 		public const string MaskMapRemapMaxName = "m_MaskMapRemapMax";
 
-		public PPtr<Texture2D.Texture2D> DiffuseTexture;
-		public PPtr<Texture2D.Texture2D> NormalMapTexture;
-		public PPtr<Texture2D.Texture2D> MaskMapTexture;
-		public Vector2f TileSize;
-		public Vector2f TileOffset;
-		public ColorRGBAf Specular;
-		public Vector4f DiffuseRemapMin;
-		public Vector4f DiffuseRemapMax;
-		public Vector4f MaskMapRemapMin;
-		public Vector4f MaskMapRemapMax;
+		public PPtr<Texture2D.Texture2D> DiffuseTexture = new();
+		public PPtr<Texture2D.Texture2D> NormalMapTexture = new();
+		public PPtr<Texture2D.Texture2D> MaskMapTexture = new();
+		public Vector2f TileSize = new();
+		public Vector2f TileOffset = new();
+		public ColorRGBAf Specular = new();
+		public Vector4f DiffuseRemapMin = new();
+		public Vector4f DiffuseRemapMax = new();
+		public Vector4f MaskMapRemapMin = new();
+		public Vector4f MaskMapRemapMax = new();
 	}
 }

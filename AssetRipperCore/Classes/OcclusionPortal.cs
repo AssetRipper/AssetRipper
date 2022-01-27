@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Classes
 		public const string CenterName = "m_Center";
 		public const string SizeName = "m_Size";
 
-		public Vector3f Center;
-		public Vector3f Size;
+		public Vector3f Center = new();
+		public Vector3f Size = new();
 	}
 }

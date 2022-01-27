@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.PhysicMaterial
 {
-	public struct JointSpring : IAssetReadable, IYAMLExportable
+	public sealed class JointSpring : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

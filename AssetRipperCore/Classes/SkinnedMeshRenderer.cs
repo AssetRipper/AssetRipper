@@ -241,7 +241,7 @@ namespace AssetRipper.Core.Classes
 		public const string AABBName = "m_AABB";
 		public const string DirtyAABBName = "m_DirtyAABB";
 
-		public PPtr<Animation.Animation> DisableAnimationWhenOffscreen;
+		public PPtr<Animation.Animation> DisableAnimationWhenOffscreen = new();
 		/// <summary>
 		/// LodMesh previously
 		/// </summary>

@@ -47,8 +47,8 @@ namespace AssetRipper.Core.Classes
 		public const string SizeName = "m_Size";
 		public const string CenterName = "m_Center";
 
-		public Vector3f Size;
-		public Vector3f Center;
+		public Vector3f Size = new();
+		public Vector3f Center = new();
 
 		protected override bool IncludesIsTrigger => true;
 		protected override bool IncludesMaterial => true;

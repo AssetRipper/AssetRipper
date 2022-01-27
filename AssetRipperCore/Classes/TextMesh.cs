@@ -139,7 +139,7 @@ namespace AssetRipper.Core.Classes
 		public const string FontName = "m_Font";
 		public const string ColorName = "m_Color";
 
-		public PPtr<Font.Font> Font;
-		public ColorRGBA32 Color;
+		public PPtr<Font.Font> Font = new();
+		public ColorRGBA32 Color = new();
 	}
 }

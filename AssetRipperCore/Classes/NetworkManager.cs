@@ -71,6 +71,6 @@ namespace AssetRipper.Core.Classes
 		public const string SendrateName = "m_Sendrate";
 		public const string AssetToPrefabName = "m_AssetToPrefab";
 
-		private Dictionary<UnityGUID, PPtr<GameObject.GameObject>> m_assetToPrefab;
+		private Dictionary<UnityGUID, PPtr<GameObject.GameObject>> m_assetToPrefab = new();
 	}
 }

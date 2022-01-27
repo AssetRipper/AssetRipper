@@ -260,6 +260,6 @@ namespace AssetRipper.Core.Classes
 		public Dictionary<Hash128, Hash128> ScriptHashes { get; set; }
 		public int[] GraphicsAPIs { get; set; }
 
-		public UnityGUID BuildGUID;
+		public UnityGUID BuildGUID = new();
 	}
 }

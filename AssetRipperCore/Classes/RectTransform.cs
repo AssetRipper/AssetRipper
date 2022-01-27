@@ -42,11 +42,11 @@ namespace AssetRipper.Core.Classes
 			return node;
 		}
 
-		public Vector2f AnchorMin;
-		public Vector2f AnchorMax;
-		public Vector2f AnchorPosition;
-		public Vector2f SizeDelta;
-		public Vector2f Pivot;
+		public Vector2f AnchorMin = new();
+		public Vector2f AnchorMax = new();
+		public Vector2f AnchorPosition = new();
+		public Vector2f SizeDelta = new();
+		public Vector2f Pivot = new();
 
 		public const string AnchorMinName = "m_AnchorMin";
 		public const string AnchorMaxName = "m_AnchorMax";

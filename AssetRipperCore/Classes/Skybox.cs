@@ -38,6 +38,6 @@ namespace AssetRipper.Core.Classes
 
 		public const string CustomSkyboxName = "m_CustomSkybox";
 
-		public PPtr<Material.Material> CustomSkybox;
+		public PPtr<Material.Material> CustomSkybox = new();
 	}
 }

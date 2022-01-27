@@ -122,7 +122,7 @@ namespace AssetRipper.Core.Classes
 		public const string ActivatedName = "m_Activated";
 		public const string AutoUpdatePositionsName = "m_AutoUpdatePositions";
 
-		public PPtr<Transform> Start;
-		public PPtr<Transform> End;
+		public PPtr<Transform> Start = new();
+		public PPtr<Transform> End = new();
 	}
 }

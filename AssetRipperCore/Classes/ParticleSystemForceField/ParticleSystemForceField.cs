@@ -41,6 +41,6 @@ namespace AssetRipper.Core.Classes.ParticleSystemForceField
 
 		public const string ParametersName = "m_Parameters";
 
-		public ParticleSystemForceFieldParameters Parameters;
+		public ParticleSystemForceFieldParameters Parameters = new();
 	}
 }

@@ -155,7 +155,7 @@ namespace AssetRipper.Core.Classes
 		public const string CycleOffsetParameterName = "m_CycleOffsetParameter";
 		public const string TimeParameterName = "m_TimeParameter";
 
-		public Vector3f Position;
+		public Vector3f Position = new();
 		public PPtr<Motion> Motion = new();
 	}
 }

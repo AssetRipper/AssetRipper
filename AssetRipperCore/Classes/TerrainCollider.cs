@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Classes
 		public const string TerrainDataName = "m_TerrainData";
 		public const string EnableTreeCollidersName = "m_EnableTreeColliders";
 
-		public PPtr<TerrainData.TerrainData> TerrainData;
+		public PPtr<TerrainData.TerrainData> TerrainData = new();
 
 		protected override bool IncludesMaterial => HasTerrainMaterial(SerializedFile.Version);
 		protected override bool IncludesIsTrigger => false;

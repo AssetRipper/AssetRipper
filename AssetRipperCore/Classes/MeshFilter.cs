@@ -38,6 +38,6 @@ namespace AssetRipper.Core.Classes
 
 		public const string MeshName = "m_Mesh";
 
-		public PPtr<Mesh.Mesh> Mesh;
+		public PPtr<Mesh.Mesh> Mesh = new();
 	}
 }

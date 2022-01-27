@@ -112,7 +112,7 @@ namespace AssetRipper.Core.Classes
 		private PPtr<Object.Object> ExtensionPtr => default;
 		private PPtr<EditorExtension> CorrespondingSourceObject => default;
 		private PPtr<Prefab> PrefabAsset => default;
-		private PPtr<IPrefabInstance> m_PrefabInstance;
+		private PPtr<IPrefabInstance> m_PrefabInstance = new();
 
 		public PPtr<IPrefabInstance> PrefabInstance
 		{

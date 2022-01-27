@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Classes
 
 		public override string ExportExtension => throw new NotSupportedException();
 
-		public PPtr<GameObject.GameObject> GameObject;
+		public PPtr<GameObject.GameObject> GameObject = new();
 
 		public PPtr<GameObject.IGameObject> GameObjectPtr => GameObject.CastTo<GameObject.IGameObject>();
 

@@ -415,8 +415,8 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 		public const string ColliderAABBColorName = "m_ColliderAABBColor";
 		public const string LayerCollisionMatrixName = "m_LayerCollisionMatrix";
 
-		public Vector2f Gravity;
-		public PPtr<PhysicsMaterial2D> DefaultMaterial;
-		public PhysicsJobOptions2D JobOptions;
+		public Vector2f Gravity = new();
+		public PPtr<PhysicsMaterial2D> DefaultMaterial = new();
+		public PhysicsJobOptions2D JobOptions = new();
 	}
 }

@@ -52,10 +52,10 @@ namespace AssetRipper.Core.Classes
 		public const string AutoTilingName = "m_AutoTiling";
 		public const string PointsName = "m_Points";
 
-		public SpriteTilingProperty SpriteTilingProperty;
+		public SpriteTilingProperty SpriteTilingProperty = new();
 		/// <summary>
 		/// Poly previously
 		/// </summary>
-		public Polygon2D Points;
+		public Polygon2D Points = new();
 	}
 }

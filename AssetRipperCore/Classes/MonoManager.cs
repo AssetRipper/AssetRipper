@@ -137,6 +137,6 @@ namespace AssetRipper.Core.Classes
 
 		public const string ScriptsName = "m_Scripts";
 
-		public DateTime EngineDllModDate;
+		public DateTime EngineDllModDate = new();
 	}
 }
