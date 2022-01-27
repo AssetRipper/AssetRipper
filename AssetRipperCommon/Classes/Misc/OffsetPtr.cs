@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public void Read(AssetReader reader)
 		{
-			Instance.Read(reader);
+			Instance = reader.ReadAsset<T>();
 		}
 
 		public void Write(AssetWriter writer)
