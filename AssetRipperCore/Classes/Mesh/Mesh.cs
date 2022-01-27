@@ -114,7 +114,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Shapes - real name
 		/// </summary>
-		public BlendShape[] BlendShapes
+		public MeshBlendShape[] BlendShapes
 		{
 			get => Shapes.Shapes;
 			set => Shapes.Shapes = value;
@@ -350,7 +350,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 			else
 			{
-				foreach (BlendShape blendShape in BlendShapes)
+				foreach (MeshBlendShape blendShape in BlendShapes)
 				{
 					if (blendShape.IsCRCMatch(crc))
 					{
@@ -414,7 +414,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 				else
 				{
-					BlendShapes = reader.ReadAssetArray<BlendShape>();
+					BlendShapes = reader.ReadAssetArray<MeshBlendShape>();
 					reader.AlignStream();
 					ShapeVertices = reader.ReadAssetArray<BlendShapeVertex>();
 				}

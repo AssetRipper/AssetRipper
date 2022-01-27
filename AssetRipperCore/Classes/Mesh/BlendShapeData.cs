@@ -14,8 +14,8 @@ namespace AssetRipper.Core.Classes.Mesh
 		public BlendShapeData(UnityVersion version)
 		{
 			Vertices = Array.Empty<BlendShapeVertex>();
-			Shapes = Array.Empty<BlendShape>();
-			Channels = Array.Empty<BlendShapeChannel>();
+			Shapes = Array.Empty<MeshBlendShape>();
+			Channels = Array.Empty<MeshBlendShapeChannel>();
 			FullWeights = Array.Empty<float>();
 		}
 
@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public string FindShapeNameByCRC(uint crc)
 		{
-			foreach (BlendShapeChannel blendChannel in Channels)
+			foreach (MeshBlendShapeChannel blendChannel in Channels)
 			{
 				if (blendChannel.NameHash == crc)
 				{
@@ -49,8 +49,8 @@ namespace AssetRipper.Core.Classes.Mesh
 		public void Read(AssetReader reader)
 		{
 			Vertices = reader.ReadAssetArray<BlendShapeVertex>();
-			Shapes = reader.ReadAssetArray<BlendShape>();
-			Channels = reader.ReadAssetArray<BlendShapeChannel>();
+			Shapes = reader.ReadAssetArray<MeshBlendShape>();
+			Channels = reader.ReadAssetArray<MeshBlendShapeChannel>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream();
@@ -83,8 +83,8 @@ namespace AssetRipper.Core.Classes.Mesh
 		}
 
 		public BlendShapeVertex[] Vertices { get; set; }
-		public BlendShape[] Shapes { get; set; }
-		public BlendShapeChannel[] Channels { get; set; }
+		public MeshBlendShape[] Shapes { get; set; }
+		public MeshBlendShapeChannel[] Channels { get; set; }
 		public float[] FullWeights { get; set; }
 
 		public const string VerticesName = "vertices";

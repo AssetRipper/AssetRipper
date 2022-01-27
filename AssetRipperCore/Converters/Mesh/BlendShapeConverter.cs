@@ -4,17 +4,17 @@ namespace AssetRipper.Core.Converters.Mesh
 {
 	public static class BlendShapeConverter
 	{
-		public static BlendShapeChannel[] GenerateBlendChannels(BlendShape[] shapes)
+		public static MeshBlendShapeChannel[] GenerateBlendChannels(MeshBlendShape[] shapes)
 		{
-			BlendShapeChannel[] channels = new BlendShapeChannel[shapes.Length];
+			MeshBlendShapeChannel[] channels = new MeshBlendShapeChannel[shapes.Length];
 			for (int i = 0; i < shapes.Length; i++)
 			{
-				channels[i] = new BlendShapeChannel(shapes[i].Name, i, 1);
+				channels[i] = new MeshBlendShapeChannel(shapes[i].Name, i, 1);
 			}
 			return channels;
 		}
 
-		public static float[] GenerateFullWeights(BlendShape[] shapes)
+		public static float[] GenerateFullWeights(MeshBlendShape[] shapes)
 		{
 			float[] fullWeights = new float[shapes.Length];
 			for (int i = 0; i < shapes.Length; i++)

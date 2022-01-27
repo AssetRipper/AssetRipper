@@ -5,9 +5,6 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	/// <summary>
-	/// MeshBlendShapeVertex previously
-	/// </summary>
 	public struct BlendShapeVertex : IAsset
 	{
 		public void Read(AssetReader reader)
