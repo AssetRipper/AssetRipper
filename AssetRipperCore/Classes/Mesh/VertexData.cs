@@ -16,7 +16,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct VertexData : IAsset
+	public sealed class VertexData : IAsset
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -82,31 +82,29 @@ namespace AssetRipper.Core.Classes.Mesh
 			int weightStreamOffset = GetStreamOffset(container.Version, weightChannel.Stream);
 			int indexStride = Channels.Where(t => t.Stream == indexChannel.Stream).Sum(t => t.GetStride(container.Version));
 			int indexStreamOffset = GetStreamOffset(container.Version, indexChannel.Stream);
-			using (MemoryStream memStream = new MemoryStream(Data))
+
+			using MemoryStream memStream = new MemoryStream(Data);
+			using BinaryReader reader = new BinaryReader(memStream);
+
+			int weightCount = System.Math.Min((int)weightChannel.Dimension, 4);
+			int indexCount = System.Math.Min((int)indexChannel.Dimension, 4);
+			float[] weights = new float[System.Math.Max(weightCount, 4)];
+			int[] indices = new int[System.Math.Max(indexCount, 4)];
+			for (int v = 0; v < VertexCount; v++)
 			{
-				using (BinaryReader reader = new BinaryReader(memStream))
+				memStream.Position = weightStreamOffset + v * weightStride + weightChannel.Offset;
+				for (int i = 0; i < weightCount; i++)
 				{
-					int weightCount = System.Math.Min((int)weightChannel.Dimension, 4);
-					int indexCount = System.Math.Min((int)indexChannel.Dimension, 4);
-					float[] weights = new float[System.Math.Max(weightCount, 4)];
-					int[] indices = new int[System.Math.Max(indexCount, 4)];
-					for (int v = 0; v < VertexCount; v++)
-					{
-						memStream.Position = weightStreamOffset + v * weightStride + weightChannel.Offset;
-						for (int i = 0; i < weightCount; i++)
-						{
-							weights[i] = reader.ReadSingle();
-						}
-
-						memStream.Position = indexStreamOffset + v * indexStride + indexChannel.Offset;
-						for (int i = 0; i < indexCount; i++)
-						{
-							indices[i] = reader.ReadInt32();
-						}
-
-						skin[v] = new BoneWeights4(weights[0], weights[1], weights[2], weights[3], indices[0], indices[1], indices[2], indices[3]);
-					}
+					weights[i] = reader.ReadSingle();
 				}
+
+				memStream.Position = indexStreamOffset + v * indexStride + indexChannel.Offset;
+				for (int i = 0; i < indexCount; i++)
+				{
+					indices[i] = reader.ReadInt32();
+				}
+
+				skin[v] = new BoneWeights4(weights[0], weights[1], weights[2], weights[3], indices[0], indices[1], indices[2], indices[3]);
 			}
 			return skin;
 		}

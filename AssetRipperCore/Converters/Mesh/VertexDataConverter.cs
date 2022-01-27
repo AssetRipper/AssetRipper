@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			VertexData instance = new VertexData();
 			if (VertexData.HasCurrentChannels(container.ExportVersion))
 			{
-				instance.CurrentChannels = GetCurrentChannels(container, ref originMesh.VertexData);
+				instance.CurrentChannels = GetCurrentChannels(container, originMesh.VertexData);
 			}
 			instance.VertexCount = originMesh.VertexData.VertexCount;
 			if (VertexData.HasChannels(container.ExportVersion))
@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			return instance;
 		}
 
-		private static uint GetCurrentChannels(IExportContainer container, ref VertexData origin)
+		private static uint GetCurrentChannels(IExportContainer container, VertexData origin)
 		{
 			if (ShaderChannelExtensions.ShaderChannel5Relevant(container.Version))
 			{
@@ -348,19 +348,16 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static byte[] AppendSkin(Classes.Mesh.Mesh originMesh)
 		{
-			ref VertexData origin = ref originMesh.VertexData;
 			byte[] odata = originMesh.GetChannelsData();
 			int dataSize = odata.Length + GetSkinLength(originMesh.Skin);
 			byte[] idata = new byte[dataSize];
 			Buffer.BlockCopy(odata, 0, idata, 0, odata.Length);
 			using (MemoryStream stream = new MemoryStream(idata, odata.Length, idata.Length - odata.Length))
 			{
-				using (BinaryWriter writer = new BinaryWriter(stream))
-				{
-					AppendSkin(originMesh.Skin, writer);
-				}
+				using BinaryWriter writer = new BinaryWriter(stream);
+				AppendSkin(originMesh.Skin, writer);
+				return idata;
 			}
-			return idata;
 		}
 
 		private static void AppendSkin(BoneWeights4[] skin, BinaryWriter writer)

@@ -201,13 +201,13 @@ namespace AssetRipper.Core.Converters.Mesh
 			{
 				if (AssetRipper.Core.Classes.Mesh.Mesh.IsOnlyVertexData(layout.Version))
 				{
-					FindMinMaxBounds(layout, ref mesh.VertexData, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
+					FindMinMaxBounds(layout, mesh.VertexData, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 				}
 				else
 				{
 					if (mesh.MeshCompression == MeshCompression.Off)
 					{
-						FindMinMaxBounds(layout, ref mesh.VertexData, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
+						FindMinMaxBounds(layout, mesh.VertexData, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 					}
 					else
 					{
@@ -295,7 +295,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 		}
 
-		private static void FindMinMaxBounds(LayoutInfo layout, ref VertexData vertexData, int firstVertex, int vertexCount, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(LayoutInfo layout, VertexData vertexData, int firstVertex, int vertexCount, out Vector3f min, out Vector3f max)
 		{
 			ChannelInfo channel = vertexData.GetChannel(layout.Version, ShaderChannel.Vertex);
 			int streamOffset = vertexData.GetStreamOffset(layout.Version, channel.Stream);

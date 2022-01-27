@@ -13,7 +13,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Sprite
 {
-	public struct SpriteRenderData : IAssetReadable, IDependent
+	public sealed class SpriteRenderData : IAssetReadable, IDependent
 	{
 		/// <summary>
 		/// 5.2.0 and greater
@@ -216,22 +216,22 @@ namespace AssetRipper.Core.Classes.Sprite
 		public const string AlphaTextureName = "alphaTexture";
 		public const string SecondaryTexturesName = "secondaryTextures";
 
-		public PPtr<Texture2D.Texture2D> Texture;
-		public PPtr<Texture2D.Texture2D> AlphaTexture;
-		public VertexData VertexData;
+		public PPtr<Texture2D.Texture2D> Texture = new();
+		public PPtr<Texture2D.Texture2D> AlphaTexture = new();
+		public VertexData VertexData = new();
 		/// <summary>
 		/// Actual sprite rectangle inside atlas texture (or in original texture for non atlas sprite)
 		/// It is a retangle of cropped image if tight mode is used. Otherwise, its size matches the original size
 		/// </summary>
-		public Rectf TextureRect;
+		public Rectf TextureRect = new();
 		/// <summary>
 		/// Offset of actual (cropped) sprite rectangle relative to Sprite.Rect .
 		/// Unity crops rectangle to save atlas space if tight mode is used. So final atlas image is a cropped version
 		/// of a rectangle, developer specified in original texture.
 		/// In other words, this value show how much Unity cropped the Sprite.Rect from bottom-left corner
 		/// </summary>
-		public Vector2f TextureRectOffset;
-		public Vector2f AtlasRectOffset;
-		public Vector4f UVTransform;
+		public Vector2f TextureRectOffset = new();
+		public Vector2f AtlasRectOffset = new();
+		public Vector4f UVTransform = new();
 	}
 }

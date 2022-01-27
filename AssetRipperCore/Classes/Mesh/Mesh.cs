@@ -28,13 +28,13 @@ namespace AssetRipper.Core.Classes.Mesh
 	public sealed class Mesh : NamedObject, IMesh
 	{
 		public BlendShapeData Shapes { get; set; } = new();
-		public VariableBoneCountWeights VariableBoneCountWeights;
-		public VertexData VertexData;
+		public VariableBoneCountWeights VariableBoneCountWeights = new();
+		public VertexData VertexData = new();
 		public CompressedMesh CompressedMesh { get; set; } = new();
 		public AABB LocalAABB = new AABB();
-		public CollisionMeshData CollisionData;
-		public StreamingInfo StreamData;
-		public LOD[] LODData { get; set; }
+		public CollisionMeshData CollisionData = new();
+		public StreamingInfo StreamData = new();
+		public LOD[] LODData { get; set; } = Array.Empty<LOD>();
 		public uint Use16BitIndices
 		{
 			get => IndexFormat == IndexFormat.UInt16 ? 1U : 0U;

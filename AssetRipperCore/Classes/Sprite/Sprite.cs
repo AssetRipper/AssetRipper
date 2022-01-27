@@ -318,7 +318,7 @@ namespace AssetRipper.Core.Classes.Sprite
 		public Vector2f Pivot;
 		public Tuple<UnityGUID, long> RenderDataKey;
 		public PPtr<SpriteAtlas.SpriteAtlas> SpriteAtlas;
-		public SpriteRenderData RD;
+		public SpriteRenderData RD = new();
 
 		public const string SpriteAtlasName = "m_SpriteAtlas";
 		public const string RDName = "m_RD";
