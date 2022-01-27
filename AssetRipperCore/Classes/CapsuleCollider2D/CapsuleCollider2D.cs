@@ -31,6 +31,6 @@ namespace AssetRipper.Core.Classes.CapsuleCollider2D
 		public const string SizeName = "m_Size";
 		public const string DirectionName = "m_Direction";
 
-		public Vector2f Size;
+		public Vector2f Size = new();
 	}
 }

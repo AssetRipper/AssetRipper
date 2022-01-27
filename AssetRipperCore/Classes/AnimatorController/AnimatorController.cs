@@ -211,8 +211,8 @@ namespace AssetRipper.Core.Classes.AnimatorController
 		public const string StateMachineBehaviourVectorDescriptionName = "m_StateMachineBehaviourVectorDescription";
 		public const string StateMachineBehavioursName = "m_StateMachineBehaviours";
 
-		public ControllerConstant Controller;
-		public StateMachineBehaviourVectorDescription StateMachineBehaviourVectorDescription;
+		public ControllerConstant Controller = new();
+		public StateMachineBehaviourVectorDescription StateMachineBehaviourVectorDescription = new();
 
 		private readonly Dictionary<uint, string> m_TOS = new Dictionary<uint, string>();
 	}

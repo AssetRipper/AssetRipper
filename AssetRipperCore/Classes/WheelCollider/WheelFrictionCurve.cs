@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.WheelCollider
 {
-	public struct WheelFrictionCurve : IAssetReadable, IYAMLExportable
+	public sealed class WheelFrictionCurve : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

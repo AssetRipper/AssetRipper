@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.AnimatorController
 {
-	public struct MotionNeighborList : IAssetReadable
+	public sealed class MotionNeighborList : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{

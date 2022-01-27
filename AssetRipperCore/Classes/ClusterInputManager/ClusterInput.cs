@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.ClusterInputManager
 {
-	public struct ClusterInput : IAssetReadable, IYAMLExportable
+	public sealed class ClusterInput : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

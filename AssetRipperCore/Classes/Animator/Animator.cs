@@ -202,7 +202,7 @@ namespace AssetRipper.Core.Classes.Animator
 		public const string AllowConstantClipSamplingOptimizationName = "m_AllowConstantClipSamplingOptimization";
 		public const string KeepAnimatorControllerStateOnDisableName = "m_KeepAnimatorControllerStateOnDisable";
 
-		public PPtr<Avatar.Avatar> Avatar;
-		public PPtr<RuntimeAnimatorController> Controller;
+		public PPtr<Avatar.Avatar> Avatar = new();
+		public PPtr<RuntimeAnimatorController> Controller = new();
 	}
 }

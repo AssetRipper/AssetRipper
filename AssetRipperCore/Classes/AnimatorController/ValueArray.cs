@@ -7,7 +7,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimatorController
 {
-	public struct ValueArray : IAssetReadable, IYAMLExportable
+	public sealed class ValueArray : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// Less than 4.3

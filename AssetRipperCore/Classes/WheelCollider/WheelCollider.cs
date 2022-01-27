@@ -100,9 +100,9 @@ namespace AssetRipper.Core.Classes.WheelCollider
 		public const string SidewaysFrictionName = "m_SidewaysFriction";
 		public const string EnabledName = "m_Enabled";
 
-		public Vector3f Center;
-		public JointSpring SuspensionSpring;
-		public WheelFrictionCurve ForwardFriction;
-		public WheelFrictionCurve SidewaysFriction;
+		public Vector3f Center = new();
+		public JointSpring SuspensionSpring = new();
+		public WheelFrictionCurve ForwardFriction = new();
+		public WheelFrictionCurve SidewaysFriction = new();
 	}
 }
