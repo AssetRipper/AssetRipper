@@ -222,11 +222,11 @@ namespace AssetRipper.Core.Classes.ReflectionProbe
 		public const string CustomBakedTextureName = "m_CustomBakedTexture";
 		public const string BakedTextureName = "m_BakedTexture";
 
-		public Vector3f BoxSize;
-		public Vector3f BoxOffset;
-		public ColorRGBAf BackGroundColor;
-		public BitField CullingMask;
-		public PPtr<Texture> CustomBakedTexture;
-		public PPtr<Texture> BakedTextureTexture;
+		public Vector3f BoxSize = new();
+		public Vector3f BoxOffset = new();
+		public ColorRGBAf BackGroundColor = new();
+		public BitField CullingMask = new();
+		public PPtr<Texture> CustomBakedTexture = new();
+		public PPtr<Texture> BakedTextureTexture = new();
 	}
 }

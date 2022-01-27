@@ -213,9 +213,9 @@ namespace AssetRipper.Core.Classes.LightingDataAsset
 		public const string EnlightenDataName = "m_EnlightenData";
 		public const string EnlightenDataVersionName = "m_EnlightenDataVersion";
 
-		public PPtr<SceneAsset> Scene;
-		public PPtr<LightProbes.LightProbes> LightProbes;
-		public SphericalHarmonicsL2 BakedAmbientProbeInLinear;
-		public EnlightenSceneMapping EnlightenSceneMapping;
+		public PPtr<SceneAsset> Scene = new();
+		public PPtr<LightProbes.LightProbes> LightProbes = new();
+		public SphericalHarmonicsL2 BakedAmbientProbeInLinear = new();
+		public EnlightenSceneMapping EnlightenSceneMapping = new();
 	}
 }

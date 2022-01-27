@@ -673,14 +673,14 @@ namespace AssetRipper.Core.Classes.Renderer
 		public const string SortingLayerName = "m_SortingLayer";
 		public const string SortingOrderName = "m_SortingOrder";
 
-		public Vector4f LightmapTilingOffset;
-		public Vector4f LightmapTilingOffsetDynamic;
-		public StaticBatchInfo StaticBatchInfo;
-		public PPtr<Transform> StaticBatchRoot;
+		public Vector4f LightmapTilingOffset = new();
+		public Vector4f LightmapTilingOffsetDynamic = new();
+		public StaticBatchInfo StaticBatchInfo = new();
+		public PPtr<Transform> StaticBatchRoot = new();
 		/// <summary>
 		/// LightProbeAnchor previously
 		/// </summary>
-		public PPtr<Transform> ProbeAnchor;
-		public PPtr<GameObject.GameObject> LightProbeVolumeOverride;
+		public PPtr<Transform> ProbeAnchor = new();
+		public PPtr<GameObject.GameObject> LightProbeVolumeOverride = new();
 	}
 }

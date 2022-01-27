@@ -11,7 +11,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.QualitySettings
 {
-	public class QualitySetting : IAssetReadable, IYAMLExportable
+	public sealed class QualitySetting : IAssetReadable, IYAMLExportable
 	{
 		public QualitySetting() { }
 
@@ -484,7 +484,7 @@ namespace AssetRipper.Core.Classes.QualitySettings
 		public const string CustomRenderPipelineName = "customRenderPipeline";
 		public const string ExcludedTargetPlatformsName = "excludedTargetPlatforms";
 
-		public Vector3f ShadowCascade4Split;
-		public PPtr<MonoBehaviour> CustomRenderPipeline;
+		public Vector3f ShadowCascade4Split = new();
+		public PPtr<MonoBehaviour> CustomRenderPipeline = new();
 	}
 }

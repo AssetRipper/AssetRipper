@@ -9,8 +9,9 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.PrefabInstance
 {
-	public struct PropertyModification : IAsset, IDependent
+	public sealed class PropertyModification : IAsset, IDependent
 	{
+		public PropertyModification() { }
 		public PropertyModification(LayoutInfo info)
 		{
 			PropertyPath = string.Empty;
@@ -54,8 +55,8 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		public string PropertyPath { get; set; }
 		public string Value { get; set; }
 
-		public PPtr<Object.Object> Target;
-		public PPtr<Object.Object> ObjectReference;
+		public PPtr<Object.Object> Target = new();
+		public PPtr<Object.Object> ObjectReference = new();
 
 		public const string TargetName = "target";
 		public const string PropertyPathName = "propertyPath";

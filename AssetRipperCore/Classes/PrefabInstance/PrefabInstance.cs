@@ -18,13 +18,11 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		public PrefabInstance(LayoutInfo layout) : base(layout)
 		{
 			Objects = Array.Empty<PPtr<EditorExtension>>();
-			Modification = new PrefabModification(layout);
 		}
 
 		public PrefabInstance(AssetInfo assetInfo) : base(assetInfo)
 		{
 			Objects = Array.Empty<PPtr<EditorExtension>>();
-			Modification = new PrefabModification(null);
 		}
 
 		public static int ToSerializedVersion(UnityVersion version)
@@ -356,11 +354,11 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		public const string PrefabKeyword = "prefab";
 
-		public UnityGUID LastMergeIdentifier;
-		public UnityGUID LastTemplateIdentifier;
-		public PrefabModification Modification;
-		public PPtr<PrefabInstance> SourcePrefab;
-		public PPtr<GameObject.GameObject> RootGameObject;
+		public UnityGUID LastMergeIdentifier = new();
+		public UnityGUID LastTemplateIdentifier = new();
+		public PrefabModification Modification = new();
+		public PPtr<PrefabInstance> SourcePrefab = new();
+		public PPtr<GameObject.GameObject> RootGameObject = new();
 
 		public PPtr<IGameObject> RootGameObjectPtr
 		{

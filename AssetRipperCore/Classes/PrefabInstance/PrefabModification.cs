@@ -11,15 +11,8 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.PrefabInstance
 {
-	public struct PrefabModification : IAsset, IDependent
+	public sealed class PrefabModification : IAsset, IDependent
 	{
-		public PrefabModification(LayoutInfo layout)
-		{
-			TransformParent = default;
-			Modifications = Array.Empty<PropertyModification>();
-			RemovedComponents = Array.Empty<PPtr<Component>>();
-		}
-
 		public void Read(AssetReader reader)
 		{
 			TransformParent.Read(reader);
@@ -56,13 +49,13 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			}
 		}
 
-		public PropertyModification[] Modifications { get; set; }
+		public PropertyModification[] Modifications { get; set; } = Array.Empty<PropertyModification>();
 		/// <summary>
 		/// PPtr Object [] before 2018.3
 		/// </summary>
-		public PPtr<Component>[] RemovedComponents { get; set; }
+		public PPtr<Component>[] RemovedComponents { get; set; } = Array.Empty<PPtr<Component>>();
 
-		public PPtr<Transform> TransformParent;
+		public PPtr<Transform> TransformParent = new();
 
 		public const string TransformParentName = "m_TransformParent";
 		public const string ModificationsName = "m_Modifications";

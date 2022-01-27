@@ -408,27 +408,27 @@ namespace AssetRipper.Core.Classes.RenderSettings
 		public const string SunName = "m_Sun";
 		public const string IndirectSpecularColorName = "m_IndirectSpecularColor";
 
-		public ColorRGBAf FogColor;
+		public ColorRGBAf FogColor = new();
 		/// <summary>
 		/// Ambient/AmbientLight previously
 		/// </summary>
-		public ColorRGBAf AmbientSkyColor;
-		public ColorRGBAf AmbientEquatorColor;
-		public ColorRGBAf AmbientGroundColor;
-		public PPtr<Light.Light> AmbientSkyboxLight;
-		public ColorRGBAf SubtractiveShadowColor;
-		public PPtr<Material.Material> SkyboxMaterial;
-		public PPtr<Texture2D.Texture2D> HaloTexture;
+		public ColorRGBAf AmbientSkyColor = new();
+		public ColorRGBAf AmbientEquatorColor = new();
+		public ColorRGBAf AmbientGroundColor = new();
+		public PPtr<Light.Light> AmbientSkyboxLight = new();
+		public ColorRGBAf SubtractiveShadowColor = new();
+		public PPtr<Material.Material> SkyboxMaterial = new();
+		public PPtr<Texture2D.Texture2D> HaloTexture = new();
 		/// <summary>
 		/// SpecularTex previously
 		/// </summary>
-		public PPtr<Cubemap> SpecularTexture;
-		public PPtr<Texture2D.Texture2D> SpotCookie;
-		public PPtr<Cubemap> CustomReflection;
-		public SphericalHarmonicsL2 AmbientProbe;
-		public SphericalHarmonicsL2 AmbientProbeInGamma;
-		public PPtr<Cubemap> GeneratedSkyboxReflection;
-		public PPtr<Light.Light> Sun;
-		public ColorRGBAf IndirectSpecularColor;
+		public PPtr<Cubemap> SpecularTexture = new();
+		public PPtr<Texture2D.Texture2D> SpotCookie = new();
+		public PPtr<Cubemap> CustomReflection = new();
+		public SphericalHarmonicsL2 AmbientProbe = new();
+		public SphericalHarmonicsL2 AmbientProbeInGamma = new();
+		public PPtr<Cubemap> GeneratedSkyboxReflection = new();
+		public PPtr<Light.Light> Sun = new();
+		public ColorRGBAf IndirectSpecularColor = new();
 	}
 }

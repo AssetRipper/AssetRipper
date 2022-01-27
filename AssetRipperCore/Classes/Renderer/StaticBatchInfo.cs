@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Renderer
 {
-	public struct StaticBatchInfo : IAssetReadable, IYAMLExportable
+	public sealed class StaticBatchInfo : IAssetReadable, IYAMLExportable
 	{
 		public ushort FirstSubMesh { get; set; }
 		public ushort SubMeshCount { get; set; }
@@ -14,6 +14,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		public const string FirstSubMeshName = "firstSubMesh";
 		public const string SubMeshCountName = "subMeshCount";
 
+		public StaticBatchInfo() { }
 		public StaticBatchInfo(IReadOnlyList<uint> subsetIndices)
 		{
 			if (subsetIndices.Count == 0)

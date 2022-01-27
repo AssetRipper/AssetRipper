@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.RenderSettings
 {
-	public struct SHCoefficientsBaked : IAssetReadable, IYAMLExportable
+	public sealed class SHCoefficientsBaked : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
