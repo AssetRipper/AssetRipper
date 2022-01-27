@@ -14,35 +14,27 @@ namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 
 		public static bool IsArchiveFile(string filePath)
 		{
-			using (Stream stream = MultiFileStream.OpenRead(filePath))
-			{
-				return IsArchiveFile(stream);
-			}
+			using Stream stream = MultiFileStream.OpenRead(filePath);
+			return IsArchiveFile(stream);
 		}
 
 		public static bool IsArchiveFile(byte[] buffer, int offset, int size)
 		{
-			using (MemoryStream stream = new MemoryStream(buffer, offset, size, false))
-			{
-				return IsArchiveFile(stream);
-			}
+			using MemoryStream stream = new MemoryStream(buffer, offset, size, false);
+			return IsArchiveFile(stream);
 		}
 
 		public static bool IsArchiveFile(Stream stream)
 		{
-			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
-			{
-				return ArchiveHeader.IsArchiveHeader(reader);
-			}
+			using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
+			return ArchiveHeader.IsArchiveHeader(reader);
 		}
 
 		public static ArchiveFileScheme LoadScheme(string filePath)
 		{
 			string fileName = Path.GetFileNameWithoutExtension(filePath);
-			using (Stream stream = MultiFileStream.OpenRead(filePath))
-			{
-				return ReadScheme(stream, filePath, fileName);
-			}
+			using Stream stream = MultiFileStream.OpenRead(filePath);
+			return ReadScheme(stream, filePath, fileName);
 		}
 
 		public static ArchiveFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)

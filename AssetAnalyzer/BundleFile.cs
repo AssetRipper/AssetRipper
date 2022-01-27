@@ -140,10 +140,8 @@ namespace AssetAnalyzer
 				byte[] compressedBytes = reader.ReadBytes((int)blockInfo.compressedSize);
 				if (blockInfo.flags == 1)//LZMA
 				{
-					using (var memoryStream = new MemoryStream(compressedBytes))
-					{
-						SevenZipHelper.DecompressLZMASizeStream(memoryStream, compressedBytes.Length, blocksStream);
-					}
+					using var memoryStream = new MemoryStream(compressedBytes);
+					SevenZipHelper.DecompressLZMASizeStream(memoryStream, compressedBytes.Length, blocksStream);
 				}
 				else
 				{
@@ -254,33 +252,31 @@ namespace AssetAnalyzer
 						break;
 					}
 			}
-			using (var blocksInfoReader = new EndianReader(blocksInfoUncompresseddStream, EndianType.BigEndian))
+			using var blocksInfoReader = new EndianReader(blocksInfoUncompresseddStream, EndianType.BigEndian);
+			var uncompressedDataHash = blocksInfoReader.ReadBytes(16);
+			var blocksInfoCount = blocksInfoReader.ReadInt32();
+			m_BlocksInfo = new StorageBlock[blocksInfoCount];
+			for (int i = 0; i < blocksInfoCount; i++)
 			{
-				var uncompressedDataHash = blocksInfoReader.ReadBytes(16);
-				var blocksInfoCount = blocksInfoReader.ReadInt32();
-				m_BlocksInfo = new StorageBlock[blocksInfoCount];
-				for (int i = 0; i < blocksInfoCount; i++)
+				m_BlocksInfo[i] = new StorageBlock
 				{
-					m_BlocksInfo[i] = new StorageBlock
-					{
-						uncompressedSize = blocksInfoReader.ReadUInt32(),
-						compressedSize = blocksInfoReader.ReadUInt32(),
-						flags = blocksInfoReader.ReadUInt16()
-					};
-				}
+					uncompressedSize = blocksInfoReader.ReadUInt32(),
+					compressedSize = blocksInfoReader.ReadUInt32(),
+					flags = blocksInfoReader.ReadUInt16()
+				};
+			}
 
-				var nodesCount = blocksInfoReader.ReadInt32();
-				m_DirectoryInfo = new Node[nodesCount];
-				for (int i = 0; i < nodesCount; i++)
+			var nodesCount = blocksInfoReader.ReadInt32();
+			m_DirectoryInfo = new Node[nodesCount];
+			for (int i = 0; i < nodesCount; i++)
+			{
+				m_DirectoryInfo[i] = new Node
 				{
-					m_DirectoryInfo[i] = new Node
-					{
-						offset = blocksInfoReader.ReadInt64(),
-						size = blocksInfoReader.ReadInt64(),
-						flags = blocksInfoReader.ReadUInt32(),
-						path = blocksInfoReader.ReadStringToNull(),
-					};
-				}
+					offset = blocksInfoReader.ReadInt64(),
+					size = blocksInfoReader.ReadInt64(),
+					flags = blocksInfoReader.ReadUInt32(),
+					path = blocksInfoReader.ReadStringToNull(),
+				};
 			}
 		}
 

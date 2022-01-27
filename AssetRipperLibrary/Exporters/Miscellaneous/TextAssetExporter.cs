@@ -73,10 +73,8 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		{
 			try
 			{
-				using (var parsed = JsonDocument.Parse(text))
-				{
-					return parsed != null;
-				}
+				using var parsed = JsonDocument.Parse(text);
+				return parsed != null;
 			}
 			catch { }
 			return false;

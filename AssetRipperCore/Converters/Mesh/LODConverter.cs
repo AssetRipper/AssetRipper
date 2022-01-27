@@ -17,18 +17,16 @@ namespace AssetRipper.Core.Converters.Mesh
 			using (MemoryStream stream = new MemoryStream(buffer))
 			{
 				EndianType endian = container.ExportPlatform == Platform.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
-				using (EndianWriter writer = new EndianWriter(stream, endian))
+				using EndianWriter writer = new EndianWriter(stream, endian);
+				for (int i = 0; i < origin.MeshData.Length; i++)
 				{
-					for (int i = 0; i < origin.MeshData.Length; i++)
+					MeshData meshData = origin.MeshData[i];
+					for (int j = 0; j < meshData.Faces.Length; j++)
 					{
-						MeshData meshData = origin.MeshData[i];
-						for (int j = 0; j < meshData.Faces.Length; j++)
-						{
-							Face face = meshData.Faces[j];
-							writer.Write(face.V1);
-							writer.Write(face.V2);
-							writer.Write(face.V3);
-						}
+						Face face = meshData.Faces[j];
+						writer.Write(face.V1);
+						writer.Write(face.V2);
+						writer.Write(face.V3);
 					}
 				}
 			}

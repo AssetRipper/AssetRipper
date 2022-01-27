@@ -129,17 +129,15 @@ namespace AssetRipper.Core.Classes.Mesh
 			int streamOffset = GetStreamOffset(version, channel.Stream);
 			using (MemoryStream memStream = new MemoryStream(Data))
 			{
-				using (BinaryReader reader = new BinaryReader(memStream))
+				using BinaryReader reader = new BinaryReader(memStream);
+				memStream.Position = streamOffset + submesh.FirstVertex * streamStride + channel.Offset;
+				for (int v = 0; v < submesh.VertexCount; v++)
 				{
-					memStream.Position = streamOffset + submesh.FirstVertex * streamStride + channel.Offset;
-					for (int v = 0; v < submesh.VertexCount; v++)
-					{
-						float x = reader.ReadSingle();
-						float y = reader.ReadSingle();
-						float z = reader.ReadSingle();
-						verts[v] = new Vector3f(x, y, z);
-						memStream.Position += streamStride - 12;
-					}
+					float x = reader.ReadSingle();
+					float y = reader.ReadSingle();
+					float z = reader.ReadSingle();
+					verts[v] = new Vector3f(x, y, z);
+					memStream.Position += streamStride - 12;
 				}
 			}
 			return verts;

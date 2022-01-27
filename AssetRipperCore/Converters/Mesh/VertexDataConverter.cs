@@ -224,21 +224,15 @@ namespace AssetRipper.Core.Converters.Mesh
 			using (MemoryStream dstStream = new MemoryStream(buffer))
 			{
 				EndianType oendian = container.ExportPlatform == Platform.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
-				using (EndianWriter dst = new EndianWriter(dstStream, oendian))
+				using EndianWriter dst = new EndianWriter(dstStream, oendian);
+				using MemoryStream srcStream = new MemoryStream(originMesh.GetChannelsData());
+				EndianType iendian = container.Platform == Platform.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
+				using EndianReader src = new EndianReader(srcStream, iendian);
+				CopyChannelsData(container, ref originMesh.VertexData, ref instance, src, dst);
+				if (NeedAppendSkin(container, ref instance))
 				{
-					using (MemoryStream srcStream = new MemoryStream(originMesh.GetChannelsData()))
-					{
-						EndianType iendian = container.Platform == Platform.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
-						using (EndianReader src = new EndianReader(srcStream, iendian))
-						{
-							CopyChannelsData(container, ref originMesh.VertexData, ref instance, src, dst);
-							if (NeedAppendSkin(container, ref instance))
-							{
-								dstStream.Position = lastOffset;
-								AppendSkin(originMesh.Skin, dst);
-							}
-						}
-					}
+					dstStream.Position = lastOffset;
+					AppendSkin(originMesh.Skin, dst);
 				}
 			}
 			return buffer;
@@ -352,12 +346,10 @@ namespace AssetRipper.Core.Converters.Mesh
 			int dataSize = odata.Length + GetSkinLength(originMesh.Skin);
 			byte[] idata = new byte[dataSize];
 			Buffer.BlockCopy(odata, 0, idata, 0, odata.Length);
-			using (MemoryStream stream = new MemoryStream(idata, odata.Length, idata.Length - odata.Length))
-			{
-				using BinaryWriter writer = new BinaryWriter(stream);
-				AppendSkin(originMesh.Skin, writer);
-				return idata;
-			}
+			using MemoryStream stream = new MemoryStream(idata, odata.Length, idata.Length - odata.Length);
+			using BinaryWriter writer = new BinaryWriter(stream);
+			AppendSkin(originMesh.Skin, writer);
+			return idata;
 		}
 
 		private static void AppendSkin(BoneWeights4[] skin, BinaryWriter writer)

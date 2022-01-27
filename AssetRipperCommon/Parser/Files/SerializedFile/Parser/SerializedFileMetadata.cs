@@ -53,10 +53,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				swapEndianess = SwapEndianess;
 			}
 			EndianType endianess = swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
-			using (SerializedReader reader = new SerializedReader(stream, endianess, header.Version))
-			{
-				Read(reader);
-			}
+			using SerializedReader reader = new SerializedReader(stream, endianess, header.Version);
+			Read(reader);
 		}
 
 		public void Write(Stream stream, SerializedFileHeader header)
@@ -68,10 +66,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				swapEndianess = SwapEndianess;
 			}
 			EndianType endianess = swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
-			using (SerializedWriter writer = new SerializedWriter(stream, endianess, header.Version))
-			{
-				Write(writer);
-			}
+			using SerializedWriter writer = new SerializedWriter(stream, endianess, header.Version);
+			Write(writer);
 		}
 
 		private void Read(SerializedReader reader)

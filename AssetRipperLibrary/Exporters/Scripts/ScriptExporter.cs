@@ -209,10 +209,8 @@ namespace AssetRipper.Library.Exporters.Scripts
 				string decompiledText = Decompiler.Decompile(exportType);
 				using (FileStream fileStream = File.Create(uniqueFilePath))
 				{
-					using (StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false)))
-					{
-						writer.Write(decompiledText);
-					}
+					using StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
+					writer.Write(decompiledText);
 				}
 				AddExportedType(exportType);
 				return uniqueFilePath;

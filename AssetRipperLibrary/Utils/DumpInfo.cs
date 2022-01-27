@@ -153,10 +153,8 @@ namespace AssetRipper.Library.Utils
 		{
 			Console.WriteLine($"Unknown file {filepath}({file.GetType().Name })");
 			Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
-			using (StreamWriter sw = new StreamWriter($"{exportPath}.err.txt"))
-			{
-				sw.WriteLine($"Can't dump file {file.GetType().FullName}");
-			}
+			using StreamWriter sw = new StreamWriter($"{exportPath}.err.txt");
+			sw.WriteLine($"Can't dump file {file.GetType().FullName}");
 		}
 		public static List<string> AllFilesInFolder(string folder)
 		{
@@ -357,12 +355,10 @@ namespace AssetRipper.Library.Utils
 			{
 				throw new Exception();
 			}
-			using (StreamWriter sw = new StreamWriter(exportPath))
+			using StreamWriter sw = new StreamWriter(exportPath);
+			foreach (SerializedFile serializedFile in seralizedFiles)
 			{
-				foreach (SerializedFile serializedFile in seralizedFiles)
-				{
-					DumpTypeInfo(serializedFile, sw);
-				}
+				DumpTypeInfo(serializedFile, sw);
 			}
 		}
 

@@ -64,11 +64,9 @@ namespace AssetRipper.Core.Utils
 			uint[] hashArray = hashList.ToArray();
 			byte[] buffer = new byte[hashArray.Length * sizeof(uint)];
 			Buffer.BlockCopy(hashArray, 0, buffer, 0, buffer.Length);
-			using (MD5 md5 = MD5.Create())
-			{
-				byte[] hash = md5.ComputeHash(buffer);
-				return new UnityGUID(hash);
-			}
+			using MD5 md5 = MD5.Create();
+			byte[] hash = md5.ComputeHash(buffer);
+			return new UnityGUID(hash);
 		}
 
 		public const char DirectorySeparatorChar = '/';

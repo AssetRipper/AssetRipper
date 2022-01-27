@@ -15,10 +15,8 @@ namespace AssetRipper.Core.Parser.Files.ResourceFiles
 
 		internal static ResourceFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
 		{
-			using (SmartStream stream = SmartStream.CreateMemory(buffer))
-			{
-				return new ResourceFileScheme(stream, filePath, fileName);
-			}
+			using SmartStream stream = SmartStream.CreateMemory(buffer);
+			return new ResourceFileScheme(stream, filePath, fileName);
 		}
 
 		internal static ResourceFileScheme ReadScheme(SmartStream stream, string filePath, string fileName)

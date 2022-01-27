@@ -303,46 +303,42 @@ namespace AssetRipper.Core.Converters.Mesh
 			int extraStride = streamStride - ShaderChannel.Vertex.GetStride(layout.Version);
 			int vertexOffset = firstVertex * streamStride;
 			int begin = streamOffset + vertexOffset + channel.Offset;
-			using (MemoryStream stream = new MemoryStream(vertexData.Data))
-			{
-				using (AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout))
-				{
-					stream.Position = begin;
-					Vector3f dummyVertex = reader.ReadAsset<Vector3f>();
-					min = dummyVertex;
-					max = dummyVertex;
+			using MemoryStream stream = new MemoryStream(vertexData.Data);
+			using AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout);
+			stream.Position = begin;
+			Vector3f dummyVertex = reader.ReadAsset<Vector3f>();
+			min = dummyVertex;
+			max = dummyVertex;
 
-					stream.Position = begin;
-					for (int i = 0; i < vertexCount; i++)
-					{
-						Vector3f vertex = reader.ReadAsset<Vector3f>();
-						if (vertex.X > max.X)
-						{
-							max.X = vertex.X;
-						}
-						else if (vertex.X < min.X)
-						{
-							min.X = vertex.X;
-						}
-						if (vertex.Y > max.Y)
-						{
-							max.Y = vertex.Y;
-						}
-						else if (vertex.Y < min.Y)
-						{
-							min.Y = vertex.Y;
-						}
-						if (vertex.Z > max.Z)
-						{
-							max.Z = vertex.Z;
-						}
-						else if (vertex.Z < min.Z)
-						{
-							min.Z = vertex.Z;
-						}
-						stream.Position += extraStride;
-					}
+			stream.Position = begin;
+			for (int i = 0; i < vertexCount; i++)
+			{
+				Vector3f vertex = reader.ReadAsset<Vector3f>();
+				if (vertex.X > max.X)
+				{
+					max.X = vertex.X;
 				}
+				else if (vertex.X < min.X)
+				{
+					min.X = vertex.X;
+				}
+				if (vertex.Y > max.Y)
+				{
+					max.Y = vertex.Y;
+				}
+				else if (vertex.Y < min.Y)
+				{
+					min.Y = vertex.Y;
+				}
+				if (vertex.Z > max.Z)
+				{
+					max.Z = vertex.Z;
+				}
+				else if (vertex.Z < min.Z)
+				{
+					min.Z = vertex.Z;
+				}
+				stream.Position += extraStride;
 			}
 		}
 	}

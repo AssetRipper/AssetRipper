@@ -67,10 +67,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public static SerializedFileScheme LoadScheme(string filePath)
 		{
 			string fileName = Path.GetFileNameWithoutExtension(filePath);
-			using (SmartStream fileStream = SmartStream.OpenRead(filePath))
-			{
-				return ReadScheme(fileStream, filePath, fileName);
-			}
+			using SmartStream fileStream = SmartStream.OpenRead(filePath);
+			return ReadScheme(fileStream, filePath, fileName);
 		}
 
 		public static SerializedFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
@@ -230,37 +228,35 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		internal void ReadData(Stream stream)
 		{
-			using (AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout))
+			using AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout);
+			if (SerializedFileMetadata.HasScriptTypes(Header.Version))
 			{
-				if (SerializedFileMetadata.HasScriptTypes(Header.Version))
+				foreach (LocalSerializedObjectIdentifier ptr in Metadata.ScriptTypes)
 				{
-					foreach (LocalSerializedObjectIdentifier ptr in Metadata.ScriptTypes)
+					if (ptr.LocalSerializedFileIndex == 0)
 					{
-						if (ptr.LocalSerializedFileIndex == 0)
-						{
-							int index = m_assetEntryLookup[ptr.LocalIdentifierInFile];
-							ReadAsset(assetReader, ref Metadata.Object[index]);
-						}
+						int index = m_assetEntryLookup[ptr.LocalIdentifierInFile];
+						ReadAsset(assetReader, ref Metadata.Object[index]);
 					}
 				}
+			}
 
-				for (int i = 0; i < Metadata.Object.Length; i++)
-				{
-					if (Metadata.Object[i].ClassID == ClassIDType.MonoScript)
-					{
-						if (!m_assets.ContainsKey(Metadata.Object[i].FileID))
-						{
-							ReadAsset(assetReader, ref Metadata.Object[i]);
-						}
-					}
-				}
-
-				for (int i = 0; i < Metadata.Object.Length; i++)
+			for (int i = 0; i < Metadata.Object.Length; i++)
+			{
+				if (Metadata.Object[i].ClassID == ClassIDType.MonoScript)
 				{
 					if (!m_assets.ContainsKey(Metadata.Object[i].FileID))
 					{
 						ReadAsset(assetReader, ref Metadata.Object[i]);
 					}
+				}
+			}
+
+			for (int i = 0; i < Metadata.Object.Length; i++)
+			{
+				if (!m_assets.ContainsKey(Metadata.Object[i].FileID))
+				{
+					ReadAsset(assetReader, ref Metadata.Object[i]);
 				}
 			}
 		}

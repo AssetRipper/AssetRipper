@@ -37,10 +37,8 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 			using (FileStream fileStream = File.Create(path))
 			{
-				using (StreamWriter sw = new StreamWriter(fileStream))
-				{
-					sw.Write(text);
-				}
+				using StreamWriter sw = new StreamWriter(fileStream);
+				sw.Write(text);
 			}
 			return true;
 		}

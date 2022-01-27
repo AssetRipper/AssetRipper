@@ -15,14 +15,10 @@ namespace AssetRipper.Library.Exporters.Audio
 			if (oggData.Length == 0)
 				return Array.Empty<byte>();
 
-			using (VorbisWaveReader vorbisStream = new VorbisWaveReader(new MemoryStream(oggData), true))
-			{
-				using (MemoryStream writeStream = new MemoryStream())
-				{
-					WaveFileWriter.WriteWavFileToStream(writeStream, vorbisStream);
-					return writeStream.ToArray();
-				}
-			}
+			using VorbisWaveReader vorbisStream = new VorbisWaveReader(new MemoryStream(oggData), true);
+			using MemoryStream writeStream = new MemoryStream();
+			WaveFileWriter.WriteWavFileToStream(writeStream, vorbisStream);
+			return writeStream.ToArray();
 		}
 
 		[SupportedOSPlatform("windows")] //NAudio.Lame is Windows-only

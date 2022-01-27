@@ -33,10 +33,8 @@ namespace AssetRipper.Core.Parser.Files.ResourceFiles
 
 		public static ResourceFileScheme LoadScheme(string filePath, string fileName)
 		{
-			using (SmartStream stream = SmartStream.OpenRead(filePath))
-			{
-				return ReadScheme(stream, filePath, fileName);
-			}
+			using SmartStream stream = SmartStream.OpenRead(filePath);
+			return ReadScheme(stream, filePath, fileName);
 		}
 
 		public static ResourceFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)

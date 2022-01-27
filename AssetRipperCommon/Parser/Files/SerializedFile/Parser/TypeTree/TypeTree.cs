@@ -134,14 +134,12 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 				Dictionary<uint, string> customTypes = new Dictionary<uint, string>();
 				using (MemoryStream stream = new MemoryStream(StringBuffer))
 				{
-					using (EndianReader reader = new EndianReader(stream, EndianType.LittleEndian))
+					using EndianReader reader = new EndianReader(stream, EndianType.LittleEndian);
+					while (stream.Position < stream.Length)
 					{
-						while (stream.Position < stream.Length)
-						{
-							uint position = (uint)stream.Position;
-							string name = reader.ReadStringZeroTerm();
-							customTypes.Add(position, name);
-						}
+						uint position = (uint)stream.Position;
+						string name = reader.ReadStringZeroTerm();
+						customTypes.Add(position, name);
 					}
 				}
 

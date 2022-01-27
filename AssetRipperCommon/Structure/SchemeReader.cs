@@ -15,39 +15,35 @@ namespace AssetRipper.Core.Structure
 		/// <summary>Returns some information about the file including its type</summary>
 		public static FileScheme LoadScheme(string filePath, string fileName)
 		{
-			using (SmartStream stream = SmartStream.OpenRead(filePath))
-			{
-				return ReadScheme(stream, filePath, fileName);
-			}
+			using SmartStream stream = SmartStream.OpenRead(filePath);
+			return ReadScheme(stream, filePath, fileName);
 		}
 
 		public static FileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
 		{
-			using (MemoryStream stream = new MemoryStream(buffer, 0, buffer.Length, false))
+			using MemoryStream stream = new MemoryStream(buffer, 0, buffer.Length, false);
+			if (BundleFile.IsBundleFile(stream))
 			{
-				if (BundleFile.IsBundleFile(stream))
-				{
-					Logger.SendStatusChange($"loading_step_parse_bundle", fileName);
-					return BundleFileScheme.ReadScheme(buffer, filePath, fileName);
-				}
-				if (ArchiveFile.IsArchiveFile(stream))
-				{
-					Logger.SendStatusChange($"loading_step_parse_archive", fileName);
-					return ArchiveFile.ReadScheme(buffer, filePath, fileName);
-				}
-				if (WebFile.IsWebFile(stream))
-				{
-					Logger.SendStatusChange($"loading_step_parse_web", fileName);
-					return WebFile.ReadScheme(buffer, filePath);
-				}
-				if (SerializedFile.IsSerializedFile(stream))
-				{
-					Logger.SendStatusChange($"loading_step_parse_serialized", fileName);
-					return SerializedFile.ReadScheme(buffer, filePath, fileName);
-				}
-				Logger.SendStatusChange($"loading_step_parse_resource", fileName);
-				return ResourceFile.ReadScheme(buffer, filePath, fileName);
+				Logger.SendStatusChange($"loading_step_parse_bundle", fileName);
+				return BundleFileScheme.ReadScheme(buffer, filePath, fileName);
 			}
+			if (ArchiveFile.IsArchiveFile(stream))
+			{
+				Logger.SendStatusChange($"loading_step_parse_archive", fileName);
+				return ArchiveFile.ReadScheme(buffer, filePath, fileName);
+			}
+			if (WebFile.IsWebFile(stream))
+			{
+				Logger.SendStatusChange($"loading_step_parse_web", fileName);
+				return WebFile.ReadScheme(buffer, filePath);
+			}
+			if (SerializedFile.IsSerializedFile(stream))
+			{
+				Logger.SendStatusChange($"loading_step_parse_serialized", fileName);
+				return SerializedFile.ReadScheme(buffer, filePath, fileName);
+			}
+			Logger.SendStatusChange($"loading_step_parse_resource", fileName);
+			return ResourceFile.ReadScheme(buffer, filePath, fileName);
 		}
 
 		public static FileScheme ReadScheme(SmartStream stream, string filePath, string fileName)

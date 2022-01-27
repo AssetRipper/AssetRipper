@@ -68,15 +68,13 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 		private void ReadHeader(Stream stream)
 		{
 			long headerPosition = stream.Position;
-			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
+			using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
+			Header.Read(reader);
+			if (Header.Signature.IsRawWeb())
 			{
-				Header.Read(reader);
-				if (Header.Signature.IsRawWeb())
+				if (stream.Position - headerPosition != Header.RawWeb.HeaderSize)
 				{
-					if (stream.Position - headerPosition != Header.RawWeb.HeaderSize)
-					{
-						throw new Exception($"Read {stream.Position - headerPosition} but expected {Header.RawWeb.HeaderSize} bytes while reading the raw/web bundle header.");
-					}
+					throw new Exception($"Read {stream.Position - headerPosition} but expected {Header.RawWeb.HeaderSize} bytes while reading the raw/web bundle header.");
 				}
 			}
 		}
@@ -137,13 +135,11 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 
 				case CompressionType.Lzma:
 					{
-						using (MemoryStream uncompressedStream = new MemoryStream(new byte[header.UncompressedBlocksInfoSize]))
-						{
-							SevenZipHelper.DecompressLZMAStream(stream, header.CompressedBlocksInfoSize, uncompressedStream, header.UncompressedBlocksInfoSize);
+						using MemoryStream uncompressedStream = new MemoryStream(new byte[header.UncompressedBlocksInfoSize]);
+						SevenZipHelper.DecompressLZMAStream(stream, header.CompressedBlocksInfoSize, uncompressedStream, header.UncompressedBlocksInfoSize);
 
-							uncompressedStream.Position = 0;
-							ReadMetadata(uncompressedStream, header.UncompressedBlocksInfoSize);
-						}
+						uncompressedStream.Position = 0;
+						ReadMetadata(uncompressedStream, header.UncompressedBlocksInfoSize);
 					}
 					break;
 
@@ -206,14 +202,12 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 				}
 			}
 
-			using (BundleFileBlockReader blockReader = new BundleFileBlockReader(stream, Metadata.BlocksInfo))
+			using BundleFileBlockReader blockReader = new BundleFileBlockReader(stream, Metadata.BlocksInfo);
+			foreach (Node entry in Metadata.DirectoryInfo.Nodes)
 			{
-				foreach (Node entry in Metadata.DirectoryInfo.Nodes)
-				{
-					SmartStream entryStream = blockReader.ReadEntry(entry);
-					FileScheme scheme = SchemeReader.ReadScheme(entryStream, FilePath, entry.PathOrigin);
-					AddScheme(scheme);
-				}
+				SmartStream entryStream = blockReader.ReadEntry(entry);
+				FileScheme scheme = SchemeReader.ReadScheme(entryStream, FilePath, entry.PathOrigin);
+				AddScheme(scheme);
 			}
 		}
 	}

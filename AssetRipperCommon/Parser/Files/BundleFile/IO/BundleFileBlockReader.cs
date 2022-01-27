@@ -45,86 +45,84 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.IO
 			}
 			long entryOffsetInsideBlock = entry.Offset - blockDecompressedOffset;
 
-			using (SmartStream entryStream = CreateStream(entry.Size))
-			{
-				long left = entry.Size;
-				m_stream.Position = m_dataOffset + blockCompressedOffset;
+			using SmartStream entryStream = CreateStream(entry.Size);
+			long left = entry.Size;
+			m_stream.Position = m_dataOffset + blockCompressedOffset;
 
-				// copy data of all blocks used by current entry to new stream
-				while (left > 0)
+			// copy data of all blocks used by current entry to new stream
+			while (left > 0)
+			{
+				long blockStreamOffset;
+				Stream blockStream;
+				StorageBlock block = m_blocksInfo.StorageBlocks[blockIndex];
+				if (m_cachedBlockIndex == blockIndex)
 				{
-					long blockStreamOffset;
-					Stream blockStream;
-					StorageBlock block = m_blocksInfo.StorageBlocks[blockIndex];
-					if (m_cachedBlockIndex == blockIndex)
+					// data of the previous entry is in the same block as this one
+					// so we don't need to unpack it once again. Instead we can use cached stream
+					blockStreamOffset = 0;
+					blockStream = m_cachedBlockStream;
+					m_stream.Position += block.CompressedSize;
+				}
+				else
+				{
+					CompressionType compressType = block.Flags.GetCompression();
+					if (compressType == CompressionType.None)
 					{
-						// data of the previous entry is in the same block as this one
-						// so we don't need to unpack it once again. Instead we can use cached stream
-						blockStreamOffset = 0;
-						blockStream = m_cachedBlockStream;
-						m_stream.Position += block.CompressedSize;
+						blockStreamOffset = m_dataOffset + blockCompressedOffset;
+						blockStream = m_stream;
 					}
 					else
 					{
-						CompressionType compressType = block.Flags.GetCompression();
-						if (compressType == CompressionType.None)
+						blockStreamOffset = 0;
+						m_cachedBlockIndex = blockIndex;
+						m_cachedBlockStream.Move(CreateStream(block.UncompressedSize));
+						switch (compressType)
 						{
-							blockStreamOffset = m_dataOffset + blockCompressedOffset;
-							blockStream = m_stream;
-						}
-						else
-						{
-							blockStreamOffset = 0;
-							m_cachedBlockIndex = blockIndex;
-							m_cachedBlockStream.Move(CreateStream(block.UncompressedSize));
-							switch (compressType)
-							{
-								case CompressionType.Lzma:
-									SevenZipHelper.DecompressLZMAStream(m_stream, block.CompressedSize, m_cachedBlockStream, block.UncompressedSize);
-									break;
+							case CompressionType.Lzma:
+								SevenZipHelper.DecompressLZMAStream(m_stream, block.CompressedSize, m_cachedBlockStream, block.UncompressedSize);
+								break;
 
-								case CompressionType.Lz4:
-								case CompressionType.Lz4HC:
-									uint uncompressedSize = block.UncompressedSize;
-									byte[] uncompressedBytes = new byte[uncompressedSize];
-									byte[] compressedBytes = new BinaryReader(m_stream).ReadBytes((int)block.CompressedSize);
-									int bytesWritten = LZ4Codec.Decode(compressedBytes, uncompressedBytes);
-									if (bytesWritten != uncompressedSize)
-									{
-										throw new System.Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize}");
-									}
-									new MemoryStream(uncompressedBytes).CopyTo(m_cachedBlockStream);
-									break;
+							case CompressionType.Lz4:
+							case CompressionType.Lz4HC:
+								uint uncompressedSize = block.UncompressedSize;
+								byte[] uncompressedBytes = new byte[uncompressedSize];
+								byte[] compressedBytes = new BinaryReader(m_stream).ReadBytes((int)block.CompressedSize);
+								int bytesWritten = LZ4Codec.Decode(compressedBytes, uncompressedBytes);
+								if (bytesWritten != uncompressedSize)
+								{
+									throw new System.Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize}");
+								}
+								new MemoryStream(uncompressedBytes).CopyTo(m_cachedBlockStream);
+								break;
 
-								default:
-									throw new NotImplementedException($"Bundle compression '{compressType}' isn't supported");
-							}
-							blockStream = m_cachedBlockStream;
+							default:
+								throw new NotImplementedException($"Bundle compression '{compressType}' isn't supported");
 						}
+						blockStream = m_cachedBlockStream;
 					}
-
-					// consider next offsets:
-					// 1) block - if it is new stream then offset is 0, otherwise offset of this block in the bundle file
-					// 2) entry - if this is first block for current entry then it is offset of this entry related to this block
-					//			  otherwise 0
-					long blockSize = block.UncompressedSize - entryOffsetInsideBlock;
-					blockStream.Position = blockStreamOffset + entryOffsetInsideBlock;
-					entryOffsetInsideBlock = 0;
-
-					long size = System.Math.Min(blockSize, left);
-					blockStream.CopyStream(entryStream, size);
-					blockIndex++;
-
-					blockCompressedOffset += block.CompressedSize;
-					left -= size;
 				}
-				if (left < 0)
-				{
-					throw new Exception($"Read more than expected");
-				}
-				entryStream.Position = 0;
-				return entryStream.CreateReference();
+
+				// consider next offsets:
+				// 1) block - if it is new stream then offset is 0, otherwise offset of this block in the bundle file
+				// 2) entry - if this is first block for current entry then it is offset of this entry related to this block
+				//			  otherwise 0
+				long blockSize = block.UncompressedSize - entryOffsetInsideBlock;
+				blockStream.Position = blockStreamOffset + entryOffsetInsideBlock;
+				entryOffsetInsideBlock = 0;
+
+				long size = System.Math.Min(blockSize, left);
+				blockStream.CopyStream(entryStream, size);
+				blockIndex++;
+
+				blockCompressedOffset += block.CompressedSize;
+				left -= size;
 			}
+			if (left < 0)
+			{
+				throw new Exception($"Read more than expected");
+			}
+			entryStream.Position = 0;
+			return entryStream.CreateReference();
 		}
 
 		private void Dispose(bool disposing)

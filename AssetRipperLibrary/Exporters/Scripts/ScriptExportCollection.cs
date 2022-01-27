@@ -125,19 +125,17 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private static int Compute(string @namespace, string name)
 		{
 			string toBeHashed = $"s\0\0\0{@namespace}{name}";
-			using (HashAlgorithm hash = new MD4())
+			using HashAlgorithm hash = new MD4();
+			byte[] hashed = hash.ComputeHash(Encoding.UTF8.GetBytes(toBeHashed));
+
+			int result = 0;
+			for (int i = 3; i >= 0; --i)
 			{
-				byte[] hashed = hash.ComputeHash(Encoding.UTF8.GetBytes(toBeHashed));
-
-				int result = 0;
-				for (int i = 3; i >= 0; --i)
-				{
-					result <<= 8;
-					result |= hashed[i];
-				}
-
-				return result;
+				result <<= 8;
+				result |= hashed[i];
 			}
+
+			return result;
 		}
 
 		private void OnScriptExported(IExportContainer container, IUnityObjectBase asset, string path)

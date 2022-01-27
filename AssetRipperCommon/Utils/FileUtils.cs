@@ -18,10 +18,8 @@ namespace AssetRipper.Core.Utils
 		/// <returns>The number of bytes in the file</returns>
 		public static long GetFileSize(string path)
 		{
-			using (var stream = File.OpenRead(path))
-			{
-				return stream.Length;
-			}
+			using var stream = File.OpenRead(path);
+			return stream.Length;
 		}
 
 		public static string FixInvalidNameCharacters(string path)

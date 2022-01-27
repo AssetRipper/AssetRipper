@@ -479,34 +479,32 @@ namespace AssetRipper.Core.Converters.Mesh
 			instance.Data = new byte[instance.VertexCount * stride];
 			using (MemoryStream stream = new MemoryStream(instance.Data))
 			{
-				using (AssetWriter writer = new AssetWriter(stream, EndianType.LittleEndian, container.ExportLayout))
+				using AssetWriter writer = new AssetWriter(stream, EndianType.LittleEndian, container.ExportLayout);
+				for (int i = 0; i < instance.VertexCount; i++)
 				{
-					for (int i = 0; i < instance.VertexCount; i++)
+					if (hasVertices)
 					{
-						if (hasVertices)
-						{
-							origin.Vertices[i].Write(writer);
-						}
-						if (hasNormals)
-						{
-							normals[i].Write(writer);
-						}
-						if (hasColors)
-						{
-							origin.Colors[i].Write(writer);
-						}
-						if (hasUV0)
-						{
-							origin.UV0[i].Write(writer);
-						}
-						if (hasUV1)
-						{
-							origin.UV1[i].Write(writer);
-						}
-						if (hasTangents)
-						{
-							tangents[i].Write(writer);
-						}
+						origin.Vertices[i].Write(writer);
+					}
+					if (hasNormals)
+					{
+						normals[i].Write(writer);
+					}
+					if (hasColors)
+					{
+						origin.Colors[i].Write(writer);
+					}
+					if (hasUV0)
+					{
+						origin.UV0[i].Write(writer);
+					}
+					if (hasUV1)
+					{
+						origin.UV1[i].Write(writer);
+					}
+					if (hasTangents)
+					{
+						tangents[i].Write(writer);
 					}
 				}
 			}

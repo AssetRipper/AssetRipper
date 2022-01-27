@@ -170,21 +170,19 @@ namespace AssetRipper.Library.Exporters.Audio
 						byte[] buffer = new byte[bufferLen];
 						using (MemoryStream stream = new MemoryStream(buffer))
 						{
-							using (BinaryWriter writer = new BinaryWriter(stream))
-							{
-								writer.Write(RiffFourCC);
-								writer.Write(36 + len1);
-								writer.Write(WaveEightCC);
-								writer.Write(16);
-								writer.Write((short)1);
-								writer.Write((short)numChannels);
-								writer.Write(sampleRate);
-								writer.Write(sampleRate * numChannels * bitsPerSample / 8);
-								writer.Write((short)(numChannels * bitsPerSample / 8));
-								writer.Write((short)bitsPerSample);
-								writer.Write(DataFourCC);
-								writer.Write(len1);
-							}
+							using BinaryWriter writer = new BinaryWriter(stream);
+							writer.Write(RiffFourCC);
+							writer.Write(36 + len1);
+							writer.Write(WaveEightCC);
+							writer.Write(16);
+							writer.Write((short)1);
+							writer.Write((short)numChannels);
+							writer.Write(sampleRate);
+							writer.Write(sampleRate * numChannels * bitsPerSample / 8);
+							writer.Write((short)(numChannels * bitsPerSample / 8));
+							writer.Write((short)bitsPerSample);
+							writer.Write(DataFourCC);
+							writer.Write(len1);
 						}
 						Marshal.Copy(ptr1, buffer, WavHeaderLength, (int)len1);
 						subsound.unlock(ptr1, ptr2, len1, len2);

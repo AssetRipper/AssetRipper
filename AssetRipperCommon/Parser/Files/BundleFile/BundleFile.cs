@@ -31,10 +31,8 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 		public static BundleFileScheme LoadScheme(string filePath)
 		{
 			string fileName = Path.GetFileNameWithoutExtension(filePath);
-			using (Stream stream = MultiFileStream.OpenRead(filePath))
-			{
-				return ReadScheme(stream, filePath, fileName);
-			}
+			using Stream stream = MultiFileStream.OpenRead(filePath);
+			return ReadScheme(stream, filePath, fileName);
 		}
 
 		public static BundleFileScheme ReadScheme(byte[] buffer, string filePath, string fileName) => BundleFileScheme.ReadScheme(buffer, filePath, fileName);

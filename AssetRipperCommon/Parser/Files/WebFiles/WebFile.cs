@@ -16,26 +16,20 @@ namespace AssetRipper.Core.Parser.Files.WebFiles
 
 		public static bool IsWebFile(string webPath)
 		{
-			using (Stream stream = MultiFileStream.OpenRead(webPath))
-			{
-				return IsWebFile(stream);
-			}
+			using Stream stream = MultiFileStream.OpenRead(webPath);
+			return IsWebFile(stream);
 		}
 
 		public static bool IsWebFile(Stream stream)
 		{
-			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
-			{
-				return WebHeader.IsWebHeader(reader);
-			}
+			using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
+			return WebHeader.IsWebHeader(reader);
 		}
 
 		public static bool IsWebFile(byte[] buffer, int offset, int size)
 		{
-			using (MemoryStream stream = new MemoryStream(buffer, offset, size, false))
-			{
-				return IsWebFile(stream);
-			}
+			using MemoryStream stream = new MemoryStream(buffer, offset, size, false);
+			return IsWebFile(stream);
 		}
 
 		public static WebFileScheme ReadScheme(byte[] buffer, string filePath)

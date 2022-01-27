@@ -50,34 +50,32 @@ namespace AssetRipper.Core.Structure.GameStructure
 			//The PlatformGameStructure constructor adds all the paths to the Assemblies and Files dictionaries
 			//No bundles or assemblies have been loaded yet
 
-			using (GameStructureProcessor processor = new GameStructureProcessor())
+			using GameStructureProcessor processor = new GameStructureProcessor();
+			//This block adds all the files to the processor
+			//It determines each of their file types, but still no extraction
+			if (PlatformStructure != null)
+				ProcessPlatformStructure(processor, PlatformStructure);
+			if (MixedStructure != null)
+				ProcessPlatformStructure(processor, MixedStructure);
+			processor.AddDependencySchemes(RequestDependency);
+
+			if (!processor.IsValid)
 			{
-				//This block adds all the files to the processor
-				//It determines each of their file types, but still no extraction
-				if (PlatformStructure != null)
-					ProcessPlatformStructure(processor, PlatformStructure);
-				if (MixedStructure != null)
-					ProcessPlatformStructure(processor, MixedStructure);
-				processor.AddDependencySchemes(RequestDependency);
+				Logger.Log(LogType.Warning, LogCategory.Import, "The game structure processor could not find any valid assets.");
+			}
+			else
+			{
+				Logger.SendStatusChange("loading_step_initialize_layout");
 
-				if (!processor.IsValid)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Import, "The game structure processor could not find any valid assets.");
-				}
-				else
-				{
-					Logger.SendStatusChange("loading_step_initialize_layout");
+				//Assigns a layout if one wasn't already provided
+				layinfo ??= processor.GetLayoutInfo();
 
-					//Assigns a layout if one wasn't already provided
-					layinfo ??= processor.GetLayoutInfo();
+				InitializeGameCollection(configuration, layinfo);
 
-					InitializeGameCollection(configuration, layinfo);
+				Logger.SendStatusChange("loading_step_begin_scheme_processing");
 
-					Logger.SendStatusChange("loading_step_begin_scheme_processing");
-
-					//Creates new objects for each scheme in the collection
-					processor.ProcessSchemes(FileCollection);
-				}
+				//Creates new objects for each scheme in the collection
+				processor.ProcessSchemes(FileCollection);
 			}
 		}
 
