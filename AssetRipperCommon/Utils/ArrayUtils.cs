@@ -17,5 +17,17 @@ namespace AssetRipper.Core.Utils
 				result.Add(item2);
 			return result.ToArray();
 		}
+
+		public static T[] CreateAndInitializeArray<T>(int length) where T : new()
+		{
+			if(length < 0)
+				throw new ArgumentOutOfRangeException(nameof(length));
+			T[] array = new T[length];
+			for(int i = 0; i < length; i++)
+			{
+				array[i] = new();
+			}
+			return array;
+		}
 	}
 }

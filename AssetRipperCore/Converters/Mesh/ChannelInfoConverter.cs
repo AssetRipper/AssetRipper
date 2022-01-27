@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Converters.Mesh
 	{
 		public static ChannelInfo Convert(IExportContainer container, ChannelInfo origin)
 		{
-			ChannelInfo instance = origin;
+			ChannelInfo instance = origin.Clone();
 			if (origin.IsSet)
 			{
 				if (VertexFormatExtensions.VertexFormat2019Relevant(container.Version))

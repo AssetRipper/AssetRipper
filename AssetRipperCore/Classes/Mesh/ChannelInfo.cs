@@ -7,8 +7,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct ChannelInfo : IAsset
+	public sealed class ChannelInfo : IAsset
 	{
+		public ChannelInfo() { }
 		public ChannelInfo(byte stream, byte offset, byte format, byte rawDimention)
 		{
 			Stream = stream;
@@ -25,6 +26,16 @@ namespace AssetRipper.Core.Classes.Mesh
 		public ChannelInfo Convert(IExportContainer container)
 		{
 			return ChannelInfoConverter.Convert(container, this);
+		}
+
+		public ChannelInfo Clone()
+		{
+			ChannelInfo instance = new();
+			instance.Stream = Stream;
+			instance.Offset = Offset;
+			instance.Format = Format;
+			instance.RawDimension = RawDimension;
+			return instance;
 		}
 
 		public void Read(AssetReader reader)
