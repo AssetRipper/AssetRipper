@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ResourceManager
 {
-	public struct ResourceManagerDependency : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class ResourceManagerDependency : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -39,6 +39,6 @@ namespace AssetRipper.Core.Classes.ResourceManager
 		public const string ObjectName = "m_Object";
 		public const string DependenciesName = "m_Dependencies";
 
-		public PPtr<Object.Object> Object;
+		public PPtr<Object.Object> Object = new();
 	}
 }

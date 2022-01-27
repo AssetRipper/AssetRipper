@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.ShaderVariantCollection
 {
-	public struct VariantInfo : IAssetReadable, IYAMLExportable
+	public sealed class VariantInfo : IAssetReadable, IYAMLExportable
 	{
 		public static bool operator ==(VariantInfo left, VariantInfo right)
 		{

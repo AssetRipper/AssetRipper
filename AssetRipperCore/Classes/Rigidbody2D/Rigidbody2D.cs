@@ -163,6 +163,6 @@ namespace AssetRipper.Core.Classes.Rigidbody2D
 		public const string CollisionDetectionName = "m_CollisionDetection";
 		public const string ConstraintsName = "m_Constraints";
 
-		public PPtr<PhysicsMaterial2D> Material;
+		public PPtr<PhysicsMaterial2D> Material = new();
 	}
 }
