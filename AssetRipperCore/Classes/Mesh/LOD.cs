@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes.Mesh
 	/// <summary>
 	/// DeprecatedLOD
 	/// </summary>
-	public struct LOD : IAsset
+	public sealed class LOD : IAsset
 	{
 		/// <summary>
 		/// Less than 1.5.0

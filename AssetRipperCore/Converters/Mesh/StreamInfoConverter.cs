@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			if (streamIndex >= 0)
 			{
 				byte offset = 0;
-				ref StreamInfo stream = ref origin[streamIndex];
+				StreamInfo stream = origin[streamIndex];
 				for (ShaderChannel4 i = 0; i < channelv4; i++)
 				{
 					if (stream.IsMatch(i))

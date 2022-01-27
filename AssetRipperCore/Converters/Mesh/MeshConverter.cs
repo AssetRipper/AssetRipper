@@ -10,6 +10,7 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -267,7 +268,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 			if (Classes.Mesh.Mesh.HasLODData(container.Version))
 			{
-				return LODConverter.GenerateIndexBuffer(container, ref origin.LODData[0]);
+				return LODConverter.GenerateIndexBuffer(container, origin.LODData[0]);
 			}
 			else
 			{
@@ -289,7 +290,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 			if (Classes.Mesh.Mesh.HasLODData(container.Version))
 			{
-				return LODConverter.GenerateSubMeshes(container, instance, ref origin.LODData[0]);
+				return LODConverter.GenerateSubMeshes(container, instance, origin.LODData[0]);
 			}
 			else
 			{
@@ -345,7 +346,7 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static CollisionMeshData GetCollisionData(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
-			return Classes.Mesh.Mesh.HasCollision(container.Version) ? origin.CollisionData.Convert(container) : new CollisionMeshData(container.ExportVersion);
+			return Classes.Mesh.Mesh.HasCollision(container.Version) ? origin.CollisionData.Convert(container) : new CollisionMeshData();
 		}
 
 		private static float[] GetMeshMetrics(IExportContainer container, Classes.Mesh.Mesh origin)
@@ -380,7 +381,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			if (hasChannels)
 			{
 				int channelCount = ShaderChannelExtensions.GetChannelCount(container.ExportVersion);
-				instance.Channels = new ChannelInfo[channelCount];
+				instance.Channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(channelCount);
 			}
 
 			byte stride = 0;

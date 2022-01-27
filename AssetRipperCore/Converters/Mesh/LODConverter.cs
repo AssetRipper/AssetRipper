@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Converters.Mesh
 {
 	public static class LODConverter
 	{
-		public static byte[] GenerateIndexBuffer(IExportContainer container, ref LOD origin)
+		public static byte[] GenerateIndexBuffer(IExportContainer container, LOD origin)
 		{
 			int indexCount = origin.MeshData.Sum(t => t.Faces.Length) * 3;
 			int dataSize = indexCount * sizeof(ushort);
@@ -33,7 +33,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			return buffer;
 		}
 
-		public static SubMesh[] GenerateSubMeshes(IExportContainer container, AssetRipper.Core.Classes.Mesh.Mesh instanceMesh, ref LOD origin)
+		public static SubMesh[] GenerateSubMeshes(IExportContainer container, AssetRipper.Core.Classes.Mesh.Mesh instanceMesh, LOD origin)
 		{
 			int offset = 0;
 			SubMesh[] instances = new SubMesh[origin.MeshData.Length];

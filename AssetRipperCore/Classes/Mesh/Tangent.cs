@@ -5,8 +5,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct Tangent : IAsset
+	public sealed class Tangent : IAsset
 	{
+		public Tangent() { }
 		public Tangent(Vector3f normal, Vector3f tangent, float handedness)
 		{
 			Normal = normal;

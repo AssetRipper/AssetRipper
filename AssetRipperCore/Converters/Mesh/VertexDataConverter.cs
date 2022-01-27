@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			{
 				instance.Streams = originMesh.VertexData.Streams.ToArray();
 			}
-			instance.Data = GetData(container, originMesh, ref instance);
+			instance.Data = GetData(container, originMesh, instance);
 			return instance;
 		}
 
@@ -53,7 +53,7 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static ChannelInfo[] GetChannels(IExportContainer container, Classes.Mesh.Mesh originMesh)
 		{
-			ref VertexData origin = ref originMesh.VertexData;
+			VertexData origin = originMesh.VertexData;
 			if (ShaderChannelExtensions.ShaderChannel2018Relevant(container.Version)) // 2018.1 <= Version
 			{
 				return origin.Channels.Select(t => t.Convert(container)).ToArray();
@@ -168,7 +168,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 		}
 
-		private static byte[] GetData(IExportContainer container, Classes.Mesh.Mesh originMesh, ref VertexData instance)
+		private static byte[] GetData(IExportContainer container, Classes.Mesh.Mesh originMesh, VertexData instance)
 		{
 			if (!originMesh.CheckAssetIntegrity())
 			{
@@ -177,9 +177,9 @@ namespace AssetRipper.Core.Converters.Mesh
 
 			if (NeedCopyData(container))
 			{
-				return CopyChannelsData(container, originMesh, ref instance);
+				return CopyChannelsData(container, originMesh, instance);
 			}
-			else if (NeedAppendSkin(container, ref instance))
+			else if (NeedAppendSkin(container, instance))
 			{
 				return AppendSkin(originMesh);
 			}
@@ -200,7 +200,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			return false;
 		}
 
-		private static bool NeedAppendSkin(IExportContainer container, ref VertexData instance)
+		private static bool NeedAppendSkin(IExportContainer container, VertexData instance)
 		{
 			if (VertexData.ToSerializedVersion(container.Version) < 2)
 			{
@@ -215,7 +215,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			return false;
 		}
 
-		private static byte[] CopyChannelsData(IExportContainer container, Classes.Mesh.Mesh originMesh, ref VertexData instance)
+		private static byte[] CopyChannelsData(IExportContainer container, Classes.Mesh.Mesh originMesh, VertexData instance)
 		{
 			int maxStream = instance.Channels.Max(t => t.Stream);
 			int lastSize = instance.GetStreamSize(container.ExportVersion, maxStream);
@@ -228,8 +228,8 @@ namespace AssetRipper.Core.Converters.Mesh
 				using MemoryStream srcStream = new MemoryStream(originMesh.GetChannelsData());
 				EndianType iendian = container.Platform == Platform.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
 				using EndianReader src = new EndianReader(srcStream, iendian);
-				CopyChannelsData(container, ref originMesh.VertexData, ref instance, src, dst);
-				if (NeedAppendSkin(container, ref instance))
+				CopyChannelsData(container, originMesh.VertexData, instance, src, dst);
+				if (NeedAppendSkin(container, instance))
 				{
 					dstStream.Position = lastOffset;
 					AppendSkin(originMesh.Skin, dst);
@@ -238,7 +238,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			return buffer;
 		}
 
-		private static void CopyChannelsData(IExportContainer container, ref VertexData origin, ref VertexData instance, BinaryReader src, BinaryWriter dst)
+		private static void CopyChannelsData(IExportContainer container, VertexData origin, VertexData instance, BinaryReader src, BinaryWriter dst)
 		{
 			for (ShaderChannel c = 0; c <= ShaderChannel.SkinBoneIndex; c++)
 			{
@@ -356,7 +356,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 			for (int i = 0; i < skin.Length; i++)
 			{
-				ref BoneWeights4 weight = ref skin[i];
+				 BoneWeights4 weight =  skin[i];
 				writer.Write(weight.Weight0);
 				writer.Write(weight.Weight1);
 				writer.Write(weight.Weight2);

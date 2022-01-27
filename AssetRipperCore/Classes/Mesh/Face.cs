@@ -4,11 +4,22 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct Face : IAsset
+	public sealed class Face : IAsset
 	{
-		public Face Convert(IExportContainer container)
+		public Face()
 		{
-			return this;
+		}
+
+		public Face(ushort v1, ushort v2, ushort v3)
+		{
+			V1 = v1;
+			V2 = v2;
+			V3 = v3;
+		}
+
+		public Face Convert()
+		{
+			return new Face(V1, V2, V3);
 		}
 
 		public void Read(AssetReader reader)

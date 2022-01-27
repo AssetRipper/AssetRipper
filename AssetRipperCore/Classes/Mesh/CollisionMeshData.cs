@@ -2,18 +2,11 @@
 using AssetRipper.Core.Project;
 using System;
 using System.Linq;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct CollisionMeshData : IAssetReadable, IAssetWritable
+	public sealed class CollisionMeshData : IAssetReadable, IAssetWritable
 	{
-		public CollisionMeshData(UnityVersion version)
-		{
-			BakedConvexCollisionMesh = Array.Empty<byte>();
-			BakedTriangleCollisionMesh = Array.Empty<byte>();
-		}
-
 		public CollisionMeshData Convert(IExportContainer container)
 		{
 			CollisionMeshData instance = new CollisionMeshData();
@@ -38,7 +31,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			writer.AlignStream();
 		}
 
-		public byte[] BakedConvexCollisionMesh { get; set; }
-		public byte[] BakedTriangleCollisionMesh { get; set; }
+		public byte[] BakedConvexCollisionMesh { get; set; } = Array.Empty<byte>();
+		public byte[] BakedTriangleCollisionMesh { get; set; } = Array.Empty<byte>();
 	}
 }

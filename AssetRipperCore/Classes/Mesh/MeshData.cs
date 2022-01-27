@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct MeshData : IAsset
+	public sealed class MeshData : IAsset
 	{
 		public MeshData Convert()
 		{
 			MeshData instance = new MeshData();
-			instance.Faces = Faces.ToArray();
+			instance.Faces = Faces.Select(f => f.Convert()).ToArray();
 			instance.Strips = Strips.ToArray();
 			return instance;
 		}

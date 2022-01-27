@@ -6,6 +6,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
@@ -313,11 +314,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		private void GetChannels(UnityVersion version)
 		{
-			Channels = new ChannelInfo[6];
-			for (int i = 0; i < 6; i++)
-			{
-				Channels[i] = new ChannelInfo();
-			}
+			Channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(6);
 			for (var s = 0; s < Streams.Length; s++)
 			{
 				var m_Stream = Streams[s];
@@ -327,7 +324,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				{
 					if (channelMask.Get(i))
 					{
-						var m_Channel = Channels[i];
+						ChannelInfo m_Channel = Channels[i];
 						m_Channel.Stream = (byte)s;
 						m_Channel.Offset = offset;
 						switch (i)
