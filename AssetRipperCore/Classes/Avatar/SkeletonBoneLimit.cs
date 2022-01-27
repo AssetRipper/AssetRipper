@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public struct SkeletonBoneLimit : IAssetReadable, IYAMLExportable
+	public sealed class SkeletonBoneLimit : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -38,8 +38,8 @@ namespace AssetRipper.Core.Classes.Avatar
 		public const string LengthName = "m_Length";
 		public const string ModifiedName = "m_Modified";
 
-		public Vector3f Min;
-		public Vector3f Max;
-		public Vector3f Value;
+		public Vector3f Min = new();
+		public Vector3f Max = new();
+		public Vector3f Value = new();
 	}
 }

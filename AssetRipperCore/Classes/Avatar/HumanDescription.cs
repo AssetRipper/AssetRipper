@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public struct HumanDescription : IAssetReadable, IYAMLExportable
+	public sealed class HumanDescription : IAssetReadable, IYAMLExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{

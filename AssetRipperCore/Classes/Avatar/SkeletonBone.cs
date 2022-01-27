@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public struct SkeletonBone : IAssetReadable, IYAMLExportable
+	public sealed class SkeletonBone : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -36,8 +36,8 @@ namespace AssetRipper.Core.Classes.Avatar
 		public const string RotationName = "m_Rotation";
 		public const string ScaleName = "m_Scale";
 
-		public Vector3f Position;
-		public Quaternionf Rotation;
-		public Vector3f Scale;
+		public Vector3f Position = new();
+		public Quaternionf Rotation = new();
+		public Vector3f Scale = new();
 	}
 }

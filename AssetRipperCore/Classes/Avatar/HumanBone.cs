@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public struct HumanBone : IAssetReadable, IYAMLExportable
+	public sealed class HumanBone : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -29,6 +29,6 @@ namespace AssetRipper.Core.Classes.Avatar
 		public const string HumanNameName = "m_HumanName";
 		public const string LimitName = "m_Limit";
 
-		public SkeletonBoneLimit Limit;
+		public SkeletonBoneLimit Limit = new();
 	}
 }

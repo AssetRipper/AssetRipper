@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Classes.Avatar
 		public const string HumanDescriptionName = "m_HumanDescription";
 
 		public AvatarConstant AvatarConstant;
-		public HumanDescription HumanDescription;
+		public HumanDescription HumanDescription = new();
 
 		private readonly Dictionary<uint, string> m_TOS = new Dictionary<uint, string>();
 	}
