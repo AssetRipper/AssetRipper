@@ -4,8 +4,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Math.Vectors
 {
-	public struct Vector2i : IAsset
+	public sealed class Vector2i : IAsset, IVector2i
 	{
+		public Vector2i() { }
 		public Vector2i(int x, int y)
 		{
 			X = x;
@@ -14,12 +15,17 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public static bool operator ==(Vector2i left, Vector2i right)
 		{
-			return left.X == right.X && left.Y == right.Y;
+			if(left is null)
+				return right is null;
+			else if (right is null)
+				return false;
+			else
+				return left.X == right.X && left.Y == right.Y;
 		}
 
 		public static bool operator !=(Vector2i left, Vector2i right)
 		{
-			return left.X != right.X || left.Y != right.Y;
+			return !(left == right);
 		}
 
 		public void Read(AssetReader reader)

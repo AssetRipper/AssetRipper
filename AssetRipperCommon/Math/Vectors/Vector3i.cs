@@ -5,8 +5,9 @@ using System;
 
 namespace AssetRipper.Core.Math.Vectors
 {
-	public struct Vector3i : IAsset
+	public sealed class Vector3i : IAsset, IVector3i
 	{
+		public Vector3i() { }
 		public Vector3i(int x, int y, int z)
 		{
 			X = x;
@@ -16,12 +17,17 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public static bool operator ==(Vector3i left, Vector3i right)
 		{
-			return left.X == right.X && left.Y == right.Y && left.Z == right.Z;
+			if (left is null)
+				return right is null;
+			else if (right is null)
+				return false;
+			else
+				return left.X == right.X && left.Y == right.Y && left.Z == right.Z;
 		}
 
 		public static bool operator !=(Vector3i left, Vector3i right)
 		{
-			return left.X != right.X || left.Y != right.Y || left.Z != right.Z;
+			return !(left == right);
 		}
 
 		public int GetValueByMember(int member)
