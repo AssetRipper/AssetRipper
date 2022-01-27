@@ -8,9 +8,9 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.UnityConnectSettings
 {
-	public struct UnityAdsSettings : IAssetReadable, IYAMLExportable
+	public sealed class UnityAdsSettings : IAssetReadable, IYAMLExportable
 	{
-		public UnityAdsSettings(bool _) : this()
+		public UnityAdsSettings()
 		{
 			InitializeOnStartup = true;
 			IosGameId = string.Empty;

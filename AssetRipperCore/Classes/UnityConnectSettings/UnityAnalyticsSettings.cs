@@ -5,9 +5,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.UnityConnectSettings
 {
-	public struct UnityAnalyticsSettings : IAssetReadable, IYAMLExportable
+	public sealed class UnityAnalyticsSettings : IAssetReadable, IYAMLExportable
 	{
-		public UnityAnalyticsSettings(bool _) : this()
+		public UnityAnalyticsSettings()
 		{
 			InitializeOnStartup = true;
 			TestEventUrl = string.Empty;

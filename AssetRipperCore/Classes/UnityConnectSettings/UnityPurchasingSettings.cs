@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.UnityConnectSettings
 {
-	public struct UnityPurchasingSettings : IAssetReadable, IYAMLExportable
+	public sealed class UnityPurchasingSettings : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

@@ -10,21 +10,16 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 {
 	public sealed class UnityConnectSettings : GlobalGameManager
 	{
-		public UnityConnectSettings(AssetInfo assetInfo) : base(assetInfo) { }
-
-		public UnityConnectSettings(AssetInfo assetInfo, bool _) : base(assetInfo)
+		public UnityConnectSettings(AssetInfo assetInfo) : base(assetInfo)
 		{
 			TestEventUrl = string.Empty;
 			TestConfigUrl = string.Empty;
 			DashboardUrl = string.Empty;
-			CrashReportingSettings = new CrashReportingSettings(true);
-			UnityAnalyticsSettings = new UnityAnalyticsSettings(true);
-			UnityAdsSettings = new UnityAdsSettings(true);
 		}
 
 		public static UnityConnectSettings CreateVirtualInstance(VirtualSerializedFile virtualFile)
 		{
-			return virtualFile.CreateAsset((assetInfo) => new UnityConnectSettings(assetInfo, true));
+			return virtualFile.CreateAsset((assetInfo) => new UnityConnectSettings(assetInfo));
 		}
 
 		public static int ToSerializedVersion(UnityVersion version)
@@ -355,15 +350,15 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		}
 		private CrashReportingSettings GetCrashReportingSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
-			return HasCrashReportingSettings(version, platform, flags) ? CrashReportingSettings : new CrashReportingSettings(true);
+			return HasCrashReportingSettings(version, platform, flags) ? CrashReportingSettings : new CrashReportingSettings();
 		}
 		private UnityAnalyticsSettings GetUnityAnalyticsSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
-			return HasUnityAnalyticsSettings(version, platform, flags) ? UnityAnalyticsSettings : new UnityAnalyticsSettings(true);
+			return HasUnityAnalyticsSettings(version, platform, flags) ? UnityAnalyticsSettings : new UnityAnalyticsSettings();
 		}
 		private UnityAdsSettings GetUnityAdsSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
 		{
-			return HasUnityAdsSettings(version, platform, flags) ? UnityAdsSettings : new UnityAdsSettings(true);
+			return HasUnityAdsSettings(version, platform, flags) ? UnityAdsSettings : new UnityAdsSettings();
 		}
 
 		public bool Enabled { get; set; }
@@ -392,10 +387,10 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		public const string UnityAdsSettingsName = "UnityAdsSettings";
 		public const string PerformanceReportingSettingsName = "PerformanceReportingSettings";
 
-		public CrashReportingSettings CrashReportingSettings;
-		public UnityPurchasingSettings UnityPurchasingSettings;
-		public UnityAnalyticsSettings UnityAnalyticsSettings;
-		public UnityAdsSettings UnityAdsSettings;
-		public PerformanceReportingSettings PerformanceReportingSettings;
+		public CrashReportingSettings CrashReportingSettings = new();
+		public UnityPurchasingSettings UnityPurchasingSettings = new();
+		public UnityAnalyticsSettings UnityAnalyticsSettings = new();
+		public UnityAdsSettings UnityAdsSettings = new();
+		public PerformanceReportingSettings PerformanceReportingSettings = new();
 	}
 }

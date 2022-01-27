@@ -5,9 +5,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.UnityConnectSettings
 {
-	public struct CrashReportingSettings : IAssetReadable, IYAMLExportable
+	public sealed class CrashReportingSettings : IAssetReadable, IYAMLExportable
 	{
-		public CrashReportingSettings(bool _) : this()
+		public CrashReportingSettings()
 		{
 			EventUrl = "https://perf-events.cloud.unity3d.com/api/events/crashes";
 		}
