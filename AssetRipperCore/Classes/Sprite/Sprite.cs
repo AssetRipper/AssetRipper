@@ -303,21 +303,21 @@ namespace AssetRipper.Core.Classes.Sprite
 		/// <summary>
 		/// Rectangle of the sprite in the source image (image, that was used to create an atlas)
 		/// </summary>
-		public Rectf Rect;
+		public Rectf Rect = new();
 		/// <summary>
 		/// Pivot pixel offset relative to sprite center
 		/// </summary>
-		public Vector2f Offset;
+		public Vector2f Offset = new();
 		/// <summary>
 		/// Border of the sprite relative to original rectangle Rect
 		/// </summary>
-		public Vector4f Border;
+		public Vector4f Border = new();
 		/// <summary>
 		/// Pivot, relative to left-bottom of original sprite rectangle Rect
 		/// </summary>
-		public Vector2f Pivot;
+		public Vector2f Pivot = new();
 		public Tuple<UnityGUID, long> RenderDataKey;
-		public PPtr<SpriteAtlas.SpriteAtlas> SpriteAtlas;
+		public PPtr<SpriteAtlas.SpriteAtlas> SpriteAtlas = new();
 		public SpriteRenderData RD = new();
 
 		public const string SpriteAtlasName = "m_SpriteAtlas";

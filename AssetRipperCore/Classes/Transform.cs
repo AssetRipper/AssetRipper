@@ -144,10 +144,10 @@ namespace AssetRipper.Core.Classes
 
 		public const char PathSeparator = '/';
 
-		public Quaternionf m_LocalRotation;
-		public Vector3f m_LocalPosition;
-		public Vector3f m_LocalScale;
-		public PPtr<Transform> Father;
+		public Quaternionf m_LocalRotation = new();
+		public Vector3f m_LocalPosition = new();
+		public Vector3f m_LocalScale = new();
+		public PPtr<Transform> Father = new();
 
 		public const string TransformName = "Transform";
 		public const string LocalRotationName = "m_LocalRotation";

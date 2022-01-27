@@ -9,7 +9,7 @@ using AssetRipper.Core.YAML;
 namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 {
 	public struct KeyframeTpl<T> : IAsset
-		where T : struct, IAsset
+		where T : IAsset, new()
 	{
 		public KeyframeTpl(float time, T value, T weight) : this(time, value, default, default, weight)
 		{
@@ -33,9 +33,9 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 		public void Read(AssetReader reader)
 		{
 			Time = reader.ReadSingle();
-			Value.Read(reader);
-			InSlope.Read(reader);
-			OutSlope.Read(reader);
+			Value = reader.ReadAsset<T>();
+			InSlope = reader.ReadAsset<T>();
+			OutSlope = reader.ReadAsset<T>();
 			if (HasTangentMode(reader.Version, reader.Flags))
 			{
 				TangentMode = reader.ReadInt32();
@@ -43,8 +43,8 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 			if (HasWeightedMode(reader.Version))
 			{
 				WeightedMode = (WeightedMode)reader.ReadInt32();
-				InWeight.Read(reader);
-				OutWeight.Read(reader);
+				InWeight = reader.ReadAsset<T>();
+				OutWeight = reader.ReadAsset<T>();
 			}
 		}
 

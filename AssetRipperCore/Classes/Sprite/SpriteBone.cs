@@ -7,7 +7,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Sprite
 {
-	public struct SpriteBone : IAsset
+	public sealed class SpriteBone : IAsset
 	{
 		/// <summary>
 		/// 2021 and greater
@@ -92,7 +92,7 @@ namespace AssetRipper.Core.Classes.Sprite
 		public const string ParentIdName = "parentId";
 		public const string ColorName = "color";
 
-		public Vector3f Position;
-		public Quaternionf Rotation;
+		public Vector3f Position = new();
+		public Quaternionf Rotation = new();
 	}
 }

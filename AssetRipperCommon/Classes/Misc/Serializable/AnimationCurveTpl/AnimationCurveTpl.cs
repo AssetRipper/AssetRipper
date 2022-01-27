@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 {
 	public struct AnimationCurveTpl<T> : IAsset
-		where T : struct, IAsset, IYAMLExportable
+		where T : IAsset, IYAMLExportable, new()
 	{
 		public AnimationCurveTpl(bool init)
 		{

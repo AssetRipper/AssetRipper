@@ -119,10 +119,10 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		public const string PositionName = "m_Position";
 		public const string AgentTypeIDName = "m_AgentTypeID";
 
-		public NavMeshParams NavMeshParams;
-		public NavMeshBuildSettings NavMeshBuildSettings;
-		public AABB SourceBounds = new AABB();
-		public Quaternionf Rotation;
-		public Vector3f Position;
+		public NavMeshParams NavMeshParams = new();
+		public NavMeshBuildSettings NavMeshBuildSettings = new();
+		public AABB SourceBounds = new();
+		public Quaternionf Rotation = new();
+		public Vector3f Position = new();
 	}
 }

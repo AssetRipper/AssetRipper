@@ -3,21 +3,21 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 
 namespace AssetRipper.Core.Math.Vectors
 {
-	[StructLayout(LayoutKind.Sequential, Pack = 4)]
-	public struct Quaternionf : IAsset, IEquatable<Quaternionf>
+	public sealed class Quaternionf : IAsset, IEquatable<Quaternionf>, IQuaternionf
 	{
-		public float X;
-		public float Y;
-		public float Z;
-		public float W;
+		public float X { get; set; }
+		public float Y { get; set; }
+		public float Z { get; set; }
+		public float W { get; set; }
 		public const string XName = "x";
 		public const string YName = "y";
 		public const string ZName = "z";
 		public const string WName = "w";
+
+		public Quaternionf() { }
 
 		public Quaternionf(float x, float y, float z, float w)
 		{
@@ -171,9 +171,10 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public override bool Equals(object other)
 		{
-			if (!(other is Quaternionf))
+			if (other is Quaternionf quat)
+				return Equals(quat);
+			else
 				return false;
-			return Equals((Quaternionf)other);
 		}
 
 		public bool Equals(Quaternionf other)
