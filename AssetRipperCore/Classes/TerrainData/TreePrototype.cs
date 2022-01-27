@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct TreePrototype : IAsset, IDependent
+	public sealed class TreePrototype : IAsset, IDependent
 	{
 
 		/// <summary>
@@ -61,6 +61,6 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public const string BendFactorName = "bendFactor";
 		public const string NavMeshLodName = "navMeshLod";
 
-		public PPtr<GameObject.GameObject> Prefab;
+		public PPtr<GameObject.GameObject> Prefab = new();
 	}
 }

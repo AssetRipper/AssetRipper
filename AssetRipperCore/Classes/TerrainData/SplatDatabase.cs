@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct SplatDatabase : IAsset, IDependent
+	public sealed class SplatDatabase : IAsset, IDependent
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 		public SplatDatabase Convert(IExportContainer container)
 		{
-			return SplatDatabaseConverter.Convert(container, ref this);
+			return SplatDatabaseConverter.Convert(container, this);
 		}
 
 		public void Read(AssetReader reader)

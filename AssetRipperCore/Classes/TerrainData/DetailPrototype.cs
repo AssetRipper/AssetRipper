@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct DetailPrototype : IAsset, IDependent
+	public sealed class DetailPrototype : IAsset, IDependent
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -154,9 +154,9 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public const string RenderModeName = "renderMode";
 		public const string UsePrototypeMeshName = "usePrototypeMesh";
 
-		public PPtr<GameObject.GameObject> Prototype;
-		public PPtr<Texture2D.Texture2D> PrototypeTexture;
-		public ColorRGBAf HealthyColor;
-		public ColorRGBAf DryColor;
+		public PPtr<GameObject.GameObject> Prototype = new();
+		public PPtr<Texture2D.Texture2D> PrototypeTexture = new();
+		public ColorRGBAf HealthyColor = new();
+		public ColorRGBAf DryColor = new();
 	}
 }

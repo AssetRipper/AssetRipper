@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct Shift : IAsset
+	public sealed class Shift : IAsset
 	{
 		public void Read(AssetReader reader)
 		{

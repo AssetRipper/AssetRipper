@@ -7,7 +7,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct TreeInstance : IAsset
+	public sealed class TreeInstance : IAsset
 	{
 		/// <summary>
 		/// 5.0.0 and greater
@@ -71,8 +71,8 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public const string LightmapColorName = "lightmapColor";
 		public const string IndexName = "index";
 
-		public Vector3f Position;
-		public ColorRGBA32 Color;
-		public ColorRGBA32 LightmapColor;
+		public Vector3f Position = new();
+		public ColorRGBA32 Color = new();
+		public ColorRGBA32 LightmapColor = new();
 	}
 }

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct Heightmap : IAsset, IDependent, IHeightmap
+	public sealed class Heightmap : IAsset, IDependent, IHeightmap
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -72,7 +72,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 		public Heightmap Convert(IExportContainer container)
 		{
-			return HeightmapConverter.Convert(container, ref this);
+			return HeightmapConverter.Convert(container, this);
 		}
 
 		public void Read(AssetReader reader)
@@ -248,7 +248,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public const string LevelsName = "m_Levels";
 		public const string ScaleName = "m_Scale";
 
-		public PPtr<PhysicMaterial.PhysicMaterial> DefaultPhysicMaterial;
-		public Vector3f m_Scale;
+		public PPtr<PhysicMaterial.PhysicMaterial> DefaultPhysicMaterial = new();
+		public Vector3f m_Scale = new();
 	}
 }

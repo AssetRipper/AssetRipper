@@ -9,12 +9,12 @@ namespace AssetRipper.Core.Converters.TerrainData
 {
 	public static class SplatDatabaseConverter
 	{
-		public static SplatDatabase Convert(IExportContainer container, ref SplatDatabase origin)
+		public static SplatDatabase Convert(IExportContainer container, SplatDatabase origin)
 		{
 			SplatDatabase instance = new SplatDatabase();
 			if (SplatDatabase.HasTerrainLayers(container.ExportVersion))
 			{
-				instance.TerrainLayers = GetTerrainLayers(container, ref origin);
+				instance.TerrainLayers = GetTerrainLayers(container, origin);
 			}
 			else
 			{
@@ -26,13 +26,13 @@ namespace AssetRipper.Core.Converters.TerrainData
 			if (SplatDatabase.HasColorSpace(container.ExportVersion))
 			{
 				instance.ColorSpace = origin.ColorSpace;
-				instance.MaterialRequiresMetallic = GetMaterialRequiresMetallic(container, ref origin);
-				instance.MaterialRequiresSmoothness = GetMaterialRequiresSmoothness(container, ref origin);
+				instance.MaterialRequiresMetallic = GetMaterialRequiresMetallic(container, origin);
+				instance.MaterialRequiresSmoothness = GetMaterialRequiresSmoothness(container, origin);
 			}
 			return instance;
 		}
 
-		public static TerrainLayer[] GenerateTerrainLayers(IExportContainer container, ref SplatDatabase origin)
+		public static TerrainLayer[] GenerateTerrainLayers(IExportContainer container, SplatDatabase origin)
 		{
 			TerrainLayer[] layers = new TerrainLayer[origin.Splats.Length];
 			for (int i = 0; i < layers.Length; i++)
@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Converters.TerrainData
 			return layers;
 		}
 
-		private static PPtr<TerrainLayer>[] GetTerrainLayers(IExportContainer container, ref SplatDatabase origin)
+		private static PPtr<TerrainLayer>[] GetTerrainLayers(IExportContainer container, SplatDatabase origin)
 		{
 			if (SplatDatabase.HasTerrainLayers(container.Version))
 			{
@@ -55,12 +55,12 @@ namespace AssetRipper.Core.Converters.TerrainData
 			}
 		}
 
-		private static bool GetMaterialRequiresMetallic(IExportContainer container, ref SplatDatabase origin)
+		private static bool GetMaterialRequiresMetallic(IExportContainer container, SplatDatabase origin)
 		{
 			return SplatDatabase.HasColorSpace(container.Version) ? origin.MaterialRequiresMetallic : true;
 		}
 
-		private static bool GetMaterialRequiresSmoothness(IExportContainer container, ref SplatDatabase origin)
+		private static bool GetMaterialRequiresSmoothness(IExportContainer container, SplatDatabase origin)
 		{
 			return SplatDatabase.HasColorSpace(container.Version) ? origin.MaterialRequiresSmoothness : true;
 		}

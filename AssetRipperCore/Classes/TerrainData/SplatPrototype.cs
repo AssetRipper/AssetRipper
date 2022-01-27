@@ -11,13 +11,8 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct SplatPrototype : IAsset, IDependent
+	public sealed class SplatPrototype : IAsset, IDependent
 	{
-		public SplatPrototype(bool _) : this()
-		{
-			TileSize = Vector2f.One;
-		}
-
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
@@ -37,7 +32,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 		public TerrainLayer Convert(IExportContainer container)
 		{
-			return SplatPrototypeConverter.GenerateTerrainLayer(container, ref this);
+			return SplatPrototypeConverter.GenerateTerrainLayer(container, this);
 		}
 
 		public void Read(AssetReader reader)

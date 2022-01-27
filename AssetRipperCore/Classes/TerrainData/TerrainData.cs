@@ -137,9 +137,9 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public const string LightmapName = "m_Lightmap";
 		public const string PreloadShadersName = "m_PreloadShaders";
 
-		public SplatDatabase SplatDatabase;
-		public DetailDatabase DetailDatabase;
-		public Heightmap m_Heightmap;
-		public PPtr<Texture2D.Texture2D> Lightmap;
+		public SplatDatabase SplatDatabase = new();
+		public DetailDatabase DetailDatabase = new();
+		public Heightmap m_Heightmap = new();
+		public PPtr<Texture2D.Texture2D> Lightmap = new();
 	}
 }

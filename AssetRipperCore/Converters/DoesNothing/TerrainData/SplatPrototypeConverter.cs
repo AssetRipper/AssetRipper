@@ -6,7 +6,7 @@ namespace AssetRipper.Core.Converters.TerrainData
 {
 	public static class SplatPrototypeConverter
 	{
-		public static TerrainLayer GenerateTerrainLayer(IExportContainer container, ref SplatPrototype origin)
+		public static TerrainLayer GenerateTerrainLayer(IExportContainer container, SplatPrototype origin)
 		{
 			throw new System.NotImplementedException();
 			/*TerrainLayer layer = new TerrainLayer();

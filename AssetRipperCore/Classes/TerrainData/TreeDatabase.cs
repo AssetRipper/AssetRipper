@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct TreeDatabase : IAssetReadable, IAssetWritable
+	public sealed class TreeDatabase : IAssetReadable, IAssetWritable
 	{
 		public void Read(AssetReader reader)
 		{

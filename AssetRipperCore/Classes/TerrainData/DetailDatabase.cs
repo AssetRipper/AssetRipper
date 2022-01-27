@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public struct DetailDatabase : IAsset, IDependent
+	public sealed class DetailDatabase : IAsset, IDependent
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 		public DetailDatabase Convert(IExportContainer container)
 		{
-			return DetailDatabaseConverter.Convert(container, ref this);
+			return DetailDatabaseConverter.Convert(container, this);
 		}
 
 		public void Read(AssetReader reader)
@@ -231,11 +231,11 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public const string DetailMeshGrassShaderName = "m_DetailMeshGrassShader";
 		public const string PreloadTextureAtlasDataName = "m_PreloadTextureAtlasData";
 
-		public PPtr<Texture2D.Texture2D> AtlasTexture;
-		public ColorRGBAf WavingGrassTint;
-		public PPtr<Shader.Shader> DetailBillboardShader;
-		public PPtr<Shader.Shader> DetailMeshLitShader;
-		public PPtr<Shader.Shader> DetailMeshGrassShader;
-		public TreeDatabase TreeDatabase;
+		public PPtr<Texture2D.Texture2D> AtlasTexture = new();
+		public ColorRGBAf WavingGrassTint = new();
+		public PPtr<Shader.Shader> DetailBillboardShader = new();
+		public PPtr<Shader.Shader> DetailMeshLitShader = new();
+		public PPtr<Shader.Shader> DetailMeshGrassShader = new();
+		public TreeDatabase TreeDatabase = new();
 	}
 }
