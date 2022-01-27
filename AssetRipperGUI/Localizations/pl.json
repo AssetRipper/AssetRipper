@@ -1,6 +1,6 @@
 ﻿{
-    "welcome_title": "",
-    "config_options": "",
+    "welcome_title": "Witaj w AssetRipper",
+    "config_options": "Opcje konfiguracji",
     "ignore_asset_bundle_content_paths": "",
     "skip_streaming_assets": "",
     "mesh_export_title": "",
