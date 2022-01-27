@@ -7,7 +7,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct MeshBlendShape : IAsset
+	public sealed class MeshBlendShape : IAsset
 	{
 		/// <summary>
 		/// Less than 4.3.0

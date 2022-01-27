@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Classes.Mesh
 	/// </summary>
 	public sealed class Mesh : NamedObject, IMesh
 	{
-		public BlendShapeData Shapes;
+		public BlendShapeData Shapes { get; set; } = new();
 		public VariableBoneCountWeights VariableBoneCountWeights;
 		public VertexData VertexData;
 		public CompressedMesh CompressedMesh { get; set; } = new();

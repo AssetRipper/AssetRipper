@@ -196,7 +196,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 			else
 			{
-				return new BlendShapeData(container.ExportVersion);
+				return new BlendShapeData();
 			}
 		}
 

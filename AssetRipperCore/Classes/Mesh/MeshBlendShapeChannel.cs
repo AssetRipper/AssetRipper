@@ -5,8 +5,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct MeshBlendShapeChannel : IAsset
+	public sealed class MeshBlendShapeChannel : IAsset
 	{
+		public MeshBlendShapeChannel() { }
 		public MeshBlendShapeChannel(string name, int frameIndex, int frameCount)
 		{
 			Name = name;

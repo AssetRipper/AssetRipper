@@ -9,15 +9,12 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct BlendShapeData : IAsset
+	public sealed class BlendShapeData : IAsset
 	{
-		public BlendShapeData(UnityVersion version)
-		{
-			Vertices = Array.Empty<BlendShapeVertex>();
-			Shapes = Array.Empty<MeshBlendShape>();
-			Channels = Array.Empty<MeshBlendShapeChannel>();
-			FullWeights = Array.Empty<float>();
-		}
+		public BlendShapeVertex[] Vertices { get; set; } = Array.Empty<BlendShapeVertex>();
+		public MeshBlendShape[] Shapes { get; set; } = Array.Empty<MeshBlendShape>();
+		public MeshBlendShapeChannel[] Channels { get; set; } = Array.Empty<MeshBlendShapeChannel>();
+		public float[] FullWeights { get; set; } = Array.Empty<float>();
 
 		/// <summary>
 		/// 2017.1 and greater
@@ -81,11 +78,6 @@ namespace AssetRipper.Core.Classes.Mesh
 			node.Add(FullWeightsName, FullWeights.ExportYAML());
 			return node;
 		}
-
-		public BlendShapeVertex[] Vertices { get; set; }
-		public MeshBlendShape[] Shapes { get; set; }
-		public MeshBlendShapeChannel[] Channels { get; set; }
-		public float[] FullWeights { get; set; }
 
 		public const string VerticesName = "vertices";
 		public const string ShapesName = "shapes";
