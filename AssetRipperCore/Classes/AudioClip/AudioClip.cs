@@ -360,7 +360,7 @@ namespace AssetRipper.Core.Classes.AudioClip
 		public const string EditorResourceName = "m_EditorResource";
 		public const string EditorCompressionFormatName = "m_EditorCompressionFormat";
 
-		public StreamedResource FSBResource;
-		public StreamingInfo streamingInfo;
+		public StreamedResource FSBResource = new();
+		public StreamingInfo streamingInfo = new();
 	}
 }

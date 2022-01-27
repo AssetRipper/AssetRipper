@@ -43,6 +43,8 @@ namespace AssetRipper.Core.Math.Colors
 
 		public static explicit operator Vector4f(ColorRGBAf c) => new(c.R, c.G, c.B, c.A);
 
+		public ColorRGBAf Clone() => new ColorRGBAf(R, G, B, A);
+
 		public void Read(AssetReader reader)
 		{
 			R = reader.ReadSingle();

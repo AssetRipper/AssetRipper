@@ -12,23 +12,19 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 	/// <summary>
 	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/IMGUI/GUIStyle.cs"/>
 	/// </summary>
-	public struct GUIStyle : IAsset
+	public sealed class GUIStyle : IAsset
 	{
-		public GUIStyle(LayoutInfo layout) : this()
+		public GUIStyle()
 		{
 			Name = string.Empty;
-			Normal = new GUIStyleState(layout);
-			Hover = new GUIStyleState(layout);
-			Active = new GUIStyleState(layout);
-			Focused = new GUIStyleState(layout);
-			OnNormal = new GUIStyleState(layout);
-			OnHover = new GUIStyleState(layout);
-			OnActive = new GUIStyleState(layout);
-			OnFocused = new GUIStyleState(layout);
 			FontSize = 33;
 			RichText = true;
-			TextClipping = layout.Version.IsGreaterEqual(4) ? TextClipping.Overflow : TextClipping.Clip;
 			StretchWidth = true;
+		}
+
+		public GUIStyle(LayoutInfo layout) : this()
+		{
+			TextClipping = layout.Version.IsGreaterEqual(4) ? TextClipping.Overflow : TextClipping.Clip;
 		}
 
 		public void Read(AssetReader reader)
@@ -263,21 +259,21 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public bool StretchWidth { get; set; }
 		public bool StretchHeight { get; set; }
 
-		public GUIStyleState Normal;
-		public GUIStyleState Hover;
-		public GUIStyleState Active;
-		public GUIStyleState Focused;
-		public GUIStyleState OnNormal;
-		public GUIStyleState OnHover;
-		public GUIStyleState OnActive;
-		public GUIStyleState OnFocused;
-		public RectOffset Border;
-		public RectOffset Margin;
-		public RectOffset Padding;
-		public RectOffset Overflow;
-		public PPtr<IFont> Font;
-		public Vector2f ContentOffset;
-		public Vector2f ClipOffset;
+		public GUIStyleState Normal = new();
+		public GUIStyleState Hover = new();
+		public GUIStyleState Active = new();
+		public GUIStyleState Focused = new();
+		public GUIStyleState OnNormal = new();
+		public GUIStyleState OnHover = new();
+		public GUIStyleState OnActive = new();
+		public GUIStyleState OnFocused = new();
+		public RectOffset Border = new();
+		public RectOffset Margin = new();
+		public RectOffset Padding = new();
+		public RectOffset Overflow = new();
+		public PPtr<IFont> Font = new();
+		public Vector2f ContentOffset = new();
+		public Vector2f ClipOffset = new();
 
 		public const string NameName = "m_Name";
 		public const string NormalName = "m_Normal";

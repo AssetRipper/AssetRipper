@@ -12,9 +12,9 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 	/// <summary>
 	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/IMGUI/GUIStyle.cs"/>
 	/// </summary>
-	public struct GUIStyleState : IAsset
+	public sealed class GUIStyleState : IAsset
 	{
-		public GUIStyleState(LayoutInfo layout)
+		public GUIStyleState()
 		{
 			Background = default;
 			ScaledBackgrounds = Array.Empty<PPtr<Texture2D.ITexture2D>>();
@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public GUIStyleState(GUIStyleState copy)
 		{
 			Background = copy.Background;
-			TextColor = copy.TextColor;
+			TextColor = copy.TextColor.Clone();
 			ScaledBackgrounds = new PPtr<Texture2D.ITexture2D>[copy.ScaledBackgrounds.Length];
 			for (int i = 0; i < copy.ScaledBackgrounds.Length; i++)
 			{
@@ -75,8 +75,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public PPtr<Texture2D.ITexture2D>[] ScaledBackgrounds { get; set; }
 
-		public PPtr<Texture2D.ITexture2D> Background;
-		public ColorRGBAf TextColor;
+		public PPtr<Texture2D.ITexture2D> Background = new();
+		public ColorRGBAf TextColor = new();
 
 		public const string BackgroundName = "m_Background";
 		public const string ScaledBackgroundsName = "m_ScaledBackgrounds";
