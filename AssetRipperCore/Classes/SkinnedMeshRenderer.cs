@@ -245,10 +245,10 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// LodMesh previously
 		/// </summary>
-		public PPtr<Mesh.Mesh> Mesh;
-		public PPtr<Animation.Animation> Animation;
-		public Matrix4x4f CurrentPose;
-		public PPtr<Transform> RootBone;
+		public PPtr<Mesh.Mesh> Mesh = new();
+		public PPtr<Animation.Animation> Animation = new();
+		public Matrix4x4f CurrentPose = new Matrix4x4f();
+		public PPtr<Transform> RootBone = new();
 		public AABB AABB = new AABB();
 	}
 }

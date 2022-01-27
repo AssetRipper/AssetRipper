@@ -3,32 +3,30 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
-using System.Runtime.InteropServices;
 
 namespace AssetRipper.Core.Math
 {
-	[StructLayout(LayoutKind.Sequential, Pack = 4)]
-	public struct Matrix4x4f : IAsset, IEquatable<Matrix4x4f>
+	public sealed class Matrix4x4f : IAsset, IEquatable<Matrix4x4f>, IMatrix4x4f
 	{
-		public float E00;
-		public float E01;
-		public float E02;
-		public float E03;
+		public float E00 { get; set; }
+		public float E01 { get; set; }
+		public float E02 { get; set; }
+		public float E03 { get; set; }
 
-		public float E10;
-		public float E11;
-		public float E12;
-		public float E13;
+		public float E10 { get; set; }
+		public float E11 { get; set; }
+		public float E12 { get; set; }
+		public float E13 { get; set; }
 
-		public float E20;
-		public float E21;
-		public float E22;
-		public float E23;
+		public float E20 { get; set; }
+		public float E21 { get; set; }
+		public float E22 { get; set; }
+		public float E23 { get; set; }
 
-		public float E30;
-		public float E31;
-		public float E32;
-		public float E33;
+		public float E30 { get; set; }
+		public float E31 { get; set; }
+		public float E32 { get; set; }
+		public float E33 { get; set; }
 
 		public const string E00Name = "e00";
 		public const string E01Name = "e01";
@@ -46,6 +44,8 @@ namespace AssetRipper.Core.Math
 		public const string E31Name = "e31";
 		public const string E32Name = "e32";
 		public const string E33Name = "e33";
+
+		public Matrix4x4f() { }
 
 		public Matrix4x4f(float[] values)
 		{
@@ -148,26 +148,26 @@ namespace AssetRipper.Core.Math
 		{
 			get
 			{
-				switch (index)
+				return index switch
 				{
-					case 0: return E00;
-					case 1: return E01;
-					case 2: return E02;
-					case 3: return E03;
-					case 4: return E10;
-					case 5: return E11;
-					case 6: return E12;
-					case 7: return E13;
-					case 8: return E20;
-					case 9: return E21;
-					case 10: return E22;
-					case 11: return E23;
-					case 12: return E30;
-					case 13: return E31;
-					case 14: return E32;
-					case 15: return E33;
-					default: throw new ArgumentOutOfRangeException(nameof(index), "Invalid Matrix4x4 index!");
-				}
+					0 => E00,
+					1 => E01,
+					2 => E02,
+					3 => E03,
+					4 => E10,
+					5 => E11,
+					6 => E12,
+					7 => E13,
+					8 => E20,
+					9 => E21,
+					10 => E22,
+					11 => E23,
+					12 => E30,
+					13 => E31,
+					14 => E32,
+					15 => E33,
+					_ => throw new ArgumentOutOfRangeException(nameof(index), "Invalid Matrix4x4 index!"),
+				};
 			}
 
 			set
@@ -204,9 +204,10 @@ namespace AssetRipper.Core.Math
 
 		public override bool Equals(object other)
 		{
-			if (!(other is Matrix4x4f))
+			if (other is Matrix4x4f matrix)
+				return Equals(matrix);
+			else
 				return false;
-			return Equals((Matrix4x4f)other);
 		}
 
 		public bool Equals(Matrix4x4f other)
@@ -243,7 +244,7 @@ namespace AssetRipper.Core.Math
 
 		public static Matrix4x4f operator *(Matrix4x4f lhs, Matrix4x4f rhs)
 		{
-			Matrix4x4f res;
+			Matrix4x4f res = new();
 			res.E00 = lhs.E00 * rhs.E00 + lhs.E10 * rhs.E01 + lhs.E20 * rhs.E02 + lhs.E30 * rhs.E03;
 			res.E10 = lhs.E00 * rhs.E10 + lhs.E10 * rhs.E11 + lhs.E20 * rhs.E12 + lhs.E30 * rhs.E13;
 			res.E20 = lhs.E00 * rhs.E20 + lhs.E10 * rhs.E21 + lhs.E20 * rhs.E22 + lhs.E30 * rhs.E23;
@@ -282,7 +283,7 @@ namespace AssetRipper.Core.Math
 
 		public static Matrix4x4f Scale(Vector3f vector)
 		{
-			Matrix4x4f m;
+			Matrix4x4f m = new();
 			m.E00 = vector.X; m.E10 = 0F; m.E20 = 0F; m.E30 = 0F;
 			m.E01 = 0F; m.E11 = vector.Y; m.E21 = 0F; m.E31 = 0F;
 			m.E02 = 0F; m.E12 = 0F; m.E22 = vector.Z; m.E32 = 0F;
@@ -292,7 +293,7 @@ namespace AssetRipper.Core.Math
 
 		public static Matrix4x4f Translate(Vector3f vector)
 		{
-			Matrix4x4f m;
+			Matrix4x4f m = new();
 			m.E00 = 1F; m.E10 = 0F; m.E20 = 0F; m.E30 = vector.X;
 			m.E01 = 0F; m.E11 = 1F; m.E21 = 0F; m.E31 = vector.Y;
 			m.E02 = 0F; m.E12 = 0F; m.E22 = 1F; m.E32 = vector.Z;
@@ -315,7 +316,7 @@ namespace AssetRipper.Core.Math
 			float wy = q.W * y;
 			float wz = q.W * z;
 
-			Matrix4x4f m;
+			Matrix4x4f m = new();
 			m.E00 = 1.0f - (yy + zz); m.E01 = xy + wz; m.E02 = xz - wy; m.E03 = 0.0F;
 			m.E10 = xy - wz; m.E11 = 1.0f - (xx + zz); m.E12 = yz + wx; m.E13 = 0.0F;
 			m.E20 = xz + wy; m.E21 = yz - wx; m.E22 = 1.0f - (xx + yy); m.E23 = 0.0F;

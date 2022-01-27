@@ -78,7 +78,7 @@ namespace AssetRipper.Core.Classes.Light
 			}
 			if (HasCullingMatrixOverride(reader.Version))
 			{
-				CullingMatrixOverride.Read(reader);
+				CullingMatrixOverride = reader.ReadAsset<Matrix4x4f>();
 				UseCullingMatrixOverride = reader.ReadBoolean();
 				reader.AlignStream();
 			}
@@ -120,6 +120,7 @@ namespace AssetRipper.Core.Classes.Light
 		public float NormalBias { get; set; }
 		public float NearPlane { get; set; }
 		public bool UseCullingMatrixOverride { get; set; }
+		public Matrix4x4f CullingMatrixOverride { get; set; }
 
 		public const string TypeName = "m_Type";
 		public const string ResolutionName = "m_Resolution";
@@ -130,7 +131,5 @@ namespace AssetRipper.Core.Classes.Light
 		public const string NearPlaneName = "m_NearPlane";
 		public const string CullingMatrixOverrideName = "m_CullingMatrixOverride";
 		public const string UseCullingMatrixOverrideName = "m_UseCullingMatrixOverride";
-
-		public Matrix4x4f CullingMatrixOverride { get; set; }
 	}
 }
