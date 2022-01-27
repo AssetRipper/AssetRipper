@@ -9,13 +9,14 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 	/// <summary>
 	/// PackingParameters previously
 	/// </summary>
-	public struct PackingSettings : IAssetReadable, IYAMLExportable
+	public sealed class PackingSettings : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 2021 and greater
 		/// </summary>
 		public static bool HasEnableAlphaDilation(UnityVersion version) => version.IsGreaterEqual(2021);
 
+		public PackingSettings() { }
 		public PackingSettings(bool _)
 		{
 			Padding = 2;

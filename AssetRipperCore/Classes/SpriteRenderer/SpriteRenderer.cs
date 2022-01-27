@@ -145,8 +145,8 @@ namespace AssetRipper.Core.Classes.SpriteRenderer
 		public const string WasSpriteAssignedName = "m_WasSpriteAssigned";
 		public const string MaskInteractionName = "m_MaskInteraction";
 
-		public PPtr<Sprite.Sprite> Sprite;
-		public ColorRGBAf Color;
-		public Vector2f Size;
+		public PPtr<Sprite.Sprite> Sprite = new();
+		public ColorRGBAf Color = new();
+		public Vector2f Size = new();
 	}
 }

@@ -437,13 +437,13 @@ namespace AssetRipper.Core.Classes.Terrain
 		public const string RenderingLayerMaskName = "m_RenderingLayerMask";
 		public const string AllowAutoConnectName = "m_AllowAutoConnect";
 
-		public PPtr<TerrainData.TerrainData> m_TerrainData;
-		public ColorRGBA32 LegacySpecular;
-		public PPtr<Material.Material> MaterialTemplate;
-		public Vector4f LightmapTilingOffset;
-		public Vector4f LightmapTilingOffsetDynamic;
-		public Hash128 ExplicitProbeSetHash;
-		public Vector4f DynamicUVST;
-		public Vector4f ChunkDynamicUVST;
+		public PPtr<TerrainData.TerrainData> m_TerrainData = new();
+		public ColorRGBA32 LegacySpecular = new();
+		public PPtr<Material.Material> MaterialTemplate = new();
+		public Vector4f LightmapTilingOffset = new();
+		public Vector4f LightmapTilingOffsetDynamic = new();
+		public Hash128 ExplicitProbeSetHash = new();
+		public Vector4f DynamicUVST = new();
+		public Vector4f ChunkDynamicUVST = new();
 	}
 }

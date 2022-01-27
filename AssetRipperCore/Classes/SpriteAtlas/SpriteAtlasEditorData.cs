@@ -13,7 +13,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.SpriteAtlas
 {
-	public class SpriteAtlasEditorData : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class SpriteAtlasEditorData : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public SpriteAtlasEditorData() { }
 
@@ -149,11 +149,11 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 		public const string BindAsDefaultName = "bindAsDefault";
 		public const string StoredHashName = "storedHash";
 
-		public TextureSettings TextureSettings;
+		public TextureSettings TextureSettings = new();
 		/// <summary>
 		/// PackingParameters previously
 		/// </summary>
-		public PackingSettings PackingSettings;
-		public Hash128 StoredHash;
+		public PackingSettings PackingSettings = new();
+		public Hash128 StoredHash = new();
 	}
 }

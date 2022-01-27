@@ -8,8 +8,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.SpriteAtlas
 {
-	public struct TextureSettings : IAssetReadable, IYAMLExportable
+	public sealed class TextureSettings : IAssetReadable, IYAMLExportable
 	{
+		public TextureSettings() { }
 		public TextureSettings(bool _)
 		{
 			AnisoLevel = 1;

@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.SpriteAtlas
 {
-	public struct SpriteAtlasData : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class SpriteAtlasData : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 2017.2 and greater
@@ -81,11 +81,11 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 		public const string SettingsRawName = "settingsRaw";
 		public const string SecondaryTexturesName = "secondaryTextures";
 
-		public PPtr<Texture2D.Texture2D> Texture;
-		public PPtr<Texture2D.Texture2D> AlphaTexture;
-		public Rectf TextureRect;
-		public Vector2f TextureRectOffset;
-		public Vector2f AtlasRectOffset;
-		public Vector4f UVTransform;
+		public PPtr<Texture2D.Texture2D> Texture = new();
+		public PPtr<Texture2D.Texture2D> AlphaTexture = new();
+		public Rectf TextureRect = new();
+		public Vector2f TextureRectOffset = new();
+		public Vector2f AtlasRectOffset = new();
+		public Vector4f UVTransform = new();
 	}
 }

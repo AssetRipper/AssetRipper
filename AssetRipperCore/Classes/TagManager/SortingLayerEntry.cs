@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.TagManager
 {
-	public struct SortingLayerEntry : IAssetReadable, IYAMLExportable
+	public sealed class SortingLayerEntry : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// Less than 5.0.0

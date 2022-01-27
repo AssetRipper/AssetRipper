@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Sprite
 {
-	public struct SecondarySpriteTexture : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class SecondarySpriteTexture : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{

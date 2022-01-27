@@ -114,6 +114,6 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 		public const string TagName = "m_Tag";
 		public const string IsVariantName = "m_IsVariant";
 
-		public PPtr<SpriteAtlas> MasterAtlas;
+		public PPtr<SpriteAtlas> MasterAtlas = new();
 	}
 }

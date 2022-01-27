@@ -7,7 +7,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Sprite
 {
-	public struct SpriteVertex : IAssetReadable, IYAMLExportable
+	public sealed class SpriteVertex : IAssetReadable, IYAMLExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -44,7 +44,7 @@ namespace AssetRipper.Core.Classes.Sprite
 		public const string PosName = "pos";
 		public const string UvName = "uv";
 
-		public Vector3f Position;
-		public Vector2f UV;
+		public Vector3f Position = new();
+		public Vector2f UV = new();
 	}
 }
