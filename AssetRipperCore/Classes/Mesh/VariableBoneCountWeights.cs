@@ -8,13 +8,8 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public struct VariableBoneCountWeights : IAsset
+	public sealed class VariableBoneCountWeights : IAsset
 	{
-		public VariableBoneCountWeights(bool _)
-		{
-			Data = Array.Empty<uint>();
-		}
-
 		public VariableBoneCountWeights Convert(IExportContainer container)
 		{
 			VariableBoneCountWeights instance = new VariableBoneCountWeights();
@@ -39,7 +34,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return node;
 		}
 
-		public uint[] Data { get; set; }
+		public uint[] Data { get; set; } = Array.Empty<uint>();
 
 		public const string DataName = "m_Data";
 	}

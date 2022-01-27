@@ -222,7 +222,7 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static VariableBoneCountWeights GetVariableBoneCountWeights(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
-			return Classes.Mesh.Mesh.HasBonesAABB(container.Version) ? origin.VariableBoneCountWeights : new VariableBoneCountWeights(true);
+			return Classes.Mesh.Mesh.HasBonesAABB(container.Version) ? origin.VariableBoneCountWeights : new VariableBoneCountWeights();
 		}
 
 		private static MeshCompression GetMeshCompression(IExportContainer container, Classes.Mesh.Mesh origin)
