@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public struct AlbedoSwatchInfo : IAssetReadable, IYAMLExportable
+	public sealed class AlbedoSwatchInfo : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -35,6 +35,6 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public const string MinLuminanceName = "minLuminance";
 		public const string MaxLuminanceName = "maxLuminance";
 
-		public ColorRGBAf Color;
+		public ColorRGBAf Color = new();
 	}
 }

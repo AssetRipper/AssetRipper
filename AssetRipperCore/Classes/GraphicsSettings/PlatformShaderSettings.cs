@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public struct PlatformShaderSettings : IAssetReadable, IYAMLExportable
+	public sealed class PlatformShaderSettings : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 5.4.0 and greater and Not Release

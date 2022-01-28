@@ -6,8 +6,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.InputManager
 {
-	public struct InputAxis : IAssetReadable, IYAMLExportable
+	public sealed class InputAxis : IAssetReadable, IYAMLExportable
 	{
+		public InputAxis() { }
 		public InputAxis(string name, string positive, string altPositive)
 		{
 			Name = name;

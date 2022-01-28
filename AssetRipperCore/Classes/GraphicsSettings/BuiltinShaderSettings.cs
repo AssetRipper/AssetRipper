@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public struct BuiltinShaderSettings : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class BuiltinShaderSettings : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -44,6 +44,6 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public const string ModeName = "m_Mode";
 		public const string ShaderName = "m_Shader";
 
-		public PPtr<Shader.Shader> Shader;
+		public PPtr<Shader.Shader> Shader = new();
 	}
 }

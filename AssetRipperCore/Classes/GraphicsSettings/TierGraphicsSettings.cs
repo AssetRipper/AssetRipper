@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public struct TierGraphicsSettings : IAssetReadable, IYAMLExportable
+	public sealed class TierGraphicsSettings : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 5.6.0 and greater

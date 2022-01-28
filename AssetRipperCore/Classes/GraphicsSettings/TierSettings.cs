@@ -10,8 +10,10 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 	/// <summary>
 	/// BuildTargetShaderSettings previously
 	/// </summary>
-	public struct TierSettings : IAssetReadable, IYAMLExportable
+	public sealed class TierSettings : IAssetReadable, IYAMLExportable
 	{
+		public TierSettings() { }
+
 		public TierSettings(PlatformShaderSettings settings, Platform platfrom, GraphicsTier tier, UnityVersion version, TransferInstructionFlags flags)
 		{
 			BuildTarget = platfrom.PlatformToBuildGroup();

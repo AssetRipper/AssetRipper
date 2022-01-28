@@ -140,9 +140,9 @@ namespace AssetRipper.Core.Classes.GUIText
 		public const string PixelCorrectName = "m_PixelCorrect";
 		public const string RichTextName = "m_RichText";
 
-		public Vector2f PixelOffset;
-		public PPtr<Font.Font> Font;
-		public PPtr<Material.Material> Material;
-		public ColorRGBA32 Color;
+		public Vector2f PixelOffset = new();
+		public PPtr<Font.Font> Font = new();
+		public PPtr<Material.Material> Material = new();
+		public ColorRGBA32 Color = new();
 	}
 }

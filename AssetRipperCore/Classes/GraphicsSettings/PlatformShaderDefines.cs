@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public struct PlatformShaderDefines : IAssetReadable, IYAMLExportable
+	public sealed class PlatformShaderDefines : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -34,8 +34,8 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 		public const string Defines_Tier2Name = "defines_Tier2";
 		public const string Defines_Tier3Name = "defines_Tier3";
 
-		public FixedBitset Defines_Tier1;
-		public FixedBitset Defines_Tier2;
-		public FixedBitset Defines_Tier3;
+		public FixedBitset Defines_Tier1 = new();
+		public FixedBitset Defines_Tier2 = new();
+		public FixedBitset Defines_Tier3 = new();
 	}
 }

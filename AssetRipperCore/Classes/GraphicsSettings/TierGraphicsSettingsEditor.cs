@@ -6,8 +6,10 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public struct TierGraphicsSettingsEditor : IAssetReadable, IYAMLExportable
+	public sealed class TierGraphicsSettingsEditor : IAssetReadable, IYAMLExportable
 	{
+		public TierGraphicsSettingsEditor() { }
+
 		public TierGraphicsSettingsEditor(PlatformShaderSettings settings, UnityVersion version, TransferInstructionFlags flags)
 		{
 			StandardShaderQuality = settings.GetStandardShaderQuality(version, flags);
