@@ -7,7 +7,7 @@ using AssetRipper.Core.YAML.Extensions;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
-	public struct NavMeshTileData : IAssetReadable, IYAMLExportable
+	public sealed class NavMeshTileData : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 5.6.0 and greater
@@ -36,6 +36,6 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		public const string MeshDataName = "m_MeshData";
 		public const string HashName = "m_Hash";
 
-		public Hash128 Hash;
+		public Hash128 Hash = new();
 	}
 }

@@ -167,7 +167,7 @@ namespace AssetRipper.Core.Classes.Material
 		public const string DisabledShaderPassesName = "disabledShaderPasses";
 		public const string SavedPropertiesName = "m_SavedProperties";
 
-		public PPtr<Shader.Shader> Shader;
-		public UnityPropertySheet SavedProperties;
+		public PPtr<Shader.Shader> Shader = new();
+		public UnityPropertySheet SavedProperties = new();
 	}
 }

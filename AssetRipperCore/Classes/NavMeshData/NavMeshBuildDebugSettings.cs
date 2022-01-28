@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
-	public struct NavMeshBuildDebugSettings : IAssetReadable, IYAMLExportable
+	public sealed class NavMeshBuildDebugSettings : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

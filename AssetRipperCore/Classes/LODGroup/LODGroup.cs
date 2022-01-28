@@ -128,6 +128,6 @@ namespace AssetRipper.Core.Classes.LODGroup
 		public const string LODsName = "m_LODs";
 		public const string EnabledName = "m_Enabled";
 
-		public Vector3f LocalReferencePoint;
+		public Vector3f LocalReferencePoint = new();
 	}
 }

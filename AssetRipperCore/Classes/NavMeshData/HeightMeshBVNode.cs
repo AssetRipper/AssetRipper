@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
-	public struct HeightMeshBVNode : IAssetReadable, IYAMLExportable
+	public sealed class HeightMeshBVNode : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -33,7 +33,7 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		public const string IName = "i";
 		public const string NName = "n";
 
-		public Vector3f Min;
-		public Vector3f Max;
+		public Vector3f Min = new();
+		public Vector3f Max = new();
 	}
 }

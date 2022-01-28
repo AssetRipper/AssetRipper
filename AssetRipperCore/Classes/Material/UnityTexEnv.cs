@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Material
 {
-	public struct UnityTexEnv : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class UnityTexEnv : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// Less than 2.1.0
@@ -62,8 +62,8 @@ namespace AssetRipper.Core.Classes.Material
 		public const string ScaleName = "m_Scale";
 		public const string OffsetName = "m_Offset";
 
-		public PPtr<Texture> Texture;
-		public Vector3f Scale3;
-		public Vector3f Offset3;
+		public PPtr<Texture> Texture = new();
+		public Vector3f Scale3 = new();
+		public Vector3f Offset3 = new();
 	}
 }

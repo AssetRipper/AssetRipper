@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.OcclusionCullingData
 {
-	public class SceneObjectIdentifier : UnityAssetBase, ISceneObjectIdentifier
+	public sealed class SceneObjectIdentifier : UnityAssetBase, ISceneObjectIdentifier
 	{
 		public override void Read(AssetReader reader)
 		{

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LODGroup
 {
-	public struct LOD : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class LOD : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 5.0.0 to 5.1.0 exclusive

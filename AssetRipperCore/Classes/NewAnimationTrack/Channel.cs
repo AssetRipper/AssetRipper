@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.NewAnimationTrack
 {
-	public struct Channel : IAssetReadable, IYAMLExportable
+	public sealed class Channel : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -31,6 +31,6 @@ namespace AssetRipper.Core.Classes.NewAnimationTrack
 		public const string CurveName = "curve";
 		public const string AttributeNameName = "attributeName";
 
-		public AnimationCurveTpl<Float> Curve;
+		public AnimationCurveTpl<Float> Curve = new();
 	}
 }

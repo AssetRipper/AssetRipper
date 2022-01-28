@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Material
 {
-	public struct FastPropertyName : IAssetReadable, IYAMLExportable
+	public sealed class FastPropertyName : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 2017.3 and greater

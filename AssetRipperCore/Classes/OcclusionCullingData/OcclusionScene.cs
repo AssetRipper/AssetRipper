@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.OcclusionCullingData
 {
-	public class OcclusionScene : UnityAssetBase, IOcclusionScene
+	public sealed class OcclusionScene : UnityAssetBase, IOcclusionScene
 	{
 		public override void Read(AssetReader reader)
 		{
@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 		public const string SizePortalsName = "sizePortals";
 		public const string SceneName = "scene";
 
-		public UnityGUID scene;
+		public UnityGUID scene = new();
 
 		public UnityGUID Scene
 		{

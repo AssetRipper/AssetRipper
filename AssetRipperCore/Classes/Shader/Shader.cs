@@ -234,8 +234,8 @@ namespace AssetRipper.Core.Classes.Shader
 
 		public SerializedShader.ISerializedShader ParsedForm => m_ParsedForm;
 		private SerializedShader.SerializedShader m_ParsedForm = new();
-		public PPtr<Shader> Fallback;
-		public UnityPropertySheet DefaultProperties;
-		public UnityPropertySheet StaticProperties;
+		public PPtr<Shader> Fallback = new();
+		public UnityPropertySheet DefaultProperties = new();
+		public UnityPropertySheet StaticProperties = new();
 	}
 }

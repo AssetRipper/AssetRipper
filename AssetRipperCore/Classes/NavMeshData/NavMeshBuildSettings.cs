@@ -9,8 +9,9 @@ namespace AssetRipper.Core.Classes.NavMeshData
 	/// <summary>
 	/// Introduced in 5.6.0
 	/// </summary>
-	public struct NavMeshBuildSettings : IAssetReadable, IYAMLExportable
+	public sealed class NavMeshBuildSettings : IAssetReadable, IYAMLExportable
 	{
+		public NavMeshBuildSettings() { }
 		public NavMeshBuildSettings(bool _)
 		{
 			AgentTypeID = 0;
@@ -28,7 +29,7 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			AccuratePlacement = 0;
 			MaxJobWorkers = 0;
 			PreserveTilesOutsideBounds = 0;
-			Debug = default;
+			Debug = new();
 		}
 
 		public NavMeshBuildSettings(float agentClimb, float cellSize) : this(true)
@@ -186,6 +187,6 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		public const string AccuratePlacementName = "accuratePlacement";
 		public const string DebugName = "debug";
 
-		public NavMeshBuildDebugSettings Debug;
+		public NavMeshBuildDebugSettings Debug = new();
 	}
 }

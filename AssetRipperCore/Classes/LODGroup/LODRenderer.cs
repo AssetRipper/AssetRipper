@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LODGroup
 {
-	public struct LODRenderer : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class LODRenderer : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -29,6 +29,6 @@ namespace AssetRipper.Core.Classes.LODGroup
 
 		public const string RendererName = "renderer";
 
-		public PPtr<Renderer.Renderer> Renderer;
+		public PPtr<Renderer.Renderer> Renderer = new();
 	}
 }

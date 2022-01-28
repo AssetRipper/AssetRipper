@@ -8,8 +8,9 @@ namespace AssetRipper.Core.Classes.NavMeshProjectSettings
 	/// <summary>
 	/// NavMeshLayerData previously
 	/// </summary>
-	public struct NavMeshAreaData : IAssetReadable, IYAMLExportable
+	public sealed class NavMeshAreaData : IAssetReadable, IYAMLExportable
 	{
+		public NavMeshAreaData() { }
 		public NavMeshAreaData(string name, float cost, int editType)
 		{
 			Name = name;

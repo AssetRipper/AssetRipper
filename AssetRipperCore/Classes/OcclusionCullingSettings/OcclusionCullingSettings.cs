@@ -229,9 +229,9 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 		/// </summary>
 		public PPtr<IOcclusionPortal>[] Portals { get; set; }
 
-		public OcclusionBakeSettings OcclusionBakeSettings;
-		public UnityGUID m_SceneGUID;
-		public PPtr<OcclusionCullingData.IOcclusionCullingData> m_OcclusionCullingData;
+		public OcclusionBakeSettings OcclusionBakeSettings = new();
+		public UnityGUID m_SceneGUID = new();
+		public PPtr<OcclusionCullingData.IOcclusionCullingData> m_OcclusionCullingData = new();
 
 		public PPtr<OcclusionCullingData.IOcclusionCullingData> OcclusionCullingData => m_OcclusionCullingData;
 

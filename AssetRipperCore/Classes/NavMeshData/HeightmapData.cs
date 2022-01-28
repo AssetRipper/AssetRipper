@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
-	public struct HeightmapData : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class HeightmapData : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -33,7 +33,7 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		public const string PositionName = "position";
 		public const string TerrainDataName = "terrainData";
 
-		public Vector3f Position;
-		public PPtr<Object.Object> TerrainData;
+		public Vector3f Position = new();
+		public PPtr<Object.Object> TerrainData = new();
 	}
 }

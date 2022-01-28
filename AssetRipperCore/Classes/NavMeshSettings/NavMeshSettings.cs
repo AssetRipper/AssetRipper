@@ -89,8 +89,8 @@ namespace AssetRipper.Core.Classes.NavMeshSettings
 		public PPtr<NavMeshObsolete> NavMesh => m_navMeshData.CastTo<NavMeshObsolete>();
 		public PPtr<NavMeshData.NavMeshData> NavMeshData => m_navMeshData.CastTo<NavMeshData.NavMeshData>();
 
-		public NavMeshBuildSettings BuildSettings;
+		public NavMeshBuildSettings BuildSettings = new();
 
-		private PPtr<NamedObject> m_navMeshData;
+		private PPtr<NamedObject> m_navMeshData = new();
 	}
 }

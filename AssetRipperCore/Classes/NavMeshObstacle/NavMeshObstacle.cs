@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Classes.NavMeshObstacle
 		public const string CenterName = "m_Center";
 		public const string TimeToStationaryName = "m_TimeToStationary";
 
-		public Vector3f Extents;
-		public Vector3f Center;
+		public Vector3f Extents = new();
+		public Vector3f Center = new();
 	}
 }

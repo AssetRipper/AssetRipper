@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 {
-	public struct OcclusionBakeSettings : IAsset
+	public sealed class OcclusionBakeSettings : IAsset
 	{
 		/// <summary>
 		/// Less than 4.3.0

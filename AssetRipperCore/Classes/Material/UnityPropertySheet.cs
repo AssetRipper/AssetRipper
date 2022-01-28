@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Material
 {
-	public struct UnityPropertySheet : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class UnityPropertySheet : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{

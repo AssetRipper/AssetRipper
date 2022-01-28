@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
-	public struct AutoOffMeshLinkData : IAssetReadable, IYAMLExportable
+	public sealed class AutoOffMeshLinkData : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -41,7 +41,7 @@ namespace AssetRipper.Core.Classes.NavMeshData
 		public const string AreaName = "m_Area";
 		public const string LinkDirectionName = "m_LinkDirection";
 
-		public Vector3f Start;
-		public Vector3f End;
+		public Vector3f Start = new();
+		public Vector3f End = new();
 	}
 }

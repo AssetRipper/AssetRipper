@@ -157,7 +157,7 @@ namespace AssetRipper.Core.Classes.MeshCollider
 		public const string SkinWidthName = "m_SkinWidth";
 		public const string MeshName = "m_Mesh";
 
-		public PPtr<Mesh.Mesh> Mesh;
+		public PPtr<Mesh.Mesh> Mesh = new();
 
 		protected override bool IncludesIsTrigger => true;
 		protected override bool IncludesMaterial => true;
