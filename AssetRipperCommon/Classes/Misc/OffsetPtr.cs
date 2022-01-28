@@ -4,8 +4,10 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct OffsetPtr<T> : IAsset where T : IAssetReadable, IYAMLExportable, new()
+	public sealed class OffsetPtr<T> : IAsset where T : IAssetReadable, IYAMLExportable, new()
 	{
+		public OffsetPtr() : this(new()) { }
+
 		public OffsetPtr(T instance)
 		{
 			Instance = instance;
@@ -32,12 +34,12 @@ namespace AssetRipper.Core.Classes.Misc
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(DataName, (Instance ?? new()).ExportYAML(container));
+			node.Add(DataName, (Instance).ExportYAML(container));
 			return node;
 		}
 
 		public const string DataName = "data";
 
-		public T Instance = new();
+		public T Instance;
 	}
 }

@@ -9,7 +9,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public struct StateMachineConstant : IAssetReadable, IYAMLExportable
+	public sealed class StateMachineConstant : IAssetReadable, IYAMLExportable
 	{
 		public struct Parameters
 		{

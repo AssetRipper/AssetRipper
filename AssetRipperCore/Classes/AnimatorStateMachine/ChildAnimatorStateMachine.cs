@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 		public const string StateMachineName = "m_StateMachine";
 		public const string PositionName = "m_Position";
 
-		public PPtr<AnimatorStateMachine> StateMachine;
-		public Vector3f Position;
+		public PPtr<AnimatorStateMachine> StateMachine = new();
+		public Vector3f Position = new();
 	}
 }

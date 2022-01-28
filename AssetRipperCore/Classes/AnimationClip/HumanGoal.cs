@@ -5,7 +5,7 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public struct HumanGoal : IAssetReadable
+	public sealed class HumanGoal : IAssetReadable
 	{
 		/// <summary>
 		/// 5.0.0 and greater
@@ -40,7 +40,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public float WeightR { get; set; }
 		public float HintWeightT { get; set; }
 
-		public XForm X;
-		public Vector4f HintT;
+		public XForm X = new();
+		public Vector4f HintT = new();
 	}
 }

@@ -2,8 +2,9 @@
 
 namespace AssetRipper.Core.Classes.AnimatorController.State
 {
-	public struct StateKey : IAssetReadable
+	public sealed class StateKey : IAssetReadable
 	{
+		public StateKey() { }
 		public StateKey(int layerIndex, uint stateID)
 		{
 			StateID = stateID;

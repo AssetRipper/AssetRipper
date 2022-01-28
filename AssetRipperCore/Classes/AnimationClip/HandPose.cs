@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public struct HandPose : IAssetReadable
+	public sealed class HandPose : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -22,6 +22,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public float InOut { get; set; }
 		public float Grab { get; set; }
 
-		public XForm GrabX;
+		public XForm GrabX = new();
 	}
 }

@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 	/// <summary>
 	/// MuscleClipInfo previously
 	/// </summary>
-	public class AnimationClipSettings : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class AnimationClipSettings : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public AnimationClipSettings() { }
 

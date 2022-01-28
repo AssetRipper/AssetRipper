@@ -8,8 +8,10 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
-	public struct Vector3Curve : IAsset, IYAMLExportable
+	public sealed class Vector3Curve : IAsset, IYAMLExportable
 	{
+		public Vector3Curve() { }
+
 		public Vector3Curve(Vector3Curve copy, IReadOnlyList<KeyframeTpl<Vector3f>> keyframes) : this(copy.Path, keyframes) { }
 
 		public Vector3Curve(string path)
@@ -56,7 +58,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 
 		public string Path { get; set; }
 
-		public AnimationCurveTpl<Vector3f> Curve;
+		public AnimationCurveTpl<Vector3f> Curve = new();
 		public const string CurveName = "curve";
 		public const string PathName = "path";
 	}

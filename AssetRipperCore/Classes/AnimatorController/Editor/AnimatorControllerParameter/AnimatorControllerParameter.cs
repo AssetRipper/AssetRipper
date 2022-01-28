@@ -63,6 +63,6 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerP
 		public const string DefaultBoolName = "m_DefaultBool";
 		public const string DefaultControllerName = "m_DefaultController";
 
-		public PPtr<AnimatorController> DefaultController;
+		public PPtr<AnimatorController> DefaultController = new();
 	}
 }

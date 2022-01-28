@@ -8,7 +8,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Clip
 {
-	public struct StreamedClip : IAssetReadable
+	public sealed class StreamedClip : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{

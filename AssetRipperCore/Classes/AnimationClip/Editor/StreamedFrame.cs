@@ -2,7 +2,7 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Editor
 {
-	public struct StreamedFrame : IAssetReadable
+	public sealed class StreamedFrame : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{

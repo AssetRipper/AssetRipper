@@ -8,8 +8,10 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
-	public struct QuaternionCurve : IAsset, IYAMLExportable
+	public sealed class QuaternionCurve : IAsset, IYAMLExportable
 	{
+		public QuaternionCurve() { }
+
 		public QuaternionCurve(QuaternionCurve copy, IReadOnlyList<KeyframeTpl<Quaternionf>> keyframes) : this(copy.Path, keyframes) { }
 
 		public QuaternionCurve(string path)
@@ -62,7 +64,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 
 		public string Path { get; set; }
 
-		public AnimationCurveTpl<Quaternionf> Curve;
+		public AnimationCurveTpl<Quaternionf> Curve = new();
 		public const string CurveName = "curve";
 		public const string PathName = "path";
 	}

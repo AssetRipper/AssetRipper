@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimatorController.State
 {
-	public struct StateMachineBehaviourVectorDescription : IAssetReadable
+	public sealed class StateMachineBehaviourVectorDescription : IAssetReadable
 	{
 		/// <summary>
 		/// 5.0.0f1 and greater

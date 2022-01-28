@@ -5,7 +5,7 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public struct HumanPose : IAssetReadable
+	public sealed class HumanPose : IAssetReadable
 	{
 		/// <summary>
 		/// 5.4.0 and greater
@@ -61,10 +61,10 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public float[] DoFArray { get; set; }
 		public Vector4f[] TDoFArray { get; set; }
 
-		public XForm RootX;
-		public Vector4f LookAtPosition;
-		public Vector4f LookAtWeight;
-		public HandPose LeftHandPose;
-		public HandPose RightHandPose;
+		public XForm RootX = new();
+		public Vector4f LookAtPosition = new();
+		public Vector4f LookAtWeight = new();
+		public HandPose LeftHandPose = new();
+		public HandPose RightHandPose = new();
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public struct LeafInfoConstant : IAssetReadable
+	public sealed class LeafInfoConstant : IAssetReadable
 	{
 		public uint[] m_IDArray;
 		public uint m_IndexOffset;

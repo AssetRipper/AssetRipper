@@ -71,6 +71,6 @@ namespace AssetRipper.Core.Classes.AnimatorOverrideController
 		public const string ControllerName = "m_Controller";
 		public const string ClipsName = "m_Clips";
 
-		public PPtr<RuntimeAnimatorController> Controller;
+		public PPtr<RuntimeAnimatorController> Controller = new();
 	}
 }

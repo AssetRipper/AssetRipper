@@ -12,8 +12,9 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public struct AnimationClipBindingConstant : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class AnimationClipBindingConstant : IAssetReadable, IYAMLExportable, IDependent
 	{
+		public AnimationClipBindingConstant() { }
 		public AnimationClipBindingConstant(bool _)
 		{
 			GenericBindings = Array.Empty<GenericBinding.GenericBinding>();

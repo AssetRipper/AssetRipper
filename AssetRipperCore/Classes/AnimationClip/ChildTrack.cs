@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public struct ChildTrack : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class ChildTrack : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -38,6 +38,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public const string ClassIDName = "classID";
 		public const string TrackName = "track";
 
-		public PPtr<BaseAnimationTrack> Track;
+		public PPtr<BaseAnimationTrack> Track = new();
 	}
 }

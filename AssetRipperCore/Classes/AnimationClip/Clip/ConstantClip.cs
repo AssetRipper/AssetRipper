@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.AnimationClip.Clip
 {
-	public struct ConstantClip : IAssetReadable
+	public sealed class ConstantClip : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{

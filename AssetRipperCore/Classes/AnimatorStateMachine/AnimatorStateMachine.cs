@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 
 			int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-			ref LayerConstant layer = ref controller.Controller.LayerArray[layerIndex].Instance;
+			LayerConstant layer = controller.Controller.LayerArray[layerIndex].Instance;
 			Name = controller.TOS[layer.Binding];
 
 			StateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Instance;
@@ -151,11 +151,11 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 		public Dictionary<PPtr<AnimatorStateMachine>, PPtr<AnimatorTransition.AnimatorTransition>[]> StateMachineTransitions { get; set; } = new Dictionary<PPtr<AnimatorStateMachine>, PPtr<AnimatorTransition.AnimatorTransition>[]>();
 		public PPtr<MonoBehaviour>[] StateMachineBehaviours { get; set; }
 
-		public Vector3f AnyStatePosition;
-		public Vector3f EntryPosition;
-		public Vector3f ExitPosition;
-		public Vector3f ParentStateMachinePosition;
-		public PPtr<AnimatorState> DefaultState;
+		public Vector3f AnyStatePosition = new();
+		public Vector3f EntryPosition = new();
+		public Vector3f ExitPosition = new();
+		public Vector3f ParentStateMachinePosition = new();
+		public PPtr<AnimatorState> DefaultState = new();
 
 		public const string ChildStatesName = "m_ChildStates";
 		public const string ChildStateMachinesName = "m_ChildStateMachines";

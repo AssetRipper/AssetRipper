@@ -505,7 +505,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			int tosCount = ClipBindingConstant.GenericBindings.Length;
 			for (int i = 0; i < tosCount; i++)
 			{
-				ref GenericBinding.GenericBinding binding = ref ClipBindingConstant.GenericBindings[i];
+				GenericBinding.GenericBinding binding = ClipBindingConstant.GenericBindings[i];
 				if (src.TryGetValue(binding.Path, out string path))
 				{
 					dest[binding.Path] = path;
@@ -678,6 +678,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public const string EventsName = "m_Events";
 
 		public AABB Bounds = new AABB();
-		public AnimationClipBindingConstant ClipBindingConstant;
+		public AnimationClipBindingConstant ClipBindingConstant = new();
 	}
 }

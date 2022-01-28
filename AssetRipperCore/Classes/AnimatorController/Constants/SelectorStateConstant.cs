@@ -6,7 +6,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public struct SelectorStateConstant : IAssetReadable, IYAMLExportable
+	public sealed class SelectorStateConstant : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

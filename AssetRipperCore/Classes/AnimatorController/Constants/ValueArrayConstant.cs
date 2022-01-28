@@ -5,7 +5,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public struct ValueArrayConstant : IAssetReadable, IYAMLExportable
+	public sealed class ValueArrayConstant : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.AnimatorController.State
 {
-	public struct StateRange : IAssetReadable
+	public sealed class StateRange : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{

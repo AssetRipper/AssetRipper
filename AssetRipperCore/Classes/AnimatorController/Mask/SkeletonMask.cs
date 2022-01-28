@@ -5,7 +5,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Mask
 {
-	public struct SkeletonMask : IAssetReadable, IYAMLExportable
+	public sealed class SkeletonMask : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

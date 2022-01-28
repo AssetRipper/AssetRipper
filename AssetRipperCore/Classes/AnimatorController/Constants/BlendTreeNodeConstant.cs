@@ -11,7 +11,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public struct BlendTreeNodeConstant : IAssetReadable, IYAMLExportable
+	public sealed class BlendTreeNodeConstant : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 4.1.0 and greater
@@ -174,8 +174,8 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		public float CycleOffset { get; set; }
 		public bool Mirror { get; set; }
 
-		public OffsetPtr<Blend1dDataConstant> Blend1dData;
-		public OffsetPtr<Blend2dDataConstant> Blend2dData;
-		public OffsetPtr<BlendDirectDataConstant> BlendDirectData;
+		public OffsetPtr<Blend1dDataConstant> Blend1dData = new();
+		public OffsetPtr<Blend2dDataConstant> Blend2dData = new();
+		public OffsetPtr<BlendDirectDataConstant> BlendDirectData = new();
 	}
 }

@@ -3,7 +3,7 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Mask
 {
-	public struct SkeletonMaskElement : IAssetReadable
+	public sealed class SkeletonMaskElement : IAssetReadable
 	{
 		/// <summary>
 		/// 4.3.0 and greater

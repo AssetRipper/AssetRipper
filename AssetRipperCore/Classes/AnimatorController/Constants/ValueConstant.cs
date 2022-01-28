@@ -4,7 +4,7 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public struct ValueConstant : IAssetReadable
+	public sealed class ValueConstant : IAssetReadable
 	{
 		/// <summary>
 		/// Less than 5.5.0

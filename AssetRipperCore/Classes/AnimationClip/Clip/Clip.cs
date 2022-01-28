@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Clip
 {
-	public struct Clip : IAssetReadable
+	public sealed class Clip : IAssetReadable
 	{
 		/// <summary>
 		/// 4.3.0 and greater
@@ -94,9 +94,9 @@ namespace AssetRipper.Core.Classes.AnimationClip.Clip
 			return bindings;
 		}
 
-		public StreamedClip StreamedClip;
-		public DenseClip DenseClip;
-		public ConstantClip ConstantClip;
-		public ValueArrayConstant Binding;
+		public StreamedClip StreamedClip = new();
+		public DenseClip DenseClip = new();
+		public ConstantClip ConstantClip = new();
+		public ValueArrayConstant Binding = new();
 	}
 }

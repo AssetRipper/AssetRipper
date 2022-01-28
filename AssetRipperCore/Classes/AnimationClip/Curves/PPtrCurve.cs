@@ -10,8 +10,10 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
-	public struct PPtrCurve : IAsset, IDependent
+	public sealed class PPtrCurve : IAsset, IDependent
 	{
+		public PPtrCurve() { }
+
 		public PPtrCurve(PPtrCurve copy, IReadOnlyList<PPtrKeyframe> keyframes) : this(copy.Path, copy.Attribute, copy.ClassID, copy.Script, keyframes) { }
 
 		public PPtrCurve(string path, string attribute, ClassIDType classID, PPtr<IMonoScript> script)
@@ -154,7 +156,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 		public string Path { get; set; }
 		public ClassIDType ClassID { get; set; }
 
-		public PPtr<IMonoScript> Script;
+		public PPtr<IMonoScript> Script = new();
 
 		public const string CurveName = "curve";
 		public const string AttributeName = "attribute";

@@ -8,7 +8,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public struct TransitionConstant : IAssetReadable, IYAMLExportable
+	public sealed class TransitionConstant : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 5.0.0 and greater

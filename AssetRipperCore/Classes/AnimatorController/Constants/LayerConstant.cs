@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 	/// <summary>
 	/// HumanLayerConstant in previous versions
 	/// </summary>
-	public struct LayerConstant : IAssetReadable, IYAMLExportable
+	public sealed class LayerConstant : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 4.2.0 and greater
@@ -57,7 +57,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		public bool IKPass { get; set; }
 		public bool SyncedLayerAffectsTiming { get; set; }
 
-		public HumanPoseMask BodyMask;
-		public OffsetPtr<SkeletonMask> SkeletonMask;
+		public HumanPoseMask BodyMask = new();
+		public OffsetPtr<SkeletonMask> SkeletonMask = new();
 	}
 }

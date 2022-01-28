@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public struct ValueDelta : IAssetReadable
+	public sealed class ValueDelta : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{

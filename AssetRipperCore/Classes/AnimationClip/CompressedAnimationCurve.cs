@@ -9,7 +9,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public class CompressedAnimationCurve : IAssetReadable, IYAMLExportable
+	public sealed class CompressedAnimationCurve : IAssetReadable, IYAMLExportable
 	{
 		public QuaternionCurve Unpack()
 		{

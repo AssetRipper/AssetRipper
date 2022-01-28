@@ -5,7 +5,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public struct BlendDirectDataConstant : IAssetReadable, IYAMLExportable
+	public sealed class BlendDirectDataConstant : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
