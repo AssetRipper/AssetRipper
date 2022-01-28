@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.AudioClip
 {
-	public struct StreamedResource : IStreamedResource
+	public sealed class StreamedResource : IStreamedResource
 	{
 		public void Read(AssetReader reader)
 		{

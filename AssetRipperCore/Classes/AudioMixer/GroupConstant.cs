@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 namespace AssetRipper.Core.Classes.AudioMixer
 {
 #warning TODO: not implemented
-	public struct GroupConstant : IAssetReadable, IYAMLExportable
+	public sealed class GroupConstant : IAssetReadable, IYAMLExportable
 	{
 		/*public static int ToSerializedVersion(Version version)
 		{

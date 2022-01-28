@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.AudioMixer
 {
-	public class GroupConnection : IAssetReadable
+	public sealed class GroupConnection : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{
