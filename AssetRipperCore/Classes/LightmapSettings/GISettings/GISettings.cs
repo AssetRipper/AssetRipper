@@ -15,8 +15,8 @@ namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 		public GISettings(bool _)
 		{
 #warning TODO:
-			SkyLightColor = default;
-			SkyLightIntensity = default;
+			SkyLightColor = new();
+			SkyLightIntensity = new();
 			BounceScale = 1.0f;
 			IndirectOutputScale = 1.0f;
 			AlbedoBoost = 1.0f;

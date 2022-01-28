@@ -369,7 +369,7 @@ namespace AssetRipper.Core.Classes.Terrain
 		}
 		private PPtr<LightmapParameters> GetLightmapParameters(TransferInstructionFlags flags)
 		{
-			return default;
+			return new();
 		}
 		private uint GetRenderingLayerMask(UnityVersion version)
 		{

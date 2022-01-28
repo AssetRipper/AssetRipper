@@ -175,7 +175,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 			if (submesh.VertexCount == 0)
 			{
-				submesh.LocalAABB = default;
+				submesh.LocalAABB = new();
 				return;
 			}
 

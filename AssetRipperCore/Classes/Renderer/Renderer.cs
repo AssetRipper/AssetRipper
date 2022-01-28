@@ -570,7 +570,7 @@ namespace AssetRipper.Core.Classes.Renderer
 			{
 				return new StaticBatchInfo(SubsetIndices);
 			}
-			return default;
+			return new();
 		}
 		private float GetScaleInLightmap(UnityVersion version, TransferInstructionFlags flags)
 		{
@@ -614,7 +614,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		}
 		private PPtr<LightmapParameters> GetLightmapParameters()
 		{
-			return default;
+			return new();
 		}
 
 		public bool Enabled { get; set; }

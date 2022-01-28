@@ -371,14 +371,14 @@ namespace AssetRipper.Core.Converters.AnimationClip
 		{
 			if (binding.Attribute == CrcUtils.CalculateDigestAscii(Classes.GameObject.GameObject.IsActiveName))
 			{
-				FloatCurve curve = new FloatCurve(path, Classes.GameObject.GameObject.IsActiveName, ClassIDType.GameObject, default);
+				FloatCurve curve = new FloatCurve(path, Classes.GameObject.GameObject.IsActiveName, ClassIDType.GameObject, new());
 				AddFloatKeyframe(curve, time, value);
 				return;
 			}
 			else
 			{
 				// that means that dev exported animation clip with missing component
-				FloatCurve curve = new FloatCurve(path, MissedPropertyPrefix + binding.Attribute, ClassIDType.GameObject, default);
+				FloatCurve curve = new FloatCurve(path, MissedPropertyPrefix + binding.Attribute, ClassIDType.GameObject, new());
 				AddFloatKeyframe(curve, time, value);
 			}
 		}
@@ -393,13 +393,13 @@ namespace AssetRipper.Core.Converters.AnimationClip
 		private void AddEngineCurve(GenericBinding binding, string path, float time, float value)
 		{
 #warning TODO:
-			FloatCurve curve = new FloatCurve(path, TypeTreePropertyPrefix + binding.Attribute, binding.ClassID, default);
+			FloatCurve curve = new FloatCurve(path, TypeTreePropertyPrefix + binding.Attribute, binding.ClassID, new());
 			AddFloatKeyframe(curve, time, value);
 		}
 
 		private void AddAnimatorMuscleCurve(GenericBinding binding, float time, float value)
 		{
-			FloatCurve curve = new FloatCurve(string.Empty, binding.GetHumanoidMuscle(Layout.Version).ToAttributeString(), ClassIDType.Animator, default);
+			FloatCurve curve = new FloatCurve(string.Empty, binding.GetHumanoidMuscle(Layout.Version).ToAttributeString(), ClassIDType.Animator, new());
 			AddFloatKeyframe(curve, time, value);
 		}
 

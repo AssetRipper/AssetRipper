@@ -16,8 +16,8 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 		{
 			PropertyPath = string.Empty;
 			Value = string.Empty;
-			Target = default;
-			ObjectReference = default;
+			Target = new();
+			ObjectReference = new();
 		}
 
 		public void Read(AssetReader reader)

@@ -93,7 +93,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		{
 			if (clipIndex == -1)
 			{
-				return default;
+				return new();
 			}
 			else
 			{
@@ -122,7 +122,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 					return Blend2dData.Instance.m_ChildPositionArray[index];
 				}
 			}
-			return default;
+			return new();
 		}
 
 		public float GetMinThreshold(UnityVersion version)

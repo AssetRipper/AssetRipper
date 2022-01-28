@@ -270,7 +270,7 @@ namespace AssetRipper.Core.Classes.GameObject
 		public bool IsActive { get; set; }
 
 		private bool IsStatic => false;
-		private PPtr<Texture2D.Texture2D> Icon => default;
+		private PPtr<Texture2D.Texture2D> Icon => new();
 
 		private object m_component;
 

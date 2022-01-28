@@ -450,7 +450,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		}
 		private PPtr<LightingDataAsset.LightingDataAsset> GetLightingDataAsset(UnityVersion version, TransferInstructionFlags flags)
 		{
-			return default;
+			return new();
 		}
 		private bool GetExportUseShadowmask(UnityVersion version)
 		{
@@ -494,9 +494,9 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		public const string ShadowMaskModeName = "m_ShadowMaskMode";
 
 #warning TODO: PPtr<LightProbesLegacy>
-		public PPtr<Object.Object> LightProbesLegacy;
-		public EnlightenSceneMapping EnlightenSceneMapping;
-		public PPtr<LightProbes.LightProbes> LightProbes;
-		public GISettings.GISettings GISettings;
+		public PPtr<Object.Object> LightProbesLegacy = new();
+		public EnlightenSceneMapping EnlightenSceneMapping = new();
+		public PPtr<LightProbes.LightProbes> LightProbes = new();
+		public GISettings.GISettings GISettings = new();
 	}
 }

@@ -81,7 +81,7 @@ namespace AssetRipper.Core.Classes
 		}
 		private PPtr<Object.Object> GetGeneratorAsset(IExportContainer container)
 		{
-			return default;
+			return new();
 		}
 		private string GetEditorClassIdentifier(IExportContainer container)
 		{

@@ -22,8 +22,8 @@ namespace AssetRipper.Core.Math.Vectors
 		}
 
 		public static implicit operator Vector3f(Vector2f v2) => new Vector3f(v2.X, v2.Y, 0f);
-		public static implicit operator Vector3f(Vector2i v2) => v2 is null ? default : new Vector3f(v2.X, v2.Y, 0f);
-		public static implicit operator Vector3f(Vector3i v3) => v3 is null ? default : new Vector3f(v3.X, v3.Y, v3.Z);
+		public static implicit operator Vector3f(Vector2i v2) => v2 is null ? new() : new Vector3f(v2.X, v2.Y, 0f);
+		public static implicit operator Vector3f(Vector3i v3) => v3 is null ? new() : new Vector3f(v3.X, v3.Y, v3.Z);
 		public static explicit operator Vector3f(Vector4f v4) => new Vector3f(v4.X, v4.Y, v4.Z);
 
 		public static implicit operator System.Numerics.Vector3(Vector3f v3) => new System.Numerics.Vector3(v3.X, v3.Y, v3.Z);

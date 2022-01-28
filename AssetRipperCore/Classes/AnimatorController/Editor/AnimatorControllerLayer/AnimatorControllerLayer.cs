@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 			StateMachine = stateMachine.SerializedFile.CreatePPtr(stateMachine);
 
 #warning TODO: animator
-			Mask = default;
+			Mask = new();
 
 			Motions = System.Array.Empty<StateMotionPair>();
 			Behaviours = System.Array.Empty<StateBehavioursPair>();

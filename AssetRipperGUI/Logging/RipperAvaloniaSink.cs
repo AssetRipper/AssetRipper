@@ -51,9 +51,9 @@ namespace AssetRipper.GUI.Logging
 			string area,
 			string template,
 			object source,
-			T0 v0 = default,
-			T1 v1 = default,
-			T2 v2 = default)
+			T0? v0 = default,
+			T1? v1 = default,
+			T2? v2 = default)
 		{
 			var result = new StringBuilder(template.Length);
 			var r = new CharacterReader(template.AsSpan());

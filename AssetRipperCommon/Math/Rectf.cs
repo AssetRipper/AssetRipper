@@ -88,7 +88,7 @@ namespace AssetRipper.Core.Math
 
 		public static Rectf operator +(Rectf left, Rectf right)
 		{
-			Rectf result = default;
+			Rectf result = new();
 			result.X = left.X + right.X;
 			result.Y = left.Y + right.Y;
 			result.Width = left.Width + right.Width;
@@ -98,7 +98,7 @@ namespace AssetRipper.Core.Math
 
 		public static Rectf operator -(Rectf left, Rectf right)
 		{
-			Rectf result = default;
+			Rectf result = new();
 			result.X = left.X - right.X;
 			result.Y = left.Y - right.Y;
 			result.Width = left.Width - right.Width;

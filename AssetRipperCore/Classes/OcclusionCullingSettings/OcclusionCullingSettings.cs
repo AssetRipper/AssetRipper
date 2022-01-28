@@ -196,7 +196,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 				SceneExportCollection scene = (SceneExportCollection)container.CurrentCollection;
 				if (scene.OcclusionCullingData == null)
 				{
-					return default;
+					return new();
 				}
 				return scene.OcclusionCullingData.SerializedFile.CreatePPtr(scene.OcclusionCullingData);
 			}
@@ -204,7 +204,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			{
 				return m_OcclusionCullingData;
 			}
-			return default;
+			return new();
 		}
 
 		public UnityGUID SceneGUID

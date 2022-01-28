@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 	{
 		public GUIStyleState()
 		{
-			Background = default;
+			Background = new();
 			ScaledBackgrounds = Array.Empty<PPtr<Texture2D.ITexture2D>>();
 			TextColor = ColorRGBAf.Black;
 		}

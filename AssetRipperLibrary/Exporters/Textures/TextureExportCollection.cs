@@ -112,7 +112,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				importer.SpriteMeshType = SpriteMeshType.Tight;
 				importer.Alignment = SpriteAlignment.Center;
 				importer.SpritePivot = new Vector2f(0.5f, 0.5f);
-				importer.SpriteBorder = default;
+				importer.SpriteBorder = new();
 				importer.SpritePixelsToUnits = 100.0f;
 			}
 			else if (m_sprites.Count == 1)
@@ -147,7 +147,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				importer.SpriteMeshType = sprite.RD.MeshType;
 				importer.Alignment = SpriteAlignment.Center;
 				importer.SpritePivot = new Vector2f(0.5f, 0.5f);
-				importer.SpriteBorder = default;
+				importer.SpriteBorder = new();
 				importer.SpritePixelsToUnits = sprite.PixelsToUnits;
 				importer.TextureType = TextureImporterType.Sprite;
 				AddSpriteSheet(container, importer);

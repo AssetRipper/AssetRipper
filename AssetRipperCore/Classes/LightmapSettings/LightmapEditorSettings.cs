@@ -30,7 +30,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			CompAOExponentDirect = 0.0f;
 			ExtractAmbientOcclusion = false;
 			Padding = 2;
-			LightmapParameters = default;
+			LightmapParameters = new();
 			LightmapsBakeMode = LightmapsMode.CombinedDirectional;
 			TextureCompression = true;
 			FinalGather = false;

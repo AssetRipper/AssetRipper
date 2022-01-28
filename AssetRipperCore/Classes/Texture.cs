@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Classes
 
 		private Hash128 GetImageContentsHash(UnityVersion version, TransferInstructionFlags flags)
 		{
-			return default;
+			return new();
 		}
 
 		public int ForcedFallbackFormat { get; set; }

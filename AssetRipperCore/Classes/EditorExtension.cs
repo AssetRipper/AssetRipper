@@ -109,9 +109,9 @@ namespace AssetRipper.Core.Classes
 			return HasPrefabInstance(version, flags) ? PrefabInstanceName : PrefabInternalName;
 		}
 
-		private PPtr<Object.Object> ExtensionPtr => default;
-		private PPtr<EditorExtension> CorrespondingSourceObject => default;
-		private PPtr<Prefab> PrefabAsset => default;
+		private PPtr<Object.Object> ExtensionPtr => new();
+		private PPtr<EditorExtension> CorrespondingSourceObject => new();
+		private PPtr<Prefab> PrefabAsset => new();
 		private PPtr<IPrefabInstance> m_PrefabInstance = new();
 
 		public PPtr<IPrefabInstance> PrefabInstance

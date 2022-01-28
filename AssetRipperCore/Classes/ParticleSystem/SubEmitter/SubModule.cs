@@ -85,7 +85,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 
 				if (subEmitters.Count == 0)
 				{
-					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Birth, default));
+					subEmitters.Add(new SubEmitterData(ParticleSystemSubEmitterType.Birth, new()));
 				}
 				SubEmitters = subEmitters.ToArray();
 			}

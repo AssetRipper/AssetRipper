@@ -141,7 +141,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 		{
 			if (BlendTreeConstantArray.Length == 0)
 			{
-				return default;
+				return new();
 			}
 			else
 			{

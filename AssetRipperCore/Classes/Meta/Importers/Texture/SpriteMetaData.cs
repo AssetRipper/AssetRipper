@@ -17,13 +17,13 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		public SpriteMetaData(UnityVersion version)
 		{
 			Name = "sprite_0";
-			Rect = default;
+			Rect = new();
 			Alignment = SpriteAlignment.Center;
-			Pivot = default;
-			Border = default;
+			Pivot = new();
+			Border = new();
 			Outline = Array.Empty<Vector2f[]>();
 			PhysicsShape = Array.Empty<Vector2f[]>();
-			TessellationDetail = default;
+			TessellationDetail = new();
 			Bones = Array.Empty<SpriteBone>();
 			SpriteID = string.Empty;
 			InternalID = 0;

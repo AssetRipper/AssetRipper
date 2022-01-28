@@ -78,8 +78,8 @@ namespace AssetRipper.Core.Classes
 			Conditions = conditionList.ToArray();
 
 			AnimatorState state = parameters.GetDestinationState();
-			DstStateMachine = default;
-			DstState = state == null ? default : state.SerializedFile.CreatePPtr(state);
+			DstStateMachine = new();
+			DstState = state == null ? new() : state.SerializedFile.CreatePPtr(state);
 
 			Name = parameters.Name;
 			Solo = false;

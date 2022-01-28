@@ -168,7 +168,7 @@ namespace AssetRipper.Core.Classes
 
 		private PPtr<Object.Object> GetIcon(UnityVersion version, TransferInstructionFlags flags)
 		{
-			return default;
+			return new();
 		}
 
 		private string GetNamespace(UnityVersion version)

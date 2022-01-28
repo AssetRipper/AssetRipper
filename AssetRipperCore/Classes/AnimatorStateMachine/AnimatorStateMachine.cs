@@ -107,7 +107,7 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 			ExitPosition = new Vector3f(2.0f * StateOffset, -StateOffset, 0.0f);
 			ParentStateMachinePosition = new Vector3f(0.0f, -2.0f * StateOffset, 0.0f);
 
-			DefaultState = ChildStates.Length > 0 ? ChildStates[stateMachine.DefaultState].State : default;
+			DefaultState = ChildStates.Length > 0 ? ChildStates[stateMachine.DefaultState].State : new();
 		}
 
 		public static AnimatorStateMachine CreateVirtualInstance(VirtualSerializedFile virtualFile, AnimatorController.AnimatorController controller, int stateMachineIndex)

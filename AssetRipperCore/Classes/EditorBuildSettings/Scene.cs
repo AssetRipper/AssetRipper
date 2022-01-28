@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 
 			Enabled = enabled;
 			Path = path;
-			m_GUID = default;
+			m_GUID = new();
 		}
 
 		public Scene(string path, UnityGUID guid)

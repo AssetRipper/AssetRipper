@@ -469,7 +469,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				StreamInfo info = new StreamInfo(instance.CurrentChannels, 0, stride);
 				if (VertexData.IsStreamStatic(container.ExportVersion))
 				{
-					instance.Streams = new StreamInfo[] { info, default, default, default, };
+					instance.Streams = new StreamInfo[] { info, new(), new(), new(), };
 				}
 				else
 				{

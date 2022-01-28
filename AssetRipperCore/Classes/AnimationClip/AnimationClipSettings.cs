@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		public AnimationClipSettings(ClipMuscleConstant muscleConst)
 		{
-			AdditiveReferencePoseClip = default;
+			AdditiveReferencePoseClip = new();
 			AdditiveReferencePoseTime = 0.0f;
 			StartTime = muscleConst.StartTime;
 			StopTime = muscleConst.StopTime;

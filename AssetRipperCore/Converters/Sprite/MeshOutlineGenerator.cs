@@ -197,7 +197,7 @@ namespace AssetRipper.Core.Converters.Sprite
 				bool xy = true;
 				bool yz = true;
 				bool zx = true;
-				outsider = default;
+				outsider = new();
 				foreach (int checkIndex in m_indexes)
 				{
 					if (checkIndex == index)
