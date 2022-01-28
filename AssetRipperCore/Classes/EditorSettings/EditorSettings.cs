@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			ProjectGenerationIncludedExtensions = DefaultExtensions;
 			ProjectGenerationRootNamespace = string.Empty;
 			UserGeneratedProjectSuffix = string.Empty;
-			CollabEditorSettings = new CollabEditorSettings(true);
+			CollabEditorSettings = new CollabEditorSettings();
 			EnableTextureStreamingInEditMode = true;
 			EnableTextureStreamingInPlayMode = true;
 			AsyncShaderCompilation = true;
@@ -509,7 +509,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		}
 		private CollabEditorSettings GetCollabEditorSettings(UnityVersion version)
 		{
-			return HasCollabEditorSettings(version) ? CollabEditorSettings : new CollabEditorSettings(true);
+			return HasCollabEditorSettings(version) ? CollabEditorSettings : new CollabEditorSettings();
 		}
 		private bool GetEnableTextureStreamingInEditMode(UnityVersion version)
 		{
@@ -625,9 +625,9 @@ namespace AssetRipper.Core.Classes.EditorSettings
 		public const string CacheServerEnableAuthName = "m_CacheServerEnableAuth";
 		public const string CacheServerEnableTlsName = "m_CacheServerEnableTls";
 
-		public PPtr<SceneAsset> PrefabRegularEnvironment;
-		public PPtr<SceneAsset> PrefabUIEnvironment;
-		public CollabEditorSettings CollabEditorSettings;
+		public PPtr<SceneAsset> PrefabRegularEnvironment = new();
+		public PPtr<SceneAsset> PrefabUIEnvironment = new();
+		public CollabEditorSettings CollabEditorSettings = new();
 		private int m_EtcTextureCompressorBehavior;
 		private int m_EtcTextureFastCompressor;
 		private int m_EtcTextureNormalCompressor;

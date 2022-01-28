@@ -8,7 +8,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
-	public class Scene : UnityAssetBase, IEditorScene
+	public sealed class Scene : UnityAssetBase, IEditorScene
 	{
 		public Scene() { }
 
@@ -69,7 +69,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 		public const string PathName = "path";
 		public const string GuidName = "guid";
 
-		public UnityGUID m_GUID;
+		public UnityGUID m_GUID = new();
 
 		public UnityGUID GUID
 		{

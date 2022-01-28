@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Flare
 {
-	public struct FlareElement : IAssetReadable, IYAMLExportable
+	public sealed class FlareElement : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Classes.Flare
 		public int ImageIndex { get; set; }
 		public float Position { get; set; }
 		public float Size { get; set; }
-		public ColorRGBAf Color;
+		public ColorRGBAf Color = new();
 		public bool UseLightColor { get; set; }
 		public bool Rotate { get; set; }
 		public bool Zoom { get; set; }

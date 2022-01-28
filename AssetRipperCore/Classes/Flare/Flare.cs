@@ -51,6 +51,6 @@ namespace AssetRipper.Core.Classes.Flare
 		public const string ElementseName = "m_Elements";
 		public const string UseFogName = "m_UseFog";
 
-		public PPtr<Texture> FlareTexture;
+		public PPtr<Texture> FlareTexture = new();
 	}
 }

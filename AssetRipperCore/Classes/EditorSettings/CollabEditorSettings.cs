@@ -4,13 +4,8 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.EditorSettings
 {
-	public struct CollabEditorSettings : IAssetReadable, IYAMLExportable
+	public sealed class CollabEditorSettings : IAssetReadable, IYAMLExportable
 	{
-		public CollabEditorSettings(bool _)
-		{
-			InProgressEnabled = true;
-		}
-
 		public void Read(AssetReader reader)
 		{
 			InProgressEnabled = reader.ReadBoolean();
@@ -24,7 +19,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			return node;
 		}
 
-		public bool InProgressEnabled { get; set; }
+		public bool InProgressEnabled { get; set; } = true;
 
 		public const string InProgressEnabledName = "inProgressEnabled";
 	}

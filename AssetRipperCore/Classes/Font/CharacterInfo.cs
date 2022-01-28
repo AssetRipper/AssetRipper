@@ -7,7 +7,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Font
 {
-	public struct CharacterInfo : IAssetReadable, IYAMLExportable
+	public sealed class CharacterInfo : IAssetReadable, IYAMLExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -82,7 +82,7 @@ namespace AssetRipper.Core.Classes.Font
 		public const string AdvanceName = "advance";
 		public const string FlippedName = "flipped";
 
-		public Rectf UV;
-		public Rectf Vert;
+		public Rectf UV = new();
+		public Rectf Vert = new();
 	}
 }
