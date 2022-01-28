@@ -8,8 +8,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.MinMaxGradient
 {
-	public struct MinMaxGradient : IAssetReadable, IYAMLExportable
+	public sealed class MinMaxGradient : IAssetReadable, IYAMLExportable
 	{
+		public MinMaxGradient() { }
 		public MinMaxGradient(bool _)
 		{
 			MinMaxState = MinMaxGradientState.Color;
@@ -117,9 +118,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem.MinMaxGradient
 		public const string MaxGradientName = "maxGradient";
 		public const string MinGradientName = "minGradient";
 
-		public ColorRGBAf MinColor;
-		public ColorRGBAf MaxColor;
-		public Gradient MaxGradient;
-		public Gradient MinGradient;
+		public ColorRGBAf MinColor = new();
+		public ColorRGBAf MaxColor = new();
+		public Gradient MaxGradient = new();
+		public Gradient MinGradient = new();
 	}
 }

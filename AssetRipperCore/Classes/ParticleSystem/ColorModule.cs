@@ -22,6 +22,6 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 
 		public const string GradientName = "gradient";
 
-		public MinMaxGradient.MinMaxGradient Gradient;
+		public MinMaxGradient.MinMaxGradient Gradient = new();
 	}
 }

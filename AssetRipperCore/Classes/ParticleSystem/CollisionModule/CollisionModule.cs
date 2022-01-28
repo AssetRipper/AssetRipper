@@ -293,15 +293,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 		public const string CollidesWithDynamicName = "collidesWithDynamic";
 		public const string InteriorCollisionsName = "interiorCollisions";
 
-		public PPtr<Transform> Plane0;
-		public PPtr<Transform> Plane1;
-		public PPtr<Transform> Plane2;
-		public PPtr<Transform> Plane3;
-		public PPtr<Transform> Plane4;
-		public PPtr<Transform> Plane5;
-		public MinMaxCurve Dampen;
-		public MinMaxCurve Bounce;
-		public MinMaxCurve EnergyLossOnCollision;
-		public BitField CollidesWith;
+		public PPtr<Transform> Plane0 = new();
+		public PPtr<Transform> Plane1 = new();
+		public PPtr<Transform> Plane2 = new();
+		public PPtr<Transform> Plane3 = new();
+		public PPtr<Transform> Plane4 = new();
+		public PPtr<Transform> Plane5 = new();
+		public MinMaxCurve Dampen = new();
+		public MinMaxCurve Bounce = new();
+		public MinMaxCurve EnergyLossOnCollision = new();
+		public BitField CollidesWith = new();
 	}
 }

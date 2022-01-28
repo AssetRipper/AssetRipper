@@ -60,9 +60,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string RangeName = "range";
 		public const string SeparateAxesName = "separateAxes";
 
-		public MinMaxCurve Curve;
-		public MinMaxCurve Y;
-		public MinMaxCurve Z;
-		public Vector2f Range;
+		public MinMaxCurve Curve = new();
+		public MinMaxCurve Y = new();
+		public MinMaxCurve Z = new();
+		public Vector2f Range = new();
 	}
 }

@@ -90,15 +90,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CustomDataModule
 		public const string Vector12Name = "vector1_2";
 		public const string Vector13Name = "vector1_3";
 
-		public MinMaxGradient.MinMaxGradient Color0;
-		public MinMaxCurve Vector0_0;
-		public MinMaxCurve Vector0_1;
-		public MinMaxCurve Vector0_2;
-		public MinMaxCurve Vector0_3;
-		public MinMaxGradient.MinMaxGradient Color1;
-		public MinMaxCurve Vector1_0;
-		public MinMaxCurve Vector1_1;
-		public MinMaxCurve Vector1_2;
-		public MinMaxCurve Vector1_3;
+		public MinMaxGradient.MinMaxGradient Color0 = new();
+		public MinMaxCurve Vector0_0 = new();
+		public MinMaxCurve Vector0_1 = new();
+		public MinMaxCurve Vector0_2 = new();
+		public MinMaxCurve Vector0_3 = new();
+		public MinMaxGradient.MinMaxGradient Color1 = new();
+		public MinMaxCurve Vector1_0 = new();
+		public MinMaxCurve Vector1_1 = new();
+		public MinMaxCurve Vector1_2 = new();
+		public MinMaxCurve Vector1_3 = new();
 	}
 }

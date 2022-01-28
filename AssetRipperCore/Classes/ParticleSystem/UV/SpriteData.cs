@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.UV
 {
-	public struct SpriteData : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class SpriteData : IAssetReadable, IYAMLExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -29,6 +29,6 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 
 		public const string SpriteName = "sprite";
 
-		public PPtr<Object.Object> Sprite;
+		public PPtr<Object.Object> Sprite = new();
 	}
 }

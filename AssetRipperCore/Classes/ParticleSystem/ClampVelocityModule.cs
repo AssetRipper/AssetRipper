@@ -94,10 +94,10 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string DampenName = "dampen";
 		public const string DragName = "drag";
 
-		public MinMaxCurve X;
-		public MinMaxCurve Y;
-		public MinMaxCurve Z;
-		public MinMaxCurve Magnitude;
-		public MinMaxCurve Drag;
+		public MinMaxCurve X = new();
+		public MinMaxCurve Y = new();
+		public MinMaxCurve Z = new();
+		public MinMaxCurve Magnitude = new();
+		public MinMaxCurve Drag = new();
 	}
 }

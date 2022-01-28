@@ -94,16 +94,16 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string SpeedModifierName = "speedModifier";
 		public const string InWorldSpaceName = "inWorldSpace";
 
-		public MinMaxCurve X;
-		public MinMaxCurve Y;
-		public MinMaxCurve Z;
-		public MinMaxCurve OrbitalX;
-		public MinMaxCurve OrbitalY;
-		public MinMaxCurve OrbitalZ;
-		public MinMaxCurve OrbitalOffsetX;
-		public MinMaxCurve OrbitalOffsetY;
-		public MinMaxCurve OrbitalOffsetZ;
-		public MinMaxCurve Radial;
-		public MinMaxCurve SpeedModifier;
+		public MinMaxCurve X = new();
+		public MinMaxCurve Y = new();
+		public MinMaxCurve Z = new();
+		public MinMaxCurve OrbitalX = new();
+		public MinMaxCurve OrbitalY = new();
+		public MinMaxCurve OrbitalZ = new();
+		public MinMaxCurve OrbitalOffsetX = new();
+		public MinMaxCurve OrbitalOffsetY = new();
+		public MinMaxCurve OrbitalOffsetZ = new();
+		public MinMaxCurve Radial = new();
+		public MinMaxCurve SpeedModifier = new();
 	}
 }

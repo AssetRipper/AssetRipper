@@ -407,18 +407,18 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 		public const string RadiusName = "radius";
 		public const string ArcName = "arc";
 
-		public Vector3f BoxThickness;
-		public Vector3f Position;
-		public Vector3f Rotation;
-		public Vector3f Scale;
-		public MultiModeParameter MeshSpawn;
-		public PPtr<Mesh.Mesh> Mesh;
-		public PPtr<MeshRenderer> MeshRenderer;
-		public PPtr<SkinnedMeshRenderer> SkinnedMeshRenderer;
-		public PPtr<Sprite.Sprite> Sprite;
-		public PPtr<SpriteRenderer.SpriteRenderer> SpriteRenderer;
-		public PPtr<Texture2D.Texture2D> Texture;
-		public MultiModeParameter Radius;
-		public MultiModeParameter Arc;
+		public Vector3f BoxThickness = new();
+		public Vector3f Position = new();
+		public Vector3f Rotation = new();
+		public Vector3f Scale = new();
+		public MultiModeParameter MeshSpawn = new();
+		public PPtr<Mesh.Mesh> Mesh = new();
+		public PPtr<MeshRenderer> MeshRenderer = new();
+		public PPtr<SkinnedMeshRenderer> SkinnedMeshRenderer = new();
+		public PPtr<Sprite.Sprite> Sprite = new();
+		public PPtr<SpriteRenderer.SpriteRenderer> SpriteRenderer = new();
+		public PPtr<Texture2D.Texture2D> Texture = new();
+		public MultiModeParameter Radius = new();
+		public MultiModeParameter Arc = new();
 	}
 }

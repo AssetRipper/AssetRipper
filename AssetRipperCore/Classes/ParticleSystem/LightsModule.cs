@@ -76,8 +76,8 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string IntensityCurveName = "intensityCurve";
 		public const string MaxLightsName = "maxLights";
 
-		public PPtr<Light.Light> Light;
-		public MinMaxCurve RangeCurve;
-		public MinMaxCurve IntensityCurve;
+		public PPtr<Light.Light> Light = new();
+		public MinMaxCurve RangeCurve = new();
+		public MinMaxCurve IntensityCurve = new();
 	}
 }

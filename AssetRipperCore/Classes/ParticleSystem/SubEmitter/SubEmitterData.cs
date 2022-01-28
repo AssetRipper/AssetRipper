@@ -10,8 +10,9 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 {
-	public struct SubEmitterData : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class SubEmitterData : IAssetReadable, IYAMLExportable, IDependent
 	{
+		public SubEmitterData() { }
 		public SubEmitterData(ParticleSystemSubEmitterType type, PPtr<ParticleSystem> emitter)
 		{
 			Emitter = emitter;
@@ -79,6 +80,6 @@ namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 		public const string PropertiesName = "properties";
 		public const string EmitProbabilityName = "emitProbability";
 
-		public PPtr<ParticleSystem> Emitter;
+		public PPtr<ParticleSystem> Emitter = new();
 	}
 }

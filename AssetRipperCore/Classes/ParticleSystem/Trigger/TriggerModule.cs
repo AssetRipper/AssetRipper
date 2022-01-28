@@ -142,11 +142,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 		public const string ColliderQueryModeName = "colliderQueryMode";
 		public const string RadiusScaleName = "radiusScale";
 
-		public PPtr<Component> CollisionShape0;
-		public PPtr<Component> CollisionShape1;
-		public PPtr<Component> CollisionShape2;
-		public PPtr<Component> CollisionShape3;
-		public PPtr<Component> CollisionShape4;
-		public PPtr<Component> CollisionShape5;
+		public PPtr<Component> CollisionShape0 = new();
+		public PPtr<Component> CollisionShape1 = new();
+		public PPtr<Component> CollisionShape2 = new();
+		public PPtr<Component> CollisionShape3 = new();
+		public PPtr<Component> CollisionShape4 = new();
+		public PPtr<Component> CollisionShape5 = new();
 	}
 }

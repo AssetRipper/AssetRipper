@@ -39,8 +39,8 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string InWorldSpaceName = "inWorldSpace";
 		public const string RandomizePerFrameName = "randomizePerFrame";
 
-		public MinMaxCurve X;
-		public MinMaxCurve Y;
-		public MinMaxCurve Z;
+		public MinMaxCurve X = new();
+		public MinMaxCurve Y = new();
+		public MinMaxCurve Z = new();
 	}
 }

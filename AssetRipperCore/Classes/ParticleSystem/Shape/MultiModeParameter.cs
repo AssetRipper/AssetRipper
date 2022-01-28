@@ -6,8 +6,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 {
-	public struct MultiModeParameter : IAssetReadable, IYAMLExportable
+	public sealed class MultiModeParameter : IAssetReadable, IYAMLExportable
 	{
+		public MultiModeParameter() { }
 		public MultiModeParameter(float value)
 		{
 			Value = value;
@@ -56,6 +57,6 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 		public const string SpreadName = "spread";
 		public const string SpeedName = "speed";
 
-		public MinMaxCurve Speed;
+		public MinMaxCurve Speed = new();
 	}
 }

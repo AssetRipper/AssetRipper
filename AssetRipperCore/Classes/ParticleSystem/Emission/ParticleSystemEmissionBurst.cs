@@ -7,8 +7,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 {
-	public struct ParticleSystemEmissionBurst : IAssetReadable, IYAMLExportable
+	public sealed class ParticleSystemEmissionBurst : IAssetReadable, IYAMLExportable
 	{
+		public ParticleSystemEmissionBurst() { }
 		public ParticleSystemEmissionBurst(float time, int minValue, int maxValue)
 		{
 			Time = time;
@@ -83,6 +84,6 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 		public const string RepeatIntervalName = "repeatInterval";
 		public const string ProbabilityName = "probability";
 
-		public MinMaxCurve CountCurve;
+		public MinMaxCurve CountCurve = new();
 	}
 }

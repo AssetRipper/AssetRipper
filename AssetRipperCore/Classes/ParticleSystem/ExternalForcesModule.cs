@@ -90,7 +90,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string InfluenceMaskName = "influenceMask";
 		public const string InfluenceListName = "influenceList";
 
-		public MinMaxCurve MultiplierCurve;
-		public BitField InfluenceMask;
+		public MinMaxCurve MultiplierCurve = new();
+		public BitField InfluenceMask = new();
 	}
 }

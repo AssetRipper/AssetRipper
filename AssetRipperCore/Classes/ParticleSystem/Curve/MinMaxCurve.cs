@@ -9,8 +9,10 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.Curve
 {
-	public struct MinMaxCurve : IAssetReadable, IYAMLExportable
+	public sealed class MinMaxCurve : IAssetReadable, IYAMLExportable
 	{
+		public MinMaxCurve() { }
+
 		public MinMaxCurve(float value) : this(ParticleSystemCurveMode.Constant, value, value, 1.0f, 1.0f) { }
 
 		public MinMaxCurve(float minValue, float maxValue) : this(ParticleSystemCurveMode.Constant, minValue, maxValue, 1.0f, 1.0f) { }
@@ -135,7 +137,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Curve
 		public const string MaxCurveName = "maxCurve";
 		public const string MinCurveName = "minCurve";
 
-		public AnimationCurveTpl<Float> MaxCurve;
-		public AnimationCurveTpl<Float> MinCurve;
+		public AnimationCurveTpl<Float> MaxCurve = new();
+		public AnimationCurveTpl<Float> MinCurve = new();
 	}
 }

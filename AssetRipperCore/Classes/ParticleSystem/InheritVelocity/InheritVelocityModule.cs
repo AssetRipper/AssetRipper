@@ -35,6 +35,6 @@ namespace AssetRipper.Core.Classes.ParticleSystem.InheritVelocity
 		public const string ModeName = "m_Mode";
 		public const string CurveName = "m_Curve";
 
-		public MinMaxCurve Curve;
+		public MinMaxCurve Curve = new();
 	}
 }

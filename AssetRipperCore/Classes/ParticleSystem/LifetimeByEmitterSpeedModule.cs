@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string CurveName = "m_Curve";
 		public const string RangeName = "m_Range";
 
-		public MinMaxCurve Curve;
-		public Vector2f Range;
+		public MinMaxCurve Curve = new();
+		public Vector2f Range = new();
 	}
 }

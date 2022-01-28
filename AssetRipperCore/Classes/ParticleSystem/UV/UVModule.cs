@@ -8,6 +8,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.UV
@@ -183,7 +184,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 		}
 		private IReadOnlyList<SpriteData> GetExportSprites(UnityVersion version)
 		{
-			return HasSprites(version) ? Sprites : new SpriteData[] { default };
+			return HasSprites(version) ? Sprites : new SpriteData[] { new() };
 		}
 
 		public ParticleSystemAnimationMode Mode { get; set; }
@@ -219,8 +220,8 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 		public const string RowModeName = "rowMode";
 		public const string SpritesName = "sprites";
 
-		public MinMaxCurve FrameOverTime;
-		public MinMaxCurve StartFrame;
-		public Vector2f SpeedRange;
+		public MinMaxCurve FrameOverTime = new();
+		public MinMaxCurve StartFrame = new();
+		public Vector2f SpeedRange = new();
 	}
 }

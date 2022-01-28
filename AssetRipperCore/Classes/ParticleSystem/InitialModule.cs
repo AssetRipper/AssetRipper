@@ -178,15 +178,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string Rotation3DName = "rotation3D";
 		public const string GravityModifierName = "gravityModifier";
 
-		public MinMaxCurve StartLifetime;
-		public MinMaxCurve StartSpeed;
-		public MinMaxGradient.MinMaxGradient StartColor;
-		public MinMaxCurve StartSize;
-		public MinMaxCurve StartSizeY;
-		public MinMaxCurve StartSizeZ;
-		public MinMaxCurve StartRotationX;
-		public MinMaxCurve StartRotationY;
-		public MinMaxCurve StartRotation;
-		public MinMaxCurve GravityModifier;
+		public MinMaxCurve StartLifetime = new();
+		public MinMaxCurve StartSpeed = new();
+		public MinMaxGradient.MinMaxGradient StartColor = new();
+		public MinMaxCurve StartSize = new();
+		public MinMaxCurve StartSizeY = new();
+		public MinMaxCurve StartSizeZ = new();
+		public MinMaxCurve StartRotationX = new();
+		public MinMaxCurve StartRotationY = new();
+		public MinMaxCurve StartRotation = new();
+		public MinMaxCurve GravityModifier = new();
 	}
 }

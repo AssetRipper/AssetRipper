@@ -163,9 +163,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem.TrailModule
 		public const string WidthOverTrailName = "widthOverTrail";
 		public const string ColorOverTrailName = "colorOverTrail";
 
-		public MinMaxCurve Lifetime;
-		public MinMaxGradient.MinMaxGradient ColorOverLifetime;
-		public MinMaxCurve WidthOverTrail;
-		public MinMaxGradient.MinMaxGradient ColorOverTrail;
+		public MinMaxCurve Lifetime = new();
+		public MinMaxGradient.MinMaxGradient ColorOverLifetime = new();
+		public MinMaxCurve WidthOverTrail = new();
+		public MinMaxGradient.MinMaxGradient ColorOverTrail = new();
 	}
 }

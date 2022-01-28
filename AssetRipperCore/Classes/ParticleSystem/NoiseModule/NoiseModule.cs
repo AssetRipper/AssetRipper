@@ -141,15 +141,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem.NoiseModule
 		public const string RotationAmountName = "rotationAmount";
 		public const string SizeAmountName = "sizeAmount";
 
-		public MinMaxCurve Strength;
-		public MinMaxCurve StrengthY;
-		public MinMaxCurve StrengthZ;
-		public MinMaxCurve ScrollSpeed;
-		public MinMaxCurve Remap;
-		public MinMaxCurve RemapY;
-		public MinMaxCurve RemapZ;
-		public MinMaxCurve PositionAmount;
-		public MinMaxCurve RotationAmount;
-		public MinMaxCurve SizeAmount;
+		public MinMaxCurve Strength = new();
+		public MinMaxCurve StrengthY = new();
+		public MinMaxCurve StrengthZ = new();
+		public MinMaxCurve ScrollSpeed = new();
+		public MinMaxCurve Remap = new();
+		public MinMaxCurve RemapY = new();
+		public MinMaxCurve RemapZ = new();
+		public MinMaxCurve PositionAmount = new();
+		public MinMaxCurve RotationAmount = new();
+		public MinMaxCurve SizeAmount = new();
 	}
 }

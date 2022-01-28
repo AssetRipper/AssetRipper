@@ -144,7 +144,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 		/// <summary>
 		/// Rate previously
 		/// </summary>
-		public MinMaxCurve RateOverTime;
-		public MinMaxCurve RateOverDistance;
+		public MinMaxCurve RateOverTime = new();
+		public MinMaxCurve RateOverDistance = new();
 	}
 }

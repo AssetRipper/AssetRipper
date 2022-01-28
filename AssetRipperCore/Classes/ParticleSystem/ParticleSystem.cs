@@ -458,7 +458,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public const string TrailModuleName = "TrailModule";
 		public const string CustomDataModuleName = "CustomDataModule";
 
-		public MinMaxCurve StartDelay;
-		public PPtr<Transform> MoveWithCustomTransform;
+		public MinMaxCurve StartDelay = new();
+		public PPtr<Transform> MoveWithCustomTransform = new();
 	}
 }
