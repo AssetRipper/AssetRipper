@@ -310,11 +310,11 @@ namespace AssetRipper.Core.Classes.Camera
 		public const string StereoConvergenceName = "m_StereoConvergence";
 		public const string StereoSeparationName = "m_StereoSeparation";
 
-		public ColorRGBAf BackGroundColor;
-		public Vector2f SensorSize;
-		public Vector2f LensShift;
-		public Rectf NormalizedViewPortRect;
-		public BitField CullingMask;
-		public PPtr<RenderTexture.RenderTexture> TargetTexture;
+		public ColorRGBAf BackGroundColor = new();
+		public Vector2f SensorSize = new();
+		public Vector2f LensShift = new();
+		public Rectf NormalizedViewPortRect = new();
+		public BitField CullingMask = new();
+		public PPtr<RenderTexture.RenderTexture> TargetTexture = new();
 	}
 }

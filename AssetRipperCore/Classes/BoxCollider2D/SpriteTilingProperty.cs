@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.BoxCollider2D
 {
-	public struct SpriteTilingProperty : IAssetReadable, IYAMLExportable
+	public sealed class SpriteTilingProperty : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -44,9 +44,9 @@ namespace AssetRipper.Core.Classes.BoxCollider2D
 		public const string DrawModeName = "drawMode";
 		public const string AdaptiveTilingName = "adaptiveTiling";
 
-		public Vector4f Border;
-		public Vector2f Pivot;
-		public Vector2f OldSize;
-		public Vector2f NewSize;
+		public Vector4f Border = new();
+		public Vector2f Pivot = new();
+		public Vector2f OldSize = new();
+		public Vector2f NewSize = new();
 	}
 }

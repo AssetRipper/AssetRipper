@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.CompositeCollider2D
 {
-	public struct IntPoint : IAssetReadable, IYAMLExportable
+	public sealed class IntPoint : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

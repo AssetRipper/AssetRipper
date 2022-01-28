@@ -82,8 +82,8 @@ namespace AssetRipper.Core.Classes.BoxCollider2D
 		public const string SizeName = "m_Size";
 		public const string EdgeRadiusName = "m_EdgeRadius";
 
-		public SpriteTilingProperty SpriteTilingProperty;
-		public Vector2f Size;
-		public Vector2f Center;
+		public SpriteTilingProperty SpriteTilingProperty = new();
+		public Vector2f Size = new();
+		public Vector2f Center = new();
 	}
 }

@@ -96,6 +96,6 @@ namespace AssetRipper.Core.Classes.CompositeCollider2D
 		public const string VertexDistanceName = "m_VertexDistance";
 		public const string OffsetDistanceName = "m_OffsetDistance";
 
-		public Polygon2D CompositePaths;
+		public Polygon2D CompositePaths = new();
 	}
 }

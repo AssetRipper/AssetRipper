@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.CompositeCollider2D
 {
-	public struct SubCollider : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class SubCollider : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 2018.3 and greater
@@ -53,6 +53,6 @@ namespace AssetRipper.Core.Classes.CompositeCollider2D
 
 		public IntPoint[][] ColliderPaths { get; set; }
 
-		public PPtr<Collider2D> Collider;
+		public PPtr<Collider2D> Collider = new();
 	}
 }
