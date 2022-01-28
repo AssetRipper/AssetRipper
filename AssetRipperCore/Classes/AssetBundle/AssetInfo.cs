@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AssetBundle
 {
-	public struct AssetInfo : IAssetReadable, IDependent, IAssetInfo
+	public sealed class AssetInfo : IAssetReadable, IDependent, IAssetInfo
 	{
 		/// <summary>
 		/// 2.5.0 and greater
@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		/// <summary>
 		/// Needs to stay a field
 		/// </summary>
-		public PPtr<Object.Object> Asset;
+		public PPtr<Object.Object> Asset = new();
 
 		public PPtr<IUnityObjectBase> AssetPtr => Asset.CastTo<IUnityObjectBase>();
 	}

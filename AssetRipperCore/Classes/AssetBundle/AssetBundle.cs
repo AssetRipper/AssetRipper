@@ -86,7 +86,7 @@ namespace AssetRipper.Core.Classes.AssetBundle
 
 			if (HasScriptCampatibility(reader.Version))
 			{
-				ScriptCampatibility = reader.ReadAssetArray<AssetBundleScriptInfo>();
+				ScriptCompatibility = reader.ReadAssetArray<AssetBundleScriptInfo>();
 			}
 			if (HasClassCampatibility(reader.Version))
 			{
@@ -157,7 +157,7 @@ namespace AssetRipper.Core.Classes.AssetBundle
 
 		public PPtr<Object.Object>[] PreloadTable { get; set; }
 		public KeyValuePair<string, AssetInfo>[] Container { get; set; }
-		public AssetBundleScriptInfo[] ScriptCampatibility { get; set; }
+		public AssetBundleScriptInfo[] ScriptCompatibility { get; set; }
 		public KeyValuePair<int, uint>[] ClassCampatibility { get; set; }
 		public Dictionary<int, int> ClassVersionMap { get; set; }
 		public uint RuntimeCompatibility { get; set; }
@@ -172,6 +172,6 @@ namespace AssetRipper.Core.Classes.AssetBundle
 
 		public const string ContainerName = "m_Container";
 
-		public AssetInfo MainAsset;
+		public AssetInfo MainAsset = new();
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.AssetBundle
 {
-	public struct AssetBundleScriptInfo : IAssetReadable
+	public sealed class AssetBundleScriptInfo : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{
