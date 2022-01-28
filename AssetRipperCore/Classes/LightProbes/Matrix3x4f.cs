@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public struct Matrix3x4f : IAssetReadable, IYAMLExportable
+	public sealed class Matrix3x4f : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

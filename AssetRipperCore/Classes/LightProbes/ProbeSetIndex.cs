@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public struct ProbeSetIndex : IAssetReadable, IYAMLExportable
+	public sealed class ProbeSetIndex : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -30,6 +30,6 @@ namespace AssetRipper.Core.Classes.LightProbes
 		public const string OffsetName = "m_Offset";
 		public const string SizeName = "m_Size";
 
-		public Hash128 Hash;
+		public Hash128 Hash = new();
 	}
 }

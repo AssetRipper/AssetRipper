@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML.Extensions;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public struct LightProbeOcclusion : IAssetReadable, IYAMLExportable
+	public sealed class LightProbeOcclusion : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 5.6.0b2 and greater

@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public struct ProbeSetTetrahedralization : IAssetReadable, IYAMLExportable
+	public sealed class ProbeSetTetrahedralization : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

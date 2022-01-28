@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public struct LightProbeData : IAssetReadable, IYAMLExportable
+	public sealed class LightProbeData : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 5.0.0 and greater
@@ -59,6 +59,6 @@ namespace AssetRipper.Core.Classes.LightProbes
 		public const string PositionsName = "m_Positions";
 		public const string NonTetrahedralizedProbeSetIndexMapName = "m_NonTetrahedralizedProbeSetIndexMap";
 
-		public ProbeSetTetrahedralization Tetrahedralization;
+		public ProbeSetTetrahedralization Tetrahedralization = new();
 	}
 }

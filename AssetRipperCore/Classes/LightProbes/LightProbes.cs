@@ -86,6 +86,6 @@ namespace AssetRipper.Core.Classes.LightProbes
 		public const string BakedCoefficientsName = "m_BakedCoefficients";
 		public const string BakedLightOcclusionName = "m_BakedLightOcclusion";
 
-		public LightProbeData Data;
+		public LightProbeData Data = new();
 	}
 }

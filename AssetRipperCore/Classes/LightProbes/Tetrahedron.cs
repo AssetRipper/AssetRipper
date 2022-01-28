@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public struct Tetrahedron : IAssetReadable, IYAMLExportable
+	public sealed class Tetrahedron : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -53,6 +53,6 @@ namespace AssetRipper.Core.Classes.LightProbes
 		public const string Neighbors3Name = "neighbors[3]";
 		public const string MatrixName = "matrix";
 
-		public Matrix3x4f Matrix;
+		public Matrix3x4f Matrix = new();
 	}
 }
