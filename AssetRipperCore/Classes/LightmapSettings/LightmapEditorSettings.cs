@@ -15,8 +15,9 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 	/// <summary>
 	/// 3.0.0 - first introduction
 	/// </summary>
-	public struct LightmapEditorSettings : IAsset, IDependent
+	public sealed class LightmapEditorSettings : IAsset, IDependent
 	{
+		public LightmapEditorSettings() { }
 		public LightmapEditorSettings(UnityVersion version) : this()
 		{
 #warning TODO:
@@ -1221,6 +1222,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 
 		private const string TrainingDataName = "TrainingData";
 
-		public ColorRGBAf SkyLightColor;
+		public ColorRGBAf SkyLightColor = new();
 	}
 }

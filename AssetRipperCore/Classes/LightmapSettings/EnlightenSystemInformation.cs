@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.LightmapSettings
 {
-	public struct EnlightenSystemInformation : IAsset
+	public sealed class EnlightenSystemInformation : IAsset
 	{
 		public void Read(AssetReader reader)
 		{
@@ -56,7 +56,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		public const string InputSystemHashName = "inputSystemHash";
 		public const string RadiositySystemHashName = "radiositySystemHash";
 
-		public Hash128 InputSystemHash;
-		public Hash128 RadiositySystemHash;
+		public Hash128 InputSystemHash = new();
+		public Hash128 RadiositySystemHash = new();
 	}
 }

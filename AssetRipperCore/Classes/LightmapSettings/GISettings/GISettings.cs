@@ -10,8 +10,9 @@ namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 	/// <summary>
 	/// First intriduced in 5.0.0
 	/// </summary>
-	public struct GISettings : IAsset
+	public sealed class GISettings : IAsset
 	{
+		public GISettings() { }
 		public GISettings(bool _)
 		{
 #warning TODO:
@@ -160,6 +161,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 		public const string EnableBakedLightmapsName = "m_EnableBakedLightmaps";
 		public const string EnableRealtimeLightmapsName = "m_EnableRealtimeLightmaps";
 
-		public ColorRGBAf SkyLightColor;
+		public ColorRGBAf SkyLightColor = new();
 	}
 }

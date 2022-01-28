@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Light
 {
-	public struct ShadowSettings : IAssetReadable, IYAMLExportable
+	public sealed class ShadowSettings : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 5.4.0 and greater

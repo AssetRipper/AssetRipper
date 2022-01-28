@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LightmapSettings
 {
-	public struct LightmapData : IAsset, IDependent
+	public sealed class LightmapData : IAsset, IDependent
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -121,11 +121,11 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		public const string DirLightmapName = "m_DirLightmap";
 		public const string ShadowMaskName = "m_ShadowMask";
 
-		public PPtr<Texture2D.Texture2D> Lightmap;
-		public PPtr<Texture2D.Texture2D> IndirectLightmap;
-		public PPtr<Texture2D.Texture2D> LightInd;
-		public PPtr<Texture2D.Texture2D> DirInd;
-		public PPtr<Texture2D.Texture2D> DirLightmap;
-		public PPtr<Texture2D.Texture2D> ShadowMask;
+		public PPtr<Texture2D.Texture2D> Lightmap = new();
+		public PPtr<Texture2D.Texture2D> IndirectLightmap = new();
+		public PPtr<Texture2D.Texture2D> LightInd = new();
+		public PPtr<Texture2D.Texture2D> DirInd = new();
+		public PPtr<Texture2D.Texture2D> DirLightmap = new();
+		public PPtr<Texture2D.Texture2D> ShadowMask = new();
 	}
 }

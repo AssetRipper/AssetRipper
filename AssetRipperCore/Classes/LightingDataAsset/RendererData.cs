@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LightingDataAsset
 {
-	public struct RendererData : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class RendererData : IAssetReadable, IYAMLExportable, IDependent
 	{
 		/// <summary>
 		/// 2018.2 and greater
@@ -66,11 +66,11 @@ namespace AssetRipper.Core.Classes.LightingDataAsset
 		public const string LightmapSTDynamicName = "lightmapSTDynamic";
 		public const string ExplicitProbeSetHashName = "explicitProbeSetHash";
 
-		public PPtr<Mesh.Mesh> UVMesh;
-		public Vector4f TerrainDynamicUVST;
-		public Vector4f TerrainChunkDynamicUVST;
-		public Vector4f LightmapST;
-		public Vector4f LightmapSTDynamic;
-		public Hash128 ExplicitProbeSetHash;
+		public PPtr<Mesh.Mesh> UVMesh = new();
+		public Vector4f TerrainDynamicUVST = new();
+		public Vector4f TerrainChunkDynamicUVST = new();
+		public Vector4f LightmapST = new();
+		public Vector4f LightmapSTDynamic = new();
+		public Hash128 ExplicitProbeSetHash = new();
 	}
 }

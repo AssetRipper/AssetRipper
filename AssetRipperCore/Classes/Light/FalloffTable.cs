@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Light
 {
-	public struct FalloffTable : IAssetReadable, IYAMLExportable
+	public sealed class FalloffTable : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

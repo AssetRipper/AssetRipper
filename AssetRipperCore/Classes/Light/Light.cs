@@ -382,14 +382,14 @@ namespace AssetRipper.Core.Classes.Light
 		public const string ShadowRadiusName = "m_ShadowRadius";
 		public const string ShadowAngleName = "m_ShadowAngle";
 
-		public ColorRGBAf Color;
-		public ShadowSettings Shadows;
-		public PPtr<Texture> Cookie;
-		public LightBakingOutput BakingOutput;
-		public PPtr<Flare.Flare> Flare;
-		public BitField CullingMask;
-		public Vector2f AreaSize;
-		public FalloffTable FalloffTable;
-		public Vector4f BoundingSphereOverride;
+		public ColorRGBAf Color = new();
+		public ShadowSettings Shadows = new();
+		public PPtr<Texture> Cookie = new();
+		public LightBakingOutput BakingOutput = new();
+		public PPtr<Flare.Flare> Flare = new();
+		public BitField CullingMask = new();
+		public Vector2f AreaSize = new();
+		public FalloffTable FalloffTable = new();
+		public Vector4f BoundingSphereOverride = new();
 	}
 }

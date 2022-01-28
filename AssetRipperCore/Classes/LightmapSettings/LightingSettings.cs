@@ -3,7 +3,7 @@ using AssetRipper.Core.Parser.Asset;
 
 namespace AssetRipper.Core.Classes.LightmapSettings
 {
-	public class LightingSettings : NamedObject
+	public sealed class LightingSettings : NamedObject
 	{
 		public LightingSettings(AssetInfo assetInfo) : base(assetInfo)
 		{

@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.LightmapSettings
 {
-	public struct EnlightenSystemAtlasInformation : IAsset
+	public sealed class EnlightenSystemAtlasInformation : IAsset
 	{
 		public void Read(AssetReader reader)
 		{
@@ -37,6 +37,6 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		public const string AtlasHashName = "atlasHash";
 		public const string FirstSystemIdName = "firstSystemId";
 
-		public Hash128 AtlasHash;
+		public Hash128 AtlasHash = new();
 	}
 }

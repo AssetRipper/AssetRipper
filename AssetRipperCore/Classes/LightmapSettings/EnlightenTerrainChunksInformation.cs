@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.LightmapSettings
 {
-	public struct EnlightenTerrainChunksInformation : IAsset
+	public sealed class EnlightenTerrainChunksInformation : IAsset
 	{
 		public void Read(AssetReader reader)
 		{

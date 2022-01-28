@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LightmapSettings
 {
-	public struct EnlightenSceneMapping : IAsset, IDependent
+	public sealed class EnlightenSceneMapping : IAsset, IDependent
 	{
 		/// <summary>
 		/// 5.3.0 and greater
