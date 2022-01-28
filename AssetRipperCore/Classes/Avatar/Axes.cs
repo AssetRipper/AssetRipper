@@ -6,12 +6,12 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public struct Axes : IAssetReadable, IYAMLExportable
+	public sealed class Axes : IAssetReadable, IYAMLExportable
 	{
-		public Vector4f m_PreQ;
-		public Vector4f m_PostQ;
-		public Vector4f m_Sgn;
-		public Limit m_Limit;
+		public Vector4f m_PreQ = new();
+		public Vector4f m_PostQ = new();
+		public Vector4f m_Sgn = new();
+		public Limit m_Limit = new();
 		public float m_Length { get; set; }
 		public uint m_Type { get; set; }
 

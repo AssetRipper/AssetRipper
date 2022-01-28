@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public struct Limit : IAssetReadable, IYAMLExportable
+	public sealed class Limit : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 5.4.0 and greater
@@ -54,7 +54,7 @@ namespace AssetRipper.Core.Classes.Avatar
 		public const string MinName = "m_Min";
 		public const string MaxName = "m_Max";
 
-		public Vector4f Min4;
-		public Vector4f Max4;
+		public Vector4f Min4 = new();
+		public Vector4f Max4 = new();
 	}
 }

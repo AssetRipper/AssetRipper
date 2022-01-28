@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public struct AvatarConstant : IAssetReadable, IYAMLExportable
+	public sealed class AvatarConstant : IAssetReadable, IYAMLExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -124,15 +124,15 @@ namespace AssetRipper.Core.Classes.Avatar
 		/// <summary>
 		/// Skeleton previously
 		/// </summary>
-		public OffsetPtr<Skeleton> AvatarSkeleton;
+		public OffsetPtr<Skeleton> AvatarSkeleton = new();
 		/// <summary>
 		/// SkeletonPose previously
 		/// </summary>
-		public OffsetPtr<SkeletonPose> AvatarSkeletonPose;
-		public OffsetPtr<SkeletonPose> DefaultPose;
-		public OffsetPtr<Human> Human;
-		public XForm RootMotionBoneX;
-		public OffsetPtr<Skeleton> RootMotionSkeleton;
-		public OffsetPtr<SkeletonPose> RootMotionSkeletonPose;
+		public OffsetPtr<SkeletonPose> AvatarSkeletonPose = new();
+		public OffsetPtr<SkeletonPose> DefaultPose = new();
+		public OffsetPtr<Human> Human = new();
+		public XForm RootMotionBoneX = new();
+		public OffsetPtr<Skeleton> RootMotionSkeleton = new();
+		public OffsetPtr<SkeletonPose> RootMotionSkeletonPose = new();
 	}
 }

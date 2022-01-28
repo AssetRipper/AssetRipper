@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public struct Node : IAssetReadable, IYAMLExportable
+	public sealed class Node : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

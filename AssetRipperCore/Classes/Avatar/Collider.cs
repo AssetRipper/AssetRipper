@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public struct Collider : IAssetReadable, IYAMLExportable
+	public sealed class Collider : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -54,6 +54,6 @@ namespace AssetRipper.Core.Classes.Avatar
 		public const string MaxLimitYName = "m_MaxLimitY";
 		public const string MaxLimitZName = "m_MaxLimitZ";
 
-		public XForm X;
+		public XForm X = new();
 	}
 }
