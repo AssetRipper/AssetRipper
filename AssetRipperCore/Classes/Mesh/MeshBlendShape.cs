@@ -109,7 +109,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public const string HasNormalsName = "hasNormals";
 		public const string HasTangentsName = "hasTangents";
 
-		public Vector3f AabbMinDelta;
-		public Vector3f AabbMaxDelta;
+		public Vector3f AabbMinDelta = new();
+		public Vector3f AabbMaxDelta = new();
 	}
 }

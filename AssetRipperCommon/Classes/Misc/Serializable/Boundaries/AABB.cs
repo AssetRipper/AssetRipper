@@ -39,8 +39,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 			return $"C:{m_Center} E:{m_Extent}";
 		}
 
-		public Vector3f m_Center;
-		public Vector3f m_Extent;
+		public Vector3f m_Center = new();
+		public Vector3f m_Extent = new();
 
 		public const string CenterName = "m_Center";
 		public const string ExtentName = "m_Extent";

@@ -44,7 +44,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public const string TangentValueName = "tangent";
 		public const string HandednessName = "handedness";
 
-		public Vector3f Normal;
-		public Vector3f TangentValue;
+		public Vector3f Normal = new();
+		public Vector3f TangentValue = new();
 	}
 }

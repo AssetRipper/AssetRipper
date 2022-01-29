@@ -158,7 +158,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public float RandomizeRotationDirection { get; set; }
 		public float InheritVelocity { get; set; }
 		public int MaxNumParticles { get; set; }
-		public Vector3f CustomEmitterVelocity { get; set; }
+		public Vector3f CustomEmitterVelocity { get; set; } = new();
 		public bool Size3D { get; set; }
 		public bool Rotation3D { get; set; }
 

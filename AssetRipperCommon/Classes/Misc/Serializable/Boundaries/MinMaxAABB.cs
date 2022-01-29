@@ -9,8 +9,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 	{
 		public const string MinName = "m_Min";
 		public const string MaxName = "m_Max";
-		public Vector3f m_Min;
-		public Vector3f m_Max;
+		public Vector3f m_Min = new();
+		public Vector3f m_Max = new();
 
 		public void Read(AssetReader reader)
 		{

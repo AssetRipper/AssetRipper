@@ -40,8 +40,8 @@ namespace AssetRipper.Core.Classes.Mesh
 		public const string TangentName = "tangent";
 		public const string IndexName = "index";
 
-		public Vector3f Vertex;
-		public Vector3f Normal;
-		public Vector3f Tangent;
+		public Vector3f Vertex = new();
+		public Vector3f Normal = new();
+		public Vector3f Tangent = new();
 	}
 }

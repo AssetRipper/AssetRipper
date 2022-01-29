@@ -3,16 +3,16 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 
 namespace AssetRipper.Core.Math.Vectors
 {
-	[StructLayout(LayoutKind.Sequential, Pack = 4)]
-	public struct Vector3f : IAsset, IEquatable<Vector3f>
+	public sealed class Vector3f : IAsset, IEquatable<Vector3f>, IVector3f
 	{
-		public float X;
-		public float Y;
-		public float Z;
+		public float X { get; set; }
+		public float Y { get; set; }
+		public float Z { get; set; }
+
+		public Vector3f() { }
 
 		public Vector3f(float x, float y, float z)
 		{
