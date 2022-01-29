@@ -3,21 +3,21 @@ using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
-using System.Runtime.InteropServices;
 
 namespace AssetRipper.Core.Math.Vectors
 {
-	[StructLayout(LayoutKind.Sequential, Pack = 4)]
-	public struct Vector4f : IAsset, IEquatable<Vector4f>
+	public sealed class Vector4f : IAsset, IEquatable<Vector4f>, IVector4f
 	{
-		public float X;
-		public float Y;
-		public float Z;
-		public float W;
+		public float X { get; set; }
+		public float Y { get; set; }
+		public float Z { get; set; }
+		public float W { get; set; }
 		public const string XName = "x";
 		public const string YName = "y";
 		public const string ZName = "z";
 		public const string WName = "w";
+
+		public Vector4f() { }
 
 		public Vector4f(float value) : this(value, value, value, value) { }
 
