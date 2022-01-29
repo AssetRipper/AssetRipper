@@ -5,11 +5,10 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System.Globalization;
-using System.IO;
 
 namespace AssetRipper.Core.Math
 {
-	public struct Rectf : IAsset
+	public sealed class Rectf : IAsset, IRectf
 	{
 		public float X { get; set; }
 		public float Y { get; set; }
@@ -21,20 +20,14 @@ namespace AssetRipper.Core.Math
 		public const string WidthName = "width";
 		public const string HeightName = "height";
 
+		public Rectf() { }
+
 		public Rectf(float x, float y, float width, float height)
 		{
 			X = x;
 			Y = y;
 			Width = width;
 			Height = height;
-		}
-
-		public Rectf(BinaryReader reader)
-		{
-			X = reader.ReadSingle();
-			Y = reader.ReadSingle();
-			Width = reader.ReadSingle();
-			Height = reader.ReadSingle();
 		}
 
 		public Rectf(Vector2f positon, Vector2f size) : this(positon.X, positon.Y, size.X, size.Y) { }
