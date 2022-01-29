@@ -11,8 +11,10 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 	/// <summary>
 	/// GradientNEW previously
 	/// </summary>
-	public struct Gradient : IAsset
+	public sealed class Gradient : IAsset
 	{
+		public Gradient() { }
+
 		public Gradient(ColorRGBAf color1, ColorRGBAf color2) : this()
 		{
 			Ctime0 = 0;
@@ -358,14 +360,14 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 		public byte NumColorKeys { get; set; }
 		public byte NumAlphaKeys { get; set; }
 
-		public ColorRGBAf Key0;
-		public ColorRGBAf Key1;
-		public ColorRGBAf Key2;
-		public ColorRGBAf Key3;
-		public ColorRGBAf Key4;
-		public ColorRGBAf Key5;
-		public ColorRGBAf Key6;
-		public ColorRGBAf Key7;
+		public ColorRGBAf Key0 = new();
+		public ColorRGBAf Key1 = new();
+		public ColorRGBAf Key2 = new();
+		public ColorRGBAf Key3 = new();
+		public ColorRGBAf Key4 = new();
+		public ColorRGBAf Key5 = new();
+		public ColorRGBAf Key6 = new();
+		public ColorRGBAf Key7 = new();
 
 		public const string Key0Name = "key0";
 		public const string Key1Name = "key1";

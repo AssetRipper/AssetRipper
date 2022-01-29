@@ -5,7 +5,7 @@ namespace AssetRipper.Core.Converters.Files
 {
 	public static class SerializedTypeConverter
 	{
-		public static void CombineFormats(FormatVersion generation, ref SerializedType origin)
+		public static void CombineFormats(FormatVersion generation, SerializedType origin)
 		{
 			if (origin.OldType != null)
 			{

@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Converters.TrailRenderer
 			return LineParameters.HasShadowBias(container.Version) ? origin.ShadowBias : 0.5f;
 		}
 
-		private static AnimationCurveTpl<T> Convert<T>(this AnimationCurveTpl<T> _this, IExportContainer container) where T : struct, IAsset, IYAMLExportable
+		private static AnimationCurveTpl<T> Convert<T>(this AnimationCurveTpl<T> _this, IExportContainer container) where T : IAsset, IYAMLExportable, new()
 		{
 			return AnimationCurveTplConverter.Convert(container, _this);
 		}

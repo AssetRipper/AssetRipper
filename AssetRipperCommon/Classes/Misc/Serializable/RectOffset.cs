@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable
 {
-	public struct RectOffset : IAsset
+	public sealed class RectOffset : IAsset
 	{
 		public void Read(AssetReader reader)
 		{

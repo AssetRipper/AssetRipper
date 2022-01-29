@@ -11,8 +11,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct Hash128 : IAsset, ISerializedReadable, ISerializedWritable, IBundleReadable, IEquatable<Hash128>
+	public sealed class Hash128 : IAsset, ISerializedReadable, ISerializedWritable, IBundleReadable, IEquatable<Hash128>
 	{
+		public Hash128() { }
+
 		public Hash128(uint v) : this(v, 0, 0, 0) { }
 
 		public Hash128(uint v0, uint v1, uint v2, uint v3)

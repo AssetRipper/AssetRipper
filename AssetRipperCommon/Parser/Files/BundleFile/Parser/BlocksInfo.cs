@@ -3,7 +3,7 @@ using AssetRipper.Core.Parser.Files.BundleFile.IO;
 
 namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 {
-	public struct BlocksInfo : IBundleReadable
+	public sealed class BlocksInfo : IBundleReadable
 	{
 		public void Read(BundleReader reader)
 		{
@@ -13,6 +13,6 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 
 		public StorageBlock[] StorageBlocks { get; set; }
 
-		public Hash128 Hash;
+		public Hash128 Hash = new();
 	}
 }

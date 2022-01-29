@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 	{
 		public KeyframeTpl() { }
 
-		public KeyframeTpl(float time, T value, T weight) : this(time, value, default, default, weight)
+		public KeyframeTpl(float time, T value, T weight) : this(time, value, new(), new(), weight)
 		{
 			// this enum member is version agnostic
 			TangentMode = KeyframeTpl.TangentMode.TangentMode.FreeSmooth.ToTangent(UnityVersion.MinVersion);

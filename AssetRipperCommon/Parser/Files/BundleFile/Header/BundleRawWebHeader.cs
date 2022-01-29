@@ -58,6 +58,6 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Header
 		public uint CompleteFileSize { get; set; }
 		public int UncompressedBlocksInfoSize { get; set; }
 
-		public Hash128 Hash;
+		public Hash128 Hash = new();
 	}
 }

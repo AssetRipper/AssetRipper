@@ -236,7 +236,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 					if (ptr.LocalSerializedFileIndex == 0)
 					{
 						int index = m_assetEntryLookup[ptr.LocalIdentifierInFile];
-						ReadAsset(assetReader, ref Metadata.Object[index]);
+						ReadAsset(assetReader, Metadata.Object[index]);
 					}
 				}
 			}
@@ -247,7 +247,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				{
 					if (!m_assets.ContainsKey(Metadata.Object[i].FileID))
 					{
-						ReadAsset(assetReader, ref Metadata.Object[i]);
+						ReadAsset(assetReader, Metadata.Object[i]);
 					}
 				}
 			}
@@ -256,7 +256,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			{
 				if (!m_assets.ContainsKey(Metadata.Object[i].FileID))
 				{
-					ReadAsset(assetReader, ref Metadata.Object[i]);
+					ReadAsset(assetReader, Metadata.Object[i]);
 				}
 			}
 		}
@@ -321,7 +321,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return asset;
 		}
 
-		private void ReadAsset(AssetReader reader, ref ObjectInfo info)
+		private void ReadAsset(AssetReader reader, ObjectInfo info)
 		{
 			AssetInfo assetInfo = new AssetInfo(this, info.FileID, info.ClassID, info.ByteSize);
 			IUnityObjectBase asset = ReadAsset(reader, assetInfo, Header.DataOffset + info.ByteStart, info.ByteSize);

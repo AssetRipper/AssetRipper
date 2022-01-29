@@ -3,7 +3,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 {
-	public struct SerializedType : ISerializedReadable, ISerializedWritable
+	public sealed class SerializedType : ISerializedReadable, ISerializedWritable
 	{
 		public ClassIDType TypeID { get; set; }
 		public bool IsStrippedType { get; set; }
@@ -17,8 +17,10 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		public TypeTree.TypeTree OldType { get; set; }
 		public int[] TypeDependencies { get; set; }
 
-		public Hash128 ScriptID;
-		public Hash128 OldTypeHash;
+		public Hash128 ScriptID = new();
+		public Hash128 OldTypeHash = new();
+
+		public SerializedType() { }
 
 		public SerializedType(bool enableTypeTree) : this()
 		{

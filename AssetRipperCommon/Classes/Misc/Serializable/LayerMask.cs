@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable
 {
-	public struct LayerMask : IAsset
+	public sealed class LayerMask : IAsset
 	{
 		public void Read(AssetReader reader)
 		{

@@ -13,14 +13,14 @@ namespace AssetRipper.Core.Converters.Files
 			}
 			for (int i = 0; i < origin.Types.Length; i++)
 			{
-				SerializedTypeConverter.CombineFormats(generation, ref origin.Types[i]);
+				SerializedTypeConverter.CombineFormats(generation, origin.Types[i]);
 			}
 			if (generation >= FormatVersion.RefactorTypeData)
 			{
 				for (int i = 0; i < origin.Object.Length; i++)
 				{
-					ref ObjectInfo entry = ref origin.Object[i];
-					ref SerializedType type = ref origin.Types[entry.TypeID];
+					ObjectInfo entry = origin.Object[i];
+					SerializedType type = origin.Types[entry.TypeID];
 					entry.ClassID = type.TypeID;
 					entry.ScriptTypeIndex = type.ScriptTypeIndex;
 					entry.Stripped = type.IsStrippedType;

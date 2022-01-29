@@ -4,8 +4,10 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct Float : IAsset, IYAMLExportable
+	public sealed class Float : IAsset, IYAMLExportable
 	{
+		public Float() { }
+
 		public Float(float value)
 		{
 			Value = value;

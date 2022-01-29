@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 			}
 		}
 
-		public BlocksInfo BlocksInfo;
-		public DirectoryInfo DirectoryInfo;
+		public BlocksInfo BlocksInfo = new();
+		public DirectoryInfo DirectoryInfo = new();
 	}
 }

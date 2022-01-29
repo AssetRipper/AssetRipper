@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 {
-	public struct DirectoryInfo : IBundleReadable
+	public sealed class DirectoryInfo : IBundleReadable
 	{
 		public void Read(BundleReader reader)
 		{

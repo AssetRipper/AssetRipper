@@ -137,7 +137,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.IO
 		}
 
 		private readonly Stream m_stream;
-		private readonly BlocksInfo m_blocksInfo;
+		private readonly BlocksInfo m_blocksInfo = new();
 		private readonly long m_dataOffset;
 
 		private readonly SmartStream m_cachedBlockStream = SmartStream.CreateNull();

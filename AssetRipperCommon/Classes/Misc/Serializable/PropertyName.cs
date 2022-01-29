@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable
 {
-	public struct PropertyName : IAsset
+	public sealed class PropertyName : IAsset
 	{
 		public static bool operator ==(PropertyName lhs, PropertyName rhs)
 		{

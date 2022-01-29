@@ -5,7 +5,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 	/// <summary>
 	/// Contains information for a block of raw serialized object data.
 	/// </summary>
-	public struct ObjectInfo : ISerializedReadable, ISerializedWritable
+	public sealed class ObjectInfo : ISerializedReadable, ISerializedWritable
 	{
 		/// <summary>
 		/// 5.0.0unk and greater
