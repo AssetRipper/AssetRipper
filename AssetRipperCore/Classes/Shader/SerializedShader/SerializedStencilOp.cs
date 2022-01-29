@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedStencilOp : IAssetReadable
+	public sealed class SerializedStencilOp : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,10 +15,10 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 
 		public bool IsDefault => PassValue.IsKeep() && FailValue.IsKeep() && ZFailValue.IsKeep() && CompValue.IsAlways();
 
-		public SerializedShaderFloatValue Pass;
-		public SerializedShaderFloatValue Fail;
-		public SerializedShaderFloatValue ZFail;
-		public SerializedShaderFloatValue Comp;
+		public SerializedShaderFloatValue Pass = new();
+		public SerializedShaderFloatValue Fail = new();
+		public SerializedShaderFloatValue ZFail = new();
+		public SerializedShaderFloatValue Comp = new();
 
 		public StencilOp PassValue => (StencilOp)Pass.Val;
 		public StencilOp FailValue => (StencilOp)Fail.Val;

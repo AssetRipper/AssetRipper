@@ -5,7 +5,7 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedSubProgram : IAssetReadable
+	public sealed class SerializedSubProgram : IAssetReadable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -150,6 +150,6 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public SamplerParameter[] Samplers { get; set; }
 		public long ShaderRequirements { get; set; }
 
-		public ParserBindChannels Channels;
+		public ParserBindChannels Channels = new();
 	}
 }

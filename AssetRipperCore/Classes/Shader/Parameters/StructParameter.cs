@@ -2,8 +2,10 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public struct StructParameter : IAssetReadable
+	public sealed class StructParameter : IAssetReadable
 	{
+		public StructParameter() { }
+
 		public StructParameter(string name, int index, int arraySize, int structSize, VectorParameter[] vectors, MatrixParameter[] matrices)
 		{
 			Name = name;

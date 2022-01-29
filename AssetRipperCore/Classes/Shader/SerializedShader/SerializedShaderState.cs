@@ -4,7 +4,7 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedShaderState : IAssetReadable
+	public sealed class SerializedShaderState : IAssetReadable
 	{
 		/// <summary>
 		/// 2017.2 and greater
@@ -76,32 +76,32 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public bool AlphaToMaskValue => AlphaToMask.Val > 0;
 		public string LightingValue => Lighting ? "On" : "Off";
 
-		public SerializedShaderRTBlendState RtBlend0;
-		public SerializedShaderRTBlendState RtBlend1;
-		public SerializedShaderRTBlendState RtBlend2;
-		public SerializedShaderRTBlendState RtBlend3;
-		public SerializedShaderRTBlendState RtBlend4;
-		public SerializedShaderRTBlendState RtBlend5;
-		public SerializedShaderRTBlendState RtBlend6;
-		public SerializedShaderRTBlendState RtBlend7;
-		public SerializedShaderFloatValue ZClip;
-		public SerializedShaderFloatValue ZTest;
-		public SerializedShaderFloatValue ZWrite;
-		public SerializedShaderFloatValue Culling;
-		public SerializedShaderFloatValue Conservative;
-		public SerializedShaderFloatValue OffsetFactor;
-		public SerializedShaderFloatValue OffsetUnits;
-		public SerializedShaderFloatValue AlphaToMask;
-		public SerializedStencilOp StencilOp;
-		public SerializedStencilOp StencilOpFront;
-		public SerializedStencilOp StencilOpBack;
-		public SerializedShaderFloatValue StencilReadMask;
-		public SerializedShaderFloatValue StencilWriteMask;
-		public SerializedShaderFloatValue StencilRef;
-		public SerializedShaderFloatValue FogStart;
-		public SerializedShaderFloatValue FogEnd;
-		public SerializedShaderFloatValue FogDensity;
-		public SerializedShaderVectorValue FogColor;
-		public SerializedTagMap Tags;
+		public SerializedShaderRTBlendState RtBlend0 = new();
+		public SerializedShaderRTBlendState RtBlend1 = new();
+		public SerializedShaderRTBlendState RtBlend2 = new();
+		public SerializedShaderRTBlendState RtBlend3 = new();
+		public SerializedShaderRTBlendState RtBlend4 = new();
+		public SerializedShaderRTBlendState RtBlend5 = new();
+		public SerializedShaderRTBlendState RtBlend6 = new();
+		public SerializedShaderRTBlendState RtBlend7 = new();
+		public SerializedShaderFloatValue ZClip = new();
+		public SerializedShaderFloatValue ZTest = new();
+		public SerializedShaderFloatValue ZWrite = new();
+		public SerializedShaderFloatValue Culling = new();
+		public SerializedShaderFloatValue Conservative = new();
+		public SerializedShaderFloatValue OffsetFactor = new();
+		public SerializedShaderFloatValue OffsetUnits = new();
+		public SerializedShaderFloatValue AlphaToMask = new();
+		public SerializedStencilOp StencilOp = new();
+		public SerializedStencilOp StencilOpFront = new();
+		public SerializedStencilOp StencilOpBack = new();
+		public SerializedShaderFloatValue StencilReadMask = new();
+		public SerializedShaderFloatValue StencilWriteMask = new();
+		public SerializedShaderFloatValue StencilRef = new();
+		public SerializedShaderFloatValue FogStart = new();
+		public SerializedShaderFloatValue FogEnd = new();
+		public SerializedShaderFloatValue FogDensity = new();
+		public SerializedShaderVectorValue FogColor = new();
+		public SerializedTagMap Tags = new();
 	}
 }

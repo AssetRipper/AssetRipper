@@ -2,7 +2,7 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedSubShader : IAssetReadable
+	public sealed class SerializedSubShader : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -14,6 +14,6 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public SerializedPass[] Passes { get; set; }
 		public int LOD { get; set; }
 
-		public SerializedTagMap Tags;
+		public SerializedTagMap Tags = new();
 	}
 }

@@ -3,8 +3,10 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public struct ShaderBindChannel : IAssetReadable
+	public sealed class ShaderBindChannel : IAssetReadable
 	{
+		public ShaderBindChannel() { }
+
 		public ShaderBindChannel(uint source, VertexComponent target)
 		{
 			Source = (byte)source;

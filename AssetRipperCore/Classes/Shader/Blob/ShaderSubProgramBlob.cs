@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
+using AssetRipper.Core.Utils;
 using K4os.Compression.LZ4;
 using System;
 using System.IO;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.Shader.Blob
 {
-	public struct ShaderSubProgramBlob
+	public sealed class ShaderSubProgramBlob
 	{
 		public void Read(LayoutInfo layout, byte[] compressedBlob, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths)
 		{
@@ -32,7 +33,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 			if (segment == 0)
 			{
 				Entries = blobReader.ReadAssetArray<ShaderSubProgramEntry>();
-				SubPrograms = new ShaderSubProgram[Entries.Length];
+				SubPrograms = ArrayUtils.CreateAndInitializeArray<ShaderSubProgram>(Entries.Length);
 			}
 			ReadSegment(blobReader, segment);
 		}
@@ -41,7 +42,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 		{
 			for (int i = 0; i < Entries.Length; i++)
 			{
-				ref ShaderSubProgramEntry entry = ref Entries[i];
+				ShaderSubProgramEntry entry = Entries[i];
 				if (entry.Segment == segment)
 				{
 					reader.BaseStream.Position = entry.Offset;
@@ -104,7 +105,7 @@ namespace AssetRipper.Core.Classes.Shader.Blob
 		{
 			for (int i = 0; i < Entries.Length; i++)
 			{
-				ref ShaderSubProgramEntry entry = ref Entries[i];
+				ShaderSubProgramEntry entry = Entries[i];
 				if (entry.Segment == segment)
 				{
 					writer.BaseStream.Position = entry.Offset;

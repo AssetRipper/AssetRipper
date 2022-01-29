@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedCustomEditorForRenderPipeline : IAssetReadable
+	public sealed class SerializedCustomEditorForRenderPipeline : IAssetReadable
 	{
 		public string customEditorName { get; set; }
 		public string renderPipelineType { get; set; }

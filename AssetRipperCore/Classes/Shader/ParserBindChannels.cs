@@ -2,8 +2,10 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public struct ParserBindChannels : IAssetReadable
+	public sealed class ParserBindChannels : IAssetReadable
 	{
+		public ParserBindChannels() { }
+
 		public ParserBindChannels(ShaderBindChannel[] channels, int sourceMap)
 		{
 			Channels = channels;

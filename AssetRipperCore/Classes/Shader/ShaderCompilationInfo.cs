@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public struct ShaderCompilationInfo : IAssetReadable, IYAMLExportable
+	public sealed class ShaderCompilationInfo : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 5.2.0 adn greater
@@ -46,6 +46,6 @@ namespace AssetRipper.Core.Classes.Shader
 		public const string HasSurfaceShadersName = "m_HasSurfaceShaders";
 		public const string HasFixedFunctionShadersName = "m_HasFixedFunctionShaders";
 
-		private Dictionary<int, ShaderSnippet> m_snippets;
+		private Dictionary<int, ShaderSnippet> m_snippets = new();
 	}
 }

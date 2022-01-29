@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedTagMap : IAssetReadable
+	public sealed class SerializedTagMap : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{

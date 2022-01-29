@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedShaderVectorValue : IAssetReadable
+	public sealed class SerializedShaderVectorValue : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -17,9 +17,9 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 
 		public string Name { get; set; }
 
-		public SerializedShaderFloatValue X;
-		public SerializedShaderFloatValue Y;
-		public SerializedShaderFloatValue Z;
-		public SerializedShaderFloatValue W;
+		public SerializedShaderFloatValue X = new();
+		public SerializedShaderFloatValue Y = new();
+		public SerializedShaderFloatValue Z = new();
+		public SerializedShaderFloatValue W = new();
 	}
 }

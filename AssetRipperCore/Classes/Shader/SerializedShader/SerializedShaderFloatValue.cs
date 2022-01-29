@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedShaderFloatValue : IAssetReadable
+	public sealed class SerializedShaderFloatValue : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{

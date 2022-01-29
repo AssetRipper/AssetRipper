@@ -4,8 +4,10 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public struct KeywordTargetInfo : IAssetReadable, IYAMLExportable
+	public sealed class KeywordTargetInfo : IAssetReadable, IYAMLExportable
 	{
+		public KeywordTargetInfo() { }
+
 		public KeywordTargetInfo(string name, int requirements)
 		{
 			KeywordName = name;

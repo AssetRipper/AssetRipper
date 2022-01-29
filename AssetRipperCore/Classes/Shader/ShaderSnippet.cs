@@ -11,7 +11,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public struct ShaderSnippet : IAssetReadable, IYAMLExportable
+	public sealed class ShaderSnippet : IAssetReadable, IYAMLExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -451,7 +451,7 @@ namespace AssetRipper.Core.Classes.Shader
 		public const string NonStrippedUserKeywordsName = "m_NonStrippedUserKeywords";
 		public const string BuiltinKeywordsName = "m_BuiltinKeywords";
 
-		public Hash128 IncludesHash;
-		public Hash128 CodeHash;
+		public Hash128 IncludesHash = new();
+		public Hash128 CodeHash = new();
 	}
 }

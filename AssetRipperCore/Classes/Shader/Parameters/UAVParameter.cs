@@ -2,8 +2,10 @@
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public struct UAVParameter : IAssetReadable
+	public sealed class UAVParameter : IAssetReadable
 	{
+		public UAVParameter() { }
+
 		public UAVParameter(string name, int index, int originalIndex)
 		{
 			Name = name;

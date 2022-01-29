@@ -3,8 +3,10 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public struct VectorParameter : IAssetReadable
+	public sealed class VectorParameter : IAssetReadable
 	{
+		public VectorParameter() { }
+
 		public VectorParameter(string name, ShaderParamType type, int index, int columns)
 		{
 			Name = name;

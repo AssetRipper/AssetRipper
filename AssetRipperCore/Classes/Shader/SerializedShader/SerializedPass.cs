@@ -7,7 +7,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedPass : IAssetReadable
+	public sealed class SerializedPass : IAssetReadable
 	{
 		/// <summary>
 		/// 2020.2 and greater
@@ -81,14 +81,14 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public string Name { get; set; }
 		public string TextureName { get; set; }
 
-		public SerializedShaderState State;
-		public SerializedProgram ProgVertex;
-		public SerializedProgram ProgFragment;
-		public SerializedProgram ProgGeometry;
-		public SerializedProgram ProgHull;
-		public SerializedProgram ProgDomain;
-		public SerializedProgram ProgRayTracing;
-		public SerializedTagMap Tags;
+		public SerializedShaderState State = new();
+		public SerializedProgram ProgVertex = new();
+		public SerializedProgram ProgFragment = new();
+		public SerializedProgram ProgGeometry = new();
+		public SerializedProgram ProgHull = new();
+		public SerializedProgram ProgDomain = new();
+		public SerializedProgram ProgRayTracing = new();
+		public SerializedTagMap Tags = new();
 
 		private Dictionary<string, int> m_nameIndices;
 	}

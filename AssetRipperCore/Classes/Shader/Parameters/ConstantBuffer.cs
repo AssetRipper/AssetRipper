@@ -3,7 +3,7 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public struct ConstantBuffer : IAssetReadable
+	public sealed class ConstantBuffer : IAssetReadable
 	{
 		/// <summary>
 		/// 2017.3 and greater
@@ -15,6 +15,9 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 		/// Not present in 2021.1.0 - 2021.1.3
 		/// </summary>
 		public static bool HasIsPartialCB(UnityVersion version) => version.Major == 2021 ? version.IsGreaterEqual(2021, 1, 4) : version.IsGreaterEqual(2020, 3, 2);
+
+		public ConstantBuffer() { }
+
 		public ConstantBuffer(string name, MatrixParameter[] matrices, VectorParameter[] vectors, StructParameter[] structs, int usedSize)
 		{
 			Name = name;

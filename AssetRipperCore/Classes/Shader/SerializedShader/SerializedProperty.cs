@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public class SerializedProperty : IAssetReadable, ISerializedProperty
+	public sealed class SerializedProperty : IAssetReadable, ISerializedProperty
 	{
 		public void Read(AssetReader reader)
 		{

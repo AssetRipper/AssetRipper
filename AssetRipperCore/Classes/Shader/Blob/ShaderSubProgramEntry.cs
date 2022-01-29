@@ -3,7 +3,7 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Shader.Blob
 {
-	public struct ShaderSubProgramEntry : IAssetReadable, IAssetWritable
+	public sealed class ShaderSubProgramEntry : IAssetReadable, IAssetWritable
 	{
 		/// <summary>
 		/// 2019.3 and greater

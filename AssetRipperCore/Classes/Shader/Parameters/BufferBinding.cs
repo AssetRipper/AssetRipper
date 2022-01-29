@@ -3,8 +3,10 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public struct BufferBinding : IAssetReadable
+	public sealed class BufferBinding : IAssetReadable
 	{
+		public BufferBinding() { }
+
 		public BufferBinding(string name, int index)
 		{
 			Name = name;

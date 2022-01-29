@@ -3,8 +3,10 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public struct MatrixParameter : IAssetReadable
+	public sealed class MatrixParameter : IAssetReadable
 	{
+		public MatrixParameter() { }
+
 		public MatrixParameter(string name, ShaderParamType type, int index, int rowCount, int columnCount)
 		{
 			Name = name;

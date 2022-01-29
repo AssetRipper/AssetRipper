@@ -8,7 +8,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public struct ShaderSubProgram : IAssetReadable, IAssetWritable
+	public sealed class ShaderSubProgram : IAssetReadable, IAssetWritable
 	{
 		/// <summary>
 		/// 2019.1 and greater
@@ -355,6 +355,6 @@ namespace AssetRipper.Core.Classes.Shader
 		public BufferBinding[] ConstantBufferBindings { get; set; }
 		public StructParameter[] StructParameters { get; set; }
 
-		public ParserBindChannels BindChannels;
+		public ParserBindChannels BindChannels = new();
 	}
 }

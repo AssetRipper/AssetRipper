@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public struct ShaderError : IAssetReadable, IYAMLExportable
+	public sealed class ShaderError : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 3.5.0 and greater

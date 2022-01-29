@@ -3,7 +3,7 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedProgram : IAssetReadable
+	public sealed class SerializedProgram : IAssetReadable
 	{
 		/// <summary>
 		/// 2020.3.2 and greater

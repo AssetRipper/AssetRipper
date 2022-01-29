@@ -187,7 +187,7 @@ namespace AssetRipper.Core.Classes.Shader
 			}
 			else
 			{
-				Blobs = new ShaderSubProgramBlob[1];
+				Blobs = new ShaderSubProgramBlob[1] { new() };
 				uint[] offsets = new uint[] { offset };
 				uint[] compressedLengths = new uint[] { compressedLength };
 				uint[] decompressedLengths = new uint[] { decompressedLength };
@@ -200,6 +200,7 @@ namespace AssetRipper.Core.Classes.Shader
 			Blobs = new ShaderSubProgramBlob[offsets.Length];
 			for (int i = 0; i < Blobs.Length; i++)
 			{
+				Blobs[i] = new();
 				uint[] blobOffsets = new uint[] { offsets[i] };
 				uint[] blobCompressedLengths = new uint[] { compressedLengths[i] };
 				uint[] blobDecompressedLengths = new uint[] { decompressedLengths[i] };
@@ -212,6 +213,7 @@ namespace AssetRipper.Core.Classes.Shader
 			Blobs = new ShaderSubProgramBlob[offsets.Length];
 			for (int i = 0; i < Platforms.Length; i++)
 			{
+				Blobs[i] = new();
 				uint[] blobOffsets = offsets[i];
 				uint[] blobCompressedLengths = compressedLengths[i];
 				uint[] blobDecompressedLengths = decompressedLengths[i];

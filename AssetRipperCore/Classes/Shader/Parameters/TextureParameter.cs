@@ -3,12 +3,14 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public struct TextureParameter : IAssetReadable
+	public sealed class TextureParameter : IAssetReadable
 	{
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
 		public static bool HasMultiSampled(UnityVersion version) => version.IsGreaterEqual(2017, 3);
+
+		public TextureParameter() { }
 
 		public TextureParameter(string name, int index, byte dimension, int sampler)
 		{

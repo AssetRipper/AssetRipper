@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedProgramParameters : IAssetReadable
+	public sealed class SerializedProgramParameters : IAssetReadable
 	{
 		public VectorParameter[] VectorParams { get; set; }
 		public MatrixParameter[] MatrixParams { get; set; }

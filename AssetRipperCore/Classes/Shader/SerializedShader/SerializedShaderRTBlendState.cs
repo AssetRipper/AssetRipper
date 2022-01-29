@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public struct SerializedShaderRTBlendState : IAssetReadable
+	public sealed class SerializedShaderRTBlendState : IAssetReadable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -16,13 +16,13 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			ColMask.Read(reader);
 		}
 
-		public SerializedShaderFloatValue SrcBlend;
-		public SerializedShaderFloatValue DestBlend;
-		public SerializedShaderFloatValue SrcBlendAlpha;
-		public SerializedShaderFloatValue DestBlendAlpha;
-		public SerializedShaderFloatValue BlendOp;
-		public SerializedShaderFloatValue BlendOpAlpha;
-		public SerializedShaderFloatValue ColMask;
+		public SerializedShaderFloatValue SrcBlend = new();
+		public SerializedShaderFloatValue DestBlend = new();
+		public SerializedShaderFloatValue SrcBlendAlpha = new();
+		public SerializedShaderFloatValue DestBlendAlpha = new();
+		public SerializedShaderFloatValue BlendOp = new();
+		public SerializedShaderFloatValue BlendOpAlpha = new();
+		public SerializedShaderFloatValue ColMask = new();
 
 		public BlendMode SrcBlendValue => (BlendMode)SrcBlend.Val;
 		public BlendMode DestBlendValue => (BlendMode)DestBlend.Val;
