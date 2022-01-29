@@ -5,8 +5,10 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Math.Colors
 {
-	public struct ColorRGBA32 : IAsset
+	public sealed class ColorRGBA32 : IAsset, IColorRGBA32
 	{
+		public ColorRGBA32() { }
+
 		public ColorRGBA32(byte r, byte g, byte b, byte a)
 		{
 			RGBA = unchecked((uint)(r | g << 8 | b << 16 | a << 24));
