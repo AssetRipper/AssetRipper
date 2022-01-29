@@ -8,9 +8,10 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 {
-	public struct KeyframeTpl<T> : IAsset
-		where T : IAsset, new()
+	public sealed class KeyframeTpl<T> : IAsset where T : IAsset, new()
 	{
+		public KeyframeTpl() { }
+
 		public KeyframeTpl(float time, T value, T weight) : this(time, value, default, default, weight)
 		{
 			// this enum member is version agnostic
@@ -28,6 +29,24 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 			WeightedMode = WeightedMode.None;
 			InWeight = weight;
 			OutWeight = weight;
+		}
+
+		/// <summary>
+		/// Makes a shallow clone
+		/// </summary>
+		/// <returns></returns>
+		public KeyframeTpl<T> Clone()
+		{
+			KeyframeTpl<T> instance = new();
+			instance.Time = Time;
+			instance.Value = Value;
+			instance.WeightedMode = WeightedMode;
+			instance.InWeight = InWeight;
+			instance.OutWeight = OutWeight;
+			instance.InSlope = InSlope;
+			instance.OutSlope = OutSlope;
+			instance.TangentMode = TangentMode;
+			return instance;
 		}
 
 		public void Read(AssetReader reader)
@@ -142,11 +161,11 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 		public static Vector3f DefaultVector3Weight => new Vector3f(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
 		public static Quaternionf DefaultQuaternionWeight => new Quaternionf(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
 
-		public T Value;
-		public T InSlope;
-		public T OutSlope;
-		public T InWeight;
-		public T OutWeight;
+		public T Value = new();
+		public T InSlope = new();
+		public T OutSlope = new();
+		public T InWeight = new();
+		public T OutWeight = new();
 
 		public const string TimeName = "time";
 		public const string ValueName = "value";

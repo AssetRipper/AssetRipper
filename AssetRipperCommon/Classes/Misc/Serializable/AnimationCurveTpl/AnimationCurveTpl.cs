@@ -9,9 +9,10 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 {
-	public struct AnimationCurveTpl<T> : IAsset
-		where T : IAsset, IYAMLExportable, new()
+	public sealed class AnimationCurveTpl<T> : IAsset where T : IAsset, IYAMLExportable, new()
 	{
+		public AnimationCurveTpl() { }
+
 		public AnimationCurveTpl(bool init)
 		{
 			PreInfinity = CurveLoopTypes.CycleWithOffset;

@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Converters.TrailRenderer
 
 		private static AnimationCurveTpl<T> Convert<T>(this AnimationCurveTpl<T> _this, IExportContainer container) where T : struct, IAsset, IYAMLExportable
 		{
-			return AnimationCurveTplConverter.Convert(container, ref _this);
+			return AnimationCurveTplConverter.Convert(container, _this);
 		}
 	}
 }

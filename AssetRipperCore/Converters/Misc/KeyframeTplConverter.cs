@@ -7,9 +7,9 @@ namespace AssetRipper.Core.Converters.Misc
 {
 	public static class KeyframeTplConverter
 	{
-		public static KeyframeTpl<T> Convert<T>(IExportContainer container, ref KeyframeTpl<T> origin) where T : struct, IAsset
+		public static KeyframeTpl<T> Convert<T>(IExportContainer container, KeyframeTpl<T> origin) where T : IAsset, new()
 		{
-			KeyframeTpl<T> instance = origin;
+			KeyframeTpl<T> instance = origin.Clone();
 			instance.TangentMode = origin.GetTangentMode(container.Version).ToTangent(container.ExportVersion);
 			return instance;
 		}
