@@ -121,10 +121,10 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public const string SpecularMetallicName = "specularMetallic";
 		public const string SmoothnessName = "smoothness";
 
-		public PPtr<Texture2D.Texture2D> Texture;
-		public PPtr<Texture2D.Texture2D> NormalMap;
-		public Vector2f TileSize;
-		public Vector2f TileOffset;
-		public Vector4f SpecularMetallic;
+		public PPtr<Texture2D.Texture2D> Texture = new();
+		public PPtr<Texture2D.Texture2D> NormalMap = new();
+		public Vector2f TileSize = new();
+		public Vector2f TileOffset = new();
+		public Vector4f SpecularMetallic = new();
 	}
 }

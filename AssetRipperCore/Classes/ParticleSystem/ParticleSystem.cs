@@ -384,7 +384,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 		public ParticleSystemStopAction StopAction { get; set; }
 		public ParticleSystemCullingMode CullingMode { get; set; }
 		public ParticleSystemRingBufferMode RingBufferMode { get; set; }
-		public Vector2f RingBufferLoopRange { get; set; }
+		public Vector2f RingBufferLoopRange { get; set; } = new();
 		public int EmitterVelocityMode { get; set; }
 		public bool Looping { get; set; }
 		public bool Prewarm { get; set; }

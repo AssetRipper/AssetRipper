@@ -231,7 +231,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			set => Width = value;
 		}
 		public int Levels { get; set; }
-		public Vector3f Scale { get; }
+		public Vector3f Scale => m_Scale;
 
 		public const string HeightsName = "m_Heights";
 		public const string HolesName = "m_Holes";

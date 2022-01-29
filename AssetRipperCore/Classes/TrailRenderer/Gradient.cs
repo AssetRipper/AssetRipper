@@ -48,10 +48,10 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 		public const string Color3Name = "m_Color3";
 		public const string Color4Name = "m_Color4";
 
-		public ColorRGBA32 Color0;
-		public ColorRGBA32 Color1;
-		public ColorRGBA32 Color2;
-		public ColorRGBA32 Color3;
-		public ColorRGBA32 Color4;
+		public ColorRGBA32 Color0 = new();
+		public ColorRGBA32 Color1 = new();
+		public ColorRGBA32 Color2 = new();
+		public ColorRGBA32 Color3 = new();
+		public ColorRGBA32 Color4 = new();
 	}
 }
