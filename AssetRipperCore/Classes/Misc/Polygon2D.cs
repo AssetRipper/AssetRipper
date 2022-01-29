@@ -6,7 +6,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct Polygon2D : IAssetReadable, IYAMLExportable
+	public sealed class Polygon2D : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

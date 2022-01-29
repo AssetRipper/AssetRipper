@@ -969,7 +969,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 			if (HasStreamData(container.ExportVersion))
 			{
-				StreamingInfo streamData = new StreamingInfo(true);
+				StreamingInfo streamData = new StreamingInfo();
 				node.Add(StreamDataName, streamData.ExportYAML(container));
 			}
 			return node;

@@ -8,7 +8,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct MdFour : IAsset
+	public sealed class MdFour : IAsset
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{

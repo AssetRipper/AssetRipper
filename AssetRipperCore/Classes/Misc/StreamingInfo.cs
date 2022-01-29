@@ -10,26 +10,12 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct StreamingInfo : IStreamingInfo
+	public sealed class StreamingInfo : IStreamingInfo
 	{
 		/// <summary>
 		/// 2020 and greater
 		/// </summary>
 		public static bool IsOffsetInt64(UnityVersion version) => version.IsGreaterEqual(2020);
-
-		public StreamingInfo(bool _)
-		{
-			Offset = 0;
-			Size = 0;
-			Path = string.Empty;
-		}
-
-		public StreamingInfo(UnityVersion version)
-		{
-			Offset = 0;
-			Size = 0;
-			Path = string.Empty;
-		}
 
 		public void Read(AssetReader reader)
 		{
@@ -88,7 +74,7 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public long Offset { get; set; }
 		public uint Size { get; set; }
-		public string Path { get; set; }
+		public string Path { get; set; } = string.Empty;
 		public UnityVersion AssetUnityVersion { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }
 		public EndianType EndianType { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }
 		public TransferInstructionFlags TransferInstructionFlags { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }

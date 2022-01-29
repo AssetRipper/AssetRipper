@@ -6,15 +6,15 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct XForm : IAssetReadable, IYAMLExportable
+	public sealed class XForm : IAssetReadable, IYAMLExportable
 	{
 		public const string TName = "t";
 		public const string QName = "q";
 		public const string SName = "s";
 
-		public Vector4f T4;
-		public Vector4f Q;
-		public Vector4f S4;
+		public Vector4f T4 = new();
+		public Vector4f Q = new();
+		public Vector4f S4 = new();
 
 		//public XForm() { }
 

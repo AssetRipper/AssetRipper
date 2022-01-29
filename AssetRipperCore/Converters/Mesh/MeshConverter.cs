@@ -356,7 +356,7 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static StreamingInfo GetStreamData(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
-			return Classes.Mesh.Mesh.HasStreamData(container.Version) ? origin.StreamData : new StreamingInfo(container.ExportVersion);
+			return Classes.Mesh.Mesh.HasStreamData(container.Version) ? origin.StreamData : new StreamingInfo();
 		}
 
 		private static VertexData GenerateVertexData(IExportContainer container, Classes.Mesh.Mesh origin)

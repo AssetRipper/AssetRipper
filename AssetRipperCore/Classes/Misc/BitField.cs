@@ -6,8 +6,10 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct BitField : IAssetReadable, IYAMLExportable
+	public sealed class BitField : IAssetReadable, IYAMLExportable
 	{
+		public BitField() { }
+
 		public BitField(uint bits)
 		{
 			Bits = bits;

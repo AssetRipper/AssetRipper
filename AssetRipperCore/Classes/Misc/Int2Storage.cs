@@ -7,7 +7,7 @@ namespace AssetRipper.Core.Classes.Misc
 	/// <summary>
 	/// Real name is 'int2_storage'
 	/// </summary>
-	public struct Int2Storage : IAsset
+	public sealed class Int2Storage : IAsset
 	{
 		public void Read(AssetReader reader)
 		{

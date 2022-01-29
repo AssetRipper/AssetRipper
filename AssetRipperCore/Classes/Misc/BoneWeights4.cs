@@ -7,8 +7,10 @@ namespace AssetRipper.Core.Classes.Misc
 	/// <summary>
 	/// BoneInfluence previously
 	/// </summary>
-	public struct BoneWeights4 : IAsset
+	public sealed class BoneWeights4 : IAsset
 	{
+		public BoneWeights4() { }
+
 		public BoneWeights4(float w0, float w1, float w2, float w3, int i0, int i1, int i2, int i3)
 		{
 			m_Weights = new float[4];

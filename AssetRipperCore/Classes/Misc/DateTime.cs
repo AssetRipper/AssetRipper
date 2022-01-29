@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct DateTime : IAssetReadable, IYAMLExportable
+	public sealed class DateTime : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{

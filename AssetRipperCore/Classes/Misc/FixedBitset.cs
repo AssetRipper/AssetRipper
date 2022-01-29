@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML.Extensions;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct FixedBitset : IAssetReadable, IYAMLExportable
+	public sealed class FixedBitset : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
