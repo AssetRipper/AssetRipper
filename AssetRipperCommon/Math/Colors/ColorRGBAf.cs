@@ -4,22 +4,22 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 
 namespace AssetRipper.Core.Math.Colors
 {
-	[StructLayout(LayoutKind.Sequential, Pack = 4)]
-	public struct ColorRGBAf : IAsset, IEquatable<ColorRGBAf>
+	public sealed class ColorRGBAf : IAsset, IEquatable<ColorRGBAf>, IColorRGBAf
 	{
-		public float R;
-		public float G;
-		public float B;
-		public float A;
+		public float R { get; set; }
+		public float G { get; set; }
+		public float B { get; set; }
+		public float A { get; set; }
 
 		public const string RName = "r";
 		public const string GName = "g";
 		public const string BName = "b";
 		public const string AName = "a";
+
+		public ColorRGBAf() { }
 
 		public ColorRGBAf(float r, float g, float b, float a)
 		{
@@ -31,13 +31,8 @@ namespace AssetRipper.Core.Math.Colors
 
 		public static explicit operator ColorRGBAf(ColorRGBA32 color32)
 		{
-			ColorRGBAf color = new()
-			{
-				R = color32.R / 255.0f,
-				G = color32.G / 255.0f,
-				B = color32.B / 255.0f,
-				A = color32.A / 255.0f
-			};
+			ColorRGBAf color = new();
+			color.CopyValuesFrom(color32);
 			return color;
 		}
 
@@ -45,19 +40,28 @@ namespace AssetRipper.Core.Math.Colors
 
 		public ColorRGBAf Clone() => new ColorRGBAf(R, G, B, A);
 
+		public void CopyValuesFrom(ColorRGBA32 color32)
+		{
+			R = color32.R / 255.0f;
+			G = color32.G / 255.0f;
+			B = color32.B / 255.0f;
+			A = color32.A / 255.0f;
+		}
+
+		public void CopyValuesFrom(ColorRGBAf colorf)
+		{
+			R = colorf.R;
+			G = colorf.G;
+			B = colorf.B;
+			A = colorf.A;
+		}
+
 		public void Read(AssetReader reader)
 		{
 			R = reader.ReadSingle();
 			G = reader.ReadSingle();
 			B = reader.ReadSingle();
 			A = reader.ReadSingle();
-		}
-
-		public void Read32(AssetReader reader)
-		{
-			ColorRGBA32 color32 = new();
-			color32.Read(reader);
-			this = (ColorRGBAf)color32;
 		}
 
 		public void Write(AssetWriter writer)
@@ -91,9 +95,10 @@ namespace AssetRipper.Core.Math.Colors
 
 		public override bool Equals(object other)
 		{
-			if (other is not ColorRGBAf)
+			if (other is ColorRGBAf color)
+				return Equals(color);
+			else
 				return false;
-			return Equals((ColorRGBAf)other);
 		}
 
 		public bool Equals(ColorRGBAf other)
