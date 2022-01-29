@@ -15,8 +15,10 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
-	public struct SpriteSheetMetaData : IAsset, IDependent
+	public sealed class SpriteSheetMetaData : IAsset, IDependent
 	{
+		public SpriteSheetMetaData() { }
+
 		public SpriteSheetMetaData(LayoutInfo layout)
 		{
 			Sprites = Array.Empty<SpriteMetaData>();
@@ -33,7 +35,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			NameFileIdTable = new();
 		}
 
-		public SpriteSheetMetaData(ref SpriteMetaData metadata)
+		public SpriteSheetMetaData(SpriteMetaData metadata)
 		{
 			Sprites = Array.Empty<SpriteMetaData>();
 			Outline = metadata.Outline;
@@ -68,13 +70,13 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		/// </summary>
 		public static bool HasNameFileIdTable(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 
-		public ref SpriteMetaData GetSpriteMetaData(string name)
+		public SpriteMetaData GetSpriteMetaData(string name)
 		{
 			for (int i = 0; i < Sprites.Length; i++)
 			{
 				if (Sprites[i].Name == name)
 				{
-					return ref Sprites[i];
+					return Sprites[i];
 				}
 			}
 			throw new ArgumentException($"There is no sprite metadata with name {name}");

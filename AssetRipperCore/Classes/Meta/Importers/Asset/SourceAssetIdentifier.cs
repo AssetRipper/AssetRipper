@@ -4,7 +4,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 {
-	public struct SourceAssetIdentifier : IAsset
+	public sealed class SourceAssetIdentifier : IAsset
 	{
 		public static bool operator ==(SourceAssetIdentifier left, SourceAssetIdentifier right)
 		{

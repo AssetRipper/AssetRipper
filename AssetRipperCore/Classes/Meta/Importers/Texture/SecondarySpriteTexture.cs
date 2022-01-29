@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
-	public struct SecondarySpriteTexture : IAsset, IDependent
+	public sealed class SecondarySpriteTexture : IAsset, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -44,6 +44,6 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		public const string TextureName = "texture";
 		public const string NameName = "name";
 
-		public PPtr<Texture2D.Texture2D> Texture;
+		public PPtr<Texture2D.Texture2D> Texture = new();
 	}
 }

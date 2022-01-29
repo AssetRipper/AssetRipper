@@ -6,8 +6,10 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
-	public struct TextureImportOutput : IAsset
+	public sealed class TextureImportOutput : IAsset
 	{
+		public TextureImportOutput() { }
+
 		public TextureImportOutput(LayoutInfo layout)
 		{
 			TextureImportInstructions = new TextureImportInstructions(layout);
@@ -58,7 +60,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		public const string SourceTextureInformationName = "sourceTextureInformation";
 		public const string ImportInspectorWarningsName = "importInspectorWarnings";
 
-		public TextureImportInstructions TextureImportInstructions;
-		public SourceTextureInformation SourceTextureInformation;
+		public TextureImportInstructions TextureImportInstructions = new();
+		public SourceTextureInformation SourceTextureInformation = new();
 	}
 }

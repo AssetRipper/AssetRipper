@@ -348,8 +348,8 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 		public const string OldHashIdentityName = "m_OldHashIdentity";
 		public const string NewHashIdentityName = "m_NewHashIdentity";
 
-		public PPtr<Texture2D.Texture2D> Preview;
-		public MdFour OldHashIdentity;
-		public MdFour NewHashIdentity;
+		public PPtr<Texture2D.Texture2D> Preview = new();
+		public MdFour OldHashIdentity = new();
+		public MdFour NewHashIdentity = new();
 	}
 }

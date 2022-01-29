@@ -161,7 +161,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				var kvp = m_sprites.First();
 				SpriteMetaData smeta = kvp.Key.GenerateSpriteMetaData(container, kvp.Value);
-				importer.SpriteSheet = new SpriteSheetMetaData(ref smeta);
+				importer.SpriteSheet = new SpriteSheetMetaData(smeta);
 			}
 			else
 			{
@@ -189,7 +189,7 @@ namespace AssetRipper.Library.Exporters.Textures
 					{
 #warning TODO: TEMP:
 						long exportID = GetExportID(sprite);
-						ref SpriteMetaData smeta = ref importer.SpriteSheet.GetSpriteMetaData(sprite.Name);
+						SpriteMetaData smeta = importer.SpriteSheet.GetSpriteMetaData(sprite.Name);
 						smeta.InternalID = exportID;
 						Tuple<ClassIDType, long> key = new Tuple<ClassIDType, long>(ClassIDType.Sprite, exportID);
 						importer.InternalIDToNameTable.Add(key, sprite.Name);

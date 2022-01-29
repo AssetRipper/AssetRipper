@@ -12,8 +12,10 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
-	public struct SpriteMetaData : IAsset
+	public sealed class SpriteMetaData : IAsset
 	{
+		public SpriteMetaData() { }
+
 		public SpriteMetaData(UnityVersion version)
 		{
 			Name = "sprite_0";
@@ -226,8 +228,8 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 		public const string EdgesName = "m_Edges";
 		public const string WeightsName = "m_Weights";
 
-		public Rectf Rect;
-		public Vector2f Pivot;
-		public Vector4f Border;
+		public Rectf Rect = new();
+		public Vector2f Pivot = new();
+		public Vector4f Border = new();
 	}
 }

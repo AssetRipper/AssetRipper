@@ -6,8 +6,10 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
-	public struct SourceTextureInformation : IAsset
+	public sealed class SourceTextureInformation : IAsset
 	{
+		public SourceTextureInformation() { }
+
 		public SourceTextureInformation(LayoutInfo layout) : this()
 		{
 #warning TODO: default values
