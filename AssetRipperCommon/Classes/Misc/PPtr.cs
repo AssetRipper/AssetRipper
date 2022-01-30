@@ -13,9 +13,6 @@ namespace AssetRipper.Core.Classes.Misc
 {
 	public static class PPtr
 	{
-		public const string FileIDName = "m_FileID";
-		public const string PathIDName = "m_PathID";
-
 		/// <summary>
 		/// At least version 5.0.0
 		/// </summary>
@@ -170,8 +167,10 @@ namespace AssetRipper.Core.Classes.Misc
 	{
 	}
 
-	public struct PPtr<T> : IAsset, IPPtr<T> where T : IUnityObjectBase
+	public sealed class PPtr<T> : IAsset, IPPtr<T> where T : IUnityObjectBase
 	{
+		public PPtr() { }
+
 		public PPtr(int fileIndex, long pathID)
 		{
 			FileIndex = fileIndex;

@@ -464,7 +464,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 		public ColorSpace BakedColorSpace { get; set; }
 		public bool UseDualLightmapsInForward { get; set; }
 		public int RuntimeCPUUsage { get; set; }
-		public PPtr<LightingSettings> LightingSettings { get; set; }
+		public PPtr<LightingSettings> LightingSettings { get; set; } = new();
 		public bool UseShadowmask
 		{
 			get => ShadowMaskMode != 0;
