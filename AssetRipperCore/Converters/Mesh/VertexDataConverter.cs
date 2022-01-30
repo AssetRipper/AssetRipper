@@ -152,7 +152,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 			if (origin.Skin.Length > 0)
 			{
-				byte skinStream = (byte)(channels.Where(t => t.IsSet).Max(t => t.Stream) + 1);
+				byte skinStream = (byte)(channels.Where(t => t.IsSet()).Max(t => t.Stream) + 1);
 				byte offset = 0;
 
 				VertexFormat weightVFormat = ShaderChannel.SkinWeight.GetVertexFormat(container.ExportVersion);
@@ -206,7 +206,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			{
 				if (VertexData.ToSerializedVersion(container.ExportVersion) >= 2)
 				{
-					if (instance.Channels[(int)ShaderChannel2018.SkinWeight].IsSet)
+					if (instance.Channels[(int)ShaderChannel2018.SkinWeight].IsSet())
 					{
 						return true;
 					}
@@ -247,7 +247,7 @@ namespace AssetRipper.Core.Converters.Mesh
 					continue;
 				}
 				ChannelInfo ochannel = origin.Channels[c.ToChannel(container.Version)];
-				if (!ochannel.IsSet)
+				if (!ochannel.IsSet())
 				{
 					continue;
 				}
@@ -257,7 +257,7 @@ namespace AssetRipper.Core.Converters.Mesh
 					continue;
 				}
 				ChannelInfo ichannel = instance.Channels[c.ToChannel(container.ExportVersion)];
-				if (!ichannel.IsSet)
+				if (!ichannel.IsSet())
 				{
 					continue;
 				}
@@ -276,7 +276,7 @@ namespace AssetRipper.Core.Converters.Mesh
 					case VertexFormat.Int:
 						for (int i = 0; i < vertexCount; i++)
 						{
-							for (int j = 0; j < ochannel.Dimension; j++)
+							for (int j = 0; j < ochannel.GetDataDimension(); j++)
 							{
 								dst.Write(src.ReadUInt32());
 							}
@@ -290,7 +290,7 @@ namespace AssetRipper.Core.Converters.Mesh
 						{
 							for (int i = 0; i < vertexCount; i++)
 							{
-								for (int j = 0; j < ochannel.Dimension; j++)
+								for (int j = 0; j < ochannel.GetDataDimension(); j++)
 								{
 									dst.Write(src.ReadByte());
 								}
@@ -302,7 +302,7 @@ namespace AssetRipper.Core.Converters.Mesh
 						{
 							for (int i = 0; i < vertexCount; i++)
 							{
-								for (int j = 0; j < ochannel.Dimension; j++)
+								for (int j = 0; j < ochannel.GetDataDimension(); j++)
 								{
 									dst.Write(src.ReadUInt32());
 								}
@@ -314,7 +314,7 @@ namespace AssetRipper.Core.Converters.Mesh
 					case VertexFormat.Float16:
 						for (int i = 0; i < vertexCount; i++)
 						{
-							for (int j = 0; j < ochannel.Dimension; j++)
+							for (int j = 0; j < ochannel.GetDataDimension(); j++)
 							{
 								dst.Write(src.ReadUInt16());
 							}
@@ -325,7 +325,7 @@ namespace AssetRipper.Core.Converters.Mesh
 					case VertexFormat.Byte:
 						for (int i = 0; i < vertexCount; i++)
 						{
-							for (int j = 0; j < ochannel.Dimension; j++)
+							for (int j = 0; j < ochannel.GetDataDimension(); j++)
 							{
 								dst.Write(src.ReadByte());
 							}

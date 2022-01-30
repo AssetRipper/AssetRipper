@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		public static ChannelInfo Convert(IExportContainer container, ChannelInfo origin)
 		{
 			ChannelInfo instance = origin.Clone();
-			if (origin.IsSet)
+			if (origin.IsSet())
 			{
 				if (VertexFormatExtensions.VertexFormat2019Relevant(container.Version))
 				{
@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Converters.Mesh
 						if (formatv4 == VertexChannelFormat.Color)
 						{
 							// replace Color4b[1] to Color1b[4]
-							instance.RawDimension = (byte)(instance.Dimension * 4);
+							instance.Dimension = (byte)(instance.GetDataDimension() * 4);
 						}
 					}
 				}

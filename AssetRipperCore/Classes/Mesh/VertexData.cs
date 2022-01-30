@@ -73,7 +73,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			ChannelInfo weightChannel = Channels[(int)ShaderChannel2018.SkinWeight];
 			ChannelInfo indexChannel = Channels[(int)ShaderChannel2018.SkinBoneIndex];
-			if (!weightChannel.IsSet)
+			if (!weightChannel.IsSet())
 			{
 				return Array.Empty<BoneWeights4>();
 			}
@@ -87,8 +87,8 @@ namespace AssetRipper.Core.Classes.Mesh
 			using MemoryStream memStream = new MemoryStream(Data);
 			using BinaryReader reader = new BinaryReader(memStream);
 
-			int weightCount = System.Math.Min((int)weightChannel.Dimension, 4);
-			int indexCount = System.Math.Min((int)indexChannel.Dimension, 4);
+			int weightCount = System.Math.Min((int)weightChannel.GetDataDimension(), 4);
+			int indexCount = System.Math.Min((int)indexChannel.GetDataDimension(), 4);
 			float[] weights = new float[System.Math.Max(weightCount, 4)];
 			int[] indices = new int[System.Math.Max(indexCount, 4)];
 			for (int v = 0; v < VertexCount; v++)
@@ -113,7 +113,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public Vector3f[] GenerateVertices(UnityVersion version, SubMesh submesh)
 		{
 			ChannelInfo channel = GetChannel(version, ShaderChannel.Vertex);
-			if (!channel.IsSet)
+			if (!channel.IsSet())
 			{
 				if (AllowUnsetVertexChannel(version))
 				{
@@ -258,7 +258,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public int GetStreamStride(UnityVersion version, int stream)
 		{
 			return HasStreams(version) ?
-				(int)Streams[stream].Stride : Channels.Where(t => t.IsSet && t.Stream == stream).Sum(t => t.GetStride(version));
+				(int)Streams[stream].Stride : Channels.Where(t => t.IsSet() && t.Stream == stream).Sum(t => t.GetStride(version));
 		}
 
 		public int GetStreamSize(UnityVersion version, int stream)
@@ -291,10 +291,10 @@ namespace AssetRipper.Core.Classes.Mesh
 					var m_Channel = Channels[chn];
 					if (m_Channel.Stream == s)
 					{
-						if (m_Channel.Dimension > 0)
+						if (m_Channel.GetDataDimension() > 0)
 						{
 							chnMask |= 1u << chn;
-							stride += m_Channel.Dimension * MeshHelper.GetFormatSize(MeshHelper.ToVertexFormat(m_Channel.Format, version));
+							stride += m_Channel.GetDataDimension() * MeshHelper.GetFormatSize(MeshHelper.ToVertexFormat(m_Channel.Format, version));
 						}
 					}
 				}
@@ -332,23 +332,23 @@ namespace AssetRipper.Core.Classes.Mesh
 							case 0: //kShaderChannelVertex
 							case 1: //kShaderChannelNormal
 								m_Channel.Format = 0; //kChannelFormatFloat
-								m_Channel.Dimension = 3;
+								m_Channel.SetDataDimension(3);
 								break;
 							case 2: //kShaderChannelColor
 								m_Channel.Format = 2; //kChannelFormatColor
-								m_Channel.Dimension = 4;
+								m_Channel.SetDataDimension(4);
 								break;
 							case 3: //kShaderChannelTexCoord0
 							case 4: //kShaderChannelTexCoord1
 								m_Channel.Format = 0; //kChannelFormatFloat
-								m_Channel.Dimension = 2;
+								m_Channel.SetDataDimension(2);
 								break;
 							case 5: //kShaderChannelTangent
 								m_Channel.Format = 0; //kChannelFormatFloat
-								m_Channel.Dimension = 4;
+								m_Channel.SetDataDimension(4);
 								break;
 						}
-						offset += (byte)(m_Channel.Dimension * MeshHelper.GetFormatSize(MeshHelper.ToVertexFormat(m_Channel.Format, version)));
+						offset += (byte)(m_Channel.GetDataDimension() * MeshHelper.GetFormatSize(MeshHelper.ToVertexFormat(m_Channel.Format, version)));
 					}
 				}
 			}

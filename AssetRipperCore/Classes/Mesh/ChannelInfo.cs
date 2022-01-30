@@ -7,7 +7,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class ChannelInfo : IAsset
+	public sealed class ChannelInfo : IAsset, IChannelInfo
 	{
 		public ChannelInfo() { }
 		public ChannelInfo(byte stream, byte offset, byte format, byte rawDimention)
@@ -15,53 +15,12 @@ namespace AssetRipper.Core.Classes.Mesh
 			Stream = stream;
 			Offset = offset;
 			Format = format;
-			m_RawDimension = rawDimention;
+			Dimension = rawDimention;
 		}
 
 		public byte GetStride(UnityVersion version)
 		{
-			return GetVertexFormat(version).CalculateStride(version, Dimension);
-		}
-
-		public ChannelInfo Convert(IExportContainer container)
-		{
-			return ChannelInfoConverter.Convert(container, this);
-		}
-
-		public ChannelInfo Clone()
-		{
-			ChannelInfo instance = new();
-			instance.Stream = Stream;
-			instance.Offset = Offset;
-			instance.Format = Format;
-			instance.RawDimension = RawDimension;
-			return instance;
-		}
-
-		public void Read(AssetReader reader)
-		{
-			Stream = reader.ReadByte();
-			Offset = reader.ReadByte();
-			Format = reader.ReadByte();
-			RawDimension = reader.ReadByte();
-		}
-
-		public void Write(AssetWriter writer)
-		{
-			writer.Write(Stream);
-			writer.Write(Offset);
-			writer.Write(Format);
-			writer.Write(RawDimension);
-		}
-
-		public YAMLNode ExportYAML(IExportContainer container)
-		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(StreamName, Stream);
-			node.Add(OffsetName, Offset);
-			node.Add(FormatName, Format);
-			node.Add(DimensionName, RawDimension);
-			return node;
+			return GetVertexFormat(version).CalculateStride(version, this.GetDataDimension());
 		}
 
 		public VertexFormat GetVertexFormat(UnityVersion version)
@@ -80,12 +39,51 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		public override string ToString()
+		public ChannelInfo Convert(IExportContainer container)
 		{
-			return $"S[{Stream}];\tO[{Offset}];\tF[{Format}];\tD[{RawDimension}]";
+			return ChannelInfoConverter.Convert(container, this);
 		}
 
-		public bool IsSet => RawDimension > 0;
+		public ChannelInfo Clone()
+		{
+			ChannelInfo instance = new();
+			instance.Stream = Stream;
+			instance.Offset = Offset;
+			instance.Format = Format;
+			instance.Dimension = Dimension;
+			return instance;
+		}
+
+		public void Read(AssetReader reader)
+		{
+			Stream = reader.ReadByte();
+			Offset = reader.ReadByte();
+			Format = reader.ReadByte();
+			Dimension = reader.ReadByte();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(Stream);
+			writer.Write(Offset);
+			writer.Write(Format);
+			writer.Write(Dimension);
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add(StreamName, Stream);
+			node.Add(OffsetName, Offset);
+			node.Add(FormatName, Format);
+			node.Add(DimensionName, Dimension);
+			return node;
+		}
+
+		public override string ToString()
+		{
+			return $"S[{Stream}];\tO[{Offset}];\tF[{Format}];\tD[{Dimension}]";
+		}
 
 		/// <summary>
 		/// Stream index
@@ -101,20 +99,11 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// Data format: float, int, byte
 		/// </summary>
 		public byte Format { get; set; }
-		private byte m_RawDimension;
-		public byte RawDimension
-		{
-			get => m_RawDimension;
-			set => m_RawDimension = value;
-		}
 		/// <summary>
-		/// Data dimention: Vector3, Vector2, Vector1
+		/// An unprocessed byte value containing the data dimension
 		/// </summary>
-		public byte Dimension
-		{
-			get => (byte)(m_RawDimension & 0b00001111);
-			set => m_RawDimension = (byte)((m_RawDimension & 0b11110000) | (value & 0b00001111));
-		}
+		public byte Dimension { get; set; }
+		
 		public const string StreamName = "stream";
 		public const string OffsetName = "offset";
 		public const string FormatName = "format";

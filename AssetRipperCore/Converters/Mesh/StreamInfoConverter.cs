@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				instance.Stream = (byte)streamIndex;
 				instance.Offset = offset;
 				instance.Format = channelType.GetVertexFormat(instanceVersion).ToFormat(instanceVersion);
-				instance.RawDimension = channelType.GetDimention(instanceVersion);
+				instance.Dimension = channelType.GetDimention(instanceVersion);
 			}
 			return instance;
 		}
