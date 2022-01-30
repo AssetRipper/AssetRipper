@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO.DictionaryTest
 {
-	public partial class NewAssetDictionary<TKey, TValue> : IAccessDictionary<TKey, TValue>
+	public class NewAssetDictionary<TKey, TValue> : IAccessDictionary<TKey, TValue>
 		where TKey : new() 
 		where TValue : new()
 	{
@@ -17,16 +17,8 @@ namespace AssetRipper.Core.IO.DictionaryTest
 		private KeyEnumerable keyEnumerable;
 		public IEnumerable<TKey> Keys => keyEnumerable ??= new KeyEnumerable(this);
 
-		public IEnumerable<TValue> Values
-		{
-			get
-			{
-				for (int i = 0; i < Count; i++)
-				{
-					yield return values[i];
-				}
-			}
-		}
+		private ValueEnumerable valueEnumerable;
+		public IEnumerable<TValue> Values => valueEnumerable ??= new ValueEnumerable(this);
 
 		public NewAssetDictionary() : this(4) { }
 
@@ -116,16 +108,6 @@ namespace AssetRipper.Core.IO.DictionaryTest
 			}
 		}
 
-		public Span<TKey> GetKeySpan()
-		{
-			return new Span<TKey>(keys, 0, Count);
-		}
-
-		public Span<TValue> GetValueSpan()
-		{
-			return new Span<TValue>(values, 0, Count);
-		}
-
 		private void Reallocate()
 		{
 			int newSize = GetNewSize();
@@ -141,6 +123,52 @@ namespace AssetRipper.Core.IO.DictionaryTest
 		{
 			int newSize = (int)System.Math.Min(2 * (long)Capacity, int.MaxValue);
 			return System.Math.Max(newSize, 1);
+		}
+
+		private class KeyEnumerable : IEnumerable<TKey>
+		{
+			private readonly NewAssetDictionary<TKey, TValue> dictionary;
+
+			public KeyEnumerable(NewAssetDictionary<TKey, TValue> dictionary)
+			{
+				this.dictionary = dictionary;
+			}
+
+			public IEnumerator<TKey> GetEnumerator()
+			{
+				for (int i = 0; i < dictionary.Count; i++)
+				{
+					yield return dictionary.keys[i];
+				}
+			}
+
+			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			{
+				return GetEnumerator();
+			}
+		}
+
+		private class ValueEnumerable : IEnumerable<TValue>
+		{
+			private readonly NewAssetDictionary<TKey, TValue> dictionary;
+
+			public ValueEnumerable(NewAssetDictionary<TKey, TValue> dictionary)
+			{
+				this.dictionary = dictionary;
+			}
+
+			public IEnumerator<TValue> GetEnumerator()
+			{
+				for (int i = 0; i < dictionary.Count; i++)
+				{
+					yield return dictionary.values[i];
+				}
+			}
+
+			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			{
+				return GetEnumerator();
+			}
 		}
 	}
 }
