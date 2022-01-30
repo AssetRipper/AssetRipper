@@ -5,12 +5,14 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 {
-	public sealed class MinMaxAABB : IAsset
+	public sealed class MinMaxAABB : IAsset, IMinMaxAABB
 	{
 		public const string MinName = "m_Min";
 		public const string MaxName = "m_Max";
-		public Vector3f m_Min = new();
-		public Vector3f m_Max = new();
+		private Vector3f m_Min = new();
+		private Vector3f m_Max = new();
+		public IVector3f Min => m_Min;
+		public IVector3f Max => m_Max;
 
 		public void Read(AssetReader reader)
 		{

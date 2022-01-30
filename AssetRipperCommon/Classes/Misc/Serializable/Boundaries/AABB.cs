@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 {
-	public sealed class AABB : IAsset
+	public sealed class AABB : IAsset, IAABB
 	{
 		public AABB() : this(new Vector3f(), new Vector3f()) { }
 		public AABB(Vector3f center, Vector3f extent)
@@ -39,8 +39,10 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 			return $"C:{m_Center} E:{m_Extent}";
 		}
 
-		public Vector3f m_Center = new();
-		public Vector3f m_Extent = new();
+		private Vector3f m_Center = new();
+		private Vector3f m_Extent = new();
+		public IVector3f Center => m_Center;
+		public IVector3f Extent => m_Extent;
 
 		public const string CenterName = "m_Center";
 		public const string ExtentName = "m_Extent";
