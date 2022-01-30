@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO.DictionaryTest
 {
-	public class NewAssetDictionary<TKey, TValue> : IAccessDictionary<TKey, TValue>
+	public partial class NewAssetDictionary<TKey, TValue> : IAccessDictionary<TKey, TValue>
 		where TKey : new() 
 		where TValue : new()
 	{
@@ -14,16 +14,8 @@ namespace AssetRipper.Core.IO.DictionaryTest
 
 		public int Capacity => keys.Length;
 
-		public IEnumerable<TKey> Keys
-		{
-			get
-			{
-				for(int i = 0; i < Count; i++)
-				{
-					yield return keys[i];
-				}
-			}
-		}
+		private KeyEnumerable keyEnumerable;
+		public IEnumerable<TKey> Keys => keyEnumerable ??= new KeyEnumerable(this);
 
 		public IEnumerable<TValue> Values
 		{
