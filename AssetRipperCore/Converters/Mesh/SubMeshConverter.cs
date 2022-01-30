@@ -68,7 +68,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			{
 				instance.FirstVertex = origin.FirstVertex;
 				instance.VertexCount = origin.VertexCount;
-				instance.LocalAABB = origin.LocalAABB;
+				instance.LocalAABB.CopyValuesFrom(origin.LocalAABB);
 			}
 			else
 			{
@@ -175,14 +175,14 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 			if (submesh.VertexCount == 0)
 			{
-				submesh.LocalAABB = new();
+				submesh.LocalAABB.Reset();
 				return;
 			}
 
 			FindMinMaxBounds(layout, mesh, submesh, out Vector3f min, out Vector3f max);
 			Vector3f center = (min + max) / 2.0f;
 			Vector3f extent = max - center;
-			submesh.LocalAABB = new AABB(center, extent);
+			submesh.LocalAABB.CopyValuesFrom(center, extent);
 		}
 
 		private static void FindMinMaxBounds(LayoutInfo layout, AssetRipper.Core.Classes.Mesh.Mesh mesh, SubMesh submesh, out Vector3f min, out Vector3f max)

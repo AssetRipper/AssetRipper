@@ -7,7 +7,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class SubMesh : IAsset
+	public sealed class SubMesh : ISubMesh
 	{
 		/// <summary>Offset in index buffer</summary>
 		public uint FirstByte { get; set; }
@@ -18,7 +18,10 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>Offset in Vertices</summary>
 		public uint FirstVertex { get; set; }
 		public uint VertexCount { get; set; }
-		public AABB LocalAABB = new AABB();
+		public IAABB LocalAABB => m_LocalAABB;
+
+
+		private AABB m_LocalAABB = new AABB();
 
 		public uint IsTriStrip => (uint)Topology;
 
@@ -62,7 +65,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				FirstVertex = reader.ReadUInt32();
 				VertexCount = reader.ReadUInt32();
-				LocalAABB.Read(reader);
+				m_LocalAABB.Read(reader);
 			}
 		}
 
@@ -83,7 +86,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				writer.Write(FirstVertex);
 				writer.Write(VertexCount);
-				LocalAABB.Write(writer);
+				m_LocalAABB.Write(writer);
 			}
 		}
 
@@ -110,7 +113,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				node.Add(FirstVertexName, FirstVertex);
 				node.Add(VertexCountName, VertexCount);
-				node.Add(LocalAABBName, LocalAABB.ExportYAML(container));
+				node.Add(LocalAABBName, m_LocalAABB.ExportYAML(container));
 			}
 			return node;
 		}
