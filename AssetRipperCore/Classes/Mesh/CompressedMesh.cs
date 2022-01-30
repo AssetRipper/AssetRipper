@@ -7,20 +7,20 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class CompressedMesh : IAsset
+	public sealed class CompressedMesh : ICompressedMesh
 	{
-		public PackedFloatVector Vertices { get; set; } = new PackedFloatVector();
-		public PackedFloatVector UV { get; set; } = new PackedFloatVector();
-		public PackedFloatVector BindPoses { get; set; } = new PackedFloatVector();
-		public PackedFloatVector Normals { get; set; } = new PackedFloatVector();
-		public PackedFloatVector Tangents { get; set; } = new PackedFloatVector();
-		public PackedIntVector Weights { get; set; } = new PackedIntVector();
-		public PackedIntVector NormalSigns { get; set; } = new PackedIntVector();
-		public PackedIntVector TangentSigns { get; set; } = new PackedIntVector();
-		public PackedFloatVector FloatColors { get; set; } = new PackedFloatVector();
-		public PackedIntVector BoneIndices { get; set; } = new PackedIntVector();
-		public PackedIntVector Triangles { get; set; } = new PackedIntVector();
-		public PackedIntVector Colors { get; set; } = new PackedIntVector();
+		public IPackedFloatVector Vertices { get; } = new PackedFloatVector();
+		public IPackedFloatVector UV { get; } = new PackedFloatVector();
+		public IPackedFloatVector BindPoses { get; } = new PackedFloatVector();
+		public IPackedFloatVector Normals { get; } = new PackedFloatVector();
+		public IPackedFloatVector Tangents { get; } = new PackedFloatVector();
+		public IPackedIntVector Weights { get; } = new PackedIntVector();
+		public IPackedIntVector NormalSigns { get; } = new PackedIntVector();
+		public IPackedIntVector TangentSigns { get; } = new PackedIntVector();
+		public IPackedFloatVector FloatColors { get; } = new PackedFloatVector();
+		public IPackedIntVector BoneIndices { get; } = new PackedIntVector();
+		public IPackedIntVector Triangles { get; } = new PackedIntVector();
+		public IPackedIntVector Colors { get; } = new PackedIntVector();
 		public uint UVInfo { get; set; }
 
 		/// <summary>

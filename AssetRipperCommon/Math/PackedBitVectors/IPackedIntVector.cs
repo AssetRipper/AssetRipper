@@ -1,8 +1,10 @@
-﻿using System;
+﻿using AssetRipper.Core.IO.Asset;
+using System;
+using System.Linq;
 
 namespace AssetRipper.Core.Math.PackedBitVectors
 {
-	public interface IPackedIntVector
+	public interface IPackedIntVector : IAsset
 	{
 		uint NumItems { get; set; }
 		byte[] Data { get; set; }
@@ -12,6 +14,18 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 	public static class PackedIntVectorExtensions
 	{
 		public static bool IsSet(this IPackedIntVector packedVector) => packedVector.NumItems > 0;
+
+		public static void CopyValuesFrom(this IPackedIntVector instance, IPackedIntVector source)
+		{
+			instance.NumItems = source.NumItems;
+			instance.Data = source.Data.ToArray();
+			instance.BitSize = source.BitSize;
+		}
+
+		public static void Pack(this IPackedIntVector packedVector, int[] values)
+		{
+			throw new NotImplementedException();
+		}
 
 		public static int[] Unpack(this IPackedIntVector packedVector)
 		{

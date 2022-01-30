@@ -1,9 +1,11 @@
-﻿using AssetRipper.Core.Math.Vectors;
+﻿using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Math.Vectors;
 using System;
+using System.Linq;
 
 namespace AssetRipper.Core.Math.PackedBitVectors
 {
-	public interface IPackedQuatVector
+	public interface IPackedQuatVector : IAsset
 	{
 		uint NumItems { get; set; }
 		byte[] Data { get; set; }
@@ -11,6 +13,17 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 
 	public static class PackedQuatVectorExtensions
 	{
+		public static void CopyValuesFrom(this IPackedQuatVector instance, IPackedQuatVector source)
+		{
+			instance.NumItems = source.NumItems;
+			instance.Data = source.Data.ToArray();
+		}
+
+		public static void Pack(this IPackedQuatVector packedVector, IQuaternionf[] values)
+		{
+			throw new NotImplementedException();
+		}
+
 		public static Quaternionf[] Unpack(this IPackedQuatVector packedVector)
 		{
 			int bitIndex = 0;

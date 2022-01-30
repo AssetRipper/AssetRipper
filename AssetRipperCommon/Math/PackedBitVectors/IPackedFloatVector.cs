@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Core.IO.Asset;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Core.Math.PackedBitVectors
 {
-	public interface IPackedFloatVector
+	public interface IPackedFloatVector : IAsset
 	{
 		uint NumItems { get; set; }
 		float Range { get; set; }
@@ -14,6 +17,20 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 	public static class PackedFloatVectorExtensions
 	{
 		public static bool IsSet(this IPackedFloatVector packedVector) => packedVector.NumItems > 0;
+
+		public static void CopyValuesFrom(this IPackedFloatVector instance, IPackedFloatVector source)
+		{
+			instance.NumItems = source.NumItems;
+			instance.Range = source.Range;
+			instance.Start = source.Start;
+			instance.Data = source.Data.ToArray();
+			instance.BitSize = source.BitSize;
+		}
+
+		public static void Pack(this IPackedFloatVector packedVector, float[] values)
+		{
+			throw new NotImplementedException();
+		}
 
 		public static float[] Unpack(this IPackedFloatVector packedVector)
 		{

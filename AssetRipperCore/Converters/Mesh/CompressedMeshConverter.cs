@@ -10,26 +10,26 @@ namespace AssetRipper.Core.Converters.Mesh
 		public static CompressedMesh Convert(IExportContainer container, CompressedMesh origin)
 		{
 			CompressedMesh instance = new CompressedMesh();
-			instance.Vertices = origin.Vertices.Convert(container);
-			instance.UV = origin.UV.Convert(container);
+			instance.Vertices.CopyValuesFrom(origin.Vertices);
+			instance.UV.CopyValuesFrom(origin.UV);
 			if (CompressedMesh.HasBindPoses(container.ExportVersion))
 			{
-				instance.BindPoses = origin.BindPoses.Convert(container);
+				instance.BindPoses.CopyValuesFrom(origin.BindPoses);
 			}
-			instance.Normals = origin.Normals.Convert(container);
-			instance.Tangents = origin.Tangents.Convert(container);
-			instance.Weights = origin.Weights.Convert(container);
-			instance.NormalSigns = origin.NormalSigns.Convert(container);
-			instance.TangentSigns = origin.TangentSigns.Convert(container);
+			instance.Normals.CopyValuesFrom(origin.Normals);
+			instance.Tangents.CopyValuesFrom(origin.Tangents);
+			instance.Weights.CopyValuesFrom(origin.Weights);
+			instance.NormalSigns.CopyValuesFrom(origin.NormalSigns);
+			instance.TangentSigns.CopyValuesFrom(origin.TangentSigns);
 			if (CompressedMesh.HasFloatColors(container.ExportVersion))
 			{
-				instance.FloatColors = GetFloatColors(container, origin);
+				instance.FloatColors.CopyValuesFrom(GetFloatColors(container, origin));
 			}
-			instance.BoneIndices = origin.BoneIndices.Convert(container);
-			instance.Triangles = origin.Triangles.Convert(container);
+			instance.BoneIndices.CopyValuesFrom(origin.BoneIndices);
+			instance.Triangles.CopyValuesFrom(origin.Triangles);
 			if (CompressedMesh.HasColors(container.ExportVersion))
 			{
-				instance.Colors = GetColors(container, origin);
+				instance.Colors.CopyValuesFrom(GetColors(container, origin));
 			}
 			if (CompressedMesh.HasUVInfo(container.ExportVersion))
 			{
@@ -38,11 +38,11 @@ namespace AssetRipper.Core.Converters.Mesh
 			return instance;
 		}
 
-		private static PackedFloatVector GetFloatColors(IExportContainer container, CompressedMesh origin)
+		private static IPackedFloatVector GetFloatColors(IExportContainer container, CompressedMesh origin)
 		{
 			if (CompressedMesh.HasFloatColors(container.Version))
 			{
-				return origin.FloatColors.Convert(container);
+				return origin.FloatColors;
 			}
 			else
 			{
@@ -55,11 +55,11 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 		}
 
-		private static PackedIntVector GetColors(IExportContainer container, CompressedMesh origin)
+		private static IPackedIntVector GetColors(IExportContainer container, CompressedMesh origin)
 		{
 			if (CompressedMesh.HasColors(container.Version))
 			{
-				return origin.Colors.Convert(container);
+				return origin.Colors;
 			}
 			return new PackedIntVector();
 		}

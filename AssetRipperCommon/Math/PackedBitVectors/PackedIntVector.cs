@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Math.PackedBitVectors
 {
-	public sealed class PackedIntVector : IAsset, IPackedIntVector
+	public sealed class PackedIntVector : IPackedIntVector
 	{
 		public const string NumItemsName = "m_NumItems";
 		public const string DataName = "m_Data";
@@ -17,20 +17,6 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 		public uint NumItems { get; set; }
 		public byte[] Data { get; set; } = Array.Empty<byte>();
 		public byte BitSize { get; set; }
-
-		public static PackedIntVector Pack(int[] values)
-		{
-			throw new NotImplementedException();
-		}
-
-		public PackedIntVector Convert(IExportContainer _)
-		{
-			PackedIntVector instance = new();
-			instance.NumItems = NumItems;
-			instance.Data = Data.ToArray();
-			instance.BitSize = BitSize;
-			return instance;
-		}
 
 		public void Read(AssetReader reader)
 		{

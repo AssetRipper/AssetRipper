@@ -8,7 +8,7 @@ using System;
 
 namespace AssetRipper.Core.Math.PackedBitVectors
 {
-	public sealed class PackedQuatVector : IAssetReadable, IYAMLExportable, IPackedQuatVector
+	public sealed class PackedQuatVector : IPackedQuatVector
 	{
 		public const string NumItemsName = "m_NumItems";
 		public const string DataName = "m_Data";
@@ -23,17 +23,19 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 			reader.AlignStream();
 		}
 
+		public void Write(AssetWriter writer)
+		{
+			writer.Write(NumItems);
+			writer.Write(Data);
+			writer.AlignStream();
+		}
+
 		public YAMLNode ExportYAML(IExportContainer _)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(NumItemsName, NumItems);
 			node.Add(DataName, Data == null ? YAMLSequenceNode.Empty : Data.ExportYAML());
 			return node;
-		}
-
-		public static PackedQuatVector Pack(Quaternionf[] values)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

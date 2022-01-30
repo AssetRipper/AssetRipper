@@ -4,11 +4,10 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
-using System.Linq;
 
 namespace AssetRipper.Core.Math.PackedBitVectors
 {
-	public sealed class PackedFloatVector : IAsset, IPackedFloatVector
+	public sealed class PackedFloatVector : IPackedFloatVector
 	{
 		public const string NumItemsName = "m_NumItems";
 		public const string RangeName = "m_Range";
@@ -21,22 +20,6 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 		public float Start { get; set; }
 		public byte[] Data { get; set; } = Array.Empty<byte>();
 		public byte BitSize { get; set; }
-
-		public static PackedFloatVector Pack(float[] values)
-		{
-			throw new NotImplementedException();
-		}
-
-		public PackedFloatVector Convert(IExportContainer _)
-		{
-			PackedFloatVector instance = new();
-			instance.NumItems = NumItems;
-			instance.Range = Range;
-			instance.Start = Start;
-			instance.Data = Data.ToArray();
-			instance.BitSize = BitSize;
-			return instance;
-		}
 
 		public void Read(AssetReader reader)
 		{
