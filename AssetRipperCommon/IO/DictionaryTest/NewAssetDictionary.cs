@@ -7,12 +7,11 @@ namespace AssetRipper.Core.IO.DictionaryTest
 		where TKey : new() 
 		where TValue : new()
 	{
-		private TKey[] keys;
-		private TValue[] values;
+		private KeyValuePair<TKey, TValue>[] pairs;
 
 		public int Count { get; private set; } = 0;
 
-		public int Capacity => keys.Length;
+		public int Capacity => pairs.Length;
 
 		private KeyEnumerable keyEnumerable;
 		public IEnumerable<TKey> Keys => keyEnumerable ??= new KeyEnumerable(this);
@@ -26,43 +25,35 @@ namespace AssetRipper.Core.IO.DictionaryTest
 		{
 			if(capacity == 0)
 			{
-				keys = Array.Empty<TKey>();
-				values = Array.Empty<TValue>();
+				pairs = Array.Empty<KeyValuePair<TKey, TValue>>();
 			}
 			else
 			{
-				keys = new TKey[capacity];
-				values = new TValue[capacity];
+				pairs = new KeyValuePair<TKey, TValue>[capacity];
 			}
 		}
 
 		public void Add(TKey key, TValue value)
 		{
-			if(Count == Capacity)
-				Reallocate();
-			keys[Count] = key;
-			values[Count] = value;
-			Count++;
+			Add(new KeyValuePair<TKey, TValue>(key, value));
 		}
 
 		public void Add(KeyValuePair<TKey,TValue> pair)
 		{
-			Add(pair.Key, pair.Value);
+			if (Count == Capacity)
+				Reallocate();
+			pairs[Count] = pair;
+			Count++;
 		}
 
-		public void AddNew()
-		{
-			TKey key = new();
-			TValue value = new();
-			Add(key, value);
-		}
+		public void AddNew() => Add(new TKey(), new TValue());
 
 		public TKey GetKey(int index)
 		{
 			if (index < 0 || index >= Count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
-			return keys[index];
+			return pairs[index].Key;
 		}
 
 		public void SetKey(int index, TKey newKey)
@@ -70,7 +61,7 @@ namespace AssetRipper.Core.IO.DictionaryTest
 			if (index < 0 || index >= Count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
-			keys[index] = newKey;
+			pairs[index] = new KeyValuePair<TKey, TValue>(newKey, pairs[index].Value);
 		}
 
 		public TValue GetValue(int index)
@@ -78,7 +69,7 @@ namespace AssetRipper.Core.IO.DictionaryTest
 			if (index < 0 || index >= Count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
-			return values[index];
+			return pairs[index].Value;
 		}
 
 		public void SetValue(int index, TValue newValue)
@@ -86,7 +77,7 @@ namespace AssetRipper.Core.IO.DictionaryTest
 			if (index < 0 || index >= Count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
-			values[index] = newValue;
+			pairs[index] = new KeyValuePair<TKey, TValue>(pairs[index].Key, newValue);
 		}
 
 		public KeyValuePair<TKey, TValue> this[int index]
@@ -96,27 +87,23 @@ namespace AssetRipper.Core.IO.DictionaryTest
 				if (index < 0 || index >= Count)
 					throw new ArgumentOutOfRangeException(nameof(index));
 
-				return new KeyValuePair<TKey, TValue>(keys[index], values[index]);
+				return pairs[index];
 			}
 			set
 			{
 				if (index < 0 || index >= Count)
 					throw new ArgumentOutOfRangeException(nameof(index));
 
-				keys[index] = value.Key;
-				values[index] = value.Value;
+				pairs[index] = value;
 			}
 		}
 
 		private void Reallocate()
 		{
 			int newSize = GetNewSize();
-			TKey[] newKeys = new TKey[newSize];
-			TValue[] newValues = new TValue[newSize];
-			Array.Copy(keys, 0, newKeys, 0, keys.Length);
-			Array.Copy(values, 0, values, 0, values.Length);
-			keys = newKeys;
-			values = newValues;
+			KeyValuePair<TKey, TValue>[] newPairs = new KeyValuePair<TKey, TValue>[newSize];
+			Array.Copy(pairs, 0, newPairs, 0, pairs.Length);
+			pairs = newPairs;
 		}
 
 		private int GetNewSize()
@@ -138,7 +125,7 @@ namespace AssetRipper.Core.IO.DictionaryTest
 			{
 				for (int i = 0; i < dictionary.Count; i++)
 				{
-					yield return dictionary.keys[i];
+					yield return dictionary.pairs[i].Key;
 				}
 			}
 
@@ -161,7 +148,7 @@ namespace AssetRipper.Core.IO.DictionaryTest
 			{
 				for (int i = 0; i < dictionary.Count; i++)
 				{
-					yield return dictionary.values[i];
+					yield return dictionary.pairs[i].Value;
 				}
 			}
 
