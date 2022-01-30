@@ -30,6 +30,6 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			return Pointer.ExportYAML(container);
 		}
 
-		public PPtr<IUnityObjectBase> Pointer;
+		public PPtr<IUnityObjectBase> Pointer = new();
 	}
 }
