@@ -262,7 +262,7 @@ namespace AssetRipper.Core.Converters.Mesh
 					continue;
 				}
 
-				int vertexCount = origin.VertexCount;
+				uint vertexCount = origin.VertexCount;
 				int ostride = origin.GetStreamStride(container.Version, ochannel.Stream);
 				int istride = instance.GetStreamStride(container.ExportVersion, ichannel.Stream);
 				int oextraStride = ostride - ochannel.GetStride(container.Version);

@@ -17,7 +17,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class VertexData : IAsset
+	public sealed class VertexData : IVertexData
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -150,7 +150,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				CurrentChannels = reader.ReadUInt32();
 			}
-			VertexCount = (int)reader.ReadUInt32();
+			VertexCount = reader.ReadUInt32();
 
 			if (HasChannels(reader.Version)) // 4 and greater
 			{
@@ -263,7 +263,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public int GetStreamSize(UnityVersion version, int stream)
 		{
-			return GetStreamStride(version, stream) * VertexCount;
+			return GetStreamStride(version, stream) * (int)VertexCount;
 		}
 
 		public int GetStreamOffset(UnityVersion version, int stream)
@@ -357,7 +357,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public bool IsSet => VertexCount > 0;
 
 		public uint CurrentChannels { get; set; }
-		public int VertexCount { get; set; }
+		public uint VertexCount { get; set; }
 		public ChannelInfo[] Channels { get; set; }
 		public StreamInfo[] Streams { get; set; }
 		public byte[] Data { get; set; }

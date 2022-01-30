@@ -463,7 +463,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			{
 				instance.CurrentChannels = curChannels.ToUInt32();
 			}
-			instance.VertexCount = origin.Vertices.Length;
+			instance.VertexCount = (uint)origin.Vertices.Length;
 			if (VertexData.HasStreams(container.ExportVersion))
 			{
 				StreamInfo info = new StreamInfo(instance.CurrentChannels, 0, stride);
