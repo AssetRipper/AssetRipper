@@ -61,27 +61,27 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			if (HasChannels(version))
 			{
-				return Channels[channelType.ToChannel(version)];
+				return m_Channels[channelType.ToChannel(version)];
 			}
 			else
 			{
-				return StreamInfoConverter.GenerateChannelInfo(version, Streams, channelType);
+				return StreamInfoConverter.GenerateChannelInfo(version, m_Streams, channelType);
 			}
 		}
 
 		public BoneWeights4[] GenerateSkin(IExportContainer container)
 		{
-			ChannelInfo weightChannel = Channels[(int)ShaderChannel2018.SkinWeight];
-			ChannelInfo indexChannel = Channels[(int)ShaderChannel2018.SkinBoneIndex];
+			ChannelInfo weightChannel = m_Channels[(int)ShaderChannel2018.SkinWeight];
+			ChannelInfo indexChannel = m_Channels[(int)ShaderChannel2018.SkinBoneIndex];
 			if (!weightChannel.IsSet())
 			{
 				return Array.Empty<BoneWeights4>();
 			}
 
 			BoneWeights4[] skin = new BoneWeights4[VertexCount];
-			int weightStride = Channels.Where(t => t.Stream == weightChannel.Stream).Sum(t => t.GetStride(container.Version));
+			int weightStride = m_Channels.Where(t => t.Stream == weightChannel.Stream).Sum(t => t.GetStride(container.Version));
 			int weightStreamOffset = GetStreamOffset(container.Version, weightChannel.Stream);
-			int indexStride = Channels.Where(t => t.Stream == indexChannel.Stream).Sum(t => t.GetStride(container.Version));
+			int indexStride = m_Channels.Where(t => t.Stream == indexChannel.Stream).Sum(t => t.GetStride(container.Version));
 			int indexStreamOffset = GetStreamOffset(container.Version, indexChannel.Stream);
 
 			using MemoryStream memStream = new MemoryStream(Data);
@@ -126,7 +126,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 
 			Vector3f[] verts = new Vector3f[submesh.VertexCount];
-			int streamStride = Channels.Where(t => t.Stream == channel.Stream).Sum(t => t.GetStride(version));
+			int streamStride = m_Channels.Where(t => t.Stream == channel.Stream).Sum(t => t.GetStride(version));
 			int streamOffset = GetStreamOffset(version, channel.Stream);
 			using (MemoryStream memStream = new MemoryStream(Data))
 			{
@@ -154,7 +154,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (HasChannels(reader.Version)) // 4 and greater
 			{
-				Channels = reader.ReadAssetArray<ChannelInfo>();
+				m_Channels = reader.ReadAssetArray<ChannelInfo>();
 				reader.AlignStream();
 			}
 
@@ -162,15 +162,15 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				if (IsStreamStatic(reader.Version)) // less than 4
 				{
-					Streams = new StreamInfo[StaticStreamCount];
+					m_Streams = new StreamInfo[StaticStreamCount];
 					for (int i = 0; i < StaticStreamCount; i++)
 					{
-						Streams[i] = reader.ReadAsset<StreamInfo>();
+						m_Streams[i] = reader.ReadAsset<StreamInfo>();
 					}
 				}
 				else // 4.x.x
 				{
-					Streams = reader.ReadAssetArray<StreamInfo>();
+					m_Streams = reader.ReadAssetArray<StreamInfo>();
 				}
 			}
 			else //5 and higher
@@ -199,7 +199,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (HasChannels(writer.Version))
 			{
-				Channels.Write(writer);
+				m_Channels.Write(writer);
 				writer.AlignStream();
 			}
 			if (HasStreams(writer.Version))
@@ -208,12 +208,12 @@ namespace AssetRipper.Core.Classes.Mesh
 				{
 					for (int i = 0; i < StaticStreamCount; i++)
 					{
-						writer.WriteAsset(Streams[i]);
+						writer.WriteAsset(m_Streams[i]);
 					}
 				}
 				else
 				{
-					Channels.Write(writer);
+					m_Channels.Write(writer);
 				}
 			}
 
@@ -233,7 +233,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (HasChannels(container.ExportVersion))
 			{
-				node.Add(ChannelsName, Channels.ExportYAML(container));
+				node.Add(ChannelsName, m_Channels.ExportYAML(container));
 			}
 			if (HasStreams(container.ExportVersion))
 			{
@@ -241,12 +241,12 @@ namespace AssetRipper.Core.Classes.Mesh
 				{
 					for (int i = 0; i < StaticStreamCount; i++)
 					{
-						node.Add($"{StreamsName}[{i}]", Streams[i].ExportYAML(container));
+						node.Add($"{StreamsName}[{i}]", m_Streams[i].ExportYAML(container));
 					}
 				}
 				else
 				{
-					node.Add(StreamsName, Streams.ExportYAML(container));
+					node.Add(StreamsName, m_Streams.ExportYAML(container));
 				}
 			}
 
@@ -258,7 +258,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public int GetStreamStride(UnityVersion version, int stream)
 		{
 			return HasStreams(version) ?
-				(int)Streams[stream].Stride : Channels.Where(t => t.IsSet() && t.Stream == stream).Sum(t => t.GetStride(version));
+				(int)m_Streams[stream].Stride : m_Channels.Where(t => t.IsSet() && t.Stream == stream).Sum(t => t.GetStride(version));
 		}
 
 		public int GetStreamSize(UnityVersion version, int stream)
@@ -279,16 +279,16 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		private void GetStreams(UnityVersion version)
 		{
-			var streamCount = Channels.Max(x => x.Stream) + 1;
-			Streams = new StreamInfo[streamCount];
+			var streamCount = m_Channels.Max(x => x.Stream) + 1;
+			m_Streams = new StreamInfo[streamCount];
 			long offset = 0;
 			for (int s = 0; s < streamCount; s++)
 			{
 				uint chnMask = 0;
 				uint stride = 0;
-				for (int chn = 0; chn < Channels.Length; chn++)
+				for (int chn = 0; chn < m_Channels.Length; chn++)
 				{
-					var m_Channel = Channels[chn];
+					var m_Channel = m_Channels[chn];
 					if (m_Channel.Stream == s)
 					{
 						if (m_Channel.GetDataDimension() > 0)
@@ -298,7 +298,7 @@ namespace AssetRipper.Core.Classes.Mesh
 						}
 					}
 				}
-				Streams[s] = new StreamInfo
+				m_Streams[s] = new StreamInfo
 				{
 					ChannelMask = chnMask,
 					Offset = (uint)offset,
@@ -314,17 +314,17 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		private void GetChannels(UnityVersion version)
 		{
-			Channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(6);
-			for (var s = 0; s < Streams.Length; s++)
+			m_Channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(6);
+			for (var s = 0; s < m_Streams.Length; s++)
 			{
-				var m_Stream = Streams[s];
+				var m_Stream = m_Streams[s];
 				var channelMask = new BitArray(new[] { (int)m_Stream.ChannelMask });
 				byte offset = 0;
 				for (int i = 0; i < 6; i++)
 				{
 					if (channelMask.Get(i))
 					{
-						ChannelInfo m_Channel = Channels[i];
+						ChannelInfo m_Channel = m_Channels[i];
 						m_Channel.Stream = (byte)s;
 						m_Channel.Offset = offset;
 						switch (i)
@@ -354,12 +354,12 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		public bool IsSet => VertexCount > 0;
-
 		public uint CurrentChannels { get; set; }
 		public uint VertexCount { get; set; }
-		public ChannelInfo[] Channels { get; set; }
-		public StreamInfo[] Streams { get; set; }
+		public ChannelInfo[] m_Channels { get; set; }
+		public IChannelInfo[] Channels => m_Channels;
+		public StreamInfo[] m_Streams { get; set; }
+		public IStreamInfo[] Streams => m_Streams;
 		public byte[] Data { get; set; }
 
 		public const string CurrentChannelsName = "m_CurrentChannels";

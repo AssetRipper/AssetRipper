@@ -381,7 +381,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			if (hasChannels)
 			{
 				int channelCount = ShaderChannelExtensions.GetChannelCount(container.ExportVersion);
-				instance.Channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(channelCount);
+				instance.m_Channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(channelCount);
 			}
 
 			byte stride = 0;
@@ -394,7 +394,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				{
 					byte format = ShaderChannel.Vertex.GetVertexFormat(container.ExportVersion).ToFormat(container.ExportVersion);
 					byte dimention = ShaderChannel.Vertex.GetDimention(container.ExportVersion);
-					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
+					instance.m_Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
 				stride += ShaderChannel.Vertex.GetStride(container.ExportVersion);
 			}
@@ -406,7 +406,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				{
 					byte format = ShaderChannel.Normal.GetVertexFormat(container.ExportVersion).ToFormat(container.ExportVersion);
 					byte dimention = ShaderChannel.Normal.GetDimention(container.ExportVersion);
-					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
+					instance.m_Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
 				stride += ShaderChannel.Normal.GetStride(container.ExportVersion);
 			}
@@ -418,7 +418,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				{
 					byte format = ShaderChannel.Color.GetVertexFormat(container.ExportVersion).ToFormat(container.ExportVersion);
 					byte dimention = ShaderChannel.Color.GetDimention(container.ExportVersion);
-					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
+					instance.m_Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
 				stride += ShaderChannel.Color.GetStride(container.ExportVersion);
 			}
@@ -430,7 +430,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				{
 					byte format = ShaderChannel.UV0.GetVertexFormat(container.ExportVersion).ToFormat(container.ExportVersion);
 					byte dimention = ShaderChannel.UV0.GetDimention(container.ExportVersion);
-					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
+					instance.m_Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
 				stride += ShaderChannel.UV0.GetStride(container.ExportVersion);
 			}
@@ -442,7 +442,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				{
 					byte format = ShaderChannel.UV1.GetVertexFormat(container.ExportVersion).ToFormat(container.ExportVersion);
 					byte dimention = ShaderChannel.UV1.GetDimention(container.ExportVersion);
-					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
+					instance.m_Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
 				stride += ShaderChannel.UV1.GetStride(container.ExportVersion);
 			}
@@ -454,7 +454,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				{
 					byte format = ShaderChannel.Tangent.GetVertexFormat(container.ExportVersion).ToFormat(container.ExportVersion);
 					byte dimention = ShaderChannel.Tangent.GetDimention(container.ExportVersion);
-					instance.Channels[index] = new ChannelInfo(0, stride, format, dimention);
+					instance.m_Channels[index] = new ChannelInfo(0, stride, format, dimention);
 				}
 				stride += ShaderChannel.Tangent.GetStride(container.ExportVersion);
 			}
@@ -469,11 +469,11 @@ namespace AssetRipper.Core.Converters.Mesh
 				StreamInfo info = new StreamInfo(instance.CurrentChannels, 0, stride);
 				if (VertexData.IsStreamStatic(container.ExportVersion))
 				{
-					instance.Streams = new StreamInfo[] { info, new(), new(), new(), };
+					instance.m_Streams = new StreamInfo[] { info, new(), new(), new(), };
 				}
 				else
 				{
-					instance.Streams = new StreamInfo[] { info, };
+					instance.m_Streams = new StreamInfo[] { info, };
 				}
 			}
 

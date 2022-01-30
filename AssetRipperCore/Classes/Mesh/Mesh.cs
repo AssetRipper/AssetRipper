@@ -334,7 +334,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			if (HasStreamData(SerializedFile.Version))
 			{
-				if (VertexData.IsSet)
+				if (VertexData.IsSet())
 				{
 					return StreamData.CheckIntegrity(SerializedFile);
 				}
@@ -1026,12 +1026,12 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			VertexCount = (int)VertexData.VertexCount;
 
-			for (var chn = 0; chn < VertexData.Channels.Length; chn++)
+			for (var chn = 0; chn < VertexData.m_Channels.Length; chn++)
 			{
-				var m_Channel = VertexData.Channels[chn];
+				var m_Channel = VertexData.m_Channels[chn];
 				if (m_Channel.GetDataDimension() > 0)
 				{
-					var m_Stream = VertexData.Streams[m_Channel.Stream];
+					var m_Stream = VertexData.m_Streams[m_Channel.Stream];
 					var channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask));
 					if (channelMask.Get(chn))
 					{

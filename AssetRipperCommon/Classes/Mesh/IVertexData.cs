@@ -12,14 +12,19 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		//IChannelInfo[] Channels { get; }
+		IChannelInfo[] Channels { get; }
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		//IStreamInfo[] Streams { get; }
+		IStreamInfo[] Streams { get; }
 		/// <summary>
 		/// Actually called m_DataSize
 		/// </summary>
 		byte[] Data { get; set; }
+	}
+
+	public static class VertexDataExtensions
+	{
+		public static bool IsSet(this IVertexData instance) => instance.VertexCount > 0;
 	}
 }

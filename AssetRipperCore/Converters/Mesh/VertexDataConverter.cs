@@ -26,11 +26,11 @@ namespace AssetRipper.Core.Converters.Mesh
 			instance.VertexCount = originMesh.VertexData.VertexCount;
 			if (VertexData.HasChannels(container.ExportVersion))
 			{
-				instance.Channels = GetChannels(container, originMesh);
+				instance.m_Channels = GetChannels(container, originMesh);
 			}
 			if (VertexData.HasStreams(container.ExportVersion))
 			{
-				instance.Streams = originMesh.VertexData.Streams.ToArray();
+				instance.m_Streams = originMesh.VertexData.m_Streams.ToArray();
 			}
 			instance.Data = GetData(container, originMesh, instance);
 			return instance;
@@ -56,27 +56,27 @@ namespace AssetRipper.Core.Converters.Mesh
 			VertexData origin = originMesh.VertexData;
 			if (ShaderChannelExtensions.ShaderChannel2018Relevant(container.Version)) // 2018.1 <= Version
 			{
-				return origin.Channels.Select(t => t.Convert(container)).ToArray();
+				return origin.m_Channels.Select(t => t.Convert(container)).ToArray();
 			}
 			else if (ShaderChannelExtensions.ShaderChannel5Relevant(container.Version)) // 5.0.0 <= Version < 2018.1
 			{
 				if (ShaderChannelExtensions.ShaderChannel2018Relevant(container.ExportVersion))
 				{
 					ChannelInfo[] channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(14);
-					channels[(int)ShaderChannel2018.Vertex] = origin.Channels[(int)ShaderChannel5.Vertex].Convert(container);
-					channels[(int)ShaderChannel2018.Normal] = origin.Channels[(int)ShaderChannel5.Normal].Convert(container);
-					channels[(int)ShaderChannel2018.Tangent] = origin.Channels[(int)ShaderChannel5.Tangent].Convert(container);
-					channels[(int)ShaderChannel2018.Color] = origin.Channels[(int)ShaderChannel5.Color].Convert(container);
-					channels[(int)ShaderChannel2018.UV0] = origin.Channels[(int)ShaderChannel5.UV0].Convert(container);
-					channels[(int)ShaderChannel2018.UV1] = origin.Channels[(int)ShaderChannel5.UV1].Convert(container);
-					channels[(int)ShaderChannel2018.UV2] = origin.Channels[(int)ShaderChannel5.UV2].Convert(container);
-					channels[(int)ShaderChannel2018.UV3] = origin.Channels[(int)ShaderChannel5.UV3].Convert(container);
+					channels[(int)ShaderChannel2018.Vertex] = origin.m_Channels[(int)ShaderChannel5.Vertex].Convert(container);
+					channels[(int)ShaderChannel2018.Normal] = origin.m_Channels[(int)ShaderChannel5.Normal].Convert(container);
+					channels[(int)ShaderChannel2018.Tangent] = origin.m_Channels[(int)ShaderChannel5.Tangent].Convert(container);
+					channels[(int)ShaderChannel2018.Color] = origin.m_Channels[(int)ShaderChannel5.Color].Convert(container);
+					channels[(int)ShaderChannel2018.UV0] = origin.m_Channels[(int)ShaderChannel5.UV0].Convert(container);
+					channels[(int)ShaderChannel2018.UV1] = origin.m_Channels[(int)ShaderChannel5.UV1].Convert(container);
+					channels[(int)ShaderChannel2018.UV2] = origin.m_Channels[(int)ShaderChannel5.UV2].Convert(container);
+					channels[(int)ShaderChannel2018.UV3] = origin.m_Channels[(int)ShaderChannel5.UV3].Convert(container);
 					ConvertSkinChannels(container, originMesh, channels);
 					return channels;
 				}
 				else
 				{
-					return origin.Channels.ToArray();
+					return origin.m_Channels.ToArray();
 				}
 			}
 			else if (VertexData.HasChannels(container.Version)) // 4.0.0 <= Version < 5.0.0
@@ -84,29 +84,29 @@ namespace AssetRipper.Core.Converters.Mesh
 				if (ShaderChannelExtensions.ShaderChannel2018Relevant(container.ExportVersion))
 				{
 					ChannelInfo[] channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(14);
-					channels[(int)ShaderChannel2018.Vertex] = origin.Channels[(int)ShaderChannel4.Vertex].Convert(container);
-					channels[(int)ShaderChannel2018.Normal] = origin.Channels[(int)ShaderChannel4.Normal].Convert(container);
-					channels[(int)ShaderChannel2018.Tangent] = origin.Channels[(int)ShaderChannel4.Tangent].Convert(container);
-					channels[(int)ShaderChannel2018.Color] = origin.Channels[(int)ShaderChannel4.Color].Convert(container);
-					channels[(int)ShaderChannel2018.UV0] = origin.Channels[(int)ShaderChannel4.UV0].Convert(container);
-					channels[(int)ShaderChannel2018.UV1] = origin.Channels[(int)ShaderChannel4.UV1].Convert(container);
+					channels[(int)ShaderChannel2018.Vertex] = origin.m_Channels[(int)ShaderChannel4.Vertex].Convert(container);
+					channels[(int)ShaderChannel2018.Normal] = origin.m_Channels[(int)ShaderChannel4.Normal].Convert(container);
+					channels[(int)ShaderChannel2018.Tangent] = origin.m_Channels[(int)ShaderChannel4.Tangent].Convert(container);
+					channels[(int)ShaderChannel2018.Color] = origin.m_Channels[(int)ShaderChannel4.Color].Convert(container);
+					channels[(int)ShaderChannel2018.UV0] = origin.m_Channels[(int)ShaderChannel4.UV0].Convert(container);
+					channels[(int)ShaderChannel2018.UV1] = origin.m_Channels[(int)ShaderChannel4.UV1].Convert(container);
 					ConvertSkinChannels(container, originMesh, channels);
 					return channels;
 				}
 				else if (ShaderChannelExtensions.ShaderChannel5Relevant(container.ExportVersion))
 				{
 					ChannelInfo[] channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(8);
-					channels[(int)ShaderChannel5.Vertex] = origin.Channels[(int)ShaderChannel4.Vertex].Convert(container);
-					channels[(int)ShaderChannel5.Normal] = origin.Channels[(int)ShaderChannel4.Normal].Convert(container);
-					channels[(int)ShaderChannel5.Color] = origin.Channels[(int)ShaderChannel4.Color].Convert(container);
-					channels[(int)ShaderChannel5.UV0] = origin.Channels[(int)ShaderChannel4.UV0].Convert(container);
-					channels[(int)ShaderChannel5.UV1] = origin.Channels[(int)ShaderChannel4.UV1].Convert(container);
-					channels[(int)ShaderChannel5.Tangent] = origin.Channels[(int)ShaderChannel4.Tangent].Convert(container);
+					channels[(int)ShaderChannel5.Vertex] = origin.m_Channels[(int)ShaderChannel4.Vertex].Convert(container);
+					channels[(int)ShaderChannel5.Normal] = origin.m_Channels[(int)ShaderChannel4.Normal].Convert(container);
+					channels[(int)ShaderChannel5.Color] = origin.m_Channels[(int)ShaderChannel4.Color].Convert(container);
+					channels[(int)ShaderChannel5.UV0] = origin.m_Channels[(int)ShaderChannel4.UV0].Convert(container);
+					channels[(int)ShaderChannel5.UV1] = origin.m_Channels[(int)ShaderChannel4.UV1].Convert(container);
+					channels[(int)ShaderChannel5.Tangent] = origin.m_Channels[(int)ShaderChannel4.Tangent].Convert(container);
 					return channels;
 				}
 				else
 				{
-					return origin.Channels.ToArray();
+					return origin.m_Channels.ToArray();
 				}
 			}
 			else  // Version < 4.0.0 - convert streams to channels
@@ -114,35 +114,35 @@ namespace AssetRipper.Core.Converters.Mesh
 				if (ShaderChannelExtensions.ShaderChannel2018Relevant(container.ExportVersion))
 				{
 					ChannelInfo[] channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(14);
-					channels[(int)ShaderChannel2018.Vertex] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Vertex);
-					channels[(int)ShaderChannel2018.Normal] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Normal);
-					channels[(int)ShaderChannel2018.Tangent] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Tangent);
-					channels[(int)ShaderChannel2018.Color] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Color);
-					channels[(int)ShaderChannel2018.UV0] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.UV0);
-					channels[(int)ShaderChannel2018.UV1] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.UV1);
+					channels[(int)ShaderChannel2018.Vertex] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Vertex);
+					channels[(int)ShaderChannel2018.Normal] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Normal);
+					channels[(int)ShaderChannel2018.Tangent] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Tangent);
+					channels[(int)ShaderChannel2018.Color] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Color);
+					channels[(int)ShaderChannel2018.UV0] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.UV0);
+					channels[(int)ShaderChannel2018.UV1] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.UV1);
 					ConvertSkinChannels(container, originMesh, channels);
 					return channels;
 				}
 				else if (ShaderChannelExtensions.ShaderChannel5Relevant(container.ExportVersion))
 				{
 					ChannelInfo[] channels = ArrayUtils.CreateAndInitializeArray<ChannelInfo>(8);
-					channels[(int)ShaderChannel5.Vertex] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Vertex);
-					channels[(int)ShaderChannel5.Normal] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Normal);
-					channels[(int)ShaderChannel5.Color] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Color);
-					channels[(int)ShaderChannel5.UV0] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.UV0);
-					channels[(int)ShaderChannel5.UV1] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.UV1);
-					channels[(int)ShaderChannel5.Tangent] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Tangent);
+					channels[(int)ShaderChannel5.Vertex] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Vertex);
+					channels[(int)ShaderChannel5.Normal] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Normal);
+					channels[(int)ShaderChannel5.Color] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Color);
+					channels[(int)ShaderChannel5.UV0] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.UV0);
+					channels[(int)ShaderChannel5.UV1] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.UV1);
+					channels[(int)ShaderChannel5.Tangent] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Tangent);
 					return channels;
 				}
 				else
 				{
 					ChannelInfo[] channels = new ChannelInfo[6];
-					channels[(int)ShaderChannel4.Vertex] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Vertex);
-					channels[(int)ShaderChannel4.Normal] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Normal);
-					channels[(int)ShaderChannel4.Color] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Color);
-					channels[(int)ShaderChannel4.UV0] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.UV0);
-					channels[(int)ShaderChannel4.UV1] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.UV1);
-					channels[(int)ShaderChannel4.Tangent] = StreamInfoConverter.GenerateChannelInfo(container, origin.Streams, ShaderChannel.Tangent);
+					channels[(int)ShaderChannel4.Vertex] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Vertex);
+					channels[(int)ShaderChannel4.Normal] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Normal);
+					channels[(int)ShaderChannel4.Color] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Color);
+					channels[(int)ShaderChannel4.UV0] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.UV0);
+					channels[(int)ShaderChannel4.UV1] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.UV1);
+					channels[(int)ShaderChannel4.Tangent] = StreamInfoConverter.GenerateChannelInfo(container, origin.m_Streams, ShaderChannel.Tangent);
 					return channels;
 				}
 			}
@@ -206,7 +206,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			{
 				if (VertexData.ToSerializedVersion(container.ExportVersion) >= 2)
 				{
-					if (instance.Channels[(int)ShaderChannel2018.SkinWeight].IsSet())
+					if (instance.m_Channels[(int)ShaderChannel2018.SkinWeight].IsSet())
 					{
 						return true;
 					}
@@ -217,7 +217,7 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static byte[] CopyChannelsData(IExportContainer container, Classes.Mesh.Mesh originMesh, VertexData instance)
 		{
-			int maxStream = instance.Channels.Max(t => t.Stream);
+			int maxStream = instance.m_Channels.Max(t => t.Stream);
 			int lastSize = instance.GetStreamSize(container.ExportVersion, maxStream);
 			int lastOffset = instance.GetStreamOffset(container.ExportVersion, maxStream);
 			byte[] buffer = new byte[lastOffset + lastSize];
@@ -246,7 +246,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				{
 					continue;
 				}
-				ChannelInfo ochannel = origin.Channels[c.ToChannel(container.Version)];
+				ChannelInfo ochannel = origin.m_Channels[c.ToChannel(container.Version)];
 				if (!ochannel.IsSet())
 				{
 					continue;
@@ -256,7 +256,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				{
 					continue;
 				}
-				ChannelInfo ichannel = instance.Channels[c.ToChannel(container.ExportVersion)];
+				ChannelInfo ichannel = instance.m_Channels[c.ToChannel(container.ExportVersion)];
 				if (!ichannel.IsSet())
 				{
 					continue;
