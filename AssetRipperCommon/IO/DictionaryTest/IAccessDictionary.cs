@@ -5,8 +5,8 @@ namespace AssetRipper.Core.IO.DictionaryTest
 	/// <summary>
 	/// Access the contents of another dictionary
 	/// </summary>
-	/// <typeparam name="TKey">The exposed key type</typeparam>
-	/// <typeparam name="TValue">The exposed value type</typeparam>
+	/// <typeparam name="TKey">The exposed key type, such as an interface or primitive type</typeparam>
+	/// <typeparam name="TValue">The exposed value type, such as an interface or primitive type</typeparam>
 	public interface IAccessDictionary<TKey, TValue>
 	{
 		/// <summary>

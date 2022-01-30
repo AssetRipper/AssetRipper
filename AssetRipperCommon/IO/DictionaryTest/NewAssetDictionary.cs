@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace AssetRipper.Core.IO.DictionaryTest
 {
 	public class NewAssetDictionary<TKey, TValue> : IAccessDictionary<TKey, TValue>
-		where TKey : class, new() 
-		where TValue : class, new()
+		where TKey : new() 
+		where TValue : new()
 	{
 		private TKey[] keys;
 		private TValue[] values;
@@ -122,6 +122,16 @@ namespace AssetRipper.Core.IO.DictionaryTest
 				keys[index] = value.Key;
 				values[index] = value.Value;
 			}
+		}
+
+		public Span<TKey> GetKeySpan()
+		{
+			return new Span<TKey>(keys, 0, Count);
+		}
+
+		public Span<TValue> GetValueSpan()
+		{
+			return new Span<TValue>(values, 0, Count);
 		}
 
 		private void Reallocate()
