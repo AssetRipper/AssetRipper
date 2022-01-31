@@ -68,7 +68,7 @@ namespace AssetRipper.Core.Classes
 			if (HasCorrespondingSourceObject(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(CorrespondingSourceObjectInvariantName(container.ExportVersion, container.ExportFlags), CorrespondingSourceObject.ExportYAML(container));
-				node.Add(PrefabInstanceInvariantName(container.ExportVersion, container.ExportFlags), m_PrefabInstance.ExportYAML(container));
+				node.Add(PrefabInstanceInvariantName(container.ExportVersion, container.ExportFlags), PrefabInstance.ExportYAML(container));
 			}
 			if (HasPrefabAsset(container.ExportVersion, container.ExportFlags))
 			{
@@ -112,13 +112,8 @@ namespace AssetRipper.Core.Classes
 		private PPtr<Object.Object> ExtensionPtr => new();
 		private PPtr<EditorExtension> CorrespondingSourceObject => new();
 		private PPtr<Prefab> PrefabAsset => new();
-		private PPtr<IPrefabInstance> m_PrefabInstance = new();
 
-		public PPtr<IPrefabInstance> PrefabInstance
-		{
-			get => m_PrefabInstance;
-			set => m_PrefabInstance = value;
-		}
+		public PPtr<IPrefabInstance> PrefabInstance { get; set; } = new();
 
 		public const string ExtensionPtrName = "m_ExtensionPtr";
 		public const string CorrespondingSourceObjectName = "m_CorrespondingSourceObject";
