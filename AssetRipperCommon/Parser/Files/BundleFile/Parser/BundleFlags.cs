@@ -14,16 +14,25 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 
 	public static class BundleFlagsExtensions
 	{
+		/// <summary>
+		/// The lowest 6 bits
+		/// </summary>
 		public static CompressionType GetCompression(this BundleFlags _this)
 		{
 			return (CompressionType)(_this & BundleFlags.CompressionTypeMask);
 		}
 
+		/// <summary>
+		/// The 0x40 bit
+		/// </summary>
 		public static bool IsBlocksAndDirectoryInfoCombined(this BundleFlags _this)
 		{
 			return (_this & BundleFlags.BlocksAndDirectoryInfoCombined) != 0;
 		}
 
+		/// <summary>
+		/// The 0x80 bit
+		/// </summary>
 		public static bool IsBlocksInfoAtTheEnd(this BundleFlags _this)
 		{
 			return (_this & BundleFlags.BlocksInfoAtTheEnd) != 0;

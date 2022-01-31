@@ -152,7 +152,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 						int bytesWritten = LZ4Codec.Decode(compressedBytes, uncompressedBytes);
 						if (bytesWritten != uncompressedSize)
 						{
-							throw new System.Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize}");
+							throw new System.Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize} for {compressedBytes.Length} compressed bytes");
 						}
 						ReadMetadata(new MemoryStream(uncompressedBytes), uncompressedSize);
 					}
