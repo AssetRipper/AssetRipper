@@ -98,5 +98,12 @@
     "export_in_progress_no_file_count_yet": "Exportando Asset Files\n0.0%\n?/?",
     "export_in_progress": "Exportando Asset Files\n{0}%\n{1}/{2}",
     "error_exporting_with_reason": "Falha ao exportar o conteúdo do jogo: {0}",
-    "error_importing_with_reason": "Falha ao carregar o conteúdo do jogo: {0}"
+    "error_importing_with_reason": "Falha ao carregar o conteúdo do jogo: {0}",
+    "c_sharp_langage_version_config_latest": "Última Versão C#",
+    "c_sharp_langage_version_config_8_0": "C# 8",
+    "c_sharp_langage_version_config_10_0": "C# 10",
+    "c_sharp_language_version_config_description": "A versão da linguagem C# que será utilizada ao decompilar scripts.",
+    "c_sharp_langage_version_config_9_0": "C# 9",
+    "script_language_version_title": "Versão da Linguagem C#",
+    "script_content_level_title": "Nível de Conteúdo Script"
 }
