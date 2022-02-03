@@ -81,6 +81,7 @@ jobs:
         cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_linux64/Licenses/
         date -u > ./Bins/Publish/AssetRipperConsole_linux64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipperConsole_linux64
+        chmod +x ./Bins/Publish/AssetRipperConsole_linux64/AssetRipperConsole
       
     - name: Upload AssetRipperConsole Linux x64
       uses: actions/upload-artifact@v2
@@ -96,6 +97,7 @@ jobs:
         cp ./Licenses/*.md ./Bins/Publish/AssetRipper_linux64/Licenses/
         date -u > ./Bins/Publish/AssetRipper_linux64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipper_linux64
+        chmod +x ./Bins/Publish/AssetRipper_linux64/AssetRipper
 
     - name: Upload AssetRipperGUI Linux x64
       uses: actions/upload-artifact@v2
@@ -130,6 +132,7 @@ jobs:
         cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_mac64/Licenses/
         date -u > ./Bins/Publish/AssetRipperConsole_mac64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipperConsole_mac64
+        chmod +x ./Bins/Publish/AssetRipperConsole_mac64/AssetRipperConsole
       
     - name: Upload AssetRipperConsole Mac x64
       uses: actions/upload-artifact@v2
@@ -145,6 +148,7 @@ jobs:
         cp ./Licenses/*.md ./Bins/Publish/AssetRipper_mac64/Licenses/
         date -u > ./Bins/Publish/AssetRipper_mac64/compile_time.txt
         ls -R ./Bins/Publish/AssetRipper_mac64
+        chmod +x ./Bins/Publish/AssetRipper_mac64/AssetRipper
 
     - name: Upload AssetRipperGUI Mac x64
       uses: actions/upload-artifact@v2
