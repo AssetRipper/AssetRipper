@@ -5,7 +5,7 @@ namespace AssetRipper.Core.Classes.TagManager
 {
 	public interface ITagManager : IUnityObjectBase
 	{
-		string[] Tags { get; set; }
+		Utf8StringBase[] Tags { get; }
 	}
 
 	public static class TagManagerExtensions

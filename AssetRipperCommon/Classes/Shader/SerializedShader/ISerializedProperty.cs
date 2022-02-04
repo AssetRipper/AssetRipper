@@ -6,7 +6,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 	public interface ISerializedProperty : IHasName
 	{
 		string Description { get; set; }
-		string[] Attributes { get; set; }
+		Utf8StringBase[] Attributes { get; }
 		SerializedPropertyType Type { get; set; }
 		SerializedPropertyFlag Flags { get; set; }
 		float DefValue0 { get; set; }

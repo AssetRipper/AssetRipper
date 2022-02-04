@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Classes.TagManager
 		{
 			base.Read(reader);
 
-			Tags = reader.ReadStringArray();
+			Tags = reader.ReadAssetArray<Utf8StringLegacy>();
 			if (IsStaticArray(reader.Version))
 			{
 				Layers = new string[32];
@@ -59,7 +59,7 @@ namespace AssetRipper.Core.Classes.TagManager
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(TagsName, Tags.ExportYAML());
+			node.Add(TagsName, Tags.ExportYAML(container));
 			node.Add(LayersName, Layers.ExportYAML());
 			node.Add(SortingLayersName, GetSortingLayers(container.Version).ExportYAML(container));
 			return node;
@@ -70,7 +70,7 @@ namespace AssetRipper.Core.Classes.TagManager
 			return HasSortingLayers(version) ? SortingLayers : System.Array.Empty<SortingLayerEntry>();
 		}
 
-		public string[] Tags { get; set; }
+		public Utf8StringBase[] Tags { get; set; }
 		public string[] Layers { get; set; }
 		public SortingLayerEntry[] SortingLayers { get; set; }
 

@@ -168,7 +168,7 @@ namespace AssetRipper.Core.Project
 				return default;
 			}
 
-			int index = m_buildSettings.Scenes.IndexOf(name);
+			int index = m_buildSettings.Scenes.IndexOf(s => s.String == name);
 			if (index == -1)
 			{
 				throw new Exception($"Scene '{name}' hasn't been found in build settings");
@@ -187,7 +187,7 @@ namespace AssetRipper.Core.Project
 
 		public string SceneIndexToName(int sceneIndex)
 		{
-			return m_buildSettings == null ? $"level{sceneIndex}" : m_buildSettings.Scenes[sceneIndex];
+			return m_buildSettings == null ? $"level{sceneIndex}" : m_buildSettings.Scenes[sceneIndex].String;
 		}
 
 		public bool IsSceneDuplicate(int sceneIndex)
@@ -197,7 +197,7 @@ namespace AssetRipper.Core.Project
 				return false;
 			}
 
-			string sceneName = m_buildSettings.Scenes[sceneIndex];
+			string sceneName = m_buildSettings.Scenes[sceneIndex].String;
 			for (int i = 0; i < m_buildSettings.Scenes.Length; i++)
 			{
 				if (m_buildSettings.Scenes[i] == sceneName)
@@ -239,7 +239,7 @@ namespace AssetRipper.Core.Project
 				{
 					if (tagIndex >= 0)
 					{
-						return m_tagManager.Tags[tagIndex];
+						return m_tagManager.Tags[tagIndex].String;
 					}
 					else if (!m_tagManager.IsBrokenCustomTags())
 					{

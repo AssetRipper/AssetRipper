@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		{
 			Name = reader.ReadString();
 			Description = reader.ReadString();
-			Attributes = reader.ReadStringArray();
+			Attributes = reader.ReadAssetArray<Utf8StringLegacy>();
 			Type = (SerializedPropertyType)reader.ReadInt32();
 			Flags = (SerializedPropertyFlag)reader.ReadUInt32();
 			DefValue0 = reader.ReadSingle();
@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 
 		public string Name { get; set; }
 		public string Description { get; set; }
-		public string[] Attributes { get; set; }
+		public Utf8StringBase[] Attributes { get; set; }
 		public SerializedPropertyType Type { get; set; }
 		public SerializedPropertyFlag Flags { get; set; }
 		public float DefValue0 { get; set; }

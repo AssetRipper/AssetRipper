@@ -4,7 +4,7 @@ namespace AssetRipper.Core.Classes
 {
 	public interface IBuildSettings : IUnityObjectBase
 	{
-		string[] Scenes { get; set; }
+		Utf8StringBase[] Scenes { get; }
 		string Version { get; set; }
 	}
 }

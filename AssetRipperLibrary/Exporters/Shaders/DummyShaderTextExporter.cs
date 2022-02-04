@@ -123,7 +123,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 		private static void Export(ISerializedProperty _this, TextWriter writer)
 		{
 			writer.WriteIndent(2);
-			foreach (string attribute in _this.Attributes)
+			foreach (string attribute in _this.Attributes.ToStringArray())
 			{
 				writer.Write("[{0}] ", attribute);
 			}

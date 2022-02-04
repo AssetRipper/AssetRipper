@@ -246,7 +246,7 @@ namespace AssetRipper.Library.Utils
 			sw.WriteLine($"  Scenes {buildSettings.Scenes.Length}");
 			for (int i = 0; i < buildSettings.Scenes.Length; i++)
 			{
-				string scene = buildSettings.Scenes[i];
+				string scene = buildSettings.Scenes[i].String;
 				sw.WriteLine($"	{i}: {scene}");
 			}
 			sw.WriteLine($"  PreloadedPlugins {buildSettings.PreloadedPlugins}");

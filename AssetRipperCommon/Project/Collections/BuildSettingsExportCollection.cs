@@ -90,7 +90,7 @@ namespace AssetRipper.Core.Project.Collections
 			IEditorScene[] scenes = editorBuildSettings.Scenes;
 			for (int i = 0; i < numScenes; i++)
 			{
-				string scenePath = buildSettings.Scenes[i];
+				string scenePath = buildSettings.Scenes[i].String;
 				IEditorScene scene = scenes[i];
 				scene.Enabled = true;
 				scene.Path = scenePath;

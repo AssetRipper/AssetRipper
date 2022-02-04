@@ -113,7 +113,7 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
-			Scenes = reader.ReadStringArray();
+			Scenes = reader.ReadAssetArray<Utf8StringLegacy>();
 			if (HasPreloadPlugin(reader.Version))
 			{
 				PreloadedPlugins = reader.ReadStringArray();
@@ -233,7 +233,7 @@ namespace AssetRipper.Core.Classes
 		/// <summary>
 		/// Levels previously
 		/// </summary>
-		public string[] Scenes { get; set; }
+		public Utf8StringBase[] Scenes { get; set; }
 		public string[] PreloadedPlugins { get; set; }
 		public string[] EnabledVRDevices { get; set; }
 		public string[] BuildTags { get; set; }
