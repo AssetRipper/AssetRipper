@@ -11,13 +11,13 @@ namespace AssetRipper.Core.Classes
 {
 	public interface IMonoScript : IUnityObjectBase, IHasName
 	{
-		string ClassName { get; }
-		string Namespace { get; }
+		string ClassName { get; set; }
+		string Namespace { get; set; }
 		/// <summary>
 		/// AssemblyIdentifier previously
 		/// </summary>
-		string AssemblyName { get; }
-		int ExecutionOrder { get; }
+		string AssemblyName { get; set; }
+		int ExecutionOrder { get; set; }
 		Hash128 PropertiesHash { get; }
 	}
 
