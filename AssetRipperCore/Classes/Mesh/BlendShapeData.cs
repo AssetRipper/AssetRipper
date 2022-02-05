@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				if (blendChannel.NameHash == crc)
 				{
-					return blendChannel.Name;
+					return blendChannel.Name.String;
 				}
 			}
 			return null;

@@ -1,24 +1,20 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class MeshBlendShapeChannel : IAsset
+	public sealed class MeshBlendShapeChannel : IMeshBlendShapeChannel
 	{
 		public MeshBlendShapeChannel() { }
 		public MeshBlendShapeChannel(string name, int frameIndex, int frameCount)
 		{
-			Name = name;
-			NameHash = CrcUtils.CalculateDigestUTF8(Name);
-			FrameIndex = frameIndex;
-			FrameCount = frameCount;
+			this.SetValues(name, frameIndex, frameCount);
 		}
 
 		public void Read(AssetReader reader)
 		{
-			Name = reader.ReadString();
+			Name.Read(reader);
 			NameHash = reader.ReadUInt32();
 			FrameIndex = reader.ReadInt32();
 			FrameCount = reader.ReadInt32();
@@ -26,7 +22,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public void Write(AssetWriter writer)
 		{
-			writer.Write(Name);
+			writer.WriteAsset(Name);
 			writer.Write(NameHash);
 			writer.Write(FrameIndex);
 			writer.Write(FrameCount);
@@ -35,14 +31,14 @@ namespace AssetRipper.Core.Classes.Mesh
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(NameName, Name);
+			node.Add(NameName, Name.String);
 			node.Add(NameHashName, NameHash);
 			node.Add(FrameIndexName, FrameIndex);
 			node.Add(FrameCountName, FrameCount);
 			return node;
 		}
 
-		public string Name { get; set; }
+		public Utf8StringBase Name { get; } = new Utf8StringLegacy();
 		public uint NameHash { get; set; }
 		public int FrameIndex { get; set; }
 		public int FrameCount { get; set; }
