@@ -132,5 +132,7 @@
     "c_sharp_langage_version_config_latest": "C# 최신",
     "c_sharp_langage_version_config_preview": "C# 프리뷰",
     "c_sharp_langage_version_config_9_0": "C# 9",
-    "c_sharp_langage_version_config_10_0": "C# 10"
+    "c_sharp_langage_version_config_10_0": "C# 10",
+    "menu_export_selected_type": "선택한 형식의 모든 파일을 내보냅니다.",
+    "check_log_for_more_details": "자세한 내용은 로그 확인"
 }
