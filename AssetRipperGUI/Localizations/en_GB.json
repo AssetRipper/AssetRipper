@@ -74,6 +74,8 @@
   "c_sharp_langage_version_config_9_0": "C# 9",
   "c_sharp_langage_version_config_10_0": "C# 10",
   "c_sharp_langage_version_config_latest": "C# Latest",
+  "c_sharp_langage_version_config_auto_safe": "Automatic - Safe",
+  "c_sharp_langage_version_config_auto_experimental": "Automatic - Experimental",
   "c_sharp_language_version_config_description": "The C# language version to be used when decompiling scripts.",
   "config_screen_drag_drop_prompt": "Please note that some setting changes may cause or prevent errors.\nOnce you're ready, drag-and-drop your game file/folder onto this window, or use the menu in the upper-left to open something manually.",
   "menu_file": "File",

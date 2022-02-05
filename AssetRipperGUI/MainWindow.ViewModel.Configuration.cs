@@ -96,7 +96,7 @@ namespace AssetRipper.GUI
 			}
 		}
 
-		public ICSharpCode.Decompiler.CSharp.LanguageVersion ScriptLanguageVersion
+		public ScriptLanguageVersion ScriptLanguageVersion
 		{
 			get => _ripper.Settings.ScriptLanguageVersion;
 			set

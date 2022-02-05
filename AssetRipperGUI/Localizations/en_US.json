@@ -74,6 +74,8 @@
   "c_sharp_langage_version_config_9_0": "C# 9",
   "c_sharp_langage_version_config_10_0": "C# 10",
   "c_sharp_langage_version_config_latest": "C# Latest",
+  "c_sharp_langage_version_config_auto_safe": "Automatic - Safe",
+  "c_sharp_langage_version_config_auto_experimental": "Automatic - Experimental",
   "c_sharp_language_version_config_description": "The C# language version to be used when decompiling scripts.",
   "config_screen_drag_drop_prompt": "Please note that some setting changes may cause or prevent errors.\nOnce you're ready, drag-and-drop your game file/folder onto this window, or use the menu in the upper-left to open something manually.",
   "menu_file": "File",
@@ -131,6 +133,6 @@
   "export_in_progress": "Exporting Asset Files\n{0}%\n{1}/{2}",
   "error_exporting_with_reason": "Failed to export game content: {0}",
   "error_importing_with_reason": "Failed to load game content: {0}",
-  "check_log_for_more_details":  "Check log for more details",
+  "check_log_for_more_details": "Check log for more details",
   "loose_file_saved_at": "Loose file saved at {0}"
 }

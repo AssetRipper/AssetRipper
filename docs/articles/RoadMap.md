@@ -1,5 +1,10 @@
 # Development Roadmap
 
+## 0.1.9.1
+
+* ~~Fix TextureDecoder rounding bug~~
+* ~~Automatic Script Language Version~~
+
 ## 0.2.0.0
 * Convert Exporters to the new Interface System
   * Animator Controller exporter
