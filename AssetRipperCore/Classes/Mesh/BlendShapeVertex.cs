@@ -5,7 +5,7 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class BlendShapeVertex : IAsset
+	public sealed class BlendShapeVertex : IBlendShapeVertex
 	{
 		public void Read(AssetReader reader)
 		{
@@ -34,14 +34,13 @@ namespace AssetRipper.Core.Classes.Mesh
 		}
 
 		public uint Index { get; set; }
+		public IVector3f Vertex { get; } = new Vector3f();
+		public IVector3f Normal { get; } = new Vector3f();
+		public IVector3f Tangent { get; } = new Vector3f();
 
 		public const string VertexName = "vertex";
 		public const string NormalName = "normal";
 		public const string TangentName = "tangent";
 		public const string IndexName = "index";
-
-		public Vector3f Vertex = new();
-		public Vector3f Normal = new();
-		public Vector3f Tangent = new();
 	}
 }
