@@ -52,13 +52,13 @@ namespace AssetRipper.Core.Project.Collections
 		}
 
 		//Type names
-		private const string PlayerSettingsName = "PlayerSettings";
-		private const string NavMeshProjectSettingsName = "NavMeshProjectSettings";
-		private const string PhysicsManagerName = "PhysicsManager";
+		protected const string PlayerSettingsName = "PlayerSettings";
+		protected const string NavMeshProjectSettingsName = "NavMeshProjectSettings";
+		protected const string PhysicsManagerName = "PhysicsManager";
 
 		//Altered names
-		private const string ProjectSettingsName = "ProjectSettings";
-		private const string NavMeshAreasName = "NavMeshAreas";
-		private const string DynamicsManagerName = "DynamicsManager";
+		protected const string ProjectSettingsName = "ProjectSettings";
+		protected const string NavMeshAreasName = "NavMeshAreas";
+		protected const string DynamicsManagerName = "DynamicsManager";
 	}
 }
