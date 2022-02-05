@@ -1,6 +1,8 @@
-﻿namespace AssetRipper.Core.Math
+﻿using AssetRipper.Core.IO.Asset;
+
+namespace AssetRipper.Core.Math
 {
-	public interface IMatrix4x4f
+	public interface IMatrix4x4f : IAsset
 	{
 		float E00 { get; set; }
 		float E01 { get; set; }

@@ -1,6 +1,8 @@
-﻿namespace AssetRipper.Core.Math
+﻿using AssetRipper.Core.IO.Asset;
+
+namespace AssetRipper.Core.Math
 {
-	public interface IRectf
+	public interface IRectf : IAsset
 	{
 		float X { get; set; }
 		float Y { get; set; }

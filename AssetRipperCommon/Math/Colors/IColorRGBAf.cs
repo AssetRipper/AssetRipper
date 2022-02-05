@@ -1,6 +1,8 @@
-﻿namespace AssetRipper.Core.Math.Colors
+﻿using AssetRipper.Core.IO.Asset;
+
+namespace AssetRipper.Core.Math.Colors
 {
-	public interface IColorRGBAf
+	public interface IColorRGBAf : IAsset
 	{
 		float R { get; set; }
 		float G { get; set; }
