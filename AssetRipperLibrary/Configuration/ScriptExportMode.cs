@@ -11,8 +11,12 @@
 		/// </summary>
 		Hybrid,
 		/// <summary>
+		/// Special assemblies, such as Assembly-CSharp, are renamed to have compatible names.
+		/// </summary>
+		DllExportWithRenaming,
+		/// <summary>
 		/// Exports assemblies in their compiled Dll form. Highly experimental. Might not work at all.
 		/// </summary>
-		TotalDllExport,
+		DllExportWithoutRenaming,
 	}
 }
