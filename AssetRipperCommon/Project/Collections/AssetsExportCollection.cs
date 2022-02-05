@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Project.Collections
 			return m_exportIDs[asset.AssetInfo];
 		}
 
-		protected override bool ExportInner(IProjectAssetContainer container, string filePath)
+		protected override bool ExportInner(ProjectAssetContainer container, string filePath)
 		{
 			return AssetExporter.Export(container, Assets.Select(t => t.ConvertLegacy(container)), filePath);
 		}

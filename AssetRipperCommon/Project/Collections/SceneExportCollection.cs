@@ -114,7 +114,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public override bool Export(IProjectAssetContainer container, string dirPath)
+		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
 			string folderPath = Path.Combine(dirPath, UnityObjectBase.AssetsKeyword, "Scene");
 			string sceneSubPath = GetSceneName(container);
@@ -208,7 +208,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		private void ExportAsset(IProjectAssetContainer container, INamedObject asset, string path)
+		private void ExportAsset(ProjectAssetContainer container, INamedObject asset, string path)
 		{
 			INativeFormatImporter importer = container.GetExportHandler().ImporterFactory.CreateNativeFormatImporter(container.ExportLayout);
 			importer.MainObjectFileID = GetExportID(asset);

@@ -82,7 +82,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 		}
 
-		public override bool Export(IProjectAssetContainer container, string dirPath)
+		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
 			if (m_export.Count == 0)
 			{

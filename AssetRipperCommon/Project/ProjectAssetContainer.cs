@@ -23,7 +23,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Project
 {
-	public class ProjectAssetContainer : IProjectAssetContainer
+	public class ProjectAssetContainer : IExportContainer
 	{
 		public ProjectAssetContainer(ProjectExporterBase exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<IUnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)

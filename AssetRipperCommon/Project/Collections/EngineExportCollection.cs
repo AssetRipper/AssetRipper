@@ -176,7 +176,7 @@ namespace AssetRipper.Core.Project.Collections
 			return false;
 		}
 
-		public bool Export(IProjectAssetContainer container, string dirPath)
+		public bool Export(ProjectAssetContainer container, string dirPath)
 		{
 			return false;
 		}

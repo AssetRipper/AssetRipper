@@ -82,7 +82,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		protected override bool ExportInner(IProjectAssetContainer container, string filePath)
+		protected override bool ExportInner(ProjectAssetContainer container, string filePath)
 		{
 			return AssetExporter.Export(container, Asset, filePath);
 		}

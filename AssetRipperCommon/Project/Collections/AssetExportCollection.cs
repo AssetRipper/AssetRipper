@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Project.Collections
 			this.fileExtension = fileExtension;
 		}
 
-		public override bool Export(IProjectAssetContainer container, string dirPath)
+		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
 			string subPath;
 			string fileName;
@@ -87,7 +87,7 @@ namespace AssetRipper.Core.Project.Collections
 				new MetaPtr(exportID, Asset.GUID, AssetExporter.ToExportType(Asset));
 		}
 
-		protected virtual bool ExportInner(IProjectAssetContainer container, string filePath)
+		protected virtual bool ExportInner(ProjectAssetContainer container, string filePath)
 		{
 			return AssetExporter.Export(container, Asset.ConvertLegacy(container), filePath);
 		}

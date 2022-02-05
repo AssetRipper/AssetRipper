@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Project.Collections
 			EditorSettings = CreateVirtualEditorSettings(virtualFile);
 		}
 
-		public override bool Export(IProjectAssetContainer container, string dirPath)
+		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
 			string subPath = Path.Combine(dirPath, ProjectSettingsName);
 			string fileName = $"{EditorBuildSettings.ClassID}.asset";
@@ -83,7 +83,7 @@ namespace AssetRipper.Core.Project.Collections
 			return virtualFile.CreateAsset<IEditorBuildSettings>(ClassIDType.EditorBuildSettings);
 		}
 
-		public static void InitializeEditorBuildSettings(IEditorBuildSettings editorBuildSettings, IBuildSettings buildSettings, IProjectAssetContainer container)
+		public static void InitializeEditorBuildSettings(IEditorBuildSettings editorBuildSettings, IBuildSettings buildSettings, ProjectAssetContainer container)
 		{
 			int numScenes = buildSettings.Scenes.Length;
 			editorBuildSettings.InitializeScenesArray(numScenes);

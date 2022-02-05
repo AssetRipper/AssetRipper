@@ -30,7 +30,7 @@ namespace AssetRipper.Core.Project.Collections
 			m_asset = asset;
 		}
 
-		public bool Export(IProjectAssetContainer container, string dirPath)
+		public bool Export(ProjectAssetContainer container, string dirPath)
 		{
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to export asset {Name}");
 			return false;

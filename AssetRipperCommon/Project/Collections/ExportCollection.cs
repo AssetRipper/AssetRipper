@@ -34,12 +34,12 @@ namespace AssetRipper.Core.Project.Collections
 			writer.Write(streamWriter);
 		}
 
-		public abstract bool Export(IProjectAssetContainer container, string dirPath);
+		public abstract bool Export(ProjectAssetContainer container, string dirPath);
 		public abstract bool IsContains(IUnityObjectBase asset);
 		public abstract long GetExportID(IUnityObjectBase asset);
 		public abstract MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal);
 
-		protected void ExportAsset(IProjectAssetContainer container, IAssetImporter importer, IUnityObjectBase asset, string path, string name)
+		protected void ExportAsset(ProjectAssetContainer container, IAssetImporter importer, IUnityObjectBase asset, string path, string name)
 		{
 			if (!Directory.Exists(path))
 			{
