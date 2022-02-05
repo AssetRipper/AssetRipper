@@ -52,6 +52,12 @@ namespace AssetRipper.Core.Classes.AudioClip
 			return data;
 		}
 
+		public static bool TryGetContent(this IStreamedResource streamedResource, ISerializedFile file, out byte[] data)
+		{
+			data = streamedResource.GetContent(file);
+			return !data.IsNullOrEmpty();
+		}
+
 		public static bool IsSet(this IStreamedResource streamedResource) => !string.IsNullOrEmpty(streamedResource.Source);
 	}
 }

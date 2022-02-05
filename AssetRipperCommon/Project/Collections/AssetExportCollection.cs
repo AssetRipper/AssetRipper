@@ -55,7 +55,7 @@ namespace AssetRipper.Core.Project.Collections
 			Directory.CreateDirectory(subPath);
 
 			string filePath = Path.Combine(subPath, fileName);
-			bool result = ExportInner(container, filePath);
+			bool result = ExportInner(container, filePath, dirPath);
 			if (result)
 			{
 				Meta meta = new Meta(Asset.GUID, CreateImporter(container));
@@ -87,7 +87,14 @@ namespace AssetRipper.Core.Project.Collections
 				new MetaPtr(exportID, Asset.GUID, AssetExporter.ToExportType(Asset));
 		}
 
-		protected virtual bool ExportInner(ProjectAssetContainer container, string filePath)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="container"></param>
+		/// <param name="filePath">The full path to the exported asset destination</param>
+		/// <param name="dirPath">The full path to the project export directory</param>
+		/// <returns>True if export was successful, false otherwise</returns>
+		protected virtual bool ExportInner(ProjectAssetContainer container, string filePath, string dirPath)
 		{
 			return AssetExporter.Export(container, Asset.ConvertLegacy(container), filePath);
 		}

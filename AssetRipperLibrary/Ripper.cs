@@ -228,6 +228,7 @@ namespace AssetRipper.Library
 			OverrideExporter<IShader>(new SimpleShaderExporter());
 
 			//Audio exporters
+			OverrideExporter<IAudioClip>(new YamlAudioExporter());
 			OverrideExporter<IAudioClip>(new NativeAudioExporter());
 			OverrideExporter<IAudioClip>(new FmodAudioExporter(Settings));
 			OverrideExporter<IAudioClip>(new AudioClipExporter(Settings));

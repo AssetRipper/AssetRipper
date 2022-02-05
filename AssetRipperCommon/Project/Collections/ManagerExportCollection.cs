@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Project.Collections
 
 			Directory.CreateDirectory(subPath);
 
-			ExportInner(container, filePath);
+			ExportInner(container, filePath, dirPath);
 			return true;
 		}
 
