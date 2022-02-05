@@ -107,7 +107,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			{
 				if (BlendType == BlendTreeType.Simple1D)
 				{
-					return Blend1dData.Instance.m_ChildThresholdArray[index];
+					return Blend1dData.Instance.ChildThresholdArray[index];
 				}
 			}
 			return 0.0f;
@@ -131,7 +131,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			{
 				if (BlendType == BlendTreeType.Simple1D)
 				{
-					return Blend1dData.Instance.m_ChildThresholdArray.Min();
+					return Blend1dData.Instance.ChildThresholdArray.Min();
 				}
 			}
 			return 0.0f;
@@ -143,7 +143,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			{
 				if (BlendType == BlendTreeType.Simple1D)
 				{
-					return Blend1dData.Instance.m_ChildThresholdArray.Max();
+					return Blend1dData.Instance.ChildThresholdArray.Max();
 				}
 			}
 			return 1.0f;

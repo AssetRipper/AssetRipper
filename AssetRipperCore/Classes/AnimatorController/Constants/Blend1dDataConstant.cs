@@ -5,11 +5,16 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class Blend1dDataConstant : IAssetReadable, IYAMLExportable
+	public sealed class Blend1dDataConstant : IBlend1dDataConstant
 	{
 		public void Read(AssetReader reader)
 		{
-			m_ChildThresholdArray = reader.ReadSingleArray();
+			ChildThresholdArray = reader.ReadSingleArray();
+		}
+
+		public void Write(AssetWriter writer)
+		{
+			throw new NotSupportedException();
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -17,6 +22,6 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			throw new NotSupportedException();
 		}
 
-		public float[] m_ChildThresholdArray { get; set; }
+		public float[] ChildThresholdArray { get; set; }
 	}
 }
