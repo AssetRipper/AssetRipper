@@ -12,11 +12,29 @@ namespace AssetRipper.Library.Utils
 {
 	public sealed class DirectBitmap : IDisposable
 	{
-		public DirectBitmap(int width, int height)
+		/// <summary>
+		/// Make a new bitmap
+		/// </summary>
+		/// <param name="width">The width of the image</param>
+		/// <param name="height">The height of the image</param>
+		public DirectBitmap(int width, int height) : this(width, height, new byte[width * height * 4]) { }
+
+		/// <summary>
+		/// Make a bitmap from existing BGRA32 data
+		/// </summary>
+		/// <param name="width">The width of the image</param>
+		/// <param name="height">The height of the image</param>
+		/// <param name="bgra32Data">The image data, 4 bytes per pixel. Will get pinned</param>
+		public DirectBitmap(int width, int height, byte[] bgra32Data)
 		{
+			if(bgra32Data is null)
+				throw new ArgumentNullException(nameof(bgra32Data));
+			if (bgra32Data.Length != width * height * 4)
+				throw new ArgumentException($"Invalid length: expected {width * height * 4} but was actually {bgra32Data.Length}", nameof(bgra32Data));
+
 			Width = width;
 			Height = height;
-			Bits = new byte[width * height * 4];
+			Bits = bgra32Data;
 			m_bitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
 		}
 

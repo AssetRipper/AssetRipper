@@ -55,25 +55,24 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		public static DirectBitmap GetBitmap(ITerrainData terrain)
 		{
-			int width = terrain.Heightmap.Width;
-			int height = terrain.Heightmap.Height;
-			byte[] data = GetRGBA32Data(terrain);
-			DirectBitmap bitmap = new(width, height);
-			RgbConverter.RGBA32ToBGRA32(data, width, height, bitmap.Bits);
+			DirectBitmap bitmap = new DirectBitmap(
+				terrain.Heightmap.Width, 
+				terrain.Heightmap.Height, 
+				GetBGRA32Data(terrain));
 			bitmap.FlipY();
 			return bitmap;
 		}
 
-		public static byte[] GetRGBA32Data(ITerrainData terrain)
+		public static byte[] GetBGRA32Data(ITerrainData terrain)
 		{
 			short[] heights = terrain.Heightmap.Heights;
 			byte[] result = new byte[heights.Length * 4];
 			for (int y = 0; y < heights.Length; y++)
 			{
 				ColorRGBA32 color = (ColorRGBA32)ConvertToColor((float)heights[y] / short.MaxValue);
-				result[4 * y] = color.R;
+				result[4 * y] = color.B;
 				result[4 * y + 1] = color.G;
-				result[4 * y + 2] = color.B;
+				result[4 * y + 2] = color.R;
 				result[4 * y + 3] = byte.MaxValue; //small optimization
 			}
 			return result;
