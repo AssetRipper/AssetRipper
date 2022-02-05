@@ -16,9 +16,7 @@ namespace AssetRipper.Core.Project.Collections
 		public override bool Export(ProjectAssetContainer container, string dirPath)
 		{
 			string subPath = Path.Combine(dirPath, ProjectSettingsName);
-			string name = Asset.GetType().Name;
-			if (name == "PlayerSettings")
-				name = ProjectSettingsName;
+			string name = GetCorrectName(Asset.GetType().Name);
 			string fileName = $"{name}.asset";
 			string filePath = Path.Combine(subPath, fileName);
 
@@ -42,6 +40,25 @@ namespace AssetRipper.Core.Project.Collections
 			throw new NotSupportedException();
 		}
 
-		protected const string ProjectSettingsName = "ProjectSettings";
+		private static string GetCorrectName(string typeName)
+		{
+			return typeName switch
+			{
+				PlayerSettingsName => ProjectSettingsName,
+				NavMeshProjectSettingsName => NavMeshAreasName,
+				PhysicsManagerName => DynamicsManagerName,
+				_ => typeName,
+			};
+		}
+
+		//Type names
+		private const string PlayerSettingsName = "PlayerSettings";
+		private const string NavMeshProjectSettingsName = "NavMeshProjectSettings";
+		private const string PhysicsManagerName = "PhysicsManager";
+
+		//Altered names
+		private const string ProjectSettingsName = "ProjectSettings";
+		private const string NavMeshAreasName = "NavMeshAreas";
+		private const string DynamicsManagerName = "DynamicsManager";
 	}
 }

@@ -3,6 +3,7 @@
 ## 0.1.9.1
 
 * ~~Fix TextureDecoder rounding bug~~
+* ~~Fix some file names in the project settings folder~~
 * ~~Automatic Script Language Version~~
 
 ## 0.2.0.0
