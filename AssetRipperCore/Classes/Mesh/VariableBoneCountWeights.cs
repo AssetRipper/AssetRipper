@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class VariableBoneCountWeights : IAsset
+	public sealed class VariableBoneCountWeights : IVariableBoneCountWeights
 	{
 		public VariableBoneCountWeights Convert(IExportContainer container)
 		{
