@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			MeshBlendShapeChannel[] channels = new MeshBlendShapeChannel[shapes.Length];
 			for (int i = 0; i < shapes.Length; i++)
 			{
-				channels[i] = new MeshBlendShapeChannel(shapes[i].Name, i, 1);
+				channels[i] = new MeshBlendShapeChannel(shapes[i].Name.String, i, 1);
 			}
 			return channels;
 		}

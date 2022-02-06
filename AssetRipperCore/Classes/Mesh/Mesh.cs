@@ -354,7 +354,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				{
 					if (blendShape.IsCRCMatch(crc))
 					{
-						return blendShape.Name;
+						return blendShape.Name.String;
 					}
 				}
 				return null;

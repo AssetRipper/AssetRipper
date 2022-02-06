@@ -2,12 +2,11 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class MeshBlendShape : IAsset
+	public sealed class MeshBlendShape : IAsset, IMeshBlendShape
 	{
 		/// <summary>
 		/// Less than 4.3.0
@@ -27,7 +26,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			if (HasName(reader.Version))
 			{
-				Name = reader.ReadString();
+				Name.Read(reader);
 			}
 
 			FirstVertex = reader.ReadUInt32();
@@ -50,7 +49,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			if (HasName(writer.Version))
 			{
-				writer.Write(Name);
+				Name.Write(writer);
 			}
 
 			writer.Write(FirstVertex);
@@ -74,7 +73,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			YAMLMappingNode node = new YAMLMappingNode();
 			if (HasName(container.ExportVersion))
 			{
-				node.Add(NameName, Name);
+				node.Add(NameName, Name.String);
 			}
 
 			node.Add(FirstVertexName, FirstVertex);
@@ -90,16 +89,22 @@ namespace AssetRipper.Core.Classes.Mesh
 			return node;
 		}
 
-		public bool IsCRCMatch(uint crc)
-		{
-			return CrcUtils.VerifyDigestUTF8(Name, crc);
-		}
-
-		public string Name { get; set; }
+		/// <summary>
+		/// Less than 4.3
+		/// </summary>
+		public Utf8StringBase Name { get; } = new Utf8StringLegacy();
 		public uint FirstVertex { get; set; }
 		public uint VertexCount { get; set; }
 		public bool HasNormals { get; set; }
 		public bool HasTangents { get; set; }
+		/// <summary>
+		/// Less than 4.3
+		/// </summary>
+		public IVector3f AabbMinDelta { get; } = new Vector3f();
+		/// <summary>
+		/// Less than 4.3
+		/// </summary>
+		public IVector3f AabbMaxDelta { get; } = new Vector3f();
 
 		public const string NameName = "name";
 		public const string FirstVertexName = "firstVertex";
@@ -108,8 +113,5 @@ namespace AssetRipper.Core.Classes.Mesh
 		public const string AabbMaxDeltaName = "aabbMaxDelta";
 		public const string HasNormalsName = "hasNormals";
 		public const string HasTangentsName = "hasTangents";
-
-		public Vector3f AabbMinDelta = new();
-		public Vector3f AabbMaxDelta = new();
 	}
 }
