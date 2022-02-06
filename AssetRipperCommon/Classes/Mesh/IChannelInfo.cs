@@ -1,6 +1,8 @@
-﻿namespace AssetRipper.Core.Classes.Mesh
+﻿using AssetRipper.Core.IO.Asset;
+
+namespace AssetRipper.Core.Classes.Mesh
 {
-	public interface IChannelInfo
+	public interface IChannelInfo : IAsset
 	{
 		/// <summary>
 		/// Stream index
