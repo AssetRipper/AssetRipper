@@ -28,12 +28,12 @@ namespace AssetRipper.Core.Classes.Mesh
 	public sealed class Mesh : NamedObject, IMesh
 	{
 		public BlendShapeData Shapes { get; set; } = new();
-		public VariableBoneCountWeights VariableBoneCountWeights = new();
-		public VertexData VertexData = new();
+		public VariableBoneCountWeights VariableBoneCountWeights { get; set; } = new();
+		public VertexData VertexData { get; set; } = new();
 		public CompressedMesh CompressedMesh { get; set; } = new();
-		public AABB LocalAABB = new AABB();
-		public CollisionMeshData CollisionData = new();
-		public StreamingInfo StreamData = new();
+		public AABB LocalAABB { get; set; } = new AABB();
+		public CollisionMeshData CollisionData { get; set; } = new();
+		public StreamingInfo StreamData { get; set; } = new();
 		public LOD[] LODData { get; set; } = Array.Empty<LOD>();
 		public uint Use16BitIndices
 		{
@@ -114,12 +114,12 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Shapes - real name
 		/// </summary>
-		public MeshBlendShape[] BlendShapes
+		public IMeshBlendShape[] BlendShapes
 		{
 			get => Shapes.Shapes;
 			set => Shapes.Shapes = value;
 		}
-		public BlendShapeVertex[] ShapeVertices
+		public IBlendShapeVertex[] ShapeVertices
 		{
 			get => Shapes.Vertices;
 			set => Shapes.Vertices = value;

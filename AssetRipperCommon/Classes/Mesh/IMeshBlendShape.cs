@@ -1,9 +1,10 @@
-﻿using AssetRipper.Core.Math.Vectors;
+﻿using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Utils;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public interface IMeshBlendShape
+	public interface IMeshBlendShape : IAsset
 	{
 		/// <summary>
 		/// Less than 4.3

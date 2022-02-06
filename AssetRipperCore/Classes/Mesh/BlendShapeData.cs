@@ -11,9 +11,9 @@ namespace AssetRipper.Core.Classes.Mesh
 {
 	public sealed class BlendShapeData : IAsset
 	{
-		public BlendShapeVertex[] Vertices { get; set; } = Array.Empty<BlendShapeVertex>();
-		public MeshBlendShape[] Shapes { get; set; } = Array.Empty<MeshBlendShape>();
-		public MeshBlendShapeChannel[] Channels { get; set; } = Array.Empty<MeshBlendShapeChannel>();
+		public IBlendShapeVertex[] Vertices { get; set; } = Array.Empty<IBlendShapeVertex>();
+		public IMeshBlendShape[] Shapes { get; set; } = Array.Empty<IMeshBlendShape>();
+		public IMeshBlendShapeChannel[] Channels { get; set; } = Array.Empty<IMeshBlendShapeChannel>();
 		public float[] FullWeights { get; set; } = Array.Empty<float>();
 
 		/// <summary>

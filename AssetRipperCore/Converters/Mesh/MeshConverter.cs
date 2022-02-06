@@ -167,12 +167,12 @@ namespace AssetRipper.Core.Converters.Mesh
 			return 1;
 		}
 
-		private static MeshBlendShape[] GetBlendShapes(IExportContainer container, Classes.Mesh.Mesh origin)
+		private static IMeshBlendShape[] GetBlendShapes(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
 			return Classes.Mesh.Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Shapes : Array.Empty<MeshBlendShape>();
 		}
 
-		private static BlendShapeVertex[] GetShapeVertices(IExportContainer container, Classes.Mesh.Mesh origin)
+		private static IBlendShapeVertex[] GetShapeVertices(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
 			return Classes.Mesh.Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Vertices : Array.Empty<BlendShapeVertex>();
 		}
