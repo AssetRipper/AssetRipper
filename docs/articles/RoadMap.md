@@ -1,15 +1,10 @@
 # Development Roadmap
 
-## 0.1.9.1
-
-* ~~Fix TextureDecoder rounding bug~~
-* ~~Fix some file names in the project settings folder~~
-* ~~Automatic Script Language Version~~
+## 0.1.9.2
 
 ## 0.2.0.0
 * Convert Exporters to the new Interface System
   * Animator Controller exporter
-  * Audio Clip exporters
   * Mesh exporters
   * Texture exporter
 * Move more classes to the Common project
