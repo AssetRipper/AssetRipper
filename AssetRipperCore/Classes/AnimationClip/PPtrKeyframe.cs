@@ -4,11 +4,12 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public sealed class PPtrKeyframe : IAsset, IDependent
+	public sealed class PPtrKeyframe : IAsset, IDependent, IEquatable<PPtrKeyframe>
 	{
 		public PPtrKeyframe() { }
 		public PPtrKeyframe(float time, PPtr<Object.Object> script)
@@ -40,6 +41,25 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			yield return context.FetchDependency(Value, ValueName);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj is PPtrKeyframe keyframe)
+			{
+				return this.Equals(keyframe);
+			}
+			return false;
+		}
+
+		public override int GetHashCode()
+		{
+			return 0;
+		}
+
+		public bool Equals(PPtrKeyframe other)
+		{
+			return Time == other.Time && Value == other.Value;
 		}
 
 		public float Time { get; set; }

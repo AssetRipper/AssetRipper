@@ -4,11 +4,12 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
-	public sealed class QuaternionCurve : IAsset, IYAMLExportable
+	public sealed class QuaternionCurve : IAsset, IYAMLExportable, IEquatable<QuaternionCurve>
 	{
 		public QuaternionCurve() { }
 
@@ -52,14 +53,21 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 			return node;
 		}
 
+		public override bool Equals(object obj)
+		{
+			if(obj is QuaternionCurve curve)
+				return Equals(curve);
+			return false;
+		}
+
 		public override int GetHashCode()
 		{
-			int hash = 199;
-			unchecked
-			{
-				hash = 617 + hash * Path.GetHashCode();
-			}
-			return hash;
+			return 0;
+		}
+
+		public bool Equals(QuaternionCurve other)
+		{
+			return Path.Equals(other.Path) && Curve.Equals(other.Curve);
 		}
 
 		public string Path { get; set; }

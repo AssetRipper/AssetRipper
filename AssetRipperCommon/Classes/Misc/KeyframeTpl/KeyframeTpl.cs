@@ -5,10 +5,11 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System;
 
 namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 {
-	public sealed class KeyframeTpl<T> : IAsset where T : IAsset, new()
+	public sealed class KeyframeTpl<T> : IAsset, IEquatable<KeyframeTpl<T>> where T : IAsset, new()
 	{
 		public KeyframeTpl() { }
 
@@ -153,19 +154,44 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 		/// </summary>
 		public static bool HasOutWeight(UnityVersion version) => version.IsGreaterEqual(2018);
 
+		public override bool Equals(object obj)
+		{
+			if(obj is KeyframeTpl<T> keyframe)
+				return Equals(keyframe);
+			else 
+				return false;
+		}
+
+		public override int GetHashCode()
+		{
+			return 0;
+		}
+
+		public bool Equals(KeyframeTpl<T> other)
+		{
+			return
+				Time.Equals(other.Time) &&
+				TangentMode.Equals(other.TangentMode) &&
+				WeightedMode.Equals(other.WeightedMode) &&
+				Value.Equals(other.Value) &&
+				InSlope.Equals(other.InSlope) &&
+				OutSlope.Equals(other.OutSlope) &&
+				InWeight.Equals(other.InWeight) &&
+				OutWeight.Equals(other.OutWeight);
+		}
+
 		public float Time { get; set; }
 		public int TangentMode { get; set; }
 		public WeightedMode WeightedMode { get; set; }
+		public T Value { get; set; } = new();
+		public T InSlope { get; set; } = new();
+		public T OutSlope { get; set; } = new();
+		public T InWeight { get; set; } = new();
+		public T OutWeight { get; set; } = new();
 
 		public static Float DefaultFloatWeight => 1.0f / 3.0f;
 		public static Vector3f DefaultVector3Weight => new Vector3f(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
 		public static Quaternionf DefaultQuaternionWeight => new Quaternionf(1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f, 1.0f / 3.0f);
-
-		public T Value = new();
-		public T InSlope = new();
-		public T OutSlope = new();
-		public T InWeight = new();
-		public T OutWeight = new();
 
 		public const string TimeName = "time";
 		public const string ValueName = "value";

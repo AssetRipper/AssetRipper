@@ -4,11 +4,12 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
-	public sealed class Vector3Curve : IAsset, IYAMLExportable
+	public sealed class Vector3Curve : IAsset, IYAMLExportable, IEquatable<Vector3Curve>
 	{
 		public Vector3Curve() { }
 
@@ -46,14 +47,21 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 			return node;
 		}
 
+		public override bool Equals(object obj)
+		{
+			if (obj is Vector3Curve curve)
+				return Equals(curve);
+			return false;
+		}
+
 		public override int GetHashCode()
 		{
-			int hash = 577;
-			unchecked
-			{
-				hash = 419 + hash * Path.GetHashCode();
-			}
-			return hash;
+			return 0;
+		}
+
+		public bool Equals(Vector3Curve other)
+		{
+			return Path.Equals(other.Path) && Curve.Equals(other.Curve);
 		}
 
 		public string Path { get; set; }

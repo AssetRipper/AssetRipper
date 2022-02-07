@@ -167,7 +167,7 @@ namespace AssetRipper.Core.Classes.Misc
 	{
 	}
 
-	public sealed class PPtr<T> : IAsset, IPPtr<T> where T : IUnityObjectBase
+	public sealed class PPtr<T> : IAsset, IPPtr<T>, IEquatable<PPtr<T>> where T : IUnityObjectBase
 	{
 		public PPtr() { }
 
@@ -245,6 +245,11 @@ namespace AssetRipper.Core.Classes.Misc
 				hash = hash * 173 + PathID.GetHashCode();
 			}
 			return hash;
+		}
+
+		public bool Equals(PPtr<T> other)
+		{
+			return this == other;
 		}
 
 		public bool IsVirtual => this.IsVirtual();

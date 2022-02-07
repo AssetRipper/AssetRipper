@@ -38,6 +38,18 @@ namespace AssetRipper.Core.Classes.Misc
 			return new YAMLScalarNode(Value);
 		}
 
+		public override bool Equals(object obj)
+		{
+			if(obj is Float f)
+				return Value == f.Value;
+			return false;
+		}
+
+		public override int GetHashCode()
+		{
+			return Value.GetHashCode();
+		}
+
 		public float Value { get; set; }
 	}
 }

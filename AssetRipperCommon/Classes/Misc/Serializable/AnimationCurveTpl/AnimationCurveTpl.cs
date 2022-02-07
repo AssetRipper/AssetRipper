@@ -1,4 +1,5 @@
 using AssetRipper.Core.Classes.Misc.KeyframeTpl;
+using AssetRipper.Core.Equality;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 {
-	public sealed class AnimationCurveTpl<T> : IAsset where T : IAsset, IYAMLExportable, new()
+	public sealed class AnimationCurveTpl<T> : IAsset, IEquatable<AnimationCurveTpl<T>> where T : IAsset, IYAMLExportable, new()
 	{
 		public AnimationCurveTpl() { }
 
@@ -138,6 +139,28 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 		/// 5.3.0 and greater
 		/// </summary>
 		public static bool HasRotationOrder(UnityVersion version) => version.IsGreaterEqual(5, 3);
+
+		public override bool Equals(object obj)
+		{
+			if (obj is AnimationCurveTpl<T> curve)
+				return Equals(curve);
+			else
+				return false;
+		}
+
+		public override int GetHashCode()
+		{
+			return 0;
+		}
+
+		public bool Equals(AnimationCurveTpl<T> other)
+		{
+			return
+				PreInfinity == other.PreInfinity &&
+				PostInfinity == other.PostInfinity &&
+				RotationOrder == other.RotationOrder &&
+				ArrayEquality.AreEqualArrays(Curve, other.Curve);
+		}
 
 		public KeyframeTpl<T>[] Curve { get; set; }
 		public CurveLoopTypes PreInfinity { get; set; }

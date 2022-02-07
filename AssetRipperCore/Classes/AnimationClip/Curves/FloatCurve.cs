@@ -6,11 +6,12 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
-	public sealed class FloatCurve : IAsset, IDependent
+	public sealed class FloatCurve : IAsset, IDependent, IEquatable<FloatCurve>
 	{
 		public FloatCurve() { }
 
@@ -68,12 +69,34 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 			return node;
 		}
 
+		public override bool Equals(object obj)
+		{
+			if (obj is FloatCurve curve)
+				return Equals(curve);
+			else
+				return false;
+		}
+
+		public override int GetHashCode()
+		{
+			return 0;
+		}
+
+		public bool Equals(FloatCurve other)
+		{
+			return 
+				ClassID == other.ClassID &&
+				Script == other.Script &&
+				Attribute == other.Attribute &&
+				Path == other.Path &&
+				Curve.Equals(other.Curve);
+		}
+
 		public string Attribute { get; set; }
 		public string Path { get; set; }
 		public ClassIDType ClassID { get; set; }
-
-		public AnimationCurveTpl<Float> Curve = new();
-		public PPtr<IMonoScript> Script = new();
+		public AnimationCurveTpl<Float> Curve { get; set; } = new();
+		public PPtr<IMonoScript> Script { get; set; } = new();
 
 		public const string CurveName = "curve";
 		public const string AttributeName = "attribute";

@@ -1,4 +1,5 @@
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Equality;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -6,11 +7,12 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
-	public sealed class PPtrCurve : IAsset, IDependent
+	public sealed class PPtrCurve : IAsset, IDependent, IEquatable<PPtrCurve>
 	{
 		public PPtrCurve() { }
 
@@ -36,45 +38,14 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 
 		public static bool operator ==(PPtrCurve left, PPtrCurve right)
 		{
-			if (left.Attribute != right.Attribute)
-			{
-				return false;
-			}
-			if (left.Path != right.Path)
-			{
-				return false;
-			}
-			if (left.ClassID != right.ClassID)
-			{
-				return false;
-			}
-			if (left.Script != right.Script)
-			{
-				return false;
-			}
-			return true;
+			return left.ClassID == right.ClassID &&
+				left.Script == right.Script &&
+				left.Attribute == right.Attribute &&
+				left.Path == right.Path &&
+				ArrayEquality.AreEqualArrays(left.Curve, right.Curve);
 		}
 
-		public static bool operator !=(PPtrCurve left, PPtrCurve right)
-		{
-			if (left.Attribute != right.Attribute)
-			{
-				return true;
-			}
-			if (left.Path != right.Path)
-			{
-				return true;
-			}
-			if (left.ClassID != right.ClassID)
-			{
-				return true;
-			}
-			if (left.Script != right.Script)
-			{
-				return true;
-			}
-			return false;
-		}
+		public static bool operator !=(PPtrCurve left, PPtrCurve right) => !(left == right);
 
 		public void Read(AssetReader reader)
 		{
@@ -135,15 +106,12 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 
 		public override int GetHashCode()
 		{
-			int hash = 113;
-			unchecked
-			{
-				hash = hash + 457 * Attribute.GetHashCode();
-				hash = hash * 433 + Path.GetHashCode();
-				hash = hash * 223 + ClassID.GetHashCode();
-				hash = hash * 911 + Script.GetHashCode();
-			}
-			return hash;
+			return 0;
+		}
+
+		public bool Equals(PPtrCurve other)
+		{
+			return this == other;
 		}
 
 		/// <summary>

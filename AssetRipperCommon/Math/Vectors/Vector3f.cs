@@ -61,9 +61,9 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public override bool Equals(object other)
 		{
-			if (!(other is Vector3f))
+			if (other is not Vector3f v)
 				return false;
-			return Equals((Vector3f)other);
+			return Equals(v);
 		}
 
 		public bool Equals(Vector3f other)
