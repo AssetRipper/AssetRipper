@@ -9,11 +9,13 @@ namespace AssetRipper.Core.Classes
 		public override void ReadRelease(AssetReader reader)
 		{
 			Data = reader.ReadByteArray();
+			reader.AlignStream();
 		}
 
 		public override void ReadEditor(AssetReader reader)
 		{
 			Data = reader.ReadByteArray();
+			reader.AlignStream();
 		}
 	}
 }
