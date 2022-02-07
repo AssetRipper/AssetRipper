@@ -36,6 +36,6 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		}
 
 		public SerializedSubProgram[] SubPrograms { get; set; }
-		public SerializedProgramParameters CommonParameters { get; set; }
+		public SerializedProgramParameters CommonParameters { get; set; } = new();
 	}
 }
