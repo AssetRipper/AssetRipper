@@ -8,7 +8,7 @@ using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable
 {
-	public abstract class SerializableType : ISerializableType
+	public abstract class SerializableType
 	{
 		public readonly struct Field
 		{

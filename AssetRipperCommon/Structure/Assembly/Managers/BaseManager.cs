@@ -167,7 +167,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			return Resolve(name);
 		}
 
-		public virtual ISerializableType GetSerializableType(ScriptIdentifier scriptID)
+		public virtual SerializableType GetSerializableType(ScriptIdentifier scriptID)
 		{
 			string uniqueName = scriptID.UniqueName;
 			if (m_serializableTypes.TryGetValue(uniqueName, out SerializableType sType))

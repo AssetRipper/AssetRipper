@@ -7,7 +7,7 @@ using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
 
 namespace AssetRipper.Core.Structure.Assembly.Mono
 {
-	public class MonoType : SerializableType
+	public sealed class MonoType : SerializableType
 	{
 		internal MonoType(BaseManager manager, TypeReference type) : this(manager, new MonoTypeContext(type)) { }
 
