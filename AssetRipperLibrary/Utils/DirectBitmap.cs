@@ -1,17 +1,22 @@
 using AssetRipper.Library.Configuration;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace AssetRipper.Library.Utils
 {
-	public sealed class DirectBitmap : IDisposable
+	public sealed partial class DirectBitmap : IDisposable
 	{
+		public int Height { get; }
+		public int Width { get; }
+		public int Stride => Width * 4;
+		public byte[] Bits { get; }
+		public IntPtr BitsPtr => m_bitsHandle.AddrOfPinnedObject();
+
+		private readonly GCHandle m_bitsHandle;
+		private bool m_disposed;
+
 		/// <summary>
 		/// Make a new bitmap
 		/// </summary>
@@ -55,38 +60,18 @@ namespace AssetRipper.Library.Utils
 
 		public bool Save(Stream stream, ImageExportFormat format)
 		{
-			if (format == ImageExportFormat.Bmp)
+			return format switch
 			{
-				BmpWriter.WriteBmp(Bits, Width, Height, stream);
-				return true;
-			}
-			else if (OperatingSystem.IsWindows())
-			{
-				using Bitmap bitmap = new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
-				bitmap.Save(stream, format.GetImageFormat());
-				return true;
-			}
-			else
-			{
-				using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
-				switch (format)
-				{
-					case ImageExportFormat.Bmp:
-						image.SaveAsBmp(stream);
-						return true;
-					case ImageExportFormat.Gif:
-						image.SaveAsGif(stream);
-						return true;
-					case ImageExportFormat.Jpeg:
-						image.SaveAsJpeg(stream);
-						return true;
-					case ImageExportFormat.Png:
-						image.SaveAsPng(stream);
-						return true;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(format));
-				}
-			}
+				ImageExportFormat.Bmp => SaveAsBmp(stream),
+				ImageExportFormat.Gif => SaveAsGif(stream),
+				ImageExportFormat.Jpeg => SaveAsJpeg(stream),
+				ImageExportFormat.Pbm => SaveAsPbm(stream),
+				ImageExportFormat.Png => SaveAsPng(stream),
+				ImageExportFormat.Tga => SaveAsTga(stream),
+				ImageExportFormat.Tiff => SaveAsTiff(stream),
+				ImageExportFormat.Webp => SaveAsWebp(stream),
+				_ => throw new ArgumentOutOfRangeException(nameof(format)),
+			};
 		}
 
 		public bool Save(string path, ImageExportFormat format)
@@ -97,20 +82,31 @@ namespace AssetRipper.Library.Utils
 
 		public async Task SaveAsync(Stream stream, ImageExportFormat format)
 		{
-			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			switch (format)
 			{
 				case ImageExportFormat.Bmp:
-					await image.SaveAsBmpAsync(stream);
+					await SaveAsBmpAsync(stream);
 					break;
 				case ImageExportFormat.Gif:
-					await image.SaveAsGifAsync(stream);
+					await SaveAsGifAsync(stream);
 					break;
 				case ImageExportFormat.Jpeg:
-					await image.SaveAsJpegAsync(stream);
+					await SaveAsJpegAsync(stream);
+					break;
+				case ImageExportFormat.Pbm:
+					await SaveAsPbmAsync(stream);
 					break;
 				case ImageExportFormat.Png:
-					await image.SaveAsPngAsync(stream);
+					await SaveAsPngAsync(stream);
+					break;
+				case ImageExportFormat.Tga:
+					await SaveAsTgaAsync(stream);
+					break;
+				case ImageExportFormat.Tiff:
+					await SaveAsTiffAsync(stream);
+					break;
+				case ImageExportFormat.Webp:
+					await SaveAsWebpAsync(stream);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(format));
@@ -142,14 +138,5 @@ namespace AssetRipper.Library.Utils
 		{
 			Dispose(false);
 		}
-
-		public int Height { get; }
-		public int Width { get; }
-		public int Stride => Width * 4;
-		public byte[] Bits { get; }
-		public IntPtr BitsPtr => m_bitsHandle.AddrOfPinnedObject();
-
-		private readonly GCHandle m_bitsHandle;
-		private bool m_disposed;
 	}
 }

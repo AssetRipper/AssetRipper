@@ -6,6 +6,7 @@
 * ~~Tiny performance improvement from removing SerializableType interface~~
 * ~~Bump ImageSharp version~~
 * ~~Bump ILSpy version~~
+* ~~Implement Pbm, Tga, Tiff, and WebP image export~~
 
 ## 0.2.0.0
 * Convert Exporters to the new Interface System
