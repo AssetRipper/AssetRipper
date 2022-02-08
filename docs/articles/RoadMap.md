@@ -2,6 +2,11 @@
 
 ## 0.1.9.2
 
+* ~~Fixed a null reference exception while reading shaders~~
+* ~~Tiny performance improvement from removing SerializableType interface~~
+* ~~Bump ImageSharp version~~
+* ~~Bump ILSpy version~~
+
 ## 0.2.0.0
 * Convert Exporters to the new Interface System
   * Animator Controller exporter
@@ -21,7 +26,6 @@
 ## 0.2.1.0
 This release will be primarily focused on cleaning up and refactoring the project. This release may include:
 * Unified mesh export
-* Implement package for Yaml
 * WWise audio extraction
 * Add support for injecting custom asset types
 * Add support for reading alternative file formats
