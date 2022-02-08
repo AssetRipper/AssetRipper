@@ -14,6 +14,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 			m_Extent = extent;
 		}
 
+		public AABB DeepClone() => new AABB(m_Center.DeepClone(), m_Extent.DeepClone());
+
 		public void Read(AssetReader reader)
 		{
 			m_Center.Read(reader);

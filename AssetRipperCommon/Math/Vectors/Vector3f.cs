@@ -21,6 +21,8 @@ namespace AssetRipper.Core.Math.Vectors
 			Z = z;
 		}
 
+		public Vector3f DeepClone() => new Vector3f(X, Y, Z);
+
 		public static implicit operator Vector3f(Vector2f v2) => new Vector3f(v2.X, v2.Y, 0f);
 		public static implicit operator Vector3f(Vector2i v2) => v2 is null ? new() : new Vector3f(v2.X, v2.Y, 0f);
 		public static implicit operator Vector3f(Vector3i v3) => v3 is null ? new() : new Vector3f(v3.X, v3.Y, v3.Z);

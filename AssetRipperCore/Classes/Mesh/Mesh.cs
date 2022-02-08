@@ -34,7 +34,6 @@ namespace AssetRipper.Core.Classes.Mesh
 		public AABB LocalAABB { get; set; } = new AABB();
 		public CollisionMeshData CollisionData { get; set; } = new();
 		public StreamingInfo StreamData { get; set; } = new();
-		public LOD[] LODData { get; set; } = Array.Empty<LOD>();
 		public uint Use16BitIndices
 		{
 			get => IndexFormat == IndexFormat.UInt16 ? 1U : 0U;
@@ -145,7 +144,6 @@ namespace AssetRipper.Core.Classes.Mesh
 		public Vector2f[] UV5 { get; set; }
 		public Vector2f[] UV6 { get; set; }
 		public Vector2f[] UV7 { get; set; }
-		public Tangent[] TangentSpace { get; set; }
 		public Vector4f[] Tangents { get; set; }
 		public Vector3f[] Normals { get; set; }
 		public ColorRGBA32[] Colors { get; set; }
@@ -388,23 +386,11 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			base.Read(reader);
 
-			if (HasLODData(reader.Version))
+			if (HasUse16bitIndices(reader.Version))
 			{
-				LODData = reader.ReadAssetArray<LOD>();
+				Use16BitIndices = reader.ReadUInt32();
 			}
-			else
-			{
-				if (HasUse16bitIndices(reader.Version))
-				{
-					Use16BitIndices = reader.ReadUInt32();
-				}
-				if (IsIndexBufferFirst(reader.Version))
-				{
-					RawIndexBuffer = reader.ReadByteArray();
-					reader.AlignStream();
-				}
-				SubMeshes = reader.ReadAssetArray<SubMesh>();
-			}
+			SubMeshes = reader.ReadAssetArray<SubMesh>();
 
 			if (HasBlendShapes(reader.Version))
 			{
@@ -419,7 +405,7 @@ namespace AssetRipper.Core.Classes.Mesh
 					ShapeVertices = reader.ReadAssetArray<BlendShapeVertex>();
 				}
 			}
-			if (HasBindPose(reader.Version) && IsBindPoseFirst(reader.Version))
+			if (IsBindPoseFirst(reader.Version))
 			{
 				BindPose = reader.ReadAssetArray<Matrix4x4f>();
 			}
@@ -434,10 +420,8 @@ namespace AssetRipper.Core.Classes.Mesh
 				VariableBoneCountWeights.Read(reader);
 			}
 
-			if (HasMeshCompression(reader.Version))
-			{
-				MeshCompression = (MeshCompression)reader.ReadByte();
-			}
+			MeshCompression = (MeshCompression)reader.ReadByte();
+
 			if (HasStreamCompression(reader.Version))
 			{
 				StreamCompression = reader.ReadByte();
@@ -448,10 +432,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				KeepVertices = reader.ReadBoolean();
 				KeepIndices = reader.ReadBoolean();
 			}
-			if (IsAlignFlags(reader.Version))
-			{
-				reader.AlignStream();
-			}
+			reader.AlignStream();
 
 			if (HasIndexFormat(reader.Version))
 			{
@@ -468,11 +449,8 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 			}
 
-			if (!HasLODData(reader.Version) && !IsIndexBufferFirst(reader.Version))
-			{
-				RawIndexBuffer = reader.ReadByteArray();
-				reader.AlignStream();
-			}
+			RawIndexBuffer = reader.ReadByteArray();
+			reader.AlignStream();
 
 			if (HasVertexData(reader.Version))
 			{
@@ -490,9 +468,13 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 
 			if (HasSkin(reader.Version))
+			{
 				Skin = reader.ReadAssetArray<BoneWeights4>();
-			if (HasBindPose(reader.Version) && !IsBindPoseFirst(reader.Version))
+			}
+			if (!IsBindPoseFirst(reader.Version))
+			{
 				BindPose = reader.ReadAssetArray<Matrix4x4f>();
+			}
 
 			if (HasVertexData(reader.Version))
 			{
@@ -519,29 +501,13 @@ namespace AssetRipper.Core.Classes.Mesh
 			else //less than 3.5.0
 			{
 				UV0 = reader.ReadAssetArray<Vector2f>();
-				if (HasUV1(reader.Version))
-				{
-					UV1 = reader.ReadAssetArray<Vector2f>();
-				}
-				if (HasTangentSpace(reader.Version))
-				{
-					TangentSpace = reader.ReadAssetArray<Tangent>();
-				}
-				else
-				{
-					Tangents = reader.ReadAssetArray<Vector4f>();
-					Normals = reader.ReadAssetArray<Vector3f>();
-				}
+				UV1 = reader.ReadAssetArray<Vector2f>();
+				Tangents = reader.ReadAssetArray<Vector4f>();
+				Normals = reader.ReadAssetArray<Vector3f>();
 			}
-			if (IsAlignVertex(reader.Version))
-			{
-				reader.AlignStream();
-			}
+			reader.AlignStream();
 
-			if (HasCompressedMesh(reader.Version))
-			{
-				CompressedMesh.Read(reader);
-			}
+			CompressedMesh.Read(reader);
 
 			LocalAABB.Read(reader);
 			if (!HasVertexData(reader.Version))
@@ -553,10 +519,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				CollisionTriangles = reader.ReadUInt32Array();
 				CollisionVertexCount = reader.ReadInt32();
 			}
-			if (HasMeshUsageFlags(reader.Version))
-			{
-				MeshUsageFlags = reader.ReadInt32();
-			}
+			MeshUsageFlags = reader.ReadInt32();
 
 			if (HasCollision(reader.Version))
 			{
@@ -581,23 +544,12 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			base.Write(writer);
 
-			if (HasLODData(writer.Version))
+			if (HasUse16bitIndices(writer.Version))
 			{
-				LODData.Write(writer);
+				writer.Write(Use16BitIndices);
 			}
-			else
-			{
-				if (HasUse16bitIndices(writer.Version))
-				{
-					writer.Write(Use16BitIndices);
-				}
-				if (IsIndexBufferFirst(writer.Version))
-				{
-					RawIndexBuffer.Write(writer);
-					writer.AlignStream();
-				}
-				SubMeshes.Write(writer);
-			}
+			
+			SubMeshes.Write(writer);
 
 			if (HasBlendShapes(writer.Version))
 			{
@@ -612,12 +564,9 @@ namespace AssetRipper.Core.Classes.Mesh
 					ShapeVertices.Write(writer);
 				}
 			}
-			if (HasBindPose(writer.Version))
+			if (IsBindPoseFirst(writer.Version))
 			{
-				if (IsBindPoseFirst(writer.Version))
-				{
-					BindPose.Write(writer);
-				}
+				BindPose.Write(writer);
 			}
 			if (HasBoneNameHashes(writer.Version))
 			{
@@ -630,10 +579,8 @@ namespace AssetRipper.Core.Classes.Mesh
 				VariableBoneCountWeights.Write(writer);
 			}
 
-			if (HasMeshCompression(writer.Version))
-			{
-				writer.Write((byte)MeshCompression);
-			}
+			writer.Write((byte)MeshCompression);
+
 			if (HasStreamCompression(writer.Version))
 			{
 				writer.Write(StreamCompression);
@@ -644,10 +591,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				writer.Write(KeepVertices);
 				writer.Write(KeepIndices);
 			}
-			if (IsAlignFlags(writer.Version))
-			{
-				writer.AlignStream();
-			}
+			writer.AlignStream();
 
 			if (HasIndexFormat(writer.Version))
 			{
@@ -664,14 +608,8 @@ namespace AssetRipper.Core.Classes.Mesh
 				}
 			}
 
-			if (!HasLODData(writer.Version))
-			{
-				if (!IsIndexBufferFirst(writer.Version))
-				{
-					RawIndexBuffer.Write(writer);
-					writer.AlignStream();
-				}
-			}
+			RawIndexBuffer.Write(writer);
+			writer.AlignStream();
 
 			if (HasVertexData(writer.Version))
 			{
@@ -692,12 +630,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				Skin.Write(writer);
 			}
-			if (HasBindPose(writer.Version))
+			if (!IsBindPoseFirst(writer.Version))
 			{
-				if (!IsBindPoseFirst(writer.Version))
-				{
-					BindPose.Write(writer);
-				}
+				BindPose.Write(writer);
 			}
 
 			if (HasVertexData(writer.Version))
@@ -725,29 +660,13 @@ namespace AssetRipper.Core.Classes.Mesh
 			else
 			{
 				UV0.Write(writer);
-				if (HasUV1(writer.Version))
-				{
-					UV1.Write(writer);
-				}
-				if (HasTangentSpace(writer.Version))
-				{
-					TangentSpace.Write(writer);
-				}
-				else
-				{
-					Tangents.Write(writer);
-					Normals.Write(writer);
-				}
+				UV1.Write(writer);
+				Tangents.Write(writer);
+				Normals.Write(writer);
 			}
-			if (IsAlignVertex(writer.Version))
-			{
-				writer.AlignStream();
-			}
+			writer.AlignStream();
 
-			if (HasCompressedMesh(writer.Version))
-			{
-				CompressedMesh.Write(writer);
-			}
+			CompressedMesh.Write(writer);
 
 			LocalAABB.Write(writer);
 			if (!HasVertexData(writer.Version))
@@ -759,10 +678,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				CollisionTriangles.Write(writer);
 				writer.Write(CollisionVertexCount);
 			}
-			if (HasMeshUsageFlags(writer.Version))
-			{
-				writer.Write(MeshUsageFlags);
-			}
+			writer.Write(MeshUsageFlags);
 
 			if (HasCollision(writer.Version))
 			{
@@ -784,22 +700,11 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			if (HasLODData(container.ExportVersion))
+			if (HasUse16bitIndices(container.ExportVersion))
 			{
-				node.Add(LODDataName, LODData.ExportYAML(container));
+				node.Add(Use16BitIndicesName, Use16BitIndices);
 			}
-			else
-			{
-				if (HasUse16bitIndices(container.ExportVersion))
-				{
-					node.Add(Use16BitIndicesName, Use16BitIndices);
-				}
-				if (IsIndexBufferFirst(container.ExportVersion))
-				{
-					node.Add(IndexBufferName, RawIndexBuffer.ExportYAML());
-				}
-				node.Add(SubMeshesName, SubMeshes.ExportYAML(container));
-			}
+			node.Add(SubMeshesName, SubMeshes.ExportYAML(container));
 
 			if (HasBlendShapes(container.ExportVersion))
 			{
@@ -813,12 +718,9 @@ namespace AssetRipper.Core.Classes.Mesh
 					node.Add(ShapeVerticesName, ShapeVertices.ExportYAML(container));
 				}
 			}
-			if (HasBindPose(container.ExportVersion))
+			if (IsBindPoseFirst(container.ExportVersion))
 			{
-				if (IsBindPoseFirst(container.ExportVersion))
-				{
-					node.Add(BindPoseName, BindPose.ExportYAML(container));
-				}
+				node.Add(BindPoseName, BindPose.ExportYAML(container));
 			}
 			if (HasBoneNameHashes(container.ExportVersion))
 			{
@@ -831,10 +733,8 @@ namespace AssetRipper.Core.Classes.Mesh
 				node.Add(VariableBoneCountWeightsName, VariableBoneCountWeights.ExportYAML(container));
 			}
 
-			if (HasMeshCompression(container.ExportVersion))
-			{
-				node.Add(MeshCompressionName, (byte)MeshCompression);
-			}
+			node.Add(MeshCompressionName, (byte)MeshCompression);
+
 			if (HasStreamCompression(container.ExportVersion))
 			{
 				node.Add(StreamCompressionName, StreamCompression);
@@ -851,13 +751,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				node.Add(IndexFormatName, (int)IndexFormat);
 			}
 
-			if (!HasLODData(container.ExportVersion))
-			{
-				if (!IsIndexBufferFirst(container.ExportVersion))
-				{
-					node.Add(IndexBufferName, RawIndexBuffer.ExportYAML());
-				}
-			}
+			node.Add(IndexBufferName, RawIndexBuffer.ExportYAML());
 
 			if (HasVertexData(container.ExportVersion))
 			{
@@ -878,12 +772,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				node.Add(SkinName, Skin.ExportYAML(container));
 			}
-			if (HasBindPose(container.ExportVersion))
+			if (!IsBindPoseFirst(container.ExportVersion))
 			{
-				if (!IsBindPoseFirst(container.ExportVersion))
-				{
-					node.Add(BindPoseName, BindPose.ExportYAML(container));
-				}
+				node.Add(BindPoseName, BindPose.ExportYAML(container));
 			}
 
 			if (HasVertexData(container.ExportVersion))
@@ -911,25 +802,12 @@ namespace AssetRipper.Core.Classes.Mesh
 			else
 			{
 				node.Add(UVName, UV0.ExportYAML(container));
-				if (HasUV1(container.ExportVersion))
-				{
-					node.Add(UV1Name, UV1.ExportYAML(container));
-				}
-				if (HasTangentSpace(container.ExportVersion))
-				{
-					node.Add(TangentSpaceName, Tangents.ExportYAML(container));
-				}
-				else
-				{
-					node.Add(TangentsName, Tangents.ExportYAML(container));
-					node.Add(NormalsName, Normals.ExportYAML(container));
-				}
+				node.Add(UV1Name, UV1.ExportYAML(container));
+				node.Add(TangentsName, Tangents.ExportYAML(container));
+				node.Add(NormalsName, Normals.ExportYAML(container));
 			}
 
-			if (HasCompressedMesh(container.ExportVersion))
-			{
-				node.Add(CompressedMeshName, CompressedMesh.ExportYAML(container));
-			}
+			node.Add(CompressedMeshName, CompressedMesh.ExportYAML(container));
 
 			node.Add(LocalAABBName, LocalAABB.ExportYAML(container));
 			if (!HasVertexData(container.ExportVersion))
@@ -941,10 +819,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				node.Add(CollisionTrianglesName, CollisionTriangles.ExportYAML(true));
 				node.Add(CollisionVertexCountName, CollisionVertexCount);
 			}
-			if (HasMeshUsageFlags(container.ExportVersion))
-			{
-				node.Add(MeshUsageFlagsName, MeshUsageFlags);
-			}
+			node.Add(MeshUsageFlagsName, MeshUsageFlags);
 
 			if (HasCollision(container.ExportVersion))
 			{

@@ -99,26 +99,13 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 			else
 			{
-				if (Classes.Mesh.Mesh.HasUV1(container.ExportVersion))
-				{
-					instance.UV1 = GetUV1(container, origin);
-				}
-				if (Classes.Mesh.Mesh.HasTangentSpace(container.ExportVersion))
-				{
-					instance.TangentSpace = origin.TangentSpace.ToArray();
-				}
-				else
-				{
-					instance.Tangents = GetTangents(container, origin);
-					instance.Normals = GetNormals(container, origin);
-				}
+				instance.UV1 = origin.UV1.ToArray();
+				instance.Tangents = origin.Tangents.ToArray();
+				instance.Normals = origin.Normals.ToArray();
 			}
 
-			if (Classes.Mesh.Mesh.HasCompressedMesh(container.ExportVersion))
-			{
-				instance.CompressedMesh = GetCompressedMesh(container, origin);
-			}
-			instance.LocalAABB = origin.LocalAABB;
+			instance.CompressedMesh = origin.CompressedMesh.Convert(container);
+			instance.LocalAABB = origin.LocalAABB.DeepClone();
 			if (Classes.Mesh.Mesh.HasCollisionTriangles(container.ExportVersion))
 			{
 				instance.CollisionTriangles = origin.CollisionTriangles.ToArray();
@@ -136,24 +123,17 @@ namespace AssetRipper.Core.Converters.Mesh
 
 			instance.StreamData = GetStreamData(container, origin);
 
-			if (Classes.Mesh.Mesh.HasLODData(container.ExportVersion))
+			if (Classes.Mesh.Mesh.HasUse16bitIndices(container.ExportVersion))
 			{
-				instance.LODData = origin.LODData.Select(t => t.Convert(container)).ToArray();
+				instance.Use16BitIndices = GetUse16bitIndices(container, origin);
 			}
-			else
+			else if (Classes.Mesh.Mesh.HasIndexFormat(container.ExportVersion))
 			{
-				if (Classes.Mesh.Mesh.HasUse16bitIndices(container.ExportVersion))
-				{
-					instance.Use16BitIndices = GetUse16bitIndices(container, origin);
-				}
-				else if (Classes.Mesh.Mesh.HasIndexFormat(container.ExportVersion))
-				{
-					instance.IndexFormat = GetIndexFormat(container, origin);
-				}
-				instance.RawIndexBuffer = GetIndexBuffer(container, origin);
-				// since this method uses instance, we need to call it last
-				instance.SubMeshes = GetSubMeshes(container, origin, instance);
+				instance.IndexFormat = GetIndexFormat(container, origin);
 			}
+			instance.RawIndexBuffer = GetIndexBuffer(container, origin);
+			// since this method uses instance, we need to call it last
+			instance.SubMeshes = SubMeshConverter.Convert(container, instance, origin.SubMeshes);
 
 			return instance;
 		}
@@ -266,35 +246,16 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static byte[] GetIndexBuffer(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
-			if (Classes.Mesh.Mesh.HasLODData(container.Version))
-			{
-				return LODConverter.GenerateIndexBuffer(container, origin.LODData[0]);
-			}
-			else
-			{
 #warning TODO: convert MeshTopology.Deprecated indices to MeshTopology.Triangles
-				if (container.Platform == container.ExportPlatform ||
-					container.Platform != Platform.XBox360 && container.ExportPlatform != Platform.XBox360)
-				{
-					return origin.RawIndexBuffer.ToArray();
-				}
-				else
-				{
-					int size = GetUse16bitIndices(container, origin) == 0 ? 4 : 2;
-					return origin.RawIndexBuffer.SwapBytes(size);
-				}
-			}
-		}
-
-		private static SubMesh[] GetSubMeshes(IExportContainer container, Classes.Mesh.Mesh origin, Classes.Mesh.Mesh instance)
-		{
-			if (Classes.Mesh.Mesh.HasLODData(container.Version))
+			if (container.Platform == container.ExportPlatform ||
+				container.Platform != Platform.XBox360 && container.ExportPlatform != Platform.XBox360)
 			{
-				return LODConverter.GenerateSubMeshes(container, instance, origin.LODData[0]);
+				return origin.RawIndexBuffer.ToArray();
 			}
 			else
 			{
-				return SubMeshConverter.Convert(container, instance, origin.SubMeshes);
+				int size = GetUse16bitIndices(container, origin) == 0 ? 4 : 2;
+				return origin.RawIndexBuffer.SwapBytes(size);
 			}
 		}
 
@@ -324,26 +285,6 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 		}
 
-		private static Vector2f[] GetUV1(IExportContainer container, Classes.Mesh.Mesh origin)
-		{
-			return Classes.Mesh.Mesh.HasUV1(container.Version) ? origin.UV1.ToArray() : Array.Empty<Vector2f>();
-		}
-
-		private static Vector4f[] GetTangents(IExportContainer container, Classes.Mesh.Mesh origin)
-		{
-			return Classes.Mesh.Mesh.HasTangentSpace(container.Version) ? TangentConverter.GenerateTangents(origin.TangentSpace) : origin.Tangents.ToArray();
-		}
-
-		private static Vector3f[] GetNormals(IExportContainer container, Classes.Mesh.Mesh origin)
-		{
-			return Classes.Mesh.Mesh.HasTangentSpace(container.Version) ? TangentConverter.GenerateNormals(origin.TangentSpace) : origin.Normals.ToArray();
-		}
-
-		private static CompressedMesh GetCompressedMesh(IExportContainer container, Classes.Mesh.Mesh origin)
-		{
-			return Classes.Mesh.Mesh.HasCompressedMesh(container.Version) ? origin.CompressedMesh.Convert(container) : new CompressedMesh();
-		}
-
 		private static CollisionMeshData GetCollisionData(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
 			return Classes.Mesh.Mesh.HasCollision(container.Version) ? origin.CollisionData.Convert(container) : new CollisionMeshData();
@@ -361,21 +302,13 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static VertexData GenerateVertexData(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
-			Vector3f[] normals = origin.Normals;
-			Vector4f[] tangents = origin.Tangents;
-			if (Classes.Mesh.Mesh.HasTangentSpace(container.Version))
-			{
-				normals = TangentConverter.GenerateNormals(origin.TangentSpace);
-				tangents = TangentConverter.GenerateTangents(origin.TangentSpace);
-			}
-
 			VertexData instance = new VertexData();
 			bool hasVertices = origin.Vertices.Length > 0;
-			bool hasNormals = normals.Length > 0;
+			bool hasNormals = origin.Normals.Length > 0;
 			bool hasColors = origin.Colors.Length > 0;
 			bool hasUV0 = origin.UV0.Length > 0;
-			bool hasUV1 = Classes.Mesh.Mesh.HasUV1(container.Version) && origin.UV1.Length > 0;
-			bool hasTangents = tangents.Length > 0;
+			bool hasUV1 = origin.UV1.Length > 0;
+			bool hasTangents = origin.Tangents.Length > 0;
 			bool hasChannels = VertexData.HasChannels(container.ExportVersion);
 
 			if (hasChannels)
@@ -489,7 +422,7 @@ namespace AssetRipper.Core.Converters.Mesh
 					}
 					if (hasNormals)
 					{
-						normals[i].Write(writer);
+						origin.Normals[i].Write(writer);
 					}
 					if (hasColors)
 					{
@@ -505,7 +438,7 @@ namespace AssetRipper.Core.Converters.Mesh
 					}
 					if (hasTangents)
 					{
-						tangents[i].Write(writer);
+						origin.Tangents[i].Write(writer);
 					}
 				}
 			}
