@@ -114,7 +114,8 @@ namespace AssetRipper.Core.Converters.Mesh
 			instance.MeshUsageFlags = origin.MeshUsageFlags;
 			if (Classes.Mesh.Mesh.HasCollision(container.ExportVersion))
 			{
-				instance.CollisionData = GetCollisionData(container, origin);
+				instance.BakedConvexCollisionMesh = origin.BakedConvexCollisionMesh?.ToArray() ?? Array.Empty<byte>();
+				instance.BakedTriangleCollisionMesh = origin.BakedTriangleCollisionMesh?.ToArray() ?? Array.Empty<byte>();
 			}
 			if (Classes.Mesh.Mesh.HasMeshMetrics(container.ExportVersion))
 			{
@@ -283,11 +284,6 @@ namespace AssetRipper.Core.Converters.Mesh
 			{
 				return GenerateVertexData(container, origin);
 			}
-		}
-
-		private static CollisionMeshData GetCollisionData(IExportContainer container, Classes.Mesh.Mesh origin)
-		{
-			return Classes.Mesh.Mesh.HasCollision(container.Version) ? origin.CollisionData.Convert(container) : new CollisionMeshData();
 		}
 
 		private static float[] GetMeshMetrics(IExportContainer container, Classes.Mesh.Mesh origin)

@@ -27,13 +27,14 @@ namespace AssetRipper.Core.Classes.Mesh
 	/// </summary>
 	public sealed class Mesh : NamedObject, IMesh
 	{
-		public BlendShapeData Shapes { get; set; } = new();
-		public VariableBoneCountWeights VariableBoneCountWeights { get; set; } = new();
-		public VertexData VertexData { get; set; } = new();
-		public CompressedMesh CompressedMesh { get; set; } = new();
+		public BlendShapeData Shapes { get; set; } = new BlendShapeData();
+		public VariableBoneCountWeights VariableBoneCountWeights { get; set; } = new VariableBoneCountWeights();
+		public VertexData VertexData { get; set; } = new VertexData();
+		public CompressedMesh CompressedMesh { get; set; } = new CompressedMesh();
 		public AABB LocalAABB { get; set; } = new AABB();
-		public CollisionMeshData CollisionData { get; set; } = new();
-		public StreamingInfo StreamData { get; set; } = new();
+		public byte[] BakedConvexCollisionMesh { get; set; } = Array.Empty<byte>();
+		public byte[] BakedTriangleCollisionMesh { get; set; } = Array.Empty<byte>();
+		public StreamingInfo StreamData { get; set; } = new StreamingInfo();
 		public uint Use16BitIndices
 		{
 			get => IndexFormat == IndexFormat.UInt16 ? 1U : 0U;
@@ -523,7 +524,10 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (HasCollision(reader.Version))
 			{
-				CollisionData.Read(reader);
+				BakedConvexCollisionMesh = reader.ReadByteArray();
+				reader.AlignStream();
+				BakedTriangleCollisionMesh = reader.ReadByteArray();
+				reader.AlignStream();
 			}
 			if (HasMeshMetrics(reader.Version))
 			{
@@ -682,7 +686,10 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (HasCollision(writer.Version))
 			{
-				CollisionData.Write(writer);
+				writer.Write(BakedConvexCollisionMesh);
+				writer.AlignStream();
+				writer.Write(BakedTriangleCollisionMesh);
+				writer.AlignStream();
 			}
 			if (HasMeshMetrics(writer.Version))
 			{
@@ -823,8 +830,8 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (HasCollision(container.ExportVersion))
 			{
-				node.Add(BakedConvexCollisionMeshName, CollisionData.BakedConvexCollisionMesh.ExportYAML());
-				node.Add(BakedTriangleCollisionMeshName, CollisionData.BakedTriangleCollisionMesh.ExportYAML());
+				node.Add(BakedConvexCollisionMeshName, BakedConvexCollisionMesh.ExportYAML());
+				node.Add(BakedTriangleCollisionMeshName, BakedTriangleCollisionMesh.ExportYAML());
 			}
 			if (HasMeshMetrics(container.ExportVersion))
 			{
