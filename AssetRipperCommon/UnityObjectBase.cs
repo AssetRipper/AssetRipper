@@ -34,9 +34,9 @@ namespace AssetRipper.Core
 		public const string AssetsKeyword = "Assets";
 		protected const string AssetExtension = "asset";
 
-		public UnityObjectBase() { }
-		public UnityObjectBase(LayoutInfo layout) { }
-		public UnityObjectBase(AssetInfo assetInfo)
+		public UnityObjectBase() : base() { }
+		public UnityObjectBase(LayoutInfo layout) : base(layout) { }
+		public UnityObjectBase(AssetInfo assetInfo) : base()
 		{
 			AssetInfo = assetInfo;
 			AssetUnityVersion = assetInfo.File.Version;
@@ -52,6 +52,15 @@ namespace AssetRipper.Core
 			YAMLNode node = ExportYAML(container);
 			root.Add(container.ExportLayout.GetClassName(ClassID), node);
 			return document;
+		}
+
+		public override UnityAssetBase CreateAnother() => new UnityObjectBase();
+
+		protected override void CopyValuesFrom(UnityAssetBase source)
+		{
+			base.CopyValuesFrom(source);
+			UnityObjectBase sourceObject = (UnityObjectBase)source;
+			//Todo
 		}
 
 		public virtual IUnityObjectBase ConvertLegacy(IExportContainer container)

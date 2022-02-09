@@ -21,8 +21,6 @@ namespace AssetRipper.Core.Classes.Object
 
 		public override void Read(AssetReader reader)
 		{
-			AssetUnityVersion = reader.Version;
-			EndianType = reader.EndianType;
 			if (HasHideFlag(reader.Version, reader.Flags))
 			{
 				m_ObjectHideFlags = reader.ReadUInt32();

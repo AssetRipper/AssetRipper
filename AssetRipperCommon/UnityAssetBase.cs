@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Equality;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Endian;
@@ -18,7 +19,7 @@ namespace AssetRipper.Core
 	/// <summary>
 	/// The artificial base class for all generated Unity classes
 	/// </summary>
-	public class UnityAssetBase : IUnityAssetBase
+	public class UnityAssetBase : IUnityAssetBase, IDeepCloneable, IAlmostEquatable
 	{
 		private const BindingFlags fieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		public UnityVersion AssetUnityVersion { get; set; }
@@ -74,12 +75,146 @@ namespace AssetRipper.Core
 
 		public virtual IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
-			yield break;
+			return Array.Empty<PPtr<IUnityObjectBase>>();
 		}
 
 		public virtual List<TypeTreeNode> MakeReleaseTypeTreeNodes(int depth, int startingIndex) => throw new NotSupportedException();
 
 		public virtual List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex) => throw new NotSupportedException();
+
+		/// <inheritdoc/>
+		public UnityAssetBase DeepClone()
+		{
+			UnityAssetBase asset = CreateAnother();
+			asset.CopyValuesFrom(this);
+			return asset;
+		}
+
+		/// <summary>
+		/// Create another instance of this asset's type
+		/// </summary>
+		/// <returns>A new blank instance</returns>
+		public virtual UnityAssetBase CreateAnother() => new UnityAssetBase();
+
+		/// <summary>
+		/// Deep copy the values of another asset
+		/// </summary>
+		/// <remarks>
+		/// This method assumes that the other asset is not null
+		/// and has the same type as this.
+		/// </remarks>
+		/// <param name="source">The source asset</param>
+		protected virtual void CopyValuesFrom(UnityAssetBase source)
+		{
+			AssetUnityVersion = source.AssetUnityVersion;
+			EndianType = source.EndianType;
+			TransferInstructionFlags = source.TransferInstructionFlags;
+		}
+
+		private bool HasEqualMetadata(object obj)
+		{
+			if(obj is null)
+				return false;
+
+			if(this.GetType() != obj.GetType())
+				return false;
+
+			if(obj is UnityObjectBase unityObjectBase)
+			{
+				UnityObjectBase thisObject = (UnityObjectBase)this;
+				return thisObject.AssetUnityVersion == unityObjectBase.AssetUnityVersion &&
+					//thisObject.EndianType == unityObjectBase.EndianType &&
+					//thisObject.TransferInstructionFlags == unityObjectBase.TransferInstructionFlags &&
+					thisObject.SerializedFile == unityObjectBase.SerializedFile &&
+					thisObject.ClassID == unityObjectBase.ClassID &&
+					thisObject.PathID == unityObjectBase.PathID &&
+					thisObject.GUID == unityObjectBase.GUID;
+			}
+			else
+			{
+				UnityAssetBase asset = (UnityAssetBase)obj;
+				return 
+					//this.TransferInstructionFlags == asset.TransferInstructionFlags &&
+					//this.EndianType == asset.EndianType &&
+					this.AssetUnityVersion == asset.AssetUnityVersion;
+			}
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (HasEqualMetadata(obj))
+				return Equals((UnityAssetBase)obj);
+			else
+				return false;
+		}
+
+		public override int GetHashCode()
+		{
+			//Assets are mutable, so this is the only way to safely use them in dictionaries
+			return 0;
+		}
+
+		/// <summary>
+		/// Check if another asset is equal to this
+		/// </summary>
+		/// <remarks>
+		/// This method assumes that the other asset is not null
+		/// and has the same metadata as this.
+		/// </remarks>
+		/// <param name="other">Another asset</param>
+		/// <returns></returns>
+		protected virtual bool Equals(UnityAssetBase other)
+		{
+			return ReferenceEquals(this, other);
+		}
+
+		/// <inheritdoc/>
+		public bool AlmostEqualByProportion(object value, float maximumProportion)
+		{
+			if (HasEqualMetadata(value))
+				return AlmostEqualByProportion((UnityAssetBase)value, maximumProportion);
+			else
+				return false;
+		}
+
+		/// <inheritdoc/>
+		public bool AlmostEqualByDeviation(object value, float maximumDeviation)
+		{
+			if (HasEqualMetadata(value))
+				return AlmostEqualByDeviation((UnityAssetBase)value, maximumDeviation);
+			else
+				return false;
+		}
+
+		/// <summary>
+		/// Check if two objects are almost equal to each other by proportion
+		/// </summary>
+		/// <remarks>
+		/// This method assumes that the other asset is not null
+		/// and has the same metadata as this.
+		/// </remarks>
+		/// <param name="value">Another asset with the same type as this</param>
+		/// <param name="maximumProportion"></param>
+		/// <returns>True if the objects are equal or almost equal by proportion</returns>
+		protected virtual bool AlmostEqualByProportion(UnityAssetBase value, float maximumProportion)
+		{
+			return ReferenceEquals(this, value);
+		}
+
+		/// <summary>
+		/// Check if two objects are almost equal to each other by deviation
+		/// </summary>
+		/// <remarks>
+		/// This method assumes that the other asset is not null
+		/// and has the same metadata as this.
+		/// </remarks>
+		/// <param name="value">Another asset with the same type as this</param>
+		/// <param name="maximumDeviation">The positive maximum value deviation between two near equal decimal values</param>
+		/// <returns>True if the objects are equal or almost equal by deviation</returns>
+		protected virtual bool AlmostEqualByDeviation(UnityAssetBase value, float maximumDeviation)
+		{
+			return ReferenceEquals(this, value);
+		}
 
 		private FieldInfo TryGetFieldInfo(string fieldName) => this.GetType().GetFields(fieldBindingFlags).Where(fieldInfo => fieldInfo.Name == fieldName).FirstOrDefault();
 

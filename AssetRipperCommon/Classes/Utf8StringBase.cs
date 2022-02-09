@@ -82,7 +82,7 @@ namespace AssetRipper.Core.Classes
 
 		public override int GetHashCode()
 		{
-			return String.GetHashCode();
+			return base.GetHashCode();
 		}
 
 		public override string ToString()
