@@ -1,23 +1,18 @@
-using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
-using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public sealed class StreamingInfo : IStreamingInfo
+	public sealed class StreamingInfo : UnityAssetBase, IStreamingInfo
 	{
 		/// <summary>
 		/// 2020 and greater
 		/// </summary>
 		public static bool IsOffsetInt64(UnityVersion version) => version.IsGreaterEqual(2020);
 
-		public void Read(AssetReader reader)
+		public override void Read(AssetReader reader)
 		{
 			if (IsOffsetInt64(reader.Version))
 				Offset = reader.ReadInt64();
@@ -37,35 +32,20 @@ namespace AssetRipper.Core.Classes.Misc
 			Path = path;
 		}
 
-		public void Write(AssetWriter writer)
+		public override void Write(AssetWriter writer)
 		{
 			writer.Write((uint)Offset);
 			writer.Write(Size);
 			writer.Write(Path);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(OffsetName, (uint)Offset);
 			node.Add(SizeName, Size);
 			node.Add(PathName, Path);
 			return node;
-		}
-
-		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
-		{
-			yield break;
-		}
-
-		public List<TypeTreeNode> MakeReleaseTypeTreeNodes(int depth, int startingIndex)
-		{
-			throw new System.NotSupportedException();
-		}
-
-		public List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex)
-		{
-			throw new System.NotSupportedException();
 		}
 
 		public const string OffsetName = "offset";
@@ -75,8 +55,5 @@ namespace AssetRipper.Core.Classes.Misc
 		public long Offset { get; set; }
 		public uint Size { get; set; }
 		public string Path { get; set; } = string.Empty;
-		public UnityVersion AssetUnityVersion { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }
-		public EndianType EndianType { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }
-		public TransferInstructionFlags TransferInstructionFlags { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }
 	}
 }
