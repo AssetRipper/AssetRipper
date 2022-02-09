@@ -56,21 +56,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		}
 
 		/// <summary>
-		/// Less than 2.0.0
-		/// </summary>
-		public static bool HasClassIDToTrack(UnityVersion version, TransferInstructionFlags flags)
-		{
-			if (version.IsGreaterEqual(2, 6))
-			{
-				return false;
-			}
-			if (version.IsGreaterEqual(2))
-			{
-				return !flags.IsRelease();
-			}
-			return true;
-		}
-		/// <summary>
 		/// 4.x.x
 		/// </summary>
 		public static bool HasAnimationType(UnityVersion version) => version.IsEqual(4);
@@ -79,21 +64,9 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// </summary>
 		public static bool HasLegacy(UnityVersion version) => version.IsGreaterEqual(5);
 		/// <summary>
-		/// 2.6.0 and greater
-		/// </summary>
-		public static bool HasCompressed(UnityVersion version) => version.IsGreaterEqual(2, 6);
-		/// <summary>
 		/// 4.3.0 and greater
 		/// </summary>
 		public static bool HasUseHightQualityCurve(UnityVersion version) => version.IsGreaterEqual(4, 3);
-		/// <summary>
-		/// 1.5.0 and greater
-		/// </summary>
-		public static bool HasCurves(UnityVersion version) => version.IsGreaterEqual(1, 5);
-		/// <summary>
-		/// 2.6.0 and greater
-		/// </summary>
-		public static bool HasCompressedRotationCurves(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
@@ -103,18 +76,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// </summary>
 		public static bool HasPPtrCurves(UnityVersion version) => version.IsGreaterEqual(4, 3);
 		/// <summary>
-		/// 1.5.0 and greater
-		/// </summary>
-		public static bool HasSampleRate(UnityVersion version) => version.IsGreaterEqual(1, 5);
-		/// <summary>
-		/// 2.6.0 and greater
-		/// </summary>
-		public static bool HasWrapMode(UnityVersion version) => version.IsGreaterEqual(2, 6);
-		/// <summary>
-		/// 3.4.0 and greater
-		/// </summary>
-		public static bool HasBounds(UnityVersion version) => version.IsGreaterEqual(3, 4);
-		/// <summary>
 		/// 4.0.0 and greater and Release
 		/// </summary>
 		public static bool HasMuscleClip(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(4) && flags.IsRelease();
@@ -122,14 +83,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		/// 4.3.0 and greater
 		/// </summary>
 		public static bool HasClipBindingConstant(UnityVersion version) => version.IsGreaterEqual(4, 3);
-		/// <summary>
-		/// 4.0.0 and Not Release
-		/// </summary>
-		public static bool HasAnimationClipSettings(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(4);
-		/// <summary>
-		/// 2.6.0 and greater and Not Release
-		/// </summary>
-		public static bool HasEditorCurves(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// <para>5.0.0 and greater and Not Release</para>
 		/// <para>2018.3 and greater</para>
@@ -156,36 +109,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			return version.IsGreaterEqual(5, 0, 0, UnityVersionType.Final);
 		}
 		/// <summary>
-		/// 5.0.0 to 2018.3 exclusive and Not Release
-		/// </summary>
-		public static bool HasGenerateMotionCurves(UnityVersion version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5) && version.IsLess(2018, 3);
-		}
-		/// <summary>
-		/// 5.5.0 to 5.6.0b9 and Not Release
-		/// </summary>
-		public static bool HasIsEmpty(UnityVersion version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(5, 5) && version.IsLessEqual(5, 6, 0, UnityVersionType.Beta, 9);
-		}
-		/// <summary>
-		/// 2.1.0 and greater
-		/// </summary>
-		public static bool HasEvents(UnityVersion version) => version.IsGreaterEqual(2, 1);
-		/// <summary>
-		/// 2.1.0 to 2.6.0 exclusive and Not Release
-		/// </summary>
-		public static bool HasRuntimeEvents(UnityVersion version, TransferInstructionFlags flags)
-		{
-			return !flags.IsRelease() && version.IsGreaterEqual(2, 1) && version.IsLess(2, 6);
-		}
-
-		/// <summary>
-		/// 2.6.0 and greater
-		/// </summary>
-		private static bool IsAlignCompressed(UnityVersion version) => version.IsGreaterEqual(2, 6);
-		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
 		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2017);
@@ -193,13 +116,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
-
-			if (HasClassIDToTrack(reader.Version, reader.Flags))
-			{
-				ClassIDToTrack = new Dictionary<int, PPtr<BaseAnimationTrack>>();
-				ClassIDToTrack.Read(reader);
-				ChildTracks = reader.ReadAssetArray<ChildTrack>();
-			}
 
 			if (HasAnimationType(reader.Version))
 			{
@@ -210,55 +126,31 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				Legacy = reader.ReadBoolean();
 			}
 
-			if (HasCompressed(reader.Version))
-			{
-				Compressed = reader.ReadBoolean();
-			}
+			Compressed = reader.ReadBoolean();
 			if (HasUseHightQualityCurve(reader.Version))
 			{
 				UseHightQualityCurve = reader.ReadBoolean();
 			}
-			if (IsAlignCompressed(reader.Version))
-			{
-				reader.AlignStream();
-			}
+			reader.AlignStream();
 
-			if (HasCurves(reader.Version))
-			{
-				RotationCurves = reader.ReadAssetArray<QuaternionCurve>();
-			}
-			if (HasCompressedRotationCurves(reader.Version))
-			{
-				CompressedRotationCurves = reader.ReadAssetArray<CompressedAnimationCurve>();
-			}
+			RotationCurves = reader.ReadAssetArray<QuaternionCurve>();
+			CompressedRotationCurves = reader.ReadAssetArray<CompressedAnimationCurve>();
 			if (HasEulerCurves(reader.Version))
 			{
 				EulerCurves = reader.ReadAssetArray<Vector3Curve>();
 			}
-			if (HasCurves(reader.Version))
-			{
-				PositionCurves = reader.ReadAssetArray<Vector3Curve>();
-				ScaleCurves = reader.ReadAssetArray<Vector3Curve>();
-				FloatCurves = reader.ReadAssetArray<FloatCurve>();
-			}
+			PositionCurves = reader.ReadAssetArray<Vector3Curve>();
+			ScaleCurves = reader.ReadAssetArray<Vector3Curve>();
+			FloatCurves = reader.ReadAssetArray<FloatCurve>();
 			if (HasPPtrCurves(reader.Version))
 			{
 				PPtrCurves = reader.ReadAssetArray<PPtrCurve>();
 			}
 
-			if (HasSampleRate(reader.Version))
-			{
-				SampleRate = reader.ReadSingle();
-			}
+			SampleRate = reader.ReadSingle();
 
-			if (HasWrapMode(reader.Version))
-			{
-				WrapMode = (WrapMode)reader.ReadInt32();
-			}
-			if (HasBounds(reader.Version))
-			{
-				Bounds.Read(reader);
-			}
+			WrapMode = (WrapMode)reader.ReadInt32();
+			Bounds.Read(reader);
 			if (HasMuscleClip(reader.Version, reader.Flags))
 			{
 				MuscleClipSize = reader.ReadUInt32();
@@ -283,10 +175,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				reader.AlignStream();
 			}
 
-			if (HasEvents(reader.Version))
-			{
-				Events = reader.ReadAssetArray<AnimationEvent>();
-			}
+			Events = reader.ReadAssetArray<AnimationEvent>();
 			if (IsAlign(reader.Version))
 			{
 				reader.AlignStream();
@@ -300,23 +189,9 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				yield return asset;
 			}
 
-			if (HasClassIDToTrack(context.Version, context.Flags))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(FloatCurves, FloatCurvesName))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies((IEnumerable<PPtr<BaseAnimationTrack>>)ClassIDToTrack.Values, ClassIDToTrackName))
-				{
-					yield return asset;
-				}
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(ChildTracks, ChildTracksName))
-				{
-					yield return asset;
-				}
-			}
-			if (HasCurves(context.Version))
-			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(FloatCurves, FloatCurvesName))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 			if (HasPPtrCurves(context.Version))
 			{
@@ -332,12 +207,9 @@ namespace AssetRipper.Core.Classes.AnimationClip
 					yield return asset;
 				}
 			}
-			if (HasEvents(context.Version))
+			foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Events, EventsName))
 			{
-				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(Events, EventsName))
-				{
-					yield return asset;
-				}
+				yield return asset;
 			}
 		}
 
@@ -363,12 +235,12 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			node.Add(BoundsName, Bounds.ExportYAML(container));
 			node.Add(ClipBindingConstantName, GetClipBindingConstant(container.Version).ExportYAML(container));
 			node.Add(AnimationClipSettingsName, GetAnimationClipSettings(container.Version, container.Flags).ExportYAML(container));
-			node.Add(EditorCurvesName, GetEditorCurves(container.Version, container.Flags).ExportYAML(container));
-			node.Add(EulerEditorCurvesName, GetEulerEditorCurves(container.Version, container.Flags).ExportYAML(container));
+			node.Add(EditorCurvesName, Array.Empty<FloatCurve>().ExportYAML(container));
+			node.Add(EulerEditorCurvesName, Array.Empty<FloatCurve>().ExportYAML(container));
 			node.Add(HasGenericRootTransformName, HasGenericRootTransform);
 			node.Add(HasMotionFloatCurvesName, HasMotionFloatCurves);
-			node.Add(GenerateMotionCurvesName, GetGenerateMotionCurves(container.Version, container.Flags));
-			node.Add(EventsName, GetEvents(container.Version).ExportYAML(container));
+			node.Add(GenerateMotionCurvesName, false);
+			node.Add(EventsName, Events.ExportYAML(container));
 
 			return node;
 		}
@@ -378,12 +250,12 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			AnimationClipConverter converter = AnimationClipConverter.Process(this);
 			return new AnimationCurves()
 			{
-				RotationCurves = converter.Rotations.Union(GetRotationCurves(SerializedFile.Version)),
-				CompressedRotationCurves = GetCompressedRotationCurves(SerializedFile.Version),
+				RotationCurves = converter.Rotations.Union(RotationCurves),
+				CompressedRotationCurves = CompressedRotationCurves,
 				EulerCurves = converter.Eulers.Union(GetEulerCurves(SerializedFile.Version)),
-				PositionCurves = converter.Translations.Union(GetPositionCurves(SerializedFile.Version)),
-				ScaleCurves = converter.Scales.Union(GetScaleCurves(SerializedFile.Version)),
-				FloatCurves = converter.Floats.Union(GetFloatCurves(SerializedFile.Version)),
+				PositionCurves = converter.Translations.Union(PositionCurves),
+				ScaleCurves = converter.Scales.Union(ScaleCurves),
+				FloatCurves = converter.Floats.Union(FloatCurves),
 				PPtrCurves = converter.PPtrs.Union(GetPPtrCurves(SerializedFile.Version)),
 			};
 		}
@@ -565,40 +437,20 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			{
 				return new AnimationCurves()
 				{
-					RotationCurves = GetRotationCurves(SerializedFile.Version),
-					CompressedRotationCurves = GetCompressedRotationCurves(SerializedFile.Version),
+					RotationCurves = RotationCurves,
+					CompressedRotationCurves = CompressedRotationCurves,
 					EulerCurves = GetEulerCurves(SerializedFile.Version),
-					PositionCurves = GetPositionCurves(SerializedFile.Version),
-					ScaleCurves = GetScaleCurves(SerializedFile.Version),
-					FloatCurves = GetFloatCurves(SerializedFile.Version),
+					PositionCurves = PositionCurves,
+					ScaleCurves = ScaleCurves,
+					FloatCurves = FloatCurves,
 					PPtrCurves = GetPPtrCurves(SerializedFile.Version),
 				};
 			}
 		}
 
-		private IReadOnlyList<QuaternionCurve> GetRotationCurves(UnityVersion version)
-		{
-			return HasCurves(version) ? RotationCurves : Array.Empty<QuaternionCurve>();
-		}
-		private IReadOnlyList<CompressedAnimationCurve> GetCompressedRotationCurves(UnityVersion version)
-		{
-			return HasCompressedRotationCurves(version) ? CompressedRotationCurves : Array.Empty<CompressedAnimationCurve>();
-		}
 		private IReadOnlyList<Vector3Curve> GetEulerCurves(UnityVersion version)
 		{
 			return HasEulerCurves(version) ? EulerCurves : Array.Empty<Vector3Curve>();
-		}
-		private IReadOnlyList<Vector3Curve> GetPositionCurves(UnityVersion version)
-		{
-			return HasCurves(version) ? PositionCurves : Array.Empty<Vector3Curve>();
-		}
-		private IReadOnlyList<Vector3Curve> GetScaleCurves(UnityVersion version)
-		{
-			return HasCurves(version) ? ScaleCurves : Array.Empty<Vector3Curve>();
-		}
-		private IReadOnlyList<FloatCurve> GetFloatCurves(UnityVersion version)
-		{
-			return HasCurves(version) ? FloatCurves : Array.Empty<FloatCurve>();
 		}
 		private IReadOnlyList<PPtrCurve> GetPPtrCurves(UnityVersion version)
 		{
@@ -611,22 +463,6 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		private AnimationClipSettings GetAnimationClipSettings(UnityVersion version, TransferInstructionFlags flags)
 		{
 			return HasMuscleClip(version, flags) ? new AnimationClipSettings(MuscleClip) : new AnimationClipSettings(true);
-		}
-		private IReadOnlyList<FloatCurve> GetEditorCurves(UnityVersion version, TransferInstructionFlags flags)
-		{
-			return Array.Empty<FloatCurve>();
-		}
-		private IReadOnlyList<FloatCurve> GetEulerEditorCurves(UnityVersion version, TransferInstructionFlags flags)
-		{
-			return Array.Empty<FloatCurve>();
-		}
-		private bool GetGenerateMotionCurves(UnityVersion version, TransferInstructionFlags flags)
-		{
-			return false;
-		}
-		private IReadOnlyList<AnimationEvent> GetEvents(UnityVersion version)
-		{
-			return HasEvents(version) ? Events : Array.Empty<AnimationEvent>();
 		}
 
 		public override string ExportExtension => "anim";
