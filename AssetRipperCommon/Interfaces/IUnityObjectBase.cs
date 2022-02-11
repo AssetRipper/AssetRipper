@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Interfaces
 		string ExportExtension { get; }
 		string ExportPath { get; }
 		ISerializedFile SerializedFile { get; }
-		UnityGUID GUID { get; }
+		UnityGUID GUID { get; set; }
 		long PathID { get; }
 		HideFlags ObjectHideFlags { get; set; }
 

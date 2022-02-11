@@ -23,7 +23,19 @@ namespace AssetRipper.Core.Utils
 
 		private static string GetNewRandomTempFolder() => Path.Combine(TempFolderPath, GetRandomString());
 
-		private static string GetRandomString() => GuidUtils.GetNewGuidString(NumberOfRandomCharacters);
+		private static string GetRandomString() => GetRandomString(NumberOfRandomCharacters);
+
+		/// <summary> Get the first characters of a new random guid </summary>
+		/// <param name="numCharacters">The number of characters to return up to 32</param>
+		/// <returns>A new string of pseudorandom hexadecimal characters</returns>
+		private static string GetRandomString(int numCharacters)
+		{
+			string guid = Guid.NewGuid().ToString().Replace("-", "");
+			if (numCharacters < 1 || numCharacters > 31)
+				return guid;
+			else
+				return guid.Substring(0, numCharacters);
+		}
 
 		public static string CreateNewRandomTempFolder()
 		{

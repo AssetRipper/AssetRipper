@@ -27,7 +27,10 @@ using Version = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Library.Utils
 {
-	public class Util
+	/// <summary>
+	/// Needs removed at some point
+	/// </summary>
+	internal class Util
 	{
 		public static BindingFlags AllBindingFlags = BindingFlags.Instance
 			| BindingFlags.Static
@@ -219,7 +222,7 @@ namespace AssetRipper.Library.Utils
 					{
 						using MD5 md5 = MD5.Create();
 						byte[] md5Hash = md5.ComputeHash(Encoding.ASCII.GetBytes(shader.GetValidShaderName()));
-						asset.AssetInfo.GUID = new UnityGUID(md5Hash);
+						asset.GUID = new UnityGUID(md5Hash);
 					}
 				}
 			}
@@ -241,13 +244,6 @@ namespace AssetRipper.Library.Utils
 			}
 			return "Unnamed";
 		}
-		public static void RandomizeAssetGuid(IEnumerable<AssetRipper.Core.Classes.Object.Object> assets)
-		{
-			foreach (var asset in assets)
-			{
-				asset.AssetInfo.GUID = UnityGUID.NewGuid();
-			}
-		}
 		public static void FixScript(IMonoScript script)
 		{
 			using MD5 md5 = MD5.Create();
@@ -263,7 +259,7 @@ namespace AssetRipper.Library.Utils
 				var x = guid[i];
 				swapped[i] = (byte)((x & 0x0F) << 4 | (x & 0xF0) >> 4);
 			}
-			asset.AssetInfo.GUID = new UnityGUID(swapped);
+			asset.GUID = new UnityGUID(swapped);
 		}
 		static T CreateInstance<T>(params object[] parameters)
 		{
