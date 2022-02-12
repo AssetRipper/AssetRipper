@@ -2,14 +2,14 @@ using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Logging;
 using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Utils;
+using AssetRipper.TextureDecoder.Astc;
+using AssetRipper.TextureDecoder.Atc;
+using AssetRipper.TextureDecoder.Dxt;
+using AssetRipper.TextureDecoder.Etc;
+using AssetRipper.TextureDecoder.Pvrtc;
+using AssetRipper.TextureDecoder.Rgb;
+using AssetRipper.TextureDecoder.Yuy2;
 using System;
-using TextureDecoder.Astc;
-using TextureDecoder.Atc;
-using TextureDecoder.Dxt;
-using TextureDecoder.Etc;
-using TextureDecoder.Pvrtc;
-using TextureDecoder.Rgb;
-using TextureDecoder.Yuy2;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Library.Exporters.Textures
