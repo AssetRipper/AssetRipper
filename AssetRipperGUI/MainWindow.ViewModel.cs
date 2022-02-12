@@ -114,10 +114,6 @@ namespace AssetRipper.GUI
 
 		public MainWindowViewModel()
 		{
-			Logger.Add(new FileLogger());
-			Logger.Add(new ConsoleLogger());
-			Logger.LogSystemInformation("AssetRipper GUI Version");
-
 			Logger.OnStatusChanged += OnImportStatusUpdated;
 
 			OnPropertyChanged(nameof(AudioExportFormat));

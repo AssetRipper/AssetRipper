@@ -11,6 +11,7 @@ using AssetRipper.Core.Structure.GameStructure.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Structure.GameStructure
@@ -81,11 +82,23 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		public void Export(CoreConfiguration options)
 		{
+			Logger.Info(LogCategory.Export, $"Game files have these Unity versions:{GetListOfVersions()}");
 			UnityVersion maxFileVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
 			UnityVersion version = UnityVersion.Max(maxFileVersion, UnityVersion.DefaultVersion);
 			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
 			options.SetProjectSettings(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			Exporter.Export(FileCollection, options);
+		}
+
+		private string GetListOfVersions()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach(UnityVersion version in FileCollection.GameFiles.Values.DistinctBy(t => t.Version).Select(s => s.Version))
+			{
+				sb.Append(' ');
+				sb.Append(version.ToString());
+			}
+			return sb.ToString();
 		}
 
 		/// <summary>Attempts to find the path for the dependency with that name.</summary>
