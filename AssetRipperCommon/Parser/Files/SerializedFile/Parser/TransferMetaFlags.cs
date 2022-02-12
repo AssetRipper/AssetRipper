@@ -3,7 +3,7 @@
 namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 {
 	[Flags]
-	public enum TransferMetaFlags
+	public enum TransferMetaFlags : uint
 	{
 		NoTransferFlags = 0x0,
 		HideInEditor = 0x1,
@@ -37,6 +37,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		DisallowSerializedPropertyModification = 0x10000000,
 		Unknown29 = 0x20000000,
 		Unknown30 = 0x40000000,
+		Unknown31 = 0x80000000,
 	}
 
 	public static class TransferMetaFlagsExtensions

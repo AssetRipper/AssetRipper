@@ -303,7 +303,7 @@ namespace AssetAnalyzer
 			typeTreeNode.Version = reader.ReadInt32();
 			if (header.m_Version != SerializedFileFormatVersion.kUnknown_3)
 			{
-				typeTreeNode.MetaFlag = (AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TransferMetaFlags)reader.ReadInt32();
+				typeTreeNode.MetaFlag = (AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TransferMetaFlags)reader.ReadUInt32();
 			}
 
 			int childrenCount = reader.ReadInt32();
@@ -328,7 +328,7 @@ namespace AssetAnalyzer
 				typeTreeNode.NameStrOffset = reader.ReadUInt32();
 				typeTreeNode.ByteSize = reader.ReadInt32();
 				typeTreeNode.Index = reader.ReadInt32();
-				typeTreeNode.MetaFlag = (AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TransferMetaFlags)reader.ReadInt32();
+				typeTreeNode.MetaFlag = (AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TransferMetaFlags)reader.ReadUInt32();
 				if (header.m_Version >= SerializedFileFormatVersion.kTypeTreeNodeWithTypeFlags)
 				{
 					typeTreeNode.RefTypeHash = reader.ReadUInt64();

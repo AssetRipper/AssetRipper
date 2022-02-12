@@ -112,11 +112,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		{
 			sb.Append('\t', Level).Append(Type).Append(' ').Append(Name);
 			sb.AppendFormat(" // ByteSize{0}{1:x}{2}, Index{3}{4:x}{5}, Version{6}{7:x}{8}, IsArray{{{9}}}, MetaFlag{10}{11:x}{12}",
-					"{", unchecked((uint)ByteSize), "}",
+					"{", ByteSize, "}",
 					"{", Index, "}",
 					"{", Version, "}",
 					TypeFlags,
-					"{", (int)MetaFlag, "}");
+					"{", (uint)MetaFlag, "}");
 			return sb;
 		}
 
