@@ -1,12 +1,6 @@
 # Development Roadmap
 
-## 0.1.9.2
-
-* ~~Fixed a null reference exception while reading shaders~~
-* ~~Tiny performance improvement from removing SerializableType interface~~
-* ~~Bump ImageSharp version~~
-* ~~Bump ILSpy version~~
-* ~~Implement Pbm, Tga, Tiff, and WebP image export~~
+## 0.1.9.3
 
 ## 0.2.0.0
 * Convert Exporters to the new Interface System
