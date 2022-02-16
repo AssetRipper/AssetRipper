@@ -82,19 +82,17 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				TargetPlatform = (Platform)reader.ReadUInt32();
 			}
 
-			bool enableTypeTree;
 			if (HasEnableTypeTree(reader.Generation))
 			{
 				EnableTypeTree = reader.ReadBoolean();
-				enableTypeTree = EnableTypeTree;
 			}
 			else
 			{
-				enableTypeTree = true;
+				EnableTypeTree = true;
 			}
 
-#warning TODO: pass enableTypeTree as Read argument
-			Types = reader.ReadSerializedArray(() => new SerializedType(enableTypeTree));
+#warning TODO: pass EnableTypeTree as Read argument
+			Types = reader.ReadSerializedArray(() => new SerializedType(EnableTypeTree));
 
 			if (HasLongFileID(reader.Generation))
 			{
@@ -113,7 +111,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 			if (HasRefTypes(reader.Generation))
 			{
-				RefTypes = reader.ReadSerializedArray(() => new SerializedType(enableTypeTree));
+				RefTypes = reader.ReadSerializedArray(() => new SerializedType(EnableTypeTree));
 			}
 			if (HasUserInformation(reader.Generation))
 			{
