@@ -19,7 +19,7 @@ namespace AssetRipper.Core
 	/// <summary>
 	/// The artificial base class for all generated Unity classes
 	/// </summary>
-	public class UnityAssetBase : IUnityAssetBase, IDeepCloneable, IAlmostEquatable
+	public class UnityAssetBase : IUnityAssetBase, IDeepCloneable, IAlmostEquatable, IEquatable<UnityAssetBase>
 	{
 		private const BindingFlags fieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		public UnityVersion AssetUnityVersion { get; set; }
@@ -140,18 +140,18 @@ namespace AssetRipper.Core
 			}
 		}
 
-		public override bool Equals(object obj)
+		/// <summary>
+		/// Check if another asset is equal to this
+		/// </summary>
+		/// <remarks>
+		/// This method assumes that the other asset is not null
+		/// and has the same metadata as this.
+		/// </remarks>
+		/// <param name="other">Another asset</param>
+		/// <returns></returns>
+		public bool Equals(UnityAssetBase other)
 		{
-			if (HasEqualMetadata(obj))
-				return Equals((UnityAssetBase)obj);
-			else
-				return false;
-		}
-
-		public override int GetHashCode()
-		{
-			//Assets are mutable, so this is the only way to safely use them in dictionaries
-			return 0;
+			return HasEqualMetadata(other) && EqualByContent(other);
 		}
 
 		/// <summary>
@@ -163,7 +163,7 @@ namespace AssetRipper.Core
 		/// </remarks>
 		/// <param name="other">Another asset</param>
 		/// <returns></returns>
-		protected virtual bool Equals(UnityAssetBase other)
+		protected virtual bool EqualByContent(UnityAssetBase other)
 		{
 			return ReferenceEquals(this, other);
 		}
