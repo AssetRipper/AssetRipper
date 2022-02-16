@@ -92,7 +92,7 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 					int bits = 0;
 					while (bits < packedVector.BitSize)
 					{
-						x |= (uint)(packedVector.Data[indexPos] >> bitPos << bits);
+						x |= unchecked((uint)(packedVector.Data[indexPos] >> bitPos << bits));
 						int num = System.Math.Min(packedVector.BitSize - bits, 8 - bitPos);
 						bitPos += num;
 						bits += num;
@@ -102,7 +102,7 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 							bitPos = 0;
 						}
 					}
-					x &= (uint)(1 << packedVector.BitSize) - 1u;
+					x &= unchecked((uint)(1 << packedVector.BitSize) - 1u);
 					data.Add(x / (scale * ((1 << packedVector.BitSize) - 1)) + packedVector.Start);
 				}
 
