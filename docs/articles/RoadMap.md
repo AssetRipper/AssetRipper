@@ -1,11 +1,6 @@
 # Development Roadmap
 
-## 0.1.9.3
-
-* ~~Fixed an overflow happening when unpacking float bit vectors~~
-* ~~Fixed an issue with large games lagging at the beginning of export~~
-* ~~Bump ILSpy version~~
-* ~~Improved log output for asset names~~
+## 0.1.9.4
 
 ## 0.2.0.0
 * Convert Exporters to the new Interface System
