@@ -10,3 +10,4 @@ bin
 .idea
 **/build/
 .vscode
+*.blend1
