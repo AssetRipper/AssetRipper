@@ -143,7 +143,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 					}
 					else
 					{
-						PValue = BitConverterExtensions.ToUInt32(reader.ReadSingle());
+						PValue = BitConverter.SingleToUInt32Bits(reader.ReadSingle());
 					}
 					break;
 
@@ -154,7 +154,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 					}
 					else
 					{
-						PValue = BitConverterExtensions.ToUInt64(reader.ReadDouble());
+						PValue = BitConverter.DoubleToUInt64Bits(reader.ReadDouble());
 					}
 					break;
 
@@ -326,7 +326,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 					}
 					else
 					{
-						writer.Write(BitConverterExtensions.ToSingle((uint)PValue));
+						writer.Write(BitConverter.UInt32BitsToSingle((uint)PValue));
 					}
 					break;
 
@@ -337,7 +337,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 					}
 					else
 					{
-						writer.Write(BitConverterExtensions.ToDouble(PValue));
+						writer.Write(BitConverter.UInt64BitsToDouble(PValue));
 					}
 					break;
 
@@ -483,9 +483,9 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 						case PrimitiveType.ULong:
 							return new YAMLScalarNode(PValue);
 						case PrimitiveType.Single:
-							return new YAMLScalarNode(BitConverterExtensions.ToSingle((uint)PValue));
+							return new YAMLScalarNode(BitConverter.UInt32BitsToSingle((uint)PValue));
 						case PrimitiveType.Double:
-							return new YAMLScalarNode(BitConverterExtensions.ToDouble(PValue));
+							return new YAMLScalarNode(BitConverter.UInt64BitsToDouble(PValue));
 						case PrimitiveType.String:
 							return new YAMLScalarNode((string)CValue);
 						default:

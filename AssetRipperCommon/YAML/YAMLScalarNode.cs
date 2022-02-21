@@ -164,11 +164,11 @@ namespace AssetRipper.Core.YAML
 		{
 #if USE_HEX_FLOAT
 			// It is more precise technic but output looks vague and less readable
-			uint hex = BitConverterExtensions.ToUInt32(value);
+			uint hex = BitConverter.SingleToUInt32Bits(value);
 			m_string = $"0x{hex.ToHexString()}({value.ToString(CultureInfo.InvariantCulture)})";
 			m_objectType = ScalarType.String;
 #else
-			m_value = BitConverterExtensions.ToUInt32(value);
+			m_value = BitConverter.SingleToUInt32Bits(value);
 			m_objectType = ScalarType.Single;
 #endif
 		}
@@ -177,11 +177,11 @@ namespace AssetRipper.Core.YAML
 		{
 #if USE_HEX_FLOAT
 			// It is more precise technic but output looks vague and less readable
-			ulong hex = BitConverterExtensions.ToUInt64(value);
+			ulong hex = BitConverter.DoubleToUInt64Bits(value);
 			m_string = $"0x{hex.ToHexString()}({value.ToString(CultureInfo.InvariantCulture)})";
 			m_objectType = ScalarType.String;
 #else
-			m_value = BitConverterExtensions.ToUInt64(value);
+			m_value = BitConverter.DoubleToUInt64Bits(value);
 			m_objectType = ScalarType.Double;
 #endif
 		}
@@ -223,8 +223,8 @@ namespace AssetRipper.Core.YAML
 				ScalarType.UInt32 => emitter.Write(m_value),
 				ScalarType.Int64 => emitter.Write(unchecked((long)m_value)),
 				ScalarType.UInt64 => emitter.Write(m_value),
-				ScalarType.Single => emitter.Write(BitConverterExtensions.ToSingle((uint)m_value)),
-				ScalarType.Double => emitter.Write(BitConverterExtensions.ToDouble(m_value)),
+				ScalarType.Single => emitter.Write(BitConverter.UInt32BitsToSingle((uint)m_value)),
+				ScalarType.Double => emitter.Write(BitConverter.UInt64BitsToDouble(m_value)),
 				ScalarType.String => WriteString(emitter),
 				_ => throw new NotImplementedException(m_objectType.ToString()),
 			};
@@ -356,8 +356,8 @@ namespace AssetRipper.Core.YAML
 						ScalarType.UInt32 => unchecked((uint)m_value).ToHexString(),
 						ScalarType.Int64 => unchecked((long)m_value).ToHexString(),
 						ScalarType.UInt64 => m_value.ToHexString(),
-						ScalarType.Single => BitConverterExtensions.ToSingle((uint)m_value).ToHexString(),
-						ScalarType.Double => BitConverterExtensions.ToDouble(m_value).ToHexString(),
+						ScalarType.Single => BitConverter.UInt32BitsToSingle((uint)m_value).ToHexString(),
+						ScalarType.Double => BitConverter.UInt64BitsToDouble(m_value).ToHexString(),
 						_ => throw new NotImplementedException(m_objectType.ToString()),
 					};
 				}
@@ -373,8 +373,8 @@ namespace AssetRipper.Core.YAML
 					ScalarType.UInt32 => m_value.ToString(),
 					ScalarType.Int64 => unchecked((long)m_value).ToString(),
 					ScalarType.UInt64 => m_value.ToString(),
-					ScalarType.Single => BitConverterExtensions.ToSingle((uint)m_value).ToString(CultureInfo.InvariantCulture),
-					ScalarType.Double => BitConverterExtensions.ToDouble(m_value).ToString(CultureInfo.InvariantCulture),
+					ScalarType.Single => BitConverter.UInt32BitsToSingle((uint)m_value).ToString(CultureInfo.InvariantCulture),
+					ScalarType.Double => BitConverter.UInt64BitsToDouble(m_value).ToString(CultureInfo.InvariantCulture),
 					ScalarType.String => m_string,
 					_ => throw new NotImplementedException(m_objectType.ToString()),
 				};

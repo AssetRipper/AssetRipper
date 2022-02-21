@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Core.Extensions
+﻿using System;
+
+namespace AssetRipper.Core.Extensions
 {
 	public static class PrimitiveExtensions
 	{
@@ -59,13 +61,13 @@
 
 		public static string ToHexString(this float _this)
 		{
-			uint value = BitConverterExtensions.ToUInt32(_this);
+			uint value = BitConverter.SingleToUInt32Bits(_this);
 			return ToHexString(value);
 		}
 
 		public static string ToHexString(this double _this)
 		{
-			ulong value = BitConverterExtensions.ToUInt64(_this);
+			ulong value = BitConverter.DoubleToUInt64Bits(_this);
 			return ToHexString(value);
 		}
 

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace AssetRipper.Core.Extensions
 {
@@ -64,12 +65,12 @@ namespace AssetRipper.Core.Extensions
 
 		public static StringBuilder AppendHex(this StringBuilder _this, float value)
 		{
-			return AppendHex(_this, BitConverterExtensions.ToUInt32(value));
+			return AppendHex(_this, BitConverter.SingleToUInt32Bits(value));
 		}
 
 		public static StringBuilder AppendHex(this StringBuilder _this, double value)
 		{
-			return AppendHex(_this, BitConverterExtensions.ToUInt64(value));
+			return AppendHex(_this, BitConverter.DoubleToUInt64Bits(value));
 		}
 
 		public static StringBuilder AppendIndent(this StringBuilder _this, int count)

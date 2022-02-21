@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Utils
 			ThreadSafeRandom random = new ThreadSafeRandom();
 			uint classID = (uint)asset.ClassID;
 #if DEBUG
-			int length = AssetRipper.Core.Extensions.BitConverterExtensions.GetDigitsCount(classID);
+			int length = GetDigitsCount(classID);
 			if (length > 4)
 			{
 				throw new NotSupportedException($"Class ID {classID} with more that 4 digits isn't supported");
@@ -67,6 +67,17 @@ namespace AssetRipper.Core.Utils
 			using MD5 md5 = MD5.Create();
 			byte[] hash = md5.ComputeHash(buffer);
 			return new UnityGUID(hash);
+		}
+
+		private static int GetDigitsCount(uint value)
+		{
+			int count = 0;
+			while (value != 0)
+			{
+				value /= 10;
+				count++;
+			}
+			return count;
 		}
 
 		public const char DirectorySeparatorChar = '/';

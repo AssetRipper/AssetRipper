@@ -1,4 +1,5 @@
 using AssetRipper.Core.Extensions;
+using System;
 
 namespace AssetRipper.Core.YAML.Extensions
 {
@@ -71,12 +72,12 @@ namespace AssetRipper.Core.YAML.Extensions
 
 		public static Emitter WriteHex(this Emitter _this, float value)
 		{
-			return WriteHex(_this, BitConverterExtensions.ToUInt32(value));
+			return WriteHex(_this, BitConverter.SingleToUInt32Bits(value));
 		}
 
 		public static Emitter WriteHex(this Emitter _this, double value)
 		{
-			return WriteHex(_this, BitConverterExtensions.ToUInt64(value));
+			return WriteHex(_this, BitConverter.DoubleToUInt64Bits(value));
 		}
 
 		private static readonly string HexAlphabet = "0123456789ABCDEF";

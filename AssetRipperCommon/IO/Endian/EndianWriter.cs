@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Extensions;
+using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -58,14 +59,14 @@ namespace AssetRipper.Core.IO.Endian
 
 		public override void Write(float value)
 		{
-			uint value32 = BitConverterExtensions.ToUInt32(value);
+			uint value32 = BitConverter.SingleToUInt32Bits(value);
 			FillInnerBuffer(value32);
 			Write(m_buffer, 0, sizeof(float));
 		}
 
 		public override void Write(double value)
 		{
-			ulong value64 = BitConverterExtensions.ToUInt64(value);
+			ulong value64 = BitConverter.DoubleToUInt64Bits(value);
 			FillInnerBuffer(value64);
 			Write(m_buffer, 0, sizeof(double));
 		}
@@ -345,7 +346,7 @@ namespace AssetRipper.Core.IO.Endian
 				int toWrite = left < BufferSize ? left : BufferSize;
 				for (int i = 0; i < toWrite; i += sizeof(float), index++)
 				{
-					FillInnerBuffer(BitConverterExtensions.ToUInt32(buffer[index]), i);
+					FillInnerBuffer(BitConverter.SingleToUInt32Bits(buffer[index]), i);
 				}
 				Write(m_buffer, 0, toWrite);
 				byteIndex += toWrite;
@@ -375,7 +376,7 @@ namespace AssetRipper.Core.IO.Endian
 				int toWrite = left < BufferSize ? left : BufferSize;
 				for (int i = 0; i < toWrite; i += sizeof(double), index++)
 				{
-					FillInnerBuffer(BitConverterExtensions.ToUInt64(buffer[index]), i);
+					FillInnerBuffer(BitConverter.DoubleToUInt64Bits(buffer[index]), i);
 				}
 				Write(m_buffer, 0, toWrite);
 				byteIndex += toWrite;
