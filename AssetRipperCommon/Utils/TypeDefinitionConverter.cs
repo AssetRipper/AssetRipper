@@ -174,47 +174,22 @@ namespace AssetRipper.Core.Utils
 			if (typeRef.IsPrimitive)
 			{
 				var primitiveName = typeRef.Name;
-				switch (primitiveName)
+				primitiveName = primitiveName switch
 				{
-					case "Boolean":
-						primitiveName = "bool";
-						break;
-					case "Byte":
-						primitiveName = "UInt8";
-						break;
-					case "SByte":
-						primitiveName = "SInt8";
-						break;
-					case "Int16":
-						primitiveName = "SInt16";
-						break;
-					case "UInt16":
-						primitiveName = "UInt16";
-						break;
-					case "Int32":
-						primitiveName = "SInt32";
-						break;
-					case "UInt32":
-						primitiveName = "UInt32";
-						break;
-					case "Int64":
-						primitiveName = "SInt64";
-						break;
-					case "UInt64":
-						primitiveName = "UInt64";
-						break;
-					case "Char":
-						primitiveName = "char";
-						break;
-					case "Double":
-						primitiveName = "double";
-						break;
-					case "Single":
-						primitiveName = "float";
-						break;
-					default:
-						throw new NotSupportedException();
-				}
+					"Boolean" => "bool",
+					"Byte" => "UInt8",
+					"SByte" => "SInt8",
+					"Int16" => "SInt16",
+					"UInt16" => "UInt16",
+					"Int32" => "SInt32",
+					"UInt32" => "UInt32",
+					"Int64" => "SInt64",
+					"UInt64" => "UInt64",
+					"Char" => "char",
+					"Double" => "double",
+					"Single" => "float",
+					_ => throw new NotSupportedException(),
+				};
 				if (isElement)
 				{
 					align = false;

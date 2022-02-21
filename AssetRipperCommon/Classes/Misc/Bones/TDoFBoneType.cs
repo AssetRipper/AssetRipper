@@ -106,54 +106,31 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 
 		public static BoneType ToBoneType(this TDoFBoneType _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case TDoFBoneType.Spine:
-					return BoneType.Spine;
-				case TDoFBoneType.Chest:
-					return BoneType.Chest;
-				case TDoFBoneType.UpperChest:
-					return BoneType.UpperChest;
-				case TDoFBoneType.Neck:
-					return BoneType.Neck;
-				case TDoFBoneType.Head:
-					return BoneType.Head;
-				case TDoFBoneType.LeftUpperLeg:
-					return BoneType.LeftUpperLeg;
-				case TDoFBoneType.LeftLowerLeg:
-					return BoneType.LeftLowerLeg;
-				case TDoFBoneType.LeftFoot:
-					return BoneType.LeftFoot;
-				case TDoFBoneType.LeftToes:
-					return BoneType.LeftToes;
-				case TDoFBoneType.RightUpperLeg:
-					return BoneType.RightUpperLeg;
-				case TDoFBoneType.RightLowerLeg:
-					return BoneType.RightLowerLeg;
-				case TDoFBoneType.RightFoot:
-					return BoneType.RightFoot;
-				case TDoFBoneType.RightToes:
-					return BoneType.RightToes;
-				case TDoFBoneType.LeftShoulder:
-					return BoneType.LeftShoulder;
-				case TDoFBoneType.LeftUpperArm:
-					return BoneType.LeftUpperArm;
-				case TDoFBoneType.LeftLowerArm:
-					return BoneType.LeftLowerArm;
-				case TDoFBoneType.LeftHand:
-					return BoneType.LeftHand;
-				case TDoFBoneType.RightShoulder:
-					return BoneType.RightShoulder;
-				case TDoFBoneType.RightUpperArm:
-					return BoneType.RightUpperArm;
-				case TDoFBoneType.RightLowerArm:
-					return BoneType.RightLowerArm;
-				case TDoFBoneType.RightHand:
-					return BoneType.RightHand;
-
-				default:
-					throw new ArgumentException(_this.ToString());
-			}
+				TDoFBoneType.Spine => BoneType.Spine,
+				TDoFBoneType.Chest => BoneType.Chest,
+				TDoFBoneType.UpperChest => BoneType.UpperChest,
+				TDoFBoneType.Neck => BoneType.Neck,
+				TDoFBoneType.Head => BoneType.Head,
+				TDoFBoneType.LeftUpperLeg => BoneType.LeftUpperLeg,
+				TDoFBoneType.LeftLowerLeg => BoneType.LeftLowerLeg,
+				TDoFBoneType.LeftFoot => BoneType.LeftFoot,
+				TDoFBoneType.LeftToes => BoneType.LeftToes,
+				TDoFBoneType.RightUpperLeg => BoneType.RightUpperLeg,
+				TDoFBoneType.RightLowerLeg => BoneType.RightLowerLeg,
+				TDoFBoneType.RightFoot => BoneType.RightFoot,
+				TDoFBoneType.RightToes => BoneType.RightToes,
+				TDoFBoneType.LeftShoulder => BoneType.LeftShoulder,
+				TDoFBoneType.LeftUpperArm => BoneType.LeftUpperArm,
+				TDoFBoneType.LeftLowerArm => BoneType.LeftLowerArm,
+				TDoFBoneType.LeftHand => BoneType.LeftHand,
+				TDoFBoneType.RightShoulder => BoneType.RightShoulder,
+				TDoFBoneType.RightUpperArm => BoneType.RightUpperArm,
+				TDoFBoneType.RightLowerArm => BoneType.RightLowerArm,
+				TDoFBoneType.RightHand => BoneType.RightHand,
+				_ => throw new ArgumentException(_this.ToString()),
+			};
 		}
 	}
 }

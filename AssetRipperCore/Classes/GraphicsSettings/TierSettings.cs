@@ -117,42 +117,25 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 
 		private static BuildTargetGroup StringToBuildGroup(string group)
 		{
-			switch (group)
+			return group switch
 			{
-				case "Standalone":
-					return BuildTargetGroup.Standalone;
-				case "Web":
-					return BuildTargetGroup.WebPlayer;
-				case "iPhone":
-					return BuildTargetGroup.iPhone;
-				case "Android":
-					return BuildTargetGroup.Android;
-				case "WebGL":
-					return BuildTargetGroup.WebGL;
-				case "Windows Store Apps":
-					return BuildTargetGroup.WSA;
-				case "Tizen":
-					return BuildTargetGroup.Tizen;
-				case "PSP2":
-					return BuildTargetGroup.PSP2;
-				case "PS4":
-					return BuildTargetGroup.PS4;
-				case "PSM":
-					return BuildTargetGroup.PSM;
-				case "XboxOne":
-					return BuildTargetGroup.XboxOne;
-				case "Samsung TV":
-					return BuildTargetGroup.SamsungTV;
-				case "Nintendo 3DS":
-					return BuildTargetGroup.N3DS;
-				case "WiiU":
-					return BuildTargetGroup.WiiU;
-				case "tvOS":
-					return BuildTargetGroup.tvOS;
-
-				default:
-					return BuildTargetGroup.Standalone;
-			}
+				"Standalone" => BuildTargetGroup.Standalone,
+				"Web" => BuildTargetGroup.WebPlayer,
+				"iPhone" => BuildTargetGroup.iPhone,
+				"Android" => BuildTargetGroup.Android,
+				"WebGL" => BuildTargetGroup.WebGL,
+				"Windows Store Apps" => BuildTargetGroup.WSA,
+				"Tizen" => BuildTargetGroup.Tizen,
+				"PSP2" => BuildTargetGroup.PSP2,
+				"PS4" => BuildTargetGroup.PS4,
+				"PSM" => BuildTargetGroup.PSM,
+				"XboxOne" => BuildTargetGroup.XboxOne,
+				"Samsung TV" => BuildTargetGroup.SamsungTV,
+				"Nintendo 3DS" => BuildTargetGroup.N3DS,
+				"WiiU" => BuildTargetGroup.WiiU,
+				"tvOS" => BuildTargetGroup.tvOS,
+				_ => BuildTargetGroup.Standalone,
+			};
 		}
 
 		public BuildTargetGroup BuildTarget { get; set; }

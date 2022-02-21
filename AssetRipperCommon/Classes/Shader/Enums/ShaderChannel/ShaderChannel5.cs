@@ -21,28 +21,18 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 	{
 		public static ShaderChannel ToShaderChannel(this ShaderChannel5 _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case ShaderChannel5.Vertex:
-					return ShaderChannel.Vertex;
-				case ShaderChannel5.Normal:
-					return ShaderChannel.Normal;
-				case ShaderChannel5.Color:
-					return ShaderChannel.Color;
-				case ShaderChannel5.UV0:
-					return ShaderChannel.UV0;
-				case ShaderChannel5.UV1:
-					return ShaderChannel.UV1;
-				case ShaderChannel5.UV2:
-					return ShaderChannel.UV2;
-				case ShaderChannel5.UV3:
-					return ShaderChannel.UV3;
-				case ShaderChannel5.Tangent:
-					return ShaderChannel.Tangent;
-
-				default:
-					throw new Exception($"Unsupported channel type {_this}");
-			}
+				ShaderChannel5.Vertex => ShaderChannel.Vertex,
+				ShaderChannel5.Normal => ShaderChannel.Normal,
+				ShaderChannel5.Color => ShaderChannel.Color,
+				ShaderChannel5.UV0 => ShaderChannel.UV0,
+				ShaderChannel5.UV1 => ShaderChannel.UV1,
+				ShaderChannel5.UV2 => ShaderChannel.UV2,
+				ShaderChannel5.UV3 => ShaderChannel.UV3,
+				ShaderChannel5.Tangent => ShaderChannel.Tangent,
+				_ => throw new Exception($"Unsupported channel type {_this}"),
+			};
 		}
 	}
 }

@@ -85,122 +85,65 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 
 		public static string ToAttributeString(this MuscleType _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case MuscleType.SpineFrontBack:
-					return "Spine Front-Back";
-				case MuscleType.SpineLeftRight:
-					return "Spine Left-Right";
-				case MuscleType.SpineTwistLeftRight:
-					return "Spine Twist Left-Right";
-				case MuscleType.ChestFrontBack:
-					return "Chest Front-Back";
-				case MuscleType.ChestLeftRight:
-					return "Chest Left-Right";
-				case MuscleType.ChestTwistLeftRight:
-					return "Chest Twist Left-Right";
-				case MuscleType.UpperchestFrontBack:
-					return "UpperChest Front-Back";
-				case MuscleType.UpperchestLeftRight:
-					return "UpperChest Left-Right";
-				case MuscleType.UpperchestTwisLeftRight:
-					return "UpperChest Twist Left-Right";
-				case MuscleType.NeckNodDownUp:
-					return "Neck Nod Down-Up";
-				case MuscleType.NeckTiltLeftRight:
-					return "Neck Tilt Left-Right";
-				case MuscleType.NeckTurnLeftRight:
-					return "Neck Turn Left-Right";
-				case MuscleType.HeadNodDownUp:
-					return "Head Nod Down-Up";
-				case MuscleType.HeadTiltLeftRight:
-					return "Head Tilt Left-Right";
-				case MuscleType.HeadTurnLeftRight:
-					return "Head Turn Left-Right";
-				case MuscleType.LeftEyeDownUp:
-					return "Left Eye Down-Up";
-				case MuscleType.LeftEyeInOut:
-					return "Left Eye In-Out";
-				case MuscleType.RightEyeDownUp:
-					return "Right Eye Down-Up";
-				case MuscleType.RightEyeInOut:
-					return "Right Eye In-Out";
-				case MuscleType.JawClose:
-					return "Jaw Close";
-				case MuscleType.JawLeftRight:
-					return "Jaw Left-Right";
-				case MuscleType.LeftUpperLegFrontBack:
-					return "Left Upper Leg Front-Back";
-				case MuscleType.LeftUpperLegInOut:
-					return "Left Upper Leg In-Out";
-				case MuscleType.LeftUpperLegTwistInOut:
-					return "Left Upper Leg Twist In-Out";
-				case MuscleType.LeftLowerLegStretch:
-					return "Left Lower Leg Stretch";
-				case MuscleType.LeftLowerLegTwistInOut:
-					return "Left Lower Leg Twist In-Out";
-				case MuscleType.LeftFootUpDown:
-					return "Left Foot Up-Down";
-				case MuscleType.LeftFootTwistInOut:
-					return "Left Foot Twist In-Out";
-				case MuscleType.LeftToesUpDown:
-					return "Left Toes Up-Down";
-				case MuscleType.RightUpperLegFrontBack:
-					return "Right Upper Leg Front-Back";
-				case MuscleType.RightUpperLegInOut:
-					return "Right Upper Leg In-Out";
-				case MuscleType.RightUpperLegTwistInOut:
-					return "Right Upper Leg Twist In-Out";
-				case MuscleType.RightLowerLegStretch:
-					return "Right Lower Leg Stretch";
-				case MuscleType.RightLowerLegTwistInOut:
-					return "Right Lower Leg Twist In-Out";
-				case MuscleType.RightFootUpDown:
-					return "Right Foot Up-Down";
-				case MuscleType.RightFootTwistInOut:
-					return "Right Foot Twist In-Out";
-				case MuscleType.RightToesUpDown:
-					return "Right Toes Up-Down";
-				case MuscleType.LeftShoulderDownUp:
-					return "Left Shoulder Down-Up";
-				case MuscleType.LeftShoulderFrontBack:
-					return "Left Shoulder Front-Back";
-				case MuscleType.LeftArmDownUp:
-					return "Left Arm Down-Up";
-				case MuscleType.LeftArmFrontBack:
-					return "Left Arm Front-Back";
-				case MuscleType.LeftArmTwistInOut:
-					return "Left Arm Twist In-Out";
-				case MuscleType.LeftForearmStretch:
-					return "Left Forearm Stretch";
-				case MuscleType.LeftForearmTwistInOut:
-					return "Left Forearm Twist In-Out";
-				case MuscleType.LeftHandDownUp:
-					return "Left Hand Down-Up";
-				case MuscleType.LeftHandInOut:
-					return "Left Hand In-Out";
-				case MuscleType.RightShoulderDownUp:
-					return "Right Shoulder Down-Up";
-				case MuscleType.RightShoulderFrontBack:
-					return "Right Shoulder Front-Back";
-				case MuscleType.RightArmDownUp:
-					return "Right Arm Down-Up";
-				case MuscleType.RightArmFrontBack:
-					return "Right Arm Front-Back";
-				case MuscleType.RightArmTwistInOut:
-					return "Right Arm Twist In-Out";
-				case MuscleType.RightForearmStretch:
-					return "Right Forearm Stretch";
-				case MuscleType.RightForearmTwistInOut:
-					return "Right Forearm Twist In-Out";
-				case MuscleType.RightHandDownUp:
-					return "Right Hand Down-Up";
-				case MuscleType.RightHandInOut:
-					return "Right Hand In-Out";
-
-				default:
-					throw new ArgumentException(_this.ToString());
-			}
+				MuscleType.SpineFrontBack => "Spine Front-Back",
+				MuscleType.SpineLeftRight => "Spine Left-Right",
+				MuscleType.SpineTwistLeftRight => "Spine Twist Left-Right",
+				MuscleType.ChestFrontBack => "Chest Front-Back",
+				MuscleType.ChestLeftRight => "Chest Left-Right",
+				MuscleType.ChestTwistLeftRight => "Chest Twist Left-Right",
+				MuscleType.UpperchestFrontBack => "UpperChest Front-Back",
+				MuscleType.UpperchestLeftRight => "UpperChest Left-Right",
+				MuscleType.UpperchestTwisLeftRight => "UpperChest Twist Left-Right",
+				MuscleType.NeckNodDownUp => "Neck Nod Down-Up",
+				MuscleType.NeckTiltLeftRight => "Neck Tilt Left-Right",
+				MuscleType.NeckTurnLeftRight => "Neck Turn Left-Right",
+				MuscleType.HeadNodDownUp => "Head Nod Down-Up",
+				MuscleType.HeadTiltLeftRight => "Head Tilt Left-Right",
+				MuscleType.HeadTurnLeftRight => "Head Turn Left-Right",
+				MuscleType.LeftEyeDownUp => "Left Eye Down-Up",
+				MuscleType.LeftEyeInOut => "Left Eye In-Out",
+				MuscleType.RightEyeDownUp => "Right Eye Down-Up",
+				MuscleType.RightEyeInOut => "Right Eye In-Out",
+				MuscleType.JawClose => "Jaw Close",
+				MuscleType.JawLeftRight => "Jaw Left-Right",
+				MuscleType.LeftUpperLegFrontBack => "Left Upper Leg Front-Back",
+				MuscleType.LeftUpperLegInOut => "Left Upper Leg In-Out",
+				MuscleType.LeftUpperLegTwistInOut => "Left Upper Leg Twist In-Out",
+				MuscleType.LeftLowerLegStretch => "Left Lower Leg Stretch",
+				MuscleType.LeftLowerLegTwistInOut => "Left Lower Leg Twist In-Out",
+				MuscleType.LeftFootUpDown => "Left Foot Up-Down",
+				MuscleType.LeftFootTwistInOut => "Left Foot Twist In-Out",
+				MuscleType.LeftToesUpDown => "Left Toes Up-Down",
+				MuscleType.RightUpperLegFrontBack => "Right Upper Leg Front-Back",
+				MuscleType.RightUpperLegInOut => "Right Upper Leg In-Out",
+				MuscleType.RightUpperLegTwistInOut => "Right Upper Leg Twist In-Out",
+				MuscleType.RightLowerLegStretch => "Right Lower Leg Stretch",
+				MuscleType.RightLowerLegTwistInOut => "Right Lower Leg Twist In-Out",
+				MuscleType.RightFootUpDown => "Right Foot Up-Down",
+				MuscleType.RightFootTwistInOut => "Right Foot Twist In-Out",
+				MuscleType.RightToesUpDown => "Right Toes Up-Down",
+				MuscleType.LeftShoulderDownUp => "Left Shoulder Down-Up",
+				MuscleType.LeftShoulderFrontBack => "Left Shoulder Front-Back",
+				MuscleType.LeftArmDownUp => "Left Arm Down-Up",
+				MuscleType.LeftArmFrontBack => "Left Arm Front-Back",
+				MuscleType.LeftArmTwistInOut => "Left Arm Twist In-Out",
+				MuscleType.LeftForearmStretch => "Left Forearm Stretch",
+				MuscleType.LeftForearmTwistInOut => "Left Forearm Twist In-Out",
+				MuscleType.LeftHandDownUp => "Left Hand Down-Up",
+				MuscleType.LeftHandInOut => "Left Hand In-Out",
+				MuscleType.RightShoulderDownUp => "Right Shoulder Down-Up",
+				MuscleType.RightShoulderFrontBack => "Right Shoulder Front-Back",
+				MuscleType.RightArmDownUp => "Right Arm Down-Up",
+				MuscleType.RightArmFrontBack => "Right Arm Front-Back",
+				MuscleType.RightArmTwistInOut => "Right Arm Twist In-Out",
+				MuscleType.RightForearmStretch => "Right Forearm Stretch",
+				MuscleType.RightForearmTwistInOut => "Right Forearm Twist In-Out",
+				MuscleType.RightHandDownUp => "Right Hand Down-Up",
+				MuscleType.RightHandInOut => "Right Hand In-Out",
+				_ => throw new ArgumentException(_this.ToString()),
+			};
 		}
 	}
 }

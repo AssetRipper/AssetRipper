@@ -96,254 +96,130 @@ namespace AssetRipper.Core.Parser.Asset
 
 		private static IUnityObjectBase DefaultInstantiator(AssetInfo assetInfo)
 		{
-			switch (assetInfo.ClassID)
+			return assetInfo.ClassID switch
 			{
-				case ClassIDType.GameObject:
-					return new GameObject(assetInfo);
-				case ClassIDType.Transform:
-					return new Transform(assetInfo);
-				case ClassIDType.TimeManager:
-					return new TimeManager(assetInfo);
-				case ClassIDType.AudioManager:
-					return new AudioManager(assetInfo);
-				case ClassIDType.InputManager:
-					return new InputManager(assetInfo);
-				case ClassIDType.Physics2DSettings:
-					return new Physics2DSettings(assetInfo);
-				case ClassIDType.Camera:
-					return new Camera(assetInfo);
-				case ClassIDType.Material:
-					return new Material(assetInfo);
-				case ClassIDType.MeshRenderer:
-					return new MeshRenderer(assetInfo);
-				case ClassIDType.Texture2D:
-					return new Texture2D(assetInfo);
-				case ClassIDType.OcclusionCullingSettings:
-					return new OcclusionCullingSettings(assetInfo);
-				case ClassIDType.GraphicsSettings:
-					return new GraphicsSettings(assetInfo);
-				case ClassIDType.MeshFilter:
-					return new MeshFilter(assetInfo);
-				case ClassIDType.OcclusionPortal:
-					return new OcclusionPortal(assetInfo);
-				case ClassIDType.Mesh:
-					return new Mesh(assetInfo);
-				case ClassIDType.Skybox:
-					return new Skybox(assetInfo);
-				case ClassIDType.QualitySettings:
-					return new QualitySettings(assetInfo);
-				case ClassIDType.Shader:
-					return new Shader(assetInfo);
-				case ClassIDType.TextAsset:
-					return new TextAsset(assetInfo);
-				case ClassIDType.Rigidbody2D:
-					return new Rigidbody2D(assetInfo);
-				case ClassIDType.Rigidbody:
-					return new Rigidbody(assetInfo);
-				case ClassIDType.PhysicsManager:
-					return new PhysicsManager(assetInfo);
-				case ClassIDType.CircleCollider2D:
-					return new CircleCollider2D(assetInfo);
-				case ClassIDType.PolygonCollider2D:
-					return new PolygonCollider2D(assetInfo);
-				case ClassIDType.BoxCollider2D:
-					return new BoxCollider2D(assetInfo);
-				case ClassIDType.PhysicsMaterial2D:
-					return new PhysicsMaterial2D(assetInfo);
-				case ClassIDType.MeshCollider:
-					return new MeshCollider(assetInfo);
-				case ClassIDType.BoxCollider:
-					return new BoxCollider(assetInfo);
-				case ClassIDType.CompositeCollider2D:
-					return new CompositeCollider2D(assetInfo);
-				case ClassIDType.EdgeCollider2D:
-					return new EdgeCollider2D(assetInfo);
-				case ClassIDType.CapsuleCollider2D:
-					return new CapsuleCollider2D(assetInfo);
-				case ClassIDType.AnimationClip:
-					return new AnimationClip(assetInfo);
-				case ClassIDType.TagManager:
-					return new TagManager(assetInfo);
-				case ClassIDType.AudioListener:
-					return new AudioListener(assetInfo);
-				case ClassIDType.AudioSource:
-					return new AudioSource(assetInfo);
-				case ClassIDType.AudioClip:
-					return new AudioClip(assetInfo);
-				case ClassIDType.RenderTexture:
-					return new RenderTexture(assetInfo);
-				case ClassIDType.Cubemap:
-					return new Cubemap(assetInfo);
-				case ClassIDType.Avatar:
-					return new Avatar(assetInfo);
-				case ClassIDType.AnimatorController:
-					return new AnimatorController(assetInfo);
-				case ClassIDType.GUILayer:
-					return new GUILayer(assetInfo);
-				case ClassIDType.Animator:
-					return new Animator(assetInfo);
-				case ClassIDType.TrailRenderer:
-					return new TrailRenderer(assetInfo);
-				case ClassIDType.TextMesh:
-					return new TextMesh(assetInfo);
-				case ClassIDType.RenderSettings:
-					return new RenderSettings(assetInfo);
-				case ClassIDType.Light:
-					return new Light(assetInfo);
-				case ClassIDType.Animation:
-					return new Animation(assetInfo);
-				case ClassIDType.MonoBehaviour:
-					return new MonoBehaviour(assetInfo);
-				case ClassIDType.MonoScript:
-					return new MonoScript(assetInfo);
-				case ClassIDType.MonoManager:
-					return new MonoManager(assetInfo);
-				case ClassIDType.Texture3D:
-					return new Texture3D(assetInfo);
-				case ClassIDType.NewAnimationTrack:
-					return new NewAnimationTrack(assetInfo);
-				case ClassIDType.Flare:
-					return new Flare(assetInfo);
-				case ClassIDType.FlareLayer:
-					return new FlareLayer(assetInfo);
-				case ClassIDType.NavMeshProjectSettings:
-					return new NavMeshProjectSettings(assetInfo);
-				case ClassIDType.Font:
-					return new Font(assetInfo);
-				case ClassIDType.GUITexture:
-					return new GUITexture(assetInfo);
-				case ClassIDType.GUIText:
-					return new GUIText(assetInfo);
-				case ClassIDType.PhysicMaterial:
-					return new PhysicMaterial(assetInfo);
-				case ClassIDType.SphereCollider:
-					return new SphereCollider(assetInfo);
-				case ClassIDType.CapsuleCollider:
-					return new CapsuleCollider(assetInfo);
-				case ClassIDType.SkinnedMeshRenderer:
-					return new SkinnedMeshRenderer(assetInfo);
-				case ClassIDType.BuildSettings:
-					return new BuildSettings(assetInfo);
-				case ClassIDType.CharacterController:
-					return new CharacterController(assetInfo);
-				case ClassIDType.AssetBundle:
-					return new AssetBundle(assetInfo);
-				case ClassIDType.WheelCollider:
-					return new WheelCollider(assetInfo);
-				case ClassIDType.ResourceManager:
-					return new ResourceManager(assetInfo);
-				case ClassIDType.NetworkManager:
-					return new NetworkManager(assetInfo);
-				case ClassIDType.PreloadData:
-					return new PreloadData(assetInfo);
-				case ClassIDType.MovieTexture:
-					return new MovieTexture(assetInfo);
-				case ClassIDType.TerrainCollider:
-					return new TerrainCollider(assetInfo);
-				case ClassIDType.TerrainData:
-					return new TerrainData(assetInfo);
-				case ClassIDType.LightmapSettings:
-					return new LightmapSettings(assetInfo);
-				case ClassIDType.EditorSettings:
-					return new EditorSettings(assetInfo);
-				case ClassIDType.AudioReverbZone:
-					return new AudioReverbZone(assetInfo);
-				case ClassIDType.WindZone:
-					return new WindZone(assetInfo);
-				case ClassIDType.OffMeshLink:
-					return new OffMeshLink(assetInfo);
-				case ClassIDType.OcclusionArea:
-					return new OcclusionArea(assetInfo);
-				case ClassIDType.NavMeshObsolete:
-					return new NavMeshObsolete(assetInfo);
-				case ClassIDType.NavMeshAgent:
-					return new NavMeshAgent(assetInfo);
-				case ClassIDType.NavMeshSettings:
-					return new NavMeshSettings(assetInfo);
-				case ClassIDType.ParticleSystem:
-					return new ParticleSystem(assetInfo);
-				case ClassIDType.ParticleSystemRenderer:
-					return new ParticleSystemRenderer(assetInfo);
-				case ClassIDType.ShaderVariantCollection:
-					return new ShaderVariantCollection(assetInfo);
-				case ClassIDType.LODGroup:
-					return new LODGroup(assetInfo);
-				case ClassIDType.NavMeshObstacle:
-					return new NavMeshObstacle(assetInfo);
-				case ClassIDType.SortingGroup:
-					return new SortingGroup(assetInfo);
-				case ClassIDType.SpriteRenderer:
-					return new SpriteRenderer(assetInfo);
-				case ClassIDType.Sprite:
-					return new Sprite(assetInfo);
-				case ClassIDType.ReflectionProbe:
-					return new ReflectionProbe(assetInfo);
-				case ClassIDType.Terrain:
-					return new Terrain(assetInfo);
-				case ClassIDType.AnimatorOverrideController:
-					return new AnimatorOverrideController(assetInfo);
-				case ClassIDType.CanvasRenderer:
-					return new CanvasRenderer(assetInfo);
-				case ClassIDType.Canvas:
-					return new Canvas(assetInfo);
-				case ClassIDType.RectTransform:
-					return new RectTransform(assetInfo);
-				case ClassIDType.CanvasGroup:
-					return new CanvasGroup(assetInfo);
-				case ClassIDType.ClusterInputManager:
-					return new ClusterInputManager(assetInfo);
-				case ClassIDType.NavMeshData:
-					return new NavMeshData(assetInfo);
-				case ClassIDType.UnityConnectSettings:
-					return new UnityConnectSettings(assetInfo);
-				case ClassIDType.ParticleSystemForceField:
-					return new ParticleSystemForceField(assetInfo);
-				case ClassIDType.OcclusionCullingData:
-					return new OcclusionCullingData(assetInfo);
-
-				case ClassIDType.PrefabInstance:
-					return new PrefabInstance(assetInfo);
-				case ClassIDType.TextureImporter:
-					return new TextureImporter(assetInfo);
-				case ClassIDType.AvatarMask:
-				case ClassIDType.AvatarMaskOld:
-					return new AvatarMask(assetInfo);
-				case ClassIDType.DefaultAsset:
-					return new DefaultAsset(assetInfo);
-				case ClassIDType.DefaultImporter:
-					return new DefaultImporter(assetInfo);
-				case ClassIDType.SceneAsset:
-					return new SceneAsset(assetInfo);
-				case ClassIDType.NativeFormatImporter:
-					return new NativeFormatImporter(assetInfo);
-				case ClassIDType.MonoImporter:
-					return new MonoImporter(assetInfo);
-				case ClassIDType.EditorBuildSettings:
-					return new EditorBuildSettings(assetInfo);
-				case ClassIDType.DDSImporter:
-					return new DDSImporter(assetInfo);
-				case ClassIDType.PVRImporter:
-					return new PVRImporter(assetInfo);
-				case ClassIDType.ASTCImporter:
-					return new ASTCImporter(assetInfo);
-				case ClassIDType.KTXImporter:
-					return new KTXImporter(assetInfo);
-				case ClassIDType.IHVImageFormatImporter:
-					return new IHVImageFormatImporter(assetInfo);
-				case ClassIDType.LightmapParameters:
-					return new LightmapParameters(assetInfo);
-				case ClassIDType.LightingDataAsset:
-					return new LightingDataAsset(assetInfo);
-				case ClassIDType.LightingSettings:
-					return new LightingSettings(assetInfo);
-
-				case ClassIDType.SpriteAtlas:
-					return new SpriteAtlas(assetInfo);
-				case ClassIDType.TerrainLayer:
-					return new TerrainLayer(assetInfo);
-				default:
-					return null;
-			}
+				ClassIDType.GameObject => new GameObject(assetInfo),
+				ClassIDType.Transform => new Transform(assetInfo),
+				ClassIDType.TimeManager => new TimeManager(assetInfo),
+				ClassIDType.AudioManager => new AudioManager(assetInfo),
+				ClassIDType.InputManager => new InputManager(assetInfo),
+				ClassIDType.Physics2DSettings => new Physics2DSettings(assetInfo),
+				ClassIDType.Camera => new Camera(assetInfo),
+				ClassIDType.Material => new Material(assetInfo),
+				ClassIDType.MeshRenderer => new MeshRenderer(assetInfo),
+				ClassIDType.Texture2D => new Texture2D(assetInfo),
+				ClassIDType.OcclusionCullingSettings => new OcclusionCullingSettings(assetInfo),
+				ClassIDType.GraphicsSettings => new GraphicsSettings(assetInfo),
+				ClassIDType.MeshFilter => new MeshFilter(assetInfo),
+				ClassIDType.OcclusionPortal => new OcclusionPortal(assetInfo),
+				ClassIDType.Mesh => new Mesh(assetInfo),
+				ClassIDType.Skybox => new Skybox(assetInfo),
+				ClassIDType.QualitySettings => new QualitySettings(assetInfo),
+				ClassIDType.Shader => new Shader(assetInfo),
+				ClassIDType.TextAsset => new TextAsset(assetInfo),
+				ClassIDType.Rigidbody2D => new Rigidbody2D(assetInfo),
+				ClassIDType.Rigidbody => new Rigidbody(assetInfo),
+				ClassIDType.PhysicsManager => new PhysicsManager(assetInfo),
+				ClassIDType.CircleCollider2D => new CircleCollider2D(assetInfo),
+				ClassIDType.PolygonCollider2D => new PolygonCollider2D(assetInfo),
+				ClassIDType.BoxCollider2D => new BoxCollider2D(assetInfo),
+				ClassIDType.PhysicsMaterial2D => new PhysicsMaterial2D(assetInfo),
+				ClassIDType.MeshCollider => new MeshCollider(assetInfo),
+				ClassIDType.BoxCollider => new BoxCollider(assetInfo),
+				ClassIDType.CompositeCollider2D => new CompositeCollider2D(assetInfo),
+				ClassIDType.EdgeCollider2D => new EdgeCollider2D(assetInfo),
+				ClassIDType.CapsuleCollider2D => new CapsuleCollider2D(assetInfo),
+				ClassIDType.AnimationClip => new AnimationClip(assetInfo),
+				ClassIDType.TagManager => new TagManager(assetInfo),
+				ClassIDType.AudioListener => new AudioListener(assetInfo),
+				ClassIDType.AudioSource => new AudioSource(assetInfo),
+				ClassIDType.AudioClip => new AudioClip(assetInfo),
+				ClassIDType.RenderTexture => new RenderTexture(assetInfo),
+				ClassIDType.Cubemap => new Cubemap(assetInfo),
+				ClassIDType.Avatar => new Avatar(assetInfo),
+				ClassIDType.AnimatorController => new AnimatorController(assetInfo),
+				ClassIDType.GUILayer => new GUILayer(assetInfo),
+				ClassIDType.Animator => new Animator(assetInfo),
+				ClassIDType.TrailRenderer => new TrailRenderer(assetInfo),
+				ClassIDType.TextMesh => new TextMesh(assetInfo),
+				ClassIDType.RenderSettings => new RenderSettings(assetInfo),
+				ClassIDType.Light => new Light(assetInfo),
+				ClassIDType.Animation => new Animation(assetInfo),
+				ClassIDType.MonoBehaviour => new MonoBehaviour(assetInfo),
+				ClassIDType.MonoScript => new MonoScript(assetInfo),
+				ClassIDType.MonoManager => new MonoManager(assetInfo),
+				ClassIDType.Texture3D => new Texture3D(assetInfo),
+				ClassIDType.NewAnimationTrack => new NewAnimationTrack(assetInfo),
+				ClassIDType.Flare => new Flare(assetInfo),
+				ClassIDType.FlareLayer => new FlareLayer(assetInfo),
+				ClassIDType.NavMeshProjectSettings => new NavMeshProjectSettings(assetInfo),
+				ClassIDType.Font => new Font(assetInfo),
+				ClassIDType.GUITexture => new GUITexture(assetInfo),
+				ClassIDType.GUIText => new GUIText(assetInfo),
+				ClassIDType.PhysicMaterial => new PhysicMaterial(assetInfo),
+				ClassIDType.SphereCollider => new SphereCollider(assetInfo),
+				ClassIDType.CapsuleCollider => new CapsuleCollider(assetInfo),
+				ClassIDType.SkinnedMeshRenderer => new SkinnedMeshRenderer(assetInfo),
+				ClassIDType.BuildSettings => new BuildSettings(assetInfo),
+				ClassIDType.CharacterController => new CharacterController(assetInfo),
+				ClassIDType.AssetBundle => new AssetBundle(assetInfo),
+				ClassIDType.WheelCollider => new WheelCollider(assetInfo),
+				ClassIDType.ResourceManager => new ResourceManager(assetInfo),
+				ClassIDType.NetworkManager => new NetworkManager(assetInfo),
+				ClassIDType.PreloadData => new PreloadData(assetInfo),
+				ClassIDType.MovieTexture => new MovieTexture(assetInfo),
+				ClassIDType.TerrainCollider => new TerrainCollider(assetInfo),
+				ClassIDType.TerrainData => new TerrainData(assetInfo),
+				ClassIDType.LightmapSettings => new LightmapSettings(assetInfo),
+				ClassIDType.EditorSettings => new EditorSettings(assetInfo),
+				ClassIDType.AudioReverbZone => new AudioReverbZone(assetInfo),
+				ClassIDType.WindZone => new WindZone(assetInfo),
+				ClassIDType.OffMeshLink => new OffMeshLink(assetInfo),
+				ClassIDType.OcclusionArea => new OcclusionArea(assetInfo),
+				ClassIDType.NavMeshObsolete => new NavMeshObsolete(assetInfo),
+				ClassIDType.NavMeshAgent => new NavMeshAgent(assetInfo),
+				ClassIDType.NavMeshSettings => new NavMeshSettings(assetInfo),
+				ClassIDType.ParticleSystem => new ParticleSystem(assetInfo),
+				ClassIDType.ParticleSystemRenderer => new ParticleSystemRenderer(assetInfo),
+				ClassIDType.ShaderVariantCollection => new ShaderVariantCollection(assetInfo),
+				ClassIDType.LODGroup => new LODGroup(assetInfo),
+				ClassIDType.NavMeshObstacle => new NavMeshObstacle(assetInfo),
+				ClassIDType.SortingGroup => new SortingGroup(assetInfo),
+				ClassIDType.SpriteRenderer => new SpriteRenderer(assetInfo),
+				ClassIDType.Sprite => new Sprite(assetInfo),
+				ClassIDType.ReflectionProbe => new ReflectionProbe(assetInfo),
+				ClassIDType.Terrain => new Terrain(assetInfo),
+				ClassIDType.AnimatorOverrideController => new AnimatorOverrideController(assetInfo),
+				ClassIDType.CanvasRenderer => new CanvasRenderer(assetInfo),
+				ClassIDType.Canvas => new Canvas(assetInfo),
+				ClassIDType.RectTransform => new RectTransform(assetInfo),
+				ClassIDType.CanvasGroup => new CanvasGroup(assetInfo),
+				ClassIDType.ClusterInputManager => new ClusterInputManager(assetInfo),
+				ClassIDType.NavMeshData => new NavMeshData(assetInfo),
+				ClassIDType.UnityConnectSettings => new UnityConnectSettings(assetInfo),
+				ClassIDType.ParticleSystemForceField => new ParticleSystemForceField(assetInfo),
+				ClassIDType.OcclusionCullingData => new OcclusionCullingData(assetInfo),
+				ClassIDType.PrefabInstance => new PrefabInstance(assetInfo),
+				ClassIDType.TextureImporter => new TextureImporter(assetInfo),
+				ClassIDType.AvatarMask or ClassIDType.AvatarMaskOld => new AvatarMask(assetInfo),
+				ClassIDType.DefaultAsset => new DefaultAsset(assetInfo),
+				ClassIDType.DefaultImporter => new DefaultImporter(assetInfo),
+				ClassIDType.SceneAsset => new SceneAsset(assetInfo),
+				ClassIDType.NativeFormatImporter => new NativeFormatImporter(assetInfo),
+				ClassIDType.MonoImporter => new MonoImporter(assetInfo),
+				ClassIDType.EditorBuildSettings => new EditorBuildSettings(assetInfo),
+				ClassIDType.DDSImporter => new DDSImporter(assetInfo),
+				ClassIDType.PVRImporter => new PVRImporter(assetInfo),
+				ClassIDType.ASTCImporter => new ASTCImporter(assetInfo),
+				ClassIDType.KTXImporter => new KTXImporter(assetInfo),
+				ClassIDType.IHVImageFormatImporter => new IHVImageFormatImporter(assetInfo),
+				ClassIDType.LightmapParameters => new LightmapParameters(assetInfo),
+				ClassIDType.LightingDataAsset => new LightingDataAsset(assetInfo),
+				ClassIDType.LightingSettings => new LightingSettings(assetInfo),
+				ClassIDType.SpriteAtlas => new SpriteAtlas(assetInfo),
+				ClassIDType.TerrainLayer => new TerrainLayer(assetInfo),
+				_ => null,
+			};
 		}
 
 		private readonly Dictionary<ClassIDType, Func<AssetInfo, IUnityObjectBase>> m_instantiators = new Dictionary<ClassIDType, Func<AssetInfo, IUnityObjectBase>>();

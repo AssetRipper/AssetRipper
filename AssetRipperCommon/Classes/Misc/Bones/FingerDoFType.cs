@@ -16,20 +16,14 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 	{
 		public static string ToAttributeString(this FingerDoFType _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case FingerDoFType._1Stretched:
-					return "1 Stretched";
-				case FingerDoFType.Spread:
-					return "Spread";
-				case FingerDoFType._2Stretched:
-					return "2 Stretched";
-				case FingerDoFType._3Stretched:
-					return "3 Stretched";
-
-				default:
-					throw new ArgumentException(_this.ToString());
-			}
+				FingerDoFType._1Stretched => "1 Stretched",
+				FingerDoFType.Spread => "Spread",
+				FingerDoFType._2Stretched => "2 Stretched",
+				FingerDoFType._3Stretched => "3 Stretched",
+				_ => throw new ArgumentException(_this.ToString()),
+			};
 		}
 	}
 }

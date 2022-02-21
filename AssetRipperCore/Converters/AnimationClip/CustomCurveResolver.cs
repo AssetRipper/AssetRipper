@@ -105,25 +105,16 @@ namespace AssetRipper.Core.Converters.AnimationClip
 							{
 								return Prefix + property;
 							}
-							char subProperty;
+
 							uint subPropIndex = attribute >> 28 & 3;
 							bool isRgba = (attribute & 0x40000000) != 0;
-							switch (subPropIndex)
+							var subProperty = subPropIndex switch
 							{
-								case 0:
-									subProperty = isRgba ? 'r' : 'x';
-									break;
-								case 1:
-									subProperty = isRgba ? 'g' : 'y';
-									break;
-								case 2:
-									subProperty = isRgba ? 'b' : 'z';
-									break;
-
-								default:
-									subProperty = isRgba ? 'a' : 'w';
-									break;
-							}
+								0 => isRgba ? 'r' : 'x',
+								1 => isRgba ? 'g' : 'y',
+								2 => isRgba ? 'b' : 'z',
+								_ => isRgba ? 'a' : 'w',
+							};
 							return Prefix + property + "." + subProperty;
 						}
 						return Prefix + attribute;

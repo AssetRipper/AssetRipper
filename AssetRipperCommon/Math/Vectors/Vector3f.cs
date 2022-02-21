@@ -35,13 +35,13 @@ namespace AssetRipper.Core.Math.Vectors
 		{
 			get
 			{
-				switch (index)
+				return index switch
 				{
-					case 0: return X;
-					case 1: return Y;
-					case 2: return Z;
-					default: throw new ArgumentOutOfRangeException(nameof(index), "Invalid Vector3 index!");
-				}
+					0 => X,
+					1 => Y,
+					2 => Z,
+					_ => throw new ArgumentOutOfRangeException(nameof(index), "Invalid Vector3 index!"),
+				};
 			}
 
 			set

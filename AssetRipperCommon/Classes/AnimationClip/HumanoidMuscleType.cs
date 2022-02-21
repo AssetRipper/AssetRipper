@@ -86,43 +86,28 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		private static string GetTransformPostfix(int index)
 		{
-			switch (index)
+			return index switch
 			{
-				case 0:
-					return "T.x";
-				case 1:
-					return "T.y";
-				case 2:
-					return "T.z";
-
-				case 3:
-					return "Q.x";
-				case 4:
-					return "Q.y";
-				case 5:
-					return "Q.z";
-				case 6:
-					return "Q.w";
-
-				default:
-					throw new ArgumentException(index.ToString());
-			}
+				0 => "T.x",
+				1 => "T.y",
+				2 => "T.z",
+				3 => "Q.x",
+				4 => "Q.y",
+				5 => "Q.z",
+				6 => "Q.w",
+				_ => throw new ArgumentException(index.ToString()),
+			};
 		}
 
 		private static string GetTDoFTransformPostfix(int index)
 		{
-			switch (index)
+			return index switch
 			{
-				case 0:
-					return "TDOF.x";
-				case 1:
-					return "TDOF.y";
-				case 2:
-					return "TDOF.z";
-
-				default:
-					throw new ArgumentException(index.ToString());
-			}
+				0 => "TDOF.x",
+				1 => "TDOF.y",
+				2 => "TDOF.z",
+				_ => throw new ArgumentException(index.ToString()),
+			};
 		}
 	}
 }

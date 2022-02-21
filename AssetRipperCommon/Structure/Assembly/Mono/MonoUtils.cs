@@ -125,17 +125,11 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 
 		public static bool IsFrameworkLibrary(string module)
 		{
-			switch (module)
+			return module switch
 			{
-				case MSCoreLibName:
-				case NetStandardName:
-				case SystemName:
-				case CLRName:
-					return true;
-
-				default:
-					return module.StartsWith($"{SystemName}.", StringComparison.Ordinal);
-			}
+				MSCoreLibName or NetStandardName or SystemName or CLRName => true,
+				_ => module.StartsWith($"{SystemName}.", StringComparison.Ordinal),
+			};
 		}
 
 		public static bool IsUnityLibrary(string module)
@@ -373,73 +367,36 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 
 		public static string ToCPrimitiveString(string name)
 		{
-			switch (name)
+			return name switch
 			{
-				case StringName:
-				case CStringName:
-					return CStringName;
-
-				case ObjectName:
-				case CObjectName:
-					return CObjectName;
-
-				default:
-					return ToPrimitiveString(name);
-			}
+				StringName or CStringName => CStringName,
+				ObjectName or CObjectName => CObjectName,
+				_ => ToPrimitiveString(name),
+			};
 		}
 
 		public static string ToPrimitiveString(string name)
 		{
-			switch (name)
+			return name switch
 			{
-				case VoidName:
-				case CVoidName:
-					return CVoidName;
-				case BooleanName:
-				case BoolName:
-					return BoolName;
-				case IntPtrName:
-					return IntPtrName;
-				case UIntPtrName:
-					return UIntPtrName;
-				case CharName:
-				case CCharName:
-					return CCharName;
-				case SByteName:
-				case CSByteName:
-					return CSByteName;
-				case ByteName:
-				case CByteName:
-					return CByteName;
-				case Int16Name:
-				case ShortName:
-					return ShortName;
-				case UInt16Name:
-				case UShortName:
-					return UShortName;
-				case Int32Name:
-				case IntName:
-					return IntName;
-				case UInt32Name:
-				case UIntName:
-					return UIntName;
-				case Int64Name:
-				case LongName:
-					return LongName;
-				case UInt64Name:
-				case ULongName:
-					return ULongName;
-				case HalfName:
-					return HalfName;
-				case SingleName:
-				case FloatName:
-					return FloatName;
-				case DoubleName:
-				case CDoubleName:
-					return CDoubleName;
-				default:
-					throw new Exception(name);
-			}
+				VoidName or CVoidName => CVoidName,
+				BooleanName or BoolName => BoolName,
+				IntPtrName => IntPtrName,
+				UIntPtrName => UIntPtrName,
+				CharName or CCharName => CCharName,
+				SByteName or CSByteName => CSByteName,
+				ByteName or CByteName => CByteName,
+				Int16Name or ShortName => ShortName,
+				UInt16Name or UShortName => UShortName,
+				Int32Name or IntName => IntName,
+				UInt32Name or UIntName => UIntName,
+				Int64Name or LongName => LongName,
+				UInt64Name or ULongName => ULongName,
+				HalfName => HalfName,
+				SingleName or FloatName => FloatName,
+				DoubleName or CDoubleName => CDoubleName,
+				_ => throw new Exception(name),
+			};
 		}
 
 		public static string GetName(TypeReference type)
@@ -971,42 +928,25 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		{
 			if (@namespace == SystemNamespace)
 			{
-				switch (name)
+				return name switch
 				{
-					case VoidName:
-						return PrimitiveType.Void;
-					case BooleanName:
-						return PrimitiveType.Bool;
-					case CharName:
-						return PrimitiveType.Char;
-					case SByteName:
-						return PrimitiveType.SByte;
-					case ByteName:
-						return PrimitiveType.Byte;
-					case Int16Name:
-						return PrimitiveType.Short;
-					case UInt16Name:
-						return PrimitiveType.UShort;
-					case Int32Name:
-						return PrimitiveType.Int;
-					case UInt32Name:
-						return PrimitiveType.UInt;
-					case Int64Name:
-						return PrimitiveType.Long;
-					case UInt64Name:
-						return PrimitiveType.ULong;
-					case HalfName:
-						return PrimitiveType.Half;
-					case SingleName:
-						return PrimitiveType.Single;
-					case DoubleName:
-						return PrimitiveType.Double;
-					case StringName:
-						return PrimitiveType.String;
-
-					default:
-						return PrimitiveType.Complex;
-				}
+					VoidName => PrimitiveType.Void,
+					BooleanName => PrimitiveType.Bool,
+					CharName => PrimitiveType.Char,
+					SByteName => PrimitiveType.SByte,
+					ByteName => PrimitiveType.Byte,
+					Int16Name => PrimitiveType.Short,
+					UInt16Name => PrimitiveType.UShort,
+					Int32Name => PrimitiveType.Int,
+					UInt32Name => PrimitiveType.UInt,
+					Int64Name => PrimitiveType.Long,
+					UInt64Name => PrimitiveType.ULong,
+					HalfName => PrimitiveType.Half,
+					SingleName => PrimitiveType.Single,
+					DoubleName => PrimitiveType.Double,
+					StringName => PrimitiveType.String,
+					_ => PrimitiveType.Complex,
+				};
 			}
 			return PrimitiveType.Complex;
 		}

@@ -50,18 +50,12 @@ namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
 				Header.Read(reader);
-				switch (Header.Type)
+				buffer = Header.Type switch
 				{
-					case ArchiveType.GZip:
-						buffer = ReadGZip(reader);
-						break;
-					case ArchiveType.Brotli:
-						buffer = ReadBrotli(reader);
-						break;
-
-					default:
-						throw new NotSupportedException(Header.Type.ToString());
-				}
+					ArchiveType.GZip => ReadGZip(reader),
+					ArchiveType.Brotli => ReadBrotli(reader),
+					_ => throw new NotSupportedException(Header.Type.ToString()),
+				};
 			}
 
 			WebScheme = WebFiles.WebFile.ReadScheme(buffer, FilePath);

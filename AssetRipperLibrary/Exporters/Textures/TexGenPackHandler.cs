@@ -24,23 +24,14 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static TexgenpackTexturetype ToTexgenpackTexturetype(TextureFormat format)
 		{
-			switch (format)
+			return format switch
 			{
-				case TextureFormat.BC4:
-					return TexgenpackTexturetype.RGTC1;
-
-				case TextureFormat.BC5:
-					return TexgenpackTexturetype.RGTC2;
-
-				case TextureFormat.BC6H:
-					return TexgenpackTexturetype.BPTC_FLOAT;
-
-				case TextureFormat.BC7:
-					return TexgenpackTexturetype.BPTC;
-
-				default:
-					throw new NotSupportedException(format.ToString());
-			}
+				TextureFormat.BC4 => TexgenpackTexturetype.RGTC1,
+				TextureFormat.BC5 => TexgenpackTexturetype.RGTC2,
+				TextureFormat.BC6H => TexgenpackTexturetype.BPTC_FLOAT,
+				TextureFormat.BC7 => TexgenpackTexturetype.BPTC,
+				_ => throw new NotSupportedException(format.ToString()),
+			};
 		}
 	}
 }

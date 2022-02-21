@@ -32,12 +32,12 @@ namespace AssetRipper.Core.Math.Vectors
 		{
 			get
 			{
-				switch (index)
+				return index switch
 				{
-					case 0: return X;
-					case 1: return Y;
-					default: throw new ArgumentOutOfRangeException(nameof(index), "Invalid Vector2f index!");
-				}
+					0 => X,
+					1 => Y,
+					_ => throw new ArgumentOutOfRangeException(nameof(index), "Invalid Vector2f index!"),
+				};
 			}
 
 			set

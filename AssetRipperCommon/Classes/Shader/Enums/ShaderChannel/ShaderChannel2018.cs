@@ -27,40 +27,24 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 	{
 		public static ShaderChannel ToShaderChannel(this ShaderChannel2018 _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case ShaderChannel2018.Vertex:
-					return ShaderChannel.Vertex;
-				case ShaderChannel2018.Normal:
-					return ShaderChannel.Normal;
-				case ShaderChannel2018.Tangent:
-					return ShaderChannel.Tangent;
-				case ShaderChannel2018.Color:
-					return ShaderChannel.Color;
-				case ShaderChannel2018.UV0:
-					return ShaderChannel.UV0;
-				case ShaderChannel2018.UV1:
-					return ShaderChannel.UV1;
-				case ShaderChannel2018.UV2:
-					return ShaderChannel.UV2;
-				case ShaderChannel2018.UV3:
-					return ShaderChannel.UV3;
-				case ShaderChannel2018.UV4:
-					return ShaderChannel.UV4;
-				case ShaderChannel2018.UV5:
-					return ShaderChannel.UV5;
-				case ShaderChannel2018.UV6:
-					return ShaderChannel.UV6;
-				case ShaderChannel2018.UV7:
-					return ShaderChannel.UV7;
-				case ShaderChannel2018.SkinWeight:
-					return ShaderChannel.SkinWeight;
-				case ShaderChannel2018.SkinBoneIndex:
-					return ShaderChannel.SkinBoneIndex;
-
-				default:
-					throw new Exception($"Unsupported channel type {_this}");
-			}
+				ShaderChannel2018.Vertex => ShaderChannel.Vertex,
+				ShaderChannel2018.Normal => ShaderChannel.Normal,
+				ShaderChannel2018.Tangent => ShaderChannel.Tangent,
+				ShaderChannel2018.Color => ShaderChannel.Color,
+				ShaderChannel2018.UV0 => ShaderChannel.UV0,
+				ShaderChannel2018.UV1 => ShaderChannel.UV1,
+				ShaderChannel2018.UV2 => ShaderChannel.UV2,
+				ShaderChannel2018.UV3 => ShaderChannel.UV3,
+				ShaderChannel2018.UV4 => ShaderChannel.UV4,
+				ShaderChannel2018.UV5 => ShaderChannel.UV5,
+				ShaderChannel2018.UV6 => ShaderChannel.UV6,
+				ShaderChannel2018.UV7 => ShaderChannel.UV7,
+				ShaderChannel2018.SkinWeight => ShaderChannel.SkinWeight,
+				ShaderChannel2018.SkinBoneIndex => ShaderChannel.SkinBoneIndex,
+				_ => throw new Exception($"Unsupported channel type {_this}"),
+			};
 		}
 	}
 }

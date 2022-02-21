@@ -220,26 +220,26 @@ namespace AssetRipper.Core.Math
 
 		public Vector4f GetColumn(int index)
 		{
-			switch (index)
+			return index switch
 			{
-				case 0: return new Vector4f(E00, E01, E02, E03);
-				case 1: return new Vector4f(E10, E11, E12, E13);
-				case 2: return new Vector4f(E20, E21, E22, E23);
-				case 3: return new Vector4f(E30, E31, E32, E33);
-				default: throw new IndexOutOfRangeException("Invalid column index!");
-			}
+				0 => new Vector4f(E00, E01, E02, E03),
+				1 => new Vector4f(E10, E11, E12, E13),
+				2 => new Vector4f(E20, E21, E22, E23),
+				3 => new Vector4f(E30, E31, E32, E33),
+				_ => throw new IndexOutOfRangeException("Invalid column index!"),
+			};
 		}
 
 		public Vector4f GetRow(int index)
 		{
-			switch (index)
+			return index switch
 			{
-				case 0: return new Vector4f(E00, E10, E20, E30);
-				case 1: return new Vector4f(E01, E11, E21, E31);
-				case 2: return new Vector4f(E02, E12, E22, E32);
-				case 3: return new Vector4f(E03, E13, E23, E33);
-				default: throw new IndexOutOfRangeException("Invalid row index!");
-			}
+				0 => new Vector4f(E00, E10, E20, E30),
+				1 => new Vector4f(E01, E11, E21, E31),
+				2 => new Vector4f(E02, E12, E22, E32),
+				3 => new Vector4f(E03, E13, E23, E33),
+				_ => throw new IndexOutOfRangeException("Invalid row index!"),
+			};
 		}
 
 		public static Matrix4x4f operator *(Matrix4x4f lhs, Matrix4x4f rhs)

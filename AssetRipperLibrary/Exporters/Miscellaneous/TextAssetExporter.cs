@@ -46,16 +46,12 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		private string GetExportExtension(IUnityObjectBase asset)
 		{
-			switch (exportMode)
+			return exportMode switch
 			{
-				case TextExportMode.Txt:
-					return TxtExtension;
-				case TextExportMode.Parse:
-					return GetExtension((ITextAsset)asset);
-				case TextExportMode.Bytes:
-				default:
-					return BytesExtension;
-			}
+				TextExportMode.Txt => TxtExtension,
+				TextExportMode.Parse => GetExtension((ITextAsset)asset),
+				_ => BytesExtension,
+			};
 		}
 
 		private static string GetExtension(ITextAsset asset)

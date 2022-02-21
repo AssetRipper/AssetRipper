@@ -147,35 +147,16 @@ namespace AssetRipper.Core.Parser.Files
 					}
 					else
 					{
-						switch (c)
+						versionType = c switch
 						{
-							case 'a':
-								versionType = UnityVersionType.Alpha;
-								break;
-
-							case 'b':
-								versionType = UnityVersionType.Beta;
-								break;
-
-							case 'c':
-								versionType = UnityVersionType.China;
-								break;
-
-							case 'f':
-								versionType = UnityVersionType.Final;
-								break;
-
-							case 'p':
-								versionType = UnityVersionType.Patch;
-								break;
-
-							case 'x':
-								versionType = UnityVersionType.Experimental;
-								break;
-
-							default:
-								throw new Exception($"Unsupported version type {c} for version '{version}'");
-						}
+							'a' => UnityVersionType.Alpha,
+							'b' => UnityVersionType.Beta,
+							'c' => UnityVersionType.China,
+							'f' => UnityVersionType.Final,
+							'p' => UnityVersionType.Patch,
+							'x' => UnityVersionType.Experimental,
+							_ => throw new Exception($"Unsupported version type {c} for version '{version}'"),
+						};
 						break;
 					}
 				}

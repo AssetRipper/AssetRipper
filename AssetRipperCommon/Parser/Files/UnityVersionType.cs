@@ -18,29 +18,16 @@ namespace AssetRipper.Core.Parser.Files
 	{
 		public static string ToLiteral(this UnityVersionType _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case UnityVersionType.Alpha:
-					return "a";
-
-				case UnityVersionType.Beta:
-					return "b";
-
-				case UnityVersionType.China:
-					return "c";
-
-				case UnityVersionType.Final:
-					return "f";
-
-				case UnityVersionType.Patch:
-					return "p";
-
-				case UnityVersionType.Experimental:
-					return "x";
-
-				default:
-					throw new Exception($"Unsupported vertion type {_this}");
-			}
+				UnityVersionType.Alpha => "a",
+				UnityVersionType.Beta => "b",
+				UnityVersionType.China => "c",
+				UnityVersionType.Final => "f",
+				UnityVersionType.Patch => "p",
+				UnityVersionType.Experimental => "x",
+				_ => throw new Exception($"Unsupported vertion type {_this}"),
+			};
 		}
 	}
 }

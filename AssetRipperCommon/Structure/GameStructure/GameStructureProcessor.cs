@@ -135,17 +135,13 @@ namespace AssetRipper.Core.Structure.GameStructure
 				return new UnityVersion(1, 2, 2);
 			}
 
-			switch (generation)
+			return generation switch
 			{
-				case FormatVersion.Unknown_5:
-					return new UnityVersion(1, 6);
-				case FormatVersion.Unknown_6:
-					return new UnityVersion(2, 5);
-				case FormatVersion.Unknown_7:
-					return new UnityVersion(3, 0, 0, UnityVersionType.Beta, 1);
-				default:
-					throw new NotSupportedException();
-			}
+				FormatVersion.Unknown_5 => new UnityVersion(1, 6),
+				FormatVersion.Unknown_6 => new UnityVersion(2, 5),
+				FormatVersion.Unknown_7 => new UnityVersion(3, 0, 0, UnityVersionType.Beta, 1),
+				_ => throw new NotSupportedException(),
+			};
 		}
 
 		private LayoutInfo GetLayoutInfo(SerializedFileScheme serialized)

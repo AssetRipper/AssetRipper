@@ -1388,27 +1388,18 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public Vector2f[] GetUV(int uv)
 		{
-			switch (uv)
+			return uv switch
 			{
-				case 0:
-					return UV0;
-				case 1:
-					return UV1;
-				case 2:
-					return UV2;
-				case 3:
-					return UV3;
-				case 4:
-					return UV4;
-				case 5:
-					return UV5;
-				case 6:
-					return UV6;
-				case 7:
-					return UV7;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+				0 => UV0,
+				1 => UV1,
+				2 => UV2,
+				3 => UV3,
+				4 => UV4,
+				5 => UV5,
+				6 => UV6,
+				7 => UV7,
+				_ => throw new ArgumentOutOfRangeException(),
+			};
 		}
 
 		public bool MeshOptimized

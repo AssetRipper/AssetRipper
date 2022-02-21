@@ -25,20 +25,14 @@ namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 	{
 		public static VertexFormat ToVertexFormat(this VertexFormat2019 _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case VertexFormat2019.Float:
-					return VertexFormat.Float;
-				case VertexFormat2019.Float16:
-					return VertexFormat.Float16;
-				case VertexFormat2019.UNorm8:
-					return VertexFormat.Byte;
-				case VertexFormat2019.UInt32:
-					return VertexFormat.Int;
-
-				default:
-					throw new Exception(_this.ToString());
-			}
+				VertexFormat2019.Float => VertexFormat.Float,
+				VertexFormat2019.Float16 => VertexFormat.Float16,
+				VertexFormat2019.UNorm8 => VertexFormat.Byte,
+				VertexFormat2019.UInt32 => VertexFormat.Int,
+				_ => throw new Exception(_this.ToString()),
+			};
 		}
 	}
 }

@@ -14,16 +14,12 @@ namespace AssetRipper.Core.Classes.Misc.Bones
 	{
 		public static BoneType ToBoneType(this ArmType _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case ArmType.LeftHand:
-					return BoneType.LeftHand;
-				case ArmType.RightHand:
-					return BoneType.RightHand;
-
-				default:
-					throw new ArgumentException(_this.ToString());
-			}
+				ArmType.LeftHand => BoneType.LeftHand,
+				ArmType.RightHand => BoneType.RightHand,
+				_ => throw new ArgumentException(_this.ToString()),
+			};
 		}
 	}
 }

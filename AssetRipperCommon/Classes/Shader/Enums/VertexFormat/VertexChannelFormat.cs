@@ -18,18 +18,13 @@ namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 	{
 		public static VertexFormat ToVertexFormat(this VertexChannelFormat _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case VertexChannelFormat.Float:
-					return VertexFormat.Float;
-				case VertexChannelFormat.Float16:
-					return VertexFormat.Float16;
-				case VertexChannelFormat.Color:
-					return VertexFormat.Color;
-
-				default:
-					throw new Exception(_this.ToString());
-			}
+				VertexChannelFormat.Float => VertexFormat.Float,
+				VertexChannelFormat.Float16 => VertexFormat.Float16,
+				VertexChannelFormat.Color => VertexFormat.Color,
+				_ => throw new Exception(_this.ToString()),
+			};
 		}
 	}
 }

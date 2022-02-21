@@ -56,27 +56,14 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected string GetUniqueFileName(ISerializedFile file, IUnityObjectBase asset, string dirPath)
 		{
-			string fileName;
-			switch (asset)
+			string fileName = asset switch
 			{
-				case IPrefabInstance prefab:
-					fileName = prefab.GetName(file);
-					break;
-				case IMonoBehaviour monoBehaviour:
-					fileName = monoBehaviour.Name;
-					break;
-				case INamedObject named:
-					fileName = named.GetValidName();
-					break;
-				case IHasName hasName:
-					fileName = hasName.Name;
-					break;
-
-				default:
-					fileName = null;
-					break;
-			}
-
+				IPrefabInstance prefab => prefab.GetName(file),
+				IMonoBehaviour monoBehaviour => monoBehaviour.Name,
+				INamedObject named => named.GetValidName(),
+				IHasName hasName => hasName.Name,
+				_ => null,
+			};
 			if (string.IsNullOrWhiteSpace(fileName))
 			{
 				fileName = asset.GetType().Name;

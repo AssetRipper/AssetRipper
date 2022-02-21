@@ -43,76 +43,42 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 	{
 		public static ShaderGpuProgramType ToGpuProgramType(this ShaderGpuProgramType55 _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case ShaderGpuProgramType55.Unknown:
-					return ShaderGpuProgramType.Unknown;
-				case ShaderGpuProgramType55.GLLegacy:
-					return ShaderGpuProgramType.GLLegacy;
-				case ShaderGpuProgramType55.GLES31AEP:
-					return ShaderGpuProgramType.GLES31AEP;
-				case ShaderGpuProgramType55.GLES31:
-					return ShaderGpuProgramType.GLES31;
-				case ShaderGpuProgramType55.GLES3:
-					return ShaderGpuProgramType.GLES3;
-				case ShaderGpuProgramType55.GLES:
-					return ShaderGpuProgramType.GLES;
-				case ShaderGpuProgramType55.GLCore32:
-					return ShaderGpuProgramType.GLCore32;
-				case ShaderGpuProgramType55.GLCore41:
-					return ShaderGpuProgramType.GLCore41;
-				case ShaderGpuProgramType55.GLCore43:
-					return ShaderGpuProgramType.GLCore43;
-				case ShaderGpuProgramType55.DX9VertexSM20:
-					return ShaderGpuProgramType.DX9VertexSM20;
-				case ShaderGpuProgramType55.DX9VertexSM30:
-					return ShaderGpuProgramType.DX9VertexSM30;
-				case ShaderGpuProgramType55.DX9PixelSM20:
-					return ShaderGpuProgramType.DX9PixelSM20;
-				case ShaderGpuProgramType55.DX9PixelSM30:
-					return ShaderGpuProgramType.DX9PixelSM30;
-				case ShaderGpuProgramType55.DX10Level9Vertex:
-					return ShaderGpuProgramType.DX10Level9Vertex;
-				case ShaderGpuProgramType55.DX10Level9Pixel:
-					return ShaderGpuProgramType.DX10Level9Pixel;
-				case ShaderGpuProgramType55.DX11VertexSM40:
-					return ShaderGpuProgramType.DX11VertexSM40;
-				case ShaderGpuProgramType55.DX11VertexSM50:
-					return ShaderGpuProgramType.DX11VertexSM50;
-				case ShaderGpuProgramType55.DX11PixelSM40:
-					return ShaderGpuProgramType.DX11PixelSM40;
-				case ShaderGpuProgramType55.DX11PixelSM50:
-					return ShaderGpuProgramType.DX11PixelSM50;
-				case ShaderGpuProgramType55.DX11GeometrySM40:
-					return ShaderGpuProgramType.DX11GeometrySM40;
-				case ShaderGpuProgramType55.DX11GeometrySM50:
-					return ShaderGpuProgramType.DX11GeometrySM50;
-				case ShaderGpuProgramType55.DX11HullSM50:
-					return ShaderGpuProgramType.DX11HullSM50;
-				case ShaderGpuProgramType55.DX11DomainSM50:
-					return ShaderGpuProgramType.DX11DomainSM50;
-				case ShaderGpuProgramType55.MetalVS:
-					return ShaderGpuProgramType.MetalVS;
-				case ShaderGpuProgramType55.MetalFS:
-					return ShaderGpuProgramType.MetalFS;
-				case ShaderGpuProgramType55.SPIRV:
-					return ShaderGpuProgramType.SPIRV;
-				case ShaderGpuProgramType55.Console:
-					return ShaderGpuProgramType.Console;
-				case ShaderGpuProgramType55.ConsoleFS:
-					return ShaderGpuProgramType.Console;
-				case ShaderGpuProgramType55.ConsoleHS:
-					return ShaderGpuProgramType.Console;
-				case ShaderGpuProgramType55.ConsoleDS:
-					return ShaderGpuProgramType.Console;
-				case ShaderGpuProgramType55.ConsoleGS:
-					return ShaderGpuProgramType.Console;
-				case ShaderGpuProgramType55.RayTracing:
-					return ShaderGpuProgramType.RayTracing;
-
-				default:
-					throw new Exception($"Unsupported gpu program type {_this}");
-			}
+				ShaderGpuProgramType55.Unknown => ShaderGpuProgramType.Unknown,
+				ShaderGpuProgramType55.GLLegacy => ShaderGpuProgramType.GLLegacy,
+				ShaderGpuProgramType55.GLES31AEP => ShaderGpuProgramType.GLES31AEP,
+				ShaderGpuProgramType55.GLES31 => ShaderGpuProgramType.GLES31,
+				ShaderGpuProgramType55.GLES3 => ShaderGpuProgramType.GLES3,
+				ShaderGpuProgramType55.GLES => ShaderGpuProgramType.GLES,
+				ShaderGpuProgramType55.GLCore32 => ShaderGpuProgramType.GLCore32,
+				ShaderGpuProgramType55.GLCore41 => ShaderGpuProgramType.GLCore41,
+				ShaderGpuProgramType55.GLCore43 => ShaderGpuProgramType.GLCore43,
+				ShaderGpuProgramType55.DX9VertexSM20 => ShaderGpuProgramType.DX9VertexSM20,
+				ShaderGpuProgramType55.DX9VertexSM30 => ShaderGpuProgramType.DX9VertexSM30,
+				ShaderGpuProgramType55.DX9PixelSM20 => ShaderGpuProgramType.DX9PixelSM20,
+				ShaderGpuProgramType55.DX9PixelSM30 => ShaderGpuProgramType.DX9PixelSM30,
+				ShaderGpuProgramType55.DX10Level9Vertex => ShaderGpuProgramType.DX10Level9Vertex,
+				ShaderGpuProgramType55.DX10Level9Pixel => ShaderGpuProgramType.DX10Level9Pixel,
+				ShaderGpuProgramType55.DX11VertexSM40 => ShaderGpuProgramType.DX11VertexSM40,
+				ShaderGpuProgramType55.DX11VertexSM50 => ShaderGpuProgramType.DX11VertexSM50,
+				ShaderGpuProgramType55.DX11PixelSM40 => ShaderGpuProgramType.DX11PixelSM40,
+				ShaderGpuProgramType55.DX11PixelSM50 => ShaderGpuProgramType.DX11PixelSM50,
+				ShaderGpuProgramType55.DX11GeometrySM40 => ShaderGpuProgramType.DX11GeometrySM40,
+				ShaderGpuProgramType55.DX11GeometrySM50 => ShaderGpuProgramType.DX11GeometrySM50,
+				ShaderGpuProgramType55.DX11HullSM50 => ShaderGpuProgramType.DX11HullSM50,
+				ShaderGpuProgramType55.DX11DomainSM50 => ShaderGpuProgramType.DX11DomainSM50,
+				ShaderGpuProgramType55.MetalVS => ShaderGpuProgramType.MetalVS,
+				ShaderGpuProgramType55.MetalFS => ShaderGpuProgramType.MetalFS,
+				ShaderGpuProgramType55.SPIRV => ShaderGpuProgramType.SPIRV,
+				ShaderGpuProgramType55.Console => ShaderGpuProgramType.Console,
+				ShaderGpuProgramType55.ConsoleFS => ShaderGpuProgramType.Console,
+				ShaderGpuProgramType55.ConsoleHS => ShaderGpuProgramType.Console,
+				ShaderGpuProgramType55.ConsoleDS => ShaderGpuProgramType.Console,
+				ShaderGpuProgramType55.ConsoleGS => ShaderGpuProgramType.Console,
+				ShaderGpuProgramType55.RayTracing => ShaderGpuProgramType.RayTracing,
+				_ => throw new Exception($"Unsupported gpu program type {_this}"),
+			};
 		}
 	}
 }

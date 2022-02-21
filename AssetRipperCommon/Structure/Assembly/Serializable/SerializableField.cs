@@ -460,37 +460,23 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 				}
 				else
 				{
-					switch (etalon.Type.Type)
+					return etalon.Type.Type switch
 					{
-						case PrimitiveType.Bool:
-							return new YAMLScalarNode(PValue != 0);
-						case PrimitiveType.Char:
-							return new YAMLScalarNode((int)(char)PValue);
-						case PrimitiveType.SByte:
-							return new YAMLScalarNode(unchecked((sbyte)PValue));
-						case PrimitiveType.Byte:
-							return new YAMLScalarNode((byte)PValue);
-						case PrimitiveType.Short:
-							return new YAMLScalarNode(unchecked((short)PValue));
-						case PrimitiveType.UShort:
-							return new YAMLScalarNode((ushort)PValue);
-						case PrimitiveType.Int:
-							return new YAMLScalarNode(unchecked((int)PValue));
-						case PrimitiveType.UInt:
-							return new YAMLScalarNode((uint)PValue);
-						case PrimitiveType.Long:
-							return new YAMLScalarNode(unchecked((long)PValue));
-						case PrimitiveType.ULong:
-							return new YAMLScalarNode(PValue);
-						case PrimitiveType.Single:
-							return new YAMLScalarNode(BitConverter.UInt32BitsToSingle((uint)PValue));
-						case PrimitiveType.Double:
-							return new YAMLScalarNode(BitConverter.UInt64BitsToDouble(PValue));
-						case PrimitiveType.String:
-							return new YAMLScalarNode((string)CValue);
-						default:
-							throw new NotSupportedException(etalon.Type.Type.ToString());
-					}
+						PrimitiveType.Bool => new YAMLScalarNode(PValue != 0),
+						PrimitiveType.Char => new YAMLScalarNode((int)(char)PValue),
+						PrimitiveType.SByte => new YAMLScalarNode(unchecked((sbyte)PValue)),
+						PrimitiveType.Byte => new YAMLScalarNode((byte)PValue),
+						PrimitiveType.Short => new YAMLScalarNode(unchecked((short)PValue)),
+						PrimitiveType.UShort => new YAMLScalarNode((ushort)PValue),
+						PrimitiveType.Int => new YAMLScalarNode(unchecked((int)PValue)),
+						PrimitiveType.UInt => new YAMLScalarNode((uint)PValue),
+						PrimitiveType.Long => new YAMLScalarNode(unchecked((long)PValue)),
+						PrimitiveType.ULong => new YAMLScalarNode(PValue),
+						PrimitiveType.Single => new YAMLScalarNode(BitConverter.UInt32BitsToSingle((uint)PValue)),
+						PrimitiveType.Double => new YAMLScalarNode(BitConverter.UInt64BitsToDouble(PValue)),
+						PrimitiveType.String => new YAMLScalarNode((string)CValue),
+						_ => throw new NotSupportedException(etalon.Type.Type.ToString()),
+					};
 				}
 			}
 		}

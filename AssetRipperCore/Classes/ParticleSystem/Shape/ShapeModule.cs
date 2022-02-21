@@ -293,22 +293,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 			{
 				return Type;
 			}
-			switch (Type)
+			return Type switch
 			{
-				case ParticleSystemShapeType.SphereShell:
-					return ParticleSystemShapeType.Sphere;
-				case ParticleSystemShapeType.HemisphereShell:
-					return ParticleSystemShapeType.Hemisphere;
-				case ParticleSystemShapeType.ConeShell:
-					return ParticleSystemShapeType.Cone;
-				case ParticleSystemShapeType.ConeVolumeShell:
-					return ParticleSystemShapeType.ConeVolume;
-				case ParticleSystemShapeType.CircleEdge:
-					return ParticleSystemShapeType.Circle;
-
-				default:
-					return Type;
-			}
+				ParticleSystemShapeType.SphereShell => ParticleSystemShapeType.Sphere,
+				ParticleSystemShapeType.HemisphereShell => ParticleSystemShapeType.Hemisphere,
+				ParticleSystemShapeType.ConeShell => ParticleSystemShapeType.Cone,
+				ParticleSystemShapeType.ConeVolumeShell => ParticleSystemShapeType.ConeVolume,
+				ParticleSystemShapeType.CircleEdge => ParticleSystemShapeType.Circle,
+				_ => Type,
+			};
 		}
 		private float GetExportLength(UnityVersion version)
 		{

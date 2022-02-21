@@ -22,24 +22,16 @@ namespace AssetRipper.Core.Classes.Shader.Enums
 	{
 		public static string ToProgramTypeString(this ShaderType _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case ShaderType.Vertex:
-					return "vp";
-				case ShaderType.Fragment:
-					return "fp";
-				case ShaderType.Geometry:
-					return "gp";
-				case ShaderType.Hull:
-					return "hp";
-				case ShaderType.Domain:
-					return "dp";
-				case ShaderType.RayTracing:
-					return "rtp";
-
-				default:
-					throw new NotSupportedException($"ShaderType {_this} isn't supported");
-			}
+				ShaderType.Vertex => "vp",
+				ShaderType.Fragment => "fp",
+				ShaderType.Geometry => "gp",
+				ShaderType.Hull => "hp",
+				ShaderType.Domain => "dp",
+				ShaderType.RayTracing => "rtp",
+				_ => throw new NotSupportedException($"ShaderType {_this} isn't supported"),
+			};
 		}
 
 		public static int ToProgramMask(this ShaderType _this)

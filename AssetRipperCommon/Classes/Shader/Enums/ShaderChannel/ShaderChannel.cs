@@ -171,88 +171,54 @@ namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel
 
 		public static ShaderChannel4 ToShaderChannel4(this ShaderChannel _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case ShaderChannel.Vertex:
-					return ShaderChannel4.Vertex;
-				case ShaderChannel.Normal:
-					return ShaderChannel4.Normal;
-				case ShaderChannel.Color:
-					return ShaderChannel4.Color;
-				case ShaderChannel.UV0:
-					return ShaderChannel4.UV0;
-				case ShaderChannel.UV1:
-					return ShaderChannel4.UV1;
-				case ShaderChannel.Tangent:
-					return ShaderChannel4.Tangent;
-
-				default:
-					throw new Exception($"Unsupported channel type {_this}");
-			}
+				ShaderChannel.Vertex => ShaderChannel4.Vertex,
+				ShaderChannel.Normal => ShaderChannel4.Normal,
+				ShaderChannel.Color => ShaderChannel4.Color,
+				ShaderChannel.UV0 => ShaderChannel4.UV0,
+				ShaderChannel.UV1 => ShaderChannel4.UV1,
+				ShaderChannel.Tangent => ShaderChannel4.Tangent,
+				_ => throw new Exception($"Unsupported channel type {_this}"),
+			};
 		}
 
 		public static ShaderChannel5 ToShaderChannel5(this ShaderChannel _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case ShaderChannel.Vertex:
-					return ShaderChannel5.Vertex;
-				case ShaderChannel.Normal:
-					return ShaderChannel5.Normal;
-				case ShaderChannel.Color:
-					return ShaderChannel5.Color;
-				case ShaderChannel.UV0:
-					return ShaderChannel5.UV0;
-				case ShaderChannel.UV1:
-					return ShaderChannel5.UV1;
-				case ShaderChannel.UV2:
-					return ShaderChannel5.UV2;
-				case ShaderChannel.UV3:
-					return ShaderChannel5.UV3;
-				case ShaderChannel.Tangent:
-					return ShaderChannel5.Tangent;
-
-				default:
-					throw new Exception($"Unsupported channel type {_this}");
-			}
+				ShaderChannel.Vertex => ShaderChannel5.Vertex,
+				ShaderChannel.Normal => ShaderChannel5.Normal,
+				ShaderChannel.Color => ShaderChannel5.Color,
+				ShaderChannel.UV0 => ShaderChannel5.UV0,
+				ShaderChannel.UV1 => ShaderChannel5.UV1,
+				ShaderChannel.UV2 => ShaderChannel5.UV2,
+				ShaderChannel.UV3 => ShaderChannel5.UV3,
+				ShaderChannel.Tangent => ShaderChannel5.Tangent,
+				_ => throw new Exception($"Unsupported channel type {_this}"),
+			};
 		}
 
 		public static ShaderChannel2018 ToShaderChannel2018(this ShaderChannel _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case ShaderChannel.Vertex:
-					return ShaderChannel2018.Vertex;
-				case ShaderChannel.Normal:
-					return ShaderChannel2018.Normal;
-				case ShaderChannel.Tangent:
-					return ShaderChannel2018.Tangent;
-				case ShaderChannel.Color:
-					return ShaderChannel2018.Color;
-				case ShaderChannel.UV0:
-					return ShaderChannel2018.UV0;
-				case ShaderChannel.UV1:
-					return ShaderChannel2018.UV1;
-				case ShaderChannel.UV2:
-					return ShaderChannel2018.UV2;
-				case ShaderChannel.UV3:
-					return ShaderChannel2018.UV3;
-				case ShaderChannel.UV4:
-					return ShaderChannel2018.UV4;
-				case ShaderChannel.UV5:
-					return ShaderChannel2018.UV5;
-				case ShaderChannel.UV6:
-					return ShaderChannel2018.UV6;
-				case ShaderChannel.UV7:
-					return ShaderChannel2018.UV7;
-				case ShaderChannel.SkinWeight:
-					return ShaderChannel2018.SkinWeight;
-				case ShaderChannel.SkinBoneIndex:
-					return ShaderChannel2018.SkinBoneIndex;
-
-				default:
-					throw new Exception($"Unsupported channel type {_this}");
-			}
+				ShaderChannel.Vertex => ShaderChannel2018.Vertex,
+				ShaderChannel.Normal => ShaderChannel2018.Normal,
+				ShaderChannel.Tangent => ShaderChannel2018.Tangent,
+				ShaderChannel.Color => ShaderChannel2018.Color,
+				ShaderChannel.UV0 => ShaderChannel2018.UV0,
+				ShaderChannel.UV1 => ShaderChannel2018.UV1,
+				ShaderChannel.UV2 => ShaderChannel2018.UV2,
+				ShaderChannel.UV3 => ShaderChannel2018.UV3,
+				ShaderChannel.UV4 => ShaderChannel2018.UV4,
+				ShaderChannel.UV5 => ShaderChannel2018.UV5,
+				ShaderChannel.UV6 => ShaderChannel2018.UV6,
+				ShaderChannel.UV7 => ShaderChannel2018.UV7,
+				ShaderChannel.SkinWeight => ShaderChannel2018.SkinWeight,
+				ShaderChannel.SkinBoneIndex => ShaderChannel2018.SkinBoneIndex,
+				_ => throw new Exception($"Unsupported channel type {_this}"),
+			};
 		}
 	}
 }

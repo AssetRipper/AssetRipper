@@ -20,15 +20,11 @@ namespace AssetRipper.Core.Parser.Files.ResourceFiles
 		public static bool IsDefaultResourceFile(string fileName)
 		{
 			string extension = Path.GetExtension(fileName).ToLower();
-			switch (extension)
+			return extension switch
 			{
-				case ResourceFileExtension:
-				case StreamingFileExtension:
-					return true;
-
-				default:
-					return false;
-			}
+				ResourceFileExtension or StreamingFileExtension => true,
+				_ => false,
+			};
 		}
 
 		public static ResourceFileScheme LoadScheme(string filePath, string fileName)

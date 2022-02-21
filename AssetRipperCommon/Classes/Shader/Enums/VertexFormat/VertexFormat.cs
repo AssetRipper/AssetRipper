@@ -35,22 +35,15 @@ namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 
 		public static int GetSize(this VertexFormat _this, UnityVersion version)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case VertexFormat.Float:
-					return 4;
-				case VertexFormat.Float16:
-					return 2;
-				case VertexFormat.Color:
-					return ShaderChannelExtensions.ShaderChannel5Relevant(version) ? 1 : 4;
-				case VertexFormat.Byte:
-					return 1;
-				case VertexFormat.Int:
-					return 4;
-
-				default:
-					throw new Exception(_this.ToString());
-			}
+				VertexFormat.Float => 4,
+				VertexFormat.Float16 => 2,
+				VertexFormat.Color => ShaderChannelExtensions.ShaderChannel5Relevant(version) ? 1 : 4,
+				VertexFormat.Byte => 1,
+				VertexFormat.Int => 4,
+				_ => throw new Exception(_this.ToString()),
+			};
 		}
 
 		public static byte ToFormat(this VertexFormat _this, UnityVersion version)
@@ -71,57 +64,38 @@ namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 
 		public static VertexChannelFormat ToVertexChannelFormat(this VertexFormat _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case VertexFormat.Float:
-					return VertexChannelFormat.Float;
-				case VertexFormat.Float16:
-					return VertexChannelFormat.Float16;
-				case VertexFormat.Color:
-					return VertexChannelFormat.Color;
-
-				default:
-					throw new Exception(_this.ToString());
-			}
+				VertexFormat.Float => VertexChannelFormat.Float,
+				VertexFormat.Float16 => VertexChannelFormat.Float16,
+				VertexFormat.Color => VertexChannelFormat.Color,
+				_ => throw new Exception(_this.ToString()),
+			};
 		}
 
 		public static VertexFormat2017 ToVertexFormat2017(this VertexFormat _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case VertexFormat.Float:
-					return VertexFormat2017.Float;
-				case VertexFormat.Float16:
-					return VertexFormat2017.Float16;
-				case VertexFormat.Color:
-					return VertexFormat2017.Color;
-				case VertexFormat.Byte:
-					return VertexFormat2017.UInt8;
-				case VertexFormat.Int:
-					return VertexFormat2017.UInt32;
-
-				default:
-					throw new Exception(_this.ToString());
-			}
+				VertexFormat.Float => VertexFormat2017.Float,
+				VertexFormat.Float16 => VertexFormat2017.Float16,
+				VertexFormat.Color => VertexFormat2017.Color,
+				VertexFormat.Byte => VertexFormat2017.UInt8,
+				VertexFormat.Int => VertexFormat2017.UInt32,
+				_ => throw new Exception(_this.ToString()),
+			};
 		}
 
 		public static VertexFormat2019 ToVertexFormat2019(this VertexFormat _this)
 		{
-			switch (_this)
+			return _this switch
 			{
-				case VertexFormat.Float:
-					return VertexFormat2019.Float;
-				case VertexFormat.Float16:
-					return VertexFormat2019.Float16;
-				case VertexFormat.Color:
-				case VertexFormat.Byte:
-					return VertexFormat2019.UNorm8;
-				case VertexFormat.Int:
-					return VertexFormat2019.UInt32;
-
-				default:
-					throw new Exception(_this.ToString());
-			}
+				VertexFormat.Float => VertexFormat2019.Float,
+				VertexFormat.Float16 => VertexFormat2019.Float16,
+				VertexFormat.Color or VertexFormat.Byte => VertexFormat2019.UNorm8,
+				VertexFormat.Int => VertexFormat2019.UInt32,
+				_ => throw new Exception(_this.ToString()),
+			};
 		}
 	}
 }

@@ -113,18 +113,13 @@ namespace AssetRipper.GUI
 			if (SettingsClasses.Contains(assetType))
 				return "Settings";
 
-			switch (assetType.Name)
+			return assetType.Name switch
 			{
-				case nameof(Mesh):
-					return "Meshes";
-				case nameof(Canvas):
-					return "Canvases";
-				case nameof(Rigidbody):
-					return "Rigidbodies";
-				default:
-					//E.g. Materials, AudioClips, etc.
-					return $"{assetType.Name}s";
-			}
+				nameof(Mesh) => "Meshes",
+				nameof(Canvas) => "Canvases",
+				nameof(Rigidbody) => "Rigidbodies",
+				_ => $"{assetType.Name}s",//E.g. Materials, AudioClips, etc.
+			};
 		}
 	}
 

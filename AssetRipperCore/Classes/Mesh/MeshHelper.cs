@@ -53,54 +53,36 @@ namespace AssetRipper.Core.Classes.Mesh
 		{
 			if (version.IsLess(2017))
 			{
-				switch ((VertexChannelFormat)format)
+				return (VertexChannelFormat)format switch
 				{
-					case VertexChannelFormat.kChannelFormatFloat:
-						return VertexFormat.kVertexFormatFloat;
-					case VertexChannelFormat.kChannelFormatFloat16:
-						return VertexFormat.kVertexFormatFloat16;
-					case VertexChannelFormat.kChannelFormatColor: //in 4.x is size 4
-						return VertexFormat.kVertexFormatUNorm8;
-					case VertexChannelFormat.kChannelFormatByte:
-						return VertexFormat.kVertexFormatUInt8;
-					case VertexChannelFormat.kChannelFormatUInt32: //in 5.x
-						return VertexFormat.kVertexFormatUInt32;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(format), format, null);
-				}
+					VertexChannelFormat.kChannelFormatFloat => VertexFormat.kVertexFormatFloat,
+					VertexChannelFormat.kChannelFormatFloat16 => VertexFormat.kVertexFormatFloat16,
+					//in 4.x is size 4
+					VertexChannelFormat.kChannelFormatColor => VertexFormat.kVertexFormatUNorm8,
+					VertexChannelFormat.kChannelFormatByte => VertexFormat.kVertexFormatUInt8,
+					//in 5.x
+					VertexChannelFormat.kChannelFormatUInt32 => VertexFormat.kVertexFormatUInt32,
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, null),
+				};
 			}
 			else if (version.IsLess(2019))
 			{
-				switch ((VertexFormat2017)format)
+				return (VertexFormat2017)format switch
 				{
-					case VertexFormat2017.kVertexFormatFloat:
-						return VertexFormat.kVertexFormatFloat;
-					case VertexFormat2017.kVertexFormatFloat16:
-						return VertexFormat.kVertexFormatFloat16;
-					case VertexFormat2017.kVertexFormatColor:
-					case VertexFormat2017.kVertexFormatUNorm8:
-						return VertexFormat.kVertexFormatUNorm8;
-					case VertexFormat2017.kVertexFormatSNorm8:
-						return VertexFormat.kVertexFormatSNorm8;
-					case VertexFormat2017.kVertexFormatUNorm16:
-						return VertexFormat.kVertexFormatUNorm16;
-					case VertexFormat2017.kVertexFormatSNorm16:
-						return VertexFormat.kVertexFormatSNorm16;
-					case VertexFormat2017.kVertexFormatUInt8:
-						return VertexFormat.kVertexFormatUInt8;
-					case VertexFormat2017.kVertexFormatSInt8:
-						return VertexFormat.kVertexFormatSInt8;
-					case VertexFormat2017.kVertexFormatUInt16:
-						return VertexFormat.kVertexFormatUInt16;
-					case VertexFormat2017.kVertexFormatSInt16:
-						return VertexFormat.kVertexFormatSInt16;
-					case VertexFormat2017.kVertexFormatUInt32:
-						return VertexFormat.kVertexFormatUInt32;
-					case VertexFormat2017.kVertexFormatSInt32:
-						return VertexFormat.kVertexFormatSInt32;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(format), format, null);
-				}
+					VertexFormat2017.kVertexFormatFloat => VertexFormat.kVertexFormatFloat,
+					VertexFormat2017.kVertexFormatFloat16 => VertexFormat.kVertexFormatFloat16,
+					VertexFormat2017.kVertexFormatColor or VertexFormat2017.kVertexFormatUNorm8 => VertexFormat.kVertexFormatUNorm8,
+					VertexFormat2017.kVertexFormatSNorm8 => VertexFormat.kVertexFormatSNorm8,
+					VertexFormat2017.kVertexFormatUNorm16 => VertexFormat.kVertexFormatUNorm16,
+					VertexFormat2017.kVertexFormatSNorm16 => VertexFormat.kVertexFormatSNorm16,
+					VertexFormat2017.kVertexFormatUInt8 => VertexFormat.kVertexFormatUInt8,
+					VertexFormat2017.kVertexFormatSInt8 => VertexFormat.kVertexFormatSInt8,
+					VertexFormat2017.kVertexFormatUInt16 => VertexFormat.kVertexFormatUInt16,
+					VertexFormat2017.kVertexFormatSInt16 => VertexFormat.kVertexFormatSInt16,
+					VertexFormat2017.kVertexFormatUInt32 => VertexFormat.kVertexFormatUInt32,
+					VertexFormat2017.kVertexFormatSInt32 => VertexFormat.kVertexFormatSInt32,
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, null),
+				};
 			}
 			else
 			{
@@ -213,15 +195,11 @@ namespace AssetRipper.Core.Classes.Mesh
 			Vector2f[] result = new Vector2f[input.Length / dimension];
 			for (int i = 0; i < result.Length; i++)
 			{
-				switch (dimension)
+				result[i] = dimension switch
 				{
-					case 1:
-						result[i] = new Vector2f(input[dimension * i], 0);
-						break;
-					default:
-						result[i] = new Vector2f(input[dimension * i], input[dimension * i + 1]);
-						break;
-				}
+					1 => new Vector2f(input[dimension * i], 0),
+					_ => new Vector2f(input[dimension * i], input[dimension * i + 1]),
+				};
 			}
 			return result;
 		}
@@ -239,20 +217,13 @@ namespace AssetRipper.Core.Classes.Mesh
 			Vector3f[] result = new Vector3f[input.Length / dimension];
 			for (int i = 0; i < result.Length; i++)
 			{
-				switch (dimension)
+				result[i] = dimension switch
 				{
-					case 1:
-						result[i] = new Vector3f(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]);
-						break;
-					case 2:
-						result[i] = new Vector3f(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]);
-						break;
-					default:
-						//In the four dimensional case for Normals, the fourth dimension was always zero
-						//This is seemingly intended to maintain data alignment
-						result[i] = new Vector3f(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]);
-						break;
-				}
+					1 => new Vector3f(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]),
+					2 => new Vector3f(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]),
+					_ => new Vector3f(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]),//In the four dimensional case for Normals, the fourth dimension was always zero
+																												//This is seemingly intended to maintain data alignment
+				};
 			}
 			return result;
 		}
@@ -270,21 +241,13 @@ namespace AssetRipper.Core.Classes.Mesh
 			Vector4f[] result = new Vector4f[input.Length / dimension];
 			for (int i = 0; i < result.Length; i++)
 			{
-				switch (dimension)
+				result[i] = dimension switch
 				{
-					case 1:
-						result[i] = new Vector4f(input[dimension * i], 0, 0, 0);
-						break;
-					case 2:
-						result[i] = new Vector4f(input[dimension * i], input[dimension * i + 1], 0, 0);
-						break;
-					case 3:
-						result[i] = new Vector4f(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2], 0);
-						break;
-					default:
-						result[i] = new Vector4f(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2], input[dimension * i + 3]);
-						break;
-				}
+					1 => new Vector4f(input[dimension * i], 0, 0, 0),
+					2 => new Vector4f(input[dimension * i], input[dimension * i + 1], 0, 0),
+					3 => new Vector4f(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2], 0),
+					_ => new Vector4f(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2], input[dimension * i + 3]),
+				};
 			}
 			return result;
 		}
