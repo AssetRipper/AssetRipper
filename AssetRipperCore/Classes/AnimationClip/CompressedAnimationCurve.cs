@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 	{
 		public QuaternionCurve Unpack()
 		{
-			int[] timesValues = Times.Unpack();
+			int[] timesValues = Times.UnpackInts();
 			float[] times = new float[timesValues.Length];
 			for (int i = 0; i < times.Length; i++)
 			{

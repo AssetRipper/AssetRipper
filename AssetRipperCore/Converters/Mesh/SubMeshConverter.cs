@@ -97,7 +97,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			{
 				if (mesh.CompressedMesh.Triangles.IsSet())
 				{
-					int[] triangles = mesh.CompressedMesh.Triangles.Unpack();
+					int[] triangles = mesh.CompressedMesh.Triangles.UnpackInts();
 					int firstByte = (int)(is16bits ? submesh.FirstByte * 2 : submesh.FirstByte);
 					FindMinMaxIndices(triangles, (int)(firstByte / sizeof(int)), (int)submesh.IndexCount, out min, out max);
 					return;

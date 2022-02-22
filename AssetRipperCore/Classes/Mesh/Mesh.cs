@@ -1126,7 +1126,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			if (CompressedMesh.Normals.NumItems > 0)
 			{
 				var normalData = CompressedMesh.Normals.UnpackFloats(2, 4 * 2);
-				var signs = CompressedMesh.NormalSigns.Unpack();
+				var signs = CompressedMesh.NormalSigns.UnpackInts();
 				Normals = new Vector3f[CompressedMesh.Normals.NumItems / 2];
 				for (int i = 0; i < CompressedMesh.Normals.NumItems / 2; ++i)
 				{
@@ -1154,7 +1154,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			if (CompressedMesh.Tangents.NumItems > 0)
 			{
 				var tangentData = CompressedMesh.Tangents.UnpackFloats(2, 4 * 2);
-				var signs = CompressedMesh.TangentSigns.Unpack();
+				var signs = CompressedMesh.TangentSigns.UnpackInts();
 				Tangents = new Vector4f[CompressedMesh.Tangents.NumItems / 2];
 				for (int i = 0; i < CompressedMesh.Tangents.NumItems / 2; ++i)
 				{
@@ -1190,8 +1190,8 @@ namespace AssetRipper.Core.Classes.Mesh
 			//Skin
 			if (CompressedMesh.Weights.NumItems > 0)
 			{
-				var weights = CompressedMesh.Weights.Unpack();
-				var boneIndices = CompressedMesh.BoneIndices.Unpack();
+				var weights = CompressedMesh.Weights.UnpackInts();
+				var boneIndices = CompressedMesh.BoneIndices.UnpackInts();
 
 				InitMSkin();
 
@@ -1235,14 +1235,14 @@ namespace AssetRipper.Core.Classes.Mesh
 			//IndexBuffer
 			if (CompressedMesh.Triangles.NumItems > 0)
 			{
-				ProcessedIndexBuffer = Array.ConvertAll(CompressedMesh.Triangles.Unpack(), x => (uint)x);
+				ProcessedIndexBuffer = Array.ConvertAll(CompressedMesh.Triangles.UnpackInts(), x => (uint)x);
 			}
 			//Color
 			if (CompressedMesh.Colors.NumItems > 0)
 			{
 				CompressedMesh.Colors.NumItems *= 4;
 				CompressedMesh.Colors.BitSize /= 4;
-				var tempColors = CompressedMesh.Colors.Unpack();
+				var tempColors = CompressedMesh.Colors.UnpackInts();
 				Colors = new ColorRGBA32[CompressedMesh.Colors.NumItems / 4];
 				for (int v = 0; v < CompressedMesh.Colors.NumItems / 4; v++)
 				{
