@@ -15,7 +15,7 @@
     "mesh_format_obj_description": "广泛使用的基于文本的网格格式，可在几乎所有3D编辑软件中使用。但是，这会中断对网格资源的导出引用。",
     "mesh_format_stl_ascii": "STL (ASCII)",
     "mesh_format_stl_ascii_description": "3D 打印常用的 3D 对象格式。 Unity 无法导入这种类型的资产。 文本变体。",
-    "mesh_format_stl_binary": "STL (Binary)",
+    "mesh_format_stl_binary": "STL (二进制文件)",
     "mesh_format_stl_binary_description": "3D 打印常用的 3D 对象格式。 Unity 无法导入这种类型的资产。 二进制变体。",
     "mesh_format_glb_primitive": "Simple GLB",
     "mesh_format_glb_primitive_description": "FBX 的高质量开源替代品。 GLTF 的二进制版本。 仅包含网格数据。 可能导致错误。 Unity 无法导入这种类型的资产。",
