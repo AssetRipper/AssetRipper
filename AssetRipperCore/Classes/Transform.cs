@@ -136,7 +136,7 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		private Vector3f LocalEulerAnglesHint => m_LocalRotation.ToEuler();
+		private Vector3f LocalEulerAnglesHint => m_LocalRotation.ToEulerAngle();
 
 		public Vector3f LocalPosition { get => m_LocalPosition; set => m_LocalPosition = value; }
 		public Quaternionf LocalRotation { get => m_LocalRotation; set => m_LocalRotation = value; }

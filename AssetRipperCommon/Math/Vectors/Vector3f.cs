@@ -151,35 +151,6 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public static Vector3f Zero => new Vector3f();
 
-		public void Normalize()
-		{
-			var length = Length();
-			if (length > kEpsilon)
-			{
-				var invNorm = 1.0f / length;
-				X *= invNorm;
-				Y *= invNorm;
-				Z *= invNorm;
-			}
-			else
-			{
-				X = 0;
-				Y = 0;
-				Z = 0;
-			}
-		}
-
-		public float Length()
-		{
-			return (float)System.Math.Sqrt(LengthSquared());
-		}
-
-		public float LengthSquared()
-		{
-			return X * X + Y * Y + Z * Z;
-		}
-
-		private const float kEpsilon = 0.00001F;
 		public const string XName = "x";
 		public const string YName = "y";
 		public const string ZName = "z";
