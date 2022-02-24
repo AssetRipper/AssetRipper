@@ -91,24 +91,6 @@ namespace AssetRipper.Core.Math.Vectors
 			return new Vector2f(left.X * right.X, left.Y * right.Y);
 		}
 
-		/// <summary>
-		/// Angle increase when 2nd line is moving in clockwise direction
-		/// </summary>
-		/// <returns>Angle in degrees</returns>
-		public static float AngleFrom3Points(Vector2f point1, Vector2f point2, Vector2f point3)
-		{
-			Vector2f transformedP1 = new Vector2f(point1.X - point2.X, point1.Y - point2.Y);
-			Vector2f transformedP2 = new Vector2f(point3.X - point2.X, point3.Y - point2.Y);
-
-			double angleToP1 = System.Math.Atan2(transformedP1.Y, transformedP1.X);
-			double angleToP2 = System.Math.Atan2(transformedP2.Y, transformedP2.X);
-
-			double angle = angleToP1 - angleToP2;
-			if (angle < 0)
-				angle += 2 * System.Math.PI;
-			return (float)(360.0 * angle / (2.0 * System.Math.PI));
-		}
-
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadSingle();
@@ -130,32 +112,6 @@ namespace AssetRipper.Core.Math.Vectors
 			return node;
 		}
 
-		public void Normalize()
-		{
-			var length = Length();
-			if (length > kEpsilon)
-			{
-				var invNorm = 1.0f / length;
-				X *= invNorm;
-				Y *= invNorm;
-			}
-			else
-			{
-				X = 0;
-				Y = 0;
-			}
-		}
-
-		public float Length()
-		{
-			return (float)System.Math.Sqrt(LengthSquared());
-		}
-
-		public float LengthSquared()
-		{
-			return X * X + Y * Y;
-		}
-
 		public override int GetHashCode()
 		{
 			return X.GetHashCode() ^ Y.GetHashCode() << 2;
@@ -163,14 +119,15 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public override bool Equals(object other)
 		{
-			if (!(other is Vector2f))
+			if (other is Vector2f asset)
+				return Equals(asset);
+			else
 				return false;
-			return Equals((Vector2f)other);
 		}
 
 		public bool Equals(Vector2f other)
 		{
-			return X.Equals(other.X) && Y.Equals(other.Y);
+			return X == other.X && Y == other.Y;
 		}
 
 		public override string ToString()
@@ -181,8 +138,6 @@ namespace AssetRipper.Core.Math.Vectors
 		public static Vector2f One { get; } = new Vector2f(1.0f, 1.0f);
 
 		public static Vector2f Zero { get; } = new Vector2f();
-
-		private const float kEpsilon = 0.00001F;
 
 		public const string XName = "x";
 		public const string YName = "y";
