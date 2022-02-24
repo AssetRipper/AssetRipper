@@ -42,10 +42,10 @@ namespace AssetRipper.Core.Math.Colors
 
 		public void CopyValuesFrom(ColorRGBA32 color32)
 		{
-			R = color32.R / 255.0f;
-			G = color32.G / 255.0f;
-			B = color32.B / 255.0f;
-			A = color32.A / 255.0f;
+			R = color32.R() / 255.0f;
+			G = color32.G() / 255.0f;
+			B = color32.B() / 255.0f;
+			A = color32.A() / 255.0f;
 		}
 
 		public void CopyValuesFrom(ColorRGBAf colorf)
