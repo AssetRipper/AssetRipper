@@ -44,6 +44,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		private readonly Dictionary<string, TypeDefinition> m_types = new Dictionary<string, TypeDefinition>();
 		private readonly HashSet<string> m_exported = new HashSet<string>();
+		private static readonly UTF8Encoding utf8Encoding = new UTF8Encoding(false);
 		private static readonly string[] specialTypeNames = new string[] { "<Module>", "<PrivateImplementationDetails>", "Consts", "Locale" };
 		private static readonly string[] forbiddenNamespaces = new string[] { "Unity", "UnityEngine", "TMPro", "System", "Microsoft", "Mono" };
 		private static readonly string[] forbiddenAssemblies = new string[] { "mscorlib" };
@@ -183,6 +184,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				string normalName = typeName.Substring(0, index);
 				typeName = normalName + $".{typeName.Count(t => t == ',') + 1}";
 			}
+			typeName = typeName.Replace('`', '.');
 			return GetExportSubPath(type.Module.Name, type.Namespace, typeName);
 		}
 
@@ -198,29 +200,31 @@ namespace AssetRipper.Library.Exporters.Scripts
 				return null;
 			}
 
-			string subPath = GetExportSubPath(exportType);
-			string filePath = Path.Combine(m_exportPath, subPath);
-			string uniqueFilePath = ToUniqueFileName(filePath);
-			string directory = Path.GetDirectoryName(uniqueFilePath);
-			Directory.CreateDirectory(directory);
-
 			try
 			{
 				string decompiledText = Decompiler.Decompile(exportType);
-				using (FileStream fileStream = File.Create(uniqueFilePath))
+				if (string.IsNullOrEmpty(decompiledText))
 				{
-					using StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
-					writer.Write(decompiledText);
+					Logger.Error(LogCategory.Export, $"Decompiling {exportType.FullName} returned an empty string");
 				}
-				AddExportedType(exportType);
-				return uniqueFilePath;
+				else
+				{
+					string subPath = GetExportSubPath(exportType);
+					string filePath = Path.Combine(m_exportPath, subPath);
+					string uniqueFilePath = ToUniqueFileName(filePath);
+					string directory = Path.GetDirectoryName(uniqueFilePath);
+					Directory.CreateDirectory(directory);
+					File.WriteAllText(uniqueFilePath, decompiledText, utf8Encoding);
+					AddExportedType(exportType);
+					return uniqueFilePath;
+				}
 			}
 			catch (Exception ex)
 			{
 				Logger.Error($"Error while decompiling {exportType.FullName}:", ex);
-				AddExportedType(exportType);
-				return null;
 			}
+			AddExportedType(exportType);
+			return null;
 		}
 
 		private void AddExportedType(TypeDefinition exportType)

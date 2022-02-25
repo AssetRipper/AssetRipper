@@ -56,9 +56,9 @@ namespace AssetRipper.Library.Exporters.Scripts
 		{
 			if (!definition.IsNested && !definition.HasGenericParameters)
 				return definition.FullName;
-			foreach (var module in decompiler.TypeSystem.Modules)
+			foreach (IModule module in decompiler.TypeSystem.Modules)
 			{
-				foreach (var type in module.TypeDefinitions)
+				foreach (ITypeDefinition type in module.TypeDefinitions)
 				{
 					if (definition.FullName == type.FullName)
 					{
@@ -71,8 +71,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		private CSharpDecompiler GetOrMakeDecompiler(AssemblyDefinition assembly)
 		{
-			CSharpDecompiler result;
-			if (!decompilers.TryGetValue(assembly, out result))
+			if (!decompilers.TryGetValue(assembly, out CSharpDecompiler result))
 			{
 				result = MakeDecompiler(assembly);
 				decompilers.Add(assembly, result);
@@ -86,7 +85,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			settings.SetLanguageVersion(m_languageVersion);
 			settings.ShowXmlDocumentation = true;
 			settings.LoadInMemory = true; //pulled from ILSpy code for reading a pe file from a stream
-			var decompiler = new CSharpDecompiler(assemblyResolver.Resolve(assembly.FullName), assemblyResolver, settings);
+			CSharpDecompiler decompiler = new CSharpDecompiler(assemblyResolver.Resolve(assembly.FullName), assemblyResolver, settings);
 			if (ScriptContentLevel == ScriptContentLevel.Level1)
 			{
 				decompiler.AstTransforms.Insert(0, new MethodStripper());
