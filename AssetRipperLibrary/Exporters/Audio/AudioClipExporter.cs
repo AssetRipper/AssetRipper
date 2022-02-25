@@ -36,6 +36,8 @@ namespace AssetRipper.Library.Exporters.Audio
 					decodedData = AudioConverter.WavToMp3(decodedData);
 			}
 
+			if (decodedData == null || decodedData.Length == 0)
+				return false;
 
 			TaskManager.AddTask(File.WriteAllBytesAsync(path, decodedData));
 			return true;
