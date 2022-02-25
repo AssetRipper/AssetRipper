@@ -25,7 +25,7 @@
 	<ItemGroup>
 		<PackageReference Include="K4os.Compression.LZ4" Version="1.2.16" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.4" />
-		<PackageReference Include="Samboy063.Cpp2IL.Core" Version="2022.0.1" />
+		<PackageReference Include="Samboy063.Cpp2IL.Core" Version="2022.0.2" />
 		<PackageReference Include="SharpCompress" Version="0.30.1" />
 		<PackageReference Include="SharpZipLib" Version="1.3.3" />
 	</ItemGroup>

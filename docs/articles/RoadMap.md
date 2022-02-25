@@ -2,6 +2,8 @@
 
 ## 0.1.9.4
 
+* ~~Bump Cpp2IL~~
+
 ## 0.2.0.0
 * Convert Exporters to the new Interface System
   * Animator Controller exporter
