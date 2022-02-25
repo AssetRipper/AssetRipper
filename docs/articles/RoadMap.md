@@ -3,6 +3,7 @@
 ## 0.1.9.4
 
 * ~~Bump Cpp2IL~~
+* ~~Fix Texture preview in the GUI~~
 
 ## 0.2.0.0
 * Convert Exporters to the new Interface System
