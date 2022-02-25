@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Utils
 	{
 		public static string FixInvalidPathCharacters(string path)
 		{
-			return PathRegex.Replace(path, string.Empty);
+			return PathRegex.Replace(path, "_");
 		}
 
 		private static Regex GeneratePathRegex()
