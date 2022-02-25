@@ -14,8 +14,19 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			if (TypeTreeNode.IsFormat5(reader.Generation))
 			{
 				IsFormat5 = true;
+
 				int nodesCount = reader.ReadInt32();
+				if (nodesCount < 0)
+				{
+					throw new InvalidDataException($"Node count cannot be negative: {nodesCount}");
+				}
+
 				int stringBufferSize = reader.ReadInt32();
+				if (stringBufferSize < 0)
+				{
+					throw new InvalidDataException($"String buffer size cannot be negative: {stringBufferSize}");
+				}
+
 				Nodes = new List<TypeTreeNode>(nodesCount);
 				for (int i = 0; i < nodesCount; i++)
 				{
@@ -23,8 +34,15 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 					node.Read(reader);
 					Nodes.Add(node);
 				}
-				StringBuffer = new byte[stringBufferSize];
-				reader.Read(StringBuffer, 0, StringBuffer.Length);
+				if(stringBufferSize == 0)
+				{
+					StringBuffer = Array.Empty<byte>();
+				}
+				else
+				{
+					StringBuffer = new byte[stringBufferSize];
+					reader.Read(StringBuffer, 0, StringBuffer.Length);
+				}
 			}
 			else
 			{
@@ -91,9 +109,12 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 
 		public StringBuilder ToString(StringBuilder sb)
 		{
-			foreach (TypeTreeNode node in Nodes)
+			if(Nodes != null)
 			{
-				node.ToString(sb).AppendLine();
+				foreach (TypeTreeNode node in Nodes)
+				{
+					node.ToString(sb).AppendLine();
+				}
 			}
 			return sb;
 		}

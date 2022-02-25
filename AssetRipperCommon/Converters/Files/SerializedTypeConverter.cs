@@ -7,10 +7,7 @@ namespace AssetRipper.Core.Converters.Files
 	{
 		public static void CombineFormats(FormatVersion generation, SerializedType origin)
 		{
-			if (origin.OldType != null)
-			{
-				origin.OldType.MaybeSetNamesFromBuffer();
-			}
+			origin.OldType.MaybeSetNamesFromBuffer();
 		}
 	}
 }

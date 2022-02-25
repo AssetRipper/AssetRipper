@@ -91,8 +91,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				EnableTypeTree = true;
 			}
 
-#warning TODO: pass EnableTypeTree as Read argument
-			Types = reader.ReadSerializedArray(() => new SerializedType(EnableTypeTree));
+			Types = reader.ReadSerializedTypeArray<SerializedType>(EnableTypeTree);
 
 			if (HasLongFileID(reader.Generation))
 			{
@@ -111,7 +110,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 			if (HasRefTypes(reader.Generation))
 			{
-				RefTypes = reader.ReadSerializedArray(() => new SerializedType(EnableTypeTree));
+				RefTypes = reader.ReadSerializedTypeArray<SerializedTypeReference>(EnableTypeTree);
 			}
 			if (HasUserInformation(reader.Generation))
 			{
@@ -134,7 +133,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				writer.Write(EnableTypeTree);
 			}
 
-			writer.WriteSerializedArray(Types);
+			writer.WriteSerializedTypeArray(Types, EnableTypeTree);
 			if (HasLongFileID(writer.Generation))
 			{
 				writer.Write(LongFileID);
@@ -148,7 +147,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 			writer.WriteSerializedArray(Externals);
 			if (HasRefTypes(writer.Generation))
 			{
-				writer.WriteSerializedArray(RefTypes);
+				writer.WriteSerializedTypeArray(RefTypes, EnableTypeTree);
 			}
 			if (HasUserInformation(writer.Generation))
 			{
@@ -170,6 +169,6 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		public LocalSerializedObjectIdentifier[] ScriptTypes { get; set; }
 		public FileIdentifier[] Externals { get; set; }
 		public string UserInformation { get; set; }
-		public SerializedType[] RefTypes { get; set; }
+		public SerializedTypeReference[] RefTypes { get; set; }
 	}
 }

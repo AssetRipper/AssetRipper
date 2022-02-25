@@ -1,16 +1,12 @@
-using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
+﻿using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 {
-	public sealed class SerializedType : SerializedTypeBase
+	public sealed class SerializedTypeReference : SerializedTypeBase
 	{
-		public int[] TypeDependencies { get; set; }
-
-		private static bool HasScriptID(FormatVersion generation, ClassIDType typeID)
-		{
-			return (generation < FormatVersion.RefactoredClassId && typeID < 0)
-				|| (generation >= FormatVersion.RefactoredClassId && typeID == ClassIDType.MonoBehaviour);
-		}
+		public string ClassName { get; set; }
+		public string NameSpace { get; set; }
+		public string AsmName { get; set; }
 
 		public override void Read(SerializedReader reader, bool hasTypeTree)
 		{
@@ -18,7 +14,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 			if (HasHash(reader.Generation))
 			{
-				if (HasScriptID(reader.Generation, TypeID))
+				if (ScriptTypeIndex >= 0)
 				{
 					ScriptID.Read(reader);
 				}
@@ -30,7 +26,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				OldType.Read(reader);
 				if (HasTypeDependencies(reader.Generation))
 				{
-					TypeDependencies = reader.ReadInt32Array();
+					ClassName = reader.ReadStringZeroTerm();
+					NameSpace = reader.ReadStringZeroTerm();
+					AsmName = reader.ReadStringZeroTerm();
 				}
 			}
 		}
@@ -41,7 +39,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 			if (HasHash(writer.Generation))
 			{
-				if (HasScriptID(writer.Generation, TypeID))
+				if (ScriptTypeIndex >= 0)
 				{
 					ScriptID.Write(writer);
 				}
@@ -53,7 +51,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 				OldType.Write(writer);
 				if (HasTypeDependencies(writer.Generation))
 				{
-					writer.WriteArray(TypeDependencies);
+					writer.WriteStringZeroTerm(ClassName);
+					writer.WriteStringZeroTerm(NameSpace);
+					writer.WriteStringZeroTerm(AsmName);
 				}
 			}
 		}

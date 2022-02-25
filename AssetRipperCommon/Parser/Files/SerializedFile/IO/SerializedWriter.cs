@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using System.IO;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles.IO
@@ -23,6 +24,17 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.IO
 			for (int i = 0; i < buffer.Length; i++)
 			{
 				buffer[i].Write(this);
+			}
+		}
+
+		public void WriteSerializedTypeArray<T>(T[] buffer, bool hasTypeTree) where T : SerializedTypeBase
+		{
+			FillInnerBuffer(buffer.Length);
+			Write(m_buffer, 0, sizeof(int));
+
+			for (int i = 0; i < buffer.Length; i++)
+			{
+				buffer[i].Write(this, hasTypeTree);
 			}
 		}
 

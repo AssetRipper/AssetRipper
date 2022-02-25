@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.IO.Endian;
+using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using System;
 using System.IO;
 
@@ -31,14 +32,14 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.IO
 			return array;
 		}
 
-		public T[] ReadSerializedArray<T>(Func<T> instantiator) where T : ISerializedReadable
+		public T[] ReadSerializedTypeArray<T>(bool hasTypeTree) where T : SerializedTypeBase, new()
 		{
 			int count = ReadInt32();
 			T[] array = new T[count];
 			for (int i = 0; i < count; i++)
 			{
-				T instance = instantiator();
-				instance.Read(this);
+				T instance = new();
+				instance.Read(this, hasTypeTree);
 				array[i] = instance;
 			}
 			return array;

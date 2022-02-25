@@ -4,6 +4,7 @@
 
 * ~~Bump Cpp2IL~~
 * ~~Fix Texture preview in the GUI~~
+* ~~Fix serialized file reading issue affecting some games~~
 
 ## 0.2.0.0
 * Convert Exporters to the new Interface System
