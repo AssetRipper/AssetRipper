@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			m_requestAssemblyCallback = requestAssemblyCallback ?? throw new ArgumentNullException(nameof(requestAssemblyCallback));
 		}
 
-		public virtual void Initialize(IPlatformGameStructure gameStructure) { }
+		public virtual void Initialize(PlatformGameStructure gameStructure) { }
 
 		public static string ToAssemblyName(string scopeName)
 		{

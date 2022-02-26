@@ -73,7 +73,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				}
 			}
 
-#warning TODO: WebGL paths
 			Name = m_root.Name;
 			RootPath = rootPath;
 			GameDataPath = rootPath;

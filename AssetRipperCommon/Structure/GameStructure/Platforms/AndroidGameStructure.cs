@@ -169,7 +169,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
 		}
 
-		public string LibPath { get; protected set; }
+		public string LibPath { get; private set; }
 
 		private const string AssetName = "assets";
 		private const string MetaName = "META-INF";

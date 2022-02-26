@@ -22,7 +22,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				throw new Exception($"Web player asset bundle data wasn't found");
 			}
 
-#warning TODO: WebPlayer paths
 			Name = name;
 			RootPath = rootPath;
 			GameDataPath = null;

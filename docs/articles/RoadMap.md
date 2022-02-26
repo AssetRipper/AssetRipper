@@ -7,6 +7,7 @@
 * ~~Fix serialized file reading issue affecting some games~~
 * ~~Improved export path decision making~~
 * ~~Catch errors converting audio~~
+* ~~Add support for 8 new asset types from Jannify~~
 
 ## 0.2.0.0
 * Convert Exporters to the new Interface System

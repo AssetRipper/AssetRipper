@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
-	public abstract class PlatformGameStructure : IPlatformGameStructure
+	public abstract class PlatformGameStructure
 	{
 		public string Name { get; protected set; }
 		public string RootPath { get; protected set; }

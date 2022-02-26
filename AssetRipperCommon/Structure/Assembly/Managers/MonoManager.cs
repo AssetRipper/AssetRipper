@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		public MonoManager(LayoutInfo layout, Action<string> requestAssemblyCallback) : base(layout, requestAssemblyCallback) { }
 
-		public override void Initialize(IPlatformGameStructure gameStructure)
+		public override void Initialize(PlatformGameStructure gameStructure)
 		{
 			string gameDataPath = gameStructure?.GameDataPath;
 			if (string.IsNullOrWhiteSpace(gameDataPath)) return;//Mixed Game Structures don't necessarily have a managed folder

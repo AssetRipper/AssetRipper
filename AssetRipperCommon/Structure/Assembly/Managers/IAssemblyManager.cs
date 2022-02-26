@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 {
 	public interface IAssemblyManager : IDisposable
 	{
-		void Initialize(IPlatformGameStructure gameStructure);
+		void Initialize(PlatformGameStructure gameStructure);
 		void Load(string filePath);
 		void Read(Stream stream, string fileName);
 		void Unload(string fileName);

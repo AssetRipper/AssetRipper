@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		public override bool IsSet => true;
 
-		public override void Initialize(IPlatformGameStructure gameStructure)
+		public override void Initialize(PlatformGameStructure gameStructure)
 		{
 			string gameDataPath = gameStructure.GameDataPath;
 			if (string.IsNullOrWhiteSpace(gameDataPath)) throw new ArgumentNullException(nameof(gameDataPath));
