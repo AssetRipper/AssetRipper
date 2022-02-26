@@ -230,6 +230,7 @@ namespace AssetRipper.Core.Project
 			OverrideYamlExporter(ClassIDType.CompositeCollider2D);
 			OverrideYamlExporter(ClassIDType.EdgeCollider2D);
 			OverrideYamlExporter(ClassIDType.CapsuleCollider2D);
+			OverrideYamlExporter(ClassIDType.ComputeShader);
 			OverrideYamlExporter(ClassIDType.AnimationClip);
 			OverrideYamlExporter(ClassIDType.TagManager);
 			OverrideYamlExporter(ClassIDType.AudioListener);
