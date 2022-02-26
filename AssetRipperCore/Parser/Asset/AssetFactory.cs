@@ -28,6 +28,7 @@ using AssetRipper.Core.Classes.Light;
 using AssetRipper.Core.Classes.LightingDataAsset;
 using AssetRipper.Core.Classes.LightmapSettings;
 using AssetRipper.Core.Classes.LightProbes;
+using AssetRipper.Core.Classes.LineRenderer;
 using AssetRipper.Core.Classes.LODGroup;
 using AssetRipper.Core.Classes.Material;
 using AssetRipper.Core.Classes.Mesh;
@@ -153,6 +154,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.MonoManager => new MonoManager(assetInfo),
 				ClassIDType.Texture3D => new Texture3D(assetInfo),
 				ClassIDType.NewAnimationTrack => new NewAnimationTrack(assetInfo),
+				ClassIDType.LineRenderer => new LineRenderer(assetInfo),
 				ClassIDType.Flare => new Flare(assetInfo),
 				ClassIDType.Halo => new Halo(assetInfo),
 				ClassIDType.LensFlare => new LensFlare(assetInfo),
