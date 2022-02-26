@@ -16,6 +16,7 @@ using AssetRipper.Core.Classes.CapsuleCollider2D;
 using AssetRipper.Core.Classes.ClusterInputManager;
 using AssetRipper.Core.Classes.CompositeCollider2D;
 using AssetRipper.Core.Classes.ComputeShader;
+using AssetRipper.Core.Classes.ConstantForce;
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
 using AssetRipper.Core.Classes.Flare;
@@ -134,6 +135,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.CapsuleCollider2D => new CapsuleCollider2D(assetInfo),
 				ClassIDType.ComputeShader => new ComputeShader(assetInfo),
 				ClassIDType.AnimationClip => new AnimationClip(assetInfo),
+				ClassIDType.ConstantForce => new ConstantForce(assetInfo),
 				ClassIDType.TagManager => new TagManager(assetInfo),
 				ClassIDType.AudioListener => new AudioListener(assetInfo),
 				ClassIDType.AudioSource => new AudioSource(assetInfo),
