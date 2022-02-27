@@ -18,11 +18,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>Offset in Vertices</summary>
 		public uint FirstVertex { get; set; }
 		public uint VertexCount { get; set; }
-		public IAABB LocalAABB => m_LocalAABB;
-
-
-		private AABB m_LocalAABB = new AABB();
-
+		public IAABB LocalAABB { get; } = new AABB();
 		public uint IsTriStrip => (uint)Topology;
 
 		public static int ToSerializedVersion(UnityVersion version)
@@ -65,7 +61,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				FirstVertex = reader.ReadUInt32();
 				VertexCount = reader.ReadUInt32();
-				m_LocalAABB.Read(reader);
+				LocalAABB.Read(reader);
 			}
 		}
 
@@ -86,7 +82,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				writer.Write(FirstVertex);
 				writer.Write(VertexCount);
-				m_LocalAABB.Write(writer);
+				LocalAABB.Write(writer);
 			}
 		}
 
@@ -113,7 +109,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				node.Add(FirstVertexName, FirstVertex);
 				node.Add(VertexCountName, VertexCount);
-				node.Add(LocalAABBName, m_LocalAABB.ExportYAML(container));
+				node.Add(LocalAABBName, LocalAABB.ExportYAML(container));
 			}
 			return node;
 		}

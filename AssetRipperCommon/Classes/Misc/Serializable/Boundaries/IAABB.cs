@@ -1,8 +1,9 @@
-﻿using AssetRipper.Core.Math.Vectors;
+﻿using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Math.Vectors;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 {
-	public interface IAABB
+	public interface IAABB : IAsset
 	{
 		IVector3f Center { get; }
 		IVector3f Extent { get; }
