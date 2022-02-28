@@ -1,13 +1,6 @@
 # Development Roadmap
 
-## 0.1.9.4
-
-* ~~Bump Cpp2IL~~
-* ~~Fix Texture preview in the GUI~~
-* ~~Fix serialized file reading issue affecting some games~~
-* ~~Improved export path decision making~~
-* ~~Catch errors converting audio~~
-* ~~Add support for 8 new asset types from Jannify~~
+## 0.1.9.5
 
 ## 0.2.0.0
 * Convert Exporters to the new Interface System
