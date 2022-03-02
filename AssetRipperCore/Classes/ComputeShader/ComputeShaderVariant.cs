@@ -1,13 +1,16 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 
 namespace AssetRipper.Core.Classes.ComputeShader
 {
-	public sealed class  ComputeShaderVariant : IAssetReadable, IYAMLExportable
+	public sealed class ComputeShaderVariant : IAssetReadable, IYAMLExportable
 	{
+		public static bool HasResourcesResolved(UnityVersion version) => version.IsGreaterEqual(5, 1, 0, UnityVersionType.Final, 3);
+
 		public void Read(AssetReader reader)
 		{
 			TargetRenderer = reader.ReadInt32();
@@ -16,8 +19,11 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			reader.AlignStream();
 			ConstantBuffers = reader.ReadAssetArray<ComputeShaderCB>();
 			reader.AlignStream();
-			ResourcesResolved = reader.ReadBoolean();
-			reader.AlignStream();
+			if (HasResourcesResolved(reader.Version))
+			{
+				ResourcesResolved = reader.ReadBoolean();
+				reader.AlignStream();
+			}
 		}
 
 		public YAMLNode ExportYAML(IExportContainer container)
@@ -27,7 +33,11 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			node.Add("targetLevel", TargetLevel);
 			node.Add("kernels", Kernels.ExportYAML(container));
 			node.Add("constantBuffers", ConstantBuffers.ExportYAML(container));
-			node.Add("resourcesResolved", ResourcesResolved);
+			if (HasResourcesResolved(container.Version))
+			{
+				node.Add("resourcesResolved", ResourcesResolved);
+			}
+
 			return node;
 		}
 

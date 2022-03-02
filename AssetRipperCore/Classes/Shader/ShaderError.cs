@@ -15,6 +15,10 @@ namespace AssetRipper.Core.Classes.Shader
 		/// 4.5.0 and greater
 		/// </summary>
 		public static bool HasFile(UnityVersion version) => version.IsGreaterEqual(4, 5);
+		/// <summary>
+		/// 5.5.0f3 and greater
+		/// </summary>
+		public static bool IsRuntimeError(UnityVersion version) => version.IsGreaterEqual(5, 5, 0, UnityVersionType.Final, 3);
 
 		public void Read(AssetReader reader)
 		{
@@ -37,12 +41,20 @@ namespace AssetRipper.Core.Classes.Shader
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(MessageName, Message);
-			node.Add(MessageDetailsName, GetMessageDetails(container.Version));
-			node.Add(FileName, GetFile(container.Version));
-			node.Add(CompilerPlatformName, (int)CompilerPlatform);
+			if (HasMessageDetails(container.Version))
+			{
+				node.Add(MessageDetailsName, GetMessageDetails(container.Version));
+			}
+
+			if (HasFile(container.Version))
+			{
+				node.Add(FileName, GetFile(container.Version));
+				node.Add(CompilerPlatformName, (int)CompilerPlatform);
+			}
+
 			node.Add(LineName, Line);
 			node.Add(WarningName, Warning);
-			node.Add(ProgramErrorName, ProgramError);
+			node.Add(ProgramErrorName(container.Version), ProgramError);
 			return node;
 		}
 
@@ -69,6 +81,6 @@ namespace AssetRipper.Core.Classes.Shader
 		public const string CompilerPlatformName = "compilerPlatform";
 		public const string LineName = "line";
 		public const string WarningName = "warning";
-		public const string ProgramErrorName = "programError";
+		public string ProgramErrorName(UnityVersion version) => IsRuntimeError(version) ? "runtimeError" : "programError";
 	}
 }

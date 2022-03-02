@@ -4,14 +4,14 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
 using AssetRipper.Core.YAML;
 
-namespace AssetRipper.Core.Classes.Material
+namespace AssetRipper.Core.Classes
 {
 	public sealed class FastPropertyName : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		private static bool IsPlainString(UnityVersion version) => version.IsGreaterEqual(2017, 3);
+		private static bool IsPlainString(UnityVersion version) => version.IsGreaterEqual(5, 6, 0, UnityVersionType.Beta, 1);
 
 		public bool IsCRC28Match(uint crc)
 		{
@@ -48,6 +48,7 @@ namespace AssetRipper.Core.Classes.Material
 			{
 				return base.ToString();
 			}
+
 			return Value;
 		}
 
