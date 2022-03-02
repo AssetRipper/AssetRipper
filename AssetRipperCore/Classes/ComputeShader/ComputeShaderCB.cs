@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.ComputeShader
 	{
 		public void Read(AssetReader reader)
 		{
-			Name = reader.ReadString();
+			Name = reader.ReadAsset<FastPropertyName>();
 			ByteSize = reader.ReadInt32();
 			Params = reader.ReadAssetArray<ComputeShaderParam>();
 			reader.AlignStream();
@@ -19,13 +19,13 @@ namespace AssetRipper.Core.Classes.ComputeShader
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("name", Name);
+			node.Add("name", Name.ExportYAML(container));
 			node.Add("byteSize", ByteSize);
 			node.Add("params", Params.ExportYAML(container));
 			return node;
 		}
 
-		public string Name { get; set; }
+		public FastPropertyName Name { get; set; }
 		public int ByteSize { get; set; }
 		public ComputeShaderParam[] Params { get; set; }
 	}

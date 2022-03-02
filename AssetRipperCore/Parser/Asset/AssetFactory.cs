@@ -133,7 +133,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.CompositeCollider2D => new CompositeCollider2D(assetInfo),
 				ClassIDType.EdgeCollider2D => new EdgeCollider2D(assetInfo),
 				ClassIDType.CapsuleCollider2D => new CapsuleCollider2D(assetInfo),
-				//ClassIDType.ComputeShader => new ComputeShader(assetInfo),
+				ClassIDType.ComputeShader => new ComputeShader(assetInfo),
 				ClassIDType.AnimationClip => new AnimationClip(assetInfo),
 				ClassIDType.ConstantForce => new ConstantForce(assetInfo),
 				ClassIDType.TagManager => new TagManager(assetInfo),
