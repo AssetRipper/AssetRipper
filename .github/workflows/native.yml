@@ -10,7 +10,7 @@ jobs:
   BuildLinux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Configure Texture2DDecoderNative
       run: cmake -B ./build/
@@ -29,7 +29,7 @@ jobs:
   BuildMac:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       
     - name: Configure Texture2DDecoderNative
       run: cmake -B ./build/
@@ -48,7 +48,7 @@ jobs:
   BuildWindows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.3
