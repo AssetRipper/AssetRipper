@@ -52,9 +52,9 @@ namespace AssetRipper.Core.Classes
 		public float EdgeRadius { get; set; }
 		public Vector2f[] Points { get; set; }
 
-		public Vector2f AdjacentStartPoint { get; set; }
+		public Vector2f AdjacentStartPoint { get; } = new();
 
-		public Vector2f AdjacentEndPoint { get; set; }
+		public Vector2f AdjacentEndPoint { get; } = new();
 
 		public bool UseAdjacentStartPoint { get; set; }
 
