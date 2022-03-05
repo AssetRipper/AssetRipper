@@ -6,6 +6,10 @@ using AssetRipper.Core.Classes.AnimatorController;
 using AssetRipper.Core.Classes.AnimatorOverrideController;
 using AssetRipper.Core.Classes.AssetBundle;
 using AssetRipper.Core.Classes.AudioClip;
+using AssetRipper.Core.Classes.AudioEchoFilter;
+using AssetRipper.Core.Classes.AudioHighPassFilter;
+using AssetRipper.Core.Classes.AudioChorusFilter;
+using AssetRipper.Core.Classes.AudioDistortionFilter;
 using AssetRipper.Core.Classes.AudioManager;
 using AssetRipper.Core.Classes.AudioSource;
 using AssetRipper.Core.Classes.Avatar;
@@ -51,6 +55,7 @@ using AssetRipper.Core.Classes.PhysicMaterial;
 using AssetRipper.Core.Classes.Physics2DSettings;
 using AssetRipper.Core.Classes.PhysicsManager;
 using AssetRipper.Core.Classes.PrefabInstance;
+using AssetRipper.Core.Classes.Projector;
 using AssetRipper.Core.Classes.QualitySettings;
 using AssetRipper.Core.Classes.ReflectionProbe;
 using AssetRipper.Core.Classes.RenderSettings;
@@ -63,6 +68,7 @@ using AssetRipper.Core.Classes.ShaderVariantCollection;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.SpriteAtlas;
 using AssetRipper.Core.Classes.SpriteRenderer;
+using AssetRipper.Core.Classes.StreamingController;
 using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Classes.Terrain;
 using AssetRipper.Core.Classes.TerrainData;
@@ -102,6 +108,12 @@ namespace AssetRipper.Core.Parser.Asset
 		{
 			return assetInfo.ClassID switch
 			{
+				ClassIDType.Projector => new Projector(assetInfo),
+				ClassIDType.StreamingController => new StreamingController(assetInfo),
+				ClassIDType.AudioDistortionFilter => new AudioDistortionFilter(assetInfo),
+				ClassIDType.AudioChorusFilter => new AudioChorusFilter(assetInfo),
+				ClassIDType.AudioEchoFilter => new AudioEchoFilter(assetInfo),
+				ClassIDType.AudioHighPassFilter => new AudioHighPassFilter(assetInfo),
 				ClassIDType.GameObject => new GameObject(assetInfo),
 				ClassIDType.Transform => new Transform(assetInfo),
 				ClassIDType.TimeManager => new TimeManager(assetInfo),
@@ -133,7 +145,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.CompositeCollider2D => new CompositeCollider2D(assetInfo),
 				ClassIDType.EdgeCollider2D => new EdgeCollider2D(assetInfo),
 				ClassIDType.CapsuleCollider2D => new CapsuleCollider2D(assetInfo),
-				ClassIDType.ComputeShader => new ComputeShader(assetInfo),
+				//ClassIDType.ComputeShader => new ComputeShader(assetInfo),
 				ClassIDType.AnimationClip => new AnimationClip(assetInfo),
 				ClassIDType.ConstantForce => new ConstantForce(assetInfo),
 				ClassIDType.TagManager => new TagManager(assetInfo),
