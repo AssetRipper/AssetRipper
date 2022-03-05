@@ -337,15 +337,4 @@ jobs:
        shell: bash
        run: |
         cd ./Output/
-        ls > ../version_list.txt
-        mv ../version_list.txt version_list.txt
-        cd ..
-     - name: Force Push Files To Branch
-       if: ${{ github.event_name == 'push' && github.repository == 'AssetRipper/AssetRipper' }}
-       uses: peaceiris/actions-gh-pages@v3
-       with:
-         github_token: ${{ secrets.GITHUB_TOKEN }}
-         publish_dir: /home/runner/work/AssetRipper/AssetRipper/Output/
-         publish_branch: assemblies
-         force_orphan: true
-         enable_jekyll: true
+        ls
