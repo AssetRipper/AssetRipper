@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+		<OutputPath>bin\x64\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>obj\x64\$(Configuration)\</IntermediateOutputPath>
 		<RootNamespace>AssemblyDumper.ConsoleApp</RootNamespace>
 		<TargetFramework>net6.0</TargetFramework>
