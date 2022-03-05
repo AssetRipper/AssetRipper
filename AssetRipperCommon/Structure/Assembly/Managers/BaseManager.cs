@@ -54,7 +54,15 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 				ReadWrite = false,
 				AssemblyResolver = this,
 			};
-			AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(filePath, parameters);
+			AssemblyDefinition assembly;
+			try
+			{
+				assembly = AssemblyDefinition.ReadAssembly(filePath, parameters);
+			}
+			catch(BadImageFormatException badImageFormatException)
+			{
+				throw new BadImageFormatException($"Could not read {filePath}", badImageFormatException);
+			}
 			string fileName = Path.GetFileNameWithoutExtension(filePath);
 			string assemblyName = ToAssemblyName(assembly.Name.Name);
 			m_assemblies.Add(fileName, assembly);
