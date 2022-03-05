@@ -55,7 +55,6 @@ using AssetRipper.Core.Classes.PhysicMaterial;
 using AssetRipper.Core.Classes.Physics2DSettings;
 using AssetRipper.Core.Classes.PhysicsManager;
 using AssetRipper.Core.Classes.PrefabInstance;
-using AssetRipper.Core.Classes.Projector;
 using AssetRipper.Core.Classes.QualitySettings;
 using AssetRipper.Core.Classes.ReflectionProbe;
 using AssetRipper.Core.Classes.RenderSettings;
@@ -108,7 +107,6 @@ namespace AssetRipper.Core.Parser.Asset
 		{
 			return assetInfo.ClassID switch
 			{
-				ClassIDType.Projector => new Projector(assetInfo),
 				ClassIDType.StreamingController => new StreamingController(assetInfo),
 				ClassIDType.AudioDistortionFilter => new AudioDistortionFilter(assetInfo),
 				ClassIDType.AudioChorusFilter => new AudioChorusFilter(assetInfo),
