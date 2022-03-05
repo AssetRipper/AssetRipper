@@ -62,6 +62,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetAnalyzer", "AssetAnaly
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{88179FFC-0863-4C4F-9860-68EB1471E59F}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\assembly_dumper_build.yml = .github\workflows\assembly_dumper_build.yml
+		.github\workflows\assembly_dumper_test.yml = .github\workflows\assembly_dumper_test.yml
 		.github\workflows\auxiliary.yml = .github\workflows\auxiliary.yml
 		.github\workflows\codeql.yml = .github\workflows\codeql.yml
 		.github\workflows\docfx_build.yml = .github\workflows\docfx_build.yml
@@ -95,6 +97,19 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperCommon", "AssetRipperCommon\AssetRipperCommon.csproj", "{676FEE4F-6353-4D8B-B8E6-D89801D25575}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperTests", "AssetRipperTests\AssetRipperTests.csproj", "{365C791E-431B-40E5-B724-BE375126AA11}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyDumper", "AssemblyDumper\AssemblyDumper.csproj", "{03223F04-FDD2-4D57-BA6C-D4988F56038B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyValidator", "AssemblyValidator\AssemblyValidator.csproj", "{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyDumper.ConsoleApp", "AssemblyDumper.ConsoleApp\AssemblyDumper.ConsoleApp.csproj", "{14F8C784-1827-4143-BBD9-3016FDABE99E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShellScripts", "ShellScripts", "{06FFA747-F995-4696-A09E-7559161EBA42}"
+	ProjectSection(SolutionItems) = preProject
+		generate_all.sh = generate_all.sh
+		get_names.sh = get_names.sh
+		test.sh = test.sh
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -238,6 +253,42 @@ Global
 		{365C791E-431B-40E5-B724-BE375126AA11}.ReleaseMac|x64.Build.0 = Release|Any CPU
 		{365C791E-431B-40E5-B724-BE375126AA11}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
 		{365C791E-431B-40E5-B724-BE375126AA11}.ReleaseWindows|x64.Build.0 = Release|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.DebugLinux|x64.ActiveCfg = Debug|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.DebugLinux|x64.Build.0 = Debug|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.DebugMac|x64.ActiveCfg = Debug|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.DebugMac|x64.Build.0 = Debug|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.DebugWindows|x64.ActiveCfg = Debug|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.DebugWindows|x64.Build.0 = Debug|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.ReleaseLinux|x64.Build.0 = Release|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.ReleaseMac|x64.Build.0 = Release|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
+		{03223F04-FDD2-4D57-BA6C-D4988F56038B}.ReleaseWindows|x64.Build.0 = Release|Any CPU
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.DebugLinux|x64.ActiveCfg = DebugLinux|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.DebugLinux|x64.Build.0 = DebugLinux|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.DebugMac|x64.ActiveCfg = DebugMac|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.DebugMac|x64.Build.0 = DebugMac|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.DebugWindows|x64.ActiveCfg = DebugWindows|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.DebugWindows|x64.Build.0 = DebugWindows|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.ReleaseLinux|x64.ActiveCfg = ReleaseLinux|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.ReleaseLinux|x64.Build.0 = ReleaseLinux|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.ReleaseMac|x64.ActiveCfg = ReleaseMac|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.ReleaseMac|x64.Build.0 = ReleaseMac|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.ReleaseWindows|x64.ActiveCfg = ReleaseWindows|x64
+		{4AA48AD6-08DF-4FFD-AABD-30D5D940E655}.ReleaseWindows|x64.Build.0 = ReleaseWindows|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.DebugLinux|x64.ActiveCfg = DebugLinux|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.DebugLinux|x64.Build.0 = DebugLinux|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.DebugMac|x64.ActiveCfg = DebugMac|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.DebugMac|x64.Build.0 = DebugMac|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.DebugWindows|x64.ActiveCfg = DebugWindows|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.DebugWindows|x64.Build.0 = DebugWindows|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.ReleaseLinux|x64.ActiveCfg = ReleaseLinux|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.ReleaseLinux|x64.Build.0 = ReleaseLinux|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.ReleaseMac|x64.ActiveCfg = ReleaseMac|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.ReleaseMac|x64.Build.0 = ReleaseMac|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.ReleaseWindows|x64.ActiveCfg = ReleaseWindows|x64
+		{14F8C784-1827-4143-BBD9-3016FDABE99E}.ReleaseWindows|x64.Build.0 = ReleaseWindows|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,6 +298,7 @@ Global
 		{38C0DDA2-6C7D-41F1-90F6-0B1DDA86C0EC} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 		{88179FFC-0863-4C4F-9860-68EB1471E59F} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 		{E3A52FDC-1C4D-430F-A1BA-BFC5671181D4} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
+		{06FFA747-F995-4696-A09E-7559161EBA42} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED4FF66B-4A6D-4440-8721-23C5ED09791C}

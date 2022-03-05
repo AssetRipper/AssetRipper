@@ -1,0 +1,37 @@
+name: Assembly_Dumper_Test
+
+on:
+   push:
+    branches: [ master ]
+   pull_request:
+    branches: [ master ]
+   workflow_dispatch:
+  
+
+jobs:
+    build:
+     runs-on: ubuntu-latest
+
+     steps:
+     - name: Checkout Dumper Repository
+       uses: actions/checkout@v2
+     - name: Setup .NET
+       uses: actions/setup-dotnet@v2
+       with:
+         dotnet-version: 6.0.x
+     - name: Build
+       run: dotnet build /p:Configuration=ReleaseLinux
+       working-directory: ./AssemblyDumper.ConsoleApp/
+      
+     - name: Run Generation
+       shell: bash
+       run: |
+        chmod +x ./test.sh
+        ./test.sh
+
+     - name: Upload Assemblies
+       uses: actions/upload-artifact@v2
+       with:
+         name: TestAssemblies
+         path: /home/runner/work/AssetRipper/AssetRipper/Output/*
+         if-no-files-found: error
