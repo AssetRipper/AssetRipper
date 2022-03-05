@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
+		<OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
 		<RootNamespace>AssemblyDumper.ConsoleApp</RootNamespace>
 		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
