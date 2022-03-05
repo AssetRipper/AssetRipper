@@ -103,4 +103,6 @@ Just go to the `AssetRipperGUI_mac64` folder and double click this file and it s
 
 ![Screenshot 2022-03-05 at 11 02 44 AM](https://user-images.githubusercontent.com/88390577/156869753-0acf7092-62d3-4f57-9086-dc941c643209.png)
 
+And there you have it :)
+
 ![Screenshot 2022-03-05 at 11 04 39 AM](https://user-images.githubusercontent.com/88390577/156869786-8ed64cba-df09-4d21-a647-cfb2bf3ea990.png)
