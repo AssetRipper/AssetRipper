@@ -4,7 +4,7 @@
 		<OutputType>Exe</OutputType>
 		<OutputPath>bin\x64\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>obj\x64\$(Configuration)\</IntermediateOutputPath>
-		<TargetFramework>net6</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<DebugType>embedded</DebugType>
