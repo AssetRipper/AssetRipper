@@ -107,11 +107,6 @@ namespace AssetRipper.Core.Parser.Asset
 		{
 			return assetInfo.ClassID switch
 			{
-				ClassIDType.StreamingController => new StreamingController(assetInfo),
-				ClassIDType.AudioDistortionFilter => new AudioDistortionFilter(assetInfo),
-				ClassIDType.AudioChorusFilter => new AudioChorusFilter(assetInfo),
-				ClassIDType.AudioEchoFilter => new AudioEchoFilter(assetInfo),
-				ClassIDType.AudioHighPassFilter => new AudioHighPassFilter(assetInfo),
 				ClassIDType.GameObject => new GameObject(assetInfo),
 				ClassIDType.Transform => new Transform(assetInfo),
 				ClassIDType.TimeManager => new TimeManager(assetInfo),
@@ -143,7 +138,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.CompositeCollider2D => new CompositeCollider2D(assetInfo),
 				ClassIDType.EdgeCollider2D => new EdgeCollider2D(assetInfo),
 				ClassIDType.CapsuleCollider2D => new CapsuleCollider2D(assetInfo),
-				//ClassIDType.ComputeShader => new ComputeShader(assetInfo),
+				ClassIDType.ComputeShader => new ComputeShader(assetInfo),
 				ClassIDType.AnimationClip => new AnimationClip(assetInfo),
 				ClassIDType.ConstantForce => new ConstantForce(assetInfo),
 				ClassIDType.TagManager => new TagManager(assetInfo),
@@ -192,7 +187,11 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.TerrainData => new TerrainData(assetInfo),
 				ClassIDType.LightmapSettings => new LightmapSettings(assetInfo),
 				ClassIDType.EditorSettings => new EditorSettings(assetInfo),
+				ClassIDType.AudioHighPassFilter => new AudioHighPassFilter(assetInfo),
+				ClassIDType.AudioChorusFilter => new AudioChorusFilter(assetInfo),
 				ClassIDType.AudioReverbZone => new AudioReverbZone(assetInfo),
+				ClassIDType.AudioEchoFilter => new AudioEchoFilter(assetInfo),
+				ClassIDType.AudioDistortionFilter => new AudioDistortionFilter(assetInfo),
 				ClassIDType.WindZone => new WindZone(assetInfo),
 				ClassIDType.OffMeshLink => new OffMeshLink(assetInfo),
 				ClassIDType.OcclusionArea => new OcclusionArea(assetInfo),
@@ -239,6 +238,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.LightingDataAsset => new LightingDataAsset(assetInfo),
 				ClassIDType.LightingSettings => new LightingSettings(assetInfo),
 				ClassIDType.SpriteAtlas => new SpriteAtlas(assetInfo),
+				ClassIDType.StreamingController => new StreamingController(assetInfo),
 				ClassIDType.TerrainLayer => new TerrainLayer(assetInfo),
 				_ => null,
 			};

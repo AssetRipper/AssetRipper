@@ -3,6 +3,7 @@
 ## 0.1.9.5
 
 * ~~Fixed null reference exception when reading EdgeCollider2D~~
+* ~~Added support for exporting audio filters (#298)~~
 
 ## 0.2.0.0
 * Convert Exporters to the new Interface System

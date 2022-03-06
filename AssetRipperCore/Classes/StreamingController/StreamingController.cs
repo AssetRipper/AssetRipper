@@ -16,17 +16,17 @@ namespace AssetRipper.Core.Classes.StreamingController
 		{
 			base.Read(reader);
 
-			streamingMipmapBias = reader.ReadSingle();
+			StreamingMipmapBias = reader.ReadSingle();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("streamingMipmapBias", streamingMipmapBias);
+			node.Add("m_StreamingMipmapBias", StreamingMipmapBias);
 			return node;
 		}
 
-		public float streamingMipmapBias { get; set; }
+		public float StreamingMipmapBias { get; set; }
 	}
 }

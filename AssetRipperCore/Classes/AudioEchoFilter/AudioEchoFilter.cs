@@ -16,26 +16,26 @@ namespace AssetRipper.Core.Classes.AudioEchoFilter
 		{
 			base.Read(reader);
 
-			delay = reader.ReadSingle();
-			decayRatio = reader.ReadSingle();
-			dryMix = reader.ReadSingle();
-			wetMix = reader.ReadSingle();
+			Delay = reader.ReadSingle();
+			DecayRatio = reader.ReadSingle();
+			DryMix = reader.ReadSingle();
+			WetMix = reader.ReadSingle();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("delay", delay);
-			node.Add("decayRatio", decayRatio);
-			node.Add("dryMix", dryMix);
-			node.Add("wetMix", wetMix);
+			node.Add("m_Delay", Delay);
+			node.Add("m_DecayRatio", DecayRatio);
+			node.Add("m_DryMix", DryMix);
+			node.Add("m_WetMix", WetMix);
 			return node;
 		}
 
-		public float delay { get; set; }
-		public float decayRatio { get; set; }
-		public float dryMix { get; set; }
-		public float wetMix { get; set; }
+		public float Delay { get; set; }
+		public float DecayRatio { get; set; }
+		public float DryMix { get; set; }
+		public float WetMix { get; set; }
 	}
 }

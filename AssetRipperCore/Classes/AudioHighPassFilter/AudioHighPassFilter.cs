@@ -16,20 +16,20 @@ namespace AssetRipper.Core.Classes.AudioHighPassFilter
 		{
 			base.Read(reader);
 
-			cutoffFrequency = reader.ReadSingle();
-			highpassResonanceQ = reader.ReadSingle();
+			CutoffFrequency = reader.ReadSingle();
+			HighpassResonanceQ = reader.ReadSingle();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("cutoffFrequency", cutoffFrequency);
-			node.Add("highpassResonanceQ", highpassResonanceQ);
+			node.Add("m_CutoffFrequency", CutoffFrequency);
+			node.Add("m_HighpassResonanceQ", HighpassResonanceQ);
 			return node;
 		}
 
-		public float cutoffFrequency { get; set; }
-		public float highpassResonanceQ { get; set; }
+		public float CutoffFrequency { get; set; }
+		public float HighpassResonanceQ { get; set; }
 	}
 }

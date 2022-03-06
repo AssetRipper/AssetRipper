@@ -16,17 +16,17 @@ namespace AssetRipper.Core.Classes.AudioDistortionFilter
 		{
 			base.Read(reader);
 
-			distortionLevel = reader.ReadSingle();
+			DistortionLevel = reader.ReadSingle();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("distortionLevel", distortionLevel);
+			node.Add("m_DistortionLevel", DistortionLevel);
 			return node;
 		}
 
-		public float distortionLevel { get; set; }
+		public float DistortionLevel { get; set; }
 	}
 }
