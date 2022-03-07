@@ -13,7 +13,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
      - name: Checkout AssemblyDumper Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
      - name: Setup .NET
        uses: actions/setup-dotnet@v2
        with:
@@ -37,14 +37,14 @@ jobs:
        with:
          dotnet-version: 6.0.x
      - name: Checkout Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
      - name: Download AssemblyDumper
        uses: actions/download-artifact@v2
        with:
         name: AssemblyDumper
         path: ./AssemblyDumper.ConsoleApp/bin/x64/ReleaseLinux/net6.0/
      - name: Checkout TypeTreeDumps Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
        with:
         repository: 'AssetRipper/TypeTreeDumps'
         path: TypeTreeDumps
@@ -73,14 +73,14 @@ jobs:
        with:
          dotnet-version: 6.0.x
      - name: Checkout Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
      - name: Download AssemblyDumper
        uses: actions/download-artifact@v2
        with:
         name: AssemblyDumper
         path: ./AssemblyDumper.ConsoleApp/bin/x64/ReleaseLinux/net6.0/
      - name: Checkout TypeTreeDumps Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
        with:
         repository: 'AssetRipper/TypeTreeDumps'
         path: TypeTreeDumps
@@ -109,14 +109,14 @@ jobs:
        with:
          dotnet-version: 6.0.x
      - name: Checkout Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
      - name: Download AssemblyDumper
        uses: actions/download-artifact@v2
        with:
         name: AssemblyDumper
         path: ./AssemblyDumper.ConsoleApp/bin/x64/ReleaseLinux/net6.0/
      - name: Checkout TypeTreeDumps Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
        with:
         repository: 'AssetRipper/TypeTreeDumps'
         path: TypeTreeDumps
@@ -145,14 +145,14 @@ jobs:
        with:
          dotnet-version: 6.0.x
      - name: Checkout Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
      - name: Download AssemblyDumper
        uses: actions/download-artifact@v2
        with:
         name: AssemblyDumper
         path: ./AssemblyDumper.ConsoleApp/bin/x64/ReleaseLinux/net6.0/
      - name: Checkout TypeTreeDumps Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
        with:
         repository: 'AssetRipper/TypeTreeDumps'
         path: TypeTreeDumps
@@ -181,14 +181,14 @@ jobs:
        with:
          dotnet-version: 6.0.x
      - name: Checkout Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
      - name: Download AssemblyDumper
        uses: actions/download-artifact@v2
        with:
         name: AssemblyDumper
         path: ./AssemblyDumper.ConsoleApp/bin/x64/ReleaseLinux/net6.0/
      - name: Checkout TypeTreeDumps Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
        with:
         repository: 'AssetRipper/TypeTreeDumps'
         path: TypeTreeDumps
@@ -217,14 +217,14 @@ jobs:
        with:
          dotnet-version: 6.0.x
      - name: Checkout Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
      - name: Download AssemblyDumper
        uses: actions/download-artifact@v2
        with:
         name: AssemblyDumper
         path: ./AssemblyDumper.ConsoleApp/bin/x64/ReleaseLinux/net6.0/
      - name: Checkout TypeTreeDumps Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
        with:
         repository: 'AssetRipper/TypeTreeDumps'
         path: TypeTreeDumps
@@ -253,14 +253,14 @@ jobs:
        with:
          dotnet-version: 6.0.x
      - name: Checkout Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
      - name: Download AssemblyDumper
        uses: actions/download-artifact@v2
        with:
         name: AssemblyDumper
         path: ./AssemblyDumper.ConsoleApp/bin/x64/ReleaseLinux/net6.0/
      - name: Checkout TypeTreeDumps Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
        with:
         repository: 'AssetRipper/TypeTreeDumps'
         path: TypeTreeDumps
@@ -285,7 +285,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
      - name: Checkout AssemblyDumper Repository
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
      - name: Setup .NET
        uses: actions/setup-dotnet@v2
        with:
