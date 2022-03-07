@@ -7,10 +7,25 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 {
 	public interface IPackedFloatVector : IAsset
 	{
+		/// <summary>
+		/// The number of values stored within
+		/// </summary>
 		uint NumItems { get; set; }
+		/// <summary>
+		/// A positive value representing the difference between the maximum and minimum values stored in the data
+		/// </summary>
 		float Range { get; set; }
+		/// <summary>
+		/// The minimum value compressed in the data
+		/// </summary>
 		float Start { get; set; }
+		/// <summary>
+		/// The compressed data containing all the values
+		/// </summary>
 		byte[] Data { get; set; }
+		/// <summary>
+		/// Allegedly a maximum of 32, but it seems to be really 24 due to the <see cref="float"/> binary structure
+		/// </summary>
 		byte BitSize { get; set; }
 	}
 
@@ -25,11 +40,6 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 			instance.Start = source.Start;
 			instance.Data = source.Data.ToArray();
 			instance.BitSize = source.BitSize;
-		}
-
-		public static void Pack(this IPackedFloatVector packedVector, float[] values)
-		{
-			throw new NotImplementedException();
 		}
 
 		public static float[] Unpack(this IPackedFloatVector packedVector)
@@ -75,16 +85,20 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 
 		public static float[] UnpackFloats(this IPackedFloatVector packedVector, int itemCountInChunk, int chunkStride, int start = 0, int numChunks = -1)
 		{
-			int bitPos = packedVector.BitSize * start;
-			int indexPos = bitPos / 8;
-			bitPos %= 8;
+			if (chunkStride % 4 != 0)
+				throw new ArgumentException(nameof(chunkStride));
+
+			int bitIndex = packedVector.BitSize * start;
+			int byteIndex = bitIndex / 8;
+			bitIndex %= 8;
 
 			float scale = 1.0f / packedVector.Range;
 			if (numChunks == -1)
 				numChunks = (int)packedVector.NumItems / itemCountInChunk;
-			var end = chunkStride * numChunks / 4;
-			var data = new List<float>();
-			for (var index = 0; index != end; index += chunkStride / 4)
+			int end = chunkStride * numChunks / 4;
+			List<float> data = new List<float>();
+			for (int index = 0; index != end; index += chunkStride / 4)
+			{
 				for (int i = 0; i < itemCountInChunk; ++i)
 				{
 					uint x = 0;
@@ -92,21 +106,95 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 					int bits = 0;
 					while (bits < packedVector.BitSize)
 					{
-						x |= unchecked((uint)(packedVector.Data[indexPos] >> bitPos << bits));
-						int num = System.Math.Min(packedVector.BitSize - bits, 8 - bitPos);
-						bitPos += num;
-						bits += num;
-						if (bitPos == 8)
+						x |= unchecked((uint)(packedVector.Data[byteIndex] >> bitIndex << bits));
+						int read = System.Math.Min(packedVector.BitSize - bits, 8 - bitIndex);
+						bitIndex += read;
+						bits += read;
+						if (bitIndex == 8)
 						{
-							indexPos++;
-							bitPos = 0;
+							byteIndex++;
+							bitIndex = 0;
 						}
 					}
 					x &= unchecked((uint)(1 << packedVector.BitSize) - 1u);
 					data.Add(x / (scale * ((1 << packedVector.BitSize) - 1)) + packedVector.Start);
 				}
-
+			}
 			return data.ToArray();
+		}
+
+		public static void PackFloats(this IPackedFloatVector packedVector, float[] data, int itemCountInChunk, int chunkStride, int numChunks, int bitSize, bool adjustBitSize)
+		{
+			if (data.Length != itemCountInChunk * numChunks)
+				throw new ArgumentException(nameof(data));
+			if (chunkStride != itemCountInChunk * 4)
+				throw new ArgumentException(nameof(chunkStride));
+
+			packedVector.PackFloats(data, bitSize, adjustBitSize);
+		}
+
+		public static void PackFloats(this IPackedFloatVector packedVector, float[] data, int bitSize, bool adjustBitSize)
+		{
+			float maxf = float.NegativeInfinity;
+			float minf = float.PositiveInfinity;
+			for (int i = 0; i < data.Length; ++i)
+			{
+				if (maxf < data[i])
+					maxf = data[i];
+				if (minf > data[i])
+					minf = data[i];
+			}
+
+			packedVector.Range = maxf - minf;
+			
+			if (adjustBitSize)
+				bitSize += GetBitCount(packedVector.Range);
+			if (bitSize > 32)
+				bitSize = 32;
+
+			packedVector.Start = minf;
+			packedVector.NumItems = (uint)(data.Length);
+			packedVector.BitSize = (byte)bitSize;
+			packedVector.Data = new byte[(packedVector.NumItems * bitSize + 7) / 8];
+
+
+			double scale = 1.0d / packedVector.Range;
+
+			int bitIndex = 0;
+			int byteIndex = 0;
+
+			for (int i = 0; i < data.Length; ++i)
+			{
+				double scaled = (data[i] - packedVector.Start) * scale;
+				if (scaled < 0)
+					scaled = 0d;
+				else if (scaled > 1)
+					scaled = 1d;
+
+				float f = BitConverter.Int32BitsToSingle((1 << (packedVector.BitSize)) - 1);
+				double d = scaled * f;
+				uint x = BitConverter.SingleToUInt32Bits((float)d);
+
+				int bits = 0;
+				while (bits < packedVector.BitSize)
+				{
+					packedVector.Data[byteIndex] |= unchecked((byte)((x >> bits) << bitIndex));
+					int read = System.Math.Min(packedVector.BitSize - bits, 8 - bitIndex);
+					bitIndex += read;
+					bits += read;
+					if (bitIndex == 8)
+					{
+						byteIndex++;
+						bitIndex = 0;
+					}
+				}
+			}
+		}
+
+		private static int GetBitCount(double value)
+		{
+			double log = System.Math.Log2(value);
+			return (int)System.Math.Ceiling(log);
 		}
 	}
 }
