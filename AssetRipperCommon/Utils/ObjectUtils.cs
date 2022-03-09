@@ -9,6 +9,12 @@ namespace AssetRipper.Core.Utils
 {
 	public static class ObjectUtils
 	{
+		private const long TenToTheFifthteenth = 1_000_000_000_000_000L;
+		/// <summary>
+		/// 9223
+		/// </summary>
+		private const uint MaxPrefixedClassId = (uint)(long.MaxValue / TenToTheFifthteenth);
+
 		public static long GenerateExportID(IUnityObjectBase asset, Func<long, bool> duplicateChecker)
 		{
 			if (asset == null)
@@ -16,26 +22,34 @@ namespace AssetRipper.Core.Utils
 				throw new ArgumentNullException(nameof(asset));
 			}
 
-			ThreadSafeRandom random = new ThreadSafeRandom();
-			uint classID = (uint)asset.ClassID;
-#if DEBUG
-			int length = GetDigitsCount(classID);
-			if (length > 4)
-			{
-				throw new NotSupportedException($"Class ID {classID} with more that 4 digits isn't supported");
-			}
-#endif
-			long prefix = classID * 1000000000000000L;
-			ulong persistentValue = 0;
 #warning TODO: depending on the export version exportID should has random or ordered value
-			long exportID = 0;
-			do
+
+			long exportID;
+			uint classID = (uint)asset.ClassID;
+			if (classID > MaxPrefixedClassId)
 			{
-				ulong value = unchecked((ulong)GenerateInternalID());
-				persistentValue = unchecked(persistentValue + value);
-				exportID = prefix + (long)(persistentValue % 1000000000000000L);
+				do
+				{
+					//Checked for StreamingController on 2018.2.5f1
+					//Small class id's use the below format
+					//Whereas this uses random id's
+					exportID = GenerateInternalID();
+				}
+				while (duplicateChecker(exportID));
 			}
-			while (duplicateChecker(exportID));
+			else
+			{
+				long prefix = classID * TenToTheFifthteenth;
+				ulong persistentValue = 0;
+				do
+				{
+					ulong value = unchecked((ulong)GenerateInternalID());
+					persistentValue = unchecked(persistentValue + value);
+					exportID = prefix + (long)(persistentValue % TenToTheFifthteenth);
+				}
+				while (duplicateChecker(exportID));
+			}
+			
 			return exportID;
 		}
 
@@ -67,17 +81,6 @@ namespace AssetRipper.Core.Utils
 			using MD5 md5 = MD5.Create();
 			byte[] hash = md5.ComputeHash(buffer);
 			return new UnityGUID(hash);
-		}
-
-		private static int GetDigitsCount(uint value)
-		{
-			int count = 0;
-			while (value != 0)
-			{
-				value /= 10;
-				count++;
-			}
-			return count;
 		}
 
 		public const char DirectorySeparatorChar = '/';
