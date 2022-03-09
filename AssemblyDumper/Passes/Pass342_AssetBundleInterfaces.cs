@@ -1,4 +1,5 @@
 ﻿using AssemblyDumper.Utils;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.AssetBundle;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
@@ -61,9 +62,10 @@ namespace AssemblyDumper.Passes
 			GenericInstanceTypeSignature fieldType = (GenericInstanceTypeSignature)field.Signature!.FieldType;
 			TypeSignature typeArgument1 = fieldType.TypeArguments[0];
 			TypeSignature typeArgument2 = fieldType.TypeArguments[1];
-			TypeSignature typeArgument3 = SharedState.Importer.ImportCommonType<IAssetInfo>().ToTypeSignature();
+			TypeSignature typeArgument3 = SharedState.Importer.ImportCommonType<Utf8StringBase>().ToTypeSignature();
+			TypeSignature typeArgument4 = SharedState.Importer.ImportCommonType<IAssetInfo>().ToTypeSignature();
 			IMethodDefOrRef extensionMethod = SharedState.Importer.ImportCommonMethod(typeof(AssetDictionaryExtensions), m => m.Name == nameof(AssetDictionaryExtensions.ToCastedArray));
-			MethodSpecification extensionMethodInstance = MethodUtils.MakeGenericInstanceMethod(extensionMethod, typeArgument1, typeArgument2, typeArgument3);
+			MethodSpecification extensionMethodInstance = MethodUtils.MakeGenericInstanceMethod(extensionMethod, typeArgument1, typeArgument2, typeArgument3, typeArgument4);
 
 			CilInstructionCollection processor = method.CilMethodBody!.Instructions;
 			processor.Add(CilOpCodes.Ldarg_0);

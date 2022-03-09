@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.AssetBundle
 	{
 		bool HasAssetBundleName { get; }
 		string AssetBundleName { get; set; }
-		NullableKeyValuePair<string, IAssetInfo>[] GetAssets();
+		NullableKeyValuePair<Utf8StringBase, IAssetInfo>[] GetAssets();
 	}
 
 	public static class AssetBundleExtensions

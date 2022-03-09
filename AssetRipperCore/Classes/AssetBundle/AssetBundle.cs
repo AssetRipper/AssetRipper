@@ -148,9 +148,9 @@ namespace AssetRipper.Core.Classes.AssetBundle
 			throw new NotSupportedException();
 		}
 
-		public NullableKeyValuePair<string, IAssetInfo>[] GetAssets()
+		public NullableKeyValuePair<Utf8StringBase, IAssetInfo>[] GetAssets()
 		{
-			return Container.Select(t => new NullableKeyValuePair<string, IAssetInfo>(t.Key, t.Value)).ToArray();
+			return Container.Select(t => new NullableKeyValuePair<Utf8StringBase, IAssetInfo>(new Utf8StringLegacy(t.Key), t.Value)).ToArray();
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();

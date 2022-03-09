@@ -63,9 +63,11 @@ namespace AssetRipper.Core.Classes.ResourceManager
 			return node;
 		}
 
-		public NullableKeyValuePair<string, PPtr<IUnityObjectBase>>[] GetAssets()
+		public NullableKeyValuePair<Utf8StringBase, PPtr<IUnityObjectBase>>[] GetAssets()
 		{
-			return Container.Select(t => new NullableKeyValuePair<string, PPtr<IUnityObjectBase>>(t.Key, t.Value.CastTo<IUnityObjectBase>())).ToArray();
+			return Container
+				.Select(t => new NullableKeyValuePair<Utf8StringBase, PPtr<IUnityObjectBase>>(new Utf8StringLegacy(t.Key), t.Value.CastTo<IUnityObjectBase>()))
+				.ToArray();
 		}
 
 		public KeyValuePair<string, PPtr<Object.Object>>[] Container { get; set; }

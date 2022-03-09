@@ -284,7 +284,7 @@ namespace AssetRipper.Core.Project
 
 		private void AddResources(IResourceManager manager)
 		{
-			foreach (NullableKeyValuePair<string, PPtr<IUnityObjectBase>> kvp in manager.GetAssets())
+			foreach (NullableKeyValuePair<Utf8StringBase, PPtr<IUnityObjectBase>> kvp in manager.GetAssets())
 			{
 				IUnityObjectBase asset = kvp.Value.FindAsset(manager.SerializedFile);
 				if (asset == null)
@@ -292,7 +292,7 @@ namespace AssetRipper.Core.Project
 					continue;
 				}
 
-				string resourcePath = kvp.Key;
+				string resourcePath = kvp.Key.String;
 				if (m_pathAssets.TryGetValue(asset, out ProjectAssetPath projectPath))
 				{
 					// for paths like "Resources/inner/resources/extra/file" engine creates 2 resource entries
@@ -311,7 +311,7 @@ namespace AssetRipper.Core.Project
 			string bundleName = bundle.GetAssetBundleName();
 			string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
 			string directory = Path.Combine(AssetBundleFullPath, bundleName);
-			foreach (NullableKeyValuePair<string, IAssetInfo> kvp in bundle.GetAssets())
+			foreach (NullableKeyValuePair<Utf8StringBase, IAssetInfo> kvp in bundle.GetAssets())
 			{
 				// skip shared bundle assets, because we need to export them in their bundle directory
 				if (kvp.Value.AssetPtr.FileIndex != 0)
@@ -324,7 +324,7 @@ namespace AssetRipper.Core.Project
 					continue;
 				}
 
-				string assetPath = kvp.Key;
+				string assetPath = kvp.Key.String;
 				if (bundle.HasPathExtension())
 				{
 					// custom names may not have extensions

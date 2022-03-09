@@ -6,6 +6,6 @@ namespace AssetRipper.Core.Classes.ResourceManager
 {
 	public interface IResourceManager : IUnityObjectBase
 	{
-		NullableKeyValuePair<string, PPtr<IUnityObjectBase>>[] GetAssets();
+		NullableKeyValuePair<Utf8StringBase, PPtr<IUnityObjectBase>>[] GetAssets();
 	}
 }
