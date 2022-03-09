@@ -65,12 +65,20 @@ namespace AssetRipper.Library.Exporters.Audio
 			FmodSoundBank fsbData = FsbLoader.LoadFsbFromByteArray(rawData);
 
 			var audioType = fsbData.Header.AudioType;
-			if (audioType == FmodAudioType.VORBIS && !LibrariesLoaded)
+			try
+			{
+				if (audioType == FmodAudioType.VORBIS && !LibrariesLoaded)
+					return false;
+				else if (audioType.IsSupported() && fsbData.Samples.Single().RebuildAsStandardFileFormat(out decodedData, out fileExtension))
+					return true;
+				else
+					return false;
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(LogCategory.Export, $"Failed to convert audio ({Enum.GetName(audioType)})", ex);
 				return false;
-			else if (audioType.IsSupported() && fsbData.Samples.Single().RebuildAsStandardFileFormat(out decodedData, out fileExtension))
-				return true;
-			else
-				return false;
+			}
 		}
 
 		/// <summary>
