@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Asset;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO
@@ -10,13 +11,21 @@ namespace AssetRipper.Core.IO
 	/// </summary>
 	/// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
 	/// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
-	public class AssetDictionary<TKey, TValue> : List<NullableKeyValuePair<TKey, TValue>>, IDependent
+	public sealed class AssetDictionary<TKey, TValue> : AccessDictionaryBase<TKey, TValue>, IDependent
+		where TKey : new() 
+		where TValue : new()
 	{
 		private static readonly bool isDependentType = NullableKeyValuePair<TKey, TValue>.IsDependentType;
-		public void Add(TKey key, TValue value) => Add(new NullableKeyValuePair<TKey, TValue>(key, value));
+		private const int DefaultCapacity = 4;
+		private NullableKeyValuePair<TKey, TValue>[] pairs;
+		private int _count = 0;
 
-		public AssetDictionary() { }
-		public AssetDictionary(int capacity) : base(capacity) { }
+		public AssetDictionary() : this(DefaultCapacity) { }
+
+		public AssetDictionary(int capacity)
+		{
+			pairs = capacity == 0 ? Array.Empty<NullableKeyValuePair<TKey, TValue>>() : new NullableKeyValuePair<TKey, TValue>[capacity];
+		}
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
@@ -34,35 +43,222 @@ namespace AssetRipper.Core.IO
 				}
 			}
 		}
-	}
 
-	public static class AssetDictionaryExtensions
-	{
-		public static NullableKeyValuePair<TKeyBase, TValueBase>[] ToCastedArray<TKey, TValue, TKeyBase, TValueBase>(this AssetDictionary<TKey, TValue> dictionary)
-			where TKey : TKeyBase
-			where TValue : TValueBase
+		/// <inheritdoc/>
+		public override int Count => _count;
+
+		/// <inheritdoc/>
+		public override int Capacity
 		{
-			var result = new NullableKeyValuePair<TKeyBase, TValueBase>[dictionary.Count];
-			for (int i = 0; i < result.Length; i++)
+			get => pairs.Length;
+			set
 			{
-				var dictEntry = dictionary[i];
-				result[i] = new NullableKeyValuePair<TKeyBase, TValueBase>(dictEntry.Key, dictEntry.Value);
+				if (value < _count)
+				{
+					throw new ArgumentOutOfRangeException(nameof(value));
+				}
+
+				if (value != pairs.Length)
+				{
+					if (value > 0)
+					{
+						NullableKeyValuePair<TKey, TValue>[] newPairs = new NullableKeyValuePair<TKey, TValue>[value];
+						if (_count > 0)
+						{
+							Array.Copy(pairs, newPairs, _count);
+						}
+						pairs = newPairs;
+					}
+					else
+					{
+						pairs = Array.Empty<NullableKeyValuePair<TKey, TValue>>();
+					}
+				}
 			}
-			return result;
 		}
 
-		public static NullableKeyValuePair<TKeyBase, PPtr<TValueElement>>[] ToPPtrArray<TKey, TValue, TKeyBase, TValueElement>(this AssetDictionary<TKey, TValue> dictionary) 
-			where TKey : TKeyBase
-			where TValue : IPPtr 
-			where TValueElement : IUnityObjectBase
+		/// <inheritdoc/>
+		public override void Add(TKey key, TValue value)
 		{
-			var result = new NullableKeyValuePair<TKeyBase, PPtr<TValueElement>>[dictionary.Count];
-			for (int i = 0; i < result.Length; i++)
+			Add(new NullableKeyValuePair<TKey, TValue>(key, value));
+		}
+
+		/// <inheritdoc/>
+		public override void Add(NullableKeyValuePair<TKey,TValue> pair)
+		{
+			if (_count == Capacity)
+				Grow(_count + 1);
+			pairs[_count] = pair;
+			_count++;
+		}
+
+		/// <inheritdoc/>
+		public override void AddNew() => Add(new TKey(), new TValue());
+
+		/// <inheritdoc/>
+		public override TKey GetKey(int index)
+		{
+			if (index < 0 || index >= _count)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			return pairs[index].Key;
+		}
+
+		/// <inheritdoc/>
+		public override void SetKey(int index, TKey newKey)
+		{
+			if (index < 0 || index >= _count)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			pairs[index] = new NullableKeyValuePair<TKey, TValue>(newKey, pairs[index].Value);
+		}
+
+		/// <inheritdoc/>
+		public override TValue GetValue(int index)
+		{
+			if (index < 0 || index >= _count)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			return pairs[index].Value;
+		}
+
+		/// <inheritdoc/>
+		public override void SetValue(int index, TValue newValue)
+		{
+			if (index < 0 || index >= _count)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			pairs[index] = new KeyValuePair<TKey, TValue>(pairs[index].Key, newValue);
+		}
+
+		/// <inheritdoc/>
+		public override NullableKeyValuePair<TKey, TValue> this[int index]
+		{
+			get
 			{
-				var dictEntry = dictionary[i];
-				result[i] = new NullableKeyValuePair<TKeyBase, PPtr<TValueElement>>(dictEntry.Key, new PPtr<TValueElement>(dictEntry.Value));
+				if (index < 0 || index >= _count)
+					throw new ArgumentOutOfRangeException(nameof(index));
+
+				return pairs[index];
 			}
-			return result;
+			set
+			{
+				if (index < 0 || index >= _count)
+					throw new ArgumentOutOfRangeException(nameof(index));
+
+				pairs[index] = value;
+			}
+		}
+
+		/// <inheritdoc/>
+		public override int IndexOf(NullableKeyValuePair<TKey, TValue> item)
+		{
+			for (int i = 0; i < _count; i++)
+			{
+				if (item.Key.Equals(pairs[i].Key) && item.Value.Equals(pairs[i].Value))
+				{
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		/// <inheritdoc/>
+		public override void Insert(int index, NullableKeyValuePair<TKey, TValue> item)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <inheritdoc/>
+		public override void RemoveAt(int index)
+		{
+			if (index < 0 || index >= _count)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			_count--;
+			if (index < _count)
+			{
+				Array.Copy(pairs, index + 1, pairs, index, _count - index);
+			}
+			pairs[_count] = default;
+		}
+
+		/// <inheritdoc/>
+		public override void Clear()
+		{
+			if (_count > 0)
+			{
+				Array.Clear(pairs, 0, _count); // Clear the elements so that the gc can reclaim the references.
+			}
+			_count = 0;
+		}
+
+		/// <inheritdoc/>
+		public override bool Contains(NullableKeyValuePair<TKey, TValue> item)
+		{
+			return IndexOf(item) >= 0;
+		}
+
+		/// <inheritdoc/>
+		public override void CopyTo(NullableKeyValuePair<TKey, TValue>[] array, int arrayIndex)
+		{
+			if(array == null)
+				throw new ArgumentNullException(nameof(array));
+
+			if (arrayIndex < 0 || arrayIndex >= array.Length - _count)
+				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+
+			Array.Copy(pairs, 0, array, arrayIndex, _count);
+		}
+
+		/// <inheritdoc/>
+		public override bool Remove(NullableKeyValuePair<TKey, TValue> item)
+		{
+			int index = IndexOf(item);
+			if (index >= 0)
+			{
+				RemoveAt(index);
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Ensures that the capacity of this list is at least the specified <paramref name="capacity"/>.
+		/// If the current capacity of the list is less than specified <paramref name="capacity"/>,
+		/// the capacity is increased by continuously twice current capacity until it is at least the specified <paramref name="capacity"/>.
+		/// </summary>
+		/// <param name="capacity">The minimum capacity to ensure.</param>
+		/// <returns>The new capacity of this list.</returns>
+		public int EnsureCapacity(int capacity)
+		{
+			if (capacity < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(capacity));
+			}
+			if (pairs.Length < capacity)
+			{
+				Grow(capacity);
+			}
+
+			return pairs.Length;
+		}
+
+		private void Grow(int capacity)
+		{
+			long newcapacity = pairs.Length == 0 ? DefaultCapacity : 2L * pairs.Length;
+
+			// Allow the list to grow to maximum possible capacity (~2G elements) before encountering overflow.
+			// Note that this check works even when _items.Length overflowed thanks to the (uint) cast
+			if (newcapacity > Array.MaxLength)
+				newcapacity = Array.MaxLength;
+
+			// If the computed capacity is still less than specified, set to the original argument.
+			// Capacities exceeding Array.MaxLength will be surfaced as OutOfMemoryException by Array.Resize.
+			if (newcapacity < capacity)
+				newcapacity = capacity;
+
+			Capacity = (int)newcapacity;
 		}
 	}
 }

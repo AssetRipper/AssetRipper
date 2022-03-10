@@ -422,7 +422,6 @@ namespace AssemblyDumper.Passes
 
 			GenericInstanceTypeSignature? genericDictType = GenericTypeResolver.ResolveDictionaryType(dictionaryNode);
 			GenericInstanceTypeSignature? genericPairType = GenericTypeResolver.ResolvePairType(pairNode);
-			GenericInstanceTypeSignature? genericListType = ((ITypeDefOrRef)SharedState.Importer.ImportSystemType("System.Collections.Generic.List`1")).ToTypeSignature().MakeGenericInstanceType(genericPairType);
 			CilLocalVariable? dictLocal = new CilLocalVariable(genericDictType); //Create local
 			processor.Owner.LocalVariables.Add(dictLocal); //Add to method
 			processor.Add(CilOpCodes.Stloc, dictLocal); //Store dict in local
@@ -435,8 +434,8 @@ namespace AssemblyDumper.Passes
 
 			//Get length of dictionary
 			processor.Add(CilOpCodes.Ldloc, dictLocal);
-			MethodDefinition getCountDefinition = SystemTypeGetter.LookupSystemType("System.Collections.Generic.List`1")!.Properties.Single(m => m.Name == "Count").GetMethod!;
-			IMethodDefOrRef getCountReference = MethodUtils.MakeMethodOnGenericType(genericListType, getCountDefinition);
+			MethodDefinition getCountDefinition = CommonTypeGetter.LookupCommonType(typeof(AssetRipper.Core.IO.AssetDictionary<,>))!.Properties.Single(m => m.Name == "Count").GetMethod!;
+			IMethodDefOrRef getCountReference = MethodUtils.MakeMethodOnGenericType(genericDictType, getCountDefinition);
 			processor.Add(CilOpCodes.Call, getCountReference);
 
 			//Make local and store length in it
@@ -458,8 +457,8 @@ namespace AssemblyDumper.Passes
 			ICilLabel jumpTargetLabel = processor.Add(CilOpCodes.Nop).CreateLabel(); //Create the dummy instruction to jump back to
 
 			//Export Yaml
-			MethodDefinition getItemDefinition = SystemTypeGetter.LookupSystemType("System.Collections.Generic.List`1")!.Properties.Single(m => m.Name == "Item").GetMethod!;
-			IMethodDefOrRef getItemReference = MethodUtils.MakeMethodOnGenericType(genericListType, getItemDefinition);
+			MethodDefinition getItemDefinition = CommonTypeGetter.LookupCommonType(typeof(AssetRipper.Core.IO.AssetDictionary<,>))!.Properties.Single(m => m.Name == "Item").GetMethod!;
+			IMethodDefOrRef getItemReference = MethodUtils.MakeMethodOnGenericType(genericDictType, getItemDefinition);
 			processor.Add(CilOpCodes.Ldloc, dictLocal); //Load Dictionary
 			processor.Add(CilOpCodes.Ldloc, iLocal); //Load i
 			processor.Add(CilOpCodes.Call, getItemReference); //Get the i_th key value pair

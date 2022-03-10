@@ -25,7 +25,7 @@ namespace AssemblyDumper.Passes
 			TransferMetaFlagsDefinition = SharedState.Importer.ImportCommonType<TransferMetaFlags>();
 			EditorMetaFlagsAttributeConstructor = SharedState.Importer.ImportCommonConstructor<EditorMetaFlagsAttribute>(1);
 			ReleaseMetaFlagsAttributeConstructor = SharedState.Importer.ImportCommonConstructor<ReleaseMetaFlagsAttribute>(1);
-			OriginalNameAttributeConstructor = SharedState.Importer.ImportCommonConstructor<OriginalNameAttribute>(1);\
+			OriginalNameAttributeConstructor = SharedState.Importer.ImportCommonConstructor<OriginalNameAttribute>(1);
 			AssetDictionaryType = SharedState.Importer.ImportCommonType(typeof(AssetRipper.Core.IO.AssetDictionary<,>));
 		}
 
