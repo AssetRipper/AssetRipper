@@ -25,7 +25,7 @@ namespace AssemblyDumper.Passes
 
 		private static void InitializeStaticFields()
 		{
-			commonPPtrTypeRef = SharedState.Importer.ImportCommonType("AssetRipper.Core.Classes.Misc.PPtr`1");
+			commonPPtrTypeRef = SharedState.Importer.ImportCommonType(typeof(AssetRipper.Core.Classes.Misc.PPtr<>));
 			unityObjectBaseInterfaceRef = SharedState.Importer.ImportCommonType<IUnityObjectBase>();
 			unityObjectBasePPtrRef = commonPPtrTypeRef.MakeGenericInstanceType(unityObjectBaseInterfaceRef.ToTypeSignature());
 			unityObjectBasePPtrListType = SystemTypeGetter.List.MakeGenericInstanceType(unityObjectBasePPtrRef);

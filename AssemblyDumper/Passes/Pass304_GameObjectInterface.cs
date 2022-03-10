@@ -32,7 +32,7 @@ namespace AssemblyDumper.Passes
 				type.ImplementFullProperty("IsActive", InterfacePropertyImplementationAttributes, SystemTypeGetter.Boolean, type.GetFieldByName("m_IsActive"));
 				type.ImplementFullProperty("Layer", InterfacePropertyImplementationAttributes, SystemTypeGetter.UInt32, type.GetFieldByName("m_Layer"));
 
-				ITypeDefOrRef commonPPtrType = SharedState.Importer.ImportCommonType("AssetRipper.Core.Classes.Misc.PPtr`1");
+				ITypeDefOrRef commonPPtrType = SharedState.Importer.ImportCommonType(typeof(AssetRipper.Core.Classes.Misc.PPtr<>));
 				ITypeDefOrRef componentInterface = SharedState.Importer.ImportCommonType<IComponent>();
 				GenericInstanceTypeSignature componentPPtrType = commonPPtrType.MakeGenericInstanceType(componentInterface.ToTypeSignature());
 				SzArrayTypeSignature componentPPtrArray = componentPPtrType.MakeSzArrayType();

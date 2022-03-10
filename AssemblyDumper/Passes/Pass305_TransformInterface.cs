@@ -36,7 +36,7 @@ namespace AssemblyDumper.Passes
 
 		private static void ImplementFatherProperty(this TypeDefinition type)
 		{
-			ITypeDefOrRef commonPPtrType = SharedState.Importer.ImportCommonType("AssetRipper.Core.Classes.Misc.PPtr`1");
+			ITypeDefOrRef commonPPtrType = SharedState.Importer.ImportCommonType(typeof(AssetRipper.Core.Classes.Misc.PPtr<>));
 			ITypeDefOrRef transformInterface = SharedState.Importer.ImportCommonType<ITransform>();
 			GenericInstanceTypeSignature transformPPtrType = commonPPtrType.MakeGenericInstanceType(transformInterface.ToTypeSignature());
 			SzArrayTypeSignature transformPPtrArray = transformPPtrType.MakeSzArrayType();
@@ -56,7 +56,7 @@ namespace AssemblyDumper.Passes
 
 		private static void ImplementChildrenProperty(this TypeDefinition type)
 		{
-			ITypeDefOrRef commonPPtrType = SharedState.Importer.ImportCommonType("AssetRipper.Core.Classes.Misc.PPtr`1");
+			ITypeDefOrRef commonPPtrType = SharedState.Importer.ImportCommonType(typeof(AssetRipper.Core.Classes.Misc.PPtr<>));
 			ITypeDefOrRef transformInterface = SharedState.Importer.ImportCommonType<ITransform>();
 			GenericInstanceTypeSignature transformPPtrType = commonPPtrType.MakeGenericInstanceType(transformInterface.ToTypeSignature());
 			SzArrayTypeSignature transformPPtrArray = transformPPtrType.MakeSzArrayType();

@@ -43,7 +43,7 @@ namespace AssemblyDumper.Passes
 
 		private static void ImplementRootGameObjectProperty(this TypeDefinition type)
 		{
-			ITypeDefOrRef commonPPtrType = SharedState.Importer.ImportCommonType("AssetRipper.Core.Classes.Misc.PPtr`1");
+			ITypeDefOrRef commonPPtrType = SharedState.Importer.ImportCommonType(typeof(AssetRipper.Core.Classes.Misc.PPtr<>));
 			ITypeDefOrRef gameObjectInterface = SharedState.Importer.ImportCommonType<IGameObject>();
 			GenericInstanceTypeSignature gameObjectPPtrType = commonPPtrType.MakeGenericInstanceType(gameObjectInterface.ToTypeSignature());
 
@@ -77,7 +77,7 @@ namespace AssemblyDumper.Passes
 
 		private static void ImplementSourcePrefabProperty(this TypeDefinition type)
 		{
-			ITypeDefOrRef commonPPtrType = SharedState.Importer.ImportCommonType("AssetRipper.Core.Classes.Misc.PPtr`1");
+			ITypeDefOrRef commonPPtrType = SharedState.Importer.ImportCommonType(typeof(AssetRipper.Core.Classes.Misc.PPtr<>));
 			ITypeDefOrRef prefabInstanceInterface = SharedState.Importer.ImportCommonType<IPrefabInstance>();
 			GenericInstanceTypeSignature prefabInstancePPtrType = commonPPtrType.MakeGenericInstanceType(prefabInstanceInterface.ToTypeSignature());
 

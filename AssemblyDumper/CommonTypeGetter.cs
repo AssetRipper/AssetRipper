@@ -55,8 +55,8 @@ namespace AssemblyDumper
 			YAMLSequenceNodeConstructor = SharedState.Importer.ImportCommonConstructor<YAMLSequenceNode>(1);
 
 			//Generics
-			AssetDictionaryType = SharedState.Importer.ImportCommonType("AssetRipper.Core.IO.AssetDictionary`2");
-			NullableKeyValuePair = SharedState.Importer.ImportCommonType("AssetRipper.Core.IO.NullableKeyValuePair`2");
+			AssetDictionaryType = SharedState.Importer.ImportCommonType(typeof(AssetRipper.Core.IO.AssetDictionary<,>));
+			NullableKeyValuePair = SharedState.Importer.ImportCommonType(typeof(AssetRipper.Core.IO.NullableKeyValuePair<,>));
 		}
 
 

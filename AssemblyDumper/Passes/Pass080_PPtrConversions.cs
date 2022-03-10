@@ -22,7 +22,7 @@ namespace AssemblyDumper.Passes
 		{
 			System.Console.WriteLine("Pass 080: PPtr Interface and Conversions");
 
-			commonPPtrType = SharedState.Importer.ImportCommonType("AssetRipper.Core.Classes.Misc.PPtr`1");
+			commonPPtrType = SharedState.Importer.ImportCommonType(typeof(AssetRipper.Core.Classes.Misc.PPtr<>));
 
 			foreach (string name in SharedState.ClassDictionary.Keys)
 			{
