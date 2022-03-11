@@ -12,8 +12,8 @@ namespace AssetRipper.Core.IO
 	/// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
 	/// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
 	public sealed class AssetDictionary<TKey, TValue> : AccessDictionaryBase<TKey, TValue>, IDependent
-		where TKey : new() 
-		where TValue : new()
+		//where TKey : new() 
+		//where TValue : new()
 	{
 		private static readonly bool isDependentType = NullableKeyValuePair<TKey, TValue>.IsDependentType;
 		private const int DefaultCapacity = 4;
@@ -93,7 +93,7 @@ namespace AssetRipper.Core.IO
 		}
 
 		/// <inheritdoc/>
-		public override void AddNew() => Add(new TKey(), new TValue());
+		public override void AddNew() { } //=> Add(new TKey(), new TValue());
 
 		/// <inheritdoc/>
 		public override TKey GetKey(int index)

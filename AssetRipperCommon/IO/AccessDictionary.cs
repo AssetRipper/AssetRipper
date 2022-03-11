@@ -10,8 +10,8 @@ namespace AssetRipper.Core.IO
 	/// <typeparam name="TKey">The key type of the reference dictionary</typeparam>
 	/// <typeparam name="TValue">The value type of the reference dictionary</typeparam>
 	public sealed class AccessDictionary<TKey, TValue, TKeyBase, TValueBase> : AccessDictionaryBase<TKeyBase, TValueBase> 
-		where TKey : TKeyBase, new()
-		where TValue : TValueBase, new()
+		where TKey : TKeyBase //, new()
+		where TValue : TValueBase //, new()
 	{
 		private readonly AccessDictionaryBase<TKey, TValue> referenceDictionary;
 
