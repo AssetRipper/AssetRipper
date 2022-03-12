@@ -1,4 +1,4 @@
-﻿{
+{
   "welcome_title": "Welcome To AssetRipper",
   "config_options": "Configuration Options",
   "ignore_asset_bundle_content_paths": "Ignore Asset Bundle Content Paths",
@@ -9,6 +9,7 @@
   "sprite_export_title": "Sprite Export Format",
   "terrain_export_title": "Terrain Export Format",
   "text_asset_export_title": "TextAsset Export Format",
+  "shader_asset_export_title": "Shader Export Format",
   "script_content_level_title": "Script Content Level",
   "script_language_version_title": "C# Language Version",
   "mesh_format_native": "Native",
@@ -50,6 +51,12 @@
   "text_asset_format_text_description": "Export as a plain text file (.txt)",
   "text_asset_format_parse": "Parse",
   "text_asset_format_parse_description": "Export as a plain text file, but try to guess the correct file extension (e.g. JSON files get the .json extension)",
+  "shader_asset_format_dummy": "Dummy Shader",
+  "shader_asset_format_dummy_description": "Export the shader as a dummy shader. Although it preserves data like the Properties and FallBack, it uses general, opaque shader code.",
+  "shader_asset_format_yaml": "YAML Asset",
+  "shader_asset_format_yaml_description": "Export the shader as a yaml asset. Experimental and only usable for viewing in the editor. The editor can randomly corrupt these files.",
+  "shader_asset_format_disassembly": "Disassembly",
+  "shader_asset_format_disassembly_description": "Export the shader as disassembly which does not compile in the editor",
   "script_content_level_0": "Level 0",
   "script_content_level_1": "Level 1",
   "script_content_level_2": "Level 2",
