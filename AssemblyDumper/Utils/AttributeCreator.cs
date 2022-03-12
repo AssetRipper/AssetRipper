@@ -54,7 +54,7 @@
 			attributeDefinition.CustomAttributes.Add(attrDef);
 
 
-			var field = new FieldDefinition(fieldName, FieldAttributes.Public, FieldSignature.CreateInstance(fieldType));
+			var field = new FieldDefinition(fieldName, FieldAttributes.Public, new FieldSignature(fieldType));
 			attributeDefinition.Fields.Add(field);
 
 

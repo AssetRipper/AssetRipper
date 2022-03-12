@@ -33,7 +33,7 @@ namespace AssemblyDumper.Passes
 			IMethodDefOrRef? dictionaryConstructor = MethodUtils.MakeConstructorOnGenericType(uintStringDictionary, 0);
 			IMethodDefOrRef? addMethod = MethodUtils.MakeMethodOnGenericType(uintStringDictionary, uintStringDictionary.Resolve()!.Methods.First(m => m.Name == "Add"));
 
-			FieldDefinition field = new FieldDefinition("dictionary", FieldAttributes.Public | FieldAttributes.Static | FieldAttributes.InitOnly, FieldSignature.CreateStatic(uintStringDictionary));
+			FieldDefinition field = new FieldDefinition("dictionary", FieldAttributes.Public | FieldAttributes.Static | FieldAttributes.InitOnly, new FieldSignature(uintStringDictionary));
 			newTypeDef.Fields.Add(field);
 
 			MethodDefinition? staticConstructor = new MethodDefinition(".cctor", StaticConstructorAttributes, MethodSignature.CreateStatic(SystemTypeGetter.Void));

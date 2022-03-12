@@ -43,7 +43,7 @@ namespace AssemblyDumper.Passes
 
 		private static FieldDefinition AddStructureField(this TypeDefinition type)
 		{
-			FieldDefinition result = new FieldDefinition("_structure", FieldAttributes.Private, FieldSignature.CreateInstance(serializableStructureSignature));
+			FieldDefinition result = new FieldDefinition("_structure", FieldAttributes.Private, new FieldSignature(serializableStructureSignature));
 			type.Fields.Add(result);
 			return result;
 		}

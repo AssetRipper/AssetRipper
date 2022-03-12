@@ -103,8 +103,7 @@ namespace AssemblyDumper.Passes
 
 		private static void AddReleaseOnlyField(this TypeDefinition type, UnityNode releaseNode, TypeSignature fieldType)
 		{
-			FieldSignature? fieldSignature = FieldSignature.CreateInstance(fieldType);
-			FieldDefinition fieldDefinition = new FieldDefinition(releaseNode.Name, FieldAttributes.Public, fieldSignature);
+			FieldDefinition fieldDefinition = new FieldDefinition(releaseNode.Name, FieldAttributes.Public, new FieldSignature(fieldType));
 			fieldDefinition.MaybeAddOriginalNameAttribute(releaseNode, null);
 			fieldDefinition.AddReleaseFlagAttribute(releaseNode.MetaFlag);
 			fieldDefinition.AddCustomAttribute(ReleaseOnlyAttributeConstructor);
@@ -113,8 +112,7 @@ namespace AssemblyDumper.Passes
 
 		private static void AddEditorOnlyField(this TypeDefinition type, UnityNode editorNode, TypeSignature fieldType)
 		{
-			FieldSignature? fieldSignature = FieldSignature.CreateInstance(fieldType);
-			FieldDefinition fieldDefinition = new FieldDefinition(editorNode.Name, FieldAttributes.Public, fieldSignature);
+			FieldDefinition fieldDefinition = new FieldDefinition(editorNode.Name, FieldAttributes.Public, new FieldSignature(fieldType));
 			fieldDefinition.MaybeAddOriginalNameAttribute(null, editorNode);
 			fieldDefinition.AddCustomAttribute(EditorOnlyAttributeConstructor);
 			fieldDefinition.AddEditorFlagAttribute(editorNode.MetaFlag);
@@ -123,8 +121,7 @@ namespace AssemblyDumper.Passes
 
 		private static void AddNormalField(this TypeDefinition type, UnityNode releaseNode, UnityNode editorNode, TypeSignature fieldType)
 		{
-			FieldSignature? fieldSignature = FieldSignature.CreateInstance(fieldType);
-			FieldDefinition fieldDefinition = new FieldDefinition(editorNode.Name, FieldAttributes.Public, fieldSignature);
+			FieldDefinition fieldDefinition = new FieldDefinition(editorNode.Name, FieldAttributes.Public, new FieldSignature(fieldType));
 			fieldDefinition.MaybeAddOriginalNameAttribute(releaseNode, editorNode);
 			fieldDefinition.AddReleaseFlagAttribute(releaseNode.MetaFlag);
 			fieldDefinition.AddEditorFlagAttribute(editorNode.MetaFlag);

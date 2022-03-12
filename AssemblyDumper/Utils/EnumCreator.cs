@@ -44,14 +44,14 @@ namespace AssemblyDumper.Utils
 
 		private static void AddEnumValue(this TypeDefinition typeDefinition)
 		{
-			FieldSignature fieldSignature = FieldSignature.CreateStatic(SystemTypeGetter.Int32);
+			FieldSignature fieldSignature = new FieldSignature(SystemTypeGetter.Int32);
 			FieldDefinition fieldDef = new FieldDefinition("value__", FieldAttributes.Public | FieldAttributes.SpecialName | FieldAttributes.RuntimeSpecialName, fieldSignature);
 			typeDefinition.Fields.Add(fieldDef);
 		}
 
 		private static void AddEnumField(this TypeDefinition typeDefinition, string name, int value)
 		{
-			FieldSignature fieldSignature = FieldSignature.CreateStatic(typeDefinition.ToTypeSignature());
+			FieldSignature fieldSignature = new FieldSignature(typeDefinition.ToTypeSignature());
 			FieldDefinition fieldDef = new FieldDefinition(name, FieldAttributes.Public | FieldAttributes.Static | FieldAttributes.Literal | FieldAttributes.HasDefault, fieldSignature);
 			fieldDef.Constant = new Constant(ElementType.I4, new DataBlobSignature(BitConverter.GetBytes(value)));
 			typeDefinition.Fields.Add(fieldDef);
