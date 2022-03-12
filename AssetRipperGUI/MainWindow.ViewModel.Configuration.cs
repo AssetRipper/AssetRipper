@@ -86,6 +86,16 @@ namespace AssetRipper.GUI
 			}
 		}
 
+		public ShaderExportMode ShaderExportMode
+		{
+			get => _ripper.Settings.ShaderExportMode;
+			set
+			{
+				_ripper.Settings.ShaderExportMode = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public ScriptContentLevel ScriptContentLevel
 		{
 			get => _ripper.Settings.ScriptContentLevel;

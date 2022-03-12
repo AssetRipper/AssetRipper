@@ -5,8 +5,11 @@ using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Library.Configuration;
 using System;
 using System.Globalization;
 using System.IO;
@@ -15,7 +18,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 {
 	public class DummyShaderTextExporter : BinaryAssetExporter
 	{
-		public const string FallbackDummyShader = @"
+		private const string FALLBACK_DUMMY_SHADER = @"
 	SubShader{
 		Tags { ""RenderType"" = ""Opaque"" }
 		LOD 200
@@ -36,9 +39,21 @@ namespace AssetRipper.Library.Exporters.Shaders
 	}
 ";
 
+		private readonly ShaderExportMode exportMode;
+
+		public DummyShaderTextExporter(LibraryConfiguration configuration)
+		{
+			exportMode = configuration.ShaderExportMode;
+		}
+
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is IShader shader && (shader.HasParsedForm || asset is ITextAsset);
+			return exportMode is ShaderExportMode.Dummy && asset is IShader shader && (shader.HasParsedForm || asset is ITextAsset);
+		}
+
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		{
+			return new AssetExportCollection(this, asset, "shader");
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -73,7 +88,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				else
 				{
 					writer.WriteIndent(1);
-					writer.Write(FallbackDummyShader.Replace("\r", ""));
+					writer.Write(FALLBACK_DUMMY_SHADER.Replace("\r", ""));
 				}
 				writer.Write('\n');
 
@@ -98,7 +113,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 				writer.Write("\t//DummyShaderTextExporter\n");
 				writer.WriteIndent(1);
-				writer.Write(FallbackDummyShader.Replace("\r", ""));
+				writer.Write(FALLBACK_DUMMY_SHADER.Replace("\r", ""));
 
 				writer.Write('}');
 			}
