@@ -30,6 +30,10 @@ namespace AssetRipper.Library.Configuration
 		/// </summary>
 		public ScriptLanguageVersion ScriptLanguageVersion { get; set; }
 		/// <summary>
+		/// How to export shaders?
+		/// </summary>
+		public ShaderExportMode ShaderExportMode { get; set; }
+		/// <summary>
 		/// Should sprites be exported as a texture? Recommended: Native
 		/// </summary>
 		public SpriteExportMode SpriteExportMode { get; set; }
@@ -51,6 +55,7 @@ namespace AssetRipper.Library.Configuration
 			MeshExportFormat = MeshExportFormat.Native;
 			ScriptExportMode = ScriptExportMode.Decompiled;
 			ScriptLanguageVersion = ScriptLanguageVersion.AutoSafe;
+			ShaderExportMode = ShaderExportMode.Dummy;
 			SpriteExportMode = SpriteExportMode.Native;
 			TerrainExportMode = TerrainExportMode.Native;
 			TextExportMode = TextExportMode.Parse;
@@ -59,15 +64,16 @@ namespace AssetRipper.Library.Configuration
 		public override void LogConfigurationValues()
 		{
 			base.LogConfigurationValues();
-			Logger.Info(LogCategory.General, $"AudioExportFormat: {AudioExportFormat}");
-			Logger.Info(LogCategory.General, $"ImageExportFormat: {ImageExportFormat}");
-			Logger.Info(LogCategory.General, $"MeshCoordinateSpace: {MeshCoordinateSpace}");
-			Logger.Info(LogCategory.General, $"MeshExportFormat: {MeshExportFormat}");
-			Logger.Info(LogCategory.General, $"ScriptExportMode: {ScriptExportMode}");
-			Logger.Info(LogCategory.General, $"ScriptLanguageVersion: {ScriptLanguageVersion}");
-			Logger.Info(LogCategory.General, $"SpriteExportMode: {SpriteExportMode}");
-			Logger.Info(LogCategory.General, $"TerrainExportMode: {TerrainExportMode}");
-			Logger.Info(LogCategory.General, $"TextExportMode: {TextExportMode}");
+			Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {AudioExportFormat}");
+			Logger.Info(LogCategory.General, $"{nameof(ImageExportFormat)}: {ImageExportFormat}");
+			Logger.Info(LogCategory.General, $"{nameof(MeshCoordinateSpace)}: {MeshCoordinateSpace}");
+			Logger.Info(LogCategory.General, $"{nameof(MeshExportFormat)}: {MeshExportFormat}");
+			Logger.Info(LogCategory.General, $"{nameof(ScriptExportMode)}: {ScriptExportMode}");
+			Logger.Info(LogCategory.General, $"{nameof(ScriptLanguageVersion)}: {ScriptLanguageVersion}");
+			Logger.Info(LogCategory.General, $"{nameof(ShaderExportMode)}: {ShaderExportMode}");
+			Logger.Info(LogCategory.General, $"{nameof(SpriteExportMode)}: {SpriteExportMode}");
+			Logger.Info(LogCategory.General, $"{nameof(TerrainExportMode)}: {TerrainExportMode}");
+			Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 		}
 	}
 }
