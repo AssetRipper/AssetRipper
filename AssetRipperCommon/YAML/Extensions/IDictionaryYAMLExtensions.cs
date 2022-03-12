@@ -7,40 +7,48 @@ namespace AssetRipper.Core.YAML.Extensions
 	{
 		public static YAMLNode ExportYAML(this IReadOnlyDictionary<uint, string> _this)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
-				node.Add(kvp.Key, kvp.Value);
+				YAMLMappingNode map = new YAMLMappingNode(MappingStyle.Block);
+				map.Add(kvp.Key, kvp.Value);
+				node.Add(map);
 			}
 			return node;
 		}
 
 		public static YAMLNode ExportYAML(this IReadOnlyDictionary<long, string> _this)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
-				node.Add(kvp.Key, kvp.Value);
+				YAMLMappingNode map = new YAMLMappingNode(MappingStyle.Block);
+				map.Add(kvp.Key, kvp.Value);
+				node.Add(map);
 			}
 			return node;
 		}
 
 		public static YAMLNode ExportYAML(this IReadOnlyDictionary<string, string> _this)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
-				node.Add(kvp.Key, kvp.Value);
+				YAMLMappingNode map = new YAMLMappingNode(MappingStyle.Block);
+				map.Add(kvp.Key, kvp.Value);
+				node.Add(map);
 			}
 			return node;
 		}
 
 		public static YAMLNode ExportYAML(this IReadOnlyDictionary<string, int> _this)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
-				node.Add(kvp.Key, kvp.Value);
+				YAMLMappingNode map = new YAMLMappingNode(MappingStyle.Block);
+				map.Add(kvp.Key, kvp.Value);
+				node.Add(map);
 			}
 			return node;
 		}
@@ -50,7 +58,7 @@ namespace AssetRipper.Core.YAML.Extensions
 			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.BlockCurve);
 			foreach (var kvp in _this)
 			{
-				YAMLMappingNode map = new YAMLMappingNode();
+				YAMLMappingNode map = new YAMLMappingNode(MappingStyle.Block);
 				map.Add(kvp.Key, kvp.Value);
 				node.Add(map);
 			}

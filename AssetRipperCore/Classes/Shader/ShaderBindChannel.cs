@@ -1,9 +1,11 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public sealed class ShaderBindChannel : IAssetReadable
+	public sealed class ShaderBindChannel : IAssetReadable, IYAMLExportable
 	{
 		public ShaderBindChannel() { }
 
@@ -17,6 +19,14 @@ namespace AssetRipper.Core.Classes.Shader
 		{
 			Source = reader.ReadByte();
 			Target = (VertexComponent)reader.ReadByte();
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add("source", Source);
+			node.Add("target", (byte)Target);
+			return node;
 		}
 
 		/// <summary>

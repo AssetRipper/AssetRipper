@@ -1,9 +1,12 @@
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public sealed class ConstantBuffer : IAssetReadable
+	public sealed class ConstantBuffer : IAssetReadable, IYAMLExportable
 	{
 		/// <summary>
 		/// 2017.3 and greater
@@ -38,12 +41,33 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			{
 				StructParams = reader.ReadAssetArray<StructParameter>();
 			}
+
 			Size = reader.ReadInt32();
 			if (HasIsPartialCB(reader.Version))
 			{
 				IsPartialCB = reader.ReadBoolean();
 				reader.AlignStream();
 			}
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add("m_NameIndex", NameIndex);
+			node.Add("m_MatrixParams", MatrixParams.ExportYAML(container));
+			node.Add("m_VectorParams", VectorParams.ExportYAML(container));
+			if (HasStructParams(container.Version))
+			{
+				node.Add("m_StructParams", StructParams.ExportYAML(container));
+			}
+
+			node.Add("m_Size", Size);
+			if (HasIsPartialCB(container.Version))
+			{
+				node.Add("m_IsPartialCB", IsPartialCB);
+			}
+
+			return node;
 		}
 
 		public string Name { get; set; }
