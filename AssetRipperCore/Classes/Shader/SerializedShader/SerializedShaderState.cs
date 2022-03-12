@@ -78,7 +78,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(ToSerializedVersion(container.Version));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add("m_Name", Name);
 			node.Add("rtBlend0", RtBlend0.ExportYAML(container));
 			node.Add("rtBlend1", RtBlend1.ExportYAML(container));
@@ -89,7 +89,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			node.Add("rtBlend6", RtBlend6.ExportYAML(container));
 			node.Add("rtBlend7", RtBlend7.ExportYAML(container));
 			node.Add("rtSeparateBlend", RtSeparateBlend);
-			if (HasZClip(container.Version))
+			if (HasZClip(container.ExportVersion))
 			{
 				node.Add("zClip", ZClip.ExportYAML(container));
 			}
@@ -97,7 +97,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			node.Add("zTest", ZTest.ExportYAML(container));
 			node.Add("zWrite", ZWrite.ExportYAML(container));
 			node.Add("culling", Culling.ExportYAML(container));
-			if (HasConservative(container.Version))
+			if (HasConservative(container.ExportVersion))
 			{
 				node.Add("conservative", Conservative.ExportYAML(container));
 			}

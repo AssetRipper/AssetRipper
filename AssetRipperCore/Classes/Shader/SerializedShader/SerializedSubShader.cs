@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			node.Add("m_LOD", LOD);
 
 			// Editor Only
-			if (HasSerializedPackageRequirements(container.Version, container.Flags))
+			if (HasSerializedPackageRequirements(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add("m_PackageRequirements", new SerializedPackageRequirements().ExportYAML(container));
 			}

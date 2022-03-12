@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_SubPrograms", SubPrograms.ExportYAML(container));
-			if (HasCommonParameters(container.Version))
+			if (HasCommonParameters(container.ExportVersion))
 			{
 				node.Add("m_CommonParameters", CommonParameters.ExportYAML(container));
 			}

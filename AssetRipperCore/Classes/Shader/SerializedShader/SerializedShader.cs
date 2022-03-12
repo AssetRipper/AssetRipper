@@ -70,7 +70,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_PropInfo", m_PropInfo.ExportYAML(container));
 			node.Add("m_SubShaders", SubShaders.ExportYAML(container));
-			if (HasKeywordData(container.Version))
+			if (HasKeywordData(container.ExportVersion))
 			{
 				node.Add("m_KeywordNames", KeywordNames.ExportYAML());
 				node.Add("m_KeywordFlags", KeywordFlags.ExportYAML());
@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			node.Add("m_CustomEditorName", CustomEditorName);
 			node.Add("m_FallbackName", FallbackName);
 			node.Add("m_Dependencies", Dependencies.ExportYAML(container));
-			if (HasCustomEditorForRenderPipelines(container.Version))
+			if (HasCustomEditorForRenderPipelines(container.ExportVersion))
 			{
 				node.Add("m_CustomEditorForRenderPipelines", CustomEditorForRenderPipelines.ExportYAML(container));
 			}

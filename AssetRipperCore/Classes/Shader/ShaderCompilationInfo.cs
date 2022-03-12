@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Classes.Shader
 			node.Add(SnippetsName, Snippets.ExportYAML(container));
 			node.Add(MeshComponentsFromSnippetsName, MeshComponentsFromSnippets);
 			node.Add(HasSurfaceShadersName, HasSurfaceShaders);
-			if (HasHasFixedFunctionShaders(container.Version))
+			if (HasHasFixedFunctionShaders(container.ExportVersion))
 			{
 				node.Add(HasFixedFunctionShadersName, HasFixedFunctionShaders);
 			}

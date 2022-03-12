@@ -128,17 +128,17 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			node.AddSerializedVersion(ToSerializedVersion(container.Version));
+			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add("m_BlobIndex", BlobIndex);
 			node.Add("m_Channels", Channels.ExportYAML(container));
-			if (HasMergedKeywordIndices(container.Version))
+			if (HasMergedKeywordIndices(container.ExportVersion))
 			{
 				node.Add("m_KeywordIndices", GlobalKeywordIndices.ExportYAML(false));
 			}
 			else
 			{
 				node.Add("m_GlobalKeywordIndices", GlobalKeywordIndices.ExportYAML(false));
-				if (HasLocalKeywordIndices(container.Version))
+				if (HasLocalKeywordIndices(container.ExportVersion))
 				{
 					node.Add("m_LocalKeywordIndices", LocalKeywordIndices.ExportYAML(false));
 				}
@@ -146,7 +146,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 
 			node.Add("m_ShaderHardwareTier", ShaderHardwareTier);
 			node.Add("m_GpuProgramType", GpuProgramType);
-			if (HasUnifiedParameters(container.Version))
+			if (HasUnifiedParameters(container.ExportVersion))
 			{
 				node.Add("m_Parameters", Parameters.ExportYAML(container));
 			}
@@ -159,15 +159,15 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 				node.Add("m_ConstantBuffers", ConstantBuffers.ExportYAML(container));
 				node.Add("m_ConstantBufferBindings", ConstantBufferBindings.ExportYAML(container));
 				node.Add("m_UAVParams", UAVParams.ExportYAML(container));
-				if (HasSamplers(container.Version))
+				if (HasSamplers(container.ExportVersion))
 				{
 					node.Add("m_Samplers", Samplers.ExportYAML(container));
 				}
 			}
 
-			if (HasShaderRequirements(container.Version))
+			if (HasShaderRequirements(container.ExportVersion))
 			{
-				if (IsShaderRequirementsInt64(container.Version))
+				if (IsShaderRequirementsInt64(container.ExportVersion))
 					node.Add("m_ShaderRequirements", ShaderRequirements);
 				else
 					node.Add("m_ShaderRequirements", (int)ShaderRequirements);

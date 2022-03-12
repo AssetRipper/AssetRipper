@@ -51,7 +51,7 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			node.Add("m_Index", Index);
 			node.Add("m_SamplerIndex", SamplerIndex);
 			
-			if (HasMultiSampled(container.Version))
+			if (HasMultiSampled(container.ExportVersion))
 			{
 				node.Add("m_MultiSampled", MultiSampled);
 			}

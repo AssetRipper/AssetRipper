@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add("m_NameIndex", NameIndex);
 			node.Add("m_Index", Index);
-			if (HasArraySize(container.Version))
+			if (HasArraySize(container.ExportVersion))
 			{
 				node.Add("m_ArraySize", ArraySize);
 			}

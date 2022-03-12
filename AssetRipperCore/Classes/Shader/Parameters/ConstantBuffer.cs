@@ -56,13 +56,13 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			node.Add("m_NameIndex", NameIndex);
 			node.Add("m_MatrixParams", MatrixParams.ExportYAML(container));
 			node.Add("m_VectorParams", VectorParams.ExportYAML(container));
-			if (HasStructParams(container.Version))
+			if (HasStructParams(container.ExportVersion))
 			{
 				node.Add("m_StructParams", StructParams.ExportYAML(container));
 			}
 
 			node.Add("m_Size", Size);
-			if (HasIsPartialCB(container.Version))
+			if (HasIsPartialCB(container.ExportVersion))
 			{
 				node.Add("m_IsPartialCB", IsPartialCB);
 			}
