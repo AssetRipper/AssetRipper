@@ -1,9 +1,12 @@
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedProperty : IAssetReadable, ISerializedProperty
+	public sealed class SerializedProperty : IAssetReadable, ISerializedProperty, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -17,6 +20,22 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			DefValue2 = reader.ReadSingle();
 			DefValue3 = reader.ReadSingle();
 			m_DefTexture.Read(reader);
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add("m_Name", Name);
+			node.Add("m_Description", Description);
+			node.Add("m_Attributes", Attributes.ExportYAML(container));
+			node.Add("m_Type", (int)Type);
+			node.Add("m_Flags", (uint)Flags);
+			node.Add("m_DefValue[0]", DefValue0);
+			node.Add("m_DefValue[1]", DefValue1);
+			node.Add("m_DefValue[2]", DefValue2);
+			node.Add("m_DefValue[3]", DefValue3);
+			node.Add("m_DefTexture", m_DefTexture.ExportYAML(container));
+			return node;
 		}
 
 		public string Name { get; set; }

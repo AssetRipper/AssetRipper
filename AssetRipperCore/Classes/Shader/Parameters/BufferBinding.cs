@@ -1,9 +1,11 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public sealed class BufferBinding : IAssetReadable
+	public sealed class BufferBinding : IAssetReadable, IYAMLExportable
 	{
 		public BufferBinding() { }
 
@@ -23,6 +25,19 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			{
 				ArraySize = reader.ReadInt32();
 			}
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add("m_NameIndex", NameIndex);
+			node.Add("m_Index", Index);
+			if (HasArraySize(container.Version))
+			{
+				node.Add("m_ArraySize", ArraySize);
+			}
+
+			return node;
 		}
 
 		/// <summary>

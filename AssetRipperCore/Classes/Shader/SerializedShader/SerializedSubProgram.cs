@@ -1,11 +1,15 @@
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedSubProgram : IAssetReadable
+	public sealed class SerializedSubProgram : IAssetReadable, IYAMLExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -20,15 +24,16 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			// return 1;
 		}
 
-
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
 		private static bool IsAlignKeywordIndices(UnityVersion version) => version.IsGreaterEqual(2017, 1);
+
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
 		public static bool HasLocalKeywordIndices(UnityVersion version) => version.IsGreaterEqual(2019);
+
 		/// <summary>
 		/// If on 2021, 2021.1.1 and greater. Otherwise, 2020.3.2 and greater.
 		/// Not present in 2021.1.0 - 2021.1.3
@@ -39,6 +44,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// 2017.1 and greater
 		/// </summary>
 		public static bool HasSamplers(UnityVersion version) => version.IsGreaterEqual(2017, 1);
+
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
@@ -60,7 +66,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			Channels.Read(reader);
 			if (HasMergedKeywordIndices(reader.Version))
 			{
-				reader.ReadUInt16Array(); //KeywordIndices
+				GlobalKeywordIndices = reader.ReadUInt16Array();
 				reader.AlignStream();
 			}
 			else
@@ -117,6 +123,57 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 				else
 					ShaderRequirements = reader.ReadInt32();
 			}
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.AddSerializedVersion(ToSerializedVersion(container.Version));
+			node.Add("m_BlobIndex", BlobIndex);
+			node.Add("m_Channels", Channels.ExportYAML(container));
+			if (HasMergedKeywordIndices(container.Version))
+			{
+				node.Add("m_KeywordIndices", GlobalKeywordIndices.ExportYAML(false));
+			}
+			else
+			{
+				node.Add("m_GlobalKeywordIndices", GlobalKeywordIndices.ExportYAML(false));
+				if (HasLocalKeywordIndices(container.Version))
+				{
+					node.Add("m_LocalKeywordIndices", LocalKeywordIndices.ExportYAML(false));
+				}
+			}
+
+			node.Add("m_ShaderHardwareTier", ShaderHardwareTier);
+			node.Add("m_GpuProgramType", GpuProgramType);
+			if (HasUnifiedParameters(container.Version))
+			{
+				node.Add("m_Parameters", Parameters.ExportYAML(container));
+			}
+			else
+			{
+				node.Add("m_VectorParams", VectorParams.ExportYAML(container));
+				node.Add("m_MatrixParams", MatrixParams.ExportYAML(container));
+				node.Add("m_TextureParams", TextureParams.ExportYAML(container));
+				node.Add("m_BufferParams", BufferParams.ExportYAML(container));
+				node.Add("m_ConstantBuffers", ConstantBuffers.ExportYAML(container));
+				node.Add("m_ConstantBufferBindings", ConstantBufferBindings.ExportYAML(container));
+				node.Add("m_UAVParams", UAVParams.ExportYAML(container));
+				if (HasSamplers(container.Version))
+				{
+					node.Add("m_Samplers", Samplers.ExportYAML(container));
+				}
+			}
+
+			if (HasShaderRequirements(container.Version))
+			{
+				if (IsShaderRequirementsInt64(container.Version))
+					node.Add("m_ShaderRequirements", ShaderRequirements);
+				else
+					node.Add("m_ShaderRequirements", (int)ShaderRequirements);
+			}
+
+			return node;
 		}
 
 		public ShaderGpuProgramType GetProgramType(UnityVersion version)

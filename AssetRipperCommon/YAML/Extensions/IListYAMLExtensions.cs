@@ -14,6 +14,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				byte bvalue = unchecked((byte)(value ? 1 : 0));
 				sb.AppendHex(bvalue);
 			}
+
 			return new YAMLScalarNode(sb.ToString(), true);
 		}
 
@@ -24,6 +25,7 @@ namespace AssetRipper.Core.YAML.Extensions
 			{
 				sb.AppendHex((ushort)value);
 			}
+
 			return new YAMLScalarNode(sb.ToString(), true);
 		}
 
@@ -34,6 +36,7 @@ namespace AssetRipper.Core.YAML.Extensions
 			{
 				sb.AppendHex(value);
 			}
+
 			return new YAMLScalarNode(sb.ToString(), true);
 		}
 
@@ -46,6 +49,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					sb.AppendHex(value);
 				}
+
 				return new YAMLScalarNode(sb.ToString(), true);
 			}
 			else
@@ -55,6 +59,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					node.Add(value);
 				}
+
 				return node;
 			}
 		}
@@ -68,6 +73,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					sb.AppendHex(value);
 				}
+
 				return new YAMLScalarNode(sb.ToString(), true);
 			}
 			else
@@ -77,6 +83,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					node.Add(value);
 				}
+
 				return node;
 			}
 		}
@@ -90,6 +97,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					sb.AppendHex(value);
 				}
+
 				return new YAMLScalarNode(sb.ToString(), true);
 			}
 			else
@@ -99,8 +107,20 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					node.Add(value);
 				}
+
 				return node;
 			}
+		}
+
+		public static YAMLNode ExportYAML(this IReadOnlyList<IReadOnlyList<uint>> _this, bool isRaw)
+		{
+			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			foreach (var value in _this)
+			{
+				node.Add(value.ExportYAML(isRaw));
+			}
+
+			return node;
 		}
 
 		public static YAMLNode ExportYAML(this IReadOnlyList<int> _this, bool isRaw)
@@ -112,6 +132,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					sb.AppendHex(value);
 				}
+
 				return new YAMLScalarNode(sb.ToString(), true);
 			}
 			else
@@ -121,6 +142,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					node.Add(value);
 				}
+
 				return node;
 			}
 		}
@@ -134,6 +156,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					sb.AppendHex(value);
 				}
+
 				return new YAMLScalarNode(sb.ToString(), true);
 			}
 			else
@@ -143,6 +166,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					node.Add(value);
 				}
+
 				return node;
 			}
 		}
@@ -156,6 +180,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					sb.AppendHex(value);
 				}
+
 				return new YAMLScalarNode(sb.ToString(), true);
 			}
 			else
@@ -165,6 +190,7 @@ namespace AssetRipper.Core.YAML.Extensions
 				{
 					node.Add(value);
 				}
+
 				return node;
 			}
 		}

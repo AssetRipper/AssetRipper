@@ -1,9 +1,11 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public sealed class MatrixParameter : IAssetReadable
+	public sealed class MatrixParameter : IAssetReadable, IYAMLExportable
 	{
 		public MatrixParameter() { }
 
@@ -32,6 +34,17 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			RowCount = reader.ReadByte();
 			ColumnCount = 4;
 			reader.AlignStream();
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add("m_NameIndex", NameIndex);
+			node.Add("m_Index", Index);
+			node.Add("m_ArraySize", ArraySize);
+			node.Add("m_Type", (byte)Type);
+			node.Add("m_RowCount", RowCount);
+			return node;
 		}
 
 		public string Name { get; set; }

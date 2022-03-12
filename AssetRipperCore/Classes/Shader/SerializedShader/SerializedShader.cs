@@ -1,13 +1,28 @@
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
+using AssetRipper.Core.YAML.Extensions;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedShader : IAssetReadable, ISerializedShader
+	public sealed class SerializedShader : IAssetReadable, ISerializedShader, IYAMLExportable
 	{
 		public ISerializedProperties PropInfo => m_PropInfo;
 		private SerializedProperties m_PropInfo = new();
 		public SerializedSubShader[] SubShaders { get; set; }
+
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public string[] KeywordNames { get; set; }
+
+		/// <summary>
+		/// 2021.2 and greater
+		/// </summary>
+		public byte[] KeywordFlags { get; set; }
+
 		public string Name { get; set; }
 		public string CustomEditorName { get; set; }
 		public string FallbackName { get; set; }
@@ -31,11 +46,12 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			SubShaders = reader.ReadAssetArray<SerializedSubShader>();
 			if (HasKeywordData(reader.Version))
 			{
-				reader.ReadStringArray(); //KeywordNames
+				KeywordNames = reader.ReadStringArray();
 				reader.AlignStream();
-				reader.ReadByteArray(); //KeywordFlags
+				KeywordFlags = reader.ReadByteArray();
 				reader.AlignStream();
 			}
+
 			Name = reader.ReadString();
 			CustomEditorName = reader.ReadString();
 			FallbackName = reader.ReadString();
@@ -44,8 +60,33 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			{
 				CustomEditorForRenderPipelines = reader.ReadAssetArray<SerializedCustomEditorForRenderPipeline>();
 			}
+
 			DisableNoSubshadersMessage = reader.ReadBoolean();
 			reader.AlignStream();
+		}
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add("m_PropInfo", m_PropInfo.ExportYAML(container));
+			node.Add("m_SubShaders", SubShaders.ExportYAML(container));
+			if (HasKeywordData(container.Version))
+			{
+				node.Add("m_KeywordNames", KeywordNames.ExportYAML());
+				node.Add("m_KeywordFlags", KeywordFlags.ExportYAML());
+			}
+
+			node.Add("m_Name", Name);
+			node.Add("m_CustomEditorName", CustomEditorName);
+			node.Add("m_FallbackName", FallbackName);
+			node.Add("m_Dependencies", Dependencies.ExportYAML(container));
+			if (HasCustomEditorForRenderPipelines(container.Version))
+			{
+				node.Add("m_CustomEditorForRenderPipelines", CustomEditorForRenderPipelines.ExportYAML(container));
+			}
+
+			node.Add("m_DisableNoSubshadersMessage", DisableNoSubshadersMessage);
+			return node;
 		}
 	}
 }

@@ -1,9 +1,11 @@
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.Project;
+using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedShaderRTBlendState : IAssetReadable
+	public sealed class SerializedShaderRTBlendState : IAssetReadable, IYAMLExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -23,6 +25,19 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public SerializedShaderFloatValue BlendOp = new();
 		public SerializedShaderFloatValue BlendOpAlpha = new();
 		public SerializedShaderFloatValue ColMask = new();
+
+		public YAMLNode ExportYAML(IExportContainer container)
+		{
+			YAMLMappingNode node = new YAMLMappingNode();
+			node.Add("srcBlend", SrcBlend.ExportYAML(container));
+			node.Add("destBlend", DestBlend.ExportYAML(container));
+			node.Add("srcBlendAlpha", SrcBlendAlpha.ExportYAML(container));
+			node.Add("destBlendAlpha", DestBlendAlpha.ExportYAML(container));
+			node.Add("blendOp", BlendOp.ExportYAML(container));
+			node.Add("blendOpAlpha", BlendOpAlpha.ExportYAML(container));
+			node.Add("colMask", ColMask.ExportYAML(container));
+			return node;
+		}
 
 		public BlendMode SrcBlendValue => (BlendMode)SrcBlend.Val;
 		public BlendMode DestBlendValue => (BlendMode)DestBlend.Val;
