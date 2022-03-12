@@ -41,12 +41,12 @@ namespace AssetRipper.Core.Classes.Shader
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(MessageName, Message);
-			if (HasMessageDetails(container.Version))
+			if (HasMessageDetails(container.ExportVersion))
 			{
 				node.Add(MessageDetailsName, GetMessageDetails(container.Version));
 			}
 
-			if (HasFile(container.Version))
+			if (HasFile(container.ExportVersion))
 			{
 				node.Add(FileName, GetFile(container.Version));
 				node.Add(CompilerPlatformName, (int)CompilerPlatform);
@@ -54,7 +54,7 @@ namespace AssetRipper.Core.Classes.Shader
 
 			node.Add(LineName, Line);
 			node.Add(WarningName, Warning);
-			node.Add(ProgramErrorName(container.Version), ProgramError);
+			node.Add(ProgramErrorName(container.ExportVersion), ProgramError);
 			return node;
 		}
 

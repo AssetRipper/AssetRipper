@@ -93,11 +93,11 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
-			if (HasHash(container.Version))
+			if (HasHash(container.ExportVersion))
 			{
 				node.Add("m_EditorDataHash", EditorDataHash.ExportYAML(container));
 				node.Add("m_Platforms", Platforms.ExportYAML());
-				if (!HasKeywordStateMaskInsteadOfKeywordMasks(container.Version))
+				if (!HasKeywordStateMaskInsteadOfKeywordMasks(container.ExportVersion))
 				{
 					node.Add("m_LocalKeywordMask", LocalKeywordMask.ExportYAML(false));
 					node.Add("m_GlobalKeywordMask", GlobalKeywordMask.ExportYAML(false));
@@ -113,13 +113,13 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			node.Add("progGeometry", ProgGeometry.ExportYAML(container));
 			node.Add("progHull", ProgHull.ExportYAML(container));
 			node.Add("progDomain", ProgDomain.ExportYAML(container));
-			if (HasProgRayTracing(container.Version))
+			if (HasProgRayTracing(container.ExportVersion))
 			{
 				node.Add("progRayTracing", ProgRayTracing.ExportYAML(container));
 			}
 
 			node.Add("m_HasInstancingVariant", HasInstancingVariant);
-			if (HasProceduralInstancingVariantField(container.Version))
+			if (HasProceduralInstancingVariantField(container.ExportVersion))
 			{
 				node.Add("m_HasProceduralInstancingVariant", HasProceduralInstancingVariant);
 			}
@@ -128,13 +128,13 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			node.Add("m_Name", Name);
 			node.Add("m_TextureName", TextureName);
 			node.Add("m_Tags", Tags.ExportYAML(container));
-			if (HasKeywordStateMaskInsteadOfKeywordMasks(container.Version))
+			if (HasKeywordStateMaskInsteadOfKeywordMasks(container.ExportVersion))
 			{
 				node.Add("m_SerializedKeywordStateMask", SerializedKeywordStateMask.ExportYAML(false));
 			}
 
 			// Editor Only
-			if (HasSerializedPackageRequirements(container.Version, container.Flags))
+			if (HasSerializedPackageRequirements(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add("m_PackageRequirements", new SerializedPackageRequirements().ExportYAML(container));
 			}

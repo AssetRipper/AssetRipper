@@ -194,13 +194,13 @@ namespace AssetRipper.Core.Classes.Shader
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node;
-			if (IsSerialized(container.Version))
+			if (IsSerialized(container.ExportVersion))
 			{
 				node = ExportBaseYAMLRoot(container);
 				node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 				node.Add("m_ParsedForm", m_ParsedForm.ExportYAML(container));
 				node.Add("platforms", Array.ConvertAll(Platforms, value => (int)value).ExportYAML(false));
-				if (IsDoubleArray(container.Version))
+				if (IsDoubleArray(container.ExportVersion))
 				{
 					node.Add("offsets", Offsets2D.ExportYAML(false));
 					node.Add("compressedLengths", CompressedLengths2D.ExportYAML(false));
@@ -220,45 +220,45 @@ namespace AssetRipper.Core.Classes.Shader
 				node = base.ExportYAMLRoot(container);
 				node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 
-				if (HasBlob(container.Version))
+				if (HasBlob(container.ExportVersion))
 				{
 					node.Add("decompressedSize", DecompressedSize);
 					node.Add("m_SubProgramBlob", CompressedBlob.ExportYAML());
 				}
 			}
 
-			if (HasDependencies(container.Version))
+			if (HasDependencies(container.ExportVersion))
 			{
 				node.Add(DependenciesName, Dependencies.ExportYAML(container));
 			}
 
-			if (HasNonModifiableTextures(container.Version))
+			if (HasNonModifiableTextures(container.ExportVersion))
 			{
 				node.Add(NonModifiableTexturesName, NonModifiableTextures.ExportYAML(container));
 			}
 
-			if (HasShaderIsBaked(container.Version))
+			if (HasShaderIsBaked(container.ExportVersion))
 			{
 				node.Add("m_ShaderIsBaked", ShaderIsBaked);
 			}
 
 			//Editor-Only
-			if (HasErrors(container.Version))
+			if (HasErrors(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add("errors", (new HashSet<ShaderError>()).ExportYAML(container));
 			}
 
-			if (HasDefaultTextures(container.Version))
+			if (HasDefaultTextures(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add("m_DefaultTextures", (new Dictionary<string, PPtr<Texture>>()).ExportYAML(container));
 			}
 
-			if (HasCompileInfo(container.Version))
+			if (HasCompileInfo(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add("m_CompileInfo", (new ShaderCompilationInfo()).ExportYAML(container));
 			}
 
-			if (HasCompileSmokeTest(container.Version))
+			if (HasCompileSmokeTest(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add("m_CompileSmokeTestAfterImport", default(bool));
 			}
