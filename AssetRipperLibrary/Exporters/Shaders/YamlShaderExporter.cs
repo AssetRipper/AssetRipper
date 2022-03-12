@@ -1,11 +1,9 @@
 ﻿using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
-using System;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
@@ -28,7 +26,6 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			throw new NotImplementedException("Shader export as yaml is currently not implemented.");
 			return new AssetExportCollection(this, asset, "asset");
 		}
 	}

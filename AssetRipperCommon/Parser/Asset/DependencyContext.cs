@@ -80,6 +80,17 @@ namespace AssetRipper.Core.Parser.Asset
 			}
 		}
 
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies<T1, T2>(IDictionary<T1, PPtr<T2>> pointers, string name) where T2 : IUnityObjectBase
+		{
+			foreach (KeyValuePair<T1, PPtr<T2>> pointerPair in pointers)
+			{
+				if (!pointerPair.Value.IsNull)
+				{
+					yield return FetchDependency(pointerPair.Value, name);
+				}
+			}
+		}
+
 		public PPtr<IUnityObjectBase> FetchDependency<T>(PPtr<T> pointer, string name) where T : IUnityObjectBase
 		{
 			if (IsLog)
