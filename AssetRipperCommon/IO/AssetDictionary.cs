@@ -98,7 +98,7 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override TKey GetKey(int index)
 		{
-			if (index < 0 || index >= count)
+			if ((uint)index >= (uint)count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
 			return pairs[index].Key;
@@ -107,7 +107,7 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void SetKey(int index, TKey newKey)
 		{
-			if (index < 0 || index >= count)
+			if ((uint)index >= (uint)count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
 			pairs[index] = new NullableKeyValuePair<TKey, TValue>(newKey, pairs[index].Value);
@@ -125,7 +125,7 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void SetValue(int index, TValue newValue)
 		{
-			if (index < 0 || index >= count)
+			if ((uint)index >= (uint)count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
 			pairs[index] = new KeyValuePair<TKey, TValue>(pairs[index].Key, newValue);
@@ -136,7 +136,7 @@ namespace AssetRipper.Core.IO
 		{
 			get
 			{
-				if (index < 0 || index >= count)
+				if ((uint)index >= (uint)count)
 					throw new ArgumentOutOfRangeException(nameof(index));
 
 				return pairs[index];
@@ -151,28 +151,29 @@ namespace AssetRipper.Core.IO
 		}
 
 		/// <inheritdoc/>
-		public override int IndexOf(NullableKeyValuePair<TKey, TValue> item)
-		{
-			for (int i = 0; i < count; i++)
-			{
-				if (item.Key.Equals(pairs[i].Key) && item.Value.Equals(pairs[i].Value))
-				{
-					return i;
-				}
-			}
-			return -1;
-		}
+		public override int IndexOf(NullableKeyValuePair<TKey, TValue> item) => Array.IndexOf(pairs, item, 0, count);
 
 		/// <inheritdoc/>
 		public override void Insert(int index, NullableKeyValuePair<TKey, TValue> item)
 		{
-			throw new NotImplementedException();
+			// Note that insertions at the end are legal.
+			if ((uint)index > (uint)count)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			if (count == pairs.Length)
+				Grow(count + 1);
+
+			if (index < count)
+				Array.Copy(pairs, index, pairs, index + 1, count - index);
+
+			pairs[index] = item;
+			count++;
 		}
 
 		/// <inheritdoc/>
 		public override void RemoveAt(int index)
 		{
-			if (index < 0 || index >= count)
+			if ((uint)index >= (uint)count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
 			count--;
