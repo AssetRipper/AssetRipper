@@ -18,7 +18,7 @@ namespace AssetRipper.Core.IO
 		private static readonly bool isDependentType = NullableKeyValuePair<TKey, TValue>.IsDependentType;
 		private const int DefaultCapacity = 4;
 		private NullableKeyValuePair<TKey, TValue>[] pairs;
-		private int _count = 0;
+		private int count = 0;
 
 		public AssetDictionary() : this(DefaultCapacity) { }
 
@@ -45,7 +45,7 @@ namespace AssetRipper.Core.IO
 		}
 
 		/// <inheritdoc/>
-		public override int Count => _count;
+		public override int Count => count;
 
 		/// <inheritdoc/>
 		public override int Capacity
@@ -53,7 +53,7 @@ namespace AssetRipper.Core.IO
 			get => pairs.Length;
 			set
 			{
-				if (value < _count)
+				if (value < count)
 				{
 					throw new ArgumentOutOfRangeException(nameof(value));
 				}
@@ -63,9 +63,9 @@ namespace AssetRipper.Core.IO
 					if (value > 0)
 					{
 						NullableKeyValuePair<TKey, TValue>[] newPairs = new NullableKeyValuePair<TKey, TValue>[value];
-						if (_count > 0)
+						if (count > 0)
 						{
-							Array.Copy(pairs, newPairs, _count);
+							Array.Copy(pairs, newPairs, count);
 						}
 						pairs = newPairs;
 					}
@@ -86,10 +86,10 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void Add(NullableKeyValuePair<TKey,TValue> pair)
 		{
-			if (_count == Capacity)
-				Grow(_count + 1);
-			pairs[_count] = pair;
-			_count++;
+			if (count == Capacity)
+				Grow(count + 1);
+			pairs[count] = pair;
+			count++;
 		}
 
 		/// <inheritdoc/>
@@ -98,7 +98,7 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override TKey GetKey(int index)
 		{
-			if (index < 0 || index >= _count)
+			if (index < 0 || index >= count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
 			return pairs[index].Key;
@@ -107,7 +107,7 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void SetKey(int index, TKey newKey)
 		{
-			if (index < 0 || index >= _count)
+			if (index < 0 || index >= count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
 			pairs[index] = new NullableKeyValuePair<TKey, TValue>(newKey, pairs[index].Value);
@@ -116,7 +116,7 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override TValue GetValue(int index)
 		{
-			if (index < 0 || index >= _count)
+			if (index < 0 || index >= count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
 			return pairs[index].Value;
@@ -125,7 +125,7 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void SetValue(int index, TValue newValue)
 		{
-			if (index < 0 || index >= _count)
+			if (index < 0 || index >= count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
 			pairs[index] = new KeyValuePair<TKey, TValue>(pairs[index].Key, newValue);
@@ -136,14 +136,14 @@ namespace AssetRipper.Core.IO
 		{
 			get
 			{
-				if (index < 0 || index >= _count)
+				if (index < 0 || index >= count)
 					throw new ArgumentOutOfRangeException(nameof(index));
 
 				return pairs[index];
 			}
 			set
 			{
-				if (index < 0 || index >= _count)
+				if (index < 0 || index >= count)
 					throw new ArgumentOutOfRangeException(nameof(index));
 
 				pairs[index] = value;
@@ -153,7 +153,7 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override int IndexOf(NullableKeyValuePair<TKey, TValue> item)
 		{
-			for (int i = 0; i < _count; i++)
+			for (int i = 0; i < count; i++)
 			{
 				if (item.Key.Equals(pairs[i].Key) && item.Value.Equals(pairs[i].Value))
 				{
@@ -172,25 +172,25 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void RemoveAt(int index)
 		{
-			if (index < 0 || index >= _count)
+			if (index < 0 || index >= count)
 				throw new ArgumentOutOfRangeException(nameof(index));
 
-			_count--;
-			if (index < _count)
+			count--;
+			if (index < count)
 			{
-				Array.Copy(pairs, index + 1, pairs, index, _count - index);
+				Array.Copy(pairs, index + 1, pairs, index, count - index);
 			}
-			pairs[_count] = default;
+			pairs[count] = default;
 		}
 
 		/// <inheritdoc/>
 		public override void Clear()
 		{
-			if (_count > 0)
+			if (count > 0)
 			{
-				Array.Clear(pairs, 0, _count); // Clear the elements so that the gc can reclaim the references.
+				Array.Clear(pairs, 0, count); // Clear the elements so that the gc can reclaim the references.
 			}
-			_count = 0;
+			count = 0;
 		}
 
 		/// <inheritdoc/>
@@ -205,10 +205,10 @@ namespace AssetRipper.Core.IO
 			if(array == null)
 				throw new ArgumentNullException(nameof(array));
 
-			if (arrayIndex < 0 || arrayIndex >= array.Length - _count)
+			if (arrayIndex < 0 || arrayIndex >= array.Length - count)
 				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
 
-			Array.Copy(pairs, 0, array, arrayIndex, _count);
+			Array.Copy(pairs, 0, array, arrayIndex, count);
 		}
 
 		/// <inheritdoc/>
