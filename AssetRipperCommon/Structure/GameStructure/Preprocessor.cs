@@ -11,6 +11,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 	{
 		private const string ZipExtension = ".zip";
 		private const string ApkExtension = ".apk";
+		private const string ObbExtension = ".obb";
 		private const string XapkExtension = ".xapk";
 		private const string VpkExtension = ".vpk"; //PS Vita
 		private const string IpaExtension = ".ipa"; //iOS App Store Package
@@ -27,6 +28,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				{
 					case ZipExtension:
 					case ApkExtension:
+					case ObbExtension:
 					case VpkExtension:
 					case IpaExtension:
 						result.Add(ExtractZip(path));
