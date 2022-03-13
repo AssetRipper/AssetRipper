@@ -1,0 +1,70 @@
+﻿using System;
+
+namespace AssetRipper.Core.IO
+{
+	public sealed class AccessList<T, TBase> : AccessListBase<TBase> where T : TBase, new()
+	{
+		private readonly AssetList<T> referenceList;
+
+		public AccessList(AssetList<T> referenceList)
+		{
+			this.referenceList = referenceList;
+		}
+
+		/// <inheritdoc/>
+		public override int Count => referenceList.Count;
+
+		/// <inheritdoc/>
+		public override int Capacity
+		{
+			get => referenceList.Capacity;
+			set => referenceList.Capacity = value;
+		}
+
+		/// <inheritdoc/>
+		public override void Add(TBase item) => Add(item);
+
+		/// <inheritdoc/>
+		public override TBase AddNew() => referenceList.AddNew();
+
+		/// <inheritdoc/>
+		public override int IndexOf(TBase item) => referenceList.IndexOf((T)item);
+
+		/// <inheritdoc/>
+		public override void Insert(int index, TBase item) => referenceList.Insert(index, (T)item);
+
+		/// <inheritdoc/>
+		public override void RemoveAt(int index) => referenceList.RemoveAt(index);
+
+		/// <inheritdoc/>
+		public override void Clear() => referenceList.Clear();
+
+		/// <inheritdoc/>
+		public override bool Contains(TBase item) => referenceList.Contains((T)item);
+
+		/// <inheritdoc/>
+		public override void CopyTo(TBase[] array, int arrayIndex)
+		{
+			if (array == null)
+				throw new ArgumentNullException(nameof(array));
+
+			if (arrayIndex < 0 || arrayIndex >= array.Length - Count)
+				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+
+			for (int i = 0; i < Count; i++)
+			{
+				array[i + arrayIndex] = this[i];
+			}
+		}
+
+		/// <inheritdoc/>
+		public override bool Remove(TBase item) => referenceList.Remove((T)item);
+
+		/// <inheritdoc/>
+		public override TBase this[int index]
+		{
+			get => referenceList[index];
+			set => referenceList[index] = (T)value;
+		}
+	}
+}
