@@ -13,9 +13,9 @@ namespace AssetRipper.Core.IO
 		where TKey : TKeyBase //, new()
 		where TValue : TValueBase //, new()
 	{
-		private readonly AccessDictionaryBase<TKey, TValue> referenceDictionary;
+		private readonly AssetDictionary<TKey, TValue> referenceDictionary;
 
-		public AccessDictionary(AccessDictionaryBase<TKey, TValue> referenceDictionary)
+		public AccessDictionary(AssetDictionary<TKey, TValue> referenceDictionary)
 		{
 			this.referenceDictionary = referenceDictionary;
 		}
