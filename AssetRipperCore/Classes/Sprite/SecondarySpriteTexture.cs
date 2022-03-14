@@ -35,6 +35,6 @@ namespace AssetRipper.Core.Classes.Sprite
 		public const string TextureName = "texture";
 		public const string NameName = "name";
 
-		public PPtr<Texture2D.Texture2D> Texture;
+		public PPtr<Texture2D.Texture2D> Texture = new();
 	}
 }
