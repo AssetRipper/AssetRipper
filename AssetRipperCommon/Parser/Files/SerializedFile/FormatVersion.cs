@@ -1,5 +1,8 @@
 namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {
+	/// <summary>
+	/// SerializedFileFormatVersion in the pdb
+	/// </summary>
 	public enum FormatVersion
 	{
 		Unsupported = 1,

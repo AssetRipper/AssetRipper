@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 			if (HasHash(reader.Generation))
 			{
-				if (ScriptTypeIndex >= 0)
+				if (HasScriptID(ScriptTypeIndex, reader.Generation, TypeID))
 				{
 					ScriptID.Read(reader);
 				}
@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 			if (HasHash(writer.Generation))
 			{
-				if (ScriptTypeIndex >= 0)
+				if (HasScriptID(ScriptTypeIndex, writer.Generation, TypeID))
 				{
 					ScriptID.Write(writer);
 				}
@@ -56,6 +56,16 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 					writer.WriteStringZeroTerm(AsmName);
 				}
 			}
+		}
+
+		private static bool HasScriptID(short scriptTypeIndex, FormatVersion generation, ClassIDType typeID)
+		{
+			//Temporary solution
+			return (scriptTypeIndex >= 0) || typeID == ClassIDType.MonoBehaviour;
+				//Previous code:
+				//(scriptTypeIndex >= 0)
+				//|| (generation < FormatVersion.RefactoredClassId && typeID < 0)
+				//|| (generation >= FormatVersion.RefactoredClassId && typeID == ClassIDType.MonoBehaviour);
 		}
 	}
 }

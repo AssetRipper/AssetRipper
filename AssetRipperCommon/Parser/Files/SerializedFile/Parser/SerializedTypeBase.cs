@@ -64,7 +64,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		}
 
 		/// <summary>
-		/// For old version it specifies <see cref="TypeID"/> or -<see cref="ScriptTypeIndex"/> for MonoBehaviour
+		/// For versions less than 17, it specifies <see cref="TypeID"/> or -<see cref="ScriptTypeIndex"/> -1 for MonoBehaviour
 		/// </summary>
 		public int OriginalTypeID
 		{
@@ -88,19 +88,19 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		}
 
 		/// <summary>
-		/// 5.5.0a and greater
+		/// 5.5.0a and greater, ie format version 16+
 		/// </summary>
 		public static bool HasIsStrippedType(FormatVersion generation) => generation >= FormatVersion.RefactoredClassId;
 		/// <summary>
-		/// 5.5.0 and greater
+		/// 5.5.0 and greater, ie format version 17+
 		/// </summary>
 		public static bool HasScriptTypeIndex(FormatVersion generation) => generation >= FormatVersion.RefactorTypeData;
 		/// <summary>
-		/// 5.0.0unk2 and greater
+		/// 5.0.0unk2 and greater, ie format version 13+
 		/// </summary>
 		public static bool HasHash(FormatVersion generation) => generation >= FormatVersion.HasTypeTreeHashes;
 		/// <summary>
-		/// 2019.3 and greater
+		/// 2019.3 and greater, ie format version 21+
 		/// </summary>
 		public static bool HasTypeDependencies(FormatVersion generation) => generation >= FormatVersion.StoresTypeDependencies;
 	}
