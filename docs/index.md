@@ -21,6 +21,10 @@ Thank you for considering to support me. I have normal expenses like food, elect
 
 [Paypal](https://paypal.me/ds5678)
 
+# Release Schedule
+
+[Releases](https://github.com/AssetRipper/AssetRipper/releases) are put out once a week, usually on either Sunday or Monday.
+
 # Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
 
 The development of this project has a dedicated [Discord server](https://discord.gg/XqXa53W2Yh). Feel free to come say hi. This is also an alternative location for people to post issues.

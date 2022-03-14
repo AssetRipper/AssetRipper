@@ -22,6 +22,10 @@ Thank you for considering to support me. I have normal expenses like food, elect
 
 [Paypal](https://paypal.me/ds5678)
 
+# Release Schedule
+
+[Releases](https://github.com/AssetRipper/AssetRipper/releases) are put out once a week, usually on either Sunday or Monday.
+
 # Links
 
 [Website](https://assetripper.github.io/AssetRipper/)
