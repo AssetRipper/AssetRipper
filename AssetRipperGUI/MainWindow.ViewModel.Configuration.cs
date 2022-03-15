@@ -96,6 +96,16 @@ namespace AssetRipper.GUI
 			}
 		}
 
+		public ScriptExportMode ScriptExportMode
+		{
+			get => _ripper.Settings.ScriptExportMode;
+			set
+			{
+				_ripper.Settings.ScriptExportMode = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public ScriptContentLevel ScriptContentLevel
 		{
 			get => _ripper.Settings.ScriptContentLevel;

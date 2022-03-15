@@ -115,7 +115,7 @@
                        TextAlignment="Center"
                        VerticalAlignment="Center" />
 
-            <Grid Grid.Row="2" RowDefinitions="50, 140, 140, 140, 140, 140" ColumnDefinitions="*, 500, 500, *" Margin="100, 0, 100, 0">
+            <Grid Grid.Row="2" RowDefinitions="50, 140, 140, 140, 140" ColumnDefinitions="*, 400, 400, 400, *" Margin="100, 0, 100, 0">
                 <WrapPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="20, 0">
                     <CheckBox IsChecked="{Binding IgnoreAssetBundleContentPaths, Mode=TwoWay}" />
                     <TextBlock Text="{i18n:Localize ignore_asset_bundle_content_paths}" Margin="0, 7, 0, 10" />
@@ -129,64 +129,71 @@
                     Grid.Row="1"
                     OptionTitle="{i18n:Localize mesh_export_title}"
                     SelectedValue="{Binding MeshExportFormat, Mode=TwoWay}"
-                    Margin="0, 0, 20, 0">
+                    Margin="0, 0, 0, 0">
                 </cc:MeshExportConfigDropdown>
                 <cc:AudioExportConfigDropdown 
                     Grid.Column="2" 
                     Grid.Row="1"
                     OptionTitle="{i18n:Localize audio_export_title}"
                     SelectedValue="{Binding AudioExportFormat, Mode=TwoWay}"
-                    Margin="20, 0, 0, 0">
+                    Margin="0, 0, 0, 0">
                 </cc:AudioExportConfigDropdown>
+				<cc:ShaderExportConfigDropdown
+                    Grid.Column="3"
+                    Grid.Row="1"
+                    OptionTitle="{i18n:Localize shader_asset_export_title}"
+                    SelectedValue="{Binding ShaderExportMode, Mode=TwoWay}"
+                    Margin="0, 0, 0, 0">
+				</cc:ShaderExportConfigDropdown>
                 <cc:ImageExportConfigDropdown 
                     Grid.Column="1" 
                     Grid.Row="2"
                     OptionTitle="{i18n:Localize image_export_title}"
                     SelectedValue="{Binding ImageExportFormat, Mode=TwoWay}"
-                    Margin="0, 0, 20, 0">
+                    Margin="0, 0, 0, 0">
                 </cc:ImageExportConfigDropdown>
                 <cc:SpriteExportConfigDropdown 
                     Grid.Column="2" 
                     Grid.Row="2"
                     OptionTitle="{i18n:Localize sprite_export_title}"
                     SelectedValue="{Binding SpriteExportMode, Mode=TwoWay}"
-                    Margin="20, 0, 0, 0">
+                    Margin="0, 0, 0, 0">
                 </cc:SpriteExportConfigDropdown>
                 <cc:TerrainExportConfigDropdown 
                     Grid.Column="1" 
                     Grid.Row="3"
                     OptionTitle="{i18n:Localize terrain_export_title}"
                     SelectedValue="{Binding TerrainExportMode, Mode=TwoWay}"
-                    Margin="0, 0, 20, 0">
+                    Margin="0, 0, 0, 0">
                 </cc:TerrainExportConfigDropdown>
                 <cc:TextExportConfigDropdown 
                     Grid.Column="2" 
                     Grid.Row="3"
                     OptionTitle="{i18n:Localize text_asset_export_title}"
                     SelectedValue="{Binding TextExportMode, Mode=TwoWay}"
-                    Margin="20, 0, 0, 0">
+                    Margin="0, 0, 0, 0">
                 </cc:TextExportConfigDropdown>
-                <cc:ShaderExportConfigDropdown
+				<cc:ScriptExportModeConfigDropdown
                     Grid.Column="1"
                     Grid.Row="4"
-                    OptionTitle="{i18n:Localize shader_asset_export_title}"
-                    SelectedValue="{Binding ShaderExportMode, Mode=TwoWay}"
-                    Margin="0, 0, 20, 0">
-                </cc:ShaderExportConfigDropdown>
-				<cc:ScriptContentLevelConfigDropdown
-                    Grid.Column="1"
-                    Grid.Row="5"
+                    OptionTitle="{i18n:Localize script_export_title}"
+                    SelectedValue="{Binding ScriptExportMode, Mode=TwoWay}"
+                    Margin="0, 0, 0, 0">
+				</cc:ScriptExportModeConfigDropdown>
+                <cc:ScriptContentLevelConfigDropdown
+                    Grid.Column="2"
+                    Grid.Row="4"
                     OptionTitle="{i18n:Localize script_content_level_title}"
                     SelectedValue="{Binding ScriptContentLevel, Mode=TwoWay}"
-                    Margin="0, 0, 20, 0">
-				</cc:ScriptContentLevelConfigDropdown>
-				<cc:ScriptLanguageVersionConfigDropdown
-                    Grid.Column="2"
-                    Grid.Row="5"
+                    Margin="0, 0, 0, 0">
+                </cc:ScriptContentLevelConfigDropdown>
+                <cc:ScriptLanguageVersionConfigDropdown
+                    Grid.Column="3"
+                    Grid.Row="4"
                     OptionTitle="{i18n:Localize script_language_version_title}"
                     SelectedValue="{Binding ScriptLanguageVersion, Mode=TwoWay}"
-                    Margin="20, 0, 0, 0">
-				</cc:ScriptLanguageVersionConfigDropdown>
+                    Margin="0, 0, 0, 0">
+                </cc:ScriptLanguageVersionConfigDropdown>
             </Grid>
 
             <TextBlock Grid.Row="3"
