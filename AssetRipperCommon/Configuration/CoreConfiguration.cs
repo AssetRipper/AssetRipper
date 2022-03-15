@@ -21,7 +21,18 @@ namespace AssetRipper.Core.Configuration
 		/// <summary>
 		/// Including the streaming assets directory can cause some games to fail while exporting.
 		/// </summary>
-		public bool IgnoreStreamingAssets { get; set; }
+		public bool IgnoreStreamingAssets
+		{
+			get => StreamingAssetsMode == StreamingAssetsMode.Ignore;
+			set
+			{
+				StreamingAssetsMode = value ? StreamingAssetsMode.Ignore : StreamingAssetsMode.Extract;
+			}
+		}
+		/// <summary>
+		/// How the StreamingAssets folder is handled
+		/// </summary>
+		public StreamingAssetsMode StreamingAssetsMode { get; set; }
 		#endregion
 
 		#region Export Settings
@@ -71,7 +82,7 @@ namespace AssetRipper.Core.Configuration
 		public virtual void ResetToDefaultValues()
 		{
 			ScriptContentLevel = ScriptContentLevel.Level2;
-			IgnoreStreamingAssets = false;
+			StreamingAssetsMode = StreamingAssetsMode.Extract;
 			ExportPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
 			IgnoreAssetBundleContentPaths = false;
@@ -82,7 +93,7 @@ namespace AssetRipper.Core.Configuration
 		{
 			Logger.Info(LogCategory.General, $"Configuration Settings:");
 			Logger.Info(LogCategory.General, $"{nameof(ScriptContentLevel)}: {ScriptContentLevel}");
-			Logger.Info(LogCategory.General, $"{nameof(IgnoreStreamingAssets)}: {IgnoreStreamingAssets}");
+			Logger.Info(LogCategory.General, $"{nameof(StreamingAssetsMode)}: {StreamingAssetsMode}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportPath)}: {ExportPath}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportDependencies)}: {ExportDependencies}");
 			Logger.Info(LogCategory.General, $"{nameof(IgnoreAssetBundleContentPaths)}: {IgnoreAssetBundleContentPaths}");
