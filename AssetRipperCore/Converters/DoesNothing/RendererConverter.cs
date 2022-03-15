@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Converters
 
 			instance.LightmapTilingOffset = origin.LightmapTilingOffset;
 			instance.LightmapTilingOffsetDynamic = origin.LightmapTilingOffsetDynamic;
-			instance.StaticBatchInfo = origin.StaticBatchInfo;
+			instance.StaticBatchInfo.CopyValues(origin.StaticBatchInfo);
 			instance.StaticBatchRoot = origin.StaticBatchRoot;
 			instance.ProbeAnchor = origin.ProbeAnchor;
 			instance.LightProbeVolumeOverride = origin.LightProbeVolumeOverride;

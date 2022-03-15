@@ -560,7 +560,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		{
 			return HasRenderingLayerMask(version) ? RenderingLayerMask : 1;
 		}
-		public StaticBatchInfo GetStaticBatchInfo(UnityVersion version)
+		public IStaticBatchInfo GetStaticBatchInfo(UnityVersion version)
 		{
 			if (HasStaticBatchInfo(version))
 			{
@@ -570,7 +570,7 @@ namespace AssetRipper.Core.Classes.Renderer
 			{
 				return new StaticBatchInfo(SubsetIndices);
 			}
-			return new();
+			return new StaticBatchInfo();
 		}
 		private float GetScaleInLightmap(UnityVersion version, TransferInstructionFlags flags)
 		{
@@ -673,10 +673,10 @@ namespace AssetRipper.Core.Classes.Renderer
 		public const string SortingLayerName = "m_SortingLayer";
 		public const string SortingOrderName = "m_SortingOrder";
 
-		public Vector4f LightmapTilingOffset = new();
-		public Vector4f LightmapTilingOffsetDynamic = new();
-		public StaticBatchInfo StaticBatchInfo = new();
-		public PPtr<Transform> StaticBatchRoot = new();
+		public Vector4f LightmapTilingOffset { get; set; } = new();
+		public Vector4f LightmapTilingOffsetDynamic { get; set; } = new();
+		public IStaticBatchInfo StaticBatchInfo { get; } = new StaticBatchInfo();
+		public PPtr<Transform> StaticBatchRoot { get; set; } = new();
 		/// <summary>
 		/// LightProbeAnchor previously
 		/// </summary>

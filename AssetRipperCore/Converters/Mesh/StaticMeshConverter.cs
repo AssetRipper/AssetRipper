@@ -26,7 +26,7 @@ namespace AssetRipper.Core
 			if (unityObjectBase is not MeshRenderer meshRenderer)
 				return;
 
-			StaticBatchInfo staticBatchInfo = meshRenderer.GetStaticBatchInfo(serializedFile.Version);
+			IStaticBatchInfo staticBatchInfo = meshRenderer.GetStaticBatchInfo(serializedFile.Version);
 			if (staticBatchInfo.SubMeshCount == 0)
 				return;
 
