@@ -680,7 +680,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		/// <summary>
 		/// LightProbeAnchor previously
 		/// </summary>
-		public PPtr<Transform> ProbeAnchor = new();
-		public PPtr<GameObject.GameObject> LightProbeVolumeOverride = new();
+		public PPtr<Transform> ProbeAnchor { get; set; } = new();
+		public PPtr<GameObject.GameObject> LightProbeVolumeOverride { get; set; } = new();
 	}
 }

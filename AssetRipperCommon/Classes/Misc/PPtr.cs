@@ -47,7 +47,7 @@ namespace AssetRipper.Core.Classes.Misc
 			return exPointer.ExportYAML(container);
 		}
 
-		public static void SetValues(this IPPtr destination, IPPtr source)
+		public static void CopyValues(this IPPtr destination, IPPtr source)
 		{
 			destination.FileIndex = source.FileIndex;
 			destination.PathID = source.PathID;
@@ -151,7 +151,7 @@ namespace AssetRipper.Core.Classes.Misc
 		public static bool IsNull(this IPPtr pptr) => pptr.PathID == 0;
 	}
 
-	public interface IPPtr
+	public interface IPPtr : IAsset
 	{
 		/// <summary>
 		/// 0 means current file
@@ -167,7 +167,7 @@ namespace AssetRipper.Core.Classes.Misc
 	{
 	}
 
-	public sealed class PPtr<T> : IAsset, IPPtr<T>, IEquatable<PPtr<T>> where T : IUnityObjectBase
+	public sealed class PPtr<T> : IPPtr<T>, IEquatable<PPtr<T>> where T : IUnityObjectBase
 	{
 		public PPtr() { }
 

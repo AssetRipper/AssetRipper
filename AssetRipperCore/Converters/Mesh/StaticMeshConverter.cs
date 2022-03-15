@@ -34,11 +34,11 @@ namespace AssetRipper.Core
 			if (gameObject == null || string.IsNullOrEmpty(gameObject.Name))
 				return;
 
-			MeshFilter meshFilter = gameObject.FindComponent<MeshFilter>();
+			IMeshFilter meshFilter = gameObject.FindComponent<IMeshFilter>();
 			if (meshFilter == null)
 				return;
 
-			Mesh mesh = meshFilter.Mesh.FindAsset(serializedFile);
+			Mesh mesh = (Mesh)meshFilter.Mesh.FindAsset(serializedFile);
 			if (mesh == null)
 				return;
 
@@ -53,7 +53,7 @@ namespace AssetRipper.Core
 			SubMesh[] subMeshes = mesh.SubMeshes.AsSpan().Slice(staticBatchInfo.FirstSubMesh, staticBatchInfo.SubMeshCount).ToArray();
 			newMesh.SubMeshes = SubMeshConverter.Convert(container, newMesh, subMeshes);
 
-			meshFilter.Mesh = virtualSerializedFile.CreatePPtr(newMesh);
+			meshFilter.Mesh.CopyValues(virtualSerializedFile.CreatePPtr(newMesh));
 			meshRenderer.StaticBatchInfo.FirstSubMesh = 0;
 			meshRenderer.StaticBatchInfo.SubMeshCount = 0;
 		}

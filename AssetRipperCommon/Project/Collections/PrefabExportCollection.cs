@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Project.Collections
 				AddAsset(asset);
 
 				//This section might not be necessary. This seems to be quite different from normal prefab files
-				asset.PrefabInstance?.SetValues(prefab.SerializedFile.CreatePPtr(prefab));
+				asset.PrefabInstance?.CopyValues(prefab.SerializedFile.CreatePPtr(prefab));
 			}
 		}
 

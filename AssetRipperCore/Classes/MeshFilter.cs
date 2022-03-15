@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class MeshFilter : Component
+	public sealed class MeshFilter : Component, IMeshFilter
 	{
 		public MeshFilter(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -38,6 +39,6 @@ namespace AssetRipper.Core.Classes
 
 		public const string MeshName = "m_Mesh";
 
-		public PPtr<Mesh.Mesh> Mesh = new();
+		public PPtr<IMesh> Mesh { get; } = new PPtr<IMesh>();
 	}
 }
