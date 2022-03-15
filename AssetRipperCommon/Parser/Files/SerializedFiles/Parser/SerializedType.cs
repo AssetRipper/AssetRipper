@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 		private static bool HasScriptID(FormatVersion generation, ClassIDType typeID)
 		{
-			//Temporary solution
+			//Temporary solution to #296
 			return typeID == ClassIDType.MonoBehaviour;
 				//Previous code:
 				//(generation < FormatVersion.RefactoredClassId && typeID < 0)

@@ -60,7 +60,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 		private static bool HasScriptID(short scriptTypeIndex, FormatVersion generation, ClassIDType typeID)
 		{
-			//Temporary solution
+			//Temporary solution to #296
 			return (scriptTypeIndex >= 0) || typeID == ClassIDType.MonoBehaviour;
 				//Previous code:
 				//(scriptTypeIndex >= 0)
