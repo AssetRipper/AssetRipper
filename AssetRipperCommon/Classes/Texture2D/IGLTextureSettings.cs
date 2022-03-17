@@ -1,7 +1,8 @@
-﻿
+﻿using AssetRipper.Core.Interfaces;
+
 namespace AssetRipper.Core.Classes.Texture2D
 {
-	public interface IGLTextureSettings
+	public interface IGLTextureSettings : IUnityAssetBase
 	{
 		int Aniso { get; set; }
 		FilterMode FilterMode { get; set; }
@@ -40,6 +41,17 @@ namespace AssetRipper.Core.Classes.Texture2D
 			settings.WrapU = (TextureWrapMode)(-1);
 			settings.WrapV = (TextureWrapMode)(-1);
 			settings.WrapW = (TextureWrapMode)(-1);
+		}
+
+		public static void CopyValues(this IGLTextureSettings destination, IGLTextureSettings source)
+		{
+			destination.Aniso = source.Aniso;
+			destination.FilterMode = source.FilterMode;
+			destination.MipBias = source.MipBias;
+			destination.WrapMode = source.WrapMode;
+			destination.WrapU = source.WrapU;
+			destination.WrapV = source.WrapV;
+			destination.WrapW = source.WrapW;
 		}
 	}
 }

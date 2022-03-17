@@ -312,7 +312,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public const string ImageDataName = "image data";
 		public const string StreamDataName = "m_StreamData";
 
-		public GLTextureSettings TextureSettings = new();
-		private StreamingInfo m_StreamData = new();
+		public IGLTextureSettings TextureSettings { get; } = new GLTextureSettings();
+		private StreamingInfo m_StreamData { get; } = new();
 	}
 }

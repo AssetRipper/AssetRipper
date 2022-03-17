@@ -110,6 +110,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		public bool SRGBTexture { get; set; }
 		public bool StreamingMipmaps { get; set; }
 		public int StreamingMipmapsPriority { get; set; }
+		public IGLTextureSettings TextureSettings { get; } = new GLTextureSettings();
 
 		protected override bool IncludesIDToName => false;
 
@@ -118,7 +119,5 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		public const string SRGBTextureName = "m_sRGBTexture";
 		public const string StreamingMipmapsName = "m_StreamingMipmaps";
 		public const string StreamingMipmapsPriorityName = "m_StreamingMipmapsPriority";
-
-		public GLTextureSettings TextureSettings = new();
 	}
 }
