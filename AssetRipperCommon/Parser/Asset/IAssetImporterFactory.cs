@@ -6,6 +6,7 @@ namespace AssetRipper.Core.Parser.Asset
 	public interface IAssetImporterFactory
 	{
 		IDefaultImporter CreateDefaultImporter(LayoutInfo layout);
+		IMonoImporter CreateMonoImporter(LayoutInfo layout);
 		INativeFormatImporter CreateNativeFormatImporter(LayoutInfo layout);
 	}
 }

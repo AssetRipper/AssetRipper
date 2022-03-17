@@ -9,6 +9,7 @@ using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Utils;
+using AssetRipper.Core.VersionHandling;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -141,7 +142,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private void OnScriptExported(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			IMonoScript script = (IMonoScript)asset;
-			MonoImporter importer = new MonoImporter(container.ExportLayout);
+			IMonoImporter importer = VersionManager.GetHandler(container.ExportVersion).ImporterFactory.CreateMonoImporter(container.ExportLayout);
 			importer.ExecutionOrder = (short)script.ExecutionOrder;
 			Meta meta = new Meta(script.GUID, importer);
 			ExportMeta(container, meta, path);

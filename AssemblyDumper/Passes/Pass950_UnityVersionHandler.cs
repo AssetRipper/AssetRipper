@@ -57,7 +57,7 @@ namespace AssemblyDumper.Passes
 		private static void AddImporterFactoryAssignment(this CilInstructionCollection processor)
 		{
 			IMethodDefOrRef baseAssetImporterFactorySetter = SharedState.Importer.ImportCommonMethod<UnityHandlerBase>(m => m.Name == "set_ImporterFactory");
-			MethodDefinition assetImporterFactoryConstructor = Pass942_MakeImporterFactory.ImporterFactoryDefinition.Methods.Single(c => c.IsConstructor && !c.IsStatic);
+			MethodDefinition assetImporterFactoryConstructor = Pass942_MakeImporterFactory.ImporterFactoryDefinition!.Methods.Single(c => c.IsConstructor && !c.IsStatic);
 			processor.Add(CilOpCodes.Ldarg_0);
 			processor.Add(CilOpCodes.Newobj, assetImporterFactoryConstructor);
 			processor.Add(CilOpCodes.Call, baseAssetImporterFactorySetter);

@@ -12,22 +12,41 @@ namespace AssemblyDumper.Passes
 			MethodAttributes.SpecialName |
 			MethodAttributes.NewSlot |
 			MethodAttributes.Virtual;
-		const string PropertyName = "MainObjectFileID";
-		const string FieldName = "m_" + PropertyName;
 
 		public static void DoPass()
 		{
-			Console.WriteLine("Pass 361: Implement Native Format Importer Interface");
-			ITypeDefOrRef nativeImporterInterface = SharedState.Importer.ImportCommonType<INativeFormatImporter>();
+			Console.WriteLine("Pass 361: Implement Mono and Native Format Importer Interfaces");
+			ImplementNativeImporter();
+			ImplementMonoImporter();
+		}
+
+		private static void ImplementNativeImporter()
+		{
+			ITypeDefOrRef importerInterface = SharedState.Importer.ImportCommonType<INativeFormatImporter>();
 			if (SharedState.TypeDictionary.TryGetValue("NativeFormatImporter", out TypeDefinition? type))
 			{
-				type.Interfaces.Add(new InterfaceImplementation(nativeImporterInterface));
-				FieldDefinition? field = type.TryGetFieldByName(FieldName);
-				type.ImplementFullProperty(PropertyName, InterfacePropertyImplementationAttributes, SystemTypeGetter.Int64, field);
+				type.Interfaces.Add(new InterfaceImplementation(importerInterface));
+				FieldDefinition? field = type.TryGetFieldByName("m_MainObjectFileID");
+				type.ImplementFullProperty(nameof(INativeFormatImporter.MainObjectFileID), InterfacePropertyImplementationAttributes, SystemTypeGetter.Int64, field);
 			}
 			else
 			{
 				throw new Exception("NativeFormatImporter not found");
+			}
+		}
+
+		private static void ImplementMonoImporter()
+		{
+			ITypeDefOrRef importerInterface = SharedState.Importer.ImportCommonType<IMonoImporter>();
+			if (SharedState.TypeDictionary.TryGetValue("MonoImporter", out TypeDefinition? type))
+			{
+				type.Interfaces.Add(new InterfaceImplementation(importerInterface));
+				FieldDefinition? field = type.TryGetFieldByName("executionOrder");
+				type.ImplementFullProperty(nameof(IMonoImporter.ExecutionOrder), InterfacePropertyImplementationAttributes, SystemTypeGetter.Int16, field);
+			}
+			else
+			{
+				throw new Exception("MonoImporter not found");
 			}
 		}
 	}

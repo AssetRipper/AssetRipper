@@ -10,6 +10,11 @@ namespace AssetRipper.Core.Parser.Asset
 			return new DefaultImporter(layout);
 		}
 
+		public IMonoImporter CreateMonoImporter(LayoutInfo layout)
+		{
+			return new MonoImporter(layout);
+		}
+
 		public INativeFormatImporter CreateNativeFormatImporter(LayoutInfo layout)
 		{
 			return new NativeFormatImporter(layout);

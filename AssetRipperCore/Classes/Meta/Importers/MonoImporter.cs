@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Meta.Importers
 {
-	public class MonoImporter : AssetImporter
+	public class MonoImporter : AssetImporter, IMonoImporter
 	{
 		public MonoImporter(LayoutInfo layout) : base(layout)
 		{
@@ -36,11 +36,11 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasDefaultReferences(UnityVersion version) => version.IsGreaterEqual(2, 6);
+		private static bool HasDefaultReferences(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
-		public static bool HasExecutionOrder(UnityVersion version) => version.IsGreaterEqual(3, 4);
+		private static bool HasExecutionOrder(UnityVersion version) => version.IsGreaterEqual(3, 4);
 
 		public override bool IncludesImporter(UnityVersion version)
 		{
