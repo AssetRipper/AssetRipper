@@ -46,7 +46,7 @@ namespace AssemblyDumper.Passes
 				getProcessor.Add(CilOpCodes.Ret);
 
 				CilInstructionCollection setProcessor = property.SetMethod!.CilMethodBody!.Instructions;
-				IMethodDefOrRef pptrSetMethod = SharedState.Importer.ImportCommonMethod(typeof(PPtr), m => m.Name == "SetValues");
+				IMethodDefOrRef pptrSetMethod = SharedState.Importer.ImportCommonMethod(typeof(PPtr), m => m.Name == nameof(PPtr.CopyValues));
 				setProcessor.Add(CilOpCodes.Ldarg_0);
 				setProcessor.Add(CilOpCodes.Ldfld, field);
 				setProcessor.Add(CilOpCodes.Ldarg_1);
