@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Meta.Importers;
+﻿using AssetRipper.Core.Classes;
+using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Project;
@@ -21,6 +22,7 @@ namespace AssetRipper.Core.Converters.Texture2D
 			instance.NPOTScale = TextureImporterNPOTScale.None;
 			instance.AlphaIsTransparency = 1;
 			instance.TextureType = origin.LightmapFormat.IsNormalmap() ? TextureImporterType.NormalMap : TextureImporterType.Default;
+			instance.TextureShape = origin is ICubemap ? TextureImporterShape.TextureCube : TextureImporterShape.Texture2D;
 			return instance;
 		}
 

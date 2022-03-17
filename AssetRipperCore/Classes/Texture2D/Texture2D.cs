@@ -88,11 +88,6 @@ namespace AssetRipper.Core.Classes.Texture2D
 		/// </summary>
 		public static bool HasStreamData(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
-		public virtual TextureImporter GenerateTextureImporter(IExportContainer container)
-		{
-			return Texture2DConverter.GenerateTextureImporter(container, this);
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
@@ -177,7 +172,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			reader.AlignStream();
 			if (HasStreamData(reader.Version))
 			{
-				m_StreamData.Read(reader);
+				StreamData.Read(reader);
 			}
 		}
 
@@ -220,7 +215,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			{
 				node.Add(StreamingMipmapsPriorityName, StreamingMipmapsPriority);
 			}
-			node.Add(AlphaIsTransparencyName, GetAlphaIsTransparency(container.Version, container.Flags));
+			node.Add(AlphaIsTransparencyName, AlphaIsTransparency);
 			node.Add(ImageCountName, ImageCount);
 			node.Add(TextureDimensionName, (int)TextureDimension);
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
@@ -234,10 +229,6 @@ namespace AssetRipper.Core.Classes.Texture2D
 			return node;
 		}
 
-		private bool GetAlphaIsTransparency(UnityVersion version, TransferInstructionFlags flags)
-		{
-			return true;
-		}
 		private byte[] GetExportImageData()
 		{
 			if (this.CheckAssetIntegrity())
@@ -276,14 +267,15 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public bool ReadAllowed { get; set; }
 		public bool StreamingMipmaps { get; set; }
 		public int StreamingMipmapsPriority { get; set; }
-		public bool AlphaIsTransparency { get; set; }
+		public bool AlphaIsTransparency { get; set; } = true;
 		public int ImageCount { get; set; }
 		public TextureDimension TextureDimension { get; set; }
 		public TextureUsageMode LightmapFormat { get; set; }
 		public ColorSpace ColorSpace { get; set; }
 		public byte[] PlatformBlob { get; set; }
 		public byte[] ImageData { get; set; }
-		public IStreamingInfo StreamData => m_StreamData;
+		public IStreamingInfo StreamData { get; } = new StreamingInfo();
+		public IGLTextureSettings TextureSettings { get; } = new GLTextureSettings();
 
 		public const string Texture2DName = "Texture2D";
 		public const string WidthName = "m_Width";
@@ -306,8 +298,5 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public const string PlatformBlobName = "m_PlatformBlob";
 		public const string ImageDataName = "image data";
 		public const string StreamDataName = "m_StreamData";
-
-		public IGLTextureSettings TextureSettings { get; } = new GLTextureSettings();
-		private StreamingInfo m_StreamData { get; } = new();
 	}
 }

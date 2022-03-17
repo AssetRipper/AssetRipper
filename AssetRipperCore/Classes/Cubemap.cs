@@ -1,6 +1,5 @@
 using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Converters.Cubemap;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -15,7 +14,7 @@ namespace AssetRipper.Core.Classes
 	/// <summary>
 	/// CubemapTexture previously
 	/// </summary>
-	public sealed class Cubemap : Texture2D.Texture2D
+	public sealed class Cubemap : Texture2D.Texture2D, ICubemap
 	{
 		public Cubemap(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -23,11 +22,6 @@ namespace AssetRipper.Core.Classes
 		/// 4.0.0 and greater
 		/// </summary>
 		public static bool HasSourceTextures(UnityVersion version) => version.IsGreaterEqual(4);
-
-		public override TextureImporter GenerateTextureImporter(IExportContainer container)
-		{
-			return CubemapConverter.GeenrateTextureImporter(container, this);
-		}
 
 		public override void Read(AssetReader reader)
 		{
