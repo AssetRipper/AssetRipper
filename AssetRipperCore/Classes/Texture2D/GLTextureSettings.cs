@@ -1,25 +1,13 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.Texture2D
 {
-	public sealed class GLTextureSettings : IAsset
+	public sealed class GLTextureSettings : UnityAssetBase, IGLTextureSettings
 	{
-		public GLTextureSettings() { }
-		public GLTextureSettings(LayoutInfo layout)
-		{
-			FilterMode = (FilterMode)(-1);
-			Aniso = -1;
-			MipBias = -100;
-			WrapU = (TextureWrapMode)(-1);
-			WrapV = (TextureWrapMode)(-1);
-			WrapW = (TextureWrapMode)(-1);
-		}
-
 		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// WrapMode has been replaced by WrapU
@@ -33,9 +21,11 @@ namespace AssetRipper.Core.Classes.Texture2D
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool HasWraps(UnityVersion version) => version.IsGreaterEqual(2017);
+		private static bool HasWraps(UnityVersion version) => version.IsGreaterEqual(2017);
 
-		public void Read(AssetReader reader)
+		public bool HasWrapMode => !HasWraps(this.AssetUnityVersion);
+
+		public override void Read(AssetReader reader)
 		{
 			FilterMode = (FilterMode)reader.ReadInt32();
 			Aniso = reader.ReadInt32();
@@ -52,7 +42,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			}
 		}
 
-		public void Write(AssetWriter writer)
+		public override void Write(AssetWriter writer)
 		{
 			writer.Write((int)FilterMode);
 			writer.Write(Aniso);
@@ -69,7 +59,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));

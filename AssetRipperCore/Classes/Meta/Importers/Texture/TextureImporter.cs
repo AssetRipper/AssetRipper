@@ -28,7 +28,8 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			GenerateCubemap = TextureImporterGenerateCubemap.AutoCubemap;
 			TextureFormat = TextureFormat.Alpha8;
 			MaxTextureSize = 2048;
-			TextureSettings = new GLTextureSettings(layout);
+			TextureSettings = new GLTextureSettings();
+			TextureSettings.SetToDefault();
 			NPOTScale = TextureImporterNPOTScale.ToNearest;
 			CompressionQuality = 50;
 
