@@ -28,9 +28,9 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is Texture2D texture)
+			if (asset is Texture2D texture)//Texture2D for now
 			{
-				return texture.IsValidData;
+				return texture.CheckAssetIntegrity();
 			}
 			if (asset is Sprite)
 			{
@@ -41,7 +41,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			Texture2D texture = (Texture2D)asset;
+			ITexture2D texture = (ITexture2D)asset;
 			if (!texture.CheckAssetIntegrity())
 			{
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{texture.StreamData.Path}' hasn't been found");
@@ -71,12 +71,12 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				return TextureExportCollection.CreateExportCollection(this, (Sprite)asset);
 			}
-			var collection = new TextureExportCollection(this, (Texture2D)asset, true);
+			var collection = new TextureExportCollection(this, (ITexture2D)asset, true);
 			collection.FileExtension = ImageExportFormat.GetFileExtension();
 			return collection;
 		}
 
-		public static DirectBitmap ConvertToBitmap(Texture2D texture)
+		public static DirectBitmap ConvertToBitmap(ITexture2D texture)
 		{
 			byte[] buffer = texture.GetImageData();
 			if (buffer.Length == 0)
