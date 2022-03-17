@@ -63,7 +63,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{88179FFC-0863-4C4F-9860-68EB1471E59F}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\assembly_dumper_build.yml = .github\workflows\assembly_dumper_build.yml
-		.github\workflows\assembly_dumper_test.yml = .github\workflows\assembly_dumper_test.yml
 		.github\workflows\auxiliary.yml = .github\workflows\auxiliary.yml
 		.github\workflows\codeql.yml = .github\workflows\codeql.yml
 		.github\workflows\docfx_build.yml = .github\workflows\docfx_build.yml
@@ -108,7 +107,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShellScripts", "ShellScript
 	ProjectSection(SolutionItems) = preProject
 		generate_all.sh = generate_all.sh
 		get_names.sh = get_names.sh
-		test.sh = test.sh
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShaderTextRestorer", "ShaderTextRestorer\ShaderTextRestorer.csproj", "{38B51E0B-9F05-4BFA-B6B4-49DEAAA876A3}"
