@@ -24,9 +24,10 @@ namespace AssetRipper.Core.Converters.Texture2D
 			return instance;
 		}
 
-		public static IHVImageFormatImporter GenerateIHVImporter(IExportContainer container, ITexture2D origin)
+		public static ISpriteImporter GenerateIHVImporter(IExportContainer container, ITexture2D origin)
 		{
 			IHVImageFormatImporter instance = new IHVImageFormatImporter(container.ExportLayout);
+			instance.SetToDefault();
 			instance.IsReadable = origin.IsReadable;
 			instance.SRGBTexture = origin.ColorSpace == ColorSpace.Linear;
 			instance.StreamingMipmaps = origin.StreamingMipmaps;

@@ -5,6 +5,7 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.SpriteAtlas;
 using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Converters.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Vectors;
@@ -67,7 +68,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return new TextureExportCollection(assetExporter, texture, true);
 		}
 
-		protected override AssetImporter CreateImporter(IExportContainer container)
+		protected override IAssetImporter CreateImporter(IExportContainer container)
 		{
 			Texture2D texture = (Texture2D)Asset;
 			if (m_convert)
@@ -78,7 +79,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 			else
 			{
-				return texture.GenerateIHVImporter(container);
+				return Texture2DConverter.GenerateIHVImporter(container, texture);
 			}
 		}
 

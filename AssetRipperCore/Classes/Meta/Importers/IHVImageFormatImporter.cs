@@ -12,14 +12,9 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 	/// <summary>
 	/// First introduced in 5.6.0 as a replacement for such importers as DDSImporter
 	/// </summary>
-	public sealed class IHVImageFormatImporter : AssetImporter
+	public sealed class IHVImageFormatImporter : AssetImporter, ISpriteImporter
 	{
-		public IHVImageFormatImporter(LayoutInfo layout) : base(layout)
-		{
-			TextureSettings.FilterMode = FilterMode.Bilinear;
-			TextureSettings.Aniso = 1;
-			SRGBTexture = true;
-		}
+		public IHVImageFormatImporter(LayoutInfo layout) : base(layout) { }
 
 		public IHVImageFormatImporter(AssetInfo assetInfo) : base(assetInfo) { }
 

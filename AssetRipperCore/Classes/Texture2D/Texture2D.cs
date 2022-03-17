@@ -93,11 +93,6 @@ namespace AssetRipper.Core.Classes.Texture2D
 			return Texture2DConverter.GenerateTextureImporter(container, this);
 		}
 
-		public virtual IHVImageFormatImporter GenerateIHVImporter(IExportContainer container)
-		{
-			return Texture2DConverter.GenerateIHVImporter(container, this);
-		}
-
 		public override void Read(AssetReader reader)
 		{
 			base.Read(reader);
