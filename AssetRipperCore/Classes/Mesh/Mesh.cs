@@ -30,7 +30,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public BlendShapeData Shapes { get; set; } = new BlendShapeData();
 		public VariableBoneCountWeights VariableBoneCountWeights { get; set; } = new VariableBoneCountWeights();
 		public VertexData VertexData { get; set; } = new VertexData();
-		public CompressedMesh CompressedMesh { get; set; } = new CompressedMesh();
+		public ICompressedMesh CompressedMesh { get; } = new CompressedMesh();
 		public IAABB LocalAABB { get; } = new AABB();
 		public byte[] BakedConvexCollisionMesh { get; set; } = Array.Empty<byte>();
 		public byte[] BakedTriangleCollisionMesh { get; set; } = Array.Empty<byte>();

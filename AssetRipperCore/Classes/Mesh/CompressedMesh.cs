@@ -40,11 +40,6 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// </summary>
 		public static bool HasUVInfo(UnityVersion version) => version.IsGreaterEqual(5);
 
-		public CompressedMesh Convert(IExportContainer container)
-		{
-			return CompressedMeshConverter.Convert(container, this);
-		}
-
 		public void Read(AssetReader reader)
 		{
 			Vertices.Read(reader);

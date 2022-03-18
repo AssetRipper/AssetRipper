@@ -7,6 +7,7 @@ namespace AssetRipper.Core.Classes.Mesh
 	//Partially Implemented
 	public interface IMesh : INamedObject
 	{
+		ICompressedMesh CompressedMesh { get; }
 		IAABB LocalAABB { get; }
 		byte[] BakedConvexCollisionMesh { get; set; }
 		byte[] BakedTriangleCollisionMesh { get; set; }

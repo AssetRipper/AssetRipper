@@ -31,4 +31,24 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// </summary>
 		uint UVInfo { get; set; }
 	}
+
+	public static class CompressedMeshExtensions
+	{
+		public static void CopyValues(this ICompressedMesh destination, ICompressedMesh source)
+		{
+			destination.Vertices.CopyValuesFrom(source.Vertices);
+			destination.UV.CopyValuesFrom(source.UV);
+			destination.BindPoses.CopyValuesFrom(source.BindPoses);
+			destination.Normals.CopyValuesFrom(source.Normals);
+			destination.Tangents.CopyValuesFrom(source.Tangents);
+			destination.Weights.CopyValuesFrom(source.Weights);
+			destination.NormalSigns.CopyValuesFrom(source.NormalSigns);
+			destination.TangentSigns.CopyValuesFrom(source.TangentSigns);
+			destination.FloatColors.CopyValuesFrom(source.FloatColors);
+			destination.BoneIndices.CopyValuesFrom(source.BoneIndices);
+			destination.Triangles.CopyValuesFrom(source.Triangles);
+			destination.Colors.CopyValuesFrom(source.Colors);
+			destination.UVInfo = source.UVInfo;
+		}
+	}
 }

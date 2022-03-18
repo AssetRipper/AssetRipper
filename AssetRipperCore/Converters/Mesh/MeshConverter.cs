@@ -104,7 +104,7 @@ namespace AssetRipper.Core.Converters.Mesh
 				instance.Normals = origin.Normals.ToArray();
 			}
 
-			instance.CompressedMesh = origin.CompressedMesh.Convert(container);
+			instance.CompressedMesh.CopyValues(origin.CompressedMesh);
 			instance.LocalAABB.CopyValuesFrom(origin.LocalAABB);
 			if (Classes.Mesh.Mesh.HasCollisionTriangles(container.ExportVersion))
 			{
