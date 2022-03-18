@@ -216,6 +216,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.CanvasGroup => new CanvasGroup(assetInfo),
 				ClassIDType.ClusterInputManager => new ClusterInputManager(assetInfo),
 				ClassIDType.NavMeshData => new NavMeshData(assetInfo),
+				ClassIDType.ConstantForce2D => new ConstantForce2D(assetInfo),
 				ClassIDType.LightProbes => new LightProbes(assetInfo),
 				ClassIDType.UnityConnectSettings => new UnityConnectSettings(assetInfo),
 				ClassIDType.ParticleSystemForceField => new ParticleSystemForceField(assetInfo),

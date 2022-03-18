@@ -7,9 +7,9 @@ using AssetRipper.Core.YAML;
 
 namespace AssetRipper.Core.Classes.ConstantForce
 {
-	public sealed class ConstantForce : Behaviour
+	public sealed class ConstantForce2D : Behaviour
 	{
-		public ConstantForce(AssetInfo assetInfo) : base(assetInfo) { }
+		public ConstantForce2D(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{
@@ -17,8 +17,7 @@ namespace AssetRipper.Core.Classes.ConstantForce
 
 			Force.Read(reader);
 			RelativeForce.Read(reader);
-			Torque.Read(reader);
-			RelativeTorque.Read(reader);
+			Torque = reader.ReadSingle();
 		}
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
@@ -27,14 +26,12 @@ namespace AssetRipper.Core.Classes.ConstantForce
 			node.AddSerializedVersion(1);
 			node.Add("m_Force", Force.ExportYAML(container));
 			node.Add("m_RelativeForce", RelativeForce.ExportYAML(container));
-			node.Add("m_Torque", Torque.ExportYAML(container));
-			node.Add("m_RelativeTorque", RelativeTorque.ExportYAML(container));
+			node.Add("m_Torque", Torque);
 			return node;
 		}
 
-		public Vector3f Force = new();
-		public Vector3f RelativeForce = new();
-		public Vector3f Torque = new();
-		public Vector3f RelativeTorque = new();
+		public Vector2f Force = new();
+		public Vector2f RelativeForce = new();
+		public float Torque { get; set; }
 	}
 }
