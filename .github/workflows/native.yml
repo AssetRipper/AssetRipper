@@ -3,8 +3,12 @@ name: NativeBuild
 on:
    push:
     branches: [ master ]
+    paths:
+      - 'Texture2DDecoderNative/**'
    pull_request:
     branches: [ master ]
+    paths:
+      - 'Texture2DDecoderNative/**'
 
 jobs:
   BuildLinux:

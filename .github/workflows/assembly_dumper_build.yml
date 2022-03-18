@@ -3,8 +3,16 @@ name: Assembly_Dumper_Build
 on:
    push:
     branches: [ master ]
+    paths:
+      - 'AssemblyDumper/**'
+      - 'AssemblyDumper.ConsoleApp/**'
+      - 'AssetRipperCommon/**'
    pull_request:
     branches: [ master ]
+    paths:
+      - 'AssemblyDumper/**'
+      - 'AssemblyDumper.ConsoleApp/**'
+      - 'AssetRipperCommon/**'
    workflow_dispatch:
   
 
