@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
