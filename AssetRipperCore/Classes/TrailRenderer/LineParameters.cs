@@ -46,14 +46,23 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 		public static int ToSerializedVersion(UnityVersion version)
 		{
 			// ShadowBias default value has been changed from 0 to 0.5
-			if (version.IsGreaterEqual(2018, 3))
+			if (HasShadowBias(version))
 			{
 				return 3;
 			}
-			// min version is 2nd 
-			return 2;
+
+			if(HasAnimationCurve(version))
+			{
+				return 2;
+			}
+
+			return 1;
 		}
 
+		/// <summary>
+		/// 5.5.0f3 and greater
+		/// </summary>
+		public static bool HasAnimationCurve(UnityVersion version) => version.IsGreaterEqual(5, 5, 0, UnityVersionType.Final, 3);
 		/// <summary>
 		/// 2018.3.0 and greater
 		/// </summary>
@@ -70,41 +79,62 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 
 		public void Read(AssetReader reader)
 		{
-			WidthMultiplier = reader.ReadSingle();
-			WidthCurve.Read(reader);
-			ColorGradient.Read(reader);
-			NumCornerVertices = reader.ReadInt32();
-			NumCapVertices = reader.ReadInt32();
-			Alignment = (LineAlignment)reader.ReadInt32();
-			TextureMode = (LineTextureMode)reader.ReadInt32();
-			if (HasShadowBias(reader.Version))
+			if (HasAnimationCurve(reader.Version))
 			{
-				ShadowBias = reader.ReadSingle();
+				WidthMultiplier = reader.ReadSingle();
+				WidthCurve.Read(reader);
+				ColorGradient.Read(reader);
+				NumCornerVertices = reader.ReadInt32();
+				NumCapVertices = reader.ReadInt32();
+				Alignment = (LineAlignment)reader.ReadInt32();
+				TextureMode = (LineTextureMode)reader.ReadInt32();
+				if (HasShadowBias(reader.Version))
+				{
+					ShadowBias = reader.ReadSingle();
+				}
+				if (HasGenerateLightingData(reader.Version))
+				{
+					GenerateLightingData = reader.ReadBoolean();
+					reader.AlignStream();
+				}
 			}
-			if (HasGenerateLightingData(reader.Version))
+			else
 			{
-				GenerateLightingData = reader.ReadBoolean();
-				reader.AlignStream();
+				StartWidth = reader.ReadSingle();
+				EndWidth = reader.ReadSingle();
+				StartColor.Read(reader);
+				EndColor.Read(reader);
 			}
 		}
 
 		public void Write(AssetWriter writer)
 		{
-			writer.Write(WidthMultiplier);
-			WidthCurve.Write(writer);
-			ColorGradient.Write(writer);
-			writer.Write(NumCornerVertices);
-			writer.Write(NumCapVertices);
-			writer.Write((int)Alignment);
-			writer.Write((int)TextureMode);
-			if (HasShadowBias(writer.Version))
+			if (HasAnimationCurve(writer.Version))
 			{
-				writer.Write(ShadowBias);
+				writer.Write(WidthMultiplier);
+				WidthCurve.Write(writer);
+				ColorGradient.Write(writer);
+				writer.Write(NumCornerVertices);
+				writer.Write(NumCapVertices);
+				writer.Write((int)Alignment);
+				writer.Write((int)TextureMode);
+				if (HasShadowBias(writer.Version))
+				{
+					writer.Write(ShadowBias);
+				}
+
+				if (HasGenerateLightingData(writer.Version))
+				{
+					writer.Write(GenerateLightingData);
+					writer.AlignStream();
+				}
 			}
-			if (HasGenerateLightingData(writer.Version))
+			else
 			{
-				writer.Write(GenerateLightingData);
-				writer.AlignStream();
+				writer.Write(StartWidth);
+				writer.Write(EndWidth);
+				StartColor.Write(writer);
+				EndColor.Write(writer);
 			}
 		}
 
@@ -112,21 +142,33 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(WidthMultiplierName, WidthMultiplier);
-			node.Add(WidthCurveName, WidthCurve.ExportYAML(container));
-			node.Add(ColorGradientName, ColorGradient.ExportYAML(container));
-			node.Add(NumCornerVerticesName, NumCornerVertices);
-			node.Add(NumCapVerticesName, NumCapVertices);
-			node.Add(AlignmentName, (int)Alignment);
-			node.Add(TextureModeName, (int)TextureMode);
-			if (HasShadowBias(container.ExportVersion))
+			if (HasAnimationCurve(container.ExportVersion))
 			{
-				node.Add(ShadowBiasName, ShadowBias);
+				node.Add(WidthMultiplierName, WidthMultiplier);
+				node.Add(WidthCurveName, WidthCurve.ExportYAML(container));
+				node.Add(ColorGradientName, ColorGradient.ExportYAML(container));
+				node.Add(NumCornerVerticesName, NumCornerVertices);
+				node.Add(NumCapVerticesName, NumCapVertices);
+				node.Add(AlignmentName, (int)Alignment);
+				node.Add(TextureModeName, (int)TextureMode);
+				if (HasShadowBias(container.ExportVersion))
+				{
+					node.Add(ShadowBiasName, ShadowBias);
+				}
+
+				if (HasGenerateLightingData(container.ExportVersion))
+				{
+					node.Add(GenerateLightingDataName, GenerateLightingData);
+				}
 			}
-			if (HasGenerateLightingData(container.ExportVersion))
+			else
 			{
-				node.Add(GenerateLightingDataName, GenerateLightingData);
+				node.Add("startWidth", StartWidth);
+				node.Add("endWidth", EndWidth);
+				node.Add("m_StartColor", StartColor.ExportYAML(container));
+				node.Add("m_EndColor", EndColor.ExportYAML(container));
 			}
+
 			return node;
 		}
 
@@ -137,6 +179,9 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 		public LineTextureMode TextureMode { get; set; }
 		public float ShadowBias { get; set; }
 		public bool GenerateLightingData { get; set; }
+
+		public float StartWidth { get; set; }
+		public float EndWidth { get; set; }
 
 		public const string WidthMultiplierName = "widthMultiplier";
 		public const string WidthCurveName = "widthCurve";
@@ -150,5 +195,8 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 
 		public AnimationCurveTpl<Float> WidthCurve = new();
 		public Misc.Serializable.Gradient.Gradient ColorGradient = new();
+
+		public ColorRGBA32 StartColor = new();
+		public ColorRGBA32 EndColor = new();
 	}
 }
