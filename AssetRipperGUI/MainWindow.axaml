@@ -129,70 +129,70 @@
                     Grid.Row="1"
                     OptionTitle="{i18n:Localize mesh_export_title}"
                     SelectedValue="{Binding MeshExportFormat, Mode=TwoWay}"
-                    Margin="0, 0, 0, 0">
+                    Margin="0, 0, 10, 0">
                 </cc:MeshExportConfigDropdown>
                 <cc:AudioExportConfigDropdown 
                     Grid.Column="2" 
                     Grid.Row="1"
                     OptionTitle="{i18n:Localize audio_export_title}"
                     SelectedValue="{Binding AudioExportFormat, Mode=TwoWay}"
-                    Margin="0, 0, 0, 0">
+                    Margin="10, 0, 10, 0">
                 </cc:AudioExportConfigDropdown>
 				<cc:ShaderExportConfigDropdown
                     Grid.Column="3"
                     Grid.Row="1"
                     OptionTitle="{i18n:Localize shader_asset_export_title}"
                     SelectedValue="{Binding ShaderExportMode, Mode=TwoWay}"
-                    Margin="0, 0, 0, 0">
+                    Margin="10, 0, 0, 0">
 				</cc:ShaderExportConfigDropdown>
                 <cc:ImageExportConfigDropdown 
                     Grid.Column="1" 
                     Grid.Row="2"
                     OptionTitle="{i18n:Localize image_export_title}"
                     SelectedValue="{Binding ImageExportFormat, Mode=TwoWay}"
-                    Margin="0, 0, 0, 0">
+                    Margin="0, 0, 10, 0">
                 </cc:ImageExportConfigDropdown>
                 <cc:SpriteExportConfigDropdown 
                     Grid.Column="2" 
                     Grid.Row="2"
                     OptionTitle="{i18n:Localize sprite_export_title}"
                     SelectedValue="{Binding SpriteExportMode, Mode=TwoWay}"
-                    Margin="0, 0, 0, 0">
+                    Margin="10, 0, 10, 0">
                 </cc:SpriteExportConfigDropdown>
                 <cc:TerrainExportConfigDropdown 
                     Grid.Column="1" 
                     Grid.Row="3"
                     OptionTitle="{i18n:Localize terrain_export_title}"
                     SelectedValue="{Binding TerrainExportMode, Mode=TwoWay}"
-                    Margin="0, 0, 0, 0">
+                    Margin="0, 0, 10, 0">
                 </cc:TerrainExportConfigDropdown>
                 <cc:TextExportConfigDropdown 
                     Grid.Column="2" 
                     Grid.Row="3"
                     OptionTitle="{i18n:Localize text_asset_export_title}"
                     SelectedValue="{Binding TextExportMode, Mode=TwoWay}"
-                    Margin="0, 0, 0, 0">
+                    Margin="10, 0, 10, 0">
                 </cc:TextExportConfigDropdown>
 				<cc:ScriptExportModeConfigDropdown
                     Grid.Column="1"
                     Grid.Row="4"
                     OptionTitle="{i18n:Localize script_export_title}"
                     SelectedValue="{Binding ScriptExportMode, Mode=TwoWay}"
-                    Margin="0, 0, 0, 0">
+                    Margin="0, 0, 10, 0">
 				</cc:ScriptExportModeConfigDropdown>
                 <cc:ScriptContentLevelConfigDropdown
                     Grid.Column="2"
                     Grid.Row="4"
                     OptionTitle="{i18n:Localize script_content_level_title}"
                     SelectedValue="{Binding ScriptContentLevel, Mode=TwoWay}"
-                    Margin="0, 0, 0, 0">
+                    Margin="10, 0, 10, 0">
                 </cc:ScriptContentLevelConfigDropdown>
                 <cc:ScriptLanguageVersionConfigDropdown
                     Grid.Column="3"
                     Grid.Row="4"
                     OptionTitle="{i18n:Localize script_language_version_title}"
                     SelectedValue="{Binding ScriptLanguageVersion, Mode=TwoWay}"
-                    Margin="0, 0, 0, 0">
+                    Margin="10, 0, 0, 0">
                 </cc:ScriptLanguageVersionConfigDropdown>
             </Grid>
 
