@@ -9,7 +9,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class BlendShapeData : IAsset
+	public sealed class BlendShapeData : IBlendShapeData
 	{
 		public IBlendShapeVertex[] Vertices { get; set; } = Array.Empty<IBlendShapeVertex>();
 		public IMeshBlendShape[] Shapes { get; set; } = Array.Empty<IMeshBlendShape>();
@@ -20,18 +20,6 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// 2017.1 and greater
 		/// </summary>
 		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2017);
-
-		public string FindShapeNameByCRC(uint crc)
-		{
-			foreach (MeshBlendShapeChannel blendChannel in Channels)
-			{
-				if (blendChannel.NameHash == crc)
-				{
-					return blendChannel.Name.String;
-				}
-			}
-			return null;
-		}
 
 		public BlendShapeData Convert()
 		{
