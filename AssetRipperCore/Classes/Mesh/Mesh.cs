@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Classes.Mesh
 	public sealed class Mesh : NamedObject, IMesh
 	{
 		public BlendShapeData Shapes { get; set; } = new BlendShapeData();
-		public VariableBoneCountWeights VariableBoneCountWeights { get; set; } = new VariableBoneCountWeights();
+		public IVariableBoneCountWeights VariableBoneCountWeights { get; } = new VariableBoneCountWeights();
 		public VertexData VertexData { get; set; } = new VertexData();
 		public ICompressedMesh CompressedMesh { get; } = new CompressedMesh();
 		public IAABB LocalAABB { get; } = new AABB();

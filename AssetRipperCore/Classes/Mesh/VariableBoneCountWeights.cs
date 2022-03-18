@@ -4,19 +4,11 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
-using System.Linq;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
 	public sealed class VariableBoneCountWeights : IVariableBoneCountWeights
 	{
-		public VariableBoneCountWeights Convert(IExportContainer container)
-		{
-			VariableBoneCountWeights instance = new VariableBoneCountWeights();
-			instance.Data = Data.ToArray();
-			return instance;
-		}
-
 		public void Read(AssetReader reader)
 		{
 			Data = reader.ReadUInt32Array();

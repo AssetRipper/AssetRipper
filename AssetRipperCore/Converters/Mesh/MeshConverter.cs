@@ -50,8 +50,8 @@ namespace AssetRipper.Core.Converters.Mesh
 			if (Classes.Mesh.Mesh.HasBonesAABB(container.ExportVersion))
 			{
 				instance.BonesAABB = GetBonesAABB(container, origin);
-				instance.VariableBoneCountWeights = GetVariableBoneCountWeights(container, origin);
 			}
+			instance.VariableBoneCountWeights.CopyValues(origin.VariableBoneCountWeights ?? new VariableBoneCountWeights());
 			if (Classes.Mesh.Mesh.HasMeshCompression(container.ExportVersion))
 			{
 				instance.MeshCompression = GetMeshCompression(container, origin);
@@ -200,11 +200,6 @@ namespace AssetRipper.Core.Converters.Mesh
 		private static MinMaxAABB[] GetBonesAABB(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
 			return Classes.Mesh.Mesh.HasBonesAABB(container.Version) ? origin.BonesAABB.ToArray() : Array.Empty<MinMaxAABB>();
-		}
-
-		private static VariableBoneCountWeights GetVariableBoneCountWeights(IExportContainer container, Classes.Mesh.Mesh origin)
-		{
-			return Classes.Mesh.Mesh.HasBonesAABB(container.Version) ? origin.VariableBoneCountWeights : new VariableBoneCountWeights();
 		}
 
 		private static MeshCompression GetMeshCompression(IExportContainer container, Classes.Mesh.Mesh origin)
