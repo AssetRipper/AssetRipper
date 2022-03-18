@@ -1,10 +1,16 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
+using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	//Not Yet Implemented
+	//Partially Implemented
 	public interface IMesh : INamedObject
 	{
+		IAABB LocalAABB { get; }
+		byte[] BakedConvexCollisionMesh { get; set; }
+		byte[] BakedTriangleCollisionMesh { get; set; }
+		IStreamingInfo StreamData { get; }
 	}
 
 	public static class MeshExtensions

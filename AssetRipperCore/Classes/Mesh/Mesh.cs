@@ -31,10 +31,10 @@ namespace AssetRipper.Core.Classes.Mesh
 		public VariableBoneCountWeights VariableBoneCountWeights { get; set; } = new VariableBoneCountWeights();
 		public VertexData VertexData { get; set; } = new VertexData();
 		public CompressedMesh CompressedMesh { get; set; } = new CompressedMesh();
-		public AABB LocalAABB { get; set; } = new AABB();
+		public IAABB LocalAABB { get; } = new AABB();
 		public byte[] BakedConvexCollisionMesh { get; set; } = Array.Empty<byte>();
 		public byte[] BakedTriangleCollisionMesh { get; set; } = Array.Empty<byte>();
-		public StreamingInfo StreamData { get; set; } = new StreamingInfo();
+		public IStreamingInfo StreamData { get; } = new StreamingInfo();
 		public uint Use16BitIndices
 		{
 			get => IndexFormat == IndexFormat.UInt16 ? 1U : 0U;
