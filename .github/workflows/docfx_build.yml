@@ -1,11 +1,30 @@
-name: DocFX Build and Publish
+﻿name: DocFX Build and Publish
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
+    paths:
+      - 'docs/**'
   pull_request:
     branches: [ master ]
-    
+    paths:
+      - 'docs/**'
+  schedule:
+    - cron: '0 0 * * 0' #once per day
+   
+# The schedule event can be delayed during periods of high loads of GitHub Actions workflow runs
+#
+# ┌───────────── minute (0 - 59)
+# │ ┌───────────── hour (0 - 23)
+# │ │ ┌───────────── day of the month (1 - 31)
+# │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+# │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+# │ │ │ │ │
+# │ │ │ │ │
+# │ │ │ │ │
+# * * * * *
+
 jobs:
   generate-docs:
     runs-on: windows-latest
