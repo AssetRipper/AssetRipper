@@ -135,5 +135,9 @@
     "c_sharp_langage_version_config_7_3": "C# 7.3",
     "c_sharp_langage_version_config_8_0": "C# 8",
     "c_sharp_langage_version_config_latest": "C# Son Sürüm",
-    "c_sharp_langage_version_config_auto_experimental": "Otomatik - Deneysel"
+    "c_sharp_langage_version_config_auto_experimental": "Otomatik - Deneysel",
+    "script_export_title": "Komut Dosyası Çıkarma Formatı",
+    "script_export_format_dll_without_renaming_description": "Assemblies derlenmiş Dll biçiminde dışa aktarılır.Deneysel özellik. Çalışacağı garanti edilmez.",
+    "script_export_format_dll_with_renaming": "Dll yeniden isimlendirerek çıkart",
+    "script_export_format_dll_without_renaming": "Dll yeniden isimlendirmeden çıkart"
 }
