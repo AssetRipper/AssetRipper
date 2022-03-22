@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes
 			writer.Write(RawData);
 		}
 
-		public override string ExportExtension => "bytes";
+		public override string ExportExtension => "unknown";
 
 		public override string ExportPath => Path.Combine("AssetRipper", "UnknownAssets", ClassID.ToString());
 	}
