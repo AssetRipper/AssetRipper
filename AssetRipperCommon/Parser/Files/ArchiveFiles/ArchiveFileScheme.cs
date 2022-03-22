@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 			WebScheme = WebFiles.WebFile.ReadScheme(buffer, FilePath);
 		}
 
-		private byte[] ReadGZip(EndianReader reader)
+		private static byte[] ReadGZip(EndianReader reader)
 		{
 			using MemoryStream stream = new MemoryStream();
 			using GZipStream gzipStream = new GZipStream(reader.BaseStream, CompressionMode.Decompress);
@@ -69,7 +69,7 @@ namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 			return stream.ToArray();
 		}
 
-		private byte[] ReadBrotli(EndianReader reader)
+		private static byte[] ReadBrotli(EndianReader reader)
 		{
 			using MemoryStream stream = new MemoryStream();
 			using BrotliStream brotliStream = new BrotliStream(reader.BaseStream, CompressionMode.Decompress);
