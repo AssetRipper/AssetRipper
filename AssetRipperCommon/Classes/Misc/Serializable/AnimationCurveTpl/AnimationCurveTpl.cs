@@ -14,12 +14,11 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 	{
 		public AnimationCurveTpl() { }
 
-		public AnimationCurveTpl(bool init)
+		public AnimationCurveTpl(bool _)
 		{
 			PreInfinity = CurveLoopTypes.CycleWithOffset;
 			PostInfinity = CurveLoopTypes.CycleWithOffset;
 			RotationOrder = RotationOrder.OrderZXY;
-			Curve = init ? Array.Empty<KeyframeTpl<T>>() : null;
 		}
 
 		public AnimationCurveTpl(T defaultValue, T defaultWeight) : this(false)
@@ -162,7 +161,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 				ArrayEquality.AreEqualArrays(Curve, other.Curve);
 		}
 
-		public KeyframeTpl<T>[] Curve { get; set; }
+		public KeyframeTpl<T>[] Curve { get; set; } = Array.Empty<KeyframeTpl<T>>();
 		public CurveLoopTypes PreInfinity { get; set; }
 		public CurveLoopTypes PostInfinity { get; set; }
 		public RotationOrder RotationOrder { get; set; }
