@@ -6,13 +6,18 @@
 * Convert Exporters to the new Interface System
   * Animator Controller exporter
   * Mesh exporters
+  * Shader disassembly exporter
   * Texture exporter
 * Move more classes to the Common project
   * Move ProjectExporter
   * Move GameStructure
 * Struct Reading Overhaul
   * Apply interfaces in the generated assemblies
-  * Implement a system for downloading the assemblies on demand
+  * Implement a system for generating the assemblies on demand
+* New Tpk Format
+  * Extract Engine Asset Info from all Unity versions
+  * Extract Reference Assembly Info from all Unity versions
+  * Finalize format structure and publish to nuget
 * Finishing touches
   * Remove the `Classes` and `Converters` namespaces
   * Remove any additional legacy code
@@ -60,14 +65,14 @@ This release will likely focus on improving the user experience in the GUI
     * DAE (aka Collada)
     * Split combined meshes back into the original set of static meshes
   * Script Export
-    * Option to reference assemblies instead of scripts
+    * Hybrid script export
+    * Assembly renaming
     * Convert TypeTree to MonoScripts
   * Selective Export
     * Export Selected object to folder
     * Export Selected object to compressed zip file
   * Shader Export
     * Replace all shaders on materials with a built-in shader (for example, the Standard shader)
-    * Export shaders as yaml
 
 ## Concept Ideas
 > Note: This is just a collection of ideas. These might not be desirable or feasible, so many of them might never be implemented. Do not interpret their inclusion here as any form of commitment.

@@ -109,7 +109,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				importer.SpriteMode = SpriteImportMode.Single;
 				importer.SpriteExtrude = 1;
-				importer.SpriteMeshType = SpriteMeshType.FullRect;
+				importer.SpriteMeshType = SpriteMeshType.FullRect;//See pull request #306
 				importer.Alignment = SpriteAlignment.Center;
 				importer.SpritePivot = new Vector2f(0.5f, 0.5f);
 				importer.SpriteBorder = new();

@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.LightProbes
 		public static bool HasEnabled(UnityVersion version) => version.IsGreaterEqual(4, 0, 0);
 
 		/// <summary>
-		/// 5.6.0b6 and greater
+		/// 2018.3.0b7 and greater
 		/// </summary>
 		public static bool HasDering(UnityVersion version) => version.IsGreaterEqual(2018, 3, 0, UnityVersionType.Beta, 7);
 
