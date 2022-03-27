@@ -28,7 +28,11 @@ namespace AssetRipper.Core.Classes.LightProbes
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.Add(ProbeOcclusionLightIndexName, ProbeOcclusionLightIndex.ExportYAML(true));
 			node.Add(OcclusionName, Occlusion.ExportYAML());
-			node.Add(OcclusionMaskChannelName, OcclusionMaskChannel.ExportYAML());
+			if (HasOcclusionMaskChannel(container.ExportVersion))
+			{
+				node.Add(OcclusionMaskChannelName, OcclusionMaskChannel.ExportYAML());
+			}
+
 			return node;
 		}
 
