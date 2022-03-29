@@ -194,11 +194,11 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		{
 			if (context.Type.ContainsGenericParameter)
 			{
-				throw new ArgumentException(nameof(context));
+				throw new ArgumentException("Contains a geneneric parameter", nameof(context));
 			}
 			if (MonoUtils.IsSerializableArray(context.Type))
 			{
-				throw new ArgumentException(nameof(context));
+				throw new ArgumentException("Is serializable array", nameof(context));
 			}
 
 			string uniqueName = GetUniqueName(context.Type);
