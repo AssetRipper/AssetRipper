@@ -1,40 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <TargetFramework>net6.0</TargetFramework>
-	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <AssemblyName>AssetRipperLibrary</AssemblyName>
-	  <RootNamespace>AssetRipper.Library</RootNamespace>
-	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	  <OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
-	  <IntermediateOutputPath>..\Bins\obj\AssetRipperLibrary\$(Configuration)\</IntermediateOutputPath>
-	  <Platforms>x64</Platforms>
-	  <Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
-	  <DebugType>embedded</DebugType>
-	  <DebugSymbols>true</DebugSymbols>
-	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
-    <DefineConstants>DEBUG</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AssemblyName>AssetRipperLibrary</AssemblyName>
+		<RootNamespace>AssetRipper.Library</RootNamespace>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipperLibrary\$(Configuration)\</IntermediateOutputPath>
+		<Platforms>x64</Platforms>
+		<Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
+		<DebugType>embedded</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<DefineConstants>TRACE;NET_CORE</DefineConstants>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AssetRipper.TextureDecoder" Version="1.1.0" />
-    <PackageReference Include="Fmod5Sharp" Version="1.2.0" />
-	<PackageReference Include="ICSharpCode.Decompiler" Version="7.2.0.6844" />
-    <PackageReference Include="NAudio.Core" Version="2.0.0" />
-    <PackageReference Include="NAudio.Lame" Version="2.0.1" />
-    <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
-    <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0025" />
-    <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0025" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.0" />
-    <PackageReference Include="YamlDotNet" Version="11.2.1" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
+		<DefineConstants>DEBUG</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AssetRipper.TextureDecoder" Version="1.1.0" />
+		<PackageReference Include="Fmod5Sharp" Version="1.2.0" />
+		<PackageReference Include="ICSharpCode.Decompiler" Version="7.2.0.6844" />
+		<PackageReference Include="NAudio.Core" Version="2.0.0" />
+		<PackageReference Include="NAudio.Lame" Version="2.0.1" />
+		<PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+		<PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0025" />
+		<PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0025" />
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.0" />
+		<PackageReference Include="YamlDotNet" Version="11.2.1" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="MeshSharp">
@@ -59,21 +58,21 @@
 		</Reference>
 	</ItemGroup>
 
-  <ItemGroup>
-    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
-  </ItemGroup>
+	<ItemGroup>
+		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
-    <ProjectReference Include="..\ShaderTextRestorer\ShaderTextRestorer.csproj" />
-    <ProjectReference Include="..\Texture2DDecoderWrapper\Texture2DDecoderWrapper.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
+		<ProjectReference Include="..\ShaderTextRestorer\ShaderTextRestorer.csproj" />
+		<ProjectReference Include="..\Texture2DDecoderWrapper\Texture2DDecoderWrapper.csproj" />
+	</ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='ReleaseWindows'">
-        <ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>texgenpack.dll</TargetPath>
-        </ContentWithTargetPath>
+	<ItemGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='ReleaseWindows'">
+		<ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>texgenpack.dll</TargetPath>
+		</ContentWithTargetPath>
 		<ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>crunch.dll</TargetPath>
@@ -82,43 +81,43 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>crunchunity.dll</TargetPath>
 		</ContentWithTargetPath>
-        <ContentWithTargetPath Include="Libraries\x64\libogg-x64.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>ogg.dll</TargetPath>
-        </ContentWithTargetPath>
-        <ContentWithTargetPath Include="Libraries\x64\libvorbis-x64.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>vorbis.dll</TargetPath>
-        </ContentWithTargetPath>
-        <ContentWithTargetPath Include="Libraries\x64\fmod_x64.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>fmod.dll</TargetPath>
-        </ContentWithTargetPath>
-    </ItemGroup>
+		<ContentWithTargetPath Include="Libraries\x64\libogg-x64.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>ogg.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="Libraries\x64\libvorbis-x64.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>vorbis.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include="Libraries\x64\fmod_x64.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>fmod.dll</TargetPath>
+		</ContentWithTargetPath>
+	</ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='DebugMac' or '$(Configuration)'=='ReleaseMac'">
-        <ContentWithTargetPath Include="Libraries\mac\libfmod.dylib">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>libfmod.dylib</TargetPath>
-        </ContentWithTargetPath>
-    </ItemGroup>
+	<ItemGroup Condition="'$(Configuration)'=='DebugMac' or '$(Configuration)'=='ReleaseMac'">
+		<ContentWithTargetPath Include="Libraries\mac\libfmod.dylib">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>libfmod.dylib</TargetPath>
+		</ContentWithTargetPath>
+	</ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='DebugLinux' or '$(Configuration)'=='ReleaseLinux'">
-        <ContentWithTargetPath Include="Libraries\linux\libfmod.so">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>libfmod.so</TargetPath>
-        </ContentWithTargetPath>
-    </ItemGroup>
+	<ItemGroup Condition="'$(Configuration)'=='DebugLinux' or '$(Configuration)'=='ReleaseLinux'">
+		<ContentWithTargetPath Include="Libraries\linux\libfmod.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>libfmod.so</TargetPath>
+		</ContentWithTargetPath>
+	</ItemGroup>
 
-    <ItemGroup>
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="obj\**" />
-  </ItemGroup>
-	
+	<ItemGroup>
+		<Compile Remove="obj\**" />
+		<EmbeddedResource Remove="obj\**" />
+		<None Remove="obj\**" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<None Remove="Exporters\Shaders\Templates\*" />
 		<EmbeddedResource Include="Exporters\Shaders\Templates\*" />
 	</ItemGroup>
-	
+
 </Project>

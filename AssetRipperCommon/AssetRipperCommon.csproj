@@ -1,22 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <TargetFramework>net6.0</TargetFramework>
-	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <OutputPath>..\Bins\AssetRipperCommon\$(Configuration)\</OutputPath>
-	  <IntermediateOutputPath>..\Bins\obj\AssetRipperCommon\$(Configuration)\</IntermediateOutputPath>
-	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <AssemblyName>AssetRipperCommon</AssemblyName>
-	  <RootNamespace>AssetRipper.Core</RootNamespace>
-	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-	  <Copyright>Copyright ©  2021</Copyright>
-	  <Authors>ds5678</Authors>
-	  <Configurations>Debug;Release</Configurations>
-	  <DebugType>embedded</DebugType>
-	  <DebugSymbols>true</DebugSymbols>
-	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>..\Bins\AssetRipperCommon\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipperCommon\$(Configuration)\</IntermediateOutputPath>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyName>AssetRipperCommon</AssemblyName>
+		<RootNamespace>AssetRipper.Core</RootNamespace>
+		<Copyright>Copyright ©  2021</Copyright>
+		<Authors>ds5678</Authors>
+		<Configurations>Debug;Release</Configurations>
+		<DebugType>embedded</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<DefineConstants>TRACE;NET_CORE</DefineConstants>
+	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
 		<DefineConstants>DEBUG</DefineConstants>

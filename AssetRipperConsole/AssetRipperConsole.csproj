@@ -1,50 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <OutputType>Exe</OutputType>
-	  <TargetFramework>net6.0</TargetFramework>
-	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <AssemblyName>AssetRipperConsole</AssemblyName>
-	  <RootNamespace>AssetRipper.Console</RootNamespace>
-	  <OutputPath>..\Bins\AssetRipperConsole\$(Configuration)\</OutputPath>
-	  <IntermediateOutputPath>..\Bins\obj\AssetRipperConsole\$(Configuration)\</IntermediateOutputPath>
-	  <Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
-	  <Platforms>x64</Platforms>
-	  <DebugType>embedded</DebugType>
-	  <DebugSymbols>true</DebugSymbols>
-	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
-	  <ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AssemblyName>AssetRipperConsole</AssemblyName>
+		<RootNamespace>AssetRipper.Console</RootNamespace>
+		<OutputPath>..\Bins\AssetRipperConsole\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipperConsole\$(Configuration)\</IntermediateOutputPath>
+		<Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
+		<Platforms>x64</Platforms>
+		<DebugType>embedded</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<DefineConstants>TRACE;NET_CORE</DefineConstants>
+		<ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
-    <DefineConstants>DEBUG</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
+		<DefineConstants>DEBUG</DefineConstants>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Remove="App.config" />
-    <None Remove="App.manifest" />
-  </ItemGroup>
+	<ItemGroup>
+		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
-    <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="App.config" />
+		<None Remove="App.manifest" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="obj\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.8.0" />
+		<PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
+		<PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="obj\**" />
+		<EmbeddedResource Remove="obj\**" />
+		<None Remove="obj\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
+	</ItemGroup>
 
 </Project>
