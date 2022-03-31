@@ -134,5 +134,22 @@
     "c_sharp_langage_version_config_9_0": "C# 9",
     "c_sharp_langage_version_config_10_0": "C# 10",
     "check_log_for_more_details": "Controlla i log per maggiori dettagli",
-    "menu_export_selected_type": "Esporta tutti i file del tipo selezionato"
+    "menu_export_selected_type": "Esporta tutti i file del tipo selezionato",
+    "shader_asset_format_disassembly_description": "Esporta le shader come disassemblate. Sperimentale e soggetto a rotture. Queste non vengono compilate nell'editor.",
+    "script_export_format_dll_without_renaming_description": "Gli assembly vengono esportati nel formato Dll compilato. Sperimentale. Potrebbe non funzionare affatto.",
+    "not_implemented_yet": "Non ancora implementato",
+    "c_sharp_langage_version_config_auto_safe": "Automatico - Sicuro",
+    "c_sharp_langage_version_config_auto_experimental": "Automatico - Sperimentale",
+    "script_export_title": "Formato di esportazione degli script",
+    "shader_asset_format_dummy": "Dummy Shader",
+    "shader_asset_format_yaml": "Asset YAML",
+    "shader_asset_format_disassembly": "Disassembla",
+    "script_export_format_decompiled": "Decompilati",
+    "script_export_format_decompiled_description": "Il decompilatore ILSpy viene utilizzato per generare script CS. È affidabile. Tuttavia, richiede anche molto tempo e contiene molti errori di compilazione.",
+    "script_export_format_hybrid": "Ibrido",
+    "script_export_format_dll_with_renaming": "Esportazione Dll con ridenominazione",
+    "script_export_format_dll_without_renaming": "Esportazione Dll senza ridenominazione",
+    "shader_asset_export_title": "Formato di esportazione delle Shader",
+    "shader_asset_format_dummy_description": "Esporta le shader come dummy shader. Sebbene conservi dati come Proprietà e FallBack, utilizza un comune codice di shader opaca.",
+    "shader_asset_format_yaml_description": "Esporta le shader come asset yaml. Sperimentale e utilizzabile solo per la visualizzazione nell'editor. L'editor può casualmente corrompere questi file."
 }
