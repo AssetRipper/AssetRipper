@@ -12,7 +12,7 @@ namespace AssetRipper.GUI
 {
 	public class LocalizationManager : BaseViewModel
 	{
-		private const string LocalizationFilePrefix = "AssetRipper.GUI.Localizations.";
+		private const string LocalizationFilePrefix = "AssetRipper.GUI.";
 		private static readonly Regex SortOrderRegex = new("\\(Sort Order=([A-Z]+)\\)", RegexOptions.Compiled);
 
 		// ReSharper disable once MemberInitializerValueIgnored

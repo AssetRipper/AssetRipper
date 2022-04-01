@@ -53,7 +53,7 @@
 		<ProjectReference Include="..\AssetRipperLibrary\AssetRipperLibrary.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Remove="Localizations\*.json" />
-		<EmbeddedResource Include="Localizations\*.json" />
+		<None Remove="..\Localizations\*.json" />
+		<EmbeddedResource Include="..\Localizations\*.json" />
 	</ItemGroup>
 </Project>
