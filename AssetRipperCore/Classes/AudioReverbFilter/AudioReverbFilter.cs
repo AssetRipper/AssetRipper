@@ -35,13 +35,13 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 			HfReference = reader.ReadSingle();
 			RoomLF = reader.ReadSingle();
 			LfReference = reader.ReadSingle();
-			if (HasroomRolloffFactor(reader.Version))
+			if (HasRoomRolloff(reader.Version))
 			{
-				roomRolloffFactor = reader.ReadSingle();
+				RoomRolloff = reader.ReadSingle();
 			}
 		}
 
-		public static bool HasroomRolloffFactor(UnityVersion version) => version.IsLessEqual(5, 4);
+		public static bool HasRoomRolloff(UnityVersion version) => version.IsLessEqual(5, 4);
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
@@ -64,21 +64,21 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 			node.Add("LfReference", LfReference);
 			return node;
 		}
-		public AudioReverbPreset ReverbPreset { get; set; }
+		public float RoomRolloff { get; set; }
 		public float DryLevel { get; set; }
 		public float Room { get; set; }
 		public float RoomHF { get; set; }
 		public float DecayTime { get; set; }
 		public float DecayHFRatio { get; set; }
 		public float ReflectionsLevel { get; set; }
-		public float ReflectionsDelay { get; set; }
-		public float roomRolloffFactor { get; set; }
 		public float ReverbLevel { get; set; }
 		public float ReverbDelay { get; set; }
 		public float Diffusion { get; set; }
 		public float Density { get; set; }
-		public float HfReference { get; set; }
+		public float HFReference { get; set; }
 		public float RoomLF { get; set; }
-		public float LfReference { get; set; }
+		public float LFReference { get; set; }
+		public float ReflectionsDelay { get; set; }
+		public AudioReverbPreset ReverbPreset { get; set; }
 	}
 }
