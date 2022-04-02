@@ -41,7 +41,7 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 			ReverbPreset = (AudioReverbPreset)reader.ReadInt32();
 		}
 
-		public static bool HasRoomRolloff(UnityVersion version) => version.IsLessEqual(5, 6);
+		public static bool HasRoomRolloff(UnityVersion version) => version.IsLess(5, 6, 0, UnityVersionType.Beta, 10);
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
@@ -50,6 +50,10 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 			node.Add("m_DryLevel", DryLevel);
 			node.Add("m_Room", Room);
 			node.Add("m_RoomHF", RoomHF);
+			if (HasRoomRolloff(container.ExportVersion))
+			{
+				node.Add("m_RoomRolloff", RoomRolloff);
+			}
 			node.Add("m_DecayTime", DecayTime);
 			node.Add("m_DecayHFRatio", DecayHFRatio);
 			node.Add("m_ReflectionsLevel", ReflectionsLevel);
@@ -61,7 +65,7 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 			node.Add("m_RoomLF", RoomLF);
 			node.Add("m_LfReference", LFReference);
 			node.Add("m_ReflectionsDelay", ReflectionsDelay);
-			node.Add("m_reverbPreset", (int)ReverbPreset);
+			node.Add("m_ReverbPreset", (int)ReverbPreset);
 			return node;
 		}
 		public float DryLevel { get; set; }
