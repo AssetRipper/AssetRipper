@@ -20,25 +20,25 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 		{
 			base.Read(reader);
 
-			ReverbPreset = (AudioReverbPreset)reader.ReadInt32();
 			DryLevel = reader.ReadSingle();
 			Room = reader.ReadSingle();
 			RoomHF = reader.ReadSingle();
-			DecayTime = reader.ReadSingle();
-			DecayHFRatio = reader.ReadSingle();
-			ReflectionsLevel = reader.ReadSingle();
-			ReflectionsDelay = reader.ReadSingle();
-			ReverbLevel = reader.ReadSingle();
-			ReverbDelay = reader.ReadSingle();
-			Diffusion = reader.ReadSingle();
-			Density = reader.ReadSingle();
-			HfReference = reader.ReadSingle();
-			RoomLF = reader.ReadSingle();
-			LfReference = reader.ReadSingle();
 			if (HasRoomRolloff(reader.Version))
 			{
 				RoomRolloff = reader.ReadSingle();
 			}
+			DecayTime = reader.ReadSingle();
+			DecayHFRatio = reader.ReadSingle();
+			ReflectionsLevel = reader.ReadSingle();
+			ReverbLevel = reader.ReadSingle();
+			ReverbDelay = reader.ReadSingle();
+			Diffusion = reader.ReadSingle();
+			Density = reader.ReadSingle();
+			HFReference = reader.ReadSingle();
+			RoomLF = reader.ReadSingle();
+			LFReference = reader.ReadSingle();
+			ReflectionsDelay = reader.ReadSingle();
+			ReverbPreset = (AudioReverbPreset)reader.ReadInt32();
 		}
 
 		public static bool HasRoomRolloff(UnityVersion version) => version.IsLessEqual(5, 4);
@@ -47,14 +47,12 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("reverbPreset", (int)ReverbPreset);
 			node.Add("DryLevel", DryLevel);
 			node.Add("Room", Room);
 			node.Add("RoomHF", RoomHF);
 			node.Add("DecayTime", DecayTime);
 			node.Add("DecayHFRatio", DecayHFRatio);
 			node.Add("ReflectionsLevel", ReflectionsLevel);
-			node.Add("ReflectionsDelay", ReflectionsDelay);
 			node.Add("ReverbLevel", ReverbLevel);
 			node.Add("ReverbDelay", ReverbDelay);
 			node.Add("Diffusion", Diffusion);
@@ -62,12 +60,14 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 			node.Add("HfReference", HfReference);
 			node.Add("RoomLF", RoomLF);
 			node.Add("LfReference", LfReference);
+			node.Add("ReflectionsDelay", ReflectionsDelay);
+			node.Add("reverbPreset", (int)ReverbPreset);
 			return node;
 		}
-		public float RoomRolloff { get; set; }
 		public float DryLevel { get; set; }
 		public float Room { get; set; }
 		public float RoomHF { get; set; }
+		public float RoomRolloff { get; set; }
 		public float DecayTime { get; set; }
 		public float DecayHFRatio { get; set; }
 		public float ReflectionsLevel { get; set; }
