@@ -57,9 +57,9 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 			node.Add("ReverbDelay", ReverbDelay);
 			node.Add("Diffusion", Diffusion);
 			node.Add("Density", Density);
-			node.Add("HfReference", HfReference);
+			node.Add("HfReference", HFReference);
 			node.Add("RoomLF", RoomLF);
-			node.Add("LfReference", LfReference);
+			node.Add("LfReference", LFReference);
 			node.Add("ReflectionsDelay", ReflectionsDelay);
 			node.Add("reverbPreset", (int)ReverbPreset);
 			return node;
