@@ -12,6 +12,7 @@ using AssetRipper.Core.Classes.AudioChorusFilter;
 using AssetRipper.Core.Classes.AudioDistortionFilter;
 using AssetRipper.Core.Classes.AudioManager;
 using AssetRipper.Core.Classes.AudioSource;
+using AssetRipper.Core.Classes.AudioReverbFilter;
 using AssetRipper.Core.Classes.Avatar;
 using AssetRipper.Core.Classes.AvatarMask;
 using AssetRipper.Core.Classes.BoxCollider2D;
@@ -144,6 +145,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.TagManager => new TagManager(assetInfo),
 				ClassIDType.AudioListener => new AudioListener(assetInfo),
 				ClassIDType.AudioSource => new AudioSource(assetInfo),
+                                      ClassIDType.AudioReverbFilter => new AudioReverbFilter(assetInfo),
 				ClassIDType.AudioClip => new AudioClip(assetInfo),
 				ClassIDType.RenderTexture => new RenderTexture(assetInfo),
 				ClassIDType.Cubemap => new Cubemap(assetInfo),
