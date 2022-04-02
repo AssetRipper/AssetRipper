@@ -41,7 +41,7 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 			ReverbPreset = (AudioReverbPreset)reader.ReadInt32();
 		}
 
-		public static bool HasRoomRolloff(UnityVersion version) => version.IsLessEqual(5, 4);
+		public static bool HasRoomRolloff(UnityVersion version) => version.IsLessEqual(5, 6);
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
