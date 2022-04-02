@@ -1,5 +1,9 @@
 ﻿namespace AssetRipper.Core.Classes.AudioReverbFilter
 {
+    //Surce url
+    https://docs.unity3d.com/ScriptReference/AudioReverbPreset.html
+    //
+	
 	public enum AudioReverbPreset
 	{
 		Off = 0,
