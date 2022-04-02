@@ -20,25 +20,25 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 		{
 			base.Read(reader);
 
-			DryLevel = reader.ReadSingle();
-			Room = reader.ReadSingle();
-			RoomHF = reader.ReadSingle();
+			m_DryLevel = reader.ReadSingle();
+			m_Room = reader.ReadSingle();
+			m_RoomHF = reader.ReadSingle();
 			if (HasRoomRolloff(reader.Version))
 			{
-				RoomRolloff = reader.ReadSingle();
+				m_RoomRolloff = reader.ReadSingle();
 			}
-			DecayTime = reader.ReadSingle();
-			DecayHFRatio = reader.ReadSingle();
-			ReflectionsLevel = reader.ReadSingle();
-			ReverbLevel = reader.ReadSingle();
-			ReverbDelay = reader.ReadSingle();
-			Diffusion = reader.ReadSingle();
-			Density = reader.ReadSingle();
-			HFReference = reader.ReadSingle();
-			RoomLF = reader.ReadSingle();
-			LFReference = reader.ReadSingle();
-			ReflectionsDelay = reader.ReadSingle();
-			ReverbPreset = (AudioReverbPreset)reader.ReadInt32();
+			m_DecayTime = reader.ReadSingle();
+			m_DecayHFRatio = reader.ReadSingle();
+			m_ReflectionsLevel = reader.ReadSingle();
+			m_ReverbLevel = reader.ReadSingle();
+			m_ReverbDelay = reader.ReadSingle();
+			m_Diffusion = reader.ReadSingle();
+			m_Density = reader.ReadSingle();
+			m_HFReference = reader.ReadSingle();
+			m_RoomLF = reader.ReadSingle();
+			m_LFReference = reader.ReadSingle();
+			m_ReflectionsDelay = reader.ReadSingle();
+			m_ReverbPreset = (AudioReverbPreset)reader.ReadInt32();
 		}
 
 		public static bool HasRoomRolloff(UnityVersion version) => version.IsLessEqual(5, 6);
@@ -47,38 +47,38 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("DryLevel", DryLevel);
-			node.Add("Room", Room);
-			node.Add("RoomHF", RoomHF);
-			node.Add("DecayTime", DecayTime);
-			node.Add("DecayHFRatio", DecayHFRatio);
-			node.Add("ReflectionsLevel", ReflectionsLevel);
-			node.Add("ReverbLevel", ReverbLevel);
-			node.Add("ReverbDelay", ReverbDelay);
-			node.Add("Diffusion", Diffusion);
-			node.Add("Density", Density);
-			node.Add("HfReference", HFReference);
-			node.Add("RoomLF", RoomLF);
-			node.Add("LfReference", LFReference);
-			node.Add("ReflectionsDelay", ReflectionsDelay);
-			node.Add("reverbPreset", (int)ReverbPreset);
+			node.Add("DryLevel", m_DryLevel);
+			node.Add("Room", m_Room);
+			node.Add("RoomHF", m_RoomHF);
+			node.Add("DecayTime", m_DecayTime);
+			node.Add("DecayHFRatio", m_DecayHFRatio);
+			node.Add("ReflectionsLevel", m_ReflectionsLevel);
+			node.Add("ReverbLevel", m_ReverbLevel);
+			node.Add("ReverbDelay", m_ReverbDelay);
+			node.Add("Diffusion", m_Diffusion);
+			node.Add("Density", m_Density);
+			node.Add("HfReference", m_HFReference);
+			node.Add("RoomLF", m_RoomLF);
+			node.Add("LfReference", m_LFReference);
+			node.Add("ReflectionsDelay", m_ReflectionsDelay);
+			node.Add("reverbPreset", (int)m_ReverbPreset);
 			return node;
 		}
-		public float DryLevel { get; set; }
-		public float Room { get; set; }
-		public float RoomHF { get; set; }
-		public float RoomRolloff { get; set; }
-		public float DecayTime { get; set; }
-		public float DecayHFRatio { get; set; }
-		public float ReflectionsLevel { get; set; }
-		public float ReverbLevel { get; set; }
-		public float ReverbDelay { get; set; }
-		public float Diffusion { get; set; }
-		public float Density { get; set; }
-		public float HFReference { get; set; }
-		public float RoomLF { get; set; }
-		public float LFReference { get; set; }
-		public float ReflectionsDelay { get; set; }
-		public AudioReverbPreset ReverbPreset { get; set; }
+		public float m_DryLevel { get; set; }
+		public float m_Room { get; set; }
+		public float m_RoomHF { get; set; }
+		public float m_RoomRolloff { get; set; }
+		public float m_DecayTime { get; set; }
+		public float m_DecayHFRatio { get; set; }
+		public float m_ReflectionsLevel { get; set; }
+		public float m_ReverbLevel { get; set; }
+		public float m_ReverbDelay { get; set; }
+		public float m_Diffusion { get; set; }
+		public float m_Density { get; set; }
+		public float m_HFReference { get; set; }
+		public float m_RoomLF { get; set; }
+		public float m_LFReference { get; set; }
+		public float m_ReflectionsDelay { get; set; }
+		public AudioReverbPreset m_ReverbPreset { get; set; }
 	}
 }
