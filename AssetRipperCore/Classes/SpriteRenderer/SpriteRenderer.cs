@@ -122,6 +122,10 @@ namespace AssetRipper.Core.Classes.SpriteRenderer
 			node.Add(SpriteTileModeName, (int)SpriteTileMode);
 			node.Add(WasSpriteAssignedName, WasSpriteAssigned);
 			node.Add(MaskInteractionName, (int)MaskInteraction);
+			if (HasSpriteSortPoint(container.ExportVersion))
+			{
+				node.Add(SpriteSortPointName, (int)SpriteSortPoint);
+			}
 			return node;
 		}
 
@@ -144,6 +148,7 @@ namespace AssetRipper.Core.Classes.SpriteRenderer
 		public const string SpriteTileModeName = "m_SpriteTileMode";
 		public const string WasSpriteAssignedName = "m_WasSpriteAssigned";
 		public const string MaskInteractionName = "m_MaskInteraction";
+		public const string SpriteSortPointName = "m_SpriteSortPoint";
 
 		public PPtr<Sprite.Sprite> Sprite = new();
 		public ColorRGBAf Color = new();
