@@ -136,5 +136,20 @@
     "c_sharp_langage_version_config_10_0": "C# 10",
     "check_log_for_more_details": "Cek file Log untuk melihat detil lebih lanjut",
     "c_sharp_langage_version_config_auto_safe": "Otomatis - Aman",
-    "c_sharp_langage_version_config_auto_experimental": "Otomatis - Eksperimental"
+    "c_sharp_langage_version_config_auto_experimental": "Otomatis - Eksperimental",
+    "shader_asset_format_dummy": "Shader Tiruan",
+    "shader_asset_format_dummy_description": "Ekspor shader sebagai shader tiruan. Data seperti Properties dan FallBack dipertahankan, namun kode shader dihasilkan dalam bentuk umum.",
+    "shader_asset_format_disassembly_description": "Ekspor shader sebagai pembongkaran. Eksperimental dan rentan terhadap kerusakan.Editor tidak dapat melakukan kompilasi.",
+    "script_export_format_dll_without_renaming_description": "Assemblies diekspor dalam bentuk Dll yang dikompilasi. Eksperimental. Kemungkinan tidak bekerja sama sekali.",
+    "shader_asset_export_title": "Format Ekspor Shader",
+    "script_export_title": "Format Ekspor Script",
+    "shader_asset_format_yaml": "Aset YAML",
+    "shader_asset_format_yaml_description": "Ekspor shader sebagai aset yaml. Eksperimental dan hanya dapat digunakan pada editor. Editor dapat secara acak merusak file-file ini.",
+    "shader_asset_format_disassembly": "Bongkar",
+    "script_export_format_decompiled": "Dekompilasi",
+    "script_export_format_decompiled_description": "ILSpy digunakan untuk menghasilkan script CS. Dapat diandalkan. Namun, akan memakan waktu lama dan terdapat banyak kesalahan kompilasi.",
+    "script_export_format_hybrid": "Campuran",
+    "script_export_format_dll_with_renaming": "Ekspor Dll Dengan Mengganti Nama",
+    "script_export_format_dll_without_renaming": "Ekspor Dll Tanpa Mengganti Nama",
+    "not_implemented_yet": "Belum diimplementasikan"
 }
