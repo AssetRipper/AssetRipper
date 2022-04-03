@@ -67,6 +67,7 @@ using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.ShaderVariantCollection;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.SpriteAtlas;
+using AssetRipper.Core.Classes.SpriteMask;
 using AssetRipper.Core.Classes.SpriteRenderer;
 using AssetRipper.Core.Classes.StreamingController;
 using AssetRipper.Core.Classes.TagManager;
@@ -222,6 +223,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.LightProbes => new LightProbes(assetInfo),
 				ClassIDType.UnityConnectSettings => new UnityConnectSettings(assetInfo),
 				ClassIDType.ParticleSystemForceField => new ParticleSystemForceField(assetInfo),
+				ClassIDType.SpriteMask => new SpriteMask(assetInfo),
 				ClassIDType.OcclusionCullingData => new OcclusionCullingData(assetInfo),
 				ClassIDType.PrefabInstance => new PrefabInstance(assetInfo),
 				ClassIDType.TextureImporter => new TextureImporter(assetInfo),
