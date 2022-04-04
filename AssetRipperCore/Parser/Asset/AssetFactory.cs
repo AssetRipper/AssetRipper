@@ -82,6 +82,7 @@ using AssetRipper.Core.Classes.WheelCollider;
 using AssetRipper.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using AssetRipper.Core.Classes.Texture2DArray;
 
 namespace AssetRipper.Core.Parser.Asset
 {
@@ -119,6 +120,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.Material => new Material(assetInfo),
 				ClassIDType.MeshRenderer => new MeshRenderer(assetInfo),
 				ClassIDType.Texture2D => new Texture2D(assetInfo),
+				ClassIDType.Texture2DArray => new Texture2DArray(assetInfo),
 				ClassIDType.OcclusionCullingSettings => new OcclusionCullingSettings(assetInfo),
 				ClassIDType.GraphicsSettings => new GraphicsSettings(assetInfo),
 				ClassIDType.MeshFilter => new MeshFilter(assetInfo),
