@@ -1,7 +1,9 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
@@ -77,11 +79,43 @@ namespace AssetRipper.Core.Classes.Texture2DArray
 			if (HasUsageMode(container.ExportVersion))
 				node.Add(UsageModeName, UsageMode);
 			node.Add(IsReadableName, IsReadable);
-			node.Add(ImageDataName, ImageData.Length);
-			node.Add(Layout.LayoutInfo.TypelessdataName, ImageData.ExportYAML());
+			byte[] imageData = GetExportImageData();
+			node.Add(ImageDataName, imageData.Length);
+			node.Add(Layout.LayoutInfo.TypelessdataName, imageData.ExportYAML());
 			StreamingInfo streamData = new StreamingInfo();
 			node.Add(StreamDataName, streamData.ExportYAML(container));
 			return node;
+		}
+
+		private byte[] GetImageData()
+		{
+			byte[] data = ImageData;
+
+			if (!data.IsNullOrEmpty())
+				return ImageData;
+			else if (StreamData != null && StreamData.IsSet())
+				data = StreamData.GetContent(SerializedFile);
+
+			return data ?? Array.Empty<byte>();
+		}
+
+		private bool CheckAssetIntegrity()
+		{
+			if (!ImageData.IsNullOrEmpty())
+				return true;
+			else if (StreamData != null)
+				return StreamData.CheckIntegrity(SerializedFile);
+			else
+				return false;
+		}
+
+		private byte[] GetExportImageData()
+		{
+			if (CheckAssetIntegrity())
+				return GetImageData();
+
+			Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{this.GetValidName()}' because resources file '{StreamData.Path}' wasn't found");
+			return Array.Empty<byte>();
 		}
 
 		public ColorSpace ColorSpace { get; set; }
