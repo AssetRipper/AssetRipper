@@ -24,9 +24,9 @@ namespace AssetRipper.Core.Classes.Texture2DArray
 		/// </summary>
 		public static bool HasStreamData(UnityVersion version) => version.IsGreaterEqual(5, 6, 0);
 		/// <summary>
-		/// 5.6.0 and greater
+		/// 2020.2.0a12 and greater
 		/// </summary>
-		public static bool HasUsageMode(UnityVersion version) => version.IsGreaterEqual(2020, 2);
+		public static bool HasUsageMode(UnityVersion version) => version.IsGreaterEqual(2020, 2, 0, UnityVersionType.Alpha, 12);
 
 		public static int ToSerializedVersion(UnityVersion version) => 2;
 		public override void Read(AssetReader reader)
