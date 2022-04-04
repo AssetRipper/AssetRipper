@@ -59,14 +59,21 @@ namespace AssetRipper.Core.Classes.Texture2DArray
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.ForceAddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(ColorSpaceName, (int)ColorSpace);
-			node.Add(FormatName, (int)Format);
+			if (container.ExportVersion.IsGreaterEqual(2019, 1, 0))
+			{
+				node.Add(ColorSpaceName, (int)ColorSpace);
+				node.Add(FormatName, (int)Format);
+			}
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
 			node.Add(DepthName, Depth);
+			if (container.ExportVersion.IsLess(2019, 1, 0))
+				node.Add(FormatName, (int)Format);
 			node.Add(MipCountName, MipCount);
 			node.Add(DataSizeName, DataSize);
 			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			if (container.ExportVersion.IsLess(2019, 1, 0))
+				node.Add(ColorSpaceName, (int)ColorSpace);
 			if (HasUsageMode(container.ExportVersion))
 				node.Add(UsageModeName, UsageMode);
 			node.Add(IsReadableName, IsReadable);
