@@ -84,7 +84,9 @@ namespace AssetRipper.Core.Converters.Sprite
 			}
 
 			Vector2f[] vertices = new Vector2f[origin.RD.VertexData.VertexCount];
-			for (int i = 0, j = 0; i < origin.RD.VertexData.VertexCount; i++, j += 28)
+			// Position always comes first
+			for (int i = 0, j = 0; i < origin.RD.VertexData.VertexCount; i++,
+				j += (int)origin.RD.VertexData.m_Streams[0].Stride)
 			{
 				vertices[i] = new Vector2f();
 
@@ -117,13 +119,15 @@ namespace AssetRipper.Core.Converters.Sprite
 
 		private static BoneWeights4[] GetBoneWeights(IExportContainer container, AssetRipper.Core.Classes.Sprite.Sprite origin)
 		{
-			if (origin.RD.VertexData.VertexCount == 0)
+			// If the stride is not 40 we know this isn't a valid BoneWeights4 struct
+			if (origin.RD.VertexData.VertexCount == 0 || origin.RD.VertexData.m_Streams[1].Stride != 40)
 			{
 				return Array.Empty<BoneWeights4>();
 			}
 
 			BoneWeights4[] weights = new BoneWeights4[origin.RD.VertexData.VertexCount];
-			for (int i = 0, j = (int)origin.RD.VertexData.m_Streams[1].Offset; i < origin.RD.VertexData.VertexCount; i++, j += 40)
+			for (int i = 0, j = (int)origin.RD.VertexData.m_Streams[1].Offset; i < origin.RD.VertexData.VertexCount; i++,
+				j += (int)origin.RD.VertexData.m_Streams[1].Stride)
 			{
 				weights[i] = new BoneWeights4();
 
