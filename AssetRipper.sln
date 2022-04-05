@@ -73,10 +73,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeTester", "CodeTester\CodeTester.csproj", "{D7D80881-42BB-473C-B7A2-EB1FEA5780A4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Texture2DDecoderNative", "Texture2DDecoderNative\Texture2DDecoderNative.vcxproj", "{29356642-C46E-4144-83D8-22DC09D0D7FD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texture2DDecoderWrapper", "Texture2DDecoderWrapper\Texture2DDecoderWrapper.csproj", "{EB322413-4A5B-4264-9622-20559036A240}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperGUI", "AssetRipperGUI\AssetRipperGUI.csproj", "{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1C4D-430F-A1BA-BFC5671181D4}"
@@ -199,30 +195,6 @@ Global
 		{D7D80881-42BB-473C-B7A2-EB1FEA5780A4}.ReleaseMac|x64.Build.0 = ReleaseMac|x64
 		{D7D80881-42BB-473C-B7A2-EB1FEA5780A4}.ReleaseWindows|x64.ActiveCfg = ReleaseWindows|x64
 		{D7D80881-42BB-473C-B7A2-EB1FEA5780A4}.ReleaseWindows|x64.Build.0 = ReleaseWindows|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.DebugLinux|x64.ActiveCfg = Debug|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.DebugLinux|x64.Build.0 = Debug|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.DebugMac|x64.ActiveCfg = Debug|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.DebugMac|x64.Build.0 = Debug|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.DebugWindows|x64.ActiveCfg = Debug|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.DebugWindows|x64.Build.0 = Debug|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.ReleaseLinux|x64.ActiveCfg = Release|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.ReleaseLinux|x64.Build.0 = Release|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.ReleaseMac|x64.ActiveCfg = Release|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.ReleaseMac|x64.Build.0 = Release|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.ReleaseWindows|x64.ActiveCfg = Release|x64
-		{29356642-C46E-4144-83D8-22DC09D0D7FD}.ReleaseWindows|x64.Build.0 = Release|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.DebugLinux|x64.ActiveCfg = DebugLinux|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.DebugLinux|x64.Build.0 = DebugLinux|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.DebugMac|x64.ActiveCfg = DebugMac|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.DebugMac|x64.Build.0 = DebugMac|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.DebugWindows|x64.ActiveCfg = DebugWindows|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.DebugWindows|x64.Build.0 = DebugWindows|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.ReleaseLinux|x64.ActiveCfg = ReleaseLinux|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.ReleaseLinux|x64.Build.0 = ReleaseLinux|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.ReleaseMac|x64.ActiveCfg = ReleaseMac|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.ReleaseMac|x64.Build.0 = ReleaseMac|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.ReleaseWindows|x64.ActiveCfg = ReleaseWindows|x64
-		{EB322413-4A5B-4264-9622-20559036A240}.ReleaseWindows|x64.Build.0 = ReleaseWindows|x64
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.DebugLinux|x64.ActiveCfg = DebugLinux|x64
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.DebugLinux|x64.Build.0 = DebugLinux|x64
 		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.DebugMac|x64.ActiveCfg = DebugMac|x64

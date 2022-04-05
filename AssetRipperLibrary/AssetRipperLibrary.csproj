@@ -25,6 +25,7 @@
 		<PackageReference Include="AssetRipper.TextureDecoder" Version="1.1.0" />
 		<PackageReference Include="Fmod5Sharp" Version="1.2.0" />
 		<PackageReference Include="ICSharpCode.Decompiler" Version="7.2.1.6856" />
+		<PackageReference Include="Kyaru.Texture2DDecoder" Version="0.16.40" />
 		<PackageReference Include="NAudio.Core" Version="2.0.0" />
 		<PackageReference Include="NAudio.Lame" Version="2.0.1" />
 		<PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
@@ -65,7 +66,18 @@
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
 		<ProjectReference Include="..\ShaderTextRestorer\ShaderTextRestorer.csproj" />
-		<ProjectReference Include="..\Texture2DDecoderWrapper\Texture2DDecoderWrapper.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='ReleaseWindows'">
+		<PackageReference Include="Kyaru.Texture2DDecoder.Windows" Version="0.1.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)'=='DebugMac' or '$(Configuration)'=='ReleaseMac'">
+		<PackageReference Include="Kyaru.Texture2DDecoder.macOS" Version="0.1.0" />
+	</ItemGroup>
+	
+	<ItemGroup Condition="'$(Configuration)'=='DebugLinux' or '$(Configuration)'=='ReleaseLinux'">
+		<PackageReference Include="Kyaru.Texture2DDecoder.Linux" Version="0.1.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='ReleaseWindows'">
