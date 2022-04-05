@@ -5,6 +5,7 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
 using System;
+using System.Buffers.Binary;
 
 namespace AssetRipper.Core.Converters.Sprite
 {
@@ -77,7 +78,7 @@ namespace AssetRipper.Core.Converters.Sprite
 
 		private static Vector2f[] GetBoneVertices(IExportContainer container, AssetRipper.Core.Classes.Sprite.Sprite origin)
 		{
-			if (origin.RD.VertexData.VertexCount == 0)
+			if (origin.RD.VertexData.Data.Length == 0)
 			{
 				return Array.Empty<Vector2f>();
 			}
@@ -87,8 +88,8 @@ namespace AssetRipper.Core.Converters.Sprite
 			{
 				vertices[i] = new Vector2f();
 
-				vertices[i].X = BitConverter.ToSingle(origin.RD.VertexData.Data, j);
-				vertices[i].Y = BitConverter.ToSingle(origin.RD.VertexData.Data, j + 4);
+				vertices[i].X = BinaryPrimitives.ReadSingleLittleEndian(origin.RD.VertexData.Data.AsSpan(j, 4));
+				vertices[i].Y = BinaryPrimitives.ReadSingleLittleEndian(origin.RD.VertexData.Data.AsSpan(j + 4, 4));
 
 				// Scale and translate vertices
 				vertices[i] *= origin.PixelsToUnits;
@@ -109,7 +110,7 @@ namespace AssetRipper.Core.Converters.Sprite
 			int[] indices = new int[origin.RD.IndexBuffer.Length / 2];
 			for (int i = 0, j = 0; i < origin.RD.IndexBuffer.Length / 2; i++, j += 2)
 			{
-				indices[i] = BitConverter.ToUInt16(origin.RD.IndexBuffer, j);
+				indices[i] = BinaryPrimitives.ReadInt16LittleEndian(origin.RD.IndexBuffer.AsSpan(j, 2));
 			}
 			return indices;
 		}
@@ -126,15 +127,15 @@ namespace AssetRipper.Core.Converters.Sprite
 			{
 				weights[i] = new BoneWeights4();
 
-				weights[i].Weight0 = BitConverter.ToSingle(origin.RD.VertexData.Data, j + 8);
-				weights[i].Weight1 = BitConverter.ToSingle(origin.RD.VertexData.Data, j + 12);
-				weights[i].Weight2 = BitConverter.ToSingle(origin.RD.VertexData.Data, j + 16);
-				weights[i].Weight3 = BitConverter.ToSingle(origin.RD.VertexData.Data, j + 20);
+				weights[i].Weight0 = BinaryPrimitives.ReadSingleLittleEndian(origin.RD.VertexData.Data.AsSpan(j + 8, 4));
+				weights[i].Weight1 = BinaryPrimitives.ReadSingleLittleEndian(origin.RD.VertexData.Data.AsSpan(j + 12, 4));
+				weights[i].Weight2 = BinaryPrimitives.ReadSingleLittleEndian(origin.RD.VertexData.Data.AsSpan(j + 16, 4));
+				weights[i].Weight3 = BinaryPrimitives.ReadSingleLittleEndian(origin.RD.VertexData.Data.AsSpan(j + 20, 4));
 
-				weights[i].BoneIndex0 = BitConverter.ToInt32(origin.RD.VertexData.Data, j + 24);
-				weights[i].BoneIndex1 = BitConverter.ToInt32(origin.RD.VertexData.Data, j + 28);
-				weights[i].BoneIndex2 = BitConverter.ToInt32(origin.RD.VertexData.Data, j + 32);
-				weights[i].BoneIndex3 = BitConverter.ToInt32(origin.RD.VertexData.Data, j + 36);
+				weights[i].BoneIndex0 = BinaryPrimitives.ReadInt32LittleEndian(origin.RD.VertexData.Data.AsSpan(j + 24, 4));
+				weights[i].BoneIndex1 = BinaryPrimitives.ReadInt32LittleEndian(origin.RD.VertexData.Data.AsSpan(j + 28, 4));
+				weights[i].BoneIndex2 = BinaryPrimitives.ReadInt32LittleEndian(origin.RD.VertexData.Data.AsSpan(j + 32, 4));
+				weights[i].BoneIndex3 = BinaryPrimitives.ReadInt32LittleEndian(origin.RD.VertexData.Data.AsSpan(j + 36, 4));
 			}
 			return weights;
 		}
