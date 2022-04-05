@@ -7,6 +7,7 @@ using AssetRipper.Core.Classes.AnimatorOverrideController;
 using AssetRipper.Core.Classes.AssetBundle;
 using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Classes.AudioEchoFilter;
+using AssetRipper.Core.Classes.AudioLowPassFilter;
 using AssetRipper.Core.Classes.AudioHighPassFilter;
 using AssetRipper.Core.Classes.AudioChorusFilter;
 using AssetRipper.Core.Classes.AudioDistortionFilter;
@@ -196,6 +197,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.AudioChorusFilter => new AudioChorusFilter(assetInfo),
 				ClassIDType.AudioReverbZone => new AudioReverbZone(assetInfo),
 				ClassIDType.AudioEchoFilter => new AudioEchoFilter(assetInfo),
+                                      ClassIDType.AudioLowPassFilter => new AudioLowPassFilter(assetInfo),
 				ClassIDType.AudioDistortionFilter => new AudioDistortionFilter(assetInfo),
 				ClassIDType.WindZone => new WindZone(assetInfo),
 				ClassIDType.OffMeshLink => new OffMeshLink(assetInfo),
