@@ -27,22 +27,19 @@ namespace AssetRipper.Core.Classes.AudioLowPassFilter
 			lowpassLevelCustomCurve.Read(reader);
 		}
 
-		public static bool HasCutoffFrequency(UnityVersion version) => version.IsLessEqual(5, 3);
+		public static bool HasCutoffFrequency(UnityVersion version) => version.IsLess(5, 2);
 
 		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
 		{
 			YAMLMappingNode node = base.ExportYAMLRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("m_CutoffFrequency", HasCutoffFrequency(container.Version));
+			if (HasCutoffFrequency(container.ExportVersion))
+            {
+                node.Add("m_CutoffFrequency", CutoffFrequency);
+            }
 			node.Add("m_LowpassResonanceQ", LowpassResonanceQ);
-			node.Add("m_lowpassLevelCustomCurve", GetlowpassLevelCustomCurve().ExportYAML(container));
+			node.Add("lowpassLevelCustomCurve", lowpassLevelCustomCurve.ExportYAML(container));
 			return node;
-		}
-
-		private AnimationCurveTpl<Float> GetlowpassLevelCustomCurve()
-		{
-			lowpassLevelCustomCurve = new AnimationCurveTpl<Float>(1.0f, 0.0f, 1.0f / 3.0f);
-			return lowpassLevelCustomCurve;
 		}
 
 		public float LowpassResonanceQ { get; set; }
