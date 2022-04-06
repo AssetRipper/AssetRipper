@@ -17,7 +17,7 @@ using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class VertexData : IVertexData
+	public sealed class VertexData : UnityAssetBase, IVertexData
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return skin;
 		}
 
-		public Vector3f[] GenerateVertices(UnityVersion version, SubMesh submesh)
+		public Vector3f[] GenerateVertices(UnityVersion version, ISubMesh submesh)
 		{
 			ChannelInfo channel = GetChannel(version, ShaderChannel.Vertex);
 			if (!channel.IsSet())
@@ -144,7 +144,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return verts;
 		}
 
-		public void Read(AssetReader reader)
+		public override void Read(AssetReader reader)
 		{
 			if (HasCurrentChannels(reader.Version))
 			{
@@ -189,7 +189,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			reader.AlignStream();
 		}
 
-		public void Write(AssetWriter writer)
+		public override void Write(AssetWriter writer)
 		{
 			if (HasCurrentChannels(writer.Version))
 			{
@@ -221,7 +221,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			writer.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public override YAMLNode ExportYAML(IExportContainer container)
 		{
 			YAMLMappingNode node = new YAMLMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));

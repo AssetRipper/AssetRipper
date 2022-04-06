@@ -906,162 +906,35 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		private void ReadVertexData(UnityVersion version)
 		{
-			VertexCount = (int)VertexData.VertexCount;
-
-			for (var chn = 0; chn < VertexData.m_Channels.Length; chn++)
-			{
-				var m_Channel = VertexData.m_Channels[chn];
-				if (m_Channel.GetDataDimension() > 0)
-				{
-					var m_Stream = VertexData.m_Streams[m_Channel.Stream];
-					var channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask));
-					if (channelMask.Get(chn))
-					{
-						if (version.IsLess(2018) && chn == 2 && m_Channel.Format == 2) //kShaderChannelColor && kChannelFormatColor
-						{
-							m_Channel.SetDataDimension(4);
-						}
-
-						var vertexFormat = MeshHelper.ToVertexFormat(m_Channel.Format, version);
-						var componentByteSize = (int)MeshHelper.GetFormatSize(vertexFormat);
-						var componentBytes = new byte[VertexCount * m_Channel.GetDataDimension() * componentByteSize];
-						for (int v = 0; v < VertexCount; v++)
-						{
-							var vertexOffset = (int)m_Stream.Offset + m_Channel.Offset + (int)m_Stream.Stride * v;
-							for (int d = 0; d < m_Channel.GetDataDimension(); d++)
-							{
-								var componentOffset = vertexOffset + componentByteSize * d;
-								Buffer.BlockCopy(VertexData.Data, componentOffset, componentBytes, componentByteSize * (v * m_Channel.GetDataDimension() + d), componentByteSize);
-							}
-						}
-
-						if (this.EndianType == EndianType.BigEndian && componentByteSize > 1) //swap bytes
-						{
-							for (var i = 0; i < componentBytes.Length / componentByteSize; i++)
-							{
-								var buff = new byte[componentByteSize];
-								Buffer.BlockCopy(componentBytes, i * componentByteSize, buff, 0, componentByteSize);
-								buff = buff.Reverse().ToArray();
-								Buffer.BlockCopy(buff, 0, componentBytes, i * componentByteSize, componentByteSize);
-							}
-						}
-
-						int[] componentsIntArray = null;
-						float[] componentsFloatArray = null;
-						if (MeshHelper.IsIntFormat(vertexFormat))
-							componentsIntArray = MeshHelper.BytesToIntArray(componentBytes, vertexFormat);
-						else
-							componentsFloatArray = MeshHelper.BytesToFloatArray(componentBytes, vertexFormat);
-
-						if (version.IsGreaterEqual(2018))
-						{
-							switch (chn)
-							{
-								case 0: //kShaderChannelVertex
-									Vertices = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 1: //kShaderChannelNormal
-									Normals = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 2: //kShaderChannelTangent
-									Tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 3: //kShaderChannelColor
-									Colors = MeshHelper.FloatArrayToColorRGBA32(componentsFloatArray);
-									break;
-								case 4: //kShaderChannelTexCoord0
-									UV0 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 5: //kShaderChannelTexCoord1
-									UV1 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 6: //kShaderChannelTexCoord2
-									UV2 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 7: //kShaderChannelTexCoord3
-									UV3 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 8: //kShaderChannelTexCoord4
-									UV4 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 9: //kShaderChannelTexCoord5
-									UV5 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 10: //kShaderChannelTexCoord6
-									UV6 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 11: //kShaderChannelTexCoord7
-									UV7 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								//2018.2 and up
-								case 12: //kShaderChannelBlendWeight
-									if (Skin == null)
-									{
-										InitMSkin();
-									}
-									for (int i = 0; i < VertexCount; i++)
-									{
-										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
-										{
-											Skin[i].Weights[j] = componentsFloatArray[i * m_Channel.GetDataDimension() + j];
-										}
-									}
-									break;
-								case 13: //kShaderChannelBlendIndices
-									if (Skin == null)
-									{
-										InitMSkin();
-									}
-									for (int i = 0; i < VertexCount; i++)
-									{
-										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
-										{
-											Skin[i].BoneIndices[j] = componentsIntArray[i * m_Channel.GetDataDimension() + j];
-										}
-									}
-									break;
-							}
-						}
-						else
-						{
-							switch (chn)
-							{
-								case 0: //kShaderChannelVertex
-									Vertices = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 1: //kShaderChannelNormal
-									Normals = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 2: //kShaderChannelColor
-									Colors = MeshHelper.FloatArrayToColorRGBA32(componentsFloatArray);
-									break;
-								case 3: //kShaderChannelTexCoord0
-									UV0 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 4: //kShaderChannelTexCoord1
-									UV1 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 5:
-									if (version.IsGreaterEqual(5)) //kShaderChannelTexCoord2
-									{
-										UV2 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									}
-									else //kShaderChannelTangent
-									{
-										Tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, m_Channel.GetDataDimension());
-									}
-									break;
-								case 6: //kShaderChannelTexCoord3
-									UV3 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-								case 7: //kShaderChannelTangent
-									Tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, m_Channel.GetDataDimension());
-									break;
-							}
-						}
-					}
-				}
-			}
+			VertexData.ReadData(version,
+				out int vertexCount,
+				out Vector3f[] vertices,
+				out Vector3f[] normals,
+				out Vector4f[] tangents,
+				out ColorRGBA32[] colors,
+				out BoneWeights4[] skin,
+				out Vector2f[] uv0,
+				out Vector2f[] uv1,
+				out Vector2f[] uv2,
+				out Vector2f[] uv3,
+				out Vector2f[] uv4,
+				out Vector2f[] uv5,
+				out Vector2f[] uv6,
+				out Vector2f[] uv7);
+			VertexCount = vertexCount;
+			Vertices ??= vertices;
+			Normals ??= normals;
+			Tangents ??= tangents;
+			Colors ??= colors;
+			Skin ??= skin;
+			UV0 ??= uv0;
+			UV1 ??= uv1;
+			UV2 ??= uv2;
+			UV3 ??= uv3;
+			UV4 ??= uv4;
+			UV5 ??= uv5;
+			UV6 ??= uv6;
+			UV7 ??= uv7;
 		}
 
 		private void DecompressCompressedMesh(UnityVersion version)
