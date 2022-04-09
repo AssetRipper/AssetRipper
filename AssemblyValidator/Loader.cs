@@ -4,6 +4,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.VersionHandling;
+using AssetRipper.VersionUtilities;
 using System.Reflection;
 
 namespace AssemblyValidator
