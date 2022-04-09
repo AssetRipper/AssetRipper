@@ -10,7 +10,7 @@ using AssetRipper.TextureDecoder.Pvrtc;
 using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Yuy2;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Library.Exporters.Textures
 {

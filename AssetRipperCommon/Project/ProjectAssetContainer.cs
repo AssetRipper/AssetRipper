@@ -19,7 +19,7 @@ using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Project
 {

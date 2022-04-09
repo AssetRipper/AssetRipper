@@ -1,5 +1,6 @@
 ﻿using AssemblyDumper.Utils;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.VersionUtilities;
 using UnityHandlerBase = AssetRipper.Core.VersionHandling.UnityHandlerBase;
 
 namespace AssemblyDumper.Passes

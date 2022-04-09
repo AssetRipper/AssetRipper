@@ -2,8 +2,9 @@ using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Classes.Shader;
 using System.Collections.Generic;
 using System.IO;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 using ShaderTextRestorer.Resources;
+using AssetRipper.VersionUtilities;
 
 namespace ShaderTextRestorer
 {

@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc.Bones;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {

@@ -13,7 +13,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Mesh
 {

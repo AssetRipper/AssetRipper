@@ -10,7 +10,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Light
 {

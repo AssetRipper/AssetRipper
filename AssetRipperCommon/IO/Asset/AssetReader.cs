@@ -4,7 +4,7 @@ using AssetRipper.Core.Parser.Files;
 using System;
 using System.IO;
 using System.Text;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.IO.Asset
 {

@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Structure.GameStructure
 {
@@ -84,7 +83,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		{
 			Logger.Info(LogCategory.Export, $"Game files have these Unity versions:{GetListOfVersions()}");
 			UnityVersion maxFileVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
-			UnityVersion version = UnityVersion.Max(maxFileVersion, UnityVersion.DefaultVersion);
+			UnityVersion version = UnityVersion.Max(maxFileVersion, new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3));
 			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
 			options.SetProjectSettings(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			Exporter.Export(FileCollection, options);

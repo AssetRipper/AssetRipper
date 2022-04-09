@@ -23,7 +23,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using YamlDotNet.RepresentationModel;
-using Version = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Library.Utils
 {
@@ -271,7 +270,7 @@ namespace AssetRipper.Library.Utils
 		}
 		public static GameCollection CreateGameCollection()
 		{
-			var layoutInfo = new LayoutInfo(new Version(), Platform.StandaloneWin64Player, TransferInstructionFlags.NoTransferInstructionFlags);
+			var layoutInfo = new LayoutInfo(new UnityVersion(), Platform.StandaloneWin64Player, TransferInstructionFlags.NoTransferInstructionFlags);
 			var gameCollection = new GameCollection(layoutInfo);
 			return gameCollection;
 		}
@@ -318,7 +317,7 @@ namespace AssetRipper.Library.Utils
 					: Platform.StandaloneWin64Player;
 				var version = serializedFileScheme.Metadata != null ?
 					serializedFileScheme.Metadata.UnityVersion
-					: new Version();
+					: new UnityVersion();
 				var layoutInfo = new LayoutInfo(version, platform, serializedFileScheme.Flags);
 				var collection = new GameCollection(layoutInfo);
 				collection.AssemblyManager = new Core.Structure.Assembly.Managers.BaseManager(layoutInfo, new Action<string>(str => str.GetType()));

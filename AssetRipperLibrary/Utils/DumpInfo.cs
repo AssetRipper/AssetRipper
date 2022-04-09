@@ -186,8 +186,8 @@ namespace AssetRipper.Library.Utils
 			{
 				//TODO container.Metadata.Hierarchy
 				bool SerializeTypeTrees = container.Metadata.EnableTypeTree;
-				Core.Parser.Files.SerializedFiles.Parser.SerializedType[] Types = container.Metadata.Types;
-				Core.Parser.Files.UnityVersion Version = container.Metadata.UnityVersion;
+				SerializedType[] Types = container.Metadata.Types;
+				UnityVersion Version = container.Metadata.UnityVersion;
 				Core.Parser.Files.Platform Platform = container.Metadata.TargetPlatform;
 				sw.WriteLine($"	File.Metadata.Hierarchy:");
 				sw.WriteLine($"		Hierarchy.Version: {Version}");
@@ -199,7 +199,7 @@ namespace AssetRipper.Library.Utils
 					sw.WriteLine("			{0,-18}, {1}, {2}, {3,-32}, {4,-32}, {5}",
 						"ClassId", "IsStrippedType", "ScriptID", "ScriptHash", "TypeHash", "NodeCount");
 				}
-				foreach (Core.Parser.Files.SerializedFiles.Parser.SerializedType type in Types)
+				foreach (SerializedType type in Types)
 				{
 					ClassIDType ClassID = type.TypeID;
 					bool IsStrippedType = type.IsStrippedType;

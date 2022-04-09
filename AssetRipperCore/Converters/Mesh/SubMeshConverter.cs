@@ -9,7 +9,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
 using System;
 using System.IO;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Converters.Mesh
 {

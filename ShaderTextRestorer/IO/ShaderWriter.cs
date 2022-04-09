@@ -6,11 +6,12 @@ using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.VersionUtilities;
 using ShaderTextRestorer.Exporters;
 using System;
 using System.IO;
 using System.Text;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace ShaderTextRestorer.IO
 {

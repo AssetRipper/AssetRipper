@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using ShaderTextRestorer.ConstantBuffers;
 using ShaderTextRestorer.Extensions;
+using AssetRipper.VersionUtilities;
 
 namespace ShaderTextRestorer.Resources
 {

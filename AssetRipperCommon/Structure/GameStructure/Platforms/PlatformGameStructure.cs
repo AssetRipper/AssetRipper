@@ -1,6 +1,7 @@
 using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.BundleFile;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
@@ -314,12 +315,17 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		protected static int[] GetUnityVersionFromSerializedFile(string filePath)
 		{
-			return AssetRipper.Core.Parser.Files.SerializedFiles.SerializedFile.LoadScheme(filePath).Metadata.UnityVersion.ToArray();
+			return ToArray(SerializedFile.LoadScheme(filePath).Metadata.UnityVersion);
 		}
 
 		protected static int[] GetUnityVersionFromBundleFile(string filePath)
 		{
-			return AssetRipper.Core.Parser.Files.BundleFile.BundleFile.LoadScheme(filePath).Header.UnityWebMinimumRevision.ToArray();
+			return ToArray(BundleFile.LoadScheme(filePath).Header.UnityWebMinimumRevision);
+		}
+
+		private static int[] ToArray(UnityVersion version)
+		{
+			return new int[] { version.Major, version.Minor, version.Build };
 		}
 
 		protected static int[] GetUnityVersionFromDataDirectory(string dataDirectoryPath)

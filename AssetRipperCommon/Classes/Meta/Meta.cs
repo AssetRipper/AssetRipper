@@ -4,7 +4,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using System;
 using DateTime = System.DateTime;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Meta
 {

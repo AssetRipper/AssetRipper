@@ -4,6 +4,7 @@ using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
 using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
+using AssetRipper.VersionUtilities;
 
 namespace ShaderTextRestorer.ConstantBuffers
 {

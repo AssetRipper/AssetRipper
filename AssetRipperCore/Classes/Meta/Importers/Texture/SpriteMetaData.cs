@@ -8,7 +8,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.YAML;
 using AssetRipper.Core.YAML.Extensions;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
