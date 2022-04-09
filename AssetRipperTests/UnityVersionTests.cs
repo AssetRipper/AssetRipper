@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Parser.Files;
+﻿using AssetRipper.VersionUtilities;
 using NUnit.Framework;
 
 namespace AssetRipper.Tests

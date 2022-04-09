@@ -87,9 +87,10 @@ namespace AssemblyDumper.Passes
 		private static void AddUnityVersionAssignment(this CilInstructionCollection processor)
 		{
 			IMethodDefOrRef baseUnityVersionSetter = SharedState.Importer.ImportCommonMethod<UnityHandlerBase>(m => m.Name == "set_UnityVersion");
-			ITypeDefOrRef unityVersionRef = SharedState.Importer.ImportCommonType<UnityVersion>();
+			//ITypeDefOrRef unityVersionRef = SharedState.Importer.ImportCommonType<UnityVersion>();
 			processor.Add(CilOpCodes.Ldarg_0);
-			processor.AddUnityVersion();
+			//processor.AddUnityVersion();
+			processor.AddDefaultValue(baseUnityVersionSetter.Signature!.ParameterTypes[0]);
 			processor.Add(CilOpCodes.Call, baseUnityVersionSetter);
 		}
 
