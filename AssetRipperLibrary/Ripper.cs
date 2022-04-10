@@ -251,6 +251,7 @@ namespace AssetRipper.Library
 			//Animator Controller - Temporary
 			OverrideExporter<AnimatorController>(new AnimatorControllerExporter());
 
+			AddPostExporter(new ProjectVersionPostExporter());
 			AddPostExporter(new TypeTreeExporter());
 			AddPostExporter(new DllPostExporter());
 		}

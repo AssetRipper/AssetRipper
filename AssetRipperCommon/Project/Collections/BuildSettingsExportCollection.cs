@@ -2,13 +2,10 @@
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
 using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace AssetRipper.Core.Project.Collections
 {
@@ -39,38 +36,7 @@ namespace AssetRipper.Core.Project.Collections
 
 			AssetExporter.Export(container, EditorSettings, filePath);
 
-			if (buildSettings.GetType().FullName == "AssetRipper.Core.Classes.BuildSettings")
-			{
-				//SaveDefaultProjectVersion(subPath);
-				SaveMaxProjectVersion(subPath, buildSettings);
-			}
-			else
-			{
-				SaveExactProjectVersion(subPath, buildSettings);
-			}
 			return true;
-		}
-
-		private static UnityVersion DefaultUnityVersion => new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3);
-
-		private static void SaveDefaultProjectVersion(string projectSettingsDirectory)
-		{
-			SaveProjectVersion(projectSettingsDirectory, DefaultUnityVersion);
-		}
-		private static void SaveMaxProjectVersion(string projectSettingsDirectory, IBuildSettings buildSettings)
-		{
-			UnityVersion projectVersion = UnityVersion.Max(DefaultUnityVersion, buildSettings.SerializedFile.Version);
-			SaveProjectVersion(projectSettingsDirectory, projectVersion);
-		}
-		private static void SaveExactProjectVersion(string projectSettingsDirectory, IBuildSettings buildSettings)
-		{
-			SaveProjectVersion(projectSettingsDirectory, buildSettings.SerializedFile.Version);
-		}
-		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version)
-		{
-			using Stream fileStream = System.IO.File.Create(Path.Combine(projectSettingsDirectory, "ProjectVersion.txt"));
-			using StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
-			writer.Write($"m_EditorVersion: {version}");
 		}
 
 		public static IEditorSettings CreateVirtualEditorSettings(VirtualSerializedFile virtualFile)
