@@ -4,6 +4,7 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Utils;
 using System;
+using System.IO;
 
 namespace AssetRipper.Core.Configuration
 {
@@ -37,9 +38,16 @@ namespace AssetRipper.Core.Configuration
 
 		#region Export Settings
 		/// <summary>
+		/// The root path to export to
+		/// </summary>
+		public string ExportRootPath { get; set; }
+		/// <summary>
 		/// The path to create a new unity project in
 		/// </summary>
-		public string ExportPath { get; set; }
+		public string ProjectRootPath => Path.Combine(ExportRootPath, "ExportedProject");
+		public string AssetsPath => Path.Combine(ProjectRootPath, "Assets");
+		public string ProjectSettingsPath => Path.Combine(ProjectRootPath, "ProjectSettings");
+		public string AuxiliaryFilesPath => Path.Combine(ExportRootPath, "AuxiliaryFiles");
 		/// <summary>
 		/// Should objects get exported with dependencies or without?
 		/// </summary>
@@ -83,7 +91,7 @@ namespace AssetRipper.Core.Configuration
 		{
 			ScriptContentLevel = ScriptContentLevel.Level2;
 			StreamingAssetsMode = StreamingAssetsMode.Extract;
-			ExportPath = ExecutingDirectory.Combine("Ripped");
+			ExportRootPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
 			IgnoreAssetBundleContentPaths = false;
 			Filter = DefaultFilter;
@@ -94,7 +102,7 @@ namespace AssetRipper.Core.Configuration
 			Logger.Info(LogCategory.General, $"Configuration Settings:");
 			Logger.Info(LogCategory.General, $"{nameof(ScriptContentLevel)}: {ScriptContentLevel}");
 			Logger.Info(LogCategory.General, $"{nameof(StreamingAssetsMode)}: {StreamingAssetsMode}");
-			Logger.Info(LogCategory.General, $"{nameof(ExportPath)}: {ExportPath}");
+			Logger.Info(LogCategory.General, $"{nameof(ExportRootPath)}: {ExportRootPath}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportDependencies)}: {ExportDependencies}");
 			Logger.Info(LogCategory.General, $"{nameof(IgnoreAssetBundleContentPaths)}: {IgnoreAssetBundleContentPaths}");
 		}

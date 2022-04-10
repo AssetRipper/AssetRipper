@@ -138,7 +138,7 @@ namespace AssetRipper.Library
 		private void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			Settings.ExportPath = exportPath;
+			Settings.ExportRootPath = exportPath;
 			Settings.Filter = filter;
 			InitializeExporters();
 			TaskManager.WaitUntilAllCompleted();

@@ -154,7 +154,7 @@ namespace AssetRipper.Core.Project
 			{
 				IExportCollection collection = collections[i];
 				container.CurrentCollection = collection;
-				bool isExported = collection.Export(container, options.ExportPath);
+				bool isExported = collection.Export(container, options.ProjectRootPath);
 				if (isExported)
 				{
 					Logger.Info(LogCategory.ExportedFile, $"'{collection.Name}' exported");
