@@ -159,6 +159,10 @@ namespace AssetRipper.Core.Project
 				{
 					Logger.Info(LogCategory.ExportedFile, $"'{collection.Name}' exported");
 				}
+				else if (collection is not EmptyExportCollection)
+				{
+					Logger.Warning(LogCategory.ExportedFile, $"'{collection.Name}' failed to export");
+				}
 				EventExportProgressUpdated?.Invoke(i, collections.Count);
 			}
 			EventExportFinished?.Invoke();
