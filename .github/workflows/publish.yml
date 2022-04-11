@@ -34,7 +34,7 @@ jobs:
         ls -R ./Bins/Publish/AssetRipperConsole_win64
       
     - name: Upload AssetRipperConsole Windows x64
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: AssetRipperConsole_win64
         path: ./Bins/Publish/AssetRipperConsole_win64/*
@@ -49,7 +49,7 @@ jobs:
         ls -R ./Bins/Publish/AssetRipper_win64
 
     - name: Upload AssetRipperGUI Windows x64
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: AssetRipperGUI_win64
         path: ./Bins/Publish/AssetRipper_win64/*
@@ -84,7 +84,7 @@ jobs:
         chmod +x ./Bins/Publish/AssetRipperConsole_linux64/AssetRipperConsole
       
     - name: Upload AssetRipperConsole Linux x64
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: AssetRipperConsole_linux64
         path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_linux64/*
@@ -100,7 +100,7 @@ jobs:
         chmod +x ./Bins/Publish/AssetRipper_linux64/AssetRipper
 
     - name: Upload AssetRipperGUI Linux x64
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: AssetRipperGUI_linux64
         path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_linux64/*
@@ -135,7 +135,7 @@ jobs:
         chmod +x ./Bins/Publish/AssetRipperConsole_mac64/AssetRipperConsole
       
     - name: Upload AssetRipperConsole Mac x64
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: AssetRipperConsole_mac64
         path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_mac64/*
@@ -151,7 +151,7 @@ jobs:
         chmod +x ./Bins/Publish/AssetRipper_mac64/AssetRipper
 
     - name: Upload AssetRipperGUI Mac x64
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: AssetRipperGUI_mac64
         path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac64/*
