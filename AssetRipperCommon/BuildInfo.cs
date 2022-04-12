@@ -12,7 +12,7 @@
 		public const string Author = "ds5678";
 		public const string CopyRight = "Copyright © 2022";
 
-		public const string Version = "0.1.9.8";
+		public const string Version = "0.1.9.9";
 
 		public const string TranslationURL = "https://weblate.samboy.dev/engage/assetripper/";
 		public const string WebsiteURL = "https://assetripper.github.io/AssetRipper";
