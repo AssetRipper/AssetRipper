@@ -1,9 +1,14 @@
-﻿using System;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.Parser.Asset;
+using System;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO
 {
-	public sealed class AssetList<T> : AccessListBase<T> where T : new()
+	public sealed class AssetList<T> : AccessListBase<T>, IDependent where T : new()
 	{
+		private static readonly bool isDependentType = typeof(IDependent).IsAssignableFrom(typeof(T));
 		private const int DefaultCapacity = 4;
 		private int count = 0;
 		private T[] items;
@@ -13,6 +18,23 @@ namespace AssetRipper.Core.IO
 		public AssetList(int capacity)
 		{
 			items = capacity == 0 ? Array.Empty<T>() : new T[capacity];
+		}
+
+		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
+		{
+			if (isDependentType)
+			{
+				foreach (IDependent dependent in this)
+				{
+					if (dependent != null)
+					{
+						foreach (PPtr<IUnityObjectBase> dependency in dependent.FetchDependencies(context))
+						{
+							yield return dependency;
+						}
+					}
+				}
+			}
 		}
 
 		/// <inheritdoc/>
