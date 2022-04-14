@@ -50,7 +50,7 @@ namespace AssetRipper.Core.Classes.Misc
 		public static void CopyValues(this IPPtr destination, IPPtr source)
 		{
 			destination.FileIndex = source.FileIndex;
-			destination.PathID = source.PathID;
+			destination.PathIndex = source.PathIndex;
 		}
 
 		public static PPtr<T>[] CastArray<T>(IPPtr[] array) where T : IUnityObjectBase
@@ -69,7 +69,7 @@ namespace AssetRipper.Core.Classes.Misc
 			{
 				return default;
 			}
-			IUnityObjectBase asset = file.FindAsset(pptr.FileIndex, pptr.PathID);
+			IUnityObjectBase asset = file.FindAsset(pptr.FileIndex, pptr.PathIndex);
 			return asset switch
 			{
 				null => default,
@@ -94,7 +94,7 @@ namespace AssetRipper.Core.Classes.Misc
 			{
 				throw new Exception("Can't get null PPtr");
 			}
-			IUnityObjectBase asset = file.GetAsset(pptr.FileIndex, pptr.PathID);
+			IUnityObjectBase asset = file.GetAsset(pptr.FileIndex, pptr.PathIndex);
 			if (asset is T t)
 			{
 				return t;
@@ -106,7 +106,7 @@ namespace AssetRipper.Core.Classes.Misc
 		{
 			if (pptr.FileIndex == 0)
 			{
-				return asset.PathID == pptr.PathID;
+				return asset.PathID == pptr.PathIndex;
 			}
 			else
 			{
@@ -120,7 +120,7 @@ namespace AssetRipper.Core.Classes.Misc
 			{
 				if (file == asset.SerializedFile)
 				{
-					return asset.PathID == pptr.PathID;
+					return asset.PathID == pptr.PathIndex;
 				}
 				else
 				{
@@ -129,7 +129,7 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 			else
 			{
-				return asset.PathID == pptr.PathID && file.Dependencies[pptr.FileIndex - 1].IsFile(asset.SerializedFile);
+				return asset.PathID == pptr.PathIndex && file.Dependencies[pptr.FileIndex - 1].IsFile(asset.SerializedFile);
 			}
 		}
 
@@ -141,14 +141,14 @@ namespace AssetRipper.Core.Classes.Misc
 		public static string ToLogString<T>(this IPPtr<T> pptr, IAssetContainer container) where T : IUnityObjectBase
 		{
 			string depName = pptr.FileIndex == 0 ? container.Name : container.Dependencies[pptr.FileIndex - 1].PathNameOrigin;
-			return $"[{depName}]{typeof(T).Name}_{pptr.PathID}";
+			return $"[{depName}]{typeof(T).Name}_{pptr.PathIndex}";
 		}
 
 		public static bool IsVirtual(this IPPtr pptr) => pptr.FileIndex == VirtualSerializedFile.VirtualFileIndex;
 		/// <summary>
 		/// PathID == 0
 		/// </summary>
-		public static bool IsNull(this IPPtr pptr) => pptr.PathID == 0;
+		public static bool IsNull(this IPPtr pptr) => pptr.PathIndex == 0;
 	}
 
 	public interface IPPtr : IAsset
@@ -160,7 +160,7 @@ namespace AssetRipper.Core.Classes.Misc
 		/// <summary>
 		/// It is acts more like a hash in some cases
 		/// </summary>
-		long PathID { get; set; }
+		long PathIndex { get; set; }
 	}
 
 	public interface IPPtr<T> : IPPtr where T : IUnityObjectBase
@@ -174,30 +174,30 @@ namespace AssetRipper.Core.Classes.Misc
 		public PPtr(int fileIndex, long pathID)
 		{
 			FileIndex = fileIndex;
-			PathID = pathID;
+			PathIndex = pathID;
 		}
 
-		public PPtr(IPPtr other) : this(other.FileIndex, other.PathID) { }
+		public PPtr(IPPtr other) : this(other.FileIndex, other.PathIndex) { }
 
 		public static bool operator ==(PPtr<T> left, PPtr<T> right)
 		{
-			return left.FileIndex == right.FileIndex && left.PathID == right.PathID;
+			return left.FileIndex == right.FileIndex && left.PathIndex == right.PathIndex;
 		}
 
 		public static bool operator !=(PPtr<T> left, PPtr<T> right)
 		{
-			return left.FileIndex != right.FileIndex || left.PathID != right.PathID;
+			return left.FileIndex != right.FileIndex || left.PathIndex != right.PathIndex;
 		}
 
 		public PPtr<T1> CastTo<T1>() where T1 : IUnityObjectBase
 		{
-			return new PPtr<T1>(FileIndex, PathID);
+			return new PPtr<T1>(FileIndex, PathIndex);
 		}
 
 		public void Read(AssetReader reader)
 		{
 			FileIndex = reader.ReadInt32();
-			PathID = PPtr.IsLongID(reader.Version) ? reader.ReadInt64() : reader.ReadInt32();
+			PathIndex = PPtr.IsLongID(reader.Version) ? reader.ReadInt64() : reader.ReadInt32();
 		}
 
 		public void Write(AssetWriter writer)
@@ -205,11 +205,11 @@ namespace AssetRipper.Core.Classes.Misc
 			writer.Write(FileIndex);
 			if (PPtr.IsLongID(writer.Version))
 			{
-				writer.Write(PathID);
+				writer.Write(PathIndex);
 			}
 			else
 			{
-				writer.Write((int)PathID);
+				writer.Write((int)PathIndex);
 			}
 		}
 
@@ -220,7 +220,7 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public override string ToString()
 		{
-			return $"[{FileIndex}, {PathID}]";
+			return $"[{FileIndex}, {PathIndex}]";
 		}
 
 		public override bool Equals(object obj)
@@ -242,7 +242,7 @@ namespace AssetRipper.Core.Classes.Misc
 			unchecked
 			{
 				hash = hash + 181 * FileIndex.GetHashCode();
-				hash = hash * 173 + PathID.GetHashCode();
+				hash = hash * 173 + PathIndex.GetHashCode();
 			}
 			return hash;
 		}
@@ -260,6 +260,6 @@ namespace AssetRipper.Core.Classes.Misc
 		/// <inheritdoc/>
 		public int FileIndex { get; set; }
 		/// <inheritdoc/>
-		public long PathID { get; set; }
+		public long PathIndex { get; set; }
 	}
 }

@@ -127,7 +127,7 @@ namespace AssetRipper.Core.Classes
 				for (int i = 0; i < children.Length; i++)
 				{
 					PPtr<Transform> child = children[i];
-					if (child.PathID == PathID)
+					if (child.PathIndex == PathID)
 					{
 						return i;
 					}

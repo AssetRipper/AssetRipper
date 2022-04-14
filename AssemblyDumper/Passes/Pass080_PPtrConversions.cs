@@ -91,7 +91,7 @@ namespace AssemblyDumper.Passes
 			pptrType.Interfaces.Add(new InterfaceImplementation(SharedState.Importer.ImportCommonType<IPPtr>()));
 			pptrType.ImplementFullProperty(nameof(IPPtr.FileIndex), InterfacePropertyImplementationAttributes, SystemTypeGetter.Int32, pptrType.GetFieldByName("m_FileID"));
 			FieldDefinition pathidField = pptrType.GetFieldByName("m_PathID");
-			PropertyDefinition property = pptrType.AddFullProperty(nameof(IPPtr.PathID), InterfacePropertyImplementationAttributes, SystemTypeGetter.Int64);
+			PropertyDefinition property = pptrType.AddFullProperty(nameof(IPPtr.PathIndex), InterfacePropertyImplementationAttributes, SystemTypeGetter.Int64);
 			CilInstructionCollection getProcessor = property.GetMethod!.CilMethodBody!.Instructions;
 			getProcessor.Add(CilOpCodes.Ldarg_0);
 			getProcessor.Add(CilOpCodes.Ldfld, pathidField);
