@@ -81,6 +81,45 @@ namespace AssetRipper.Core.IO.Asset
 			return array;
 		}
 
+		public AssetList<T> ReadAssetList<T>() where T : IAssetReadable, new() => ReadAssetList<T>(true);
+		public AssetList<T> ReadAssetList<T>(bool allowAlignment) where T : IAssetReadable, new()
+		{
+			int count = ReadInt32();
+			if (count < 0)
+				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
+			AssetList<T> list = new AssetList<T>();
+			for (int i = 0; i < count; i++)
+			{
+				T instance = new T();
+				instance.Read(this);
+				list.Add(instance);
+			}
+			if (IsAlignArray)
+			{
+				AlignStream();
+			}
+			return list;
+		}
+
+		public AssetList<AssetList<T>> ReadAssetListList<T>() where T : IAssetReadable, new() => ReadAssetListList<T>(true);
+		public AssetList<AssetList<T>> ReadAssetListList<T>(bool allowAlignment) where T : IAssetReadable, new()
+		{
+			int count = ReadInt32();
+			if (count < 0)
+				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
+			AssetList<AssetList<T>> list = new AssetList<AssetList<T>>();
+			for (int i = 0; i < count; i++)
+			{
+				AssetList<T> innerList = ReadAssetList<T>();
+				list.Add(innerList);
+			}
+			if (allowAlignment && IsAlignArray)
+			{
+				AlignStream();
+			}
+			return list;
+		}
+
 		public override string ToString()
 		{
 			return $"{nameof(AssetReader)} ({Platform} {Version})";
