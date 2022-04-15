@@ -89,25 +89,12 @@ namespace AssetRipper.Core.Parser.Asset
 {
 	public class AssetFactory : AssetFactoryBase
 	{
-		public override IUnityObjectBase CreateAsset(AssetInfo assetInfo)
+		public override IUnityObjectBase CreateAsset(AssetInfo assetInfo, UnityVersion version)
 		{
-			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<AssetInfo, IUnityObjectBase> instantiator))
-			{
-				return instantiator(assetInfo);
-			}
-			return DefaultInstantiator(assetInfo);
+			return DefaultInstantiator(assetInfo, version);
 		}
 
-		public void OverrideInstantiator(int classType, Func<AssetInfo, IUnityObjectBase> instantiator)
-		{
-			if (instantiator == null)
-			{
-				throw new ArgumentNullException(nameof(instantiator));
-			}
-			m_instantiators[(ClassIDType)classType] = instantiator;
-		}
-
-		private static IUnityObjectBase DefaultInstantiator(AssetInfo assetInfo)
+		private static IUnityObjectBase DefaultInstantiator(AssetInfo assetInfo, UnityVersion version)
 		{
 			return assetInfo.ClassID switch
 			{
@@ -197,7 +184,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.AudioChorusFilter => new AudioChorusFilter(assetInfo),
 				ClassIDType.AudioReverbZone => new AudioReverbZone(assetInfo),
 				ClassIDType.AudioEchoFilter => new AudioEchoFilter(assetInfo),
-                                      ClassIDType.AudioLowPassFilter => new AudioLowPassFilter(assetInfo),
+				ClassIDType.AudioLowPassFilter => new AudioLowPassFilter(assetInfo),
 				ClassIDType.AudioDistortionFilter => new AudioDistortionFilter(assetInfo),
 				ClassIDType.WindZone => new WindZone(assetInfo),
 				ClassIDType.OffMeshLink => new OffMeshLink(assetInfo),
@@ -249,10 +236,13 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.SpriteAtlas => new SpriteAtlas(assetInfo),
 				ClassIDType.StreamingController => new StreamingController(assetInfo),
 				ClassIDType.TerrainLayer => new TerrainLayer(assetInfo),
+				//ClassIDType.FixedJoint => SourceGenerated.AssetFactory.CreateClassId_138(assetInfo, version),
+				//ClassIDType.FixedJoint2D => SourceGenerated.AssetFactory.CreateClassId_255(assetInfo, version),
+				//ClassIDType.HingeJoint => SourceGenerated.AssetFactory.CreateClassId_59(assetInfo, version),
+				//ClassIDType.HingeJoint2D => SourceGenerated.AssetFactory.CreateClassId_233(assetInfo, version),
+				//ClassIDType.ConfigurableJoint => SourceGenerated.AssetFactory.CreateClassId_153(assetInfo, version),
 				_ => null,
 			};
 		}
-
-		private readonly Dictionary<ClassIDType, Func<AssetInfo, IUnityObjectBase>> m_instantiators = new Dictionary<ClassIDType, Func<AssetInfo, IUnityObjectBase>>();
 	}
 }

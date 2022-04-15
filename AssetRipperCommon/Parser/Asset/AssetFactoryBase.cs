@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Parser.Asset
 {
 	public abstract class AssetFactoryBase
 	{
-		public abstract IUnityObjectBase CreateAsset(AssetInfo assetInfo);
+		public abstract IUnityObjectBase CreateAsset(AssetInfo assetInfo, UnityVersion version);
 
 		public virtual IAsset CreateEngineAsset(string name)
 		{

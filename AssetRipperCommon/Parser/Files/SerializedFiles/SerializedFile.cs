@@ -336,7 +336,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			IUnityObjectBase asset;
 			try
 			{
-				asset = VersionManager.GetHandler(Version).AssetFactory.CreateAsset(assetInfo);
+				asset = VersionManager.GetHandler(Version).AssetFactory.CreateAsset(assetInfo, Version);
 			}
 			catch (TypeLoadException typeLoadException)
 			{
