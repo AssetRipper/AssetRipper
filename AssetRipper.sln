@@ -113,6 +113,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smolv", "Smolv\Smolv.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpirV", "SpirV\SpirV.csproj", "{2135442C-E861-486D-A07B-0367A09177F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Fundamentals", "AssetRipper.Fundamentals\AssetRipper.Fundamentals.csproj", "{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		DebugLinux|x64 = DebugLinux|x64
@@ -303,6 +305,18 @@ Global
 		{2135442C-E861-486D-A07B-0367A09177F9}.ReleaseMac|x64.Build.0 = Release|Any CPU
 		{2135442C-E861-486D-A07B-0367A09177F9}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
 		{2135442C-E861-486D-A07B-0367A09177F9}.ReleaseWindows|x64.Build.0 = Release|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.DebugLinux|x64.ActiveCfg = Debug|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.DebugLinux|x64.Build.0 = Debug|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.DebugMac|x64.ActiveCfg = Debug|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.DebugMac|x64.Build.0 = Debug|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.DebugWindows|x64.ActiveCfg = Debug|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.DebugWindows|x64.Build.0 = Debug|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.ReleaseLinux|x64.Build.0 = Release|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.ReleaseMac|x64.Build.0 = Release|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
+		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.ReleaseWindows|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
