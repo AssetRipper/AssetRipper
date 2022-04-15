@@ -1,5 +1,4 @@
 ﻿//#define USE_HEX_FLOAT
-
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.YAML.Extensions;
 using System;

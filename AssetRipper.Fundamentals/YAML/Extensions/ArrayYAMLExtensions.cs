@@ -18,7 +18,9 @@ namespace AssetRipper.Core.YAML.Extensions
 		public static void AddTypelessData(this YAMLMappingNode mappingNode, string name, byte[] data)
 		{
 			mappingNode.Add(name, data.Length);
-			mappingNode.Add(Layout.LayoutInfo.TypelessdataName, data.ExportYAML());
+			mappingNode.Add(TypelessdataName, data.ExportYAML());
 		}
+
+		public const string TypelessdataName = "_typelessdata";
 	}
 }
