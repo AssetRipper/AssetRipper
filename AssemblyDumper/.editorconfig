@@ -1,7 +1,0 @@
-﻿# top-most EditorConfig file
-root = true
-
-# Tabs
-[*]
-indent_style = tab
-end_of_line = crlf
