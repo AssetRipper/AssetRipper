@@ -29,7 +29,7 @@ namespace AssetRipper.Core
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, GetType().Name);
 		public virtual string ExportExtension => AssetExtension;
 
-		public virtual HideFlags ObjectHideFlags
+		public virtual HideFlags ObjectHideFlagsOld
 		{
 			get => HideFlags.None;
 			set => throw new NotSupportedException();

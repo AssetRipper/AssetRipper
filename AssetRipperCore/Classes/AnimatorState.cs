@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Classes
 		private AnimatorState(LayoutInfo layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position) : base(layout)
 		{
 			AssetInfo = assetInfo;
-			ObjectHideFlags = HideFlags.HideInHierarchy;
+			ObjectHideFlagsOld = HideFlags.HideInHierarchy;
 
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 

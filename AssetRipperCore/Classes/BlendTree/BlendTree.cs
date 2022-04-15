@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.BlendTree
 		private BlendTree(LayoutInfo layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, StateConstant state, int nodeIndex) : base(layout)
 		{
 			AssetInfo = assetInfo;
-			ObjectHideFlags = HideFlags.HideInHierarchy;
+			ObjectHideFlagsOld = HideFlags.HideInHierarchy;
 
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 			BlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Instance;

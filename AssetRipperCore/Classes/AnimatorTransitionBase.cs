@@ -63,7 +63,7 @@ namespace AssetRipper.Core.Classes
 		protected AnimatorTransitionBase(LayoutInfo layout, AssetInfo assetInfo, BaseParameters parameters) : base(layout)
 		{
 			AssetInfo = assetInfo;
-			ObjectHideFlags = HideFlags.HideInHierarchy;
+			ObjectHideFlagsOld = HideFlags.HideInHierarchy;
 
 			List<AnimatorCondition> conditionList = new List<AnimatorCondition>(parameters.ConditionConstants.Count);
 			for (int i = 0; i < parameters.ConditionConstants.Count; i++)
