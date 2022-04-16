@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Extensions
 {
-	public static class PrimitiveExtensions
+	internal static class PrimitiveExtensions
 	{
 		public static string ToHexString(this byte _this)
 		{
