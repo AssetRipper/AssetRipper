@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.IO.Asset
 {

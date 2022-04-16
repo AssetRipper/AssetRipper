@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Core.YAML
+﻿namespace AssetRipper.Yaml
 {
 	public sealed class YAMLDocument
 	{
@@ -28,9 +28,7 @@
 		internal void Emit(Emitter emitter, bool isSeparator)
 		{
 			if (isSeparator)
-			{
 				emitter.Write("---").WriteWhitespace();
-			}
 
 			Root.Emit(emitter);
 		}

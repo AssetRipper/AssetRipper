@@ -1,7 +1,7 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 
 namespace AssetRipper.Core.Math.Vectors

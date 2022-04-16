@@ -5,7 +5,7 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.BundleFile.IO;
 using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Diagnostics.CodeAnalysis;
 

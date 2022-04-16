@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Core.YAML
+﻿namespace AssetRipper.Yaml
 {
 	public abstract class YAMLNode
 	{
@@ -17,12 +17,8 @@
 			}
 
 			if (isWrote)
-			{
 				if (IsMultiline)
-				{
 					emitter.WriteLine();
-				}
-			}
 		}
 
 		public abstract YAMLNodeType NodeType { get; }

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.YAML;
+﻿using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.GUI.AssetInfo

@@ -9,7 +9,7 @@
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Yaml\$(Configuration)\</IntermediateOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>AssetRipper.Yaml</AssemblyName>
-		<RootNamespace>AssetRipper.Core</RootNamespace>
+		<RootNamespace>AssetRipper.Yaml</RootNamespace>
 		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
 		<Configurations>Debug;Release</Configurations>

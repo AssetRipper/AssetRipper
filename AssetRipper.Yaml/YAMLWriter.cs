@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Core.YAML
+namespace AssetRipper.Yaml
 {
-	using Version = System.Version;
+	using Version = Version;
 
 	public class YAMLWriter
 	{
@@ -13,13 +13,9 @@ namespace AssetRipper.Core.YAML
 		{
 #if DEBUG
 			if (document == null)
-			{
 				throw new ArgumentNullException(nameof(document));
-			}
 			if (m_documents.Contains(document))
-			{
 				throw new ArgumentException($"Document {document} is added already", nameof(document));
-			}
 #endif
 			m_documents.Add(document);
 		}
@@ -27,9 +23,7 @@ namespace AssetRipper.Core.YAML
 		public void AddTag(string handle, string content)
 		{
 			if (m_tags.Any(t => t.Handle == handle))
-			{
 				throw new Exception($"Writer already contains tag {handle}");
-			}
 			YAMLTag tag = new YAMLTag(handle, content);
 			m_tags.Add(tag);
 		}
@@ -38,9 +32,7 @@ namespace AssetRipper.Core.YAML
 		{
 			WriteHead(output);
 			foreach (YAMLDocument doc in m_documents)
-			{
 				WriteDocument(doc);
-			}
 			WriteTail(output);
 		}
 

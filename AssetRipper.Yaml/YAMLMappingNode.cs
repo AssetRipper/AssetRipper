@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AssetRipper.Core.YAML
+namespace AssetRipper.Yaml
 {
 	public sealed class YAMLMappingNode : YAMLNode
 	{
@@ -189,9 +189,7 @@ namespace AssetRipper.Core.YAML
 		public void Add(YAMLNode key, YAMLNode value)
 		{
 			if (key.NodeType != YAMLNodeType.Scalar)
-			{
 				throw new Exception($"Only {YAMLNodeType.Scalar} node as a key supported");
-			}
 
 			InsertEnd(key, value);
 		}
@@ -199,9 +197,7 @@ namespace AssetRipper.Core.YAML
 		public void Append(YAMLMappingNode map)
 		{
 			foreach (KeyValuePair<YAMLNode, YAMLNode> child in map.m_children)
-			{
 				Add(child.Key, child.Value);
-			}
 		}
 
 		public void InsertBegin(string key, int value)
@@ -219,9 +215,7 @@ namespace AssetRipper.Core.YAML
 		public void InsertBegin(YAMLNode key, YAMLNode value)
 		{
 			if (value == null)
-			{
 				throw new ArgumentNullException(nameof(value));
-			}
 			KeyValuePair<YAMLNode, YAMLNode> pair = new(key, value);
 			m_children.Insert(0, pair);
 		}
@@ -251,16 +245,10 @@ namespace AssetRipper.Core.YAML
 		private void StartChildren(Emitter emitter)
 		{
 			if (Style == MappingStyle.Block)
-			{
 				if (m_children.Count == 0)
-				{
 					emitter.Write('{');
-				}
-			}
 			else if (Style == MappingStyle.Flow)
-			{
 				emitter.Write('{');
-			}
 		}
 
 		private void EndChildren(Emitter emitter)
@@ -268,55 +256,37 @@ namespace AssetRipper.Core.YAML
 			if (Style == MappingStyle.Block)
 			{
 				if (m_children.Count == 0)
-				{
 					emitter.Write('}');
-				}
 				emitter.WriteLine();
 			}
 			else if (Style == MappingStyle.Flow)
-			{
 				emitter.WriteClose('}');
-			}
 		}
 
 		private void StartTransition(Emitter emitter, YAMLNode next)
 		{
 			emitter.Write(':').WriteWhitespace();
 			if (Style == MappingStyle.Block)
-			{
 				if (next.IsMultiline)
-				{
 					emitter.WriteLine();
-				}
-			}
 			if (next.IsIndent)
-			{
 				emitter.IncreaseIndent();
-			}
 		}
 
 		private void EndTransition(Emitter emitter, YAMLNode next)
 		{
 			if (Style == MappingStyle.Block)
-			{
 				emitter.WriteLine();
-			}
 			else if (Style == MappingStyle.Flow)
-			{
 				emitter.WriteSeparator().WriteWhitespace();
-			}
 			if (next.IsIndent)
-			{
 				emitter.DecreaseIndent();
-			}
 		}
 
 		private void InsertEnd(YAMLNode key, YAMLNode value)
 		{
 			if (value == null)
-			{
 				throw new ArgumentNullException(nameof(value));
-			}
 			KeyValuePair<YAMLNode, YAMLNode> pair = new(key, value);
 			m_children.Add(pair);
 		}

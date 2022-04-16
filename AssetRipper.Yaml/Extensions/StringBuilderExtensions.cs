@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Text;
 
-namespace AssetRipper.Core.Extensions
+namespace AssetRipper.Yaml.Extensions
 {
 	public static class StringBuilderExtensions
 	{
 		static StringBuilderExtensions()
 		{
 			for (int i = 0; i <= byte.MaxValue; i++)
-			{
 				ByteHexRepresentations[i] = i.ToString("x2");
-			}
 		}
 
 		public static StringBuilder AppendHex(this StringBuilder _this, byte value)
@@ -21,14 +19,14 @@ namespace AssetRipper.Core.Extensions
 
 		public static StringBuilder AppendHex(this StringBuilder _this, ushort value)
 		{
-			_this.Append(ByteHexRepresentations[(value >> 0) & 0xFF]);
-			_this.Append(ByteHexRepresentations[(value >> 8) & 0xFF]);
+			_this.Append(ByteHexRepresentations[value >> 0 & 0xFF]);
+			_this.Append(ByteHexRepresentations[value >> 8 & 0xFF]);
 			return _this;
 		}
 
 		public static StringBuilder AppendHex(this StringBuilder _this, short value)
 		{
-			return AppendHex(_this, unchecked((ushort)value));
+			return _this.AppendHex(unchecked((ushort)value));
 		}
 
 		public static StringBuilder AppendHex(this StringBuilder _this, uint value)
@@ -42,7 +40,7 @@ namespace AssetRipper.Core.Extensions
 
 		public static StringBuilder AppendHex(this StringBuilder _this, int value)
 		{
-			return AppendHex(_this, unchecked((uint)value));
+			return _this.AppendHex(unchecked((uint)value));
 		}
 
 		public static StringBuilder AppendHex(this StringBuilder _this, ulong value)
@@ -60,25 +58,23 @@ namespace AssetRipper.Core.Extensions
 
 		public static StringBuilder AppendHex(this StringBuilder _this, long value)
 		{
-			return AppendHex(_this, unchecked((ulong)value));
+			return _this.AppendHex(unchecked((ulong)value));
 		}
 
 		public static StringBuilder AppendHex(this StringBuilder _this, float value)
 		{
-			return AppendHex(_this, BitConverter.SingleToUInt32Bits(value));
+			return _this.AppendHex(BitConverter.SingleToUInt32Bits(value));
 		}
 
 		public static StringBuilder AppendHex(this StringBuilder _this, double value)
 		{
-			return AppendHex(_this, BitConverter.DoubleToUInt64Bits(value));
+			return _this.AppendHex(BitConverter.DoubleToUInt64Bits(value));
 		}
 
 		public static StringBuilder AppendIndent(this StringBuilder _this, int count)
 		{
 			for (int i = 0; i < count; i++)
-			{
 				_this.Append('\t');
-			}
 			return _this;
 		}
 

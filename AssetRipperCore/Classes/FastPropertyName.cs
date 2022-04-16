@@ -2,7 +2,8 @@
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
-using AssetRipper.Core.YAML;
+
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes
 {

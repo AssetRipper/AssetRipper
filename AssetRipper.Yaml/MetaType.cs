@@ -1,4 +1,4 @@
-namespace AssetRipper.Core.YAML
+namespace AssetRipper.Yaml
 {
 	internal enum MetaType
 	{

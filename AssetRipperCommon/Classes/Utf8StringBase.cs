@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Layout;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+
+using AssetRipper.Yaml;
 using System;
 using System.Text;
 

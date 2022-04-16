@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace AssetRipper.Core.YAML
+namespace AssetRipper.Yaml
 {
 	internal class Emitter
 	{
@@ -11,9 +11,7 @@ namespace AssetRipper.Core.YAML
 			m_stream = writer ?? throw new ArgumentNullException(nameof(writer));
 			IsFormatKeys = formatKeys;
 			if (formatKeys)
-			{
 				m_sb = new StringBuilder();
-			}
 		}
 
 		public Emitter IncreaseIndent()
@@ -25,9 +23,7 @@ namespace AssetRipper.Core.YAML
 		public Emitter DecreaseIndent()
 		{
 			if (m_indent == 0)
-			{
 				throw new Exception($"Increase/decrease indent mismatch");
-			}
 			m_indent--;
 			return this;
 		}
@@ -127,9 +123,7 @@ namespace AssetRipper.Core.YAML
 				{
 					m_sb.Append(value, 2, value.Length - 2);
 					if (char.IsUpper(m_sb[0]))
-					{
 						m_sb[0] = char.ToLower(m_sb[0]);
-					}
 					value = m_sb.ToString();
 					m_sb.Clear();
 				}
@@ -208,9 +202,7 @@ namespace AssetRipper.Core.YAML
 		private void WriteIndent()
 		{
 			for (int i = 0; i < m_indent * 2; i++)
-			{
 				m_stream.Write(' ');
-			}
 		}
 
 		public bool IsFormatKeys { get; }

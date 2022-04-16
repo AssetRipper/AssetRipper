@@ -1,11 +1,10 @@
 ﻿//#define USE_HEX_FLOAT
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml.Extensions;
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.Core.YAML
+namespace AssetRipper.Yaml
 {
 	public sealed class YAMLScalarNode : YAMLNode
 	{
@@ -194,7 +193,6 @@ namespace AssetRipper.Core.YAML
 		internal Emitter ToString(Emitter emitter)
 		{
 			if (Style == ScalarStyle.Hex)
-			{
 				return m_objectType switch
 				{
 					ScalarType.Byte => emitter.WriteHex((byte)m_value),
@@ -209,7 +207,6 @@ namespace AssetRipper.Core.YAML
 					ScalarType.Double => emitter.WriteHex(m_value),
 					_ => throw new NotImplementedException(m_objectType.ToString()),
 				};
-			}
 
 			return m_objectType switch
 			{
@@ -260,16 +257,10 @@ namespace AssetRipper.Core.YAML
 		private Emitter WriteString(Emitter emitter)
 		{
 			if (Style == ScalarStyle.Plain)
-			{
 				if (emitter.IsFormatKeys && emitter.IsKey)
-				{
 					emitter.WriteFormat(m_string);
-				}
 				else
-				{
 					emitter.Write(m_string);
-				}
-			}
 			else if (Style == ScalarStyle.SingleQuoted)
 			{
 				emitter.WriteDelayed();
@@ -278,13 +269,9 @@ namespace AssetRipper.Core.YAML
 					char c = m_string[i];
 					emitter.WriteRaw(c);
 					if (c == '\'')
-					{
 						emitter.WriteRaw(c);
-					}
 					else if (c == '\n')
-					{
 						emitter.WriteRaw("\n	");
-					}
 				}
 			}
 			else if (Style == ScalarStyle.DoubleQuoted)
@@ -318,18 +305,14 @@ namespace AssetRipper.Core.YAML
 				}
 			}
 			else
-			{
 				throw new NotSupportedException(Style.ToString());
-			}
 			return emitter;
 		}
 
 		private static ScalarStyle GetStringStyle(string value)
 		{
 			if (!string.IsNullOrEmpty(value) && s_illegal.IsMatch(value))
-			{
 				return value.Contains("\n ") ? ScalarStyle.DoubleQuoted : ScalarStyle.SingleQuoted;
-			}
 			return ScalarStyle.Plain;
 		}
 
@@ -344,7 +327,6 @@ namespace AssetRipper.Core.YAML
 			get
 			{
 				if (Style == ScalarStyle.Hex)
-				{
 					return m_objectType switch
 					{
 						ScalarType.Byte => unchecked((byte)m_value).ToHexString(),
@@ -359,7 +341,6 @@ namespace AssetRipper.Core.YAML
 						ScalarType.Double => BitConverter.UInt64BitsToDouble(m_value).ToHexString(),
 						_ => throw new NotImplementedException(m_objectType.ToString()),
 					};
-				}
 
 				return m_objectType switch
 				{

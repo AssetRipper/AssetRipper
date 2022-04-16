@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.YAML;
+﻿using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.IO.Extensions
 {

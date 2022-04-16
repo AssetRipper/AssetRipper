@@ -1,7 +1,6 @@
-﻿using AssetRipper.Core.Extensions;
-using System.Text;
+﻿using System.Text;
 
-namespace AssetRipper.Core.YAML.Extensions
+namespace AssetRipper.Yaml.Extensions
 {
 	public static class ArrayYAMLExtensions
 	{
@@ -9,9 +8,7 @@ namespace AssetRipper.Core.YAML.Extensions
 		{
 			StringBuilder sb = new StringBuilder(_this.Length * 2);
 			for (int i = 0; i < _this.Length; i++)
-			{
 				sb.AppendHex(_this[i]);
-			}
 			return new YAMLScalarNode(sb.ToString(), true);
 		}
 

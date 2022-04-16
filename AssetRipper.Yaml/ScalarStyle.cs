@@ -1,4 +1,4 @@
-namespace AssetRipper.Core.YAML
+namespace AssetRipper.Yaml
 {
 	/// <summary>
 	/// Specifies the style of a YAML scalar.

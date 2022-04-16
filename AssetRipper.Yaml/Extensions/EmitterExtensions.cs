@@ -1,6 +1,6 @@
 using System;
 
-namespace AssetRipper.Core.YAML.Extensions
+namespace AssetRipper.Yaml.Extensions
 {
 	internal static class EmitterExtensions
 	{
@@ -13,16 +13,16 @@ namespace AssetRipper.Core.YAML.Extensions
 
 		public static Emitter WriteHex(this Emitter _this, ushort value)
 		{
-			_this.Write(HexAlphabet[(value >> 4) & 0xF]);
-			_this.Write(HexAlphabet[(value >> 0) & 0xF]);
-			_this.Write(HexAlphabet[(value >> 12) & 0xF]);
-			_this.Write(HexAlphabet[(value >> 8) & 0xF]);
+			_this.Write(HexAlphabet[value >> 4 & 0xF]);
+			_this.Write(HexAlphabet[value >> 0 & 0xF]);
+			_this.Write(HexAlphabet[value >> 12 & 0xF]);
+			_this.Write(HexAlphabet[value >> 8 & 0xF]);
 			return _this;
 		}
 
 		public static Emitter WriteHex(this Emitter _this, short value)
 		{
-			return WriteHex(_this, unchecked((ushort)value));
+			return _this.WriteHex(unchecked((ushort)value));
 		}
 
 		public static Emitter WriteHex(this Emitter _this, uint value)
@@ -40,7 +40,7 @@ namespace AssetRipper.Core.YAML.Extensions
 
 		public static Emitter WriteHex(this Emitter _this, int value)
 		{
-			return WriteHex(_this, unchecked((uint)value));
+			return _this.WriteHex(unchecked((uint)value));
 		}
 
 		public static Emitter WriteHex(this Emitter _this, ulong value)
@@ -66,17 +66,17 @@ namespace AssetRipper.Core.YAML.Extensions
 
 		public static Emitter WriteHex(this Emitter _this, long value)
 		{
-			return WriteHex(_this, unchecked((ulong)value));
+			return _this.WriteHex(unchecked((ulong)value));
 		}
 
 		public static Emitter WriteHex(this Emitter _this, float value)
 		{
-			return WriteHex(_this, BitConverter.SingleToUInt32Bits(value));
+			return _this.WriteHex(BitConverter.SingleToUInt32Bits(value));
 		}
 
 		public static Emitter WriteHex(this Emitter _this, double value)
 		{
-			return WriteHex(_this, BitConverter.DoubleToUInt64Bits(value));
+			return _this.WriteHex(BitConverter.DoubleToUInt64Bits(value));
 		}
 
 		private static readonly string HexAlphabet = "0123456789ABCDEF";

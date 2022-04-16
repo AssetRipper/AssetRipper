@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AssetRipper.Core.YAML
+namespace AssetRipper.Yaml
 {
 	public sealed class YAMLSequenceNode : YAMLNode
 	{
@@ -102,16 +102,12 @@ namespace AssetRipper.Core.YAML
 			{
 				case SequenceStyle.Block:
 					if (m_children.Count == 0)
-					{
 						emitter.Write('[');
-					}
 					break;
 
 				case SequenceStyle.BlockCurve:
 					if (m_children.Count == 0)
-					{
 						emitter.Write('{');
-					}
 					break;
 
 				case SequenceStyle.Flow:
@@ -120,9 +116,7 @@ namespace AssetRipper.Core.YAML
 
 				case SequenceStyle.Raw:
 					if (m_children.Count == 0)
-					{
 						emitter.Write('[');
-					}
 					break;
 			}
 		}
@@ -133,17 +127,13 @@ namespace AssetRipper.Core.YAML
 			{
 				case SequenceStyle.Block:
 					if (m_children.Count == 0)
-					{
 						emitter.Write(']');
-					}
 					emitter.WriteLine();
 					break;
 
 				case SequenceStyle.BlockCurve:
 					if (m_children.Count == 0)
-					{
 						emitter.WriteClose('}');
-					}
 					emitter.WriteLine();
 					break;
 
@@ -153,9 +143,7 @@ namespace AssetRipper.Core.YAML
 
 				case SequenceStyle.Raw:
 					if (m_children.Count == 0)
-					{
 						emitter.Write(']');
-					}
 					emitter.WriteLine();
 					break;
 			}
@@ -168,14 +156,10 @@ namespace AssetRipper.Core.YAML
 				emitter.Write('-').Write(' ');
 
 				if (next.NodeType == NodeType)
-				{
 					emitter.IncreaseIndent();
-				}
 			}
 			if (next.IsIndent)
-			{
 				emitter.IncreaseIndent();
-			}
 		}
 
 		private void EndChild(Emitter emitter, YAMLNode next)
@@ -184,18 +168,12 @@ namespace AssetRipper.Core.YAML
 			{
 				emitter.WriteLine();
 				if (next.NodeType == NodeType)
-				{
 					emitter.DecreaseIndent();
-				}
 			}
 			else if (Style == SequenceStyle.Flow)
-			{
 				emitter.WriteSeparator().WriteWhitespace();
-			}
 			if (next.IsIndent)
-			{
 				emitter.DecreaseIndent();
-			}
 		}
 
 		public static YAMLSequenceNode Empty { get; } = new YAMLSequenceNode();
