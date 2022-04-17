@@ -9,7 +9,7 @@
 		<RootNamespace>AssetRipper.Core</RootNamespace>
 		<OutputPath>..\Bins\AssetRipperCore\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipperCore\$(Configuration)\</IntermediateOutputPath>
-		<Copyright>Copyright ©  2021</Copyright>
+		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
 		<Configurations>Debug;Release</Configurations>
 		<DebugType>embedded</DebugType>
