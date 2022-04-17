@@ -59,6 +59,7 @@ namespace AssetRipper.Yaml
 
 		public void WriteDocument(YamlDocument doc)
 		{
+			ThrowIfNullEmitter();
 			doc.Emit(m_emitter, m_isWriteSeparator);
 			m_isWriteSeparator = true;
 		}
@@ -66,6 +67,13 @@ namespace AssetRipper.Yaml
 		public void WriteTail(TextWriter output)
 		{
 			output.Write('\n');
+		}
+
+		[System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(m_emitter))]
+		private void ThrowIfNullEmitter()
+		{
+			if(m_emitter is null) 
+				throw new NullReferenceException("Emitter cannot be null");
 		}
 
 		public static Version Version { get; } = new Version(1, 1);
@@ -82,7 +90,7 @@ namespace AssetRipper.Yaml
 		private readonly HashSet<YamlDocument> m_documents = new HashSet<YamlDocument>();
 		private readonly List<YamlTag> m_tags = new List<YamlTag>();
 
-		private Emitter m_emitter;
+		private Emitter? m_emitter;
 		private bool m_isWriteSeparator;
 	}
 }

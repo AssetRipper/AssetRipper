@@ -121,6 +121,7 @@ namespace AssetRipper.Yaml
 				WriteDelayed();
 				if (value.Length > 2 && value.StartsWith("m_", StringComparison.Ordinal))
 				{
+					ThrowIfNullStringBuilder();
 					m_sb.Append(value, 2, value.Length - 2);
 					if (char.IsUpper(m_sb[0]))
 						m_sb[0] = char.ToLower(m_sb[0]);
@@ -205,11 +206,18 @@ namespace AssetRipper.Yaml
 				m_stream.Write(' ');
 		}
 
+		[System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(m_sb))]
+		private void ThrowIfNullStringBuilder()
+		{
+			if (m_sb is null)
+				throw new NullReferenceException("m_sb cannot be null here");
+		}
+
 		public bool IsFormatKeys { get; }
 		public bool IsKey { get; set; }
 
 		private readonly TextWriter m_stream;
-		private readonly StringBuilder m_sb;
+		private readonly StringBuilder? m_sb;
 
 		private int m_indent = 0;
 		private bool m_isNeedWhitespace = false;

@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Yaml
+﻿using System;
+
+namespace AssetRipper.Yaml
 {
 	public sealed class YamlDocument
 	{
@@ -30,9 +32,17 @@
 			if (isSeparator)
 				emitter.Write("---").WriteWhitespace();
 
+			ThrowIfNullRoot();
 			Root.Emit(emitter);
 		}
 
-		public YamlNode Root { get; private set; }
+		[System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(Root))]
+		private void ThrowIfNullRoot()
+		{
+			if (Root is null)
+				throw new NullReferenceException("Root cannot be null here");
+		}
+
+		public YamlNode? Root { get; private set; }
 	}
 }
