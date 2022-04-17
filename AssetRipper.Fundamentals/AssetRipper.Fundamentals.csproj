@@ -7,7 +7,6 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>..\Bins\AssetRipper.Fundamentals\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Fundamentals\$(Configuration)\</IntermediateOutputPath>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>AssetRipper.Fundamentals</AssemblyName>
 		<RootNamespace>AssetRipper.Core</RootNamespace>
 		<Copyright>Copyright ©  2022</Copyright>

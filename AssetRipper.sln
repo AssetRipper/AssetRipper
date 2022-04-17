@@ -107,6 +107,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Fundamentals", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Yaml", "AssetRipper.Yaml\AssetRipper.Yaml.csproj", "{E3458355-E654-41B9-A06C-9E2A00EA9CE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.SerializationLogic", "AssetRipper.SerializationLogic\AssetRipper.SerializationLogic.csproj", "{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		DebugLinux|x64 = DebugLinux|x64
@@ -273,6 +275,18 @@ Global
 		{E3458355-E654-41B9-A06C-9E2A00EA9CE2}.ReleaseMac|x64.Build.0 = Release|Any CPU
 		{E3458355-E654-41B9-A06C-9E2A00EA9CE2}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
 		{E3458355-E654-41B9-A06C-9E2A00EA9CE2}.ReleaseWindows|x64.Build.0 = Release|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.DebugLinux|x64.ActiveCfg = Debug|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.DebugLinux|x64.Build.0 = Debug|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.DebugMac|x64.ActiveCfg = Debug|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.DebugMac|x64.Build.0 = Debug|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.DebugWindows|x64.ActiveCfg = Debug|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.DebugWindows|x64.Build.0 = Debug|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.ReleaseLinux|x64.Build.0 = Release|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.ReleaseMac|x64.Build.0 = Release|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
+		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.ReleaseWindows|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
