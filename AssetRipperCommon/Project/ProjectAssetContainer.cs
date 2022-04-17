@@ -361,11 +361,11 @@ namespace AssetRipper.Core.Project
 		public string Name => File.Name;
 		public LayoutInfo Layout => File.Layout;
 		public UnityVersion Version => File.Version;
-		public Platform Platform => File.Platform;
+		public BuildTarget Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
 		public LayoutInfo ExportLayout { get; }
 		public UnityVersion ExportVersion => ExportLayout.Version;
-		public Platform ExportPlatform => ExportLayout.Platform;
+		public BuildTarget ExportPlatform => ExportLayout.Platform;
 		public virtual TransferInstructionFlags ExportFlags => ExportLayout.Flags | CurrentCollection.Flags;
 		public virtual IReadOnlyList<FileIdentifier> Dependencies => File.Dependencies;
 

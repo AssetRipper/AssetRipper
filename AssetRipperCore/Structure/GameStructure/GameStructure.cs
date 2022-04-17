@@ -85,7 +85,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			UnityVersion maxFileVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
 			UnityVersion version = UnityVersion.Max(maxFileVersion, new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3));
 			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
-			options.SetProjectSettings(version, Platform.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
+			options.SetProjectSettings(version, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			Exporter.Export(FileCollection, options);
 		}
 

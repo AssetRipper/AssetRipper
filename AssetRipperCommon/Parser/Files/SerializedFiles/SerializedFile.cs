@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public SerializedFileMetadata Metadata { get; }
 		public LayoutInfo Layout { get; }
 		public UnityVersion Version => Layout.Version;
-		public Platform Platform => Layout.Platform;
+		public BuildTarget Platform => Layout.Platform;
 		public TransferInstructionFlags Flags => Layout.Flags;
 
 		public IFileCollection Collection { get; }

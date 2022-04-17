@@ -25,10 +25,10 @@ namespace AssetRipper.Core.Layout
 		public bool IsStructSerializable { get; }
 
 		public UnityVersion Version { get; }
-		public Platform Platform { get; }
+		public BuildTarget Platform { get; }
 		public TransferInstructionFlags Flags { get; }
 
-		public LayoutInfo(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		public LayoutInfo(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			Version = version;
 			Platform = platform;

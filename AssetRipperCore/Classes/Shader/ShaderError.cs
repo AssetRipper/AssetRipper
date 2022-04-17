@@ -30,7 +30,7 @@ namespace AssetRipper.Core.Classes.Shader
 			if (HasFile(reader.Version))
 			{
 				File = reader.ReadString();
-				CompilerPlatform = (Platform)reader.ReadInt32();
+				CompilerPlatform = (BuildTarget)reader.ReadInt32();
 			}
 			Line = reader.ReadString();
 			Warning = reader.ReadBoolean();
@@ -70,7 +70,7 @@ namespace AssetRipper.Core.Classes.Shader
 		public string Message { get; set; }
 		public string MessageDetails { get; set; }
 		public string File { get; set; }
-		public Platform CompilerPlatform { get; set; }
+		public BuildTarget CompilerPlatform { get; set; }
 		public string Line { get; set; }
 		public bool Warning { get; set; }
 		public bool ProgramError { get; set; }

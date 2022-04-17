@@ -571,7 +571,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			return HasTransparencySortMode(version) ? TransparencySortAxis : new Vector3f(0.0f, 0.0f, 1.0f);
 		}
 
-		private IReadOnlyList<TierSettings> GetTierSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		private IReadOnlyList<TierSettings> GetTierSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			if (!HasTierSettings(version))
 			{

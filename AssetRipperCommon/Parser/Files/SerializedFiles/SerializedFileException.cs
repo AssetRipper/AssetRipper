@@ -5,7 +5,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {
 	public sealed class SerializedFileException : Exception
 	{
-		public SerializedFileException(string message, UnityVersion version, Platform platform, ClassIDType assetType, string fileName, string filePath) : base(message)
+		public SerializedFileException(string message, UnityVersion version, BuildTarget platform, ClassIDType assetType, string fileName, string filePath) : base(message)
 		{
 			if (string.IsNullOrEmpty(fileName))
 			{
@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			FilePath = filePath;
 		}
 
-		public SerializedFileException(string message, Exception innerException, UnityVersion version, Platform platform, ClassIDType assetType, string fileName, string filePath) : base(message, innerException)
+		public SerializedFileException(string message, Exception innerException, UnityVersion version, BuildTarget platform, ClassIDType assetType, string fileName, string filePath) : base(message, innerException)
 		{
 			if (string.IsNullOrEmpty(fileName))
 			{
@@ -60,7 +60,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		}
 
 		public UnityVersion Version { get; }
-		public Platform Platform { get; }
+		public BuildTarget Platform { get; }
 		public ClassIDType AssetType { get; }
 		public string FileName { get; }
 		public string FilePath { get; }

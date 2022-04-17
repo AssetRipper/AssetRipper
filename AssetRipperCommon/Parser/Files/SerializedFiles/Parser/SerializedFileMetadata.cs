@@ -79,7 +79,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 			}
 			if (HasPlatform(reader.Generation))
 			{
-				TargetPlatform = (Platform)reader.ReadUInt32();
+				TargetPlatform = (BuildTarget)reader.ReadUInt32();
 			}
 
 			if (HasEnableTypeTree(reader.Generation))
@@ -156,7 +156,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		}
 
 		public UnityVersion UnityVersion { get; set; }
-		public Platform TargetPlatform { get; set; }
+		public BuildTarget TargetPlatform { get; set; }
 		public bool EnableTypeTree { get; set; }
 		public SerializedType[] Types { get; set; }
 		/// <summary>

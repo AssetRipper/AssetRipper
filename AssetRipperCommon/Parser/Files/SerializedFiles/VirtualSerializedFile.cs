@@ -149,7 +149,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		}
 
 		public string Name => nameof(VirtualSerializedFile);
-		public Platform Platform => Layout.Platform;
+		public BuildTarget Platform => Layout.Platform;
 		public UnityVersion Version => Layout.Version;
 		public TransferInstructionFlags Flags => Layout.Flags;
 

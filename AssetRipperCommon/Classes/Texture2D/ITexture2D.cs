@@ -74,9 +74,9 @@ namespace AssetRipper.Core.Classes.Texture2D
 			return data;
 		}
 
-		public static bool IsSwapBytes(Platform platform, TextureFormat format)
+		public static bool IsSwapBytes(BuildTarget platform, TextureFormat format)
 		{
-			if (platform == Platform.XBox360)
+			if (platform == BuildTarget.XBox360)
 			{
 				switch (format)
 				{

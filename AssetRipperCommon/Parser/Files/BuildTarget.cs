@@ -1,10 +1,9 @@
 namespace AssetRipper.Core.Parser.Files
 {
 	/// <summary>
-	/// TODO: rename to build target<br/>
 	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/BuildTarget.cs"/>
 	/// </summary>
-	public enum Platform : uint
+	public enum BuildTarget : uint
 	{
 		ValidPlayer = 1,
 		/// <summary>
@@ -149,7 +148,7 @@ namespace AssetRipper.Core.Parser.Files
 
 	public static class PlatformExtensions
 	{
-		public static bool IsCompatible(this Platform _this, Platform comp)
+		public static bool IsCompatible(this BuildTarget _this, BuildTarget comp)
 		{
 			if (_this == comp)
 			{
@@ -167,19 +166,19 @@ namespace AssetRipper.Core.Parser.Files
 			return false;
 		}
 
-		public static bool IsStandalone(this Platform _this)
+		public static bool IsStandalone(this BuildTarget _this)
 		{
 			switch (_this)
 			{
-				case Platform.StandaloneWinPlayer:
-				case Platform.StandaloneWin64Player:
-				case Platform.StandaloneLinux:
-				case Platform.StandaloneLinux64:
-				case Platform.StandaloneLinuxUniversal:
-				case Platform.StandaloneOSXIntel:
-				case Platform.StandaloneOSXIntel64:
-				case Platform.StandaloneOSXPPC:
-				case Platform.StandaloneOSXUniversal:
+				case BuildTarget.StandaloneWinPlayer:
+				case BuildTarget.StandaloneWin64Player:
+				case BuildTarget.StandaloneLinux:
+				case BuildTarget.StandaloneLinux64:
+				case BuildTarget.StandaloneLinuxUniversal:
+				case BuildTarget.StandaloneOSXIntel:
+				case BuildTarget.StandaloneOSXIntel64:
+				case BuildTarget.StandaloneOSXPPC:
+				case BuildTarget.StandaloneOSXUniversal:
 					return true;
 			}
 			return false;

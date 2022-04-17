@@ -210,7 +210,7 @@ namespace AssetRipper.Core.IO.Asset
 
 		public LayoutInfo Info { get; }
 		public UnityVersion Version => Info.Version;
-		public Platform Platform => Info.Platform;
+		public BuildTarget Platform => Info.Platform;
 		public TransferInstructionFlags Flags => Info.Flags;
 
 		private bool IsAlignString { get; }

@@ -72,7 +72,7 @@ namespace AssetRipper.Core
 
 			public UnityVersion ExportVersion => ExportLayout.Version;
 
-			public Platform ExportPlatform => ExportLayout.Platform;
+			public BuildTarget ExportPlatform => ExportLayout.Platform;
 
 			public TransferInstructionFlags ExportFlags => ExportLayout.Flags;
 
@@ -82,7 +82,7 @@ namespace AssetRipper.Core
 
 			public UnityVersion Version => Layout.Version;
 
-			public Platform Platform => Layout.Platform;
+			public BuildTarget Platform => Layout.Platform;
 
 			public TransferInstructionFlags Flags => Layout.Flags;
 

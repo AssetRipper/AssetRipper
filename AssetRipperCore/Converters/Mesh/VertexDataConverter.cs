@@ -192,7 +192,7 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static bool NeedCopyData(IExportContainer container)
 		{
-			if (container.Platform == Platform.XBox360 && container.ExportPlatform != Platform.XBox360)
+			if (container.Platform == BuildTarget.XBox360 && container.ExportPlatform != BuildTarget.XBox360)
 			{
 				return true;
 			}
@@ -223,10 +223,10 @@ namespace AssetRipper.Core.Converters.Mesh
 			byte[] buffer = new byte[lastOffset + lastSize];
 			using (MemoryStream dstStream = new MemoryStream(buffer))
 			{
-				EndianType oendian = container.ExportPlatform == Platform.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
+				EndianType oendian = container.ExportPlatform == BuildTarget.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
 				using EndianWriter dst = new EndianWriter(dstStream, oendian);
 				using MemoryStream srcStream = new MemoryStream(originMesh.GetChannelsData());
-				EndianType iendian = container.Platform == Platform.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
+				EndianType iendian = container.Platform == BuildTarget.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
 				using EndianReader src = new EndianReader(srcStream, iendian);
 				CopyChannelsData(container, originMesh.VertexData, instance, src, dst);
 				if (NeedAppendSkin(container, instance))

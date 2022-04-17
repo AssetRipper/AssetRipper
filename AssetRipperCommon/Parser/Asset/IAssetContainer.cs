@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Parser.Asset
 		string Name { get; }
 		LayoutInfo Layout { get; }
 		UnityVersion Version { get; }
-		Platform Platform { get; }
+		BuildTarget Platform { get; }
 		TransferInstructionFlags Flags { get; }
 
 		IReadOnlyList<FileIdentifier> Dependencies { get; }

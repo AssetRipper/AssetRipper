@@ -65,7 +65,7 @@ namespace AssetRipper.Core.Configuration
 
 		#region Project Settings
 		public UnityVersion Version { get; private set; }
-		public Platform Platform { get; private set; }
+		public BuildTarget Platform { get; private set; }
 		public TransferInstructionFlags Flags { get; private set; }
 		#endregion
 
@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Configuration
 		public CoreConfiguration() => ResetToDefaultValues();
 
 		internal void SetProjectSettings(Layout.LayoutInfo info) => SetProjectSettings(info.Version, info.Platform, info.Flags);
-		internal void SetProjectSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		internal void SetProjectSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			Version = version;
 			Platform = platform;

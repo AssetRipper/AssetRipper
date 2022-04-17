@@ -56,7 +56,7 @@ namespace AssetRipper.Core.Project.Exporters
 			Logger.Info(LogCategory.Export, $"Writing raw to {path}");
 			try
 			{
-				LayoutInfo layoutInfo = new LayoutInfo(asset.AssetUnityVersion, Core.Parser.Files.Platform.NoTarget, asset.TransferInstructionFlags);
+				LayoutInfo layoutInfo = new LayoutInfo(asset.AssetUnityVersion, Core.Parser.Files.BuildTarget.NoTarget, asset.TransferInstructionFlags);
 				using MemoryStream memoryStream = new MemoryStream();
 				using AssetWriter writer = new AssetWriter(memoryStream, asset.EndianType, layoutInfo);
 				asset.Write(writer);

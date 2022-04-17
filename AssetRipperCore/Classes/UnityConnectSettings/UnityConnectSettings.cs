@@ -69,7 +69,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// 5.4.0 and greater and (Not Release or IsSupported)
 		/// </summary>
-		public static bool HasCrashReportingSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasCrashReportingSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 4))
 			{
@@ -81,27 +81,27 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			}
 			switch (platform)
 			{
-				case Platform.NoTarget:
-				case Platform.Android:
-				case Platform.iOS:
-				case Platform.tvOS:
-				case Platform.StandaloneWinPlayer:
-				case Platform.StandaloneWin64Player:
-				case Platform.StandaloneLinux:
-				case Platform.StandaloneLinux64:
-				case Platform.StandaloneLinuxUniversal:
-				case Platform.StandaloneOSXUniversal:
-				case Platform.StandaloneOSXIntel:
-				case Platform.StandaloneOSXIntel64:
-				case Platform.MetroPlayerX64:
-				case Platform.MetroPlayerX86:
-				case Platform.MetroPlayerARM:
-				case Platform.WebPlayerLZMA:
-				case Platform.WebPlayerLZMAStreamed:
-				case Platform.WebGL:
+				case BuildTarget.NoTarget:
+				case BuildTarget.Android:
+				case BuildTarget.iOS:
+				case BuildTarget.tvOS:
+				case BuildTarget.StandaloneWinPlayer:
+				case BuildTarget.StandaloneWin64Player:
+				case BuildTarget.StandaloneLinux:
+				case BuildTarget.StandaloneLinux64:
+				case BuildTarget.StandaloneLinuxUniversal:
+				case BuildTarget.StandaloneOSXUniversal:
+				case BuildTarget.StandaloneOSXIntel:
+				case BuildTarget.StandaloneOSXIntel64:
+				case BuildTarget.MetroPlayerX64:
+				case BuildTarget.MetroPlayerX86:
+				case BuildTarget.MetroPlayerARM:
+				case BuildTarget.WebPlayerLZMA:
+				case BuildTarget.WebPlayerLZMAStreamed:
+				case BuildTarget.WebGL:
 					return true;
 
-				case Platform.Tizen:
+				case BuildTarget.Tizen:
 					return version.IsGreaterEqual(5, 6);
 
 				default:
@@ -111,7 +111,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// Less than 5.4.0 or Not Release or IsSupported
 		/// </summary>
-		public static bool HasUnityPurchasingSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasUnityPurchasingSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 4))
 			{
@@ -123,23 +123,23 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			}
 			switch (platform)
 			{
-				case Platform.NoTarget:
-				case Platform.Android:
-				case Platform.iOS:
-				case Platform.tvOS:
-				case Platform.Tizen:
-				case Platform.StandaloneWinPlayer:
-				case Platform.StandaloneWin64Player:
-				case Platform.StandaloneLinux:
-				case Platform.StandaloneLinux64:
-				case Platform.StandaloneLinuxUniversal:
-				case Platform.StandaloneOSXUniversal:
-				case Platform.StandaloneOSXIntel:
-				case Platform.StandaloneOSXIntel64:
-				case Platform.MetroPlayerX64:
-				case Platform.MetroPlayerX86:
-				case Platform.MetroPlayerARM:
-				case Platform.WebGL:
+				case BuildTarget.NoTarget:
+				case BuildTarget.Android:
+				case BuildTarget.iOS:
+				case BuildTarget.tvOS:
+				case BuildTarget.Tizen:
+				case BuildTarget.StandaloneWinPlayer:
+				case BuildTarget.StandaloneWin64Player:
+				case BuildTarget.StandaloneLinux:
+				case BuildTarget.StandaloneLinux64:
+				case BuildTarget.StandaloneLinuxUniversal:
+				case BuildTarget.StandaloneOSXUniversal:
+				case BuildTarget.StandaloneOSXIntel:
+				case BuildTarget.StandaloneOSXIntel64:
+				case BuildTarget.MetroPlayerX64:
+				case BuildTarget.MetroPlayerX86:
+				case BuildTarget.MetroPlayerARM:
+				case BuildTarget.WebGL:
 					return true;
 
 				default:
@@ -149,7 +149,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// Less than 5.4.0 or Not Release or IsSupported
 		/// </summary>
-		public static bool HasUnityAnalyticsSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasUnityAnalyticsSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 4))
 			{
@@ -161,23 +161,23 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			}
 			switch (platform)
 			{
-				case Platform.NoTarget:
-				case Platform.Android:
-				case Platform.iOS:
-				case Platform.tvOS:
-				case Platform.Tizen:
-				case Platform.StandaloneWinPlayer:
-				case Platform.StandaloneWin64Player:
-				case Platform.StandaloneLinux:
-				case Platform.StandaloneLinux64:
-				case Platform.StandaloneLinuxUniversal:
-				case Platform.StandaloneOSXUniversal:
-				case Platform.StandaloneOSXIntel:
-				case Platform.StandaloneOSXIntel64:
-				case Platform.MetroPlayerX64:
-				case Platform.MetroPlayerX86:
-				case Platform.MetroPlayerARM:
-				case Platform.WebGL:
+				case BuildTarget.NoTarget:
+				case BuildTarget.Android:
+				case BuildTarget.iOS:
+				case BuildTarget.tvOS:
+				case BuildTarget.Tizen:
+				case BuildTarget.StandaloneWinPlayer:
+				case BuildTarget.StandaloneWin64Player:
+				case BuildTarget.StandaloneLinux:
+				case BuildTarget.StandaloneLinux64:
+				case BuildTarget.StandaloneLinuxUniversal:
+				case BuildTarget.StandaloneOSXUniversal:
+				case BuildTarget.StandaloneOSXIntel:
+				case BuildTarget.StandaloneOSXIntel64:
+				case BuildTarget.MetroPlayerX64:
+				case BuildTarget.MetroPlayerX86:
+				case BuildTarget.MetroPlayerARM:
+				case BuildTarget.WebGL:
 					return true;
 
 				default:
@@ -187,7 +187,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// 5.5.0 and greater and (Not Release or IsSupported)
 		/// </summary>
-		public static bool HasUnityAdsSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasUnityAdsSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 5))
 			{
@@ -199,23 +199,23 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			}
 			switch (platform)
 			{
-				case Platform.NoTarget:
-				case Platform.Android:
-				case Platform.iOS:
-				case Platform.tvOS:
-				case Platform.Tizen:
-				case Platform.StandaloneWinPlayer:
-				case Platform.StandaloneWin64Player:
-				case Platform.StandaloneLinux:
-				case Platform.StandaloneLinux64:
-				case Platform.StandaloneLinuxUniversal:
-				case Platform.StandaloneOSXUniversal:
-				case Platform.StandaloneOSXIntel:
-				case Platform.StandaloneOSXIntel64:
-				case Platform.MetroPlayerX64:
-				case Platform.MetroPlayerX86:
-				case Platform.MetroPlayerARM:
-				case Platform.WebGL:
+				case BuildTarget.NoTarget:
+				case BuildTarget.Android:
+				case BuildTarget.iOS:
+				case BuildTarget.tvOS:
+				case BuildTarget.Tizen:
+				case BuildTarget.StandaloneWinPlayer:
+				case BuildTarget.StandaloneWin64Player:
+				case BuildTarget.StandaloneLinux:
+				case BuildTarget.StandaloneLinux64:
+				case BuildTarget.StandaloneLinuxUniversal:
+				case BuildTarget.StandaloneOSXUniversal:
+				case BuildTarget.StandaloneOSXIntel:
+				case BuildTarget.StandaloneOSXIntel64:
+				case BuildTarget.MetroPlayerX64:
+				case BuildTarget.MetroPlayerX86:
+				case BuildTarget.MetroPlayerARM:
+				case BuildTarget.WebGL:
 					return true;
 
 				default:
@@ -225,7 +225,7 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		/// <summary>
 		/// 5.6.0 and greater and (Not Release or IsSupported)
 		/// </summary>
-		public static bool HasPerformanceReportingSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		public static bool HasPerformanceReportingSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			if (version.IsLess(5, 6))
 			{
@@ -237,23 +237,23 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			}
 			switch (platform)
 			{
-				case Platform.NoTarget:
-				case Platform.Android:
-				case Platform.iOS:
-				case Platform.tvOS:
-				case Platform.Tizen:
-				case Platform.StandaloneWinPlayer:
-				case Platform.StandaloneWin64Player:
-				case Platform.StandaloneLinux:
-				case Platform.StandaloneLinux64:
-				case Platform.StandaloneLinuxUniversal:
-				case Platform.StandaloneOSXUniversal:
-				case Platform.StandaloneOSXIntel:
-				case Platform.StandaloneOSXIntel64:
-				case Platform.MetroPlayerX64:
-				case Platform.MetroPlayerX86:
-				case Platform.MetroPlayerARM:
-				case Platform.WebGL:
+				case BuildTarget.NoTarget:
+				case BuildTarget.Android:
+				case BuildTarget.iOS:
+				case BuildTarget.tvOS:
+				case BuildTarget.Tizen:
+				case BuildTarget.StandaloneWinPlayer:
+				case BuildTarget.StandaloneWin64Player:
+				case BuildTarget.StandaloneLinux:
+				case BuildTarget.StandaloneLinux64:
+				case BuildTarget.StandaloneLinuxUniversal:
+				case BuildTarget.StandaloneOSXUniversal:
+				case BuildTarget.StandaloneOSXIntel:
+				case BuildTarget.StandaloneOSXIntel64:
+				case BuildTarget.MetroPlayerX64:
+				case BuildTarget.MetroPlayerX86:
+				case BuildTarget.MetroPlayerARM:
+				case BuildTarget.WebGL:
 					return true;
 
 				default:
@@ -348,15 +348,15 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 		{
 			return HasEnabled(version) ? TestConfigUrl : "https://config.uca.cloud.unity3d.com";
 		}
-		private CrashReportingSettings GetCrashReportingSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		private CrashReportingSettings GetCrashReportingSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			return HasCrashReportingSettings(version, platform, flags) ? CrashReportingSettings : new CrashReportingSettings();
 		}
-		private UnityAnalyticsSettings GetUnityAnalyticsSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		private UnityAnalyticsSettings GetUnityAnalyticsSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			return HasUnityAnalyticsSettings(version, platform, flags) ? UnityAnalyticsSettings : new UnityAnalyticsSettings();
 		}
-		private UnityAdsSettings GetUnityAdsSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		private UnityAdsSettings GetUnityAdsSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			return HasUnityAdsSettings(version, platform, flags) ? UnityAdsSettings : new UnityAdsSettings();
 		}

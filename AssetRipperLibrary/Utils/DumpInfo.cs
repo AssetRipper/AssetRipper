@@ -188,7 +188,7 @@ namespace AssetRipper.Library.Utils
 				bool SerializeTypeTrees = container.Metadata.EnableTypeTree;
 				SerializedType[] Types = container.Metadata.Types;
 				UnityVersion Version = container.Metadata.UnityVersion;
-				Core.Parser.Files.Platform Platform = container.Metadata.TargetPlatform;
+				Core.Parser.Files.BuildTarget Platform = container.Metadata.TargetPlatform;
 				sw.WriteLine($"	File.Metadata.Hierarchy:");
 				sw.WriteLine($"		Hierarchy.Version: {Version}");
 				sw.WriteLine($"		Hierarchy.Platform: {Platform}");

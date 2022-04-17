@@ -42,7 +42,7 @@ namespace ShaderTextRestorer.IO
 
 		public Shader Shader { get; }
 		public UnityVersion Version => Shader.SerializedFile.Version;
-		public Platform Platform => Shader.SerializedFile.Platform;
+		public BuildTarget Platform => Shader.SerializedFile.Platform;
 
 		private readonly Func<UnityVersion, GPUPlatform, ShaderTextExporter> m_exporterInstantiator;
 	}

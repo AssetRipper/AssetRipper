@@ -270,7 +270,7 @@ namespace AssetRipper.Library.Utils
 		}
 		public static GameCollection CreateGameCollection()
 		{
-			var layoutInfo = new LayoutInfo(new UnityVersion(), Platform.StandaloneWin64Player, TransferInstructionFlags.NoTransferInstructionFlags);
+			var layoutInfo = new LayoutInfo(new UnityVersion(), BuildTarget.StandaloneWin64Player, TransferInstructionFlags.NoTransferInstructionFlags);
 			var gameCollection = new GameCollection(layoutInfo);
 			return gameCollection;
 		}
@@ -314,7 +314,7 @@ namespace AssetRipper.Library.Utils
 				var platform = serializedFileScheme.Metadata != null &&
 					serializedFileScheme.Metadata.TargetPlatform != 0 ?
 					serializedFileScheme.Metadata.TargetPlatform
-					: Platform.StandaloneWin64Player;
+					: BuildTarget.StandaloneWin64Player;
 				var version = serializedFileScheme.Metadata != null ?
 					serializedFileScheme.Metadata.UnityVersion
 					: new UnityVersion();

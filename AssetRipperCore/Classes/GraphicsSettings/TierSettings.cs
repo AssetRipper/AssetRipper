@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 	{
 		public TierSettings() { }
 
-		public TierSettings(PlatformShaderSettings settings, Platform platfrom, GraphicsTier tier, UnityVersion version, TransferInstructionFlags flags)
+		public TierSettings(PlatformShaderSettings settings, BuildTarget platfrom, GraphicsTier tier, UnityVersion version, TransferInstructionFlags flags)
 		{
 			BuildTarget = platfrom.PlatformToBuildGroup();
 			Tier = tier;
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			Automatic = false;
 		}
 
-		public TierSettings(TierGraphicsSettings settings, Platform platfrom, GraphicsTier tier)
+		public TierSettings(TierGraphicsSettings settings, BuildTarget platfrom, GraphicsTier tier)
 		{
 			BuildTarget = platfrom.PlatformToBuildGroup();
 			Tier = tier;

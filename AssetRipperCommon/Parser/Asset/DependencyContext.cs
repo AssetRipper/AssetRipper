@@ -126,7 +126,7 @@ namespace AssetRipper.Core.Parser.Asset
 
 		public LayoutInfo Info { get; }
 		public UnityVersion Version => Info.Version;
-		public Platform Platform => Info.Platform;
+		public BuildTarget Platform => Info.Platform;
 		public TransferInstructionFlags Flags => Info.Flags;
 		public bool IsLog { get; }
 		public string PointerName { get; private set; }

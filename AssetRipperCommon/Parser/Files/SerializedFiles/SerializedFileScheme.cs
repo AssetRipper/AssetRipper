@@ -87,7 +87,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			Flags = TransferInstructionFlags.SerializeGameRelease;
 			if (SerializedFileMetadata.HasPlatform(Header.Version))
 			{
-				if (Metadata.TargetPlatform == Platform.NoTarget)
+				if (Metadata.TargetPlatform == BuildTarget.NoTarget)
 				{
 					Flags = TransferInstructionFlags.NoTransferInstructionFlags;
 					if (FilePath.EndsWith(".unity", StringComparison.Ordinal))

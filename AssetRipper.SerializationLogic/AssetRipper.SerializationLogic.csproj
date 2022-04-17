@@ -8,7 +8,7 @@
 		<OutputPath>..\Bins\AssetRipper.SerializationLogic\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.SerializationLogic\$(Configuration)\</IntermediateOutputPath>
 		<AssemblyName>AssetRipper.SerializationLogic</AssemblyName>
-		<RootNamespace>AssetRipper.Core</RootNamespace>
+		<RootNamespace>AssetRipper.SerializationLogic</RootNamespace>
 		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
 		<Configurations>Debug;Release</Configurations>

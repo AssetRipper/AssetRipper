@@ -153,7 +153,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 			else
 			{
-				const Platform DefaultPlatform = Platform.StandaloneWinPlayer;
+				const BuildTarget DefaultPlatform = BuildTarget.StandaloneWinPlayer;
 				const TransferInstructionFlags DefaultFlags = TransferInstructionFlags.SerializeGameRelease;
 				BundleFileScheme bundle = GetBundleFile();
 				if (bundle == null)
