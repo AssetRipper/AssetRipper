@@ -8,12 +8,12 @@ using System;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedPackageRequirements : IYAMLExportable
+	public sealed class SerializedPackageRequirements : IYamlExportable
 	{
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Requirements", Array.Empty<string>().ExportYAML()); // As we have an empty array we don't need to use SerializedPackageRequirement
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_Requirements", Array.Empty<string>().ExportYaml()); // As we have an empty array we don't need to use SerializedPackageRequirement
 			node.Add("m_StatusMessage", default(string));
 			node.Add("m_CombinedStatus", default(sbyte));
 			return node;

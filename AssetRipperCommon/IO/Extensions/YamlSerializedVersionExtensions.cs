@@ -2,9 +2,9 @@
 
 namespace AssetRipper.Core.IO.Extensions
 {
-	public static class SerializedVersionYAMLExtensions
+	public static class YamlSerializedVersionExtensions
 	{
-		public static void AddSerializedVersion(this YAMLMappingNode _this, int version)
+		public static void AddSerializedVersion(this YamlMappingNode _this, int version)
 		{
 			if (version > 1)
 			{
@@ -12,7 +12,7 @@ namespace AssetRipper.Core.IO.Extensions
 			}
 		}
 
-		public static void ForceAddSerializedVersion(this YAMLMappingNode _this, int version)
+		public static void ForceAddSerializedVersion(this YamlMappingNode _this, int version)
 		{
 			if (version > 0)
 			{
@@ -20,7 +20,7 @@ namespace AssetRipper.Core.IO.Extensions
 			}
 		}
 
-		public static void InsertSerializedVersion(this YAMLMappingNode _this, int version)
+		public static void InsertSerializedVersion(this YamlMappingNode _this, int version)
 		{
 			if (version > 1)
 			{

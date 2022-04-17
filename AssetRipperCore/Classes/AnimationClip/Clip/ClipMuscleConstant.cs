@@ -7,7 +7,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Clip
 {
-	public sealed class ClipMuscleConstant : IAssetReadable, IYAMLExportable
+	public sealed class ClipMuscleConstant : IAssetReadable, IYamlExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -121,7 +121,7 @@ namespace AssetRipper.Core.Classes.AnimationClip.Clip
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new System.NotImplementedException();
 		}

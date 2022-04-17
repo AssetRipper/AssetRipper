@@ -6,7 +6,7 @@ using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public sealed class LightProbeOcclusion : IAssetReadable, IYAMLExportable
+	public sealed class LightProbeOcclusion : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 5.6.0b2 and greater
@@ -23,14 +23,14 @@ namespace AssetRipper.Core.Classes.LightProbes
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(ProbeOcclusionLightIndexName, ProbeOcclusionLightIndex.ExportYAML(true));
-			node.Add(OcclusionName, Occlusion.ExportYAML());
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(ProbeOcclusionLightIndexName, ProbeOcclusionLightIndex.ExportYaml(true));
+			node.Add(OcclusionName, Occlusion.ExportYaml());
 			if (HasOcclusionMaskChannel(container.ExportVersion))
 			{
-				node.Add(OcclusionMaskChannelName, OcclusionMaskChannel.ExportYAML());
+				node.Add(OcclusionMaskChannelName, OcclusionMaskChannel.ExportYaml());
 			}
 
 			return node;

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public sealed class BuiltinShaderSettings : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class BuiltinShaderSettings : IAssetReadable, IYamlExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -22,20 +22,20 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			yield return context.FetchDependency(Shader, ShaderName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ModeName, (int)Mode);
-			node.Add(ShaderName, Shader.ExportYAML(container));
+			node.Add(ShaderName, Shader.ExportYaml(container));
 			return node;
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container, string shaderName)
+		public YamlNode ExportYaml(IExportContainer container, string shaderName)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ModeName, (int)BuiltinShaderMode.Builtin);
 			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(shaderName, container.ExportVersion);
-			node.Add(ShaderName, buildInAsset.ToExportPointer().ExportYAML(container));
+			node.Add(ShaderName, buildInAsset.ToExportPointer().ExportYaml(container));
 			return node;
 		}
 

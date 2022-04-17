@@ -84,9 +84,9 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(CompressedFormatName, CompressedFormat);
 			node.Add(UncompressedFormatName, UncompressedFormat);
 			if (HasRecommendedFormat(container.ExportVersion))

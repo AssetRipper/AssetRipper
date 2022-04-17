@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Physics2DSettings
 {
-	public sealed class PhysicsJobOptions2D : IAssetReadable, IYAMLExportable
+	public sealed class PhysicsJobOptions2D : IAssetReadable, IYamlExportable
 	{
 		public PhysicsJobOptions2D() { }
 		public PhysicsJobOptions2D(bool _)
@@ -63,9 +63,9 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			IslandSolverContactsPerJob = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(UseMultithreadingName, UseMultithreading);
 			node.Add(UseConsistencySortingName, UseConsistencySorting);

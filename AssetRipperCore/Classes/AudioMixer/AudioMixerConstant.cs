@@ -9,7 +9,7 @@ using AssetRipper.Yaml.Extensions;
 namespace AssetRipper.Core.Classes.AudioMixer
 {
 #warning TODO: not implemented
-	public sealed class AudioMixerConstant : IAssetReadable, IYAMLExportable
+	public sealed class AudioMixerConstant : IAssetReadable, IYamlExportable
 	{
 		/*public static int ToSerializedVersion(Version version)
 		{
@@ -49,22 +49,22 @@ namespace AssetRipper.Core.Classes.AudioMixer
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			//node.AddSerializedVersion(ToSerializedVersion(container.Version));
-			node.Add(GroupsName, Groups.ExportYAML(container));
-			node.Add(GroupGUIDsName, GroupGUIDs.ExportYAML(container));
-			node.Add(EffectsName, Effects.ExportYAML(container));
-			node.Add(EffectGUIDsName, EffectGUIDs.ExportYAML(container));
+			node.Add(GroupsName, Groups.ExportYaml(container));
+			node.Add(GroupGUIDsName, GroupGUIDs.ExportYaml(container));
+			node.Add(EffectsName, Effects.ExportYaml(container));
+			node.Add(EffectGUIDsName, EffectGUIDs.ExportYaml(container));
 			node.Add(NumSideChainBuffersName, NumSideChainBuffers);
-			node.Add(SnapshotsName, Snapshots.ExportYAML(container));
-			node.Add(SnapshotGUIDsName, SnapshotGUIDs.ExportYAML(container));
-			//node.Add("groupNameBuffer", GroupNameBuffer.ExportYAML(container));
-			//node.Add("snapshotNameBuffer", SnapshotNameBuffer.ExportYAML(container));
-			//node.Add("pluginEffectNameBuffer", PluginEffectNameBuffer.ExportYAML(container));
-			node.Add(ExposedParameterNamesName, ExposedParameterNames.ExportYAML(true));
-			node.Add(ExposedParameterIndicesName, ExposedParameterIndices.ExportYAML(true));
+			node.Add(SnapshotsName, Snapshots.ExportYaml(container));
+			node.Add(SnapshotGUIDsName, SnapshotGUIDs.ExportYaml(container));
+			//node.Add("groupNameBuffer", GroupNameBuffer.ExportYaml(container));
+			//node.Add("snapshotNameBuffer", SnapshotNameBuffer.ExportYaml(container));
+			//node.Add("pluginEffectNameBuffer", PluginEffectNameBuffer.ExportYaml(container));
+			node.Add(ExposedParameterNamesName, ExposedParameterNames.ExportYaml(true));
+			node.Add(ExposedParameterIndicesName, ExposedParameterIndices.ExportYaml(true));
 			return node;
 		}
 

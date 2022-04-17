@@ -9,7 +9,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorStateMachine
 {
-	public sealed class ChildAnimatorState : IYAMLExportable
+	public sealed class ChildAnimatorState : IYamlExportable
 	{
 		public ChildAnimatorState(AnimatorState state, Vector3f position)
 		{
@@ -27,12 +27,12 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 			return 1;
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.ForceAddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(StateName, State.ExportYAML(container));
-			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(StateName, State.ExportYaml(container));
+			node.Add(PositionName, Position.ExportYaml(container));
 			return node;
 		}
 

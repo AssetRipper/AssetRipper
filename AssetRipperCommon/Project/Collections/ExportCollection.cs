@@ -25,11 +25,11 @@ namespace AssetRipper.Core.Project.Collections
 			using var fileStream = System.IO.File.Create(metaPath);
 			using var streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
 
-			YAMLWriter writer = new YAMLWriter();
+			YamlWriter writer = new YamlWriter();
 			writer.IsWriteDefaultTag = false;
 			writer.IsWriteVersion = false;
 			writer.IsFormatKeys = true;
-			YAMLDocument doc = meta.ExportYAMLDocument(container);
+			YamlDocument doc = meta.ExportYamlDocument(container);
 			writer.AddDocument(doc);
 			writer.Write(streamWriter);
 		}

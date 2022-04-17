@@ -56,15 +56,15 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 			TextColor.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(BackgroundName, Background.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(BackgroundName, Background.ExportYaml(container));
 			if (HasScaledBackgrounds(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(ScaledBackgroundsName, ScaledBackgrounds.ExportYAML(container));
+				node.Add(ScaledBackgroundsName, ScaledBackgrounds.ExportYaml(container));
 			}
-			node.Add(TextColorName, TextColor.ExportYAML(container));
+			node.Add(TextColorName, TextColor.ExportYaml(container));
 			return node;
 		}
 

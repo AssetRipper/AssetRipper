@@ -774,9 +774,9 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			yield return context.FetchDependency(LightmapParameters, LightmapParametersName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ResolutionName, Resolution);
 			if (HasBakeResolution(container.ExportVersion))
@@ -805,7 +805,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			{
 				node.Add(BounceBoostName, BounceBoost);
 				node.Add(BounceIntensityName, BounceIntensity);
-				node.Add(SkyLightColorName, SkyLightColor.ExportYAML(container));
+				node.Add(SkyLightColorName, SkyLightColor.ExportYaml(container));
 				node.Add(SkyLightIntensityName, SkyLightIntensity);
 				node.Add(QualityName, Quality);
 				node.Add(BouncesName, Bounces);
@@ -861,7 +861,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			if (HasLightmapParameters(container.ExportVersion))
 			{
-				node.Add(LightmapParametersName, LightmapParameters.ExportYAML(container));
+				node.Add(LightmapParametersName, LightmapParameters.ExportYaml(container));
 			}
 			if (HasLightmapsBakeMode(container.ExportVersion))
 			{

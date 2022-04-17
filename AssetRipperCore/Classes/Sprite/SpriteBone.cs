@@ -59,21 +59,21 @@ namespace AssetRipper.Core.Classes.Sprite
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(NameName, Name);
 			if (HasGuid(container.ExportVersion))
 			{
 				node.Add(GuidName, Guid);
 			}
-			node.Add(PositionName, Position.ExportYAML(container));
-			node.Add(RotationName, Rotation.ExportYAML(container));
+			node.Add(PositionName, Position.ExportYaml(container));
+			node.Add(RotationName, Rotation.ExportYaml(container));
 			node.Add(LengthName, Length);
 			node.Add(ParentIdName, ParentId);
 			if (HasColor(container.ExportVersion))
 			{
-				node.Add(ColorName, Color.ExportYAML(container));
+				node.Add(ColorName, Color.ExportYaml(container));
 			}
 			return node;
 		}

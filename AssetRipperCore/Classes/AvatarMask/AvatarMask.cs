@@ -19,11 +19,11 @@ namespace AssetRipper.Core.Classes.AvatarMask
 			Elements = reader.ReadAssetArray<TransformMaskElement>();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(MaskName, Mask.ExportYAML(true));
-			node.Add(ElementsName, Elements.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(MaskName, Mask.ExportYaml(true));
+			node.Add(ElementsName, Elements.ExportYaml(container));
 			return node;
 		}
 

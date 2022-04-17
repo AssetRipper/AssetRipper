@@ -116,38 +116,38 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(PatchesName, Patches.ExportYAML(container));
-			node.Add(DetailPrototypesName, DetailPrototypes.ExportYAML(container));
+			node.Add(PatchesName, Patches.ExportYaml(container));
+			node.Add(DetailPrototypesName, DetailPrototypes.ExportYaml(container));
 			node.Add(PatchCountName, PatchCount);
 			node.Add(PatchSamplesName, PatchSamples);
 			if (HasRandomRotations(container.ExportVersion))
 			{
-				node.Add(RandomRotationsName, RandomRotations.ExportYAML(container));
+				node.Add(RandomRotationsName, RandomRotations.ExportYaml(container));
 			}
 
 			if (HasAtlasTexture(container.ExportVersion))
 			{
-				node.Add(AtlasTextureName, AtlasTexture.ExportYAML(container));
+				node.Add(AtlasTextureName, AtlasTexture.ExportYaml(container));
 			}
 
-			node.Add(WavingGrassTintName, WavingGrassTint.ExportYAML(container));
+			node.Add(WavingGrassTintName, WavingGrassTint.ExportYaml(container));
 			node.Add(WavingGrassStrengthName, WavingGrassStrength);
 			node.Add(WavingGrassAmountName, WavingGrassAmount);
 			node.Add(WavingGrassSpeedName, WavingGrassSpeed);
 			if (HasDetailBillboardShader(container.ExportVersion))
 			{
-				node.Add(DetailBillboardShaderName, DetailBillboardShader.ExportYAML(container));
-				node.Add(DetailMeshLitShaderName, DetailMeshLitShader.ExportYAML(container));
-				node.Add(DetailMeshGrassShaderName, DetailMeshGrassShader.ExportYAML(container));
+				node.Add(DetailBillboardShaderName, DetailBillboardShader.ExportYaml(container));
+				node.Add(DetailMeshLitShaderName, DetailMeshLitShader.ExportYaml(container));
+				node.Add(DetailMeshGrassShaderName, DetailMeshGrassShader.ExportYaml(container));
 			}
-			TreeDatabase.ExportYAML(container, node);
+			TreeDatabase.ExportYaml(container, node);
 			if (!HasAtlasTexture(container.ExportVersion))
 			{
-				node.Add(PreloadTextureAtlasDataName, PreloadTextureAtlasData.ExportYAML(container));
+				node.Add(PreloadTextureAtlasDataName, PreloadTextureAtlasData.ExportYaml(container));
 			}
 			return node;
 		}
@@ -175,35 +175,35 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 		}
 
-		/*private YAMLNode ExportDetailBillboardShader(IExportContainer container)
+		/*private YamlNode ExportDetailBillboardShader(IExportContainer container)
 		{
 			if (HasDetailBillboardShader(container.Version))
 			{
-				return DetailBillboardShader.ExportYAML(container);
+				return DetailBillboardShader.ExportYaml(container);
 			}
 
 			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(EngineBuiltInAssets.TerrainBillboardWavingDoublePass, container.ExportVersion);
-			return buildInAsset.ToExportPointer().ExportYAML(container);
+			return buildInAsset.ToExportPointer().ExportYaml(container);
 		}
-		private YAMLNode ExportDetailMeshLitShader(IExportContainer container)
+		private YamlNode ExportDetailMeshLitShader(IExportContainer container)
 		{
 			if (HasDetailBillboardShader(container.Version))
 			{
-				return DetailMeshLitShader.ExportYAML(container);
+				return DetailMeshLitShader.ExportYaml(container);
 			}
 
 			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(EngineBuiltInAssets.TerrainVertexLit, container.ExportVersion);
-			return buildInAsset.ToExportPointer().ExportYAML(container);
+			return buildInAsset.ToExportPointer().ExportYaml(container);
 		}
-		private YAMLNode ExportDetailMeshGrassShader(IExportContainer container)
+		private YamlNode ExportDetailMeshGrassShader(IExportContainer container)
 		{
 			if (HasDetailBillboardShader(container.Version))
 			{
-				return DetailMeshGrassShader.ExportYAML(container);
+				return DetailMeshGrassShader.ExportYaml(container);
 			}
 
 			EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(EngineBuiltInAssets.TerrainWavingDoublePass, container.ExportVersion);
-			return buildInAsset.ToExportPointer().ExportYAML(container);
+			return buildInAsset.ToExportPointer().ExportYaml(container);
 		}*/
 
 		public DetailPatch[] Patches { get; set; }

@@ -28,9 +28,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			writer.Write(FrameCount);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(NameName, Name.String);
 			node.Add(NameHashName, NameHash);
 			node.Add(FrameIndexName, FrameIndex);

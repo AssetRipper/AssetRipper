@@ -19,10 +19,10 @@ namespace AssetRipper.Core.Classes.Mesh
 			Data.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(DataName, Data.ExportYAML(true));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(DataName, Data.ExportYaml(true));
 			return node;
 		}
 

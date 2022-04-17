@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Light
 {
-	public sealed class ShadowSettings : IAssetReadable, IYAMLExportable
+	public sealed class ShadowSettings : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 5.4.0 and greater
@@ -84,9 +84,9 @@ namespace AssetRipper.Core.Classes.Light
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(TypeName, (int)Type);
 			node.Add(ResolutionName, Resolution);
 			node.Add(CustomResolutionName, CustomResolution);
@@ -96,7 +96,7 @@ namespace AssetRipper.Core.Classes.Light
 			node.Add(NearPlaneName, NearPlane);
 			if (HasCullingMatrixOverride(container.ExportVersion))
 			{
-				node.Add(CullingMatrixOverrideName, GetCullingMatrixOverride(container.Version).ExportYAML(container));
+				node.Add(CullingMatrixOverrideName, GetCullingMatrixOverride(container.Version).ExportYaml(container));
 				node.Add(UseCullingMatrixOverrideName, UseCullingMatrixOverride);
 			}
 			return node;

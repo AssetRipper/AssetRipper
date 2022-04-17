@@ -52,13 +52,13 @@ namespace AssetRipper.Core.Classes.ResourceManager
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(ContainerName, Container.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(ContainerName, Container.ExportYaml(container));
 			if (HasDependentAssets(container.Version, container.ExportFlags))
 			{
-				node.Add(DependentAssetsName, DependentAssets.ExportYAML(container));
+				node.Add(DependentAssetsName, DependentAssets.ExportYaml(container));
 			}
 			return node;
 		}

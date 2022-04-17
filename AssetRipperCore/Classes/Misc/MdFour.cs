@@ -29,11 +29,11 @@ namespace AssetRipper.Core.Classes.Misc
 			writer.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.Version));
-			node.Add(Md4HashName, Md4Hash.ExportYAML());
+			node.Add(Md4HashName, Md4Hash.ExportYaml());
 			return node;
 		}
 

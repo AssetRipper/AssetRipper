@@ -43,9 +43,9 @@ namespace AssetRipper.Core.Classes.PhysicMaterial
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(DynamicFrictionName, DynamicFriction);
 			node.Add(StaticFrictionName, StaticFriction);
 			node.Add(BouncinessName, Bounciness);

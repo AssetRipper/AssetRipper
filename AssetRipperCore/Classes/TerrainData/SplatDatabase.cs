@@ -83,20 +83,20 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (HasTerrainLayers(container.ExportVersion))
 			{
-				node.Add(TerrainLayersName, TerrainLayers.ExportYAML(container));
+				node.Add(TerrainLayersName, TerrainLayers.ExportYaml(container));
 			}
 			else
 			{
-				node.Add(SplatsName, Splats.ExportYAML(container));
+				node.Add(SplatsName, Splats.ExportYaml(container));
 			}
 
-			node.Add(AlphaTexturesName, AlphaTextures.ExportYAML(container));
+			node.Add(AlphaTexturesName, AlphaTextures.ExportYaml(container));
 			node.Add(AlphamapResolutionName, AlphamapResolution);
 			node.Add(BaseMapResolutionName, BaseMapResolution);
 			if (HasColorSpace(container.ExportVersion))

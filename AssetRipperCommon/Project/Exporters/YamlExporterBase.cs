@@ -22,8 +22,8 @@ namespace AssetRipper.Core.Project.Exporters
 		{
 			using Stream fileStream = File.Create(path);
 			using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
-			YAMLWriter writer = new YAMLWriter();
-			YAMLDocument doc = asset.ExportYAMLDocument(container);
+			YamlWriter writer = new YamlWriter();
+			YamlDocument doc = asset.ExportYamlDocument(container);
 			writer.AddDocument(doc);
 			writer.Write(streamWriter);
 			return true;
@@ -39,11 +39,11 @@ namespace AssetRipper.Core.Project.Exporters
 		{
 			using Stream fileStream = File.Create(path);
 			using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
-			YAMLWriter writer = new YAMLWriter();
+			YamlWriter writer = new YamlWriter();
 			writer.WriteHead(streamWriter);
 			foreach (IUnityObjectBase asset in assets)
 			{
-				YAMLDocument doc = asset.ExportYAMLDocument(container);
+				YamlDocument doc = asset.ExportYamlDocument(container);
 				writer.WriteDocument(doc);
 			}
 			writer.WriteTail(streamWriter);
@@ -52,7 +52,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
-			throw new NotSupportedException("YAML supports only single file export");
+			throw new NotSupportedException("Yaml supports only single file export");
 		}
 
 		public abstract IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset);

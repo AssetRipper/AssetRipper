@@ -151,9 +151,9 @@ namespace AssetRipper.Core.Classes.AudioManager
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(VolumeName, Volume);
 			node.Add(RolloffScaleName, RolloffScale);

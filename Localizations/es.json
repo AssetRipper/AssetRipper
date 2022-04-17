@@ -79,7 +79,7 @@
     "loading_step_pre_processing": "Pre-Procesando Archivos",
     "select_asset_to_view_info": "Selecciona un asset de la ventana de la izquierda para ver más información sobre él",
     "asset_tab_basic": "Información Básica",
-    "asset_tab_yaml": "YAML",
+    "asset_tab_yaml": "Yaml",
     "asset_tab_image": "Imagen",
     "asset_tab_audio": "Audio",
     "asset_tab_audio_play": "Reproducir",
@@ -143,10 +143,10 @@
     "shader_asset_export_title": "Formato de exportación de Shaders",
     "shader_asset_format_dummy": "Shader básico",
     "shader_asset_format_dummy_description": "Exporta los shaders en su formato más simple (pero el más funcional). Aunque contiene los campos de datos como \"Propiedades\" y FallBack, generalmente usa código de shader opaco.",
-    "shader_asset_format_yaml": "YAML Asset",
+    "shader_asset_format_yaml": "Yaml Asset",
     "script_export_format_decompiled": "Decompilado",
     "script_export_format_decompiled_description": "El decompilador ILSpy es utilizado para generar scripts CS. Es un método robusto y eficaz. Aunque también aumenta el tiempo de exportación y contiene bastantes errores, pero con la experiencia necesaria, se pueden arreglar manualmente.",
     "script_export_format_hybrid": "Híbrida",
     "script_export_format_dll_with_renaming": "Exportación de DLL renombrados",
-    "shader_asset_format_yaml_description": "Experimental. Exporta el shader como YAML asset. Solamente visible en el editor. Existe la probabilidad de que, de manera aleatoria, el editor corrompa estos archivos."
+    "shader_asset_format_yaml_description": "Experimental. Exporta el shader como Yaml asset. Solamente visible en el editor. Existe la probabilidad de que, de manera aleatoria, el editor corrompa estos archivos."
 }

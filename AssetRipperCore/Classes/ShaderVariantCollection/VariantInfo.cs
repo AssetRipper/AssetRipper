@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ShaderVariantCollection
 {
-	public sealed class VariantInfo : IAssetReadable, IYAMLExportable
+	public sealed class VariantInfo : IAssetReadable, IYamlExportable
 	{
 		public static bool operator ==(VariantInfo left, VariantInfo right)
 		{
@@ -22,9 +22,9 @@ namespace AssetRipper.Core.Classes.ShaderVariantCollection
 			PassType = (PassType)reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(KeywordsName, Keywords);
 			node.Add(PassTypeName, (int)PassType);
 			return node;

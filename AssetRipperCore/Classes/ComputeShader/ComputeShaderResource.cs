@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ComputeShader
 {
-	public sealed class  ComputeShaderResource : IAssetReadable, IYAMLExportable
+	public sealed class  ComputeShaderResource : IAssetReadable, IYamlExportable
 	{
 		public static bool HasGeneratedName(UnityVersion version) => version.IsGreaterEqual(5, 1, 0, UnityVersionType.Final, 3);
 
@@ -44,13 +44,13 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("name", Name.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("name", Name.ExportYaml(container));
 			if (HasGeneratedName(container.Version))
 			{
-				node.Add("generatedName", GeneratedName.ExportYAML(container));
+				node.Add("generatedName", GeneratedName.ExportYaml(container));
 			}
 			node.Add("bindPoint", BindPoint);
 			if (HasSecondaryBindPoint(container.Version))
@@ -59,7 +59,7 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			}
 			if (HasComputeBufferCounter(container.Version))
 			{
-				node.Add("counter", Counter.ExportYAML(container));
+				node.Add("counter", Counter.ExportYaml(container));
 			}
 			if (HasSamplerBindPoint(container.Version))
 			{

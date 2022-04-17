@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public sealed class Matrix3x4f : IAssetReadable, IYAMLExportable
+	public sealed class Matrix3x4f : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -22,9 +22,9 @@ namespace AssetRipper.Core.Classes.LightProbes
 			E23 = reader.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(E00Name, E00);
 			node.Add(E01Name, E01);
 			node.Add(E02Name, E02);

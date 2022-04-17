@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public sealed class XForm : IAssetReadable, IYAMLExportable
+	public sealed class XForm : IAssetReadable, IYamlExportable
 	{
 		public const string TName = "t";
 		public const string QName = "q";
@@ -44,12 +44,12 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TName, T.ExportYAML(container));
-			node.Add(QName, Q.ExportYAML(container));
-			node.Add(SName, S.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(TName, T.ExportYaml(container));
+			node.Add(QName, Q.ExportYaml(container));
+			node.Add(SName, S.ExportYaml(container));
 			return node;
 		}
 

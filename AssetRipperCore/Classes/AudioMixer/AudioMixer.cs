@@ -38,18 +38,18 @@ namespace AssetRipper.Core.Classes.AudioMixer
 
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			//node.AddSerializedVersion(ToSerializedVersion(container.Version));
-			node.Add(OutputGroupName, OutputGroup.ExportYAML(container));
-			node.Add(MasterGroupName, MasterGroup.ExportYAML(container));
-			node.Add(SnapshotsName, Snapshots.ExportYAML(container));
-			node.Add(StartSnapshotName, StartSnapshot.ExportYAML(container));
+			node.Add(OutputGroupName, OutputGroup.ExportYaml(container));
+			node.Add(MasterGroupName, MasterGroup.ExportYaml(container));
+			node.Add(SnapshotsName, Snapshots.ExportYaml(container));
+			node.Add(StartSnapshotName, StartSnapshot.ExportYaml(container));
 			node.Add(SuspendThresholdName, SuspendThreshold);
 			node.Add(EnableSuspendName, EnableSuspend);
 			node.Add(UpdateModeName, UpdateMode);
-			node.Add(MixerConstantName, MixerConstant.ExportYAML(container));
+			node.Add(MixerConstantName, MixerConstant.ExportYaml(container));
 			return node;
 		}
 

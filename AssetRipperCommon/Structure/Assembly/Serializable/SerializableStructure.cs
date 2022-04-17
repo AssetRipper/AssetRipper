@@ -43,15 +43,15 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.GetField(i);
 				if (IsAvailable(etalon))
 				{
-					node.Add(etalon.Name, Fields[i].ExportYAML(container, etalon));
+					node.Add(etalon.Name, Fields[i].ExportYaml(container, etalon));
 				}
 			}
 			return node;

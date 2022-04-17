@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LODGroup
 {
-	public sealed class LOD : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class LOD : IAssetReadable, IYamlExportable, IDependent
 	{
 		/// <summary>
 		/// 5.0.0 to 5.1.0 exclusive
@@ -43,12 +43,12 @@ namespace AssetRipper.Core.Classes.LODGroup
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ScreenRelativeHeightName, ScreenRelativeHeight);
 			node.Add(FadeTransitionWidthName, FadeTransitionWidth);
-			node.Add(RenderersName, Renderers.ExportYAML(container));
+			node.Add(RenderersName, Renderers.ExportYaml(container));
 			return node;
 		}
 

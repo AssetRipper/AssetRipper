@@ -40,10 +40,10 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(GameObject, GameObjectName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(GameObjectName, GameObject.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(GameObjectName, GameObject.ExportYaml(container));
 			return node;
 		}
 

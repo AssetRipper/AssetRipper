@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Light
 {
-	public sealed class LightBakingOutput : IAssetReadable, IYAMLExportable
+	public sealed class LightBakingOutput : IAssetReadable, IYamlExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -42,15 +42,15 @@ namespace AssetRipper.Core.Classes.Light
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ProbeOcclusionLightIndexName, ProbeOcclusionLightIndex);
 			node.Add(OcclusionMaskChannelName, OcclusionMaskChannel);
 			if (ToSerializedVersion(container.Version) >= 2)
 			{
-				node.Add(LightmapBakeModeName, LightmapBakeMode.ExportYAML(container));
+				node.Add(LightmapBakeModeName, LightmapBakeMode.ExportYaml(container));
 				node.Add(IsBakedName, IsBaked);
 			}
 			else

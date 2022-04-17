@@ -43,9 +43,9 @@ namespace AssetRipper.Core.Classes.AudioReverbFilter
 
 		public static bool HasRoomRolloff(UnityVersion version) => version.IsLess(5, 6, 0, UnityVersionType.Beta, 10);
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(1);
 			node.Add("m_DryLevel", DryLevel);
 			node.Add("m_Room", Room);

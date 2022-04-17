@@ -5,17 +5,17 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedProperties : IAssetReadable, ISerializedProperties, IYAMLExportable
+	public sealed class SerializedProperties : IAssetReadable, ISerializedProperties, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
 			m_Props = reader.ReadAssetArray<SerializedProperty>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Props", m_Props.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_Props", m_Props.ExportYaml(container));
 			return node;
 		}
 

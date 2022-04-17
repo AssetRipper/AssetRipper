@@ -12,9 +12,9 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			TargetPrefab = reader.ReadInt64();
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(TargetObjectName, TargetObject);
 			node.Add(TargetPrefabName, TargetPrefab);
 			return node;

@@ -60,15 +60,15 @@ namespace AssetRipper.Core.Classes
 			return $"{Name}({nameof(MonoBehaviour)})";
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(EditorHideFlagsName, (uint)GetEditorHideFlags(container));
 			if (HasGeneratorAsset(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(GeneratorAssetName, GetGeneratorAsset(container).ExportYAML(container));
+				node.Add(GeneratorAssetName, GetGeneratorAsset(container).ExportYaml(container));
 			}
-			node.Add(ScriptName, Script.ExportYAML(container));
+			node.Add(ScriptName, Script.ExportYaml(container));
 			node.Add(NameName, Name);
 			node.Add(EditorClassIdentifierName, GetEditorClassIdentifier(container));
 			this.MaybeExportYamlForStructure(node, container);

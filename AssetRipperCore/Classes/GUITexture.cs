@@ -37,12 +37,12 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(Texture, TextureName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(TextureName, Texture.ExportYAML(container));
-			node.Add(ColorName, Color.ExportYAML(container));
-			node.Add(PixelInsetName, PixelInset.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(TextureName, Texture.ExportYaml(container));
+			node.Add(ColorName, Color.ExportYaml(container));
+			node.Add(PixelInsetName, PixelInset.ExportYaml(container));
 			node.Add(LeftBorderName, LeftBorder);
 			node.Add(RightBorderName, RightBorder);
 			node.Add(TopBorderName, TopBorder);

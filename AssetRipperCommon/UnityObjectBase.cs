@@ -47,13 +47,13 @@ namespace AssetRipper.Core
 			TransferInstructionFlags = assetInfo.File.Flags;
 		}
 
-		public YAMLDocument ExportYAMLDocument(IExportContainer container)
+		public YamlDocument ExportYamlDocument(IExportContainer container)
 		{
-			YAMLDocument document = new YAMLDocument();
-			YAMLMappingNode root = document.CreateMappingRoot();
+			YamlDocument document = new YamlDocument();
+			YamlMappingNode root = document.CreateMappingRoot();
 			root.Tag = ClassID.ToInt().ToString();
 			root.Anchor = container.GetExportID(this).ToString();
-			YAMLNode node = ExportYAML(container);
+			YamlNode node = ExportYaml(container);
 			root.Add(container.ExportLayout.GetClassName(ClassID), node);
 			return document;
 		}

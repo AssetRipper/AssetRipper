@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public sealed class ParserBindChannels : IAssetReadable, IYAMLExportable
+	public sealed class ParserBindChannels : IAssetReadable, IYamlExportable
 	{
 		public ParserBindChannels() { }
 
@@ -22,10 +22,10 @@ namespace AssetRipper.Core.Classes.Shader
 			SourceMap = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Channels", Channels.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_Channels", Channels.ExportYaml(container));
 			node.Add("m_SourceMap", SourceMap);
 			return node;
 		}

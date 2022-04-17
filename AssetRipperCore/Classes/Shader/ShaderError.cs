@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public sealed class ShaderError : IAssetReadable, IYAMLExportable
+	public sealed class ShaderError : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 3.5.0 and greater
@@ -37,9 +37,9 @@ namespace AssetRipper.Core.Classes.Shader
 			ProgramError = reader.ReadBoolean();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(MessageName, Message);
 			if (HasMessageDetails(container.ExportVersion))
 			{

@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.Yaml
 {
-	public abstract class YAMLNode
+	public abstract class YamlNode
 	{
 		internal virtual void Emit(Emitter emitter)
 		{
@@ -21,16 +21,16 @@
 					emitter.WriteLine();
 		}
 
-		public abstract YAMLNodeType NodeType { get; }
+		public abstract YamlNodeType NodeType { get; }
 		public abstract bool IsMultiline { get; }
 		public abstract bool IsIndent { get; }
 
 		public string Tag
 		{
 			get => CustomTag.Content;
-			set => CustomTag = new YAMLTag(YAMLWriter.DefaultTagHandle, value);
+			set => CustomTag = new YamlTag(YamlWriter.DefaultTagHandle, value);
 		}
-		public YAMLTag CustomTag { get; set; }
+		public YamlTag CustomTag { get; set; }
 		public string Anchor { get; set; } = string.Empty;
 	}
 }

@@ -477,9 +477,9 @@ namespace AssetRipper.Core.Classes.Renderer
 			base.Read(reader);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(EnabledName, GetEnabled(container.Version));
 			node.Add(CastShadowsName, (byte)GetCastShadows(container.Version));
 			node.Add(ReceiveShadowsName, GetReceiveShadows(container.Version));
@@ -507,11 +507,11 @@ namespace AssetRipper.Core.Classes.Renderer
 			{
 				node.Add(RendererPriorityName, RendererPriority);
 			}
-			node.Add(MaterialsName, Materials.ExportYAML(container));
-			node.Add(StaticBatchInfoName, GetStaticBatchInfo(container.Version).ExportYAML(container));
-			node.Add(StaticBatchRootName, StaticBatchRoot.ExportYAML(container));
-			node.Add(ProbeAnchorName, ProbeAnchor.ExportYAML(container));
-			node.Add(LightProbeVolumeOverrideName, LightProbeVolumeOverride.ExportYAML(container));
+			node.Add(MaterialsName, Materials.ExportYaml(container));
+			node.Add(StaticBatchInfoName, GetStaticBatchInfo(container.Version).ExportYaml(container));
+			node.Add(StaticBatchRootName, StaticBatchRoot.ExportYaml(container));
+			node.Add(ProbeAnchorName, ProbeAnchor.ExportYaml(container));
+			node.Add(LightProbeVolumeOverrideName, LightProbeVolumeOverride.ExportYaml(container));
 			node.Add(ScaleInLightmapName, GetScaleInLightmap(container.Version, container.Flags));
 			if (HasReceiveGI(container.ExportVersion, container.ExportFlags))
 			{
@@ -525,7 +525,7 @@ namespace AssetRipper.Core.Classes.Renderer
 			node.Add(MinimumChartSizeName, GetMinimumChartSize(container.Version, container.Flags));
 			node.Add(AutoUVMaxDistanceName, GetAutoUVMaxDistance(container.Version, container.Flags));
 			node.Add(AutoUVMaxAngleName, GetAutoUVMaxAngle(container.Version, container.Flags));
-			node.Add(LightmapParametersName, GetLightmapParameters().ExportYAML(container));
+			node.Add(LightmapParametersName, GetLightmapParameters().ExportYaml(container));
 			node.Add(SortingLayerIDName, SortingLayerID);
 			node.Add(SortingLayerName, SortingLayer);
 			node.Add(SortingOrderName, SortingOrder);

@@ -122,7 +122,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 
 		/// <summary>
 		/// Field type version, starts with 1 and is incremented after the type information has been significantly updated in a new release.<br/>
-		/// Equal to serializedVersion in YAML format files
+		/// Equal to serializedVersion in Yaml format files
 		/// </summary>
 		public int Version { get; set; }
 		/// <summary>

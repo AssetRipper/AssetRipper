@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedTextureProperty : IAssetReadable, ISerializedTextureProperty, IYAMLExportable
+	public sealed class SerializedTextureProperty : IAssetReadable, ISerializedTextureProperty, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -12,9 +12,9 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			TexDim = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("m_DefaultName", DefaultName);
 			node.Add("m_TexDim", TexDim);
 			return node;

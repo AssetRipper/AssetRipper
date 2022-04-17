@@ -141,17 +141,17 @@ namespace AssetRipper.Core.Classes.GameObject
 			return $"{Name}({GetType().Name})";
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (IsComponentTuple(container.ExportVersion))
 			{
-				node.Add(ComponentName, ComponentTuple.ExportYAML(container, (t) => (int)t));
+				node.Add(ComponentName, ComponentTuple.ExportYaml(container, (t) => (int)t));
 			}
 			else
 			{
-				node.Add(ComponentName, ExportYAML(Component, container));
+				node.Add(ComponentName, ExportYaml(Component, container));
 			}
 
 			node.Add(LayerName, Layer);
@@ -167,7 +167,7 @@ namespace AssetRipper.Core.Classes.GameObject
 
 			if (HasIcon(container.ExportVersion, container.ExportFlags) && IsIconFirst(container.ExportVersion))
 			{
-				node.Add(IconName, Icon.ExportYAML(container));
+				node.Add(IconName, Icon.ExportYaml(container));
 			}
 			if (HasNavMeshLayer(container.ExportVersion, container.ExportFlags))
 			{
@@ -181,19 +181,19 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 			if (HasIcon(container.ExportVersion, container.ExportFlags) && !IsIconFirst(container.ExportVersion))
 			{
-				node.Add(IconName, Icon.ExportYAML(container));
+				node.Add(IconName, Icon.ExportYaml(container));
 			}
 			return node;
 		}
 
-		private static YAMLNode ExportYAML(IEnumerable<ComponentPair> _this, IExportContainer container)
+		private static YamlNode ExportYaml(IEnumerable<ComponentPair> _this, IExportContainer container)
 		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 			foreach (ComponentPair pair in _this)
 			{
 				if (pair.Component.IsValid(container))
 				{
-					node.Add(pair.ExportYAML(container));
+					node.Add(pair.ExportYaml(container));
 				}
 			}
 			return node;

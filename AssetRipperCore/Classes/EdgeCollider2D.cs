@@ -41,11 +41,11 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(EdgeRadiusName, EdgeRadius);
-			node.Add(PointsName, Points.ExportYAML(container));
+			node.Add(PointsName, Points.ExportYaml(container));
 			return node;
 		}
 

@@ -25,9 +25,9 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			yield return context.FetchDependency(Pointer, string.Empty);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			return Pointer.ExportYAML(container);
+			return Pointer.ExportYaml(container);
 		}
 
 		public PPtr<IUnityObjectBase> Pointer = new();

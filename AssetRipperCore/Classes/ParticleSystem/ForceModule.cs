@@ -19,12 +19,12 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			reader.AlignStream();
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add(XName, X.ExportYAML(container));
-			node.Add(YName, Y.ExportYAML(container));
-			node.Add(ZName, Z.ExportYAML(container));
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
+			node.Add(XName, X.ExportYaml(container));
+			node.Add(YName, Y.ExportYaml(container));
+			node.Add(ZName, Z.ExportYaml(container));
 			node.Add(InWorldSpaceName, InWorldSpace);
 			node.Add(RandomizePerFrameName, RandomizePerFrame);
 			return node;

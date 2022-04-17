@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public sealed class BufferBinding : IAssetReadable, IYAMLExportable
+	public sealed class BufferBinding : IAssetReadable, IYamlExportable
 	{
 		public BufferBinding() { }
 
@@ -27,9 +27,9 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("m_NameIndex", NameIndex);
 			node.Add("m_Index", Index);
 			if (HasArraySize(container.ExportVersion))

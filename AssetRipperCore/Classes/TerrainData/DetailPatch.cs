@@ -41,16 +41,16 @@ namespace AssetRipper.Core.Classes.TerrainData
 			writer.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			if (HasBounds(container.ExportVersion))
 			{
-				node.Add(BoundsName, Bounds.ExportYAML(container));
+				node.Add(BoundsName, Bounds.ExportYaml(container));
 			}
 
-			node.Add(LayerIndicesName, LayerIndices.ExportYAML());
-			node.Add(NumberOfObjectsName, NumberOfObjects.ExportYAML());
+			node.Add(LayerIndicesName, LayerIndices.ExportYaml());
+			node.Add(NumberOfObjectsName, NumberOfObjects.ExportYaml());
 			return node;
 		}
 

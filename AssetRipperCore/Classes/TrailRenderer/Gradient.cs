@@ -31,14 +31,14 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 			Color4.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(Color0Name, Color0.ExportYAML(container));
-			node.Add(Color1Name, Color1.ExportYAML(container));
-			node.Add(Color2Name, Color2.ExportYAML(container));
-			node.Add(Color3Name, Color3.ExportYAML(container));
-			node.Add(Color4Name, Color4.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(Color0Name, Color0.ExportYaml(container));
+			node.Add(Color1Name, Color1.ExportYaml(container));
+			node.Add(Color2Name, Color2.ExportYaml(container));
+			node.Add(Color3Name, Color3.ExportYaml(container));
+			node.Add(Color4Name, Color4.ExportYaml(container));
 			return node;
 		}
 

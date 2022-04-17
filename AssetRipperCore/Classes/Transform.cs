@@ -96,16 +96,16 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(Father, FatherName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(LocalRotationName, m_LocalRotation.ExportYAML(container));
-			node.Add(LocalPositionName, m_LocalPosition.ExportYAML(container));
-			node.Add(LocalScaleName, m_LocalScale.ExportYAML(container));
-			node.Add(ChildrenName, Children.ExportYAML(container));
-			node.Add(FatherName, Father.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(LocalRotationName, m_LocalRotation.ExportYaml(container));
+			node.Add(LocalPositionName, m_LocalPosition.ExportYaml(container));
+			node.Add(LocalScaleName, m_LocalScale.ExportYaml(container));
+			node.Add(ChildrenName, Children.ExportYaml(container));
+			node.Add(FatherName, Father.ExportYaml(container));
 			node.Add(RootOrderName, RootOrder);
-			node.Add(LocalEulerAnglesHintName, LocalEulerAnglesHint.ExportYAML(container));
+			node.Add(LocalEulerAnglesHintName, LocalEulerAnglesHint.ExportYaml(container));
 			return node;
 		}
 

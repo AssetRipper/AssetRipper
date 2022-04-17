@@ -107,7 +107,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			try
 			{
-				YAMLMappingNode yamlRoot = (YAMLMappingNode)Asset.ExportYAML(_uiAssetContainer);
+				YamlMappingNode yamlRoot = (YamlMappingNode)Asset.ExportYaml(_uiAssetContainer);
 
 				YamlTree = new[] { new AssetYamlNode(Name ?? Asset.GetType().Name, yamlRoot) };
 			}
@@ -117,16 +117,16 @@ namespace AssetRipper.GUI.AssetInfo
 
 				if (e is NotImplementedException or NotSupportedException)
 				{
-					YamlTree = new[] { new AssetYamlNode("Asset Doesn't Support YAML Export", new YAMLScalarNode(true)) };
+					YamlTree = new[] { new AssetYamlNode("Asset Doesn't Support Yaml Export", new YamlScalarNode(true)) };
 					return;
 				}
 				Logger.Error(e);
-				YamlTree = new[] { new AssetYamlNode($"Asset threw {e.GetType().Name} when exporting as YAML", new YAMLScalarNode(true)) };
+				YamlTree = new[] { new AssetYamlNode($"Asset threw {e.GetType().Name} when exporting as Yaml", new YamlScalarNode(true)) };
 			}
 		}
 
 		//Read from UI
-		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", YAMLScalarNode.Empty) };
+		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", YamlScalarNode.Empty) };
 
 		//Read from UI
 		public bool HasImageData => Asset is ITexture2D or ITerrainData;

@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public sealed class DateTime : IAssetReadable, IYAMLExportable
+	public sealed class DateTime : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -13,9 +13,9 @@ namespace AssetRipper.Core.Classes.Misc
 			LowSeconds = reader.ReadUInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(HighSecondsName, HighSeconds);
 			node.Add(FractionName, Fraction);
 			node.Add(LowSecondsName, LowSeconds);

@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedProgram : IAssetReadable, IYAMLExportable
+	public sealed class SerializedProgram : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 2020.3.2 and greater
@@ -22,13 +22,13 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_SubPrograms", SubPrograms.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_SubPrograms", SubPrograms.ExportYaml(container));
 			if (HasCommonParameters(container.ExportVersion))
 			{
-				node.Add("m_CommonParameters", CommonParameters.ExportYAML(container));
+				node.Add("m_CommonParameters", CommonParameters.ExportYaml(container));
 			}
 
 			return node;

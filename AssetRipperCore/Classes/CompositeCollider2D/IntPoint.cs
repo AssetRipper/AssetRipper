@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.CompositeCollider2D
 {
-	public sealed class IntPoint : IAssetReadable, IYAMLExportable
+	public sealed class IntPoint : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -12,9 +12,9 @@ namespace AssetRipper.Core.Classes.CompositeCollider2D
 			Y = reader.ReadInt64();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(XName, X);
 			node.Add(YName, Y);
 			return node;

@@ -22,9 +22,9 @@ namespace AssetRipper.Core.Classes.AudioEchoFilter
 			WetMix = reader.ReadSingle();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(1);
 			node.Add("m_Delay", Delay);
 			node.Add("m_DecayRatio", DecayRatio);

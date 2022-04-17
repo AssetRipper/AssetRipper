@@ -6,7 +6,7 @@ using AssetRipper.Yaml.Extensions;
 namespace AssetRipper.Core.Classes.AudioMixer
 {
 #warning TODO: not implemented
-	public sealed class EffectConstant : IAssetReadable, IYAMLExportable
+	public sealed class EffectConstant : IAssetReadable, IYamlExportable
 	{
 		/*public static int ToSerializedVersion(Version version)
 		{
@@ -27,9 +27,9 @@ namespace AssetRipper.Core.Classes.AudioMixer
 			ParameterIndices = reader.ReadUInt32Array();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			//node.AddSerializedVersion(ToSerializedVersion(container.Version));
 			node.Add(TypeName, Type);
 			node.Add(GroupConstantIndexName, GroupConstantIndex);
@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Classes.AudioMixer
 			node.Add(WetMixLevelIndexName, WetMixLevelIndex);
 			node.Add(PrevEffectIndexName, PrevEffectIndex);
 			node.Add(BypassName, Bypass);
-			node.Add(ParameterIndicesName, ParameterIndices.ExportYAML(true));
+			node.Add(ParameterIndicesName, ParameterIndices.ExportYaml(true));
 			return node;
 		}
 

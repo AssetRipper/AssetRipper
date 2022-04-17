@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public sealed class StructParameter : IAssetReadable, IYAMLExportable
+	public sealed class StructParameter : IAssetReadable, IYamlExportable
 	{
 		public StructParameter() { }
 
@@ -32,15 +32,15 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("m_NameIndex", NameIndex);
 			node.Add("m_Index", Index);
 			node.Add("m_ArraySize", ArraySize);
 			node.Add("m_StructSize", StructSize);
-			node.Add("m_VectorMembers", VectorMembers.ExportYAML(container));
-			node.Add("m_MatrixMembers", MatrixMembers.ExportYAML(container));
+			node.Add("m_VectorMembers", VectorMembers.ExportYaml(container));
+			node.Add("m_MatrixMembers", MatrixMembers.ExportYaml(container));
 			return node;
 		}
 

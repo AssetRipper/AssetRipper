@@ -58,9 +58,9 @@ namespace AssetRipper.Core.Classes.Texture2DArray
 			if (HasStreamData(reader.Version))
 				StreamData.Read(reader);
 		}
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.ForceAddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (container.ExportVersion.IsGreaterEqual(2019, 1, 0))
 			{
@@ -74,7 +74,7 @@ namespace AssetRipper.Core.Classes.Texture2DArray
 				node.Add(FormatName, (int)Format);
 			node.Add(MipCountName, MipCount);
 			node.Add(DataSizeName, DataSize);
-			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			node.Add(TextureSettingsName, TextureSettings.ExportYaml(container));
 			if (container.ExportVersion.IsLess(2019, 1, 0))
 				node.Add(ColorSpaceName, (int)ColorSpace);
 			if (HasUsageMode(container.ExportVersion))
@@ -82,9 +82,9 @@ namespace AssetRipper.Core.Classes.Texture2DArray
 			node.Add(IsReadableName, IsReadable);
 			byte[] imageData = GetExportImageData();
 			node.Add(ImageDataName, imageData.Length);
-			node.Add(Layout.LayoutInfo.TypelessdataName, imageData.ExportYAML());
+			node.Add(Layout.LayoutInfo.TypelessdataName, imageData.ExportYaml());
 			StreamingInfo streamData = new StreamingInfo();
-			node.Add(StreamDataName, streamData.ExportYAML(container));
+			node.Add(StreamDataName, streamData.ExportYaml(container));
 			return node;
 		}
 

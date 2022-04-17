@@ -319,9 +319,9 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.ForceAddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(EnabledName, Enabled);
 			node.Add(TestModeName, TestMode);
@@ -332,11 +332,11 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 				node.Add(DashboardUrlName, DashboardUrl);
 			}
 			node.Add(TestInitModeName, TestInitMode);
-			node.Add(CrashReportingSettingsName, GetCrashReportingSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
-			node.Add(UnityPurchasingSettingsName, UnityPurchasingSettings.ExportYAML(container));
-			node.Add(UnityAnalyticsSettingsName, GetUnityAnalyticsSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
-			node.Add(UnityAdsSettingsName, GetUnityAdsSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
-			node.Add(PerformanceReportingSettingsName, PerformanceReportingSettings.ExportYAML(container));
+			node.Add(CrashReportingSettingsName, GetCrashReportingSettings(container.Version, container.Platform, container.Flags).ExportYaml(container));
+			node.Add(UnityPurchasingSettingsName, UnityPurchasingSettings.ExportYaml(container));
+			node.Add(UnityAnalyticsSettingsName, GetUnityAnalyticsSettings(container.Version, container.Platform, container.Flags).ExportYaml(container));
+			node.Add(UnityAdsSettingsName, GetUnityAdsSettings(container.Version, container.Platform, container.Flags).ExportYaml(container));
+			node.Add(PerformanceReportingSettingsName, PerformanceReportingSettings.ExportYaml(container));
 			return node;
 		}
 

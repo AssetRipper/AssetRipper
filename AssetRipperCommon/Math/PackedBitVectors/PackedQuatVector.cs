@@ -30,11 +30,11 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 			writer.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer _)
+		public YamlNode ExportYaml(IExportContainer _)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(NumItemsName, NumItems);
-			node.Add(DataName, Data == null ? YAMLSequenceNode.Empty : Data.ExportYAML());
+			node.Add(DataName, Data == null ? YamlSequenceNode.Empty : Data.ExportYaml());
 			return node;
 		}
 	}

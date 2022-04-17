@@ -58,13 +58,13 @@ namespace AssetRipper.Core.Classes.Mesh
 			FullWeights.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(VerticesName, Vertices.ExportYAML(container));
-			node.Add(ShapesName, Shapes.ExportYAML(container));
-			node.Add(ChannelsName, Channels.ExportYAML(container));
-			node.Add(FullWeightsName, FullWeights.ExportYAML());
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(VerticesName, Vertices.ExportYaml(container));
+			node.Add(ShapesName, Shapes.ExportYaml(container));
+			node.Add(ChannelsName, Channels.ExportYaml(container));
+			node.Add(FullWeightsName, FullWeights.ExportYaml());
 			return node;
 		}
 

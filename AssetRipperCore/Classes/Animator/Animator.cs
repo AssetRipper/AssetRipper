@@ -153,12 +153,12 @@ namespace AssetRipper.Core.Classes.Animator
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(AvatarName, Avatar.ExportYAML(container));
-			node.Add(ControllerName, Controller.ExportYAML(container));
+			node.Add(AvatarName, Avatar.ExportYaml(container));
+			node.Add(ControllerName, Controller.ExportYaml(container));
 			node.Add(CullingModeName, (int)CullingMode);
 			node.Add(UpdateModeName, (int)UpdateMode);
 			node.Add(ApplyRootMotionName, ApplyRootMotion);

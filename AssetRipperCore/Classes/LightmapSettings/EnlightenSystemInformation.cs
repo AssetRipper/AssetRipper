@@ -29,16 +29,16 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			RadiositySystemHash.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(RendererIndexName, RendererIndex);
 			node.Add(RendererSizeName, RendererSize);
 			node.Add(AtlasIndexName, AtlasIndex);
 			node.Add(AtlasOffsetXName, AtlasOffsetX);
 			node.Add(AtlasOffsetYName, AtlasOffsetY);
-			node.Add(InputSystemHashName, InputSystemHash.ExportYAML(container));
-			node.Add(RadiositySystemHashName, RadiositySystemHash.ExportYAML(container));
+			node.Add(InputSystemHashName, InputSystemHash.ExportYaml(container));
+			node.Add(RadiositySystemHashName, RadiositySystemHash.ExportYaml(container));
 			return node;
 		}
 

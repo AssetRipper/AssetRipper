@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public sealed class TierGraphicsSettings : IAssetReadable, IYAMLExportable
+	public sealed class TierGraphicsSettings : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 5.6.0 and greater
@@ -56,9 +56,9 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(RenderingPathName, (int)RenderingPath);
 			node.Add(HdrModeName, (int)HdrMode);
 			node.Add(RealtimeGICPUUsageName, (int)RealtimeGICPUUsage);

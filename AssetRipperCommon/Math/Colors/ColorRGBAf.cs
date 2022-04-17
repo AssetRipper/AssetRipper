@@ -72,9 +72,9 @@ namespace AssetRipper.Core.Math.Colors
 			writer.Write(A);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new();
+			YamlMappingNode node = new();
 			node.Style = MappingStyle.Flow;
 			node.Add(RName, R);
 			node.Add(GName, G);

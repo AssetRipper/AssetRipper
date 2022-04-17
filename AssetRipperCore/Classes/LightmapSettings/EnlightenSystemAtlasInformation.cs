@@ -21,11 +21,11 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			writer.Write(FirstSystemId);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(AtlasSizeName, AtlasSize);
-			node.Add(AtlasHashName, AtlasHash.ExportYAML(container));
+			node.Add(AtlasHashName, AtlasHash.ExportYaml(container));
 			node.Add(FirstSystemIdName, FirstSystemId);
 			return node;
 		}

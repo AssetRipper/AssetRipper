@@ -8,7 +8,7 @@ using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedShader : IAssetReadable, ISerializedShader, IYAMLExportable
+	public sealed class SerializedShader : IAssetReadable, ISerializedShader, IYamlExportable
 	{
 		public ISerializedProperties PropInfo => m_PropInfo;
 		private SerializedProperties m_PropInfo = new();
@@ -66,24 +66,24 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_PropInfo", m_PropInfo.ExportYAML(container));
-			node.Add("m_SubShaders", SubShaders.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_PropInfo", m_PropInfo.ExportYaml(container));
+			node.Add("m_SubShaders", SubShaders.ExportYaml(container));
 			if (HasKeywordData(container.ExportVersion))
 			{
-				node.Add("m_KeywordNames", KeywordNames.ExportYAML());
-				node.Add("m_KeywordFlags", KeywordFlags.ExportYAML());
+				node.Add("m_KeywordNames", KeywordNames.ExportYaml());
+				node.Add("m_KeywordFlags", KeywordFlags.ExportYaml());
 			}
 
 			node.Add("m_Name", Name);
 			node.Add("m_CustomEditorName", CustomEditorName);
 			node.Add("m_FallbackName", FallbackName);
-			node.Add("m_Dependencies", Dependencies.ExportYAML(container));
+			node.Add("m_Dependencies", Dependencies.ExportYaml(container));
 			if (HasCustomEditorForRenderPipelines(container.ExportVersion))
 			{
-				node.Add("m_CustomEditorForRenderPipelines", CustomEditorForRenderPipelines.ExportYAML(container));
+				node.Add("m_CustomEditorForRenderPipelines", CustomEditorForRenderPipelines.ExportYaml(container));
 			}
 
 			node.Add("m_DisableNoSubshadersMessage", DisableNoSubshadersMessage);

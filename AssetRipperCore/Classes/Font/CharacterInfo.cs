@@ -7,7 +7,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Font
 {
-	public sealed class CharacterInfo : IAssetReadable, IYAMLExportable
+	public sealed class CharacterInfo : IAssetReadable, IYamlExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -59,13 +59,13 @@ namespace AssetRipper.Core.Classes.Font
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(IndexName, Index);
-			node.Add(UVName, UV.ExportYAML(container));
-			node.Add(VertName, Vert.ExportYAML(container));
+			node.Add(UVName, UV.ExportYaml(container));
+			node.Add(VertName, Vert.ExportYaml(container));
 			node.Add(AdvanceName, Advance);
 			node.Add(FlippedName, Flipped);
 			return node;

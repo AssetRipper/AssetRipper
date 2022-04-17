@@ -17,10 +17,10 @@ namespace AssetRipper.Core.Classes.ClusterInputManager
 			Inputs = reader.ReadAssetArray<ClusterInput>();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(InputsName, Inputs.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(InputsName, Inputs.ExportYaml(container));
 			return node;
 		}
 

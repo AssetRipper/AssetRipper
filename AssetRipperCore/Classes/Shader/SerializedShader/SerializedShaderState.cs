@@ -7,7 +7,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedShaderState : IAssetReadable, IYAMLExportable
+	public sealed class SerializedShaderState : IAssetReadable, IYamlExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -75,49 +75,49 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add("m_Name", Name);
-			node.Add("rtBlend0", RtBlend0.ExportYAML(container));
-			node.Add("rtBlend1", RtBlend1.ExportYAML(container));
-			node.Add("rtBlend2", RtBlend2.ExportYAML(container));
-			node.Add("rtBlend3", RtBlend3.ExportYAML(container));
-			node.Add("rtBlend4", RtBlend4.ExportYAML(container));
-			node.Add("rtBlend5", RtBlend5.ExportYAML(container));
-			node.Add("rtBlend6", RtBlend6.ExportYAML(container));
-			node.Add("rtBlend7", RtBlend7.ExportYAML(container));
+			node.Add("rtBlend0", RtBlend0.ExportYaml(container));
+			node.Add("rtBlend1", RtBlend1.ExportYaml(container));
+			node.Add("rtBlend2", RtBlend2.ExportYaml(container));
+			node.Add("rtBlend3", RtBlend3.ExportYaml(container));
+			node.Add("rtBlend4", RtBlend4.ExportYaml(container));
+			node.Add("rtBlend5", RtBlend5.ExportYaml(container));
+			node.Add("rtBlend6", RtBlend6.ExportYaml(container));
+			node.Add("rtBlend7", RtBlend7.ExportYaml(container));
 			node.Add("rtSeparateBlend", RtSeparateBlend);
 			if (HasZClip(container.ExportVersion))
 			{
-				node.Add("zClip", ZClip.ExportYAML(container));
+				node.Add("zClip", ZClip.ExportYaml(container));
 			}
 
-			node.Add("zTest", ZTest.ExportYAML(container));
-			node.Add("zWrite", ZWrite.ExportYAML(container));
-			node.Add("culling", Culling.ExportYAML(container));
+			node.Add("zTest", ZTest.ExportYaml(container));
+			node.Add("zWrite", ZWrite.ExportYaml(container));
+			node.Add("culling", Culling.ExportYaml(container));
 			if (HasConservative(container.ExportVersion))
 			{
-				node.Add("conservative", Conservative.ExportYAML(container));
+				node.Add("conservative", Conservative.ExportYaml(container));
 			}
 
-			node.Add("offsetFactor", OffsetFactor.ExportYAML(container));
-			node.Add("offsetUnits", OffsetUnits.ExportYAML(container));
-			node.Add("alphaToMask", AlphaToMask.ExportYAML(container));
-			node.Add("stencilOp", StencilOp.ExportYAML(container));
-			node.Add("stencilOpFront", StencilOpFront.ExportYAML(container));
-			node.Add("stencilOpBack", StencilOpBack.ExportYAML(container));
-			node.Add("stencilReadMask", StencilReadMask.ExportYAML(container));
-			node.Add("stencilWriteMask", StencilWriteMask.ExportYAML(container));
-			node.Add("stencilRef", StencilRef.ExportYAML(container));
-			node.Add("fogStart", FogStart.ExportYAML(container));
-			node.Add("fogEnd", FogEnd.ExportYAML(container));
-			node.Add("fogDensity", FogDensity.ExportYAML(container));
-			node.Add("fogColor", FogColor.ExportYAML(container));
+			node.Add("offsetFactor", OffsetFactor.ExportYaml(container));
+			node.Add("offsetUnits", OffsetUnits.ExportYaml(container));
+			node.Add("alphaToMask", AlphaToMask.ExportYaml(container));
+			node.Add("stencilOp", StencilOp.ExportYaml(container));
+			node.Add("stencilOpFront", StencilOpFront.ExportYaml(container));
+			node.Add("stencilOpBack", StencilOpBack.ExportYaml(container));
+			node.Add("stencilReadMask", StencilReadMask.ExportYaml(container));
+			node.Add("stencilWriteMask", StencilWriteMask.ExportYaml(container));
+			node.Add("stencilRef", StencilRef.ExportYaml(container));
+			node.Add("fogStart", FogStart.ExportYaml(container));
+			node.Add("fogEnd", FogEnd.ExportYaml(container));
+			node.Add("fogDensity", FogDensity.ExportYaml(container));
+			node.Add("fogColor", FogColor.ExportYaml(container));
 			node.Add("fogMode", (int)FogMode);
 			node.Add("gpuProgramID", GpuProgramID);
-			node.Add("m_Tags", Tags.ExportYAML(container));
+			node.Add("m_Tags", Tags.ExportYaml(container));
 			node.Add("m_LOD", LOD);
 			node.Add("lighting", Lighting);
 			return node;

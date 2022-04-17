@@ -39,9 +39,9 @@ namespace AssetRipper.Core.Classes.Misc
 			writer.Write(Path);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(OffsetName, (uint)Offset);
 			node.Add(SizeName, Size);
 			node.Add(PathName, Path);

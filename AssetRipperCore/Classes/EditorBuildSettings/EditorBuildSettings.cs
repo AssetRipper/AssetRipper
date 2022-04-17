@@ -65,14 +65,14 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(ScenesName, m_Scenes.ExportYAML(container));
+			node.Add(ScenesName, m_Scenes.ExportYaml(container));
 			if (HasConfigObjects(container.ExportVersion))
 			{
-				node.Add(ConfigObjectsName, GetConfigObjects(container.Version).ExportYAML(container));
+				node.Add(ConfigObjectsName, GetConfigObjects(container.Version).ExportYaml(container));
 			}
 			return node;
 		}

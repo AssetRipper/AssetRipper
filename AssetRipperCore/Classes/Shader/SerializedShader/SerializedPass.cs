@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedPass : IAssetReadable, IYAMLExportable
+	public sealed class SerializedPass : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 2020.2 and greater
@@ -90,32 +90,32 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			if (HasHash(container.ExportVersion))
 			{
-				node.Add("m_EditorDataHash", EditorDataHash.ExportYAML(container));
-				node.Add("m_Platforms", Platforms.ExportYAML());
+				node.Add("m_EditorDataHash", EditorDataHash.ExportYaml(container));
+				node.Add("m_Platforms", Platforms.ExportYaml());
 				if (!HasKeywordStateMaskInsteadOfKeywordMasks(container.ExportVersion))
 				{
-					node.Add("m_LocalKeywordMask", LocalKeywordMask.ExportYAML(false));
-					node.Add("m_GlobalKeywordMask", GlobalKeywordMask.ExportYAML(false));
+					node.Add("m_LocalKeywordMask", LocalKeywordMask.ExportYaml(false));
+					node.Add("m_GlobalKeywordMask", GlobalKeywordMask.ExportYaml(false));
 				}
 			}
 
-			node.Add("m_NameIndices", NameIndices.ExportYAML());
+			node.Add("m_NameIndices", NameIndices.ExportYaml());
 			node.Add("m_Type", (int)Type);
-			node.Add("m_State", State.ExportYAML(container));
+			node.Add("m_State", State.ExportYaml(container));
 			node.Add("m_ProgramMask", ProgramMask);
-			node.Add("progVertex", ProgVertex.ExportYAML(container));
-			node.Add("progFragment", ProgFragment.ExportYAML(container));
-			node.Add("progGeometry", ProgGeometry.ExportYAML(container));
-			node.Add("progHull", ProgHull.ExportYAML(container));
-			node.Add("progDomain", ProgDomain.ExportYAML(container));
+			node.Add("progVertex", ProgVertex.ExportYaml(container));
+			node.Add("progFragment", ProgFragment.ExportYaml(container));
+			node.Add("progGeometry", ProgGeometry.ExportYaml(container));
+			node.Add("progHull", ProgHull.ExportYaml(container));
+			node.Add("progDomain", ProgDomain.ExportYaml(container));
 			if (HasProgRayTracing(container.ExportVersion))
 			{
-				node.Add("progRayTracing", ProgRayTracing.ExportYAML(container));
+				node.Add("progRayTracing", ProgRayTracing.ExportYaml(container));
 			}
 
 			node.Add("m_HasInstancingVariant", HasInstancingVariant);
@@ -127,16 +127,16 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			node.Add("m_UseName", UseName);
 			node.Add("m_Name", Name);
 			node.Add("m_TextureName", TextureName);
-			node.Add("m_Tags", Tags.ExportYAML(container));
+			node.Add("m_Tags", Tags.ExportYaml(container));
 			if (HasKeywordStateMaskInsteadOfKeywordMasks(container.ExportVersion))
 			{
-				node.Add("m_SerializedKeywordStateMask", SerializedKeywordStateMask.ExportYAML(false));
+				node.Add("m_SerializedKeywordStateMask", SerializedKeywordStateMask.ExportYaml(false));
 			}
 
 			// Editor Only
 			if (HasSerializedPackageRequirements(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add("m_PackageRequirements", new SerializedPackageRequirements().ExportYAML(container));
+				node.Add("m_PackageRequirements", new SerializedPackageRequirements().ExportYaml(container));
 			}
 
 			return node;

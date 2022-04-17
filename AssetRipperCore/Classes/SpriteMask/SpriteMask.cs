@@ -68,10 +68,10 @@ namespace AssetRipper.Core.Classes.SpriteMask
 			yield return context.FetchDependency(Sprite, SpriteName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(SpriteName, Sprite.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(SpriteName, Sprite.ExportYaml(container));
 			node.Add(MaskAlphaCutoffName, MaskAlphaCutoff);
 			// Editor always exposes the sorting layer IDs,
 			// however they weren't exposed to the Player until 2019.3.0a3.

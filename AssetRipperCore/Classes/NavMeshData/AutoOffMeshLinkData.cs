@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
-	public sealed class AutoOffMeshLinkData : IAssetReadable, IYAMLExportable
+	public sealed class AutoOffMeshLinkData : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -17,11 +17,11 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			LinkDirection = reader.ReadByte();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(StartName, Start.ExportYAML(container));
-			node.Add(EndName, End.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(StartName, Start.ExportYaml(container));
+			node.Add(EndName, End.ExportYaml(container));
 			node.Add(RadiusName, Radius);
 			node.Add(LinkTypeName, LinkType);
 			node.Add(AreaName, Area);

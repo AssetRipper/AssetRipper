@@ -86,20 +86,20 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 			PostWrite(writer);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (HasDefaultReferences(container.ExportVersion))
 			{
-				node.Add(DefaultReferencesName, DefaultReferences.ExportYAML(container));
+				node.Add(DefaultReferencesName, DefaultReferences.ExportYaml(container));
 			}
 			if (HasExecutionOrder(container.ExportVersion))
 			{
 				node.Add(ExecutionOrderName, ExecutionOrder);
-				node.Add(IconName, Icon.ExportYAML(container));
+				node.Add(IconName, Icon.ExportYaml(container));
 			}
-			PostExportYAML(container, node);
+			PostExportYaml(container, node);
 			return node;
 		}
 

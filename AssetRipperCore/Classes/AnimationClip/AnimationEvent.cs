@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public sealed class AnimationEvent : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class AnimationEvent : IAssetReadable, IYamlExportable, IDependent
 	{
 		/// <summary>
 		/// 2.6.0 and greater
@@ -43,13 +43,13 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			yield return context.FetchDependency(ObjectReferenceParameter, ObjectReferenceParameterName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(TimeName, Time);
 			node.Add(FunctionNameName, FunctionName);
 			node.Add(DataName, StringParameter);
-			node.Add(ObjectReferenceParameterName, ObjectReferenceParameter.ExportYAML(container));
+			node.Add(ObjectReferenceParameterName, ObjectReferenceParameter.ExportYaml(container));
 			node.Add(FloatParameterName, FloatParameter);
 			node.Add(IntParameterName, IntParameter);
 			node.Add(MessageOptionsName, MessageOptions);

@@ -42,11 +42,11 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TextureImportInstructionsName, TextureImportInstructions.ExportYAML(container));
-			node.Add(SourceTextureInformationName, SourceTextureInformation.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(TextureImportInstructionsName, TextureImportInstructions.ExportYaml(container));
+			node.Add(SourceTextureInformationName, SourceTextureInformation.ExportYaml(container));
 			if (HasImportInspectorWarnings(container.ExportVersion))
 			{
 				node.Add(ImportInspectorWarningsName, ImportInspectorWarnings);

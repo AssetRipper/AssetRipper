@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public sealed class TierGraphicsSettingsEditor : IAssetReadable, IYAMLExportable
+	public sealed class TierGraphicsSettingsEditor : IAssetReadable, IYamlExportable
 	{
 		public TierGraphicsSettingsEditor() { }
 
@@ -110,9 +110,9 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(StandardShaderQualityName, (int)StandardShaderQuality);
 			node.Add(RenderingPathName, (int)RenderingPath);
 			node.Add(HdrModeName, (int)HdrMode);

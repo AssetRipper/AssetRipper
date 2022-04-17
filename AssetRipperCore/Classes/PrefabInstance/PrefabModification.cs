@@ -27,12 +27,12 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			RemovedComponents.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TransformParentName, TransformParent.ExportYAML(container));
-			node.Add(ModificationsName, Modifications.ExportYAML(container));
-			node.Add(RemovedComponentsName, RemovedComponents.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(TransformParentName, TransformParent.ExportYaml(container));
+			node.Add(ModificationsName, Modifications.ExportYaml(container));
+			node.Add(RemovedComponentsName, RemovedComponents.ExportYaml(container));
 			return node;
 		}
 

@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.WheelCollider
 {
-	public sealed class WheelFrictionCurve : IAssetReadable, IYAMLExportable
+	public sealed class WheelFrictionCurve : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,9 +15,9 @@ namespace AssetRipper.Core.Classes.WheelCollider
 			Stiffness = reader.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ExtremumSlipName, ExtremumSlip);
 			node.Add(ExtremumValueName, ExtremumValue);
 			node.Add(AsymptoteSlipName, AsymptoteSlip);

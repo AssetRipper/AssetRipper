@@ -7,7 +7,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class BlendTreeConstant : IAssetReadable, IYAMLExportable
+	public sealed class BlendTreeConstant : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// Less than 4.5.0
@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

@@ -32,13 +32,13 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add(CurveName, Curve.ExportYAML(container));
-			node.Add(YName, GetExportY(container.Version).ExportYAML(container));
-			node.Add(ZName, GetExportZ(container.Version).ExportYAML(container));
-			node.Add(RangeName, Range.ExportYAML(container));
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
+			node.Add(CurveName, Curve.ExportYaml(container));
+			node.Add(YName, GetExportY(container.Version).ExportYaml(container));
+			node.Add(ZName, GetExportZ(container.Version).ExportYaml(container));
+			node.Add(RangeName, Range.ExportYaml(container));
 			node.Add(SeparateAxesName, SeparateAxes);
 			return node;
 		}

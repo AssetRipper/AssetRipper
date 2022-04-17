@@ -222,9 +222,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			writer.AlignStream();
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (HasCurrentChannels(container.ExportVersion))
 			{
@@ -234,7 +234,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (HasChannels(container.ExportVersion))
 			{
-				node.Add(ChannelsName, m_Channels.ExportYAML(container));
+				node.Add(ChannelsName, m_Channels.ExportYaml(container));
 			}
 			if (HasStreams(container.ExportVersion))
 			{
@@ -242,17 +242,17 @@ namespace AssetRipper.Core.Classes.Mesh
 				{
 					for (int i = 0; i < StaticStreamCount; i++)
 					{
-						node.Add($"{StreamsName}[{i}]", m_Streams[i].ExportYAML(container));
+						node.Add($"{StreamsName}[{i}]", m_Streams[i].ExportYaml(container));
 					}
 				}
 				else
 				{
-					node.Add(StreamsName, m_Streams.ExportYAML(container));
+					node.Add(StreamsName, m_Streams.ExportYaml(container));
 				}
 			}
 
 			node.Add(DataSizeName, Data.Length);
-			node.Add(Layout.LayoutInfo.TypelessdataName, Data.ExportYAML());
+			node.Add(Layout.LayoutInfo.TypelessdataName, Data.ExportYaml());
 			return node;
 		}
 

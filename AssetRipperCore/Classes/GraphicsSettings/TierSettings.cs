@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 	/// <summary>
 	/// BuildTargetShaderSettings previously
 	/// </summary>
-	public sealed class TierSettings : IAssetReadable, IYAMLExportable
+	public sealed class TierSettings : IAssetReadable, IYamlExportable
 	{
 		public TierSettings() { }
 
@@ -99,13 +99,13 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(BuildTargetName, (int)BuildTarget);
 			node.Add(TierName, (int)GetTier(container.Version));
-			node.Add(SettingsName, Settings.ExportYAML(container));
+			node.Add(SettingsName, Settings.ExportYaml(container));
 			node.Add(AutomaticName, Automatic);
 			return node;
 		}

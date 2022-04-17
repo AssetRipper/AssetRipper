@@ -9,7 +9,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.Curve
 {
-	public sealed class MinMaxCurve : IAssetReadable, IYAMLExportable
+	public sealed class MinMaxCurve : IAssetReadable, IYamlExportable
 	{
 		public MinMaxCurve() { }
 
@@ -78,15 +78,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Curve
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(MinMaxStateName, (ushort)MinMaxState);
 			node.Add(ScalarName, GetExportScalar(container.Version));
 			node.Add(MinScalarName, GetExportMinScalar(container.Version));
-			node.Add(MaxCurveName, MaxCurve.ExportYAML(container));
-			node.Add(MinCurveName, MinCurve.ExportYAML(container));
+			node.Add(MaxCurveName, MaxCurve.ExportYaml(container));
+			node.Add(MinCurveName, MinCurve.ExportYaml(container));
 			return node;
 		}
 

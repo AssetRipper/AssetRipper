@@ -32,13 +32,13 @@ namespace AssetRipper.Core.Classes.Flare
 			yield return context.FetchDependency(FlareTexture, FlareTextureName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add(FlareTextureName, FlareTexture.ExportYAML(container));
+			node.Add(FlareTextureName, FlareTexture.ExportYaml(container));
 			node.Add(TextureLayoutName, (int)TextureLayout);
-			node.Add(ElementseName, Elements.ExportYAML(container));
+			node.Add(ElementseName, Elements.ExportYaml(container));
 			node.Add(UseFogName, UseFog);
 			return node;
 		}

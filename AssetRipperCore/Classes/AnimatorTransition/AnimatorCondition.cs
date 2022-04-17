@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimatorTransition
 {
-	public sealed class AnimatorCondition : IYAMLExportable
+	public sealed class AnimatorCondition : IYamlExportable
 	{
 		public AnimatorCondition(ConditionConstant condition, IReadOnlyDictionary<uint, string> tos)
 		{
@@ -15,9 +15,9 @@ namespace AssetRipper.Core.Classes.AnimatorTransition
 			EventTreshold = condition.EventThreshold;
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ConditionModeName, (int)ConditionMode);
 			node.Add(ConditionEventName, ConditionEvent);
 			node.Add(EventTresholdName, EventTreshold);

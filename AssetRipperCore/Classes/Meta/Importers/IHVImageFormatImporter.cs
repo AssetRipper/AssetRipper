@@ -81,10 +81,10 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 			PostWrite(writer);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(TextureSettingsName, TextureSettings.ExportYaml(container));
 			node.Add(IsReadableName, IsReadable);
 			if (HasSRGBTexture(container.ExportVersion))
 			{
@@ -95,7 +95,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 				node.Add(StreamingMipmapsName, StreamingMipmaps);
 				node.Add(StreamingMipmapsPriorityName, StreamingMipmapsPriority);
 			}
-			PostExportYAML(container, node);
+			PostExportYaml(container, node);
 			return node;
 		}
 

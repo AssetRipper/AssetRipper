@@ -22,16 +22,16 @@ namespace AssetRipper.Core.Classes.Misc
 			return version.IsGreaterEqual(5);
 		}
 
-		public static YAMLNode ExportYAML<T>(IExportContainer container, int fileIndex, long pathID) where T : IUnityObjectBase
+		public static YamlNode ExportYaml<T>(IExportContainer container, int fileIndex, long pathID) where T : IUnityObjectBase
 		{
-			return new PPtr<T>(fileIndex, pathID).ExportYAML(container);
+			return new PPtr<T>(fileIndex, pathID).ExportYaml(container);
 		}
 
-		public static YAMLNode ExportYAML<T>(this IPPtr<T> pptr, IExportContainer container) where T : IUnityObjectBase
+		public static YamlNode ExportYaml<T>(this IPPtr<T> pptr, IExportContainer container) where T : IUnityObjectBase
 		{
 			if (pptr.IsNull())
 			{
-				return MetaPtr.NullPtr.ExportYAML(container);
+				return MetaPtr.NullPtr.ExportYaml(container);
 			}
 
 			T asset = pptr.FindAsset(container);
@@ -40,11 +40,11 @@ namespace AssetRipper.Core.Classes.Misc
 				ClassIDType classType = typeof(T).ToClassIDType();
 				AssetType assetType = container.ToExportType(classType);
 				MetaPtr pointer = new MetaPtr(classType, assetType);
-				return pointer.ExportYAML(container);
+				return pointer.ExportYaml(container);
 			}
 
 			MetaPtr exPointer = container.CreateExportPointer(asset);
-			return exPointer.ExportYAML(container);
+			return exPointer.ExportYaml(container);
 		}
 
 		public static void CopyValues(this IPPtr destination, IPPtr source)
@@ -213,9 +213,9 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			return PPtr.ExportYAML(this, container);
+			return PPtr.ExportYaml(this, container);
 		}
 
 		public override string ToString()

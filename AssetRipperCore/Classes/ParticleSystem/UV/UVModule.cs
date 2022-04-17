@@ -138,9 +138,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ModeName, (int)Mode);
 			if (HasTimeMode(container.ExportVersion))
@@ -148,11 +148,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 				node.Add(TimeModeName, (int)TimeMode);
 				node.Add(FpsName, FPS);
 			}
-			node.Add(FrameOverTimeName, FrameOverTime.ExportYAML(container));
-			node.Add(StartFrameName, GetExportStartFrame(container.Version).ExportYAML(container));
+			node.Add(FrameOverTimeName, FrameOverTime.ExportYaml(container));
+			node.Add(StartFrameName, GetExportStartFrame(container.Version).ExportYaml(container));
 			if (HasSpeedRange(container.ExportVersion))
 			{
-				node.Add(SpeedRangeName, SpeedRange.ExportYAML(container));
+				node.Add(SpeedRangeName, SpeedRange.ExportYaml(container));
 			}
 			node.Add(TilesXName, TilesX);
 			node.Add(TilesYName, TilesY);
@@ -170,7 +170,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.UV
 			{
 				node.Add(RandomRowName, RandomRow);
 			}
-			node.Add(SpritesName, GetExportSprites(container.Version).ExportYAML(container));
+			node.Add(SpritesName, GetExportSprites(container.Version).ExportYaml(container));
 			return node;
 		}
 

@@ -5,11 +5,9 @@ using System.Linq;
 
 namespace AssetRipper.Yaml
 {
-	using Version = Version;
-
-	public class YAMLWriter
+	public class YamlWriter
 	{
-		public void AddDocument(YAMLDocument document)
+		public void AddDocument(YamlDocument document)
 		{
 #if DEBUG
 			if (document == null)
@@ -24,14 +22,14 @@ namespace AssetRipper.Yaml
 		{
 			if (m_tags.Any(t => t.Handle == handle))
 				throw new Exception($"Writer already contains tag {handle}");
-			YAMLTag tag = new YAMLTag(handle, content);
+			YamlTag tag = new YamlTag(handle, content);
 			m_tags.Add(tag);
 		}
 
 		public void Write(TextWriter output)
 		{
 			WriteHead(output);
-			foreach (YAMLDocument doc in m_documents)
+			foreach (YamlDocument doc in m_documents)
 				WriteDocument(doc);
 			WriteTail(output);
 		}
@@ -43,23 +41,23 @@ namespace AssetRipper.Yaml
 
 			if (IsWriteVersion)
 			{
-				m_emitter.WriteMeta(MetaType.YAML, Version.ToString());
+				m_emitter.WriteMeta(MetaType.Yaml, Version.ToString());
 				m_isWriteSeparator = true;
 			}
 
 			if (IsWriteDefaultTag)
 			{
-				m_emitter.WriteMeta(MetaType.TAG, DefaultTag.ToHeaderString());
+				m_emitter.WriteMeta(MetaType.Tag, DefaultTag.ToHeaderString());
 				m_isWriteSeparator = true;
 			}
-			foreach (YAMLTag tag in m_tags)
+			foreach (YamlTag tag in m_tags)
 			{
-				m_emitter.WriteMeta(MetaType.TAG, tag.ToHeaderString());
+				m_emitter.WriteMeta(MetaType.Tag, tag.ToHeaderString());
 				m_isWriteSeparator = true;
 			}
 		}
 
-		public void WriteDocument(YAMLDocument doc)
+		public void WriteDocument(YamlDocument doc)
 		{
 			doc.Emit(m_emitter, m_isWriteSeparator);
 			m_isWriteSeparator = true;
@@ -75,14 +73,14 @@ namespace AssetRipper.Yaml
 		public const string DefaultTagHandle = "!u!";
 		public const string DefaultTagContent = "tag:unity3d.com,2011:";
 
-		public readonly YAMLTag DefaultTag = new YAMLTag(DefaultTagHandle, DefaultTagContent);
+		public readonly YamlTag DefaultTag = new YamlTag(DefaultTagHandle, DefaultTagContent);
 
 		public bool IsWriteVersion { get; set; } = true;
 		public bool IsWriteDefaultTag { get; set; } = true;
 		public bool IsFormatKeys { get; set; }
 
-		private readonly HashSet<YAMLDocument> m_documents = new HashSet<YAMLDocument>();
-		private readonly List<YAMLTag> m_tags = new List<YAMLTag>();
+		private readonly HashSet<YamlDocument> m_documents = new HashSet<YamlDocument>();
+		private readonly List<YamlTag> m_tags = new List<YamlTag>();
 
 		private Emitter m_emitter;
 		private bool m_isWriteSeparator;

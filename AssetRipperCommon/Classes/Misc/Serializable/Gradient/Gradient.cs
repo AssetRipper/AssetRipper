@@ -129,31 +129,31 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Gradient
 			writer.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (!UsesColorRBGAf(container.ExportVersion))
 			{
-				node.Add(Key0Name, Key0_32.ExportYAML(container));
-				node.Add(Key1Name, Key1_32.ExportYAML(container));
-				node.Add(Key2Name, Key2_32.ExportYAML(container));
-				node.Add(Key3Name, Key3_32.ExportYAML(container));
-				node.Add(Key4Name, Key4_32.ExportYAML(container));
-				node.Add(Key5Name, Key5_32.ExportYAML(container));
-				node.Add(Key6Name, Key6_32.ExportYAML(container));
-				node.Add(Key7Name, Key7_32.ExportYAML(container));
+				node.Add(Key0Name, Key0_32.ExportYaml(container));
+				node.Add(Key1Name, Key1_32.ExportYaml(container));
+				node.Add(Key2Name, Key2_32.ExportYaml(container));
+				node.Add(Key3Name, Key3_32.ExportYaml(container));
+				node.Add(Key4Name, Key4_32.ExportYaml(container));
+				node.Add(Key5Name, Key5_32.ExportYaml(container));
+				node.Add(Key6Name, Key6_32.ExportYaml(container));
+				node.Add(Key7Name, Key7_32.ExportYaml(container));
 			}
 			else
 			{
-				node.Add(Key0Name, Key0.ExportYAML(container));
-				node.Add(Key1Name, Key1.ExportYAML(container));
-				node.Add(Key2Name, Key2.ExportYAML(container));
-				node.Add(Key3Name, Key3.ExportYAML(container));
-				node.Add(Key4Name, Key4.ExportYAML(container));
-				node.Add(Key5Name, Key5.ExportYAML(container));
-				node.Add(Key6Name, Key6.ExportYAML(container));
-				node.Add(Key7Name, Key7.ExportYAML(container));
+				node.Add(Key0Name, Key0.ExportYaml(container));
+				node.Add(Key1Name, Key1.ExportYaml(container));
+				node.Add(Key2Name, Key2.ExportYaml(container));
+				node.Add(Key3Name, Key3.ExportYaml(container));
+				node.Add(Key4Name, Key4.ExportYaml(container));
+				node.Add(Key5Name, Key5.ExportYaml(container));
+				node.Add(Key6Name, Key6.ExportYaml(container));
+				node.Add(Key7Name, Key7.ExportYaml(container));
 			}
 
 			node.Add(Ctime0Name, Ctime0);

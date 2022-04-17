@@ -58,21 +58,21 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			if (HasExtensionPtr(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(ExtensionPtrName, ExtensionPtr.ExportYAML(container));
+				node.Add(ExtensionPtrName, ExtensionPtr.ExportYaml(container));
 			}
 			if (HasCorrespondingSourceObject(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(CorrespondingSourceObjectInvariantName(container.ExportVersion, container.ExportFlags), CorrespondingSourceObject.ExportYAML(container));
-				node.Add(PrefabInstanceInvariantName(container.ExportVersion, container.ExportFlags), PrefabInstance.ExportYAML(container));
+				node.Add(CorrespondingSourceObjectInvariantName(container.ExportVersion, container.ExportFlags), CorrespondingSourceObject.ExportYaml(container));
+				node.Add(PrefabInstanceInvariantName(container.ExportVersion, container.ExportFlags), PrefabInstance.ExportYaml(container));
 			}
 			if (HasPrefabAsset(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(PrefabAssetName, PrefabAsset.ExportYAML(container));
+				node.Add(PrefabAssetName, PrefabAsset.ExportYaml(container));
 			}
 			return node;
 		}
@@ -87,9 +87,9 @@ namespace AssetRipper.Core.Classes
 			base.Write(writer);
 		}
 
-		protected YAMLMappingNode ExportYAMLRootObject(IExportContainer container)
+		protected YamlMappingNode ExportYamlRootObject(IExportContainer container)
 		{
-			return base.ExportYAMLRoot(container);
+			return base.ExportYamlRoot(container);
 		}
 
 		protected IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesObject(DependencyContext context)

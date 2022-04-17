@@ -50,4 +50,4 @@ You should be prompted with confirmation box beginning with `Your project was la
 Other possible causes of this issue include: 
 * Exporting engine assets as normal assets
 * Including engine dll assemblies in the project
-* Bugged YAML export
+* Bugged Yaml export

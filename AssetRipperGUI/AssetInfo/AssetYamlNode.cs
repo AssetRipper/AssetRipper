@@ -14,7 +14,7 @@ namespace AssetRipper.GUI.AssetInfo
 		//Read from UI
 		public List<AssetYamlNode> Children { get; } = new();
 
-		public AssetYamlNode(string key, YAMLScalarNode value)
+		public AssetYamlNode(string key, YamlScalarNode value)
 		{
 			if (key == "_typelessdata")
 			{
@@ -29,12 +29,12 @@ namespace AssetRipper.GUI.AssetInfo
 				DisplayName += "<Null or Empty Value>";
 		}
 
-		public AssetYamlNode(string key, YAMLMappingNode value)
+		public AssetYamlNode(string key, YamlMappingNode value)
 		{
 			DisplayName = key;
 			foreach (var (keyNode, valueNode) in value.m_children)
 			{
-				string subKey = keyNode is YAMLScalarNode s ? s.Value : keyNode.ToString()!;
+				string subKey = keyNode is YamlScalarNode s ? s.Value : keyNode.ToString()!;
 
 				AppendChild(subKey, valueNode);
 			}
@@ -49,7 +49,7 @@ namespace AssetRipper.GUI.AssetInfo
 			}
 		}
 
-		public AssetYamlNode(string key, YAMLSequenceNode value)
+		public AssetYamlNode(string key, YamlSequenceNode value)
 		{
 			DisplayName = key;
 			int i = 0;
@@ -72,18 +72,18 @@ namespace AssetRipper.GUI.AssetInfo
 			}
 		}
 
-		private void AppendChild(string subKey, YAMLNode valueNode)
+		private void AppendChild(string subKey, YamlNode valueNode)
 		{
 			AssetYamlNode child;
-			if (valueNode is YAMLScalarNode scalarNode)
+			if (valueNode is YamlScalarNode scalarNode)
 			{
 				child = new AssetYamlNode(subKey, scalarNode);
 			}
-			else if (valueNode is YAMLMappingNode mappingNode)
+			else if (valueNode is YamlMappingNode mappingNode)
 			{
 				child = new AssetYamlNode(subKey, mappingNode);
 			}
-			else if (valueNode is YAMLSequenceNode sequenceNode)
+			else if (valueNode is YamlSequenceNode sequenceNode)
 			{
 				child = new AssetYamlNode(subKey, sequenceNode);
 			}

@@ -61,14 +61,14 @@ namespace AssetRipper.Core.Classes
 
 		public bool Equals(string other) => String.Equals(other);
 
-		public override YAMLNode ExportYAMLEditor(IExportContainer container)
+		public override YamlNode ExportYamlEditor(IExportContainer container)
 		{
-			return new YAMLScalarNode(String);
+			return new YamlScalarNode(String);
 		}
 
-		public override YAMLNode ExportYAMLRelease(IExportContainer container)
+		public override YamlNode ExportYamlRelease(IExportContainer container)
 		{
-			return new YAMLScalarNode(String);
+			return new YamlScalarNode(String);
 		}
 
 		public override bool Equals(object obj)

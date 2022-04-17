@@ -3,9 +3,9 @@ using System.Text;
 
 namespace AssetRipper.Yaml.Extensions
 {
-	public static class IListYAMLExtensions
+	public static class YamlListExtensions
 	{
-		public static YAMLNode ExportYAML(this IReadOnlyList<bool> _this)
+		public static YamlNode ExportYaml(this IReadOnlyList<bool> _this)
 		{
 			StringBuilder sb = new StringBuilder(_this.Count * 2);
 			foreach (bool value in _this)
@@ -14,28 +14,28 @@ namespace AssetRipper.Yaml.Extensions
 				sb.AppendHex(bvalue);
 			}
 
-			return new YAMLScalarNode(sb.ToString(), true);
+			return new YamlScalarNode(sb.ToString(), true);
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<char> _this)
+		public static YamlNode ExportYaml(this IReadOnlyList<char> _this)
 		{
 			StringBuilder sb = new StringBuilder(_this.Count * 4);
 			foreach (char value in _this)
 				sb.AppendHex(value);
 
-			return new YAMLScalarNode(sb.ToString(), true);
+			return new YamlScalarNode(sb.ToString(), true);
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<byte> _this)
+		public static YamlNode ExportYaml(this IReadOnlyList<byte> _this)
 		{
 			StringBuilder sb = new StringBuilder(_this.Count * 2);
 			foreach (byte value in _this)
 				sb.AppendHex(value);
 
-			return new YAMLScalarNode(sb.ToString(), true);
+			return new YamlScalarNode(sb.ToString(), true);
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<ushort> _this, bool isRaw)
+		public static YamlNode ExportYaml(this IReadOnlyList<ushort> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
@@ -43,11 +43,11 @@ namespace AssetRipper.Yaml.Extensions
 				foreach (ushort value in _this)
 					sb.AppendHex(value);
 
-				return new YAMLScalarNode(sb.ToString(), true);
+				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
-				YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (ushort value in _this)
 					node.Add(value);
 
@@ -55,7 +55,7 @@ namespace AssetRipper.Yaml.Extensions
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<short> _this, bool isRaw)
+		public static YamlNode ExportYaml(this IReadOnlyList<short> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
@@ -63,11 +63,11 @@ namespace AssetRipper.Yaml.Extensions
 				foreach (short value in _this)
 					sb.AppendHex(value);
 
-				return new YAMLScalarNode(sb.ToString(), true);
+				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
-				YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (short value in _this)
 					node.Add(value);
 
@@ -75,7 +75,7 @@ namespace AssetRipper.Yaml.Extensions
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<uint> _this, bool isRaw)
+		public static YamlNode ExportYaml(this IReadOnlyList<uint> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
@@ -83,11 +83,11 @@ namespace AssetRipper.Yaml.Extensions
 				foreach (uint value in _this)
 					sb.AppendHex(value);
 
-				return new YAMLScalarNode(sb.ToString(), true);
+				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
-				YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (uint value in _this)
 					node.Add(value);
 
@@ -95,16 +95,16 @@ namespace AssetRipper.Yaml.Extensions
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<IReadOnlyList<uint>> _this, bool isRaw)
+		public static YamlNode ExportYaml(this IReadOnlyList<IReadOnlyList<uint>> _this, bool isRaw)
 		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 			foreach (var value in _this)
-				node.Add(value.ExportYAML(isRaw));
+				node.Add(value.ExportYaml(isRaw));
 
 			return node;
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<int> _this, bool isRaw)
+		public static YamlNode ExportYaml(this IReadOnlyList<int> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
@@ -112,11 +112,11 @@ namespace AssetRipper.Yaml.Extensions
 				foreach (int value in _this)
 					sb.AppendHex(value);
 
-				return new YAMLScalarNode(sb.ToString(), true);
+				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
-				YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (int value in _this)
 					node.Add(value);
 
@@ -124,7 +124,7 @@ namespace AssetRipper.Yaml.Extensions
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<ulong> _this, bool isRaw)
+		public static YamlNode ExportYaml(this IReadOnlyList<ulong> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
@@ -132,11 +132,11 @@ namespace AssetRipper.Yaml.Extensions
 				foreach (ulong value in _this)
 					sb.AppendHex(value);
 
-				return new YAMLScalarNode(sb.ToString(), true);
+				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
-				YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (ulong value in _this)
 					node.Add(value);
 
@@ -144,7 +144,7 @@ namespace AssetRipper.Yaml.Extensions
 			}
 		}
 
-		public static YAMLNode ExportYAML(this IReadOnlyList<long> _this, bool isRaw)
+		public static YamlNode ExportYaml(this IReadOnlyList<long> _this, bool isRaw)
 		{
 			if (isRaw)
 			{
@@ -152,11 +152,11 @@ namespace AssetRipper.Yaml.Extensions
 				foreach (long value in _this)
 					sb.AppendHex(value);
 
-				return new YAMLScalarNode(sb.ToString(), true);
+				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
-				YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (long value in _this)
 					node.Add(value);
 

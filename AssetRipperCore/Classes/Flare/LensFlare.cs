@@ -45,18 +45,18 @@ namespace AssetRipper.Core.Classes.Flare
 			yield return context.FetchDependency(Flare, "m_Flare");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("m_Flare", Flare.ExportYAML(container));
-			node.Add("m_Color", Color.ExportYAML(container));
+			node.Add("m_Flare", Flare.ExportYaml(container));
+			node.Add("m_Color", Color.ExportYaml(container));
 			node.Add("m_Brightness", Brightness);
 			if (HasFadeSpeed(container.ExportVersion))
 			{
 				node.Add("m_FadeSpeed", FadeSpeed);
 			}
-			node.Add("m_IgnoreLayers", IgnoreLayers.ExportYAML(container));
+			node.Add("m_IgnoreLayers", IgnoreLayers.ExportYaml(container));
 			node.Add("m_Directional", Directional);
 			return node;
 		}

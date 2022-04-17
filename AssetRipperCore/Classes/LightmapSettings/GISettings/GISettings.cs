@@ -107,13 +107,13 @@ namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 			writer.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (HasSkyLightColorRGBAf(container.ExportVersion))
 			{
-				node.Add(SkyLightColorName, SkyLightColor.ExportYAML(container));
+				node.Add(SkyLightColorName, SkyLightColor.ExportYaml(container));
 				node.Add(SkyLightIntensityName, SkyLightIntensity);
 			}
 			node.Add(BounceScaleName, BounceScale);

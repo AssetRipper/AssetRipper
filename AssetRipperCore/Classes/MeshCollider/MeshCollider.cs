@@ -105,14 +105,14 @@ namespace AssetRipper.Core.Classes.MeshCollider
 			yield return context.FetchDependency(Mesh, MeshName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ConvexName, Convex);
 			node.Add(CookingOptionsName, (int)GetCookingOptions(container.Version, container.ExportVersion));
 			node.Add(SkinWidthName, GetSkinWidth(container.Version));
-			node.Add(MeshName, Mesh.ExportYAML(container));
+			node.Add(MeshName, Mesh.ExportYaml(container));
 			return node;
 		}
 

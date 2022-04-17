@@ -42,9 +42,9 @@ namespace AssetRipper.Core.Math.Colors
 			writer.Write(RGBA);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion());
 			node.Add(RgbaName, RGBA);
 			return node;

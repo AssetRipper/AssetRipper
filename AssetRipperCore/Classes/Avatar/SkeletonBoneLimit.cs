@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public sealed class SkeletonBoneLimit : IAssetReadable, IYAMLExportable
+	public sealed class SkeletonBoneLimit : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -18,12 +18,12 @@ namespace AssetRipper.Core.Classes.Avatar
 
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(MinName, Min.ExportYAML(container));
-			node.Add(MaxName, Max.ExportYAML(container));
-			node.Add(ValueName, Value.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(MinName, Min.ExportYaml(container));
+			node.Add(MaxName, Max.ExportYaml(container));
+			node.Add(ValueName, Value.ExportYaml(container));
 			node.Add(LengthName, Length);
 			node.Add(ModifiedName, Modified);
 			return node;

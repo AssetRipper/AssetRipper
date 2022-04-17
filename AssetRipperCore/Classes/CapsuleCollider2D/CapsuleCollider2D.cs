@@ -18,10 +18,10 @@ namespace AssetRipper.Core.Classes.CapsuleCollider2D
 			Direction = (CapsuleDirection2D)reader.ReadInt32();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(SizeName, Size.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(SizeName, Size.ExportYaml(container));
 			node.Add(DirectionName, (int)Direction);
 			return node;
 		}

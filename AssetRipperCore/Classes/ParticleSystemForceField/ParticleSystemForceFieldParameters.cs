@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ParticleSystemForceField
 {
-	public sealed class ParticleSystemForceFieldParameters : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class ParticleSystemForceFieldParameters : IAssetReadable, IYamlExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -40,25 +40,25 @@ namespace AssetRipper.Core.Classes.ParticleSystemForceField
 			yield return context.FetchDependency(VectorField, VectorFieldName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ShapeName, (int)Shape);
 			node.Add(StartRangeName, StartRange);
 			node.Add(EndRangeName, EndRange);
 			node.Add(LengthName, Length);
 			node.Add(GravityFocusName, GravityFocus);
-			node.Add(RotationRandomnessName, RotationRandomness.ExportYAML(container));
-			node.Add(DirectionCurveXName, DirectionCurveX.ExportYAML(container));
-			node.Add(DirectionCurveYName, DirectionCurveY.ExportYAML(container));
-			node.Add(DirectionCurveZName, DirectionCurveZ.ExportYAML(container));
-			node.Add(GravityCurveName, GravityCurve.ExportYAML(container));
-			node.Add(RotationSpeedCurveName, RotationSpeedCurve.ExportYAML(container));
-			node.Add(RotationAttractionCurveName, RotationAttractionCurve.ExportYAML(container));
-			node.Add(DragCurveName, DragCurve.ExportYAML(container));
-			node.Add(VectorFieldName, VectorField.ExportYAML(container));
-			node.Add(VectorFieldSpeedCurveName, VectorFieldSpeedCurve.ExportYAML(container));
-			node.Add(VectorFieldAttractionCurveName, VectorFieldAttractionCurve.ExportYAML(container));
+			node.Add(RotationRandomnessName, RotationRandomness.ExportYaml(container));
+			node.Add(DirectionCurveXName, DirectionCurveX.ExportYaml(container));
+			node.Add(DirectionCurveYName, DirectionCurveY.ExportYaml(container));
+			node.Add(DirectionCurveZName, DirectionCurveZ.ExportYaml(container));
+			node.Add(GravityCurveName, GravityCurve.ExportYaml(container));
+			node.Add(RotationSpeedCurveName, RotationSpeedCurve.ExportYaml(container));
+			node.Add(RotationAttractionCurveName, RotationAttractionCurve.ExportYaml(container));
+			node.Add(DragCurveName, DragCurve.ExportYaml(container));
+			node.Add(VectorFieldName, VectorField.ExportYaml(container));
+			node.Add(VectorFieldSpeedCurveName, VectorFieldSpeedCurve.ExportYaml(container));
+			node.Add(VectorFieldAttractionCurveName, VectorFieldAttractionCurve.ExportYaml(container));
 			node.Add(MultiplyDragByParticleSizeName, MultiplyDragByParticleSize);
 			node.Add(MultiplyDragByParticleVelocityName, MultiplyDragByParticleVelocity);
 			return node;

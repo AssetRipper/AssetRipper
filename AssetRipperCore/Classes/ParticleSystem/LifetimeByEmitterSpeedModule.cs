@@ -16,11 +16,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			Range.Read(reader);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add(CurveName, Curve.ExportYAML(container));
-			node.Add(RangeName, Range.ExportYAML(container));
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
+			node.Add(CurveName, Curve.ExportYaml(container));
+			node.Add(RangeName, Range.ExportYaml(container));
 			return node;
 		}
 

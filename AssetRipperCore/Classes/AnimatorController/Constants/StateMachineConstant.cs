@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class StateMachineConstant : IAssetReadable, IYAMLExportable
+	public sealed class StateMachineConstant : IAssetReadable, IYamlExportable
 	{
 		public struct Parameters
 		{
@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			MotionSetCount = reader.ReadUInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

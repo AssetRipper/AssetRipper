@@ -161,32 +161,32 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(NameName, Name);
-			node.Add(NormalName, Normal.ExportYAML(container));
-			node.Add(HoverName, Hover.ExportYAML(container));
-			node.Add(ActiveName, Active.ExportYAML(container));
-			node.Add(FocusedName, Focused.ExportYAML(container));
-			node.Add(OnNormalName, OnNormal.ExportYAML(container));
-			node.Add(OnHoverName, OnHover.ExportYAML(container));
-			node.Add(OnActiveName, OnActive.ExportYAML(container));
-			node.Add(OnFocusedName, OnFocused.ExportYAML(container));
-			node.Add(BorderName, Border.ExportYAML(container));
+			node.Add(NormalName, Normal.ExportYaml(container));
+			node.Add(HoverName, Hover.ExportYaml(container));
+			node.Add(ActiveName, Active.ExportYaml(container));
+			node.Add(FocusedName, Focused.ExportYaml(container));
+			node.Add(OnNormalName, OnNormal.ExportYaml(container));
+			node.Add(OnHoverName, OnHover.ExportYaml(container));
+			node.Add(OnActiveName, OnActive.ExportYaml(container));
+			node.Add(OnFocusedName, OnFocused.ExportYaml(container));
+			node.Add(BorderName, Border.ExportYaml(container));
 			if (IsBuiltinFormat(container.ExportVersion))
 			{
-				node.Add(MarginName, Margin.ExportYAML(container));
-				node.Add(PaddingName, Padding.ExportYAML(container));
+				node.Add(MarginName, Margin.ExportYaml(container));
+				node.Add(PaddingName, Padding.ExportYaml(container));
 			}
 			else
 			{
-				node.Add(PaddingName, Padding.ExportYAML(container));
-				node.Add(MarginName, Margin.ExportYAML(container));
+				node.Add(PaddingName, Padding.ExportYaml(container));
+				node.Add(MarginName, Margin.ExportYaml(container));
 			}
 
-			node.Add(OverflowName, Overflow.ExportYAML(container));
-			node.Add(FontName, Font.ExportYAML(container));
+			node.Add(OverflowName, Overflow.ExportYaml(container));
+			node.Add(FontName, Font.ExportYaml(container));
 			if (IsBuiltinFormat(container.ExportVersion))
 			{
 				node.Add(FontSizeName, FontSize);
@@ -196,7 +196,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 				node.Add(RichTextName, RichText);
 				node.Add(TextClippingName, (int)TextClipping);
 				node.Add(ImagePositionName, (int)ImagePosition);
-				node.Add(ContentOffsetName, ContentOffset.ExportYAML(container));
+				node.Add(ContentOffsetName, ContentOffset.ExportYaml(container));
 				node.Add(FixedWidthName, FixedWidth);
 				node.Add(FixedHeightName, FixedHeight);
 				node.Add(StretchWidthName, StretchWidth);
@@ -208,8 +208,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 				node.Add(AlignmentName, (int)Alignment);
 				node.Add(WordWrapName, WordWrap);
 				node.Add(TextClippingName, (int)TextClipping);
-				node.Add(ContentOffsetName, ContentOffset.ExportYAML(container));
-				node.Add(ClipOffsetName, ClipOffset.ExportYAML(container));
+				node.Add(ContentOffsetName, ContentOffset.ExportYaml(container));
+				node.Add(ClipOffsetName, ClipOffset.ExportYaml(container));
 				node.Add(FixedWidthName, FixedWidth);
 				node.Add(FixedHeightName, FixedHeight);
 				if (HasFontSize(container.ExportVersion))

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedTagMap : IAssetReadable, IYAMLExportable
+	public sealed class SerializedTagMap : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -16,10 +16,10 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			m_tags.Read(reader);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("tags", m_tags.ExportYAML());
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("tags", m_tags.ExportYaml());
 			return node;
 		}
 

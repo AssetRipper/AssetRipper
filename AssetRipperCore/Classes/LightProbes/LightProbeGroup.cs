@@ -45,15 +45,15 @@ namespace AssetRipper.Core.Classes.LightProbes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRootComponent(container);
+			YamlMappingNode node = base.ExportYamlRootComponent(container);
 			if (HasEnabled(container.ExportVersion))
 			{
 				node.Add(EnabledName, m_Enabled);
 			}
 			//Editor-Only
-			node.Add("m_SourcePositions", Array.Empty<Vector3f>().ExportYAML(container));
+			node.Add("m_SourcePositions", Array.Empty<Vector3f>().ExportYaml(container));
 			if (HasDering(container.ExportVersion))
 			{
 				node.Add("m_Dering", default(bool));

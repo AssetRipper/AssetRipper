@@ -145,9 +145,9 @@ namespace AssetRipper.Core.Classes.ReflectionProbe
 			yield return context.FetchDependency(CustomBakedTexture, CustomBakedTextureName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TypeName, (int)Type);
 			node.Add(ModeName, (int)Mode);
@@ -155,14 +155,14 @@ namespace AssetRipper.Core.Classes.ReflectionProbe
 			node.Add(TimeSlicingModeName, (int)TimeSlicingMode);
 			node.Add(ResolutionName, Resolution);
 			node.Add(UpdateFrequencyName, UpdateFrequency);
-			node.Add(BoxSizeName, BoxSize.ExportYAML(container));
-			node.Add(BoxOffsetName, BoxOffset.ExportYAML(container));
+			node.Add(BoxSizeName, BoxSize.ExportYaml(container));
+			node.Add(BoxOffsetName, BoxOffset.ExportYaml(container));
 			node.Add(NearClipName, NearClip);
 			node.Add(FarClipName, FarClip);
 			node.Add(ShadowDistanceName, ShadowDistance);
 			node.Add(ClearFlagsName, (uint)ClearFlags);
-			node.Add(BackGroundColorName, BackGroundColor.ExportYAML(container));
-			node.Add(CullingMaskName, CullingMask.ExportYAML(container));
+			node.Add(BackGroundColorName, BackGroundColor.ExportYaml(container));
+			node.Add(CullingMaskName, CullingMask.ExportYaml(container));
 			node.Add(IntensityMultiplierName, IntensityMultiplier);
 			node.Add(BlendDistanceName, BlendDistance);
 			node.Add(HDRName, HDR);
@@ -170,10 +170,10 @@ namespace AssetRipper.Core.Classes.ReflectionProbe
 			node.Add(RenderDynamicObjectsName, RenderDynamicObjects);
 			node.Add(UseOcclusionCullingName, UseOcclusionCulling);
 			node.Add(ImportanceName, Importance);
-			node.Add(CustomBakedTextureName, CustomBakedTexture.ExportYAML(container));
+			node.Add(CustomBakedTextureName, CustomBakedTexture.ExportYaml(container));
 			if (HasBakedTexture(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(BakedTextureName, BakedTextureTexture.ExportYAML(container));
+				node.Add(BakedTextureName, BakedTextureTexture.ExportYaml(container));
 			}
 			return node;
 		}

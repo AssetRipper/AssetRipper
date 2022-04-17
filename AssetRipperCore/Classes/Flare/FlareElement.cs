@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Flare
 {
-	public sealed class FlareElement : IAssetReadable, IYAMLExportable
+	public sealed class FlareElement : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -19,13 +19,13 @@ namespace AssetRipper.Core.Classes.Flare
 			Fade = reader.ReadBoolean();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ImageIndexName, ImageIndex);
 			node.Add(PositionName, Position);
 			node.Add(SizeName, Size);
-			node.Add(ColorName, Color.ExportYAML(container));
+			node.Add(ColorName, Color.ExportYaml(container));
 			node.Add(UseLightColorName, UseLightColor);
 			node.Add(RotateName, Rotate);
 			node.Add(ZoomName, Zoom);

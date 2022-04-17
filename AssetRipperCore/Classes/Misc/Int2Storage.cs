@@ -21,9 +21,9 @@ namespace AssetRipper.Core.Classes.Misc
 			writer.Write(Y);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Style = MappingStyle.Flow;
 			node.Add(XName, X);
 			node.Add(YName, Y);

@@ -289,12 +289,12 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 			yield return context.FetchDependency(DefaultMaterial, DefaultMaterialName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(GravityName, Gravity.ExportYAML(container));
-			node.Add(DefaultMaterialName, DefaultMaterial.ExportYAML(container));
+			node.Add(GravityName, Gravity.ExportYaml(container));
+			node.Add(DefaultMaterialName, DefaultMaterial.ExportYaml(container));
 			node.Add(BounceThresholdName, BounceThreshold);
 			node.Add(SleepThresholdName, GetSleepThreshold(container.Version));
 			node.Add(DefaultContactOffsetName, GetDefaultContactOffset(container.Version));
@@ -306,18 +306,18 @@ namespace AssetRipper.Core.Classes.PhysicsManager
 			node.Add(ClothInterCollisionDistanceName, ClothInterCollisionDistance);
 			node.Add(ClothInterCollisionStiffnessName, ClothInterCollisionStiffness);
 			node.Add(ContactsGenerationName, (int)GetContactsGeneration(container.Version));
-			node.Add(LayerCollisionMatrixName, GetLayerCollisionMatrix(container.Version).ExportYAML(true));
+			node.Add(LayerCollisionMatrixName, GetLayerCollisionMatrix(container.Version).ExportYaml(true));
 			node.Add(AutoSimulationName, GetAutoSimulation(container.Version));
 			node.Add(AutoSyncTransformsName, GetAutoSyncTransforms(container.Version));
 			node.Add(ReuseCollisionCallbacksName, ReuseCollisionCallbacks);
 			node.Add(ClothInterCollisionSettingsToggleName, ClothInterCollisionSettingsToggle);
 			if (HasClothGravity(container.ExportVersion))
 			{
-				node.Add(ClothGravityName, GetClothGravity(container.Version).ExportYAML(container));
+				node.Add(ClothGravityName, GetClothGravity(container.Version).ExportYaml(container));
 			}
 			node.Add(ContactPairsModeName, (int)ContactPairsMode);
 			node.Add(BroadphaseTypeName, (int)BroadphaseType);
-			node.Add(WorldBoundsName, GetWorldBounds(container.Version).ExportYAML(container));
+			node.Add(WorldBoundsName, GetWorldBounds(container.Version).ExportYaml(container));
 			node.Add(WorldSubdivisionsName, GetWorldSubdivisions(container.Version));
 			if (HasFrictionType(container.ExportVersion))
 			{

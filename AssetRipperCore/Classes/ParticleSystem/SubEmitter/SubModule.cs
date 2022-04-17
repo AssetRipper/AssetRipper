@@ -99,11 +99,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(SubEmittersName, SubEmitters.ExportYAML(container));
+			node.Add(SubEmittersName, SubEmitters.ExportYaml(container));
 			return node;
 		}
 

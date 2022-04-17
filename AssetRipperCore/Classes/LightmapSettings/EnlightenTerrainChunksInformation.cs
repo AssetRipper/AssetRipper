@@ -20,9 +20,9 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			writer.Write(NumChunksInY);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(FirstSystemIdName, FirstSystemId);
 			node.Add(NumChunksInXName, NumChunksInX);
 			node.Add(NumChunksInYName, NumChunksInY);

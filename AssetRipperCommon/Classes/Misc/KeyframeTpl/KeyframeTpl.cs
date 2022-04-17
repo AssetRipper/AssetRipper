@@ -86,14 +86,14 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TimeName, Time);
-			node.Add(ValueName, Value.ExportYAML(container));
-			node.Add(InSlopeName, InSlope.ExportYAML(container));
-			node.Add(OutSlopeName, OutSlope.ExportYAML(container));
+			node.Add(ValueName, Value.ExportYaml(container));
+			node.Add(InSlopeName, InSlope.ExportYaml(container));
+			node.Add(OutSlopeName, OutSlope.ExportYaml(container));
 			if (HasTangentMode(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(TangentModeName, TangentMode);
@@ -101,8 +101,8 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 			if (HasWeightedMode(container.ExportVersion))
 			{
 				node.Add(WeightedModeName, (int)WeightedMode);
-				node.Add(InWeightName, InWeight.ExportYAML(container));
-				node.Add(OutWeightName, OutWeight.ExportYAML(container));
+				node.Add(InWeightName, InWeight.ExportYaml(container));
+				node.Add(OutWeightName, OutWeight.ExportYaml(container));
 			}
 			return node;
 		}

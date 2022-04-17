@@ -70,11 +70,11 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		public static void MaybeExportYamlForStructure(this IMonoBehaviour monoBehaviour, YAMLMappingNode node, IExportContainer container)
+		public static void MaybeExportYamlForStructure(this IMonoBehaviour monoBehaviour, YamlMappingNode node, IExportContainer container)
 		{
 			if (monoBehaviour.Structure != null)
 			{
-				YAMLMappingNode structureNode = (YAMLMappingNode)monoBehaviour.Structure.ExportYAML(container);
+				YamlMappingNode structureNode = (YamlMappingNode)monoBehaviour.Structure.ExportYaml(container);
 				node.Append(structureNode);
 			}
 		}

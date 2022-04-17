@@ -172,9 +172,9 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(BuildTargetName, BuildTarget);
 			node.Add(MaxTextureSizeName, MaxTextureSize);

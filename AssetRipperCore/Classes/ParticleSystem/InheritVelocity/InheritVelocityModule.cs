@@ -22,11 +22,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem.InheritVelocity
 			Curve.Read(reader);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.Add(ModeName, (int)Mode);
-			node.Add(CurveName, Curve.ExportYAML(container));
+			node.Add(CurveName, Curve.ExportYaml(container));
 			return node;
 		}
 

@@ -253,37 +253,37 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 			yield return context.FetchDependency(SkinnedMeshRenderer, SkinnedMeshRendererName);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TypeName, (int)GetType(container.Version));
 			node.Add(AngleName, Angle);
 			node.Add(LengthName, GetExportLength(container.Version));
-			node.Add(BoxThicknessName, BoxThickness.ExportYAML(container));
+			node.Add(BoxThicknessName, BoxThickness.ExportYaml(container));
 			node.Add(RadiusThicknessName, GetExportRadiusThickness(container.Version));
 			node.Add(DonutRadiusName, GetExportDonutRadius(container.Version));
-			node.Add(PositionName, Position.ExportYAML(container));
-			node.Add(RotationName, Rotation.ExportYAML(container));
-			node.Add(ScaleName, Scale.ExportYAML(container));
+			node.Add(PositionName, Position.ExportYaml(container));
+			node.Add(RotationName, Rotation.ExportYaml(container));
+			node.Add(ScaleName, Scale.ExportYaml(container));
 			node.Add(PlacementModeName, (int)PlacementMode);
 			node.Add(MeshMaterialIndexName, MeshMaterialIndex);
 			node.Add(MeshNormalOffsetName, MeshNormalOffset);
 			if (HasMeshSpawn(container.Version))
 			{
-				node.Add(MeshSpawnName, MeshSpawn.ExportYAML(container));
+				node.Add(MeshSpawnName, MeshSpawn.ExportYaml(container));
 			}
-			node.Add(MeshName, Mesh.ExportYAML(container));
-			node.Add(MeshRendererName, MeshRenderer.ExportYAML(container));
-			node.Add(SkinnedMeshRendererName, SkinnedMeshRenderer.ExportYAML(container));
+			node.Add(MeshName, Mesh.ExportYaml(container));
+			node.Add(MeshRendererName, MeshRenderer.ExportYaml(container));
+			node.Add(SkinnedMeshRendererName, SkinnedMeshRenderer.ExportYaml(container));
 			node.Add(UseMeshMaterialIndexName, UseMeshMaterialIndex);
 			node.Add(UseMeshColorsName, GetExportUseMeshColors(container.Version));
 			node.Add(AlignToDirectionName, AlignToDirection);
 			node.Add(RandomDirectionAmountName, RandomDirectionAmount);
 			node.Add(SphericalDirectionAmountName, SphericalDirectionAmount);
 			node.Add(RandomPositionAmountName, RandomPositionAmount);
-			node.Add(RadiusName, Radius.ExportYAML(container));
-			node.Add(ArcName, GetArc(container.Version).ExportYAML(container));
+			node.Add(RadiusName, Radius.ExportYaml(container));
+			node.Add(ArcName, GetArc(container.Version).ExportYaml(container));
 			return node;
 		}
 

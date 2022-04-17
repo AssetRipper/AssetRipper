@@ -2,82 +2,82 @@
 
 namespace AssetRipper.Yaml
 {
-	public sealed class YAMLSequenceNode : YAMLNode
+	public sealed class YamlSequenceNode : YamlNode
 	{
-		public YAMLSequenceNode() { }
+		public YamlSequenceNode() { }
 
-		public YAMLSequenceNode(SequenceStyle style)
+		public YamlSequenceNode(SequenceStyle style)
 		{
 			Style = style;
 		}
 
 		public void Add(bool value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(byte value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(short value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(ushort value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(int value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(uint value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(long value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(ulong value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(float value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(double value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(string value)
 		{
-			YAMLScalarNode node = new YAMLScalarNode(value);
+			YamlScalarNode node = new YamlScalarNode(value);
 			Add(node);
 		}
 
-		public void Add(YAMLNode child)
+		public void Add(YamlNode child)
 		{
 			m_children.Add(child);
 		}
@@ -87,7 +87,7 @@ namespace AssetRipper.Yaml
 			base.Emit(emitter);
 
 			StartChildren(emitter);
-			foreach (YAMLNode child in m_children)
+			foreach (YamlNode child in m_children)
 			{
 				StartChild(emitter, child);
 				child.Emit(emitter);
@@ -149,7 +149,7 @@ namespace AssetRipper.Yaml
 			}
 		}
 
-		private void StartChild(Emitter emitter, YAMLNode next)
+		private void StartChild(Emitter emitter, YamlNode next)
 		{
 			if (Style.IsAnyBlock())
 			{
@@ -162,7 +162,7 @@ namespace AssetRipper.Yaml
 				emitter.IncreaseIndent();
 		}
 
-		private void EndChild(Emitter emitter, YAMLNode next)
+		private void EndChild(Emitter emitter, YamlNode next)
 		{
 			if (Style.IsAnyBlock())
 			{
@@ -176,14 +176,14 @@ namespace AssetRipper.Yaml
 				emitter.DecreaseIndent();
 		}
 
-		public static YAMLSequenceNode Empty { get; } = new YAMLSequenceNode();
+		public static YamlSequenceNode Empty { get; } = new YamlSequenceNode();
 
-		public override YAMLNodeType NodeType => YAMLNodeType.Sequence;
+		public override YamlNodeType NodeType => YamlNodeType.Sequence;
 		public override bool IsMultiline => Style.IsAnyBlock() && m_children.Count > 0;
 		public override bool IsIndent => false;
 
 		public SequenceStyle Style { get; }
 
-		public readonly List<YAMLNode> m_children = new List<YAMLNode>();
+		public readonly List<YamlNode> m_children = new List<YamlNode>();
 	}
 }

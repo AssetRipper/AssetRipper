@@ -29,16 +29,16 @@ namespace AssetRipper.Core.Classes.AudioLowPassFilter
 
 		public static bool HasCutoffFrequency(UnityVersion version) => version.IsLess(5, 2);
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(1);
 			if (HasCutoffFrequency(container.ExportVersion))
             {
                 node.Add("m_CutoffFrequency", CutoffFrequency);
             }
 			node.Add("m_LowpassResonanceQ", LowpassResonanceQ);
-			node.Add("lowpassLevelCustomCurve", lowpassLevelCustomCurve.ExportYAML(container));
+			node.Add("lowpassLevelCustomCurve", lowpassLevelCustomCurve.ExportYaml(container));
 			return node;
 		}
 

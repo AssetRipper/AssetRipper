@@ -20,9 +20,9 @@ namespace AssetRipper.Core.Classes.TerrainData
 			writer.Write(Flags);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(XName, X);
 			node.Add(YName, Y);
 			node.Add(FlagsName, Flags);

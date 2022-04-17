@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.UnityConnectSettings
 {
-	public sealed class CrashReportingSettings : IAssetReadable, IYAMLExportable
+	public sealed class CrashReportingSettings : IAssetReadable, IYamlExportable
 	{
 		public CrashReportingSettings()
 		{
@@ -40,9 +40,9 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(EventUrlName, EventUrl);
 			if (HasNativeEventUrl(container.ExportVersion))
 			{

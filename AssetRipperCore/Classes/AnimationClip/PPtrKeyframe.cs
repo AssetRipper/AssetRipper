@@ -30,11 +30,11 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			Value.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(TimeName, Time);
-			node.Add(ValueName, Value.ExportYAML(container));
+			node.Add(ValueName, Value.ExportYaml(container));
 			return node;
 		}
 

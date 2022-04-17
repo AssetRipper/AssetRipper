@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedShaderFloatValue : IAssetReadable, IYAMLExportable
+	public sealed class SerializedShaderFloatValue : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -12,9 +12,9 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			Name = reader.ReadString();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("val", Val);
 			node.Add("name", Name);
 			return node;

@@ -7,7 +7,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController
 {
-	public sealed class ValueArray : IAssetReadable, IYAMLExportable
+	public sealed class ValueArray : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// Less than 4.3
@@ -68,7 +68,7 @@ namespace AssetRipper.Core.Classes.AnimatorController
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

@@ -109,15 +109,15 @@ namespace AssetRipper.Core.Classes.SpriteRenderer
 			yield return context.FetchDependency(Sprite, SpriteName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(SpriteName, Sprite.ExportYAML(container));
-			node.Add(ColorName, Color.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(SpriteName, Sprite.ExportYaml(container));
+			node.Add(ColorName, Color.ExportYaml(container));
 			node.Add(FlipXName, FlipX);
 			node.Add(FlipYName, FlipY);
 			node.Add(DrawModeName, (int)DrawMode);
-			node.Add(SizeName, (HasDrawMode(container.Version) ? Size : Vector2f.One).ExportYAML(container));
+			node.Add(SizeName, (HasDrawMode(container.Version) ? Size : Vector2f.One).ExportYaml(container));
 			node.Add(AdaptiveModeThresholdName, AdaptiveModeThreshold);
 			node.Add(SpriteTileModeName, (int)SpriteTileMode);
 			node.Add(WasSpriteAssignedName, WasSpriteAssigned);

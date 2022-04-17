@@ -272,10 +272,10 @@ namespace AssetRipper.Core.Classes.AudioClip
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
-			/*YAMLMappingNode node = base.ExportYAMLRoot(container);
+			/*YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(container.ExportVersion);
 			node.Add(LoadTypeName, (int)LoadType);
 			node.Add(ChannelsName, Channels);
@@ -288,9 +288,9 @@ namespace AssetRipper.Core.Classes.AudioClip
 			node.Add(PreloadAudioDataName, PreloadAudioData);
 			node.Add(LoadInBackgroundName, LoadInBackground);
 			node.Add(Legacy3DName, Legacy3D);
-			node.Add(ResourceName, FSBResource.ExportYAML(container));
+			node.Add(ResourceName, FSBResource.ExportYaml(container));
 			node.Add(CompressionFormatName, (int)CompressionFormat);
-			node.Add(EditorResourceName, EditorResource.ExportYAML(container));
+			node.Add(EditorResourceName, EditorResource.ExportYaml(container));
 			node.Add(EditorCompressionFormatName, (int)EditorCompressionFormat);
 			return node;*/
 		}

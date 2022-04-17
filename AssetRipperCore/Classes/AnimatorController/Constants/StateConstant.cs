@@ -9,7 +9,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class StateConstant : IAssetReadable, IYAMLExportable
+	public sealed class StateConstant : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// Less than 5.2.0
@@ -105,7 +105,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

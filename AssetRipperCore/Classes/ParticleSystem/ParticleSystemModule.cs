@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem
 {
-	public abstract class ParticleSystemModule : IAssetReadable, IYAMLExportable
+	public abstract class ParticleSystemModule : IAssetReadable, IYamlExportable
 	{
 		protected ParticleSystemModule() { }
 
@@ -19,9 +19,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			reader.AlignStream();
 		}
 
-		public virtual YAMLNode ExportYAML(IExportContainer container)
+		public virtual YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(EnabledName, Enabled);
 			return node;
 		}

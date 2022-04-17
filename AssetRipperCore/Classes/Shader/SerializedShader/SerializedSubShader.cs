@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedSubShader : IAssetReadable, IYAMLExportable
+	public sealed class SerializedSubShader : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 2021.2.0a17 and greater and Not Release
@@ -20,17 +20,17 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			LOD = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_Passes", Passes.ExportYAML(container));
-			node.Add("m_Tags", Tags.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_Passes", Passes.ExportYaml(container));
+			node.Add("m_Tags", Tags.ExportYaml(container));
 			node.Add("m_LOD", LOD);
 
 			// Editor Only
 			if (HasSerializedPackageRequirements(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add("m_PackageRequirements", new SerializedPackageRequirements().ExportYAML(container));
+				node.Add("m_PackageRequirements", new SerializedPackageRequirements().ExportYaml(container));
 			}
 			return node;
 		}

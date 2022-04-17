@@ -165,27 +165,27 @@ namespace AssetRipper.Core.Classes.TerrainData
 			m_Scale.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(HeightsName, Heights.ExportYAML(true));
+			node.Add(HeightsName, Heights.ExportYaml(true));
 			if (HasHoles(container.ExportVersion))
 			{
-				node.Add(HolesName, Holes.ExportYAML());
-				node.Add(HolesLODName, HolesLOD.ExportYAML());
+				node.Add(HolesName, Holes.ExportYaml());
+				node.Add(HolesLODName, HolesLOD.ExportYaml());
 				node.Add(EnableHolesTextureCompressionName, EnableHolesTextureCompression);
 			}
 			if (HasShifts(container.ExportVersion))
 			{
-				node.Add(ShiftsName, Shifts.ExportYAML(container));
+				node.Add(ShiftsName, Shifts.ExportYaml(container));
 			}
 
-			node.Add(PrecomputedErrorName, PrecomputedError.ExportYAML());
-			node.Add(MinMaxPatchHeightsName, MinMaxPatchHeights.ExportYAML());
+			node.Add(PrecomputedErrorName, PrecomputedError.ExportYaml());
+			node.Add(MinMaxPatchHeightsName, MinMaxPatchHeights.ExportYaml());
 			if (HasDefaultPhysicMaterial(container.ExportVersion))
 			{
-				node.Add(DefaultPhysicMaterialName, DefaultPhysicMaterial.ExportYAML(container));
+				node.Add(DefaultPhysicMaterialName, DefaultPhysicMaterial.ExportYaml(container));
 			}
 
 			if (HasWidth(container.ExportVersion))
@@ -203,7 +203,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 
 			node.Add(LevelsName, Levels);
-			node.Add(ScaleName, m_Scale.ExportYAML(container));
+			node.Add(ScaleName, m_Scale.ExportYaml(container));
 			return node;
 		}
 

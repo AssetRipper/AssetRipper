@@ -138,15 +138,15 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (HasAnimationCurve(container.ExportVersion))
 			{
 				node.Add(WidthMultiplierName, WidthMultiplier);
-				node.Add(WidthCurveName, WidthCurve.ExportYAML(container));
-				node.Add(ColorGradientName, ColorGradient.ExportYAML(container));
+				node.Add(WidthCurveName, WidthCurve.ExportYaml(container));
+				node.Add(ColorGradientName, ColorGradient.ExportYaml(container));
 				node.Add(NumCornerVerticesName, NumCornerVertices);
 				node.Add(NumCapVerticesName, NumCapVertices);
 				node.Add(AlignmentName, (int)Alignment);
@@ -165,8 +165,8 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 			{
 				node.Add("startWidth", StartWidth);
 				node.Add("endWidth", EndWidth);
-				node.Add("m_StartColor", StartColor.ExportYAML(container));
-				node.Add("m_EndColor", EndColor.ExportYAML(container));
+				node.Add("m_StartColor", StartColor.ExportYaml(container));
+				node.Add("m_EndColor", EndColor.ExportYaml(container));
 			}
 
 			return node;

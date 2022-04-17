@@ -20,9 +20,9 @@ namespace AssetRipper.Core.Classes.AudioHighPassFilter
 			HighpassResonanceQ = reader.ReadSingle();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(1);
 			node.Add("m_CutoffFrequency", CutoffFrequency);
 			node.Add("m_HighpassResonanceQ", HighpassResonanceQ);

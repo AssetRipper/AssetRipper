@@ -19,6 +19,6 @@ namespace AssetRipper.Core.Interfaces
 		HideFlags ObjectHideFlagsOld { get; set; }
 
 		IUnityObjectBase ConvertLegacy(IExportContainer container);
-		YAMLDocument ExportYAMLDocument(IExportContainer container);
+		YamlDocument ExportYamlDocument(IExportContainer container);
 	}
 }

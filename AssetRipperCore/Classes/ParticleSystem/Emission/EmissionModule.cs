@@ -122,14 +122,14 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(RateOverTimeName, RateOverTime.ExportYAML(container));
-			node.Add(RateOverDistanceName, RateOverDistance.ExportYAML(container));
+			node.Add(RateOverTimeName, RateOverTime.ExportYaml(container));
+			node.Add(RateOverDistanceName, RateOverDistance.ExportYaml(container));
 			node.Add(BurstCountName, BurstCount);
-			node.Add(BurstsName, Bursts.ExportYAML(container));
+			node.Add(BurstsName, Bursts.ExportYaml(container));
 			return node;
 		}
 

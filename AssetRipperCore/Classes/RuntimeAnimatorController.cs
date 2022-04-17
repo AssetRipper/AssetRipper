@@ -16,9 +16,9 @@ namespace AssetRipper.Core.Classes
 
 		public abstract bool IsContainsAnimationClip(AnimationClip.AnimationClip clip);
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			return base.ExportYAMLRoot(container);
+			return base.ExportYamlRoot(container);
 		}
 	}
 }

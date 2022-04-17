@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public sealed class PlatformShaderDefines : IAssetReadable, IYAMLExportable
+	public sealed class PlatformShaderDefines : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -17,13 +17,13 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ShaderPlatformName, (int)ShaderPlatform);
-			node.Add(Defines_Tier1Name, Defines_Tier1.ExportYAML(container));
-			node.Add(Defines_Tier2Name, Defines_Tier2.ExportYAML(container));
-			node.Add(Defines_Tier3Name, Defines_Tier3.ExportYAML(container));
+			node.Add(Defines_Tier1Name, Defines_Tier1.ExportYaml(container));
+			node.Add(Defines_Tier2Name, Defines_Tier2.ExportYaml(container));
+			node.Add(Defines_Tier3Name, Defines_Tier3.ExportYaml(container));
 			return node;
 		}
 

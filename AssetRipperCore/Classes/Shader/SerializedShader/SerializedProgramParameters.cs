@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedProgramParameters : IAssetReadable, IYAMLExportable
+	public sealed class SerializedProgramParameters : IAssetReadable, IYamlExportable
 	{
 		public VectorParameter[] VectorParams { get; set; }
 		public MatrixParameter[] MatrixParams { get; set; }
@@ -29,17 +29,17 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			Samplers = reader.ReadAssetArray<SamplerParameter>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("m_VectorParams", VectorParams.ExportYAML(container));
-			node.Add("m_MatrixParams", MatrixParams.ExportYAML(container));
-			node.Add("m_TextureParams", TextureParams.ExportYAML(container));
-			node.Add("m_BufferParams", BufferParams.ExportYAML(container));
-			node.Add("m_ConstantBuffers", ConstantBuffers.ExportYAML(container));
-			node.Add("m_ConstantBufferBindings", ConstantBufferBindings.ExportYAML(container));
-			node.Add("m_UAVParams", UAVParams.ExportYAML(container));
-			node.Add("m_Samplers", Samplers.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_VectorParams", VectorParams.ExportYaml(container));
+			node.Add("m_MatrixParams", MatrixParams.ExportYaml(container));
+			node.Add("m_TextureParams", TextureParams.ExportYaml(container));
+			node.Add("m_BufferParams", BufferParams.ExportYaml(container));
+			node.Add("m_ConstantBuffers", ConstantBuffers.ExportYaml(container));
+			node.Add("m_ConstantBufferBindings", ConstantBufferBindings.ExportYaml(container));
+			node.Add("m_UAVParams", UAVParams.ExportYaml(container));
+			node.Add("m_Samplers", Samplers.ExportYaml(container));
 			return node;
 		}
 	}

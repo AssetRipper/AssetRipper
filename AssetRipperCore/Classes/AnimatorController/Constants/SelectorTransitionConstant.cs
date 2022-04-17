@@ -6,7 +6,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class SelectorTransitionConstant : IAssetReadable, IYAMLExportable
+	public sealed class SelectorTransitionConstant : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			ConditionConstantArray = reader.ReadAssetArray<OffsetPtr<ConditionConstant>>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

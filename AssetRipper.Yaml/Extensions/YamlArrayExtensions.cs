@@ -2,20 +2,20 @@
 
 namespace AssetRipper.Yaml.Extensions
 {
-	public static class ArrayYAMLExtensions
+	public static class YamlArrayExtensions
 	{
-		public static YAMLNode ExportYAML(this byte[] _this)
+		public static YamlNode ExportYaml(this byte[] _this)
 		{
 			StringBuilder sb = new StringBuilder(_this.Length * 2);
 			for (int i = 0; i < _this.Length; i++)
 				sb.AppendHex(_this[i]);
-			return new YAMLScalarNode(sb.ToString(), true);
+			return new YamlScalarNode(sb.ToString(), true);
 		}
 
-		public static void AddTypelessData(this YAMLMappingNode mappingNode, string name, byte[] data)
+		public static void AddTypelessData(this YamlMappingNode mappingNode, string name, byte[] data)
 		{
 			mappingNode.Add(name, data.Length);
-			mappingNode.Add(TypelessdataName, data.ExportYAML());
+			mappingNode.Add(TypelessdataName, data.ExportYaml());
 		}
 
 		public const string TypelessdataName = "_typelessdata";

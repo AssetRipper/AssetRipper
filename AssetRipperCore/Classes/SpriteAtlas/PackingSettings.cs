@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 	/// <summary>
 	/// PackingParameters previously
 	/// </summary>
-	public sealed class PackingSettings : IAssetReadable, IYAMLExportable
+	public sealed class PackingSettings : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 2021 and greater
@@ -53,9 +53,9 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(PaddingName, Padding);
 			node.Add(BlockOffsetName, BlockOffset);

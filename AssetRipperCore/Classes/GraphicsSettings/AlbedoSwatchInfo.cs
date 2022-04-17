@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public sealed class AlbedoSwatchInfo : IAssetReadable, IYAMLExportable
+	public sealed class AlbedoSwatchInfo : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -16,11 +16,11 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(NameName, Name);
-			node.Add(ColorName, Color.ExportYAML(container));
+			node.Add(ColorName, Color.ExportYaml(container));
 			node.Add(MinLuminanceName, MinLuminance);
 			node.Add(MaxLuminanceName, MaxLuminance);
 			return node;

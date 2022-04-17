@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LightingDataAsset
 {
-	public sealed class RendererData : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class RendererData : IAssetReadable, IYamlExportable, IDependent
 	{
 		/// <summary>
 		/// 2018.2 and greater
@@ -37,19 +37,19 @@ namespace AssetRipper.Core.Classes.LightingDataAsset
 			yield return context.FetchDependency(UVMesh, UvMeshName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(UvMeshName, UVMesh.ExportYAML(container));
-			node.Add(TerrainDynamicUVSTName, TerrainDynamicUVST.ExportYAML(container));
-			node.Add(TerrainChunkDynamicUVSTName, TerrainChunkDynamicUVST.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(UvMeshName, UVMesh.ExportYaml(container));
+			node.Add(TerrainDynamicUVSTName, TerrainDynamicUVST.ExportYaml(container));
+			node.Add(TerrainChunkDynamicUVSTName, TerrainChunkDynamicUVST.ExportYaml(container));
 			node.Add(LightmapIndexName, LightmapIndex);
 			node.Add(LightmapIndexDynamicName, LightmapIndexDynamic);
-			node.Add(LightmapSTName, LightmapST.ExportYAML(container));
-			node.Add(LightmapSTDynamicName, LightmapSTDynamic.ExportYAML(container));
+			node.Add(LightmapSTName, LightmapST.ExportYaml(container));
+			node.Add(LightmapSTDynamicName, LightmapSTDynamic.ExportYaml(container));
 			if (HasExplicitProbeSetHash(container.ExportVersion))
 			{
-				node.Add(ExplicitProbeSetHashName, ExplicitProbeSetHash.ExportYAML(container));
+				node.Add(ExplicitProbeSetHashName, ExplicitProbeSetHash.ExportYaml(container));
 			}
 			return node;
 		}

@@ -59,9 +59,9 @@ namespace AssetRipper.Core.Classes.Texture2D
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(FilterModeName, (int)FilterMode);
 			node.Add(AnisoName, Aniso);

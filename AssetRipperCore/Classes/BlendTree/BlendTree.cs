@@ -48,10 +48,10 @@ namespace AssetRipper.Core.Classes.BlendTree
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(ChildsName, Childs.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(ChildsName, Childs.ExportYaml(container));
 			node.Add(BlendParameterName, BlendParameter);
 			node.Add(BlendParameterYName, BlendParameterY);
 			node.Add(MinThresholdName, MinThreshold);

@@ -31,7 +31,7 @@ namespace AssetRipper.GUI
 			AssociatedFile.Stream.CopyTo(smartStream);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

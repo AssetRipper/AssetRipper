@@ -737,12 +737,12 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 
-			YAMLMappingNode mipmap = new YAMLMappingNode();
+			YamlMappingNode mipmap = new YamlMappingNode();
 			mipmap.Add(MipMapModeName, (int)MipMapMode);
 			mipmap.Add(EnableMipMapName, EnableMipMap);
 			if (HasSRGBTexture(container.ExportVersion))
@@ -768,7 +768,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			mipmap.Add(MipMapFadeDistanceEndName, MipMapFadeDistanceEnd);
 			node.Add(MipmapsName, mipmap);
 
-			YAMLMappingNode bumpmap = new YAMLMappingNode();
+			YamlMappingNode bumpmap = new YamlMappingNode();
 			bumpmap.Add(ConvertToNormalMapName, ConvertToNormalMap);
 			if (HasExternalNormalMap(container.ExportVersion))
 			{
@@ -811,7 +811,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 
 			node.Add(MaxTextureSizeName, MaxTextureSize);
-			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			node.Add(TextureSettingsName, TextureSettings.ExportYaml(container));
 			node.Add(NPOTScaleName, (int)NPOTScale);
 			if (HasLightmap(container.ExportVersion))
 			{
@@ -835,7 +835,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 				node.Add(SpriteExtrudeName, SpriteExtrude);
 				node.Add(SpriteMeshTypeName, (int)SpriteMeshType);
 				node.Add(AlignmentName, (int)Alignment);
-				node.Add(SpritePivotName, SpritePivot.ExportYAML(container));
+				node.Add(SpritePivotName, SpritePivot.ExportYaml(container));
 			}
 			if (HasSprite(container.ExportVersion) && SpritePixelsToUnitsFirst(container.ExportVersion))
 			{
@@ -843,7 +843,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 			if (HasSpriteBorder(container.ExportVersion))
 			{
-				node.Add(SpriteBorderName, SpriteBorder.ExportYAML(container));
+				node.Add(SpriteBorderName, SpriteBorder.ExportYaml(container));
 			}
 			if (HasSprite(container.ExportVersion) && !SpritePixelsToUnitsFirst(container.ExportVersion))
 			{
@@ -875,7 +875,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 			if (HasSourceTextureInformation(container.ExportVersion))
 			{
-				node.Add(SourceTextureInformationName, SourceTextureInformation.ExportYAML(container));
+				node.Add(SourceTextureInformationName, SourceTextureInformation.ExportYaml(container));
 			}
 			if (HasTextureShape(container.ExportVersion))
 			{
@@ -897,23 +897,23 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 			if (HasPlatformSettings(container.ExportVersion))
 			{
-				node.Add(GetPlatformSettingsName(container.ExportVersion), PlatformSettings.ExportYAML(container));
+				node.Add(GetPlatformSettingsName(container.ExportVersion), PlatformSettings.ExportYaml(container));
 			}
 			if (HasSprite(container.ExportVersion))
 			{
-				node.Add(SpriteSheetName, SpriteSheet.ExportYAML(container));
+				node.Add(SpriteSheetName, SpriteSheet.ExportYaml(container));
 				node.Add(SpritePackingTagName, SpritePackingTag);
 			}
 			/*if (HasOutput(container.ExportVersion))
 			{
-				node.Add(OutputName, Output.ExportYAML(container));
+				node.Add(OutputName, Output.ExportYaml(container));
 			}*/
 			if (HasPSDRemoveMatte(container.ExportVersion))
 			{
 				node.Add(PSDRemoveMatteName, PSDRemoveMatte);
 				node.Add(PSDShowRemoveMatteOptionName, PSDShowRemoveMatteOption);
 			}
-			PostExportYAML(container, node);
+			PostExportYaml(container, node);
 			return node;
 		}
 

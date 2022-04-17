@@ -6,17 +6,17 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public sealed class SkeletonPose : IAssetReadable, IYAMLExportable
+	public sealed class SkeletonPose : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
 			X = reader.ReadAssetArray<XForm>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(XName, X == null ? YAMLSequenceNode.Empty : X.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(XName, X == null ? YamlSequenceNode.Empty : X.ExportYaml(container));
 			return node;
 		}
 

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LODGroup
 {
-	public sealed class LODRenderer : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class LODRenderer : IAssetReadable, IYamlExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -20,10 +20,10 @@ namespace AssetRipper.Core.Classes.LODGroup
 			yield return context.FetchDependency(Renderer, RendererName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(RendererName, Renderer.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(RendererName, Renderer.ExportYaml(container));
 			return node;
 		}
 

@@ -37,9 +37,9 @@ namespace AssetRipper.Core.Classes.AnimatorTransition
 			return 1;
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.ForceAddSerializedVersion(ToSerializedVersion(container.Version));
 			return node;
 		}

@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public sealed class ShaderBindChannel : IAssetReadable, IYAMLExportable
+	public sealed class ShaderBindChannel : IAssetReadable, IYamlExportable
 	{
 		public ShaderBindChannel() { }
 
@@ -21,9 +21,9 @@ namespace AssetRipper.Core.Classes.Shader
 			Target = (VertexComponent)reader.ReadByte();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("source", Source);
 			node.Add("target", (byte)Target);
 			return node;

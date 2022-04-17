@@ -98,14 +98,14 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(RenderersName, Renderers.ExportYAML(container));
-			node.Add(SystemsName, Systems.ExportYAML(container));
-			node.Add(ProbesetsName, Probesets.ExportYAML(container));
-			node.Add(SystemAtlasesName, SystemAtlases.ExportYAML(container));
-			node.Add(TerrainChunksName, TerrainChunks.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(RenderersName, Renderers.ExportYaml(container));
+			node.Add(SystemsName, Systems.ExportYaml(container));
+			node.Add(ProbesetsName, Probesets.ExportYaml(container));
+			node.Add(SystemAtlasesName, SystemAtlases.ExportYaml(container));
+			node.Add(TerrainChunksName, TerrainChunks.ExportYaml(container));
 			return node;
 		}
 

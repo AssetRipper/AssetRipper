@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedProperty : IAssetReadable, ISerializedProperty, IYAMLExportable
+	public sealed class SerializedProperty : IAssetReadable, ISerializedProperty, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -22,19 +22,19 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			m_DefTexture.Read(reader);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("m_Name", Name);
 			node.Add("m_Description", Description);
-			node.Add("m_Attributes", Attributes.ExportYAML(container));
+			node.Add("m_Attributes", Attributes.ExportYaml(container));
 			node.Add("m_Type", (int)Type);
 			node.Add("m_Flags", (uint)Flags);
 			node.Add("m_DefValue[0]", DefValue0);
 			node.Add("m_DefValue[1]", DefValue1);
 			node.Add("m_DefValue[2]", DefValue2);
 			node.Add("m_DefValue[3]", DefValue3);
-			node.Add("m_DefTexture", m_DefTexture.ExportYAML(container));
+			node.Add("m_DefTexture", m_DefTexture.ExportYaml(container));
 			return node;
 		}
 

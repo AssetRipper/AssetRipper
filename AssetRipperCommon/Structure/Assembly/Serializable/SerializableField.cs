@@ -369,14 +369,14 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container, in SerializableType.Field etalon)
+		public YamlNode ExportYaml(IExportContainer container, in SerializableType.Field etalon)
 		{
 			if (etalon.IsArray)
 			{
 				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
 					IAsset[] structures = (IAsset[])CValue;
-					return structures.ExportYAML(container);
+					return structures.ExportYaml(container);
 				}
 				else
 				{
@@ -385,67 +385,67 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 						case PrimitiveType.Bool:
 							{
 								bool[] array = (bool[])CValue;
-								return array.ExportYAML();
+								return array.ExportYaml();
 							}
 						case PrimitiveType.Char:
 							{
 								char[] array = (char[])CValue;
-								return array.ExportYAML();
+								return array.ExportYaml();
 							}
 						case PrimitiveType.SByte:
 							{
 								byte[] array = (byte[])CValue;
-								return array.ExportYAML();
+								return array.ExportYaml();
 							}
 						case PrimitiveType.Byte:
 							{
 								byte[] array = (byte[])CValue;
-								return array.ExportYAML();
+								return array.ExportYaml();
 							}
 						case PrimitiveType.Short:
 							{
 								short[] array = (short[])CValue;
-								return array.ExportYAML(true);
+								return array.ExportYaml(true);
 							}
 						case PrimitiveType.UShort:
 							{
 								ushort[] array = (ushort[])CValue;
-								return array.ExportYAML(true);
+								return array.ExportYaml(true);
 							}
 						case PrimitiveType.Int:
 							{
 								int[] array = (int[])CValue;
-								return array.ExportYAML(true);
+								return array.ExportYaml(true);
 							}
 						case PrimitiveType.UInt:
 							{
 								uint[] array = (uint[])CValue;
-								return array.ExportYAML(true);
+								return array.ExportYaml(true);
 							}
 						case PrimitiveType.Long:
 							{
 								long[] array = (long[])CValue;
-								return array.ExportYAML(true);
+								return array.ExportYaml(true);
 							}
 						case PrimitiveType.ULong:
 							{
 								ulong[] array = (ulong[])CValue;
-								return array.ExportYAML(true);
+								return array.ExportYaml(true);
 							}
 						case PrimitiveType.Single:
 							{
 								float[] array = (float[])CValue;
-								return array.ExportYAML();
+								return array.ExportYaml();
 							}
 						case PrimitiveType.Double:
 							{
 								double[] array = (double[])CValue;
-								return array.ExportYAML();
+								return array.ExportYaml();
 							}
 						case PrimitiveType.String:
 							{
 								string[] array = (string[])CValue;
-								return array.ExportYAML();
+								return array.ExportYaml();
 							}
 						default:
 							throw new NotSupportedException(etalon.Type.Type.ToString());
@@ -457,25 +457,25 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
 					IAsset structure = (IAsset)CValue;
-					return structure.ExportYAML(container);
+					return structure.ExportYaml(container);
 				}
 				else
 				{
 					return etalon.Type.Type switch
 					{
-						PrimitiveType.Bool => new YAMLScalarNode(PValue != 0),
-						PrimitiveType.Char => new YAMLScalarNode((int)(char)PValue),
-						PrimitiveType.SByte => new YAMLScalarNode(unchecked((sbyte)PValue)),
-						PrimitiveType.Byte => new YAMLScalarNode((byte)PValue),
-						PrimitiveType.Short => new YAMLScalarNode(unchecked((short)PValue)),
-						PrimitiveType.UShort => new YAMLScalarNode((ushort)PValue),
-						PrimitiveType.Int => new YAMLScalarNode(unchecked((int)PValue)),
-						PrimitiveType.UInt => new YAMLScalarNode((uint)PValue),
-						PrimitiveType.Long => new YAMLScalarNode(unchecked((long)PValue)),
-						PrimitiveType.ULong => new YAMLScalarNode(PValue),
-						PrimitiveType.Single => new YAMLScalarNode(BitConverter.UInt32BitsToSingle((uint)PValue)),
-						PrimitiveType.Double => new YAMLScalarNode(BitConverter.UInt64BitsToDouble(PValue)),
-						PrimitiveType.String => new YAMLScalarNode((string)CValue),
+						PrimitiveType.Bool => new YamlScalarNode(PValue != 0),
+						PrimitiveType.Char => new YamlScalarNode((int)(char)PValue),
+						PrimitiveType.SByte => new YamlScalarNode(unchecked((sbyte)PValue)),
+						PrimitiveType.Byte => new YamlScalarNode((byte)PValue),
+						PrimitiveType.Short => new YamlScalarNode(unchecked((short)PValue)),
+						PrimitiveType.UShort => new YamlScalarNode((ushort)PValue),
+						PrimitiveType.Int => new YamlScalarNode(unchecked((int)PValue)),
+						PrimitiveType.UInt => new YamlScalarNode((uint)PValue),
+						PrimitiveType.Long => new YamlScalarNode(unchecked((long)PValue)),
+						PrimitiveType.ULong => new YamlScalarNode(PValue),
+						PrimitiveType.Single => new YamlScalarNode(BitConverter.UInt32BitsToSingle((uint)PValue)),
+						PrimitiveType.Double => new YamlScalarNode(BitConverter.UInt64BitsToDouble(PValue)),
+						PrimitiveType.String => new YamlScalarNode((string)CValue),
 						_ => throw new NotSupportedException(etalon.Type.Type.ToString()),
 					};
 				}

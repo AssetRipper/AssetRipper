@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ComputeShader
 {
-	public sealed class ComputeShaderBuiltinSampler : IAssetReadable, IYAMLExportable
+	public sealed class ComputeShaderBuiltinSampler : IAssetReadable, IYamlExportable
 	{
 		public static bool HaUnsignedSampler(UnityVersion version) => version.IsGreaterEqual(2017, 1, 0, UnityVersionType.Beta, 1);
 
@@ -23,9 +23,9 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			BindPoint = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("sampler", HaUnsignedSampler(container.Version) ? Sampler : SignedSampler);
 			node.Add("bindPoint", BindPoint);
 			return node;

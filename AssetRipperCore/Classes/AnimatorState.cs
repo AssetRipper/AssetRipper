@@ -92,15 +92,15 @@ namespace AssetRipper.Core.Classes
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(SpeedName, Speed);
 			node.Add(CycleOffsetName, CycleOffset);
-			node.Add(TransitionsName, Transitions.ExportYAML(container));
-			node.Add(StateMachineBehavioursName, StateMachineBehaviours.ExportYAML(container));
-			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(TransitionsName, Transitions.ExportYaml(container));
+			node.Add(StateMachineBehavioursName, StateMachineBehaviours.ExportYaml(container));
+			node.Add(PositionName, Position.ExportYaml(container));
 			node.Add(IKOnFeetName, IKOnFeet);
 			node.Add(WriteDefaultValuesName, WriteDefaultValues);
 			node.Add(MirrorName, Mirror);
@@ -108,7 +108,7 @@ namespace AssetRipper.Core.Classes
 			node.Add(MirrorParameterActiveName, MirrorParameterActive);
 			node.Add(CycleOffsetParameterActiveName, CycleOffsetParameterActive);
 			node.Add(TimeParameterActiveName, TimeParameterActive);
-			node.Add(MotionName, Motion.ExportYAML(container));
+			node.Add(MotionName, Motion.ExportYaml(container));
 			node.Add(TagName, Tag);
 			node.Add(SpeedParameterName, SpeedParameter);
 			node.Add(MirrorParameterName, MirrorParameter);

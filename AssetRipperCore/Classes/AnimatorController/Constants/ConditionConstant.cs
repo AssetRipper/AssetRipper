@@ -6,7 +6,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class ConditionConstant : IAssetReadable, IYAMLExportable
+	public sealed class ConditionConstant : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -16,7 +16,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			ExitTime = reader.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

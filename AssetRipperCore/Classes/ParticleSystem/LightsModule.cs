@@ -44,17 +44,17 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			yield return context.FetchDependency(Light, LightName);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.Add(RatioName, Ratio);
-			node.Add(LightName, Light.ExportYAML(container));
+			node.Add(LightName, Light.ExportYaml(container));
 			node.Add(RandomDistributionName, RandomDistribution);
 			node.Add(ColorName, Color);
 			node.Add(RangeName, Range);
 			node.Add(IntensityName, Intensity);
-			node.Add(RangeCurveName, RangeCurve.ExportYAML(container));
-			node.Add(IntensityCurveName, IntensityCurve.ExportYAML(container));
+			node.Add(RangeCurveName, RangeCurve.ExportYaml(container));
+			node.Add(IntensityCurveName, IntensityCurve.ExportYaml(container));
 			node.Add(MaxLightsName, MaxLights);
 			return node;
 		}

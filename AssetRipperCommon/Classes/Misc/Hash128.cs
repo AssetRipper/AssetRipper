@@ -87,9 +87,9 @@ namespace AssetRipper.Core.Classes.Misc
 			writer.Write(Data3);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (ToSerializedVersion(container.Version) > 1)
 			{

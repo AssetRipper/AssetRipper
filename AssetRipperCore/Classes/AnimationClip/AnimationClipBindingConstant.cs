@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public sealed class AnimationClipBindingConstant : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class AnimationClipBindingConstant : IAssetReadable, IYamlExportable, IDependent
 	{
 		public AnimationClipBindingConstant() { }
 		public AnimationClipBindingConstant(bool _)
@@ -69,11 +69,11 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			return context.FetchDependencies(PPtrCurveMapping, PptrCurveMappingName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(GenericBindingsName, GenericBindings.ExportYAML(container));
-			node.Add(PptrCurveMappingName, PPtrCurveMapping.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(GenericBindingsName, GenericBindings.ExportYaml(container));
+			node.Add(PptrCurveMappingName, PPtrCurveMapping.ExportYaml(container));
 			return node;
 		}
 

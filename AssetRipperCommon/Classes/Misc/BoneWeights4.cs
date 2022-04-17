@@ -49,9 +49,9 @@ namespace AssetRipper.Core.Classes.Misc
 			writer.Write(BoneIndex3);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(Weight0Name, Weight0);
 			node.Add(Weight1Name, Weight1);
 			node.Add(Weight2Name, Weight2);

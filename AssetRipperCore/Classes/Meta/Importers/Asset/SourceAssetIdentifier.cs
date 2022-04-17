@@ -54,9 +54,9 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 			writer.Write(Name);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(TypeName, Type);
 			node.Add(AssemblyName, Assembly);
 			node.Add(NameName, Name);

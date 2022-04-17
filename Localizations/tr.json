@@ -84,7 +84,7 @@
     "loading_step_pre_processing": "Ön İşleme Dosyaları",
     "select_asset_to_view_info": "Hakkında bilgileri görüntülemek için soldan bir Varlık seçin",
     "asset_tab_basic": "Temel Bilgiler",
-    "asset_tab_yaml": "YAML",
+    "asset_tab_yaml": "Yaml",
     "asset_tab_image": "Resim",
     "asset_tab_text": "Metin",
     "asset_tab_audio": "Ses",

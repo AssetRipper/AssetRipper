@@ -155,7 +155,7 @@ namespace AssetRipper.Core.Classes.AnimatorController
 			return false;
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
 			if (container is null)
 				throw new ArgumentNullException(nameof(container));
@@ -179,10 +179,10 @@ namespace AssetRipper.Core.Classes.AnimatorController
 				layers[i] = new AnimatorControllerLayer(stateMachine, this, i);
 			}
 
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(AnimatorParametersName, @params.ExportYAML(container));
-			node.Add(AnimatorLayersName, layers.ExportYAML(container));
+			node.Add(AnimatorParametersName, @params.ExportYaml(container));
+			node.Add(AnimatorLayersName, layers.ExportYaml(container));
 			return node;
 		}
 

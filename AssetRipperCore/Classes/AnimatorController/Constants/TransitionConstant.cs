@@ -8,7 +8,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class TransitionConstant : IAssetReadable, IYAMLExportable
+	public sealed class TransitionConstant : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 5.0.0 and greater
@@ -57,7 +57,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

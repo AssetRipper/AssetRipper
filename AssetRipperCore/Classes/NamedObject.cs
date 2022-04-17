@@ -34,9 +34,9 @@ namespace AssetRipper.Core.Classes
 			return $"{this.GetValidName()}({GetType().Name})";
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode root = base.ExportYAMLRoot(container);
+			YamlMappingNode root = base.ExportYamlRoot(container);
 			root.Add(NameName, Name);
 			return root;
 		}

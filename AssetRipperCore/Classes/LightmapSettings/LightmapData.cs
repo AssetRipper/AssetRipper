@@ -92,24 +92,24 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(LightmapName, Lightmap.ExportYAML(container));
+			node.Add(LightmapName, Lightmap.ExportYaml(container));
 			if (HasIndirectLightmap(container.ExportVersion))
 			{
-				node.Add(IndirectLightmapName, IndirectLightmap.ExportYAML(container));
+				node.Add(IndirectLightmapName, IndirectLightmap.ExportYaml(container));
 			}
 			if (HasLightInd(container.ExportVersion))
 			{
-				node.Add(LightIndName, LightInd.ExportYAML(container));
-				node.Add(DirIndName, DirInd.ExportYAML(container));
+				node.Add(LightIndName, LightInd.ExportYaml(container));
+				node.Add(DirIndName, DirInd.ExportYaml(container));
 			}
 			if (HasDirLightmap(container.ExportVersion))
 			{
-				node.Add(DirLightmapName, DirLightmap.ExportYAML(container));
-				node.Add(ShadowMaskName, ShadowMask.ExportYAML(container));
+				node.Add(DirLightmapName, DirLightmap.ExportYaml(container));
+				node.Add(ShadowMaskName, ShadowMask.ExportYaml(container));
 			}
 			return node;
 		}

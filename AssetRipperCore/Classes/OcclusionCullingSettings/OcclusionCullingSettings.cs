@@ -152,13 +152,13 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(OcclusionBakeSettingsName, GetExportOcclusionBakeSettings(container).ExportYAML(container));
-			node.Add(SceneGUIDName, GetExportSceneGUID(container).ExportYAML(container));
-			node.Add(OcclusionCullingDataName, GetExportOcclusionCullingData(container).ExportYAML(container));
+			node.Add(OcclusionBakeSettingsName, GetExportOcclusionBakeSettings(container).ExportYaml(container));
+			node.Add(SceneGUIDName, GetExportSceneGUID(container).ExportYaml(container));
+			node.Add(OcclusionCullingDataName, GetExportOcclusionCullingData(container).ExportYaml(container));
 			return node;
 		}
 

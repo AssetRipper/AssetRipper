@@ -703,41 +703,41 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (HasUse16bitIndices(container.ExportVersion))
 			{
 				node.Add(Use16BitIndicesName, Use16BitIndices);
 			}
-			node.Add(SubMeshesName, SubMeshes.ExportYAML(container));
+			node.Add(SubMeshesName, SubMeshes.ExportYaml(container));
 
 			if (HasBlendShapes(container.ExportVersion))
 			{
 				if (HasBlendChannels(container.ExportVersion))
 				{
-					node.Add(ShapesName, Shapes.ExportYAML(container));
+					node.Add(ShapesName, Shapes.ExportYaml(container));
 				}
 				else
 				{
-					node.Add(ShapesName, BlendShapes.ExportYAML(container));
-					node.Add(ShapeVerticesName, ShapeVertices.ExportYAML(container));
+					node.Add(ShapesName, BlendShapes.ExportYaml(container));
+					node.Add(ShapeVerticesName, ShapeVertices.ExportYaml(container));
 				}
 			}
 			if (IsBindPoseFirst(container.ExportVersion))
 			{
-				node.Add(BindPoseName, BindPose.ExportYAML(container));
+				node.Add(BindPoseName, BindPose.ExportYaml(container));
 			}
 			if (HasBoneNameHashes(container.ExportVersion))
 			{
-				node.Add(BoneNameHashesName, BoneNameHashes.ExportYAML(true));
+				node.Add(BoneNameHashesName, BoneNameHashes.ExportYaml(true));
 				node.Add(RootBoneNameHashName, RootBoneNameHash);
 			}
 			if (HasBonesAABB(container.ExportVersion))
 			{
-				node.Add(BonesAABBName, BonesAABB.ExportYAML(container));
-				node.Add(VariableBoneCountWeightsName, VariableBoneCountWeights.ExportYAML(container));
+				node.Add(BonesAABBName, BonesAABB.ExportYaml(container));
+				node.Add(VariableBoneCountWeightsName, VariableBoneCountWeights.ExportYaml(container));
 			}
 
 			node.Add(MeshCompressionName, (byte)MeshCompression);
@@ -758,7 +758,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				node.Add(IndexFormatName, (int)IndexFormat);
 			}
 
-			node.Add(IndexBufferName, RawIndexBuffer.ExportYAML());
+			node.Add(IndexBufferName, RawIndexBuffer.ExportYaml());
 
 			if (HasVertexData(container.ExportVersion))
 			{
@@ -766,72 +766,72 @@ namespace AssetRipper.Core.Classes.Mesh
 				{
 					if (MeshCompression != MeshCompression.Off)
 					{
-						node.Add(VerticesName, Vertices.ExportYAML(container));
+						node.Add(VerticesName, Vertices.ExportYaml(container));
 					}
 				}
 			}
 			else
 			{
-				node.Add(VerticesName, Vertices.ExportYAML(container));
+				node.Add(VerticesName, Vertices.ExportYaml(container));
 			}
 
 			if (HasSkin(container.ExportVersion))
 			{
-				node.Add(SkinName, Skin.ExportYAML(container));
+				node.Add(SkinName, Skin.ExportYaml(container));
 			}
 			if (!IsBindPoseFirst(container.ExportVersion))
 			{
-				node.Add(BindPoseName, BindPose.ExportYAML(container));
+				node.Add(BindPoseName, BindPose.ExportYaml(container));
 			}
 
 			if (HasVertexData(container.ExportVersion))
 			{
 				if (IsOnlyVertexData(container.ExportVersion))
 				{
-					node.Add(VertexDataName, VertexData.ExportYAML(container));
+					node.Add(VertexDataName, VertexData.ExportYaml(container));
 				}
 				else
 				{
 					if (MeshCompression == MeshCompression.Off)
 					{
-						node.Add(VertexDataName, VertexData.ExportYAML(container));
+						node.Add(VertexDataName, VertexData.ExportYaml(container));
 					}
 					else
 					{
-						node.Add(UVName, UV0.ExportYAML(container));
-						node.Add(UV1Name, UV1.ExportYAML(container));
-						node.Add(TangentsName, Tangents.ExportYAML(container));
-						node.Add(NormalsName, Normals.ExportYAML(container));
-						node.Add(ColorsName, Colors.ExportYAML(container));
+						node.Add(UVName, UV0.ExportYaml(container));
+						node.Add(UV1Name, UV1.ExportYaml(container));
+						node.Add(TangentsName, Tangents.ExportYaml(container));
+						node.Add(NormalsName, Normals.ExportYaml(container));
+						node.Add(ColorsName, Colors.ExportYaml(container));
 					}
 				}
 			}
 			else
 			{
-				node.Add(UVName, UV0.ExportYAML(container));
-				node.Add(UV1Name, UV1.ExportYAML(container));
-				node.Add(TangentsName, Tangents.ExportYAML(container));
-				node.Add(NormalsName, Normals.ExportYAML(container));
+				node.Add(UVName, UV0.ExportYaml(container));
+				node.Add(UV1Name, UV1.ExportYaml(container));
+				node.Add(TangentsName, Tangents.ExportYaml(container));
+				node.Add(NormalsName, Normals.ExportYaml(container));
 			}
 
-			node.Add(CompressedMeshName, CompressedMesh.ExportYAML(container));
+			node.Add(CompressedMeshName, CompressedMesh.ExportYaml(container));
 
-			node.Add(LocalAABBName, LocalAABB.ExportYAML(container));
+			node.Add(LocalAABBName, LocalAABB.ExportYaml(container));
 			if (!HasVertexData(container.ExportVersion))
 			{
-				node.Add(ColorsName, Colors.ExportYAML(container));
+				node.Add(ColorsName, Colors.ExportYaml(container));
 			}
 			if (HasCollisionTriangles(container.ExportVersion))
 			{
-				node.Add(CollisionTrianglesName, CollisionTriangles.ExportYAML(true));
+				node.Add(CollisionTrianglesName, CollisionTriangles.ExportYaml(true));
 				node.Add(CollisionVertexCountName, CollisionVertexCount);
 			}
 			node.Add(MeshUsageFlagsName, MeshUsageFlags);
 
 			if (HasCollision(container.ExportVersion))
 			{
-				node.Add(BakedConvexCollisionMeshName, BakedConvexCollisionMesh.ExportYAML());
-				node.Add(BakedTriangleCollisionMeshName, BakedTriangleCollisionMesh.ExportYAML());
+				node.Add(BakedConvexCollisionMeshName, BakedConvexCollisionMesh.ExportYaml());
+				node.Add(BakedTriangleCollisionMeshName, BakedTriangleCollisionMesh.ExportYaml());
 			}
 			if (HasMeshMetrics(container.ExportVersion))
 			{
@@ -852,7 +852,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			if (HasStreamData(container.ExportVersion))
 			{
 				StreamingInfo streamData = new StreamingInfo();
-				node.Add(StreamDataName, streamData.ExportYAML(container));
+				node.Add(StreamDataName, streamData.ExportYaml(container));
 			}
 			return node;
 		}

@@ -307,7 +307,7 @@
                             </Grid>
                         </TabItem>
 
-                        <!--YAML Tab-->
+                        <!--Yaml Tab-->
                         <TabItem Header="{i18n:Localize asset_tab_yaml}"
                                  IsVisible="{Binding SelectedAsset.YamlTreeIsSupported, FallbackValue=False}">
                             <TreeView Items="{Binding SelectedAsset.YamlTree, FallbackValue=[]}">

@@ -60,17 +60,17 @@ namespace AssetRipper.Core
 				WriteEditor(writer);
 		}
 
-		public virtual YAMLNode ExportYAMLEditor(IExportContainer container) => throw new NotSupportedException($"Editor yaml export is not supported for {GetType().FullName}");
+		public virtual YamlNode ExportYamlEditor(IExportContainer container) => throw new NotSupportedException($"Editor yaml export is not supported for {GetType().FullName}");
 
-		public virtual YAMLNode ExportYAMLRelease(IExportContainer container) => throw new NotSupportedException($"Release yaml export is not supported for {GetType().FullName}");
+		public virtual YamlNode ExportYamlRelease(IExportContainer container) => throw new NotSupportedException($"Release yaml export is not supported for {GetType().FullName}");
 
-		public virtual YAMLNode ExportYAML(IExportContainer container)
+		public virtual YamlNode ExportYaml(IExportContainer container)
 		{
 			if (container.ExportFlags.IsRelease())
 				//if(this.TransferInstructionFlags.IsRelease())
-				return ExportYAMLRelease(container);
+				return ExportYamlRelease(container);
 			else
-				return ExportYAMLEditor(container);
+				return ExportYamlEditor(container);
 		}
 
 		public virtual IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)

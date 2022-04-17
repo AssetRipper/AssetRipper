@@ -86,9 +86,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(FirstByteName, FirstByte);
 			node.Add(IndexCountName, IndexCount);
@@ -109,7 +109,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				node.Add(FirstVertexName, FirstVertex);
 				node.Add(VertexCountName, VertexCount);
-				node.Add(LocalAABBName, LocalAABB.ExportYAML(container));
+				node.Add(LocalAABBName, LocalAABB.ExportYaml(container));
 			}
 			return node;
 		}

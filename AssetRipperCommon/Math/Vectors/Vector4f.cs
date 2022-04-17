@@ -131,9 +131,9 @@ namespace AssetRipper.Core.Math.Vectors
 			writer.Write(W);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new(MappingStyle.Flow);
+			YamlMappingNode node = new(MappingStyle.Flow);
 			node.Add(XName, X);
 			node.Add(YName, Y);
 			node.Add(ZName, Z);

@@ -16,14 +16,14 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			scene.Read(reader);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(IndexRenderersName, IndexRenderers);
 			node.Add(SizeRenderersName, SizeRenderers);
 			node.Add(IndexPortalsName, IndexPortals);
 			node.Add(SizePortalsName, SizePortals);
-			node.Add(SceneName, scene.ExportYAML(container));
+			node.Add(SceneName, scene.ExportYaml(container));
 			return node;
 		}
 

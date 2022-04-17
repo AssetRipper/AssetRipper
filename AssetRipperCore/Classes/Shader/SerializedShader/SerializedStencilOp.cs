@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedStencilOp : IAssetReadable, IYAMLExportable
+	public sealed class SerializedStencilOp : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,13 +15,13 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			Comp.Read(reader);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("pass", Pass.ExportYAML(container));
-			node.Add("fail", Fail.ExportYAML(container));
-			node.Add("zFail", ZFail.ExportYAML(container));
-			node.Add("comp", Comp.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("pass", Pass.ExportYaml(container));
+			node.Add("fail", Fail.ExportYaml(container));
+			node.Add("zFail", ZFail.ExportYaml(container));
+			node.Add("comp", Comp.ExportYaml(container));
 			return node;
 		}
 

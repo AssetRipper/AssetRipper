@@ -76,18 +76,18 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(NavMeshTilesName, NavMeshTiles.ExportYAML(container));
-			node.Add(NavMeshBuildSettingsName, GetExportNavMeshBuildSettings(container.Version).ExportYAML(container));
-			node.Add(HeightmapsName, Heightmaps.ExportYAML(container));
-			node.Add(HeightMeshesName, HeightMeshes.ExportYAML(container));
-			node.Add(OffMeshLinksName, OffMeshLinks.ExportYAML(container));
-			node.Add(SourceBoundsName, SourceBounds.ExportYAML(container));
-			node.Add(RotationName, GetExportRotation(container.Version).ExportYAML(container));
-			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(NavMeshTilesName, NavMeshTiles.ExportYaml(container));
+			node.Add(NavMeshBuildSettingsName, GetExportNavMeshBuildSettings(container.Version).ExportYaml(container));
+			node.Add(HeightmapsName, Heightmaps.ExportYaml(container));
+			node.Add(HeightMeshesName, HeightMeshes.ExportYaml(container));
+			node.Add(OffMeshLinksName, OffMeshLinks.ExportYaml(container));
+			node.Add(SourceBoundsName, SourceBounds.ExportYaml(container));
+			node.Add(RotationName, GetExportRotation(container.Version).ExportYaml(container));
+			node.Add(PositionName, Position.ExportYaml(container));
 			node.Add(AgentTypeIDName, AgentTypeID);
 			return node;
 		}

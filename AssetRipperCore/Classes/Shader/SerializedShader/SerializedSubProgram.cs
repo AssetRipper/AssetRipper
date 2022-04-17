@@ -9,7 +9,7 @@ using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedSubProgram : IAssetReadable, IYAMLExportable
+	public sealed class SerializedSubProgram : IAssetReadable, IYamlExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -125,22 +125,22 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add("m_BlobIndex", BlobIndex);
-			node.Add("m_Channels", Channels.ExportYAML(container));
+			node.Add("m_Channels", Channels.ExportYaml(container));
 			if (HasMergedKeywordIndices(container.ExportVersion))
 			{
-				node.Add("m_KeywordIndices", GlobalKeywordIndices.ExportYAML(false));
+				node.Add("m_KeywordIndices", GlobalKeywordIndices.ExportYaml(false));
 			}
 			else
 			{
-				node.Add("m_GlobalKeywordIndices", GlobalKeywordIndices.ExportYAML(false));
+				node.Add("m_GlobalKeywordIndices", GlobalKeywordIndices.ExportYaml(false));
 				if (HasLocalKeywordIndices(container.ExportVersion))
 				{
-					node.Add("m_LocalKeywordIndices", LocalKeywordIndices.ExportYAML(false));
+					node.Add("m_LocalKeywordIndices", LocalKeywordIndices.ExportYaml(false));
 				}
 			}
 
@@ -148,20 +148,20 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			node.Add("m_GpuProgramType", GpuProgramType);
 			if (HasUnifiedParameters(container.ExportVersion))
 			{
-				node.Add("m_Parameters", Parameters.ExportYAML(container));
+				node.Add("m_Parameters", Parameters.ExportYaml(container));
 			}
 			else
 			{
-				node.Add("m_VectorParams", VectorParams.ExportYAML(container));
-				node.Add("m_MatrixParams", MatrixParams.ExportYAML(container));
-				node.Add("m_TextureParams", TextureParams.ExportYAML(container));
-				node.Add("m_BufferParams", BufferParams.ExportYAML(container));
-				node.Add("m_ConstantBuffers", ConstantBuffers.ExportYAML(container));
-				node.Add("m_ConstantBufferBindings", ConstantBufferBindings.ExportYAML(container));
-				node.Add("m_UAVParams", UAVParams.ExportYAML(container));
+				node.Add("m_VectorParams", VectorParams.ExportYaml(container));
+				node.Add("m_MatrixParams", MatrixParams.ExportYaml(container));
+				node.Add("m_TextureParams", TextureParams.ExportYaml(container));
+				node.Add("m_BufferParams", BufferParams.ExportYaml(container));
+				node.Add("m_ConstantBuffers", ConstantBuffers.ExportYaml(container));
+				node.Add("m_ConstantBufferBindings", ConstantBufferBindings.ExportYaml(container));
+				node.Add("m_UAVParams", UAVParams.ExportYaml(container));
 				if (HasSamplers(container.ExportVersion))
 				{
-					node.Add("m_Samplers", Samplers.ExportYAML(container));
+					node.Add("m_Samplers", Samplers.ExportYaml(container));
 				}
 			}
 

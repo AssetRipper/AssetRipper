@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			throw new NotSupportedException();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

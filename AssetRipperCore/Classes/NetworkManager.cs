@@ -54,12 +54,12 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(DebugLevelName, DebugLevel);
 			node.Add(SendrateName, Sendrate);
-			node.Add(AssetToPrefabName, AssetToPrefab.ExportYAML(container));
+			node.Add(AssetToPrefabName, AssetToPrefab.ExportYaml(container));
 			return node;
 		}
 

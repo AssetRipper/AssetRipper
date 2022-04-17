@@ -41,9 +41,9 @@ namespace AssetRipper.Core.Classes
 			RoomLF = reader.ReadInt32();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(MinDistanceName, MinDistance);
 			node.Add(MaxDistanceName, MaxDistance);
 			node.Add(ReverbPresetName, ReverbPreset);

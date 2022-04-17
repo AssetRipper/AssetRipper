@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public sealed class UAVParameter : IAssetReadable, IYAMLExportable
+	public sealed class UAVParameter : IAssetReadable, IYamlExportable
 	{
 		public UAVParameter() { }
 
@@ -23,9 +23,9 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			OriginalIndex = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("m_NameIndex", NameIndex);
 			node.Add("m_Index", Index);
 			node.Add("m_OriginalIndex", OriginalIndex);

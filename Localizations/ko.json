@@ -84,7 +84,7 @@
     "loading_step_pre_processing": "파일 전처리",
     "select_asset_to_view_info": "왼쪽에서 자산을 선택하여 자산에 대한 정보를 봅니다",
     "asset_tab_basic": "기본 정보",
-    "asset_tab_yaml": "YAML",
+    "asset_tab_yaml": "Yaml",
     "asset_tab_image": "이미지",
     "asset_tab_text": "텍스트",
     "asset_tab_audio": "오디오",

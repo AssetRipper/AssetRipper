@@ -50,10 +50,10 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected sealed override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(SourceTexturesName, SourceTextures.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(SourceTexturesName, SourceTextures.ExportYaml(container));
 			return node;
 		}
 

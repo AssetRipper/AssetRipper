@@ -113,28 +113,28 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(StartLifetimeName, StartLifetime.ExportYAML(container));
-			node.Add(StartSpeedName, StartSpeed.ExportYAML(container));
-			node.Add(StartColorName, StartColor.ExportYAML(container));
-			node.Add(StartSizeName, StartSize.ExportYAML(container));
-			node.Add(StartSizeYName, GetStartSizeY(container.Version).ExportYAML(container));
-			node.Add(StartSizeZName, GetStartSizeZ(container.Version).ExportYAML(container));
-			node.Add(StartRotationXName, GetStartRotationX(container.Version).ExportYAML(container));
-			node.Add(StartRotationYName, GetStartRotationY(container.Version).ExportYAML(container));
-			node.Add(StartRotationName, StartRotation.ExportYAML(container));
+			node.Add(StartLifetimeName, StartLifetime.ExportYaml(container));
+			node.Add(StartSpeedName, StartSpeed.ExportYaml(container));
+			node.Add(StartColorName, StartColor.ExportYaml(container));
+			node.Add(StartSizeName, StartSize.ExportYaml(container));
+			node.Add(StartSizeYName, GetStartSizeY(container.Version).ExportYaml(container));
+			node.Add(StartSizeZName, GetStartSizeZ(container.Version).ExportYaml(container));
+			node.Add(StartRotationXName, GetStartRotationX(container.Version).ExportYaml(container));
+			node.Add(StartRotationYName, GetStartRotationY(container.Version).ExportYaml(container));
+			node.Add(StartRotationName, StartRotation.ExportYaml(container));
 			node.Add(RandomizeRotationDirectionName, RandomizeRotationDirection);
 			node.Add(MaxNumParticlesName, MaxNumParticles);
 			if (HasCustomEmitterVelocity(container.ExportVersion))
 			{
-				node.Add(CustomEmitterVelocityName, CustomEmitterVelocity.ExportYAML(container));
+				node.Add(CustomEmitterVelocityName, CustomEmitterVelocity.ExportYaml(container));
 			}
 			node.Add(Size3DName, Size3D);
 			node.Add(Rotation3DName, Rotation3D);
-			node.Add(GravityModifierName, GravityModifier.ExportYAML(container));
+			node.Add(GravityModifierName, GravityModifier.ExportYaml(container));
 			return node;
 		}
 

@@ -53,14 +53,14 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 			PostWrite(writer);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			if (HasIsReadable(container.ExportVersion))
 			{
 				node.Add(IsReadableName, IsReadable);
 			}
-			PostExportYAML(container, node);
+			PostExportYaml(container, node);
 			return node;
 		}
 

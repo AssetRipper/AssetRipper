@@ -27,9 +27,9 @@ namespace AssetRipper.Core.Classes.Misc.Serializable
 			writer.Write(ID);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			return new YAMLScalarNode(ID == 0 ? string.Empty : $"Unknown_{unchecked((uint)ID)}");
+			return new YamlScalarNode(ID == 0 ? string.Empty : $"Unknown_{unchecked((uint)ID)}");
 		}
 
 		public override int GetHashCode()

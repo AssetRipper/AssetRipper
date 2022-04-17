@@ -42,10 +42,10 @@ namespace AssetRipper.Core.Classes.TerrainData
 			yield return context.FetchDependency(Prefab, PrefabName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(PrefabName, Prefab.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(PrefabName, Prefab.ExportYaml(container));
 			node.Add(BendFactorName, BendFactor);
 			if (HasNavMeshLod(container.ExportVersion))
 			{

@@ -26,11 +26,11 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 			m_Max.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(MinName, m_Min.ExportYAML(container));
-			node.Add(MaxName, m_Max.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(MinName, m_Min.ExportYaml(container));
+			node.Add(MaxName, m_Max.ExportYaml(container));
 			return node;
 		}
 	}

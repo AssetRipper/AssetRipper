@@ -45,10 +45,10 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(TerrainData, TerrainDataName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(TerrainDataName, TerrainData.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(TerrainDataName, TerrainData.ExportYaml(container));
 			node.Add(EnableTreeCollidersName, EnableTreeColliders);
 			return node;
 		}

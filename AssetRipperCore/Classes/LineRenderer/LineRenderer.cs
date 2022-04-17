@@ -45,12 +45,12 @@ namespace AssetRipper.Core.Classes.LineRenderer
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.InsertSerializedVersion(1);
-			node.Add("m_Positions", Positions.ExportYAML(container));
-			node.Add("m_Parameters", Parameters.ExportYAML(container));
+			node.Add("m_Positions", Positions.ExportYaml(container));
+			node.Add("m_Parameters", Parameters.ExportYaml(container));
 			node.Add("m_UseWorldSpace", UseWorldSpace);
 			if (HasLoop(container.ExportVersion))
 			{

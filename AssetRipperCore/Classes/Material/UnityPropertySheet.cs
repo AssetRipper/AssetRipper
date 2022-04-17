@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Material
 {
-	public sealed class UnityPropertySheet : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class UnityPropertySheet : IAssetReadable, IYamlExportable, IDependent
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -82,17 +82,17 @@ namespace AssetRipper.Core.Classes.Material
 			m_colors.Read(reader);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(TexEnvsName, m_texEnvs.ExportYAML(container));
+			node.Add(TexEnvsName, m_texEnvs.ExportYaml(container));
 			if (HasInts(container.ExportVersion))
 			{
-				node.Add(IntsName, m_ints.ExportYAML(container));
+				node.Add(IntsName, m_ints.ExportYaml(container));
 			}
-			node.Add(FloatsName, m_floats.ExportYAML(container));
-			node.Add(ColorsName, m_colors.ExportYAML(container));
+			node.Add(FloatsName, m_floats.ExportYaml(container));
+			node.Add(ColorsName, m_colors.ExportYaml(container));
 			return node;
 		}
 

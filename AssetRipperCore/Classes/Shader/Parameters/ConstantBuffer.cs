@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public sealed class ConstantBuffer : IAssetReadable, IYAMLExportable
+	public sealed class ConstantBuffer : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 2017.3 and greater
@@ -50,15 +50,15 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("m_NameIndex", NameIndex);
-			node.Add("m_MatrixParams", MatrixParams.ExportYAML(container));
-			node.Add("m_VectorParams", VectorParams.ExportYAML(container));
+			node.Add("m_MatrixParams", MatrixParams.ExportYaml(container));
+			node.Add("m_VectorParams", VectorParams.ExportYaml(container));
 			if (HasStructParams(container.ExportVersion))
 			{
-				node.Add("m_StructParams", StructParams.ExportYAML(container));
+				node.Add("m_StructParams", StructParams.ExportYaml(container));
 			}
 
 			node.Add("m_Size", Size);

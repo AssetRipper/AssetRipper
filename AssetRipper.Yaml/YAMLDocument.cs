@@ -1,26 +1,26 @@
 ﻿namespace AssetRipper.Yaml
 {
-	public sealed class YAMLDocument
+	public sealed class YamlDocument
 	{
-		public YAMLDocument() { }
+		public YamlDocument() { }
 
-		public YAMLScalarNode CreateScalarRoot()
+		public YamlScalarNode CreateScalarRoot()
 		{
-			YAMLScalarNode root = new YAMLScalarNode();
+			YamlScalarNode root = new YamlScalarNode();
 			Root = root;
 			return root;
 		}
 
-		public YAMLSequenceNode CreateSequenceRoot()
+		public YamlSequenceNode CreateSequenceRoot()
 		{
-			YAMLSequenceNode root = new YAMLSequenceNode();
+			YamlSequenceNode root = new YamlSequenceNode();
 			Root = root;
 			return root;
 		}
 
-		public YAMLMappingNode CreateMappingRoot()
+		public YamlMappingNode CreateMappingRoot()
 		{
-			YAMLMappingNode root = new YAMLMappingNode();
+			YamlMappingNode root = new YamlMappingNode();
 			Root = root;
 			return root;
 		}
@@ -33,6 +33,6 @@
 			Root.Emit(emitter);
 		}
 
-		public YAMLNode Root { get; private set; }
+		public YamlNode Root { get; private set; }
 	}
 }

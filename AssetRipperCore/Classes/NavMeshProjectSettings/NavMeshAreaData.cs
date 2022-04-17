@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.NavMeshProjectSettings
 	/// <summary>
 	/// NavMeshLayerData previously
 	/// </summary>
-	public sealed class NavMeshAreaData : IAssetReadable, IYAMLExportable
+	public sealed class NavMeshAreaData : IAssetReadable, IYamlExportable
 	{
 		public NavMeshAreaData() { }
 		public NavMeshAreaData(string name, float cost, int editType)
@@ -33,9 +33,9 @@ namespace AssetRipper.Core.Classes.NavMeshProjectSettings
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(NameName, Name);
 			node.Add(CostName, Cost);
 			return node;

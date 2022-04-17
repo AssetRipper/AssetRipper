@@ -20,10 +20,10 @@ namespace AssetRipper.Core.Classes.GameObject
 			Component.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(ComponentName, Component.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(ComponentName, Component.ExportYaml(container));
 			return node;
 		}
 

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 {
-	public sealed class AnimationCurveTpl<T> : IAsset, IEquatable<AnimationCurveTpl<T>> where T : IAsset, IYAMLExportable, new()
+	public sealed class AnimationCurveTpl<T> : IAsset, IEquatable<AnimationCurveTpl<T>> where T : IAsset, IYamlExportable, new()
 	{
 		public AnimationCurveTpl() { }
 
@@ -102,11 +102,11 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(CurveName, Curve.ExportYAML(container));
+			node.Add(CurveName, Curve.ExportYaml(container));
 			node.Add(PreInfinityName, (int)PreInfinity);
 			node.Add(PostInfinityName, (int)PostInfinity);
 			if (HasRotationOrder(container.ExportVersion))

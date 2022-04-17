@@ -7,7 +7,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerParameter
 {
-	public sealed class AnimatorControllerParameter : IYAMLExportable
+	public sealed class AnimatorControllerParameter : IYamlExportable
 	{
 		public AnimatorControllerParameter(AnimatorController controller, int paramIndex)
 		{
@@ -38,15 +38,15 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerP
 			DefaultController = controller.SerializedFile.CreatePPtr(controller);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(NameName, Name);
 			node.Add(TypeName, (int)Type);
 			node.Add(DefaultFloatName, DefaultFloat);
 			node.Add(DefaultIntName, DefaultInt);
 			node.Add(DefaultBoolName, DefaultBool);
-			node.Add(DefaultControllerName, DefaultController.ExportYAML(container));
+			node.Add(DefaultControllerName, DefaultController.ExportYaml(container));
 			return node;
 		}
 

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public sealed class SamplerParameter : IAssetReadable, IYAMLExportable
+	public sealed class SamplerParameter : IAssetReadable, IYamlExportable
 	{
 		public SamplerParameter() { }
 
@@ -21,9 +21,9 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			BindPoint = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("sampler", Sampler);
 			node.Add("bindPoint", BindPoint);
 			return node;

@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Classes.RenderSettings
 	/// <summary>
 	/// LightProbeCoefficients and SH9Coefficients previously
 	/// </summary>
-	public sealed class SphericalHarmonicsL2 : IAssetReadable, IYAMLExportable
+	public sealed class SphericalHarmonicsL2 : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// Not 5.0.0b
@@ -53,9 +53,9 @@ namespace AssetRipper.Core.Classes.RenderSettings
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(Sh0Name, Sh0);
 			node.Add(Sh1Name, Sh1);
 			node.Add(Sh2Name, Sh2);

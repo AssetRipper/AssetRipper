@@ -113,7 +113,7 @@
     "loading_step_pre_processing": "",
     "select_asset_to_view_info": "Sélectionnez un Asset sur le panneau de gauche pour voir ses informations",
     "asset_tab_basic": "Informations de base",
-    "asset_tab_yaml": "YAML",
+    "asset_tab_yaml": "Yaml",
     "asset_tab_image": "Image",
     "asset_tab_text": "Texte",
     "asset_tab_audio": "",

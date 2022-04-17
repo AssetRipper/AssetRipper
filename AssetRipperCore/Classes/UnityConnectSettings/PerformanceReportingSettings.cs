@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.UnityConnectSettings
 {
-	public sealed class PerformanceReportingSettings : IAssetReadable, IYAMLExportable
+	public sealed class PerformanceReportingSettings : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -13,9 +13,9 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(EnabledName, Enabled);
 			return node;
 		}

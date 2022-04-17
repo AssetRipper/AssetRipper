@@ -3,8 +3,8 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.IO.Asset
 {
-	public interface IYAMLExportable
+	public interface IYamlExportable
 	{
-		YAMLNode ExportYAML(IExportContainer container);
+		YamlNode ExportYaml(IExportContainer container);
 	}
 }

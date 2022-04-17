@@ -58,15 +58,15 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
 			if (HasData(container.Version) || IsInherited(container.Version))
 			{
-				return base.ExportYAMLRoot(container);
+				return base.ExportYamlRoot(container);
 			}
 			else
 			{
-				return ExportYAMLRootTexture(container);
+				return ExportYamlRootTexture(container);
 			}
 		}
 	}

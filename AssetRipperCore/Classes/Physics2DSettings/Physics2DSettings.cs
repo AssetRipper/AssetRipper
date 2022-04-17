@@ -213,12 +213,12 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			yield return context.FetchDependency(DefaultMaterial, DefaultMaterialName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(GravityName, Gravity.ExportYAML(container));
-			node.Add(DefaultMaterialName, DefaultMaterial.ExportYAML(container));
+			node.Add(GravityName, Gravity.ExportYaml(container));
+			node.Add(DefaultMaterialName, DefaultMaterial.ExportYaml(container));
 			node.Add(VelocityIterationsName, VelocityIterations);
 			node.Add(PositionIterationsName, PositionIterations);
 			node.Add(VelocityThresholdName, GetVelocityThreshold(container.Version));
@@ -245,11 +245,11 @@ namespace AssetRipper.Core.Classes.Physics2DSettings
 			node.Add(ShowColliderContactsName, GetShowColliderContacts());
 			node.Add(ShowColliderAABBName, GetShowColliderAABB());
 			node.Add(ContactArrowScaleName, GetContactArrowScale(container.Version, container.Flags));
-			node.Add(ColliderAwakeColorName, GetColliderAwakeColorRGBAf(container.Version, container.Flags).ExportYAML(container));
-			node.Add(ColliderAsleepColorName, GetColliderAsleepColorRGBAf(container.Version, container.Flags).ExportYAML(container));
-			node.Add(ColliderContactColorName, GetColliderContactColorRGBAf(container.Version, container.Flags).ExportYAML(container));
-			node.Add(ColliderAABBColorName, GetColliderAABBColorRGBAf(container.Version, container.Flags).ExportYAML(container));
-			node.Add(LayerCollisionMatrixName, LayerCollisionMatrix.ExportYAML(true));
+			node.Add(ColliderAwakeColorName, GetColliderAwakeColorRGBAf(container.Version, container.Flags).ExportYaml(container));
+			node.Add(ColliderAsleepColorName, GetColliderAsleepColorRGBAf(container.Version, container.Flags).ExportYaml(container));
+			node.Add(ColliderContactColorName, GetColliderContactColorRGBAf(container.Version, container.Flags).ExportYaml(container));
+			node.Add(ColliderAABBColorName, GetColliderAABBColorRGBAf(container.Version, container.Flags).ExportYaml(container));
+			node.Add(LayerCollisionMatrixName, LayerCollisionMatrix.ExportYaml(true));
 			return node;
 		}
 

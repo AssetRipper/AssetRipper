@@ -70,19 +70,19 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			if (HasEditorData(container.ExportFlags))
 			{
-				node.Add(EditorDataName, GetEditorData(container.Flags).ExportYAML(container));
-				node.Add(MasterAtlasName, MasterAtlas.ExportYAML(container));
+				node.Add(EditorDataName, GetEditorData(container.Flags).ExportYaml(container));
+				node.Add(MasterAtlasName, MasterAtlas.ExportYaml(container));
 			}
-			node.Add(PackedSpritesName, PackedSprites.ExportYAML(container));
-			node.Add(PackedSpriteNamesToIndexName, PackedSpriteNamesToIndex.ExportYAML());
+			node.Add(PackedSpritesName, PackedSprites.ExportYaml(container));
+			node.Add(PackedSpriteNamesToIndexName, PackedSpriteNamesToIndex.ExportYaml());
 			if (HasRenderDataMap(container.ExportFlags))
 			{
-				node.Add(RenderDataMapName, RenderDataMap.ExportYAML(container));
+				node.Add(RenderDataMapName, RenderDataMap.ExportYaml(container));
 			}
 			node.Add(TagName, Tag);
 			node.Add(IsVariantName, IsVariant);

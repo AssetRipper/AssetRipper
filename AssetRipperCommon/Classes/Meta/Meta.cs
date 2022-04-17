@@ -33,12 +33,12 @@ namespace AssetRipper.Core.Classes.Meta
 			return 2;
 		}
 
-		public YAMLDocument ExportYAMLDocument(IExportContainer container)
+		public YamlDocument ExportYamlDocument(IExportContainer container)
 		{
-			YAMLDocument document = new YAMLDocument();
-			YAMLMappingNode root = document.CreateMappingRoot();
+			YamlDocument document = new YamlDocument();
+			YamlMappingNode root = document.CreateMappingRoot();
 			root.Add(FileFormatVersionName, ToFileFormatVersion(container.ExportVersion));
-			root.Add(GuidName, GUID.ExportYAML(container));
+			root.Add(GuidName, GUID.ExportYaml(container));
 			if (IsFolderAsset)
 			{
 				root.Add(FolderAssetName, true);
@@ -50,7 +50,7 @@ namespace AssetRipper.Core.Classes.Meta
 			}
 			//if (Importer.IncludesImporter(container.ExportVersion)) //For now, assume true
 			{
-				root.Add(Importer.ClassID.ToString(), Importer.ExportYAML(container));
+				root.Add(Importer.ClassID.ToString(), Importer.ExportYaml(container));
 			}
 			return document;
 		}

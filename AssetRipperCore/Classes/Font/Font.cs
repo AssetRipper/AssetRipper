@@ -298,28 +298,28 @@ namespace AssetRipper.Core.Classes.Font
 			yield return context.FetchDependency(Texture, TextureName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(LineSpacingName, LineSpacing);
-			node.Add(DefaultMaterialName, DefaultMaterial.ExportYAML(container));
+			node.Add(DefaultMaterialName, DefaultMaterial.ExportYaml(container));
 			node.Add(FontSizeName, FontSize);
-			node.Add(TextureName, Texture.ExportYAML(container));
+			node.Add(TextureName, Texture.ExportYaml(container));
 			node.Add(AsciiStartOffsetName, AsciiStartOffset);
 			node.Add(TrackingName, GetTracking(container.Version));
 			node.Add(CharacterSpacingName, CharacterSpacing);
 			node.Add(CharacterPaddingName, GetCharacterPadding(container.Version));
 			node.Add(ConvertCaseName, ConvertCase);
-			node.Add(CharacterRectsName, CharacterRects.ExportYAML(container));
-			node.Add(KerningValuesName, KerningValues.ExportYAML());
+			node.Add(CharacterRectsName, CharacterRects.ExportYaml(container));
+			node.Add(KerningValuesName, KerningValues.ExportYaml());
 			node.Add(PixelScaleName, GetPixelScale(container.Version));
-			node.Add(FontDataName, GetFontData(container.Version).ExportYAML());
+			node.Add(FontDataName, GetFontData(container.Version).ExportYaml());
 			node.Add(AscentName, Ascent);
 			node.Add(DescentName, Descent);
 			node.Add(DefaultStyleName, (int)DefaultStyle);
-			node.Add(FontNamesName, GetFontNames(container.Version).ExportYAML());
-			node.Add(FallbackFontsName, GetFallbackFonts(container.Version).ExportYAML(container));
+			node.Add(FontNamesName, GetFontNames(container.Version).ExportYaml());
+			node.Add(FallbackFontsName, GetFallbackFonts(container.Version).ExportYaml(container));
 			node.Add(FontRenderingModeName, (int)FontRenderingMode);
 			node.Add(UseLegacyBoundsCalculationName, UseLegacyBoundsCalculation);
 			node.Add(ShouldRoundAdvanceValueName, GetShouldRoundAdvanceValue(container.Version));

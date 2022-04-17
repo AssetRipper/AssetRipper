@@ -29,10 +29,10 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(CustomSkybox, CustomSkyboxName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(CustomSkyboxName, CustomSkybox.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(CustomSkyboxName, CustomSkybox.ExportYaml(container));
 			return node;
 		}
 

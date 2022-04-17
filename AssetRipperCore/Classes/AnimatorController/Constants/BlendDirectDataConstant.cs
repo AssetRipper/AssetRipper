@@ -5,7 +5,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class BlendDirectDataConstant : IAssetReadable, IYAMLExportable
+	public sealed class BlendDirectDataConstant : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

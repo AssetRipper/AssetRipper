@@ -43,7 +43,7 @@ namespace AssetRipper.Core.Converters.TrailRenderer
 			return AssetRipper.Core.Classes.TrailRenderer.TrailRenderer.HasEmitting(container.Version) ? origin : true;
 		}
 
-		private static AnimationCurveTpl<T> Convert<T>(this AnimationCurveTpl<T> _this, IExportContainer container) where T : IAsset, IYAMLExportable, new()
+		private static AnimationCurveTpl<T> Convert<T>(this AnimationCurveTpl<T> _this, IExportContainer container) where T : IAsset, IYamlExportable, new()
 		{
 			return AnimationCurveTplConverter.Convert(container, _this);
 		}

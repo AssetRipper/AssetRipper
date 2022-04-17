@@ -115,9 +115,9 @@ namespace AssetRipper.Core.Math
 			writer.Write(E33);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(E00Name, E00);
 			node.Add(E01Name, E01);
 			node.Add(E02Name, E02);

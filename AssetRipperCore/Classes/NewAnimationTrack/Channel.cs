@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.NewAnimationTrack
 {
-	public sealed class Channel : IAssetReadable, IYAMLExportable
+	public sealed class Channel : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,11 +15,11 @@ namespace AssetRipper.Core.Classes.NewAnimationTrack
 			AttributeName = reader.ReadString();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ByteOffsetName, ByteOffset);
-			node.Add(CurveName, Curve.ExportYAML(container));
+			node.Add(CurveName, Curve.ExportYaml(container));
 			node.Add(AttributeNameName, AttributeName);
 			return node;
 		}

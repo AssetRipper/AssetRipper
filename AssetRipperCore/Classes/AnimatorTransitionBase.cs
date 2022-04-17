@@ -93,12 +93,12 @@ namespace AssetRipper.Core.Classes
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(ConditionsName, Conditions.ExportYAML(container));
-			node.Add(DstStateMachineName, DstStateMachine.ExportYAML(container));
-			node.Add(DstStateName, DstState.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(ConditionsName, Conditions.ExportYaml(container));
+			node.Add(DstStateMachineName, DstStateMachine.ExportYaml(container));
+			node.Add(DstStateName, DstState.ExportYaml(container));
 			node.Add(SoloName, Solo);
 			node.Add(MuteName, Mute);
 			node.Add(IsExitName, IsExit);

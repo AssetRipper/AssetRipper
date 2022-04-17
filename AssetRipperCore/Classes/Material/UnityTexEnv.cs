@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Material
 {
-	public sealed class UnityTexEnv : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class UnityTexEnv : IAssetReadable, IYamlExportable, IDependent
 	{
 		/// <summary>
 		/// Less than 2.1.0
@@ -37,12 +37,12 @@ namespace AssetRipper.Core.Classes.Material
 			yield return context.FetchDependency(Texture, TextureName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TextureName, Texture.ExportYAML(container));
-			node.Add(ScaleName, Scale.ExportYAML(container));
-			node.Add(OffsetName, Offset.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(TextureName, Texture.ExportYaml(container));
+			node.Add(ScaleName, Scale.ExportYaml(container));
+			node.Add(OffsetName, Offset.ExportYaml(container));
 			return node;
 		}
 

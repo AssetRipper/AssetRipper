@@ -35,9 +35,9 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(FixedTimestepName, FixedTimestep);
 			node.Add(MaximumAllowedTimestepName, GetMaximumAllowedTimestep(container.Version));
 			node.Add(TimeScaleName, TimeScale);

@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public sealed class Float : IAsset, IYAMLExportable
+	public sealed class Float : IAsset, IYamlExportable
 	{
 		public Float() { }
 
@@ -34,9 +34,9 @@ namespace AssetRipper.Core.Classes.Misc
 			writer.Write(Value);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			return new YAMLScalarNode(Value);
+			return new YamlScalarNode(Value);
 		}
 
 		public override bool Equals(object obj)

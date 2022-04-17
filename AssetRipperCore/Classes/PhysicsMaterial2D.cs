@@ -17,9 +17,9 @@ namespace AssetRipper.Core.Classes
 			Bounciness = reader.ReadSingle();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(FrictionName, Friction);
 			node.Add(BouncinessName, Bounciness);
 			return node;

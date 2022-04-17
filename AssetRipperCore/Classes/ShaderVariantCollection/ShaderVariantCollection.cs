@@ -47,10 +47,10 @@ namespace AssetRipper.Core.Classes.ShaderVariantCollection
 			return shaders;
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(ShadersName, GetShaders().ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(ShadersName, GetShaders().ExportYaml(container));
 			return node;
 		}
 

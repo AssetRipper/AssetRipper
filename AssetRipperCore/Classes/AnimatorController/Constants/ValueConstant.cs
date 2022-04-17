@@ -28,10 +28,10 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			Index = (int)reader.ReadUInt32();
 		}
 
-		/*public YAMLNode ExportYAML()
+		/*public YamlNode ExportYaml()
 		{
 #warning TODO: ExportName
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("m_ID", ID);
 			node.Add("m_TypeID", TypeID);
 			node.Add("m_Type", Type);

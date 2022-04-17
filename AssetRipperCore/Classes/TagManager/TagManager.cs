@@ -56,13 +56,13 @@ namespace AssetRipper.Core.Classes.TagManager
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(TagsName, Tags.ExportYAML(container));
-			node.Add(LayersName, Layers.ExportYAML());
-			node.Add(SortingLayersName, GetSortingLayers(container.Version).ExportYAML(container));
+			node.Add(TagsName, Tags.ExportYaml(container));
+			node.Add(LayersName, Layers.ExportYaml());
+			node.Add(SortingLayersName, GetSortingLayers(container.Version).ExportYaml(container));
 			return node;
 		}
 

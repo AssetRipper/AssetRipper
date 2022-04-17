@@ -19,9 +19,9 @@ namespace AssetRipper.Core.Classes.StreamingController
 			StreamingMipmapBias = reader.ReadSingle();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(1);
 			node.Add("m_StreamingMipmapBias", StreamingMipmapBias);
 			return node;

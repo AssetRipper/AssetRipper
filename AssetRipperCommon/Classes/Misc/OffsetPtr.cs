@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public sealed class OffsetPtr<T> : IAsset where T : IAssetReadable, IYAMLExportable, new()
+	public sealed class OffsetPtr<T> : IAsset where T : IAssetReadable, IYamlExportable, new()
 	{
 		public OffsetPtr() : this(new()) { }
 
@@ -31,10 +31,10 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(DataName, (Instance).ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(DataName, (Instance).ExportYaml(container));
 			return node;
 		}
 

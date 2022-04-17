@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ResourceManager
 {
-	public sealed class ResourceManagerDependency : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class ResourceManagerDependency : IAssetReadable, IYamlExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -26,11 +26,11 @@ namespace AssetRipper.Core.Classes.ResourceManager
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(ObjectName, Object.ExportYAML(container));
-			node.Add(DependenciesName, Dependencies.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(ObjectName, Object.ExportYaml(container));
+			node.Add(DependenciesName, Dependencies.ExportYaml(container));
 			return node;
 		}
 

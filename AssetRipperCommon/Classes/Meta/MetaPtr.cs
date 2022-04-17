@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Meta
 {
-	public sealed class MetaPtr : IYAMLExportable
+	public sealed class MetaPtr : IYamlExportable
 	{
 		public MetaPtr(long fileID)
 		{
@@ -24,14 +24,14 @@ namespace AssetRipper.Core.Classes.Meta
 
 		public MetaPtr(ClassIDType classID, AssetType assetType) : this(ExportIdHandler.GetMainExportID((uint)classID), UnityGUID.MissingReference, assetType) { }
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Style = MappingStyle.Flow;
 			node.Add(FileIDName, FileID);
 			if (!GUID.IsZero)
 			{
-				node.Add(GuidName, GUID.ExportYAML(container));
+				node.Add(GuidName, GUID.ExportYaml(container));
 				node.Add(TypeName, (int)AssetType);
 			}
 			return node;

@@ -1,7 +1,7 @@
 namespace AssetRipper.Yaml
 {
 	/// <summary>
-	/// Specifies the style of a YAML scalar.
+	/// Specifies the style of a Yaml scalar.
 	/// </summary>
 	public enum ScalarStyle
 	{

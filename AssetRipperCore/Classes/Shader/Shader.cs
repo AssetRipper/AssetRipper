@@ -191,50 +191,50 @@ namespace AssetRipper.Core.Classes.Shader
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node;
+			YamlMappingNode node;
 			if (IsSerialized(container.ExportVersion))
 			{
-				node = ExportBaseYAMLRoot(container);
+				node = ExportBaseYamlRoot(container);
 				node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
-				node.Add("m_ParsedForm", m_ParsedForm.ExportYAML(container));
-				node.Add("platforms", Array.ConvertAll(Platforms, value => (int)value).ExportYAML(false));
+				node.Add("m_ParsedForm", m_ParsedForm.ExportYaml(container));
+				node.Add("platforms", Array.ConvertAll(Platforms, value => (int)value).ExportYaml(false));
 				if (IsDoubleArray(container.ExportVersion))
 				{
-					node.Add("offsets", Offsets2D.ExportYAML(false));
-					node.Add("compressedLengths", CompressedLengths2D.ExportYAML(false));
-					node.Add("decompressedLengths", DecompressedLengths2D.ExportYAML(false));
+					node.Add("offsets", Offsets2D.ExportYaml(false));
+					node.Add("compressedLengths", CompressedLengths2D.ExportYaml(false));
+					node.Add("decompressedLengths", DecompressedLengths2D.ExportYaml(false));
 				}
 				else
 				{
-					node.Add("offsets", Offsets1D.ExportYAML(false));
-					node.Add("compressedLengths", CompressedLengths1D.ExportYAML(false));
-					node.Add("decompressedLengths", DecompressedLengths1D.ExportYAML(false));
+					node.Add("offsets", Offsets1D.ExportYaml(false));
+					node.Add("compressedLengths", CompressedLengths1D.ExportYaml(false));
+					node.Add("decompressedLengths", DecompressedLengths1D.ExportYaml(false));
 				}
 
-				node.Add("compressedBlob", CompressedBlob.ExportYAML());
+				node.Add("compressedBlob", CompressedBlob.ExportYaml());
 			}
 			else //Shader as TextAsset (old format)
 			{
-				node = base.ExportYAMLRoot(container);
+				node = base.ExportYamlRoot(container);
 				node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 
 				if (HasBlob(container.ExportVersion))
 				{
 					node.Add("decompressedSize", DecompressedSize);
-					node.Add("m_SubProgramBlob", CompressedBlob.ExportYAML());
+					node.Add("m_SubProgramBlob", CompressedBlob.ExportYaml());
 				}
 			}
 
 			if (HasDependencies(container.ExportVersion))
 			{
-				node.Add(DependenciesName, Dependencies.ExportYAML(container));
+				node.Add(DependenciesName, Dependencies.ExportYaml(container));
 			}
 
 			if (HasNonModifiableTextures(container.ExportVersion))
 			{
-				node.Add(NonModifiableTexturesName, NonModifiableTextures.ExportYAML(container));
+				node.Add(NonModifiableTexturesName, NonModifiableTextures.ExportYaml(container));
 			}
 
 			if (HasShaderIsBaked(container.ExportVersion))
@@ -245,17 +245,17 @@ namespace AssetRipper.Core.Classes.Shader
 			//Editor-Only
 			if (HasErrors(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add("errors", (new HashSet<ShaderError>()).ExportYAML(container));
+				node.Add("errors", (new HashSet<ShaderError>()).ExportYaml(container));
 			}
 
 			if (HasDefaultTextures(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add("m_DefaultTextures", (new Dictionary<string, PPtr<Texture>>()).ExportYAML(container));
+				node.Add("m_DefaultTextures", (new Dictionary<string, PPtr<Texture>>()).ExportYaml(container));
 			}
 
 			if (HasCompileInfo(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add("m_CompileInfo", (new ShaderCompilationInfo()).ExportYAML(container));
+				node.Add("m_CompileInfo", (new ShaderCompilationInfo()).ExportYaml(container));
 			}
 
 			if (HasCompileSmokeTest(container.ExportVersion, container.ExportFlags))

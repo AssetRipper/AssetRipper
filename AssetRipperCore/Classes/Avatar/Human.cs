@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public sealed class Human : IAssetReadable, IYAMLExportable
+	public sealed class Human : IAssetReadable, IYamlExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -74,20 +74,20 @@ namespace AssetRipper.Core.Classes.Avatar
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(RootXName, RootX.ExportYAML(container));
-			node.Add(SkeletonName, Skeleton.ExportYAML(container));
-			node.Add(SkeletonPoseName, SkeletonPose.ExportYAML(container));
-			node.Add(LeftHandName, LeftHand.ExportYAML(container));
-			node.Add(RightHandName, RightHand.ExportYAML(container));
-			node.Add(HandlesName, GetExportHandles(container.Version).ExportYAML(container));
-			node.Add(ColliderArrayName, GetExportColliderArray(container.Version).ExportYAML(container));
-			node.Add(HumanBoneIndexName, HumanBoneIndex.ExportYAML(true));
-			node.Add(HumanBoneMassName, HumanBoneMass.ExportYAML());
-			node.Add(ColliderIndexName, GetExportColliderIndex(container.Version).ExportYAML(true));
+			node.Add(RootXName, RootX.ExportYaml(container));
+			node.Add(SkeletonName, Skeleton.ExportYaml(container));
+			node.Add(SkeletonPoseName, SkeletonPose.ExportYaml(container));
+			node.Add(LeftHandName, LeftHand.ExportYaml(container));
+			node.Add(RightHandName, RightHand.ExportYaml(container));
+			node.Add(HandlesName, GetExportHandles(container.Version).ExportYaml(container));
+			node.Add(ColliderArrayName, GetExportColliderArray(container.Version).ExportYaml(container));
+			node.Add(HumanBoneIndexName, HumanBoneIndex.ExportYaml(true));
+			node.Add(HumanBoneMassName, HumanBoneMass.ExportYaml());
+			node.Add(ColliderIndexName, GetExportColliderIndex(container.Version).ExportYaml(true));
 			node.Add(ScaleName, Scale);
 			node.Add(ArmTwistName, ArmTwist);
 			node.Add(ForeArmTwistName, ForeArmTwist);

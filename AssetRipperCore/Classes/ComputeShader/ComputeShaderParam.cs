@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ComputeShader
 {
-	public sealed class  ComputeShaderParam : IAssetReadable, IYAMLExportable
+	public sealed class  ComputeShaderParam : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -16,10 +16,10 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			ColCount = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("name", Name.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("name", Name.ExportYaml(container));
 			node.Add("type", Type);
 			node.Add("offset", Offset);
 			node.Add("arraySize", ArraySize);

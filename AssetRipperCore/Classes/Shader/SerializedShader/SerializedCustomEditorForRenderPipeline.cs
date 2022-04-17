@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedCustomEditorForRenderPipeline : IAssetReadable, IYAMLExportable
+	public sealed class SerializedCustomEditorForRenderPipeline : IAssetReadable, IYamlExportable
 	{
 		public string CustomEditorName { get; set; }
 		public string RenderPipelineType { get; set; }
@@ -16,9 +16,9 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			RenderPipelineType = reader.ReadAlignedString();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add("customEditorName", CustomEditorName);
 			node.Add("renderPipelineType", RenderPipelineType);
 			return node;

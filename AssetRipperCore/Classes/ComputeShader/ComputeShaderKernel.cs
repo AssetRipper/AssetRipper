@@ -9,7 +9,7 @@ using System;
 
 namespace AssetRipper.Core.Classes.ComputeShader
 {
-	public sealed class ComputeShaderKernel : IAssetReadable, IYAMLExportable
+	public sealed class ComputeShaderKernel : IAssetReadable, IYamlExportable
 	{
 		public static bool HasThreadGroupSize(UnityVersion version) => version.IsGreaterEqual(5, 4, 0, UnityVersionType.Beta, 22);
 		public static bool HasPreprocessedSource(UnityVersion version) => version.IsLess(2020, 2, 0, UnityVersionType.Alpha, 15);
@@ -38,19 +38,19 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("name", Name.ExportYAML(container));
-			node.Add("cbs", Cbs.ExportYAML(container));
-			node.Add("textures", Textures.ExportYAML(container));
-			node.Add("builtinSamplers", BuiltinSamplers.ExportYAML(container));
-			node.Add("inBuffers", InBuffers.ExportYAML(container));
-			node.Add("outBuffers", OutBuffers.ExportYAML(container));
-			node.Add("code", Code.ExportYAML());
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("name", Name.ExportYaml(container));
+			node.Add("cbs", Cbs.ExportYaml(container));
+			node.Add("textures", Textures.ExportYaml(container));
+			node.Add("builtinSamplers", BuiltinSamplers.ExportYaml(container));
+			node.Add("inBuffers", InBuffers.ExportYaml(container));
+			node.Add("outBuffers", OutBuffers.ExportYaml(container));
+			node.Add("code", Code.ExportYaml());
 			if (HasThreadGroupSize(container.Version))
 			{
-				node.Add("threadGroupSize", ThreadGroupSize.ExportYAML(true));
+				node.Add("threadGroupSize", ThreadGroupSize.ExportYaml(true));
 			}
 			//Editor-only
 			if (HasPreprocessedSource(container.Version))
@@ -61,10 +61,10 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			{
 				node.Add("requirements", default(long));
 			}
-			node.Add("keywords", Array.Empty<string>().ExportYAML());
+			node.Add("keywords", Array.Empty<string>().ExportYaml());
 			if (HasCacheKey(container.Version))
 			{
-				node.Add("cacheKey", new Hash128().ExportYAML(container));
+				node.Add("cacheKey", new Hash128().ExportYaml(container));
 			}
 			node.Add("isCompiled", false);
 

@@ -5,7 +5,7 @@ using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public sealed class FixedBitset : IAssetReadable, IYAMLExportable
+	public sealed class FixedBitset : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -13,10 +13,10 @@ namespace AssetRipper.Core.Classes.Misc
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(DataName, Data.ExportYAML(true));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(DataName, Data.ExportYaml(true));
 			return node;
 		}
 

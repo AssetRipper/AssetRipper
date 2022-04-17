@@ -68,14 +68,14 @@ namespace AssetRipper.Core.Classes.LightProbes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(DataName, Data.ExportYAML(container));
-			node.Add(BakedCoefficientsName, BakedCoefficients.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(DataName, Data.ExportYaml(container));
+			node.Add(BakedCoefficientsName, BakedCoefficients.ExportYaml(container));
 			if (HasBakedLightOcclusion(container.Version))
 			{
-				node.Add(BakedLightOcclusionName, BakedLightOcclusion.ExportYAML(container));
+				node.Add(BakedLightOcclusionName, BakedLightOcclusion.ExportYaml(container));
 			}
 
 			return node;

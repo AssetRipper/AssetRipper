@@ -31,9 +31,9 @@ namespace AssetRipper.Core.Classes
 			writer.AlignStream();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(EnabledName, m_Enabled);
 			return node;
 		}
@@ -48,9 +48,9 @@ namespace AssetRipper.Core.Classes
 			base.Write(writer);
 		}
 
-		protected YAMLMappingNode ExportYAMLRootComponent(IExportContainer container)
+		protected YamlMappingNode ExportYamlRootComponent(IExportContainer container)
 		{
-			return base.ExportYAMLRoot(container);
+			return base.ExportYamlRoot(container);
 		}
 
 		public bool Enabled

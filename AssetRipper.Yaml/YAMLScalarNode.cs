@@ -6,105 +6,105 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.Yaml
 {
-	public sealed class YAMLScalarNode : YAMLNode
+	public sealed class YamlScalarNode : YamlNode
 	{
-		public YAMLScalarNode() { }
+		public YamlScalarNode() { }
 
-		public YAMLScalarNode(bool value) : this(value, false) { }
+		public YamlScalarNode(bool value) : this(value, false) { }
 
-		public YAMLScalarNode(bool value, bool isHex)
+		public YamlScalarNode(bool value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(byte value) : this(value, false) { }
+		public YamlScalarNode(byte value) : this(value, false) { }
 
-		public YAMLScalarNode(byte value, bool isHex)
+		public YamlScalarNode(byte value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(sbyte value) : this(value, false) { }
+		public YamlScalarNode(sbyte value) : this(value, false) { }
 
-		public YAMLScalarNode(sbyte value, bool isHex)
+		public YamlScalarNode(sbyte value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(short value) : this(value, false) { }
+		public YamlScalarNode(short value) : this(value, false) { }
 
-		public YAMLScalarNode(short value, bool isHex)
+		public YamlScalarNode(short value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(ushort value) : this(value, false) { }
+		public YamlScalarNode(ushort value) : this(value, false) { }
 
-		public YAMLScalarNode(ushort value, bool isHex)
+		public YamlScalarNode(ushort value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(int value) : this(value, false) { }
+		public YamlScalarNode(int value) : this(value, false) { }
 
-		public YAMLScalarNode(int value, bool isHex)
+		public YamlScalarNode(int value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(uint value) : this(value, false) { }
+		public YamlScalarNode(uint value) : this(value, false) { }
 
-		public YAMLScalarNode(uint value, bool isHex)
+		public YamlScalarNode(uint value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(long value) : this(value, false) { }
+		public YamlScalarNode(long value) : this(value, false) { }
 
-		public YAMLScalarNode(long value, bool isHex)
+		public YamlScalarNode(long value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(ulong value) : this(value, false) { }
+		public YamlScalarNode(ulong value) : this(value, false) { }
 
-		public YAMLScalarNode(ulong value, bool isHex)
+		public YamlScalarNode(ulong value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(float value) : this(value, false) { }
+		public YamlScalarNode(float value) : this(value, false) { }
 
-		public YAMLScalarNode(float value, bool isHex)
+		public YamlScalarNode(float value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(double value) : this(value, false) { }
+		public YamlScalarNode(double value) : this(value, false) { }
 
-		public YAMLScalarNode(double value, bool isHex)
+		public YamlScalarNode(double value, bool isHex)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YAMLScalarNode(string value)
+		public YamlScalarNode(string value)
 		{
 			SetValue(value);
 			Style = GetStringStyle(value);
 		}
 
-		internal YAMLScalarNode(string value, bool _)
+		internal YamlScalarNode(string value, bool _)
 		{
 			SetValue(value);
 			Style = ScalarStyle.Plain;
@@ -316,9 +316,9 @@ namespace AssetRipper.Yaml
 			return ScalarStyle.Plain;
 		}
 
-		public static YAMLScalarNode Empty { get; } = new YAMLScalarNode();
+		public static YamlScalarNode Empty { get; } = new YamlScalarNode();
 
-		public override YAMLNodeType NodeType => YAMLNodeType.Scalar;
+		public override YamlNodeType NodeType => YamlNodeType.Scalar;
 		public override bool IsMultiline => false;
 		public override bool IsIndent => false;
 

@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 	/// <summary>
 	/// HumanLayerConstant in previous versions
 	/// </summary>
-	public sealed class LayerConstant : IAssetReadable, IYAMLExportable
+	public sealed class LayerConstant : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 4.2.0 and greater
@@ -44,7 +44,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

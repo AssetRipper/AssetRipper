@@ -1,8 +1,8 @@
 ﻿namespace AssetRipper.Yaml
 {
-	public readonly struct YAMLTag
+	public readonly struct YamlTag
 	{
-		public YAMLTag(string handle, string content)
+		public YamlTag(string handle, string content)
 		{
 			Handle = handle;
 			Content = content;

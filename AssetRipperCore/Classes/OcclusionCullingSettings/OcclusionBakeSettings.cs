@@ -44,9 +44,9 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			if (HasViewCellSize(container.ExportVersion))
 			{
 				node.Add(ViewCellSizeName, ViewCellSize);

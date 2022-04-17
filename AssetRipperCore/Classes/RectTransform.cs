@@ -31,14 +31,14 @@ namespace AssetRipper.Core.Classes
 			Pivot.Read(reader);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(AnchorMinName, AnchorMin.ExportYAML(container));
-			node.Add(AnchorMaxName, AnchorMax.ExportYAML(container));
-			node.Add(AnchoredPositionName, AnchorPosition.ExportYAML(container));
-			node.Add(SizeDeltaName, SizeDelta.ExportYAML(container));
-			node.Add(PivotName, Pivot.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(AnchorMinName, AnchorMin.ExportYaml(container));
+			node.Add(AnchorMaxName, AnchorMax.ExportYaml(container));
+			node.Add(AnchoredPositionName, AnchorPosition.ExportYaml(container));
+			node.Add(SizeDeltaName, SizeDelta.ExportYaml(container));
+			node.Add(PivotName, Pivot.ExportYaml(container));
 			return node;
 		}
 

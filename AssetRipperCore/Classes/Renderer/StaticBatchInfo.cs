@@ -29,9 +29,9 @@ namespace AssetRipper.Core.Classes.Renderer
 			throw new System.NotImplementedException();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(FirstSubMeshName, FirstSubMesh);
 			node.Add(SubMeshCountName, SubMeshCount);
 			return node;
