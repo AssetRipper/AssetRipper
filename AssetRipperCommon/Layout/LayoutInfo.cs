@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Layout
@@ -7,13 +8,8 @@ namespace AssetRipper.Core.Layout
 	/// <summary>
 	/// A class for holding the Version, Platform, and Transfer Instruction Flags
 	/// </summary>
-	public sealed class LayoutInfo
+	public sealed class LayoutInfo : IEquatable<LayoutInfo>
 	{
-		static LayoutInfo()
-		{
-			ClassNames = InitializeClassNames();
-		}
-
 		/// <summary>
 		/// 2.1.0 and greater
 		/// The alignment concept was first introduced only in v2.1.0
@@ -42,107 +38,37 @@ namespace AssetRipper.Core.Layout
 			IsStructSerializable = Version.IsGreaterEqual(4, 5);
 		}
 
-		public static bool operator ==(LayoutInfo lhs, LayoutInfo rhs)
-		{
-			if (lhs.Version != rhs.Version)
-			{
-				return false;
-			}
-			if (lhs.Platform != rhs.Platform)
-			{
-				return false;
-			}
-			if (lhs.Flags != rhs.Flags)
-			{
-				return false;
-			}
-			return true;
-		}
-
-		public static bool operator !=(LayoutInfo lhs, LayoutInfo rhs)
-		{
-			if (lhs.Version != rhs.Version)
-			{
-				return true;
-			}
-			if (lhs.Platform != rhs.Platform)
-			{
-				return true;
-			}
-			if (lhs.Flags != rhs.Flags)
-			{
-				return true;
-			}
-			return false;
-		}
-
-		public override int GetHashCode()
-		{
-			int hash = 647;
-			unchecked
-			{
-				hash = hash + 1063 * Version.GetHashCode();
-				hash = hash * 347 + Platform.GetHashCode();
-				hash = hash * 557 + Flags.GetHashCode();
-			}
-			return hash;
-		}
-
-		public override bool Equals(object obj)
-		{
-			if (obj is LayoutInfo info)
-			{
-				return info == this;
-			}
-			return false;
-		}
-
 		public override string ToString()
 		{
 			return $"v{Version} {Platform} [{Flags}]";
 		}
 
-		private static Dictionary<ClassIDType, string> InitializeClassNames()
+		public override bool Equals(object obj)
 		{
-			Dictionary<ClassIDType, string> names = new Dictionary<ClassIDType, string>();
-			ClassIDType[] classTypes = (ClassIDType[])System.Enum.GetValues(typeof(ClassIDType));
-			foreach (ClassIDType classType in classTypes)
-			{
-				names[classType] = classType.ToString();
-			}
-			return names;
+			return Equals(obj as LayoutInfo);
 		}
 
-		public string GetClassName(ClassIDType classID)
+		public bool Equals(LayoutInfo other)
 		{
-			if (classID == ClassIDType.PrefabInstance)
-				return GetPrefabClassName(Version);
-			else if (ClassNames.TryGetValue(classID, out string name))
-				return name;
-			else
-				return null;
+			return other is not null &&
+				   Version.Equals(other.Version) &&
+				   Platform == other.Platform &&
+				   Flags == other.Flags;
 		}
 
-
-		private static IReadOnlyDictionary<ClassIDType, string> ClassNames { get; }
-
-		private static string GetPrefabClassName(UnityVersion version)
+		public override int GetHashCode()
 		{
-			if (version.IsGreaterEqual(2018, 3))
-			{
-				return nameof(ClassIDType.PrefabInstance);
-			}
-			else if (version.IsGreaterEqual(3, 5))
-			{
-				return nameof(ClassIDType.Prefab);
-			}
-			else
-			{
-				return nameof(ClassIDType.DataTemplate);
-			}
+			return HashCode.Combine(Version, Platform, Flags);
 		}
 
+		public static bool operator ==(LayoutInfo left, LayoutInfo right)
+		{
+			return EqualityComparer<LayoutInfo>.Default.Equals(left, right);
+		}
 
-		public const string TypelessdataName = "_typelessdata";
+		public static bool operator !=(LayoutInfo left, LayoutInfo right)
+		{
+			return !(left == right);
+		}
 	}
 }

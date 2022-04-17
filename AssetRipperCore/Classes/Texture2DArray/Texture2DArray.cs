@@ -82,7 +82,7 @@ namespace AssetRipper.Core.Classes.Texture2DArray
 			node.Add(IsReadableName, IsReadable);
 			byte[] imageData = GetExportImageData();
 			node.Add(ImageDataName, imageData.Length);
-			node.Add(Layout.LayoutInfo.TypelessdataName, imageData.ExportYaml());
+			node.Add(Layout.ClassNameHandler.TypelessdataName, imageData.ExportYaml());
 			StreamingInfo streamData = new StreamingInfo();
 			node.Add(StreamDataName, streamData.ExportYaml(container));
 			return node;
