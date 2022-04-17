@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Updating
 	public static class UpdateManager
 	{
 		private static HttpClient client;
-		const string url = "https://api.github.com/repos/ds5678/AssetRipper/releases";
+		const string url = "https://api.github.com/repos/AssetRipper/AssetRipper/releases";
 
 		static UpdateManager()
 		{
