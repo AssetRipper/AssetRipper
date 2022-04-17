@@ -10,7 +10,6 @@ namespace AssetRipper.Core.VersionHandling
 		public UnityVersion UnityVersion { get; protected set; }
 		protected Type ClassIDTypeEnum { get; set; }
 		public AssetFactoryBase AssetFactory { get; protected set; }
-		public IAssetImporterFactory ImporterFactory { get; protected set; }
 		protected Dictionary<uint, string> CommonStringDictionary { get; set; }
 
 		public string GetCommonString(uint index)

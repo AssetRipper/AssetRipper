@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Structure.GameStructure
 {
-	internal sealed class GameStructureProcessor : IDisposable
+	public sealed class GameStructureProcessor : IDisposable
 	{
 		private readonly List<FileScheme> m_schemes = new List<FileScheme>();
 		private readonly HashSet<string> m_knownFiles = new HashSet<string>();

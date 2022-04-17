@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Meta.Importers;
+using AssetRipper.Core.Importers;
 using AssetRipper.Core.Layout;
 
 namespace AssetRipper.Core.Parser.Asset

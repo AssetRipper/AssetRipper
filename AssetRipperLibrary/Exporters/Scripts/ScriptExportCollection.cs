@@ -2,6 +2,7 @@ using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Importers;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -52,7 +53,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 		}
 
-		public override bool Export(ProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			if (m_export.Count == 0)
 			{
@@ -126,7 +127,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private void OnScriptExported(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			IMonoScript script = (IMonoScript)asset;
-			IMonoImporter importer = VersionManager.GetHandler(container.ExportVersion).ImporterFactory.CreateMonoImporter(container.ExportLayout);
+			IMonoImporter importer = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateMonoImporter(container.ExportLayout);
 			importer.ExecutionOrder = (short)script.ExecutionOrder;
 			Meta meta = new Meta(script.GUID, importer);
 			ExportMeta(container, meta, path);

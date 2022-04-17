@@ -5,6 +5,7 @@ using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.OcclusionCullingData;
 using AssetRipper.Core.Classes.OcclusionCullingSettings;
+using AssetRipper.Core.Importers;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
@@ -114,7 +115,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public override bool Export(ProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			string folderPath = Path.Combine(dirPath, UnityObjectBase.AssetsKeyword, "Scene");
 			string sceneSubPath = GetSceneName(container);
@@ -134,7 +135,7 @@ namespace AssetRipper.Core.Project.Collections
 			Directory.CreateDirectory(folderPath);
 
 			AssetExporter.Export(container, Components.Select(t => t.ConvertLegacy(container)), filePath);
-			IDefaultImporter sceneImporter = container.GetExportHandler().ImporterFactory.CreateDefaultImporter(container.ExportLayout);
+			IDefaultImporter sceneImporter = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateDefaultImporter(container.ExportLayout);
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);
 
@@ -208,9 +209,9 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		private void ExportAsset(ProjectAssetContainer container, INamedObject asset, string path)
+		private void ExportAsset(IProjectAssetContainer container, INamedObject asset, string path)
 		{
-			INativeFormatImporter importer = container.GetExportHandler().ImporterFactory.CreateNativeFormatImporter(container.ExportLayout);
+			INativeFormatImporter importer = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateNativeFormatImporter(container.ExportLayout);
 			importer.MainObjectFileID = GetExportID(asset);
 			ExportAsset(container, importer, asset, path, asset.Name);
 		}

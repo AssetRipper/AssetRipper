@@ -23,7 +23,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Project
 {
-	public class ProjectAssetContainer : IExportContainer
+	public class ProjectAssetContainer : IExportContainer, IProjectAssetContainer
 	{
 		public ProjectAssetContainer(ProjectExporterBase exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<IUnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)

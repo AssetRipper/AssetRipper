@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		private readonly Dictionary<long, IUnityObjectBase> m_assets = new Dictionary<long, IUnityObjectBase>();
 		private readonly Dictionary<long, int> m_assetEntryLookup = new Dictionary<long, int>();
-		internal SerializedFile(GameCollection collection, SerializedFileScheme scheme)
+		internal SerializedFile(IFileCollection collection, SerializedFileScheme scheme)
 		{
 			Collection = collection ?? throw new ArgumentNullException(nameof(collection));
 			FilePath = scheme.FilePath;
@@ -81,7 +81,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return SerializedFileScheme.ReadSceme(stream, filePath, fileName);
 		}
 
-		private static LayoutInfo GetLayout(GameCollection collection, SerializedFileScheme scheme, string name)
+		private static LayoutInfo GetLayout(IFileCollection collection, SerializedFileScheme scheme, string name)
 		{
 			if (!SerializedFileMetadata.HasPlatform(scheme.Header.Version))
 			{

@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Structure.Assembly.Managers;
@@ -9,6 +10,7 @@ namespace AssetRipper.Core.Structure
 {
 	public interface IFileCollection
 	{
+		LayoutInfo Layout { get; }
 		ISerializedFile FindSerializedFile(string fileName);
 		IResourceFile FindResourceFile(string fileName);
 

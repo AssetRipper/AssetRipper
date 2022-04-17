@@ -79,8 +79,8 @@ namespace AssetRipper.Core.Configuration
 
 		public CoreConfiguration() => ResetToDefaultValues();
 
-		internal void SetProjectSettings(Layout.LayoutInfo info) => SetProjectSettings(info.Version, info.Platform, info.Flags);
-		internal void SetProjectSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
+		public void SetProjectSettings(Layout.LayoutInfo info) => SetProjectSettings(info.Version, info.Platform, info.Flags);
+		public void SetProjectSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			Version = version;
 			Platform = platform;

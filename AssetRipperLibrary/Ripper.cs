@@ -11,6 +11,7 @@ using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
@@ -40,6 +41,7 @@ namespace AssetRipper.Library
 		static Ripper()
 		{
 			VersionManager.LegacyHandler = new LegacyHandler();
+			Core.Importers.ImporterVersionHandler.SetLegacyImporter(new LegacyImporterFactory());
 		}
 
 		public Ripper() : this(new()) { }

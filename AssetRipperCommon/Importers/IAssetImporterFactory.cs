@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Layout;
 
-namespace AssetRipper.Core.Parser.Asset
+namespace AssetRipper.Core.Importers
 {
 	public interface IAssetImporterFactory
 	{

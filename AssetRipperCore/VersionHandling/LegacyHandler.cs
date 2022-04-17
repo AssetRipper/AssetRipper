@@ -7,7 +7,6 @@ namespace AssetRipper.Core.VersionHandling
 		public LegacyHandler()
 		{
 			this.AssetFactory = new AssetFactory();
-			this.ImporterFactory = new LegacyImporterFactory();
 			ClassIDTypeEnum = typeof(ClassIDType);
 		}
 	}

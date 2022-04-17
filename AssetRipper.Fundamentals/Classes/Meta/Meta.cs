@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.Meta.Importers.Asset;
-using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
 using System;
@@ -10,11 +10,11 @@ namespace AssetRipper.Core.Classes.Meta
 {
 	public class Meta
 	{
-		public Meta(UnityGUID guid, IAssetImporter importer) : this(guid, true, importer) { }
+		public Meta(UnityGUID guid, IUnityObjectBase importer) : this(guid, true, importer) { }
 
-		public Meta(UnityGUID guid, bool hasLicense, IAssetImporter importer) : this(guid, hasLicense, false, importer) { }
+		public Meta(UnityGUID guid, bool hasLicense, IUnityObjectBase importer) : this(guid, hasLicense, false, importer) { }
 
-		public Meta(UnityGUID guid, bool hasLicense, bool isFolder, IAssetImporter importer)
+		public Meta(UnityGUID guid, bool hasLicense, bool isFolder, IUnityObjectBase importer)
 		{
 			if (guid.IsZero)
 			{
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.Classes.Meta
 		public UnityGUID GUID { get; }
 		public bool IsFolderAsset { get; }
 		public bool HasLicenseData { get; }
-		public IAssetImporter Importer { get; }
+		public IUnityObjectBase Importer { get; }
 
 		private long CurrentTick => (DateTime.Now.Ticks - 0x089f7ff5f7b58000) / 10000000;
 

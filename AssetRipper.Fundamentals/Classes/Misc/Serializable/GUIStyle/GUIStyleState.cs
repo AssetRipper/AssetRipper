@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.Colors;
@@ -17,7 +18,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public GUIStyleState()
 		{
 			Background = new();
-			ScaledBackgrounds = Array.Empty<PPtr<Texture2D.ITexture2D>>();
+			ScaledBackgrounds = Array.Empty<PPtr<IUnityObjectBase>>();
 			TextColor = ColorRGBAf.Black;
 		}
 
@@ -25,7 +26,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		{
 			Background = copy.Background;
 			TextColor = copy.TextColor.Clone();
-			ScaledBackgrounds = new PPtr<Texture2D.ITexture2D>[copy.ScaledBackgrounds.Length];
+			ScaledBackgrounds = new PPtr<IUnityObjectBase>[copy.ScaledBackgrounds.Length];
 			for (int i = 0; i < copy.ScaledBackgrounds.Length; i++)
 			{
 				ScaledBackgrounds[i] = copy.ScaledBackgrounds[i];
@@ -37,11 +38,11 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 			Background.Read(reader);
 			if (HasScaledBackgrounds(reader.Version, reader.Flags))
 			{
-				ScaledBackgrounds = reader.ReadAssetArray<PPtr<Texture2D.ITexture2D>>();
+				ScaledBackgrounds = reader.ReadAssetArray<PPtr<IUnityObjectBase>>();
 			}
 			else
 			{
-				ScaledBackgrounds = Array.Empty<PPtr<Texture2D.ITexture2D>>();
+				ScaledBackgrounds = Array.Empty<PPtr<IUnityObjectBase>>();
 			}
 			TextColor.Read(reader);
 		}
@@ -72,10 +73,16 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		/// 5.4.0 and greater and Not Release
 		/// </summary>
 		public static bool HasScaledBackgrounds(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(5, 4) && !flags.IsRelease();
+		
+		/// <summary>
+		/// Texture2D
+		/// </summary>
+		public PPtr<IUnityObjectBase>[] ScaledBackgrounds { get; set; }
 
-		public PPtr<Texture2D.ITexture2D>[] ScaledBackgrounds { get; set; }
-
-		public PPtr<Texture2D.ITexture2D> Background = new();
+		/// <summary>
+		/// Texture2D
+		/// </summary>
+		public PPtr<IUnityObjectBase> Background = new();
 		public ColorRGBAf TextColor = new();
 
 		public const string BackgroundName = "m_Background";

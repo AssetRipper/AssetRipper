@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
-	internal static class PlatformChecker
+	public static class PlatformChecker
 	{
 		public static bool CheckPlatform(List<string> paths, out PlatformGameStructure platformStructure, out MixedGameStructure mixedStructure)
 		{

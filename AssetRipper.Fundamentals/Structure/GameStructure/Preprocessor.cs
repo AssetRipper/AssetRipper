@@ -7,7 +7,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Structure.GameStructure
 {
-	internal static class Preprocessor
+	public static class Preprocessor
 	{
 		private const string ZipExtension = ".zip";
 		private const string ApkExtension = ".apk";
@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		private const uint ZipEmptyMagic = 0x06054B50;
 		private const uint ZipSpannedMagic = 0x08074B50;
 
-		internal static List<string> Process(IEnumerable<string> paths)
+		public static List<string> Process(IEnumerable<string> paths)
 		{
 			List<string> result = new List<string>();
 			foreach (string path in paths)

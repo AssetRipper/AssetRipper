@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public interface IExportCollection
 	{
-		bool Export(ProjectAssetContainer container, string dirPath);
+		bool Export(IProjectAssetContainer container, string dirPath);
 		bool IsContains(IUnityObjectBase asset);
 		long GetExportID(IUnityObjectBase asset);
 		MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal);
