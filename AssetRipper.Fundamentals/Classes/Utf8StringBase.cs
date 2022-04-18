@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Layout;
 using AssetRipper.Core.Project;
-
 using AssetRipper.Yaml;
 using System;
 using System.Text;
@@ -20,11 +19,11 @@ namespace AssetRipper.Core.Classes
 			set => Data = value == null ? Array.Empty<byte>() : Encoding.UTF8.GetBytes(value);
 		}
 
-		public static bool operator ==(Utf8StringBase utf8String, string str) => utf8String?.String == str;
-		public static bool operator !=(Utf8StringBase utf8String, string str) => utf8String?.String != str;
-		public static bool operator ==(string str, Utf8StringBase utf8String) => utf8String?.String == str;
-		public static bool operator !=(string str, Utf8StringBase utf8String) => utf8String?.String != str;
-		public static bool operator ==(Utf8StringBase str1, Utf8StringBase str2)
+		public static bool operator ==(Utf8StringBase? utf8String, string? str) => utf8String?.String == str;
+		public static bool operator !=(Utf8StringBase? utf8String, string? str) => utf8String?.String != str;
+		public static bool operator ==(string? str, Utf8StringBase? utf8String) => utf8String?.String == str;
+		public static bool operator !=(string? str, Utf8StringBase? utf8String) => utf8String?.String != str;
+		public static bool operator ==(Utf8StringBase? str1, Utf8StringBase? str2)
 		{
 			if (str1 is null || str2 is null)
 			{
@@ -55,11 +54,11 @@ namespace AssetRipper.Core.Classes
 
 			return true;
 		}
-		public static bool operator !=(Utf8StringBase str1, Utf8StringBase str2) => !(str1 == str2);
+		public static bool operator !=(Utf8StringBase? str1, Utf8StringBase? str2) => !(str1 == str2);
 
-		public bool Equals(Utf8StringBase other) => this == other;
+		public bool Equals(Utf8StringBase? other) => this == other;
 
-		public bool Equals(string other) => String.Equals(other);
+		public bool Equals(string? other) => String.Equals(other);
 
 		public override YamlNode ExportYamlEditor(IExportContainer container)
 		{
@@ -71,9 +70,11 @@ namespace AssetRipper.Core.Classes
 			return new YamlScalarNode(String);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
-			if (obj is Utf8StringBase utf8String)
+			if (obj is null)
+				return false;
+			else if (obj is Utf8StringBase utf8String)
 				return Equals(utf8String);
 			else if (obj is string str)
 				return Equals(str);
@@ -83,7 +84,7 @@ namespace AssetRipper.Core.Classes
 
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();
+			return HashCode.Combine(Data);
 		}
 
 		public override string ToString()
