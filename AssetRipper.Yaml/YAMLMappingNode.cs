@@ -245,10 +245,14 @@ namespace AssetRipper.Yaml
 		private void StartChildren(Emitter emitter)
 		{
 			if (Style == MappingStyle.Block)
+			{
 				if (m_children.Count == 0)
 					emitter.Write('{');
+			}
 			else if (Style == MappingStyle.Flow)
+			{
 				emitter.Write('{');
+			}
 		}
 
 		private void EndChildren(Emitter emitter)
