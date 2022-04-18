@@ -73,9 +73,9 @@ namespace AssetRipper.Core.Project.Collections
 			IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance);
 			instance.RootGameObjectPtr = root.SerializedFile.CreatePPtr(root);
 			instance.IsPrefabAsset = true;
-			if (instance is IHasName hasName)
+			if (instance is IHasNameString hasName)
 			{
-				hasName.Name = root.Name;
+				hasName.NameString = root.NameString;
 			}
 			return instance;
 		}

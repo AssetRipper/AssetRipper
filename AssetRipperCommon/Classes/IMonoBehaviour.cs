@@ -10,10 +10,9 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public interface IMonoBehaviour : IComponent, IHasName
+	public interface IMonoBehaviour : IComponent, IHasNameString, Interfaces.IMonoBehaviour
 	{
 		PPtr<IMonoScript> ScriptPtr { get; }
-		SerializableStructure Structure { get; set; }
 	}
 
 	public static class MonoBehaviourExtensions
@@ -23,7 +22,7 @@ namespace AssetRipper.Core.Classes
 		/// TODO: find out why GameObject may have a value like PPtr(0, 894) even though such game object doesn't exist
 		/// </summary>
 		public static bool IsSceneObject(this IMonoBehaviour monoBehaviour) => !monoBehaviour.GameObjectPtr.IsNull;
-		public static bool IsScriptableObject(this IMonoBehaviour monoBehaviour) => monoBehaviour.Name.Length > 0;
+		public static bool IsScriptableObject(this IMonoBehaviour monoBehaviour) => monoBehaviour.NameString.Length > 0;
 
 		/// <summary>
 		/// Reads the structure with an AssetReader

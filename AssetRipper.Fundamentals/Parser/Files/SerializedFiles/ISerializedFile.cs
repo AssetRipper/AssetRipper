@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		/// </summary>
 		/// <param name="pathID">Path ID of the asset</param>
 		/// <returns>Found asset or null</returns>
-		IUnityObjectBase FindAsset(long pathID);
+		IUnityObjectBase? FindAsset(long pathID);
 
 		ObjectInfo GetAssetEntry(long pathID);
 

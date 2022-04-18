@@ -36,13 +36,13 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 	{
 		public static string GetName(this IPrefabInstance prefab, IAssetContainer file)
 		{
-			if (prefab is IHasName hasName && string.IsNullOrEmpty(hasName.Name))
+			if (prefab is IHasNameString hasName && string.IsNullOrEmpty(hasName.NameString))
 			{
-				return hasName.Name;
+				return hasName.NameString;
 			}
 			else
 			{
-				return prefab.RootGameObjectPtr.TryGetAsset(file)?.Name;
+				return prefab.RootGameObjectPtr.TryGetAsset(file)?.NameString;
 			}
 		}
 

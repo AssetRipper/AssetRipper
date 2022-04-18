@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.GameObject
 {
-	public interface IGameObject : IEditorExtension, IHasName
+	public interface IGameObject : IEditorExtension, IHasNameString
 	{
 		ushort Tag { get; set; }
 		string TagString { get; set; }
@@ -184,7 +184,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			{
 				ITransform childTransform = childPtr.GetAsset(gameObject.SerializedFile);
 				IGameObject child = childTransform.GameObjectPtr.GetAsset(gameObject.SerializedFile);
-				string path = string.IsNullOrEmpty(parentPath) ? child.Name : $"{parentPath}/{child.Name}";
+				string path = string.IsNullOrEmpty(parentPath) ? child.NameString : $"{parentPath}/{child.NameString}";
 				uint pathHash = CrcUtils.CalculateDigestUTF8(path);
 				tos[pathHash] = path;
 

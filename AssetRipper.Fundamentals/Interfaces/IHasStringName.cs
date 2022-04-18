@@ -1,8 +1,8 @@
 ﻿namespace AssetRipper.Core.Interfaces
 {
-	public interface IHasName
+	public interface IHasNameString
 	{
-		string Name { get; set; }
+		string NameString { get; set; }
 	}
 
 	public static class HasNameExtensions
@@ -12,9 +12,9 @@
 		/// </summary>
 		/// <param name="named">The object implementing the HasName interface</param>
 		/// <returns>The object's name if it's not empty, otherwise the name of the object's type</returns>
-		public static string GetNameNotEmpty(this IHasName named)
+		public static string GetNameNotEmpty(this IHasNameString named)
 		{
-			return string.IsNullOrEmpty(named.Name) ? named.GetType().Name : named.Name;
+			return string.IsNullOrEmpty(named.NameString) ? named.GetType().Name : named.NameString;
 		}
 	}
 }

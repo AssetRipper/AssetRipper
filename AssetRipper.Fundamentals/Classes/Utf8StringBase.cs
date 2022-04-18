@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes
 		public Utf8StringBase() : base() { }
 		public Utf8StringBase(LayoutInfo layout) : base(layout) { }
 
-		public abstract byte[] Data { get; set; }
+		public abstract byte[]? Data { get; set; }
 
 		public string String
 		{
@@ -68,6 +68,31 @@ namespace AssetRipper.Core.Classes
 		public override YamlNode ExportYamlRelease(IExportContainer container)
 		{
 			return new YamlScalarNode(String);
+		}
+
+		public bool CopyIfNullOrEmpty(Utf8StringBase? other)
+		{
+			if(Data is null || Data.Length == 0)
+			{
+				Data = CopyData(other?.Data);
+				return true;
+			}
+			return false;
+		}
+
+		private static byte[] CopyData(byte[]? source)
+		{
+			int length = source?.Length ?? 0;
+			if (length == 0)
+			{
+				return Array.Empty<byte>();
+			}
+			else
+			{
+				byte[] destination = new byte[length];
+				Array.Copy(source!, destination, length);
+				return destination;
+			}
 		}
 
 		public override bool Equals(object? obj)

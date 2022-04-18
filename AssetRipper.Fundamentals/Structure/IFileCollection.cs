@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Structure
 		IResourceFile FindResourceFile(string fileName);
 
 		T FindAsset<T>() where T : IUnityObjectBase;
-		T FindAsset<T>(string name) where T : IUnityObjectBase, INamedObject;
+		T FindAsset<T>(string name) where T : IUnityObjectBase, IHasNameString;
 		IEnumerable<IUnityObjectBase> FetchAssets();
 
 		IEnumerable<IUnityObjectBase> FetchAssetsOfType(ClassIDType type);

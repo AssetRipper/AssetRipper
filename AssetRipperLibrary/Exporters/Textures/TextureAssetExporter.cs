@@ -44,14 +44,14 @@ namespace AssetRipper.Library.Exporters.Textures
 			ITexture2D texture = (ITexture2D)asset;
 			if (!texture.CheckAssetIntegrity())
 			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{texture.StreamData.Path}' hasn't been found");
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.NameString}' because resources file '{texture.StreamData.Path}' hasn't been found");
 				return false;
 			}
 
 			using DirectBitmap bitmap = ConvertToBitmap(texture);
 			if (bitmap == null)
 			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.NameString}' to bitmap");
 				return false;
 			}
 			if (System.OperatingSystem.IsWindows())

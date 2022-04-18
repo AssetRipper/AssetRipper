@@ -61,7 +61,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			IShader shader = (IShader)asset;
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-			if (shader.ParsedForm?.Name?.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
+			if (shader.ParsedForm?.NameString?.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
 				return false;
 
 			using (FileStream fileStream = File.Create(path))
@@ -76,7 +76,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			if (shader.HasParsedForm)
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
-				writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm.Name);
+				writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm.NameString);
 				Export(shader.ParsedForm.PropInfo, writer);
 
 				TemplateShader templateShader = TemplateList.GetBestTemplate(shader);
@@ -167,7 +167,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				writer.Write("[Gamma] ");
 			}
 
-			writer.Write("{0} (\"{1}\", ", _this.Name, _this.Description);
+			writer.Write("{0} (\"{1}\", ", _this.NameString, _this.Description);
 
 			switch (_this.Type)
 			{

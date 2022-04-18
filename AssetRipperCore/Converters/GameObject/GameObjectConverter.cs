@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Converters.GameObject
 			}
 			instance.IsActive = GetIsActive(container, origin);
 			instance.Layer = origin.Layer;
-			instance.Name = origin.Name;
+			instance.NameString = origin.NameString;
 			if (GObject.HasTag(container.ExportVersion, container.ExportFlags))
 			{
 				instance.Tag = GetTag(container, origin);

@@ -235,7 +235,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 
 		public PPtr<OcclusionCullingData.IOcclusionCullingData> OcclusionCullingData => m_OcclusionCullingData;
 
-		public const string SceneKeyword = nameof(ClassIDType.Scene);
+		public const string SceneKeyword = "Scene";
 
 		public const string ViewCellSizeName = "m_ViewCellSize";
 		public const string OcclusionBakeSettingsName = "m_OcclusionBakeSettings";

@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Classes
 			{
 				pre = transform.FatherPtr.GetAsset(transform.SerializedFile).GetRootPath() + PathSeparator;
 			}
-			return pre + transform.GetGameObject().Name;
+			return pre + transform.GetGameObject().NameString;
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace AssetRipper.Core.Classes
 			{
 				ITransform child = childPtr.GetAsset(transform.SerializedFile);
 				IGameObject childGO = child.GetGameObject();
-				if (childGO.Name == childName)
+				if (childGO.NameString == childName)
 				{
 					return separatorIndex == -1 ? child : child.FindChild(path, separatorIndex + 1);
 				}

@@ -108,7 +108,7 @@ namespace AssetRipper.Core.Classes.NavMeshProjectSettings
 			return HasLastAgentTypeID(version) ? SettingNames : new[] { "Humanoid" };
 		}
 
-		public override string ExportPath => nameof(ClassIDType.NavMeshAreas);
+		public override string ExportPath => "NavMeshAreas";
 
 		public NavMeshAreaData[] Areas { get; set; }
 		public int LastAgentTypeID { get; set; }

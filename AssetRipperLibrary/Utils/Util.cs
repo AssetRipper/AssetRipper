@@ -232,9 +232,9 @@ namespace AssetRipper.Library.Utils
 			{
 				return no.GetValidName();
 			}
-			if (asset is IMonoBehaviour mb && mb.IsScriptableObject())
+			if (asset is Core.Classes.IMonoBehaviour mb && mb.IsScriptableObject())
 			{
-				return mb.Name;
+				return mb.NameString;
 			}
 			var nameProp = asset.GetType().GetProperty("Name");
 			if (nameProp != null)

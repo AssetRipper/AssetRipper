@@ -126,7 +126,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			get
 			{
-				if (Asset is IHasName hasName)
+				if (Asset is IHasNameString hasName)
 					return hasName.GetNameNotEmpty();
 				else
 					return Asset.ToString();

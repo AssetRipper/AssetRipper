@@ -9,7 +9,7 @@ using Mono.Cecil;
 
 namespace AssetRipper.Core.Classes
 {
-	public interface IMonoScript : IUnityObjectBase, IHasName
+	public interface IMonoScript : IUnityObjectBase, IHasNameString
 	{
 		string ClassName { get; set; }
 		string Namespace { get; set; }

@@ -168,9 +168,9 @@ namespace AssetRipper.GUI
 				_displayAs = no.GetValidName();
 			}
 
-			if (_associatedObject is IHasName hasName)
+			if (_associatedObject is IHasNameString hasName)
 			{
-				_displayAs = hasName.Name;
+				_displayAs = hasName.NameString;
 			}
 
 			if (_associatedObject is UnknownObject)

@@ -45,7 +45,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 			else
 			{
-				Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.Name}' with default decoder because it's '{audioType}' encoded.");
+				Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.NameString}' with default decoder because it's '{audioType}' encoded.");
 				return false;
 			}
 		}

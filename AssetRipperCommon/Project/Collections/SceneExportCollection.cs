@@ -213,7 +213,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			INativeFormatImporter importer = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateNativeFormatImporter(container.ExportLayout);
 			importer.MainObjectFileID = GetExportID(asset);
-			ExportAsset(container, importer, asset, path, asset.Name);
+			ExportAsset(container, importer, asset, path, asset.NameString);
 		}
 
 		private bool IsComponent(IUnityObjectBase asset)
@@ -294,7 +294,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return true;
 			}
-			if (asset is IMonoBehaviour monoBeh)
+			if (asset is Classes.IMonoBehaviour monoBeh)
 			{
 				if (!monoBeh.IsSceneObject())
 				{

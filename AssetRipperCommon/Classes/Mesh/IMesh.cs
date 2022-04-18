@@ -17,6 +17,6 @@ namespace AssetRipper.Core.Classes.Mesh
 
 	public static class MeshExtensions
 	{
-		public static bool IsCombinedMesh(this IMesh mesh) => mesh?.Name == "Combined Mesh (root scene)";
+		public static bool IsCombinedMesh(this IMesh mesh) => mesh?.NameString == "Combined Mesh (root scene)";
 	}
 }

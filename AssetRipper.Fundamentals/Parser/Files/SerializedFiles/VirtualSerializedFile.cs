@@ -26,8 +26,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public IUnityObjectBase GetAsset(long pathID)
 		{
-			IUnityObjectBase asset = FindAsset(pathID);
-			if (asset == null)
+			IUnityObjectBase? asset = FindAsset(pathID);
+			if (asset is null)
 			{
 				throw new Exception($"Object with path ID {pathID} wasn't found");
 			}
@@ -43,13 +43,13 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			throw new NotSupportedException();
 		}
 
-		public IUnityObjectBase FindAsset(long pathID)
+		public IUnityObjectBase? FindAsset(long pathID)
 		{
-			m_assets.TryGetValue(pathID, out IUnityObjectBase asset);
+			m_assets.TryGetValue(pathID, out IUnityObjectBase? asset);
 			return asset;
 		}
 
-		public IUnityObjectBase FindAsset(int fileIndex, long pathID)
+		public IUnityObjectBase? FindAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualFileIndex)
 			{
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			throw new NotSupportedException();
 		}
 
-		public IUnityObjectBase FindAsset(ClassIDType classID)
+		public IUnityObjectBase? FindAsset(ClassIDType classID)
 		{
 			foreach (IUnityObjectBase asset in FetchAssets())
 			{
@@ -70,13 +70,13 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return null;
 		}
 
-		public IUnityObjectBase FindAsset(ClassIDType classID, string name)
+		public IUnityObjectBase? FindAsset(ClassIDType classID, string name)
 		{
 			foreach (IUnityObjectBase asset in FetchAssets())
 			{
-				if (asset.ClassID == classID && asset is INamedObject namedAsset)
+				if (asset.ClassID == classID && asset is IHasNameString namedAsset)
 				{
-					if (namedAsset.GetValidName() == name)
+					if (namedAsset.NameString == name)
 					{
 						return asset;
 					}

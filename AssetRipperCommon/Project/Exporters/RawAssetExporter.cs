@@ -29,9 +29,9 @@ namespace AssetRipper.Core.Project.Exporters
 			sb.AppendLine("Raw export currently has issues. Dumping instead...");
 			sb.AppendLine();
 			sb.AppendLine("Asset Information:");
-			if (asset is IHasName hasName)
+			if (asset is IHasNameString hasName)
 			{
-				sb.AppendLine($"Name: {hasName.Name}");
+				sb.AppendLine($"Name: {hasName.NameString}");
 			}
 			sb.AppendLine($"Asset Type: {asset.GetType().FullName}");
 			sb.AppendLine($"Path: {path}");

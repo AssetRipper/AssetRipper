@@ -30,7 +30,7 @@ namespace AssetRipper.Core.Project.Collections
 			get { yield return Asset; }
 		}
 
-		public override string Name => string.IsNullOrWhiteSpace(Asset.Name) ? $"UnreadableObject_{Asset.ClassID}" : $"UnreadableObject_{Asset.Name}";
+		public override string Name => string.IsNullOrWhiteSpace(Asset.NameString) ? $"UnreadableObject_{Asset.ClassID}" : $"UnreadableObject_{Asset.NameString}";
 
 		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{

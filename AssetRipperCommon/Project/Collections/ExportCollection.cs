@@ -59,9 +59,9 @@ namespace AssetRipper.Core.Project.Collections
 			string fileName = asset switch
 			{
 				IPrefabInstance prefab => prefab.GetName(file),
-				IMonoBehaviour monoBehaviour => monoBehaviour.Name,
+				Classes.IMonoBehaviour monoBehaviour => monoBehaviour.NameString,
 				INamedObject named => named.GetValidName(),
-				IHasName hasName => hasName.Name,
+				IHasNameString hasName => hasName.NameString,
 				_ => null,
 			};
 			if (string.IsNullOrWhiteSpace(fileName))

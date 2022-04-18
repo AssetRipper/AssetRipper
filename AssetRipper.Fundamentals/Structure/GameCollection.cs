@@ -90,7 +90,7 @@ namespace AssetRipper.Core.Structure
 			return default;
 		}
 
-		public T FindAsset<T>(string name) where T : IUnityObjectBase, INamedObject
+		public T FindAsset<T>(string name) where T : IUnityObjectBase, IHasNameString
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
 			foreach (IUnityObjectBase asset in FetchAssets())
@@ -98,7 +98,7 @@ namespace AssetRipper.Core.Structure
 				if (asset.ClassID == classID)
 				{
 					T namedAsset = (T)asset;
-					if (namedAsset.GetValidName() == name)
+					if (namedAsset.NameString == name)
 					{
 						return namedAsset;
 					}

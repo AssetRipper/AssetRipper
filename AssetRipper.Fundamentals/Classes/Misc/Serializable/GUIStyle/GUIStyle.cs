@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Font;
 using AssetRipper.Core.Classes.GUIText;
+using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.Vectors;
@@ -271,7 +272,10 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public RectOffset Margin = new();
 		public RectOffset Padding = new();
 		public RectOffset Overflow = new();
-		public PPtr<IFont> Font = new();
+		/// <summary>
+		/// IFont
+		/// </summary>
+		public PPtr<IUnityObjectBase> Font = new();
 		public Vector2f ContentOffset = new();
 		public Vector2f ClipOffset = new();
 

@@ -138,7 +138,7 @@ namespace ShaderTextRestorer.IO
 				writer.Write("[Gamma] ");
 			}
 
-			writer.Write("{0} (\"{1}\", ", _this.Name, _this.Description);
+			writer.Write("{0} (\"{1}\", ", _this.NameString, _this.Description);
 
 			switch (_this.Type)
 			{

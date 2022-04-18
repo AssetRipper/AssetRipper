@@ -87,7 +87,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			IAudioClip audioClip = (IAudioClip)asset;
 			if (!audioClip.CheckAssetIntegrity())
 			{
-				Logger.Warning(LogCategory.Export, $"Can't export '{audioClip.Name}' because resources file hasn't been found");
+				Logger.Warning(LogCategory.Export, $"Can't export '{audioClip.NameString}' because resources file hasn't been found");
 				return false;
 			}
 

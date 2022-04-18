@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.Shader
 	{
 		public static string GetValidShaderName(this IShader shader)
 		{
-			return shader.HasParsedForm ? shader.ParsedForm.Name : shader.GetNameNotEmpty();
+			return shader.HasParsedForm ? shader.ParsedForm.NameString : shader.GetNameNotEmpty();
 		}
 	}
 }

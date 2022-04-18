@@ -7,10 +7,10 @@ using System.IO;
 
 namespace AssetRipper.Core.Classes
 {
-	public class UnreadableObject : UnityObjectBase, IHasName, IHasRawData
+	public class UnreadableObject : UnityObjectBase, IHasNameString, IHasRawData
 	{
 		public byte[] RawData { get; private set; } = Array.Empty<byte>();
-		public string Name { get; set; }
+		public string NameString { get; set; }
 
 		public UnreadableObject(LayoutInfo layout) : base(layout) { }
 		public UnreadableObject(AssetInfo assetInfo) : base(assetInfo) { }

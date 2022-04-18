@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.GameObject
 {
-	public sealed class GameObject : EditorExtension, IHasName, IGameObject
+	public sealed class GameObject : EditorExtension, IHasNameString, IGameObject
 	{
 		public GameObject(LayoutInfo layout) : base(layout)
 		{
@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			{
 				Component = Array.Empty<ComponentPair>();
 			}
-			Name = string.Empty;
+			NameString = string.Empty;
 			TagString = TagManager.TagManagerConstants.UntaggedTag;
 			IsActive = true;
 		}
@@ -77,7 +77,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 
 			Layer = reader.ReadUInt32();
-			Name = reader.ReadString();
+			NameString = reader.ReadString();
 
 			if (HasTag(reader.Version, reader.Flags))
 			{
@@ -100,7 +100,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 
 			writer.Write(Layer);
-			writer.Write(Name);
+			writer.Write(NameString);
 
 			if (HasTag(writer.Version, writer.Flags))
 			{
@@ -134,11 +134,11 @@ namespace AssetRipper.Core.Classes.GameObject
 
 		public override string ToString()
 		{
-			if (string.IsNullOrEmpty(Name))
+			if (string.IsNullOrEmpty(NameString))
 			{
 				return base.ToString();
 			}
-			return $"{Name}({GetType().Name})";
+			return $"{NameString}({GetType().Name})";
 		}
 
 		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
@@ -155,7 +155,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 
 			node.Add(LayerName, Layer);
-			node.Add(NameName, Name);
+			node.Add(NameName, NameString);
 			if (HasTag(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(TagName, Tag);
@@ -261,7 +261,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			set => m_component = value;
 		}
 		public uint Layer { get; set; }
-		public string Name { get; set; }
+		public string NameString { get; set; }
 		public ushort Tag { get; set; }
 		public string TagString { get; set; }
 

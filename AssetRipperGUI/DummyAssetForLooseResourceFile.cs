@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace AssetRipper.GUI
 {
-	public class DummyAssetForLooseResourceFile : UnityObjectBase, IDisposable, IHasName
+	public class DummyAssetForLooseResourceFile : UnityObjectBase, IDisposable, IHasNameString
 	{
 		private bool disposedValue;
 
 		public ResourceFile AssociatedFile { get; }
 
-		public string Name
+		public string NameString
 		{
 			get => AssociatedFile.Name;
 			set => throw new NotSupportedException();

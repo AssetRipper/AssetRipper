@@ -267,7 +267,7 @@ namespace AssetRipper.Library
 			OverrideExporter<IShader>(engineExporter);
 			OverrideExporter<IFont>(engineExporter);
 			OverrideExporter<ISprite>(engineExporter);
-			OverrideExporter<IMonoBehaviour>(engineExporter);
+			OverrideExporter<Core.Classes.IMonoBehaviour>(engineExporter);
 		}
 
 		public void OverrideExporter<T>(IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter<T>(exporter, true);

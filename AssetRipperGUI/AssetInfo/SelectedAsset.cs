@@ -186,18 +186,18 @@ namespace AssetRipper.GUI.AssetInfo
 		private bool HasName => Asset switch
 		{
 			IShader s => !string.IsNullOrEmpty(s.GetValidShaderName()),
-			IGameObject go => !string.IsNullOrEmpty(go.Name),
-			INamedObject no => !string.IsNullOrEmpty(no.Name),
-			IHasName hasName => !string.IsNullOrEmpty(hasName.Name),
+			IGameObject go => !string.IsNullOrEmpty(go.NameString),
+			INamedObject no => !string.IsNullOrEmpty(no.NameString),
+			IHasNameString hasName => !string.IsNullOrEmpty(hasName.NameString),
 			_ => false
 		};
 
 		private string? Name => Asset switch
 		{
 			IShader s => s.GetValidShaderName(),
-			IGameObject go => go.Name,
-			INamedObject no => no.Name,
-			IHasName hasName => hasName.Name,
+			IGameObject go => go.NameString,
+			INamedObject no => no.NameString,
+			IHasNameString hasName => hasName.NameString,
 			_ => null
 		};
 

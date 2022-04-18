@@ -31,7 +31,7 @@ namespace AssetRipper.Core
 				return;
 
 			IGameObject gameObject = meshRenderer.TryGetGameObject();
-			if (gameObject == null || string.IsNullOrEmpty(gameObject.Name))
+			if (gameObject == null || string.IsNullOrEmpty(gameObject.NameString))
 				return;
 
 			IMeshFilter meshFilter = gameObject.FindComponent<IMeshFilter>();
@@ -46,7 +46,7 @@ namespace AssetRipper.Core
 
 			Mesh newMesh = (Mesh)mesh.ConvertLegacy(container);
 			virtualSerializedFile.AddAsset(newMesh, ClassIDType.Mesh);
-			newMesh.Name = new string(gameObject.Name);
+			newMesh.Name = new string(gameObject.NameString);
 
 			Logging.Logger.Info($"Created {newMesh.Name} from static mesh {mesh.Name}");
 

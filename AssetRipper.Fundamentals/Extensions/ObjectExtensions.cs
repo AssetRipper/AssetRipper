@@ -8,9 +8,9 @@ namespace AssetRipper.Core.Extensions
 	{
 		public static string GetOriginalName(this IUnityObjectBase _this)
 		{
-			if (_this is IHasName named)
+			if (_this is IHasNameString named)
 			{
-				return named.Name;
+				return named.NameString;
 			}
 			else
 			{
@@ -18,15 +18,11 @@ namespace AssetRipper.Core.Extensions
 			}
 		}
 
-		public static string TryGetName(this IUnityObjectBase _this)
+		public static string? TryGetName(this IUnityObjectBase _this)
 		{
-			if (_this is INamedObject named)
+			if (_this is IHasNameString named)
 			{
-				return named.GetValidName();
-			}
-			else if (_this is IHasName named2)
-			{
-				return named2.Name;
+				return named.NameString;
 			}
 			else
 			{

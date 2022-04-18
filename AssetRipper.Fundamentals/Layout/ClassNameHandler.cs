@@ -23,11 +23,11 @@ namespace AssetRipper.Core.Layout
 			return names;
 		}
 
-		public static string GetClassName(this LayoutInfo layout, ClassIDType classID)
+		public static string? GetClassName(this LayoutInfo layout, ClassIDType classID)
 		{
 			if (classID == ClassIDType.PrefabInstance)
 				return GetPrefabClassName(layout.Version);
-			else if (ClassNames.TryGetValue(classID, out string name))
+			else if (ClassNames.TryGetValue(classID, out string? name))
 				return name;
 			else
 				return null;
@@ -37,15 +37,15 @@ namespace AssetRipper.Core.Layout
 		{
 			if (version.IsGreaterEqual(2018, 3))
 			{
-				return nameof(ClassIDType.PrefabInstance);
+				return "PrefabInstance";
 			}
 			else if (version.IsGreaterEqual(3, 5))
 			{
-				return nameof(ClassIDType.Prefab);
+				return "Prefab";
 			}
 			else
 			{
-				return nameof(ClassIDType.DataTemplate);
+				return "DataTemplate";
 			}
 		}
 	}

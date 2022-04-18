@@ -136,10 +136,13 @@ namespace AssetRipper.Core.Project
 		}
 		private static bool TryGetTypeForID(ClassIDType classID, out Type type)
 		{
-			if (classID == ClassIDType.AvatarMaskOld)
-				classID = ClassIDType.AvatarMask;
-			else if (classID == ClassIDType.VideoClipOld)
-				classID = ClassIDType.VideoClip;
+			string className = classID.ToString();
+			if (classID == ClassIDType.AvatarMask_319 || classID == ClassIDType.AvatarMask_1011)
+				className = "AvatarMask";
+			else if (classID == ClassIDType.VideoClip_327 || classID == ClassIDType.VideoClip_329)
+				className = "VideoClip";
+			else if (classID == ClassIDType.LightProbes_197 || classID == ClassIDType.LightProbes_258)
+				className = "LightProbes";
 
 			if (classID == ClassIDType.UnknownType)
 			{
@@ -147,7 +150,6 @@ namespace AssetRipper.Core.Project
 				return true;
 			}
 
-			string className = classID.ToString();
 			type = unityTypes.FirstOrDefault(t => t.Name == className);
 			return type != null;
 		}
