@@ -20,7 +20,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 		private OcclusionCullingData(LayoutInfo layout, AssetInfo assetInfo) : base(layout)
 		{
 			AssetInfo = assetInfo;
-			Name = nameof(OcclusionCullingData);
+			NameString = nameof(OcclusionCullingData);
 		}
 
 		public static OcclusionCullingData CreateVirtualInstance(VirtualSerializedFile virtualFile)

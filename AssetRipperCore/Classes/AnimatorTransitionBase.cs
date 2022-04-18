@@ -81,7 +81,7 @@ namespace AssetRipper.Core.Classes
 			DstStateMachine = new();
 			DstState = state == null ? new() : state.SerializedFile.CreatePPtr(state);
 
-			Name = parameters.Name;
+			NameString = parameters.Name;
 			Solo = false;
 			Mute = false;
 			IsExit = parameters.IsExit;

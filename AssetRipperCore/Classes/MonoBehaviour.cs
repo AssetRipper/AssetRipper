@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Classes
 			base.Read(reader);
 
 			Script.Read(reader);
-			Name = reader.ReadString();
+			NameString = reader.ReadString();
 
 			this.ReadStructure(reader);
 			ObjectInfo info = SerializedFile.GetAssetEntry(PathID);
@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Classes
 			base.Write(writer);
 
 			Script.Write(writer);
-			writer.Write(Name);
+			writer.Write(NameString);
 
 			this.MaybeWriteStructure(writer);
 		}
@@ -57,7 +57,7 @@ namespace AssetRipper.Core.Classes
 
 		public override string ToString()
 		{
-			return $"{Name}({nameof(MonoBehaviour)})";
+			return $"{NameString}({nameof(MonoBehaviour)})";
 		}
 
 		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
@@ -69,7 +69,7 @@ namespace AssetRipper.Core.Classes
 				node.Add(GeneratorAssetName, GetGeneratorAsset(container).ExportYaml(container));
 			}
 			node.Add(ScriptName, Script.ExportYaml(container));
-			node.Add(NameName, Name);
+			node.Add(NameName, NameString);
 			node.Add(EditorClassIdentifierName, GetEditorClassIdentifier(container));
 			this.MaybeExportYamlForStructure(node, container);
 			return node;
@@ -104,7 +104,7 @@ namespace AssetRipper.Core.Classes
 		public override string ExportPath => Path.Combine(AssetsKeyword, "ScriptableObject");
 		public override string ExportExtension => AssetExtension;
 
-		public string Name { get; set; }
+		public string NameString { get; set; }
 		public SerializableStructure Structure { get; set; }
 
 		public PPtr<IMonoScript> Script = new();

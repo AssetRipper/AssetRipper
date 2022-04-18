@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes
 	{
 		protected NamedObject(LayoutInfo layout) : base(layout)
 		{
-			Name = string.Empty;
+			NameString = string.Empty;
 		}
 
 		protected NamedObject(AssetInfo assetInfo) : base(assetInfo) { }
@@ -19,14 +19,14 @@ namespace AssetRipper.Core.Classes
 		{
 			base.Read(reader);
 
-			Name = reader.ReadString();
+			NameString = reader.ReadString();
 		}
 
 		public override void Write(AssetWriter writer)
 		{
 			base.Write(writer);
 
-			writer.Write(Name);
+			writer.Write(NameString);
 		}
 
 		public override string ToString()
@@ -37,11 +37,11 @@ namespace AssetRipper.Core.Classes
 		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
 			YamlMappingNode root = base.ExportYamlRoot(container);
-			root.Add(NameName, Name);
+			root.Add(NameName, NameString);
 			return root;
 		}
 
-		public string Name { get; set; }
+		public string NameString { get; set; }
 
 		public const string NameName = "m_Name";
 	}

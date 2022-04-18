@@ -119,7 +119,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				Sprite sprite = m_sprites.Keys.First();
 				Texture2D texture = (Texture2D)Asset;
-				if (sprite.Rect == sprite.RD.TextureRect && sprite.Name == texture.Name)
+				if (sprite.Rect == sprite.RD.TextureRect && sprite.NameString == texture.NameString)
 				{
 					importer.SpriteMode = SpriteImportMode.Single;
 				}
@@ -189,10 +189,10 @@ namespace AssetRipper.Library.Exporters.Textures
 					{
 #warning TODO: TEMP:
 						long exportID = GetExportID(sprite);
-						SpriteMetaData smeta = importer.SpriteSheet.GetSpriteMetaData(sprite.Name);
+						SpriteMetaData smeta = importer.SpriteSheet.GetSpriteMetaData(sprite.NameString);
 						smeta.InternalID = exportID;
 						Tuple<ClassIDType, long> key = new Tuple<ClassIDType, long>(ClassIDType.Sprite, exportID);
-						importer.InternalIDToNameTable.Add(key, sprite.Name);
+						importer.InternalIDToNameTable.Add(key, sprite.NameString);
 					}
 				}
 				else
@@ -200,7 +200,7 @@ namespace AssetRipper.Library.Exporters.Textures
 					foreach (Sprite sprite in m_sprites.Keys)
 					{
 						long exportID = GetExportID(sprite);
-						importer.FileIDToRecycleName.Add(exportID, sprite.Name);
+						importer.FileIDToRecycleName.Add(exportID, sprite.NameString);
 					}
 				}
 			}

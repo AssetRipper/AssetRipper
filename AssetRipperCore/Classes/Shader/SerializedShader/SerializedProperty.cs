@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 	{
 		public void Read(AssetReader reader)
 		{
-			Name = reader.ReadString();
+			NameString = reader.ReadString();
 			Description = reader.ReadString();
 			Attributes = reader.ReadAssetArray<Utf8StringLegacy>();
 			Type = (SerializedPropertyType)reader.ReadInt32();
@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public YamlNode ExportYaml(IExportContainer container)
 		{
 			YamlMappingNode node = new YamlMappingNode();
-			node.Add("m_Name", Name);
+			node.Add("m_Name", NameString);
 			node.Add("m_Description", Description);
 			node.Add("m_Attributes", Attributes.ExportYaml(container));
 			node.Add("m_Type", (int)Type);
@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			return node;
 		}
 
-		public string Name { get; set; }
+		public string NameString { get; set; }
 		public string Description { get; set; }
 		public Utf8StringBase[] Attributes { get; set; }
 		public SerializedPropertyType Type { get; set; }

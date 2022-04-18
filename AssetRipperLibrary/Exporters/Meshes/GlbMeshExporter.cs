@@ -100,7 +100,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		private static void AddMeshToScene<TvG, TvM>(Mesh mesh, SceneBuilder sceneBuilder, MaterialBuilder material) where TvG : struct, IVertexGeometry where TvM : struct, IVertexMaterial
 		{
-			var meshBuilder = VertexBuilder<TvG, TvM, VertexEmpty>.CreateCompatibleMesh(mesh.Name);
+			var meshBuilder = VertexBuilder<TvG, TvM, VertexEmpty>.CreateCompatibleMesh(mesh.NameString);
 			var primitiveBuilder = meshBuilder.UsePrimitive(material);
 			for (int j = 0; j < mesh.Indices.Count; j += 3)
 			{

@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		/// </summary>
 		public byte[] KeywordFlags { get; set; }
 
-		public string Name { get; set; }
+		public string NameString { get; set; }
 		public string CustomEditorName { get; set; }
 		public string FallbackName { get; set; }
 		public SerializedShaderDependency[] Dependencies { get; set; }
@@ -53,7 +53,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 				reader.AlignStream();
 			}
 
-			Name = reader.ReadString();
+			NameString = reader.ReadString();
 			CustomEditorName = reader.ReadString();
 			FallbackName = reader.ReadString();
 			Dependencies = reader.ReadAssetArray<SerializedShaderDependency>();
@@ -77,7 +77,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 				node.Add("m_KeywordFlags", KeywordFlags.ExportYaml());
 			}
 
-			node.Add("m_Name", Name);
+			node.Add("m_Name", NameString);
 			node.Add("m_CustomEditorName", CustomEditorName);
 			node.Add("m_FallbackName", FallbackName);
 			node.Add("m_Dependencies", Dependencies.ExportYaml(container));

@@ -224,7 +224,7 @@ namespace ShaderTextRestorer.IO
 
 		public static void Export(this SerializedShader _this, ShaderWriter writer)
 		{
-			writer.Write("Shader \"{0}\" {{\n", _this.Name);
+			writer.Write("Shader \"{0}\" {{\n", _this.NameString);
 
 			_this.PropInfo.Export(writer);
 

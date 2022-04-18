@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Classes
 			StateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Instance;
 			StateConstant state = stateMachine.StateConstantArray[stateIndex].Instance;
 
-			Name = TOS[state.NameID];
+			NameString = TOS[state.NameID];
 
 			Speed = state.Speed;
 			CycleOffset = state.CycleOffset;

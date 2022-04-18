@@ -46,9 +46,9 @@ namespace AssetRipper.Core
 
 			Mesh newMesh = (Mesh)mesh.ConvertLegacy(container);
 			virtualSerializedFile.AddAsset(newMesh, ClassIDType.Mesh);
-			newMesh.Name = new string(gameObject.NameString);
+			newMesh.NameString = new string(gameObject.NameString);
 
-			Logging.Logger.Info($"Created {newMesh.Name} from static mesh {mesh.Name}");
+			Logging.Logger.Info($"Created {newMesh.NameString} from static mesh {mesh.NameString}");
 
 			SubMesh[] subMeshes = mesh.SubMeshes.AsSpan().Slice(staticBatchInfo.FirstSubMesh, staticBatchInfo.SubMeshCount).ToArray();
 			newMesh.SubMeshes = SubMeshConverter.Convert(container, newMesh, subMeshes);

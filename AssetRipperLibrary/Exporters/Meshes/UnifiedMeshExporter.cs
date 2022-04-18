@@ -123,9 +123,9 @@ namespace AssetRipper.Library.Exporters.Meshes
 		{
 			var outputMesh = ConvertToMeshSharpMesh(unityMesh);
 			Scene scene = new Scene();
-			scene.Name = unityMesh.Name;
+			scene.Name = unityMesh.NameString;
 			Node node = new Node();
-			node.Name = unityMesh.Name;
+			node.Name = unityMesh.NameString;
 			node.Children.Add(outputMesh);
 			scene.Nodes.Add(node);
 			return scene;
@@ -144,7 +144,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			//Logger.Info($"UV 1: {hasUV1}");
 			//Logger.Info($"Colors: {hasColors}");
 			var outputMesh = new MeshSharp.Elements.Geometries.Mesh();
-			outputMesh.Name = unityMesh.Name;
+			outputMesh.Name = unityMesh.NameString;
 
 			//Vertices
 			foreach (var vertex in unityMesh.Vertices)

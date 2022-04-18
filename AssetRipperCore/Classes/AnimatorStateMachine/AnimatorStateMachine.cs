@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 
 			int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
 			LayerConstant layer = controller.Controller.LayerArray[layerIndex].Instance;
-			Name = controller.TOS[layer.Binding];
+			NameString = controller.TOS[layer.Binding];
 
 			StateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Instance;
 

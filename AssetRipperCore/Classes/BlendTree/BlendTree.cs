@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Classes.BlendTree
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 			BlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Instance;
 
-			Name = nameof(BlendTree);
+			NameString = nameof(BlendTree);
 
 			Childs = new ChildMotion[node.ChildIndices.Length];
 			for (int i = 0; i < node.ChildIndices.Length; i++)

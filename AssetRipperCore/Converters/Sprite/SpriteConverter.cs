@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Converters.Sprite
 			origin.GetSpriteCoordinatesInAtlas(originAtlas, out Rectf rect, out Vector2f pivot, out Vector4f border);
 
 			SpriteMetaData instance = new SpriteMetaData(container.ExportVersion);
-			instance.Name = origin.Name;
+			instance.Name = origin.NameString;
 			instance.Rect = rect;
 			instance.Alignment = SpriteAlignment.Custom;
 			instance.Pivot = pivot;

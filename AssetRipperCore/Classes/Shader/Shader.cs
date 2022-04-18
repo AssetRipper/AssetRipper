@@ -100,7 +100,7 @@ namespace AssetRipper.Core.Classes.Shader
 				ReadNamedObject(reader);
 
 				m_ParsedForm.Read(reader);
-				Name = m_ParsedForm.Name; // Use the serialized shader name as asset name if available.
+				NameString = m_ParsedForm.NameString; // Use the serialized shader name as asset name if available.
 
 				Platforms = reader.ReadArray((t) => (GPUPlatform)t);
 				if (IsDoubleArray(reader.Version))

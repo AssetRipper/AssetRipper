@@ -892,15 +892,15 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (Vertices == null)
 			{
-				Logger.Warning(LogCategory.Import, $"Null Vertices for {Name}");
+				Logger.Warning(LogCategory.Import, $"Null Vertices for {NameString}");
 			}
 			if (UV0 == null)
 			{
-				Logger.Verbose(LogCategory.Import, $"Null UV0 for {Name}");
+				Logger.Verbose(LogCategory.Import, $"Null UV0 for {NameString}");
 			}
 			if (Normals == null)
 			{
-				Logger.Verbose(LogCategory.Import, $"Null Normals for {Name}");
+				Logger.Verbose(LogCategory.Import, $"Null Normals for {NameString}");
 			}
 		}
 

@@ -344,7 +344,7 @@ namespace AssetRipper.Core.Classes.Font
 		}
 		private IReadOnlyList<string> GetFontNames(UnityVersion version)
 		{
-			return HasDefaultStyle(version) ? FontNames : new string[] { Name };
+			return HasDefaultStyle(version) ? FontNames : new string[] { NameString };
 		}
 		private IReadOnlyList<PPtr<Font>> GetFallbackFonts(UnityVersion version)
 		{
