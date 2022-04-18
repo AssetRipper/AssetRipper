@@ -109,6 +109,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Yaml", "AssetRi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.SerializationLogic", "AssetRipper.SerializationLogic\AssetRipper.SerializationLogic.csproj", "{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Yaml.Tests", "AssetRipper.Yaml.Tests\AssetRipper.Yaml.Tests.csproj", "{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		DebugLinux|x64 = DebugLinux|x64
@@ -287,6 +289,18 @@ Global
 		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.ReleaseMac|x64.Build.0 = Release|Any CPU
 		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
 		{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}.ReleaseWindows|x64.Build.0 = Release|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.DebugLinux|x64.ActiveCfg = Debug|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.DebugLinux|x64.Build.0 = Debug|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.DebugMac|x64.ActiveCfg = Debug|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.DebugMac|x64.Build.0 = Debug|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.DebugWindows|x64.ActiveCfg = Debug|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.DebugWindows|x64.Build.0 = Debug|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.ReleaseLinux|x64.Build.0 = Release|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.ReleaseMac|x64.Build.0 = Release|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
+		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.ReleaseWindows|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
