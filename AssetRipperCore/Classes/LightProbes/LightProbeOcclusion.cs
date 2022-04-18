@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
@@ -44,7 +44,7 @@ namespace AssetRipper.Core.Classes.LightProbes
 		/// <summary>
 		/// ShadowMaskChannel previously (before 5.6.0b5)
 		/// </summary>
-		public byte[] OcclusionMaskChannel { get; set; }
+		public byte[] OcclusionMaskChannel { get; set; } = System.Array.Empty<byte>();
 
 		public const string BakedLightIndexName = "m_BakedLightIndex";
 		public const string ProbeOcclusionLightIndexName = "m_ProbeOcclusionLightIndex";
