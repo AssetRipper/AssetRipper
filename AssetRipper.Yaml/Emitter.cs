@@ -174,7 +174,7 @@ namespace AssetRipper.Yaml
 
 		public void WriteMeta(MetaType type, string value)
 		{
-			Write('%').Write(type.ToString()).WriteWhitespace();
+			Write('%').Write(type.ToStringRepresentation()).WriteWhitespace();
 			Write(value).WriteLine();
 		}
 
