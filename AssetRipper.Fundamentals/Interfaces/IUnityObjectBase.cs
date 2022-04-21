@@ -10,6 +10,7 @@ namespace AssetRipper.Core.Interfaces
 	public interface IUnityObjectBase : IUnityAssetBase, IConvertToEditor
 	{
 		AssetInfo AssetInfo { get; set; }
+		string AssetClassName { get; }
 		ClassIDType ClassID { get; }
 		string ExportExtension { get; }
 		string ExportPath { get; }
