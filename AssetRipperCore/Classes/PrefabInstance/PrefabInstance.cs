@@ -160,11 +160,7 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		public override string ToString()
 		{
-#if DEBUG
-			return $"{Name}({nameof(PrefabInstance)})";
-#else
-			return nameof(Prefab);
-#endif
+			return $"{NameString}({nameof(PrefabInstance)})";
 		}
 
 		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
