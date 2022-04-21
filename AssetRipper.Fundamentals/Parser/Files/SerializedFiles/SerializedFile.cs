@@ -371,7 +371,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			long read = reader.BaseStream.Position - offset;
 			if (!replaceWithUnreadableObject && read != size)
 			{
-				if (asset is IMonoBehaviour monoBehaviour && monoBehaviour.Structure == null)
+				if (asset is IMonoBehaviourBase monoBehaviour && monoBehaviour.Structure == null)
 				{
 					reader.BaseStream.Position = offset + size;
 				}

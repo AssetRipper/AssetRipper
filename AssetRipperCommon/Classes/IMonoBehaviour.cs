@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public interface IMonoBehaviour : IComponent, IHasNameString, Interfaces.IMonoBehaviour
+	public interface IMonoBehaviour : IComponent, IHasNameString, Interfaces.IMonoBehaviourBase
 	{
 		PPtr<IMonoScript> ScriptPtr { get; }
 	}

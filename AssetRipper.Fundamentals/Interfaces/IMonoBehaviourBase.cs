@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Interfaces
 {
-	public interface IMonoBehaviour
+	public interface IMonoBehaviourBase
 	{
 		SerializableStructure Structure { get; set; }
 	}
