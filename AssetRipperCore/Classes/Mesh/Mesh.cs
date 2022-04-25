@@ -341,7 +341,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return true;
 		}
 
-		public string FindBlendShapeNameByCRC(uint crc)
+		public string? FindBlendShapeNameByCRC(uint crc)
 		{
 			if (HasBlendChannels(SerializedFile.Version))
 			{
