@@ -22,6 +22,14 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public abstract void Add(T item);
 
+		public void AddRange(IEnumerable<T> range)
+		{
+			foreach (T item in range)
+			{
+				Add(item);
+			}
+		}
+
 		/// <summary>
 		/// Add a new element to the list
 		/// </summary>

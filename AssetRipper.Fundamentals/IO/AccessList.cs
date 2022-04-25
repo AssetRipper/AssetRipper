@@ -22,7 +22,7 @@ namespace AssetRipper.Core.IO
 		}
 
 		/// <inheritdoc/>
-		public override void Add(TBase item) => Add(item);
+		public override void Add(TBase item) => referenceList.Add((T)item);
 
 		/// <inheritdoc/>
 		public override TBase AddNew() => referenceList.AddNew();
