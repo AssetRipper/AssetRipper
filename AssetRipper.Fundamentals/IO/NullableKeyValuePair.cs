@@ -1,11 +1,12 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Asset;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO
 {
-	public class NullableKeyValuePair<TKey, TValue> : IDependent
+	public class NullableKeyValuePair<TKey, TValue> : IDependent, IEquatable<NullableKeyValuePair<TKey, TValue>?>
 	{
 		static NullableKeyValuePair()
 		{
@@ -36,12 +37,22 @@ namespace AssetRipper.Core.IO
 
 		public static implicit operator KeyValuePair<TKey, TValue>(NullableKeyValuePair<TKey, TValue> nullable)
 		{
-			return nullable == null ? default : new KeyValuePair<TKey, TValue>(nullable.Key, nullable.Value);
+			return nullable is null ? default : new KeyValuePair<TKey, TValue>(nullable.Key, nullable.Value);
 		}
 
 		public static implicit operator NullableKeyValuePair<TKey, TValue>(KeyValuePair<TKey, TValue> nonnullable)
 		{
 			return new NullableKeyValuePair<TKey, TValue>(nonnullable);
+		}
+
+		public static bool operator ==(NullableKeyValuePair<TKey, TValue>? left, NullableKeyValuePair<TKey, TValue>? right)
+		{
+			return EqualityComparer<NullableKeyValuePair<TKey, TValue>>.Default.Equals(left, right);
+		}
+
+		public static bool operator !=(NullableKeyValuePair<TKey, TValue>? left, NullableKeyValuePair<TKey, TValue>? right)
+		{
+			return !(left == right);
 		}
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
@@ -60,6 +71,23 @@ namespace AssetRipper.Core.IO
 					yield return dependency;
 				}
 			}
+		}
+
+		public override bool Equals(object? obj)
+		{
+			return Equals(obj as NullableKeyValuePair<TKey, TValue>);
+		}
+
+		public bool Equals(NullableKeyValuePair<TKey, TValue>? other)
+		{
+			return other is not null &&
+				   EqualityComparer<TKey>.Default.Equals(Key, other.Key) &&
+				   EqualityComparer<TValue>.Default.Equals(Value, other.Value);
+		}
+
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(Key, Value);
 		}
 	}
 }
