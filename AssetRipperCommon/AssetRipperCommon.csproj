@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>..\Bins\AssetRipperCommon\$(Configuration)\</OutputPath>

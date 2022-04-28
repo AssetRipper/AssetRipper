@@ -10,6 +10,12 @@ namespace AssetRipper.Core.Math.Vectors
 
 	public static class Vector2fExtensions
 	{
+		public static void CopyValues(this IVector2f destination, IVector2f source)
+		{
+			destination.X = source.X;
+			destination.Y = source.Y;
+		}
+
 		public static void Normalize(this IVector2f vector)
 		{
 			double length = vector.Length();

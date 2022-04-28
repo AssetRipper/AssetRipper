@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
