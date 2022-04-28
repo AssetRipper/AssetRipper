@@ -186,7 +186,7 @@ namespace AssetRipper.Core.IO
 		/// </summary>
 		/// <param name="capacity">The minimum capacity to ensure.</param>
 		/// <returns>The new capacity of this list.</returns>
-		public int EnsureCapacity(int capacity)
+		public override int EnsureCapacity(int capacity)
 		{
 			if (capacity < 0)
 			{

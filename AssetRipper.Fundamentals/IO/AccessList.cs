@@ -57,6 +57,8 @@ namespace AssetRipper.Core.IO
 			}
 		}
 
+		public override int EnsureCapacity(int capacity) => referenceList.EnsureCapacity(capacity);
+
 		/// <inheritdoc/>
 		public override bool Remove(TBase item) => referenceList.Remove((T)item);
 

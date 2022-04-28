@@ -30,6 +30,15 @@ namespace AssetRipper.Core.IO
 			}
 		}
 
+		public void AddRange(T[] array)
+		{
+			EnsureCapacity(Count + array.Length);
+			for (int i = 0; i < array.Length; i++)
+			{
+				Add(array[i]);
+			}
+		}
+
 		/// <summary>
 		/// Add a new element to the list
 		/// </summary>
@@ -43,6 +52,8 @@ namespace AssetRipper.Core.IO
 
 		/// <inheritdoc/>
 		public abstract void CopyTo(T[] array, int arrayIndex);
+
+		public abstract int EnsureCapacity(int capacity);
 
 		/// <inheritdoc/>
 		public abstract int IndexOf(T item);
