@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Math.Colors
 
 		public ColorRGBA32(byte r, byte g, byte b, byte a)
 		{
-			RGBA = unchecked((uint)(r | g << 8 | b << 16 | a << 24));
+			Rgba = unchecked((uint)(r | g << 8 | b << 16 | a << 24));
 		}
 
 		public static explicit operator ColorRGBA32(ColorRGBAf color)
@@ -34,19 +34,19 @@ namespace AssetRipper.Core.Math.Colors
 
 		public void Read(AssetReader reader)
 		{
-			RGBA = reader.ReadUInt32();
+			Rgba = reader.ReadUInt32();
 		}
 
 		public void Write(AssetWriter writer)
 		{
-			writer.Write(RGBA);
+			writer.Write(Rgba);
 		}
 
 		public YamlNode ExportYaml(IExportContainer container)
 		{
 			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion());
-			node.Add(RgbaName, RGBA);
+			node.Add(RgbaName, Rgba);
 			return node;
 		}
 
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.Math.Colors
 		public static ColorRGBA32 Black => new ColorRGBA32(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 		public static ColorRGBA32 White => new ColorRGBA32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
-		public uint RGBA { get; set; }
+		public uint Rgba { get; set; }
 
 		public const string RgbaName = "rgba";
 	}
