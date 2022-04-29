@@ -357,14 +357,14 @@ namespace AssetRipper.Core.Converters.Mesh
 			for (int i = 0; i < skin.Length; i++)
 			{
 				 BoneWeights4 weight =  skin[i];
-				writer.Write(weight.Weight0);
-				writer.Write(weight.Weight1);
-				writer.Write(weight.Weight2);
-				writer.Write(weight.Weight3);
-				writer.Write(weight.BoneIndex0);
-				writer.Write(weight.BoneIndex1);
-				writer.Write(weight.BoneIndex2);
-				writer.Write(weight.BoneIndex3);
+				writer.Write(weight.Weight_0_);
+				writer.Write(weight.Weight_1_);
+				writer.Write(weight.Weight_2_);
+				writer.Write(weight.Weight_3_);
+				writer.Write(weight.BoneIndex_0_);
+				writer.Write(weight.BoneIndex_1_);
+				writer.Write(weight.BoneIndex_2_);
+				writer.Write(weight.BoneIndex_3_);
 			}
 		}
 

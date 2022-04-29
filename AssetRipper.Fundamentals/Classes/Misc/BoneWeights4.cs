@@ -15,62 +15,62 @@ namespace AssetRipper.Core.Classes.Misc
 		{
 			m_Weights = new float[4];
 			m_BoneIndices = new int[4];
-			Weight0 = w0;
-			Weight1 = w1;
-			Weight2 = w2;
-			Weight3 = w3;
-			BoneIndex0 = i0;
-			BoneIndex1 = i1;
-			BoneIndex2 = i2;
-			BoneIndex3 = i3;
+			Weight_0_ = w0;
+			Weight_1_ = w1;
+			Weight_2_ = w2;
+			Weight_3_ = w3;
+			BoneIndex_0_ = i0;
+			BoneIndex_1_ = i1;
+			BoneIndex_2_ = i2;
+			BoneIndex_3_ = i3;
 		}
 
 		public void Read(AssetReader reader)
 		{
-			Weight0 = reader.ReadSingle();
-			Weight1 = reader.ReadSingle();
-			Weight2 = reader.ReadSingle();
-			Weight3 = reader.ReadSingle();
-			BoneIndex0 = reader.ReadInt32();
-			BoneIndex1 = reader.ReadInt32();
-			BoneIndex2 = reader.ReadInt32();
-			BoneIndex3 = reader.ReadInt32();
+			Weight_0_ = reader.ReadSingle();
+			Weight_1_ = reader.ReadSingle();
+			Weight_2_ = reader.ReadSingle();
+			Weight_3_ = reader.ReadSingle();
+			BoneIndex_0_ = reader.ReadInt32();
+			BoneIndex_1_ = reader.ReadInt32();
+			BoneIndex_2_ = reader.ReadInt32();
+			BoneIndex_3_ = reader.ReadInt32();
 		}
 
 		public void Write(AssetWriter writer)
 		{
-			writer.Write(Weight0);
-			writer.Write(Weight1);
-			writer.Write(Weight2);
-			writer.Write(Weight3);
-			writer.Write(BoneIndex0);
-			writer.Write(BoneIndex1);
-			writer.Write(BoneIndex2);
-			writer.Write(BoneIndex3);
+			writer.Write(Weight_0_);
+			writer.Write(Weight_1_);
+			writer.Write(Weight_2_);
+			writer.Write(Weight_3_);
+			writer.Write(BoneIndex_0_);
+			writer.Write(BoneIndex_1_);
+			writer.Write(BoneIndex_2_);
+			writer.Write(BoneIndex_3_);
 		}
 
 		public YamlNode ExportYaml(IExportContainer container)
 		{
 			YamlMappingNode node = new YamlMappingNode();
-			node.Add(Weight0Name, Weight0);
-			node.Add(Weight1Name, Weight1);
-			node.Add(Weight2Name, Weight2);
-			node.Add(Weight3Name, Weight3);
-			node.Add(BoneIndex0Name, BoneIndex0);
-			node.Add(BoneIndex1Name, BoneIndex1);
-			node.Add(BoneIndex2Name, BoneIndex2);
-			node.Add(BoneIndex3Name, BoneIndex3);
+			node.Add(Weight0Name, Weight_0_);
+			node.Add(Weight1Name, Weight_1_);
+			node.Add(Weight2Name, Weight_2_);
+			node.Add(Weight3Name, Weight_3_);
+			node.Add(BoneIndex0Name, BoneIndex_0_);
+			node.Add(BoneIndex1Name, BoneIndex_1_);
+			node.Add(BoneIndex2Name, BoneIndex_2_);
+			node.Add(BoneIndex3Name, BoneIndex_3_);
 			return node;
 		}
 
-		public float Weight0 { get => Weights[0]; set => Weights[0] = value; }
-		public float Weight1 { get => Weights[1]; set => Weights[1] = value; }
-		public float Weight2 { get => Weights[2]; set => Weights[2] = value; }
-		public float Weight3 { get => Weights[3]; set => Weights[3] = value; }
-		public int BoneIndex0 { get => BoneIndices[0]; set => BoneIndices[0] = value; }
-		public int BoneIndex1 { get => BoneIndices[1]; set => BoneIndices[1] = value; }
-		public int BoneIndex2 { get => BoneIndices[2]; set => BoneIndices[2] = value; }
-		public int BoneIndex3 { get => BoneIndices[3]; set => BoneIndices[3] = value; }
+		public float Weight_0_ { get => Weights[0]; set => Weights[0] = value; }
+		public float Weight_1_ { get => Weights[1]; set => Weights[1] = value; }
+		public float Weight_2_ { get => Weights[2]; set => Weights[2] = value; }
+		public float Weight_3_ { get => Weights[3]; set => Weights[3] = value; }
+		public int BoneIndex_0_ { get => BoneIndices[0]; set => BoneIndices[0] = value; }
+		public int BoneIndex_1_ { get => BoneIndices[1]; set => BoneIndices[1] = value; }
+		public int BoneIndex_2_ { get => BoneIndices[2]; set => BoneIndices[2] = value; }
+		public int BoneIndex_3_ { get => BoneIndices[3]; set => BoneIndices[3] = value; }
 		public float[] Weights
 		{
 			get
@@ -87,8 +87,8 @@ namespace AssetRipper.Core.Classes.Misc
 				return m_BoneIndices;
 			}
 		}
-		private float[] m_Weights;
-		private int[] m_BoneIndices;
+		private float[]? m_Weights;
+		private int[]? m_BoneIndices;
 
 
 		public const string Weight0Name = "weight[0]";
