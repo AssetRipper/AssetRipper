@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
-using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.AssetBundle
 {

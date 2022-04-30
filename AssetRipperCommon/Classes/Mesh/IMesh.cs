@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
-using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes.Mesh
 {

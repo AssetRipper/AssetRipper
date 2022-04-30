@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AssetRipper.Core.Classes.Texture2DArray
+﻿namespace AssetRipper.Core.Classes.Texture2DArray
 {
 	/// <summary>
 	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>

@@ -2,7 +2,6 @@
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using System;
-using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AudioClip
 {

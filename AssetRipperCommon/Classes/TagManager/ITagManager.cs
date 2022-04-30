@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.TagManager
 {

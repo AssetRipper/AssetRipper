@@ -1,8 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
 using System;
@@ -61,12 +59,12 @@ namespace AssetRipper.Core.Classes.GameObject
 			return container.TagIDToName(gameObject.Tag);
 		}
 
-		public static T FindComponent<T>(this IGameObject gameObject) where T : IComponent
+		public static T? FindComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
 			foreach (PPtr<IComponent> ptr in gameObject.FetchComponents())
 			{
 				// component could have not implemented asset type
-				IComponent comp = ptr.FindAsset(gameObject.SerializedFile);
+				IComponent? comp = ptr.FindAsset(gameObject.SerializedFile);
 				if (comp is T t)
 				{
 					return t;
@@ -77,7 +75,7 @@ namespace AssetRipper.Core.Classes.GameObject
 
 		public static T GetComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
-			T component = gameObject.FindComponent<T>();
+			T? component = gameObject.FindComponent<T>();
 			if (component == null)
 			{
 				throw new Exception($"Component of type {nameof(T)} hasn't been found");
@@ -89,7 +87,7 @@ namespace AssetRipper.Core.Classes.GameObject
 		{
 			foreach (PPtr<IComponent> ptr in gameObject.FetchComponents())
 			{
-				IComponent comp = ptr.FindAsset(gameObject.SerializedFile);
+				IComponent? comp = ptr.FindAsset(gameObject.SerializedFile);
 				if (comp == null)
 				{
 					continue;
@@ -108,7 +106,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			ITransform root = gameObject.GetTransform();
 			while (true)
 			{
-				ITransform parent = root.FatherPtr.TryGetAsset(root.SerializedFile);
+				ITransform? parent = root.FatherPtr.TryGetAsset(root.SerializedFile);
 				if (parent == null)
 				{
 					break;
@@ -127,7 +125,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			int depth = 0;
 			while (true)
 			{
-				ITransform parent = root.FatherPtr.TryGetAsset(root.SerializedFile);
+				ITransform? parent = root.FatherPtr.TryGetAsset(root.SerializedFile);
 				if (parent == null)
 				{
 					break;
@@ -143,10 +141,10 @@ namespace AssetRipper.Core.Classes.GameObject
 		{
 			yield return root;
 
-			ITransform transform = null;
+			ITransform? transform = null;
 			foreach (PPtr<IComponent> ptr in root.FetchComponents())
 			{
-				IComponent component = ptr.FindAsset(root.SerializedFile);
+				IComponent? component = ptr.FindAsset(root.SerializedFile);
 				if (component == null)
 				{
 					continue;
@@ -158,6 +156,9 @@ namespace AssetRipper.Core.Classes.GameObject
 					transform = trfm;
 				}
 			}
+
+			if (transform is null)
+				throw new NullReferenceException($"{nameof(transform)} cannot be null");
 
 			foreach (PPtr<ITransform> pchild in transform.ChildrenPtrs)
 			{
