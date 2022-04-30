@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Core.IO
 {
@@ -129,6 +131,14 @@ namespace AssetRipper.Core.IO
 
 		/// <inheritdoc/>
 		public abstract bool Remove(NullableKeyValuePair<TKey, TValue> item);
+
+		public TValue GetSingleValueForKey(TKey key)
+		{
+			if (key is null)
+				throw new ArgumentNullException(nameof(key));
+			int hash = key.GetHashCode();
+			return this.Single(pair => pair.Key?.GetHashCode() == hash && key.Equals(pair.Key)).Value;
+		}
 
 		/// <inheritdoc/>
 		public IEnumerator<NullableKeyValuePair<TKey, TValue>> GetEnumerator()
