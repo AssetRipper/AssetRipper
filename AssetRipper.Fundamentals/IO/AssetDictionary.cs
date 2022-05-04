@@ -95,6 +95,14 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void AddNew() => Add(new TKey(), new TValue());
 
+		public void AddRange(IEnumerable<NullableKeyValuePair<TKey, TValue>> range)
+		{
+			foreach(NullableKeyValuePair<TKey, TValue> pair in range)
+			{
+				Add(pair);
+			}
+		}
+
 		/// <inheritdoc/>
 		public override TKey GetKey(int index)
 		{

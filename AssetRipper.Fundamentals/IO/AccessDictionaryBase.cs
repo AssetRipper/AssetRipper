@@ -60,6 +60,8 @@ namespace AssetRipper.Core.IO
 		/// </summary>
 		public abstract void AddNew();
 
+		public bool ContainsKey(TKey key) => Keys.Contains(key);
+
 		/// <summary>
 		/// Get a key in the dictionary
 		/// </summary>
@@ -135,7 +137,10 @@ namespace AssetRipper.Core.IO
 		public TValue GetSingleValueForKey(TKey key)
 		{
 			if (key is null)
+			{
 				throw new ArgumentNullException(nameof(key));
+			}
+
 			int hash = key.GetHashCode();
 			return this.Single(pair => pair.Key?.GetHashCode() == hash && key.Equals(pair.Key)).Value;
 		}
