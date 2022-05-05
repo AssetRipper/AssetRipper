@@ -182,25 +182,28 @@ namespace AssetRipper.Core.Classes.Misc
 			return new UnityGUID(Guid.Parse(guidString));
 		}
 
+		/// <summary>
+		/// Make a guid by MD5 hashing a string
+		/// </summary>
+		/// <remarks>
+		/// The returned guid is most likely not "valid" by official standards. However, Unity doesn't seem to care.
+		/// </remarks>
+		/// <param name="str">Input string. Can be any length</param>
+		/// <returns>A stable guid corresponding to the input string</returns>
 		public static UnityGUID Md5Hash(string str) => Md5Hash(Encoding.UTF8.GetBytes(str));
+
+		/// <summary>
+		/// Make a guid by MD5 hashing some input data
+		/// </summary>
+		/// <remarks>
+		/// The returned guid is most likely not "valid" by official standards. However, Unity doesn't seem to care.
+		/// </remarks>
+		/// <param name="inputBytes">Input byte array. Can be any length</param>
+		/// <returns>A stable guid corresponding to the input bytes</returns>
 		public static UnityGUID Md5Hash(byte[] inputBytes)
 		{
 			byte[] hashBytes = MD5.HashData(inputBytes);
-
-			//Removed in 0.2.0.0 for better compatibility with ThunderKit. Unity doesn't seem to care if a guid is valid
-			//MakeValidMD5Guid(hashBytes);
-
 			return new UnityGUID(ConvertSystemOrUnityBytes(hashBytes));
-		}
-
-		private static void MakeValidMD5Guid(byte[] hashBytes)
-		{
-			const byte VersionMask = 0xF0;
-			const byte Md5GuidVersion = 0x30;
-			const byte ClockSeqHiAndReservedMask = 0xC0;
-			const byte ClockSeqHiAndReservedValue = 0x80;
-			hashBytes[7] = (byte)((hashBytes[7] & ~VersionMask) | Md5GuidVersion); // time_hi_and_version
-			hashBytes[8] = (byte)((hashBytes[8] & ~ClockSeqHiAndReservedMask) | ClockSeqHiAndReservedValue); // clock_seq_hi_and_reserved
 		}
 
 		public bool IsZero => Data0 == 0 && Data1 == 0 && Data2 == 0 && Data3 == 0;
