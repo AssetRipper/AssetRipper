@@ -185,19 +185,22 @@ namespace AssetRipper.Core.Classes.Misc
 		public static UnityGUID Md5Hash(string str) => Md5Hash(Encoding.UTF8.GetBytes(str));
 		public static UnityGUID Md5Hash(byte[] inputBytes)
 		{
+			byte[] hashBytes = MD5.HashData(inputBytes);
+
+			//Removed in 0.2.0.0 for better compatibility with ThunderKit. Unity doesn't seem to care if a guid is valid
+			//MakeValidMD5Guid(hashBytes);
+
+			return new UnityGUID(ConvertSystemOrUnityBytes(hashBytes));
+		}
+
+		private static void MakeValidMD5Guid(byte[] hashBytes)
+		{
 			const byte VersionMask = 0xF0;
 			const byte Md5GuidVersion = 0x30;
 			const byte ClockSeqHiAndReservedMask = 0xC0;
 			const byte ClockSeqHiAndReservedValue = 0x80;
-
-			byte[] hashBytes = MD5.HashData(inputBytes);
-
-			// time_hi_and_version
-			hashBytes[7] = (byte)((hashBytes[7] & ~VersionMask) | Md5GuidVersion);
-			// clock_seq_hi_and_reserved
-			hashBytes[8] = (byte)((hashBytes[8] & ~ClockSeqHiAndReservedMask) | ClockSeqHiAndReservedValue);
-
-			return new UnityGUID(ConvertSystemOrUnityBytes(hashBytes));
+			hashBytes[7] = (byte)((hashBytes[7] & ~VersionMask) | Md5GuidVersion); // time_hi_and_version
+			hashBytes[8] = (byte)((hashBytes[8] & ~ClockSeqHiAndReservedMask) | ClockSeqHiAndReservedValue); // clock_seq_hi_and_reserved
 		}
 
 		public bool IsZero => Data0 == 0 && Data1 == 0 && Data2 == 0 && Data3 == 0;
