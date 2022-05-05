@@ -71,7 +71,7 @@ namespace AssetRipper.Core.Project
 		}
 
 #warning TODO: get rid of IEnumerable. pass only main asset (issues: prefab, texture with sprites, animatorController)
-		public bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, out IUnityObjectBase selectedAsset, out string assetPath)
+		public bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, out IUnityObjectBase? selectedAsset, out string assetPath)
 		{
 			selectedAsset = null;
 			assetPath = string.Empty;
@@ -308,6 +308,11 @@ namespace AssetRipper.Core.Project
 
 		private void AddBundleAssets(IAssetBundle bundle)
 		{
+			if (m_IgnoreAssetBundleContentPaths)
+			{
+				return;
+			}
+
 			string bundleName = bundle.GetAssetBundleName();
 			string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
 			string directory = Path.Combine(AssetBundleFullPath, bundleName);
