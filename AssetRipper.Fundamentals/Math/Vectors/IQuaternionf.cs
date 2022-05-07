@@ -13,6 +13,14 @@ namespace AssetRipper.Core.Math.Vectors
 
 	public static class QuaternionfExtensions
 	{
+		public static void CopyValuesFrom(this IQuaternionf instance, IQuaternionf source)
+		{
+			instance.X = source.X;
+			instance.Y = source.Y;
+			instance.Z = source.Z;
+			instance.W = source.W;
+		}
+
 		public static float GetAt(this IQuaternionf quaternion, int index)
 		{
 			return index switch
