@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Classes.Misc
 				return MetaPtr.NullPtr.ExportYaml(container);
 			}
 
-			T asset = pptr.FindAsset(container);
+			T? asset = pptr.FindAsset(container);
 			if (asset == null)
 			{
 				ClassIDType classType = typeof(T).ToClassIDType();
@@ -63,13 +63,13 @@ namespace AssetRipper.Core.Classes.Misc
 			return result;
 		}
 
-		public static T FindAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
+		public static T? FindAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
 		{
 			if (pptr.IsNull())
 			{
 				return default;
 			}
-			IUnityObjectBase asset = file.FindAsset(pptr.FileIndex, pptr.PathIndex);
+			IUnityObjectBase? asset = file.FindAsset(pptr.FileIndex, pptr.PathIndex);
 			return asset switch
 			{
 				null => default,
@@ -79,7 +79,7 @@ namespace AssetRipper.Core.Classes.Misc
 			};
 		}
 
-		public static T TryGetAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
+		public static T? TryGetAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
 		{
 			if (pptr.IsNull())
 			{

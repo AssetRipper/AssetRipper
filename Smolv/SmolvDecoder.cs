@@ -84,10 +84,8 @@ namespace Smolv
 				return false;
 			}
 
-			using (MemoryStream outputStream = new MemoryStream(output))
-			{
-				return Decode(data, outputStream);
-			}
+			using MemoryStream outputStream = new MemoryStream(output);
+			return Decode(data, outputStream);
 		}
 
 		public static bool Decode(byte[] data, Stream outputStream)
@@ -96,10 +94,8 @@ namespace Smolv
 			{
 				throw new ArgumentNullException(nameof(data));
 			}
-			using (MemoryStream inputStream = new MemoryStream(data))
-			{
-				return Decode(inputStream, data.Length, outputStream);
-			}
+			using MemoryStream inputStream = new MemoryStream(data);
+			return Decode(inputStream, data.Length, outputStream);
 		}
 
 		public static bool Decode(Stream inputStream, int inputSize, Stream outputStream)
@@ -117,215 +113,212 @@ namespace Smolv
 				return false;
 			}
 
-			using (BinaryReader input = new BinaryReader(inputStream, Encoding.UTF8, true))
+			using BinaryReader input = new BinaryReader(inputStream, Encoding.UTF8, true);
+			using BinaryWriter output = new BinaryWriter(outputStream, Encoding.UTF8, true);
+			long inputEndPosition = input.BaseStream.Position + inputSize;
+			long outputStartPosition = output.BaseStream.Position;
+
+			// Header
+			output.Write(SpirVHeaderMagic);
+			input.BaseStream.Position += sizeof(uint);
+			uint version = input.ReadUInt32();
+			output.Write(version & 0x00FFFFFF);
+			uint generator = input.ReadUInt32();
+			output.Write(generator);
+			int bound = input.ReadInt32();
+			output.Write(bound);
+			uint schema = input.ReadUInt32();
+			output.Write(schema);
+			int decodedSize = input.ReadInt32();
+
+			// Body
+			int prevResult = 0;
+			int prevDecorate = 0;
+			while (input.BaseStream.Position < inputEndPosition)
 			{
-				using (BinaryWriter output = new BinaryWriter(outputStream, Encoding.UTF8, true))
+				// read length + opcode
+				if (!ReadLengthOp(input, out uint instrLen, out SpvOp op))
 				{
-					long inputEndPosition = input.BaseStream.Position + inputSize;
-					long outputStartPosition = output.BaseStream.Position;
+					return false;
+				}
 
-					// Header
-					output.Write(SpirVHeaderMagic);
-					input.BaseStream.Position += sizeof(uint);
-					uint version = input.ReadUInt32();
-					output.Write(version & 0x00FFFFFF);
-					uint generator = input.ReadUInt32();
-					output.Write(generator);
-					int bound = input.ReadInt32();
-					output.Write(bound);
-					uint schema = input.ReadUInt32();
-					output.Write(schema);
-					int decodedSize = input.ReadInt32();
+				bool wasSwizzle = op == SpvOp.VectorShuffleCompact;
+				if (wasSwizzle)
+				{
+					op = SpvOp.VectorShuffle;
+				}
+				output.Write((instrLen << 16) | (uint)op);
 
-					// Body
-					int prevResult = 0;
-					int prevDecorate = 0;
-					while (input.BaseStream.Position < inputEndPosition)
+				uint ioffs = 1;
+				// read type as varint, if we have it
+				if (op.OpHasType())
+				{
+					if (!ReadVarint(input, out uint value))
 					{
-						// read length + opcode
-						if (!ReadLengthOp(input, out uint instrLen, out SpvOp op))
-						{
+						return false;
+					}
+
+					output.Write(value);
+					ioffs++;
+				}
+
+				// read result as delta+varint, if we have it
+				if (op.OpHasResult())
+				{
+					if (!ReadVarint(input, out uint value))
+					{
+						return false;
+					}
+
+					int zds = prevResult + ZigDecode(value);
+					output.Write(zds);
+					prevResult = zds;
+					ioffs++;
+				}
+
+				// Decorate: IDs relative to previous decorate
+				if (op == SpvOp.Decorate || op == SpvOp.MemberDecorate)
+				{
+					if (!ReadVarint(input, out uint value))
+					{
+						return false;
+					}
+
+					int zds = prevDecorate + unchecked((int)value);
+					output.Write(zds);
+					prevDecorate = zds;
+					ioffs++;
+				}
+
+				bool isNewSmolV = false;
+				if (op == SpvOp.MemberDecorate && isNewSmolV)
+				{
+					if (input.BaseStream.Position >= inputEndPosition)
+						return false; //Broken input
+
+					long count = input.BaseStream.Position + 1;
+					uint prevIndex = 0;
+					uint prevOffset = 0;
+					for (int m = 0; m < count; m++)
+					{
+						//read member index
+						if (!ReadVarint(input, out uint memberIndex))
 							return false;
-						}
 
-						bool wasSwizzle = op == SpvOp.VectorShuffleCompact;
-						if (wasSwizzle)
-						{
-							op = SpvOp.VectorShuffle;
-						}
-						output.Write((instrLen << 16) | (uint)op);
+						memberIndex += prevIndex;
+						prevIndex = memberIndex;
 
-						uint ioffs = 1;
-						// read type as varint, if we have it
-						if (op.OpHasType())
+						//decoration (and length if not common/known)
+						if (!ReadVarint(input, out uint memberDec))
+							return false;
+
+						int knownExtraOps = DecorationExtraOps((int)memberDec);
+						uint memberLen;
+						if (knownExtraOps == -1)
 						{
-							if (!ReadVarint(input, out uint value))
-							{
+							if (!ReadVarint(input, out memberLen))
 								return false;
-							}
 
-							output.Write(value);
-							ioffs++;
-						}
-
-						// read result as delta+varint, if we have it
-						if (op.OpHasResult())
-						{
-							if (!ReadVarint(input, out uint value))
-							{
-								return false;
-							}
-
-							int zds = prevResult + ZigDecode(value);
-							output.Write(zds);
-							prevResult = zds;
-							ioffs++;
-						}
-
-						// Decorate: IDs relative to previous decorate
-						if (op == SpvOp.Decorate || op == SpvOp.MemberDecorate)
-						{
-							if (!ReadVarint(input, out uint value))
-							{
-								return false;
-							}
-
-							int zds = prevDecorate + unchecked((int)value);
-							output.Write(zds);
-							prevDecorate = zds;
-							ioffs++;
-						}
-
-						bool isNewSmolV = false;
-						if (op == SpvOp.MemberDecorate && isNewSmolV)
-						{
-							if (input.BaseStream.Position >= inputEndPosition)
-								return false; //Broken input
-
-							long count = input.BaseStream.Position + 1;
-							uint prevIndex = 0;
-							uint prevOffset = 0;
-							for (int m = 0; m < count; m++)
-							{
-								//read member index
-								if (!ReadVarint(input, out uint memberIndex))
-									return false;
-
-								memberIndex += prevIndex;
-								prevIndex = memberIndex;
-								
-								//decoration (and length if not common/known)
-								if (!ReadVarint(input, out uint memberDec))
-									return false;
-
-								int knownExtraOps = DecorationExtraOps((int)memberDec);
-								uint memberLen;
-								if (knownExtraOps == -1)
-								{
-									if (!ReadVarint(input, out memberLen))
-										return false;
-
-									memberLen += 4;
-								}
-								else
-								{
-									memberLen = (uint)(4 + knownExtraOps);
-								}
-
-								// write SPIR-V op+length (unless it's first member decoration, in which case it was written before)
-								if (m != 0)
-								{
-									output.Write((memberLen << 16) | (uint)op);
-									output.Write(prevDecorate);
-								}
-								output.Write(memberIndex);
-								output.Write(memberDec);
-								
-								if (memberDec == 35) // Offset
-								{
-									if (memberLen != 5)
-										return false;
-									if (!ReadVarint(input, out uint val))
-										return false;
-									val += prevOffset;
-									output.Write(val);
-									prevOffset = val;
-								} else
-								{
-									for (uint i = 4; i < memberLen; ++i)
-									{
-										if (!ReadVarint(input, out uint val))
-											return false;
-										output.Write(val);
-									}
-								}
-							}
-							continue;
-						}
-
-						// Read this many IDs, that are relative to result ID
-						int relativeCount = op.OpDeltaFromResult();
-						bool inverted = false;
-						if (relativeCount < 0)
-						{
-							inverted = true;
-							relativeCount = -relativeCount;
-						}
-						for (int i = 0; i < relativeCount && ioffs < instrLen; ++i, ++ioffs)
-						{
-							if (!ReadVarint(input, out uint value))
-							{
-								return false;
-							}
-
-							int zd = inverted ? ZigDecode(value) : unchecked((int)value);
-							output.Write(prevResult - zd);
-						}
-
-						if (wasSwizzle && instrLen <= 9)
-						{
-							uint swizzle = input.ReadByte();
-							if (instrLen > 5) output.Write(swizzle >> 6);
-							if (instrLen > 6) output.Write((swizzle >> 4) & 3);
-							if (instrLen > 7) output.Write((swizzle >> 2) & 3);
-							if (instrLen > 8) output.Write(swizzle & 3);
-						}
-						else if (op.OpVarRest())
-						{
-							// read rest of words with variable encoding
-							for (; ioffs < instrLen; ++ioffs)
-							{
-								if (!ReadVarint(input, out uint value))
-								{
-									return false;
-								}
-								output.Write(value);
-							}
+							memberLen += 4;
 						}
 						else
 						{
-							// read rest of words without any encoding
-							for (; ioffs < instrLen; ++ioffs)
+							memberLen = (uint)(4 + knownExtraOps);
+						}
+
+						// write SPIR-V op+length (unless it's first member decoration, in which case it was written before)
+						if (m != 0)
+						{
+							output.Write((memberLen << 16) | (uint)op);
+							output.Write(prevDecorate);
+						}
+						output.Write(memberIndex);
+						output.Write(memberDec);
+
+						if (memberDec == 35) // Offset
+						{
+							if (memberLen != 5)
+								return false;
+							if (!ReadVarint(input, out uint val))
+								return false;
+							val += prevOffset;
+							output.Write(val);
+							prevOffset = val;
+						}
+						else
+						{
+							for (uint i = 4; i < memberLen; ++i)
 							{
-								if (input.BaseStream.Position + 4 > input.BaseStream.Length)
-								{
+								if (!ReadVarint(input, out uint val))
 									return false;
-								}
-								uint val = input.ReadUInt32();
 								output.Write(val);
 							}
 						}
 					}
+					continue;
+				}
 
-					if (output.BaseStream.Position != outputStartPosition + decodedSize)
+				// Read this many IDs, that are relative to result ID
+				int relativeCount = op.OpDeltaFromResult();
+				bool inverted = false;
+				if (relativeCount < 0)
+				{
+					inverted = true;
+					relativeCount = -relativeCount;
+				}
+				for (int i = 0; i < relativeCount && ioffs < instrLen; ++i, ++ioffs)
+				{
+					if (!ReadVarint(input, out uint value))
 					{
-						// something went wrong during decoding? we should have decoded to exact output size
 						return false;
 					}
 
-					return true;
+					int zd = inverted ? ZigDecode(value) : unchecked((int)value);
+					output.Write(prevResult - zd);
+				}
+
+				if (wasSwizzle && instrLen <= 9)
+				{
+					uint swizzle = input.ReadByte();
+					if (instrLen > 5) output.Write(swizzle >> 6);
+					if (instrLen > 6) output.Write((swizzle >> 4) & 3);
+					if (instrLen > 7) output.Write((swizzle >> 2) & 3);
+					if (instrLen > 8) output.Write(swizzle & 3);
+				}
+				else if (op.OpVarRest())
+				{
+					// read rest of words with variable encoding
+					for (; ioffs < instrLen; ++ioffs)
+					{
+						if (!ReadVarint(input, out uint value))
+						{
+							return false;
+						}
+						output.Write(value);
+					}
+				}
+				else
+				{
+					// read rest of words without any encoding
+					for (; ioffs < instrLen; ++ioffs)
+					{
+						if (input.BaseStream.Position + 4 > input.BaseStream.Length)
+						{
+							return false;
+						}
+						uint val = input.ReadUInt32();
+						output.Write(val);
+					}
 				}
 			}
+
+			if (output.BaseStream.Position != outputStartPosition + decodedSize)
+			{
+				// something went wrong during decoding? we should have decoded to exact output size
+				return false;
+			}
+
+			return true;
 		}
 
 		private static bool CheckSmolHeader(byte[] data)

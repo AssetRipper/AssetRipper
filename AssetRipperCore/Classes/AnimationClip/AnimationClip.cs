@@ -352,7 +352,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		private bool AddAnimatorTOS(Animator.Animator animator, Dictionary<uint, string> tos)
 		{
-			Avatar.Avatar avatar = animator.Avatar.FindAsset(animator.SerializedFile);
+			Avatar.Avatar? avatar = animator.Avatar.FindAsset(animator.SerializedFile);
 			if (avatar != null)
 			{
 				if (AddAvatarTOS(avatar, tos))
@@ -378,7 +378,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			for (int i = 0; i < tosCount; i++)
 			{
 				GenericBinding.GenericBinding binding = ClipBindingConstant.GenericBindings[i];
-				if (src.TryGetValue(binding.Path, out string path))
+				if (src.TryGetValue(binding.Path, out string? path))
 				{
 					dest[binding.Path] = path;
 					if (dest.Count == tosCount)

@@ -6,7 +6,6 @@
   * Animation Clip exporter
 
 ## 0.2.0.1
-
 * Fix the inevitable bugs that pop up
 
 ## 0.2.1.0

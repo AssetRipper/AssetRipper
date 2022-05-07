@@ -17,12 +17,12 @@ namespace AssetRipper.Core.Classes
 	{
 		public abstract class BaseParameters
 		{
-			public AnimatorState GetDestinationState()
+			public AnimatorState? GetDestinationState()
 			{
 				return GetDestinationState(DestinationState);
 			}
 
-			private AnimatorState GetDestinationState(int destinationState)
+			private AnimatorState? GetDestinationState(int destinationState)
 			{
 				if (destinationState == -1)
 				{
@@ -77,7 +77,7 @@ namespace AssetRipper.Core.Classes
 			}
 			Conditions = conditionList.ToArray();
 
-			AnimatorState state = parameters.GetDestinationState();
+			AnimatorState? state = parameters.GetDestinationState();
 			DstStateMachine = new();
 			DstState = state == null ? new() : state.SerializedFile.CreatePPtr(state);
 

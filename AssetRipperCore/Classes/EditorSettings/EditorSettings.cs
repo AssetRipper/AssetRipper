@@ -213,14 +213,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			if (HasExternalVersionControl(reader.Version))
 			{
 				ExternalVersionControl support = (ExternalVersionControl)reader.ReadInt32();
-				ExternalVersionControlSupport = support switch
-				{
-					ExternalVersionControl.AutoDetect => "Auto detect",
-					ExternalVersionControl.Disabled => HiddenMeta,
-					ExternalVersionControl.Generic or ExternalVersionControl.AssetServer => VisibleMeta,
-					ExternalVersionControl.Subversion or ExternalVersionControl.Perforce => support.ToString(),
-					_ => HiddenMeta,
-				};
+				ExternalVersionControlSupport = support.ConvertToString();
 			}
 			else if (HasExternalVersionControlSupport(reader.Version))
 			{

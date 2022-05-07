@@ -43,12 +43,12 @@ namespace AssetRipper.Core.Layout
 			return $"v{Version} {Platform} [{Flags}]";
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as LayoutInfo);
 		}
 
-		public bool Equals(LayoutInfo other)
+		public bool Equals(LayoutInfo? other)
 		{
 			return other is not null &&
 				   Version.Equals(other.Version) &&

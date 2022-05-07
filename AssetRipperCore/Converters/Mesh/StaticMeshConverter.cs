@@ -24,23 +24,33 @@ namespace AssetRipper.Core
 		public static void MaybeReplaceStaticMesh(IUnityObjectBase unityObjectBase, SerializedFile serializedFile, VirtualSerializedFile virtualSerializedFile)
 		{
 			if (unityObjectBase is not MeshRenderer meshRenderer)
+			{
 				return;
+			}
 
 			IStaticBatchInfo staticBatchInfo = meshRenderer.GetStaticBatchInfo(serializedFile.Version);
 			if (staticBatchInfo.SubMeshCount == 0)
+			{
 				return;
+			}
 
 			IGameObject gameObject = meshRenderer.TryGetGameObject();
 			if (gameObject == null || string.IsNullOrEmpty(gameObject.NameString))
+			{
 				return;
+			}
 
 			IMeshFilter meshFilter = gameObject.FindComponent<IMeshFilter>();
 			if (meshFilter == null)
+			{
 				return;
+			}
 
 			Mesh mesh = (Mesh)meshFilter.Mesh.FindAsset(serializedFile);
 			if (mesh == null)
+			{
 				return;
+			}
 
 			IExportContainer container = new DummyExportContainer(serializedFile, virtualSerializedFile);
 

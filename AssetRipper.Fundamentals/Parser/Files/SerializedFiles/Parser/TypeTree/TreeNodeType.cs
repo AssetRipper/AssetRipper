@@ -153,7 +153,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			{
 				if (index > 0)
 				{
-					EnumNameAttribute name = field.GetCustomAttribute<EnumNameAttribute>();
+					EnumNameAttribute? name = field.GetCustomAttribute<EnumNameAttribute>();
 					typeNames.Add(values[index - 1], name == null ? values[index - 1].ToString() : name.Name);
 				}
 				index++;
