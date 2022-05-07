@@ -4,6 +4,7 @@ using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.VersionHandling;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable
@@ -12,20 +13,26 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 	{
 		public readonly struct Field
 		{
-			public Field(SerializableType type, bool isArray, string name)
+			public Field(SerializableType type, int arrayDepth, string name)
 			{
 				Type = type;
-				IsArray = isArray;
+				ArrayDepth = arrayDepth;
 				Name = name;
 			}
 
-			public override string ToString()
+			public override string? ToString()
 			{
-				return Type == null ? base.ToString() : IsArray ? $"{Type}[] {Name}" : $"{Type} {Name}";
+				if (Type == null)
+				{
+					return base.ToString();
+				}
+
+				return $"{Type}{string.Concat(Enumerable.Repeat("[]", ArrayDepth))} {Name}";
 			}
 
 			public SerializableType Type { get; }
-			public bool IsArray { get; }
+			public int ArrayDepth { get; }
+			public bool IsArray => ArrayDepth > 0; 
 			public string Name { get; }
 		}
 
