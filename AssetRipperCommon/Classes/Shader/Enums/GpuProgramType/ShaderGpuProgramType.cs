@@ -1,6 +1,6 @@
 using AssetRipper.Core.Parser.Files;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 {
@@ -119,7 +119,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 			}
 		}
 
-		public static GPUPlatform ToGPUPlatform(this ShaderGpuProgramType _this, Platform platform)
+		public static GPUPlatform ToGPUPlatform(this ShaderGpuProgramType _this, BuildTarget platform)
 		{
 			switch (_this)
 			{
@@ -177,35 +177,35 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 				case ShaderGpuProgramType.ConsoleGS:
 					switch (platform)
 					{
-						case Platform.PS3:
+						case BuildTarget.PS3:
 							return GPUPlatform.ps3;
-						case Platform.PS4:
+						case BuildTarget.PS4:
 							return GPUPlatform.ps4;
-						case Platform.PSM:
+						case BuildTarget.PSM:
 							return GPUPlatform.psm;
-						case Platform.PSP2:
+						case BuildTarget.PSP2:
 							return GPUPlatform.psp2;
 
-						case Platform.XBox360:
+						case BuildTarget.XBox360:
 							return GPUPlatform.xbox360;
-						case Platform.XboxOne:
+						case BuildTarget.XboxOne:
 							return GPUPlatform.xboxone;
 #warning		 TODO:
 						//return GPUPlatform.xboxone_d3d12;
 
-						case Platform.WiiU:
+						case BuildTarget.WiiU:
 							return GPUPlatform.wiiu;
 
-						case Platform.N3DS:
+						case BuildTarget.N3DS:
 							return GPUPlatform.n3ds;
 
-						case Platform.GoogleNaCl:
+						case BuildTarget.GoogleNaCl:
 							return GPUPlatform.glesdesktop;
 
-						case Platform.Flash:
+						case BuildTarget.Flash:
 							return GPUPlatform.flash;
 
-						case Platform.Switch:
+						case BuildTarget.Switch:
 							return GPUPlatform.Switch;
 
 						default:
@@ -217,7 +217,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 			}
 		}
 
-		public static string ToProgramDataKeyword(this ShaderGpuProgramType _this, Platform platform, ShaderType type)
+		public static string ToProgramDataKeyword(this ShaderGpuProgramType _this, BuildTarget platform, ShaderType type)
 		{
 			switch (_this)
 			{
@@ -294,7 +294,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 
 			switch (platform)
 			{
-				case Platform.Flash:
+				case BuildTarget.Flash:
 					{
 						if (_this == ShaderGpuProgramType.Console)
 						{
@@ -309,7 +309,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 					}
 					break;
 
-				case Platform.PS4:
+				case BuildTarget.PS4:
 					{
 						switch (_this)
 						{
@@ -337,7 +337,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 					}
 					break;
 
-				case Platform.Switch:
+				case BuildTarget.Switch:
 					{
 						if (_this == ShaderGpuProgramType.Console)
 						{

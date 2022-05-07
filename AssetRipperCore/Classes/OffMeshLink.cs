@@ -5,7 +5,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
@@ -85,14 +85,14 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(End, EndName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(AreaIndexName, AreaIndex);
 			node.Add(AgentTypeIDName, AgentTypeID);
-			node.Add(StartName, Start.ExportYAML(container));
-			node.Add(EndName, End.ExportYAML(container));
+			node.Add(StartName, Start.ExportYaml(container));
+			node.Add(EndName, End.ExportYaml(container));
 			node.Add(CostOverrideName, CostOverride);
 			node.Add(BiDirectionalName, BiDirectional);
 			node.Add(ActivatedName, Activated);

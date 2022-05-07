@@ -2,11 +2,11 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
 {
-	public sealed class GenericBinding : IAssetReadable, IYAMLExportable
+	public sealed class GenericBinding : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 5.6.0 an greater
@@ -40,12 +40,12 @@ namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(PathName, Path);
 			node.Add(AttributeName, Attribute);
-			node.Add(ScriptName, Script.ExportYAML(container));
+			node.Add(ScriptName, Script.ExportYaml(container));
 			node.Add(ClassIDName, (int)ClassID);
 			node.Add(CustomTypeName, (byte)CustomType);
 			node.Add(IsPPtrCurveName, IsPPtrCurve);

@@ -2,14 +2,14 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class StateMachineConstant : IAssetReadable, IYAMLExportable
+	public sealed class StateMachineConstant : IAssetReadable, IYamlExportable
 	{
 		public struct Parameters
 		{
@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			MotionSetCount = reader.ReadUInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

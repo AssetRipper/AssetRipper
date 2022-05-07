@@ -2,12 +2,12 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer
 {
-	public sealed class StateBehavioursPair : IYAMLExportable
+	public sealed class StateBehavioursPair : IYamlExportable
 	{
 		public StateBehavioursPair(AnimatorState state, MonoBehaviour[] behaviours)
 		{
@@ -31,11 +31,11 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(StateName, State.ExportYAML(container));
-			node.Add(StateMachineBehavioursName, StateMachineBehaviours.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(StateName, State.ExportYaml(container));
+			node.Add(StateMachineBehavioursName, StateMachineBehaviours.ExportYaml(container));
 			return node;
 		}
 

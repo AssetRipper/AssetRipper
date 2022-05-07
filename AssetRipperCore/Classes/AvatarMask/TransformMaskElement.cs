@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.AvatarMask
 {
-	public sealed class TransformMaskElement : IAssetReadable, IYAMLExportable
+	public sealed class TransformMaskElement : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -12,9 +12,9 @@ namespace AssetRipper.Core.Classes.AvatarMask
 			Weight = reader.ReadSingle();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(PathName, Path);
 			node.Add(WeightName, Weight);
 			return node;

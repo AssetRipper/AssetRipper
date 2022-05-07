@@ -10,7 +10,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -25,21 +25,21 @@ namespace AssetRipper.Core.Project.Collections
 			using var fileStream = System.IO.File.Create(metaPath);
 			using var streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
 
-			YAMLWriter writer = new YAMLWriter();
+			YamlWriter writer = new YamlWriter();
 			writer.IsWriteDefaultTag = false;
 			writer.IsWriteVersion = false;
 			writer.IsFormatKeys = true;
-			YAMLDocument doc = meta.ExportYAMLDocument(container);
+			YamlDocument doc = meta.ExportYamlDocument(container);
 			writer.AddDocument(doc);
 			writer.Write(streamWriter);
 		}
 
-		public abstract bool Export(ProjectAssetContainer container, string dirPath);
+		public abstract bool Export(IProjectAssetContainer container, string dirPath);
 		public abstract bool IsContains(IUnityObjectBase asset);
 		public abstract long GetExportID(IUnityObjectBase asset);
 		public abstract MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal);
 
-		protected void ExportAsset(ProjectAssetContainer container, IAssetImporter importer, IUnityObjectBase asset, string path, string name)
+		protected void ExportAsset(IProjectAssetContainer container, IAssetImporter importer, IUnityObjectBase asset, string path, string name)
 		{
 			if (!Directory.Exists(path))
 			{
@@ -59,9 +59,9 @@ namespace AssetRipper.Core.Project.Collections
 			string fileName = asset switch
 			{
 				IPrefabInstance prefab => prefab.GetName(file),
-				IMonoBehaviour monoBehaviour => monoBehaviour.Name,
+				Classes.IMonoBehaviour monoBehaviour => monoBehaviour.NameString,
 				INamedObject named => named.GetValidName(),
-				IHasName hasName => hasName.Name,
+				IHasNameString hasName => hasName.NameString,
 				_ => null,
 			};
 			if (string.IsNullOrWhiteSpace(fileName))

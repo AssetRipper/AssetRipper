@@ -3,12 +3,12 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Sprite
 {
-	public sealed class SecondarySpriteTexture : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class SecondarySpriteTexture : IAssetReadable, IYamlExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -22,10 +22,10 @@ namespace AssetRipper.Core.Classes.Sprite
 			yield return context.FetchDependency(Texture, TextureName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TextureName, Texture.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(TextureName, Texture.ExportYaml(container));
 			node.Add(NameName, Name);
 			return node;
 		}
@@ -35,6 +35,6 @@ namespace AssetRipper.Core.Classes.Sprite
 		public const string TextureName = "texture";
 		public const string NameName = "name";
 
-		public PPtr<Texture2D.Texture2D> Texture;
+		public PPtr<Texture2D.Texture2D> Texture = new();
 	}
 }

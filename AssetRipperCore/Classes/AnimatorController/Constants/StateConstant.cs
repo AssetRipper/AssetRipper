@@ -3,13 +3,13 @@ using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class StateConstant : IAssetReadable, IYAMLExportable
+	public sealed class StateConstant : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// Less than 5.2.0
@@ -105,7 +105,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

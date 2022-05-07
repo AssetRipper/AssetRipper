@@ -1,21 +1,21 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ShaderVariantCollection
 {
-	public sealed class ShaderInfo : IAssetReadable, IYAMLExportable
+	public sealed class ShaderInfo : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
 			Variants = reader.ReadAssetArray<VariantInfo>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(VariantsName, Variants.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(VariantsName, Variants.ExportYaml(container));
 			return node;
 		}
 

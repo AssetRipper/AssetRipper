@@ -1,12 +1,12 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class Blend2dDataConstant : IAssetReadable, IYAMLExportable
+	public sealed class Blend2dDataConstant : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			m_ChildNeighborListArray = reader.ReadAssetArray<MotionNeighborList>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

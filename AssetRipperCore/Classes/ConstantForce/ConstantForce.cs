@@ -1,10 +1,9 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ConstantForce
 {
@@ -22,14 +21,14 @@ namespace AssetRipper.Core.Classes.ConstantForce
 			RelativeTorque.Read(reader);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("m_Force", Force.ExportYAML(container));
-			node.Add("m_RelativeForce", RelativeForce.ExportYAML(container));
-			node.Add("m_Torque", Torque.ExportYAML(container));
-			node.Add("m_RelativeTorque", RelativeTorque.ExportYAML(container));
+			node.Add("m_Force", Force.ExportYaml(container));
+			node.Add("m_RelativeForce", RelativeForce.ExportYaml(container));
+			node.Add("m_Torque", Torque.ExportYaml(container));
+			node.Add("m_RelativeTorque", RelativeTorque.ExportYaml(container));
 			return node;
 		}
 

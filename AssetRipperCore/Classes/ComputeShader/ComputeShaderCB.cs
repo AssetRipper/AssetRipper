@@ -1,12 +1,12 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ComputeShader
 {
-	public sealed class  ComputeShaderCB : IAssetReadable, IYAMLExportable
+	public sealed class  ComputeShaderCB : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -16,12 +16,12 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("name", Name.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("name", Name.ExportYaml(container));
 			node.Add("byteSize", ByteSize);
-			node.Add("params", Params.ExportYAML(container));
+			node.Add("params", Params.ExportYaml(container));
 			return node;
 		}
 

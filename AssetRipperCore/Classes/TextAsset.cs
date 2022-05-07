@@ -3,8 +3,9 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
 using System.Text;
 
@@ -40,15 +41,15 @@ namespace AssetRipper.Core.Classes
 			base.Read(reader);
 		}
 
-		protected YAMLMappingNode ExportBaseYAMLRoot(IExportContainer container)
+		protected YamlMappingNode ExportBaseYamlRoot(IExportContainer container)
 		{
-			return base.ExportYAMLRoot(container);
+			return base.ExportYamlRoot(container);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(ScriptName, RawData.ExportYAML());
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(ScriptName, RawData.ExportYaml());
 			return node;
 		}
 

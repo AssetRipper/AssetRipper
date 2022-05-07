@@ -2,11 +2,11 @@
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public sealed class Axes : IAssetReadable, IYAMLExportable
+	public sealed class Axes : IAssetReadable, IYamlExportable
 	{
 		public Vector4f m_PreQ = new();
 		public Vector4f m_PostQ = new();
@@ -37,13 +37,13 @@ namespace AssetRipper.Core.Classes.Avatar
 			m_Type = reader.ReadUInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(PreQName, m_PreQ.ExportYAML(container));
-			node.Add(PostQName, m_PostQ.ExportYAML(container));
-			node.Add(SgnName, m_Sgn.ExportYAML(container));
-			node.Add(LimitName, m_Limit.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(PreQName, m_PreQ.ExportYaml(container));
+			node.Add(PostQName, m_PostQ.ExportYaml(container));
+			node.Add(SgnName, m_Sgn.ExportYaml(container));
+			node.Add(LimitName, m_Limit.ExportYaml(container));
 			node.Add(LengthName, m_Length);
 			node.Add(TypeName, m_Type);
 			return node;

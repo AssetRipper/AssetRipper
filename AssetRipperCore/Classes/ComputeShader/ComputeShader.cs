@@ -4,7 +4,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ComputeShader
@@ -45,27 +45,27 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			reader.AlignStream();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			if (HasComputeShaderPlatformVariant(container.Version))
 			{
-				node.Add("variants", PlatformVariants.ExportYAML(container));
+				node.Add("variants", PlatformVariants.ExportYaml(container));
 			}
 			else if (HasComputeShaderVariant(container.Version))
 			{
-				node.Add("variants", Variants.ExportYAML(container));
+				node.Add("variants", Variants.ExportYaml(container));
 			}
 			else
 			{
-				node.Add("kernels", Kernels.ExportYAML(container));
+				node.Add("kernels", Kernels.ExportYaml(container));
 			}
 			//Editor-Only
 			if (HasComputeShaderCompilationContext(container.Version))
 			{
-				node.Add("m_CompilationContext", new ComputeShaderCompilationContext().ExportYAML(container));
+				node.Add("m_CompilationContext", new ComputeShaderCompilationContext().ExportYaml(container));
 			}
-			node.Add("errors" , (new HashSet<ShaderError>()).ExportYAML(container));
+			node.Add("errors" , (new HashSet<ShaderError>()).ExportYaml(container));
 			if (HasPreprocessorOverride(container.Version))
 			{
 				node.Add("m_PreprocessorOverride", default(int));

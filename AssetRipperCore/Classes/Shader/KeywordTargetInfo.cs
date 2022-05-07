@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public sealed class KeywordTargetInfo : IAssetReadable, IYAMLExportable
+	public sealed class KeywordTargetInfo : IAssetReadable, IYamlExportable
 	{
 		public KeywordTargetInfo() { }
 
@@ -20,9 +20,9 @@ namespace AssetRipper.Core.Classes.Shader
 			Requirements = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(KeywordNameName, KeywordName);
 			node.Add(RequirementsName, Requirements);
 			return node;

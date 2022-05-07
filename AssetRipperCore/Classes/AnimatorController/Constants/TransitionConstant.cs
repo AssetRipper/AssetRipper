@@ -2,13 +2,13 @@ using AssetRipper.Core.Classes.AnimatorTransition;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class TransitionConstant : IAssetReadable, IYAMLExportable
+	public sealed class TransitionConstant : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 5.0.0 and greater
@@ -57,7 +57,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

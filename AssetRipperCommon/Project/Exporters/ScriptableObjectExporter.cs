@@ -9,12 +9,12 @@ namespace AssetRipper.Core.Project.Exporters
 	{
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is IMonoBehaviour;
+			return asset is Classes.IMonoBehaviour;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			IMonoBehaviour monoBehaviour = (IMonoBehaviour)asset;
+			Classes.IMonoBehaviour monoBehaviour = (Classes.IMonoBehaviour)asset;
 			if (monoBehaviour.IsScriptableObject())
 			{
 				return new AssetExportCollection(this, asset);

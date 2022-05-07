@@ -3,13 +3,13 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.AnimatorStateMachine
 {
-	public sealed class ChildAnimatorStateMachine : IYAMLExportable
+	public sealed class ChildAnimatorStateMachine : IYamlExportable
 	{
 		public ChildAnimatorStateMachine(AnimatorStateMachine stateMachine, Vector3f position)
 		{
@@ -27,12 +27,12 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 			return 1;
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(StateMachineName, StateMachine.ExportYAML(container));
-			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(StateMachineName, StateMachine.ExportYaml(container));
+			node.Add(PositionName, Position.ExportYaml(container));
 			return node;
 		}
 

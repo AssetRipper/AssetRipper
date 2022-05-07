@@ -3,12 +3,12 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
-	public sealed class HeightMeshData : IAssetReadable, IYAMLExportable
+	public sealed class HeightMeshData : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -18,13 +18,13 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			Nodes = reader.ReadAssetArray<HeightMeshBVNode>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(VerticesName, Vertices.ExportYAML(container));
-			node.Add(IndicesName, Indices.ExportYAML(true));
-			node.Add(BoundsName, Bounds.ExportYAML(container));
-			node.Add(NodesName, Nodes.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(VerticesName, Vertices.ExportYaml(container));
+			node.Add(IndicesName, Indices.ExportYaml(true));
+			node.Add(BoundsName, Bounds.ExportYaml(container));
+			node.Add(NodesName, Nodes.ExportYaml(container));
 			return node;
 		}
 

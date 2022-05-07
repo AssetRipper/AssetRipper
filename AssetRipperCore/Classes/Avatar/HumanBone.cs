@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public sealed class HumanBone : IAssetReadable, IYAMLExportable
+	public sealed class HumanBone : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -13,12 +13,12 @@ namespace AssetRipper.Core.Classes.Avatar
 			Limit.Read(reader);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(BoneNameName, BoneName);
 			node.Add(HumanNameName, HumanName);
-			node.Add(LimitName, Limit.ExportYAML(container));
+			node.Add(LimitName, Limit.ExportYaml(container));
 			return node;
 		}
 

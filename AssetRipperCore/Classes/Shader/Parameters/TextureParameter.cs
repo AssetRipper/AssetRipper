@@ -1,9 +1,11 @@
-﻿using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public sealed class TextureParameter : IAssetReadable
+	public sealed class TextureParameter : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 2017.3 and greater
@@ -37,8 +39,25 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			{
 				MultiSampled = reader.ReadBoolean();
 			}
+
 			Dim = reader.ReadByte();
 			reader.AlignStream();
+		}
+
+		public YamlNode ExportYaml(IExportContainer container)
+		{
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_NameIndex", NameIndex);
+			node.Add("m_Index", Index);
+			node.Add("m_SamplerIndex", SamplerIndex);
+			
+			if (HasMultiSampled(container.ExportVersion))
+			{
+				node.Add("m_MultiSampled", MultiSampled);
+			}
+
+			node.Add("m_Dim", Dim);
+			return node;
 		}
 
 		public string Name { get; set; }

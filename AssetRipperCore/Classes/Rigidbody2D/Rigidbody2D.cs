@@ -5,7 +5,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Rigidbody2D
@@ -116,9 +116,9 @@ namespace AssetRipper.Core.Classes.Rigidbody2D
 			yield return context.FetchDependency(Material, MaterialName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(BodyTypeName, (int)BodyType);
 			node.Add(SimulatedName, Simulated);
@@ -128,7 +128,7 @@ namespace AssetRipper.Core.Classes.Rigidbody2D
 			node.Add(LinearDragName, LinearDrag);
 			node.Add(AngularDragName, AngularDrag);
 			node.Add(GravityScaleName, GravityScale);
-			node.Add(MaterialName, Material.ExportYAML(container));
+			node.Add(MaterialName, Material.ExportYaml(container));
 			node.Add(InterpolateName, (int)Interpolate);
 			node.Add(SleepingModeName, (int)SleepingMode);
 			node.Add(CollisionDetectionName, (int)CollisionDetection);

@@ -2,14 +2,14 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
 	/// <summary>
 	/// Introduced in 5.6.0
 	/// </summary>
-	public sealed class NavMeshBuildSettings : IAssetReadable, IYAMLExportable
+	public sealed class NavMeshBuildSettings : IAssetReadable, IYamlExportable
 	{
 		public NavMeshBuildSettings() { }
 		public NavMeshBuildSettings(bool _)
@@ -119,9 +119,9 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(AgentTypeIDName, AgentTypeID);
 			node.Add(AgentRadiusName, AgentRadius);
@@ -136,7 +136,7 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			node.Add(ManualTileSizeName, ManualTileSize);
 			node.Add(TileSizeName, TileSize);
 			node.Add(AccuratePlacementName, AccuratePlacement);
-			node.Add(DebugName, Debug.ExportYAML(container));
+			node.Add(DebugName, Debug.ExportYaml(container));
 			return node;
 
 		}

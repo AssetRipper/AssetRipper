@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public sealed class Tetrahedron : IAssetReadable, IYAMLExportable
+	public sealed class Tetrahedron : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -19,9 +19,9 @@ namespace AssetRipper.Core.Classes.LightProbes
 			Matrix.Read(reader);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(Indices0Name, Indices0);
 			node.Add(Indices1Name, Indices1);
 			node.Add(Indices2Name, Indices2);
@@ -30,7 +30,7 @@ namespace AssetRipper.Core.Classes.LightProbes
 			node.Add(Neighbors1Name, Neighbors1);
 			node.Add(Neighbors2Name, Neighbors2);
 			node.Add(Neighbors3Name, Neighbors3);
-			node.Add(MatrixName, Matrix.ExportYAML(container));
+			node.Add(MatrixName, Matrix.ExportYaml(container));
 			return node;
 		}
 

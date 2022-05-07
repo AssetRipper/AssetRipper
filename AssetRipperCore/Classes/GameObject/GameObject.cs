@@ -7,14 +7,14 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace AssetRipper.Core.Classes.GameObject
 {
-	public sealed class GameObject : EditorExtension, IHasName, IGameObject
+	public sealed class GameObject : EditorExtension, IHasNameString, IGameObject
 	{
 		public GameObject(LayoutInfo layout) : base(layout)
 		{
@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			{
 				Component = Array.Empty<ComponentPair>();
 			}
-			Name = string.Empty;
+			NameString = string.Empty;
 			TagString = TagManager.TagManagerConstants.UntaggedTag;
 			IsActive = true;
 		}
@@ -77,7 +77,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 
 			Layer = reader.ReadUInt32();
-			Name = reader.ReadString();
+			NameString = reader.ReadString();
 
 			if (HasTag(reader.Version, reader.Flags))
 			{
@@ -100,7 +100,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 
 			writer.Write(Layer);
-			writer.Write(Name);
+			writer.Write(NameString);
 
 			if (HasTag(writer.Version, writer.Flags))
 			{
@@ -134,28 +134,28 @@ namespace AssetRipper.Core.Classes.GameObject
 
 		public override string ToString()
 		{
-			if (string.IsNullOrEmpty(Name))
+			if (string.IsNullOrEmpty(NameString))
 			{
 				return base.ToString();
 			}
-			return $"{Name}({GetType().Name})";
+			return $"{NameString}({GetType().Name})";
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (IsComponentTuple(container.ExportVersion))
 			{
-				node.Add(ComponentName, ComponentTuple.ExportYAML(container, (t) => (int)t));
+				node.Add(ComponentName, ComponentTuple.ExportYaml(container, (t) => (int)t));
 			}
 			else
 			{
-				node.Add(ComponentName, ExportYAML(Component, container));
+				node.Add(ComponentName, ExportYaml(Component, container));
 			}
 
 			node.Add(LayerName, Layer);
-			node.Add(NameName, Name);
+			node.Add(NameName, NameString);
 			if (HasTag(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(TagName, Tag);
@@ -167,7 +167,7 @@ namespace AssetRipper.Core.Classes.GameObject
 
 			if (HasIcon(container.ExportVersion, container.ExportFlags) && IsIconFirst(container.ExportVersion))
 			{
-				node.Add(IconName, Icon.ExportYAML(container));
+				node.Add(IconName, Icon.ExportYaml(container));
 			}
 			if (HasNavMeshLayer(container.ExportVersion, container.ExportFlags))
 			{
@@ -181,19 +181,19 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 			if (HasIcon(container.ExportVersion, container.ExportFlags) && !IsIconFirst(container.ExportVersion))
 			{
-				node.Add(IconName, Icon.ExportYAML(container));
+				node.Add(IconName, Icon.ExportYaml(container));
 			}
 			return node;
 		}
 
-		private static YAMLNode ExportYAML(IEnumerable<ComponentPair> _this, IExportContainer container)
+		private static YamlNode ExportYaml(IEnumerable<ComponentPair> _this, IExportContainer container)
 		{
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 			foreach (ComponentPair pair in _this)
 			{
 				if (pair.Component.IsValid(container))
 				{
-					node.Add(pair.ExportYAML(container));
+					node.Add(pair.ExportYaml(container));
 				}
 			}
 			return node;
@@ -261,7 +261,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			set => m_component = value;
 		}
 		public uint Layer { get; set; }
-		public string Name { get; set; }
+		public string NameString { get; set; }
 		public ushort Tag { get; set; }
 		public string TagString { get; set; }
 

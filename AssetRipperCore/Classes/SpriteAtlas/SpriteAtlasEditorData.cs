@@ -6,14 +6,14 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.SpriteAtlas
 {
-	public sealed class SpriteAtlasEditorData : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class SpriteAtlasEditorData : IAssetReadable, IYamlExportable, IDependent
 	{
 		public SpriteAtlasEditorData() { }
 
@@ -88,19 +88,19 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
-			node.Add(PlatformSettingsName, GetPlatformSettings(container).ExportYAML(container));
-			node.Add(GetPackingSettingsName(container.ExportVersion), PackingSettings.ExportYAML(container));
+			node.Add(TextureSettingsName, TextureSettings.ExportYaml(container));
+			node.Add(PlatformSettingsName, GetPlatformSettings(container).ExportYaml(container));
+			node.Add(GetPackingSettingsName(container.ExportVersion), PackingSettings.ExportYaml(container));
 			node.Add(VariantMultiplierName, VariantMultiplier);
-			node.Add(PackablesName, Packables.ExportYAML(container));
+			node.Add(PackablesName, Packables.ExportYaml(container));
 			node.Add(BindAsDefaultName, BindAsDefault);
 			if (HasStoredHash(container.ExportVersion))
 			{
-				node.Add(StoredHashName, StoredHash.ExportYAML(container));
+				node.Add(StoredHashName, StoredHash.ExportYaml(container));
 			}
 			return node;
 		}

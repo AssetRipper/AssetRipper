@@ -7,11 +7,11 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
@@ -167,22 +167,22 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(SpritesName, Sprites.ExportYAML(container));
+			node.Add(SpritesName, Sprites.ExportYaml(container));
 			if (SpriteMetaData.HasOutline(container.ExportVersion))
 			{
-				node.Add(OutlineName, Outline.ExportYAML(container));
+				node.Add(OutlineName, Outline.ExportYaml(container));
 			}
 			if (SpriteMetaData.HasPhysicsShape(container.ExportVersion))
 			{
-				node.Add(PhysicsShapeName, PhysicsShape.ExportYAML(container));
+				node.Add(PhysicsShapeName, PhysicsShape.ExportYaml(container));
 			}
 			if (SpriteMetaData.HasBones(container.ExportVersion))
 			{
-				node.Add(BonesName, Bones.ExportYAML(container));
+				node.Add(BonesName, Bones.ExportYaml(container));
 				node.Add(SpriteIDName, SpriteID);
 			}
 			if (SpriteMetaData.HasInternalID(container.ExportVersion))
@@ -191,14 +191,14 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 			if (SpriteMetaData.HasBones(container.ExportVersion))
 			{
-				node.Add(VerticesName, Vertices.ExportYAML(container));
-				node.Add(IndicesName, Indices.ExportYAML(true));
-				node.Add(EdgesName, Edges.ExportYAML(container));
-				node.Add(WeightsName, Weights.ExportYAML(container));
+				node.Add(VerticesName, Vertices.ExportYaml(container));
+				node.Add(IndicesName, Indices.ExportYaml(true));
+				node.Add(EdgesName, Edges.ExportYaml(container));
+				node.Add(WeightsName, Weights.ExportYaml(container));
 			}
 			if (HasSecondaryTextures(container.ExportVersion))
 			{
-				node.Add(SecondaryTexturesName, SecondaryTextures.ExportYAML(container));
+				node.Add(SecondaryTexturesName, SecondaryTextures.ExportYaml(container));
 			}
 			return node;
 		}

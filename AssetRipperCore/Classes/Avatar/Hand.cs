@@ -1,21 +1,21 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public sealed class Hand : IAssetReadable, IYAMLExportable
+	public sealed class Hand : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
 			HandBoneIndex = reader.ReadInt32Array();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(HandBoneIndexName, HandBoneIndex.ExportYAML(true));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(HandBoneIndexName, HandBoneIndex.ExportYaml(true));
 			return node;
 		}
 

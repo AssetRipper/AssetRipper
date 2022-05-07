@@ -2,7 +2,7 @@ using AssetRipper.Core.Classes.ParticleSystem.Curve;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.TrailModule
 {
@@ -93,12 +93,12 @@ namespace AssetRipper.Core.Classes.ParticleSystem.TrailModule
 			ColorOverTrail.Read(reader);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.Add(ModeName, (int)Mode);
 			node.Add(RatioName, Ratio);
-			node.Add(LifetimeName, Lifetime.ExportYAML(container));
+			node.Add(LifetimeName, Lifetime.ExportYaml(container));
 			node.Add(MinVertexDistanceName, MinVertexDistance);
 			node.Add(TextureModeName, (int)TextureMode);
 			node.Add(RibbonCountName, GetExportRibbonCount(container.Version));
@@ -117,9 +117,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem.TrailModule
 			{
 				node.Add(AttachRibbonsToTransformName, AttachRibbonsToTransform);
 			}
-			node.Add(ColorOverLifetimeName, ColorOverLifetime.ExportYAML(container));
-			node.Add(WidthOverTrailName, WidthOverTrail.ExportYAML(container));
-			node.Add(ColorOverTrailName, ColorOverTrail.ExportYAML(container));
+			node.Add(ColorOverLifetimeName, ColorOverLifetime.ExportYaml(container));
+			node.Add(WidthOverTrailName, WidthOverTrail.ExportYaml(container));
+			node.Add(ColorOverTrailName, ColorOverTrail.ExportYaml(container));
 			return node;
 
 		}

@@ -4,7 +4,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LightmapSettings
@@ -45,14 +45,14 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			yield return context.FetchDependency(Renderer, RendererName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(RendererName, Renderer.ExportYAML(container));
-			node.Add(DynamicLightmapSTInSystemName, DynamicLightmapSTInSystem.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(RendererName, Renderer.ExportYaml(container));
+			node.Add(DynamicLightmapSTInSystemName, DynamicLightmapSTInSystem.ExportYaml(container));
 			node.Add(SystemIdName, SystemId);
-			node.Add(InstanceHashName, InstanceHash.ExportYAML(container));
-			node.Add(GeometryHashName, GeometryHash.ExportYAML(container));
+			node.Add(InstanceHashName, InstanceHash.ExportYaml(container));
+			node.Add(GeometryHashName, GeometryHash.ExportYaml(container));
 			return node;
 		}
 

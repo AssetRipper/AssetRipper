@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.PackedBitVectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
@@ -39,11 +39,6 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// 5.0.0 and greater
 		/// </summary>
 		public static bool HasUVInfo(UnityVersion version) => version.IsGreaterEqual(5);
-
-		public CompressedMesh Convert(IExportContainer container)
-		{
-			return CompressedMeshConverter.Convert(container, this);
-		}
 
 		public void Read(AssetReader reader)
 		{
@@ -107,31 +102,31 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(VerticesName, Vertices.ExportYAML(container));
-			node.Add(UVName, UV.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(VerticesName, Vertices.ExportYaml(container));
+			node.Add(UVName, UV.ExportYaml(container));
 			if (HasBindPoses(container.ExportVersion))
 			{
-				node.Add(BindPosesName, BindPoses.ExportYAML(container));
+				node.Add(BindPosesName, BindPoses.ExportYaml(container));
 			}
 
-			node.Add(NormalsName, Normals.ExportYAML(container));
-			node.Add(TangentsName, Tangents.ExportYAML(container));
-			node.Add(WeightsName, Weights.ExportYAML(container));
-			node.Add(NormalSignsName, NormalSigns.ExportYAML(container));
-			node.Add(TangentSignsName, TangentSigns.ExportYAML(container));
+			node.Add(NormalsName, Normals.ExportYaml(container));
+			node.Add(TangentsName, Tangents.ExportYaml(container));
+			node.Add(WeightsName, Weights.ExportYaml(container));
+			node.Add(NormalSignsName, NormalSigns.ExportYaml(container));
+			node.Add(TangentSignsName, TangentSigns.ExportYaml(container));
 			if (HasFloatColors(container.ExportVersion))
 			{
-				node.Add(FloatColorsName, FloatColors.ExportYAML(container));
+				node.Add(FloatColorsName, FloatColors.ExportYaml(container));
 			}
 
-			node.Add(BoneIndicesName, BoneIndices.ExportYAML(container));
-			node.Add(TrianglesName, Triangles.ExportYAML(container));
+			node.Add(BoneIndicesName, BoneIndices.ExportYaml(container));
+			node.Add(TrianglesName, Triangles.ExportYaml(container));
 			if (HasColors(container.ExportVersion))
 			{
-				node.Add(ColorsName, Colors.ExportYAML(container));
+				node.Add(ColorsName, Colors.ExportYaml(container));
 			}
 			if (HasUVInfo(container.ExportVersion))
 			{

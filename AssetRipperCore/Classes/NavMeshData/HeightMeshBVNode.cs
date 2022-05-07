@@ -1,11 +1,11 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
-	public sealed class HeightMeshBVNode : IAssetReadable, IYAMLExportable
+	public sealed class HeightMeshBVNode : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,11 +15,11 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			N = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(MinName, Min.ExportYAML(container));
-			node.Add(MaxName, Max.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(MinName, Min.ExportYaml(container));
+			node.Add(MaxName, Max.ExportYaml(container));
 			node.Add(IName, I);
 			node.Add(NName, N);
 			return node;

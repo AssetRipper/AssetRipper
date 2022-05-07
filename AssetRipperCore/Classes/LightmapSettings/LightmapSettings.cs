@@ -6,7 +6,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LightmapSettings
@@ -373,15 +373,15 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 
 
 			if (HasLightProbesLegacy(container.ExportVersion))
 			{
-				node.Add(LightProbesLegacyName, LightProbesLegacy.ExportYAML(container));
+				node.Add(LightProbesLegacyName, LightProbesLegacy.ExportYaml(container));
 			}
 			if (HasGIWorkflowMode(container.ExportVersion, container.ExportFlags))
 			{
@@ -389,11 +389,11 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 			}
 			if (HasLightProbes(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(LightProbesName, LightProbes.ExportYAML(container));
+				node.Add(LightProbesName, LightProbes.ExportYaml(container));
 			}
 			if (HasLightmaps(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(LightmapsName, Lightmaps.ExportYAML(container));
+				node.Add(LightmapsName, Lightmaps.ExportYaml(container));
 			}
 
 			if (HasLightmapsModeLegacy(container.ExportVersion))
@@ -415,7 +415,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings
 
 			if (HasGISettings(container.ExportVersion))
 			{
-				node.Add(GISettingsName, GetExportGISettings(container.Version).ExportYAML(container));
+				node.Add(GISettingsName, GetExportGISettings(container.Version).ExportYaml(container));
 			}
 
 			if (HasRuntimeCPUUsage(container.ExportVersion))

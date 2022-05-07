@@ -1,10 +1,11 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Misc
 {
@@ -28,11 +29,11 @@ namespace AssetRipper.Core.Classes.Misc
 			writer.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.Version));
-			node.Add(Md4HashName, Md4Hash.ExportYAML());
+			node.Add(Md4HashName, Md4Hash.ExportYaml());
 			return node;
 		}
 

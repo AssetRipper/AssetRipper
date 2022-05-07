@@ -2,7 +2,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
@@ -68,9 +68,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			if (HasName(container.ExportVersion))
 			{
 				node.Add(NameName, Name.String);
@@ -80,8 +80,8 @@ namespace AssetRipper.Core.Classes.Mesh
 			node.Add(VertexCountName, VertexCount);
 			if (HasAABB(container.ExportVersion))
 			{
-				node.Add(AabbMinDeltaName, AabbMinDelta.ExportYAML(container));
-				node.Add(AabbMaxDeltaName, AabbMaxDelta.ExportYAML(container));
+				node.Add(AabbMinDeltaName, AabbMinDelta.ExportYaml(container));
+				node.Add(AabbMaxDeltaName, AabbMaxDelta.ExportYaml(container));
 			}
 
 			node.Add(HasNormalsName, HasNormals);

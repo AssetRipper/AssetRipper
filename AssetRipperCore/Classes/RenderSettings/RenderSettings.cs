@@ -6,7 +6,7 @@ using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.RenderSettings
@@ -282,35 +282,35 @@ namespace AssetRipper.Core.Classes.RenderSettings
 			yield return context.FetchDependency(Sun, SunName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.Version));
 			node.Add(FogName, Fog);
-			node.Add(FogColorName, FogColor.ExportYAML(container));
+			node.Add(FogColorName, FogColor.ExportYaml(container));
 			node.Add(FogModeName, (int)GetExportFogMode(container.Version));
 			node.Add(FogDensityName, FogDensity);
 			node.Add(LinearFogStartName, LinearFogStart);
 			node.Add(LinearFogEndName, GetExportLinearFogEnd(container.Version));
-			node.Add(AmbientSkyColorName, AmbientSkyColor.ExportYAML(container));
-			node.Add(AmbientEquatorColorName, GetExportAmbientEquatorColorRGBAf(container.Version).ExportYAML(container));
-			node.Add(AmbientGroundColorName, GetExportAmbientGroundColorRGBAf(container.Version).ExportYAML(container));
+			node.Add(AmbientSkyColorName, AmbientSkyColor.ExportYaml(container));
+			node.Add(AmbientEquatorColorName, GetExportAmbientEquatorColorRGBAf(container.Version).ExportYaml(container));
+			node.Add(AmbientGroundColorName, GetExportAmbientGroundColorRGBAf(container.Version).ExportYaml(container));
 			node.Add(AmbientIntensityName, GetExportAmbientIntensity(container.Version));
 			node.Add(AmbientModeName, (int)AmbientMode);
-			node.Add(SubtractiveShadowColorName, GetExportSubtractiveShadowColorRGBAf(container.Version).ExportYAML(container));
-			node.Add(SkyboxMaterialName, SkyboxMaterial.ExportYAML(container));
+			node.Add(SubtractiveShadowColorName, GetExportSubtractiveShadowColorRGBAf(container.Version).ExportYaml(container));
+			node.Add(SkyboxMaterialName, SkyboxMaterial.ExportYaml(container));
 			node.Add(HaloStrengthName, HaloStrength);
 			node.Add(FlareStrengthName, FlareStrength);
 			node.Add(FlareFadeSpeedName, GetExportFlareFadeSpeed(container.Version));
-			node.Add(HaloTextureName, HaloTexture.ExportYAML(container));
-			node.Add(SpotCookieName, SpotCookie.ExportYAML(container));
+			node.Add(HaloTextureName, HaloTexture.ExportYaml(container));
+			node.Add(SpotCookieName, SpotCookie.ExportYaml(container));
 			node.Add(DefaultReflectionModeName, DefaultReflectionMode);
 			node.Add(DefaultReflectionResolutionName, GetExportDefaultReflectionResolution(container.Version));
 			node.Add(ReflectionBouncesName, GetExportReflectionBounces(container.Version));
 			node.Add(ReflectionIntensityName, GetExportReflectionIntensity(container.Version));
-			node.Add(CustomReflectionName, CustomReflection.ExportYAML(container));
-			node.Add(SunName, Sun.ExportYAML(container));
-			node.Add(IndirectSpecularColorName, GetExportIndirectSpecularColorRGBAf(container.Version).ExportYAML(container));
+			node.Add(CustomReflectionName, CustomReflection.ExportYaml(container));
+			node.Add(SunName, Sun.ExportYaml(container));
+			node.Add(IndirectSpecularColorName, GetExportIndirectSpecularColorRGBAf(container.Version).ExportYaml(container));
 			return node;
 		}
 

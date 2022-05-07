@@ -7,8 +7,9 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ParticleSystemRenderer
@@ -253,9 +254,9 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(RenderModeName, (short)RenderMode);
 			node.Add(SortModeName, (short)SortMode);
@@ -267,13 +268,13 @@ namespace AssetRipper.Core.Classes.ParticleSystemRenderer
 			node.Add(SortingFudgeName, SortingFudge);
 			node.Add(NormalDirectionName, GetNormalDirection(container.Version));
 			node.Add(RenderAlignmentName, (int)RenderAlignment);
-			node.Add(PivotName, Pivot.ExportYAML(container));
+			node.Add(PivotName, Pivot.ExportYaml(container));
 			node.Add(UseCustomVertexStreamsName, UseCustomVertexStreams);
-			node.Add(VertexStreamsName, GetVertexStreams(container.Version).ExportYAML());
-			node.Add(MeshName, Mesh.ExportYAML(container));
-			node.Add(Mesh1Name, Mesh1.ExportYAML(container));
-			node.Add(Mesh2Name, Mesh2.ExportYAML(container));
-			node.Add(Mesh3Name, Mesh3.ExportYAML(container));
+			node.Add(VertexStreamsName, GetVertexStreams(container.Version).ExportYaml());
+			node.Add(MeshName, Mesh.ExportYaml(container));
+			node.Add(Mesh1Name, Mesh1.ExportYaml(container));
+			node.Add(Mesh2Name, Mesh2.ExportYaml(container));
+			node.Add(Mesh3Name, Mesh3.ExportYaml(container));
 			node.Add(MaskInteractionName, (int)MaskInteraction);
 			return node;
 		}

@@ -1,6 +1,6 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
@@ -28,9 +28,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			writer.Write(FrameCount);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(NameName, Name.String);
 			node.Add(NameHashName, NameHash);
 			node.Add(FrameIndexName, FrameIndex);

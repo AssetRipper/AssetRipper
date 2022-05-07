@@ -1,22 +1,14 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
-using System.Linq;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
 	public sealed class VariableBoneCountWeights : IVariableBoneCountWeights
 	{
-		public VariableBoneCountWeights Convert(IExportContainer container)
-		{
-			VariableBoneCountWeights instance = new VariableBoneCountWeights();
-			instance.Data = Data.ToArray();
-			return instance;
-		}
-
 		public void Read(AssetReader reader)
 		{
 			Data = reader.ReadUInt32Array();
@@ -27,10 +19,10 @@ namespace AssetRipper.Core.Classes.Mesh
 			Data.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(DataName, Data.ExportYAML(true));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(DataName, Data.ExportYaml(true));
 			return node;
 		}
 

@@ -4,14 +4,15 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.QualitySettings
 {
-	public sealed class QualitySetting : IAssetReadable, IYAMLExportable
+	public sealed class QualitySetting : IAssetReadable, IYamlExportable
 	{
 		public QualitySetting() { }
 
@@ -329,9 +330,9 @@ namespace AssetRipper.Core.Classes.QualitySettings
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(NameName, Name);
 			node.Add(PixelLightCountName, PixelLightCount);
@@ -342,7 +343,7 @@ namespace AssetRipper.Core.Classes.QualitySettings
 			node.Add(ShadowDistanceName, ShadowDistance);
 			node.Add(ShadowNearPlaneOffsetName, ShadowNearPlaneOffset);
 			node.Add(ShadowCascade2SplitName, ShadowCascade2Split);
-			node.Add(ShadowCascade4SplitName, ShadowCascade4Split.ExportYAML(container));
+			node.Add(ShadowCascade4SplitName, ShadowCascade4Split.ExportYaml(container));
 			node.Add(ShadowmaskModeName, (int)ShadowmaskMode);
 			node.Add(GetSkinWeightsName(container.ExportVersion), (int)SkinWeights);
 			node.Add(TextureQualityName, (int)TextureQuality);
@@ -374,9 +375,9 @@ namespace AssetRipper.Core.Classes.QualitySettings
 			node.Add(ResolutionScalingFixedDPIFactorName, ResolutionScalingFixedDPIFactor);
 			if (HasCustomRenderPipeline(container.ExportVersion))
 			{
-				node.Add(CustomRenderPipelineName, CustomRenderPipeline.ExportYAML(container));
+				node.Add(CustomRenderPipelineName, CustomRenderPipeline.ExportYaml(container));
 			}
-			node.Add(ExcludedTargetPlatformsName, GetExcludedTargetPlatforms(container.Version, container.Flags).ExportYAML());
+			node.Add(ExcludedTargetPlatformsName, GetExcludedTargetPlatforms(container.Version, container.Flags).ExportYaml());
 			return node;
 		}
 

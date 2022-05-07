@@ -6,7 +6,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LODGroup
@@ -92,16 +92,16 @@ namespace AssetRipper.Core.Classes.LODGroup
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(LocalReferencePointName, LocalReferencePoint.ExportYAML(container));
+			node.Add(LocalReferencePointName, LocalReferencePoint.ExportYaml(container));
 			node.Add(SizeName, Size);
 			node.Add(FadeModeName, (int)GetFadeMode(container.Version));
 			node.Add(AnimateCrossFadingName, AnimateCrossFading);
 			node.Add(LastLODIsBillboardName, LastLODIsBillboard);
-			node.Add(LODsName, LODs.ExportYAML(container));
+			node.Add(LODsName, LODs.ExportYaml(container));
 			node.Add(EnabledName, Enabled);
 			return node;
 		}

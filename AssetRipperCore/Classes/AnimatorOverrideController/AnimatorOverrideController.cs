@@ -4,7 +4,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimatorOverrideController
@@ -56,11 +56,11 @@ namespace AssetRipper.Core.Classes.AnimatorOverrideController
 			return false;
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(ControllerName, Controller.ExportYAML(container));
-			node.Add(ClipsName, Clips.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(ControllerName, Controller.ExportYaml(container));
+			node.Add(ClipsName, Clips.ExportYaml(container));
 			return node;
 		}
 

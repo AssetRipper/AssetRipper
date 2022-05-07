@@ -2,11 +2,11 @@ using AssetRipper.Core.Classes.ParticleSystem.Curve;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 {
-	public sealed class MultiModeParameter : IAssetReadable, IYAMLExportable
+	public sealed class MultiModeParameter : IAssetReadable, IYamlExportable
 	{
 		public MultiModeParameter() { }
 		public MultiModeParameter(float value)
@@ -38,13 +38,13 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 			Speed.Read(reader);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ValueName, Value);
 			node.Add(ModeName, (int)Mode);
 			node.Add(SpreadName, Spread);
-			node.Add(SpeedName, Speed.ExportYAML(container));
+			node.Add(SpeedName, Speed.ExportYaml(container));
 			return node;
 		}
 

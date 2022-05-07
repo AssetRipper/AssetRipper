@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Flare
 {
@@ -19,11 +19,11 @@ namespace AssetRipper.Core.Classes.Flare
 			Size = reader.ReadSingle();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("m_Color", Color.ExportYAML(container));
+			node.Add("m_Color", Color.ExportYaml(container));
 			node.Add("m_Brightness", Size);
 			return node;
 		}

@@ -41,5 +41,12 @@ namespace AssetRipper.Core.Classes.Misc
 			res.Stream.ReadBuffer(data, 0, data.Length);
 			return data;
 		}
+
+		public static void CopyValues(this IStreamingInfo destination, IStreamingInfo source)
+		{
+			destination.Offset = source.Offset;
+			destination.Size = source.Size;
+			destination.Path = source.Path;
+		}
 	}
 }

@@ -6,12 +6,13 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class EmptyExportCollection : IExportCollection
 	{
-		public bool Export(ProjectAssetContainer container, string dirPath)
+		public bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			return false;
 		}
@@ -38,10 +39,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public ISerializedFile File => throw new NotSupportedException();
 		public TransferInstructionFlags Flags => throw new NotSupportedException();
-		public IEnumerable<IUnityObjectBase> Assets
-		{
-			get { yield break; }
-		}
+		public IEnumerable<IUnityObjectBase> Assets => Enumerable.Empty<IUnityObjectBase>();
 		public string Name => throw new NotSupportedException();
 		public IAssetImporter MetaImporter => throw new NotSupportedException();
 	}

@@ -2,11 +2,11 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public sealed class ProbeSetTetrahedralization : IAssetReadable, IYAMLExportable
+	public sealed class ProbeSetTetrahedralization : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -14,11 +14,11 @@ namespace AssetRipper.Core.Classes.LightProbes
 			HullRays = reader.ReadAssetArray<Vector3f>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TetrahedraName, Tetrahedra.ExportYAML(container));
-			node.Add(HullRaysName, HullRays.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(TetrahedraName, Tetrahedra.ExportYaml(container));
+			node.Add(HullRaysName, HullRays.ExportYaml(container));
 			return node;
 		}
 

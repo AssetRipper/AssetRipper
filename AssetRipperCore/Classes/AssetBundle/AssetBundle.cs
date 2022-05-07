@@ -6,11 +6,11 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.AssetBundle
 {
@@ -143,14 +143,14 @@ namespace AssetRipper.Core.Classes.AssetBundle
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}
 
-		public NullableKeyValuePair<string, IAssetInfo>[] GetAssets()
+		public NullableKeyValuePair<Utf8StringBase, IAssetInfo>[] GetAssets()
 		{
-			return Container.Select(t => new NullableKeyValuePair<string, IAssetInfo>(t.Key, t.Value)).ToArray();
+			return Container.Select(t => new NullableKeyValuePair<Utf8StringBase, IAssetInfo>(new Utf8StringLegacy(t.Key), t.Value)).ToArray();
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();

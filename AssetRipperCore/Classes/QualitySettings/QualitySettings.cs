@@ -5,8 +5,9 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.QualitySettings
@@ -189,13 +190,13 @@ namespace AssetRipper.Core.Classes.QualitySettings
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(CurrentQualityName, CurrentQuality);
-			node.Add(QualitySettingsName, QualitySettingss.ExportYAML(container));
-			node.Add(PerPlatformDefaultQualityName, GetPerPlatformDefaultQuality(container.Version, container.Flags).ExportYAML());
+			node.Add(QualitySettingsName, QualitySettingss.ExportYaml(container));
+			node.Add(PerPlatformDefaultQualityName, GetPerPlatformDefaultQuality(container.Version, container.Flags).ExportYaml());
 			return node;
 		}
 

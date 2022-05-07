@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
-	public sealed class PlatformShaderSettings : IAssetReadable, IYAMLExportable
+	public sealed class PlatformShaderSettings : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 5.4.0 and greater and Not Release
@@ -21,9 +21,9 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(UseScreenSpaceShadowsName, UseScreenSpaceShadows);
 			node.Add(StandardShaderQualityName, (int)GetStandardShaderQuality(container.Version, container.Flags));
 			node.Add(UseReflectionProbeBoxProjectionName, GetUseReflectionProbeBoxProjection(container.Version, container.Flags));

@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.TagManager
 {
-	public sealed class SortingLayerEntry : IAssetReadable, IYAMLExportable
+	public sealed class SortingLayerEntry : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// Less than 5.0.0
@@ -23,9 +23,9 @@ namespace AssetRipper.Core.Classes.TagManager
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(NameName, Name);
 			node.Add(UniqueIDName, UniqueID);
 			node.Add(LockedName, false);

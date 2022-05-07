@@ -1,18 +1,18 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class ValueArrayConstant : IAssetReadable, IYAMLExportable
+	public sealed class ValueArrayConstant : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
 			ValueArray = reader.ReadAssetArray<ValueConstant>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

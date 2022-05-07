@@ -19,11 +19,11 @@ using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Project
 {
-	public class ProjectAssetContainer : IExportContainer
+	public class ProjectAssetContainer : IExportContainer, IProjectAssetContainer
 	{
 		public ProjectAssetContainer(ProjectExporterBase exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<IUnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)
@@ -71,7 +71,7 @@ namespace AssetRipper.Core.Project
 		}
 
 #warning TODO: get rid of IEnumerable. pass only main asset (issues: prefab, texture with sprites, animatorController)
-		public bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, out IUnityObjectBase selectedAsset, out string assetPath)
+		public bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, out IUnityObjectBase? selectedAsset, out string assetPath)
 		{
 			selectedAsset = null;
 			assetPath = string.Empty;
@@ -284,7 +284,7 @@ namespace AssetRipper.Core.Project
 
 		private void AddResources(IResourceManager manager)
 		{
-			foreach (NullableKeyValuePair<string, PPtr<IUnityObjectBase>> kvp in manager.GetAssets())
+			foreach (NullableKeyValuePair<Utf8StringBase, PPtr<IUnityObjectBase>> kvp in manager.GetAssets())
 			{
 				IUnityObjectBase asset = kvp.Value.FindAsset(manager.SerializedFile);
 				if (asset == null)
@@ -292,7 +292,7 @@ namespace AssetRipper.Core.Project
 					continue;
 				}
 
-				string resourcePath = kvp.Key;
+				string resourcePath = kvp.Key.String;
 				if (m_pathAssets.TryGetValue(asset, out ProjectAssetPath projectPath))
 				{
 					// for paths like "Resources/inner/resources/extra/file" engine creates 2 resource entries
@@ -308,10 +308,15 @@ namespace AssetRipper.Core.Project
 
 		private void AddBundleAssets(IAssetBundle bundle)
 		{
+			if (m_IgnoreAssetBundleContentPaths)
+			{
+				return;
+			}
+
 			string bundleName = bundle.GetAssetBundleName();
 			string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
 			string directory = Path.Combine(AssetBundleFullPath, bundleName);
-			foreach (NullableKeyValuePair<string, IAssetInfo> kvp in bundle.GetAssets())
+			foreach (NullableKeyValuePair<Utf8StringBase, IAssetInfo> kvp in bundle.GetAssets())
 			{
 				// skip shared bundle assets, because we need to export them in their bundle directory
 				if (kvp.Value.AssetPtr.FileIndex != 0)
@@ -324,7 +329,7 @@ namespace AssetRipper.Core.Project
 					continue;
 				}
 
-				string assetPath = kvp.Key;
+				string assetPath = kvp.Key.String;
 				if (bundle.HasPathExtension())
 				{
 					// custom names may not have extensions
@@ -361,11 +366,11 @@ namespace AssetRipper.Core.Project
 		public string Name => File.Name;
 		public LayoutInfo Layout => File.Layout;
 		public UnityVersion Version => File.Version;
-		public Platform Platform => File.Platform;
+		public BuildTarget Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
 		public LayoutInfo ExportLayout { get; }
 		public UnityVersion ExportVersion => ExportLayout.Version;
-		public Platform ExportPlatform => ExportLayout.Platform;
+		public BuildTarget ExportPlatform => ExportLayout.Platform;
 		public virtual TransferInstructionFlags ExportFlags => ExportLayout.Flags | CurrentCollection.Flags;
 		public virtual IReadOnlyList<FileIdentifier> Dependencies => File.Dependencies;
 

@@ -3,8 +3,9 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Avatar
@@ -33,15 +34,15 @@ namespace AssetRipper.Core.Classes.Avatar
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(AvatarSizeName, AvatarSize);
-			node.Add(AvatarName, AvatarConstant.ExportYAML(container));
-			node.Add(TOSName, TOS.ExportYAML());
+			node.Add(AvatarName, AvatarConstant.ExportYaml(container));
+			node.Add(TOSName, TOS.ExportYaml());
 			if (HasHumanDescription(container.Version))
 			{
-				node.Add(HumanDescriptionName, HumanDescription.ExportYAML(container));
+				node.Add(HumanDescriptionName, HumanDescription.ExportYaml(container));
 			}
 			return node;
 		}

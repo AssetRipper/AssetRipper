@@ -6,12 +6,12 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Meta.Importers
 {
-	public class MonoImporter : AssetImporter
+	public class MonoImporter : AssetImporter, IMonoImporter
 	{
 		public MonoImporter(LayoutInfo layout) : base(layout)
 		{
@@ -36,11 +36,11 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		/// <summary>
 		/// 2.6.0 and greater
 		/// </summary>
-		public static bool HasDefaultReferences(UnityVersion version) => version.IsGreaterEqual(2, 6);
+		private static bool HasDefaultReferences(UnityVersion version) => version.IsGreaterEqual(2, 6);
 		/// <summary>
 		/// 3.4.0 and greater
 		/// </summary>
-		public static bool HasExecutionOrder(UnityVersion version) => version.IsGreaterEqual(3, 4);
+		private static bool HasExecutionOrder(UnityVersion version) => version.IsGreaterEqual(3, 4);
 
 		public override bool IncludesImporter(UnityVersion version)
 		{
@@ -86,20 +86,20 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 			PostWrite(writer);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (HasDefaultReferences(container.ExportVersion))
 			{
-				node.Add(DefaultReferencesName, DefaultReferences.ExportYAML(container));
+				node.Add(DefaultReferencesName, DefaultReferences.ExportYaml(container));
 			}
 			if (HasExecutionOrder(container.ExportVersion))
 			{
 				node.Add(ExecutionOrderName, ExecutionOrder);
-				node.Add(IconName, Icon.ExportYAML(container));
+				node.Add(IconName, Icon.ExportYaml(container));
 			}
-			PostExportYAML(container, node);
+			PostExportYaml(container, node);
 			return node;
 		}
 

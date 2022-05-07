@@ -3,7 +3,7 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
@@ -30,11 +30,11 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(AudioMixer, AudioMixerName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(AudioMixerName, AudioMixer.ExportYAML(container));
-			node.Add(SnapshotIDName, SnapshotID.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(AudioMixerName, AudioMixer.ExportYaml(container));
+			node.Add(SnapshotIDName, SnapshotID.ExportYaml(container));
 			return node;
 		}
 

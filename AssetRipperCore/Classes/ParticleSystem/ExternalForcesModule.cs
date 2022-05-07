@@ -4,7 +4,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem
 {
@@ -59,13 +59,13 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (HasMultiplierCurve(container.ExportVersion))
 			{
-				node.Add(MultiplierCurveName, MultiplierCurve.ExportYAML(container));
+				node.Add(MultiplierCurveName, MultiplierCurve.ExportYaml(container));
 			}
 			else
 			{
@@ -74,8 +74,8 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			if (HasInfluenceFilter(container.Version))
 			{
 				node.Add(InfluenceFilterName, InfluenceFilter);
-				node.Add(InfluenceMaskName, InfluenceMask.ExportYAML(container));
-				node.Add(InfluenceListName, InfluenceList.ExportYAML(container));
+				node.Add(InfluenceMaskName, InfluenceMask.ExportYaml(container));
+				node.Add(InfluenceListName, InfluenceList.ExportYaml(container));
 			}
 			return node;
 		}

@@ -192,7 +192,7 @@ namespace AssetRipper.Core.Converters.Mesh
 
 		private static bool NeedCopyData(IExportContainer container)
 		{
-			if (container.Platform == Platform.XBox360 && container.ExportPlatform != Platform.XBox360)
+			if (container.Platform == BuildTarget.XBox360 && container.ExportPlatform != BuildTarget.XBox360)
 			{
 				return true;
 			}
@@ -223,10 +223,10 @@ namespace AssetRipper.Core.Converters.Mesh
 			byte[] buffer = new byte[lastOffset + lastSize];
 			using (MemoryStream dstStream = new MemoryStream(buffer))
 			{
-				EndianType oendian = container.ExportPlatform == Platform.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
+				EndianType oendian = container.ExportPlatform == BuildTarget.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
 				using EndianWriter dst = new EndianWriter(dstStream, oendian);
 				using MemoryStream srcStream = new MemoryStream(originMesh.GetChannelsData());
-				EndianType iendian = container.Platform == Platform.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
+				EndianType iendian = container.Platform == BuildTarget.XBox360 ? EndianType.BigEndian : EndianType.LittleEndian;
 				using EndianReader src = new EndianReader(srcStream, iendian);
 				CopyChannelsData(container, originMesh.VertexData, instance, src, dst);
 				if (NeedAppendSkin(container, instance))
@@ -357,14 +357,14 @@ namespace AssetRipper.Core.Converters.Mesh
 			for (int i = 0; i < skin.Length; i++)
 			{
 				 BoneWeights4 weight =  skin[i];
-				writer.Write(weight.Weight0);
-				writer.Write(weight.Weight1);
-				writer.Write(weight.Weight2);
-				writer.Write(weight.Weight3);
-				writer.Write(weight.BoneIndex0);
-				writer.Write(weight.BoneIndex1);
-				writer.Write(weight.BoneIndex2);
-				writer.Write(weight.BoneIndex3);
+				writer.Write(weight.Weight_0_);
+				writer.Write(weight.Weight_1_);
+				writer.Write(weight.Weight_2_);
+				writer.Write(weight.Weight_3_);
+				writer.Write(weight.BoneIndex_0_);
+				writer.Write(weight.BoneIndex_1_);
+				writer.Write(weight.BoneIndex_2_);
+				writer.Write(weight.BoneIndex_3_);
 			}
 		}
 

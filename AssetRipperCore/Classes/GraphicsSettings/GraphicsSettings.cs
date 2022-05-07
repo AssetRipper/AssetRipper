@@ -10,10 +10,10 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters.Engine;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
@@ -436,9 +436,9 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			yield return context.FetchDependency(CustomRenderPipeline, CustomRenderPipelineName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(DeferredName, ExportDeferred(container));
 			node.Add(DeferredReflectionsName, ExportDeferredReflections(container));
@@ -449,14 +449,14 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			node.Add(LightHaloName, ExportLightHalo(container));
 			node.Add(LensFlareName, ExportLensFlare(container));
 			node.Add(AlwaysIncludedShadersName, ExportAlwaysIncludedShaders(container));
-			node.Add(PreloadedShadersName, GetPreloadedShaders(container.Version).ExportYAML(container));
-			node.Add(SpritesDefaultMaterialName, GetSpritesDefaultMaterial(container.Version).ExportYAML(container));
-			node.Add(CustomRenderPipelineName, CustomRenderPipeline.ExportYAML(container));
+			node.Add(PreloadedShadersName, GetPreloadedShaders(container.Version).ExportYaml(container));
+			node.Add(SpritesDefaultMaterialName, GetSpritesDefaultMaterial(container.Version).ExportYaml(container));
+			node.Add(CustomRenderPipelineName, CustomRenderPipeline.ExportYaml(container));
 			node.Add(TransparencySortModeName, (int)TransparencySortMode);
-			node.Add(TransparencySortAxisName, GetTransparencySortAxis(container.Version).ExportYAML(container));
+			node.Add(TransparencySortAxisName, GetTransparencySortAxis(container.Version).ExportYaml(container));
 			node.Add(DefaultRenderingPathName, (int)RenderingPath.Forward);
 			node.Add(DefaultMobileRenderingPathName, (int)RenderingPath.Forward);
-			node.Add(TierSettingsName, GetTierSettings(container.Version, container.Platform, container.Flags).ExportYAML(container));
+			node.Add(TierSettingsName, GetTierSettings(container.Version, container.Platform, container.Flags).ExportYaml(container));
 			node.Add(LightmapStrippingName, (int)LightmapStrippingMode.Automatic);
 			node.Add(FogStrippingName, (int)LightmapStrippingMode.Automatic);
 			node.Add(InstancingStrippingName, (int)InstancingStrippingVariant.StripUnused);
@@ -469,7 +469,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			node.Add(FogKeepLinearName, true);
 			node.Add(FogKeepExpName, true);
 			node.Add(FogKeepExp2Name, true);
-			node.Add(AlbedoSwatchInfosName, System.Array.Empty<AlbedoSwatchInfo>().ExportYAML(container));
+			node.Add(AlbedoSwatchInfosName, System.Array.Empty<AlbedoSwatchInfo>().ExportYaml(container));
 			node.Add(LightsUseLinearIntensityName, LightsUseLinearIntensity);
 			node.Add(LightsUseColorTemperatureName, LightsUseColorTemperature);
 			if (HasLogWhenShaderIsCompiled(container.ExportVersion))
@@ -483,60 +483,60 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			return node;
 		}
 
-		private YAMLNode ExportDeferred(IExportContainer container)
+		private YamlNode ExportDeferred(IExportContainer container)
 		{
 			const string DefferedShading = "Hidden/Internal-DeferredShading";
-			return HasDeferred(container.Version) ? Deferred.ExportYAML(container) : Deferred.ExportYAML(container, DefferedShading);
+			return HasDeferred(container.Version) ? Deferred.ExportYaml(container) : Deferred.ExportYaml(container, DefferedShading);
 		}
-		private YAMLNode ExportDeferredReflections(IExportContainer container)
+		private YamlNode ExportDeferredReflections(IExportContainer container)
 		{
 			const string DefferedReflection = "Hidden/Internal-DeferredReflections";
-			return HasDeferredReflections(container.Version) ? DeferredReflections.ExportYAML(container) : DeferredReflections.ExportYAML(container, DefferedReflection);
+			return HasDeferredReflections(container.Version) ? DeferredReflections.ExportYaml(container) : DeferredReflections.ExportYaml(container, DefferedReflection);
 		}
-		private YAMLNode ExportScreenSpaceShadows(IExportContainer container)
+		private YamlNode ExportScreenSpaceShadows(IExportContainer container)
 		{
 			const string ScreenShadows = "Hidden/Internal-ScreenSpaceShadows";
-			return HasScreenSpaceShadows(container.Version) ? ScreenSpaceShadows.ExportYAML(container) : ScreenSpaceShadows.ExportYAML(container, ScreenShadows);
+			return HasScreenSpaceShadows(container.Version) ? ScreenSpaceShadows.ExportYaml(container) : ScreenSpaceShadows.ExportYaml(container, ScreenShadows);
 		}
-		private YAMLNode ExportLegacyDeferred(IExportContainer container)
+		private YamlNode ExportLegacyDeferred(IExportContainer container)
 		{
 			const string PrePassLighting = "Hidden/Internal-PrePassLighting";
-			return HasLegacyDeferred(container.Version) ? LegacyDeferred.ExportYAML(container) : LegacyDeferred.ExportYAML(container, PrePassLighting);
+			return HasLegacyDeferred(container.Version) ? LegacyDeferred.ExportYaml(container) : LegacyDeferred.ExportYaml(container, PrePassLighting);
 		}
-		private YAMLNode ExportDepthNormals(IExportContainer container)
+		private YamlNode ExportDepthNormals(IExportContainer container)
 		{
 			const string DepthNormal = "Hidden/Internal-DepthNormalsTexture";
-			return HasDepthNormals(container.Version) ? DepthNormals.ExportYAML(container) : DepthNormals.ExportYAML(container, DepthNormal);
+			return HasDepthNormals(container.Version) ? DepthNormals.ExportYaml(container) : DepthNormals.ExportYaml(container, DepthNormal);
 		}
-		private YAMLNode ExportMotionVectors(IExportContainer container)
+		private YamlNode ExportMotionVectors(IExportContainer container)
 		{
 			const string Motions = "Hidden/Internal-MotionVectors";
-			return HasDepthNormals(container.Version) ? MotionVectors.ExportYAML(container) : MotionVectors.ExportYAML(container, Motions);
+			return HasDepthNormals(container.Version) ? MotionVectors.ExportYaml(container) : MotionVectors.ExportYaml(container, Motions);
 		}
-		private YAMLNode ExportLightHalo(IExportContainer container)
+		private YamlNode ExportLightHalo(IExportContainer container)
 		{
 			const string Halo = "Hidden/Internal-Halo";
-			return HasDepthNormals(container.Version) ? LightHalo.ExportYAML(container) : LightHalo.ExportYAML(container, Halo);
+			return HasDepthNormals(container.Version) ? LightHalo.ExportYaml(container) : LightHalo.ExportYaml(container, Halo);
 		}
-		private YAMLNode ExportLensFlare(IExportContainer container)
+		private YamlNode ExportLensFlare(IExportContainer container)
 		{
 			const string Flare = "Hidden/Internal-Flare";
-			return HasDepthNormals(container.Version) ? LensFlare.ExportYAML(container) : LensFlare.ExportYAML(container, Flare);
+			return HasDepthNormals(container.Version) ? LensFlare.ExportYaml(container) : LensFlare.ExportYaml(container, Flare);
 		}
-		private YAMLNode ExportAlwaysIncludedShaders(IExportContainer container)
+		private YamlNode ExportAlwaysIncludedShaders(IExportContainer container)
 		{
 			if (ToSerializedVersion(container.Version) >= 3)
 			{
-				return AlwaysIncludedShaders.ExportYAML(container);
+				return AlwaysIncludedShaders.ExportYaml(container);
 			}
 
-			YAMLSequenceNode node = new YAMLSequenceNode(SequenceStyle.Block);
+			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 			HashSet<string> shaderNames = new HashSet<string>();
 			if (HasAlwaysIncludedShaders(container.Version))
 			{
 				foreach (PPtr<Shader.Shader> shaderPtr in AlwaysIncludedShaders)
 				{
-					node.Add(shaderPtr.ExportYAML(container));
+					node.Add(shaderPtr.ExportYaml(container));
 					Shader.Shader shader = shaderPtr.FindAsset(container);
 					if (shader != null)
 					{
@@ -571,7 +571,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			return HasTransparencySortMode(version) ? TransparencySortAxis : new Vector3f(0.0f, 0.0f, 1.0f);
 		}
 
-		private IReadOnlyList<TierSettings> GetTierSettings(UnityVersion version, Platform platform, TransferInstructionFlags flags)
+		private IReadOnlyList<TierSettings> GetTierSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			if (!HasTierSettings(version))
 			{
@@ -605,12 +605,12 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			}
 		}
 
-		private void ExportShaderPointer(IExportContainer container, YAMLSequenceNode node, HashSet<string> shaderNames, string name)
+		private void ExportShaderPointer(IExportContainer container, YamlSequenceNode node, HashSet<string> shaderNames, string name)
 		{
 			if (!shaderNames.Contains(name))
 			{
 				EngineBuiltInAsset buildInAsset = EngineBuiltInAssets.GetShader(name, container.ExportVersion);
-				node.Add(buildInAsset.ToExportPointer().ExportYAML(container));
+				node.Add(buildInAsset.ToExportPointer().ExportYaml(container));
 			}
 		}
 

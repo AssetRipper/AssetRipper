@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem
 {
@@ -15,11 +15,11 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			Range.Read(reader);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add(GradientName, Gradient.ExportYAML(container));
-			node.Add(RangeName, Range.ExportYAML(container));
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
+			node.Add(GradientName, Gradient.ExportYaml(container));
+			node.Add(RangeName, Range.ExportYaml(container));
 			return node;
 		}
 

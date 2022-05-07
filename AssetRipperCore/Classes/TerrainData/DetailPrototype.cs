@@ -6,7 +6,7 @@ using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
@@ -94,12 +94,12 @@ namespace AssetRipper.Core.Classes.TerrainData
 			yield return context.FetchDependency(PrototypeTexture, PrototypeTextureName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(PrototypeName, Prototype.ExportYAML(container));
-			node.Add(PrototypeTextureName, PrototypeTexture.ExportYAML(container));
+			node.Add(PrototypeName, Prototype.ExportYaml(container));
+			node.Add(PrototypeTextureName, PrototypeTexture.ExportYaml(container));
 			node.Add(MinWidthName, MinWidth);
 			node.Add(MaxWidthName, MaxWidth);
 			node.Add(MinHeightName, MinHeight);
@@ -114,8 +114,8 @@ namespace AssetRipper.Core.Classes.TerrainData
 				node.Add(BendFactorName, BendFactor);
 			}
 
-			node.Add(HealthyColorName, HealthyColor.ExportYAML(container));
-			node.Add(DryColorName, DryColor.ExportYAML(container));
+			node.Add(HealthyColorName, HealthyColor.ExportYaml(container));
+			node.Add(DryColorName, DryColor.ExportYaml(container));
 			if (HasGrayscaleLighting(container.ExportVersion))
 			{
 				node.Add(GrayscaleLightingName, GrayscaleLighting);

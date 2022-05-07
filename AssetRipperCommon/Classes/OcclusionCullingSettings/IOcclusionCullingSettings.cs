@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.OcclusionCullingData;
 using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 {

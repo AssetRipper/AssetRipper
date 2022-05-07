@@ -2,11 +2,11 @@
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public sealed class HumanDescription : IAssetReadable, IYAMLExportable
+	public sealed class HumanDescription : IAssetReadable, IYamlExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -34,12 +34,12 @@ namespace AssetRipper.Core.Classes.Avatar
 
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(HumanName, Human.ExportYAML(container));
-			node.Add(SkeletonName, Skeleton.ExportYAML(container));
+			node.Add(HumanName, Human.ExportYaml(container));
+			node.Add(SkeletonName, Skeleton.ExportYaml(container));
 			node.Add(ArmTwistName, ArmTwist);
 			node.Add(ForeArmTwistName, ForeArmTwist);
 			node.Add(UpperLegTwistName, UpperLegTwist);

@@ -4,7 +4,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.PrefabInstance
@@ -36,13 +36,13 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			ObjectReference.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TargetName, Target.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(TargetName, Target.ExportYaml(container));
 			node.Add(PropertyPathName, PropertyPath);
 			node.Add(ValueName, Value);
-			node.Add(ObjectReferenceName, ObjectReference.ExportYAML(container));
+			node.Add(ObjectReferenceName, ObjectReference.ExportYaml(container));
 			return node;
 		}
 

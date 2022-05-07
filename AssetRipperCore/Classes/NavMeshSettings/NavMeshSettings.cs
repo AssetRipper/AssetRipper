@@ -5,7 +5,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.NavMeshSettings
@@ -47,11 +47,11 @@ namespace AssetRipper.Core.Classes.NavMeshSettings
 			yield return context.FetchDependency(m_navMeshData, NavMeshDataName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(BuildSettingsName, GetExportNavMeshBuildSettings(container).ExportYAML(container));
-			node.Add(NavMeshDataName, HasNavMeshData(container.Version) ? NavMeshData.ExportYAML(container) : NavMesh.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(BuildSettingsName, GetExportNavMeshBuildSettings(container).ExportYaml(container));
+			node.Add(NavMeshDataName, HasNavMeshData(container.Version) ? NavMeshData.ExportYaml(container) : NavMesh.ExportYaml(container));
 			return node;
 		}
 

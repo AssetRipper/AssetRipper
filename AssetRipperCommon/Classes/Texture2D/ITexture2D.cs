@@ -27,6 +27,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 		bool AlphaIsTransparency { get; set; }
 		bool IsReadable { get; set; }
 		IStreamingInfo StreamData { get; }
+		IGLTextureSettings TextureSettings { get; }
 	}
 
 	public static class Texture2DExtensions
@@ -73,9 +74,9 @@ namespace AssetRipper.Core.Classes.Texture2D
 			return data;
 		}
 
-		public static bool IsSwapBytes(Platform platform, TextureFormat format)
+		private static bool IsSwapBytes(BuildTarget platform, TextureFormat format)
 		{
-			if (platform == Platform.XBox360)
+			if (platform == BuildTarget.XBox360)
 			{
 				switch (format)
 				{

@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.BoxCollider2D
 {
-	public sealed class SpriteTilingProperty : IAssetReadable, IYAMLExportable
+	public sealed class SpriteTilingProperty : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -19,13 +19,13 @@ namespace AssetRipper.Core.Classes.BoxCollider2D
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(BorderName, Border.ExportYAML(container));
-			node.Add(PivotName, Pivot.ExportYAML(container));
-			node.Add(OldSizeName, OldSize.ExportYAML(container));
-			node.Add(NewSizeName, NewSize.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(BorderName, Border.ExportYaml(container));
+			node.Add(PivotName, Pivot.ExportYaml(container));
+			node.Add(OldSizeName, OldSize.ExportYaml(container));
+			node.Add(NewSizeName, NewSize.ExportYaml(container));
 			node.Add(AdaptiveTilingThresholdName, AdaptiveTilingThreshold);
 			node.Add(DrawModeName, DrawMode);
 			node.Add(AdaptiveTilingName, AdaptiveTiling);

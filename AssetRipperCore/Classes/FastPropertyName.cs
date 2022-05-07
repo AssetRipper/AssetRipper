@@ -2,11 +2,12 @@
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
-using AssetRipper.Core.YAML;
+
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class FastPropertyName : IAssetReadable, IYAMLExportable
+	public sealed class FastPropertyName : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 2017.3 and greater
@@ -23,15 +24,15 @@ namespace AssetRipper.Core.Classes
 			Value = reader.ReadString();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			if (IsPlainString(container.ExportVersion))
 			{
-				return new YAMLScalarNode(Value);
+				return new YamlScalarNode(Value);
 			}
 			else
 			{
-				YAMLMappingNode node = new YAMLMappingNode();
+				YamlMappingNode node = new YamlMappingNode();
 				node.Add(NameName, Value);
 				return node;
 			}

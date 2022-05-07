@@ -8,7 +8,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.TrailRenderer
 {
@@ -87,20 +87,20 @@ namespace AssetRipper.Core.Classes.TrailRenderer
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TimeName, Time);
 			if (HasParameters(container.ExportVersion))
 			{
-				node.Add(ParametersName, Parameters.ExportYAML(container));
+				node.Add(ParametersName, Parameters.ExportYaml(container));
 			}
 			else
 			{
 				node.Add(StartWidthName, StartWidth);
 				node.Add(EndWidthName, EndWidth);
-				node.Add(ColorsName, Colors.ExportYAML(container));
+				node.Add(ColorsName, Colors.ExportYaml(container));
 			}
 			node.Add(MinVertexDistanceName, MinVertexDistance);
 			node.Add(AutodestructName, Autodestruct);

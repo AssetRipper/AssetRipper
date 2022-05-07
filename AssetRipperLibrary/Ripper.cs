@@ -11,6 +11,7 @@ using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
@@ -40,6 +41,7 @@ namespace AssetRipper.Library
 		static Ripper()
 		{
 			VersionManager.LegacyHandler = new LegacyHandler();
+			Core.Importers.ImporterVersionHandler.SetLegacyImporter(new LegacyImporterFactory());
 		}
 
 		public Ripper() : this(new()) { }
@@ -138,7 +140,7 @@ namespace AssetRipper.Library
 		private void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			Settings.ExportPath = exportPath;
+			Settings.ExportRootPath = exportPath;
 			Settings.Filter = filter;
 			InitializeExporters();
 			TaskManager.WaitUntilAllCompleted();
@@ -224,7 +226,9 @@ namespace AssetRipper.Library
 			OverrideExporter<ISprite>(textureExporter);
 
 			//Shader exporters
-			OverrideExporter<IShader>(new DummyShaderTextExporter());
+			OverrideExporter<IShader>(new DummyShaderTextExporter(Settings));
+			OverrideExporter<IShader>(new YamlShaderExporter(Settings));
+			OverrideExporter<Shader>(new ShaderDisassemblyExporter(Settings));
 			OverrideExporter<IShader>(new SimpleShaderExporter());
 
 			//Audio exporters
@@ -249,6 +253,7 @@ namespace AssetRipper.Library
 			//Animator Controller - Temporary
 			OverrideExporter<AnimatorController>(new AnimatorControllerExporter());
 
+			AddPostExporter(new ProjectVersionPostExporter());
 			AddPostExporter(new TypeTreeExporter());
 			AddPostExporter(new DllPostExporter());
 		}
@@ -262,7 +267,7 @@ namespace AssetRipper.Library
 			OverrideExporter<IShader>(engineExporter);
 			OverrideExporter<IFont>(engineExporter);
 			OverrideExporter<ISprite>(engineExporter);
-			OverrideExporter<IMonoBehaviour>(engineExporter);
+			OverrideExporter<Core.Classes.IMonoBehaviour>(engineExporter);
 		}
 
 		public void OverrideExporter<T>(IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter<T>(exporter, true);

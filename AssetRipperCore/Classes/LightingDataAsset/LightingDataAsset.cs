@@ -9,8 +9,9 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LightingDataAsset
@@ -132,36 +133,36 @@ namespace AssetRipper.Core.Classes.LightingDataAsset
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(SceneName, Scene.ExportYAML(container));
-			node.Add(LightmapsName, Lightmaps.ExportYAML(container));
+			node.Add(SceneName, Scene.ExportYaml(container));
+			node.Add(LightmapsName, Lightmaps.ExportYaml(container));
 			if (HasAOTextures(container.ExportVersion))
 			{
-				node.Add(AOTexturesName, GetAOTextures(container.Version).ExportYAML(container));
+				node.Add(AOTexturesName, GetAOTextures(container.Version).ExportYaml(container));
 			}
 			if (HasLightmapsCacheFiles(container.Version))
 			{
-				node.Add(LightmapsCacheFilesName, GetLightmapsCacheFiles(container.Version).ExportYAML());
+				node.Add(LightmapsCacheFilesName, GetLightmapsCacheFiles(container.Version).ExportYaml());
 			}
-			node.Add(LightProbesName, LightProbes.ExportYAML(container));
+			node.Add(LightProbesName, LightProbes.ExportYaml(container));
 			node.Add(LightmapsModeName, LightmapsMode);
-			node.Add(BakedAmbientProbeInLinearName, BakedAmbientProbeInLinear.ExportYAML(container));
-			node.Add(LightmappedRendererDataName, LightmappedRendererData.ExportYAML(container));
-			node.Add(LightmappedRendererDataIDsName, LightmappedRendererDataIDs.ExportYAML(container));
-			node.Add(EnlightenSceneMappingName, EnlightenSceneMapping.ExportYAML(container));
-			node.Add(EnlightenSceneMappingRendererIDsName, EnlightenSceneMappingRendererIDs.ExportYAML(container));
-			node.Add(LightsName, Lights.ExportYAML(container));
-			node.Add(LightBakingOutputsName, LightBakingOutputs.ExportYAML(container));
+			node.Add(BakedAmbientProbeInLinearName, BakedAmbientProbeInLinear.ExportYaml(container));
+			node.Add(LightmappedRendererDataName, LightmappedRendererData.ExportYaml(container));
+			node.Add(LightmappedRendererDataIDsName, LightmappedRendererDataIDs.ExportYaml(container));
+			node.Add(EnlightenSceneMappingName, EnlightenSceneMapping.ExportYaml(container));
+			node.Add(EnlightenSceneMappingRendererIDsName, EnlightenSceneMappingRendererIDs.ExportYaml(container));
+			node.Add(LightsName, Lights.ExportYaml(container));
+			node.Add(LightBakingOutputsName, LightBakingOutputs.ExportYaml(container));
 			if (HasBakedReflectionProbeCubemapCacheFiles(container.ExportVersion))
 			{
-				node.Add(BakedReflectionProbeCubemapCacheFilesName, GetBakedReflectionProbeCubemapCacheFiles(container.Version).ExportYAML());
+				node.Add(BakedReflectionProbeCubemapCacheFilesName, GetBakedReflectionProbeCubemapCacheFiles(container.Version).ExportYaml());
 			}
-			node.Add(BakedReflectionProbeCubemapsName, BakedReflectionProbeCubemaps.ExportYAML(container));
-			node.Add(BakedReflectionProbesName, BakedReflectionProbes.ExportYAML(container));
-			node.Add(EnlightenDataName, EnlightenData.ExportYAML());
+			node.Add(BakedReflectionProbeCubemapsName, BakedReflectionProbeCubemaps.ExportYaml(container));
+			node.Add(BakedReflectionProbesName, BakedReflectionProbes.ExportYaml(container));
+			node.Add(EnlightenDataName, EnlightenData.ExportYaml());
 			node.Add(EnlightenDataVersionName, EnlightenDataVersion);
 			return node;
 		}

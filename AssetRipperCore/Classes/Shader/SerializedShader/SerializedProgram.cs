@@ -1,9 +1,12 @@
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.Project;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedProgram : IAssetReadable
+	public sealed class SerializedProgram : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 2020.3.2 and greater
@@ -19,6 +22,18 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			}
 		}
 
+		public YamlNode ExportYaml(IExportContainer container)
+		{
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_SubPrograms", SubPrograms.ExportYaml(container));
+			if (HasCommonParameters(container.ExportVersion))
+			{
+				node.Add("m_CommonParameters", CommonParameters.ExportYaml(container));
+			}
+
+			return node;
+		}
+
 		public int GetTierCount()
 		{
 			int tierCount = 1;
@@ -32,6 +47,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 
 				tierCount++;
 			}
+
 			return tierCount;
 		}
 

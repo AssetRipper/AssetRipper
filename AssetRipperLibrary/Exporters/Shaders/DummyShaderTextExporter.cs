@@ -5,8 +5,11 @@ using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
+using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Library.Configuration;
 using System;
 using System.Globalization;
 using System.IO;
@@ -15,7 +18,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 {
 	public class DummyShaderTextExporter : BinaryAssetExporter
 	{
-		public const string FallbackDummyShader = @"
+		private const string FALLBACK_DUMMY_SHADER = @"
 	SubShader{
 		Tags { ""RenderType"" = ""Opaque"" }
 		LOD 200
@@ -36,9 +39,21 @@ namespace AssetRipper.Library.Exporters.Shaders
 	}
 ";
 
+		private readonly ShaderExportMode exportMode;
+
+		public DummyShaderTextExporter(LibraryConfiguration configuration)
+		{
+			exportMode = configuration.ShaderExportMode;
+		}
+
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is IShader shader && (shader.HasParsedForm || asset is ITextAsset);
+			return exportMode is ShaderExportMode.Dummy && asset is IShader shader && (shader.HasParsedForm || asset is ITextAsset);
+		}
+
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		{
+			return new AssetExportCollection(this, asset, "shader");
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -46,7 +61,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			IShader shader = (IShader)asset;
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-			if (shader.ParsedForm?.Name?.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
+			if (shader.ParsedForm?.NameString?.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
 				return false;
 
 			using (FileStream fileStream = File.Create(path))
@@ -61,7 +76,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			if (shader.HasParsedForm)
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
-				writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm.Name);
+				writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm.NameString);
 				Export(shader.ParsedForm.PropInfo, writer);
 
 				TemplateShader templateShader = TemplateList.GetBestTemplate(shader);
@@ -73,7 +88,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				else
 				{
 					writer.WriteIndent(1);
-					writer.Write(FallbackDummyShader.Replace("\r", ""));
+					writer.Write(FALLBACK_DUMMY_SHADER.Replace("\r", ""));
 				}
 				writer.Write('\n');
 
@@ -98,7 +113,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 				writer.Write("\t//DummyShaderTextExporter\n");
 				writer.WriteIndent(1);
-				writer.Write(FallbackDummyShader.Replace("\r", ""));
+				writer.Write(FALLBACK_DUMMY_SHADER.Replace("\r", ""));
 
 				writer.Write('}');
 			}
@@ -152,7 +167,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				writer.Write("[Gamma] ");
 			}
 
-			writer.Write("{0} (\"{1}\", ", _this.Name, _this.Description);
+			writer.Write("{0} (\"{1}\", ", _this.NameString, _this.Description);
 
 			switch (_this.Type)
 			{

@@ -4,7 +4,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes
 {
@@ -48,9 +48,9 @@ namespace AssetRipper.Core.Classes
 			Center.Read(reader);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(HeightName, Height);
 			node.Add(RadiusName, Radius);
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.Classes
 			node.Add(StepOffsetName, StepOffset);
 			node.Add(SkinWidthName, SkinWidth);
 			node.Add(MinMoveDistanceName, MinMoveDistance);
-			node.Add(CenterName, Center.ExportYAML(container));
+			node.Add(CenterName, Center.ExportYaml(container));
 			return node;
 		}
 

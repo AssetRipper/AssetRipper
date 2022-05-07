@@ -30,14 +30,14 @@ namespace AssetRipper.Core.Project.Collections
 			get { yield return Asset; }
 		}
 
-		public override string Name => string.IsNullOrWhiteSpace(Asset.Name) ? $"UnreadableObject_{Asset.ClassID}" : $"UnreadableObject_{Asset.Name}";
+		public override string Name => string.IsNullOrWhiteSpace(Asset.NameString) ? $"UnreadableObject_{Asset.ClassID}" : $"UnreadableObject_{Asset.NameString}";
 
 		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}
 
-		public override bool Export(ProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			string subFolder = Asset.ExportPath;
 			string subPath = Path.Combine(dirPath, subFolder);

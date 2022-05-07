@@ -6,7 +6,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 using System.IO;
 
@@ -108,19 +108,19 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(SplatDatabaseName, SplatDatabase.ExportYAML(container));
-			node.Add(DetailDatabaseName, DetailDatabase.ExportYAML(container));
-			node.Add(HeightmapName, m_Heightmap.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(SplatDatabaseName, SplatDatabase.ExportYaml(container));
+			node.Add(DetailDatabaseName, DetailDatabase.ExportYaml(container));
+			node.Add(HeightmapName, m_Heightmap.ExportYaml(container));
 			if (HasLightmap(container.ExportVersion))
 			{
-				node.Add(LightmapName, Lightmap.ExportYAML(container));
+				node.Add(LightmapName, Lightmap.ExportYaml(container));
 			}
 			if (HasPreloadShaders(container.ExportVersion))
 			{
-				node.Add(PreloadShadersName, PreloadShaders.ExportYAML(container));
+				node.Add(PreloadShadersName, PreloadShaders.ExportYaml(container));
 			}
 			return node;
 		}

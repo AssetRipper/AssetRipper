@@ -7,7 +7,7 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
 
@@ -160,29 +160,25 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 
 		public override string ToString()
 		{
-#if DEBUG
-			return $"{Name}({nameof(PrefabInstance)})";
-#else
-			return nameof(Prefab);
-#endif
+			return $"{NameString}({nameof(PrefabInstance)})";
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
 			if (IsModificationFormat(container.ExportVersion))
 			{
-				YAMLMappingNode node = ExportYAMLRootObject(container);
+				YamlMappingNode node = ExportYamlRootObject(container);
 				node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 				if (HasRootGameObject(container.ExportVersion, container.ExportFlags) && IsRootGameObjectFirst(container.ExportVersion))
 				{
-					node.Add(RootGameObjectName, RootGameObject.ExportYAML(container));
+					node.Add(RootGameObjectName, RootGameObject.ExportYaml(container));
 				}
 
-				node.Add(ModificationName, Modification.ExportYAML(container));
-				node.Add(SourcePrefabInvariantName(container.ExportVersion), SourcePrefab.ExportYAML(container));
+				node.Add(ModificationName, Modification.ExportYaml(container));
+				node.Add(SourcePrefabInvariantName(container.ExportVersion), SourcePrefab.ExportYaml(container));
 				if (!IsRootGameObjectFirst(container.ExportVersion))
 				{
-					node.Add(RootGameObjectName, RootGameObject.ExportYAML(container));
+					node.Add(RootGameObjectName, RootGameObject.ExportYaml(container));
 				}
 				if (HasIsPrefabAssetInvariant(container.ExportVersion))
 				{
@@ -196,17 +192,17 @@ namespace AssetRipper.Core.Classes.PrefabInstance
 			}
 			else
 			{
-				YAMLMappingNode node = new YAMLMappingNode();
-				node.Add(LastMergeIdentifierName, LastMergeIdentifier.ExportYAML(container));
+				YamlMappingNode node = new YamlMappingNode();
+				node.Add(LastMergeIdentifierName, LastMergeIdentifier.ExportYaml(container));
 				if (HasLastTemplateIdentifier(container.ExportVersion))
 				{
-					node.Add(LastTemplateIdentifierName, LastTemplateIdentifier.ExportYAML(container));
+					node.Add(LastTemplateIdentifierName, LastTemplateIdentifier.ExportYaml(container));
 				}
-				node.Add(ObjectsName, Objects.ExportYAML(container));
-				node.Add(FatherName, Father.ExportYAML(container));
+				node.Add(ObjectsName, Objects.ExportYaml(container));
+				node.Add(FatherName, Father.ExportYaml(container));
 				node.Add(IsDataTemplateName, IsDataTemplate);
 
-				YAMLMappingNode baseNode = base.ExportYAMLRoot(container);
+				YamlMappingNode baseNode = base.ExportYamlRoot(container);
 				node.Append(baseNode);
 				return node;
 			}

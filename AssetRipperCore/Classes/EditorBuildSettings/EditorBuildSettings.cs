@@ -3,11 +3,11 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
@@ -65,14 +65,14 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(ScenesName, m_Scenes.ExportYAML(container));
+			node.Add(ScenesName, m_Scenes.ExportYaml(container));
 			if (HasConfigObjects(container.ExportVersion))
 			{
-				node.Add(ConfigObjectsName, GetConfigObjects(container.Version).ExportYAML(container));
+				node.Add(ConfigObjectsName, GetConfigObjects(container.Version).ExportYaml(container));
 			}
 			return node;
 		}

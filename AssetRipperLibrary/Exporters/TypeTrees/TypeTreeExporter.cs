@@ -12,7 +12,7 @@ namespace AssetRipper.Library.Exporters.TypeTrees
 	{
 		public void DoPostExport(Ripper ripper)
 		{
-			string outputDirectory = Path.Combine(ripper.Settings.ExportPath, "AssetRipper", "TypeTrees");
+			string outputDirectory = Path.Combine(ripper.Settings.AuxiliaryFilesPath, "TypeTrees");
 
 			Logger.Info(LogCategory.Export, "Exporting type trees...");
 			foreach (var serializedFile in ripper.GameStructure.FileCollection.GameSerializedFiles)

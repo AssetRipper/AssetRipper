@@ -6,11 +6,11 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.BlendTree
 {
-	public sealed class ChildMotion : IYAMLExportable
+	public sealed class ChildMotion : IYamlExportable
 	{
 		public ChildMotion(VirtualSerializedFile file, AnimatorController.AnimatorController controller, StateConstant state, int nodeIndex, int childIndex)
 		{
@@ -36,13 +36,13 @@ namespace AssetRipper.Core.Classes.BlendTree
 			return 2;
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(MotionName, Motion.ExportYAML(container));
+			node.Add(MotionName, Motion.ExportYaml(container));
 			node.Add(ThresholdName, Threshold);
-			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(PositionName, Position.ExportYaml(container));
 			node.Add(TimeScaleName, TimeScale);
 			node.Add(CycleOffsetName, CycleOffset);
 			node.Add(DirectBlendParameterName, DirectBlendParameter);

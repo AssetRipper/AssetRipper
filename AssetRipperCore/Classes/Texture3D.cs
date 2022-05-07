@@ -4,11 +4,12 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes
 {
@@ -192,9 +193,9 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		protected sealed override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected sealed override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			if (HasColorSpace(container.ExportVersion))
 			{
 				node.Add(ColorSpaceName, (int)ColorSpace);
@@ -205,7 +206,7 @@ namespace AssetRipper.Core.Classes
 			node.Add(DepthName, Depth);
 			node.Add(MipCountName, MipCount);
 			node.Add(DataSizeName, DataSize);
-			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			node.Add(TextureSettingsName, TextureSettings.ExportYaml(container));
 			if (HasUsageMode(container.ExportVersion))
 			{
 				node.Add(UsageModeName, UsageMode);
@@ -213,9 +214,9 @@ namespace AssetRipper.Core.Classes
 			node.Add(IsReadableName, IsReadable);
 			byte[] imageData = GetImageData(container.Version);
 			node.Add(ImageDataName, imageData.Length);
-			node.Add(Layout.LayoutInfo.TypelessdataName, imageData.ExportYAML());
+			node.Add(Layout.ClassNameHandler.TypelessdataName, imageData.ExportYaml());
 			StreamingInfo streamData = new StreamingInfo();
-			node.Add(StreamDataName, streamData.ExportYAML(container));
+			node.Add(StreamDataName, streamData.ExportYaml(container));
 			return node;
 		}
 

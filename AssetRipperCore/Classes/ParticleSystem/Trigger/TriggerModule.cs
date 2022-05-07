@@ -5,7 +5,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
@@ -87,17 +87,17 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			if (HasCollisionShapes(container.ExportVersion))
 			{
-				node.Add(CollisionShape0Name, CollisionShape0.ExportYAML(container));
-				node.Add(CollisionShape1Name, CollisionShape1.ExportYAML(container));
-				node.Add(CollisionShape2Name, CollisionShape2.ExportYAML(container));
-				node.Add(CollisionShape3Name, CollisionShape3.ExportYAML(container));
-				node.Add(CollisionShape4Name, CollisionShape4.ExportYAML(container));
-				node.Add(CollisionShape5Name, CollisionShape5.ExportYAML(container));
+				node.Add(CollisionShape0Name, CollisionShape0.ExportYaml(container));
+				node.Add(CollisionShape1Name, CollisionShape1.ExportYaml(container));
+				node.Add(CollisionShape2Name, CollisionShape2.ExportYaml(container));
+				node.Add(CollisionShape3Name, CollisionShape3.ExportYaml(container));
+				node.Add(CollisionShape4Name, CollisionShape4.ExportYaml(container));
+				node.Add(CollisionShape5Name, CollisionShape5.ExportYaml(container));
 			}
 
 			node.Add(InsideName, (int)Inside);
@@ -114,7 +114,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Trigger
 
 			if (HasPrimitives(container.ExportVersion))
 			{
-				node.Add(PrimitivesName, Primitives.ExportYAML(container));
+				node.Add(PrimitivesName, Primitives.ExportYaml(container));
 			}
 
 			return node;

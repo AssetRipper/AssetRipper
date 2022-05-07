@@ -2,13 +2,10 @@
 using AssetRipper.Core.Classes.EditorBuildSettings;
 using AssetRipper.Core.Classes.EditorSettings;
 using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace AssetRipper.Core.Project.Collections
 {
@@ -22,7 +19,7 @@ namespace AssetRipper.Core.Project.Collections
 			EditorSettings = CreateVirtualEditorSettings(virtualFile);
 		}
 
-		public override bool Export(ProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			string subPath = Path.Combine(dirPath, ProjectSettingsName);
 			string fileName = $"{EditorBuildSettings.ClassID}.asset";
@@ -39,36 +36,7 @@ namespace AssetRipper.Core.Project.Collections
 
 			AssetExporter.Export(container, EditorSettings, filePath);
 
-			if (buildSettings.GetType().FullName == "AssetRipper.Core.Classes.BuildSettings")
-			{
-				//SaveDefaultProjectVersion(subPath);
-				SaveMaxProjectVersion(subPath, buildSettings);
-			}
-			else
-			{
-				SaveExactProjectVersion(subPath, buildSettings);
-			}
 			return true;
-		}
-
-		private static void SaveDefaultProjectVersion(string projectSettingsDirectory)
-		{
-			SaveProjectVersion(projectSettingsDirectory, UnityVersion.DefaultVersion);
-		}
-		private static void SaveMaxProjectVersion(string projectSettingsDirectory, IBuildSettings buildSettings)
-		{
-			UnityVersion projectVersion = UnityVersion.Max(UnityVersion.DefaultVersion, buildSettings.SerializedFile.Version);
-			SaveProjectVersion(projectSettingsDirectory, projectVersion);
-		}
-		private static void SaveExactProjectVersion(string projectSettingsDirectory, IBuildSettings buildSettings)
-		{
-			SaveProjectVersion(projectSettingsDirectory, buildSettings.SerializedFile.Version);
-		}
-		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version)
-		{
-			using Stream fileStream = System.IO.File.Create(Path.Combine(projectSettingsDirectory, "ProjectVersion.txt"));
-			using StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
-			writer.Write($"m_EditorVersion: {version}");
 		}
 
 		public static IEditorSettings CreateVirtualEditorSettings(VirtualSerializedFile virtualFile)
@@ -83,7 +51,7 @@ namespace AssetRipper.Core.Project.Collections
 			return virtualFile.CreateAsset<IEditorBuildSettings>(ClassIDType.EditorBuildSettings);
 		}
 
-		public static void InitializeEditorBuildSettings(IEditorBuildSettings editorBuildSettings, IBuildSettings buildSettings, ProjectAssetContainer container)
+		public static void InitializeEditorBuildSettings(IEditorBuildSettings editorBuildSettings, IBuildSettings buildSettings, IProjectAssetContainer container)
 		{
 			int numScenes = buildSettings.Scenes.Length;
 			editorBuildSettings.InitializeScenesArray(numScenes);

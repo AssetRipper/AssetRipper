@@ -22,7 +22,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		public bool IsMatch(ISerializedProperty property)
 		{
-			return this.PropertyName == property.Name && PropertyType.IsMatch(property.Type);
+			return this.PropertyName == property.NameString && PropertyType.IsMatch(property.Type);
 		}
 	}
 }

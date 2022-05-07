@@ -10,7 +10,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters.Engine;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Terrain
@@ -255,11 +255,11 @@ namespace AssetRipper.Core.Classes.Terrain
 			yield return context.FetchDependency(MaterialTemplate, MaterialTemplateName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(TerrainDataName, m_TerrainData.ExportYAML(container));
+			node.Add(TerrainDataName, m_TerrainData.ExportYaml(container));
 			node.Add(TreeDistanceName, TreeDistance);
 			node.Add(TreeBillboardDistanceName, TreeBillboardDistance);
 			node.Add(TreeCrossFadeLengthName, TreeCrossFadeLength);
@@ -291,7 +291,7 @@ namespace AssetRipper.Core.Classes.Terrain
 			if (HasMaterialType(container.ExportVersion))
 			{
 				node.Add(MaterialTypeName, (int)GetMaterialType(container.Version));
-				node.Add(LegacySpecularName, LegacySpecular.ExportYAML(container));
+				node.Add(LegacySpecularName, LegacySpecular.ExportYaml(container));
 				node.Add(LegacyShininessName, LegacyShininess);
 			}
 			node.Add(MaterialTemplateName, ExportMaterialTemplate(container));
@@ -306,7 +306,7 @@ namespace AssetRipper.Core.Classes.Terrain
 			}
 #warning TODO: get lightmap by index and fill those values
 			node.Add(ScaleInLightmapName, GetScaleInLightmap(container.Flags));
-			node.Add(LightmapParametersName, GetLightmapParameters(container.Flags).ExportYAML(container));
+			node.Add(LightmapParametersName, GetLightmapParameters(container.Flags).ExportYaml(container));
 			if (HasGroupingID(container.ExportVersion))
 			{
 				node.Add(GroupingIDName, GroupingID);
@@ -330,34 +330,34 @@ namespace AssetRipper.Core.Classes.Terrain
 			}
 			return MaterialType == MaterialType.BuiltInStandard ? MaterialType.BuiltInLegacyDiffuse : MaterialType.Custom;
 		}
-		private YAMLNode ExportMaterialTemplate(IExportContainer container)
+		private YamlNode ExportMaterialTemplate(IExportContainer container)
 		{
 			if (ToSerializedVersion(container.ExportVersion) < 5)
 			{
-				return MaterialTemplate.ExportYAML(container);
+				return MaterialTemplate.ExportYaml(container);
 			}
 			if (ToSerializedVersion(container.Version) >= 5)
 			{
-				return MaterialTemplate.ExportYAML(container);
+				return MaterialTemplate.ExportYaml(container);
 			}
 
 			MaterialType type = GetMaterialType(container.Version);
 			if (type == MaterialType.BuiltInStandard)
 			{
 				EngineBuiltInAsset asset = EngineBuiltInAssets.GetMaterial(EngineBuiltInAssets.DefaultTerrainStandardName, container.ExportVersion);
-				return asset.ToExportPointer().ExportYAML(container);
+				return asset.ToExportPointer().ExportYaml(container);
 			}
 			if (type == MaterialType.BuiltInLegacyDiffuse)
 			{
 				EngineBuiltInAsset asset = EngineBuiltInAssets.GetMaterial(EngineBuiltInAssets.DefaultTerrainDiffuseName, container.ExportVersion);
-				return asset.ToExportPointer().ExportYAML(container);
+				return asset.ToExportPointer().ExportYaml(container);
 			}
 			if (type == MaterialType.BuiltInLegacySpecular)
 			{
 				EngineBuiltInAsset asset = EngineBuiltInAssets.GetMaterial(EngineBuiltInAssets.DefaultTerrainSpecularName, container.ExportVersion);
-				return asset.ToExportPointer().ExportYAML(container);
+				return asset.ToExportPointer().ExportYaml(container);
 			}
-			return MaterialTemplate.ExportYAML(container);
+			return MaterialTemplate.ExportYaml(container);
 		}
 		private bool GetDeringLightProbesForTrees(UnityVersion version, TransferInstructionFlags flags)
 		{

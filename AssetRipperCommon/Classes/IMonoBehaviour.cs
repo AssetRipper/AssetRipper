@@ -5,15 +5,14 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly.Serializable;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public interface IMonoBehaviour : IComponent, IHasName
+	public interface IMonoBehaviour : IComponent, IHasNameString, Interfaces.IMonoBehaviourBase
 	{
 		PPtr<IMonoScript> ScriptPtr { get; }
-		SerializableStructure Structure { get; set; }
 	}
 
 	public static class MonoBehaviourExtensions
@@ -23,7 +22,7 @@ namespace AssetRipper.Core.Classes
 		/// TODO: find out why GameObject may have a value like PPtr(0, 894) even though such game object doesn't exist
 		/// </summary>
 		public static bool IsSceneObject(this IMonoBehaviour monoBehaviour) => !monoBehaviour.GameObjectPtr.IsNull;
-		public static bool IsScriptableObject(this IMonoBehaviour monoBehaviour) => monoBehaviour.Name.Length > 0;
+		public static bool IsScriptableObject(this IMonoBehaviour monoBehaviour) => monoBehaviour.NameString.Length > 0;
 
 		/// <summary>
 		/// Reads the structure with an AssetReader
@@ -70,11 +69,11 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		public static void MaybeExportYamlForStructure(this IMonoBehaviour monoBehaviour, YAMLMappingNode node, IExportContainer container)
+		public static void MaybeExportYamlForStructure(this IMonoBehaviour monoBehaviour, YamlMappingNode node, IExportContainer container)
 		{
 			if (monoBehaviour.Structure != null)
 			{
-				YAMLMappingNode structureNode = (YAMLMappingNode)monoBehaviour.Structure.ExportYAML(container);
+				YamlMappingNode structureNode = (YamlMappingNode)monoBehaviour.Structure.ExportYaml(container);
 				node.Append(structureNode);
 			}
 		}

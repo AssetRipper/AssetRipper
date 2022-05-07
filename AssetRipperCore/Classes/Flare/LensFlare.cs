@@ -4,14 +4,20 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Flare
 {
 	public sealed class LensFlare : Behaviour
 	{
+		/// <summary>
+		/// 4.3.0 and greater
+		/// </summary>
+		public static bool HasFadeSpeed(UnityVersion version) => version.IsGreaterEqual(4, 3, 0);
+
 		public LensFlare(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
@@ -21,7 +27,10 @@ namespace AssetRipper.Core.Classes.Flare
 			Flare.Read(reader);
 			Color.Read(reader);
 			Brightness = reader.ReadSingle();
-			FadeSpeed = reader.ReadSingle();
+			if (HasFadeSpeed(reader.Version))
+			{
+				FadeSpeed = reader.ReadSingle();
+			}
 			IgnoreLayers.Read(reader);
 			Directional = reader.ReadBoolean();
 		}
@@ -36,15 +45,18 @@ namespace AssetRipper.Core.Classes.Flare
 			yield return context.FetchDependency(Flare, "m_Flare");
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(1);
-			node.Add("m_Flare", Flare.ExportYAML(container));
-			node.Add("m_Color", Color.ExportYAML(container));
+			node.Add("m_Flare", Flare.ExportYaml(container));
+			node.Add("m_Color", Color.ExportYaml(container));
 			node.Add("m_Brightness", Brightness);
-			node.Add("m_FadeSpeed", FadeSpeed);
-			node.Add("m_IgnoreLayers", IgnoreLayers.ExportYAML(container));
+			if (HasFadeSpeed(container.ExportVersion))
+			{
+				node.Add("m_FadeSpeed", FadeSpeed);
+			}
+			node.Add("m_IgnoreLayers", IgnoreLayers.ExportYaml(container));
 			node.Add("m_Directional", Directional);
 			return node;
 		}

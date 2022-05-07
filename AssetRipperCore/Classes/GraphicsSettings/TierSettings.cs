@@ -3,18 +3,18 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.GraphicsSettings
 {
 	/// <summary>
 	/// BuildTargetShaderSettings previously
 	/// </summary>
-	public sealed class TierSettings : IAssetReadable, IYAMLExportable
+	public sealed class TierSettings : IAssetReadable, IYamlExportable
 	{
 		public TierSettings() { }
 
-		public TierSettings(PlatformShaderSettings settings, Platform platfrom, GraphicsTier tier, UnityVersion version, TransferInstructionFlags flags)
+		public TierSettings(PlatformShaderSettings settings, BuildTarget platfrom, GraphicsTier tier, UnityVersion version, TransferInstructionFlags flags)
 		{
 			BuildTarget = platfrom.PlatformToBuildGroup();
 			Tier = tier;
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			Automatic = false;
 		}
 
-		public TierSettings(TierGraphicsSettings settings, Platform platfrom, GraphicsTier tier)
+		public TierSettings(TierGraphicsSettings settings, BuildTarget platfrom, GraphicsTier tier)
 		{
 			BuildTarget = platfrom.PlatformToBuildGroup();
 			Tier = tier;
@@ -99,13 +99,13 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 			reader.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(BuildTargetName, (int)BuildTarget);
 			node.Add(TierName, (int)GetTier(container.Version));
-			node.Add(SettingsName, Settings.ExportYAML(container));
+			node.Add(SettingsName, Settings.ExportYaml(container));
 			node.Add(AutomaticName, Automatic);
 			return node;
 		}

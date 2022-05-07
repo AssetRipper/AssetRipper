@@ -9,7 +9,7 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
 
@@ -116,12 +116,12 @@ namespace AssetRipper.Core.Classes.Animation
 			return false;
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(AnimationName, DefaultAnimation.ExportYAML(container));
-			node.Add(AnimationsName, Animations.ExportYAML(container));
+			node.Add(AnimationName, DefaultAnimation.ExportYaml(container));
+			node.Add(AnimationsName, Animations.ExportYaml(container));
 
 			node.Add(WrapModeName, (int)WrapMode);
 			node.Add(PlayAutomaticallyName, PlayAutomatically);
@@ -136,7 +136,7 @@ namespace AssetRipper.Core.Classes.Animation
 			}
 			if (HasUserAABB(container.ExportVersion))
 			{
-				node.Add(UserAABBName, UserAABB.ExportYAML(container));
+				node.Add(UserAABBName, UserAABB.ExportYaml(container));
 			}
 			return node;
 		}

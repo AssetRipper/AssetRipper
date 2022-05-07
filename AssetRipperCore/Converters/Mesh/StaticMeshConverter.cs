@@ -24,36 +24,46 @@ namespace AssetRipper.Core
 		public static void MaybeReplaceStaticMesh(IUnityObjectBase unityObjectBase, SerializedFile serializedFile, VirtualSerializedFile virtualSerializedFile)
 		{
 			if (unityObjectBase is not MeshRenderer meshRenderer)
+			{
 				return;
+			}
 
-			StaticBatchInfo staticBatchInfo = meshRenderer.GetStaticBatchInfo(serializedFile.Version);
+			IStaticBatchInfo staticBatchInfo = meshRenderer.GetStaticBatchInfo(serializedFile.Version);
 			if (staticBatchInfo.SubMeshCount == 0)
+			{
 				return;
+			}
 
 			IGameObject gameObject = meshRenderer.TryGetGameObject();
-			if (gameObject == null || string.IsNullOrEmpty(gameObject.Name))
+			if (gameObject == null || string.IsNullOrEmpty(gameObject.NameString))
+			{
 				return;
+			}
 
-			MeshFilter meshFilter = gameObject.FindComponent<MeshFilter>();
+			IMeshFilter meshFilter = gameObject.FindComponent<IMeshFilter>();
 			if (meshFilter == null)
+			{
 				return;
+			}
 
-			Mesh mesh = meshFilter.Mesh.FindAsset(serializedFile);
+			Mesh mesh = (Mesh)meshFilter.Mesh.FindAsset(serializedFile);
 			if (mesh == null)
+			{
 				return;
+			}
 
 			IExportContainer container = new DummyExportContainer(serializedFile, virtualSerializedFile);
 
 			Mesh newMesh = (Mesh)mesh.ConvertLegacy(container);
 			virtualSerializedFile.AddAsset(newMesh, ClassIDType.Mesh);
-			newMesh.Name = new string(gameObject.Name);
+			newMesh.NameString = new string(gameObject.NameString);
 
-			Logging.Logger.Info($"Created {newMesh.Name} from static mesh {mesh.Name}");
+			Logging.Logger.Info($"Created {newMesh.NameString} from static mesh {mesh.NameString}");
 
 			SubMesh[] subMeshes = mesh.SubMeshes.AsSpan().Slice(staticBatchInfo.FirstSubMesh, staticBatchInfo.SubMeshCount).ToArray();
 			newMesh.SubMeshes = SubMeshConverter.Convert(container, newMesh, subMeshes);
 
-			meshFilter.Mesh = virtualSerializedFile.CreatePPtr(newMesh);
+			meshFilter.Mesh.CopyValues(virtualSerializedFile.CreatePPtr(newMesh));
 			meshRenderer.StaticBatchInfo.FirstSubMesh = 0;
 			meshRenderer.StaticBatchInfo.SubMeshCount = 0;
 		}
@@ -72,7 +82,7 @@ namespace AssetRipper.Core
 
 			public UnityVersion ExportVersion => ExportLayout.Version;
 
-			public Platform ExportPlatform => ExportLayout.Platform;
+			public BuildTarget ExportPlatform => ExportLayout.Platform;
 
 			public TransferInstructionFlags ExportFlags => ExportLayout.Flags;
 
@@ -82,7 +92,7 @@ namespace AssetRipper.Core
 
 			public UnityVersion Version => Layout.Version;
 
-			public Platform Platform => Layout.Platform;
+			public BuildTarget Platform => Layout.Platform;
 
 			public TransferInstructionFlags Flags => Layout.Flags;
 

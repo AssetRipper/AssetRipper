@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes
 {
-	public interface ILightmapParameters : IHasName
+	public interface ILightmapParameters : IHasNameString
 	{
 	}
 }

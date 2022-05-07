@@ -3,15 +3,16 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public sealed class ShaderSnippet : IAssetReadable, IYAMLExportable
+	public sealed class ShaderSnippet : IAssetReadable, IYamlExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -207,9 +208,9 @@ namespace AssetRipper.Core.Classes.Shader
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(CodeName, Code);
 			node.Add(AssetPathName, AssetPath);
@@ -217,28 +218,28 @@ namespace AssetRipper.Core.Classes.Shader
 			node.Add(HardwareTierVariantsMaskName, HardwareTierVariantsMask);
 			node.Add(StartLineName, StartLine);
 			node.Add(TypesMaskName, TypesMask);
-			node.Add(IncludesHashName, IncludesHash.ExportYAML(container));
-			node.Add(CodeHashName, CodeHash.ExportYAML(container));
+			node.Add(IncludesHashName, IncludesHash.ExportYaml(container));
+			node.Add(CodeHashName, CodeHash.ExportYaml(container));
 			node.Add(FromOtherName, FromOther);
 			if (HasForceSyncCompilation(container.ExportVersion))
 			{
 				node.Add(ForceSyncCompilationName, ForceSyncCompilation);
 			}
 			node.Add(LanguageName, Language);
-			node.Add(VariantsUser0Name, GetVariantsUser0(container.Version).ExportYAML());
-			node.Add(VariantsUser1Name, GetVariantsUser1(container.Version).ExportYAML());
-			node.Add(VariantsUser2Name, GetVariantsUser2(container.Version).ExportYAML());
-			node.Add(VariantsUser3Name, GetVariantsUser3(container.Version).ExportYAML());
-			node.Add(VariantsUser4Name, GetVariantsUser4(container.Version).ExportYAML());
-			node.Add(VariantsUser5Name, GetVariantsUser5(container.Version).ExportYAML());
-			node.Add(VariantsBuiltin0Name, GetVariantsBuiltin0(container.Version).ExportYAML());
-			node.Add(VariantsBuiltin1Name, GetVariantsBuiltin1(container.Version).ExportYAML());
-			node.Add(VariantsBuiltin2Name, GetVariantsBuiltin2(container.Version).ExportYAML());
-			node.Add(VariantsBuiltin3Name, GetVariantsBuiltin3(container.Version).ExportYAML());
-			node.Add(VariantsBuiltin4Name, GetVariantsBuiltin4(container.Version).ExportYAML());
-			node.Add(VariantsBuiltin5Name, GetVariantsBuiltin5(container.Version).ExportYAML());
+			node.Add(VariantsUser0Name, GetVariantsUser0(container.Version).ExportYaml());
+			node.Add(VariantsUser1Name, GetVariantsUser1(container.Version).ExportYaml());
+			node.Add(VariantsUser2Name, GetVariantsUser2(container.Version).ExportYaml());
+			node.Add(VariantsUser3Name, GetVariantsUser3(container.Version).ExportYaml());
+			node.Add(VariantsUser4Name, GetVariantsUser4(container.Version).ExportYaml());
+			node.Add(VariantsUser5Name, GetVariantsUser5(container.Version).ExportYaml());
+			node.Add(VariantsBuiltin0Name, GetVariantsBuiltin0(container.Version).ExportYaml());
+			node.Add(VariantsBuiltin1Name, GetVariantsBuiltin1(container.Version).ExportYaml());
+			node.Add(VariantsBuiltin2Name, GetVariantsBuiltin2(container.Version).ExportYaml());
+			node.Add(VariantsBuiltin3Name, GetVariantsBuiltin3(container.Version).ExportYaml());
+			node.Add(VariantsBuiltin4Name, GetVariantsBuiltin4(container.Version).ExportYaml());
+			node.Add(VariantsBuiltin5Name, GetVariantsBuiltin5(container.Version).ExportYaml());
 			node.Add(BaseRequirementsName, GetBaseRequirements(container.Version));
-			node.Add(KeywordTargetInfoName, GetKeywordTargetInfo(container.Version).ExportYAML(container));
+			node.Add(KeywordTargetInfoName, GetKeywordTargetInfo(container.Version).ExportYaml(container));
 			node.Add(NonStrippedUserKeywordsName, GetNonStrippedUserKeywords(container.Version));
 			node.Add(BuiltinKeywordsName, GetBuiltinKeywords(container.Version));
 			return node;

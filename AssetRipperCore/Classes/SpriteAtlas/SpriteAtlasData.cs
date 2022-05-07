@@ -7,12 +7,12 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.SpriteAtlas
 {
-	public sealed class SpriteAtlasData : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class SpriteAtlasData : IAssetReadable, IYamlExportable, IDependent
 	{
 		/// <summary>
 		/// 2017.2 and greater
@@ -48,15 +48,15 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			yield return context.FetchDependency(AlphaTexture, AlphaTextureName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TextureName, Texture.ExportYAML(container));
-			node.Add(AlphaTextureName, AlphaTexture.ExportYAML(container));
-			node.Add(TextureRectName, TextureRect.ExportYAML(container));
-			node.Add(TextureRectOffsetName, TextureRectOffset.ExportYAML(container));
-			node.Add(AtlasRectOffsetName, AtlasRectOffset.ExportYAML(container));
-			node.Add(UVTransformName, UVTransform.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(TextureName, Texture.ExportYaml(container));
+			node.Add(AlphaTextureName, AlphaTexture.ExportYaml(container));
+			node.Add(TextureRectName, TextureRect.ExportYaml(container));
+			node.Add(TextureRectOffsetName, TextureRectOffset.ExportYaml(container));
+			node.Add(AtlasRectOffsetName, AtlasRectOffset.ExportYaml(container));
+			node.Add(UVTransformName, UVTransform.ExportYaml(container));
 			node.Add(DownscaleMultiplierName, DownscaleMultiplier);
 			node.Add(SettingsRawName, SettingsRaw);
 			return node;

@@ -8,7 +8,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 	{
 		public void DoPostExport(Ripper ripper)
 		{
-			string outputDirectory = Path.Combine(ripper.Settings.ExportPath, "AssetRipper", "GameAssemblies");
+			string outputDirectory = Path.Combine(ripper.Settings.AuxiliaryFilesPath, "GameAssemblies");
 
 			Logger.Info(LogCategory.Export, "Saving game assemblies...");
 			AssemblyDefinition[] assemblies = ripper.GameStructure.FileCollection.AssemblyManager.GetAssemblies();

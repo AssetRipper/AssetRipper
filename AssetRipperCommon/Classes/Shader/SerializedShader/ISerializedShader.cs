@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public interface ISerializedShader : IHasName
+	public interface ISerializedShader : IHasNameString
 	{
 		string CustomEditorName { get; set; }
 		string FallbackName { get; set; }

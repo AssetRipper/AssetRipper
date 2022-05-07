@@ -7,10 +7,10 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Light
 {
@@ -273,16 +273,16 @@ namespace AssetRipper.Core.Classes.Light
 			yield return context.FetchDependency(Flare, FlareName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TypeName, (int)Type);
 			if (HasShape(container.ExportVersion))
 			{
 				node.Add(ShapeName, (int)Shape);
 			}
-			node.Add(ColorName, Color.ExportYAML(container));
+			node.Add(ColorName, Color.ExportYaml(container));
 			node.Add(IntensityName, Intensity);
 			node.Add(RangeName, Range);
 			node.Add(SpotAngleName, SpotAngle);
@@ -291,28 +291,28 @@ namespace AssetRipper.Core.Classes.Light
 				node.Add(InnerSpotAngleName, InnerSpotAngle);
 			}
 			node.Add(CookieSizeName, CookieSize);
-			node.Add(ShadowsName, Shadows.ExportYAML(container));
-			node.Add(CookieName, Cookie.ExportYAML(container));
+			node.Add(ShadowsName, Shadows.ExportYaml(container));
+			node.Add(CookieName, Cookie.ExportYaml(container));
 			node.Add(DrawHaloName, DrawHalo);
 			if (HasBakingOutput(container.ExportVersion, container.ExportFlags))
 			{
-				node.Add(BakingOutputName, BakingOutput.ExportYAML(container));
+				node.Add(BakingOutputName, BakingOutput.ExportYaml(container));
 			}
-			node.Add(FlareName, Flare.ExportYAML(container));
+			node.Add(FlareName, Flare.ExportYaml(container));
 			node.Add(RenderModeName, (int)RenderMode);
-			node.Add(CullingMaskName, CullingMask.ExportYAML(container));
+			node.Add(CullingMaskName, CullingMask.ExportYaml(container));
 			if (HasRenderingLayerMask(container.ExportVersion))
 			{
 				node.Add(RenderingLayerMaskName, RenderingLayerMask);
 			}
 			node.Add(LightmappingName, (int)Lightmapping);
-			node.Add(AreaSizeName, AreaSize.ExportYAML(container));
+			node.Add(AreaSizeName, AreaSize.ExportYaml(container));
 			node.Add(BounceIntensityName, BounceIntensity);
 			node.Add(ColorTemperatureName, ColorTemperature);
 			node.Add(UseColorTemperatureName, UseColorTemperature);
 			if (HasBoundingSphereOverride(container.ExportVersion))
 			{
-				node.Add(BoundingSphereOverrideName, BoundingSphereOverride.ExportYAML(container));
+				node.Add(BoundingSphereOverrideName, BoundingSphereOverride.ExportYaml(container));
 				node.Add(UseBoundingSphereOverrideName, UseBoundingSphereOverride);
 			}
 			node.Add(ShadowRadiusName, GetShadowRadius(container.Version, container.Flags));

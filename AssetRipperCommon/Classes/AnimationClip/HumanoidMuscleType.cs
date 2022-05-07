@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc.Bones;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
@@ -16,7 +15,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 		Last = TDoFBones + TDoFBoneType.Last * 3,
 	}
 
-	public static class AnimationMuscleTypeExtensions
+	public static class HumanoidMuscleTypeExtensions
 	{
 		public static HumanoidMuscleType Update(this HumanoidMuscleType _this, UnityVersion version)
 		{

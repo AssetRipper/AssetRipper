@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Converters
 		public static void Convert(IExportContainer container, Object origin, Object instance)
 		{
 			instance.AssetInfo = origin.AssetInfo;
-			instance.ObjectHideFlags = origin.ObjectHideFlags;
+			instance.ObjectHideFlagsOld = origin.ObjectHideFlagsOld;
 		}
 	}
 }

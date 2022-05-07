@@ -6,7 +6,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip
@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 	/// <summary>
 	/// MuscleClipInfo previously
 	/// </summary>
-	public sealed class AnimationClipSettings : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class AnimationClipSettings : IAssetReadable, IYamlExportable, IDependent
 	{
 		public AnimationClipSettings() { }
 
@@ -117,11 +117,11 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(AdditiveReferencePoseClipName, AdditiveReferencePoseClip.ExportYAML(container));
+			node.Add(AdditiveReferencePoseClipName, AdditiveReferencePoseClip.ExportYaml(container));
 			node.Add(AdditiveReferencePoseTimeName, AdditiveReferencePoseTime);
 			node.Add(StartTimeName, StartTime);
 			node.Add(StopTimeName, StopTime);

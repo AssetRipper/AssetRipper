@@ -5,8 +5,9 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
 using System.IO;
 
@@ -19,7 +20,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 		private OcclusionCullingData(LayoutInfo layout, AssetInfo assetInfo) : base(layout)
 		{
 			AssetInfo = assetInfo;
-			Name = nameof(OcclusionCullingData);
+			NameString = nameof(OcclusionCullingData);
 		}
 
 		public static OcclusionCullingData CreateVirtualInstance(VirtualSerializedFile virtualFile)
@@ -50,14 +51,14 @@ namespace AssetRipper.Core.Classes.OcclusionCullingData
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(PVSDataName, PVSData.ExportYAML());
-			node.Add(ScenesName, m_Scenes.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(PVSDataName, PVSData.ExportYaml());
+			node.Add(ScenesName, m_Scenes.ExportYaml(container));
 			this.SetExportData(container);
-			node.Add(StaticRenderersName, m_StaticRenderers.ExportYAML(container));
-			node.Add(PortalsName, m_Portals.ExportYAML(container));
+			node.Add(StaticRenderersName, m_StaticRenderers.ExportYaml(container));
+			node.Add(PortalsName, m_Portals.ExportYaml(container));
 			return node;
 		}
 

@@ -1,12 +1,12 @@
-﻿using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public sealed class LightProbeOcclusion : IAssetReadable, IYAMLExportable
+	public sealed class LightProbeOcclusion : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 5.6.0b2 and greater
@@ -23,12 +23,16 @@ namespace AssetRipper.Core.Classes.LightProbes
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(ProbeOcclusionLightIndexName, ProbeOcclusionLightIndex.ExportYAML(true));
-			node.Add(OcclusionName, Occlusion.ExportYAML());
-			node.Add(OcclusionMaskChannelName, OcclusionMaskChannel.ExportYAML());
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(ProbeOcclusionLightIndexName, ProbeOcclusionLightIndex.ExportYaml(true));
+			node.Add(OcclusionName, Occlusion.ExportYaml());
+			if (HasOcclusionMaskChannel(container.ExportVersion))
+			{
+				node.Add(OcclusionMaskChannelName, OcclusionMaskChannel.ExportYaml());
+			}
+
 			return node;
 		}
 
@@ -40,7 +44,7 @@ namespace AssetRipper.Core.Classes.LightProbes
 		/// <summary>
 		/// ShadowMaskChannel previously (before 5.6.0b5)
 		/// </summary>
-		public byte[] OcclusionMaskChannel { get; set; }
+		public byte[] OcclusionMaskChannel { get; set; } = System.Array.Empty<byte>();
 
 		public const string BakedLightIndexName = "m_BakedLightIndex";
 		public const string ProbeOcclusionLightIndexName = "m_ProbeOcclusionLightIndex";

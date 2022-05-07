@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.AudioMixer
 {
 #warning TODO: not implemented
-	public sealed class GroupConstant : IAssetReadable, IYAMLExportable
+	public sealed class GroupConstant : IAssetReadable, IYamlExportable
 	{
 		/*public static int ToSerializedVersion(Version version)
 		{
@@ -25,9 +25,9 @@ namespace AssetRipper.Core.Classes.AudioMixer
 
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			//node.AddSerializedVersion(ToSerializedVersion(container.Version));
 			node.Add(ParentConstantIndexName, ParentConstantIndex);
 			node.Add(VolumeIndexName, VolumeIndex);

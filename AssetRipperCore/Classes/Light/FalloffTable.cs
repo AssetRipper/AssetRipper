@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Light
 {
-	public sealed class FalloffTable : IAssetReadable, IYAMLExportable
+	public sealed class FalloffTable : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,9 +15,9 @@ namespace AssetRipper.Core.Classes.Light
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(Table0Name, Table[0]);
 			node.Add(Table1Name, Table[1]);
 			node.Add(Table2Name, Table[2]);

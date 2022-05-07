@@ -1,6 +1,7 @@
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Meta.Importers.Asset;
+using AssetRipper.Core.Importers;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
@@ -32,7 +33,7 @@ namespace AssetRipper.Core.Project.Collections
 			this.fileExtension = fileExtension;
 		}
 
-		public override bool Export(ProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			string subPath;
 			string fileName;
@@ -94,14 +95,14 @@ namespace AssetRipper.Core.Project.Collections
 		/// <param name="filePath">The full path to the exported asset destination</param>
 		/// <param name="dirPath">The full path to the project export directory</param>
 		/// <returns>True if export was successful, false otherwise</returns>
-		protected virtual bool ExportInner(ProjectAssetContainer container, string filePath, string dirPath)
+		protected virtual bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
 		{
 			return AssetExporter.Export(container, Asset.ConvertLegacy(container), filePath);
 		}
 
 		protected virtual IAssetImporter CreateImporter(IExportContainer container)
 		{
-			INativeFormatImporter importer = VersionManager.GetHandler(container.ExportVersion).ImporterFactory.CreateNativeFormatImporter(container.ExportLayout);
+			INativeFormatImporter importer = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateNativeFormatImporter(container.ExportLayout);
 			importer.MainObjectFileID = GetExportID(Asset);
 			return importer;
 		}
@@ -125,7 +126,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			get
 			{
-				if (Asset is IHasName hasName)
+				if (Asset is IHasNameString hasName)
 					return hasName.GetNameNotEmpty();
 				else
 					return Asset.ToString();

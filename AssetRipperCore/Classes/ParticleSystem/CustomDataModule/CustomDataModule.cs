@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.Classes.ParticleSystem.Curve;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.CustomDataModule
 {
@@ -49,23 +49,23 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CustomDataModule
 			Vector1_3.Read(reader);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.Add(Mode0Name, (int)Mode0);
 			node.Add(VectorComponentCount0Name, VectorComponentCount0);
-			node.Add(Color0Name, Color0.ExportYAML(container));
-			node.Add(Vector00Name, Vector0_0.ExportYAML(container));
-			node.Add(Vector01Name, Vector0_1.ExportYAML(container));
-			node.Add(Vector02Name, Vector0_2.ExportYAML(container));
-			node.Add(Vector03Name, Vector0_3.ExportYAML(container));
+			node.Add(Color0Name, Color0.ExportYaml(container));
+			node.Add(Vector00Name, Vector0_0.ExportYaml(container));
+			node.Add(Vector01Name, Vector0_1.ExportYaml(container));
+			node.Add(Vector02Name, Vector0_2.ExportYaml(container));
+			node.Add(Vector03Name, Vector0_3.ExportYaml(container));
 			node.Add(Mode1Name, (int)Mode1);
 			node.Add(VectorComponentCount1Name, VectorComponentCount1);
-			node.Add(Color1Name, Color1.ExportYAML(container));
-			node.Add(Vector10Name, Vector1_0.ExportYAML(container));
-			node.Add(Vector11Name, Vector1_1.ExportYAML(container));
-			node.Add(Vector12Name, Vector1_2.ExportYAML(container));
-			node.Add(Vector13Name, Vector1_3.ExportYAML(container));
+			node.Add(Color1Name, Color1.ExportYaml(container));
+			node.Add(Vector10Name, Vector1_0.ExportYaml(container));
+			node.Add(Vector11Name, Vector1_1.ExportYaml(container));
+			node.Add(Vector12Name, Vector1_2.ExportYaml(container));
+			node.Add(Vector13Name, Vector1_3.ExportYaml(container));
 			return node;
 		}
 

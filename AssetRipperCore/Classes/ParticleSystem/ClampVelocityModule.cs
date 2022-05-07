@@ -2,7 +2,7 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem
 {
@@ -48,19 +48,19 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add(XName, X.ExportYAML(container));
-			node.Add(YName, Y.ExportYAML(container));
-			node.Add(ZName, Z.ExportYAML(container));
-			node.Add(MagnitudeName, Magnitude.ExportYAML(container));
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
+			node.Add(XName, X.ExportYaml(container));
+			node.Add(YName, Y.ExportYaml(container));
+			node.Add(ZName, Z.ExportYaml(container));
+			node.Add(MagnitudeName, Magnitude.ExportYaml(container));
 			node.Add(SeparateAxisName, SeparateAxis);
 			node.Add(InWorldSpaceName, InWorldSpace);
 			node.Add(MultiplyDragByParticleSizeName, GetExportMultiplyDragByParticleSize(container.Version));
 			node.Add(MultiplyDragByParticleVelocityName, GetExportMultiplyDragByParticleVelocity(container.Version));
 			node.Add(DampenName, Dampen);
-			node.Add(DragName, GetExportDrag(container.Version).ExportYAML(container));
+			node.Add(DragName, GetExportDrag(container.Version).ExportYaml(container));
 			return node;
 		}
 

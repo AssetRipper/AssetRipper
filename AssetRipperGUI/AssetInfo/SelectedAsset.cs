@@ -8,13 +8,13 @@ using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Utils;
+using AssetRipper.Yaml;
 using Avalonia.Media;
 using LibVLCSharp.Shared;
 using System;
@@ -107,7 +107,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			try
 			{
-				YAMLMappingNode yamlRoot = (YAMLMappingNode)Asset.ExportYAML(_uiAssetContainer);
+				YamlMappingNode yamlRoot = (YamlMappingNode)Asset.ExportYaml(_uiAssetContainer);
 
 				YamlTree = new[] { new AssetYamlNode(Name ?? Asset.GetType().Name, yamlRoot) };
 			}
@@ -117,16 +117,16 @@ namespace AssetRipper.GUI.AssetInfo
 
 				if (e is NotImplementedException or NotSupportedException)
 				{
-					YamlTree = new[] { new AssetYamlNode("Asset Doesn't Support YAML Export", new YAMLScalarNode(true)) };
+					YamlTree = new[] { new AssetYamlNode("Asset Doesn't Support Yaml Export", new YamlScalarNode(true)) };
 					return;
 				}
 				Logger.Error(e);
-				YamlTree = new[] { new AssetYamlNode($"Asset threw {e.GetType().Name} when exporting as YAML", new YAMLScalarNode(true)) };
+				YamlTree = new[] { new AssetYamlNode($"Asset threw {e.GetType().Name} when exporting as Yaml", new YamlScalarNode(true)) };
 			}
 		}
 
 		//Read from UI
-		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", YAMLScalarNode.Empty) };
+		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", YamlScalarNode.Empty) };
 
 		//Read from UI
 		public bool HasImageData => Asset is ITexture2D or ITerrainData;
@@ -186,18 +186,18 @@ namespace AssetRipper.GUI.AssetInfo
 		private bool HasName => Asset switch
 		{
 			IShader s => !string.IsNullOrEmpty(s.GetValidShaderName()),
-			IGameObject go => !string.IsNullOrEmpty(go.Name),
-			INamedObject no => !string.IsNullOrEmpty(no.Name),
-			IHasName hasName => !string.IsNullOrEmpty(hasName.Name),
+			IGameObject go => !string.IsNullOrEmpty(go.NameString),
+			INamedObject no => !string.IsNullOrEmpty(no.NameString),
+			IHasNameString hasName => !string.IsNullOrEmpty(hasName.NameString),
 			_ => false
 		};
 
 		private string? Name => Asset switch
 		{
 			IShader s => s.GetValidShaderName(),
-			IGameObject go => go.Name,
-			INamedObject no => no.Name,
-			IHasName hasName => hasName.Name,
+			IGameObject go => go.NameString,
+			INamedObject no => no.NameString,
+			IHasNameString hasName => hasName.NameString,
 			_ => null
 		};
 

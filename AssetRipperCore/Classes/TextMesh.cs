@@ -8,7 +8,7 @@ using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
@@ -78,9 +78,9 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(Font, FontName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TextName, Text);
 			node.Add(OffsetZName, OffsetZ);
@@ -98,10 +98,10 @@ namespace AssetRipper.Core.Classes
 			{
 				node.Add(RichTextName, GetRichText(container.Version));
 			}
-			node.Add(FontName, Font.ExportYAML(container));
+			node.Add(FontName, Font.ExportYaml(container));
 			if (HasColorRGBAf(container.ExportVersion))
 			{
-				node.Add(ColorName, GetColorRGBAf(container.Version).ExportYAML(container));
+				node.Add(ColorName, GetColorRGBAf(container.Version).ExportYaml(container));
 			}
 			return node;
 		}

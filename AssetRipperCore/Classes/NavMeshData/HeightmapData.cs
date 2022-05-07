@@ -4,12 +4,12 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.NavMeshData
 {
-	public sealed class HeightmapData : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class HeightmapData : IAssetReadable, IYamlExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -22,11 +22,11 @@ namespace AssetRipper.Core.Classes.NavMeshData
 			yield return context.FetchDependency(TerrainData, TerrainDataName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(PositionName, Position.ExportYAML(container));
-			node.Add(TerrainDataName, TerrainData.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(PositionName, Position.ExportYaml(container));
+			node.Add(TerrainDataName, TerrainData.ExportYaml(container));
 			return node;
 		}
 

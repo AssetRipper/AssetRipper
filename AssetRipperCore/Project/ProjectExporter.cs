@@ -45,10 +45,15 @@ namespace AssetRipper.Core.Project
 		public override void OverrideExporter(Type type, IAssetExporter exporter, bool allowInheritance)
 		{
 			if (exporter == null)
+			{
 				throw new ArgumentNullException(nameof(exporter));
+			}
+
 			registeredExporters.Add((type, exporter, allowInheritance));
 			if (typeMap.Count > 0)//Just in case an exporter gets added after CreateCollection or ToExportType have already been used
+			{
 				RecalculateTypeMap();
+			}
 		}
 
 		public override AssetType ToExportType(ClassIDType classID)
@@ -125,7 +130,9 @@ namespace AssetRipper.Core.Project
 			foreach ((Type baseType, IAssetExporter exporter, bool allowInheritance) in registeredExporters)
 			{
 				if (type == baseType || (allowInheritance && type.IsAssignableTo(baseType)))
+				{
 					result.Push(exporter);
+				}
 			}
 			return result;
 		}
@@ -136,10 +143,19 @@ namespace AssetRipper.Core.Project
 		}
 		private static bool TryGetTypeForID(ClassIDType classID, out Type type)
 		{
-			if (classID == ClassIDType.AvatarMaskOld)
-				classID = ClassIDType.AvatarMask;
-			else if (classID == ClassIDType.VideoClipOld)
-				classID = ClassIDType.VideoClip;
+			string className = classID.ToString();
+			if (classID == ClassIDType.AvatarMask_319 || classID == ClassIDType.AvatarMask_1011)
+			{
+				className = "AvatarMask";
+			}
+			else if (classID == ClassIDType.VideoClip_327 || classID == ClassIDType.VideoClip_329)
+			{
+				className = "VideoClip";
+			}
+			else if (classID == ClassIDType.LightProbes_197 || classID == ClassIDType.LightProbes_258)
+			{
+				className = "LightProbes";
+			}
 
 			if (classID == ClassIDType.UnknownType)
 			{
@@ -147,7 +163,6 @@ namespace AssetRipper.Core.Project
 				return true;
 			}
 
-			string className = classID.ToString();
 			type = unityTypes.FirstOrDefault(t => t.Name == className);
 			return type != null;
 		}

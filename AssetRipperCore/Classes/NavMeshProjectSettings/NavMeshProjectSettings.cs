@@ -5,8 +5,9 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.NavMeshProjectSettings
@@ -83,14 +84,14 @@ namespace AssetRipper.Core.Classes.NavMeshProjectSettings
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(AreasName, Areas.ExportYAML(container));
+			node.Add(AreasName, Areas.ExportYaml(container));
 			node.Add(LastAgentTypeIDName, GetLastAgentTypeID(container.Version));
-			node.Add(SettingsName, GetSettings(container.Version).ExportYAML(container));
-			node.Add(SettingNamesName, GetSettingNames(container.Version).ExportYAML());
+			node.Add(SettingsName, GetSettings(container.Version).ExportYaml(container));
+			node.Add(SettingNamesName, GetSettingNames(container.Version).ExportYaml());
 			return node;
 		}
 
@@ -107,7 +108,7 @@ namespace AssetRipper.Core.Classes.NavMeshProjectSettings
 			return HasLastAgentTypeID(version) ? SettingNames : new[] { "Humanoid" };
 		}
 
-		public override string ExportPath => nameof(ClassIDType.NavMeshAreas);
+		public override string ExportPath => "NavMeshAreas";
 
 		public NavMeshAreaData[] Areas { get; set; }
 		public int LastAgentTypeID { get; set; }

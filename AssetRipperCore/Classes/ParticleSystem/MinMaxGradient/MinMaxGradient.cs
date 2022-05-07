@@ -4,11 +4,11 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.MinMaxGradient
 {
-	public sealed class MinMaxGradient : IAssetReadable, IYAMLExportable
+	public sealed class MinMaxGradient : IAssetReadable, IYamlExportable
 	{
 		public MinMaxGradient() { }
 		public MinMaxGradient(bool _)
@@ -88,15 +88,15 @@ namespace AssetRipper.Core.Classes.ParticleSystem.MinMaxGradient
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(MinMaxStateName, (ushort)MinMaxState);
-			node.Add(MinColorName, MinColor.ExportYAML(container));
-			node.Add(MaxColorName, MaxColor.ExportYAML(container));
-			node.Add(MaxGradientName, MaxGradient.ExportYAML(container));
-			node.Add(MinGradientName, MinGradient.ExportYAML(container));
+			node.Add(MinColorName, MinColor.ExportYaml(container));
+			node.Add(MaxColorName, MaxColor.ExportYaml(container));
+			node.Add(MaxGradientName, MaxGradient.ExportYaml(container));
+			node.Add(MinGradientName, MinGradient.ExportYaml(container));
 			return node;
 		}
 

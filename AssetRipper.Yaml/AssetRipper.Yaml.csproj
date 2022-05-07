@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>..\Bins\AssetRipper.Fundamentals\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Yaml\$(Configuration)\</IntermediateOutputPath>
+		<AssemblyName>AssetRipper.Yaml</AssemblyName>
+		<RootNamespace>AssetRipper.Yaml</RootNamespace>
+		<Copyright>Copyright ©  2022</Copyright>
+		<Authors>ds5678</Authors>
+		<Configurations>Debug;Release</Configurations>
+		<DebugType>embedded</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<DefineConstants>TRACE;NET_CORE</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+	</ItemGroup>
+
+</Project>

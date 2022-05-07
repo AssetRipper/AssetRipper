@@ -4,13 +4,13 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public sealed class AvatarConstant : IAssetReadable, IYAMLExportable
+	public sealed class AvatarConstant : IAssetReadable, IYamlExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -70,22 +70,22 @@ namespace AssetRipper.Core.Classes.Avatar
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(AvatarSkeletonName, AvatarSkeleton.ExportYAML(container));
-			node.Add(AvatarSkeletonPoseName, AvatarSkeletonPose.ExportYAML(container));
-			node.Add(DefaultPoseName, GetDefaultPose(container.Version).ExportYAML(container));
-			node.Add(SkeletonNameIDArrayName, GetSkeletonNameIDArray(container.Version).ExportYAML(true));
-			node.Add(HumanName, Human.ExportYAML(container));
-			node.Add(HumanSkeletonIndexArrayName, HumanSkeletonIndexArray.ExportYAML(true));
-			node.Add(HumanSkeletonReverseIndexArrayName, HumanSkeletonReverseIndexArray.ExportYAML(true));
+			node.Add(AvatarSkeletonName, AvatarSkeleton.ExportYaml(container));
+			node.Add(AvatarSkeletonPoseName, AvatarSkeletonPose.ExportYaml(container));
+			node.Add(DefaultPoseName, GetDefaultPose(container.Version).ExportYaml(container));
+			node.Add(SkeletonNameIDArrayName, GetSkeletonNameIDArray(container.Version).ExportYaml(true));
+			node.Add(HumanName, Human.ExportYaml(container));
+			node.Add(HumanSkeletonIndexArrayName, HumanSkeletonIndexArray.ExportYaml(true));
+			node.Add(HumanSkeletonReverseIndexArrayName, HumanSkeletonReverseIndexArray.ExportYaml(true));
 			node.Add(RootMotionBoneIndexName, RootMotionBoneIndex);
-			node.Add(RootMotionBoneXName, RootMotionBoneX.ExportYAML(container));
-			node.Add(RootMotionSkeletonName, RootMotionSkeleton.ExportYAML(container));
-			node.Add(RootMotionSkeletonPoseName, RootMotionSkeletonPose.ExportYAML(container));
-			node.Add(RootMotionSkeletonIndexArrayName, GetRootMotionSkeletonIndexArray(container.Version).ExportYAML(true));
+			node.Add(RootMotionBoneXName, RootMotionBoneX.ExportYaml(container));
+			node.Add(RootMotionSkeletonName, RootMotionSkeleton.ExportYaml(container));
+			node.Add(RootMotionSkeletonPoseName, RootMotionSkeletonPose.ExportYaml(container));
+			node.Add(RootMotionSkeletonIndexArrayName, GetRootMotionSkeletonIndexArray(container.Version).ExportYaml(true));
 			return node;
 		}
 

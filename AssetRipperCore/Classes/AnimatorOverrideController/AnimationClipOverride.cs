@@ -3,12 +3,12 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimatorOverrideController
 {
-	public sealed class AnimationClipOverride : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class AnimationClipOverride : IAssetReadable, IYamlExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -16,11 +16,11 @@ namespace AssetRipper.Core.Classes.AnimatorOverrideController
 			OverrideClip.Read(reader);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(OriginalClipName, OriginalClip.ExportYAML(container));
-			node.Add(OverrideClipName, OverrideClip.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(OriginalClipName, OriginalClip.ExportYaml(container));
+			node.Add(OverrideClipName, OverrideClip.ExportYaml(container));
 			return node;
 		}
 

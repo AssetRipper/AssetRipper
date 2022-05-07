@@ -3,12 +3,12 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public sealed class ChildTrack : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class ChildTrack : IAssetReadable, IYamlExportable, IDependent
 	{
 		public void Read(AssetReader reader)
 		{
@@ -22,12 +22,12 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			yield return context.FetchDependency(Track, TrackName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(PathName, Path);
 			node.Add(ClassIDName, (int)ClassID);
-			node.Add(TrackName, Track.ExportYAML(container));
+			node.Add(TrackName, Track.ExportYaml(container));
 			return node;
 		}
 

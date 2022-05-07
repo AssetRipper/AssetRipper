@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Project.Collections
 				AddAsset(asset);
 
 				//This section might not be necessary. This seems to be quite different from normal prefab files
-				asset.PrefabInstance?.SetValues(prefab.SerializedFile.CreatePPtr(prefab));
+				asset.PrefabInstance?.CopyValues(prefab.SerializedFile.CreatePPtr(prefab));
 			}
 		}
 
@@ -73,9 +73,9 @@ namespace AssetRipper.Core.Project.Collections
 			IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance);
 			instance.RootGameObjectPtr = root.SerializedFile.CreatePPtr(root);
 			instance.IsPrefabAsset = true;
-			if (instance is IHasName hasName)
+			if (instance is IHasNameString hasName)
 			{
-				hasName.Name = root.Name;
+				hasName.NameString = root.NameString;
 			}
 			return instance;
 		}

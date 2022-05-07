@@ -7,7 +7,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AudioSource
@@ -181,12 +181,12 @@ namespace AssetRipper.Core.Classes.AudioSource
 			yield return context.FetchDependency(AudioClip, AudioClipName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(OutputAudioMixerGroupName, OutputAudioMixerGroup.ExportYAML(container));
-			node.Add(AudioClipName, AudioClip.ExportYAML(container));
+			node.Add(OutputAudioMixerGroupName, OutputAudioMixerGroup.ExportYaml(container));
+			node.Add(AudioClipName, AudioClip.ExportYaml(container));
 			node.Add(PlayOnAwakeName, PlayOnAwake);
 			node.Add(VolumeName, Volume);
 			node.Add(PitchName, Pitch);
@@ -203,10 +203,10 @@ namespace AssetRipper.Core.Classes.AudioSource
 			node.Add(BypassEffectsName, BypassEffects);
 			node.Add(BypassListenerEffectsName, BypassListenerEffects);
 			node.Add(BypassReverbZonesName, BypassReverbZones);
-			node.Add(RolloffCustomCurveName, GetRolloffCustomCurve(container.Version).ExportYAML(container));
-			node.Add(PanLevelCustomCurveName, GetPanLevelCustomCurve(container.Version).ExportYAML(container));
-			node.Add(SpreadCustomCurveName, GetSpreadCustomCurve(container.Version).ExportYAML(container));
-			node.Add(ReverbZoneMixCustomCurveName, GetReverbZoneMixCustomCurve(container.Version).ExportYAML(container));
+			node.Add(RolloffCustomCurveName, GetRolloffCustomCurve(container.Version).ExportYaml(container));
+			node.Add(PanLevelCustomCurveName, GetPanLevelCustomCurve(container.Version).ExportYaml(container));
+			node.Add(SpreadCustomCurveName, GetSpreadCustomCurve(container.Version).ExportYaml(container));
+			node.Add(ReverbZoneMixCustomCurveName, GetReverbZoneMixCustomCurve(container.Version).ExportYaml(container));
 			return node;
 		}
 

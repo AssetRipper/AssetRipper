@@ -2,7 +2,7 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
@@ -80,9 +80,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(ChannelMaskName, ChannelMask);
 			node.Add(OffsetName, Offset);
 			node.Add(StrideName, Stride);

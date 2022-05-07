@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			throw new NotSupportedException();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

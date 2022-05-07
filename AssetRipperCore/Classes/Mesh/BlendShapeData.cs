@@ -1,15 +1,16 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
 using System.Linq;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class BlendShapeData : IAsset
+	public sealed class BlendShapeData : IBlendShapeData
 	{
 		public IBlendShapeVertex[] Vertices { get; set; } = Array.Empty<IBlendShapeVertex>();
 		public IMeshBlendShape[] Shapes { get; set; } = Array.Empty<IMeshBlendShape>();
@@ -20,18 +21,6 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// 2017.1 and greater
 		/// </summary>
 		private static bool IsAlign(UnityVersion version) => version.IsGreaterEqual(2017);
-
-		public string FindShapeNameByCRC(uint crc)
-		{
-			foreach (MeshBlendShapeChannel blendChannel in Channels)
-			{
-				if (blendChannel.NameHash == crc)
-				{
-					return blendChannel.Name.String;
-				}
-			}
-			return null;
-		}
 
 		public BlendShapeData Convert()
 		{
@@ -69,13 +58,13 @@ namespace AssetRipper.Core.Classes.Mesh
 			FullWeights.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(VerticesName, Vertices.ExportYAML(container));
-			node.Add(ShapesName, Shapes.ExportYAML(container));
-			node.Add(ChannelsName, Channels.ExportYAML(container));
-			node.Add(FullWeightsName, FullWeights.ExportYAML());
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(VerticesName, Vertices.ExportYaml(container));
+			node.Add(ShapesName, Shapes.ExportYaml(container));
+			node.Add(ChannelsName, Channels.ExportYaml(container));
+			node.Add(FullWeightsName, FullWeights.ExportYaml());
 			return node;
 		}
 

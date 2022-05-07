@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Converters
 		public static void Convert(IExportContainer container, NamedObject origin, NamedObject instance)
 		{
 			EditorExtensionConverter.Convert(container, origin, instance);
-			instance.Name = origin.Name;
+			instance.NameString = origin.NameString;
 		}
 	}
 }

@@ -7,17 +7,18 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class VertexData : IVertexData
+	public sealed class VertexData : UnityAssetBase, IVertexData
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -110,7 +111,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return skin;
 		}
 
-		public Vector3f[] GenerateVertices(UnityVersion version, SubMesh submesh)
+		public Vector3f[] GenerateVertices(UnityVersion version, ISubMesh submesh)
 		{
 			ChannelInfo channel = GetChannel(version, ShaderChannel.Vertex);
 			if (!channel.IsSet())
@@ -144,7 +145,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return verts;
 		}
 
-		public void Read(AssetReader reader)
+		public override void Read(AssetReader reader)
 		{
 			if (HasCurrentChannels(reader.Version))
 			{
@@ -189,7 +190,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			reader.AlignStream();
 		}
 
-		public void Write(AssetWriter writer)
+		public override void Write(AssetWriter writer)
 		{
 			if (HasCurrentChannels(writer.Version))
 			{
@@ -221,9 +222,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			writer.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (HasCurrentChannels(container.ExportVersion))
 			{
@@ -233,7 +234,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 			if (HasChannels(container.ExportVersion))
 			{
-				node.Add(ChannelsName, m_Channels.ExportYAML(container));
+				node.Add(ChannelsName, m_Channels.ExportYaml(container));
 			}
 			if (HasStreams(container.ExportVersion))
 			{
@@ -241,17 +242,17 @@ namespace AssetRipper.Core.Classes.Mesh
 				{
 					for (int i = 0; i < StaticStreamCount; i++)
 					{
-						node.Add($"{StreamsName}[{i}]", m_Streams[i].ExportYAML(container));
+						node.Add($"{StreamsName}[{i}]", m_Streams[i].ExportYaml(container));
 					}
 				}
 				else
 				{
-					node.Add(StreamsName, m_Streams.ExportYAML(container));
+					node.Add(StreamsName, m_Streams.ExportYaml(container));
 				}
 			}
 
 			node.Add(DataSizeName, Data.Length);
-			node.Add(Layout.LayoutInfo.TypelessdataName, Data.ExportYAML());
+			node.Add(Layout.ClassNameHandler.TypelessdataName, Data.ExportYaml());
 			return node;
 		}
 

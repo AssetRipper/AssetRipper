@@ -4,7 +4,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
@@ -23,10 +23,10 @@ namespace AssetRipper.Core.Classes.TerrainData
 			TreePrototypes.Write(writer);
 		}
 
-		public void ExportYAML(IExportContainer container, YAMLMappingNode node)
+		public void ExportYaml(IExportContainer container, YamlMappingNode node)
 		{
-			node.Add(TreeInstancesName, TreeInstances.ExportYAML(container));
-			node.Add(TreePrototypesName, TreePrototypes.ExportYAML(container));
+			node.Add(TreeInstancesName, TreeInstances.ExportYaml(container));
+			node.Add(TreePrototypesName, TreePrototypes.ExportYaml(container));
 		}
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)

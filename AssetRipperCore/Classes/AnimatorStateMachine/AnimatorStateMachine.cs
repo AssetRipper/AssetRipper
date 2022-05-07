@@ -8,10 +8,10 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.AnimatorStateMachine
 {
@@ -20,13 +20,13 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 		private AnimatorStateMachine(LayoutInfo layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, int stateMachineIndex) : base(layout)
 		{
 			AssetInfo = assetInfo;
-			ObjectHideFlags = HideFlags.HideInHierarchy;
+			ObjectHideFlagsOld = HideFlags.HideInHierarchy;
 
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 
 			int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
 			LayerConstant layer = controller.Controller.LayerArray[layerIndex].Instance;
-			Name = controller.TOS[layer.Binding];
+			NameString = controller.TOS[layer.Binding];
 
 			StateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Instance;
 
@@ -126,21 +126,21 @@ namespace AssetRipper.Core.Classes.AnimatorStateMachine
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(ChildStatesName, ChildStates.ExportYAML(container));
-			node.Add(ChildStateMachinesName, ChildStateMachines.ExportYAML(container));
-			node.Add(AnyStateTransitionsName, AnyStateTransitions.ExportYAML(container));
-			node.Add(EntryTransitionsName, EntryTransitions.ExportYAML(container));
-			node.Add(StateMachineTransitionsName, StateMachineTransitions.ExportYAML(container));
-			node.Add(StateMachineBehavioursName, StateMachineBehaviours.ExportYAML(container));
-			node.Add(AnyStatePositionName, AnyStatePosition.ExportYAML(container));
-			node.Add(EntryPositionName, EntryPosition.ExportYAML(container));
-			node.Add(ExitPositionName, ExitPosition.ExportYAML(container));
-			node.Add(ParentStateMachinePositionName, ParentStateMachinePosition.ExportYAML(container));
-			node.Add(DefaultStateName, DefaultState.ExportYAML(container));
+			node.Add(ChildStatesName, ChildStates.ExportYaml(container));
+			node.Add(ChildStateMachinesName, ChildStateMachines.ExportYaml(container));
+			node.Add(AnyStateTransitionsName, AnyStateTransitions.ExportYaml(container));
+			node.Add(EntryTransitionsName, EntryTransitions.ExportYaml(container));
+			node.Add(StateMachineTransitionsName, StateMachineTransitions.ExportYaml(container));
+			node.Add(StateMachineBehavioursName, StateMachineBehaviours.ExportYaml(container));
+			node.Add(AnyStatePositionName, AnyStatePosition.ExportYaml(container));
+			node.Add(EntryPositionName, EntryPosition.ExportYaml(container));
+			node.Add(ExitPositionName, ExitPosition.ExportYaml(container));
+			node.Add(ParentStateMachinePositionName, ParentStateMachinePosition.ExportYaml(container));
+			node.Add(DefaultStateName, DefaultState.ExportYaml(container));
 			return node;
 		}
 

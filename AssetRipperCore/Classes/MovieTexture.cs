@@ -4,7 +4,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
@@ -58,15 +58,15 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
 			if (HasData(container.Version) || IsInherited(container.Version))
 			{
-				return base.ExportYAMLRoot(container);
+				return base.ExportYamlRoot(container);
 			}
 			else
 			{
-				return ExportYAMLRootTexture(container);
+				return ExportYamlRootTexture(container);
 			}
 		}
 	}

@@ -6,7 +6,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.SpriteRenderer
@@ -109,19 +109,23 @@ namespace AssetRipper.Core.Classes.SpriteRenderer
 			yield return context.FetchDependency(Sprite, SpriteName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(SpriteName, Sprite.ExportYAML(container));
-			node.Add(ColorName, Color.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(SpriteName, Sprite.ExportYaml(container));
+			node.Add(ColorName, Color.ExportYaml(container));
 			node.Add(FlipXName, FlipX);
 			node.Add(FlipYName, FlipY);
 			node.Add(DrawModeName, (int)DrawMode);
-			node.Add(SizeName, (HasDrawMode(container.Version) ? Size : Vector2f.One).ExportYAML(container));
+			node.Add(SizeName, (HasDrawMode(container.Version) ? Size : Vector2f.One).ExportYaml(container));
 			node.Add(AdaptiveModeThresholdName, AdaptiveModeThreshold);
 			node.Add(SpriteTileModeName, (int)SpriteTileMode);
 			node.Add(WasSpriteAssignedName, WasSpriteAssigned);
 			node.Add(MaskInteractionName, (int)MaskInteraction);
+			if (HasSpriteSortPoint(container.ExportVersion))
+			{
+				node.Add(SpriteSortPointName, (int)SpriteSortPoint);
+			}
 			return node;
 		}
 
@@ -144,6 +148,7 @@ namespace AssetRipper.Core.Classes.SpriteRenderer
 		public const string SpriteTileModeName = "m_SpriteTileMode";
 		public const string WasSpriteAssignedName = "m_WasSpriteAssigned";
 		public const string MaskInteractionName = "m_MaskInteraction";
+		public const string SpriteSortPointName = "m_SpriteSortPoint";
 
 		public PPtr<Sprite.Sprite> Sprite = new();
 		public ColorRGBAf Color = new();

@@ -1,13 +1,16 @@
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedProperty : IAssetReadable, ISerializedProperty
+	public sealed class SerializedProperty : IAssetReadable, ISerializedProperty, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
-			Name = reader.ReadString();
+			NameString = reader.ReadString();
 			Description = reader.ReadString();
 			Attributes = reader.ReadAssetArray<Utf8StringLegacy>();
 			Type = (SerializedPropertyType)reader.ReadInt32();
@@ -19,7 +22,23 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 			m_DefTexture.Read(reader);
 		}
 
-		public string Name { get; set; }
+		public YamlNode ExportYaml(IExportContainer container)
+		{
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_Name", NameString);
+			node.Add("m_Description", Description);
+			node.Add("m_Attributes", Attributes.ExportYaml(container));
+			node.Add("m_Type", (int)Type);
+			node.Add("m_Flags", (uint)Flags);
+			node.Add("m_DefValue[0]", DefValue0);
+			node.Add("m_DefValue[1]", DefValue1);
+			node.Add("m_DefValue[2]", DefValue2);
+			node.Add("m_DefValue[3]", DefValue3);
+			node.Add("m_DefTexture", m_DefTexture.ExportYaml(container));
+			return node;
+		}
+
+		public string NameString { get; set; }
 		public string Description { get; set; }
 		public Utf8StringBase[] Attributes { get; set; }
 		public SerializedPropertyType Type { get; set; }

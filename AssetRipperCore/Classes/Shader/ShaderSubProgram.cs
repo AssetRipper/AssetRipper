@@ -4,7 +4,7 @@ using AssetRipper.Core.Classes.Shader.Parameters;
 using AssetRipper.Core.IO.Asset;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Shader
 {

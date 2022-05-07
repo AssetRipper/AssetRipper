@@ -3,13 +3,13 @@ using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AnimationClip.Curves
 {
-	public sealed class Vector3Curve : IAsset, IYAMLExportable, IEquatable<Vector3Curve>
+	public sealed class Vector3Curve : IAsset, IYamlExportable, IEquatable<Vector3Curve>
 	{
 		public Vector3Curve() { }
 
@@ -39,10 +39,10 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 			writer.Write(Path);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(CurveName, Curve.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(CurveName, Curve.ExportYaml(container));
 			node.Add(PathName, Path);
 			return node;
 		}

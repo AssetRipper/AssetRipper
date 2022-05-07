@@ -6,7 +6,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.OcclusionCullingSettings
@@ -152,13 +152,13 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(OcclusionBakeSettingsName, GetExportOcclusionBakeSettings(container).ExportYAML(container));
-			node.Add(SceneGUIDName, GetExportSceneGUID(container).ExportYAML(container));
-			node.Add(OcclusionCullingDataName, GetExportOcclusionCullingData(container).ExportYAML(container));
+			node.Add(OcclusionBakeSettingsName, GetExportOcclusionBakeSettings(container).ExportYaml(container));
+			node.Add(SceneGUIDName, GetExportSceneGUID(container).ExportYaml(container));
+			node.Add(OcclusionCullingDataName, GetExportOcclusionCullingData(container).ExportYaml(container));
 			return node;
 		}
 
@@ -235,7 +235,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 
 		public PPtr<OcclusionCullingData.IOcclusionCullingData> OcclusionCullingData => m_OcclusionCullingData;
 
-		public const string SceneKeyword = nameof(ClassIDType.Scene);
+		public const string SceneKeyword = "Scene";
 
 		public const string ViewCellSizeName = "m_ViewCellSize";
 		public const string OcclusionBakeSettingsName = "m_OcclusionBakeSettings";

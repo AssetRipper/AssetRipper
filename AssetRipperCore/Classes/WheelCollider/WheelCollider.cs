@@ -4,7 +4,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.WheelCollider
 {
@@ -66,18 +66,18 @@ namespace AssetRipper.Core.Classes.WheelCollider
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(CenterName, Center.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(CenterName, Center.ExportYaml(container));
 			node.Add(RadiusName, Radius);
-			node.Add(SuspensionSpringName, SuspensionSpring.ExportYAML(container));
+			node.Add(SuspensionSpringName, SuspensionSpring.ExportYaml(container));
 			node.Add(SuspensionDistanceName, SuspensionDistance);
 			node.Add(ForceAppPointDistanceName, ForceAppPointDistance);
 			node.Add(MassName, Mass);
 			node.Add(WheelDampingRateName, WheelDampingRate);
-			node.Add(ForwardFrictionName, ForwardFriction.ExportYAML(container));
-			node.Add(SidewaysFrictionName, SidewaysFriction.ExportYAML(container));
+			node.Add(ForwardFrictionName, ForwardFriction.ExportYaml(container));
+			node.Add(SidewaysFrictionName, SidewaysFriction.ExportYaml(container));
 			node.Add(EnabledName, Enabled);
 			return node;
 		}

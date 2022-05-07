@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public sealed class ProbeSetIndex : IAssetReadable, IYAMLExportable
+	public sealed class ProbeSetIndex : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -14,10 +14,10 @@ namespace AssetRipper.Core.Classes.LightProbes
 			Size = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(HashName, Hash.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(HashName, Hash.ExportYaml(container));
 			node.Add(OffsetName, Offset);
 			node.Add(SizeName, Size);
 			return node;

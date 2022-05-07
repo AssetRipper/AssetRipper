@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public sealed class ShaderError : IAssetReadable, IYAMLExportable
+	public sealed class ShaderError : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 3.5.0 and greater
@@ -30,23 +30,23 @@ namespace AssetRipper.Core.Classes.Shader
 			if (HasFile(reader.Version))
 			{
 				File = reader.ReadString();
-				CompilerPlatform = (Platform)reader.ReadInt32();
+				CompilerPlatform = (BuildTarget)reader.ReadInt32();
 			}
 			Line = reader.ReadString();
 			Warning = reader.ReadBoolean();
 			ProgramError = reader.ReadBoolean();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(MessageName, Message);
-			if (HasMessageDetails(container.Version))
+			if (HasMessageDetails(container.ExportVersion))
 			{
 				node.Add(MessageDetailsName, GetMessageDetails(container.Version));
 			}
 
-			if (HasFile(container.Version))
+			if (HasFile(container.ExportVersion))
 			{
 				node.Add(FileName, GetFile(container.Version));
 				node.Add(CompilerPlatformName, (int)CompilerPlatform);
@@ -54,7 +54,7 @@ namespace AssetRipper.Core.Classes.Shader
 
 			node.Add(LineName, Line);
 			node.Add(WarningName, Warning);
-			node.Add(ProgramErrorName(container.Version), ProgramError);
+			node.Add(ProgramErrorName(container.ExportVersion), ProgramError);
 			return node;
 		}
 
@@ -70,7 +70,7 @@ namespace AssetRipper.Core.Classes.Shader
 		public string Message { get; set; }
 		public string MessageDetails { get; set; }
 		public string File { get; set; }
-		public Platform CompilerPlatform { get; set; }
+		public BuildTarget CompilerPlatform { get; set; }
 		public string Line { get; set; }
 		public bool Warning { get; set; }
 		public bool ProgramError { get; set; }

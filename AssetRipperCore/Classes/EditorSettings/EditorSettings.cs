@@ -4,7 +4,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.EditorSettings
 {
@@ -213,14 +213,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			if (HasExternalVersionControl(reader.Version))
 			{
 				ExternalVersionControl support = (ExternalVersionControl)reader.ReadInt32();
-				ExternalVersionControlSupport = support switch
-				{
-					ExternalVersionControl.AutoDetect => "Auto detect",
-					ExternalVersionControl.Disabled => HiddenMeta,
-					ExternalVersionControl.Generic or ExternalVersionControl.AssetServer => VisibleMeta,
-					ExternalVersionControl.Subversion or ExternalVersionControl.Perforce => support.ToString(),
-					_ => HiddenMeta,
-				};
+				ExternalVersionControlSupport = support.ConvertToString();
 			}
 			else if (HasExternalVersionControlSupport(reader.Version))
 			{
@@ -382,9 +375,9 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ExternalVersionControlSupportName, ExternalVersionControlSupport);
 			node.Add(SerializationModeName, (int)SerializationMode);
@@ -392,8 +385,8 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			node.Add(DefaultBehaviorModeName, (int)DefaultBehaviorMode);
 			if (HasPrefabRegularEnvironment(container.ExportVersion))
 			{
-				node.Add(PrefabRegularEnvironmentName, PrefabRegularEnvironment.ExportYAML(container));
-				node.Add(PrefabUIEnvironmentName, PrefabUIEnvironment.ExportYAML(container));
+				node.Add(PrefabRegularEnvironmentName, PrefabRegularEnvironment.ExportYaml(container));
+				node.Add(PrefabUIEnvironmentName, PrefabUIEnvironment.ExportYaml(container));
 			}
 			node.Add(SpritePackerModeName, (int)SpritePackerMode);
 			node.Add(SpritePackerPaddingPowerName, GetSpritePackerPaddingPower(container.Version));
@@ -407,7 +400,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 			{
 				node.Add(UserGeneratedProjectSuffixName, GetUserGeneratedProjectSuffix(container.Version));
 			}
-			node.Add(CollabEditorSettingsName, GetCollabEditorSettings(container.Version).ExportYAML(container));
+			node.Add(CollabEditorSettingsName, GetCollabEditorSettings(container.Version).ExportYaml(container));
 			if (HasEnableTextureStreamingInEditMode(container.ExportVersion))
 			{
 				node.Add(EnableTextureStreamingInEditModeName, GetEnableTextureStreamingInEditMode(container.Version));

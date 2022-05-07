@@ -73,25 +73,6 @@ namespace AssetRipper.Tests
 			Assert.AreEqual(originalGuid, equivalentGuid);
 		}
 
-		[Test]
-		public void Md5HashHasVersionAtTheCorrectBits()
-		{
-			const byte VersionMask = 0xF0;
-			const byte Md5GuidVersion = 0x30;
-			const byte RandomGuidVersion = 0x40;
-
-			//Verify the location of the version bits in the system generated guid
-			Guid systemGuid = Guid.NewGuid();
-			byte[] systemBytes = systemGuid.ToByteArray();
-			byte systemVersion = (byte)(systemBytes[7] & VersionMask);
-			Assert.AreEqual(RandomGuidVersion, systemVersion);
-
-			Guid hashGuid = (Guid)UnityGUID.Md5Hash(GetLongRandomString());
-			byte[] hashBytes = hashGuid.ToByteArray();
-			byte hashVersion = (byte)(hashBytes[7] & VersionMask);
-			Assert.AreEqual(Md5GuidVersion, hashVersion);
-		}
-
 		private static string GetLongRandomString(int numSetsOf32Characters = 4)
 		{
 			StringBuilder sb = new(numSetsOf32Characters * 32);

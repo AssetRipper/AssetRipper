@@ -154,10 +154,14 @@ namespace AssetRipper.Core.Project
 			{
 				IExportCollection collection = collections[i];
 				container.CurrentCollection = collection;
-				bool isExported = collection.Export(container, options.ExportPath);
+				bool isExported = collection.Export(container, options.ProjectRootPath);
 				if (isExported)
 				{
 					Logger.Info(LogCategory.ExportedFile, $"'{collection.Name}' exported");
+				}
+				else if (collection is not EmptyExportCollection)
+				{
+					Logger.Warning(LogCategory.ExportedFile, $"'{collection.Name}' failed to export");
 				}
 				EventExportProgressUpdated?.Invoke(i, collections.Count);
 			}
@@ -173,7 +177,7 @@ namespace AssetRipper.Core.Project
 
 			OverrideExporter<IBuildSettings>(BuildSettingsExporter, true);
 
-			OverrideExporter<IMonoBehaviour>(ScriptableExporter, true);
+			OverrideExporter<Classes.IMonoBehaviour>(ScriptableExporter, true);
 
 			OverrideExporter<IGameObject>(SceneExporter, true);
 			OverrideExporter<IComponent>(SceneExporter, true);
@@ -288,13 +292,14 @@ namespace AssetRipper.Core.Project
 			OverrideYamlExporter(ClassIDType.CanvasGroup);
 			OverrideYamlExporter(ClassIDType.ClusterInputManager);
 			OverrideYamlExporter(ClassIDType.NavMeshData);
-			OverrideYamlExporter(ClassIDType.LightProbes);
+			OverrideYamlExporter(ClassIDType.LightProbes_197);
+			OverrideYamlExporter(ClassIDType.LightProbes_258);
 			OverrideYamlExporter(ClassIDType.UnityConnectSettings);
-			OverrideYamlExporter(ClassIDType.AvatarMask);
+			OverrideYamlExporter(ClassIDType.AvatarMask_319);
+			OverrideYamlExporter(ClassIDType.AvatarMask_1011);
 			OverrideYamlExporter(ClassIDType.ParticleSystemForceField);
 			OverrideYamlExporter(ClassIDType.OcclusionCullingData);
 			OverrideYamlExporter(ClassIDType.PrefabInstance);
-			OverrideYamlExporter(ClassIDType.AvatarMaskOld);
 			OverrideYamlExporter(ClassIDType.SceneAsset);
 			OverrideYamlExporter(ClassIDType.LightmapParameters);
 			OverrideYamlExporter(ClassIDType.SpriteAtlas);

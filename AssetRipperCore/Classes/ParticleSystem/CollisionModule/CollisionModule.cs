@@ -6,7 +6,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
@@ -176,9 +176,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TypeName, (int)Type);
 			node.Add(CollisionModeName, (int)CollisionMode);
@@ -189,25 +189,25 @@ namespace AssetRipper.Core.Classes.ParticleSystem.CollisionModule
 
 			if (HasPlaneListNotIndividual(container.ExportVersion))
 			{
-				node.Add(PlanesName, Planes.ExportYAML(container));
+				node.Add(PlanesName, Planes.ExportYaml(container));
 			}
 			else
 			{
-				node.Add(Plane0Name, Plane0.ExportYAML(container));
-				node.Add(Plane1Name, Plane1.ExportYAML(container));
-				node.Add(Plane2Name, Plane2.ExportYAML(container));
-				node.Add(Plane3Name, Plane3.ExportYAML(container));
-				node.Add(Plane4Name, Plane4.ExportYAML(container));
-				node.Add(Plane5Name, Plane5.ExportYAML(container));
+				node.Add(Plane0Name, Plane0.ExportYaml(container));
+				node.Add(Plane1Name, Plane1.ExportYaml(container));
+				node.Add(Plane2Name, Plane2.ExportYaml(container));
+				node.Add(Plane3Name, Plane3.ExportYaml(container));
+				node.Add(Plane4Name, Plane4.ExportYaml(container));
+				node.Add(Plane5Name, Plane5.ExportYaml(container));
 			}
 
-			node.Add(DampenName, Dampen.ExportYAML(container));
-			node.Add(BounceName, Bounce.ExportYAML(container));
-			node.Add(EnergyLossOnCollisionName, EnergyLossOnCollision.ExportYAML(container));
+			node.Add(DampenName, Dampen.ExportYaml(container));
+			node.Add(BounceName, Bounce.ExportYaml(container));
+			node.Add(EnergyLossOnCollisionName, EnergyLossOnCollision.ExportYaml(container));
 			node.Add(MinKillSpeedName, MinKillSpeed);
 			node.Add(MaxKillSpeedName, GetExportMaxKillSpeed(container.Version));
 			node.Add(RadiusScaleName, GetExportRadiusScale(container.Version));
-			node.Add(CollidesWithName, GetExportCollidesWith(container.Version).ExportYAML(container));
+			node.Add(CollidesWithName, GetExportCollidesWith(container.Version).ExportYaml(container));
 			node.Add(MaxCollisionShapesName, GetExportMaxCollisionShapes(container.Version));
 			node.Add(QualityName, (int)Quality);
 			node.Add(VoxelSizeName, GetExportVoxelSize(container.Version));

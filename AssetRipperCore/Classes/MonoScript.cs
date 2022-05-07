@@ -5,8 +5,9 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 using System.IO;
 
@@ -142,12 +143,12 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = ExportBaseYAMLRoot(container);
-			node.Add(ScriptName, GetScript(container.Version, container.Flags).ExportYAML());
-			node.Add(DefaultReferencesName, GetDefaultReferences(container.Version, container.Flags).ExportYAML(container));
-			node.Add(IconName, GetIcon(container.Version, container.Flags).ExportYAML(container));
+			YamlMappingNode node = ExportBaseYamlRoot(container);
+			node.Add(ScriptName, GetScript(container.Version, container.Flags).ExportYaml());
+			node.Add(DefaultReferencesName, GetDefaultReferences(container.Version, container.Flags).ExportYaml(container));
+			node.Add(IconName, GetIcon(container.Version, container.Flags).ExportYaml(container));
 			node.Add(ExecutionOrderName, ExecutionOrder);
 			node.Add(ClassNameName, ClassName);
 			node.Add(NamespaceName, GetNamespace(container.Version));

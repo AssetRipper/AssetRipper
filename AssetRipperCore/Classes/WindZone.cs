@@ -2,7 +2,7 @@
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes
 {
@@ -33,9 +33,9 @@ namespace AssetRipper.Core.Classes
 			writer.Write(WindPulseFrequency);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(ModeName, Mode);
 			node.Add(RadiusName, Radius);
 			node.Add(WindMainName, WindMain);

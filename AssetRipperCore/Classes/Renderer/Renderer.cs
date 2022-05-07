@@ -6,7 +6,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Renderer
@@ -477,9 +477,9 @@ namespace AssetRipper.Core.Classes.Renderer
 			base.Read(reader);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(EnabledName, GetEnabled(container.Version));
 			node.Add(CastShadowsName, (byte)GetCastShadows(container.Version));
 			node.Add(ReceiveShadowsName, GetReceiveShadows(container.Version));
@@ -507,11 +507,11 @@ namespace AssetRipper.Core.Classes.Renderer
 			{
 				node.Add(RendererPriorityName, RendererPriority);
 			}
-			node.Add(MaterialsName, Materials.ExportYAML(container));
-			node.Add(StaticBatchInfoName, GetStaticBatchInfo(container.Version).ExportYAML(container));
-			node.Add(StaticBatchRootName, StaticBatchRoot.ExportYAML(container));
-			node.Add(ProbeAnchorName, ProbeAnchor.ExportYAML(container));
-			node.Add(LightProbeVolumeOverrideName, LightProbeVolumeOverride.ExportYAML(container));
+			node.Add(MaterialsName, Materials.ExportYaml(container));
+			node.Add(StaticBatchInfoName, GetStaticBatchInfo(container.Version).ExportYaml(container));
+			node.Add(StaticBatchRootName, StaticBatchRoot.ExportYaml(container));
+			node.Add(ProbeAnchorName, ProbeAnchor.ExportYaml(container));
+			node.Add(LightProbeVolumeOverrideName, LightProbeVolumeOverride.ExportYaml(container));
 			node.Add(ScaleInLightmapName, GetScaleInLightmap(container.Version, container.Flags));
 			if (HasReceiveGI(container.ExportVersion, container.ExportFlags))
 			{
@@ -525,7 +525,7 @@ namespace AssetRipper.Core.Classes.Renderer
 			node.Add(MinimumChartSizeName, GetMinimumChartSize(container.Version, container.Flags));
 			node.Add(AutoUVMaxDistanceName, GetAutoUVMaxDistance(container.Version, container.Flags));
 			node.Add(AutoUVMaxAngleName, GetAutoUVMaxAngle(container.Version, container.Flags));
-			node.Add(LightmapParametersName, GetLightmapParameters().ExportYAML(container));
+			node.Add(LightmapParametersName, GetLightmapParameters().ExportYaml(container));
 			node.Add(SortingLayerIDName, SortingLayerID);
 			node.Add(SortingLayerName, SortingLayer);
 			node.Add(SortingOrderName, SortingOrder);
@@ -560,7 +560,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		{
 			return HasRenderingLayerMask(version) ? RenderingLayerMask : 1;
 		}
-		public StaticBatchInfo GetStaticBatchInfo(UnityVersion version)
+		public IStaticBatchInfo GetStaticBatchInfo(UnityVersion version)
 		{
 			if (HasStaticBatchInfo(version))
 			{
@@ -570,7 +570,7 @@ namespace AssetRipper.Core.Classes.Renderer
 			{
 				return new StaticBatchInfo(SubsetIndices);
 			}
-			return new();
+			return new StaticBatchInfo();
 		}
 		private float GetScaleInLightmap(UnityVersion version, TransferInstructionFlags flags)
 		{
@@ -673,14 +673,14 @@ namespace AssetRipper.Core.Classes.Renderer
 		public const string SortingLayerName = "m_SortingLayer";
 		public const string SortingOrderName = "m_SortingOrder";
 
-		public Vector4f LightmapTilingOffset = new();
-		public Vector4f LightmapTilingOffsetDynamic = new();
-		public StaticBatchInfo StaticBatchInfo = new();
-		public PPtr<Transform> StaticBatchRoot = new();
+		public Vector4f LightmapTilingOffset { get; set; } = new();
+		public Vector4f LightmapTilingOffsetDynamic { get; set; } = new();
+		public IStaticBatchInfo StaticBatchInfo { get; } = new StaticBatchInfo();
+		public PPtr<Transform> StaticBatchRoot { get; set; } = new();
 		/// <summary>
 		/// LightProbeAnchor previously
 		/// </summary>
-		public PPtr<Transform> ProbeAnchor = new();
-		public PPtr<GameObject.GameObject> LightProbeVolumeOverride = new();
+		public PPtr<Transform> ProbeAnchor { get; set; } = new();
+		public PPtr<GameObject.GameObject> LightProbeVolumeOverride { get; set; } = new();
 	}
 }

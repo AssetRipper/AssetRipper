@@ -12,7 +12,7 @@ namespace AssetRipper.Library.Exporters.Audio
 		{
 		}
 
-		protected override bool ExportInner(ProjectAssetContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
 		{
 			IAudioClip asset = (IAudioClip)Asset;
 			IStreamedResource resource = asset.Resource;

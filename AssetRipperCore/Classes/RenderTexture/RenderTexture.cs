@@ -4,7 +4,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.RenderTexture
 {
@@ -161,9 +161,9 @@ namespace AssetRipper.Core.Classes.RenderTexture
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
@@ -183,7 +183,7 @@ namespace AssetRipper.Core.Classes.RenderTexture
 			{
 				node.Add(EnableCompatibleFormatName, GetEnableCompatibleFormat(container.Version));
 			}
-			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			node.Add(TextureSettingsName, TextureSettings.ExportYaml(container));
 			node.Add(DimensionName, Dimension);
 			node.Add(VolumeDepthName, VolumeDepth);
 			return node;

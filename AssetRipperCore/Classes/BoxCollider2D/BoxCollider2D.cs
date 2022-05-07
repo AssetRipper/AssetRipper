@@ -4,7 +4,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.BoxCollider2D
 {
@@ -63,13 +63,13 @@ namespace AssetRipper.Core.Classes.BoxCollider2D
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(SpriteTilingPropertyName, SpriteTilingProperty.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(SpriteTilingPropertyName, SpriteTilingProperty.ExportYaml(container));
 			node.Add(AutoTilingName, AutoTiling);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(SizeName, Size.ExportYAML(container));
+			node.Add(SizeName, Size.ExportYaml(container));
 			node.Add(EdgeRadiusName, EdgeRadius);
 			return node;
 		}

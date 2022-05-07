@@ -6,12 +6,12 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 {
@@ -217,39 +217,39 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			if (HasInternalIDToNameTable(container.ExportVersion))
 			{
 				if (IncludesIDToName)
 				{
-					node.Add(InternalIDToNameTableName, InternalIDToNameTable.ExportYAML((t) => (int)t));
+					node.Add(InternalIDToNameTableName, InternalIDToNameTable.ExportYaml((t) => (int)t));
 				}
 			}
 			else if (FileIDToRecycleNameRelevant(container.ExportVersion))
 			{
 				if (!IsFileIDToRecycleNameConditional(container.ExportVersion) || IncludesIDToName)
 				{
-					node.Add(FileIDToRecycleNameName, FileIDToRecycleName.ExportYAML());
+					node.Add(FileIDToRecycleNameName, FileIDToRecycleName.ExportYaml());
 				}
 			}
 			if (HasExternalObjects(container.ExportVersion))
 			{
-				node.Add(ExternalObjectsName, ExternalObjects.ExportYAML(container));
+				node.Add(ExternalObjectsName, ExternalObjects.ExportYaml(container));
 			}
 			if (HasUsedFileIDs(container.ExportVersion))
 			{
-				node.Add(UsedFileIDsName, UsedFileIDs.ExportYAML(false));
+				node.Add(UsedFileIDsName, UsedFileIDs.ExportYaml(false));
 			}
 			if (HasPreview(container.ExportVersion))
 			{
-				node.Add(PreviewName, Preview.ExportYAML(container));
+				node.Add(PreviewName, Preview.ExportYaml(container));
 			}
 			if (HasHash(container.ExportVersion))
 			{
-				node.Add(OldHashIdentityName, OldHashIdentity.ExportYAML(container));
-				node.Add(NewHashIdentityName, NewHashIdentity.ExportYAML(container));
+				node.Add(OldHashIdentityName, OldHashIdentity.ExportYaml(container));
+				node.Add(NewHashIdentityName, NewHashIdentity.ExportYaml(container));
 			}
 			return node;
 		}
@@ -290,7 +290,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 			}
 		}
 
-		protected void PostExportYAML(IExportContainer container, YAMLMappingNode root)
+		protected void PostExportYaml(IExportContainer container, YamlMappingNode root)
 		{
 			if (HasUserData(container.ExportVersion))
 			{

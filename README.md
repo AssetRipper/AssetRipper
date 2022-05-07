@@ -1,6 +1,6 @@
 # AssetRipper
 
-[![AssetRipper Logo](https://github.com/AssetRipper/AssetRipper/raw/master/Media/Images/2D_Logo/AssetRipperLogoBackground.png)](https://github.com/AssetRipper/AssetRipper/raw/master/Media/Images/2D_Logo/AssetRipperLogoBackground.png)
+[![AssetRipper Logo](Media/Images/2D_Logo/AssetRipperLogoBackground.png)](https://github.com/AssetRipper/AssetRipper/raw/master/Media/Images/2D_Logo/AssetRipperLogoBackground.png)
 
 [![](https://img.shields.io/github/downloads/AssetRipper/AssetRipper/total.svg)](https://github.com/AssetRipper/AssetRipper/releases)
 [![](https://img.shields.io/github/downloads/AssetRipper/AssetRipper/latest/total.svg)](https://github.com/AssetRipper/AssetRipper/releases/latest)
@@ -21,6 +21,10 @@ Thank you for considering to support me. I have normal expenses like food, elect
 [Patreon](https://www.patreon.com/ds5678)
 
 [Paypal](https://paypal.me/ds5678)
+
+# Release Schedule
+
+[Releases](https://github.com/AssetRipper/AssetRipper/releases) are put out once a week, usually on either Sunday or Monday.
 
 # Links
 

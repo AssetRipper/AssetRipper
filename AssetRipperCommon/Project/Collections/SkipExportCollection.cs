@@ -8,6 +8,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Core.Project.Collections
 {
@@ -15,20 +16,11 @@ namespace AssetRipper.Core.Project.Collections
 	{
 		public SkipExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset)
 		{
-			if (assetExporter == null)
-			{
-				throw new ArgumentNullException(nameof(assetExporter));
-			}
-			if (asset == null)
-			{
-				throw new ArgumentNullException(nameof(asset));
-			}
-
-			AssetExporter = assetExporter;
-			m_asset = asset;
+			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
+			m_asset = asset ?? throw new ArgumentNullException(nameof(asset));
 		}
 
-		public bool Export(ProjectAssetContainer container, string dirPath)
+		public bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			return false;
 		}
@@ -67,10 +59,7 @@ namespace AssetRipper.Core.Project.Collections
 		public IAssetExporter AssetExporter { get; }
 		public ISerializedFile File => m_asset.SerializedFile;
 		public TransferInstructionFlags Flags => File.Flags;
-		public IEnumerable<IUnityObjectBase> Assets
-		{
-			get { yield return m_asset; }
-		}
+		public IEnumerable<IUnityObjectBase> Assets => Enumerable.Empty<IUnityObjectBase>();
 		public string Name => m_asset.GetType().Name;
 		public IAssetImporter MetaImporter => throw new NotSupportedException();
 

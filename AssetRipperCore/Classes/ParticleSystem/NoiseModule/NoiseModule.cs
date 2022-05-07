@@ -2,7 +2,7 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.NoiseModule
 {
@@ -76,12 +76,12 @@ namespace AssetRipper.Core.Classes.ParticleSystem.NoiseModule
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAML(container);
-			node.Add(StrengthName, Strength.ExportYAML(container));
-			node.Add(StrengthYName, StrengthY.ExportYAML(container));
-			node.Add(StrengthZName, StrengthZ.ExportYAML(container));
+			YamlMappingNode node = (YamlMappingNode)base.ExportYaml(container);
+			node.Add(StrengthName, Strength.ExportYaml(container));
+			node.Add(StrengthYName, StrengthY.ExportYaml(container));
+			node.Add(StrengthZName, StrengthZ.ExportYaml(container));
 			node.Add(SeparateAxesName, SeparateAxes);
 			node.Add(FrequencyName, Frequency);
 			node.Add(DampingName, Damping);
@@ -89,14 +89,14 @@ namespace AssetRipper.Core.Classes.ParticleSystem.NoiseModule
 			node.Add(OctaveMultiplierName, OctaveMultiplier);
 			node.Add(OctaveScaleName, OctaveScale);
 			node.Add(QualityName, (int)Quality);
-			node.Add(ScrollSpeedName, ScrollSpeed.ExportYAML(container));
-			node.Add(RemapName, Remap.ExportYAML(container));
-			node.Add(RemapYName, RemapY.ExportYAML(container));
-			node.Add(RemapZName, RemapZ.ExportYAML(container));
+			node.Add(ScrollSpeedName, ScrollSpeed.ExportYaml(container));
+			node.Add(RemapName, Remap.ExportYaml(container));
+			node.Add(RemapYName, RemapY.ExportYaml(container));
+			node.Add(RemapZName, RemapZ.ExportYaml(container));
 			node.Add(RemapEnabledName, RemapEnabled);
-			node.Add(PositionAmountName, GetExportPositionAmount(container.Version).ExportYAML(container));
-			node.Add(RotationAmountName, GetExportRotationAmount(container.Version).ExportYAML(container));
-			node.Add(SizeAmountName, GetExportSizeAmount(container.Version).ExportYAML(container));
+			node.Add(PositionAmountName, GetExportPositionAmount(container.Version).ExportYaml(container));
+			node.Add(RotationAmountName, GetExportRotationAmount(container.Version).ExportYaml(container));
+			node.Add(SizeAmountName, GetExportSizeAmount(container.Version).ExportYaml(container));
 			return node;
 		}
 

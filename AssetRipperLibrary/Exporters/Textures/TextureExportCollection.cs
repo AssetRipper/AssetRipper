@@ -5,8 +5,8 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.SpriteAtlas;
 using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Converters.Texture2D;
 using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
@@ -20,7 +20,7 @@ namespace AssetRipper.Library.Exporters.Textures
 {
 	public class TextureExportCollection : AssetsExportCollection
 	{
-		public TextureExportCollection(IAssetExporter assetExporter, Texture2D texture, bool convert) : base(assetExporter, texture)
+		public TextureExportCollection(IAssetExporter assetExporter, ITexture2D texture, bool convert) : base(assetExporter, texture)
 		{
 			m_convert = convert;
 			if (convert)
@@ -59,7 +59,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public static IExportCollection CreateExportCollection(IAssetExporter assetExporter, Sprite asset)
 		{
-			Texture2D texture = asset.RD.Texture.FindAsset(asset.SerializedFile);
+			ITexture2D texture = asset.RD.Texture.FindAsset(asset.SerializedFile);
 			if (texture == null)
 			{
 				return new FailExportCollection(assetExporter, asset);
@@ -67,22 +67,22 @@ namespace AssetRipper.Library.Exporters.Textures
 			return new TextureExportCollection(assetExporter, texture, true);
 		}
 
-		protected override AssetImporter CreateImporter(IExportContainer container)
+		protected override IAssetImporter CreateImporter(IExportContainer container)
 		{
-			Texture2D texture = (Texture2D)Asset;
+			ITexture2D texture = (ITexture2D)Asset;
 			if (m_convert)
 			{
-				TextureImporter importer = texture.GenerateTextureImporter(container);
+				TextureImporter importer = Texture2DConverter.GenerateTextureImporter(container, texture);
 				AddSprites(container, importer);
 				return importer;
 			}
 			else
 			{
-				return texture.GenerateIHVImporter(container);
+				return Texture2DConverter.GenerateIHVImporter(container, texture);
 			}
 		}
 
-		protected override bool ExportInner(ProjectAssetContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
 		{
 			return AssetExporter.Export(container, Asset, filePath);
 		}
@@ -109,7 +109,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				importer.SpriteMode = SpriteImportMode.Single;
 				importer.SpriteExtrude = 1;
-				importer.SpriteMeshType = SpriteMeshType.Tight;
+				importer.SpriteMeshType = SpriteMeshType.FullRect;//See pull request #306
 				importer.Alignment = SpriteAlignment.Center;
 				importer.SpritePivot = new Vector2f(0.5f, 0.5f);
 				importer.SpriteBorder = new();
@@ -119,7 +119,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				Sprite sprite = m_sprites.Keys.First();
 				Texture2D texture = (Texture2D)Asset;
-				if (sprite.Rect == sprite.RD.TextureRect && sprite.Name == texture.Name)
+				if (sprite.Rect == sprite.RD.TextureRect && sprite.NameString == texture.NameString)
 				{
 					importer.SpriteMode = SpriteImportMode.Single;
 				}
@@ -189,10 +189,10 @@ namespace AssetRipper.Library.Exporters.Textures
 					{
 #warning TODO: TEMP:
 						long exportID = GetExportID(sprite);
-						SpriteMetaData smeta = importer.SpriteSheet.GetSpriteMetaData(sprite.Name);
+						SpriteMetaData smeta = importer.SpriteSheet.GetSpriteMetaData(sprite.NameString);
 						smeta.InternalID = exportID;
 						Tuple<ClassIDType, long> key = new Tuple<ClassIDType, long>(ClassIDType.Sprite, exportID);
-						importer.InternalIDToNameTable.Add(key, sprite.Name);
+						importer.InternalIDToNameTable.Add(key, sprite.NameString);
 					}
 				}
 				else
@@ -200,7 +200,7 @@ namespace AssetRipper.Library.Exporters.Textures
 					foreach (Sprite sprite in m_sprites.Keys)
 					{
 						long exportID = GetExportID(sprite);
-						importer.FileIDToRecycleName.Add(exportID, sprite.Name);
+						importer.FileIDToRecycleName.Add(exportID, sprite.NameString);
 					}
 				}
 			}

@@ -4,14 +4,14 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Linq;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {
-	public sealed class BlendTreeNodeConstant : IAssetReadable, IYAMLExportable
+	public sealed class BlendTreeNodeConstant : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 4.1.0 and greater
@@ -84,7 +84,7 @@ namespace AssetRipper.Core.Classes.AnimatorController.Constants
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

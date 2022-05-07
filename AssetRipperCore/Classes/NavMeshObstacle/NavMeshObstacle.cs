@@ -4,7 +4,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.NavMeshObstacle
 {
@@ -69,16 +69,16 @@ namespace AssetRipper.Core.Classes.NavMeshObstacle
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ShapeName, (int)Shape);
-			node.Add(ExtentsName, Extents.ExportYAML(container));
+			node.Add(ExtentsName, Extents.ExportYaml(container));
 			node.Add(MoveThresholdName, GetMoveThreshold(container.Version));
 			node.Add(CarveName, Carve);
 			node.Add(CarveOnlyStationaryName, GetCarveOnlyStationary(container.Version));
-			node.Add(CenterName, Center.ExportYAML(container));
+			node.Add(CenterName, Center.ExportYaml(container));
 			node.Add(TimeToStationaryName, GetTimeToStationary(container.Version));
 			return node;
 		}

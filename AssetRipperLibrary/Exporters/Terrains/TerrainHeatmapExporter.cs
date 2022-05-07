@@ -38,7 +38,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			using DirectBitmap bitmap = GetBitmap(terrain);
 			if (bitmap == null)
 			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{terrain.Name}' to bitmap");
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{terrain.NameString}' to bitmap");
 				return false;
 			}
 			if (System.OperatingSystem.IsWindows())

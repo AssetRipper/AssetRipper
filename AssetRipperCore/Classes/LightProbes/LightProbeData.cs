@@ -4,12 +4,12 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.LightProbes
 {
-	public sealed class LightProbeData : IAssetReadable, IYAMLExportable
+	public sealed class LightProbeData : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 5.0.0 and greater
@@ -39,14 +39,14 @@ namespace AssetRipper.Core.Classes.LightProbes
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 #warning TODO:
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TetrahedralizationName, Tetrahedralization.ExportYAML(container));
-			node.Add(ProbeSetsName, HasProbeSets(container.Version) ? ProbeSets.ExportYAML(container) : YAMLSequenceNode.Empty);
-			node.Add(PositionsName, HasProbeSets(container.Version) ? Positions.ExportYAML(container) : YAMLSequenceNode.Empty);
-			node.Add(NonTetrahedralizedProbeSetIndexMapName, HasNonTetrahedralizedProbeSetIndexMap(container.Version) ? NonTetrahedralizedProbeSetIndexMap.ExportYAML(container) : YAMLSequenceNode.Empty);
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(TetrahedralizationName, Tetrahedralization.ExportYaml(container));
+			node.Add(ProbeSetsName, HasProbeSets(container.Version) ? ProbeSets.ExportYaml(container) : YamlSequenceNode.Empty);
+			node.Add(PositionsName, HasProbeSets(container.Version) ? Positions.ExportYaml(container) : YamlSequenceNode.Empty);
+			node.Add(NonTetrahedralizedProbeSetIndexMapName, HasNonTetrahedralizedProbeSetIndexMap(container.Version) ? NonTetrahedralizedProbeSetIndexMap.ExportYaml(container) : YamlSequenceNode.Empty);
 			return node;
 		}
 

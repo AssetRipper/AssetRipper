@@ -4,11 +4,11 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.SpriteAtlas
 {
-	public sealed class TextureSettings : IAssetReadable, IYAMLExportable
+	public sealed class TextureSettings : IAssetReadable, IYamlExportable
 	{
 		public TextureSettings() { }
 		public TextureSettings(bool _)
@@ -71,9 +71,9 @@ namespace AssetRipper.Core.Classes.SpriteAtlas
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(AnisoLevelName, AnisoLevel);
 			node.Add(CompressionQualityName, CompressionQuality);

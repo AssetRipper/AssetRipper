@@ -7,8 +7,9 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
@@ -205,18 +206,18 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(RootBone, RootBoneName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(QualityName, Quality);
 			node.Add(UpdateWhenOffscreenName, UpdateWhenOffscreen);
 			node.Add(SkinnedMotionVectorsName, SkinnedMotionVectors);
-			node.Add(MeshName, Mesh.ExportYAML(container));
-			node.Add(BonesName, Bones.ExportYAML(container));
-			node.Add(BlendShapeWeightsName, HasWeights(container.Version) ? BlendShapeWeights.ExportYAML() : YAMLSequenceNode.Empty);
-			node.Add(RootBoneName, RootBone.ExportYAML(container));
-			node.Add(AABBName, AABB.ExportYAML(container));
+			node.Add(MeshName, Mesh.ExportYaml(container));
+			node.Add(BonesName, Bones.ExportYaml(container));
+			node.Add(BlendShapeWeightsName, HasWeights(container.Version) ? BlendShapeWeights.ExportYaml() : YamlSequenceNode.Empty);
+			node.Add(RootBoneName, RootBone.ExportYaml(container));
+			node.Add(AABBName, AABB.ExportYaml(container));
 			node.Add(DirtyAABBName, DirtyAABB);
 			return node;
 		}

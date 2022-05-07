@@ -6,7 +6,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
@@ -79,22 +79,22 @@ namespace AssetRipper.Core.Classes.TerrainData
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(TextureName, Texture.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(TextureName, Texture.ExportYaml(container));
 			if (HasNormalMap(container.ExportVersion))
 			{
-				node.Add(NormalMapName, NormalMap.ExportYAML(container));
+				node.Add(NormalMapName, NormalMap.ExportYaml(container));
 			}
-			node.Add(TileSizeName, TileSize.ExportYAML(container));
+			node.Add(TileSizeName, TileSize.ExportYaml(container));
 			if (HasTileOffset(container.ExportVersion))
 			{
-				node.Add(TileOffsetName, TileOffset.ExportYAML(container));
+				node.Add(TileOffsetName, TileOffset.ExportYaml(container));
 			}
 			if (HasSpecularMetallic(container.ExportVersion))
 			{
-				node.Add(SpecularMetallicName, SpecularMetallic.ExportYAML(container));
+				node.Add(SpecularMetallicName, SpecularMetallic.ExportYaml(container));
 			}
 			if (HasSmoothness(container.ExportVersion))
 			{

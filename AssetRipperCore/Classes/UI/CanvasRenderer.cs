@@ -1,5 +1,5 @@
 ﻿//using AssetRipper.AssetExporters;
-//using AssetRipper.YAML;
+//using AssetRipper.Yaml;
 
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
@@ -26,9 +26,9 @@ namespace AssetRipper.Core.Classes.UI
 			}
 		}
 
-		/*protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		/*protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = (YAMLMappingNode)base.ExportYAMLRoot(container);
+			YamlMappingNode node = (YamlMappingNode)base.ExportYamlRoot(container);
 			return node;
 		}*/
 

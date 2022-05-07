@@ -1,8 +1,11 @@
 using AssetRipper.Core.IO.Asset;
+using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Core.Project;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {
-	public sealed class StructParameter : IAssetReadable
+	public sealed class StructParameter : IAssetReadable, IYamlExportable
 	{
 		public StructParameter() { }
 
@@ -27,6 +30,18 @@ namespace AssetRipper.Core.Classes.Shader.Parameters
 			reader.AlignStream();
 			MatrixMembers = reader.ReadAssetArray<MatrixParameter>();
 			reader.AlignStream();
+		}
+
+		public YamlNode ExportYaml(IExportContainer container)
+		{
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("m_NameIndex", NameIndex);
+			node.Add("m_Index", Index);
+			node.Add("m_ArraySize", ArraySize);
+			node.Add("m_StructSize", StructSize);
+			node.Add("m_VectorMembers", VectorMembers.ExportYaml(container));
+			node.Add("m_MatrixMembers", MatrixMembers.ExportYaml(container));
+			return node;
 		}
 
 		public string Name { get; set; }

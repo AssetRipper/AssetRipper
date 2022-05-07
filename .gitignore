@@ -11,3 +11,4 @@ bin
 **/build/
 .vscode
 *.blend1
+launchSettings.json

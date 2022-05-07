@@ -5,21 +5,16 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Meta.Importers
 {
 	/// <summary>
 	/// First introduced in 5.6.0 as a replacement for such importers as DDSImporter
 	/// </summary>
-	public sealed class IHVImageFormatImporter : AssetImporter
+	public sealed class IHVImageFormatImporter : AssetImporter, ISpriteImporter
 	{
-		public IHVImageFormatImporter(LayoutInfo layout) : base(layout)
-		{
-			TextureSettings.FilterMode = FilterMode.Bilinear;
-			TextureSettings.Aniso = 1;
-			SRGBTexture = true;
-		}
+		public IHVImageFormatImporter(LayoutInfo layout) : base(layout) { }
 
 		public IHVImageFormatImporter(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -86,10 +81,10 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 			PostWrite(writer);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(TextureSettingsName, TextureSettings.ExportYaml(container));
 			node.Add(IsReadableName, IsReadable);
 			if (HasSRGBTexture(container.ExportVersion))
 			{
@@ -100,7 +95,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 				node.Add(StreamingMipmapsName, StreamingMipmaps);
 				node.Add(StreamingMipmapsPriorityName, StreamingMipmapsPriority);
 			}
-			PostExportYAML(container, node);
+			PostExportYaml(container, node);
 			return node;
 		}
 
@@ -110,6 +105,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		public bool SRGBTexture { get; set; }
 		public bool StreamingMipmaps { get; set; }
 		public int StreamingMipmapsPriority { get; set; }
+		public IGLTextureSettings TextureSettings { get; } = new GLTextureSettings();
 
 		protected override bool IncludesIDToName => false;
 
@@ -118,7 +114,5 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 		public const string SRGBTextureName = "m_sRGBTexture";
 		public const string StreamingMipmapsName = "m_StreamingMipmaps";
 		public const string StreamingMipmapsPriorityName = "m_StreamingMipmapsPriority";
-
-		public GLTextureSettings TextureSettings = new();
 	}
 }

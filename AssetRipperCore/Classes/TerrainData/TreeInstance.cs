@@ -3,7 +3,7 @@ using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
@@ -42,18 +42,18 @@ namespace AssetRipper.Core.Classes.TerrainData
 			writer.Write(Index);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(PositionName, Position.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(PositionName, Position.ExportYaml(container));
 			node.Add(WidthScaleName, WidthScale);
 			node.Add(HeightScaleName, HeightScale);
 			if (HasRotation(container.ExportVersion))
 			{
 				node.Add(RotationName, Rotation);
 			}
-			node.Add(ColorName, Color.ExportYAML(container));
-			node.Add(LightmapColorName, LightmapColor.ExportYAML(container));
+			node.Add(ColorName, Color.ExportYaml(container));
+			node.Add(LightmapColorName, LightmapColor.ExportYaml(container));
 			node.Add(IndexName, Index);
 			return node;
 		}

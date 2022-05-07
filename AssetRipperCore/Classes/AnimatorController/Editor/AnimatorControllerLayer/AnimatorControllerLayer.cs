@@ -6,11 +6,11 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer
 {
-	public sealed class AnimatorControllerLayer : IYAMLExportable
+	public sealed class AnimatorControllerLayer : IYamlExportable
 	{
 		public AnimatorControllerLayer(AnimatorStateMachine.AnimatorStateMachine stateMachine, AnimatorController controller, int layerIndex)
 		{
@@ -41,21 +41,21 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 			return 5;
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(NameName, Name);
-			node.Add(StateMachineName, StateMachine.ExportYAML(container));
-			node.Add(MaskName, Mask.ExportYAML(container));
-			node.Add(MotionsName, Motions.ExportYAML(container));
-			node.Add(BehavioursName, Behaviours.ExportYAML(container));
+			node.Add(StateMachineName, StateMachine.ExportYaml(container));
+			node.Add(MaskName, Mask.ExportYaml(container));
+			node.Add(MotionsName, Motions.ExportYaml(container));
+			node.Add(BehavioursName, Behaviours.ExportYaml(container));
 			node.Add(BlendingModeName, (int)BlendingMode);
 			node.Add(SyncedLayerIndexName, SyncedLayerIndex);
 			node.Add(DefaultWeightName, DefaultWeight);
 			node.Add(IKPassName, IKPass);
 			node.Add(SyncedLayerAffectsTimingName, SyncedLayerAffectsTiming);
-			node.Add(ControllerName, Controller.ExportYAML(container));
+			node.Add(ControllerName, Controller.ExportYaml(container));
 			return node;
 		}
 

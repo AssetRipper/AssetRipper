@@ -1,18 +1,18 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Mask
 {
-	public sealed class SkeletonMask : IAssetReadable, IYAMLExportable
+	public sealed class SkeletonMask : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
 			Data = reader.ReadAssetArray<SkeletonMaskElement>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

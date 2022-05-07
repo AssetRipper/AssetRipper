@@ -2,13 +2,14 @@
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ComputeShader
 {
-	public sealed class ComputeShaderKernelParent : IAssetReadable, IYAMLExportable
+	public sealed class ComputeShaderKernelParent : IAssetReadable, IYamlExportable
 	{
 		public static bool HasSplitedKeywords(UnityVersion version) => version.IsGreaterEqual(2020, 2, 0, UnityVersionType.Alpha, 15);
 
@@ -28,19 +29,19 @@ namespace AssetRipper.Core.Classes.ComputeShader
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add("name", Name.ExportYAML());
-			node.Add("variantMap", VariantMap.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add("name", Name.ExportYaml());
+			node.Add("variantMap", VariantMap.ExportYaml(container));
 			if (HasSplitedKeywords(container.Version))
 			{
-				node.Add("globalKeywords", GlobalKeywords.ExportYAML());
-				node.Add("localKeywords", LocalKeywords.ExportYAML());
+				node.Add("globalKeywords", GlobalKeywords.ExportYaml());
+				node.Add("localKeywords", LocalKeywords.ExportYaml());
 			}
 			else
 			{
-				node.Add("validKeywords", ValidKeywords.ExportYAML());
+				node.Add("validKeywords", ValidKeywords.ExportYaml());
 			}
 
 			return node;

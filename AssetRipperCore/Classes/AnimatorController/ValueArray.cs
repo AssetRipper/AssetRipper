@@ -1,13 +1,13 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.AnimatorController
 {
-	public sealed class ValueArray : IAssetReadable, IYAMLExportable
+	public sealed class ValueArray : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// Less than 4.3
@@ -68,7 +68,7 @@ namespace AssetRipper.Core.Classes.AnimatorController
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}

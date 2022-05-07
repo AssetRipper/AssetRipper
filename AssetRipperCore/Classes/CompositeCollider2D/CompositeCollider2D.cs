@@ -5,7 +5,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.CompositeCollider2D
@@ -60,14 +60,14 @@ namespace AssetRipper.Core.Classes.CompositeCollider2D
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(GeometryTypeName, (int)GeometryType);
 			node.Add(GenerationTypeName, (int)GenerationType);
 			node.Add(EdgeRadiusName, EdgeRadius);
-			node.Add(ColliderPathsName, ColliderPaths.ExportYAML(container));
-			node.Add(CompositePathsName, CompositePaths.ExportYAML(container));
+			node.Add(ColliderPathsName, ColliderPaths.ExportYaml(container));
+			node.Add(CompositePathsName, CompositePaths.ExportYaml(container));
 			node.Add(VertexDistanceName, VertexDistance);
 			if (HasOffsetDistance(container.ExportVersion))
 			{

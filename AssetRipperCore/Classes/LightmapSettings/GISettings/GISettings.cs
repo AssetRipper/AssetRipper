@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 {
@@ -107,13 +107,13 @@ namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 			writer.AlignStream();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			if (HasSkyLightColorRGBAf(container.ExportVersion))
 			{
-				node.Add(SkyLightColorName, SkyLightColor.ExportYAML(container));
+				node.Add(SkyLightColorName, SkyLightColor.ExportYaml(container));
 				node.Add(SkyLightIntensityName, SkyLightIntensity);
 			}
 			node.Add(BounceScaleName, BounceScale);

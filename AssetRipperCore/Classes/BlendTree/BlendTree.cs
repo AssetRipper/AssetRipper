@@ -6,7 +6,7 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 
 namespace AssetRipper.Core.Classes.BlendTree
@@ -16,12 +16,12 @@ namespace AssetRipper.Core.Classes.BlendTree
 		private BlendTree(LayoutInfo layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, StateConstant state, int nodeIndex) : base(layout)
 		{
 			AssetInfo = assetInfo;
-			ObjectHideFlags = HideFlags.HideInHierarchy;
+			ObjectHideFlagsOld = HideFlags.HideInHierarchy;
 
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 			BlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Instance;
 
-			Name = nameof(BlendTree);
+			NameString = nameof(BlendTree);
 
 			Childs = new ChildMotion[node.ChildIndices.Length];
 			for (int i = 0; i < node.ChildIndices.Length; i++)
@@ -48,10 +48,10 @@ namespace AssetRipper.Core.Classes.BlendTree
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(ChildsName, Childs.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(ChildsName, Childs.ExportYaml(container));
 			node.Add(BlendParameterName, BlendParameter);
 			node.Add(BlendParameterYName, BlendParameterY);
 			node.Add(MinThresholdName, MinThreshold);

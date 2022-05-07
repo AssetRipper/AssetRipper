@@ -3,11 +3,11 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Sprite
 {
-	public sealed class SpriteVertex : IAssetReadable, IYAMLExportable
+	public sealed class SpriteVertex : IAssetReadable, IYamlExportable
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -29,14 +29,14 @@ namespace AssetRipper.Core.Classes.Sprite
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
-			node.Add(PosName, Position.ExportYAML(container));
+			node.Add(PosName, Position.ExportYaml(container));
 			if (HasUV(container.ExportVersion))
 			{
-				node.Add(UvName, UV.ExportYAML(container));
+				node.Add(UvName, UV.ExportYaml(container));
 			}
 			return node;
 		}

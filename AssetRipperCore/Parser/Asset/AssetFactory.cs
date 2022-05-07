@@ -6,8 +6,14 @@ using AssetRipper.Core.Classes.AnimatorController;
 using AssetRipper.Core.Classes.AnimatorOverrideController;
 using AssetRipper.Core.Classes.AssetBundle;
 using AssetRipper.Core.Classes.AudioClip;
+using AssetRipper.Core.Classes.AudioEchoFilter;
+using AssetRipper.Core.Classes.AudioLowPassFilter;
+using AssetRipper.Core.Classes.AudioHighPassFilter;
+using AssetRipper.Core.Classes.AudioChorusFilter;
+using AssetRipper.Core.Classes.AudioDistortionFilter;
 using AssetRipper.Core.Classes.AudioManager;
 using AssetRipper.Core.Classes.AudioSource;
+using AssetRipper.Core.Classes.AudioReverbFilter;
 using AssetRipper.Core.Classes.Avatar;
 using AssetRipper.Core.Classes.AvatarMask;
 using AssetRipper.Core.Classes.BoxCollider2D;
@@ -62,7 +68,9 @@ using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.ShaderVariantCollection;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.SpriteAtlas;
+using AssetRipper.Core.Classes.SpriteMask;
 using AssetRipper.Core.Classes.SpriteRenderer;
+using AssetRipper.Core.Classes.StreamingController;
 using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Classes.Terrain;
 using AssetRipper.Core.Classes.TerrainData;
@@ -75,30 +83,18 @@ using AssetRipper.Core.Classes.WheelCollider;
 using AssetRipper.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using AssetRipper.Core.Classes.Texture2DArray;
 
 namespace AssetRipper.Core.Parser.Asset
 {
 	public class AssetFactory : AssetFactoryBase
 	{
-		public override IUnityObjectBase CreateAsset(AssetInfo assetInfo)
+		public override IUnityObjectBase CreateAsset(AssetInfo assetInfo, UnityVersion version)
 		{
-			if (m_instantiators.TryGetValue(assetInfo.ClassID, out Func<AssetInfo, IUnityObjectBase> instantiator))
-			{
-				return instantiator(assetInfo);
-			}
-			return DefaultInstantiator(assetInfo);
+			return DefaultInstantiator(assetInfo, version);
 		}
 
-		public void OverrideInstantiator(int classType, Func<AssetInfo, IUnityObjectBase> instantiator)
-		{
-			if (instantiator == null)
-			{
-				throw new ArgumentNullException(nameof(instantiator));
-			}
-			m_instantiators[(ClassIDType)classType] = instantiator;
-		}
-
-		private static IUnityObjectBase DefaultInstantiator(AssetInfo assetInfo)
+		private static IUnityObjectBase DefaultInstantiator(AssetInfo assetInfo, UnityVersion version)
 		{
 			return assetInfo.ClassID switch
 			{
@@ -112,6 +108,7 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.Material => new Material(assetInfo),
 				ClassIDType.MeshRenderer => new MeshRenderer(assetInfo),
 				ClassIDType.Texture2D => new Texture2D(assetInfo),
+				ClassIDType.Texture2DArray => new Texture2DArray(assetInfo),
 				ClassIDType.OcclusionCullingSettings => new OcclusionCullingSettings(assetInfo),
 				ClassIDType.GraphicsSettings => new GraphicsSettings(assetInfo),
 				ClassIDType.MeshFilter => new MeshFilter(assetInfo),
@@ -182,7 +179,13 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.TerrainData => new TerrainData(assetInfo),
 				ClassIDType.LightmapSettings => new LightmapSettings(assetInfo),
 				ClassIDType.EditorSettings => new EditorSettings(assetInfo),
+				ClassIDType.AudioReverbFilter => new AudioReverbFilter(assetInfo),
+				ClassIDType.AudioHighPassFilter => new AudioHighPassFilter(assetInfo),
+				ClassIDType.AudioChorusFilter => new AudioChorusFilter(assetInfo),
 				ClassIDType.AudioReverbZone => new AudioReverbZone(assetInfo),
+				ClassIDType.AudioEchoFilter => new AudioEchoFilter(assetInfo),
+				ClassIDType.AudioLowPassFilter => new AudioLowPassFilter(assetInfo),
+				ClassIDType.AudioDistortionFilter => new AudioDistortionFilter(assetInfo),
 				ClassIDType.WindZone => new WindZone(assetInfo),
 				ClassIDType.OffMeshLink => new OffMeshLink(assetInfo),
 				ClassIDType.OcclusionArea => new OcclusionArea(assetInfo),
@@ -207,13 +210,15 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.CanvasGroup => new CanvasGroup(assetInfo),
 				ClassIDType.ClusterInputManager => new ClusterInputManager(assetInfo),
 				ClassIDType.NavMeshData => new NavMeshData(assetInfo),
-				ClassIDType.LightProbes => new LightProbes(assetInfo),
+				ClassIDType.ConstantForce2D => new ConstantForce2D(assetInfo),
+				ClassIDType.LightProbes_197 or ClassIDType.LightProbes_258 => new LightProbes(assetInfo),
 				ClassIDType.UnityConnectSettings => new UnityConnectSettings(assetInfo),
 				ClassIDType.ParticleSystemForceField => new ParticleSystemForceField(assetInfo),
+				ClassIDType.SpriteMask => new SpriteMask(assetInfo),
 				ClassIDType.OcclusionCullingData => new OcclusionCullingData(assetInfo),
 				ClassIDType.PrefabInstance => new PrefabInstance(assetInfo),
 				ClassIDType.TextureImporter => new TextureImporter(assetInfo),
-				ClassIDType.AvatarMask or ClassIDType.AvatarMaskOld => new AvatarMask(assetInfo),
+				ClassIDType.AvatarMask_319 or ClassIDType.AvatarMask_1011 => new AvatarMask(assetInfo),
 				ClassIDType.DefaultAsset => new DefaultAsset(assetInfo),
 				ClassIDType.DefaultImporter => new DefaultImporter(assetInfo),
 				ClassIDType.SceneAsset => new SceneAsset(assetInfo),
@@ -229,11 +234,15 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.LightingDataAsset => new LightingDataAsset(assetInfo),
 				ClassIDType.LightingSettings => new LightingSettings(assetInfo),
 				ClassIDType.SpriteAtlas => new SpriteAtlas(assetInfo),
+				ClassIDType.StreamingController => new StreamingController(assetInfo),
 				ClassIDType.TerrainLayer => new TerrainLayer(assetInfo),
+				//ClassIDType.FixedJoint => SourceGenerated.AssetFactory.CreateClassId_138(assetInfo, version),
+				//ClassIDType.FixedJoint2D => SourceGenerated.AssetFactory.CreateClassId_255(assetInfo, version),
+				//ClassIDType.HingeJoint => SourceGenerated.AssetFactory.CreateClassId_59(assetInfo, version),
+				//ClassIDType.HingeJoint2D => SourceGenerated.AssetFactory.CreateClassId_233(assetInfo, version),
+				//ClassIDType.ConfigurableJoint => SourceGenerated.AssetFactory.CreateClassId_153(assetInfo, version),
 				_ => null,
 			};
 		}
-
-		private readonly Dictionary<ClassIDType, Func<AssetInfo, IUnityObjectBase>> m_instantiators = new Dictionary<ClassIDType, Func<AssetInfo, IUnityObjectBase>>();
 	}
 }

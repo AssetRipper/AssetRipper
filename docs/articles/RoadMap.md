@@ -1,73 +1,88 @@
 # Development Roadmap
 
-## 0.1.9.5
-
 ## 0.2.0.0
-* Convert Exporters to the new Interface System
+* Convert exporters to the new system
   * Animator Controller exporter
+  * Animation Clip exporter
+
+## 0.2.0.1
+* Fix the inevitable bugs that pop up
+
+## 0.2.1.0
+This release will be primarily focused on cleaning up and refactoring the project.
+
+* Convert exporters to the new system
   * Mesh exporters
-  * Texture exporter
-* Move more classes to the Common project
-  * Move ProjectExporter
-  * Move GameStructure
-* Struct Reading Overhaul
-  * Apply interfaces in the generated assemblies
-  * Implement a system for downloading the assemblies on demand
-* Finishing touches
+* Cleanup legacy code
+  * Move documentation on legacy code to a suitable home
   * Remove the `Classes` and `Converters` namespaces
   * Remove any additional legacy code
   * Merge the common project back into the core project
- 
-## 0.2.1.0
-This release will be primarily focused on cleaning up and refactoring the project. This release may include:
-* Unified mesh export
-* WWise audio extraction
-* Add support for injecting custom asset types
-* Add support for reading alternative file formats
 
-## 0.2.2.0
-This release will likely focus on removing the native texture dependency by porting essential code to C#.
+## 0.2.X.0
+These releases will likely focus on preparing for the next major milestone.
 
-Other tentative inclusions in this release:
-* Build Ogg and Vorbis Native Binaries for Mac and Linux
+* Remove native dependencies
+  * Replace ogg and vorbis with managed code
+  * Remove Fmod
+  * Port essential texture decoding code to C#
+* Make all dependencies trimmable
+* Nuget feed for source generated code and forked dependencies
+* Switch to AsmResolver and the Cpp2IL rewrite
+* Segregating the codebase into more distinct layers
 
-## 0.2.3.0
-This release will likely focus on improving the user experience in the GUI
+## 0.3.0.0 / 1.0.0.0
+This release will focus on improving the user experience by overhauling the GUI
 
+* Improved UI performance
 * Improved Asset previews
   * Preview decompiled script
   * Add a Mesh preview
   * Add a Material preview
-  * Add a Hex Viewer
   * Add a TypeTree Viewer
   * Improve the Audio preview
     * Fast-forward and rewind
     * Seek-bar for selecting playback position
-    * Visual wave form display
 * Preferences window
   * Adjustable background color/theme
 * Window for licensed works
+* NativeAOT compilation for better performance while loading and extracting
 
 ## Planned But Unscheduled
-* GUI improvements
-  * Performance enhancements for viewing asset types with large contents, such as 9000 game objects
-  * UI overhaul to resemble Unity Editor
+* Import
+  * Script Import
+    * Use type trees for deserialization when available
+  * Asset Loading
+    * Extract assets and save to disk for lower ram usage
 * Export
   * Model Export
     * FBX (full)
     * GLB (full)
-    * PMX
+    * PMX (maybe)
     * DAE (aka Collada)
     * Split combined meshes back into the original set of static meshes
+    * Unified mesh export
   * Script Export
-    * Option to reference assemblies instead of scripts
-    * Convert TypeTree to MonoScripts
+    * Hybrid script export
+    * Assembly renaming
+    * Improve script decompilation quality with ILSpy's whole project decompilation method
+  * Audio Export
+    * WWise audio extraction
+  * Shader Export
+    * Replace all shaders on materials with a built-in shader (for example, the Standard shader)
+  * Miscellaneous Export
+    * Copy plugins folder into output
   * Selective Export
     * Export Selected object to folder
     * Export Selected object to compressed zip file
-  * Shader Export
-    * Replace all shaders on materials with a built-in shader (for example, the Standard shader)
-    * Export shaders as yaml
+* UI
+  * Audio preview
+    * Visual wave form display
+  * Asset preview
+    * Add a Hex Viewer
+  * Scene preview
+  * Font preview
+  * Asset editing
 
 ## Concept Ideas
 > Note: This is just a collection of ideas. These might not be desirable or feasible, so many of them might never be implemented. Do not interpret their inclusion here as any form of commitment.

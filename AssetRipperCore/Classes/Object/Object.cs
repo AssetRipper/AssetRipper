@@ -3,7 +3,7 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Object
 {
@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Classes.Object
 
 		protected Object(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public override HideFlags ObjectHideFlags
+		public override HideFlags ObjectHideFlagsOld
 		{
 			get => (HideFlags)m_ObjectHideFlags;
 			set => m_ObjectHideFlags = (uint)value;
@@ -35,14 +35,14 @@ namespace AssetRipper.Core.Classes.Object
 			}
 		}
 
-		public sealed override YAMLNode ExportYAML(IExportContainer container)
+		public sealed override YamlNode ExportYaml(IExportContainer container)
 		{
-			return ExportYAMLRoot(container);
+			return ExportYamlRoot(container);
 		}
 
-		protected virtual YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected virtual YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			if (HasHideFlag(container.ExportVersion, container.ExportFlags))
 			{
 				node.Add(ObjectHideFlagsName, m_ObjectHideFlags);

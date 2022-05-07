@@ -8,7 +8,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Camera
@@ -206,12 +206,12 @@ namespace AssetRipper.Core.Classes.Camera
 			yield return context.FetchDependency(TargetTexture, TargetTextureName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(ClearFlagsName, ClearFlags);
-			node.Add(BackGroundColorName, BackGroundColor.ExportYAML(container));
+			node.Add(BackGroundColorName, BackGroundColor.ExportYaml(container));
 
 			if (HasProjectionMatrixMode(container.ExportVersion))
 			{
@@ -223,8 +223,8 @@ namespace AssetRipper.Core.Classes.Camera
 			}
 			if (HasSensorSize(container.ExportVersion))
 			{
-				node.Add(SensorSizeName, SensorSize.ExportYAML(container));
-				node.Add(LensShiftName, LensShift.ExportYAML(container));
+				node.Add(SensorSizeName, SensorSize.ExportYaml(container));
+				node.Add(LensShiftName, LensShift.ExportYaml(container));
 			}
 			if (HasGateFitMode(container.ExportVersion))
 			{
@@ -235,16 +235,16 @@ namespace AssetRipper.Core.Classes.Camera
 				node.Add(FocalLengthName, FocalLength);
 			}
 
-			node.Add(NormalizedViewPortRectName, NormalizedViewPortRect.ExportYAML(container));
+			node.Add(NormalizedViewPortRectName, NormalizedViewPortRect.ExportYaml(container));
 			node.Add(NearClipPlaneName, NearClipPlane);
 			node.Add(FarClipPlaneName, FarClipPlane);
 			node.Add(FieldOfViewName, FieldOfView);
 			node.Add(OrthographicName, Orthographic);
 			node.Add(OrthographicSizeName, OrthographicSize);
 			node.Add(DepthName, Depth);
-			node.Add(CullingMaskName, CullingMask.ExportYAML(container));
+			node.Add(CullingMaskName, CullingMask.ExportYaml(container));
 			node.Add(RenderingPathName, (int)RenderingPath);
-			node.Add(TargetTextureName, TargetTexture.ExportYAML(container));
+			node.Add(TargetTextureName, TargetTexture.ExportYaml(container));
 			node.Add(TargetDisplayName, TargetDisplay);
 			node.Add(TargetEyeName, (int)TargetEye);
 			node.Add(HDRName, HDR);

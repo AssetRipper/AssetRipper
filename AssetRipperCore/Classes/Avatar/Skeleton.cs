@@ -1,12 +1,12 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.Avatar
 {
-	public sealed class Skeleton : IAssetReadable, IYAMLExportable
+	public sealed class Skeleton : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,12 +15,12 @@ namespace AssetRipper.Core.Classes.Avatar
 			AxesArray = reader.ReadAssetArray<Axes>();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(NodeName, Node == null ? YAMLSequenceNode.Empty : Node.ExportYAML(container));
-			node.Add(IDName, ID == null ? YAMLSequenceNode.Empty : ID.ExportYAML(true));
-			node.Add(AxesArrayName, AxesArray == null ? YAMLSequenceNode.Empty : AxesArray.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(NodeName, Node == null ? YamlSequenceNode.Empty : Node.ExportYaml(container));
+			node.Add(IDName, ID == null ? YamlSequenceNode.Empty : ID.ExportYaml(true));
+			node.Add(AxesArrayName, AxesArray == null ? YamlSequenceNode.Empty : AxesArray.ExportYaml(container));
 			return node;
 		}
 

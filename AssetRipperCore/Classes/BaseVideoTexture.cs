@@ -4,8 +4,9 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
@@ -38,12 +39,12 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(AudioClip, AudioClipName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(LoopName, IsLoop);
-			node.Add(AudioClipName, AudioClip.ExportYAML(container));
-			node.Add(MovieDataName, m_MovieData.ExportYAML());
+			node.Add(AudioClipName, AudioClip.ExportYaml(container));
+			node.Add(MovieDataName, m_MovieData.ExportYaml());
 			node.Add(ColorSpaceName, (int)ColorSpace);
 			return node;
 		}
@@ -58,9 +59,9 @@ namespace AssetRipper.Core.Classes
 			return base.FetchDependencies(context);
 		}
 
-		protected YAMLMappingNode ExportYAMLRootTexture(IExportContainer container)
+		protected YamlMappingNode ExportYamlRootTexture(IExportContainer container)
 		{
-			return base.ExportYAMLRoot(container);
+			return base.ExportYamlRoot(container);
 		}
 
 		public bool IsLoop { get; set; }

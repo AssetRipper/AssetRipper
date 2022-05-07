@@ -13,7 +13,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 		/// <param name="safe">If true, this method will return RG rather than throwing an exception.</param>
 		/// <returns>The format</returns>
 		/// <exception cref="NotSupportedException">if not safe and not an pvrtc texture</exception>
-		public static KTXBaseInternalFormat GetKTXBaseInternalFormat(this Texture2D _this, bool safe)
+		public static KTXBaseInternalFormat GetKTXBaseInternalFormat(this ITexture2D _this, bool safe)
 		{
 			switch (_this.TextureFormat)
 			{
@@ -70,7 +70,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 		/// <param name="safe">If true, this method will return zero rather than throwing an exception.</param>
 		/// <returns>The bit count</returns>
 		/// <exception cref="NotSupportedException">if not safe and not an pvrtc texture</exception>
-		public static int PVRTCBitCount(this Texture2D _this, bool safe)
+		public static int PVRTCBitCount(this ITexture2D _this, bool safe)
 		{
 			switch (_this.TextureFormat)
 			{
@@ -99,7 +99,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 		/// <param name="safe">If true, this method will return zero rather than throwing an exception.</param>
 		/// <returns>The length of one side of the block</returns>
 		/// <exception cref="NotSupportedException">if not safe and not an astc texture</exception>
-		public static int ASTCBlockSize(this Texture2D _this, bool safe)
+		public static int ASTCBlockSize(this ITexture2D _this, bool safe)
 		{
 			switch (_this.TextureFormat)
 			{

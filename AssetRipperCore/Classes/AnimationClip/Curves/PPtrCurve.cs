@@ -6,7 +6,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
 
@@ -75,14 +75,14 @@ namespace AssetRipper.Core.Classes.AnimationClip.Curves
 			Script.Write(writer);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(CurveName, Curve.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(CurveName, Curve.ExportYaml(container));
 			node.Add(AttributeName, Attribute);
 			node.Add(PathName, Path);
 			node.Add(ClassIDName, (int)ClassID);
-			node.Add(ScriptName, Script.ExportYAML(container));
+			node.Add(ScriptName, Script.ExportYaml(container));
 			return node;
 		}
 

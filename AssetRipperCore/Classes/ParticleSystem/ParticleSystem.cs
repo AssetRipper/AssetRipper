@@ -13,7 +13,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.ParticleSystem
@@ -279,9 +279,9 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(LengthInSecName, LengthInSec);
 			node.Add(SimulationSpeedName, SimulationSpeed);
@@ -296,37 +296,37 @@ namespace AssetRipper.Core.Classes.ParticleSystem
 			node.Add(UseUnscaledTimeName, UseUnscaledTime);
 			node.Add(AutoRandomSeedName, GetAutoRandomSeed(container.Version));
 			node.Add(UseRigidbodyForVelocityName, GetUseRigidbodyForVelocity(container.Version));
-			node.Add(StartDelayName, GetStartDelay(container.Version).ExportYAML(container));
+			node.Add(StartDelayName, GetStartDelay(container.Version).ExportYaml(container));
 			node.Add(MoveWithTransformName, (int)MoveWithTransform);
-			node.Add(MoveWithCustomTransformName, MoveWithCustomTransform.ExportYAML(container));
+			node.Add(MoveWithCustomTransformName, MoveWithCustomTransform.ExportYaml(container));
 			node.Add(ScalingModeName, (int)GetScalingMode(container.Version));
 			node.Add(RandomSeedName, RandomSeed);
-			node.Add(InitialModuleName, InitialModule.ExportYAML(container));
-			node.Add(ShapeModuleName, ShapeModule.ExportYAML(container));
-			node.Add(EmissionModuleName, EmissionModule.ExportYAML(container));
-			node.Add(SizeModuleName, SizeModule.ExportYAML(container));
-			node.Add(RotationModuleName, RotationModule.ExportYAML(container));
-			node.Add(ColorModuleName, ColorModule.ExportYAML(container));
-			node.Add(UVModuleName, UVModule.ExportYAML(container));
-			node.Add(VelocityModuleName, VelocityModule.ExportYAML(container));
-			node.Add(InheritVelocityModuleName, GetInheritVelocityModule(container.Version).ExportYAML(container));
+			node.Add(InitialModuleName, InitialModule.ExportYaml(container));
+			node.Add(ShapeModuleName, ShapeModule.ExportYaml(container));
+			node.Add(EmissionModuleName, EmissionModule.ExportYaml(container));
+			node.Add(SizeModuleName, SizeModule.ExportYaml(container));
+			node.Add(RotationModuleName, RotationModule.ExportYaml(container));
+			node.Add(ColorModuleName, ColorModule.ExportYaml(container));
+			node.Add(UVModuleName, UVModule.ExportYaml(container));
+			node.Add(VelocityModuleName, VelocityModule.ExportYaml(container));
+			node.Add(InheritVelocityModuleName, GetInheritVelocityModule(container.Version).ExportYaml(container));
 			if (HasLifetimeByEmitterSpeedModule(container.ExportVersion))
 			{
-				node.Add(LifetimeByEmitterSpeedModuleName, LifetimeByEmitterSpeedModule.ExportYAML(container));
+				node.Add(LifetimeByEmitterSpeedModuleName, LifetimeByEmitterSpeedModule.ExportYaml(container));
 			}
-			node.Add(ForceModuleName, ForceModule.ExportYAML(container));
-			node.Add(ExternalForcesModuleName, GetExternalForcesModule(container.Version).ExportYAML(container));
-			node.Add(ClampVelocityModuleName, ClampVelocityModule.ExportYAML(container));
-			node.Add(NoiseModuleName, GetNoiseModule(container.Version).ExportYAML(container));
-			node.Add(SizeBySpeedModuleName, SizeBySpeedModule.ExportYAML(container));
-			node.Add(RotationBySpeedModuleName, RotationBySpeedModule.ExportYAML(container));
-			node.Add(ColorBySpeedModuleName, ColorBySpeedModule.ExportYAML(container));
-			node.Add(CollisionModuleName, CollisionModule.ExportYAML(container));
-			node.Add(TriggerModuleName, GetTriggerModule(container.Version).ExportYAML(container));
-			node.Add(SubModuleName, SubModule.ExportYAML(container));
-			node.Add(LightsModuleName, GetLightsModule(container.Version).ExportYAML(container));
-			node.Add(TrailModuleName, GetTrailModule(container.Version).ExportYAML(container));
-			node.Add(CustomDataModuleName, GetCustomDataModule(container.Version).ExportYAML(container));
+			node.Add(ForceModuleName, ForceModule.ExportYaml(container));
+			node.Add(ExternalForcesModuleName, GetExternalForcesModule(container.Version).ExportYaml(container));
+			node.Add(ClampVelocityModuleName, ClampVelocityModule.ExportYaml(container));
+			node.Add(NoiseModuleName, GetNoiseModule(container.Version).ExportYaml(container));
+			node.Add(SizeBySpeedModuleName, SizeBySpeedModule.ExportYaml(container));
+			node.Add(RotationBySpeedModuleName, RotationBySpeedModule.ExportYaml(container));
+			node.Add(ColorBySpeedModuleName, ColorBySpeedModule.ExportYaml(container));
+			node.Add(CollisionModuleName, CollisionModule.ExportYaml(container));
+			node.Add(TriggerModuleName, GetTriggerModule(container.Version).ExportYaml(container));
+			node.Add(SubModuleName, SubModule.ExportYaml(container));
+			node.Add(LightsModuleName, GetLightsModule(container.Version).ExportYaml(container));
+			node.Add(TrailModuleName, GetTrailModule(container.Version).ExportYaml(container));
+			node.Add(CustomDataModuleName, GetCustomDataModule(container.Version).ExportYaml(container));
 			return node;
 		}
 

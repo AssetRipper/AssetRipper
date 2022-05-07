@@ -5,7 +5,7 @@ using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 using System.IO;
 
@@ -46,22 +46,22 @@ namespace AssetRipper.Core.Classes
 			yield return context.FetchDependency(MaskMapTexture, MaskMapTextureName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(DiffuseTextureName, DiffuseTexture.ExportYAML(container));
-			node.Add(NormalMapTextureName, NormalMapTexture.ExportYAML(container));
-			node.Add(MaskMapTextureName, MaskMapTexture.ExportYAML(container));
-			node.Add(TileSizeName, TileSize.ExportYAML(container));
-			node.Add(TileOffsetName, TileOffset.ExportYAML(container));
-			node.Add(SpecularName, Specular.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(DiffuseTextureName, DiffuseTexture.ExportYaml(container));
+			node.Add(NormalMapTextureName, NormalMapTexture.ExportYaml(container));
+			node.Add(MaskMapTextureName, MaskMapTexture.ExportYaml(container));
+			node.Add(TileSizeName, TileSize.ExportYaml(container));
+			node.Add(TileOffsetName, TileOffset.ExportYaml(container));
+			node.Add(SpecularName, Specular.ExportYaml(container));
 			node.Add(MetallicName, Metallic);
 			node.Add(SmoothnessName, Smoothness);
 			node.Add(NormalScaleName, NormalScale);
-			node.Add(DiffuseRemapMinName, DiffuseRemapMin.ExportYAML(container));
-			node.Add(DiffuseRemapMaxName, DiffuseRemapMax.ExportYAML(container));
-			node.Add(MaskMapRemapMinName, MaskMapRemapMin.ExportYAML(container));
-			node.Add(MaskMapRemapMaxName, MaskMapRemapMax.ExportYAML(container));
+			node.Add(DiffuseRemapMinName, DiffuseRemapMin.ExportYaml(container));
+			node.Add(DiffuseRemapMaxName, DiffuseRemapMax.ExportYaml(container));
+			node.Add(MaskMapRemapMinName, MaskMapRemapMin.ExportYaml(container));
+			node.Add(MaskMapRemapMaxName, MaskMapRemapMax.ExportYaml(container));
 			return node;
 		}
 

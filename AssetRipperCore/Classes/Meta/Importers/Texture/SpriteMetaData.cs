@@ -5,10 +5,10 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 {
@@ -156,25 +156,25 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(NameName, Name);
-			node.Add(RectName, Rect.ExportYAML(container));
+			node.Add(RectName, Rect.ExportYaml(container));
 			node.Add(AlignmentName, (int)Alignment);
-			node.Add(PivotName, Pivot.ExportYAML(container));
+			node.Add(PivotName, Pivot.ExportYaml(container));
 			if (HasBorder(container.ExportVersion))
 			{
-				node.Add(BorderName, Border.ExportYAML(container));
+				node.Add(BorderName, Border.ExportYaml(container));
 			}
 			if (HasOutline(container.ExportVersion))
 			{
-				node.Add(OutlineName, Outline.ExportYAML(container));
+				node.Add(OutlineName, Outline.ExportYaml(container));
 			}
 			if (HasPhysicsShape(container.ExportVersion))
 			{
-				node.Add(PhysicsShapeName, PhysicsShape.ExportYAML(container));
+				node.Add(PhysicsShapeName, PhysicsShape.ExportYaml(container));
 			}
 			if (HasTessellationDetail(container.ExportVersion))
 			{
@@ -182,7 +182,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 			if (HasBones(container.ExportVersion))
 			{
-				node.Add(BonesName, Bones.ExportYAML(container));
+				node.Add(BonesName, Bones.ExportYaml(container));
 				node.Add(SpriteIDName, SpriteID);
 			}
 			if (HasInternalID(container.ExportVersion))
@@ -191,10 +191,10 @@ namespace AssetRipper.Core.Classes.Meta.Importers.Texture
 			}
 			if (HasBones(container.ExportVersion))
 			{
-				node.Add(VerticesName, Vertices.ExportYAML(container));
-				node.Add(IndicesName, Indices.ExportYAML(true));
-				node.Add(EdgesName, Edges.ExportYAML(container));
-				node.Add(WeightsName, Weights.ExportYAML(container));
+				node.Add(VerticesName, Vertices.ExportYaml(container));
+				node.Add(IndicesName, Indices.ExportYaml(true));
+				node.Add(EdgesName, Edges.ExportYaml(container));
+				node.Add(WeightsName, Weights.ExportYaml(container));
 			}
 			return node;
 		}

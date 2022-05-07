@@ -6,7 +6,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -52,20 +52,22 @@ namespace AssetRipper.Core.Classes.ResourceManager
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(ContainerName, Container.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(ContainerName, Container.ExportYaml(container));
 			if (HasDependentAssets(container.Version, container.ExportFlags))
 			{
-				node.Add(DependentAssetsName, DependentAssets.ExportYAML(container));
+				node.Add(DependentAssetsName, DependentAssets.ExportYaml(container));
 			}
 			return node;
 		}
 
-		public NullableKeyValuePair<string, PPtr<IUnityObjectBase>>[] GetAssets()
+		public NullableKeyValuePair<Utf8StringBase, PPtr<IUnityObjectBase>>[] GetAssets()
 		{
-			return Container.Select(t => new NullableKeyValuePair<string, PPtr<IUnityObjectBase>>(t.Key, t.Value.CastTo<IUnityObjectBase>())).ToArray();
+			return Container
+				.Select(t => new NullableKeyValuePair<Utf8StringBase, PPtr<IUnityObjectBase>>(new Utf8StringLegacy(t.Key), t.Value.CastTo<IUnityObjectBase>()))
+				.ToArray();
 		}
 
 		public KeyValuePair<string, PPtr<Object.Object>>[] Container { get; set; }

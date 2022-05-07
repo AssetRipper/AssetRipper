@@ -5,11 +5,11 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.PackedBitVectors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public sealed class CompressedAnimationCurve : IAssetReadable, IYAMLExportable
+	public sealed class CompressedAnimationCurve : IAssetReadable, IYamlExportable
 	{
 		public QuaternionCurve Unpack()
 		{
@@ -45,13 +45,13 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			PostInfinity = (CurveLoopTypes)reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(PathName, Path);
-			node.Add(TimesName, Times.ExportYAML(container));
-			node.Add(ValuesName, Values.ExportYAML(container));
-			node.Add(SlopesName, Slopes.ExportYAML(container));
+			node.Add(TimesName, Times.ExportYaml(container));
+			node.Add(ValuesName, Values.ExportYaml(container));
+			node.Add(SlopesName, Slopes.ExportYaml(container));
 			node.Add(PreInfinityName, (int)PreInfinity);
 			node.Add(PostInfinityName, (int)PostInfinity);
 			return node;

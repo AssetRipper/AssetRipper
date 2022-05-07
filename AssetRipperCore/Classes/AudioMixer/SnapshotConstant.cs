@@ -1,12 +1,12 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.AudioMixer
 {
 #warning TODO: not implemented
-	public sealed class SnapshotConstant : IAssetReadable, IYAMLExportable
+	public sealed class SnapshotConstant : IAssetReadable, IYamlExportable
 	{
 		/*public static int ToSerializedVersion(Version version)
 		{
@@ -22,14 +22,14 @@ namespace AssetRipper.Core.Classes.AudioMixer
 			TransitionIndices = reader.ReadUInt32Array();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			//node.AddSerializedVersion(ToSerializedVersion(container.Version));
 			node.Add(NameHashName, NameHash);
-			node.Add(ValuesName, Values.ExportYAML());
-			node.Add(TransitionTypesName, TransitionTypes.ExportYAML(true));
-			node.Add(TransitionIndicesName, TransitionIndices.ExportYAML(true));
+			node.Add(ValuesName, Values.ExportYaml());
+			node.Add(TransitionTypesName, TransitionTypes.ExportYaml(true));
+			node.Add(TransitionIndicesName, TransitionIndices.ExportYaml(true));
 			return node;
 		}
 

@@ -1,40 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <TargetFramework>net6.0</TargetFramework>
-	  <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <AssemblyName>AssetRipperCore</AssemblyName>
-	  <RootNamespace>AssetRipper.Core</RootNamespace>
-	  <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-	  <OutputPath>..\Bins\AssetRipperCore\$(Configuration)\</OutputPath>
-	  <IntermediateOutputPath>..\Bins\obj\AssetRipperCore\$(Configuration)\</IntermediateOutputPath>
-	  <Copyright>Copyright ©  2021</Copyright>
-	  <Authors>ds5678</Authors>
-	  <Configurations>Debug;Release</Configurations>
-	  <DebugType>embedded</DebugType>
-	  <DebugSymbols>true</DebugSymbols>
-	  <DefineConstants>TRACE;NET_CORE</DefineConstants>
-	  <Platforms>AnyCPU</Platforms>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AssemblyName>AssetRipperCore</AssemblyName>
+		<RootNamespace>AssetRipper.Core</RootNamespace>
+		<OutputPath>..\Bins\AssetRipperCore\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipperCore\$(Configuration)\</IntermediateOutputPath>
+		<Copyright>Copyright ©  2022</Copyright>
+		<Authors>ds5678</Authors>
+		<Configurations>Debug;Release</Configurations>
+		<DebugType>embedded</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<DefineConstants>TRACE;NET_CORE</DefineConstants>
+		<Platforms>AnyCPU</Platforms>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-	<DefineConstants>DEBUG</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
+		<DefineConstants>DEBUG</DefineConstants>
+	</PropertyGroup>
 
-  <ItemGroup>
-	<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
-  </ItemGroup>
+	<ItemGroup>
+		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+	</ItemGroup>
 
-  <ItemGroup>
-	<ProjectReference Include="..\AssetRipperCommon\AssetRipperCommon.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipperCommon\AssetRipperCommon.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-	<Compile Remove="obj\**" />
-	<EmbeddedResource Remove="obj\**" />
-	<None Remove="obj\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="obj\**" />
+		<EmbeddedResource Remove="obj\**" />
+		<None Remove="obj\**" />
+	</ItemGroup>
 
 </Project>

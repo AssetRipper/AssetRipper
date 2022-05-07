@@ -2,7 +2,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.NavMeshAgent
 {
@@ -54,9 +54,9 @@ namespace AssetRipper.Core.Classes.NavMeshAgent
 			ObstacleAvoidanceType = (ObstacleAvoidanceType)reader.ReadInt32();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.Add(AgentTypeIDName, AgentTypeID);
 			node.Add(RadiusName, Radius);
 			node.Add(SpeedName, Speed);

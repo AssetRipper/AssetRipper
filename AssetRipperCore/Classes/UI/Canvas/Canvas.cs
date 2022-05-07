@@ -5,7 +5,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.UI.Canvas
@@ -112,12 +112,12 @@ namespace AssetRipper.Core.Classes.UI.Canvas
 			yield return context.FetchDependency(Camera, CameraName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(RenderModeName, (int)RenderMode);
-			node.Add(CameraName, Camera.ExportYAML(container));
+			node.Add(CameraName, Camera.ExportYaml(container));
 			node.Add(PlaneDistanceName, HasPlaneDistance(container.Version) ? PlaneDistance : 100.0f);
 			node.Add(PixelPerfectName, PixelPerfect);
 			node.Add(ReceivesEventsName, HasRecievesEvents(container.Version) ? RecievesEvents : true);

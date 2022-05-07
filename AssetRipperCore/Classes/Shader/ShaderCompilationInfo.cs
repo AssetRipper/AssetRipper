@@ -2,12 +2,12 @@
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public sealed class ShaderCompilationInfo : IAssetReadable, IYAMLExportable
+	public sealed class ShaderCompilationInfo : IAssetReadable, IYamlExportable
 	{
 		/// <summary>
 		/// 5.2.0 adn greater
@@ -26,13 +26,17 @@ namespace AssetRipper.Core.Classes.Shader
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(SnippetsName, Snippets.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(SnippetsName, Snippets.ExportYaml(container));
 			node.Add(MeshComponentsFromSnippetsName, MeshComponentsFromSnippets);
 			node.Add(HasSurfaceShadersName, HasSurfaceShaders);
-			node.Add(HasFixedFunctionShadersName, HasFixedFunctionShaders);
+			if (HasHasFixedFunctionShaders(container.ExportVersion))
+			{
+				node.Add(HasFixedFunctionShadersName, HasFixedFunctionShaders);
+			}
+
 			return node;
 		}
 

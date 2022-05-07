@@ -7,11 +7,13 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
+using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Shader
 {
@@ -63,11 +65,12 @@ namespace AssetRipper.Core.Classes.Shader
 		/// </summary>
 		public static bool HasShaderIsBaked(UnityVersion version) => version.IsGreaterEqual(4);
 		/// <summary>
-		/// 3.4.0 to 5.5.0 exclusive and Not Release
+		/// 3.4.0 to 5.5.0 as well as 2021.2.0a19 and greater while Not Release
 		/// </summary>
 		public static bool HasErrors(UnityVersion version, TransferInstructionFlags flags)
 		{
-			return !flags.IsRelease() && version.IsGreaterEqual(3, 4) && version.IsLess(5, 5);
+			return !flags.IsRelease() && ((version.IsGreaterEqual(3, 4) && version.IsLess(5, 5, 0, UnityVersionType.Final, 3)) ||
+			        (version.IsGreaterEqual(2021, 2, 0, UnityVersionType.Alpha, 19)));
 		}
 		/// <summary>
 		/// 4.2.0 and greater and Not Release
@@ -84,6 +87,10 @@ namespace AssetRipper.Core.Classes.Shader
 		/// 2019.3 and greater
 		/// </summary>
 		private static bool IsDoubleArray(UnityVersion version) => version.IsGreaterEqual(2019, 3);
+		/// <summary>
+		/// 2020.1.0b4 and greater and Not Release
+		/// </summary>
+		private static bool HasCompileSmokeTest(UnityVersion version, TransferInstructionFlags flags) => !flags.IsRelease() && version.IsGreaterEqual(2020, 1, 0, UnityVersionType.Beta, 4);
 		#endregion
 
 		public override void Read(AssetReader reader)
@@ -93,26 +100,28 @@ namespace AssetRipper.Core.Classes.Shader
 				ReadNamedObject(reader);
 
 				m_ParsedForm.Read(reader);
+				NameString = m_ParsedForm.NameString; // Use the serialized shader name as asset name if available.
+
 				Platforms = reader.ReadArray((t) => (GPUPlatform)t);
 				if (IsDoubleArray(reader.Version))
 				{
-					uint[][] offsets = reader.ReadUInt32ArrayArray();
-					uint[][] compressedLengths = reader.ReadUInt32ArrayArray();
-					uint[][] decompressedLengths = reader.ReadUInt32ArrayArray();
-					byte[] compressedBlob = reader.ReadByteArray();
+					Offsets2D = reader.ReadUInt32ArrayArray();
+					CompressedLengths2D = reader.ReadUInt32ArrayArray();
+					DecompressedLengths2D = reader.ReadUInt32ArrayArray();
+					CompressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					UnpackSubProgramBlobs(reader.Info, offsets, compressedLengths, decompressedLengths, compressedBlob);
+					UnpackSubProgramBlobs(reader.Info, Offsets2D, CompressedLengths2D, DecompressedLengths2D, CompressedBlob);
 				}
 				else
 				{
-					uint[] offsets = reader.ReadUInt32Array();
-					uint[] compressedLengths = reader.ReadUInt32Array();
-					uint[] decompressedLengths = reader.ReadUInt32Array();
-					byte[] compressedBlob = reader.ReadByteArray();
+					Offsets1D = reader.ReadUInt32Array();
+					CompressedLengths1D = reader.ReadUInt32Array();
+					DecompressedLengths1D = reader.ReadUInt32Array();
+					CompressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					UnpackSubProgramBlobs(reader.Info, offsets, compressedLengths, decompressedLengths, compressedBlob);
+					UnpackSubProgramBlobs(reader.Info, Offsets1D, CompressedLengths1D, DecompressedLengths1D, CompressedBlob);
 				}
 			}
 			else
@@ -121,11 +130,11 @@ namespace AssetRipper.Core.Classes.Shader
 
 				if (HasBlob(reader.Version))
 				{
-					uint decompressedSize = reader.ReadUInt32();
-					byte[] compressedBlob = reader.ReadByteArray();
+					DecompressedSize = reader.ReadUInt32();
+					CompressedBlob = reader.ReadByteArray();
 					reader.AlignStream();
 
-					UnpackSubProgramBlobs(reader.Info, 0, (uint)compressedBlob.Length, decompressedSize, compressedBlob);
+					UnpackSubProgramBlobs(reader.Info, 0, (uint)CompressedBlob.Length, DecompressedSize, CompressedBlob );
 				}
 
 				if (HasFallback(reader.Version))
@@ -172,11 +181,89 @@ namespace AssetRipper.Core.Classes.Shader
 					yield return asset;
 				}
 			}
+
+			if (HasNonModifiableTextures(context.Version))
+			{
+				foreach (PPtr<IUnityObjectBase> asset in context.FetchDependencies(NonModifiableTextures, NonModifiableTexturesName))
+				{
+					yield return asset;
+				}
+			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			throw new NotSupportedException();
+			YamlMappingNode node;
+			if (IsSerialized(container.ExportVersion))
+			{
+				node = ExportBaseYamlRoot(container);
+				node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
+				node.Add("m_ParsedForm", m_ParsedForm.ExportYaml(container));
+				node.Add("platforms", Array.ConvertAll(Platforms, value => (int)value).ExportYaml(false));
+				if (IsDoubleArray(container.ExportVersion))
+				{
+					node.Add("offsets", Offsets2D.ExportYaml(false));
+					node.Add("compressedLengths", CompressedLengths2D.ExportYaml(false));
+					node.Add("decompressedLengths", DecompressedLengths2D.ExportYaml(false));
+				}
+				else
+				{
+					node.Add("offsets", Offsets1D.ExportYaml(false));
+					node.Add("compressedLengths", CompressedLengths1D.ExportYaml(false));
+					node.Add("decompressedLengths", DecompressedLengths1D.ExportYaml(false));
+				}
+
+				node.Add("compressedBlob", CompressedBlob.ExportYaml());
+			}
+			else //Shader as TextAsset (old format)
+			{
+				node = base.ExportYamlRoot(container);
+				node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
+
+				if (HasBlob(container.ExportVersion))
+				{
+					node.Add("decompressedSize", DecompressedSize);
+					node.Add("m_SubProgramBlob", CompressedBlob.ExportYaml());
+				}
+			}
+
+			if (HasDependencies(container.ExportVersion))
+			{
+				node.Add(DependenciesName, Dependencies.ExportYaml(container));
+			}
+
+			if (HasNonModifiableTextures(container.ExportVersion))
+			{
+				node.Add(NonModifiableTexturesName, NonModifiableTextures.ExportYaml(container));
+			}
+
+			if (HasShaderIsBaked(container.ExportVersion))
+			{
+				node.Add("m_ShaderIsBaked", ShaderIsBaked);
+			}
+
+			//Editor-Only
+			if (HasErrors(container.ExportVersion, container.ExportFlags))
+			{
+				node.Add("errors", (new HashSet<ShaderError>()).ExportYaml(container));
+			}
+
+			if (HasDefaultTextures(container.ExportVersion, container.ExportFlags))
+			{
+				node.Add("m_DefaultTextures", (new Dictionary<string, PPtr<Texture>>()).ExportYaml(container));
+			}
+
+			if (HasCompileInfo(container.ExportVersion, container.ExportFlags))
+			{
+				node.Add("m_CompileInfo", (new ShaderCompilationInfo()).ExportYaml(container));
+			}
+
+			if (HasCompileSmokeTest(container.ExportVersion, container.ExportFlags))
+			{
+				node.Add("m_CompileSmokeTestAfterImport", default(bool));
+			}
+
+			return node;
 		}
 
 		private void UnpackSubProgramBlobs(LayoutInfo layout, uint offset, uint compressedLength, uint decompressedLength, byte[] compressedBlob)
@@ -227,12 +314,25 @@ namespace AssetRipper.Core.Classes.Shader
 
 		public GPUPlatform[] Platforms { get; set; }
 		public ShaderSubProgramBlob[] Blobs { get; set; }
+
+		//2D arrays starting from 2019.3
+		public uint[][] Offsets2D { get; set; }
+		public uint[][] CompressedLengths2D { get; set; }
+		public uint[][] DecompressedLengths2D { get; set; }
+		//1D arrays before 2019.3
+		public uint[] Offsets1D { get; set; }
+		public uint[] CompressedLengths1D { get; set; }
+		public uint[] DecompressedLengths1D { get; set; }
+		//Not serialized
+		public uint DecompressedSize { get; set; }
+		public byte[] CompressedBlob { get; set; }
+
 		public PPtr<Shader>[] Dependencies { get; set; }
 		public Dictionary<string, PPtr<Texture>> NonModifiableTextures { get; set; }
 		public bool ShaderIsBaked { get; set; }
 
-		public const string ErrorsName = "errors";
 		public const string DependenciesName = "m_Dependencies";
+		public const string NonModifiableTexturesName = "m_NonModifiableTextures";
 
 		public SerializedShader.ISerializedShader ParsedForm => m_ParsedForm;
 		private SerializedShader.SerializedShader m_ParsedForm = new();

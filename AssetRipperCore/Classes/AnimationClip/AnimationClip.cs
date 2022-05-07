@@ -10,11 +10,11 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
@@ -213,34 +213,34 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(LegacyName, GetLegacy(container.Version));
 			node.Add(CompressedName, Compressed);
 			node.Add(UseHighQualityCurveName, UseHightQualityCurve);
 
 			AnimationCurves curves = GetAnimationCurves(container.Version, container.Flags);
-			node.Add(RotationCurvesName, curves.RotationCurves.ExportYAML(container));
-			node.Add(CompressedRotationCurvesName, curves.CompressedRotationCurves.ExportYAML(container));
-			node.Add(EulerCurvesName, curves.EulerCurves.ExportYAML(container));
-			node.Add(PositionCurvesName, curves.PositionCurves.ExportYAML(container));
-			node.Add(ScaleCurvesName, curves.ScaleCurves.ExportYAML(container));
-			node.Add(FloatCurvesName, curves.FloatCurves.ExportYAML(container));
-			node.Add(PPtrCurvesName, curves.PPtrCurves.ExportYAML(container));
+			node.Add(RotationCurvesName, curves.RotationCurves.ExportYaml(container));
+			node.Add(CompressedRotationCurvesName, curves.CompressedRotationCurves.ExportYaml(container));
+			node.Add(EulerCurvesName, curves.EulerCurves.ExportYaml(container));
+			node.Add(PositionCurvesName, curves.PositionCurves.ExportYaml(container));
+			node.Add(ScaleCurvesName, curves.ScaleCurves.ExportYaml(container));
+			node.Add(FloatCurvesName, curves.FloatCurves.ExportYaml(container));
+			node.Add(PPtrCurvesName, curves.PPtrCurves.ExportYaml(container));
 
 			node.Add(SampleRateName, SampleRate);
 			node.Add(WrapModeName, (int)WrapMode);
-			node.Add(BoundsName, Bounds.ExportYAML(container));
-			node.Add(ClipBindingConstantName, GetClipBindingConstant(container.Version).ExportYAML(container));
-			node.Add(AnimationClipSettingsName, GetAnimationClipSettings(container.Version, container.Flags).ExportYAML(container));
-			node.Add(EditorCurvesName, Array.Empty<FloatCurve>().ExportYAML(container));
-			node.Add(EulerEditorCurvesName, Array.Empty<FloatCurve>().ExportYAML(container));
+			node.Add(BoundsName, Bounds.ExportYaml(container));
+			node.Add(ClipBindingConstantName, GetClipBindingConstant(container.Version).ExportYaml(container));
+			node.Add(AnimationClipSettingsName, GetAnimationClipSettings(container.Version, container.Flags).ExportYaml(container));
+			node.Add(EditorCurvesName, Array.Empty<FloatCurve>().ExportYaml(container));
+			node.Add(EulerEditorCurvesName, Array.Empty<FloatCurve>().ExportYaml(container));
 			node.Add(HasGenericRootTransformName, HasGenericRootTransform);
 			node.Add(HasMotionFloatCurvesName, HasMotionFloatCurves);
 			node.Add(GenerateMotionCurvesName, false);
-			node.Add(EventsName, Events.ExportYAML(container));
+			node.Add(EventsName, Events.ExportYaml(container));
 
 			return node;
 		}
@@ -352,7 +352,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 
 		private bool AddAnimatorTOS(Animator.Animator animator, Dictionary<uint, string> tos)
 		{
-			Avatar.Avatar avatar = animator.Avatar.FindAsset(animator.SerializedFile);
+			Avatar.Avatar? avatar = animator.Avatar.FindAsset(animator.SerializedFile);
 			if (avatar != null)
 			{
 				if (AddAvatarTOS(avatar, tos))
@@ -378,7 +378,7 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			for (int i = 0; i < tosCount; i++)
 			{
 				GenericBinding.GenericBinding binding = ClipBindingConstant.GenericBindings[i];
-				if (src.TryGetValue(binding.Path, out string path))
+				if (src.TryGetValue(binding.Path, out string? path))
 				{
 					dest[binding.Path] = path;
 					if (dest.Count == tosCount)

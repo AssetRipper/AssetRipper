@@ -8,7 +8,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.GUIText
@@ -87,21 +87,21 @@ namespace AssetRipper.Core.Classes.GUIText
 			yield return context.FetchDependency(Material, MaterialName);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TextName, Text);
 			node.Add(AnchorName, (short)Anchor);
 			node.Add(AlignmentName, (short)Alignment);
-			node.Add(PixelOffsetName, PixelOffset.ExportYAML(container));
+			node.Add(PixelOffsetName, PixelOffset.ExportYaml(container));
 			node.Add(LineSpacingName, LineSpacing);
 			node.Add(TabSizeName, TabSize);
-			node.Add(FontName, Font.ExportYAML(container));
-			node.Add(MaterialName, Material.ExportYAML(container));
+			node.Add(FontName, Font.ExportYaml(container));
+			node.Add(MaterialName, Material.ExportYaml(container));
 			node.Add(FontSizeName, FontSize);
 			node.Add(FontStyleName, (int)FontStyle);
-			node.Add(ColorName, GetColorRGBAf(container.Version).ExportYAML(container));
+			node.Add(ColorName, GetColorRGBAf(container.Version).ExportYaml(container));
 			node.Add(PixelCorrectName, PixelCorrect);
 			node.Add(RichTextName, GetRichText(container.Version));
 			return node;

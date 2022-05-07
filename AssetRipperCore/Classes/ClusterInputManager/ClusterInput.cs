@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ClusterInputManager
 {
-	public sealed class ClusterInput : IAssetReadable, IYAMLExportable
+	public sealed class ClusterInput : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -15,9 +15,9 @@ namespace AssetRipper.Core.Classes.ClusterInputManager
 			Type = reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(NameName, Name);
 			node.Add(DeviceNameName, DeviceName);
 			node.Add(ServerUrlName, ServerUrl);

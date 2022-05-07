@@ -7,7 +7,7 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
 
@@ -17,12 +17,12 @@ namespace AssetRipper.Core.Classes
 	{
 		public abstract class BaseParameters
 		{
-			public AnimatorState GetDestinationState()
+			public AnimatorState? GetDestinationState()
 			{
 				return GetDestinationState(DestinationState);
 			}
 
-			private AnimatorState GetDestinationState(int destinationState)
+			private AnimatorState? GetDestinationState(int destinationState)
 			{
 				if (destinationState == -1)
 				{
@@ -63,7 +63,7 @@ namespace AssetRipper.Core.Classes
 		protected AnimatorTransitionBase(LayoutInfo layout, AssetInfo assetInfo, BaseParameters parameters) : base(layout)
 		{
 			AssetInfo = assetInfo;
-			ObjectHideFlags = HideFlags.HideInHierarchy;
+			ObjectHideFlagsOld = HideFlags.HideInHierarchy;
 
 			List<AnimatorCondition> conditionList = new List<AnimatorCondition>(parameters.ConditionConstants.Count);
 			for (int i = 0; i < parameters.ConditionConstants.Count; i++)
@@ -77,11 +77,11 @@ namespace AssetRipper.Core.Classes
 			}
 			Conditions = conditionList.ToArray();
 
-			AnimatorState state = parameters.GetDestinationState();
+			AnimatorState? state = parameters.GetDestinationState();
 			DstStateMachine = new();
 			DstState = state == null ? new() : state.SerializedFile.CreatePPtr(state);
 
-			Name = parameters.Name;
+			NameString = parameters.Name;
 			Solo = false;
 			Mute = false;
 			IsExit = parameters.IsExit;
@@ -93,12 +93,12 @@ namespace AssetRipper.Core.Classes
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(ConditionsName, Conditions.ExportYAML(container));
-			node.Add(DstStateMachineName, DstStateMachine.ExportYAML(container));
-			node.Add(DstStateName, DstState.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(ConditionsName, Conditions.ExportYaml(container));
+			node.Add(DstStateMachineName, DstStateMachine.ExportYaml(container));
+			node.Add(DstStateName, DstState.ExportYaml(container));
 			node.Add(SoloName, Solo);
 			node.Add(MuteName, Mute);
 			node.Add(IsExitName, IsExit);

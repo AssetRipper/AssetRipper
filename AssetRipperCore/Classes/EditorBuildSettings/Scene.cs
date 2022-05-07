@@ -2,9 +2,9 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
@@ -53,12 +53,12 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 			}
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(EnabledName, Enabled);
 			node.Add(PathName, Path);
-			node.Add(GuidName, m_GUID.ExportYAML(container));
+			node.Add(GuidName, m_GUID.ExportYaml(container));
 			return node;
 		}
 

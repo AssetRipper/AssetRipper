@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Meta.Importers;
+using AssetRipper.Core.Importers;
 using AssetRipper.Core.Layout;
 
 namespace AssetRipper.Core.Parser.Asset
@@ -8,6 +9,11 @@ namespace AssetRipper.Core.Parser.Asset
 		public IDefaultImporter CreateDefaultImporter(LayoutInfo layout)
 		{
 			return new DefaultImporter(layout);
+		}
+
+		public IMonoImporter CreateMonoImporter(LayoutInfo layout)
+		{
+			return new MonoImporter(layout);
 		}
 
 		public INativeFormatImporter CreateNativeFormatImporter(LayoutInfo layout)

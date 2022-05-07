@@ -2,6 +2,7 @@ using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Importers;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -9,6 +10,7 @@ using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Utils;
+using AssetRipper.Core.VersionHandling;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,10 +25,10 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public ScriptExportCollection(IAssetExporter assetExporter, IMonoScript script)
 		{
 			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
-
 			File = script.SerializedFile;
 
 			// find copies in whole project and skip them
+			Dictionary<MonoScriptInfo, IMonoScript> uniqueDictionary = new();
 			foreach (IUnityObjectBase asset in script.SerializedFile.Collection.FetchAssets())
 			{
 				if (asset is not IMonoScript assetScript)
@@ -34,31 +36,15 @@ namespace AssetRipper.Library.Exporters.Scripts
 					continue;
 				}
 
-				//MonoScript assetScript = (MonoScript)asset;
-				IMonoScript unique = assetScript;
-				foreach (IMonoScript export in m_unique)
+				MonoScriptInfo info = MonoScriptInfo.From(assetScript);
+				if(uniqueDictionary.TryGetValue(info, out IMonoScript uniqueScript))
 				{
-					if (assetScript.ClassName != export.ClassName)
-					{
-						continue;
-					}
-					if (assetScript.Namespace != export.Namespace)
-					{
-						continue;
-					}
-					if (assetScript.GetAssemblyNameFixed() != export.GetAssemblyNameFixed())
-					{
-						continue;
-					}
-
-					unique = export;
-					break;
+					m_scripts.Add(assetScript, uniqueScript);
 				}
-
-				m_scripts.Add(assetScript, unique);
-				if (assetScript == unique)
+				else
 				{
-					m_unique.Add(assetScript);
+					m_scripts.Add(assetScript, assetScript);
+					uniqueDictionary.Add(info, assetScript);
 					if (assetScript.IsScriptPresents())
 					{
 						m_export.Add(assetScript);
@@ -67,7 +53,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 		}
 
-		public override bool Export(ProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			if (m_export.Count == 0)
 			{
@@ -141,7 +127,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private void OnScriptExported(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			IMonoScript script = (IMonoScript)asset;
-			MonoImporter importer = new MonoImporter(container.ExportLayout);
+			IMonoImporter importer = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateMonoImporter(container.ExportLayout);
 			importer.ExecutionOrder = (short)script.ExecutionOrder;
 			Meta meta = new Meta(script.GUID, importer);
 			ExportMeta(container, meta, path);
@@ -156,7 +142,52 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private static readonly Regex s_unityEngine = new Regex(@"^UnityEngine(\.[0-9a-zA-Z]+)*(\.dll)?$", RegexOptions.Compiled);
 
 		private readonly List<IMonoScript> m_export = new List<IMonoScript>();
-		private readonly HashSet<IMonoScript> m_unique = new HashSet<IMonoScript>();
 		private readonly Dictionary<IUnityObjectBase, IMonoScript> m_scripts = new Dictionary<IUnityObjectBase, IMonoScript>();
+
+		private struct MonoScriptInfo : IEquatable<MonoScriptInfo>
+		{
+			public readonly string @class;
+			public readonly string @namespace;
+			public readonly string assembly;
+
+			public MonoScriptInfo(string @class, string @namespace, string assembly)
+			{
+				this.@class = @class;
+				this.@namespace = @namespace;
+				this.assembly = assembly;
+			}
+
+			public static MonoScriptInfo From(IMonoScript monoScript)
+			{
+				return new MonoScriptInfo(monoScript.ClassName, monoScript.Namespace, monoScript.GetAssemblyNameFixed());
+			}
+
+			public override bool Equals(object obj)
+			{
+				return obj is MonoScriptInfo info && Equals(info);
+			}
+
+			public bool Equals(MonoScriptInfo other)
+			{
+				return @class == other.@class &&
+					   @namespace == other.@namespace &&
+					   assembly == other.assembly;
+			}
+
+			public override int GetHashCode()
+			{
+				return HashCode.Combine(@class, @namespace, assembly);
+			}
+
+			public static bool operator ==(MonoScriptInfo left, MonoScriptInfo right)
+			{
+				return left.Equals(right);
+			}
+
+			public static bool operator !=(MonoScriptInfo left, MonoScriptInfo right)
+			{
+				return !(left == right);
+			}
+		}
 	}
 }

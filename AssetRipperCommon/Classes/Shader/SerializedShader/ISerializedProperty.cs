@@ -3,7 +3,7 @@ using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public interface ISerializedProperty : IHasName
+	public interface ISerializedProperty : IHasNameString
 	{
 		string Description { get; set; }
 		Utf8StringBase[] Attributes { get; }

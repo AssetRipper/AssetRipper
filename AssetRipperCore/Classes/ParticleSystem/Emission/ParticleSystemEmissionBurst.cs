@@ -3,11 +3,11 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 {
-	public sealed class ParticleSystemEmissionBurst : IAssetReadable, IYAMLExportable
+	public sealed class ParticleSystemEmissionBurst : IAssetReadable, IYamlExportable
 	{
 		public ParticleSystemEmissionBurst() { }
 		public ParticleSystemEmissionBurst(float time, int minValue, int maxValue)
@@ -58,12 +58,12 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Emission
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(TimeName, Time);
-			node.Add(CountCurveName, CountCurve.ExportYAML(container));
+			node.Add(CountCurveName, CountCurve.ExportYaml(container));
 			node.Add(CycleCountName, CycleCount);
 			node.Add(RepeatIntervalName, RepeatInterval);
 			if (HasProbability(container.ExportVersion))

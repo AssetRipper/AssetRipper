@@ -1,12 +1,12 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer
 {
-	public sealed class StateMotionPair : IYAMLExportable
+	public sealed class StateMotionPair : IYamlExportable
 	{
 		public StateMotionPair(AnimatorState state, Motion motion)
 		{
@@ -22,11 +22,11 @@ namespace AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerL
 			Motion = motion.SerializedFile.CreatePPtr(motion);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(StateName, State.ExportYAML(container));
-			node.Add(MotionName, Motion.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(StateName, State.ExportYaml(container));
+			node.Add(MotionName, Motion.ExportYaml(container));
 			return node;
 		}
 

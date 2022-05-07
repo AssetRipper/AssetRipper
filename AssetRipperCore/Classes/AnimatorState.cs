@@ -9,10 +9,10 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes
 {
@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Classes
 		private AnimatorState(LayoutInfo layout, AssetInfo assetInfo, AnimatorController.AnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position) : base(layout)
 		{
 			AssetInfo = assetInfo;
-			ObjectHideFlags = HideFlags.HideInHierarchy;
+			ObjectHideFlagsOld = HideFlags.HideInHierarchy;
 
 			VirtualSerializedFile virtualFile = (VirtualSerializedFile)assetInfo.File;
 
@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Classes
 			StateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Instance;
 			StateConstant state = stateMachine.StateConstantArray[stateIndex].Instance;
 
-			Name = TOS[state.NameID];
+			NameString = TOS[state.NameID];
 
 			Speed = state.Speed;
 			CycleOffset = state.CycleOffset;
@@ -92,15 +92,15 @@ namespace AssetRipper.Core.Classes
 			throw new NotSupportedException();
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.InsertSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(SpeedName, Speed);
 			node.Add(CycleOffsetName, CycleOffset);
-			node.Add(TransitionsName, Transitions.ExportYAML(container));
-			node.Add(StateMachineBehavioursName, StateMachineBehaviours.ExportYAML(container));
-			node.Add(PositionName, Position.ExportYAML(container));
+			node.Add(TransitionsName, Transitions.ExportYaml(container));
+			node.Add(StateMachineBehavioursName, StateMachineBehaviours.ExportYaml(container));
+			node.Add(PositionName, Position.ExportYaml(container));
 			node.Add(IKOnFeetName, IKOnFeet);
 			node.Add(WriteDefaultValuesName, WriteDefaultValues);
 			node.Add(MirrorName, Mirror);
@@ -108,7 +108,7 @@ namespace AssetRipper.Core.Classes
 			node.Add(MirrorParameterActiveName, MirrorParameterActive);
 			node.Add(CycleOffsetParameterActiveName, CycleOffsetParameterActive);
 			node.Add(TimeParameterActiveName, TimeParameterActive);
-			node.Add(MotionName, Motion.ExportYAML(container));
+			node.Add(MotionName, Motion.ExportYaml(container));
 			node.Add(TagName, Tag);
 			node.Add(SpeedParameterName, SpeedParameter);
 			node.Add(MirrorParameterName, MirrorParameter);

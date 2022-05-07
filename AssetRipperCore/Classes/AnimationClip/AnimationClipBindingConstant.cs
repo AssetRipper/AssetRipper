@@ -5,14 +5,14 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {
-	public sealed class AnimationClipBindingConstant : IAssetReadable, IYAMLExportable, IDependent
+	public sealed class AnimationClipBindingConstant : IAssetReadable, IYamlExportable, IDependent
 	{
 		public AnimationClipBindingConstant() { }
 		public AnimationClipBindingConstant(bool _)
@@ -69,11 +69,11 @@ namespace AssetRipper.Core.Classes.AnimationClip
 			return context.FetchDependencies(PPtrCurveMapping, PptrCurveMappingName);
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
-			node.Add(GenericBindingsName, GenericBindings.ExportYAML(container));
-			node.Add(PptrCurveMappingName, PPtrCurveMapping.ExportYAML(container));
+			YamlMappingNode node = new YamlMappingNode();
+			node.Add(GenericBindingsName, GenericBindings.ExportYaml(container));
+			node.Add(PptrCurveMappingName, PPtrCurveMapping.ExportYaml(container));
 			return node;
 		}
 

@@ -2,13 +2,13 @@
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.UnityConnectSettings
 {
-	public sealed class UnityAdsSettings : IAssetReadable, IYAMLExportable
+	public sealed class UnityAdsSettings : IAssetReadable, IYamlExportable
 	{
 		public UnityAdsSettings()
 		{
@@ -57,15 +57,15 @@ namespace AssetRipper.Core.Classes.UnityConnectSettings
 			}
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.Add(EnabledName, Enabled);
 			node.Add(InitializeOnStartupName, InitializeOnStartup);
 			node.Add(TestModeName, TestMode);
 			node.Add(IosGameIdName, GetIosGameId(container.Version, container.Flags));
 			node.Add(AndroidGameIdName, GetAndroidGameId(container.Version, container.Flags));
-			node.Add(GameIdsName, GetGameIds(container.Version, container.Flags).ExportYAML());
+			node.Add(GameIdsName, GetGameIds(container.Version, container.Flags).ExportYaml());
 			node.Add(GameIdName, GetGameId(container.Version));
 			return node;
 		}

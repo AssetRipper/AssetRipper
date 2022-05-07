@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Converters
 		public static void Convert(IExportContainer container, EditorExtension origin, EditorExtension instance)
 		{
 			ObjectConverter.Convert(container, origin, instance);
-			instance.PrefabInstance.SetValues(origin.PrefabInstance);
+			instance.PrefabInstance.CopyValues(origin.PrefabInstance);
 		}
 	}
 }

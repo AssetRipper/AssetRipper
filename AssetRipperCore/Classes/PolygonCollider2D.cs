@@ -4,7 +4,7 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes
 {
@@ -37,12 +37,12 @@ namespace AssetRipper.Core.Classes
 			Points.Read(reader);
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
-			node.Add(SpriteTilingPropertyName, SpriteTilingProperty.ExportYAML(container));
+			YamlMappingNode node = base.ExportYamlRoot(container);
+			node.Add(SpriteTilingPropertyName, SpriteTilingProperty.ExportYaml(container));
 			node.Add(AutoTilingName, AutoTiling);
-			node.Add(PointsName, Points.ExportYAML(container));
+			node.Add(PointsName, Points.ExportYaml(container));
 			return node;
 		}
 

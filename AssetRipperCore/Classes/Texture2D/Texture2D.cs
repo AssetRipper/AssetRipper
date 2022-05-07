@@ -7,10 +7,11 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
-using AssetRipper.Core.YAML.Extensions;
+
+using AssetRipper.Yaml;
+using AssetRipper.Yaml.Extensions;
 using System;
-using UnityVersion = AssetRipper.Core.Parser.Files.UnityVersion;
+
 
 namespace AssetRipper.Core.Classes.Texture2D
 {
@@ -87,16 +88,6 @@ namespace AssetRipper.Core.Classes.Texture2D
 		/// 5.3.0 and greater
 		/// </summary>
 		public static bool HasStreamData(UnityVersion version) => version.IsGreaterEqual(5, 3);
-
-		public virtual TextureImporter GenerateTextureImporter(IExportContainer container)
-		{
-			return Texture2DConverter.GenerateTextureImporter(container, this);
-		}
-
-		public virtual IHVImageFormatImporter GenerateIHVImporter(IExportContainer container)
-		{
-			return Texture2DConverter.GenerateIHVImporter(container, this);
-		}
 
 		public override void Read(AssetReader reader)
 		{
@@ -182,13 +173,13 @@ namespace AssetRipper.Core.Classes.Texture2D
 			reader.AlignStream();
 			if (HasStreamData(reader.Version))
 			{
-				m_StreamData.Read(reader);
+				StreamData.Read(reader);
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			YAMLMappingNode node = base.ExportYAMLRoot(container);
+			YamlMappingNode node = base.ExportYamlRoot(container);
 			node.AddSerializedVersion(ToSerializedVersion(container.ExportVersion));
 			node.Add(WidthName, Width);
 			node.Add(HeightName, Height);
@@ -225,24 +216,20 @@ namespace AssetRipper.Core.Classes.Texture2D
 			{
 				node.Add(StreamingMipmapsPriorityName, StreamingMipmapsPriority);
 			}
-			node.Add(AlphaIsTransparencyName, GetAlphaIsTransparency(container.Version, container.Flags));
+			node.Add(AlphaIsTransparencyName, AlphaIsTransparency);
 			node.Add(ImageCountName, ImageCount);
 			node.Add(TextureDimensionName, (int)TextureDimension);
-			node.Add(TextureSettingsName, TextureSettings.ExportYAML(container));
+			node.Add(TextureSettingsName, TextureSettings.ExportYaml(container));
 			node.Add(LightmapFormatName, (int)LightmapFormat);
 			node.Add(ColorSpaceName, (int)ColorSpace);
 			byte[] imageData = GetExportImageData();
 			node.Add(ImageDataName, imageData.Length);
-			node.Add(Layout.LayoutInfo.TypelessdataName, imageData.ExportYAML());
+			node.Add(Layout.ClassNameHandler.TypelessdataName, imageData.ExportYaml());
 			StreamingInfo streamData = new StreamingInfo();
-			node.Add(StreamDataName, streamData.ExportYAML(container));
+			node.Add(StreamDataName, streamData.ExportYaml(container));
 			return node;
 		}
 
-		private bool GetAlphaIsTransparency(UnityVersion version, TransferInstructionFlags flags)
-		{
-			return true;
-		}
 		private byte[] GetExportImageData()
 		{
 			if (this.CheckAssetIntegrity())
@@ -281,14 +268,15 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public bool ReadAllowed { get; set; }
 		public bool StreamingMipmaps { get; set; }
 		public int StreamingMipmapsPriority { get; set; }
-		public bool AlphaIsTransparency { get; set; }
+		public bool AlphaIsTransparency { get; set; } = true;
 		public int ImageCount { get; set; }
 		public TextureDimension TextureDimension { get; set; }
 		public TextureUsageMode LightmapFormat { get; set; }
 		public ColorSpace ColorSpace { get; set; }
 		public byte[] PlatformBlob { get; set; }
 		public byte[] ImageData { get; set; }
-		public IStreamingInfo StreamData => m_StreamData;
+		public IStreamingInfo StreamData { get; } = new StreamingInfo();
+		public IGLTextureSettings TextureSettings { get; } = new GLTextureSettings();
 
 		public const string Texture2DName = "Texture2D";
 		public const string WidthName = "m_Width";
@@ -311,8 +299,5 @@ namespace AssetRipper.Core.Classes.Texture2D
 		public const string PlatformBlobName = "m_PlatformBlob";
 		public const string ImageDataName = "image data";
 		public const string StreamDataName = "m_StreamData";
-
-		public GLTextureSettings TextureSettings = new();
-		private StreamingInfo m_StreamData = new();
 	}
 }

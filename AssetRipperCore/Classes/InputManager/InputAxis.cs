@@ -2,11 +2,11 @@
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.InputManager
 {
-	public sealed class InputAxis : IAssetReadable, IYAMLExportable
+	public sealed class InputAxis : IAssetReadable, IYamlExportable
 	{
 		public InputAxis() { }
 		public InputAxis(string name, string positive, string altPositive)
@@ -55,9 +55,9 @@ namespace AssetRipper.Core.Classes.InputManager
 			JoyNum = (JoystickType)reader.ReadInt32();
 		}
 
-		public YAMLNode ExportYAML(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YAMLMappingNode node = new YAMLMappingNode();
+			YamlMappingNode node = new YamlMappingNode();
 			node.AddSerializedVersion(ToSerializedVersion(container.Version));
 			node.Add(NameName, Name);
 			node.Add(DescriptiveNameName, DescriptiveName);

@@ -2,7 +2,7 @@
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes
 {
@@ -39,9 +39,9 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		protected override YAMLMappingNode ExportYAMLRoot(IExportContainer container)
+		protected override YamlMappingNode ExportYamlRoot(IExportContainer container)
 		{
-			return HasEditorExtension(container.ExportVersion) ? base.ExportYAMLRoot(container) : ExportYAMLRootObject(container);
+			return HasEditorExtension(container.ExportVersion) ? base.ExportYamlRoot(container) : ExportYamlRootObject(container);
 		}
 	}
 }

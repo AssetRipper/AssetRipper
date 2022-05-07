@@ -3,20 +3,20 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Project;
-using AssetRipper.Core.YAML;
+using AssetRipper.Yaml;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace AssetRipper.GUI
 {
-	public class DummyAssetForLooseResourceFile : UnityObjectBase, IDisposable, IHasName
+	public class DummyAssetForLooseResourceFile : UnityObjectBase, IDisposable, IHasNameString
 	{
 		private bool disposedValue;
 
 		public ResourceFile AssociatedFile { get; }
 
-		public string Name
+		public string NameString
 		{
 			get => AssociatedFile.Name;
 			set => throw new NotSupportedException();
@@ -31,7 +31,7 @@ namespace AssetRipper.GUI
 			AssociatedFile.Stream.CopyTo(smartStream);
 		}
 
-		public override YAMLNode ExportYAML(IExportContainer container)
+		public override YamlNode ExportYaml(IExportContainer container)
 		{
 			throw new NotSupportedException();
 		}
