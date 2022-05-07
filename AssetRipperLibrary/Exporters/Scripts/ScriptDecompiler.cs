@@ -48,7 +48,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		public string Decompile(TypeDefinition definition)
 		{
-			var decompiler = GetOrMakeDecompiler(definition.Module.Assembly);
+			CSharpDecompiler decompiler = GetOrMakeDecompiler(definition.Module.Assembly);
 			return decompiler.DecompileTypeAsString(new FullTypeName(GetReflectionName(definition, decompiler)));
 		}
 
@@ -71,7 +71,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		private CSharpDecompiler GetOrMakeDecompiler(AssemblyDefinition assembly)
 		{
-			if (!decompilers.TryGetValue(assembly, out CSharpDecompiler result))
+			if (!decompilers.TryGetValue(assembly, out CSharpDecompiler? result))
 			{
 				result = MakeDecompiler(assembly);
 				decompilers.Add(assembly, result);
@@ -83,6 +83,14 @@ namespace AssetRipper.Library.Exporters.Scripts
 		{
 			DecompilerSettings settings = new DecompilerSettings();
 			settings.SetLanguageVersion(m_languageVersion);
+			// these settings may need to be changed later because
+			// CSharpDecompiler.IsMemberHidden seems to contradict
+			// what these settings state they do.
+			settings.AnonymousTypes = false;
+			settings.AnonymousMethods = false;
+			settings.AsyncEnumerator = false;
+
+			settings.AlwaysShowEnumMemberValues = true;
 			settings.ShowXmlDocumentation = true;
 			settings.LoadInMemory = true; //pulled from ILSpy code for reading a pe file from a stream
 			CSharpDecompiler decompiler = new CSharpDecompiler(assemblyResolver.Resolve(assembly.FullName), assemblyResolver, settings);
@@ -90,6 +98,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			{
 				decompiler.AstTransforms.Insert(0, new MethodStripper());
 			}
+			decompiler.AstTransforms.Insert(0, new CodeCleanupHandler());
 			return decompiler;
 		}
 	}
