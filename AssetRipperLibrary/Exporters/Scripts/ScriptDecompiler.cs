@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.Library.Exporters.Scripts.Transform;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.TypeSystem;
@@ -14,11 +15,21 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private readonly CecilAssemblyResolver assemblyResolver;
 		private LanguageVersion m_languageVersion = LanguageVersion.CSharp7_3;
 		private ScriptContentLevel m_ScriptContentLevel = ScriptContentLevel.Level2;
+		private readonly CodeCleanupHandler m_codeCleanupHandler;
 
-		public ScriptDecompiler(IAssemblyManager assemblyManager) : this(new CecilAssemblyResolver(assemblyManager)) { }
-		public ScriptDecompiler(AssemblyDefinition assembly) : this(new CecilAssemblyResolver(assembly)) { }
-		public ScriptDecompiler(AssemblyDefinition[] assemblies) : this(new CecilAssemblyResolver(assemblies)) { }
-		private ScriptDecompiler(CecilAssemblyResolver cecilAssemblyResolver) => assemblyResolver = cecilAssemblyResolver;
+		public ScriptDecompiler(IAssemblyManager assemblyManager, CodeCleanupSettings? cleanupSettings = null) : this(new CecilAssemblyResolver(assemblyManager), cleanupSettings) { }
+		public ScriptDecompiler(AssemblyDefinition assembly, CodeCleanupSettings? cleanupSettings = null) : this(new CecilAssemblyResolver(assembly), cleanupSettings) { }
+		public ScriptDecompiler(AssemblyDefinition[] assemblies, CodeCleanupSettings? cleanupSettings = null) : this(new CecilAssemblyResolver(assemblies), cleanupSettings) { }
+		private ScriptDecompiler(CecilAssemblyResolver cecilAssemblyResolver, CodeCleanupSettings? cleanupSettings = null)
+		{
+            assemblyResolver = cecilAssemblyResolver;
+			m_codeCleanupHandler = new(cleanupSettings);
+		}
+
+		public CodeCleanupSettings CodeCleanupSettings
+		{
+			get => m_codeCleanupHandler.Settings;
+		}
 
 		public LanguageVersion LanguageVersion
 		{
@@ -96,9 +107,9 @@ namespace AssetRipper.Library.Exporters.Scripts
 			CSharpDecompiler decompiler = new CSharpDecompiler(assemblyResolver.Resolve(assembly.FullName), assemblyResolver, settings);
 			if (ScriptContentLevel == ScriptContentLevel.Level1)
 			{
-				decompiler.AstTransforms.Insert(0, new MethodStripper());
+				decompiler.AstTransforms.Insert(0, new MethodStripperTransform());
 			}
-			decompiler.AstTransforms.Insert(0, new CodeCleanupHandler());
+			m_codeCleanupHandler.SetupDecompiler(decompiler);
 			return decompiler;
 		}
 	}

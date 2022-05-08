@@ -1,94 +1,44 @@
-﻿using ICSharpCode.Decompiler.CSharp.Syntax;
-using ICSharpCode.Decompiler.CSharp.Transforms;
+﻿using ICSharpCode.Decompiler.CSharp;
+using AssetRipper.Library.Exporters.Scripts.Transforms;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {
 	/// <summary>
-	/// Cleans up code to make it reduce the number of compiler errors
+	/// Handles setting up decompilers to clean up code based on given settings.
 	/// </summary>
-	internal class CodeCleanupHandler : DepthFirstAstVisitor, IAstTransform
+	internal class CodeCleanupHandler
 	{
-		private readonly CodeCleanupSettings settings;
-
 		public CodeCleanupHandler(CodeCleanupSettings? settings = null)
 		{
-			this.settings = settings ?? new CodeCleanupSettings();
+			this.Settings = settings ?? new CodeCleanupSettings();
 		}
 
-		private bool RemoveInvalidEntity(EntityDeclaration entityDeclaration)
+		/// <summary>
+		/// Settings for code cleanup.
+		/// </summary>
+		public CodeCleanupSettings Settings { get; }
+
+		public void SetupDecompiler(CSharpDecompiler decompiler)
 		{
-			if (!settings.RemoveInvalidMembers)
+			if (Settings.RemoveInvalidMembers)
 			{
-				return false;
+				decompiler.AstTransforms.Add(new RemoveInvalidMemberTransform());
 			}
 
-			if (entityDeclaration.Name.StartsWith("<"))
+			if (Settings.EnsureOutParametersSet)
 			{
-				entityDeclaration.Remove();
-				return true;
+				decompiler.AstTransforms.Add(new EnsureOutParamsSetTransform());
 			}
 
-
-			return false;
-		}
-
-		public override void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
-		{
-			if (RemoveInvalidEntity(methodDeclaration))
+			if (Settings.EnsureStructFieldsSetInConstructor)
 			{
-				return;
+				decompiler.AstTransforms.Add(new EnsureStructFieldsSetTransform());
 			}
 
-			base.VisitMethodDeclaration(methodDeclaration);
-
-			if (!settings.EnsureOutParametersSet || methodDeclaration.Body == null)
+			if (Settings.EnsureValidBaseConstructor)
 			{
-				return;
+				decompiler.AstTransforms.Add(new EnsureValidBaseConstructorTransform());
 			}
-
-			foreach (ParameterDeclaration parameter in methodDeclaration.Parameters)
-			{
-				if ((parameter.ParameterModifier & ParameterModifier.Out) != ParameterModifier.Out)
-				{
-					continue;
-				}
-
-				ExpressionStatement assignment = new(new AssignmentExpression(new IdentifierExpression(parameter.Name), new DefaultValueExpression()));
-				Statement? firstStatement = methodDeclaration.Body.Statements.FirstOrNullObject();
-				if (firstStatement == null)
-				{
-					methodDeclaration.Body.Statements.Add(assignment);
-				}
-				else
-				{
-					methodDeclaration.Body.Statements.InsertBefore(firstStatement, assignment);
-				}
-			}
-		}
-
-		public override void VisitFieldDeclaration(FieldDeclaration fieldDeclaration)
-		{
-			if (RemoveInvalidEntity(fieldDeclaration))
-			{
-				return;
-			}
-
-			base.VisitFieldDeclaration(fieldDeclaration);
-		}
-
-		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
-		{
-			if (RemoveInvalidEntity(typeDeclaration))
-			{
-				return;
-			}
-
-			base.VisitTypeDeclaration(typeDeclaration);
-		}
-
-		public void Run(AstNode rootNode, TransformContext context)
-		{
-			rootNode.AcceptVisitor(this);
 		}
 	}
 }

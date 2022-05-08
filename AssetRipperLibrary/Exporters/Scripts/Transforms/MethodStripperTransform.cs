@@ -1,12 +1,12 @@
 ﻿using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Transforms;
 
-namespace AssetRipper.Library.Exporters.Scripts
+namespace AssetRipper.Library.Exporters.Scripts.Transform
 {
 	/// <summary>
 	/// Remove all members from type except for fields and nested types
 	/// </summary>
-	internal class MethodStripper : DepthFirstAstVisitor, IAstTransform
+	internal class MethodStripperTransform : DepthFirstAstVisitor, IAstTransform
 	{
 		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
