@@ -1,13 +1,14 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.GameObject;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Object;
-using AssetRipper.Core.Classes.PrefabInstance;
+﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1001;
+using AssetRipper.SourceGenerated.Classes.ClassID_18;
+using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,7 +27,34 @@ namespace AssetRipper.Core.Project.Collections
 				AddAsset(asset);
 
 				//This section might not be necessary. This seems to be quite different from normal prefab files
-				asset.PrefabInstance?.CopyValues(prefab.SerializedFile.CreatePPtr(prefab));
+				SetPrefabInstance(asset, prefab);
+			}
+		}
+
+		private static void SetPrefabInstance(IEditorExtension asset, IPrefabInstance prefab)
+		{
+			if (asset is IGameObject gameObject)
+			{
+				if (gameObject.Has_PrefabInstance_C1())//2018.3 +
+				{
+					gameObject.PrefabInstance_C1.CopyValues(prefab.SerializedFile.CreatePPtr(prefab));
+				}
+				else if (gameObject.Has_PrefabAsset_C1())//3.5 +
+				{
+					gameObject.PrefabAsset_C1.CopyValues(prefab.SerializedFile.CreatePPtr(prefab));
+				}
+			}
+			else if (asset is IComponent component)
+			{
+
+				if (component.Has_PrefabInstance_C2())//2018.3 +
+				{
+					component.PrefabInstance_C2.CopyValues(prefab.SerializedFile.CreatePPtr(prefab));
+				}
+				else if (component.Has_PrefabAsset_C2())//3.5 +
+				{
+					component.PrefabAsset_C2.CopyValues(prefab.SerializedFile.CreatePPtr(prefab));
+				}
 			}
 		}
 
@@ -38,7 +66,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is IComponent component)
 			{
-				return component.GameObjectPtr.FindAsset(component.SerializedFile) != null;
+				return component.GameObject_C2.FindAsset(component.SerializedFile) != null;
 			}
 			return false;
 		}
@@ -56,8 +84,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is IComponent component)
 			{
-				IGameObject go = component.GameObjectPtr.GetAsset(component.SerializedFile);
-				return go.GetRoot();
+				return component.GetGameObject().GetRoot();
 			}
 			else
 			{
@@ -71,8 +98,8 @@ namespace AssetRipper.Core.Project.Collections
 		private static IPrefabInstance CreateVirtualPrefab(VirtualSerializedFile virtualFile, IGameObject root)
 		{
 			IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance);
-			instance.RootGameObjectPtr = root.SerializedFile.CreatePPtr(root);
-			instance.IsPrefabAsset = true;
+			instance.RootGameObject_C1001?.CopyValues(root.SerializedFile.CreatePPtr(root));
+			instance.IsPrefabAsset_C1001 = true;
 			if (instance is IHasNameString hasName)
 			{
 				hasName.NameString = root.NameString;

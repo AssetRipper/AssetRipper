@@ -1,5 +1,6 @@
-﻿using AssetRipper.Core.Classes.AudioClip;
-using AssetRipper.Core.Logging;
+﻿using AssetRipper.Core.Logging;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using Fmod5Sharp;
 using OggVorbisSharp;
 using System;

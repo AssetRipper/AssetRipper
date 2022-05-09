@@ -1,7 +1,4 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Shader;
-using AssetRipper.Core.Classes.Shader.SerializedShader;
-using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
+﻿using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
@@ -10,6 +7,10 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Classes.ClassID_49;
+using AssetRipper.SourceGenerated.Subclasses.SerializedProperties;
+using AssetRipper.SourceGenerated.Subclasses.SerializedProperty;
 using System;
 using System.Globalization;
 using System.IO;
@@ -48,7 +49,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return exportMode is ShaderExportMode.Dummy && asset is IShader shader && (shader.HasParsedForm || asset is ITextAsset);
+			return exportMode is ShaderExportMode.Dummy && asset is IShader shader && (shader.Has_ParsedForm_C48() || asset is ITextAsset);
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
@@ -61,7 +62,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			IShader shader = (IShader)asset;
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-			if (shader.ParsedForm?.NameString?.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
+			if (shader.ParsedForm_C48?.NameString?.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
 				return false;
 
 			using (FileStream fileStream = File.Create(path))
@@ -73,11 +74,11 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		public static void ExportShader(IShader shader, IExportContainer container, Stream stream)
 		{
-			if (shader.HasParsedForm)
+			if (shader.Has_ParsedForm_C48())
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
-				writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm.NameString);
-				Export(shader.ParsedForm.PropInfo, writer);
+				writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm_C48.NameString);
+				Export(shader.ParsedForm_C48.PropInfo, writer);
 
 				TemplateShader templateShader = TemplateList.GetBestTemplate(shader);
 				writer.Write("\t//DummyShaderTextExporter\n");
@@ -92,22 +93,22 @@ namespace AssetRipper.Library.Exporters.Shaders
 				}
 				writer.Write('\n');
 
-				if (shader.ParsedForm.FallbackName != string.Empty)
+				if (shader.ParsedForm_C48.FallbackName != string.Empty)
 				{
 					writer.WriteIndent(1);
-					writer.Write("Fallback \"{0}\"\n", shader.ParsedForm.FallbackName);
+					writer.Write("Fallback \"{0}\"\n", shader.ParsedForm_C48.FallbackName);
 				}
-				if (shader.ParsedForm.CustomEditorName != string.Empty)
+				if (shader.ParsedForm_C48.CustomEditorName != string.Empty)
 				{
 					writer.WriteIndent(1);
-					writer.Write("//CustomEditor \"{0}\"\n", shader.ParsedForm.CustomEditorName);
+					writer.Write("//CustomEditor \"{0}\"\n", shader.ParsedForm_C48.CustomEditorName);
 				}
 				writer.Write('}');
 			}
 			else if (shader is ITextAsset textAsset)
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
-				string header = textAsset.ParseWithUTF8();
+				string header = textAsset.Script_C49.String;
 				var subshaderIndex = header.IndexOf("SubShader");
 				writer.WriteString(header, 0, subshaderIndex);
 
@@ -123,11 +124,11 @@ namespace AssetRipper.Library.Exporters.Shaders
 			}
 		}
 
-		private static void Export(ISerializedProperties _this, TextWriter writer)
+		private static void Export(SourceGenerated.Subclasses.SerializedProperties.ISerializedProperties _this, TextWriter writer)
 		{
 			writer.WriteIndent(1);
 			writer.Write("Properties {\n");
-			foreach (ISerializedProperty prop in _this.Props)
+			foreach (SourceGenerated.Subclasses.SerializedProperty.ISerializedProperty prop in _this.Props)
 			{
 				Export(prop, writer);
 			}
@@ -135,41 +136,42 @@ namespace AssetRipper.Library.Exporters.Shaders
 			writer.Write("}\n");
 		}
 
-		private static void Export(ISerializedProperty _this, TextWriter writer)
+		private static void Export(SourceGenerated.Subclasses.SerializedProperty.ISerializedProperty _this, TextWriter writer)
 		{
 			writer.WriteIndent(2);
-			foreach (string attribute in _this.Attributes.ToStringArray())
+			foreach (var attribute in _this.Attributes)
 			{
 				writer.Write("[{0}] ", attribute);
 			}
-			if (_this.Flags.IsHideInInspector())
+			SerializedPropertyFlag flags = (SerializedPropertyFlag)_this.Flags;
+			if (flags.IsHideInInspector())
 			{
 				writer.Write("[HideInInspector] ");
 			}
-			if (_this.Flags.IsPerRendererData())
+			if (flags.IsPerRendererData())
 			{
 				writer.Write("[PerRendererData] ");
 			}
-			if (_this.Flags.IsNoScaleOffset())
+			if (flags.IsNoScaleOffset())
 			{
 				writer.Write("[NoScaleOffset] ");
 			}
-			if (_this.Flags.IsNormal())
+			if (flags.IsNormal())
 			{
 				writer.Write("[Normal] ");
 			}
-			if (_this.Flags.IsHDR())
+			if (flags.IsHDR())
 			{
 				writer.Write("[HDR] ");
 			}
-			if (_this.Flags.IsGamma())
+			if (flags.IsGamma())
 			{
 				writer.Write("[Gamma] ");
 			}
 
 			writer.Write("{0} (\"{1}\", ", _this.NameString, _this.Description);
 
-			switch (_this.Type)
+			switch ((SerializedPropertyType)_this.Type)
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
@@ -184,8 +186,8 @@ namespace AssetRipper.Library.Exporters.Shaders
 				case SerializedPropertyType.Range:
 					writer.Write("{0}({1}, {2})",
 						nameof(SerializedPropertyType.Range),
-						_this.DefValue1.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue2.ToString(CultureInfo.InvariantCulture));
+						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture),
+						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture));
 					break;
 
 				case SerializedPropertyType._2D:
@@ -203,13 +205,13 @@ namespace AssetRipper.Library.Exporters.Shaders
 							writer.Write("3D");
 							break;
 						case 4:
-							writer.Write(nameof(SerializedPropertyType.Cube));
+							writer.Write("Cube");
 							break;
 						case 5:
 							writer.Write("2DArray");
 							break;
 						case 6:
-							writer.Write(nameof(SerializedPropertyType.CubeArray));
+							writer.Write("CubeArray");
 							break;
 						default:
 							throw new NotSupportedException("Texture dimension isn't supported");
@@ -222,21 +224,21 @@ namespace AssetRipper.Library.Exporters.Shaders
 			}
 			writer.Write(") = ");
 
-			switch (_this.Type)
+			switch ((SerializedPropertyType)_this.Type)
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
 					writer.Write("({0},{1},{2},{3})",
-						_this.DefValue0.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue1.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue2.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue3.ToString(CultureInfo.InvariantCulture));
+						_this.DefValue_0_.ToString(CultureInfo.InvariantCulture),
+						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture),
+						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture),
+						_this.DefValue_3_.ToString(CultureInfo.InvariantCulture));
 					break;
 
 				case SerializedPropertyType.Int:
 				//case SerializedPropertyType.Float:
 				case SerializedPropertyType.Range:
-					writer.Write(_this.DefValue0.ToString(CultureInfo.InvariantCulture));
+					writer.Write(_this.DefValue_0_.ToString(CultureInfo.InvariantCulture));
 					break;
 
 				case SerializedPropertyType._2D:

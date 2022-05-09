@@ -1,14 +1,4 @@
 ﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.AnimatorController;
-using AssetRipper.Core.Classes.AudioClip;
-using AssetRipper.Core.Classes.Font;
-using AssetRipper.Core.Classes.Material;
-using AssetRipper.Core.Classes.Mesh;
-using AssetRipper.Core.Classes.Shader;
-using AssetRipper.Core.Classes.Sprite;
-using AssetRipper.Core.Classes.TerrainData;
-using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
@@ -20,6 +10,8 @@ using AssetRipper.Core.VersionHandling;
 using AssetRipper.Library.Attributes;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters;
+using AssetRipper.Library.Exporters.AnimationClips;
+using AssetRipper.Library.Exporters.AnimatorControllers;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Miscellaneous;
@@ -28,6 +20,23 @@ using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.Exporters.TypeTrees;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Classes.ClassID_117;
+using AssetRipper.SourceGenerated.Classes.ClassID_128;
+using AssetRipper.SourceGenerated.Classes.ClassID_152;
+using AssetRipper.SourceGenerated.Classes.ClassID_156;
+using AssetRipper.SourceGenerated.Classes.ClassID_187;
+using AssetRipper.SourceGenerated.Classes.ClassID_188;
+using AssetRipper.SourceGenerated.Classes.ClassID_21;
+using AssetRipper.SourceGenerated.Classes.ClassID_213;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Classes.ClassID_49;
+using AssetRipper.SourceGenerated.Classes.ClassID_74;
+using AssetRipper.SourceGenerated.Classes.ClassID_83;
+using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -157,7 +166,7 @@ namespace AssetRipper.Library
 			OnFinishExporting?.Invoke();
 			TaskManager.WaitUntilAllCompleted();
 
-			foreach (var postExporter in PostExporters)
+			foreach (IPostExporter postExporter in PostExporters)
 			{
 				postExporter.DoPostExport(this);
 			}
@@ -200,9 +209,12 @@ namespace AssetRipper.Library
 
 		private void InitializeExporters()
 		{
-			if (GameStructure == null) throw new NullReferenceException("GameStructure cannot be null");
-			if (GameStructure.FileCollection == null) throw new NullReferenceException("FileCollection cannot be null");
-			if (GameStructure.Exporter == null) throw new NullReferenceException("Project Exporter cannot be null");
+			if (GameStructure == null) 
+				throw new NullReferenceException("GameStructure cannot be null");
+			if (GameStructure.FileCollection == null) 
+				throw new NullReferenceException("FileCollection cannot be null");
+			if (GameStructure.Exporter == null) 
+				throw new NullReferenceException("Project Exporter cannot be null");
 			if (ExportersInitialized)
 				return;
 
@@ -215,6 +227,14 @@ namespace AssetRipper.Library
 
 		private void OverrideNormalExporters()
 		{
+			//Yaml Exporters
+			YamlStreamedAssetExporter streamedAssetExporter = new YamlStreamedAssetExporter();
+			OverrideExporter<IMesh>(streamedAssetExporter);
+			OverrideExporter<ITexture2D>(streamedAssetExporter);//ICubemap also by inheritance
+			OverrideExporter<ITexture3D>(streamedAssetExporter);
+			OverrideExporter<ITexture2DArray>(streamedAssetExporter);
+			OverrideExporter<ICubemapArray>(streamedAssetExporter);
+
 			//Miscellaneous exporters
 			OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
 			OverrideExporter<IFont>(new FontAssetExporter());
@@ -228,7 +248,7 @@ namespace AssetRipper.Library
 			//Shader exporters
 			OverrideExporter<IShader>(new DummyShaderTextExporter(Settings));
 			OverrideExporter<IShader>(new YamlShaderExporter(Settings));
-			OverrideExporter<Shader>(new ShaderDisassemblyExporter(Settings));
+			OverrideExporter<IShader>(new ShaderDisassemblyExporter(Settings));
 			OverrideExporter<IShader>(new SimpleShaderExporter());
 
 			//Audio exporters
@@ -238,8 +258,8 @@ namespace AssetRipper.Library
 			OverrideExporter<IAudioClip>(new AudioClipExporter(Settings));
 
 			//Mesh exporters
-			OverrideExporter<IMesh>(new GlbMeshExporter(Settings));
-			OverrideExporter<IMesh>(new UnifiedMeshExporter(Settings));
+			OverrideExporter<Core.Classes.Mesh.IMesh>(new GlbMeshExporter(Settings));
+			OverrideExporter<Core.Classes.Mesh.IMesh>(new UnifiedMeshExporter(Settings));
 
 			//Terrain exporters
 			OverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings));
@@ -250,8 +270,11 @@ namespace AssetRipper.Library
 			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
 			OverrideExporter<IMonoScript>(new SkipScriptExporter(Settings));
 
-			//Animator Controller - Temporary
-			OverrideExporter<AnimatorController>(new AnimatorControllerExporter());
+			//Animator Controller
+			OverrideExporter<IAnimatorController>(new AnimatorControllerExporter());
+
+			//Animation Clip
+			OverrideExporter<IAnimationClip>(new AnimationClipExporter());
 
 			AddPostExporter(new ProjectVersionPostExporter());
 			AddPostExporter(new TypeTreeExporter());
@@ -267,7 +290,7 @@ namespace AssetRipper.Library
 			OverrideExporter<IShader>(engineExporter);
 			OverrideExporter<IFont>(engineExporter);
 			OverrideExporter<ISprite>(engineExporter);
-			OverrideExporter<Core.Classes.IMonoBehaviour>(engineExporter);
+			OverrideExporter<IMonoBehaviour>(engineExporter);
 		}
 
 		public void OverrideExporter<T>(IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter<T>(exporter, true);

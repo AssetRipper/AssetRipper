@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Meta;
+﻿using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
@@ -8,8 +7,10 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Utils;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,11 +54,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 				IMonoScript unique = assetScript;
 				foreach (IMonoScript export in m_unique)
 				{
-					if (assetScript.ClassName != export.ClassName)
+					if (assetScript.ClassName_C115 != export.ClassName_C115)
 					{
 						continue;
 					}
-					if (assetScript.Namespace != export.Namespace)
+					if (assetScript.Namespace_C115 != export.Namespace_C115)
 					{
 						continue;
 					}
@@ -156,7 +157,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			{
 				if (MonoScriptExtensions.HasNamespace(script.SerializedFile.Version))
 				{
-					int fileID = Compute(script.Namespace, script.ClassName);
+					int fileID = Compute(script.Namespace_C115.String, script.ClassName_C115.String);
 					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 				}
 				else
@@ -170,11 +171,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 				}
 			}
 
-			var scriptKey = $"{script.AssemblyName}{script.Namespace}{script.ClassName}";
+			var scriptKey = $"{script.AssemblyName_C115.String}{script.Namespace_C115.String}{script.ClassName_C115.String}";
 			if (!ScriptId.ContainsKey(scriptKey))
-				ScriptId[scriptKey] = Compute(script.Namespace, script.ClassName);
+				ScriptId[scriptKey] = Compute(script.Namespace_C115.String, script.ClassName_C115.String);
 
-			return new MetaPtr(ScriptId[scriptKey], GetAssemblyGuid(script.AssemblyName), AssetExporter.ToExportType(asset));
+			return new MetaPtr(ScriptId[scriptKey], GetAssemblyGuid(script.AssemblyName_C115.String), AssetExporter.ToExportType(asset));
 		}
 
 		private static int Compute(string @namespace, string name)

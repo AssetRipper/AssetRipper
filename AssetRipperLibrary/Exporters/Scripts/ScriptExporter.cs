@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
@@ -9,10 +8,12 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;

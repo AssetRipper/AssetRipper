@@ -13,9 +13,9 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 		/// <param name="safe">If true, this method will return RG rather than throwing an exception.</param>
 		/// <returns>The format</returns>
 		/// <exception cref="NotSupportedException">if not safe and not an pvrtc texture</exception>
-		public static KTXBaseInternalFormat GetKTXBaseInternalFormat(this ITexture2D _this, bool safe)
+		public static KTXBaseInternalFormat GetKTXBaseInternalFormat(this SourceGenerated.Classes.ClassID_28.ITexture2D _this, bool safe)
 		{
-			switch (_this.TextureFormat)
+			switch ((TextureFormat)_this.TextureFormat_C28)
 			{
 				case TextureFormat.RHalf:
 				case TextureFormat.RFloat:
@@ -58,7 +58,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 						if (safe)
 							return KTXBaseInternalFormat.RG;
 						else
-							throw new NotSupportedException(_this.TextureFormat.ToString());
+							throw new NotSupportedException(((TextureFormat)_this.TextureFormat_C28).ToString());
 					}
 			}
 		}
@@ -70,9 +70,9 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 		/// <param name="safe">If true, this method will return zero rather than throwing an exception.</param>
 		/// <returns>The bit count</returns>
 		/// <exception cref="NotSupportedException">if not safe and not an pvrtc texture</exception>
-		public static int PVRTCBitCount(this ITexture2D _this, bool safe)
+		public static int PVRTCBitCount(this SourceGenerated.Classes.ClassID_28.ITexture2D _this, bool safe)
 		{
-			switch (_this.TextureFormat)
+			switch ((TextureFormat)_this.TextureFormat_C28)
 			{
 				case TextureFormat.PVRTC_RGB2:
 				case TextureFormat.PVRTC_RGBA2:
@@ -87,7 +87,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 						if (safe)
 							return 0;
 						else
-							throw new NotSupportedException(_this.TextureFormat.ToString());
+							throw new NotSupportedException(((TextureFormat)_this.TextureFormat_C28).ToString());
 					}
 			}
 		}
@@ -99,9 +99,9 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 		/// <param name="safe">If true, this method will return zero rather than throwing an exception.</param>
 		/// <returns>The length of one side of the block</returns>
 		/// <exception cref="NotSupportedException">if not safe and not an astc texture</exception>
-		public static int ASTCBlockSize(this ITexture2D _this, bool safe)
+		public static int ASTCBlockSize(this SourceGenerated.Classes.ClassID_28.ITexture2D _this, bool safe)
 		{
-			switch (_this.TextureFormat)
+			switch ((TextureFormat)_this.TextureFormat_C28)
 			{
 				case TextureFormat.ASTC_RGB_4x4:
 				case TextureFormat.ASTC_RGBA_4x4:
@@ -132,7 +132,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 						if (safe)
 							return 0;
 						else
-							throw new NotSupportedException(_this.TextureFormat.ToString());
+							throw new NotSupportedException(((TextureFormat)_this.TextureFormat_C28).ToString());
 					}
 			}
 		}

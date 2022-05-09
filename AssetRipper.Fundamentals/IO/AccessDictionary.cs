@@ -51,6 +51,8 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void SetValue(int index, TValueBase newValue) => referenceDictionary.SetValue(index, (TValue)newValue);
 
+		public override NullableKeyValuePair<TKeyBase, TValueBase> GetPair(int index) => CastPair(referenceDictionary.GetPair(index));
+
 		/// <inheritdoc/>
 		public override int IndexOf(NullableKeyValuePair<TKeyBase, TValueBase> item) => referenceDictionary.IndexOf(CastPair(item));
 
@@ -77,19 +79,12 @@ namespace AssetRipper.Core.IO
 
 			for(int i = 0; i < Count; i++)
 			{
-				array[i + arrayIndex] = this[i];
+				array[i + arrayIndex] = GetPair(i);
 			}
 		}
 
 		/// <inheritdoc/>
 		public override bool Remove(NullableKeyValuePair<TKeyBase, TValueBase> item) => referenceDictionary.Remove(CastPair(item));
-
-		/// <inheritdoc/>
-		public override NullableKeyValuePair<TKeyBase, TValueBase> this[int index]
-		{
-			get => CastPair(referenceDictionary[index]);
-			set => referenceDictionary[index] = CastPair(value);
-		}
 
 		private static NullableKeyValuePair<TKey, TValue> CastPair(NullableKeyValuePair<TKeyBase, TValueBase> pair)
 		{

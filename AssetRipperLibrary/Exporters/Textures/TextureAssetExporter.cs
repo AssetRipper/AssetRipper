@@ -1,17 +1,17 @@
 using AssetRipper.Core;
-using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Exporters.Textures.Extensions;
 using AssetRipper.Library.Utils;
+using AssetRipper.SourceGenerated.Classes.ClassID_213;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -28,11 +28,11 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is Texture2D texture)//Texture2D for now
+			if (asset is SourceGenerated.Classes.ClassID_28.ITexture2D texture)
 			{
 				return texture.CheckAssetIntegrity();
 			}
-			if (asset is Sprite)
+			if (asset is ISprite)
 			{
 				return SpriteExportMode == SpriteExportMode.Texture2D;
 			}
@@ -41,15 +41,15 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			ITexture2D texture = (ITexture2D)asset;
+			SourceGenerated.Classes.ClassID_28.ITexture2D texture = (SourceGenerated.Classes.ClassID_28.ITexture2D)asset;
 			if (!texture.CheckAssetIntegrity())
 			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.NameString}' because resources file '{texture.StreamData.Path}' hasn't been found");
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.NameString}' because resources file '{texture.StreamData_C28.Path}' hasn't been found");
 				return false;
 			}
 
-			using DirectBitmap bitmap = ConvertToBitmap(texture);
-			if (bitmap == null)
+			using DirectBitmap? bitmap = ConvertToBitmap(texture);
+			if (bitmap is null)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.NameString}' to bitmap");
 				return false;
@@ -67,16 +67,16 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			if (asset is Sprite)
+			if (asset is ISprite sprite)
 			{
-				return TextureExportCollection.CreateExportCollection(this, (Sprite)asset);
+				return TextureExportCollection.CreateExportCollection(this, sprite);
 			}
-			var collection = new TextureExportCollection(this, (ITexture2D)asset, true);
+			TextureExportCollection collection = new TextureExportCollection(this, (SourceGenerated.Classes.ClassID_28.ITexture2D)asset, true);
 			collection.FileExtension = ImageExportFormat.GetFileExtension();
 			return collection;
 		}
 
-		public static DirectBitmap ConvertToBitmap(ITexture2D texture)
+		public static DirectBitmap? ConvertToBitmap(SourceGenerated.Classes.ClassID_28.ITexture2D texture)
 		{
 			byte[] buffer = texture.GetImageData();
 			if (buffer.Length == 0)
@@ -88,7 +88,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			int astcBlockSize = texture.ASTCBlockSize(true);
 			KTXBaseInternalFormat baseInternalFormat = texture.GetKTXBaseInternalFormat(true);
 
-			DirectBitmap bitmap = ConvertToBitmap(texture.TextureFormat, texture.Width, texture.Height, texture.SerializedFile.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
+			DirectBitmap? bitmap = ConvertToBitmap((TextureFormat)texture.TextureFormat_C28, texture.Width_C28, texture.Height_C28, texture.SerializedFile.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
 
 			if (bitmap == null)
 			{
@@ -96,7 +96,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 
 			// despite the name, this packing works for different formats
-			if (texture.LightmapFormat == TextureUsageMode.NormalmapDXT5nm)
+			if (texture.LightmapFormat_C28 == (int)TextureUsageMode.NormalmapDXT5nm)
 			{
 				TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
 			}
@@ -104,7 +104,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return bitmap;
 		}
 
-		public static DirectBitmap ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data, int pvrtcBitCount, int astcBlockSize, KTXBaseInternalFormat ktxBaseInternalFormat)
+		public static DirectBitmap? ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data, int pvrtcBitCount, int astcBlockSize, KTXBaseInternalFormat ktxBaseInternalFormat)
 		{
 			if (width == 0 || height == 0)
 				return new DirectBitmap(1, 1);

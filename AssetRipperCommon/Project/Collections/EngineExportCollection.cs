@@ -1,18 +1,20 @@
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Font;
-using AssetRipper.Core.Classes.Material;
-using AssetRipper.Core.Classes.Mesh;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Shader;
-using AssetRipper.Core.Classes.Sprite;
-using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Project.Exporters.Engine;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Classes.ClassID_1113;
+using AssetRipper.SourceGenerated.Classes.ClassID_128;
+using AssetRipper.SourceGenerated.Classes.ClassID_21;
+using AssetRipper.SourceGenerated.Classes.ClassID_213;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using System;
 using System.Collections.Generic;
 
@@ -63,7 +65,7 @@ namespace AssetRipper.Core.Project.Collections
 				{
 					return false;
 				}
-				IShader shader = material.ShaderPtr.FindAsset(material.SerializedFile);
+				IShader shader = material.Shader_C21.FindAsset(material.SerializedFile);
 				if (shader == null)
 				{
 					return true;
@@ -76,11 +78,11 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is ITexture2D texture)
 			{
-				return builtinAsset.Parameter == texture.CompleteImageSize;
+				return builtinAsset.Parameter == texture.GetCompleteImageSize();
 			}
 			else if (asset is ISprite sprite)
 			{
-				ITexture2D spriteTexture = sprite.TexturePtr.FindAsset(sprite.SerializedFile);
+				ITexture2D spriteTexture = sprite.RD_C213.Texture.FindAsset(sprite.SerializedFile);
 				if (spriteTexture == null)
 				{
 					return false;
@@ -135,7 +137,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is IShader shader)
 			{
-				if (EngineBuiltInAssets.TryGetShader(shader.GetValidShaderName(), version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetShader(shader.TryGetName() ?? "", version, out engineAsset))
 				{
 					return true;
 				}
@@ -161,7 +163,7 @@ namespace AssetRipper.Core.Project.Collections
 					return true;
 				}
 			}
-			else if (asset is Classes.IMonoBehaviour behaviour)
+			else if (asset is SourceGenerated.Classes.ClassID_114.IMonoBehaviour behaviour)
 			{
 				if (behaviour.NameString != string.Empty)
 				{
@@ -178,7 +180,8 @@ namespace AssetRipper.Core.Project.Collections
 
 		public bool Export(IProjectAssetContainer container, string dirPath)
 		{
-			return false;
+			//return false;
+			return true; //successfully redirected to an engine asset
 		}
 
 		public bool IsContains(IUnityObjectBase asset)
@@ -198,20 +201,20 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				throw new NotSupportedException();
 			}
-			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engneAsset);
-			if (!engneAsset.IsValid)
+			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engineAsset);
+			if (!engineAsset.IsValid)
 			{
 				throw new NotImplementedException($"Unknown ExportID for asset {asset.PathID} from file {asset.SerializedFile.Name}");
 			}
-			long exportID = engneAsset.ExportID;
-			UnityGUID guid = engneAsset.GUID;
+			long exportID = engineAsset.ExportID;
+			UnityGUID guid = engineAsset.GUID;
 			return new MetaPtr(exportID, guid, AssetType.Internal);
 		}
 
 		public ISerializedFile File { get; }
 		public TransferInstructionFlags Flags => File.Flags;
 		public IEnumerable<IUnityObjectBase> Assets => m_assets;
-		public string Name => "Engine 2017.3.0f3";
+		public string Name => $"Engine {m_version}";
 
 		private readonly HashSet<IUnityObjectBase> m_assets = new HashSet<IUnityObjectBase>();
 

@@ -1,11 +1,10 @@
 ﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using System.IO;
-using System.Text;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
@@ -17,14 +16,14 @@ namespace AssetRipper.Library.Exporters.Shaders
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is IShader && asset is ITextAsset textAsset)
-				return HasDecompiledShaderText(textAsset.ParseWithUTF8());
+				return HasDecompiledShaderText(textAsset.Script_C49.String);
 			else
 				return false;
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).Script));
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).Script_C49.Data));
 			return true;
 		}
 

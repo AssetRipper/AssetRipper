@@ -1,9 +1,10 @@
-﻿using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using System.IO;
 
 namespace AssetRipper.Library.Exporters.Textures

@@ -58,6 +58,10 @@
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>Libraries\MeshSharp.STL.dll</HintPath>
 		</Reference>
+		<Reference Include="AssetRipper.SourceGenerated">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>../Libraries/AssetRipper.SourceGenerated.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,4 +1,3 @@
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
@@ -8,9 +7,11 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Utils;
 using AssetRipper.Core.VersionHandling;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -89,7 +90,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			{
 				if (MonoScriptExtensions.HasNamespace(script.SerializedFile.Version))
 				{
-					int fileID = Compute(script.Namespace, script.ClassName);
+					int fileID = Compute(script.Namespace_C115.String, script.ClassName_C115.String);
 					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 				}
 				else
@@ -128,7 +129,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		{
 			IMonoScript script = (IMonoScript)asset;
 			IMonoImporter importer = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateMonoImporter(container.ExportLayout);
-			importer.ExecutionOrder = (short)script.ExecutionOrder;
+			importer.ExecutionOrder = (short)script.ExecutionOrder_C115;
 			Meta meta = new Meta(script.GUID, importer);
 			ExportMeta(container, meta, path);
 		}
@@ -159,7 +160,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 			public static MonoScriptInfo From(IMonoScript monoScript)
 			{
-				return new MonoScriptInfo(monoScript.ClassName, monoScript.Namespace, monoScript.GetAssemblyNameFixed());
+				return new MonoScriptInfo(monoScript.ClassName_C115.String, monoScript.Namespace_C115.String, monoScript.GetAssemblyNameFixed());
 			}
 
 			public override bool Equals(object obj)

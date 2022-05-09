@@ -730,13 +730,13 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 		public static readonly UnityGUID EGUID = new UnityGUID(0x00000000, 0x00000000, 0x0000000E, 0x00000000);
 		public static readonly UnityGUID FGUID = new UnityGUID(0x00000000, 0x00000000, 0x0000000F, 0x00000000);
 
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_materials = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_textures = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_meshes = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_shaders = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_fonts = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_sprites = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_lightmapParams = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static Dictionary<string, EngineBuiltInAssetInfo> m_behaviours = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_materials = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_textures = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_meshes = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_shaders = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_fonts = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_sprites = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_lightmapParams = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_behaviours = new Dictionary<string, EngineBuiltInAssetInfo>();
 	}
 }

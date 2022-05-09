@@ -32,6 +32,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Reference Include="AssetRipper.SourceGenerated">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>../Libraries/AssetRipper.SourceGenerated.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\AssetRipper.Fundamentals\AssetRipper.Fundamentals.csproj" />
 	  <ProjectReference Include="..\AssetRipper.SerializationLogic\AssetRipper.SerializationLogic.csproj" />
 	  <ProjectReference Include="..\AssetRipper.Yaml\AssetRipper.Yaml.csproj" />

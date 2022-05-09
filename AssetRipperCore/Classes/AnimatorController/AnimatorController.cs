@@ -10,6 +10,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.SourceGenerated.Classes.ClassID_1107;
 using AssetRipper.Yaml;
 using System;
 using System.Collections.Generic;
@@ -175,8 +176,8 @@ namespace AssetRipper.Core.Classes.AnimatorController
 			for (int i = 0; i < Controller.LayerArray.Length; i++)
 			{
 				int stateMachineIndex = Controller.LayerArray[i].Instance.StateMachineIndex;
-				AnimatorStateMachine.AnimatorStateMachine stateMachine = collection.StateMachines[stateMachineIndex];
-				layers[i] = new AnimatorControllerLayer(stateMachine, this, i);
+				IAnimatorStateMachine stateMachine = collection.StateMachines[stateMachineIndex];
+				layers[i] = new AnimatorControllerLayer((AnimatorStateMachine.AnimatorStateMachine)(object)stateMachine, this, i);
 			}
 
 			YamlMappingNode node = base.ExportYamlRoot(container);

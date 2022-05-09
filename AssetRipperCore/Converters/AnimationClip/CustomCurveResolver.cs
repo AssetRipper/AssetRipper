@@ -28,7 +28,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 			m_clip = clip;
 		}
 
-		public string ToAttributeName(LayoutInfo layout, BindingCustomType type, uint attribute, string path)
+		public string ToAttributeName(BindingCustomType type, uint attribute, string path)
 		{
 			switch (type)
 			{
@@ -48,17 +48,17 @@ namespace AssetRipper.Core.Converters.AnimationClip
 							{
 								continue;
 							}
-							SkinnedMeshRenderer skin = child.GetGameObject().FindComponent<SkinnedMeshRenderer>();
+							SkinnedMeshRenderer? skin = child.GetGameObject().FindComponent<SkinnedMeshRenderer>();
 							if (skin == null)
 							{
 								continue;
 							}
-							AssetRipper.Core.Classes.Mesh.Mesh mesh = skin.Mesh.FindAsset(skin.SerializedFile);
+							AssetRipper.Core.Classes.Mesh.Mesh? mesh = skin.Mesh.FindAsset(skin.SerializedFile);
 							if (mesh == null)
 							{
 								continue;
 							}
-							string shapeName = mesh.FindBlendShapeNameByCRC(attribute);
+							string? shapeName = mesh.FindBlendShapeNameByCRC(attribute);
 							if (shapeName == null)
 							{
 								continue;
@@ -90,7 +90,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 							}
 
 							uint crc28 = attribute & 0xFFFFFFF;
-							Renderer renderer = child.GetGameObject().FindComponent<Renderer>();
+							Renderer? renderer = child.GetGameObject().FindComponent<Renderer>();
 							if (renderer == null)
 							{
 								continue;

@@ -89,12 +89,13 @@ namespace AssetRipper.Core.Parser.Asset
 {
 	public class AssetFactory : AssetFactoryBase
 	{
-		public override IUnityObjectBase CreateAsset(AssetInfo assetInfo, UnityVersion version)
+		public override IUnityObjectBase? CreateAsset(AssetInfo assetInfo, UnityVersion version)
 		{
-			return DefaultInstantiator(assetInfo, version);
+			//return DefaultInstantiator(assetInfo, version);
+			return AssetRipper.SourceGenerated.AssetFactory.CreateAsset(version, assetInfo);
 		}
 
-		private static IUnityObjectBase DefaultInstantiator(AssetInfo assetInfo, UnityVersion version)
+		private static IUnityObjectBase? DefaultInstantiator(AssetInfo assetInfo, UnityVersion version)
 		{
 			return assetInfo.ClassID switch
 			{
@@ -236,11 +237,6 @@ namespace AssetRipper.Core.Parser.Asset
 				ClassIDType.SpriteAtlas => new SpriteAtlas(assetInfo),
 				ClassIDType.StreamingController => new StreamingController(assetInfo),
 				ClassIDType.TerrainLayer => new TerrainLayer(assetInfo),
-				//ClassIDType.FixedJoint => SourceGenerated.AssetFactory.CreateClassId_138(assetInfo, version),
-				//ClassIDType.FixedJoint2D => SourceGenerated.AssetFactory.CreateClassId_255(assetInfo, version),
-				//ClassIDType.HingeJoint => SourceGenerated.AssetFactory.CreateClassId_59(assetInfo, version),
-				//ClassIDType.HingeJoint2D => SourceGenerated.AssetFactory.CreateClassId_233(assetInfo, version),
-				//ClassIDType.ConfigurableJoint => SourceGenerated.AssetFactory.CreateClassId_153(assetInfo, version),
 				_ => null,
 			};
 		}

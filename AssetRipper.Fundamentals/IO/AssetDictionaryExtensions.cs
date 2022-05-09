@@ -12,7 +12,7 @@ namespace AssetRipper.Core.IO
 			var result = new NullableKeyValuePair<TKeyBase, TValueBase>[dictionary.Count];
 			for (int i = 0; i < result.Length; i++)
 			{
-				var dictEntry = dictionary[i];
+				var dictEntry = dictionary.GetPair(i);
 				result[i] = new NullableKeyValuePair<TKeyBase, TValueBase>(dictEntry.Key, dictEntry.Value);
 			}
 			return result;
@@ -26,7 +26,7 @@ namespace AssetRipper.Core.IO
 			var result = new NullableKeyValuePair<TKeyBase, PPtr<TValueElement>>[dictionary.Count];
 			for (int i = 0; i < result.Length; i++)
 			{
-				var dictEntry = dictionary[i];
+				var dictEntry = dictionary.GetPair(i);
 				result[i] = new NullableKeyValuePair<TKeyBase, PPtr<TValueElement>>(dictEntry.Key, new PPtr<TValueElement>(dictEntry.Value));
 			}
 			return result;

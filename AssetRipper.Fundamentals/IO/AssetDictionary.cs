@@ -139,23 +139,12 @@ namespace AssetRipper.Core.IO
 			pairs[index] = new KeyValuePair<TKey, TValue>(pairs[index].Key, newValue);
 		}
 
-		/// <inheritdoc/>
-		public override NullableKeyValuePair<TKey, TValue> this[int index]
+		public override NullableKeyValuePair<TKey, TValue> GetPair(int index)
 		{
-			get
-			{
-				if ((uint)index >= (uint)count)
-					throw new ArgumentOutOfRangeException(nameof(index));
+			if ((uint)index >= (uint)count)
+				throw new ArgumentOutOfRangeException(nameof(index));
 
-				return pairs[index];
-			}
-			set
-			{
-				if (index < 0 || index >= count)
-					throw new ArgumentOutOfRangeException(nameof(index));
-
-				pairs[index] = value;
-			}
+			return pairs[index];
 		}
 
 		/// <inheritdoc/>

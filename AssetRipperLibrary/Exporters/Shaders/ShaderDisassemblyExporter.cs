@@ -1,17 +1,14 @@
-using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Classes.Shader.SerializedShader;
 using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using ShaderTextRestorer.Exporters;
 using ShaderTextRestorer.Exporters.DirectX;
 using ShaderTextRestorer.IO;
 using System;
 using System.IO;
-using System.Text;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
@@ -26,17 +23,17 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is Shader && ExportMode == ShaderExportMode.Disassembly;
+			return asset is IShader && ExportMode == ShaderExportMode.Disassembly;
 		}
 
 		public static bool IsDX11ExportMode(ShaderExportMode mode) => mode == ShaderExportMode.Disassembly;
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			Shader shader = (Shader)asset;
+			IShader shader = (IShader)asset;
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-			if (shader.ParsedForm.NameString?.StartsWith("Hidden/Internal") ?? false) 
+			if (shader.ParsedForm_C48.NameString?.StartsWith("Hidden/Internal") ?? false) 
 				return false;
 
 			using Stream fileStream = File.Create(path);
@@ -73,30 +70,30 @@ namespace AssetRipper.Library.Exporters.Shaders
 			}
 		}
 
-		public void ExportBinary(Shader shader, IExportContainer container, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
+		public void ExportBinary(IShader shader, IExportContainer container, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
 		{
-			if (Shader.IsSerialized(container.Version))
+			if (shader.Has_ParsedForm_C48())
 			{
 				using ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator);
-				((SerializedShader)shader.ParsedForm).Export(writer);
+				(shader.ParsedForm_C48).Export(writer);
 			}
-			else if (Shader.HasBlob(container.Version))
+			else if (shader.Has_CompressedBlob_C48())
 			{
 				using ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator);
-				string header = Encoding.UTF8.GetString(shader.Script);
-				if (shader.Blobs.Length == 0)
+				string header = shader.Script_C48.String;
+				if (writer.Blobs.Length == 0)
 				{
 					writer.Write(header);
 				}
 				else
 				{
-					shader.Blobs[0].Export(writer, header);
+					writer.Blobs[0].Export(writer, header);
 				}
 			}
 			else
 			{
 				using BinaryWriter writer = new BinaryWriter(stream);
-				writer.Write(shader.Script);
+				writer.Write(shader.Script_C48.Data);
 			}
 		}
 	}

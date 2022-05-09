@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -13,7 +13,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			return ((ITexture2D)asset).TextureFormat.ToString();
+			return ((Core.Classes.Texture2D.TextureFormat)((ITexture2D)asset).TextureFormat_C28).ToString();
 		}
 	}
 }

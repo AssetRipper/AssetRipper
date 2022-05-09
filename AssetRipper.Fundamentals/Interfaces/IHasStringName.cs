@@ -14,7 +14,12 @@
 		/// <returns>The object's name if it's not empty, otherwise the name of the object's type</returns>
 		public static string GetNameNotEmpty(this IHasNameString named)
 		{
-			return string.IsNullOrEmpty(named.NameString) ? named.GetType().Name : named.NameString;
+			string result = named.NameString;
+			if (string.IsNullOrEmpty(result))
+			{
+				result = named is IUnityObjectBase @object ? @object.AssetClassName : named.GetType().Name;
+			}
+			return result;
 		}
 	}
 }

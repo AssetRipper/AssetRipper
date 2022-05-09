@@ -12,4 +12,5 @@ public enum PropertyType
 public static class PropertyTypeExtensions
 {
 	public static bool IsMatch(this PropertyType _this, SerializedPropertyType type) => (int)_this == (int)type;
+	public static bool IsMatch(this PropertyType _this, int type) => (int)_this == type;
 }
