@@ -40,8 +40,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			// this enum member is version agnostic
 			keyframe.TangentMode = TangentMode.FreeSmooth.ToTangent(version);
 			keyframe.WeightedMode = (int)WeightedMode.None;
-			keyframe.InWeight.CopyValuesFrom(weight);
-			keyframe.OutWeight.CopyValuesFrom(weight);
+			keyframe.InWeight?.CopyValuesFrom(weight);
+			keyframe.OutWeight?.CopyValuesFrom(weight);
 		}
 
 		public static void SetValues(this IKeyframe_Vector3f keyframe, UnityVersion version, float time, IVector3f value, IVector3f inSlope, IVector3f outSlope, IVector3f weight)
@@ -53,8 +53,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			// this enum member is version agnostic
 			keyframe.TangentMode = TangentMode.FreeFree.ToTangent(version);
 			keyframe.WeightedMode = (int)WeightedMode.None;
-			keyframe.InWeight.CopyValuesFrom(weight);
-			keyframe.OutWeight.CopyValuesFrom(weight);
+			keyframe.InWeight?.CopyValuesFrom(weight);
+			keyframe.OutWeight?.CopyValuesFrom(weight);
 		}
 
 		public static void SetValues(this IKeyframe_Quaternionf keyframe, UnityVersion version, float time, IQuaternionf value, IQuaternionf weight)
