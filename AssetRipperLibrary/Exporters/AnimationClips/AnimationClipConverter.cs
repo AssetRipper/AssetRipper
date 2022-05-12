@@ -400,7 +400,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 
 		private void AddDefaultCurve(IGenericBinding binding, string path, float time, float value)
 		{
-			switch ((ClassIDType)binding.ClassID)
+			switch (binding.GetClassID())
 			{
 				case ClassIDType.GameObject:
 					{
