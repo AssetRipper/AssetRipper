@@ -13,7 +13,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			for (int i = 0; i < constant.GenericBindings.Count; i++)
 			{
 				IGenericBinding gb = constant.GenericBindings[i];
-				if (gb.ClassID == (int)ClassIDType.Transform)
+				if (gb.GetClassID() == ClassIDType.Transform)
 				{
 					curves += gb.TransformType().GetDimension();
 				}
