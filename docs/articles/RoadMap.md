@@ -1,18 +1,17 @@
 # Development Roadmap
 
-## 0.2.0.0
-* Convert exporters to the new system
-  * Animator Controller exporter
-  * Animation Clip exporter
-
 ## 0.2.0.1
-* Fix the inevitable bugs that pop up
+* Bug fixing
+  * TextureImporter Yaml
+  * Any other bugs that pop up
+* Mesh export - STL, OBJ, FBX, PLY, GLB
+  * Convert Unified Exporter to the new system
+  * Convert GLB Exporter to the new system
+  * Use nuget package
 
 ## 0.2.1.0
 This release will be primarily focused on cleaning up and refactoring the project.
 
-* Convert exporters to the new system
-  * Mesh exporters
 * Cleanup legacy code
   * Move documentation on legacy code to a suitable home
   * Remove the `Classes` and `Converters` namespaces

@@ -12,3 +12,4 @@ bin
 .vscode
 *.blend1
 launchSettings.json
+AssetRipper.SourceGenerated.xml
