@@ -160,15 +160,29 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				IAnimatorState state = states[i];
 				IStateConstant stateConstant = stateMachine.StateConstantArray[i].Data;
-				PPtr_AnimatorStateTransition_[] transitions = new PPtr_AnimatorStateTransition_[stateConstant.TransitionConstantArray.Count];
+				
+				if (state.Has_Transitions_C1102())
+				{
+					state.Transitions_C1102.EnsureCapacity(state.Transitions_C1102.Count + stateConstant.TransitionConstantArray.Count);
+				}
+				else if (state.Has_Motions_C1102())
+				{
+					state.Motions_C1102.EnsureCapacity(state.Motions_C1102.Count + stateConstant.TransitionConstantArray.Count);
+				}
+
 				for (int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
 				{
 					ITransitionConstant transitionConstant = stateConstant.TransitionConstantArray[j].Data;
 					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
-					transitions[j] = new();
-					transitions[j].CopyValues(transition.SerializedFile.CreatePPtr(transition));
+					if (state.Has_Transitions_C1102())
+					{
+						state.Transitions_C1102.AddNew().CopyValues(transition.SerializedFile.CreatePPtr(transition));
+					}
+					else if (state.Has_Motions_C1102())
+					{
+						state.Motions_C1102.AddNew().CopyValues(transition.SerializedFile.CreatePPtr(transition));
+					}
 				}
-				state.Transitions_C1102.AddRange(transitions);
 			}
 
 			if (generatedStateMachine.Has_AnyStateTransitions_C1107())
