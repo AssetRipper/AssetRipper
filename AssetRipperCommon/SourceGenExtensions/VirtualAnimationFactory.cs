@@ -124,19 +124,31 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				generatedStateMachine.ChildStates_C1107.Clear();
 				generatedStateMachine.ChildStates_C1107.Capacity = stateCount;
-				for (int y = 0, stateIndex = 0; y < side && stateIndex < stateCount; y++)
+			}
+			else if (generatedStateMachine.Has_States_C1107())
+			{
+				generatedStateMachine.States_C1107.Clear();
+				generatedStateMachine.States_C1107.Capacity = stateCount;
+			}
+			for (int y = 0, stateIndex = 0; y < side && stateIndex < stateCount; y++)
+			{
+				for (int x = 0; x < side && stateIndex < stateCount; x++, stateIndex++)
 				{
-					for (int x = 0; x < side && stateIndex < stateCount; x++, stateIndex++)
-					{
-						Vector3f_3_5_0_f5 position = new Vector3f_3_5_0_f5() { X = x * StateOffset, Y = y * StateOffset };
-						IAnimatorState state = CreateAnimatorState(virtualFile, controller, stateMachineIndex, stateIndex, position);
+					Vector3f_3_5_0_f5 position = new Vector3f_3_5_0_f5() { X = x * StateOffset, Y = y * StateOffset };
+					IAnimatorState state = CreateAnimatorState(virtualFile, controller, stateMachineIndex, stateIndex, position);
 
+					if (generatedStateMachine.Has_ChildStates_C1107())
+					{
 						ChildAnimatorState childState = generatedStateMachine.ChildStates_C1107.AddNew();
 						childState.Position.CopyValues(position);
 						childState.State.CopyValues(state.SerializedFile.CreatePPtr(state));
-
-						states.Add(state);
 					}
+					else if (generatedStateMachine.Has_States_C1107())
+					{
+						generatedStateMachine.States_C1107.AddNew().CopyValues(state.SerializedFile.CreatePPtr(state));
+					}
+
+					states.Add(state);
 				}
 			}
 
@@ -175,11 +187,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 #warning TEMP: remove comment when AnimatorStateMachine's child StateMachines has been implemented
 			//StateMachineBehaviours = controller.GetStateBehaviours(layerIndex);
-			generatedStateMachine.StateMachineBehaviours_C1107.Clear();
+			generatedStateMachine.StateMachineBehaviours_C1107?.Clear();
 
 			generatedStateMachine.AnyStatePosition_C1107.SetValues(0.0f, -StateOffset, 0.0f);
-			generatedStateMachine.EntryPosition_C1107.SetValues(StateOffset, -StateOffset, 0.0f);
-			generatedStateMachine.ExitPosition_C1107.SetValues(2.0f * StateOffset, -StateOffset, 0.0f);
+			generatedStateMachine.EntryPosition_C1107?.SetValues(StateOffset, -StateOffset, 0.0f);
+			generatedStateMachine.ExitPosition_C1107?.SetValues(2.0f * StateOffset, -StateOffset, 0.0f);
 			generatedStateMachine.ParentStateMachinePosition_C1107.SetValues(0.0f, -2.0f * StateOffset, 0.0f);
 
 			if (generatedStateMachine.Has_ChildStates_C1107() && generatedStateMachine.ChildStates_C1107.Count > 0)
