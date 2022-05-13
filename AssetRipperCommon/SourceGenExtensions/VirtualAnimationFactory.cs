@@ -233,23 +233,26 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			// skip Transitions because not all state exists at this moment
 
-			// exclude StateMachine's behaviours
-			int layerIndex = controller.Controller_C91.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-			PPtr_MonoBehaviour__5_0_0_f4[] machineBehaviours = controller.GetStateBehaviours(layerIndex);
-			PPtr_MonoBehaviour__5_0_0_f4[] stateBehaviours = controller.GetStateBehaviours(stateMachineIndex, stateIndex);
-			PPtr_MonoBehaviour__5_0_0_f4[] behaviours = stateBehaviours;
+			if (generatedState.Has_StateMachineBehaviours_C1102())
+			{
+				// exclude StateMachine's behaviours
+				int layerIndex = controller.Controller_C91.GetLayerIndexByStateMachineIndex(stateMachineIndex);
+				PPtr_MonoBehaviour__5_0_0_f4[] machineBehaviours = controller.GetStateBehaviours(layerIndex);
+				PPtr_MonoBehaviour__5_0_0_f4[] stateBehaviours = controller.GetStateBehaviours(stateMachineIndex, stateIndex);
+				PPtr_MonoBehaviour__5_0_0_f4[] behaviours = stateBehaviours;
 #warning TEMP: remove comment when AnimatorStateMachine's child StateMachines has been implemented
-			//List<PPtr_MonoBehaviour__5_0_0_f4> behaviours = new List<PPtr_MonoBehaviour__5_0_0_f4>(stateBehaviours.Length);
-			//foreach (PPtr_MonoBehaviour__5_0_0_f4 ptr in stateBehaviours)
-			//{
-			//if (!machineBehaviours.Contains(ptr))
-			//{
-			//	behaviours.Add(ptr);
-			//}
-			//}
-			generatedState.StateMachineBehaviours_C1102.Clear();
-			generatedState.StateMachineBehaviours_C1102.AddRange(behaviours);
-			//generatedState.StateMachineBehaviours_C1102.AddRange(behaviours.ToArray());
+				//List<PPtr_MonoBehaviour__5_0_0_f4> behaviours = new List<PPtr_MonoBehaviour__5_0_0_f4>(stateBehaviours.Length);
+				//foreach (PPtr_MonoBehaviour__5_0_0_f4 ptr in stateBehaviours)
+				//{
+				//if (!machineBehaviours.Contains(ptr))
+				//{
+				//	behaviours.Add(ptr);
+				//}
+				//}
+				generatedState.StateMachineBehaviours_C1102.Clear();
+				generatedState.StateMachineBehaviours_C1102.AddRange(behaviours);
+				//generatedState.StateMachineBehaviours_C1102.AddRange(behaviours.ToArray());
+			}
 
 			generatedState.Position_C1102.CopyValues(position);
 			generatedState.IKOnFeet_C1102 = state.IKOnFeet;
@@ -260,13 +263,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 			generatedState.CycleOffsetParameterActive_C1102 = state.CycleOffsetParamID > 0;
 			generatedState.TimeParameterActive_C1102 = state.TimeParamID > 0;
 
-			generatedState.Motion_C1102.CopyValues(state.CreateMotion(virtualFile, controller, 0));
+			generatedState.Motion_C1102?.CopyValues(state.CreateMotion(virtualFile, controller, 0));
 
 			generatedState.Tag_C1102.CopyValues(TOS[state.TagID]);
-			generatedState.SpeedParameter_C1102.CopyValues(TOS[state.SpeedParamID]);
-			generatedState.MirrorParameter_C1102.CopyValues(TOS[state.MirrorParamID]);
-			generatedState.CycleOffsetParameter_C1102.CopyValues(TOS[state.CycleOffsetParamID]);
-			generatedState.TimeParameter_C1102.CopyValues(TOS[state.TimeParamID]);
+			generatedState.SpeedParameter_C1102?.CopyValues(TOS[state.SpeedParamID]);
+			generatedState.MirrorParameter_C1102?.CopyValues(TOS[state.MirrorParamID]);
+			generatedState.CycleOffsetParameter_C1102?.CopyValues(TOS[state.CycleOffsetParamID]);
+			generatedState.TimeParameter_C1102?.CopyValues(TOS[state.TimeParamID]);
 
 			return generatedState;
 		}
