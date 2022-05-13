@@ -318,8 +318,8 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 						// this enum member is version agnostic
 						key.TangentMode = TangentMode.FreeFree.ToTangent(Layout.Version);
 						key.WeightedMode = (int)Core.Classes.Misc.KeyframeTpl.WeightedMode.None;
-						key.InWeight.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
-						key.OutWeight.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
+						key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
+						key.OutWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 					}
 					break;
 
