@@ -47,7 +47,10 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers
 				IAnimatorStateMachine stateMachine = StateMachines[i];
 				IStateMachineConstant stateMachineConstant = asset.Controller_C91.StateMachineArray[i].Data;
 				AddAsset(stateMachine);
-				AddBehaviours(asset, stateMachine.StateMachineBehaviours_C1107);
+				if (stateMachine.Has_StateMachineBehaviours_C1107())
+				{
+					AddBehaviours(asset, stateMachine.StateMachineBehaviours_C1107);
+				}
 
 				foreach (PPtr_AnimatorStateTransition_ transitionPtr in stateMachine.AnyStateTransitions_C1107)
 				{
@@ -66,7 +69,10 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers
 					IAnimatorState state = statePtr.GetAsset(virtualFile);
 					IStateConstant stateConstant = stateMachineConstant.StateConstantArray[j].Data;
 					AddAsset(state);
-					AddBehaviours(asset, state.StateMachineBehaviours_C1102);
+					if (state.Has_StateMachineBehaviours_C1102())
+					{
+						AddBehaviours(asset, state.StateMachineBehaviours_C1102);
+					}
 
 					if (state.Motion_C1102.IsVirtual())
 					{
