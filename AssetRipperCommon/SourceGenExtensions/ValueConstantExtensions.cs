@@ -7,9 +7,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static AnimatorControllerParameterType GetTypeValue(this IValueConstant valueConstant)
 		{
-			return valueConstant.Has_TypeID() 
-				? (AnimatorControllerParameterType)valueConstant.TypeID 
-				: (AnimatorControllerParameterType)valueConstant.Type;
+			//return valueConstant.Has_TypeID() 
+			//	? (AnimatorControllerParameterType)valueConstant.TypeID 
+			//	: (AnimatorControllerParameterType)valueConstant.Type;
+			return (AnimatorControllerParameterType)valueConstant.Type;
 		}
 	}
 }
