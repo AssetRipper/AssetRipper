@@ -21,6 +21,7 @@ using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorState_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorStateTransition_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorTransition_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_State_;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.TransitionConstant;
@@ -52,41 +53,85 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers
 					AddBehaviours(asset, stateMachine.StateMachineBehaviours_C1107);
 				}
 
-				foreach (PPtr_AnimatorStateTransition_ transitionPtr in stateMachine.AnyStateTransitions_C1107)
+				if (stateMachine.Has_AnyStateTransitions_C1107())
 				{
-					IAnimatorStateTransition transition = transitionPtr.GetAsset(virtualFile);
-					AddAsset(transition);
-				}
-				foreach (PPtr_AnimatorTransition_ transitionPtr in stateMachine.EntryTransitions_C1107)
-				{
-					IAnimatorTransition transition = transitionPtr.GetAsset(virtualFile);
-					AddAsset(transition);
-				}
-
-				for (int j = 0; j < stateMachine.ChildStates_C1107.Count; j++)
-				{
-					PPtr_AnimatorState_ statePtr = stateMachine.ChildStates_C1107[j].State;
-					IAnimatorState state = statePtr.GetAsset(virtualFile);
-					IStateConstant stateConstant = stateMachineConstant.StateConstantArray[j].Data;
-					AddAsset(state);
-					if (state.Has_StateMachineBehaviours_C1102())
+					foreach (PPtr_AnimatorStateTransition_ transitionPtr in stateMachine.AnyStateTransitions_C1107)
 					{
-						AddBehaviours(asset, state.StateMachineBehaviours_C1102);
-					}
-
-					if (state.Motion_C1102.IsVirtual())
-					{
-						Motion motion = state.Motion_C1102.GetAsset(virtualFile);
-						AddBlendTree(virtualFile, (IBlendTree)motion);
-					}
-
-					for (int k = 0; k < state.Transitions_C1102.Count; k++)
-					{
-						PPtr_AnimatorStateTransition_ transitionPtr = state.Transitions_C1102[k];
 						IAnimatorStateTransition transition = transitionPtr.GetAsset(virtualFile);
-						ITransitionConstant transitionConstant = stateConstant.TransitionConstantArray[k].Data;
-
 						AddAsset(transition);
+					}
+				}
+				if (stateMachine.Has_EntryTransitions_C1107())
+				{
+					foreach (PPtr_AnimatorTransition_ transitionPtr in stateMachine.EntryTransitions_C1107)
+					{
+						IAnimatorTransition transition = transitionPtr.GetAsset(virtualFile);
+						AddAsset(transition);
+					}
+				}
+
+				if (stateMachine.Has_ChildStates_C1107())
+				{
+					for (int j = 0; j < stateMachine.ChildStates_C1107.Count; j++)
+					{
+						PPtr_AnimatorState_ statePtr = stateMachine.ChildStates_C1107[j].State;
+						IAnimatorState state = statePtr.GetAsset(virtualFile);
+						IStateConstant stateConstant = stateMachineConstant.StateConstantArray[j].Data;
+						AddAsset(state);
+						if (state.Has_StateMachineBehaviours_C1102())
+						{
+							AddBehaviours(asset, state.StateMachineBehaviours_C1102);
+						}
+
+						if (state.Has_Motion_C1102() && state.Motion_C1102.IsVirtual())
+						{
+							Motion motion = state.Motion_C1102.GetAsset(virtualFile);
+							AddBlendTree(virtualFile, (IBlendTree)motion);
+						}
+
+						if (state.Has_Transitions_C1102())
+						{
+							for (int k = 0; k < state.Transitions_C1102.Count; k++)
+							{
+								PPtr_AnimatorStateTransition_ transitionPtr = state.Transitions_C1102[k];
+								IAnimatorStateTransition transition = transitionPtr.GetAsset(virtualFile);
+								ITransitionConstant transitionConstant = stateConstant.TransitionConstantArray[k].Data;
+
+								AddAsset(transition);
+							}
+						}
+					}
+				}
+				else if (stateMachine.Has_States_C1107())
+				{
+					for (int j = 0; j < stateMachine.States_C1107.Count; j++)
+					{
+						PPtr_State_ statePtr = stateMachine.States_C1107[j];
+						IAnimatorState state = statePtr.GetAsset(virtualFile);
+						IStateConstant stateConstant = stateMachineConstant.StateConstantArray[j].Data;
+						AddAsset(state);
+						if (state.Has_StateMachineBehaviours_C1102())
+						{
+							AddBehaviours(asset, state.StateMachineBehaviours_C1102);
+						}
+
+						if (state.Has_Motion_C1102() && state.Motion_C1102.IsVirtual())
+						{
+							Motion motion = state.Motion_C1102.GetAsset(virtualFile);
+							AddBlendTree(virtualFile, (IBlendTree)motion);
+						}
+
+						if (state.Has_Transitions_C1102())
+						{
+							for (int k = 0; k < state.Transitions_C1102.Count; k++)
+							{
+								PPtr_AnimatorStateTransition_ transitionPtr = state.Transitions_C1102[k];
+								IAnimatorStateTransition transition = transitionPtr.GetAsset(virtualFile);
+								ITransitionConstant transitionConstant = stateConstant.TransitionConstantArray[k].Data;
+
+								AddAsset(transition);
+							}
+						}
 					}
 				}
 			}
