@@ -165,10 +165,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 				{
 					state.Transitions_C1102.EnsureCapacity(state.Transitions_C1102.Count + stateConstant.TransitionConstantArray.Count);
 				}
-				else if (state.Has_Motions_C1102())
-				{
-					state.Motions_C1102.EnsureCapacity(state.Motions_C1102.Count + stateConstant.TransitionConstantArray.Count);
-				}
 
 				for (int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
 				{
@@ -177,10 +173,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 					if (state.Has_Transitions_C1102())
 					{
 						state.Transitions_C1102.AddNew().CopyValues(transition.SerializedFile.CreatePPtr(transition));
-					}
-					else if (state.Has_Motions_C1102())
-					{
-						state.Motions_C1102.AddNew().CopyValues(transition.SerializedFile.CreatePPtr(transition));
 					}
 				}
 			}
