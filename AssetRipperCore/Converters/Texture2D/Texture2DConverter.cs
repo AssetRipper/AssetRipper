@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Converters.Texture2D
 			instance.SpriteMode_C1006 = (int)Classes.Meta.Importers.Texture.SpriteImportMode.Single;
 			instance.SpriteExtrude_C1006 = 1;
 			instance.SpriteMeshType_C1006 = (int)Classes.Sprite.SpriteMeshType.Tight;
-			instance.SpritePivot_C1006.SetValues(0.5f, 0.5f);
+			instance.SpritePivot_C1006?.SetValues(0.5f, 0.5f);
 			instance.SpritePixelsToUnits_C1006 = 100.0f;
 			instance.SpriteGenerateFallbackPhysicsShape_C1006 = 1;
 			instance.AlphaUsage_C1006 = (int)Classes.Meta.Importers.Texture.TextureImporterAlphaSource.FromInput;
