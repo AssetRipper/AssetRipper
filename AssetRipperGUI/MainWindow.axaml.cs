@@ -27,8 +27,6 @@ namespace AssetRipper.GUI
 
 			Logger.Verbose(LogCategory.System, $"Available languages: {string.Join(", ", LocalizationManager.SupportedLanguages.Select(l => l.LanguageCode))}");
 
-			Opened += (_, _) => VM.CheckForUpdates(false);
-
 			InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
