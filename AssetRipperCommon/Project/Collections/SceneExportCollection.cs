@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Importers;
 using AssetRipper.Core.Interfaces;
@@ -9,6 +8,8 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1030;
+using AssetRipper.SourceGenerated.Classes.ClassID_1034;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
@@ -51,7 +52,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			m_components = components.OrderBy(t => t, this).ToArray();
 
-			IOcclusionCullingSettings sceneSettings = Components.Where(t => t is IOcclusionCullingSettings).Select(t => (IOcclusionCullingSettings)t).FirstOrDefault();
+			IOcclusionCullingSettings? sceneSettings = Components.Where(t => t is IOcclusionCullingSettings).Select(t => (IOcclusionCullingSettings)t).FirstOrDefault();
 			if (sceneSettings != null)
 			{
 				GUID = sceneSettings.GUID;
@@ -127,17 +128,17 @@ namespace AssetRipper.Core.Project.Collections
 				}
 			}
 
-			folderPath = Path.GetDirectoryName(filePath);
+			folderPath = Path.GetDirectoryName(filePath)!;
 			Directory.CreateDirectory(folderPath);
 
 			AssetExporter.Export(container, Components.Select(t => Convert(t, container)), filePath);
-			IDefaultImporter sceneImporter = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateDefaultImporter(container.ExportLayout);
+			IDefaultImporter sceneImporter = DefaultImporterFactory.CreateAsset(container.ExportVersion);
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);
 
 			string sceneName = Path.GetFileName(sceneSubPath);
 			string subFolderPath = Path.Combine(folderPath, sceneName);
-			if (OcclusionCullingData != null)
+			if (OcclusionCullingData is not null && m_occlusionCullingSettings is not null)
 			{
 				OcclusionCullingData.Initialize(container, m_occlusionCullingSettings);
 				ExportAsset(container, OcclusionCullingData, subFolderPath);
@@ -204,8 +205,8 @@ namespace AssetRipper.Core.Project.Collections
 
 		private void ExportAsset(IProjectAssetContainer container, IHasNameString asset, string path)
 		{
-			INativeFormatImporter importer = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateNativeFormatImporter(container.ExportLayout);
-			importer.MainObjectFileID = GetExportID((IUnityObjectBase)asset);
+			INativeFormatImporter importer = NativeFormatImporterFactory.CreateAsset(container.ExportVersion);
+			importer.MainObjectFileID_C1034 = GetExportID((IUnityObjectBase)asset);
 			ExportAsset(container, importer, (IUnityObjectBase)asset, path, asset.NameString);
 		}
 
@@ -301,7 +302,7 @@ namespace AssetRipper.Core.Project.Collections
 		public override string Name { get; }
 		public override ISerializedFile File => m_file;
 
-		public IOcclusionCullingData OcclusionCullingData { get; }
+		public IOcclusionCullingData? OcclusionCullingData { get; }
 		public UnityGUID GUID { get; }
 
 		private IEnumerable<IUnityObjectBase> Components => m_components;
@@ -315,6 +316,6 @@ namespace AssetRipper.Core.Project.Collections
 		private readonly IUnityObjectBase[] m_components;
 		private readonly Dictionary<AssetInfo, long> m_exportIDs = new Dictionary<AssetInfo, long>();
 		private readonly ISerializedFile m_file;
-		private readonly IOcclusionCullingSettings m_occlusionCullingSettings;
+		private readonly IOcclusionCullingSettings? m_occlusionCullingSettings;
 	}
 }

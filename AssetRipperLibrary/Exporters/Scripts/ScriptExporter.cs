@@ -82,7 +82,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			return true;
 		}
 
-		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string dirPath, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string dirPath, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			Logger.Info(LogCategory.Export, "Exporting scripts...");
 
@@ -99,7 +99,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			ExportSecondaryScripts();
 		}
 
-		private void ExportPrimaryScripts(IExportContainer container, IEnumerable<IUnityObjectBase> assets, Action<IExportContainer, IUnityObjectBase, string> callback)
+		private void ExportPrimaryScripts(IExportContainer container, IEnumerable<IUnityObjectBase> assets, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			Dictionary<IUnityObjectBase, TypeDefinition> exportTypes = new Dictionary<IUnityObjectBase, TypeDefinition>();
 			foreach (IUnityObjectBase asset in assets)
@@ -113,7 +113,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			Logger.Info(LogCategory.Export, $"Exporting {primaryTotal} primary scripts...");
 			foreach (KeyValuePair<IUnityObjectBase, TypeDefinition> exportType in exportTypes)
 			{
-				string path = Export(exportType.Value);
+				string? path = Export(exportType.Value);
 				if (path != null)
 				{
 					callback?.Invoke(container, exportType.Key, path);
@@ -156,7 +156,9 @@ namespace AssetRipper.Library.Exporters.Scripts
 					foreach (var type in module.Types)
 					{
 						if (!specialTypeNames.Contains(type.FullName) && !IsForbiddenNamespace(type.Namespace) && !m_types.ContainsKey(type.FullName))
+						{
 							m_types.Add(type.FullName, type);
+						}
 					}
 				}
 			}
@@ -189,7 +191,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			return GetExportSubPath(type.Module.Name, type.Namespace, typeName);
 		}
 
-		public string Export(TypeDefinition exportType)
+		public string? Export(TypeDefinition exportType)
 		{
 			if (exportType.DeclaringType != null)
 			{
@@ -213,7 +215,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 					string subPath = GetExportSubPath(exportType);
 					string filePath = Path.Combine(m_exportPath, subPath);
 					string uniqueFilePath = ToUniqueFileName(filePath);
-					string directory = Path.GetDirectoryName(uniqueFilePath);
+					string directory = Path.GetDirectoryName(uniqueFilePath)!;
 					Directory.CreateDirectory(directory);
 					File.WriteAllText(uniqueFilePath, decompiledText, utf8Encoding);
 					AddExportedType(exportType);
@@ -242,7 +244,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		{
 			if (File.Exists(filePath))
 			{
-				string directory = Path.GetDirectoryName(filePath);
+				string directory = Path.GetDirectoryName(filePath)!;
 				string fileName = Path.GetFileNameWithoutExtension(filePath);
 				string fileExtension = Path.GetExtension(filePath);
 				for (int i = 2; i < int.MaxValue; i++)

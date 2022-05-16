@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Importers;
 using AssetRipper.Core.Interfaces;
@@ -10,7 +9,7 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Utils;
-using AssetRipper.Core.VersionHandling;
+using AssetRipper.SourceGenerated.Classes.ClassID_1035;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System;
 using System.Collections.Generic;
@@ -38,7 +37,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				}
 
 				MonoScriptInfo info = MonoScriptInfo.From(assetScript);
-				if(uniqueDictionary.TryGetValue(info, out IMonoScript uniqueScript))
+				if(uniqueDictionary.TryGetValue(info, out IMonoScript? uniqueScript))
 				{
 					m_scripts.Add(assetScript, uniqueScript);
 				}
@@ -128,8 +127,8 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private void OnScriptExported(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			IMonoScript script = (IMonoScript)asset;
-			IMonoImporter importer = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateMonoImporter(container.ExportLayout);
-			importer.ExecutionOrder = (short)script.ExecutionOrder_C115;
+			IMonoImporter importer = MonoImporterFactory.CreateAsset(container.ExportVersion);
+			importer.ExecutionOrder_C1035 = (short)script.ExecutionOrder_C115;
 			Meta meta = new Meta(script.GUID, importer);
 			ExportMeta(container, meta, path);
 		}
@@ -163,7 +162,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				return new MonoScriptInfo(monoScript.ClassName_C115.String, monoScript.Namespace_C115.String, monoScript.GetAssemblyNameFixed());
 			}
 
-			public override bool Equals(object obj)
+			public override bool Equals(object? obj)
 			{
 				return obj is MonoScriptInfo info && Equals(info);
 			}
