@@ -78,7 +78,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1
 		docs\articles\Credits.md = docs\articles\Credits.md
 		docs\docfx.json = docs\docfx.json
 		docs\articles\Downloads.md = docs\articles\Downloads.md
-		docs\articles\ExportFeatures.md = docs\articles\ExportFeatures.md
 		docs\index.md = docs\index.md
 		docs\articles\Requirements.md = docs\articles\Requirements.md
 		docs\articles\RoadMap.md = docs\articles\RoadMap.md
@@ -103,13 +102,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smolv", "Smolv\Smolv.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpirV", "SpirV\SpirV.csproj", "{2135442C-E861-486D-A07B-0367A09177F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Fundamentals", "AssetRipper.Fundamentals\AssetRipper.Fundamentals.csproj", "{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Fundamentals", "AssetRipper.Fundamentals\AssetRipper.Fundamentals.csproj", "{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Yaml", "AssetRipper.Yaml\AssetRipper.Yaml.csproj", "{E3458355-E654-41B9-A06C-9E2A00EA9CE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Yaml", "AssetRipper.Yaml\AssetRipper.Yaml.csproj", "{E3458355-E654-41B9-A06C-9E2A00EA9CE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.SerializationLogic", "AssetRipper.SerializationLogic\AssetRipper.SerializationLogic.csproj", "{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.SerializationLogic", "AssetRipper.SerializationLogic\AssetRipper.SerializationLogic.csproj", "{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Yaml.Tests", "AssetRipper.Yaml.Tests\AssetRipper.Yaml.Tests.csproj", "{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Yaml.Tests", "AssetRipper.Yaml.Tests\AssetRipper.Yaml.Tests.csproj", "{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

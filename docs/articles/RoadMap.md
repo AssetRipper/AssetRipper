@@ -1,9 +1,8 @@
 # Development Roadmap
 
-## 0.2.0.1
+## 0.2.0.2
 * Bug fixing
   * TextureImporter Yaml
-  * Any other bugs that pop up
 * Mesh export - STL, OBJ, FBX, PLY, GLB
   * Convert Unified Exporter to the new system
   * Convert GLB Exporter to the new system

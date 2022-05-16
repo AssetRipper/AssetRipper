@@ -40,14 +40,3 @@ Modified assemblies almost always cause read errors when used in AssetRipper. He
 * Publicizing an assembly changes field deserialization on Monobehaviours.
 * Attribute removal can also change field deserialization.
 * Modified method bodies can cause decompiler errors.
-
-## Game ripped without errors, but Unity crashes on launch
-
-The most common cause of this is not upgrading your project's Unity version. Currently, AssetRipper exports everything as a `2017.3.0` project, but if the game used a newer Unity version, this needs to be upgraded in UnityHub before launching the editor.
-
-You should be prompted with confirmation box beginning with `Your project was last saved with a different version of Unity.`. Click `Continue`.
-
-Other possible causes of this issue include: 
-* Exporting engine assets as normal assets
-* Including engine dll assemblies in the project
-* Bugged Yaml export

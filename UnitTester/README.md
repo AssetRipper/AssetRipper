@@ -5,7 +5,7 @@ This is an automated testing program.
 ## File Structure
 
 ```
-root //contains the Unit Tester executable
+Bins
  |--Tests
  |   |--2019.4.3 //just an example
  |   |   |--Test1Name

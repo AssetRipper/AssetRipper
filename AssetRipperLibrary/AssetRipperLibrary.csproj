@@ -137,4 +137,8 @@
 		<EmbeddedResource Include="Exporters\Shaders\Templates\*" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="C:\Users\jrpri\.nuget\packages\naudio.vorbis\1.5.0\contentFiles\any\netstandard2.0\README.md" />
+	</ItemGroup>
+
 </Project>
