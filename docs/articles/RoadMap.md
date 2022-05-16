@@ -2,7 +2,8 @@
 
 ## 0.2.0.2
 * Bug fixing
-  * TextureImporter Yaml
+  * ~~TextureImporter Yaml~~
+  * ~~Other Importers~~
 * Mesh export - STL, OBJ, FBX, PLY, GLB
   * Convert Unified Exporter to the new system
   * Convert GLB Exporter to the new system

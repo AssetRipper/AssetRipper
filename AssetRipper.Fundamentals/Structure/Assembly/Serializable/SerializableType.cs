@@ -45,7 +45,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 		{
 			if (MonoUtils.IsEngineStruct(this.Namespace, this.Name))
 			{
-				return VersionManager.GetHandler(version).AssetFactory.CreateEngineAsset(this.Name);
+				return VersionManager.AssetFactory.CreateEngineAsset(this.Name);
 			}
 			if (this.IsEnginePointer())
 			{

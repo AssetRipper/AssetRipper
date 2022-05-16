@@ -49,8 +49,7 @@ namespace AssetRipper.Library
 	{
 		static Ripper()
 		{
-			VersionManager.LegacyHandler = new LegacyHandler();
-			Core.Importers.ImporterVersionHandler.SetLegacyImporter(new LegacyImporterFactory());
+			VersionManager.AssetFactory = new AssetFactory();
 		}
 
 		public Ripper() : this(new()) { }

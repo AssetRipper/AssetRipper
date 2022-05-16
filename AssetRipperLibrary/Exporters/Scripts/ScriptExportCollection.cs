@@ -1,6 +1,5 @@
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Importers;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
