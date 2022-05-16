@@ -22,6 +22,7 @@ using AssetRipper.SourceGenerated.Subclasses.PPtr_Object_;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 
@@ -74,7 +75,7 @@ namespace AssetRipper.Core.Project
 		}
 
 #warning TODO: get rid of IEnumerable. pass only main asset (issues: prefab, texture with sprites, animatorController)
-		public bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, out IUnityObjectBase? selectedAsset, out string assetPath)
+		public bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, [NotNullWhen(true)] out IUnityObjectBase? selectedAsset, out string assetPath)
 		{
 			selectedAsset = null;
 			assetPath = string.Empty;
@@ -99,7 +100,7 @@ namespace AssetRipper.Core.Project
 			return File.GetAsset(pathID);
 		}
 
-		public virtual IUnityObjectBase FindAsset(int fileIndex, long pathID)
+		public virtual IUnityObjectBase? FindAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
