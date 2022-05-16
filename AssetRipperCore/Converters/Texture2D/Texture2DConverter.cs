@@ -13,12 +13,12 @@ namespace AssetRipper.Core.Converters.Texture2D
 		public static ITextureImporter GenerateTextureImporter(IExportContainer container, ITexture2D origin)
 		{
 			ITextureImporter instance = TextureImporterFactory.CreateAsset(container.ExportLayout.Version);
-			instance.EnableMipMap_C1006 = origin.MipCount_C28 > 1 ? 1 : 0;
-			instance.SRGBTexture_C1006 = origin.ColorSpace_C28 == (int)Classes.Texture2D.ColorSpace.Linear ? 1 : 0;
-			instance.AlphaTestReferenceValue_C1006 = 0.5f;
-			instance.MipMapFadeDistanceStart_C1006 = 1;
-			instance.MipMapFadeDistanceEnd_C1006 = 3;
-			instance.HeightScale_C1006 = .25f;
+			instance.MipMaps_C1006.EnableMipMap = origin.MipCount_C28 > 1 ? 1 : 0;
+			instance.MipMaps_C1006.SRGBTexture = origin.ColorSpace_C28 == (int)Classes.Texture2D.ColorSpace.Linear ? 1 : 0;
+			instance.MipMaps_C1006.AlphaTestReferenceValue = 0.5f;
+			instance.MipMaps_C1006.MipMapFadeDistanceStart = 1;
+			instance.MipMaps_C1006.MipMapFadeDistanceEnd = 3;
+			instance.BumpMap_C1006.HeightScale = .25f;
 			instance.GenerateCubemap_C1006 = (int)Classes.Meta.Importers.Texture.TextureImporterGenerateCubemap.AutoCubemap;
 			instance.StreamingMipmaps_C1006 = origin.StreamingMipmaps_C28 ? 1 : 0;
 			instance.StreamingMipmapsPriority_C1006 = origin.StreamingMipmapsPriority_C28;
