@@ -67,7 +67,7 @@ namespace AssetRipper.GUI
 				foreach (IUnityObjectBase asset in resourceFile.FetchAssets())
 				{
 					//Get the name of the category this asset should go in.
-					string categoryName = GetCategoryName(asset.GetType());
+					string categoryName = asset.AssetClassName;
 
 					//Get or create the category.
 					NewUiFileListItem category;
@@ -106,20 +106,6 @@ namespace AssetRipper.GUI
 			ret.Add(looseFiles);
 
 			return ret;
-		}
-
-		private static string GetCategoryName(Type assetType)
-		{
-			if (SettingsClasses.Contains(assetType))
-				return "Settings";
-
-			return assetType.Name switch
-			{
-				nameof(Mesh) => "Meshes",
-				nameof(Canvas) => "Canvases",
-				nameof(Rigidbody) => "Rigidbodies",
-				_ => $"{assetType.Name}s",//E.g. Materials, AudioClips, etc.
-			};
 		}
 	}
 
