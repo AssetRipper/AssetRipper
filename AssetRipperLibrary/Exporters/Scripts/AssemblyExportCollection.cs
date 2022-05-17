@@ -28,7 +28,6 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public override string Name => nameof(ScriptExportCollection);
 
 		private static readonly UnityGUID UnityEngineGUID = new UnityGUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
-		private static readonly Regex s_unityEngine = new Regex(@"^UnityEngine(\.[0-9a-zA-Z]+)*(\.dll)?$", RegexOptions.Compiled);
 
 		private readonly List<IMonoScript> m_export = new List<IMonoScript>();
 		private readonly HashSet<IMonoScript> m_unique = new HashSet<IMonoScript>();
@@ -101,38 +100,17 @@ namespace AssetRipper.Library.Exporters.Scripts
 				if (!assemblyName.EndsWith(".dll"))
 					assemblyName = assemblyName + ".dll";
 
-				if (IsReferenceAssembly(assemblyName))
+				if (ReferenceAssemblies.IsReferenceAssembly(assemblyName))
 					continue;
 
 				string path = System.IO.Path.Combine(scriptPath, assemblyName);
 				Directory.CreateDirectory(scriptPath);
-				using var file = System.IO.File.Create(path);
+				using FileStream file = System.IO.File.Create(path);
 				assembly.Write(file);
 				OnAssemblyExported(container, path);
 			}
 			Logger.Info(LogCategory.Export, "Finished exporting scripts");
 			return true;
-		}
-
-		private static bool IsReferenceAssembly(string assemblyName)
-		{
-			if (assemblyName == null)
-				throw new ArgumentNullException(assemblyName);
-			if (assemblyName.StartsWith("System."))
-				return true;
-			if (assemblyName.StartsWith("Unity."))
-				return true;
-			if (assemblyName.StartsWith("UnityEngine."))
-				return true;
-			if (assemblyName.StartsWith("UnityEditor."))
-				return true;
-			if (assemblyName == "mscorlib.dll")
-				return true;
-			if (assemblyName == "netstandard.dll")
-				return true;
-			if (assemblyName == "Mono.Security.dll")
-				return true;
-			return false;
 		}
 
 		public override bool IsContains(IUnityObjectBase asset)
@@ -153,7 +131,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 
 			IMonoScript script = m_scripts[asset];
-			if (!MonoScriptExtensions.HasAssemblyName(script.SerializedFile.Version, script.SerializedFile.Flags) || s_unityEngine.IsMatch(script.GetAssemblyNameFixed()))
+			if (!MonoScriptExtensions.HasAssemblyName(script.SerializedFile.Version, script.SerializedFile.Flags) || ReferenceAssemblies.IsUnityEngineAssembly(script.GetAssemblyNameFixed()))
 			{
 				if (MonoScriptExtensions.HasNamespace(script.SerializedFile.Version))
 				{

@@ -11,11 +11,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 {
 	internal class CecilAssemblyResolver : ICSharpCode.Decompiler.Metadata.IAssemblyResolver
 	{
-		private readonly ConcurrentDictionary<string, PEFile> peAssemblies = new ConcurrentDictionary<string, PEFile>();
+		private readonly ConcurrentDictionary<string, PEFile> peAssemblies = new();
 		public CecilAssemblyResolver(IAssemblyManager manager) : this(manager.GetAssemblies()) { }
 		public CecilAssemblyResolver(ReadOnlySpan<AssemblyDefinition> assemblies)
 		{
-			foreach (var assembly in assemblies)
+			foreach (AssemblyDefinition assembly in assemblies)
 			{
 				PEFile peFile = CreatePEFile(assembly);
 				if (!peAssemblies.TryAdd(assembly.FullName, peFile))
@@ -45,17 +45,19 @@ namespace AssetRipper.Library.Exporters.Scripts
 			return new PEFile(assembly.Name.Name, memoryStream);
 		}
 
-		public PEFile Resolve(IAssemblyReference reference) => Resolve(reference.FullName);
+		public PEFile? Resolve(IAssemblyReference reference) => Resolve(reference.FullName);
 
-		public PEFile Resolve(string fullName)
+		public PEFile? Resolve(AssemblyDefinition assembly) => Resolve(assembly.FullName);
+
+		public PEFile? Resolve(string fullName)
 		{
-			if (peAssemblies.TryGetValue(fullName, out PEFile result))
+			if (peAssemblies.TryGetValue(fullName, out PEFile? result))
 				return result;
 			else
 				return null;
 		}
 
-		public Task<PEFile> ResolveAsync(IAssemblyReference reference)
+		public Task<PEFile?> ResolveAsync(IAssemblyReference reference)
 		{
 			return Task.Run(() => Resolve(reference));
 		}
@@ -66,12 +68,12 @@ namespace AssetRipper.Library.Exporters.Scripts
 		/// <param name="mainModule"></param>
 		/// <param name="moduleName"></param>
 		/// <returns></returns>
-		public PEFile ResolveModule(PEFile mainModule, string moduleName)
+		public PEFile? ResolveModule(PEFile mainModule, string moduleName)
 		{
-			return peAssemblies.Values.Where(x => x.Name == moduleName).Single();
+			return peAssemblies.Values.Where(x => x.Name == moduleName).SingleOrDefault();
 		}
 
-		public Task<PEFile> ResolveModuleAsync(PEFile mainModule, string moduleName)
+		public Task<PEFile?> ResolveModuleAsync(PEFile mainModule, string moduleName)
 		{
 			return Task.Run(() => ResolveModule(mainModule, moduleName));
 		}

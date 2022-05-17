@@ -3,7 +3,9 @@
 ## 0.2.0.2
 * Bug fixing
   * ~~TextureImporter Yaml~~
-  * ~~Other Importers~~
+  * ~~Creation of Default, Native, and Mono Importers~~
+* Script export
+  * ~~Implemented a whole assembly decompiler for better script export~~
 * Mesh export - STL, OBJ, FBX, PLY, GLB
   * Convert Unified Exporter to the new system
   * Convert GLB Exporter to the new system

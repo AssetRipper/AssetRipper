@@ -15,11 +15,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {
-	public class ScriptExportCollection : ExportCollection
+	public partial class ScriptExportCollection : ExportCollection
 	{
 		public ScriptExportCollection(IAssetExporter assetExporter, IMonoScript script)
 		{
@@ -84,7 +83,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 
 			IMonoScript script = m_scripts[asset];
-			if (!MonoScriptExtensions.HasAssemblyName(script.SerializedFile.Version, script.SerializedFile.Flags) || s_unityEngine.IsMatch(script.GetAssemblyNameFixed()))
+			if (IsEngineScript(script))
 			{
 				if (MonoScriptExtensions.HasNamespace(script.SerializedFile.Version))
 				{
@@ -132,61 +131,19 @@ namespace AssetRipper.Library.Exporters.Scripts
 			ExportMeta(container, meta, path);
 		}
 
+		public static bool IsEngineScript(IMonoScript script)
+		{
+			return ReferenceAssemblies.IsUnityEngineAssembly(script.GetAssemblyNameFixed());
+		}
+
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File { get; }
 		public override IEnumerable<IUnityObjectBase> Assets => m_scripts.Keys;
 		public override string Name => nameof(ScriptExportCollection);
 
 		private static readonly UnityGUID UnityEngineGUID = new UnityGUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
-		private static readonly Regex s_unityEngine = new Regex(@"^UnityEngine(\.[0-9a-zA-Z]+)*(\.dll)?$", RegexOptions.Compiled);
 
-		private readonly List<IMonoScript> m_export = new List<IMonoScript>();
-		private readonly Dictionary<IUnityObjectBase, IMonoScript> m_scripts = new Dictionary<IUnityObjectBase, IMonoScript>();
-
-		private struct MonoScriptInfo : IEquatable<MonoScriptInfo>
-		{
-			public readonly string @class;
-			public readonly string @namespace;
-			public readonly string assembly;
-
-			public MonoScriptInfo(string @class, string @namespace, string assembly)
-			{
-				this.@class = @class;
-				this.@namespace = @namespace;
-				this.assembly = assembly;
-			}
-
-			public static MonoScriptInfo From(IMonoScript monoScript)
-			{
-				return new MonoScriptInfo(monoScript.ClassName_C115.String, monoScript.Namespace_C115.String, monoScript.GetAssemblyNameFixed());
-			}
-
-			public override bool Equals(object? obj)
-			{
-				return obj is MonoScriptInfo info && Equals(info);
-			}
-
-			public bool Equals(MonoScriptInfo other)
-			{
-				return @class == other.@class &&
-					   @namespace == other.@namespace &&
-					   assembly == other.assembly;
-			}
-
-			public override int GetHashCode()
-			{
-				return HashCode.Combine(@class, @namespace, assembly);
-			}
-
-			public static bool operator ==(MonoScriptInfo left, MonoScriptInfo right)
-			{
-				return left.Equals(right);
-			}
-
-			public static bool operator !=(MonoScriptInfo left, MonoScriptInfo right)
-			{
-				return !(left == right);
-			}
-		}
+		private readonly List<IMonoScript> m_export = new();
+		private readonly Dictionary<IUnityObjectBase, IMonoScript> m_scripts = new();
 	}
 }
