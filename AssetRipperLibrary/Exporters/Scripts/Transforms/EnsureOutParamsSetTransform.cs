@@ -12,6 +12,11 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 		{
 			base.VisitMethodDeclaration(methodDeclaration);
 
+			if (methodDeclaration.Body == null || methodDeclaration.Body.IsNull)
+			{
+				return;
+			}	
+
 			foreach (ParameterDeclaration parameter in methodDeclaration.Parameters)
 			{
 				if ((parameter.ParameterModifier & ParameterModifier.Out) != ParameterModifier.Out)
@@ -21,7 +26,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 
 				ExpressionStatement assignment = new(new AssignmentExpression(new IdentifierExpression(parameter.Name), new DefaultValueExpression(parameter.Type.Clone())));
 				Statement? firstStatement = methodDeclaration.Body.Statements.FirstOrNullObject();
-				if (firstStatement == null)
+				if (firstStatement == null || firstStatement.IsNull)
 				{
 					methodDeclaration.Body.Statements.Add(assignment);
 				}

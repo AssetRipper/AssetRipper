@@ -23,5 +23,17 @@
 		/// Ensures all constructors call a valid base constructor.
 		/// </summary>
 		public bool EnsureValidBaseConstructor { get; set; } = true;
+		/// <summary>
+		/// Ensures all optional parameters have a default value set to them.
+		/// </summary>
+		public bool ValidateOptionalParameterValues { get; set; } = true;
+		/// <summary>
+		/// Replaces all null casts with default casts
+		/// </summary>
+		public bool ValidateNullCasts { get; set; } = true;
+		/// <summary>
+		/// Attempts to fix all explicit interface implementations (e.g. special name methods)
+		/// </summary>
+		public bool FixExplicitInterfaceImplementations { get; set; } = true;
 	}
 }

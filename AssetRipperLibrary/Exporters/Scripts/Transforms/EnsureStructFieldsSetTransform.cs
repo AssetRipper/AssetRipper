@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Transforms;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -17,6 +18,25 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 
 			if (typeDeclaration.ClassType == ClassType.Struct)
 			{
+				List<(AstType, List<string>)> requiredFields = new();
+				foreach (EntityDeclaration member in typeDeclaration.Members)
+				{
+					if (member is FieldDeclaration field)
+					{
+						(AstType, List<string>) fieldInfo = new(field.ReturnType.Clone(), new());
+						if ((field.Modifiers & Modifiers.Static) == Modifiers.Static)
+						{
+							continue;
+						}
+
+						foreach (VariableInitializer variable in field.Variables)
+						{
+							fieldInfo.Item2.Add(variable.Name);
+						}
+
+						requiredFields.Add(fieldInfo);
+					}
+				}
 
 				foreach (ConstructorDeclaration? constructorDeclaration in typeDeclaration.Members.Select((member) => member as ConstructorDeclaration).Where((constructor) => constructor is not null))
 				{
@@ -34,19 +54,21 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 
 					Debug.Assert(constructorDeclaration.Body != null);
 
-					foreach (FieldDeclaration? fieldDeclaration in typeDeclaration.Members.Select((member) => member as FieldDeclaration).Where((field) => field is not null))
+					foreach ((AstType, List<string>) requiredField in requiredFields)
 					{
-						Debug.Assert(fieldDeclaration != null);
+						foreach (string fieldName in requiredField.Item2)
+						{
 
-						ExpressionStatement assignment = new(new AssignmentExpression(new MemberReferenceExpression(new ThisReferenceExpression(), fieldDeclaration.Name), new DefaultValueExpression(fieldDeclaration.ReturnType.Clone())));
-						Statement? firstStatement = constructorDeclaration.Body.Statements.FirstOrDefault();
-						if (firstStatement == null)
-						{
-							constructorDeclaration.Body.Statements.Add(assignment);
-						}
-						else
-						{
-							constructorDeclaration.Body.Statements.InsertBefore(firstStatement, assignment);
+							ExpressionStatement assignment = new(new AssignmentExpression(new MemberReferenceExpression(new ThisReferenceExpression(), fieldName), new DefaultValueExpression(requiredField.Item1)));
+							Statement? firstStatement = constructorDeclaration.Body.Statements.FirstOrDefault();
+							if (firstStatement == null || firstStatement.IsNull)
+							{
+								constructorDeclaration.Body.Statements.Add(assignment);
+							}
+							else
+							{
+								constructorDeclaration.Body.Statements.InsertBefore(firstStatement, assignment);
+							}
 						}
 					}
 				}

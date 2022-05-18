@@ -1,4 +1,5 @@
-﻿using ICSharpCode.Decompiler.CSharp.Syntax;
+﻿using AssetRipper.Core.Logging;
+using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Transforms;
 
 namespace AssetRipper.Library.Exporters.Scripts.Transforms
@@ -10,12 +11,32 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 	{
         private static bool RemoveInvalidEntity(EntityDeclaration entityDeclaration)
 		{
-			if (entityDeclaration.Name.StartsWith("<"))
+			if (!IsValidName(entityDeclaration.Name))
 			{
 				entityDeclaration.Remove();
 				return true;
 			}
+			else if (entityDeclaration is FieldDeclaration fieldDeclaration)
+			{
+				foreach (VariableInitializer variable in fieldDeclaration.Variables)
+				{
+					if (!IsValidName(variable.Name))
+					{
+						variable.Remove();
+					}
+				}
 
+				if (fieldDeclaration.Variables.Count == 0)
+				{
+					fieldDeclaration.Remove();
+					return true;
+				}
+			}
+
+			static bool IsValidName(string name)
+			{
+				return !name.StartsWith("<");
+			}
 
 			return false;
 		}

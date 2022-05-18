@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.Decompiler.CSharp;
 using AssetRipper.Library.Exporters.Scripts.Transforms;
+using AssetRipper.Core.Logging;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {
@@ -38,6 +39,21 @@ namespace AssetRipper.Library.Exporters.Scripts
 			if (Settings.EnsureValidBaseConstructor)
 			{
 				decompiler.AstTransforms.Add(new EnsureValidBaseConstructorTransform());
+			}
+
+			if (Settings.ValidateOptionalParameterValues)
+			{
+				decompiler.AstTransforms.Add(new FixOptionalParametersTransform());
+			}
+
+			if (Settings.ValidateNullCasts)
+			{
+				decompiler.AstTransforms.Add(new ValidateNullCastsTransform());
+			}
+
+			if (Settings.FixExplicitInterfaceImplementations)
+			{
+				decompiler.AstTransforms.Add(new FixExplicitInterfaceImplementationTransform());
 			}
 		}
 	}

@@ -22,8 +22,15 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			this.context = null!;
 		}
 
+		// TODO: Refactor this method so parts of it aren't used when no constructors exist at all.
+
 		private bool TryGetBestConstructor(ITypeDefinition type, ConstructorDeclaration currentConstructor, [NotNullWhen(true)] out IMethod? bestConstructor, out bool isBaseConstructor)
 		{
+			if (type.IsStatic)
+			{
+				goto INVALID;
+			}
+
 			IMethod ctorMethod = (IMethod)currentConstructor.GetSymbol();
 			IType? baseType = type.DirectBaseTypes?.Where((t) => t.Kind != TypeKind.Interface).FirstOrDefault();
 			if (baseType == null)
@@ -79,6 +86,14 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 
 				foreach (IMethod constructor in baseType.GetConstructors())
 				{
+					// exclude hidden constructors
+					if (constructor.Accessibility != Accessibility.Public &&
+							constructor.Accessibility != Accessibility.Protected)
+					{
+						Logger.Debug(baseType.Name + " " + constructor.Accessibility);
+						continue;
+					}
+
 					int cost = 0;
 					int parameterPosition = 0;
 					foreach (IParameter parameter in constructor.Parameters)
@@ -176,7 +191,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 				if (!hasBaseConstructor)
 				{
 					IType? baseType = type.DirectBaseTypes?.Where((t) => t.Kind != TypeKind.Interface).FirstOrDefault();
-					if (baseType == null)
+					if (baseType == null || type.IsStatic)
 					{
 						return;
 					}
@@ -200,7 +215,11 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 							Modifiers = Modifiers.Public,
 							Body = new BlockStatement(),
 						};
-						constructorDeclaration.Initializer = initializer;
+
+						// todo: fix constructor being externed even though it has a body and
+						//       a null statement.
+						constructorDeclaration.Body.Statements.Add(Statement.Null);
+						typeDeclaration.Members.Add(constructorDeclaration);
 					}
 				}
 			}
