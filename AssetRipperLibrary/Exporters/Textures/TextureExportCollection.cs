@@ -48,7 +48,7 @@ namespace AssetRipper.Library.Exporters.Textures
 							if (sprite != null)
 							{
 								//ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
-								ISpriteAtlasData atlasData = GetValueForKey(atlas.RenderDataMap_C687078895, sprite.RenderDataKey_C213);
+								ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
 								if (atlasData.Texture.IsAsset(atlas.SerializedFile, texture))
 								{
 									m_sprites.Add(sprite, atlas);
@@ -59,11 +59,6 @@ namespace AssetRipper.Library.Exporters.Textures
 					}
 				}
 			}
-		}
-
-		private static TValue GetValueForKey<TKey,TValue>(AccessDictionaryBase<TKey,TValue> dict, TKey key)
-		{
-			return dict.Single(pair => EqualityComparer<TKey>.Default.Equals(key, pair.Key)).Value;
 		}
 
 		public static IExportCollection CreateExportCollection(IAssetExporter assetExporter, ISprite asset)
