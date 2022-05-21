@@ -1,9 +1,9 @@
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.VersionHandling;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable
@@ -12,20 +12,26 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 	{
 		public readonly struct Field
 		{
-			public Field(SerializableType type, bool isArray, string name)
+			public Field(SerializableType type, int arrayDepth, string name)
 			{
 				Type = type;
-				IsArray = isArray;
+				ArrayDepth = arrayDepth;
 				Name = name;
 			}
 
-			public override string ToString()
+			public override string? ToString()
 			{
-				return Type == null ? base.ToString() : IsArray ? $"{Type}[] {Name}" : $"{Type} {Name}";
+				if (Type == null)
+				{
+					return base.ToString();
+				}
+
+				return $"{Type}{string.Concat(Enumerable.Repeat("[]", ArrayDepth))} {Name}";
 			}
 
 			public SerializableType Type { get; }
-			public bool IsArray { get; }
+			public int ArrayDepth { get; }
+			public bool IsArray => ArrayDepth > 0;
 			public string Name { get; }
 		}
 
@@ -34,6 +40,8 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
 			Type = type;
 			Name = name ?? throw new ArgumentNullException(nameof(name));
+			// is a placeholder - Is assigned by inheriting types.
+			Fields = new List<Field>();
 		}
 
 		public SerializableStructure CreateSerializableStructure()
@@ -43,11 +51,11 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 
 		public IAsset CreateInstance(int depth, UnityVersion version)
 		{
-			if (MonoUtils.IsEngineStruct(this.Namespace, this.Name))
+			if (MonoUtils.IsEngineStruct(Namespace, Name))
 			{
-				return VersionManager.AssetFactory.CreateEngineAsset(this.Name);
+				return VersionManager.AssetFactory.CreateEngineAsset(Name);
 			}
-			if (this.IsEnginePointer())
+			if (IsEnginePointer())
 			{
 				return new SerializablePointer();
 			}
@@ -56,7 +64,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 
 		public Field GetField(int index)
 		{
-			if (index < BaseFieldCount)
+			if (index < BaseFieldCount && Base != null)
 			{
 				return Base.GetField(index);
 			}
@@ -103,9 +111,9 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 		public string Namespace { get; }
 		public PrimitiveType Type { get; }
 		public string Name { get; }
-		public SerializableType Base { get; protected set; }
+		public SerializableType? Base { get; protected set; }
 		public IReadOnlyList<Field> Fields { get; protected set; }
-		public int FieldCount => BaseFieldCount + Fields.Count;
+		public int FieldCount => BaseFieldCount + (Fields?.Count ?? 0);
 
 		internal int BaseFieldCount
 		{
