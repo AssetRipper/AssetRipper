@@ -113,7 +113,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 		public string Name { get; }
 		public SerializableType? Base { get; protected set; }
 		public IReadOnlyList<Field> Fields { get; protected set; }
-		public int FieldCount => BaseFieldCount + (Fields?.Count ?? 0);
+		public int FieldCount => BaseFieldCount + Fields.Count;
 
 		internal int BaseFieldCount
 		{
