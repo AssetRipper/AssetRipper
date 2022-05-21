@@ -1,3 +1,4 @@
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using Mono.Cecil;
@@ -15,11 +16,11 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		{
 			if (context.Type.ContainsGenericParameter)
 			{
-				throw new ArgumentException(nameof(context));
+				throw new ArgumentException("Context type contains a generic parameter", nameof(context));
 			}
 			if (IsSerializableArray(context.Type))
 			{
-				throw new ArgumentException(nameof(context));
+				throw new ArgumentException("Arrays are not valid Mono Types", nameof(context));
 			}
 
 			manager.AddSerializableType(context.Type, this);
@@ -50,27 +51,33 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				{
 					MonoTypeContext typeContext = new MonoTypeContext(field.FieldType, arguments);
 					MonoTypeContext resolvedContext = typeContext.Resolve();
-					MonoTypeContext serFieldContext = GetSerializedElementContext(resolvedContext);
+					int depth = 0;
+					MonoTypeContext serFieldContext = GetSerializedElementContext(resolvedContext, ref depth);
+					if (depth > 1)
+					{
+						continue;
+					}
 					SerializableType scriptType = manager.GetSerializableType(serFieldContext);
-					bool isArray = IsSerializableArray(resolvedContext.Type);
-					Field fieldStruc = new Field(scriptType, isArray, field.Name);
+					Field fieldStruc = new Field(scriptType, depth, field.Name);
 					fields.Add(fieldStruc);
 				}
 			}
 			return fields.ToArray();
 		}
 
-		private static MonoTypeContext GetSerializedElementContext(MonoTypeContext context)
+		private static MonoTypeContext GetSerializedElementContext(MonoTypeContext context, ref int depth)
 		{
 			if (context.Type.IsArray)
 			{
 				ArrayType array = (ArrayType)context.Type;
-				return new MonoTypeContext(array.ElementType);
+				depth++;
+				return GetSerializedElementContext(new MonoTypeContext(array.ElementType), ref depth);
 			}
 			if (IsList(context.Type))
 			{
 				GenericInstanceType generic = (GenericInstanceType)context.Type;
-				return new MonoTypeContext(generic.GenericArguments[0]);
+				depth++;
+				return GetSerializedElementContext(new MonoTypeContext(generic.GenericArguments[0]), ref depth);
 			}
 			return context;
 		}
