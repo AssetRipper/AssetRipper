@@ -16,59 +16,61 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 		{
 			base.VisitTypeDeclaration(typeDeclaration);
 
-			if (typeDeclaration.ClassType == ClassType.Struct)
+			if (typeDeclaration.ClassType != ClassType.Struct)
 			{
-				List<(AstType, List<string>)> requiredFields = new();
-				foreach (EntityDeclaration member in typeDeclaration.Members)
+				return;
+			}
+
+			List<(AstType, List<string>)> requiredFields = new();
+			foreach (EntityDeclaration member in typeDeclaration.Members)
+			{
+				if (member is FieldDeclaration field)
 				{
-					if (member is FieldDeclaration field)
+					(AstType, List<string>) fieldInfo = new(field.ReturnType.Clone(), new());
+					if ((field.Modifiers & Modifiers.Static) == Modifiers.Static)
 					{
-						(AstType, List<string>) fieldInfo = new(field.ReturnType.Clone(), new());
-						if ((field.Modifiers & Modifiers.Static) == Modifiers.Static)
-						{
-							continue;
-						}
-
-						foreach (VariableInitializer variable in field.Variables)
-						{
-							fieldInfo.Item2.Add(variable.Name);
-						}
-
-						requiredFields.Add(fieldInfo);
+						continue;
 					}
+
+					foreach (VariableInitializer variable in field.Variables)
+					{
+						fieldInfo.Item2.Add(variable.Name);
+					}
+
+					requiredFields.Add(fieldInfo);
+				}
+			}
+
+			foreach (ConstructorDeclaration? constructorDeclaration in typeDeclaration.Members.Select((member) => member as ConstructorDeclaration).Where((constructor) => constructor is not null))
+			{
+				Debug.Assert(constructorDeclaration != null);
+
+				if ((constructorDeclaration.Modifiers & Modifiers.Static) == Modifiers.Static)
+				{
+					continue;
 				}
 
-				foreach (ConstructorDeclaration? constructorDeclaration in typeDeclaration.Members.Select((member) => member as ConstructorDeclaration).Where((constructor) => constructor is not null))
+				if (constructorDeclaration.Initializer != null)
 				{
-					Debug.Assert(constructorDeclaration != null);
+					continue;
+				}
 
-					if ((constructorDeclaration.Modifiers & Modifiers.Static) == Modifiers.Static)
+				Debug.Assert(constructorDeclaration.Body != null);
+
+				foreach ((AstType, List<string>) requiredField in requiredFields)
+				{
+					foreach (string fieldName in requiredField.Item2)
 					{
-						continue;
-					}
 
-					if (constructorDeclaration.Initializer != null)
-					{
-						continue;
-					}
-
-					Debug.Assert(constructorDeclaration.Body != null);
-
-					foreach ((AstType, List<string>) requiredField in requiredFields)
-					{
-						foreach (string fieldName in requiredField.Item2)
+						ExpressionStatement assignment = new(new AssignmentExpression(new MemberReferenceExpression(new ThisReferenceExpression(), fieldName), new DefaultValueExpression(requiredField.Item1)));
+						Statement? firstStatement = constructorDeclaration.Body.Statements.FirstOrDefault();
+						if (firstStatement == null || firstStatement.IsNull)
 						{
-
-							ExpressionStatement assignment = new(new AssignmentExpression(new MemberReferenceExpression(new ThisReferenceExpression(), fieldName), new DefaultValueExpression(requiredField.Item1)));
-							Statement? firstStatement = constructorDeclaration.Body.Statements.FirstOrDefault();
-							if (firstStatement == null || firstStatement.IsNull)
-							{
-								constructorDeclaration.Body.Statements.Add(assignment);
-							}
-							else
-							{
-								constructorDeclaration.Body.Statements.InsertBefore(firstStatement, assignment);
-							}
+							constructorDeclaration.Body.Statements.Add(assignment);
+						}
+						else
+						{
+							constructorDeclaration.Body.Statements.InsertBefore(firstStatement, assignment);
 						}
 					}
 				}
