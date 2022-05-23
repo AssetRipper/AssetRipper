@@ -13,7 +13,8 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 {
 	public class BaseManager : IAssemblyManager, IAssemblyResolver
 	{
-		public virtual bool IsSet => false;
+		public bool IsSet => ScriptingBackend != ScriptingBackend.Unknown;
+		public virtual ScriptingBackend ScriptingBackend => ScriptingBackend.Unknown;
 
 		protected readonly Dictionary<string, AssemblyDefinition> m_assemblies = new Dictionary<string, AssemblyDefinition>();
 		protected readonly Dictionary<string, bool> m_validTypes = new Dictionary<string, bool>();

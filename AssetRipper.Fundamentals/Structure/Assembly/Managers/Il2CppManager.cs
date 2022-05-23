@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			contentLevel = level;
 		}
 
-		public override bool IsSet => true;
+		public override ScriptingBackend ScriptingBackend => ScriptingBackend.IL2Cpp;
 
 		public override void Initialize(PlatformGameStructure gameStructure)
 		{

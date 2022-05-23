@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		public string GameDataPath { get; private set; }
 		public string ManagedPath { get; private set; }
 
-		public override bool IsSet => true;
+		public override ScriptingBackend ScriptingBackend => ScriptingBackend.Mono;
 
 		public MonoManager(LayoutInfo layout, Action<string> requestAssemblyCallback) : base(layout, requestAssemblyCallback) { }
 
