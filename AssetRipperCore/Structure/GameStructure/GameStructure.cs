@@ -149,7 +149,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 			FileCollection.ResourceCallback = RequestResource;
 
-			var scriptBackend = GetScriptingBackend(configuration.DisableScriptImport);
+			ScriptingBackend scriptBackend = GetScriptingBackend(configuration.DisableScriptImport);
 			Logger.Info(LogCategory.Import, $"Files use the '{scriptBackend}' scripting backend.");
 
 			switch (scriptBackend)

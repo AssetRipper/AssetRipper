@@ -56,7 +56,7 @@ namespace AssetRipper.GUI
 		public static List<NewUiFileListItem> GetItemsFromStructure(GameStructure structure)
 		{
 			List<NewUiFileListItem> ret = new();
-			foreach (var (name, resourceFile) in structure.FileCollection.GameFiles)
+			foreach ((string name, SerializedFile resourceFile) in structure.FileCollection.GameFiles)
 			{
 				//Create a top-level tree view entry for each file
 				NewUiFileListItem? topLevelEntry = new(name!, resourceFile);
@@ -97,7 +97,7 @@ namespace AssetRipper.GUI
 
 			//Create a top-level tree view entry for any loose resource files
 			NewUiFileListItem? looseFiles = new("Loose Resource Files");
-			foreach (ResourceFile resourceFile in structure.FileCollection.GameResourceFiles)
+			foreach (ResourceFile? resourceFile in structure.FileCollection.GameResourceFiles)
 			{
 				if (resourceFile != null)
 					looseFiles.SubItems.Add(new(new DummyAssetForLooseResourceFile(resourceFile)));
