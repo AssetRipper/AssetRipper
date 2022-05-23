@@ -88,14 +88,7 @@
                     </DataTemplate>
                 </MenuItem.ItemTemplate>
             </MenuItem>
-
-            <!--About Menu-->
-            <MenuItem Header="{i18n:Localize menu_about}">
-                <MenuItem Header="{i18n:Localize menu_about_website}" Command="{Binding WebsiteClicked}" />
-                <MenuItem Header="{i18n:Localize menu_about_github}" Command="{Binding GithubClicked}" />
-                <MenuItem Header="{i18n:Localize menu_about_check_for_update}" Command="{Binding CheckForUpdatesUI}" />
-                <MenuItem Header="{i18n:Localize menu_about_translate}" Command="{Binding TranslateClicked}"></MenuItem>
-            </MenuItem>
+			
         </Menu>
 
         <!--Introduction Screens-->

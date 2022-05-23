@@ -1,9 +1,5 @@
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.AssetBundle;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.ResourceManager;
-using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
@@ -15,9 +11,18 @@ using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
+using AssetRipper.SourceGenerated.Classes.ClassID_141;
+using AssetRipper.SourceGenerated.Classes.ClassID_142;
+using AssetRipper.SourceGenerated.Classes.ClassID_147;
+using AssetRipper.SourceGenerated.Classes.ClassID_78;
+using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Object_;
+using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 
@@ -29,8 +34,7 @@ namespace AssetRipper.Core.Project
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
-			if (options == null) throw new ArgumentNullException(nameof(options));
-			m_IgnoreAssetBundleContentPaths = options.IgnoreAssetBundleContentPaths;
+			m_IgnoreAssetBundleContentPaths = options?.IgnoreAssetBundleContentPaths ?? throw new ArgumentNullException(nameof(options));
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			ExportLayout = file.Layout;
 
@@ -71,7 +75,7 @@ namespace AssetRipper.Core.Project
 		}
 
 #warning TODO: get rid of IEnumerable. pass only main asset (issues: prefab, texture with sprites, animatorController)
-		public bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, out IUnityObjectBase? selectedAsset, out string assetPath)
+		public bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, [NotNullWhen(true)] out IUnityObjectBase? selectedAsset, out string assetPath)
 		{
 			selectedAsset = null;
 			assetPath = string.Empty;
@@ -96,7 +100,7 @@ namespace AssetRipper.Core.Project
 			return File.GetAsset(pathID);
 		}
 
-		public virtual IUnityObjectBase FindAsset(int fileIndex, long pathID)
+		public virtual IUnityObjectBase? FindAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
@@ -120,12 +124,12 @@ namespace AssetRipper.Core.Project
 			}
 		}
 
-		public IUnityObjectBase FindAsset(ClassIDType classID)
+		public IUnityObjectBase? FindAsset(ClassIDType classID)
 		{
 			return File.FindAsset(classID);
 		}
 
-		public virtual IUnityObjectBase FindAsset(ClassIDType classID, string name)
+		public virtual IUnityObjectBase? FindAsset(ClassIDType classID, string name)
 		{
 			return File.FindAsset(classID, name);
 		}
@@ -137,7 +141,7 @@ namespace AssetRipper.Core.Project
 
 		public long GetExportID(IUnityObjectBase asset)
 		{
-			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
+			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection? collection))
 			{
 				return collection.GetExportID(asset);
 			}
@@ -152,7 +156,7 @@ namespace AssetRipper.Core.Project
 
 		public MetaPtr CreateExportPointer(IUnityObjectBase asset)
 		{
-			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection collection))
+			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection? collection))
 			{
 				return collection.CreateExportPointer(asset, collection == CurrentCollection);
 			}
@@ -168,7 +172,7 @@ namespace AssetRipper.Core.Project
 				return default;
 			}
 
-			int index = m_buildSettings.Scenes.IndexOf(s => s.String == name);
+			int index = m_buildSettings.Scenes_C141.IndexOf(s => s.String == name);
 			if (index == -1)
 			{
 				throw new Exception($"Scene '{name}' hasn't been found in build settings");
@@ -187,7 +191,7 @@ namespace AssetRipper.Core.Project
 
 		public string SceneIndexToName(int sceneIndex)
 		{
-			return m_buildSettings == null ? $"level{sceneIndex}" : m_buildSettings.Scenes[sceneIndex].String;
+			return m_buildSettings == null ? $"level{sceneIndex}" : m_buildSettings.Scenes_C141[sceneIndex].String;
 		}
 
 		public bool IsSceneDuplicate(int sceneIndex)
@@ -197,10 +201,10 @@ namespace AssetRipper.Core.Project
 				return false;
 			}
 
-			string sceneName = m_buildSettings.Scenes[sceneIndex].String;
-			for (int i = 0; i < m_buildSettings.Scenes.Length; i++)
+			string sceneName = m_buildSettings.Scenes_C141[sceneIndex].String;
+			for (int i = 0; i < m_buildSettings.Scenes_C141.Count; i++)
 			{
-				if (m_buildSettings.Scenes[i] == sceneName)
+				if (m_buildSettings.Scenes_C141[i] == sceneName)
 				{
 					if (i != sceneIndex)
 					{
@@ -216,30 +220,30 @@ namespace AssetRipper.Core.Project
 			switch (tagID)
 			{
 				case 0:
-					return TagManagerConstants.UntaggedTag;
+					return Classes.TagManager.TagManagerConstants.UntaggedTag;
 				case 1:
-					return TagManagerConstants.RespawnTag;
+					return Classes.TagManager.TagManagerConstants.RespawnTag;
 				case 2:
-					return TagManagerConstants.FinishTag;
+					return Classes.TagManager.TagManagerConstants.FinishTag;
 				case 3:
-					return TagManagerConstants.EditorOnlyTag;
+					return Classes.TagManager.TagManagerConstants.EditorOnlyTag;
 				//case 4:
 				case 5:
-					return TagManagerConstants.MainCameraTag;
+					return Classes.TagManager.TagManagerConstants.MainCameraTag;
 				case 6:
-					return TagManagerConstants.PlayerTag;
+					return Classes.TagManager.TagManagerConstants.PlayerTag;
 				case 7:
-					return TagManagerConstants.GameControllerTag;
+					return Classes.TagManager.TagManagerConstants.GameControllerTag;
 			}
 			if (m_tagManager != null)
 			{
 				// Unity doesn't verify tagID on export?
 				int tagIndex = tagID - 20000;
-				if (tagIndex < m_tagManager.Tags.Length)
+				if (tagIndex < m_tagManager.Tags_C78.Count)
 				{
 					if (tagIndex >= 0)
 					{
-						return m_tagManager.Tags[tagIndex].String;
+						return m_tagManager.Tags_C78[tagIndex].String;
 					}
 					else if (!m_tagManager.IsBrokenCustomTags())
 					{
@@ -254,26 +258,26 @@ namespace AssetRipper.Core.Project
 		{
 			switch (tagName)
 			{
-				case TagManagerConstants.UntaggedTag:
+				case Classes.TagManager.TagManagerConstants.UntaggedTag:
 					return 0;
-				case TagManagerConstants.RespawnTag:
+				case Classes.TagManager.TagManagerConstants.RespawnTag:
 					return 1;
-				case TagManagerConstants.FinishTag:
+				case Classes.TagManager.TagManagerConstants.FinishTag:
 					return 2;
-				case TagManagerConstants.EditorOnlyTag:
+				case Classes.TagManager.TagManagerConstants.EditorOnlyTag:
 					return 3;
-				case TagManagerConstants.MainCameraTag:
+				case Classes.TagManager.TagManagerConstants.MainCameraTag:
 					return 5;
-				case TagManagerConstants.PlayerTag:
+				case Classes.TagManager.TagManagerConstants.PlayerTag:
 					return 6;
-				case TagManagerConstants.GameControllerTag:
+				case Classes.TagManager.TagManagerConstants.GameControllerTag:
 					return 7;
 			}
 			if (m_tagManager != null)
 			{
-				for (int i = 0; i < m_tagManager.Tags.Length; i++)
+				for (int i = 0; i < m_tagManager.Tags_C78.Count; i++)
 				{
-					if (m_tagManager.Tags[i] == tagName)
+					if (m_tagManager.Tags_C78[i] == tagName)
 					{
 						return (ushort)(20000 + i);
 					}
@@ -284,9 +288,9 @@ namespace AssetRipper.Core.Project
 
 		private void AddResources(IResourceManager manager)
 		{
-			foreach (NullableKeyValuePair<Utf8StringBase, PPtr<IUnityObjectBase>> kvp in manager.GetAssets())
+			foreach (NullableKeyValuePair<Utf8String, IPPtr_Object_> kvp in manager.Container_C147)
 			{
-				IUnityObjectBase asset = kvp.Value.FindAsset(manager.SerializedFile);
+				IUnityObjectBase? asset = kvp.Value.FindAsset(manager.SerializedFile);
 				if (asset == null)
 				{
 					continue;
@@ -316,14 +320,14 @@ namespace AssetRipper.Core.Project
 			string bundleName = bundle.GetAssetBundleName();
 			string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
 			string directory = Path.Combine(AssetBundleFullPath, bundleName);
-			foreach (NullableKeyValuePair<Utf8StringBase, IAssetInfo> kvp in bundle.GetAssets())
+			foreach (NullableKeyValuePair<Utf8String, IAssetInfo> kvp in bundle.Container_C142)
 			{
 				// skip shared bundle assets, because we need to export them in their bundle directory
-				if (kvp.Value.AssetPtr.FileIndex != 0)
+				if (kvp.Value.Asset.FileIndex != 0)
 				{
 					continue;
 				}
-				IUnityObjectBase asset = kvp.Value.AssetPtr.FindAsset(bundle.SerializedFile);
+				UnityObjectBase? asset = kvp.Value.Asset.FindAsset(bundle.SerializedFile);
 				if (asset == null)
 				{
 					continue;
@@ -386,8 +390,8 @@ namespace AssetRipper.Core.Project
 		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
 		private readonly Dictionary<IUnityObjectBase, ProjectAssetPath> m_pathAssets = new Dictionary<IUnityObjectBase, ProjectAssetPath>();
 
-		private readonly IBuildSettings m_buildSettings;
-		private readonly ITagManager m_tagManager;
+		private readonly IBuildSettings? m_buildSettings;
+		private readonly ITagManager? m_tagManager;
 		private readonly SceneExportCollection[] m_scenes;
 	}
 }

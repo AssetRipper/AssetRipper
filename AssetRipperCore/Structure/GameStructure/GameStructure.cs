@@ -91,7 +91,8 @@ namespace AssetRipper.Core.Structure.GameStructure
 		{
 			Logger.Info(LogCategory.Export, $"Game files have these Unity versions:{GetListOfVersions()}");
 			UnityVersion maxFileVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
-			UnityVersion version = UnityVersion.Max(maxFileVersion, new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3));
+			//UnityVersion version = UnityVersion.Max(maxFileVersion, new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3));
+			UnityVersion version = maxFileVersion;
 			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
 			options.SetProjectSettings(version, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			Exporter.Export(FileCollection, options);
@@ -117,7 +118,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				if (path != null)
 				{
 					return path;
-			}
+				}
 			}
 			if (MixedStructure != null)
 			{
@@ -125,7 +126,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				if (path != null)
 				{
 					return path;
-			}
+				}
 			}
 			return null;
 		}
@@ -148,7 +149,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 			FileCollection.ResourceCallback = RequestResource;
 
-			var scriptBackend = GetScriptingBackend(configuration.DisableScriptImport);
+			ScriptingBackend scriptBackend = GetScriptingBackend(configuration.DisableScriptImport);
 			Logger.Info(LogCategory.Import, $"Files use the '{scriptBackend}' scripting backend.");
 
 			switch (scriptBackend)
@@ -192,7 +193,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				if (backend != ScriptingBackend.Unknown)
 				{
 					return backend;
-			}
+				}
 			}
 			if (MixedStructure != null)
 			{
@@ -200,7 +201,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				if (backend != ScriptingBackend.Unknown)
 				{
 					return backend;
-			}
+				}
 			}
 			return ScriptingBackend.Unknown;
 		}
@@ -234,7 +235,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				if (assemblyPath != null)
 				{
 					return assemblyPath;
-			}
+				}
 			}
 			if (MixedStructure != null)
 			{
@@ -242,7 +243,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				if (assemblyPath != null)
 				{
 					return assemblyPath;
-			}
+				}
 			}
 			return null;
 		}

@@ -11,11 +11,11 @@ namespace AssetRipper.Core.Structure
 	public interface IFileCollection
 	{
 		LayoutInfo Layout { get; }
-		ISerializedFile FindSerializedFile(string fileName);
-		IResourceFile FindResourceFile(string fileName);
+		ISerializedFile? FindSerializedFile(string fileName);
+		IResourceFile? FindResourceFile(string fileName);
 
-		T FindAsset<T>() where T : IUnityObjectBase;
-		T FindAsset<T>(string name) where T : IUnityObjectBase, IHasNameString;
+		T? FindAsset<T>() where T : IUnityObjectBase;
+		T? FindAsset<T>(string name) where T : IUnityObjectBase, IHasNameString;
 		IEnumerable<IUnityObjectBase> FetchAssets();
 
 		IEnumerable<IUnityObjectBase> FetchAssetsOfType(ClassIDType type);

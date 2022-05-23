@@ -1,4 +1,3 @@
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Layout;
@@ -12,6 +11,7 @@ using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace AssetRipper.Core.Structure
@@ -23,15 +23,15 @@ namespace AssetRipper.Core.Structure
 		public IReadOnlyDictionary<string, SerializedFile> GameFiles => m_files;
 		public IAssemblyManager AssemblyManager { get; set; }
 
-		public List<ResourceFile> GameResourceFiles => m_resources.Values.ToList();
+		public List<ResourceFile?> GameResourceFiles => m_resources.Values.ToList();
 		public List<SerializedFile> GameSerializedFiles => m_files.Values.ToList();
 
-		private readonly Dictionary<string, SerializedFile> m_files = new Dictionary<string, SerializedFile>();
-		private readonly Dictionary<string, ResourceFile> m_resources = new Dictionary<string, ResourceFile>();
+		private readonly Dictionary<string, SerializedFile> m_files = new();
+		private readonly Dictionary<string, ResourceFile?> m_resources = new();
 
 		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
 
-		public Func<string, string> ResourceCallback;
+		public Func<string, string>? ResourceCallback;
 
 		private readonly Dictionary<ClassIDType, List<IUnityObjectBase>> _cachedAssetsByClassID = new();
 		private readonly Dictionary<Type, List<IUnityObjectBase>> _cachedAssetsByType = new();
@@ -41,26 +41,26 @@ namespace AssetRipper.Core.Structure
 			Layout = layout;
 		}
 
-		public ISerializedFile FindSerializedFile(string fileName)
+		public ISerializedFile? FindSerializedFile(string fileName)
 		{
-			m_files.TryGetValue(fileName, out SerializedFile file);
+			m_files.TryGetValue(fileName, out SerializedFile? file);
 			return file;
 		}
 
-		public bool TryGetResourceFile(string resourceName, out ResourceFile file)
+		public bool TryGetResourceFile(string resourceName, [NotNullWhen(true)] out ResourceFile? file)
 		{
 			return m_resources.TryGetValue(resourceName, out file);
 		}
 
-		public IResourceFile FindResourceFile(string resName)
+		public IResourceFile? FindResourceFile(string resName)
 		{
 			string fixedName = FilenameUtils.FixResourcePath(resName);
-			if (m_resources.TryGetValue(fixedName, out ResourceFile file))
+			if (m_resources.TryGetValue(fixedName, out ResourceFile? file))
 			{
 				return file;
 			}
 
-			string resPath = ResourceCallback?.Invoke(fixedName);
+			string? resPath = ResourceCallback?.Invoke(fixedName);
 			if (resPath == null)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Import, $"Resource file '{resName}' hasn't been found");
@@ -77,7 +77,7 @@ namespace AssetRipper.Core.Structure
 			return m_resources[fixedName];
 		}
 
-		public T FindAsset<T>() where T : IUnityObjectBase
+		public T? FindAsset<T>() where T : IUnityObjectBase
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
 			foreach (IUnityObjectBase asset in FetchAssets())
@@ -90,7 +90,7 @@ namespace AssetRipper.Core.Structure
 			return default;
 		}
 
-		public T FindAsset<T>(string name) where T : IUnityObjectBase, IHasNameString
+		public T? FindAsset<T>(string name) where T : IUnityObjectBase, IHasNameString
 		{
 			ClassIDType classID = typeof(T).ToClassIDType();
 			foreach (IUnityObjectBase asset in FetchAssets())
@@ -120,8 +120,10 @@ namespace AssetRipper.Core.Structure
 
 		public IEnumerable<IUnityObjectBase> FetchAssetsOfType(ClassIDType type)
 		{
-			if (_cachedAssetsByClassID.TryGetValue(type, out List<IUnityObjectBase> list))
+			if (_cachedAssetsByClassID.TryGetValue(type, out List<IUnityObjectBase>? list))
+			{
 				return list;
+			}
 
 			List<IUnityObjectBase> objects = FetchAssets().Where(o => o.ClassID == type).ToList();
 			_cachedAssetsByClassID.TryAdd(type, objects);
@@ -131,8 +133,10 @@ namespace AssetRipper.Core.Structure
 
 		public IEnumerable<IUnityObjectBase> FetchAssetsOfType<T>() where T : IUnityObjectBase
 		{
-			if (_cachedAssetsByType.TryGetValue(typeof(T), out List<IUnityObjectBase> list))
+			if (_cachedAssetsByType.TryGetValue(typeof(T), out List<IUnityObjectBase>? list))
+			{
 				return list;
+			}
 
 			List<IUnityObjectBase> objects = FetchAssets().Where(o => o is T).ToList();
 			_cachedAssetsByType.TryAdd(typeof(T), objects);
@@ -146,7 +150,7 @@ namespace AssetRipper.Core.Structure
 		{
 			if (m_files.ContainsKey(file.Name))
 			{
-				var existingFile = m_files[file.Name];
+				SerializedFile existingFile = m_files[file.Name];
 				if (existingFile.FilePath == file.FilePath)
 				{
 					Logger.Error(LogCategory.Import, $"{nameof(SerializedFile)} with name '{file.Name}' and path '{file.FilePath}' was already added to this collection");
@@ -201,13 +205,17 @@ namespace AssetRipper.Core.Structure
 		protected override void OnResourceFileAdded(ResourceFile file)
 		{
 			if (m_resources.ContainsKey(file.Name))
+			{
 #if DEBUG
 				throw new ArgumentException($"{nameof(ResourceFile)} with name '{file.Name}' already presents in the collection", nameof(file));
 #else
 				Logger.Warning(LogCategory.Import, $"{nameof(ResourceFile)} with name '{file.Name}' already presents in the collection");
 #endif
+			}
 			else
+			{
 				m_resources.Add(file.Name, file);
+			}
 		}
 
 		private bool IsSceneSerializedFile(SerializedFile file)
@@ -215,7 +223,9 @@ namespace AssetRipper.Core.Structure
 			foreach (ObjectInfo entry in file.Metadata.Object)
 			{
 				if (entry.ClassID.IsSceneSettings())
+				{
 					return true;
+				}
 			}
 			return false;
 		}
@@ -223,7 +233,7 @@ namespace AssetRipper.Core.Structure
 		private void Dispose(bool disposing)
 		{
 			AssemblyManager?.Dispose();
-			foreach (ResourceFile res in m_resources.Values)
+			foreach (ResourceFile? res in m_resources.Values)
 			{
 				res?.Dispose();
 			}

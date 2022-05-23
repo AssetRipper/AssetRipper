@@ -16,11 +16,11 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		{
 			if (context.Type.ContainsGenericParameter)
 			{
-				throw new ArgumentException(nameof(context));
+				throw new ArgumentException("Context type contains a generic parameter", nameof(context));
 			}
 			if (IsSerializableArray(context.Type))
 			{
-				throw new ArgumentException(nameof(context));
+				throw new ArgumentException("Arrays are not valid Mono Types", nameof(context));
 			}
 
 			manager.AddSerializableType(context.Type, this);

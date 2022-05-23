@@ -1,5 +1,4 @@
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.VersionHandling;
 using System;
@@ -32,7 +31,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 
 			public SerializableType Type { get; }
 			public int ArrayDepth { get; }
-			public bool IsArray => ArrayDepth > 0; 
+			public bool IsArray => ArrayDepth > 0;
 			public string Name { get; }
 		}
 
@@ -41,6 +40,8 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
 			Type = type;
 			Name = name ?? throw new ArgumentNullException(nameof(name));
+			// is a placeholder - Is assigned by inheriting types.
+			Fields = new List<Field>();
 		}
 
 		public SerializableStructure CreateSerializableStructure()
@@ -50,11 +51,11 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 
 		public IAsset CreateInstance(int depth, UnityVersion version)
 		{
-			if (MonoUtils.IsEngineStruct(this.Namespace, this.Name))
+			if (MonoUtils.IsEngineStruct(Namespace, Name))
 			{
-				return VersionManager.GetHandler(version).AssetFactory.CreateEngineAsset(this.Name);
+				return VersionManager.AssetFactory.CreateEngineAsset(Name);
 			}
-			if (this.IsEnginePointer())
+			if (IsEnginePointer())
 			{
 				return new SerializablePointer();
 			}
@@ -63,7 +64,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 
 		public Field GetField(int index)
 		{
-			if (index < BaseFieldCount)
+			if (index < BaseFieldCount && Base != null)
 			{
 				return Base.GetField(index);
 			}
@@ -110,7 +111,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 		public string Namespace { get; }
 		public PrimitiveType Type { get; }
 		public string Name { get; }
-		public SerializableType Base { get; protected set; }
+		public SerializableType? Base { get; protected set; }
 		public IReadOnlyList<Field> Fields { get; protected set; }
 		public int FieldCount => BaseFieldCount + Fields.Count;
 

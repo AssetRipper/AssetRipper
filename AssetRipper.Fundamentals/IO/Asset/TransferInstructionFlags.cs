@@ -7,6 +7,9 @@ namespace AssetRipper.Core.IO.Asset
 	{
 		NoTransferInstructionFlags = 0x0,
 		NeedsInstanceIDRemapping = 0x1,
+		/// <summary>
+		/// Only serialize data needed for .meta files
+		/// </summary>
 		AssetMetaDataOnly = 0x2,
 		YamlGlobalPPtrReference = 0x4,
 		LoadAndUnloadAssetsDuringBuild = 0x8,

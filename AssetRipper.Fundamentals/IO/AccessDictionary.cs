@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Core.IO
 {
@@ -51,6 +52,8 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void SetValue(int index, TValueBase newValue) => referenceDictionary.SetValue(index, (TValue)newValue);
 
+		public override NullableKeyValuePair<TKeyBase, TValueBase> GetPair(int index) => CastPair(referenceDictionary.GetPair(index));
+
 		/// <inheritdoc/>
 		public override int IndexOf(NullableKeyValuePair<TKeyBase, TValueBase> item) => referenceDictionary.IndexOf(CastPair(item));
 
@@ -77,18 +80,40 @@ namespace AssetRipper.Core.IO
 
 			for(int i = 0; i < Count; i++)
 			{
-				array[i + arrayIndex] = this[i];
+				array[i + arrayIndex] = GetPair(i);
 			}
 		}
 
 		/// <inheritdoc/>
 		public override bool Remove(NullableKeyValuePair<TKeyBase, TValueBase> item) => referenceDictionary.Remove(CastPair(item));
 
-		/// <inheritdoc/>
-		public override NullableKeyValuePair<TKeyBase, TValueBase> this[int index]
+		protected override bool TryGetSinglePairForKey(TKeyBase key, [NotNullWhen(true)] out NullableKeyValuePair<TKeyBase, TValueBase>? pair)
 		{
-			get => CastPair(referenceDictionary[index]);
-			set => referenceDictionary[index] = CastPair(value);
+			if (key is null)
+			{
+				throw new ArgumentNullException(nameof(key));
+			}
+
+			int hash = key.GetHashCode();
+			bool found = false;
+			pair = null;
+			for (int i = Count - 1; i > -1; i--)
+			{
+				NullableKeyValuePair<TKey, TValue> p = referenceDictionary.GetPair(i);
+				if (p.Key is not null && p.Key.GetHashCode() == hash && key.Equals(p.Key))
+				{
+					if (found)
+					{
+						throw new Exception("Found more than one matching key");
+					}
+					else
+					{
+						found = true;
+						pair = CastPair(p);
+					}
+				}
+			}
+			return found;
 		}
 
 		private static NullableKeyValuePair<TKey, TValue> CastPair(NullableKeyValuePair<TKeyBase, TValueBase> pair)

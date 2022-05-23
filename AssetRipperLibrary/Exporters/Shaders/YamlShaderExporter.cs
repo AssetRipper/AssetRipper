@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Classes.Shader;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {

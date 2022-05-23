@@ -1,13 +1,14 @@
 ﻿using AssetRipper.Core;
 using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Configuration;
+using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using FMOD;
 using System;
 using System.IO;
@@ -32,18 +33,18 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public static bool IsSupported(IAudioClip audioClip)
 		{
-			if (audioClip.HasType)
+			if (audioClip.Has_Type_C83())
 			{
-				switch (audioClip.Type)
+				switch ((Core.Classes.AudioClip.FMODSoundType)audioClip.Type_C83)
 				{
-					case FMODSoundType.AIFF:
-					case FMODSoundType.IT:
-					case FMODSoundType.MOD:
-					case FMODSoundType.S3M:
-					case FMODSoundType.XM:
-					case FMODSoundType.XMA:
-					case FMODSoundType.VAG:
-					case FMODSoundType.AUDIOQUEUE:
+					case Core.Classes.AudioClip.FMODSoundType.AIFF:
+					case Core.Classes.AudioClip.FMODSoundType.IT:
+					case Core.Classes.AudioClip.FMODSoundType.MOD:
+					case Core.Classes.AudioClip.FMODSoundType.S3M:
+					case Core.Classes.AudioClip.FMODSoundType.XM:
+					case Core.Classes.AudioClip.FMODSoundType.XMA:
+					case Core.Classes.AudioClip.FMODSoundType.VAG:
+					case Core.Classes.AudioClip.FMODSoundType.AUDIOQUEUE:
 						return true;
 					default:
 						return false;
@@ -51,17 +52,17 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 			else
 			{
-				switch (audioClip.CompressionFormat)
+				switch ((Core.Classes.AudioClip.AudioCompressionFormat)audioClip.CompressionFormat_C83)
 				{
-					case AudioCompressionFormat.PCM:
-					case AudioCompressionFormat.Vorbis:
-					case AudioCompressionFormat.ADPCM:
-					case AudioCompressionFormat.MP3:
-					case AudioCompressionFormat.VAG:
-					case AudioCompressionFormat.HEVAG:
-					case AudioCompressionFormat.XMA:
-					case AudioCompressionFormat.GCADPCM:
-					case AudioCompressionFormat.ATRAC9:
+					case Core.Classes.AudioClip.AudioCompressionFormat.PCM:
+					case Core.Classes.AudioClip.AudioCompressionFormat.Vorbis:
+					case Core.Classes.AudioClip.AudioCompressionFormat.ADPCM:
+					case Core.Classes.AudioClip.AudioCompressionFormat.MP3:
+					case Core.Classes.AudioClip.AudioCompressionFormat.VAG:
+					case Core.Classes.AudioClip.AudioCompressionFormat.HEVAG:
+					case Core.Classes.AudioClip.AudioCompressionFormat.XMA:
+					case Core.Classes.AudioClip.AudioCompressionFormat.GCADPCM:
+					case Core.Classes.AudioClip.AudioCompressionFormat.ATRAC9:
 						return true;
 					default:
 						return false;
@@ -94,7 +95,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			byte[] data = ExportWavAudio(audioClip);
 			if (data == null)
 			{
-				Logger.Warning(LogCategory.Export, $"Unable to convert '{audioClip.GetValidName()}' to wav");
+				Logger.Warning(LogCategory.Export, $"Unable to convert '{audioClip.GetNameNotEmpty()}' to wav");
 				return false;
 			}
 

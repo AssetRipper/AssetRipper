@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math.Colors;
@@ -9,6 +8,7 @@ using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Utils;
+using AssetRipper.SourceGenerated.Classes.ClassID_156;
 
 namespace AssetRipper.Library.Exporters.Terrains
 {
@@ -55,8 +55,8 @@ namespace AssetRipper.Library.Exporters.Terrains
 		public static DirectBitmap GetBitmap(ITerrainData terrain)
 		{
 			DirectBitmap bitmap = new DirectBitmap(
-				terrain.Heightmap.Width, 
-				terrain.Heightmap.Height, 
+				System.Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution),
+				System.Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution), 
 				GetBGRA32Data(terrain));
 			bitmap.FlipY();
 			return bitmap;
@@ -64,7 +64,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		public static byte[] GetBGRA32Data(ITerrainData terrain)
 		{
-			short[] heights = terrain.Heightmap.Heights;
+			short[] heights = terrain.Heightmap_C156.Heights;
 			byte[] result = new byte[heights.Length * 4];
 			for (int y = 0; y < heights.Length; y++)
 			{

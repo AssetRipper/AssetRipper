@@ -15,7 +15,6 @@
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 		<DefineConstants>TRACE;NET_CORE</DefineConstants>
-		<ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
@@ -32,7 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommandLineParser" Version="2.8.0" />
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
 		<PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
 	</ItemGroup>

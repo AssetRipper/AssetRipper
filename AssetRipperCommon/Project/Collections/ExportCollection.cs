@@ -1,15 +1,19 @@
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Material;
 using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Meta.Importers.Asset;
-using AssetRipper.Core.Classes.PrefabInstance;
-using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1001;
+using AssetRipper.SourceGenerated.Classes.ClassID_1953259897;
+using AssetRipper.SourceGenerated.Classes.ClassID_21;
+using AssetRipper.SourceGenerated.Classes.ClassID_4;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Classes.ClassID_74;
+using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.Yaml;
 using System.Collections.Generic;
 using System.IO;
@@ -39,7 +43,7 @@ namespace AssetRipper.Core.Project.Collections
 		public abstract long GetExportID(IUnityObjectBase asset);
 		public abstract MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal);
 
-		protected void ExportAsset(IProjectAssetContainer container, IAssetImporter importer, IUnityObjectBase asset, string path, string name)
+		protected void ExportAsset(IProjectAssetContainer container, IUnityObjectBase importer, IUnityObjectBase asset, string path, string name)
 		{
 			if (!Directory.Exists(path))
 			{
@@ -56,17 +60,15 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected string GetUniqueFileName(ISerializedFile file, IUnityObjectBase asset, string dirPath)
 		{
-			string fileName = asset switch
+			string? fileName = asset switch
 			{
 				IPrefabInstance prefab => prefab.GetName(file),
-				Classes.IMonoBehaviour monoBehaviour => monoBehaviour.NameString,
-				INamedObject named => named.GetValidName(),
-				IHasNameString hasName => hasName.NameString,
+				IHasNameString hasName => hasName.GetNameNotEmpty(),
 				_ => null,
 			};
 			if (string.IsNullOrWhiteSpace(fileName))
 			{
-				fileName = asset.GetType().Name;
+				fileName = asset.AssetClassName;
 			}
 
 			fileName = FileUtils.RemoveCloneSuffixes(fileName);
@@ -76,7 +78,7 @@ namespace AssetRipper.Core.Project.Collections
 			return GetUniqueFileName(dirPath, fileName);
 		}
 
-		protected string GetUniqueFileName(string directoryPath, string fileName)
+		protected static string GetUniqueFileName(string directoryPath, string fileName)
 		{
 			return FileUtils.GetUniqueName(directoryPath, fileName, FileUtils.MaxFileNameLength - MetaExtension.Length);
 		}
@@ -87,8 +89,29 @@ namespace AssetRipper.Core.Project.Collections
 				return "shader";
 			else if (asset is IMaterial)
 				return "mat";
+			else if (asset is IAnimationClip)
+				return "anim";
+			else if (asset is IAnimatorController)
+				return "controller";
+			else if (asset is SourceGenerated.Classes.ClassID_319.IAvatarMask or SourceGenerated.Classes.ClassID_1011.IAvatarMask)
+				return "mask";
+			else if (asset is ITerrainLayer)
+				return "terrainlayer";
 			else
 				return asset.ExportExtension;
+		}
+
+		protected static IUnityObjectBase Convert(IUnityObjectBase asset, IExportContainer container)
+		{
+			if (asset is IGameObject gameObject)
+			{
+				gameObject.ConvertToEditorFormat(container);
+			}
+			else if (asset is ITransform transform)
+			{
+				transform.ConvertToEditorFormat();
+			}
+			return asset;
 		}
 
 		public abstract IAssetExporter AssetExporter { get; }

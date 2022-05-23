@@ -19,10 +19,10 @@ namespace AssetRipper.Core.Classes
 		{
 			public AnimatorState? GetDestinationState()
 			{
-				return GetDestinationState(DestinationState);
+				return GetDestinationState(DestinationState, StateMachine, States);
 			}
 
-			private AnimatorState? GetDestinationState(int destinationState)
+			private static AnimatorState? GetDestinationState(int destinationState, StateMachineConstant stateMachine, IReadOnlyList<AnimatorState> states)
 			{
 				if (destinationState == -1)
 				{
@@ -39,15 +39,15 @@ namespace AssetRipper.Core.Classes
 					}
 					else
 					{
-						SelectorStateConstant selectorState = StateMachine.SelectorStateConstantArray[stateIndex].Instance;
+						SelectorStateConstant selectorState = stateMachine.SelectorStateConstantArray[stateIndex].Instance;
 #warning		HACK: take default Entry destination. TODO: child StateMachines
 						SelectorTransitionConstant selectorTransition = selectorState.TransitionConstantArray[selectorState.TransitionConstantArray.Length - 1].Instance;
-						return GetDestinationState(selectorTransition.Destination);
+						return GetDestinationState(selectorTransition.Destination, stateMachine, states);
 					}
 				}
 				else
 				{
-					return States[destinationState];
+					return states[destinationState];
 				}
 			}
 

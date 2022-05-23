@@ -1,11 +1,8 @@
 using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Meta.Importers;
-using AssetRipper.Core.Classes.Meta.Importers.Asset;
-using AssetRipper.Core.Importers;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.VersionHandling;
+using AssetRipper.SourceGenerated.Classes.ClassID_1034;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,10 +34,10 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			string subPath;
 			string fileName;
-			if (container.TryGetAssetPathFromAssets(Assets, out IUnityObjectBase asset, out string assetPath))
+			if (container.TryGetAssetPathFromAssets(Assets, out IUnityObjectBase? asset, out string assetPath))
 			{
 				string resourcePath = Path.Combine(dirPath, $"{assetPath}.{GetExportExtension(asset)}");
-				subPath = Path.GetDirectoryName(resourcePath);
+				subPath = Path.GetDirectoryName(resourcePath)!;
 				string resFileName = Path.GetFileName(resourcePath);
 #warning TODO: combine assets with the same res path into one big asset
 				// Unity distinguish assets with non unique path by its type, but file system doesn't support it
@@ -97,13 +94,13 @@ namespace AssetRipper.Core.Project.Collections
 		/// <returns>True if export was successful, false otherwise</returns>
 		protected virtual bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
 		{
-			return AssetExporter.Export(container, Asset.ConvertLegacy(container), filePath);
+			return AssetExporter.Export(container, Convert(Asset, container), filePath);
 		}
 
-		protected virtual IAssetImporter CreateImporter(IExportContainer container)
+		protected virtual IUnityObjectBase CreateImporter(IExportContainer container)
 		{
-			INativeFormatImporter importer = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateNativeFormatImporter(container.ExportLayout);
-			importer.MainObjectFileID = GetExportID(Asset);
+			INativeFormatImporter importer = NativeFormatImporterFactory.CreateAsset(container.ExportVersion);
+			importer.MainObjectFileID_C1034 = GetExportID(Asset);
 			return importer;
 		}
 
@@ -115,7 +112,7 @@ namespace AssetRipper.Core.Project.Collections
 				return fileExtension;
 		}
 
-		private string fileExtension;
+		private readonly string? fileExtension;
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File => Asset.SerializedFile;
 		public override IEnumerable<IUnityObjectBase> Assets
@@ -127,9 +124,13 @@ namespace AssetRipper.Core.Project.Collections
 			get
 			{
 				if (Asset is IHasNameString hasName)
+				{
 					return hasName.GetNameNotEmpty();
+				}
 				else
-					return Asset.ToString();
+				{
+					return Asset.AssetClassName;
+				}
 			}
 		}
 		public IUnityObjectBase Asset { get; }

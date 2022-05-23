@@ -1,11 +1,10 @@
-using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Core.Classes.Shader.SerializedShader;
-using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
-using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Classes.ShaderBlob;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.VersionUtilities;
 using ShaderTextRestorer.Exporters;
 using System;
@@ -17,7 +16,7 @@ namespace ShaderTextRestorer.IO
 {
 	public class ShaderWriter : InvariantStreamWriter
 	{
-		public ShaderWriter(Stream stream, Shader shader, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator) : base(stream, new UTF8Encoding(false), 4096, true)
+		public ShaderWriter(Stream stream, IShader shader, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator) : base(stream, new UTF8Encoding(false), 4096, true)
 		{
 			if (shader == null)
 			{
@@ -29,6 +28,7 @@ namespace ShaderTextRestorer.IO
 			}
 
 			Shader = shader;
+			Blobs = shader.ReadBlobs();
 			m_exporterInstantiator = exporterInstantiator;
 		}
 
@@ -40,7 +40,8 @@ namespace ShaderTextRestorer.IO
 			exporter.Export(this, ref subProgram);
 		}
 
-		public Shader Shader { get; }
+		public IShader Shader { get; }
+		public ShaderSubProgramBlob[] Blobs { get; }
 		public UnityVersion Version => Shader.SerializedFile.Version;
 		public BuildTarget Platform => Shader.SerializedFile.Platform;
 

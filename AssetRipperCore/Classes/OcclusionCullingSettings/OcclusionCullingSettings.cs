@@ -6,6 +6,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.SourceGenerated.Classes.ClassID_363;
 using AssetRipper.Yaml;
 using System.Collections.Generic;
 
@@ -189,7 +190,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 				return m_SceneGUID;
 			}
 		}
-		private PPtr<OcclusionCullingData.IOcclusionCullingData> GetExportOcclusionCullingData(IExportContainer container)
+		private PPtr<IOcclusionCullingData> GetExportOcclusionCullingData(IExportContainer container)
 		{
 			if (HasReadPVSData(container.Version))
 			{
@@ -202,7 +203,7 @@ namespace AssetRipper.Core.Classes.OcclusionCullingSettings
 			}
 			if (HasSceneGUID(container.Version))
 			{
-				return m_OcclusionCullingData;
+				//return m_OcclusionCullingData;
 			}
 			return new();
 		}

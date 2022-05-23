@@ -1,6 +1,4 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.GameObject;
-using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Layout;
@@ -10,6 +8,16 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_116;
+using AssetRipper.SourceGenerated.Classes.ClassID_141;
+using AssetRipper.SourceGenerated.Classes.ClassID_142;
+using AssetRipper.SourceGenerated.Classes.ClassID_147;
+using AssetRipper.SourceGenerated.Classes.ClassID_150;
+using AssetRipper.SourceGenerated.Classes.ClassID_2;
+using AssetRipper.SourceGenerated.Classes.ClassID_3;
+using AssetRipper.SourceGenerated.Classes.ClassID_6;
 using System;
 using System.Collections.Generic;
 
@@ -63,6 +71,12 @@ namespace AssetRipper.Core.Project
 		{
 			DummyExporter.SetUpClassType(classType, isEmptyCollection, isMetaType);
 			OverrideExporter(classType, DummyExporter);
+		}
+
+		protected void OverrideDummyExporter<T>(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
+		{
+			DummyExporter.SetUpClassType(classType, isEmptyCollection, isMetaType);
+			OverrideExporter<T>(DummyExporter, true);
 		}
 
 		public void Export(GameCollection fileCollection, CoreConfiguration options) => Export(fileCollection, fileCollection.FetchSerializedFiles(), options);
@@ -177,13 +191,17 @@ namespace AssetRipper.Core.Project
 
 			OverrideExporter<IBuildSettings>(BuildSettingsExporter, true);
 
-			OverrideExporter<Classes.IMonoBehaviour>(ScriptableExporter, true);
+			OverrideExporter<IMonoBehaviour>(ScriptableExporter, true);
 
 			OverrideExporter<IGameObject>(SceneExporter, true);
 			OverrideExporter<IComponent>(SceneExporter, true);
 			OverrideExporter<ILevelGameManager>(SceneExporter, true);
 
-
+			OverrideDummyExporter<IPreloadData>(ClassIDType.PreloadData, true, false);
+			OverrideDummyExporter<IMonoManager>(ClassIDType.MonoManager, true, false);
+			OverrideDummyExporter<IAssetBundle>(ClassIDType.AssetBundle, true, false);
+			OverrideDummyExporter<IResourceManager>(ClassIDType.ResourceManager, true, false);
+			/*
 			OverrideDummyExporter(ClassIDType.MonoManager, true, false);
 			OverrideDummyExporter(ClassIDType.BuildSettings, false, false);
 			OverrideDummyExporter(ClassIDType.AssetBundle, true, false);
@@ -304,7 +322,7 @@ namespace AssetRipper.Core.Project
 			OverrideYamlExporter(ClassIDType.LightmapParameters);
 			OverrideYamlExporter(ClassIDType.SpriteAtlas);
 			OverrideYamlExporter(ClassIDType.TerrainLayer);
-			OverrideYamlExporter(ClassIDType.LightingSettings);
+			OverrideYamlExporter(ClassIDType.LightingSettings);*/
 		}
 	}
 }

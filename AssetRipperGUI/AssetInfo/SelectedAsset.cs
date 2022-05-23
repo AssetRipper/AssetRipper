@@ -1,10 +1,4 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.AudioClip;
-using AssetRipper.Core.Classes.GameObject;
-using AssetRipper.Core.Classes.Shader;
-using AssetRipper.Core.Classes.TerrainData;
-using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Extensions;
+﻿using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
@@ -14,6 +8,12 @@ using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Utils;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_156;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Classes.ClassID_49;
+using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using AssetRipper.Yaml;
 using Avalonia.Media;
 using LibVLCSharp.Shared;
@@ -141,7 +141,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public bool HasTextData => Asset switch
 		{
 			IShader => true,
-			ITextAsset txt => !txt.Script.IsNullOrEmpty(),
+			ITextAsset txt => txt.Script_C49.Data.Length > 0,
 			IHasRawData rawDataAsset => rawDataAsset.RawData.Length > 0,
 			_ => false,
 		};
@@ -150,7 +150,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public string? TextAssetData => (Asset switch
 		{
 			IShader shader => DumpShaderDataAsText(shader),
-			ITextAsset txt => txt.ParseWithUTF8(),
+			ITextAsset txt => txt.Script_C49.String,
 			IHasRawData rawDataAsset => rawDataAsset.RawData.ToFormattedHex(),
 			_ => null
 		})?.Replace("\t", "    ");
@@ -162,15 +162,10 @@ namespace AssetRipper.GUI.AssetInfo
 			{
 				switch (Asset)
 				{
-					case Texture2D texture:
+					case ITexture2D texture:
 						{
 							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(texture);
-							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
-						}
-					case ITexture2D img:
-						{
-							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(img.TextureFormat, img.Width, img.Height, Asset.SerializedFile.Version, img.ImageData, 0, 0, KTXBaseInternalFormat.RG);
-							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
+							return directBitmap is null ? null : AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
 						}
 					case ITerrainData terrain:
 						{
@@ -185,40 +180,34 @@ namespace AssetRipper.GUI.AssetInfo
 
 		private bool HasName => Asset switch
 		{
-			IShader s => !string.IsNullOrEmpty(s.GetValidShaderName()),
-			IGameObject go => !string.IsNullOrEmpty(go.NameString),
-			INamedObject no => !string.IsNullOrEmpty(no.NameString),
 			IHasNameString hasName => !string.IsNullOrEmpty(hasName.NameString),
 			_ => false
 		};
 
 		private string? Name => Asset switch
 		{
-			IShader s => s.GetValidShaderName(),
-			IGameObject go => go.NameString,
-			INamedObject no => no.NameString,
 			IHasNameString hasName => hasName.NameString,
 			_ => null
 		};
 
-		private TextureFormat TextureFormat => Asset switch
+		private Core.Classes.Texture2D.TextureFormat TextureFormat => Asset switch
 		{
-			ITexture2D img => img.TextureFormat,
-			ITerrainData => TextureFormat.RGBA32,
-			_ => TextureFormat.Automatic,
+			ITexture2D img => (Core.Classes.Texture2D.TextureFormat)img.TextureFormat_C28,
+			ITerrainData => Core.Classes.Texture2D.TextureFormat.RGBA32,
+			_ => Core.Classes.Texture2D.TextureFormat.Automatic,
 		};
 
 		private int ImageWidth => Asset switch
 		{
-			ITexture2D img => img.Width,
-			ITerrainData terrain => terrain.Heightmap.Width,
+			ITexture2D img => img.Width_C28,
+			ITerrainData terrain => terrain.Heightmap_C156.Width,
 			_ => -1,
 		};
 
 		private int ImageHeight => Asset switch
 		{
-			ITexture2D img => img.Height,
-			ITerrainData terrain => terrain.Heightmap.Height,
+			ITexture2D img => img.Height_C28,
+			ITerrainData terrain => terrain.Heightmap_C156.Height,
 			_ => -1,
 		};
 

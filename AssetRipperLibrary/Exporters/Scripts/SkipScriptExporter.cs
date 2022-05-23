@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Asset;
@@ -7,6 +6,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System;
 using System.Collections.Generic;
 

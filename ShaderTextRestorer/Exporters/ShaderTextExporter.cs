@@ -1,4 +1,4 @@
-using AssetRipper.Core.Classes.Shader;
+using AssetRipper.Core.Classes.ShaderBlob;
 using AssetRipper.Core.Extensions;
 using ShaderTextRestorer.IO;
 using System.Collections.Generic;
@@ -13,13 +13,9 @@ namespace ShaderTextRestorer.Exporters
 		public virtual void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
 			byte[] exportData = subProgram.ProgramData;
-			using (MemoryStream memStream = new MemoryStream(exportData))
-			{
-				using (BinaryReader reader = new BinaryReader(memStream))
-				{
-					ExportText(writer, reader, Name);
-				}
-			}
+			using MemoryStream memStream = new MemoryStream(exportData);
+			using BinaryReader reader = new BinaryReader(memStream);
+			ExportText(writer, reader, Name);
 		}
 
 		protected static void ExportText(TextWriter writer, BinaryReader reader) => ExportText(writer, reader, null);

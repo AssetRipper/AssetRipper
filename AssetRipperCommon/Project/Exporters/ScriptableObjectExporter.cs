@@ -1,20 +1,20 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
 
 namespace AssetRipper.Core.Project.Exporters
 {
 	public class ScriptableObjectExporter : YamlExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool IsHandle(Interfaces.IUnityObjectBase asset)
 		{
-			return asset is Classes.IMonoBehaviour;
+			return asset is IMonoBehaviour;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, Interfaces.IUnityObjectBase asset)
 		{
-			Classes.IMonoBehaviour monoBehaviour = (Classes.IMonoBehaviour)asset;
+			IMonoBehaviour monoBehaviour = (IMonoBehaviour)asset;
 			if (monoBehaviour.IsScriptableObject())
 			{
 				return new AssetExportCollection(this, asset);

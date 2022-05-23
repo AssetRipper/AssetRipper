@@ -117,7 +117,10 @@ namespace AssetRipper.Core.Converters.AnimationClip
 						curveIndex = GetNextCurve(frame, curveIndex);
 					}
 				}
-				if (frameIndex0) frameIndex0 = false;
+				if (frameIndex0)
+				{
+					frameIndex0 = false;
+				}
 			}
 		}
 
@@ -196,14 +199,22 @@ namespace AssetRipper.Core.Converters.AnimationClip
 			switch (binding.CustomType)
 			{
 				case BindingCustomType.AnimatorMuscle:
-					if (ProcessStreams_frameIndex0) AddAnimatorMuscleCurve(binding, time, value);
+					if (ProcessStreams_frameIndex0)
+					{
+						AddAnimatorMuscleCurve(binding, time, value);
+					}
+
 					break;
 
 				default:
-					string attribute = m_customCurveResolver.ToAttributeName(Layout, binding.CustomType, binding.Attribute, path);
+					string attribute = m_customCurveResolver.ToAttributeName(binding.CustomType, binding.Attribute, path);
 					if (binding.IsPPtrCurve)
 					{
-						if (!ProcessStreams_frameIndex0) time = 0.0f;
+						if (!ProcessStreams_frameIndex0)
+						{
+							time = 0.0f;
+						}
+
 						PPtrCurve curve = new PPtrCurve(path, attribute, binding.ClassID, binding.Script.CastTo<IMonoScript>());
 						AddPPtrKeyframe(curve, bindings, time, (int)value);
 					}
@@ -461,7 +472,7 @@ namespace AssetRipper.Core.Converters.AnimationClip
 
 		private static string GetCurvePath(IReadOnlyDictionary<uint, string> tos, uint hash)
 		{
-			if (tos.TryGetValue(hash, out string path))
+			if (tos.TryGetValue(hash, out string? path))
 			{
 				return path;
 			}

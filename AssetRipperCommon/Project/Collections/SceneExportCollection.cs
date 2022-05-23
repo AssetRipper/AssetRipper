@@ -1,16 +1,19 @@
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.OcclusionCullingData;
-using AssetRipper.Core.Classes.OcclusionCullingSettings;
-using AssetRipper.Core.Importers;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1030;
+using AssetRipper.SourceGenerated.Classes.ClassID_1034;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_2;
+using AssetRipper.SourceGenerated.Classes.ClassID_29;
+using AssetRipper.SourceGenerated.Classes.ClassID_3;
+using AssetRipper.SourceGenerated.Classes.ClassID_363;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,31 +51,24 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			m_components = components.OrderBy(t => t, this).ToArray();
 
-			if (OcclusionCullingSettingsExtensions.HasSceneGUID(file.Version))
+			IOcclusionCullingSettings? sceneSettings = Components.Where(t => t is IOcclusionCullingSettings).Select(t => (IOcclusionCullingSettings)t).FirstOrDefault();
+			if (sceneSettings != null)
 			{
-				IOcclusionCullingSettings sceneSettings = Components.Where(t => t is IOcclusionCullingSettings).Select(t => (IOcclusionCullingSettings)t).FirstOrDefault();
-				if (sceneSettings != null)
-				{
-					GUID = sceneSettings.SceneGUID;
-				}
+				GUID = sceneSettings.GUID;
 			}
 			if (GUID.IsZero)
 			{
 				GUID = UnityGUID.NewGuid();
 			}
 
-			if (OcclusionCullingSettingsExtensions.HasReadPVSData(File.Version))
+			foreach (IUnityObjectBase comp in Components)
 			{
-				foreach (IUnityObjectBase comp in Components)
+				if (comp is IOcclusionCullingSettings settings)
 				{
-					if (comp is IOcclusionCullingSettings settings)
+					if (settings.PVSData_C29?.Length > 0)
 					{
-						if (settings.PVSData?.Length > 0)
-						{
-							m_occlusionCullingSettings = settings;
-							//OcclusionCullingData = OcclusionCullingData.CreateVirtualInstance(virtualFile);
-							break;
-						}
+						m_occlusionCullingSettings = settings;
+						break;
 					}
 				}
 			}
@@ -131,17 +127,17 @@ namespace AssetRipper.Core.Project.Collections
 				}
 			}
 
-			folderPath = Path.GetDirectoryName(filePath);
+			folderPath = Path.GetDirectoryName(filePath)!;
 			Directory.CreateDirectory(folderPath);
 
-			AssetExporter.Export(container, Components.Select(t => t.ConvertLegacy(container)), filePath);
-			IDefaultImporter sceneImporter = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateDefaultImporter(container.ExportLayout);
+			AssetExporter.Export(container, Components.Select(t => Convert(t, container)), filePath);
+			IDefaultImporter sceneImporter = DefaultImporterFactory.CreateAsset(container.ExportVersion);
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);
 
 			string sceneName = Path.GetFileName(sceneSubPath);
 			string subFolderPath = Path.Combine(folderPath, sceneName);
-			if (OcclusionCullingData != null)
+			if (OcclusionCullingData is not null && m_occlusionCullingSettings is not null)
 			{
 				OcclusionCullingData.Initialize(container, m_occlusionCullingSettings);
 				ExportAsset(container, OcclusionCullingData, subFolderPath);
@@ -178,16 +174,16 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public int Compare(IUnityObjectBase obj1, IUnityObjectBase obj2)
+		public int Compare(IUnityObjectBase? obj1, IUnityObjectBase? obj2)
 		{
-			if (obj1.ClassID == obj2.ClassID)
+			if (obj1?.ClassID == obj2?.ClassID)
 			{
 				return 0;
 			}
 
-			if (obj1.ClassID.IsSceneSettings())
+			if (obj1 is ILevelGameManager)
 			{
-				if (obj2.ClassID.IsSceneSettings())
+				if (obj2 is ILevelGameManager)
 				{
 					return obj1.ClassID < obj2.ClassID ? -1 : 1;
 				}
@@ -196,24 +192,21 @@ namespace AssetRipper.Core.Project.Collections
 					return -1;
 				}
 			}
+			else if (obj2 is ILevelGameManager)
+			{
+				return 1;
+			}
 			else
 			{
-				if (obj2.ClassID.IsSceneSettings())
-				{
-					return 1;
-				}
-				else
-				{
-					return 0;
-				}
+				return 0;
 			}
 		}
 
-		private void ExportAsset(IProjectAssetContainer container, INamedObject asset, string path)
+		private void ExportAsset(IProjectAssetContainer container, IHasNameString asset, string path)
 		{
-			INativeFormatImporter importer = ImporterVersionHandler.GetImporterFactory(container.ExportVersion).CreateNativeFormatImporter(container.ExportLayout);
-			importer.MainObjectFileID = GetExportID(asset);
-			ExportAsset(container, importer, asset, path, asset.NameString);
+			INativeFormatImporter importer = NativeFormatImporterFactory.CreateAsset(container.ExportVersion);
+			importer.MainObjectFileID_C1034 = GetExportID((IUnityObjectBase)asset);
+			ExportAsset(container, importer, (IUnityObjectBase)asset, path, asset.NameString);
 		}
 
 		private bool IsComponent(IUnityObjectBase asset)
@@ -294,7 +287,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return true;
 			}
-			if (asset is Classes.IMonoBehaviour monoBeh)
+			if (asset is IMonoBehaviour monoBeh)
 			{
 				if (!monoBeh.IsSceneObject())
 				{
@@ -308,7 +301,7 @@ namespace AssetRipper.Core.Project.Collections
 		public override string Name { get; }
 		public override ISerializedFile File => m_file;
 
-		public IOcclusionCullingData OcclusionCullingData { get; }
+		public IOcclusionCullingData? OcclusionCullingData { get; }
 		public UnityGUID GUID { get; }
 
 		private IEnumerable<IUnityObjectBase> Components => m_components;
@@ -322,6 +315,6 @@ namespace AssetRipper.Core.Project.Collections
 		private readonly IUnityObjectBase[] m_components;
 		private readonly Dictionary<AssetInfo, long> m_exportIDs = new Dictionary<AssetInfo, long>();
 		private readonly ISerializedFile m_file;
-		private readonly IOcclusionCullingSettings m_occlusionCullingSettings;
+		private readonly IOcclusionCullingSettings? m_occlusionCullingSettings;
 	}
 }

@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Meta;
+﻿using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Meta.Importers;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
@@ -8,8 +7,10 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Utils;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,7 +28,6 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public override string Name => nameof(ScriptExportCollection);
 
 		private static readonly UnityGUID UnityEngineGUID = new UnityGUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
-		private static readonly Regex s_unityEngine = new Regex(@"^UnityEngine(\.[0-9a-zA-Z]+)*(\.dll)?$", RegexOptions.Compiled);
 
 		private readonly List<IMonoScript> m_export = new List<IMonoScript>();
 		private readonly HashSet<IMonoScript> m_unique = new HashSet<IMonoScript>();
@@ -53,11 +53,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 				IMonoScript unique = assetScript;
 				foreach (IMonoScript export in m_unique)
 				{
-					if (assetScript.ClassName != export.ClassName)
+					if (assetScript.ClassName_C115 != export.ClassName_C115)
 					{
 						continue;
 					}
-					if (assetScript.Namespace != export.Namespace)
+					if (assetScript.Namespace_C115 != export.Namespace_C115)
 					{
 						continue;
 					}
@@ -100,38 +100,17 @@ namespace AssetRipper.Library.Exporters.Scripts
 				if (!assemblyName.EndsWith(".dll"))
 					assemblyName = assemblyName + ".dll";
 
-				if (IsReferenceAssembly(assemblyName))
+				if (ReferenceAssemblies.IsReferenceAssembly(assemblyName))
 					continue;
 
 				string path = System.IO.Path.Combine(scriptPath, assemblyName);
 				Directory.CreateDirectory(scriptPath);
-				using var file = System.IO.File.Create(path);
+				using FileStream file = System.IO.File.Create(path);
 				assembly.Write(file);
 				OnAssemblyExported(container, path);
 			}
 			Logger.Info(LogCategory.Export, "Finished exporting scripts");
 			return true;
-		}
-
-		private static bool IsReferenceAssembly(string assemblyName)
-		{
-			if (assemblyName == null)
-				throw new ArgumentNullException(assemblyName);
-			if (assemblyName.StartsWith("System."))
-				return true;
-			if (assemblyName.StartsWith("Unity."))
-				return true;
-			if (assemblyName.StartsWith("UnityEngine."))
-				return true;
-			if (assemblyName.StartsWith("UnityEditor."))
-				return true;
-			if (assemblyName == "mscorlib.dll")
-				return true;
-			if (assemblyName == "netstandard.dll")
-				return true;
-			if (assemblyName == "Mono.Security.dll")
-				return true;
-			return false;
 		}
 
 		public override bool IsContains(IUnityObjectBase asset)
@@ -152,11 +131,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 
 			IMonoScript script = m_scripts[asset];
-			if (!MonoScriptExtensions.HasAssemblyName(script.SerializedFile.Version, script.SerializedFile.Flags) || s_unityEngine.IsMatch(script.GetAssemblyNameFixed()))
+			if (!MonoScriptExtensions.HasAssemblyName(script.SerializedFile.Version, script.SerializedFile.Flags) || ReferenceAssemblies.IsUnityEngineAssembly(script.GetAssemblyNameFixed()))
 			{
 				if (MonoScriptExtensions.HasNamespace(script.SerializedFile.Version))
 				{
-					int fileID = Compute(script.Namespace, script.ClassName);
+					int fileID = Compute(script.Namespace_C115.String, script.ClassName_C115.String);
 					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 				}
 				else
@@ -170,11 +149,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 				}
 			}
 
-			var scriptKey = $"{script.AssemblyName}{script.Namespace}{script.ClassName}";
+			var scriptKey = $"{script.AssemblyName_C115.String}{script.Namespace_C115.String}{script.ClassName_C115.String}";
 			if (!ScriptId.ContainsKey(scriptKey))
-				ScriptId[scriptKey] = Compute(script.Namespace, script.ClassName);
+				ScriptId[scriptKey] = Compute(script.Namespace_C115.String, script.ClassName_C115.String);
 
-			return new MetaPtr(ScriptId[scriptKey], GetAssemblyGuid(script.AssemblyName), AssetExporter.ToExportType(asset));
+			return new MetaPtr(ScriptId[scriptKey], GetAssemblyGuid(script.AssemblyName_C115.String), AssetExporter.ToExportType(asset));
 		}
 
 		private static int Compute(string @namespace, string name)

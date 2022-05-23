@@ -26,12 +26,4 @@ namespace AssetRipper.Core.Project
 		BuildTarget ExportPlatform { get; }
 		TransferInstructionFlags ExportFlags { get; }
 	}
-
-	public static class ExportContainerExtensions
-	{
-		public static UnityHandlerBase GetExportHandler(this IExportContainer container)
-		{
-			return VersionManager.GetHandler(container.ExportVersion);
-		}
-	}
 }

@@ -82,15 +82,14 @@ namespace AssetRipper.Core.Classes
 
 		private static byte[] CopyData(byte[]? source)
 		{
-			int length = source?.Length ?? 0;
-			if (length == 0)
+			if (source is null || source.Length == 0)
 			{
 				return Array.Empty<byte>();
 			}
 			else
 			{
-				byte[] destination = new byte[length];
-				Array.Copy(source!, destination, length);
+				byte[] destination = new byte[source.Length];
+				Array.Copy(source!, destination, source.Length);
 				return destination;
 			}
 		}

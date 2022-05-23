@@ -10,7 +10,7 @@ namespace AssetRipper.Library.Exporters
 
 		public void DoPostExport(Ripper ripper)
 		{
-			SaveMaxProjectVersion(ripper.Settings.ProjectSettingsPath, ripper.Settings.Version);
+			SaveExactProjectVersion(ripper.Settings.ProjectSettingsPath, ripper.Settings.Version);
 		}
 
 		private static void SaveDefaultProjectVersion(string projectSettingsDirectory)

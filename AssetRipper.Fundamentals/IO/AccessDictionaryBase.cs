@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace AssetRipper.Core.IO
@@ -10,7 +11,7 @@ namespace AssetRipper.Core.IO
 	/// </summary>
 	/// <typeparam name="TKey">The exposed key type, such as an interface, base type, or primitive type</typeparam>
 	/// <typeparam name="TValue">The exposed value type, such as an interface, base type, or primitive type</typeparam>
-	public abstract class AccessDictionaryBase<TKey, TValue> : IList<NullableKeyValuePair<TKey, TValue>>, IReadOnlyList<NullableKeyValuePair<TKey, TValue>>
+	public abstract class AccessDictionaryBase<TKey, TValue> : IEnumerable<NullableKeyValuePair<TKey, TValue>>
 	{
 		/// <summary>
 		/// The capacity of the dictionary 
@@ -26,13 +27,13 @@ namespace AssetRipper.Core.IO
 		/// The keys in the dictionary
 		/// </summary>
 		public IEnumerable<TKey> Keys => keyEnumerable ??= new KeyEnumerable(this);
-		private KeyEnumerable keyEnumerable;
+		private KeyEnumerable? keyEnumerable;
 
 		/// <summary>
 		/// The values in the dictionary
 		/// </summary>
 		public IEnumerable<TValue> Values => valueEnumerable ??= new ValueEnumerable(this);
-		private ValueEnumerable valueEnumerable;
+		private ValueEnumerable? valueEnumerable;
 
 		/// <summary>
 		/// Add a pair to the dictionary
@@ -77,6 +78,13 @@ namespace AssetRipper.Core.IO
 		public abstract TValue GetValue(int index);
 
 		/// <summary>
+		/// Get a pair in the dictionary
+		/// </summary>
+		/// <param name="index">The index to access</param>
+		/// <returns>The pair at the specified index</returns>
+		public abstract NullableKeyValuePair<TKey, TValue> GetPair(int index);
+
+		/// <summary>
 		/// Set a key in the dictionary
 		/// </summary>
 		/// <remarks>
@@ -97,18 +105,6 @@ namespace AssetRipper.Core.IO
 		/// <param name="index">The index to access</param>
 		/// <param name="newValue">The new value to be assigned</param>
 		public abstract void SetValue(int index, TValue newValue);
-
-		/// <summary>
-		/// Access a pair in the dictionary
-		/// </summary>
-		/// <remarks>
-		/// The get method is type safe.
-		/// The set method is not necessarily type safe
-		/// and could throw exceptions if used improperly.
-		/// </remarks>
-		/// <param name="index">The index to access</param>
-		/// <returns>The pair at that index</returns>
-		public abstract NullableKeyValuePair<TKey, TValue> this[int index] { get; set; }
 
 		/// <inheritdoc/>
 		public bool IsReadOnly => false;
@@ -134,15 +130,57 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public abstract bool Remove(NullableKeyValuePair<TKey, TValue> item);
 
-		public TValue GetSingleValueForKey(TKey key)
+		protected NullableKeyValuePair<TKey,TValue> GetSinglePairForKey(TKey key)
 		{
-			if (key is null)
+			if (TryGetSinglePairForKey(key, out NullableKeyValuePair<TKey, TValue>? pair))
 			{
-				throw new ArgumentNullException(nameof(key));
+				return pair;
 			}
+			else
+			{
+				throw new KeyNotFoundException($"Key not found: {key?.ToString()}");
+			}
+		}
 
-			int hash = key.GetHashCode();
-			return this.Single(pair => pair.Key?.GetHashCode() == hash && key.Equals(pair.Key)).Value;
+		protected abstract bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out NullableKeyValuePair<TKey, TValue>? pair);
+
+		/// <summary>
+		/// Access a value in the dictionary
+		/// </summary>
+		/// <remarks>
+		/// The get method is type safe.
+		/// The set method is not necessarily type safe
+		/// and could throw exceptions if used improperly.
+		/// Both will throw if the key isn't unique.
+		/// </remarks>
+		public TValue this[TKey key] 
+		{
+			get => GetSinglePairForKey(key).Value;
+			set
+			{
+				if(TryGetSinglePairForKey(key, out NullableKeyValuePair<TKey, TValue>? pair))
+				{
+					pair.Value = value;
+				}
+				else 
+				{
+					Add(key, value);
+				}
+			}
+		}
+
+		public bool TryGetValue(TKey key, [NotNullWhen(true)] out TValue? value)
+		{
+			if (TryGetSinglePairForKey(key, out NullableKeyValuePair<TKey, TValue>? pair))
+			{
+				value = pair.Value;
+				return value is not null;
+			}
+			else
+			{
+				value = default;
+				return false;
+			}
 		}
 
 		/// <inheritdoc/>
@@ -150,7 +188,7 @@ namespace AssetRipper.Core.IO
 		{
 			for (int i = 0; i < Count; i++)
 			{
-				yield return this[i];
+				yield return GetPair(i);
 			}
 		}
 

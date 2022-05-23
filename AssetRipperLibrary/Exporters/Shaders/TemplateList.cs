@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.Shader;
-using AssetRipper.Core.Logging;
+﻿using AssetRipper.Core.Logging;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

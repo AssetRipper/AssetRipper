@@ -1,9 +1,11 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.EditorBuildSettings;
-using AssetRipper.Core.Classes.EditorSettings;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Classes.ClassID_1045;
+using AssetRipper.SourceGenerated.Classes.ClassID_141;
+using AssetRipper.SourceGenerated.Classes.ClassID_159;
+using AssetRipper.SourceGenerated.Subclasses.EditorScene;
 using System.Collections.Generic;
 using System.IO;
 
@@ -22,7 +24,7 @@ namespace AssetRipper.Core.Project.Collections
 		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
 			string subPath = Path.Combine(dirPath, ProjectSettingsName);
-			string fileName = $"{EditorBuildSettings.ClassID}.asset";
+			string fileName = "EditorBuildSettings.asset";
 			string filePath = Path.Combine(subPath, fileName);
 
 			Directory.CreateDirectory(subPath);
@@ -31,7 +33,7 @@ namespace AssetRipper.Core.Project.Collections
 			InitializeEditorBuildSettings(EditorBuildSettings, buildSettings, container);
 			AssetExporter.Export(container, EditorBuildSettings, filePath);
 
-			fileName = $"{EditorSettings.ClassID}.asset";
+			fileName = "EditorSettings.asset";
 			filePath = Path.Combine(subPath, fileName);
 
 			AssetExporter.Export(container, EditorSettings, filePath);
@@ -53,16 +55,16 @@ namespace AssetRipper.Core.Project.Collections
 
 		public static void InitializeEditorBuildSettings(IEditorBuildSettings editorBuildSettings, IBuildSettings buildSettings, IProjectAssetContainer container)
 		{
-			int numScenes = buildSettings.Scenes.Length;
-			editorBuildSettings.InitializeScenesArray(numScenes);
-			IEditorScene[] scenes = editorBuildSettings.Scenes;
+			int numScenes = buildSettings.Scenes_C141.Count;
+			editorBuildSettings.Scenes_C1045.Capacity = numScenes;
 			for (int i = 0; i < numScenes; i++)
 			{
-				string scenePath = buildSettings.Scenes[i].String;
-				IEditorScene scene = scenes[i];
+				string scenePath = buildSettings.Scenes_C141[i].String;
+				IEditorScene scene = editorBuildSettings.Scenes_C1045.AddNew();
 				scene.Enabled = true;
-				scene.Path = scenePath;
-				scene.GUID = container.SceneNameToGUID(scenePath);
+				scene.Path.String = scenePath;
+				if(scene.Has_Guid())
+					scene.Guid.SetValues(container.SceneNameToGUID(scenePath));
 			}
 		}
 

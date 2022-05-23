@@ -144,6 +144,11 @@ namespace AssetRipper.Core.Classes.Misc
 			return $"[{depName}]{typeof(T).Name}_{pptr.PathIndex}";
 		}
 
+		public static PPtr<T1> CastTo<T1>(this IPPtr pptr) where T1 : IUnityObjectBase
+		{
+			return new PPtr<T1>(pptr.FileIndex, pptr.PathIndex);
+		}
+
 		public static bool IsVirtual(this IPPtr pptr) => pptr.FileIndex == VirtualSerializedFile.VirtualFileIndex;
 		/// <summary>
 		/// PathID == 0
@@ -189,11 +194,6 @@ namespace AssetRipper.Core.Classes.Misc
 			return left.FileIndex != right.FileIndex || left.PathIndex != right.PathIndex;
 		}
 
-		public PPtr<T1> CastTo<T1>() where T1 : IUnityObjectBase
-		{
-			return new PPtr<T1>(FileIndex, PathIndex);
-		}
-
 		public void Read(AssetReader reader)
 		{
 			FileIndex = reader.ReadInt32();
@@ -223,17 +223,9 @@ namespace AssetRipper.Core.Classes.Misc
 			return $"[{FileIndex}, {PathIndex}]";
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
-			if (obj == null)
-			{
-				return false;
-			}
-			if (obj is PPtr<T> ptr)
-			{
-				return ptr == this;
-			}
-			return false;
+			return Equals(obj as PPtr<T>);
 		}
 
 		public override int GetHashCode()
@@ -247,9 +239,9 @@ namespace AssetRipper.Core.Classes.Misc
 			return hash;
 		}
 
-		public bool Equals(PPtr<T> other)
+		public bool Equals(PPtr<T>? other)
 		{
-			return this == other;
+			return other is not null && this == other;
 		}
 
 		public bool IsVirtual => this.IsVirtual();

@@ -27,7 +27,7 @@ namespace AssetRipper.Core
 			get => AssetInfo.GUID;
 			set => AssetInfo.GUID = value;
 		}
-		public virtual string ExportPath => Path.Combine(AssetsKeyword, GetType().Name);
+		public virtual string ExportPath => Path.Combine(AssetsKeyword, AssetClassName);
 		public virtual string ExportExtension => AssetExtension;
 
 		public virtual HideFlags ObjectHideFlagsOld
@@ -55,7 +55,7 @@ namespace AssetRipper.Core
 			root.Tag = ClassID.ToInt().ToString();
 			root.Anchor = container.GetExportID(this).ToString();
 			YamlNode node = ExportYaml(container);
-			root.Add(container.ExportLayout.GetClassName(ClassID), node);
+			root.Add(AssetClassName, node);
 			return document;
 		}
 

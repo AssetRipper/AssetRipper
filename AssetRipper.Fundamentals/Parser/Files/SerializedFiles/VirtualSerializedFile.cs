@@ -121,7 +121,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public T CreateAsset<T>(ClassIDType classID) where T : IUnityObjectBase
 		{
 			AssetInfo assetInfo = CreateAssetInfo(classID);
-			IUnityObjectBase asset = VersionManager.GetHandler(Version).AssetFactory.CreateAsset(assetInfo, Version);
+			IUnityObjectBase? asset = VersionManager.AssetFactory.CreateAsset(assetInfo, Version);
 			if (asset == null)
 			{
 				throw new ArgumentException($"Could not create asset with id: {classID}", nameof(classID));

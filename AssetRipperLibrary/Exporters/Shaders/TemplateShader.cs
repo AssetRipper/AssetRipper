@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.Shader;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,8 +17,8 @@ namespace AssetRipper.Library.Exporters.Shaders
 				throw new System.NullReferenceException("requiredProperties cannot be null");
 			if (RequiredProperties.Count == 0)
 				return true;
-			var properties = shader.ParsedForm.PropInfo.Props;
-			if (properties == null || properties.Length == 0)
+			var properties = shader.ParsedForm_C48.PropInfo.Props;
+			if (properties == null || properties.Count == 0)
 				return false;
 			foreach (var reqProp in RequiredProperties)
 			{

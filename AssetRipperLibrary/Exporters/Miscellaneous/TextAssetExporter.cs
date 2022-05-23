@@ -1,5 +1,4 @@
 using AssetRipper.Core;
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -7,6 +6,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
+using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -28,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is ITextAsset textAsset)
-				return !textAsset.Script.IsNullOrEmpty();
+				return !textAsset.Script_C49.Data.IsNullOrEmpty();
 			else
 				return false;
 		}
@@ -40,7 +40,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).Script));
+			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).Script_C49.Data));
 			return true;
 		}
 
@@ -56,7 +56,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		private static string GetExtension(ITextAsset asset)
 		{
-			string text = asset.ParseWithUTF8();
+			string text = asset.Script_C49.String;
 			if (IsValidJson(text))
 				return JsonExtension;
 			else if (IsPlainText(text))

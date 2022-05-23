@@ -27,7 +27,7 @@
 		<PackageReference Include="Fmod5Sharp" Version="1.2.0" />
 		<PackageReference Include="ICSharpCode.Decompiler" Version="8.0.0.7007-preview1" />
 		<PackageReference Include="Kyaru.Texture2DDecoder" Version="0.16.40" />
-		<PackageReference Include="NAudio.Core" Version="2.0.0" />
+		<PackageReference Include="NAudio.Core" Version="2.1.0" />
 		<PackageReference Include="NAudio.Lame" Version="2.0.1" />
 		<PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
 		<PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0026" />
@@ -57,6 +57,10 @@
 		<Reference Include="MeshSharp.STL">
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>Libraries\MeshSharp.STL.dll</HintPath>
+		</Reference>
+		<Reference Include="AssetRipper.SourceGenerated">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>../Libraries/AssetRipper.SourceGenerated.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 
@@ -131,6 +135,10 @@
 	<ItemGroup>
 		<None Remove="Exporters\Shaders\Templates\*" />
 		<EmbeddedResource Include="Exporters\Shaders\Templates\*" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="C:\Users\jrpri\.nuget\packages\naudio.vorbis\1.5.0\contentFiles\any\netstandard2.0\README.md" />
 	</ItemGroup>
 
 </Project>

@@ -56,7 +56,7 @@ namespace AssetRipper.GUI
 		public static List<NewUiFileListItem> GetItemsFromStructure(GameStructure structure)
 		{
 			List<NewUiFileListItem> ret = new();
-			foreach (var (name, resourceFile) in structure.FileCollection.GameFiles)
+			foreach ((string name, SerializedFile resourceFile) in structure.FileCollection.GameFiles)
 			{
 				//Create a top-level tree view entry for each file
 				NewUiFileListItem? topLevelEntry = new(name!, resourceFile);
@@ -67,7 +67,7 @@ namespace AssetRipper.GUI
 				foreach (IUnityObjectBase asset in resourceFile.FetchAssets())
 				{
 					//Get the name of the category this asset should go in.
-					string categoryName = GetCategoryName(asset.GetType());
+					string categoryName = asset.AssetClassName;
 
 					//Get or create the category.
 					NewUiFileListItem category;
@@ -97,7 +97,7 @@ namespace AssetRipper.GUI
 
 			//Create a top-level tree view entry for any loose resource files
 			NewUiFileListItem? looseFiles = new("Loose Resource Files");
-			foreach (ResourceFile resourceFile in structure.FileCollection.GameResourceFiles)
+			foreach (ResourceFile? resourceFile in structure.FileCollection.GameResourceFiles)
 			{
 				if (resourceFile != null)
 					looseFiles.SubItems.Add(new(new DummyAssetForLooseResourceFile(resourceFile)));
@@ -106,20 +106,6 @@ namespace AssetRipper.GUI
 			ret.Add(looseFiles);
 
 			return ret;
-		}
-
-		private static string GetCategoryName(Type assetType)
-		{
-			if (SettingsClasses.Contains(assetType))
-				return "Settings";
-
-			return assetType.Name switch
-			{
-				nameof(Mesh) => "Meshes",
-				nameof(Canvas) => "Canvases",
-				nameof(Rigidbody) => "Rigidbodies",
-				_ => $"{assetType.Name}s",//E.g. Materials, AudioClips, etc.
-			};
 		}
 	}
 
