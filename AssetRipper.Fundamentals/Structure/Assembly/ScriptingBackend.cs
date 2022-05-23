@@ -5,6 +5,6 @@ namespace AssetRipper.Core.Structure.Assembly
 		Unknown,
 
 		Mono,
-		Il2Cpp
+		IL2Cpp
 	}
 }

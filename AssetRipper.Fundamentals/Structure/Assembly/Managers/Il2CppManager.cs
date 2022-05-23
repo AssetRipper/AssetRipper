@@ -27,23 +27,34 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		public override void Initialize(PlatformGameStructure gameStructure)
 		{
-			string gameDataPath = gameStructure.GameDataPath;
-			if (string.IsNullOrWhiteSpace(gameDataPath)) throw new ArgumentNullException(nameof(gameDataPath));
+			string? gameDataPath = gameStructure.GameDataPath;
+			if (string.IsNullOrWhiteSpace(gameDataPath))
+			{
+				throw new ArgumentNullException(nameof(gameDataPath));
+			}
 
-			GameDataPath = gameStructure.GameDataPath;
+			GameDataPath = gameDataPath;
 			GameAssemblyPath = gameStructure.Il2CppGameAssemblyPath;
 			UnityPlayerPath = gameStructure.UnityPlayerPath;
 			MetaDataPath = gameStructure.Il2CppMetaDataPath;
 
 			if (gameStructure.UnityVersion != null)
+			{
 				UnityVersion = gameStructure.UnityVersion;
+			}
 			else
+			{
 				UnityVersion = Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath, GameDataPath);
+			}
 
 			if (UnityVersion == null)
+			{
 				throw new NullReferenceException("Could not determine the unity version");
+			}
 			else
+			{
 				Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
+			}
 
 			Logger.SendStatusChange("loading_step_parse_il2cpp_metadata");
 
@@ -95,7 +106,10 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		private static string MakeVersionString(int[] version)
 		{
-			if (version == null || version.Length == 0) return "";
+			if (version == null || version.Length == 0)
+			{
+				return "";
+			}
 
 			StringBuilder builder = new StringBuilder();
 			builder.Append(version[0].ToString());

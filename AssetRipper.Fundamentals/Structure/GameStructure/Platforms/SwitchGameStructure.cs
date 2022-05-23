@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			UnityVersion = GetUnityVersionFromDataDirectory(dataPath);
 			Il2CppGameAssemblyPath = Path.Combine(rootPath, ExefsName, MainName);
 			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
-			Backend = HasIl2CppFiles() ? Assembly.ScriptingBackend.Il2Cpp : Assembly.ScriptingBackend.Unknown;
+			Backend = HasIl2CppFiles() ? Assembly.ScriptingBackend.IL2Cpp : Assembly.ScriptingBackend.Unknown;
 
 			DataPaths = new string[] { dataPath };
 		}

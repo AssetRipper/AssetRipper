@@ -6,6 +6,7 @@ using AssetRipper.Core.Structure.GameStructure.Platforms;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 
@@ -16,13 +17,13 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		public bool IsSet => ScriptingBackend != ScriptingBackend.Unknown;
 		public virtual ScriptingBackend ScriptingBackend => ScriptingBackend.Unknown;
 
-		protected readonly Dictionary<string, AssemblyDefinition> m_assemblies = new Dictionary<string, AssemblyDefinition>();
-		protected readonly Dictionary<string, bool> m_validTypes = new Dictionary<string, bool>();
+		protected readonly Dictionary<string, AssemblyDefinition?> m_assemblies = new();
+		protected readonly Dictionary<string, bool> m_validTypes = new();
 
 		public LayoutInfo Layout { get; }
 
 		private event Action<string> m_requestAssemblyCallback;
-		private readonly Dictionary<string, SerializableType> m_serializableTypes = new Dictionary<string, SerializableType>();
+		private readonly Dictionary<string, SerializableType> m_serializableTypes = new();
 
 		public BaseManager(LayoutInfo layout, Action<string> requestAssemblyCallback)
 		{
@@ -87,9 +88,9 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		public virtual void Unload(string fileName)
 		{
-			if (m_assemblies.TryGetValue(fileName, out AssemblyDefinition assembly))
+			if (m_assemblies.TryGetValue(fileName, out AssemblyDefinition? assembly))
 			{
-				assembly.Dispose();
+				assembly?.Dispose();
 				m_assemblies.Remove(fileName);
 			}
 		}
@@ -102,38 +103,60 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		public virtual bool IsPresent(ScriptIdentifier scriptID)
 		{
 			if (!IsSet)
+			{
 				return false;
+			}
+
 			if (scriptID.IsDefault)
+			{
 				return false;
+			}
 			else
+			{
 				return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name) != null;
+			}
 		}
 
 		public virtual bool IsValid(ScriptIdentifier scriptID)
 		{
 			if (!IsSet)
+			{
 				return false;
+			}
+
 			if (scriptID.IsDefault)
+			{
 				return false;
-			TypeDefinition type = FindType(scriptID);
+			}
+
+			TypeDefinition? type = FindType(scriptID);
 			if (type == null)
+			{
 				return false;
+			}
+
 			if (type.IsAbstract)
+			{
 				return false;
+			}
 
 			MonoTypeContext context = new MonoTypeContext(type);
 			if (!IsTypeValid(context))
+			{
 				return false;
+			}
 
 			if (!IsInheritanceValid(type))
+			{
 				return false;
+			}
 
 			return true;
 		}
 
 		public virtual TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID)
 		{
-			TypeDefinition type = FindType(scriptID);
+			TypeDefinition? type = FindType(scriptID);
 			if (type == null)
 			{
 				throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
@@ -144,8 +167,11 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		public virtual ScriptIdentifier GetScriptID(string assembly, string name)
 		{
 			if (!IsSet)
+			{
 				return default;
-			TypeDefinition type = FindType(assembly, name);
+			}
+
+			TypeDefinition? type = FindType(assembly, name);
 			if (type == null)
 			{
 				return default;
@@ -156,8 +182,11 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		public virtual ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
 		{
 			if (!IsSet)
+			{
 				return default;
-			TypeDefinition type = FindType(assembly, @namespace, name);
+			}
+
+			TypeDefinition? type = FindType(assembly, @namespace, name);
 			if (type == null)
 			{
 				return default;
@@ -165,13 +194,13 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			return new ScriptIdentifier(assembly, type.Namespace, type.Name);
 		}
 
-		public virtual AssemblyDefinition Resolve(AssemblyNameReference assemblyReference)
+		public virtual AssemblyDefinition? Resolve(AssemblyNameReference assemblyReference)
 		{
 			string assemblyName = ToAssemblyName(assemblyReference.Name);
 			return FindAssembly(assemblyName);
 		}
 
-		public virtual AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
+		public virtual AssemblyDefinition? Resolve(AssemblyNameReference name, ReaderParameters parameters)
 		{
 			return Resolve(name);
 		}
@@ -179,11 +208,11 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		public virtual SerializableType GetSerializableType(ScriptIdentifier scriptID)
 		{
 			string uniqueName = scriptID.UniqueName;
-			if (m_serializableTypes.TryGetValue(uniqueName, out SerializableType sType))
+			if (m_serializableTypes.TryGetValue(uniqueName, out SerializableType? sType))
 			{
 				return sType;
 			}
-			TypeDefinition type = FindType(scriptID);
+			TypeDefinition? type = FindType(scriptID);
 			if (type == null)
 			{
 				throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
@@ -203,7 +232,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			}
 
 			string uniqueName = GetUniqueName(context.Type);
-			if (TryGetSerializableType(uniqueName, out SerializableType serializableType))
+			if (TryGetSerializableType(uniqueName, out SerializableType? serializableType))
 			{
 				return serializableType;
 			}
@@ -223,11 +252,14 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		internal void AddSerializableType(string uniqueName, SerializableType scriptType) => m_serializableTypes.Add(uniqueName, scriptType);
 
-		internal bool TryGetSerializableType(string uniqueName, out SerializableType scriptType) => m_serializableTypes.TryGetValue(uniqueName, out scriptType);
-
-		protected AssemblyDefinition FindAssembly(string name)
+		internal bool TryGetSerializableType(string uniqueName, [NotNullWhen(true)] out SerializableType? scriptType)
 		{
-			if (m_assemblies.TryGetValue(name, out AssemblyDefinition assembly))
+			return m_serializableTypes.TryGetValue(uniqueName, out scriptType);
+		}
+
+		protected AssemblyDefinition? FindAssembly(string name)
+		{
+			if (m_assemblies.TryGetValue(name, out AssemblyDefinition? assembly))
 			{
 				return assembly;
 			}
@@ -241,9 +273,9 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			return null;
 		}
 
-		protected TypeDefinition FindType(string assembly, string name)
+		protected TypeDefinition? FindType(string assembly, string name)
 		{
-			AssemblyDefinition definition = FindAssembly(assembly);
+			AssemblyDefinition? definition = FindAssembly(assembly);
 			if (definition == null)
 			{
 				return null;
@@ -262,9 +294,9 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			return null;
 		}
 
-		protected TypeDefinition FindType(string assembly, string @namespace, string name)
+		protected TypeDefinition? FindType(string assembly, string @namespace, string name)
 		{
-			AssemblyDefinition definition = FindAssembly(assembly);
+			AssemblyDefinition? definition = FindAssembly(assembly);
 			if (definition == null)
 			{
 				return null;
@@ -281,7 +313,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			return null;
 		}
 
-		protected TypeDefinition FindType(ScriptIdentifier scriptID)
+		protected TypeDefinition? FindType(ScriptIdentifier scriptID)
 		{
 			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name);
 		}
@@ -402,7 +434,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		public virtual AssemblyDefinition[] GetAssemblies()
 		{
-			return m_assemblies.Values.Where(x => x != null).Distinct().ToArray();
+			return m_assemblies.Values.Where(x => x is not null).Distinct().ToArray();
 		}
 
 		public void Dispose()
@@ -413,7 +445,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		protected void Dispose(bool disposing)
 		{
-			foreach (AssemblyDefinition assembly in m_assemblies.Values)
+			foreach (AssemblyDefinition? assembly in m_assemblies.Values)
 			{
 				if (assembly != null)
 				{

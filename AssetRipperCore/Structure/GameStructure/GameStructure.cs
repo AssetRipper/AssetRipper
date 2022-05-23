@@ -157,7 +157,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				case ScriptingBackend.Mono:
 					FileCollection.AssemblyManager = new MonoManager(layout, OnRequestAssembly);
 					break;
-				case ScriptingBackend.Il2Cpp:
+				case ScriptingBackend.IL2Cpp:
 					FileCollection.AssemblyManager = new Il2CppManager(layout, OnRequestAssembly, configuration.ScriptContentLevel);
 					break;
 				case ScriptingBackend.Unknown:

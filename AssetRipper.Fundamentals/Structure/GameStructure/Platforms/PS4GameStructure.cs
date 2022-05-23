@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Il2CppMetaDataPath = Path.Combine(GameDataPath, MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
-				Backend = Assembly.ScriptingBackend.Il2Cpp;
+				Backend = Assembly.ScriptingBackend.IL2Cpp;
 			else if (HasMonoAssemblies(ManagedPath))
 				Backend = Assembly.ScriptingBackend.Mono;
 			else

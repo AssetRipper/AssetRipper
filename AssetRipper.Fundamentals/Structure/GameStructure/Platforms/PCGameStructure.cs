@@ -50,7 +50,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			if (HasIl2CppFiles())
 			{
-				Backend = Assembly.ScriptingBackend.Il2Cpp;
+				Backend = Assembly.ScriptingBackend.IL2Cpp;
 			}
 			else if (HasMonoAssemblies(ManagedPath))
 			{
