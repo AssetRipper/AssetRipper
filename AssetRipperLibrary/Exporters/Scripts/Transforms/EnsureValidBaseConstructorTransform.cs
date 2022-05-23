@@ -3,6 +3,7 @@ using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Transforms;
 using ICSharpCode.Decompiler.TypeSystem;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -22,7 +23,39 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			this.context = null!;
 		}
 
-		// TODO: Refactor this method so parts of it aren't used when no constructors exist at all.
+		private static int GetConstructorCost(IMethod constructor, ConstructorDeclaration? currentConstructor, bool onlyAccessible = false)
+		{
+			// return max value cost for a non-accessible constructor (if toggled)
+			if (onlyAccessible && !(constructor.Accessibility == Accessibility.Public || constructor.Accessibility == Accessibility.Protected))
+			{
+				return int.MaxValue;
+			}
+			int cost = 0;
+			int parameterPosition = 0;
+			foreach (IParameter parameter in constructor.Parameters)
+			{
+				// 3 cost per parameter
+				cost += 3;
+				int paramPosition = 0;
+				if (currentConstructor != null)
+				{
+					foreach (ParameterDeclaration param in currentConstructor.Parameters)
+					{
+						if (param.Name == parameter.Name)
+						{
+							cost--;
+							// todo: remove cost for parameter with same type
+							break;
+						}
+
+						paramPosition++;
+					}
+				}
+
+				parameterPosition++;
+			}
+			return cost;
+		}
 
 		private bool TryGetBestConstructor(ITypeDefinition type, ConstructorDeclaration currentConstructor, [NotNullWhen(true)] out IMethod? bestConstructor, out bool isBaseConstructor)
 		{
@@ -52,27 +85,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 						continue;
 					}
 
-					int cost = 0;
-					int parameterPosition = 0;
-					foreach (IParameter parameter in constructor.Parameters)
-					{
-						// 3 cost per parameter
-						cost += 3;
-						int paramPosition = 0;
-						foreach (ParameterDeclaration param in currentConstructor.Parameters)
-						{
-							if (param.Name == parameter.Name)
-							{
-								cost--;
-								// todo: remove cost for parameter with same type
-								break;
-							}
-
-							paramPosition++;
-						}
-
-						parameterPosition++;
-					}
+					int cost = GetConstructorCost(constructor, currentConstructor);
 					// subtract 1 cost to prefer defined constructors over base constructors
 					cost--;
 
@@ -86,35 +99,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 
 				foreach (IMethod constructor in baseType.GetConstructors())
 				{
-					// exclude hidden constructors
-					if (constructor.Accessibility != Accessibility.Public &&
-							constructor.Accessibility != Accessibility.Protected)
-					{
-						Logger.Debug(baseType.Name + " " + constructor.Accessibility);
-						continue;
-					}
-
-					int cost = 0;
-					int parameterPosition = 0;
-					foreach (IParameter parameter in constructor.Parameters)
-					{
-						// 3 cost per parameter
-						cost += 3;
-						int paramPosition = 0;
-						foreach (ParameterDeclaration param in currentConstructor.Parameters)
-						{
-							if (param.Name == parameter.Name)
-							{
-								cost--;
-								// todo: remove cost for parameter with same type
-								break;
-							}
-
-							paramPosition++;
-						}
-
-						parameterPosition++;
-					}
+					int cost = GetConstructorCost(constructor, currentConstructor, true);
 
 					if (cost < bestCost)
 					{
@@ -147,9 +132,12 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 					return;
 				}
 
-				foreach (ConstructorDeclaration? constructorDeclaration in typeDeclaration.Members.Select((member) => member as ConstructorDeclaration).Where((constructor) => constructor is not null && (constructor.Modifiers & Modifiers.Static) != Modifiers.Static))
+				IEnumerable<ConstructorDeclaration> nonStaticConstructors = typeDeclaration.Members
+					.Select((member) => member as ConstructorDeclaration)
+					.Where((constructor) => constructor is not null && (constructor.Modifiers & Modifiers.Static) != Modifiers.Static)!;
+
+				foreach (ConstructorDeclaration constructorDeclaration in nonStaticConstructors)
 				{
-					Debug.Assert(constructorDeclaration != null);
 					hasBaseConstructor = true;
 
 					if (constructorDeclaration.Initializer != null && !constructorDeclaration.Initializer.IsNull)
@@ -197,7 +185,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 					}
 
 					IMethod? bestConstructor = baseType.GetConstructors()
-						.OrderBy((ctor) => ctor.Parameters.Count * 2 + ((ctor.Accessibility == Accessibility.Public || ctor.Accessibility == Accessibility.Protected) ? 0 : 1)).FirstOrDefault();
+						.OrderBy((ctor) => GetConstructorCost(ctor, null, true)).FirstOrDefault();
 					if (bestConstructor != null)
 					{
 						ConstructorInitializer initializer = new()
@@ -209,16 +197,17 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 							initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(parameter.Type)));
 						}
 
+
 						ConstructorDeclaration constructorDeclaration = new()
 						{
 							Initializer = initializer,
 							Modifiers = Modifiers.Public,
-							Body = new BlockStatement(),
 						};
+						BlockStatement body = new();
+						constructorDeclaration.Body = body;
 
 						// todo: fix constructor being externed even though it has a body and
 						//       a null statement.
-						constructorDeclaration.Body.Statements.Add(Statement.Null);
 						typeDeclaration.Members.Add(constructorDeclaration);
 					}
 				}

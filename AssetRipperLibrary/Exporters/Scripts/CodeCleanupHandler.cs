@@ -11,7 +11,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 	{
 		public CodeCleanupHandler(CodeCleanupSettings? settings = null)
 		{
-			this.Settings = settings ?? new CodeCleanupSettings();
+			Settings = settings ?? new CodeCleanupSettings();
 		}
 
 		/// <summary>
