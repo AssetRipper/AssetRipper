@@ -23,5 +23,6 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		ScriptIdentifier GetScriptID(string assembly, string @namespace, string name);
 
 		bool IsSet { get; }
+		ScriptingBackend ScriptingBackend { get; }
 	}
 }
