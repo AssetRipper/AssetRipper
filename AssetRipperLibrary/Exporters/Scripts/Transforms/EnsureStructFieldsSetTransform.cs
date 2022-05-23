@@ -1,4 +1,5 @@
-﻿using ICSharpCode.Decompiler.CSharp.Syntax;
+﻿using AssetRipper.Core.Logging;
+using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Transforms;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,6 +13,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 	/// </summary>
 	internal class EnsureStructFieldsSetTransform : DepthFirstAstVisitor, IAstTransform
 	{
+
 		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			base.VisitTypeDeclaration(typeDeclaration);
@@ -26,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			{
 				if (member is FieldDeclaration field)
 				{
-					(AstType, List<string>) fieldInfo = new(field.ReturnType.Clone(), new());
+					(AstType, List<string>) fieldInfo = new(field.ReturnType, new());
 					if ((field.Modifiers & Modifiers.Static) == Modifiers.Static)
 					{
 						continue;
@@ -41,7 +43,9 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 				}
 			}
 
-			foreach (ConstructorDeclaration? constructorDeclaration in typeDeclaration.Members.Select((member) => member as ConstructorDeclaration).Where((constructor) => constructor is not null))
+			IEnumerable<ConstructorDeclaration> constructors = typeDeclaration.Members.Select((member) => member as ConstructorDeclaration).Where((constructor) => constructor is not null)!;
+
+			foreach (ConstructorDeclaration? constructorDeclaration in constructors)
 			{
 				Debug.Assert(constructorDeclaration != null);
 
@@ -50,7 +54,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 					continue;
 				}
 
-				if (constructorDeclaration.Initializer != null)
+				if (constructorDeclaration.Initializer != null && !constructorDeclaration.Initializer.IsNull)
 				{
 					continue;
 				}
@@ -61,8 +65,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 				{
 					foreach (string fieldName in requiredField.Item2)
 					{
-
-						ExpressionStatement assignment = new(new AssignmentExpression(new MemberReferenceExpression(new ThisReferenceExpression(), fieldName), new DefaultValueExpression(requiredField.Item1)));
+						ExpressionStatement assignment = new(new AssignmentExpression(new MemberReferenceExpression(new ThisReferenceExpression(), fieldName), new DefaultValueExpression(requiredField.Item1.Clone())));
 						Statement? firstStatement = constructorDeclaration.Body.Statements.FirstOrDefault();
 						if (firstStatement == null || firstStatement.IsNull)
 						{
