@@ -14,13 +14,21 @@ namespace AssetRipper.Library.Exporters.Scripts.Transform
 			{
 				if (member is TypeDeclaration nestedType)
 				{
-					this.VisitTypeDeclaration(nestedType);
+					VisitTypeDeclaration(nestedType);
 				}
 				else if (member is ConstructorDeclaration)
 				{
 					// TODO: Check if constructor is for an attribute type.
 					//		 We should keep attribute constructors so fields
 					//       Annotated with custom attributes work properly
+					member.Remove();
+				}
+				else if (member is PropertyDeclaration property && property.PrivateImplementationType.IsNull)
+				{
+					member.Remove();
+				}
+				else if (member is MethodDeclaration method && method.PrivateImplementationType.IsNull)
+				{
 					member.Remove();
 				}
 				else if (member is not FieldDeclaration && member is not EnumMemberDeclaration)
