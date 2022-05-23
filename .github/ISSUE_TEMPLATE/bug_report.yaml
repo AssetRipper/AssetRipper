@@ -8,7 +8,7 @@ body:
       value: |
         Thanks for submitting a bug report, please fill out as much detail as possible.
   - type: dropdown
-    id: latestversion
+    id: assetripper_version
     attributes:
       label: Are you on the latest version of AssetRipper?
       description: If not, you must update first.
@@ -16,10 +16,11 @@ body:
         - Yes, I'm on the latest release of AssetRipper.
         - Yes, I'm on the latest pre-release of AssetRipper.
         - Yes, I'm on the latest alpha-build of AssetRipper.
+        - No, I need to download a newer version and try again.
     validations:
       required: true
   - type: dropdown
-    id: version
+    id: assetripper_type
     attributes:
       label: Which release are you using?
       description: Please select your environment for AssetRipper.
@@ -33,14 +34,21 @@ body:
     validations:
       required: true
   - type: textarea
-    id: game
+    id: game_name
+    attributes:
+      label: Which Unity version did this occur on?
+      description: (Optional but preferred) Please tell us the game's name. If the game is available on Steam, a [SteamDB](https://steamdb.info/) link would be ideal.
+    validations:
+      required: false
+  - type: textarea
+    id: game_version
     attributes:
       label: Which Unity version did this occur on?
       description: Please tell us the game's Unity version. If you don't know, [here](https://ngyikp.com/find-unity-game-build-version/) is a short guide to determine it.
     validations:
       required: true
   - type: dropdown
-    id: backend
+    id: game_backend
     attributes:
       label: Is the game Mono or IL2Cpp?
       description: IL2Cpp games have a GameAssembly.dll in the same directory as the game executable file.
@@ -51,7 +59,7 @@ body:
     validations:
       required: true
   - type: textarea
-    id: what-happened
+    id: what_happened
     attributes:
       label: Describe the issue.
       description: What happened? Should something else have happened instead? Please provide steps to reproduce the issue if possible.
