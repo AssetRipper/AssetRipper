@@ -13,17 +13,17 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
 	public abstract class PlatformGameStructure
 	{
-		public string Name { get; protected set; }
-		public string RootPath { get; protected set; }
-		public string GameDataPath { get; protected set; }
-		public string StreamingAssetsPath { get; protected set; }
-		public string ResourcesPath { get; protected set; }
+		public string? Name { get; protected set; }
+		public string? RootPath { get; protected set; }
+		public string? GameDataPath { get; protected set; }
+		public string? StreamingAssetsPath { get; protected set; }
+		public string? ResourcesPath { get; protected set; }
 		public ScriptingBackend Backend { get; protected set; } = ScriptingBackend.Unknown;
-		public string ManagedPath { get; protected set; }
-		public string Il2CppGameAssemblyPath { get; protected set; }
-		public string Il2CppMetaDataPath { get; protected set; }
-		public string UnityPlayerPath { get; protected set; }
-		public int[] UnityVersion { get; protected set; }
+		public string? ManagedPath { get; protected set; }
+		public string? Il2CppGameAssemblyPath { get; protected set; }
+		public string? Il2CppMetaDataPath { get; protected set; }
+		public string? UnityPlayerPath { get; protected set; }
+		public int[]? UnityVersion { get; protected set; }
 
 		public IReadOnlyList<string> DataPaths { get; protected set; }
 
@@ -75,9 +75,9 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		}
 
 		/// <summary>Attempts to find the path for the dependency with that name.</summary>
-		public string RequestDependency(string dependency)
+		public string? RequestDependency(string dependency)
 		{
-			if (Files.TryGetValue(dependency, out string dependencyPath))
+			if (Files.TryGetValue(dependency, out string? dependencyPath))
 			{
 				return dependencyPath;
 			}
@@ -104,17 +104,17 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return null;
 		}
 
-		public string RequestAssembly(string assembly)
+		public string? RequestAssembly(string assembly)
 		{
 			string assemblyName = $"{assembly}{MonoManager.AssemblyExtension}";
-			if (Assemblies.TryGetValue(assemblyName, out string assemblyPath))
+			if (Assemblies.TryGetValue(assemblyName, out string? assemblyPath))
 			{
 				return assemblyPath;
 			}
 			return null;
 		}
 
-		public string RequestResource(string resource)
+		public string? RequestResource(string resource)
 		{
 			foreach (string dataPath in DataPaths)
 			{
@@ -130,15 +130,20 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		public virtual void CollectFiles(bool skipStreamingAssets)
 		{
 			if (this is MixedGameStructure)
+			{
 				return;
+			}
+
 			foreach (string dataPath in DataPaths)
 			{
 				DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
 				CollectGameFiles(dataDirectory, Files);
 			}
-			CollectMainAssemblies(new DirectoryInfo(GameDataPath), Assemblies);
+			CollectMainAssemblies();
 			if (!skipStreamingAssets)
+			{
 				CollectStreamingAssets(Files);
+			}
 		}
 
 		protected void CollectGameFiles(DirectoryInfo root, IDictionary<string, string> files)
@@ -195,7 +200,10 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		protected void CollectStreamingAssets(IDictionary<string, string> files)
 		{
 			if (string.IsNullOrWhiteSpace(StreamingAssetsPath))
+			{
 				return;
+			}
+
 			Logger.Info(LogCategory.Import, "Collecting Streaming Assets...");
 			DirectoryInfo streamingDirectory = new DirectoryInfo(StreamingAssetsPath);
 			if (streamingDirectory.Exists)
@@ -232,7 +240,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 		}
 
-		protected void CollectAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
+		protected static void CollectAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
@@ -243,7 +251,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 		}
 
-		protected void CollectMainAssemblies(DirectoryInfo dataDirectory, IDictionary<string, string> assemblies)
+		protected void CollectMainAssemblies()
 		{
 			if (Backend != ScriptingBackend.Mono)
 			{
@@ -252,21 +260,21 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			else if (!string.IsNullOrWhiteSpace(ManagedPath) && Directory.Exists(ManagedPath))
 			{
 				DirectoryInfo managedDirectory = new DirectoryInfo(ManagedPath);
-				CollectAssemblies(managedDirectory, assemblies);
+				CollectAssemblies(managedDirectory, Assemblies);
 			}
-			else
+			else if (!string.IsNullOrEmpty(GameDataPath))
 			{
-				string libPath = Path.Combine(dataDirectory.FullName, LibName);
+				string libPath = Path.Combine(Path.GetFullPath(GameDataPath), LibName);
 				if (Directory.Exists(libPath))
 				{
-					CollectAssemblies(dataDirectory, assemblies);
+					CollectAssemblies(new DirectoryInfo(GameDataPath), Assemblies);
 					DirectoryInfo libDirectory = new DirectoryInfo(libPath);
-					CollectAssemblies(libDirectory, assemblies);
+					CollectAssemblies(libDirectory, Assemblies);
 				}
 			}
 		}
 
-		private string FindEngineDependency(string path, string dependency)
+		private string? FindEngineDependency(string path, string dependency)
 		{
 			string filePath = Path.Combine(path, dependency);
 			if (File.Exists(filePath))
@@ -328,7 +336,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return new int[] { version.Major, version.Minor, version.Build };
 		}
 
-		protected static int[] GetUnityVersionFromDataDirectory(string dataDirectoryPath)
+		protected static int[]? GetUnityVersionFromDataDirectory(string dataDirectoryPath)
 		{
 			string globalGameManagersPath = Path.Combine(dataDirectoryPath, GlobalGameManagersName);
 			if (File.Exists(globalGameManagersPath))
@@ -345,7 +353,10 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 		protected static bool HasMonoAssemblies(string managedDirectory)
 		{
-			if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory)) return false;
+			if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory))
+			{
+				return false;
+			}
 
 			return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
 		}
