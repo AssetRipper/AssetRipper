@@ -57,7 +57,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			return cost;
 		}
 
-		private bool TryGetBestConstructor(ITypeDefinition type, ConstructorDeclaration currentConstructor, [NotNullWhen(true)] out IMethod? bestConstructor, out bool isBaseConstructor)
+		private static bool TryGetBestConstructor(ITypeDefinition type, ConstructorDeclaration currentConstructor, [NotNullWhen(true)] out IMethod? bestConstructor, out bool isBaseConstructor)
 		{
 			if (type.IsStatic)
 			{
@@ -125,8 +125,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			{
 				bool hasBaseConstructor = false;
 
-				ITypeDefinition? type = typeDeclaration.GetSymbol() as ITypeDefinition;
-				if (type == null)
+				if (typeDeclaration.GetSymbol() is not ITypeDefinition type)
 				{
 					Logger.Warning($"Skip ensuring valid base constructor for type declaration {typeDeclaration.Name}, as failed to get type definition");
 					return;
