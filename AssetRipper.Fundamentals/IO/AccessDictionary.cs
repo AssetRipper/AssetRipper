@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Core.IO
 {
@@ -85,6 +86,35 @@ namespace AssetRipper.Core.IO
 
 		/// <inheritdoc/>
 		public override bool Remove(NullableKeyValuePair<TKeyBase, TValueBase> item) => referenceDictionary.Remove(CastPair(item));
+
+		protected override bool TryGetSinglePairForKey(TKeyBase key, [NotNullWhen(true)] out NullableKeyValuePair<TKeyBase, TValueBase>? pair)
+		{
+			if (key is null)
+			{
+				throw new ArgumentNullException(nameof(key));
+			}
+
+			int hash = key.GetHashCode();
+			bool found = false;
+			pair = null;
+			for (int i = Count - 1; i > -1; i--)
+			{
+				NullableKeyValuePair<TKey, TValue> p = referenceDictionary.GetPair(i);
+				if (p.Key is not null && p.Key.GetHashCode() == hash && key.Equals(p.Key))
+				{
+					if (found)
+					{
+						throw new Exception("Found more than one matching key");
+					}
+					else
+					{
+						found = true;
+						pair = CastPair(p);
+					}
+				}
+			}
+			return found;
+		}
 
 		private static NullableKeyValuePair<TKey, TValue> CastPair(NullableKeyValuePair<TKeyBase, TValueBase> pair)
 		{

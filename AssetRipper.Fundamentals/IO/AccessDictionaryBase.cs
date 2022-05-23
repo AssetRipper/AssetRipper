@@ -130,28 +130,19 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public abstract bool Remove(NullableKeyValuePair<TKey, TValue> item);
 
-		private NullableKeyValuePair<TKey,TValue> GetSinglePairForKey(TKey key)
+		protected NullableKeyValuePair<TKey,TValue> GetSinglePairForKey(TKey key)
 		{
-			if (key is null)
+			if (TryGetSinglePairForKey(key, out NullableKeyValuePair<TKey, TValue>? pair))
 			{
-				throw new ArgumentNullException(nameof(key));
+				return pair;
 			}
-
-			int hash = key.GetHashCode();
-			return this.Single(pair => pair.Key?.GetHashCode() == hash && key.Equals(pair.Key));
+			else
+			{
+				throw new KeyNotFoundException($"Key not found: {key?.ToString()}");
+			}
 		}
 
-		private bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out NullableKeyValuePair<TKey, TValue>? pair)
-		{
-			if (key is null)
-			{
-				throw new ArgumentNullException(nameof(key));
-			}
-
-			int hash = key.GetHashCode();
-			pair = this.SingleOrDefault(p => p.Key?.GetHashCode() == hash && key.Equals(p.Key));
-			return pair is not null;
-		}
+		protected abstract bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out NullableKeyValuePair<TKey, TValue>? pair);
 
 		/// <summary>
 		/// Access a value in the dictionary

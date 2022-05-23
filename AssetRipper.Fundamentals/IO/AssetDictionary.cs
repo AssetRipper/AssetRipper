@@ -3,6 +3,7 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Asset;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Core.IO
 {
@@ -221,6 +222,35 @@ namespace AssetRipper.Core.IO
 				return true;
 			}
 			return false;
+		}
+
+		protected override bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out NullableKeyValuePair<TKey, TValue>? pair)
+		{
+			if (key is null)
+			{
+				throw new ArgumentNullException(nameof(key));
+			}
+
+			int hash = key.GetHashCode();
+			bool found = false;
+			pair = null;
+			for (int i = Count - 1; i > -1; i--)
+			{
+				NullableKeyValuePair<TKey, TValue> p = pairs[i];
+				if (p.Key is not null && p.Key.GetHashCode() == hash && key.Equals(p.Key))
+				{
+					if (found)
+					{
+						throw new Exception("Found more than one matching key");
+					}
+					else
+					{
+						found = true;
+						pair = p;
+					}
+				}
+			}
+			return found;
 		}
 
 		/// <summary>
