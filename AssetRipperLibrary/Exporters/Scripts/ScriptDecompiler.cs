@@ -46,7 +46,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			decompiler.Settings.ShowXmlDocumentation = true;
 			if (ScriptContentLevel == ScriptContentLevel.Level1)
 			{
-				decompiler.CustomTransforms.Add(new MethodStripper());
+				decompiler.CustomTransforms.Add(new MethodStripperTransform());
 			}
 			CodeCleanupHandler.SetupDecompiler(decompiler);
 			DecompileWholeProject(decompiler, assembly, outputFolder);

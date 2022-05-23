@@ -19,41 +19,41 @@ namespace AssetRipper.Library.Exporters.Scripts
 		/// </summary>
 		public CodeCleanupSettings Settings { get; }
 
-		public void SetupDecompiler(CSharpDecompiler decompiler)
+		public void SetupDecompiler(WholeAssemblyDecompiler decompiler)
 		{
 			if (Settings.RemoveInvalidMembers)
 			{
-				decompiler.AstTransforms.Add(new RemoveInvalidMemberTransform());
+				decompiler.CustomTransforms.Add(new RemoveInvalidMemberTransform());
 			}
 
 			if (Settings.EnsureOutParametersSet)
 			{
-				decompiler.AstTransforms.Add(new EnsureOutParamsSetTransform());
+				decompiler.CustomTransforms.Add(new EnsureOutParamsSetTransform());
 			}
 
 			if (Settings.EnsureStructFieldsSetInConstructor)
 			{
-				decompiler.AstTransforms.Add(new EnsureStructFieldsSetTransform());
+				decompiler.CustomTransforms.Add(new EnsureStructFieldsSetTransform());
 			}
 
 			if (Settings.EnsureValidBaseConstructor)
 			{
-				decompiler.AstTransforms.Add(new EnsureValidBaseConstructorTransform());
+				decompiler.CustomTransforms.Add(new EnsureValidBaseConstructorTransform());
 			}
 
 			if (Settings.ValidateOptionalParameterValues)
 			{
-				decompiler.AstTransforms.Add(new FixOptionalParametersTransform());
+				decompiler.CustomTransforms.Add(new FixOptionalParametersTransform());
 			}
 
 			if (Settings.ValidateNullCasts)
 			{
-				decompiler.AstTransforms.Add(new ValidateNullCastsTransform());
+				decompiler.CustomTransforms.Add(new ValidateNullCastsTransform());
 			}
 
 			if (Settings.FixExplicitInterfaceImplementations)
 			{
-				decompiler.AstTransforms.Add(new FixExplicitInterfaceImplementationTransform());
+				decompiler.CustomTransforms.Add(new FixExplicitInterfaceImplementationTransform());
 			}
 		}
 	}
