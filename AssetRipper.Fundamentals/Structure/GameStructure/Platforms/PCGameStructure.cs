@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Logging;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
@@ -15,12 +16,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			if (IsExecutableFile(rootPath))
 			{
 				Logger.Info(LogCategory.Import, "PC executable found. Setting root to parent directory");
-				m_root = (new FileInfo(rootPath)).Directory;
+				m_root = (new FileInfo(rootPath)).Directory ?? throw new Exception("File has no directory");
 			}
 			else if (IsUnityDataDirectory(rootPath))
 			{
 				Logger.Info(LogCategory.Import, "PC data directory found. Setting root to parent directory");
-				m_root = (new DirectoryInfo(rootPath)).Parent;
+				m_root = (new DirectoryInfo(rootPath)).Parent ?? throw new Exception("Directory has no parent");
 			}
 			else
 			{
@@ -31,7 +32,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				}
 			}
 
-			if (!GetDataPCDirectory(m_root, out string dataPath, out string name))
+			if (!GetDataPCDirectory(m_root, out string? dataPath, out string? name))
 			{
 				throw new Exception($"Data directory wasn't found");
 			}
@@ -48,11 +49,17 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
-				Backend = Assembly.ScriptingBackend.Il2Cpp;
+			{
+				Backend = Assembly.ScriptingBackend.IL2Cpp;
+			}
 			else if (HasMonoAssemblies(ManagedPath))
+			{
 				Backend = Assembly.ScriptingBackend.Mono;
+			}
 			else
+			{
 				Backend = Assembly.ScriptingBackend.Unknown;
+			}
 
 			DataPaths = new string[] { dataPath };
 		}
@@ -61,34 +68,52 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		{
 			DirectoryInfo dinfo;
 			if (IsExecutableFile(path))
-				dinfo = (new FileInfo(path)).Directory;
+			{
+				dinfo = (new FileInfo(path)).Directory ?? throw new Exception("File has no directory");
+			}
 			else if (IsUnityDataDirectory(path))
+			{
 				return true;
+			}
 			else
+			{
 				dinfo = new DirectoryInfo(path);
+			}
 
 			if (!dinfo.Exists)
+			{
 				return false;
+			}
 			else
+			{
 				return IsRootPCDirectory(dinfo);
+			}
 		}
 
 		private static bool IsUnityDataDirectory(string folderPath)
 		{
 			if (string.IsNullOrEmpty(folderPath) || !folderPath.EndsWith($"_{DataFolderName}"))
+			{
 				return false;
+			}
 
 			DirectoryInfo directoryInfo = new DirectoryInfo(folderPath);
 			if (!directoryInfo.Exists || directoryInfo.Parent == null)
+			{
 				return false;
+			}
 
 			string folderName = directoryInfo.Name;
 			string gameName = folderName.Substring(0, folderName.IndexOf($"_{DataFolderName}"));
 			string rootPath = directoryInfo.Parent.FullName;
 			if (File.Exists(Path.Combine(rootPath, gameName + ExeExtension)))
+			{
 				return true;
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		private static bool IsExecutableFile(string filePath)
@@ -96,23 +121,23 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return !string.IsNullOrEmpty(filePath) && filePath.EndsWith(ExeExtension) && File.Exists(filePath);
 		}
 
-		private static bool IsRootPCDirectory(DirectoryInfo rootDiectory)
+		private static bool IsRootPCDirectory(DirectoryInfo rootDirectory)
 		{
-			return GetDataPCDirectory(rootDiectory, out string _, out string _);
+			return GetDataPCDirectory(rootDirectory, out string? _, out string? _);
 		}
 
-		private static bool GetDataPCDirectory(DirectoryInfo rootDiectory, out string dataPath, out string name)
+		private static bool GetDataPCDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? name)
 		{
-			name = null;
+			name = "";
 			int exeCount = 0;
-			foreach (FileInfo finfo in rootDiectory.EnumerateFiles())
+			foreach (FileInfo fileInfo in rootDirectory.EnumerateFiles())
 			{
-				if (finfo.Extension == ExeExtension)
+				if (fileInfo.Extension == ExeExtension)
 				{
 					exeCount++;
-					name = Path.GetFileNameWithoutExtension(finfo.Name);
+					name = Path.GetFileNameWithoutExtension(fileInfo.Name);
 					string dataFolder = $"{name}_{DataFolderName}";
-					dataPath = Path.Combine(rootDiectory.FullName, dataFolder);
+					dataPath = Path.Combine(rootDirectory.FullName, dataFolder);
 					if (Directory.Exists(dataPath))
 					{
 						return true;
@@ -122,8 +147,8 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			if (exeCount > 0)
 			{
-				name = exeCount == 1 ? name : rootDiectory.Name;
-				dataPath = Path.Combine(rootDiectory.FullName, DataFolderName);
+				name = exeCount == 1 ? name : rootDirectory.Name;
+				dataPath = Path.Combine(rootDirectory.FullName, DataFolderName);
 				if (Directory.Exists(dataPath))
 				{
 					return true;

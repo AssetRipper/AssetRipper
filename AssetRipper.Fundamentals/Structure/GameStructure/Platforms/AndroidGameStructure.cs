@@ -41,7 +41,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			UnityVersion = GetUnityVersionFromDataDirectory(GameDataPath);
 
 			if (HasIl2CppFiles())
-				Backend = Assembly.ScriptingBackend.Il2Cpp;
+				Backend = Assembly.ScriptingBackend.IL2Cpp;
 			else if (IsMono(ManagedPath))
 				Backend = Assembly.ScriptingBackend.Mono;
 			else
