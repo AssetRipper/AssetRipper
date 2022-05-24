@@ -11,6 +11,7 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
+using AssetRipper.Library.Exporters.Scripts.Assemblies;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using Mono.Cecil;
 using System;
@@ -93,6 +94,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				string outputDirectory = Path.Combine(dirPath, assembly.Name.Name);
 				Directory.CreateDirectory(outputDirectory);
 				Decompiler.DecompileWholeProject(assembly, outputDirectory);
+				AssemblyDefinitionExporter.Export(assembly, outputDirectory);
 			}
 			if(callback is not null)
 			{
