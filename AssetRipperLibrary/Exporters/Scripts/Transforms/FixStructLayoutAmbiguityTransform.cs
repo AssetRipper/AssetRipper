@@ -17,7 +17,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			base.VisitTypeDeclaration(typeDeclaration);
-			if (typeDeclaration.ClassType != ClassType.Struct)
+			if (typeDeclaration.ClassType != ClassType.Struct && typeDeclaration.ClassType != ClassType.Class)
 			{
 				return;
 			}
@@ -26,27 +26,30 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			{
 				foreach (Attribute attribute in attributeSection.Attributes)
 				{
-					if (attribute.Type is not SimpleType attributeTypeName || attributeTypeName.Identifier != "StructLayout")
+					if (attribute.Type is not SimpleType attributeTypeName)
 					{
 						continue;
 					}
 
-					if (attribute.HasArgumentList)
+					if (attributeTypeName.Identifier != "StructLayout" && attributeTypeName.Identifier != "StructLayoutAttribute")
 					{
-						Expression? firstArgument = attribute.Arguments.FirstOrNullObject();
-						if (firstArgument != null && firstArgument is PrimitiveExpression primitive &&
-							primitive.Format == LiteralFormat.DecimalNumber)
-						{
-							Logger.Info(LogCategory.Debug, "Primitive Value: " + primitive.Value);
-							if (primitive.Value.Equals(0))
-							{
-								SimpleType type = new(nameof(StructLayoutAttribute));
-								TypeReferenceExpression typeExpression = new(type);
-								MemberReferenceExpression newArgument = new(typeExpression, nameof(LayoutKind.Sequential));
+						continue;
+					}
 
-								attribute.Arguments.InsertBefore(newArgument, firstArgument);
-								firstArgument.Remove();
-							}
+					Expression? firstArgument = attribute.Arguments.FirstOrNullObject();
+					if (firstArgument != null && firstArgument is PrimitiveExpression primitive)
+					{
+						if (primitive.Value.Equals(0))
+						{
+							SimpleType type = new(nameof(LayoutKind));
+							TypeReferenceExpression typeExpression = new(type);
+							MemberReferenceExpression newArgument = new(typeExpression, nameof(LayoutKind.Sequential));
+
+							attribute.Arguments.InsertBefore(firstArgument, newArgument);
+							firstArgument.Remove();
+
+							// we could implement conversion of classes to structs,
+							// but can be added later if relevant.
 						}
 					}
 				}
