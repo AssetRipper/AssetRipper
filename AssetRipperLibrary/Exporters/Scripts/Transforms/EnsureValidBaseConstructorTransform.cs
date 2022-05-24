@@ -174,7 +174,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 						}
 						else
 						{
-							initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(parameter.Type)));
+							initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(new FullTypeName(parameter.Type.FullName))));
 						}
 					}
 
@@ -210,7 +210,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 
 				foreach (IParameter parameter in bestConstructor.Parameters)
 				{
-					initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(parameter.Type)));
+					initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(new FullTypeName(parameter.Type.FullName))));
 				}
 
 
