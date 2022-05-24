@@ -94,7 +94,15 @@ namespace AssetRipper.Library.Exporters.Scripts
 				string outputDirectory = Path.Combine(dirPath, assembly.Name.Name);
 				Directory.CreateDirectory(outputDirectory);
 				Decompiler.DecompileWholeProject(assembly, outputDirectory);
-				AssemblyDefinitionExporter.Export(assembly, outputDirectory);
+
+				// assembly definitions were added in 2017.3:
+				//     https://blog.unity.com/technology/unity-2017-3b-feature-preview-assembly-definition-files-and-transform-tool
+				if (container.ExportVersion.IsGreaterEqual(2017, 3) && 
+					// exclude predefined assemblies like Assembly-CSharp.dll
+					!ReferenceAssemblies.IsPredefinedAssembly(assembly.Name.Name))
+				{
+					AssemblyDefinitionExporter.Export(assembly, outputDirectory);
+				}
 			}
 			if(callback is not null)
 			{

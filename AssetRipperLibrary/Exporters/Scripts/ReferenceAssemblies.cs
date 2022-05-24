@@ -23,6 +23,23 @@ namespace AssetRipper.Library.Exporters.Scripts
 			"Mono.Security.dll",
 			"Mono.Security"
 		};
+		private static readonly HashSet<string> predefinedAssemblies = new()
+		{
+			"Assembly-CSharp.dll",
+			"Assembly-CSharp",
+			"Assembly-CSharp-firstpass.dll",
+			"Assembly-CSharp-firstpass"
+		};
+
+		public static bool IsPredefinedAssembly(string assemblyName)
+		{
+			if (assemblyName is null)
+			{
+				throw new ArgumentNullException(assemblyName);
+			}
+
+			return predefinedAssemblies.Contains(assemblyName);
+		}
 
 		public static bool IsReferenceAssembly(string assemblyName)
 		{
