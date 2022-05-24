@@ -11,6 +11,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Assemblies
 		public AssemblyDefinitionAsset(string name)
 		{
 			this.name = name;
+			allowUnsafeCode = true;
 		}
 	}
 }
