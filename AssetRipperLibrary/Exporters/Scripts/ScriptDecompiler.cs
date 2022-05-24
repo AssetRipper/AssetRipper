@@ -60,6 +60,8 @@ namespace AssetRipper.Library.Exporters.Scripts
 			// il2cpp fixes
 			if (ScriptingBackend == ScriptingBackend.IL2Cpp && ScriptContentLevel <= ScriptContentLevel.Level2)
 			{
+				// maybe could be moved to code quality?
+				decompiler.CustomTransforms.Add(new FixCompilerGeneratedAccessorsTransform());
 				decompiler.CustomTransforms.Add(new EnsureOutParamsSetTransform());
 				decompiler.CustomTransforms.Add(new EnsureStructFieldsSetTransform());
 				decompiler.CustomTransforms.Add(new EnsureValidBaseConstructorTransform());

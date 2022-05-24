@@ -25,17 +25,24 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			List<(AstType, List<string>)> requiredFields = new();
 			foreach (EntityDeclaration member in typeDeclaration.Members)
 			{
+
+				if ((member.Modifiers & Modifiers.Static) == Modifiers.Static)
+				{
+					continue;
+				}
+
+				if ((member.Modifiers & Modifiers.Const) == Modifiers.Const)
+				{
+					continue;
+				}
+
+				if (member is PropertyDeclaration property && !property.Getter.IsNull && property.Getter.Body.IsNull)
+				{
+					requiredFields.Add((property.ReturnType, new List<string>(new string[] { property.Name })));
+					continue;
+				}
+
 				if (member is not FieldDeclaration field)
-				{
-					continue;
-				}
-
-				if ((field.Modifiers & Modifiers.Static) == Modifiers.Static)
-				{
-					continue;
-				}
-
-				if ((field.Modifiers & Modifiers.Const) == Modifiers.Const)
 				{
 					continue;
 				}
