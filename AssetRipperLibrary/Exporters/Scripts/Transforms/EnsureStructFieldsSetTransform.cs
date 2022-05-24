@@ -36,7 +36,18 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 					continue;
 				}
 
-				(AstType, List<string>) fieldInfo = new(field.ReturnType, new());
+				if ((field.Modifiers & Modifiers.Const) == Modifiers.Const)
+				{
+					continue;
+				}
+
+				AstType fieldType = field.ReturnType;
+				if (fieldType is ComposedType composedType && composedType.PointerRank > 0)
+				{
+					typeDeclaration.Modifiers |= Modifiers.Unsafe;
+				}
+
+				(AstType, List<string>) fieldInfo = new(fieldType, new());
 
 				foreach (VariableInitializer variable in field.Variables)
 				{
