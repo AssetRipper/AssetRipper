@@ -11,7 +11,7 @@ on:
     paths:
       - 'docs/**'
   schedule:
-    - cron: '0 0 * * 0' #once per day
+    - cron: '0 0 * * 0' #once per week
    
 # The schedule event can be delayed during periods of high loads of GitHub Actions workflow runs
 #

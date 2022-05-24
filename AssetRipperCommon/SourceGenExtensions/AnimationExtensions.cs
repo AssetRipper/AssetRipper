@@ -2,6 +2,8 @@
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip_;
+using WrapMode = AssetRipper.Core.Classes.AnimationClip.WrapMode;
+using AnimationCullingType = AssetRipper.Core.Classes.Animation.AnimationCullingType;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -17,6 +19,28 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 			}
 			return false;
+		}
+
+		public static WrapMode GetWrapMode(this IAnimation animation)
+		{
+			return (WrapMode)animation.WrapMode_C111;
+		}
+
+		public static AnimationCullingType GetAnimationCullingType(this IAnimation animation)
+		{
+			// 2.6.0 to 3.4.0 exclusive
+			if (animation.Has_AnimateOnlyIfVisible_C111())
+			{
+				return animation.AnimateOnlyIfVisible_C111 ? AnimationCullingType.BasedOnRenderers : AnimationCullingType.AlwaysAnimate;
+			}
+			//else if (animation.Has_CullingType_C111())
+			//{
+				return (AnimationCullingType)animation.CullingType_C111;
+			//}
+			//else
+			//{
+			//	return default;
+			//}
 		}
 	}
 }
