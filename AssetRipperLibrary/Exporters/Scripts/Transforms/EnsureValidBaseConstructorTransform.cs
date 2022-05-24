@@ -122,105 +122,108 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 		{
 			base.VisitTypeDeclaration(typeDeclaration);
 
-			if (typeDeclaration.ClassType == ClassType.Class)
+			if (typeDeclaration.ClassType != ClassType.Class)
 			{
-				bool hasBaseConstructor = false;
-				IMethod? bestConstructor = null;
+				return;
+			}
 
-				if (typeDeclaration.GetSymbol() is not ITypeDefinition type)
+			bool hasBaseConstructor = false;
+			IMethod? bestConstructor = null;
+
+			if (typeDeclaration.GetSymbol() is not ITypeDefinition type)
+			{
+				Logger.Warning($"Skip ensuring valid base constructor for type declaration {typeDeclaration.Name}, as failed to get type definition");
+				return;
+			}
+
+			IEnumerable<ConstructorDeclaration> nonStaticConstructors = typeDeclaration.Members
+				.Select((member) => member as ConstructorDeclaration)
+				.Where((constructor) => constructor is not null && (constructor.Modifiers & Modifiers.Static) != Modifiers.Static)!;
+
+			foreach (ConstructorDeclaration constructorDeclaration in nonStaticConstructors)
+			{
+				hasBaseConstructor = true;
+
+				if (constructorDeclaration.Initializer != null && !constructorDeclaration.Initializer.IsNull)
 				{
-					Logger.Warning($"Skip ensuring valid base constructor for type declaration {typeDeclaration.Name}, as failed to get type definition");
-					return;
+					continue;
 				}
 
-				IEnumerable<ConstructorDeclaration> nonStaticConstructors = typeDeclaration.Members
-					.Select((member) => member as ConstructorDeclaration)
-					.Where((constructor) => constructor is not null && (constructor.Modifiers & Modifiers.Static) != Modifiers.Static)!;
-
-				foreach (ConstructorDeclaration constructorDeclaration in nonStaticConstructors)
-				{
-					hasBaseConstructor = true;
-
-					if (constructorDeclaration.Initializer != null && !constructorDeclaration.Initializer.IsNull)
-					{
-						continue;
-					}
-
-					if (TryGetBestConstructor(type, constructorDeclaration, out bestConstructor, out bool isBaseConstructor))
-					{
-						ConstructorInitializer initializer = new()
-						{
-							ConstructorInitializerType = isBaseConstructor ? ConstructorInitializerType.Base : ConstructorInitializerType.This
-						};
-
-						foreach (IParameter parameter in bestConstructor.Parameters)
-						{
-							bool hasParameterMatch = false;
-							foreach (ParameterDeclaration param in constructorDeclaration.Parameters)
-							{
-								if (param.Name == parameter.Name)
-								{
-									hasParameterMatch = true;
-									break;
-								}
-							}
-
-							if (hasParameterMatch)
-							{
-								initializer.Arguments.Add(new IdentifierExpression(parameter.Name));
-							}
-							else
-							{
-								initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(parameter.Type)));
-							}
-						}
-
-						constructorDeclaration.Initializer = initializer;
-						if (constructorDeclaration.Body.IsNull)
-						{
-							constructorDeclaration.Body = new BlockStatement();
-							constructorDeclaration.Modifiers &= ~Modifiers.Extern;
-						}
-					}
-				}
-
-				if (!hasBaseConstructor)
-				{
-					return;
-				}
-
-				IType? baseType = type.DirectBaseTypes?.Where((t) => t.Kind != TypeKind.Interface)
-					.FirstOrDefault();
-				if (baseType == null || type.IsStatic)
-				{
-					return;
-				}
-
-				bestConstructor = baseType.GetConstructors()
-					.OrderBy((ctor) => GetConstructorCost(ctor, null, true)).FirstOrDefault();
-				if (bestConstructor != null)
+				if (TryGetBestConstructor(type, constructorDeclaration, out bestConstructor, out bool isBaseConstructor))
 				{
 					ConstructorInitializer initializer = new()
 					{
-						ConstructorInitializerType = ConstructorInitializerType.Base
+						ConstructorInitializerType = isBaseConstructor ? ConstructorInitializerType.Base : ConstructorInitializerType.This
 					};
 
 					foreach (IParameter parameter in bestConstructor.Parameters)
 					{
-						initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(parameter.Type)));
+						bool hasParameterMatch = false;
+						foreach (ParameterDeclaration param in constructorDeclaration.Parameters)
+						{
+							if (param.Name == parameter.Name)
+							{
+								hasParameterMatch = true;
+								break;
+							}
+						}
+
+						if (hasParameterMatch)
+						{
+							initializer.Arguments.Add(new IdentifierExpression(parameter.Name));
+						}
+						else
+						{
+							initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(parameter.Type)));
+						}
 					}
 
-
-					ConstructorDeclaration constructorDeclaration = new()
+					constructorDeclaration.Initializer = initializer;
+					if (constructorDeclaration.Body.IsNull)
 					{
-						Initializer = initializer,
-						Body = new BlockStatement(),
-						Modifiers = Modifiers.Public
-					};
-
-					typeDeclaration.Members.Add(constructorDeclaration);
+						constructorDeclaration.Body = new BlockStatement();
+						constructorDeclaration.Modifiers &= ~Modifiers.Extern;
+					}
 				}
 			}
+
+			if (hasBaseConstructor)
+			{
+				return;
+			}
+
+			IType? baseType = type.DirectBaseTypes?.Where((t) => t.Kind != TypeKind.Interface)
+				.FirstOrDefault();
+			if (baseType == null || type.IsStatic)
+			{
+				return;
+			}
+
+			bestConstructor = baseType.GetConstructors()
+				.OrderBy((ctor) => GetConstructorCost(ctor, null, true)).FirstOrDefault();
+			if (bestConstructor != null)
+			{
+				ConstructorInitializer initializer = new()
+				{
+					ConstructorInitializerType = ConstructorInitializerType.Base
+				};
+
+				foreach (IParameter parameter in bestConstructor.Parameters)
+				{
+					initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(parameter.Type)));
+				}
+
+
+				ConstructorDeclaration constructorDeclaration = new()
+				{
+					Initializer = initializer,
+					Body = new BlockStatement(),
+					Modifiers = Modifiers.Public
+				};
+
+				typeDeclaration.Members.Add(constructorDeclaration);
+			}
+
 		}
 
 		public void Run(AstNode rootNode, TransformContext context)
