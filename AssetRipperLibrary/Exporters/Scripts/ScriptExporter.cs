@@ -95,10 +95,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 				Directory.CreateDirectory(outputDirectory);
 				Decompiler.DecompileWholeProject(assembly, outputDirectory);
 
-				// assembly definitions were added in 2017.3:
-				//     https://blog.unity.com/technology/unity-2017-3b-feature-preview-assembly-definition-files-and-transform-tool
+				// assembly definitions were added in 2017.3
+				//     see: https://blog.unity.com/technology/unity-2017-3b-feature-preview-assembly-definition-files-and-transform-tool
 				if (container.ExportVersion.IsGreaterEqual(2017, 3) && 
 					// exclude predefined assemblies like Assembly-CSharp.dll
+					//    see: https://docs.unity3d.com/2017.3/Documentation/Manual/ScriptCompilationAssemblyDefinitionFiles.html
 					!ReferenceAssemblies.IsPredefinedAssembly(assembly.Name.Name))
 				{
 					AssemblyDefinitionExporter.Export(assembly, outputDirectory);
