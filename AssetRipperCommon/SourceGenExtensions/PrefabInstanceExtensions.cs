@@ -33,7 +33,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (prefab.Has_Objects_C1001())//DataTemplate
 			{
-				foreach (PPtr_EditorExtension__3_4_0_f5 asset in prefab.Objects_C1001)
+				foreach (PPtr_EditorExtension__3_0_0_f5 asset in prefab.Objects_C1001)
 				{
 					yield return asset.GetAsset(file);
 				}

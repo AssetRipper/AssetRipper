@@ -63,9 +63,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static IEnumerable<Utf8String> GetTexEnvNames(this IUnityPropertySheet sheet)
 		{
-			if (sheet.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_4_0_f5())
+			if (sheet.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_0_0_f5())
 			{
-				return sheet.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_4_0_f5.Keys.Select(n => n.Name);
+				return sheet.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_0_0_f5.Keys.Select(n => n.Name);
 			}
 			else if (sheet.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0_f5())
 			{
@@ -87,9 +87,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static IEnumerable<Utf8String> GetColorNames(this IUnityPropertySheet sheet)
 		{
-			if (sheet.Has_Colors_AssetDictionary_FastPropertyName_ColorRGBAf_3_4_0_f5())
+			if (sheet.Has_Colors_AssetDictionary_FastPropertyName_ColorRGBAf_3_0_0_f5())
 			{
-				return sheet.Colors_AssetDictionary_FastPropertyName_ColorRGBAf_3_4_0_f5.Keys.Select(n => n.Name);
+				return sheet.Colors_AssetDictionary_FastPropertyName_ColorRGBAf_3_0_0_f5.Keys.Select(n => n.Name);
 			}
 			else if (sheet.Has_Colors_AssetDictionary_FastPropertyName_ColorRGBAf_3_5_0_f5())
 			{

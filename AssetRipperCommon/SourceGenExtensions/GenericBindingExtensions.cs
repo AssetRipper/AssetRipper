@@ -25,7 +25,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static ClassIDType GetClassID(this IGenericBinding binding)
 		{
-			return binding.Has_ClassID() ? (ClassIDType)binding.ClassID : (ClassIDType)binding.TypeID;
+			return binding.Has_ClassID_UInt16() ? (ClassIDType)binding.ClassID_UInt16 : (ClassIDType)binding.ClassID_Int32;
 		}
 
 		public static bool IsPPtrCurve(this IGenericBinding binding)

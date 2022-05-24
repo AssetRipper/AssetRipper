@@ -73,9 +73,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				return gameObject.Component_C1_AssetList_ComponentPair.Select(pair => pair.m_Component);
 			}
-			else if (gameObject.Component_C1_AssetList_NullableKeyValuePair_Int32_PPtr_Component__3_4_0_f5 is not null)
+			else if (gameObject.Component_C1_AssetList_NullableKeyValuePair_Int32_PPtr_Component__3_0_0_f5 is not null)
 			{
-				return gameObject.Component_C1_AssetList_NullableKeyValuePair_Int32_PPtr_Component__3_4_0_f5.Select(pair => pair.Value);
+				return gameObject.Component_C1_AssetList_NullableKeyValuePair_Int32_PPtr_Component__3_0_0_f5.Select(pair => pair.Value);
 			}
 			else if (gameObject.Component_C1_AssetList_NullableKeyValuePair_Int32_PPtr_Component__5_0_0_f4 is not null)
 			{
@@ -87,12 +87,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static T FindComponent<T>(this IGameObject gameObject) where T : IComponent
+		public static T? FindComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
 			foreach (IPPtr_Component_ ptr in gameObject.FetchComponents())
 			{
 				// component could have not implemented asset type
-				IComponent comp = ptr.FindAsset(gameObject.SerializedFile);
+				IComponent? comp = ptr.FindAsset(gameObject.SerializedFile);
 				if (comp is T t)
 				{
 					return t;
@@ -103,7 +103,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static T GetComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
-			T component = gameObject.FindComponent<T>();
+			T? component = gameObject.FindComponent<T>();
 			if (component == null)
 			{
 				throw new Exception($"Component of type {nameof(T)} hasn't been found");
@@ -115,7 +115,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			foreach (IPPtr_Component_ ptr in gameObject.FetchComponents())
 			{
-				IComponent comp = ptr.FindAsset(gameObject.SerializedFile);
+				IComponent? comp = ptr.FindAsset(gameObject.SerializedFile);
 				if (comp == null)
 				{
 					continue;
@@ -134,7 +134,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			ITransform root = gameObject.GetTransform();
 			while (true)
 			{
-				ITransform parent = root.Father_C4.TryGetAsset(root.SerializedFile);
+				ITransform? parent = root.Father_C4.TryGetAsset(root.SerializedFile);
 				if (parent == null)
 				{
 					break;
@@ -153,7 +153,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			int depth = 0;
 			while (true)
 			{
-				ITransform parent = root.Father_C4.TryGetAsset(root.SerializedFile);
+				ITransform? parent = root.Father_C4.TryGetAsset(root.SerializedFile);
 				if (parent == null)
 				{
 					break;
@@ -169,10 +169,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			yield return root;
 
-			ITransform transform = null;
+			ITransform? transform = null;
 			foreach (IPPtr_Component_ ptr in root.FetchComponents())
 			{
-				IComponent component = ptr.FindAsset(root.SerializedFile);
+				IComponent? component = ptr.FindAsset(root.SerializedFile);
 				if (component == null)
 				{
 					continue;
@@ -183,6 +183,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 				{
 					transform = trfm;
 				}
+			}
+
+			if(transform is null)
+			{
+				throw new Exception("GameObject has no transform");
 			}
 
 			foreach (IPPtr_Transform_ pchild in transform.Children_C4)
