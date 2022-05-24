@@ -59,16 +59,19 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 
 		private static bool TryGetBestConstructor(ITypeDefinition type, ConstructorDeclaration currentConstructor, [NotNullWhen(true)] out IMethod? bestConstructor, out bool isBaseConstructor)
 		{
+			bestConstructor = null;
+			isBaseConstructor = default;
+
 			if (type.IsStatic)
 			{
-				goto INVALID;
+				return false;
 			}
 
 			IMethod ctorMethod = (IMethod)currentConstructor.GetSymbol();
 			IType? baseType = type.DirectBaseTypes?.Where((t) => t.Kind != TypeKind.Interface).FirstOrDefault();
 			if (baseType == null)
 			{
-				goto INVALID;
+				return false;
 			}
 
 			if (currentConstructor.Initializer?.GetSymbol() is not IMethod)
@@ -112,18 +115,17 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 				return bestConstructor != null;
 			}
 
-		INVALID:
-			bestConstructor = null;
-			isBaseConstructor = default;
 			return false;
 		}
 
 		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			base.VisitTypeDeclaration(typeDeclaration);
+
 			if (typeDeclaration.ClassType == ClassType.Class)
 			{
 				bool hasBaseConstructor = false;
+				IMethod? bestConstructor = null;
 
 				if (typeDeclaration.GetSymbol() is not ITypeDefinition type)
 				{
@@ -144,12 +146,13 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 						continue;
 					}
 
-					if (TryGetBestConstructor(type, constructorDeclaration, out IMethod? bestConstructor, out bool isBaseConstructor))
+					if (TryGetBestConstructor(type, constructorDeclaration, out bestConstructor, out bool isBaseConstructor))
 					{
 						ConstructorInitializer initializer = new()
 						{
 							ConstructorInitializerType = isBaseConstructor ? ConstructorInitializerType.Base : ConstructorInitializerType.This
 						};
+
 						foreach (IParameter parameter in bestConstructor.Parameters)
 						{
 							bool hasParameterMatch = false;
@@ -171,44 +174,51 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 								initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(parameter.Type)));
 							}
 						}
+
 						constructorDeclaration.Initializer = initializer;
+						if (constructorDeclaration.Body.IsNull)
+						{
+							constructorDeclaration.Body = new BlockStatement();
+							constructorDeclaration.Modifiers &= ~Modifiers.Extern;
+						}
 					}
 				}
 
 				if (!hasBaseConstructor)
 				{
-					IType? baseType = type.DirectBaseTypes?.Where((t) => t.Kind != TypeKind.Interface).FirstOrDefault();
-					if (baseType == null || type.IsStatic)
+					return;
+				}
+
+				IType? baseType = type.DirectBaseTypes?.Where((t) => t.Kind != TypeKind.Interface)
+					.FirstOrDefault();
+				if (baseType == null || type.IsStatic)
+				{
+					return;
+				}
+
+				bestConstructor = baseType.GetConstructors()
+					.OrderBy((ctor) => GetConstructorCost(ctor, null, true)).FirstOrDefault();
+				if (bestConstructor != null)
+				{
+					ConstructorInitializer initializer = new()
 					{
-						return;
+						ConstructorInitializerType = ConstructorInitializerType.Base
+					};
+
+					foreach (IParameter parameter in bestConstructor.Parameters)
+					{
+						initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(parameter.Type)));
 					}
 
-					IMethod? bestConstructor = baseType.GetConstructors()
-						.OrderBy((ctor) => GetConstructorCost(ctor, null, true)).FirstOrDefault();
-					if (bestConstructor != null)
+
+					ConstructorDeclaration constructorDeclaration = new()
 					{
-						ConstructorInitializer initializer = new()
-						{
-							ConstructorInitializerType = ConstructorInitializerType.Base
-						};
-						foreach (IParameter parameter in bestConstructor.Parameters)
-						{
-							initializer.Arguments.Add(new DefaultValueExpression(context.TypeSystemAstBuilder.ConvertType(parameter.Type)));
-						}
+						Initializer = initializer,
+						Body = new BlockStatement(),
+						Modifiers = Modifiers.Public
+					};
 
-
-						ConstructorDeclaration constructorDeclaration = new()
-						{
-							Initializer = initializer,
-							Modifiers = Modifiers.Public,
-						};
-						BlockStatement body = new();
-						constructorDeclaration.Body = body;
-
-						// todo: fix constructor being externed even though it has a body and
-						//       a null statement.
-						typeDeclaration.Members.Add(constructorDeclaration);
-					}
+					typeDeclaration.Members.Add(constructorDeclaration);
 				}
 			}
 		}

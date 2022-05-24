@@ -30,16 +30,19 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public void DecompileWholeProject(AssemblyDefinition assembly, string outputFolder)
 		{
 			WholeAssemblyDecompiler decompiler = new(assemblyResolver);
-			decompiler.Settings.SetLanguageVersion(LanguageVersion);
-			decompiler.Settings.UseNestedDirectoriesForNamespaces = true;
 			// these settings may need to be changed later because
 			// CSharpDecompiler.IsMemberHidden seems to contradict
 			// what these settings state they do.
 			decompiler.Settings.AnonymousTypes = false;
 			decompiler.Settings.AnonymousMethods = false;
 			decompiler.Settings.AsyncEnumerator = false;
+
 			decompiler.Settings.AlwaysShowEnumMemberValues = true;
 			decompiler.Settings.ShowXmlDocumentation = true;
+
+			decompiler.Settings.SetLanguageVersion(LanguageVersion);
+			decompiler.Settings.UseNestedDirectoriesForNamespaces = true;
+
 			if (ScriptContentLevel == ScriptContentLevel.Level1)
 			{
 				decompiler.CustomTransforms.Add(new MethodStripperTransform());

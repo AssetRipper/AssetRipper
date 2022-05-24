@@ -26,21 +26,24 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			List<(AstType, List<string>)> requiredFields = new();
 			foreach (EntityDeclaration member in typeDeclaration.Members)
 			{
-				if (member is FieldDeclaration field)
+				if (member is not FieldDeclaration field)
 				{
-					(AstType, List<string>) fieldInfo = new(field.ReturnType, new());
-					if ((field.Modifiers & Modifiers.Static) == Modifiers.Static)
-					{
-						continue;
-					}
-
-					foreach (VariableInitializer variable in field.Variables)
-					{
-						fieldInfo.Item2.Add(variable.Name);
-					}
-
-					requiredFields.Add(fieldInfo);
+					continue;
 				}
+
+				if ((field.Modifiers & Modifiers.Static) == Modifiers.Static)
+				{
+					continue;
+				}
+
+				(AstType, List<string>) fieldInfo = new(field.ReturnType, new());
+
+				foreach (VariableInitializer variable in field.Variables)
+				{
+					fieldInfo.Item2.Add(variable.Name);
+				}
+
+				requiredFields.Add(fieldInfo);
 			}
 
 			IEnumerable<ConstructorDeclaration> constructors = typeDeclaration.Members.Select((member) => member as ConstructorDeclaration).Where((constructor) => constructor is not null)!;
@@ -65,7 +68,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 				{
 					foreach (string fieldName in requiredField.Item2)
 					{
-						ExpressionStatement assignment = new(new AssignmentExpression(new MemberReferenceExpression(new ThisReferenceExpression(), fieldName), new DefaultValueExpression(requiredField.Item1.Clone())));
+						ExpressionStatement assignment = new ExpressionStatement(new AssignmentExpression(new MemberReferenceExpression(new ThisReferenceExpression(), fieldName), new DefaultValueExpression(requiredField.Item1.Clone())));
 						Statement? firstStatement = constructorDeclaration.Body.Statements.FirstOrDefault();
 						if (firstStatement == null || firstStatement.IsNull)
 						{
