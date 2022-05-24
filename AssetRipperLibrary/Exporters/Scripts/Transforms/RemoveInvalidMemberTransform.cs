@@ -9,7 +9,21 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 	/// </summary>
 	internal class RemoveInvalidMemberTransform : DepthFirstAstVisitor, IAstTransform
 	{
-        private static bool RemoveInvalidEntity(EntityDeclaration entityDeclaration)
+		/// <summary>
+		/// Whether or not this transform handles il2cpp scripts.
+		/// <para>
+		/// IL2CPP Scripts have special members start with '_003C' instead of
+		/// "<" with the new Cpp2IL/ILSpy update.
+		/// </para>
+		/// </summary>
+		private readonly bool il2cpp;
+
+		public RemoveInvalidMemberTransform(bool il2cpp)
+		{
+			this.il2cpp = il2cpp;
+		}
+
+        private bool RemoveInvalidEntity(EntityDeclaration entityDeclaration)
 		{
 			if (!IsValidName(entityDeclaration.Name))
 			{
@@ -33,9 +47,9 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 				}
 			}
 
-			static bool IsValidName(string name)
+			bool IsValidName(string name)
 			{
-				return !name.StartsWith("<");
+				return !name.StartsWith("<") && (!il2cpp || !name.StartsWith("_003C"));
 			}
 
 			return false;

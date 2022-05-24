@@ -49,7 +49,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 
 			// code quality
-			decompiler.CustomTransforms.Add(new RemoveInvalidMemberTransform());
+			decompiler.CustomTransforms.Add(new RemoveInvalidMemberTransform(ScriptingBackend == ScriptingBackend.IL2Cpp));
 			decompiler.CustomTransforms.Add(new FixOptionalParametersTransform());
 			decompiler.CustomTransforms.Add(new ValidateNullCastsTransform());
 			decompiler.CustomTransforms.Add(new FixExplicitInterfaceImplementationTransform());
