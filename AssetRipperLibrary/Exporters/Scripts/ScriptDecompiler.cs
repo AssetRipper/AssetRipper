@@ -54,6 +54,8 @@ namespace AssetRipper.Library.Exporters.Scripts
 			decompiler.CustomTransforms.Add(new ValidateNullCastsTransform());
 			decompiler.CustomTransforms.Add(new FixExplicitInterfaceImplementationTransform());
 			decompiler.CustomTransforms.Add(new FixStructLayoutAmbiguityTransform());
+			decompiler.CustomTransforms.Add(new RemoveCompilerAttributeTransform());
+			decompiler.CustomTransforms.Add(new FixGenericStructConstraintTransform());
 			
 			// il2cpp fixes
 			if (ScriptingBackend == ScriptingBackend.IL2Cpp && ScriptContentLevel <= ScriptContentLevel.Level2)

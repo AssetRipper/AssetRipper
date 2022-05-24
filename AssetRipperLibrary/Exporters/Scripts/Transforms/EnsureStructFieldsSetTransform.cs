@@ -13,7 +13,6 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 	/// </summary>
 	internal class EnsureStructFieldsSetTransform : DepthFirstAstVisitor, IAstTransform
 	{
-
 		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			base.VisitTypeDeclaration(typeDeclaration);
