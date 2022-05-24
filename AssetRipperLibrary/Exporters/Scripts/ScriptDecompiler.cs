@@ -45,7 +45,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 			if (ScriptContentLevel == ScriptContentLevel.Level1)
 			{
-				decompiler.CustomTransforms.Add(new MethodStripperTransform());
+				decompiler.CustomTransforms.Add(new MemberStubTransform());
 			}
 
 			// code quality
@@ -58,7 +58,9 @@ namespace AssetRipper.Library.Exporters.Scripts
 			decompiler.CustomTransforms.Add(new FixGenericStructConstraintTransform());
 			
 			// il2cpp fixes
-			if (ScriptingBackend == ScriptingBackend.IL2Cpp && ScriptContentLevel <= ScriptContentLevel.Level2)
+			if (ScriptContentLevel == ScriptContentLevel.Level1 || // level one stubs everything, thus needs
+																   // to be fixed up.
+				(ScriptingBackend == ScriptingBackend.IL2Cpp && ScriptContentLevel <= ScriptContentLevel.Level2))
 			{
 				// maybe could be moved to code quality?
 				decompiler.CustomTransforms.Add(new FixCompilerGeneratedAccessorsTransform());
