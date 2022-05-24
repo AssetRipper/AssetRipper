@@ -5,7 +5,7 @@ using ICSharpCode.Decompiler.CSharp.Transforms;
 namespace AssetRipper.Library.Exporters.Scripts.Transforms
 {
 	/// <summary>
-	/// A transformer that removed all invalid members
+	/// A transformer that removes all invalid members
 	/// </summary>
 	internal class RemoveInvalidMemberTransform : DepthFirstAstVisitor, IAstTransform
 	{
@@ -13,7 +13,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 		/// Whether or not this transform handles il2cpp scripts.
 		/// <para>
 		/// IL2CPP Scripts have special members start with '_003C' instead of
-		/// "<" with the new Cpp2IL/ILSpy update.
+		/// "&lt;" with the new Cpp2IL/ILSpy update.
 		/// </para>
 		/// </summary>
 		private readonly bool il2cpp;

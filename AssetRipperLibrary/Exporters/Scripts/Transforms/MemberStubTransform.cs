@@ -4,7 +4,7 @@ using ICSharpCode.Decompiler.CSharp.Transforms;
 namespace AssetRipper.Library.Exporters.Scripts.Transform
 {
 	/// <summary>
-	/// Converts all members to stubs.
+	/// Converts all members to stubs. Is activated for Scripted Level 1.
 	/// </summary>
 	internal class MemberStubTransform : DepthFirstAstVisitor, IAstTransform
 	{
