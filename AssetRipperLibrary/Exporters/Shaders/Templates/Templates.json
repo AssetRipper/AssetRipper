@@ -46,39 +46,6 @@
 			]
 		},
 		{
-			"TemplateName" : "Lit",
-			"RequiredProperties" : [
-				{
-					"PropertyName" : "_MainTex",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_Metallic",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_Roughness",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_AO",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_BumpMap",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_Emission",
-					"PropertyTypeName" : "Color"
-				},
-				{
-					"PropertyName" : "_Culling",
-					"PropertyTypeName" : "Range"
-				}
-			]
-		},
-		{
 			"TemplateName" : "ParticlesLit",
 			"RequiredProperties" : [
 				{
@@ -104,31 +71,6 @@
 				},
 				{
 					"PropertyName" : "_Culling",
-					"PropertyTypeName" : "Range"
-				}
-			]
-		},
-		{
-			"TemplateName" : "Triplanar",
-			"RequiredProperties" : [
-				{
-					"PropertyName" : "_MainTex",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_SecTex",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_ThiTex",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_Falloff",
-					"PropertyTypeName" : "Range"
-				},
-				{
-					"PropertyName" : "_Tiling",
 					"PropertyTypeName" : "Range"
 				}
 			]
