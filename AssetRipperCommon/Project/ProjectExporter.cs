@@ -23,13 +23,25 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project
 {
-	public abstract class ProjectExporterBase
+	public class ProjectExporter
 	{
 		public event Action? EventExportPreparationStarted;
 		public event Action? EventExportPreparationFinished;
 		public event Action? EventExportStarted;
 		public event Action<int, int>? EventExportProgressUpdated;
 		public event Action? EventExportFinished;
+
+		/// <summary>
+		/// Exact type to the exporters that handle that type
+		/// </summary>
+		private readonly Dictionary<Type, Stack<IAssetExporter>> typeMap = new Dictionary<Type, Stack<IAssetExporter>>();
+		/// <summary>
+		/// List of type-exporter-allow pairs<br/>
+		/// Type: the asset type<br/>
+		/// IAssetExporter: the exporter that can handle that asset type<br/>
+		/// Bool: allow the exporter to apply on inherited asset types?
+		/// </summary>
+		private readonly List<(Type, IAssetExporter, bool)> registeredExporters = new List<(Type, IAssetExporter, bool)>();
 
 		//Exporters
 		protected DefaultYamlExporter DefaultExporter { get; } = new DefaultYamlExporter();
@@ -39,19 +51,114 @@ namespace AssetRipper.Core.Project
 		protected ScriptableObjectExporter ScriptableExporter { get; } = new ScriptableObjectExporter();
 		protected DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
 
+		public ProjectExporter()
+		{
+			OverrideExporter<IUnityObjectBase>(new RawAssetExporter(), true);
+			OverrideExporter<IUnityObjectBase>(DefaultExporter, true);
+
+			OverrideExporter<IGlobalGameManager>(ManagerExporter, true);
+
+			OverrideExporter<IBuildSettings>(BuildSettingsExporter, true);
+
+			OverrideExporter<IMonoBehaviour>(ScriptableExporter, true);
+
+			OverrideExporter<IGameObject>(SceneExporter, true);
+			OverrideExporter<IComponent>(SceneExporter, true);
+			OverrideExporter<ILevelGameManager>(SceneExporter, true);
+
+			OverrideDummyExporter<IPreloadData>(ClassIDType.PreloadData, true, false);
+			OverrideDummyExporter<IMonoManager>(ClassIDType.MonoManager, true, false);
+			OverrideDummyExporter<IAssetBundle>(ClassIDType.AssetBundle, true, false);
+			OverrideDummyExporter<IResourceManager>(ClassIDType.ResourceManager, true, false);
+
+			OverrideExporter<Classes.UnknownObject>(new UnknownObjectExporter(), false);
+			OverrideExporter<Classes.UnreadableObject>(new UnreadableObjectExporter(), false);
+		}
+
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
 		/// <typeparam name="T">The c sharp type of this asset type. Any inherited types also get this exporter.</typeparam>
 		/// <param name="exporter">The new exporter. If it doesn't work, the next one in the stack is used.</param>
 		/// <param name="allowInheritance">Should types that inherit from this type also use the exporter?</param>
-		public void OverrideExporter<T>(IAssetExporter exporter, bool allowInheritance) => OverrideExporter(typeof(T), exporter, allowInheritance);
+		public void OverrideExporter<T>(IAssetExporter exporter, bool allowInheritance)
+		{
+			OverrideExporter(typeof(T), exporter, allowInheritance);
+		}
+
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
 		/// <param name="type">The c sharp type of this asset type. Any inherited types also get this exporter.</param>
 		/// <param name="exporter">The new exporter. If it doesn't work, the next one in the stack is used.</param>
 		/// <param name="allowInheritance">Should types that inherit from this type also use the exporter?</param>
-		public abstract void OverrideExporter(Type type, IAssetExporter exporter, bool allowInheritance);
+		public void OverrideExporter(Type type, IAssetExporter exporter, bool allowInheritance)
+		{
+			if (exporter == null)
+			{
+				throw new ArgumentNullException(nameof(exporter));
+			}
 
-		public abstract AssetType ToExportType(Type type);
-		protected abstract IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset);
+			registeredExporters.Add((type, exporter, allowInheritance));
+			if (typeMap.Count > 0)//Just in case an exporter gets added after CreateCollection or ToExportType have already been used
+			{
+				RecalculateTypeMap();
+			}
+		}
+
+		public AssetType ToExportType(Type type)
+		{
+			Stack<IAssetExporter> exporters = GetExporterStack(type);
+			foreach (IAssetExporter exporter in exporters)
+			{
+				if (exporter.ToUnknownExportType(type, out AssetType assetType))
+				{
+					return assetType;
+				}
+			}
+			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{type}'");
+		}
+
+		protected IExportCollection CreateCollection(VirtualSerializedFile file, IUnityObjectBase asset)
+		{
+			Stack<IAssetExporter> exporters = GetExporterStack(asset);
+			foreach (IAssetExporter exporter in exporters)
+			{
+				if (exporter.IsHandle(asset))
+				{
+					return exporter.CreateCollection(file, asset);
+				}
+			}
+			throw new Exception($"There is no exporter that can handle '{asset}'");
+		}
+
+		private Stack<IAssetExporter> GetExporterStack(IUnityObjectBase asset) => GetExporterStack(asset.GetType());
+		private Stack<IAssetExporter> GetExporterStack(Type type)
+		{
+			if (!typeMap.TryGetValue(type, out Stack<IAssetExporter>? exporters))
+			{
+				exporters = CalculateAssetExporterStack(type);
+				typeMap.Add(type, exporters);
+			}
+			return exporters;
+		}
+
+		private void RecalculateTypeMap()
+		{
+			foreach (Type type in typeMap.Keys)
+			{
+				typeMap[type] = CalculateAssetExporterStack(type);
+			}
+		}
+
+		private Stack<IAssetExporter> CalculateAssetExporterStack(Type type)
+		{
+			Stack<IAssetExporter> result = new Stack<IAssetExporter>();
+			foreach ((Type baseType, IAssetExporter exporter, bool allowInheritance) in registeredExporters)
+			{
+				if (type == baseType || (allowInheritance && type.IsAssignableTo(baseType)))
+				{
+					result.Push(exporter);
+				}
+			}
+			return result;
+		}
 
 		protected void OverrideDummyExporter<T>(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
 		{
@@ -160,27 +267,6 @@ namespace AssetRipper.Core.Project
 				EventExportProgressUpdated?.Invoke(i, collections.Count);
 			}
 			EventExportFinished?.Invoke();
-		}
-
-		public ProjectExporterBase()
-		{
-			OverrideExporter<IUnityObjectBase>(new RawAssetExporter(), true);
-			OverrideExporter<IUnityObjectBase>(DefaultExporter, true);
-
-			OverrideExporter<IGlobalGameManager>(ManagerExporter, true);
-
-			OverrideExporter<IBuildSettings>(BuildSettingsExporter, true);
-
-			OverrideExporter<IMonoBehaviour>(ScriptableExporter, true);
-
-			OverrideExporter<IGameObject>(SceneExporter, true);
-			OverrideExporter<IComponent>(SceneExporter, true);
-			OverrideExporter<ILevelGameManager>(SceneExporter, true);
-
-			OverrideDummyExporter<IPreloadData>(ClassIDType.PreloadData, true, false);
-			OverrideDummyExporter<IMonoManager>(ClassIDType.MonoManager, true, false);
-			OverrideDummyExporter<IAssetBundle>(ClassIDType.AssetBundle, true, false);
-			OverrideDummyExporter<IResourceManager>(ClassIDType.ResourceManager, true, false);
 		}
 	}
 }
