@@ -1,4 +1,5 @@
 using AssetRipper.Core.Interfaces;
+using System;
 
 namespace AssetRipper.Core.Parser.Asset
 {
@@ -7,6 +8,19 @@ namespace AssetRipper.Core.Parser.Asset
 		public override IUnityObjectBase? CreateAsset(AssetInfo assetInfo, UnityVersion version)
 		{
 			return SourceGenerated.AssetFactory.CreateAsset(version, assetInfo);
+		}
+
+		public override ClassIDType GetClassIdForType(Type type)
+		{
+			if(SourceGenerated.ClassIDTypeMap.dictionary.TryGetValue(type, out SourceGenerated.ClassIDType value))
+			{
+				return (ClassIDType)value;
+			}
+			else
+			{
+				//throw new NotSupportedException(type.FullName);
+				return ClassIDType.UnknownType;
+			}
 		}
 	}
 }

@@ -50,7 +50,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		/// <summary>Attempts to add any missing dependencies to the file list</summary>
 		/// <param name="dependencyCallback">A method that takes a dependency name and tries to output a path</param>
-		public void AddDependencySchemes(Func<string, string> dependencyCallback)
+		public void AddDependencySchemes(Func<string, string?> dependencyCallback)
 		{
 			for (int i = 0; i < m_schemes.Count; i++)
 			{
@@ -62,7 +62,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 						continue;
 					}
 
-					string systemFilePath = dependencyCallback.Invoke(dependency.PathName);
+					string? systemFilePath = dependencyCallback.Invoke(dependency.PathName);
 					if (systemFilePath == null)
 					{
 						m_knownFiles.Add(dependency.PathName);
@@ -94,13 +94,13 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		public LayoutInfo GetLayoutInfo()
 		{
-			SerializedFileScheme prime = GetPrimaryFile();
+			SerializedFileScheme? prime = GetPrimaryFile();
 			if (prime != null)
 			{
 				return GetLayoutInfo(prime);
 			}
 
-			SerializedFileScheme serialized = GetEngineFile();
+			SerializedFileScheme? serialized = GetEngineFile();
 			return GetLayoutInfo(serialized);
 		}
 
@@ -155,7 +155,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			{
 				const BuildTarget DefaultPlatform = BuildTarget.StandaloneWinPlayer;
 				const TransferInstructionFlags DefaultFlags = TransferInstructionFlags.SerializeGameRelease;
-				BundleFileScheme bundle = GetBundleFile();
+				BundleFileScheme? bundle = GetBundleFile();
 				if (bundle == null)
 				{
 					Logger.Log(LogType.Warning, LogCategory.Import, "Unable to determine layout for provided files. Tring default one");
@@ -171,7 +171,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 		}
 
-		private SerializedFileScheme GetPrimaryFile()
+		private SerializedFileScheme? GetPrimaryFile()
 		{
 			foreach (FileScheme scheme in EnumerateSchemes(m_schemes))
 			{
@@ -186,7 +186,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			return null;
 		}
 
-		private SerializedFileScheme GetEngineFile()
+		private SerializedFileScheme? GetEngineFile()
 		{
 			foreach (FileScheme scheme in EnumerateSchemes(m_schemes))
 			{
@@ -198,7 +198,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			return null;
 		}
 
-		private BundleFileScheme GetBundleFile()
+		private BundleFileScheme? GetBundleFile()
 		{
 			foreach (FileScheme scheme in EnumerateSchemes(m_schemes))
 			{

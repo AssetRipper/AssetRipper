@@ -6,8 +6,6 @@ using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace AssetRipper.Core.Project
 {
@@ -24,21 +22,11 @@ namespace AssetRipper.Core.Project
 		/// Bool: allow the exporter to apply on inherited asset types?
 		/// </summary>
 		private readonly List<(Type, IAssetExporter, bool)> registeredExporters = new List<(Type, IAssetExporter, bool)>();
-		/// <summary>
-		/// All the unity types from before the 2.0 update
-		/// </summary>
-		private static readonly Type[] unityTypes = GetAllUnityTypesSafe();
 
 		public ProjectExporter()
 		{
 			OverrideExporter<UnknownObject>(new UnknownObjectExporter(), false);
 			OverrideExporter<UnreadableObject>(new UnreadableObjectExporter(), false);
-		}
-
-		/// <inheritdoc/>
-		public override void OverrideExporter(ClassIDType classType, IAssetExporter exporter)
-		{
-			OverrideExporter(GetTypeForID(classType), exporter, false);
 		}
 
 		/// <inheritdoc/>
@@ -56,40 +44,17 @@ namespace AssetRipper.Core.Project
 			}
 		}
 
-		public override AssetType ToExportType(ClassIDType classID)
+		public override AssetType ToExportType(Type type)
 		{
-			switch (classID)
-			{
-				// abstract objects
-				case ClassIDType.Object:
-					return AssetType.Meta;
-				case ClassIDType.Renderer:
-					return AssetType.Serialized;
-				case ClassIDType.Texture:
-					classID = ClassIDType.Texture2D;
-					break;
-				case ClassIDType.RuntimeAnimatorController:
-					classID = ClassIDType.AnimatorController;
-					break;
-				case ClassIDType.Motion:
-					return AssetType.Serialized;
-
-				// not implemented yet
-				case ClassIDType.AudioMixerGroup:
-					return AssetType.Serialized;
-				case ClassIDType.EditorExtension:
-					return AssetType.Serialized;
-			}
-
-			Stack<IAssetExporter> exporters = GetExporterStack(GetTypeForID(classID));
+			Stack<IAssetExporter> exporters = GetExporterStack(type);
 			foreach (IAssetExporter exporter in exporters)
 			{
-				if (exporter.ToUnknownExportType(classID, out AssetType assetType))
+				if (exporter.ToUnknownExportType(type, out AssetType assetType))
 				{
 					return assetType;
 				}
 			}
-			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{classID}'");
+			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{type}'");
 		}
 
 		protected override IExportCollection CreateCollection(VirtualSerializedFile file, IUnityObjectBase asset)
@@ -108,7 +73,7 @@ namespace AssetRipper.Core.Project
 		private Stack<IAssetExporter> GetExporterStack(IUnityObjectBase asset) => GetExporterStack(asset.GetType());
 		private Stack<IAssetExporter> GetExporterStack(Type type)
 		{
-			if (!typeMap.TryGetValue(type, out Stack<IAssetExporter> exporters))
+			if (!typeMap.TryGetValue(type, out Stack<IAssetExporter>? exporters))
 			{
 				exporters = CalculateAssetExporterStack(type);
 				typeMap.Add(type, exporters);
@@ -118,7 +83,7 @@ namespace AssetRipper.Core.Project
 
 		private void RecalculateTypeMap()
 		{
-			foreach (var type in typeMap.Keys)
+			foreach (Type type in typeMap.Keys)
 			{
 				typeMap[type] = CalculateAssetExporterStack(type);
 			}
@@ -126,7 +91,7 @@ namespace AssetRipper.Core.Project
 
 		private Stack<IAssetExporter> CalculateAssetExporterStack(Type type)
 		{
-			var result = new Stack<IAssetExporter>();
+			Stack<IAssetExporter> result = new Stack<IAssetExporter>();
 			foreach ((Type baseType, IAssetExporter exporter, bool allowInheritance) in registeredExporters)
 			{
 				if (type == baseType || (allowInheritance && type.IsAssignableTo(baseType)))
@@ -135,65 +100,6 @@ namespace AssetRipper.Core.Project
 				}
 			}
 			return result;
-		}
-
-		private static Type GetTypeForID(ClassIDType classID)
-		{
-			return TryGetTypeForID(classID, out Type type) ? type : throw new NotSupportedException($"The {classID} ClassIDType does not have an associated Type.");
-		}
-		private static bool TryGetTypeForID(ClassIDType classID, out Type type)
-		{
-			string className = classID.ToString();
-			if (classID == ClassIDType.AvatarMask_319 || classID == ClassIDType.AvatarMask_1011)
-			{
-				className = "AvatarMask";
-			}
-			else if (classID == ClassIDType.VideoClip_327 || classID == ClassIDType.VideoClip_329)
-			{
-				className = "VideoClip";
-			}
-			else if (classID == ClassIDType.LightProbes_197 || classID == ClassIDType.LightProbes_258)
-			{
-				className = "LightProbes";
-			}
-
-			if (classID == ClassIDType.UnknownType)
-			{
-				type = typeof(UnknownObject);
-				return true;
-			}
-
-			type = unityTypes.FirstOrDefault(t => t.Name == className);
-			return type != null;
-		}
-
-		private static ClassIDType GetIDForType(Type type)
-		{
-			return TryGetIDForType(type, out ClassIDType result) ? result : throw new NotSupportedException($"The {type.Name} Type does not have an associated ClassIDType.");
-		}
-		private static bool TryGetIDForType(Type type, out ClassIDType classID)
-		{
-			if (type == typeof(UnknownObject))
-			{
-				classID = ClassIDType.UnknownType;
-				return true;
-			}
-			return Enum.TryParse<ClassIDType>(type.Name, out classID);
-		}
-
-		private static Type[] GetAllUnityTypesSafe()
-		{
-			Type[] types;
-			Type objectType = typeof(AssetRipper.Core.Classes.Object.Object);
-			try
-			{
-				types = objectType.Assembly.GetTypes();
-			}
-			catch (ReflectionTypeLoadException re)
-			{
-				types = re.Types.Where(t => t != null).ToArray();
-			}
-			return types.Where(type => type.IsAssignableTo(objectType)).ToArray();
 		}
 	}
 }

@@ -43,5 +43,7 @@ namespace AssetRipper.Core.Parser.Asset
 				_ => throw new NotImplementedException(name),
 			};
 		}
+
+		public abstract ClassIDType GetClassIdForType(Type type);
 	}
 }

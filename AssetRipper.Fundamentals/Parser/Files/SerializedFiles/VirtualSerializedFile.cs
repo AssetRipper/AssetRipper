@@ -109,20 +109,22 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return m_assets.Values;
 		}
 
+		[Obsolete]
 		public T CreateAsset<T>(Func<AssetInfo, T> instantiator) where T : IUnityObjectBase
 		{
-			ClassIDType classID = typeof(T).ToClassIDType();
-			AssetInfo assetInfo = CreateAssetInfo(classID);
-			T instance = instantiator(assetInfo);
-			m_assets.Add(instance.PathID, instance);
-			return instance;
+			//ClassIDType classID = typeof(T).ToClassIDType();
+			//AssetInfo assetInfo = CreateAssetInfo(classID);
+			//T instance = instantiator(assetInfo);
+			//m_assets.Add(instance.PathID, instance);
+			//return instance;
+			throw new NotSupportedException();
 		}
 
 		public T CreateAsset<T>(ClassIDType classID) where T : IUnityObjectBase
 		{
 			AssetInfo assetInfo = CreateAssetInfo(classID);
 			IUnityObjectBase? asset = VersionManager.AssetFactory.CreateAsset(assetInfo, Version);
-			if (asset == null)
+			if (asset is null)
 			{
 				throw new ArgumentException($"Could not create asset with id: {classID}", nameof(classID));
 			}

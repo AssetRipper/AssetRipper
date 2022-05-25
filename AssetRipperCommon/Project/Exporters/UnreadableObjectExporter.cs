@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			using var fileStream = File.Create(path);
+			using FileStream fileStream = File.Create(path);
 			using BinaryWriter writer = new BinaryWriter(fileStream);
 			writer.Write(((UnreadableObject)asset).RawData);
 			return true;
@@ -33,7 +33,7 @@ namespace AssetRipper.Core.Project.Exporters
 		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
 		{
 			bool success = true;
-			foreach (var asset in assets)
+			foreach (IUnityObjectBase? asset in assets)
 			{
 				success &= Export(container, asset, path);
 			}
@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
-			foreach (var asset in assets)
+			foreach (IUnityObjectBase asset in assets)
 			{
 				Export(container, asset, path, callback);
 			}
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.Project.Exporters
 			return AssetType.Meta;
 		}
 
-		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
+		public bool ToUnknownExportType(Type type, out AssetType assetType)
 		{
 			assetType = AssetType.Meta;
 			return true;

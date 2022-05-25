@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
-			foreach (var asset in assets)
+			foreach (IUnityObjectBase asset in assets)
 			{
 				Export(container, asset, path, callback);
 			}
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.Project.Exporters
 			return AssetType.Meta;
 		}
 
-		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
+		public bool ToUnknownExportType(Type type, out AssetType assetType)
 		{
 			assetType = AssetType.Meta;
 			return true;

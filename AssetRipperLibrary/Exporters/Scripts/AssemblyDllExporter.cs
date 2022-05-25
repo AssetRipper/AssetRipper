@@ -56,7 +56,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		public AssetType ToExportType(IUnityObjectBase asset) => AssetType.Meta;
 
-		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
+		public bool ToUnknownExportType(Type type, out AssetType assetType)
 		{
 			assetType = AssetType.Meta;
 			return true;

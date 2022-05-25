@@ -79,12 +79,11 @@ namespace AssetRipper.Core.Structure
 
 		public T? FindAsset<T>() where T : IUnityObjectBase
 		{
-			ClassIDType classID = typeof(T).ToClassIDType();
 			foreach (IUnityObjectBase asset in FetchAssets())
 			{
-				if (asset.ClassID == classID)
+				if (asset is T castedAsset)
 				{
-					return (T)asset;
+					return castedAsset;
 				}
 			}
 			return default;
@@ -92,12 +91,10 @@ namespace AssetRipper.Core.Structure
 
 		public T? FindAsset<T>(string name) where T : IUnityObjectBase, IHasNameString
 		{
-			ClassIDType classID = typeof(T).ToClassIDType();
 			foreach (IUnityObjectBase asset in FetchAssets())
 			{
-				if (asset.ClassID == classID)
+				if (asset is T namedAsset)
 				{
-					T namedAsset = (T)asset;
 					if (namedAsset.NameString == name)
 					{
 						return namedAsset;

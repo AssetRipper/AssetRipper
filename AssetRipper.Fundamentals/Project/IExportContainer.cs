@@ -5,14 +5,14 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project.Collections;
-using AssetRipper.Core.VersionHandling;
+using System;
 
 namespace AssetRipper.Core.Project
 {
 	public interface IExportContainer : IAssetContainer
 	{
 		long GetExportID(IUnityObjectBase asset);
-		AssetType ToExportType(ClassIDType classID);
+		AssetType ToExportType(Type type);
 		MetaPtr CreateExportPointer(IUnityObjectBase asset);
 
 		string SceneIndexToName(int sceneID);

@@ -158,7 +158,7 @@ namespace AssetRipper.Core
 				throw new NotImplementedException();
 			}
 
-			public AssetType ToExportType(ClassIDType classID)
+			public AssetType ToExportType(Type type)
 			{
 				throw new NotImplementedException();
 			}

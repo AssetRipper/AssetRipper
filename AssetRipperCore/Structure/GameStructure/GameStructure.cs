@@ -26,10 +26,10 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		public bool IsValid => FileCollection != null;
 
-		public string Name => PlatformStructure?.Name ?? MixedStructure?.Name;
+		public string? Name => PlatformStructure?.Name ?? MixedStructure?.Name;
 
 		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration) => Load(paths, configuration, null);
-		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration, LayoutInfo layinfo)
+		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration, LayoutInfo? layinfo)
 		{
 			List<string> toProcess = Preprocessor.Process(paths);
 			if (toProcess.Count == 0)
@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			return structure;
 		}
 
-		private void Load(List<string> paths, CoreConfiguration configuration, LayoutInfo layinfo)
+		private void Load(List<string> paths, CoreConfiguration configuration, LayoutInfo? layinfo)
 		{
 			Logger.SendStatusChange("loading_step_detect_platform");
 			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure platformStructure, out MixedGameStructure mixedStructure);
@@ -110,11 +110,11 @@ namespace AssetRipper.Core.Structure.GameStructure
 		}
 
 		/// <summary>Attempts to find the path for the dependency with that name.</summary>
-		public string RequestDependency(string dependency)
+		public string? RequestDependency(string dependency)
 		{
 			if (PlatformStructure != null)
 			{
-				string path = PlatformStructure.RequestDependency(dependency);
+				string? path = PlatformStructure.RequestDependency(dependency);
 				if (path != null)
 				{
 					return path;
@@ -122,7 +122,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 			if (MixedStructure != null)
 			{
-				string path = MixedStructure.RequestDependency(dependency);
+				string? path = MixedStructure.RequestDependency(dependency);
 				if (path != null)
 				{
 					return path;
@@ -209,14 +209,14 @@ namespace AssetRipper.Core.Structure.GameStructure
 		private void OnRequestAssembly(string assembly)
 		{
 			string assemblyName = $"{assembly}.dll";
-			if (FileCollection.TryGetResourceFile(assemblyName, out ResourceFile resFile) && resFile != null)
+			if (FileCollection.TryGetResourceFile(assemblyName, out ResourceFile? resFile) && resFile != null)
 			{
 				resFile.Stream.Position = 0;
 				FileCollection.AssemblyManager.Read(resFile.Stream, assemblyName);
 			}
 			else
 			{
-				string path = RequestAssembly(assembly);
+				string? path = RequestAssembly(assembly);
 				if (path == null)
 				{
 					Logger.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
@@ -227,11 +227,11 @@ namespace AssetRipper.Core.Structure.GameStructure
 			Logger.Info(LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 		}
 
-		public string RequestAssembly(string assembly)
+		public string? RequestAssembly(string assembly)
 		{
 			if (PlatformStructure != null)
 			{
-				string assemblyPath = PlatformStructure.RequestAssembly(assembly);
+				string? assemblyPath = PlatformStructure.RequestAssembly(assembly);
 				if (assemblyPath != null)
 				{
 					return assemblyPath;
@@ -239,7 +239,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 			if (MixedStructure != null)
 			{
-				string assemblyPath = MixedStructure.RequestAssembly(assembly);
+				string? assemblyPath = MixedStructure.RequestAssembly(assembly);
 				if (assemblyPath != null)
 				{
 					return assemblyPath;
@@ -248,11 +248,11 @@ namespace AssetRipper.Core.Structure.GameStructure
 			return null;
 		}
 
-		public string RequestResource(string resource)
+		public string? RequestResource(string resource)
 		{
 			if (PlatformStructure != null)
 			{
-				string path = PlatformStructure.RequestResource(resource);
+				string? path = PlatformStructure.RequestResource(resource);
 				if (path != null)
 				{
 					return path;
@@ -260,7 +260,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			}
 			if (MixedStructure != null)
 			{
-				string path = MixedStructure.RequestResource(resource);
+				string? path = MixedStructure.RequestResource(resource);
 				if (path != null)
 				{
 					return path;

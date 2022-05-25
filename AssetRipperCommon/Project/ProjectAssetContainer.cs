@@ -149,9 +149,9 @@ namespace AssetRipper.Core.Project
 			return ExportIdHandler.GetMainExportID(asset);
 		}
 
-		public AssetType ToExportType(ClassIDType classID)
+		public AssetType ToExportType(Type type)
 		{
-			return m_exporter.ToExportType(classID);
+			return m_exporter.ToExportType(type);
 		}
 
 		public MetaPtr CreateExportPointer(IUnityObjectBase asset)

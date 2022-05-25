@@ -17,7 +17,6 @@ using AssetRipper.SourceGenerated.Subclasses.ConditionConstant;
 using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_SelectorStateConstant;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorState_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorStateTransition_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorTransition_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour_;
 using AssetRipper.SourceGenerated.Subclasses.SelectorStateConstant;
@@ -39,7 +38,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static IBlendTree CreateBlendTree(VirtualSerializedFile virtualFile, IAnimatorController controller, IStateConstant state, int nodeIndex)
 		{
-			IBlendTree blendTree = virtualFile.CreateAsset((assetInfo) => BlendTreeFactory.CreateAsset(virtualFile.Version, assetInfo));
+			IBlendTree blendTree = virtualFile.CreateAsset<IBlendTree>(ClassIDType.BlendTree);
 			blendTree.ObjectHideFlags = HideFlags.HideInHierarchy;
 
 			IBlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Data;
@@ -105,7 +104,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			const float StateOffset = 250.0f;
 
-			IAnimatorStateMachine generatedStateMachine = virtualFile.CreateAsset((assetInfo) => AnimatorStateMachineFactory.CreateAsset(virtualFile.Version, assetInfo));
+			IAnimatorStateMachine generatedStateMachine = virtualFile.CreateAsset<IAnimatorStateMachine>(ClassIDType.AnimatorStateMachine);
 			generatedStateMachine.ObjectHideFlags = HideFlags.HideInHierarchy;
 
 			int layerIndex = controller.Controller_C91.GetLayerIndexByStateMachineIndex(stateMachineIndex);
@@ -219,7 +218,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static IAnimatorState CreateAnimatorState(VirtualSerializedFile virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f_3_5_0_f5 position)
 		{
-			IAnimatorState generatedState = virtualFile.CreateAsset((assetInfo) => AnimatorStateFactory.CreateAsset(virtualFile.Version, assetInfo));
+			IAnimatorState generatedState = virtualFile.CreateAsset<IAnimatorState>(ClassIDType.AnimatorState);
 			generatedState.ObjectHideFlags = HideFlags.HideInHierarchy;
 
 			AssetDictionary<uint, Utf8String> TOS = controller.TOS_C91;
@@ -287,7 +286,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			AssetDictionary<uint, Utf8String> TOS, 
 			ITransitionConstant Transition)
 		{
-			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset((assetInfo) => AnimatorStateTransitionFactory.CreateAsset(virtualFile.Version, assetInfo));
+			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset<IAnimatorStateTransition>(ClassIDType.AnimatorStateTransition);
 			animatorStateTransition.ObjectHideFlags_C1101 = (uint)HideFlags.HideInHierarchy;
 
 			animatorStateTransition.Conditions_C1101.Capacity = Transition.ConditionConstantArray.Count;
@@ -338,7 +337,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			AssetDictionary<uint, Utf8String> TOS,
 			SelectorTransitionConstant Transition)
 		{
-			IAnimatorTransition animatorTransition = virtualFile.CreateAsset((assetInfo) => AnimatorTransitionFactory.CreateAsset(virtualFile.Version, assetInfo));
+			IAnimatorTransition animatorTransition = virtualFile.CreateAsset<IAnimatorTransition>(ClassIDType.AnimatorTransition);
 			animatorTransition.ObjectHideFlags_C1109 = (uint)HideFlags.HideInHierarchy;
 
 			animatorTransition.Conditions_C1109.Capacity = Transition.ConditionConstantArray.Count;

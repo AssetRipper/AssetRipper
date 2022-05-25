@@ -18,6 +18,6 @@ namespace AssetRipper.Core.Project.Exporters
 
 		IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset);
 		AssetType ToExportType(IUnityObjectBase asset);
-		bool ToUnknownExportType(ClassIDType classID, out AssetType assetType);
+		bool ToUnknownExportType(Type type, out AssetType assetType);
 	}
 }

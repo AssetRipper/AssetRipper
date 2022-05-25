@@ -1,9 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
@@ -35,16 +33,17 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 
 			T? asset = pptr.FindAsset(container);
-			if (asset == null)
+			if (asset is null)
 			{
-				ClassIDType classType = typeof(T).ToClassIDType();
-				AssetType assetType = container.ToExportType(classType);
-				MetaPtr pointer = new MetaPtr(classType, assetType);
+				AssetType assetType = container.ToExportType(typeof(T));
+				MetaPtr pointer = new MetaPtr(VersionHandling.VersionManager.AssetFactory.GetClassIdForType(typeof(T)), assetType);
 				return pointer.ExportYaml(container);
 			}
-
-			MetaPtr exPointer = container.CreateExportPointer(asset);
-			return exPointer.ExportYaml(container);
+			else
+			{
+				MetaPtr exPointer = container.CreateExportPointer(asset);
+				return exPointer.ExportYaml(container);
+			}
 		}
 
 		public static void CopyValues(this IPPtr destination, IPPtr source)

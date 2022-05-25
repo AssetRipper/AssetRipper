@@ -78,6 +78,12 @@ namespace AssetRipper.Core.Project.Exporters
 			}
 		}
 
+		public bool ToUnknownExportType(Type type, out AssetType assetType)
+		{
+			ClassIDType classID = VersionHandling.VersionManager.AssetFactory.GetClassIdForType(type);
+			return ToUnknownExportType(classID, out assetType);
+		}
+
 		private readonly Dictionary<ClassIDType, bool> m_emptyTypes = new Dictionary<ClassIDType, bool>();
 		private readonly Dictionary<ClassIDType, bool> m_metaTypes = new Dictionary<ClassIDType, bool>();
 	}

@@ -42,11 +42,10 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public AssetType ToExportType(IUnityObjectBase asset)
 		{
-			ToUnknownExportType(asset.ClassID, out AssetType assetType);
-			return assetType;
+			return AssetType.Meta;
 		}
 
-		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
+		public bool ToUnknownExportType(Type type, out AssetType assetType)
 		{
 			assetType = AssetType.Meta;
 			return true;

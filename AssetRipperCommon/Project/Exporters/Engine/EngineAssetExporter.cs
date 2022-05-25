@@ -48,7 +48,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			return AssetType.Internal;
 		}
 
-		public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
+		public bool ToUnknownExportType(Type type, out AssetType assetType)
 		{
 			assetType = AssetType.Internal;
 			return false;

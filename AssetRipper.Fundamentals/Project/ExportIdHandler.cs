@@ -35,24 +35,12 @@ namespace AssetRipper.Core.Project
 			}
 
 #if DEBUG
-			int digits = GetDigitsCount(value);
-			if (digits > 5)
+			if (value >= 100000)
 			{
 				throw new ArgumentException($"Value {value} for main export ID must have no more than 5 digits");
 			}
 #endif
 			return classID * 100000 + value;
-		}
-
-		private static int GetDigitsCount(uint value)
-		{
-			int count = 0;
-			while (value != 0)
-			{
-				value /= 10;
-				count++;
-			}
-			return count;
 		}
 	}
 }
