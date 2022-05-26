@@ -10,6 +10,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_1953259897;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
+using AssetRipper.SourceGenerated.Classes.ClassID_221;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
@@ -85,20 +86,17 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected virtual string GetExportExtension(IUnityObjectBase asset)
 		{
-			if (asset is IShader)
-				return "shader";
-			else if (asset is IMaterial)
-				return "mat";
-			else if (asset is IAnimationClip)
-				return "anim";
-			else if (asset is IAnimatorController)
-				return "controller";
-			else if (asset is SourceGenerated.Classes.ClassID_319.IAvatarMask or SourceGenerated.Classes.ClassID_1011.IAvatarMask)
-				return "mask";
-			else if (asset is ITerrainLayer)
-				return "terrainlayer";
-			else
-				return asset.ExportExtension;
+			return asset switch
+			{
+				IShader => "shader",
+				IMaterial => "mat",
+				IAnimationClip => "anim",
+				IAnimatorController => "controller",
+				IAnimatorOverrideController => "overrideController",
+				SourceGenerated.Classes.ClassID_319.IAvatarMask or SourceGenerated.Classes.ClassID_1011.IAvatarMask => "mask",
+				ITerrainLayer => "terrainlayer",
+				_ => asset.ExportExtension
+			};
 		}
 
 		protected static IUnityObjectBase Convert(IUnityObjectBase asset, IExportContainer container)
