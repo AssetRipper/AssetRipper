@@ -116,16 +116,19 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static bool AddTOS(this IAnimationClip clip, IReadOnlyDictionary<uint, string> src, Dictionary<uint, string> dest)
 		{
-			int tosCount = clip.ClipBindingConstant_C74.GenericBindings.Count;
-			for (int i = 0; i < tosCount; i++)
+			if (clip.Has_ClipBindingConstant_C74())
 			{
-				IGenericBinding binding = clip.ClipBindingConstant_C74.GenericBindings[i];
-				if (src.TryGetValue(binding.Path, out string? path))
+				int tosCount = clip.ClipBindingConstant_C74.GenericBindings.Count;
+				for (int i = 0; i < tosCount; i++)
 				{
-					dest[binding.Path] = path;
-					if (dest.Count == tosCount)
+					IGenericBinding binding = clip.ClipBindingConstant_C74.GenericBindings[i];
+					if (src.TryGetValue(binding.Path, out string? path))
 					{
-						return true;
+						dest[binding.Path] = path;
+						if (dest.Count == tosCount)
+						{
+							return true;
+						}
 					}
 				}
 			}
@@ -134,16 +137,19 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static bool AddTOS(this IAnimationClip clip, AssetDictionary<uint, Utf8String> src, Dictionary<uint, string> dest)
 		{
-			int tosCount = clip.ClipBindingConstant_C74.GenericBindings.Count;
-			for (int i = 0; i < tosCount; i++)
+			if (clip.Has_ClipBindingConstant_C74())
 			{
-				IGenericBinding binding = clip.ClipBindingConstant_C74.GenericBindings[i];
-				if (src.TryGetValue(binding.Path, out Utf8String? path))
+				int tosCount = clip.ClipBindingConstant_C74.GenericBindings.Count;
+				for (int i = 0; i < tosCount; i++)
 				{
-					dest[binding.Path] = path.String;
-					if (dest.Count == tosCount)
+					IGenericBinding binding = clip.ClipBindingConstant_C74.GenericBindings[i];
+					if (src.TryGetValue(binding.Path, out Utf8String? path))
 					{
-						return true;
+						dest[binding.Path] = path.String;
+						if (dest.Count == tosCount)
+						{
+							return true;
+						}
 					}
 				}
 			}
