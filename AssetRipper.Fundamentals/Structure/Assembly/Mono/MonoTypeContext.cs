@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Structure.Assembly.Mono.Extensions;
 using Mono.Cecil;
-using System;
 using System.Collections.Generic;
 using System.Text;
 

@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
@@ -9,10 +8,8 @@ using AssetRipper.Library;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 

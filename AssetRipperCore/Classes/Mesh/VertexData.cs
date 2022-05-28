@@ -10,7 +10,6 @@ using AssetRipper.Core.Utils;
 
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
-using System;
 using System.Collections;
 using System.IO;
 using System.Linq;

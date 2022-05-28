@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipBindingConstant;
 using AssetRipper.SourceGenerated.Subclasses.GenericBinding;
-using System;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

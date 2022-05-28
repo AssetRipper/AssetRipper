@@ -12,7 +12,6 @@ using AssetRipper.SourceGenerated.Subclasses.SpriteBone;
 using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.SourceGenerated.Subclasses.Vector4f;
-using System;
 using System.Buffers.Binary;
 
 namespace AssetRipper.Core.SourceGenExtensions

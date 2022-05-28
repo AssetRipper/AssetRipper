@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -8,7 +7,6 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Library.Exporters.Scripts

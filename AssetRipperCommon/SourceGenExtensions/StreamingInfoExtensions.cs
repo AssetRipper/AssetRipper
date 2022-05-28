@@ -2,7 +2,6 @@
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Subclasses.StreamingInfo;
-using System;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.IO.MultiFile;
-using System;
 using System.IO;
 
 namespace AssetRipper.Core.IO.Smart

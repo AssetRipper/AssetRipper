@@ -14,10 +14,8 @@ using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_206;
 using AssetRipper.SourceGenerated.Classes.ClassID_207;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
-using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorState;
 using AssetRipper.SourceGenerated.Subclasses.ChildMotion;
 using AssetRipper.SourceGenerated.Subclasses.ControllerConstant;
-using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorState_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorStateTransition_;
@@ -26,8 +24,6 @@ using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour_;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.TransitionConstant;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
-using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Collections
 {

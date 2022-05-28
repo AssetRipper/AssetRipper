@@ -7,7 +7,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using ShaderTextRestorer.Exporters;
 using ShaderTextRestorer.Exporters.DirectX;
 using ShaderTextRestorer.IO;
-using System;
 using System.IO;
 
 namespace AssetRipper.Library.Exporters.Shaders

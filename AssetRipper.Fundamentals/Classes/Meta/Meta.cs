@@ -2,7 +2,6 @@
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
-using System;
 using DateTime = System.DateTime;
 
 

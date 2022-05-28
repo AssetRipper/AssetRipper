@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Logging;
-using ICSharpCode.Decompiler.CSharp.Syntax;
+﻿using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Transforms;
 
 namespace AssetRipper.Library.Exporters.Scripts.Transforms

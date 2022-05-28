@@ -7,12 +7,10 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
 using AssetRipper.Yaml;
-using System;
 using System.Collections.Generic;
 
 

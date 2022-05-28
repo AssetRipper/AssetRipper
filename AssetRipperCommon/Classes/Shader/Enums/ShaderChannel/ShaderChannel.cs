@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
-using System;
 
 
 namespace AssetRipper.Core.Classes.Shader.Enums.ShaderChannel

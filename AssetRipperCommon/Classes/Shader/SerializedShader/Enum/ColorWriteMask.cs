@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Core.Classes.Shader.SerializedShader.Enum
+﻿namespace AssetRipper.Core.Classes.Shader.SerializedShader.Enum
 {
 	/// <summary>
 	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Graphics/GraphicsEnums.cs"/>

@@ -9,7 +9,6 @@ using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

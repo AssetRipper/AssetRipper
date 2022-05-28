@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpritePackingMode = AssetRipper.Core.Classes.Sprite.SpritePackingMode;
 using SpritePackingRotation = AssetRipper.Core.Classes.Sprite.SpritePackingRotation;
 using SpriteMeshType = AssetRipper.Core.Classes.Sprite.SpriteMeshType;

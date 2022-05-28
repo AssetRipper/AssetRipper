@@ -3,7 +3,6 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_1034;
-using System;
 using System.Collections.Generic;
 using System.IO;
 

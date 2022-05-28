@@ -4,7 +4,6 @@ using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
 using Mono.Cecil;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;

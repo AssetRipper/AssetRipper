@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Parser.Files;
-using System;
 
 namespace AssetRipper.Core.Classes.Misc
 {

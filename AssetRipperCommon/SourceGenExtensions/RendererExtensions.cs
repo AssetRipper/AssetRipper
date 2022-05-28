@@ -15,7 +15,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_483693784;
 using AssetRipper.SourceGenerated.Classes.ClassID_73398921;
 using AssetRipper.SourceGenerated.Classes.ClassID_96;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Material_;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.SourceGenExtensions

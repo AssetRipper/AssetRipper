@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 

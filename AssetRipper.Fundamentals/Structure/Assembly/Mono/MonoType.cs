@@ -1,8 +1,6 @@
-using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using Mono.Cecil;
-using System;
 using System.Collections.Generic;
 using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
 

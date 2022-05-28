@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AssetRipper.Core.Math.Vectors
+﻿namespace AssetRipper.Core.Math.Vectors
 {
 	public static class GeometricMath
 	{

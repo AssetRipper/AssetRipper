@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
 using System.Text;
 using ShaderTextRestorer.ConstantBuffers;

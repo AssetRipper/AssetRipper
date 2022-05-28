@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Math.Vectors;
-using System;
 
 namespace AssetRipper.Core.Classes
 {

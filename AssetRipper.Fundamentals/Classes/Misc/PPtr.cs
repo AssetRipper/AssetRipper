@@ -5,7 +5,6 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
-using System;
 
 namespace AssetRipper.Core.Classes.Misc
 {

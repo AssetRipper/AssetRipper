@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Utils;
-using System;
 using System.IO;
 
 namespace AssetRipper.Core.Project

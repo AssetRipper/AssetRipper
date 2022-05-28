@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
+﻿namespace AssetRipper.Core.Classes.AnimationClip.GenericBinding
 {
 	public enum TransformType
 	{

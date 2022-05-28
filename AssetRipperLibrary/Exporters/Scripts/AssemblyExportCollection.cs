@@ -11,12 +11,10 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {

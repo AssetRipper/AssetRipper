@@ -8,7 +8,6 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

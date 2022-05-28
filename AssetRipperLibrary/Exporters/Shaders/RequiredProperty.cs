@@ -1,5 +1,4 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.SerializedProperty;
-using System;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {

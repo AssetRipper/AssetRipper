@@ -1,5 +1,3 @@
-using System;
-
 namespace AssetRipper.Core.Classes.ParticleSystem.SubEmitter
 {
 	/// <summary>

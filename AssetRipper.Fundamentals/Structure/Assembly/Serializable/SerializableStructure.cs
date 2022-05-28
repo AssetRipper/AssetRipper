@@ -5,7 +5,6 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Yaml;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable

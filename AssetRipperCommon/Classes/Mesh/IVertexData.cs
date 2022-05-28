@@ -3,7 +3,6 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
-using System;
 using System.Collections;
 using System.Linq;
 

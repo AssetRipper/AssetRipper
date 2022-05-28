@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Parser.Asset;
-using System;
 
 namespace AssetRipper.Core.VersionHandling
 {

@@ -8,7 +8,6 @@ using AssetRipper.SourceGenerated.Subclasses.BlendTreeConstant;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
 using AssetRipper.SourceGenerated.Subclasses.LeafInfoConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
-using System;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

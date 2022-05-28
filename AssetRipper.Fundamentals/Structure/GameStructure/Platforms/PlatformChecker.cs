@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Logging;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms

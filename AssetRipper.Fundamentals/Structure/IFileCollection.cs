@@ -1,4 +1,3 @@
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Files.ResourceFiles;

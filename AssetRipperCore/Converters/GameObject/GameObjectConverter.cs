@@ -2,7 +2,6 @@
 using AssetRipper.Core.Classes.GameObject;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Project;
-using System;
 using System.Linq;
 using GObject = AssetRipper.Core.Classes.GameObject.GameObject;
 

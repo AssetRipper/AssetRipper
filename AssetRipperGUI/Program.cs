@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Logging;
 using Avalonia;
-using System;
 
 namespace AssetRipper.GUI
 {

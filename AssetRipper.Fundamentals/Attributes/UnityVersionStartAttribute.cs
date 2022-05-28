@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Core.Attributes
+﻿namespace AssetRipper.Core.Attributes
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 	public sealed class UnityVersionStartAttribute : Attribute

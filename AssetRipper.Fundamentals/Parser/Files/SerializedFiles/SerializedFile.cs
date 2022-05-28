@@ -12,7 +12,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.VersionHandling;
-using System;
 using System.Collections.Generic;
 using System.IO;
 

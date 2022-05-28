@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
-using System;
 
 namespace AssetRipper.Core.Attributes
 {

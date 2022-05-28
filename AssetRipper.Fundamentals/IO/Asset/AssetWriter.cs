@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Files;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

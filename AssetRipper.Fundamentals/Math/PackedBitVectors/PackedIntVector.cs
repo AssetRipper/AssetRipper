@@ -3,8 +3,6 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
-using System;
-using System.Linq;
 
 namespace AssetRipper.Core.Math.PackedBitVectors
 {

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Math.Vectors;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Converters.Sprite

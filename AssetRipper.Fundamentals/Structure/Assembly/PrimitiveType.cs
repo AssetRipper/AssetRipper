@@ -1,5 +1,3 @@
-using System;
-
 namespace AssetRipper.Core.Structure.Assembly
 {
 	public enum PrimitiveType

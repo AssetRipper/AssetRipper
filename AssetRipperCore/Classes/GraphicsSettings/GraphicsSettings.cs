@@ -11,7 +11,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Yaml;
-using System;
 using System.Collections.Generic;
 
 

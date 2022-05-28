@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Core.Extensions
+﻿namespace AssetRipper.Core.Extensions
 {
 	public static class StringExtensions
 	{

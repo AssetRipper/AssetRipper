@@ -1,5 +1,4 @@
 using AssetRipper.Core.IO.Smart;
-using System;
 using System.IO;
 
 namespace AssetRipper.Core.Parser.Files.ResourceFiles

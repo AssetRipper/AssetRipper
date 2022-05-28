@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
-using System;
 
 namespace AssetRipper.Core.Classes.Mesh
 {

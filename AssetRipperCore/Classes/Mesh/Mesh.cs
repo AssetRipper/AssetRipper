@@ -3,7 +3,6 @@ using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
 using AssetRipper.Core.Converters.Mesh;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math;
@@ -11,14 +10,10 @@ using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.PackedBitVectors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AssetRipper.Core.Classes.Mesh
 {

@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Structure.Assembly.Managers;
 using ICSharpCode.Decompiler.Metadata;
 using Mono.Cecil;
-using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;

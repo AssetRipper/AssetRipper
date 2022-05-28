@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Layout;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
-using System;
 using System.Text;
 
 namespace AssetRipper.Core.Classes

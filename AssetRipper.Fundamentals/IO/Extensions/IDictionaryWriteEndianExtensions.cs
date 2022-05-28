@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.IO.Endian;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO.Extensions

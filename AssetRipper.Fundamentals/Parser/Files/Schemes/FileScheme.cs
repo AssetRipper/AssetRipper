@@ -1,7 +1,6 @@
 using AssetRipper.Core.Parser.Files.Entries;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Utils;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Parser.Files.Schemes

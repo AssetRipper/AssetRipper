@@ -4,7 +4,6 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform_;
-using System;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

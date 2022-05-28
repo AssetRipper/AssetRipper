@@ -14,7 +14,6 @@ using AssetRipper.SourceGenerated.Subclasses.OcclusionScene;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_OcclusionPortal_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Renderer_;
 using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

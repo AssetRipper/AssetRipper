@@ -9,7 +9,6 @@ using AssetRipper.Core.Classes.Misc.KeyframeTpl;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Utils;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;

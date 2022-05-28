@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.TerrainData;
 using AssetRipper.Core.Project;
-using System;
 using System.Linq;
 
 namespace AssetRipper.Core.Converters.TerrainData

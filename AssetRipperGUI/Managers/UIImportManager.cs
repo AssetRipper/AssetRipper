@@ -1,9 +1,7 @@
 ﻿using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.Library;
-using System;
 using System.Linq;
 using System.Threading;
 

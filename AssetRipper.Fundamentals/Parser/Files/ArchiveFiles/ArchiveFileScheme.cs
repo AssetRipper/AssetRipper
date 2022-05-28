@@ -4,7 +4,6 @@ using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Files.WebFiles;
 using AssetRipper.Core.Structure.GameStructure;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;

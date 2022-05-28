@@ -5,7 +5,6 @@ using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.WebFiles;
 using AssetRipper.Core.Structure.GameStructure;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Parser.Files.Entries

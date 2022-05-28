@@ -7,7 +7,6 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.PackedBitVectors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using System;
 using System.IO;
 
 

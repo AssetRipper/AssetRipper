@@ -7,7 +7,6 @@ using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateKey;
 using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateRange;
-using System;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

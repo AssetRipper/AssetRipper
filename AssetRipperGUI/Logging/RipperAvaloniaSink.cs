@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Logging;
 using Avalonia.Logging;
 using Avalonia.Utilities;
-using System;
 using System.Text;
 using Logger = AssetRipper.Core.Logging.Logger;
 

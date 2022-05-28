@@ -2,7 +2,6 @@
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_6;
-using System;
 using System.IO;
 
 namespace AssetRipper.Core.Project.Collections

@@ -11,7 +11,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Parser.Files.WebFiles;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

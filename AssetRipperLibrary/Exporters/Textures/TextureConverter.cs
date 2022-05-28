@@ -9,7 +9,6 @@ using AssetRipper.TextureDecoder.Etc;
 using AssetRipper.TextureDecoder.Pvrtc;
 using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Yuy2;
-using System;
 
 
 namespace AssetRipper.Library.Exporters.Textures

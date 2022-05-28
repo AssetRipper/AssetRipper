@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
-using System.IO;
 
 namespace AssetRipper.Core.Classes.Shader.Parameters
 {

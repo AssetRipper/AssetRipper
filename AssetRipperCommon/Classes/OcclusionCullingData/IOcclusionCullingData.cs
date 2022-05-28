@@ -4,7 +4,6 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

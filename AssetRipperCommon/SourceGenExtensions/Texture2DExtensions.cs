@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Parser.Files;
-using System;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

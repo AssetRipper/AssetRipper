@@ -3,7 +3,6 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Exporters.Engine

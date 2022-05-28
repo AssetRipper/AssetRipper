@@ -2,7 +2,6 @@
 using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Parser.Files.BundleFile.Parser;
 using K4os.Compression.LZ4;
-using System;
 using System.IO;
 
 namespace AssetRipper.Core.Parser.Files.BundleFile.IO

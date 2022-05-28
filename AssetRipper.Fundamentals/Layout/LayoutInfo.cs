@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Files;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Layout

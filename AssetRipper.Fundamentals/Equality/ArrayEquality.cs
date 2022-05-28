@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Core.Equality
+﻿namespace AssetRipper.Core.Equality
 {
 	public static class ArrayEquality
 	{

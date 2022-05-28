@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Utils;
-using System;
 using System.IO;
 using System.Linq;
 using System.Text;

@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Transforms;
 using System.Runtime.CompilerServices;
+using Attribute = ICSharpCode.Decompiler.CSharp.Syntax.Attribute;
 
 namespace AssetRipper.Library.Exporters.Scripts.Transforms
 {

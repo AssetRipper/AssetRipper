@@ -9,9 +9,6 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
-using AssetRipper.SourceGenerated.Subclasses.SerializedProperties;
-using AssetRipper.SourceGenerated.Subclasses.SerializedProperty;
-using System;
 using System.Globalization;
 using System.IO;
 

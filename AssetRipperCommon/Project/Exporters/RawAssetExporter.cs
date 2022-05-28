@@ -4,7 +4,6 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
-using System;
 using System.IO;
 using System.Text;
 

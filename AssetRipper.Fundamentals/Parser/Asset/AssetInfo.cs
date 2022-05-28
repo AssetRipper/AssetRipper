@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
-using System;
 
 namespace AssetRipper.Core.Parser.Asset
 {

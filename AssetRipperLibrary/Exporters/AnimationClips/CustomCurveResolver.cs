@@ -7,7 +7,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
-using System;
 using System.Linq;
 using BindingCustomType = AssetRipper.Core.Classes.AnimationClip.GenericBinding.BindingCustomType;
 

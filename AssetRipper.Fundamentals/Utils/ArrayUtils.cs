@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Core.Utils
+﻿namespace AssetRipper.Core.Utils
 {
 	public static class ArrayUtils
 	{

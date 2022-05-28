@@ -1,6 +1,5 @@
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Library.Exporters.Textures.Enums;
-using System;
 
 namespace AssetRipper.Library.Exporters.Textures.Extensions
 {

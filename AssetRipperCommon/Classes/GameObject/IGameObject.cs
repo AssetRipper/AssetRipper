@@ -3,7 +3,6 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.GameObject

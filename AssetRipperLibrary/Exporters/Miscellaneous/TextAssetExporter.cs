@@ -9,7 +9,6 @@ using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 
 namespace AssetRipper.Library.Exporters.Miscellaneous

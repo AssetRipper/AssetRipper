@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Configuration;
+﻿using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Asset;
@@ -14,7 +13,6 @@ using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Scripts.Assemblies;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using Mono.Cecil;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

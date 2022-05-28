@@ -2,7 +2,6 @@
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Classes.ClassID_93;
-using System;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

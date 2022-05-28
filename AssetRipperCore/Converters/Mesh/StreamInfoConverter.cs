@@ -2,7 +2,6 @@
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
 using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 
 namespace AssetRipper.Core.Converters.Mesh

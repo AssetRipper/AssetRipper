@@ -1,7 +1,6 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.VersionHandling;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;

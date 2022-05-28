@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Misc.Bones;
-using System;
 
 namespace AssetRipper.Core.Classes.AnimationClip
 {

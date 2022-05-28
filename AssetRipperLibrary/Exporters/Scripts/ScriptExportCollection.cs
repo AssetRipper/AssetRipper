@@ -10,7 +10,6 @@ using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1035;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;

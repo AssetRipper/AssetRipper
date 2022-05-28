@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Core.IO
+﻿namespace AssetRipper.Core.IO
 {
 	public sealed class AccessList<T, TBase> : AccessListBase<TBase> where T : TBase, new()
 	{

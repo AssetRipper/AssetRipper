@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.IO.Asset;
-using System;
 using System.Linq;
 
 namespace AssetRipper.Core.Math.PackedBitVectors

@@ -1,6 +1,5 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.ControllerConstant;
 using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
-using System;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Library.Attributes
+﻿namespace AssetRipper.Library.Attributes
 {
 	[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
 	public sealed class RegisterPluginAttribute : Attribute

@@ -10,7 +10,6 @@ using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.GameStructure;
 using K4os.Compression.LZ4;
-using System;
 using System.IO;
 
 namespace AssetRipper.Core.Parser.Files.BundleFile

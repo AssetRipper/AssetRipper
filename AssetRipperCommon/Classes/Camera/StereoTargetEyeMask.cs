@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Core.Classes.Camera
+﻿namespace AssetRipper.Core.Classes.Camera
 {
 	[Flags]
 	public enum StereoTargetEyeMask

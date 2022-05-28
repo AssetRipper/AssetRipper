@@ -6,12 +6,10 @@ using AssetRipper.Core.Classes.Light;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Renderer;
 using AssetRipper.Core.Classes.SpriteRenderer;
-using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Utils;
-using System;
 using System.Linq;
 
 

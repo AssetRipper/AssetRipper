@@ -3,7 +3,6 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Utils;
-using System;
 using System.IO;
 
 namespace AssetRipper.Core.Configuration

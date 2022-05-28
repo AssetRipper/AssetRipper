@@ -9,7 +9,6 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
-using System;
 using System.Collections.Generic;
 
 

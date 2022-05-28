@@ -15,7 +15,6 @@ using MeshSharp.FBX;
 using MeshSharp.OBJ;
 using MeshSharp.PLY;
 using MeshSharp.STL;
-using System;
 using System.IO;
 using System.Linq;
 

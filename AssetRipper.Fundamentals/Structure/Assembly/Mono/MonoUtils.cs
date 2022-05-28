@@ -2,7 +2,6 @@ using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Mono.Extensions;
 using Mono.Cecil;
 using Mono.Collections.Generic;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

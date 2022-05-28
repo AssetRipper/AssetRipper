@@ -37,7 +37,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

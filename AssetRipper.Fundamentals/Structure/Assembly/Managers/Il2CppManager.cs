@@ -2,7 +2,6 @@ using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
-using System;
 using System.IO;
 using System.Text;
 using Cpp2IlApi = Cpp2IL.Core.Cpp2IlApi;

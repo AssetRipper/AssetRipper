@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes;
 using ICSharpCode.SharpZipLib.Checksum;
-using System;
 using System.Text;
 
 namespace AssetRipper.Core.Utils

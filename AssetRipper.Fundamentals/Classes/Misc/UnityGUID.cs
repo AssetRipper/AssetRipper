@@ -4,7 +4,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
-using System;
 using System.Buffers.Binary;
 using System.Security.Cryptography;
 using System.Text;

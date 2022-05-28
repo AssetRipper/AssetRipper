@@ -18,7 +18,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_150;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_6;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project

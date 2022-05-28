@@ -6,7 +6,6 @@ using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
-using System;
 using System.Buffers.Binary;
 
 namespace AssetRipper.Core.Converters.Sprite

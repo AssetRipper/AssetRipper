@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.ShaderBlob;
 using AssetRipper.Core.Layout;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
-using System;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

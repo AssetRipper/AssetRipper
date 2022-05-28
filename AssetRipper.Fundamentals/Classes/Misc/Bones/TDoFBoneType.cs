@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace AssetRipper.Core.Classes.Misc.Bones
+﻿namespace AssetRipper.Core.Classes.Misc.Bones
 {
 	public enum TDoFBoneType
 	{

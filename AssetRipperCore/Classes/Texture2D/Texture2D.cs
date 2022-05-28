@@ -1,7 +1,4 @@
-using AssetRipper.Core.Classes.Meta.Importers;
-using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Converters.Texture2D;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Logging;
@@ -10,7 +7,6 @@ using AssetRipper.Core.Project;
 
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
-using System;
 
 
 namespace AssetRipper.Core.Classes.Texture2D

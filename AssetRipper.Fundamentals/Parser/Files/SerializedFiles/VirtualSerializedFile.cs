@@ -1,6 +1,4 @@
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
@@ -9,7 +7,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.VersionHandling;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles

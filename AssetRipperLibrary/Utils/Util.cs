@@ -14,7 +14,6 @@ using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.WebFiles;
 using AssetRipper.Core.Structure;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

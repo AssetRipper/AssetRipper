@@ -1,5 +1,4 @@
 ﻿using Mono.Cecil;
-using System;
 using System.Reflection;
 
 namespace AssetRipper.Core.Structure.Assembly.Mono.Extensions

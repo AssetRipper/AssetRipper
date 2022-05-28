@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
-using System;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {

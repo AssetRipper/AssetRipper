@@ -1,7 +1,6 @@
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
-using System;
 using System.IO;
 
 namespace AssetRipper.Core.Structure.Assembly.Managers

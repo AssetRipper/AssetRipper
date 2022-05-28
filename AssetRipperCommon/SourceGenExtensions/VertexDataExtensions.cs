@@ -10,7 +10,6 @@ using AssetRipper.SourceGenerated.Subclasses.StreamInfo;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.VertexData;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;

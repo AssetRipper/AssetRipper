@@ -1,6 +1,4 @@
-﻿using AssetRipper.Core.Parser.Files;
-
-namespace AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode
+﻿namespace AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode
 {
 	public enum TangentMode
 	{

@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Parser.Files.BundleFile.Parser;
-using System;
 
 namespace AssetRipper.Core.Parser.Files.BundleFile.Header
 {

@@ -7,7 +7,6 @@ using AssetRipper.Core.Project;
 
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
-using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.SpriteAtlas

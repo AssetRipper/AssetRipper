@@ -1,11 +1,8 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
-using System;
-using System.Collections.Generic;
 
 
 namespace AssetRipper.Core.Classes.AudioClip

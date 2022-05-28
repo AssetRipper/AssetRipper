@@ -10,7 +10,6 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Structure.Assembly.Mono;
-using System;
 
 namespace AssetRipper.Core.Parser.Asset
 {

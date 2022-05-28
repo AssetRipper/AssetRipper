@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.VersionUtilities;
 using ShaderTextRestorer.Handlers;
 using System;

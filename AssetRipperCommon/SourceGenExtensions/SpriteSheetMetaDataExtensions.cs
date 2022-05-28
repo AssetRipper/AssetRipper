@@ -4,7 +4,6 @@ using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteSheetMetaData;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.SourceGenerated.Subclasses.Vector2Int;
-using System;
 using System.Linq;
 
 namespace AssetRipper.Core.SourceGenExtensions

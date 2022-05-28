@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Logging;
 using NAudio.Vorbis;
 using NAudio.Wave;
-using System;
 using System.IO;
 using System.Runtime.Versioning;
 

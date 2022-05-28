@@ -2,10 +2,8 @@ using AssetRipper.Core.Classes.BlendTree;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
-using System;
 using System.Linq;
 
 

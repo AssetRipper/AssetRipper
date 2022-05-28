@@ -7,7 +7,6 @@ using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
-using System;
 using System.Collections;
 using System.IO;
 using System.Linq;

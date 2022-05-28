@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;

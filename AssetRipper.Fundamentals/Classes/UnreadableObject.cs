@@ -2,7 +2,6 @@
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
-using System;
 using System.IO;
 
 namespace AssetRipper.Core.Classes

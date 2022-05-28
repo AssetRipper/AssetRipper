@@ -3,11 +3,8 @@ using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Library.Exporters.Scripts.Transform;
 using AssetRipper.Library.Exporters.Scripts.Transforms;
-using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
-using ICSharpCode.Decompiler.TypeSystem;
 using Mono.Cecil;
-using System;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {

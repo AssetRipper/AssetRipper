@@ -3,7 +3,6 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using Fmod5Sharp;
 using OggVorbisSharp;
-using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;

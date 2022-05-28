@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {

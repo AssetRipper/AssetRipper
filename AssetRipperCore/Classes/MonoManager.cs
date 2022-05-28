@@ -5,7 +5,6 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
-using System;
 using System.Collections.Generic;
 using DateTime = AssetRipper.Core.Classes.Misc.DateTime;
 

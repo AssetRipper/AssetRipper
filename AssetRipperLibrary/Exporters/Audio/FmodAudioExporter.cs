@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -10,7 +9,6 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using FMOD;
-using System;
 using System.IO;
 using System.Runtime.InteropServices;
 

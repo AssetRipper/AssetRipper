@@ -1,6 +1,4 @@
-﻿using AssetRipper.Core.Parser.Files;
-using ICSharpCode.Decompiler.CSharp;
-using System;
+﻿using ICSharpCode.Decompiler.CSharp;
 
 namespace AssetRipper.Library.Configuration
 {

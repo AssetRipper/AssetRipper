@@ -8,7 +8,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform_;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

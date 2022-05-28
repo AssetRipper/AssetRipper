@@ -15,7 +15,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
-using System;
 using System.Collections.Generic;
 
 
@@ -65,7 +64,7 @@ namespace AssetRipper.Core.Project.Collections
 				{
 					return false;
 				}
-				IShader shader = material.Shader_C21.FindAsset(material.SerializedFile);
+				IShader? shader = material.Shader_C21.FindAsset(material.SerializedFile);
 				if (shader == null)
 				{
 					return true;
@@ -82,7 +81,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is ISprite sprite)
 			{
-				ITexture2D spriteTexture = sprite.RD_C213.Texture.FindAsset(sprite.SerializedFile);
+				ITexture2D? spriteTexture = sprite.RD_C213.Texture.FindAsset(sprite.SerializedFile);
 				if (spriteTexture == null)
 				{
 					return false;
@@ -95,21 +94,10 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		private static bool IsEngineFile(string fileName)
+		private static bool IsEngineFile(string? fileName)
 		{
-			if (FilenameUtils.IsDefaultResource(fileName))
-			{
-				return true;
-			}
-			if (FilenameUtils.IsBuiltinExtra(fileName))
-			{
-				return true;
-			}
-			if (FilenameUtils.IsEngineGeneratedF(fileName))
-			{
-				return true;
-			}
-			return false;
+			return fileName is not null 
+				&& (FilenameUtils.IsDefaultResource(fileName) || FilenameUtils.IsBuiltinExtra(fileName) || FilenameUtils.IsEngineGeneratedF(fileName));
 		}
 
 		private static bool GetEngineBuildInAsset(IUnityObjectBase asset, UnityVersion version, out EngineBuiltInAsset engineAsset)

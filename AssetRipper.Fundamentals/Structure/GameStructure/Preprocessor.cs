@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Utils;
 using ICSharpCode.SharpZipLib.Zip;
-using System;
 using System.Collections.Generic;
 using System.IO;
 

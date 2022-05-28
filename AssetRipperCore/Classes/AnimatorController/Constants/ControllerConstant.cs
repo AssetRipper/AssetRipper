@@ -1,6 +1,5 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO.Asset;
-using System;
 
 namespace AssetRipper.Core.Classes.AnimatorController.Constants
 {

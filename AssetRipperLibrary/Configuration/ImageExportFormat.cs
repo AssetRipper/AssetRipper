@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Library.Configuration
+﻿namespace AssetRipper.Library.Configuration
 {
 	public enum ImageExportFormat
 	{

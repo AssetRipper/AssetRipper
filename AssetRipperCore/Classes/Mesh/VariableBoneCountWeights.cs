@@ -3,7 +3,6 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
-using System;
 
 namespace AssetRipper.Core.Classes.Mesh
 {

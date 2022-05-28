@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Files;
-using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 

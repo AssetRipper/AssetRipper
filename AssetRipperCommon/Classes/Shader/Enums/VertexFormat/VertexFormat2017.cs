@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
+﻿namespace AssetRipper.Core.Classes.Shader.Enums.VertexFormat
 {
 	/// <summary>
 	/// 2017.1 to 2018.x.x

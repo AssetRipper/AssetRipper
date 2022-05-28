@@ -8,7 +8,6 @@ using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
 using System.Collections.Generic;
