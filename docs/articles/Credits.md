@@ -2,6 +2,8 @@
 
 ## Licensed Works
 
+[AsmResolver](https://github.com/Washi1337/AsmResolver) is licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Licenses/AsmResolver.md).
+
 [Avalonia](https://github.com/AvaloniaUI/Avalonia) is licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Licenses/Avalonia.md).
 
 [CommandLineParser](https://github.com/commandlineparser/commandline) is licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Licenses/CommandLineParser.md).

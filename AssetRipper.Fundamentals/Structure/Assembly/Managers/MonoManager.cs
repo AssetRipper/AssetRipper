@@ -1,15 +1,12 @@
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
-using System.IO;
 
 namespace AssetRipper.Core.Structure.Assembly.Managers
 {
 	public sealed class MonoManager : BaseManager
 	{
 		public const string AssemblyExtension = ".dll";
-		public string GameDataPath { get; private set; }
-		public string ManagedPath { get; private set; }
 
 		public override ScriptingBackend ScriptingBackend => ScriptingBackend.Mono;
 
@@ -17,21 +14,17 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		public override void Initialize(PlatformGameStructure gameStructure)
 		{
-			string? gameDataPath = gameStructure?.GameDataPath;
-			if (string.IsNullOrWhiteSpace(gameDataPath))
+			Logger.Info(LogCategory.Import, $"During Mono initialization, found {gameStructure.Assemblies.Count} assemblies");
+			foreach ((string assemblyName, string assemblyPath) in gameStructure.Assemblies)
 			{
-				return;//Mixed Game Structures don't necessarily have a managed folder
-			}
-
-			GameDataPath = Path.GetFullPath(gameDataPath);
-			ManagedPath = gameStructure?.ManagedPath ?? throw new ArgumentException("Managed Path cannot be null");
-
-			string[] assemblyFiles = Directory.GetFiles(ManagedPath, "*.dll");
-
-			Logger.Info(LogCategory.Import, $"During Mono initialization, found {assemblyFiles.Length} assemblies");
-			foreach (string assembly in assemblyFiles)
-			{
-				Load(assembly);
+				if(AsmResolver.PE.PEImage.FromFile(assemblyPath).DotNetDirectory is null)
+				{
+					Logger.Info(LogCategory.Import, $"Skipping native assembly: {assemblyName}");
+				}
+				else
+				{
+					Load(assemblyPath);
+				}
 			}
 		}
 
@@ -42,11 +35,6 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 				return true;
 			}
 			return false;
-		}
-
-		~MonoManager()
-		{
-			Dispose(false);
 		}
 	}
 }

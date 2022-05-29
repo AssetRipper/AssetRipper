@@ -169,7 +169,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			try
 			{
 				//Loads any Mono or IL2Cpp assemblies
-				FileCollection.AssemblyManager.Initialize(PlatformStructure);
+				FileCollection.AssemblyManager.Initialize(PlatformStructure ?? MixedStructure);
 			}
 			catch (Exception ex)
 			{
