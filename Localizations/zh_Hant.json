@@ -91,7 +91,7 @@
     "c_sharp_langage_version_config_auto_safe": "自動 - 安全",
     "c_sharp_langage_version_config_auto_experimental": "自動 - 實驗性",
     "c_sharp_language_version_config_description": "反編譯指令碼時要使用的 C# 語言版本。",
-    "config_screen_drag_drop_prompt": "請注意，某些設定變更可能造成或避免錯誤。\n準備好後，請將遊戲資料或資料夾拖放到此視窗，或使用左上方的功能表手動開啟。",
+    "config_screen_drag_drop_prompt": "請注意，部分設定變更可能引發錯誤，但也可能預防錯誤的發生。\n準備好後，請將遊戲資料或資料夾拖放到此視窗，或使用左上方的功能表手動開啟。",
     "menu_file": "檔案",
     "menu_file_open_file": "開啟檔案",
     "menu_file_open_folder": "開啟資料夾",
