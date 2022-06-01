@@ -94,8 +94,6 @@ namespace AssetRipper.GUI
 			{
 				string? version = UnityVersion;
 
-				Logger.Info("Version: " + version);
-
 				if (version == null)
 				{
 					return null;
