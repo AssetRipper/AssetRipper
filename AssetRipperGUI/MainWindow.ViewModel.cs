@@ -10,8 +10,10 @@ using Avalonia.Input;
 using Avalonia.Threading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace AssetRipper.GUI
 {
@@ -23,6 +25,7 @@ namespace AssetRipper.GUI
 		private bool _hasLoaded;
 		private bool _isExporting;
 		private string? _loadingText;
+		private string? _unityVersionText;
 		private string _logText = "";
 		private string _exportingText = "";
 		private SelectedAsset? _selectedAsset;
@@ -73,6 +76,32 @@ namespace AssetRipper.GUI
 			{
 				_loadingText = value;
 				OnPropertyChanged();
+			}
+		}
+
+		public string? UnityVersion
+		{
+			get => _unityVersionText;
+			set
+			{
+				_unityVersionText = value?.Split("f")?[0];
+				OnPropertyChanged(nameof(UnityVersionText));
+			}
+		}
+		public string? UnityVersionText
+		{
+			get
+			{
+				string? version = UnityVersion;
+
+				Logger.Info("Version: " + version);
+
+				if (version == null)
+				{
+					return null;
+				}
+
+				return "Unity " + version;
 			}
 		}
 
@@ -170,6 +199,7 @@ namespace AssetRipper.GUI
 			UIImportManager.ImportFromPath(_ripper, filesDropped, gameStructure =>
 			{
 				HasLoaded = true;
+				UnityVersion = _ripper.GameStructure.FileCollection.GameFiles.Values.Max(t => t.Version).ToString();
 				_assetContainer = new UIAssetContainer(_ripper);
 
 				Dispatcher.UIThread.Post(() =>
@@ -340,6 +370,24 @@ namespace AssetRipper.GUI
 				Logger.Error(error);
 				this.ShowPopup(string.Format(MainWindow.Instance.LocalizationManager["error_exporting_with_reason"], error.Message), MainWindow.Instance.LocalizationManager["error"]);
 			});
+		}
+
+		// Called from UI
+		public void OpenUnityDownloadPage()
+		{
+			string url = "https://unity3d.com/unity/whats-new/" + UnityVersion;
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+			}
+			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+			{
+				Process.Start("xdg-open", url);
+			}
+			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			{
+				Process.Start("open", url);
+			}
 		}
 
 		//Called from UI
