@@ -13,7 +13,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace AssetRipper.GUI
 {
@@ -374,15 +373,15 @@ namespace AssetRipper.GUI
 		public void OpenUnityDownloadPage()
 		{
 			string url = "https://unity3d.com/unity/whats-new/" + UnityVersion;
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			if (OperatingSystem.IsWindows())
 			{
 				Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
 			}
-			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+			else if (OperatingSystem.IsLinux())
 			{
 				Process.Start("xdg-open", url);
 			}
-			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			else if (OperatingSystem.IsMacOS())
 			{
 				Process.Start("open", url);
 			}
