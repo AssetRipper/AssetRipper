@@ -1,6 +1,6 @@
 # Development Roadmap
 
-## 0.2.0.3 / 0.2.1.0
+## 0.2.1.0
 This release will be primarily focused on cleaning up and refactoring the project.
 
 * Mesh export - STL, OBJ, FBX, PLY, GLB
