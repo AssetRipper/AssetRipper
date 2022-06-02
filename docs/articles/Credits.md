@@ -14,8 +14,6 @@ Crunch is licensed under the [MIT license](https://github.com/AssetRipper/AssetR
 
 [darkfx](https://github.com/steffen-wilke/darkfx) is licensed under the [MIT License](https://github.com/AssetRipper/AssetRipper/blob/master/Licenses/darkfx.md).
 
-FMOD is licensed under a [non-commercial license](https://github.com/AssetRipper/AssetRipper/blob/master/Licenses/FMOD.md).
-
 [Fmod5Sharp](https://github.com/SamboyCoding/Fmod5Sharp) is licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Licenses/Fmod5Sharp.md).
 
 [ICSharpCode.Decompiler](https://github.com/icsharpcode/ILSpy) is licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Licenses/ILSpy.md).
