@@ -88,7 +88,12 @@
                     </DataTemplate>
                 </MenuItem.ItemTemplate>
             </MenuItem>
-			
+
+            <!-- Unity Version Menu -->
+            <MenuItem Header="{Binding UnityVersionText}" IsVisible="{Binding HasLoaded}">
+                <!--Unity {Version}->Download-->
+                <MenuItem Header="Download" Command="{Binding OpenUnityDownloadPage}" />
+            </MenuItem>
         </Menu>
 
         <!--Introduction Screens-->
