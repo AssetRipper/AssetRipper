@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Serializable;
@@ -73,6 +74,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			ScriptIdentifier scriptID = monoScript.GetScriptID(true);
 			return monoScript.SerializedFile.Collection.AssemblyManager.IsPresent(scriptID);
+		}
+
+		public static Hash128 GetPropertiesHash(this IMonoScript monoScript)
+		{
+			return monoScript.Has_PropertiesHash_C115_Hash128()
+				? (Hash128)monoScript.PropertiesHash_C115_Hash128
+				: new Hash128(monoScript.PropertiesHash_C115_UInt32);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,8 +31,8 @@ namespace AssetRipper.Library.Exporters.TypeTrees
 					string? typeTreeText = type.OldType?.Dump;
 					if (!string.IsNullOrEmpty(typeTreeText))
 					{
-						IMonoScript? monoScript = monoScripts.FirstOrDefault(asset => asset.PropertiesHash == type.OldTypeHash);
-						string typeName = monoScript == null ? type.TypeID.ToString() : monoScript.GetFullName();
+						IMonoScript? monoScript = monoScripts.FirstOrDefault(asset => asset.GetPropertiesHash() == type.OldTypeHash);
+						string typeName = monoScript is null ? type.TypeID.ToString() : monoScript.GetFullName();
 						sb.AppendLine($"// classID{{{(int)type.TypeID}}}: {typeName}");
 						sb.AppendLine(typeTreeText);
 					}
