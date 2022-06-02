@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AssetRipper.Library.Exporters.Scripts.Assemblies
+namespace AssetRipper.Library.Exporters.Scripts.AssemblyDefinitions
 {
 	public class AssemblyDefinitionAsset
 	{

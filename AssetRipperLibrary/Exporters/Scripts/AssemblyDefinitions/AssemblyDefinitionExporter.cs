@@ -3,7 +3,7 @@ using Mono.Cecil;
 using System.IO;
 using System.Text.Json;
 
-namespace AssetRipper.Library.Exporters.Scripts.Assemblies
+namespace AssetRipper.Library.Exporters.Scripts.AssemblyDefinitions
 {
 	public static class AssemblyDefinitionExporter
 	{

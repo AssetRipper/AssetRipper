@@ -10,7 +10,7 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library.Configuration;
-using AssetRipper.Library.Exporters.Scripts.Assemblies;
+using AssetRipper.Library.Exporters.Scripts.AssemblyDefinitions;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using Mono.Cecil;
 using System.Collections.Generic;
