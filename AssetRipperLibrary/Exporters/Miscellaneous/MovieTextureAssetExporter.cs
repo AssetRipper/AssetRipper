@@ -13,10 +13,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 	{
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is IMovieTexture texture)
-				return IsValidData(texture.MovieData_C152);
-			else
-				return false;
+			return asset is IMovieTexture texture && IsValidData(texture.MovieData_C152);
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)

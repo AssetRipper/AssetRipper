@@ -41,7 +41,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{terrain.NameString}' to bitmap");
 				return false;
 			}
-			if (System.OperatingSystem.IsWindows())
+			if (OperatingSystem.IsWindows())
 			{
 				bitmap.Save(path, ImageFormat);
 			}
@@ -55,8 +55,8 @@ namespace AssetRipper.Library.Exporters.Terrains
 		public static DirectBitmap GetBitmap(ITerrainData terrain)
 		{
 			DirectBitmap bitmap = new DirectBitmap(
-				System.Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution),
-				System.Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution), 
+				Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution),
+				Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution), 
 				GetBGRA32Data(terrain));
 			bitmap.FlipY();
 			return bitmap;
@@ -80,27 +80,45 @@ namespace AssetRipper.Library.Exporters.Terrains
 		private static ColorRGBAf ConvertToColor(float value)
 		{
 			if (value <= 0f)
+			{
 				return zero;
+			}
 			else if (value < q1point)
+			{
 				return Average(zero, 0f, q1, q1point, value);
+			}
 			else if (value < q2point)
+			{
 				return Average(q1, q1point, q2, q2point, value);
+			}
 			else if (value < q3point)
+			{
 				return Average(q2, q2point, q3, q3point, value);
+			}
 			else if (value < 1f)
+			{
 				return Average(q3, q3point, one, 1f, value);
+			}
 			else
+			{
 				return one;
+			}
 		}
 
 		private static float Normalize(float min, float max, float value)
 		{
 			if (value <= min)
+			{
 				return 0f;
+			}
 			else if (value >= max)
+			{
 				return 1f;
+			}
 			else
+			{
 				return (value - min) / (max - min);
+			}
 		}
 
 		private static ColorRGBAf Average(ColorRGBAf minColor, float min, ColorRGBAf maxColor, float max, float value)

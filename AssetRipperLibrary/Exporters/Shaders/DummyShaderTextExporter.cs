@@ -60,7 +60,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
 			if (shader.ParsedForm_C48?.NameString?.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
+			{
 				return false;
+			}
 
 			using (FileStream fileStream = File.Create(path))
 			{
@@ -106,7 +108,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
 				string header = textAsset.Script_C49.String;
-				var subshaderIndex = header.IndexOf("SubShader");
+				int subshaderIndex = header.IndexOf("SubShader");
 				writer.WriteString(header, 0, subshaderIndex);
 
 				writer.Write("\t//DummyShaderTextExporter\n");
@@ -136,7 +138,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 		private static void Export(SourceGenerated.Subclasses.SerializedProperty.ISerializedProperty _this, TextWriter writer)
 		{
 			writer.WriteIndent(2);
-			foreach (var attribute in _this.Attributes)
+			foreach (SourceGenerated.Subclasses.Utf8String.Utf8String? attribute in _this.Attributes)
 			{
 				writer.Write("[{0}] ", attribute);
 			}

@@ -11,6 +11,6 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers.Editor
 		}
 
 		public float Time { get; set; }
-		public StreamedCurveKey[] Curves { get; set; } = System.Array.Empty<StreamedCurveKey>();
+		public StreamedCurveKey[] Curves { get; set; } = Array.Empty<StreamedCurveKey>();
 	}
 }

@@ -63,7 +63,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 				IReadOnlyList<StreamedFrame> streamedFrames = GenerateFramesFromStreamedClip(clip.StreamedClip, Layout);
 				float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
 				float lastSampleFrame = streamedFrames.Count > 1 ? streamedFrames[streamedFrames.Count - 2].Time : 0.0f;
-				float lastFrame = System.Math.Max(lastDenseFrame, lastSampleFrame);
+				float lastFrame = Math.Max(lastDenseFrame, lastSampleFrame);
 
 				ProcessStreams(streamedFrames, bindings, tos, clip.DenseClip.SampleRate);
 				ProcessDenses(clip, bindings, tos);

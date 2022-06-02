@@ -116,9 +116,14 @@ namespace AssetRipper.Library
 		{
 			ResetData();
 			if (paths.Count == 1)
+			{
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths[0]}");
+			}
 			else
+			{
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths.Count} paths...");
+			}
+
 			OnStartLoadingGameStructure?.Invoke();
 			TaskManager.WaitUntilAllCompleted();
 
@@ -133,12 +138,20 @@ namespace AssetRipper.Library
 
 		public IEnumerable<IUnityObjectBase> FetchLoadedAssets()
 		{
-			if (GameStructure == null) throw new NullReferenceException("GameStructure cannot be null");
-			if (GameStructure.FileCollection == null) throw new NullReferenceException("FileCollection cannot be null");
+			if (GameStructure == null)
+			{
+				throw new NullReferenceException("GameStructure cannot be null");
+			}
+
+			if (GameStructure.FileCollection == null)
+			{
+				throw new NullReferenceException("FileCollection cannot be null");
+			}
+
 			return GameStructure.FileCollection.FetchAssets();
 		}
 
-		public void ExportProject(string exportPath) => ExportProject(exportPath, LibraryConfiguration.DefaultFilter);
+		public void ExportProject(string exportPath) => ExportProject(exportPath, Core.Configuration.CoreConfiguration.DefaultFilter);
 		public void ExportProject(string exportPath, IUnityObjectBase asset) => ExportProject(exportPath, new IUnityObjectBase[] { asset });
 		public void ExportProject(string exportPath, IEnumerable<IUnityObjectBase> assets) => ExportProject(exportPath, GetFilter(assets));
 		public void ExportProject<T>(string exportPath) => ExportProject(exportPath, GetFilter<T>());
@@ -185,9 +198,13 @@ namespace AssetRipper.Library
 		private static Func<IUnityObjectBase, bool> GetFilter(IEnumerable<IUnityObjectBase> assets)
 		{
 			if (assets == null || !assets.Any())
+			{
 				return LibraryConfiguration.DefaultFilter;
+			}
 			else
+			{
 				return assets.Contains;
+			}
 		}
 		private static Func<IUnityObjectBase, bool> GetFilter<T>()
 		{
@@ -200,21 +217,36 @@ namespace AssetRipper.Library
 		private static Func<IUnityObjectBase, bool> GetFilter(IEnumerable<Type> types)
 		{
 			if (types == null || !types.Any())
+			{
 				return LibraryConfiguration.DefaultFilter;
+			}
 			else
+			{
 				return asset => types.Any(t => asset.GetType().IsAssignableTo(t));
+			}
 		}
 
 		private void InitializeExporters()
 		{
-			if (GameStructure == null) 
+			if (GameStructure == null)
+			{
 				throw new NullReferenceException("GameStructure cannot be null");
-			if (GameStructure.FileCollection == null) 
+			}
+
+			if (GameStructure.FileCollection == null)
+			{
 				throw new NullReferenceException("FileCollection cannot be null");
-			if (GameStructure.Exporter == null) 
+			}
+
+			if (GameStructure.Exporter == null)
+			{
 				throw new NullReferenceException("Project Exporter cannot be null");
+			}
+
 			if (ExportersInitialized)
+			{
 				return;
+			}
 
 			OverrideNormalExporters();
 			OnInitializingExporters?.Invoke();

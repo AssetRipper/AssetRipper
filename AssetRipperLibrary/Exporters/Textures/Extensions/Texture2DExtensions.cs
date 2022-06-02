@@ -55,9 +55,13 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 				default:
 					{
 						if (safe)
+						{
 							return KTXBaseInternalFormat.RG;
+						}
 						else
+						{
 							throw new NotSupportedException(((TextureFormat)_this.TextureFormat_C28).ToString());
+						}
 					}
 			}
 		}
@@ -84,9 +88,13 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 				default:
 					{
 						if (safe)
+						{
 							return 0;
+						}
 						else
+						{
 							throw new NotSupportedException(((TextureFormat)_this.TextureFormat_C28).ToString());
+						}
 					}
 			}
 		}
@@ -129,9 +137,13 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 				default:
 					{
 						if (safe)
+						{
 							return 0;
+						}
 						else
+						{
 							throw new NotSupportedException(((TextureFormat)_this.TextureFormat_C28).ToString());
+						}
 					}
 			}
 		}

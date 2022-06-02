@@ -62,11 +62,30 @@ namespace AssetRipper.Library.Utils
 
 		public static void WriteBmp(byte[] bgra32Data, int width, int height, Stream stream, bool flip = true)
 		{
-			if (bgra32Data is null) throw new ArgumentNullException(nameof(bgra32Data));
-			if (stream is null) throw new ArgumentNullException(nameof(stream));
-			if (width <= 0) throw new ArgumentOutOfRangeException(nameof(width));
-			if (height <= 0) throw new ArgumentOutOfRangeException(nameof(height));
-			if (bgra32Data.Length != GetRawImageSize(width, height)) throw new ArgumentException("Length must match 4 * width * height", nameof(bgra32Data));
+			if (bgra32Data is null)
+			{
+				throw new ArgumentNullException(nameof(bgra32Data));
+			}
+
+			if (stream is null)
+			{
+				throw new ArgumentNullException(nameof(stream));
+			}
+
+			if (width <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(width));
+			}
+
+			if (height <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(height));
+			}
+
+			if (bgra32Data.Length != GetRawImageSize(width, height))
+			{
+				throw new ArgumentException("Length must match 4 * width * height", nameof(bgra32Data));
+			}
 
 			using BinaryWriter writer = new BinaryWriter(stream);
 

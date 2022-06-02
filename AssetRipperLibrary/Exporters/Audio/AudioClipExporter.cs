@@ -25,19 +25,27 @@ namespace AssetRipper.Library.Exporters.Audio
 			IAudioClip audioClip = (IAudioClip)asset;
 			bool success = AudioClipDecoder.TryGetDecodedAudioClipData(audioClip, out byte[] decodedData, out string fileExtension);
 			if (!success)
+			{
 				return false;
+			}
 
 			if (AudioFormat == AudioExportFormat.Wav || AudioFormat == AudioExportFormat.Mp3)
 			{
 				if (fileExtension == "ogg")
+				{
 					decodedData = AudioConverter.OggToWav(decodedData);
+				}
 
-				if (AudioFormat == AudioExportFormat.Mp3 && System.OperatingSystem.IsWindows() && (fileExtension == "ogg" || fileExtension == "wav"))
+				if (AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows() && (fileExtension == "ogg" || fileExtension == "wav"))
+				{
 					decodedData = AudioConverter.WavToMp3(decodedData);
+				}
 			}
 
 			if (decodedData == null || decodedData.Length == 0)
+			{
 				return false;
+			}
 
 			TaskManager.AddTask(File.WriteAllBytesAsync(path, decodedData));
 			return true;
@@ -52,11 +60,18 @@ namespace AssetRipper.Library.Exporters.Audio
 		{
 			string defaultExtension = AudioClipDecoder.GetFileExtension(audioClip);
 			if (AudioFormat == AudioExportFormat.Wav && defaultExtension == "ogg")
+			{
 				return "wav";
-			if (AudioFormat == AudioExportFormat.Mp3 && System.OperatingSystem.IsWindows() && (defaultExtension == "ogg" || defaultExtension == "wav"))
+			}
+
+			if (AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows() && (defaultExtension == "ogg" || defaultExtension == "wav"))
+			{
 				return "mp3";
+			}
 			else
+			{
 				return defaultExtension;
+			}
 		}
 	}
 }

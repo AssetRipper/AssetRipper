@@ -16,7 +16,10 @@ namespace AssetRipper.Library.Exporters.Textures
 		public static bool Decode(TextureFormat textureFormat, byte[] texturedata, int width, int height, IntPtr bmp, bool fixAlpha)
 		{
 			if (!OperatingSystem.IsWindows())
+			{
 				return false;
+			}
+
 			texgenpackdecode((int)ToTexgenpackTexturetype(textureFormat), texturedata, width, height, bmp, fixAlpha);
 			return true;
 		}

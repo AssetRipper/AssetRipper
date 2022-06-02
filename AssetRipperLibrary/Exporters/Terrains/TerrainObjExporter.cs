@@ -33,7 +33,9 @@ namespace AssetRipper.Library.Exporters.Terrains
 		{
 			string text = ExportTerrainToObj((ITerrainData)asset);
 			if (string.IsNullOrEmpty(text))
+			{
 				return false;
+			}
 
 			using (FileStream fileStream = File.Create(path))
 			{
@@ -46,8 +48,8 @@ namespace AssetRipper.Library.Exporters.Terrains
 		private static string ExportTerrainToObj(ITerrainData terrain)
 		{
 			StringBuilder sb = new StringBuilder();
-			int tw = System.Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution);
-			int th = System.Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution);
+			int tw = Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution);
+			int th = Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution);
 
 			//Vector3f meshScale = terrain.Heightmap.Scale;
 			Vector3f meshScale = new Vector3f(-1, 1, 1);
@@ -109,8 +111,8 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		private static float[,] GetHeights(ITerrainData terrain)
 		{
-			int width = System.Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution);
-			int height = System.Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution);
+			int width = Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution);
+			int height = Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution);
 			short[] heights = terrain.Heightmap_C156.Heights;
 			float[,] result = new float[width, height];
 			for (int y = 0; y < height; y++)

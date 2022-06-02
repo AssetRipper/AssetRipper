@@ -51,17 +51,29 @@ namespace AssetRipper.Library.Configuration
 		private static LanguageVersion GetAutomaticCSharpLanguageVersion(UnityVersion unityVersion, bool experimental)
 		{
 			if (unityVersion.IsGreaterEqual(2021, 2))
+			{
 				return LanguageVersion.CSharp9_0;
+			}
 			else if (unityVersion.IsGreaterEqual(2020, 2))
+			{
 				return LanguageVersion.CSharp8_0;
+			}
 			else if (unityVersion.IsGreaterEqual(2019, 2))
+			{
 				return LanguageVersion.CSharp7_3;
+			}
 			else if (experimental && unityVersion.IsGreaterEqual(2018, 3))
+			{
 				return LanguageVersion.CSharp7_3;
+			}
 			else if (experimental && unityVersion.IsGreaterEqual(2017, 1))
+			{
 				return LanguageVersion.CSharp6;
+			}
 			else
+			{
 				return LanguageVersion.CSharp4;
+			}
 		}
 	}
 }

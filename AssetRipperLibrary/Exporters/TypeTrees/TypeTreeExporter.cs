@@ -15,7 +15,7 @@ namespace AssetRipper.Library.Exporters.TypeTrees
 			string outputDirectory = Path.Combine(ripper.Settings.AuxiliaryFilesPath, "TypeTrees");
 
 			Logger.Info(LogCategory.Export, "Exporting type trees...");
-			foreach (var serializedFile in ripper.GameStructure.FileCollection.GameSerializedFiles)
+			foreach (Core.Parser.Files.SerializedFiles.SerializedFile? serializedFile in ripper.GameStructure.FileCollection.GameSerializedFiles)
 			{
 				if (serializedFile.Metadata.EnableTypeTree)
 				{
@@ -24,13 +24,13 @@ namespace AssetRipper.Library.Exporters.TypeTrees
 
 				List<IMonoScript> monoScripts = serializedFile.FetchAssets().Where(asset => asset is IMonoScript).Select(asset => (IMonoScript)asset).ToList();
 				StringBuilder sb = new StringBuilder();
-				foreach (var type in serializedFile.Metadata.Types)
+				foreach (Core.Parser.Files.SerializedFiles.Parser.SerializedType? type in serializedFile.Metadata.Types)
 				{
 					//Logger.Info(LogCategory.Export, $"\t\tID: {type.TypeID.ToString()} Node Count: {type.OldType?.Nodes?.Count ?? 0}");
-					string typeTreeText = type.OldType?.Dump;
+					string? typeTreeText = type.OldType?.Dump;
 					if (!string.IsNullOrEmpty(typeTreeText))
 					{
-						IMonoScript monoScript = monoScripts.FirstOrDefault(asset => asset.PropertiesHash == type.OldTypeHash);
+						IMonoScript? monoScript = monoScripts.FirstOrDefault(asset => asset.PropertiesHash == type.OldTypeHash);
 						string typeName = monoScript == null ? type.TypeID.ToString() : monoScript.GetFullName();
 						sb.AppendLine($"// classID{{{(int)type.TypeID}}}: {typeName}");
 						sb.AppendLine(typeTreeText);

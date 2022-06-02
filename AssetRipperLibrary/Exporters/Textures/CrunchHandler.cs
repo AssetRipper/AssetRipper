@@ -79,8 +79,16 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static bool DecompressNormalCrunchWithStudioDecoder(byte[] data, out byte[] uncompressedBytes)
 		{
-			if (data is null) throw new ArgumentNullException(nameof(data));
-			if (data.Length == 0) throw new ArgumentException(nameof(data));
+			if (data is null)
+			{
+				throw new ArgumentNullException(nameof(data));
+			}
+
+			if (data.Length == 0)
+			{
+				throw new ArgumentException(nameof(data));
+			}
+
 			Logger.Info("About to unpack normal crunch...");
 			uncompressedBytes = Texture2DDecoder.TextureDecoder.UnpackCrunch(data);
 			return uncompressedBytes != null;
@@ -88,8 +96,16 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private static bool DecompressUnityCrunchWithStudioDecoder(byte[] data, out byte[] uncompressedBytes)
 		{
-			if (data is null) throw new ArgumentNullException(nameof(data));
-			if (data.Length == 0) throw new ArgumentException(nameof(data));
+			if (data is null)
+			{
+				throw new ArgumentNullException(nameof(data));
+			}
+
+			if (data.Length == 0)
+			{
+				throw new ArgumentException(nameof(data));
+			}
+
 			Logger.Info("About to unpack unity crunch...");
 			uncompressedBytes = Texture2DDecoder.TextureDecoder.UnpackUnityCrunch(data);
 			return uncompressedBytes != null;

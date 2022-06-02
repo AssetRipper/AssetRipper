@@ -92,16 +92,20 @@ namespace AssetRipper.Library.Exporters.Scripts
 			string scriptFolder = m_export[0].ExportPath;
 			string scriptPath = Path.Combine(dirPath, scriptFolder);
 
-			foreach (var assembly in ((AssemblyDllExporter)AssetExporter).AssemblyManager.GetAssemblies())
+			foreach (Mono.Cecil.AssemblyDefinition? assembly in ((AssemblyDllExporter)AssetExporter).AssemblyManager.GetAssemblies())
 			{
 				string assemblyName = assembly.Name.Name;
 				if (!assemblyName.EndsWith(".dll"))
+				{
 					assemblyName = assemblyName + ".dll";
+				}
 
 				if (ReferenceAssemblies.IsReferenceAssembly(assemblyName))
+				{
 					continue;
+				}
 
-				string path = System.IO.Path.Combine(scriptPath, assemblyName);
+				string path = Path.Combine(scriptPath, assemblyName);
 				Directory.CreateDirectory(scriptPath);
 				using FileStream file = System.IO.File.Create(path);
 				assembly.Write(file);
@@ -147,9 +151,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 				}
 			}
 
-			var scriptKey = $"{script.AssemblyName_C115.String}{script.Namespace_C115.String}{script.ClassName_C115.String}";
+			string? scriptKey = $"{script.AssemblyName_C115.String}{script.Namespace_C115.String}{script.ClassName_C115.String}";
 			if (!ScriptId.ContainsKey(scriptKey))
+			{
 				ScriptId[scriptKey] = Compute(script.Namespace_C115.String, script.ClassName_C115.String);
+			}
 
 			return new MetaPtr(ScriptId[scriptKey], GetAssemblyGuid(script.AssemblyName_C115.String), AssetExporter.ToExportType(asset));
 		}
@@ -178,7 +184,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 			else
 			{
-				var guid = CalculateAssemblyHashGuid(assemblyName);
+				UnityGUID guid = CalculateAssemblyHashGuid(assemblyName);
 				AssemblyHash[assemblyName] = guid;
 				return guid;
 			}
@@ -192,7 +198,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		private void OnAssemblyExported(IExportContainer container, string path)
 		{
-			var guid = GetAssemblyGuid(Path.GetFileName(path));
+			UnityGUID guid = GetAssemblyGuid(Path.GetFileName(path));
 			DefaultImporter importer = new DefaultImporter(container.ExportLayout);//Might need to use PluginImporter
 			Meta meta = new Meta(guid, importer);
 			ExportMeta(container, meta, path);

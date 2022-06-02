@@ -44,7 +44,11 @@ namespace AssetRipper.Library.Utils
 		}
 		public static void DeleteDirectory(string path)
 		{
-			if (!Directory.Exists(path)) return;
+			if (!Directory.Exists(path))
+			{
+				return;
+			}
+
 			foreach (string directory in Directory.GetDirectories(path))
 			{
 				Thread.Sleep(1);
@@ -111,7 +115,7 @@ namespace AssetRipper.Library.Utils
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Could not perform line replace on {filePath}, file does not exist");
 				return;
 			}
-			var text = File.ReadAllText(filePath);
+			string? text = File.ReadAllText(filePath);
 			text = text.Replace(source, replacement);
 			File.WriteAllText(filePath, text);
 		}
@@ -122,22 +126,22 @@ namespace AssetRipper.Library.Utils
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Could not perform line insert on {filePath}, file does not exist");
 				return;
 			}
-			var lines = File.ReadAllLines(filePath).ToList();
+			List<string>? lines = File.ReadAllLines(filePath).ToList();
 			lines.Insert(index, replacement);
 			File.WriteAllLines(filePath, lines);
 		}
 
 		public static List<string> GetManifestDependencies(string filePath)
 		{
-			var yaml = new YamlStream();
+			YamlStream? yaml = new YamlStream();
 			YamlMappingNode mapping = null;
-			using (var fs = File.OpenText(filePath))
+			using (StreamReader? fs = File.OpenText(filePath))
 			{
 				yaml.Load(fs);
 				mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
 			}
-			var dependencies = (YamlSequenceNode)mapping.Children[new YamlScalarNode("Dependencies")];
-			var results = dependencies
+			YamlSequenceNode? dependencies = (YamlSequenceNode)mapping.Children[new YamlScalarNode("Dependencies")];
+			List<string?>? results = dependencies
 				.Select(node => Path.GetFileName(((YamlScalarNode)node).Value))
 				.ToList();
 			return results;
@@ -145,16 +149,16 @@ namespace AssetRipper.Library.Utils
 
 		internal static List<string> GetManifestAssets(string filePath)
 		{
-			var lines = File.ReadAllLines(filePath).ToList();
+			List<string>? lines = File.ReadAllLines(filePath).ToList();
 			bool isAtDependencies = false;
-			var results = new List<string>();
-			foreach (var line in lines)
+			List<string>? results = new List<string>();
+			foreach (string? line in lines)
 			{
 				if (isAtDependencies)
 				{
 					if (line.StartsWith("- "))
 					{
-						var dep = line.Replace("- ", "");
+						string? dep = line.Replace("- ", "");
 						results.Add(Path.GetFileName(dep));
 					}
 					else
@@ -164,7 +168,10 @@ namespace AssetRipper.Library.Utils
 				}
 				else
 				{
-					if (line.StartsWith("Assets:")) isAtDependencies = true;
+					if (line.StartsWith("Assets:"))
+					{
+						isAtDependencies = true;
+					}
 				}
 			}
 			return results;
@@ -211,10 +218,10 @@ namespace AssetRipper.Library.Utils
 
 		public static void FixShaderBundle(GameCollection fileCollection)
 		{
-			var shaderBundle = fileCollection.GameFiles.Values.FirstOrDefault(f => f is SerializedFile sf && Path.GetFileName(sf.FilePath) == "shaders");
+			SerializedFile? shaderBundle = fileCollection.GameFiles.Values.FirstOrDefault(f => f is SerializedFile sf && Path.GetFileName(sf.FilePath) == "shaders");
 			if (shaderBundle != null)
 			{
-				foreach (var asset in shaderBundle.FetchAssets())
+				foreach (IUnityObjectBase? asset in shaderBundle.FetchAssets())
 				{
 					if (asset is IShader shader)
 					{
@@ -235,7 +242,7 @@ namespace AssetRipper.Library.Utils
 			{
 				return mb.NameString;
 			}
-			var nameProp = asset.GetType().GetProperty("Name");
+			PropertyInfo? nameProp = asset.GetType().GetProperty("Name");
 			if (nameProp != null)
 			{
 				return (string)nameProp.GetValue(asset);
@@ -245,23 +252,23 @@ namespace AssetRipper.Library.Utils
 		public static void FixScript(IMonoScript script)
 		{
 			using MD5 md5 = MD5.Create();
-			var fullName = $"{script.GetAssemblyNameFixed()}.{script.Namespace}.{script.ClassName}";
-			var data = md5.ComputeHash(Encoding.UTF8.GetBytes(fullName));
+			string? fullName = $"{script.GetAssemblyNameFixed()}.{script.Namespace}.{script.ClassName}";
+			byte[]? data = md5.ComputeHash(Encoding.UTF8.GetBytes(fullName));
 			SetGUID(script, data);
 		}
 		public static void SetGUID(IUnityObjectBase asset, byte[] guid)
 		{
-			var swapped = new byte[guid.Length];
+			byte[]? swapped = new byte[guid.Length];
 			for (int i = 0; i < guid.Length; i++)
 			{
-				var x = guid[i];
+				byte x = guid[i];
 				swapped[i] = (byte)((x & 0x0F) << 4 | (x & 0xF0) >> 4);
 			}
 			asset.GUID = new UnityGUID(swapped);
 		}
 		static T CreateInstance<T>(params object[] parameters)
 		{
-			var instance = typeof(T)
+			object? instance = typeof(T)
 				.GetConstructors(AllBindingFlags)
 				.Single(c => c.GetParameters().Length == parameters.Length)
 				.Invoke(parameters);
@@ -269,27 +276,27 @@ namespace AssetRipper.Library.Utils
 		}
 		public static GameCollection CreateGameCollection()
 		{
-			var layoutInfo = new LayoutInfo(new UnityVersion(), BuildTarget.StandaloneWin64Player, TransferInstructionFlags.NoTransferInstructionFlags);
-			var gameCollection = new GameCollection(layoutInfo);
+			LayoutInfo? layoutInfo = new LayoutInfo(new UnityVersion(), BuildTarget.StandaloneWin64Player, TransferInstructionFlags.NoTransferInstructionFlags);
+			GameCollection? gameCollection = new GameCollection(layoutInfo);
 			return gameCollection;
 		}
 		public static object LoadFile(string filepath)
 		{
-			var scheme = SchemeReader.LoadScheme(filepath, Path.GetFileName(filepath));
+			FileScheme? scheme = SchemeReader.LoadScheme(filepath, Path.GetFileName(filepath));
 			object file = LoadScheme(scheme);
 			scheme.Dispose();
 			return file;
 		}
 		private static void AddScheme(FileList fileList, FileSchemeList list)
 		{
-			foreach (var scheme in list.Schemes)
+			foreach (FileScheme? scheme in list.Schemes)
 			{
 				AddScheme(fileList, scheme);
 			}
 		}
 		private static void AddScheme(FileList fileList, FileScheme scheme)
 		{
-			var file = LoadScheme(scheme);
+			object? file = LoadScheme(scheme);
 			switch (scheme.SchemeType)
 			{
 				case FileEntryType.Serialized:
@@ -310,38 +317,38 @@ namespace AssetRipper.Library.Utils
 			object file = null;
 			if (scheme is SerializedFileScheme serializedFileScheme)
 			{
-				var platform = serializedFileScheme.Metadata != null &&
+				BuildTarget platform = serializedFileScheme.Metadata != null &&
 					serializedFileScheme.Metadata.TargetPlatform != 0 ?
 					serializedFileScheme.Metadata.TargetPlatform
 					: BuildTarget.StandaloneWin64Player;
-				var version = serializedFileScheme.Metadata != null ?
+				UnityVersion version = serializedFileScheme.Metadata != null ?
 					serializedFileScheme.Metadata.UnityVersion
 					: new UnityVersion();
-				var layoutInfo = new LayoutInfo(version, platform, serializedFileScheme.Flags);
-				var collection = new GameCollection(layoutInfo);
+				LayoutInfo? layoutInfo = new LayoutInfo(version, platform, serializedFileScheme.Flags);
+				GameCollection? collection = new GameCollection(layoutInfo);
 				collection.AssemblyManager = new Core.Structure.Assembly.Managers.BaseManager(layoutInfo, new Action<string>(str => str.GetType()));
-				file = Util.CreateInstance<SerializedFile>(collection, scheme);
+				file = CreateInstance<SerializedFile>(collection, scheme);
 				typeof(SerializedFile).GetMethod("ReadData", AllBindingFlags)
 					.Invoke(file, new object[] { serializedFileScheme.Stream });
 			}
 			if (scheme is BundleFileScheme bundleFileScheme)
 			{
-				file = Util.CreateInstance<BundleFile>(scheme);
+				file = CreateInstance<BundleFile>(scheme);
 				AddScheme((BundleFile)file, bundleFileScheme);
 			}
 			if (scheme is ArchiveFileScheme archiveFileScheme)
 			{
-				file = Util.CreateInstance<ArchiveFile>(scheme);
+				file = CreateInstance<ArchiveFile>(scheme);
 				AddScheme((ArchiveFile)file, archiveFileScheme);
 			}
 			if (scheme is WebFileScheme webFileScheme)
 			{
-				file = Util.CreateInstance<WebFile>(scheme);
+				file = CreateInstance<WebFile>(scheme);
 				AddScheme((WebFile)file, webFileScheme);
 			}
 			if (scheme is ResourceFileScheme resourceFileScheme)
 			{
-				file = Util.CreateInstance<ResourceFile>(scheme);
+				file = CreateInstance<ResourceFile>(scheme);
 			}
 			return file;
 		}

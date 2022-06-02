@@ -32,8 +32,10 @@ namespace AssetRipper.Library.Exporters.Shaders
 			IShader shader = (IShader)asset;
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-			if (shader.ParsedForm_C48.NameString?.StartsWith("Hidden/Internal") ?? false) 
+			if (shader.ParsedForm_C48.NameString?.StartsWith("Hidden/Internal") ?? false)
+			{
 				return false;
+			}
 
 			using Stream fileStream = File.Create(path);
 			ExportBinary(shader, container, fileStream, ShaderExporterInstantiator);

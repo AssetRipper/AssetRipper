@@ -14,17 +14,28 @@ namespace AssetRipper.Library.Exporters.Shaders
 		public bool IsMatch(IShader shader)
 		{
 			if (RequiredProperties == null)
+			{
 				throw new System.NullReferenceException("requiredProperties cannot be null");
+			}
+
 			if (RequiredProperties.Count == 0)
+			{
 				return true;
-			var properties = shader.ParsedForm_C48.PropInfo.Props;
+			}
+
+			Core.IO.AccessListBase<SourceGenerated.Subclasses.SerializedProperty.ISerializedProperty>? properties = shader.ParsedForm_C48.PropInfo.Props;
 			if (properties == null || properties.Count == 0)
+			{
 				return false;
-			foreach (var reqProp in RequiredProperties)
+			}
+
+			foreach (RequiredProperty? reqProp in RequiredProperties)
 			{
 				int matches = properties.Where(prop => reqProp.IsMatch(prop)).Count();
 				if (matches == 0)
+				{
 					return false;
+				}
 			}
 			return true;
 		}

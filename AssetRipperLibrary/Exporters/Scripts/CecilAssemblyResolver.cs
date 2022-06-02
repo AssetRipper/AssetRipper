@@ -35,7 +35,9 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private static PEFile CreatePEFile(AssemblyDefinition assembly)
 		{
 			if (assembly == null)
+			{
 				throw new ArgumentNullException(nameof(assembly));
+			}
 
 			MemoryStream memoryStream = new MemoryStream();
 			assembly.Write(memoryStream);
@@ -51,9 +53,13 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public PEFile? Resolve(string fullName)
 		{
 			if (peAssemblies.TryGetValue(fullName, out PEFile? result))
+			{
 				return result;
+			}
 			else
+			{
 				return null;
+			}
 		}
 
 		public Task<PEFile?> ResolveAsync(IAssemblyReference reference)

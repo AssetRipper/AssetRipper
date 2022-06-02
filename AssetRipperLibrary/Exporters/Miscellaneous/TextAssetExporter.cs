@@ -26,10 +26,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is ITextAsset textAsset)
-				return !textAsset.Script_C49.Data.IsNullOrEmpty();
-			else
-				return false;
+			return asset is ITextAsset textAsset && !textAsset.Script_C49.Data.IsNullOrEmpty();
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
@@ -57,22 +54,30 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		{
 			string text = asset.Script_C49.String;
 			if (IsValidJson(text))
+			{
 				return JsonExtension;
+			}
 			else if (IsPlainText(text))
+			{
 				return TxtExtension;
+			}
 			else
+			{
 				return BytesExtension;
+			}
 		}
 
 		private static bool IsValidJson(string text)
 		{
 			try
 			{
-				using var parsed = JsonDocument.Parse(text);
+				using JsonDocument? parsed = JsonDocument.Parse(text);
 				return parsed != null;
 			}
-			catch { }
-			return false;
+			catch
+			{
+				return false;
+			}
 		}
 
 		private static bool IsPlainText(string text) => text.All(c => !char.IsControl(c) || char.IsWhiteSpace(c));

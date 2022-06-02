@@ -26,7 +26,10 @@ namespace AssetRipper.Library.Utils
 			{
 				string ext = Path.GetExtension(file);
 				if (ext != "" && ext != ".assets" && ext != ".unity3d" && ext != ".bundle")
+				{
 					continue;
+				}
+
 				string relPath = Util.GetRelativePath(file, gameDir);
 				relPath = Path.GetDirectoryName(relPath);
 				if (Directory.Exists(file))
@@ -114,7 +117,11 @@ namespace AssetRipper.Library.Utils
 				if (asset is IMonoScript ms)
 				{
 					string scriptName = $"[{ms.GetAssemblyNameFixed()}]";
-					if (!string.IsNullOrEmpty(ms.Namespace)) scriptName += $"{ms.Namespace}.";
+					if (!string.IsNullOrEmpty(ms.Namespace))
+					{
+						scriptName += $"{ms.Namespace}.";
+					}
+
 					scriptName += $"{ms.ClassName}:{HashToString(ms.PropertiesHash)}";
 					extra = scriptName;
 				}
@@ -144,7 +151,11 @@ namespace AssetRipper.Library.Utils
 	"FileID", "ClassID", "TypeID", "ScriptTypeIndex", "Stripped", "IsDestroyed", "ByteStart", "ByteSize");
 			foreach (Core.Parser.Files.SerializedFiles.Parser.ObjectInfo info in file.Metadata.Object)
 			{
-				if (lookup.ContainsKey(info.FileID)) continue;
+				if (lookup.ContainsKey(info.FileID))
+				{
+					continue;
+				}
+
 				sw.WriteLine($"{info.FileID,-6}, {info.ClassID,-40}, {info.TypeID,-6}, {info.ScriptTypeIndex,-15}, {info.Stripped,-8}, {info.IsDestroyed,-11}, {info.ByteStart,-9}, {info.ByteSize,-8}");
 			}
 		}
@@ -376,7 +387,7 @@ namespace AssetRipper.Library.Utils
 			sw.WriteLine($"Version {serializedFile.Version}");
 
 			sw.WriteLine($"Preloads:");
-			foreach (var ptr in serializedFile.Metadata.Externals)
+			foreach (FileIdentifier ptr in serializedFile.Metadata.Externals)
 			{
 				sw.WriteLine($"\t{ptr}");
 			}

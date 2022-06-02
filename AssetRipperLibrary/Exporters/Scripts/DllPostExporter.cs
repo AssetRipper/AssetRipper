@@ -15,11 +15,14 @@ namespace AssetRipper.Library.Exporters.Scripts
 			if (assemblies.Length != 0)
 			{
 				Directory.CreateDirectory(outputDirectory);
-				foreach (var assembly in assemblies)
+				foreach (AssemblyDefinition? assembly in assemblies)
 				{
 					string filepath = Path.Combine(outputDirectory, assembly.Name.Name);
 					if (!filepath.EndsWith(".dll"))
+					{
 						filepath += ".dll";
+					}
+
 					assembly.Write(filepath);
 				}
 			}

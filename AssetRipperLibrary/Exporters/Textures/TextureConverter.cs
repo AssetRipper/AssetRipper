@@ -355,9 +355,13 @@ namespace AssetRipper.Library.Exporters.Textures
 				}
 			}
 			if (count == 0)
+			{
 				Logger.Verbose("Byte arrays were equal at all indices!");
+			}
 			else
+			{
 				Logger.Verbose($"Byte arrays were inequal in {count}/{length} places!");
+			}
 		}
 
 		public unsafe static void UnpackNormal(IntPtr inputOutput, int length)
@@ -377,7 +381,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				double vg = g * 2.0 - 255.0;
 				double hypotenuseSqr = vr * vr + vg * vg;
 				hypotenuseSqr = hypotenuseSqr > MagnitudeSqr ? MagnitudeSqr : hypotenuseSqr;
-				double b = (System.Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
+				double b = (Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
 				dataPtr[0] = (byte)b;
 			}
 		}

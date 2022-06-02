@@ -32,7 +32,7 @@ namespace AssetRipper.Library.Exporters
 		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version)
 		{
 			Directory.CreateDirectory(projectSettingsDirectory);
-			using Stream fileStream = System.IO.File.Create(Path.Combine(projectSettingsDirectory, "ProjectVersion.txt"));
+			using Stream fileStream = File.Create(Path.Combine(projectSettingsDirectory, "ProjectVersion.txt"));
 			using StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
 			writer.Write($"m_EditorVersion: {version}");
 		}

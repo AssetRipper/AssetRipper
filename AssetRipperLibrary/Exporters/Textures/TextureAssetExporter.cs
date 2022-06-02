@@ -54,7 +54,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.NameString}' to bitmap");
 				return false;
 			}
-			if (System.OperatingSystem.IsWindows())
+			if (OperatingSystem.IsWindows())
 			{
 				bitmap.Save(path, ImageExportFormat);
 			}
@@ -107,7 +107,9 @@ namespace AssetRipper.Library.Exporters.Textures
 		public static DirectBitmap? ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data, int pvrtcBitCount, int astcBlockSize, KTXBaseInternalFormat ktxBaseInternalFormat)
 		{
 			if (width == 0 || height == 0)
+			{
 				return new DirectBitmap(1, 1);
+			}
 
 			switch (textureFormat)
 			{

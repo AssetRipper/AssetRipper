@@ -32,9 +32,14 @@ namespace AssetRipper.Library.Utils
 		public DirectBitmap(int width, int height, byte[] bgra32Data)
 		{
 			if(bgra32Data is null)
+			{
 				throw new ArgumentNullException(nameof(bgra32Data));
+			}
+
 			if (bgra32Data.Length != width * height * 4)
+			{
 				throw new ArgumentException($"Invalid length: expected {width * height * 4} but was actually {bgra32Data.Length}", nameof(bgra32Data));
+			}
 
 			Width = width;
 			Height = height;

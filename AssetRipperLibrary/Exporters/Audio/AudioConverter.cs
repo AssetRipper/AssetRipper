@@ -11,9 +11,14 @@ namespace AssetRipper.Library.Exporters.Audio
 		public static byte[] OggToWav(byte[] oggData)
 		{
 			if (oggData == null)
+			{
 				throw new ArgumentNullException(nameof(oggData));
+			}
+
 			if (oggData.Length == 0)
+			{
 				return Array.Empty<byte>();
+			}
 
 			try
 			{
@@ -33,9 +38,14 @@ namespace AssetRipper.Library.Exporters.Audio
 		public static byte[] WavToMp3(byte[] wavData)
 		{
 			if (wavData == null)
+			{
 				throw new ArgumentNullException(nameof(wavData));
+			}
+
 			if (wavData.Length == 0)
+			{
 				return Array.Empty<byte>();
+			}
 
 			try
 			{

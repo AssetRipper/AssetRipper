@@ -38,9 +38,13 @@ namespace AssetRipper.Library.Exporters.Meshes
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
 			if (asset is Mesh mesh)
+			{
 				return IsSupported(ExportFormat) && HasValidMeshData(mesh);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public static bool HasValidMeshData(Mesh mesh)
@@ -57,8 +61,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 		private static bool IsNotLinesOrPoints(Mesh mesh)
 		{
 			if (mesh.AssetUnityVersion.IsLess(4))
+			{
 				return true;
-			foreach (var submesh in mesh.SubMeshes)
+			}
+
+			foreach (SubMesh? submesh in mesh.SubMeshes)
 			{
 				switch (submesh.Topology)
 				{
@@ -85,7 +92,9 @@ namespace AssetRipper.Library.Exporters.Meshes
 		{
 			byte[] data = ExportBinary((Mesh)asset);
 			if (data == null || data.Length == 0)
+			{
 				return false;
+			}
 
 			TaskManager.AddTask(File.WriteAllBytesAsync(path, data));
 			return true;
@@ -120,7 +129,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		private Scene ConvertToScene(Mesh unityMesh)
 		{
-			var outputMesh = ConvertToMeshSharpMesh(unityMesh);
+			MeshSharp.Elements.Geometries.Mesh? outputMesh = ConvertToMeshSharpMesh(unityMesh);
 			Scene scene = new Scene();
 			scene.Name = unityMesh.NameString;
 			Node node = new Node();
@@ -142,11 +151,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 			//Logger.Info($"UV 0: {hasUV0}");
 			//Logger.Info($"UV 1: {hasUV1}");
 			//Logger.Info($"Colors: {hasColors}");
-			var outputMesh = new MeshSharp.Elements.Geometries.Mesh();
+			MeshSharp.Elements.Geometries.Mesh? outputMesh = new MeshSharp.Elements.Geometries.Mesh();
 			outputMesh.Name = unityMesh.NameString;
 
 			//Vertices
-			foreach (var vertex in unityMesh.Vertices)
+			foreach (Vector3f? vertex in unityMesh.Vertices)
 			{
 				outputMesh.Vertices.Add(Convert(ToCoordinateSpace(vertex, ExportSpace)));
 			}
@@ -155,19 +164,23 @@ namespace AssetRipper.Library.Exporters.Meshes
 			for (int i = 0; i + 2 < unityMesh.Indices.Count; i += 3)
 			{
 				if (ExportSpace == MeshCoordinateSpace.Right) //Switching to a right handed coordinate system requires reversing the polygon vertex order
+				{
 					outputMesh.Polygons.Add(new Triangle(unityMesh.Indices[i + 2], unityMesh.Indices[i + 1], unityMesh.Indices[i]));
+				}
 				else
+				{
 					outputMesh.Polygons.Add(new Triangle(unityMesh.Indices[i], unityMesh.Indices[i + 1], unityMesh.Indices[i + 2]));
+				}
 			}
 
 			//Normals
-			var normalElement = new LayerElementNormal(outputMesh);
+			LayerElementNormal? normalElement = new LayerElementNormal(outputMesh);
 			outputMesh.Layers.Add(normalElement);
 			if (hasVertexNormals)
 			{
 				normalElement.MappingInformationType = MappingMode.ByPolygonVertex;
 				normalElement.ReferenceInformationType = ReferenceMode.Direct;
-				foreach (var polygon in outputMesh.Polygons)
+				foreach (Polygon? polygon in outputMesh.Polygons)
 				{
 					foreach (uint index in polygon.Indices)
 					{
@@ -187,7 +200,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			//Tangents
 			if (hasTangents)
 			{
-				var tangentElement = new MeshSharp.Elements.Geometries.Layers.LayerElementTangent(outputMesh);
+				LayerElementTangent? tangentElement = new MeshSharp.Elements.Geometries.Layers.LayerElementTangent(outputMesh);
 				outputMesh.Layers.Add(tangentElement);
 				tangentElement.MappingInformationType = MappingMode.ByPolygonVertex;
 				tangentElement.ReferenceInformationType = ReferenceMode.Direct;
@@ -200,7 +213,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			//UV
 			if (hasUV0)
 			{
-				var uv0Element = new MeshSharp.Elements.Geometries.Layers.LayerElementUV(outputMesh);
+				LayerElementUV? uv0Element = new MeshSharp.Elements.Geometries.Layers.LayerElementUV(outputMesh);
 				outputMesh.Layers.Add(uv0Element);
 				uv0Element.MappingInformationType = MappingMode.ByPolygonVertex;
 				uv0Element.ReferenceInformationType = ReferenceMode.IndexToDirect;
@@ -209,7 +222,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			}
 			if (hasUV1)
 			{
-				var uv1Element = new MeshSharp.Elements.Geometries.Layers.LayerElementUV(outputMesh);
+				LayerElementUV? uv1Element = new MeshSharp.Elements.Geometries.Layers.LayerElementUV(outputMesh);
 				outputMesh.Layers.Add(uv1Element);
 				uv1Element.MappingInformationType = MappingMode.ByPolygonVertex;
 				uv1Element.ReferenceInformationType = ReferenceMode.IndexToDirect;
@@ -220,7 +233,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			//Colors
 			if (hasColors)
 			{
-				var colorElement = new MeshSharp.Elements.Geometries.Layers.LayerElementVertexColor(outputMesh);
+				LayerElementVertexColor? colorElement = new MeshSharp.Elements.Geometries.Layers.LayerElementVertexColor(outputMesh);
 				outputMesh.Layers.Add(colorElement);
 				colorElement.MappingInformationType = MappingMode.ByPolygonVertex;
 				colorElement.ReferenceInformationType = ReferenceMode.IndexToDirect;
