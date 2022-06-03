@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class MovieTexture : BaseVideoTexture, IMovieTexture
+	public sealed class MovieTexture : BaseVideoTexture
 	{
 		public byte[] MovieData
 		{

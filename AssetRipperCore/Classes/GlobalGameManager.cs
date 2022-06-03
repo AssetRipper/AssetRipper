@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes
 {
-	public abstract class GlobalGameManager : GameManager, IGlobalGameManager
+	public abstract class GlobalGameManager : GameManager
 	{
 		protected GlobalGameManager(AssetInfo assetInfo) : base(assetInfo) { }
 

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Meta.Importers.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
@@ -60,7 +59,6 @@ namespace AssetRipper.Core.Project.Collections
 		public TransferInstructionFlags Flags => File.Flags;
 		public IEnumerable<IUnityObjectBase> Assets => Enumerable.Empty<IUnityObjectBase>();
 		public string Name => m_asset.GetType().Name;
-		public IAssetImporter MetaImporter => throw new NotSupportedException();
 
 		private readonly IUnityObjectBase m_asset;
 	}

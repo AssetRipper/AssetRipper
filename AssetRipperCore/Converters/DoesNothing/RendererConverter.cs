@@ -33,5 +33,11 @@ namespace AssetRipper.Core.Converters
 			instance.ProbeAnchor = origin.ProbeAnchor;
 			instance.LightProbeVolumeOverride = origin.LightProbeVolumeOverride;
 		}
+
+		private static void CopyValues(this StaticBatchInfo destination, StaticBatchInfo source)
+		{
+			destination.FirstSubMesh = source.FirstSubMesh;
+			destination.SubMeshCount = source.SubMeshCount;
+		}
 	}
 }

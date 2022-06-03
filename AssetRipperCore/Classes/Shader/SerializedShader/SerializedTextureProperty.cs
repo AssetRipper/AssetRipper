@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedTextureProperty : IAssetReadable, ISerializedTextureProperty, IYamlExportable
+	public sealed class SerializedTextureProperty : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{

@@ -20,16 +20,16 @@ namespace AssetRipper.Core.Classes.Mesh
 	/// <summary>
 	/// LodMesh previously
 	/// </summary>
-	public sealed class Mesh : NamedObject, IMesh
+	public sealed class Mesh : NamedObject
 	{
 		public BlendShapeData Shapes { get; set; } = new BlendShapeData();
-		public IVariableBoneCountWeights VariableBoneCountWeights { get; } = new VariableBoneCountWeights();
+		public VariableBoneCountWeights VariableBoneCountWeights { get; } = new VariableBoneCountWeights();
 		public VertexData VertexData { get; set; } = new VertexData();
-		public ICompressedMesh CompressedMesh { get; } = new CompressedMesh();
-		public IAABB LocalAABB { get; } = new AABB();
+		public CompressedMesh CompressedMesh { get; } = new CompressedMesh();
+		public AABB LocalAABB { get; } = new AABB();
 		public byte[] BakedConvexCollisionMesh { get; set; } = Array.Empty<byte>();
 		public byte[] BakedTriangleCollisionMesh { get; set; } = Array.Empty<byte>();
-		public IStreamingInfo StreamData { get; } = new StreamingInfo();
+		public StreamingInfo StreamData { get; } = new StreamingInfo();
 		public uint Use16BitIndices
 		{
 			get => IndexFormat == IndexFormat.UInt16 ? 1U : 0U;

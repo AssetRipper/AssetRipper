@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedProperties : IAssetReadable, ISerializedProperties, IYamlExportable
+	public sealed class SerializedProperties : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -21,6 +21,6 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 
 		private SerializedProperty[] m_Props;
 
-		public ISerializedProperty[] Props => m_Props;
+		public SerializedProperty[] Props => m_Props;
 	}
 }

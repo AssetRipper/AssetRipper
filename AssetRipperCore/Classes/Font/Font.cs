@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Font
 {
-	public sealed class Font : NamedObject, IFont
+	public sealed class Font : NamedObject
 	{
 		public Font(AssetInfo assetInfo) : base(assetInfo) { }
 

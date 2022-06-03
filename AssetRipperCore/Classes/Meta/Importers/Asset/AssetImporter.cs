@@ -14,7 +14,7 @@ using System.Linq;
 namespace AssetRipper.Core.Classes.Meta.Importers.Asset
 {
 	// NOTE: unknown layout for all importers for versions < 2.5.0
-	public abstract class AssetImporter : NamedObject, IAssetImporter
+	public abstract class AssetImporter : NamedObject
 	{
 		protected AssetImporter(LayoutInfo layout) : base(layout)
 		{

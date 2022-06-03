@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes.Meta.Importers
 	/// <summary>
 	/// First introduced in 5.6.0 as a replacement for such importers as DDSImporter
 	/// </summary>
-	public sealed class IHVImageFormatImporter : AssetImporter, ISpriteImporter
+	public sealed class IHVImageFormatImporter : AssetImporter
 	{
 		public IHVImageFormatImporter(LayoutInfo layout) : base(layout) { }
 

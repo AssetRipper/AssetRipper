@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
-	public sealed class EditorBuildSettings : Object.Object, IEditorBuildSettings
+	public sealed class EditorBuildSettings : Object.Object
 	{
 		public EditorBuildSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -91,7 +91,7 @@ namespace AssetRipper.Core.Classes.EditorBuildSettings
 		}
 
 		public Scene[] m_Scenes;
-		public IEditorScene[] Scenes
+		public Scene[] Scenes
 		{
 			get => m_Scenes;
 		}

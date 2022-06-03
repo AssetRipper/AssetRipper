@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.SpriteAtlas
 {
-	public sealed class SpriteAtlas : NamedObject, ISpriteAtlas
+	public sealed class SpriteAtlas : NamedObject
 	{
 		public SpriteAtlas(AssetInfo assetInfo) : base(assetInfo) { }
 

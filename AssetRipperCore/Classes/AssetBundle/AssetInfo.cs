@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.AssetBundle
 {
-	public sealed class AssetInfo : IAssetReadable, IDependent, IAssetInfo
+	public sealed class AssetInfo : IAssetReadable, IDependent
 	{
 		/// <summary>
 		/// 2.5.0 and greater

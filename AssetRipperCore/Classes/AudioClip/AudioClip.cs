@@ -7,7 +7,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.AudioClip
 {
-	public sealed class AudioClip : NamedObject, IAudioClip
+	public sealed class AudioClip : NamedObject
 	{
 		public AudioClip(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -327,12 +327,12 @@ namespace AssetRipper.Core.Classes.AudioClip
 		/// </summary>
 		private string StreamingFileName => SerializedFile.Name + "." + StreamingFileExtension;
 
-		public IStreamedResource Resource
+		public StreamedResource Resource
 		{
 			get => HasLoadType(SerializedFile.Version) ? FSBResource : null;
 		}
 
-		public IStreamingInfo StreamingInfo
+		public StreamingInfo StreamingInfo
 		{
 			get => HasStreamingInfo(SerializedFile.Version) ? streamingInfo : null;
 		}

@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.AssetBundle
 {
-	public sealed class AssetBundle : NamedObject, IAssetBundle
+	public sealed class AssetBundle : NamedObject
 	{
 		public AssetBundle(Parser.Asset.AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -146,9 +146,9 @@ namespace AssetRipper.Core.Classes.AssetBundle
 			throw new NotSupportedException();
 		}
 
-		public NullableKeyValuePair<Utf8StringBase, IAssetInfo>[] GetAssets()
+		public NullableKeyValuePair<Utf8StringBase, AssetInfo>[] GetAssets()
 		{
-			return Container.Select(t => new NullableKeyValuePair<Utf8StringBase, IAssetInfo>(new Utf8StringLegacy(t.Key), t.Value)).ToArray();
+			return Container.Select(t => new NullableKeyValuePair<Utf8StringBase, AssetInfo>(new Utf8StringLegacy(t.Key), t.Value)).ToArray();
 		}
 
 		public override string ExportExtension => throw new NotSupportedException();
@@ -165,8 +165,6 @@ namespace AssetRipper.Core.Classes.AssetBundle
 		public int ExplicitDataLayout { get; set; }
 		public int PathFlags { get; set; }
 		public Dictionary<string, string> SceneHashes { get; set; }
-
-		bool IAssetBundle.HasAssetBundleName => HasAssetBundleName(SerializedFile.Version);
 
 		public const string ContainerName = "m_Container";
 

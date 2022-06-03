@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Meta.Importers.Asset;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
@@ -73,7 +72,6 @@ namespace AssetRipper.Core.Project.Collections
 			get { yield return m_asset; }
 		}
 		public string Name => m_asset is IHasNameString namedAsset ? namedAsset.GetNameNotEmpty() : m_asset.AssetClassName;
-		public IAssetImporter MetaImporter => throw new NotSupportedException();
 
 		private readonly IUnityObjectBase m_asset;
 	}

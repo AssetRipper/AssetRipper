@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Terrain
 {
-	public sealed class Terrain : Behaviour, ITerrain
+	public sealed class Terrain : Behaviour
 	{
 		public Terrain(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -403,8 +403,6 @@ namespace AssetRipper.Core.Classes.Terrain
 		public int GroupingID { get; set; }
 		public uint RenderingLayerMask { get; set; }
 		public bool AllowAutoConnect { get; set; }
-
-		public PPtr<ITerrainData> TerrainData => m_TerrainData.CastTo<ITerrainData>();
 
 		public const string TerrainDataName = "m_TerrainData";
 		public const string TreeDistanceName = "m_TreeDistance";

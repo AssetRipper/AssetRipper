@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Classes
 	/// <summary>
 	/// Script previously
 	/// </summary>
-	public class TextAsset : NamedObject, IHasRawData, ITextAsset
+	public class TextAsset : NamedObject, IHasRawData
 	{
 		public TextAsset(AssetInfo assetInfo) : base(assetInfo) { }
 

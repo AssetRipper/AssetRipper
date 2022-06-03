@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedProperty : IAssetReadable, ISerializedProperty, IYamlExportable
+	public sealed class SerializedProperty : IAssetReadable, IYamlExportable
 	{
 		public void Read(AssetReader reader)
 		{
@@ -48,7 +48,7 @@ namespace AssetRipper.Core.Classes.Shader.SerializedShader
 		public float DefValue2 { get; set; }
 		public float DefValue3 { get; set; }
 
-		public ISerializedTextureProperty DefTexture => m_DefTexture;
+		public SerializedTextureProperty DefTexture => m_DefTexture;
 
 		private SerializedTextureProperty m_DefTexture = new();
 	}

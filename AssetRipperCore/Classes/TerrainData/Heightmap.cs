@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public sealed class Heightmap : IAsset, IDependent, IHeightmap
+	public sealed class Heightmap : IAsset, IDependent
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{

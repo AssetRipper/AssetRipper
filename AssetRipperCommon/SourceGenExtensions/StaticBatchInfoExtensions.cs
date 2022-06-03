@@ -1,13 +1,7 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.SourceGenerated.Subclasses.StaticBatchInfo;
 
-namespace AssetRipper.Core.Classes.Renderer
+namespace AssetRipper.Core.SourceGenExtensions
 {
-	public interface IStaticBatchInfo : IAsset
-	{
-		ushort FirstSubMesh { get; set; }
-		ushort SubMeshCount { get; set; }
-	}
-
 	public static class StaticBatchInfoExtensions
 	{
 		public static void Initialize(this IStaticBatchInfo staticBatchInfo, uint[] subsetIndices)
@@ -29,12 +23,6 @@ namespace AssetRipper.Core.Classes.Renderer
 					}
 				}
 			}
-		}
-
-		public static void CopyValues(this IStaticBatchInfo destination, IStaticBatchInfo source)
-		{
-			destination.FirstSubMesh = source.FirstSubMesh;
-			destination.SubMeshCount = source.SubMeshCount;
 		}
 	}
 }

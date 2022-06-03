@@ -16,7 +16,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Sprite
 {
-	public sealed class Sprite : NamedObject, ISprite
+	public sealed class Sprite : NamedObject
 	{
 		public Sprite(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -290,7 +290,7 @@ namespace AssetRipper.Core.Classes.Sprite
 			return outlines;
 		}
 
-		public PPtr<ITexture2D> TexturePtr => RD.Texture.CastTo<ITexture2D>();
+		public PPtr<Texture2D.Texture2D> TexturePtr => RD.Texture;
 		public float PixelsToUnits { get; set; }
 		public uint Extrude { get; set; }
 		public bool IsPolygon { get; set; }

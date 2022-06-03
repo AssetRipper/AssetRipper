@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class BuildSettings : GlobalGameManager, IBuildSettings
+	public sealed class BuildSettings : GlobalGameManager
 	{
 		public BuildSettings(AssetInfo assetInfo) : base(assetInfo) { }
 

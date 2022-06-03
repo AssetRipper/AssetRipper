@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.EditorBuildSettings
 {
-	public sealed class Scene : UnityAssetBase, IEditorScene
+	public sealed class Scene : UnityAssetBase
 	{
 		public Scene() { }
 

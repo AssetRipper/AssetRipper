@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Classes.Texture2D
 	/// <summary>
 	/// FileTexture previously
 	/// </summary>
-	public class Texture2D : Texture, ITexture2D
+	public class Texture2D : Texture
 	{
 		public Texture2D(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -228,10 +228,10 @@ namespace AssetRipper.Core.Classes.Texture2D
 
 		private byte[] GetExportImageData()
 		{
-			if (this.CheckAssetIntegrity())
-			{
-				return this.GetImageData();
-			}
+			//if (this.CheckAssetIntegrity())
+			//{
+			//	return this.GetImageData();
+			//}
 
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{this.GetValidName()}' because resources file '{StreamData.Path}' wasn't found");
 			return Array.Empty<byte>();

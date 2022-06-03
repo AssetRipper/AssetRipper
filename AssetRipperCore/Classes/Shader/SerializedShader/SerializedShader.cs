@@ -7,9 +7,9 @@ using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.Shader.SerializedShader
 {
-	public sealed class SerializedShader : IAssetReadable, ISerializedShader, IYamlExportable
+	public sealed class SerializedShader : IAssetReadable, IYamlExportable
 	{
-		public ISerializedProperties PropInfo => m_PropInfo;
+		public SerializedProperties PropInfo => m_PropInfo;
 		private SerializedProperties m_PropInfo = new();
 		public SerializedSubShader[] SubShaders { get; set; }
 

@@ -1,19 +1,4 @@
 ﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.AudioManager;
-using AssetRipper.Core.Classes.EditorBuildSettings;
-using AssetRipper.Core.Classes.EditorSettings;
-using AssetRipper.Core.Classes.GraphicsSettings;
-using AssetRipper.Core.Classes.InputManager;
-using AssetRipper.Core.Classes.LightmapSettings;
-using AssetRipper.Core.Classes.NavMeshProjectSettings;
-using AssetRipper.Core.Classes.NavMeshSettings;
-using AssetRipper.Core.Classes.Physics2DSettings;
-using AssetRipper.Core.Classes.PhysicsManager;
-using AssetRipper.Core.Classes.QualitySettings;
-using AssetRipper.Core.Classes.RenderSettings;
-using AssetRipper.Core.Classes.ResourceManager;
-using AssetRipper.Core.Classes.TagManager;
-using AssetRipper.Core.Classes.UnityConnectSettings;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Structure.GameStructure;
@@ -26,29 +11,6 @@ namespace AssetRipper.GUI
 {
 	public static class UIFileListing
 	{
-		private static readonly Type[] SettingsClasses =
-		{
-			typeof(AudioManager),
-			typeof(BuildSettings),
-			typeof(EditorBuildSettings),
-			typeof(EditorSettings),
-			typeof(GraphicsSettings),
-			typeof(InputManager),
-			typeof(LightingSettings),
-			typeof(LightmapSettings),
-			typeof(MonoManager),
-			typeof(NavMeshProjectSettings),
-			typeof(NavMeshSettings),
-			typeof(Physics2DSettings),
-			typeof(PhysicsManager),
-			typeof(QualitySettings),
-			typeof(RenderSettings),
-			typeof(ResourceManager),
-			typeof(TagManager),
-			typeof(TimeManager),
-			typeof(UnityConnectSettings),
-		};
-
 		public static List<NewUiFileListItem> GetItemsFromStructure(GameStructure structure)
 		{
 			List<NewUiFileListItem> ret = new();
@@ -145,14 +107,9 @@ namespace AssetRipper.GUI
 		{
 			_associatedObject = asset;
 
-			if (_associatedObject is INamedObject no)
-			{
-				_displayAs = no.GetValidName();
-			}
-
 			if (_associatedObject is IHasNameString hasName)
 			{
-				_displayAs = hasName.NameString;
+				_displayAs = hasName.GetNameNotEmpty();
 			}
 
 			if (_associatedObject is UnknownObject)

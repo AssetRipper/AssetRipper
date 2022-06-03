@@ -11,7 +11,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Classes.TerrainData
 {
-	public sealed class TerrainData : NamedObject, ITerrainData
+	public sealed class TerrainData : NamedObject
 	{
 		public TerrainData(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -127,8 +127,6 @@ namespace AssetRipper.Core.Classes.TerrainData
 		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain.Terrain), nameof(TerrainData));
 
 		public PPtr<Shader.Shader>[] PreloadShaders { get; set; }
-
-		public IHeightmap Heightmap => m_Heightmap;
 
 		public const string SplatDatabaseName = "m_SplatDatabase";
 		public const string DetailDatabaseName = "m_DetailDatabase";

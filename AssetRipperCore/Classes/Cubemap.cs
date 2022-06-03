@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Classes
 	/// <summary>
 	/// CubemapTexture previously
 	/// </summary>
-	public sealed class Cubemap : Texture2D.Texture2D, ICubemap
+	public sealed class Cubemap : Texture2D.Texture2D
 	{
 		public Cubemap(AssetInfo assetInfo) : base(assetInfo) { }
 

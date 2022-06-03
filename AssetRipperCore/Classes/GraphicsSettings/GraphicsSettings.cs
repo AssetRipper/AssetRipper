@@ -536,10 +536,10 @@ namespace AssetRipper.Core.Classes.GraphicsSettings
 				foreach (PPtr<Shader.Shader> shaderPtr in AlwaysIncludedShaders)
 				{
 					node.Add(shaderPtr.ExportYaml(container));
-					Shader.Shader shader = shaderPtr.FindAsset(container);
+					Shader.Shader? shader = shaderPtr.FindAsset(container);
 					if (shader != null)
 					{
-						shaderNames.Add(shader.GetValidShaderName());
+						shaderNames.Add(shader.HasParsedForm ? shader.ParsedForm.NameString : shader.GetNameNotEmpty());
 					}
 				}
 			}

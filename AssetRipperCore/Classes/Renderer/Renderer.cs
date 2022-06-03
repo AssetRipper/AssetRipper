@@ -559,7 +559,7 @@ namespace AssetRipper.Core.Classes.Renderer
 		{
 			return HasRenderingLayerMask(version) ? RenderingLayerMask : 1;
 		}
-		public IStaticBatchInfo GetStaticBatchInfo(UnityVersion version)
+		public StaticBatchInfo GetStaticBatchInfo(UnityVersion version)
 		{
 			if (HasStaticBatchInfo(version))
 			{
@@ -674,7 +674,7 @@ namespace AssetRipper.Core.Classes.Renderer
 
 		public Vector4f LightmapTilingOffset { get; set; } = new();
 		public Vector4f LightmapTilingOffsetDynamic { get; set; } = new();
-		public IStaticBatchInfo StaticBatchInfo { get; } = new StaticBatchInfo();
+		public StaticBatchInfo StaticBatchInfo { get; } = new StaticBatchInfo();
 		public PPtr<Transform> StaticBatchRoot { get; set; } = new();
 		/// <summary>
 		/// LightProbeAnchor previously

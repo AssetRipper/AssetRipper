@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Shader
 {
-	public sealed class Shader : TextAsset, IShader
+	public sealed class Shader : TextAsset
 	{
 		public Shader(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -332,7 +332,7 @@ namespace AssetRipper.Core.Classes.Shader
 		public const string DependenciesName = "m_Dependencies";
 		public const string NonModifiableTexturesName = "m_NonModifiableTextures";
 
-		public SerializedShader.ISerializedShader ParsedForm => m_ParsedForm;
+		public SerializedShader.SerializedShader ParsedForm => m_ParsedForm;
 		private SerializedShader.SerializedShader m_ParsedForm = new();
 		public PPtr<Shader> Fallback = new();
 		public UnityPropertySheet DefaultProperties = new();

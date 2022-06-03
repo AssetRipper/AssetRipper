@@ -13,7 +13,7 @@ using System.Collections.Generic;
 namespace AssetRipper.Core.Classes.Material
 {
 #warning possible vector m_BuildTextureStacks 2020 and up
-	public sealed class Material : NamedObject, IMaterial
+	public sealed class Material : NamedObject
 	{
 		public Material(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -154,8 +154,6 @@ namespace AssetRipper.Core.Classes.Material
 		public bool DoubleSidedGI { get; set; }
 		public string[] DisabledShaderPasses { get; set; }
 		public Dictionary<string, string> StringTagMap { get; set; }
-
-		public PPtr<IShader> ShaderPtr => Shader.CastTo<IShader>();
 
 		public const string ShaderName = "m_Shader";
 		public const string ShaderKeywordsName = "m_ShaderKeywords";

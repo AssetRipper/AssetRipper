@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class MeshFilter : Component, IMeshFilter
+	public sealed class MeshFilter : Component
 	{
 		public MeshFilter(AssetInfo assetInfo) : base(assetInfo) { }
 
@@ -39,6 +39,6 @@ namespace AssetRipper.Core.Classes
 
 		public const string MeshName = "m_Mesh";
 
-		public PPtr<IMesh> Mesh { get; } = new PPtr<IMesh>();
+		public PPtr<Mesh.Mesh> Mesh { get; } = new PPtr<Mesh.Mesh>();
 	}
 }

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.TagManager
 {
-	public sealed class TagManager : GlobalGameManager, ITagManager
+	public sealed class TagManager : GlobalGameManager
 	{
 		public TagManager(AssetInfo assetInfo) : base(assetInfo) { }
 

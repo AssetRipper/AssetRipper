@@ -7,7 +7,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Meta.Importers
 {
-	public sealed class DefaultImporter : AssetImporter, IDefaultImporter
+	public sealed class DefaultImporter : AssetImporter
 	{
 		public DefaultImporter(LayoutInfo layout) : base(layout) { }
 

@@ -1,10 +1,10 @@
-﻿using AssetRipper.Core.Classes.Sprite;
-using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.GUI.Utils;
 using AssetRipper.Library;
+using AssetRipper.SourceGenerated.Classes.ClassID_213;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;

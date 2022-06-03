@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.ResourceManager
 {
-	public sealed class ResourceManager : GlobalGameManager, IResourceManager
+	public sealed class ResourceManager : GlobalGameManager
 	{
 		public ResourceManager(AssetInfo assetInfo) : base(assetInfo) { }
 

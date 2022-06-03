@@ -287,8 +287,8 @@ namespace AssetRipper.Library
 			OverrideExporter<IAudioClip>(new AudioClipExporter(Settings));
 
 			//Mesh exporters
-			OverrideExporter<Core.Classes.Mesh.IMesh>(new GlbMeshExporter(Settings));
-			OverrideExporter<Core.Classes.Mesh.IMesh>(new UnifiedMeshExporter(Settings));
+			OverrideExporter<Core.Classes.Mesh.Mesh>(new GlbMeshExporter(Settings));
+			OverrideExporter<Core.Classes.Mesh.Mesh>(new UnifiedMeshExporter(Settings));
 
 			//Terrain exporters
 			OverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings));

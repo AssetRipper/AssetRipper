@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Meta.Importers
 {
-	public class MonoImporter : AssetImporter, IMonoImporter
+	public class MonoImporter : AssetImporter
 	{
 		public MonoImporter(LayoutInfo layout) : base(layout)
 		{

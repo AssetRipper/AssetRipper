@@ -223,10 +223,10 @@ namespace AssetRipper.Library.Utils
 			{
 				foreach (IUnityObjectBase? asset in shaderBundle.FetchAssets())
 				{
-					if (asset is IShader shader)
+					if (asset is Shader shader)
 					{
 						using MD5 md5 = MD5.Create();
-						byte[] md5Hash = md5.ComputeHash(Encoding.ASCII.GetBytes(shader.GetValidShaderName()));
+						byte[] md5Hash = md5.ComputeHash(Encoding.ASCII.GetBytes(shader.HasParsedForm ? shader.ParsedForm.NameString : shader.GetNameNotEmpty()));
 						asset.GUID = new UnityGUID(md5Hash);
 					}
 				}

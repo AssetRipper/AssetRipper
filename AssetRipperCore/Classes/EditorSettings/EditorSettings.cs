@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Classes.EditorSettings
 	/// <summary>
 	/// First introduced in 2.6.0
 	/// </summary>
-	public sealed class EditorSettings : Object.Object, IEditorSettings
+	public sealed class EditorSettings : Object.Object
 	{
 		public EditorSettings(AssetInfo assetInfo) : base(assetInfo) { }
 
