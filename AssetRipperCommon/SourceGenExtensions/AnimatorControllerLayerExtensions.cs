@@ -30,7 +30,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			//Mask = new();
 
 			animatorControllerLayer.BlendingMode = layer.LayerBlendingMode;
-			animatorControllerLayer.SyncedLayerIndex = layer.StateMachineMotionSetIndex == 0 ? -1 : (int)layer.StateMachineIndex;
+			animatorControllerLayer.SyncedLayerIndex = layer.StateMachineSynchronizedLayerIndex == 0 ? -1 : (int)layer.StateMachineIndex;
 			animatorControllerLayer.DefaultWeight = layer.DefaultWeight;
 			animatorControllerLayer.IKPass = layer.IKPass;
 			animatorControllerLayer.SyncedLayerAffectsTiming = layer.SyncedLayerAffectsTiming;

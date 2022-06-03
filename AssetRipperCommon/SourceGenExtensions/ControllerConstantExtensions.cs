@@ -10,7 +10,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
 			{
 				ILayerConstant layer = controllerConstant.LayerArray[i].Data;
-				if (layer.StateMachineIndex == index && layer.StateMachineMotionSetIndex == 0)
+				if (layer.StateMachineIndex == index && layer.StateMachineSynchronizedLayerIndex == 0)
 				{
 					return layer;
 				}
@@ -23,7 +23,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
 			{
 				ILayerConstant layer = controllerConstant.LayerArray[i].Data;
-				if (layer.StateMachineIndex == index && layer.StateMachineMotionSetIndex == 0)
+				if (layer.StateMachineIndex == index && layer.StateMachineSynchronizedLayerIndex == 0)
 				{
 					return i;
 				}
@@ -36,7 +36,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
 			{
 				ILayerConstant checkLayer = controllerConstant.LayerArray[i].Data;
-				if (checkLayer.StateMachineIndex == layer.StateMachineIndex && checkLayer.StateMachineMotionSetIndex == layer.StateMachineMotionSetIndex)
+				if (checkLayer.StateMachineIndex == layer.StateMachineIndex && checkLayer.StateMachineSynchronizedLayerIndex == layer.StateMachineSynchronizedLayerIndex)
 				{
 					return i;
 				}
