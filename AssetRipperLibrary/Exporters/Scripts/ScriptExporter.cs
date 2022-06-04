@@ -88,17 +88,16 @@ namespace AssetRipper.Library.Exporters.Scripts
 					continue;
 				}
 
-				Logger.Info(LogCategory.Export, $"Decompiling {assembly.Name.Name}");
 				string outputDirectory = Path.Combine(dirPath, assembly.Name.Name);
 				Directory.CreateDirectory(outputDirectory);
-				Decompiler.DecompileWholeProject(assembly, outputDirectory);
 
-				// assembly definitions were added in 2017.3
-				//     see: https://blog.unity.com/technology/unity-2017-3b-feature-preview-assembly-definition-files-and-transform-tool
-				if (container.ExportVersion.IsGreaterEqual(2017, 3) && 
-					// exclude predefined assemblies like Assembly-CSharp.dll
-					//    see: https://docs.unity3d.com/2017.3/Documentation/Manual/ScriptCompilationAssemblyDefinitionFiles.html
-					!ReferenceAssemblies.IsPredefinedAssembly(assembly.Name.Name))
+				if (CanDecompileAssembly(assembly))
+				{
+					Logger.Info(LogCategory.Export, $"Decompiling {assembly.Name.Name}");
+					Decompiler.DecompileWholeProject(assembly, outputDirectory);
+				}
+				
+				if (CanExportAssemblyAsset(assembly, container.ExportVersion))
 				{
 					AssemblyDefinitionExporter.Export(assembly, outputDirectory);
 				}
@@ -124,6 +123,29 @@ namespace AssetRipper.Library.Exporters.Scripts
 					callback.Invoke(container, asset, filePath);
 				}
 			}
+		}
+
+		private bool CanDecompileAssembly(AssemblyDefinition assembly)
+		{
+			return ScriptExportMode switch
+			{
+				ScriptExportMode.Decompiled => true,
+				ScriptExportMode.Hybrid => ReferenceAssemblies.IsPredefinedAssembly(assembly.Name.Name),
+				_ => false,
+			};
+		}
+
+		private bool CanExportAssemblyAsset(AssemblyDefinition assembly, UnityVersion unityVersion)
+		{
+			// There will only be assemblies that reference each other when decompiled. Otherwise, the assemblies
+			// themselves can handle the references.
+			return ScriptExportMode == ScriptExportMode.Decompiled &&
+				// assembly definitions were added in 2017.3
+				//     see: https://blog.unity.com/technology/unity-2017-3b-feature-preview-assembly-definition-files-and-transform-tool
+				unityVersion.IsGreaterEqual(2017, 3) &&
+				// exclude predefined assemblies like Assembly-CSharp.dll
+				//    see: https://docs.unity3d.com/2017.3/Documentation/Manual/ScriptCompilationAssemblyDefinitionFiles.html
+				!ReferenceAssemblies.IsPredefinedAssembly(assembly.Name.Name);
 		}
 
 		private static string GetExportSubPath(string assembly, string @namespace, string @class)
