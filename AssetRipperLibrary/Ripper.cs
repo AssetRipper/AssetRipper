@@ -283,7 +283,7 @@ namespace AssetRipper.Library
 
 			//Audio exporters
 			OverrideExporter<IAudioClip>(new YamlAudioExporter());
-			OverrideExporter<IAudioClip>(new NativeAudioExporter());
+			OverrideExporter<IAudioClip>(new NativeAudioExporter(Settings));
 			OverrideExporter<IAudioClip>(new AudioClipExporter(Settings));
 
 			//Mesh exporters

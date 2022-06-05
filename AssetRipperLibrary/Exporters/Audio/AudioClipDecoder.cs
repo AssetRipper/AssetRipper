@@ -55,7 +55,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 		}
 
-		public static bool TryGetDecodedAudioClipData(IAudioClip audioClip, out byte[]? decodedData, out string? fileExtension)
+		public static bool TryGetDecodedAudioClipData(IAudioClip audioClip, [NotNullWhen(true)] out byte[]? decodedData, [NotNullWhen(true)] out string? fileExtension)
 		{
 			return TryGetDecodedAudioClipData(audioClip?.GetAudioData(), out decodedData, out fileExtension);
 		}
@@ -151,10 +151,11 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 		}
 
-		public static string? GetFileExtension(IAudioClip audioClip) => GetFileExtension(audioClip.GetAudioData()?.ToArray());
-		public static string? GetFileExtension(byte[]? rawData)
+		public static string GetFileExtension(IAudioClip audioClip) => GetFileExtension(audioClip.GetAudioData()?.ToArray());
+		public static string GetFileExtension(byte[]? rawData)
 		{
-			return GetAudioType(rawData).FileExtension();
+			FmodAudioType audioType = GetAudioType(rawData);
+			return audioType.FileExtension() ?? throw new Exception($"No extension for {audioType}");
 		}
 
 		/// <summary>

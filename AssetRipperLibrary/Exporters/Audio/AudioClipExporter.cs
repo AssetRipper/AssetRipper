@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -7,13 +8,25 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using System.IO;
+using System.Runtime.Versioning;
 
 namespace AssetRipper.Library.Exporters.Audio
 {
 	public class AudioClipExporter : BinaryAssetExporter
 	{
-		private AudioExportFormat AudioFormat { get; set; }
+		private AudioExportFormat AudioFormat { get; }
 		public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
+
+		public override bool IsHandle(IUnityObjectBase asset)
+		{
+			return IsSupportedExportFormat(AudioFormat) && asset is IAudioClip audio && AudioClipDecoder.CanDecode(audio);
+		}
+
+		private static bool IsSupportedExportFormat(AudioExportFormat format) => format switch
+		{
+			AudioExportFormat.Default or AudioExportFormat.PreferWav or AudioExportFormat.PreferMp3 => true,
+			_ => false,
+		};
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
@@ -22,27 +35,25 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			IAudioClip audioClip = (IAudioClip)asset;
-			bool success = AudioClipDecoder.TryGetDecodedAudioClipData(audioClip, out byte[] decodedData, out string fileExtension);
-			if (!success)
+			if (!AudioClipDecoder.TryGetDecodedAudioClipData((IAudioClip)asset, out byte[]? decodedData, out string? fileExtension))
 			{
 				return false;
 			}
 
-			if (AudioFormat == AudioExportFormat.Wav || AudioFormat == AudioExportFormat.Mp3)
+			if (AudioFormat == AudioExportFormat.PreferWav || AudioFormat == AudioExportFormat.PreferMp3)
 			{
 				if (fileExtension == "ogg")
 				{
 					decodedData = AudioConverter.OggToWav(decodedData);
 				}
 
-				if (AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows() && (fileExtension == "ogg" || fileExtension == "wav"))
+				if (IsMp3Extension(fileExtension))
 				{
 					decodedData = AudioConverter.WavToMp3(decodedData);
 				}
 			}
 
-			if (decodedData == null || decodedData.Length == 0)
+			if (decodedData.IsNullOrEmpty())
 			{
 				return false;
 			}
@@ -51,20 +62,15 @@ namespace AssetRipper.Library.Exporters.Audio
 			return true;
 		}
 
-		public override bool IsHandle(IUnityObjectBase asset)
-		{
-			return asset is IAudioClip audio && AudioClipDecoder.CanDecode(audio) && AudioFormat != AudioExportFormat.Native;
-		}
-
 		private string GetFileExtension(IAudioClip audioClip)
 		{
 			string defaultExtension = AudioClipDecoder.GetFileExtension(audioClip);
-			if (AudioFormat == AudioExportFormat.Wav && defaultExtension == "ogg")
+			if (IsWavExtension(defaultExtension))
 			{
 				return "wav";
 			}
 
-			if (AudioFormat == AudioExportFormat.Mp3 && OperatingSystem.IsWindows() && (defaultExtension == "ogg" || defaultExtension == "wav"))
+			if (IsMp3Extension(defaultExtension))
 			{
 				return "mp3";
 			}
@@ -72,6 +78,17 @@ namespace AssetRipper.Library.Exporters.Audio
 			{
 				return defaultExtension;
 			}
+		}
+
+		[SupportedOSPlatformGuard("windows")]
+		private bool IsMp3Extension(string defaultExtension)
+		{
+			return AudioFormat == AudioExportFormat.PreferMp3 && OperatingSystem.IsWindows() && (defaultExtension == "ogg" || defaultExtension == "wav");
+		}
+
+		private bool IsWavExtension(string defaultExtension)
+		{
+			return AudioFormat == AudioExportFormat.PreferWav && defaultExtension == "ogg";
 		}
 	}
 }

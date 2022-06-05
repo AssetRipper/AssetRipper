@@ -22,15 +22,18 @@ namespace AssetRipper.Library.Exporters.Audio
 			{
 				string resPath = filePath + ".resS";
 				System.IO.File.WriteAllBytes(resPath, data);
+				string originalSource = resource.Source.String;
 				resource.Source.String = System.IO.Path.GetRelativePath(dirPath, resPath);
+				bool result = base.ExportInner(container, filePath, dirPath);
+				resource.Source.String = originalSource;
+				return result;
 			}
-
-			return base.ExportInner(container, filePath, dirPath);
+			else
+			{
+				return base.ExportInner(container, filePath, dirPath);
+			}
 		}
 
-		protected override string GetExportExtension(IUnityObjectBase asset)
-		{
-			return "audioclip";
-		}
+		protected override string GetExportExtension(IUnityObjectBase asset) => "audioclip";
 	}
 }

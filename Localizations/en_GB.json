@@ -27,6 +27,8 @@
   "mesh_format_glb_primitive_description": "A high-quality, open-source alternative to FBX. Binary version of GLTF. Only contains mesh data. Can cause errors. Unity cannot import assets of this type.",
   "mesh_format_fbx_primitive": "Simple FBX",
   "mesh_format_fbx_primitive_description": "Industry standard format usuable in almost all 3d editing software, including Unity. Only contains mesh data. This breaks exported references to the mesh asset.",
+  "audio_format_yaml": "Yaml",
+  "audio_format_yaml_description": "Export as a yaml asset and resS file. This is a safe option and is the backup when things go wrong.",
   "audio_format_native": "Raw",
   "audio_format_native_description": "Raw FSB Audio. Cannot be imported into Unity, so only use this if you're an advanced user.",
   "audio_format_default": "Default",

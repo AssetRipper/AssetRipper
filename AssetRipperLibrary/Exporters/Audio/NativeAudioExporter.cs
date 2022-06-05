@@ -8,25 +8,30 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Library.Configuration;
+using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using System.IO;
 
 namespace AssetRipper.Library.Exporters.Audio
 {
 	public class NativeAudioExporter : BinaryAssetExporter
 	{
+		private AudioExportFormat AudioFormat { get; }
+		public NativeAudioExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
+
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is SourceGenerated.Classes.ClassID_83.IAudioClip;
+			return AudioFormat == AudioExportFormat.Native || asset is IAudioClip;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, GetExportExtension((SourceGenerated.Classes.ClassID_83.IAudioClip)asset));
+			return new AssetExportCollection(this, asset, GetExportExtension((IAudioClip)asset));
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			SourceGenerated.Classes.ClassID_83.IAudioClip audioClip = (SourceGenerated.Classes.ClassID_83.IAudioClip)asset;
+			IAudioClip audioClip = (IAudioClip)asset;
 
 			byte[] data = audioClip.GetAudioData();
 			if (data.IsNullOrEmpty())
@@ -41,7 +46,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 		}
 
-		private static string GetExportExtension(SourceGenerated.Classes.ClassID_83.IAudioClip audioClip)
+		private static string GetExportExtension(IAudioClip audioClip)
 		{
 			if (audioClip.Has_Type_C83())
 			{

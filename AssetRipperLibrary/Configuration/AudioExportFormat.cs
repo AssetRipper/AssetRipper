@@ -3,6 +3,10 @@
 	public enum AudioExportFormat
 	{
 		/// <summary>
+		/// Export as a yaml asset and resS file. This is a safe option and is the backup when things go wrong.
+		/// </summary>
+		Yaml,
+		/// <summary>
 		/// For advanced users. This exports in a native format, usually FSB (FMOD Sound Bank). FSB files cannot be used in Unity Editor.
 		/// </summary>
 		Native,
@@ -13,10 +17,10 @@
 		/// <summary>
 		/// Not advised if rebundling. This converts audio to the WAV format when possible
 		/// </summary>
-		Wav,
+		PreferWav,
 		/// <summary>
 		/// Not advised if rebundling. This converts audio to the MP3 format when possible. Windows only
 		/// </summary>
-		Mp3,
+		PreferMp3,
 	}
 }
