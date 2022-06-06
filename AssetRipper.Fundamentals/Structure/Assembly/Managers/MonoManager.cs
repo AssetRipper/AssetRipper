@@ -1,3 +1,5 @@
+using AsmResolver.PE.File;
+using AsmResolver.PE.File.Headers;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
@@ -17,13 +19,20 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			Logger.Info(LogCategory.Import, $"During Mono initialization, found {gameStructure.Assemblies.Count} assemblies");
 			foreach ((string assemblyName, string assemblyPath) in gameStructure.Assemblies)
 			{
-				if(AsmResolver.PE.PEImage.FromFile(assemblyPath).DotNetDirectory is null)
+				try
 				{
-					Logger.Info(LogCategory.Import, $"Skipping native assembly: {assemblyName}");
+					if (PEFile.FromFile(assemblyPath).OptionalHeader.GetDataDirectory(DataDirectoryIndex.ClrDirectory).IsPresentInPE)
+					{
+						Logger.Info(LogCategory.Import, $"Skipping native assembly: {assemblyName}");
+					}
+					else
+					{
+						Load(assemblyPath);
+					}
 				}
-				else
+				catch (BadImageFormatException)
 				{
-					Load(assemblyPath);
+					Logger.Warning(LogCategory.Import, $"Bad Image Format Exception thrown for: {assemblyName}");
 				}
 			}
 		}
