@@ -12,8 +12,8 @@ namespace AssetRipper.Core.Utils
 	{
 		public static string ReadTypeString(TypeTree m_Type, BinaryReader reader)
 		{
-			var sb = new StringBuilder();
-			var m_Nodes = m_Type.Nodes;
+			StringBuilder? sb = new StringBuilder();
+			List<TypeTreeNode>? m_Nodes = m_Type.Nodes;
 			for (int i = 0; i < m_Nodes.Count; i++)
 			{
 				ReadStringValue(sb, m_Nodes, reader, ref i);
@@ -23,13 +23,13 @@ namespace AssetRipper.Core.Utils
 
 		private static void ReadStringValue(StringBuilder sb, List<TypeTreeNode> m_Nodes, BinaryReader reader, ref int i)
 		{
-			var m_Node = m_Nodes[i];
-			var level = m_Node.Level;
-			var varTypeStr = m_Node.Type;
-			var varNameStr = m_Node.Name;
-			object value = null;
-			var append = true;
-			var align = m_Node.MetaFlag.IsAlignBytes();
+			TypeTreeNode? m_Node = m_Nodes[i];
+			byte level = m_Node.Level;
+			string? varTypeStr = m_Node.Type;
+			string? varNameStr = m_Node.Name;
+			object? value = null;
+			bool append = true;
+			bool align = m_Node.MetaFlag.IsAlignBytes();
 			switch (varTypeStr)
 			{
 				case "SInt8":
@@ -76,7 +76,7 @@ namespace AssetRipper.Core.Utils
 					break;
 				case "string":
 					append = false;
-					var str = reader.ReadAlignedString();
+					string? str = reader.ReadAlignedString();
 					sb.AppendFormat("{0}{1} {2} = \"{3}\"\r\n", (new string('\t', level)), varTypeStr, varNameStr, str);
 					i += 3;
 					break;
@@ -87,13 +87,13 @@ namespace AssetRipper.Core.Utils
 						append = false;
 						sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
 						sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level + 1)), "Array", "Array");
-						var size = reader.ReadInt32();
+						int size = reader.ReadInt32();
 						sb.AppendFormat("{0}{1} {2} = {3}\r\n", (new string('\t', level + 1)), "int", "size", size);
-						var map = GetNodes(m_Nodes, i);
+						List<TypeTreeNode>? map = GetNodes(m_Nodes, i);
 						i += map.Count - 1;
-						var first = GetNodes(map, 4);
-						var next = 4 + first.Count;
-						var second = GetNodes(map, next);
+						List<TypeTreeNode>? first = GetNodes(map, 4);
+						int next = 4 + first.Count;
+						List<TypeTreeNode>? second = GetNodes(map, next);
 						for (int j = 0; j < size; j++)
 						{
 							sb.AppendFormat("{0}[{1}]\r\n", (new string('\t', level + 2)), j);
@@ -108,7 +108,7 @@ namespace AssetRipper.Core.Utils
 				case "TypelessData":
 					{
 						append = false;
-						var size = reader.ReadInt32();
+						int size = reader.ReadInt32();
 						reader.ReadBytes(size);
 						i += 2;
 						sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
@@ -124,9 +124,9 @@ namespace AssetRipper.Core.Utils
 							append = false;
 							sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
 							sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level + 1)), "Array", "Array");
-							var size = reader.ReadInt32();
+							int size = reader.ReadInt32();
 							sb.AppendFormat("{0}{1} {2} = {3}\r\n", (new string('\t', level + 1)), "int", "size", size);
-							var vector = GetNodes(m_Nodes, i);
+							List<TypeTreeNode>? vector = GetNodes(m_Nodes, i);
 							i += vector.Count - 1;
 							for (int j = 0; j < size; j++)
 							{
@@ -140,7 +140,7 @@ namespace AssetRipper.Core.Utils
 						{
 							append = false;
 							sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
-							var @class = GetNodes(m_Nodes, i);
+							List<TypeTreeNode>? @class = GetNodes(m_Nodes, i);
 							i += @class.Count - 1;
 							for (int j = 1; j < @class.Count; j++)
 							{
@@ -158,12 +158,12 @@ namespace AssetRipper.Core.Utils
 
 		public static OrderedDictionary ReadType(TypeTree m_Types, BinaryReader reader)
 		{
-			var obj = new OrderedDictionary();
-			var m_Nodes = m_Types.Nodes;
+			OrderedDictionary? obj = new OrderedDictionary();
+			List<TypeTreeNode>? m_Nodes = m_Types.Nodes;
 			for (int i = 1; i < m_Nodes.Count; i++)
 			{
-				var m_Node = m_Nodes[i];
-				var varNameStr = m_Node.Name;
+				TypeTreeNode? m_Node = m_Nodes[i];
+				string? varNameStr = m_Node.Name;
 				obj[varNameStr] = ReadValue(m_Nodes, reader, ref i);
 			}
 			return obj;
@@ -171,10 +171,10 @@ namespace AssetRipper.Core.Utils
 
 		private static object ReadValue(List<TypeTreeNode> m_Nodes, BinaryReader reader, ref int i)
 		{
-			var m_Node = m_Nodes[i];
-			var varTypeStr = m_Node.Type;
+			TypeTreeNode? m_Node = m_Nodes[i];
+			string? varTypeStr = m_Node.Type;
 			object value;
-			var align = (m_Node.MetaFlag.IsAlignBytes());
+			bool align = (m_Node.MetaFlag.IsAlignBytes());
 			switch (varTypeStr)
 			{
 				case "SInt8":
@@ -227,13 +227,13 @@ namespace AssetRipper.Core.Utils
 					{
 						if (m_Nodes[i + 1].MetaFlag.IsAlignBytes())
 							align = true;
-						var map = GetNodes(m_Nodes, i);
+						List<TypeTreeNode>? map = GetNodes(m_Nodes, i);
 						i += map.Count - 1;
-						var first = GetNodes(map, 4);
-						var next = 4 + first.Count;
-						var second = GetNodes(map, next);
-						var size = reader.ReadInt32();
-						var dic = new List<KeyValuePair<object, object>>(size);
+						List<TypeTreeNode>? first = GetNodes(map, 4);
+						int next = 4 + first.Count;
+						List<TypeTreeNode>? second = GetNodes(map, next);
+						int size = reader.ReadInt32();
+						List<KeyValuePair<object, object>>? dic = new List<KeyValuePair<object, object>>(size);
 						for (int j = 0; j < size; j++)
 						{
 							int tmp1 = 0;
@@ -245,7 +245,7 @@ namespace AssetRipper.Core.Utils
 					}
 				case "TypelessData":
 					{
-						var size = reader.ReadInt32();
+						int size = reader.ReadInt32();
 						value = reader.ReadBytes(size);
 						i += 2;
 						break;
@@ -256,10 +256,10 @@ namespace AssetRipper.Core.Utils
 						{
 							if ((m_Nodes[i + 1].MetaFlag.IsAlignBytes()))
 								align = true;
-							var vector = GetNodes(m_Nodes, i);
+							List<TypeTreeNode>? vector = GetNodes(m_Nodes, i);
 							i += vector.Count - 1;
-							var size = reader.ReadInt32();
-							var list = new List<object>(size);
+							int size = reader.ReadInt32();
+							List<object>? list = new List<object>(size);
 							for (int j = 0; j < size; j++)
 							{
 								int tmp = 3;
@@ -270,13 +270,13 @@ namespace AssetRipper.Core.Utils
 						}
 						else //Class
 						{
-							var @class = GetNodes(m_Nodes, i);
+							List<TypeTreeNode>? @class = GetNodes(m_Nodes, i);
 							i += @class.Count - 1;
-							var obj = new OrderedDictionary();
+							OrderedDictionary? obj = new OrderedDictionary();
 							for (int j = 1; j < @class.Count; j++)
 							{
-								var classmember = @class[j];
-								var name = classmember.Name;
+								TypeTreeNode? classmember = @class[j];
+								string? name = classmember.Name;
 								obj[name] = ReadValue(@class, reader, ref j);
 							}
 							value = obj;
@@ -291,13 +291,13 @@ namespace AssetRipper.Core.Utils
 
 		private static List<TypeTreeNode> GetNodes(List<TypeTreeNode> m_Nodes, int index)
 		{
-			var nodes = new List<TypeTreeNode>();
+			List<TypeTreeNode>? nodes = new List<TypeTreeNode>();
 			nodes.Add(m_Nodes[index]);
-			var level = m_Nodes[index].Level;
+			byte level = m_Nodes[index].Level;
 			for (int i = index + 1; i < m_Nodes.Count; i++)
 			{
-				var member = m_Nodes[i];
-				var level2 = member.Level;
+				TypeTreeNode? member = m_Nodes[i];
+				byte level2 = member.Level;
 				if (level2 <= level)
 				{
 					return nodes;

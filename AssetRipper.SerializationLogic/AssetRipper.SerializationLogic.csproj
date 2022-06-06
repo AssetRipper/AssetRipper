@@ -17,6 +17,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AsmResolver.DotNet" Version="4.11.1" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.4" />
 	</ItemGroup>
 

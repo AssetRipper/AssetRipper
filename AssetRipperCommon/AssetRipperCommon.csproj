@@ -40,7 +40,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\AssetRipper.Fundamentals\AssetRipper.Fundamentals.csproj" />
-	  <ProjectReference Include="..\AssetRipper.SerializationLogic\AssetRipper.SerializationLogic.csproj" />
 	  <ProjectReference Include="..\AssetRipper.Yaml\AssetRipper.Yaml.csproj" />
 	</ItemGroup>
 

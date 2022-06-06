@@ -57,5 +57,3 @@ This began as a fork of [mafaca](https://github.com/mafaca)'s [uTinyRipper](http
 It has borrowed code from [Perfare](https://github.com/Perfare)'s [AssetStudio](https://github.com/Perfare/AssetStudio) project licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Licenses/AssetStudio.md).
 
 It has borrowed code from [spacehamster](https://github.com/spacehamster)'s [uTinyRipperExporter](https://github.com/spacehamster/UtinyRipperExporter) project licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Licenses/uTinyRipperExporter.md).
-
-Some code from Unity is licensed under the [Unity Reference-Only License](https://github.com/AssetRipper/AssetRipper/blob/master/Licenses/Unity.md).

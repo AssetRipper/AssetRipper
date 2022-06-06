@@ -1,10 +1,6 @@
-// Unity C# reference source
-// Copyright (c) Unity Technologies. For terms of use, see
-// https://unity3d.com/legal/licenses/Unity_Reference_Only_License
+using AsmResolver.DotNet;
 
-using Mono.Cecil;
-
-namespace Unity.CecilTools.Extensions
+namespace AssetRipper.SerializationLogic.Extensions
 {
 	static class MethodDefinitionExtensions
 	{
@@ -16,25 +12,27 @@ namespace Unity.CecilTools.Extensions
 
 		public static string PropertyName(this MethodDefinition self)
 		{
-			return self.Name.Substring(4);
+			return self.Name.Value.Substring(4);
 		}
 
 		public static bool IsConversionOperator(this MethodDefinition method)
 		{
 			if (!method.IsSpecialName)
+			{
 				return false;
+			}
 
 			return method.Name == "op_Implicit" || method.Name == "op_Explicit";
 		}
 
 		public static bool IsSimpleSetter(this MethodDefinition original)
 		{
-			return original.IsSetter && original.Parameters.Count == 1;
+			return original.IsSetMethod && original.Parameters.Count == 1;
 		}
 
 		public static bool IsSimpleGetter(this MethodDefinition original)
 		{
-			return original.IsGetter && original.Parameters.Count == 0;
+			return original.IsGetMethod && original.Parameters.Count == 0;
 		}
 
 		public static bool IsSimplePropertyAccessor(this MethodDefinition method)

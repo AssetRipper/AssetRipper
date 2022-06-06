@@ -1,43 +1,54 @@
-// Unity C# reference source
-// Copyright (c) Unity Technologies. For terms of use, see
-// https://unity3d.com/legal/licenses/Unity_Reference_Only_License
+using AsmResolver.DotNet;
 
-using Mono.Cecil;
-
-namespace Unity.CecilTools.Extensions
+namespace AssetRipper.SerializationLogic.Extensions
 {
 	public static class TypeDefinitionExtensions
 	{
 		public static bool IsSubclassOf(this TypeDefinition type, string baseTypeName)
 		{
-			var baseType = type.BaseType;
+			ITypeDefOrRef? baseType = type.BaseType;
 			if (baseType == null)
+			{
 				return false;
+			}
+
 			if (baseType.FullName == baseTypeName)
+			{
 				return true;
+			}
 
-			var baseTypeDef = baseType.Resolve();
+			TypeDefinition? baseTypeDef = baseType.Resolve();
 			if (baseTypeDef == null)
+			{
 				return false;
+			}
 
-			return IsSubclassOf(baseTypeDef, baseTypeName);
+			return baseTypeDef.IsSubclassOf(baseTypeName);
 		}
 
 		public static bool IsSubclassOf(this TypeDefinition type, params string[] baseTypeNames)
 		{
-			var baseType = type.BaseType;
+			ITypeDefOrRef? baseType = type.BaseType;
 			if (baseType == null)
+			{
 				return false;
+			}
 
 			for (int i = 0; i < baseTypeNames.Length; i++)
+			{
 				if (baseType.FullName == baseTypeNames[i])
+				{
 					return true;
+				}
+			}
 
-			var baseTypeDef = baseType.Resolve();
+			TypeDefinition? baseTypeDef = baseType.Resolve();
 			if (baseTypeDef == null)
+			{
 				return false;
+			}
 
-			return IsSubclassOf(baseTypeDef, baseTypeNames);
+			return baseTypeDef.IsSubclassOf(baseTypeNames);
 		}
 	}
 }

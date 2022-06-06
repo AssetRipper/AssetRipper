@@ -39,7 +39,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\SharpGLTF.md = Licenses\SharpGLTF.md
 		Licenses\SharpZipLib.md = Licenses\SharpZipLib.md
 		Licenses\texgenpack.md = Licenses\texgenpack.md
-		Licenses\Unity.md = Licenses\Unity.md
 		Licenses\uTinyRipper.md = Licenses\uTinyRipper.md
 		Licenses\uTinyRipperExporter.md = Licenses\uTinyRipperExporter.md
 		Licenses\Xiph.md = Licenses\Xiph.md

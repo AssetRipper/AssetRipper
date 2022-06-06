@@ -1,14 +1,10 @@
-// Unity C# reference source
-// Copyright (c) Unity Technologies. For terms of use, see
-// https://unity3d.com/legal/licenses/Unity_Reference_Only_License
-
-using Mono.Cecil;
+using AsmResolver.DotNet;
+using AssetRipper.SerializationLogic.Extensions;
 using System.Collections.Generic;
-using Unity.CecilTools.Extensions;
 
-namespace Unity.SerializationLogic
+namespace AssetRipper.SerializationLogic
 {
-	public class UnityEngineTypePredicates
+	public class EngineTypePredicates
 	{
 		private static readonly HashSet<string> TypesThatShouldHaveHadSerializableAttribute = new HashSet<string>
 		{
@@ -39,7 +35,7 @@ namespace Unity.SerializationLogic
 		private const string SerializeFieldAttribute = "UnityEngine.SerializeField";
 		private const string SerializeReferenceAttribute = "UnityEngine.SerializeReference";
 
-		private static string[] serializableClasses = new[]
+		private static readonly string[] serializableClasses = new[]
 		{
 			"UnityEngine.AnimationCurve",
 			"UnityEngine.Gradient",
@@ -47,7 +43,7 @@ namespace Unity.SerializationLogic
 			"UnityEngine.RectOffset"
 		};
 
-		private static string[] serializableStructs = new[]
+		private static readonly string[] serializableStructs = new[]
 		{
 			// NOTE: assumes all types here are NOT interfaces
 			"UnityEngine.Color32",
@@ -56,7 +52,7 @@ namespace Unity.SerializationLogic
 			"UnityEngine.PropertyName",
 		};
 
-		public static bool IsMonoBehaviour(TypeReference type)
+		public static bool IsMonoBehaviour(ITypeDescriptor type)
 		{
 			return IsMonoBehaviour(type.CheckedResolve());
 		}
@@ -66,7 +62,7 @@ namespace Unity.SerializationLogic
 			return typeDefinition.IsSubclassOf(MonoBehaviour);
 		}
 
-		public static bool IsScriptableObject(TypeReference type)
+		public static bool IsScriptableObject(ITypeDescriptor type)
 		{
 			return IsScriptableObject(type.CheckedResolve());
 		}
@@ -76,91 +72,103 @@ namespace Unity.SerializationLogic
 			return temp.IsSubclassOf(ScriptableObject);
 		}
 
-		public static bool IsColor32(TypeReference type)
+		public static bool IsColor32(ITypeDescriptor type)
 		{
 			return type.IsAssignableTo(Color32);
 		}
 
 		//Do NOT remove these, cil2as still depends on these in 4.x
-		public static bool IsMatrix4x4(TypeReference type)
+		public static bool IsMatrix4x4(ITypeDescriptor type)
 		{
 			return type.IsAssignableTo(Matrix4x4);
 		}
 
-		public static bool IsGradient(TypeReference type)
+		public static bool IsGradient(ITypeDescriptor type)
 		{
 			return type.IsAssignableTo(Gradient);
 		}
 
-		public static bool IsGUIStyle(TypeReference type)
+		public static bool IsGUIStyle(ITypeDescriptor type)
 		{
 			return type.IsAssignableTo(GUIStyle);
 		}
 
-		public static bool IsRectOffset(TypeReference type)
+		public static bool IsRectOffset(ITypeDescriptor type)
 		{
 			return type.IsAssignableTo(RectOffset);
 		}
 
-		public static bool IsSerializableUnityClass(TypeReference type)
+		public static bool IsSerializableUnityClass(ITypeDescriptor type)
 		{
-			foreach (var unityClasses in serializableClasses)
+			foreach (string unityClasses in serializableClasses)
 			{
 				if (type.IsAssignableTo(unityClasses))
+				{
 					return true;
+				}
 			}
 			return false;
 		}
 
-		public static bool IsSerializableUnityStruct(TypeReference type)
+		public static bool IsSerializableUnityStruct(ITypeDescriptor type)
 		{
-			foreach (var unityStruct in serializableStructs)
+			foreach (string unityStruct in serializableStructs)
 			{
 				// NOTE: structs cannot inherit from structs, and can only inherit from interfaces
 				//	   since we know all types in serializableStructs are not interfaces,
 				//	   we can just do a direct comparison.
 				if (type.FullName == unityStruct)
+				{
 					return true;
+				}
 			}
 
 			if (type.FullName.IndexOf("UnityEngine.LazyLoadReference`1") == 0)
+			{
 				return true;
+			}
 
 			return false;
 		}
 
-		public static bool IsUnityEngineObject(TypeReference type)
+		public static bool IsUnityEngineObject(ITypeDescriptor type)
 		{
 #warning todo: somehow solve this elegantly. CheckedResolve() drops the [] of a type.
-			if (type.IsArray)
+			if (type.IsArray())
+			{
 				return false;
+			}
 
 			if (type.FullName == UnityEngineObject)
+			{
 				return true;
+			}
 
-			var typeDefinition = type.Resolve();
+			TypeDefinition? typeDefinition = type.Resolve();
 			if (typeDefinition == null)
+			{
 				return false;
+			}
 
 			return typeDefinition.IsSubclassOf(UnityEngineObject);
 		}
 
-		public static bool ShouldHaveHadSerializableAttribute(TypeReference type)
+		public static bool ShouldHaveHadSerializableAttribute(ITypeDescriptor type)
 		{
 			return IsUnityEngineValueType(type);
 		}
 
-		public static bool IsUnityEngineValueType(TypeReference type)
+		public static bool IsUnityEngineValueType(ITypeDescriptor type)
 		{
-			return type.SafeNamespace() == "UnityEngine" && TypesThatShouldHaveHadSerializableAttribute.Contains(type.Name);
+			return type.SafeNamespace() == "UnityEngine" && TypesThatShouldHaveHadSerializableAttribute.Contains(type.Name ?? "");
 		}
 
-		public static bool IsSerializeFieldAttribute(TypeReference attributeType)
+		public static bool IsSerializeFieldAttribute(ITypeDescriptor attributeType)
 		{
 			return attributeType.FullName == SerializeFieldAttribute;
 		}
 
-		public static bool IsSerializeReferenceAttribute(TypeReference attributeType)
+		public static bool IsSerializeReferenceAttribute(ITypeDescriptor attributeType)
 		{
 			return attributeType.FullName == SerializeReferenceAttribute;
 		}
