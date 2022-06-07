@@ -57,7 +57,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 			if (m_clip.Has_MuscleClip_C74())
 			{
 				IClip clip = m_clip.MuscleClip_C74.Clip.Data;
-				IAnimationClipBindingConstant bindings = m_clip.ClipBindingConstant_C74;
+				IAnimationClipBindingConstant bindings = m_clip.ClipBindingConstant_C74!;
 				IReadOnlyDictionary<uint, string> tos = m_clip.FindTOS();
 
 				IReadOnlyList<StreamedFrame> streamedFrames = GenerateFramesFromStreamedClip(clip.StreamedClip, Layout);
@@ -541,15 +541,13 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 			List<StreamedFrame> frames = new List<StreamedFrame>();
 			byte[] memStreamBuffer = new byte[clip.Data.Length * sizeof(uint)];
 			Buffer.BlockCopy(clip.Data, 0, memStreamBuffer, 0, memStreamBuffer.Length);
-			using (MemoryStream stream = new MemoryStream(memStreamBuffer))
+			using MemoryStream stream = new MemoryStream(memStreamBuffer);
+			using AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout);
+			while (reader.BaseStream.Position < reader.BaseStream.Length)
 			{
-				using AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout);
-				while (reader.BaseStream.Position < reader.BaseStream.Length)
-				{
-					StreamedFrame frame = new StreamedFrame();
-					frame.Read(reader);
-					frames.Add(frame);
-				}
+				StreamedFrame frame = new StreamedFrame();
+				frame.Read(reader);
+				frames.Add(frame);
 			}
 			return frames;
 		}

@@ -97,7 +97,7 @@ namespace AssetRipper.Core.Classes.Misc
 			{
 				return t;
 			}
-			throw new Exception($"Object's type {asset.ClassID} isn't assignable from {typeof(T).Name}");
+			throw new Exception($"Object's type {asset.GetType().Name} isn't assignable from {typeof(T).Name}");
 		}
 
 		public static bool IsAsset<T>(this IPPtr<T> pptr, IUnityObjectBase asset) where T : IUnityObjectBase
