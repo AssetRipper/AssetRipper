@@ -25,10 +25,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (constant.Has_Blend1dData())
 			{
-				if (constant.BlendType() == BlendTreeType.Simple1D)
+				if (constant.GetBlendType() == BlendTreeType.Simple1D)
 				{
 					return constant.Blend1dData.Data.ChildThresholdArray[index];
 				}
+			}
+			else if (constant.Has_ChildThresholdArray())
+			{
+				return constant.ChildThresholdArray[index];
 			}
 			return 0.0f;
 		}
@@ -37,7 +41,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (constant.Has_Blend2dData())
 			{
-				if (constant.BlendType() != BlendTreeType.Simple1D && constant.BlendType() != BlendTreeType.Direct)
+				if (constant.GetBlendType() != BlendTreeType.Simple1D && constant.GetBlendType() != BlendTreeType.Direct)
 				{
 					return constant.Blend2dData.Data.m_ChildPositionArray[index];
 				}
@@ -49,7 +53,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (constant.Has_Blend1dData())
 			{
-				if (constant.BlendType() == BlendTreeType.Simple1D)
+				if (constant.GetBlendType() == BlendTreeType.Simple1D)
 				{
 					return constant.Blend1dData.Data.ChildThresholdArray.Min();
 				}
@@ -61,7 +65,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (constant.Has_Blend1dData())
 			{
-				if (constant.BlendType() == BlendTreeType.Simple1D)
+				if (constant.GetBlendType() == BlendTreeType.Simple1D)
 				{
 					return constant.Blend1dData.Data.ChildThresholdArray.Max();
 				}
@@ -73,7 +77,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (constant.Has_BlendDirectData())
 			{
-				if (constant.BlendType() == BlendTreeType.Direct)
+				if (constant.GetBlendType() == BlendTreeType.Direct)
 				{
 					return constant.BlendDirectData.Data.m_ChildBlendEventIDArray[index];
 				}
@@ -82,6 +86,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 		}
 
 		public static bool IsBlendTree(this IBlendTreeNodeConstant constant) => constant.ChildIndices.Length > 0;
-		public static BlendTreeType BlendType(this IBlendTreeNodeConstant constant) => (BlendTreeType)constant.BlendType;
+		public static BlendTreeType GetBlendType(this IBlendTreeNodeConstant constant) => (BlendTreeType)constant.BlendType;
 	}
 }
