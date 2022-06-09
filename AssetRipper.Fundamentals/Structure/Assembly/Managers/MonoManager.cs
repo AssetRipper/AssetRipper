@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			{
 				try
 				{
-					if (PEFile.FromFile(assemblyPath).OptionalHeader.GetDataDirectory(DataDirectoryIndex.ClrDirectory).IsPresentInPE)
+					if (!PEFile.FromFile(assemblyPath).OptionalHeader.GetDataDirectory(DataDirectoryIndex.ClrDirectory).IsPresentInPE)
 					{
 						Logger.Info(LogCategory.Import, $"Skipping native assembly: {assemblyName}");
 					}
@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 				}
 				catch (BadImageFormatException)
 				{
-					Logger.Warning(LogCategory.Import, $"Bad Image Format Exception thrown for: {assemblyName}");
+					Logger.Info(LogCategory.Import, $"Skipping non-PE file: {assemblyName}");
 				}
 			}
 		}
