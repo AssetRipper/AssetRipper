@@ -8,12 +8,20 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
+using AssetRipper.SourceGenerated.Classes.ClassID_1113;
+using AssetRipper.SourceGenerated.Classes.ClassID_121;
+using AssetRipper.SourceGenerated.Classes.ClassID_134;
 using AssetRipper.SourceGenerated.Classes.ClassID_1953259897;
+using AssetRipper.SourceGenerated.Classes.ClassID_200;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_221;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Classes.ClassID_62;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
+using AssetRipper.SourceGenerated.Classes.ClassID_84;
+using AssetRipper.SourceGenerated.Classes.ClassID_850595691;
+using AssetRipper.SourceGenerated.Classes.ClassID_89;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.Yaml;
 using System.Collections.Generic;
@@ -27,10 +35,10 @@ namespace AssetRipper.Core.Project.Collections
 		protected static void ExportMeta(IExportContainer container, Meta meta, string filePath)
 		{
 			string metaPath = $"{filePath}{MetaExtension}";
-			using var fileStream = System.IO.File.Create(metaPath);
-			using var streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
+			using FileStream fileStream = System.IO.File.Create(metaPath);
+			using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
 
-			YamlWriter writer = new YamlWriter();
+			YamlWriter writer = new();
 			writer.IsWriteDefaultTag = false;
 			writer.IsWriteVersion = false;
 			writer.IsFormatKeys = true;
@@ -94,6 +102,14 @@ namespace AssetRipper.Core.Project.Collections
 				IAnimatorController => "controller",
 				IAnimatorOverrideController => "overrideController",
 				SourceGenerated.Classes.ClassID_319.IAvatarMask or SourceGenerated.Classes.ClassID_1011.IAvatarMask => "mask",
+				IShaderVariantCollection => "shadervariants",
+				ICubemap => "cubemap",
+				IFlare => "flare",
+				ILightingSettings => "lighting",
+				ILightmapParameters => "giparams",
+				IPhysicMaterial => "physicMaterial",
+				IPhysicsMaterial2D => "physicsMaterial2D",
+				IRenderTexture => "renderTexture",
 				ITerrainLayer => "terrainlayer",
 				_ => asset.ExportExtension
 			};
