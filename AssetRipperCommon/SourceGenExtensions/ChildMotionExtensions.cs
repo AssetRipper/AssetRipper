@@ -18,12 +18,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			childMotion.Motion.CopyValues(state.CreateMotion(file, controller, childNodeIndex));
 
 			childMotion.Threshold = node.GetThreshold(childIndex);
-			childMotion.Position.CopyValues(node.GetPosition(childIndex));
+			childMotion.Position?.CopyValues(node.GetPosition(childIndex));
 			childMotion.TimeScale = 1.0f;
 			childMotion.CycleOffset = node.CycleOffset;
 
 			uint directID = node.GetDirectBlendParameter(childIndex);
-			childMotion.DirectBlendParameter.CopyValues(controller.TOS_C91[directID]);
+			childMotion.DirectBlendParameter?.CopyValues(controller.TOS_C91[directID]);
 
 			childMotion.Mirror = node.Mirror;
 		}

@@ -40,5 +40,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 				parameter.Controller.CopyValues(controller.SerializedFile.CreatePPtr(controller));
 			}
 		}
+
+		public static AnimatorControllerParameterType GetTypeValue(this IAnimatorControllerParameter parameter)
+		{
+			return (AnimatorControllerParameterType)parameter.Type;
+		}
 	}
 }

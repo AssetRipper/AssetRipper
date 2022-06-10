@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Extensions;
+﻿using AssetRipper.Core.Classes.AudioClip;
+using AssetRipper.Core.Extensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -44,5 +45,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 				return true;
 			}
 		}
+
+		public static AudioClipLoadType GetLoadType(this IAudioClip audioClip) => (AudioClipLoadType)audioClip.LoadType_C83;
+
+		public static AudioCompressionFormat GetCompressionFormat(this IAudioClip audioClip) => (AudioCompressionFormat)audioClip.CompressionFormat_C83;
+
+		public static FMODSoundFormat GetSoundFormat(this IAudioClip audioClip) => (FMODSoundFormat)audioClip.Format_C83;
+
+		public static FMODSoundType GetSoundType(this IAudioClip audioClip) => (FMODSoundType)audioClip.Type_C83;
 	}
 }

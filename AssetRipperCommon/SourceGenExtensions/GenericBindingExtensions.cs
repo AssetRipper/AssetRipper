@@ -28,6 +28,18 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return binding.Has_ClassID_UInt16() ? (ClassIDType)binding.ClassID_UInt16 : (ClassIDType)binding.ClassID_Int32;
 		}
 
+		public static void SetClassID(this IGenericBinding binding, ClassIDType classID)
+		{
+			if (binding.Has_ClassID_UInt16())
+			{
+				binding.ClassID_UInt16 = (ushort)classID;
+			}
+			else
+			{
+				binding.ClassID_Int32 = (int)classID;
+			}
+		}
+
 		public static bool IsPPtrCurve(this IGenericBinding binding)
 		{
 			return binding.IsPPtrCurve != 0;

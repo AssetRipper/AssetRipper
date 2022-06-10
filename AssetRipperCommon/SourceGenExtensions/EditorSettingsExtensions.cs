@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.EditorSettings;
+using AssetRipper.SourceGenerated.Classes.ClassID_159;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -10,9 +11,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 		private const string HiddenMeta = "Hidden Meta Files";
 		private const string VisibleMeta = "Visible Meta Files";
 
-		public static void SetToDefaults(this AssetRipper.SourceGenerated.Classes.ClassID_159.IEditorSettings settings)
+		public static void SetToDefaults(this IEditorSettings settings)
 		{
 			settings.ExternalVersionControlSupport_C159_Utf8String.TrySet(VisibleMeta);
+			settings.ExternalVersionControlSupport_C159_Int32 = (int)ExternalVersionControl.Generic;
+
 			settings.SerializationMode_C159 = (int)SerializationMode.ForceText;
 			settings.SpritePackerPaddingPower_C159 = 1;
 			settings.EtcTextureCompressorBehavior_C159 = 1;
@@ -32,18 +35,37 @@ namespace AssetRipper.Core.SourceGenExtensions
 			settings.CacheServerEnableDownload_C159 = false;
 			settings.CacheServerEnableUpload_C159 = false;
 
-			settings.ExternalVersionControlSupport_C159_Int32 = (int)ExternalVersionControl.Generic;
 			settings.ShowLightmapResolutionOverlay_C159 = true;
 			settings.UseLegacyProbeSampleCount_C159 = true;
 			settings.EnterPlayModeOptions_C159 = (int)(EnterPlayModeOptions.DisableDomainReload | EnterPlayModeOptions.DisableSceneReload);
 		}
 
-		private static void TrySet(this Utf8StringBase utf8String, string str)
+		private static void TrySet(this Utf8StringBase? utf8String, string str)
 		{
 			if(utf8String is not null)
 			{
 				utf8String.String = str;
 			}
+		}
+
+		public static SerializationMode GetSerializationMode(this IEditorSettings settings)
+		{
+			return (SerializationMode)settings.SerializationMode_C159;
+		}
+
+		public static AssetPipelineMode GetAssetPipelineMode(this IEditorSettings settings)
+		{
+			return (AssetPipelineMode)settings.AssetPipelineMode_C159;
+		}
+
+		public static CacheServerMode GetCacheServerMode(this IEditorSettings settings)
+		{
+			return (CacheServerMode)settings.CacheServerMode_C159;
+		}
+
+		public static EnterPlayModeOptions GetEnterPlayModeOptions(this IEditorSettings settings)
+		{
+			return (EnterPlayModeOptions)settings.EnterPlayModeOptions_C159;
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Animator;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
@@ -52,6 +53,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 				IGameObject go = animator.GameObject_C95.GetAsset(animator.SerializedFile);
 				return go.BuildTOS();
 			}
+		}
+
+		public static AnimatorCullingMode GetCullingMode(this IAnimator animator)
+		{
+			return (AnimatorCullingMode)animator.CullingMode_C95;
+		}
+
+		public static AnimatorUpdateMode GetUpdateMode(this IAnimator animator)
+		{
+			return animator.Has_UpdateMode_C95() ? (AnimatorUpdateMode)animator.UpdateMode_C95 : AnimatorUpdateMode.Normal;
 		}
 	}
 }

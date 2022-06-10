@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.AnimationClip;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -14,6 +15,15 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class AnimationClipExtensions
 	{
+		public static bool GetLegacy(this IAnimationClip clip)
+		{
+			if (clip.Has_Legacy_C74())
+			{
+				return clip.Legacy_C74;
+			}
+			return clip.AnimationType_C74 == (int)AnimationType.Legacy;
+		}
+
 		public static IEnumerable<IGameObject> FindRoots(this IAnimationClip clip)
 		{
 			foreach (IUnityObjectBase asset in clip.SerializedFile.Collection.FetchAssets())

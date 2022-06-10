@@ -71,7 +71,7 @@ namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 			}
 			else
 			{
-				EnvironmentLightingMode = (EnvironmentAmbeintMode)reader.ReadUInt32();
+				EnvironmentLightingMode = (EnvironmentAmbientMode)reader.ReadUInt32();
 				EnableBakedLightmaps = reader.ReadBoolean();
 				EnableRealtimeLightmaps = reader.ReadBoolean();
 			}
@@ -142,10 +142,10 @@ namespace AssetRipper.Core.Classes.LightmapSettings.GISettings
 		public float TemporalCoherenceThreshold { get; set; }
 		public bool DynamicEnv
 		{
-			get => EnvironmentLightingMode == EnvironmentAmbeintMode.Realtime;
-			set => EnvironmentLightingMode = value ? EnvironmentAmbeintMode.Realtime : EnvironmentAmbeintMode.Baked;
+			get => EnvironmentLightingMode == EnvironmentAmbientMode.Realtime;
+			set => EnvironmentLightingMode = value ? EnvironmentAmbientMode.Realtime : EnvironmentAmbientMode.Baked;
 		}
-		public EnvironmentAmbeintMode EnvironmentLightingMode { get; set; }
+		public EnvironmentAmbientMode EnvironmentLightingMode { get; set; }
 		public bool EnableBakedLightmaps { get; set; }
 		public bool EnableRealtimeLightmaps { get; set; }
 

@@ -5,6 +5,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class MuscleClipInfoExtensions
 	{
+		public static void Initialize(this IMuscleClipInfo info)
+		{
+			info.StopTime = 1.0f;
+			info.KeepOriginalPositionY = true;
+		}
+
 		public static void Initialize(this IMuscleClipInfo info, IMuscleClipConstant muscleConst)
 		{
 			info.AdditiveReferencePoseTime = 0.0f;
