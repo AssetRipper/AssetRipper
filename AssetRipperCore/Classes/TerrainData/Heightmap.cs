@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Converters.TerrainData;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -68,11 +67,6 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// 2.1.0 and greater
 		/// </summary>
 		private static bool HasAlign(UnityVersion version) => version.IsGreaterEqual(2, 1);
-
-		public Heightmap Convert(IExportContainer container)
-		{
-			return HeightmapConverter.Convert(container, this);
-		}
 
 		public void Read(AssetReader reader)
 		{

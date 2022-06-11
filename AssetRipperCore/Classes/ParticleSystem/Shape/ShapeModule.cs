@@ -406,7 +406,7 @@ namespace AssetRipper.Core.Classes.ParticleSystem.Shape
 		public MultiModeParameter MeshSpawn = new();
 		public PPtr<Mesh.Mesh> Mesh = new();
 		public PPtr<MeshRenderer> MeshRenderer = new();
-		public PPtr<SkinnedMeshRenderer> SkinnedMeshRenderer = new();
+		public PPtr<Object.Object> SkinnedMeshRenderer = new();
 		public PPtr<Sprite.Sprite> Sprite = new();
 		public PPtr<SpriteRenderer.SpriteRenderer> SpriteRenderer = new();
 		public PPtr<Texture2D.Texture2D> Texture = new();

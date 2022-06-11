@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Converters.TerrainData;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -41,11 +40,6 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// Less than 2020.2
 		/// </summary>
 		public static bool HasRandomRotations(UnityVersion version) => version.IsLess(2020, 2);
-
-		public DetailDatabase Convert(IExportContainer container)
-		{
-			return DetailDatabaseConverter.Convert(container, this);
-		}
 
 		public void Read(AssetReader reader)
 		{

@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Converters.TerrainData;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Math.Vectors;
@@ -28,11 +27,6 @@ namespace AssetRipper.Core.Classes.TerrainData
 		/// 5.0.0p1 and greater
 		/// </summary>
 		public static bool HasSmoothness(UnityVersion version) => version.IsGreaterEqual(5, 0, 0, UnityVersionType.Patch);
-
-		public TerrainLayer Convert(IExportContainer container)
-		{
-			return SplatPrototypeConverter.GenerateTerrainLayer(container, this);
-		}
 
 		public void Read(AssetReader reader)
 		{

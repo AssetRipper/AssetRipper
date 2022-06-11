@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Classes.Renderer
 {
-	public abstract class Renderer : Component, IRenderer
+	public abstract class Renderer : Component
 	{
 		protected Renderer(AssetInfo assetInfo) : base(assetInfo) { }
 

@@ -66,7 +66,7 @@ namespace AssetRipper.Core.Classes
 		}
 
 		public override string ExportExtension => "terrainlayer";
-		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain.Terrain), nameof(TerrainLayer));
+		public override string ExportPath => Path.Combine(AssetsKeyword, "Terrain", nameof(TerrainLayer));
 
 		public float Metallic { get; set; }
 		public float Smoothness { get; set; }

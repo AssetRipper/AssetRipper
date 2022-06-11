@@ -22,9 +22,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return file.Collection.FindResourceFile(streamedResource.Source?.String) != null;
 		}
 
-		public static byte[] GetContent(this IStreamedResource streamedResource, ISerializedFile file)
+		public static byte[]? GetContent(this IStreamedResource streamedResource, ISerializedFile file)
 		{
-			IResourceFile res = file.Collection.FindResourceFile(streamedResource.Source?.String);
+			IResourceFile? res = file.Collection.FindResourceFile(streamedResource.Source?.String);
 			if (res == null)
 			{
 				return null;
@@ -40,7 +40,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return data;
 		}
 
-		public static bool TryGetContent(this IStreamedResource streamedResource, ISerializedFile file, out byte[] data)
+		public static bool TryGetContent(this IStreamedResource streamedResource, ISerializedFile file, out byte[]? data)
 		{
 			data = streamedResource.GetContent(file);
 			return !data.IsNullOrEmpty();

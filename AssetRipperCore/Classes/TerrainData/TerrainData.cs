@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Converters.TerrainData;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Extensions;
@@ -37,7 +36,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 
 		public override IUnityObjectBase ConvertLegacy(IExportContainer container)
 		{
-			return TerrainDataConverter.Convert(container, this);
+			return this;
 		}
 
 		public override void Read(AssetReader reader)
@@ -124,7 +123,7 @@ namespace AssetRipper.Core.Classes.TerrainData
 			return node;
 		}
 
-		public override string ExportPath => Path.Combine(AssetsKeyword, nameof(Terrain.Terrain), nameof(TerrainData));
+		public override string ExportPath => Path.Combine(AssetsKeyword, "Terrain", nameof(TerrainData));
 
 		public PPtr<Shader.Shader>[] PreloadShaders { get; set; }
 
