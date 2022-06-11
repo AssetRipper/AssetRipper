@@ -1,6 +1,5 @@
 using AssetRipper.Core;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Converters.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Project;
@@ -75,13 +74,13 @@ namespace AssetRipper.Library.Exporters.Textures
 			ITexture2D texture = (ITexture2D)Asset;
 			if (m_convert)
 			{
-				ITextureImporter importer = Texture2DConverter.GenerateTextureImporter(container, texture);
+				ITextureImporter importer = ImporterFactory.GenerateTextureImporter(container, texture);
 				AddSprites(container, importer);
 				return importer;
 			}
 			else
 			{
-				return Texture2DConverter.GenerateIHVImporter(container, texture);
+				return ImporterFactory.GenerateIHVImporter(container, texture);
 			}
 		}
 

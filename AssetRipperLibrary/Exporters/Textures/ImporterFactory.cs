@@ -9,9 +9,9 @@ using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_89;
 using AssetRipper.SourceGenerated.Subclasses.TextureImporterPlatformSettings;
 
-namespace AssetRipper.Core.Converters.Texture2D
+namespace AssetRipper.Library.Exporters.Textures
 {
-	public static class Texture2DConverter
+	public static class ImporterFactory
 	{
 		public static ITextureImporter GenerateTextureImporter(IExportContainer container, ITexture2D origin)
 		{
@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Converters.Texture2D
 			instance.StreamingMipmapsPriority_C1006 = origin.StreamingMipmapsPriority_C28;
 			instance.IsReadable_C1006 = origin.IsReadable_C28 ? 1 : 0;
 			instance.TextureFormat_C1006 = origin.TextureFormat_C28;
-			instance.MaxTextureSize_C1006 = System.Math.Min(2048, System.Math.Max(origin.Width_C28, origin.Height_C28));
+			instance.MaxTextureSize_C1006 = Math.Min(2048, Math.Max(origin.Width_C28, origin.Height_C28));
 			instance.TextureSettings_C1006.CopyValues(origin.TextureSettings_C28);
 			instance.NPOTScale_C1006 = (int)TextureImporterNPOTScale.None;
 			instance.CompressionQuality_C1006 = 50;
@@ -42,8 +42,8 @@ namespace AssetRipper.Core.Converters.Texture2D
 			instance.AlphaIsTransparency_C1006 = 1;
 			instance.SpriteTessellationDetail_C1006 = -1;
 			instance.TextureType_C1006 = GetTextureTypeFromLightmapFormat(origin);
-			instance.TextureShape_C1006 = origin is ICubemap 
-				? (int)TextureImporterShape.TextureCube 
+			instance.TextureShape_C1006 = origin is ICubemap
+				? (int)TextureImporterShape.TextureCube
 				: (int)TextureImporterShape.Texture2D;
 
 			ITextureImporterPlatformSettings platformSettings = instance.PlatformSettings_C1006.AddNew();
