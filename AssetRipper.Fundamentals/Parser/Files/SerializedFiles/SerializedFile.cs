@@ -36,8 +36,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public IFileCollection Collection { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
 
-		private readonly Dictionary<long, IUnityObjectBase> m_assets = new Dictionary<long, IUnityObjectBase>();
-		private readonly Dictionary<long, int> m_assetEntryLookup = new Dictionary<long, int>();
+		private readonly Dictionary<long, IUnityObjectBase> m_assets = new();
+		private readonly Dictionary<long, int> m_assetEntryLookup = new();
 		internal SerializedFile(IFileCollection collection, SerializedFileScheme scheme)
 		{
 			Collection = collection ?? throw new ArgumentNullException(nameof(collection));
@@ -96,18 +96,12 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public IUnityObjectBase GetAsset(long pathID)
 		{
-			IUnityObjectBase asset = FindAsset(pathID);
-			if (asset == null)
-			{
-				throw new Exception($"Object with path ID {pathID} wasn't found");
-			}
-
-			return asset;
+			return FindAsset(pathID) ?? throw new Exception($"Object with path ID {pathID} wasn't found");
 		}
 
 		public IUnityObjectBase GetAsset(int fileIndex, long pathID)
 		{
-			return FindAsset(fileIndex, pathID, false);
+			return FindAsset(fileIndex, pathID, false) ?? throw new Exception($"Object with file ID {fileIndex} path ID {pathID} wasn't found");
 		}
 
 		public IUnityObjectBase? FindAsset(long pathID)
@@ -133,7 +127,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 			foreach (FileIdentifier identifier in Metadata.Externals)
 			{
-				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
+				ISerializedFile? file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (file == null)
 				{
 					continue;
@@ -165,7 +159,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 			foreach (FileIdentifier identifier in Metadata.Externals)
 			{
-				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
+				ISerializedFile? file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (file == null)
 				{
 					continue;
@@ -205,7 +199,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			for (int i = 0; i < Metadata.Externals.Length; i++)
 			{
 				FileIdentifier identifier = Metadata.Externals[i];
-				ISerializedFile file = Collection.FindSerializedFile(identifier.GetFilePath());
+				ISerializedFile? file = Collection.FindSerializedFile(identifier.GetFilePath());
 				if (asset.SerializedFile == file)
 				{
 					return new PPtr<T>(i + 1, asset.PathID);
@@ -262,7 +256,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		private IUnityObjectBase? FindAsset(int fileIndex, long pathID, bool isSafe)
 		{
-			ISerializedFile file;
+			ISerializedFile? file;
 			if (fileIndex == 0)
 			{
 				file = this;
@@ -324,10 +318,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		{
 			AssetInfo assetInfo = new AssetInfo(this, info.FileID, info.ClassID, info.ByteSize);
 			IUnityObjectBase asset = ReadAsset(reader, assetInfo, Header.DataOffset + info.ByteStart, info.ByteSize);
-			if (asset != null)
-			{
-				AddAsset(info.FileID, asset);
-			}
+			AddAsset(info.FileID, asset);
 		}
 
 		private IUnityObjectBase ReadAsset(AssetReader reader, AssetInfo assetInfo, long offset, int size)
