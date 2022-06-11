@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.Classes.Texture2D;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;
@@ -73,7 +74,7 @@ namespace AssetRipper.Library.Exporters.Textures
 		{
 			if (container.ExportLayout.Version.IsLess(5, 6))
 			{
-				Logging.Logger.Warning("IHVImageFormatImporter doesn't exist on versions less than 5.6. A different importer needs to be used on this version");
+				Logger.Warning("IHVImageFormatImporter doesn't exist on versions less than 5.6. A different importer needs to be used on this version");
 			}
 			IIHVImageFormatImporter instance = IHVImageFormatImporterFactory.CreateAsset(container.ExportLayout.Version);
 			instance.SetToDefault();
