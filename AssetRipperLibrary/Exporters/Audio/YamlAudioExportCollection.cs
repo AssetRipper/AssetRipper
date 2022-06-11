@@ -18,14 +18,27 @@ namespace AssetRipper.Library.Exporters.Audio
 		{
 			IAudioClip asset = (IAudioClip)Asset;
 			IStreamedResource? resource = asset.Resource_C83;
-			if (resource is not null && resource.TryGetContent(asset.SerializedFile, out byte[] data))
+			if (resource is not null)
 			{
-				string resPath = filePath + ".resS";
-				System.IO.File.WriteAllBytes(resPath, data);
 				string originalSource = resource.Source.String;
-				resource.Source.String = System.IO.Path.GetRelativePath(dirPath, resPath);
+				ulong originalOffset = resource.Offset;
+				ulong originalSize = resource.Size;
+				if (resource.TryGetContent(asset.SerializedFile, out byte[] data))
+				{
+					string resPath = filePath + ".resS";
+					System.IO.File.WriteAllBytes(resPath, data);
+					resource.Source.String = System.IO.Path.GetRelativePath(dirPath, resPath);
+				}
+				else
+				{
+					resource.Source.Data = Array.Empty<byte>();
+					resource.Offset = 0;
+					resource.Size = 0;
+				}
 				bool result = base.ExportInner(container, filePath, dirPath);
 				resource.Source.String = originalSource;
+				resource.Offset = originalOffset;
+				resource.Size = originalSize;
 				return result;
 			}
 			else
