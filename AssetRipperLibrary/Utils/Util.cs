@@ -1,6 +1,4 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Shader;
+﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
@@ -13,7 +11,12 @@ using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.WebFiles;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -134,15 +137,15 @@ namespace AssetRipper.Library.Utils
 		public static List<string> GetManifestDependencies(string filePath)
 		{
 			YamlStream? yaml = new YamlStream();
-			YamlMappingNode mapping = null;
+			YamlMappingNode? mapping = null;
 			using (StreamReader? fs = File.OpenText(filePath))
 			{
 				yaml.Load(fs);
 				mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
 			}
 			YamlSequenceNode? dependencies = (YamlSequenceNode)mapping.Children[new YamlScalarNode("Dependencies")];
-			List<string?>? results = dependencies
-				.Select(node => Path.GetFileName(((YamlScalarNode)node).Value))
+			List<string> results = dependencies
+				.Select(node => Path.GetFileName(((YamlScalarNode)node).Value ?? ""))
 				.ToList();
 			return results;
 		}
@@ -223,10 +226,10 @@ namespace AssetRipper.Library.Utils
 			{
 				foreach (IUnityObjectBase? asset in shaderBundle.FetchAssets())
 				{
-					if (asset is Shader shader)
+					if (asset is IShader shader)
 					{
 						using MD5 md5 = MD5.Create();
-						byte[] md5Hash = md5.ComputeHash(Encoding.ASCII.GetBytes(shader.HasParsedForm ? shader.ParsedForm.NameString : shader.GetNameNotEmpty()));
+						byte[] md5Hash = md5.ComputeHash(shader.Name.Data);
 						asset.GUID = new UnityGUID(md5Hash);
 					}
 				}
@@ -234,26 +237,21 @@ namespace AssetRipper.Library.Utils
 		}
 		public static string GetName(IUnityObjectBase asset)
 		{
-			if (asset is INamedObject no)
+			if (asset is IHasName no)
 			{
-				return no.GetValidName();
+				return no.GetNameNotEmpty();
 			}
-			if (asset is Core.Classes.IMonoBehaviour mb && mb.IsScriptableObject())
+			if (asset is IMonoBehaviour mb && mb.IsScriptableObject())
 			{
 				return mb.NameString;
-			}
-			PropertyInfo? nameProp = asset.GetType().GetProperty("Name");
-			if (nameProp != null)
-			{
-				return (string)nameProp.GetValue(asset);
 			}
 			return "Unnamed";
 		}
 		public static void FixScript(IMonoScript script)
 		{
 			using MD5 md5 = MD5.Create();
-			string? fullName = $"{script.GetAssemblyNameFixed()}.{script.Namespace}.{script.ClassName}";
-			byte[]? data = md5.ComputeHash(Encoding.UTF8.GetBytes(fullName));
+			string fullName = $"{script.GetAssemblyNameFixed()}.{script.Namespace_C115}.{script.ClassName_C115}";
+			byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(fullName));
 			SetGUID(script, data);
 		}
 		public static void SetGUID(IUnityObjectBase asset, byte[] guid)
@@ -268,7 +266,7 @@ namespace AssetRipper.Library.Utils
 		}
 		static T CreateInstance<T>(params object[] parameters)
 		{
-			object? instance = typeof(T)
+			object instance = typeof(T)
 				.GetConstructors(AllBindingFlags)
 				.Single(c => c.GetParameters().Length == parameters.Length)
 				.Invoke(parameters);
@@ -314,7 +312,7 @@ namespace AssetRipper.Library.Utils
 		}
 		private static object LoadScheme(FileScheme scheme)
 		{
-			object file = null;
+			object? file = null;
 			if (scheme is SerializedFileScheme serializedFileScheme)
 			{
 				BuildTarget platform = serializedFileScheme.Metadata != null &&
@@ -328,7 +326,7 @@ namespace AssetRipper.Library.Utils
 				GameCollection? collection = new GameCollection(layoutInfo);
 				collection.AssemblyManager = new Core.Structure.Assembly.Managers.BaseManager(layoutInfo, new Action<string>(str => str.GetType()));
 				file = CreateInstance<SerializedFile>(collection, scheme);
-				typeof(SerializedFile).GetMethod("ReadData", AllBindingFlags)
+				typeof(SerializedFile).GetMethod("ReadData", AllBindingFlags)?
 					.Invoke(file, new object[] { serializedFileScheme.Stream });
 			}
 			if (scheme is BundleFileScheme bundleFileScheme)
@@ -350,7 +348,7 @@ namespace AssetRipper.Library.Utils
 			{
 				file = CreateInstance<ResourceFile>(scheme);
 			}
-			return file;
+			return file ?? throw new Exception();
 		}
 	}
 }

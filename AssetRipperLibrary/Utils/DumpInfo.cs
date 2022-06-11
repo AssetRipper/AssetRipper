@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.ArchiveFiles;
 using AssetRipper.Core.Parser.Files.BundleFile;
@@ -11,6 +9,11 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Parser.Files.WebFiles;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Classes.ClassID_116;
+using AssetRipper.SourceGenerated.Classes.ClassID_141;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -49,13 +52,13 @@ namespace AssetRipper.Library.Utils
 			DumpObjectInfo(container, sw);
 			if (container.Name == "globalgamemanagers")
 			{
-				BuildSettings buildSettings = (BuildSettings)container.FetchAssets().FirstOrDefault(asset => asset is BuildSettings);
+				IBuildSettings? buildSettings = (IBuildSettings?)container.FetchAssets().FirstOrDefault(asset => asset is IBuildSettings);
 				if (buildSettings != null)
 				{
 					sw.WriteLine("");
 					DumpBuildSettings(buildSettings, sw);
 				}
-				MonoManager monoManager = (MonoManager)container.FetchAssets().FirstOrDefault(asset => asset is MonoManager);
+				IMonoManager? monoManager = (IMonoManager?)container.FetchAssets().FirstOrDefault(asset => asset is IMonoManager);
 				if (monoManager != null)
 				{
 					sw.WriteLine("");
@@ -117,24 +120,24 @@ namespace AssetRipper.Library.Utils
 				if (asset is IMonoScript ms)
 				{
 					string scriptName = $"[{ms.GetAssemblyNameFixed()}]";
-					if (!string.IsNullOrEmpty(ms.Namespace))
+					if (!string.IsNullOrEmpty(ms.Namespace_C115.String))
 					{
-						scriptName += $"{ms.Namespace}.";
+						scriptName += $"{ms.Namespace_C115.String}.";
 					}
 
-					scriptName += $"{ms.ClassName}:{HashToString(ms.PropertiesHash)}";
+					scriptName += $"{ms.ClassName_C115.String}:{HashToString(ms.GetPropertiesHash())}";
 					extra = scriptName;
 				}
-				if (asset is Shader shader)
+				if (asset is IShader shader)
 				{
-					if (Shader.IsSerialized(file.Version) || Shader.HasBlob(file.Version))
+					if (shader.Has_CompressedBlob_C48())
 					{
-						IEnumerable<Core.Classes.Shader.Enums.GpuProgramType.ShaderGpuProgramType> programTypes = shader.Blobs
+						IEnumerable<Core.Classes.Shader.Enums.GpuProgramType.ShaderGpuProgramType> programTypes = shader.ReadBlobs()
 							.SelectMany(b => b.SubPrograms)
 							.Select(sp => sp.GetProgramType(file.Version))
 							.Distinct();
 						extra += string.Format("Platforms: {0} ProgramTypes: {1}",
-							string.Join(", ", shader.Platforms),
+							string.Join(", ", shader.Platforms_C48 ?? Array.Empty<uint>()),
 							string.Join(", ", programTypes));
 					}
 					else
@@ -249,26 +252,26 @@ namespace AssetRipper.Library.Utils
 				.ToArray();
 			return BitConverter.ToString(data).Replace("-", "");
 		}
-		public static void DumpBuildSettings(BuildSettings buildSettings, StreamWriter sw)
+		public static void DumpBuildSettings(IBuildSettings buildSettings, StreamWriter sw)
 		{
 			sw.WriteLine("BuildSettings");
-			sw.WriteLine($"  Version: {buildSettings.Version}");
-			sw.WriteLine($"  Scenes {buildSettings.Scenes.Length}");
-			for (int i = 0; i < buildSettings.Scenes.Length; i++)
+			/*sw.WriteLine($"  Version: {buildSettings.Version_C141}");
+			sw.WriteLine($"  Scenes {buildSettings.Scenes_C141.Length}");
+			for (int i = 0; i < buildSettings.Scenes_C141.Length; i++)
 			{
-				string scene = buildSettings.Scenes[i].String;
+				string scene = buildSettings.Scenes_C141[i].String;
 				sw.WriteLine($"	{i}: {scene}");
 			}
-			sw.WriteLine($"  PreloadedPlugins {buildSettings.PreloadedPlugins}");
-			for (int i = 0; i < buildSettings.PreloadedPlugins.Length; i++)
+			sw.WriteLine($"  PreloadedPlugins {buildSettings.PreloadedPlugins_C141}");
+			for (int i = 0; i < buildSettings.PreloadedPlugins_C141.Length; i++)
 			{
-				string preloadedPlugin = buildSettings.PreloadedPlugins[i];
+				string? preloadedPlugin = buildSettings.PreloadedPlugins_C141?[i].String;
 				sw.WriteLine($"	{i}: {preloadedPlugin}");
 			}
-			sw.WriteLine($"  BuildTags {buildSettings.BuildTags.Length}");
-			for (int i = 0; i < buildSettings.BuildTags.Length; i++)
+			sw.WriteLine($"  BuildTags {buildSettings.BuildTags_C141.Length}");
+			for (int i = 0; i < buildSettings.BuildTags_C141.Length; i++)
 			{
-				string buildTag = buildSettings.BuildTags[i];
+				string? buildTag = buildSettings.BuildTags_C141?[i].String;
 				sw.WriteLine($"	{i}: {buildTag}");
 			}
 			sw.WriteLine($"  RuntimeClassHashes {buildSettings.RuntimeClassHashes.Count}");
@@ -280,12 +283,12 @@ namespace AssetRipper.Library.Utils
 			foreach (KeyValuePair<Hash128, Hash128> kv in buildSettings.ScriptHashes)
 			{
 				sw.WriteLine($"	{HashToString(kv.Key)}: {HashToString(kv.Value)}");
-			}
+			}*/
 		}
-		public static void DumpMonoManager(MonoManager monoManager, StreamWriter sw)
+		public static void DumpMonoManager(IMonoManager monoManager, StreamWriter sw)
 		{
 			sw.WriteLine("MonoManager");
-			sw.WriteLine($"  HasCompileErrors {monoManager.HasCompileErrors}");
+			/*sw.WriteLine($"  HasCompileErrors {monoManager.HasCompileErrors}");
 			sw.WriteLine($"  EngineDllModDate {monoManager.EngineDllModDate}");
 			sw.WriteLine($"  CustomDlls {monoManager.CustomDlls?.Length}");
 			foreach (string dll in monoManager.CustomDlls ?? Array.Empty<string>())
@@ -311,7 +314,7 @@ namespace AssetRipper.Library.Utils
 			foreach (PPtr<IMonoScript> dll in monoManager.Scripts ?? Array.Empty<PPtr<IMonoScript>>())
 			{
 				sw.WriteLine($"    {dll}");
-			}
+			}*/
 		}
 		static void DumpFile(string filepath, string exportPath)
 		{
@@ -376,8 +379,8 @@ namespace AssetRipper.Library.Utils
 		{
 			foreach (Core.Interfaces.IUnityObjectBase asset in serializedFile.FetchAssets().Where(asset => asset is IMonoScript))
 			{
-				IMonoScript monoScript = asset as IMonoScript;
-				sw.WriteLine($"\t[{monoScript.GetAssemblyNameFixed()}]{monoScript.Namespace}.{monoScript.ClassName} - {HashToString(monoScript.PropertiesHash)}");
+				IMonoScript monoScript = (IMonoScript)asset;
+				sw.WriteLine($"\t[{monoScript.GetAssemblyNameFixed()}]{monoScript.Namespace_C115}.{monoScript.ClassName_C115} - {HashToString(monoScript.GetPropertiesHash())}");
 
 			}
 			sw.WriteLine($"SerializedFile");
@@ -406,8 +409,8 @@ namespace AssetRipper.Library.Utils
 				Hash128 ScriptHash = type.ScriptID;
 				Hash128 TypeHash = type.OldTypeHash;
 
-				IMonoScript monoScript = serializedFile.FetchAssets().FirstOrDefault(asset => asset is IMonoScript ms && ms.PropertiesHash == TypeHash) as IMonoScript;
-				string scriptType = monoScript == null ? "\tNo Script" : $"\tMonoScript is [{monoScript.GetAssemblyNameFixed()}]{monoScript.Namespace}.{monoScript.ClassName}";
+				IMonoScript? monoScript = serializedFile.FetchAssets().FirstOrDefault(asset => asset is IMonoScript ms && ms.GetPropertiesHash() == TypeHash) as IMonoScript;
+				string scriptType = monoScript == null ? "\tNo Script" : $"\tMonoScript is [{monoScript.GetAssemblyNameFixed()}]{monoScript.Namespace_C115}.{monoScript.ClassName_C115}";
 				sw.WriteLine(scriptType);
 				sw.WriteLine($"\tType: ClassID {ClassID}, ScriptID {ScriptID}, IsStrippedType {IsStrippedType}, ScriptHash {HashToString(ScriptHash)}, TypeHash {HashToString(TypeHash)}");
 				string Dump = Tree.Dump;
