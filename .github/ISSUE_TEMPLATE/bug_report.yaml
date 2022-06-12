@@ -37,7 +37,7 @@ body:
     id: game_name
     attributes:
       label: Which game did this occur on?
-      description: (Optional but preferred) Please tell us the game's name. If the game is available on Steam, a [SteamDB](https://steamdb.info/) link would be ideal.
+      description: (Optional but preferred) Please tell us the game's name. If the game is available on Steam, a [SteamDB](https://steamdb.info/) link would be ideal. Similarly for an Android game, a [Google Play](https://play.google.com/store/games) link is ideal.
     validations:
       required: false
   - type: textarea

@@ -18,7 +18,6 @@ These releases will likely focus on preparing for the next major milestone.
 
 * Remove native dependencies
   * Replace ogg and vorbis with managed code
-  * Remove Fmod
   * Port essential texture decoding code to C#
 * Make all dependencies trimmable
 * Nuget feed for source generated code and forked dependencies
