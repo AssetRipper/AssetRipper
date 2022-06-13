@@ -114,10 +114,6 @@
                        VerticalAlignment="Center" />
 
             <Grid Grid.Row="2" RowDefinitions="50, 140, 140, 140, 140" ColumnDefinitions="*, 400, 400, 400, *" Margin="100, 0, 100, 0">
-                <WrapPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="20, 0">
-                    <CheckBox IsChecked="{Binding IgnoreAssetBundleContentPaths, Mode=TwoWay}" />
-                    <TextBlock Text="{i18n:Localize ignore_asset_bundle_content_paths}" Margin="0, 7, 0, 10" />
-                </WrapPanel>
                 <WrapPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Margin="20, 0">
                     <CheckBox IsChecked="{Binding IgnoreStreamingAssets, Mode=TwoWay}" />
                     <TextBlock Text="{i18n:Localize skip_streaming_assets}" Margin="0, 7, 0, 10" />
@@ -157,6 +153,13 @@
                     SelectedValue="{Binding SpriteExportMode, Mode=TwoWay}"
                     Margin="10, 0, 10, 0">
                 </cc:SpriteExportConfigDropdown>
+				<cc:BundledAssetsExportConfigDropdown
+                    Grid.Column="3"
+                    Grid.Row="2"
+                    OptionTitle="{i18n:Localize bundled_assets_export_title}"
+                    SelectedValue="{Binding BundledAssetsExportMode, Mode=TwoWay}"
+                    Margin="10, 0, 0, 0">
+				</cc:BundledAssetsExportConfigDropdown>
                 <cc:TerrainExportConfigDropdown 
                     Grid.Column="1" 
                     Grid.Row="3"
@@ -192,7 +195,8 @@
                     SelectedValue="{Binding ScriptLanguageVersion, Mode=TwoWay}"
                     Margin="10, 0, 0, 0">
                 </cc:ScriptLanguageVersionConfigDropdown>
-            </Grid>
+            
+		</Grid>
 
             <TextBlock Grid.Row="3"
                        Text="{i18n:Localize config_screen_drag_drop_prompt}"

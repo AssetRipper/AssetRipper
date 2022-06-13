@@ -33,7 +33,7 @@ namespace AssetRipper.Core.Project
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
-			m_IgnoreAssetBundleContentPaths = options?.IgnoreAssetBundleContentPaths ?? throw new ArgumentNullException(nameof(options));
+			m_BundledAssetsExportMode = options.BundledAssetsExportMode;
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			ExportLayout = file.Layout;
 
@@ -311,7 +311,7 @@ namespace AssetRipper.Core.Project
 
 		private void AddBundleAssets(IAssetBundle bundle)
 		{
-			if (m_IgnoreAssetBundleContentPaths)
+			if (m_BundledAssetsExportMode == BundledAssetsExportMode.GroupByAssetType)
 			{
 				return;
 			}
@@ -343,11 +343,11 @@ namespace AssetRipper.Core.Project
 					}
 				}
 
-				if (m_IgnoreAssetBundleContentPaths)
+				if (m_BundledAssetsExportMode == BundledAssetsExportMode.DirectExport)
 				{
 					m_pathAssets.Add(asset, new ProjectAssetPath(string.Empty, assetPath));
 				}
-				else
+				else if (m_BundledAssetsExportMode == BundledAssetsExportMode.GroupByBundleName)
 				{
 					if (assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
 					{
@@ -359,8 +359,12 @@ namespace AssetRipper.Core.Project
 					}
 					m_pathAssets.Add(asset, new ProjectAssetPath(directory, assetPath));
 				}
+				else
+				{
+					throw new Exception($"Invalid {nameof(BundledAssetsExportMode)} for {nameof(m_BundledAssetsExportMode)} : {m_BundledAssetsExportMode}");
+				}
 			}
-#warning TODO: asset bundle may contain more assets than listed in Container. Need to export them in AssetBundleFullPath directory if KeepAssetBundleContentPath is false
+#warning TODO: asset bundle may contain more assets than listed in Container. Need to export them in AssetBundleFullPath directory if m_BundledAssetsExportMode is GroupByBundleName
 		}
 
 		public IExportCollection CurrentCollection { get; set; }
@@ -385,7 +389,7 @@ namespace AssetRipper.Core.Project
 		private const string AssetBundleFullPath = AssetsDirectory + "Asset_Bundles";
 
 		private readonly ProjectExporter m_exporter;
-		private readonly bool m_IgnoreAssetBundleContentPaths;
+		private readonly BundledAssetsExportMode m_BundledAssetsExportMode;
 		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
 		private readonly Dictionary<IUnityObjectBase, ProjectAssetPath> m_pathAssets = new Dictionary<IUnityObjectBase, ProjectAssetPath>();
 

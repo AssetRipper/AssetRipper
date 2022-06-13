@@ -6,12 +6,12 @@ namespace AssetRipper.GUI
 {
 	public partial class MainWindowViewModel
 	{
-		public bool IgnoreAssetBundleContentPaths
+		public BundledAssetsExportMode BundledAssetsExportMode
 		{
-			get => _ripper.Settings.IgnoreAssetBundleContentPaths;
+			get => _ripper.Settings.BundledAssetsExportMode;
 			set
 			{
-				_ripper.Settings.IgnoreAssetBundleContentPaths = value;
+				_ripper.Settings.BundledAssetsExportMode = value;
 				OnPropertyChanged();
 			}
 		}

@@ -51,10 +51,7 @@ namespace AssetRipper.Core.Configuration
 		/// Should objects get exported with dependencies or without?
 		/// </summary>
 		public bool ExportDependencies { get; set; }
-		/// <summary>
-		/// Export asset bundle content to its original path instead of the Asset_Bundle directory
-		/// </summary>
-		public bool IgnoreAssetBundleContentPaths { get; set; }
+		public BundledAssetsExportMode BundledAssetsExportMode { get; set; }
 		/// <summary>
 		/// A function to determine if an object is allowed to be exported.<br/>
 		/// Set by default to allow everything.
@@ -92,7 +89,7 @@ namespace AssetRipper.Core.Configuration
 			StreamingAssetsMode = StreamingAssetsMode.Extract;
 			ExportRootPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
-			IgnoreAssetBundleContentPaths = false;
+			BundledAssetsExportMode = BundledAssetsExportMode.GroupByBundleName;
 			Filter = DefaultFilter;
 		}
 
@@ -103,7 +100,7 @@ namespace AssetRipper.Core.Configuration
 			Logger.Info(LogCategory.General, $"{nameof(StreamingAssetsMode)}: {StreamingAssetsMode}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportRootPath)}: {ExportRootPath}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportDependencies)}: {ExportDependencies}");
-			Logger.Info(LogCategory.General, $"{nameof(IgnoreAssetBundleContentPaths)}: {IgnoreAssetBundleContentPaths}");
+			Logger.Info(LogCategory.General, $"{nameof(BundledAssetsExportMode)}: {BundledAssetsExportMode}");
 		}
 	}
 }
