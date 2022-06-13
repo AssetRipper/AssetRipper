@@ -19,6 +19,7 @@ namespace AssetRipper.Library.Configuration
 		CSharp8_0 = 800,
 		CSharp9_0 = 900,
 		CSharp10_0 = 1000,
+		CSharp11_0 = 1100,
 		Latest = int.MaxValue
 	}
 
@@ -43,6 +44,7 @@ namespace AssetRipper.Library.Configuration
 				ScriptLanguageVersion.CSharp8_0 => LanguageVersion.CSharp8_0,
 				ScriptLanguageVersion.CSharp9_0 => LanguageVersion.CSharp9_0,
 				ScriptLanguageVersion.CSharp10_0 => LanguageVersion.CSharp10_0,
+				ScriptLanguageVersion.CSharp11_0 => LanguageVersion.CSharp11_0,
 				ScriptLanguageVersion.Latest => LanguageVersion.Latest,
 				_ => throw new ArgumentOutOfRangeException(nameof(scriptLanguageVersion), $"{scriptLanguageVersion}"),
 			};

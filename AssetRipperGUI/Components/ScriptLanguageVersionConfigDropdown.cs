@@ -19,6 +19,7 @@ namespace AssetRipper.GUI.Components
 			ScriptLanguageVersion.CSharp8_0 => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_8_0"],
 			ScriptLanguageVersion.CSharp9_0 => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_9_0"],
 			ScriptLanguageVersion.CSharp10_0 => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_10_0"],
+			ScriptLanguageVersion.CSharp11_0 => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_11_0"],
 			ScriptLanguageVersion.Latest => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_latest"],
 			ScriptLanguageVersion.AutoSafe => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_auto_safe"],
 			ScriptLanguageVersion.AutoExperimental => MainWindow.Instance.LocalizationManager["c_sharp_langage_version_config_auto_experimental"],
