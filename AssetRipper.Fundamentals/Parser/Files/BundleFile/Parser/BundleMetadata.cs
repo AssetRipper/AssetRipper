@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 			if (HasBlocksInfo(reader.Signature))
 			{
 				BlocksInfo.Read(reader);
-				if (reader.Flags.IsBlocksAndDirectoryInfoCombined())
+				if (reader.Flags.GetBlocksAndDirectoryInfoCombined())
 				{
 					DirectoryInfo.Read(reader);
 				}

@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Header
 		/// <summary>
 		/// Generation version
 		/// </summary>
-		public string UnityWebBundleVersion { get; set; }
+		public string? UnityWebBundleVersion { get; set; }
 		/// <summary>
 		/// Actual engine version
 		/// </summary>
@@ -21,14 +21,14 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Header
 			{
 				if (Signature == BundleType.UnityFS)
 				{
-					return FileStream.Flags;
+					return FileStream!.Flags;
 				}
 				return 0;
 			}
 		}
 
-		public BundleRawWebHeader RawWeb { get; set; }
-		public BundleFileStreamHeader FileStream { get; set; }
+		public BundleRawWebHeader? RawWeb { get; set; }
+		public BundleFileStreamHeader? FileStream { get; set; }
 
 		public void Read(EndianReader reader)
 		{
@@ -57,10 +57,9 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Header
 
 		public static BundleType ParseSignature(string signature)
 		{
-			if (TryParseSignature(signature, out BundleType bundleType))
-				return bundleType;
-			else
-				throw new ArgumentException($"Unsupported signature '{signature}'");
+			return TryParseSignature(signature, out BundleType bundleType)
+				? bundleType
+				: throw new ArgumentException($"Unsupported signature '{signature}'");
 		}
 
 		public static bool TryParseSignature(string signatureString, out BundleType type)

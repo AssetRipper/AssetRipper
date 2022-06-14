@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 
 		private void ReadRawWebMetadata(Stream stream, out Stream dataStream, out long metadataOffset)
 		{
-			BundleRawWebHeader header = Header.RawWeb;
+			BundleRawWebHeader header = Header.RawWeb!;
 			int metadataSize = BundleRawWebHeader.HasUncompressedBlocksInfoSize(Header.Version) ? header.UncompressedBlocksInfoSize : 0;
 			switch (Header.Signature)
 			{
@@ -113,12 +113,12 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 
 		private void ReadFileStreamMetadata(Stream stream, long basePosition)
 		{
-			BundleFileStreamHeader header = Header.FileStream;
-			if (Header.Version >= BundleVersion.BF_Addressables)
+			BundleFileStreamHeader header = Header.FileStream!;
+			if (Header.Version >= BundleVersion.BF_LargeFilesSupport)
 			{
 				stream.Align(16);
 			}
-			if (header.Flags.IsBlocksInfoAtTheEnd())
+			if (header.Flags.GetBlocksInfoAtTheEnd())
 			{
 				stream.Position = basePosition + (header.Size - header.CompressedBlocksInfoSize);
 			}
@@ -192,13 +192,17 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 
 		private void ReadFileStreamData(Stream stream, long basePosition, long headerSize)
 		{
-			if (Header.FileStream.Flags.IsBlocksInfoAtTheEnd())
+			if (Header.Flags.GetBlocksInfoAtTheEnd())
 			{
 				stream.Position = basePosition + headerSize;
-				if (Header.Version >= BundleVersion.BF_Addressables)
+				if (Header.Version >= BundleVersion.BF_LargeFilesSupport)
 				{
 					stream.Align(16);
 				}
+			}
+			if (Header.Flags.GetAlignAfterBlocksInfo())
+			{
+				stream.Align(16);
 			}
 
 			using BundleFileBlockReader blockReader = new BundleFileBlockReader(stream, Metadata.BlocksInfo);

@@ -10,6 +10,6 @@
 		BF_520a1 = 4,
 		BF_520aunk = 5,
 		BF_520_x = 6,
-		BF_Addressables = 7,//not real name
+		BF_LargeFilesSupport = 7,//not real name
 	}
 }
