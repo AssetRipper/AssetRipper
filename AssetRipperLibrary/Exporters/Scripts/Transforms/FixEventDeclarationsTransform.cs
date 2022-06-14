@@ -4,7 +4,7 @@ using ICSharpCode.Decompiler.CSharp.Transforms;
 namespace AssetRipper.Library.Exporters.Scripts.Transforms
 {
 	/// <summary>
-	/// Fixed event declarations that look like:
+	/// Fixes event declarations that look like:
 	/// <code>
 	/// event MyEvent
 	/// {
