@@ -28,17 +28,19 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 		{
 			base.VisitCustomEventDeclaration(eventDeclaration);
 
-			bool hasAccessorImpl = AccessorHasImplementation(eventDeclaration.AddAccessor) || AccessorHasImplementation(eventDeclaration.RemoveAccessor);
+			bool hasAccessorImplementation = AccessorHasImplementation(eventDeclaration.AddAccessor) || AccessorHasImplementation(eventDeclaration.RemoveAccessor);
 
-			if (!hasAccessorImpl)
+			if (hasAccessorImplementation)
 			{
-				EventDeclaration declaration = new EventDeclaration();
-				declaration.Modifiers = eventDeclaration.Modifiers;
-				declaration.ReturnType = eventDeclaration.ReturnType.Clone();
-				declaration.Variables.Add(new VariableInitializer(eventDeclaration.Name));
-				((TypeDeclaration)eventDeclaration.Parent!).Members.Add(declaration);
-				eventDeclaration.Remove();
+				return;
 			}
+
+			EventDeclaration declaration = new EventDeclaration();
+			declaration.Modifiers = eventDeclaration.Modifiers;
+			declaration.ReturnType = eventDeclaration.ReturnType.Clone();
+			declaration.Variables.Add(new VariableInitializer(eventDeclaration.Name));
+			((TypeDeclaration)eventDeclaration.Parent!).Members.Add(declaration);
+			eventDeclaration.Remove();
 		}
 
 		public void Run(AstNode rootNode, TransformContext context)
