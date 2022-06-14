@@ -64,6 +64,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				decompiler.CustomTransforms.Add(new EnsureOutParamsSetTransform());
 				decompiler.CustomTransforms.Add(new EnsureStructFieldsSetTransform());
 				decompiler.CustomTransforms.Add(new EnsureValidBaseConstructorTransform());
+				decompiler.CustomTransforms.Add(new FixEventDeclarationsTransform());
 			}
 
 			DecompileWholeProject(decompiler, assembly, outputFolder);
