@@ -106,24 +106,6 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>vorbis.dll</TargetPath>
 		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="Libraries\x64\fmod_x64.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>fmod.dll</TargetPath>
-		</ContentWithTargetPath>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(Configuration)'=='DebugMac' or '$(Configuration)'=='ReleaseMac'">
-		<ContentWithTargetPath Include="Libraries\mac\libfmod.dylib">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libfmod.dylib</TargetPath>
-		</ContentWithTargetPath>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(Configuration)'=='DebugLinux' or '$(Configuration)'=='ReleaseLinux'">
-		<ContentWithTargetPath Include="Libraries\linux\libfmod.so">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>libfmod.so</TargetPath>
-		</ContentWithTargetPath>
 	</ItemGroup>
 
 	<ItemGroup>
