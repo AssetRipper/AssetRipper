@@ -81,7 +81,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1
 		docs\articles\Requirements.md = docs\articles\Requirements.md
 		docs\articles\RoadMap.md = docs\articles\RoadMap.md
 		docs\articles\RunningOnMac.md = docs\articles\RunningOnMac.md
-		docs\articles\Structure.md = docs\articles\Structure.md
 		docs\articles\toc.yml = docs\articles\toc.yml
 	EndProjectSection
 EndProject

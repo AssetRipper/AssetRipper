@@ -120,6 +120,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="C:\Users\jrpri\.nuget\packages\icsharpcode.decompiler\8.0.0.7007-preview1\contentFiles\any\netstandard2.0\Humanizer\LICENSE" />
+	  <Content Remove="C:\Users\jrpri\.nuget\packages\icsharpcode.decompiler\8.0.0.7007-preview1\contentFiles\any\netstandard2.0\Pattern Matching.html" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="C:\Users\jrpri\.nuget\packages\naudio.vorbis\1.5.0\contentFiles\any\netstandard2.0\README.md" />
 	</ItemGroup>
 
