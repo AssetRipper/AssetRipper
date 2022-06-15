@@ -181,12 +181,14 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			else
 			{
 				uint offset = value & ~0x80000000;
-				TreeNodeType nodeType = (TreeNodeType)offset;
-				if (!Enum.IsDefined(typeof(TreeNodeType), nodeType))
+				if(CommonString.StringBuffer.TryGetValue(offset, out string? nodeTypeName))
 				{
-					throw new Exception($"Unsupported asset class type name '{nodeType}''");
+					return nodeTypeName;
 				}
-				return nodeType.ToTypeString();
+				else
+				{
+					throw new Exception($"Unsupported asset class type name '{offset}''");
+				}
 			}
 		}
 
