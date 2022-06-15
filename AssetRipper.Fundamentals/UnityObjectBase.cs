@@ -16,7 +16,7 @@ namespace AssetRipper.Core
 	/// </summary>
 	public class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	{
-		public AssetInfo AssetInfo { get; set; }
+		public AssetInfo? AssetInfo { get; set; }
 		public ISerializedFile? SerializedFile => AssetInfo?.File;
 		public virtual ClassIDType ClassID => AssetInfo?.ClassID ?? ClassIDType.UnknownType;
 		public virtual string AssetClassName => "Unknown";

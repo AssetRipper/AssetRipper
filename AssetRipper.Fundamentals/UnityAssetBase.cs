@@ -9,8 +9,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Core
 {
@@ -19,7 +18,6 @@ namespace AssetRipper.Core
 	/// </summary>
 	public class UnityAssetBase : IUnityAssetBase, IDeepCloneable, IAlmostEquatable, IEquatable<UnityAssetBase>
 	{
-		private const BindingFlags fieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		public UnityVersion AssetUnityVersion { get; set; }
 		public EndianType EndianType { get; set; }
 		public TransferInstructionFlags TransferInstructionFlags { get; set; }
@@ -41,9 +39,13 @@ namespace AssetRipper.Core
 			EndianType = reader.EndianType;
 			TransferInstructionFlags = reader.Flags;
 			if (reader.Flags.IsRelease())
+			{
 				ReadRelease(reader);
+			}
 			else
+			{
 				ReadEditor(reader);
+			}
 		}
 
 		public virtual void WriteEditor(AssetWriter writer) => throw new NotSupportedException();
@@ -53,9 +55,13 @@ namespace AssetRipper.Core
 		public virtual void Write(AssetWriter writer)
 		{
 			if (writer.Flags.IsRelease())
+			{
 				WriteRelease(writer);
+			}
 			else
+			{
 				WriteEditor(writer);
+			}
 		}
 
 		public virtual YamlNode ExportYamlEditor(IExportContainer container) => throw new NotSupportedException($"Editor yaml export is not supported for {GetType().FullName}");
@@ -65,10 +71,14 @@ namespace AssetRipper.Core
 		public virtual YamlNode ExportYaml(IExportContainer container)
 		{
 			if (container.ExportFlags.IsRelease())
+			{
 				//if(this.TransferInstructionFlags.IsRelease())
 				return ExportYamlRelease(container);
+			}
 			else
+			{
 				return ExportYamlEditor(container);
+			}
 		}
 
 		public virtual IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
@@ -109,15 +119,19 @@ namespace AssetRipper.Core
 			TransferInstructionFlags = source.TransferInstructionFlags;
 		}
 
-		private bool HasEqualMetadata(object obj)
+		private bool HasEqualMetadata([NotNullWhen(true)] object? obj)
 		{
 			if(obj is null)
+			{
 				return false;
+			}
 
-			if(this.GetType() != obj.GetType())
+			if (this.GetType() != obj.GetType())
+			{
 				return false;
+			}
 
-			if(obj is UnityObjectBase unityObjectBase)
+			if (obj is UnityObjectBase unityObjectBase)
 			{
 				UnityObjectBase thisObject = (UnityObjectBase)this;
 				return thisObject.AssetUnityVersion == unityObjectBase.AssetUnityVersion &&
@@ -147,7 +161,7 @@ namespace AssetRipper.Core
 		/// </remarks>
 		/// <param name="other">Another asset</param>
 		/// <returns></returns>
-		public bool Equals(UnityAssetBase other)
+		public bool Equals(UnityAssetBase? other)
 		{
 			return HasEqualMetadata(other) && EqualByContent(other);
 		}
@@ -170,18 +184,26 @@ namespace AssetRipper.Core
 		public bool AlmostEqualByProportion(object value, float maximumProportion)
 		{
 			if (HasEqualMetadata(value))
+			{
 				return AlmostEqualByProportion((UnityAssetBase)value, maximumProportion);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		/// <inheritdoc/>
 		public bool AlmostEqualByDeviation(object value, float maximumDeviation)
 		{
 			if (HasEqualMetadata(value))
+			{
 				return AlmostEqualByDeviation((UnityAssetBase)value, maximumDeviation);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		/// <summary>
@@ -212,54 +234,6 @@ namespace AssetRipper.Core
 		protected virtual bool AlmostEqualByDeviation(UnityAssetBase value, float maximumDeviation)
 		{
 			return ReferenceEquals(this, value);
-		}
-
-		private FieldInfo TryGetFieldInfo(string fieldName) => this.GetType().GetFields(fieldBindingFlags).Where(fieldInfo => fieldInfo.Name == fieldName).FirstOrDefault();
-
-		/// <summary>
-		/// Try using reflection to get the value of a field.<br/>
-		/// Warning: reflection seems to fail on generated assemblies
-		/// </summary>
-		/// <param name="fieldName">The name of the field.</param>
-		/// <returns>The boxed value of that field if it exists.</returns>
-		private object TryGetFieldValue(string fieldName) => TryGetFieldInfo(fieldName)?.GetValue(this);
-
-		/// <summary>
-		/// Try using reflection to get the value of a field.<br/>
-		/// Warning: reflection seems to fail on generated assemblies
-		/// </summary>
-		/// <typeparam name="T">The type to cast the boxed value to.</typeparam>
-		/// <param name="fieldName">The name of the field.</param>
-		/// <returns>The value of that field if it exists and is castable to the specified type.</returns>
-		private T TryGetFieldValue<T>(string fieldName)
-		{
-			object value = TryGetFieldValue(fieldName);
-			if (value is T result)
-				return result;
-			else
-				return default;
-		}
-
-		/// <summary>
-		/// Try using reflection to set the value of a field.<br/>
-		/// Warning: reflection seems to fail on generated assemblies
-		/// </summary>
-		/// <typeparam name="T">The type of the value being assigned.</typeparam>
-		/// <param name="fieldName">The name of the field.</param>
-		/// <param name="value">The value to assign.</param>
-		/// <returns>True if successful, false otherwise</returns>
-		private bool TrySetFieldValue<T>(string fieldName, T value)
-		{
-			FieldInfo fieldInfo = TryGetFieldInfo(fieldName);
-			if (fieldInfo == null)
-			{
-				return false;
-			}
-			else
-			{
-				fieldInfo.SetValue(this, value);
-				return true;
-			}
 		}
 	}
 }

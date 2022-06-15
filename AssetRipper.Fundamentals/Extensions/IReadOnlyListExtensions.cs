@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Extensions
 
 		public static bool Contains<T>(this IReadOnlyList<T> _this, T value)
 		{
-			return _this.IndexOf(value) != -1;
+			return _this.IndexOf(value) > -1;
 		}
 	}
 }
