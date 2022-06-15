@@ -17,46 +17,46 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Build AssetAnalyzer Windows x64
+    - name: Build FileAnalyzer Windows x64
       run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
-      working-directory: ./AssetAnalyzer/
+      working-directory: ./AssetRipper.FileAnalyzer/
       
-    - name: Build UnitTester Windows x64
+    - name: Build SystemTester Windows x64
       run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
-      working-directory: ./UnitTester/
+      working-directory: ./AssetRipper.SystemTester/
       
     - name: Build Tests Windows x64
       run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
-      working-directory: ./AssetRipperTests/
+      working-directory: ./AssetRipper.Tests/
       
     - name: Run Tests
       run: dotnet test
-      working-directory: ./AssetRipperTests/
+      working-directory: ./AssetRipper.Tests/
       
-    - name: List Analyzer Files
+    - name: List FileAnalyzer Files
       shell: bash
       run: |
         mkdir -p ./Bins/AssetAnalyzer/ReleaseWindows/Licenses
         cp ./Licenses/*.md ./Bins/AssetAnalyzer/ReleaseWindows/Licenses/
         ls -R ./Bins/AssetAnalyzer/ReleaseWindows
       
-    - name: Upload AssetAnalyzer Windows x64
+    - name: Upload FileAnalyzer Windows x64
       uses: actions/upload-artifact@v3
       with:
-        name: AssetAnalyzer_win64
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetAnalyzer\ReleaseWindows\*
+        name: FileAnalyzer_win64
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipper.FileAnalyzer\ReleaseWindows\*
         if-no-files-found: error
         
-    - name: List UnitTester Files
+    - name: List SystemTester Files
       shell: bash
       run: |
-        mkdir -p ./Bins/UnitTester/ReleaseWindows/Licenses
-        cp ./Licenses/*.md ./Bins/UnitTester/ReleaseWindows/Licenses/
-        ls -R ./Bins/UnitTester/ReleaseWindows
+        mkdir -p ./Bins/AssetRipper.SystemTester/ReleaseWindows/Licenses
+        cp ./Licenses/*.md ./Bins/AssetRipper.SystemTester/ReleaseWindows/Licenses/
+        ls -R ./Bins/AssetRipper.SystemTester/ReleaseWindows
 
-    - name: Upload UnitTester Windows x64
+    - name: Upload SystemTester Windows x64
       uses: actions/upload-artifact@v3
       with:
-        name: UnitTester_win64
-        path: D:\a\AssetRipper\AssetRipper\Bins\UnitTester\ReleaseWindows\*
+        name: SystemTester_win64
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipper.SystemTester\ReleaseWindows\*
         if-no-files-found: error

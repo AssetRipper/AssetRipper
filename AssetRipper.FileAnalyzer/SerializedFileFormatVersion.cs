@@ -1,4 +1,4 @@
-﻿namespace AssetAnalyzer
+﻿namespace AssetRipper.FileAnalyzer
 {
 	public enum SerializedFileFormatVersion
 	{

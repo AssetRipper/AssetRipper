@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 
-namespace AssetAnalyzer
+namespace AssetRipper.FileAnalyzer
 {
 	public class SerializedType
 	{

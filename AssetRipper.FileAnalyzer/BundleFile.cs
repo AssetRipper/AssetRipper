@@ -1,12 +1,12 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.IO.FileReading;
 using AssetRipper.Core.Parser.Files.BundleFile;
+using AssetRipper.FileAnalyzer.IO;
 using K4os.Compression.LZ4;
 using System.IO;
 using System.Linq;
 
-namespace AssetAnalyzer
+namespace AssetRipper.FileAnalyzer
 {
 	public class BundleFile
 	{

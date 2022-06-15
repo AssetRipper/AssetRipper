@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AssetAnalyzer
+namespace AssetRipper.FileAnalyzer
 {
 	public static class CommonString
 	{

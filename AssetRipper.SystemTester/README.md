@@ -1,6 +1,6 @@
-﻿# Unit Tester
+﻿# AssetRipper.SystemTester
 
-This is an automated testing program.
+This is an automated system testing program.
 
 ## File Structure
 

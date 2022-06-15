@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetAnalyzer
+namespace AssetRipper.FileAnalyzer
 {
 	public class FileIdentifier
 	{

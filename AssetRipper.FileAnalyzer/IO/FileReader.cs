@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Core.IO.FileReading
+namespace AssetRipper.FileAnalyzer.IO
 {
 	public class FileReader : EndianReader
 	{

@@ -5,8 +5,8 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>..\Bins\UnitTester\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\UnitTester\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\Bins\AssetRipper.SystemTester\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.SystemTester\$(Configuration)\</IntermediateOutputPath>
 		<Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
 		<Platforms>x64</Platforms>
 		<DebugType>embedded</DebugType>

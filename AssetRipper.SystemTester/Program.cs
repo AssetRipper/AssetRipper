@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace UnitTester
+namespace AssetRipper.SystemTester
 {
 	static class Program
 	{
@@ -22,8 +22,8 @@ namespace UnitTester
 			}
 
 			Logger.Add(new ConsoleLogger(true));
-			Logger.Add(new FileLogger("UnitTester.log"));
-			Logger.LogSystemInformation("Unit Tester");
+			Logger.Add(new FileLogger("AssetRipper.SystemTester.log"));
+			Logger.LogSystemInformation("System Tester");
 			Logger.BlankLine();
 
 			RunTests();

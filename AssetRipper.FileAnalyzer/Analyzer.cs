@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.IO.FileReading;
-using AssetRipper.Core.Logging;
+﻿using AssetRipper.Core.Logging;
+using AssetRipper.FileAnalyzer.IO;
 using System;
 using System.IO;
 
-namespace AssetAnalyzer
+namespace AssetRipper.FileAnalyzer
 {
 	public static class Analyzer
 	{

@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.Logging;
 using System;
 
-namespace AssetAnalyzer
+namespace AssetRipper.FileAnalyzer
 {
 	class Program
 	{

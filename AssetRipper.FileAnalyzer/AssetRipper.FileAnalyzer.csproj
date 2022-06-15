@@ -5,10 +5,10 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AssemblyName>AssetAnalyzer</AssemblyName>
-		<RootNamespace>AssetAnalyzer</RootNamespace>
-		<OutputPath>..\Bins\AssetAnalyzer\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetAnalyzer\$(Configuration)\</IntermediateOutputPath>
+		<AssemblyName>AssetRipper.FileAnalyzer</AssemblyName>
+		<RootNamespace>AssetRipper.FileAnalyzer</RootNamespace>
+		<OutputPath>..\Bins\AssetRipper.FileAnalyzer\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.FileAnalyzer\$(Configuration)\</IntermediateOutputPath>
 		<Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
 		<Platforms>x64</Platforms>
 		<DebugType>embedded</DebugType>
@@ -21,7 +21,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
+	  <ProjectReference Include="..\AssetRipper.Fundamentals\AssetRipper.Fundamentals.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

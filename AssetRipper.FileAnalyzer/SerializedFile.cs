@@ -1,15 +1,15 @@
 ﻿using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.IO.FileReading;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
+using AssetRipper.FileAnalyzer.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace AssetAnalyzer
+namespace AssetRipper.FileAnalyzer
 {
 	public class SerializedFile
 	{
