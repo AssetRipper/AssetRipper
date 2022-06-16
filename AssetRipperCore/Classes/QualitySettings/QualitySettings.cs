@@ -94,7 +94,7 @@ namespace AssetRipper.Core.Classes.QualitySettings
 				PerPlatformDefaultQuality = new Dictionary<string, int>();
 				SetDefaultPlatformQuality(PerPlatformDefaultQuality);
 				PerPlatformDefaultQuality[BuildTargetGroup.Standalone.ToExportString()] = (int)defaultStandaloneQuality;
-				PerPlatformDefaultQuality[BuildTargetGroup.WebPlayer.ToExportString()] = (int)defaultStandaloneQuality;
+				PerPlatformDefaultQuality[BuildTargetGroup.WebPlayer.ToExportString()] = (int)defaultWebPlayerQuality;
 			}
 			if (HasDefaultMobileQuality(reader.Version))
 			{

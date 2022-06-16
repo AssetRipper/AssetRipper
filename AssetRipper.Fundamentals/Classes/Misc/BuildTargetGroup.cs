@@ -187,11 +187,33 @@ namespace AssetRipper.Core.Classes.Misc
 		{
 			return _this switch
 			{
-				BuildTargetGroup.N3DS => "Nintendo 3DS",
-				BuildTargetGroup.Switch => "Nintendo Switch",
-				BuildTargetGroup.Metro => "Windows Store Apps",
+				BuildTargetGroup.Unknown => "Unknown",
+				BuildTargetGroup.Standalone => "Standalone",
+				BuildTargetGroup.WebPlayer => "WebPlayer",
+				BuildTargetGroup.Wii => "Wii",
 				BuildTargetGroup.iOS => "iPhone",
-				_ => _this.ToString(),
+				BuildTargetGroup.PS3 => "PS3",
+				BuildTargetGroup.XBOX360 => "XBOX360",
+				BuildTargetGroup.Android => "Android",
+				BuildTargetGroup.GLESEmu => "GLESEmu",
+				BuildTargetGroup.NaCl => "NaCl",
+				BuildTargetGroup.FlashPlayer => "FlashPlayer",
+				BuildTargetGroup.WebGL => "WebGL",
+				BuildTargetGroup.Metro => "Windows Store Apps",
+				BuildTargetGroup.WP8 => "WP8",
+				BuildTargetGroup.BlackBerry => "BlackBerry",
+				BuildTargetGroup.Tizen => "Tizen",
+				BuildTargetGroup.PSP2 => "PSP2",
+				BuildTargetGroup.PS4 => "PS4",
+				BuildTargetGroup.PSM => "PSM",
+				BuildTargetGroup.XboxOne => "XboxOne",
+				BuildTargetGroup.SamsungTV => "SamsungTV",
+				BuildTargetGroup.N3DS => "Nintendo 3DS",
+				BuildTargetGroup.WiiU => "WiiU",
+				BuildTargetGroup.tvOS => "tvOS",
+				BuildTargetGroup.Facebook => "Facebook",
+				BuildTargetGroup.Switch => "Nintendo Switch",
+				_ => throw new NotSupportedException($"Value: {_this}"),
 			};
 		}
 	}

@@ -22,6 +22,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			settings.LightmapKeepDynamicDirSeparate_C30 = true;
 			settings.LightmapKeepDynamicPlain_C30 = true;
 			settings.LightmapKeepDynamic_C30 = true;
+			settings.LightmapKeepPlain_C30 = true;
 			settings.LightmapKeepShadowMask_C30 = true;
 			settings.LightmapKeepSubtractive_C30 = true;
 			settings.LightmapStripping_C30 = (int)LightmapStrippingMode.Automatic;

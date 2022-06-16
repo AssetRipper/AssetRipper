@@ -24,6 +24,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 			settings.EtcTextureBestCompressor_C159 = 4;
 			settings.ProjectGenerationIncludedExtensions_C159.TrySet(DefaultExtensions);
 			settings.ProjectGenerationRootNamespace_C159.TrySet(string.Empty);
+			if(settings.Has_CollabEditorSettings_C159())
+			{
+				settings.CollabEditorSettings_C159.InProgressEnabled = true;
+			}
 			settings.UserGeneratedProjectSuffix_C159.TrySet(string.Empty);
 			settings.EnableTextureStreamingInEditMode_C159 = true;
 			settings.EnableTextureStreamingInPlayMode_C159 = true;
