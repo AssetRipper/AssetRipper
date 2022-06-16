@@ -1,5 +1,4 @@
 using AssetRipper.Core.Extensions;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Parser.Files.BundleFile.Header;
@@ -9,6 +8,7 @@ using AssetRipper.Core.Parser.Files.Entries;
 using AssetRipper.Core.Parser.Files.Schemes;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.IO.Endian;
 using K4os.Compression.LZ4;
 using System.IO;
 

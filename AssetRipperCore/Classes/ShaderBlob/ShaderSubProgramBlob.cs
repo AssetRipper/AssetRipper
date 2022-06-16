@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Utils;
+using AssetRipper.IO.Endian;
 using K4os.Compression.LZ4;
 using System.IO;
 using System.Linq;

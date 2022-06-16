@@ -5,7 +5,7 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_1045;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_159;
-using AssetRipper.SourceGenerated.Subclasses.EditorScene;
+using AssetRipper.SourceGenerated.Subclasses.Scene;
 using System.Collections.Generic;
 using System.IO;
 
@@ -60,11 +60,13 @@ namespace AssetRipper.Core.Project.Collections
 			for (int i = 0; i < numScenes; i++)
 			{
 				string scenePath = buildSettings.Scenes_C141[i].String;
-				IEditorScene scene = editorBuildSettings.Scenes_C1045.AddNew();
+				IScene scene = editorBuildSettings.Scenes_C1045.AddNew();
 				scene.Enabled = true;
 				scene.Path.String = scenePath;
 				if(scene.Has_Guid())
+				{
 					scene.Guid.SetValues(container.SceneNameToGUID(scenePath));
+				}
 			}
 		}
 

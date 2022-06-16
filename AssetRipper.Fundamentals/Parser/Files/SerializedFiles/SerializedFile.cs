@@ -2,7 +2,6 @@ using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Layout;
@@ -12,6 +11,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.VersionHandling;
+using AssetRipper.IO.Endian;
 using System.Collections.Generic;
 using System.IO;
 

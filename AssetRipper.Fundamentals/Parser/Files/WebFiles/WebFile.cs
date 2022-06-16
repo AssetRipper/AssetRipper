@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.IO.MultiFile;
+﻿using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Parser.Files.Entries;
+using AssetRipper.IO.Endian;
 using System.IO;
 
 namespace AssetRipper.Core.Parser.Files.WebFiles

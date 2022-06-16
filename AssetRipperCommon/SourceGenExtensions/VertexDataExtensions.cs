@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
+using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.StreamInfo;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;

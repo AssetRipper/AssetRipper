@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
+using AssetRipper.IO.Endian;
 using System.Collections;
 using System.Linq;
 

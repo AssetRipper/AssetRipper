@@ -1,9 +1,9 @@
 ﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files.BundleFile.IO;
 using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 using AssetRipper.Core.Project;
+using AssetRipper.IO.Endian;
 using AssetRipper.Yaml;
 using System.Diagnostics.CodeAnalysis;
 

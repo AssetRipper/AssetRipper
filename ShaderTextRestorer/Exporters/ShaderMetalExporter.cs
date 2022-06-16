@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Shader;
 using AssetRipper.Core.Classes.ShaderBlob;
-using AssetRipper.Core.IO.Endian;
+using AssetRipper.IO.Endian;
 using ShaderTextRestorer.IO;
 using System.IO;
 

@@ -2,11 +2,11 @@
 using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.PackedBitVectors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
+using AssetRipper.IO.Endian;
 using System.IO;
 
 

@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.IO.Extensions;
+﻿using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Parser.Files.BundleFile;
 using AssetRipper.FileAnalyzer.IO;
+using AssetRipper.IO.Endian;
 using K4os.Compression.LZ4;
 using System.IO;
 using System.Linq;

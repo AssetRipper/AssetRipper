@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.IO.Endian;
+﻿using AssetRipper.IO.Endian;
 using System.IO;
 using System.Text;
 

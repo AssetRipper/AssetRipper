@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Parser.Files.Entries;
+﻿using AssetRipper.Core.Parser.Files.Entries;
 using AssetRipper.Core.Parser.Utils;
+using AssetRipper.IO.Endian;
 
 namespace AssetRipper.Core.Parser.Files.WebFiles
 {

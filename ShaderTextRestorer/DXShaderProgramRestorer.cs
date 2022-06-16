@@ -1,9 +1,9 @@
-using AssetRipper.Core.IO.Endian;
 using System.Collections.Generic;
 using System.IO;
 using ShaderTextRestorer.Resources;
 using AssetRipper.VersionUtilities;
 using AssetRipper.Core.Classes.ShaderBlob;
+using AssetRipper.IO.Endian;
 
 namespace ShaderTextRestorer
 {

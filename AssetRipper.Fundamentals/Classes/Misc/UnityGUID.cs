@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Parser.Files.SerializedFiles.IO;
 using AssetRipper.Core.Project;
+using AssetRipper.IO.Endian;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
 using System.Buffers.Binary;

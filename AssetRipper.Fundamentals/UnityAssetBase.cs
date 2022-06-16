@@ -2,11 +2,11 @@
 using AssetRipper.Core.Equality;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Project;
+using AssetRipper.IO.Endian;
 using AssetRipper.Yaml;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

@@ -1,11 +1,11 @@
-﻿using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using ShaderTextRestorer.Extensions;
 using ShaderTextRestorer.Types;
+using AssetRipper.IO.Endian;
 
 namespace ShaderTextRestorer.ConstantBuffers
 {

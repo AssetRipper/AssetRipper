@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.IO.Endian;
-using AssetRipper.Core.IO.Extensions;
+﻿using AssetRipper.Core.IO.Extensions;
+using AssetRipper.IO.Endian;
 using System;
 using System.IO;
 using System.Linq;

@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.Parser.Asset;
+using AssetRipper.IO.Endian;
 
 namespace AssetRipper.Core.Interfaces
 {

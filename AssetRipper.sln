@@ -108,6 +108,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.SerializationLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Yaml.Tests", "AssetRipper.Yaml.Tests\AssetRipper.Yaml.Tests.csproj", "{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.IO.Endian", "AssetRipper.IO.Endian\AssetRipper.IO.Endian.csproj", "{82436B39-9077-407B-9FE6-51E1BEADB855}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.IO.FileReading", "AssetRipper.IO.FileReading\AssetRipper.IO.FileReading.csproj", "{95684DEF-EFC1-4649-AD9E-4660DA7A584A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		DebugLinux|x64 = DebugLinux|x64
@@ -298,6 +302,30 @@ Global
 		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.ReleaseMac|x64.Build.0 = Release|Any CPU
 		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
 		{838B66B6-B54D-4BEE-B7E3-888E8FDE7CAE}.ReleaseWindows|x64.Build.0 = Release|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.DebugLinux|x64.ActiveCfg = Debug|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.DebugLinux|x64.Build.0 = Debug|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.DebugMac|x64.ActiveCfg = Debug|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.DebugMac|x64.Build.0 = Debug|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.DebugWindows|x64.ActiveCfg = Debug|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.DebugWindows|x64.Build.0 = Debug|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.ReleaseLinux|x64.Build.0 = Release|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.ReleaseMac|x64.Build.0 = Release|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
+		{82436B39-9077-407B-9FE6-51E1BEADB855}.ReleaseWindows|x64.Build.0 = Release|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.DebugLinux|x64.ActiveCfg = Debug|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.DebugLinux|x64.Build.0 = Debug|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.DebugMac|x64.ActiveCfg = Debug|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.DebugMac|x64.Build.0 = Debug|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.DebugWindows|x64.ActiveCfg = Debug|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.DebugWindows|x64.Build.0 = Debug|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.ReleaseLinux|x64.ActiveCfg = Release|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.ReleaseLinux|x64.Build.0 = Release|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.ReleaseMac|x64.ActiveCfg = Release|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.ReleaseMac|x64.Build.0 = Release|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.ReleaseWindows|x64.ActiveCfg = Release|Any CPU
+		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.ReleaseWindows|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

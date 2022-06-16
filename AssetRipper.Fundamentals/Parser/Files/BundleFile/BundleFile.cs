@@ -1,8 +1,8 @@
-using AssetRipper.Core.IO.Endian;
 using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.Parser.Files.BundleFile.Header;
 using AssetRipper.Core.Parser.Files.BundleFile.Parser;
 using AssetRipper.Core.Parser.Files.Entries;
+using AssetRipper.IO.Endian;
 using System.IO;
 
 namespace AssetRipper.Core.Parser.Files.BundleFile

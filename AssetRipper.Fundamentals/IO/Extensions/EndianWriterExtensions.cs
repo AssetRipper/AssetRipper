@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.IO.Endian;
+﻿using AssetRipper.IO.Endian;
 
 namespace AssetRipper.Core.IO.Extensions
 {
