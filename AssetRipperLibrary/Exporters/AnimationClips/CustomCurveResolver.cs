@@ -521,9 +521,17 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
-#warning TODO: Find the actual name of this custom type and implement its attribute names
-				case BindingCustomType.Unknown38:
-					return "Unknown38_" + attribute;
+				case BindingCustomType.VisualEffect:
+					return "VisualEffect_" + attribute;
+
+				case BindingCustomType.ParticleForceField:
+					return "ParticleForceField_" + attribute;
+
+				case BindingCustomType.UserDefined:
+					return "UserDefined_" + attribute;
+
+				case BindingCustomType.MeshFilter:
+					return "MeshFilter_" + attribute;
 
 				default:
 					throw new ArgumentException($"Binding type {type} not implemented", nameof(type));
@@ -543,10 +551,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 			}
 		}
 
-		private UnityVersion Version => m_clip.SerializedFile.Version;
-
 		private readonly IAnimationClip m_clip;
-
 		private IGameObject[] m_roots = Array.Empty<IGameObject>();
 		private bool m_rootInited = false;
 	}
