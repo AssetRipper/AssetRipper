@@ -141,5 +141,10 @@
     "script_export_format_hybrid": "hybrid",
     "script_export_format_dll_with_renaming": "Dll-Export mit Umbenennung",
     "script_export_format_dll_without_renaming": "Dll-Export ohne Umbenennung",
-    "script_export_format_dll_without_renaming_description": "Assemblies werden in ihrer kompilierten Dll-Form exportiert. Experimentell. Funktioniert vielleicht gar nicht."
+    "script_export_format_dll_without_renaming_description": "Assemblies werden in ihrer kompilierten Dll-Form exportiert. Experimentell. Funktioniert vielleicht gar nicht.",
+    "bundled_assets_export_title": "Gebündelte Assets Exportmodus",
+    "bundled_assets_export_group_by_asset_type": "Gruppieren nach Asset-Typ",
+    "bundled_assets_export_group_by_asset_type_description": "Gebündelte Assets werden genauso behandelt wie Assets aus anderen Dateien.",
+    "bundled_assets_export_group_by_bundle_name": "Gruppieren nach Bündelnamen",
+    "bundled_assets_export_group_by_bundle_name_description": "Gebündelte Assets werden nach ihrem Asset-Bundle-Namen gruppiert."
 }
