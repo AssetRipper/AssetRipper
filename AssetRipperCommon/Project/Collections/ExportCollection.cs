@@ -15,6 +15,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1953259897;
 using AssetRipper.SourceGenerated.Classes.ClassID_200;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_221;
+using AssetRipper.SourceGenerated.Classes.ClassID_30;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_62;
@@ -124,6 +125,10 @@ namespace AssetRipper.Core.Project.Collections
 			else if (asset is ITransform transform)
 			{
 				transform.ConvertToEditorFormat();
+			}
+			else if (asset is IGraphicsSettings graphicsSettings)
+			{
+				graphicsSettings.ConvertToEditorFormat();
 			}
 			return asset;
 		}
