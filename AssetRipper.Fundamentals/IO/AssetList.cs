@@ -23,7 +23,7 @@ namespace AssetRipper.Core.IO
 		{
 			if (isDependentType)
 			{
-				foreach (IDependent dependent in this)
+				foreach (IDependent? dependent in this)
 				{
 					if (dependent != null)
 					{
