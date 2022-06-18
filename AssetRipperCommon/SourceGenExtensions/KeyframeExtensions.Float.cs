@@ -6,6 +6,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static partial class KeyframeExtensions
 	{
+		public const float DefaultFloatWeight = (float)(1.0 / 3.0);
+
 		public static void SetValues(this IKeyframe_float keyframe, UnityVersion version, float time, float value, float weight)
 		{
 			keyframe.Time = time;

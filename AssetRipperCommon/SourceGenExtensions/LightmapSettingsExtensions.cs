@@ -6,9 +6,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class LightmapSettingsExtensions
 	{
-		public static void ConvertToEditor(this ILightmapSettings settings)
+		public static void ConvertToEditorFormat(this ILightmapSettings settings)
 		{
 			settings.GIWorkflowMode_C157 = (int)GIWorkflowMode.OnDemand;
+			settings.LightmapEditorSettings_C157.SetToDefault();
 		}
 
 		public static GIWorkflowMode GetGIWorkflowMode(this ILightmapSettings settings)

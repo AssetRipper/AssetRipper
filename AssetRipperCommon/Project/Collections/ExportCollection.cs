@@ -11,9 +11,13 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_1113;
 using AssetRipper.SourceGenerated.Classes.ClassID_121;
 using AssetRipper.SourceGenerated.Classes.ClassID_134;
+using AssetRipper.SourceGenerated.Classes.ClassID_157;
+using AssetRipper.SourceGenerated.Classes.ClassID_19;
 using AssetRipper.SourceGenerated.Classes.ClassID_1953259897;
+using AssetRipper.SourceGenerated.Classes.ClassID_196;
 using AssetRipper.SourceGenerated.Classes.ClassID_200;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
+using AssetRipper.SourceGenerated.Classes.ClassID_218;
 using AssetRipper.SourceGenerated.Classes.ClassID_221;
 using AssetRipper.SourceGenerated.Classes.ClassID_30;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
@@ -134,6 +138,22 @@ namespace AssetRipper.Core.Project.Collections
 			else if (asset is IQualitySettings qualitySettings)
 			{
 				qualitySettings.ConvertToEditorFormat();
+			}
+			else if (asset is IPhysics2DSettings physics2DSettings)
+			{
+				physics2DSettings.ConvertToEditorFormat();
+			}
+			else if (asset is ITerrain terrain)
+			{
+				terrain.ConvertToEditorFormat();
+			}
+			else if (asset is ILightmapSettings lightmapSettings)
+			{
+				lightmapSettings.ConvertToEditorFormat();
+			}
+			else if (asset is INavMeshSettings navMeshSettings)
+			{
+				navMeshSettings.ConvertToEditorFormat();
 			}
 			return asset;
 		}

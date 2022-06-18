@@ -6,7 +6,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class LightmapEditorSettingsExtensions
 	{
-		public static void Initialize(this ILightmapEditorSettings settings)
+		public static void SetToDefault(this ILightmapEditorSettings settings)
 		{
 			settings.Resolution = 2.0f;
 			settings.BakeResolution = 40.0f;

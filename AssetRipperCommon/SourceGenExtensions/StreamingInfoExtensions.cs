@@ -20,7 +20,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static byte[] GetContent(this IStreamingInfo streamingInfo, ISerializedFile file)
 		{
-			IResourceFile res = file.Collection.FindResourceFile(streamingInfo.Path.String);
+			IResourceFile? res = file.Collection.FindResourceFile(streamingInfo.Path.String);
 			if (res == null)
 			{
 				return Array.Empty<byte>();

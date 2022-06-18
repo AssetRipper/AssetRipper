@@ -1,6 +1,9 @@
-﻿using AssetRipper.Core.Classes.ShaderBlob;
+﻿using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.Core.Classes.ShaderBlob;
 using AssetRipper.Core.Layout;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -85,6 +88,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 				blobs[i].Read(layout, compressedBlob, blobOffsets, blobCompressedLengths, blobDecompressedLengths);
 			}
 			return blobs;
+		}
+
+		public static IEnumerable<GPUPlatform>? GetPlatforms(this IShader shader)
+		{
+			return shader.Platforms_C48?.Select(p => unchecked((GPUPlatform)p));
 		}
 	}
 }
