@@ -5,7 +5,9 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO
 {
-	public class NullableKeyValuePair<TKey, TValue> : IDependent, IEquatable<NullableKeyValuePair<TKey, TValue>?>
+	public class NullableKeyValuePair<TKey, TValue> : IDependent, IEquatable<NullableKeyValuePair<TKey, TValue>>
+		where TKey : notnull
+		where TValue : notnull
 	{
 		static NullableKeyValuePair()
 		{
@@ -17,8 +19,8 @@ namespace AssetRipper.Core.IO
 		private static readonly bool hasDependentKeys;
 		private static readonly bool hasDependentValues;
 		public static bool IsDependentType { get; }
-		public TKey Key { get; set; }
-		public TValue Value { get; set; }
+		public TKey? Key { get; set; }
+		public TValue? Value { get; set; }
 
 		public NullableKeyValuePair() { }
 
@@ -34,9 +36,9 @@ namespace AssetRipper.Core.IO
 			Value = pair.Value;
 		}
 
-		public static implicit operator KeyValuePair<TKey, TValue>(NullableKeyValuePair<TKey, TValue> nullable)
+		public static implicit operator KeyValuePair<TKey?, TValue?>(NullableKeyValuePair<TKey, TValue> nullable)
 		{
-			return nullable is null ? default : new KeyValuePair<TKey, TValue>(nullable.Key, nullable.Value);
+			return nullable is null ? default : new KeyValuePair<TKey?, TValue?>(nullable.Key, nullable.Value);
 		}
 
 		public static implicit operator NullableKeyValuePair<TKey, TValue>(KeyValuePair<TKey, TValue> nonnullable)

@@ -19,9 +19,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		/// </summary>
 		public static bool HasHash(FormatVersion generation) => generation >= FormatVersion.Unknown_5;
 
-		public bool IsFile(ISerializedFile file)
+		public bool IsFile(ISerializedFile? file)
 		{
-			return file.Name == PathName;
+			return file is not null && file.Name == PathName;
 		}
 
 		public void Read(SerializedReader reader)
@@ -62,7 +62,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 			return PathName;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			if (Type == AssetType.Meta)
 			{

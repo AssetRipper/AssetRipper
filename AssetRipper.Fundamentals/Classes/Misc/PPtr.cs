@@ -53,7 +53,7 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public static PPtr<T>[] CastArray<T>(IPPtr[] array) where T : IUnityObjectBase
 		{
-			var result = new PPtr<T>[array.Length];
+			PPtr<T>[] result = new PPtr<T>[array.Length];
 			for (int i = 0; i < array.Length; i++)
 			{
 				result[i] = new PPtr<T>(array[i]);

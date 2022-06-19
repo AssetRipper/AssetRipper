@@ -11,7 +11,7 @@ namespace AssetRipper.Core
 
 		public static void WaitUntilAllCompleted()
 		{
-			foreach (var task in tasks)
+			foreach (Task task in tasks)
 			{
 				task.Wait();
 			}

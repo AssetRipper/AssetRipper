@@ -433,7 +433,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		public virtual AssemblyDefinition[] GetAssemblies()
 		{
-			return m_assemblies.Values.Where(x => x is not null).Distinct().ToArray();
+			return m_assemblies.Values.Where(x => x is not null).Distinct().ToArray()!;
 		}
 
 		public void Dispose()

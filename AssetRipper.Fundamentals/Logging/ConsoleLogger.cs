@@ -24,7 +24,9 @@
 		public void BlankLine(int numLines)
 		{
 			for (int i = 0; i < numLines; i++)
+			{
 				Console.WriteLine();
+			}
 		}
 
 		public void Log(LogType type, LogCategory category, string message)
@@ -32,9 +34,14 @@
 			if (type == LogType.Info)
 			{
 				if (category == LogCategory.None)
+				{
 					Console.WriteLine(message);
+				}
 				else
+				{
 					Console.WriteLine($"{category} : {message}");
+				}
+
 				return;
 			}
 
@@ -59,8 +66,14 @@
 					break;
 			}
 
-			if (category == LogCategory.None) Console.WriteLine(message);
-			else Console.WriteLine($"{category} : {message}");
+			if (category == LogCategory.None)
+			{
+				Console.WriteLine(message);
+			}
+			else
+			{
+				Console.WriteLine($"{category} : {message}");
+			}
 
 			Console.ForegroundColor = foreColor;
 		}

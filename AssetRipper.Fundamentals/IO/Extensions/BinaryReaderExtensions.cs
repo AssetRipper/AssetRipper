@@ -51,11 +51,11 @@ namespace AssetRipper.Core.IO.Extensions
 
 		public static string ReadStringToNull(this BinaryReader reader, int maxLength = 32767)
 		{
-			var bytes = new List<byte>();
+			List<byte> bytes = new List<byte>();
 			int count = 0;
 			while (reader.BaseStream.Position != reader.BaseStream.Length && count < maxLength)
 			{
-				var b = reader.ReadByte();
+				byte b = reader.ReadByte();
 				if (b == 0)
 				{
 					break;
@@ -68,7 +68,7 @@ namespace AssetRipper.Core.IO.Extensions
 
 		private static T[] ReadArray<T>(Func<T> del, int length)
 		{
-			var array = new T[length];
+			T[] array = new T[length];
 			for (int i = 0; i < length; i++)
 			{
 				array[i] = del();

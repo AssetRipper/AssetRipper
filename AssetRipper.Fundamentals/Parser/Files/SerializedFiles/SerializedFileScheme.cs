@@ -61,7 +61,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			if (Stream != null)
 			{
 				Stream.Dispose();
-				Stream = null;
+				Stream = null!;
 			}
 		}
 

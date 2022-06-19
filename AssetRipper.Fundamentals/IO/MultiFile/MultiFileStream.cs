@@ -67,9 +67,13 @@ namespace AssetRipper.Core.IO.MultiFile
 			{
 				SplitPath(path, out string directory, out string file, true);
 				if (string.IsNullOrEmpty(file))
+				{
 					return false;
+				}
 				else
+				{
 					return Exists(directory, file);
+				}
 			}
 		}
 
@@ -214,7 +218,7 @@ namespace AssetRipper.Core.IO.MultiFile
 		private static void SplitPath(string path, out string directory, out string file) => SplitPath(path, out directory, out file, false);
 		private static void SplitPath(string path, out string directory, out string file, bool allowNullReturn)
 		{
-			directory = Path.GetDirectoryName(path);
+			directory = Path.GetDirectoryName(path) ?? throw new Exception("Could not get directory name");
 			directory = string.IsNullOrEmpty(directory) ? "." : directory;
 			file = Path.GetFileName(path);
 			if (string.IsNullOrEmpty(file) && !allowNullReturn)
@@ -225,7 +229,7 @@ namespace AssetRipper.Core.IO.MultiFile
 
 		private static void SplitPathWithoutExtension(string path, out string directory, out string file)
 		{
-			directory = Path.GetDirectoryName(path);
+			directory = Path.GetDirectoryName(path) ?? throw new Exception("Could not get directory name");
 			directory = string.IsNullOrEmpty(directory) ? "." : directory;
 			file = Path.GetFileNameWithoutExtension(path);
 			if (string.IsNullOrEmpty(file))

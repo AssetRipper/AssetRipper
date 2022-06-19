@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
@@ -17,7 +18,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				throw new Exception($"Root directory '{rootPath}' doesn't exist");
 			}
 
-			if (!GetDataiOSDirectory(m_root, out string dataPath, out string appPath, out string name))
+			if (!GetDataiOSDirectory(m_root, out string? dataPath, out string? appPath, out string? name))
 			{
 				throw new Exception($"Data directory wasn't found");
 			}
@@ -34,11 +35,17 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
+			{
 				Backend = Assembly.ScriptingBackend.IL2Cpp;
+			}
 			else if (HasMonoAssemblies(ManagedPath))
+			{
 				Backend = Assembly.ScriptingBackend.Mono;
+			}
 			else
+			{
 				Backend = Assembly.ScriptingBackend.Unknown;
+			}
 
 			DataPaths = new string[] { dataPath };
 		}
@@ -54,7 +61,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return GetDataiOSDirectory(root, out string _, out string _, out string _);
 		}
 
-		private static bool GetDataiOSDirectory(DirectoryInfo rootDirectory, out string dataPath, out string appPath, out string appName)
+		private static bool GetDataiOSDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? appPath, [NotNullWhen(true)] out string? appName)
 		{
 			dataPath = null;
 			appPath = null;

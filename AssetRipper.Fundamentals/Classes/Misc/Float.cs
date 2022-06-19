@@ -39,10 +39,13 @@ namespace AssetRipper.Core.Classes.Misc
 			return new YamlScalarNode(Value);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if(obj is Float f)
+			{
 				return Value == f.Value;
+			}
+
 			return false;
 		}
 

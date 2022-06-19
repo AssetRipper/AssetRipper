@@ -24,8 +24,10 @@ namespace AssetRipper.Core.Structure.GameStructure
 			{
 				(SerializedFile file, SerializedFileScheme scheme) = m_files.First();
 				if (scheme.Stream.Length > 100 * 1024)
+				{
 					//Don't update status for files less than 100kb because they'll be read so quickly that they're just clutter. 
 					Logger.SendStatusChange("loading_step_load_assets_from_file", file.Name);
+				}
 
 				ReadFile(file);
 			}
@@ -39,7 +41,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			{
 				if (!m_knownFiles.Contains(dependency.PathName))
 				{
-					if (Collection.GameFiles.TryGetValue(dependency.PathName, out SerializedFile dependencyFile))
+					if (Collection.GameFiles.TryGetValue(dependency.PathName, out SerializedFile? dependencyFile))
 					{
 						ReadFile(dependencyFile);
 					}

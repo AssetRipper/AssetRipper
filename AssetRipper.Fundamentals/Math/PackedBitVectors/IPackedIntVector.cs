@@ -28,8 +28,12 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 		{
 			uint maxDataValue = 0;
 			for (int i = 0; i < data.Length; i++)
+			{
 				if (maxDataValue < data[i])
+				{
 					maxDataValue = data[i];
+				}
+			}
 
 			packedVector.NumItems = (uint)data.Length;
 			packedVector.BitSize = maxDataValue == 0xFFFFFFFF ? (byte)32 : GetBitCount(maxDataValue + 1U);
@@ -59,8 +63,12 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 		{
 			uint maxDataValue = 0;
 			for (int i = 0; i < data.Length; i++)
+			{
 				if (maxDataValue < data[i])
+				{
 					maxDataValue = data[i];
+				}
+			}
 
 			packedVector.NumItems = (uint)data.Length;
 			packedVector.BitSize = maxDataValue == 0xFFFFFFFF ? (byte)32 : GetBitCount(maxDataValue + 1U);

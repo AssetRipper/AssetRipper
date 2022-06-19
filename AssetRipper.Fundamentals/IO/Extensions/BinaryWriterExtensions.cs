@@ -7,8 +7,8 @@ namespace AssetRipper.Core.IO.Extensions
 	{
 		public static void AlignStream(this BinaryWriter writer, int alignment)
 		{
-			var pos = writer.BaseStream.Position;
-			var mod = pos % alignment;
+			long pos = writer.BaseStream.Position;
+			long mod = pos % alignment;
 			if (mod != 0)
 			{
 				writer.Write(new byte[alignment - mod]);
@@ -17,7 +17,7 @@ namespace AssetRipper.Core.IO.Extensions
 
 		public static void WriteAlignedString(this BinaryWriter writer, string str)
 		{
-			var bytes = Encoding.UTF8.GetBytes(str);
+			byte[] bytes = Encoding.UTF8.GetBytes(str);
 			writer.Write(bytes.Length);
 			writer.Write(bytes);
 			writer.AlignStream(4);

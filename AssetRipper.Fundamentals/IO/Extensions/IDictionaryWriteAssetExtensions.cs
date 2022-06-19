@@ -33,7 +33,7 @@ namespace AssetRipper.Core.IO.Extensions
 		public static void Write<T>(this IReadOnlyDictionary<string, T> _this, AssetWriter writer) where T : IAssetWritable
 		{
 			writer.Write(_this.Count);
-			foreach (var kvp in _this)
+			foreach (KeyValuePair<string, T> kvp in _this)
 			{
 				writer.Write(kvp.Key);
 				kvp.Value.Write(writer);
@@ -44,7 +44,7 @@ namespace AssetRipper.Core.IO.Extensions
 			where T2 : IAssetWritable
 		{
 			writer.Write(_this.Count);
-			foreach (var kvp in _this)
+			foreach (KeyValuePair<T1, T2> kvp in _this)
 			{
 				kvp.Key.Write(writer);
 				kvp.Value.Write(writer);

@@ -81,7 +81,7 @@ namespace AssetRipper.Core.Classes.Misc
 			return result;
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (obj is UnityGUID guid)
 			{
@@ -149,9 +149,14 @@ namespace AssetRipper.Core.Classes.Misc
 		private static byte[] ConvertSystemOrUnityBytes(byte[] originalBytes)
 		{
 			if (originalBytes is null)
+			{
 				throw new ArgumentNullException(nameof(originalBytes));
+			}
+
 			if (originalBytes.Length != 16)
+			{
 				throw new ArgumentException($"Invalid length: {originalBytes.Length}", nameof(originalBytes));
+			}
 
 			byte[] newBytes = new byte[16];
 			for (int i = 0; i < 4; i++)
@@ -218,6 +223,6 @@ namespace AssetRipper.Core.Classes.Misc
 		public static readonly UnityGUID MissingReference = new UnityGUID(0xD0000000, 0x1FEEBDAE, 0x00FDAED5, 0x0000000D);
 
 		[ThreadStatic]
-		private static StringBuilder s_sb = null;
+		private static StringBuilder? s_sb = null;
 	}
 }

@@ -4,7 +4,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 {
 	public sealed class SerializedType : SerializedTypeBase
 	{
-		public int[] TypeDependencies { get; set; }
+		public int[] TypeDependencies { get; set; } = Array.Empty<int>();
 
 		private static bool HasScriptID(FormatVersion generation, ClassIDType typeID)
 		{

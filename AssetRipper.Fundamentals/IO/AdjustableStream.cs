@@ -36,7 +36,10 @@ namespace AssetRipper.Core.IO
 			set
 			{
 				if (value < m_minPosition || m_maxPosition < value)
+				{
 					throw new ArgumentOutOfRangeException(nameof(value), "New position must be between the minimum and maximum positions, inclusive");
+				}
+
 				m_stream.Position = value;
 			}
 		}
@@ -54,15 +57,29 @@ namespace AssetRipper.Core.IO
 		public void SetPositionBoundaries(long minimumPosition, long maximumPosition, long newPosition)
 		{
 			if (minimumPosition < 0)
+			{
 				throw new ArgumentOutOfRangeException(nameof(minimumPosition), "Cannot be negative");
+			}
+
 			if (maximumPosition < 0)
+			{
 				throw new ArgumentOutOfRangeException(nameof(maximumPosition), "Cannot be negative");
+			}
+
 			if (newPosition < 0)
+			{
 				throw new ArgumentOutOfRangeException(nameof(newPosition), "Cannot be negative");
+			}
+
 			if (maximumPosition < minimumPosition)
+			{
 				throw new ArgumentOutOfRangeException(nameof(maximumPosition), "Maximum cannot be less than the minimum");
+			}
+
 			if (newPosition < minimumPosition || maximumPosition < newPosition)
+			{
 				throw new ArgumentOutOfRangeException(nameof(newPosition), "New position must be between the minimum and maximum positions, inclusive");
+			}
 
 			m_minPosition = minimumPosition;
 			m_maxPosition = maximumPosition;

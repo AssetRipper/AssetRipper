@@ -111,7 +111,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			return Arguments;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			if (Type == null)
 			{

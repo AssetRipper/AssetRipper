@@ -10,8 +10,10 @@ namespace AssetRipper.Core.IO
 	/// <typeparam name="TKey">The key type of the reference dictionary</typeparam>
 	/// <typeparam name="TValue">The value type of the reference dictionary</typeparam>
 	public sealed class AccessDictionary<TKey, TValue, TKeyBase, TValueBase> : AccessDictionaryBase<TKeyBase, TValueBase> 
-		where TKey : TKeyBase, new()
-		where TValue : TValueBase, new()
+		where TKeyBase : notnull
+		where TValueBase : notnull
+		where TKey : notnull, TKeyBase, new()
+		where TValue : notnull, TValueBase, new()
 	{
 		private readonly AssetDictionary<TKey, TValue> referenceDictionary;
 
@@ -72,12 +74,16 @@ namespace AssetRipper.Core.IO
 		public override void CopyTo(NullableKeyValuePair<TKeyBase, TValueBase>[] array, int arrayIndex)
 		{
 			if (array == null)
+			{
 				throw new ArgumentNullException(nameof(array));
+			}
 
 			if (arrayIndex < 0 || arrayIndex >= array.Length - Count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+			}
 
-			for(int i = 0; i < Count; i++)
+			for (int i = 0; i < Count; i++)
 			{
 				array[i + arrayIndex] = GetPair(i);
 			}

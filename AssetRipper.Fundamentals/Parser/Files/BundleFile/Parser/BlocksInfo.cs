@@ -11,8 +11,8 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 			StorageBlocks = reader.ReadBundleArray<StorageBlock>();
 		}
 
-		public StorageBlock[] StorageBlocks { get; set; }
+		public StorageBlock[] StorageBlocks { get; set; } = Array.Empty<StorageBlock>();
 
-		public Hash128 Hash = new();
+		public Hash128 Hash { get; } = new();
 	}
 }

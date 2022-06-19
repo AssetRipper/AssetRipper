@@ -91,10 +91,15 @@ namespace AssetRipper.Core.Math.Vectors
 			float otherLength = other.Length();
 
 			if(instanceLength < kEpsilon)
+			{
 				return otherLength < kEpsilon;
+			}
+
 			if (otherLength < kEpsilon)
+			{
 				return false;
-			
+			}
+
 			float dot = instance.Dot(other);
 			float deviation = 1f - ((dot / instanceLength) / otherLength);
 			return deviation < kEpsilon;

@@ -46,7 +46,9 @@ namespace AssetRipper.Core.Structure.GameStructure
 		private static string ExtractZip(string zipFilePath)
 		{
 			if (!HasCompatibleMagic(zipFilePath))
+			{
 				return zipFilePath;
+			}
 
 			string outputDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			DecompressZipArchive(zipFilePath, outputDirectory);
@@ -56,15 +58,19 @@ namespace AssetRipper.Core.Structure.GameStructure
 		private static string ExtractXapk(string xapkFilePath)
 		{
 			if (!HasCompatibleMagic(xapkFilePath))
+			{
 				return xapkFilePath;
+			}
 
 			string intermediateDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			string outputDirectory = TempFolderManager.CreateNewRandomTempFolder();
 			DecompressZipArchive(xapkFilePath, intermediateDirectory);
-			foreach (var filePath in Directory.GetFiles(intermediateDirectory))
+			foreach (string filePath in Directory.GetFiles(intermediateDirectory))
 			{
 				if (GetFileExtension(filePath) == ApkExtension)
+				{
 					DecompressZipArchive(filePath, outputDirectory);
+				}
 			}
 			return outputDirectory;
 		}
@@ -76,12 +82,16 @@ namespace AssetRipper.Core.Structure.GameStructure
 			zipper.ExtractZip(zipFilePath, outputDirectory, null);
 		}
 
-		private static string GetFileExtension(string path)
+		private static string? GetFileExtension(string path)
 		{
 			if (File.Exists(path))
+			{
 				return Path.GetExtension(path);
+			}
 			else
+			{
 				return null;
+			}
 		}
 
 		private static bool HasCompatibleMagic(string path)

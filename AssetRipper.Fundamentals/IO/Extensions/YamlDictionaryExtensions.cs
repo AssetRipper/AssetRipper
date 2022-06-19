@@ -10,7 +10,7 @@ namespace AssetRipper.Core.IO.Extensions
 		public static YamlNode ExportYaml<T>(this IReadOnlyDictionary<int, T> _this, IExportContainer container) where T : IYamlExportable
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.BlockCurve);
-			foreach (var kvp in _this)
+			foreach (KeyValuePair<int, T> kvp in _this)
 			{
 				YamlMappingNode map = new YamlMappingNode();
 				map.Add(kvp.Key, kvp.Value.ExportYaml(container));
@@ -22,7 +22,7 @@ namespace AssetRipper.Core.IO.Extensions
 		public static YamlNode ExportYaml<T>(this IReadOnlyDictionary<string, T> _this, IExportContainer container) where T : IYamlExportable
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.BlockCurve);
-			foreach (var kvp in _this)
+			foreach (KeyValuePair<string, T> kvp in _this)
 			{
 				YamlMappingNode map = new YamlMappingNode();
 				map.Add(kvp.Key, kvp.Value.ExportYaml(container));
@@ -36,7 +36,7 @@ namespace AssetRipper.Core.IO.Extensions
 		{
 #warning TODO: test
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.BlockCurve);
-			foreach (var kvp in _this)
+			foreach (KeyValuePair<Tuple<T1, long>, T2> kvp in _this)
 			{
 				YamlMappingNode kvpMap = new YamlMappingNode();
 				YamlMappingNode keyMap = new YamlMappingNode();
@@ -52,7 +52,7 @@ namespace AssetRipper.Core.IO.Extensions
 		public static YamlNode ExportYaml<T>(this IReadOnlyDictionary<T, int> _this, IExportContainer container) where T : IYamlExportable
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.BlockCurve);
-			foreach (var kvp in _this)
+			foreach (KeyValuePair<T, int> kvp in _this)
 			{
 				YamlMappingNode map = new YamlMappingNode();
 				YamlNode key = kvp.Key.ExportYaml(container);
@@ -73,7 +73,7 @@ namespace AssetRipper.Core.IO.Extensions
 		public static YamlNode ExportYaml<T>(this IReadOnlyDictionary<T, float> _this, IExportContainer container) where T : IYamlExportable
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.BlockCurve);
-			foreach (var kvp in _this)
+			foreach (KeyValuePair<T, float> kvp in _this)
 			{
 				YamlMappingNode map = new YamlMappingNode();
 				YamlNode key = kvp.Key.ExportYaml(container);
@@ -95,7 +95,7 @@ namespace AssetRipper.Core.IO.Extensions
 			where T2 : IYamlExportable
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.BlockCurve);
-			foreach (var kvp in _this)
+			foreach (KeyValuePair<T1, T2> kvp in _this)
 			{
 				YamlMappingNode map = new YamlMappingNode();
 				YamlNode key = kvp.Key.ExportYaml(container);
@@ -117,7 +117,7 @@ namespace AssetRipper.Core.IO.Extensions
 			where T2 : IYamlExportable
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.BlockCurve);
-			foreach (var kvp in _this)
+			foreach (KeyValuePair<T1, T2[]> kvp in _this)
 			{
 				YamlMappingNode map = new YamlMappingNode();
 				YamlNode key = kvp.Key.ExportYaml(container);

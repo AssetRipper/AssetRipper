@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO
 {
-	public sealed class AssetList<T> : AccessListBase<T>, IDependent where T : new()
+	public sealed class AssetList<T> : AccessListBase<T>, IDependent 
+		where T : notnull, new()
 	{
 		private static readonly bool isDependentType = typeof(IDependent).IsAssignableFrom(typeof(T));
 		private const int DefaultCapacity = 4;
@@ -75,14 +76,18 @@ namespace AssetRipper.Core.IO
 			get
 			{
 				if ((uint)index >= (uint)count)
+				{
 					throw new ArgumentOutOfRangeException(nameof(index));
+				}
 
 				return items[index];
 			}
 			set
 			{
 				if ((uint)index >= (uint)count)
+				{
 					throw new ArgumentOutOfRangeException(nameof(index));
+				}
 
 				items[index] = value;
 			}
@@ -92,7 +97,10 @@ namespace AssetRipper.Core.IO
 		public override void Add(T item)
 		{
 			if (count == Capacity)
+			{
 				Grow(count + 1);
+			}
+
 			items[count] = item;
 			count++;
 		}
@@ -122,10 +130,14 @@ namespace AssetRipper.Core.IO
 		public override void CopyTo(T[] array, int arrayIndex)
 		{
 			if (array == null)
+			{
 				throw new ArgumentNullException(nameof(array));
+			}
 
 			if (arrayIndex < 0 || arrayIndex >= array.Length - count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+			}
 
 			Array.Copy(items, 0, array, arrayIndex, count);
 		}
@@ -138,13 +150,19 @@ namespace AssetRipper.Core.IO
 		{
 			// Note that insertions at the end are legal.
 			if ((uint)index > (uint)count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(index));
+			}
 
-			if (count == items.Length) 
+			if (count == items.Length)
+			{
 				Grow(count + 1);
+			}
 
 			if (index < count)
+			{
 				Array.Copy(items, index, items, index + 1, count - index);
+			}
 
 			items[index] = item;
 			count++;
@@ -166,14 +184,16 @@ namespace AssetRipper.Core.IO
 		public override void RemoveAt(int index)
 		{
 			if ((uint)index >= (uint)count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(index));
+			}
 
 			count--;
 			if (index < count)
 			{
 				Array.Copy(items, index + 1, items, index, count - index);
 			}
-			items[count] = default;
+			items[count] = default!;
 		}
 
 		public Span<T> AsSpan() => items.AsSpan(0, count);
@@ -206,12 +226,16 @@ namespace AssetRipper.Core.IO
 			// Allow the list to grow to maximum possible capacity (~2G elements) before encountering overflow.
 			// Note that this check works even when _items.Length overflowed thanks to the (uint) cast
 			if (newcapacity > Array.MaxLength)
+			{
 				newcapacity = Array.MaxLength;
+			}
 
 			// If the computed capacity is still less than specified, set to the original argument.
 			// Capacities exceeding Array.MaxLength will be surfaced as OutOfMemoryException by Array.Resize.
 			if (newcapacity < capacity)
+			{
 				newcapacity = capacity;
+			}
 
 			Capacity = (int)newcapacity;
 		}

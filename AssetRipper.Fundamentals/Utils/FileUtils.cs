@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Utils
 		/// <returns>The number of bytes in the file</returns>
 		public static long GetFileSize(string path)
 		{
-			using var stream = File.OpenRead(path);
+			using FileStream stream = File.OpenRead(path);
 			return stream.Length;
 		}
 
@@ -33,8 +33,8 @@ namespace AssetRipper.Core.Utils
 
 		public static string GetUniqueName(string dirPath, string fileName, int maxNameLength)
 		{
-			string ext = null;
-			string name = null;
+			string? ext = null;
+			string? name = null;
 			int maxLength = maxNameLength - 4;
 			string validFileName = fileName;
 			if (validFileName.Length > maxLength)
@@ -60,9 +60,8 @@ namespace AssetRipper.Core.Utils
 
 			ext = ext ?? Path.GetExtension(validFileName);
 
-			var initial = 0;
-			var key = Path.Combine(dirPath, $"{name}{ext}");
-			UniqueNamesByInitialPath.TryGetValue(key, out initial);
+			string key = Path.Combine(dirPath, $"{name}{ext}");
+			UniqueNamesByInitialPath.TryGetValue(key, out int initial);
 
 			for (int counter = initial; counter < int.MaxValue; counter++)
 			{
@@ -101,9 +100,13 @@ namespace AssetRipper.Core.Utils
 			char[] defaultBadCharacters = Path.GetInvalidFileNameChars();
 			string result = new string(defaultBadCharacters);
 			if (defaultBadCharacters.Contains(':'))
+			{
 				return result;
+			}
 			else
+			{
 				return result + ':';
+			}
 		}
 
 		public const int MaxFileNameLength = 256;

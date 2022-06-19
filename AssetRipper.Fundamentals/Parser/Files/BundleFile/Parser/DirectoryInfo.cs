@@ -9,6 +9,6 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 			Nodes = reader.ReadBundleArray<Node>();
 		}
 
-		public Node[] Nodes { get; set; }
+		public Node[] Nodes { get; set; } = Array.Empty<Node>();
 	}
 }

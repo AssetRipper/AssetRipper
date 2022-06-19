@@ -256,7 +256,7 @@ namespace AssetRipper.FileAnalyzer
 			if (m_EnableTypeTree)
 			{
 				type.m_Type = new TypeTree();
-				type.m_Type.Nodes = new List<TypeTreeNode>();
+				type.m_Type.Nodes.Clear();
 				if (header.m_Version >= SerializedFileFormatVersion.kUnknown_12 || header.m_Version == SerializedFileFormatVersion.kUnknown_10)
 				{
 					TypeTreeBlobRead(type.m_Type);

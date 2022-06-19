@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Interfaces;
 
 namespace AssetRipper.Core.Parser.Asset
 {

@@ -157,9 +157,13 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 
 			//0x0c
 			if (HasLargeFilesSupport(Version))
+			{
 				writer.Write(0);
+			}
 			else
+			{
 				writer.Write((uint)DataOffset);
+			}
 
 			//0x10
 			if (HasEndianess(Version))

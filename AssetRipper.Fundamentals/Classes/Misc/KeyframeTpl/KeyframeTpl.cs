@@ -152,12 +152,16 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 		/// </summary>
 		public static bool HasOutWeight(UnityVersion version) => version.IsGreaterEqual(2018);
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if(obj is KeyframeTpl<T> keyframe)
+			{
 				return Equals(keyframe);
-			else 
+			}
+			else
+			{
 				return false;
+			}
 		}
 
 		public override int GetHashCode()
@@ -165,9 +169,10 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 			return 0;
 		}
 
-		public bool Equals(KeyframeTpl<T> other)
+		public bool Equals(KeyframeTpl<T>? other)
 		{
 			return
+				other is not null &&
 				Time.Equals(other.Time) &&
 				TangentMode.Equals(other.TangentMode) &&
 				WeightedMode.Equals(other.WeightedMode) &&

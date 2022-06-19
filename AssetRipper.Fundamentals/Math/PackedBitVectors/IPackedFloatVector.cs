@@ -85,7 +85,9 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 		public static float[] UnpackFloats(this IPackedFloatVector packedVector, int itemCountInChunk, int chunkStride, int start = 0, int numChunks = -1)
 		{
 			if (chunkStride % 4 != 0)
+			{
 				throw new ArgumentException(nameof(chunkStride));
+			}
 
 			int bitIndex = packedVector.BitSize * start;
 			int byteIndex = bitIndex / 8;
@@ -93,7 +95,10 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 
 			float scale = 1.0f / packedVector.Range;
 			if (numChunks == -1)
+			{
 				numChunks = (int)packedVector.NumItems / itemCountInChunk;
+			}
+
 			int end = chunkStride * numChunks / 4;
 			List<float> data = new List<float>();
 			for (int index = 0; index != end; index += chunkStride / 4)
@@ -125,9 +130,14 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 		public static void PackFloats(this IPackedFloatVector packedVector, float[] data, int itemCountInChunk, int chunkStride, int numChunks, int bitSize, bool adjustBitSize)
 		{
 			if (data.Length != itemCountInChunk * numChunks)
+			{
 				throw new ArgumentException(nameof(data));
+			}
+
 			if (chunkStride != itemCountInChunk * 4)
+			{
 				throw new ArgumentException(nameof(chunkStride));
+			}
 
 			packedVector.PackFloats(data, bitSize, adjustBitSize);
 		}
@@ -139,17 +149,27 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 			for (int i = 0; i < data.Length; ++i)
 			{
 				if (maxf < data[i])
+				{
 					maxf = data[i];
+				}
+
 				if (minf > data[i])
+				{
 					minf = data[i];
+				}
 			}
 
 			packedVector.Range = maxf - minf;
 			
 			if (adjustBitSize)
+			{
 				bitSize += GetBitCount(packedVector.Range);
+			}
+
 			if (bitSize > 32)
+			{
 				bitSize = 32;
+			}
 
 			packedVector.Start = minf;
 			packedVector.NumItems = (uint)(data.Length);
@@ -166,9 +186,13 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 			{
 				double scaled = (data[i] - packedVector.Start) * scale;
 				if (scaled < 0)
+				{
 					scaled = 0d;
+				}
 				else if (scaled > 1)
+				{
 					scaled = 1d;
+				}
 
 				float f = BitConverter.Int32BitsToSingle((1 << (packedVector.BitSize)) - 1);
 				double d = scaled * f;

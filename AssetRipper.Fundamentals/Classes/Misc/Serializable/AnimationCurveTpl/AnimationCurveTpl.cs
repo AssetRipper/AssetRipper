@@ -137,12 +137,16 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 		/// </summary>
 		public static bool HasRotationOrder(UnityVersion version) => version.IsGreaterEqual(5, 3);
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (obj is AnimationCurveTpl<T> curve)
+			{
 				return Equals(curve);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public override int GetHashCode()
@@ -150,9 +154,10 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl
 			return 0;
 		}
 
-		public bool Equals(AnimationCurveTpl<T> other)
+		public bool Equals(AnimationCurveTpl<T>? other)
 		{
 			return
+				other is not null &&
 				PreInfinity == other.PreInfinity &&
 				PostInfinity == other.PostInfinity &&
 				RotationOrder == other.RotationOrder &&

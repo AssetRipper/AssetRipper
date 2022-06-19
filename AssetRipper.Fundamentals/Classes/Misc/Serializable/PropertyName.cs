@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable
 			return ID;
 		}
 
-		public override bool Equals(object other)
+		public override bool Equals(object? other)
 		{
 			if (other is PropertyName propertyName)
 			{

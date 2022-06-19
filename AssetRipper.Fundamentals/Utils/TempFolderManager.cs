@@ -17,7 +17,9 @@ namespace AssetRipper.Core.Utils
 		private static void DeleteTempFolder()
 		{
 			if (Directory.Exists(TempFolderPath))
+			{
 				Directory.Delete(TempFolderPath, true);
+			}
 		}
 
 		private static string GetNewRandomTempFolder() => Path.Combine(TempFolderPath, GetRandomString());
@@ -31,9 +33,13 @@ namespace AssetRipper.Core.Utils
 		{
 			string guid = Guid.NewGuid().ToString().Replace("-", "");
 			if (numCharacters < 1 || numCharacters > 31)
+			{
 				return guid;
+			}
 			else
+			{
 				return guid.Substring(0, numCharacters);
+			}
 		}
 
 		public static string CreateNewRandomTempFolder()
@@ -52,7 +58,9 @@ namespace AssetRipper.Core.Utils
 		public static string WriteToTempFile(byte[] data, string fileExtension)
 		{
 			if (data == null)
+			{
 				throw new ArgumentNullException(nameof(data));
+			}
 
 			string fileName = GetRandomString() + (fileExtension ?? "");
 			string filePath = Path.Combine(TempFolderPath, fileName);

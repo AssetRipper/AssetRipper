@@ -12,8 +12,8 @@ namespace AssetRipper.Core.IO
 	/// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
 	/// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
 	public sealed class AssetDictionary<TKey, TValue> : AccessDictionaryBase<TKey, TValue>, IDependent
-		where TKey : new() 
-		where TValue : new()
+		where TKey : notnull, new() 
+		where TValue : notnull, new()
 	{
 		private static readonly bool isDependentType = NullableKeyValuePair<TKey, TValue>.IsDependentType;
 		private const int DefaultCapacity = 4;
@@ -87,7 +87,10 @@ namespace AssetRipper.Core.IO
 		public override void Add(NullableKeyValuePair<TKey,TValue> pair)
 		{
 			if (count == Capacity)
+			{
 				Grow(count + 1);
+			}
+
 			pairs[count] = pair;
 			count++;
 		}
@@ -107,7 +110,9 @@ namespace AssetRipper.Core.IO
 		public override TKey GetKey(int index)
 		{
 			if ((uint)index >= (uint)count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(index));
+			}
 
 			return pairs[index].Key;
 		}
@@ -116,7 +121,9 @@ namespace AssetRipper.Core.IO
 		public override void SetKey(int index, TKey newKey)
 		{
 			if ((uint)index >= (uint)count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(index));
+			}
 
 			pairs[index] = new NullableKeyValuePair<TKey, TValue>(newKey, pairs[index].Value);
 		}
@@ -125,7 +132,9 @@ namespace AssetRipper.Core.IO
 		public override TValue GetValue(int index)
 		{
 			if (index < 0 || index >= count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(index));
+			}
 
 			return pairs[index].Value;
 		}
@@ -134,7 +143,9 @@ namespace AssetRipper.Core.IO
 		public override void SetValue(int index, TValue newValue)
 		{
 			if ((uint)index >= (uint)count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(index));
+			}
 
 			pairs[index] = new KeyValuePair<TKey, TValue>(pairs[index].Key, newValue);
 		}
@@ -142,7 +153,9 @@ namespace AssetRipper.Core.IO
 		public override NullableKeyValuePair<TKey, TValue> GetPair(int index)
 		{
 			if ((uint)index >= (uint)count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(index));
+			}
 
 			return pairs[index];
 		}
@@ -155,13 +168,19 @@ namespace AssetRipper.Core.IO
 		{
 			// Note that insertions at the end are legal.
 			if ((uint)index > (uint)count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(index));
+			}
 
 			if (count == pairs.Length)
+			{
 				Grow(count + 1);
+			}
 
 			if (index < count)
+			{
 				Array.Copy(pairs, index, pairs, index + 1, count - index);
+			}
 
 			pairs[index] = item;
 			count++;
@@ -171,7 +190,9 @@ namespace AssetRipper.Core.IO
 		public override void RemoveAt(int index)
 		{
 			if ((uint)index >= (uint)count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(index));
+			}
 
 			count--;
 			if (index < count)
@@ -203,10 +224,14 @@ namespace AssetRipper.Core.IO
 		public override void CopyTo(NullableKeyValuePair<TKey, TValue>[] array, int arrayIndex)
 		{
 			if(array == null)
+			{
 				throw new ArgumentNullException(nameof(array));
+			}
 
 			if (arrayIndex < 0 || arrayIndex >= array.Length - count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+			}
 
 			Array.Copy(pairs, 0, array, arrayIndex, count);
 		}
@@ -280,12 +305,16 @@ namespace AssetRipper.Core.IO
 			// Allow the list to grow to maximum possible capacity (~2G elements) before encountering overflow.
 			// Note that this check works even when _items.Length overflowed thanks to the (uint) cast
 			if (newcapacity > Array.MaxLength)
+			{
 				newcapacity = Array.MaxLength;
+			}
 
 			// If the computed capacity is still less than specified, set to the original argument.
 			// Capacities exceeding Array.MaxLength will be surfaced as OutOfMemoryException by Array.Resize.
 			if (newcapacity < capacity)
+			{
 				newcapacity = capacity;
+			}
 
 			Capacity = (int)newcapacity;
 		}

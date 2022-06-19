@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			Fields = CreateFields(manager, context);
 		}
 
-		private static SerializableType GetBaseType(BaseManager manager, MonoTypeContext context)
+		private static SerializableType? GetBaseType(BaseManager manager, MonoTypeContext context)
 		{
 			MonoTypeContext baseContext = context.GetBase();
 			MonoTypeContext resolvedContext = baseContext.Resolve();

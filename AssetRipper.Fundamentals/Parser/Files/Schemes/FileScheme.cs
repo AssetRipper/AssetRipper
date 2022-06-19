@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Parser.Files.Schemes
 			Name = FilenameUtils.FixFileIdentifier(fileName);
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return Name == null ? base.ToString() : $"T:{SchemeType} N:'{Name}'";
 		}

@@ -99,7 +99,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 				return GetLayoutInfo(prime);
 			}
 
-			SerializedFileScheme? serialized = GetEngineFile();
+			SerializedFileScheme? serialized = GetEngineFile() ?? throw new Exception("Could not get serialized file scheme");
 			return GetLayoutInfo(serialized);
 		}
 

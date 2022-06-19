@@ -17,11 +17,17 @@ namespace AssetRipper.Core.Math.Vectors
 		public static bool operator ==(Vector3i left, Vector3i right)
 		{
 			if (left is null)
+			{
 				return right is null;
+			}
 			else if (right is null)
+			{
 				return false;
+			}
 			else
+			{
 				return left.X == right.X && left.Y == right.Y && left.Z == right.Z;
+			}
 		}
 
 		public static bool operator !=(Vector3i left, Vector3i right)
@@ -33,27 +39,45 @@ namespace AssetRipper.Core.Math.Vectors
 		{
 			member %= 3;
 			if (member == 0)
+			{
 				return X;
+			}
+
 			if (member == 1)
+			{
 				return Y;
+			}
+
 			return Z;
 		}
 
 		public int GetMemberByValue(int value)
 		{
 			if (X == value)
+			{
 				return 0;
+			}
+
 			if (Y == value)
+			{
 				return 1;
+			}
+
 			if (Z == value)
+			{
 				return 2;
+			}
+
 			throw new ArgumentException($"Member with value {value} wasn't found");
 		}
 
 		public bool ContainsValue(int value)
 		{
 			if (X == value || Y == value || Z == value)
+			{
 				return true;
+			}
+
 			return false;
 		}
 
@@ -81,12 +105,18 @@ namespace AssetRipper.Core.Math.Vectors
 			return node;
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (obj == null)
+			{
 				return false;
+			}
+
 			if (obj.GetType() != typeof(Vector3i))
+			{
 				return false;
+			}
+
 			return this == (Vector3i)obj;
 		}
 

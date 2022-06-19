@@ -34,9 +34,13 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			//See https://docs.unity3d.com/2017.4/Documentation/Manual/ScriptingRestrictions.html
 
 			if (HasMonoAssemblies(ManagedPath))
+			{
 				Backend = Assembly.ScriptingBackend.Mono;
+			}
 			else
+			{
 				Backend = Assembly.ScriptingBackend.Unknown;
+			}
 
 			DataPaths = new string[] { GameDataPath };
 		}

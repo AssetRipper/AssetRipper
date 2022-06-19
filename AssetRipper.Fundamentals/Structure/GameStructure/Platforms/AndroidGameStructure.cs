@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 	{
 		public AndroidGameStructure(string rootPath) : this(rootPath, string.Empty) { }
 
-		public AndroidGameStructure(string rootPath, string obbPath)
+		public AndroidGameStructure(string rootPath, string? obbPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
@@ -40,11 +40,17 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			UnityVersion = GetUnityVersionFromDataDirectory(GameDataPath);
 
 			if (HasIl2CppFiles())
+			{
 				Backend = Assembly.ScriptingBackend.IL2Cpp;
+			}
 			else if (IsMono(ManagedPath))
+			{
 				Backend = Assembly.ScriptingBackend.Mono;
+			}
 			else
+			{
 				Backend = Assembly.ScriptingBackend.Unknown;
+			}
 
 			if (obbPath != null)
 			{
@@ -147,23 +153,32 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			}
 		}
 
-		private static string GetIl2CppGameAssemblyPath(string libDirectory)
+		private static string? GetIl2CppGameAssemblyPath(string libDirectory)
 		{
-			if (string.IsNullOrEmpty(libDirectory) || !Directory.Exists(libDirectory)) return null;
+			if (string.IsNullOrEmpty(libDirectory) || !Directory.Exists(libDirectory))
+			{
+				return null;
+			}
 
 			return Directory.GetFiles(libDirectory, Il2CppGameAssemblyName, SearchOption.AllDirectories).FirstOrDefault();
 		}
 
-		private static string GetAndroidUnityAssemblyPath(string libDirectory)
+		private static string? GetAndroidUnityAssemblyPath(string libDirectory)
 		{
-			if (string.IsNullOrEmpty(libDirectory) || !Directory.Exists(libDirectory)) return null;
+			if (string.IsNullOrEmpty(libDirectory) || !Directory.Exists(libDirectory))
+			{
+				return null;
+			}
 
 			return Directory.GetFiles(libDirectory, AndroidUnityAssemblyName, SearchOption.AllDirectories).FirstOrDefault();
 		}
 
 		private static bool IsMono(string managedDirectory)
 		{
-			if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory)) return false;
+			if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory))
+			{
+				return false;
+			}
 
 			return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
 		}
@@ -176,6 +191,6 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		private const string Il2CppGameAssemblyName = "libil2cpp.so";
 		private const string AndroidUnityAssemblyName = "libunity.so";
 
-		private readonly DirectoryInfo m_obbRoot;
+		private readonly DirectoryInfo? m_obbRoot;
 	}
 }

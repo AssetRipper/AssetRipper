@@ -11,11 +11,11 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 {
 	public sealed class IL2CppManager : BaseManager
 	{
-		public string GameAssemblyPath { get; private set; }
-		public string UnityPlayerPath { get; private set; }
-		public string GameDataPath { get; private set; }
-		public string MetaDataPath { get; private set; }
-		public int[] UnityVersion { get; private set; }
+		public string? GameAssemblyPath { get; private set; }
+		public string? UnityPlayerPath { get; private set; }
+		public string? GameDataPath { get; private set; }
+		public string? MetaDataPath { get; private set; }
+		public int[]? UnityVersion { get; private set; }
 		private readonly ScriptContentLevel contentLevel;
 
 		public IL2CppManager(LayoutInfo layout, Action<string> requestAssemblyCallback, ScriptContentLevel level) : base(layout, requestAssemblyCallback)
@@ -44,7 +44,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			}
 			else
 			{
-				UnityVersion = Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath, GameDataPath);
+				UnityVersion = Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath!, GameDataPath);
 			}
 
 			if (UnityVersion == null)
@@ -58,13 +58,13 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 			Logger.SendStatusChange("loading_step_parse_il2cpp_metadata");
 
-			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath, MetaDataPath, UnityVersion, false);
+			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath!, MetaDataPath!, UnityVersion, false);
 
 			Logger.SendStatusChange("loading_step_generate_dummy_dll");
 
 			Cpp2IlApi.MakeDummyDLLs(true);
 
-			LibCpp2IL.InstructionSet instructionSet = LibCpp2IL.LibCpp2IlMain.Binary.InstructionSet;
+			LibCpp2IL.InstructionSet instructionSet = LibCpp2IL.LibCpp2IlMain.Binary?.InstructionSet ?? throw new Exception("Null binary");
 			Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found {instructionSet} instruction set.");
 
 			Cpp2IL.Core.BaseKeyFunctionAddresses? keyFunctionAddresses = null;
@@ -85,7 +85,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 				bool unsafeAnalysis = contentLevel == ScriptContentLevel.Level4;
 				foreach (AssemblyDefinition assembly in Cpp2IlApi.GeneratedAssemblies)
 				{
-					Cpp2IlApi.AnalyseAssembly(Cpp2IL.Core.AnalysisLevel.IL_ONLY, assembly, keyFunctionAddresses, null, true, unsafeAnalysis);
+					Cpp2IlApi.AnalyseAssembly(Cpp2IL.Core.AnalysisLevel.IL_ONLY, assembly, keyFunctionAddresses!, null, true, unsafeAnalysis);
 				}
 			}
 

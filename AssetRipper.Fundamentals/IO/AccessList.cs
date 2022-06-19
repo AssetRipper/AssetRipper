@@ -1,6 +1,8 @@
 ﻿namespace AssetRipper.Core.IO
 {
-	public sealed class AccessList<T, TBase> : AccessListBase<TBase> where T : TBase, new()
+	public sealed class AccessList<T, TBase> : AccessListBase<TBase> 
+		where TBase : notnull
+		where T : notnull, TBase, new()
 	{
 		private readonly AssetList<T> referenceList;
 
@@ -44,10 +46,14 @@
 		public override void CopyTo(TBase[] array, int arrayIndex)
 		{
 			if (array == null)
+			{
 				throw new ArgumentNullException(nameof(array));
+			}
 
 			if (arrayIndex < 0 || arrayIndex >= array.Length - Count)
+			{
 				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+			}
 
 			for (int i = 0; i < Count; i++)
 			{

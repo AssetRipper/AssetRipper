@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
@@ -16,7 +17,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
-			if (!GetWebPlayerName(m_root, out string name))
+			if (!GetWebPlayerName(m_root, out string? name))
 			{
 				throw new Exception($"Web player asset bundle data wasn't found");
 			}
@@ -50,7 +51,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return GetWebPlayerName(dinfo, out string _);
 		}
 
-		public static bool GetWebPlayerName(DirectoryInfo root, out string name)
+		public static bool GetWebPlayerName(DirectoryInfo root, [NotNullWhen(true)] out string? name)
 		{
 			foreach (FileInfo fi in root.EnumerateFiles())
 			{

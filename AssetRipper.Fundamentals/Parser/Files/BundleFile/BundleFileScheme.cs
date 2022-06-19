@@ -71,7 +71,7 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 			Header.Read(reader);
 			if (Header.Signature.IsRawWeb())
 			{
-				if (stream.Position - headerPosition != Header.RawWeb.HeaderSize)
+				if (stream.Position - headerPosition != Header.RawWeb!.HeaderSize)
 				{
 					throw new Exception($"Read {stream.Position - headerPosition} but expected {Header.RawWeb.HeaderSize} bytes while reading the raw/web bundle header.");
 				}

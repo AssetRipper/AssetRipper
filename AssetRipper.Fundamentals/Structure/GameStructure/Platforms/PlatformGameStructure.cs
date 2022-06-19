@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		public string? UnityPlayerPath { get; protected set; }
 		public int[]? UnityVersion { get; protected set; }
 
-		public IReadOnlyList<string> DataPaths { get; protected set; }
+		public IReadOnlyList<string> DataPaths { get; protected set; } = Array.Empty<string>();
 
 		/// <summary>Name : FullName</summary>
 		public Dictionary<string, string> Files { get; } = new Dictionary<string, string>();

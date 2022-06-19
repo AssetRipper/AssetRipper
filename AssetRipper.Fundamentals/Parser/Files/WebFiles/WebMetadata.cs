@@ -18,6 +18,6 @@ namespace AssetRipper.Core.Parser.Files.WebFiles
 			Entries = entries.ToArray();
 		}
 
-		public WebFileEntry[] Entries { get; set; }
+		public WebFileEntry[] Entries { get; set; } = Array.Empty<WebFileEntry>();
 	}
 }

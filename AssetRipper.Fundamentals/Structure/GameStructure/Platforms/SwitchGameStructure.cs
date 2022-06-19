@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
@@ -20,7 +21,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				throw new Exception($"Root directory '{rootPath}' doesn't exist");
 			}
 
-			if (!GetDataSwitchDirectory(m_root, out string dataPath))
+			if (!GetDataSwitchDirectory(m_root, out string? dataPath))
 			{
 				throw new Exception($"Data directory wasn't found");
 			}
@@ -55,7 +56,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return GetDataSwitchDirectory(rootInfo, out string _);
 		}
 
-		private static bool GetDataSwitchDirectory(DirectoryInfo rootDirectory, out string dataPath)
+		private static bool GetDataSwitchDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath)
 		{
 			dataPath = null;
 			string romPath = Path.Combine(rootDirectory.FullName, RomName);

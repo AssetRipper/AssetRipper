@@ -92,17 +92,21 @@ namespace AssetRipper.Core.Math.Colors
 			return ((Vector4f)this).GetHashCode();
 		}
 
-		public override bool Equals(object other)
+		public override bool Equals(object? other)
 		{
 			if (other is ColorRGBAf color)
+			{
 				return Equals(color);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
-		public bool Equals(ColorRGBAf other)
+		public bool Equals(ColorRGBAf? other)
 		{
-			return R.Equals(other.R) && G.Equals(other.G) && B.Equals(other.B) && A.Equals(other.A);
+			return other is not null && R.Equals(other.R) && G.Equals(other.G) && B.Equals(other.B) && A.Equals(other.A);
 		}
 
 		public static ColorRGBAf operator +(ColorRGBAf a, ColorRGBAf b)

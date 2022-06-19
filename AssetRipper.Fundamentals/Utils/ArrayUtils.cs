@@ -4,8 +4,15 @@
 	{
 		public static T[] Combine<T>(T[] array1, T[] array2)
 		{
-			if (array1 == null) throw new ArgumentNullException(nameof(array1));
-			if (array2 == null) throw new ArgumentNullException(nameof(array2));
+			if (array1 == null)
+			{
+				throw new ArgumentNullException(nameof(array1));
+			}
+
+			if (array2 == null)
+			{
+				throw new ArgumentNullException(nameof(array2));
+			}
 
 			T[] result = new T[array1.Length + array2.Length];
 			for(int i = 0; i < array1.Length; i++)
@@ -29,9 +36,14 @@
 		public static T[] CreateAndInitializeArray<T>(int length) where T : new()
 		{
 			if(length < 0)
+			{
 				throw new ArgumentOutOfRangeException(nameof(length));
-			if(length == 0)
+			}
+
+			if (length == 0)
+			{
 				return Array.Empty<T>();
+			}
 
 			T[] array = new T[length];
 			for(int i = 0; i < length; i++)

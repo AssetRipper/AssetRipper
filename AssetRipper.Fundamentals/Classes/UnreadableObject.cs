@@ -9,15 +9,17 @@ namespace AssetRipper.Core.Classes
 	public class UnreadableObject : UnityObjectBase, IHasNameString, IHasRawData
 	{
 		public byte[] RawData { get; private set; } = Array.Empty<byte>();
-		public string NameString { get; set; }
+		public string NameString { get; set; } = "";
 
 		public UnreadableObject(LayoutInfo layout) : base(layout) { }
 		public UnreadableObject(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{
-			if (AssetInfo.ByteSize > 0)
+			if (AssetInfo?.ByteSize > 0)
+			{
 				RawData = reader.ReadBytes(AssetInfo.ByteSize);
+			}
 		}
 
 		public override void Write(AssetWriter writer)

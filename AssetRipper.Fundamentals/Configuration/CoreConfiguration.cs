@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Configuration
 		/// <summary>
 		/// The root path to export to
 		/// </summary>
-		public string ExportRootPath { get; set; }
+		public string ExportRootPath { get; set; } = "";
 		/// <summary>
 		/// The path to create a new unity project in
 		/// </summary>
@@ -56,7 +56,7 @@ namespace AssetRipper.Core.Configuration
 		/// A function to determine if an object is allowed to be exported.<br/>
 		/// Set by default to allow everything.
 		/// </summary>
-		public Func<IUnityObjectBase, bool> Filter { get; set; }
+		public Func<IUnityObjectBase, bool> Filter { get; set; } = DefaultFilterMethod;
 		#endregion
 
 		#region Project Settings

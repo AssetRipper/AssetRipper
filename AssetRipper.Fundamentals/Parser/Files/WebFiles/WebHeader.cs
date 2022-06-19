@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Parser.Files.WebFiles
 			if (reader.BaseStream.Length - reader.BaseStream.Position > Signature.Length)
 			{
 				long position = reader.BaseStream.Position;
-				bool isRead = reader.ReadStringZeroTerm(Signature.Length + 1, out string signature);
+				bool isRead = reader.ReadStringZeroTerm(Signature.Length + 1, out string? signature);
 				reader.BaseStream.Position = position;
 				if (isRead)
 				{

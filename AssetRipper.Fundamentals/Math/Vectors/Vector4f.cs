@@ -140,16 +140,18 @@ namespace AssetRipper.Core.Math.Vectors
 			return node;
 		}
 
-		public override bool Equals(object other)
+		public override bool Equals(object? other)
 		{
-			if (other is not Vector4f)
-				return false;
-			return Equals((Vector4f)other);
+			if (other is Vector4f vector)
+			{
+				return Equals(vector);
+			}
+			return false;
 		}
 
-		public bool Equals(Vector4f other)
+		public bool Equals(Vector4f? other)
 		{
-			return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z) && W.Equals(other.W);
+			return other is not null && X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z) && W.Equals(other.W);
 		}
 
 		public override int GetHashCode()

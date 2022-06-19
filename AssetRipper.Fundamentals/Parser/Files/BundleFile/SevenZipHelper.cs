@@ -96,6 +96,6 @@ namespace AssetRipper.Core.Parser.Files.BundleFile
 		private const int UncompressedSize = 8;
 
 		[ThreadStatic]
-		private static byte[] s_buffer;
+		private static byte[]? s_buffer;
 	}
 }

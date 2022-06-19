@@ -12,13 +12,12 @@ namespace AssetRipper.Core.Parser.Asset
 		public DependencyContext(LayoutInfo layout, bool log)
 		{
 			Info = layout;
-			IsLog = log;
 			m_hierarchy = log ? new Stack<string>() : null;
 		}
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesFromDependent<T>(T dependent, string name) where T : IDependent
 		{
-			if (IsLog)
+			if (m_hierarchy is not null)
 			{
 				m_hierarchy.Push(name);
 			}
@@ -29,7 +28,7 @@ namespace AssetRipper.Core.Parser.Asset
 					yield return pointer;
 				}
 			}
-			if (IsLog)
+			if (m_hierarchy is not null)
 			{
 				m_hierarchy.Pop();
 			}
@@ -37,7 +36,7 @@ namespace AssetRipper.Core.Parser.Asset
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesFromArray<T>(IEnumerable<T> dependents, string name) where T : IDependent
 		{
-			if (IsLog)
+			if (m_hierarchy is not null)
 			{
 				m_hierarchy.Push(name);
 			}
@@ -51,7 +50,7 @@ namespace AssetRipper.Core.Parser.Asset
 					}
 				}
 			}
-			if (IsLog)
+			if (m_hierarchy is not null)
 			{
 				m_hierarchy.Pop();
 			}
@@ -93,7 +92,7 @@ namespace AssetRipper.Core.Parser.Asset
 
 		public PPtr<IUnityObjectBase> FetchDependency<T>(PPtr<T> pointer, string name) where T : IUnityObjectBase
 		{
-			if (IsLog)
+			if (m_hierarchy is not null)
 			{
 				PointerName = name;
 			}
@@ -102,7 +101,7 @@ namespace AssetRipper.Core.Parser.Asset
 
 		public string GetPointerPath()
 		{
-			if (m_hierarchy.Count == 0)
+			if (m_hierarchy is null || m_hierarchy.Count == 0)
 			{
 				return string.Empty;
 			}
@@ -128,9 +127,8 @@ namespace AssetRipper.Core.Parser.Asset
 		public UnityVersion Version => Info.Version;
 		public BuildTarget Platform => Info.Platform;
 		public TransferInstructionFlags Flags => Info.Flags;
-		public bool IsLog { get; }
-		public string PointerName { get; private set; }
+		public string PointerName { get; private set; } = "";
 
-		private readonly Stack<string> m_hierarchy;
+		private readonly Stack<string>? m_hierarchy;
 	}
 }

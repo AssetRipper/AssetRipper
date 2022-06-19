@@ -4,15 +4,20 @@ namespace AssetRipper.Core.IO.MultiFile
 {
 	public class SplitNameComparer : IComparer<string>
 	{
-		public int Compare(string x, string y)
+		public int Compare(string? x, string? y)
 		{
 			int xNumber = GetSplitIndex(x);
 			int yNumber = GetSplitIndex(y);
 			return xNumber.CompareTo(yNumber);
 		}
 
-		private static int GetSplitIndex(string value)
+		private static int GetSplitIndex(string? value)
 		{
+			if (string.IsNullOrEmpty(value))
+			{
+				return -1;
+			}
+
 			int i;
 			for (i = value.Length - 1; i >= 0; i--)
 			{

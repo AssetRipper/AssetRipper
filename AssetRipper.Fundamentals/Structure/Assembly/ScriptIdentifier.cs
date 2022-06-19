@@ -65,7 +65,7 @@ namespace AssetRipper.Core.Structure.Assembly
 			return false;
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (obj == null)
 			{
@@ -90,7 +90,7 @@ namespace AssetRipper.Core.Structure.Assembly
 			return hash;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return IsDefault ? base.ToString() : Namespace == string.Empty ? $"{Name}" : $"{Namespace}.{Name}";
 		}

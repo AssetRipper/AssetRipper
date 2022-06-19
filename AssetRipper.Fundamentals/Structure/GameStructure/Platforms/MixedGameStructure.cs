@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				{
 					string name = MultiFileStream.GetFileName(path);
 					AddFile(Files, name, path);
-					string directory = Path.GetDirectoryName(path);
+					string directory = Path.GetDirectoryName(path) ?? throw new Exception("Could not get directory name");
 					dataPaths.Add(directory);
 				}
 				else if (Directory.Exists(path))

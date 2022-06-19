@@ -60,16 +60,18 @@ namespace AssetRipper.Core.Math.Vectors
 			return X.GetHashCode() ^ Y.GetHashCode() << 2 ^ Z.GetHashCode() >> 2;
 		}
 
-		public override bool Equals(object other)
+		public override bool Equals(object? other)
 		{
-			if (other is not Vector3f v)
-				return false;
-			return Equals(v);
+			if (other is Vector3f v)
+			{
+				return Equals(v);
+			}
+			return false;
 		}
 
-		public bool Equals(Vector3f other)
+		public bool Equals(Vector3f? other)
 		{
-			return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
+			return other is not null && X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
 		}
 
 		public static Vector3f operator -(Vector3f left)

@@ -42,11 +42,17 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
+			{
 				Backend = Assembly.ScriptingBackend.IL2Cpp;
+			}
 			else if (HasMonoAssemblies(ManagedPath))
+			{
 				Backend = Assembly.ScriptingBackend.Mono;
+			}
 			else
+			{
 				Backend = Assembly.ScriptingBackend.Unknown;
+			}
 		}
 
 		public static bool IsMacStructure(string path)

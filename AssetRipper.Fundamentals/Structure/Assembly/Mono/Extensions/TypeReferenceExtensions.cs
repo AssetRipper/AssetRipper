@@ -15,35 +15,31 @@ namespace AssetRipper.Core.Structure.Assembly.Mono.Extensions
 
 		public static TypeReference ResolveOrDefault(this TypeReference typeReference)
 		{
-			var module = typeReference.Module;
+			ModuleDefinition module = typeReference.Module;
 			if (module == null)
+			{
 				return typeReference;
+			}
 
-			var definition = module.MetadataResolver.Resolve(typeReference);
+			TypeDefinition definition = module.MetadataResolver.Resolve(typeReference);
 			if (definition == null)
+			{
 				return typeReference;
+			}
 
 			return definition;
 		}
 
-		static bool initialized;
-		static FieldInfo etypeFieldInfo;
-
-		private static void Initialize()
-		{
-			etypeFieldInfo = typeof(TypeReference).GetField("etype", BindingFlags.NonPublic | BindingFlags.Instance);
-			initialized = true;
-		}
+		static FieldInfo etypeFieldInfo = typeof(TypeReference).GetField("etype", BindingFlags.NonPublic | BindingFlags.Instance)
+			?? throw new Exception();
 
 		public static ElementType GetEType(this TypeReference _this)
 		{
-			if (!initialized) Initialize();
-			return (ElementType)etypeFieldInfo.GetValue(_this);
+			return (ElementType)(etypeFieldInfo.GetValue(_this) ?? throw new Exception());
 		}
 
 		public static void SetEType(this TypeReference _this, ElementType value)
 		{
-			if (!initialized) Initialize();
 			etypeFieldInfo.SetValue(_this, value);
 		}
 	}

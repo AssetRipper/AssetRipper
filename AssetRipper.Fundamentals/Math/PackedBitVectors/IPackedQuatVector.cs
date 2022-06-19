@@ -37,21 +37,27 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 					max = System.Math.Abs(q.Y);
 					flags = 1;
 					if (q.Y < 0)
+					{
 						flags |= 4;
+					}
 				}
 				if (System.Math.Abs(q.Z) > max)
 				{
 					max = System.Math.Abs(q.Z);
 					flags = 2;
 					if (q.Z < 0)
+					{
 						flags |= 4;
+					}
 				}
 				if (System.Math.Abs(q.W) > max)
 				{
 					max = System.Math.Abs(q.W);
 					flags = 3;
 					if (q.W < 0)
+					{
 						flags |= 4;
+					}
 				}
 				int bitOffset = 0;
 				while (bitOffset < 3)
@@ -72,10 +78,14 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 					{
 						int bitSize = (((flags & 3) + 1) % 4 == j) ? 9 : 10;
 						double scaled = (q.GetAt(j) + 1d) * 0.5d;
-						if (scaled < 0) 
+						if (scaled < 0)
+						{
 							scaled = 0d;
-						else if (scaled > 1) 
+						}
+						else if (scaled > 1)
+						{
 							scaled = 1d;
+						}
 
 						float f = BitConverter.Int32BitsToSingle((1 << bitSize) - 1);
 						uint x = BitConverter.SingleToUInt32Bits((float)(scaled * f));
@@ -156,7 +166,10 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 				int lastComponent = unchecked((int)(flags & 3));
 				quaternion.SetAt(lastComponent, (float)System.Math.Sqrt(1.0d - sum));
 				if ((flags & 4) != 0)
+				{
 					quaternion.FlipSignAt(lastComponent);
+				}
+
 				buffer[i] = quaternion;
 			}
 			return buffer;

@@ -38,6 +38,6 @@
 
 		private static readonly Random s_global = new Random();
 		[ThreadStatic]
-		private static Random s_local;
+		private static Random? s_local;
 	}
 }

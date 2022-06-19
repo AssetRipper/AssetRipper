@@ -8,7 +8,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 	{
 		public MonoFieldContext(FieldDefinition field, LayoutInfo layout) : this(field, null, layout) { }
 
-		public MonoFieldContext(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference> arguments, LayoutInfo layout)
+		public MonoFieldContext(FieldDefinition field, IReadOnlyDictionary<GenericParameter, TypeReference>? arguments, LayoutInfo layout)
 		{
 			Layout = layout;
 			Definition = field;
@@ -31,6 +31,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		public TypeReference DeclaringType => Definition.DeclaringType;
 		public TypeReference ElementType { get; }
 		public bool IsArray { get; }
-		public IReadOnlyDictionary<GenericParameter, TypeReference> Arguments { get; }
+		public IReadOnlyDictionary<GenericParameter, TypeReference>? Arguments { get; }
 	}
 }

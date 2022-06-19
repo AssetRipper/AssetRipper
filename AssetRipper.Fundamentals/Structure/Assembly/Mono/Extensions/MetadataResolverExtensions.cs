@@ -9,25 +9,17 @@ namespace AssetRipper.Core.Structure.Assembly.Mono.Extensions
 		 * MetadataResolver.AreSame(TypeReference, TypeReference)
 		 */
 
-		static bool initialized;
-		static MethodInfo areSameMethodInfo;
-
-		private static void Initialize()
-		{
-			areSameMethodInfo = typeof(MetadataResolver).GetMethod(
+		static MethodInfo areSameMethodInfo = typeof(MetadataResolver).GetMethod(
 				"AreSame",
 				BindingFlags.NonPublic | BindingFlags.Static,
 				null,
 				new Type[] { typeof(TypeReference), typeof(TypeReference) },
-				null);
-
-			initialized = true;
-		}
+				null)
+			?? throw new Exception();
 
 		public static bool AreSame(TypeReference a, TypeReference b)
 		{
-			if (!initialized) Initialize();
-			return (bool)areSameMethodInfo.Invoke(null, new object[] { a, b });
+			return (bool)(areSameMethodInfo.Invoke(null, new object[] { a, b }) ?? throw new Exception());
 		}
 	}
 }

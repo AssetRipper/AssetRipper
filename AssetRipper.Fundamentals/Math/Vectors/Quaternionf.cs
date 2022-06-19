@@ -70,17 +70,21 @@ namespace AssetRipper.Core.Math.Vectors
 			return X.GetHashCode() ^ Y.GetHashCode() << 2 ^ Z.GetHashCode() >> 2 ^ W.GetHashCode() >> 1;
 		}
 
-		public override bool Equals(object other)
+		public override bool Equals(object? other)
 		{
 			if (other is Quaternionf quat)
+			{
 				return Equals(quat);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
-		public bool Equals(Quaternionf other)
+		public bool Equals(Quaternionf? other)
 		{
-			return X == other.X && Y == other.Y && Z == other.Z && W == other.W;
+			return other is not null && X == other.X && Y == other.Y && Z == other.Z && W == other.W;
 		}
 
 		public static bool operator ==(Quaternionf lhs, Quaternionf rhs)

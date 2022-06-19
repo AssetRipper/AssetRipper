@@ -15,14 +15,14 @@ namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 				return true;
 			}
 
-			string brotliSignature = ReadBrotliMetadata(reader);
+			string? brotliSignature = ReadBrotliMetadata(reader);
 			reader.BaseStream.Position = position;
 			if (brotliSignature == BrotliSignature)
 			{
 				return true;
 			}
 
-			return false;
+			return brotliSignature == BrotliSignature;
 		}
 
 		private static ushort ReadGZipMagic(EndianReader reader)
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 			return 0;
 		}
 
-		private static string ReadBrotliMetadata(EndianReader reader)
+		private static string? ReadBrotliMetadata(EndianReader reader)
 		{
 			if (reader.BaseStream.Length < 4)
 			{
@@ -82,7 +82,7 @@ namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 			}
 
 			long position = reader.BaseStream.Position;
-			string signature = ReadBrotliMetadata(reader);
+			string? signature = ReadBrotliMetadata(reader);
 			reader.BaseStream.Position = position;
 			if (signature == BrotliSignature)
 			{

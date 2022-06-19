@@ -90,11 +90,11 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Header
 			if (reader.BaseStream.Length >= MaxLength)
 			{
 				long position = reader.BaseStream.Position;
-				bool isRead = reader.ReadStringZeroTerm(MaxLength, out string signature);
+				bool isRead = reader.ReadStringZeroTerm(MaxLength, out string? signature);
 				reader.BaseStream.Position = position;
 				if (isRead)
 				{
-					return TryParseSignature(signature, out BundleType _);
+					return TryParseSignature(signature!, out BundleType _);
 				}
 			}
 			return false;

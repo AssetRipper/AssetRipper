@@ -163,17 +163,25 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		public static bool IsCompilerGeneratedAttrribute(string @namespace, string name)
 		{
 			if (@namespace == CompilerServicesNamespace)
+			{
 				return name == CompilerGeneratedName;
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public static bool IsSerializeFieldAttrribute(string @namespace, string name)
 		{
 			if (@namespace == UnityEngineNamespace)
+			{
 				return name == SerializeFieldName;
+			}
 			else
+			{
 				return false;
+			}
 		}
 		#endregion
 
@@ -538,9 +546,13 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		public static bool AreSame(TypeReference type, MonoTypeContext checkContext, TypeReference checkType)
 		{
 			if (ReferenceEquals(type, checkType))
+			{
 				return true;
+			}
 			else if (type == null || checkType == null)
+			{
 				return false;
+			}
 
 			MonoTypeContext context = new MonoTypeContext(checkType, checkContext);
 			MonoTypeContext resolvedContext = context.Resolve();
@@ -556,9 +568,15 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			if (method.HasGenericParameters)
 			{
 				if (!checkMethod.HasGenericParameters)
+				{
 					return false;
+				}
+
 				if (method.GenericParameters.Count != checkMethod.GenericParameters.Count)
+				{
 					return false;
+				}
+
 				checkContext = checkContext.Merge(checkMethod);
 			}
 			if (!AreSame(method.ReturnType, checkContext, checkMethod.ReturnType))
@@ -569,19 +587,32 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			if (method.IsVarArg())
 			{
 				if (!checkMethod.IsVarArg())
+				{
 					return false;
+				}
+
 				if (method.Parameters.Count >= checkMethod.Parameters.Count)
+				{
 					return false;
+				}
+
 				if (checkMethod.GetSentinelPosition() != method.Parameters.Count)
+				{
 					return false;
+				}
 			}
 
 			if (method.HasParameters)
 			{
 				if (!checkMethod.HasParameters)
+				{
 					return false;
+				}
+
 				if (method.Parameters.Count != checkMethod.Parameters.Count)
+				{
 					return false;
+				}
 
 				for (int i = 0; i < method.Parameters.Count; i++)
 				{
@@ -640,11 +671,20 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		public static bool IsCPrimitive(string @namespace, string name)
 		{
 			if (IsPrimitive(@namespace, name))
+			{
 				return true;
+			}
+
 			if (IsString(@namespace, name))
+			{
 				return true;
+			}
+
 			if (IsObject(@namespace, name))
+			{
 				return true;
+			}
+
 			return false;
 		}
 
@@ -652,9 +692,15 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		public static bool IsBasic(string @namespace, string name)
 		{
 			if (IsObject(@namespace, name))
+			{
 				return true;
+			}
+
 			if (@namespace == SystemNamespace && name == ValueType)
+			{
 				return true;
+			}
+
 			return false;
 		}
 
@@ -755,9 +801,15 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		public static bool IsPrime(string @namespace, string name)
 		{
 			if (IsObject(@namespace, name))
+			{
 				return true;
+			}
+
 			if (IsMonoPrime(@namespace, name))
+			{
 				return true;
+			}
+
 			return false;
 		}
 
@@ -765,13 +817,25 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		public static bool IsMonoPrime(string @namespace, string name)
 		{
 			if (IsMonoBehaviour(@namespace, name))
+			{
 				return true;
+			}
+
 			if (IsBehaviour(@namespace, name))
+			{
 				return true;
+			}
+
 			if (IsComponent(@namespace, name))
+			{
 				return true;
+			}
+
 			if (IsEngineObject(@namespace, name))
+			{
 				return true;
+			}
+
 			return false;
 		}
 
@@ -843,32 +907,46 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			if (type.IsGenericInstance)
 			{
 				if (IsBuiltinGeneric(type))
+				{
 					return true;
+				}
 
 				TypeDefinition definition = type.Resolve();
 				if (definition.IsEnum)
+				{
 					return true;
+				}
 
 				if (definition.IsSerializable && type is GenericInstanceType git)
 				{
-					var allSerializableArgs = git.GenericArguments.All(t =>
+					bool allSerializableArgs = git.GenericArguments.All(t =>
 					{
-						if (t is GenericParameter p && arguments.TryGetValue(p, out TypeReference resolved))
+						if (t is GenericParameter p && arguments.TryGetValue(p, out TypeReference? resolved))
+						{
 							t = resolved;
+						}
 
 						if (t.IsGenericInstance)
+						{
 							return IsSerializableGeneric(t, arguments);
+						}
 
-						var resolvedType = t.Resolve();
+						TypeDefinition resolvedType = t.Resolve();
 
 						if (resolvedType == null)
+						{
 							return false;
+						}
 
 						if (resolvedType.IsSerializable)
+						{
 							return true;
+						}
 
 						if (resolvedType.BaseType?.Resolve()?.IsSerializable == true)
+						{
 							return true;
+						}
 
 						return false;
 					});
@@ -884,7 +962,9 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			while (type != null)
 			{
 				if (IsMonoPrime(type))
+				{
 					return true;
+				}
 
 				TypeDefinition definition = type.Resolve();
 				type = definition.BaseType;
@@ -988,13 +1068,21 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		public static bool IsSerializableModifier(FieldDefinition field)
 		{
 			if (field.HasConstant)
+			{
 				return false;
+			}
 			else if (field.IsStatic)
+			{
 				return false;
+			}
 			else if (field.IsInitOnly)
+			{
 				return false;
+			}
 			else if (IsCompilerGenerated(field))
+			{
 				return false;
+			}
 			else if (field.IsPublic)
 			{
 				if (field.IsNotSerialized)
@@ -1017,7 +1105,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			if (fieldType.IsGenericParameter)
 			{
 				GenericParameter parameter = (GenericParameter)fieldType;
-				fieldType = context.Arguments[parameter];
+				fieldType = context.Arguments?[parameter] ?? throw new Exception();
 			}
 
 			if (fieldType.IsArray)
@@ -1034,7 +1122,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				if (elementType.IsGenericParameter)
 				{
 					GenericParameter parameter = (GenericParameter)elementType;
-					elementType = context.Arguments[parameter];
+					elementType = context.Arguments?[parameter] ?? throw new Exception();
 				}
 
 				// array of arrays isn't serializable
@@ -1043,7 +1131,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 					return false;
 				}
 				// array of serializable generics is serializable
-				if (IsSerializableGeneric(elementType, context.Arguments))
+				if (IsSerializableGeneric(elementType, context.Arguments ?? throw new Exception()))
 				{
 					return true;
 				}
@@ -1062,7 +1150,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				if (listElement.IsGenericParameter)
 				{
 					GenericParameter parameter = (GenericParameter)listElement;
-					listElement = context.Arguments[parameter];
+					listElement = context.Arguments?[parameter] ?? throw new Exception();
 				}
 
 				// list of arrays isn't serializable
@@ -1096,7 +1184,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			if (fieldType.IsGenericInstance)
 			{
 				// even monobehaviour derived generic instances aren't serialiable
-				return IsSerializableGeneric(fieldType, context.Arguments);
+				return IsSerializableGeneric(fieldType, context.Arguments ?? throw new Exception());
 			}
 			if (IsMonoDerived(fieldType))
 			{

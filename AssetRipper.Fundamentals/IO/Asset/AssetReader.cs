@@ -46,7 +46,10 @@ namespace AssetRipper.Core.IO.Asset
 		{
 			int count = ReadInt32();
 			if (count < 0)
+			{
 				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
+			}
+
 			T[] array = count == 0 ? Array.Empty<T>() : new T[count];
 			for (int i = 0; i < count; i++)
 			{
@@ -66,7 +69,10 @@ namespace AssetRipper.Core.IO.Asset
 		{
 			int count = ReadInt32();
 			if (count < 0)
+			{
 				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
+			}
+
 			T[][] array = count == 0 ? Array.Empty<T[]>() : new T[count][];
 			for (int i = 0; i < count; i++)
 			{
@@ -85,7 +91,10 @@ namespace AssetRipper.Core.IO.Asset
 		{
 			int count = ReadInt32();
 			if (count < 0)
+			{
 				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
+			}
+
 			AssetList<T> list = new AssetList<T>();
 			for (int i = 0; i < count; i++)
 			{
@@ -105,7 +114,10 @@ namespace AssetRipper.Core.IO.Asset
 		{
 			int count = ReadInt32();
 			if (count < 0)
+			{
 				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
+			}
+
 			AssetList<AssetList<T>> list = new AssetList<AssetList<T>>();
 			for (int i = 0; i < count; i++)
 			{

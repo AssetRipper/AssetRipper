@@ -16,11 +16,17 @@ namespace AssetRipper.Core.Math.Vectors
 		public static bool operator ==(Vector2i left, Vector2i right)
 		{
 			if(left is null)
+			{
 				return right is null;
+			}
 			else if (right is null)
+			{
 				return false;
+			}
 			else
+			{
 				return left.X == right.X && left.Y == right.Y;
+			}
 		}
 
 		public static bool operator !=(Vector2i left, Vector2i right)
@@ -49,12 +55,18 @@ namespace AssetRipper.Core.Math.Vectors
 			return node;
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (obj == null)
+			{
 				return false;
+			}
+
 			if (obj.GetType() != typeof(Vector2i))
+			{
 				return false;
+			}
+
 			return this == (Vector2i)obj;
 		}
 

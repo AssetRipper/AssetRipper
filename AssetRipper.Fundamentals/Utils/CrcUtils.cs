@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Utils
 		public static uint CalculateDigest(byte[] data, int offset, int size)
 		{
 			Crc32 crc = new Crc32();
-			var segment = new ArraySegment<byte>(data, offset, size);
+			ArraySegment<byte> segment = new ArraySegment<byte>(data, offset, size);
 			crc.Update(segment);
 			return (uint)crc.Value;
 		}

@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Logging
 		private static readonly List<ILogger> loggers = new List<ILogger>();
 		public static bool AllowVerbose { get; set; }
 
-		public static event Action<string, object> OnStatusChanged = (_, _) => { };
+		public static event Action<string, object?> OnStatusChanged = (_, _) => { };
 
 		static Logger()
 		{
@@ -28,27 +28,47 @@ namespace AssetRipper.Core.Logging
 		public static void Log(LogType type, LogCategory category, string message)
 		{
 #if !DEBUG
-			if (type == LogType.Debug) return;
+			if (type == LogType.Debug)
+			{
+				return;
+			}
 #endif
-			if (type == LogType.Verbose && !AllowVerbose) return;
+			if (type == LogType.Verbose && !AllowVerbose)
+			{
+				return;
+			}
 
-			if (message == null) throw new ArgumentNullException(nameof(message));
+			if (message == null)
+			{
+				throw new ArgumentNullException(nameof(message));
+			}
+
 			foreach (ILogger instance in loggers)
+			{
 				instance?.Log(type, category, message);
+			}
 		}
 
 		public static void Log(LogType type, LogCategory category, string[] messages)
 		{
-			if (messages == null) throw new ArgumentNullException(nameof(messages));
+			if (messages == null)
+			{
+				throw new ArgumentNullException(nameof(messages));
+			}
+
 			foreach (string message in messages)
+			{
 				Log(type, category, message);
+			}
 		}
 
 		public static void BlankLine() => BlankLine(1);
 		public static void BlankLine(int numLines)
 		{
 			foreach (ILogger instance in loggers)
+			{
 				instance?.BlankLine(numLines);
+			}
 		}
 
 		public static void Info(string message) => Log(LogType.Info, LogCategory.None, message);
@@ -59,10 +79,14 @@ namespace AssetRipper.Core.Logging
 		public static void Error(LogCategory category, string message) => Log(LogType.Error, category, message);
 		public static void Error(Exception e) => Error(LogCategory.None, null, e);
 		public static void Error(string message, Exception e) => Error(LogCategory.None, message, e);
-		public static void Error(LogCategory category, string message, Exception e)
+		public static void Error(LogCategory category, string? message, Exception e)
 		{
-			var sb = new StringBuilder();
-			if (message != null) sb.AppendLine(message);
+			StringBuilder sb = new StringBuilder();
+			if (message != null)
+			{
+				sb.AppendLine(message);
+			}
+
 			sb.AppendLine(e.ToString());
 			Log(LogType.Error, category, sb.ToString());
 		}
@@ -122,14 +146,38 @@ namespace AssetRipper.Core.Logging
 
 		private static string GetOsName()
 		{
-			if (OperatingSystem.IsWindows()) return "Windows";
-			else if (OperatingSystem.IsLinux()) return "Linux";
-			else if (OperatingSystem.IsMacOS()) return "MacOS";
-			else if (OperatingSystem.IsBrowser()) return "Browser";
-			else if (OperatingSystem.IsAndroid()) return "Android";
-			else if (OperatingSystem.IsIOS()) return "iOS";
-			else if (OperatingSystem.IsFreeBSD()) return "FreeBSD";
-			else return "Other";
+			if (OperatingSystem.IsWindows())
+			{
+				return "Windows";
+			}
+			else if (OperatingSystem.IsLinux())
+			{
+				return "Linux";
+			}
+			else if (OperatingSystem.IsMacOS())
+			{
+				return "MacOS";
+			}
+			else if (OperatingSystem.IsBrowser())
+			{
+				return "Browser";
+			}
+			else if (OperatingSystem.IsAndroid())
+			{
+				return "Android";
+			}
+			else if (OperatingSystem.IsIOS())
+			{
+				return "iOS";
+			}
+			else if (OperatingSystem.IsFreeBSD())
+			{
+				return "FreeBSD";
+			}
+			else
+			{
+				return "Other";
+			}
 		}
 
 		public static void Add(ILogger logger) => loggers.Add(logger);
@@ -138,6 +186,6 @@ namespace AssetRipper.Core.Logging
 
 		public static void Clear() => loggers.Clear();
 
-		public static void SendStatusChange(string newStatus, object context = null) => OnStatusChanged(newStatus, context);
+		public static void SendStatusChange(string newStatus, object? context = null) => OnStatusChanged(newStatus, context);
 	}
 }

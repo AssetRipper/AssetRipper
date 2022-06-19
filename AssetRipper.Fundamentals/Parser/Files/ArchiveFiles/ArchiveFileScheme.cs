@@ -57,7 +57,7 @@ namespace AssetRipper.Core.Parser.Files.ArchiveFiles
 				};
 			}
 
-			WebScheme = WebFiles.WebFile.ReadScheme(buffer, FilePath);
+			WebScheme = WebFile.ReadScheme(buffer, FilePath);
 		}
 
 		private static byte[] ReadGZip(EndianReader reader)

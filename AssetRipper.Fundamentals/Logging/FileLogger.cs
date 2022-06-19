@@ -14,7 +14,10 @@ namespace AssetRipper.Core.Logging
 		/// <param name="filePath">The absolute path to the log file</param>
 		public FileLogger(string filePath)
 		{
-			if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentException("Invalid path", nameof(filePath));
+			if (string.IsNullOrWhiteSpace(filePath))
+			{
+				throw new ArgumentException("Invalid path", nameof(filePath));
+			}
 
 			this.filePath = filePath;
 
@@ -26,7 +29,10 @@ namespace AssetRipper.Core.Logging
 			StringBuilder stringBuilder = new StringBuilder();
 
 			if (category != LogCategory.None)
+			{
 				stringBuilder.Append($"{category.ToString()} ");
+			}
+
 			switch (type)
 			{
 				case LogType.Warning:

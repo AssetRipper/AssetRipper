@@ -11,6 +11,8 @@ namespace AssetRipper.Core.IO
 	/// <typeparam name="TKey">The exposed key type, such as an interface, base type, or primitive type</typeparam>
 	/// <typeparam name="TValue">The exposed value type, such as an interface, base type, or primitive type</typeparam>
 	public abstract class AccessDictionaryBase<TKey, TValue> : IEnumerable<NullableKeyValuePair<TKey, TValue>>
+		where TKey : notnull
+		where TValue : notnull
 	{
 		/// <summary>
 		/// The capacity of the dictionary 

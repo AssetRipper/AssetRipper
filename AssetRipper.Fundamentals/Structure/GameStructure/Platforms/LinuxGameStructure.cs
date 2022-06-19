@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Logging;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
@@ -14,12 +15,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			if (IsExecutableFile(rootPath))
 			{
 				Logger.Info(LogCategory.Import, "Linux executable found. Setting root to parent directory");
-				m_root = (new FileInfo(rootPath)).Directory;
+				m_root = (new FileInfo(rootPath)).Directory ?? throw new Exception("Could not get file directory");
 			}
 			else if (IsUnityDataDirectory(rootPath))
 			{
 				Logger.Info(LogCategory.Import, "Linux data directory found. Setting root to parent directory");
-				m_root = (new DirectoryInfo(rootPath)).Parent;
+				m_root = (new DirectoryInfo(rootPath)).Parent ?? throw new Exception("Could not get parent directory");
 			}
 			else
 			{
@@ -30,7 +31,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				}
 			}
 
-			if (!GetDataLinuxDirectory(m_root, out string dataPath, out string name))
+			if (!GetDataLinuxDirectory(m_root, out string? dataPath, out string? name))
 			{
 				throw new Exception($"Data directory wasn't found");
 			}
@@ -47,11 +48,17 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
+			{
 				Backend = Assembly.ScriptingBackend.IL2Cpp;
+			}
 			else if (HasMonoAssemblies(ManagedPath))
+			{
 				Backend = Assembly.ScriptingBackend.Mono;
+			}
 			else
+			{
 				Backend = Assembly.ScriptingBackend.Unknown;
+			}
 
 			DataPaths = new string[] { dataPath };
 		}
@@ -60,26 +67,40 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 		{
 			DirectoryInfo dinfo;
 			if (IsExecutableFile(path))
-				dinfo = (new FileInfo(path)).Directory;
+			{
+				dinfo = (new FileInfo(path)).Directory ?? throw new Exception("Could not get file directory");
+			}
 			else if (IsUnityDataDirectory(path))
+			{
 				return true;
+			}
 			else
+			{
 				dinfo = new DirectoryInfo(path);
+			}
 
 			if (!dinfo.Exists)
+			{
 				return false;
+			}
 			else
+			{
 				return IsRootLinuxDirectory(dinfo);
+			}
 		}
 
 		private static bool IsUnityDataDirectory(string folderPath)
 		{
 			if (string.IsNullOrEmpty(folderPath) || !folderPath.EndsWith($"_{DataFolderName}"))
+			{
 				return false;
+			}
 
 			DirectoryInfo directoryInfo = new DirectoryInfo(folderPath);
 			if (!directoryInfo.Exists || directoryInfo.Parent == null)
+			{
 				return false;
+			}
 
 			string folderName = directoryInfo.Name;
 			string gameName = folderName.Substring(0, folderName.IndexOf($"_{DataFolderName}"));
@@ -88,9 +109,13 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			string x64Path = Path.Combine(rootPath, gameName + x64Extension);
 			string x86_64Path = Path.Combine(rootPath, gameName + x86_64Extension);
 			if (File.Exists(x86Path) || File.Exists(x64Path) || File.Exists(x86_64Path))
+			{
 				return true;
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		private static bool IsExecutableFile(string filePath)
@@ -105,7 +130,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return GetDataLinuxDirectory(rootDiectory, out string _, out string _);
 		}
 
-		private static bool GetDataLinuxDirectory(DirectoryInfo rootDiectory, out string dataPath, out string name)
+		private static bool GetDataLinuxDirectory(DirectoryInfo rootDiectory, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? name)
 		{
 			foreach (FileInfo finfo in rootDiectory.EnumerateFiles())
 			{

@@ -54,8 +54,8 @@ namespace AssetRipper.Core.Utils
 
 		public static long GenerateInternalID()
 		{
-			s_random.NextBytes(s_idBuffer.Value);
-			return BitConverter.ToInt64(s_idBuffer.Value, 0);
+			s_random.NextBytes(s_idBuffer.Value!);
+			return BitConverter.ToInt64(s_idBuffer.Value!, 0);
 		}
 
 		public static UnityGUID CalculateAssetsGUID(IEnumerable<IUnityObjectBase> assets)

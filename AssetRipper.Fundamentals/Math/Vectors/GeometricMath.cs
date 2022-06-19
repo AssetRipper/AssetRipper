@@ -20,7 +20,10 @@
 
 			double angle = angleToP1 - angleToP2;
 			if (angle < 0)
+			{
 				angle += 2 * System.Math.PI;
+			}
+
 			return (float)(360.0 * angle / (2.0 * System.Math.PI));
 		}
 	}

@@ -26,7 +26,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 					throw new InvalidDataException($"String buffer size cannot be negative: {stringBufferSize}");
 				}
 
-				Nodes = new List<TypeTreeNode>(nodesCount);
+				Nodes.Clear();
+				Nodes.Capacity = nodesCount;
 				for (int i = 0; i < nodesCount; i++)
 				{
 					TypeTreeNode node = new TypeTreeNode();
@@ -46,7 +47,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			else
 			{
 				IsFormat5 = false;
-				Nodes = new List<TypeTreeNode>();
+				Nodes.Clear();
 				ReadTreeNode(reader, Nodes, 0);
 			}
 		}
@@ -57,7 +58,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			{
 				writer.Write(Nodes.Count);
 				writer.Write(StringBuffer.Length);
-				foreach (var node in Nodes)
+				foreach (TypeTreeNode node in Nodes)
 				{
 					node.Write(writer);
 				}
@@ -96,7 +97,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			}
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			if (Nodes == null)
 			{
@@ -192,8 +193,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			}
 		}
 
-		public List<TypeTreeNode> Nodes { get; set; }
-		public byte[] StringBuffer { get; set; }
+		public List<TypeTreeNode> Nodes { get; } = new();
+		public byte[] StringBuffer { get; set; } = Array.Empty<byte>();
 		/// <summary>
 		/// 5.0.0a1 and greater<br/>
 		/// Generation 10

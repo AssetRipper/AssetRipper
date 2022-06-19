@@ -25,10 +25,22 @@ namespace AssetRipper.Core.Math.Colors
 
 		private static byte ConvertFloatToByte(float value)
 		{
-			if (float.IsNaN(value)) return byte.MinValue;
+			if (float.IsNaN(value))
+			{
+				return byte.MinValue;
+			}
+
 			float scaledValue = value * 255.0f;
-			if (scaledValue <= 0f) return byte.MinValue;
-			if (scaledValue >= 255f) return byte.MaxValue;
+			if (scaledValue <= 0f)
+			{
+				return byte.MinValue;
+			}
+
+			if (scaledValue >= 255f)
+			{
+				return byte.MaxValue;
+			}
+
 			return (byte)scaledValue;
 		}
 

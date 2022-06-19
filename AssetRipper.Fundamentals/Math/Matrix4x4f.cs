@@ -49,9 +49,14 @@ namespace AssetRipper.Core.Math
 		public Matrix4x4f(float[] values)
 		{
 			if (values == null)
+			{
 				throw new ArgumentNullException(nameof(values));
+			}
+
 			if (values.Length != 16)
+			{
 				throw new ArgumentOutOfRangeException(nameof(values), "There must be exactly sixteen input values for Matrix.");
+			}
 
 			E00 = values[0];
 			E01 = values[1];
@@ -201,17 +206,21 @@ namespace AssetRipper.Core.Math
 			return GetColumn(0).GetHashCode() ^ (GetColumn(1).GetHashCode() << 2) ^ (GetColumn(2).GetHashCode() >> 2) ^ (GetColumn(3).GetHashCode() >> 1);
 		}
 
-		public override bool Equals(object other)
+		public override bool Equals(object? other)
 		{
 			if (other is Matrix4x4f matrix)
+			{
 				return Equals(matrix);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
-		public bool Equals(Matrix4x4f other)
+		public bool Equals(Matrix4x4f? other)
 		{
-			return GetColumn(0).Equals(other.GetColumn(0))
+			return other is not null && GetColumn(0).Equals(other.GetColumn(0))
 				   && GetColumn(1).Equals(other.GetColumn(1))
 				   && GetColumn(2).Equals(other.GetColumn(2))
 				   && GetColumn(3).Equals(other.GetColumn(3));

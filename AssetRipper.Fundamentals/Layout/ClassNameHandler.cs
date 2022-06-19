@@ -22,11 +22,17 @@ namespace AssetRipper.Core.Layout
 		public static string? GetClassName(this LayoutInfo layout, ClassIDType classID)
 		{
 			if (classID == ClassIDType.PrefabInstance)
+			{
 				return GetPrefabClassName(layout.Version);
+			}
 			else if (ClassNames.TryGetValue(classID, out string? name))
+			{
 				return name;
+			}
 			else
+			{
 				return null;
+			}
 		}
 
 		private static string GetPrefabClassName(UnityVersion version)

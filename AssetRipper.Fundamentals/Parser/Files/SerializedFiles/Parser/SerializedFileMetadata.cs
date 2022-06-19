@@ -158,17 +158,17 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		public UnityVersion UnityVersion { get; set; }
 		public BuildTarget TargetPlatform { get; set; }
 		public bool EnableTypeTree { get; set; }
-		public SerializedType[] Types { get; set; }
+		public SerializedType[] Types { get; set; } = Array.Empty<SerializedType>();
 		/// <summary>
 		/// Indicate that <see cref="ObjectInfo.FileID"/> is 8 bytes size<br/>
 		/// Serialized files with this enabled field doesn't exist
 		/// </summary>
 		public uint LongFileID { get; set; }
 		public bool SwapEndianess { get; set; }
-		public ObjectInfo[] Object { get; set; }
-		public LocalSerializedObjectIdentifier[] ScriptTypes { get; set; }
-		public FileIdentifier[] Externals { get; set; }
-		public string UserInformation { get; set; }
-		public SerializedTypeReference[] RefTypes { get; set; }
+		public ObjectInfo[] Object { get; set; } = Array.Empty<ObjectInfo>();
+		public LocalSerializedObjectIdentifier[] ScriptTypes { get; set; } = Array.Empty<LocalSerializedObjectIdentifier>();
+		public FileIdentifier[] Externals { get; set; } = Array.Empty<FileIdentifier>();
+		public string UserInformation { get; set; } = "";
+		public SerializedTypeReference[] RefTypes { get; set; } = Array.Empty<SerializedTypeReference>();
 	}
 }

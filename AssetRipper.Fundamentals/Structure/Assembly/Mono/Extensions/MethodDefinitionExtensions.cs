@@ -17,12 +17,18 @@ namespace AssetRipper.Core.Structure.Assembly.Mono.Extensions
 		public static int GetSentinelPosition(this IMethodSignature self)
 		{
 			if (!self.HasParameters)
+			{
 				return -1;
+			}
 
-			var parameters = self.Parameters;
+			global::Mono.Collections.Generic.Collection<ParameterDefinition> parameters = self.Parameters;
 			for (int i = 0; i < parameters.Count; i++)
+			{
 				if (parameters[i].ParameterType.IsSentinel)
+				{
 					return i;
+				}
+			}
 
 			return -1;
 		}

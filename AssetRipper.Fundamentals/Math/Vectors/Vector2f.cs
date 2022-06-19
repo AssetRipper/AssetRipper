@@ -116,17 +116,21 @@ namespace AssetRipper.Core.Math.Vectors
 			return X.GetHashCode() ^ Y.GetHashCode() << 2;
 		}
 
-		public override bool Equals(object other)
+		public override bool Equals(object? other)
 		{
 			if (other is Vector2f asset)
+			{
 				return Equals(asset);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
-		public bool Equals(Vector2f other)
+		public bool Equals(Vector2f? other)
 		{
-			return X == other.X && Y == other.Y;
+			return other is not null && X == other.X && Y == other.Y;
 		}
 
 		public override string ToString()

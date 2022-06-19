@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace AssetRipper.Core.Structure.GameStructure.Platforms
 {
@@ -23,7 +24,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
-			if (!GetDataDirectory(m_root, out string dataPath))
+			if (!GetDataDirectory(m_root, out string? dataPath))
 			{
 				throw new Exception($"Data directory wasn't found");
 			}
@@ -41,11 +42,17 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Il2CppMetaDataPath = Path.Combine(GameDataPath, MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
+			{
 				Backend = Assembly.ScriptingBackend.IL2Cpp;
+			}
 			else if (HasMonoAssemblies(ManagedPath))
+			{
 				Backend = Assembly.ScriptingBackend.Mono;
+			}
 			else
+			{
 				Backend = Assembly.ScriptingBackend.Unknown;
+			}
 
 			DataPaths = new string[] { dataPath };
 		}
@@ -65,7 +72,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			return GetDataDirectory(rootDiectory, out string _);
 		}
 
-		private static bool GetDataDirectory(DirectoryInfo rootDiectory, out string dataPath)
+		private static bool GetDataDirectory(DirectoryInfo rootDiectory, [NotNullWhen(true)] out string? dataPath)
 		{
 			foreach (FileInfo finfo in rootDiectory.EnumerateFiles())
 			{

@@ -96,7 +96,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			}
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			if (Type == null)
 			{
@@ -144,11 +144,11 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 		/// <summary>
 		/// Name of the data type. This can be the name of any substructure or a static predefined type.
 		/// </summary>
-		public string Type { get; set; }
+		public string Type { get; set; } = "";
 		/// <summary>
 		/// Name of the field.
 		/// </summary>
-		public string Name { get; set; }
+		public string Name { get; set; } = "";
 		/// <summary>
 		/// Size of the data value in bytes, e.g. 4 for int. -1 means that there is an array somewhere inside its hierarchy<br/>
 		/// Note: The padding for the alignment is not included in the size.

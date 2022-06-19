@@ -4,9 +4,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 {
 	public sealed class SerializedTypeReference : SerializedTypeBase
 	{
-		public string ClassName { get; set; }
-		public string NameSpace { get; set; }
-		public string AsmName { get; set; }
+		public string ClassName { get; set; } = "";
+		public string NameSpace { get; set; } = "";
+		public string AsmName { get; set; } = "";
 
 		public override void Read(SerializedReader reader, bool hasTypeTree)
 		{

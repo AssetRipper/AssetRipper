@@ -33,8 +33,8 @@ namespace AssetRipper.Core.Parser.Files.BundleFile.Parser
 			return Path;
 		}
 
-		public string Path { get; set; }
-		public string PathOrigin { get; set; }
+		public string Path { get; set; } = "";
+		public string PathOrigin { get; set; } = "";
 		public long Offset { get; set; }
 		public long Size { get; set; }
 		public int BlobIndex { get; set; }
