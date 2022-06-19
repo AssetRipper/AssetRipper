@@ -17,6 +17,7 @@
 		<DebugSymbols>true</DebugSymbols>
 		<DefineConstants>TRACE;NET_CORE</DefineConstants>
 		<Platforms>AnyCPU</Platforms>
+		<IsTrimmable>true</IsTrimmable>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
