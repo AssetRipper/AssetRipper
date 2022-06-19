@@ -20,7 +20,7 @@
 		/// Padding is added after blocks info, so files within asset bundles start on aligned boundaries.
 		/// </summary>
 		/// <remarks>
-		/// Introduced in 2019.4.40f1?, 2020.3.34f1, 2021.3.2f1, 2022.1.1f1 so that Switch patching works appropriately.<br/>
+		/// Introduced in 2019.4.41f1?, 2020.3.34f1, 2021.3.2f1, 2022.1.1f1 so that Switch patching works appropriately.<br/>
 		/// <see href="https://unity3d.com/unity/whats-new/2021.3.2"/><br/>
 		/// <see href="https://issuetracker.unity3d.com/issues/files-within-assetbundles-do-not-start-on-aligned-boundaries-breaking-patching-on-nintendo-switch"/><br/>
 		/// This fix implies that loading newly generated AssetBundles will require using this new Unity editor/runtime combination. It is not backwards compatible.

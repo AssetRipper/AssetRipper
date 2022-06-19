@@ -110,7 +110,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Yaml.Tests", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.IO.Endian", "AssetRipper.IO.Endian\AssetRipper.IO.Endian.csproj", "{82436B39-9077-407B-9FE6-51E1BEADB855}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.IO.FileReading", "AssetRipper.IO.FileReading\AssetRipper.IO.FileReading.csproj", "{95684DEF-EFC1-4649-AD9E-4660DA7A584A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.IO.Files", "AssetRipper.IO.Files\AssetRipper.IO.Files.csproj", "{95684DEF-EFC1-4649-AD9E-4660DA7A584A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
