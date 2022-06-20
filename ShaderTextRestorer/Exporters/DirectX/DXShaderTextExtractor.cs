@@ -24,7 +24,24 @@ namespace ShaderTextRestorer.Exporters.DirectX
 				uint fourCC = BitConverter.ToUInt32(data, dataOffset);
 				if (!D3DHandler.IsCompatible(fourCC))
 				{
-					throw new Exception($"Magic number {fourCC} doesn't match");
+					int length = data.Length - 0x20;
+					int offset = 0;
+					byte[] newData = new byte[length];
+					for (int j = 0; j < length; j++)
+					{
+						if (j == 6)
+						{
+							offset += 0x20; 
+						}
+						newData[j] = data[offset];
+						offset++;
+					}
+					data = newData;
+
+					fourCC = BitConverter.ToUInt32(data, dataOffset);
+					if (!D3DHandler.IsCompatible(fourCC)) { 
+						throw new Exception($"Magic number {fourCC} doesn't match");
+					}
 				}
 				return D3DHandler.TryGetShaderText(data, dataOffset, out disassemblyText);
 			}
