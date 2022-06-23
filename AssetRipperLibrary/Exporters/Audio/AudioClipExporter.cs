@@ -19,10 +19,10 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return IsSupportedExportFormat(AudioFormat) && asset is IAudioClip audio && AudioClipDecoder.CanDecode(audio);
+			return asset is IAudioClip audio && AudioClipDecoder.CanDecode(audio);
 		}
 
-		private static bool IsSupportedExportFormat(AudioExportFormat format) => format switch
+		public static bool IsSupportedExportFormat(AudioExportFormat format) => format switch
 		{
 			AudioExportFormat.Default or AudioExportFormat.PreferWav or AudioExportFormat.PreferMp3 => true,
 			_ => false,

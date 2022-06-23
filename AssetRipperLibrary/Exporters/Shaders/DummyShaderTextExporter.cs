@@ -6,7 +6,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using System.Globalization;
@@ -37,16 +36,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 	}
 ";
 
-		private readonly ShaderExportMode exportMode;
-
-		public DummyShaderTextExporter(LibraryConfiguration configuration)
-		{
-			exportMode = configuration.ShaderExportMode;
-		}
-
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return exportMode is ShaderExportMode.Dummy && asset is IShader shader && (shader.Has_ParsedForm_C48() || asset is ITextAsset);
+			return asset is IShader;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
@@ -117,7 +109,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 				writer.Write('}');
 			}
-			else
+			else //should never happen
 			{
 				throw new NotSupportedException();
 			}

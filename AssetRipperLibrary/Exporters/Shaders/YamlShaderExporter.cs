@@ -2,7 +2,6 @@
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 
 namespace AssetRipper.Library.Exporters.Shaders
@@ -12,16 +11,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 	/// </summary>
 	public class YamlShaderExporter : YamlExporterBase
 	{
-		private readonly ShaderExportMode exportMode;
-
-		public YamlShaderExporter(LibraryConfiguration configuration)
-		{
-			exportMode = configuration.ShaderExportMode;
-		}
-
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return exportMode is ShaderExportMode.Yaml && asset is IShader;
+			return asset is IShader;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)

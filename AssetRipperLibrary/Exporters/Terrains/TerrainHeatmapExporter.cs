@@ -14,17 +14,15 @@ namespace AssetRipper.Library.Exporters.Terrains
 {
 	public class TerrainHeatmapExporter : BinaryAssetExporter
 	{
-		TerrainExportMode ExportMode { get; }
 		ImageExportFormat ImageFormat { get; }
 		public TerrainHeatmapExporter(LibraryConfiguration configuration)
 		{
-			ExportMode = configuration.TerrainExportMode;
 			ImageFormat = configuration.ImageExportFormat;
 		}
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return ExportMode == TerrainExportMode.Heatmap && asset is ITerrainData;
+			return asset is ITerrainData;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)

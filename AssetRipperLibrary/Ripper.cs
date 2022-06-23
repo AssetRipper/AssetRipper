@@ -258,7 +258,7 @@ namespace AssetRipper.Library
 		private void OverrideNormalExporters()
 		{
 			//Yaml Exporters
-			YamlStreamedAssetExporter streamedAssetExporter = new YamlStreamedAssetExporter();
+			YamlStreamedAssetExporter streamedAssetExporter = new();
 			OverrideExporter<IMesh>(streamedAssetExporter);
 			OverrideExporter<ITexture2D>(streamedAssetExporter);//ICubemap also by inheritance
 			OverrideExporter<ITexture3D>(streamedAssetExporter);
@@ -276,28 +276,28 @@ namespace AssetRipper.Library
 			OverrideExporter<ISprite>(textureExporter);
 
 			//Shader exporters
-			OverrideExporter<IShader>(new DummyShaderTextExporter(Settings));
-			OverrideExporter<IShader>(new YamlShaderExporter(Settings));
-			OverrideExporter<IShader>(new ShaderDisassemblyExporter(Settings));
+			ConditionalOverrideExporter<IShader>(new DummyShaderTextExporter(), Settings.ShaderExportMode == ShaderExportMode.Dummy);
+			ConditionalOverrideExporter<IShader>(new YamlShaderExporter(), Settings.ShaderExportMode == ShaderExportMode.Yaml);
+			ConditionalOverrideExporter<IShader>(new ShaderDisassemblyExporter(), Settings.ShaderExportMode == ShaderExportMode.Disassembly);
 			OverrideExporter<IShader>(new SimpleShaderExporter());
 
 			//Audio exporters
 			OverrideExporter<IAudioClip>(new YamlAudioExporter());
-			OverrideExporter<IAudioClip>(new NativeAudioExporter(Settings));
-			OverrideExporter<IAudioClip>(new AudioClipExporter(Settings));
+			ConditionalOverrideExporter<IAudioClip>(new NativeAudioExporter(), Settings.AudioExportFormat == AudioExportFormat.Native);
+			ConditionalOverrideExporter<IAudioClip>(new AudioClipExporter(Settings), AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat));
 
 			//Mesh exporters
 			OverrideExporter<Core.Classes.Mesh.Mesh>(new GlbMeshExporter(Settings));
 			OverrideExporter<Core.Classes.Mesh.Mesh>(new UnifiedMeshExporter(Settings));
 
 			//Terrain exporters
-			OverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings));
-			OverrideExporter<ITerrainData>(new TerrainObjExporter(Settings));
+			ConditionalOverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings), Settings.TerrainExportMode == TerrainExportMode.Heatmap);
+			ConditionalOverrideExporter<ITerrainData>(new TerrainObjExporter(), Settings.TerrainExportMode == TerrainExportMode.Obj);
 
 			//Script exporters
 			OverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));
 			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
-			OverrideExporter<IMonoScript>(new SkipScriptExporter(Settings));
+			ConditionalOverrideExporter<IMonoScript>(new SkipScriptExporter(), Settings.ScriptContentLevel == Core.Configuration.ScriptContentLevel.Level0);
 
 			//Animator Controller
 			OverrideExporter<IAnimatorController>(new AnimatorControllerExporter());
@@ -322,8 +322,14 @@ namespace AssetRipper.Library
 			OverrideExporter<IMonoBehaviour>(engineExporter);
 		}
 
+		private void ConditionalOverrideExporter<T>(IAssetExporter exporter, bool shouldOverride)
+		{
+			if (shouldOverride)
+			{
+				OverrideExporter<T>(exporter);
+			}
+		}
 		public void OverrideExporter<T>(IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter<T>(exporter, true);
-		public void OverrideExporter<T>(IAssetExporter exporter, bool allowInheritance) => GameStructure.Exporter.OverrideExporter<T>(exporter, allowInheritance);
 		public void AddPostExporter(IPostExporter exporter) => PostExporters.Add(exporter);
 	}
 }

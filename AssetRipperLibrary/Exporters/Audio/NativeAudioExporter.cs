@@ -8,7 +8,6 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using System.IO;
 
@@ -16,12 +15,9 @@ namespace AssetRipper.Library.Exporters.Audio
 {
 	public class NativeAudioExporter : BinaryAssetExporter
 	{
-		private AudioExportFormat AudioFormat { get; }
-		public NativeAudioExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
-
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return AudioFormat == AudioExportFormat.Native && asset is IAudioClip;
+			return asset is IAudioClip;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)

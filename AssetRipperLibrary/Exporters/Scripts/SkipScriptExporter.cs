@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -12,12 +11,6 @@ namespace AssetRipper.Library.Exporters.Scripts
 {
 	public class SkipScriptExporter : IAssetExporter
 	{
-		private readonly ScriptContentLevel level;
-		public SkipScriptExporter(CoreConfiguration configuration)
-		{
-			level = configuration.ScriptContentLevel;
-		}
-
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
 			return new EmptyExportCollection();
@@ -45,7 +38,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		public bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is IMonoScript && level == ScriptContentLevel.Level0;
+			return asset is IMonoScript;
 		}
 
 		public AssetType ToExportType(IUnityObjectBase asset)

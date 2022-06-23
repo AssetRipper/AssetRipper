@@ -4,7 +4,6 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using System.IO;
 using System.Text;
@@ -13,15 +12,9 @@ namespace AssetRipper.Library.Exporters.Terrains
 {
 	public class TerrainObjExporter : BinaryAssetExporter
 	{
-		public TerrainExportMode ExportMode;
-		public TerrainObjExporter(LibraryConfiguration configuration)
-		{
-			ExportMode = configuration.TerrainExportMode;
-		}
-
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return ExportMode == TerrainExportMode.Obj && asset is ITerrainData;
+			return asset is ITerrainData;
 		}
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)

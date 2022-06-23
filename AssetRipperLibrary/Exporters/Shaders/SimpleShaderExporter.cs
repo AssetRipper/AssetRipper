@@ -15,14 +15,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 	{
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is IShader && asset is ITextAsset textAsset)
-			{
-				return HasDecompiledShaderText(textAsset.Script_C49.String);
-			}
-			else
-			{
-				return false;
-			}
+			return asset is IShader && asset is ITextAsset textAsset && HasDecompiledShaderText(textAsset.Script_C49.String);
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -33,12 +26,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		private static bool HasDecompiledShaderText(string text)
 		{
-			if (string.IsNullOrEmpty(text))
-			{
-				return false;
-			}
-
-			return !text.Contains("Program") && !text.Contains("SubProgram");
+			return !string.IsNullOrEmpty(text) 
+				&& !text.Contains("Program") 
+				&& !text.Contains("SubProgram");
 		}
 	}
 }

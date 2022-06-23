@@ -2,7 +2,6 @@ using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using ShaderTextRestorer.Exporters;
 using ShaderTextRestorer.Exporters.DirectX;
@@ -13,19 +12,10 @@ namespace AssetRipper.Library.Exporters.Shaders
 {
 	public sealed class ShaderDisassemblyExporter : BinaryAssetExporter
 	{
-		ShaderExportMode ExportMode { get; set; }
-
-		public ShaderDisassemblyExporter(LibraryConfiguration options)
-		{
-			ExportMode = options.ShaderExportMode;
-		}
-
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is IShader && ExportMode == ShaderExportMode.Disassembly;
+			return asset is IShader;
 		}
-
-		public static bool IsDX11ExportMode(ShaderExportMode mode) => mode == ShaderExportMode.Disassembly;
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
@@ -38,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			}
 
 			using Stream fileStream = File.Create(path);
-			ExportBinary(shader, container, fileStream, ShaderExporterInstantiator);
+			ExportBinary(shader, fileStream, ShaderExporterInstantiator);
 			return true;
 		}
 
@@ -71,7 +61,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			}
 		}
 
-		public void ExportBinary(IShader shader, IExportContainer container, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
+		private void ExportBinary(IShader shader, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
 		{
 			if (shader.Has_ParsedForm_C48())
 			{
