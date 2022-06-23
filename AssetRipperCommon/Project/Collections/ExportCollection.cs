@@ -19,6 +19,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_200;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_218;
 using AssetRipper.SourceGenerated.Classes.ClassID_221;
+using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_30;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
@@ -132,6 +133,9 @@ namespace AssetRipper.Core.Project.Collections
 					break;
 				case ITransform transform:
 					transform.ConvertToEditorFormat();
+					break;
+				case IRenderer renderer:
+					renderer.ConvertToEditorFormat();
 					break;
 				case IMesh mesh:
 					mesh.ConvertToEditorFormat();
