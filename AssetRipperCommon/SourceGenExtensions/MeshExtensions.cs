@@ -8,6 +8,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static bool IsCombinedMesh(this IMesh mesh) => mesh?.NameString == "Combined Mesh (root scene)";
 
+		public static void ConvertToEditorFormat(this IMesh mesh)
+		{
+			mesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
+		}
+
 		public static bool CheckAssetIntegrity(this IMesh mesh)
 		{
 			if (mesh.Has_StreamData_C43() && mesh.Has_VertexData_C43() && mesh.SerializedFile is not null)
@@ -77,6 +82,18 @@ namespace AssetRipper.Core.SourceGenExtensions
 			else
 			{
 				return default;
+			}
+		}
+
+		public static void SetMeshOptimizationFlags(this IMesh mesh, MeshOptimizationFlags value)
+		{
+			if (mesh.Has_MeshOptimizationFlags_C43())
+			{
+				mesh.MeshOptimizationFlags_C43 = (int)value;
+			}
+			else if (mesh.Has_MeshOptimized_C43())
+			{
+				mesh.MeshOptimized_C43 = value == MeshOptimizationFlags.Everything;
 			}
 		}
 	}

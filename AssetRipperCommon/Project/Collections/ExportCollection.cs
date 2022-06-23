@@ -21,6 +21,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_218;
 using AssetRipper.SourceGenerated.Classes.ClassID_221;
 using AssetRipper.SourceGenerated.Classes.ClassID_30;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_47;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_62;
@@ -123,37 +124,36 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected static IUnityObjectBase Convert(IUnityObjectBase asset, IExportContainer container)
 		{
-			if (asset is IGameObject gameObject)
+			switch (asset)
 			{
-				gameObject.ConvertToEditorFormat(container);
-			}
-			else if (asset is ITransform transform)
-			{
-				transform.ConvertToEditorFormat();
-			}
-			else if (asset is IGraphicsSettings graphicsSettings)
-			{
-				graphicsSettings.ConvertToEditorFormat();
-			}
-			else if (asset is IQualitySettings qualitySettings)
-			{
-				qualitySettings.ConvertToEditorFormat();
-			}
-			else if (asset is IPhysics2DSettings physics2DSettings)
-			{
-				physics2DSettings.ConvertToEditorFormat();
-			}
-			else if (asset is ITerrain terrain)
-			{
-				terrain.ConvertToEditorFormat();
-			}
-			else if (asset is ILightmapSettings lightmapSettings)
-			{
-				lightmapSettings.ConvertToEditorFormat();
-			}
-			else if (asset is INavMeshSettings navMeshSettings)
-			{
-				navMeshSettings.ConvertToEditorFormat();
+				//ordered by approximate frequency
+				case IGameObject gameObject:
+					gameObject.ConvertToEditorFormat(container);
+					break;
+				case ITransform transform:
+					transform.ConvertToEditorFormat();
+					break;
+				case IMesh mesh:
+					mesh.ConvertToEditorFormat();
+					break;
+				case ITerrain terrain:
+					terrain.ConvertToEditorFormat();
+					break;
+				case IGraphicsSettings graphicsSettings:
+					graphicsSettings.ConvertToEditorFormat();
+					break;
+				case IQualitySettings qualitySettings:
+					qualitySettings.ConvertToEditorFormat();
+					break;
+				case IPhysics2DSettings physics2DSettings:
+					physics2DSettings.ConvertToEditorFormat();
+					break;
+				case ILightmapSettings lightmapSettings:
+					lightmapSettings.ConvertToEditorFormat();
+					break;
+				case INavMeshSettings navMeshSettings:
+					navMeshSettings.ConvertToEditorFormat();
+					break;
 			}
 			return asset;
 		}
