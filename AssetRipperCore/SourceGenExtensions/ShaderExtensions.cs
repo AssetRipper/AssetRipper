@@ -11,36 +11,36 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static ShaderSubProgramBlob[] ReadBlobs(this IShader shader)
 		{
+			LayoutInfo layout = new LayoutInfo(shader.AssetUnityVersion, Parser.Files.BuildTarget.NoTarget, shader.TransferInstructionFlags);
 			if (shader.Has_CompressedBlob_C48())
 			{
-				LayoutInfo layout = new LayoutInfo(shader.AssetUnityVersion, Parser.Files.BuildTarget.NoTarget, shader.TransferInstructionFlags);
 				if (shader.Has_CompressedLengths_C48_UInt32_Array())
 				{
 					return UnpackSubProgramBlobs(
 						layout,
-						shader.Offsets_C48_UInt32_Array,
+						shader.Offsets_C48_UInt32_Array!,
 						shader.CompressedLengths_C48_UInt32_Array,
-						shader.DecompressedLengths_C48_UInt32_Array,
+						shader.DecompressedLengths_C48_UInt32_Array!,
 						shader.CompressedBlob_C48);
 				}
 				else if (shader.Has_CompressedLengths_C48_UInt32_Array_Array())
 				{
 					return UnpackSubProgramBlobs(
 						layout, 
-						shader.Offsets_C48_UInt32_Array_Array, 
+						shader.Offsets_C48_UInt32_Array_Array!, 
 						shader.CompressedLengths_C48_UInt32_Array_Array, 
-						shader.DecompressedLengths_C48_UInt32_Array_Array, 
+						shader.DecompressedLengths_C48_UInt32_Array_Array!, 
 						shader.CompressedBlob_C48);
 				}
-				else
-				{
-					return UnpackSubProgramBlobs(
-						layout, 
-						0, 
-						(uint)shader.CompressedBlob_C48.Length, 
-						shader.DecompressedSize_C48, 
-						shader.CompressedBlob_C48);
-				}
+			}
+			else if (shader.Has_SubProgramBlob_C48())//todo: rename to CompressedBlob
+			{
+				return UnpackSubProgramBlobs(
+					layout,
+					0,
+					(uint)shader.SubProgramBlob_C48.Length,
+					shader.DecompressedSize_C48,
+					shader.SubProgramBlob_C48);
 			}
 			return Array.Empty<ShaderSubProgramBlob>();
 		}
