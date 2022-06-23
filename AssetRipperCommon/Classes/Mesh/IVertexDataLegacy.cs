@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public interface IVertexData : IUnityAssetBase
+	public interface IVertexDataLegacy : IUnityAssetBase
 	{
 		/// <summary>
 		/// Less than 2018.1
@@ -18,11 +18,11 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// 4.0.0 and greater
 		/// </summary>
-		IChannelInfo[] Channels { get; }
+		IChannelInfoLegacy[] Channels { get; }
 		/// <summary>
 		/// Less than 5.0.0
 		/// </summary>
-		IStreamInfo[] Streams { get; }
+		IStreamInfoLegacy[] Streams { get; }
 		/// <summary>
 		/// Actually called m_DataSize
 		/// </summary>
@@ -31,10 +31,10 @@ namespace AssetRipper.Core.Classes.Mesh
 
 	public static class VertexDataExtensions
 	{
-		public static bool IsSet(this IVertexData instance) => instance.VertexCount > 0;
+		public static bool IsSet(this IVertexDataLegacy instance) => instance.VertexCount > 0;
 
 		public static void ReadData(
-			this IVertexData instance, 
+			this IVertexDataLegacy instance, 
 			UnityVersion version,
 			out int vertexCount,
 			out Vector3f[] vertices,

@@ -109,12 +109,12 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Shapes - real name
 		/// </summary>
-		public IMeshBlendShape[] BlendShapes
+		public IMeshBlendShapeLegacy[] BlendShapes
 		{
 			get => Shapes.Shapes;
 			set => Shapes.Shapes = value;
 		}
-		public IBlendShapeVertex[] ShapeVertices
+		public BlendShapeVertex[] ShapeVertices
 		{
 			get => Shapes.Vertices;
 			set => Shapes.Vertices = value;

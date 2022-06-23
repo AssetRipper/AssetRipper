@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class StreamInfo : IStreamInfo
+	public sealed class StreamInfo : IStreamInfoLegacy
 	{
 		public uint ChannelMask { get; set; }
 		public uint Offset { get; set; }

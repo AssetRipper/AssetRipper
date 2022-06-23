@@ -17,7 +17,7 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class VertexData : UnityAssetBase, IVertexData
+	public sealed class VertexData : UnityAssetBase, IVertexDataLegacy
 	{
 		public static int ToSerializedVersion(UnityVersion version)
 		{
@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return skin;
 		}
 
-		public Vector3f[] GenerateVertices(UnityVersion version, ISubMesh submesh)
+		public Vector3f[] GenerateVertices(UnityVersion version, ISubMeshLegacy submesh)
 		{
 			ChannelInfo channel = GetChannel(version, ShaderChannel.Vertex);
 			if (!channel.IsSet())
@@ -357,9 +357,9 @@ namespace AssetRipper.Core.Classes.Mesh
 		public uint CurrentChannels { get; set; }
 		public uint VertexCount { get; set; }
 		public ChannelInfo[] m_Channels { get; set; }
-		public IChannelInfo[] Channels => m_Channels;
+		public IChannelInfoLegacy[] Channels => m_Channels;
 		public StreamInfo[] m_Streams { get; set; }
-		public IStreamInfo[] Streams => m_Streams;
+		public IStreamInfoLegacy[] Streams => m_Streams;
 		public byte[] Data { get; set; }
 
 		public const string CurrentChannelsName = "m_CurrentChannels";

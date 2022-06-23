@@ -1,4 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Classes.ClassID_43;
+﻿using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Subclasses.MeshBlendShape;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -6,6 +7,30 @@ namespace AssetRipper.Core.SourceGenExtensions
 	public static class MeshExtensions
 	{
 		public static bool IsCombinedMesh(this IMesh mesh) => mesh?.NameString == "Combined Mesh (root scene)";
+
+		public static bool CheckAssetIntegrity(this IMesh mesh)
+		{
+			if (mesh.Has_StreamData_C43() && mesh.Has_VertexData_C43() && mesh.SerializedFile is not null)
+			{
+				if (mesh.VertexData_C43.IsSet())
+				{
+					return mesh.StreamData_C43.CheckIntegrity(mesh.SerializedFile);
+				}
+			}
+			return true;
+		}
+
+		public static byte[] GetChannelsData(this IMesh mesh)
+		{
+			if (mesh.Has_StreamData_C43() && mesh.StreamData_C43.IsSet())
+			{
+				return mesh.StreamData_C43.GetContent(mesh.SerializedFile);
+			}
+			else
+			{
+				return mesh.VertexData_C43?.Data ?? Array.Empty<byte>();
+			}
+		}
 
 		public static string? FindBlendShapeNameByCRC(this IMesh mesh, uint crc)
 		{
@@ -34,9 +59,25 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (mesh.Has_IndexFormat_C43())
 			{
-				return mesh.IndexFormat_C43 == (int)Classes.Mesh.IndexFormat.UInt16;
+				return mesh.IndexFormat_C43 == (int)IndexFormat.UInt16;
 			}
 			return true;
+		}
+
+		public static MeshOptimizationFlags GetMeshOptimizationFlags(this IMesh mesh)
+		{
+			if (mesh.Has_MeshOptimizationFlags_C43())
+			{
+				return (MeshOptimizationFlags)mesh.MeshOptimizationFlags_C43;
+			}
+			else if (mesh.Has_MeshOptimized_C43())
+			{
+				return mesh.MeshOptimized_C43 ? MeshOptimizationFlags.Everything : MeshOptimizationFlags.PolygonOrder;
+			}
+			else
+			{
+				return default;
+			}
 		}
 	}
 }

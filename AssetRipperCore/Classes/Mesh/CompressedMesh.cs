@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class CompressedMesh : ICompressedMesh
+	public sealed class CompressedMesh : ICompressedMeshLegacy
 	{
 		public IPackedFloatVector Vertices { get; } = new PackedFloatVector();
 		public IPackedFloatVector UV { get; } = new PackedFloatVector();

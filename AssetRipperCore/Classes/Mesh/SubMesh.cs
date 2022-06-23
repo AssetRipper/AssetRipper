@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class SubMesh : ISubMesh
+	public sealed class SubMesh : ISubMeshLegacy
 	{
 		/// <summary>Offset in index buffer</summary>
 		public uint FirstByte { get; set; }

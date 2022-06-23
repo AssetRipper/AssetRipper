@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class BlendShapeVertex : IBlendShapeVertex
+	public sealed class BlendShapeVertex : IAsset
 	{
 		public void Read(AssetReader reader)
 		{

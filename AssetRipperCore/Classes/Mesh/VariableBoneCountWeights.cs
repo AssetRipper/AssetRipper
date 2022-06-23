@@ -6,7 +6,7 @@ using AssetRipper.Yaml.Extensions;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class VariableBoneCountWeights : IVariableBoneCountWeights
+	public sealed class VariableBoneCountWeights
 	{
 		public void Read(AssetReader reader)
 		{

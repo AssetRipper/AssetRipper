@@ -4,9 +4,9 @@ namespace AssetRipper.Core.Converters.Mesh
 {
 	public static class BlendShapeConverter
 	{
-		public static IMeshBlendShapeChannel[] GenerateBlendChannels(IMeshBlendShape[] shapes)
+		public static IMeshBlendShapeChannelLegacy[] GenerateBlendChannels(IMeshBlendShapeLegacy[] shapes)
 		{
-			IMeshBlendShapeChannel[] channels = new IMeshBlendShapeChannel[shapes.Length];
+			IMeshBlendShapeChannelLegacy[] channels = new IMeshBlendShapeChannelLegacy[shapes.Length];
 			for (int i = 0; i < shapes.Length; i++)
 			{
 				channels[i] = new MeshBlendShapeChannel(shapes[i].Name.String, i, 1);
@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			return channels;
 		}
 
-		public static float[] GenerateFullWeights(IMeshBlendShape[] shapes)
+		public static float[] GenerateFullWeights(IMeshBlendShapeLegacy[] shapes)
 		{
 			float[] fullWeights = new float[shapes.Length];
 			for (int i = 0; i < shapes.Length; i++)

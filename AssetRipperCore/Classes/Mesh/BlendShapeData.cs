@@ -9,11 +9,26 @@ using System.Linq;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class BlendShapeData : IBlendShapeData
+	public static class BlendShapeDataExtensions
 	{
-		public IBlendShapeVertex[] Vertices { get; set; } = Array.Empty<IBlendShapeVertex>();
-		public IMeshBlendShape[] Shapes { get; set; } = Array.Empty<IMeshBlendShape>();
-		public IMeshBlendShapeChannel[] Channels { get; set; } = Array.Empty<IMeshBlendShapeChannel>();
+		public static string? FindShapeNameByCRC(this BlendShapeData blendShapeData, uint crc)
+		{
+			foreach (IMeshBlendShapeChannelLegacy blendChannel in blendShapeData.Channels)
+			{
+				if (blendChannel.NameHash == crc)
+				{
+					return blendChannel.Name.String;
+				}
+			}
+			return null;
+		}
+	}
+
+	public sealed class BlendShapeData
+	{
+		public BlendShapeVertex[] Vertices { get; set; } = Array.Empty<BlendShapeVertex>();
+		public IMeshBlendShapeLegacy[] Shapes { get; set; } = Array.Empty<IMeshBlendShapeLegacy>();
+		public IMeshBlendShapeChannelLegacy[] Channels { get; set; } = Array.Empty<IMeshBlendShapeChannelLegacy>();
 		public float[] FullWeights { get; set; } = Array.Empty<float>();
 
 		/// <summary>

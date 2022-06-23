@@ -4,7 +4,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class MeshBlendShapeChannel : IMeshBlendShapeChannel
+	public sealed class MeshBlendShapeChannel : IMeshBlendShapeChannelLegacy
 	{
 		public MeshBlendShapeChannel() { }
 		public MeshBlendShapeChannel(string name, int frameIndex, int frameCount)

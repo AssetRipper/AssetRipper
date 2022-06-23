@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public interface IChannelInfo : IAsset
+	public interface IChannelInfoLegacy : IAsset
 	{
 		/// <summary>
 		/// Stream index
@@ -26,12 +26,12 @@ namespace AssetRipper.Core.Classes.Mesh
 
 	public static class ChannelInfoExtensions
 	{
-		public static bool IsSet(this IChannelInfo channelInfo) => channelInfo.Dimension > 0;
+		public static bool IsSet(this IChannelInfoLegacy channelInfo) => channelInfo.Dimension > 0;
 
 		/// <summary>
 		/// Data dimention: Vector3, Vector2, Vector1
 		/// </summary>
-		public static byte GetDataDimension(this IChannelInfo channelInfo)
+		public static byte GetDataDimension(this IChannelInfoLegacy channelInfo)
 		{
 			return (byte)(channelInfo.Dimension & 0b00001111);
 		}
@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// <summary>
 		/// Data dimention: Vector3, Vector2, Vector1
 		/// </summary>
-		public static void SetDataDimension(this IChannelInfo channelInfo, byte value)
+		public static void SetDataDimension(this IChannelInfoLegacy channelInfo, byte value)
 		{
 			channelInfo.Dimension = (byte)((channelInfo.Dimension & 0b11110000) | (value & 0b00001111));
 		}

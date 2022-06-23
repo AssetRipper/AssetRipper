@@ -4,7 +4,7 @@ using AssetRipper.Core.Utils;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public interface IMeshBlendShape : IAsset
+	public interface IMeshBlendShapeLegacy : IAsset
 	{
 		/// <summary>
 		/// Less than 4.3
@@ -26,7 +26,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 	public static class MeshBlendShapeExtensions
 	{
-		public static bool IsCRCMatch(this IMeshBlendShape blendShape, uint crc)
+		public static bool IsCRCMatch(this IMeshBlendShapeLegacy blendShape, uint crc)
 		{
 			if (blendShape.Name is null)
 				return false;

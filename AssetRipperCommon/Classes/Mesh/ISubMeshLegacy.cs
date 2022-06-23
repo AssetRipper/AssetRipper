@@ -3,7 +3,7 @@ using AssetRipper.Core.IO.Asset;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public interface ISubMesh : IAsset
+	public interface ISubMeshLegacy : IAsset
 	{
 		/// <summary>
 		/// Offset in index buffer

@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public interface IStreamInfo : IAsset
+	public interface IStreamInfoLegacy : IAsset
 	{
 		uint ChannelMask { get; set; }
 		uint Offset { get; set; }

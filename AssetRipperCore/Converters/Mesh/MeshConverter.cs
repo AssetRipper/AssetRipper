@@ -147,12 +147,12 @@ namespace AssetRipper.Core.Converters.Mesh
 			return 1;
 		}
 
-		private static IMeshBlendShape[] GetBlendShapes(IExportContainer container, Classes.Mesh.Mesh origin)
+		private static IMeshBlendShapeLegacy[] GetBlendShapes(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
 			return Classes.Mesh.Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Shapes : Array.Empty<MeshBlendShape>();
 		}
 
-		private static IBlendShapeVertex[] GetShapeVertices(IExportContainer container, Classes.Mesh.Mesh origin)
+		private static BlendShapeVertex[] GetShapeVertices(IExportContainer container, Classes.Mesh.Mesh origin)
 		{
 			return Classes.Mesh.Mesh.HasBlendShapes(container.Version) ? origin.Shapes.Vertices : Array.Empty<BlendShapeVertex>();
 		}
@@ -429,6 +429,11 @@ namespace AssetRipper.Core.Converters.Mesh
 			}
 
 			return instance;
+		}
+
+		private static void CopyValues(this VariableBoneCountWeights destination, VariableBoneCountWeights source)
+		{
+			destination.Data = source.Data?.ToArray() ?? Array.Empty<uint>();
 		}
 	}
 }

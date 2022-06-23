@@ -3,7 +3,7 @@ using AssetRipper.Core.Math.PackedBitVectors;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public interface ICompressedMesh : IAsset
+	public interface ICompressedMeshLegacy : IAsset
 	{
 		IPackedFloatVector Vertices { get; }
 		IPackedFloatVector UV { get; }
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Classes.Mesh
 
 	public static class CompressedMeshExtensions
 	{
-		public static void CopyValues(this ICompressedMesh destination, ICompressedMesh source)
+		public static void CopyValues(this ICompressedMeshLegacy destination, ICompressedMeshLegacy source)
 		{
 			destination.Vertices.CopyValuesFrom(source.Vertices);
 			destination.UV.CopyValuesFrom(source.UV);

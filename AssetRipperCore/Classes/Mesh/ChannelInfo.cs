@@ -6,7 +6,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class ChannelInfo : IChannelInfo
+	public sealed class ChannelInfo : IChannelInfoLegacy
 	{
 		public ChannelInfo() { }
 		public ChannelInfo(byte stream, byte offset, byte format, byte rawDimention)

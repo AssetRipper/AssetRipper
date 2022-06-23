@@ -5,7 +5,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
-	public sealed class MeshBlendShape : IMeshBlendShape
+	public sealed class MeshBlendShape : IMeshBlendShapeLegacy
 	{
 		/// <summary>
 		/// Less than 4.3.0

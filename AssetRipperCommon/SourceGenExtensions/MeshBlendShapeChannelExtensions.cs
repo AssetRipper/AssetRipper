@@ -1,16 +1,8 @@
-﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Utils;
+﻿using AssetRipper.Core.Utils;
+using AssetRipper.SourceGenerated.Subclasses.MeshBlendShapeChannel;
 
-namespace AssetRipper.Core.Classes.Mesh
+namespace AssetRipper.Core.SourceGenExtensions
 {
-	public interface IMeshBlendShapeChannel : IAsset
-	{
-		Utf8StringBase Name { get; }
-		uint NameHash { get; set; }
-		int FrameIndex { get; set; }
-		int FrameCount { get; set; }
-	}
-
 	public static class MeshBlendShapeChannelExtensions
 	{
 		public static void SetValues(this IMeshBlendShapeChannel channel, string name, int frameIndex, int frameCount)
