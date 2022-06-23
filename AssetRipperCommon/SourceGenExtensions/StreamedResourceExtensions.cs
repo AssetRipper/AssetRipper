@@ -2,6 +2,7 @@
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Subclasses.StreamedResource;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -40,7 +41,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return data;
 		}
 
-		public static bool TryGetContent(this IStreamedResource streamedResource, ISerializedFile file, out byte[]? data)
+		public static bool TryGetContent(this IStreamedResource streamedResource, ISerializedFile file, [NotNullWhen(true)] out byte[]? data)
 		{
 			data = streamedResource.GetContent(file);
 			return !data.IsNullOrEmpty();

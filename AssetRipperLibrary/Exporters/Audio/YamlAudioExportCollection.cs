@@ -20,10 +20,10 @@ namespace AssetRipper.Library.Exporters.Audio
 			IStreamedResource? resource = asset.Resource_C83;
 			if (resource is not null)
 			{
-				string originalSource = resource.Source.String;
+				byte[] originalSource = resource.Source.Data;
 				ulong originalOffset = resource.Offset;
 				ulong originalSize = resource.Size;
-				if (resource.TryGetContent(asset.SerializedFile, out byte[] data))
+				if (resource.TryGetContent(asset.SerializedFile, out byte[]? data))
 				{
 					string resPath = filePath + ".resS";
 					System.IO.File.WriteAllBytes(resPath, data);
@@ -36,7 +36,7 @@ namespace AssetRipper.Library.Exporters.Audio
 					resource.Size = 0;
 				}
 				bool result = base.ExportInner(container, filePath, dirPath);
-				resource.Source.String = originalSource;
+				resource.Source.Data = originalSource;
 				resource.Offset = originalOffset;
 				resource.Size = originalSize;
 				return result;

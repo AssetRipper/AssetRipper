@@ -40,9 +40,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static void SetOffset(this IStreamingInfo streamingInfo, ulong value)
 		{
 			if (streamingInfo.Has_Offset_UInt64())
+			{
 				streamingInfo.Offset_UInt64 = value;
+			}
 			else
+			{
 				streamingInfo.Offset_UInt32 = (uint)value;
+			}
 		}
 
 		public static void CopyValues(this IStreamingInfo destination, IStreamingInfo source)

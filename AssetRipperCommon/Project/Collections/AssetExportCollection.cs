@@ -106,9 +106,13 @@ namespace AssetRipper.Core.Project.Collections
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
 			if (string.IsNullOrWhiteSpace(fileExtension))
+			{
 				return base.GetExportExtension(asset);
+			}
 			else
+			{
 				return fileExtension;
+			}
 		}
 
 		private readonly string? fileExtension;
