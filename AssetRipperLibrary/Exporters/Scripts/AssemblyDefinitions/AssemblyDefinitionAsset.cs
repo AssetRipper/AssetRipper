@@ -1,17 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace AssetRipper.Library.Exporters.Scripts.AssemblyDefinitions
 {
-	public class AssemblyDefinitionAsset
+	public sealed class AssemblyDefinitionAsset
 	{
-		public string name;
-		public List<string> references = new();
-		public bool allowUnsafeCode;
+		[JsonPropertyName("name")]
+		public string Name { get; set; }
+		[JsonPropertyName("references")]
+		public List<string> References { get; set; }
+		[JsonPropertyName("allowUnsafeCode")]
+		public bool AllowUnsafeCode { get; set; }
 
 		public AssemblyDefinitionAsset(string name)
 		{
-			this.name = name;
-			allowUnsafeCode = true;
+			Name = name;
+			AllowUnsafeCode = true;
+			References = new();
 		}
 	}
 }
