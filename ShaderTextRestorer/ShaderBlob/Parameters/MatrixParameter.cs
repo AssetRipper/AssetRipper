@@ -1,11 +1,8 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Project;
-using AssetRipper.Yaml;
 
 namespace ShaderTextRestorer.ShaderBlob.Parameters
 {
-	public sealed class MatrixParameter : IAssetReadable, IYamlExportable
+	public sealed class MatrixParameter
 	{
 		public MatrixParameter() { }
 
@@ -25,29 +22,7 @@ namespace ShaderTextRestorer.ShaderBlob.Parameters
 			ArraySize = arraySize;
 		}
 
-		public void Read(AssetReader reader)
-		{
-			NameIndex = reader.ReadInt32();
-			Index = reader.ReadInt32();
-			ArraySize = reader.ReadInt32();
-			Type = (ShaderParamType)reader.ReadByte();
-			RowCount = reader.ReadByte();
-			ColumnCount = 4;
-			reader.AlignStream();
-		}
-
-		public YamlNode ExportYaml(IExportContainer container)
-		{
-			YamlMappingNode node = new YamlMappingNode();
-			node.Add("m_NameIndex", NameIndex);
-			node.Add("m_Index", Index);
-			node.Add("m_ArraySize", ArraySize);
-			node.Add("m_Type", (byte)Type);
-			node.Add("m_RowCount", RowCount);
-			return node;
-		}
-
-		public string Name { get; set; }
+		public string Name { get; set; } = string.Empty;
 		public int NameIndex { get; set; }
 		public int Index { get; set; }
 		public int ArraySize { get; set; }

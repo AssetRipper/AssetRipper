@@ -1,17 +1,7 @@
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Project;
-using AssetRipper.VersionUtilities;
-using AssetRipper.Yaml;
-
 namespace ShaderTextRestorer.ShaderBlob.Parameters
 {
-	public sealed class TextureParameter : IAssetReadable, IYamlExportable
+	public sealed class TextureParameter
 	{
-		/// <summary>
-		/// 2017.3 and greater
-		/// </summary>
-		public static bool HasMultiSampled(UnityVersion version) => version.IsGreaterEqual(2017, 3);
-
 		public TextureParameter() { }
 
 		public TextureParameter(string name, int index, byte dimension, int sampler)
@@ -29,38 +19,7 @@ namespace ShaderTextRestorer.ShaderBlob.Parameters
 			MultiSampled = multiSampled;
 		}
 
-		public void Read(AssetReader reader)
-		{
-			NameIndex = reader.ReadInt32();
-			Index = reader.ReadInt32();
-			SamplerIndex = reader.ReadInt32();
-
-			if (HasMultiSampled(reader.Version))
-			{
-				MultiSampled = reader.ReadBoolean();
-			}
-
-			Dim = reader.ReadByte();
-			reader.AlignStream();
-		}
-
-		public YamlNode ExportYaml(IExportContainer container)
-		{
-			YamlMappingNode node = new YamlMappingNode();
-			node.Add("m_NameIndex", NameIndex);
-			node.Add("m_Index", Index);
-			node.Add("m_SamplerIndex", SamplerIndex);
-
-			if (HasMultiSampled(container.ExportVersion))
-			{
-				node.Add("m_MultiSampled", MultiSampled);
-			}
-
-			node.Add("m_Dim", Dim);
-			return node;
-		}
-
-		public string Name { get; set; }
+		public string Name { get; set; } = string.Empty;
 		public int NameIndex { get; set; }
 		public int Index { get; set; }
 		public int SamplerIndex { get; set; }

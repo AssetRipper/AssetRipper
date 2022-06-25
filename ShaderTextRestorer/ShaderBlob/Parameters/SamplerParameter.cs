@@ -1,10 +1,6 @@
-﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Project;
-using AssetRipper.Yaml;
-
-namespace ShaderTextRestorer.ShaderBlob.Parameters
+﻿namespace ShaderTextRestorer.ShaderBlob.Parameters
 {
-	public sealed class SamplerParameter : IAssetReadable, IYamlExportable
+	public sealed class SamplerParameter
 	{
 		public SamplerParameter() { }
 
@@ -12,20 +8,6 @@ namespace ShaderTextRestorer.ShaderBlob.Parameters
 		{
 			Sampler = sampler;
 			BindPoint = bindPoint;
-		}
-
-		public void Read(AssetReader reader)
-		{
-			Sampler = reader.ReadUInt32();
-			BindPoint = reader.ReadInt32();
-		}
-
-		public YamlNode ExportYaml(IExportContainer container)
-		{
-			YamlMappingNode node = new YamlMappingNode();
-			node.Add("sampler", Sampler);
-			node.Add("bindPoint", BindPoint);
-			return node;
 		}
 
 		public uint Sampler { get; set; }

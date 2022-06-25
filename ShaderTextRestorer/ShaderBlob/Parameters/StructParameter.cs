@@ -1,11 +1,8 @@
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Project;
-using AssetRipper.Yaml;
+using System;
 
 namespace ShaderTextRestorer.ShaderBlob.Parameters
 {
-	public sealed class StructParameter : IAssetReadable, IYamlExportable
+	public sealed class StructParameter
 	{
 		public StructParameter() { }
 
@@ -20,36 +17,12 @@ namespace ShaderTextRestorer.ShaderBlob.Parameters
 			MatrixMembers = matrices;
 		}
 
-		public void Read(AssetReader reader)
-		{
-			NameIndex = reader.ReadInt32();
-			Index = reader.ReadInt32();
-			ArraySize = reader.ReadInt32();
-			StructSize = reader.ReadInt32();
-			VectorMembers = reader.ReadAssetArray<VectorParameter>();
-			reader.AlignStream();
-			MatrixMembers = reader.ReadAssetArray<MatrixParameter>();
-			reader.AlignStream();
-		}
-
-		public YamlNode ExportYaml(IExportContainer container)
-		{
-			YamlMappingNode node = new YamlMappingNode();
-			node.Add("m_NameIndex", NameIndex);
-			node.Add("m_Index", Index);
-			node.Add("m_ArraySize", ArraySize);
-			node.Add("m_StructSize", StructSize);
-			node.Add("m_VectorMembers", VectorMembers.ExportYaml(container));
-			node.Add("m_MatrixMembers", MatrixMembers.ExportYaml(container));
-			return node;
-		}
-
-		public string Name { get; set; }
+		public string Name { get; set; } = string.Empty;
 		public int NameIndex { get; set; }
 		public int Index { get; set; }
 		public int ArraySize { get; set; }
 		public int StructSize { get; set; }
-		public VectorParameter[] VectorMembers { get; set; }
-		public MatrixParameter[] MatrixMembers { get; set; }
+		public VectorParameter[] VectorMembers { get; set; } = Array.Empty<VectorParameter>();
+		public MatrixParameter[] MatrixMembers { get; set; } = Array.Empty<MatrixParameter>();
 	}
 }

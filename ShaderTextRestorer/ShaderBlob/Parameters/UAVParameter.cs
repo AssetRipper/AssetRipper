@@ -1,10 +1,6 @@
-﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Project;
-using AssetRipper.Yaml;
-
-namespace ShaderTextRestorer.ShaderBlob.Parameters
+﻿namespace ShaderTextRestorer.ShaderBlob.Parameters
 {
-	public sealed class UAVParameter : IAssetReadable, IYamlExportable
+	public sealed class UAVParameter
 	{
 		public UAVParameter() { }
 
@@ -16,23 +12,7 @@ namespace ShaderTextRestorer.ShaderBlob.Parameters
 			OriginalIndex = originalIndex;
 		}
 
-		public void Read(AssetReader reader)
-		{
-			NameIndex = reader.ReadInt32();
-			Index = reader.ReadInt32();
-			OriginalIndex = reader.ReadInt32();
-		}
-
-		public YamlNode ExportYaml(IExportContainer container)
-		{
-			YamlMappingNode node = new YamlMappingNode();
-			node.Add("m_NameIndex", NameIndex);
-			node.Add("m_Index", Index);
-			node.Add("m_OriginalIndex", OriginalIndex);
-			return node;
-		}
-
-		public string Name { get; set; }
+		public string Name { get; set; } = string.Empty;
 		public int NameIndex { get; set; }
 		public int Index { get; set; }
 		public int OriginalIndex { get; set; }

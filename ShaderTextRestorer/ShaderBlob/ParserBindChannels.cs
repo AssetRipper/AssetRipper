@@ -1,11 +1,6 @@
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Project;
-using AssetRipper.Yaml;
-
 namespace ShaderTextRestorer.ShaderBlob
 {
-	public sealed class ParserBindChannels : IAssetReadable, IYamlExportable
+	public sealed class ParserBindChannels
 	{
 		public ParserBindChannels() { }
 
@@ -15,22 +10,7 @@ namespace ShaderTextRestorer.ShaderBlob
 			SourceMap = sourceMap;
 		}
 
-		public void Read(AssetReader reader)
-		{
-			Channels = reader.ReadAssetArray<ShaderBindChannel>();
-			reader.AlignStream();
-			SourceMap = reader.ReadInt32();
-		}
-
-		public YamlNode ExportYaml(IExportContainer container)
-		{
-			YamlMappingNode node = new YamlMappingNode();
-			node.Add("m_Channels", Channels.ExportYaml(container));
-			node.Add("m_SourceMap", SourceMap);
-			return node;
-		}
-
-		public ShaderBindChannel[] Channels { get; set; }
+		public ShaderBindChannel[] Channels { get; set; } = System.Array.Empty<ShaderBindChannel>();
 		public int SourceMap { get; set; }
 	}
 }
