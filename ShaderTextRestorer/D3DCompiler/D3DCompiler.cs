@@ -7,9 +7,8 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-namespace D3DCompiler
+namespace ShaderTextRestorer.D3DCompiler
 {
-	using DotNetDxc;
 	using System;
 	using System.Runtime.InteropServices;
 	using System.Runtime.Versioning;
@@ -25,7 +24,7 @@ namespace D3DCompiler
 	internal static class D3DCompiler
 	{
 		[DllImport("d3dcompiler_47", CallingConvention = CallingConvention.Winapi, SetLastError = false, CharSet = CharSet.Ansi, ExactSpelling = true)]
-		internal extern static Int32 D3DDisassemble(
+		internal extern static int D3DDisassemble(
 			IntPtr ptr, uint ptrSize, uint flags,
 			[MarshalAs(UnmanagedType.LPStr)] string szComments,
 			out IDxcBlob disassembly);

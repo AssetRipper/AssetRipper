@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Core.Classes.Shader.Parameters;
 using ShaderTextRestorer.Extensions;
+using ShaderTextRestorer.ShaderBlob.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;

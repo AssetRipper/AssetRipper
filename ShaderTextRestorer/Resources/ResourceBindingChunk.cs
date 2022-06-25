@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Classes.Shader.Parameters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssetRipper.Core.Classes.ShaderBlob;
 using AssetRipper.IO.Endian;
+using ShaderTextRestorer.ShaderBlob;
+using ShaderTextRestorer.ShaderBlob.Parameters;
 
 namespace ShaderTextRestorer.Resources
 {

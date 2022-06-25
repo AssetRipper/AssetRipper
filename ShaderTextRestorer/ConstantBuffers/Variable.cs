@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Core.Classes.Shader.Parameters;
+using ShaderTextRestorer.ShaderBlob.Parameters;
 using System;
 
 namespace ShaderTextRestorer.ConstantBuffers

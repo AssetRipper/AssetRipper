@@ -1,20 +1,25 @@
-﻿using AssetRipper.Core.Classes.Shader;
-using AssetRipper.Core.Classes.ShaderBlob;
-using AssetRipper.IO.Endian;
+﻿using AssetRipper.IO.Endian;
+using AssetRipper.VersionUtilities;
 using ShaderTextRestorer.IO;
+using ShaderTextRestorer.ShaderBlob;
 using System.IO;
 
 namespace ShaderTextRestorer.Exporters
 {
 	public class ShaderMetalExporter : ShaderTextExporter
 	{
+		/// <summary>
+		/// 5.3.0 and greater
+		/// </summary>
+		public static bool HasBlob(UnityVersion version) => version.IsGreaterEqual(5, 3);
+		
 		public override string Name => "ShaderMetalExporter";
 
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
 			using MemoryStream memStream = new MemoryStream(subProgram.ProgramData);
 			using BinaryReader reader = new BinaryReader(memStream);
-			if (Shader.HasBlob(writer.Version))
+			if (HasBlob(writer.Version))
 			{
 				long position = reader.BaseStream.Position;
 				uint fourCC = reader.ReadUInt32();

@@ -1,16 +1,21 @@
 using AssetRipper.Core.IO;
-using AssetRipper.Core.Classes.Shader.SerializedShader;
 using Smolv;
 using SpirV;
 using System;
 using System.IO;
 using ShaderTextRestorer.IO;
-using AssetRipper.Core.Classes.ShaderBlob;
+using AssetRipper.VersionUtilities;
+using ShaderTextRestorer.ShaderBlob;
 
 namespace ShaderTextRestorer.Exporters
 {
 	public class ShaderVulkanExporter : ShaderTextExporter
 	{
+		/// <summary>
+		/// 2019.3 and greater
+		/// </summary>
+		public static bool HasProgRayTracing(UnityVersion version) => version.IsGreaterEqual(2019, 3);
+		
 		public override string Name => "ShaderVulkanExporter";
 
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
@@ -18,7 +23,7 @@ namespace ShaderTextRestorer.Exporters
 			using MemoryStream ms = new MemoryStream(subProgram.ProgramData);
 			using BinaryReader reader = new BinaryReader(ms);
 			int requirements = reader.ReadInt32();
-			int snippetCount = SerializedPass.HasProgRayTracing(writer.Version) ? 6 : 5;
+			int snippetCount = HasProgRayTracing(writer.Version) ? 6 : 5;
 			for (int i = 0; i < snippetCount; i++)
 			{
 				int offset = reader.ReadInt32();

@@ -4,8 +4,8 @@ using System.Text;
 using ShaderTextRestorer.ConstantBuffers;
 using ShaderTextRestorer.Extensions;
 using AssetRipper.VersionUtilities;
-using AssetRipper.Core.Classes.ShaderBlob;
 using AssetRipper.IO.Endian;
+using ShaderTextRestorer.ShaderBlob;
 
 namespace ShaderTextRestorer.Resources
 {

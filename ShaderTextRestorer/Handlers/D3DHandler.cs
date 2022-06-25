@@ -1,4 +1,4 @@
-﻿using DotNetDxc;
+﻿using ShaderTextRestorer.D3DCompiler;
 using System;
 using System.Runtime.InteropServices;
 

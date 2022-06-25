@@ -1,6 +1,6 @@
 using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Classes.ShaderBlob;
 using ShaderTextRestorer.IO;
+using ShaderTextRestorer.ShaderBlob;
 
 namespace ShaderTextRestorer.Exporters
 {

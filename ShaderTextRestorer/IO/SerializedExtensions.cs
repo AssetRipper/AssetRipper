@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
-using AssetRipper.Core.Classes.ShaderBlob;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Subclasses.SerializedPass;
@@ -16,6 +15,7 @@ using AssetRipper.SourceGenerated.Subclasses.SerializedSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedTagMap;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
+using ShaderTextRestorer.ShaderBlob;
 using System;
 using System.Globalization;
 using System.IO;

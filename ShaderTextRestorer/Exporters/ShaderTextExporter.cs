@@ -1,6 +1,6 @@
-using AssetRipper.Core.Classes.ShaderBlob;
 using AssetRipper.Core.Extensions;
 using ShaderTextRestorer.IO;
+using ShaderTextRestorer.ShaderBlob;
 using System.Collections.Generic;
 using System.IO;
 

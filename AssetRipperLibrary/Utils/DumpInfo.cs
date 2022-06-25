@@ -14,6 +14,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_116;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using ShaderTextRestorer.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
