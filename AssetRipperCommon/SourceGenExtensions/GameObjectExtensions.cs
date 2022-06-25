@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -16,14 +15,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 	public static class GameObjectExtensions
 	{
 		/// <summary>
-		/// Release or less than 2.1.0
-		/// </summary>
-		public static bool HasTag(UnityVersion version, TransferInstructionFlags flags) => flags.IsRelease() || version.IsLess(2, 1);
-		/// <summary>
-		/// 2.1.0 and greater and Not Release
-		/// </summary>
-		public static bool HasTagString(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(2, 1) && !flags.IsRelease();
-		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
 		public static bool IsActiveInherited(UnityVersion version) => version.IsLess(4);
@@ -39,31 +30,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return gameObject.IsActive();
 		}
 
-		private static ushort GetTag(this IGameObject gameObject, IExportContainer container)
-		{
-			if (HasTag(gameObject.AssetUnityVersion, gameObject.TransferInstructionFlags))
-			{
-				return gameObject.Tag_C1;
-			}
-			return container.TagNameToID(gameObject.TagString_C1.String);
-		}
-
-		private static string GetTagString(this IGameObject gameObject, IExportContainer container)
-		{
-			if (HasTagString(gameObject.AssetUnityVersion, gameObject.TransferInstructionFlags))
-			{
-				return gameObject.TagString_C1.String;
-			}
-			return container.TagIDToName(gameObject.Tag_C1);
-		}
-
 		public static void ConvertToEditorFormat(this IGameObject gameObject, IExportContainer container)
 		{
 			bool isActive = gameObject.GetIsActive();
 			gameObject.IsActive_C1_Byte = isActive ? (byte)1 : (byte)0;
 			gameObject.IsActive_C1_Boolean = isActive;
-			gameObject.Tag_C1 = gameObject.GetTag(container);
-			gameObject.TagString_C1.String = gameObject.GetTagString(container);
+			gameObject.TagString_C1.String = container.TagIDToName(gameObject.Tag_C1);
 		}
 
 		public static IEnumerable<IPPtr_Component_> FetchComponents(this IGameObject gameObject)
