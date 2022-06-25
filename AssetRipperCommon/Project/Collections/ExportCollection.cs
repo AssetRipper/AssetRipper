@@ -26,6 +26,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_47;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_62;
+using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_84;
 using AssetRipper.SourceGenerated.Classes.ClassID_850595691;
@@ -139,6 +140,9 @@ namespace AssetRipper.Core.Project.Collections
 					break;
 				case IMesh mesh:
 					mesh.ConvertToEditorFormat();
+					break;
+				case ISpriteAtlas spriteAtlas:
+					spriteAtlas.ConvertToEditorFormat();
 					break;
 				case ITerrain terrain:
 					terrain.ConvertToEditorFormat();
