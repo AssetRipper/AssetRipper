@@ -61,18 +61,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
 
-			foreach (IUnityObjectBase asset in clip.SerializedFile.Collection.FetchAssetsOfType(ClassIDType.Avatar))
+			foreach (IAvatar avatar in clip.SerializedFile.Collection.FetchAssetsOfType<IAvatar>())
 			{
-				IAvatar avatar = (IAvatar)asset;
 				if (clip.AddAvatarTOS(avatar, tos))
 				{
 					return tos;
 				}
 			}
 
-			foreach (IUnityObjectBase asset in clip.SerializedFile.Collection.FetchAssetsOfType(ClassIDType.Animator))
+			foreach (IAnimator animator in clip.SerializedFile.Collection.FetchAssetsOfType<IAnimator>())
 			{
-				IAnimator animator = (IAnimator)asset;
 				if (clip.IsAnimatorContainsClip(animator))
 				{
 					if (clip.AddAnimatorTOS(animator, tos))
@@ -82,9 +80,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 			}
 
-			foreach (IUnityObjectBase asset in clip.SerializedFile.Collection.FetchAssetsOfType(ClassIDType.Animation))
+			foreach (IAnimation animation in clip.SerializedFile.Collection.FetchAssetsOfType<IAnimation>())
 			{
-				IAnimation animation = (IAnimation)asset;
 				if (clip.IsAnimationContainsClip(animation))
 				{
 					if (clip.AddAnimationTOS(animation, tos))

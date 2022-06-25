@@ -5,7 +5,6 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.Entries;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Utils;
@@ -32,7 +31,6 @@ namespace AssetRipper.Core.Structure
 
 		public Func<string, string>? ResourceCallback;
 
-		private readonly Dictionary<ClassIDType, List<IUnityObjectBase>> _cachedAssetsByClassID = new();
 		private readonly Dictionary<Type, List<IUnityObjectBase>> _cachedAssetsByType = new();
 
 		public GameCollection(LayoutInfo layout) : base(nameof(GameCollection))
@@ -112,19 +110,6 @@ namespace AssetRipper.Core.Structure
 					yield return asset;
 				}
 			}
-		}
-
-		public IEnumerable<IUnityObjectBase> FetchAssetsOfType(ClassIDType type)
-		{
-			if (_cachedAssetsByClassID.TryGetValue(type, out List<IUnityObjectBase>? list))
-			{
-				return list;
-			}
-
-			List<IUnityObjectBase> objects = FetchAssets().Where(o => o.ClassID == type).ToList();
-			_cachedAssetsByClassID.TryAdd(type, objects);
-
-			return objects;
 		}
 
 		public IEnumerable<IUnityObjectBase> FetchAssetsOfType<T>() where T : IUnityObjectBase
@@ -214,16 +199,9 @@ namespace AssetRipper.Core.Structure
 			}
 		}
 
-		private bool IsSceneSerializedFile(SerializedFile file)
+		private static bool IsSceneSerializedFile(SerializedFile file)
 		{
-			foreach (ObjectInfo entry in file.Metadata.Object)
-			{
-				if (entry.ClassID.IsSceneSettings())
-				{
-					return true;
-				}
-			}
-			return false;
+			return file.Metadata.Object.Any(entry => entry.ClassID.IsSceneSettings());
 		}
 
 		private void Dispose(bool disposing)
