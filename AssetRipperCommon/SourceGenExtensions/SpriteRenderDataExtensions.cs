@@ -45,7 +45,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static void GenerateOutline(this ISpriteRenderData spriteRenderData, UnityVersion version, AssetList<AssetList<Vector2f_3_5_0_f5>> outlines)
 		{
 			outlines.Clear();
-			if (spriteRenderData.Has_VertexData() && spriteRenderData.SubMeshes.Count != 0)
+			if (spriteRenderData.Has_VertexData() && spriteRenderData.SubMeshes!.Count != 0)
 			{
 				for (int i = 0; i < spriteRenderData.SubMeshes.Count; i++)
 				{
