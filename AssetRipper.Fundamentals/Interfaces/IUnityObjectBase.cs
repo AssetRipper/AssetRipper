@@ -7,7 +7,7 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Interfaces
 {
-	public interface IUnityObjectBase : IUnityAssetBase, IConvertToEditor
+	public interface IUnityObjectBase : IUnityAssetBase
 	{
 		AssetInfo? AssetInfo { get; set; }
 		string AssetClassName { get; }
@@ -18,8 +18,6 @@ namespace AssetRipper.Core.Interfaces
 		UnityGUID GUID { get; set; }
 		long PathID { get; }
 		HideFlags ObjectHideFlagsOld { get; set; }
-
-		IUnityObjectBase ConvertLegacy(IExportContainer container);
 		YamlDocument ExportYamlDocument(IExportContainer container);
 	}
 

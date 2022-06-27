@@ -56,7 +56,7 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 		}
 
-		public override IUnityObjectBase ConvertLegacy(IExportContainer container)
+		public IUnityObjectBase ConvertLegacy(IExportContainer container)
 		{
 			return GameObjectConverter.Convert(container, this);
 		}

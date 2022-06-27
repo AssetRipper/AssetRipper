@@ -16,7 +16,7 @@ namespace AssetRipper.Core
 	/// <summary>
 	/// The artificial base class for all generated Unity classes
 	/// </summary>
-	public class UnityAssetBase : IUnityAssetBase, IDeepCloneable, IAlmostEquatable, IEquatable<UnityAssetBase>
+	public class UnityAssetBase : IUnityAssetBase, IAlmostEquatable
 	{
 		public UnityVersion AssetUnityVersion { get; set; }
 		public EndianType EndianType { get; set; }
@@ -90,35 +90,6 @@ namespace AssetRipper.Core
 
 		public virtual List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex) => throw new NotSupportedException();
 
-		/// <inheritdoc/>
-		public UnityAssetBase DeepClone()
-		{
-			UnityAssetBase asset = CreateAnother();
-			asset.CopyValuesFrom(this);
-			return asset;
-		}
-
-		/// <summary>
-		/// Create another instance of this asset's type
-		/// </summary>
-		/// <returns>A new blank instance</returns>
-		public virtual UnityAssetBase CreateAnother() => new UnityAssetBase();
-
-		/// <summary>
-		/// Deep copy the values of another asset
-		/// </summary>
-		/// <remarks>
-		/// This method assumes that the other asset is not null
-		/// and has the same type as this.
-		/// </remarks>
-		/// <param name="source">The source asset</param>
-		protected virtual void CopyValuesFrom(UnityAssetBase source)
-		{
-			AssetUnityVersion = source.AssetUnityVersion;
-			EndianType = source.EndianType;
-			TransferInstructionFlags = source.TransferInstructionFlags;
-		}
-
 		private bool HasEqualMetadata([NotNullWhen(true)] object? obj)
 		{
 			if(obj is null)
@@ -150,34 +121,6 @@ namespace AssetRipper.Core
 					//this.EndianType == asset.EndianType &&
 					this.AssetUnityVersion == asset.AssetUnityVersion;
 			}
-		}
-
-		/// <summary>
-		/// Check if another asset is equal to this
-		/// </summary>
-		/// <remarks>
-		/// This method assumes that the other asset is not null
-		/// and has the same metadata as this.
-		/// </remarks>
-		/// <param name="other">Another asset</param>
-		/// <returns></returns>
-		public bool Equals(UnityAssetBase? other)
-		{
-			return HasEqualMetadata(other) && EqualByContent(other);
-		}
-
-		/// <summary>
-		/// Check if another asset is equal to this
-		/// </summary>
-		/// <remarks>
-		/// This method assumes that the other asset is not null
-		/// and has the same metadata as this.
-		/// </remarks>
-		/// <param name="other">Another asset</param>
-		/// <returns></returns>
-		protected virtual bool EqualByContent(UnityAssetBase other)
-		{
-			return ReferenceEquals(this, other);
 		}
 
 		/// <inheritdoc/>

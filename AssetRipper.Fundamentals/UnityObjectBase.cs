@@ -63,23 +63,5 @@ namespace AssetRipper.Core
 			root.Add(AssetClassName, node);
 			return document;
 		}
-
-		public override UnityAssetBase CreateAnother() => new UnityObjectBase();
-
-		protected override void CopyValuesFrom(UnityAssetBase source)
-		{
-			base.CopyValuesFrom(source);
-			UnityObjectBase sourceObject = (UnityObjectBase)source;
-			//Todo
-		}
-
-		public virtual IUnityObjectBase ConvertLegacy(IExportContainer container)
-		{
-			return this;
-		}
-
-		public virtual void ConvertToEditor()
-		{
-		}
 	}
 }
