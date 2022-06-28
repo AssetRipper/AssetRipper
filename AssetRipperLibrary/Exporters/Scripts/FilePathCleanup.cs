@@ -5,40 +5,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 {
 	internal static class FilePathCleanup
 	{
-		private static Lazy<(bool longPathsEnabled, int maxPathLength, int maxSegmentLength)> LongPathSupport { get; } =
-			new Lazy<(bool longPathsEnabled, int maxPathLength, int maxSegmentLength)>(GetLongPathSupport, isThreadSafe: true);
-
-		private static (bool longPathsEnabled, int maxPathLength, int maxSegmentLength) GetLongPathSupport()
-		{
-			return (true, int.MaxValue, 255);
-			//Long paths don't seem to be an issue
-			/*try
-			{
-				if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
-				{
-					return (true, int.MaxValue, 255);
-				}
-				else if (OperatingSystem.IsWindows())
-				{
-					const string key = @"SYSTEM\CurrentControlSet\Control\FileSystem";
-					Microsoft.Win32.RegistryKey? fileSystem = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(key);
-					int? value = (int?)fileSystem?.GetValue("LongPathsEnabled");
-					if (value == 1)
-					{
-						return (true, int.MaxValue, 255);
-					}
-					return (false, 200, 30);
-				}
-				else
-				{
-					return (false, 200, 30);
-				}
-			}
-			catch
-			{
-				return (false, 200, 30);
-			}*/
-		}
+		const int maxSegmentLength = 255;
 
 		/// <summary>
 		/// Cleans up a node name for use as a file name.
@@ -80,7 +47,6 @@ namespace AssetRipper.Library.Exporters.Scripts
 			text = text.Trim();
 			string? extension = null;
 			int currentSegmentLength = 0;
-			(bool supportsLongPaths, int maxPathLength, int maxSegmentLength) = LongPathSupport.Value;
 			if (treatAsFileName)
 			{
 				// Check if input is a file name, i.e., has a valid extension
@@ -149,10 +115,6 @@ namespace AssetRipper.Library.Exporters.Scripts
 					{
 						b.Append('-');
 					}
-				}
-				if (b.Length >= maxPathLength && !supportsLongPaths)
-				{
-					break;  // limit to 200 chars, if long paths are not supported.
 				}
 			}
 			if (b.Length == 0)
