@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 					node.Read(reader);
 					Nodes.Add(node);
 				}
-				if(stringBufferSize == 0)
+				if (stringBufferSize == 0)
 				{
 					StringBuffer = Array.Empty<byte>();
 				}
@@ -109,7 +109,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 
 		public StringBuilder ToString(StringBuilder sb)
 		{
-			if(Nodes != null)
+			if (Nodes != null)
 			{
 				foreach (TypeTreeNode node in Nodes)
 				{
@@ -182,7 +182,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree
 			else
 			{
 				uint offset = value & ~0x80000000;
-				if(CommonString.StringBuffer.TryGetValue(offset, out string? nodeTypeName))
+				if (CommonString.StringBuffer.TryGetValue(offset, out string? nodeTypeName))
 				{
 					return nodeTypeName;
 				}

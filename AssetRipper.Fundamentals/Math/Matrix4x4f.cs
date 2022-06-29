@@ -143,9 +143,9 @@ namespace AssetRipper.Core.Math
 
 		public float this[int row, int column]
 		{
-			get => this[row + column * 4];
+			get => this[row + (column * 4)];
 
-			set => this[row + column * 4] = value;
+			set => this[row + (column * 4)] = value;
 		}
 
 		public float this[int index]
@@ -253,25 +253,25 @@ namespace AssetRipper.Core.Math
 		public static Matrix4x4f operator *(Matrix4x4f lhs, Matrix4x4f rhs)
 		{
 			Matrix4x4f res = new();
-			res.E00 = lhs.E00 * rhs.E00 + lhs.E10 * rhs.E01 + lhs.E20 * rhs.E02 + lhs.E30 * rhs.E03;
-			res.E10 = lhs.E00 * rhs.E10 + lhs.E10 * rhs.E11 + lhs.E20 * rhs.E12 + lhs.E30 * rhs.E13;
-			res.E20 = lhs.E00 * rhs.E20 + lhs.E10 * rhs.E21 + lhs.E20 * rhs.E22 + lhs.E30 * rhs.E23;
-			res.E30 = lhs.E00 * rhs.E30 + lhs.E10 * rhs.E31 + lhs.E20 * rhs.E32 + lhs.E30 * rhs.E33;
+			res.E00 = (lhs.E00 * rhs.E00) + (lhs.E10 * rhs.E01) + (lhs.E20 * rhs.E02) + (lhs.E30 * rhs.E03);
+			res.E10 = (lhs.E00 * rhs.E10) + (lhs.E10 * rhs.E11) + (lhs.E20 * rhs.E12) + (lhs.E30 * rhs.E13);
+			res.E20 = (lhs.E00 * rhs.E20) + (lhs.E10 * rhs.E21) + (lhs.E20 * rhs.E22) + (lhs.E30 * rhs.E23);
+			res.E30 = (lhs.E00 * rhs.E30) + (lhs.E10 * rhs.E31) + (lhs.E20 * rhs.E32) + (lhs.E30 * rhs.E33);
 
-			res.E01 = lhs.E01 * rhs.E00 + lhs.E11 * rhs.E01 + lhs.E21 * rhs.E02 + lhs.E31 * rhs.E03;
-			res.E11 = lhs.E01 * rhs.E10 + lhs.E11 * rhs.E11 + lhs.E21 * rhs.E12 + lhs.E31 * rhs.E13;
-			res.E21 = lhs.E01 * rhs.E20 + lhs.E11 * rhs.E21 + lhs.E21 * rhs.E22 + lhs.E31 * rhs.E23;
-			res.E31 = lhs.E01 * rhs.E30 + lhs.E11 * rhs.E31 + lhs.E21 * rhs.E32 + lhs.E31 * rhs.E33;
+			res.E01 = (lhs.E01 * rhs.E00) + (lhs.E11 * rhs.E01) + (lhs.E21 * rhs.E02) + (lhs.E31 * rhs.E03);
+			res.E11 = (lhs.E01 * rhs.E10) + (lhs.E11 * rhs.E11) + (lhs.E21 * rhs.E12) + (lhs.E31 * rhs.E13);
+			res.E21 = (lhs.E01 * rhs.E20) + (lhs.E11 * rhs.E21) + (lhs.E21 * rhs.E22) + (lhs.E31 * rhs.E23);
+			res.E31 = (lhs.E01 * rhs.E30) + (lhs.E11 * rhs.E31) + (lhs.E21 * rhs.E32) + (lhs.E31 * rhs.E33);
 
-			res.E02 = lhs.E02 * rhs.E00 + lhs.E12 * rhs.E01 + lhs.E22 * rhs.E02 + lhs.E32 * rhs.E03;
-			res.E12 = lhs.E02 * rhs.E10 + lhs.E12 * rhs.E11 + lhs.E22 * rhs.E12 + lhs.E32 * rhs.E13;
-			res.E22 = lhs.E02 * rhs.E20 + lhs.E12 * rhs.E21 + lhs.E22 * rhs.E22 + lhs.E32 * rhs.E23;
-			res.E32 = lhs.E02 * rhs.E30 + lhs.E12 * rhs.E31 + lhs.E22 * rhs.E32 + lhs.E32 * rhs.E33;
+			res.E02 = (lhs.E02 * rhs.E00) + (lhs.E12 * rhs.E01) + (lhs.E22 * rhs.E02) + (lhs.E32 * rhs.E03);
+			res.E12 = (lhs.E02 * rhs.E10) + (lhs.E12 * rhs.E11) + (lhs.E22 * rhs.E12) + (lhs.E32 * rhs.E13);
+			res.E22 = (lhs.E02 * rhs.E20) + (lhs.E12 * rhs.E21) + (lhs.E22 * rhs.E22) + (lhs.E32 * rhs.E23);
+			res.E32 = (lhs.E02 * rhs.E30) + (lhs.E12 * rhs.E31) + (lhs.E22 * rhs.E32) + (lhs.E32 * rhs.E33);
 
-			res.E03 = lhs.E03 * rhs.E00 + lhs.E13 * rhs.E01 + lhs.E23 * rhs.E02 + lhs.E33 * rhs.E03;
-			res.E13 = lhs.E03 * rhs.E10 + lhs.E13 * rhs.E11 + lhs.E23 * rhs.E12 + lhs.E33 * rhs.E13;
-			res.E23 = lhs.E03 * rhs.E20 + lhs.E13 * rhs.E21 + lhs.E23 * rhs.E22 + lhs.E33 * rhs.E23;
-			res.E33 = lhs.E03 * rhs.E30 + lhs.E13 * rhs.E31 + lhs.E23 * rhs.E32 + lhs.E33 * rhs.E33;
+			res.E03 = (lhs.E03 * rhs.E00) + (lhs.E13 * rhs.E01) + (lhs.E23 * rhs.E02) + (lhs.E33 * rhs.E03);
+			res.E13 = (lhs.E03 * rhs.E10) + (lhs.E13 * rhs.E11) + (lhs.E23 * rhs.E12) + (lhs.E33 * rhs.E13);
+			res.E23 = (lhs.E03 * rhs.E20) + (lhs.E13 * rhs.E21) + (lhs.E23 * rhs.E22) + (lhs.E33 * rhs.E23);
+			res.E33 = (lhs.E03 * rhs.E30) + (lhs.E13 * rhs.E31) + (lhs.E23 * rhs.E32) + (lhs.E33 * rhs.E33);
 
 			return res;
 		}

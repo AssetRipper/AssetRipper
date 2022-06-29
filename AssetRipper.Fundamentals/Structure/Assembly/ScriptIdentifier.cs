@@ -83,9 +83,9 @@ namespace AssetRipper.Core.Structure.Assembly
 			int hash = 317;
 			unchecked
 			{
-				hash = hash + 89 * Assembly.GetHashCode();
-				hash = hash * 79 + Namespace.GetHashCode();
-				hash = hash * 37 + Name.GetHashCode();
+				hash = hash + (89 * Assembly.GetHashCode());
+				hash = (hash * 79) + Namespace.GetHashCode();
+				hash = (hash * 37) + Name.GetHashCode();
 			}
 			return hash;
 		}

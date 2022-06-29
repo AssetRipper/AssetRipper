@@ -119,9 +119,13 @@ namespace AssetRipper.FileAnalyzer
 				}
 
 				if (header.m_Version >= SerializedFileFormatVersion.kLargeFilesSupport)
+				{
 					objectInfo.byteStart = reader.ReadInt64();
+				}
 				else
+				{
 					objectInfo.byteStart = reader.ReadUInt32();
+				}
 
 				objectInfo.byteStart += header.m_DataOffset;
 				objectInfo.byteSize = reader.ReadUInt32();
@@ -145,7 +149,9 @@ namespace AssetRipper.FileAnalyzer
 				{
 					var m_ScriptTypeIndex = reader.ReadInt16();
 					if (objectInfo.serializedType != null)
+					{
 						objectInfo.serializedType.m_ScriptTypeIndex = m_ScriptTypeIndex;
+					}
 				}
 				if (header.m_Version == SerializedFileFormatVersion.kSupportsStrippedObject || header.m_Version == SerializedFileFormatVersion.kRefactoredClassId)
 				{
@@ -246,7 +252,7 @@ namespace AssetRipper.FileAnalyzer
 				{
 					type.m_ScriptID = reader.ReadBytes(16);
 				}
-				else if (header.m_Version < SerializedFileFormatVersion.kRefactoredClassId && type.classID < 0 || header.m_Version >= SerializedFileFormatVersion.kRefactoredClassId && type.classID == 114)
+				else if ((header.m_Version < SerializedFileFormatVersion.kRefactoredClassId && type.classID < 0) || (header.m_Version >= SerializedFileFormatVersion.kRefactoredClassId && type.classID == 114))
 				{
 					type.m_ScriptID = reader.ReadBytes(16);
 				}

@@ -243,7 +243,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 #warning TODO: convert MeshTopology.Deprecated indices to MeshTopology.Triangles
 			if (container.Platform == container.ExportPlatform ||
-				container.Platform != BuildTarget.XBox360 && container.ExportPlatform != BuildTarget.XBox360)
+				(container.Platform != BuildTarget.XBox360 && container.ExportPlatform != BuildTarget.XBox360))
 			{
 				return origin.RawIndexBuffer.ToArray();
 			}

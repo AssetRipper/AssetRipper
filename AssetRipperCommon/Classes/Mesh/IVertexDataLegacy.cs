@@ -108,9 +108,13 @@ namespace AssetRipper.Core.Classes.Mesh
 						int[] componentsIntArray = null;
 						float[] componentsFloatArray = null;
 						if (MeshHelper.IsIntFormat(vertexFormat))
+						{
 							componentsIntArray = MeshHelper.BytesToIntArray(componentBytes, vertexFormat);
+						}
 						else
+						{
 							componentsFloatArray = MeshHelper.BytesToFloatArray(componentBytes, vertexFormat);
+						}
 
 						if (version.IsGreaterEqual(2018))
 						{

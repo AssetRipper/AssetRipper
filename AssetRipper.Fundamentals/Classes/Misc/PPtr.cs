@@ -231,8 +231,8 @@ namespace AssetRipper.Core.Classes.Misc
 			int hash = 149;
 			unchecked
 			{
-				hash = hash + 181 * FileIndex.GetHashCode();
-				hash = hash * 173 + PathIndex.GetHashCode();
+				hash = hash + (181 * FileIndex.GetHashCode());
+				hash = (hash * 173) + PathIndex.GetHashCode();
 			}
 			return hash;
 		}

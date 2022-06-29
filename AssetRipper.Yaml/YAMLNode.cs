@@ -17,8 +17,12 @@
 			}
 
 			if (isWrote)
+			{
 				if (IsMultiline)
+				{
 					emitter.WriteLine();
+				}
+			}
 		}
 
 		public abstract YamlNodeType NodeType { get; }

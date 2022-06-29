@@ -129,7 +129,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static void SetObjectID(this ISceneObjectIdentifier sceneObjectIdentifier, IExportContainer container, IUnityObjectBase asset)
 		{
-			if (sceneObjectIdentifier is null) throw new ArgumentNullException(nameof(sceneObjectIdentifier));
+			if (sceneObjectIdentifier is null)
+			{
+				throw new ArgumentNullException(nameof(sceneObjectIdentifier));
+			}
+
 			long lid = asset == null ? 0 : container.GetExportID(asset);
 			sceneObjectIdentifier.TargetObject = lid;
 			sceneObjectIdentifier.TargetPrefab = 0;

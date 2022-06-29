@@ -14,9 +14,14 @@ namespace AssetRipper.Core.Classes.Misc
 		public override void Read(AssetReader reader)
 		{
 			if (IsOffsetInt64(reader.Version))
+			{
 				Offset = reader.ReadInt64();
+			}
 			else
+			{
 				Offset = reader.ReadUInt32();
+			}
+
 			Size = reader.ReadUInt32();
 			Path = reader.ReadString();
 		}

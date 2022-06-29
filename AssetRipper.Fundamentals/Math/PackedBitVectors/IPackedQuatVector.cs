@@ -157,7 +157,7 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 
 						// final value's range is [-1.0f : 1.0f]
 						double halfMaxValue = 0.5d * ((1 << bitSize) - 1);
-						double quaternion_j = value / halfMaxValue - 1.0d;
+						double quaternion_j = (value / halfMaxValue) - 1.0d;
 						quaternion.SetAt(j, (float)quaternion_j);
 						sum += quaternion_j * quaternion_j;
 					}

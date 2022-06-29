@@ -58,7 +58,7 @@
 			int value = (int)_this;
 			int mask = (int)TangentMode.HConstant;
 			int mask2 = (int)TangentMode2.HConstant;
-			value = value & ~mask2 | (value & mask) >> 2;
+			value = (value & ~mask2) | ((value & mask) >> 2);
 			return (TangentMode2)value;
 		}
 

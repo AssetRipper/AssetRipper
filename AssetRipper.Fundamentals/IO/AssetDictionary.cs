@@ -12,7 +12,7 @@ namespace AssetRipper.Core.IO
 	/// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
 	/// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
 	public sealed class AssetDictionary<TKey, TValue> : AccessDictionaryBase<TKey, TValue>, IDependent
-		where TKey : notnull, new() 
+		where TKey : notnull, new()
 		where TValue : notnull, new()
 	{
 		private static readonly bool isDependentType = NullableKeyValuePair<TKey, TValue>.IsDependentType;
@@ -84,7 +84,7 @@ namespace AssetRipper.Core.IO
 		}
 
 		/// <inheritdoc/>
-		public override void Add(NullableKeyValuePair<TKey,TValue> pair)
+		public override void Add(NullableKeyValuePair<TKey, TValue> pair)
 		{
 			if (count == Capacity)
 			{
@@ -100,7 +100,7 @@ namespace AssetRipper.Core.IO
 
 		public void AddRange(IEnumerable<NullableKeyValuePair<TKey, TValue>> range)
 		{
-			foreach(NullableKeyValuePair<TKey, TValue> pair in range)
+			foreach (NullableKeyValuePair<TKey, TValue> pair in range)
 			{
 				Add(pair);
 			}
@@ -223,7 +223,7 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void CopyTo(NullableKeyValuePair<TKey, TValue>[] array, int arrayIndex)
 		{
-			if(array == null)
+			if (array == null)
 			{
 				throw new ArgumentNullException(nameof(array));
 			}

@@ -83,7 +83,10 @@ namespace AssetRipper.Core.Utils
 				case "map":
 					{
 						if ((m_Nodes[i + 1].MetaFlag.IsAlignBytes()))
+						{
 							align = true;
+						}
+
 						append = false;
 						sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
 						sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level + 1)), "Array", "Array");
@@ -120,7 +123,10 @@ namespace AssetRipper.Core.Utils
 						if (i < m_Nodes.Count - 1 && m_Nodes[i + 1].Type == "Array") //Array
 						{
 							if (m_Nodes[i + 1].MetaFlag.IsAlignBytes())
+							{
 								align = true;
+							}
+
 							append = false;
 							sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
 							sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level + 1)), "Array", "Array");
@@ -151,9 +157,14 @@ namespace AssetRipper.Core.Utils
 					}
 			}
 			if (append)
+			{
 				sb.AppendFormat("{0}{1} {2} = {3}\r\n", (new string('\t', level)), varTypeStr, varNameStr, value);
+			}
+
 			if (align)
+			{
 				reader.AlignStream();
+			}
 		}
 
 		public static OrderedDictionary ReadType(TypeTree m_Types, BinaryReader reader)
@@ -226,7 +237,10 @@ namespace AssetRipper.Core.Utils
 				case "map":
 					{
 						if (m_Nodes[i + 1].MetaFlag.IsAlignBytes())
+						{
 							align = true;
+						}
+
 						List<TypeTreeNode>? map = GetNodes(m_Nodes, i);
 						i += map.Count - 1;
 						List<TypeTreeNode>? first = GetNodes(map, 4);
@@ -255,7 +269,10 @@ namespace AssetRipper.Core.Utils
 						if (i < m_Nodes.Count - 1 && m_Nodes[i + 1].Type == "Array") //Array
 						{
 							if ((m_Nodes[i + 1].MetaFlag.IsAlignBytes()))
+							{
 								align = true;
+							}
+
 							List<TypeTreeNode>? vector = GetNodes(m_Nodes, i);
 							i += vector.Count - 1;
 							int size = reader.ReadInt32();
@@ -285,7 +302,10 @@ namespace AssetRipper.Core.Utils
 					}
 			}
 			if (align)
+			{
 				reader.AlignStream();
+			}
+
 			return value;
 		}
 

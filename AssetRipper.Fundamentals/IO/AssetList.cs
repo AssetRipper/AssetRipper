@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO
 {
-	public sealed class AssetList<T> : AccessListBase<T>, IDependent 
+	public sealed class AssetList<T> : AccessListBase<T>, IDependent
 		where T : notnull, new()
 	{
 		private static readonly bool isDependentType = typeof(IDependent).IsAssignableFrom(typeof(T));

@@ -20,7 +20,10 @@ namespace AssetRipper.Yaml.Extensions
 		{
 			StringBuilder sb = new StringBuilder();
 			foreach (char value in _this)
+			{
 				sb.AppendHex(value);
+			}
+
 			return new YamlScalarNode(sb.ToString(), true);
 		}
 
@@ -28,7 +31,10 @@ namespace AssetRipper.Yaml.Extensions
 		{
 			StringBuilder sb = new StringBuilder();
 			foreach (byte value in _this)
+			{
 				sb.AppendHex(value);
+			}
+
 			return new YamlScalarNode(sb.ToString(), true);
 		}
 
@@ -38,14 +44,20 @@ namespace AssetRipper.Yaml.Extensions
 			{
 				StringBuilder sb = new StringBuilder();
 				foreach (ushort value in _this)
+				{
 					sb.AppendHex(value);
+				}
+
 				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
 				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (ushort value in _this)
+				{
 					node.Add(value);
+				}
+
 				return node;
 			}
 		}
@@ -56,14 +68,20 @@ namespace AssetRipper.Yaml.Extensions
 			{
 				StringBuilder sb = new StringBuilder();
 				foreach (short value in _this)
+				{
 					sb.AppendHex(value);
+				}
+
 				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
 				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (short value in _this)
+				{
 					node.Add(value);
+				}
+
 				return node;
 			}
 		}
@@ -74,14 +92,20 @@ namespace AssetRipper.Yaml.Extensions
 			{
 				StringBuilder sb = new StringBuilder();
 				foreach (uint value in _this)
+				{
 					sb.AppendHex(value);
+				}
+
 				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
 				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (uint value in _this)
+				{
 					node.Add(value);
+				}
+
 				return node;
 			}
 		}
@@ -92,14 +116,20 @@ namespace AssetRipper.Yaml.Extensions
 			{
 				StringBuilder sb = new StringBuilder();
 				foreach (int value in _this)
+				{
 					sb.AppendHex(value);
+				}
+
 				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
 				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (int value in _this)
+				{
 					node.Add(value);
+				}
+
 				return node;
 			}
 		}
@@ -110,14 +140,20 @@ namespace AssetRipper.Yaml.Extensions
 			{
 				StringBuilder sb = new StringBuilder();
 				foreach (ulong value in _this)
+				{
 					sb.AppendHex(value);
+				}
+
 				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
 				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (ulong value in _this)
+				{
 					node.Add(value);
+				}
+
 				return node;
 			}
 		}
@@ -128,14 +164,20 @@ namespace AssetRipper.Yaml.Extensions
 			{
 				StringBuilder sb = new StringBuilder();
 				foreach (long value in _this)
+				{
 					sb.AppendHex(value);
+				}
+
 				return new YamlScalarNode(sb.ToString(), true);
 			}
 			else
 			{
 				YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 				foreach (long value in _this)
+				{
 					node.Add(value);
+				}
+
 				return node;
 			}
 		}
@@ -144,7 +186,10 @@ namespace AssetRipper.Yaml.Extensions
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 			foreach (float value in _this)
+			{
 				node.Add(value);
+			}
+
 			return node;
 		}
 
@@ -152,7 +197,10 @@ namespace AssetRipper.Yaml.Extensions
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 			foreach (double value in _this)
+			{
 				node.Add(value);
+			}
+
 			return node;
 		}
 
@@ -160,7 +208,10 @@ namespace AssetRipper.Yaml.Extensions
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 			foreach (string value in _this)
+			{
 				node.Add(value);
+			}
+
 			return node;
 		}
 
@@ -168,7 +219,10 @@ namespace AssetRipper.Yaml.Extensions
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 			foreach (IEnumerable<string> export in _this)
+			{
 				node.Add(export.ExportYaml());
+			}
+
 			return node;
 		}
 	}

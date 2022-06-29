@@ -102,12 +102,18 @@ namespace AssetRipper.Yaml
 			{
 				case SequenceStyle.Block:
 					if (m_children.Count == 0)
+					{
 						emitter.Write('[');
+					}
+
 					break;
 
 				case SequenceStyle.BlockCurve:
 					if (m_children.Count == 0)
+					{
 						emitter.Write('{');
+					}
+
 					break;
 
 				case SequenceStyle.Flow:
@@ -116,7 +122,10 @@ namespace AssetRipper.Yaml
 
 				case SequenceStyle.Raw:
 					if (m_children.Count == 0)
+					{
 						emitter.Write('[');
+					}
+
 					break;
 			}
 		}
@@ -127,13 +136,19 @@ namespace AssetRipper.Yaml
 			{
 				case SequenceStyle.Block:
 					if (m_children.Count == 0)
+					{
 						emitter.Write(']');
+					}
+
 					emitter.WriteLine();
 					break;
 
 				case SequenceStyle.BlockCurve:
 					if (m_children.Count == 0)
+					{
 						emitter.WriteClose('}');
+					}
+
 					emitter.WriteLine();
 					break;
 
@@ -143,7 +158,10 @@ namespace AssetRipper.Yaml
 
 				case SequenceStyle.Raw:
 					if (m_children.Count == 0)
+					{
 						emitter.Write(']');
+					}
+
 					emitter.WriteLine();
 					break;
 			}
@@ -156,10 +174,14 @@ namespace AssetRipper.Yaml
 				emitter.Write('-').Write(' ');
 
 				if (next.NodeType == NodeType)
+				{
 					emitter.IncreaseIndent();
+				}
 			}
 			if (next.IsIndent)
+			{
 				emitter.IncreaseIndent();
+			}
 		}
 
 		private void EndChild(Emitter emitter, YamlNode next)
@@ -168,12 +190,19 @@ namespace AssetRipper.Yaml
 			{
 				emitter.WriteLine();
 				if (next.NodeType == NodeType)
+				{
 					emitter.DecreaseIndent();
+				}
 			}
 			else if (Style == SequenceStyle.Flow)
+			{
 				emitter.WriteSeparator().WriteWhitespace();
+			}
+
 			if (next.IsIndent)
+			{
 				emitter.DecreaseIndent();
+			}
 		}
 
 		public static YamlSequenceNode Empty { get; } = new YamlSequenceNode();

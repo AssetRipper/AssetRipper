@@ -9,7 +9,7 @@ namespace AssetRipper.Core.IO
 	/// <typeparam name="TValueBase">The exposed value type, such as an interface</typeparam>
 	/// <typeparam name="TKey">The key type of the reference dictionary</typeparam>
 	/// <typeparam name="TValue">The value type of the reference dictionary</typeparam>
-	public sealed class AccessDictionary<TKey, TValue, TKeyBase, TValueBase> : AccessDictionaryBase<TKeyBase, TValueBase> 
+	public sealed class AccessDictionary<TKey, TValue, TKeyBase, TValueBase> : AccessDictionaryBase<TKeyBase, TValueBase>
 		where TKeyBase : notnull
 		where TValueBase : notnull
 		where TKey : notnull, TKeyBase, new()

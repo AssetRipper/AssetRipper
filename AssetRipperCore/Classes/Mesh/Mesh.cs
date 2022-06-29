@@ -547,7 +547,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				writer.Write(Use16BitIndices);
 			}
-			
+
 			SubMeshes.Write(writer);
 
 			if (HasBlendShapes(writer.Version))
@@ -998,12 +998,14 @@ namespace AssetRipper.Core.Classes.Mesh
 				Normals = new Vector3f[CompressedMesh.Normals.NumItems / 2];
 				for (int i = 0; i < CompressedMesh.Normals.NumItems / 2; ++i)
 				{
-					var x = normalData[i * 2 + 0];
-					var y = normalData[i * 2 + 1];
-					var zsqr = 1 - x * x - y * y;
+					var x = normalData[(i * 2) + 0];
+					var y = normalData[(i * 2) + 1];
+					var zsqr = 1 - (x * x) - (y * y);
 					float z;
 					if (zsqr >= 0f)
+					{
 						z = (float)System.Math.Sqrt(zsqr);
+					}
 					else
 					{
 						z = 0;
@@ -1014,7 +1016,10 @@ namespace AssetRipper.Core.Classes.Mesh
 						z = normal.Z;
 					}
 					if (signs[i] == 0)
+					{
 						z = -z;
+					}
+
 					Normals[i] = new Vector3f(x, y, z);
 				}
 			}
@@ -1026,12 +1031,14 @@ namespace AssetRipper.Core.Classes.Mesh
 				Tangents = new Vector4f[CompressedMesh.Tangents.NumItems / 2];
 				for (int i = 0; i < CompressedMesh.Tangents.NumItems / 2; ++i)
 				{
-					var x = tangentData[i * 2 + 0];
-					var y = tangentData[i * 2 + 1];
-					var zsqr = 1 - x * x - y * y;
+					var x = tangentData[(i * 2) + 0];
+					var y = tangentData[(i * 2) + 1];
+					var zsqr = 1 - (x * x) - (y * y);
 					float z;
 					if (zsqr >= 0f)
+					{
 						z = (float)System.Math.Sqrt(zsqr);
+					}
 					else
 					{
 						z = 0;
@@ -1041,9 +1048,12 @@ namespace AssetRipper.Core.Classes.Mesh
 						y = vector3f.Y;
 						z = vector3f.Z;
 					}
-					if (signs[i * 2 + 0] == 0)
+					if (signs[(i * 2) + 0] == 0)
+					{
 						z = -z;
-					var w = signs[i * 2 + 1] > 0 ? 1.0f : -1.0f;
+					}
+
+					var w = signs[(i * 2) + 1] > 0 ? 1.0f : -1.0f;
 					Tangents[i] = new Vector4f(x, y, z, w);
 				}
 			}
@@ -1114,7 +1124,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				Colors = new ColorRGBA32[CompressedMesh.Colors.NumItems / 4];
 				for (int v = 0; v < CompressedMesh.Colors.NumItems / 4; v++)
 				{
-					Colors[v] = new ColorRGBA32((byte)tempColors[4 * v], (byte)tempColors[4 * v + 1], (byte)tempColors[4 * v + 2], (byte)tempColors[4 * v + 3]);
+					Colors[v] = new ColorRGBA32((byte)tempColors[4 * v], (byte)tempColors[(4 * v) + 1], (byte)tempColors[(4 * v) + 2], (byte)tempColors[(4 * v) + 3]);
 				}
 				CompressedMesh.Colors.NumItems /= 4;
 				CompressedMesh.Colors.BitSize *= 4;
@@ -1159,7 +1169,9 @@ namespace AssetRipper.Core.Classes.Mesh
 
 						// skip degenerates
 						if (a == b || a == c || b == c)
+						{
 							continue;
+						}
 
 						// do the winding flip-flop of strips :
 						if ((i & 1) == 1)

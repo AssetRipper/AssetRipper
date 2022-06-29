@@ -125,9 +125,9 @@ namespace AssetRipper.Core.Math.Vectors
 			int hash = 193;
 			unchecked
 			{
-				hash = hash + 787 * X.GetHashCode();
-				hash = hash * 823 + Y.GetHashCode();
-				hash = hash * 431 + Z.GetHashCode();
+				hash = hash + (787 * X.GetHashCode());
+				hash = (hash * 823) + Y.GetHashCode();
+				hash = (hash * 431) + Z.GetHashCode();
 			}
 			return hash;
 		}

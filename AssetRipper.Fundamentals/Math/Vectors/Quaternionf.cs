@@ -67,7 +67,7 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public override int GetHashCode()
 		{
-			return X.GetHashCode() ^ Y.GetHashCode() << 2 ^ Z.GetHashCode() >> 2 ^ W.GetHashCode() >> 1;
+			return X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2) ^ (W.GetHashCode() >> 1);
 		}
 
 		public override bool Equals(object? other)

@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Extensions
 			{
 				if (_this[i])
 				{
-					value |= (1 << i);
+					value |= 1 << i;
 				}
 			}
 			return unchecked((uint)value);

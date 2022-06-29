@@ -41,7 +41,7 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public override bool Equals(object? obj)
 		{
-			if(obj is Float f)
+			if (obj is Float f)
 			{
 				return Value == f.Value;
 			}

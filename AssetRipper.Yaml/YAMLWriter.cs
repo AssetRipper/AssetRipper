@@ -21,7 +21,10 @@ namespace AssetRipper.Yaml
 		public void AddTag(string handle, string content)
 		{
 			if (m_tags.Any(t => t.Handle == handle))
+			{
 				throw new Exception($"Writer already contains tag {handle}");
+			}
+
 			YamlTag tag = new YamlTag(handle, content);
 			m_tags.Add(tag);
 		}
@@ -30,7 +33,10 @@ namespace AssetRipper.Yaml
 		{
 			WriteHead(output);
 			foreach (YamlDocument doc in m_documents)
+			{
 				WriteDocument(doc);
+			}
+
 			WriteTail(output);
 		}
 
@@ -72,8 +78,10 @@ namespace AssetRipper.Yaml
 		[System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(m_emitter))]
 		private void ThrowIfNullEmitter()
 		{
-			if(m_emitter is null) 
+			if (m_emitter is null)
+			{
 				throw new NullReferenceException("Emitter cannot be null");
+			}
 		}
 
 		public static Version Version { get; } = new Version(1, 1);

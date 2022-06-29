@@ -13,10 +13,10 @@ namespace AssetRipper.Yaml.Extensions
 
 		public static Emitter WriteHex(this Emitter _this, ushort value)
 		{
-			_this.Write(HexAlphabet[value >> 4 & 0xF]);
-			_this.Write(HexAlphabet[value >> 0 & 0xF]);
-			_this.Write(HexAlphabet[value >> 12 & 0xF]);
-			_this.Write(HexAlphabet[value >> 8 & 0xF]);
+			_this.Write(HexAlphabet[(value >> 4) & 0xF]);
+			_this.Write(HexAlphabet[(value >> 0) & 0xF]);
+			_this.Write(HexAlphabet[(value >> 12) & 0xF]);
+			_this.Write(HexAlphabet[(value >> 8) & 0xF]);
 			return _this;
 		}
 

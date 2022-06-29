@@ -96,7 +96,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				}
 			}
 
-			if (FilenameUtils.IsEngineResource(Name) || Header.Version < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(Name))
+			if (FilenameUtils.IsEngineResource(Name) || (Header.Version < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(Name)))
 			{
 				Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
 			}

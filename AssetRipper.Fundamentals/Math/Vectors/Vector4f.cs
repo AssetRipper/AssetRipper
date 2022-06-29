@@ -156,7 +156,7 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public override int GetHashCode()
 		{
-			return X.GetHashCode() ^ Y.GetHashCode() << 2 ^ Z.GetHashCode() >> 2 ^ W.GetHashCode() >> 1;
+			return X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2) ^ (W.GetHashCode() >> 1);
 		}
 
 		public override string ToString()
@@ -191,7 +191,7 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public float LengthSquared()
 		{
-			return X * X + Y * Y + Z * Z + W * W;
+			return (X * X) + (Y * Y) + (Z * Z) + (W * W);
 		}
 
 		public static Vector4f Zero => new();

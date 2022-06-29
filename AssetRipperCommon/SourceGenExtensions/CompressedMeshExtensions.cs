@@ -4,11 +4,6 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -147,7 +142,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 					float zsqr = 1 - x * x - y * y;
 					float z;
 					if (zsqr >= 0f)
+					{
 						z = (float)System.Math.Sqrt(zsqr);
+					}
 					else
 					{
 						z = 0;
@@ -158,7 +155,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 						z = normal.Z;
 					}
 					if (signs[i] == 0)
+					{
 						z = -z;
+					}
+
 					normals[i] = new Vector3f(x, y, z);
 				}
 			}
@@ -175,7 +175,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 					float zsqr = 1 - x * x - y * y;
 					float z;
 					if (zsqr >= 0f)
+					{
 						z = (float)System.Math.Sqrt(zsqr);
+					}
 					else
 					{
 						z = 0;
@@ -186,7 +188,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 						z = vector3f.Z;
 					}
 					if (signs[i * 2 + 0] == 0)
+					{
 						z = -z;
+					}
+
 					float w = signs[i * 2 + 1] > 0 ? 1.0f : -1.0f;
 					tangents[i] = new Vector4f(x, y, z, w);
 				}

@@ -62,10 +62,10 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		{
 			//Temporary solution to #296
 			return (scriptTypeIndex >= 0) || typeID == ClassIDType.MonoBehaviour;
-				//Previous code:
-				//(scriptTypeIndex >= 0)
-				//|| (generation < FormatVersion.RefactoredClassId && typeID < 0)
-				//|| (generation >= FormatVersion.RefactoredClassId && typeID == ClassIDType.MonoBehaviour);
+			//Previous code:
+			//(scriptTypeIndex >= 0)
+			//|| (generation < FormatVersion.RefactoredClassId && typeID < 0)
+			//|| (generation >= FormatVersion.RefactoredClassId && typeID == ClassIDType.MonoBehaviour);
 		}
 	}
 }

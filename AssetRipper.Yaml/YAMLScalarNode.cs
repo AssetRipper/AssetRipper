@@ -193,6 +193,7 @@ namespace AssetRipper.Yaml
 		internal Emitter ToString(Emitter emitter)
 		{
 			if (Style == ScalarStyle.Hex)
+			{
 				return m_objectType switch
 				{
 					ScalarType.Byte => emitter.WriteHex((byte)m_value),
@@ -207,6 +208,7 @@ namespace AssetRipper.Yaml
 					ScalarType.Double => emitter.WriteHex(m_value),
 					_ => throw new NotImplementedException(m_objectType.ToString()),
 				};
+			}
 
 			return m_objectType switch
 			{
@@ -257,10 +259,16 @@ namespace AssetRipper.Yaml
 		private Emitter WriteString(Emitter emitter)
 		{
 			if (Style == ScalarStyle.Plain)
+			{
 				if (emitter.IsFormatKeys && emitter.IsKey)
+				{
 					emitter.WriteFormat(m_string);
+				}
 				else
+				{
 					emitter.Write(m_string);
+				}
+			}
 			else if (Style == ScalarStyle.SingleQuoted)
 			{
 				emitter.WriteDelayed();
@@ -269,9 +277,13 @@ namespace AssetRipper.Yaml
 					char c = m_string[i];
 					emitter.WriteRaw(c);
 					if (c == '\'')
+					{
 						emitter.WriteRaw(c);
+					}
 					else if (c == '\n')
+					{
 						emitter.WriteRaw("\n	");
+					}
 				}
 			}
 			else if (Style == ScalarStyle.DoubleQuoted)
@@ -305,14 +317,20 @@ namespace AssetRipper.Yaml
 				}
 			}
 			else
+			{
 				throw new NotSupportedException(Style.ToString());
+			}
+
 			return emitter;
 		}
 
 		private static ScalarStyle GetStringStyle(string value)
 		{
 			if (!string.IsNullOrEmpty(value) && s_illegal.IsMatch(value))
+			{
 				return value.Contains("\n ") ? ScalarStyle.DoubleQuoted : ScalarStyle.SingleQuoted;
+			}
+
 			return ScalarStyle.Plain;
 		}
 
@@ -327,6 +345,7 @@ namespace AssetRipper.Yaml
 			get
 			{
 				if (Style == ScalarStyle.Hex)
+				{
 					return m_objectType switch
 					{
 						ScalarType.Byte => unchecked((byte)m_value).ToHexString(),
@@ -341,6 +360,7 @@ namespace AssetRipper.Yaml
 						ScalarType.Double => BitConverter.UInt64BitsToDouble(m_value).ToHexString(),
 						_ => throw new NotImplementedException(m_objectType.ToString()),
 					};
+				}
 
 				return m_objectType switch
 				{

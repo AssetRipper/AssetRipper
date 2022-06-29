@@ -93,13 +93,13 @@ namespace AssetRipper.Core.Classes.Mesh
 			int[] indices = new int[System.Math.Max(indexCount, 4)];
 			for (int v = 0; v < VertexCount; v++)
 			{
-				memStream.Position = weightStreamOffset + v * weightStride + weightChannel.Offset;
+				memStream.Position = weightStreamOffset + (v * weightStride) + weightChannel.Offset;
 				for (int i = 0; i < weightCount; i++)
 				{
 					weights[i] = reader.ReadSingle();
 				}
 
-				memStream.Position = indexStreamOffset + v * indexStride + indexChannel.Offset;
+				memStream.Position = indexStreamOffset + (v * indexStride) + indexChannel.Offset;
 				for (int i = 0; i < indexCount; i++)
 				{
 					indices[i] = reader.ReadInt32();
@@ -131,7 +131,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			using (MemoryStream memStream = new MemoryStream(Data))
 			{
 				using BinaryReader reader = new BinaryReader(memStream);
-				memStream.Position = streamOffset + submesh.FirstVertex * streamStride + channel.Offset;
+				memStream.Position = streamOffset + (submesh.FirstVertex * streamStride) + channel.Offset;
 				for (int v = 0; v < submesh.VertexCount; v++)
 				{
 					float x = reader.ReadSingle();

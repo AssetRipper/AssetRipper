@@ -232,7 +232,7 @@ namespace AssetRipper.FileAnalyzer
 				case 1: //LZMA
 					{
 						MemoryStream blocksInfoCompressedStream = new MemoryStream(blocksInfoBytes);
-						blocksInfoUncompresseddStream = new MemoryStream((int)(m_Header.uncompressedBlocksInfoSize));
+						blocksInfoUncompresseddStream = new MemoryStream((int)m_Header.uncompressedBlocksInfoSize);
 						SevenZipHelper.DecompressLZMAStream(blocksInfoCompressedStream, m_Header.compressedBlocksInfoSize, blocksInfoUncompresseddStream, m_Header.uncompressedBlocksInfoSize);
 						blocksInfoUncompresseddStream.Position = 0;
 						blocksInfoCompressedStream.Close();

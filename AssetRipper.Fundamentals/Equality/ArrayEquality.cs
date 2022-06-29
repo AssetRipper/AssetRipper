@@ -13,17 +13,17 @@
 
 		public static bool AreEqualArrays<T>(T[] first, T[] second) where T : IEquatable<T>
 		{
-			if(first is null || second is null)
+			if (first is null || second is null)
 			{
 				return first is null && second is null;
 			}
-			if(first.Length != second.Length)
+			if (first.Length != second.Length)
 			{
 				return false;
 			}
-			for(int i = 0; i < first.Length; i++)
+			for (int i = 0; i < first.Length; i++)
 			{
-				if(!AreEqual(first[i], second[i]))
+				if (!AreEqual(first[i], second[i]))
 				{
 					return false;
 				}

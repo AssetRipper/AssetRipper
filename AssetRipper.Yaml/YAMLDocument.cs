@@ -30,7 +30,9 @@ namespace AssetRipper.Yaml
 		internal void Emit(Emitter emitter, bool isSeparator)
 		{
 			if (isSeparator)
+			{
 				emitter.Write("---").WriteWhitespace();
+			}
 
 			ThrowIfNullRoot();
 			Root.Emit(emitter);
@@ -40,7 +42,9 @@ namespace AssetRipper.Yaml
 		private void ThrowIfNullRoot()
 		{
 			if (Root is null)
+			{
 				throw new NullReferenceException("Root cannot be null here");
+			}
 		}
 
 		public YamlNode? Root { get; private set; }

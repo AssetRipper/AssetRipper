@@ -10,7 +10,9 @@ namespace AssetRipper.FileAnalyzer
 		public static void LoadFiles(string[] files)
 		{
 			foreach (string file in files)
+			{
 				LoadFile(file);
+			}
 		}
 		public static void LoadFile(string fullName)
 		{
@@ -50,14 +52,21 @@ namespace AssetRipper.FileAnalyzer
 			{
 				var assetsFile = new SerializedFile(reader);
 				if (assetsFile.IsVersionStripped)
+				{
 					Logger.Info("\tUnity version: stripped");
+				}
 				else
+				{
 					Logger.Info($"\tUnity version: {assetsFile.unityVersion}");
+				}
+
 				Logger.Info($"\tSerialied version: {(int)assetsFile.header.m_Version}");
 				Logger.Info($"\tEndianess: {(assetsFile.header.m_Endianess == 0 ? "Little Endian" : "Big Endian")}");
 
 				if (assetsFile.m_Externals.Count > 0)
+				{
 					Logger.Info("\tShared files:");
+				}
 
 				foreach (var sharedFile in assetsFile.m_Externals)
 				{

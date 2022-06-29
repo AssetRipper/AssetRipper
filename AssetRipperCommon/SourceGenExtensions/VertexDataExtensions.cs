@@ -111,7 +111,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 						{
 							for (int i = 0; i < componentBytes.Length / componentByteSize; i++)
 							{
-								byte[]? buff = new byte[componentByteSize];
+								byte[] buff = new byte[componentByteSize];
 								Buffer.BlockCopy(componentBytes, i * componentByteSize, buff, 0, componentByteSize);
 								buff = buff.Reverse().ToArray();
 								Buffer.BlockCopy(buff, 0, componentBytes, i * componentByteSize, componentByteSize);
@@ -121,9 +121,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 						int[]? componentsIntArray = null;
 						float[]? componentsFloatArray = null;
 						if (MeshHelper.IsIntFormat(vertexFormat))
+						{
 							componentsIntArray = MeshHelper.BytesToIntArray(componentBytes, vertexFormat);
+						}
 						else
+						{
 							componentsFloatArray = MeshHelper.BytesToFloatArray(componentBytes, vertexFormat);
+						}
 
 						if (version.IsGreaterEqual(2018))
 						{
@@ -349,7 +353,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				uint stride = 0;
 				for (int chn = 0; chn < instance.Channels.Count; chn++)
 				{
-					var m_Channel = instance.Channels[chn];
+					ChannelInfo m_Channel = instance.Channels[chn];
 					if (m_Channel.Stream == s)
 					{
 						if (m_Channel.GetDataDimension() > 0)
@@ -390,9 +394,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 				return new List<IStreamInfo>()
 				{
 					instance.Streams_0_,
-					instance.Streams_1_,
-					instance.Streams_2_,
-					instance.Streams_3_
+					instance.Streams_1_!,
+					instance.Streams_2_!,
+					instance.Streams_3_!
 				};
 			}
 			else
@@ -409,10 +413,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			AssetList<ChannelInfo> channels = new AssetList<ChannelInfo>(6);
 			List<IStreamInfo> streams = instance.GetStreamsInvariant();
-			for (var s = 0; s < streams.Count; s++)
+			for (int s = 0; s < streams.Count; s++)
 			{
-				var m_Stream = streams[s];
-				var channelMask = new BitArray(new[] { (int)m_Stream.ChannelMask });
+				IStreamInfo m_Stream = streams[s];
+				BitArray channelMask = new BitArray(new[] { (int)m_Stream.ChannelMask });
 				byte offset = 0;
 				for (int i = 0; i < 6; i++)
 				{

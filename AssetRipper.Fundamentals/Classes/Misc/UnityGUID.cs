@@ -97,10 +97,10 @@ namespace AssetRipper.Core.Classes.Misc
 			int hash = 19;
 			unchecked
 			{
-				hash = hash + 31 * Data0.GetHashCode();
-				hash = hash * 479 + Data1.GetHashCode();
-				hash = hash * 593 + Data2.GetHashCode();
-				hash = hash * 347 + Data3.GetHashCode();
+				hash = hash + (31 * Data0.GetHashCode());
+				hash = (hash * 479) + Data1.GetHashCode();
+				hash = (hash * 593) + Data2.GetHashCode();
+				hash = (hash * 347) + Data3.GetHashCode();
 			}
 			return hash;
 		}

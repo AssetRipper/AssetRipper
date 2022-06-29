@@ -440,7 +440,7 @@ namespace AssetRipper.IO.Endian
 
 		public void AlignStream()
 		{
-			BaseStream.Position = BaseStream.Position + 3 & ~3;
+			BaseStream.Position = (BaseStream.Position + 3) & ~3;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

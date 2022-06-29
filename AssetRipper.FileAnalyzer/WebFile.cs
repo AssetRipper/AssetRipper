@@ -61,7 +61,10 @@ namespace AssetRipper.FileAnalyzer
 		{
 			var signature = reader.ReadStringToNull();
 			if (signature != "UnityWebData1.0")
+			{
 				return;
+			}
+
 			var headLength = reader.ReadInt32();
 			var dataList = new List<WebData>();
 			while (reader.BaseStream.Position < headLength)

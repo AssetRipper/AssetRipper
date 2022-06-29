@@ -92,7 +92,7 @@ namespace AssetRipper.Core
 
 		private bool HasEqualMetadata([NotNullWhen(true)] object? obj)
 		{
-			if(obj is null)
+			if (obj is null)
 			{
 				return false;
 			}
@@ -116,7 +116,7 @@ namespace AssetRipper.Core
 			else
 			{
 				UnityAssetBase asset = (UnityAssetBase)obj;
-				return 
+				return
 					//this.TransferInstructionFlags == asset.TransferInstructionFlags &&
 					//this.EndianType == asset.EndianType &&
 					this.AssetUnityVersion == asset.AssetUnityVersion;

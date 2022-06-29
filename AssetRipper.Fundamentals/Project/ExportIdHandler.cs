@@ -39,7 +39,7 @@ namespace AssetRipper.Core.Project
 				throw new ArgumentException($"Value {value} for main export ID must have no more than 5 digits");
 			}
 #endif
-			return classID * 100000 + value;
+			return (classID * 100000) + value;
 		}
 	}
 }

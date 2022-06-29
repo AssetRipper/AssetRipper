@@ -5,7 +5,7 @@ namespace AssetRipper.Core.VersionHandling
 	public static class VersionManager
 	{
 		private static AssetFactoryBase? _assetFactory;
-		public static AssetFactoryBase AssetFactory 
+		public static AssetFactoryBase AssetFactory
 		{
 			get
 			{

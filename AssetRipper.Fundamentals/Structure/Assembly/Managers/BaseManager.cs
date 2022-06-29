@@ -60,7 +60,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			{
 				assembly = AssemblyDefinition.ReadAssembly(filePath, parameters);
 			}
-			catch(BadImageFormatException badImageFormatException)
+			catch (BadImageFormatException badImageFormatException)
 			{
 				throw new BadImageFormatException($"Could not read {filePath}", badImageFormatException);
 			}

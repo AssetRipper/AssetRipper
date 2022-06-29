@@ -136,7 +136,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 			min = BitConverter.ToUInt16(indexBuffer, offset);
 			max = BitConverter.ToUInt16(indexBuffer, offset);
-			int end = offset + indexCount * sizeof(ushort);
+			int end = offset + (indexCount * sizeof(ushort));
 			for (int i = offset; i < end; i += sizeof(ushort))
 			{
 				int index = BitConverter.ToUInt16(indexBuffer, i);
@@ -155,7 +155,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 			min = BitConverter.ToInt32(indexBuffer, offset);
 			max = BitConverter.ToInt32(indexBuffer, offset);
-			int end = offset + indexCount * sizeof(int);
+			int end = offset + (indexCount * sizeof(int));
 			for (int i = offset; i < end; i += sizeof(int))
 			{
 				int index = BitConverter.ToInt32(indexBuffer, i);
@@ -225,7 +225,7 @@ namespace AssetRipper.Core.Converters.Mesh
 			int offset = firstVertex * 3;
 			min = new Vector3f(vertexBuffer[offset], vertexBuffer[offset + 1], vertexBuffer[offset + 2]);
 			max = new Vector3f(vertexBuffer[offset], vertexBuffer[offset + 1], vertexBuffer[offset + 2]);
-			int end = offset + vertexCount * 3;
+			int end = offset + (vertexCount * 3);
 			for (int i = offset; i < end;)
 			{
 				float x = vertexBuffer[i++];

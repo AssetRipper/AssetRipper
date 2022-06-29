@@ -355,7 +355,7 @@ namespace AssetRipper.Core.Converters.Mesh
 		{
 			for (int i = 0; i < skin.Length; i++)
 			{
-				 BoneWeights4 weight =  skin[i];
+				BoneWeights4 weight = skin[i];
 				writer.Write(weight.Weight_0_);
 				writer.Write(weight.Weight_1_);
 				writer.Write(weight.Weight_2_);

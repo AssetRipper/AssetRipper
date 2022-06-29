@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public static bool operator ==(Vector2i left, Vector2i right)
 		{
-			if(left is null)
+			if (left is null)
 			{
 				return right is null;
 			}
@@ -75,8 +75,8 @@ namespace AssetRipper.Core.Math.Vectors
 			int hash = 941;
 			unchecked
 			{
-				hash = hash + 61 * X.GetHashCode();
-				hash = hash * 677 + Y.GetHashCode();
+				hash = hash + (61 * X.GetHashCode());
+				hash = (hash * 677) + Y.GetHashCode();
 			}
 			return hash;
 		}

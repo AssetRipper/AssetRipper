@@ -8,7 +8,9 @@ namespace AssetRipper.Yaml.Extensions
 		static StringBuilderExtensions()
 		{
 			for (int i = 0; i <= byte.MaxValue; i++)
+			{
 				ByteHexRepresentations[i] = i.ToString("x2");
+			}
 		}
 
 		public static StringBuilder AppendHex(this StringBuilder _this, byte value)
@@ -19,8 +21,8 @@ namespace AssetRipper.Yaml.Extensions
 
 		public static StringBuilder AppendHex(this StringBuilder _this, ushort value)
 		{
-			_this.Append(ByteHexRepresentations[value >> 0 & 0xFF]);
-			_this.Append(ByteHexRepresentations[value >> 8 & 0xFF]);
+			_this.Append(ByteHexRepresentations[(value >> 0) & 0xFF]);
+			_this.Append(ByteHexRepresentations[(value >> 8) & 0xFF]);
 			return _this;
 		}
 
@@ -74,7 +76,10 @@ namespace AssetRipper.Yaml.Extensions
 		public static StringBuilder AppendIndent(this StringBuilder _this, int count)
 		{
 			for (int i = 0; i < count; i++)
+			{
 				_this.Append('\t');
+			}
+
 			return _this;
 		}
 

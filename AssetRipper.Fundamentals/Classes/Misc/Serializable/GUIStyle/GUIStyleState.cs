@@ -70,7 +70,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		/// 5.4.0 and greater and Not Release
 		/// </summary>
 		public static bool HasScaledBackgrounds(UnityVersion version, TransferInstructionFlags flags) => version.IsGreaterEqual(5, 4) && !flags.IsRelease();
-		
+
 		/// <summary>
 		/// Texture2D
 		/// </summary>

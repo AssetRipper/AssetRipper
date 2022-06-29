@@ -154,7 +154,7 @@ namespace AssetRipper.Core.Classes.Misc.KeyframeTpl
 
 		public override bool Equals(object? obj)
 		{
-			if(obj is KeyframeTpl<T> keyframe)
+			if (obj is KeyframeTpl<T> keyframe)
 			{
 				return Equals(keyframe);
 			}

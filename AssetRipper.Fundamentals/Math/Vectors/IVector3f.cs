@@ -42,10 +42,10 @@ namespace AssetRipper.Core.Math.Vectors
 			double cr = System.Math.Cos(GetRadians(source.X, isDegrees) * 0.5);
 			double sr = System.Math.Sin(GetRadians(source.X, isDegrees) * 0.5);
 
-			destination.W = -(float)(cr * cp * cy + sr * sp * sy);
-			destination.X = -(float)(sr * cp * cy - cr * sp * sy);
-			destination.Y = (float)(cr * sp * cy + sr * cp * sy);
-			destination.Z = (float)(cr * cp * sy - sr * sp * cy);
+			destination.W = -(float)((cr * cp * cy) + (sr * sp * sy));
+			destination.X = -(float)((sr * cp * cy) - (cr * sp * sy));
+			destination.Y = (float)((cr * sp * cy) + (sr * cp * sy));
+			destination.Z = (float)((cr * cp * sy) - (sr * sp * cy));
 		}
 
 		private static double GetRadians(double angle, bool isDegrees)
@@ -77,12 +77,12 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public static float LengthSquared(this IVector3f instance)
 		{
-			return instance.X * instance.X + instance.Y * instance.Y + instance.Z * instance.Z;
+			return (instance.X * instance.X) + (instance.Y * instance.Y) + (instance.Z * instance.Z);
 		}
 
 		public static float Dot(this IVector3f instance, IVector3f other)
 		{
-			return instance.X * other.X + instance.Y * other.Y + instance.Z * other.Z;
+			return (instance.X * other.X) + (instance.Y * other.Y) + (instance.Z * other.Z);
 		}
 
 		public static bool IsEqualByDot(this IVector3f instance, IVector3f other)
@@ -90,7 +90,7 @@ namespace AssetRipper.Core.Math.Vectors
 			float instanceLength = instance.Length();
 			float otherLength = other.Length();
 
-			if(instanceLength < kEpsilon)
+			if (instanceLength < kEpsilon)
 			{
 				return otherLength < kEpsilon;
 			}
@@ -101,7 +101,7 @@ namespace AssetRipper.Core.Math.Vectors
 			}
 
 			float dot = instance.Dot(other);
-			float deviation = 1f - ((dot / instanceLength) / otherLength);
+			float deviation = 1f - (dot / instanceLength / otherLength);
 			return deviation < kEpsilon;
 		}
 

@@ -10,9 +10,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles.Parser
 		{
 			//Temporary solution to #296
 			return typeID == ClassIDType.MonoBehaviour;
-				//Previous code:
-				//(generation < FormatVersion.RefactoredClassId && typeID < 0)
-				//|| (generation >= FormatVersion.RefactoredClassId && typeID == ClassIDType.MonoBehaviour);
+			//Previous code:
+			//(generation < FormatVersion.RefactoredClassId && typeID < 0)
+			//|| (generation >= FormatVersion.RefactoredClassId && typeID == ClassIDType.MonoBehaviour);
 		}
 
 		public override void Read(SerializedReader reader, bool hasTypeTree)

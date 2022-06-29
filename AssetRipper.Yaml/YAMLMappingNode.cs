@@ -189,7 +189,9 @@ namespace AssetRipper.Yaml
 		public void Add(YamlNode key, YamlNode value)
 		{
 			if (key.NodeType != YamlNodeType.Scalar)
+			{
 				throw new Exception($"Only {YamlNodeType.Scalar} node as a key supported");
+			}
 
 			InsertEnd(key, value);
 		}
@@ -197,7 +199,9 @@ namespace AssetRipper.Yaml
 		public void Append(YamlMappingNode map)
 		{
 			foreach (KeyValuePair<YamlNode, YamlNode> child in map.m_children)
+			{
 				Add(child.Key, child.Value);
+			}
 		}
 
 		public void InsertBegin(string key, int value)
@@ -215,7 +219,10 @@ namespace AssetRipper.Yaml
 		public void InsertBegin(YamlNode key, YamlNode value)
 		{
 			if (value == null)
+			{
 				throw new ArgumentNullException(nameof(value));
+			}
+
 			KeyValuePair<YamlNode, YamlNode> pair = new(key, value);
 			m_children.Insert(0, pair);
 		}
@@ -247,7 +254,9 @@ namespace AssetRipper.Yaml
 			if (Style == MappingStyle.Block)
 			{
 				if (m_children.Count == 0)
+				{
 					emitter.Write('{');
+				}
 			}
 			else if (Style == MappingStyle.Flow)
 			{
@@ -260,37 +269,59 @@ namespace AssetRipper.Yaml
 			if (Style == MappingStyle.Block)
 			{
 				if (m_children.Count == 0)
+				{
 					emitter.Write('}');
+				}
+
 				emitter.WriteLine();
 			}
 			else if (Style == MappingStyle.Flow)
+			{
 				emitter.WriteClose('}');
+			}
 		}
 
 		private void StartTransition(Emitter emitter, YamlNode next)
 		{
 			emitter.Write(':').WriteWhitespace();
 			if (Style == MappingStyle.Block)
+			{
 				if (next.IsMultiline)
+				{
 					emitter.WriteLine();
+				}
+			}
+
 			if (next.IsIndent)
+			{
 				emitter.IncreaseIndent();
+			}
 		}
 
 		private void EndTransition(Emitter emitter, YamlNode next)
 		{
 			if (Style == MappingStyle.Block)
+			{
 				emitter.WriteLine();
+			}
 			else if (Style == MappingStyle.Flow)
+			{
 				emitter.WriteSeparator().WriteWhitespace();
+			}
+
 			if (next.IsIndent)
+			{
 				emitter.DecreaseIndent();
+			}
 		}
 
 		private void InsertEnd(YamlNode key, YamlNode value)
 		{
 			if (value == null)
+			{
 				throw new ArgumentNullException(nameof(value));
+			}
+
 			KeyValuePair<YamlNode, YamlNode> pair = new(key, value);
 			m_children.Add(pair);
 		}

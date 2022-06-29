@@ -28,8 +28,8 @@ namespace AssetRipper.Core.Classes
 			{
 				return str1 is null && str2 is null;
 			}
-			
-			if(str1.Data.Length != str2.Data.Length)
+
+			if (str1.Data.Length != str2.Data.Length)
 			{
 				return false;
 			}
@@ -62,7 +62,7 @@ namespace AssetRipper.Core.Classes
 
 		public bool CopyIfNullOrEmpty(Utf8StringBase? other)
 		{
-			if(Data is null || Data.Length == 0)
+			if (Data is null || Data.Length == 0)
 			{
 				Data = CopyData(other?.Data);
 				return true;
@@ -120,7 +120,7 @@ namespace AssetRipper.Core.Classes
 		public static string[] ToStringArray(this Utf8StringBase[] utf8Strings)
 		{
 			string[] result = new string[utf8Strings.Length];
-			for(int i = 0; i < utf8Strings.Length; i++)
+			for (int i = 0; i < utf8Strings.Length; i++)
 			{
 				result[i] = utf8Strings[i].String;
 			}

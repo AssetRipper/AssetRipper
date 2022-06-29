@@ -44,11 +44,13 @@ namespace AssetRipperTests.PackedBitVectorTests
 		private static void AreAlmostEqual(float[] expected, float[] actual, float maxDeviation)
 		{
 			if (expected.Length != actual.Length)
+			{
 				Assert.Fail($"Lengths were inequal.\nExpected: {expected.Length}\nBut was: {actual.Length}");
+			}
 
 			for (int i = 0; i < expected.Length; i++)
 			{
-				if(!NearEquality.AlmostEqualByDeviation(expected[i], actual[i], maxDeviation))
+				if (!NearEquality.AlmostEqualByDeviation(expected[i], actual[i], maxDeviation))
 				{
 					Assert.Fail($"Values significantly differ at index {i}\nExpected: {expected[i]}\nBut was: {actual[i]}");
 				}

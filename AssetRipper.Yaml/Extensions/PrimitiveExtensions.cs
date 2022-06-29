@@ -23,7 +23,7 @@ namespace AssetRipper.Yaml.Extensions
 
 		public static string ToHexString(this ushort _this)
 		{
-			ushort reverse = unchecked((ushort)((0xFF00 & _this) >> 8 | (0x00FF & _this) << 8));
+			ushort reverse = unchecked((ushort)(((0xFF00 & _this) >> 8) | ((0x00FF & _this) << 8)));
 			return reverse.ToString("x4");
 		}
 
@@ -35,7 +35,7 @@ namespace AssetRipper.Yaml.Extensions
 
 		public static string ToHexString(this uint _this)
 		{
-			uint reverse = (0xFF000000 & _this) >> 24 | (0x00FF0000 & _this) >> 8 | (0x0000FF00 & _this) << 8 | (0x000000FF & _this) << 24;
+			uint reverse = ((0xFF000000 & _this) >> 24) | ((0x00FF0000 & _this) >> 8) | ((0x0000FF00 & _this) << 8) | ((0x000000FF & _this) << 24);
 			return reverse.ToString("x8");
 		}
 
@@ -47,10 +47,10 @@ namespace AssetRipper.Yaml.Extensions
 
 		public static string ToHexString(this ulong _this)
 		{
-			ulong reverse = (_this & 0x00000000000000FFUL) << 56 | (_this & 0x000000000000FF00UL) << 40 |
-					(_this & 0x0000000000FF0000UL) << 24 | (_this & 0x00000000FF000000UL) << 8 |
-					(_this & 0x000000FF00000000UL) >> 8 | (_this & 0x0000FF0000000000UL) >> 24 |
-					(_this & 0x00FF000000000000UL) >> 40 | (_this & 0xFF00000000000000UL) >> 56;
+			ulong reverse = ((_this & 0x00000000000000FFUL) << 56) | ((_this & 0x000000000000FF00UL) << 40) |
+					((_this & 0x0000000000FF0000UL) << 24) | ((_this & 0x00000000FF000000UL) << 8) |
+					((_this & 0x000000FF00000000UL) >> 8) | ((_this & 0x0000FF0000000000UL) >> 24) |
+					((_this & 0x00FF000000000000UL) >> 40) | ((_this & 0xFF00000000000000UL) >> 56);
 			return reverse.ToString("x16");
 		}
 
@@ -69,9 +69,15 @@ namespace AssetRipper.Yaml.Extensions
 		public static int ToClosestInt(this long _this)
 		{
 			if (_this > int.MaxValue)
+			{
 				return int.MaxValue;
+			}
+
 			if (_this < int.MinValue)
+			{
 				return int.MinValue;
+			}
+
 			return unchecked((int)_this);
 		}
 	}

@@ -143,10 +143,10 @@ namespace AssetRipper.Core.Math
 			int hash = 97;
 			unchecked
 			{
-				hash = hash + 347 * X.GetHashCode();
-				hash = hash * 53 + Y.GetHashCode();
-				hash = hash * 641 + Width.GetHashCode();
-				hash = hash * 557 + Height.GetHashCode();
+				hash = hash + (347 * X.GetHashCode());
+				hash = (hash * 53) + Y.GetHashCode();
+				hash = (hash * 641) + Width.GetHashCode();
+				hash = (hash * 557) + Height.GetHashCode();
 			}
 			return hash;
 		}
@@ -169,7 +169,7 @@ namespace AssetRipper.Core.Math
 			return true;
 		}
 
-		public Vector2f Center => new Vector2f(X + Width / 2.0f, Y + Height / 2.0f);
+		public Vector2f Center => new Vector2f(X + (Width / 2.0f), Y + (Height / 2.0f));
 
 		public Vector2f Position => new Vector2f(X, Y);
 		public Vector2f Size => new Vector2f(Width, Height);

@@ -25,13 +25,13 @@ namespace AssetRipper.Tests
 			Assert.AreEqual(guid, fromBytes);
 			Assert.AreEqual(guid.ToString(), fromBytes.ToString());
 		}
-		
+
 		[Test]
 		public void ConversionFromSystemGuidToUnityGuidProducesSameString()
 		{
 			Guid systemGuid = Guid.NewGuid();
 			UnityGUID unityGUID = new UnityGUID(systemGuid);
-			Assert.AreEqual(systemGuid.ToString().Replace("-",""), unityGUID.ToString());
+			Assert.AreEqual(systemGuid.ToString().Replace("-", ""), unityGUID.ToString());
 		}
 
 		[Test]
@@ -76,7 +76,7 @@ namespace AssetRipper.Tests
 		private static string GetLongRandomString(int numSetsOf32Characters = 4)
 		{
 			StringBuilder sb = new(numSetsOf32Characters * 32);
-			for(int i = 0; i < numSetsOf32Characters; i++)
+			for (int i = 0; i < numSetsOf32Characters; i++)
 			{
 				sb.Append(Guid.NewGuid().ToString());
 			}

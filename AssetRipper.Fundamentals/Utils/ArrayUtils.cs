@@ -15,11 +15,11 @@
 			}
 
 			T[] result = new T[array1.Length + array2.Length];
-			for(int i = 0; i < array1.Length; i++)
+			for (int i = 0; i < array1.Length; i++)
 			{
 				result[i] = array1[i];
 			}
-			for(int j = 0; j < array2.Length; j++)
+			for (int j = 0; j < array2.Length; j++)
 			{
 				result[j + array1.Length] = array2[j];
 			}
@@ -35,7 +35,7 @@
 		/// <exception cref="ArgumentOutOfRangeException">Length less than zero</exception>
 		public static T[] CreateAndInitializeArray<T>(int length) where T : new()
 		{
-			if(length < 0)
+			if (length < 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(length));
 			}
@@ -46,7 +46,7 @@
 			}
 
 			T[] array = new T[length];
-			for(int i = 0; i < length; i++)
+			for (int i = 0; i < length; i++)
 			{
 				array[i] = new();
 			}

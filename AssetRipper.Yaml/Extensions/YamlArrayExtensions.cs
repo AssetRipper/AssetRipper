@@ -8,7 +8,10 @@ namespace AssetRipper.Yaml.Extensions
 		{
 			StringBuilder sb = new StringBuilder(_this.Length * 2);
 			for (int i = 0; i < _this.Length; i++)
+			{
 				sb.AppendHex(_this[i]);
+			}
+
 			return new YamlScalarNode(sb.ToString(), true);
 		}
 

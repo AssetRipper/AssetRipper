@@ -26,7 +26,9 @@ namespace AssetRipper.Core.Project.Exporters
 		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
 		{
 			if (Export(container, asset, path))
+			{
 				callback?.Invoke(container, asset, path);
+			}
 		}
 
 		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)

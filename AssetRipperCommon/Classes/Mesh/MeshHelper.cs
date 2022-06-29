@@ -121,10 +121,16 @@ namespace AssetRipper.Core.Classes.Mesh
 		public static float[] BytesToFloatArray(byte[] inputBytes, VertexFormat format)
 		{
 			if (inputBytes == null)
+			{
 				throw new ArgumentNullException(nameof(inputBytes));
+			}
+
 			var size = GetFormatSize(format);
 			if (inputBytes.Length % size != 0)
+			{
 				throw new Exception($"Input array length {inputBytes.Length} is not divisible by size {size}");
+			}
+
 			var len = inputBytes.Length / size;
 			var result = new float[len];
 			for (int i = 0; i < len; i++)
@@ -184,11 +190,19 @@ namespace AssetRipper.Core.Classes.Mesh
 		public static Vector2f[] FloatArrayToVector2(float[] input, int dimension)
 		{
 			if (input == null)
+			{
 				throw new ArgumentNullException(nameof(input));
+			}
+
 			if (dimension < 1)
+			{
 				throw new ArgumentOutOfRangeException(nameof(dimension));
+			}
+
 			if (input.Length % dimension != 0)
+			{
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by dimension {dimension}", nameof(input));
+			}
 
 			Vector2f[] result = new Vector2f[input.Length / dimension];
 			for (int i = 0; i < result.Length; i++)
@@ -206,11 +220,19 @@ namespace AssetRipper.Core.Classes.Mesh
 		public static Vector3f[] FloatArrayToVector3(float[] input, int dimension)
 		{
 			if (input == null)
+			{
 				throw new ArgumentNullException(nameof(input));
+			}
+
 			if (dimension < 1)
+			{
 				throw new ArgumentOutOfRangeException(nameof(dimension));
+			}
+
 			if (input.Length % dimension != 0)
+			{
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by dimension {dimension}", nameof(input));
+			}
 
 			Vector3f[] result = new Vector3f[input.Length / dimension];
 			for (int i = 0; i < result.Length; i++)
@@ -230,11 +252,19 @@ namespace AssetRipper.Core.Classes.Mesh
 		public static Vector4f[] FloatArrayToVector4(float[] input, int dimension)
 		{
 			if (input == null)
+			{
 				throw new ArgumentNullException(nameof(input));
+			}
+
 			if (dimension < 1)
+			{
 				throw new ArgumentOutOfRangeException(nameof(dimension));
+			}
+
 			if (input.Length % dimension != 0)
+			{
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by dimension {dimension}", nameof(input));
+			}
 
 			Vector4f[] result = new Vector4f[input.Length / dimension];
 			for (int i = 0; i < result.Length; i++)
@@ -253,9 +283,14 @@ namespace AssetRipper.Core.Classes.Mesh
 		public static ColorRGBAf[] FloatArrayToColorRGBAf(float[] input)
 		{
 			if (input == null)
+			{
 				throw new ArgumentNullException(nameof(input));
+			}
+
 			if (input.Length % 4 != 0)
+			{
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by four", nameof(input));
+			}
 
 			ColorRGBAf[] result = new ColorRGBAf[input.Length / 4];
 			for (int i = 0; i < result.Length; i++)
@@ -268,9 +303,14 @@ namespace AssetRipper.Core.Classes.Mesh
 		public static ColorRGBA32[] FloatArrayToColorRGBA32(float[] input)
 		{
 			if (input == null)
+			{
 				throw new ArgumentNullException(nameof(input));
+			}
+
 			if (input.Length % 4 != 0)
+			{
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by four", nameof(input));
+			}
 
 			ColorRGBA32[] result = new ColorRGBA32[input.Length / 4];
 			for (int i = 0; i < result.Length; i++)

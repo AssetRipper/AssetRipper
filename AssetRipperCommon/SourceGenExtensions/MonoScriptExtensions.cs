@@ -50,9 +50,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static string GetFullName(this IMonoScript monoScript)
 		{
 			if (string.IsNullOrEmpty(monoScript.Namespace_C115.String))
+			{
 				return monoScript.ClassName_C115.String;
+			}
 			else
+			{
 				return $"{monoScript.Namespace_C115.String}.{monoScript.ClassName_C115.String}";
+			}
 		}
 
 		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript, bool includeNamespace)

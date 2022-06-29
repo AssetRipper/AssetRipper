@@ -131,7 +131,7 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public abstract bool Remove(NullableKeyValuePair<TKey, TValue> item);
 
-		protected NullableKeyValuePair<TKey,TValue> GetSinglePairForKey(TKey key)
+		protected NullableKeyValuePair<TKey, TValue> GetSinglePairForKey(TKey key)
 		{
 			if (TryGetSinglePairForKey(key, out NullableKeyValuePair<TKey, TValue>? pair))
 			{
@@ -154,16 +154,16 @@ namespace AssetRipper.Core.IO
 		/// and could throw exceptions if used improperly.
 		/// Both will throw if the key isn't unique.
 		/// </remarks>
-		public TValue this[TKey key] 
+		public TValue this[TKey key]
 		{
 			get => GetSinglePairForKey(key).Value;
 			set
 			{
-				if(TryGetSinglePairForKey(key, out NullableKeyValuePair<TKey, TValue>? pair))
+				if (TryGetSinglePairForKey(key, out NullableKeyValuePair<TKey, TValue>? pair))
 				{
 					pair.Value = value;
 				}
-				else 
+				else
 				{
 					Add(key, value);
 				}

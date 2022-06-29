@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.IO
 {
-	public abstract class AccessListBase<T> : IList<T>, IReadOnlyList<T> 
+	public abstract class AccessListBase<T> : IList<T>, IReadOnlyList<T>
 		where T : notnull
 	{
 		/// <inheritdoc/>

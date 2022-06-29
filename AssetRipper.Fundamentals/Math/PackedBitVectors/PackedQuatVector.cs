@@ -13,7 +13,7 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 
 		public uint NumItems { get; set; }
 		public byte[] Data { get; set; } = Array.Empty<byte>();
-		
+
 		public void Read(AssetReader reader)
 		{
 			NumItems = reader.ReadUInt32();

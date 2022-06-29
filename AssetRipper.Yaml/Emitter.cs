@@ -11,7 +11,9 @@ namespace AssetRipper.Yaml
 			m_stream = writer ?? throw new ArgumentNullException(nameof(writer));
 			IsFormatKeys = formatKeys;
 			if (formatKeys)
+			{
 				m_sb = new StringBuilder();
+			}
 		}
 
 		public Emitter IncreaseIndent()
@@ -23,7 +25,10 @@ namespace AssetRipper.Yaml
 		public Emitter DecreaseIndent()
 		{
 			if (m_indent == 0)
+			{
 				throw new Exception($"Increase/decrease indent mismatch");
+			}
+
 			m_indent--;
 			return this;
 		}
@@ -124,7 +129,10 @@ namespace AssetRipper.Yaml
 					ThrowIfNullStringBuilder();
 					m_sb.Append(value, 2, value.Length - 2);
 					if (char.IsUpper(m_sb[0]))
+					{
 						m_sb[0] = char.ToLower(m_sb[0]);
+					}
+
 					value = m_sb.ToString();
 					m_sb.Clear();
 				}
@@ -203,14 +211,18 @@ namespace AssetRipper.Yaml
 		private void WriteIndent()
 		{
 			for (int i = 0; i < m_indent * 2; i++)
+			{
 				m_stream.Write(' ');
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(m_sb))]
 		private void ThrowIfNullStringBuilder()
 		{
 			if (m_sb is null)
+			{
 				throw new NullReferenceException("m_sb cannot be null here");
+			}
 		}
 
 		public bool IsFormatKeys { get; }

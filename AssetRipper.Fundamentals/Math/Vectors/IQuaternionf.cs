@@ -100,7 +100,7 @@ namespace AssetRipper.Core.Math.Vectors
 
 			double[,] M = new double[4, 4];
 
-			double Nq = qx * qx + qy * qy + qz * qz + qw * qw;
+			double Nq = (qx * qx) + (qy * qy) + (qz * qz) + (qw * qw);
 			double s = Nq > 0.0 ? 2.0 / Nq : 0.0;
 			double xs = qx * s, ys = qy * s, zs = qz * s;
 			double wx = qw * xs, wy = qw * ys, wz = qw * zs;
@@ -112,7 +112,7 @@ namespace AssetRipper.Core.Math.Vectors
 			M[2, 0] = xz - wy; M[2, 1] = yz + wx; M[2, 2] = 1.0 - (xx + yy);
 			M[3, 0] = M[3, 1] = M[3, 2] = M[0, 3] = M[1, 3] = M[2, 3] = 0.0; M[3, 3] = 1.0;
 
-			double test = System.Math.Sqrt(M[0, 0] * M[0, 0] + M[1, 0] * M[1, 0]);
+			double test = System.Math.Sqrt((M[0, 0] * M[0, 0]) + (M[1, 0] * M[1, 0]));
 			if (test > 16 * 1.19209290E-07F)//FLT_EPSILON
 			{
 				eax = System.Math.Atan2(M[2, 1], M[2, 2]);
@@ -138,12 +138,12 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public static double Dot(this IQuaternionf a, IQuaternionf b)
 		{
-			return (double)a.X * b.X + (double)a.Y * b.Y + (double)a.Z * b.Z + (double)a.W * b.W;
+			return ((double)a.X * b.X) + ((double)a.Y * b.Y) + ((double)a.Z * b.Z) + ((double)a.W * b.W);
 		}
 
 		public static bool IsUnitQuaternion(this IQuaternionf a)
 		{
-			return (a.X * a.X + a.Y * a.Y + a.Z * a.Z + a.W * a.W) > 1d - kEpsilon;
+			return ((a.X * a.X) + (a.Y * a.Y) + (a.Z * a.Z) + (a.W * a.W)) > 1d - kEpsilon;
 		}
 
 		public static bool IsEqualUsingDot(this IQuaternionf a, IQuaternionf b)

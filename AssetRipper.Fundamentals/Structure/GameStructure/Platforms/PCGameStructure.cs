@@ -15,12 +15,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			if (IsExecutableFile(rootPath))
 			{
 				Logger.Info(LogCategory.Import, "PC executable found. Setting root to parent directory");
-				m_root = (new FileInfo(rootPath)).Directory ?? throw new Exception("File has no directory");
+				m_root = new FileInfo(rootPath).Directory ?? throw new Exception("File has no directory");
 			}
 			else if (IsUnityDataDirectory(rootPath))
 			{
 				Logger.Info(LogCategory.Import, "PC data directory found. Setting root to parent directory");
-				m_root = (new DirectoryInfo(rootPath)).Parent ?? throw new Exception("Directory has no parent");
+				m_root = new DirectoryInfo(rootPath).Parent ?? throw new Exception("Directory has no parent");
 			}
 			else
 			{
@@ -68,7 +68,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			DirectoryInfo dinfo;
 			if (IsExecutableFile(path))
 			{
-				dinfo = (new FileInfo(path)).Directory ?? throw new Exception("File has no directory");
+				dinfo = new FileInfo(path).Directory ?? throw new Exception("File has no directory");
 			}
 			else if (IsUnityDataDirectory(path))
 			{

@@ -48,7 +48,7 @@ namespace AssetRipper.Core.Utils
 				}
 				while (duplicateChecker(exportID));
 			}
-			
+
 			return exportID;
 		}
 

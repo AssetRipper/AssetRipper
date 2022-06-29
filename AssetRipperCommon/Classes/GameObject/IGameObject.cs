@@ -157,7 +157,9 @@ namespace AssetRipper.Core.Classes.GameObject
 			}
 
 			if (transform is null)
+			{
 				throw new NullReferenceException($"{nameof(transform)} cannot be null");
+			}
 
 			foreach (PPtr<ITransform> pchild in transform.ChildrenPtrs)
 			{

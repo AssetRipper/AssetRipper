@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Math.Vectors
 
 		public static double LengthSquared(this IVector2f vector)
 		{
-			return (double)vector.X * vector.X + (double)vector.Y * vector.Y;
+			return ((double)vector.X * vector.X) + ((double)vector.Y * vector.Y);
 		}
 
 		private const float kEpsilon = 0.00001F;

@@ -34,7 +34,7 @@ namespace AssetRipper.Core.Classes.Misc
 		public YamlNode ExportYaml(IExportContainer container)
 		{
 			YamlMappingNode node = new YamlMappingNode();
-			node.Add(DataName, (Instance).ExportYaml(container));
+			node.Add(DataName, Instance.ExportYaml(container));
 			return node;
 		}
 

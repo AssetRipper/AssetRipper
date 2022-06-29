@@ -29,9 +29,13 @@ namespace AssetRipper.Core.Classes.Mesh
 		public static bool IsCRCMatch(this IMeshBlendShapeLegacy blendShape, uint crc)
 		{
 			if (blendShape.Name is null)
+			{
 				return false;
+			}
 			else
+			{
 				return CrcUtils.VerifyDigestUTF8(blendShape.Name, crc);
+			}
 		}
 	}
 }

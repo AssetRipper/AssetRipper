@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.Core.IO
 {
-	public sealed class AccessList<T, TBase> : AccessListBase<TBase> 
+	public sealed class AccessList<T, TBase> : AccessListBase<TBase>
 		where TBase : notnull
 		where T : notnull, TBase, new()
 	{

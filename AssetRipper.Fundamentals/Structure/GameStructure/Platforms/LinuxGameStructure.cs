@@ -15,12 +15,12 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			if (IsExecutableFile(rootPath))
 			{
 				Logger.Info(LogCategory.Import, "Linux executable found. Setting root to parent directory");
-				m_root = (new FileInfo(rootPath)).Directory ?? throw new Exception("Could not get file directory");
+				m_root = new FileInfo(rootPath).Directory ?? throw new Exception("Could not get file directory");
 			}
 			else if (IsUnityDataDirectory(rootPath))
 			{
 				Logger.Info(LogCategory.Import, "Linux data directory found. Setting root to parent directory");
-				m_root = (new DirectoryInfo(rootPath)).Parent ?? throw new Exception("Could not get parent directory");
+				m_root = new DirectoryInfo(rootPath).Parent ?? throw new Exception("Could not get parent directory");
 			}
 			else
 			{
@@ -68,7 +68,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			DirectoryInfo dinfo;
 			if (IsExecutableFile(path))
 			{
-				dinfo = (new FileInfo(path)).Directory ?? throw new Exception("Could not get file directory");
+				dinfo = new FileInfo(path).Directory ?? throw new Exception("Could not get file directory");
 			}
 			else if (IsUnityDataDirectory(path))
 			{

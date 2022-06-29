@@ -102,7 +102,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		/// An unprocessed byte value containing the data dimension
 		/// </summary>
 		public byte Dimension { get; set; }
-		
+
 		public const string StreamName = "stream";
 		public const string OffsetName = "offset";
 		public const string FormatName = "format";
