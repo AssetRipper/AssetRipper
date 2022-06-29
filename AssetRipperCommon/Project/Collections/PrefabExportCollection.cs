@@ -66,7 +66,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is IComponent component)
 			{
-				return component.GameObject_C2.FindAsset(component.SerializedFile) != null;
+				return component.GameObject_C2.FindAsset(component.SerializedFile) is not null;
 			}
 			return false;
 		}
@@ -88,7 +88,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else
 			{
-				return default;
+				throw new NotSupportedException();
 			}
 		}
 		public override ISerializedFile File => m_file;
