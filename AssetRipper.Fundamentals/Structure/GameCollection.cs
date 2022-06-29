@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Structure
 
 		private readonly HashSet<SerializedFile> m_scenes = new HashSet<SerializedFile>();
 
-		public Func<string, string>? ResourceCallback;
+		public Func<string, string?>? ResourceCallback;
 
 		private readonly Dictionary<Type, List<IUnityObjectBase>> _cachedAssetsByType = new();
 

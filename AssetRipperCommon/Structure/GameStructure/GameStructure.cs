@@ -9,6 +9,7 @@ using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -16,14 +17,15 @@ namespace AssetRipper.Core.Structure.GameStructure
 {
 	public sealed class GameStructure : IDisposable
 	{
-		public GameCollection FileCollection { get; private set; }
+		public GameCollection? FileCollection { get; private set; }
 		public ProjectExporter Exporter { get; private set; } = new ProjectExporter();
-		public PlatformGameStructure PlatformStructure { get; private set; }
-		public PlatformGameStructure MixedStructure { get; private set; }
+		public PlatformGameStructure? PlatformStructure { get; private set; }
+		public PlatformGameStructure? MixedStructure { get; private set; }
 
 		private GameStructure() { }
 
-		public bool IsValid => FileCollection != null;
+		[MemberNotNullWhen(true, nameof(FileCollection))]
+		public bool IsValid => FileCollection is not null;
 
 		public string? Name => PlatformStructure?.Name ?? MixedStructure?.Name;
 
@@ -44,7 +46,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		private void Load(List<string> paths, CoreConfiguration configuration, LayoutInfo? layinfo)
 		{
 			Logger.SendStatusChange("loading_step_detect_platform");
-			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure platformStructure, out MixedGameStructure mixedStructure);
+			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure? platformStructure, out MixedGameStructure? mixedStructure);
 			PlatformStructure = platformStructure;
 			PlatformStructure?.CollectFiles(configuration.IgnoreStreamingAssets);
 			MixedStructure = mixedStructure;
@@ -89,9 +91,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		public void Export(CoreConfiguration options)
 		{
 			Logger.Info(LogCategory.Export, $"Game files have these Unity versions:{GetListOfVersions()}");
-			UnityVersion maxFileVersion = FileCollection.GameFiles.Values.Max(t => t.Version);
-			//UnityVersion version = UnityVersion.Max(maxFileVersion, new UnityVersion(2017, 3, 0, UnityVersionType.Final, 3));
-			UnityVersion version = maxFileVersion;
+			UnityVersion version = FileCollection.GameFiles.Values.Max(t => t.Version);
 			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
 			options.SetProjectSettings(version, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			Exporter.Export(FileCollection, options);
@@ -99,7 +99,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 
 		private string GetListOfVersions()
 		{
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new();
 			foreach(UnityVersion version in FileCollection.GameFiles.Values.DistinctBy(t => t.Version).Select(s => s.Version))
 			{
 				sb.Append(' ');
@@ -131,7 +131,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		}
 
 		/// <summary>Processes all files, gets their file type, and adds it to one big list.</summary>
-		private void ProcessPlatformStructure(GameStructureProcessor processor, PlatformGameStructure structure)
+		private static void ProcessPlatformStructure(GameStructureProcessor processor, PlatformGameStructure structure)
 		{
 			foreach (KeyValuePair<string, string> file in structure.Files)
 			{
@@ -169,7 +169,8 @@ namespace AssetRipper.Core.Structure.GameStructure
 			try
 			{
 				//Loads any Mono or IL2Cpp assemblies
-				FileCollection.AssemblyManager.Initialize(PlatformStructure ?? MixedStructure);
+				FileCollection.AssemblyManager.Initialize(
+					PlatformStructure ?? MixedStructure ?? throw new Exception("No platform structure"));
 			}
 			catch (Exception ex)
 			{
