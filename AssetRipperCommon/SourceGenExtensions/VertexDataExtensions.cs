@@ -46,6 +46,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static void ReadData(
 			this IVertexData instance,
 			UnityVersion version,
+			EndianType endianType,
 			out int vertexCount,
 			out Vector3f[]? vertices,
 			out Vector3f[]? normals,
@@ -77,12 +78,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			uv6 = default;
 			uv7 = default;
 
-			AssetList<ChannelInfo> channels = instance.GetChannels(version);
+			IReadOnlyList<ChannelInfo> channels = instance.GetChannels(version);
 			List<IStreamInfo> streams = instance.GetStreams(version);
 
 			for (int chn = 0; chn < channels.Count; chn++)
 			{
-				SourceGenerated.Subclasses.ChannelInfo.ChannelInfo? m_Channel = channels[chn];
+				ChannelInfo? m_Channel = channels[chn];
 				if (m_Channel.GetDataDimension() > 0)
 				{
 					IStreamInfo m_Stream = streams[m_Channel.Stream];
@@ -107,7 +108,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 							}
 						}
 
-						if (instance.EndianType == EndianType.BigEndian && componentByteSize > 1) //swap bytes
+						if (endianType == EndianType.BigEndian && componentByteSize > 1) //swap bytes
 						{
 							for (int i = 0; i < componentBytes.Length / componentByteSize; i++)
 							{
@@ -405,7 +406,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		private static AssetList<ChannelInfo> GetChannels(this IVertexData instance, UnityVersion version)
+		private static IReadOnlyList<ChannelInfo> GetChannels(this IVertexData instance, UnityVersion version)
 		{
 			if (instance.Has_Channels())
 			{

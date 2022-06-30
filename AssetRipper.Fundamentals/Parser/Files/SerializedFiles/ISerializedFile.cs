@@ -3,6 +3,7 @@ using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Structure;
+using AssetRipper.IO.Endian;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles
@@ -23,5 +24,6 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		IEnumerable<IUnityObjectBase> FetchAssets();
 
 		IFileCollection Collection { get; }
+		EndianType EndianType { get; }
 	}
 }

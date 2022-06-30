@@ -13,7 +13,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (clipIndex == -1)
 			{
-				return PPtr_AnimationClip_Factory.CreateAsset(controller.AssetUnityVersion);
+				return PPtr_AnimationClip_Factory.CreateAsset(controller.SerializedFile.Version);
 			}
 			else
 			{

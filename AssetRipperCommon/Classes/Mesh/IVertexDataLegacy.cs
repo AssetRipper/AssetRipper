@@ -36,6 +36,7 @@ namespace AssetRipper.Core.Classes.Mesh
 		public static void ReadData(
 			this IVertexDataLegacy instance, 
 			UnityVersion version,
+			EndianType endianType,
 			out int vertexCount,
 			out Vector3f[] vertices,
 			out Vector3f[] normals,
@@ -94,7 +95,7 @@ namespace AssetRipper.Core.Classes.Mesh
 							}
 						}
 
-						if (instance.EndianType == EndianType.BigEndian && componentByteSize > 1) //swap bytes
+						if (endianType == EndianType.BigEndian && componentByteSize > 1) //swap bytes
 						{
 							for (var i = 0; i < componentBytes.Length / componentByteSize; i++)
 							{

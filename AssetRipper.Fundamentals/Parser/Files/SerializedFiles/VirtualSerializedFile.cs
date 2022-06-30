@@ -7,6 +7,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Structure;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.VersionHandling;
+using AssetRipper.IO.Endian;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Parser.Files.SerializedFiles
@@ -151,6 +152,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public BuildTarget Platform => Layout.Platform;
 		public UnityVersion Version => Layout.Version;
 		public TransferInstructionFlags Flags => Layout.Flags;
+		public EndianType EndianType => EndianType.LittleEndian;
 
 		public bool IsScene => throw new NotSupportedException();
 

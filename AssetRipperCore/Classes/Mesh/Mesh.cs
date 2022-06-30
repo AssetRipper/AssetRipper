@@ -536,7 +536,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				StreamData.Read(reader);
 			}
 
-			ProcessData(AssetUnityVersion);
+			ProcessData();
 		}
 
 		public override void Write(AssetWriter writer)
@@ -864,8 +864,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		private void ProcessData(UnityVersion version)
+		private void ProcessData()
 		{
+			UnityVersion version = SerializedFile.Version;
 			if (!string.IsNullOrEmpty(StreamData.Path))
 			{
 				if (VertexData.VertexCount > 0)
@@ -875,7 +876,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 			if (version.IsGreaterEqual(3, 5)) //3.5 and up
 			{
-				ReadVertexData(version);
+				ReadVertexData();
 			}
 
 			if (version.IsGreaterEqual(2, 6)) //2.6.0 and later
@@ -899,9 +900,9 @@ namespace AssetRipper.Core.Classes.Mesh
 			}
 		}
 
-		private void ReadVertexData(UnityVersion version)
+		private void ReadVertexData()
 		{
-			VertexData.ReadData(version,
+			VertexData.ReadData(SerializedFile.Version, SerializedFile.EndianType,
 				out int vertexCount,
 				out Vector3f[] vertices,
 				out Vector3f[] normals,

@@ -32,6 +32,14 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		public UnityVersion Version => Layout.Version;
 		public BuildTarget Platform => Layout.Platform;
 		public TransferInstructionFlags Flags => Layout.Flags;
+		public EndianType EndianType
+		{
+			get
+			{
+				bool swapEndianess = SerializedFileHeader.HasEndianess(Header.Version) ? Header.Endianess : Metadata.SwapEndianess;
+				return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
+			}
+		}
 
 		public IFileCollection Collection { get; }
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
@@ -221,7 +229,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		internal void ReadData(Stream stream)
 		{
-			using AssetReader assetReader = new AssetReader(stream, GetEndianType(), Layout);
+			using AssetReader assetReader = new AssetReader(stream, EndianType, Layout);
 			if (SerializedFileMetadata.HasScriptTypes(Header.Version))
 			{
 				foreach (LocalSerializedObjectIdentifier ptr in Metadata.ScriptTypes)
@@ -407,12 +415,6 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 		private void AddAsset(long pathID, IUnityObjectBase asset)
 		{
 			m_assets.Add(pathID, asset);
-		}
-
-		public EndianType GetEndianType()
-		{
-			bool swapEndianess = SerializedFileHeader.HasEndianess(Header.Version) ? Header.Endianess : Metadata.SwapEndianess;
-			return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 		}
 	}
 }

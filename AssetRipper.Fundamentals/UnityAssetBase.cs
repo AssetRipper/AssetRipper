@@ -6,7 +6,6 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Project;
-using AssetRipper.IO.Endian;
 using AssetRipper.Yaml;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -19,7 +18,6 @@ namespace AssetRipper.Core
 	public class UnityAssetBase : IUnityAssetBase, IAlmostEquatable
 	{
 		public UnityVersion AssetUnityVersion { get; set; }
-		public EndianType EndianType { get; set; }
 		public TransferInstructionFlags TransferInstructionFlags { get; set; }
 
 		public UnityAssetBase() { }
@@ -36,7 +34,6 @@ namespace AssetRipper.Core
 		public virtual void Read(AssetReader reader)
 		{
 			AssetUnityVersion = reader.Version;
-			EndianType = reader.EndianType;
 			TransferInstructionFlags = reader.Flags;
 			if (reader.Flags.IsRelease())
 			{
@@ -106,7 +103,6 @@ namespace AssetRipper.Core
 			{
 				UnityObjectBase thisObject = (UnityObjectBase)this;
 				return thisObject.AssetUnityVersion == unityObjectBase.AssetUnityVersion &&
-					//thisObject.EndianType == unityObjectBase.EndianType &&
 					//thisObject.TransferInstructionFlags == unityObjectBase.TransferInstructionFlags &&
 					thisObject.SerializedFile == unityObjectBase.SerializedFile &&
 					thisObject.ClassID == unityObjectBase.ClassID &&
@@ -118,7 +114,6 @@ namespace AssetRipper.Core
 				UnityAssetBase asset = (UnityAssetBase)obj;
 				return
 					//this.TransferInstructionFlags == asset.TransferInstructionFlags &&
-					//this.EndianType == asset.EndianType &&
 					this.AssetUnityVersion == asset.AssetUnityVersion;
 			}
 		}

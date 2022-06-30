@@ -4,6 +4,7 @@ using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.IO.Endian;
 using System.IO;
 using System.Text;
 
@@ -34,8 +35,8 @@ namespace AssetRipper.Core.Project.Exporters
 			}
 			sb.AppendLine($"Asset Type: {asset.GetType().FullName}");
 			sb.AppendLine($"Path: {path}");
-			sb.AppendLine($"Unity Version: {asset.AssetUnityVersion}");
-			sb.AppendLine($"Endianess: {asset.EndianType}");
+			sb.AppendLine($"Unity Version: {asset.SerializedFile.Version}");
+			sb.AppendLine($"Endianess: {asset.SerializedFile.EndianType}");
 			sb.AppendLine($"GUID: {asset.GUID}");
 			sb.AppendLine($"File: {asset.SerializedFile.Name}");
 			sb.AppendLine($"Path ID: {asset.PathID}");
@@ -55,9 +56,8 @@ namespace AssetRipper.Core.Project.Exporters
 			Logger.Info(LogCategory.Export, $"Writing raw to {path}");
 			try
 			{
-				LayoutInfo layoutInfo = new LayoutInfo(asset.AssetUnityVersion, Core.Parser.Files.BuildTarget.NoTarget, asset.TransferInstructionFlags);
 				using MemoryStream memoryStream = new MemoryStream();
-				using AssetWriter writer = new AssetWriter(memoryStream, asset.EndianType, layoutInfo);
+				using AssetWriter writer = new AssetWriter(memoryStream, asset.SerializedFile.EndianType, asset.SerializedFile.Layout);
 				asset.Write(writer);
 				File.WriteAllBytes(path, memoryStream.ToArray());
 				return true;
