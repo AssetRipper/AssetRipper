@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Layout;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using ShaderTextRestorer.ShaderBlob;
 using System;
@@ -10,7 +9,7 @@ namespace ShaderTextRestorer.Extensions
 	{
 		public static ShaderSubProgramBlob[] ReadBlobs(this IShader shader)
 		{
-			LayoutInfo layout = new LayoutInfo(shader.AssetUnityVersion, BuildTarget.NoTarget, shader.TransferInstructionFlags);
+			LayoutInfo layout = shader.SerializedFile.Layout;
 			if (shader.Has_CompressedBlob_C48())
 			{
 				if (shader.Has_CompressedLengths_C48_UInt32_Array())

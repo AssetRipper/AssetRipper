@@ -60,7 +60,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		private static bool IsNotLinesOrPoints(Mesh mesh)
 		{
-			if (mesh.AssetUnityVersion.IsLess(4))
+			if (mesh.SerializedFile.Version.IsLess(4))
 			{
 				return true;
 			}

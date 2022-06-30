@@ -33,7 +33,7 @@ namespace AssetRipper.Core.Classes.GameObject
 
 		public static bool GetIsActive(this IGameObject gameObject)
 		{
-			if (IsActiveInherited(gameObject.AssetUnityVersion))
+			if (IsActiveInherited(gameObject.SerializedFile.Version))
 			{
 				return gameObject.SerializedFile.Collection.IsScene(gameObject.SerializedFile) ? gameObject.IsActive : true;
 			}
@@ -42,7 +42,7 @@ namespace AssetRipper.Core.Classes.GameObject
 
 		public static ushort GetTag(this IGameObject gameObject, IExportContainer container)
 		{
-			if (HasTag(gameObject.AssetUnityVersion, gameObject.TransferInstructionFlags))
+			if (HasTag(gameObject.SerializedFile.Version, gameObject.SerializedFile.Flags))
 			{
 				return gameObject.Tag;
 			}
@@ -51,7 +51,7 @@ namespace AssetRipper.Core.Classes.GameObject
 
 		public static string GetTagString(this IGameObject gameObject, IExportContainer container)
 		{
-			if (HasTagString(gameObject.AssetUnityVersion, gameObject.TransferInstructionFlags))
+			if (HasTagString(gameObject.SerializedFile.Version, gameObject.SerializedFile.Flags))
 			{
 				return gameObject.TagString;
 			}

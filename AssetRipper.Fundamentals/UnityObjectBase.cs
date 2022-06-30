@@ -49,8 +49,6 @@ namespace AssetRipper.Core
 		public UnityObjectBase(AssetInfo assetInfo) : base()
 		{
 			AssetInfo = assetInfo;
-			AssetUnityVersion = assetInfo.File.Version;
-			TransferInstructionFlags = assetInfo.File.Flags;
 		}
 
 		public YamlDocument ExportYamlDocument(IExportContainer container)

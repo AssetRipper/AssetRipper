@@ -23,7 +23,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static bool GetIsActive(this IGameObject gameObject)
 		{
-			if (IsActiveInherited(gameObject.AssetUnityVersion))
+			if (IsActiveInherited(gameObject.SerializedFile.Version))
 			{
 				return gameObject.SerializedFile.Collection.IsScene(gameObject.SerializedFile) ? gameObject.IsActive() : true;
 			}

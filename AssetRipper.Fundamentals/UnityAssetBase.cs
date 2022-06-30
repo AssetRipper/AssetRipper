@@ -17,14 +17,9 @@ namespace AssetRipper.Core
 	/// </summary>
 	public class UnityAssetBase : IUnityAssetBase, IAlmostEquatable
 	{
-		public UnityVersion AssetUnityVersion { get; set; }
-		public TransferInstructionFlags TransferInstructionFlags { get; set; }
-
 		public UnityAssetBase() { }
 		public UnityAssetBase(LayoutInfo layout)
 		{
-			AssetUnityVersion = layout.Version;
-			TransferInstructionFlags = layout.Flags;
 		}
 
 		public virtual void ReadEditor(AssetReader reader) => throw new NotSupportedException();
@@ -33,8 +28,6 @@ namespace AssetRipper.Core
 
 		public virtual void Read(AssetReader reader)
 		{
-			AssetUnityVersion = reader.Version;
-			TransferInstructionFlags = reader.Flags;
 			if (reader.Flags.IsRelease())
 			{
 				ReadRelease(reader);
@@ -69,7 +62,6 @@ namespace AssetRipper.Core
 		{
 			if (container.ExportFlags.IsRelease())
 			{
-				//if(this.TransferInstructionFlags.IsRelease())
 				return ExportYamlRelease(container);
 			}
 			else
@@ -102,19 +94,14 @@ namespace AssetRipper.Core
 			if (obj is UnityObjectBase unityObjectBase)
 			{
 				UnityObjectBase thisObject = (UnityObjectBase)this;
-				return thisObject.AssetUnityVersion == unityObjectBase.AssetUnityVersion &&
-					//thisObject.TransferInstructionFlags == unityObjectBase.TransferInstructionFlags &&
-					thisObject.SerializedFile == unityObjectBase.SerializedFile &&
+				return thisObject.SerializedFile == unityObjectBase.SerializedFile &&
 					thisObject.ClassID == unityObjectBase.ClassID &&
 					thisObject.PathID == unityObjectBase.PathID &&
 					thisObject.GUID == unityObjectBase.GUID;
 			}
 			else
 			{
-				UnityAssetBase asset = (UnityAssetBase)obj;
-				return
-					//this.TransferInstructionFlags == asset.TransferInstructionFlags &&
-					this.AssetUnityVersion == asset.AssetUnityVersion;
+				return true;
 			}
 		}
 

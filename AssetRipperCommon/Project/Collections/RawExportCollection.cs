@@ -21,7 +21,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override ISerializedFile File => Asset.SerializedFile;
 
-		public override TransferInstructionFlags Flags => Asset.TransferInstructionFlags;
+		public override TransferInstructionFlags Flags => Asset.SerializedFile.Flags;
 
 		public override IEnumerable<IUnityObjectBase> Assets
 		{
