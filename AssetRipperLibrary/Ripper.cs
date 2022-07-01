@@ -269,6 +269,9 @@ namespace AssetRipper.Library
 			OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
 			OverrideExporter<IFont>(new FontAssetExporter());
 			OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
+			VideoClipExporter videoClipExporter = new();
+			OverrideExporter<SourceGenerated.Classes.ClassID_327.IVideoClip>(videoClipExporter);
+			OverrideExporter<SourceGenerated.Classes.ClassID_329.IVideoClip>(videoClipExporter);
 
 			//Texture exporters
 			TextureAssetExporter textureExporter = new(Settings);
