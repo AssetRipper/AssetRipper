@@ -9,16 +9,13 @@ namespace AssetRipper.Library.Exporters.Shaders
 	/// <summary>
 	/// An exporter for exporting shaders as unity assets. Shader.Find will not work in the Unity Editor with this exporter.
 	/// </summary>
-	public class YamlShaderExporter : YamlExporterBase
+	public sealed class YamlShaderExporter : YamlExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
-		{
-			return asset is IShader;
-		}
+		public override bool IsHandle(IUnityObjectBase asset) => asset is IShader;
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, "asset");
+			return new YamlShaderExportCollection(this, asset);
 		}
 	}
 }

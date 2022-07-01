@@ -43,7 +43,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, "shader");
+			return new AssetExportCollection(this, asset);
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

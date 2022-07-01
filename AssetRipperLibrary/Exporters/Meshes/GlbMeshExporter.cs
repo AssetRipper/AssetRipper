@@ -13,14 +13,14 @@ using System.IO;
 
 namespace AssetRipper.Library.Exporters.Meshes
 {
-	public class GlbMeshExporter : BinaryAssetExporter
+	public sealed class GlbMeshExporter : BinaryAssetExporter
 	{
-		protected MeshExportFormat ExportFormat { get; set; }
+		private MeshExportFormat ExportFormat { get; set; }
 		public GlbMeshExporter(LibraryConfiguration configuration) : base() => ExportFormat = configuration.MeshExportFormat;
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, "glb");
+			return new GlbMeshExportCollection(this, asset);
 		}
 
 		public override bool IsHandle(IUnityObjectBase asset)

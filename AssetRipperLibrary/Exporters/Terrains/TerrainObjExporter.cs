@@ -10,7 +10,7 @@ using System.Text;
 
 namespace AssetRipper.Library.Exporters.Terrains
 {
-	public class TerrainObjExporter : BinaryAssetExporter
+	public sealed class TerrainObjExporter : BinaryAssetExporter
 	{
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
@@ -19,7 +19,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, "obj");
+			return new TerrainObjExportCollection(this, asset);
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

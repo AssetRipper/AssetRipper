@@ -48,10 +48,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static AudioClipLoadType GetLoadType(this IAudioClip audioClip) => (AudioClipLoadType)audioClip.LoadType_C83;
 
+		/// <summary>
+		/// Only present when <see cref="IAudioClip.Has_CompressionFormat_C83"/> is true.
+		/// </summary>
 		public static AudioCompressionFormat GetCompressionFormat(this IAudioClip audioClip) => (AudioCompressionFormat)audioClip.CompressionFormat_C83;
 
 		public static FMODSoundFormat GetSoundFormat(this IAudioClip audioClip) => (FMODSoundFormat)audioClip.Format_C83;
 
+		/// <summary>
+		/// Only present when <see cref="IAudioClip.Has_Type_C83"/> is true.
+		/// </summary>
 		public static FMODSoundType GetSoundType(this IAudioClip audioClip) => (FMODSoundType)audioClip.Type_C83;
 	}
 }

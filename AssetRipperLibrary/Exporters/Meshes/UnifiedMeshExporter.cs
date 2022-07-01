@@ -20,10 +20,10 @@ using System.Linq;
 
 namespace AssetRipper.Library.Exporters.Meshes
 {
-	public class UnifiedMeshExporter : BinaryAssetExporter
+	public sealed class UnifiedMeshExporter : BinaryAssetExporter
 	{
-		protected MeshExportFormat ExportFormat { get; set; }
-		protected MeshCoordinateSpace ExportSpace { get; set; }
+		public MeshExportFormat ExportFormat { get; }
+		public MeshCoordinateSpace ExportSpace { get; }
 		public UnifiedMeshExporter(LibraryConfiguration configuration)
 		{
 			ExportFormat = configuration.MeshExportFormat;
@@ -32,7 +32,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, ExportFormat.GetFileExtension());
+			return new UnifiedMeshExportCollection(this, asset);
 		}
 
 		public override bool IsHandle(IUnityObjectBase asset)

@@ -12,9 +12,9 @@ using AssetRipper.SourceGenerated.Classes.ClassID_156;
 
 namespace AssetRipper.Library.Exporters.Terrains
 {
-	public class TerrainHeatmapExporter : BinaryAssetExporter
+	public sealed class TerrainHeatmapExporter : BinaryAssetExporter
 	{
-		ImageExportFormat ImageFormat { get; }
+		public ImageExportFormat ImageFormat { get; }
 		public TerrainHeatmapExporter(LibraryConfiguration configuration)
 		{
 			ImageFormat = configuration.ImageExportFormat;
@@ -27,7 +27,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, ImageFormat.GetFileExtension());
+			return new TerrainHeatmapExportCollection(this, asset);
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

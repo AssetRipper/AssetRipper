@@ -8,13 +8,12 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using System.IO;
-using System.Runtime.Versioning;
 
 namespace AssetRipper.Library.Exporters.Audio
 {
-	public class AudioClipExporter : BinaryAssetExporter
+	public sealed class AudioClipExporter : BinaryAssetExporter
 	{
-		private AudioExportFormat AudioFormat { get; }
+		public AudioExportFormat AudioFormat { get; }
 		public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
 
 		public override bool IsHandle(IUnityObjectBase asset)
@@ -30,7 +29,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, GetFileExtension((IAudioClip)asset));
+			return new AudioClipExportCollection(this, asset);
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -47,7 +46,7 @@ namespace AssetRipper.Library.Exporters.Audio
 					decodedData = AudioConverter.OggToWav(decodedData);
 				}
 
-				if (IsMp3Extension(fileExtension))
+				if (AudioClipExportCollection.IsMp3Extension(this, fileExtension))
 				{
 					decodedData = AudioConverter.WavToMp3(decodedData);
 				}
@@ -60,35 +59,6 @@ namespace AssetRipper.Library.Exporters.Audio
 
 			TaskManager.AddTask(File.WriteAllBytesAsync(path, decodedData));
 			return true;
-		}
-
-		private string GetFileExtension(IAudioClip audioClip)
-		{
-			string defaultExtension = AudioClipDecoder.GetFileExtension(audioClip);
-			if (IsWavExtension(defaultExtension))
-			{
-				return "wav";
-			}
-
-			if (IsMp3Extension(defaultExtension))
-			{
-				return "mp3";
-			}
-			else
-			{
-				return defaultExtension;
-			}
-		}
-
-		[SupportedOSPlatformGuard("windows")]
-		private bool IsMp3Extension(string defaultExtension)
-		{
-			return AudioFormat == AudioExportFormat.PreferMp3 && OperatingSystem.IsWindows() && (defaultExtension == "ogg" || defaultExtension == "wav");
-		}
-
-		private bool IsWavExtension(string defaultExtension)
-		{
-			return AudioFormat == AudioExportFormat.PreferWav && defaultExtension == "ogg";
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core;
-using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
@@ -22,7 +21,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new AssetExportCollection(this, asset, GetExportExtension((IAudioClip)asset));
+			return new NativeAudioExportCollection(this, asset);
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -39,18 +38,6 @@ namespace AssetRipper.Library.Exporters.Audio
 			{
 				TaskManager.AddTask(File.WriteAllBytesAsync(path, data));
 				return true;
-			}
-		}
-
-		private static string GetExportExtension(IAudioClip audioClip)
-		{
-			if (audioClip.Has_Type_C83())
-			{
-				return ((FMODSoundType)audioClip.Type_C83).ToRawExtension();
-			}
-			else
-			{
-				return ((AudioCompressionFormat)audioClip.CompressionFormat_C83).ToRawExtension();
 			}
 		}
 	}

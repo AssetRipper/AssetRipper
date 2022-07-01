@@ -50,6 +50,6 @@ namespace AssetRipper.Core.Project.Exporters
 			return true;
 		}
 
-		protected static bool IsValidData(byte[] data) => data != null && data.Length > 0;
+		protected static bool IsValidData(byte[]? data) => data != null && data.Length > 0;
 	}
 }

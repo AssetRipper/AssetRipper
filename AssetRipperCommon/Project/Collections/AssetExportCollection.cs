@@ -12,21 +12,8 @@ namespace AssetRipper.Core.Project.Collections
 	{
 		public AssetExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset)
 		{
-			if (assetExporter == null)
-			{
-				throw new ArgumentNullException(nameof(assetExporter));
-			}
-			if (asset == null)
-			{
-				throw new ArgumentNullException(nameof(asset));
-			}
-			AssetExporter = assetExporter;
-			Asset = asset;
-		}
-
-		public AssetExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset, string fileExtension) : this(assetExporter, asset)
-		{
-			this.fileExtension = fileExtension;
+			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
+			Asset = asset ?? throw new ArgumentNullException(nameof(asset));
 		}
 
 		public override bool Export(IProjectAssetContainer container, string dirPath)
@@ -103,19 +90,6 @@ namespace AssetRipper.Core.Project.Collections
 			return importer;
 		}
 
-		protected override string GetExportExtension(IUnityObjectBase asset)
-		{
-			if (string.IsNullOrWhiteSpace(fileExtension))
-			{
-				return base.GetExportExtension(asset);
-			}
-			else
-			{
-				return fileExtension;
-			}
-		}
-
-		private readonly string? fileExtension;
 		public override IAssetExporter AssetExporter { get; }
 		public override ISerializedFile File => Asset.SerializedFile;
 		public override IEnumerable<IUnityObjectBase> Assets
