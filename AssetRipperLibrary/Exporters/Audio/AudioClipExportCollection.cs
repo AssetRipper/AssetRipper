@@ -2,7 +2,6 @@
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
-using System.Runtime.Versioning;
 
 namespace AssetRipper.Library.Exporters.Audio
 {
@@ -19,22 +18,10 @@ namespace AssetRipper.Library.Exporters.Audio
 			{
 				return "wav";
 			}
-			else if (IsMp3Extension((AudioClipExporter)AssetExporter, defaultExtension))
-			{
-				return "mp3";
-			}
 			else
 			{
 				return defaultExtension;
 			}
-		}
-
-		[SupportedOSPlatformGuard("windows")]
-		internal static bool IsMp3Extension(AudioClipExporter assetExporter, string defaultExtension)
-		{
-			return assetExporter.AudioFormat == AudioExportFormat.PreferMp3 
-				&& OperatingSystem.IsWindows() 
-				&& (defaultExtension == "ogg" || defaultExtension == "wav");
 		}
 
 		private static bool IsWavExtension(AudioClipExporter assetExporter, string defaultExtension)

@@ -23,7 +23,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		public static bool IsSupportedExportFormat(AudioExportFormat format) => format switch
 		{
-			AudioExportFormat.Default or AudioExportFormat.PreferWav or AudioExportFormat.PreferMp3 => true,
+			AudioExportFormat.Default or AudioExportFormat.PreferWav => true,
 			_ => false,
 		};
 
@@ -39,17 +39,9 @@ namespace AssetRipper.Library.Exporters.Audio
 				return false;
 			}
 
-			if (AudioFormat == AudioExportFormat.PreferWav || AudioFormat == AudioExportFormat.PreferMp3)
+			if (AudioFormat == AudioExportFormat.PreferWav && fileExtension == "ogg")
 			{
-				if (fileExtension == "ogg")
-				{
-					decodedData = AudioConverter.OggToWav(decodedData);
-				}
-
-				if (AudioClipExportCollection.IsMp3Extension(this, fileExtension))
-				{
-					decodedData = AudioConverter.WavToMp3(decodedData);
-				}
+				decodedData = AudioConverter.OggToWav(decodedData);
 			}
 
 			if (decodedData.IsNullOrEmpty())

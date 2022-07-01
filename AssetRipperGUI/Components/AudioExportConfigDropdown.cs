@@ -9,7 +9,6 @@ namespace AssetRipper.GUI.Components
 			AudioExportFormat.Yaml => MainWindow.Instance.LocalizationManager["audio_format_yaml"],
 			AudioExportFormat.Native => MainWindow.Instance.LocalizationManager["audio_format_native"],
 			AudioExportFormat.PreferWav => MainWindow.Instance.LocalizationManager["audio_format_force_wav"],
-			AudioExportFormat.PreferMp3 => MainWindow.Instance.LocalizationManager["audio_format_force_mp3"],
 			AudioExportFormat.Default => MainWindow.Instance.LocalizationManager["audio_format_default"],
 			_ => base.GetValueDisplayName(value),
 		};
@@ -19,7 +18,6 @@ namespace AssetRipper.GUI.Components
 			AudioExportFormat.Yaml => MainWindow.Instance.LocalizationManager["audio_format_yaml_description"],
 			AudioExportFormat.Native => MainWindow.Instance.LocalizationManager["audio_format_native_description"],
 			AudioExportFormat.PreferWav => MainWindow.Instance.LocalizationManager["audio_format_force_wav_description"],
-			AudioExportFormat.PreferMp3 => MainWindow.Instance.LocalizationManager["audio_format_force_mp3_description"],
 			AudioExportFormat.Default => MainWindow.Instance.LocalizationManager["audio_format_default_description"],
 			_ => null,
 		};

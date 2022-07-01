@@ -18,9 +18,5 @@
 		/// Not advised if rebundling. This converts audio to the WAV format when possible
 		/// </summary>
 		PreferWav,
-		/// <summary>
-		/// Not advised if rebundling. This converts audio to the MP3 format when possible. Windows only
-		/// </summary>
-		PreferMp3,
 	}
 }
