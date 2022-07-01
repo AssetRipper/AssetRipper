@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using System.IO;
 
@@ -9,14 +8,18 @@ namespace AssetRipper.Core.Classes
 	{
 		public byte[] RawData { get; private set; } = Array.Empty<byte>();
 
-		public UnknownObject(LayoutInfo layout) : base(layout) { }
 		public UnknownObject(AssetInfo assetInfo) : base(assetInfo) { }
 
 		public override void Read(AssetReader reader)
 		{
-			if (AssetInfo?.ByteSize > 0)
+			throw new NotSupportedException();
+		}
+
+		public void Read(AssetReader reader, int byteSize)
+		{
+			if (byteSize > 0)
 			{
-				RawData = reader.ReadBytes(AssetInfo.ByteSize);
+				RawData = reader.ReadBytes(byteSize);
 			}
 		}
 

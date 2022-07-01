@@ -324,7 +324,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		private void ReadAsset(AssetReader reader, ObjectInfo info)
 		{
-			AssetInfo assetInfo = new AssetInfo(this, info.FileID, info.ClassID, info.ByteSize);
+			AssetInfo assetInfo = new AssetInfo(this, info.FileID, info.ClassID);
 			IUnityObjectBase asset = ReadAsset(reader, assetInfo, Header.DataOffset + info.ByteStart, info.ByteSize);
 			AddAsset(info.FileID, asset);
 		}
@@ -346,26 +346,31 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 #endif
 			}
 
-			if (asset == null)
-			{
-				asset = new UnknownObject(assetInfo);
-			}
-
 			bool replaceWithUnreadableObject = false;
 			reader.AdjustableStream.SetPositionBoundaries(offset, offset + size, offset);
-			try
+			if (asset is null)
 			{
-				asset.Read(reader);
+				UnknownObject unknownObject = new UnknownObject(assetInfo);
+				unknownObject.Read(reader, size);
+				asset = unknownObject;
 			}
-			catch (Exception ex)
+			else
 			{
+				try
+				{
+					asset.Read(reader);
+				}
+				catch (Exception ex)
+				{
 #if DEBUG
-				throw new SerializedFileException($"Error during reading of asset type {assetInfo.ClassID}", ex, Version, Platform, assetInfo.ClassID, Name, FilePath);
+					throw new SerializedFileException($"Error during reading of asset type {assetInfo.ClassID}", ex, Version, Platform, assetInfo.ClassID, Name, FilePath);
 #else
-				replaceWithUnreadableObject = true;
-				Logger.Error($"Error during reading of asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}", ex);
+					replaceWithUnreadableObject = true;
+					Logger.Error($"Error during reading of asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}", ex);
 #endif
+				}
 			}
+			
 			long read = reader.BaseStream.Position - offset;
 			if (!replaceWithUnreadableObject && read != size)
 			{
@@ -388,7 +393,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			{
 				reader.AdjustableStream.Position = offset;
 				UnreadableObject unreadable = new UnreadableObject(assetInfo);
-				unreadable.Read(reader);
+				unreadable.Read(reader, size);
 				unreadable.NameString = asset is IHasNameString hasName ? hasName.NameString : asset.GetType().Name;
 				asset = unreadable;
 			}
