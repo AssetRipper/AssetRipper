@@ -32,12 +32,6 @@ namespace AssetRipper.Core
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, AssetClassName);
 		public virtual string ExportExtension => AssetExtension;
 
-		public virtual HideFlags ObjectHideFlagsOld
-		{
-			get => HideFlags.None;
-			set => throw new NotSupportedException();
-		}
-
 		public const string AssetsKeyword = "Assets";
 		protected const string AssetExtension = "asset";
 

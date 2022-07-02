@@ -17,7 +17,6 @@ namespace AssetRipper.Core.Interfaces
 		ISerializedFile SerializedFile { get; }
 		UnityGUID GUID { get; set; }
 		long PathID { get; }
-		HideFlags ObjectHideFlagsOld { get; set; }
 		YamlDocument ExportYamlDocument(IExportContainer container);
 	}
 
