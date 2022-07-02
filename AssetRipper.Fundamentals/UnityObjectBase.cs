@@ -16,20 +16,17 @@ namespace AssetRipper.Core
 	/// </summary>
 	public class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	{
-		public AssetInfo? AssetInfo { get; set; }
-		public ISerializedFile? SerializedFile => AssetInfo?.File;
-		public virtual ClassIDType ClassID => AssetInfo?.ClassID ?? ClassIDType.UnknownType;
+		public AssetInfo AssetInfo { get; set; }
+		public ISerializedFile SerializedFile => AssetInfo.File;
+		public virtual ClassIDType ClassID => AssetInfo.ClassID;
 		public virtual string AssetClassName => "Unknown";
-		public long PathID => AssetInfo?.PathID ?? -1;
+		public long PathID => AssetInfo.PathID;
 		public UnityGUID GUID
 		{
-			get => AssetInfo?.GUID ?? default;
+			get => AssetInfo.GUID;
 			set
 			{
-				if (AssetInfo is not null)
-				{
-					AssetInfo.GUID = value;
-				}
+				AssetInfo.GUID = value;
 			}
 		}
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, AssetClassName);
@@ -44,8 +41,16 @@ namespace AssetRipper.Core
 		public const string AssetsKeyword = "Assets";
 		protected const string AssetExtension = "asset";
 
-		public UnityObjectBase() : base() { }
-		public UnityObjectBase(LayoutInfo layout) : base(layout) { }
+		public UnityObjectBase() : base()
+		{
+			AssetInfo = AssetInfo.MakeDummyAssetInfo();
+		}
+
+		public UnityObjectBase(LayoutInfo layout) : base(layout) 
+		{
+			AssetInfo = AssetInfo.MakeDummyAssetInfo();
+		}
+
 		public UnityObjectBase(AssetInfo assetInfo) : base()
 		{
 			AssetInfo = assetInfo;

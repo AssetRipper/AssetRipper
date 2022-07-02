@@ -3,7 +3,7 @@ using AssetRipper.Core.Parser.Files.SerializedFiles;
 
 namespace AssetRipper.Core.Parser.Asset
 {
-	public class AssetInfo
+	public sealed partial class AssetInfo
 	{
 		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID) 
 			: this(serializedFile, pathID, classID, UnityGUID.NewGuid()) { }
@@ -20,5 +20,12 @@ namespace AssetRipper.Core.Parser.Asset
 		public ClassIDType ClassID { get; }
 		public int ClassNumber => (int)ClassID;
 		public UnityGUID GUID { get; set; }
+
+		public static AssetInfo MakeDummyAssetInfo()
+		{
+			return new AssetInfo(dummySerializedFile, -1, default, default);
+		}
+
+		private static readonly DummySerializedFile dummySerializedFile = new();
 	}
 }

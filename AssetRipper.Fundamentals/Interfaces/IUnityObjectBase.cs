@@ -9,12 +9,12 @@ namespace AssetRipper.Core.Interfaces
 {
 	public interface IUnityObjectBase : IUnityAssetBase
 	{
-		AssetInfo? AssetInfo { get; set; }
+		AssetInfo AssetInfo { get; set; }
 		string AssetClassName { get; }
 		ClassIDType ClassID { get; }
 		string ExportExtension { get; }
 		string ExportPath { get; }
-		ISerializedFile? SerializedFile { get; }
+		ISerializedFile SerializedFile { get; }
 		UnityGUID GUID { get; set; }
 		long PathID { get; }
 		HideFlags ObjectHideFlagsOld { get; set; }
