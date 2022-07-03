@@ -28,10 +28,10 @@ namespace AssetRipper.Library.Exporters.Scripts
 			Decompiler = new ScriptDecompiler(AssemblyManager);
 			LanguageVersion = configuration.ScriptLanguageVersion.ToCSharpLanguageVersion(configuration.Version);
 			ScriptContentLevel = configuration.ScriptContentLevel;
-			Enabled = ScriptExportMode == ScriptExportMode.Decompiled && ScriptContentLevel > ScriptContentLevel.Level0;
+			Enabled = ScriptExportMode == ScriptExportMode.Decompiled;
 		}
 
-		private IAssemblyManager AssemblyManager { get; }
+		public IAssemblyManager AssemblyManager { get; }
 		private ScriptExportMode ScriptExportMode { get; }
 		private ICSharpCode.Decompiler.CSharp.LanguageVersion LanguageVersion { get; }
 		private ScriptContentLevel ScriptContentLevel { get; }
@@ -78,77 +78,119 @@ namespace AssetRipper.Library.Exporters.Scripts
 				throw new ArgumentNullException(nameof(dirPath));
 			}
 
-			Decompiler.LanguageVersion = LanguageVersion;
-			Decompiler.ScriptContentLevel = ScriptContentLevel;
+			Dictionary<string, AssemblyDefinitionDetails> assemblyDefinitionDetailsDictionary = new();
 
-			foreach (AssemblyDefinition assembly in AssemblyManager.GetAssemblies())
+			if (AssemblyManager.IsSet)
 			{
-				if (ReferenceAssemblies.IsReferenceAssembly(assembly.Name.Name))
-				{
-					continue;
-				}
+				Decompiler.LanguageVersion = LanguageVersion;
+				Decompiler.ScriptContentLevel = ScriptContentLevel;
 
-				Logger.Info(LogCategory.Export, $"Decompiling {assembly.Name.Name}");
-				string outputDirectory = Path.Combine(dirPath, assembly.Name.Name);
-				Directory.CreateDirectory(outputDirectory);
-				Decompiler.DecompileWholeProject(assembly, outputDirectory);
-
-				// assembly definitions were added in 2017.3
-				//     see: https://blog.unity.com/technology/unity-2017-3b-feature-preview-assembly-definition-files-and-transform-tool
-				if (container.ExportVersion.IsGreaterEqual(2017, 3) && 
-					// exclude predefined assemblies like Assembly-CSharp.dll
-					//    see: https://docs.unity3d.com/2017.3/Documentation/Manual/ScriptCompilationAssemblyDefinitionFiles.html
-					!ReferenceAssemblies.IsPredefinedAssembly(assembly.Name.Name))
+				foreach (AssemblyDefinition assembly in AssemblyManager.GetAssemblies())
 				{
-					AssemblyDefinitionExporter.Export(assembly, outputDirectory);
-				}
-			}
-			if(callback is not null)
-			{
-				foreach (IMonoScript asset in assets.Cast<IMonoScript>())
-				{
-					if (ScriptExportCollection.IsEngineScript(asset))
+					if (ReferenceAssemblies.IsReferenceAssembly(assembly.Name.Name))
 					{
 						continue;
 					}
 
-					string filePath = Path.Combine(dirPath, GetExportSubPath(asset.GetTypeDefinition()));
-					if (!File.Exists(filePath))
-					{
-						Logger.Error(LogCategory.Export, $"No script exists at {filePath}");
-					}
+					Logger.Info(LogCategory.Export, $"Decompiling {assembly.Name.Name}");
+					string outputDirectory = Path.Combine(dirPath, assembly.Name.Name);
+					Directory.CreateDirectory(outputDirectory);
+					Decompiler.DecompileWholeProject(assembly, outputDirectory);
+
+					assemblyDefinitionDetailsDictionary.TryAdd(assembly.Name.Name, new AssemblyDefinitionDetails(assembly, outputDirectory));
+				}
+			}
+
+			foreach (IMonoScript asset in assets.Cast<IMonoScript>())
+			{
+				if (ScriptExportCollection.IsEngineScript(asset))
+				{
+					continue;
+				}
+
+				GetExportSubPath(asset, out string subFolderPath, out string fileName);
+				string folderPath = Path.Combine(dirPath, subFolderPath);
+				string filePath = Path.Combine(folderPath, fileName);
+				if (!File.Exists(filePath))
+				{
+					Directory.CreateDirectory(folderPath);
+					File.WriteAllText(filePath, GetEmptyScriptContent(asset));
+					string assemblyName = BaseManager.ToAssemblyName(asset.GetAssemblyNameFixed());
+					assemblyDefinitionDetailsDictionary.TryAdd(assemblyName, 
+						new AssemblyDefinitionDetails(assemblyName, Path.Combine(dirPath, assemblyName)));
+				}
+
+				if (callback is not null)
+				{
 					if (File.Exists($"{filePath}.meta"))
 					{
 						Logger.Error(LogCategory.Export, $"Metafile already exists at {filePath}.meta");
+						//throw new Exception($"Metafile already exists at {filePath}.meta");
 					}
-					callback.Invoke(container, asset, filePath);
+					else
+					{
+						callback.Invoke(container, asset, filePath);
+					}
+				}
+			}
+
+			// assembly definitions were added in 2017.3
+			//     see: https://blog.unity.com/technology/unity-2017-3b-feature-preview-assembly-definition-files-and-transform-tool
+			if (assemblyDefinitionDetailsDictionary.Count > 0 && container.ExportVersion.IsGreaterEqual(2017, 3))
+			{
+				foreach (AssemblyDefinitionDetails details in assemblyDefinitionDetailsDictionary.Values)
+				{
+					// exclude predefined assemblies like Assembly-CSharp.dll
+					//    see: https://docs.unity3d.com/2017.3/Documentation/Manual/ScriptCompilationAssemblyDefinitionFiles.html
+					if (!ReferenceAssemblies.IsPredefinedAssembly(details.AssemblyName))
+					{
+						AssemblyDefinitionExporter.Export(details);
+					}
 				}
 			}
 		}
 
-		private static string GetExportSubPath(string assembly, string @namespace, string @class)
+		private static void GetExportSubPath(string assembly, string @namespace, string @class, out string folderPath, out string fileName)
 		{
 			string assemblyFolder = BaseManager.ToAssemblyName(assembly);
 			string namespaceFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
-			string folderPath = Path.Combine(assemblyFolder, namespaceFolder);
-			string filePath = Path.Combine(folderPath, @class);
-			return $"{DirectoryUtils.FixInvalidPathCharacters(filePath)}.cs";
+			folderPath = DirectoryUtils.FixInvalidPathCharacters(Path.Combine(assemblyFolder, namespaceFolder));
+			fileName = $"{DirectoryUtils.FixInvalidPathCharacters(@class)}.cs";
 		}
 
-		private static string GetExportSubPath(TypeDefinition type)
+		private static void GetExportSubPath(IMonoScript script, out string folderPath, out string fileName)
 		{
-			string typeName = type.Name;
-			int index = typeName.IndexOf('<');
-			if (index >= 0)
+			GetExportSubPath(script.GetAssemblyNameFixed(), script.Namespace_C115.String, script.ClassName_C115.String, out folderPath, out fileName);
+		}
+
+		private static string GetEmptyScriptContent(IMonoScript script)
+		{
+			return GetEmptyScriptContent(script.Namespace_C115.String, script.ClassName_C115.String);
+		}
+
+		private static string GetEmptyScriptContent(string? @namespace, string name)
+		{
+			if (string.IsNullOrEmpty(@namespace))
 			{
-				typeName = typeName.Substring(0, index);
+				return $@"using UnityEngine;
+
+public class {name} : MonoBehaviour
+{{
+	//Dummy class. Use different settings or provide .NET dll files for better decompilation output
+}}";
 			}
-			index = typeName.IndexOf('`');
-			if (index >= 0)
+			else
 			{
-				typeName = typeName.Substring(0, index);
+				return $@"using UnityEngine;
+
+namespace {@namespace}
+{{
+	public class {name} : MonoBehaviour
+	{{
+		//Dummy class. Use different settings or provide .NET dll files for better decompilation output
+	}}
+}}";
 			}
-			return GetExportSubPath(type.Module.Name, type.Namespace, typeName);
 		}
 	}
 }

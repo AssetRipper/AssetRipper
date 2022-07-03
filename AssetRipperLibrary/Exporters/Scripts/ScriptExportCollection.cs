@@ -19,7 +19,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 {
 	public partial class ScriptExportCollection : ExportCollection
 	{
-		public ScriptExportCollection(IAssetExporter assetExporter, IMonoScript script)
+		public ScriptExportCollection(ScriptExporter assetExporter, IMonoScript script)
 		{
 			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
 			File = script.SerializedFile;
@@ -42,7 +42,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				{
 					m_scripts.Add(assetScript, assetScript);
 					uniqueDictionary.Add(info, assetScript);
-					if (assetScript.IsScriptPresents())
+					if (!assetExporter.AssemblyManager.IsSet || assetScript.IsScriptPresents())
 					{
 						m_export.Add(assetScript);
 					}

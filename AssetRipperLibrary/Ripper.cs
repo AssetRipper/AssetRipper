@@ -300,8 +300,7 @@ namespace AssetRipper.Library
 			//Script exporters
 			OverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));
 			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
-			ConditionalOverrideExporter<IMonoScript>(new SkipScriptExporter(), Settings.ScriptContentLevel == Core.Configuration.ScriptContentLevel.Level0);
-
+			
 			//Animator Controller
 			OverrideExporter<IAnimatorController>(new AnimatorControllerExporter());
 
