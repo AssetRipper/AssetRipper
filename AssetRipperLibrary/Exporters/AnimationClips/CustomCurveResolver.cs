@@ -198,6 +198,10 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 						{
 							return "m_SpotAngle";
 						}
+						if (attribute == CrcUtils.CalculateDigestAscii("m_InnerSpotAngle"))
+						{
+							return "m_InnerSpotAngle";
+						}
 						if (attribute == CrcUtils.CalculateDigestAscii("m_ColorTemperature"))
 						{
 							return "m_ColorTemperature";

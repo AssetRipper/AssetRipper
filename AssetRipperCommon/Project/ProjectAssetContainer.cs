@@ -357,7 +357,8 @@ namespace AssetRipper.Core.Project
 					{
 						assetPath = assetPath.Substring(bundleDirectory.Length);
 					}
-					m_pathAssets.Add(asset, new ProjectAssetPath(directory, assetPath));
+					m_pathAssets.TryAdd(asset, new ProjectAssetPath(directory, assetPath));
+					//TryAdd because Unity sometimes includes duplicates (issue #378)
 				}
 				else
 				{
