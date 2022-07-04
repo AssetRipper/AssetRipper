@@ -76,8 +76,8 @@
     "c_sharp_language_version_config_description": "Die C# sprach Version die beim Dekompilieren von Skripts verwendet wird.",
     "config_screen_drag_drop_prompt": "Bitte beachten Sie, dass einige Einstellungsänderungen Fehler verursachen oder verhindern können.\nSobald Sie bereit sind, nehmen Sie Ihre Spieldatei bzw. Ihren Ordner per Drag-and-Drop in dieses Fenster oder verwenden Sie das Menü oben links, um etwas manuell zu öffnen.",
     "menu_file": "Datei",
-    "menu_file_open_file": "Datei öfnen",
-    "menu_file_open_folder": "Ordner öfnen",
+    "menu_file_open_file": "Datei öffnen",
+    "menu_file_open_folder": "Ordner öffnen",
     "menu_file_reset": "zurücksetzen",
     "menu_file_exit": "Beenden",
     "menu_export": "Exportieren",
@@ -146,5 +146,10 @@
     "bundled_assets_export_group_by_asset_type": "Gruppieren nach Asset-Typ",
     "bundled_assets_export_group_by_asset_type_description": "Gebündelte Assets werden genauso behandelt wie Assets aus anderen Dateien.",
     "bundled_assets_export_group_by_bundle_name": "Gruppieren nach Bündelnamen",
-    "bundled_assets_export_group_by_bundle_name_description": "Gebündelte Assets werden nach ihrem Asset-Bundle-Namen gruppiert."
+    "bundled_assets_export_group_by_bundle_name_description": "Gebündelte Assets werden nach ihrem Asset-Bundle-Namen gruppiert.",
+    "bundled_assets_export_direct_export": "Direkter Export",
+    "bundled_assets_export_direct_export_description": "Gebündelte Assets werden ohne Gruppierung exportiert.",
+    "audio_format_yaml": "Yaml",
+    "audio_format_yaml_description": "Exportieren als yaml Asset und resS-Datei. Dies ist eine sichere Option und fungiert als Backup, wenn etwas schief geht.",
+    "c_sharp_langage_version_config_11_0": "C# 11"
 }
