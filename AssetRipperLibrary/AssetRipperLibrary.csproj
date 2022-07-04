@@ -25,7 +25,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.TextureDecoder" Version="1.1.0" />
-		<PackageReference Include="Fmod5Sharp" Version="1.2.0" />
+		<PackageReference Include="Fmod5Sharp" Version="2.0.0" />
 		<PackageReference Include="ICSharpCode.Decompiler" Version="8.0.0.7007-preview1" />
 		<PackageReference Include="Kyaru.Texture2DDecoder" Version="0.16.40" />
 		<PackageReference Include="NAudio.Core" Version="2.1.0" />
@@ -97,14 +97,6 @@
 		<ContentWithTargetPath Include="Libraries\x64\crunchunity_x64.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>crunchunity.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="Libraries\x64\libogg-x64.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>ogg.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="Libraries\x64\libvorbis-x64.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>vorbis.dll</TargetPath>
 		</ContentWithTargetPath>
 	</ItemGroup>
 

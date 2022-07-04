@@ -2,34 +2,20 @@
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using Fmod5Sharp;
-using OggVorbisSharp;
+using Fmod5Sharp.FmodTypes;
+using Fmod5Sharp.Util;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace AssetRipper.Library.Exporters.Audio
 {
 	public static class AudioClipDecoder
 	{
 		/// <summary>
-		/// Are Ogg and Vorbis loaded?
-		/// </summary>
-		public static bool LibrariesLoaded { get; private set; }
-		/// <summary>
 		/// Size of the magic number currently
 		/// </summary>
 		private const int MinimumFsbSize = 4;
-
-		static AudioClipDecoder()
-		{
-			NativeLibrary.SetDllImportResolver(typeof(Ogg).Assembly, DllImportResolver);
-			LibrariesLoaded = IsVorbisLoaded() & IsOggLoaded();
-			if (!LibrariesLoaded)
-			{
-				Logger.Error(LogCategory.Export, "Either LibVorbis or LibOgg is missing from your system, so Ogg audio clips cannot be exported. This message will not repeat.");
-			}
-		}
 
 		public static bool CanDecode(IAudioClip audioClip)
 		{
@@ -40,11 +26,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			}
 
 			FmodAudioType audioType = GetAudioType(rawData);
-			if (audioType == FmodAudioType.VORBIS && !LibrariesLoaded)
-			{
-				return false;
-			}
-			else if (FmodAudioTypeExtensions.IsSupported(audioType))
+			if (FmodAudioTypeExtensions.IsSupported(audioType))
 			{
 				return true;
 			}
@@ -74,11 +56,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			FmodAudioType audioType = fsbData.Header.AudioType;
 			try
 			{
-				if (audioType == FmodAudioType.VORBIS && !LibrariesLoaded)
-				{
-					return false;
-				}
-				else if (audioType.IsSupported() && fsbData.Samples.Single().RebuildAsStandardFileFormat(out decodedData, out fileExtension))
+				if (audioType.IsSupported() && fsbData.Samples.Single().RebuildAsStandardFileFormat(out decodedData, out fileExtension))
 				{
 					return true;
 				}
@@ -162,52 +140,5 @@ namespace AssetRipper.Library.Exporters.Audio
 		/// Not null and at least the minimum size
 		/// </summary>
 		private static bool IsDataUsable([NotNullWhen(true)] byte[]? data) => data is not null && data.Length >= MinimumFsbSize;
-
-		private unsafe static bool IsVorbisLoaded()
-		{
-			try { Vorbis.vorbis_version_string(); }
-			catch (DllNotFoundException ex)
-			{
-				Logger.Error($"Could not find vorbis: {ex.Message}");
-				return false;
-			}
-			return true;
-		}
-
-		private unsafe static bool IsOggLoaded()
-		{
-			bool result = true;
-			ogg_stream_state* streamPtr = (ogg_stream_state*)Marshal.AllocHGlobal(sizeof(OggVorbisSharp.ogg_stream_state));
-			*streamPtr = new ogg_stream_state();
-			try
-			{
-				Ogg.ogg_stream_init(streamPtr, 1);
-			}
-			catch (DllNotFoundException ex)
-			{
-				Logger.Error($"Could not find ogg: {ex.Message}");
-				result = false;
-			}
-			finally
-			{
-				Marshal.FreeHGlobal((IntPtr)streamPtr);
-			}
-			return result;
-		}
-
-		private static IntPtr DllImportResolver(string libraryName, System.Reflection.Assembly assembly, DllImportSearchPath? searchPath)
-		{
-			// On linux, try .so.0
-			if (OperatingSystem.IsLinux())
-			{
-				if (libraryName == "ogg" || libraryName == "vorbis")
-				{
-					return NativeLibrary.Load(libraryName + ".so.0", assembly, searchPath);
-				}
-			}
-
-			// Otherwise, fallback to default import resolver.
-			return IntPtr.Zero;
-		}
 	}
 }
