@@ -46,17 +46,19 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 
 			// code quality
-			decompiler.CustomTransforms.Add(new RemoveInvalidMemberTransform(ScriptingBackend == ScriptingBackend.IL2Cpp));
-			decompiler.CustomTransforms.Add(new FixOptionalParametersTransform());
-			decompiler.CustomTransforms.Add(new ValidateNullCastsTransform());
-			decompiler.CustomTransforms.Add(new FixExplicitInterfaceImplementationTransform());
-			decompiler.CustomTransforms.Add(new FixStructLayoutAmbiguityTransform());
-			decompiler.CustomTransforms.Add(new RemoveCompilerAttributeTransform());
-			decompiler.CustomTransforms.Add(new FixGenericStructConstraintTransform());
+			if (ScriptingBackend == ScriptingBackend.IL2Cpp && ScriptContentLevel <= ScriptContentLevel.Level2)
+			{
+				decompiler.CustomTransforms.Add(new RemoveInvalidMemberTransform(ScriptingBackend == ScriptingBackend.IL2Cpp));
+				decompiler.CustomTransforms.Add(new FixOptionalParametersTransform());
+				decompiler.CustomTransforms.Add(new ValidateNullCastsTransform());
+				decompiler.CustomTransforms.Add(new FixExplicitInterfaceImplementationTransform());
+				decompiler.CustomTransforms.Add(new FixStructLayoutAmbiguityTransform());
+				decompiler.CustomTransforms.Add(new RemoveCompilerAttributeTransform());
+				decompiler.CustomTransforms.Add(new FixGenericStructConstraintTransform());
+			}
 			
 			// il2cpp fixes
-			if (ScriptContentLevel == ScriptContentLevel.Level1 || // level one stubs everything, thus needs
-																   // to be fixed up.
+			if (ScriptContentLevel == ScriptContentLevel.Level1 || // level one stubs everything, so it needs to be fixed up.
 				(ScriptingBackend == ScriptingBackend.IL2Cpp && ScriptContentLevel <= ScriptContentLevel.Level2))
 			{
 				// maybe could be moved to code quality?
