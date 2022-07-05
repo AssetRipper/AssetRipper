@@ -135,7 +135,13 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			LibCpp2IL.InstructionSet.X86_32 => true,
 			LibCpp2IL.InstructionSet.X86_64 => true,
 			LibCpp2IL.InstructionSet.WASM => true,
-			_ => false, //Arm32 and Arm64 excluded for performance reasons
+
+			//Arm32 and Arm64 were excluded before for performance reasons.
+			//However, the community requested that they be enabled anyway.
+			LibCpp2IL.InstructionSet.ARM32 => true,
+			LibCpp2IL.InstructionSet.ARM64 => true,
+
+			_ => false, 
 		};
 
 		~IL2CppManager()
