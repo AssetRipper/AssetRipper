@@ -7,6 +7,7 @@ namespace AssetRipper.Core.Logging
 {
 	public static class Logger
 	{
+		private static readonly object _lock = new();
 		private static readonly List<ILogger> loggers = new List<ILogger>();
 		public static bool AllowVerbose { get; set; }
 
@@ -43,9 +44,12 @@ namespace AssetRipper.Core.Logging
 				throw new ArgumentNullException(nameof(message));
 			}
 
-			foreach (ILogger instance in loggers)
+			lock (_lock)
 			{
-				instance?.Log(type, category, message);
+				foreach (ILogger instance in loggers)
+				{
+					instance?.Log(type, category, message);
+				}
 			}
 		}
 
