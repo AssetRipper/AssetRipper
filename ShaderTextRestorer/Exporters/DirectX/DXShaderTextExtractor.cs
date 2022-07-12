@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.VersionUtilities;
 using ShaderTextRestorer.Handlers;
-using System;
 
 namespace ShaderTextRestorer.Exporters.DirectX
 {
@@ -18,15 +17,6 @@ namespace ShaderTextRestorer.Exporters.DirectX
 			if (DXDecompilerlyHandler.TryDisassemble(data, dataOffset, out disassemblyText))
 			{
 				return true;
-			}
-			else if (D3DHandler.IsD3DAvailable())
-			{
-				uint fourCC = BitConverter.ToUInt32(data, dataOffset);
-				if (!D3DHandler.IsCompatible(fourCC))
-				{
-					throw new Exception($"Magic number {fourCC} doesn't match");
-				}
-				return D3DHandler.TryGetShaderText(data, dataOffset, out disassemblyText);
 			}
 			else
 			{
