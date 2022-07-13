@@ -75,7 +75,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			BoneWeights4[]? skin = null;
 
 			origin.RD_C213.VertexData?.ReadData(origin.SerializedFile.Version, origin.SerializedFile.EndianType,
-				out int _,
 				out vertices,
 				out Vector3f[]? _,//normals,
 				out Vector4f[]? _,//tangents,

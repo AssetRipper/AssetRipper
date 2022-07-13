@@ -291,7 +291,7 @@ namespace AssetRipper.Library
 
 			//Mesh exporters
 			OverrideExporter<Core.Classes.Mesh.Mesh>(new GlbMeshExporter(Settings));
-			OverrideExporter<Core.Classes.Mesh.Mesh>(new UnifiedMeshExporter(Settings));
+			OverrideExporter<IMesh>(new UnifiedMeshExporter(Settings));
 
 			//Terrain exporters
 			ConditionalOverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings), Settings.TerrainExportMode == TerrainExportMode.Heatmap);

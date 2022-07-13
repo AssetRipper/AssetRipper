@@ -47,7 +47,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			this IVertexData instance,
 			UnityVersion version,
 			EndianType endianType,
-			out int vertexCount,
 			out Vector3f[]? vertices,
 			out Vector3f[]? normals,
 			out Vector4f[]? tangents,
@@ -62,7 +61,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			out Vector2f[]? uv6,
 			out Vector2f[]? uv7)
 		{
-			vertexCount = (int)instance.VertexCount;
+			int vertexCount = (int)instance.VertexCount;
 
 			vertices = default;
 			normals = default;

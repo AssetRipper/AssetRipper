@@ -19,18 +19,13 @@ namespace AssetRipper.GUI.Components
 		protected override string? GetValueDescription(MeshExportFormat value) => value switch
 		{
 			MeshExportFormat.Native => MainWindow.Instance.LocalizationManager["mesh_format_native_description"],
-			//MeshExportFormat.Obj => MainWindow.Instance.LocalizationManager["mesh_format_obj_description"],
-			//MeshExportFormat.StlAscii => MainWindow.Instance.LocalizationManager["mesh_format_stl_ascii_description"],
-			//MeshExportFormat.StlBinary => MainWindow.Instance.LocalizationManager["mesh_format_stl_binary_description"],
-			//MeshExportFormat.PlyAscii => MainWindow.Instance.LocalizationManager["mesh_format_ply_ascii_description"],
+			MeshExportFormat.Obj => MainWindow.Instance.LocalizationManager["mesh_format_obj_description"],
+			MeshExportFormat.StlAscii => MainWindow.Instance.LocalizationManager["mesh_format_stl_ascii_description"],
+			MeshExportFormat.StlBinary => MainWindow.Instance.LocalizationManager["mesh_format_stl_binary_description"],
+			MeshExportFormat.PlyAscii => MainWindow.Instance.LocalizationManager["mesh_format_ply_ascii_description"],
 			//MeshExportFormat.GlbPrimitive => MainWindow.Instance.LocalizationManager["mesh_format_glb_primitive_description"],
-			//MeshExportFormat.FbxPrimitive => MainWindow.Instance.LocalizationManager["mesh_format_fbx_primitive_description"],
-			MeshExportFormat.Obj => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
-			MeshExportFormat.StlAscii => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
-			MeshExportFormat.StlBinary => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
-			MeshExportFormat.PlyAscii => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
 			MeshExportFormat.GlbPrimitive => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
-			MeshExportFormat.FbxPrimitive => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
+			MeshExportFormat.FbxPrimitive => MainWindow.Instance.LocalizationManager["mesh_format_fbx_primitive_description"],
 			_ => null,
 		};
 	}

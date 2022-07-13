@@ -11,7 +11,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void DecompressCompressedMesh(this ICompressedMesh compressedMesh,
 			UnityVersion version,
-			out int vertexCount,
 			out Vector3f[]? vertices,
 			out Vector3f[]? normals,
 			out Vector4f[]? tangents,
@@ -28,7 +27,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			out Matrix4x4f[]? bindPose,
 			out uint[]? processedIndexBuffer)
 		{
-			vertexCount = default;
+			int vertexCount = default;
 			vertices = default;
 			normals = default;
 			tangents = default;
