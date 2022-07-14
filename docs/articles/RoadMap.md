@@ -1,14 +1,9 @@
 # Development Roadmap
 
-## 0.2.1.0
+## 0.2.1.1
 This release will be primarily focused on cleaning up and refactoring the project.
 
-* Mesh export - STL, OBJ, FBX, PLY, GLB
-  * Convert Unified Exporter to the new system
-  * Convert GLB Exporter to the new system
-  * Use nuget package?
 * Cleanup legacy code
-  * Move documentation on legacy code to a suitable home
   * Remove the `Classes` and `Converters` namespaces
   * Remove any additional legacy code
   * Merge the common project back into the core project
