@@ -23,8 +23,7 @@ namespace AssetRipper.GUI.Components
 			MeshExportFormat.StlAscii => MainWindow.Instance.LocalizationManager["mesh_format_stl_ascii_description"],
 			MeshExportFormat.StlBinary => MainWindow.Instance.LocalizationManager["mesh_format_stl_binary_description"],
 			MeshExportFormat.PlyAscii => MainWindow.Instance.LocalizationManager["mesh_format_ply_ascii_description"],
-			//MeshExportFormat.GlbPrimitive => MainWindow.Instance.LocalizationManager["mesh_format_glb_primitive_description"],
-			MeshExportFormat.GlbPrimitive => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
+			MeshExportFormat.GlbPrimitive => MainWindow.Instance.LocalizationManager["mesh_format_glb_primitive_description"],
 			MeshExportFormat.FbxPrimitive => MainWindow.Instance.LocalizationManager["mesh_format_fbx_primitive_description"],
 			_ => null,
 		};

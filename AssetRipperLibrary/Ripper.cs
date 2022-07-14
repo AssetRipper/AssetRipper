@@ -290,7 +290,7 @@ namespace AssetRipper.Library
 			ConditionalOverrideExporter<IAudioClip>(new AudioClipExporter(Settings), AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat));
 
 			//Mesh exporters
-			OverrideExporter<Core.Classes.Mesh.Mesh>(new GlbMeshExporter(Settings));
+			OverrideExporter<IMesh>(new GlbMeshExporter(Settings));
 			OverrideExporter<IMesh>(new UnifiedMeshExporter(Settings));
 
 			//Terrain exporters
