@@ -14,7 +14,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class MeshExtensions
 	{
-		public static bool IsCombinedMesh(this IMesh mesh) => mesh?.NameString == "Combined Mesh (root scene)";
+		public static bool IsCombinedMesh(this IMesh mesh) => mesh.NameString == "Combined Mesh (root scene)";
 
 		public static void ConvertToEditorFormat(this IMesh mesh)
 		{
@@ -196,6 +196,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				mesh.MeshOptimized_C43 = value == MeshOptimizationFlags.Everything;
 			}
+		}
+
+		public static MeshCompression GetMeshCompression(this IMesh mesh)
+		{
+			return (MeshCompression)mesh.MeshCompression_C43;
 		}
 
 		public static uint[] GetProcessedIndexBuffer(this IMesh mesh)

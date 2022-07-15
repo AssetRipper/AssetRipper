@@ -1,5 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
+using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
@@ -38,8 +40,28 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else
 			{
-				return new();
-				//return StreamInfoConverter.GenerateChannelInfo(version, instance.Streams, channelType);
+				List<IStreamInfo> streams = instance.GetStreamsInvariant();
+				ChannelInfo channelInfo = new ChannelInfo();
+				ShaderChannel4 channelv4 = channelType.ToShaderChannel4();
+				int streamIndex = streams.IndexOf(t => t.IsMatch(channelv4));
+				if (streamIndex >= 0)
+				{
+					byte offset = 0;
+					IStreamInfo stream = streams[streamIndex];
+					for (ShaderChannel4 i = 0; i < channelv4; i++)
+					{
+						if (stream.IsMatch(i))
+						{
+							offset += i.ToShaderChannel().GetStride(version);
+						}
+					}
+
+					channelInfo.Stream = (byte)streamIndex;
+					channelInfo.Offset = offset;
+					channelInfo.Format = channelType.GetVertexFormat(version).ToFormat(version);
+					channelInfo.Dimension = channelType.GetDimention(version);
+				}
+				return channelInfo;
 			}
 		}
 
