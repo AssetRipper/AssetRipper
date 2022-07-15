@@ -69,7 +69,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AssetRipperCore\AssetRipperCore.csproj" />
+		<ProjectReference Include="..\AssetRipper.Core\AssetRipper.Core.csproj" />
 		<ProjectReference Include="..\ShaderTextRestorer\ShaderTextRestorer.csproj" />
 	</ItemGroup>
 

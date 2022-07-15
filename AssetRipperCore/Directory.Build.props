@@ -1,7 +1,0 @@
-<Project>
-
-  <PropertyGroup>
-	<BaseIntermediateOutputPath>..\Bins\obj\standard\</BaseIntermediateOutputPath>
-  </PropertyGroup>
-  
-</Project>

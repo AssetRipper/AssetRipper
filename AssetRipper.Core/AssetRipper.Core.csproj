@@ -29,10 +29,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AssetRipperCommon\AssetRipperCommon.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Reference Include="AssetRipper.SourceGenerated">
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>../Libraries/AssetRipper.SourceGenerated.dll</HintPath>
@@ -43,6 +39,10 @@
 		<Compile Remove="obj\**" />
 		<EmbeddedResource Remove="obj\**" />
 		<None Remove="obj\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\AssetRipper.Fundamentals\AssetRipper.Fundamentals.csproj" />
 	</ItemGroup>
 
 </Project>

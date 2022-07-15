@@ -6,7 +6,7 @@ This release will be primarily focused on cleaning up and refactoring the projec
 * Cleanup legacy code
   * ~~Remove the `Classes` and `Converters` namespaces~~
   * ~~Remove any additional legacy code~~
-  * Merge the common project back into the core project
+  * ~~Merge the common project back into the core project~~
 
 ## 0.2.X.0
 These releases will likely focus on preparing for the next major milestone.
