@@ -4,8 +4,8 @@
 This release will be primarily focused on cleaning up and refactoring the project.
 
 * Cleanup legacy code
-  * Remove the `Classes` and `Converters` namespaces
-  * Remove any additional legacy code
+  * ~~Remove the `Classes` and `Converters` namespaces~~
+  * ~~Remove any additional legacy code~~
   * Merge the common project back into the core project
 
 ## 0.2.X.0
