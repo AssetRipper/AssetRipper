@@ -11,16 +11,10 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipperLibrary\$(Configuration)\</IntermediateOutputPath>
-		<Platforms>x64</Platforms>
-		<Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
-		<DefineConstants>TRACE;NET_CORE</DefineConstants>
 		<IsTrimmable>true</IsTrimmable>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
-		<DefineConstants>DEBUG</DefineConstants>
+		<Platforms>AnyCPU;AnyCPU</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,6 +22,9 @@
 		<PackageReference Include="Fmod5Sharp" Version="2.0.1" />
 		<PackageReference Include="ICSharpCode.Decompiler" Version="8.0.0.7007-preview1" />
 		<PackageReference Include="Kyaru.Texture2DDecoder" Version="0.16.40" />
+		<PackageReference Include="Kyaru.Texture2DDecoder.Windows" Version="0.1.0" />
+		<PackageReference Include="Kyaru.Texture2DDecoder.macOS" Version="0.1.0" />
+		<PackageReference Include="Kyaru.Texture2DDecoder.Linux" Version="0.1.0" />
 		<PackageReference Include="NAudio.Core" Version="2.1.0" />
 		<PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
 		<PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0026" />
@@ -73,19 +70,7 @@
 		<ProjectReference Include="..\ShaderTextRestorer\ShaderTextRestorer.csproj" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='ReleaseWindows'">
-		<PackageReference Include="Kyaru.Texture2DDecoder.Windows" Version="0.1.0" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(Configuration)'=='DebugMac' or '$(Configuration)'=='ReleaseMac'">
-		<PackageReference Include="Kyaru.Texture2DDecoder.macOS" Version="0.1.0" />
-	</ItemGroup>
-	
-	<ItemGroup Condition="'$(Configuration)'=='DebugLinux' or '$(Configuration)'=='ReleaseLinux'">
-		<PackageReference Include="Kyaru.Texture2DDecoder.Linux" Version="0.1.0" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='ReleaseWindows'">
+	<ItemGroup>
 		<ContentWithTargetPath Include="Libraries\x64\texgenpack_x64.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>texgenpack.dll</TargetPath>
@@ -98,12 +83,6 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<TargetPath>crunchunity.dll</TargetPath>
 		</ContentWithTargetPath>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Remove="obj\**" />
-		<EmbeddedResource Remove="obj\**" />
-		<None Remove="obj\**" />
 	</ItemGroup>
 
 	<ItemGroup>

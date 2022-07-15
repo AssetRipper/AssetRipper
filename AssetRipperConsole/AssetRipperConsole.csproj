@@ -10,15 +10,9 @@
 		<RootNamespace>AssetRipper.Console</RootNamespace>
 		<OutputPath>..\Bins\AssetRipperConsole\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipperConsole\$(Configuration)\</IntermediateOutputPath>
-		<Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
-		<Platforms>x64</Platforms>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
-		<DefineConstants>TRACE;NET_CORE</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
-		<DefineConstants>DEBUG</DefineConstants>
+		<Platforms>AnyCPU;AnyCPU</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -34,12 +28,6 @@
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
 		<PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Remove="obj\**" />
-		<EmbeddedResource Remove="obj\**" />
-		<None Remove="obj\**" />
 	</ItemGroup>
 
 	<ItemGroup>

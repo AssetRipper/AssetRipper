@@ -18,11 +18,11 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Publish AssetRipperConsole Windows x64
-      run: dotnet publish /p:Configuration=ReleaseWindows  /p:Platform=x64 /p:PublishProfile=windows_console /p:EnableCompressionInSingleFile=true
+      run: dotnet publish /p:PublishProfile=windows_console /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI Windows x64
-      run: dotnet publish /p:Configuration=ReleaseWindows  /p:Platform=x64 /p:PublishProfile=windows_gui /p:EnableCompressionInSingleFile=true
+      run: dotnet publish /p:PublishProfile=windows_gui /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperGUI/
       
     - name: List Console Files
@@ -67,11 +67,11 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Publish AssetRipperConsole Linux x64
-      run: dotnet publish /p:Configuration=ReleaseLinux  /p:Platform=x64 /p:PublishProfile=linux_console /p:EnableCompressionInSingleFile=true
+      run: dotnet publish /p:PublishProfile=linux_console /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI Linux x64
-      run: dotnet publish /p:Configuration=ReleaseLinux  /p:Platform=x64 /p:PublishProfile=linux_gui /p:EnableCompressionInSingleFile=true
+      run: dotnet publish /p:PublishProfile=linux_gui /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperGUI/
         
     - name: List Console Files
@@ -118,11 +118,11 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Publish AssetRipperConsole Mac x64
-      run: dotnet publish /p:Configuration=ReleaseMac  /p:Platform=x64 /p:PublishProfile=mac_console /p:EnableCompressionInSingleFile=true
+      run: dotnet publish /p:PublishProfile=mac_console /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperConsole/
       
     - name: Publish AssetRipperGUI Mac x64
-      run: dotnet publish /p:Configuration=ReleaseMac  /p:Platform=x64 /p:PublishProfile=mac_gui /p:EnableCompressionInSingleFile=true
+      run: dotnet publish /p:PublishProfile=mac_gui /p:EnableCompressionInSingleFile=true
       working-directory: ./AssetRipperGUI/
         
     - name: List Console Files

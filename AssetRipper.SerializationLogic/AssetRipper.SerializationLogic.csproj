@@ -11,7 +11,6 @@
 		<RootNamespace>AssetRipper.SerializationLogic</RootNamespace>
 		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
-		<Configurations>Debug;Release</Configurations>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 		<IsTrimmable>true</IsTrimmable>

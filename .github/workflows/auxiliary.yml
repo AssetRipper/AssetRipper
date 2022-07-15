@@ -18,15 +18,15 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Build FileAnalyzer Windows x64
-      run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
+      run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipper.FileAnalyzer/
       
     - name: Build SystemTester Windows x64
-      run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
+      run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipper.SystemTester/
       
     - name: Build Tests Windows x64
-      run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
+      run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipper.Tests/
       
     - name: Run Tests
@@ -36,27 +36,27 @@ jobs:
     - name: List FileAnalyzer Files
       shell: bash
       run: |
-        mkdir -p ./Bins/AssetAnalyzer/ReleaseWindows/Licenses
-        cp ./Licenses/*.md ./Bins/AssetAnalyzer/ReleaseWindows/Licenses/
-        ls -R ./Bins/AssetAnalyzer/ReleaseWindows
+        mkdir -p ./Bins/AssetAnalyzer/Release/Licenses
+        cp ./Licenses/*.md ./Bins/AssetAnalyzer/Release/Licenses/
+        ls -R ./Bins/AssetAnalyzer/Release
       
     - name: Upload FileAnalyzer Windows x64
       uses: actions/upload-artifact@v3
       with:
         name: FileAnalyzer_win64
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipper.FileAnalyzer\ReleaseWindows\*
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipper.FileAnalyzer\Release\*
         if-no-files-found: error
         
     - name: List SystemTester Files
       shell: bash
       run: |
-        mkdir -p ./Bins/AssetRipper.SystemTester/ReleaseWindows/Licenses
-        cp ./Licenses/*.md ./Bins/AssetRipper.SystemTester/ReleaseWindows/Licenses/
-        ls -R ./Bins/AssetRipper.SystemTester/ReleaseWindows
+        mkdir -p ./Bins/AssetRipper.SystemTester/Release/Licenses
+        cp ./Licenses/*.md ./Bins/AssetRipper.SystemTester/Release/Licenses/
+        ls -R ./Bins/AssetRipper.SystemTester/Release
 
     - name: Upload SystemTester Windows x64
       uses: actions/upload-artifact@v3
       with:
         name: SystemTester_win64
-        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipper.SystemTester\ReleaseWindows\*
+        path: D:\a\AssetRipper\AssetRipper\Bins\AssetRipper.SystemTester\Release\*
         if-no-files-found: error

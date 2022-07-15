@@ -7,7 +7,6 @@
 		<AssemblyName>Smolv</AssemblyName>
 		<RootNamespace>Smolv</RootNamespace>
 		<OutputPath>..\Bins\Smolv\$(Configuration)\</OutputPath>
-		<Configurations>Debug;Release</Configurations>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 		<IsTrimmable>true</IsTrimmable>
@@ -23,12 +22,6 @@
 
 	<ItemGroup>
 		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Remove="obj\**" />
-		<EmbeddedResource Remove="obj\**" />
-		<None Remove="obj\**" />
 	</ItemGroup>
 
 </Project>

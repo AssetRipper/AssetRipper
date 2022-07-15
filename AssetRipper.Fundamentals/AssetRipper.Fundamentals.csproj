@@ -11,10 +11,8 @@
 		<RootNamespace>AssetRipper.Core</RootNamespace>
 		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
-		<Configurations>Debug;Release</Configurations>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
-		<DefineConstants>TRACE;NET_CORE</DefineConstants>
 		<IsTrimmable>true</IsTrimmable>
 	</PropertyGroup>
 

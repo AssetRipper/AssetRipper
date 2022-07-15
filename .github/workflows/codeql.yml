@@ -62,7 +62,7 @@ jobs:
     - name: Restore dependencies
       run: nuget restore
     - name: Build
-      run: dotnet build /p:Configuration=ReleaseWindows  /p:Platform=x64
+      run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipperGUI/
 
     # ℹ️ Command-line programs to run using the OS shell.

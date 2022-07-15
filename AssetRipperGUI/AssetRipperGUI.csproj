@@ -8,19 +8,13 @@
 		<Nullable>enable</Nullable>
 		<OutputPath>..\Bins\AssetRipperGUI\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipperGUI\$(Configuration)\</IntermediateOutputPath>
-		<Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
 		<AssemblyName>AssetRipper</AssemblyName>
 		<RootNamespace>AssetRipper.GUI</RootNamespace>
-		<DefineConstants>TRACE;NET_CORE</DefineConstants>
 		<Copyright>Copyright © 2022</Copyright>
 		<Authors>ds5678</Authors>
-		<Platforms>x64</Platforms>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
-		<DefineConstants>DEBUG</DefineConstants>
+		<Platforms>AnyCPU;AnyCPU</Platforms>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -49,10 +43,8 @@
 		<PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
 		<PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='ReleaseWindows'">
+	<ItemGroup>
 		<PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.17.4" />
-	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)'=='DebugMac' or '$(Configuration)'=='ReleaseMac'">
 		<PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
 	</ItemGroup>
 	<ItemGroup>

@@ -9,15 +9,9 @@
 		<RootNamespace>AssetRipper.FileAnalyzer</RootNamespace>
 		<OutputPath>..\Bins\AssetRipper.FileAnalyzer\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.FileAnalyzer\$(Configuration)\</IntermediateOutputPath>
-		<Configurations>DebugWindows;ReleaseWindows;DebugMac;ReleaseMac;DebugLinux;ReleaseLinux</Configurations>
-		<Platforms>x64</Platforms>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
-		<DefineConstants>TRACE;NET_CORE</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)'=='DebugWindows' or '$(Configuration)'=='DebugMac' or '$(Configuration)'=='DebugLinux'">
-		<DefineConstants>DEBUG</DefineConstants>
+		<Platforms>AnyCPU;AnyCPU</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
