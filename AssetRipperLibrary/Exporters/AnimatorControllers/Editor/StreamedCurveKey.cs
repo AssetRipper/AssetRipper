@@ -59,20 +59,25 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers.Editor
 		/// <summary>
 		/// Calculate value between two KeyframeTpl Float at given time
 		/// </summary>
+		/// <remarks>
+		/// This calculates a unit interval cubic Hermite spline.<br />
+		/// <see href="https://en.wikipedia.org/wiki/Cubic_Hermite_spline"/><br />
+		/// <see href="https://en.wikipedia.org/wiki/Hermite_interpolation"/>
+		/// </remarks>
 		/// <param name="deltaTimeFraction">(time - leftTime) / (rightTime - leftTime)</param>
-		/// <param name="leftVaue">lhs.Value</param>
-		/// <param name="outTangent">lhs.OutSlope * (rightTime - leftTime)</param>
+		/// <param name="leftValue">lhs.Value</param>
+		/// <param name="leftTangent">lhs.OutSlope * (rightTime - leftTime)</param>
 		/// <param name="rightValue">rhs.Value</param>
-		/// <param name="inTangent">rhs.OutSlope * (rightTime - leftTime)</param>
+		/// <param name="rightTangent">rhs.OutSlope * (rightTime - leftTime)</param>
 		/// <returns>Value between two keyframes</returns>
-		public static float HermiteInterpolate(float deltaTimeFraction, float leftVaue, float outTangent, float rightValue, float inTangent)
+		public static float HermiteInterpolate(float deltaTimeFraction, float leftValue, float leftTangent, float rightValue, float rightTangent)
 		{
 			float tt = deltaTimeFraction * deltaTimeFraction;
 			float ttt = tt * deltaTimeFraction;
 			float tttx2 = ttt * 2.0f;
 			float ttx3 = tt * 3.0f;
-			float v1 = deltaTimeFraction + ttt - 2.0f * tt * outTangent + (tttx2 - ttx3 + 1.0f) * leftVaue;
-			float v2 = (ttt - tt) * inTangent;
+			float v1 = (deltaTimeFraction + ttt - 2.0f * tt) * leftTangent + (tttx2 - ttx3 + 1.0f) * leftValue;
+			float v2 = (ttt - tt) * rightTangent;
 			float v3 = ttx3 - tttx2;
 			return v1 + v2 + v3 * rightValue;
 		}
