@@ -1,18 +1,14 @@
 # Development Roadmap
 
-## 0.2.1.1
-This release will be primarily focused on cleaning up and refactoring the project.
+## 0.2.2.0
+This release will be primarily focused on dependencies.
 
-* Cleanup legacy code
-  * ~~Remove the `Classes` and `Converters` namespaces~~
-  * ~~Remove any additional legacy code~~
-  * ~~Merge the common project back into the core project~~
+* Replace texgenpack with a managed library
 
 ## 0.2.X.0
 These releases will likely focus on preparing for the next major milestone.
 
 * Remove native dependencies
-  * Replace ogg and vorbis with managed code
   * Port essential texture decoding code to C#
 * Make all dependencies trimmable
 * Nuget feed for source generated code and forked dependencies
