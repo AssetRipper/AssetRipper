@@ -19,7 +19,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.TextureDecoder" Version="1.1.0" />
-		<PackageReference Include="Fmod5Sharp" Version="2.0.1" />
+		<PackageReference Include="Fmod5Sharp" Version="2.0.2" />
 		<PackageReference Include="ICSharpCode.Decompiler" Version="8.0.0.7007-preview1" />
 		<PackageReference Include="Kyaru.Texture2DDecoder" Version="0.16.40" />
 		<PackageReference Include="Kyaru.Texture2DDecoder.Windows" Version="0.1.0" />
