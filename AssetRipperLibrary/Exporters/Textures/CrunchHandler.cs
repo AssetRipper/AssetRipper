@@ -86,7 +86,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 			if (data.Length == 0)
 			{
-				throw new ArgumentException(nameof(data));
+				throw new ArgumentException(null, nameof(data));
 			}
 
 			Logger.Info("About to unpack normal crunch...");
@@ -103,7 +103,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 			if (data.Length == 0)
 			{
-				throw new ArgumentException(nameof(data));
+				throw new ArgumentException(null, nameof(data));
 			}
 
 			Logger.Info("About to unpack unity crunch...");

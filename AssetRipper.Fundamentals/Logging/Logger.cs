@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Utils;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace AssetRipper.Core.Logging
 	public static class Logger
 	{
 		private static readonly object _lock = new();
-		private static readonly List<ILogger> loggers = new List<ILogger>();
+		private static readonly List<ILogger> loggers = new();
 		public static bool AllowVerbose { get; set; }
 
 		public static event Action<string, object?> OnStatusChanged = (_, _) => { };
@@ -85,7 +86,7 @@ namespace AssetRipper.Core.Logging
 		public static void Error(string message, Exception e) => Error(LogCategory.None, message, e);
 		public static void Error(LogCategory category, string? message, Exception e)
 		{
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new();
 			if (message != null)
 			{
 				sb.AppendLine(message);
@@ -102,15 +103,10 @@ namespace AssetRipper.Core.Logging
 		private static void LogReleaseInformation()
 		{
 #if DEBUG
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Debug {GetBuildArchitecture()} {GetBuildType()}");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Debug {GetBuildType()}");
 #else
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Release {GetBuildArchitecture()} {GetBuildType()}");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Release {GetBuildType()}");
 #endif
-		}
-
-		private static string GetBuildArchitecture()
-		{
-			return Environment.Is64BitProcess ? "x64" : "x86";
 		}
 
 		private static string GetBuildType()
@@ -121,7 +117,7 @@ namespace AssetRipper.Core.Logging
 		private static void LogOperatingSystemInformation()
 		{
 			Log(LogType.Info, LogCategory.System, $"System Version: {Environment.OSVersion.VersionString}");
-			string architecture = Environment.Is64BitOperatingSystem ? "x64" : "x86";
+			string architecture = Environment.Is64BitOperatingSystem ? "64 bit" : "32 bit";
 			Log(LogType.Info, LogCategory.System, $"Operating System: {GetOsName()} {architecture}");
 		}
 
@@ -131,7 +127,7 @@ namespace AssetRipper.Core.Logging
 			LogOperatingSystemInformation();
 			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {BuildInfo.Version}");
 			LogReleaseInformation();
-			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {System.DateTime.UtcNow.ToString()}");
+			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)}");
 			Log(LogType.Info, LogCategory.System, $"UTC Compile Time: {GetCompileTime()}");
 		}
 

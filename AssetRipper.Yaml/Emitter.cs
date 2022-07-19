@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
@@ -216,12 +217,12 @@ namespace AssetRipper.Yaml
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(m_sb))]
+		[MemberNotNull(nameof(m_sb))]
 		private void ThrowIfNullStringBuilder()
 		{
 			if (m_sb is null)
 			{
-				throw new NullReferenceException("m_sb cannot be null here");
+				throw new NullReferenceException($"{nameof(m_sb)} cannot be null here");
 			}
 		}
 
