@@ -213,7 +213,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 				{
 					foreach (uint index in polygon.Indices)
 					{
-						normalElement.Normals.Add(Convert(ToCoordinateSpace(normals[index], ExportSpace)));
+						normalElement.Normals.Add(Convert(ToCoordinateSpace(normals![index], ExportSpace)));
 					}
 				}
 			}
@@ -233,7 +233,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 				outputMesh.Layers.Add(tangentElement);
 				tangentElement.MappingInformationType = MappingMode.ByPolygonVertex;
 				tangentElement.ReferenceInformationType = ReferenceMode.Direct;
-				tangentElement.Tangents.AddRange(tangents.Select(t => Convert(ToCoordinateSpace((Vector3f)t, ExportSpace))));
+				tangentElement.Tangents.AddRange(tangents!.Select(t => Convert(ToCoordinateSpace((Vector3f)t, ExportSpace))));
 				//We're excluding W here because it's not supported by MeshSharp
 				//For Unity, the tangent W coordinate denotes the direction of the binormal vector and is always 1 or -1
 				//https://docs.unity3d.com/ScriptReference/Mesh-tangents.html
@@ -246,8 +246,8 @@ namespace AssetRipper.Library.Exporters.Meshes
 				outputMesh.Layers.Add(uv0Element);
 				uv0Element.MappingInformationType = MappingMode.ByPolygonVertex;
 				uv0Element.ReferenceInformationType = ReferenceMode.IndexToDirect;
-				uv0Element.UV.AddRange(uv0.Select(v => Convert(v)));
-				uv0Element.UVIndex.AddRange(Enumerable.Range(0, uv0.Length));
+				uv0Element.UV.AddRange(uv0!.Select(v => Convert(v)));
+				uv0Element.UVIndex.AddRange(Enumerable.Range(0, uv0!.Length));
 			}
 			if (hasUV1)
 			{
@@ -255,8 +255,8 @@ namespace AssetRipper.Library.Exporters.Meshes
 				outputMesh.Layers.Add(uv1Element);
 				uv1Element.MappingInformationType = MappingMode.ByPolygonVertex;
 				uv1Element.ReferenceInformationType = ReferenceMode.IndexToDirect;
-				uv1Element.UV.AddRange(uv1.Select(v => Convert(v)));
-				uv1Element.UVIndex.AddRange(Enumerable.Range(0, uv1.Length));
+				uv1Element.UV.AddRange(uv1!.Select(v => Convert(v)));
+				uv1Element.UVIndex.AddRange(Enumerable.Range(0, uv1!.Length));
 			}
 
 			//Colors
@@ -266,8 +266,8 @@ namespace AssetRipper.Library.Exporters.Meshes
 				outputMesh.Layers.Add(colorElement);
 				colorElement.MappingInformationType = MappingMode.ByPolygonVertex;
 				colorElement.ReferenceInformationType = ReferenceMode.IndexToDirect;
-				colorElement.Colors.AddRange(colors.Select(v => Convert(v)));
-				colorElement.ColorIndex.AddRange(Enumerable.Range(0, colors.Length));
+				colorElement.Colors.AddRange(colors!.Select(v => Convert(v)));
+				colorElement.ColorIndex.AddRange(Enumerable.Range(0, colors!.Length));
 			}
 
 			return outputMesh;

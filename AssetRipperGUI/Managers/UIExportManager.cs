@@ -23,7 +23,7 @@ namespace AssetRipper.GUI.Managers
 
 			if (Directory.Exists(path))
 			{
-				await Task.Factory.StartNew(s_path => Directory.Delete((string)s_path, true), path);
+				await Task.Run(() => Directory.Delete(path, true));
 			}
 		}
 

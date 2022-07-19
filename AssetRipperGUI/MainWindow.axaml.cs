@@ -15,14 +15,14 @@ namespace AssetRipper.GUI
 		public static MainWindow Instance;
 
 		private MainWindowViewModel VM;
-		public readonly LocalizationManager LocalizationManager = new();
+		public readonly LocalizationManager LocalizationManager;
 
 		public MainWindow()
 		{
 			Instance = this;
 			DataContext = VM = new();
 
-			LocalizationManager.Init();
+			LocalizationManager = new();
 
 			Logger.Verbose(LogCategory.System, $"Available languages: {string.Join(", ", LocalizationManager.SupportedLanguages.Select(l => l.LanguageCode))}");
 

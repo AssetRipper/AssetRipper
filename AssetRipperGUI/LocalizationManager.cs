@@ -15,7 +15,7 @@ namespace AssetRipper.GUI
 		private static readonly Regex SortOrderRegex = new("\\(Sort Order=([A-Z]+)\\)", RegexOptions.Compiled);
 
 		// ReSharper disable once MemberInitializerValueIgnored
-		private Dictionary<string, string> CurrentLocale = null!; //To suppress warning as it's initialized indirectly in constructor
+		private Dictionary<string, string> CurrentLocale; //To suppress warning as it's initialized indirectly in constructor
 		private Dictionary<string, string> FallbackLocale;
 		private string? CurrentLang;
 		public SupportedLanguage[] SupportedLanguages { get; private set; }
@@ -24,21 +24,16 @@ namespace AssetRipper.GUI
 
 		public LocalizationManager()
 		{
-
-		}
-
-		public void Init()
-		{
 			LoadLanguage("en_US");
 			FallbackLocale = CurrentLocale;
 
-			var supportedLanguageCodes = Assembly.GetExecutingAssembly()
+			string[] supportedLanguageCodes = Assembly.GetExecutingAssembly()
 				.GetManifestResourceNames()
 				.Where(l => l.StartsWith(LocalizationFilePrefix))
 				.Select(l => l[LocalizationFilePrefix.Length..^5])
 				.ToArray();
 
-			var supportedLanguageNames = supportedLanguageCodes.Select(code => new CultureInfo(code.Replace('_', '-'))).Select(ExtractCultureName).ToArray();
+			string[] supportedLanguageNames = supportedLanguageCodes.Select(code => new CultureInfo(code.Replace('_', '-'))).Select(ExtractCultureName).ToArray();
 
 			List<SupportedLanguage> languages = new();
 			for (int i = 0; i < supportedLanguageNames.Length; i++)
@@ -55,11 +50,12 @@ namespace AssetRipper.GUI
 		}
 
 		[SuppressMessage("ReSharper", "NotResolvedInText")]
+		[MemberNotNull(nameof(CurrentLocale), nameof(CurrentLang))]
 		public void LoadLanguage(string code)
 		{
 			CurrentLang = code;
 			Logger.Info(LogCategory.System, $"Loading locale {code}.json");
-			using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(LocalizationFilePrefix + code + ".json") ?? throw new Exception($"Could not load language file {code}.json");
+			using System.IO.Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(LocalizationFilePrefix + code + ".json") ?? throw new Exception($"Could not load language file {code}.json");
 
 			CurrentLocale = JsonSerializer.Deserialize<Dictionary<string, string>>(stream) ?? throw new Exception($"Could not parse language file {code}.json");
 
@@ -72,7 +68,7 @@ namespace AssetRipper.GUI
 		{
 			get
 			{
-				if (CurrentLocale.TryGetValue(key, out var ret) && !string.IsNullOrEmpty(ret))
+				if (CurrentLocale.TryGetValue(key, out string? ret) && !string.IsNullOrEmpty(ret))
 				{
 					return ret;
 				}

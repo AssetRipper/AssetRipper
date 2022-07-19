@@ -1,10 +1,12 @@
 ﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.IO;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour_;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateKey;
+using AssetRipper.SourceGenerated.Subclasses.StateMachineBehaviourVectorDescription;
 using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateRange;
 
@@ -33,7 +35,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				key.SetValues(layerIndex, layerID);
 				if (controller.StateMachineBehaviourVectorDescription_C91.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
 				{
-					return controller.GetStateBehaviours(range);
+					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription_C91, controller.StateMachineBehaviours_C91!, range);
 				}
 			}
 			return Array.Empty<PPtr_MonoBehaviour__5_0_0_f4>();
@@ -51,19 +53,22 @@ namespace AssetRipper.Core.SourceGenExtensions
 				key.SetValues(layerIndex, stateID);
 				if (controller.StateMachineBehaviourVectorDescription_C91.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
 				{
-					return controller.GetStateBehaviours(range);
+					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription_C91, controller.StateMachineBehaviours_C91!, range);
 				}
 			}
 			return Array.Empty<PPtr_MonoBehaviour__5_0_0_f4>();
 		}
 
-		private static PPtr_MonoBehaviour__5_0_0_f4[] GetStateBehaviours(this IAnimatorController controller, StateRange range)
+		private static PPtr_MonoBehaviour__5_0_0_f4[] GetStateBehaviours(
+			IStateMachineBehaviourVectorDescription controllerStateMachineBehaviourVectorDescription,
+			AssetList<PPtr_MonoBehaviour__5_0_0_f4> controllerStateMachineBehaviours, 
+			StateRange range)
 		{
 			PPtr_MonoBehaviour__5_0_0_f4[] stateMachineBehaviours = new PPtr_MonoBehaviour__5_0_0_f4[range.Count];
 			for (int i = 0; i < range.Count; i++)
 			{
-				int index = (int)controller.StateMachineBehaviourVectorDescription_C91.StateMachineBehaviourIndices[range.StartIndex + i];
-				stateMachineBehaviours[i] = controller.StateMachineBehaviours_C91[index];
+				int index = (int)controllerStateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[range.StartIndex + i];
+				stateMachineBehaviours[i] = controllerStateMachineBehaviours[index];
 			}
 			return stateMachineBehaviours;
 		}

@@ -51,7 +51,7 @@
 			MeshExportFormat.PlyAscii => "ply",
 			MeshExportFormat.GlbPrimitive => "glb",
 			MeshExportFormat.FbxPrimitive => "fbx",
-			_ => null,
+			_ => throw new ArgumentOutOfRangeException(nameof(format)),
 		};
 
 		public static bool IsFBX(this MeshExportFormat format) => format == MeshExportFormat.FbxPrimitive;

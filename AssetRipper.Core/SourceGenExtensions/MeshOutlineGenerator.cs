@@ -285,7 +285,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					return true;
 				}
 
-				Vector3i next = tri1;
+				Vector3i? next = tri1;
 				while (GetNextNeighbor(next, vertex, out next))
 				{
 					if (next == tri2)
@@ -297,7 +297,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 
 			public int TriangleCount => m_indexes.Count;
-			public IReadOnlyList<int> GeneratedOutline { get; private set; }
+			public IReadOnlyList<int> GeneratedOutline { get; private set; } = Array.Empty<int>();
 
 			private readonly IReadOnlyList<Vector3i> m_triangles;
 			private readonly HashSet<int> m_indexes = new HashSet<int>();

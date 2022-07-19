@@ -1,4 +1,5 @@
 using AsmResolver.DotNet;
+using System;
 
 namespace AssetRipper.SerializationLogic.Extensions
 {
@@ -12,6 +13,11 @@ namespace AssetRipper.SerializationLogic.Extensions
 
 		public static string PropertyName(this MethodDefinition self)
 		{
+			if (self.Name is null || self.Name.Length < 5)
+			{
+				throw new ArgumentException(null, nameof(self));
+			}
+
 			return self.Name.Value.Substring(4);
 		}
 

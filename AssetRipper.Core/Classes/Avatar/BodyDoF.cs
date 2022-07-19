@@ -8,13 +8,12 @@
 		SpineFrontBack = 0,
 		SpineLeftRight = 1,
 		SpineRollLeftRight = 2,
-#warning TODO: check since reference has this as 3 not 4
-		ChestFrontBack = 4,
-		ChestLeftRight = 5,
-		ChestRollLeftRight = 6,
-		UpperChestFrontBack = 7,
-		UpperChestLeftRight = 8,
-		UpperChestRollLeftRight = 9,
-		LastBodyDoF = 10,
+		ChestFrontBack = 3,
+		ChestLeftRight = 4,
+		ChestRollLeftRight = 5,
+		UpperChestFrontBack = 6,
+		UpperChestLeftRight = 7,
+		UpperChestRollLeftRight = 8,
+		LastBodyDoF = 9,
 	}
 }

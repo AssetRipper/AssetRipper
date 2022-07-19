@@ -32,7 +32,7 @@ namespace AssetRipper.GUI.AssetInfo
 		public AssetYamlNode(string key, YamlMappingNode value)
 		{
 			DisplayName = key;
-			foreach (var (keyNode, valueNode) in value.m_children)
+			foreach ((YamlNode keyNode, YamlNode valueNode) in value.m_children)
 			{
 				string subKey = keyNode is YamlScalarNode s ? s.Value : keyNode.ToString()!;
 
@@ -53,7 +53,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			DisplayName = key;
 			int i = 0;
-			foreach (var valueNode in value.m_children)
+			foreach (YamlNode valueNode in value.m_children)
 			{
 				string subKey = $"[{i}]";
 

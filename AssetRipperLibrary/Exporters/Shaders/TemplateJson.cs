@@ -4,6 +4,6 @@ namespace AssetRipper.Library.Exporters.Shaders
 {
 	internal class TemplateJson
 	{
-		public List<TemplateShader> Templates { get; set; }
+		public List<TemplateShader> Templates { get; set; } = new();
 	}
 }

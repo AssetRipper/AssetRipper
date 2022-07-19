@@ -42,13 +42,13 @@ namespace AssetRipper.SerializationLogic
 
 		private static bool IsHiddenByParentClass(IEnumerable<TypeReference> parentTypes, FieldDefinition fieldDefinition, TypeDefinition processingType)
 		{
-			return processingType.Fields.Any(f => f.Name == fieldDefinition.Name) || parentTypes.Any(t => t.Resolve().Fields.Any(f => f.Name == fieldDefinition.Name));
+			return processingType.Fields.Any(f => f.Name == fieldDefinition.Name) || parentTypes.Any(t => t.Resolve()?.Fields.Any(f => f.Name == fieldDefinition.Name) ?? false);
 		}
 
 		private IEnumerable<FieldDefinition> FilteredFields()
 		{
 			return TypeDef.Fields.Where(WillUnitySerialize).Where(f =>
-				FieldSerializationLogic.IsSupportedCollection(f.Signature.FieldType) ||
+				FieldSerializationLogic.IsSupportedCollection(f.Signature!.FieldType) ||
 				f.Signature.FieldType is not GenericInstanceTypeSignature ||
 				FieldSerializationLogic.ShouldImplementIDeserializable(f.Signature.FieldType.Resolve()));
 		}

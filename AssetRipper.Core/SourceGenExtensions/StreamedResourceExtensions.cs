@@ -20,12 +20,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 				return false;
 			}
 
-			return file.Collection.FindResourceFile(streamedResource.Source?.String) != null;
+			return file.Collection.FindResourceFile(streamedResource.Source.String) != null;
 		}
 
 		public static byte[]? GetContent(this IStreamedResource streamedResource, ISerializedFile file)
 		{
-			IResourceFile? res = file.Collection.FindResourceFile(streamedResource.Source?.String);
+			IResourceFile? res = file.Collection.FindResourceFile(streamedResource.Source.String);
 			if (res == null)
 			{
 				return null;

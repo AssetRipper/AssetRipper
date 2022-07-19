@@ -22,7 +22,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		public static TemplateShader GetBestTemplate(IShader shader)
 		{
-			return Templates.Where(tmp => tmp.IsMatch(shader)).MaxBy(matchedTmp => matchedTmp.RequiredProperties.Count);
+			return Templates.Where(tmp => tmp.IsMatch(shader)).MaxBy(matchedTmp => matchedTmp.RequiredProperties.Count)!;
 		}
 
 		private static List<TemplateShader> LoadTemplates()
@@ -30,18 +30,20 @@ namespace AssetRipper.Library.Exporters.Shaders
 			Logger.Verbose("Loading shader templates");
 			string jsonText = GetTextFromResource(TemplatesJsonPath);
 
-			List<TemplateShader> templates = JsonSerializer.Deserialize<TemplateJson>(jsonText).Templates;
-			foreach (TemplateShader template in templates)
+			TemplateJson templateJson = JsonSerializer.Deserialize(jsonText, TemplateJsonSerializerContext.Default.TemplateJson)
+				?? throw new Exception("Failed to deserialize json");
+			foreach (TemplateShader template in templateJson.Templates)
 			{
 				string path = ShaderTemplatePrefix + template.TemplateName + ShaderTemplateExtension;
 				template.ShaderText = GetTextFromResource(path);
 			}
-			return templates;
+			return templateJson.Templates;
 		}
 
 		private static string GetTextFromResource(string path)
 		{
-			Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
+			Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path)
+				?? throw new ArgumentException($"No stream at path: {path}", nameof(path));
 			using StreamReader reader = new(stream);
 			return reader.ReadToEnd().Replace("\r", "");
 		}

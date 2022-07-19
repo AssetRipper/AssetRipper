@@ -126,6 +126,6 @@ namespace AssetRipper.GUI
 			}
 		}
 
-		public Binding MeshExportModeBinding { get; set; }
+		public Binding? MeshExportModeBinding { get; set; }
 	}
 }

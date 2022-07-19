@@ -17,7 +17,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 {
 	public sealed class GameStructure : IDisposable
 	{
-		public GameCollection? FileCollection { get; private set; }
+		public GameCollection FileCollection { get; private set; }
 		public ProjectExporter Exporter { get; private set; } = new ProjectExporter();
 		public PlatformGameStructure? PlatformStructure { get; private set; }
 		public PlatformGameStructure? MixedStructure { get; private set; }

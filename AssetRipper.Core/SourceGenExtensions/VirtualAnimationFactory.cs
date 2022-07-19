@@ -51,12 +51,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			if(node.BlendEventYID != uint.MaxValue)
 			{
-				blendTree.BlendParameterY_C206.CopyValues(controller.TOS_C91[node.BlendEventYID]);
+				blendTree.BlendParameterY_C206?.CopyValues(controller.TOS_C91[node.BlendEventYID]);
 			}
 			blendTree.MinThreshold_C206 = node.GetMinThreshold();
 			blendTree.MaxThreshold_C206 = node.GetMaxThreshold();
 			blendTree.UseAutomaticThresholds_C206 = false;
-			blendTree.NormalizedBlendValues_C206 = node.BlendDirectData.Data.m_NormalizedBlendValues;
+			blendTree.NormalizedBlendValues_C206 = node.BlendDirectData?.Data.m_NormalizedBlendValues ?? false;
 			if (blendTree.Has_BlendType_C206_Int32())
 			{
 				blendTree.BlendType_C206_Int32 = (int)node.BlendType;
@@ -371,12 +371,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 					// base layer node. Default value is valid
 					return null;
 				}
-				else
+				else if (stateMachine.Has_SelectorStateConstantArray())
 				{
 					SelectorStateConstant selectorState = stateMachine.SelectorStateConstantArray[(int)stateIndex].Data;
 #warning		HACK: take default Entry destination. TODO: child StateMachines
 					SelectorTransitionConstant selectorTransition = selectorState.TransitionConstantArray[selectorState.TransitionConstantArray.Count - 1].Data;
 					return GetDestinationState(selectorTransition.Destination, stateMachine, states);
+				}
+				else
+				{
+					return null;
 				}
 			}
 			else

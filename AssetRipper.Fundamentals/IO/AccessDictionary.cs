@@ -105,7 +105,7 @@ namespace AssetRipper.Core.IO
 			for (int i = Count - 1; i > -1; i--)
 			{
 				NullableKeyValuePair<TKey, TValue> p = referenceDictionary.GetPair(i);
-				if (p.Key is not null && p.Key.GetHashCode() == hash && key.Equals(p.Key))
+				if (p.Key.GetHashCode() == hash && key.Equals(p.Key))
 				{
 					if (found)
 					{

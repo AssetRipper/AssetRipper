@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -341,6 +342,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 			}
 		}
 
+		[MemberNotNull(nameof(m_currentStream))]
 		private void UpdateCurrentStream()
 		{
 			m_currentBegin = 0;
@@ -358,7 +360,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 
 				m_currentBegin += m_currentStream.Length;
 			}
-			m_currentBegin -= m_currentStream.Length;
+			m_currentBegin -= m_currentStream!.Length;
 			m_currentStream.Position = m_position - m_currentBegin;
 		}
 
@@ -395,6 +397,9 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 
 		public const string MultifileRegPostfix = @"\.split";
 
+		/// <summary>
+		/// Always has at least one element.
+		/// </summary>
 		private readonly IReadOnlyList<Stream> m_streams;
 
 		private Stream m_currentStream;

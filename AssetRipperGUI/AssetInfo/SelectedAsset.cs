@@ -75,7 +75,7 @@ namespace AssetRipper.GUI.AssetInfo
 			if (asset is IAudioClip clip && LibVlc != null)
 			{
 				DateTime start = DateTime.Now;
-				bool success = AudioClipDecoder.TryGetDecodedAudioClipData(clip, out byte[] rawClipAudioData, out string _);
+				bool success = AudioClipDecoder.TryGetDecodedAudioClipData(clip, out byte[]? rawClipAudioData, out string _);
 				if (!success || rawClipAudioData == null)
 				{
 					//Unsupported sound type
@@ -104,7 +104,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			try
 			{
-				YamlMappingNode yamlRoot = (YamlMappingNode)Asset.ExportYaml(_uiAssetContainer);
+				YamlMappingNode yamlRoot = (YamlMappingNode)Asset.ExportYaml(_uiAssetContainer ?? throw new NullReferenceException(nameof(_uiAssetContainer)));
 
 				YamlTree = new[] { new AssetYamlNode(Name ?? Asset.GetType().Name, yamlRoot) };
 			}

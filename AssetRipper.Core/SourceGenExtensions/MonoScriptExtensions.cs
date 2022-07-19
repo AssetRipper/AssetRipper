@@ -35,14 +35,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return FilenameUtils.FixAssemblyName(monoScript.AssemblyName_C115.String);
 		}
 
-		public static SerializableType GetBehaviourType(this IMonoScript monoScript)
+		public static SerializableType? GetBehaviourType(this IMonoScript monoScript)
 		{
 			ScriptIdentifier scriptID = HasNamespace(monoScript.SerializedFile.Version) ?
 				monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace_C115.String, monoScript.ClassName_C115.String) :
 				monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName_C115.String);
 			if (monoScript.SerializedFile.Collection.AssemblyManager.IsValid(scriptID))
 			{
-				return monoScript.SerializedFile.Collection.AssemblyManager.GetSerializableType(scriptID) as SerializableType;
+				return monoScript.SerializedFile.Collection.AssemblyManager.GetSerializableType(scriptID);
 			}
 			return null;
 		}
@@ -61,7 +61,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript, bool includeNamespace)
 		{
-			bool useNamespace = includeNamespace && monoScript.Namespace_C115 is not null;
+			bool useNamespace = includeNamespace; //&& monoScript.Namespace_C115 is not null;
 			return useNamespace ? monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace_C115.String, monoScript.ClassName_C115.String)
 				: monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName_C115.String);
 		}

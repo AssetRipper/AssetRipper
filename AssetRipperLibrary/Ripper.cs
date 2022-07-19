@@ -67,11 +67,11 @@ namespace AssetRipper.Library
 		private bool ExportersInitialized { get; set; }
 		private List<IPostExporter> PostExporters { get; } = new();
 
-		public event Action OnStartLoadingGameStructure;
-		public event Action OnFinishLoadingGameStructure;
-		public event Action OnInitializingExporters;
-		public event Action OnStartExporting;
-		public event Action OnFinishExporting;
+		public event Action? OnStartLoadingGameStructure;
+		public event Action? OnFinishLoadingGameStructure;
+		public event Action? OnInitializingExporters;
+		public event Action? OnStartExporting;
+		public event Action? OnFinishExporting;
 
 		private void LoadPlugins()
 		{

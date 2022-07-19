@@ -22,7 +22,14 @@ namespace AssetRipper.GUI
 			{
 				try
 				{
-					Logger.Error(LogCategory.General, "Unhandled app-level fatal exception!", e.ExceptionObject as Exception);
+					if (e.ExceptionObject is Exception exception)
+					{
+						Logger.Error(LogCategory.General, "Unhandled app-level fatal exception!", exception);
+					}
+					else
+					{
+						Logger.Error(LogCategory.General, "Unhandled app-level fatal exception!");
+					}
 				}
 				catch (Exception)
 				{

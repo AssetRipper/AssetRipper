@@ -368,7 +368,7 @@ namespace AssetRipper.SerializationLogic
 
 		private static bool ShouldHaveHadAllFieldsPublic(FieldDefinition field)
 		{
-			return EngineTypePredicates.IsUnityEngineValueType(field.DeclaringType);
+			return field.DeclaringType is not null && EngineTypePredicates.IsUnityEngineValueType(field.DeclaringType);
 		}
 
 		private static bool IsUnityEngineObject(ITypeDescriptor typeReference)
@@ -445,12 +445,12 @@ namespace AssetRipper.SerializationLogic
 				TypeDefinition resolvedTypeDeclaration = typeDeclaration.CheckedResolve();
 				if (resolvedTypeDeclaration.IsValueType)
 				{
-					return resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor.DeclaringType.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated"));
+					return resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor?.DeclaringType?.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated") ?? false);
 				}
 				else
 				{
-					return (resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor.DeclaringType.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated"))) ||
-						resolvedTypeDeclaration.IsSubclassOf(EngineTypePredicates.MonoBehaviour, EngineTypePredicates.ScriptableObject);
+					return (resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor?.DeclaringType?.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated") ?? false)) 
+						|| resolvedTypeDeclaration.IsSubclassOf(EngineTypePredicates.MonoBehaviour, EngineTypePredicates.ScriptableObject);
 				}
 			}
 			catch (Exception)

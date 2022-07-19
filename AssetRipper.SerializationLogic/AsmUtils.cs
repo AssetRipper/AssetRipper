@@ -11,7 +11,7 @@ namespace AssetRipper.SerializationLogic
 	{
 		public static IEnumerable<TypeDefinition> AllInterfacesImplementedBy(TypeDefinition typeDefinition)
 		{
-			return TypeAndBaseTypesOf(typeDefinition).SelectMany(t => t.Interfaces).Select(i => i.Interface.CheckedResolve()).Distinct();
+			return TypeAndBaseTypesOf(typeDefinition).SelectMany(t => t.Interfaces).Select(i => i.Interface!.CheckedResolve()).Distinct();
 		}
 
 		public static IEnumerable<TypeDefinition> TypeAndBaseTypesOf(ITypeDescriptor? typeReference)

@@ -18,9 +18,20 @@ namespace AssetRipper.Core.IO
 
 		private static readonly bool hasDependentKeys;
 		private static readonly bool hasDependentValues;
+		private TKey? key;
+		private TValue? value;
+
 		public static bool IsDependentType { get; }
-		public TKey? Key { get; set; }
-		public TValue? Value { get; set; }
+		public TKey Key 
+		{
+			get => key ?? throw new NullReferenceException(nameof(Key));
+			set => key = value; 
+		}
+		public TValue Value 
+		{ 
+			get => value ?? throw new NullReferenceException(nameof(Value));
+			set => this.value = value; 
+		}
 
 		public NullableKeyValuePair() { }
 

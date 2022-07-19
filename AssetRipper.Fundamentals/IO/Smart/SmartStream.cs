@@ -1,59 +1,15 @@
 ﻿using AssetRipper.Core.IO.MultiFile;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace AssetRipper.Core.IO.Smart
 {
-	public class SmartStream : Stream
+	public partial class SmartStream : Stream
 	{
-		private class SmartRefCount
-		{
-			public static SmartRefCount operator ++(SmartRefCount _this)
-			{
-				_this.RefCount++;
-				return _this;
-			}
-			public static SmartRefCount operator --(SmartRefCount _this)
-			{
-				_this.RefCount--;
-				return _this;
-			}
-
-			public void Increase()
-			{
-				RefCount++;
-			}
-
-			public void Decrease()
-			{
-				RefCount--;
-			}
-
-			public override string ToString()
-			{
-				return m_refCount.ToString();
-			}
-
-			public bool IsZero => RefCount == 0;
-
-			private int RefCount
-			{
-				get => m_refCount;
-				set
-				{
-					if (value < 0)
-					{
-						throw new ArgumentOutOfRangeException();
-					}
-					m_refCount = value;
-				}
-			}
-
-			private int m_refCount = 0;
-		}
-
 		private SmartStream()
 		{
 			m_isDisposed = true;
+			m_refCount = new SmartRefCount();
 		}
 
 		private SmartStream(Stream baseStream, SmartStreamType type)
@@ -109,6 +65,7 @@ namespace AssetRipper.Core.IO.Smart
 			return new SmartStream(new MemoryStream(buffer, offset, size), SmartStreamType.Memory);
 		}
 
+		[MemberNotNull(nameof(m_refCount))]
 		public void Assign(SmartStream source)
 		{
 			Dispose();
@@ -147,7 +104,7 @@ namespace AssetRipper.Core.IO.Smart
 			{
 				throw new ObjectDisposedException(null);
 			}
-			m_stream.Flush();
+			m_stream?.Flush();
 		}
 
 		public override int Read(byte[] buffer, int offset, int count)
@@ -156,7 +113,14 @@ namespace AssetRipper.Core.IO.Smart
 			{
 				throw new ObjectDisposedException(null);
 			}
-			return m_stream.Read(buffer, offset, count);
+			else if (IsNull)
+			{
+				throw new NullReferenceException(nameof(m_stream));
+			}
+			else
+			{
+				return m_stream.Read(buffer, offset, count);
+			}
 		}
 
 		public override long Seek(long offset, SeekOrigin origin)
@@ -165,7 +129,14 @@ namespace AssetRipper.Core.IO.Smart
 			{
 				throw new ObjectDisposedException(null);
 			}
-			return m_stream.Seek(offset, origin);
+			else if (IsNull)
+			{
+				throw new NullReferenceException(nameof(m_stream));
+			}
+			else
+			{
+				return m_stream.Seek(offset, origin);
+			}
 		}
 
 		public override void SetLength(long value)
@@ -174,7 +145,14 @@ namespace AssetRipper.Core.IO.Smart
 			{
 				throw new ObjectDisposedException(null);
 			}
-			m_stream.SetLength(value);
+			else if (IsNull)
+			{
+				throw new NullReferenceException(nameof(m_stream));
+			}
+			else
+			{
+				m_stream.SetLength(value);
+			}
 		}
 
 		public override void Write(byte[] buffer, int offset, int count)
@@ -183,7 +161,14 @@ namespace AssetRipper.Core.IO.Smart
 			{
 				throw new ObjectDisposedException(null);
 			}
-			m_stream.Write(buffer, offset, count);
+			else if (IsNull)
+			{
+				throw new NullReferenceException(nameof(m_stream));
+			}
+			else
+			{
+				m_stream.Write(buffer, offset, count);
+			}
 		}
 
 		protected override void Dispose(bool disposing)
@@ -208,7 +193,7 @@ namespace AssetRipper.Core.IO.Smart
 				{
 					throw new ObjectDisposedException(null);
 				}
-				return m_stream.CanRead;
+				return m_stream?.CanRead ?? false;
 			}
 		}
 		public override bool CanSeek
@@ -219,7 +204,7 @@ namespace AssetRipper.Core.IO.Smart
 				{
 					throw new ObjectDisposedException(null);
 				}
-				return m_stream.CanSeek;
+				return m_stream?.CanSeek ?? false;
 			}
 		}
 		public override bool CanWrite
@@ -230,7 +215,7 @@ namespace AssetRipper.Core.IO.Smart
 				{
 					throw new ObjectDisposedException(null);
 				}
-				return m_stream.CanWrite;
+				return m_stream?.CanWrite ?? false;
 			}
 		}
 
@@ -242,7 +227,7 @@ namespace AssetRipper.Core.IO.Smart
 				{
 					throw new ObjectDisposedException(null);
 				}
-				return m_stream.Position;
+				return m_stream?.Position ?? 0;
 			}
 			set
 			{
@@ -250,7 +235,14 @@ namespace AssetRipper.Core.IO.Smart
 				{
 					throw new ObjectDisposedException(null);
 				}
-				m_stream.Position = value;
+				else if (IsNull)
+				{
+					throw new NullReferenceException(nameof(m_stream));
+				}
+				else
+				{
+					m_stream.Position = value;
+				}
 			}
 		}
 
@@ -262,7 +254,7 @@ namespace AssetRipper.Core.IO.Smart
 				{
 					throw new ObjectDisposedException(null);
 				}
-				return m_stream.Length;
+				return m_stream?.Length ?? 0;
 			}
 		}
 
@@ -278,10 +270,11 @@ namespace AssetRipper.Core.IO.Smart
 			}
 		}
 
+		[MemberNotNullWhen(false, nameof(m_stream))]
 		public bool IsNull => m_stream == null;
 
 		private SmartRefCount m_refCount;
-		private Stream m_stream;
+		private Stream? m_stream;
 		private SmartStreamType m_streamType;
 		private bool m_isDisposed;
 	}

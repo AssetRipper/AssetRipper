@@ -91,7 +91,7 @@ namespace AssetRipper.Core.Project.Collections
 				throw new NotSupportedException();
 			}
 		}
-		public override ISerializedFile File => m_file;
+		public override ISerializedFile File => m_file ?? Asset.SerializedFile;
 		public override TransferInstructionFlags Flags => base.Flags | TransferInstructionFlags.SerializeForPrefabSystem;
 
 		//This might not be necessary. 2019.4.3 doesn't use this in normally created prefabs
@@ -127,6 +127,6 @@ namespace AssetRipper.Core.Project.Collections
 
 		public const string PrefabKeyword = "prefab";
 
-		private ISerializedFile m_file;
+		private ISerializedFile? m_file;
 	}
 }

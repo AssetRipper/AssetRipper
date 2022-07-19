@@ -133,7 +133,7 @@ namespace AssetRipper.SerializationLogic
 
 		public static bool IsUnityEngineObject(ITypeDescriptor type)
 		{
-#warning todo: somehow solve this elegantly. CheckedResolve() drops the [] of a type.
+			//todo: somehow solve this elegantly. CheckedResolve() drops the [] of a type.
 			if (type.IsArray())
 			{
 				return false;

@@ -35,7 +35,7 @@ namespace AssetRipper.GUI.Components
 			get => _optionTitle;
 			set
 			{
-				var oldValue = _optionTitle;
+				string oldValue = _optionTitle;
 				_optionTitle = value;
 				OnPropertyChanged();
 				RaisePropertyChanged(OptionTitleProperty, oldValue, value);
@@ -47,7 +47,7 @@ namespace AssetRipper.GUI.Components
 			get => _selectedValue!;
 			set
 			{
-				var oldValue = _selectedValue;
+				BaseConfigurationDropdown<T>.ItemWrapper? oldValue = _selectedValue;
 				_selectedValue = value;
 				OnPropertyChanged();
 				RaisePropertyChanged(RawSelectedValueProperty, oldValue, value);
@@ -61,7 +61,7 @@ namespace AssetRipper.GUI.Components
 			get => _selectedValueDesc;
 			set
 			{
-				var oldValue = _selectedValueDesc;
+				string? oldValue = _selectedValueDesc;
 				_selectedValueDesc = value;
 				OnPropertyChanged();
 				RaisePropertyChanged(SelectedValueDescriptionProperty, oldValue, value);
