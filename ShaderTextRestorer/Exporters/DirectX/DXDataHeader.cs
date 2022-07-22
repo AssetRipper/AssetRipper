@@ -15,11 +15,15 @@ namespace ShaderTextRestorer.Exporters.DirectX
 		/// </summary>
 		public static bool HasGSInputPrimitive(UnityVersion version) => version.IsGreaterEqual(5, 4);
 
-		public static int GetDataOffset(UnityVersion version, GPUPlatform graphicApi)
+		public static int GetDataOffset(UnityVersion version, GPUPlatform graphicApi, int headerVersion)
 		{
 			if (HasHeader(graphicApi))
 			{
-				return HasGSInputPrimitive(version) ? 6 : 5;
+				int offset = HasGSInputPrimitive(version) ? 6 : 5;
+				if (headerVersion >= 2)
+					offset += 0x20;
+
+				return offset;
 			}
 			else
 			{
@@ -29,7 +33,7 @@ namespace ShaderTextRestorer.Exporters.DirectX
 
 		public void Read(BinaryReader reader, UnityVersion version)
 		{
-			Unknown1 = reader.ReadByte();
+			Version = reader.ReadByte();
 			Textures = reader.ReadByte();
 			CBs = reader.ReadByte();
 			Samplers = reader.ReadByte();
@@ -42,7 +46,7 @@ namespace ShaderTextRestorer.Exporters.DirectX
 
 		public void Write(BinaryWriter writer, UnityVersion version)
 		{
-			writer.Write(Unknown1);
+			writer.Write(Version);
 			writer.Write(Textures);
 			writer.Write(CBs);
 			writer.Write(Samplers);
@@ -54,9 +58,10 @@ namespace ShaderTextRestorer.Exporters.DirectX
 		}
 
 		/// <summary>
-		/// Always 1
+		/// 1: No block of 32 00s after these parameters
+		/// 2: Block of 32 00s after these parameters
 		/// </summary>
-		public byte Unknown1 { get; set; }
+		public byte Version { get; set; }
 		public byte Textures { get; set; }
 		public byte CBs { get; set; }
 		public byte Samplers { get; set; }
