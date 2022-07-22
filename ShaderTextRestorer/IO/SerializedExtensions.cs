@@ -269,7 +269,7 @@ namespace ShaderTextRestorer.IO
 				{
 					writer.Write("{0} ", index);
 				}
-				writer.Write("{0} {1}", _this.SrcBlend, _this.DestBlendValue());
+				writer.Write("{0} {1}", _this.SrcBlendValue(), _this.DestBlendValue());
 				if (!_this.SrcBlendValue().IsOne() || !_this.DestBlendAlphaValue().IsZero())
 				{
 					writer.Write(", {0} {1}", _this.SrcBlendAlphaValue(), _this.DestBlendAlphaValue());
