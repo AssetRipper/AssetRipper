@@ -22,7 +22,7 @@ namespace AssetRipper.GUI
 
 		public event Action OnLanguageChanged = () => { };
 
-		public void Setup()
+		public LocalizationManager()
 		{
 			LoadLanguage("en_US");
 			FallbackLocale = CurrentLocale;
