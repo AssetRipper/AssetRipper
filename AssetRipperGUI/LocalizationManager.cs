@@ -16,7 +16,7 @@ namespace AssetRipper.GUI
 
 		// ReSharper disable once MemberInitializerValueIgnored
 		private Dictionary<string, string> CurrentLocale; //To suppress warning as it's initialized indirectly in constructor
-		private Dictionary<string, string> FallbackLocale;
+		private readonly Dictionary<string, string> FallbackLocale;
 		private string? CurrentLang;
 		public SupportedLanguage[] SupportedLanguages { get; private set; }
 
@@ -35,13 +35,11 @@ namespace AssetRipper.GUI
 
 			string[] supportedLanguageNames = supportedLanguageCodes.Select(code => new CultureInfo(code.Replace('_', '-'))).Select(ExtractCultureName).ToArray();
 
-			List<SupportedLanguage> languages = new();
+			SupportedLanguages = new SupportedLanguage[supportedLanguageNames.Length];
 			for (int i = 0; i < supportedLanguageNames.Length; i++)
 			{
-				languages.Add(new(supportedLanguageNames[i], supportedLanguageCodes[i]));
+				SupportedLanguages[i] = new SupportedLanguage(this, supportedLanguageNames[i], supportedLanguageCodes[i]);
 			}
-
-			SupportedLanguages = languages.ToArray();
 		}
 
 		private static string ExtractCultureName(CultureInfo culture)
@@ -88,25 +86,27 @@ namespace AssetRipper.GUI
 		{
 			public string DisplayName { get; }
 			public string LanguageCode { get; }
+			public LocalizationManager Manager { get; }
 
 			public bool IsActive
 			{
-				get => MainWindow.Instance.LocalizationManager.CurrentLang == LanguageCode;
+				get => Manager.CurrentLang == LanguageCode;
 			}
 
-			public SupportedLanguage(string displayName, string languageCode)
+			public SupportedLanguage(LocalizationManager manager, string displayName, string languageCode)
 			{
 				DisplayName = displayName;
 				LanguageCode = languageCode;
 
-				Logger.Verbose(LogCategory.System, $"Language {displayName} isActive {IsActive}");
+				Manager = manager;
+				Manager.OnLanguageChanged += () => OnPropertyChanged(nameof(IsActive));
 
-				MainWindow.Instance.LocalizationManager.OnLanguageChanged += () => OnPropertyChanged(nameof(IsActive));
+				Logger.Verbose(LogCategory.System, $"Language {displayName} isActive {IsActive}");
 			}
 
 			public void Apply()
 			{
-				MainWindow.Instance.LocalizationManager.LoadLanguage(LanguageCode);
+				Manager.LoadLanguage(LanguageCode);
 			}
 
 			public override string ToString() => DisplayName;
