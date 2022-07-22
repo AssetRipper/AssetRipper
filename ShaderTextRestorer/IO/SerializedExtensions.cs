@@ -543,9 +543,11 @@ namespace ShaderTextRestorer.IO
 				writer.WriteIndent(5);
 			}
 
-#warning TODO: convertion (DX to HLSL)
 			ShaderGpuProgramType programType = _this.GetProgramType(writer.Version);
-			writer.Write("\"{0}", programType.ToProgramDataKeyword(writer.Platform, type));
+
+			if (writer.WriteQuotesAroundProgram)
+				writer.Write("\"{0}", programType.ToProgramDataKeyword(writer.Platform, type));
+
 			if (_this.ProgramData.Length > 0)
 			{
 				writer.Write("\n");
@@ -553,7 +555,9 @@ namespace ShaderTextRestorer.IO
 
 				writer.WriteShaderData(ref _this);
 			}
-			writer.Write('"');
+
+			if (writer.WriteQuotesAroundProgram)
+				writer.Write('"');
 		}
 
 		public static void Export(this ShaderSubProgramBlob _this, ShaderWriter writer, string header)

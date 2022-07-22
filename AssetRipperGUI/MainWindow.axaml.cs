@@ -23,6 +23,7 @@ namespace AssetRipper.GUI
 			DataContext = VM = new();
 
 			LocalizationManager = new();
+			LocalizationManager.Setup();
 
 			Logger.Verbose(LogCategory.System, $"Available languages: {string.Join(", ", LocalizationManager.SupportedLanguages.Select(l => l.LanguageCode))}");
 
