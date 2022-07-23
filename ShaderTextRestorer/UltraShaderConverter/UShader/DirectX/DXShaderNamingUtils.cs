@@ -54,7 +54,9 @@ namespace ShaderLabConvert
             string name = input.name switch
             {
                 "SV_POSITION" => "position",
-                "POSITION" => "vertex",
+				"SV_Position" => "position",
+				"SV_IsFrontFace" => "facing",
+				"POSITION" => "vertex",
                 _ => type.ToLower(),
             };
             return name;
@@ -76,7 +78,7 @@ namespace ShaderLabConvert
 			string name = output.name switch
             {
                 "SV_POSITION" => "position",
-                "POSITION" => "vertex",
+				"POSITION" => "vertex",
                 _ => type.ToLower(),
             };
 
@@ -185,7 +187,8 @@ namespace ShaderLabConvert
 
 		public static string GetOSGNFormatName(OSGN.Output output)
 		{
-			return ((FormatType)output.format).ToString() + GetMaskSize(output.mask);
+			int maskSize = GetMaskSize(output.mask);
+			return ((FormatType)output.format).ToString() + (maskSize != 1 ? maskSize : "");
 		}
 
 		public static int GetMaskSize(byte mask)

@@ -397,8 +397,19 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 					if (hasFragment)
 					{
+						// needs to move somewhere else...
+						DirectXCompiledShader dxShader = fragmentConverter.DxShader;
+						bool hasFrontFace = dxShader.Isgn.inputs.Any(i => i.name == "SV_IsFrontFace");
+
 						writer.WriteIndent(3);
-						writer.WriteLine($"{USILConstants.FRAG_OUTPUT_STRUCT_NAME} frag({USILConstants.VERT_TO_FRAG_STRUCT_NAME} {USILConstants.FRAG_INPUT_NAME})");
+
+						string args = $"{USILConstants.VERT_TO_FRAG_STRUCT_NAME} {USILConstants.FRAG_INPUT_NAME}";
+						if (hasFrontFace)
+						{
+							// not part of v2f
+							args += $", float facing: VFACE";
+						}
+						writer.WriteLine($"{USILConstants.FRAG_OUTPUT_STRUCT_NAME} frag({args})");
 						writer.WriteIndent(3);
 						writer.WriteLine("{");
 

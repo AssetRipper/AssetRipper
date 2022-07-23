@@ -454,7 +454,11 @@ namespace ShaderLabConvert
             AppendLine($"{comment}{inst.destOperand} = {value};");
         }
 
-        private void HandleSampleLOD(USILInstruction inst)
+		// issue: tex2Dlod
+		//   problem: tex2Dlod(_HeightMap, float4(tmp1.xy, 0, tmp1.z), 0);
+		//   fix:     tex2Dlod(_HeightMap, float4(tmp1.xy, 0, tmp1.z));
+		//   'tex2Dlod': no matching 3 parameter intrinsic function; Possible intrinsic functions are: tex2Dlod(sampler2D, float4|half4|min10float4|min16float4)
+		private void HandleSampleLOD(USILInstruction inst)
         {
             List<USILOperand> srcOps = inst.srcOperands;
             USILOperand textureOperand = srcOps[2];
