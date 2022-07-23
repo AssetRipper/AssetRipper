@@ -45,12 +45,20 @@ namespace ShaderLabConvert
                 // correct mask
                 operand.mask = MatchMaskToInputOutput(operand.mask, input.mask, true);
 
-                operand.metadataName = _shader.shaderFunctionType switch
-                {
-                    UShaderFunctionType.Vertex => $"{USILConstants.VERT_INPUT_NAME}.{input.name}",
-                    UShaderFunctionType.Fragment => $"{USILConstants.FRAG_INPUT_NAME}.{input.name}",
-                    _ => $"unk_input.{input.name}",
-                };
+				if (_shader.shaderFunctionType == UShaderFunctionType.Fragment && input.type == "SV_IsFrontFace")
+				{
+					operand.metadataName = input.name;
+				}
+				else
+				{
+					operand.metadataName = _shader.shaderFunctionType switch
+					{
+						UShaderFunctionType.Vertex => $"{USILConstants.VERT_INPUT_NAME}.{input.name}",
+						UShaderFunctionType.Fragment => $"{USILConstants.FRAG_INPUT_NAME}.{input.name}",
+						_ => $"unk_input.{input.name}",
+					};
+				}
+
                 operand.metadataNameAssigned = true;
             }
             else if (operand.operandType == USILOperandType.OutputRegister)
