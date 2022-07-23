@@ -2,7 +2,7 @@
 
 namespace ShaderTextRestorer.ShaderBlob.Parameters
 {
-	public sealed class VectorParameter
+	public sealed class VectorParameter : NumericShaderParameter
 	{
 		public VectorParameter() { }
 
@@ -14,6 +14,8 @@ namespace ShaderTextRestorer.ShaderBlob.Parameters
 			ArraySize = 0;
 			Type = type;
 			Dim = (byte)columns;
+			ColumnCount = 1;
+			IsMatrix = false;
 		}
 
 		public VectorParameter(string name, ShaderParamType type, int index, int arraySize, int columns) : this(name, type, index, columns)
@@ -21,11 +23,10 @@ namespace ShaderTextRestorer.ShaderBlob.Parameters
 			ArraySize = arraySize;
 		}
 
-		public string Name { get; set; } = string.Empty;
-		public int NameIndex { get; set; }
-		public int Index { get; set; }
-		public int ArraySize { get; set; }
-		public ShaderParamType Type { get; set; }
-		public byte Dim { get; set; }
+		public byte Dim
+		{
+			get { return RowCount; }
+			set { RowCount = value; }
+		}
 	}
 }

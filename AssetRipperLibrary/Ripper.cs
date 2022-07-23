@@ -282,6 +282,7 @@ namespace AssetRipper.Library
 			ConditionalOverrideExporter<IShader>(new DummyShaderTextExporter(), Settings.ShaderExportMode == ShaderExportMode.Dummy);
 			ConditionalOverrideExporter<IShader>(new YamlShaderExporter(), Settings.ShaderExportMode == ShaderExportMode.Yaml);
 			ConditionalOverrideExporter<IShader>(new ShaderDisassemblyExporter(), Settings.ShaderExportMode == ShaderExportMode.Disassembly);
+			ConditionalOverrideExporter<IShader>(new USCShaderExporter(), Settings.ShaderExportMode == ShaderExportMode.Decompile);
 			OverrideExporter<IShader>(new SimpleShaderExporter());
 
 			//Audio exporters

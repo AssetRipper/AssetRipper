@@ -9,6 +9,7 @@ namespace AssetRipper.GUI.Components
 			ShaderExportMode.Dummy => MainWindow.Instance.LocalizationManager["shader_asset_format_dummy"],
 			ShaderExportMode.Yaml => MainWindow.Instance.LocalizationManager["shader_asset_format_yaml"],
 			ShaderExportMode.Disassembly => MainWindow.Instance.LocalizationManager["shader_asset_format_disassembly"],
+			ShaderExportMode.Decompile => MainWindow.Instance.LocalizationManager["shader_asset_format_decompile"],
 			_ => base.GetValueDisplayName(value),
 		};
 
@@ -17,6 +18,7 @@ namespace AssetRipper.GUI.Components
 			ShaderExportMode.Dummy => MainWindow.Instance.LocalizationManager["shader_asset_format_dummy_description"],
 			ShaderExportMode.Yaml => MainWindow.Instance.LocalizationManager["shader_asset_format_yaml_description"],
 			ShaderExportMode.Disassembly => MainWindow.Instance.LocalizationManager["shader_asset_format_disassembly_description"],
+			ShaderExportMode.Decompile => MainWindow.Instance.LocalizationManager["shader_asset_format_decompile_description"],
 			_ => null,
 		};
 	}

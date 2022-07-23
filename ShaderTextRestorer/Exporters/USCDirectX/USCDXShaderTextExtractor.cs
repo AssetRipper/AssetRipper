@@ -1,10 +1,14 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.VersionUtilities;
+using ShaderLabConvert;
+using ShaderTextRestorer.Exporters.DirectX;
 using ShaderTextRestorer.Handlers;
+using ShaderTextRestorer.ShaderBlob;
+using System;
 
-namespace ShaderTextRestorer.Exporters.DirectX
+namespace ShaderTextRestorer.Exporters.USCDirectX
 {
-	public static class DXShaderTextExtractor
+	public static class USCDXShaderTextExtractor
 	{
 		public static bool TryGetShaderText(byte[] data, UnityVersion version, GPUPlatform gpuPlatform, out string disassemblyText)
 		{
@@ -24,7 +28,7 @@ namespace ShaderTextRestorer.Exporters.DirectX
 			}
 		}
 
-		public static bool TryDecompileText(byte[] data, UnityVersion version, GPUPlatform gpuPlatform, out string decompiledText)
+		public static bool TryDecompileText(byte[] data, UnityVersion version, GPUPlatform gpuPlatform, ShaderSubProgram subProgram, out string decompiledText, out UShaderProgram uShaderProgram)
 		{
 			int dataOffset = 0;
 			if (DXDataHeader.HasHeader(gpuPlatform))
@@ -32,7 +36,7 @@ namespace ShaderTextRestorer.Exporters.DirectX
 				dataOffset = DXDataHeader.GetDataOffset(version, gpuPlatform, data[0]);
 			}
 
-			return DXDecompilerlyHandler.TryDecompile(data, dataOffset, out decompiledText);
+			return USCDecompilerHandler.TryDecompile(data, dataOffset, subProgram, out decompiledText, out uShaderProgram);
 		}
 	}
 }

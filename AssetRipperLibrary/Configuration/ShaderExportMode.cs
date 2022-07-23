@@ -14,5 +14,9 @@
 		/// Export as disassembly which does not compile in the editor
 		/// </summary>
 		Disassembly,
+		/// <summary>
+		/// Export as decompiled hlsl (unstable!)
+		/// </summary>
+		Decompile
 	}
 }

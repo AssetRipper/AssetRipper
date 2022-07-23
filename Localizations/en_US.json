@@ -64,6 +64,8 @@
   "shader_asset_format_yaml_description": "Export the shader as a yaml asset. Experimental and only usable for viewing in the editor. The editor can randomly corrupt these files.",
   "shader_asset_format_disassembly": "Disassembly",
   "shader_asset_format_disassembly_description": "Export the shader as disassembly. Experimental and prone to breakage. This does not compile in the editor.",
+  "shader_asset_format_decompile": "Decompile",
+  "shader_asset_format_decompile_description": "Export the shader to ShaderLab. Very experimental and almost certainly will have errors. Only supports DX11, not DX9.",
   "script_export_format_decompiled": "Decompiled",
   "script_export_format_decompiled_description": "The ILSpy decompiler is used to generate CS scripts. This is reliable. However, it's also time-consuming and contains many compile errors.",
   "script_export_format_hybrid": "Hybrid",

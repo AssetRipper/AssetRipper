@@ -24,5 +24,16 @@ namespace ShaderTextRestorer.ShaderBlob.Parameters
 		public int StructSize { get; set; }
 		public VectorParameter[] VectorMembers { get; set; } = Array.Empty<VectorParameter>();
 		public MatrixParameter[] MatrixMembers { get; set; } = Array.Empty<MatrixParameter>();
+
+		public NumericShaderParameter[] AllNumericMembers
+		{
+			get
+			{
+				NumericShaderParameter[] shaderParams = new NumericShaderParameter[MatrixMembers.Length + VectorMembers.Length];
+				MatrixMembers.CopyTo(shaderParams, 0);
+				VectorMembers.CopyTo(shaderParams, MatrixMembers.Length);
+				return shaderParams;
+			}
+		}
 	}
 }
