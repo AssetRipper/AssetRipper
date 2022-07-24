@@ -34,6 +34,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
+using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
@@ -277,6 +278,9 @@ namespace AssetRipper.Library
 			TextureAssetExporter textureExporter = new(Settings);
 			OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
 			OverrideExporter<ISprite>(textureExporter);
+			YamlSpriteExporter spriteExporter = new(Settings);
+			OverrideExporter<ISprite>(spriteExporter);
+			OverrideExporter<ISpriteAtlas>(spriteExporter);
 
 			//Shader exporters
 			ConditionalOverrideExporter<IShader>(new DummyShaderTextExporter(), Settings.ShaderExportMode == ShaderExportMode.Dummy);

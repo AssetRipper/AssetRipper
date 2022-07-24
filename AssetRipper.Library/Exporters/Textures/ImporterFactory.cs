@@ -28,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			instance.StreamingMipmapsPriority_C1006 = origin.StreamingMipmapsPriority_C28;
 			instance.IsReadable_C1006 = origin.IsReadable_C28 ? 1 : 0;
 			instance.TextureFormat_C1006 = origin.TextureFormat_C28;
-			instance.MaxTextureSize_C1006 = Math.Min(2048, Math.Max(origin.Width_C28, origin.Height_C28));
+			instance.MaxTextureSize_C1006 = Math.Max(2048, NextPowerOfTwo(Math.Max(origin.Width_C28, origin.Height_C28)));
 			instance.TextureSettings_C1006.CopyValues(origin.TextureSettings_C28);
 			instance.NPOTScale_C1006 = (int)TextureImporterNPOTScale.None;
 			instance.CompressionQuality_C1006 = 50;
@@ -49,7 +49,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 			ITextureImporterPlatformSettings platformSettings = instance.PlatformSettings_C1006.AddNew();
 			platformSettings.BuildTarget.String = "DefaultTexturePlatform";
-			platformSettings.MaxTextureSize = 2048;
+			platformSettings.MaxTextureSize = instance.MaxTextureSize_C1006;
 			platformSettings.ResizeAlgorithm = (int)TextureResizeAlgorithm.Mitchell;
 			platformSettings.TextureFormat = (int)TextureFormat.Automatic;
 			platformSettings.TextureCompression = (int)TextureImporterCompression.Compressed;//Uncompressed results in a significantly larger Library folder
@@ -61,6 +61,17 @@ namespace AssetRipper.Library.Exporters.Textures
 			platformSettings.ForceMaximumCompressionQuality_BC6H_BC7 = false;
 
 			return instance;
+		}
+
+		private static int NextPowerOfTwo(int n)
+		{
+			n--;
+			n |= n >> 1;
+			n |= n >> 2;
+			n |= n >> 4;
+			n |= n >> 8;
+			n |= n >> 16;
+			return ++n;
 		}
 
 		private static int GetTextureTypeFromLightmapFormat(ITexture2D origin)

@@ -3,7 +3,13 @@
 	public enum SpriteExportMode
 	{
 		/// <summary>
-		/// Export in the native asset format
+		/// Export as yaml assets which can be viewed in the editor.
+		/// This is the only mode that can ensure a precise recovery of metadata of all sprites.
+		/// <see href="https://github.com/trouger/AssetRipper/issues/2"/>
+		/// </summary>
+		Yaml,
+		/// <summary>
+		/// Export in the native asset format, where all sprites data are stored in texture importer settings.
 		/// </summary>
 		Native,
 		/// <summary>

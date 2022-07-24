@@ -21,10 +21,10 @@ namespace AssetRipper.Library.Exporters.Textures
 {
 	public class TextureExportCollection : AssetsExportCollection
 	{
-		public TextureExportCollection(IAssetExporter assetExporter, ITexture2D texture, bool convert) : base(assetExporter, texture)
+		public TextureExportCollection(IAssetExporter assetExporter, ITexture2D texture, bool convert, bool exportSprites) : base(assetExporter, texture)
 		{
 			m_convert = convert;
-			if (convert)
+			if (convert && exportSprites)
 			{
 				foreach (ISprite sprite in texture.SerializedFile.Collection.FetchAssetsOfType<ISprite>())
 				{
@@ -66,7 +66,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				return new FailExportCollection(assetExporter, asset);
 			}
-			return new TextureExportCollection(assetExporter, texture, true);
+			return new TextureExportCollection(assetExporter, texture, true, true);
 		}
 
 		protected override IUnityObjectBase CreateImporter(IExportContainer container)

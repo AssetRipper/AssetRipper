@@ -71,7 +71,9 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				return TextureExportCollection.CreateExportCollection(this, sprite);
 			}
-			TextureExportCollection collection = new TextureExportCollection(this, (SourceGenerated.Classes.ClassID_28.ITexture2D)asset, true);
+
+			TextureExportCollection collection = new TextureExportCollection(this,
+				(SourceGenerated.Classes.ClassID_28.ITexture2D)asset, true, SpriteExportMode != SpriteExportMode.Yaml);
 			collection.FileExtension = ImageExportFormat.GetFileExtension();
 			return collection;
 		}
