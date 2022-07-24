@@ -112,8 +112,10 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override bool Export(IProjectAssetContainer container, string dirPath)
 		{
-			string folderPath = Path.Combine(dirPath, UnityObjectBase.AssetsKeyword, "Scene");
-			string sceneSubPath = GetSceneName(container);
+			string sceneSubPath = GetSceneName(container, out bool isRegular);
+			string folderPath = isRegular
+				? Path.Combine(dirPath, UnityObjectBase.AssetsKeyword)
+				: Path.Combine(dirPath, UnityObjectBase.AssetsKeyword, "Scene");
 			string fileName = $"{sceneSubPath}.unity";
 			string filePath = Path.Combine(folderPath, fileName);
 
@@ -213,8 +215,9 @@ namespace AssetRipper.Core.Project.Collections
 			return asset != OcclusionCullingData;
 		}
 
-		private string GetSceneName(IExportContainer container)
+		private string GetSceneName(IExportContainer container, out bool isRegular)
 		{
+			isRegular = false;
 			if (IsSceneName)
 			{
 				int index = FileNameToSceneIndex(Name, File.Version);
@@ -222,6 +225,7 @@ namespace AssetRipper.Core.Project.Collections
 				if (scenePath.StartsWith(AssetsName, StringComparison.Ordinal))
 				{
 					string extension = Path.GetExtension(scenePath);
+					isRegular = true;
 					return scenePath.Substring(AssetsName.Length, scenePath.Length - AssetsName.Length - extension.Length);
 				}
 				else if (Path.IsPathRooted(scenePath))
@@ -230,6 +234,7 @@ namespace AssetRipper.Core.Project.Collections
 					// NOTE: absolute project path may contain Assets/ in its name so in this case we get incorrect scene path, but there is no way to bypass this issue
 					int assetIndex = scenePath.IndexOf(AssetsName);
 					string extension = Path.GetExtension(scenePath);
+					isRegular = true;
 					return scenePath.Substring(assetIndex + AssetsName.Length, scenePath.Length - assetIndex - AssetsName.Length - extension.Length);
 				}
 				else if (scenePath.Length == 0)
