@@ -24,7 +24,7 @@ namespace ShaderLabConvert
 			typeof(USILGetDimensionsFixer),
 
             // do detection optimizers which usually depend on metadders
-            typeof(USILMatrixMulOptimizer),
+            //typeof(USILMatrixMulOptimizer), // I don't trust this code so it's commented for now
 			
             // do simplification optimizers last when detection has been finished
             typeof(USILCompareOrderOptimizer),

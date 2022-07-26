@@ -454,10 +454,6 @@ namespace ShaderLabConvert
             AppendLine($"{comment}{inst.destOperand} = {value};");
         }
 
-		// issue: tex2Dlod
-		//   problem: tex2Dlod(_HeightMap, float4(tmp1.xy, 0, tmp1.z), 0);
-		//   fix:     tex2Dlod(_HeightMap, float4(tmp1.xy, 0, tmp1.z));
-		//   'tex2Dlod': no matching 3 parameter intrinsic function; Possible intrinsic functions are: tex2Dlod(sampler2D, float4|half4|min10float4|min16float4)
 		private void HandleSampleLOD(USILInstruction inst)
         {
             List<USILOperand> srcOps = inst.srcOperands;
@@ -473,11 +469,11 @@ namespace ShaderLabConvert
 			{
 				value = textureOperand.operandType switch
 				{
-					USILOperandType.Sampler2D => $"tex2Dlod({args}, {srcOps[4]})",
-					USILOperandType.Sampler3D => $"tex3Dlod({args}, {srcOps[4]})",
-					USILOperandType.SamplerCube => $"texCUBElod({args}, {srcOps[4]})",
-					USILOperandType.Sampler2DArray => $"UNITY_SAMPLE_TEX2DARRAY_LOD({args}, {srcOps[4]})",
-					USILOperandType.SamplerCubeArray => $"UNITY_SAMPLE_TEXCUBEARRAY_LOD({args}, {srcOps[4]})",
+					USILOperandType.Sampler2D => $"tex2Dlod({args})",
+					USILOperandType.Sampler3D => $"tex3Dlod({args})",
+					USILOperandType.SamplerCube => $"texCUBElod({args})",
+					USILOperandType.Sampler2DArray => $"UNITY_SAMPLE_TEX2DARRAY_LOD({args})",
+					USILOperandType.SamplerCubeArray => $"UNITY_SAMPLE_TEXCUBEARRAY_LOD({args})",
 					_ => $"texNDlod({args})" // unknown real type
 				};
 			}
