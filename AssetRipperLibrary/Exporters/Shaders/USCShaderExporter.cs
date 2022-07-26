@@ -381,6 +381,11 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 					if (hasVertex)
 					{
+						string keywordsList = string.Join(' ', vertexSubProgram.LocalKeywords.Concat(vertexSubProgram.GlobalKeywords));
+
+						writer.WriteIndent(3);
+						writer.WriteLine($"// Keywords: {keywordsList}");
+
 						writer.WriteIndent(3);
 						writer.WriteLine($"{USILConstants.VERT_TO_FRAG_STRUCT_NAME} vert(appdata_full {USILConstants.VERT_INPUT_NAME})");
 						writer.WriteIndent(3);
@@ -397,6 +402,11 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 					if (hasFragment)
 					{
+						string keywordsList = string.Join(' ', fragmentSubProgram.LocalKeywords.Concat(fragmentSubProgram.GlobalKeywords));
+
+						writer.WriteIndent(3);
+						writer.WriteLine($"// Keywords: {keywordsList}");
+
 						// needs to move somewhere else...
 						DirectXCompiledShader dxShader = fragmentConverter.DxShader;
 						bool hasFrontFace = dxShader.Isgn.inputs.Any(i => i.name == "SV_IsFrontFace");
