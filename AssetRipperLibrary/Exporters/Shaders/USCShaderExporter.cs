@@ -713,9 +713,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 				List<string> keywords = new List<string>();
 
-				if (subProgram.GlobalKeywords != null)
+				if (subProgram.GlobalKeywords.Length > 0)
 					keywords.AddRange(subProgram.GlobalKeywords);
-				if (subProgram.LocalKeywords != null)
+				if (subProgram.LocalKeywords.Length > 0)
 					keywords.AddRange(subProgram.LocalKeywords);
 
 				// don't have to worry about order I don't think

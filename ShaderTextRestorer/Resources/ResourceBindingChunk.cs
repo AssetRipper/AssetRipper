@@ -71,7 +71,7 @@ namespace ShaderTextRestorer.Resources
 				string samplerName = "sampler" + textureParam.Name;
 				samplers.Add(new Sampler(samplerName, (uint)textureParam.SamplerIndex, false));
 			}
-			foreach (SamplerParameter samplerParam in shaderSubprogram.SamplerParameters ?? Array.Empty<SamplerParameter>())
+			foreach (SamplerParameter samplerParam in shaderSubprogram.SamplerParameters)
 			{
 				SamplerFilterMode filterMode = (SamplerFilterMode)(samplerParam.Sampler & 0x3);
 				SamplerWrapMode wrapU = (SamplerWrapMode)(samplerParam.Sampler >> 2 & 0x3);

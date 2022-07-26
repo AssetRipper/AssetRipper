@@ -347,19 +347,18 @@ namespace ShaderTextRestorer.ShaderBlob
 		public int StatsTEX { get; set; }
 		public int StatsFlow { get; set; }
 		public int StatsTempRegister { get; set; }
-		public string[] GlobalKeywords { get; set; }
-		public string[] LocalKeywords { get; set; }
-		public byte[] ProgramData { get; set; }
-		public VectorParameter[] VectorParameters { get; set; }
-		public MatrixParameter[] MatrixParameters { get; set; }
-		public TextureParameter[] TextureParameters { get; set; }
-		public BufferBinding[] BufferParameters { get; set; }
-		public UAVParameter[] UAVParameters { get; set; }
-		public SamplerParameter[] SamplerParameters { get; set; }
-		public ConstantBuffer[] ConstantBuffers { get; set; }
-		public BufferBinding[] ConstantBufferBindings { get; set; }
-		public StructParameter[] StructParameters { get; set; }
-
-		public ParserBindChannels BindChannels = new();
+		public string[] GlobalKeywords { get; set; } = Array.Empty<string>();
+		public string[] LocalKeywords { get; set; } = Array.Empty<string>();
+		public byte[] ProgramData { get; set; } = Array.Empty<byte>();
+		public VectorParameter[] VectorParameters { get; set; } = Array.Empty<VectorParameter>();
+		public MatrixParameter[] MatrixParameters { get; set; } = Array.Empty<MatrixParameter>();
+		public TextureParameter[] TextureParameters { get; set; } = Array.Empty<TextureParameter>();
+		public BufferBinding[] BufferParameters { get; set; } = Array.Empty<BufferBinding>();
+		public UAVParameter[] UAVParameters { get; set; } = Array.Empty<UAVParameter>();
+		public SamplerParameter[] SamplerParameters { get; set; } = Array.Empty<SamplerParameter>();
+		public ConstantBuffer[] ConstantBuffers { get; set; } = Array.Empty<ConstantBuffer>();
+		public BufferBinding[] ConstantBufferBindings { get; set; } = Array.Empty<BufferBinding>();
+		public StructParameter[] StructParameters { get; set; } = Array.Empty<StructParameter>();
+		public ParserBindChannels BindChannels { get; set; } = new();
 	}
 }
