@@ -1,11 +1,8 @@
-﻿using AssetRipper.Core.Classes.Shader;
-using AssetRipper.Core.Classes.Shader.Enums;
+﻿using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Core.Classes.Shader.SerializedShader;
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
@@ -24,15 +21,12 @@ using ShaderLabConvert;
 using ShaderTextRestorer.Exporters;
 using ShaderTextRestorer.Exporters.DirectX;
 using ShaderTextRestorer.Exporters.USCDirectX;
-using ShaderTextRestorer.Extensions;
 using ShaderTextRestorer.IO;
 using ShaderTextRestorer.ShaderBlob;
 using ShaderTextRestorer.ShaderBlob.Parameters;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using UltraShaderConverter;
 
 namespace AssetRipper.Library.Exporters.Shaders

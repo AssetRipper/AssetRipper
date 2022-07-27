@@ -1,6 +1,4 @@
 ﻿using AssetRipper.Core.Classes.ParticleSystem.Trigger;
-using AssetRipper.Core.Classes.ParticleSystemForceField;
-using AssetRipper.SourceGenerated.Subclasses.ParticleSystemForceFieldParameters;
 using AssetRipper.SourceGenerated.Subclasses.TriggerModule;
 
 namespace AssetRipper.Core.SourceGenExtensions

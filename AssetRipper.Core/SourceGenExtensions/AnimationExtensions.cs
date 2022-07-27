@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Animation;
+using AssetRipper.Core.Classes.AnimationClip;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip_;
-using WrapMode = AssetRipper.Core.Classes.AnimationClip.WrapMode;
-using AnimationCullingType = AssetRipper.Core.Classes.Animation.AnimationCullingType;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

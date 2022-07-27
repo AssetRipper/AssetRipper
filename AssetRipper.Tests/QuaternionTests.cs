@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Math.Vectors;
-using NUnit.Framework;
 
 namespace AssetRipper.Tests
 {

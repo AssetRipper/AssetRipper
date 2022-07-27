@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Equality;
 using AssetRipper.Core.Math.PackedBitVectors;
-using NUnit.Framework;
 using System;
 
 namespace AssetRipperTests.PackedBitVectorTests

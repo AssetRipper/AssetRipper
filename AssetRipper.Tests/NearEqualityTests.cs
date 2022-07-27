@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Equality;
-using NUnit.Framework;
 
 namespace AssetRipper.Tests
 {

@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using SpritePackingMode = AssetRipper.Core.Classes.Sprite.SpritePackingMode;
-using SpritePackingRotation = AssetRipper.Core.Classes.Sprite.SpritePackingRotation;
-using SpriteMeshType = AssetRipper.Core.Classes.Sprite.SpriteMeshType;
-using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
-using AssetRipper.Core.Math.Vectors;
-using AssetRipper.SourceGenerated.Subclasses.SubMesh;
-using AssetRipper.SourceGenerated.Subclasses.Vector3f;
+﻿using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.IO;
+using AssetRipper.Core.Math.Vectors;
+using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
+using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
+using AssetRipper.SourceGenerated.Subclasses.Vector3f;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

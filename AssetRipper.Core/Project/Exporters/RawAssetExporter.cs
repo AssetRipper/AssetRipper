@@ -1,10 +1,8 @@
 ﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
-using AssetRipper.IO.Endian;
 using System.IO;
 using System.Text;
 

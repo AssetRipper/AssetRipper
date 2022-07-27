@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.Sprite;
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;

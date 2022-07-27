@@ -1,5 +1,4 @@
 using AssetRipper.Core.Classes.Misc;
-using NUnit.Framework;
 using System;
 using System.Text;
 
