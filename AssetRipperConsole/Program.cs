@@ -33,7 +33,7 @@ namespace AssetRipper.Console
 
 		public static void Main(string[] args)
 		{
-			CommandLine.Parser.Default.ParseArguments<Options>(args)
+			Parser.Default.ParseArguments<Options>(args)
 				.WithParsed(options =>
 				{
 					if (ValidateOptions(options))
@@ -49,6 +49,10 @@ namespace AssetRipper.Console
 					{
 						System.Console.ReadKey();
 					}
+				})
+				.WithNotParsed((errors) =>
+				{
+					System.Console.ReadKey();
 				});
 		}
 
