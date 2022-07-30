@@ -97,7 +97,7 @@ namespace AssetRipper.Core.Project.Collections
 		//This might not be necessary. 2019.4.3 doesn't use this in normally created prefabs
 		private static IPrefabInstance CreateVirtualPrefab(VirtualSerializedFile virtualFile, IGameObject root)
 		{
-			IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance);
+			IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance, root.SerializedFile.Version);
 			instance.RootGameObject_C1001?.CopyValues(root.SerializedFile.CreatePPtr(root));
 			instance.IsPrefabAsset_C1001 = true;
 			if (instance is IHasNameString hasName)

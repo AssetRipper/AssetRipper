@@ -107,21 +107,35 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return m_assets.Values;
 		}
 
-		[Obsolete]
-		public T CreateAsset<T>(Func<AssetInfo, T> instantiator) where T : IUnityObjectBase
+		public T CreateAsset<T>(Func<AssetInfo, T> factory) where T : IUnityObjectBase
 		{
-			//ClassIDType classID = typeof(T).ToClassIDType();
-			//AssetInfo assetInfo = CreateAssetInfo(classID);
-			//T instance = instantiator(assetInfo);
-			//m_assets.Add(instance.PathID, instance);
-			//return instance;
-			throw new NotSupportedException();
+			ClassIDType classID = VersionManager.AssetFactory.GetClassIdForType(typeof(T));
+			return CreateAsset<T>(classID, factory);
+		}
+
+		public T CreateAsset<T>(ClassIDType classID, Func<AssetInfo, T> factory) where T : IUnityObjectBase
+		{
+			AssetInfo assetInfo = CreateAssetInfo(classID);
+			T instance = factory(assetInfo);
+			m_assets.Add(instance.PathID, instance);
+			return instance;
 		}
 
 		public T CreateAsset<T>(ClassIDType classID) where T : IUnityObjectBase
 		{
+			return CreateAsset<T>(classID, Version);
+		}
+
+		public T CreateAsset<T>(UnityVersion version) where T : IUnityObjectBase
+		{
+			ClassIDType classID = VersionManager.AssetFactory.GetClassIdForType(typeof(T));
+			return CreateAsset<T>(classID, version);
+		}
+
+		public T CreateAsset<T>(ClassIDType classID, UnityVersion version) where T : IUnityObjectBase
+		{
 			AssetInfo assetInfo = CreateAssetInfo(classID);
-			IUnityObjectBase? asset = VersionManager.AssetFactory.CreateAsset(assetInfo, Version);
+			IUnityObjectBase? asset = VersionManager.AssetFactory.CreateAsset(assetInfo, version);
 			if (asset is null)
 			{
 				throw new ArgumentException($"Could not create asset with id: {classID}", nameof(classID));
