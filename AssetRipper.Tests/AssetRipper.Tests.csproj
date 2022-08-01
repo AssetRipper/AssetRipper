@@ -18,4 +18,11 @@
 		<ProjectReference Include="..\AssetRipper.Core\AssetRipper.Core.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Reference Include="AssetRipper.SourceGenerated">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>../Libraries/AssetRipper.SourceGenerated.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
 </Project>

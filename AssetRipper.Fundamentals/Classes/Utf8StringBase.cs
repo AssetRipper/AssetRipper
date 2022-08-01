@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Layout;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.Utils;
 using AssetRipper.Yaml;
 using System.Text;
 
@@ -106,25 +107,12 @@ namespace AssetRipper.Core.Classes
 
 		public override int GetHashCode()
 		{
-			return HashCode.Combine(Data);
+			return unchecked((int)CrcUtils.CalculateDigest(Data));
 		}
 
 		public override string ToString()
 		{
 			return String;
-		}
-	}
-
-	public static class Utf8StringBaseExtensions
-	{
-		public static string[] ToStringArray(this Utf8StringBase[] utf8Strings)
-		{
-			string[] result = new string[utf8Strings.Length];
-			for (int i = 0; i < utf8Strings.Length; i++)
-			{
-				result[i] = utf8Strings[i].String;
-			}
-			return result;
 		}
 	}
 }
