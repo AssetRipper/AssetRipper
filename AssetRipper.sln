@@ -41,8 +41,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\YamlDotNet.md = Licenses\YamlDotNet.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperLibrary", "AssetRipperLibrary\AssetRipperLibrary.csproj", "{36C3C081-547B-4C0C-98D0-BB90BA07B976}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.SystemTester", "AssetRipper.SystemTester\AssetRipper.SystemTester.csproj", "{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueTemplates", "IssueTemplates", "{38C0DDA2-6C7D-41F1-90F6-0B1DDA86C0EC}"
@@ -63,8 +61,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
 		.github\workflows\publish.yml = .github\workflows\publish.yml
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipperGUI", "AssetRipperGUI\AssetRipperGUI.csproj", "{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1C4D-430F-A1BA-BFC5671181D4}"
 	ProjectSection(SolutionItems) = preProject
@@ -108,16 +104,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Files", "Ass
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Core", "AssetRipper.Core\AssetRipper.Core.csproj", "{AA893E5C-2431-4070-AF6A-EE638C3249D7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.GUI", "AssetRipper.GUI\AssetRipper.GUI.csproj", "{6158D3B9-B15D-43BD-84B7-128EE8410527}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Library", "AssetRipper.Library\AssetRipper.Library.csproj", "{43F551D5-62FB-4F39-9D4A-EE3563941474}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{36C3C081-547B-4C0C-98D0-BB90BA07B976}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -126,10 +122,6 @@ Global
 		{80284066-08A7-496A-A9EB-732966584CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80284066-08A7-496A-A9EB-732966584CE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80284066-08A7-496A-A9EB-732966584CE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8CDB3DC9-77D2-4295-BB04-CEA24CA59B93}.Release|Any CPU.Build.0 = Release|Any CPU
 		{365C791E-431B-40E5-B724-BE375126AA11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{365C791E-431B-40E5-B724-BE375126AA11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{365C791E-431B-40E5-B724-BE375126AA11}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -174,6 +166,14 @@ Global
 		{AA893E5C-2431-4070-AF6A-EE638C3249D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA893E5C-2431-4070-AF6A-EE638C3249D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA893E5C-2431-4070-AF6A-EE638C3249D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6158D3B9-B15D-43BD-84B7-128EE8410527}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6158D3B9-B15D-43BD-84B7-128EE8410527}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6158D3B9-B15D-43BD-84B7-128EE8410527}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6158D3B9-B15D-43BD-84B7-128EE8410527}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43F551D5-62FB-4F39-9D4A-EE3563941474}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43F551D5-62FB-4F39-9D4A-EE3563941474}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43F551D5-62FB-4F39-9D4A-EE3563941474}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43F551D5-62FB-4F39-9D4A-EE3563941474}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

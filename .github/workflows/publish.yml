@@ -19,7 +19,7 @@ jobs:
         
     - name: Publish AssetRipper Windows x64
       run: dotnet publish /p:PublishProfile=windows_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperGUI/
+      working-directory: ./AssetRipper.GUI/
       
     - name: List Files
       shell: bash
@@ -49,7 +49,7 @@ jobs:
         
     - name: Publish AssetRipper Windows arm64
       run: dotnet publish /p:PublishProfile=windows_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperGUI/
+      working-directory: ./AssetRipper.GUI/
       
     - name: List Files
       shell: bash
@@ -79,7 +79,7 @@ jobs:
         
     - name: Publish AssetRipper Linux x64
       run: dotnet publish /p:PublishProfile=linux_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperGUI/
+      working-directory: ./AssetRipper.GUI/
         
     - name: List Files
       shell: bash
@@ -110,7 +110,7 @@ jobs:
         
     - name: Publish AssetRipper Linux arm64
       run: dotnet publish /p:PublishProfile=linux_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperGUI/
+      working-directory: ./AssetRipper.GUI/
         
     - name: List Files
       shell: bash
@@ -141,7 +141,7 @@ jobs:
         
     - name: Publish AssetRipper Mac x64
       run: dotnet publish /p:PublishProfile=mac_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperGUI/
+      working-directory: ./AssetRipper.GUI/
         
     - name: List Files
       shell: bash
@@ -173,7 +173,7 @@ jobs:
         
     - name: Publish AssetRipper Mac arm64
       run: dotnet publish /p:PublishProfile=mac_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperGUI/
+      working-directory: ./AssetRipper.GUI/
         
     - name: List Files
       shell: bash
