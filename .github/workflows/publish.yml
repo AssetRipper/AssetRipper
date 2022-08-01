@@ -17,42 +17,23 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Publish AssetRipperConsole Windows x64
-      run: dotnet publish /p:PublishProfile=console_windows_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperConsole/
-      
-    - name: Publish AssetRipperGUI Windows x64
-      run: dotnet publish /p:PublishProfile=gui_windows_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+    - name: Publish AssetRipper Windows x64
+      run: dotnet publish /p:PublishProfile=windows_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
       working-directory: ./AssetRipperGUI/
       
-    - name: List Console Files
+    - name: List Files
       shell: bash
       run: |
-        mkdir -p ./Bins/Publish/AssetRipperConsole_win_x64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_win_x64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperConsole_win_x64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperConsole_win_x64
-      
-    - name: Upload AssetRipperConsole Windows x64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipperConsole_win_x64
-        path: ./Bins/Publish/AssetRipperConsole_win_x64/*
-        if-no-files-found: error
-        
-    - name: List GUI Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipperGUI_win_x64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperGUI_win_x64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperGUI_win_x64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperGUI_win_x64
+        mkdir -p ./Bins/Publish/AssetRipper_win_x64/Licenses
+        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_win_x64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_win_x64/compile_time.txt
+        ls -R ./Bins/Publish/AssetRipper_win_x64
 
-    - name: Upload AssetRipperGUI Windows x64
+    - name: Upload AssetRipper Windows x64
       uses: actions/upload-artifact@v3
       with:
-        name: AssetRipperGUI_win_x64
-        path: ./Bins/Publish/AssetRipperGUI_win_x64/*
+        name: AssetRipper_win_x64
+        path: ./Bins/Publish/AssetRipper_win_x64/*
         if-no-files-found: error
 
         
@@ -66,42 +47,23 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Publish AssetRipperConsole Windows arm64
-      run: dotnet publish /p:PublishProfile=console_windows_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperConsole/
-      
-    - name: Publish AssetRipperGUI Windows arm64
-      run: dotnet publish /p:PublishProfile=gui_windows_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+    - name: Publish AssetRipper Windows arm64
+      run: dotnet publish /p:PublishProfile=windows_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
       working-directory: ./AssetRipperGUI/
       
-    - name: List Console Files
+    - name: List Files
       shell: bash
       run: |
-        mkdir -p ./Bins/Publish/AssetRipperConsole_win_arm64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_win_arm64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperConsole_win_arm64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperConsole_win_arm64
-      
-    - name: Upload AssetRipperConsole Windows arm64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipperConsole_win_arm64
-        path: ./Bins/Publish/AssetRipperConsole_win_arm64/*
-        if-no-files-found: error
+        mkdir -p ./Bins/Publish/AssetRipper_win_arm64/Licenses
+        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_win_arm64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_win_arm64/compile_time.txt
+        ls -R ./Bins/Publish/AssetRipper_win_arm64
         
-    - name: List GUI Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipperGUI_win_arm64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperGUI_win_arm64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperGUI_win_arm64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperGUI_win_arm64
-
-    - name: Upload AssetRipperGUI Windows arm64
+    - name: Upload AssetRipper Windows arm64
       uses: actions/upload-artifact@v3
       with:
-        name: AssetRipperGUI_win_arm64
-        path: ./Bins/Publish/AssetRipperGUI_win_arm64/*
+        name: AssetRipper_win_arm64
+        path: ./Bins/Publish/AssetRipper_win_arm64/*
         if-no-files-found: error
       
 
@@ -115,44 +77,24 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Publish AssetRipperConsole Linux x64
-      run: dotnet publish /p:PublishProfile=console_linux_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperConsole/
-      
-    - name: Publish AssetRipperGUI Linux x64
-      run: dotnet publish /p:PublishProfile=gui_linux_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+    - name: Publish AssetRipper Linux x64
+      run: dotnet publish /p:PublishProfile=linux_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
       working-directory: ./AssetRipperGUI/
         
-    - name: List Console Files
+    - name: List Files
       shell: bash
       run: |
-        mkdir -p ./Bins/Publish/AssetRipperConsole_linux_x64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_linux_x64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperConsole_linux_x64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperConsole_linux_x64
-        chmod +x ./Bins/Publish/AssetRipperConsole_linux_x64/AssetRipperConsole
-      
-    - name: Upload AssetRipperConsole Linux x64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipperConsole_linux_x64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_linux_x64/*
-        if-no-files-found: error
-        
-    - name: List GUI Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipperGUI_linux_x64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperGUI_linux_x64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperGUI_linux_x64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperGUI_linux_x64
-        chmod +x ./Bins/Publish/AssetRipperGUI_linux_x64/AssetRipper
+        mkdir -p ./Bins/Publish/AssetRipper_linux_x64/Licenses
+        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_linux_x64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_linux_x64/compile_time.txt
+        ls -R ./Bins/Publish/AssetRipper_linux_x64
+        chmod +x ./Bins/Publish/AssetRipper_linux_x64/AssetRipper
 
-    - name: Upload AssetRipperGUI Linux x64
+    - name: Upload AssetRipper Linux x64
       uses: actions/upload-artifact@v3
       with:
-        name: AssetRipperGUI_linux_x64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperGUI_linux_x64/*
+        name: AssetRipper_linux_x64
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_linux_x64/*
         if-no-files-found: error
       
 
@@ -166,44 +108,24 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Publish AssetRipperConsole Linux arm64
-      run: dotnet publish /p:PublishProfile=console_linux_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperConsole/
-      
-    - name: Publish AssetRipperGUI Linux arm64
-      run: dotnet publish /p:PublishProfile=gui_linux_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+    - name: Publish AssetRipper Linux arm64
+      run: dotnet publish /p:PublishProfile=linux_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
       working-directory: ./AssetRipperGUI/
         
-    - name: List Console Files
+    - name: List Files
       shell: bash
       run: |
-        mkdir -p ./Bins/Publish/AssetRipperConsole_linux_arm64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_linux_arm64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperConsole_linux_arm64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperConsole_linux_arm64
-        chmod +x ./Bins/Publish/AssetRipperConsole_linux_arm64/AssetRipperConsole
-      
-    - name: Upload AssetRipperConsole Linux arm64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipperConsole_linux_arm64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_linux_arm64/*
-        if-no-files-found: error
-        
-    - name: List GUI Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipperGUI_linux_arm64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperGUI_linux_arm64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperGUI_linux_arm64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperGUI_linux_arm64
-        chmod +x ./Bins/Publish/AssetRipperGUI_linux_arm64/AssetRipper
+        mkdir -p ./Bins/Publish/AssetRipper_linux_arm64/Licenses
+        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_linux_arm64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_linux_arm64/compile_time.txt
+        ls -R ./Bins/Publish/AssetRipper_linux_arm64
+        chmod +x ./Bins/Publish/AssetRipper_linux_arm64/AssetRipper
 
-    - name: Upload AssetRipperGUI Linux arm64
+    - name: Upload AssetRipper Linux arm64
       uses: actions/upload-artifact@v3
       with:
-        name: AssetRipperGUI_linux_arm64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperGUI_linux_arm64/*
+        name: AssetRipper_linux_arm64
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_linux_arm64/*
         if-no-files-found: error
 
 
@@ -217,44 +139,24 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Publish AssetRipperConsole Mac x64
-      run: dotnet publish /p:PublishProfile=console_mac_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperConsole/
-      
-    - name: Publish AssetRipperGUI Mac x64
-      run: dotnet publish /p:PublishProfile=gui_mac_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+    - name: Publish AssetRipper Mac x64
+      run: dotnet publish /p:PublishProfile=mac_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
       working-directory: ./AssetRipperGUI/
         
-    - name: List Console Files
+    - name: List Files
       shell: bash
       run: |
-        mkdir -p ./Bins/Publish/AssetRipperConsole_mac_x64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_mac_x64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperConsole_mac_x64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperConsole_mac_x64
-        chmod +x ./Bins/Publish/AssetRipperConsole_mac_x64/AssetRipperConsole
-      
-    - name: Upload AssetRipperConsole Mac x64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipperConsole_mac_x64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_mac_x64/*
-        if-no-files-found: error
-        
-    - name: List GUI Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipperGUI_mac_x64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperGUI_mac_x64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperGUI_mac_x64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperGUI_mac_x64
-        chmod +x ./Bins/Publish/AssetRipperGUI_mac_x64/AssetRipper
+        mkdir -p ./Bins/Publish/AssetRipper_mac_x64/Licenses
+        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_mac_x64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_mac_x64/compile_time.txt
+        ls -R ./Bins/Publish/AssetRipper_mac_x64
+        chmod +x ./Bins/Publish/AssetRipper_mac_x64/AssetRipper
 
-    - name: Upload AssetRipperGUI Mac x64
+    - name: Upload AssetRipper Mac x64
       uses: actions/upload-artifact@v3
       with:
-        name: AssetRipperGUI_mac_x64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperGUI_mac_x64/*
+        name: AssetRipper_mac_x64
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_x64/*
         if-no-files-found: error
         
 
@@ -269,42 +171,22 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Publish AssetRipperConsole Mac arm64
-      run: dotnet publish /p:PublishProfile=console_mac_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipperConsole/
-      
-    - name: Publish AssetRipperGUI Mac arm64
-      run: dotnet publish /p:PublishProfile=gui_mac_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+    - name: Publish AssetRipper Mac arm64
+      run: dotnet publish /p:PublishProfile=mac_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
       working-directory: ./AssetRipperGUI/
         
-    - name: List Console Files
+    - name: List Files
       shell: bash
       run: |
-        mkdir -p ./Bins/Publish/AssetRipperConsole_mac_arm64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperConsole_mac_arm64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperConsole_mac_arm64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperConsole_mac_arm64
-        chmod +x ./Bins/Publish/AssetRipperConsole_mac_arm64/AssetRipperConsole
-      
-    - name: Upload AssetRipperConsole Mac arm64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipperConsole_mac_arm64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperConsole_mac_arm64/*
-        if-no-files-found: error
-        
-    - name: List GUI Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipperGUI_mac_arm64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipperGUI_mac_arm64/Licenses/
-        date -u > ./Bins/Publish/AssetRipperGUI_mac_arm64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipperGUI_mac_arm64
-        chmod +x ./Bins/Publish/AssetRipperGUI_mac_arm64/AssetRipper
+        mkdir -p ./Bins/Publish/AssetRipper_mac_arm64/Licenses
+        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_mac_arm64/Licenses/
+        date -u > ./Bins/Publish/AssetRipper_mac_arm64/compile_time.txt
+        ls -R ./Bins/Publish/AssetRipper_mac_arm64
+        chmod +x ./Bins/Publish/AssetRipper_mac_arm64/AssetRipper
 
-    - name: Upload AssetRipperGUI Mac arm64
+    - name: Upload AssetRipper Mac arm64
       uses: actions/upload-artifact@v3
       with:
-        name: AssetRipperGUI_mac_arm64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipperGUI_mac_arm64/*
+        name: AssetRipper_mac_arm64
+        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_arm64/*
         if-no-files-found: error

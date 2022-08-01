@@ -1,18 +1,17 @@
-using AssetRipper.Core.IO.MultiFile;
+﻿using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library;
 using CommandLine;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.Console
+namespace AssetRipper.GUI
 {
-	public class Program
+	internal static class ConsoleApp
 	{
-		private const string DefaultLogFileName = "AssetRipperConsole.log";
-
+		private const string DefaultLogFileName = "AssetRipper.log";
+		
 		internal class Options
 		{
 			[Value(0, Required = true, HelpText = "Input files or directory to export.")]
@@ -25,13 +24,13 @@ namespace AssetRipper.Console
 			public FileInfo LogFile { get; set; }
 
 			[Option('v', "verbose", Default = false, HelpText = "Verbose logging output.")]
-			public bool verbose { get; set; }
+			public bool Verbose { get; set; }
 
 			[Option('q', "quit", Default = false, HelpText = "Close console after export.")]
 			public bool Quit { get; set; }
 		}
 
-		public static void Main(string[] args)
+		public static void ParseArgumentsAndRun(string[] args)
 		{
 			Parser.Default.ParseArguments<Options>(args)
 				.WithParsed(options =>
@@ -79,15 +78,8 @@ namespace AssetRipper.Console
 
 			try
 			{
-				if (options.LogFile == null)
-				{
-					options.LogFile = new FileInfo(ExecutingDirectory.Combine(DefaultLogFileName));
-				}
-
-				if (options.OutputDirectory == null)
-				{
-					options.OutputDirectory = new DirectoryInfo(ExecutingDirectory.Combine("Ripped"));
-				}
+				options.LogFile ??= new FileInfo(ExecutingDirectory.Combine(DefaultLogFileName));
+				options.OutputDirectory ??= new DirectoryInfo(ExecutingDirectory.Combine("Ripped"));
 			}
 			catch (Exception ex)
 			{
@@ -101,14 +93,14 @@ namespace AssetRipper.Console
 
 		private static void Run(Options options)
 		{
-			Logger.AllowVerbose = options.verbose;
+			Logger.AllowVerbose = options.Verbose;
 			Logger.Add(new ConsoleLogger(false));
 			Logger.Add(new FileLogger(options.LogFile.FullName));
 			Logger.LogSystemInformation("AssetRipper Console Version");
 
 			try
 			{
-				Ripper ripper = new Ripper();
+				Ripper ripper = new();
 				ripper.Settings.LogConfigurationValues();
 				ripper.Load(options.FilesToExport);
 				PrepareExportDirectory(options.OutputDirectory.FullName);

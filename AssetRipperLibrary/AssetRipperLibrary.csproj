@@ -91,8 +91,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Remove="C:\Users\jrpri\.nuget\packages\icsharpcode.decompiler\8.0.0.7007-preview1\contentFiles\any\netstandard2.0\Humanizer\LICENSE" />
-	  <Content Remove="C:\Users\jrpri\.nuget\packages\icsharpcode.decompiler\8.0.0.7007-preview1\contentFiles\any\netstandard2.0\Pattern Matching.html" />
+	  <Content Remove="C:\Users\jrpri\.nuget\packages\icsharpcode.decompiler\8.0.0.7106-preview2\contentFiles\any\netstandard2.0\Humanizer\LICENSE" />
+	  <Content Remove="C:\Users\jrpri\.nuget\packages\icsharpcode.decompiler\8.0.0.7106-preview2\contentFiles\any\netstandard2.0\Pattern Matching.html" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -6,8 +6,8 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<Nullable>enable</Nullable>
-		<OutputPath>..\Bins\AssetRipperGUI\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipperGUI\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\Bins\AssetRipper\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper\$(Configuration)\</IntermediateOutputPath>
 		<AssemblyName>AssetRipper</AssemblyName>
 		<RootNamespace>AssetRipper.GUI</RootNamespace>
 		<Copyright>Copyright © 2022</Copyright>
@@ -36,6 +36,7 @@
 		<PackageReference Include="Avalonia" Version="0.10.17" />
 		<PackageReference Include="Avalonia.Desktop" Version="0.10.17" />
 		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.17" />
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="LibVLCSharp" Version="3.6.6" />
 		<PackageReference Include="LibVLCSharp.Avalonia" Version="3.6.6" />
 		<PackageReference Include="MessageBox.Avalonia" Version="2.0.2" />
