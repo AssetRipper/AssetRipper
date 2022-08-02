@@ -24,10 +24,10 @@ namespace ShaderTextRestorer.Extensions
 				else if (shader.Has_CompressedLengths_C48_UInt32_Array_Array())
 				{
 					return UnpackSubProgramBlobs(
-						layout, 
-						shader.Offsets_C48_UInt32_Array_Array!, 
-						shader.CompressedLengths_C48_UInt32_Array_Array, 
-						shader.DecompressedLengths_C48_UInt32_Array_Array!, 
+						layout,
+						shader.Offsets_C48_UInt32_Array_Array!,
+						shader.CompressedLengths_C48_UInt32_Array_Array,
+						shader.DecompressedLengths_C48_UInt32_Array_Array!,
 						shader.CompressedBlob_C48);
 				}
 			}

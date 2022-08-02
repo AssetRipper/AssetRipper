@@ -24,7 +24,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			settings.EtcTextureBestCompressor_C159 = 4;
 			settings.ProjectGenerationIncludedExtensions_C159.TrySet(DefaultExtensions);
 			settings.ProjectGenerationRootNamespace_C159.TrySet(string.Empty);
-			if(settings.Has_CollabEditorSettings_C159())
+			if (settings.Has_CollabEditorSettings_C159())
 			{
 				settings.CollabEditorSettings_C159.InProgressEnabled = true;
 			}
@@ -46,7 +46,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static void TrySet(this Utf8StringBase? utf8String, string str)
 		{
-			if(utf8String is not null)
+			if (utf8String is not null)
 			{
 				utf8String.String = str;
 			}

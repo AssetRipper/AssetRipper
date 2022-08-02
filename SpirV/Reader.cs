@@ -39,7 +39,7 @@ namespace SpirV
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static uint Reverse(uint u)
 		{
-			return (u << 24) | (u & 0xFF00U) << 8 | (u >> 8) & 0xFF00U | (u >> 24);
+			return (u << 24) | ((u & 0xFF00U) << 8) | ((u >> 8) & 0xFF00U) | (u >> 24);
 		}
 
 		public bool EndOfStream => reader_.BaseStream.Position == reader_.BaseStream.Length;

@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Parser.Asset
 
 		public override ClassIDType GetClassIdForType(Type type)
 		{
-			if(SourceGenerated.ClassIDTypeMap.dictionary.TryGetValue(type, out SourceGenerated.ClassIDType value))
+			if (SourceGenerated.ClassIDTypeMap.dictionary.TryGetValue(type, out SourceGenerated.ClassIDType value))
 			{
 				return (ClassIDType)value;
 			}

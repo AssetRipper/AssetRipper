@@ -46,7 +46,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
 			if (shader.ParsedForm_C48?.NameString?.StartsWith("Hidden/Internal") ?? false)
+			{
 				return false;
+			}
 
 			using Stream fileStream = File.Create(path);
 			ExportBinary(shader, container, fileStream, ShaderExporterInstantiator);
@@ -88,7 +90,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			{
 				using ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator);
 				writer.WriteQuotesAroundProgram = false; // this can be removed after ESSWC is finished
-				//((SerializedShader)shader.ParsedForm).Export(writer);
+														 //((SerializedShader)shader.ParsedForm).Export(writer);
 				ExportSerializedShaderDecomp(shader.ParsedForm_C48, writer);
 			}
 			else if (shader.Has_SubProgramBlob_C48())
@@ -334,7 +336,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 						foreach (ConstantBuffer cbuffer in vertexSubProgram.ConstantBuffers)
 						{
 							if (UnityShaderConstants.BUILTIN_CBUFFER_NAMES.Contains(cbuffer.Name))
+							{
 								continue;
+							}
 
 							ExportPassConstantBufferDefinitions(vertexSubProgram, writer, declaredBufs, cbuffer, 3);
 						}
@@ -348,7 +352,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 						foreach (ConstantBuffer cbuffer in fragmentSubProgram.ConstantBuffers)
 						{
 							if (UnityShaderConstants.BUILTIN_CBUFFER_NAMES.Contains(cbuffer.Name))
+							{
 								continue;
+							}
 
 							ExportPassConstantBufferDefinitions(fragmentSubProgram, writer, declaredBufs, cbuffer, 3);
 						}
@@ -471,7 +477,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 					// skip things like unity_MatrixVP if they show up in $Globals
 					if (UnityShaderConstants.INCLUDED_UNITY_PROP_NAMES.Contains(name))
+					{
 						continue;
+					}
 
 					if (!declaredBufs.Contains(name))
 					{
@@ -564,7 +572,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 				GPUPlatform graphicApi = programType.ToGPUPlatform(platform);
 
 				if (graphicApi != GPUPlatform.d3d11)
+				{
 					continue;
+				}
 
 				bool matched = false;
 
@@ -573,12 +583,18 @@ namespace AssetRipper.Library.Exporters.Shaders
 					case ShaderGpuProgramType.DX11VertexSM40:
 					case ShaderGpuProgramType.DX11VertexSM50:
 						if (shaderType == ShaderType.Vertex)
+						{
 							matched = true;
+						}
+
 						break;
 					case ShaderGpuProgramType.DX11PixelSM40:
 					case ShaderGpuProgramType.DX11PixelSM50:
 						if (shaderType == ShaderType.Fragment)
+						{
 							matched = true;
+						}
+
 						break;
 				}
 
@@ -603,7 +619,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 						for (int j = 0; j < subProgram.GlobalKeywordIndices.Length; j++)
 						{
 							if (pass.NameIndices[realInstancingOn] == subProgram.GlobalKeywordIndices[j])
+							{
 								matched = false;
+							}
 						}
 					}
 					if (subProgram.LocalKeywordIndices != null)
@@ -611,7 +629,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 						for (int j = 0; j < subProgram.LocalKeywordIndices.Length; j++)
 						{
 							if (pass.NameIndices[realInstancingOn] == subProgram.LocalKeywordIndices[j])
+							{
 								matched = false;
+							}
 						}
 					}
 				}
@@ -630,7 +650,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 						for (int j = 0; j < subProgram.GlobalKeywordIndices.Length; j++)
 						{
 							if (pass.NameIndices[realDirectional] == subProgram.GlobalKeywordIndices[j])
+							{
 								matchesDirectional = true;
+							}
 						}
 					}
 					if (subProgram.LocalKeywordIndices != null)
@@ -638,7 +660,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 						for (int j = 0; j < subProgram.LocalKeywordIndices.Length; j++)
 						{
 							if (pass.NameIndices[realDirectional] == subProgram.LocalKeywordIndices[j])
+							{
 								matchesDirectional = true;
+							}
 						}
 					}
 				}
@@ -653,7 +677,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 						for (int j = 0; j < subProgram.GlobalKeywordIndices.Length; j++)
 						{
 							if (pass.NameIndices[realPoint] == subProgram.GlobalKeywordIndices[j])
+							{
 								matchesPoint = true;
+							}
 						}
 					}
 					if (subProgram.LocalKeywordIndices != null)
@@ -661,13 +687,17 @@ namespace AssetRipper.Library.Exporters.Shaders
 						for (int j = 0; j < subProgram.LocalKeywordIndices.Length; j++)
 						{
 							if (pass.NameIndices[realPoint] == subProgram.LocalKeywordIndices[j])
+							{
 								matchesPoint = true;
+							}
 						}
 					}
 				}
 
-				if ((hasDirectional || hasPoint) && (!matchesDirectional && !matchesPoint))
+				if ((hasDirectional || hasPoint) && !matchesDirectional && !matchesPoint)
+				{
 					matched = false;
+				}
 
 				if (matchedProgram != null)
 				{
@@ -684,7 +714,9 @@ namespace AssetRipper.Library.Exporters.Shaders
 			}
 
 			if (matchingPrograms.Count == 0 && fallbackProgram != null)
+			{
 				matchingPrograms.Add(fallbackProgram);
+			}
 
 			return matchingPrograms;
 		}
@@ -703,14 +735,21 @@ namespace AssetRipper.Library.Exporters.Shaders
 				GPUPlatform graphicApi = programType.ToGPUPlatform(platform);
 
 				if (!progPlats.Contains(graphicApi))
+				{
 					continue;
+				}
 
 				List<string> keywords = new List<string>();
 
 				if (subProgram.GlobalKeywords.Length > 0)
+				{
 					keywords.AddRange(subProgram.GlobalKeywords);
+				}
+
 				if (subProgram.LocalKeywords.Length > 0)
+				{
 					keywords.AddRange(subProgram.LocalKeywords);
+				}
 
 				// don't have to worry about order I don't think
 				// although it would probably be safer to sort
@@ -744,9 +783,15 @@ namespace AssetRipper.Library.Exporters.Shaders
 		private static byte[] GetRelevantData(byte[] bytes, int offset)
 		{
 			if (bytes == null)
+			{
 				throw new ArgumentNullException(nameof(bytes));
+			}
+
 			if (offset < 0 || offset > bytes.Length)
+			{
 				throw new ArgumentOutOfRangeException(nameof(offset));
+			}
+
 			int size = bytes.Length - offset;
 			byte[] result = new byte[size];
 			for (int i = 0; i < size; i++)

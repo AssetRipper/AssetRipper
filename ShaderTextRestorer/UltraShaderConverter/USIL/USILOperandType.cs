@@ -1,31 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShaderLabConvert
+﻿namespace ShaderLabConvert
 {
-    public enum USILOperandType
-    {
-        None,
+	public enum USILOperandType
+	{
+		None,
 		Null,
-        Comment,
+		Comment,
 
-        TempRegister,
+		TempRegister,
 		IndexableTempRegister,
-        InputRegister,
-        OutputRegister,
-        ResourceRegister,
-        SamplerRegister,
+		InputRegister,
+		OutputRegister,
+		ResourceRegister,
+		SamplerRegister,
 
-        ConstantBuffer,
+		ConstantBuffer,
 
-        Sampler2D,
-        Sampler3D,
-        SamplerCube,
-        Sampler2DArray,
-        SamplerCubeArray,
+		Sampler2D,
+		Sampler3D,
+		SamplerCube,
+		Sampler2DArray,
+		SamplerCubeArray,
 
 		InputCoverageMask,
 		InputThreadGroupID,
@@ -44,10 +38,10 @@ namespace ShaderLabConvert
 		StencilRef,
 
 		ImmediateInt,
-        ImmediateFloat,
+		ImmediateFloat,
 		ImmediateConstantBuffer,
 		Matrix,
 
-        Multiple // i.e. fixed2(cb1, cb2)
-    }
+		Multiple // i.e. fixed2(cb1, cb2)
+	}
 }

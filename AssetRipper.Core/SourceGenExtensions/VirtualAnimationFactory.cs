@@ -45,11 +45,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 				blendTree.Childs_C206.AddNew().SetValues(virtualFile, controller, state, nodeIndex, i);
 			}
 
-			if(node.BlendEventID != uint.MaxValue)
+			if (node.BlendEventID != uint.MaxValue)
 			{
 				blendTree.BlendParameter_C206.CopyValues(controller.TOS_C91[node.BlendEventID]);
 			}
-			if(node.BlendEventYID != uint.MaxValue)
+			if (node.BlendEventYID != uint.MaxValue)
 			{
 				blendTree.BlendParameterY_C206?.CopyValues(controller.TOS_C91[node.BlendEventYID]);
 			}
@@ -153,7 +153,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				IAnimatorState state = states[i];
 				IStateConstant stateConstant = stateMachine.StateConstantArray[i].Data;
-				
+
 				if (state.Has_Transitions_C1102())
 				{
 					state.Transitions_C1102.EnsureCapacity(state.Transitions_C1102.Count + stateConstant.TransitionConstantArray.Count);
@@ -196,7 +196,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			if (generatedStateMachine.Has_ChildStates_C1107() && generatedStateMachine.ChildStates_C1107.Count > 0)
 			{
 				PPtr_AnimatorState_ defaultStatePPtr = generatedStateMachine.ChildStates_C1107[(int)stateMachine.DefaultState].State;
-				
+
 				if (generatedStateMachine.Has_DefaultState_C1107_PPtr_State_())
 				{
 					generatedStateMachine.DefaultState_C1107_PPtr_State_.CopyValues(defaultStatePPtr);
@@ -277,7 +277,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			VirtualSerializedFile virtualFile,
 			IStateMachineConstant StateMachine,
 			IReadOnlyList<IAnimatorState> States,
-			AssetDictionary<uint, Utf8String> TOS, 
+			AssetDictionary<uint, Utf8String> TOS,
 			ITransitionConstant Transition)
 		{
 			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset<IAnimatorStateTransition>(ClassIDType.AnimatorStateTransition);
@@ -348,11 +348,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 
 			IAnimatorState? state = GetDestinationState(Transition.Destination, StateMachine, States);
-			if(state is not null)
+			if (state is not null)
 			{
 				animatorTransition.DstState_C1109.CopyValues(state.SerializedFile.CreatePPtr(state));
 			}
-			
+
 			return animatorTransition;
 		}
 

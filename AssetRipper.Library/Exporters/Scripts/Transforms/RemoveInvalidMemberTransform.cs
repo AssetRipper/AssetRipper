@@ -22,7 +22,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			this.il2cpp = il2cpp;
 		}
 
-        private bool RemoveInvalidEntity(EntityDeclaration entityDeclaration)
+		private bool RemoveInvalidEntity(EntityDeclaration entityDeclaration)
 		{
 			if (!IsValidName(entityDeclaration.Name))
 			{

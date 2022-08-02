@@ -1,9 +1,5 @@
 ﻿using ShaderTextRestorer.ShaderBlob;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShaderLabConvert
 {
@@ -108,9 +104,13 @@ namespace ShaderLabConvert
 						if (addIterInst.isIntVariant)
 						{
 							if (addIterInst.isIntUnsigned)
+							{
 								numberType = USILNumberType.UnsignedInt;
+							}
 							else
+							{
 								numberType = USILNumberType.Int;
+							}
 
 							addCount = addIterInst.srcOperands[1].immValueInt[0];
 						}
@@ -121,7 +121,9 @@ namespace ShaderLabConvert
 						}
 
 						if (addIterInst.instructionType == USILInstructionType.Subtract)
+						{
 							addCount *= -1;
+						}
 
 						forLoopInst.instructionType = USILInstructionType.ForLoop;
 						forLoopInst.srcOperands = new List<USILOperand>
@@ -145,7 +147,7 @@ namespace ShaderLabConvert
 						changes = true;
 					}
 				}
-				
+
 				if (loopInfos.Count > 0)
 				{
 					List<USILOperand> allOperands = GetAllOperands(insts[i]);
@@ -161,7 +163,9 @@ namespace ShaderLabConvert
 									op.mask[0] == iterRegOp.mask[0];
 
 								if (!matchesIter)
+								{
 									break;
+								}
 
 								op.metadataName = USILConstants.ITER_CHARS[loopInfo.loopDepth].ToString();
 								op.metadataNameAssigned = true;
@@ -173,7 +177,9 @@ namespace ShaderLabConvert
 				}
 
 				if (insts[i].instructionType == USILInstructionType.Loop)
+				{
 					loopDepth++;
+				}
 			}
 			return changes;
 		}
@@ -238,12 +244,16 @@ namespace ShaderLabConvert
 		private bool DoOpcodesMatch(List<USILInstruction> insts, int startIndex, USILInstructionType[] instTypes)
 		{
 			if (startIndex + instTypes.Length > insts.Count)
+			{
 				return false;
+			}
 
 			for (int i = 0; i < instTypes.Length; i++)
 			{
 				if (insts[startIndex + i].instructionType != instTypes[i])
+				{
 					return false;
+				}
 			}
 			return true;
 		}
@@ -251,12 +261,16 @@ namespace ShaderLabConvert
 		private bool DoMasksMatch(int[] maskA, int[] maskB)
 		{
 			if (maskA.Length != maskB.Length)
+			{
 				return false;
+			}
 
 			for (int i = 0; i < maskB.Length; i++)
 			{
 				if (maskA[i] != maskB[i])
+				{
 					return false;
+				}
 			}
 			return true;
 		}
@@ -266,7 +280,9 @@ namespace ShaderLabConvert
 			List<USILOperand> operands = new List<USILOperand>();
 
 			if (inst.destOperand != null)
+			{
 				operands.AddRange(GetAllOperands(inst.destOperand));
+			}
 
 			if (inst.srcOperands != null)
 			{
@@ -278,18 +294,22 @@ namespace ShaderLabConvert
 
 			return operands;
 		}
-		
+
 		private List<USILOperand> GetAllOperands(USILOperand operand)
 		{
 			if (operand.arrayRelative == null && (operand.children == null || operand.children.Length == 0))
+			{
 				return new List<USILOperand> { operand };
+			}
 
 			List<USILOperand> operands = new List<USILOperand>();
-			
+
 			operands.Add(operand);
 
 			if (operand.arrayRelative != null)
+			{
 				operands.AddRange(GetAllOperands(operand.arrayRelative));
+			}
 
 			if (operand.children != null)
 			{

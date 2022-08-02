@@ -28,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 						if (simpleType.Identifier == "AsyncStateMachine" ||
 							simpleType.Identifier == "IteratorStateMachine" ||
 							simpleType.Identifier == "IsReadOnly")
-						{ 
+						{
 							attribute.Remove();
 						}
 					}

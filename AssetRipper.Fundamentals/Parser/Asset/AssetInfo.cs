@@ -5,7 +5,7 @@ namespace AssetRipper.Core.Parser.Asset
 {
 	public sealed partial class AssetInfo
 	{
-		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID) 
+		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID)
 			: this(serializedFile, pathID, classID, UnityGUID.NewGuid()) { }
 		public AssetInfo(ISerializedFile serializedFile, long pathID, ClassIDType classID, UnityGUID guid)
 		{

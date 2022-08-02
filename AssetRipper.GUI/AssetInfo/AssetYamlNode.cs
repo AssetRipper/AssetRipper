@@ -26,7 +26,9 @@ namespace AssetRipper.GUI.AssetInfo
 			DisplayName = $"{key}: {value.Value}";
 
 			if (string.IsNullOrEmpty(value.Value))
+			{
 				DisplayName += "<Null or Empty Value>";
+			}
 		}
 
 		public AssetYamlNode(string key, YamlMappingNode value)

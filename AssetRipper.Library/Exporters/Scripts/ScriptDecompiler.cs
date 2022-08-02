@@ -20,7 +20,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public ScriptDecompiler(AssemblyDefinition[] assemblies, ScriptingBackend scriptingBackend) : this(new CecilAssemblyResolver(assemblies), scriptingBackend) { }
 		private ScriptDecompiler(CecilAssemblyResolver cecilAssemblyResolver, ScriptingBackend scriptingBackend)
 		{
-            assemblyResolver = cecilAssemblyResolver;
+			assemblyResolver = cecilAssemblyResolver;
 			ScriptingBackend = scriptingBackend;
 		}
 
@@ -56,7 +56,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				decompiler.CustomTransforms.Add(new RemoveCompilerAttributeTransform());
 				decompiler.CustomTransforms.Add(new FixGenericStructConstraintTransform());
 			}
-			
+
 			// il2cpp fixes
 			if (ScriptContentLevel == ScriptContentLevel.Level1 || // level one stubs everything, so it needs to be fixed up.
 				(ScriptingBackend == ScriptingBackend.IL2Cpp && ScriptContentLevel <= ScriptContentLevel.Level2))

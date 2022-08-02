@@ -9,7 +9,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			return streamInfo.Has_Stride_UInt32() ? streamInfo.Stride_UInt32 : streamInfo.Stride_Byte;
 		}
-		
+
 		public static void SetStride(this IStreamInfo streamInfo, uint stride)
 		{
 			if (streamInfo.Has_Stride_Byte())

@@ -2,7 +2,6 @@ using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.VersionUtilities;
 using ShaderTextRestorer.Exporters;

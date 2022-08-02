@@ -190,7 +190,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			Vector2f aAtlasPivotPosition = pivotPosition - cropBotLeft;
 			sAtlasPivot = new();
 			sAtlasPivot.SetValues(aAtlasPivotPosition.X / sAtlasRect.Size().X, aAtlasPivotPosition.Y / sAtlasRect.Size().Y);
-			
+
 			sAtlasBorder = new();
 			if (sprite.Has_Border_C213())
 			{
@@ -203,16 +203,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 		}
 
 		public static void GenerateOutline(
-			this ISprite sprite, 
-			UnityVersion version, 
-			ISpriteAtlas atlas, 
-			Rectf rect, 
+			this ISprite sprite,
+			UnityVersion version,
+			ISpriteAtlas atlas,
+			Rectf rect,
 			Vector2f_3_5_0_f5 pivot,
 			AssetList<AssetList<Vector2f_3_5_0_f5>> outlines)
 		{
 			sprite.RD_C213.GenerateOutline(version, outlines);
-			float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
-			float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
+			float pivotShiftX = (rect.Width * pivot.X) - (rect.Width * 0.5f);
+			float pivotShiftY = (rect.Height * pivot.Y) - (rect.Height * 0.5f);
 			Vector2f pivotShift = new Vector2f(pivotShiftX, pivotShiftY);
 			foreach (AssetList<Vector2f_3_5_0_f5> outline in outlines)
 			{
@@ -226,18 +226,18 @@ namespace AssetRipper.Core.SourceGenExtensions
 		}
 
 		public static void GeneratePhysicsShape(
-			this ISprite sprite, 
-			ISpriteAtlas atlas, 
-			Rectf rect, 
-			Vector2f_3_5_0_f5 pivot, 
+			this ISprite sprite,
+			ISpriteAtlas atlas,
+			Rectf rect,
+			Vector2f_3_5_0_f5 pivot,
 			AssetList<AssetList<Vector2f_3_5_0_f5>> shape)
 		{
 			if (sprite.Has_PhysicsShape_C213() && sprite.PhysicsShape_C213.Count > 0)
 			{
 				shape.Clear();
 				shape.Capacity = sprite.PhysicsShape_C213.Count;
-				float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
-				float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
+				float pivotShiftX = (rect.Width * pivot.X) - (rect.Width * 0.5f);
+				float pivotShiftY = (rect.Height * pivot.Y) - (rect.Height * 0.5f);
 				Vector2f pivotShift = new Vector2f(pivotShiftX, pivotShiftY);
 				for (int i = 0; i < sprite.PhysicsShape_C213.Count; i++)
 				{

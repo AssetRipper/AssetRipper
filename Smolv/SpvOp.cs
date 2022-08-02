@@ -358,9 +358,15 @@ namespace Smolv
 		static int GetKnownOpsCount(int version)
 		{
 			if (version == 0)
+			{
 				return (int)(SpvOp.ModuleProcessed + 1);
+			}
+
 			if (version == 1) // 2020 February, version 1 added ExecutionModeId..GroupNonUniformQuadSwap
+			{
 				return (int)(SpvOp.GroupNonUniformQuadSwap + 1);
+			}
+
 			return 0;
 		}
 

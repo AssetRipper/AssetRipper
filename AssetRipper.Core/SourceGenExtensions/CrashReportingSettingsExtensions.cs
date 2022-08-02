@@ -6,7 +6,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void ConvertToEditorFormat(this ICrashReportingSettings settings)
 		{
-			if(settings.Has_NativeEventUrl() && settings.NativeEventUrl.Data.Length == 0)
+			if (settings.Has_NativeEventUrl() && settings.NativeEventUrl.Data.Length == 0)
 			{
 				settings.NativeEventUrl.String = "https://perf-events.cloud.unity3d.com/symbolicate"; //not sure where this url came from
 			}

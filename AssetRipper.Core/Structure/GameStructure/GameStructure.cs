@@ -100,7 +100,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		private string GetListOfVersions()
 		{
 			StringBuilder sb = new();
-			foreach(UnityVersion version in FileCollection.GameFiles.Values.DistinctBy(t => t.Version).Select(s => s.Version))
+			foreach (UnityVersion version in FileCollection.GameFiles.Values.DistinctBy(t => t.Version).Select(s => s.Version))
 			{
 				sb.Append(' ');
 				sb.Append(version.ToString());

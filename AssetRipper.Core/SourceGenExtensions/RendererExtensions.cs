@@ -140,10 +140,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			return renderer switch
 			{
-				IMeshRenderer meshRenderer => meshRenderer.Has_LightProbeUsage_C23() 
-					? (LightProbeUsage)meshRenderer.LightProbeUsage_C23 
+				IMeshRenderer meshRenderer => meshRenderer.Has_LightProbeUsage_C23()
+					? (LightProbeUsage)meshRenderer.LightProbeUsage_C23
 					: meshRenderer.UseLightProbes_C23
-						? LightProbeUsage.BlendProbes 
+						? LightProbeUsage.BlendProbes
 						: LightProbeUsage.Off,
 				IParticleRenderer particleRenderer => particleRenderer.Has_LightProbeUsage_C26()
 					? (LightProbeUsage)particleRenderer.LightProbeUsage_C26

@@ -12,7 +12,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			settings.PerPlatformDefaultQuality_C47?.SetDefaultPlatformQuality();
 		}
-		
+
 		private static void SetDefaultPlatformQuality(this AssetDictionary<Utf8String, int> dictionary)
 		{
 			dictionary.Clear();

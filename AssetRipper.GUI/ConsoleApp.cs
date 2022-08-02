@@ -11,7 +11,7 @@ namespace AssetRipper.GUI
 	internal static class ConsoleApp
 	{
 		private const string DefaultLogFileName = "AssetRipper.log";
-		
+
 		internal class Options
 		{
 			[Value(0, Required = true, HelpText = "Input files or directory to export.")]

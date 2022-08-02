@@ -35,7 +35,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			//else if (animation.Has_CullingType_C111())
 			//{
-				return (AnimationCullingType)animation.CullingType_C111 != AnimationCullingType.AlwaysAnimate;
+			return (AnimationCullingType)animation.CullingType_C111 != AnimationCullingType.AlwaysAnimate;
 			//}
 			//else
 			//{
@@ -52,7 +52,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			//else if (animation.Has_CullingType_C111())
 			//{
-				return (AnimationCullingType)animation.CullingType_C111;
+			return (AnimationCullingType)animation.CullingType_C111;
 			//}
 			//else
 			//{

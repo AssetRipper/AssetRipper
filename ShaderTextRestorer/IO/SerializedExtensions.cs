@@ -150,7 +150,7 @@ namespace ShaderTextRestorer.IO
 			}
 
 			writer.Write("{0} (\"{1}\", ", _this.NameString, _this.Description);
-			
+
 			switch ((SerializedPropertyType)_this.Type)
 			{
 				case SerializedPropertyType.Color:
@@ -546,7 +546,9 @@ namespace ShaderTextRestorer.IO
 			ShaderGpuProgramType programType = _this.GetProgramType(writer.Version);
 
 			if (writer.WriteQuotesAroundProgram)
+			{
 				writer.Write("\"{0}", programType.ToProgramDataKeyword(writer.Platform, type));
+			}
 
 			if (_this.ProgramData.Length > 0)
 			{
@@ -557,7 +559,9 @@ namespace ShaderTextRestorer.IO
 			}
 
 			if (writer.WriteQuotesAroundProgram)
+			{
 				writer.Write('"');
+			}
 		}
 
 		public static void Export(this ShaderSubProgramBlob _this, ShaderWriter writer, string header)

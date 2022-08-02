@@ -40,7 +40,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static IEnumerable<IPPtr_Component_> FetchComponents(this IGameObject gameObject)
 		{
-			if(gameObject.Component_C1_AssetList_ComponentPair is not null)
+			if (gameObject.Component_C1_AssetList_ComponentPair is not null)
 			{
 				return gameObject.Component_C1_AssetList_ComponentPair.Select(pair => pair.m_Component);
 			}
@@ -156,7 +156,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 			}
 
-			if(transform is null)
+			if (transform is null)
 			{
 				throw new Exception("GameObject has no transform");
 			}

@@ -10,8 +10,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static bool IsSet(this IClip clip)
 		{
-			return clip.StreamedClip.IsSet() 
-				|| clip.DenseClip.IsSet() 
+			return clip.StreamedClip.IsSet()
+				|| clip.DenseClip.IsSet()
 				|| (clip.Has_ConstantClip() && clip.ConstantClip.IsSet());
 		}
 

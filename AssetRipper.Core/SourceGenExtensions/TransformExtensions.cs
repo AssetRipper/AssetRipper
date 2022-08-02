@@ -81,9 +81,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			if (transform.Has_LocalEulerAnglesHint_C4())
 			{
 				Vector3f eulerHints = new Quaternionf(
-					transform.LocalRotation_C4.X, 
-					transform.LocalRotation_C4.Y, 
-					transform.LocalRotation_C4.Z, 
+					transform.LocalRotation_C4.X,
+					transform.LocalRotation_C4.Y,
+					transform.LocalRotation_C4.Z,
 					transform.LocalRotation_C4.W).ToEulerAngle();
 				transform.LocalEulerAnglesHint_C4.SetValues(eulerHints.X, eulerHints.Y, eulerHints.Z);
 			}

@@ -19,7 +19,9 @@ namespace AssetRipper.GUI
 		{
 			string keyToUse = Key;
 			if (!string.IsNullOrWhiteSpace(Context))
+			{
 				keyToUse = $"{Context}/{Key}";
+			}
 
 			ReflectionBindingExtension binding = new ReflectionBindingExtension($"[{keyToUse}]")
 			{

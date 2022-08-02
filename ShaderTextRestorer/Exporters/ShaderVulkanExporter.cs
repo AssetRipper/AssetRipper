@@ -1,11 +1,11 @@
 using AssetRipper.Core.IO;
+using AssetRipper.VersionUtilities;
+using ShaderTextRestorer.IO;
+using ShaderTextRestorer.ShaderBlob;
 using Smolv;
 using SpirV;
 using System;
 using System.IO;
-using ShaderTextRestorer.IO;
-using AssetRipper.VersionUtilities;
-using ShaderTextRestorer.ShaderBlob;
 
 namespace ShaderTextRestorer.Exporters
 {
@@ -15,7 +15,7 @@ namespace ShaderTextRestorer.Exporters
 		/// 2019.3 and greater
 		/// </summary>
 		public static bool HasProgRayTracing(UnityVersion version) => version.IsGreaterEqual(2019, 3);
-		
+
 		public override string Name => "ShaderVulkanExporter";
 
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)

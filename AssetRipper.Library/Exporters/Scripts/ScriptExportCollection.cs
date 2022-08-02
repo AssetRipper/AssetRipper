@@ -34,7 +34,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				}
 
 				MonoScriptInfo info = MonoScriptInfo.From(assetScript);
-				if(uniqueDictionary.TryGetValue(info, out IMonoScript? uniqueScript))
+				if (uniqueDictionary.TryGetValue(info, out IMonoScript? uniqueScript))
 				{
 					m_scripts.Add(assetScript, uniqueScript);
 				}

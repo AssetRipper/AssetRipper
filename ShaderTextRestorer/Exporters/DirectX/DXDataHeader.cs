@@ -21,7 +21,9 @@ namespace ShaderTextRestorer.Exporters.DirectX
 			{
 				int offset = HasGSInputPrimitive(version) ? 6 : 5;
 				if (headerVersion >= 2)
+				{
 					offset += 0x20;
+				}
 
 				return offset;
 			}

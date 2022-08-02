@@ -27,7 +27,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			packedVector.NumItems = (uint)data.Length;
 			packedVector.BitSize = maxDataValue == 0xFFFFFFFF ? (byte)32 : GetBitCount(maxDataValue + 1U);
-			packedVector.Data = new byte[(data.Length * packedVector.BitSize + 7) / 8];
+			packedVector.Data = new byte[((data.Length * packedVector.BitSize) + 7) / 8];
 
 			int bitIndex = 0;
 			int byteIndex = 0;
@@ -62,7 +62,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			packedVector.NumItems = (uint)data.Length;
 			packedVector.BitSize = maxDataValue == 0xFFFFFFFF ? (byte)32 : GetBitCount(maxDataValue + 1U);
-			packedVector.Data = new byte[(data.Length * packedVector.BitSize + 7) / 8];
+			packedVector.Data = new byte[((data.Length * packedVector.BitSize) + 7) / 8];
 
 			int bitIndex = 0;
 			int byteIndex = 0;

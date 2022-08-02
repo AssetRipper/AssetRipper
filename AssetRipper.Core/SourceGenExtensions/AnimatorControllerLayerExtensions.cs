@@ -17,7 +17,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			animatorControllerLayer.Name.CopyValues(controller.TOS_C91[layer.Binding]);
 
-			
+
 			if (animatorControllerLayer.Has_StateMachine_PPtr_AnimatorStateMachine_())
 			{
 				animatorControllerLayer.StateMachine_PPtr_AnimatorStateMachine_.CopyValues(stateMachine.SerializedFile.CreatePPtr(stateMachine));

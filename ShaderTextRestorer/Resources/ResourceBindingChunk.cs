@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AssetRipper.IO.Endian;
+﻿using AssetRipper.IO.Endian;
 using ShaderTextRestorer.ShaderBlob;
 using ShaderTextRestorer.ShaderBlob.Parameters;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShaderTextRestorer.Resources
 {
@@ -15,7 +14,7 @@ namespace ShaderTextRestorer.Resources
 			m_nameLookup = nameLookup;
 			m_Samplers = CreateSamplers(ref shaderSubprogram);
 			const uint bindingHeaderSize = 32;
-			uint nameOffset = resourceBindingOffset + bindingHeaderSize * Count;
+			uint nameOffset = resourceBindingOffset + (bindingHeaderSize * Count);
 			foreach (BufferBinding bufferParam in shaderSubprogram.BufferParameters)
 			{
 				nameLookup[bufferParam.Name] = nameOffset;
@@ -67,16 +66,20 @@ namespace ShaderTextRestorer.Resources
 			List<Sampler> samplers = new List<Sampler>();
 			foreach (TextureParameter textureParam in shaderSubprogram.TextureParameters)
 			{
-				if (textureParam.SamplerIndex < 0 || textureParam.SamplerIndex == 0xFFFF) continue;
+				if (textureParam.SamplerIndex < 0 || textureParam.SamplerIndex == 0xFFFF)
+				{
+					continue;
+				}
+
 				string samplerName = "sampler" + textureParam.Name;
 				samplers.Add(new Sampler(samplerName, (uint)textureParam.SamplerIndex, false));
 			}
 			foreach (SamplerParameter samplerParam in shaderSubprogram.SamplerParameters)
 			{
 				SamplerFilterMode filterMode = (SamplerFilterMode)(samplerParam.Sampler & 0x3);
-				SamplerWrapMode wrapU = (SamplerWrapMode)(samplerParam.Sampler >> 2 & 0x3);
-				SamplerWrapMode wrapV = (SamplerWrapMode)(samplerParam.Sampler >> 4 & 0x3);
-				SamplerWrapMode wrapW = (SamplerWrapMode)(samplerParam.Sampler >> 6 & 0x3);
+				SamplerWrapMode wrapU = (SamplerWrapMode)((samplerParam.Sampler >> 2) & 0x3);
+				SamplerWrapMode wrapV = (SamplerWrapMode)((samplerParam.Sampler >> 4) & 0x3);
+				SamplerWrapMode wrapW = (SamplerWrapMode)((samplerParam.Sampler >> 6) & 0x3);
 				bool isComparisonSampler = (samplerParam.Sampler & 0x100) != 0;
 				string samplerName;
 				if (wrapU == wrapV && wrapU == wrapW)

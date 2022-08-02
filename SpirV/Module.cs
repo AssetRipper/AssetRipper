@@ -355,22 +355,22 @@ namespace SpirV
 						{
 							if (i.Width == 16)
 							{
-								return unchecked((short)(words[index]));
+								return unchecked((short)words[index]);
 							}
 							else if (i.Width == 32)
 							{
-								return unchecked((int)(words[index]));
+								return unchecked((int)words[index]);
 							}
 							else if (i.Width == 64)
 							{
-								return unchecked((long)(words[index] | (ulong)(words[index + 1]) << 32));
+								return unchecked((long)(words[index] | ((ulong)words[index + 1] << 32)));
 							}
 						}
 						else
 						{
 							if (i.Width == 16)
 							{
-								return unchecked((ushort)(words[index]));
+								return unchecked((ushort)words[index]);
 							}
 							else if (i.Width == 32)
 							{
@@ -378,7 +378,7 @@ namespace SpirV
 							}
 							else if (i.Width == 64)
 							{
-								return words[index] | (ulong)(words[index + 1]) << 32;
+								return words[index] | ((ulong)words[index + 1] << 32);
 							}
 						}
 
@@ -393,7 +393,7 @@ namespace SpirV
 						}
 						else if (f.Width == 64)
 						{
-							return new DoubleULongUnion { Long = (words[index] | (ulong)(words[index + 1]) << 32) }.Double;
+							return new DoubleULongUnion { Long = words[index] | ((ulong)words[index + 1] << 32) }.Double;
 						}
 						else
 						{

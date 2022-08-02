@@ -95,7 +95,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		private static bool IsEngineFile(string? fileName)
 		{
-			return fileName is not null 
+			return fileName is not null
 				&& (FilenameUtils.IsDefaultResource(fileName) || FilenameUtils.IsBuiltinExtra(fileName) || FilenameUtils.IsEngineGeneratedF(fileName));
 		}
 

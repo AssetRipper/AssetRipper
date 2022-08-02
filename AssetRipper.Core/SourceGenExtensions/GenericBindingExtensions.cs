@@ -13,9 +13,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static bool IsTransform(this IGenericBinding binding)
 		{
-			return binding.GetClassID() == ClassIDType.Transform 
-				|| binding.GetClassID() == ClassIDType.RectTransform 
-				&& binding.TransformType().IsValid();
+			return binding.GetClassID() == ClassIDType.Transform
+				|| (binding.GetClassID() == ClassIDType.RectTransform
+				&& binding.TransformType().IsValid());
 		}
 
 		public static TransformType TransformType(this IGenericBinding binding)

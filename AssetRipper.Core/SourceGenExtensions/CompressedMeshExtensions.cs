@@ -136,9 +136,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 				normals = new Vector3f[compressedMesh.Normals.NumItems / 2];
 				for (int i = 0; i < compressedMesh.Normals.NumItems / 2; ++i)
 				{
-					float x = normalData[i * 2 + 0];
-					float y = normalData[i * 2 + 1];
-					float zsqr = 1 - x * x - y * y;
+					float x = normalData[(i * 2) + 0];
+					float y = normalData[(i * 2) + 1];
+					float zsqr = 1 - (x * x) - (y * y);
 					float z;
 					if (zsqr >= 0f)
 					{
@@ -169,9 +169,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 				tangents = new Vector4f[compressedMesh.Tangents.NumItems / 2];
 				for (int i = 0; i < compressedMesh.Tangents.NumItems / 2; ++i)
 				{
-					float x = tangentData[i * 2 + 0];
-					float y = tangentData[i * 2 + 1];
-					float zsqr = 1 - x * x - y * y;
+					float x = tangentData[(i * 2) + 0];
+					float y = tangentData[(i * 2) + 1];
+					float zsqr = 1 - (x * x) - (y * y);
 					float z;
 					if (zsqr >= 0f)
 					{
@@ -186,12 +186,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 						y = vector3f.Y;
 						z = vector3f.Z;
 					}
-					if (signs[i * 2 + 0] == 0)
+					if (signs[(i * 2) + 0] == 0)
 					{
 						z = -z;
 					}
 
-					float w = signs[i * 2 + 1] > 0 ? 1.0f : -1.0f;
+					float w = signs[(i * 2) + 1] > 0 ? 1.0f : -1.0f;
 					tangents[i] = new Vector4f(x, y, z, w);
 				}
 			}
@@ -266,7 +266,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				colors = new ColorRGBA32[compressedMesh.Colors.NumItems / 4];
 				for (int v = 0; v < compressedMesh.Colors.NumItems / 4; v++)
 				{
-					colors[v] = new ColorRGBA32((byte)tempColors[4 * v], (byte)tempColors[4 * v + 1], (byte)tempColors[4 * v + 2], (byte)tempColors[4 * v + 3]);
+					colors[v] = new ColorRGBA32((byte)tempColors[4 * v], (byte)tempColors[(4 * v) + 1], (byte)tempColors[(4 * v) + 2], (byte)tempColors[(4 * v) + 3]);
 				}
 				compressedMesh.Colors.NumItems /= 4;
 				compressedMesh.Colors.BitSize *= 4;

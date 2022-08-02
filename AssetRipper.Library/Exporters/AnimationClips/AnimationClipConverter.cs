@@ -100,10 +100,10 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 					string path = GetCurvePath(tos, binding.Path);
 					if (binding.IsTransform())
 					{
-						if (frameIndex0) 
-						{ 
-							curveIndex = GetNextCurve(frame, curveIndex); 
-							continue; 
+						if (frameIndex0)
+						{
+							curveIndex = GetNextCurve(frame, curveIndex);
+							continue;
 						}
 						GetPreviousFrame(streamFrames, curve.Index, frameIndex, out int prevFrameIndex, out int prevCurveIndex);
 						int dimension = binding.TransformType().GetDimension();

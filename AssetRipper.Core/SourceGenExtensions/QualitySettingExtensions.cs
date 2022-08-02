@@ -48,7 +48,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static SkinWeights GetSkinWeights(this IQualitySetting setting)
 		{
-			return (SkinWeights)(setting.Has_SkinWeights() ? setting.SkinWeights : setting.BlendWeights); 
+			return (SkinWeights)(setting.Has_SkinWeights() ? setting.SkinWeights : setting.BlendWeights);
 			//todo: merge BlendWeights into SkinWeights in the source generation
 		}
 

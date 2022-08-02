@@ -27,10 +27,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			settings.StandardShaderQuality = (int)ShaderQuality.High;
 			settings.RenderingPath = tierGraphicsSettings.RenderingPath;
-			settings.HdrMode = tierGraphicsSettings.Has_HdrMode() 
-				? tierGraphicsSettings.HdrMode 
+			settings.HdrMode = tierGraphicsSettings.Has_HdrMode()
+				? tierGraphicsSettings.HdrMode
 				: (int)CameraHDRMode.FP16;
-			settings.RealtimeGICPUUsage = tierGraphicsSettings.Has_RealtimeGICPUUsage() 
+			settings.RealtimeGICPUUsage = tierGraphicsSettings.Has_RealtimeGICPUUsage()
 				? tierGraphicsSettings.RealtimeGICPUUsage
 				: (int)RealtimeGICPUUsage.Low;
 			settings.UseReflectionProbeBoxProjection = true;

@@ -65,7 +65,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 					}
 
 				case BindingCustomType.Renderer:
-					return "m_Materials" 
+					return "m_Materials"
 						+ "." + "Array" //from the common string
 						+ "." + "data" //from the common string
 						+ $"[{attribute}]";
@@ -104,7 +104,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 								return Prefix + property;
 							}
 
-							uint subPropIndex = attribute >> 28 & 3;
+							uint subPropIndex = (attribute >> 28) & 3;
 							bool isRgba = (attribute & 0x40000000) != 0;
 							char subProperty = subPropIndex switch
 							{

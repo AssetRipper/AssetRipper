@@ -58,7 +58,9 @@ namespace AssetRipper.GUI
 			foreach (ResourceFile? resourceFile in structure.FileCollection.GameResourceFiles)
 			{
 				if (resourceFile != null)
+				{
 					looseFiles.SubItems.Add(new(new DummyAssetForLooseResourceFile(resourceFile)));
+				}
 			}
 
 			ret.Add(looseFiles);

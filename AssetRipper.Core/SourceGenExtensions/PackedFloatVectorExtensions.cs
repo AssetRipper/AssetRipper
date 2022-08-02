@@ -48,7 +48,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					}
 				}
 				value &= (1 << packedVector.BitSize) - 1;
-				buffer[i] = packedVector.Start + value / halfMaxValue;
+				buffer[i] = packedVector.Start + (value / halfMaxValue);
 			}
 			return buffer;
 		}
@@ -97,7 +97,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 						}
 					}
 					x &= unchecked((uint)(1 << packedVector.BitSize) - 1u);
-					data.Add(x / (scale * ((1 << packedVector.BitSize) - 1)) + packedVector.Start);
+					data.Add((x / (scale * ((1 << packedVector.BitSize) - 1))) + packedVector.Start);
 				}
 			}
 			return data.ToArray();
@@ -148,9 +148,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 
 			packedVector.Start = minf;
-			packedVector.NumItems = (uint)(data.Length);
+			packedVector.NumItems = (uint)data.Length;
 			packedVector.BitSize = (byte)bitSize;
-			packedVector.Data = new byte[(packedVector.NumItems * bitSize + 7) / 8];
+			packedVector.Data = new byte[((packedVector.NumItems * bitSize) + 7) / 8];
 
 
 			double scale = 1.0d / packedVector.Range;

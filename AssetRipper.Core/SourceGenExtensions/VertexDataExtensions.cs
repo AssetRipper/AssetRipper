@@ -121,11 +121,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 						byte[]? componentBytes = new byte[vertexCount * m_Channel.GetDataDimension() * componentByteSize];
 						for (int v = 0; v < vertexCount; v++)
 						{
-							int vertexOffset = (int)m_Stream.Offset + m_Channel.Offset + (int)m_Stream.GetStride() * v;
+							int vertexOffset = (int)m_Stream.Offset + m_Channel.Offset + ((int)m_Stream.GetStride() * v);
 							for (int d = 0; d < m_Channel.GetDataDimension(); d++)
 							{
-								int componentOffset = vertexOffset + componentByteSize * d;
-								Buffer.BlockCopy(instance.Data, componentOffset, componentBytes, componentByteSize * (v * m_Channel.GetDataDimension() + d), componentByteSize);
+								int componentOffset = vertexOffset + (componentByteSize * d);
+								Buffer.BlockCopy(instance.Data, componentOffset, componentBytes, componentByteSize * ((v * m_Channel.GetDataDimension()) + d), componentByteSize);
 							}
 						}
 
@@ -201,7 +201,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 									{
 										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
 										{
-											skin[i].Weights[j] = componentsFloatArray[i * m_Channel.GetDataDimension() + j];
+											skin[i].Weights[j] = componentsFloatArray[(i * m_Channel.GetDataDimension()) + j];
 										}
 									}
 									break;
@@ -214,7 +214,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 									{
 										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
 										{
-											skin[i].BoneIndices[j] = componentsIntArray[i * m_Channel.GetDataDimension() + j];
+											skin[i].BoneIndices[j] = componentsIntArray[(i * m_Channel.GetDataDimension()) + j];
 										}
 									}
 									break;
@@ -286,13 +286,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 			int[] indices = new int[System.Math.Max(indexCount, 4)];
 			for (int v = 0; v < instance.VertexCount; v++)
 			{
-				memStream.Position = weightStreamOffset + v * weightStride + weightChannel.Offset;
+				memStream.Position = weightStreamOffset + (v * weightStride) + weightChannel.Offset;
 				for (int i = 0; i < weightCount; i++)
 				{
 					weights[i] = reader.ReadSingle();
 				}
 
-				memStream.Position = indexStreamOffset + v * indexStride + indexChannel.Offset;
+				memStream.Position = indexStreamOffset + (v * indexStride) + indexChannel.Offset;
 				for (int i = 0; i < indexCount; i++)
 				{
 					indices[i] = reader.ReadInt32();
@@ -324,7 +324,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			using (MemoryStream memStream = new MemoryStream(instance.Data))
 			{
 				using BinaryReader reader = new BinaryReader(memStream);
-				memStream.Position = streamOffset + submesh.FirstVertex * streamStride + channel.Offset;
+				memStream.Position = streamOffset + (submesh.FirstVertex * streamStride) + channel.Offset;
 				for (int v = 0; v < submesh.VertexCount; v++)
 				{
 					float x = reader.ReadSingle();
@@ -359,7 +359,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			return offset;
 		}
-		
+
 		private static List<IStreamInfo> GetStreams(this IVertexData instance, UnityVersion version)
 		{
 			if (instance.HasStreamsInvariant())
@@ -474,7 +474,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			return channels;
 		}
-		
+
 		private static T[] MakeInitializedArray<T>(int size) where T : new()
 		{
 			T[] array = new T[size];

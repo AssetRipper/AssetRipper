@@ -30,7 +30,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			if (settings.Has_TierSettings_C30())
 			{
 				settings.TierSettings_C30.Clear();//protection against converting GraphicsSettings multiple times
-				if(settings.Has_TierSettings_Tier1_C30() && settings.Has_TierSettings_Tier2_C30() && settings.Has_TierSettings_Tier3_C30())
+				if (settings.Has_TierSettings_Tier1_C30() && settings.Has_TierSettings_Tier2_C30() && settings.Has_TierSettings_Tier3_C30())
 				{
 					settings.TierSettings_C30.Capacity = 3;
 					settings.TierSettings_C30.AddNew().ConvertToEditorFormat(settings.TierSettings_Tier1_C30, settings.GetBuildTargetGroup(), GraphicsTier.Tier1);
@@ -71,8 +71,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 		/// </summary>
 		public static RenderingPath GetDefaultRenderingPath(this IGraphicsSettings settings)
 		{
-			return settings.Has_DefaultRenderingPath_C30() 
-				? (RenderingPath)settings.DefaultRenderingPath_C30 
+			return settings.Has_DefaultRenderingPath_C30()
+				? (RenderingPath)settings.DefaultRenderingPath_C30
 				: RenderingPath.Forward;
 		}
 
@@ -81,7 +81,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		/// </summary>
 		public static RenderingPath GetDefaultMobileRenderingPath(this IGraphicsSettings settings)
 		{
-			return settings.Has_DefaultMobileRenderingPath_C30() 
+			return settings.Has_DefaultMobileRenderingPath_C30()
 				? (RenderingPath)settings.DefaultMobileRenderingPath_C30
 				: RenderingPath.Forward;
 		}

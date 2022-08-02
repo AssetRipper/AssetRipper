@@ -72,7 +72,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			List<IGrouping<string, TypeDefinitionHandle>> files = GetFiles(module, targetDirectory);
 			DecompilerTypeSystem ts = new DecompilerTypeSystem(module, AssemblyResolver, Settings);
 
-			if(CustomTransforms.Count > 0) //Transforms are not thread-safe
+			if (CustomTransforms.Count > 0) //Transforms are not thread-safe
 			{
 				DecompileInSerial(files, module, ts, targetDirectory, ProgressIndicator, cancellationToken);
 			}
@@ -89,7 +89,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				.GetTopLevelTypeDefinitions()
 				.Where(td => IncludeTypeWhenDecompilingProject(module, td))
 				.GroupBy(
-					(TypeDefinitionHandle handle) => GetOutputPath(handle, metadata, targetDirectory), 
+					(TypeDefinitionHandle handle) => GetOutputPath(handle, metadata, targetDirectory),
 					StringComparer.OrdinalIgnoreCase)
 				.ToList();
 		}
@@ -143,7 +143,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			CancellationToken cancellationToken)
 		{
 			int total = files.Count;
-			for(int i = 0; i < total; i++)
+			for (int i = 0; i < total; i++)
 			{
 				IGrouping<string, TypeDefinitionHandle> file = files[i];
 				DecompileSingleFile(file, module, ts, targetDirectory, total, progress, cancellationToken);
@@ -151,8 +151,8 @@ namespace AssetRipper.Library.Exporters.Scripts
 		}
 
 		private void DecompileSingleFile(
-			IGrouping<string, TypeDefinitionHandle> file, 
-			PEFile module, 
+			IGrouping<string, TypeDefinitionHandle> file,
+			PEFile module,
 			DecompilerTypeSystem ts,
 			string targetDirectory,
 			int total,

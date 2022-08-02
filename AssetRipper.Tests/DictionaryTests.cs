@@ -15,7 +15,7 @@ namespace AssetRipper.Tests
 				{ 4, 4 }
 			};
 
-			Assert.Multiple(() => 
+			Assert.Multiple(() =>
 			{
 				Assert.IsTrue(dictionary.ContainsKey(1));
 				Assert.IsFalse(dictionary.ContainsKey(2));

@@ -1,9 +1,5 @@
 ﻿using ShaderTextRestorer.ShaderBlob;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShaderLabConvert
 {
@@ -42,11 +38,15 @@ namespace ShaderLabConvert
 
 					// USILSamplerMetadder couldn't find sampler metadata, skip
 					if (sampleOperand.operandType == USILOperandType.SamplerRegister)
+					{
 						break;
+					}
 
 					// Shouldn't happen, but just in case
 					if (!sampleOperand.metadataNameAssigned)
+					{
 						break;
+					}
 
 					if (BUILTIN_SAMPLER_TEXTURE_NAMES.Contains(sampleOperand.metadataName))
 					{

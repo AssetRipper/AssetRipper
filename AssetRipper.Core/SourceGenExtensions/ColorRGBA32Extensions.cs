@@ -6,7 +6,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void SetValues(this IColorRGBA32 color, byte r, byte g, byte b, byte a)
 		{
-			color.Rgba = unchecked((uint)(r | g << 8 | b << 16 | a << 24));
+			color.Rgba = unchecked((uint)(r | (g << 8) | (b << 16) | (a << 24)));
 		}
 
 		public static void SetAsBlack(this IColorRGBA32 color) => color.SetValues(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);

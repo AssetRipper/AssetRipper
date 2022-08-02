@@ -6,11 +6,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void CopyValues(this ISpriteBone destination, ISpriteBone source)
 		{
-			if(destination.Has_Color() && source.Has_Color())
+			if (destination.Has_Color() && source.Has_Color())
 			{
 				destination.Color.CopyValues(source.Color);
 			}
-			if(destination.Has_Guid() && source.Has_Guid())
+			if (destination.Has_Guid() && source.Has_Guid())
 			{
 				destination.Guid.CopyValues(source.Guid);
 			}

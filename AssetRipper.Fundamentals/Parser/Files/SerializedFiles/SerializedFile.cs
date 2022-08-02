@@ -370,7 +370,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 #endif
 				}
 			}
-			
+
 			long read = reader.BaseStream.Position - offset;
 			if (!replaceWithUnreadableObject && read != size)
 			{

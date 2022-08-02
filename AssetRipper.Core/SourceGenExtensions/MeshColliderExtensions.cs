@@ -13,9 +13,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else
 			{
-				MeshColliderCookingOptions options = 
-					MeshColliderCookingOptions.CookForFasterSimulation | 
-					MeshColliderCookingOptions.EnableMeshCleaning | 
+				MeshColliderCookingOptions options =
+					MeshColliderCookingOptions.CookForFasterSimulation |
+					MeshColliderCookingOptions.EnableMeshCleaning |
 					MeshColliderCookingOptions.WeldColocatedVertices;
 
 				if (collider.InflateMesh_C64)

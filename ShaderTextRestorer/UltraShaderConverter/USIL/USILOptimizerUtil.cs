@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ShaderLabConvert
 {
@@ -11,12 +7,16 @@ namespace ShaderLabConvert
 		public static bool DoOpcodesMatch(List<USILInstruction> insts, int startIndex, USILInstructionType[] instTypes)
 		{
 			if (startIndex + instTypes.Length > insts.Count)
+			{
 				return false;
+			}
 
 			for (int i = 0; i < instTypes.Length; i++)
 			{
 				if (insts[startIndex + i].instructionType != instTypes[i])
+				{
 					return false;
+				}
 			}
 			return true;
 		}
@@ -24,12 +24,16 @@ namespace ShaderLabConvert
 		public static bool DoMasksMatch(USILOperand operand, int[] mask)
 		{
 			if (operand.mask.Length != mask.Length)
+			{
 				return false;
+			}
 
 			for (int i = 0; i < mask.Length; i++)
 			{
 				if (operand.mask[i] != mask[i])
+				{
 					return false;
+				}
 			}
 			return true;
 		}

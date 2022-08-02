@@ -74,7 +74,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 					}
 				}
 			}
-			
+
 			return indices;
 		}
 	}

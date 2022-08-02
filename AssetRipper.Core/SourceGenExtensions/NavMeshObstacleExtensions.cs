@@ -7,8 +7,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static NavMeshObstacleShape GetShape(this INavMeshObstacle obstacle)
 		{
-			return obstacle.Has_Shape_C208() 
-				? (NavMeshObstacleShape)obstacle.Shape_C208 
+			return obstacle.Has_Shape_C208()
+				? (NavMeshObstacleShape)obstacle.Shape_C208
 				: NavMeshObstacleShape.Capsule;
 		}
 	}

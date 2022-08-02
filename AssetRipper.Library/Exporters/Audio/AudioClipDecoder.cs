@@ -51,7 +51,7 @@ namespace AssetRipper.Library.Exporters.Audio
 				return false;
 			}
 
-			if(FsbLoader.TryLoadFsbFromByteArray(rawData, out FmodSoundBank? fsbData))
+			if (FsbLoader.TryLoadFsbFromByteArray(rawData, out FmodSoundBank? fsbData))
 			{
 				FmodAudioType audioType = fsbData!.Header.AudioType;
 				try

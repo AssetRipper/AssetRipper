@@ -15,7 +15,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			if (methodDeclaration.Body == null || methodDeclaration.Body.IsNull)
 			{
 				return;
-			}	
+			}
 
 			foreach (ParameterDeclaration parameter in methodDeclaration.Parameters)
 			{

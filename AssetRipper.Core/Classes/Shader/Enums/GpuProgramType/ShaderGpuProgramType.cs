@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 
 		public static bool IsDX(this ShaderGpuProgramType _this)
 		{
-			switch(_this)
+			switch (_this)
 			{
 				case ShaderGpuProgramType.DX9PixelSM20:
 				case ShaderGpuProgramType.DX9PixelSM30:

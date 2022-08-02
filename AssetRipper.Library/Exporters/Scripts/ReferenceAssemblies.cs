@@ -11,7 +11,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private static readonly Regex systemRegex = new Regex(@"^System(\.[0-9a-zA-Z]+)*(\.dll)?$", RegexOptions.Compiled);
 		private static readonly HashSet<string> whitelistAssemblies = new HashSet<string>()
 		{
-			
+
 		};
 		private static readonly HashSet<string> blacklistAssemblies = new HashSet<string>()
 		{

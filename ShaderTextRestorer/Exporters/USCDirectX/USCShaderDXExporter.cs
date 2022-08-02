@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Classes.Shader;
-using AssetRipper.Core.Classes.Shader.Enums;
+﻿using AssetRipper.Core.Classes.Shader.Enums;
 using ShaderLabConvert;
 using ShaderTextRestorer.IO;
 using ShaderTextRestorer.ShaderBlob;

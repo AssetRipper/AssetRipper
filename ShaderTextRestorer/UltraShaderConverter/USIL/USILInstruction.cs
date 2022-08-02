@@ -1,47 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ShaderLabConvert
 {
-    public class USILInstruction
-    {
-        public USILInstructionType instructionType;
-        public USILOperand destOperand;
-        public List<USILOperand> srcOperands;
-        public bool saturate;
+	public class USILInstruction
+	{
+		public USILInstructionType instructionType;
+		public USILOperand destOperand;
+		public List<USILOperand> srcOperands;
+		public bool saturate;
 		public bool commented;
 
 		public bool isIntVariant;
 		public bool isIntUnsigned;
 
 		public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
+		{
+			StringBuilder sb = new StringBuilder();
 
-            sb.Append(instructionType.ToString());
+			sb.Append(instructionType.ToString());
 
-            sb.Append(' ');
+			sb.Append(' ');
 
-            if (saturate)
-                sb.Append("saturate(");
+			if (saturate)
+			{
+				sb.Append("saturate(");
+			}
 
-            if (destOperand != null)
-            {
-                sb.Append(destOperand.ToString());
+			if (destOperand != null)
+			{
+				sb.Append(destOperand.ToString());
 
-                if (srcOperands.Count > 0)
-                    sb.Append(", ");
-            }
+				if (srcOperands.Count > 0)
+				{
+					sb.Append(", ");
+				}
+			}
 
-            sb.Append(string.Join(", ", srcOperands));
+			sb.Append(string.Join(", ", srcOperands));
 
-            if (saturate)
-                sb.Append(')');
+			if (saturate)
+			{
+				sb.Append(')');
+			}
 
-            return sb.ToString();
+			return sb.ToString();
 		}
 
 		// todo: all of them

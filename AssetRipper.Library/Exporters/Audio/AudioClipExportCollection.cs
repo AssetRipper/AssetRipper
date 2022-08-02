@@ -26,7 +26,7 @@ namespace AssetRipper.Library.Exporters.Audio
 
 		private static bool IsWavExtension(AudioClipExporter assetExporter, string defaultExtension)
 		{
-			return assetExporter.AudioFormat == AudioExportFormat.PreferWav 
+			return assetExporter.AudioFormat == AudioExportFormat.PreferWav
 				&& defaultExtension == "ogg";
 		}
 	}

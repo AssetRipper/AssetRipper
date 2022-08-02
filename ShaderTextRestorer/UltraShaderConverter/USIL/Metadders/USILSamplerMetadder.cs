@@ -1,34 +1,31 @@
 ﻿using AssetRipper.Core.Logging;
 using ShaderTextRestorer.ShaderBlob;
 using ShaderTextRestorer.ShaderBlob.Parameters;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShaderLabConvert
 {
-    public class USILSamplerMetadder : IUSILOptimizer
-    {
-        private UShaderProgram _shader;
-        private ShaderSubProgram _shaderData;
+	public class USILSamplerMetadder : IUSILOptimizer
+	{
+		private UShaderProgram _shader;
+		private ShaderSubProgram _shaderData;
 
-        public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
-        {
-            _shader = shader;
-            _shaderData = shaderData;
+		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
+		{
+			_shader = shader;
+			_shaderData = shaderData;
 
-            List<USILInstruction> instructions = shader.instructions;
-            foreach (USILInstruction instruction in instructions)
-            {
-                foreach (USILOperand operand in instruction.srcOperands)
-                {
-                    if (operand.operandType == USILOperandType.SamplerRegister)
-                    {
-                        TextureParameter texParam = _shaderData.TextureParameters.FirstOrDefault(
-                            p => p.SamplerIndex == operand.registerIndex
-                        );
+			List<USILInstruction> instructions = shader.instructions;
+			foreach (USILInstruction instruction in instructions)
+			{
+				foreach (USILOperand operand in instruction.srcOperands)
+				{
+					if (operand.operandType == USILOperandType.SamplerRegister)
+					{
+						TextureParameter texParam = _shaderData.TextureParameters.FirstOrDefault(
+							p => p.SamplerIndex == operand.registerIndex
+						);
 
 						if (texParam == null)
 						{
@@ -38,31 +35,31 @@ namespace ShaderLabConvert
 						}
 
 						int dimension = texParam.Dim;
-                        switch (dimension)
-                        {
-                            case 2:
-                                operand.operandType = USILOperandType.Sampler2D;
-                                break;
-                            case 3:
-                                operand.operandType = USILOperandType.Sampler3D;
-                                break;
-                            case 4:
-                                operand.operandType = USILOperandType.SamplerCube;
-                                break;
-                            case 5:
-                                operand.operandType = USILOperandType.Sampler2DArray;
-                                break;
-                            case 6:
-                                operand.operandType = USILOperandType.SamplerCubeArray;
-                                break;
-                        }
+						switch (dimension)
+						{
+							case 2:
+								operand.operandType = USILOperandType.Sampler2D;
+								break;
+							case 3:
+								operand.operandType = USILOperandType.Sampler3D;
+								break;
+							case 4:
+								operand.operandType = USILOperandType.SamplerCube;
+								break;
+							case 5:
+								operand.operandType = USILOperandType.Sampler2DArray;
+								break;
+							case 6:
+								operand.operandType = USILOperandType.SamplerCubeArray;
+								break;
+						}
 
-                        if (texParam != null)
-                        {
-                            operand.metadataName = texParam.Name;
-                            operand.metadataNameAssigned = true;
-                        }
-                    }
+						if (texParam != null)
+						{
+							operand.metadataName = texParam.Name;
+							operand.metadataNameAssigned = true;
+						}
+					}
 					else if (operand.operandType == USILOperandType.ResourceRegister)
 					{
 						TextureParameter texParam = _shaderData.TextureParameters.FirstOrDefault(
@@ -81,9 +78,9 @@ namespace ShaderLabConvert
 							operand.metadataNameAssigned = true;
 						}
 					}
-                }
-            }
-            return true; // any changes made?
-        }
-    }
+				}
+			}
+			return true; // any changes made?
+		}
+	}
 }

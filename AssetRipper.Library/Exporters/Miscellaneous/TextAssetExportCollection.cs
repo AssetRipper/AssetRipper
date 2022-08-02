@@ -12,7 +12,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		private const string JsonExtension = "json";
 		private const string TxtExtension = "txt";
 		private const string BytesExtension = "bytes";
-		
+
 		public TextAssetExportCollection(TextAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
 		{
 		}

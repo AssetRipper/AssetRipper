@@ -2,73 +2,89 @@
 using DirectXDisassembler;
 using DirectXDisassembler.Blocks;
 using ShaderTextRestorer.ShaderBlob.Parameters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShaderLabConvert
 {
-    public static class DXShaderNamingUtils
-    {
+	public static class DXShaderNamingUtils
+	{
 		// these two are useless now
 		public static string GetConstantBufferParamTypeName(VectorParameter param) => GetConstantBufferParamTypeName(param.Dim, 1, param.Type, false);
 		public static string GetConstantBufferParamTypeName(MatrixParameter param) => GetConstantBufferParamTypeName(param.RowCount, param.ColumnCount, param.Type, true);
 
 		public static string GetConstantBufferParamTypeName(NumericShaderParameter param) => GetConstantBufferParamTypeName(param.RowCount, param.ColumnCount, param.Type, true);
 
-        public static string GetConstantBufferParamTypeName(int rowCount, int columnCount, ShaderParamType paramType, bool isMatrix)
-        {
-            string name = $"unknownType";
+		public static string GetConstantBufferParamTypeName(int rowCount, int columnCount, ShaderParamType paramType, bool isMatrix)
+		{
+			string name = $"unknownType";
 			string baseName = paramType.ToString().ToLower();
 
-            if (columnCount == 1)
-            {
-                if (rowCount == 1)
+			if (columnCount == 1)
+			{
+				if (rowCount == 1)
+				{
 					name = $"{baseName}";
-                if (rowCount == 2)
+				}
+
+				if (rowCount == 2)
+				{
 					name = $"{baseName}2";
-                if (rowCount == 3)
+				}
+
+				if (rowCount == 3)
+				{
 					name = $"{baseName}3";
-                if (rowCount == 4)
+				}
+
+				if (rowCount == 4)
+				{
 					name = $"{baseName}4";
-            }
-            else if (columnCount == 4)
-            {
-                if (rowCount == 4 && isMatrix)
+				}
+			}
+			else if (columnCount == 4)
+			{
+				if (rowCount == 4 && isMatrix)
+				{
 					name = $"{baseName}4x4";
-            }
+				}
+			}
 
-            return name;
-        }
+			return name;
+		}
 
-        public static string GetISGNInputName(ISGN.Input input)
-        {
-            string type;
-            if (input.index > 0)
-                type = input.name + input.index;
-            else
-                type = input.name;
+		public static string GetISGNInputName(ISGN.Input input)
+		{
+			string type;
+			if (input.index > 0)
+			{
+				type = input.name + input.index;
+			}
+			else
+			{
+				type = input.name;
+			}
 
-            string name = input.name switch
-            {
-                "SV_POSITION" => "position",
+			string name = input.name switch
+			{
+				"SV_POSITION" => "position",
 				"SV_Position" => "position",
 				"SV_IsFrontFace" => "facing",
 				"POSITION" => "vertex",
-                _ => type.ToLower(),
-            };
-            return name;
-        }
+				_ => type.ToLower(),
+			};
+			return name;
+		}
 
-        public static string GetOSGNOutputName(OSGN.Output output)
-        {
-            string type;
-            if (output.index > 0)
-                type = output.name + output.index;
-            else
-                type = output.name;
+		public static string GetOSGNOutputName(OSGN.Output output)
+		{
+			string type;
+			if (output.index > 0)
+			{
+				type = output.name + output.index;
+			}
+			else
+			{
+				type = output.name;
+			}
 
 			if (HasSpecialInputOutputName(output.name))
 			{
@@ -76,13 +92,13 @@ namespace ShaderLabConvert
 			}
 
 			string name = output.name switch
-            {
-                "SV_POSITION" => "position",
+			{
+				"SV_POSITION" => "position",
 				"POSITION" => "vertex",
-                _ => type.ToLower(),
-            };
+				_ => type.ToLower(),
+			};
 
-            return name;
+			return name;
 		}
 
 		public static bool HasSpecialInputOutputName(string typeName) => GetSpecialInputOutputName(typeName) != string.Empty;
@@ -91,25 +107,25 @@ namespace ShaderLabConvert
 			switch (typeName)
 			{
 				case "SV_Depth":
-				{
-					return "oDepth";
-				}
+					{
+						return "oDepth";
+					}
 				case "SV_Coverage":
-				{
-					return "oMask";
-				}
+					{
+						return "oMask";
+					}
 				case "SV_DepthGreaterEqual":
-				{
-					return "oDepthGE";
-				}
+					{
+						return "oDepthGE";
+					}
 				case "SV_DepthLessEqual":
-				{
-					return "oDepthLE";
-				}
+					{
+						return "oDepthLE";
+					}
 				case "SV_StencilRef":
-				{
-					return "oStencilRef"; // not in 3dmigoto
-				}
+					{
+						return "oStencilRef"; // not in 3dmigoto
+					}
 			}
 
 			return string.Empty;
@@ -121,65 +137,65 @@ namespace ShaderLabConvert
 			switch (operandType)
 			{
 				case USILOperandType.InputCoverageMask:
-				{
-					return "vCoverage";
-				}
+					{
+						return "vCoverage";
+					}
 				case USILOperandType.InputThreadGroupID:
-				{
-					return "vThreadGroupID";
-				}
+					{
+						return "vThreadGroupID";
+					}
 				case USILOperandType.InputThreadID:
-				{
-					return "vThreadID";
-				}
+					{
+						return "vThreadID";
+					}
 				case USILOperandType.InputThreadIDInGroup:
-				{
-					return "vThreadIDInGroup";
-				}
+					{
+						return "vThreadIDInGroup";
+					}
 				case USILOperandType.InputThreadIDInGroupFlattened:
-				{
-					return "vThreadIDInGroupFlattened";
-				}
+					{
+						return "vThreadIDInGroupFlattened";
+					}
 				case USILOperandType.InputPrimitiveID:
-				{
-					return "vPrim";
-				}
+					{
+						return "vPrim";
+					}
 				case USILOperandType.InputForkInstanceID:
-				{
-					return "vForkInstanceID";
-				}
+					{
+						return "vForkInstanceID";
+					}
 				case USILOperandType.InputGSInstanceID:
-				{
-					return "vGSInstanceID";
-				}
+					{
+						return "vGSInstanceID";
+					}
 				case USILOperandType.InputDomainPoint:
-				{
-					return "vDomain";
-				}
+					{
+						return "vDomain";
+					}
 				case USILOperandType.OutputControlPointID:
-				{
-					return "outputControlPointID"; // not in 3dmigoto
-				}
+					{
+						return "outputControlPointID"; // not in 3dmigoto
+					}
 				case USILOperandType.OutputDepth:
-				{
-					return "oDepth";
-				}
+					{
+						return "oDepth";
+					}
 				case USILOperandType.OutputCoverageMask:
-				{
-					return "oMask";
-				}
+					{
+						return "oMask";
+					}
 				case USILOperandType.OutputDepthGreaterEqual:
-				{
-					return "oDepthGE";
-				}
+					{
+						return "oDepthGE";
+					}
 				case USILOperandType.OutputDepthLessEqual:
-				{
-					return "oDepthLE";
-				}
+					{
+						return "oDepthLE";
+					}
 				case USILOperandType.StencilRef:
-				{
-					return "oStencilRef"; // not in 3dmigoto
-				}
+					{
+						return "oStencilRef"; // not in 3dmigoto
+					}
 			}
 
 			return string.Empty;

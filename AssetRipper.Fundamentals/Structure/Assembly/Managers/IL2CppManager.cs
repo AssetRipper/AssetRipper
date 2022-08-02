@@ -141,7 +141,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			LibCpp2IL.InstructionSet.ARM32 => true,
 			LibCpp2IL.InstructionSet.ARM64 => true,
 
-			_ => false, 
+			_ => false,
 		};
 
 		~IL2CppManager()

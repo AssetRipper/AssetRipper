@@ -28,7 +28,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			foreach (IUnityObjectBase asset in clip.SerializedFile.Collection.FetchAssets())
 			{
-				if(asset is IAnimator animator)
+				if (asset is IAnimator animator)
 				{
 					if (clip.IsAnimatorContainsClip(animator))
 					{

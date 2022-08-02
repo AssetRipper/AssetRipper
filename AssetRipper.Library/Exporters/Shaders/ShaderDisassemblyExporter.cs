@@ -66,7 +66,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			if (shader.Has_ParsedForm_C48())
 			{
 				using ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator);
-				(shader.ParsedForm_C48).Export(writer);
+				shader.ParsedForm_C48.Export(writer);
 			}
 			else if (shader.Has_SubProgramBlob_C48())
 			{

@@ -152,7 +152,9 @@ namespace AssetRipper.GUI
 			// Logger.Log(LogType.Info, LogCategory.System, $"{newStatus} at {DateTime.Now:hh:mm:ss.fff}");
 
 			if (_updatingLoadingText)
+			{
 				return;
+			}
 
 			string newStatus = context == null ? MainWindow.Instance.LocalizationManager[statusKey] : string.Format(MainWindow.Instance.LocalizationManager[statusKey], context);
 
@@ -164,7 +166,9 @@ namespace AssetRipper.GUI
 		public void OnFileDropped(DragEventArgs e)
 		{
 			if (IsExporting || (HasFile && !HasLoaded))
+			{
 				return;
+			}
 
 			string[]? filesDropped = e.Data.GetFileNames()?.ToArray();
 
@@ -283,10 +287,12 @@ namespace AssetRipper.GUI
 				string? saveLoc = await saveFileDialog.ShowAsync(MainWindow.Instance);
 
 				if (saveLoc == null)
+				{
 					return;
+				}
 
 				await da.SaveToFileAsync(saveLoc);
-				
+
 				Logger.Info(LogCategory.ExportedFile, $"Loose file saved at: {saveLoc}");
 
 				return;
@@ -395,7 +401,9 @@ namespace AssetRipper.GUI
 			string[]? result = await openFileDialog.ShowAsync(MainWindow.Instance);
 
 			if (result == null)
+			{
 				return;
+			}
 
 			DoLoad(result);
 		}
@@ -407,7 +415,9 @@ namespace AssetRipper.GUI
 			string? result = await openFolderDialog.ShowAsync(MainWindow.Instance);
 
 			if (string.IsNullOrEmpty(result))
+			{
 				return;
+			}
 
 			DoLoad(new[] { result });
 		}
@@ -416,7 +426,9 @@ namespace AssetRipper.GUI
 		public void Reset()
 		{
 			if (!HasFile)
+			{
 				return;
+			}
 
 			_ripper.ResetData();
 			AssetFiles.Clear();

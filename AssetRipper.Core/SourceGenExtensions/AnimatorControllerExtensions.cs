@@ -61,7 +61,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static PPtr_MonoBehaviour__5_0_0_f4[] GetStateBehaviours(
 			IStateMachineBehaviourVectorDescription controllerStateMachineBehaviourVectorDescription,
-			AssetList<PPtr_MonoBehaviour__5_0_0_f4> controllerStateMachineBehaviours, 
+			AssetList<PPtr_MonoBehaviour__5_0_0_f4> controllerStateMachineBehaviours,
 			StateRange range)
 		{
 			PPtr_MonoBehaviour__5_0_0_f4[] stateMachineBehaviours = new PPtr_MonoBehaviour__5_0_0_f4[range.Count];

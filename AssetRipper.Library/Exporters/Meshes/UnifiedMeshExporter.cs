@@ -54,7 +54,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 		public static bool HasValidMeshData(IMesh mesh)
 		{
 			return mesh != null &&
-				
+
 				//mesh.Vertices != null &&
 				//mesh.Vertices.Length > 0 &&
 				//mesh.Indices != null &&

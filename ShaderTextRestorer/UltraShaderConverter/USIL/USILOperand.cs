@@ -1,104 +1,103 @@
-﻿using DirectXDisassembler;
-using DirectXDisassembler.Blocks;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShaderLabConvert
 {
-    public class USILOperand
-    {
-        public USILOperandType operandType;
+	public class USILOperand
+	{
+		public USILOperandType operandType;
 
-        public int[] immValueInt;
-        public float[] immValueFloat;
-        public bool immIsInt; // useless
+		public int[] immValueInt;
+		public float[] immValueFloat;
+		public bool immIsInt; // useless
 
-        public bool absoluteValue;
-        public bool negative;
-        public bool transposeMatrix;
+		public bool absoluteValue;
+		public bool negative;
+		public bool transposeMatrix;
 
-        public int registerIndex;
-        public int arrayIndex;
+		public int registerIndex;
+		public int arrayIndex;
 		public USILOperand arrayRelative;
 
-        public string metadataName;
-        public bool metadataNameAssigned;
-        public bool metadataNameWithArray;
+		public string metadataName;
+		public bool metadataNameAssigned;
+		public bool metadataNameWithArray;
 
 		public string comment;
 
-        public USILOperand[] children;
+		public USILOperand[] children;
 
-        public int[] mask;
-        public bool displayMask;
+		public int[] mask;
+		public bool displayMask;
 
-        public USILOperand()
-        {
-            operandType = USILOperandType.None;
+		public USILOperand()
+		{
+			operandType = USILOperandType.None;
 
-            immValueInt = Array.Empty<int>();
-            immValueFloat = Array.Empty<float>();
-            immIsInt = false;
+			immValueInt = Array.Empty<int>();
+			immValueFloat = Array.Empty<float>();
+			immIsInt = false;
 
-            absoluteValue = false;
-            negative = false;
-            transposeMatrix = false;
+			absoluteValue = false;
+			negative = false;
+			transposeMatrix = false;
 
-            registerIndex = 0;
-            arrayIndex = 0;
+			registerIndex = 0;
+			arrayIndex = 0;
 			arrayRelative = null;
 
 			metadataName = null;
-            metadataNameAssigned = false;
+			metadataNameAssigned = false;
 			metadataNameWithArray = false;
 
-            comment = "";
+			comment = "";
 
-            children = new USILOperand[0];
+			children = new USILOperand[0];
 
-            mask = Array.Empty<int>();
-            displayMask = true;
-        }
+			mask = Array.Empty<int>();
+			displayMask = true;
+		}
 
-        public USILOperand(USILOperand original)
-        {
-            operandType = original.operandType;
+		public USILOperand(USILOperand original)
+		{
+			operandType = original.operandType;
 
-            immValueInt = original.immValueInt;
-            immValueFloat = original.immValueFloat;
-            immIsInt = original.immIsInt;
+			immValueInt = original.immValueInt;
+			immValueFloat = original.immValueFloat;
+			immIsInt = original.immIsInt;
 
-            absoluteValue = original.absoluteValue;
-            negative = original.negative;
-            transposeMatrix = original.transposeMatrix;
+			absoluteValue = original.absoluteValue;
+			negative = original.negative;
+			transposeMatrix = original.transposeMatrix;
 
-            registerIndex = original.registerIndex;
-            arrayIndex = original.arrayIndex;
+			registerIndex = original.registerIndex;
+			arrayIndex = original.arrayIndex;
 
 			if (original.arrayRelative != null)
+			{
 				arrayRelative = new USILOperand(original.arrayRelative);
+			}
 			else
+			{
 				arrayRelative = null;
+			}
 
 			metadataName = original.metadataName;
-            metadataNameAssigned = original.metadataNameAssigned;
+			metadataNameAssigned = original.metadataNameAssigned;
 			metadataNameWithArray = original.metadataNameWithArray;
 
-            comment = original.comment;
+			comment = original.comment;
 
-            children = new USILOperand[original.children.Length];
-            for (int i = 0; i < original.children.Length; i++)
-            {
-                children[i] = new USILOperand(original.children[i]);
-            }
+			children = new USILOperand[original.children.Length];
+			for (int i = 0; i < original.children.Length; i++)
+			{
+				children[i] = new USILOperand(original.children[i]);
+			}
 
-            mask = original.mask.ToArray();
-            displayMask = original.displayMask;
-        }
+			mask = original.mask.ToArray();
+			displayMask = original.displayMask;
+		}
 
 		public USILOperand(int value)
 		{
@@ -116,159 +115,176 @@ namespace ShaderLabConvert
 			mask = new[] { 0 };
 		}
 
-        public int GetValueCount()
-        {
-            switch (operandType)
-            {
-                case USILOperandType.ImmediateFloat:
-                    return immValueFloat.Length;
-                case USILOperandType.ImmediateInt:
-                    return immValueInt.Length;
-                case USILOperandType.Multiple:
-                    int multipleSum = 0;
-                    foreach (USILOperand operand in children)
-                    {
-                        multipleSum += operand.GetValueCount();
-                    }
-                    return multipleSum;
-                default:
-                    return mask.Length;
-            }
-        }
+		public int GetValueCount()
+		{
+			switch (operandType)
+			{
+				case USILOperandType.ImmediateFloat:
+					return immValueFloat.Length;
+				case USILOperandType.ImmediateInt:
+					return immValueInt.Length;
+				case USILOperandType.Multiple:
+					int multipleSum = 0;
+					foreach (USILOperand operand in children)
+					{
+						multipleSum += operand.GetValueCount();
+					}
+					return multipleSum;
+				default:
+					return mask.Length;
+			}
+		}
 
-        public override string ToString()
-        {
-            return ToString(false);
-        }
+		public override string ToString()
+		{
+			return ToString(false);
+		}
 
-        public string ToString(bool forceHideMask)
-        {
-            string prefix = "";
-            string body = "";
-            string suffix = "";
+		public string ToString(bool forceHideMask)
+		{
+			string prefix = "";
+			string body = "";
+			string suffix = "";
 
-            bool displayMaskOverride = displayMask;
-            if (forceHideMask)
-                displayMaskOverride = false;
+			bool displayMaskOverride = displayMask;
+			if (forceHideMask)
+			{
+				displayMaskOverride = false;
+			}
 
-            if (!metadataNameAssigned)
-                prefix = GetTypeShortForm(operandType);
+			if (!metadataNameAssigned)
+			{
+				prefix = GetTypeShortForm(operandType);
+			}
 
-            if (absoluteValue)
-                prefix = $"abs({prefix}";
-            if (negative)
-                prefix = $"-{prefix}";
+			if (absoluteValue)
+			{
+				prefix = $"abs({prefix}";
+			}
 
-            if (metadataNameAssigned)
-            {
-                body = metadataName;
-            }
-            else
-            {
-                switch (operandType)
-                {
-                    case USILOperandType.None:
-                    {
-                        body = "none";
-                        break;
-                    }
+			if (negative)
+			{
+				prefix = $"-{prefix}";
+			}
+
+			if (metadataNameAssigned)
+			{
+				body = metadataName;
+			}
+			else
+			{
+				switch (operandType)
+				{
+					case USILOperandType.None:
+						{
+							body = "none";
+							break;
+						}
 					case USILOperandType.Null:
-					{
-						body = "null";
-						break;
-					}
-                    case USILOperandType.Comment:
-                    {
-                        body = comment;
-                        break;
-                    }
-                    case USILOperandType.TempRegister:
-                    case USILOperandType.InputRegister:
-                    case USILOperandType.OutputRegister:
-                    case USILOperandType.ResourceRegister:
-                    case USILOperandType.SamplerRegister:
-                    case USILOperandType.Sampler2D:
-                    case USILOperandType.Sampler3D:
-                    case USILOperandType.SamplerCube:
-                    {
-                        body = $"{registerIndex}";
-                        break;
-                    }
+						{
+							body = "null";
+							break;
+						}
+					case USILOperandType.Comment:
+						{
+							body = comment;
+							break;
+						}
+					case USILOperandType.TempRegister:
+					case USILOperandType.InputRegister:
+					case USILOperandType.OutputRegister:
+					case USILOperandType.ResourceRegister:
+					case USILOperandType.SamplerRegister:
+					case USILOperandType.Sampler2D:
+					case USILOperandType.Sampler3D:
+					case USILOperandType.SamplerCube:
+						{
+							body = $"{registerIndex}";
+							break;
+						}
 					case USILOperandType.IndexableTempRegister:
-					{
-						body = $"{registerIndex}[{arrayIndex}]";
-						break;
-					}
-                    case USILOperandType.ConstantBuffer:
-                    case USILOperandType.Matrix:
-                    {
-						body = $"{registerIndex}";
-                        break;
-                    }
-                    case USILOperandType.ImmediateConstantBuffer:
-                    {
-                        body = "";
-                        break;
-                    }
-                    case USILOperandType.ImmediateInt:
-                    {
-                        if (immValueInt.Length == 1)
-                        {
-                            body = $"{immValueInt[0]}";
-                        }
-                        else //if (immValueInt.Length > 1)
-                        {
-                            body += $"int{immValueInt.Length}(";
-                            for (int i = 0; i < immValueInt.Length; i++)
-                            {
-                                if (i != immValueInt.Length - 1)
-                                    body += $"{immValueInt[i]}, ";
-                                else
-                                    body += $"{immValueInt[i]}";
-                            }
-                            body += ")";
-                        }
-                        break;
-                    }
-                    case USILOperandType.ImmediateFloat:
-                    {
-                        if (immValueFloat.Length == 1)
-                        {
-							// todo: check if number can't possibly be expressed as float and write in hex.
-							// todo: float precision isn't correct atm. add precision check somewhere.
-                            body = $"{immValueFloat[0].ToString("0.0######", CultureInfo.InvariantCulture)}";
-                        }
-                        else //if (immValueFloat.Length > 1)
-                        {
-                            // todo: if all numbers are the same and it matches the mask, use it only once
-                            body += $"float{immValueFloat.Length}(";
-                            for (int i = 0; i < immValueFloat.Length; i++)
-                            {
-                                if (i != immValueFloat.Length - 1)
-                                    body += $"{immValueFloat[i].ToString("0.0######", CultureInfo.InvariantCulture)}, ";
-                                else
-                                    body += $"{immValueFloat[i].ToString("0.0######", CultureInfo.InvariantCulture)}";
-                            }
-                            body += ")";
-                        }
-                        break;
-                    }
-                    case USILOperandType.Multiple:
-                    {
-                        body += $"float{GetValueCount()}({string.Join(", ", children.ToList())})";
-                        break;
-                    }
+						{
+							body = $"{registerIndex}[{arrayIndex}]";
+							break;
+						}
+					case USILOperandType.ConstantBuffer:
+					case USILOperandType.Matrix:
+						{
+							body = $"{registerIndex}";
+							break;
+						}
+					case USILOperandType.ImmediateConstantBuffer:
+						{
+							body = "";
+							break;
+						}
+					case USILOperandType.ImmediateInt:
+						{
+							if (immValueInt.Length == 1)
+							{
+								body = $"{immValueInt[0]}";
+							}
+							else //if (immValueInt.Length > 1)
+							{
+								body += $"int{immValueInt.Length}(";
+								for (int i = 0; i < immValueInt.Length; i++)
+								{
+									if (i != immValueInt.Length - 1)
+									{
+										body += $"{immValueInt[i]}, ";
+									}
+									else
+									{
+										body += $"{immValueInt[i]}";
+									}
+								}
+								body += ")";
+							}
+							break;
+						}
+					case USILOperandType.ImmediateFloat:
+						{
+							if (immValueFloat.Length == 1)
+							{
+								// todo: check if number can't possibly be expressed as float and write in hex.
+								// todo: float precision isn't correct atm. add precision check somewhere.
+								body = $"{immValueFloat[0].ToString("0.0######", CultureInfo.InvariantCulture)}";
+							}
+							else //if (immValueFloat.Length > 1)
+							{
+								// todo: if all numbers are the same and it matches the mask, use it only once
+								body += $"float{immValueFloat.Length}(";
+								for (int i = 0; i < immValueFloat.Length; i++)
+								{
+									if (i != immValueFloat.Length - 1)
+									{
+										body += $"{immValueFloat[i].ToString("0.0######", CultureInfo.InvariantCulture)}, ";
+									}
+									else
+									{
+										body += $"{immValueFloat[i].ToString("0.0######", CultureInfo.InvariantCulture)}";
+									}
+								}
+								body += ")";
+							}
+							break;
+						}
+					case USILOperandType.Multiple:
+						{
+							body += $"float{GetValueCount()}({string.Join(", ", children.ToList())})";
+							break;
+						}
 
 					default:
-					{
-						if (DXShaderNamingUtils.HasSpecialInputOutputName(operandType))
 						{
-							body = DXShaderNamingUtils.GetSpecialInputOutputName(operandType);
+							if (DXShaderNamingUtils.HasSpecialInputOutputName(operandType))
+							{
+								body = DXShaderNamingUtils.GetSpecialInputOutputName(operandType);
+							}
+							break;
 						}
-						break;
-					}
 				};
-            }
+			}
 
 			if (!metadataNameAssigned || metadataNameWithArray)
 			{
@@ -276,81 +292,87 @@ namespace ShaderLabConvert
 				{
 					case USILOperandType.ConstantBuffer:
 					case USILOperandType.Matrix:
-					{
-						if (arrayRelative != null)
 						{
-							if (arrayIndex == 0)
-								body += $"[{arrayRelative}]";
+							if (arrayRelative != null)
+							{
+								if (arrayIndex == 0)
+								{
+									body += $"[{arrayRelative}]";
+								}
+								else
+								{
+									body += $"[{arrayRelative} + {arrayIndex}]";
+								}
+							}
 							else
-								body += $"[{arrayRelative} + {arrayIndex}]";
+							{
+								body += $"[{arrayIndex}]";
+							}
+							break;
 						}
-						else
-						{
-							body += $"[{arrayIndex}]";
-						}
-						break;
-					}
 					case USILOperandType.ImmediateConstantBuffer:
-					{
-						body += $"[{arrayRelative} + {arrayIndex}]";
-						break;
-					}
+						{
+							body += $"[{arrayRelative} + {arrayIndex}]";
+							break;
+						}
 				}
 			}
 
-            if (operandType != USILOperandType.ImmediateFloat &&
-                operandType != USILOperandType.ImmediateInt &&
-                operandType != USILOperandType.Multiple &&
+			if (operandType != USILOperandType.ImmediateFloat &&
+				operandType != USILOperandType.ImmediateInt &&
+				operandType != USILOperandType.Multiple &&
 				!DXShaderNamingUtils.HasSpecialInputOutputName(operandType) &&
-                displayMaskOverride)
-            {
-                if (mask.Length > 0)
-                {
-                    suffix += ".";
-                }
+				displayMaskOverride)
+			{
+				if (mask.Length > 0)
+				{
+					suffix += ".";
+				}
 
-                if (operandType == USILOperandType.Matrix)
-                {
-                    string[] charArray = transposeMatrix ? USILConstants.TMATRIX_MASK_CHARS : USILConstants.MATRIX_MASK_CHARS;
-                    for (int i = 0; i < mask.Length; i++)
-                    {
-                        suffix += charArray[arrayIndex * 4 + mask[i]];
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < mask.Length; i++)
-                    {
-                        suffix += USILConstants.MASK_CHARS[mask[i]];
-                    }
-                }
+				if (operandType == USILOperandType.Matrix)
+				{
+					string[] charArray = transposeMatrix ? USILConstants.TMATRIX_MASK_CHARS : USILConstants.MATRIX_MASK_CHARS;
+					for (int i = 0; i < mask.Length; i++)
+					{
+						suffix += charArray[(arrayIndex * 4) + mask[i]];
+					}
+				}
+				else
+				{
+					for (int i = 0; i < mask.Length; i++)
+					{
+						suffix += USILConstants.MASK_CHARS[mask[i]];
+					}
+				}
 
-                if (suffix == ".xyzw")
-                {
-                    suffix = "";
-                }
-            }
+				if (suffix == ".xyzw")
+				{
+					suffix = "";
+				}
+			}
 
-            if (absoluteValue)
-                suffix = $"{suffix})";
+			if (absoluteValue)
+			{
+				suffix = $"{suffix})";
+			}
 
-            return $"{prefix}{body}{suffix}";
-        }
+			return $"{prefix}{body}{suffix}";
+		}
 
-        public static string GetTypeShortForm(USILOperandType operandType)
-        {
-            return operandType switch
-            {
-                USILOperandType.TempRegister => "tmp",
-                USILOperandType.IndexableTempRegister => "xtmp",
-                USILOperandType.InputRegister => "in",
-                USILOperandType.OutputRegister => "out",
-                USILOperandType.ResourceRegister => "rsc",
-                USILOperandType.SamplerRegister => "smp",
-                USILOperandType.ConstantBuffer => "cb",
-                USILOperandType.ImmediateConstantBuffer => "icb",
+		public static string GetTypeShortForm(USILOperandType operandType)
+		{
+			return operandType switch
+			{
+				USILOperandType.TempRegister => "tmp",
+				USILOperandType.IndexableTempRegister => "xtmp",
+				USILOperandType.InputRegister => "in",
+				USILOperandType.OutputRegister => "out",
+				USILOperandType.ResourceRegister => "rsc",
+				USILOperandType.SamplerRegister => "smp",
+				USILOperandType.ConstantBuffer => "cb",
+				USILOperandType.ImmediateConstantBuffer => "icb",
 				_ => ""
-            };
-        }
-    }
+			};
+		}
+	}
 }

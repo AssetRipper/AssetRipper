@@ -49,7 +49,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			settings.PVRFilteringAtrousPositionSigmaAO = 1.0f;
 			settings.ShowResolutionOverlay = true;
 			settings.ExportTrainingData = false;
-			if(settings.Has_TrainingDataDestination())
+			if (settings.Has_TrainingDataDestination())
 			{
 				settings.TrainingDataDestination.String = "TrainingData";
 			}
@@ -68,7 +68,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static MixedLightingMode GetMixedBakeMode(this ILightmapEditorSettings settings)
 		{
-			if(settings.Has_MixedBakeMode())
+			if (settings.Has_MixedBakeMode())
 			{
 				return (MixedLightingMode)settings.MixedBakeMode;
 			}

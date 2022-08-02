@@ -13,9 +13,14 @@ namespace ShaderTextRestorer.Handlers
 		public static bool TryDisassemble(byte[] data, out string disassemblyText)
 		{
 			if (data == null)
+			{
 				throw new ArgumentNullException(nameof(data));
+			}
+
 			if (data.Length == 0)
+			{
 				throw new ArgumentException("inputData cannot have zero length");
+			}
 
 			try
 			{
@@ -31,7 +36,7 @@ namespace ShaderTextRestorer.Handlers
 						return !string.IsNullOrEmpty(disassemblyText);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Logger.Error(LogCategory.Export, $"DXDecompilerly threw an exception while attempting to disassemble a shader");
 				Logger.Verbose(LogCategory.Export, ex.ToString());
@@ -45,9 +50,14 @@ namespace ShaderTextRestorer.Handlers
 		public static bool TryDecompile(byte[] data, out string decompiledText)
 		{
 			if (data == null)
+			{
 				throw new ArgumentNullException(nameof(data));
+			}
+
 			if (data.Length == 0)
+			{
 				throw new ArgumentException("inputData cannot have zero length");
+			}
 
 			try
 			{
@@ -102,9 +112,15 @@ namespace ShaderTextRestorer.Handlers
 		private static byte[] GetRelevantData(byte[] bytes, int offset)
 		{
 			if (bytes == null)
+			{
 				throw new ArgumentNullException(nameof(bytes));
+			}
+
 			if (offset < 0 || offset > bytes.Length)
+			{
 				throw new ArgumentOutOfRangeException(nameof(offset));
+			}
+
 			int size = bytes.Length - offset;
 			byte[] result = new byte[size];
 			for (int i = 0; i < size; i++)

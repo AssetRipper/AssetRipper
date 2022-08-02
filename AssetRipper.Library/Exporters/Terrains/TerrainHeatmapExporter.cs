@@ -54,7 +54,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 		{
 			DirectBitmap bitmap = new DirectBitmap(
 				Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution),
-				Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution), 
+				Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution),
 				GetBGRA32Data(terrain));
 			bitmap.FlipY();
 			return bitmap;
@@ -68,9 +68,9 @@ namespace AssetRipper.Library.Exporters.Terrains
 			{
 				ColorRGBA32 color = (ColorRGBA32)ConvertToColor((float)heights[y] / short.MaxValue);
 				result[4 * y] = color.B();
-				result[4 * y + 1] = color.G();
-				result[4 * y + 2] = color.R();
-				result[4 * y + 3] = byte.MaxValue; //small optimization
+				result[(4 * y) + 1] = color.G();
+				result[(4 * y) + 2] = color.R();
+				result[(4 * y) + 3] = byte.MaxValue; //small optimization
 			}
 			return result;
 		}
@@ -122,7 +122,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 		private static ColorRGBAf Average(ColorRGBAf minColor, float min, ColorRGBAf maxColor, float max, float value)
 		{
 			float normalized = Normalize(min, max, value);
-			return (1 - normalized) * minColor + normalized * maxColor;
+			return ((1 - normalized) * minColor) + (normalized * maxColor);
 		}
 
 		private static readonly ColorRGBAf zero = new(0, 0, 0.4f, 1);

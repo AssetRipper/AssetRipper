@@ -28,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 				return base.GetExportExtension(asset);
 			}
 		}
-		
+
 		private static string GetExtensionFromPath(string path)
 		{
 			string extension = Path.GetExtension(path);

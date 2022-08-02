@@ -65,9 +65,9 @@ namespace AssetRipper.Library.Exporters.Terrains
 			{
 				for (int x = 0; x < w; x++)
 				{
-					Vector3f pos = new Vector3f(-(startY + y), tData[startX + x, startY + y], (startX + x));
-					tVertices[y * w + x] = Vector3f.Scale(meshScale, pos);
-					tUV[y * w + x] = Vector2f.Scale(new Vector2f(x, y), uvScale);
+					Vector3f pos = new Vector3f(-(startY + y), tData[startX + x, startY + y], startX + x);
+					tVertices[(y * w) + x] = Vector3f.Scale(meshScale, pos);
+					tUV[(y * w) + x] = Vector2f.Scale(new Vector2f(x, y), uvScale);
 				}
 			}
 			int index = 0;
@@ -112,7 +112,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			{
 				for (int x = 0; x < width; x++)
 				{
-					result[x, y] = (float)heights[x + y * width] / short.MaxValue;
+					result[x, y] = (float)heights[x + (y * width)] / short.MaxValue;
 				}
 			}
 			return result;

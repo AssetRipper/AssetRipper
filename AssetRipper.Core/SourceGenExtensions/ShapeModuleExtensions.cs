@@ -31,7 +31,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				_ => module.GetShapeType(),
 			};
 		}
-		
+
 		private static float GetExportRadiusThickness(this IShapeModule module)
 		{
 			if (module.Has_RadiusThickness())

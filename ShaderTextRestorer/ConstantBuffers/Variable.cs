@@ -42,7 +42,10 @@ namespace ShaderTextRestorer.ConstantBuffers
 
 		public static Variable CreateDummyVariable(string name, int index, int sizeToAdd, ShaderGpuProgramType programType)
 		{
-			if (sizeToAdd % 4 != 0 || sizeToAdd <= 0) throw new Exception($"Invalid dummy variable size {sizeToAdd}");
+			if (sizeToAdd % 4 != 0 || sizeToAdd <= 0)
+			{
+				throw new Exception($"Invalid dummy variable size {sizeToAdd}");
+			}
 
 			//Constant Buffer indices have a stride of 16 bytes
 			var alignIndex = index % 16;

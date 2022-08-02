@@ -260,7 +260,7 @@ namespace AssetRipper.Library.Utils
 			for (int i = 0; i < guid.Length; i++)
 			{
 				byte x = guid[i];
-				swapped[i] = (byte)((x & 0x0F) << 4 | (x & 0xF0) >> 4);
+				swapped[i] = (byte)(((x & 0x0F) << 4) | ((x & 0xF0) >> 4));
 			}
 			asset.GUID = new UnityGUID(swapped);
 		}

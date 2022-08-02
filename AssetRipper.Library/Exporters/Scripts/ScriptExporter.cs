@@ -116,7 +116,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 					Directory.CreateDirectory(folderPath);
 					File.WriteAllText(filePath, GetEmptyScriptContent(asset));
 					string assemblyName = BaseManager.ToAssemblyName(asset.GetAssemblyNameFixed());
-					assemblyDefinitionDetailsDictionary.TryAdd(assemblyName, 
+					assemblyDefinitionDetailsDictionary.TryAdd(assemblyName,
 						new AssemblyDefinitionDetails(assemblyName, Path.Combine(dirPath, assemblyName)));
 				}
 

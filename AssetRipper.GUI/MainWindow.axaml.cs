@@ -74,7 +74,9 @@ namespace AssetRipper.GUI
 		private void LanguageMenuItemClicked(object? sender, RoutedEventArgs e)
 		{
 			if (sender is not MenuItem { SelectedItem: LocalizationManager.SupportedLanguage language })
+			{
 				return;
+			}
 
 			Logger.Info(LogCategory.System, $"User selected language {language}");
 

@@ -39,7 +39,7 @@ namespace Smolv
 
 			long initPosition = stream.Position;
 			stream.Position += HeaderSize - sizeof(uint);
-			int size = stream.ReadByte() | stream.ReadByte() << 8 | stream.ReadByte() << 16 | stream.ReadByte() << 24;
+			int size = stream.ReadByte() | (stream.ReadByte() << 8) | (stream.ReadByte() << 16) | (stream.ReadByte() << 24);
 			stream.Position = initPosition;
 			return size;
 		}
@@ -194,7 +194,9 @@ namespace Smolv
 				if (op == SpvOp.MemberDecorate && isNewSmolV)
 				{
 					if (input.BaseStream.Position >= inputEndPosition)
+					{
 						return false; //Broken input
+					}
 
 					long count = input.BaseStream.Position + 1;
 					uint prevIndex = 0;
@@ -203,21 +205,27 @@ namespace Smolv
 					{
 						//read member index
 						if (!ReadVarint(input, out uint memberIndex))
+						{
 							return false;
+						}
 
 						memberIndex += prevIndex;
 						prevIndex = memberIndex;
 
 						//decoration (and length if not common/known)
 						if (!ReadVarint(input, out uint memberDec))
+						{
 							return false;
+						}
 
 						int knownExtraOps = DecorationExtraOps((int)memberDec);
 						uint memberLen;
 						if (knownExtraOps == -1)
 						{
 							if (!ReadVarint(input, out memberLen))
+							{
 								return false;
+							}
 
 							memberLen += 4;
 						}
@@ -238,9 +246,15 @@ namespace Smolv
 						if (memberDec == 35) // Offset
 						{
 							if (memberLen != 5)
+							{
 								return false;
+							}
+
 							if (!ReadVarint(input, out uint val))
+							{
 								return false;
+							}
+
 							val += prevOffset;
 							output.Write(val);
 							prevOffset = val;
@@ -250,7 +264,10 @@ namespace Smolv
 							for (uint i = 4; i < memberLen; ++i)
 							{
 								if (!ReadVarint(input, out uint val))
+								{
 									return false;
+								}
+
 								output.Write(val);
 							}
 						}
@@ -280,10 +297,25 @@ namespace Smolv
 				if (wasSwizzle && instrLen <= 9)
 				{
 					uint swizzle = input.ReadByte();
-					if (instrLen > 5) output.Write(swizzle >> 6);
-					if (instrLen > 6) output.Write((swizzle >> 4) & 3);
-					if (instrLen > 7) output.Write((swizzle >> 2) & 3);
-					if (instrLen > 8) output.Write(swizzle & 3);
+					if (instrLen > 5)
+					{
+						output.Write(swizzle >> 6);
+					}
+
+					if (instrLen > 6)
+					{
+						output.Write((swizzle >> 4) & 3);
+					}
+
+					if (instrLen > 7)
+					{
+						output.Write((swizzle >> 2) & 3);
+					}
+
+					if (instrLen > 8)
+					{
+						output.Write(swizzle & 3);
+					}
 				}
 				else if (op.OpVarRest())
 				{
@@ -525,7 +557,7 @@ namespace Smolv
 
 		private static int ZigDecode(uint u)
 		{
-			return (u & 1) != 0 ? unchecked((int)(~(u >> 1))) : unchecked((int)(u >> 1));
+			return (u & 1) != 0 ? unchecked((int)~(u >> 1)) : unchecked((int)(u >> 1));
 		}
 
 		public const uint SpirVHeaderMagic = 0x07230203;

@@ -449,7 +449,7 @@ namespace AssetRipper.SerializationLogic
 				}
 				else
 				{
-					return (resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor?.DeclaringType?.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated") ?? false)) 
+					return (resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor?.DeclaringType?.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated") ?? false))
 						|| resolvedTypeDeclaration.IsSubclassOf(EngineTypePredicates.MonoBehaviour, EngineTypePredicates.ScriptableObject);
 				}
 			}

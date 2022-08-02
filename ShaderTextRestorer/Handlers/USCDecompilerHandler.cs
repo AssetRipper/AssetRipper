@@ -2,8 +2,6 @@
 using AssetRipper.Core.Logging;
 using AssetRipper.VersionUtilities;
 using DirectXDisassembler;
-using DXDecompiler;
-using DXDecompiler.Decompiler;
 using DXDecompiler.Util;
 using ShaderLabConvert;
 using ShaderTextRestorer.ShaderBlob;
@@ -19,9 +17,14 @@ namespace ShaderTextRestorer.Handlers
 		public static bool TryDecompile(byte[] data, ShaderSubProgram subProgram, out string decompiledText, out UShaderProgram uShaderProgram)
 		{
 			if (data == null)
+			{
 				throw new ArgumentNullException(nameof(data));
+			}
+
 			if (data.Length == 0)
+			{
 				throw new ArgumentException("inputData cannot have zero length");
+			}
 
 			uShaderProgram = null;
 
@@ -47,7 +50,7 @@ namespace ShaderTextRestorer.Handlers
 						USILOptimizerApplier.Apply(uProg, subProgram);
 
 						UShaderFunctionToHLSL hlslConverter = new UShaderFunctionToHLSL(uProg);
-						
+
 						decompiledText = hlslConverter.Convert(0);
 
 						Logger.Info(LogCategory.Export, "USC successfully decompiled a DXBC shader");
@@ -95,9 +98,15 @@ namespace ShaderTextRestorer.Handlers
 		private static byte[] GetRelevantData(byte[] bytes, int offset)
 		{
 			if (bytes == null)
+			{
 				throw new ArgumentNullException(nameof(bytes));
+			}
+
 			if (offset < 0 || offset > bytes.Length)
+			{
 				throw new ArgumentOutOfRangeException(nameof(offset));
+			}
+
 			int size = bytes.Length - offset;
 			byte[] result = new byte[size];
 			for (int i = 0; i < size; i++)

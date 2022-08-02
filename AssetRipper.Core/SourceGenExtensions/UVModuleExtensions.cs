@@ -22,7 +22,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static ParticleSystemAnimationRowMode GetRowMode(this IUVModule module)
 		{
-			if(module.Has_RowMode())
+			if (module.Has_RowMode())
 			{
 				return (ParticleSystemAnimationRowMode)module.RowMode;
 			}

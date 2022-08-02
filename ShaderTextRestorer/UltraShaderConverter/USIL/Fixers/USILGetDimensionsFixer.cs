@@ -1,9 +1,6 @@
 ﻿using ShaderTextRestorer.ShaderBlob;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShaderLabConvert
 {
@@ -44,7 +41,9 @@ namespace ShaderLabConvert
 
 				// needed? (did I even get the right registers?)
 				if (resinfoInst.srcOperands[1].registerIndex != sampleinfoInst.srcOperands[0].registerIndex)
+				{
 					continue;
+				}
 
 				resinfoInst.srcOperands[5] = sampleinfoInst.destOperand;
 

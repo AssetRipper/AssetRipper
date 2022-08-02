@@ -9,7 +9,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			return (ParticleSystemCollisionType)module.Type;
 		}
-		
+
 		public static ParticleSystemCollisionMode GetCollisionMode(this ICollisionModule module)
 		{
 			return (ParticleSystemCollisionMode)module.CollisionMode;

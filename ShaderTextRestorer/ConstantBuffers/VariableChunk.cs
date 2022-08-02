@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+using AssetRipper.IO.Endian;
+using ShaderTextRestorer.Extensions;
+using ShaderTextRestorer.ShaderBlob.Parameters;
+using ShaderTextRestorer.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShaderTextRestorer.Extensions;
-using ShaderTextRestorer.Types;
-using AssetRipper.IO.Endian;
-using ShaderTextRestorer.ShaderBlob.Parameters;
 
 namespace ShaderTextRestorer.ConstantBuffers
 {
@@ -33,7 +33,7 @@ namespace ShaderTextRestorer.ConstantBuffers
 			const int memberSize = 12;
 			uint variableSize = majorVersion >= 5 ? 40 : (uint)24;
 			uint variableCount = (uint)m_variables.Length;
-			uint dataOffset = variableOffset + variableCount * variableSize;
+			uint dataOffset = variableOffset + (variableCount * variableSize);
 			foreach (Variable variable in m_variables)
 			{
 				m_variableNameLookup[variable.Name] = dataOffset;

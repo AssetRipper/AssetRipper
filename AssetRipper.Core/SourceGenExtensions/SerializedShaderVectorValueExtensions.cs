@@ -6,9 +6,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static bool IsZero(this ISerializedShaderVectorValue value)
 		{
-			return value.X.IsZero() 
-				&& value.Y.IsZero() 
-				&& value.Z.IsZero() 
+			return value.X.IsZero()
+				&& value.Y.IsZero()
+				&& value.Z.IsZero()
 				&& value.W.IsZero();
 		}
 	}

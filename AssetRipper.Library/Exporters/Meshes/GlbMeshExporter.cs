@@ -43,11 +43,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 		public bool IsHandle(IMesh mesh)
 		{
 			return ExportFormat == MeshExportFormat.GlbPrimitive; //&&
-				//mesh.Vertices != null &&
-				//mesh.Vertices.Length > 0 &&
-				//mesh.Indices != null &&
-				//mesh.Indices.Count > 0 &&
-				//mesh.Indices.Count % 3 == 0;
+																  //mesh.Vertices != null &&
+																  //mesh.Vertices.Length > 0 &&
+																  //mesh.Indices != null &&
+																  //mesh.Indices.Count > 0 &&
+																  //mesh.Indices.Count % 3 == 0;
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -152,14 +152,14 @@ namespace AssetRipper.Library.Exporters.Meshes
 			return model.WriteGLB().ToArray();
 		}
 
-		private static void AddMeshToScene<TvG, TvM>(SceneBuilder sceneBuilder, string name, 
+		private static void AddMeshToScene<TvG, TvM>(SceneBuilder sceneBuilder, string name,
 			Vector3f[]? vertices,
 			Vector3f[]? normals,
 			Vector4f[]? tangents,
 			Vector2f[]? uv0,
 			Vector2f[]? uv1,
-			List<uint> indices) 
-			where TvG : struct, IVertexGeometry 
+			List<uint> indices)
+			where TvG : struct, IVertexGeometry
 			where TvM : struct, IVertexMaterial
 		{
 			MaterialBuilder material = new MaterialBuilder("material");
@@ -189,7 +189,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 		}
 
 		private static VertexBuilder<TvG, TvM, VertexEmpty> GetVertex<TvG, TvM>(Vector3 vertex, Vector3 normal, Vector4 tangent, Vector2 uv0, Vector2 uv1)
-			where TvG : struct, IVertexGeometry 
+			where TvG : struct, IVertexGeometry
 			where TvM : struct, IVertexMaterial
 		{
 			IVertexGeometry geometry;

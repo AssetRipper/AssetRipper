@@ -63,7 +63,7 @@ namespace AssetRipper.Core.Project.Collections
 				IScene scene = editorBuildSettings.Scenes_C1045.AddNew();
 				scene.Enabled = true;
 				scene.Path.String = scenePath;
-				if(scene.Has_Guid())
+				if (scene.Has_Guid())
 				{
 					scene.Guid.SetValues(container.SceneNameToGUID(scenePath));
 				}

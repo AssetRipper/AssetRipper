@@ -4,7 +4,6 @@ using ShaderLabConvert;
 using ShaderTextRestorer.Exporters.DirectX;
 using ShaderTextRestorer.Handlers;
 using ShaderTextRestorer.ShaderBlob;
-using System;
 
 namespace ShaderTextRestorer.Exporters.USCDirectX
 {

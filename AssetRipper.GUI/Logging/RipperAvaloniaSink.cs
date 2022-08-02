@@ -19,31 +19,41 @@ namespace AssetRipper.GUI.Logging
 		public void Log(LogEventLevel level, string area, object? source, string messageTemplate)
 		{
 			if (IsEnabled(level, area))
+			{
 				Logger.Verbose(LogCategory.Avalonia, Format<object, object, object>(area, messageTemplate, source));
+			}
 		}
 
 		public void Log<T0>(LogEventLevel level, string area, object? source, string messageTemplate, T0 propertyValue0)
 		{
 			if (IsEnabled(level, area))
+			{
 				Logger.Verbose(LogCategory.Avalonia, Format<T0, object, object>(area, messageTemplate, source, propertyValue0));
+			}
 		}
 
 		public void Log<T0, T1>(LogEventLevel level, string area, object? source, string messageTemplate, T0 propertyValue0, T1 propertyValue1)
 		{
 			if (IsEnabled(level, area))
+			{
 				Logger.Verbose(LogCategory.Avalonia, Format<T0, T1, object>(area, messageTemplate, source, propertyValue0, propertyValue1));
+			}
 		}
 
 		public void Log<T0, T1, T2>(LogEventLevel level, string area, object? source, string messageTemplate, T0 propertyValue0, T1 propertyValue1, T2 propertyValue2)
 		{
 			if (IsEnabled(level, area))
+			{
 				Logger.Verbose(LogCategory.Avalonia, Format(area, messageTemplate, source, propertyValue0, propertyValue1, propertyValue2));
+			}
 		}
 
 		public void Log(LogEventLevel level, string area, object? source, string messageTemplate, params object?[] propertyValues)
 		{
 			if (IsEnabled(level, area))
+			{
 				Logger.Verbose(LogCategory.Avalonia, Format(area, messageTemplate, source, propertyValues));
+			}
 		}
 
 		private static string Format<T0, T1, T2>(

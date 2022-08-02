@@ -45,7 +45,7 @@ namespace AssetRipper.Library.Utils
 		}
 		static void DumpFileInfo(SerializedFile container, string exportPath)
 		{
-			Console.WriteLine($"Dumping container {container.Name }");
+			Console.WriteLine($"Dumping container {container.Name}");
 			Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
 			using StreamWriter sw = new($"{exportPath}.txt");
 			WriteFileInfo(container, sw);
@@ -165,7 +165,7 @@ namespace AssetRipper.Library.Utils
 		}
 		static void UnknownFileType(object file, string filepath, string exportPath)
 		{
-			Console.WriteLine($"Unknown file {filepath}({file.GetType().Name })");
+			Console.WriteLine($"Unknown file {filepath}({file.GetType().Name})");
 			Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
 			using StreamWriter sw = new StreamWriter($"{exportPath}.err.txt");
 			sw.WriteLine($"Can't dump file {file.GetType().FullName}");

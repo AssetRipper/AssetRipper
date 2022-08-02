@@ -19,7 +19,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static RigidbodyInterpolation2D GetInterpolate(this IRigidbody2D body)
 		{
-			if(body.Has_Interpolate_C50_Byte())
+			if (body.Has_Interpolate_C50_Byte())
 			{
 				return (RigidbodyInterpolation2D)body.Interpolate_C50_Byte;
 			}

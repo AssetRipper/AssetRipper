@@ -377,9 +377,9 @@ namespace AssetRipper.Library.Exporters.Textures
 				dataPtr[3] = a;
 
 				const double MagnitudeSqr = 255.0 * 255.0;
-				double vr = r * 2.0 - 255.0;
-				double vg = g * 2.0 - 255.0;
-				double hypotenuseSqr = vr * vr + vg * vg;
+				double vr = (r * 2.0) - 255.0;
+				double vg = (g * 2.0) - 255.0;
+				double hypotenuseSqr = (vr * vr) + (vg * vg);
 				hypotenuseSqr = hypotenuseSqr > MagnitudeSqr ? MagnitudeSqr : hypotenuseSqr;
 				double b = (Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
 				dataPtr[0] = (byte)b;

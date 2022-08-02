@@ -12,7 +12,7 @@ namespace ShaderTextRestorer.Exporters
 		/// 5.3.0 and greater
 		/// </summary>
 		public static bool HasBlob(UnityVersion version) => version.IsGreaterEqual(5, 3);
-		
+
 		public override string Name => "ShaderMetalExporter";
 
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)

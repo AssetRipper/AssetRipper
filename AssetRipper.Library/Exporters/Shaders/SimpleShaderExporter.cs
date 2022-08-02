@@ -26,8 +26,8 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		private static bool HasDecompiledShaderText(string text)
 		{
-			return !string.IsNullOrEmpty(text) 
-				&& !text.Contains("Program") 
+			return !string.IsNullOrEmpty(text)
+				&& !text.Contains("Program")
 				&& !text.Contains("SubProgram");
 		}
 	}

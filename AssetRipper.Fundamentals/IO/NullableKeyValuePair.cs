@@ -22,15 +22,15 @@ namespace AssetRipper.Core.IO
 		private TValue? value;
 
 		public static bool IsDependentType { get; }
-		public TKey Key 
+		public TKey Key
 		{
 			get => key ?? throw new NullReferenceException(nameof(Key));
-			set => key = value; 
+			set => key = value;
 		}
-		public TValue Value 
-		{ 
+		public TValue Value
+		{
 			get => value ?? throw new NullReferenceException(nameof(Value));
-			set => this.value = value; 
+			set => this.value = value;
 		}
 
 		public NullableKeyValuePair() { }

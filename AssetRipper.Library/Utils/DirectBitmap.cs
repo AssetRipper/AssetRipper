@@ -31,7 +31,7 @@ namespace AssetRipper.Library.Utils
 		/// <param name="bgra32Data">The image data, 4 bytes per pixel. Will get pinned</param>
 		public DirectBitmap(int width, int height, byte[] bgra32Data)
 		{
-			if(bgra32Data is null)
+			if (bgra32Data is null)
 			{
 				throw new ArgumentNullException(nameof(bgra32Data));
 			}
@@ -52,7 +52,7 @@ namespace AssetRipper.Library.Utils
 			uint* top = (uint*)BitsPtr;
 			for (int row = 0, irow = Height - 1; row < irow; row++, irow--)
 			{
-				uint* bottom = (uint*)(BitsPtr + irow * Stride);
+				uint* bottom = (uint*)(BitsPtr + (irow * Stride));
 				for (int i = 0; i < Width; i++, bottom++, top++)
 				{
 					uint pixel = *bottom;

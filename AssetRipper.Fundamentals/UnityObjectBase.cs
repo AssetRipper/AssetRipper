@@ -39,7 +39,7 @@ namespace AssetRipper.Core
 			AssetInfo = AssetInfo.MakeDummyAssetInfo();
 		}
 
-		public UnityObjectBase(LayoutInfo layout) : base(layout) 
+		public UnityObjectBase(LayoutInfo layout) : base(layout)
 		{
 			AssetInfo = AssetInfo.MakeDummyAssetInfo();
 		}

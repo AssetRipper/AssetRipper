@@ -77,21 +77,21 @@ namespace AssetRipper.Core.Utils
 				case "string":
 					append = false;
 					string? str = reader.ReadAlignedString();
-					sb.AppendFormat("{0}{1} {2} = \"{3}\"\r\n", (new string('\t', level)), varTypeStr, varNameStr, str);
+					sb.AppendFormat("{0}{1} {2} = \"{3}\"\r\n", new string('\t', level), varTypeStr, varNameStr, str);
 					i += 3;
 					break;
 				case "map":
 					{
-						if ((m_Nodes[i + 1].MetaFlag.IsAlignBytes()))
+						if (m_Nodes[i + 1].MetaFlag.IsAlignBytes())
 						{
 							align = true;
 						}
 
 						append = false;
-						sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
-						sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level + 1)), "Array", "Array");
+						sb.AppendFormat("{0}{1} {2}\r\n", new string('\t', level), varTypeStr, varNameStr);
+						sb.AppendFormat("{0}{1} {2}\r\n", new string('\t', level + 1), "Array", "Array");
 						int size = reader.ReadInt32();
-						sb.AppendFormat("{0}{1} {2} = {3}\r\n", (new string('\t', level + 1)), "int", "size", size);
+						sb.AppendFormat("{0}{1} {2} = {3}\r\n", new string('\t', level + 1), "int", "size", size);
 						List<TypeTreeNode>? map = GetNodes(m_Nodes, i);
 						i += map.Count - 1;
 						List<TypeTreeNode>? first = GetNodes(map, 4);
@@ -99,8 +99,8 @@ namespace AssetRipper.Core.Utils
 						List<TypeTreeNode>? second = GetNodes(map, next);
 						for (int j = 0; j < size; j++)
 						{
-							sb.AppendFormat("{0}[{1}]\r\n", (new string('\t', level + 2)), j);
-							sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level + 2)), "pair", "data");
+							sb.AppendFormat("{0}[{1}]\r\n", new string('\t', level + 2), j);
+							sb.AppendFormat("{0}{1} {2}\r\n", new string('\t', level + 2), "pair", "data");
 							int tmp1 = 0;
 							int tmp2 = 0;
 							ReadStringValue(sb, first, reader, ref tmp1);
@@ -114,8 +114,8 @@ namespace AssetRipper.Core.Utils
 						int size = reader.ReadInt32();
 						reader.ReadBytes(size);
 						i += 2;
-						sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
-						sb.AppendFormat("{0}{1} {2} = {3}\r\n", (new string('\t', level)), "int", "size", size);
+						sb.AppendFormat("{0}{1} {2}\r\n", new string('\t', level), varTypeStr, varNameStr);
+						sb.AppendFormat("{0}{1} {2} = {3}\r\n", new string('\t', level), "int", "size", size);
 						break;
 					}
 				default:
@@ -128,15 +128,15 @@ namespace AssetRipper.Core.Utils
 							}
 
 							append = false;
-							sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
-							sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level + 1)), "Array", "Array");
+							sb.AppendFormat("{0}{1} {2}\r\n", new string('\t', level), varTypeStr, varNameStr);
+							sb.AppendFormat("{0}{1} {2}\r\n", new string('\t', level + 1), "Array", "Array");
 							int size = reader.ReadInt32();
-							sb.AppendFormat("{0}{1} {2} = {3}\r\n", (new string('\t', level + 1)), "int", "size", size);
+							sb.AppendFormat("{0}{1} {2} = {3}\r\n", new string('\t', level + 1), "int", "size", size);
 							List<TypeTreeNode>? vector = GetNodes(m_Nodes, i);
 							i += vector.Count - 1;
 							for (int j = 0; j < size; j++)
 							{
-								sb.AppendFormat("{0}[{1}]\r\n", (new string('\t', level + 2)), j);
+								sb.AppendFormat("{0}[{1}]\r\n", new string('\t', level + 2), j);
 								int tmp = 3;
 								ReadStringValue(sb, vector, reader, ref tmp);
 							}
@@ -145,7 +145,7 @@ namespace AssetRipper.Core.Utils
 						else //Class
 						{
 							append = false;
-							sb.AppendFormat("{0}{1} {2}\r\n", (new string('\t', level)), varTypeStr, varNameStr);
+							sb.AppendFormat("{0}{1} {2}\r\n", new string('\t', level), varTypeStr, varNameStr);
 							List<TypeTreeNode>? @class = GetNodes(m_Nodes, i);
 							i += @class.Count - 1;
 							for (int j = 1; j < @class.Count; j++)
@@ -158,7 +158,7 @@ namespace AssetRipper.Core.Utils
 			}
 			if (append)
 			{
-				sb.AppendFormat("{0}{1} {2} = {3}\r\n", (new string('\t', level)), varTypeStr, varNameStr, value);
+				sb.AppendFormat("{0}{1} {2} = {3}\r\n", new string('\t', level), varTypeStr, varNameStr, value);
 			}
 
 			if (align)
@@ -185,7 +185,7 @@ namespace AssetRipper.Core.Utils
 			TypeTreeNode? m_Node = m_Nodes[i];
 			string? varTypeStr = m_Node.Type;
 			object value;
-			bool align = (m_Node.MetaFlag.IsAlignBytes());
+			bool align = m_Node.MetaFlag.IsAlignBytes();
 			switch (varTypeStr)
 			{
 				case "SInt8":
@@ -268,7 +268,7 @@ namespace AssetRipper.Core.Utils
 					{
 						if (i < m_Nodes.Count - 1 && m_Nodes[i + 1].Type == "Array") //Array
 						{
-							if ((m_Nodes[i + 1].MetaFlag.IsAlignBytes()))
+							if (m_Nodes[i + 1].MetaFlag.IsAlignBytes())
 							{
 								align = true;
 							}

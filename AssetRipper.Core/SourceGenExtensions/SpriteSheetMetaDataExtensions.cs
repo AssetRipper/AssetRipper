@@ -38,7 +38,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				instance.Bones.Clear();
 				instance.Bones.Capacity = spriteMetaData.Bones.Count;
-				foreach(ISpriteBone bone in spriteMetaData.Bones)
+				foreach (ISpriteBone bone in spriteMetaData.Bones)
 				{
 					instance.Bones.AddNew().CopyValues(bone);
 				}
