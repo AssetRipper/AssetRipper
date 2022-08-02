@@ -5,16 +5,10 @@
 		<Nullable>enable</Nullable>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AssemblyName>AssetRipperLibrary</AssemblyName>
-		<RootNamespace>AssetRipper.Library</RootNamespace>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<OutputPath>..\Bins\AssetRipperLibrary\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipperLibrary\$(Configuration)\</IntermediateOutputPath>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 		<IsTrimmable>true</IsTrimmable>
-		<Platforms>AnyCPU;AnyCPU</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -59,10 +53,6 @@
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>../Libraries/AssetRipper.SourceGenerated.dll</HintPath>
 		</Reference>
-	</ItemGroup>
-
-	<ItemGroup>
-		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
 	</ItemGroup>
 
 	<ItemGroup>

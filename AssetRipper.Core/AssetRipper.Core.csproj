@@ -5,21 +5,12 @@
 		<Nullable>enable</Nullable>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AssemblyName>AssetRipperCore</AssemblyName>
-		<RootNamespace>AssetRipper.Core</RootNamespace>
-		<OutputPath>..\Bins\AssetRipperCore\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipperCore\$(Configuration)\</IntermediateOutputPath>
 		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 		<IsTrimmable>true</IsTrimmable>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="AssetRipper.SourceGenerated">

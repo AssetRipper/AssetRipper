@@ -14,8 +14,11 @@
 		<Authors>ds5678</Authors>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
-		<Platforms>AnyCPU;AnyCPU</Platforms>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+	</ItemGroup>
 
 	<PropertyGroup>
 		<ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>

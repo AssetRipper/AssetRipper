@@ -4,9 +4,6 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>..\Bins\AssetRipper.Fundamentals\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Fundamentals\$(Configuration)\</IntermediateOutputPath>
 		<AssemblyName>AssetRipper.Fundamentals</AssemblyName>
 		<RootNamespace>AssetRipper.Core</RootNamespace>
 		<Copyright>Copyright ©  2022</Copyright>
@@ -29,10 +26,6 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\AssetRipper.IO.Endian\AssetRipper.IO.Endian.csproj" />
 	  <ProjectReference Include="..\AssetRipper.Yaml\AssetRipper.Yaml.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
 	</ItemGroup>
 
 </Project>
