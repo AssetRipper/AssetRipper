@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace AssetRipper.Core.Utils
 {
-	public class MD4 : HashAlgorithm
+	public sealed class MD4 : HashAlgorithm
 	{
 		public MD4()
 		{
@@ -166,7 +166,7 @@ namespace AssetRipper.Core.Utils
 		private uint _b;
 		private uint _c;
 		private uint _d;
-		private uint[] _x;
+		private readonly uint[] _x;
 		private int _bytesProcessed;
 	}
 }

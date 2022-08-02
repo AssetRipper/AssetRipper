@@ -9,7 +9,7 @@ namespace AssetRipper.Core.Utils
 		{
 			using MD5 md5 = MD5.Create();
 			byte[] hashBytes = md5.ComputeHash(inputBytes);
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new();
 			for (int i = 0; i < hashBytes.Length; i++)
 			{
 				sb.Append(hashBytes[i].ToString("X2"));

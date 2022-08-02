@@ -12,7 +12,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1035;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace AssetRipper.Library.Exporters.Scripts
@@ -108,7 +107,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		private static int Compute(string @namespace, string name)
 		{
 			string toBeHashed = $"s\0\0\0{@namespace}{name}";
-			using HashAlgorithm hash = new MD4();
+			using MD4 hash = new();
 			byte[] hashed = hash.ComputeHash(Encoding.UTF8.GetBytes(toBeHashed));
 
 			int result = 0;
