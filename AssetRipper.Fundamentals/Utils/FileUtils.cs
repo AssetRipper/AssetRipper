@@ -23,7 +23,7 @@ namespace AssetRipper.Core.Utils
 
 		public static string FixInvalidNameCharacters(string path)
 		{
-			return FileNameRegex.Replace(path, string.Empty);
+			return FileNameRegex.Replace(path, "_");
 		}
 
 		public static string RemoveCloneSuffixes(string path)
@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Utils
 				return validFileName;
 			}
 
-			name = name ?? Path.GetFileNameWithoutExtension(validFileName);
+			name ??= Path.GetFileNameWithoutExtension(validFileName);
 			if (!IsReservedName(name))
 			{
 				if (!File.Exists(Path.Combine(dirPath, validFileName)))
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.Utils
 				}
 			}
 
-			ext = ext ?? Path.GetExtension(validFileName);
+			ext ??= Path.GetExtension(validFileName);
 
 			string key = Path.Combine(dirPath, $"{name}{ext}");
 			UniqueNamesByInitialPath.TryGetValue(key, out int initial);

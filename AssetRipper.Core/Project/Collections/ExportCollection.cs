@@ -78,19 +78,21 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected string GetUniqueFileName(ISerializedFile file, IUnityObjectBase asset, string dirPath)
 		{
-			string? fileName = asset switch
+			string fileName = asset switch
 			{
 				IPrefabInstance prefab => prefab.GetName(file),
 				IHasNameString hasName => hasName.GetNameNotEmpty(),
-				_ => null,
+				_ => "",
 			};
+			fileName = FileUtils.RemoveCloneSuffixes(fileName);
 			if (string.IsNullOrWhiteSpace(fileName))
 			{
 				fileName = asset.AssetClassName;
 			}
-
-			fileName = FileUtils.RemoveCloneSuffixes(fileName);
-			fileName = FileUtils.FixInvalidNameCharacters(fileName);
+			else
+			{
+				fileName = FileUtils.FixInvalidNameCharacters(fileName);
+			}
 
 			fileName = $"{fileName}.{GetExportExtension(asset)}";
 			return GetUniqueFileName(dirPath, fileName);
