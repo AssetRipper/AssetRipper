@@ -26,6 +26,11 @@ namespace AssetRipper.Core.Parser.Asset
 			return new AssetInfo(dummySerializedFile, -1, default, default);
 		}
 
+		public static AssetInfo MakeDummyAssetInfo(ClassIDType classID)
+		{
+			return new AssetInfo(dummySerializedFile, -1, classID, default);
+		}
+
 		private static readonly DummySerializedFile dummySerializedFile = new();
 	}
 }
