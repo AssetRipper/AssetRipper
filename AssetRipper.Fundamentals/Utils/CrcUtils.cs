@@ -73,7 +73,8 @@ namespace AssetRipper.Core.Utils
 		/// Find a conflicting ascii string with Gaussian Elimination
 		/// </summary>
 		/// <remarks>
-		/// The output is one-to-one and matches [H-Wh-w]{6}[HJLN]
+		/// The output is one-to-one and matches [H-Wh-w]{6}[HJLN] <br />
+		/// Based on <see href="https://gitlab.com/-/snippets/2369762">work</see> by <see href="https://gitlab.com/lox9973">lox9973</see> licensed under MIT.
 		/// </remarks>
 		/// <param name="digest">A CRC32 checksum</param>
 		/// <returns>An Ascii string of length 7 with that <paramref name="digest"/></returns>
