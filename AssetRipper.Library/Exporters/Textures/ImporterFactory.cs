@@ -52,7 +52,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			platformSettings.MaxTextureSize = 2048;
 			platformSettings.ResizeAlgorithm = (int)TextureResizeAlgorithm.Mitchell;
 			platformSettings.TextureFormat = (int)TextureFormat.Automatic;
-			platformSettings.TextureCompression = (int)TextureImporterCompression.Uncompressed;
+			platformSettings.TextureCompression = (int)TextureImporterCompression.Compressed;//Uncompressed results in a significantly larger Library folder
 			platformSettings.CompressionQuality = 50;
 			platformSettings.CrunchedCompression = false;
 			platformSettings.AllowsAlphaSplitting = false;
