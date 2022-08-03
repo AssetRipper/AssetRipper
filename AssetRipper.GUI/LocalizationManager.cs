@@ -1,18 +1,15 @@
 ﻿using AssetRipper.Core.Logging;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 
 namespace AssetRipper.GUI
 {
-	public class LocalizationManager : BaseViewModel
+	public sealed partial class LocalizationManager : BaseViewModel
 	{
 		private const string LocalizationFilePrefix = "AssetRipper.GUI.";
-		private static readonly Regex SortOrderRegex = new("\\(Sort Order=([A-Z]+)\\)", RegexOptions.Compiled);
 
 		// ReSharper disable once MemberInitializerValueIgnored
 		private Dictionary<string, string> CurrentLocale; //To suppress warning as it's initialized indirectly in constructor
@@ -33,21 +30,13 @@ namespace AssetRipper.GUI
 				.Select(l => l[LocalizationFilePrefix.Length..^5])
 				.ToArray();
 
-			string[] supportedLanguageNames = supportedLanguageCodes.Select(code => new CultureInfo(code.Replace('_', '-'))).Select(ExtractCultureName).ToArray();
-
-			SupportedLanguages = new SupportedLanguage[supportedLanguageNames.Length];
-			for (int i = 0; i < supportedLanguageNames.Length; i++)
+			SupportedLanguages = new SupportedLanguage[supportedLanguageCodes.Length];
+			for (int i = 0; i < supportedLanguageCodes.Length; i++)
 			{
-				SupportedLanguages[i] = new SupportedLanguage(this, supportedLanguageNames[i], supportedLanguageCodes[i]);
+				SupportedLanguages[i] = new SupportedLanguage(this, LanguageNameDictionary[supportedLanguageCodes[i]], supportedLanguageCodes[i]);
 			}
 		}
 
-		private static string ExtractCultureName(CultureInfo culture)
-		{
-			return SortOrderRegex.Replace(culture.NativeName, match => $"({match.Groups[1].Value})");
-		}
-
-		[SuppressMessage("ReSharper", "NotResolvedInText")]
 		[MemberNotNull(nameof(CurrentLocale), nameof(CurrentLang))]
 		public void LoadLanguage(string code)
 		{
