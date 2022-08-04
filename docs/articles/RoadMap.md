@@ -1,6 +1,6 @@
 # Development Roadmap
 
-## 0.2.2.0
+## 0.2.3.0
 This release will be primarily focused on dependencies.
 
 * Replace texgenpack with a managed library
@@ -45,11 +45,10 @@ This release will focus on improving the user experience by overhauling the GUI
     * PMX (maybe)
     * DAE (aka Collada)
     * Split combined meshes back into the original set of static meshes
-    * Unified mesh export
+    * Use submeshes for mesh export
   * Script Export
     * Hybrid script export
     * Assembly renaming
-    * Improve script decompilation quality with ILSpy's whole project decompilation method
   * Audio Export
     * WWise audio extraction
   * Shader Export
