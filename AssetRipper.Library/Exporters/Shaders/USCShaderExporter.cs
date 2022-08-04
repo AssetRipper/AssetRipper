@@ -564,7 +564,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 		private static List<ShaderSubProgram> GetSubPrograms(IShader shader, ShaderSubProgramBlob[] blobs, ISerializedProgram program, UnityVersion version, BuildTarget platform, ShaderType shaderType, ISerializedPass pass)
 		{
 			List<ShaderSubProgram> matchingPrograms = new List<ShaderSubProgram>();
-			ShaderSubProgram fallbackProgram = null;
+			ShaderSubProgram? fallbackProgram = null;
 			for (int i = 0; i < program.SubPrograms.Count; i++)
 			{
 				ISerializedSubProgram subProgram = program.SubPrograms[i];
@@ -598,27 +598,22 @@ namespace AssetRipper.Library.Exporters.Shaders
 						break;
 				}
 
-				ShaderSubProgram matchedProgram = null;
+				ShaderSubProgram? matchedProgram = null;
 				if (matched)
 				{
-					int platformIndex = shader.Platforms_C48.ToList().IndexOf((uint)graphicApi);
+					int platformIndex = shader.Platforms_C48.IndexOf((uint)graphicApi);
 					matchedProgram = blobs[platformIndex].SubPrograms[subProgram.BlobIndex];
 				}
 
-				Utf8String INSTANCING_ON = new Utf8String() { String = "INSTANCING_ON" };
-				Utf8String DIRECTIONAL = new Utf8String() { String = "DIRECTIONAL" };
-				Utf8String POINT = new Utf8String() { String = "POINT" };
-
 				// skip instanced shaders
+				Utf8String INSTANCING_ON = (Utf8String)"INSTANCING_ON";
 				if (pass.NameIndices.ContainsKey(INSTANCING_ON))
 				{
-					Utf8String realInstancingOn = pass.NameIndices.First(n => n.Key.String == "INSTANCING_ON").Key;
-
 					if (subProgram.GlobalKeywordIndices != null)
 					{
 						for (int j = 0; j < subProgram.GlobalKeywordIndices.Length; j++)
 						{
-							if (pass.NameIndices[realInstancingOn] == subProgram.GlobalKeywordIndices[j])
+							if (pass.NameIndices[INSTANCING_ON] == subProgram.GlobalKeywordIndices[j])
 							{
 								matched = false;
 							}
@@ -628,7 +623,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 					{
 						for (int j = 0; j < subProgram.LocalKeywordIndices.Length; j++)
 						{
-							if (pass.NameIndices[realInstancingOn] == subProgram.LocalKeywordIndices[j])
+							if (pass.NameIndices[INSTANCING_ON] == subProgram.LocalKeywordIndices[j])
 							{
 								matched = false;
 							}
@@ -636,20 +631,17 @@ namespace AssetRipper.Library.Exporters.Shaders
 					}
 				}
 
+				Utf8String DIRECTIONAL = (Utf8String)"DIRECTIONAL";
 				bool hasDirectional = false;
-				bool hasPoint = false;
 				bool matchesDirectional = false;
-				bool matchesPoint = false;
 				if (pass.NameIndices.ContainsKey(DIRECTIONAL))
 				{
-					Utf8String realDirectional = pass.NameIndices.First(n => n.Key.String == "DIRECTIONAL").Key;
-
 					hasDirectional = true;
 					if (subProgram.GlobalKeywordIndices != null)
 					{
 						for (int j = 0; j < subProgram.GlobalKeywordIndices.Length; j++)
 						{
-							if (pass.NameIndices[realDirectional] == subProgram.GlobalKeywordIndices[j])
+							if (pass.NameIndices[DIRECTIONAL] == subProgram.GlobalKeywordIndices[j])
 							{
 								matchesDirectional = true;
 							}
@@ -659,7 +651,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 					{
 						for (int j = 0; j < subProgram.LocalKeywordIndices.Length; j++)
 						{
-							if (pass.NameIndices[realDirectional] == subProgram.LocalKeywordIndices[j])
+							if (pass.NameIndices[DIRECTIONAL] == subProgram.LocalKeywordIndices[j])
 							{
 								matchesDirectional = true;
 							}
@@ -667,16 +659,17 @@ namespace AssetRipper.Library.Exporters.Shaders
 					}
 				}
 
+				Utf8String POINT = (Utf8String)"POINT";
+				bool hasPoint = false;
+				bool matchesPoint = false;
 				if (pass.NameIndices.ContainsKey(POINT))
 				{
-					Utf8String realPoint = pass.NameIndices.First(n => n.Key.String == "POINT").Key;
-
 					hasPoint = true;
 					if (subProgram.GlobalKeywordIndices != null)
 					{
 						for (int j = 0; j < subProgram.GlobalKeywordIndices.Length; j++)
 						{
-							if (pass.NameIndices[realPoint] == subProgram.GlobalKeywordIndices[j])
+							if (pass.NameIndices[POINT] == subProgram.GlobalKeywordIndices[j])
 							{
 								matchesPoint = true;
 							}
@@ -686,7 +679,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 					{
 						for (int j = 0; j < subProgram.LocalKeywordIndices.Length; j++)
 						{
-							if (pass.NameIndices[realPoint] == subProgram.LocalKeywordIndices[j])
+							if (pass.NameIndices[POINT] == subProgram.LocalKeywordIndices[j])
 							{
 								matchesPoint = true;
 							}
