@@ -94,6 +94,11 @@ namespace AssetRipper.Core.Project
 			return false;
 		}
 
+		public IUnityObjectBase? FindAsset(long pathID)
+		{
+			return File.FindAsset(pathID);
+		}
+
 		public IUnityObjectBase GetAsset(long pathID)
 		{
 			return File.GetAsset(pathID);

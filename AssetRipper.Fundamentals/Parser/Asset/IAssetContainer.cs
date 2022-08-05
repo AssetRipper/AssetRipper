@@ -10,6 +10,12 @@ namespace AssetRipper.Core.Parser.Asset
 	public interface IAssetContainer
 	{
 		/// <summary>
+		/// Try to find an asset in the current serialized file
+		/// </summary>
+		/// <param name="pathID">Path ID of the asset</param>
+		/// <returns>Found asset or null</returns>
+		IUnityObjectBase? FindAsset(long pathID);
+		/// <summary>
 		/// Get asset from current asset container
 		/// </summary>
 		/// <param name="fileIndex">Path ID of the asset</param>

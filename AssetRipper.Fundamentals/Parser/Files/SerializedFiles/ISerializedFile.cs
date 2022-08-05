@@ -10,13 +10,6 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {
 	public interface ISerializedFile : IAssetContainer
 	{
-		/// <summary>
-		/// Try to find an asset in the current serialized file
-		/// </summary>
-		/// <param name="pathID">Path ID of the asset</param>
-		/// <returns>Found asset or null</returns>
-		IUnityObjectBase? FindAsset(long pathID);
-
 		ObjectInfo GetAssetEntry(long pathID);
 
 		PPtr<T> CreatePPtr<T>(T asset) where T : IUnityObjectBase;
