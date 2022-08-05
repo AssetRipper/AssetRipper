@@ -123,78 +123,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return FindAsset(fileIndex, pathID, true);
 		}
 
-		public IUnityObjectBase? FindAsset(ClassIDType classID)
-		{
-			foreach (IUnityObjectBase asset in FetchAssets())
-			{
-				if (asset.ClassID == classID)
-				{
-					return asset;
-				}
-			}
-
-			foreach (FileIdentifier identifier in Metadata.Externals)
-			{
-				ISerializedFile? file = Collection.FindSerializedFile(identifier.GetFilePath());
-				if (file == null)
-				{
-					continue;
-				}
-				foreach (IUnityObjectBase asset in file.FetchAssets())
-				{
-					if (asset.ClassID == classID)
-					{
-						return asset;
-					}
-				}
-			}
-			return null;
-		}
-
-		public IUnityObjectBase? FindAsset(ClassIDType classID, string name)
-		{
-			foreach (IUnityObjectBase asset in FetchAssets())
-			{
-				if (asset.ClassID == classID)
-				{
-					IHasNameString namedAsset = (IHasNameString)asset;
-					if (namedAsset.NameString == name)
-					{
-						return asset;
-					}
-				}
-			}
-
-			foreach (FileIdentifier identifier in Metadata.Externals)
-			{
-				ISerializedFile? file = Collection.FindSerializedFile(identifier.GetFilePath());
-				if (file == null)
-				{
-					continue;
-				}
-				foreach (IUnityObjectBase asset in file.FetchAssets())
-				{
-					if (asset.ClassID == classID)
-					{
-						IHasNameString namedAsset = (IHasNameString)asset;
-						if (namedAsset.NameString == name)
-						{
-							return asset;
-						}
-					}
-				}
-			}
-			return null;
-		}
-
 		public ObjectInfo GetAssetEntry(long pathID)
 		{
 			return Metadata.Object[m_assetEntryLookup[pathID]];
-		}
-
-		public ClassIDType GetAssetType(long pathID)
-		{
-			return Metadata.Object[m_assetEntryLookup[pathID]].ClassID;
 		}
 
 		public PPtr<T> CreatePPtr<T>(T asset) where T : IUnityObjectBase

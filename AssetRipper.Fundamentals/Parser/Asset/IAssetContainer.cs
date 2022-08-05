@@ -29,10 +29,6 @@ namespace AssetRipper.Core.Parser.Asset
 		/// <param name="pathID">Path ID of the asset</param>
 		/// <returns>Found asset</returns>
 		IUnityObjectBase GetAsset(int fileIndex, long pathID);
-		IUnityObjectBase? FindAsset(ClassIDType classID);
-		IUnityObjectBase? FindAsset(ClassIDType classID, string name);
-
-		ClassIDType GetAssetType(long pathID);
 
 		string Name { get; }
 		LayoutInfo Layout { get; }

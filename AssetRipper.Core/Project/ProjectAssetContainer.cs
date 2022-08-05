@@ -123,21 +123,6 @@ namespace AssetRipper.Core.Project
 			}
 		}
 
-		public IUnityObjectBase? FindAsset(ClassIDType classID)
-		{
-			return File.FindAsset(classID);
-		}
-
-		public virtual IUnityObjectBase? FindAsset(ClassIDType classID, string name)
-		{
-			return File.FindAsset(classID, name);
-		}
-
-		public ClassIDType GetAssetType(long pathID)
-		{
-			return File.GetAssetType(pathID);
-		}
-
 		public long GetExportID(IUnityObjectBase asset)
 		{
 			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection? collection))

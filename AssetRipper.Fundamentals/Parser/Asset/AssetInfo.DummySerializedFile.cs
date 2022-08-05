@@ -52,16 +52,6 @@ namespace AssetRipper.Core.Parser.Asset
 				return null;
 			}
 
-			public IUnityObjectBase? FindAsset(ClassIDType classID)
-			{
-				return null;
-			}
-
-			public IUnityObjectBase? FindAsset(ClassIDType classID, string name)
-			{
-				return null;
-			}
-
 			public IUnityObjectBase GetAsset(long pathID)
 			{
 				throw new NotSupportedException();
@@ -73,11 +63,6 @@ namespace AssetRipper.Core.Parser.Asset
 			}
 
 			public ObjectInfo GetAssetEntry(long pathID)
-			{
-				throw new NotSupportedException();
-			}
-
-			public ClassIDType GetAssetType(long pathID)
 			{
 				throw new NotSupportedException();
 			}

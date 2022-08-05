@@ -56,41 +56,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			throw new NotSupportedException();
 		}
 
-		public IUnityObjectBase? FindAsset(ClassIDType classID)
-		{
-			foreach (IUnityObjectBase asset in FetchAssets())
-			{
-				if (asset.ClassID == classID)
-				{
-					return asset;
-				}
-			}
-			return null;
-		}
-
-		public IUnityObjectBase? FindAsset(ClassIDType classID, string name)
-		{
-			foreach (IUnityObjectBase asset in FetchAssets())
-			{
-				if (asset.ClassID == classID && asset is IHasNameString namedAsset)
-				{
-					if (namedAsset.NameString == name)
-					{
-						return asset;
-					}
-				}
-			}
-			return null;
-		}
-
 		public ObjectInfo GetAssetEntry(long pathID)
 		{
 			throw new NotSupportedException();
-		}
-
-		public ClassIDType GetAssetType(long pathID)
-		{
-			return m_assets[pathID].ClassID;
 		}
 
 		public PPtr<T> CreatePPtr<T>(T asset) where T : IUnityObjectBase
