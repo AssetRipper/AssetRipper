@@ -35,14 +35,10 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				ISpriteAtlasData spriteData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
 				ISpriteRenderData m_RD = sprite.RD_C213;
-				IUnityObjectBase? texture = spriteData.Texture.FindAsset(atlas.SerializedFile);
-				if (texture is not null)
-				{
-					m_RD.Texture.CopyValues(sprite.SerializedFile.CreatePPtr(texture));
-				}
+				m_RD.Texture.CopyValues(ConvertPPtr(spriteData.Texture, atlas, sprite));
 				if (m_RD.Has_AlphaTexture())
 				{
-					m_RD.AlphaTexture.CopyValues(spriteData.AlphaTexture);
+					m_RD.AlphaTexture.CopyValues(ConvertPPtr(spriteData.AlphaTexture, atlas, sprite));
 				}
 				m_RD.TextureRect.CopyValues(spriteData.TextureRect);
 				m_RD.TextureRectOffset.CopyValues(spriteData.TextureRectOffset);
@@ -61,7 +57,9 @@ namespace AssetRipper.Library.Exporters.Textures
 					m_RD.SecondaryTextures.Clear();
 					foreach (SecondarySpriteTexture spt in spriteData.SecondaryTextures)
 					{
-						m_RD.SecondaryTextures.Add(spt);
+						SecondarySpriteTexture newSpt = m_RD.SecondaryTextures.AddNew();
+						newSpt.Name.CopyValues(spt.Name);
+						newSpt.Texture.CopyValues(ConvertPPtr(spt.Texture, atlas, sprite));
 					}
 				}
 				
@@ -74,8 +72,15 @@ namespace AssetRipper.Library.Exporters.Textures
 			// Prior to Unity 5, this value in the exported project is used to sample the sprite in the packed atlas.
 			// Thus we must fill it with the actual rect in the atlas.
 			sprite.Rect_C213.CopyValues(sprite.RD_C213.TextureRect);
-			
+			sprite.Offset_C213.CopyValues(sprite.RD_C213.TextureRectOffset);
+
 			return new AssetExportCollection(this, asset);
+		}
+		
+		private static IPPtr<T> ConvertPPtr<T>(IPPtr<T> pptr, ISpriteAtlas atlas, ISprite sprite) where T: IUnityObjectBase
+		{
+			T? asset = pptr.FindAsset(atlas.SerializedFile);
+			return asset is not null ? sprite.SerializedFile.CreatePPtr(asset) : new PPtr<T>();
 		}
 	}
 }
