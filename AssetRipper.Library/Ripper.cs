@@ -309,6 +309,7 @@ namespace AssetRipper.Library
 			OverrideExporter<IAnimationClip>(new AnimationClipExporter());
 
 			AddPostExporter(new ProjectVersionPostExporter());
+			AddPostExporter(new PackageManifestPostExporter());
 			AddPostExporter(new TypeTreeExporter());
 			AddPostExporter(new DllPostExporter());
 		}
