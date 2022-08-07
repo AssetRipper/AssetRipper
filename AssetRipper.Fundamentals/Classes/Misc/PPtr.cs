@@ -35,7 +35,7 @@ namespace AssetRipper.Core.Classes.Misc
 			if (asset is null)
 			{
 				AssetType assetType = container.ToExportType(typeof(T));
-				MetaPtr pointer = new MetaPtr(VersionHandling.VersionManager.AssetFactory.GetClassIdForType(typeof(T)), assetType);
+				MetaPtr pointer = MetaPtr.CreateMissingReference(VersionHandling.VersionManager.AssetFactory.GetClassIdForType(typeof(T)), assetType);
 				return pointer.ExportYaml(container);
 			}
 			else

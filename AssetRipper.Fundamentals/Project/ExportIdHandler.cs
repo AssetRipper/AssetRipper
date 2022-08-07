@@ -1,7 +1,4 @@
 ﻿using AssetRipper.Core.Interfaces;
-#if DEBUG
-using AssetRipper.Core.Extensions;
-#endif
 
 namespace AssetRipper.Core.Project
 {
