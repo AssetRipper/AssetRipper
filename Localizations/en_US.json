@@ -42,6 +42,8 @@
   "audio_format_force_wav": "Convert to WAV",
   "audio_format_force_wav_description": "Convert all audio files to WAV files. Not recommended if importing into unity, as it may recompress files, causing a loss of quality.",
   "image_format_description": "Affects all exported images",
+  "sprite_format_yaml": "Yaml Asset",
+  "sprite_format_yaml_description": "Export as yaml assets which can be viewed in the editor. This is the only mode that ensures a precise recovery of all metadata of sprites.",
   "sprite_format_native": "Unity",
   "sprite_format_native_description": "Export in the unity sprite format. Cannot be viewed outside of unity.",
   "sprite_format_texture": "Texture",

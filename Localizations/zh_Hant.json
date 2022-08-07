@@ -36,6 +36,8 @@
     "audio_format_force_mp3": "轉換成 MP3",
     "audio_format_force_mp3_description": "將所有音訊檔轉換為 MP3 檔案。不建議使用，因為會重新壓縮造成品質損失。僅適用於 Windows。",
     "image_format_description": "影響所有匯出的圖像",
+    "sprite_format_yaml": "Yaml 資源",
+    "sprite_format_yaml_description": "匯出為可在 Unity Editor 中檢視的 Yaml 資源。這是能夠精確復原 Sprite 的元資料的唯一模式。",
     "sprite_format_native": "Unity",
     "sprite_format_native_description": "匯出為 Unity Sprite 格式。不能在 Unity 外檢視。",
     "sprite_format_texture": "紋理",

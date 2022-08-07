@@ -278,9 +278,9 @@ namespace AssetRipper.Library
 			TextureAssetExporter textureExporter = new(Settings);
 			OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
 			OverrideExporter<ISprite>(textureExporter);
-			YamlSpriteExporter spriteExporter = new(Settings);
-			OverrideExporter<ISprite>(spriteExporter);
-			OverrideExporter<ISpriteAtlas>(spriteExporter);
+			YamlSpriteExporter spriteExporter = new();
+			ConditionalOverrideExporter<ISprite>(spriteExporter, Settings.SpriteExportMode == SpriteExportMode.Yaml);
+			ConditionalOverrideExporter<ISpriteAtlas>(spriteExporter, Settings.SpriteExportMode == SpriteExportMode.Yaml);
 
 			//Shader exporters
 			ConditionalOverrideExporter<IShader>(new DummyShaderTextExporter(), Settings.ShaderExportMode == ShaderExportMode.Dummy);

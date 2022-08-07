@@ -4,7 +4,7 @@
 	{
 		/// <summary>
 		/// Export as yaml assets which can be viewed in the editor.
-		/// This is the only mode that can ensure a precise recovery of metadata of all sprites.
+		/// This is the only mode that ensures a precise recovery of all metadata of sprites.
 		/// <see href="https://github.com/trouger/AssetRipper/issues/2"/>
 		/// </summary>
 		Yaml,

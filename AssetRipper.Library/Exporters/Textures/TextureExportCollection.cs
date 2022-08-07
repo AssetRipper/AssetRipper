@@ -24,7 +24,10 @@ namespace AssetRipper.Library.Exporters.Textures
 		public TextureExportCollection(IAssetExporter assetExporter, ITexture2D texture, bool convert, bool exportSprites) : base(assetExporter, texture)
 		{
 			m_convert = convert;
-			if (convert && exportSprites)
+			// If exportSprites is false, we do not generate sprite sheet into texture importer,
+			// yet we still collect sprites into m_sprites to properly set other texture importer settings.
+			m_exportSprites = exportSprites;
+			if (convert)
 			{
 				foreach (ISprite sprite in texture.SerializedFile.Collection.FetchAssetsOfType<ISprite>())
 				{
@@ -32,7 +35,10 @@ namespace AssetRipper.Library.Exporters.Textures
 					{
 						ISpriteAtlas? atlas = sprite.Has_SpriteAtlas_C213() ? sprite.SpriteAtlas_C213.FindAsset(sprite.SerializedFile) : null;
 						m_sprites.Add(sprite, atlas);
-						AddAsset(sprite);
+						if (exportSprites)
+						{
+							AddAsset(sprite);
+						}
 					}
 				}
 
@@ -50,7 +56,10 @@ namespace AssetRipper.Library.Exporters.Textures
 								if (atlasData.Texture.IsAsset(atlas.SerializedFile, texture))
 								{
 									m_sprites.Add(sprite, atlas);
-									AddAsset(sprite);
+									if (exportSprites)
+									{
+										AddAsset(sprite);
+									}
 								}
 							}
 						}
@@ -145,8 +154,11 @@ namespace AssetRipper.Library.Exporters.Textures
 				}
 				importer.SpritePixelsToUnits_C1006 = sprite.PixelsToUnits_C213;
 				importer.TextureType_C1006 = (int)Core.Classes.Meta.Importers.Texture.TextureImporterType.Sprite;
-				AddSpriteSheet(container, importer);
-				AddIDToName(importer);
+				if (m_exportSprites)
+				{
+					AddSpriteSheet(container, importer);
+					AddIDToName(importer);
+				}
 			}
 			else
 			{
@@ -162,8 +174,11 @@ namespace AssetRipper.Library.Exporters.Textures
 				}
 				importer.SpritePixelsToUnits_C1006 = sprite.PixelsToUnits_C213;
 				importer.TextureType_C1006 = (int)Core.Classes.Meta.Importers.Texture.TextureImporterType.Sprite;
-				AddSpriteSheet(container, importer);
-				AddIDToName(importer);
+				if (m_exportSprites)
+				{
+					AddSpriteSheet(container, importer);
+					AddIDToName(importer);
+				}
 			}
 		}
 
@@ -230,7 +245,8 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public string? FileExtension { get; set; }
 
-		public readonly Dictionary<ISprite, ISpriteAtlas?> m_sprites = new Dictionary<ISprite, ISpriteAtlas?>();
+		private readonly Dictionary<ISprite, ISpriteAtlas?> m_sprites = new Dictionary<ISprite, ISpriteAtlas?>();
+		private readonly bool m_exportSprites;
 
 		private readonly bool m_convert;
 		private uint m_nextExportID = 0;
