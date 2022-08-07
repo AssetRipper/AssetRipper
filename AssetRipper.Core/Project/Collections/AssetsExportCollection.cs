@@ -66,7 +66,7 @@ namespace AssetRipper.Core.Project.Collections
 			return m_exportIDs.ContainsValue(id);
 		}
 
-		protected readonly List<IUnityObjectBase> m_assets = new List<IUnityObjectBase>();
-		protected readonly Dictionary<AssetInfo, long> m_exportIDs = new Dictionary<AssetInfo, long>();
+		protected readonly List<IUnityObjectBase> m_assets = new();
+		protected readonly Dictionary<AssetInfo, long> m_exportIDs = new();
 	}
 }

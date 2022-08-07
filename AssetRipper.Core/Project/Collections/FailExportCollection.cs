@@ -44,7 +44,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return ExportIdHandler.GetMainExportID(m_asset);
 			}
-			throw new ArgumentException(nameof(asset));
+			throw new ArgumentException(null, nameof(asset));
 		}
 
 		public UnityGUID GetExportGUID(IUnityObjectBase _)
@@ -56,7 +56,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			if (isLocal)
 			{
-				throw new ArgumentException(nameof(isLocal));
+				throw new ArgumentException(null, nameof(isLocal));
 			}
 
 			long exportId = GetExportID(asset);

@@ -86,7 +86,7 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 		{
 			if (chunkStride % 4 != 0)
 			{
-				throw new ArgumentException(nameof(chunkStride));
+				throw new ArgumentException(null, nameof(chunkStride));
 			}
 
 			int bitIndex = packedVector.BitSize * start;
@@ -131,12 +131,12 @@ namespace AssetRipper.Core.Math.PackedBitVectors
 		{
 			if (data.Length != itemCountInChunk * numChunks)
 			{
-				throw new ArgumentException(nameof(data));
+				throw new ArgumentException(null, nameof(data));
 			}
 
 			if (chunkStride != itemCountInChunk * 4)
 			{
-				throw new ArgumentException(nameof(chunkStride));
+				throw new ArgumentException(null, nameof(chunkStride));
 			}
 
 			packedVector.PackFloats(data, bitSize, adjustBitSize);

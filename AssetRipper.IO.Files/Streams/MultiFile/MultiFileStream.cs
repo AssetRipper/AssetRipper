@@ -29,7 +29,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 			m_streams = streams.ToArray();
 			if (m_streams.Count == 0)
 			{
-				throw new ArgumentException(nameof(streams));
+				throw new ArgumentException(null, nameof(streams));
 			}
 
 			Length = streams.Sum(t => t.Length);

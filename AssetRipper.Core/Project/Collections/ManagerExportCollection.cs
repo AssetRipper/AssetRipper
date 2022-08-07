@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return 1;
 			}
-			throw new ArgumentException(nameof(asset));
+			throw new ArgumentException(null, nameof(asset));
 		}
 
 		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)

@@ -62,7 +62,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (chunkStride % 4 != 0)
 			{
-				throw new ArgumentException(nameof(chunkStride));
+				throw new ArgumentException(null, nameof(chunkStride));
 			}
 
 			int bitIndex = packedVector.BitSize * start;

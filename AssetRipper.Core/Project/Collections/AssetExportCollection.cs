@@ -60,7 +60,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return ExportIdHandler.GetMainExportID(Asset);
 			}
-			throw new ArgumentException(nameof(asset));
+			throw new ArgumentException(null, nameof(asset));
 		}
 
 		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)

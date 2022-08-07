@@ -30,7 +30,7 @@ namespace Smolv
 			}
 			if (!stream.CanSeek)
 			{
-				throw new ArgumentException(nameof(stream));
+				throw new ArgumentException(null, nameof(stream));
 			}
 			if (stream.Position + HeaderSize > stream.Length)
 			{
