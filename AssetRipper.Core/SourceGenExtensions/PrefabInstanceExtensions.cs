@@ -12,14 +12,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static string GetName(this IPrefabInstance prefab, IAssetContainer rootGameObjectFile)
 		{
-			if (prefab is IHasNameString hasName && string.IsNullOrEmpty(hasName.NameString))
+			string? name;
+			if (prefab is IHasNameString hasName)
 			{
-				return hasName.NameString;
+				name = hasName.NameString;
 			}
 			else
 			{
-				return prefab.RootGameObject_C1001?.TryGetAsset(rootGameObjectFile)?.NameString ?? prefab.AssetClassName;
+				name = prefab.RootGameObject_C1001?.TryGetAsset(rootGameObjectFile)?.NameString;
 			}
+			return string.IsNullOrEmpty(name) ? prefab.AssetClassName : name;
 		}
 
 		public static IEnumerable<IEditorExtension> FetchObjects(this IPrefabInstance prefab, IAssetContainer file)

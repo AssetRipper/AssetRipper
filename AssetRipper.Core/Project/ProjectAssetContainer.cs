@@ -150,8 +150,7 @@ namespace AssetRipper.Core.Project
 				return collection.CreateExportPointer(asset, collection == CurrentCollection);
 			}
 
-			long exportID = ExportIdHandler.GetMainExportID(asset);
-			return new MetaPtr(exportID, UnityGUID.MissingReference, AssetType.Meta);
+			return MetaPtr.CreateMissingReference(asset.ClassID, AssetType.Meta);
 		}
 
 		public UnityGUID SceneNameToGUID(string name)

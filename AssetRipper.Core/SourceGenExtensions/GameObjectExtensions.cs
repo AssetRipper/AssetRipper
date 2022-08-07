@@ -164,7 +164,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			foreach (IPPtr_Transform_ pchild in transform.Children_C4)
 			{
 				ITransform child = pchild.GetAsset(transform.SerializedFile);
-				IGameObject childGO = child.GameObject_C4.GetAsset(root.SerializedFile);
+				IGameObject childGO = child.GameObject_C4.GetAsset(child.SerializedFile);
 				foreach (IEditorExtension childElement in FetchHierarchy(childGO))
 				{
 					yield return childElement;
