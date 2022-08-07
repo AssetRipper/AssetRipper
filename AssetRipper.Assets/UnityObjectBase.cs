@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Metadata;
 
 namespace AssetRipper.Assets;
 

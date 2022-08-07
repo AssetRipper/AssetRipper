@@ -11,10 +11,4 @@ public class TemporaryAssetCollection : VirtualAssetCollection
 	public TemporaryAssetCollection(Bundle bundle) : base(bundle)
 	{
 	}
-
-	/// <summary>
-	/// Subject to change
-	/// </summary>
-	public const int TemporaryFileIndex = -2;
 }
-

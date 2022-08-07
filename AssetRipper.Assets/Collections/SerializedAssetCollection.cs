@@ -14,5 +14,10 @@ public class SerializedAssetCollection : AssetCollection
 	protected SerializedAssetCollection(Bundle bundle) : base(bundle)
 	{
 	}
+
+	protected override bool IsValidDependency(AssetCollection dependency)
+	{
+		return dependency is SerializedAssetCollection or ProcessedAssetCollection;
+	}
 }
 

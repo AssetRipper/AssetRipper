@@ -11,9 +11,9 @@ public class ProcessedAssetCollection : VirtualAssetCollection
 	{
 	}
 
-	/// <summary>
-	/// Subject to change
-	/// </summary>
-	public const int ProcessedFileIndex = -1;
+	protected override bool IsValidDependency(AssetCollection dependency)
+	{
+		return dependency is SerializedAssetCollection or ProcessedAssetCollection;
+	}
 }
 

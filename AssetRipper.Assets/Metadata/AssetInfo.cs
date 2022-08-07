@@ -1,9 +1,9 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 
-namespace AssetRipper.Assets;
+namespace AssetRipper.Assets.Metadata;
 
-public record struct AssetInfo(AssetCollection Collection, long PathID, int ClassID)
+public readonly record struct AssetInfo(AssetCollection Collection, long PathID, int ClassID)
 {
 	public static AssetInfo MakeDummyAssetInfo(int classID)
 	{

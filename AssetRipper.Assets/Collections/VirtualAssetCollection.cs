@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Metadata;
 
 namespace AssetRipper.Assets.Collections;
 
@@ -14,9 +15,9 @@ public abstract class VirtualAssetCollection : AssetCollection
 	public T CreateAsset<T>(int classID, Func<AssetInfo, T> factory) where T : IUnityObjectBase
 	{
 		AssetInfo assetInfo = CreateAssetInfo(classID);
-		T instance = factory(assetInfo);
-		m_assets.Add(instance.PathID, instance);
-		return instance;
+		T asset = factory(assetInfo);
+		AddAsset(asset);
+		return asset;
 	}
 
 	private AssetInfo CreateAssetInfo(int classID)
