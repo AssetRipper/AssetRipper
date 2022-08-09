@@ -64,7 +64,7 @@
     "shader_asset_format_dummy_description": "Експорте шейдера як фіктивний шейдер. Попри те, що він зберігає такі дані, як властивості та FallBack, він використовує загальний, непрозорий код шейдера.",
     "shader_asset_format_yaml": "Yaml асет",
     "shader_asset_format_yaml_description": "Експортуй шейдера як асет yaml. Експериментальний і придатний лише для перегляду в редакторі. Редактор може довільно пошкодити ці файли.",
-    "shader_asset_format_disassembly": "Disassembly",
+    "shader_asset_format_disassembly": "Дізассемблювання",
     "shader_asset_format_disassembly_description": "Експорт шейдерів як Disassembly. Експериментальний і схильний до поломок. Не компілюється в редакторі.",
     "script_export_format_decompiled": "Декомпільований",
     "script_export_format_decompiled_description": "Декомпілятор ILSpy використовується для створення CS скриптів. Це надійно. Однак це також займає багато часу та містить багато помилок компіляції.",
@@ -149,5 +149,9 @@
     "error_importing_with_reason": "Не вдалося завантажити вміст гри: {0}",
     "check_log_for_more_details": "Щоб дізнатися більше, перевірте журнал",
     "loose_file_saved_at": "Відсутній файл збережено в {0}",
-    "not_implemented_yet": "Ще не реалізовано"
+    "not_implemented_yet": "Ще не реалізовано",
+    "shader_asset_format_decompile": "Декомпілювати",
+    "shader_asset_format_decompile_description": "Експорт шейдеру в ShaderLab. Дуже експериментально та майже завжди буде мати помилки. Підтримує тільки DX11, не DX9.",
+    "sprite_format_yaml_description": "Експортуйте як ассети yaml, які можна переглядати в редакторі. Це єдиний режим, що забезпечує точне відновлення усіх метаданих спрайтів.",
+    "sprite_format_yaml": "ассет Yaml"
 }
