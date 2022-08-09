@@ -5,6 +5,7 @@ using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Textures;
+using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_241;
 using AssetRipper.SourceGenerated.Classes.ClassID_243;
 using AssetRipper.SourceGenerated.Classes.ClassID_245;
@@ -21,7 +22,7 @@ namespace AssetRipper.Library.Exporters.Audio
 		
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			var audioMixer = asset switch
+			IAudioMixer? audioMixer = asset switch
 			{
 				IAudioMixerController mixer => mixer,
 				IAudioMixerGroupController group => group.AudioMixer_C243.FindAsset(group.SerializedFile),

@@ -296,7 +296,7 @@ namespace AssetRipper.Library
 			OverrideExporter<IAudioClip>(new YamlAudioExporter());
 			ConditionalOverrideExporter<IAudioClip>(new NativeAudioExporter(), Settings.AudioExportFormat == AudioExportFormat.Native);
 			ConditionalOverrideExporter<IAudioClip>(new AudioClipExporter(Settings), AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat));
-			var audioMixerExporter = new AudioMixerExporter();
+			AudioMixerExporter audioMixerExporter = new();
 			OverrideExporter<IAudioMixerController>(audioMixerExporter);
 			OverrideExporter<IAudioMixerGroupController>(audioMixerExporter);
 			OverrideExporter<IAudioMixerSnapshotController>(audioMixerExporter);
