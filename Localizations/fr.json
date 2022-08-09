@@ -136,5 +136,7 @@
     "audio_format_yaml": "Yaml",
     "audio_format_yaml_description": "Exporter en tant qu'élément yaml et ficher resS. C'est une option sûr et est une sauvegarde quand les choses vont mal.",
     "script_export_format_decompiled": "Décompilé",
-    "script_export_format_hybrid": "Hybride"
+    "script_export_format_hybrid": "Hybride",
+    "sprite_format_yaml": "Élément Yaml",
+    "sprite_format_yaml_description": "Exporter en tant qu'élément yaml permet d'être lu dans un éditeur. C'est le seul mode qui permet une récupération précise de toutes les métadonnées des sprites."
 }
