@@ -32,6 +32,15 @@ namespace AssetRipper.Tests
 			AssertApproximatelyEqual(actual, Transformation.Identity, 0.00001f);
 		}
 
+		[Test]
+		public void Inversion()
+		{
+			Transformation original = new Transformation(new Vector3(2, 5, -8), Quaternion.CreateFromYawPitchRoll(2, 0.5f, 3), new Vector3(0.8f, 2, 3));
+			Transformation inverted = original.Invert();
+			AssertApproximatelyEqual(original * inverted, Transformation.Identity, 0.00001f);
+			AssertApproximatelyEqual(inverted * original, Transformation.Identity, 0.00001f);
+		}
+
 		private static void AssertApproximatelyEqual(Transformation actual, Transformation expected, float maxDeviation)
 		{
 			AssertApproximatelyEqual(actual.Matrix, expected.Matrix, maxDeviation);

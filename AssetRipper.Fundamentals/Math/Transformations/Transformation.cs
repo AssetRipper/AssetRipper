@@ -21,5 +21,17 @@ namespace AssetRipper.Core.Math.Transformations
 		{
 			return Matrix4x4.CreateScale(scale) * Matrix4x4.CreateFromQuaternion(rotation) * Matrix4x4.CreateTranslation(position);
 		}
+
+		public Transformation Invert()
+		{
+			if (Matrix4x4.Invert(Matrix, out Matrix4x4 inverted))
+			{
+				return new Transformation(inverted);
+			}
+			else
+			{
+				throw new Exception("Could not invert matrix");
+			}
+		}
 	}
 }
