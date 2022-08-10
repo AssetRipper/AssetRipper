@@ -13,6 +13,7 @@ using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.SourceGenerated.Subclasses.Vector4f;
 using System.Buffers.Binary;
+using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -70,23 +71,23 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static void SetBoneGeometry(this ISpriteMetaData instance, ISprite origin)
 		{
-			Vector3f[]? vertices = null;
+			Vector3[]? vertices = null;
 			BoneWeights4[]? skin = null;
 
 			origin.RD_C213.VertexData?.ReadData(origin.SerializedFile.Version, origin.SerializedFile.EndianType,
 				out vertices,
-				out Vector3f[]? _,//normals,
-				out Vector4f[]? _,//tangents,
+				out Vector3[]? _,//normals,
+				out Vector4[]? _,//tangents,
 				out ColorRGBA32[]? _,//colors,
 				out skin,
-				out Vector2f[]? _,//uv0,
-				out Vector2f[]? _,//uv1,
-				out Vector2f[]? _,//uv2,
-				out Vector2f[]? _,//uv3,
-				out Vector2f[]? _,//uv4,
-				out Vector2f[]? _,//uv5,
-				out Vector2f[]? _,//uv6,
-				out Vector2f[]? _);//uv7);
+				out Vector2[]? _,//uv0,
+				out Vector2[]? _,//uv1,
+				out Vector2[]? _,//uv2,
+				out Vector2[]? _,//uv3,
+				out Vector2[]? _,//uv4,
+				out Vector2[]? _,//uv5,
+				out Vector2[]? _,//uv6,
+				out Vector2[]? _);//uv7);
 
 			if (instance.Has_Vertices())
 			{

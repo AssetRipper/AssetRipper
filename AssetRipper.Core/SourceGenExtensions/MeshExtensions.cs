@@ -9,12 +9,16 @@ using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class MeshExtensions
 	{
-		public static bool IsCombinedMesh(this IMesh mesh) => mesh.NameString == "Combined Mesh (root scene)";
+		private static readonly Regex combinedMeshRegex = new Regex(@"^Combined Mesh \(root scene\)( [0-9]+)?$", RegexOptions.Compiled);
+
+		public static bool IsCombinedMesh(this IMesh mesh) => combinedMeshRegex.IsMatch(mesh.NameString); 
 
 		public static void ConvertToEditorFormat(this IMesh mesh)
 		{
@@ -35,19 +39,19 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static void ReadData(
 			this IMesh mesh,
-			out Vector3f[]? vertices,
-			out Vector3f[]? normals,
-			out Vector4f[]? tangents,
+			out Vector3[]? vertices,
+			out Vector3[]? normals,
+			out Vector4[]? tangents,
 			out ColorRGBA32[]? colors,
 			out BoneWeights4[]? skin,
-			out Vector2f[]? uv0,
-			out Vector2f[]? uv1,
-			out Vector2f[]? uv2,
-			out Vector2f[]? uv3,
-			out Vector2f[]? uv4,
-			out Vector2f[]? uv5,
-			out Vector2f[]? uv6,
-			out Vector2f[]? uv7,
+			out Vector2[]? uv0,
+			out Vector2[]? uv1,
+			out Vector2[]? uv2,
+			out Vector2[]? uv3,
+			out Vector2[]? uv4,
+			out Vector2[]? uv5,
+			out Vector2[]? uv6,
+			out Vector2[]? uv7,
 			out Matrix4x4f[]? bindPose,
 			out uint[] processedIndexBuffer)
 		{
@@ -84,28 +88,28 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else
 			{
-				vertices = mesh.Vertices_C43!.Select(v => (Vector3f)v).ToArray();
-				normals = mesh.Normals_C43!.Select(n => (Vector3f)n).ToArray();
-				tangents = mesh.Tangents_C43!.Select(t => (Vector4f)t).ToArray();
+				vertices = mesh.Vertices_C43!.Select(v => v.CastToStruct()).ToArray();
+				normals = mesh.Normals_C43!.Select(n => n.CastToStruct()).ToArray();
+				tangents = mesh.Tangents_C43!.Select(t => t.CastToStruct()).ToArray();
 				colors = mesh.Colors_C43!.Select(c => (ColorRGBA32)c).ToArray();
-				uv0 = mesh.UV_C43!.Select(v => (Vector2f)v).ToArray();
-				uv1 = mesh.UV1_C43!.Select(v => (Vector2f)v).ToArray();
+				uv0 = mesh.UV_C43!.Select(v => v.CastToStruct()).ToArray();
+				uv1 = mesh.UV1_C43!.Select(v => v.CastToStruct()).ToArray();
 			}
 
 			mesh.CompressedMesh_C43.DecompressCompressedMesh(mesh.SerializedFile.Version,
-				out Vector3f[]? compressed_vertices,
-				out Vector3f[]? compressed_normals,
-				out Vector4f[]? compressed_tangents,
+				out Vector3[]? compressed_vertices,
+				out Vector3[]? compressed_normals,
+				out Vector4[]? compressed_tangents,
 				out ColorRGBA32[]? compressed_colors,
 				out BoneWeights4[]? compressed_skin,
-				out Vector2f[]? compressed_uv0,
-				out Vector2f[]? compressed_uv1,
-				out Vector2f[]? compressed_uv2,
-				out Vector2f[]? compressed_uv3,
-				out Vector2f[]? compressed_uv4,
-				out Vector2f[]? compressed_uv5,
-				out Vector2f[]? compressed_uv6,
-				out Vector2f[]? compressed_uv7,
+				out Vector2[]? compressed_uv0,
+				out Vector2[]? compressed_uv1,
+				out Vector2[]? compressed_uv2,
+				out Vector2[]? compressed_uv3,
+				out Vector2[]? compressed_uv4,
+				out Vector2[]? compressed_uv5,
+				out Vector2[]? compressed_uv6,
+				out Vector2[]? compressed_uv7,
 				out Matrix4x4f[]? compressed_bindPose,
 				out uint[]? compressed_processedIndexBuffer);
 

@@ -4,6 +4,7 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
+using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -11,19 +12,19 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void DecompressCompressedMesh(this ICompressedMesh compressedMesh,
 			UnityVersion version,
-			out Vector3f[]? vertices,
-			out Vector3f[]? normals,
-			out Vector4f[]? tangents,
+			out Vector3[]? vertices,
+			out Vector3[]? normals,
+			out Vector4[]? tangents,
 			out ColorRGBA32[]? colors,
 			out BoneWeights4[]? skin,
-			out Vector2f[]? uv0,
-			out Vector2f[]? uv1,
-			out Vector2f[]? uv2,
-			out Vector2f[]? uv3,
-			out Vector2f[]? uv4,
-			out Vector2f[]? uv5,
-			out Vector2f[]? uv6,
-			out Vector2f[]? uv7,
+			out Vector2[]? uv0,
+			out Vector2[]? uv1,
+			out Vector2[]? uv2,
+			out Vector2[]? uv3,
+			out Vector2[]? uv4,
+			out Vector2[]? uv5,
+			out Vector2[]? uv6,
+			out Vector2[]? uv7,
 			out Matrix4x4f[]? bindPose,
 			out uint[]? processedIndexBuffer)
 		{
@@ -70,7 +71,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 						if ((texCoordBits & kUVChannelExists) != 0)
 						{
 							int uvDim = 1 + (int)(texCoordBits & kUVDimensionMask);
-							Vector2f[] m_UV = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(uvDim, uvDim * 4, uvSrcOffset, vertexCount));
+							Vector2[] m_UV = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(uvDim, uvDim * 4, uvSrcOffset, vertexCount));
 							switch (uvIndex)
 							{
 								case 0:
@@ -133,7 +134,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				float[] normalData = compressedMesh.Normals.UnpackFloats(2, 4 * 2);
 				int[] signs = compressedMesh.NormalSigns.UnpackInts();
-				normals = new Vector3f[compressedMesh.Normals.NumItems / 2];
+				normals = new Vector3[compressedMesh.Normals.NumItems / 2];
 				for (int i = 0; i < compressedMesh.Normals.NumItems / 2; ++i)
 				{
 					float x = normalData[(i * 2) + 0];
@@ -166,7 +167,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				float[] tangentData = compressedMesh.Tangents.UnpackFloats(2, 4 * 2);
 				int[] signs = compressedMesh.TangentSigns.UnpackInts();
-				tangents = new Vector4f[compressedMesh.Tangents.NumItems / 2];
+				tangents = new Vector4[compressedMesh.Tangents.NumItems / 2];
 				for (int i = 0; i < compressedMesh.Tangents.NumItems / 2; ++i)
 				{
 					float x = tangentData[(i * 2) + 0];

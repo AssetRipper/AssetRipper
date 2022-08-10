@@ -75,11 +75,7 @@ namespace AssetRipper.Core.Classes.Misc
 		{
 			get
 			{
-				if (m_Weights == null)
-				{
-					m_Weights = new float[4];
-				}
-
+				m_Weights ??= new float[4];
 				return m_Weights;
 			}
 		}
@@ -87,11 +83,7 @@ namespace AssetRipper.Core.Classes.Misc
 		{
 			get
 			{
-				if (m_BoneIndices == null)
-				{
-					m_BoneIndices = new int[4];
-				}
-
+				m_BoneIndices ??= new int[4];
 				return m_BoneIndices;
 			}
 		}

@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
+using System.Numerics;
 
 namespace AssetRipper.Core.Classes.Mesh
 {
@@ -89,25 +90,25 @@ namespace AssetRipper.Core.Classes.Mesh
 		}
 
 
-		public static uint GetFormatSize(VertexFormat format)
+		public static int GetFormatSize(VertexFormat format)
 		{
 			switch (format)
 			{
 				case VertexFormat.kVertexFormatFloat:
 				case VertexFormat.kVertexFormatUInt32:
 				case VertexFormat.kVertexFormatSInt32:
-					return 4u;
+					return 4;
 				case VertexFormat.kVertexFormatFloat16:
 				case VertexFormat.kVertexFormatUNorm16:
 				case VertexFormat.kVertexFormatSNorm16:
 				case VertexFormat.kVertexFormatUInt16:
 				case VertexFormat.kVertexFormatSInt16:
-					return 2u;
+					return 2;
 				case VertexFormat.kVertexFormatUNorm8:
 				case VertexFormat.kVertexFormatSNorm8:
 				case VertexFormat.kVertexFormatUInt8:
 				case VertexFormat.kVertexFormatSInt8:
-					return 1u;
+					return 1;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(format), format, null);
 			}
@@ -125,14 +126,14 @@ namespace AssetRipper.Core.Classes.Mesh
 				throw new ArgumentNullException(nameof(inputBytes));
 			}
 
-			var size = GetFormatSize(format);
+			int size = GetFormatSize(format);
 			if (inputBytes.Length % size != 0)
 			{
 				throw new Exception($"Input array length {inputBytes.Length} is not divisible by size {size}");
 			}
 
-			var len = inputBytes.Length / size;
-			var result = new float[len];
+			int len = inputBytes.Length / size;
+			float[] result = new float[len];
 			for (int i = 0; i < len; i++)
 			{
 				switch (format)
@@ -162,9 +163,9 @@ namespace AssetRipper.Core.Classes.Mesh
 
 		public static int[] BytesToIntArray(byte[] inputBytes, VertexFormat format)
 		{
-			var size = GetFormatSize(format);
-			var len = inputBytes.Length / size;
-			var result = new int[len];
+			int size = GetFormatSize(format);
+			int len = inputBytes.Length / size;
+			int[] result = new int[len];
 			for (int i = 0; i < len; i++)
 			{
 				switch (format)
@@ -186,8 +187,8 @@ namespace AssetRipper.Core.Classes.Mesh
 			return result;
 		}
 
-		public static Vector2f[] FloatArrayToVector2(float[] input) => FloatArrayToVector2(input, 2);
-		public static Vector2f[] FloatArrayToVector2(float[] input, int dimension)
+		public static Vector2[] FloatArrayToVector2(float[] input) => FloatArrayToVector2(input, 2);
+		public static Vector2[] FloatArrayToVector2(float[] input, int dimension)
 		{
 			if (input == null)
 			{
@@ -204,20 +205,20 @@ namespace AssetRipper.Core.Classes.Mesh
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by dimension {dimension}", nameof(input));
 			}
 
-			Vector2f[] result = new Vector2f[input.Length / dimension];
+			Vector2[] result = new Vector2[input.Length / dimension];
 			for (int i = 0; i < result.Length; i++)
 			{
 				result[i] = dimension switch
 				{
-					1 => new Vector2f(input[dimension * i], 0),
-					_ => new Vector2f(input[dimension * i], input[(dimension * i) + 1]),
+					1 => new Vector2(input[dimension * i], 0),
+					_ => new Vector2(input[dimension * i], input[(dimension * i) + 1]),
 				};
 			}
 			return result;
 		}
 
-		public static Vector3f[] FloatArrayToVector3(float[] input) => FloatArrayToVector3(input, 3);
-		public static Vector3f[] FloatArrayToVector3(float[] input, int dimension)
+		public static Vector3[] FloatArrayToVector3(float[] input) => FloatArrayToVector3(input, 3);
+		public static Vector3[] FloatArrayToVector3(float[] input, int dimension)
 		{
 			if (input == null)
 			{
@@ -234,22 +235,22 @@ namespace AssetRipper.Core.Classes.Mesh
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by dimension {dimension}", nameof(input));
 			}
 
-			Vector3f[] result = new Vector3f[input.Length / dimension];
+			Vector3[] result = new Vector3[input.Length / dimension];
 			for (int i = 0; i < result.Length; i++)
 			{
 				result[i] = dimension switch
 				{
-					1 => new Vector3f(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2]),
-					2 => new Vector3f(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2]),
-					_ => new Vector3f(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2]),//In the four dimensional case for Normals, the fourth dimension was always zero
+					1 => new Vector3(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2]),
+					2 => new Vector3(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2]),
+					_ => new Vector3(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2]), //In the four dimensional case for Normals, the fourth dimension was always zero
 																													//This is seemingly intended to maintain data alignment
 				};
 			}
 			return result;
 		}
 
-		public static Vector4f[] FloatArrayToVector4(float[] input) => FloatArrayToVector4(input, 4);
-		public static Vector4f[] FloatArrayToVector4(float[] input, int dimension)
+		public static Vector4[] FloatArrayToVector4(float[] input) => FloatArrayToVector4(input, 4);
+		public static Vector4[] FloatArrayToVector4(float[] input, int dimension)
 		{
 			if (input == null)
 			{
@@ -266,15 +267,15 @@ namespace AssetRipper.Core.Classes.Mesh
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by dimension {dimension}", nameof(input));
 			}
 
-			Vector4f[] result = new Vector4f[input.Length / dimension];
+			Vector4[] result = new Vector4[input.Length / dimension];
 			for (int i = 0; i < result.Length; i++)
 			{
 				result[i] = dimension switch
 				{
-					1 => new Vector4f(input[dimension * i], 0, 0, 0),
-					2 => new Vector4f(input[dimension * i], input[(dimension * i) + 1], 0, 0),
-					3 => new Vector4f(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2], 0),
-					_ => new Vector4f(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2], input[(dimension * i) + 3]),
+					1 => new Vector4(input[dimension * i], 0, 0, 0),
+					2 => new Vector4(input[dimension * i], input[(dimension * i) + 1], 0, 0),
+					3 => new Vector4(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2], 0),
+					_ => new Vector4(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2], input[(dimension * i) + 3]),
 				};
 			}
 			return result;

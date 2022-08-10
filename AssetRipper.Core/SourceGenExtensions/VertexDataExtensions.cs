@@ -16,6 +16,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using MeshHelper = AssetRipper.Core.Classes.Mesh.MeshHelper;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -69,19 +70,19 @@ namespace AssetRipper.Core.SourceGenExtensions
 			this IVertexData instance,
 			UnityVersion version,
 			EndianType endianType,
-			out Vector3f[]? vertices,
-			out Vector3f[]? normals,
-			out Vector4f[]? tangents,
+			out Vector3[]? vertices,
+			out Vector3[]? normals,
+			out Vector4[]? tangents,
 			out ColorRGBA32[]? colors,
 			out BoneWeights4[]? skin,
-			out Vector2f[]? uv0,
-			out Vector2f[]? uv1,
-			out Vector2f[]? uv2,
-			out Vector2f[]? uv3,
-			out Vector2f[]? uv4,
-			out Vector2f[]? uv5,
-			out Vector2f[]? uv6,
-			out Vector2f[]? uv7)
+			out Vector2[]? uv0,
+			out Vector2[]? uv1,
+			out Vector2[]? uv2,
+			out Vector2[]? uv3,
+			out Vector2[]? uv4,
+			out Vector2[]? uv5,
+			out Vector2[]? uv6,
+			out Vector2[]? uv7)
 		{
 			int vertexCount = (int)instance.VertexCount;
 
@@ -104,11 +105,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			for (int chn = 0; chn < channels.Count; chn++)
 			{
-				ChannelInfo? m_Channel = channels[chn];
+				ChannelInfo m_Channel = channels[chn];
 				if (m_Channel.GetDataDimension() > 0)
 				{
 					IStreamInfo m_Stream = streams[m_Channel.Stream];
-					BitArray? channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask));
+					BitArray channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask));
 					if (channelMask.Get(chn))
 					{
 						if (version.IsLess(2018) && chn == 2 && m_Channel.Format == 2) //kShaderChannelColor && kChannelFormatColor
@@ -193,10 +194,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 									break;
 								//2018.2 and up
 								case 12: //kShaderChannelBlendWeight
-									if (skin == null)
-									{
-										skin = MakeInitializedArray<BoneWeights4>(vertexCount);
-									}
+									skin ??= MakeInitializedArray<BoneWeights4>(vertexCount);
 									for (int i = 0; i < vertexCount; i++)
 									{
 										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
@@ -206,10 +204,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 									}
 									break;
 								case 13: //kShaderChannelBlendIndices
-									if (skin == null)
-									{
-										skin = MakeInitializedArray<BoneWeights4>(vertexCount);
-									}
+									skin ??= MakeInitializedArray<BoneWeights4>(vertexCount);
 									for (int i = 0; i < vertexCount; i++)
 									{
 										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
@@ -381,7 +376,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 						if (m_Channel.GetDataDimension() > 0)
 						{
 							chnMask |= 1u << chn;
-							stride += m_Channel.GetDataDimension() * MeshHelper.GetFormatSize(MeshHelper.ToVertexFormat(m_Channel.Format, version));
+							stride += m_Channel.GetDataDimension() * (uint)MeshHelper.GetFormatSize(MeshHelper.ToVertexFormat(m_Channel.Format, version));
 						}
 					}
 				}

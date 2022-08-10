@@ -1,4 +1,5 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.Vector4f;
+using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -10,6 +11,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			vector.Y *= scalar;
 			vector.Z *= scalar;
 			vector.W *= scalar;
+		}
+
+		public static Vector4 CastToStruct(this IVector4f vector)
+		{
+			return new Vector4(vector.X, vector.Y, vector.Z, vector.W);
 		}
 	}
 }

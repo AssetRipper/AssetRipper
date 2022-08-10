@@ -21,6 +21,7 @@ using MeshSharp.STL;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 
 namespace AssetRipper.Library.Exporters.Meshes
 {
@@ -148,19 +149,19 @@ namespace AssetRipper.Library.Exporters.Meshes
 		private MeshSharp.Elements.Geometries.Mesh ConvertToMeshSharpMesh(IMesh unityMesh)
 		{
 			unityMesh.ReadData(
-				out Vector3f[]? vertices,
-				out Vector3f[]? normals,
-				out Vector4f[]? tangents,
+				out Vector3[]? vertices,
+				out Vector3[]? normals,
+				out Vector4[]? tangents,
 				out ColorRGBA32[]? colors,
 				out _, //skin
-				out Vector2f[]? uv0,
-				out Vector2f[]? uv1,
-				out Vector2f[]? uv2,
-				out Vector2f[]? uv3,
-				out Vector2f[]? uv4,
-				out Vector2f[]? uv5,
-				out Vector2f[]? uv6,
-				out Vector2f[]? uv7,
+				out Vector2[]? uv0,
+				out Vector2[]? uv1,
+				out Vector2[]? uv2,
+				out Vector2[]? uv3,
+				out Vector2[]? uv4,
+				out Vector2[]? uv5,
+				out Vector2[]? uv6,
+				out Vector2[]? uv7,
 				out _, //bindpose
 				out uint[] processedIndexBuffer);
 
@@ -181,9 +182,9 @@ namespace AssetRipper.Library.Exporters.Meshes
 			//Logger.Info($"Colors: {hasColors}");
 			MeshSharp.Elements.Geometries.Mesh? outputMesh = new MeshSharp.Elements.Geometries.Mesh();
 			outputMesh.Name = unityMesh.NameString;
-
+			
 			//Vertices
-			foreach (Vector3f vertex in vertices)
+			foreach (Vector3 vertex in vertices)
 			{
 				outputMesh.Vertices.Add(Convert(ToCoordinateSpace(vertex, ExportSpace)));
 			}
@@ -233,7 +234,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 				outputMesh.Layers.Add(tangentElement);
 				tangentElement.MappingInformationType = MappingMode.ByPolygonVertex;
 				tangentElement.ReferenceInformationType = ReferenceMode.Direct;
-				tangentElement.Tangents.AddRange(tangents!.Select(t => Convert(ToCoordinateSpace((Vector3f)t, ExportSpace))));
+				tangentElement.Tangents.AddRange(tangents!.Select(t => Convert(ToCoordinateSpace(new Vector3(t.X, t.Y, t.Z), ExportSpace))));
 				//We're excluding W here because it's not supported by MeshSharp
 				//For Unity, the tangent W coordinate denotes the direction of the binormal vector and is always 1 or -1
 				//https://docs.unity3d.com/ScriptReference/Mesh-tangents.html
@@ -272,19 +273,19 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 			return outputMesh;
 		}
-
-		private static XY Convert(Vector2f vector) => new XY(vector.X, vector.Y);
-		private static XYZ Convert(Vector3f vector) => new XYZ(vector.X, vector.Y, vector.Z);
-		private static XYZM Convert(Vector4f vector) => new XYZM(vector.X, vector.Y, vector.Z, vector.W);
+		
+		private static XY Convert(Vector2 vector) => new XY(vector.X, vector.Y);
+		private static XYZ Convert(Vector3 vector) => new XYZ(vector.X, vector.Y, vector.Z);
+		private static XYZM Convert(Vector4 vector) => new XYZM(vector.X, vector.Y, vector.Z, vector.W);
 		private static XYZM Convert(ColorRGBAf vector) => new XYZM(vector.R, vector.G, vector.B, vector.A);
 		private static XYZM Convert(ColorRGBA32 vector) => Convert((ColorRGBAf)vector);
-
-		private static Vector3f ToCoordinateSpace(Vector3f point, MeshCoordinateSpace space)
+		
+		private static Vector3 ToCoordinateSpace(Vector3 point, MeshCoordinateSpace space)
 		{
 			return space switch
 			{
-				MeshCoordinateSpace.Left => new Vector3f(-point.Y, point.Z, point.X),
-				MeshCoordinateSpace.Right => new Vector3f(point.Z, -point.X, point.Y),
+				MeshCoordinateSpace.Left => new Vector3(-point.Y, point.Z, point.X),
+				MeshCoordinateSpace.Right => new Vector3(point.Z, -point.X, point.Y),
 				MeshCoordinateSpace.Unity => point,
 				_ => throw new ArgumentOutOfRangeException(nameof(space)),
 			};

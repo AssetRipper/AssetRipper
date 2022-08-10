@@ -30,14 +30,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is IMesh mesh)
-			{
-				return IsHandle(mesh);
-			}
-			else
-			{
-				return false;
-			}
+			return asset is IMesh mesh && IsHandle(mesh);
 		}
 
 		public bool IsHandle(IMesh mesh)
@@ -66,19 +59,19 @@ namespace AssetRipper.Library.Exporters.Meshes
 		private byte[] ExportBinary(IMesh mesh)
 		{
 			mesh.ReadData(
-				out Vector3f[]? vertices,
-				out Vector3f[]? normals,
-				out Vector4f[]? tangents,
+				out Vector3[]? vertices,
+				out Vector3[]? normals,
+				out Vector4[]? tangents,
 				out ColorRGBA32[]? colors,
 				out _, //skin
-				out Vector2f[]? uv0,
-				out Vector2f[]? uv1,
-				out Vector2f[]? uv2,
-				out Vector2f[]? uv3,
-				out Vector2f[]? uv4,
-				out Vector2f[]? uv5,
-				out Vector2f[]? uv6,
-				out Vector2f[]? uv7,
+				out Vector2[]? uv0,
+				out Vector2[]? uv1,
+				out Vector2[]? uv2,
+				out Vector2[]? uv3,
+				out Vector2[]? uv4,
+				out Vector2[]? uv5,
+				out Vector2[]? uv6,
+				out Vector2[]? uv7,
 				out _, //bindpose
 				out uint[] processedIndexBuffer);
 
@@ -95,8 +88,8 @@ namespace AssetRipper.Library.Exporters.Meshes
 			bool hasUV1 = uv1 != null && uv1.Length == vertices.Length;
 			//bool hasColors = colors != null && colors.Length == vertices.Length;
 
-			SceneBuilder? sceneBuilder = new SceneBuilder();
-			MaterialBuilder? material = new MaterialBuilder("material");
+			SceneBuilder sceneBuilder = new SceneBuilder();
+			MaterialBuilder material = new MaterialBuilder("material");
 
 			if (hasTangents)
 			{
@@ -153,11 +146,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 		}
 
 		private static void AddMeshToScene<TvG, TvM>(SceneBuilder sceneBuilder, string name,
-			Vector3f[]? vertices,
-			Vector3f[]? normals,
-			Vector4f[]? tangents,
-			Vector2f[]? uv0,
-			Vector2f[]? uv1,
+			Vector3[]? vertices,
+			Vector3[]? normals,
+			Vector4[]? tangents,
+			Vector2[]? uv0,
+			Vector2[]? uv1,
 			List<uint> indices)
 			where TvG : struct, IVertexGeometry
 			where TvM : struct, IVertexMaterial
@@ -177,15 +170,15 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		private static VertexBuilder<TvG, TvM, VertexEmpty> GetVertex<TvG, TvM>(
 			uint index,
-			Vector3f[]? vertices,
-			Vector3f[]? normals,
-			Vector4f[]? tangents,
-			Vector2f[]? uv0,
-			Vector2f[]? uv1)
+			Vector3[]? vertices,
+			Vector3[]? normals,
+			Vector4[]? tangents,
+			Vector2[]? uv0,
+			Vector2[]? uv1)
 			where TvG : struct, IVertexGeometry
 			where TvM : struct, IVertexMaterial
 		{
-			return GetVertex<TvG, TvM>(Cast(vertices?[index]), Cast(normals?[index]), Cast(tangents?[index]), Cast(uv0?[index]), Cast(uv1?[index]));
+			return GetVertex<TvG, TvM>(TryGetAtIndex(vertices, index), TryGetAtIndex(normals, index), TryGetAtIndex(tangents, index), TryGetAtIndex(uv0, index), TryGetAtIndex(uv1, index));
 		}
 
 		private static VertexBuilder<TvG, TvM, VertexEmpty> GetVertex<TvG, TvM>(Vector3 vertex, Vector3 normal, Vector4 tangent, Vector2 uv0, Vector2 uv1)
@@ -227,19 +220,9 @@ namespace AssetRipper.Library.Exporters.Meshes
 			return new VertexBuilder<TvG, TvM, VertexEmpty>((TvG)geometry, (TvM)material);
 		}
 
-		private static Vector2 Cast(Vector2f? vector)
+		private static T TryGetAtIndex<T>(T[]? array, uint index) where T : struct
 		{
-			return vector is null ? default : (Vector2)vector;
-		}
-
-		private static Vector3 Cast(Vector3f? vector)
-		{
-			return vector is null ? default : (Vector3)vector;
-		}
-
-		private static Vector4 Cast(Vector4f? vector)
-		{
-			return vector is null ? default : (Vector4)vector;
+			return array is null ? default : array[index];
 		}
 	}
 }
