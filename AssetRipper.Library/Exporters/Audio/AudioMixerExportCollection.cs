@@ -264,18 +264,11 @@ namespace AssetRipper.Library.Exporters.Audio
 		{
 			if (HasAnyEffectParameterNameToRecover)
 			{
-				// Put an editor script file in the exported project. See comments in the file for more detail.
-				string postprocessorScriptPath = System.IO.Path.Combine(dirPath,
-					"Assets/MonoScript/Editor/AssetRipperAudioMixerPostprocessor.cs");
-				if (!System.IO.File.Exists(postprocessorScriptPath))
-				{
-					System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(postprocessorScriptPath));
-					System.IO.File.WriteAllBytes(postprocessorScriptPath,
-						Properties.Resources.AssetRipperAudioMixerPostprocessor);
-				}
+				UnityPatchUtils.ApplyPatchFromManifestResource(typeof(AudioMixerExporter).Assembly, UnityPatchName, dirPath);
 			}
-
 			return base.ExportInner(container, filePath, dirPath);
 		}
+		
+		private const string UnityPatchName = "AssetRipper.Library.Exporters.Audio.UnityPatch.AudioMixerPostprocessor.txt";
 	}
 }
