@@ -54,10 +54,10 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 
 		private void ProcessInner()
 		{
-			if (m_clip.Has_MuscleClip_C74())
+			if (m_clip.Has_MuscleClip_C74() && m_clip.Has_ClipBindingConstant_C74())
 			{
 				IClip clip = m_clip.MuscleClip_C74.Clip.Data;
-				IAnimationClipBindingConstant bindings = m_clip.ClipBindingConstant_C74!;
+				IAnimationClipBindingConstant bindings = m_clip.ClipBindingConstant_C74;
 				IReadOnlyDictionary<uint, string> tos = m_clip.FindTOS();
 
 				IReadOnlyList<StreamedFrame> streamedFrames = GenerateFramesFromStreamedClip(clip.StreamedClip, Layout);
