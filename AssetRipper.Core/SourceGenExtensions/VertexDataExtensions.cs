@@ -26,7 +26,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		private const int StaticStreamCount = 4;
 		private const int VertexStreamAlign = 16;
 
-		public static bool IsSet(this IVertexData instance) => instance.VertexCount > 0;
+		public static bool IsSet(this IVertexData instance) => instance.VertexCount > 0 && instance.Data.Length > 0;
 
 		/// <summary>
 		/// 5.6.0
@@ -99,6 +99,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			uv5 = default;
 			uv6 = default;
 			uv7 = default;
+
+			if (instance.Data.Length == 0)
+			{
+				return;
+			}
 
 			IReadOnlyList<ChannelInfo> channels = instance.GetChannels(version);
 			List<IStreamInfo> streams = instance.GetStreams(version);

@@ -10,6 +10,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class CompressedMeshExtensions
 	{
+		public static bool IsSet(this ICompressedMesh compressedMesh) => compressedMesh.Vertices.NumItems > 0;
+
 		public static void DecompressCompressedMesh(this ICompressedMesh compressedMesh,
 			UnityVersion version,
 			out Vector3[]? vertices,

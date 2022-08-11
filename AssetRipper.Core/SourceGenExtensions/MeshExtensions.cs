@@ -20,6 +20,18 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static bool IsCombinedMesh(this IMesh mesh) => combinedMeshRegex.IsMatch(mesh.NameString); 
 
+		public static bool IsSet(this IMesh mesh)
+		{
+			if (mesh.Has_VertexData_C43())
+			{
+				return mesh.CompressedMesh_C43.IsSet() || mesh.VertexData_C43.IsSet();
+			}
+			else
+			{
+				return mesh.CompressedMesh_C43.IsSet() || mesh.Vertices_C43!.Count > 0;
+			}
+		}
+
 		public static void ConvertToEditorFormat(this IMesh mesh)
 		{
 			mesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
