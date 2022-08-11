@@ -97,8 +97,9 @@ namespace AssetRipper.GUI
 			Logger.Add(new ConsoleLogger(false));
 			Logger.Add(new FileLogger(options.LogFile.FullName));
 			Logger.LogSystemInformation("AssetRipper Console Version");
-
+#if !DEBUG
 			try
+#endif
 			{
 				Ripper ripper = new();
 				ripper.Settings.LogConfigurationValues();
@@ -106,10 +107,12 @@ namespace AssetRipper.GUI
 				PrepareExportDirectory(options.OutputDirectory.FullName);
 				ripper.ExportProject(options.OutputDirectory.FullName);
 			}
+#if !DEBUG
 			catch (Exception ex)
 			{
 				Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
 			}
+#endif
 		}
 
 		private static void PrepareExportDirectory(string path)

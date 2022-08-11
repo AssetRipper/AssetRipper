@@ -269,12 +269,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			}
 			catch (TypeLoadException typeLoadException)
 			{
-#if DEBUG
-				throw new SerializedFileException($"Could not load {typeLoadException.TypeName}", typeLoadException, Version, Platform, assetInfo.ClassID, Name, FilePath);
-#else
 				Logger.Error($"Could not load {typeLoadException.TypeName} : {typeLoadException.Message}");
 				asset = null;
-#endif
 			}
 
 			bool replaceWithUnreadableObject = false;
@@ -293,12 +289,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				}
 				catch (Exception ex)
 				{
-#if DEBUG
-					throw new SerializedFileException($"Error during reading of asset type {assetInfo.ClassID}", ex, Version, Platform, assetInfo.ClassID, Name, FilePath);
-#else
 					replaceWithUnreadableObject = true;
 					Logger.Error($"Error during reading of asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}", ex);
-#endif
 				}
 			}
 
@@ -311,12 +303,8 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				}
 				else
 				{
-#if DEBUG
-					throw new SerializedFileException($"Read {read} but expected {size} for asset type {assetInfo.ClassID}", Version, Platform, assetInfo.ClassID, Name, FilePath);
-#else
 					replaceWithUnreadableObject = true;
 					Logger.Error($"Read {read} but expected {size} for asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}");
-#endif
 				}
 			}
 
