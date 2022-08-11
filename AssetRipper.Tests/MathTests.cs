@@ -1,3 +1,4 @@
+using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Utils;
 using System;
 using System.Numerics;
@@ -20,6 +21,13 @@ namespace AssetRipper.Tests
 					Assert.Less(pot >> 1, n);
 				}
 			}
+		}
+
+		[Test]
+		public void TestAsVector3ExtensionMethod()
+		{
+			Vector4 v = new Vector4(1, 2, 3, 4);
+			Assert.AreEqual(new Vector3(1, 2, 3), v.AsVector3());
 		}
 	}
 }
