@@ -14,11 +14,8 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 			foreach (ISubMesh subMesh in mesh.SubMeshes_C43)
 			{
-				uint firstIndex = subMesh.FirstByte / 2;
-				if (!mesh.Is16BitIndices())
-				{
-					firstIndex /= 2;
-				}
+				uint firstIndex = mesh.Is16BitIndices() ? subMesh.FirstByte / 2 : subMesh.FirstByte / 4;
+				
 				uint indexCount = subMesh.IndexCount;
 				MeshTopology topology = subMesh.GetTopology();
 				if (topology == MeshTopology.Triangles)

@@ -1,4 +1,6 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -7,11 +9,11 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
-using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -46,7 +48,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			return true;
 		}
 
-		private byte[] ExportBinary(IMesh mesh)
+		private static byte[] ExportBinary(IMesh mesh)
 		{
 			mesh.ReadData(
 				out Vector3[]? vertices,
@@ -69,20 +71,27 @@ namespace AssetRipper.Library.Exporters.Meshes
 			{
 				throw new ArgumentException("Vertices can't be null.", nameof(mesh));
 			}
-			
-			List<uint> indices = TriangleProcessor.ReadIndices(mesh, processedIndexBuffer);
-
-			if (indices.Count % 3 != 0)
-			{
-				throw new ArgumentException("Index count must be a multiple of 3.", nameof(mesh));
-			}
 
 			SceneBuilder sceneBuilder = new SceneBuilder();
 			MaterialBuilder material = new MaterialBuilder("material");
 			string name = mesh.NameString;
-			MeshData meshData = new MeshData(vertices, normals, tangents, null, uv0, uv1, indices);
+			MeshData meshData = new MeshData(vertices, normals, tangents, colors, uv0, uv1, processedIndexBuffer, mesh);
+			GlbMeshType meshType = GetMeshType(vertices, normals, tangents, colors, uv0, uv1);
+
+			AddMeshToScene(sceneBuilder, material, name, meshData, meshType);
+
+			SharpGLTF.Schema2.ModelRoot model = sceneBuilder.ToGltf2();
+
+			//Write settings can be used in the write glb method if desired
+			//SharpGLTF.Schema2.WriteSettings writeSettings = new();
+
+			return model.WriteGLB().ToArray();
+		}
+
+		private static GlbMeshType GetMeshType(Vector3[] vertices, Vector3[]? normals, Vector4[]? tangents, ColorFloat[]? colors, Vector2[]? uv0, Vector2[]? uv1)
+		{
 			GlbMeshType meshType = default;
-			
+
 			if (normals != null && normals.Length == vertices.Length)
 			{
 				if (tangents != null && tangents.Length == vertices.Length)
@@ -94,7 +103,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 					meshType |= GlbMeshType.PositionNormal;
 				}
 			}
-			
+
 			if (uv0 != null && uv0.Length == vertices.Length)
 			{
 				if (uv1 != null && uv1.Length == vertices.Length)
@@ -112,6 +121,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 				meshType |= GlbMeshType.Color1;
 			}
 
+			return meshType;
+		}
+
+		private static void AddMeshToScene(SceneBuilder sceneBuilder, MaterialBuilder material, string name, MeshData meshData, GlbMeshType meshType)
+		{
 			switch (meshType)
 			{
 				case GlbMeshType.Position | GlbMeshType.Empty | GlbMeshType.Empty:
@@ -205,13 +219,6 @@ namespace AssetRipper.Library.Exporters.Meshes
 					AddMeshToScene<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints4>(sceneBuilder, material, name, meshData);
 					break;
 			}
-
-			SharpGLTF.Schema2.ModelRoot model = sceneBuilder.ToGltf2();
-
-			//Write settings can be used in the write glb method if desired
-			//SharpGLTF.Schema2.WriteSettings writeSettings = new();
-
-			return model.WriteGLB().ToArray();
 		}
 
 		private static void AddMeshToScene<TvG, TvM, TvS>(SceneBuilder sceneBuilder, MaterialBuilder material, string name, MeshData meshData)
@@ -219,21 +226,120 @@ namespace AssetRipper.Library.Exporters.Meshes
 			where TvM : unmanaged, IVertexMaterial
 			where TvS : unmanaged, IVertexSkinning
 		{
-			MeshBuilder<TvG, TvM, TvS> meshBuilder = VertexBuilder<TvG, TvM, TvS>.CreateCompatibleMesh();
-			PrimitiveBuilder<MaterialBuilder, TvG, TvM, TvS> primitiveBuilder = meshBuilder.UsePrimitive(material);
-			
-			for (int j = 0; j < meshData.Indices.Count; j += 3)
-			{
-				primitiveBuilder.AddTriangle(
-					GetVertex<TvG, TvM, TvS>(meshData, meshData.Indices[j]),
-					GetVertex<TvG, TvM, TvS>(meshData, meshData.Indices[j + 1]),
-					GetVertex<TvG, TvM, TvS>(meshData, meshData.Indices[j + 2]));
-			}
-			
-			NodeBuilder nodeBuilder = new NodeBuilder(name);
+			NodeBuilder rootNodeForMesh = new NodeBuilder(name);
 			//nodeBuilder.LocalMatrix = Matrix4x4.Identity; //Local transform can be changed if desired
-			sceneBuilder.AddNode(nodeBuilder);
-			sceneBuilder.AddRigidMesh(meshBuilder, nodeBuilder);
+			sceneBuilder.AddNode(rootNodeForMesh);
+
+			for (int submeshIndex = 0; submeshIndex < meshData.Mesh.SubMeshes_C43.Count; submeshIndex++)
+			{
+				ISubMesh subMesh = meshData.Mesh.SubMeshes_C43[submeshIndex];
+				uint firstIndex = meshData.Mesh.Is16BitIndices() ? subMesh.FirstByte / 2 : subMesh.FirstByte / 4;
+
+				uint indexCount = subMesh.IndexCount;
+				MeshTopology topology = subMesh.GetTopology();
+				if (topology != MeshTopology.Triangles && meshData.Mesh.SerializedFile.Version.IsLess(4))
+				{
+					topology = MeshTopology.TriangleStrip;
+				}
+				
+				MeshBuilder<TvG, TvM, TvS> meshBuilder = VertexBuilder<TvG, TvM, TvS>.CreateCompatibleMesh();
+				int primitiveVertexCount = topology switch
+				{
+					MeshTopology.Lines or MeshTopology.LineStrip => 2,
+					MeshTopology.Points => 1,
+					_ => 3
+				};
+				PrimitiveBuilder<MaterialBuilder, TvG, TvM, TvS> primitiveBuilder = meshBuilder.UsePrimitive(material, primitiveVertexCount);
+
+				switch (topology)
+				{
+					case MeshTopology.Triangles:
+						{
+							for (int i = 0; i < indexCount; i += 3)
+							{
+								primitiveBuilder.AddTriangle(
+									GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + i]),
+									GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + i + 1]),
+									GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + i + 2]));
+							}
+						}
+						break;
+
+					case MeshTopology.TriangleStrip:
+						{
+							// de-stripify :
+							uint triIndex = 0;
+							for (int i = 0; i < indexCount - 2; i++)
+							{
+								uint a = meshData.ProcessedIndexBuffer[firstIndex + i];
+								uint b = meshData.ProcessedIndexBuffer[firstIndex + i + 1];
+								uint c = meshData.ProcessedIndexBuffer[firstIndex + i + 2];
+
+								// skip degenerates
+								if (a == b || a == c || b == c)
+								{
+									continue;
+								}
+
+								// do the winding flip-flop of strips :
+								if ((i & 1) == 1)
+								{
+									primitiveBuilder.AddTriangle(
+										GetVertex<TvG, TvM, TvS>(meshData, b),
+										GetVertex<TvG, TvM, TvS>(meshData, a),
+										GetVertex<TvG, TvM, TvS>(meshData, c));
+								}
+								else
+								{
+									primitiveBuilder.AddTriangle(
+										GetVertex<TvG, TvM, TvS>(meshData, a),
+										GetVertex<TvG, TvM, TvS>(meshData, b),
+										GetVertex<TvG, TvM, TvS>(meshData, c));
+								}
+								triIndex += 3;
+							}
+						}
+						break;
+
+					case MeshTopology.Quads:
+						{
+							for (int q = 0; q < indexCount; q += 4)
+							{
+								primitiveBuilder.AddQuadrangle(
+									GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q]),
+									GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q + 1]),
+									GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q + 2]),
+									GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q + 3]));
+							}
+						}
+						break;
+
+					case MeshTopology.Lines:
+						{
+							for (int l = 0; l < indexCount; l += 2)
+							{
+								primitiveBuilder.AddLine(
+									GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + l]),
+									GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + l + 1]));
+							}
+						}
+						break;
+					case MeshTopology.LineStrip:
+						Logger.Warning(LogCategory.Export, "LineStrip is not supported for GLB mesh export.");
+						break;
+					case MeshTopology.Points:
+						{
+							for (int p = 0; p < indexCount; p++)
+							{
+								primitiveBuilder.AddPoint(GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + p]));
+							}
+						}
+						break;
+				}
+
+				NodeBuilder subMeshNode = rootNodeForMesh.CreateNode($"SubMesh_{submeshIndex}");
+				sceneBuilder.AddRigidMesh(meshBuilder, subMeshNode);
+			}
 		}
 
 		private static VertexBuilder<TvG, TvM, TvS> GetVertex<TvG, TvM, TvS>(MeshData meshData, uint index)
@@ -241,57 +347,66 @@ namespace AssetRipper.Library.Exporters.Meshes
 			where TvM : unmanaged, IVertexMaterial
 			where TvS : unmanaged, IVertexSkinning
 		{
-			TvG geometry;
+			TvG geometry = GetGeometry<TvG>(meshData, index);
+			TvM material = GetMaterial<TvM>(meshData, index);
+			TvS skin = GetSkin<TvS>(meshData, index);
+			return new VertexBuilder<TvG, TvM, TvS>(geometry, material, skin);
+		}
+
+		private static TvG GetGeometry<TvG>(MeshData meshData, uint index) where TvG : unmanaged, IVertexGeometry
+		{
 			if (typeof(TvG) == typeof(VertexPosition))
 			{
-				geometry = Cast<VertexPosition, TvG>(new VertexPosition(meshData.TryGetVertexAtIndex(index)));
+				return Cast<VertexPosition, TvG>(new VertexPosition(meshData.TryGetVertexAtIndex(index)));
 			}
 			else if (typeof(TvG) == typeof(VertexPositionNormal))
 			{
-				geometry = Cast<VertexPositionNormal, TvG>(new VertexPositionNormal(meshData.TryGetVertexAtIndex(index), meshData.TryGetNormalAtIndex(index)));
+				return Cast<VertexPositionNormal, TvG>(new VertexPositionNormal(meshData.TryGetVertexAtIndex(index), meshData.TryGetNormalAtIndex(index)));
 			}
 			else if (typeof(TvG) == typeof(VertexPositionNormalTangent))
 			{
-				geometry = Cast<VertexPositionNormalTangent, TvG>(new VertexPositionNormalTangent(meshData.TryGetVertexAtIndex(index), meshData.TryGetNormalAtIndex(index), meshData.TryGetTangentAtIndex(index)));
+				return Cast<VertexPositionNormalTangent, TvG>(new VertexPositionNormalTangent(meshData.TryGetVertexAtIndex(index), meshData.TryGetNormalAtIndex(index), meshData.TryGetTangentAtIndex(index)));
 			}
 			else
 			{
-				geometry = default;
+				return default;
 			}
+		}
 
-			TvM material;
+		private static TvM GetMaterial<TvM>(MeshData meshData, uint index) where TvM : unmanaged, IVertexMaterial
+		{
 			if (typeof(TvM) == typeof(VertexTexture1))
 			{
-				material = Cast<VertexTexture1,TvM>(new VertexTexture1(meshData.TryGetUV0AtIndex(index)));
+				return Cast<VertexTexture1, TvM>(new VertexTexture1(meshData.TryGetUV0AtIndex(index)));
 			}
 			else if (typeof(TvM) == typeof(VertexTexture2))
 			{
-				material = Cast<VertexTexture2, TvM>(new VertexTexture2(meshData.TryGetUV0AtIndex(index), meshData.TryGetUV1AtIndex(index)));
+				return Cast<VertexTexture2, TvM>(new VertexTexture2(meshData.TryGetUV0AtIndex(index), meshData.TryGetUV1AtIndex(index)));
 			}
 			else if (typeof(TvM) == typeof(VertexColor1Texture1))
 			{
-				material = Cast<VertexColor1Texture1, TvM>(new VertexColor1Texture1(meshData.TryGetColorAtIndex(index).Vector, meshData.TryGetUV0AtIndex(index)));
+				return Cast<VertexColor1Texture1, TvM>(new VertexColor1Texture1(meshData.TryGetColorAtIndex(index).Vector, meshData.TryGetUV0AtIndex(index)));
 			}
 			else if (typeof(TvM) == typeof(VertexColor1Texture2))
 			{
-				material = Cast<VertexColor1Texture2, TvM>(new VertexColor1Texture2(meshData.TryGetColorAtIndex(index).Vector, meshData.TryGetUV0AtIndex(index), meshData.TryGetUV1AtIndex(index)));
+				return Cast<VertexColor1Texture2, TvM>(new VertexColor1Texture2(meshData.TryGetColorAtIndex(index).Vector, meshData.TryGetUV0AtIndex(index), meshData.TryGetUV1AtIndex(index)));
 			}
 			else
 			{
-				material = default;
+				return default;
 			}
-			
-			TvS skin;
+		}
+
+		private static TvS GetSkin<TvS>(MeshData meshData, uint index) where TvS : unmanaged, IVertexSkinning
+		{
 			if (typeof(TvS) == typeof(VertexJoints4))
 			{
-				skin = default;
+				return default;
 			}
 			else
 			{
-				skin = default;
+				return default;
 			}
-
-			return new VertexBuilder<TvG, TvM, TvS>(geometry, material, skin);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
@@ -305,7 +420,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 			}
 			else
 			{
+#if DEBUG
+				throw new InvalidCastException();
+#else
 				return default;
+#endif
 			}
 		}
 		
@@ -316,7 +435,8 @@ namespace AssetRipper.Library.Exporters.Meshes
 			ColorFloat[]? Colors,
 			Vector2[]? UV0,
 			Vector2[]? UV1,
-			IReadOnlyList<uint> Indices)
+			uint[] ProcessedIndexBuffer,
+			IMesh Mesh)
 		{
 			public Vector3 TryGetVertexAtIndex(uint index) => Vertices[index];
 			public Vector3 TryGetNormalAtIndex(uint index) => TryGetAtIndex(Normals, index);
