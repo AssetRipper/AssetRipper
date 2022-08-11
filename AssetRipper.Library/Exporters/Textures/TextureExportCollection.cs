@@ -34,7 +34,7 @@ namespace AssetRipper.Library.Exporters.Textures
 					if (sprite.RD_C213.Texture.IsAsset(sprite.SerializedFile, texture))
 					{
 						ISpriteAtlas? atlas = sprite.Has_SpriteAtlas_C213() ? sprite.SpriteAtlas_C213.FindAsset(sprite.SerializedFile) : null;
-						m_sprites.Add(sprite, atlas);
+						AddToDictionary(sprite, atlas);
 						if (exportSprites)
 						{
 							AddAsset(sprite);
@@ -49,13 +49,12 @@ namespace AssetRipper.Library.Exporters.Textures
 						foreach (PPtr_Sprite__5_0_0_f4 spritePtr in atlas.PackedSprites_C687078895)
 						{
 							ISprite? sprite = spritePtr.FindAsset(atlas.SerializedFile);
-							if (sprite != null)
+							if (sprite is not null)
 							{
-								//ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
-								ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
+								ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213!];
 								if (atlasData.Texture.IsAsset(atlas.SerializedFile, texture))
 								{
-									m_sprites.Add(sprite, atlas);
+									AddToDictionary(sprite, atlas);
 									if (exportSprites)
 									{
 										AddAsset(sprite);
@@ -65,6 +64,25 @@ namespace AssetRipper.Library.Exporters.Textures
 						}
 					}
 				}
+			}
+		}
+
+		private void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas)
+		{
+			if (m_sprites.TryGetValue(sprite, out ISpriteAtlas? mappedAtlas))
+			{
+				if (mappedAtlas is null)
+				{
+					m_sprites[sprite] = atlas;
+				}
+				else if (atlas is not null && atlas != mappedAtlas)
+				{
+					throw new Exception($"{nameof(atlas)} is not the same as {nameof(mappedAtlas)}");
+				}
+			}
+			else
+			{
+				m_sprites.Add(sprite, atlas);
 			}
 		}
 
