@@ -320,7 +320,17 @@ namespace AssetRipper.Library.Exporters.Meshes
 		{
 			public Vector3 TryGetVertexAtIndex(uint index) => Vertices[index];
 			public Vector3 TryGetNormalAtIndex(uint index) => TryGetAtIndex(Normals, index);
-			public Vector4 TryGetTangentAtIndex(uint index) => TryGetAtIndex(Tangents, index);
+			public Vector4 TryGetTangentAtIndex(uint index)
+			{
+				Vector4 v = TryGetAtIndex(Tangents, index);
+				//Unity documentation claims W should always be 1 or -1, but it's not always the case.
+				return v.W switch
+				{
+					-1 or 1 => v,
+					< 0 => new Vector4(v.X, v.Y, v.Z, -1),
+					_ => new Vector4(v.X, v.Y, v.Z, 1)
+				};
+			}
 			public ColorFloat TryGetColorAtIndex(uint index) => TryGetAtIndex(Colors, index);
 			public Vector2 TryGetUV0AtIndex(uint index) => TryGetAtIndex(UV0, index);
 			public Vector2 TryGetUV1AtIndex(uint index) => TryGetAtIndex(UV1, index);
