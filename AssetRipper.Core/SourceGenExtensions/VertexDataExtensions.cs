@@ -73,7 +73,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			out Vector3[]? vertices,
 			out Vector3[]? normals,
 			out Vector4[]? tangents,
-			out ColorRGBA32[]? colors,
+			out ColorFloat[]? colors,
 			out BoneWeights4[]? skin,
 			out Vector2[]? uv0,
 			out Vector2[]? uv1,
@@ -171,7 +171,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 									tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, m_Channel.GetDataDimension());
 									break;
 								case 3: //kShaderChannelColor
-									colors = MeshHelper.FloatArrayToColorRGBA32(componentsFloatArray);
+									colors = MeshHelper.FloatArrayToColorFloat(componentsFloatArray);
 									break;
 								case 4: //kShaderChannelTexCoord0
 									uv0 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
@@ -231,7 +231,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 									normals = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.GetDataDimension());
 									break;
 								case 2: //kShaderChannelColor
-									colors = MeshHelper.FloatArrayToColorRGBA32(componentsFloatArray);
+									colors = MeshHelper.FloatArrayToColorFloat(componentsFloatArray);
 									break;
 								case 3: //kShaderChannelTexCoord0
 									uv0 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());

@@ -17,7 +17,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			out Vector3[]? vertices,
 			out Vector3[]? normals,
 			out Vector4[]? tangents,
-			out ColorRGBA32[]? colors,
+			out ColorFloat[]? colors,
 			out BoneWeights4[]? skin,
 			out Vector2[]? uv0,
 			out Vector2[]? uv1,
@@ -199,12 +199,23 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 			}
 			//FloatColor
-			if (compressedMesh.Has_FloatColors())
+			if (compressedMesh.Has_FloatColors() && compressedMesh.FloatColors.NumItems > 0)
 			{
-				if (compressedMesh.FloatColors.NumItems > 0)
+				colors = MeshHelper.FloatArrayToColorFloat(compressedMesh.FloatColors.UnpackFloats(1, 4));
+			}
+			//Color
+			if (compressedMesh.Has_Colors() && compressedMesh.Colors.NumItems > 0)
+			{
+				compressedMesh.Colors.NumItems *= 4;
+				compressedMesh.Colors.BitSize /= 4;
+				int[] tempColors = compressedMesh.Colors.UnpackInts();
+				colors = new ColorFloat[compressedMesh.Colors.NumItems / 4];
+				for (int v = 0; v < compressedMesh.Colors.NumItems / 4; v++)
 				{
-					colors = MeshHelper.FloatArrayToColorRGBA32(compressedMesh.FloatColors.UnpackFloats(1, 4));
+					colors[v] = (ColorFloat)new Color32((byte)tempColors[4 * v], (byte)tempColors[(4 * v) + 1], (byte)tempColors[(4 * v) + 2], (byte)tempColors[(4 * v) + 3]);
 				}
+				compressedMesh.Colors.NumItems /= 4;
+				compressedMesh.Colors.BitSize *= 4;
 			}
 			//Skin
 			if (compressedMesh.Weights.NumItems > 0)
@@ -259,20 +270,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			if (compressedMesh.Triangles.NumItems > 0)
 			{
 				processedIndexBuffer = Array.ConvertAll(compressedMesh.Triangles.UnpackInts(), x => (uint)x);
-			}
-			//Color
-			if (compressedMesh.Has_Colors() && compressedMesh.Colors.NumItems > 0)
-			{
-				compressedMesh.Colors.NumItems *= 4;
-				compressedMesh.Colors.BitSize /= 4;
-				int[] tempColors = compressedMesh.Colors.UnpackInts();
-				colors = new ColorRGBA32[compressedMesh.Colors.NumItems / 4];
-				for (int v = 0; v < compressedMesh.Colors.NumItems / 4; v++)
-				{
-					colors[v] = new ColorRGBA32((byte)tempColors[4 * v], (byte)tempColors[(4 * v) + 1], (byte)tempColors[(4 * v) + 2], (byte)tempColors[(4 * v) + 3]);
-				}
-				compressedMesh.Colors.NumItems /= 4;
-				compressedMesh.Colors.BitSize *= 4;
 			}
 		}
 

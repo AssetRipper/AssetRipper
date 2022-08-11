@@ -281,7 +281,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			return result;
 		}
 
-		public static ColorRGBAf[] FloatArrayToColorRGBAf(float[] input)
+		public static ColorFloat[] FloatArrayToColorFloat(float[] input)
 		{
 			if (input == null)
 			{
@@ -293,30 +293,10 @@ namespace AssetRipper.Core.Classes.Mesh
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by four", nameof(input));
 			}
 
-			ColorRGBAf[] result = new ColorRGBAf[input.Length / 4];
+			ColorFloat[] result = new ColorFloat[input.Length / 4];
 			for (int i = 0; i < result.Length; i++)
 			{
-				result[i] = new ColorRGBAf(input[4 * i], input[(4 * i) + 1], input[(4 * i) + 2], input[(4 * i) + 3]);
-			}
-			return result;
-		}
-
-		public static ColorRGBA32[] FloatArrayToColorRGBA32(float[] input)
-		{
-			if (input == null)
-			{
-				throw new ArgumentNullException(nameof(input));
-			}
-
-			if (input.Length % 4 != 0)
-			{
-				throw new ArgumentException($"Input array length {input.Length} is not divisible by four", nameof(input));
-			}
-
-			ColorRGBA32[] result = new ColorRGBA32[input.Length / 4];
-			for (int i = 0; i < result.Length; i++)
-			{
-				result[i] = (ColorRGBA32)new ColorRGBAf(input[4 * i], input[(4 * i) + 1], input[(4 * i) + 2], input[(4 * i) + 3]);
+				result[i] = new ColorFloat(input[4 * i], input[(4 * i) + 1], input[(4 * i) + 2], input[(4 * i) + 3]);
 			}
 			return result;
 		}

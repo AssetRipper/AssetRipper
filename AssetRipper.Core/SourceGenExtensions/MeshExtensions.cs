@@ -54,7 +54,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			out Vector3[]? vertices,
 			out Vector3[]? normals,
 			out Vector4[]? tangents,
-			out ColorRGBA32[]? colors,
+			out ColorFloat[]? colors,
 			out BoneWeights4[]? skin,
 			out Vector2[]? uv0,
 			out Vector2[]? uv1,
@@ -103,7 +103,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				vertices = mesh.Vertices_C43!.Select(v => v.CastToStruct()).ToArray();
 				normals = mesh.Normals_C43!.Select(n => n.CastToStruct()).ToArray();
 				tangents = mesh.Tangents_C43!.Select(t => t.CastToStruct()).ToArray();
-				colors = mesh.Colors_C43!.Select(c => (ColorRGBA32)c).ToArray();
+				colors = mesh.Colors_C43!.Select(c => c.ConvertToColorFloat()).ToArray();
 				uv0 = mesh.UV_C43!.Select(v => v.CastToStruct()).ToArray();
 				uv1 = mesh.UV1_C43!.Select(v => v.CastToStruct()).ToArray();
 			}
@@ -112,7 +112,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				out Vector3[]? compressed_vertices,
 				out Vector3[]? compressed_normals,
 				out Vector4[]? compressed_tangents,
-				out ColorRGBA32[]? compressed_colors,
+				out ColorFloat[]? compressed_colors,
 				out BoneWeights4[]? compressed_skin,
 				out Vector2[]? compressed_uv0,
 				out Vector2[]? compressed_uv1,
@@ -140,6 +140,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			uv7 ??= compressed_uv7;
 			bindPose = compressed_bindPose;
 			processedIndexBuffer = compressed_processedIndexBuffer ?? mesh.GetProcessedIndexBuffer();
+		}
+
+		private static ColorFloat ConvertToColorFloat(this SourceGenerated.Subclasses.ColorRGBA32.ColorRGBA32 c)
+		{
+			return (ColorFloat)new Color32(c.GetR(), c.GetG(), c.GetB(), c.GetA());
 		}
 
 		public static byte[] GetChannelsData(this IMesh mesh)

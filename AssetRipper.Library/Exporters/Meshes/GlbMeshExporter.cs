@@ -52,7 +52,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 				out Vector3[]? vertices,
 				out Vector3[]? normals,
 				out Vector4[]? tangents,
-				out ColorRGBA32[]? colors,
+				out ColorFloat[]? colors,
 				out _, //skin
 				out Vector2[]? uv0,
 				out Vector2[]? uv1,
@@ -77,22 +77,15 @@ namespace AssetRipper.Library.Exporters.Meshes
 				throw new ArgumentException("Index count must be a multiple of 3.", nameof(mesh));
 			}
 
-			bool hasNormals = normals != null && normals.Length == vertices.Length;
-			bool hasTangents = tangents != null && tangents.Length == vertices.Length;
-			bool hasUV0 = uv0 != null && uv0.Length == vertices.Length;
-			bool hasUV1 = uv1 != null && uv1.Length == vertices.Length;
-			//bool hasColors = colors != null && colors.Length == vertices.Length;
-			//bool hasSkin;
-
 			SceneBuilder sceneBuilder = new SceneBuilder();
 			MaterialBuilder material = new MaterialBuilder("material");
 			string name = mesh.NameString;
 			MeshData meshData = new MeshData(vertices, normals, tangents, null, uv0, uv1, indices);
 			GlbMeshType meshType = default;
 			
-			if (hasNormals)
+			if (normals != null && normals.Length == vertices.Length)
 			{
-				if (hasTangents)
+				if (tangents != null && tangents.Length == vertices.Length)
 				{
 					meshType |= GlbMeshType.PositionNormalTangent;
 				}
@@ -102,9 +95,9 @@ namespace AssetRipper.Library.Exporters.Meshes
 				}
 			}
 			
-			if (hasUV0)
+			if (uv0 != null && uv0.Length == vertices.Length)
 			{
-				if (hasUV1)
+				if (uv1 != null && uv1.Length == vertices.Length)
 				{
 					meshType |= GlbMeshType.Texture2;
 				}
@@ -112,6 +105,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 				{
 					meshType |= GlbMeshType.Texture1;
 				}
+			}
+
+			if (colors != null && colors.Length == vertices.Length)
+			{
+				meshType |= GlbMeshType.Color1;
 			}
 
 			switch (meshType)
@@ -272,11 +270,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 			}
 			else if (typeof(TvM) == typeof(VertexColor1Texture1))
 			{
-				material = Cast<VertexColor1Texture1, TvM>(new VertexColor1Texture1(meshData.TryGetColorAtIndex(index), meshData.TryGetUV0AtIndex(index)));
+				material = Cast<VertexColor1Texture1, TvM>(new VertexColor1Texture1(meshData.TryGetColorAtIndex(index).Vector, meshData.TryGetUV0AtIndex(index)));
 			}
 			else if (typeof(TvM) == typeof(VertexColor1Texture2))
 			{
-				material = Cast<VertexColor1Texture2, TvM>(new VertexColor1Texture2(meshData.TryGetColorAtIndex(index), meshData.TryGetUV0AtIndex(index), meshData.TryGetUV1AtIndex(index)));
+				material = Cast<VertexColor1Texture2, TvM>(new VertexColor1Texture2(meshData.TryGetColorAtIndex(index).Vector, meshData.TryGetUV0AtIndex(index), meshData.TryGetUV1AtIndex(index)));
 			}
 			else
 			{
@@ -315,7 +313,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			Vector3[] Vertices,
 			Vector3[]? Normals,
 			Vector4[]? Tangents,
-			Vector4[]? Colors,
+			ColorFloat[]? Colors,
 			Vector2[]? UV0,
 			Vector2[]? UV1,
 			IReadOnlyList<uint> Indices)
@@ -323,7 +321,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			public Vector3 TryGetVertexAtIndex(uint index) => Vertices[index];
 			public Vector3 TryGetNormalAtIndex(uint index) => TryGetAtIndex(Normals, index);
 			public Vector4 TryGetTangentAtIndex(uint index) => TryGetAtIndex(Tangents, index);
-			public Vector4 TryGetColorAtIndex(uint index) => TryGetAtIndex(Colors, index);
+			public ColorFloat TryGetColorAtIndex(uint index) => TryGetAtIndex(Colors, index);
 			public Vector2 TryGetUV0AtIndex(uint index) => TryGetAtIndex(UV0, index);
 			public Vector2 TryGetUV1AtIndex(uint index) => TryGetAtIndex(UV1, index);
 

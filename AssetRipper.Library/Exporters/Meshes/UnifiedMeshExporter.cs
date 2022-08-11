@@ -42,26 +42,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is IMesh mesh)
-			{
-				return IsSupported(ExportFormat) && HasValidMeshData(mesh);
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		public static bool HasValidMeshData(IMesh mesh)
-		{
-			return mesh != null &&
-
-				//mesh.Vertices != null &&
-				//mesh.Vertices.Length > 0 &&
-				//mesh.Indices != null &&
-				//mesh.Indices.Count > 0 &&
-				//mesh.Indices.Count % 3 == 0 &&
-				IsNotLinesOrPoints(mesh);
+			return IsSupported(ExportFormat) && asset is IMesh mesh && mesh.IsSet();
 		}
 
 		private static bool IsNotLinesOrPoints(IMesh mesh)
@@ -110,7 +91,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 		private byte[] ExportBinary(IMesh mesh)
 		{
 			Scene scene = ConvertToScene(mesh);
-			using MemoryStream memoryStream = new MemoryStream();
+			using MemoryStream memoryStream = new();
 			switch (ExportFormat)
 			{
 				case MeshExportFormat.FbxPrimitive:
@@ -136,10 +117,10 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		private Scene ConvertToScene(IMesh unityMesh)
 		{
-			MeshSharp.Elements.Geometries.Mesh? outputMesh = ConvertToMeshSharpMesh(unityMesh);
-			Scene scene = new Scene();
+			MeshSharp.Elements.Geometries.Mesh outputMesh = ConvertToMeshSharpMesh(unityMesh);
+			Scene scene = new();
 			scene.Name = unityMesh.NameString;
-			Node node = new Node();
+			Node node = new();
 			node.Name = unityMesh.NameString;
 			node.Children.Add(outputMesh);
 			scene.Nodes.Add(node);
@@ -152,7 +133,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 				out Vector3[]? vertices,
 				out Vector3[]? normals,
 				out Vector4[]? tangents,
-				out ColorRGBA32[]? colors,
+				out ColorFloat[]? colors,
 				out _, //skin
 				out Vector2[]? uv0,
 				out Vector2[]? uv1,
@@ -170,17 +151,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 				throw new ArgumentException("Vertices can't be null", nameof(unityMesh));
 			}
 
-			bool hasVertexNormals = normals != null && normals.Length == vertices.Length;
-			bool hasTangents = tangents != null && tangents.Length == vertices.Length;
-			bool hasUV0 = uv0 != null && uv0.Length == vertices.Length;
-			bool hasUV1 = uv1 != null && uv1.Length == vertices.Length;
-			bool hasColors = colors != null && colors.Length == vertices.Length;
-			//Logger.Info($"VertexNormals: {hasVertexNormals}");
-			//Logger.Info($"Tangents: {hasTangents}");
-			//Logger.Info($"UV 0: {hasUV0}");
-			//Logger.Info($"UV 1: {hasUV1}");
-			//Logger.Info($"Colors: {hasColors}");
-			MeshSharp.Elements.Geometries.Mesh? outputMesh = new MeshSharp.Elements.Geometries.Mesh();
+			MeshSharp.Elements.Geometries.Mesh outputMesh = new();
 			outputMesh.Name = unityMesh.NameString;
 			
 			//Vertices
@@ -191,6 +162,10 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 			//Polygons
 			List<uint> indices = TriangleProcessor.ReadIndices(unityMesh, processedIndexBuffer);
+			if (indices.Count % 3 != 0)
+			{
+				throw new ArgumentException("Index count must be a multiple of 3.", nameof(unityMesh));
+			}
 			for (int i = 0; i + 2 < indices.Count; i += 3)
 			{
 				if (ExportSpace == MeshCoordinateSpace.Right) //Switching to a right handed coordinate system requires reversing the polygon vertex order
@@ -206,7 +181,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			//Normals
 			LayerElementNormal normalElement = new LayerElementNormal(outputMesh);
 			outputMesh.Layers.Add(normalElement);
-			if (hasVertexNormals)
+			if (normals != null && normals.Length == vertices.Length)
 			{
 				normalElement.MappingInformationType = MappingMode.ByPolygonVertex;
 				normalElement.ReferenceInformationType = ReferenceMode.Direct;
@@ -214,7 +189,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 				{
 					foreach (uint index in polygon.Indices)
 					{
-						normalElement.Normals.Add(Convert(ToCoordinateSpace(normals![index], ExportSpace)));
+						normalElement.Normals.Add(Convert(ToCoordinateSpace(normals[index], ExportSpace)));
 					}
 				}
 			}
@@ -228,47 +203,47 @@ namespace AssetRipper.Library.Exporters.Meshes
 			}
 
 			//Tangents
-			if (hasTangents)
+			if (tangents != null && tangents.Length == vertices.Length)
 			{
 				LayerElementTangent tangentElement = new LayerElementTangent(outputMesh);
 				outputMesh.Layers.Add(tangentElement);
 				tangentElement.MappingInformationType = MappingMode.ByPolygonVertex;
 				tangentElement.ReferenceInformationType = ReferenceMode.Direct;
-				tangentElement.Tangents.AddRange(tangents!.Select(t => Convert(ToCoordinateSpace(new Vector3(t.X, t.Y, t.Z), ExportSpace))));
+				tangentElement.Tangents.AddRange(tangents.Select(t => Convert(ToCoordinateSpace(new Vector3(t.X, t.Y, t.Z), ExportSpace))));
 				//We're excluding W here because it's not supported by MeshSharp
 				//For Unity, the tangent W coordinate denotes the direction of the binormal vector and is always 1 or -1
 				//https://docs.unity3d.com/ScriptReference/Mesh-tangents.html
 			}
 
 			//UV
-			if (hasUV0)
+			if (uv0 != null && uv0.Length == vertices.Length)
 			{
-				LayerElementUV? uv0Element = new LayerElementUV(outputMesh);
+				LayerElementUV uv0Element = new LayerElementUV(outputMesh);
 				outputMesh.Layers.Add(uv0Element);
 				uv0Element.MappingInformationType = MappingMode.ByPolygonVertex;
 				uv0Element.ReferenceInformationType = ReferenceMode.IndexToDirect;
-				uv0Element.UV.AddRange(uv0!.Select(v => Convert(v)));
-				uv0Element.UVIndex.AddRange(Enumerable.Range(0, uv0!.Length));
+				uv0Element.UV.AddRange(uv0.Select(v => Convert(v)));
+				uv0Element.UVIndex.AddRange(Enumerable.Range(0, uv0.Length));
 			}
-			if (hasUV1)
+			if (uv1 != null && uv1.Length == vertices.Length)
 			{
-				LayerElementUV? uv1Element = new LayerElementUV(outputMesh);
+				LayerElementUV uv1Element = new LayerElementUV(outputMesh);
 				outputMesh.Layers.Add(uv1Element);
 				uv1Element.MappingInformationType = MappingMode.ByPolygonVertex;
 				uv1Element.ReferenceInformationType = ReferenceMode.IndexToDirect;
-				uv1Element.UV.AddRange(uv1!.Select(v => Convert(v)));
-				uv1Element.UVIndex.AddRange(Enumerable.Range(0, uv1!.Length));
+				uv1Element.UV.AddRange(uv1.Select(v => Convert(v)));
+				uv1Element.UVIndex.AddRange(Enumerable.Range(0, uv1.Length));
 			}
 
 			//Colors
-			if (hasColors)
+			if (colors != null && colors.Length == vertices.Length)
 			{
-				LayerElementVertexColor? colorElement = new LayerElementVertexColor(outputMesh);
+				LayerElementVertexColor colorElement = new LayerElementVertexColor(outputMesh);
 				outputMesh.Layers.Add(colorElement);
 				colorElement.MappingInformationType = MappingMode.ByPolygonVertex;
 				colorElement.ReferenceInformationType = ReferenceMode.IndexToDirect;
-				colorElement.Colors.AddRange(colors!.Select(v => Convert(v)));
-				colorElement.ColorIndex.AddRange(Enumerable.Range(0, colors!.Length));
+				colorElement.Colors.AddRange(colors.Select(v => Convert(v)));
+				colorElement.ColorIndex.AddRange(Enumerable.Range(0, colors.Length));
 			}
 
 			return outputMesh;
@@ -277,8 +252,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 		private static XY Convert(Vector2 vector) => new XY(vector.X, vector.Y);
 		private static XYZ Convert(Vector3 vector) => new XYZ(vector.X, vector.Y, vector.Z);
 		private static XYZM Convert(Vector4 vector) => new XYZM(vector.X, vector.Y, vector.Z, vector.W);
-		private static XYZM Convert(ColorRGBAf vector) => new XYZM(vector.R, vector.G, vector.B, vector.A);
-		private static XYZM Convert(ColorRGBA32 vector) => Convert((ColorRGBAf)vector);
+		private static XYZM Convert(ColorFloat vector) => new XYZM(vector.R, vector.G, vector.B, vector.A);
 		
 		private static Vector3 ToCoordinateSpace(Vector3 point, MeshCoordinateSpace space)
 		{

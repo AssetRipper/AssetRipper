@@ -78,7 +78,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				out vertices,
 				out Vector3[]? _,//normals,
 				out Vector4[]? _,//tangents,
-				out ColorRGBA32[]? _,//colors,
+				out ColorFloat[]? _,//colors,
 				out skin,
 				out Vector2[]? _,//uv0,
 				out Vector2[]? _,//uv1,
