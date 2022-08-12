@@ -29,26 +29,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="MeshSharp">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>Libraries\MeshSharp.dll</HintPath>
-		</Reference>
-		<Reference Include="MeshSharp.FBX">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>Libraries\MeshSharp.FBX.dll</HintPath>
-		</Reference>
-		<Reference Include="MeshSharp.OBJ">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>Libraries\MeshSharp.OBJ.dll</HintPath>
-		</Reference>
-		<Reference Include="MeshSharp.PLY">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>Libraries\MeshSharp.PLY.dll</HintPath>
-		</Reference>
-		<Reference Include="MeshSharp.STL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>Libraries\MeshSharp.STL.dll</HintPath>
-		</Reference>
 		<Reference Include="AssetRipper.SourceGenerated">
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>../Libraries/AssetRipper.SourceGenerated.dll</HintPath>

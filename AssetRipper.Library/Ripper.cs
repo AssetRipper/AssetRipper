@@ -287,7 +287,7 @@ namespace AssetRipper.Library
 			ConditionalOverrideExporter<ISpriteAtlas>(spriteExporter, Settings.SpriteExportMode == SpriteExportMode.Yaml);
 
 			//Shader exporters
-			ConditionalOverrideExporter<IShader>(new DummyShaderTextExporter(), Settings.ShaderExportMode == ShaderExportMode.Dummy);
+			OverrideExporter<IShader>(new DummyShaderTextExporter());
 			ConditionalOverrideExporter<IShader>(new YamlShaderExporter(), Settings.ShaderExportMode == ShaderExportMode.Yaml);
 			ConditionalOverrideExporter<IShader>(new ShaderDisassemblyExporter(), Settings.ShaderExportMode == ShaderExportMode.Disassembly);
 			ConditionalOverrideExporter<IShader>(new USCShaderExporter(), Settings.ShaderExportMode == ShaderExportMode.Decompile);
@@ -299,8 +299,7 @@ namespace AssetRipper.Library
 			ConditionalOverrideExporter<IAudioClip>(new AudioClipExporter(Settings), AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat));
 
 			//Mesh exporters
-			OverrideExporter<IMesh>(new GlbMeshExporter(Settings));
-			OverrideExporter<IMesh>(new UnifiedMeshExporter(Settings));
+			ConditionalOverrideExporter<IMesh>(new GlbMeshExporter(), Settings.MeshExportFormat == MeshExportFormat.Glb);
 
 			//Model exporters
 			GlbModelExporter glbModelExporter = new();

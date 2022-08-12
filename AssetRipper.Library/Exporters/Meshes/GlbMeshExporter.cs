@@ -17,8 +17,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 {
 	public sealed class GlbMeshExporter : BinaryAssetExporter
 	{
-		private MeshExportFormat ExportFormat { get; set; }
-		public GlbMeshExporter(LibraryConfiguration configuration) : base() => ExportFormat = configuration.MeshExportFormat;
+		public GlbMeshExporter() : base() { }
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
@@ -27,7 +26,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return ExportFormat is MeshExportFormat.Glb && asset is IMesh mesh && mesh.IsSet();
+			return asset is IMesh mesh && mesh.IsSet();
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

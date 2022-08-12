@@ -14,10 +14,6 @@ namespace AssetRipper.Library.Configuration
 		/// </summary>
 		public ImageExportFormat ImageExportFormat { get; set; }
 		/// <summary>
-		/// The coordinate space that meshes get exported in for non-yaml export.
-		/// </summary>
-		public MeshCoordinateSpace MeshCoordinateSpace { get; set; }
-		/// <summary>
 		/// The format that meshes get exported in. Recommended: Native
 		/// </summary>
 		public MeshExportFormat MeshExportFormat { get; set; }
@@ -51,7 +47,6 @@ namespace AssetRipper.Library.Configuration
 			base.ResetToDefaultValues();
 			AudioExportFormat = AudioExportFormat.Default;
 			ImageExportFormat = ImageExportFormat.Png;
-			MeshCoordinateSpace = MeshCoordinateSpace.Unity;
 			MeshExportFormat = MeshExportFormat.Native;
 			ScriptExportMode = ScriptExportMode.Decompiled;
 			ScriptLanguageVersion = ScriptLanguageVersion.AutoSafe;
@@ -66,7 +61,6 @@ namespace AssetRipper.Library.Configuration
 			base.LogConfigurationValues();
 			Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {AudioExportFormat}");
 			Logger.Info(LogCategory.General, $"{nameof(ImageExportFormat)}: {ImageExportFormat}");
-			Logger.Info(LogCategory.General, $"{nameof(MeshCoordinateSpace)}: {MeshCoordinateSpace}");
 			Logger.Info(LogCategory.General, $"{nameof(MeshExportFormat)}: {MeshExportFormat}");
 			Logger.Info(LogCategory.General, $"{nameof(ScriptExportMode)}: {ScriptExportMode}");
 			Logger.Info(LogCategory.General, $"{nameof(ScriptLanguageVersion)}: {ScriptLanguageVersion}");
