@@ -15,11 +15,13 @@ using AssetRipper.Library.Exporters.AnimatorControllers;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Miscellaneous;
+using AssetRipper.Library.Exporters.Models;
 using AssetRipper.Library.Exporters.Scripts;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.Exporters.TypeTrees;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
@@ -28,9 +30,11 @@ using AssetRipper.SourceGenerated.Classes.ClassID_152;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
 using AssetRipper.SourceGenerated.Classes.ClassID_188;
+using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
@@ -297,6 +301,12 @@ namespace AssetRipper.Library
 			//Mesh exporters
 			OverrideExporter<IMesh>(new GlbMeshExporter(Settings));
 			OverrideExporter<IMesh>(new UnifiedMeshExporter(Settings));
+
+			//Model exporters
+			GlbModelExporter glbModelExporter = new();
+			ConditionalOverrideExporter<IComponent>(glbModelExporter, Settings.MeshExportFormat == MeshExportFormat.Glb);
+			ConditionalOverrideExporter<IGameObject>(glbModelExporter, Settings.MeshExportFormat == MeshExportFormat.Glb);
+			ConditionalOverrideExporter<ILevelGameManager>(glbModelExporter, Settings.MeshExportFormat == MeshExportFormat.Glb);
 
 			//Terrain exporters
 			ConditionalOverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings), Settings.TerrainExportMode == TerrainExportMode.Heatmap);

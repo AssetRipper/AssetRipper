@@ -7,8 +7,10 @@ using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
 using AssetRipper.IO.Endian;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.StreamInfo;
+using AssetRipper.SourceGenerated.Subclasses.StreamingInfo;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.VertexData;
@@ -26,7 +28,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 		private const int StaticStreamCount = 4;
 		private const int VertexStreamAlign = 16;
 
-		public static bool IsSet(this IVertexData instance) => instance.VertexCount > 0 && instance.Data.Length > 0;
+		public static bool IsSet(this IVertexData instance, IStreamingInfo? streamingInfo)
+		{
+			return instance.VertexCount > 0 && (instance.Data.Length > 0 || (streamingInfo is not null && streamingInfo.IsSet()));
+		}
 
 		/// <summary>
 		/// 5.6.0
@@ -70,6 +75,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			this IVertexData instance,
 			UnityVersion version,
 			EndianType endianType,
+			IMesh? mesh,
 			out Vector3[]? vertices,
 			out Vector3[]? normals,
 			out Vector4[]? tangents,
@@ -100,9 +106,26 @@ namespace AssetRipper.Core.SourceGenExtensions
 			uv6 = default;
 			uv7 = default;
 
+			byte[] data;
+
 			if (instance.Data.Length == 0)
 			{
-				return;
+				if (mesh?.StreamData_C43 is not null)
+				{
+					data = mesh.StreamData_C43.GetContent(mesh.SerializedFile);
+					if (data.Length == 0)
+					{
+						return;
+					}
+				}
+				else
+				{
+					return;
+				}
+			}
+			else
+			{
+				data = instance.Data;
 			}
 
 			IReadOnlyList<ChannelInfo> channels = instance.GetChannels(version);
@@ -123,15 +146,15 @@ namespace AssetRipper.Core.SourceGenExtensions
 						}
 
 						MeshHelper.VertexFormat vertexFormat = MeshHelper.ToVertexFormat(m_Channel.Format, version);
-						int componentByteSize = (int)MeshHelper.GetFormatSize(vertexFormat);
-						byte[]? componentBytes = new byte[vertexCount * m_Channel.GetDataDimension() * componentByteSize];
+						int componentByteSize = MeshHelper.GetFormatSize(vertexFormat);
+						byte[] componentBytes = new byte[vertexCount * m_Channel.GetDataDimension() * componentByteSize];
 						for (int v = 0; v < vertexCount; v++)
 						{
 							int vertexOffset = (int)m_Stream.Offset + m_Channel.Offset + ((int)m_Stream.GetStride() * v);
 							for (int d = 0; d < m_Channel.GetDataDimension(); d++)
 							{
 								int componentOffset = vertexOffset + (componentByteSize * d);
-								Buffer.BlockCopy(instance.Data, componentOffset, componentBytes, componentByteSize * ((v * m_Channel.GetDataDimension()) + d), componentByteSize);
+								Buffer.BlockCopy(data, componentOffset, componentBytes, componentByteSize * ((v * m_Channel.GetDataDimension()) + d), componentByteSize);
 							}
 						}
 

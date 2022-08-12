@@ -166,7 +166,7 @@ namespace AssetRipper.Core.Project
 				throw new Exception($"Scene '{name}' hasn't been found in build settings");
 			}
 
-			string fileName = SceneExportCollection.SceneIndexToFileName(index, Version);
+			string fileName = SceneExportHelpers.SceneIndexToFileName(index, Version);
 			foreach (SceneExportCollection scene in m_scenes)
 			{
 				if (scene.Name == fileName)

@@ -1,15 +1,27 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO;
+using AssetRipper.Core.Math.Transformations;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform_;
+using System.Collections.Generic;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class TransformExtensions
 	{
 		private const char PathSeparator = '/';
+
+		public static Transformation ToTransformation(this ITransform transform)
+		{
+			return Transformation.Create(transform.LocalPosition_C4.CastToStruct(), transform.LocalRotation_C4.CastToStruct(), transform.LocalScale_C4.CastToStruct());
+		}
+
+		public static Transformation ToInverseTransformation(this ITransform transform)
+		{
+			return Transformation.CreateInverse(transform.LocalPosition_C4.CastToStruct(), transform.LocalRotation_C4.CastToStruct(), transform.LocalScale_C4.CastToStruct());
+		}
 
 		public static string GetRootPath(this ITransform transform)
 		{
@@ -60,9 +72,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			string childName = separatorIndex == -1 ?
 				path.Substring(startIndex, path.Length - startIndex) :
 				path.Substring(startIndex, separatorIndex - startIndex);
-			foreach (IPPtr_Transform_ childPtr in transform.Children_C4)
+			foreach (ITransform child in transform.GetChildren())
 			{
-				ITransform child = childPtr.GetAsset(transform.SerializedFile);
 				IGameObject childGO = child.GetGameObject();
 				if (childGO.NameString == childName)
 				{
@@ -70,6 +81,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 			}
 			return default;
+		}
+
+		public static IEnumerable<ITransform> GetChildren(this ITransform transform)
+		{
+			foreach (IPPtr_Transform_ childPtr in transform.Children_C4)
+			{
+				yield return childPtr.GetAsset(transform.SerializedFile);
+			}
 		}
 
 		public static void ConvertToEditorFormat(this ITransform transform)

@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_33;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -9,6 +10,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static IMesh GetMesh(this IMeshFilter meshFilter)
 		{
 			return meshFilter.Mesh_C33.GetAsset(meshFilter.SerializedFile);
+		}
+
+		public static bool TryGetMesh(this IMeshFilter meshFilter, [NotNullWhen(true)] out IMesh? mesh)
+		{
+			mesh = meshFilter.Mesh_C33.FindAsset(meshFilter.SerializedFile);
+			return mesh is not null;
 		}
 	}
 }

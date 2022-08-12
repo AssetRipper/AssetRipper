@@ -23,13 +23,13 @@
 		/// </summary>
 		PlyAscii,
 		/// <summary>
-		/// An opensource alternative to FBX. It is the binary version of GLTF. Primitive export only contains mesh data. Unity does not support importing this format.
-		/// </summary>
-		GlbPrimitive,
-		/// <summary>
 		/// FBX. Primitive export only contains mesh data. This option breaks exported references to the mesh asset.
 		/// </summary>
 		FbxPrimitive,
+		/// <summary>
+		/// An opensource alternative to FBX. It is the binary version of GLTF. Unity does not support importing this format.
+		/// </summary>
+		Glb,
 	}
 
 	/* Unity supported mesh import formats: (https://docs.unity3d.com/2019.3/Documentation/Manual/3D-formats.html)
@@ -49,13 +49,13 @@
 			MeshExportFormat.StlAscii => "stl",
 			MeshExportFormat.StlBinary => "stl",
 			MeshExportFormat.PlyAscii => "ply",
-			MeshExportFormat.GlbPrimitive => "glb",
+			MeshExportFormat.Glb => "glb",
 			MeshExportFormat.FbxPrimitive => "fbx",
 			_ => throw new ArgumentOutOfRangeException(nameof(format)),
 		};
 
 		public static bool IsFBX(this MeshExportFormat format) => format == MeshExportFormat.FbxPrimitive;
-		public static bool IsGLB(this MeshExportFormat format) => format == MeshExportFormat.GlbPrimitive;
+		public static bool IsGLB(this MeshExportFormat format) => format == MeshExportFormat.Glb;
 		public static bool IsOBJ(this MeshExportFormat format) => format == MeshExportFormat.Obj;
 		public static bool IsPLY(this MeshExportFormat format) => format == MeshExportFormat.PlyAscii;
 		public static bool IsSTL(this MeshExportFormat format) => format == MeshExportFormat.StlAscii || format == MeshExportFormat.StlBinary;

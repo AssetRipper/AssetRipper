@@ -2,7 +2,6 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Colors;
-using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Subclasses.MeshBlendShape;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
@@ -24,7 +23,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (mesh.Has_VertexData_C43())
 			{
-				return mesh.CompressedMesh_C43.IsSet() || mesh.VertexData_C43.IsSet();
+				return mesh.CompressedMesh_C43.IsSet() || mesh.VertexData_C43.IsSet(mesh.StreamData_C43);
 			}
 			else
 			{
@@ -39,12 +38,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static bool CheckAssetIntegrity(this IMesh mesh)
 		{
-			if (mesh.Has_StreamData_C43() && mesh.Has_VertexData_C43() && mesh.SerializedFile is not null)
+			if (mesh.Has_StreamData_C43() && mesh.Has_VertexData_C43() && mesh.VertexData_C43.IsSet(mesh.StreamData_C43))
 			{
-				if (mesh.VertexData_C43.IsSet())
-				{
-					return mesh.StreamData_C43.CheckIntegrity(mesh.SerializedFile);
-				}
+				return mesh.StreamData_C43.CheckIntegrity(mesh.SerializedFile);
 			}
 			return true;
 		}
@@ -83,7 +79,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			if (mesh.Has_VertexData_C43())
 			{
-				mesh.VertexData_C43?.ReadData(mesh.SerializedFile.Version, mesh.SerializedFile.EndianType,
+				mesh.VertexData_C43?.ReadData(mesh.SerializedFile.Version, mesh.SerializedFile.EndianType, mesh,
 					out vertices,
 					out normals,
 					out tangents,

@@ -72,7 +72,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 		public Vector2 TryGetUV0AtIndex(uint index) => TryGetAtIndex(UV0, index);
 		public Vector2 TryGetUV1AtIndex(uint index) => TryGetAtIndex(UV1, index);
 		
-		public static MeshData FromMesh(IMesh mesh)
+		public static bool TryMakeFromMesh(IMesh mesh, out MeshData meshData)
 		{
 			mesh.ReadData(
 				out Vector3[]? vertices,
@@ -93,10 +93,14 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 			if (vertices is null)
 			{
-				throw new ArgumentException("Vertices can't be null.", nameof(mesh));
+				meshData = default;
+				return false;
 			}
-			
-			return new MeshData(vertices, normals, tangents, colors, uv0, uv1, processedIndexBuffer, mesh);
+			else
+			{
+				meshData = new MeshData(vertices, normals, tangents, colors, uv0, uv1, processedIndexBuffer, mesh);
+				return true;
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]

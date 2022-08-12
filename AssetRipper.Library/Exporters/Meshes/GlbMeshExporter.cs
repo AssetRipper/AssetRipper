@@ -27,7 +27,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return ExportFormat is MeshExportFormat.GlbPrimitive && asset is IMesh mesh && mesh.IsSet();
+			return ExportFormat is MeshExportFormat.Glb && asset is IMesh mesh && mesh.IsSet();
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -45,33 +45,35 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		private static byte[] ExportBinary(IMesh mesh)
 		{
-			SceneBuilder sceneBuilder = new SceneBuilder();
+			SceneBuilder sceneBuilder = new();
 			MaterialBuilder material = new MaterialBuilder("material");
 
 			AddMeshToScene(sceneBuilder, material, mesh);
-			
-			SharpGLTF.Schema2.ModelRoot model = sceneBuilder.ToGltf2();
 
-			//Write settings can be used in the write glb method if desired
-			//SharpGLTF.Schema2.WriteSettings writeSettings = new();
+			SharpGLTF.Schema2.WriteSettings writeSettings = new();
+			writeSettings.Validation = SharpGLTF.Validation.ValidationMode.Skip; //Required due to non-invertible and non-decomposeable transforms
 
-			return model.WriteGLB().ToArray();
+			return sceneBuilder.ToGltf2().WriteGLB(writeSettings).ToArray();
 		}
 
-		private static void AddMeshToScene(SceneBuilder sceneBuilder, MaterialBuilder material, IMesh mesh)
+		private static bool AddMeshToScene(SceneBuilder sceneBuilder, MaterialBuilder material, IMesh mesh)
 		{
-			MeshData meshData = MeshData.FromMesh(mesh);
-			NodeBuilder rootNodeForMesh = new NodeBuilder(mesh.NameString);
-			//rootNodeForMesh.LocalMatrix = Matrix4x4.Identity; //Local transform can be changed if desired
-			sceneBuilder.AddNode(rootNodeForMesh);
-
-			for (int submeshIndex = 0; submeshIndex < meshData.Mesh.SubMeshes_C43.Count; submeshIndex++)
+			if (MeshData.TryMakeFromMesh(mesh, out MeshData meshData))
 			{
-				ISubMesh subMesh = meshData.Mesh.SubMeshes_C43[submeshIndex];
-				IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMesh(material, meshData, subMesh, Transformation.Identity);
-				NodeBuilder subMeshNode = rootNodeForMesh.CreateNode($"SubMesh_{submeshIndex}");
-				sceneBuilder.AddRigidMesh(subMeshBuilder, subMeshNode);
+				NodeBuilder rootNodeForMesh = new NodeBuilder(mesh.NameString);
+				//rootNodeForMesh.LocalMatrix = Matrix4x4.Identity; //Local transform can be changed if desired
+				sceneBuilder.AddNode(rootNodeForMesh);
+
+				for (int submeshIndex = 0; submeshIndex < meshData.Mesh.SubMeshes_C43.Count; submeshIndex++)
+				{
+					ISubMesh subMesh = meshData.Mesh.SubMeshes_C43[submeshIndex];
+					IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMesh(material, meshData, subMesh, Transformation.IdentityWithInvertedX, Transformation.IdentityWithInvertedX);
+					NodeBuilder subMeshNode = rootNodeForMesh.CreateNode($"SubMesh_{submeshIndex}");
+					sceneBuilder.AddRigidMesh(subMeshBuilder, subMeshNode);
+				}
+				return true;
 			}
+			return false;
 		}
 	}
 }

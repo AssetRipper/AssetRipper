@@ -8,6 +8,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform_;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -71,17 +72,23 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			return default;
 		}
+		
+		public static bool TryFindComponent<T>(this IGameObject gameObject, [NotNullWhen(true)] out T? component) where T : IComponent
+		{
+			component = gameObject.FindComponent<T>();
+			return component is not null;
+		}
 
 		public static T GetComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
 			T? component = gameObject.FindComponent<T>();
-			if (component == null)
+			if (component is null)
 			{
-				throw new Exception($"Component of type {nameof(T)} hasn't been found");
+				throw new Exception($"Component of type {typeof(T)} hasn't been found");
 			}
 			return component;
 		}
-
+		
 		public static ITransform GetTransform(this IGameObject gameObject)
 		{
 			foreach (IPPtr_Component_ ptr in gameObject.FetchComponents())

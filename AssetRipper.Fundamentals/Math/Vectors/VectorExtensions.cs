@@ -9,5 +9,10 @@ namespace AssetRipper.Core.Math.Vectors
 		{
 			return Unsafe.As<Vector4, Vector3>(ref vector4);
 		}
+
+		public static Vector3 InvertX(this Vector3 vector)
+		{
+			return new Vector3(-vector.X, vector.Y, vector.Z);
+		}
 	}
 }

@@ -33,10 +33,69 @@ namespace AssetRipper.Tests
 		}
 
 		[Test]
+		public void RemoveTranslation()
+		{
+			Vector3 translation = new Vector3(2, 5, -8);
+			Quaternion rotation = Quaternion.CreateFromYawPitchRoll(2, 0.5f, 3);
+			Vector3 scale = new Vector3(0.8f, 2, 3);
+			Transformation withTranslation = Transformation.Create(translation, rotation, scale);
+			Transformation withoutTranslation = Transformation.Create(Vector3.Zero, rotation, scale);
+			AssertApproximatelyEqual(withTranslation.RemoveTranslation(), withoutTranslation, 0.00001f);
+		}
+
+		[Test]
 		public void Inversion()
 		{
 			Transformation original = new Transformation(new Vector3(2, 5, -8), Quaternion.CreateFromYawPitchRoll(2, 0.5f, 3), new Vector3(0.8f, 2, 3));
 			Transformation inverted = original.Invert();
+			AssertApproximatelyEqual(original * inverted, Transformation.Identity, 0.00001f);
+			AssertApproximatelyEqual(inverted * original, Transformation.Identity, 0.00001f);
+		}
+
+		[Test]
+		public void InversionFromComponents()
+		{
+			Vector3 translation = new Vector3(2, 5, -8);
+			Quaternion rotation = Quaternion.CreateFromYawPitchRoll(2, 0.5f, 3);
+			Vector3 scale = new Vector3(0.8f, 2, 3);
+			Transformation original = Transformation.Create(translation, rotation, scale);
+			Transformation inverted = Transformation.CreateInverse(translation, rotation, scale);
+			AssertApproximatelyEqual(original * inverted, Transformation.Identity, 0.00001f);
+			AssertApproximatelyEqual(inverted * original, Transformation.Identity, 0.00001f);
+		}
+
+		[Test]
+		public void InversionFromComponentsTranslation()
+		{
+			Vector3 translation = new Vector3(2, 5, -8);
+			Quaternion rotation = Quaternion.Identity;
+			Vector3 scale = Vector3.One;
+			Transformation original = Transformation.Create(translation, rotation, scale);
+			Transformation inverted = Transformation.CreateInverse(translation, rotation, scale);
+			AssertApproximatelyEqual(original * inverted, Transformation.Identity, 0.00001f);
+			AssertApproximatelyEqual(inverted * original, Transformation.Identity, 0.00001f);
+		}
+
+		[Test]
+		public void InversionFromComponentsRotation()
+		{
+			Vector3 translation = Vector3.Zero;
+			Quaternion rotation = Quaternion.CreateFromYawPitchRoll(2, 0.5f, 3);
+			Vector3 scale = Vector3.One;
+			Transformation original = Transformation.Create(translation, rotation, scale);
+			Transformation inverted = Transformation.CreateInverse(translation, rotation, scale);
+			AssertApproximatelyEqual(original * inverted, Transformation.Identity, 0.00001f);
+			AssertApproximatelyEqual(inverted * original, Transformation.Identity, 0.00001f);
+		}
+
+		[Test]
+		public void InversionFromComponentsScale()
+		{
+			Vector3 translation = Vector3.Zero;
+			Quaternion rotation = Quaternion.Identity;
+			Vector3 scale = new Vector3(0.8f, 2, 3);
+			Transformation original = Transformation.Create(translation, rotation, scale);
+			Transformation inverted = Transformation.CreateInverse(translation, rotation, scale);
 			AssertApproximatelyEqual(original * inverted, Transformation.Identity, 0.00001f);
 			AssertApproximatelyEqual(inverted * original, Transformation.Identity, 0.00001f);
 		}
