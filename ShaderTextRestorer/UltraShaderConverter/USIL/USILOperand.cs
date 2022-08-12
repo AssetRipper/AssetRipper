@@ -8,8 +8,8 @@ namespace ShaderLabConvert
 	{
 		public USILOperandType operandType;
 
-		public int[] immValueInt;
-		public float[] immValueFloat;
+		public int[] immValueInt = Array.Empty<int>();
+		public float[] immValueFloat = Array.Empty<float>();
 		public bool immIsInt; // useless
 
 		public bool absoluteValue;
@@ -18,15 +18,15 @@ namespace ShaderLabConvert
 
 		public int registerIndex;
 		public int arrayIndex;
-		public USILOperand arrayRelative;
+		public USILOperand? arrayRelative;
 
-		public string metadataName;
+		public string? metadataName;
 		public bool metadataNameAssigned;
 		public bool metadataNameWithArray;
 
-		public string comment;
+		public string comment = string.Empty;
 
-		public USILOperand[] children;
+		public USILOperand[] children = Array.Empty<USILOperand>();
 
 		public int[] mask;
 		public bool displayMask;
@@ -35,8 +35,6 @@ namespace ShaderLabConvert
 		{
 			operandType = USILOperandType.None;
 
-			immValueInt = Array.Empty<int>();
-			immValueFloat = Array.Empty<float>();
 			immIsInt = false;
 
 			absoluteValue = false;
@@ -50,10 +48,6 @@ namespace ShaderLabConvert
 			metadataName = null;
 			metadataNameAssigned = false;
 			metadataNameWithArray = false;
-
-			comment = "";
-
-			children = new USILOperand[0];
 
 			mask = Array.Empty<int>();
 			displayMask = true;
@@ -169,7 +163,7 @@ namespace ShaderLabConvert
 
 			if (metadataNameAssigned)
 			{
-				body = metadataName;
+				body = metadataName ?? "";
 			}
 			else
 			{

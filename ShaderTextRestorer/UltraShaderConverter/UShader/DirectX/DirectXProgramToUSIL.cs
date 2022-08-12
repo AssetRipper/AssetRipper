@@ -2136,7 +2136,7 @@ namespace ShaderLabConvert
 			switch (size)
 			{
 				case 0:
-					return new int[0];
+					return Array.Empty<int>();
 				case 1:
 					return new[] { 0 };
 				case 2:
