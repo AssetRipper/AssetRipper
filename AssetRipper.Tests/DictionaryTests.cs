@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.IO;
+using AssetRipper.SourceGenerated.Subclasses.FastPropertyName;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
 namespace AssetRipper.Tests
@@ -60,6 +61,33 @@ namespace AssetRipper.Tests
 		private static Utf8String Cast(string str)
 		{
 			return new() { String = str };
+		}
+
+		[Test]
+		public void FastPropertyNameDictionaryTests()
+		{
+			AssetDictionary<FastPropertyName, int> dictionary = new()
+			{
+				{ MakeFastPropertyName("One"), 1 },
+				{ MakeFastPropertyName("Two"), 2 },
+				{ MakeFastPropertyName("Three"), 3 }
+			};
+
+			Assert.Multiple(() =>
+			{
+				Assert.That(dictionary.Count, Is.EqualTo(3));
+				Assert.IsTrue(dictionary.ContainsKey(MakeFastPropertyName("One")));
+				Assert.IsTrue(dictionary.ContainsKey(MakeFastPropertyName("Three")));
+				Assert.IsFalse(dictionary.ContainsKey(MakeFastPropertyName("Four")));
+				Assert.That(MakeFastPropertyName("Three").GetHashCode(), Is.EqualTo(MakeFastPropertyName("Three").GetHashCode()));
+				Assert.That(MakeFastPropertyName("Three").Equals(MakeFastPropertyName("Three")));
+				Assert.That(dictionary[MakeFastPropertyName("Three")], Is.EqualTo(3));
+			});
+		}
+
+		private static FastPropertyName MakeFastPropertyName(string str)
+		{
+			return new() { NameString = str };
 		}
 	}
 }

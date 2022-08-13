@@ -69,9 +69,10 @@ namespace AssetRipper.Library.Exporters.Meshes
 			};
 		}
 		public ColorFloat TryGetColorAtIndex(uint index) => TryGetAtIndex(Colors, index);
-		public Vector2 TryGetUV0AtIndex(uint index) => TryGetAtIndex(UV0, index);
-		public Vector2 TryGetUV1AtIndex(uint index) => TryGetAtIndex(UV1, index);
-		
+		public Vector2 TryGetUV0AtIndex(uint index) => FlipY(TryGetAtIndex(UV0, index));
+		public Vector2 TryGetUV1AtIndex(uint index) => FlipY(TryGetAtIndex(UV1, index));
+		private static Vector2 FlipY(Vector2 uv) => new Vector2(uv.X, 1 - uv.Y);
+
 		public static bool TryMakeFromMesh(IMesh mesh, out MeshData meshData)
 		{
 			mesh.ReadData(

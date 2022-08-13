@@ -9,18 +9,18 @@ namespace AssetRipper.Library.Utils
 {
 	public partial class DirectBitmap
 	{
-		private bool SaveAsBmp(Stream stream)
+		public bool SaveAsBmp(Stream stream)
 		{
 			BmpWriter.WriteBmp(Bits, Width, Height, stream);
 			return true;
 		}
 
-		private async Task SaveAsBmpAsync(Stream stream)
+		public async Task SaveAsBmpAsync(Stream stream)
 		{
 			await Task.Run(() => BmpWriter.WriteBmp(Bits, Width, Height, stream));
 		}
 
-		private bool SaveAsGif(Stream stream)
+		public bool SaveAsGif(Stream stream)
 		{
 			if (OperatingSystem.IsWindows())
 			{
@@ -36,13 +36,13 @@ namespace AssetRipper.Library.Utils
 			}
 		}
 
-		private async Task SaveAsGifAsync(Stream stream)
+		public async Task SaveAsGifAsync(Stream stream)
 		{
 			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			await image.SaveAsGifAsync(stream);
 		}
 
-		private bool SaveAsJpeg(Stream stream)
+		public bool SaveAsJpeg(Stream stream)
 		{
 			if (OperatingSystem.IsWindows())
 			{
@@ -58,26 +58,26 @@ namespace AssetRipper.Library.Utils
 			}
 		}
 
-		private async Task SaveAsJpegAsync(Stream stream)
+		public async Task SaveAsJpegAsync(Stream stream)
 		{
 			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			await image.SaveAsJpegAsync(stream);
 		}
 
-		private bool SaveAsPbm(Stream stream)
+		public bool SaveAsPbm(Stream stream)
 		{
 			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			image.SaveAsPbm(stream);
 			return true;
 		}
 
-		private async Task SaveAsPbmAsync(Stream stream)
+		public async Task SaveAsPbmAsync(Stream stream)
 		{
 			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			await image.SaveAsPbmAsync(stream);
 		}
 
-		private bool SaveAsPng(Stream stream)
+		public bool SaveAsPng(Stream stream)
 		{
 			if (OperatingSystem.IsWindows())
 			{
@@ -93,26 +93,26 @@ namespace AssetRipper.Library.Utils
 			}
 		}
 
-		private async Task SaveAsPngAsync(Stream stream)
+		public async Task SaveAsPngAsync(Stream stream)
 		{
 			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			await image.SaveAsPngAsync(stream);
 		}
 
-		private bool SaveAsTga(Stream stream)
+		public bool SaveAsTga(Stream stream)
 		{
 			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			image.SaveAsTga(stream);
 			return true;
 		}
 
-		private async Task SaveAsTgaAsync(Stream stream)
+		public async Task SaveAsTgaAsync(Stream stream)
 		{
 			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			await image.SaveAsTgaAsync(stream);
 		}
 
-		private bool SaveAsTiff(Stream stream)
+		public bool SaveAsTiff(Stream stream)
 		{
 			if (OperatingSystem.IsWindows())
 			{
@@ -128,20 +128,20 @@ namespace AssetRipper.Library.Utils
 			}
 		}
 
-		private async Task SaveAsTiffAsync(Stream stream)
+		public async Task SaveAsTiffAsync(Stream stream)
 		{
 			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			await image.SaveAsTiffAsync(stream);
 		}
 
-		private bool SaveAsWebp(Stream stream)
+		public bool SaveAsWebp(Stream stream)
 		{
 			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			image.SaveAsWebp(stream);
 			return true;
 		}
 
-		private async Task SaveAsWebpAsync(Stream stream)
+		public async Task SaveAsWebpAsync(Stream stream)
 		{
 			using Image<Bgra32> image = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
 			await image.SaveAsWebpAsync(stream);

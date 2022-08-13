@@ -12,6 +12,7 @@ using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Exporters.Textures.Extensions;
 using AssetRipper.Library.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -28,7 +29,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			if (asset is SourceGenerated.Classes.ClassID_28.ITexture2D texture)
+			if (asset is ITexture2D texture)
 			{
 				return texture.CheckAssetIntegrity();
 			}
@@ -41,7 +42,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			SourceGenerated.Classes.ClassID_28.ITexture2D texture = (SourceGenerated.Classes.ClassID_28.ITexture2D)asset;
+			ITexture2D texture = (ITexture2D)asset;
 			if (!texture.CheckAssetIntegrity())
 			{
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.NameString}' because resources file '{texture.StreamData_C28.Path}' hasn't been found");
@@ -72,13 +73,12 @@ namespace AssetRipper.Library.Exporters.Textures
 				return TextureExportCollection.CreateExportCollection(this, sprite);
 			}
 
-			TextureExportCollection collection = new TextureExportCollection(this,
-				(SourceGenerated.Classes.ClassID_28.ITexture2D)asset, true, SpriteExportMode != SpriteExportMode.Yaml);
+			TextureExportCollection collection = new TextureExportCollection(this, (ITexture2D)asset, true, SpriteExportMode != SpriteExportMode.Yaml);
 			collection.FileExtension = ImageExportFormat.GetFileExtension();
 			return collection;
 		}
 
-		public static DirectBitmap? ConvertToBitmap(SourceGenerated.Classes.ClassID_28.ITexture2D texture)
+		public static DirectBitmap? ConvertToBitmap(ITexture2D texture)
 		{
 			byte[] buffer = texture.GetImageData();
 			if (buffer.Length == 0)

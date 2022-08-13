@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math.Transformations;
@@ -13,10 +12,8 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
-using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_23;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
-using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_33;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
@@ -24,7 +21,6 @@ using AssetRipper.SourceGenerated.Subclasses.PPtr_Material_;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using SharpGLTF.Geometry;
 using SharpGLTF.Materials;
-using SharpGLTF.Memory;
 using SharpGLTF.Scenes;
 using System.Buffers;
 using System.Collections.Generic;
@@ -33,7 +29,7 @@ using System.Linq;
 
 namespace AssetRipper.Library.Exporters.Models
 {
-	public class GlbModelExporter : BinaryAssetExporter
+	public partial class GlbModelExporter : BinaryAssetExporter
 	{
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
@@ -242,86 +238,6 @@ namespace AssetRipper.Library.Exporters.Models
 			else
 			{
 				return Array.Empty<int>();
-			}
-		}
-
-		private readonly record struct BuildParameters(
-			MaterialBuilder DefaultMaterial,
-			Dictionary<IMaterial, MaterialBuilder> MaterialCache,
-			Dictionary<IMesh, MeshData> MeshCache,
-			Dictionary<ITexture2D, MemoryImage> TextureCache,
-			bool IsScene)
-		{
-			public BuildParameters(bool isScene) : this(new MaterialBuilder("DefaultMaterial"), new(), new(), new(), isScene) { }
-			public bool TryGetOrMakeMeshData(IMesh mesh, out MeshData meshData)
-			{
-				if (MeshCache.TryGetValue(mesh, out meshData))
-				{
-					return true;
-				}
-				else if (MeshData.TryMakeFromMesh(mesh, out meshData))
-				{
-					MeshCache.Add(mesh, meshData);
-					return true;
-				}
-				return false;
-			}
-			public MaterialBuilder GetOrMakeMaterial(IMaterial? material)
-			{
-				if (material is null)
-				{
-					return DefaultMaterial;
-				}
-				if (!MaterialCache.TryGetValue(material, out MaterialBuilder? materialBuilder))
-				{
-					materialBuilder = MakeMaterialBuilder(material);
-					MaterialCache.Add(material, materialBuilder);
-				}
-				return materialBuilder;
-			}
-
-			private static MaterialBuilder MakeMaterialBuilder(IMaterial material)
-			{
-				MaterialBuilder materialBuilder = new MaterialBuilder(material.NameString);
-				//materialBuilder.WithDiffuse()//For _MainTex
-				//materialBuilder.WithNormal() //For _Normal
-				return materialBuilder;
-			}
-
-			private static MemoryImage MakeMemoryImage(ITexture2D texture)
-			{
-				byte[] data = Array.Empty<byte>();//Convert texture to png
-				return new MemoryImage(data);
-			}
-		}
-
-		private readonly struct MaterialList
-		{
-			private readonly AccessListBase<IPPtr_Material_> materials;
-			private readonly ISerializedFile file;
-
-			private MaterialList(AccessListBase<IPPtr_Material_> materials, ISerializedFile file)
-			{
-				this.materials = materials;
-				this.file = file;
-			}
-
-			public MaterialList(IMeshRenderer renderer) : this(renderer.Materials_C23, renderer.SerializedFile) { }
-
-			public MaterialList(ISkinnedMeshRenderer renderer) : this(renderer.Materials_C137, renderer.SerializedFile) { }
-
-			public int Count => materials.Count;
-
-			public IMaterial? this[int index]
-			{
-				get
-				{
-					if (index >= materials.Count)
-					{
-						return null;
-					}
-					return materials[index].FindAsset(file);
-				}
 			}
 		}
 	}
