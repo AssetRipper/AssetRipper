@@ -128,7 +128,7 @@ namespace DirectXDisassembler.Blocks
 
 			if (opcode == Opcode.customdata)
 			{
-				reader.BaseStream.Position = startPos + (declData.customDataArray.Length * 16) + 8;
+				reader.BaseStream.Position = startPos + (declData!.customDataArray.Length * 16) + 8;
 			}
 			else
 			{
@@ -404,8 +404,8 @@ namespace DirectXDisassembler.Blocks
 		public int componentMode;
 		public bool extended;
 		public int extendedData;
-		public int[] swizzle;
-		public int[] indexes;
+		public int[] swizzle = Array.Empty<int>();
+		public int[]? indexes;
 		public double[] immValues;
 		public int[] arraySizes;
 		public SHDRInstructionOperand[] subOperands;
@@ -531,11 +531,11 @@ namespace DirectXDisassembler.Blocks
 		public TessDomain tessDomain;
 		public TessPartitioning tessPartitioning;
 		public TessOutputPrimitive tessOutPrim;
-		public int[] workGroupSize;
+		public int[]? workGroupSize;
 		public int hullPhaseInstanceInfo;
 		public float maxTessFactor;
 		public int indexRange;
-		public float[][] customDataArray;
+		public float[][] customDataArray = Array.Empty<float[]>();
 
 		public int interfaceId;
 		public int interfaceFuncTableCount;
@@ -546,12 +546,12 @@ namespace DirectXDisassembler.Blocks
 		public byte uavCounter;
 		public ResourceReturnType uavType;
 
-		public string nameToken;
+		public string? nameToken;
 
 		public int tgsmStride;
 		public int tgsmCount;
 
-		public SHDRInstructionOperand[] operands;
+		public SHDRInstructionOperand[] operands = Array.Empty<SHDRInstructionOperand>();
 
 		private static readonly string[] nameTokens =
 		{
