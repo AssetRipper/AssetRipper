@@ -98,13 +98,13 @@ namespace AssetRipper.Library.Exporters.Audio
 
 				effect.EffectID_C244.CopyValues(constants.EffectGUIDs[i]);
 
-				if (FMODDefinitions.IsPluginEffect(effectConstant.Type))
+				if (AudioEffectDefinitions.IsPluginEffect(effectConstant.Type))
 				{
 					effect.EffectName_C244.CopyValues(pluginEffectNames[pluginEffectIndex++]);
 				}
 				else
 				{
-					string name = FMODDefinitions.EffectTypeToName(effectConstant.Type) ?? "Unknown";
+					string name = AudioEffectDefinitions.EffectTypeToName(effectConstant.Type) ?? "Unknown";
 					effect.EffectName_C244.String = name;
 					if (name == "Attenuation")
 					{
