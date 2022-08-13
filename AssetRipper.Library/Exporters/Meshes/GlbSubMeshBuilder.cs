@@ -14,118 +14,133 @@ namespace AssetRipper.Library.Exporters.Meshes
 {
 	internal static class GlbSubMeshBuilder
 	{
-		public static IMeshBuilder<MaterialBuilder> BuildSubMesh(MaterialBuilder material, MeshData meshData, ISubMesh subMesh, Transformation transform, Transformation inverseTransform)
+		public static IMeshBuilder<MaterialBuilder> BuildSubMeshes(ArraySegment<ValueTuple<ISubMesh, MaterialBuilder>> subMeshes, MeshData meshData, Transformation transform, Transformation inverseTransform)
 		{
-			BuildSubMeshParameters parameters = new BuildSubMeshParameters(material, meshData, subMesh, transform, inverseTransform);
+			BuildSubMeshParameters parameters = new BuildSubMeshParameters(subMeshes, meshData, transform, inverseTransform);
 			switch (meshData.MeshType)
 			{
 				case GlbMeshType.Position | GlbMeshType.Empty | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPosition, VertexEmpty, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexEmpty, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Empty | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormal, VertexEmpty, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexEmpty, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Empty | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexEmpty, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexEmpty, VertexEmpty>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Texture1 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPosition, VertexTexture1, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexTexture1, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Texture1 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormal, VertexTexture1, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexTexture1, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Texture1 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexTexture1, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexTexture1, VertexEmpty>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Texture2 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPosition, VertexTexture2, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexTexture2, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Texture2 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormal, VertexTexture2, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexTexture2, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Texture2 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexTexture2, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexTexture2, VertexEmpty>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Color1 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPosition, VertexColor1, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexColor1, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Color1 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormal, VertexColor1, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexColor1, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexColor1, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1, VertexEmpty>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Color1Texture1 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPosition, VertexColor1Texture1, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexColor1Texture1, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Color1Texture1 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormal, VertexColor1Texture1, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexColor1Texture1, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1Texture1 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexColor1Texture1, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture1, VertexEmpty>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Color1Texture2 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPosition, VertexColor1Texture2, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexColor1Texture2, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Color1Texture2 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormal, VertexColor1Texture2, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexColor1Texture2, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1Texture2 | GlbMeshType.Empty:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexColor1Texture2, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture2, VertexEmpty>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Empty | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPosition, VertexEmpty, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexEmpty, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Empty | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormal, VertexEmpty, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexEmpty, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Empty | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexEmpty, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexEmpty, VertexJoints4>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Texture1 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPosition, VertexTexture1, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexTexture1, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Texture1 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormal, VertexTexture1, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexTexture1, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Texture1 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexTexture1, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexTexture1, VertexJoints4>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Texture2 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPosition, VertexTexture2, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexTexture2, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Texture2 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormal, VertexTexture2, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexTexture2, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Texture2 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexTexture2, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexTexture2, VertexJoints4>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Color1 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPosition, VertexColor1, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexColor1, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Color1 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormal, VertexColor1, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexColor1, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexColor1, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1, VertexJoints4>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Color1Texture1 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPosition, VertexColor1Texture1, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexColor1Texture1, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Color1Texture1 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormal, VertexColor1Texture1, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexColor1Texture1, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1Texture1 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexColor1Texture1, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture1, VertexJoints4>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Color1Texture2 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPosition, VertexColor1Texture2, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexColor1Texture2, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Color1Texture2 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormal, VertexColor1Texture2, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexColor1Texture2, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1Texture2 | GlbMeshType.Joints4:
-					return BuildSubMesh<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints4>(parameters);
 
 				default:
 					throw new ArgumentOutOfRangeException(nameof(meshData), meshData.MeshType, "Mesh type not supported.");
 			}
 		}
 
-		private readonly record struct BuildSubMeshParameters(MaterialBuilder Material, MeshData MeshData, ISubMesh SubMesh, Transformation Transform, Transformation InverseTransform)
-		{
-		}
-
-		private static MeshBuilder<TvG, TvM, TvS> BuildSubMesh<TvG, TvM, TvS>(BuildSubMeshParameters parameters)
+		private static MeshBuilder<TvG, TvM, TvS> BuildSubMeshes<TvG, TvM, TvS>(BuildSubMeshParameters parameters)
 			where TvG : unmanaged, IVertexGeometry
 			where TvM : unmanaged, IVertexMaterial
 			where TvS : unmanaged, IVertexSkinning
 		{
-			MaterialBuilder material = parameters.Material;
-			MeshData meshData = parameters.MeshData;
-			ISubMesh subMesh = parameters.SubMesh;
 			Transformation positionTransform = parameters.Transform;
 			Transformation tangentTransform = positionTransform.RemoveTranslation();
 			Transformation normalTransform = parameters.InverseTransform.Transpose();
-
+			MeshBuilder<TvG, TvM, TvS> meshBuilder = VertexBuilder<TvG, TvM, TvS>.CreateCompatibleMesh();
+			
+			for (int i = 0; i < parameters.SubMeshes.Count; i++)
+			{
+				(ISubMesh subMesh, MaterialBuilder material) = parameters.SubMeshes[i];
+				BuildSubMesh(meshBuilder, subMesh, material, parameters.MeshData, positionTransform, tangentTransform, normalTransform);
+			}
+			
+			return meshBuilder;
+		}
+		
+		private static PrimitiveBuilder<MaterialBuilder, TvG, TvM, TvS> BuildSubMesh<TvG, TvM, TvS>(
+			MeshBuilder<TvG, TvM, TvS> meshBuilder, 
+			ISubMesh subMesh, 
+			MaterialBuilder material,
+			MeshData meshData,
+			Transformation positionTransform,
+			Transformation tangentTransform,
+			Transformation normalTransform)
+			where TvG : unmanaged, IVertexGeometry
+			where TvM : unmanaged, IVertexMaterial
+			where TvS : unmanaged, IVertexSkinning
+		{
 			uint firstIndex = meshData.Mesh.Is16BitIndices() ? subMesh.FirstByte / 2 : subMesh.FirstByte / 4;
-
+			
 			uint indexCount = subMesh.IndexCount;
 			MeshTopology topology = subMesh.GetTopology();
 			if (topology != MeshTopology.Triangles && meshData.Mesh.SerializedFile.Version.IsLess(4))
@@ -133,7 +148,6 @@ namespace AssetRipper.Library.Exporters.Meshes
 				topology = MeshTopology.TriangleStrip;
 			}
 
-			MeshBuilder<TvG, TvM, TvS> meshBuilder = VertexBuilder<TvG, TvM, TvS>.CreateCompatibleMesh();
 			int primitiveVertexCount = topology switch
 			{
 				MeshTopology.Lines or MeshTopology.LineStrip => 2,
@@ -230,7 +244,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 					break;
 			}
 
-			return meshBuilder;
+			return primitiveBuilder;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
@@ -328,6 +342,14 @@ namespace AssetRipper.Library.Exporters.Meshes
 				return default;
 #endif
 			}
+		}
+
+		private readonly record struct BuildSubMeshParameters(
+			ArraySegment<ValueTuple<ISubMesh, MaterialBuilder>> SubMeshes, 
+			MeshData MeshData, 
+			Transformation Transform, 
+			Transformation InverseTransform)
+		{
 		}
 	}
 }

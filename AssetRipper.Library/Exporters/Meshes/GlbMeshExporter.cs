@@ -5,7 +5,6 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using SharpGLTF.Geometry;
@@ -45,12 +44,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 		private static byte[] ExportBinary(IMesh mesh)
 		{
 			SceneBuilder sceneBuilder = new();
-			MaterialBuilder material = new MaterialBuilder("material");
+			MaterialBuilder material = new MaterialBuilder("DefaultMaterial");
 
 			AddMeshToScene(sceneBuilder, material, mesh);
 
 			SharpGLTF.Schema2.WriteSettings writeSettings = new();
-			writeSettings.Validation = SharpGLTF.Validation.ValidationMode.Skip; //Required due to non-invertible and non-decomposeable transforms
 
 			return sceneBuilder.ToGltf2().WriteGLB(writeSettings).ToArray();
 		}
@@ -60,13 +58,16 @@ namespace AssetRipper.Library.Exporters.Meshes
 			if (MeshData.TryMakeFromMesh(mesh, out MeshData meshData))
 			{
 				NodeBuilder rootNodeForMesh = new NodeBuilder(mesh.NameString);
-				//rootNodeForMesh.LocalMatrix = Matrix4x4.Identity; //Local transform can be changed if desired
 				sceneBuilder.AddNode(rootNodeForMesh);
+
+				(ISubMesh, MaterialBuilder)[] subMeshes = new (ISubMesh, MaterialBuilder)[1];
 
 				for (int submeshIndex = 0; submeshIndex < meshData.Mesh.SubMeshes_C43.Count; submeshIndex++)
 				{
 					ISubMesh subMesh = meshData.Mesh.SubMeshes_C43[submeshIndex];
-					IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMesh(material, meshData, subMesh, Transformation.IdentityWithInvertedX, Transformation.IdentityWithInvertedX);
+					subMeshes[0] = (subMesh, material);
+					
+					IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMeshes(subMeshes, meshData, Transformation.Identity, Transformation.Identity);
 					NodeBuilder subMeshNode = rootNodeForMesh.CreateNode($"SubMesh_{submeshIndex}");
 					sceneBuilder.AddRigidMesh(subMeshBuilder, subMeshNode);
 				}

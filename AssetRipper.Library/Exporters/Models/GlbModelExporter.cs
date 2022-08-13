@@ -1,7 +1,8 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math.Transformations;
-using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
@@ -19,15 +20,16 @@ using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_33;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Material_;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using SharpGLTF.Geometry;
 using SharpGLTF.Materials;
 using SharpGLTF.Memory;
 using SharpGLTF.Scenes;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 
 namespace AssetRipper.Library.Exporters.Models
 {
@@ -103,7 +105,6 @@ namespace AssetRipper.Library.Exporters.Models
 			}
 
 			SharpGLTF.Schema2.WriteSettings writeSettings = new();
-			//writeSettings.Validation = SharpGLTF.Validation.ValidationMode.Skip; //Required due to non-invertible and non-decomposeable transforms
 
 			return sceneBuilder.ToGltf2().WriteGLB(writeSettings).ToArray();
 		}
@@ -117,7 +118,7 @@ namespace AssetRipper.Library.Exporters.Models
 			Transformation globalInverseTransform = parentGlobalInverseTransform * localInverseTransform;
 
 			NodeBuilder node = parentNode is null ? new NodeBuilder(gameObject.NameString) : parentNode.CreateNode(gameObject.NameString);
-			if (parentNode is not null && parameters.IsScene)
+			if (parentNode is not null || parameters.IsScene)
 			{
 				node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(
 					transform.LocalScale_C4.CastToStruct(),
@@ -135,24 +136,25 @@ namespace AssetRipper.Library.Exporters.Models
 				{
 					if (ReferencesDynamicMesh(meshRenderer))
 					{
-						AddDynamicMeshToScene(sceneBuilder, parameters.DefaultMaterial, node, mesh, meshData);
+						
+						AddDynamicMeshToScene(sceneBuilder, parameters, node, meshData, new MaterialList(meshRenderer));
 					}
 					else
 					{
 						int[] subsetIndices = GetSubsetIndices(meshRenderer);
-						AddStaticMeshToScene(sceneBuilder, parameters.DefaultMaterial, globalTransform, globalInverseTransform, node, meshData, subsetIndices);
+						AddStaticMeshToScene(sceneBuilder, parameters, node, meshData, subsetIndices, new MaterialList(meshRenderer), globalTransform, globalInverseTransform);
 					}
 				}
 				else if (gameObject.TryFindComponent(out ISkinnedMeshRenderer? skinnedMeshRenderer))
 				{
 					if (ReferencesDynamicMesh(skinnedMeshRenderer))
 					{
-						AddDynamicMeshToScene(sceneBuilder, parameters.DefaultMaterial, node, mesh, meshData);
+						AddDynamicMeshToScene(sceneBuilder, parameters, node, meshData, new MaterialList(skinnedMeshRenderer));
 					}
 					else
 					{
 						int[] subsetIndices = GetSubsetIndices(skinnedMeshRenderer);
-						AddStaticMeshToScene(sceneBuilder, parameters.DefaultMaterial, globalTransform, globalInverseTransform, node, meshData, subsetIndices);
+						AddStaticMeshToScene(sceneBuilder, parameters, node, meshData, subsetIndices, new MaterialList(skinnedMeshRenderer), globalTransform, globalInverseTransform);
 					}
 				}
 				else if (gameObject.TryFindComponent(out IRenderer? renderer))
@@ -167,41 +169,35 @@ namespace AssetRipper.Library.Exporters.Models
 			}
 		}
 
-		private static void AddDynamicMeshToScene(SceneBuilder sceneBuilder, MaterialBuilder material, NodeBuilder node, IMesh mesh, MeshData meshData)
+		private static void AddDynamicMeshToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder node, MeshData meshData, MaterialList materialList)
 		{
-			for (int submeshIndex = 0; submeshIndex < mesh.SubMeshes_C43.Count; submeshIndex++)
+			AccessListBase<ISubMesh> subMeshes = meshData.Mesh.SubMeshes_C43;
+			(ISubMesh, MaterialBuilder)[] subMeshArray = ArrayPool<(ISubMesh, MaterialBuilder)>.Shared.Rent(subMeshes.Count);
+			for (int i = 0; i < subMeshes.Count; i++)
 			{
-				ISubMesh subMesh = meshData.Mesh.SubMeshes_C43[submeshIndex];
-				IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMesh(material, meshData, subMesh, Transformation.Identity, Transformation.Identity);
-				if (mesh.SubMeshes_C43.Count == 1)
-				{
-					sceneBuilder.AddRigidMesh(subMeshBuilder, node);
-				}
-				else
-				{
-					NodeBuilder subMeshNode = node.CreateNode($"SubMesh_{submeshIndex}");
-					sceneBuilder.AddRigidMesh(subMeshBuilder, subMeshNode);
-				}
+				MaterialBuilder materialBuilder = parameters.GetOrMakeMaterial(materialList[i]);
+				subMeshArray[i] = (subMeshes[i], materialBuilder);
 			}
+			ArraySegment<(ISubMesh, MaterialBuilder)> arraySegment = new ArraySegment<(ISubMesh, MaterialBuilder)>(subMeshArray, 0, subMeshes.Count);
+			IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMeshes(arraySegment, meshData, Transformation.Identity, Transformation.Identity);
+			sceneBuilder.AddRigidMesh(subMeshBuilder, node);
+			ArrayPool<(ISubMesh, MaterialBuilder)>.Shared.Return(subMeshArray);
 		}
 
-		private static void AddStaticMeshToScene(SceneBuilder sceneBuilder, MaterialBuilder material, Transformation globalTransform, Transformation globalInverseTransform, NodeBuilder node, MeshData meshData, int[] subsetIndices)
+		private static void AddStaticMeshToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder node, MeshData meshData, int[] subsetIndices, MaterialList materialList, Transformation globalTransform, Transformation globalInverseTransform)
 		{
+			(ISubMesh, MaterialBuilder)[] subMeshArray = ArrayPool<(ISubMesh, MaterialBuilder)>.Shared.Rent(subsetIndices.Length);
+			AccessListBase<ISubMesh> subMeshes = meshData.Mesh.SubMeshes_C43;
 			for (int i = 0; i < subsetIndices.Length; i++)
 			{
-				int submeshIndex = subsetIndices[i];
-				ISubMesh subMesh = meshData.Mesh.SubMeshes_C43[submeshIndex];
-				IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMesh(material, meshData, subMesh, globalInverseTransform, globalTransform);
-				if (subsetIndices.Length == 1)
-				{
-					sceneBuilder.AddRigidMesh(subMeshBuilder, node);
-				}
-				else
-				{
-					NodeBuilder subMeshNode = node.CreateNode($"SubMesh_{i}");
-					sceneBuilder.AddRigidMesh(subMeshBuilder, subMeshNode);
-				}
+				ISubMesh subMesh = subMeshes[subsetIndices[i]];
+				MaterialBuilder materialBuilder = parameters.GetOrMakeMaterial(materialList[i]);
+				subMeshArray[i] = (subMesh, materialBuilder);
 			}
+			ArraySegment<(ISubMesh, MaterialBuilder)> arraySegment = new ArraySegment<(ISubMesh, MaterialBuilder)>(subMeshArray, 0, subsetIndices.Length);
+			IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMeshes(arraySegment, meshData, globalInverseTransform, globalTransform);
+			sceneBuilder.AddRigidMesh(subMeshBuilder, node);
+			ArrayPool<(ISubMesh, MaterialBuilder)>.Shared.Return(subMeshArray);
 		}
 
 		private static bool ReferencesDynamicMesh(IMeshRenderer renderer)
@@ -218,6 +214,7 @@ namespace AssetRipper.Library.Exporters.Models
 
 		private static int[] GetSubsetIndices(IMeshRenderer renderer)
 		{
+			AccessListBase<IPPtr_Material_> materials = renderer.Materials_C23;
 			if (renderer.Has_SubsetIndices_C23())
 			{
 				return renderer.SubsetIndices_C23.Select(i => (int)i).ToArray();
@@ -248,9 +245,14 @@ namespace AssetRipper.Library.Exporters.Models
 			}
 		}
 
-		private readonly record struct BuildParameters(MaterialBuilder DefaultMaterial, Dictionary<IMaterial, MaterialBuilder> MaterialCache, Dictionary<IMesh, MeshData> MeshCache, bool IsScene)
+		private readonly record struct BuildParameters(
+			MaterialBuilder DefaultMaterial,
+			Dictionary<IMaterial, MaterialBuilder> MaterialCache,
+			Dictionary<IMesh, MeshData> MeshCache,
+			Dictionary<ITexture2D, MemoryImage> TextureCache,
+			bool IsScene)
 		{
-			public BuildParameters(bool isScene) : this(new MaterialBuilder("DefaultMaterial"), new(), new(), isScene) { }
+			public BuildParameters(bool isScene) : this(new MaterialBuilder("DefaultMaterial"), new(), new(), new(), isScene) { }
 			public bool TryGetOrMakeMeshData(IMesh mesh, out MeshData meshData)
 			{
 				if (MeshCache.TryGetValue(mesh, out meshData))
@@ -264,8 +266,12 @@ namespace AssetRipper.Library.Exporters.Models
 				}
 				return false;
 			}
-			public MaterialBuilder GetOrMakeMaterial(IMaterial material)
+			public MaterialBuilder GetOrMakeMaterial(IMaterial? material)
 			{
+				if (material is null)
+				{
+					return DefaultMaterial;
+				}
 				if (!MaterialCache.TryGetValue(material, out MaterialBuilder? materialBuilder))
 				{
 					materialBuilder = MakeMaterialBuilder(material);
@@ -286,6 +292,36 @@ namespace AssetRipper.Library.Exporters.Models
 			{
 				byte[] data = Array.Empty<byte>();//Convert texture to png
 				return new MemoryImage(data);
+			}
+		}
+
+		private readonly struct MaterialList
+		{
+			private readonly AccessListBase<IPPtr_Material_> materials;
+			private readonly ISerializedFile file;
+
+			private MaterialList(AccessListBase<IPPtr_Material_> materials, ISerializedFile file)
+			{
+				this.materials = materials;
+				this.file = file;
+			}
+
+			public MaterialList(IMeshRenderer renderer) : this(renderer.Materials_C23, renderer.SerializedFile) { }
+
+			public MaterialList(ISkinnedMeshRenderer renderer) : this(renderer.Materials_C137, renderer.SerializedFile) { }
+
+			public int Count => materials.Count;
+
+			public IMaterial? this[int index]
+			{
+				get
+				{
+					if (index >= materials.Count)
+					{
+						return null;
+					}
+					return materials[index].FindAsset(file);
+				}
 			}
 		}
 	}
