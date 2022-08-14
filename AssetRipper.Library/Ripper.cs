@@ -13,6 +13,7 @@ using AssetRipper.Library.Exporters;
 using AssetRipper.Library.Exporters.AnimationClips;
 using AssetRipper.Library.Exporters.AnimatorControllers;
 using AssetRipper.Library.Exporters.Audio;
+using AssetRipper.Library.Exporters.AudioMixers;
 using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Miscellaneous;
 using AssetRipper.Library.Exporters.Scripts;
@@ -296,6 +297,8 @@ namespace AssetRipper.Library
 			OverrideExporter<IAudioClip>(new YamlAudioExporter());
 			ConditionalOverrideExporter<IAudioClip>(new NativeAudioExporter(), Settings.AudioExportFormat == AudioExportFormat.Native);
 			ConditionalOverrideExporter<IAudioClip>(new AudioClipExporter(Settings), AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat));
+			
+			//AudioMixer exporters
 			AudioMixerExporter audioMixerExporter = new();
 			OverrideExporter<IAudioMixerController>(audioMixerExporter);
 			OverrideExporter<IAudioMixerGroupController>(audioMixerExporter);

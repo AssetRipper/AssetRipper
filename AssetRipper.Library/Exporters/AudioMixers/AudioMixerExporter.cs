@@ -11,7 +11,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_243;
 using AssetRipper.SourceGenerated.Classes.ClassID_245;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 
-namespace AssetRipper.Library.Exporters.Audio
+namespace AssetRipper.Library.Exporters.AudioMixers
 {
 	public class AudioMixerExporter : YamlExporterBase
 	{

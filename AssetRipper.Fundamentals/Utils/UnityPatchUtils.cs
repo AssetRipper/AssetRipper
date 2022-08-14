@@ -6,7 +6,7 @@ namespace AssetRipper.Core.Utils
 {
 	public static class UnityPatchUtils
 	{
-		private const string PatchesDirPath = "Assets/MonoScript/AssetRipperPatches/Editor/";
+		private const string PatchesDirPath = "Assets/Editor/AssetRipperPatches/";
 		
 		/// <summary>
 		/// For some asset types, the complete recovery must be assisted by scripts that run in the Unity Editor.
@@ -25,7 +25,7 @@ namespace AssetRipper.Core.Utils
 			Stream stream = assembly.GetManifestResourceStream(resourceName) ?? throw new ArgumentException($"Load resource failed: {resourceName}");
 			using StreamReader reader = new(stream);
 			string patchCode = reader.ReadToEnd();
-			Directory.CreateDirectory(Path.GetDirectoryName(patchFilePath));
+			Directory.CreateDirectory(Path.GetDirectoryName(patchFilePath)!);
 			File.WriteAllBytes(patchFilePath, Encoding.UTF8.GetBytes(patchCode));
 		}
 	}

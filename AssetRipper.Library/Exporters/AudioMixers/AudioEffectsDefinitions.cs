@@ -1,4 +1,4 @@
-namespace AssetRipper.Library.Exporters.Audio
+namespace AssetRipper.Library.Exporters.AudioMixers
 {
 	public static class AudioEffectDefinitions
 	{
@@ -10,7 +10,9 @@ namespace AssetRipper.Library.Exporters.Audio
 			DuckVolume = -5
 		}
 
-		// <see href="https://documentation.help/FMOD-Ex/FMOD_DSP_TYPE.html" />
+		/// <summary>
+		/// <see href="https://documentation.help/FMOD-Ex/FMOD_DSP_TYPE.html" />
+		/// </summary>
 		private enum FMOD_DSP_TYPE
 		{
 			FMOD_DSP_TYPE_UNKNOWN,
