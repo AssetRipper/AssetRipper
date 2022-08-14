@@ -87,6 +87,10 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 				group.Mute_C243 = groupConstant.Mute;
 				group.Solo_C243 = groupConstant.Solo;
 				group.BypassEffects_C243 = groupConstant.BypassEffects;
+				
+				// Protect against exporting multiple times in the same session.
+				// Effects are created and added to groups during ProcessAudioMixerEffects.
+				group.Effects_C243.Clear();
 			}
 		}
 
@@ -158,7 +162,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 				effect.Bypass_C244 = effectConstant.Bypass;
 			}
 			
-			// append an Attenuation effect to a group if it has not yet got one,
+			// Append an Attenuation effect to a group if it has not yet got one,
 			// as Unity doesn't store Attenuation effect if it is the last.
 			foreach (IAudioMixerGroupController group in context.Groups)
 			{
@@ -217,6 +221,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 		private void ProcessAudioMixer(in AssetsProcessingContext context)
 		{
 			// generate exposed parameters
+			context.Mixer.ExposedParameters_C241.Clear();
 			for (int i = 0; i < context.Constants.ExposedParameterIndices.Length; i++)
 			{
 				uint paramIndex = context.Constants.ExposedParameterIndices[i];
@@ -234,6 +239,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			}
 			
 			// complete mixer controller
+			context.Mixer.AudioMixerGroupViews_C241.Clear();
 			IAudioMixerGroupView groupView = context.Mixer.AudioMixerGroupViews_C241.AddNew();
 			groupView.NameString = "View";
 			foreach (IAudioMixerGroupController group in context.Groups)
