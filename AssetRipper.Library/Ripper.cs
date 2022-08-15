@@ -13,6 +13,7 @@ using AssetRipper.Library.Exporters;
 using AssetRipper.Library.Exporters.AnimationClips;
 using AssetRipper.Library.Exporters.AnimatorControllers;
 using AssetRipper.Library.Exporters.Audio;
+using AssetRipper.Library.Exporters.AudioMixers;
 using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Miscellaneous;
 using AssetRipper.Library.Exporters.Models;
@@ -33,6 +34,9 @@ using AssetRipper.SourceGenerated.Classes.ClassID_188;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
+using AssetRipper.SourceGenerated.Classes.ClassID_241;
+using AssetRipper.SourceGenerated.Classes.ClassID_243;
+using AssetRipper.SourceGenerated.Classes.ClassID_245;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
@@ -297,6 +301,12 @@ namespace AssetRipper.Library
 			OverrideExporter<IAudioClip>(new YamlAudioExporter());
 			ConditionalOverrideExporter<IAudioClip>(new NativeAudioExporter(), Settings.AudioExportFormat == AudioExportFormat.Native);
 			ConditionalOverrideExporter<IAudioClip>(new AudioClipExporter(Settings), AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat));
+			
+			//AudioMixer exporters
+			AudioMixerExporter audioMixerExporter = new();
+			OverrideExporter<IAudioMixerController>(audioMixerExporter);
+			OverrideExporter<IAudioMixerGroupController>(audioMixerExporter);
+			OverrideExporter<IAudioMixerSnapshotController>(audioMixerExporter);
 
 			//Mesh exporters
 			ConditionalOverrideExporter<IMesh>(new GlbMeshExporter(), Settings.MeshExportFormat == MeshExportFormat.Glb);

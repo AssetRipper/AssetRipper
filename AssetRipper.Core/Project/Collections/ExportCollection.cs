@@ -19,6 +19,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_200;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_218;
 using AssetRipper.SourceGenerated.Classes.ClassID_221;
+using AssetRipper.SourceGenerated.Classes.ClassID_241;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_30;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
@@ -112,6 +113,7 @@ namespace AssetRipper.Core.Project.Collections
 				IAnimationClip => "anim",
 				IAnimatorController => "controller",
 				IAnimatorOverrideController => "overrideController",
+				IAudioMixerController => "mixer",
 				SourceGenerated.Classes.ClassID_319.IAvatarMask or SourceGenerated.Classes.ClassID_1011.IAvatarMask => "mask",
 				IShaderVariantCollection => "shadervariants",
 				ICubemap => "cubemap",

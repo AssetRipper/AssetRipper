@@ -58,6 +58,8 @@
 	<ItemGroup>
 		<None Remove="Exporters\Shaders\Templates\*" />
 		<EmbeddedResource Include="Exporters\Shaders\Templates\*" />
+		<None Remove="Exporters\AudioMixers\UnityPatch\*" />
+		<EmbeddedResource Include="Exporters\AudioMixers\UnityPatch\*" />
 	</ItemGroup>
 
 	<ItemGroup>
