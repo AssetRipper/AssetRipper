@@ -60,6 +60,8 @@
 		<EmbeddedResource Include="Exporters\Shaders\Templates\*" />
 		<None Remove="Exporters\AudioMixers\UnityPatch\*" />
 		<EmbeddedResource Include="Exporters\AudioMixers\UnityPatch\*" />
+		<None Remove="Exporters\Shaders\UnityPatch\*" />
+		<EmbeddedResource Include="Exporters\Shaders\UnityPatch\*" />
 	</ItemGroup>
 
 	<ItemGroup>
