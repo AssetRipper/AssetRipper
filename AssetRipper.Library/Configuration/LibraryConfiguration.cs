@@ -52,7 +52,7 @@ namespace AssetRipper.Library.Configuration
 			ScriptLanguageVersion = ScriptLanguageVersion.AutoSafe;
 			ShaderExportMode = ShaderExportMode.Dummy;
 			SpriteExportMode = SpriteExportMode.Yaml;
-			TerrainExportMode = TerrainExportMode.Native;
+			TerrainExportMode = TerrainExportMode.Yaml;
 			TextExportMode = TextExportMode.Parse;
 		}
 

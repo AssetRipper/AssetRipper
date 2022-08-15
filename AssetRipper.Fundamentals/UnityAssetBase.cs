@@ -79,6 +79,11 @@ namespace AssetRipper.Core
 
 		public virtual List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex) => throw new NotSupportedException();
 
+		public override string? ToString()
+		{
+			return this is IHasNameString hasName ? hasName.NameString : base.ToString();
+		}
+
 		private bool HasEqualMetadata([NotNullWhen(true)] object? obj)
 		{
 			if (obj is null)
