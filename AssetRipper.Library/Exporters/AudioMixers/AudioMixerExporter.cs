@@ -22,6 +22,10 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 		
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
+			// Audio mixer groups and snapshots should be serialized into the audio mixer YAML asset,
+			// precisely the same as a regular Unity project would do.
+			// So when we encounter audio mixer groups and snapshots, we create an export collection for the audio mixer
+			// to which they belong and let the collection export all related assets into one audio mixer YAML asset.
 			IAudioMixer? audioMixer = asset switch
 			{
 				IAudioMixerController mixer => mixer,
