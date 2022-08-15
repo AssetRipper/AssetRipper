@@ -66,16 +66,16 @@ namespace AssetRipper.Library.Exporters.Terrains
 			byte[] result = new byte[heights.Length * 4];
 			for (int y = 0; y < heights.Length; y++)
 			{
-				ColorRGBA32 color = (ColorRGBA32)ConvertToColor((float)heights[y] / short.MaxValue);
-				result[4 * y] = color.B();
-				result[(4 * y) + 1] = color.G();
-				result[(4 * y) + 2] = color.R();
+				Color32 color = (Color32)ConvertToColor((float)heights[y] / short.MaxValue);
+				result[4 * y] = color.B;
+				result[(4 * y) + 1] = color.G;
+				result[(4 * y) + 2] = color.R;
 				result[(4 * y) + 3] = byte.MaxValue; //small optimization
 			}
 			return result;
 		}
 
-		private static ColorRGBAf ConvertToColor(float value)
+		private static ColorFloat ConvertToColor(float value)
 		{
 			if (value <= 0f)
 			{
@@ -119,17 +119,17 @@ namespace AssetRipper.Library.Exporters.Terrains
 			}
 		}
 
-		private static ColorRGBAf Average(ColorRGBAf minColor, float min, ColorRGBAf maxColor, float max, float value)
+		private static ColorFloat Average(ColorFloat minColor, float min, ColorFloat maxColor, float max, float value)
 		{
 			float normalized = Normalize(min, max, value);
 			return ((1 - normalized) * minColor) + (normalized * maxColor);
 		}
 
-		private static readonly ColorRGBAf zero = new(0, 0, 0.4f, 1);
-		private static readonly ColorRGBAf q1 = new(0, 0, 1, 1);
-		private static readonly ColorRGBAf q2 = new(0, 1, 0, 1);
-		private static readonly ColorRGBAf q3 = new(1, 0, 0, 1);
-		private static readonly ColorRGBAf one = ColorRGBAf.White;
+		private static readonly ColorFloat zero = new(0, 0, 0.4f, 1);
+		private static readonly ColorFloat q1 = new(0, 0, 1, 1);
+		private static readonly ColorFloat q2 = new(0, 1, 0, 1);
+		private static readonly ColorFloat q3 = new(1, 0, 0, 1);
+		private static readonly ColorFloat one = ColorFloat.White;
 
 		private const float q1point = 0.15f;
 		private const float q2point = 0.3f;
