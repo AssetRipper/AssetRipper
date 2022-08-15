@@ -70,13 +70,13 @@ namespace AssetRipper.Library.Exporters.Models
 		public bool ExportModel(IEnumerable<IUnityObjectBase> assets, string path, bool isScene)
 		{
 			byte[] data = ExportBinary(assets, isScene);
-			if (data.Length != 0)
+			if (data.Length == 0)
 			{
+				return false;
+			}
 				File.WriteAllBytes(path, data);
 				return true;
 			}
-			return false;
-		}
 
 		private static byte[] ExportBinary(IEnumerable<IUnityObjectBase> assets, bool isScene)
 		{

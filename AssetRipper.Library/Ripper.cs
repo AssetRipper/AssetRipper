@@ -309,7 +309,7 @@ namespace AssetRipper.Library
 
 			//Terrain exporters
 			ConditionalOverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings), Settings.TerrainExportMode == TerrainExportMode.Heatmap);
-			ConditionalOverrideExporter<ITerrainData>(new TerrainObjExporter(), Settings.TerrainExportMode == TerrainExportMode.Obj);
+			ConditionalOverrideExporter<ITerrainData>(new TerrainMeshExporter(), Settings.TerrainExportMode == TerrainExportMode.Mesh);
 
 			//Script exporters
 			OverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));

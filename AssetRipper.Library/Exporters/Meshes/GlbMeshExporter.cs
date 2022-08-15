@@ -31,13 +31,11 @@ namespace AssetRipper.Library.Exporters.Meshes
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			byte[] data = ExportBinary((IMesh)asset);
-			if (data == null || data.Length == 0)
+			if (data.Length == 0)
 			{
 				return false;
 			}
-
-			using FileStream fileStream = File.Create(path);
-			fileStream.Write(data);
+			File.WriteAllBytes(path, data);
 			return true;
 		}
 

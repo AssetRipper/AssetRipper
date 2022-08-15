@@ -5,11 +5,11 @@
 		/// <summary>
 		/// The default export mode. This is the only one that exports in a format Unity can use for terrains.
 		/// </summary>
-		Native,
+		Yaml,
 		/// <summary>
-		/// This experimental mode converts the terrain data into an OBJ mesh. Exported mesh size, position, and proportions may not be correct.
+		/// This converts the terrain data into a mesh. Unity cannot import this.
 		/// </summary>
-		Obj,
+		Mesh,
 		/// <summary>
 		/// A heatmap of the terrain height. Probably not usable for anything but a visual representation.
 		/// </summary>
