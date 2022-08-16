@@ -36,9 +36,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="0.10.17" />
-		<PackageReference Include="Avalonia.Desktop" Version="0.10.17" />
-		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.17" />
+		<PackageReference Include="Avalonia" Version="0.10.18" />
+		<PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="LibVLCSharp" Version="3.6.6" />
 		<PackageReference Include="LibVLCSharp.Avalonia" Version="3.6.6" />
