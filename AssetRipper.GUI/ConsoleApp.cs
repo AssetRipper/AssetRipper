@@ -20,16 +20,16 @@ namespace AssetRipper.GUI
 
 		internal class Options
 		{
-			[Option('i', "input", Required = true, HelpText = "Input files or directory to export.")]
-			public IReadOnlyList<string> FilesToExport { get; set; }
+			[Option('i', "input", Required = true, HelpText = "Input files or directory to export")]
+			public IReadOnlyList<string>? FilesToExport { get; set; }
 
-			[Option('o', "output", HelpText = "Directory to export to. Will be cleared if already exists.")]
-			public DirectoryInfo OutputDirectory { get; set; }
+			[Option('o', "output", Required = true, HelpText = "Directory to export to (will be cleared if already exists)")]
+			public DirectoryInfo? OutputDirectory { get; set; }
 
-			[Option("logFile", HelpText = "(Default: " + DefaultLogFileName + ") File to log to.")]
-			public FileInfo LogFile { get; set; }
+			[Option('w', "log-file", Default = DefaultLogFileName, HelpText = "File to log to")]
+			public FileInfo? LogFile { get; set; }
 
-			[Option('v', "verbose", Default = false, HelpText = "Verbose logging output.")]
+			[Option('v', "verbose", Default = false, HelpText = "Verbose logging output")]
 			public bool Verbose { get; set; }
 
 			[Option('q', "quit", Default = false, HelpText = "Close console after export.")]
@@ -128,19 +128,24 @@ namespace AssetRipper.GUI
 
 		private static bool ValidateOptions(Options options)
 		{
+			if (options.FilesToExport == null)
+			{
+				Console.WriteLine("Found no files to export. Please specify at least one file or folder as input. Use --help for help.");
+				return false;
+			}
+
+			if (options.OutputDirectory == null)
+			{
+				Console.WriteLine("No output directory is specified. Please spectfy the output directory. Use --help for help.");
+				return false;
+			}
+
 			foreach (string arg in options.FilesToExport)
 			{
-				if (MultiFileStream.Exists(arg))
-				{
+				if (MultiFileStream.Exists(arg) || Directory.Exists(arg))
 					continue;
-				}
 
-				if (Directory.Exists(arg))
-				{
-					continue;
-				}
-
-				System.Console.WriteLine(MultiFileStream.IsMultiFile(arg)
+				Console.WriteLine(MultiFileStream.IsMultiFile(arg)
 					? $"File '{arg}' doesn't have all parts for combining"
 					: $"Neither file nor directory with path '{arg}' exists");
 
@@ -166,7 +171,12 @@ namespace AssetRipper.GUI
 		{
 			Logger.AllowVerbose = options.Verbose;
 			Logger.Add(new ConsoleLogger(false));
-			Logger.Add(new FileLogger(options.LogFile.FullName));
+
+			// Do not log to a file if the logging target is null. It should be AssetRipper.log
+			// if the user didn't specify one.
+			if (options.LogFile != null)
+				Logger.Add(new FileLogger(options.LogFile.FullName));
+
 			Logger.LogSystemInformation("AssetRipper Console Version");
 #if !DEBUG
 			try
@@ -188,9 +198,21 @@ namespace AssetRipper.GUI
 				ripper.Settings.ScriptLanguageVersion = options.ScriptLanguageVersion;
 
 				ripper.Settings.LogConfigurationValues();
-				ripper.Load(options.FilesToExport);
-				PrepareExportDirectory(options.OutputDirectory.FullName);
-				ripper.ExportProject(options.OutputDirectory.FullName);
+
+				// FilesToExport and OutputDirectory shouldn't be null here, as CommandLine should have set them,
+				// but technically they could be null as their nullable type suggests.
+				if (options.FilesToExport == null)
+					throw new Exception("Internal error - list of files to export was lost");
+				else
+					ripper.Load(options.FilesToExport);
+
+				if (options.OutputDirectory == null)
+					throw new Exception("Internal error - output directory was lost");
+				else
+				{
+					PrepareExportDirectory(options.OutputDirectory.FullName);
+					ripper.ExportProject(options.OutputDirectory.FullName);
+				}
 			}
 #if !DEBUG
 			catch (Exception ex)
