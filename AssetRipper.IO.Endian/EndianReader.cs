@@ -631,7 +631,7 @@ namespace AssetRipper.IO.Endian
 
 		protected void ThrowIfNotEnoughSpaceForArray(int elementNumberToRead, int elementSize)
 		{
-			if (RemainingStreamBytes > elementNumberToRead * elementSize)
+			if (RemainingStreamBytes < elementNumberToRead * elementSize)
 			{
 				throw new Exception($"Stream only has {RemainingStreamBytes} bytes in the stream, so {elementNumberToRead} elements of size {elementSize} cannot be read.");
 			}

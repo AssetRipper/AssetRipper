@@ -172,7 +172,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 						int count = reader.ReadInt32();
 
 						long remainingBytes = reader.BaseStream.Length - reader.BaseStream.Position;
-						if (remainingBytes > count)
+						if (remainingBytes < count)
 						{
 							throw new Exception($"Stream only has {remainingBytes} bytes in the stream, so {count} elements cannot be read.");
 						}

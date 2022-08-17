@@ -44,7 +44,8 @@ namespace AssetRipper.Core.IO
 			}
 		}
 		/// <inheritdoc/>
-		public override long Length => System.Math.Min(m_maxPosition, m_stream.Length) - m_minPosition;
+		public override long Length => System.Math.Min(m_maxPosition, m_stream.Length);
+		public long ActualLength => Length - m_minPosition;
 		public long MinPosition => m_minPosition;
 		public long MaxPosition => m_maxPosition;
 
