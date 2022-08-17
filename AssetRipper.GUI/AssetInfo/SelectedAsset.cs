@@ -2,6 +2,7 @@
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
@@ -208,6 +209,13 @@ namespace AssetRipper.GUI.AssetInfo
 			_ => -1,
 		};
 
+		private int ImageSize => Asset switch
+		{
+			ITexture2D img => img.GetImageData().Length,
+			ITerrainData terrain => terrain.Heightmap_C156.Width * terrain.Heightmap_C156.Height * 2,
+			_ => -1,
+		};
+
 		public float AudioLengthSeconds
 		{
 			get => _lengthSeconds;
@@ -270,6 +278,7 @@ namespace AssetRipper.GUI.AssetInfo
 				{
 					builder.Append($"Image Format: {TextureFormat}\n");
 					builder.Append($"Image Dimensions (width x height): {ImageWidth} x {ImageHeight} pixels");
+					builder.Append($"Image Size: {ImageSize} bytes");
 				}
 
 				return builder.ToString();
