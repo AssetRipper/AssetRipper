@@ -1,7 +1,9 @@
-﻿using AssetRipper.Core.IO.MultiFile;
+﻿using AssetRipper.Core.Configuration;
+using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library;
+using AssetRipper.Library.Configuration;
 using CommandLine;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +16,7 @@ namespace AssetRipper.GUI
 
 		internal class Options
 		{
-			[Value(0, Required = true, HelpText = "Input files or directory to export.")]
+			[Option('i', "input", Required = true, HelpText = "Input files or directory to export.")]
 			public IReadOnlyList<string> FilesToExport { get; set; }
 
 			[Option('o', "output", HelpText = "Directory to export to. Will be cleared if already exists.")]
@@ -28,6 +30,42 @@ namespace AssetRipper.GUI
 
 			[Option('q', "quit", Default = false, HelpText = "Close console after export.")]
 			public bool Quit { get; set; }
+
+			[Option('b', "bundle-mode", Default = BundledAssetsExportMode.GroupByBundleName, HelpText = "Bundled asset export mode")]
+			public BundledAssetsExportMode BundledAssetsExportMode { get; set; }
+
+			[Option('g', "ignore-streaming", Default = false, HelpText = "Ignore StreamingAssets folder")]
+			public bool IgnoreStreaming { get; set; }
+
+			[Option('a', "audio-format", Default = AudioExportFormat.Default, HelpText = "Audio export format")]
+			public AudioExportFormat AudioExportFormat { get; set; }
+
+			[Option('p', "image-format", Default = ImageExportFormat.Png, HelpText = "Image export format")]
+			public ImageExportFormat ImageExportFormat { get; set; }
+
+			[Option('m', "mesh-format", Default = MeshExportFormat.Native, HelpText = "Mesh export format")]
+			public MeshExportFormat MeshExportFormat { get; set; }
+
+			[Option('s', "sprite-mode", Default = SpriteExportMode.Native, HelpText = "Sprite export mode")]
+			public SpriteExportMode SpriteExportMode { get; set; }
+
+			[Option('t', "terrain-mode", Default = TerrainExportMode.Yaml, HelpText = "Terrain export mode")]
+			public TerrainExportMode TerrainExportMode { get; set; }
+
+			[Option('x', "text-mode", Default = TextExportMode.Parse, HelpText = "Text export mode")]
+			public TextExportMode TextExportMode { get; set; }
+
+			[Option('d', "shader-mode", Default = ShaderExportMode.Dummy, HelpText = "Shader export mode")]
+			public ShaderExportMode ShaderExportMode { get; set; }
+
+			[Option('c', "script-mode", Default = ScriptExportMode.Hybrid, HelpText = "Script export mode")]
+			public ScriptExportMode ScriptExportMode { get; set; }
+
+			[Option('r', "script-level", Default = ScriptContentLevel.Level2, HelpText = "Script content level")]
+			public ScriptContentLevel ScriptContentLevel { get; set; }
+
+			[Option('l', "script-language-version", Default = ScriptLanguageVersion.AutoSafe, HelpText = "Script language version")]
+			public ScriptLanguageVersion ScriptLanguageVersion { get; set; }
 		}
 
 		public static void ParseArgumentsAndRun(string[] args)
@@ -102,6 +140,20 @@ namespace AssetRipper.GUI
 #endif
 			{
 				Ripper ripper = new();
+
+				ripper.Settings.BundledAssetsExportMode = options.BundledAssetsExportMode;
+				ripper.Settings.IgnoreStreamingAssets = options.IgnoreStreaming;
+				ripper.Settings.AudioExportFormat = options.AudioExportFormat;
+				ripper.Settings.ImageExportFormat = options.ImageExportFormat;
+				ripper.Settings.MeshExportFormat = options.MeshExportFormat;
+				ripper.Settings.SpriteExportMode = options.SpriteExportMode;
+				ripper.Settings.TerrainExportMode = options.TerrainExportMode;
+				ripper.Settings.TextExportMode = options.TextExportMode;
+				ripper.Settings.ShaderExportMode = options.ShaderExportMode;
+				ripper.Settings.ScriptExportMode = options.ScriptExportMode;
+				ripper.Settings.ScriptContentLevel = options.ScriptContentLevel;
+				ripper.Settings.ScriptLanguageVersion = options.ScriptLanguageVersion;
+
 				ripper.Settings.LogConfigurationValues();
 				ripper.Load(options.FilesToExport);
 				PrepareExportDirectory(options.OutputDirectory.FullName);
