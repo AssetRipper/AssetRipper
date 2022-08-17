@@ -32,8 +32,8 @@ namespace AssetRipper.GUI
 			[Option('v', "verbose", Default = false, HelpText = "Verbose logging output")]
 			public bool Verbose { get; set; }
 
-			[Option('q', "quit", Default = false, HelpText = "Close console after export.")]
-			public bool Quit { get; set; }
+			[Option('k', "keep-open", Default = false, HelpText = "Keep console open after exporting finishes")]
+			public bool KeepOpen { get; set; }
 
 			[Option('b', "bundle-mode", Default = BundledAssetsExportMode.GroupByBundleName, HelpText = "Bundled asset export mode\n")]
 			public BundledAssetsExportMode BundledAssetsExportMode { get; set; }
@@ -90,9 +90,10 @@ namespace AssetRipper.GUI
 						Environment.ExitCode = 1;
 					}
 
-					if (!options.Quit)
+					if (options.KeepOpen)
 					{
-						System.Console.ReadKey();
+						Console.WriteLine("AssetRipper finished, press any key to exit.");
+						Console.ReadKey();
 					}
 				})
 				.WithNotParsed((errors) =>
