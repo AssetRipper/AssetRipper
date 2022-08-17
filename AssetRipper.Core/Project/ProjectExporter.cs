@@ -173,12 +173,12 @@ namespace AssetRipper.Core.Project
 
 			LayoutInfo exportLayout = new LayoutInfo(options.Version, options.Platform, options.Flags);
 			VirtualSerializedFile virtualFile = new VirtualSerializedFile(exportLayout);
-			List<IExportCollection> collections = new List<IExportCollection>();
+			List<IExportCollection> collections = new();
 
 			// speed up fetching
-			List<IUnityObjectBase> depList = new List<IUnityObjectBase>();
-			HashSet<IUnityObjectBase> depSet = new HashSet<IUnityObjectBase>();
-			HashSet<IUnityObjectBase> queued = new HashSet<IUnityObjectBase>();
+			List<IUnityObjectBase> depList = new();
+			HashSet<IUnityObjectBase> depSet = new();
+			HashSet<IUnityObjectBase> queued = new();
 
 			foreach (SerializedFile file in files)
 			{

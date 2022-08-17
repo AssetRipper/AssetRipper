@@ -22,6 +22,8 @@ namespace AssetRipper.IO.Endian
 
 		private readonly byte[] m_buffer = new byte[BufferSize];
 
+		protected long RemainingStreamBytes => BaseStream.Length - BaseStream.Position;
+
 		public EndianReader(Stream stream, EndianType endianess) : this(stream, endianess, false) { }
 
 		protected EndianReader(Stream stream, EndianType endianess, bool alignArray) : base(stream, Encoding.UTF8, true)
@@ -215,6 +217,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(bool));
 			bool[] array = count == 0 ? Array.Empty<bool>() : new bool[count];
 			while (index < count)
 			{
@@ -240,6 +243,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(char));
 			char[] array = count == 0 ? Array.Empty<char>() : new char[count];
 			while (index < count)
 			{
@@ -265,6 +269,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(byte));
 			byte[] array = count == 0 ? Array.Empty<byte>() : new byte[count];
 			while (index < count)
 			{
@@ -287,6 +292,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(sbyte));
 			sbyte[] array = count == 0 ? Array.Empty<sbyte>() : new sbyte[count];
 			while (index < count)
 			{
@@ -312,6 +318,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(short));
 			short[] array = count == 0 ? Array.Empty<short>() : new short[count];
 			while (index < count)
 			{
@@ -337,6 +344,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(ushort));
 			ushort[] array = count == 0 ? Array.Empty<ushort>() : new ushort[count];
 			while (index < count)
 			{
@@ -362,6 +370,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(int));
 			int[] array = count == 0 ? Array.Empty<int>() : new int[count];
 			while (index < count)
 			{
@@ -387,6 +396,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(uint));
 			uint[] array = count == 0 ? Array.Empty<uint>() : new uint[count];
 			while (index < count)
 			{
@@ -412,6 +422,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(long));
 			long[] array = count == 0 ? Array.Empty<long>() : new long[count];
 			while (index < count)
 			{
@@ -437,6 +448,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(ulong));
 			ulong[] array = count == 0 ? Array.Empty<ulong>() : new ulong[count];
 			while (index < count)
 			{
@@ -462,6 +474,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(float));
 			float[] array = count == 0 ? Array.Empty<float>() : new float[count];
 			while (index < count)
 			{
@@ -487,6 +500,7 @@ namespace AssetRipper.IO.Endian
 		{
 			int count = ReadInt32();
 			int index = 0;
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(double));
 			double[] array = count == 0 ? Array.Empty<double>() : new double[count];
 			while (index < count)
 			{
@@ -511,6 +525,7 @@ namespace AssetRipper.IO.Endian
 		public string[] ReadStringArray(bool allowAlignment)
 		{
 			int count = ReadInt32();
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(byte));
 			string[] array = count == 0 ? Array.Empty<string>() : new string[count];
 			for (int i = 0; i < count; i++)
 			{
@@ -534,6 +549,7 @@ namespace AssetRipper.IO.Endian
 		public T[] ReadEndianArray<T>() where T : IEndianReadable, new()
 		{
 			int count = ReadInt32();
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(byte));
 			T[] array = count == 0 ? Array.Empty<T>() : new T[count];
 			for (int i = 0; i < count; i++)
 			{
@@ -551,6 +567,7 @@ namespace AssetRipper.IO.Endian
 		public T[][] ReadEndianArrayArray<T>() where T : IEndianReadable, new()
 		{
 			int count = ReadInt32();
+			ThrowIfNotEnoughSpaceForArray(count, sizeof(int));
 			T[][] array = count == 0 ? Array.Empty<T[]>() : new T[count][];
 			for (int i = 0; i < count; i++)
 			{
@@ -609,6 +626,14 @@ namespace AssetRipper.IO.Endian
 				}
 				offset += read;
 				count -= read;
+			}
+		}
+
+		protected void ThrowIfNotEnoughSpaceForArray(int elementNumberToRead, int elementSize)
+		{
+			if (RemainingStreamBytes > elementNumberToRead * elementSize)
+			{
+				throw new Exception($"Stream only has {RemainingStreamBytes} bytes in the stream, so {elementNumberToRead} elements of size {elementSize} cannot be read.");
 			}
 		}
 	}
