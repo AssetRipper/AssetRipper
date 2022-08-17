@@ -82,13 +82,9 @@ namespace AssetRipper.GUI
 				.WithParsed(options =>
 				{
 					if (ValidateOptions(options))
-					{
 						Run(options);
-					}
 					else
-					{
 						Environment.ExitCode = 1;
-					}
 
 					if (options.KeepOpen)
 					{
@@ -160,8 +156,8 @@ namespace AssetRipper.GUI
 			}
 			catch (Exception ex)
 			{
-				System.Console.WriteLine($"Failed to initialize the output and log paths.");
-				System.Console.WriteLine(ex.ToString());
+				Console.WriteLine($"Failed to initialize the output and log paths.");
+				Console.WriteLine(ex.ToString());
 				return false;
 			}
 
