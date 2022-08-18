@@ -5,6 +5,8 @@ using System.Linq;
 
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.CommandLine.Parsing;
+using System.CommandLine.Builder;
 
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.IO.MultiFile;
@@ -12,57 +14,87 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library;
 using AssetRipper.Library.Configuration;
+using AssetRipper.Core.Classes.Misc;
 
 namespace AssetRipper.GUI
 {
 	internal static class ConsoleApp
 	{
 		private const string DefaultLogFileName = "AssetRipper.log";
-		private const string DefaultOutputPath = ".";
+		private const string DefaultOutputPath = "Ripped";
+		private const bool DefaultQuit = false;
+		private const bool DefaultVerbose = false;
 
-		/*
-		internal class Options
+		private static void SetupLogger(bool verbose, string path)
 		{
-			[Option('k', "keep-open", Default = false, HelpText = "Keep console open after exporting finishes")]
-			public bool KeepOpen { get; set; }
+			Logger.AllowVerbose = verbose;
+			Logger.Add(new ConsoleLogger(false));
 
-			[Option('b', "bundle-mode", Default = BundledAssetsExportMode.GroupByBundleName, HelpText = "Bundled asset export mode\n")]
-			public BundledAssetsExportMode BundledAssetsExportMode { get; set; }
-
-			[Option('g', "ignore-streaming", Default = false, HelpText = "Ignore StreamingAssets folder")]
-			public bool IgnoreStreaming { get; set; }
-
-			[Option('r', "script-level", Default = ScriptContentLevel.Level2, HelpText = "Script content level\n")]
-			public ScriptContentLevel ScriptContentLevel { get; set; }
+			// Do not log to a file if the logging target is null. It should be AssetRipper.log
+			// if the user didn't specify one.
+			if (!string.IsNullOrEmpty(path))
+				Logger.Add(new FileLogger(path));
 		}
-		*/
 
-		private static void RootCommandHandler(InvocationContext context, Ripper ripper, Dictionary<string, Option> options)
+		private static void DoRipping(Ripper ripper, List<string> inputPaths, string outputPath)
 		{
-			// TODO: Remove this
-			Console.WriteLine("Root command handler");
+			Logger.LogSystemInformation("AssetRipper Console Version");
+			ripper.Settings.LogConfigurationValues();
 
-			// TODO: Don't run the extract handler, but refactor that so that extracting happens elsewhere.
-			// Then call that from here with -k, as the root command is called when a file is dropped onto the exe.
-			ExtractCommandHandler(context, ripper, options);
+			ripper.Load(inputPaths);
+
+			PrepareExportDirectory(outputPath);
+			ripper.ExportProject(outputPath);
+		}
+
+		private static void RootCommandHandler(InvocationContext context, Ripper ripper)
+		{
+			string? input = context.ParseResult.GetValueForArgument(inputArgument);
+			bool quit = context.ParseResult.GetValueForOption(quitOption);
+
+			Console.WriteLine($"Root command handler {input}");
+
+			// FIXME: System.CommandLine is still a little buggy and loses positional arguments,
+			//		  so we have to duct-tape it until it stops doing that.
+			//
+			// TODO: Remove these two lines when updating System.CommandLine to see if the argument
+			//       still gets lost.
+			if (string.IsNullOrEmpty(input))
+				input = Environment.GetCommandLineArgs()[0];
+
+			if (string.IsNullOrEmpty(input))
+				throw new Exception("Internal error - input path was lost");
+
+			SetupLogger(false, DefaultLogFileName);
+
+			try
+			{
+				DoRipping(ripper, new List<string>() { input }, DefaultOutputPath);
+			}
+			catch (Exception ex)
+			{
+				HandleException(ex);
+			}
+			finally
+			{
+				if (!quit)
+				{
+					Console.WriteLine($"AssetRipper finished, press any key to exit. Pass -q to quit automatically.");
+					Console.ReadKey();
+				}
+			}
 		}
 
 		private static void ExtractCommandHandler(InvocationContext context, Ripper ripper, Dictionary<string, Option> options)
 		{
 			List<string>? input = context.ParseResult.GetValueForOption(inputOption);
 			DirectoryInfo? output = context.ParseResult.GetValueForOption(outputOption);
+			output ??= new DirectoryInfo(DefaultOutputPath);
+
 			FileInfo? logFile = context.ParseResult.GetValueForOption(logFileOption);
+			logFile ??= new FileInfo(DefaultLogFileName);
+
 			bool verbose = context.ParseResult.GetValueForOption(verboseOption);
-
-			Logger.AllowVerbose = verbose;
-			Logger.Add(new ConsoleLogger(false));
-
-			// Do not log to a file if the logging target is null. It should be AssetRipper.log
-			// if the user didn't specify one.
-			if (logFile != null)
-				Logger.Add(new FileLogger(logFile.FullName));
-
-			Logger.LogSystemInformation("AssetRipper Console Version");
 
 			// Get a list of options supported by LibraryConfiguration
 			// MUST be run after defaults have been filled, as it only lists
@@ -92,21 +124,48 @@ namespace AssetRipper.GUI
 				ripper.Settings.SetSetting(type, Enum.Parse(type, enumKey));
 			}
 
-			ripper.Settings.LogConfigurationValues();
-
-			// FilesToExport and OutputDirectory shouldn't be null here, as CommandLine should have set them,
-			// but technically they could be null as their nullable type suggests.
 			if (input == null)
-				throw new Exception("Internal error - list of files to export was lost");
-			else
-				ripper.Load(input);
+				throw new Exception("Internal error - Input was lost");
 
 			if (output == null)
-				throw new Exception("Internal error - output directory was lost");
-			else
+				throw new Exception("Internal error - Output was lost");
+
+			if (logFile != null)
+				SetupLogger(verbose, logFile.FullName);
+
+			DoRipping(ripper, input, output.FullName);
+		}
+
+		#region Options
+
+		private static Argument<string> inputArgument
+		{
+			get
 			{
-				PrepareExportDirectory(output.FullName);
-				ripper.ExportProject(output.FullName);
+				Argument<string> argument = new Argument<string>(name: "input", description: "Input files or directory to export");
+
+				argument.AddValidator((symbolResult) =>
+				{
+					string? input = symbolResult.GetValueForArgument(argument);
+
+					if (string.IsNullOrEmpty(input))
+					{
+						symbolResult.ErrorMessage = "No files to export. You must provide at least one path using --input. Use --help for help.";
+						return;
+					}
+
+					string path = ExecutingDirectory.Combine(input);
+
+					if (!MultiFileStream.Exists(path) && !Directory.Exists(path))
+					{
+						symbolResult.ErrorMessage = MultiFileStream.IsMultiFile(path)
+							? $"File '{path}' doesn't have all parts for combining"
+							: $"Neither file nor directory with path '{path}' exists";
+						return;
+					}
+				});
+
+				return argument;
 			}
 		}
 
@@ -151,7 +210,7 @@ namespace AssetRipper.GUI
 			{
 				Option<DirectoryInfo> option = new Option<DirectoryInfo>(name: "--output", description: "Directory to export to (will be cleared if already exists)");
 				option.AddAlias("-o");
-				option.SetDefaultValue(".");
+				option.SetDefaultValue(DefaultOutputPath);
 				option.IsRequired = false;
 
 				option.AddValidator((symbolResult) =>
@@ -171,13 +230,25 @@ namespace AssetRipper.GUI
 			}
 		}
 
+
+		private static Option<bool> quitOption
+		{
+			get
+			{
+				Option<bool> option = new Option<bool>(name: "--quit", description: "Quit after ripping");
+				option.AddAlias("-q");
+				option.SetDefaultValue(DefaultQuit);
+
+				return option;
+			}
+		}
 		private static Option<bool> verboseOption
 		{
 			get
 			{
 				Option<bool> option = new Option<bool>(name: "--verbose", description: "Verbose logging output");
 				option.AddAlias("-v");
-				option.SetDefaultValue(false);
+				option.SetDefaultValue(DefaultVerbose);
 
 				return option;
 			}
@@ -208,6 +279,8 @@ namespace AssetRipper.GUI
 			}
 		}
 
+		#endregion
+
 		private static string ToHyphenCase(string input)
 		{
 			IEnumerable<string> result = input.Select(x =>
@@ -222,11 +295,6 @@ namespace AssetRipper.GUI
 		private static Dictionary<string, Option> CreateOptions(Ripper ripper)
 		{
 			Dictionary<string, Option> options = new Dictionary<string, Option>();
-
-			options.Add(inputOption.Name, inputOption);
-			options.Add(outputOption.Name, outputOption);
-			options.Add(verboseOption.Name, verboseOption);
-			options.Add(logFileOption.Name, logFileOption);
 
 			foreach (Type type in ripper.Settings.settings.Keys)
 			{
@@ -245,6 +313,20 @@ namespace AssetRipper.GUI
 			return options;
 		}
 
+		private static void HandleException(Exception ex)
+		{
+#if DEBUG
+			Console.WriteLine("===================================================");
+			Console.WriteLine("Error during command invocation, extraction aborted");
+			Console.WriteLine("===================================================");
+			Console.WriteLine(ex.ToString());
+#else
+				Console.WriteLine("Error during command invocation, extraction aborted");
+				Console.WriteLine("See this message below for details:");
+				Console.WriteLine(ex.Message);
+#endif
+		}
+
 		public static void ParseArgumentsAndRun(string[] args)
 		{
 			Ripper ripper = new();
@@ -253,10 +335,17 @@ namespace AssetRipper.GUI
 			Dictionary<string, Option> options = CreateOptions(ripper);
 
 			RootCommand rootCommand = new RootCommand("AssetRipper");
-			rootCommand.SetHandler((InvocationContext context) => RootCommandHandler(context, ripper, options));
+			rootCommand.AddArgument(inputArgument);
+			rootCommand.AddOption(outputOption);
+			rootCommand.AddOption(quitOption);
+			rootCommand.SetHandler((InvocationContext context) => RootCommandHandler(context, ripper));
 
 			Command extractCommand = new Command("extract");
 			extractCommand.AddAlias("e");
+			extractCommand.AddOption(inputOption);
+			extractCommand.AddOption(outputOption);
+			extractCommand.AddOption(verboseOption);
+			extractCommand.AddOption(logFileOption);
 			extractCommand.SetHandler((InvocationContext context) => ExtractCommandHandler(context, ripper, options));
 
 			foreach (Option option in options.Values)
@@ -265,57 +354,23 @@ namespace AssetRipper.GUI
 			}
 
 			rootCommand.AddCommand(extractCommand);
-			rootCommand.Invoke(args);
 
-			/*
-			Parser parser = new Parser(with => with.HelpWriter = null);
+			Parser parser = new CommandLineBuilder(rootCommand)
+				.UseVersionOption()
+				.UseHelp()
+				.RegisterWithDotnetSuggest()
+				.UseTypoCorrections()
+				.UseParseErrorReporting()
+				.CancelOnProcessTermination()
+				.Build();
 
-			ParserResult<Options> parserResult = parser.ParseArguments<Options>(args);
-
-			parserResult
-				.WithParsed(options =>
-				{
-					if (ValidateOptions(options))
-						Run(options);
-					else
-						Environment.ExitCode = 1;
-
-					if (options.KeepOpen)
-					{
-						Console.WriteLine("AssetRipper finished, press any key to exit.");
-						Console.ReadKey();
-					}
-				})
-				.WithNotParsed((errors) =>
-				{
-					HelpText? helpText = HelpText.AutoBuild(parserResult, h =>
-					{
-						Process currentProcess = Process.GetCurrentProcess();
-
-						// System.Diagnostics provides nullable interfaces, so we check all of them
-						// and skip showing the usage example if any of them are null.
-						if (
-							currentProcess != null
-							&& currentProcess.MainModule != null
-							&& !string.IsNullOrEmpty(currentProcess.MainModule.FileName)
-						)
-						{
-							string exeName = Path.GetFileName(currentProcess.MainModule.FileName);
-							h.AddPreOptionsText($"Example: {exeName} -i Games/MyGame -o Code/MyGameDecompiled");
-						}
-
-#if DEBUG
-						h.AddPreOptionsText(string.Join('\n', errors));
-#endif
-
-						h.AddEnumValuesToHelpText = true;
-						h.AdditionalNewLineAfterOption = true;
-						return h;
-					}, e => e);
-
-					Console.WriteLine(helpText);
-				});
-			*/
+			try
+			{
+				parser.Invoke(args);
+			} catch (Exception ex)
+			{
+				HandleException(ex);
+			}
 		}
 
 		private static void PrepareExportDirectory(string path)
