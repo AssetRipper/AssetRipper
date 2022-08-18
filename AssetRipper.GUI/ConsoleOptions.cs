@@ -259,7 +259,7 @@ namespace AssetRipper.GUI
 			get
 			{
 				if (_verboseOption != null)
-					return verboseOption;
+					return _verboseOption;
 
 				Option<bool> option = new Option<bool>(name: "--verbose", description: "Verbose logging output");
 				option.AddAlias("-v");
