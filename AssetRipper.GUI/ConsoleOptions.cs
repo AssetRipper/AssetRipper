@@ -127,15 +127,10 @@ namespace AssetRipper.GUI
 
 				Argument<List<string>> argument = new Argument<List<string>>(name: "input", description: "Input files or directory to export");
 
+				argument.Arity = ArgumentArity.OneOrMore;
 				argument.AddValidator((symbolResult) =>
 				{
 					List<string>? inputs = symbolResult.GetValueForArgument(argument);
-
-					if (inputs.Count < 1)
-					{
-						symbolResult.ErrorMessage = "No files to export. You must provide at least one path using --input. Use --help for help.";
-						return;
-					}
 
 					foreach (string input in inputs)
 					{
