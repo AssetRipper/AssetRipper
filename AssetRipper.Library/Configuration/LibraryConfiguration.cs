@@ -9,60 +9,46 @@ namespace AssetRipper.Library.Configuration
 	{
 		public Dictionary<Type, object> settings = new Dictionary<Type, object>();
 
-		/*
-		/// <summary>
-		/// The file format that audio clips get exported in. Recommended: Ogg
-		/// </summary>
-		public AudioExportFormat AudioExportFormat { get; set; }
-		/// <summary>
-		/// The file format that images (like textures) get exported in.
-		/// </summary>
-		public ImageExportFormat ImageExportFormat { get; set; }
-		/// <summary>
-		/// The format that meshes get exported in. Recommended: Native
-		/// </summary>
-		public MeshExportFormat MeshExportFormat { get; set; }
-		/// <summary>
-		/// How are MonoScripts exported? Recommended: Decompiled
-		/// </summary>
-		public ScriptExportMode ScriptExportMode { get; set; }
-		/// <summary>
-		/// The C# language version of decompiled scripts.
-		/// </summary>
-		public ScriptLanguageVersion ScriptLanguageVersion { get; set; }
-		/// <summary>
-		/// How to export shaders?
-		/// </summary>
-		public ShaderExportMode ShaderExportMode { get; set; }
-		/// <summary>
-		/// Should sprites be exported as a texture? Recommended: Native
-		/// </summary>
-		public SpriteExportMode SpriteExportMode { get; set; }
-		/// <summary>
-		/// How terrain data is exported. Recommended: Native
-		/// </summary>
-		public TerrainExportMode TerrainExportMode { get; set; }
-		/// <summary>
-		/// How are text assets exported?
-		/// </summary>
-		public TextExportMode TextExportMode { get; set; }
-		*/
-
 		public T? GetSetting<T>()
 		{
-			this.settings.TryGetValue(typeof(T), out object? result);
+			object? result = this.settings.GetValueOrDefault(typeof(T));
+
+			if (result == null || result == default)
+				return default(T);
 
 			return (T?)result;
 		}
 
+		public void SetSetting(Type type, object value)
+		{
+			if (value == null)
+				return;
+
+			this.settings.Remove(type);
+			this.settings.Add(type, value);
+		}
+
 		public void SetSetting<T>(object value)
 		{
-			this.settings.TryAdd(typeof(T), value);
+			if (value == null)
+				return;
+
+			this.settings.Remove(typeof(T));
+			this.settings.Add(typeof(T), value);
+		}
+
+		// NOTE: Is this actually a good idea? If this is called AFTER we set the default values,
+		// the removed setting will not be restored to its default value, but it will just start
+		// returning null.
+		public void RemoveSetting<T>()
+		{
+			this.settings.Remove(typeof(T));
 		}
 
 		public override void ResetToDefaultValues()
 		{
 			base.ResetToDefaultValues();
+
 			this.SetSetting<AudioExportFormat>(AudioExportFormat.Default);
 			this.SetSetting<ImageExportFormat>(ImageExportFormat.Png);
 			this.SetSetting<MeshExportFormat>(MeshExportFormat.Native);
