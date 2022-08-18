@@ -18,6 +18,7 @@ namespace AssetRipper.GUI
 	internal static class ConsoleApp
 	{
 		private const string DefaultLogFileName = "AssetRipper.log";
+		private const string DefaultOutputPath = ".";
 
 		/*
 		internal class Options
@@ -116,6 +117,30 @@ namespace AssetRipper.GUI
 				option.AddAlias("-i");
 				option.IsRequired = true;
 
+				option.AddValidator((symbolResult) =>
+				{
+					List<string>? inputs = symbolResult.GetValueForOption(option);
+
+					if (inputs == null)
+					{
+						symbolResult.ErrorMessage = "No files to export. You must provide at least one path using --input. Use --help for help.";
+						return;
+					}
+
+					foreach (string input in inputs)
+					{
+						string path = ExecutingDirectory.Combine(input);
+
+						if (!MultiFileStream.Exists(path) && !Directory.Exists(path))
+						{
+							symbolResult.ErrorMessage = MultiFileStream.IsMultiFile(path)
+								? $"File '{path}' doesn't have all parts for combining"
+								: $"Neither file nor directory with path '{path}' exists";
+							return;
+						}
+					}
+				});
+
 				return option;
 			}
 		}
@@ -128,6 +153,19 @@ namespace AssetRipper.GUI
 				option.AddAlias("-o");
 				option.SetDefaultValue(".");
 				option.IsRequired = false;
+
+				option.AddValidator((symbolResult) =>
+				{
+					DirectoryInfo? dirInfo = symbolResult.GetValueForOption(option);
+
+					if (dirInfo == null)
+						dirInfo = new DirectoryInfo(DefaultOutputPath);
+
+					string path = ExecutingDirectory.Combine(dirInfo.FullName);
+
+					if (!Directory.Exists(System.IO.Path.GetDirectoryName(path)))
+						symbolResult.ErrorMessage = "Directory for output does not exist";
+				});
 
 				return option;
 			}
@@ -151,7 +189,20 @@ namespace AssetRipper.GUI
 			{
 				Option<FileInfo> option = new Option<FileInfo>(name: "--log-file", description: "File to log to");
 				option.AddAlias("-w");
-				option.SetDefaultValue("AssetRipper.log");
+				option.SetDefaultValue(DefaultLogFileName);
+
+				option.AddValidator((symbolResult) =>
+				{
+					FileInfo? fileInfo = symbolResult.GetValueForOption(option);
+
+					if (fileInfo == null)
+						fileInfo = new FileInfo(DefaultLogFileName);
+
+					string path = ExecutingDirectory.Combine(fileInfo.FullName);
+
+					if (!Directory.Exists(System.IO.Path.GetDirectoryName(path)))
+						symbolResult.ErrorMessage = "Directory for log file does not exist";
+				});
 
 				return option;
 			}
@@ -266,47 +317,6 @@ namespace AssetRipper.GUI
 				});
 			*/
 		}
-
-		/* private static bool ValidateOptions(Options options)
-		{
-			if (options.FilesToExport == null)
-			{
-				Console.WriteLine("Found no files to export. Please specify at least one file or folder as input. Use --help for help.");
-				return false;
-			}
-
-			if (options.OutputDirectory == null)
-			{
-				Console.WriteLine("No output directory is specified. Please spectfy the output directory. Use --help for help.");
-				return false;
-			}
-
-			foreach (string arg in options.FilesToExport)
-			{
-				if (MultiFileStream.Exists(arg) || Directory.Exists(arg))
-					continue;
-
-				Console.WriteLine(MultiFileStream.IsMultiFile(arg)
-					? $"File '{arg}' doesn't have all parts for combining"
-					: $"Neither file nor directory with path '{arg}' exists");
-
-				return false;
-			}
-
-			try
-			{
-				options.LogFile ??= new FileInfo(ExecutingDirectory.Combine(DefaultLogFileName));
-				options.OutputDirectory ??= new DirectoryInfo(ExecutingDirectory.Combine("Ripped"));
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Failed to initialize the output and log paths.");
-				Console.WriteLine(ex.ToString());
-				return false;
-			}
-
-			return true;
-		} */
 
 		private static void PrepareExportDirectory(string path)
 		{
