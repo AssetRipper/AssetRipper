@@ -19,7 +19,7 @@ namespace AssetRipper.GUI
 			Logger.AllowVerbose = verbose;
 			Logger.Add(new ConsoleLogger(false));
 
-			// Do not log to a file if the logging target is null. It should be AssetRipper.log
+			// Do not log to a file if the logging target is null. It should be set from ConsoleOptions.DefaultLogFileName
 			// if the user didn't specify one.
 			if (string.IsNullOrEmpty(path))
 				return;
@@ -72,6 +72,8 @@ namespace AssetRipper.GUI
 
 		private static void ExtractCommandHandler(InvocationContext context, Ripper ripper, Dictionary<string, Option> options)
 		{
+			ConsoleOptions.SetContext(context);
+
 			List<string>? inputs = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.inputOption, new List<string>());
 			DirectoryInfo? output = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.outputOption, new DirectoryInfo(ConsoleOptions.DefaultOutputPath));
 			FileInfo? logFile = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.logFileOption, new FileInfo(ConsoleOptions.DefaultLogFileName));
