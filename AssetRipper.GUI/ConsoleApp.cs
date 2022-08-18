@@ -14,21 +14,18 @@ namespace AssetRipper.GUI
 {
 	internal static class ConsoleApp
 	{
-		private static void SetupLogger(bool verbose, string path)
+		private static void DoRipping(Ripper ripper, List<string> inputPaths, string outputPath, bool verbose, string logPath)
 		{
 			Logger.AllowVerbose = verbose;
 			Logger.Add(new ConsoleLogger(false));
 
 			// Do not log to a file if the logging target is null. It should be set from ConsoleOptions.DefaultLogFileName
 			// if the user didn't specify one.
-			if (string.IsNullOrEmpty(path))
+			if (string.IsNullOrEmpty(logPath))
 				return;
 
-			Logger.Add(new FileLogger(path));
-		}
+			Logger.Add(new FileLogger(logPath));
 
-		private static void DoRipping(Ripper ripper, List<string> inputPaths, string outputPath)
-		{
 			Logger.LogSystemInformation("AssetRipper Console Version");
 			ripper.Settings.LogConfigurationValues();
 			ripper.Load(inputPaths);
@@ -49,12 +46,12 @@ namespace AssetRipper.GUI
 			List<string> inputs = ConsoleOptions.GetArgumentOrFallback(ConsoleOptions.inputArgument, new List<string>());
 			DirectoryInfo output = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.outputOption, new DirectoryInfo(ConsoleOptions.DefaultOutputPath));
 			bool quit = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.quitOption, false);
-
-			SetupLogger(false, ConsoleOptions.DefaultLogFileName);
+			bool verbose = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.verboseOption, false);
+			FileInfo logFile = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.logFileOption, new FileInfo(ConsoleOptions.DefaultLogFileName));
 
 			try
 			{
-				DoRipping(ripper, inputs, output.FullName);
+				DoRipping(ripper, inputs, output.FullName, verbose, logFile.FullName);
 			}
 			catch (Exception ex)
 			{
@@ -74,9 +71,9 @@ namespace AssetRipper.GUI
 		{
 			ConsoleOptions.SetContext(context);
 
-			List<string>? inputs = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.inputOption, new List<string>());
-			DirectoryInfo? output = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.outputOption, new DirectoryInfo(ConsoleOptions.DefaultOutputPath));
-			FileInfo? logFile = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.logFileOption, new FileInfo(ConsoleOptions.DefaultLogFileName));
+			List<string> inputs = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.inputOption, new List<string>());
+			DirectoryInfo output = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.outputOption, new DirectoryInfo(ConsoleOptions.DefaultOutputPath));
+			FileInfo logFile = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.logFileOption, new FileInfo(ConsoleOptions.DefaultLogFileName));
 			bool verbose = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.verboseOption, false);
 
 			// Get a list of options supported by LibraryConfiguration
@@ -107,8 +104,8 @@ namespace AssetRipper.GUI
 				ripper.Settings.SetSetting(type, Enum.Parse(type, enumKey));
 			}
 
-			if (logFile != null)
-				SetupLogger(verbose, logFile.FullName);
+			DoRipping(ripper, inputs, output.FullName, verbose, logFile.FullName);
+		}
 
 			DoRipping(ripper, inputs, output.FullName);
 		}
@@ -134,13 +131,15 @@ namespace AssetRipper.GUI
 			Ripper ripper = new();
 			ripper.Settings.ResetToDefaultValues();
 
-			Dictionary<string, Option> options = ConsoleOptions.GenerateFromRipper(ripper);
-
 			RootCommand rootCommand = new RootCommand();
 			rootCommand.SetHandler((InvocationContext context) => RootCommandHandler(context, ripper));
 			rootCommand.AddArgument(ConsoleOptions.inputArgument);
 			rootCommand.AddOption(ConsoleOptions.outputOption);
 			rootCommand.AddOption(ConsoleOptions.quitOption);
+			rootCommand.AddOption(ConsoleOptions.verboseOption);
+			rootCommand.AddOption(ConsoleOptions.logFileOption);
+
+			Dictionary<string, Option> options = ConsoleOptions.GenerateFromRipper(ripper);
 
 			Command extractCommand = new Command("extract");
 			extractCommand.SetHandler((InvocationContext context) => ExtractCommandHandler(context, ripper, options));
