@@ -29,17 +29,31 @@ namespace AssetRipper.GUI
 
 		#region Utilities
 
-		public static string OptionNameFromType(Type input)
+		/// <summary>
+		/// Converts the name of the given type to hyphen-case, with a leading hyphen.
+		/// For example: ConsoleOptions -> -console-options (if using the default separator)
+		/// </summary>
+		/// <param name="input">The type to get the name of</param>
+		/// <param name="separator">Char to use as separator</param>
+		/// <returns></returns>
+		public static string OptionNameFromType(Type input, char separator = '-')
 		{
-			IEnumerable<string> result = input.Name.Select(x =>
+			IEnumerable<string> result = input.Name.Select((character) =>
 			{
-				if (char.IsUpper(x)) return "-" + char.ToLower(x);
-				return x.ToString();
+				if (char.IsUpper(character))
+					return $"{separator}{char.ToLower(character)}";
+
+				return character.ToString();
 			});
 
-			return $"-{string.Join("", result)}";
+			return $"{separator}{string.Join("", result)}";
 		}
 
+		/// <summary>
+		/// Generates a Dictionary of `System.CommandLine.Option`s indexed by their name,
+		/// based on what settings are currently available. Each option will be named in
+		/// hyphen-case sa standard for cli options.
+		/// </summary>
 		public static Dictionary<string, Option> GenerateFromRipper(Ripper ripper)
 		{
 			Dictionary<string, Option> options = new Dictionary<string, Option>();
@@ -77,11 +91,23 @@ namespace AssetRipper.GUI
 			return options;
 		}
 
+		/// <summary>
+		/// Sets the given InvocationContext so that GetOptionOrFallback and GetArgumentOrFallback
+		/// can read from it later. This function MUST be called before the above mentioned ones do.
+		/// </summary>
+		/// <param name="context">InvocationContext provided by System.CommandLine</param>
 		public static void SetContext(InvocationContext context)
 		{
 			_context = context;
 		}
 
+		/// <summary>
+		/// Gets the values for a given Option. If the result is null, the fallback value is returned.
+		/// </summary>
+		/// <typeparam name="T">The type of the resulting object</typeparam>
+		/// <param name="option">An Option object from System.CommandLine</param>
+		/// <param name="fallback">The value to return if the parse result is null</param>
+		/// <returns>T</returns>
 		public static T GetOptionOrFallback<T>(Option<T> option, T fallback)
 		{
 			if (_context == null)
@@ -100,6 +126,13 @@ namespace AssetRipper.GUI
 			return result;
 		}
 
+		/// <summary>
+		/// Gets the values for a given positional Argument. If the result is null, the fallback value is returned.
+		/// </summary>
+		/// <typeparam name="T">The type of the resulting object</typeparam>
+		/// <param name="option">An Argument object from System.CommandLine</param>
+		/// <param name="fallback">The value to return if the parse result is null</param>
+		/// <returns>T</returns>
 		public static T GetArgumentOrFallback<T>(Argument<T> argument, T fallback)
 		{
 			if (_context == null)
