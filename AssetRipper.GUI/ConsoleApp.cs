@@ -81,11 +81,10 @@ namespace AssetRipper.GUI
 			// options with values.
 			foreach (Type type in ripper.Settings.settings.Keys.ToList())
 			{
-				string optionName = ConsoleOptions.OptionNameFromType(type);
-
 				if (type == null)
 					continue;
 
+				string optionName = ConsoleOptions.OptionNameFromType(type);
 				options.TryGetValue(optionName, out Option? option);
 
 				if (option == null)
