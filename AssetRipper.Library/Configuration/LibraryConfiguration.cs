@@ -7,44 +7,6 @@ namespace AssetRipper.Library.Configuration
 {
 	public class LibraryConfiguration : CoreConfiguration
 	{
-		public Dictionary<Type, object> settings = new Dictionary<Type, object>();
-
-		public T? GetSetting<T>()
-		{
-			object? result = this.settings.GetValueOrDefault(typeof(T));
-
-			if (result == null || result == default)
-				return default(T);
-
-			return (T?)result;
-		}
-
-		public void SetSetting(Type type, object value)
-		{
-			if (value == null)
-				return;
-
-			this.settings.Remove(type);
-			this.settings.Add(type, value);
-		}
-
-		public void SetSetting<T>(object value)
-		{
-			if (value == null)
-				return;
-
-			this.settings.Remove(typeof(T));
-			this.settings.Add(typeof(T), value);
-		}
-
-		// NOTE: Is this actually a good idea? If this is called AFTER we set the default values,
-		// the removed setting will not be restored to its default value, but it will just start
-		// returning null.
-		public void RemoveSetting<T>()
-		{
-			this.settings.Remove(typeof(T));
-		}
-
 		public override void ResetToDefaultValues()
 		{
 			base.ResetToDefaultValues();

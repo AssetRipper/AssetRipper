@@ -3,12 +3,43 @@ using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files;
 using AssetRipper.Core.Utils;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AssetRipper.Core.Configuration
 {
 	public class CoreConfiguration
 	{
+		public Dictionary<Type, object> settings = new Dictionary<Type, object>();
+
+		public T? GetSetting<T>()
+		{
+			object? result = this.settings.GetValueOrDefault(typeof(T));
+
+			if (result == null || result == default)
+				return default(T);
+
+			return (T?)result;
+		}
+
+		public void SetSetting(Type type, object value)
+		{
+			if (value == null)
+				return;
+
+			this.settings.Remove(type);
+			this.settings.Add(type, value);
+		}
+
+		public void SetSetting<T>(object value)
+		{
+			if (value == null)
+				return;
+
+			this.settings.Remove(typeof(T));
+			this.settings.Add(typeof(T), value);
+		}
+
 		#region Import Settings
 		/// <summary>
 		/// Disabling scripts can allow some games to export when they previously did not.
@@ -23,16 +54,12 @@ namespace AssetRipper.Core.Configuration
 		/// </summary>
 		public bool IgnoreStreamingAssets
 		{
-			get => StreamingAssetsMode == StreamingAssetsMode.Ignore;
+			get => this.GetSetting<StreamingAssetsMode>() == StreamingAssetsMode.Ignore;
 			set
 			{
-				StreamingAssetsMode = value ? StreamingAssetsMode.Ignore : StreamingAssetsMode.Extract;
+				this.SetSetting<StreamingAssetsMode>(value ? StreamingAssetsMode.Ignore : StreamingAssetsMode.Extract);
 			}
 		}
-		/// <summary>
-		/// How the StreamingAssets folder is handled
-		/// </summary>
-		public StreamingAssetsMode StreamingAssetsMode { get; set; }
 		#endregion
 
 		#region Export Settings
@@ -86,7 +113,7 @@ namespace AssetRipper.Core.Configuration
 		public virtual void ResetToDefaultValues()
 		{
 			ScriptContentLevel = ScriptContentLevel.Level2;
-			StreamingAssetsMode = StreamingAssetsMode.Extract;
+			IgnoreStreamingAssets = false;
 			ExportRootPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
 			BundledAssetsExportMode = BundledAssetsExportMode.GroupByBundleName;
@@ -97,7 +124,7 @@ namespace AssetRipper.Core.Configuration
 		{
 			Logger.Info(LogCategory.General, $"Configuration Settings:");
 			Logger.Info(LogCategory.General, $"{nameof(ScriptContentLevel)}: {ScriptContentLevel}");
-			Logger.Info(LogCategory.General, $"{nameof(StreamingAssetsMode)}: {StreamingAssetsMode}");
+			Logger.Info(LogCategory.General, $"{nameof(StreamingAssetsMode)}: {this.GetSetting<StreamingAssetsMode>()}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportRootPath)}: {ExportRootPath}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportDependencies)}: {ExportDependencies}");
 			Logger.Info(LogCategory.General, $"{nameof(BundledAssetsExportMode)}: {BundledAssetsExportMode}");
