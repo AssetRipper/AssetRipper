@@ -13,3 +13,6 @@ bin
 *.blend1
 launchSettings.json
 AssetRipper.SourceGenerated.xml
+
+/Ripped
+/AssetRipper.log
