@@ -50,12 +50,6 @@ namespace AssetRipper.GUI
 			DirectoryInfo output = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.outputOption, new DirectoryInfo(ConsoleOptions.DefaultOutputPath));
 			bool quit = ConsoleOptions.GetOptionOrFallback(ConsoleOptions.quitOption, false);
 
-			if (inputs == null)
-				throw new Exception("Internal error - Input was lost");
-
-			if (output == null)
-				throw new Exception("Internal error - Output was lost");
-
 			SetupLogger(false, ConsoleOptions.DefaultLogFileName);
 
 			try
@@ -110,12 +104,6 @@ namespace AssetRipper.GUI
 
 				ripper.Settings.SetSetting(type, Enum.Parse(type, enumKey));
 			}
-
-			if (inputs == null)
-				throw new Exception("Internal error - Input was lost");
-
-			if (output == null)
-				throw new Exception("Internal error - Output was lost");
 
 			if (logFile != null)
 				SetupLogger(verbose, logFile.FullName);
