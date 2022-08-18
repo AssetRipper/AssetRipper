@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
+using System.Reflection;
+using System.Linq;
 
-using CommandLine;
-using CommandLine.Text;
+using System.CommandLine;
+using System.CommandLine.Invocation;
 
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.IO.MultiFile;
@@ -11,6 +13,7 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library;
 using AssetRipper.Library.Configuration;
+using YamlDotNet.Core.Tokens;
 
 namespace AssetRipper.GUI
 {
@@ -18,6 +21,7 @@ namespace AssetRipper.GUI
 	{
 		private const string DefaultLogFileName = "AssetRipper.log";
 
+		/*
 		internal class Options
 		{
 			[Option('i', "input", Required = true, HelpText = "Input files or directory to export")]
@@ -71,9 +75,191 @@ namespace AssetRipper.GUI
 			[Option('l', "script-language-version", Default = ScriptLanguageVersion.AutoSafe, HelpText = "Script language version\n")]
 			public ScriptLanguageVersion ScriptLanguageVersion { get; set; }
 		}
+		*/
+
+		private static void RootCommandHandler(InvocationContext context, Ripper ripper)
+		{
+			// TODO: Remove this
+			Console.WriteLine("Root command handler");
+
+			// TODO: Don't run the extract handler, but refactor that so that extracting happens elsewhere.
+			// Then call that from here with -k, as the root command is called when a file is dropped onto the exe.
+			ExtractCommandHandler(context, ripper);
+		}
+
+		private static void ExtractCommandHandler(InvocationContext context, Ripper ripper)
+		{
+			// TODO: Remove this
+			Console.WriteLine("Extract command handler");
+
+			List<string>? input = context.ParseResult.GetValueForOption(inputOption);
+			DirectoryInfo? output = context.ParseResult.GetValueForOption(outputOption);
+			FileInfo? logFile = context.ParseResult.GetValueForOption(logFileOption);
+			bool verbose = context.ParseResult.GetValueForOption(verboseOption);
+
+			Logger.AllowVerbose = verbose;
+			Logger.Add(new ConsoleLogger(false));
+
+			// Do not log to a file if the logging target is null. It should be AssetRipper.log
+			// if the user didn't specify one.
+			if (logFile != null)
+				Logger.Add(new FileLogger(logFile.FullName));
+
+			Logger.LogSystemInformation("AssetRipper Console Version");
+
+			/*
+			ripper.Settings.BundledAssetsExportMode = options.BundledAssetsExportMode;
+			ripper.Settings.IgnoreStreamingAssets = options.IgnoreStreaming;
+			ripper.Settings.AudioExportFormat = options.AudioExportFormat;
+			ripper.Settings.ImageExportFormat = options.ImageExportFormat;
+			ripper.Settings.MeshExportFormat = options.MeshExportFormat;
+			ripper.Settings.SpriteExportMode = options.SpriteExportMode;
+			ripper.Settings.TerrainExportMode = options.TerrainExportMode;
+			ripper.Settings.TextExportMode = options.TextExportMode;
+			ripper.Settings.ShaderExportMode = options.ShaderExportMode;
+			ripper.Settings.ScriptExportMode = options.ScriptExportMode;
+			ripper.Settings.ScriptContentLevel = options.ScriptContentLevel;
+			ripper.Settings.ScriptLanguageVersion = options.ScriptLanguageVersion;
+			*/
+
+			ripper.Settings.LogConfigurationValues();
+
+			// FilesToExport and OutputDirectory shouldn't be null here, as CommandLine should have set them,
+			// but technically they could be null as their nullable type suggests.
+			if (input == null)
+				throw new Exception("Internal error - list of files to export was lost");
+			else
+				ripper.Load(input);
+
+			if (output == null)
+				throw new Exception("Internal error - output directory was lost");
+			else
+			{
+				PrepareExportDirectory(output.FullName);
+				ripper.ExportProject(output.FullName);
+			}
+		}
+
+		private static Option<List<string>> inputOption
+		{
+			get {
+				Option<List<string>> option = new Option<List<string>>(name: "--input", description: "Input files or directory to export");
+				option.AddAlias("-i");
+
+				return option;
+			}
+		}
+
+		private static Option<DirectoryInfo> outputOption
+		{
+			get
+			{
+				Option<DirectoryInfo> option = new Option<DirectoryInfo>(name: "--output", description: "Directory to export to (will be cleared if already exists)");
+				option.AddAlias("-o");
+
+				return option;
+			}
+		}
+
+		private static Option<bool> verboseOption
+		{
+			get
+			{
+				Option<bool> option = new Option<bool>(name: "--verbose", description: "Verbose logging output");
+				option.AddAlias("-v");
+
+				return option;
+			}
+		}
+
+		private static Option<FileInfo> logFileOption
+		{
+			get
+			{
+				Option<FileInfo> option = new Option<FileInfo>(name: "--log-file", description: "File to log to");
+				option.AddAlias("-w");
+
+				return option;
+			}
+		}
+
+		private static string ToHyphenCase(string input)
+		{
+			IEnumerable<string> result = input.Select(x =>
+			 {
+				 if (char.IsUpper(x)) return "-" + char.ToLower(x);
+				 return x.ToString();
+			 });
+
+			return string.Join("", result);
+		}
+
+		private static List<Option> CreateOptions(Ripper ripper)
+		{
+			List<Option> list = new List<Option>();
+
+			list.Add(inputOption);
+			list.Add(outputOption);
+			list.Add(verboseOption);
+			list.Add(logFileOption);
+
+			// WIP
+			// Generate a list of options by looking at properties of the LibraryConfiguration class
+
+			IEnumerable<object> values1 = typeof(LibraryConfiguration).GetFields(BindingFlags.Public | BindingFlags.Static).Select(a => (LibraryConfiguration)a.GetValue(null));
+
+			Console.WriteLine($"Got {values1.Count()} values");
+
+			foreach (object value in values1)
+			{
+				Console.WriteLine("Vaklue", value);
+			}
+
+			var members = typeof(LibraryConfiguration).GetMembers();
+			Console.WriteLine($"[TRACE] Found {members.Length} members.");
+
+			foreach (var member in members)
+			{
+				if (member.MemberType != MemberTypes.Property || member.DeclaringType != typeof(LibraryConfiguration))
+					continue;
+
+				Option option = new Option<int>(name: $"-{ToHyphenCase(member.Name)}");
+
+				Console.WriteLine($"{member.Name} is enum: {member.GetType().IsEnum}. It is: {member.GetType()}. Member type: {member.MemberType}");
+
+				if (member.GetType().IsEnum)
+				{
+					string[] values = Enum.GetNames(member.GetType());
+					option.AddCompletions(values);
+				}
+
+				list.Add(option);
+			}
+
+			return list;
+		}
 
 		public static void ParseArgumentsAndRun(string[] args)
 		{
+			Ripper ripper = new();
+
+			RootCommand rootCommand = new RootCommand("AssetRipper");
+			rootCommand.SetHandler((InvocationContext context) => RootCommandHandler(context, ripper));
+
+			Command extractCommand = new Command("extract");
+			extractCommand.SetHandler((InvocationContext context) => ExtractCommandHandler(context, ripper));
+
+			List<Option> options = CreateOptions(ripper);
+
+			foreach (Option option in options)
+			{
+				extractCommand.AddOption(option);
+			}
+
+			rootCommand.AddCommand(extractCommand);
+			rootCommand.Invoke(args);
+
+			/*
 			Parser parser = new Parser(with => with.HelpWriter = null);
 
 			ParserResult<Options> parserResult = parser.ParseArguments<Options>(args);
@@ -121,9 +307,10 @@ namespace AssetRipper.GUI
 
 					Console.WriteLine(helpText);
 				});
+			*/
 		}
 
-		private static bool ValidateOptions(Options options)
+		/* private static bool ValidateOptions(Options options)
 		{
 			if (options.FilesToExport == null)
 			{
@@ -162,62 +349,7 @@ namespace AssetRipper.GUI
 			}
 
 			return true;
-		}
-
-		private static void Run(Options options)
-		{
-			Logger.AllowVerbose = options.Verbose;
-			Logger.Add(new ConsoleLogger(false));
-
-			// Do not log to a file if the logging target is null. It should be AssetRipper.log
-			// if the user didn't specify one.
-			if (options.LogFile != null)
-				Logger.Add(new FileLogger(options.LogFile.FullName));
-
-			Logger.LogSystemInformation("AssetRipper Console Version");
-#if !DEBUG
-			try
-#endif
-			{
-				Ripper ripper = new();
-
-				ripper.Settings.BundledAssetsExportMode = options.BundledAssetsExportMode;
-				ripper.Settings.IgnoreStreamingAssets = options.IgnoreStreaming;
-				ripper.Settings.AudioExportFormat = options.AudioExportFormat;
-				ripper.Settings.ImageExportFormat = options.ImageExportFormat;
-				ripper.Settings.MeshExportFormat = options.MeshExportFormat;
-				ripper.Settings.SpriteExportMode = options.SpriteExportMode;
-				ripper.Settings.TerrainExportMode = options.TerrainExportMode;
-				ripper.Settings.TextExportMode = options.TextExportMode;
-				ripper.Settings.ShaderExportMode = options.ShaderExportMode;
-				ripper.Settings.ScriptExportMode = options.ScriptExportMode;
-				ripper.Settings.ScriptContentLevel = options.ScriptContentLevel;
-				ripper.Settings.ScriptLanguageVersion = options.ScriptLanguageVersion;
-
-				ripper.Settings.LogConfigurationValues();
-
-				// FilesToExport and OutputDirectory shouldn't be null here, as CommandLine should have set them,
-				// but technically they could be null as their nullable type suggests.
-				if (options.FilesToExport == null)
-					throw new Exception("Internal error - list of files to export was lost");
-				else
-					ripper.Load(options.FilesToExport);
-
-				if (options.OutputDirectory == null)
-					throw new Exception("Internal error - output directory was lost");
-				else
-				{
-					PrepareExportDirectory(options.OutputDirectory.FullName);
-					ripper.ExportProject(options.OutputDirectory.FullName);
-				}
-			}
-#if !DEBUG
-			catch (Exception ex)
-			{
-				Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
-			}
-#endif
-		}
+		} */
 
 		private static void PrepareExportDirectory(string path)
 		{
