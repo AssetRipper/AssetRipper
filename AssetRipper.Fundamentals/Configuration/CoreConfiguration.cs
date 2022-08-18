@@ -33,11 +33,7 @@ namespace AssetRipper.Core.Configuration
 
 		public void SetSetting<T>(object value)
 		{
-			if (value == null)
-				return;
-
-			this.settings.Remove(typeof(T));
-			this.settings.Add(typeof(T), value);
+			SetSetting(typeof(T), value);
 		}
 
 		#region Import Settings
