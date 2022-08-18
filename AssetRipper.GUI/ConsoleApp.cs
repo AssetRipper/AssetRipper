@@ -305,6 +305,22 @@ namespace AssetRipper.GUI
 				{
 					string[] values = Enum.GetNames(type);
 					option.AddCompletions(values);
+
+					option.AddValidator((symbolResult) =>
+					{
+						object? input = symbolResult.GetValueForOption(option);
+
+						if (input == null)
+							return;
+
+						string[] names = Enum.GetNames(type);
+
+						if (!names.Contains(input))
+						{
+							symbolResult.ErrorMessage = $"{input} is not a valid option. Valid options: {string.Join(", ", names)}";
+							return;
+						}
+					});
 				}
 
 				options.Add(optionName, option);
