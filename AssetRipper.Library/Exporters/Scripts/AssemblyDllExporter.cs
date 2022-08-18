@@ -19,7 +19,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public AssemblyDllExporter(IAssemblyManager assemblyManager, LibraryConfiguration configuration)
 		{
 			AssemblyManager = assemblyManager;
-			ScriptExportMode = configuration.ScriptExportMode;
+			ScriptExportMode = configuration.GetSetting<ScriptExportMode>();
 		}
 
 		public bool IsHandle(IUnityObjectBase asset)

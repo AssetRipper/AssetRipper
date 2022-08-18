@@ -24,9 +24,9 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public ScriptExporter(IAssemblyManager assemblyManager, LibraryConfiguration configuration)
 		{
 			AssemblyManager = assemblyManager;
-			ScriptExportMode = configuration.ScriptExportMode;
+			ScriptExportMode = configuration.GetSetting<ScriptExportMode>();
 			Decompiler = new ScriptDecompiler(AssemblyManager);
-			LanguageVersion = configuration.ScriptLanguageVersion.ToCSharpLanguageVersion(configuration.Version);
+			LanguageVersion = configuration.GetSetting<ScriptLanguageVersion>().ToCSharpLanguageVersion(configuration.Version);
 			ScriptContentLevel = configuration.ScriptContentLevel;
 			Enabled = ScriptExportMode == ScriptExportMode.Decompiled;
 		}

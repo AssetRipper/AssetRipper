@@ -28,80 +28,80 @@ namespace AssetRipper.GUI
 
 		public AudioExportFormat AudioExportFormat
 		{
-			get => _ripper.Settings.AudioExportFormat;
+			get => _ripper.Settings.GetSetting<AudioExportFormat>();
 			set
 			{
-				_ripper.Settings.AudioExportFormat = value;
+				_ripper.Settings.SetSetting<AudioExportFormat>(value);
 				OnPropertyChanged();
 			}
 		}
 
 		public ImageExportFormat ImageExportFormat
 		{
-			get => _ripper.Settings.ImageExportFormat;
+			get => _ripper.Settings.GetSetting<ImageExportFormat>();
 			set
 			{
-				_ripper.Settings.ImageExportFormat = value;
+				_ripper.Settings.SetSetting<ImageExportFormat>(value);
 				OnPropertyChanged();
 			}
 		}
 
 		public MeshExportFormat MeshExportFormat
 		{
-			get => _ripper.Settings.MeshExportFormat;
+			get => _ripper.Settings.GetSetting<MeshExportFormat>();
 			set
 			{
-				_ripper.Settings.MeshExportFormat = value;
+				_ripper.Settings.SetSetting<MeshExportFormat>(value);
 				OnPropertyChanged();
 			}
 		}
 
 		public SpriteExportMode SpriteExportMode
 		{
-			get => _ripper.Settings.SpriteExportMode;
+			get => _ripper.Settings.GetSetting<SpriteExportMode>();
 			set
 			{
-				_ripper.Settings.SpriteExportMode = value;
+				_ripper.Settings.SetSetting<SpriteExportMode>(value);
 				OnPropertyChanged();
 			}
 		}
 
 		public TerrainExportMode TerrainExportMode
 		{
-			get => _ripper.Settings.TerrainExportMode;
+			get => _ripper.Settings.GetSetting<TerrainExportMode>();
 			set
 			{
-				_ripper.Settings.TerrainExportMode = value;
+				_ripper.Settings.SetSetting<TerrainExportMode>(value);
 				OnPropertyChanged();
 			}
 		}
 
 		public TextExportMode TextExportMode
 		{
-			get => _ripper.Settings.TextExportMode;
+			get => _ripper.Settings.GetSetting<TextExportMode>();
 			set
 			{
-				_ripper.Settings.TextExportMode = value;
+				_ripper.Settings.SetSetting<TextExportMode>(value);
 				OnPropertyChanged();
 			}
 		}
 
 		public ShaderExportMode ShaderExportMode
 		{
-			get => _ripper.Settings.ShaderExportMode;
+			get => _ripper.Settings.GetSetting<ShaderExportMode>();
 			set
 			{
-				_ripper.Settings.ShaderExportMode = value;
+				_ripper.Settings.SetSetting<ShaderExportMode>(value);
 				OnPropertyChanged();
 			}
 		}
 
 		public ScriptExportMode ScriptExportMode
 		{
-			get => _ripper.Settings.ScriptExportMode;
+			get => _ripper.Settings.GetSetting<ScriptExportMode>();
 			set
 			{
-				_ripper.Settings.ScriptExportMode = value;
+				_ripper.Settings.SetSetting<ScriptExportMode>(value);
 				OnPropertyChanged();
 			}
 		}
@@ -118,10 +118,10 @@ namespace AssetRipper.GUI
 
 		public ScriptLanguageVersion ScriptLanguageVersion
 		{
-			get => _ripper.Settings.ScriptLanguageVersion;
+			get => _ripper.Settings.GetSetting<ScriptLanguageVersion>();
 			set
 			{
-				_ripper.Settings.ScriptLanguageVersion = value;
+				_ripper.Settings.SetSetting<ScriptLanguageVersion>(value);
 				OnPropertyChanged();
 			}
 		}

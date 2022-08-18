@@ -23,8 +23,8 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public TextureAssetExporter(LibraryConfiguration configuration)
 		{
-			ImageExportFormat = configuration.ImageExportFormat;
-			SpriteExportMode = configuration.SpriteExportMode;
+			ImageExportFormat = configuration.GetSetting<ImageExportFormat>();
+			SpriteExportMode = configuration.GetSetting<SpriteExportMode>();
 		}
 
 		public override bool IsHandle(IUnityObjectBase asset)

@@ -287,20 +287,20 @@ namespace AssetRipper.Library
 			OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
 			OverrideExporter<ISprite>(textureExporter);
 			YamlSpriteExporter spriteExporter = new();
-			ConditionalOverrideExporter<ISprite>(spriteExporter, Settings.SpriteExportMode == SpriteExportMode.Yaml);
-			ConditionalOverrideExporter<ISpriteAtlas>(spriteExporter, Settings.SpriteExportMode == SpriteExportMode.Yaml);
+			ConditionalOverrideExporter<ISprite>(spriteExporter, Settings.GetSetting<SpriteExportMode>() == SpriteExportMode.Yaml);
+			ConditionalOverrideExporter<ISpriteAtlas>(spriteExporter, Settings.GetSetting<SpriteExportMode>() == SpriteExportMode.Yaml);
 
 			//Shader exporters
 			OverrideExporter<IShader>(new DummyShaderTextExporter());
-			ConditionalOverrideExporter<IShader>(new YamlShaderExporter(), Settings.ShaderExportMode == ShaderExportMode.Yaml);
-			ConditionalOverrideExporter<IShader>(new ShaderDisassemblyExporter(), Settings.ShaderExportMode == ShaderExportMode.Disassembly);
-			ConditionalOverrideExporter<IShader>(new USCShaderExporter(), Settings.ShaderExportMode == ShaderExportMode.Decompile);
+			ConditionalOverrideExporter<IShader>(new YamlShaderExporter(), Settings.GetSetting<ShaderExportMode>() == ShaderExportMode.Yaml);
+			ConditionalOverrideExporter<IShader>(new ShaderDisassemblyExporter(), Settings.GetSetting<ShaderExportMode>() == ShaderExportMode.Disassembly);
+			ConditionalOverrideExporter<IShader>(new USCShaderExporter(), Settings.GetSetting<ShaderExportMode>() == ShaderExportMode.Decompile);
 			OverrideExporter<IShader>(new SimpleShaderExporter());
 
 			//Audio exporters
 			OverrideExporter<IAudioClip>(new YamlAudioExporter());
-			ConditionalOverrideExporter<IAudioClip>(new NativeAudioExporter(), Settings.AudioExportFormat == AudioExportFormat.Native);
-			ConditionalOverrideExporter<IAudioClip>(new AudioClipExporter(Settings), AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat));
+			ConditionalOverrideExporter<IAudioClip>(new NativeAudioExporter(), Settings.GetSetting<AudioExportFormat>() == AudioExportFormat.Native);
+			ConditionalOverrideExporter<IAudioClip>(new AudioClipExporter(Settings), AudioClipExporter.IsSupportedExportFormat(Settings.GetSetting<AudioExportFormat>()));
 			
 			//AudioMixer exporters
 			AudioMixerExporter audioMixerExporter = new();
@@ -309,17 +309,17 @@ namespace AssetRipper.Library
 			OverrideExporter<IAudioMixerSnapshotController>(audioMixerExporter);
 
 			//Mesh exporters
-			ConditionalOverrideExporter<IMesh>(new GlbMeshExporter(), Settings.MeshExportFormat == MeshExportFormat.Glb);
+			ConditionalOverrideExporter<IMesh>(new GlbMeshExporter(), Settings.GetSetting<MeshExportFormat>() == MeshExportFormat.Glb);
 
 			//Model exporters
 			GlbModelExporter glbModelExporter = new();
-			ConditionalOverrideExporter<IComponent>(glbModelExporter, Settings.MeshExportFormat == MeshExportFormat.Glb);
-			ConditionalOverrideExporter<IGameObject>(glbModelExporter, Settings.MeshExportFormat == MeshExportFormat.Glb);
-			ConditionalOverrideExporter<ILevelGameManager>(glbModelExporter, Settings.MeshExportFormat == MeshExportFormat.Glb);
+			ConditionalOverrideExporter<IComponent>(glbModelExporter, Settings.GetSetting<MeshExportFormat>() == MeshExportFormat.Glb);
+			ConditionalOverrideExporter<IGameObject>(glbModelExporter, Settings.GetSetting<MeshExportFormat>() == MeshExportFormat.Glb);
+			ConditionalOverrideExporter<ILevelGameManager>(glbModelExporter, Settings.GetSetting<MeshExportFormat>() == MeshExportFormat.Glb);
 
 			//Terrain exporters
-			ConditionalOverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings), Settings.TerrainExportMode == TerrainExportMode.Heatmap);
-			ConditionalOverrideExporter<ITerrainData>(new TerrainMeshExporter(), Settings.TerrainExportMode == TerrainExportMode.Mesh);
+			ConditionalOverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings), Settings.GetSetting<TerrainExportMode>() == TerrainExportMode.Heatmap);
+			ConditionalOverrideExporter<ITerrainData>(new TerrainMeshExporter(), Settings.GetSetting<TerrainExportMode>() == TerrainExportMode.Mesh);
 
 			//Script exporters
 			OverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));

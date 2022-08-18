@@ -1,10 +1,15 @@
-﻿using AssetRipper.Core.Configuration;
+﻿using System.Collections.Generic;
+
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Logging;
 
 namespace AssetRipper.Library.Configuration
 {
 	public class LibraryConfiguration : CoreConfiguration
 	{
+		public Dictionary<Type, object> settings = new Dictionary<Type, object>();
+
+		/*
 		/// <summary>
 		/// The file format that audio clips get exported in. Recommended: Ogg
 		/// </summary>
@@ -41,33 +46,47 @@ namespace AssetRipper.Library.Configuration
 		/// How are text assets exported?
 		/// </summary>
 		public TextExportMode TextExportMode { get; set; }
+		*/
+
+		public T? GetSetting<T>()
+		{
+			this.settings.TryGetValue(typeof(T), out object? result);
+
+			return (T?)result;
+		}
+
+		public void SetSetting<T>(object value)
+		{
+			this.settings.TryAdd(typeof(T), value);
+		}
 
 		public override void ResetToDefaultValues()
 		{
 			base.ResetToDefaultValues();
-			AudioExportFormat = AudioExportFormat.Default;
-			ImageExportFormat = ImageExportFormat.Png;
-			MeshExportFormat = MeshExportFormat.Native;
-			ScriptExportMode = ScriptExportMode.Decompiled;
-			ScriptLanguageVersion = ScriptLanguageVersion.AutoSafe;
-			ShaderExportMode = ShaderExportMode.Dummy;
-			SpriteExportMode = SpriteExportMode.Yaml;
-			TerrainExportMode = TerrainExportMode.Yaml;
-			TextExportMode = TextExportMode.Parse;
+			this.SetSetting<AudioExportFormat>(AudioExportFormat.Default);
+			this.SetSetting<ImageExportFormat>(ImageExportFormat.Png);
+			this.SetSetting<MeshExportFormat>(MeshExportFormat.Native);
+			this.SetSetting<ScriptExportMode>(ScriptExportMode.Decompiled);
+			this.SetSetting<ScriptLanguageVersion>(ScriptLanguageVersion.AutoSafe);
+			this.SetSetting<ShaderExportMode>(ShaderExportMode.Dummy);
+			this.SetSetting<SpriteExportMode>(SpriteExportMode.Yaml);
+			this.SetSetting<TerrainExportMode>(TerrainExportMode.Yaml);
+			this.SetSetting<TextExportMode>(TextExportMode.Parse);
 		}
 
 		public override void LogConfigurationValues()
 		{
 			base.LogConfigurationValues();
-			Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {AudioExportFormat}");
-			Logger.Info(LogCategory.General, $"{nameof(ImageExportFormat)}: {ImageExportFormat}");
-			Logger.Info(LogCategory.General, $"{nameof(MeshExportFormat)}: {MeshExportFormat}");
-			Logger.Info(LogCategory.General, $"{nameof(ScriptExportMode)}: {ScriptExportMode}");
-			Logger.Info(LogCategory.General, $"{nameof(ScriptLanguageVersion)}: {ScriptLanguageVersion}");
-			Logger.Info(LogCategory.General, $"{nameof(ShaderExportMode)}: {ShaderExportMode}");
-			Logger.Info(LogCategory.General, $"{nameof(SpriteExportMode)}: {SpriteExportMode}");
-			Logger.Info(LogCategory.General, $"{nameof(TerrainExportMode)}: {TerrainExportMode}");
-			Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
+
+			Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {this.GetSetting<AudioExportFormat>()}");
+			Logger.Info(LogCategory.General, $"{nameof(ImageExportFormat)}: {this.GetSetting<ImageExportFormat>()}");
+			Logger.Info(LogCategory.General, $"{nameof(MeshExportFormat)}: {this.GetSetting<MeshExportFormat>()}");
+			Logger.Info(LogCategory.General, $"{nameof(ScriptExportMode)}: {this.GetSetting<ScriptExportMode>()}");
+			Logger.Info(LogCategory.General, $"{nameof(ScriptLanguageVersion)}: {this.GetSetting<ScriptLanguageVersion>()}");
+			Logger.Info(LogCategory.General, $"{nameof(ShaderExportMode)}: {this.GetSetting<ShaderExportMode>()}");
+			Logger.Info(LogCategory.General, $"{nameof(SpriteExportMode)}: {this.GetSetting<SpriteExportMode>()}");
+			Logger.Info(LogCategory.General, $"{nameof(TerrainExportMode)}: {this.GetSetting<TerrainExportMode>()}");
+			Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {this.GetSetting<TextExportMode>()}");
 		}
 	}
 }

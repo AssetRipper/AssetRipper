@@ -14,7 +14,7 @@ namespace AssetRipper.Library.Exporters.Audio
 	public sealed class AudioClipExporter : BinaryAssetExporter
 	{
 		public AudioExportFormat AudioFormat { get; }
-		public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
+		public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.GetSetting<AudioExportFormat>();
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{

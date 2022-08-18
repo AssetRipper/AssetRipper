@@ -16,7 +16,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 		public TextExportMode ExportMode { get; }
 		public TextAssetExporter(LibraryConfiguration configuration)
 		{
-			ExportMode = configuration.TextExportMode;
+			ExportMode = configuration.GetSetting<TextExportMode>();
 		}
 
 		public override bool IsHandle(IUnityObjectBase asset)

@@ -206,16 +206,9 @@ namespace AssetRipper.GUI
 			// WIP
 			// Generate a list of options by looking at properties of the LibraryConfiguration class
 
-			IEnumerable<object> values1 = typeof(LibraryConfiguration).GetFields(BindingFlags.Public | BindingFlags.Static).Select(a => (LibraryConfiguration)a.GetValue(null));
+			// IEnumerable<object> values1 = ripper.Settings.GetType().GetFields().Select(a => (LibraryConfiguration)a.GetValue(null));
 
-			Console.WriteLine($"Got {values1.Count()} values");
-
-			foreach (object value in values1)
-			{
-				Console.WriteLine("Vaklue", value);
-			}
-
-			var members = typeof(LibraryConfiguration).GetMembers();
+			var members = ripper.Settings.GetType().GetMembers();
 			Console.WriteLine($"[TRACE] Found {members.Length} members.");
 
 			foreach (var member in members)

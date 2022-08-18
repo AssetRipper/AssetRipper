@@ -17,7 +17,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 		public ImageExportFormat ImageFormat { get; }
 		public TerrainHeatmapExporter(LibraryConfiguration configuration)
 		{
-			ImageFormat = configuration.ImageExportFormat;
+			ImageFormat = configuration.GetSetting<ImageExportFormat>();
 		}
 
 		public override bool IsHandle(IUnityObjectBase asset)
