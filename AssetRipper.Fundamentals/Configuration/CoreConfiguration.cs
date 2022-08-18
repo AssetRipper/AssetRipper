@@ -48,7 +48,11 @@ namespace AssetRipper.Core.Configuration
 		/// <summary>
 		/// The level of scripts to export
 		/// </summary>
-		public ScriptContentLevel ScriptContentLevel { get; set; }
+		public ScriptContentLevel ScriptContentLevel
+		{
+			get { return this.GetSetting<ScriptContentLevel>(); }
+			set { this.SetSetting<ScriptContentLevel>(value); }
+		}
 		/// <summary>
 		/// Including the streaming assets directory can cause some games to fail while exporting.
 		/// </summary>
