@@ -12,6 +12,12 @@ using AssetRipper.Library;
 
 namespace AssetRipper.GUI
 {
+	internal enum ExitCode
+	{
+		ExtractingError = 1,
+		ArgumentError = 2,
+	}
+
 	internal static class ConsoleOptions
 	{
 		public const string DefaultLogFileName = "AssetRipper.log";
@@ -141,6 +147,8 @@ namespace AssetRipper.GUI
 							symbolResult.ErrorMessage = MultiFileStream.IsMultiFile(path)
 								? $"File '{path}' doesn't have all parts for combining"
 								: $"Neither file nor directory with path '{path}' exists";
+
+							Environment.ExitCode = (int)ExitCode.ArgumentError;
 							return;
 						}
 					}
@@ -164,16 +172,14 @@ namespace AssetRipper.GUI
 				Option<List<string>> option = new Option<List<string>>(name: "--input", description: "Input files or directory to export");
 				option.AddAlias("-i");
 				option.IsRequired = true;
+				option.Arity = ArgumentArity.OneOrMore;
 
 				option.AddValidator((symbolResult) =>
 				{
 					List<string>? inputs = symbolResult.GetValueForOption(option);
 
-					if (inputs == null || inputs.Count < 1)
-					{
-						symbolResult.ErrorMessage = "No files to export. You must provide at least one path using --input. Use --help for help.";
+					if (inputs == null)
 						return;
-					}
 
 					foreach (string input in inputs)
 					{
@@ -184,6 +190,8 @@ namespace AssetRipper.GUI
 							symbolResult.ErrorMessage = MultiFileStream.IsMultiFile(path)
 								? $"File '{path}' doesn't have all parts for combining"
 								: $"Neither file nor directory with path '{path}' exists";
+
+							Environment.ExitCode = (int)ExitCode.ArgumentError;
 							return;
 						}
 					}
@@ -218,8 +226,11 @@ namespace AssetRipper.GUI
 
 					string path = ExecutingDirectory.Combine(dirInfo.FullName);
 
-					if (!Directory.Exists(System.IO.Path.GetDirectoryName(path)))
+					if (!Directory.Exists(Path.GetDirectoryName(path)))
+					{
 						symbolResult.ErrorMessage = "Directory for output does not exist";
+						Environment.ExitCode = (int)ExitCode.ArgumentError;
+					}
 				});
 
 				_outputOption = option;
@@ -288,8 +299,11 @@ namespace AssetRipper.GUI
 
 					string path = ExecutingDirectory.Combine(fileInfo.FullName);
 
-					if (!Directory.Exists(System.IO.Path.GetDirectoryName(path)))
+					if (!Directory.Exists(Path.GetDirectoryName(path)))
+					{
 						symbolResult.ErrorMessage = "Directory for log file does not exist";
+						Environment.ExitCode = (int)ExitCode.ArgumentError;
+					}
 				});
 
 				_logFileOption = option;

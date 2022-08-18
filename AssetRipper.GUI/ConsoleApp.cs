@@ -107,12 +107,14 @@ namespace AssetRipper.GUI
 			DoRipping(ripper, inputs, output.FullName, verbose, logFile.FullName);
 		}
 
-			DoRipping(ripper, inputs, output.FullName);
+		private static void HandleException(Exception ex, InvocationContext context)
+		{
+			HandleException(ex);
 		}
 
 		private static void HandleException(Exception ex)
 		{
-			Environment.ExitCode = 1;
+			Environment.ExitCode = (int)ExitCode.ExtractingError;
 
 #if DEBUG
 			Console.WriteLine("===================================================");
@@ -157,6 +159,8 @@ namespace AssetRipper.GUI
 			rootCommand.AddCommand(extractCommand);
 
 			Parser parser = new CommandLineBuilder(rootCommand)
+				.UseExceptionHandler(HandleException)
+				.UseParseErrorReporting((int)ExitCode.ArgumentError)
 				.UseVersionOption()
 				.UseHelp()
 				.RegisterWithDotnetSuggest()
