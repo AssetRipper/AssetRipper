@@ -81,7 +81,11 @@ namespace AssetRipper.Core.Configuration
 		/// <summary>
 		/// Should objects get exported with dependencies or without?
 		/// </summary>
-		public bool ExportDependencies { get; set; }
+		public bool ExportDependencies
+		{
+			get { return this.GetSetting<ExportDependencies>() == Configuration.ExportDependencies.Export; }
+			set { this.SetSetting<ExportDependencies>(value ? Configuration.ExportDependencies.Export : Configuration.ExportDependencies.Ignore); }
+		}
 		public BundledAssetsExportMode BundledAssetsExportMode
 		{
 			get { return this.GetSetting<BundledAssetsExportMode>(); }
