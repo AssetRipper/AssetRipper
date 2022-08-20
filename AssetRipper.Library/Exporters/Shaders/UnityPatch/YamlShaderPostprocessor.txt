@@ -17,7 +17,7 @@ namespace AssetRipperPatches.Editor
         {
             foreach (var importedAsset in importedAssets)
             {
-                if (!importedAsset.EndsWith(".asset", StringComparison.OrdinalIgnoreCase)) continue;
+                if (!importedAsset.EndsWith(".asset", StringComparison.Ordinal)) continue;
                 Shader yamlShader = AssetDatabase.LoadMainAssetAtPath(importedAsset) as Shader;
                 if (yamlShader == null) continue;
                 ShaderUtil.RegisterShader(yamlShader);
