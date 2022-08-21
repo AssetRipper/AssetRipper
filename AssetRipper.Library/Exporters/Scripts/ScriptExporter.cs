@@ -24,21 +24,17 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public ScriptExporter(IAssemblyManager assemblyManager, LibraryConfiguration configuration)
 		{
 			AssemblyManager = assemblyManager;
-			ScriptExportMode = configuration.ScriptExportMode;
 			Decompiler = new ScriptDecompiler(AssemblyManager);
 			LanguageVersion = configuration.ScriptLanguageVersion.ToCSharpLanguageVersion(configuration.Version);
 			ScriptContentLevel = configuration.ScriptContentLevel;
-			Enabled = ScriptExportMode == ScriptExportMode.Decompiled;
 		}
 
 		public IAssemblyManager AssemblyManager { get; }
-		private ScriptExportMode ScriptExportMode { get; }
 		private ICSharpCode.Decompiler.CSharp.LanguageVersion LanguageVersion { get; }
 		private ScriptContentLevel ScriptContentLevel { get; }
-		public bool Enabled { get; }
 		private ScriptDecompiler Decompiler { get; set; }
 
-		public bool IsHandle(IUnityObjectBase asset) => Enabled && asset is IMonoScript;
+		public bool IsHandle(IUnityObjectBase asset) => asset is IMonoScript;
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{

@@ -322,8 +322,8 @@ namespace AssetRipper.Library
 			ConditionalOverrideExporter<ITerrainData>(new TerrainMeshExporter(), Settings.TerrainExportMode == TerrainExportMode.Mesh);
 
 			//Script exporters
-			OverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager, Settings));
 			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
+			ConditionalOverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager), Settings.ScriptExportMode == ScriptExportMode.DllExportWithoutRenaming);
 
 			//Animator Controller
 			OverrideExporter<IAnimatorController>(new AnimatorControllerExporter());

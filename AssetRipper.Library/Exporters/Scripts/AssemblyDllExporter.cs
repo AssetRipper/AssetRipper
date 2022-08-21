@@ -5,7 +5,6 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Assembly.Managers;
-using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Collections.Generic;
 
@@ -14,18 +13,13 @@ namespace AssetRipper.Library.Exporters.Scripts
 	public class AssemblyDllExporter : IAssetExporter
 	{
 		public IAssemblyManager AssemblyManager { get; }
-		public ScriptExportMode ScriptExportMode { get; }
 
-		public AssemblyDllExporter(IAssemblyManager assemblyManager, LibraryConfiguration configuration)
+		public AssemblyDllExporter(IAssemblyManager assemblyManager)
 		{
 			AssemblyManager = assemblyManager;
-			ScriptExportMode = configuration.ScriptExportMode;
 		}
 
-		public bool IsHandle(IUnityObjectBase asset)
-		{
-			return ScriptExportMode == ScriptExportMode.DllExportWithoutRenaming && asset is IMonoScript;
-		}
+		public bool IsHandle(IUnityObjectBase asset) => asset is IMonoScript;
 
 		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
