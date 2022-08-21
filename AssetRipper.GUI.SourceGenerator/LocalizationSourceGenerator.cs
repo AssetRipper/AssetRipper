@@ -14,22 +14,18 @@ public static class LocalizationSourceGenerator
 		using StringWriter stringWriter = new();
 		using IndentedTextWriter writer = new IndentedTextWriter(stringWriter);
 
-		writer.WriteLine("// Auto-generated code");
-		writer.WriteLine("using System.Collections.Generic;");
+		writer.WriteComment("Auto-generated code");
+		writer.WriteUsing("System.Collections.Generic");
 		writer.WriteLine();
-		writer.WriteLine("namespace AssetRipper.GUI");
-		writer.WriteLine("{");
-		writer.Indent++;
-		writer.WriteLine("public partial class LocalizationManager");
-		writer.WriteLine("{");
-		writer.Indent++;
-
-		AddLocalizationDictionary(writer, repositoryPath);
 		
-		writer.Indent--;
-		writer.WriteLine("}");
-		writer.Indent--;
-		writer.WriteLine("}");
+		using (new Namespace(writer, "AssetRipper.GUI"))
+		{
+			writer.WriteLine("public partial class LocalizationManager");
+			using (new CurlyBrackets(writer))
+			{
+				AddLocalizationDictionary(writer, repositoryPath);
+			}
+		}
 
 		writer.Flush();
 		
@@ -40,22 +36,18 @@ public static class LocalizationSourceGenerator
 	{
 		string[] localizationFiles = Directory.GetFiles(Path.Combine(repositoryPath, "Localizations"), "*.json");
 
-		writer.WriteLine("/// <summary>");
-		writer.WriteLine("/// Dictionary of Language codes to Language names");
-		writer.WriteLine("/// </summary>");
+		writer.WriteSummaryDocumentation("Dictionary of Language codes to Language names");
 		writer.WriteLine("private static Dictionary<string, string> LanguageNameDictionary { get; } = new()");
-		writer.WriteLine("{");
-		writer.Indent++;
 		
-		foreach (string file in localizationFiles)
+		using (new CurlyBracketsWithSemicolon(writer))
 		{
-			string languageCode = Path.GetFileNameWithoutExtension(file);
-			string languageName = ExtractCultureName(new CultureInfo(languageCode.Replace('_', '-')));
-			writer.WriteLine($"{{ \"{languageCode}\", \"{languageName}\" }},");
+			foreach (string file in localizationFiles)
+			{
+				string languageCode = Path.GetFileNameWithoutExtension(file);
+				string languageName = ExtractCultureName(new CultureInfo(languageCode.Replace('_', '-')));
+				writer.WriteLine($"{{ \"{languageCode}\", \"{languageName}\" }},");
+			}
 		}
-		
-		writer.Indent--;
-		writer.WriteLine("};");
 	}
 
 	private static string ExtractCultureName(CultureInfo culture)
