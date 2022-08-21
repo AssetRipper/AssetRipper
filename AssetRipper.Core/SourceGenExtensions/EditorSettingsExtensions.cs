@@ -36,8 +36,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			settings.CacheServerMode_C159 = (int)CacheServerMode.AsPreferences;
 			settings.CacheServerEndpoint_C159.TrySet(string.Empty);
 			settings.CacheServerNamespacePrefix_C159.TrySet("default");
-			settings.CacheServerEnableDownload_C159 = false;
-			settings.CacheServerEnableUpload_C159 = false;
+			settings.CacheServerEnableDownload_C159 = true;
+			settings.CacheServerEnableUpload_C159 = true;
 
 			settings.ShowLightmapResolutionOverlay_C159 = true;
 			settings.UseLegacyProbeSampleCount_C159 = true;
