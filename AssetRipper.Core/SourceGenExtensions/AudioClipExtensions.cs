@@ -12,7 +12,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				return audioClip.AudioData_C83;
 			}
-			else if (audioClip.Resource_C83 != null)
+			else if (audioClip.Has_Resource_C83())
 			{
 				return audioClip.Resource_C83.GetContent(audioClip.SerializedFile) ?? Array.Empty<byte>();
 			}
@@ -46,6 +46,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
+		/// <summary>
+		/// Only present when <see cref="IAudioClip.Has_LoadType_C83"/> is true.
+		/// </summary>
 		public static AudioClipLoadType GetLoadType(this IAudioClip audioClip) => (AudioClipLoadType)audioClip.LoadType_C83;
 
 		/// <summary>
@@ -53,6 +56,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 		/// </summary>
 		public static AudioCompressionFormat GetCompressionFormat(this IAudioClip audioClip) => (AudioCompressionFormat)audioClip.CompressionFormat_C83;
 
+		/// <summary>
+		/// Only present when <see cref="IAudioClip.Has_Format_C83"/> is true.
+		/// </summary>
 		public static FMODSoundFormat GetSoundFormat(this IAudioClip audioClip) => (FMODSoundFormat)audioClip.Format_C83;
 
 		/// <summary>
