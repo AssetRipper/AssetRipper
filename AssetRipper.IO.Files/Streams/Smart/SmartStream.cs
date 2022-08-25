@@ -60,9 +60,9 @@ namespace AssetRipper.IO.Files.Streams.Smart
 			return new SmartStream(new MemoryStream(buffer), SmartStreamType.Memory);
 		}
 
-		public static SmartStream CreateMemory(byte[] buffer, int offset, int size)
+		public static SmartStream CreateMemory(byte[] buffer, int offset, int size, bool writable = true)
 		{
-			return new SmartStream(new MemoryStream(buffer, offset, size), SmartStreamType.Memory);
+			return new SmartStream(new MemoryStream(buffer, offset, size, writable), SmartStreamType.Memory);
 		}
 
 		[MemberNotNull(nameof(m_refCount))]

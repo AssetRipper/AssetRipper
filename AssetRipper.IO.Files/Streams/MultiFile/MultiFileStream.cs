@@ -60,7 +60,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 				SplitPathWithoutExtension(path, out string directory, out string file);
 				return Exists(directory, file);
 			}
-			if (File.Exists(path))
+			if (System.IO.File.Exists(path))
 			{
 				return true;
 			}
@@ -85,9 +85,9 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 				SplitPathWithoutExtension(path, out string directory, out string file);
 				return OpenRead(directory, file);
 			}
-			if (File.Exists(path))
+			if (System.IO.File.Exists(path))
 			{
-				return File.OpenRead(path);
+				return System.IO.File.OpenRead(path);
 			}
 
 			{
@@ -123,7 +123,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 				return GetFiles(directory, file);
 			}
 
-			if (File.Exists(path))
+			if (System.IO.File.Exists(path))
 			{
 				return new[] { path };
 			}
@@ -196,7 +196,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 			{
 				for (int i = 0; i < splitFiles.Length; i++)
 				{
-					Stream stream = File.OpenRead(splitFiles[i]);
+					Stream stream = System.IO.File.OpenRead(splitFiles[i]);
 					streams[i] = stream;
 				}
 

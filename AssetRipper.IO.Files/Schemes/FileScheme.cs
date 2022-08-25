@@ -1,4 +1,3 @@
-using AssetRipper.IO.Files.Entries;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Utils;
 using System.Collections.Generic;
@@ -16,14 +15,13 @@ namespace AssetRipper.IO.Files.Schemes
 
 		public override string? ToString()
 		{
-			return Name == null ? base.ToString() : $"T:{SchemeType} N:'{Name}'";
+			return Name ?? base.ToString();
 		}
 
 		public string FilePath { get; }
 		public string NameOrigin { get; }
 		public string Name { get; }
 
-		public abstract FileEntryType SchemeType { get; }
 		public abstract IEnumerable<FileIdentifier> Dependencies { get; }
 
 		~FileScheme()

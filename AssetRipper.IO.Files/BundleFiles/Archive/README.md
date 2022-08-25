@@ -1,0 +1,1 @@
+﻿I'm not certain that UnityArchive files exist, but code inherited from uTinyRipper indicated that they do exist.

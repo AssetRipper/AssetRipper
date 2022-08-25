@@ -1,6 +1,5 @@
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.Converters;
-using AssetRipper.IO.Files.Entries;
 using AssetRipper.IO.Files.Extensions;
 using AssetRipper.IO.Files.Schemes;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
@@ -70,7 +69,6 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			SerializedFileMetadataConverter.CombineFormats(Header.Version, Metadata);
 		}
 
-		public override FileEntryType SchemeType => FileEntryType.Serialized;
 		public override IEnumerable<FileIdentifier> Dependencies => Metadata.Externals;
 
 		public SerializedFileHeader Header { get; } = new SerializedFileHeader();

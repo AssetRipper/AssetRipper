@@ -19,7 +19,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 
 		public bool IsFile(SerializedFile? file)
 		{
-			return file is not null && file.Name == PathName;
+			return file is not null && file.NameFixed == PathName;
 		}
 
 		public void Read(SerializedReader reader)

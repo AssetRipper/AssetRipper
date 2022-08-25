@@ -1,18 +1,17 @@
 ﻿using AssetRipper.IO.Endian;
-using AssetRipper.IO.Files.Entries;
+using AssetRipper.IO.Files.Extensions;
 using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Streams.Smart;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace AssetRipper.IO.Files.WebFiles
 {
-	public sealed class WebFile : FileList
+	public sealed class WebFile : FileContainer
 	{
-		internal WebFile(WebFileScheme scheme) : base(scheme.NameOrigin)
-		{
-			Header = scheme.Header;
-			Metadata = scheme.Metadata;
-		}
+		private const string Signature = "UnityWebData1.0";
+		public WebFileEntry[] Entries { get; set; } = Array.Empty<WebFileEntry>();
 
 		public static bool IsWebFile(string webPath)
 		{
@@ -22,27 +21,74 @@ namespace AssetRipper.IO.Files.WebFiles
 
 		public static bool IsWebFile(Stream stream)
 		{
-			using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
-			return WebHeader.IsWebHeader(reader);
+			using EndianReader reader = new EndianReader(stream, EndianType.LittleEndian);
+			return IsWebFile(reader);
 		}
 
-		public static bool IsWebFile(byte[] buffer, int offset, int size)
+		public override void Read(SmartStream stream)
 		{
-			using MemoryStream stream = new MemoryStream(buffer, offset, size, false);
-			return IsWebFile(stream);
+			long basePosition = stream.Position;
+			using (EndianReader reader = new EndianReader(stream, EndianType.LittleEndian))
+			{
+				string signature = reader.ReadStringZeroTerm();
+				Debug.Assert(signature == Signature, $"Signature '{signature}' doesn't match to '{Signature}'");
+
+				long headerLength = reader.ReadInt32(); //total size of the header including the signature and all the entries.
+				List<WebFileEntry> entries = new();
+				while (reader.BaseStream.Position - basePosition < headerLength)
+				{
+					WebFileEntry entry = new();
+					entry.Read(reader);
+					entries.Add(entry);
+				}
+				Entries = entries.ToArray();
+			}
+
+			foreach (WebFileEntry entry in Entries)
+			{
+				byte[] buffer = new byte[entry.Size];
+				stream.Position = entry.Offset + basePosition;
+				stream.ReadBuffer(buffer, 0, buffer.Length);
+				File file = SchemeReader.ReadFile(buffer, FilePath, entry.NameOrigin);
+				AddFile(file);
+			}
 		}
 
-		public static WebFileScheme ReadScheme(byte[] buffer, string filePath)
+		public override void Write(SmartStream stream)
 		{
-			return WebFileScheme.ReadScheme(buffer, filePath);
+			long basePosition = stream.Position;
+			using (EndianWriter writer = new EndianWriter(stream, EndianType.LittleEndian))
+			{
+				writer.WriteStringZeroTerm(Signature);
+
+				long entriesStartPosition = basePosition + 4;
+				writer.BaseStream.Position = entriesStartPosition;
+				foreach (WebFileEntry entry in Entries)
+				{
+					writer.WriteEndian(entry);
+				}
+				long endPosition = writer.BaseStream.Position;
+				writer.BaseStream.Position = basePosition;
+				writer.Write((int)(endPosition - basePosition));
+				writer.BaseStream.Position = endPosition;
+			}
+
+			throw new NotImplementedException();
 		}
 
-		public static WebFileScheme ReadScheme(SmartStream stream, string filePath)
+		internal static bool IsWebFile(EndianReader reader)
 		{
-			return WebFileScheme.ReadScheme(stream, filePath);
+			if (reader.BaseStream.Length - reader.BaseStream.Position > Signature.Length)
+			{
+				long position = reader.BaseStream.Position;
+				bool isRead = reader.ReadStringZeroTerm(Signature.Length + 1, out string? signature);
+				reader.BaseStream.Position = position;
+				if (isRead)
+				{
+					return signature == Signature;
+				}
+			}
+			return false;
 		}
-
-		public WebHeader Header { get; }
-		public WebMetadata Metadata { get; }
 	}
 }

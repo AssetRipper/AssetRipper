@@ -2,7 +2,6 @@ using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Streams.Smart;
-using AssetRipper.IO.Files.Utils;
 using System.Collections.Generic;
 using System.IO;
 
@@ -12,11 +11,8 @@ namespace AssetRipper.IO.Files.SerializedFiles
 	/// Serialized files contain binary serialized objects and optional run-time type information.
 	/// They have file name extensions like .asset, .assets, .sharedAssets but may also have no extension at all
 	/// </summary>
-	public sealed class SerializedFile
+	public sealed class SerializedFile : File
 	{
-		public string Name { get; }
-		public string NameOrigin { get; }
-		public string FilePath { get; }
 		public SerializedFileHeader Header { get; }
 		public SerializedFileMetadata Metadata { get; }
 		public UnityVersion Version { get; set; }
@@ -27,8 +23,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		internal SerializedFile(SerializedFileScheme scheme)
 		{
 			FilePath = scheme.FilePath;
-			NameOrigin = scheme.Name;
-			Name = FilenameUtils.FixFileIdentifier(scheme.Name);
+			Name = scheme.Name;
 
 			Header = scheme.Header;
 			Metadata = scheme.Metadata;
@@ -71,13 +66,23 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 		public override string ToString()
 		{
-			return Name;
+			return NameFixed;
 		}
 
 		public EndianType GetEndianType()
 		{
 			bool swapEndianess = SerializedFileHeader.HasEndianess(Header.Version) ? Header.Endianess : Metadata.SwapEndianess;
 			return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
+		}
+
+		public override void Read(SmartStream stream)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void Write(SmartStream stream)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

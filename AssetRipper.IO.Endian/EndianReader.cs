@@ -162,6 +162,15 @@ namespace AssetRipper.IO.Endian
 			}
 		}
 
+		/// <summary>
+		/// Read a UTF8 string
+		/// </summary>
+		/// <remarks>
+		/// First, a 32-bit integer length is read. 
+		/// It signifies the length of a byte buffer, which is read next.
+		/// A string is then parsed from the buffer with <see cref="Encoding.UTF8"/>.
+		/// </remarks>
+		/// <returns></returns>
 		public override string ReadString()
 		{
 			int length = ReadInt32();

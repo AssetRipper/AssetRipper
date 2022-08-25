@@ -3,63 +3,42 @@ using System.IO;
 
 namespace AssetRipper.IO.Files.ResourceFiles
 {
-	public sealed class ResourceFile : IResourceFile, IDisposable
+	public sealed class ResourceFile : File
 	{
-		internal ResourceFile(ResourceFileScheme scheme)
+		internal ResourceFile(SmartStream stream, string filePath, string name)
 		{
-			Name = scheme.NameOrigin;
-			Stream = scheme.Stream.CreateReference();
+			Stream = stream.CreateReference();
+			FilePath = filePath;
+			Name = name;
 		}
 
-		~ResourceFile()
-		{
-			Dispose(false);
-		}
+		public bool IsDefaultResourceFile() => IsDefaultResourceFile(Name);
 
 		public static bool IsDefaultResourceFile(string fileName)
 		{
 			string extension = Path.GetExtension(fileName).ToLower();
-			return extension switch
-			{
-				ResourceFileExtension or StreamingFileExtension => true,
-				_ => false,
-			};
+			return extension is ResourceFileExtension or StreamingFileExtension;
 		}
 
-		public static ResourceFileScheme LoadScheme(string filePath, string fileName)
-		{
-			using SmartStream stream = SmartStream.OpenRead(filePath);
-			return ReadScheme(stream, filePath, fileName);
-		}
+		public override string ToString() => Name;
 
-		public static ResourceFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
+		protected override void Dispose(bool disposing)
 		{
-			return ResourceFileScheme.ReadScheme(buffer, filePath, fileName);
-		}
-
-		public static ResourceFileScheme ReadScheme(SmartStream stream, string filePath, string fileName)
-		{
-			return ResourceFileScheme.ReadScheme(stream, filePath, fileName);
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		public override string ToString()
-		{
-			return Name;
-		}
-
-		private void Dispose(bool _)
-		{
+			base.Dispose(disposing);
 			Stream.Dispose();
 		}
 
-		public string Name { get; }
-		public Stream Stream { get; }
+		public override void Read(SmartStream stream)
+		{
+			throw new NotSupportedException();
+		}
+
+		public override void Write(SmartStream stream)
+		{
+			throw new NotImplementedException();
+		}
+
+		public SmartStream Stream { get; }
 
 		public const string ResourceFileExtension = ".resource";
 		public const string StreamingFileExtension = ".ress";
