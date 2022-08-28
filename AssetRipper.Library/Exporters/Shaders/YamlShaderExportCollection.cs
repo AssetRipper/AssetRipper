@@ -18,11 +18,17 @@ namespace AssetRipper.Library.Exporters.Shaders
 			// This patch uses ShaderUtil.RegisterShader(), which is only available start from Unity 2018.
 			if (container.ExportVersion.IsGreaterEqual(2018, 1, 0))
 			{
-				UnityPatchUtils.ApplyPatchFromManifestResource(typeof(YamlShaderExporter).Assembly, UnityPatchName, dirPath);
+				UnityPatchUtils.ApplyPatchFromManifestResource(typeof(YamlShaderExporter).Assembly, RegisterShaderUnityPatchName, dirPath);
+			}
+			// This patch uses AssetModificationProcessor, which is only available start from Unity 3.5.
+			if (container.ExportVersion.IsGreaterEqual(3, 5, 0))
+			{
+				UnityPatchUtils.ApplyPatchFromManifestResource(typeof(YamlShaderExporter).Assembly, FileLockerUnityPatchName, dirPath);
 			}
 			return base.ExportInner(container, filePath, dirPath);
 		}
 
-		private const string UnityPatchName = "AssetRipper.Library.Exporters.Shaders.UnityPatch.YamlShaderPostprocessor.txt";
+		private const string RegisterShaderUnityPatchName = "AssetRipper.Library.Exporters.Shaders.UnityPatch.YamlShaderPostprocessor.txt";
+		private const string FileLockerUnityPatchName = "AssetRipper.Library.Exporters.Shaders.UnityPatch.YamlShaderLocker.txt";
 	}
 }
