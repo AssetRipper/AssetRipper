@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace AssetRipperPatches.Editor
             _pathList.Clear();
             foreach (string path in paths)
             {
-                if (path.EndsWith(".asset") && AssetDatabase.LoadMainAssetAtPath(path) is Shader)
+                if (path.EndsWith(".asset", StringComparison.Ordinal) && AssetDatabase.LoadMainAssetAtPath(path) is Shader)
                 {
                     Debug.Log(string.Format("Unity's attempt to overwrite the YAML Shader asset has been blocked: {0}", path));
                 }
