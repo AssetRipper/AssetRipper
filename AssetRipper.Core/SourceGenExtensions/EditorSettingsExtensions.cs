@@ -32,7 +32,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			settings.EnableTextureStreamingInEditMode_C159 = true;
 			settings.EnableTextureStreamingInPlayMode_C159 = true;
 			settings.AsyncShaderCompilation_C159 = true;
-			settings.AssetPipelineMode_C159 = (int)AssetPipelineMode.Version1;
+
+			//Version 2 is the default whenever this property is available.
+			//Similarly, version 1 is marked obsolete in those versions.
+			//https://docs.unity3d.com/Manual/AssetDatabase.html
+			settings.AssetPipelineMode_C159 = (int)AssetPipelineMode.Version2;
+
 			settings.CacheServerMode_C159 = (int)CacheServerMode.AsPreferences;
 			settings.CacheServerEndpoint_C159.TrySet(string.Empty);
 			settings.CacheServerNamespacePrefix_C159.TrySet("default");
