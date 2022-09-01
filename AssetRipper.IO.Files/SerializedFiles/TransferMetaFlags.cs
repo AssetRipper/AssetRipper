@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AssetRipper.IO.Files.SerializedFiles.Parser
+namespace AssetRipper.IO.Files.SerializedFiles
 {
 	[Flags]
 	public enum TransferMetaFlags : uint

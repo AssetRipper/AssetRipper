@@ -8,27 +8,27 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 	public sealed class ObjectInfo : ISerializedReadable, ISerializedWritable
 	{
 		/// <summary>
-		/// 5.0.0unk and greater
+		/// 5.0.0unk and greater / Format Version at least 14
 		/// </summary>
 		public static bool IsLongID(FormatVersion generation) => generation >= FormatVersion.Unknown_14;
 		/// <summary>
-		/// Less than 5.5.0
+		/// Less than 5.5.0 / Format Version less than 16
 		/// </summary>
 		public static bool HasClassID(FormatVersion generation) => generation < FormatVersion.RefactoredClassId;
 		/// <summary>
-		/// Less than 5.0.0unk
+		/// Less than 5.0.0unk / Format Version less than 11
 		/// </summary>
 		public static bool HasIsDestroyed(FormatVersion generation) => generation < FormatVersion.HasScriptTypeIndex;
 		/// <summary>
-		/// 5.0.0unk to 5.5.0unk exclusive
+		/// 5.0.0unk to 5.5.0unk exclusive / Format Version at least 11 but less than 17
 		/// </summary>
 		public static bool HasScriptID(FormatVersion generation) => generation >= FormatVersion.HasScriptTypeIndex && generation < FormatVersion.RefactorTypeData;
 		/// <summary>
-		/// 5.0.1 to 5.5.0unk exclusive
+		/// 5.0.1 to 5.5.0unk exclusive / Format Version at least 15 but less than 17
 		/// </summary>
 		public static bool HasStripped(FormatVersion generation) => generation >= FormatVersion.SupportsStrippedObject && generation < FormatVersion.RefactorTypeData;
 		/// <summary>
-		/// 2020.1.0 and greater / Format Version 22 +
+		/// 2020.1.0 and greater / Format Version at least 22
 		/// </summary>
 		public static bool HasLargeFilesSupport(FormatVersion generation) => generation >= FormatVersion.LargeFilesSupport;
 

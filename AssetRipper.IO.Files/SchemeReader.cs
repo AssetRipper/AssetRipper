@@ -5,6 +5,7 @@ using AssetRipper.IO.Files.BundleFiles.RawWeb.Web;
 using AssetRipper.IO.Files.CompressedFiles.Brotli;
 using AssetRipper.IO.Files.CompressedFiles.GZip;
 using AssetRipper.IO.Files.ResourceFiles;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.WebFiles;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace AssetRipper.IO.Files
 	{
 		private static readonly Stack<IScheme> schemes = new()
 		{
+			new SerializedFileScheme(),
 			new GZipFileScheme(),
 			new BrotliFileScheme(),
 			new WebFileScheme(),

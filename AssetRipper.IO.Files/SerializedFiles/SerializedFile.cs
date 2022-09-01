@@ -1,4 +1,5 @@
 using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files.Converters;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Streams.Smart;
@@ -13,26 +14,21 @@ namespace AssetRipper.IO.Files.SerializedFiles
 	/// </summary>
 	public sealed class SerializedFile : File
 	{
-		public SerializedFileHeader Header { get; }
-		public SerializedFileMetadata Metadata { get; }
-		public UnityVersion Version { get; set; }
-		public BuildTarget Platform { get; set; }
+		public SerializedFileHeader Header { get; } = new();
+		public SerializedFileMetadata Metadata { get; } = new();
+		public UnityVersion Version 
+		{
+			get => Metadata.UnityVersion;
+			set => Metadata.UnityVersion = value;
+		}
+		public BuildTarget Platform
+		{
+			get => Metadata.TargetPlatform;
+			set => Metadata.TargetPlatform = value;
+		}
 
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
 		private readonly Dictionary<long, int> m_assetEntryLookup = new();
-		internal SerializedFile(SerializedFileScheme scheme)
-		{
-			FilePath = scheme.FilePath;
-			Name = scheme.Name;
-
-			Header = scheme.Header;
-			Metadata = scheme.Metadata;
-
-			for (int i = 0; i < Metadata.Object.Length; i++)
-			{
-				m_assetEntryLookup.Add(Metadata.Object[i].FileID, i);
-			}
-		}
 
 		public static bool IsSerializedFile(string filePath) => IsSerializedFile(MultiFileStream.OpenRead(filePath));
 		public static bool IsSerializedFile(byte[] buffer, int offset, int size) => IsSerializedFile(new MemoryStream(buffer, offset, size, false));
@@ -40,23 +36,6 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		{
 			using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
 			return SerializedFileHeader.IsSerializedFileHeader(reader, stream.Length);
-		}
-
-		public static SerializedFileScheme LoadScheme(string filePath)
-		{
-			string fileName = Path.GetFileNameWithoutExtension(filePath);
-			using SmartStream fileStream = SmartStream.OpenRead(filePath);
-			return ReadScheme(fileStream, filePath, fileName);
-		}
-
-		public static SerializedFileScheme ReadScheme(byte[] buffer, string filePath, string fileName)
-		{
-			return SerializedFileScheme.ReadSceme(buffer, filePath, fileName);
-		}
-
-		public static SerializedFileScheme ReadScheme(SmartStream stream, string filePath, string fileName)
-		{
-			return SerializedFileScheme.ReadSceme(stream, filePath, fileName);
 		}
 
 		public ObjectInfo GetAssetEntry(long pathID)
@@ -77,7 +56,17 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 		public override void Read(SmartStream stream)
 		{
-			throw new NotImplementedException();
+			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
+			{
+				Header.Read(reader);
+			}
+			if (SerializedFileMetadata.IsMetadataAtTheEnd(Header.Version))
+			{
+				stream.Position = Header.FileSize - Header.MetadataSize;
+			}
+			Metadata.Read(stream, Header);
+
+			SerializedFileMetadataConverter.CombineFormats(Header.Version, Metadata);
 		}
 
 		public override void Write(SmartStream stream)

@@ -161,7 +161,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 		public SerializedType[] Types { get; set; } = Array.Empty<SerializedType>();
 		/// <summary>
 		/// Indicate that <see cref="ObjectInfo.FileID"/> is 8 bytes size<br/>
-		/// Serialized files with this enabled field doesn't exist
+		/// Serialized files with this field enabled supposedly don't exist
 		/// </summary>
 		public uint LongFileID { get; set; }
 		public bool SwapEndianess { get; set; }

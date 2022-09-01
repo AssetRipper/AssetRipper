@@ -4,6 +4,8 @@ using AssetRipper.IO.Files.BundleFiles.FileStream;
 using AssetRipper.IO.Files.BundleFiles.RawWeb.Raw;
 using AssetRipper.IO.Files.BundleFiles.RawWeb.Web;
 using AssetRipper.IO.Files.ResourceFiles;
+using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.SerializedFiles.Parser;
 using System;
 
 namespace AssetRipper.FileAnalyzer
@@ -58,6 +60,9 @@ namespace AssetRipper.FileAnalyzer
 			Logger.Info($"{indentionString}Name (fixed): {file.NameFixed}");
 			switch (file)
 			{
+				case SerializedFile serializedFile:
+					LogFileInfo(serializedFile, indent);
+					break;
 				case FileStreamBundleFile fileStreamBundleFile:
 					LogFileInfo(fileStreamBundleFile, indent);
 					break;
@@ -72,6 +77,39 @@ namespace AssetRipper.FileAnalyzer
 					break;
 				default:
 					break;
+			}
+		}
+
+		private static void LogFileInfo(SerializedFile assetsFile, int indent = 0)
+		{
+			string indentionString = new string('\t', indent);
+			if (assetsFile.Metadata.UnityVersion.IsEqual(0, 0, 0))
+			{
+				Logger.Info($"{indentionString}Unity version: stripped");
+			}
+			else
+			{
+				Logger.Info($"{indentionString}Unity version: {assetsFile.Metadata.UnityVersion}");
+			}
+
+			Logger.Info($"{indentionString}Serialied version: {(int)assetsFile.Header.Version}");
+			Logger.Info($"{indentionString}Endianess: {(assetsFile.Header.Endianess ? "Big Endian" : "Little Endian")}");
+
+			if (assetsFile.Metadata.Externals.Length > 0)
+			{
+				Logger.Info($"{indentionString}Shared files:");
+			}
+
+			for (int i = 0; i < assetsFile.Metadata.Externals.Length; i++)
+			{
+				FileIdentifier sharedFile = assetsFile.Metadata.Externals[i];
+				if (i != 0)
+				{
+					Logger.BlankLine();
+				}
+				Logger.Info($"{indentionString}\t{sharedFile.PathNameOrigin}");
+				Logger.Info($"{indentionString}\tGUID: {sharedFile.Guid}");
+				Logger.Info($"{indentionString}\tType: {sharedFile.Type}");
 			}
 		}
 
@@ -106,6 +144,15 @@ namespace AssetRipper.FileAnalyzer
 		private static void LogFileListInfo(FileContainer fileList, int indent)
 		{
 			string indentionString = new string('\t', indent);
+			if (fileList.SerializedFiles.Count > 0)
+			{
+				Logger.Info($"{indentionString}Serialized Files:");
+				foreach (File file in fileList.SerializedFiles)
+				{
+					LogFileInfo(file, indent + 1);
+					Logger.BlankLine();
+				}
+			}
 			if (fileList.ResourceFiles.Count > 0)
 			{
 				Logger.Info($"{indentionString}Resource Files:");

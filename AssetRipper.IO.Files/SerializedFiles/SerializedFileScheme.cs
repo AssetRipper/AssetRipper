@@ -9,70 +9,11 @@ using System.IO;
 
 namespace AssetRipper.IO.Files.SerializedFiles
 {
-	public sealed class SerializedFileScheme : FileScheme
+	public sealed class SerializedFileScheme : Scheme<SerializedFile>
 	{
-		private SerializedFileScheme(byte[] buffer, string filePath, string fileName) : base(filePath, fileName)
+		public override bool CanRead(SmartStream stream)
 		{
-			Stream = new MemoryStream(buffer, 0, buffer.Length, false);
+			return SerializedFile.IsSerializedFile(stream);
 		}
-
-		private SerializedFileScheme(SmartStream stream, string filePath, string fileName) : base(filePath, fileName)
-		{
-			if (stream.Length <= int.MaxValue)
-			{
-				byte[] buffer = new byte[stream.Length];
-				stream.ReadBuffer(buffer, 0, buffer.Length);
-				Stream = new MemoryStream(buffer, 0, buffer.Length, false);
-			}
-			else
-			{
-				Stream = stream.CreateReference();
-			}
-		}
-
-		internal static SerializedFileScheme ReadSceme(byte[] buffer, string filePath, string fileName)
-		{
-			SerializedFileScheme scheme = new SerializedFileScheme(buffer, filePath, fileName);
-			scheme.ReadScheme();
-			return scheme;
-		}
-
-		internal static SerializedFileScheme ReadSceme(SmartStream stream, string filePath, string fileName)
-		{
-			SerializedFileScheme scheme = new SerializedFileScheme(stream, filePath, fileName);
-			scheme.ReadScheme();
-			return scheme;
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			base.Dispose(disposing);
-			if (Stream != null)
-			{
-				Stream.Dispose();
-				Stream = null!;
-			}
-		}
-
-		private void ReadScheme()
-		{
-			using (EndianReader reader = new EndianReader(Stream, EndianType.BigEndian))
-			{
-				Header.Read(reader);
-			}
-			if (SerializedFileMetadata.IsMetadataAtTheEnd(Header.Version))
-			{
-				Stream.Position = Header.FileSize - Header.MetadataSize;
-			}
-			Metadata.Read(Stream, Header);
-
-			SerializedFileMetadataConverter.CombineFormats(Header.Version, Metadata);
-		}
-
-		public override IEnumerable<FileIdentifier> Dependencies => Metadata.Externals;
-
-		public SerializedFileHeader Header { get; } = new SerializedFileHeader();
-		public SerializedFileMetadata Metadata { get; } = new SerializedFileMetadata();
-		public Stream Stream { get; private set; }
 	}
 }
