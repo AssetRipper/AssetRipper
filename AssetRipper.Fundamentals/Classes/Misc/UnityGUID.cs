@@ -10,24 +10,24 @@ using System.Text;
 
 namespace AssetRipper.Core.Classes.Misc
 {
-	public struct UnityGUID : IAsset, ISerializedReadable, ISerializedWritable, IEquatable<UnityGUID>
+	public record struct UnityGUID : IAsset, ISerializedReadable, ISerializedWritable
 	{
 		public UnityGUID(Guid guid) : this(ConvertSystemOrUnityBytes(guid.ToByteArray())) { }
 
-		public UnityGUID(byte[] guidData)
+		public UnityGUID(ReadOnlySpan<byte> guidData)
 		{
-			Data0 = BinaryPrimitives.ReadUInt32LittleEndian(guidData.AsSpan(0, 4));
-			Data1 = BinaryPrimitives.ReadUInt32LittleEndian(guidData.AsSpan(4, 4));
-			Data2 = BinaryPrimitives.ReadUInt32LittleEndian(guidData.AsSpan(8, 4));
-			Data3 = BinaryPrimitives.ReadUInt32LittleEndian(guidData.AsSpan(12, 4));
+			Data0 = BinaryPrimitives.ReadUInt32LittleEndian(guidData.Slice(0, sizeof(uint)));
+			Data1 = BinaryPrimitives.ReadUInt32LittleEndian(guidData.Slice(4, sizeof(uint)));
+			Data2 = BinaryPrimitives.ReadUInt32LittleEndian(guidData.Slice(8, sizeof(uint)));
+			Data3 = BinaryPrimitives.ReadUInt32LittleEndian(guidData.Slice(12, sizeof(uint)));
 		}
 
-		public UnityGUID(uint dword0, uint dword1, uint dword2, uint dword3)
+		public UnityGUID(uint data0, uint data1, uint data2, uint data3)
 		{
-			Data0 = dword0;
-			Data1 = dword1;
-			Data2 = dword2;
-			Data3 = dword3;
+			Data0 = data0;
+			Data1 = data1;
+			Data2 = data2;
+			Data3 = data3;
 		}
 
 		public static UnityGUID NewGuid() => new UnityGUID(Guid.NewGuid().ToByteArray());
@@ -35,16 +35,6 @@ namespace AssetRipper.Core.Classes.Misc
 		public static explicit operator UnityGUID(Guid systemGuid) => new UnityGUID(systemGuid);
 
 		public static explicit operator Guid(UnityGUID unityGuid) => new Guid(ConvertSystemOrUnityBytes(unityGuid.ToByteArray()));
-
-		public static bool operator ==(UnityGUID left, UnityGUID right)
-		{
-			return left.Data0 == right.Data0 && left.Data1 == right.Data1 && left.Data2 == right.Data2 && left.Data3 == right.Data3;
-		}
-
-		public static bool operator !=(UnityGUID left, UnityGUID right)
-		{
-			return left.Data0 != right.Data0 || left.Data1 != right.Data1 || left.Data2 != right.Data2 || left.Data3 != right.Data3;
-		}
 
 		public void Read(SerializedReader reader) => Read((EndianReader)reader);
 		public void Read(AssetReader reader) => Read((EndianReader)reader);
@@ -66,10 +56,7 @@ namespace AssetRipper.Core.Classes.Misc
 			writer.Write(Data3);
 		}
 
-		public YamlNode ExportYaml(IExportContainer container)
-		{
-			return new YamlScalarNode(ToString());
-		}
+		public YamlNode ExportYaml(IExportContainer container) => new YamlScalarNode(ToString());
 
 		public byte[] ToByteArray()
 		{
@@ -79,30 +66,6 @@ namespace AssetRipper.Core.Classes.Misc
 			BinaryPrimitives.WriteUInt32LittleEndian(result.AsSpan(8, 4), Data2);
 			BinaryPrimitives.WriteUInt32LittleEndian(result.AsSpan(12, 4), Data3);
 			return result;
-		}
-
-		public override bool Equals(object? obj)
-		{
-			if (obj is UnityGUID guid)
-			{
-				return this == guid;
-			}
-			return false;
-		}
-
-		public bool Equals(UnityGUID other) => this == other;
-
-		public override int GetHashCode()
-		{
-			int hash = 19;
-			unchecked
-			{
-				hash = hash + (31 * Data0.GetHashCode());
-				hash = (hash * 479) + Data1.GetHashCode();
-				hash = (hash * 593) + Data2.GetHashCode();
-				hash = (hash * 347) + Data3.GetHashCode();
-			}
-			return hash;
 		}
 
 		public override string ToString()
@@ -122,16 +85,7 @@ namespace AssetRipper.Core.Classes.Misc
 			}
 		}
 
-		private static StringBuilder GetStringBuilder()
-		{
-			if (s_sb == null)
-			{
-				s_sb = new StringBuilder(32, 32);
-			}
-			return s_sb;
-		}
-
-		private void Append(StringBuilder sb, uint value)
+		private static void Append(StringBuilder sb, uint value)
 		{
 			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value << 4) & 0xF0) | unchecked((int)(value >> 4) & 0xF)]);
 			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value >> 4) & 0xF0) | unchecked((int)(value >> 12) & 0xF)]);
@@ -181,10 +135,7 @@ namespace AssetRipper.Core.Classes.Misc
 			return newBytes;
 		}
 
-		public static UnityGUID Parse(string guidString)
-		{
-			return new UnityGUID(Guid.Parse(guidString));
-		}
+		public static UnityGUID Parse(string guidString) => new UnityGUID(Guid.Parse(guidString));
 
 		/// <summary>
 		/// Make a guid by MD5 hashing a string
@@ -220,9 +171,15 @@ namespace AssetRipper.Core.Classes.Misc
 		/// <summary>
 		/// 0x0000000DEADBEEF15DEADF00D0000000
 		/// </summary>
-		public static readonly UnityGUID MissingReference = new UnityGUID(0xD0000000, 0x1FEEBDAE, 0x00FDAED5, 0x0000000D);
+		public static UnityGUID MissingReference { get; } = new UnityGUID(0xD0000000, 0x1FEEBDAE, 0x00FDAED5, 0x0000000D);
 
 		[ThreadStatic]
 		private static StringBuilder? s_sb = null;
+
+		private static StringBuilder GetStringBuilder()
+		{
+			s_sb ??= new StringBuilder(32, 32);
+			return s_sb;
+		}
 	}
 }
