@@ -42,7 +42,7 @@
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="LibVLCSharp" Version="3.6.6" />
 		<PackageReference Include="LibVLCSharp.Avalonia" Version="3.6.6" />
-		<PackageReference Include="MessageBox.Avalonia" Version="2.0.2" />
+		<PackageReference Include="MessageBox.Avalonia" Version="2.2.0" />
 		<PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
 		<PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
 		<PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
