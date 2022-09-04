@@ -29,7 +29,7 @@ namespace AssetRipper.Library.Exporters.Audio
 			IAudioClip audioClip = (IAudioClip)asset;
 
 			byte[] data = audioClip.GetAudioData();
-			if (data.IsNullOrEmpty())
+			if (data.Length == 0)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{audioClip.GetNameNotEmpty()}' because no valid data was found");
 				return false;

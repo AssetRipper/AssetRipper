@@ -333,6 +333,7 @@ namespace AssetRipper.Library
 
 			AddPostExporter(new ProjectVersionPostExporter());
 			AddPostExporter(new PackageManifestPostExporter());
+			AddPostExporter(new StreamingAssetsPostExporter());
 			AddPostExporter(new TypeTreeExporter());
 			AddPostExporter(new DllPostExporter());
 		}

@@ -4,6 +4,5 @@
 	{
 		Ignore,
 		Extract,
-		//Copy,
 	}
 }
