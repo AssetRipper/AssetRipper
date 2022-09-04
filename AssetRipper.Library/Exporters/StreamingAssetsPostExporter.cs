@@ -25,7 +25,7 @@ namespace AssetRipper.Library.Exporters
 				foreach (string file in Directory.EnumerateFiles(inputDirectory))
 				{
 					string newFile = Path.Combine(outputDirectory, Path.GetRelativePath(inputDirectory, file));
-					File.Copy(newFile, file, true);
+					File.Copy(file, newFile, true);
 				}
 			}
 		}
