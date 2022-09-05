@@ -21,7 +21,6 @@ namespace AssetRipper.FileAnalyzer
 			else
 			{
 				Logger.Add(new ConsoleLogger(true));
-				//Analyzer.LoadFiles(args);
 				LoadFiles(args);
 			}
 			Console.ReadKey();

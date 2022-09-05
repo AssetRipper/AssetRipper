@@ -22,7 +22,7 @@ namespace AssetRipper.Library.Exporters
 			{
 				//Unity 5 has an extra line
 				//Even on beta versions, this always seems to be zero.
-				writer.Write("m_StandardAssetsVersion: 0");
+				writer.Write("m_StandardAssetsVersion: 0\n");
 			}
 
 			//Beginning with 2019.1.0a10, ProjectVersion.txt files have an additional line.
