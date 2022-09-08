@@ -21,6 +21,10 @@ namespace AssetRipper.Core.IO
 			this.file = file;
 		}
 
+		public PPtrAccessList(IReadOnlyList<TPPtr> list, IUnityObjectBase asset) : this(list, asset.SerializedFile)
+		{
+		}
+
 		public TTarget? this[int index]
 		{
 			get
