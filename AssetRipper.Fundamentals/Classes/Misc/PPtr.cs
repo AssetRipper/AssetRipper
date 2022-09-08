@@ -51,6 +51,19 @@ namespace AssetRipper.Core.Classes.Misc
 			destination.PathIndex = source.PathIndex;
 		}
 
+		//prevents boxing
+		public static void CopyValues<T>(this IPPtr destination, PPtr<T> source) where T : IUnityObjectBase
+		{
+			destination.FileIndex = source.FileIndex;
+			destination.PathIndex = source.PathIndex;
+		}
+
+		public static void SetNull(this IPPtr destination)
+		{
+			destination.FileIndex = 0;
+			destination.PathIndex = 0;
+		}
+
 		public static PPtr<T>[] CastArray<T>(IPPtr[] array) where T : IUnityObjectBase
 		{
 			PPtr<T>[] result = new PPtr<T>[array.Length];
