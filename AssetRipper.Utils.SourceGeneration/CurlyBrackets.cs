@@ -1,11 +1,13 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 
-namespace AssetRipper.GUI.SourceGenerator;
+namespace AssetRipper.Utils.SourceGeneration;
 
 public readonly struct CurlyBrackets : IDisposable
 {
 	private readonly IndentedTextWriter writer;
+
+	public CurlyBrackets() => throw new NotSupportedException();
 
 	public CurlyBrackets(IndentedTextWriter writer)
 	{

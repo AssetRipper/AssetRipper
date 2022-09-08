@@ -6,4 +6,8 @@
 		<LangVersion>Latest</LangVersion>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.Utils.SourceGeneration\AssetRipper.Utils.SourceGeneration.csproj" />
+	</ItemGroup>
+
 </Project>

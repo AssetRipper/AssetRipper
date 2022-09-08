@@ -1,11 +1,13 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 
-namespace AssetRipper.GUI.SourceGenerator;
+namespace AssetRipper.Utils.SourceGeneration;
 
 public readonly struct Namespace : IDisposable
 {
 	private readonly CurlyBrackets curlyBrackets;
+
+	public Namespace() => throw new NotSupportedException();
 
 	public Namespace(IndentedTextWriter writer, string @namespace)
 	{
