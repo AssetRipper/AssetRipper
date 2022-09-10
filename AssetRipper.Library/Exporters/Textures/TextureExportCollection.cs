@@ -51,8 +51,8 @@ namespace AssetRipper.Library.Exporters.Textures
 							ISprite? sprite = spritePtr.FindAsset(atlas.SerializedFile);
 							if (sprite is not null)
 							{
-								ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213!];
-								if (atlasData.Texture.IsAsset(atlas.SerializedFile, texture))
+								if (atlas.RenderDataMap_C687078895.TryGetValue(sprite.RenderDataKey_C213!, out ISpriteAtlasData? atlasData) 
+									&& atlasData.Texture.IsAsset(atlas.SerializedFile, texture))
 								{
 									AddToDictionary(sprite, atlas);
 									if (exportSprites)

@@ -101,5 +101,10 @@ namespace AssetRipper.Core.IO
 		{
 			return HashCode.Combine(Key, Value);
 		}
+
+		public override string ToString()
+		{
+			return $"{key} : {value}";
+		}
 	}
 }

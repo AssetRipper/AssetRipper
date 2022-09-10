@@ -139,7 +139,7 @@ namespace AssetRipper.Core.IO
 			}
 			else
 			{
-				throw new KeyNotFoundException($"Key not found: {key?.ToString()}");
+				throw new KeyNotFoundException($"Key not found: {key}");
 			}
 		}
 

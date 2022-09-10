@@ -28,10 +28,15 @@ namespace AssetRipper.Library.Exporters
 			//Beginning with 2019.1.0a10, ProjectVersion.txt files have an additional line.
 			//m_EditorVersionWithRevision: 2019.4.3f1 (f880dceab6fe)
 			//The revision is always 6 bytes.
-			//It can be acquired with the FileVersionInfo class in the System.Diagnostics namespace.
+
+			//Beginning with 2019.3.0a5, it can be acquired with the FileVersionInfo class in the System.Diagnostics namespace.
 			//FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo("path/to/Unity.exe");
 			//string productVersion = versionInfo.ProductVersion; //For example: 2019.4.3f1_f880dceab6fe
 			//string revision = productVersion.Substring(productVersion.IndexOf('_') + 1);
+
+			//For 2019.3.0a4 and earlier, versionInfo.ProductVersion is equal to versionInfo.FileVersion.
+			//versionInfo.FileVersion is the same format for all Unity versions: 2019.4.3.16285916
+			//The fourth number contains half of the revision and is a 24-bit big-endian integer.
 		}
 	}
 }
