@@ -50,6 +50,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace AssetRipper.Library
 {
@@ -166,6 +167,7 @@ namespace AssetRipper.Library
 		public void ExportProject<T>(string exportPath) => ExportProject(exportPath, GetFilter<T>());
 		public void ExportProject(string exportPath, Type type) => ExportProject(exportPath, GetFilter(type));
 		public void ExportProject(string exportPath, IEnumerable<Type> types) => ExportProject(exportPath, GetFilter(types));
+		public void ExportProject(string exportPath, String filespec) => ExportProject(exportPath, GetFilter(filespec));
 		private void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
@@ -232,6 +234,36 @@ namespace AssetRipper.Library
 			else
 			{
 				return asset => types.Any(t => asset.GetType().IsAssignableTo(t));
+			}
+		}
+		private static Func<IUnityObjectBase, bool> GetFilter(String filespec)
+		{
+			if (filespec == null)
+			{
+				return LibraryConfiguration.DefaultFilter;
+			}
+			else if (filespec == "")
+			{
+				return asset => false;
+			}
+			else
+			{
+				Regex fileregex = new Regex(
+					"^"+filespec.Replace(".","\\.").Replace("*","[^/]*").Replace("[^/]*[^/]*",".*").Replace("?",".")+"$",
+					RegexOptions.Singleline | RegexOptions.Compiled
+				);
+				return asset => {
+					String originalName;
+					try {
+						originalName = asset.GetOriginalName();
+					}
+					catch (Exception ex) {
+						// types like Transform throw an exception if you try to get their name
+						originalName = "";
+					}
+					// TODO compare to the full exported path and name, which seems hard to reach via IProjectAssetContainer.TryGetAssetPathFromAssets
+					return fileregex.IsMatch(originalName);
+				};
 			}
 		}
 

@@ -28,6 +28,9 @@ namespace AssetRipper.GUI
 
 			[Option('q', "quit", Default = false, HelpText = "Close console after export.")]
 			public bool Quit { get; set; }
+
+			[Option('f', "filespec", HelpText = "File pattern to export, including glob wildcards * ** ?")]
+			public String FileSpec { get; set; }
 		}
 
 		public static void ParseArgumentsAndRun(string[] args)
@@ -80,6 +83,7 @@ namespace AssetRipper.GUI
 			{
 				options.LogFile ??= new FileInfo(ExecutingDirectory.Combine(DefaultLogFileName));
 				options.OutputDirectory ??= new DirectoryInfo(ExecutingDirectory.Combine("Ripped"));
+				options.FileSpec ??= "*";
 			}
 			catch (Exception ex)
 			{
@@ -105,7 +109,7 @@ namespace AssetRipper.GUI
 				ripper.Settings.LogConfigurationValues();
 				ripper.Load(options.FilesToExport);
 				PrepareExportDirectory(options.OutputDirectory.FullName);
-				ripper.ExportProject(options.OutputDirectory.FullName);
+				ripper.ExportProject(options.OutputDirectory.FullName, options.FileSpec);
 			}
 #if !DEBUG
 			catch (Exception ex)
