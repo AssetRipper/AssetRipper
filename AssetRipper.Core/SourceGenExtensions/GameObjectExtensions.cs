@@ -64,7 +64,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			foreach (IPPtr_Component_ ptr in gameObject.FetchComponents())
 			{
 				// component could have not implemented asset type
-				IComponent? comp = ptr.FindAsset(gameObject.SerializedFile);
+				IComponent? comp = ptr.TryGetAsset(gameObject.SerializedFile);
 				if (comp is T t)
 				{
 					return t;
@@ -93,7 +93,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			foreach (IPPtr_Component_ ptr in gameObject.FetchComponents())
 			{
-				IComponent? comp = ptr.FindAsset(gameObject.SerializedFile);
+				IComponent? comp = ptr.TryGetAsset(gameObject.SerializedFile);
 				if (comp == null)
 				{
 					continue;
@@ -150,7 +150,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			ITransform? transform = null;
 			foreach (IPPtr_Component_ ptr in root.FetchComponents())
 			{
-				IComponent? component = ptr.FindAsset(root.SerializedFile);
+				IComponent? component = ptr.TryGetAsset(root.SerializedFile);
 				if (component == null)
 				{
 					continue;

@@ -67,7 +67,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is IComponent component)
 			{
-				return component.GameObject_C2.FindAsset(component.SerializedFile) is not null;
+				return component.GameObject_C2.TryGetAsset(component.SerializedFile) is not null;
 			}
 			return false;
 		}

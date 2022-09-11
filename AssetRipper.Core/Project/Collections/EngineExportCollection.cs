@@ -63,7 +63,7 @@ namespace AssetRipper.Core.Project.Collections
 				{
 					return false;
 				}
-				IShader? shader = material.Shader_C21.FindAsset(material.SerializedFile);
+				IShader? shader = material.Shader_C21.TryGetAsset(material.SerializedFile);
 				if (shader == null)
 				{
 					return true;
@@ -80,7 +80,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is ISprite sprite)
 			{
-				ITexture2D? spriteTexture = sprite.RD_C213.Texture.FindAsset(sprite.SerializedFile);
+				ITexture2D? spriteTexture = sprite.RD_C213.Texture.TryGetAsset(sprite.SerializedFile);
 				if (spriteTexture == null)
 				{
 					return false;

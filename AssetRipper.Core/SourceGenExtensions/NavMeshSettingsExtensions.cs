@@ -8,7 +8,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void ConvertToEditorFormat(this INavMeshSettings settings)
 		{
-			INavMeshData? data = settings.NavMeshData_C196?.FindAsset(settings.SerializedFile);
+			INavMeshData? data = settings.NavMeshData_C196?.TryGetAsset(settings.SerializedFile);
 			if (data == null)
 			{
 				settings.BuildSettings_C196.SetToDefault();

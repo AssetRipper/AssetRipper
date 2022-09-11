@@ -88,7 +88,7 @@ namespace AssetRipper.Library.Exporters.Models
 			{
 				if (material.TryGetTextureProperty("_MainTex", out IUnityTexEnv? unityTexEnv))
 				{
-					texture = unityTexEnv.Texture.FindAsset(material.SerializedFile) as ITexture2D;
+					texture = unityTexEnv.Texture.TryGetAsset(material.SerializedFile) as ITexture2D;
 				}
 				else
 				{

@@ -5,6 +5,7 @@ using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Core.Classes.Misc
 {
@@ -31,7 +32,7 @@ namespace AssetRipper.Core.Classes.Misc
 				return MetaPtr.NullPtr.ExportYaml(container);
 			}
 
-			T? asset = pptr.FindAsset(container);
+			T? asset = pptr.TryGetAsset(container);
 			if (asset is null)
 			{
 				AssetType assetType = container.ToExportType(typeof(T));
@@ -74,29 +75,34 @@ namespace AssetRipper.Core.Classes.Misc
 			return result;
 		}
 
-		public static T? FindAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
+		public static bool TryGetAsset<T>(this IPPtr<T> pptr, IAssetContainer file, [NotNullWhen(true)] out T? asset) where T : IUnityObjectBase
 		{
 			if (pptr.IsNull())
 			{
-				return default;
+				asset = default;
+				return false;
 			}
-			IUnityObjectBase? asset = file.FindAsset(pptr.FileIndex, pptr.PathIndex);
-			return asset switch
+			IUnityObjectBase? @object = file.FindAsset(pptr.FileIndex, pptr.PathIndex);
+			switch (@object)
 			{
-				null => default,
-				UnknownObject or UnreadableObject => default,
-				T t => t,
-				_ => throw new Exception($"Object's type {asset.GetType().Name} isn't assignable from {typeof(T).Name}"),
-			};
+				case null:
+					asset = default;
+					return false;
+				case T t:
+					asset = t;
+					return true;
+				case UnknownObject or UnreadableObject:
+					asset = default;
+					return false;
+				default:
+					throw new Exception($"Object's type {@object.GetType().Name} isn't assignable from {typeof(T).Name}");
+			}
 		}
 
 		public static T? TryGetAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
 		{
-			if (pptr.IsNull())
-			{
-				return default;
-			}
-			return pptr.GetAsset(file);
+			pptr.TryGetAsset(file, out T? asset);
+			return asset;
 		}
 
 		public static T GetAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
@@ -146,7 +152,7 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public static bool IsValid<T>(this IPPtr<T> pptr, IExportContainer container) where T : IUnityObjectBase
 		{
-			return pptr.FindAsset(container) != null;
+			return pptr.TryGetAsset(container) != null;
 		}
 
 		public static string ToLogString<T>(this IPPtr<T> pptr, IAssetContainer container) where T : IUnityObjectBase

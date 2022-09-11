@@ -218,7 +218,7 @@ namespace AssetRipper.Core.Project
 							continue;
 						}
 
-						IUnityObjectBase? dependency = pointer.FindAsset(asset.SerializedFile);
+						IUnityObjectBase? dependency = pointer.TryGetAsset(asset.SerializedFile);
 						if (dependency == null)
 						{
 							string hierarchy = $"[{asset.SerializedFile.Name}]" + asset.SerializedFile.GetAssetLogString(asset.PathID) + "." + context.GetPointerPath();

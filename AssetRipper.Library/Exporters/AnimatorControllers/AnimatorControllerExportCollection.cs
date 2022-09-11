@@ -154,7 +154,7 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers
 		{
 			foreach (PPtr_MonoBehaviour__5_0_0_f4 pbehaviour in behaviours)
 			{
-				IMonoBehaviour? behaviour = pbehaviour.FindAsset(asset.SerializedFile);
+				IMonoBehaviour? behaviour = pbehaviour.TryGetAsset(asset.SerializedFile);
 				if (behaviour != null)
 				{
 #warning HACK: skip duplicates. remove it when AnimatorStateMachine's child StateMachines has been implemented

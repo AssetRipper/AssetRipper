@@ -29,8 +29,8 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			IAudioMixer? audioMixer = asset switch
 			{
 				IAudioMixerController mixer => mixer,
-				IAudioMixerGroupController group => group.AudioMixer_C243.FindAsset(group.SerializedFile),
-				IAudioMixerSnapshotController snapshot => snapshot.AudioMixer_C245.FindAsset(snapshot.SerializedFile),
+				IAudioMixerGroupController group => group.AudioMixer_C243.TryGetAsset(group.SerializedFile),
+				IAudioMixerSnapshotController snapshot => snapshot.AudioMixer_C245.TryGetAsset(snapshot.SerializedFile),
 				_ => null,
 			};
 			return audioMixer is IAudioMixerController audioMixerController

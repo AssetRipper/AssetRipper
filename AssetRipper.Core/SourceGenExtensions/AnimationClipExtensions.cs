@@ -101,7 +101,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static bool AddAnimatorTOS(this IAnimationClip clip, IAnimator animator, Dictionary<uint, string> tos)
 		{
-			IAvatar? avatar = animator.Avatar_C95.FindAsset(animator.SerializedFile);
+			IAvatar? avatar = animator.Avatar_C95.TryGetAsset(animator.SerializedFile);
 			if (avatar != null)
 			{
 				if (clip.AddAvatarTOS(avatar, tos))

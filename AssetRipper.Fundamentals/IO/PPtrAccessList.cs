@@ -29,7 +29,7 @@ namespace AssetRipper.Core.IO
 		{
 			get
 			{
-				return list[index].FindAsset(file);
+				return list[index].TryGetAsset(file);
 			}
 			set
 			{

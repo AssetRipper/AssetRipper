@@ -31,7 +31,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			// Otherwise, if a SpriteAtlas reference is serialized into this sprite,
 			// we must recover the m_RD field of the sprite from the SpriteAtlas.
 			ISprite sprite = (ISprite)asset;
-			if (sprite.Has_SpriteAtlas_C213() && sprite.Has_RenderDataKey_C213() && sprite.SpriteAtlas_C213.FindAsset(sprite.SerializedFile) is { } atlas)
+			if (sprite.Has_SpriteAtlas_C213() && sprite.Has_RenderDataKey_C213() && sprite.SpriteAtlas_C213.TryGetAsset(sprite.SerializedFile) is { } atlas)
 			{
 				ISpriteAtlasData spriteData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
 				ISpriteRenderData m_RD = sprite.RD_C213;
@@ -79,7 +79,7 @@ namespace AssetRipper.Library.Exporters.Textures
 		
 		private static IPPtr<T> ConvertPPtr<T>(IPPtr<T> pptr, ISpriteAtlas atlas, ISprite sprite) where T: IUnityObjectBase
 		{
-			T? asset = pptr.FindAsset(atlas.SerializedFile);
+			T? asset = pptr.TryGetAsset(atlas.SerializedFile);
 			return asset is not null ? sprite.SerializedFile.CreatePPtr(asset) : new PPtr<T>();
 		}
 	}

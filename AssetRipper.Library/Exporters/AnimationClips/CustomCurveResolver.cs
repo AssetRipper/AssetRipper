@@ -48,7 +48,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 							{
 								continue;
 							}
-							IMesh? mesh = skin.Mesh_C137.FindAsset(skin.SerializedFile);
+							IMesh? mesh = skin.Mesh_C137.TryGetAsset(skin.SerializedFile);
 							if (mesh == null)
 							{
 								continue;

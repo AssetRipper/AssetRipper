@@ -35,7 +35,7 @@ namespace AssetRipper.Library.Exporters.Models
 					{
 						return null;
 					}
-					return materials[index].FindAsset(file);
+					return materials[index].TryGetAsset(file);
 				}
 			}
 		}

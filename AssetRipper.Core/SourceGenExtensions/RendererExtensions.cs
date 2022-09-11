@@ -27,7 +27,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			foreach (IPPtr_Material_ materialPtr in renderer.GetMaterials())
 			{
-				IMaterial? material = materialPtr.FindAsset(renderer.SerializedFile);
+				IMaterial? material = materialPtr.TryGetAsset(renderer.SerializedFile);
 				if (material == null)
 				{
 					continue;

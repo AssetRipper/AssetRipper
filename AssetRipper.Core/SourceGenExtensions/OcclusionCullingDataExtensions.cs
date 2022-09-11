@@ -115,14 +115,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 			for (int i = 0; i < cullingSetting.StaticRenderers_C29.Count; i++)
 			{
 				PPtr_Renderer__5_0_0_f4 prenderer = cullingSetting.StaticRenderers_C29[i];
-				IRenderer renderer = prenderer.FindAsset(cullingSetting.SerializedFile);
+				IRenderer renderer = prenderer.TryGetAsset(cullingSetting.SerializedFile);
 				occlusionCullingData.StaticRenderers_C363[scene.IndexRenderers + i].SetObjectID(container, renderer);
 			}
 
 			for (int i = 0; i < cullingSetting.Portals_C29.Count; i++)
 			{
 				PPtr_OcclusionPortal__5_5_0_f3 pportal = cullingSetting.Portals_C29[i];
-				IOcclusionPortal portal = pportal.FindAsset(cullingSetting.SerializedFile);
+				IOcclusionPortal portal = pportal.TryGetAsset(cullingSetting.SerializedFile);
 				occlusionCullingData.Portals_C363[scene.IndexPortals + i].SetObjectID(container, portal);
 			}
 		}

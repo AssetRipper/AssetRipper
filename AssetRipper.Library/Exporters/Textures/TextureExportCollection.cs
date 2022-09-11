@@ -33,7 +33,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				{
 					if (sprite.RD_C213.Texture.IsAsset(sprite.SerializedFile, texture))
 					{
-						ISpriteAtlas? atlas = sprite.Has_SpriteAtlas_C213() ? sprite.SpriteAtlas_C213.FindAsset(sprite.SerializedFile) : null;
+						ISpriteAtlas? atlas = sprite.Has_SpriteAtlas_C213() ? sprite.SpriteAtlas_C213.TryGetAsset(sprite.SerializedFile) : null;
 						AddToDictionary(sprite, atlas);
 						if (exportSprites)
 						{
@@ -48,7 +48,7 @@ namespace AssetRipper.Library.Exporters.Textures
 					{
 						foreach (PPtr_Sprite__5_0_0_f4 spritePtr in atlas.PackedSprites_C687078895)
 						{
-							ISprite? sprite = spritePtr.FindAsset(atlas.SerializedFile);
+							ISprite? sprite = spritePtr.TryGetAsset(atlas.SerializedFile);
 							if (sprite is not null)
 							{
 								if (atlas.RenderDataMap_C687078895.TryGetValue(sprite.RenderDataKey_C213!, out ISpriteAtlasData? atlasData) 
@@ -88,7 +88,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public static IExportCollection CreateExportCollection(IAssetExporter assetExporter, ISprite asset)
 		{
-			ITexture2D? texture = asset.RD_C213.Texture.FindAsset(asset.SerializedFile);
+			ITexture2D? texture = asset.RD_C213.Texture.TryGetAsset(asset.SerializedFile);
 			if (texture is null)
 			{
 				return new FailExportCollection(assetExporter, asset);
