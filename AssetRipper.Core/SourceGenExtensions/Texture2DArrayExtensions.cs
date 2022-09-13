@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Classes.Texture2DArray;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -41,11 +40,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static ColorSpace GetColorSpace(this ITexture2DArray texture)
 		{
 			return (ColorSpace)texture.ColorSpace_C187;
-		}
-
-		public static GraphicsFormat GetFormat(this ITexture2DArray texture)
-		{
-			return (GraphicsFormat)texture.Format_C187;
 		}
 	}
 }

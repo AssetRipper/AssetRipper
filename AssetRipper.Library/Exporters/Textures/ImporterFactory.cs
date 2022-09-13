@@ -28,7 +28,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			instance.StreamingMipmaps_C1006 = origin.StreamingMipmaps_C28 ? 1 : 0;
 			instance.StreamingMipmapsPriority_C1006 = origin.StreamingMipmapsPriority_C28;
 			instance.IsReadable_C1006 = origin.IsReadable_C28 ? 1 : 0;
-			instance.TextureFormat_C1006 = origin.TextureFormat_C28;
+			instance.Format_C1006 = origin.Format_C28;
 			instance.MaxTextureSize_C1006 = (int)Math.Max(2048, MathUtils.NextPowerOfTwo((uint)Math.Max(origin.Width_C28, origin.Height_C28)));
 			instance.TextureSettings_C1006.CopyValues(origin.TextureSettings_C28);
 			instance.NPOTScale_C1006 = (int)TextureImporterNPOTScale.None;
@@ -52,7 +52,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			platformSettings.BuildTarget.String = "DefaultTexturePlatform";
 			platformSettings.MaxTextureSize = instance.MaxTextureSize_C1006;
 			platformSettings.ResizeAlgorithm = (int)TextureResizeAlgorithm.Mitchell;
-			platformSettings.TextureFormat = (int)TextureFormat.Automatic;
+			platformSettings.FormatE = SourceGenerated.Enums.TextureImporterFormat.Automatic;
 			platformSettings.TextureCompression = (int)TextureImporterCompression.Compressed;//Uncompressed results in a significantly larger Library folder
 			platformSettings.CompressionQuality = 50;
 			platformSettings.CrunchedCompression = false;

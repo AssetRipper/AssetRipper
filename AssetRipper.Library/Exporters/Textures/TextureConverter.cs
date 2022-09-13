@@ -2,6 +2,7 @@ using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Logging;
 using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Utils;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.TextureDecoder.Astc;
 using AssetRipper.TextureDecoder.Atc;
 using AssetRipper.TextureDecoder.Dxt;
@@ -87,7 +88,7 @@ namespace AssetRipper.Library.Exporters.Textures
 					case TextureFormat.RGBA4444:
 						RgbConverter.RGBA16ToBGRA32(data, width, height, bitmap.Bits);
 						break;
-					case TextureFormat.BGRA32:
+					case TextureFormat.BGRA32_14:
 						Buffer.BlockCopy(data, 0, bitmap.Bits, 0, bitmap.Bits.Length);
 						break;
 					case TextureFormat.RG16:
@@ -199,11 +200,11 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				switch (textureFormat)
 				{
-					case TextureFormat.ATC_RGB4:
+					case TextureFormat.ATC_RGB4_35:
 						AtcDecoder.DecompressAtcRgb4(data, width, height, bitmap.Bits);
 						break;
 
-					case TextureFormat.ATC_RGBA8:
+					case TextureFormat.ATC_RGBA8_36:
 						AtcDecoder.DecompressAtcRgba8(data, width, height, bitmap.Bits);
 						break;
 

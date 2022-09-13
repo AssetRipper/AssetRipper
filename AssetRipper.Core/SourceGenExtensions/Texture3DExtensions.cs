@@ -26,25 +26,21 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return (ColorSpace)texture.ColorSpace_C117;
 		}
 
-		public static TextureFormat GetTextureFormat(this ITexture3D texture)
+		public static SourceGenerated.Enums.TextureFormat GetTextureFormat(this ITexture3D texture)
 		{
 			if (texture.Has_Format_C117_Int32())
 			{
-				return (TextureFormat)texture.Format_C117_Int32;
-			}
-			else if (texture.Has_Format_C117_UInt32())
-			{
-				return (TextureFormat)texture.Format_C117_UInt32;
+				return texture.Format_C117_Int32E;
 			}
 			else
 			{
-				return (TextureFormat)texture.TextureFormat_C117;
+				return texture.Format_C117_UInt32E;
 			}
 		}
 
 		public static TextureDimension GetTextureDimension(this ITexture3D texture)
 		{
-			return (TextureDimension)texture.TextureDimension_C117;
+			return (TextureDimension)texture.Dimension_C117;
 		}
 
 		public static TextureUsageMode GetLightmapFormat(this ITexture3D texture)

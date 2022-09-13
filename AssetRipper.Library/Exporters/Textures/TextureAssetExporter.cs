@@ -13,6 +13,8 @@ using AssetRipper.Library.Exporters.Textures.Extensions;
 using AssetRipper.Library.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Enums;
+using LogType = AssetRipper.Core.Logging.LogType;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -90,7 +92,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			int astcBlockSize = texture.ASTCBlockSize(true);
 			KTXBaseInternalFormat baseInternalFormat = texture.GetKTXBaseInternalFormat(true);
 
-			DirectBitmap? bitmap = ConvertToBitmap((TextureFormat)texture.TextureFormat_C28, texture.Width_C28, texture.Height_C28, texture.SerializedFile.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
+			DirectBitmap? bitmap = ConvertToBitmap((TextureFormat)texture.Format_C28, texture.Width_C28, texture.Height_C28, texture.SerializedFile.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
 
 			if (bitmap == null)
 			{
@@ -98,7 +100,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 
 			// despite the name, this packing works for different formats
-			if (texture.LightmapFormat_C28 == (int)TextureUsageMode.NormalmapDXT5nm)
+			if (texture.LightmapFormat_C28 == (int)Core.Classes.Texture2D.TextureUsageMode.NormalmapDXT5nm)
 			{
 				TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
 			}
@@ -128,7 +130,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				case TextureFormat.RGB565:
 				case TextureFormat.R16:
 				case TextureFormat.RGBA4444:
-				case TextureFormat.BGRA32:
+				case TextureFormat.BGRA32_14:
 				case TextureFormat.RHalf:
 				case TextureFormat.RGHalf:
 				case TextureFormat.RGBAHalf:
@@ -161,8 +163,8 @@ namespace AssetRipper.Library.Exporters.Textures
 				case TextureFormat.ETC_RGBA8_3DS:
 					return TextureConverter.ETCTextureToBitmap(textureFormat, width, height, data);
 
-				case TextureFormat.ATC_RGB4:
-				case TextureFormat.ATC_RGBA8:
+				case TextureFormat.ATC_RGB4_35:
+				case TextureFormat.ATC_RGBA8_36:
 					return TextureConverter.ATCTextureToBitmap(textureFormat, width, height, data);
 
 				case TextureFormat.ASTC_RGB_4x4:

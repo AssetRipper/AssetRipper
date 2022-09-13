@@ -281,7 +281,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			ITransitionConstant Transition)
 		{
 			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset<IAnimatorStateTransition>(ClassIDType.AnimatorStateTransition);
-			animatorStateTransition.ObjectHideFlags_C1101 = (uint)HideFlags.HideInHierarchy;
+			animatorStateTransition.HideFlags_C1101 = (uint)HideFlags.HideInHierarchy;
 
 			animatorStateTransition.Conditions_C1101.Capacity = Transition.ConditionConstantArray.Count;
 			for (int i = 0; i < Transition.ConditionConstantArray.Count; i++)
@@ -332,7 +332,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			SelectorTransitionConstant Transition)
 		{
 			IAnimatorTransition animatorTransition = virtualFile.CreateAsset<IAnimatorTransition>(ClassIDType.AnimatorTransition);
-			animatorTransition.ObjectHideFlags_C1109 = (uint)HideFlags.HideInHierarchy;
+			animatorTransition.HideFlags_C1109 = (uint)HideFlags.HideInHierarchy;
 
 			animatorTransition.Conditions_C1109.Capacity = Transition.ConditionConstantArray.Count;
 			for (int i = 0; i < Transition.ConditionConstantArray.Count; i++)

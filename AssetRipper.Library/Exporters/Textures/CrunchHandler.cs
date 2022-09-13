@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Logging;
+using AssetRipper.SourceGenerated.Enums;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 

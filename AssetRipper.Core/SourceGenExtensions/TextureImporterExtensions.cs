@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Meta.Importers.Texture;
 using AssetRipper.Core.Classes.Sprite;
-using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -22,9 +21,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return (TextureImporterGenerateCubemap)importer.GenerateCubemap_C1006;
 		}
 
-		public static TextureFormat GetTextureFormat(this ITextureImporter importer)
+		public static SourceGenerated.Enums.TextureImporterFormat GetTextureFormat(this ITextureImporter importer)
 		{
-			return (TextureFormat)importer.TextureFormat_C1006;
+			return importer.Format_C1006E;
 		}
 
 		public static TextureImporterNPOTScale GetNPOTScale(this ITextureImporter importer)

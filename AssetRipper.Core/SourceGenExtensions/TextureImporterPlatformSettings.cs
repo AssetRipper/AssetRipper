@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Meta.Importers.Texture;
-using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.SourceGenerated.Subclasses.TextureImporterPlatformSettings;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -11,7 +10,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return (TextureResizeAlgorithm)settings.ResizeAlgorithm;
 		}
 
-		public static TextureFormat GetTextureFormat(this ITextureImporterPlatformSettings settings)
+		public static SourceGenerated.Enums.TextureFormat GetTextureFormat(this ITextureImporterPlatformSettings settings)
 		{
 			/*if (settings.ToSerializedVersion() > 1)// TextureFormat.ATC_RGB4/ATC_RGBA8 has been replaced by ETC_RGB4/ETC2_RGBA8
 			{
@@ -24,7 +23,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					return TextureFormat.ETC2_RGBA8;
 				}
 			}*/
-			return (TextureFormat)settings.TextureFormat;
+			return (SourceGenerated.Enums.TextureFormat)settings.Format;
 		}
 
 		public static TextureImporterCompression GetTextureCompression(this ITextureImporterPlatformSettings settings)

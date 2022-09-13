@@ -1,17 +1,18 @@
-﻿using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Extensions;
+﻿using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Parser.Files;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class Texture2DExtensions
 	{
-		public static long GetCompleteImageSize(this SourceGenerated.Classes.ClassID_28.ITexture2D texture)
+		public static long GetCompleteImageSize(this ITexture2D texture)
 		{
 			return System.Math.Max(texture.CompleteImageSize_C28_Int32, texture.CompleteImageSize_C28_UInt32);
 		}
 
-		public static bool CheckAssetIntegrity(this SourceGenerated.Classes.ClassID_28.ITexture2D texture)
+		public static bool CheckAssetIntegrity(this ITexture2D texture)
 		{
 			if (!texture.ImageData_C28.IsNullOrEmpty())
 			{
@@ -27,7 +28,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static byte[] GetImageData(this SourceGenerated.Classes.ClassID_28.ITexture2D texture)
+		public static byte[] GetImageData(this ITexture2D texture)
 		{
 			byte[] data = texture.ImageData_C28;
 
@@ -42,7 +43,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			data ??= Array.Empty<byte>();
 
-			if (IsSwapBytes(texture.SerializedFile.Platform, (TextureFormat)texture.TextureFormat_C28))
+			if (IsSwapBytes(texture.SerializedFile.Platform, texture.Format_C28E))
 			{
 				for (int i = 0; i < data.Length; i += 2)
 				{
@@ -53,9 +54,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return data;
 		}
 
-		public static bool IsSwapBytes(BuildTarget platform, TextureFormat format)
+		public static bool IsSwapBytes(Parser.Files.BuildTarget platform, TextureFormat format)
 		{
-			if (platform == BuildTarget.XBox360)
+			if (platform == Parser.Files.BuildTarget.XBox360)
 			{
 				switch (format)
 				{

@@ -13,7 +13,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			return ((Core.Classes.Texture2D.TextureFormat)((ITexture2D)asset).TextureFormat_C28).ToString();
+			return ((ITexture2D)asset).Format_C28E.ToString();
 		}
 	}
 }

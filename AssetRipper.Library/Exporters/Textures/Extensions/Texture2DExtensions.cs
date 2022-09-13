@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Library.Exporters.Textures.Enums;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Library.Exporters.Textures.Extensions
 {
@@ -14,7 +15,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 		/// <exception cref="NotSupportedException">if not safe and not an pvrtc texture</exception>
 		public static KTXBaseInternalFormat GetKTXBaseInternalFormat(this SourceGenerated.Classes.ClassID_28.ITexture2D _this, bool safe)
 		{
-			switch ((TextureFormat)_this.TextureFormat_C28)
+			switch ((TextureFormat)_this.Format_C28)
 			{
 				case TextureFormat.RHalf:
 				case TextureFormat.RFloat:
@@ -36,7 +37,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 				case TextureFormat.ETC_RGB4Crunched:
 				case TextureFormat.ETC_RGB4_3DS:
 				case TextureFormat.ETC_RGB4:
-				case TextureFormat.ATC_RGB4:
+				case TextureFormat.ATC_RGB4_35:
 				case TextureFormat.ETC2_RGB:
 					return KTXBaseInternalFormat.RGB;
 
@@ -45,7 +46,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 				case TextureFormat.BC7:
 				case TextureFormat.PVRTC_RGBA2:
 				case TextureFormat.PVRTC_RGBA4:
-				case TextureFormat.ATC_RGBA8:
+				case TextureFormat.ATC_RGBA8_36:
 				case TextureFormat.ETC2_RGBA8Crunched:
 				case TextureFormat.ETC_RGBA8_3DS:
 				case TextureFormat.ETC2_RGBA8:
@@ -60,7 +61,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 						}
 						else
 						{
-							throw new NotSupportedException(((TextureFormat)_this.TextureFormat_C28).ToString());
+							throw new NotSupportedException(((TextureFormat)_this.Format_C28).ToString());
 						}
 					}
 			}
@@ -75,7 +76,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 		/// <exception cref="NotSupportedException">if not safe and not an pvrtc texture</exception>
 		public static int PVRTCBitCount(this SourceGenerated.Classes.ClassID_28.ITexture2D _this, bool safe)
 		{
-			switch ((TextureFormat)_this.TextureFormat_C28)
+			switch ((TextureFormat)_this.Format_C28)
 			{
 				case TextureFormat.PVRTC_RGB2:
 				case TextureFormat.PVRTC_RGBA2:
@@ -93,7 +94,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 						}
 						else
 						{
-							throw new NotSupportedException(((TextureFormat)_this.TextureFormat_C28).ToString());
+							throw new NotSupportedException(((TextureFormat)_this.Format_C28).ToString());
 						}
 					}
 			}
@@ -108,7 +109,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 		/// <exception cref="NotSupportedException">if not safe and not an astc texture</exception>
 		public static int ASTCBlockSize(this SourceGenerated.Classes.ClassID_28.ITexture2D _this, bool safe)
 		{
-			switch ((TextureFormat)_this.TextureFormat_C28)
+			switch ((TextureFormat)_this.Format_C28)
 			{
 				case TextureFormat.ASTC_RGB_4x4:
 				case TextureFormat.ASTC_RGBA_4x4:
@@ -142,7 +143,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 						}
 						else
 						{
-							throw new NotSupportedException(((TextureFormat)_this.TextureFormat_C28).ToString());
+							throw new NotSupportedException(((TextureFormat)_this.Format_C28).ToString());
 						}
 					}
 			}
