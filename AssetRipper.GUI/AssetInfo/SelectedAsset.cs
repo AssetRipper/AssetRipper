@@ -188,11 +188,11 @@ namespace AssetRipper.GUI.AssetInfo
 			_ => null
 		};
 
-		private Core.Classes.Texture2D.TextureFormat TextureFormat => Asset switch
+		private SourceGenerated.Enums.TextureFormat TextureFormat => Asset switch
 		{
-			ITexture2D img => (Core.Classes.Texture2D.TextureFormat)img.TextureFormat_C28,
-			ITerrainData => Core.Classes.Texture2D.TextureFormat.RGBA32,
-			_ => Core.Classes.Texture2D.TextureFormat.Automatic,
+			ITexture2D img => img.Format_C28E,
+			ITerrainData => SourceGenerated.Enums.TextureFormat.RGBA32,
+			_ => default,
 		};
 
 		private int ImageWidth => Asset switch
