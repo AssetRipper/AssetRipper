@@ -16,8 +16,10 @@ using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_147;
 using AssetRipper.SourceGenerated.Classes.ClassID_150;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
+using AssetRipper.SourceGenerated.Classes.ClassID_290;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_6;
+using AssetRipper.SourceGenerated.Classes.ClassID_94;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project
@@ -66,9 +68,11 @@ namespace AssetRipper.Core.Project
 			OverrideExporter<ILevelGameManager>(SceneExporter, true);
 
 			OverrideDummyExporter<IPreloadData>(ClassIDType.PreloadData, true, false);
-			OverrideDummyExporter<IMonoManager>(ClassIDType.MonoManager, true, false);
 			OverrideDummyExporter<IAssetBundle>(ClassIDType.AssetBundle, true, false);
+			OverrideDummyExporter<IAssetBundleManifest>(ClassIDType.AssetBundleManifest, true, false);
+			OverrideDummyExporter<IMonoManager>(ClassIDType.MonoManager, true, false);
 			OverrideDummyExporter<IResourceManager>(ClassIDType.ResourceManager, true, false);
+			OverrideDummyExporter<IShaderNameRegistry>(ClassIDType.ShaderNameRegistry, true, false);
 
 			OverrideExporter<Classes.UnknownObject>(new UnknownObjectExporter(), false);
 			OverrideExporter<Classes.UnreadableObject>(new UnreadableObjectExporter(), false);
