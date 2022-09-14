@@ -19,7 +19,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class SpriteExtensions
 	{
-		public static ISpriteMetaData GenerateSpriteMetaData(this ISprite sprite, IExportContainer container, ISpriteAtlas atlas)
+		public static ISpriteMetaData GenerateSpriteMetaData(this ISprite sprite, IExportContainer container, ISpriteAtlas? atlas)
 		{
 			sprite.GetSpriteCoordinatesInAtlas(atlas, out Rectf rect, out Vector2f_3_5_0_f5 pivot, out Vector4f_3_5_0_f5 border);
 
@@ -206,7 +206,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static void GenerateOutline(
 			this ISprite sprite,
 			UnityVersion version,
-			ISpriteAtlas atlas,
+			ISpriteAtlas? atlas,
 			Rectf rect,
 			Vector2f_3_5_0_f5 pivot,
 			AssetList<AssetList<Vector2f_3_5_0_f5>> outlines)
@@ -228,7 +228,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static void GeneratePhysicsShape(
 			this ISprite sprite,
-			ISpriteAtlas atlas,
+			ISpriteAtlas? atlas,
 			Rectf rect,
 			Vector2f_3_5_0_f5 pivot,
 			AssetList<AssetList<Vector2f_3_5_0_f5>> shape)
@@ -253,7 +253,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		private static void FixRotation(this ISprite sprite, ISpriteAtlas atlas, AssetList<AssetList<Vector2f_3_5_0_f5>> outlines)
+		private static void FixRotation(this ISprite sprite, ISpriteAtlas? atlas, AssetList<AssetList<Vector2f_3_5_0_f5>> outlines)
 		{
 			bool isPacked = sprite.RD_C213.IsPacked();
 			SpritePackingRotation rotation = sprite.RD_C213.GetPackingRotation();

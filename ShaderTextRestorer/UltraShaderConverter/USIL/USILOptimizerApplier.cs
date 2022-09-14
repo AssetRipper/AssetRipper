@@ -34,7 +34,8 @@ namespace ShaderLabConvert
 		{
 			foreach (Type optimizerType in OPTIMIZER_TYPES)
 			{
-				IUSILOptimizer optimizer = (IUSILOptimizer)Activator.CreateInstance(optimizerType);
+				IUSILOptimizer optimizer = (IUSILOptimizer?)Activator.CreateInstance(optimizerType)
+					?? throw new NullReferenceException($"Could not create an instance of type {optimizerType}");
 				optimizer.Run(shader, shaderData);
 			}
 		}

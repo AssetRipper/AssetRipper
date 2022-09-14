@@ -11,7 +11,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			PropertyType = type;
 		}
 
-		public string PropertyName { get; set; }
+		public string PropertyName { get; set; } = "";
 		public string PropertyTypeName
 		{
 			get => PropertyType.ToString();

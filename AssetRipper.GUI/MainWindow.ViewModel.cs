@@ -447,7 +447,10 @@ namespace AssetRipper.GUI
 		//Called from UI indirectly
 		public void OnAssetSelected(NewUiFileListItem selectedItem, IUnityObjectBase selectedAsset)
 		{
-			_assetContainer.LastAccessedAsset = selectedAsset;
+			if (_assetContainer is not null)
+			{
+				_assetContainer.LastAccessedAsset = selectedAsset;
+			}
 
 			SelectedAsset?.Dispose();
 			SelectedAsset = new(selectedAsset, _assetContainer);

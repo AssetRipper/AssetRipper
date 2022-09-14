@@ -191,8 +191,8 @@ namespace AssetRipper.Library.Exporters.Shaders
 					bool hasVertex = (_this.ProgramMask & ShaderType.Vertex.ToProgramMask()) != 0;
 					bool hasFragment = (_this.ProgramMask & ShaderType.Fragment.ToProgramMask()) != 0;
 
-					List<ShaderSubProgram> vertexSubPrograms = null;
-					List<ShaderSubProgram> fragmentSubPrograms = null;
+					List<ShaderSubProgram>? vertexSubPrograms = null;
+					List<ShaderSubProgram>? fragmentSubPrograms = null;
 
 					if (hasVertex)
 					{
@@ -219,10 +219,10 @@ namespace AssetRipper.Library.Exporters.Shaders
 						}
 					}
 
-					ShaderSubProgram vertexSubProgram = null;
-					ShaderSubProgram fragmentSubProgram = null;
-					USCShaderConverter vertexConverter = null;
-					USCShaderConverter fragmentConverter = null;
+					ShaderSubProgram? vertexSubProgram = null;
+					ShaderSubProgram? fragmentSubProgram = null;
+					USCShaderConverter? vertexConverter = null;
+					USCShaderConverter? fragmentConverter = null;
 
 					if (hasVertex)
 					{

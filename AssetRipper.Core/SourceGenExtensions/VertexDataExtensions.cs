@@ -169,8 +169,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 							}
 						}
 
-						int[]? componentsIntArray = null;
-						float[]? componentsFloatArray = null;
+						int[] componentsIntArray = Array.Empty<int>();
+						float[] componentsFloatArray = Array.Empty<float>();
 						if (MeshHelper.IsIntFormat(vertexFormat))
 						{
 							componentsIntArray = MeshHelper.BytesToIntArray(componentBytes, vertexFormat);

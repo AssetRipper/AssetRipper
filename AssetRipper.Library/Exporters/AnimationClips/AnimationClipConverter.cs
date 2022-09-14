@@ -69,7 +69,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 				ProcessDenses(clip, bindings, tos);
 				if (clip.Has_ConstantClip())
 				{
-					ProcessConstant(clip, bindings, tos, lastFrame);
+					ProcessConstant(clip, clip.ConstantClip, bindings, tos, lastFrame);
 				}
 				if (m_clip.Has_MuscleClipInfo_C74())
 				{
@@ -174,9 +174,8 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 			}
 		}
 
-		private void ProcessConstant(IClip clip, IAnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos, float lastFrame)
+		private void ProcessConstant(IClip clip, IConstantClip constant, IAnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos, float lastFrame)
 		{
-			IConstantClip constant = clip.ConstantClip;
 			int streamCount = (int)clip.StreamedClip.CurveCount;
 			int denseCount = (int)clip.DenseClip.CurveCount;
 			float[] slopeValues = new float[4]; // no slopes - 0 values
@@ -360,6 +359,10 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 					{
 						if (!m_eulers.TryGetValue(path, out IVector3Curve? curve))
 						{
+							if (!m_clip.Has_EulerCurves_C74())
+							{
+								break;
+							}
 							curve = m_clip.EulerCurves_C74.AddNew();
 							curve.SetValues(path);
 							m_eulers.Add(path, curve);
@@ -477,6 +480,10 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 		{
 			if (!m_pptrs.TryGetValue(curveData, out IPPtrCurve? curve))
 			{
+				if (!m_clip.Has_PPtrCurves_C74())
+				{
+					return;
+				}
 				curve = m_clip.PPtrCurves_C74.AddNew();
 				curve.Path.String = curveData.path;
 				curve.Attribute.String = curveData.attribute;

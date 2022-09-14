@@ -92,6 +92,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			foreach (IOcclusionCullingSettings cullingSetting in cullingSettings)
 			{
+				if (!cullingSetting.Has_SceneGUID_C29())
+				{
+					continue;
+				}
+
 				int sceneIndex = occlusionCullingData.Scenes_C363.IndexOf(t => t.Scene == cullingSetting.SceneGUID_C29);
 				if (sceneIndex == -1)
 				{
