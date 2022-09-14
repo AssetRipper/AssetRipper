@@ -9,7 +9,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Project.Collections
 {
-	public class UnreadableExportCollection : ExportCollection
+	public sealed class UnreadableExportCollection : ExportCollection
 	{
 		UnreadableObject Asset { get; }
 		public override IAssetExporter AssetExporter { get; }
@@ -55,5 +55,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			return asset == Asset;
 		}
+
+		protected override string GetExportExtension(IUnityObjectBase asset) => "unreadable";
 	}
 }

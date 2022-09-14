@@ -1,3 +1,4 @@
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO;
@@ -124,7 +125,7 @@ namespace AssetRipper.Core.Project.Collections
 				IPhysicsMaterial2D => "physicsMaterial2D",
 				IRenderTexture => "renderTexture",
 				ITerrainLayer => "terrainlayer",
-				_ => asset.ExportExtension
+				_ => AssetExtension
 			};
 		}
 
@@ -177,5 +178,6 @@ namespace AssetRipper.Core.Project.Collections
 		public abstract string Name { get; }
 
 		private const string MetaExtension = ".meta";
+		protected const string AssetExtension = "asset";
 	}
 }

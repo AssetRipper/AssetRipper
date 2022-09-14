@@ -1,10 +1,11 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Core.Interfaces;
+using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
 using System.IO;
 
 namespace AssetRipper.Core.Classes
 {
-	public class UnknownObject : UnityObjectBase
+	public sealed class UnknownObject : UnityObjectBase, IHasRawData
 	{
 		public byte[] RawData { get; private set; } = Array.Empty<byte>();
 
@@ -27,8 +28,6 @@ namespace AssetRipper.Core.Classes
 		{
 			writer.Write(RawData);
 		}
-
-		public override string ExportExtension => "unknown";
 
 		public override string ExportPath => Path.Combine("AssetRipper", "UnknownAssets", ClassID.ToString());
 	}

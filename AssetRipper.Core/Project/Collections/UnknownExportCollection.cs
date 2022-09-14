@@ -55,5 +55,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			return asset == Asset;
 		}
+
+		protected override string GetExportExtension(IUnityObjectBase asset) => "unknown";
 	}
 }

@@ -29,10 +29,8 @@ namespace AssetRipper.Core
 			}
 		}
 		public virtual string ExportPath => Path.Combine(AssetsKeyword, AssetClassName);
-		public virtual string ExportExtension => AssetExtension;
 
 		public const string AssetsKeyword = "Assets";
-		protected const string AssetExtension = "asset";
 
 		public UnityObjectBase() : base()
 		{

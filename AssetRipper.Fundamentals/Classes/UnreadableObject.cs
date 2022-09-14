@@ -5,7 +5,7 @@ using System.IO;
 
 namespace AssetRipper.Core.Classes
 {
-	public class UnreadableObject : UnityObjectBase, IHasNameString, IHasRawData
+	public sealed class UnreadableObject : UnityObjectBase, IHasNameString, IHasRawData
 	{
 		public byte[] RawData { get; private set; } = Array.Empty<byte>();
 		public string NameString { get; set; } = "";
@@ -29,8 +29,6 @@ namespace AssetRipper.Core.Classes
 		{
 			writer.Write(RawData);
 		}
-
-		public override string ExportExtension => "unreadable";
 
 		public override string ExportPath => Path.Combine("AssetRipper", "UnreadableAssets", ClassID.ToString());
 	}
