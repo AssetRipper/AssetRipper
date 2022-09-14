@@ -120,6 +120,7 @@ namespace AssetRipper.Core.Project.Collections
 						instance.Objects_C1001.AddNew().CopyValues(root.SerializedFile.CreatePPtr(editorExtension));
 					}
 				}
+				instance.OriginalAssetPath = root.OriginalAssetPath;
 				return instance;
 			}
 		}
