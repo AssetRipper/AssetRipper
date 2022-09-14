@@ -59,7 +59,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static T? FindComponent<T>(this IGameObject gameObject) where T : IComponent
+		public static T? TryGetComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
 			foreach (IPPtr_Component_ ptr in gameObject.FetchComponents())
 			{
@@ -73,15 +73,15 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return default;
 		}
 		
-		public static bool TryFindComponent<T>(this IGameObject gameObject, [NotNullWhen(true)] out T? component) where T : IComponent
+		public static bool TryGetComponent<T>(this IGameObject gameObject, [NotNullWhen(true)] out T? component) where T : IComponent
 		{
-			component = gameObject.FindComponent<T>();
+			component = gameObject.TryGetComponent<T>();
 			return component is not null;
 		}
 
 		public static T GetComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
-			T? component = gameObject.FindComponent<T>();
+			T? component = gameObject.TryGetComponent<T>();
 			if (component is null)
 			{
 				throw new Exception($"Component of type {typeof(T)} hasn't been found");
@@ -181,7 +181,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static IReadOnlyDictionary<uint, string> BuildTOS(this IGameObject gameObject)
 		{
-			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
+			Dictionary<uint, string> tos = new() { { 0, string.Empty } };
 			gameObject.BuildTOS(gameObject, string.Empty, tos);
 			return tos;
 		}

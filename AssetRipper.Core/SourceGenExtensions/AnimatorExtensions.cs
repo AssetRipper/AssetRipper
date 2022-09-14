@@ -15,17 +15,17 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (animator.Has_Controller_C95_PPtr_AnimatorController__4_0_0_f7())
 			{
-				IAnimatorController? controller = animator.Controller_C95_PPtr_AnimatorController__4_0_0_f7.TryGetAsset(animator.SerializedFile);
+				IAnimatorController? controller = animator.Controller_C95_PPtr_AnimatorController__4_0_0_f7P;
 				return controller is not null && controller.IsContainsAnimationClip(clip);
 			}
 			else if (animator.Has_Controller_C95_PPtr_RuntimeAnimatorController__4_3_0_f4())
 			{
-				IRuntimeAnimatorController? controller = animator.Controller_C95_PPtr_RuntimeAnimatorController__4_3_0_f4.TryGetAsset(animator.SerializedFile);
+				IRuntimeAnimatorController? controller = animator.Controller_C95_PPtr_RuntimeAnimatorController__4_3_0_f4P;
 				return controller is not null && controller.IsContainsAnimationClip(clip);
 			}
 			else if (animator.Has_Controller_C95_PPtr_RuntimeAnimatorController__5_0_0_f4())
 			{
-				IRuntimeAnimatorController? controller = animator.Controller_C95_PPtr_RuntimeAnimatorController__5_0_0_f4.TryGetAsset(animator.SerializedFile);
+				IRuntimeAnimatorController? controller = animator.Controller_C95_PPtr_RuntimeAnimatorController__5_0_0_f4P;
 				return controller is not null && controller.IsContainsAnimationClip(clip);
 			}
 			else

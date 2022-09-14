@@ -39,48 +39,36 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static Vector2f_3_5_0_f5 GetPosition(this IBlendTreeNodeConstant constant, int index)
 		{
-			if (constant.Has_Blend2dData())
+			if (constant.Has_Blend2dData() && constant.GetBlendType() != BlendTreeType.Simple1D && constant.GetBlendType() != BlendTreeType.Direct)
 			{
-				if (constant.GetBlendType() != BlendTreeType.Simple1D && constant.GetBlendType() != BlendTreeType.Direct)
-				{
-					return constant.Blend2dData.Data.m_ChildPositionArray[index];
-				}
+				return constant.Blend2dData.Data.m_ChildPositionArray[index];
 			}
 			return new();
 		}
 
 		public static float GetMinThreshold(this IBlendTreeNodeConstant constant)
 		{
-			if (constant.Has_Blend1dData())
+			if (constant.Has_Blend1dData() && constant.GetBlendType() == BlendTreeType.Simple1D)
 			{
-				if (constant.GetBlendType() == BlendTreeType.Simple1D)
-				{
-					return constant.Blend1dData.Data.ChildThresholdArray.Min();
-				}
+				return constant.Blend1dData.Data.ChildThresholdArray.Min();
 			}
 			return 0.0f;
 		}
 
 		public static float GetMaxThreshold(this IBlendTreeNodeConstant constant)
 		{
-			if (constant.Has_Blend1dData())
+			if (constant.Has_Blend1dData() && constant.GetBlendType() == BlendTreeType.Simple1D)
 			{
-				if (constant.GetBlendType() == BlendTreeType.Simple1D)
-				{
-					return constant.Blend1dData.Data.ChildThresholdArray.Max();
-				}
+				return constant.Blend1dData.Data.ChildThresholdArray.Max();
 			}
 			return 1.0f;
 		}
 
 		public static uint GetDirectBlendParameter(this IBlendTreeNodeConstant constant, int index)
 		{
-			if (constant.Has_BlendDirectData())
+			if (constant.Has_BlendDirectData() && constant.GetBlendType() == BlendTreeType.Direct)
 			{
-				if (constant.GetBlendType() == BlendTreeType.Direct)
-				{
-					return constant.BlendDirectData.Data.m_ChildBlendEventIDArray[index];
-				}
+				return constant.BlendDirectData.Data.m_ChildBlendEventIDArray[index];
 			}
 			return 0;
 		}

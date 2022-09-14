@@ -21,7 +21,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					return true;
 				}
 			}
-			IRuntimeAnimatorController? baseController = controller.Controller_C221.TryGetAsset(controller.SerializedFile);
+			IRuntimeAnimatorController? baseController = controller.Controller_C221P;
 			if (baseController != null)
 			{
 				return baseController.IsContainsAnimationClip(clip);

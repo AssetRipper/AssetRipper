@@ -11,11 +11,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return component.GameObject_C2.GetAsset(component.SerializedFile);
 		}
 
-		public static IGameObject? TryGetGameObject(this IComponent component)
-		{
-			return component.GameObject_C2.TryGetAsset(component.SerializedFile);
-		}
-
 		public static IGameObject GetRoot(this IComponent component)
 		{
 			return component.GetGameObject().GetRoot();

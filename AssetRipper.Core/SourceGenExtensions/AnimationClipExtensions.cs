@@ -71,23 +71,17 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			foreach (IAnimator animator in clip.SerializedFile.Collection.FetchAssetsOfType<IAnimator>())
 			{
-				if (clip.IsAnimatorContainsClip(animator))
+				if (clip.IsAnimatorContainsClip(animator) && clip.AddAnimatorTOS(animator, tos))
 				{
-					if (clip.AddAnimatorTOS(animator, tos))
-					{
-						return tos;
-					}
+					return tos;
 				}
 			}
 
 			foreach (IAnimation animation in clip.SerializedFile.Collection.FetchAssetsOfType<IAnimation>())
 			{
-				if (clip.IsAnimationContainsClip(animation))
+				if (clip.IsAnimationContainsClip(animation) && clip.AddAnimationTOS(animation, tos))
 				{
-					if (clip.AddAnimationTOS(animation, tos))
-					{
-						return tos;
-					}
+					return tos;
 				}
 			}
 
@@ -101,13 +95,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static bool AddAnimatorTOS(this IAnimationClip clip, IAnimator animator, Dictionary<uint, string> tos)
 		{
-			IAvatar? avatar = animator.Avatar_C95.TryGetAsset(animator.SerializedFile);
-			if (avatar != null)
+			IAvatar? avatar = animator.Avatar_C95P;
+			if (avatar != null && clip.AddAvatarTOS(avatar, tos))
 			{
-				if (clip.AddAvatarTOS(avatar, tos))
-				{
-					return true;
-				}
+				return true;
 			}
 
 			IReadOnlyDictionary<uint, string> animatorTOS = animator.BuildTOS();

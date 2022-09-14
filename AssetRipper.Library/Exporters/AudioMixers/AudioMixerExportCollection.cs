@@ -23,10 +23,8 @@ using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerEffectController_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerSnapshot_;
 using AssetRipper.SourceGenerated.Subclasses.SnapshotConstant;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
-using Cpp2IL.Core;
 using System.Collections.Generic;
 using System.Linq;
-using Logger = AssetRipper.Core.Logging.Logger;
 
 namespace AssetRipper.Library.Exporters.AudioMixers
 {
@@ -250,7 +248,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			context.Mixer.TargetSnapshot_C241.CopyValues(context.Mixer.StartSnapshot_C241);
 		}
 		
-		private GUID IndexingNewGuid(uint index, Dictionary<uint, GUID> table)
+		private static GUID IndexingNewGuid(uint index, Dictionary<uint, GUID> table)
 		{
 			GUID guid = (GUID)UnityGUID.NewGuid();
 			if (!table.TryAdd(index, guid))
@@ -260,7 +258,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			return guid;
 		}
 
-		private List<Utf8String> ParseNameBuffer(byte[] buffer)
+		private static List<Utf8String> ParseNameBuffer(byte[] buffer)
 		{
 			List<Utf8String> names = new();
 			int offset = 0;
@@ -269,7 +267,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 				int start = offset;
 				while (buffer[++offset] != 0) { }
 
-				byte[] utf8Data = buffer.SubArray(start, offset - start);
+				byte[] utf8Data = SubArray(buffer, start, offset - start);
 				names.Add(new Utf8String { Data = utf8Data });
 
 				offset++;
@@ -279,7 +277,14 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 		}
 
 		private uint m_nextExportID;
-		
+
+		private static byte[] SubArray(byte[] data, int index, int length)
+		{
+			byte[] subArray = new byte[length];
+			Array.Copy(data, index, subArray, 0, length);
+			return subArray;
+		}
+
 		protected override long GenerateExportID(IUnityObjectBase asset)
 		{
 			long exportID = ExportIdHandler.GetMainExportID(asset, m_nextExportID);
