@@ -123,12 +123,12 @@ namespace AssetRipper.Library.Exporters.Models
 			}
 			sceneBuilder.AddNode(node);
 
-			if (gameObject.TryFindComponent(out IMeshFilter? meshFilter)
+			if (gameObject.TryGetComponent(out IMeshFilter? meshFilter)
 				&& meshFilter.TryGetMesh(out IMesh? mesh)
 				&& mesh.IsSet()
 				&& parameters.TryGetOrMakeMeshData(mesh, out MeshData meshData))
 			{
-				if (gameObject.TryFindComponent(out IMeshRenderer? meshRenderer))
+				if (gameObject.TryGetComponent(out IMeshRenderer? meshRenderer))
 				{
 					if (ReferencesDynamicMesh(meshRenderer))
 					{
@@ -141,7 +141,7 @@ namespace AssetRipper.Library.Exporters.Models
 						AddStaticMeshToScene(sceneBuilder, parameters, node, meshData, subsetIndices, new MaterialList(meshRenderer), globalTransform, globalInverseTransform);
 					}
 				}
-				else if (gameObject.TryFindComponent(out ISkinnedMeshRenderer? skinnedMeshRenderer))
+				else if (gameObject.TryGetComponent(out ISkinnedMeshRenderer? skinnedMeshRenderer))
 				{
 					if (ReferencesDynamicMesh(skinnedMeshRenderer))
 					{
@@ -153,7 +153,7 @@ namespace AssetRipper.Library.Exporters.Models
 						AddStaticMeshToScene(sceneBuilder, parameters, node, meshData, subsetIndices, new MaterialList(skinnedMeshRenderer), globalTransform, globalInverseTransform);
 					}
 				}
-				else if (gameObject.TryFindComponent(out IRenderer? renderer))
+				else if (gameObject.TryGetComponent(out IRenderer? renderer))
 				{
 					Logger.Warning(LogCategory.Export, $"Renderer type {renderer.GetType()} not supported in {nameof(GlbModelExporter)}");
 				}
