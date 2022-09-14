@@ -14,7 +14,7 @@ namespace AssetRipper.Core.Parser.Asset
 		/// </summary>
 		/// <param name="pathID">Path ID of the asset</param>
 		/// <returns>Found asset or null</returns>
-		IUnityObjectBase? FindAsset(long pathID);
+		IUnityObjectBase? TryGetAsset(long pathID);
 		/// <summary>
 		/// Get asset from current asset container
 		/// </summary>
@@ -27,7 +27,7 @@ namespace AssetRipper.Core.Parser.Asset
 		/// <param name="fileIndex">Dependent file index</param>
 		/// <param name="pathID">Path ID of the asset</param>
 		/// <returns>Found asset or null</returns>
-		IUnityObjectBase? FindAsset(int fileIndex, long pathID);
+		IUnityObjectBase? TryGetAsset(int fileIndex, long pathID);
 		/// <summary>
 		/// Get asset in the dependency with specified file index
 		/// </summary>

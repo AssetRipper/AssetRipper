@@ -104,7 +104,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public IUnityObjectBase GetAsset(long pathID)
 		{
-			return FindAsset(pathID) ?? throw new Exception($"Object with path ID {pathID} wasn't found");
+			return TryGetAsset(pathID) ?? throw new Exception($"Object with path ID {pathID} wasn't found");
 		}
 
 		public IUnityObjectBase GetAsset(int fileIndex, long pathID)
@@ -112,13 +112,13 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			return FindAsset(fileIndex, pathID, false) ?? throw new Exception($"Object with file ID {fileIndex} path ID {pathID} wasn't found");
 		}
 
-		public IUnityObjectBase? FindAsset(long pathID)
+		public IUnityObjectBase? TryGetAsset(long pathID)
 		{
 			m_assets.TryGetValue(pathID, out IUnityObjectBase? asset);
 			return asset;
 		}
 
-		public IUnityObjectBase? FindAsset(int fileIndex, long pathID)
+		public IUnityObjectBase? TryGetAsset(int fileIndex, long pathID)
 		{
 			return FindAsset(fileIndex, pathID, true);
 		}
@@ -241,7 +241,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				throw new Exception($"{nameof(SerializedFile)} with index {fileIndex} was not found in collection");
 			}
 
-			IUnityObjectBase? asset = file.FindAsset(pathID);
+			IUnityObjectBase? asset = file.TryGetAsset(pathID);
 			if (asset == null)
 			{
 				if (isSafe)

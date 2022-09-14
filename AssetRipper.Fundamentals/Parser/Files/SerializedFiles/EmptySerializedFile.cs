@@ -34,9 +34,9 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public IEnumerable<IUnityObjectBase> FetchAssets() => Enumerable.Empty<IUnityObjectBase>();
 
-		public IUnityObjectBase? FindAsset(long pathID) => null;
+		public IUnityObjectBase? TryGetAsset(long pathID) => null;
 
-		public IUnityObjectBase? FindAsset(int fileIndex, long pathID) => null;
+		public IUnityObjectBase? TryGetAsset(int fileIndex, long pathID) => null;
 
 		public IUnityObjectBase GetAsset(long pathID) => throw new NotSupportedException();
 

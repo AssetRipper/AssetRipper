@@ -74,9 +74,9 @@ namespace AssetRipper.Core.Project
 			m_scenes = scenes.ToArray();
 		}
 
-		public IUnityObjectBase? FindAsset(long pathID)
+		public IUnityObjectBase? TryGetAsset(long pathID)
 		{
-			return File.FindAsset(pathID);
+			return File.TryGetAsset(pathID);
 		}
 
 		public IUnityObjectBase GetAsset(long pathID)
@@ -84,15 +84,15 @@ namespace AssetRipper.Core.Project
 			return File.GetAsset(pathID);
 		}
 
-		public virtual IUnityObjectBase? FindAsset(int fileIndex, long pathID)
+		public virtual IUnityObjectBase? TryGetAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
 			{
-				return VirtualFile.FindAsset(pathID);
+				return VirtualFile.TryGetAsset(pathID);
 			}
 			else
 			{
-				return File.FindAsset(fileIndex, pathID);
+				return File.TryGetAsset(fileIndex, pathID);
 			}
 		}
 

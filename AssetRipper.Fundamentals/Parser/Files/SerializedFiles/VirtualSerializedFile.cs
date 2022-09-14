@@ -24,7 +24,7 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 
 		public IUnityObjectBase GetAsset(long pathID)
 		{
-			IUnityObjectBase? asset = FindAsset(pathID);
+			IUnityObjectBase? asset = TryGetAsset(pathID);
 			if (asset is null)
 			{
 				throw new Exception($"Object with path ID {pathID} wasn't found");
@@ -41,17 +41,17 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 			throw new NotSupportedException();
 		}
 
-		public IUnityObjectBase? FindAsset(long pathID)
+		public IUnityObjectBase? TryGetAsset(long pathID)
 		{
 			m_assets.TryGetValue(pathID, out IUnityObjectBase? asset);
 			return asset;
 		}
 
-		public IUnityObjectBase? FindAsset(int fileIndex, long pathID)
+		public IUnityObjectBase? TryGetAsset(int fileIndex, long pathID)
 		{
 			if (fileIndex == VirtualFileIndex)
 			{
-				return FindAsset(pathID);
+				return TryGetAsset(pathID);
 			}
 			throw new NotSupportedException();
 		}

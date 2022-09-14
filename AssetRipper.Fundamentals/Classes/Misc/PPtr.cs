@@ -82,7 +82,7 @@ namespace AssetRipper.Core.Classes.Misc
 				asset = default;
 				return false;
 			}
-			IUnityObjectBase? @object = file.FindAsset(pptr.FileIndex, pptr.PathIndex);
+			IUnityObjectBase? @object = file.TryGetAsset(pptr.FileIndex, pptr.PathIndex);
 			switch (@object)
 			{
 				case null:
