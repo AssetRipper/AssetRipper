@@ -21,6 +21,8 @@ namespace AssetRipper.GUI
 			set => throw new NotSupportedException();
 		}
 
+		public override string AssetClassName => nameof(DummyAssetForLooseResourceFile);
+
 		private readonly SmartStream smartStream;
 
 		public DummyAssetForLooseResourceFile(ResourceFile associatedFile)

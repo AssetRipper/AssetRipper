@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Project.Collections
 			get { yield return Asset; }
 		}
 
-		public override string Name => $"UnknownObject_{Asset.ClassID}";
+		public override string Name => Asset.NameString;
 
 		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
@@ -38,10 +38,11 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
-			string subFolder = Asset.ExportPath;
-			string subPath = Path.Combine(projectDirectory, subFolder);
+			string resourcePath = Path.Combine(projectDirectory, $"{Asset.OriginalAssetPath}.{GetExportExtension(Asset)}");
+			string subPath = Path.GetDirectoryName(resourcePath)!;
 			Directory.CreateDirectory(subPath);
-			string fileName = GetUniqueFileName(container.File, Asset, subPath);
+			string resFileName = Path.GetFileName(resourcePath);
+			string fileName = GetUniqueFileName(subPath, resFileName);
 			string filePath = Path.Combine(subPath, fileName);
 			return AssetExporter.Export(container, Asset, filePath);
 		}

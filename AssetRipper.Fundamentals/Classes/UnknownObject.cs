@@ -1,34 +1,25 @@
 ﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Parser.Asset;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace AssetRipper.Core.Classes
 {
-	public sealed class UnknownObject : UnityObjectBase, IHasRawData
+	public sealed class UnknownObject : RawDataObject, IHasNameString
 	{
-		public byte[] RawData { get; private set; } = Array.Empty<byte>();
+		public string NameString
+		{
+			get => $"Unknown{AssetClassName}_{RawDataHash:X}";
+			set { }
+		}
+
+		[NotNull]
+		public override string? OriginalAssetPath
+		{
+			get => Path.Combine("AssetRipper", "UnknownAssets", AssetClassName, NameString);
+			set { }
+		}
 
 		public UnknownObject(AssetInfo assetInfo) : base(assetInfo) { }
-
-		public override void Read(AssetReader reader)
-		{
-			throw new NotSupportedException();
-		}
-
-		public void Read(AssetReader reader, int byteSize)
-		{
-			if (byteSize > 0)
-			{
-				RawData = reader.ReadBytes(byteSize);
-			}
-		}
-
-		public override void Write(AssetWriter writer)
-		{
-			writer.Write(RawData);
-		}
-
-		public override string ExportPath => Path.Combine("AssetRipper", "UnknownAssets", ClassID.ToString());
 	}
 }

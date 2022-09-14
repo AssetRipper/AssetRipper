@@ -18,7 +18,7 @@ namespace AssetRipper.Core
 		public AssetInfo AssetInfo { get; set; }
 		public ISerializedFile SerializedFile => AssetInfo.File;
 		public virtual ClassIDType ClassID => AssetInfo.ClassID;
-		public virtual string AssetClassName => "Unknown";
+		public abstract string AssetClassName { get; }
 		public long PathID => AssetInfo.PathID;
 		public UnityGUID GUID
 		{
@@ -28,9 +28,7 @@ namespace AssetRipper.Core
 				AssetInfo.GUID = value;
 			}
 		}
-		public virtual string ExportPath => Path.Combine(AssetsKeyword, AssetClassName);
-
-		public const string AssetsKeyword = "Assets";
+		public virtual string? OriginalAssetPath { get; set; }
 
 		public UnityObjectBase() : this(AssetInfo.MakeDummyAssetInfo())
 		{

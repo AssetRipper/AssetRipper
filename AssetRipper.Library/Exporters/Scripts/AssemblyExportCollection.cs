@@ -88,8 +88,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 			Logger.Info(LogCategory.Export, "Exporting scripts...");
 
-			string scriptFolder = m_export[0].ExportPath;
-			string scriptPath = Path.Combine(projectDirectory, scriptFolder);
+			string pluginsFolder = Path.Combine(projectDirectory, AssetsKeyword, "Plugins");
 
 			foreach (Mono.Cecil.AssemblyDefinition? assembly in ((AssemblyDllExporter)AssetExporter).AssemblyManager.GetAssemblies())
 			{
@@ -104,8 +103,8 @@ namespace AssetRipper.Library.Exporters.Scripts
 					continue;
 				}
 
-				string path = Path.Combine(scriptPath, assemblyName);
-				Directory.CreateDirectory(scriptPath);
+				string path = Path.Combine(pluginsFolder, assemblyName);
+				Directory.CreateDirectory(pluginsFolder);
 				using FileStream file = System.IO.File.Create(path);
 				assembly.Write(file);
 				OnAssemblyExported(container, path);

@@ -180,5 +180,6 @@ namespace AssetRipper.Core.Project.Collections
 
 		private const string MetaExtension = ".meta";
 		protected const string AssetExtension = "asset";
+		public const string AssetsKeyword = "Assets";
 	}
 }

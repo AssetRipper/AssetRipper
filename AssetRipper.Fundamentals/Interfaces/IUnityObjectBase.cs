@@ -11,7 +11,7 @@ namespace AssetRipper.Core.Interfaces
 		AssetInfo AssetInfo { get; set; }
 		string AssetClassName { get; }
 		ClassIDType ClassID { get; }
-		string ExportPath { get; }
+		string? OriginalAssetPath { get; set; }
 		ISerializedFile SerializedFile { get; }
 		UnityGUID GUID { get; set; }
 		long PathID { get; }

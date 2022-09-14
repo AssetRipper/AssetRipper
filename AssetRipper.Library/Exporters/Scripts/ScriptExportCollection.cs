@@ -56,10 +56,9 @@ namespace AssetRipper.Library.Exporters.Scripts
 				return false;
 			}
 
-			string scriptFolder = m_export[0].ExportPath;
-			string scriptPath = Path.Combine(projectDirectory, scriptFolder);
+			string scriptsFolder = Path.Combine(projectDirectory, AssetsKeyword, "Scripts");
 
-			AssetExporter.Export(container, m_export, scriptPath, OnScriptExported);
+			AssetExporter.Export(container, m_export, scriptsFolder, OnScriptExported);
 			return true;
 		}
 

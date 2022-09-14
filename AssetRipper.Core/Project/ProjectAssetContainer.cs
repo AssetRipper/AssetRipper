@@ -74,27 +74,6 @@ namespace AssetRipper.Core.Project
 			m_scenes = scenes.ToArray();
 		}
 
-#warning TODO: get rid of IEnumerable. pass only main asset (issues: prefab, texture with sprites, animatorController)
-		public bool TryGetAssetPathFromAssets(IEnumerable<IUnityObjectBase> assets, [NotNullWhen(true)] out IUnityObjectBase? selectedAsset, out string assetPath)
-		{
-			selectedAsset = null;
-			assetPath = string.Empty;
-			if (m_pathAssets.Count > 0)
-			{
-				foreach (IUnityObjectBase asset in assets)
-				{
-					if (m_pathAssets.TryGetValue(asset, out ProjectAssetPath projectPath))
-					{
-						selectedAsset = asset;
-						assetPath = projectPath.SubstituteExportPath(asset);
-						return true;
-					}
-				}
-			}
-
-			return false;
-		}
-
 		public IUnityObjectBase? FindAsset(long pathID)
 		{
 			return File.FindAsset(pathID);
@@ -285,17 +264,17 @@ namespace AssetRipper.Core.Project
 					continue;
 				}
 
-				string resourcePath = kvp.Key.String;
-				if (m_pathAssets.TryGetValue(asset, out ProjectAssetPath projectPath))
+				string resourcePath = Path.Combine(ResourceFullPath, kvp.Key.String);
+				if (asset.OriginalAssetPath is null)
+				{
+					asset.OriginalAssetPath = resourcePath;
+				}
+				else if (asset.OriginalAssetPath.Length < resourcePath.Length)
 				{
 					// for paths like "Resources/inner/resources/extra/file" engine creates 2 resource entries
 					// "inner/resources/extra/file" and "extra/file"
-					if (projectPath.AssetPath.Length >= resourcePath.Length)
-					{
-						continue;
-					}
+					asset.OriginalAssetPath = resourcePath;
 				}
-				m_pathAssets[asset] = new ProjectAssetPath(ResourceFullPath, resourcePath);
 			}
 		}
 
@@ -347,7 +326,7 @@ namespace AssetRipper.Core.Project
 				switch (m_BundledAssetsExportMode)
 				{
 					case BundledAssetsExportMode.DirectExport:
-						m_pathAssets.Add(asset, new ProjectAssetPath(string.Empty, assetPath));
+						asset.OriginalAssetPath = assetPath;
 						break;
 					case BundledAssetsExportMode.GroupByBundleName:
 						if (assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
@@ -358,7 +337,7 @@ namespace AssetRipper.Core.Project
 						{
 							assetPath = assetPath.Substring(bundleDirectory.Length);
 						}
-						m_pathAssets.TryAdd(asset, new ProjectAssetPath(directory, assetPath));
+						asset.OriginalAssetPath = Path.Combine(directory, assetPath);
 						//TryAdd because Unity sometimes includes duplicates (issue #378)
 						break;
 					default:
@@ -383,7 +362,7 @@ namespace AssetRipper.Core.Project
 
 		private const string ResourcesKeyword = "Resources";
 		private const string AssetBundleKeyword = "AssetBundles";
-		private const string AssetsDirectory = UnityObjectBase.AssetsKeyword + ObjectUtils.DirectorySeparator;
+		private const string AssetsDirectory = ExportCollection.AssetsKeyword + ObjectUtils.DirectorySeparator;
 		private const string ResourceFullPath = AssetsDirectory + ResourcesKeyword;
 		//private const string AssetBundleFullPath = AssetsDirectory + AssetBundleKeyword;
 		private const string AssetBundleFullPath = AssetsDirectory + "Asset_Bundles";
@@ -391,7 +370,6 @@ namespace AssetRipper.Core.Project
 		private readonly ProjectExporter m_exporter;
 		private readonly BundledAssetsExportMode m_BundledAssetsExportMode;
 		private readonly Dictionary<AssetInfo, IExportCollection> m_assetCollections = new();
-		private readonly Dictionary<IUnityObjectBase, ProjectAssetPath> m_pathAssets = new();
 
 		private readonly IBuildSettings? m_buildSettings;
 		private readonly ITagManager? m_tagManager;

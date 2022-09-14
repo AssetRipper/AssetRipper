@@ -20,18 +20,16 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			string subPath;
 			string fileName;
-			if (container.TryGetAssetPathFromAssets(Assets, out IUnityObjectBase? asset, out string assetPath))
+			if (Asset.OriginalAssetPath is not null)
 			{
-				string resourcePath = Path.Combine(projectDirectory, $"{assetPath}.{GetExportExtension(asset)}");
+				string resourcePath = Path.Combine(projectDirectory, $"{Asset.OriginalAssetPath}.{GetExportExtension(Asset)}");
 				subPath = Path.GetDirectoryName(resourcePath)!;
 				string resFileName = Path.GetFileName(resourcePath);
-#warning TODO: combine assets with the same res path into one big asset
-				// Unity distinguish assets with non unique path by its type, but file system doesn't support it
 				fileName = GetUniqueFileName(subPath, resFileName);
 			}
 			else
 			{
-				string subFolder = Asset.ExportPath;
+				string subFolder = Path.Combine(AssetsKeyword, Asset.AssetClassName);
 				subPath = Path.Combine(projectDirectory, subFolder);
 				fileName = GetUniqueFileName(container.File, Asset, subPath);
 			}
