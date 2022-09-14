@@ -14,7 +14,7 @@ namespace AssetRipper.Core
 	/// <summary>
 	/// The artificial base class for all generated Unity classes
 	/// </summary>
-	public class UnityAssetBase : IUnityAssetBase, IAlmostEquatable
+	public abstract class UnityAssetBase : IUnityAssetBase, IAlmostEquatable
 	{
 		public virtual void ReadEditor(AssetReader reader) => throw new NotSupportedException();
 
