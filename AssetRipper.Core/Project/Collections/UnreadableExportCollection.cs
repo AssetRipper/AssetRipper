@@ -33,7 +33,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
-			throw new NotSupportedException();
+			return MetaPtr.NullPtr;
 		}
 
 		public override bool Export(IProjectAssetContainer container, string projectDirectory)
