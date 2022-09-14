@@ -8,9 +8,6 @@ namespace AssetRipper.Core.Classes
 {
 	public abstract class Utf8StringBase : UnityAssetBase, IEquatable<Utf8StringBase>, IEquatable<string>
 	{
-		public Utf8StringBase() : base() { }
-		public Utf8StringBase(LayoutInfo layout) : base(layout) { }
-
 		public abstract byte[] Data { get; set; }
 
 		public string String

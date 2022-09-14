@@ -2,7 +2,6 @@
 using AssetRipper.Core.Equality;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
 using AssetRipper.Core.Project;
@@ -17,11 +16,6 @@ namespace AssetRipper.Core
 	/// </summary>
 	public class UnityAssetBase : IUnityAssetBase, IAlmostEquatable
 	{
-		public UnityAssetBase() { }
-		public UnityAssetBase(LayoutInfo layout)
-		{
-		}
-
 		public virtual void ReadEditor(AssetReader reader) => throw new NotSupportedException();
 
 		public virtual void ReadRelease(AssetReader reader) => throw new NotSupportedException();

@@ -32,17 +32,11 @@ namespace AssetRipper.Core
 
 		public const string AssetsKeyword = "Assets";
 
-		public UnityObjectBase() : base()
+		public UnityObjectBase() : this(AssetInfo.MakeDummyAssetInfo())
 		{
-			AssetInfo = AssetInfo.MakeDummyAssetInfo();
 		}
 
-		public UnityObjectBase(LayoutInfo layout) : base(layout)
-		{
-			AssetInfo = AssetInfo.MakeDummyAssetInfo();
-		}
-
-		public UnityObjectBase(AssetInfo assetInfo) : base()
+		public UnityObjectBase(AssetInfo assetInfo)
 		{
 			AssetInfo = assetInfo;
 		}
