@@ -1,0 +1,41 @@
+{
+	"Name": "ObjectInfo",
+	"Namespace": "AssetRipper.IO.Files.SerializedFiles.ObjectInformation",
+	"ClassType": "record class",
+	"Summary": "Contains information for a block of raw serialized object data.",
+	"Remarks": "",
+	"Properties": {
+		"FileID": {
+			"Summary": "ObjectID",
+			"Remarks": "Unique ID that identifies the object. Can be used as a key for a map."
+		},
+		"ByteStart": {
+			"Summary": "Offset to the object data.",
+			"Remarks": "Add to <see cref=\"SerializedFileHeader.DataOffset\"/> to get the absolute offset within the serialized file."
+		},
+		"ByteSize": {
+			"Summary": "Size of the object data.",
+			"Remarks": ""
+		},
+		"TypeID": {
+			"Summary": "New versions: Type index in <see cref=\"SerializedFileMetadata.Types\"/> array.",
+			"Remarks": "Old versions: Type ID of the object, which is mapped to <see cref=\"SerializedType.TypeID\"/>. Equals to classID if the object is not <see cref=\"ClassIDType.MonoBehaviour\"/>"
+		},
+		"ClassID": {
+			"Summary": "Class ID of the object.",
+			"Remarks": ""
+		},
+		"IsDestroyed": {
+			"Summary": "",
+			"Remarks": ""
+		},
+		"ScriptTypeIndex": {
+			"Summary": "",
+			"Remarks": ""
+		},
+		"Stripped": {
+			"Summary": "",
+			"Remarks": ""
+		}
+	}
+}

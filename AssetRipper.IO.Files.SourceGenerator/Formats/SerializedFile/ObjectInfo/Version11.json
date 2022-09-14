@@ -1,0 +1,37 @@
+{
+	"Name": "ObjectInfo",
+	"Version": 11,
+	"SerializableFields": [
+		{
+			"TypeName": "int",
+			"FieldName": "FileID",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "ByteStart",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "ByteSize",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "TypeID",
+			"Special": null
+		},
+		{
+			"TypeName": "short",
+			"FieldName": "ClassID",
+			"Special": null
+		},
+		{
+			"TypeName": "short",
+			"FieldName": "ScriptTypeIndex",
+			"Special": null
+		}
+	],
+	"ExtraFields":[]
+}

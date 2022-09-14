@@ -1,0 +1,30 @@
+{
+	"Name": "SerializedFileHeader",
+	"Version": 1,
+	"SerializableFields": [
+		{
+			"TypeName": "int",
+			"FieldName": "MetadataSize",
+			"Special": null
+		},
+		{
+			"TypeName": "uint",
+			"FieldName": "FileSize",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "Version",
+			"Special": {
+				"Identifier": "enum",
+				"Parameter": "FormatVersion"
+			}
+		},
+		{
+			"TypeName": "uint",
+			"FieldName": "DataOffset",
+			"Special": null
+		}
+	],
+	"ExtraFields": []
+}

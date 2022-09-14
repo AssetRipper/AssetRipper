@@ -1,0 +1,57 @@
+{
+	"Name": "TypeTreeNode",
+	"Version": 1,
+	"SerializableFields": [
+		{
+			"TypeName": "string",
+			"FieldName": "Type",
+			"Special": {
+				"Identifier": "NullTerminated",
+				"Parameter": null
+			}
+		},
+		{
+			"TypeName": "string",
+			"FieldName": "Name",
+			"Special": {
+				"Identifier": "NullTerminated",
+				"Parameter": null
+			}
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "ByteSize",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "Index",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "TypeFlags",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "Version",
+			"Special": null
+		},
+		{
+			"TypeName": "uint",
+			"FieldName": "MetaFlag",
+			"Special": {
+				"Identifier": "enum",
+				"Parameter": "TransferMetaFlags"
+			}
+		}
+	],
+	"ExtraFields":[
+		{
+			"TypeName": "byte",
+			"FieldName": "Level",
+			"Special": null
+		}
+	]
+}

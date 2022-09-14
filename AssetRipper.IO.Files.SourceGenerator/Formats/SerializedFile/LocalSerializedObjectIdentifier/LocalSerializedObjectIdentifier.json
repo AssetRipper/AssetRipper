@@ -1,0 +1,11 @@
+{
+	"Name": "LocalSerializedObjectIdentifier",
+	"Namespace": "AssetRipper.IO.Files.SerializedFiles.LocalSerializedObjectIdentifiers",
+	"ClassType": "record class",
+	"Summary": "",
+	"Remarks": "",
+	"Properties": {
+		"LocalSerializedFileIndex": null,
+		"LocalIdentifierInFile": null
+	}
+}

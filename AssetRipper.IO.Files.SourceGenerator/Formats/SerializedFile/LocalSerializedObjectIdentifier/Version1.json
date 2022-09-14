@@ -1,0 +1,17 @@
+{
+	"Name": "LocalSerializedObjectIdentifier",
+	"Version": 1,
+	"SerializableFields": [
+		{
+			"TypeName": "int",
+			"FieldName": "LocalSerializedFileIndex",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "LocalIdentifierInFile",
+			"Special": null
+		}
+	],
+	"ExtraFields": []
+}

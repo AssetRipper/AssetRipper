@@ -1,0 +1,15 @@
+{
+	"Name": "FileIdentifier",
+	"Version": 1,
+	"SerializableFields": [
+		{
+			"TypeName": "string",
+			"FieldName": "PathName",
+			"Special": {
+				"Identifier": "NullTerminated",
+				"Parameter": ""
+			}
+		}
+	],
+	"ExtraFields": []
+}

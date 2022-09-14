@@ -1,0 +1,33 @@
+{
+	"Name": "SerializedFileHeader",
+	"Namespace": "AssetRipper.IO.Files.SerializedFiles.Header",
+	"ClassType": "record class",
+	"Summary": "The file header is found at the beginning of an asset file. The header is always using big endian byte order.",
+	"Remarks": "",
+	"Properties": {
+		"Version": {
+			"Summary": "File format version. The number is required for backward compatibility and is normally incremented after the file format has been changed in a major update.",
+			"Remarks": ""
+		},
+		"SwapEndianess": {
+			"Summary": "This controls the byte order of the data structure. False is little endian. True is big endian.",
+			"Remarks": "This field is normally set to 0."
+		},
+		"MetadataSize": {
+			"Summary": "Size of the metadata section in the file",
+			"Remarks": ""
+		},
+		"FileSize": {
+			"Summary": "Size of the whole file",
+			"Remarks": ""
+		},
+		"DataOffset": {
+			"Summary": "Offset to the serialized object data. It starts at the data for the first object.",
+			"Remarks": ""
+		},
+		"Unknown22": {
+			"Summary": "An unknown field introduced in version 22.",
+			"Remarks": ""
+		}
+	}
+}

@@ -1,0 +1,36 @@
+{
+	"Name": "FileIdentifier",
+	"Version": 6,
+	"SerializableFields": [
+		{
+			"TypeName": "string",
+			"FieldName": "AssetPath",
+			"Special": {
+				"Identifier": "NullTerminated",
+				"Parameter": ""
+			}
+		},
+		{
+			"TypeName": "Hash128",
+			"FieldName": "Guid",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "Type",
+			"Special": {
+				"Identifier": "enum",
+				"Parameter": "AssetType"
+			}
+		},
+		{
+			"TypeName": "string",
+			"FieldName": "PathName",
+			"Special": {
+				"Identifier": "NullTerminated",
+				"Parameter": ""
+			}
+		}
+	],
+	"ExtraFields": []
+}

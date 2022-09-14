@@ -1,0 +1,32 @@
+{
+	"Name": "ObjectInfo",
+	"Version": 22,
+	"SerializableFields": [
+		{
+			"TypeName": "align4",
+			"FieldName": "",
+			"Special": null
+		},
+		{
+			"TypeName": "long",
+			"FieldName": "FileID",
+			"Special": null
+		},
+		{
+			"TypeName": "long",
+			"FieldName": "ByteStart",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "ByteSize",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "TypeID",
+			"Special": null
+		}
+	],
+	"ExtraFields":[]
+}

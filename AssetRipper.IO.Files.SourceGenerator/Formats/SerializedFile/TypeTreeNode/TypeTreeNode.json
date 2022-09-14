@@ -1,0 +1,50 @@
+{
+	"Name": "TypeTreeNode",
+	"Namespace": "AssetRipper.IO.Files.SerializedFiles.TypeTrees",
+	"ClassType": "record class",
+	"Summary": "",
+	"Remarks": "",
+	"Properties": {
+		"Version": {
+			"Summary": "Field type version, starts with 1 and is incremented after the type information has been significantly updated in a new release.",
+			"Remarks": "Equal to serializedVersion in Yaml format files"
+		},
+		"Level": {
+			"Summary": "Depth of current type relative to root.",
+			"Remarks": ""
+		},
+		"TypeFlags": {
+			"Summary": "Array flag, set to 1 if type is \"Array\" or \"TypelessData\".",
+			"Remarks": ""
+		},
+		"Type": {
+			"Summary": "Name of the data type. This can be the name of any substructure or a static predefined type.",
+			"Remarks": ""
+		},
+		"Name": {
+			"Summary": "Name of the field.",
+			"Remarks": ""
+		},
+		"TypeStrOffset": {
+			"Summary": "Type offset in the string buffer.",
+			"Remarks": ""
+		},
+		"NameStrOffset": {
+			"Summary": "Name offset in the string buffer.",
+			"Remarks": ""
+		},
+		"ByteSize": {
+			"Summary": "Size of the data value in bytes, e.g. 4 for int. -1 means that there is an array somewhere inside the hierarchy.",
+			"Remarks": "Note: The padding for the alignment is not included in the size."
+		},
+		"Index": {
+			"Summary": "Index of the field that is unique within a tree.",
+			"Remarks": "Normally starts with 0 and is incremented with each additional field."
+		},
+		"MetaFlag": {
+			"Summary": "Meta flags of the field.",
+			"Remarks": ""
+		},
+		"RefTypeHash": null
+	}
+}

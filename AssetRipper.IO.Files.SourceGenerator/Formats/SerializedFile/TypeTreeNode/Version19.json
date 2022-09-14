@@ -1,0 +1,66 @@
+{
+	"Name": "TypeTreeNode",
+	"Version": 19,
+	"SerializableFields": [
+		{
+			"TypeName": "ushort",
+			"FieldName": "Version",
+			"Special": null
+		},
+		{
+			"TypeName": "byte",
+			"FieldName": "Level",
+			"Special": null
+		},
+		{
+			"TypeName": "byte",
+			"FieldName": "TypeFlags",
+			"Special": null
+		},
+		{
+			"TypeName": "uint",
+			"FieldName": "TypeStrOffset",
+			"Special": null
+		},
+		{
+			"TypeName": "uint",
+			"FieldName": "NameStrOffset",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "ByteSize",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "Index",
+			"Special": null
+		},
+		{
+			"TypeName": "uint",
+			"FieldName": "MetaFlag",
+			"Special": {
+				"Identifier": "enum",
+				"Parameter": "TransferMetaFlags"
+			}
+		},
+		{
+			"TypeName": "ulong",
+			"FieldName": "RefTypeHash",
+			"Special": null
+		}
+	],
+	"ExtraFields":[
+		{
+			"TypeName": "string",
+			"FieldName": "Type",
+			"Special": null
+		},
+		{
+			"TypeName": "string",
+			"FieldName": "Name",
+			"Special": null
+		}
+	]
+}

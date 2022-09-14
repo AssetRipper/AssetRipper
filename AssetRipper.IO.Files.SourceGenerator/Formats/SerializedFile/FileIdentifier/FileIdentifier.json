@@ -1,0 +1,25 @@
+{
+	"Name": "FileIdentifier",
+	"Namespace": "AssetRipper.IO.Files.SerializedFiles.FileIdentifiers",
+	"ClassType": "record class",
+	"Summary": "A serialized file may be linked with other serialized files to create shared dependencies.",
+	"Remarks": "",
+	"Properties": {
+		"PathName": {
+			"Summary": "Actual file path. This path is relative to the path of the current file.",
+			"Remarks": "The folder \"library\" often needs to be translated to \"resources\" in order to find the file on the file system."
+		},
+		"Type": {
+			"Summary": "The type of the file",
+			"Remarks": ""
+		},
+		"AssetPath": {
+			"Summary": "Virtual asset path. Used for cached files, otherwise it's empty.",
+			"Remarks": "The file with that path usually doesn't exist, so it's probably an alias."
+		},
+		"Guid": {
+			"Summary": "Actually UnityGUID",
+			"Remarks": ""
+		}
+	}
+}

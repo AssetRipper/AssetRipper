@@ -1,0 +1,47 @@
+{
+	"Name": "ObjectInfo",
+	"Version": 15,
+	"SerializableFields": [
+		{
+			"TypeName": "align4",
+			"FieldName": "",
+			"Special": null
+		},
+		{
+			"TypeName": "long",
+			"FieldName": "FileID",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "ByteStart",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "ByteSize",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "TypeID",
+			"Special": null
+		},
+		{
+			"TypeName": "short",
+			"FieldName": "ClassID",
+			"Special": null
+		},
+		{
+			"TypeName": "short",
+			"FieldName": "ScriptTypeIndex",
+			"Special": null
+		},
+		{
+			"TypeName": "bool",
+			"FieldName": "Stripped",
+			"Special": null
+		}
+	],
+	"ExtraFields":[]
+}

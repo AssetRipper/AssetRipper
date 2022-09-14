@@ -1,0 +1,60 @@
+{
+	"Name": "SerializedFileHeader",
+	"Version": 22,
+	"SerializableFields": [
+		{
+			"TypeName": "uint",
+			"FieldName": "",
+			"Special": null
+		},
+		{
+			"TypeName": "uint",
+			"FieldName": "",
+			"Special": null
+		},
+		{
+			"TypeName": "int",
+			"FieldName": "Version",
+			"Special": {
+				"Identifier": "enum",
+				"Parameter": "FormatVersion"
+			}
+		},
+		{
+			"TypeName": "uint",
+			"FieldName": "",
+			"Special": null
+		},
+		{
+			"TypeName": "bool",
+			"FieldName": "SwapEndianess",
+			"Special": null
+		},
+		{
+			"TypeName": "align4",
+			"FieldName": "",
+			"Special": null
+		},
+		{
+			"TypeName": "uint",
+			"FieldName": "MetadataSize",
+			"Special": null
+		},
+		{
+			"TypeName": "long",
+			"FieldName": "FileSize",
+			"Special": null
+		},
+		{
+			"TypeName": "long",
+			"FieldName": "DataOffset",
+			"Special": null
+		},
+		{
+			"TypeName": "long",
+			"FieldName": "Unknown22",
+			"Special": null
+		}
+	],
+	"ExtraFields": []
+}
