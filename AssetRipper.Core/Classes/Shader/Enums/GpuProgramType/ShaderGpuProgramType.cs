@@ -3,44 +3,45 @@ using AssetRipper.Core.Parser.Files;
 
 namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 {
+	/// <remarks>
+	/// This is a native-only type. It has no managed equivalent.
+	/// </remarks>
 	public enum ShaderGpuProgramType
 	{
-		Unknown,
-		GLLegacy,
-		GLES31AEP,
-		GLES31,
-		GLES3,
-		GLES,
-		GLCore32,
-		GLCore41,
-		GLCore43,
-		DX9VertexSM20,
-		DX9VertexSM30,
-		DX9PixelSM20,
-		DX9PixelSM30,
-		DX10Level9Vertex,
-		DX10Level9Pixel,
-		DX11VertexSM40,
-		DX11VertexSM50,
-		DX11PixelSM40,
-		DX11PixelSM50,
-		DX11GeometrySM40,
-		DX11GeometrySM50,
-		DX11HullSM50,
-		DX11DomainSM50,
-		MetalVS,
-		MetalFS,
-		SPIRV,
-
-#warning Console is omitted in AssetStudio
-		Console,
-
-		ConsoleVS,
-		ConsoleFS,
-		ConsoleHS,
-		ConsoleDS,
-		ConsoleGS,
-		RayTracing,
+		Unknown = 0,
+		GLLegacy = 1,
+		GLES31AEP = 2,
+		GLES31 = 3,
+		GLES3 = 4,
+		GLES = 5,
+		GLCore32 = 6,
+		GLCore41 = 7,
+		GLCore43 = 8,
+		DX9VertexSM20 = 9,
+		DX9VertexSM30 = 10,
+		DX9PixelSM20 = 11,
+		DX9PixelSM30 = 12,
+		DX10Level9Vertex = 13,
+		DX10Level9Pixel = 14,
+		DX11VertexSM40 = 15,
+		DX11VertexSM50 = 16,
+		DX11PixelSM40 = 17,
+		DX11PixelSM50 = 18,
+		DX11GeometrySM40 = 19,
+		DX11GeometrySM50 = 20,
+		DX11HullSM50 = 21,
+		DX11DomainSM50 = 22,
+		MetalVS = 23,
+		MetalFS = 24,
+		SPIRV = 25,
+		Console = 26,
+		ConsoleVS = 26,
+		ConsoleFS = 27,
+		ConsoleHS = 28,
+		ConsoleDS = 29,
+		ConsoleGS = 30,
+		RayTracing = 31,
+		PS5NGGC = 32
 	}
 
 	public static class ShaderGpuProgramTypeExtensions
@@ -168,7 +169,6 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 				case ShaderGpuProgramType.SPIRV:
 					return GPUPlatform.vulkan;
 
-				case ShaderGpuProgramType.Console:
 				case ShaderGpuProgramType.ConsoleVS:
 				case ShaderGpuProgramType.ConsoleFS:
 				case ShaderGpuProgramType.ConsoleHS:
@@ -312,20 +312,6 @@ namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 					{
 						switch (_this)
 						{
-							case ShaderGpuProgramType.Console:
-								{
-									switch (type)
-									{
-										case ShaderType.Vertex:
-											return "pssl_vs";
-										case ShaderType.Fragment:
-											return "pssl_ps";
-										case ShaderType.Geometry:
-											return "pssl_gs";
-									}
-								}
-								break;
-
 							case ShaderGpuProgramType.ConsoleVS:
 								return "pssl_vs";
 							case ShaderGpuProgramType.ConsoleFS:
