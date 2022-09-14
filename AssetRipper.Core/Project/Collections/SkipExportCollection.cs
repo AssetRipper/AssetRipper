@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Project.Collections
 			m_asset = asset ?? throw new ArgumentNullException(nameof(asset));
 		}
 
-		public bool Export(IProjectAssetContainer container, string dirPath)
+		public bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
 			return false;
 		}

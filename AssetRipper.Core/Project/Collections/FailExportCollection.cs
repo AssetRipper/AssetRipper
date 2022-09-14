@@ -14,20 +14,11 @@ namespace AssetRipper.Core.Project.Collections
 	{
 		public FailExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset)
 		{
-			if (assetExporter == null)
-			{
-				throw new ArgumentNullException(nameof(assetExporter));
-			}
-			if (asset == null)
-			{
-				throw new ArgumentNullException(nameof(asset));
-			}
-
-			AssetExporter = assetExporter;
-			m_asset = asset;
+			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
+			m_asset = asset ?? throw new ArgumentNullException(nameof(asset));
 		}
 
-		public bool Export(IProjectAssetContainer container, string dirPath)
+		public bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to export asset {Name}");
 			return false;

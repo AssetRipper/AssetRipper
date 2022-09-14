@@ -21,9 +21,9 @@ namespace AssetRipper.Core.Project.Collections
 			EditorSettings = CreateVirtualEditorSettings(virtualFile);
 		}
 
-		public override bool Export(IProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
-			string subPath = Path.Combine(dirPath, ProjectSettingsName);
+			string subPath = Path.Combine(projectDirectory, ProjectSettingsName);
 			string fileName = "EditorBuildSettings.asset";
 			string filePath = Path.Combine(subPath, fileName);
 

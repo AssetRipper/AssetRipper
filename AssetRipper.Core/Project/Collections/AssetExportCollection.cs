@@ -16,13 +16,13 @@ namespace AssetRipper.Core.Project.Collections
 			Asset = asset ?? throw new ArgumentNullException(nameof(asset));
 		}
 
-		public override bool Export(IProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
 			string subPath;
 			string fileName;
 			if (container.TryGetAssetPathFromAssets(Assets, out IUnityObjectBase? asset, out string assetPath))
 			{
-				string resourcePath = Path.Combine(dirPath, $"{assetPath}.{GetExportExtension(asset)}");
+				string resourcePath = Path.Combine(projectDirectory, $"{assetPath}.{GetExportExtension(asset)}");
 				subPath = Path.GetDirectoryName(resourcePath)!;
 				string resFileName = Path.GetFileName(resourcePath);
 #warning TODO: combine assets with the same res path into one big asset
@@ -32,14 +32,14 @@ namespace AssetRipper.Core.Project.Collections
 			else
 			{
 				string subFolder = Asset.ExportPath;
-				subPath = Path.Combine(dirPath, subFolder);
+				subPath = Path.Combine(projectDirectory, subFolder);
 				fileName = GetUniqueFileName(container.File, Asset, subPath);
 			}
 
 			Directory.CreateDirectory(subPath);
 
 			string filePath = Path.Combine(subPath, fileName);
-			bool result = ExportInner(container, filePath, dirPath);
+			bool result = ExportInner(container, filePath, projectDirectory);
 			if (result)
 			{
 				Meta meta = new Meta(Asset.GUID, CreateImporter(container));

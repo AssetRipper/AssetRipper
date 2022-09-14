@@ -39,9 +39,9 @@ namespace AssetRipper.Core.Project.Collections
 			throw new NotSupportedException();
 		}
 
-		public override bool Export(IProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
-			string subPath = Path.Combine(dirPath, "AssetRipper", "RawData", AssetTypeName);
+			string subPath = Path.Combine(projectDirectory, "AssetRipper", "RawData", AssetTypeName);
 			Directory.CreateDirectory(subPath);
 			string fileName = GetUniqueFileName(container.File, Asset, subPath);
 			string filePath = Path.Combine(subPath, fileName);

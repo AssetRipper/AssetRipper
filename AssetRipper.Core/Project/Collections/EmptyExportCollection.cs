@@ -10,7 +10,7 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class EmptyExportCollection : IExportCollection
 	{
-		public bool Export(IProjectAssetContainer container, string dirPath)
+		public bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
 			return false;
 		}

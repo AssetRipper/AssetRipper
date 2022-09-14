@@ -59,12 +59,12 @@ namespace AssetRipper.Core.Project.Collections
 			}
 		}
 
-		public override bool Export(IProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
 			string sceneSubPath = SceneExportHelpers.GetSceneSubPath(container, File, out bool isRegular);
 			string filePath = isRegular
-				? Path.Combine(dirPath, UnityObjectBase.AssetsKeyword, $"{sceneSubPath}.{ExportExtension}")
-				: Path.Combine(dirPath, UnityObjectBase.AssetsKeyword, "Scenes", $"{sceneSubPath}.{ExportExtension}");
+				? Path.Combine(projectDirectory, UnityObjectBase.AssetsKeyword, $"{sceneSubPath}.{ExportExtension}")
+				: Path.Combine(projectDirectory, UnityObjectBase.AssetsKeyword, "Scenes", $"{sceneSubPath}.{ExportExtension}");
 			string folderPath = Path.GetDirectoryName(filePath)!;
 			string sceneName = Path.GetFileName(sceneSubPath);
 

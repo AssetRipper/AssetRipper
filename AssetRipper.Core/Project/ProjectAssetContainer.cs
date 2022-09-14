@@ -1,5 +1,6 @@
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Interfaces;
@@ -208,20 +209,20 @@ namespace AssetRipper.Core.Project
 			switch (tagID)
 			{
 				case 0:
-					return Classes.TagManager.TagManagerConstants.UntaggedTag;
+					return TagManagerConstants.UntaggedTag;
 				case 1:
-					return Classes.TagManager.TagManagerConstants.RespawnTag;
+					return TagManagerConstants.RespawnTag;
 				case 2:
-					return Classes.TagManager.TagManagerConstants.FinishTag;
+					return TagManagerConstants.FinishTag;
 				case 3:
-					return Classes.TagManager.TagManagerConstants.EditorOnlyTag;
+					return TagManagerConstants.EditorOnlyTag;
 				//case 4:
 				case 5:
-					return Classes.TagManager.TagManagerConstants.MainCameraTag;
+					return TagManagerConstants.MainCameraTag;
 				case 6:
-					return Classes.TagManager.TagManagerConstants.PlayerTag;
+					return TagManagerConstants.PlayerTag;
 				case 7:
-					return Classes.TagManager.TagManagerConstants.GameControllerTag;
+					return TagManagerConstants.GameControllerTag;
 			}
 			if (m_tagManager != null)
 			{
@@ -246,19 +247,19 @@ namespace AssetRipper.Core.Project
 		{
 			switch (tagName)
 			{
-				case Classes.TagManager.TagManagerConstants.UntaggedTag:
+				case TagManagerConstants.UntaggedTag:
 					return 0;
-				case Classes.TagManager.TagManagerConstants.RespawnTag:
+				case TagManagerConstants.RespawnTag:
 					return 1;
-				case Classes.TagManager.TagManagerConstants.FinishTag:
+				case TagManagerConstants.FinishTag:
 					return 2;
-				case Classes.TagManager.TagManagerConstants.EditorOnlyTag:
+				case TagManagerConstants.EditorOnlyTag:
 					return 3;
-				case Classes.TagManager.TagManagerConstants.MainCameraTag:
+				case TagManagerConstants.MainCameraTag:
 					return 5;
-				case Classes.TagManager.TagManagerConstants.PlayerTag:
+				case TagManagerConstants.PlayerTag:
 					return 6;
-				case Classes.TagManager.TagManagerConstants.GameControllerTag:
+				case TagManagerConstants.GameControllerTag:
 					return 7;
 			}
 			if (m_tagManager != null)
@@ -298,6 +299,16 @@ namespace AssetRipper.Core.Project
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <remarks>
+		/// TODO: Asset bundles usually contain more assets than listed in <see cref="IAssetBundle.Container_C142"/>. 
+		/// Need to export them in AssetBundleFullPath directory if <see cref="m_BundledAssetsExportMode"/> is <see cref="BundledAssetsExportMode.GroupByBundleName"/>.
+		/// Or maybe remove that mode entirely. It has dubious utility.
+		/// </remarks>
+		/// <param name="bundle"></param>
+		/// <exception cref="Exception"></exception>
 		private void AddBundleAssets(IAssetBundle bundle)
 		{
 			if (m_BundledAssetsExportMode == BundledAssetsExportMode.GroupByAssetType)
@@ -315,6 +326,7 @@ namespace AssetRipper.Core.Project
 				{
 					continue;
 				}
+
 				UnityObjectBase? asset = kvp.Value.Asset.TryGetAsset(bundle.SerializedFile);
 				if (asset == null)
 				{
@@ -332,29 +344,27 @@ namespace AssetRipper.Core.Project
 					}
 				}
 
-				if (m_BundledAssetsExportMode == BundledAssetsExportMode.DirectExport)
+				switch (m_BundledAssetsExportMode)
 				{
-					m_pathAssets.Add(asset, new ProjectAssetPath(string.Empty, assetPath));
-				}
-				else if (m_BundledAssetsExportMode == BundledAssetsExportMode.GroupByBundleName)
-				{
-					if (assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
-					{
-						assetPath = assetPath.Substring(AssetsDirectory.Length);
-					}
-					if (assetPath.StartsWith(bundleDirectory, StringComparison.OrdinalIgnoreCase))
-					{
-						assetPath = assetPath.Substring(bundleDirectory.Length);
-					}
-					m_pathAssets.TryAdd(asset, new ProjectAssetPath(directory, assetPath));
-					//TryAdd because Unity sometimes includes duplicates (issue #378)
-				}
-				else
-				{
-					throw new Exception($"Invalid {nameof(BundledAssetsExportMode)} for {nameof(m_BundledAssetsExportMode)} : {m_BundledAssetsExportMode}");
+					case BundledAssetsExportMode.DirectExport:
+						m_pathAssets.Add(asset, new ProjectAssetPath(string.Empty, assetPath));
+						break;
+					case BundledAssetsExportMode.GroupByBundleName:
+						if (assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
+						{
+							assetPath = assetPath.Substring(AssetsDirectory.Length);
+						}
+						if (assetPath.StartsWith(bundleDirectory, StringComparison.OrdinalIgnoreCase))
+						{
+							assetPath = assetPath.Substring(bundleDirectory.Length);
+						}
+						m_pathAssets.TryAdd(asset, new ProjectAssetPath(directory, assetPath));
+						//TryAdd because Unity sometimes includes duplicates (issue #378)
+						break;
+					default:
+						throw new Exception($"Invalid {nameof(BundledAssetsExportMode)} for {nameof(m_BundledAssetsExportMode)} : {m_BundledAssetsExportMode}");
 				}
 			}
-#warning TODO: asset bundle may contain more assets than listed in Container. Need to export them in AssetBundleFullPath directory if m_BundledAssetsExportMode is GroupByBundleName
 		}
 
 		public IExportCollection CurrentCollection { get; set; }
@@ -380,8 +390,8 @@ namespace AssetRipper.Core.Project
 
 		private readonly ProjectExporter m_exporter;
 		private readonly BundledAssetsExportMode m_BundledAssetsExportMode;
-		private readonly Dictionary<Parser.Asset.AssetInfo, IExportCollection> m_assetCollections = new Dictionary<Parser.Asset.AssetInfo, IExportCollection>();
-		private readonly Dictionary<IUnityObjectBase, ProjectAssetPath> m_pathAssets = new Dictionary<IUnityObjectBase, ProjectAssetPath>();
+		private readonly Dictionary<AssetInfo, IExportCollection> m_assetCollections = new();
+		private readonly Dictionary<IUnityObjectBase, ProjectAssetPath> m_pathAssets = new();
 
 		private readonly IBuildSettings? m_buildSettings;
 		private readonly ITagManager? m_tagManager;

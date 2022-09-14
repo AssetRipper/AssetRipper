@@ -34,6 +34,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_84;
 using AssetRipper.SourceGenerated.Classes.ClassID_850595691;
 using AssetRipper.SourceGenerated.Classes.ClassID_89;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
+using AssetRipper.SourceGenerated.MarkerInterfaces;
 using AssetRipper.Yaml;
 using System.Collections.Generic;
 using System.IO;
@@ -58,7 +59,7 @@ namespace AssetRipper.Core.Project.Collections
 			writer.Write(streamWriter);
 		}
 
-		public abstract bool Export(IProjectAssetContainer container, string dirPath);
+		public abstract bool Export(IProjectAssetContainer container, string projectDirectory);
 		public abstract bool IsContains(IUnityObjectBase asset);
 		public abstract long GetExportID(IUnityObjectBase asset);
 		public abstract MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal);
@@ -115,7 +116,7 @@ namespace AssetRipper.Core.Project.Collections
 				IAnimatorController => "controller",
 				IAnimatorOverrideController => "overrideController",
 				IAudioMixerController => "mixer",
-				SourceGenerated.Classes.ClassID_319.IAvatarMask or SourceGenerated.Classes.ClassID_1011.IAvatarMask => "mask",
+				IAvatarMaskMarker => "mask",
 				IShaderVariantCollection => "shadervariants",
 				ICubemap => "cubemap",
 				IFlare => "flare",

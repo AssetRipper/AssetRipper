@@ -79,7 +79,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 		}
 
-		public override bool Export(IProjectAssetContainer container, string dirPath)
+		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
 			if (m_export.Count == 0)
 			{
@@ -89,7 +89,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			Logger.Info(LogCategory.Export, "Exporting scripts...");
 
 			string scriptFolder = m_export[0].ExportPath;
-			string scriptPath = Path.Combine(dirPath, scriptFolder);
+			string scriptPath = Path.Combine(projectDirectory, scriptFolder);
 
 			foreach (Mono.Cecil.AssemblyDefinition? assembly in ((AssemblyDllExporter)AssetExporter).AssemblyManager.GetAssemblies())
 			{

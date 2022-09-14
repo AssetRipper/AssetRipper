@@ -165,9 +165,8 @@ namespace AssetRipper.Core.Project.Collections
 			return false;
 		}
 
-		public bool Export(IProjectAssetContainer container, string dirPath)
+		public bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
-			//return false;
 			return true; //successfully redirected to an engine asset
 		}
 

@@ -4,14 +4,8 @@ using System.IO;
 
 namespace AssetRipper.Core.Project
 {
-	public struct ProjectAssetPath
+	public readonly record struct ProjectAssetPath(string Root, string AssetPath)
 	{
-		public ProjectAssetPath(string root, string path)
-		{
-			Root = root;
-			AssetPath = path;
-		}
-
 		public string SubstituteExportPath(IUnityObjectBase asset)
 		{
 			string projectPath = SubstitutePath(asset.GetOriginalName());
@@ -35,8 +29,5 @@ namespace AssetRipper.Core.Project
 			}
 			return AssetPath;
 		}
-
-		public string Root { get; }
-		public string AssetPath { get; }
 	}
 }
