@@ -114,7 +114,7 @@ namespace AssetRipper.Yaml.Extensions
 		public static YamlNode ExportYaml(this IReadOnlyList<IReadOnlyList<uint>> _this, bool isRaw)
 		{
 			YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
-			foreach (var value in _this)
+			foreach (IReadOnlyList<uint> value in _this)
 			{
 				node.Add(value.ExportYaml(isRaw));
 			}

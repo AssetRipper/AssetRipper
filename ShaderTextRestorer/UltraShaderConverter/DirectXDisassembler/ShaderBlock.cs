@@ -2,6 +2,6 @@
 {
 	public abstract class ShaderBlock
 	{
-		public string fourCc;
+		public abstract string FourCC { get; }
 	}
 }

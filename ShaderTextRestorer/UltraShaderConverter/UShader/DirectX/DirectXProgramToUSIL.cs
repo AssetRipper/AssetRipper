@@ -214,7 +214,7 @@ namespace ShaderLabConvert
 			StringBuilder sb = new StringBuilder();
 
 			int depth = 4;
-			foreach (var instruction in Instructions)
+			foreach (USILInstruction instruction in Instructions)
 			{
 				if (instruction.instructionType == USILInstructionType.EndIf ||
 					instruction.instructionType == USILInstructionType.EndLoop ||

@@ -24,11 +24,11 @@ namespace ShaderTextRestorer.Handlers
 
 			try
 			{
-				var programType = GetProgramType(data);
+				DXProgramType programType = GetProgramType(data);
 				switch (programType)
 				{
 					case DXProgramType.DXBC:
-						var container = new BytecodeContainer(data);
+						BytecodeContainer container = new BytecodeContainer(data);
 						disassemblyText = container.ToString();
 						return !string.IsNullOrEmpty(disassemblyText);
 					case DXProgramType.DX9:
@@ -61,7 +61,7 @@ namespace ShaderTextRestorer.Handlers
 
 			try
 			{
-				var programType = GetProgramType(data);
+				DXProgramType programType = GetProgramType(data);
 				switch (programType)
 				{
 					case DXProgramType.DXBC:
@@ -99,7 +99,7 @@ namespace ShaderTextRestorer.Handlers
 			{
 				return DXProgramType.DXBC;
 			}
-			var dx9ShaderType = (DXDecompiler.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
+			DXDecompiler.DX9Shader.ShaderType dx9ShaderType = (DXDecompiler.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
 			if (dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Vertex ||
 				dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Pixel ||
 				dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Effect)

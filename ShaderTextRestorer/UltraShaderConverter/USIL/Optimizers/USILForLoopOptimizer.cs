@@ -39,7 +39,7 @@ namespace ShaderLabConvert
 
 			int loopDepth = 0;
 
-			var insts = _shader.instructions;
+			List<USILInstruction> insts = _shader.instructions;
 			for (int i = 0; i < insts.Count - 5; i++)
 			{
 				// do detection

@@ -42,10 +42,10 @@ namespace SpirV
 
 		public T GetBitEnumValue<T>() where T : Enum
 		{
-			var v = Value as IBitEnumOperandValue;
+			IBitEnumOperandValue v = Value as IBitEnumOperandValue;
 
 			uint result = 0;
-			foreach (var k in v.Values.Keys)
+			foreach (uint k in v.Values.Keys)
 			{
 				result |= k;
 			}
@@ -228,7 +228,7 @@ namespace SpirV
 
 		public void ResolveReferences(IReadOnlyDictionary<uint, ParsedInstruction> objects)
 		{
-			foreach (var operand in Operands)
+			foreach (ParsedOperand operand in Operands)
 			{
 				if (operand.Value is ObjectReference objectReference)
 				{

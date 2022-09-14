@@ -37,7 +37,7 @@ namespace ShaderTextRestorer.Resources
 			writer.Write(minorVersion);
 			writer.Write(m_majorVersion);
 			writer.Write((ushort)m_programType);
-			var flags = ShaderFlags.NoPreshader;
+			ShaderFlags flags = ShaderFlags.NoPreshader;
 			writer.Write((uint)flags);
 			writer.Write(m_creatorStringOffset);
 			if (m_majorVersion >= 5)

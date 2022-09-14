@@ -49,7 +49,7 @@ namespace SpirV
 			// Those need to be resolved afterwards
 			List<ParsedInstruction> entryPoints = new List<ParsedInstruction>();
 
-			foreach (var instruction in instructions)
+			foreach (ParsedInstruction instruction in instructions)
 			{
 				if (IsDebugInstruction(instruction))
 				{

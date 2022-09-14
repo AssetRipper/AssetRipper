@@ -2,26 +2,26 @@
 
 namespace DirectXDisassembler.Blocks
 {
-	public class ISGN : ShaderBlock
+	public sealed class ISGN : ShaderBlock
 	{
 		public int inputCount;
 		public int unknown;
 		public Input[] inputs;
+
+		public override string FourCC => "ISGN";
+
 		public ISGN(Stream stream)
 		{
-			fourCc = "ISGN";
-			using (BinaryReader reader = new BinaryReader(stream))
+			using BinaryReader reader = new BinaryReader(stream);
+			inputCount = reader.ReadInt32();
+			unknown = reader.ReadInt32();
+			inputs = new Input[inputCount];
+			for (int i = 0; i < inputCount; i++)
 			{
-				inputCount = reader.ReadInt32();
-				unknown = reader.ReadInt32();
-				inputs = new Input[inputCount];
-				for (int i = 0; i < inputCount; i++)
-				{
-					Input input = new Input(reader);
-					inputs[i] = input;
-				}
-				reader.Align(4);
+				Input input = new Input(reader);
+				inputs[i] = input;
 			}
+			reader.Align(4);
 		}
 		public class Input
 		{

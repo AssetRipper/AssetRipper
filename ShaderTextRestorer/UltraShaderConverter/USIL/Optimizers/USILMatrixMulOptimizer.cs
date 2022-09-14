@@ -45,7 +45,7 @@ namespace ShaderLabConvert
 		{
 			bool changes = false;
 
-			var insts = _shader.instructions;
+			List<USILInstruction> insts = _shader.instructions;
 			for (int i = 0; i < insts.Count - 3; i++)
 			{
 				// do detection
@@ -174,7 +174,7 @@ namespace ShaderLabConvert
 		{
 			bool changes = false;
 
-			var insts = _shader.instructions;
+			List<USILInstruction> insts = _shader.instructions;
 			for (int i = 0; i < insts.Count - 3; i++)
 			{
 				// do detection
@@ -297,7 +297,7 @@ namespace ShaderLabConvert
 
 			bool changes = false;
 
-			var insts = _shader.instructions;
+			List<USILInstruction> insts = _shader.instructions;
 			for (int i = 0; i < insts.Count - 3; i++)
 			{
 				// do detection

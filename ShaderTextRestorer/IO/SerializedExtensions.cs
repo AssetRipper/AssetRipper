@@ -515,7 +515,7 @@ namespace ShaderTextRestorer.IO
 			{
 				writer.WriteIndent(indent);
 				writer.Write("Tags { ");
-				foreach (var kvp in _this.Tags)
+				foreach (AssetRipper.Core.IO.NullableKeyValuePair<Utf8String, Utf8String> kvp in _this.Tags)
 				{
 					writer.Write("\"{0}\" = \"{1}\" ", kvp.Key, kvp.Value);
 				}

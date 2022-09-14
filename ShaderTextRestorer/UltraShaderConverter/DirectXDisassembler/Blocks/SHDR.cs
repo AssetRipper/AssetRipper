@@ -4,7 +4,7 @@ using System.IO;
 
 namespace DirectXDisassembler.Blocks
 {
-	public class SHDR : ShaderBlock
+	public sealed class SHDR : ShaderBlock
 	{
 		public int majorVersion;
 		public int minorVersion;
@@ -12,24 +12,23 @@ namespace DirectXDisassembler.Blocks
 		public int instructionSize;
 		public List<SHDRInstruction> shaderInstructions;
 
+		public override string FourCC => "SHDR";
+
 		private ShaderBlock[] blocks;
 		public SHDR(Stream stream, ShaderBlock[] blocks)
 		{
-			fourCc = "SHDR";
 			this.blocks = blocks;
-			using (BinaryReader reader = new BinaryReader(stream))
+			using BinaryReader reader = new BinaryReader(stream);
+			short version = reader.ReadInt16();
+			majorVersion = (version & 0x00f0) >> 4;
+			minorVersion = version & 0x000f;
+			shaderType = (Type)reader.ReadInt16();
+			instructionSize = reader.ReadInt32();
+			shaderInstructions = new List<SHDRInstruction>();
+			while (reader.BaseStream.Position < (instructionSize * 4))
 			{
-				short version = reader.ReadInt16();
-				majorVersion = (version & 0x00f0) >> 4;
-				minorVersion = version & 0x000f;
-				shaderType = (Type)reader.ReadInt16();
-				instructionSize = reader.ReadInt32();
-				shaderInstructions = new List<SHDRInstruction>();
-				while (reader.BaseStream.Position < (instructionSize * 4))
-				{
-					SHDRInstruction inst = new SHDRInstruction(reader, this);
-					shaderInstructions.Add(inst);
-				}
+				SHDRInstruction inst = new SHDRInstruction(reader, this);
+				shaderInstructions.Add(inst);
 			}
 		}
 	}
