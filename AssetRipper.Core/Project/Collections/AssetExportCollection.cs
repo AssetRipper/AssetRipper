@@ -85,6 +85,10 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			INativeFormatImporter importer = NativeFormatImporterFactory.CreateAsset(container.ExportVersion);
 			importer.MainObjectFileID_C1034 = GetExportID(Asset);
+			if (importer.Has_AssetBundleName_C1034() && Asset.AssetBundleName is not null)
+			{
+				importer.AssetBundleName_C1034.String = Asset.AssetBundleName;
+			}
 			return importer;
 		}
 

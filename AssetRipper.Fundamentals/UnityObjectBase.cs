@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Layout;
 using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project;
@@ -29,6 +28,7 @@ namespace AssetRipper.Core
 			}
 		}
 		public virtual string? OriginalAssetPath { get; set; }
+		public string? AssetBundleName { get; set; }
 
 		public UnityObjectBase() : this(AssetInfo.MakeDummyAssetInfo())
 		{

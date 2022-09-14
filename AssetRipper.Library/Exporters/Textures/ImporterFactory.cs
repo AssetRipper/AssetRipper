@@ -61,6 +61,11 @@ namespace AssetRipper.Library.Exporters.Textures
 			platformSettings.AndroidETC2FallbackOverride = (int)AndroidETC2FallbackOverride.UseBuildSettings;
 			platformSettings.ForceMaximumCompressionQuality_BC6H_BC7 = false;
 
+			if (instance.Has_AssetBundleName_C1006() && origin.AssetBundleName is not null)
+			{
+				instance.AssetBundleName_C1006.String = origin.AssetBundleName;
+			}
+
 			return instance;
 		}
 
@@ -83,6 +88,10 @@ namespace AssetRipper.Library.Exporters.Textures
 			instance.SRGBTexture_C1055 = origin.ColorSpace_C28 == (int)ColorSpace.Linear;
 			instance.StreamingMipmaps_C1055 = origin.StreamingMipmaps_C28;
 			instance.StreamingMipmapsPriority_C1055 = origin.StreamingMipmapsPriority_C28;
+			if (origin.AssetBundleName is not null)
+			{
+				instance.AssetBundleName_C1055.String = origin.AssetBundleName;
+			}
 			return instance;
 		}
 	}

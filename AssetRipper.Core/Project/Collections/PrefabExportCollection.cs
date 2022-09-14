@@ -120,6 +120,7 @@ namespace AssetRipper.Core.Project.Collections
 						instance.Objects_C1001.AddNew().CopyValues(root.SerializedFile.CreatePPtr(editorExtension));
 					}
 				}
+				instance.AssetBundleName = root.AssetBundleName;
 				instance.OriginalAssetPath = root.OriginalAssetPath;
 				return instance;
 			}
@@ -147,9 +148,19 @@ namespace AssetRipper.Core.Project.Collections
 
 		protected override IUnityObjectBase CreateImporter(IExportContainer container)
 		{
-			return Prefab is null 
-				? PrefabImporterFactory.CreateAsset(container.ExportVersion)
-				: base.CreateImporter(container);
+			if (Prefab is null)
+			{
+				IPrefabImporter importer = PrefabImporterFactory.CreateAsset(container.ExportVersion);
+				if (RootGameObject.AssetBundleName is not null)
+				{
+					importer.AssetBundleName_C468431735.String = RootGameObject.AssetBundleName;
+				}
+				return importer;
+			}
+			else
+			{
+				return base.CreateImporter(container);
+			}
 		}
 
 		public override long GetExportID(IUnityObjectBase asset)

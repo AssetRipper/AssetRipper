@@ -290,11 +290,6 @@ namespace AssetRipper.Core.Project
 		/// <exception cref="Exception"></exception>
 		private void AddBundleAssets(IAssetBundle bundle)
 		{
-			if (m_BundledAssetsExportMode == BundledAssetsExportMode.GroupByAssetType)
-			{
-				return;
-			}
-
 			string bundleName = bundle.GetAssetBundleName();
 			string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
 			string directory = Path.Combine(AssetBundleFullPath, bundleName);
@@ -323,6 +318,8 @@ namespace AssetRipper.Core.Project
 					}
 				}
 
+				asset.AssetBundleName = bundleName;
+
 				switch (m_BundledAssetsExportMode)
 				{
 					case BundledAssetsExportMode.DirectExport:
@@ -339,6 +336,8 @@ namespace AssetRipper.Core.Project
 						}
 						asset.OriginalAssetPath = Path.Combine(directory, assetPath);
 						//TryAdd because Unity sometimes includes duplicates (issue #378)
+						break;
+					case BundledAssetsExportMode.GroupByAssetType:
 						break;
 					default:
 						throw new Exception($"Invalid {nameof(BundledAssetsExportMode)} for {nameof(m_BundledAssetsExportMode)} : {m_BundledAssetsExportMode}");
