@@ -14,8 +14,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static bool TryGetMesh(this IMeshFilter meshFilter, [NotNullWhen(true)] out IMesh? mesh)
 		{
-			mesh = meshFilter.Mesh_C33.TryGetAsset(meshFilter.SerializedFile);
-			return mesh is not null;
+			return meshFilter.Mesh_C33.TryGetAsset(meshFilter.SerializedFile, out mesh);
 		}
 	}
 }

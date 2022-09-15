@@ -156,6 +156,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			};
 			PrimitiveBuilder<MaterialBuilder, TvG, TvM, TvS> primitiveBuilder = meshBuilder.UsePrimitive(material, primitiveVertexCount);
 
+			//Vertex order is flipped in Gltf
 			switch (topology)
 			{
 				case MeshTopology.Triangles:
@@ -163,9 +164,9 @@ namespace AssetRipper.Library.Exporters.Meshes
 						for (int i = 0; i < indexCount; i += 3)
 						{
 							primitiveBuilder.AddTriangle(
-								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + i], positionTransform, normalTransform, tangentTransform),
+								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + i + 2], positionTransform, normalTransform, tangentTransform),
 								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + i + 1], positionTransform, normalTransform, tangentTransform),
-								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + i + 2], positionTransform, normalTransform, tangentTransform));
+								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + i], positionTransform, normalTransform, tangentTransform));
 						}
 					}
 					break;
@@ -176,9 +177,9 @@ namespace AssetRipper.Library.Exporters.Meshes
 						uint triIndex = 0;
 						for (int i = 0; i < indexCount - 2; i++)
 						{
-							uint a = meshData.ProcessedIndexBuffer[firstIndex + i];
+							uint a = meshData.ProcessedIndexBuffer[firstIndex + i + 2];
 							uint b = meshData.ProcessedIndexBuffer[firstIndex + i + 1];
-							uint c = meshData.ProcessedIndexBuffer[firstIndex + i + 2];
+							uint c = meshData.ProcessedIndexBuffer[firstIndex + i];
 
 							// skip degenerates
 							if (a == b || a == c || b == c)
@@ -211,10 +212,10 @@ namespace AssetRipper.Library.Exporters.Meshes
 						for (int q = 0; q < indexCount; q += 4)
 						{
 							primitiveBuilder.AddQuadrangle(
-								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q], positionTransform, normalTransform, tangentTransform),
-								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q + 1], positionTransform, normalTransform, tangentTransform),
+								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q + 3], positionTransform, normalTransform, tangentTransform),
 								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q + 2], positionTransform, normalTransform, tangentTransform),
-								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q + 3], positionTransform, normalTransform, tangentTransform));
+								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q + 1], positionTransform, normalTransform, tangentTransform),
+								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + q], positionTransform, normalTransform, tangentTransform));
 						}
 					}
 					break;
@@ -224,8 +225,8 @@ namespace AssetRipper.Library.Exporters.Meshes
 						for (int l = 0; l < indexCount; l += 2)
 						{
 							primitiveBuilder.AddLine(
-								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + l], positionTransform, normalTransform, tangentTransform),
-								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + l + 1], positionTransform, normalTransform, tangentTransform));
+								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + l + 1], positionTransform, normalTransform, tangentTransform),
+								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + l], positionTransform, normalTransform, tangentTransform));
 						}
 					}
 					break;
@@ -264,22 +265,23 @@ namespace AssetRipper.Library.Exporters.Meshes
 		private static TvG GetGeometry<TvG>(MeshData meshData, uint index, Transformation positionTransform, Transformation normalTransform, Transformation tangentTransform)
 			where TvG : unmanaged, IVertexGeometry
 		{
-			Vector3 position = meshData.TryGetVertexAtIndex(index) * positionTransform;
+			Vector3 position = GlbConversion.ToGltfVector3Convert(meshData.TryGetVertexAtIndex(index) * positionTransform);
 			if (typeof(TvG) == typeof(VertexPosition))
 			{
 				return Cast<VertexPosition, TvG>(new VertexPosition(position));
 			}
 			else if (typeof(TvG) == typeof(VertexPositionNormal))
 			{
-				Vector3 normal = Vector3.Normalize(meshData.TryGetNormalAtIndex(index) * normalTransform);
+				Vector3 normal = GlbConversion.ToGltfVector3Convert(Vector3.Normalize(meshData.TryGetNormalAtIndex(index) * normalTransform));
 				return Cast<VertexPositionNormal, TvG>(new VertexPositionNormal(position, normal));
 			}
 			else if (typeof(TvG) == typeof(VertexPositionNormalTangent))
 			{
-				Vector3 normal = Vector3.Normalize(meshData.TryGetNormalAtIndex(index) * normalTransform);
+				Vector3 normal = GlbConversion.ToGltfVector3Convert(Vector3.Normalize(meshData.TryGetNormalAtIndex(index) * normalTransform));
 				Vector4 originalTangent = meshData.TryGetTangentAtIndex(index);
 				Vector3 transformedTangent = Vector3.Normalize(originalTangent.AsVector3() * tangentTransform);
-				return Cast<VertexPositionNormalTangent, TvG>(new VertexPositionNormalTangent(position, normal, new Vector4(transformedTangent, originalTangent.W)));
+				Vector4 tangent = GlbConversion.ToGltfTangentConvert(new Vector4(transformedTangent, originalTangent.W));
+				return Cast<VertexPositionNormalTangent, TvG>(new VertexPositionNormalTangent(position, normal, tangent));
 			}
 			else
 			{

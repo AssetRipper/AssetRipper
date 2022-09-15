@@ -117,9 +117,9 @@ namespace AssetRipper.Library.Exporters.Models
 			if (parentNode is not null || parameters.IsScene)
 			{
 				node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(
-					transform.LocalScale_C4.CastToStruct(),
-					transform.LocalRotation_C4.CastToStruct(),
-					transform.LocalPosition_C4.CastToStruct());
+					transform.LocalScale_C4.CastToStruct(),//Scaling is the same in both coordinate systems
+					GlbConversion.ToGltfQuaternionConvert(transform.LocalRotation_C4),
+					GlbConversion.ToGltfVector3Convert(transform.LocalPosition_C4));
 			}
 			sceneBuilder.AddNode(node);
 
