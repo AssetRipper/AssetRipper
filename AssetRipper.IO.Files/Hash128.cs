@@ -44,6 +44,34 @@ namespace AssetRipper.IO.Files
 			writer.Write(Byte15);
 		}
 
+		public override string ToString()
+		{
+			return new UnityGUID(ToArray()).ToString();
+		}
+
+		public byte[] ToArray()
+		{
+			return new byte[16]
+			{
+				Byte0,
+				Byte1,
+				Byte2,
+				Byte3,
+				Byte4,
+				Byte5,
+				Byte6,
+				Byte7,
+				Byte8,
+				Byte9,
+				Byte10,
+				Byte11,
+				Byte12,
+				Byte13,
+				Byte14,
+				Byte15,
+			};
+		}
+
 		public byte Byte0 { get; set; }
 		public byte Byte1 { get; set; }
 		public byte Byte2 { get; set; }

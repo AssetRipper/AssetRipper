@@ -144,21 +144,12 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public override int GetHashCode()
 		{
-			int hash = 311;
-			unchecked
-			{
-				hash = hash + (709 * Data0.GetHashCode());
-				hash = (hash * 443) + Data1.GetHashCode();
-				hash = (hash * 269) + Data2.GetHashCode();
-				hash = (hash * 653) + Data3.GetHashCode();
-			}
-			return hash;
+			return HashCode.Combine(Data0, Data1, Data2, Data3);
 		}
 
 		public override string ToString()
 		{
-			UnityGUID guid = new UnityGUID(Data0, Data1, Data2, Data3);
-			return guid.ToString();
+			return new UnityGUID(Data0, Data1, Data2, Data3).ToString();
 		}
 
 		public uint Data0 { get; set; }
