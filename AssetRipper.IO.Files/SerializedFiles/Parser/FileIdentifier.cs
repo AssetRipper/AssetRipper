@@ -30,8 +30,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 			if (HasHash(reader.Generation))
 			{
-				Guid ??= new();
-				Guid.Read(reader);
+				Guid = reader.ReadEndian<UnityGUID>();
 				Type = (AssetType)reader.ReadInt32();
 			}
 			PathNameOrigin = reader.ReadStringZeroTerm();
@@ -56,20 +55,17 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 		{
 			if (Type == AssetType.Meta)
 			{
-				//Commented out during creation of AssetRipper.IO.Files
-				//return Guid.ToString();
-				throw new NotImplementedException();
+				return Guid.ToString();
 			}
 			return PathName;
 		}
 
 		public override string? ToString()
 		{
-			//Commented out during creation of AssetRipper.IO.Files
-			//if (Type == AssetType.Meta)
-			//{
-			//	return Guid.ToString();
-			//}
+			if (Type == AssetType.Meta)
+			{
+				return Guid.ToString();
+			}
 			return PathNameOrigin ?? base.ToString();
 		}
 
@@ -93,8 +89,6 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 		/// </summary>
 		public string PathNameOrigin { get; set; }
 
-		//Commented out during creation of AssetRipper.IO.Files
-		//public UnityGUID Guid;
-		public Hash128 Guid { get; set; }
+		public UnityGUID Guid { get; set; }
 	}
 }

@@ -15,9 +15,7 @@ public partial record class FileIdentifier_1
 	{
 		if (Type == AssetType.Meta)
 		{
-			//Commented out during creation of AssetRipper.IO.Files
-			//return Guid.ToString();
-			throw new NotImplementedException();
+			return Guid.ToString();
 		}
 		return PathNameFixed;
 	}

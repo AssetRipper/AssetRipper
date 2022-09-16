@@ -17,7 +17,7 @@ public partial interface IFileIdentifier : IEndianReadable, IEndianWritable
 	/// <summary>
 	/// Actually UnityGUID
 	/// </summary>
-	public Hash128 Guid { get; set; }
+	public UnityGUID Guid { get; set; }
 	
 	/// <summary>
 	/// The type of the file

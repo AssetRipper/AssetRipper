@@ -38,7 +38,7 @@ public partial record class FileIdentifier_1 : IFileIdentifier
 	/// <summary>
 	/// Actually UnityGUID
 	/// </summary>
-	public Hash128 Guid
+	public UnityGUID Guid
 	{
 		get => default;
 		set { }

@@ -9,12 +9,12 @@ public partial record class FileIdentifier_5 : IFileIdentifier
 	/// <summary>
 	/// Actually UnityGUID
 	/// </summary>
-	private Hash128 m_Guid = new();
+	private UnityGUID m_Guid = new();
 	
 	/// <summary>
 	/// Actually UnityGUID
 	/// </summary>
-	public Hash128 Guid
+	public UnityGUID Guid
 	{
 		get => m_Guid;
 		set
@@ -27,7 +27,7 @@ public partial record class FileIdentifier_5 : IFileIdentifier
 	/// <summary>
 	/// Called when <see cref="Guid"/> is set.
 	/// </summary>
-	partial void OnGuidAssignment(Hash128 value);
+	partial void OnGuidAssignment(UnityGUID value);
 	
 	/// <summary>
 	/// The type of the file
@@ -95,7 +95,7 @@ public partial record class FileIdentifier_5 : IFileIdentifier
 	
 	public void Read(EndianReader reader)
 	{
-		m_Guid = reader.ReadEndian<Hash128>();
+		m_Guid = reader.ReadEndian<UnityGUID>();
 		m_Type = reader.ReadInt32();
 		m_PathName = reader.ReadStringZeroTerm();
 		OnReadFinished(reader);

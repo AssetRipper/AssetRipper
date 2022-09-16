@@ -11,7 +11,7 @@
 			}
 		},
 		{
-			"TypeName": "Hash128",
+			"TypeName": "UnityGUID",
 			"FieldName": "Guid",
 			"Special": null
 		},
