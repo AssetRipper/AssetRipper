@@ -1,11 +1,12 @@
 ﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.Core.Project.Exporters;
 
 namespace AssetRipper.Library.Exporters.Meshes
 {
-	public sealed class GlbMeshExportCollection : AssetExportCollection
+	public sealed class GlbExportCollection : AssetExportCollection
 	{
-		public GlbMeshExportCollection(GlbMeshExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
+		public GlbExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
 		{
 		}
 

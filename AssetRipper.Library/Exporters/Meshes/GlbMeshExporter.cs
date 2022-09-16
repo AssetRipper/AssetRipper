@@ -20,7 +20,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new GlbMeshExportCollection(this, asset);
+			return new GlbExportCollection(this, asset);
 		}
 
 		public override bool IsHandle(IUnityObjectBase asset)

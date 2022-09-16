@@ -4,6 +4,7 @@ using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
@@ -24,7 +25,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 
 		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
 		{
-			return new TerrainMeshExportCollection(this, asset);
+			return new GlbExportCollection(this, asset);
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
