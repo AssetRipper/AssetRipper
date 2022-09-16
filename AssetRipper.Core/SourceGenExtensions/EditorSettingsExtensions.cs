@@ -17,6 +17,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			settings.ExternalVersionControlSupport_C159_Int32 = (int)ExternalVersionControl.Generic;
 
 			settings.SerializationMode_C159 = (int)SerializationMode.ForceText;
+			settings.SerializeInlineMappingsOnOneLine_C159 = true;
 			settings.SpritePackerPaddingPower_C159 = 1;
 			settings.EtcTextureCompressorBehavior_C159 = 1;
 			settings.EtcTextureFastCompressor_C159 = 1;
