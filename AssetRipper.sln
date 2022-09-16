@@ -41,8 +41,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\YamlDotNet.md = Licenses\YamlDotNet.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.SystemTester", "AssetRipper.SystemTester\AssetRipper.SystemTester.csproj", "{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueTemplates", "IssueTemplates", "{38C0DDA2-6C7D-41F1-90F6-0B1DDA86C0EC}"
 	ProjectSection(SolutionItems) = preProject
 		.github\ISSUE_TEMPLATE\bug_report.yaml = .github\ISSUE_TEMPLATE\bug_report.yaml
@@ -50,8 +48,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueTemplates", "IssueTemp
 		.github\ISSUE_TEMPLATE\enhancement.yaml = .github\ISSUE_TEMPLATE\enhancement.yaml
 		.github\ISSUE_TEMPLATE\other.yaml = .github\ISSUE_TEMPLATE\other.yaml
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.FileAnalyzer", "AssetRipper.FileAnalyzer\AssetRipper.FileAnalyzer.csproj", "{80284066-08A7-496A-A9EB-732966584CE8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{88179FFC-0863-4C4F-9860-68EB1471E59F}"
 	ProjectSection(SolutionItems) = preProject
@@ -118,20 +114,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Files.Source
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Files.Tests", "AssetRipper.IO.Files.Tests\AssetRipper.IO.Files.Tests.csproj", "{F295E724-B3DE-45A0-870F-237BADFD15D4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.FileAnalyzer", "AssetRipper.Tools.FileAnalyzer\AssetRipper.Tools.FileAnalyzer.csproj", "{4A115327-7E89-4657-AA85-91366AFA2905}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.SystemTester", "AssetRipper.Tools.SystemTester\AssetRipper.Tools.SystemTester.csproj", "{8F4FDC30-EDEA-4FB1-A12B-FD47650C51F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B061A55-5B4A-4A22-B0A6-A4BF2093BF42}.Release|Any CPU.Build.0 = Release|Any CPU
-		{80284066-08A7-496A-A9EB-732966584CE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80284066-08A7-496A-A9EB-732966584CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{80284066-08A7-496A-A9EB-732966584CE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80284066-08A7-496A-A9EB-732966584CE8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{365C791E-431B-40E5-B724-BE375126AA11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{365C791E-431B-40E5-B724-BE375126AA11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{365C791E-431B-40E5-B724-BE375126AA11}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -204,6 +196,14 @@ Global
 		{F295E724-B3DE-45A0-870F-237BADFD15D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F295E724-B3DE-45A0-870F-237BADFD15D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F295E724-B3DE-45A0-870F-237BADFD15D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A115327-7E89-4657-AA85-91366AFA2905}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A115327-7E89-4657-AA85-91366AFA2905}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A115327-7E89-4657-AA85-91366AFA2905}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A115327-7E89-4657-AA85-91366AFA2905}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F4FDC30-EDEA-4FB1-A12B-FD47650C51F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F4FDC30-EDEA-4FB1-A12B-FD47650C51F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F4FDC30-EDEA-4FB1-A12B-FD47650C51F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F4FDC30-EDEA-4FB1-A12B-FD47650C51F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

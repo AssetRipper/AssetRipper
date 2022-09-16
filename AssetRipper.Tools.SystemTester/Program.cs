@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AssetRipper.SystemTester
+namespace AssetRipper.Tools.SystemTester
 {
 	static class Program
 	{

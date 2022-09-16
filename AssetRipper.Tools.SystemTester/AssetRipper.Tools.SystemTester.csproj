@@ -5,15 +5,14 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>..\Bins\AssetRipper.FileAnalyzer\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.FileAnalyzer\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\Bins\AssetRipper.Tools.SystemTester\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Tools.SystemTester\$(Configuration)\</IntermediateOutputPath>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AssetRipper.Fundamentals\AssetRipper.Fundamentals.csproj" />
-	  <ProjectReference Include="..\AssetRipper.IO.Files\AssetRipper.IO.Files.csproj" />
+		<ProjectReference Include="..\AssetRipper.Library\AssetRipper.Library.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

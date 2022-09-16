@@ -1,4 +1,4 @@
-﻿# AssetRipper.SystemTester
+﻿# AssetRipper.Tools.SystemTester
 
 This is an automated system testing program.
 

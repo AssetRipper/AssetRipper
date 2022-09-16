@@ -8,7 +8,7 @@ using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using System;
 
-namespace AssetRipper.FileAnalyzer
+namespace AssetRipper.Tools.FileAnalyzer
 {
 	class Program
 	{
