@@ -22,7 +22,7 @@ namespace AssetRipper.Tools.SystemTester
 			}
 
 			Logger.Add(new ConsoleLogger(true));
-			Logger.Add(new FileLogger("AssetRipper.SystemTester.log"));
+			Logger.Add(new FileLogger("AssetRipper.Tools.SystemTester.log"));
 			Logger.LogSystemInformation("System Tester");
 			Logger.BlankLine();
 

@@ -157,14 +157,14 @@ namespace AssetRipper.Core.Structure.GameStructure
 				BundleFileScheme? bundle = GetBundleFile();
 				if (bundle == null)
 				{
-					Logger.Log(LogType.Warning, LogCategory.Import, "Unable to determine layout for provided files. Tring default one");
+					Logger.Log(LogType.Warning, LogCategory.Import, "Unable to determine layout for provided files. Trying default one");
 					UnityVersion version = GetDefaultGenerationVersions(serialized.Header.Version);
 					return new LayoutInfo(version, DefaultPlatform, DefaultFlags);
 
 				}
 				else
 				{
-					Logger.Log(LogType.Warning, LogCategory.Import, "Unable to precisly determine layout for provided files. Tring default one");
+					Logger.Log(LogType.Warning, LogCategory.Import, "Unable to precisly determine layout for provided files. Trying default one");
 					return new LayoutInfo(bundle.Header.UnityWebMinimumRevision, DefaultPlatform, DefaultFlags);
 				}
 			}
