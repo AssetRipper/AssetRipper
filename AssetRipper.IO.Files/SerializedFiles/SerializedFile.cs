@@ -3,6 +3,7 @@ using AssetRipper.IO.Files.Converters;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Streams.Smart;
+using AssetRipper.IO.Files.Utils;
 using System.Collections.Generic;
 using System.IO;
 
@@ -26,6 +27,15 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			get => Metadata.TargetPlatform;
 			set => Metadata.TargetPlatform = value;
 		}
+		public TransferInstructionFlags Flags { get; private set; }
+		public EndianType EndianType
+		{
+			get
+			{
+				bool swapEndianess = SerializedFileHeader.HasEndianess(Header.Version) ? Header.Endianess : Metadata.SwapEndianess;
+				return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
+			}
+		}
 
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
 		private readonly Dictionary<long, int> m_assetEntryLookup = new();
@@ -48,12 +58,6 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			return NameFixed;
 		}
 
-		public EndianType GetEndianType()
-		{
-			bool swapEndianess = SerializedFileHeader.HasEndianess(Header.Version) ? Header.Endianess : Metadata.SwapEndianess;
-			return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
-		}
-
 		public override void Read(SmartStream stream)
 		{
 			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
@@ -67,6 +71,33 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			Metadata.Read(stream, Header);
 
 			SerializedFileMetadataConverter.CombineFormats(Header.Version, Metadata);
+
+			UpdateFlags();
+		}
+
+		private void UpdateFlags()
+		{
+			Flags = TransferInstructionFlags.SerializeGameRelease;
+			if (SerializedFileMetadata.HasPlatform(Header.Version))
+			{
+				if (Metadata.TargetPlatform == BuildTarget.NoTarget)
+				{
+					Flags = TransferInstructionFlags.NoTransferInstructionFlags;
+					if (FilePath.EndsWith(".unity", StringComparison.Ordinal))
+					{
+						Flags |= TransferInstructionFlags.SerializeEditorMinimalScene;
+					}
+				}
+			}
+
+			if (FilenameUtils.IsEngineResource(Name) || (Header.Version < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(Name)))
+			{
+				Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
+			}
+			if (Header.Endianess || Metadata.SwapEndianess)
+			{
+				Flags |= TransferInstructionFlags.SwapEndianess;
+			}
 		}
 
 		public override void Write(SmartStream stream)
