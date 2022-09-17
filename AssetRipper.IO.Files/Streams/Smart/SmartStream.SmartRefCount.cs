@@ -39,7 +39,7 @@
 				{
 					if (value < 0)
 					{
-						throw new ArgumentOutOfRangeException();
+						throw new ArgumentOutOfRangeException(nameof(value));
 					}
 					m_refCount = value;
 				}

@@ -120,6 +120,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.SystemTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Tools.TypeTreeExtractor", "AssetRipper.Tools.TypeTreeExtractor\AssetRipper.Tools.TypeTreeExtractor.csproj", "{441FAA30-1347-4334-B8B2-6CBC793B7D8C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Tools.FileExtractor", "AssetRipper.Tools.FileExtractor\AssetRipper.Tools.FileExtractor.csproj", "{89FAE22A-C59F-477B-A5F5-2E19CB1366C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -210,6 +212,10 @@ Global
 		{441FAA30-1347-4334-B8B2-6CBC793B7D8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{441FAA30-1347-4334-B8B2-6CBC793B7D8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{441FAA30-1347-4334-B8B2-6CBC793B7D8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89FAE22A-C59F-477B-A5F5-2E19CB1366C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89FAE22A-C59F-477B-A5F5-2E19CB1366C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89FAE22A-C59F-477B-A5F5-2E19CB1366C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89FAE22A-C59F-477B-A5F5-2E19CB1366C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

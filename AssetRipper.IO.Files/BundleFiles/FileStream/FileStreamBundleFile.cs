@@ -1,5 +1,6 @@
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.Extensions;
+using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
 using K4os.Compression.LZ4;
 using System.IO;
@@ -22,7 +23,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			ReadFileStreamData(stream, basePosition, headerSize);//ReadBlocks and ReadFiles
 		}
 
-		public override void Write(SmartStream stream)
+		public override void Write(Stream stream)
 		{
 			EndianWriter writer = new EndianWriter(stream, EndianType.BigEndian);
 			long basePosition = stream.Position;
@@ -121,8 +122,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			foreach (FileStreamNode entry in DirectoryInfo.Nodes)
 			{
 				SmartStream entryStream = blockReader.ReadEntry(entry);
-				File scheme = SchemeReader.ReadFile(entryStream, FilePath, entry.Path);
-				AddFile(scheme);
+				AddResourceFile(new ResourceFile(entryStream, FilePath, entry.Path));
 			}
 		}
 

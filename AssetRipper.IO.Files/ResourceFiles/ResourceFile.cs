@@ -16,7 +16,7 @@ namespace AssetRipper.IO.Files.ResourceFiles
 
 		public static bool IsDefaultResourceFile(string fileName)
 		{
-			string extension = Path.GetExtension(fileName).ToLower();
+			string extension = Path.GetExtension(fileName).ToLowerInvariant();
 			return extension is ResourceFileExtension or StreamingFileExtension;
 		}
 
@@ -33,9 +33,9 @@ namespace AssetRipper.IO.Files.ResourceFiles
 			throw new NotSupportedException();
 		}
 
-		public override void Write(SmartStream stream)
+		public override void Write(Stream stream)
 		{
-			throw new NotImplementedException();
+			Stream.CopyTo(stream);
 		}
 
 		public SmartStream Stream { get; }

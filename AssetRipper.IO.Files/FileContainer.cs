@@ -63,6 +63,28 @@ namespace AssetRipper.IO.Files
 
 		protected virtual void OnResourceFileAdded(ResourceFile resource) { }
 
+		public override void ReadContents()
+		{
+			if (m_resourceFiles.Count > 0)
+			{
+				ResourceFile[] resourceFiles = m_resourceFiles.ToArray();
+				m_resourceFiles.Clear();
+				for (int i = 0; i < resourceFiles.Length; i++)
+				{
+					AddFile(SchemeReader.ReadFile(resourceFiles[i]));
+				}
+			}
+		}
+
+		public override void ReadContentsRecursively()
+		{
+			ReadContents();
+			foreach (FileContainer container in FileLists)
+			{
+				container.ReadContentsRecursively();
+			}
+		}
+
 		public IReadOnlyList<SerializedFile> SerializedFiles => m_serializedFiles;
 		public IReadOnlyList<FileContainer> FileLists => m_fileLists;
 		public IReadOnlyList<ResourceFile> ResourceFiles => m_resourceFiles;

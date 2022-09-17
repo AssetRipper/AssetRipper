@@ -42,6 +42,7 @@ namespace AssetRipper.Tools.FileAnalyzer
 			try
 			{
 				File file = SchemeReader.LoadFile(fullName);
+				file.ReadContentsRecursively();
 				LogFileInfo(file);
 			}
 			catch (Exception ex)

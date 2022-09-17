@@ -1,5 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.Extensions;
+using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Streams.Smart;
 using System.Collections.Generic;
@@ -49,12 +50,12 @@ namespace AssetRipper.IO.Files.WebFiles
 				byte[] buffer = new byte[entry.Size];
 				stream.Position = entry.Offset + basePosition;
 				stream.ReadBuffer(buffer, 0, buffer.Length);
-				File file = SchemeReader.ReadFile(buffer, FilePath, entry.NameOrigin);
-				AddFile(file);
+				ResourceFile file = new ResourceFile(SmartStream.CreateMemory(buffer, 0, buffer.Length, false), FilePath, entry.NameOrigin);
+				AddResourceFile(file);
 			}
 		}
 
-		public override void Write(SmartStream stream)
+		public override void Write(Stream stream)
 		{
 			long basePosition = stream.Position;
 			using (EndianWriter writer = new EndianWriter(stream, EndianType.LittleEndian))

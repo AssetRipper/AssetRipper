@@ -100,7 +100,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			}
 		}
 
-		public override void Write(SmartStream stream)
+		public override void Write(Stream stream)
 		{
 			throw new NotImplementedException();
 		}

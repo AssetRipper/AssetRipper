@@ -14,11 +14,7 @@ namespace AssetRipper.IO.Files.Streams.Smart
 
 		private SmartStream(Stream baseStream, SmartStreamType type)
 		{
-			if (baseStream == null)
-			{
-				throw new ArgumentNullException(nameof(baseStream));
-			}
-			m_stream = baseStream;
+			m_stream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
 			m_streamType = type;
 			m_refCount = new SmartRefCount();
 			m_refCount++;

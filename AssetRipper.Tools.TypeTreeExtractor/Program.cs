@@ -40,6 +40,7 @@ namespace AssetRipper.Tools.TypeTreeExtractor
 			try
 			{
 				File file = SchemeReader.LoadFile(fullName);
+				file.ReadContentsRecursively();
 				SaveTypeTrees(file);
 			}
 			catch (Exception ex)

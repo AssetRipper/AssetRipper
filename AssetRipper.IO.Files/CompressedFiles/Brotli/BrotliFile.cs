@@ -1,4 +1,5 @@
 ﻿using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
 using System.IO;
 using System.IO.Compression;
@@ -12,7 +13,7 @@ namespace AssetRipper.IO.Files.CompressedFiles.Brotli
 		public override void Read(SmartStream stream)
 		{
 			byte[] buffer = ReadBrotli(stream);
-			UncompressedFile = SchemeReader.ReadFile(buffer, FilePath, Name);
+			UncompressedFile = new ResourceFile(SmartStream.CreateMemory(buffer, 0, buffer.Length, false), FilePath, Name);
 		}
 
 		internal static bool IsBrotliFile(EndianReader reader)
@@ -69,7 +70,7 @@ namespace AssetRipper.IO.Files.CompressedFiles.Brotli
 			return memoryStream.ToArray();
 		}
 
-		public override void Write(SmartStream stream)
+		public override void Write(Stream stream)
 		{
 			throw new NotImplementedException();
 		}

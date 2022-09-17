@@ -24,7 +24,9 @@ namespace AssetRipper.IO.Files
 		private string name = string.Empty;
 
 		public abstract void Read(SmartStream stream);
-		public abstract void Write(SmartStream stream);
+		public abstract void Write(System.IO.Stream stream);
+		public virtual void ReadContents() { }
+		public virtual void ReadContentsRecursively() => ReadContents();
 
 		~File() => Dispose(false);
 

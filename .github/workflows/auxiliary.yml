@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-   publish_windows:
+   build:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,6 +20,10 @@ jobs:
     - name: Build FileAnalyzer
       run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipper.Tools.FileAnalyzer/
+        
+    - name: Build FileExtractor
+      run: dotnet build /p:Configuration=Release
+      working-directory: ./AssetRipper.Tools.FileExtractor/
       
     - name: Build SystemTester
       run: dotnet build /p:Configuration=Release

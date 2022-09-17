@@ -2,6 +2,7 @@ using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.BundleFiles.RawWeb.Raw;
 using AssetRipper.IO.Files.BundleFiles.RawWeb.Web;
 using AssetRipper.IO.Files.Extensions;
+using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
 using System.IO;
 
@@ -26,7 +27,7 @@ namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 			ReadRawWebData(dataStream, metadataOffset);//also ReadBlocksAndDirectory
 		}
 
-		public override void Write(SmartStream stream)
+		public override void Write(Stream stream)
 		{
 			EndianWriter writer = new EndianWriter(stream, EndianType.BigEndian);
 			Header.Write(writer);
@@ -85,8 +86,8 @@ namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 				byte[] buffer = new byte[entry.Size];
 				stream.Position = metadataOffset + entry.Offset;
 				stream.ReadBuffer(buffer, 0, buffer.Length);
-				File file = SchemeReader.ReadFile(buffer, FilePath, entry.Path);
-				AddFile(file);
+				ResourceFile file = new ResourceFile(SmartStream.CreateMemory(buffer, 0, buffer.Length, false), FilePath, entry.Path);
+				AddResourceFile(file);
 			}
 		}
 	}

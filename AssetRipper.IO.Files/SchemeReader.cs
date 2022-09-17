@@ -53,6 +53,11 @@ namespace AssetRipper.IO.Files
 			return new ResourceFile(stream, filePath, fileName);
 		}
 
+		public static File ReadFile(ResourceFile file)
+		{
+			return ReadFile(file.Stream, file.FilePath, file.Name);
+		}
+
 		/// <summary>
 		/// Required for the initialization of <see cref="schemes"/>
 		/// </summary>
