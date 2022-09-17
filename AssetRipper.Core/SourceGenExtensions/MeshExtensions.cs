@@ -2,10 +2,12 @@
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Colors;
+using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Subclasses.MeshBlendShape;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using System.Buffers;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -227,15 +229,54 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				int indexCount = mesh.IndexBuffer_C43.Length / sizeof(ushort);
 				ushort[] rentedBuffer = ArrayPool<ushort>.Shared.Rent(indexCount);
-				Buffer.BlockCopy(mesh.IndexBuffer_C43, 0, rentedBuffer, 0, mesh.IndexBuffer_C43.Length);
+				if (!BitConverter.IsLittleEndian && mesh.SerializedFile.EndianType == EndianType.LittleEndian)
+				{
+					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer_C43;
+					for (int i = 0; i < indexCount; i++)
+					{
+						rentedBuffer[i] = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer.Slice(i * sizeof(ushort)));
+					}
+				}
+				else if (BitConverter.IsLittleEndian && mesh.SerializedFile.EndianType == EndianType.BigEndian)
+				{
+					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer_C43;
+					for (int i = 0; i < indexCount; i++)
+					{
+						rentedBuffer[i] = BinaryPrimitives.ReadUInt16BigEndian(indexBuffer.Slice(i * sizeof(ushort)));
+					}
+				}
+				else
+				{
+					Buffer.BlockCopy(mesh.IndexBuffer_C43, 0, rentedBuffer, 0, mesh.IndexBuffer_C43.Length);
+				}
 				result = new uint[indexCount];
 				UShortToUInt(rentedBuffer, result, indexCount);
 				ArrayPool<ushort>.Shared.Return(rentedBuffer);
 			}
 			else
 			{
-				result = new uint[mesh.IndexBuffer_C43.Length / sizeof(uint)];
-				Buffer.BlockCopy(mesh.IndexBuffer_C43, 0, result, 0, mesh.IndexBuffer_C43.Length);
+				int indexCount = mesh.IndexBuffer_C43.Length / sizeof(uint);
+				result = new uint[indexCount];
+				if (!BitConverter.IsLittleEndian && mesh.SerializedFile.EndianType == EndianType.LittleEndian)
+				{
+					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer_C43;
+					for (int i = 0; i < indexCount; i++)
+					{
+						result[i] = BinaryPrimitives.ReadUInt32LittleEndian(indexBuffer.Slice(i * sizeof(uint)));
+					}
+				}
+				else if(BitConverter.IsLittleEndian && mesh.SerializedFile.EndianType == EndianType.BigEndian)
+				{
+					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer_C43;
+					for (int i = 0; i < indexCount; i++)
+					{
+						result[i] = BinaryPrimitives.ReadUInt32BigEndian(indexBuffer.Slice(i * sizeof(uint)));
+					}
+				}
+				else
+				{
+					Buffer.BlockCopy(mesh.IndexBuffer_C43, 0, result, 0, mesh.IndexBuffer_C43.Length);
+				}
 			}
 			return result;
 		}
@@ -247,13 +288,54 @@ namespace AssetRipper.Core.SourceGenExtensions
 				mesh.IndexBuffer_C43 = new byte[indices.Length * sizeof(ushort)];
 				ushort[] rentedBuffer = ArrayPool<ushort>.Shared.Rent(indices.Length);
 				UIntToUShort(indices, rentedBuffer, indices.Length);
-				Buffer.BlockCopy(rentedBuffer, 0, mesh.IndexBuffer_C43, 0, mesh.IndexBuffer_C43.Length);
+				
+				if (!BitConverter.IsLittleEndian && mesh.SerializedFile.EndianType == EndianType.LittleEndian)
+				{
+					Span<byte> indexBuffer = mesh.IndexBuffer_C43;
+					for (int i = 0; i < indices.Length; i++)
+					{
+						BinaryPrimitives.WriteUInt16LittleEndian(indexBuffer.Slice(i * sizeof(ushort)), (ushort)indices[i]);
+					}
+				}
+				else if (BitConverter.IsLittleEndian && mesh.SerializedFile.EndianType == EndianType.BigEndian)
+				{
+					Span<byte> indexBuffer = mesh.IndexBuffer_C43;
+					for (int i = 0; i < indices.Length; i++)
+					{
+						BinaryPrimitives.WriteUInt16BigEndian(indexBuffer.Slice(i * sizeof(ushort)), (ushort)indices[i]);
+					}
+				}
+				else
+				{
+					Buffer.BlockCopy(rentedBuffer, 0, mesh.IndexBuffer_C43, 0, mesh.IndexBuffer_C43.Length);
+				}
+
 				ArrayPool<ushort>.Shared.Return(rentedBuffer);
 			}
 			else
 			{
 				mesh.IndexBuffer_C43 = new byte[indices.Length * sizeof(uint)];
-				Buffer.BlockCopy(indices, 0, mesh.IndexBuffer_C43, 0, mesh.IndexBuffer_C43.Length);
+
+				if (!BitConverter.IsLittleEndian && mesh.SerializedFile.EndianType == EndianType.LittleEndian)
+				{
+					Span<byte> indexBuffer = mesh.IndexBuffer_C43;
+					for (int i = 0; i < indices.Length; i++)
+					{
+						BinaryPrimitives.WriteUInt32LittleEndian(indexBuffer.Slice(i * sizeof(uint)), indices[i]);
+					}
+				}
+				else if (BitConverter.IsLittleEndian && mesh.SerializedFile.EndianType == EndianType.BigEndian)
+				{
+					Span<byte> indexBuffer = mesh.IndexBuffer_C43;
+					for (int i = 0; i < indices.Length; i++)
+					{
+						BinaryPrimitives.WriteUInt32BigEndian(indexBuffer.Slice(i * sizeof(uint)), indices[i]);
+					}
+				}
+				else
+				{
+					Buffer.BlockCopy(indices, 0, mesh.IndexBuffer_C43, 0, mesh.IndexBuffer_C43.Length);
+				}
 			}
 		}
 
@@ -280,101 +362,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			for (int i = 0; i < indexCount; i++)
 			{
 				destinationArray[i] = (ushort)sourceArray[i];
-			}
-		}
-
-		private static void ReadTriangles(this IMesh mesh)
-		{
-			List<uint> indices = new List<uint>();
-			List<List<uint>> allTriangles = new List<List<uint>>();
-			uint[] processedIndexBuffer = mesh.GetProcessedIndexBuffer();
-
-			foreach (ISubMesh subMesh in mesh.SubMeshes_C43)
-			{
-				List<uint> submeshTriangles = new List<uint>();
-				allTriangles.Add(submeshTriangles);
-				uint firstIndex = subMesh.FirstByte / 2;
-				if (!mesh.Is16BitIndices())
-				{
-					firstIndex /= 2;
-				}
-				uint indexCount = subMesh.IndexCount;
-				MeshTopology topology = subMesh.GetTopology();
-				if (topology == MeshTopology.Triangles)
-				{
-					for (int i = 0; i < indexCount; i += 3)
-					{
-						indices.Add(processedIndexBuffer[firstIndex + i]);
-						indices.Add(processedIndexBuffer[firstIndex + i + 1]);
-						indices.Add(processedIndexBuffer[firstIndex + i + 2]);
-						submeshTriangles.Add(processedIndexBuffer[firstIndex + i]);
-						submeshTriangles.Add(processedIndexBuffer[firstIndex + i + 1]);
-						submeshTriangles.Add(processedIndexBuffer[firstIndex + i + 2]);
-					}
-				}
-				else if (mesh.SerializedFile.Version.IsLess(4) || topology == MeshTopology.TriangleStrip)
-				{
-					// de-stripify :
-					uint triIndex = 0;
-					for (int i = 0; i < indexCount - 2; i++)
-					{
-						uint a = processedIndexBuffer[firstIndex + i];
-						uint b = processedIndexBuffer[firstIndex + i + 1];
-						uint c = processedIndexBuffer[firstIndex + i + 2];
-
-						// skip degenerates
-						if (a == b || a == c || b == c)
-						{
-							continue;
-						}
-
-						// do the winding flip-flop of strips :
-						if ((i & 1) == 1)
-						{
-							indices.Add(b);
-							indices.Add(a);
-							submeshTriangles.Add(b);
-							submeshTriangles.Add(a);
-						}
-						else
-						{
-							indices.Add(a);
-							indices.Add(b);
-							submeshTriangles.Add(a);
-							submeshTriangles.Add(b);
-						}
-						indices.Add(c);
-						submeshTriangles.Add(c);
-						triIndex += 3;
-					}
-					//fix indexCount
-					//subMesh.IndexCount = triIndex;
-				}
-				else if (topology == MeshTopology.Quads)
-				{
-					for (int q = 0; q < indexCount; q += 4)
-					{
-						indices.Add(processedIndexBuffer[firstIndex + q]);
-						indices.Add(processedIndexBuffer[firstIndex + q + 1]);
-						indices.Add(processedIndexBuffer[firstIndex + q + 2]);
-						indices.Add(processedIndexBuffer[firstIndex + q]);
-						indices.Add(processedIndexBuffer[firstIndex + q + 2]);
-						indices.Add(processedIndexBuffer[firstIndex + q + 3]);
-
-						submeshTriangles.Add(processedIndexBuffer[firstIndex + q]);
-						submeshTriangles.Add(processedIndexBuffer[firstIndex + q + 1]);
-						submeshTriangles.Add(processedIndexBuffer[firstIndex + q + 2]);
-						submeshTriangles.Add(processedIndexBuffer[firstIndex + q]);
-						submeshTriangles.Add(processedIndexBuffer[firstIndex + q + 2]);
-						submeshTriangles.Add(processedIndexBuffer[firstIndex + q + 3]);
-					}
-					//fix indexCount
-					//subMesh.IndexCount = indexCount / 2 * 3;
-				}
-				else
-				{
-					//throw new NotSupportedException("Failed getting triangles. Submesh topology is lines or points.");
-				}
 			}
 		}
 	}
