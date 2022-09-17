@@ -93,7 +93,7 @@ namespace AssetRipper.Tools.FileAnalyzer
 			}
 
 			Logger.Info($"{indentionString}Serialied version: {(int)assetsFile.Header.Version}");
-			Logger.Info($"{indentionString}Endianess: {(assetsFile.Header.Endianess ? "Big Endian" : "Little Endian")}");
+			Logger.Info($"{indentionString}Endianess: {(assetsFile.EndianType)}");
 
 			if (assetsFile.Metadata.Externals.Length > 0)
 			{
