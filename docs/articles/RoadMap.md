@@ -1,9 +1,10 @@
 # Development Roadmap
 
-## 0.2.3.0
+## 0.2.5.0
 This release will be primarily focused on dependencies.
 
 * Replace texgenpack with a managed library
+* Overhaul file reading
 
 ## 0.2.X.0
 These releases will likely focus on preparing for the next major milestone.
