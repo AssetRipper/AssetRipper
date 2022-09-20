@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.IO.Endian;
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -13,11 +14,13 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 {
 	protected AssetCollection(Bundle bundle)
 	{
-		Bundle = bundle;
 		dependencies.Add(this);
+		Bundle = bundle;
+		bundle.AddCollection(this);
 	}
 
 	public Bundle Bundle { get; }
+	public string Name { get; protected set; } = string.Empty;
 
 	/// <summary>
 	/// The list of dependencies for this collection.
@@ -28,7 +31,9 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 	/// </remarks>
 	public IReadOnlyList<AssetCollection?> Dependencies => dependencies;
 	private readonly List<AssetCollection?> dependencies = new();
+	public IReadOnlyDictionary<long, IUnityObjectBase> Assets => assets;
 	private readonly Dictionary<long, IUnityObjectBase> assets = new();
+	public EndianType EndianType { get; protected set; }
 
 	public int AddDependency(AssetCollection dependency)
 	{
@@ -37,18 +42,38 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 		{
 			return index;
 		}
-		else if (IsValidDependency(dependency))
+		else if (IsCompatibleDependency(dependency))
 		{
 			dependencies.Add(dependency);
 			return dependencies.Count - 1;
 		}
 		else
 		{
-			throw new ArgumentException($"Dependency is not valid for this {nameof(AssetCollection)}", nameof(dependency));
+			throw new ArgumentException($"Dependency is not compatible with this {nameof(AssetCollection)}.", nameof(dependency));
 		}
 	}
 
-	protected virtual bool IsValidDependency(AssetCollection dependency) => true;
+	protected void SetDependency(int index, AssetCollection? collection)
+	{
+		if (index < 1)
+		{
+			throw new ArgumentOutOfRangeException(nameof(index));
+		}
+		else if (index < dependencies.Count)
+		{
+			dependencies[index] = collection;
+		}
+		else
+		{
+			while (dependencies.Count < index)
+			{
+				dependencies.Add(null);
+			}
+			dependencies.Add(collection);
+		}
+	}
+
+	protected virtual bool IsCompatibleDependency(AssetCollection dependency) => true;
 
 	public PPtr CreatePPtr(IUnityObjectBase asset)
 	{
@@ -70,6 +95,11 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 	{
 		Debug.Assert(asset.Collection == this, "Asset info must marked this as its collection");
 		assets.Add(asset.PathID, asset);
+	}
+
+	public override string ToString()
+	{
+		return Name;
 	}
 
 	#region GetAsset Methods

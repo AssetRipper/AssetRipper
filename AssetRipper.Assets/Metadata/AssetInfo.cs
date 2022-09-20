@@ -25,7 +25,7 @@ public readonly record struct AssetInfo(AssetCollection Collection, long PathID,
 		public override string Name => nameof(DummyBundle);
 		public DummyBundle()
 		{
-			Collection = (DummyAssetCollection)AddCollection((bundle) => new DummyAssetCollection(bundle));
+			Collection = new DummyAssetCollection(this);
 		}
 	}
 }

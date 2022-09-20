@@ -11,7 +11,7 @@ public class ProcessedAssetCollection : VirtualAssetCollection
 	{
 	}
 
-	protected override bool IsValidDependency(AssetCollection dependency)
+	protected override bool IsCompatibleDependency(AssetCollection dependency)
 	{
 		return dependency is SerializedAssetCollection or ProcessedAssetCollection;
 	}
