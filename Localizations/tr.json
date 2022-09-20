@@ -130,5 +130,12 @@
     "script_export_title": "Komut Dosyası Çıkarma Formatı",
     "script_export_format_dll_without_renaming_description": "Assemblies derlenmiş Dll biçiminde dışa aktarılır.Deneysel özellik. Çalışacağı garanti edilmez.",
     "script_export_format_dll_with_renaming": "Dll yeniden isimlendirerek çıkart",
-    "script_export_format_dll_without_renaming": "Dll yeniden isimlendirmeden çıkart"
+    "script_export_format_dll_without_renaming": "Dll yeniden isimlendirmeden çıkart",
+    "shader_asset_export_title": "Gölgelendirici Dışa Aktarma Formatı",
+    "bundled_assets_export_title": "Birlikte Verilen Varlıklar Dışa Aktarma Modu",
+    "bundled_assets_export_group_by_asset_type": "Varlık Türüne Göre Gruplandırın",
+    "bundled_assets_export_group_by_asset_type_description": "Paketlenmiş varlıklar diğer dosyalardaki varlıklarla aynı muameleye tabi tutulur.",
+    "bundled_assets_export_group_by_bundle_name": "Paket Adına Göre Gruplama",
+    "bundled_assets_export_group_by_bundle_name_description": "Paketlenmiş varlıklar, varlık paketi adlarına göre gruplandırılır.",
+    "bundled_assets_export_direct_export": "Doğrudan İhracat"
 }
