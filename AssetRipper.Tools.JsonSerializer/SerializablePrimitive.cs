@@ -30,8 +30,8 @@ public sealed class SerializablePrimitive : SerializableEntry
 			PrimitiveType.I2 => JsonValue.Create(reader.ReadInt16()),
 			PrimitiveType.I4 => JsonValue.Create(reader.ReadInt32()),
 			PrimitiveType.I8 => JsonValue.Create(reader.ReadInt64()),
-			PrimitiveType.Float => JsonValue.Create(reader.ReadSingle()),
-			PrimitiveType.Double => JsonValue.Create(reader.ReadDouble()),
+			PrimitiveType.Float => JsonValue.Create(Clamp(reader.ReadSingle())),
+			PrimitiveType.Double => JsonValue.Create(Clamp(reader.ReadDouble())),
 			PrimitiveType.Boolean => JsonValue.Create(reader.ReadBoolean()),
 			PrimitiveType.Character => JsonValue.Create(reader.ReadChar()),
 			PrimitiveType.String => JsonValue.Create(ReadString(reader)),
@@ -94,6 +94,46 @@ public sealed class SerializablePrimitive : SerializableEntry
 		else
 		{
 			return false;
+		}
+	}
+
+	private static float Clamp(float value)
+	{
+		if (float.IsNaN(value))
+		{
+			return 0;
+		}
+		else if (float.IsPositiveInfinity(value))
+		{
+			return float.MaxValue;
+		}
+		else if (float.IsNegativeInfinity(value))
+		{
+			return float.MinValue;
+		}
+		else
+		{
+			return value;
+		}
+	}
+
+	private static double Clamp(double value)
+	{
+		if (double.IsNaN(value))
+		{
+			return 0;
+		}
+		else if (double.IsPositiveInfinity(value))
+		{
+			return double.MaxValue;
+		}
+		else if (double.IsNegativeInfinity(value))
+		{
+			return double.MinValue;
+		}
+		else
+		{
+			return value;
 		}
 	}
 }

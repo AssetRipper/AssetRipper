@@ -39,6 +39,7 @@ public abstract class SerializableEntry
 					{
 						index++;
 						ThrowIfIncorrectName(list[index], "Array");
+						align |= list[index].MetaFlag.IsAlignBytes();
 						result = SerializableArray.FromTypeTreeNodes(list, ref index);
 						break;
 					}
@@ -46,6 +47,7 @@ public abstract class SerializableEntry
 					{
 						index++;
 						ThrowIfIncorrectName(list[index], "Array");
+						align |= list[index].MetaFlag.IsAlignBytes();
 						result = SerializableArray.FromTypeTreeNodes(list, ref index);
 						break;
 					}
@@ -55,6 +57,15 @@ public abstract class SerializableEntry
 				case "pair":
 					result = SerializablePair.FromTypeTreeNodes(list, ref index);
 					break;
+				case "TypelessData":
+					{
+						index++;
+						ThrowIfIncorrectName(list[index], "size");
+						index++;
+						ThrowIfIncorrectName(list[index], "data");
+						index++;
+						return new SerializableArray(new SerializablePrimitive(PrimitiveType.U1));
+					}
 				default:
 					result = SerializableType.FromTypeTreeNodes(list, ref index);
 					break;
