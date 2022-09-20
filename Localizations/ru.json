@@ -9,7 +9,7 @@
     "sprite_export_title": "Формат экспорта спрайтов",
     "terrain_export_title": "Формат экспорта Terrain",
     "text_asset_export_title": "Формат экспорта текста",
-    "mesh_format_native": "Нативный",
+    "mesh_format_native": "Yaml",
     "mesh_format_native_description": "Надежный формат для использования сетки в редакторе. Может быть преобразован в другие форматы различными пакетами unity.",
     "mesh_format_obj": "OBJ",
     "mesh_format_obj_description": "Широко распространенный текстовый формат, используемый почти во всех программах редактирования 3d. Однако это нарушает экспортируемые ссылки на ассеты сетки.",
@@ -34,7 +34,7 @@
     "sprite_format_native_description": "Экспорт в формате Unity sprite. Невозможно просматривать за пределами Unity.",
     "sprite_format_texture": "Текстуры",
     "sprite_format_texture_description": "Экспорт в виде изображения листа спрайтов. Можно просматривать за пределами Unity, но экспортируется медленнее.",
-    "terrain_format_native": "Unity",
+    "terrain_format_native": "Yaml",
     "terrain_format_native_description": "Экспорт в родной формат ландшафта Unity. Наиболее полезная опция, если вы планируете повторно импортировать в Unity.",
     "terrain_format_obj": "3D Модель (OBJ)",
     "terrain_format_obj_description": "Экспортируйте terrain как 3D-модель в формате OBJ, пригодную для просмотра в широком спектре 3D-редакторов. Экспериментальный, не имеет правильного масштабирования.",
@@ -152,9 +152,10 @@
     "script_export_format_dll_without_renaming": "Экспорт Dll без переименования",
     "sprite_format_yaml_description": "Экспортируйте как ассеты yaml, которые можно просматривать в редакторе. Это единственный режим, позволяющий точно восстановить все метаданные спрайтов.",
     "shader_asset_format_dummy_description": "Экспортируйте шейдер как фиктивный шейдер. Несмотря на то, что он сохраняет такие данные, как Свойства и FallBack, он использует общий, непрозрачный код шейдера.",
-    "sprite_format_yaml": "ассет Yaml",
+    "sprite_format_yaml": "Yaml",
     "shader_asset_format_dummy": "Фиктивный шейдер",
     "shader_asset_format_disassembly": "Дизассемблирование",
     "shader_asset_format_decompile": "Декомпилировать",
-    "shader_asset_format_decompile_description": "Экспорт шейдера в ShaderLab. Очень экспериментально и почти всегда будет иметь ошибки. Поддерживает только DX11, не DX9."
+    "shader_asset_format_decompile_description": "Экспорт шейдера в ShaderLab. Очень экспериментально и почти всегда будет иметь ошибки. Поддерживает только DX11, не DX9.",
+    "terrain_format_mesh_description": "Экспортируйте рельеф в виде 3D-сетки в формате GLB, пригодной для просмотра в широком спектре 3D-редакторов."
 }
