@@ -6,6 +6,8 @@ namespace AssetRipper.IO.Files.Streams.Smart
 {
 	public partial class SmartStream : Stream
 	{
+		public static new SmartStream Null { get; } = new();
+
 		private SmartStream()
 		{
 			m_isDisposed = true;
@@ -28,11 +30,6 @@ namespace AssetRipper.IO.Files.Streams.Smart
 		~SmartStream()
 		{
 			Dispose(false);
-		}
-
-		public static SmartStream CreateNull()
-		{
-			return new SmartStream();
 		}
 
 		public static SmartStream OpenRead(string path)

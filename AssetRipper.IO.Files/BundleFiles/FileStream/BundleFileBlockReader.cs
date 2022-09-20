@@ -138,7 +138,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 		private readonly BlocksInfo m_blocksInfo = new();
 		private readonly long m_dataOffset;
 
-		private readonly SmartStream m_cachedBlockStream = SmartStream.CreateNull();
+		private readonly SmartStream m_cachedBlockStream = SmartStream.Null;
 		private int m_cachedBlockIndex = -1;
 
 		private bool m_isDisposed = false;
