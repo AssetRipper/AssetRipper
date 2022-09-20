@@ -24,7 +24,7 @@ public class SerializedBundle : Bundle
 		}
 		foreach (SerializedFile serializedFile in container.SerializedFiles)
 		{
-			SerializedAssetCollection.FromSerializedFile(bundle, serializedFile, factory);
+			bundle.AddCollectionFromSerializedFile(serializedFile, factory);
 		}
 		foreach (FileContainer childContainer in container.FileLists)
 		{

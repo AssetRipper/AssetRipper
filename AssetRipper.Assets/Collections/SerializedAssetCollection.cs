@@ -39,7 +39,7 @@ public class SerializedAssetCollection : AssetCollection
 		DependencyIdentifiers = Array.Empty<FileIdentifier>();
 	}
 
-	public static SerializedAssetCollection FromSerializedFile(Bundle bundle, SerializedFile file, AssetFactory factory)
+	internal static SerializedAssetCollection FromSerializedFile(Bundle bundle, SerializedFile file, AssetFactory factory)
 	{
 		SerializedAssetCollection collection = new SerializedAssetCollection(bundle);
 		collection.Name = file.NameFixed;

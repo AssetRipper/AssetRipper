@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.IO.Files.ResourceFiles;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 
 namespace AssetRipper.Assets.Bundles;
@@ -95,5 +96,10 @@ public abstract class Bundle
 	public override string ToString()
 	{
 		return Name;
+	}
+
+	public SerializedAssetCollection AddCollectionFromSerializedFile(SerializedFile file, AssetFactory factory)
+	{
+		return SerializedAssetCollection.FromSerializedFile(this, file, factory);
 	}
 }

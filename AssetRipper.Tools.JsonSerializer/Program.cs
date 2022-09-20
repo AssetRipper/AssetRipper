@@ -45,7 +45,7 @@ internal static class Program
 		{
 			GameBundle bundle = new();
 			SerializedFile file = (SerializedFile)SchemeReader.LoadFile(fullName);
-			SerializedAssetCollection collection = SerializedAssetCollection.FromSerializedFile(bundle, file, new JsonAssetFactory());
+			SerializedAssetCollection collection = bundle.AddCollectionFromSerializedFile(file, new JsonAssetFactory());
 			bundle.InitializeAllDependencyLists();
 			JsonArray array = new();
 			JsonObject root = new()

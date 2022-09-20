@@ -24,6 +24,10 @@ jobs:
     - name: Build FileExtractor
       run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipper.Tools.FileExtractor/
+        
+    - name: Build JsonSerializer
+      run: dotnet build /p:Configuration=Release
+      working-directory: ./AssetRipper.Tools.JsonSerializer/
       
     - name: Build SystemTester
       run: dotnet build /p:Configuration=Release
