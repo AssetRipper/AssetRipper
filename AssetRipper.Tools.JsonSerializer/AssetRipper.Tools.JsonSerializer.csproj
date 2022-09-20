@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>..\Bins\AssetRipper.Tools.JsonSerializer\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Tools.JsonSerializer\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.Assets\AssetRipper.Assets.csproj" />
+	</ItemGroup>
+
+</Project>
