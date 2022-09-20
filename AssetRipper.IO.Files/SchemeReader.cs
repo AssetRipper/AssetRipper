@@ -30,13 +30,13 @@ namespace AssetRipper.IO.Files
 
 		public static File LoadFile(string filePath, string fileName)
 		{
-			using SmartStream stream = SmartStream.OpenRead(filePath);
+			SmartStream stream = SmartStream.OpenRead(filePath);
 			return ReadFile(stream, filePath, fileName);
 		}
 
 		public static File ReadFile(byte[] buffer, string filePath, string fileName)
 		{
-			using SmartStream smartStream = SmartStream.CreateMemory(buffer, 0, buffer.Length, false);
+			SmartStream smartStream = SmartStream.CreateMemory(buffer, 0, buffer.Length, false);
 			return ReadFile(smartStream, filePath, fileName);
 		}
 
