@@ -19,7 +19,7 @@
     "bundled_assets_export_group_by_bundle_name_description": "Bundled assets груповано за назвами групи об’єктів.",
     "bundled_assets_export_direct_export": "Прямий експорт",
     "bundled_assets_export_direct_export_description": "Bundled assets експортуються без групування.",
-    "mesh_format_native": "Рідний",
+    "mesh_format_native": "Yaml",
     "mesh_format_native_description": "Надійний формат для використання Mesh у редакторі. Може бути перетворений на інші формати розпізнаванні пакетами Unity.",
     "mesh_format_obj": "OBJ",
     "mesh_format_obj_description": "Широко поширений текстовий формат, який використовується майже у всіх редакторів 3d графіки. Однак це руйнує експортовані посилання на асети Mesh.",
@@ -48,7 +48,7 @@
     "sprite_format_native_description": "Експорт у спрайти які підтримує Unity. Не можна переглядати за межами Unity.",
     "sprite_format_texture": "Текстура",
     "sprite_format_texture_description": "Експортується як зображення аркуша спрайтів. Можна переглядати за межами Unity, але повільніше експортувати.",
-    "terrain_format_native": "Unity",
+    "terrain_format_native": "Yaml",
     "terrain_format_native_description": "Експорт у рідному форматі Unity Terrain. Найкорисніший варіант, якщо ви плануєте повторно імпортувати в Unity.",
     "terrain_format_obj": "3D Модель (OBJ)",
     "terrain_format_obj_description": "Експорт 3D-моделі Terrain у форматі OBJ, придатний для перегляду за допомогою широкого спектра 3D-редакторів. Експериментальний; не має правильного масштабування.",
@@ -153,5 +153,7 @@
     "shader_asset_format_decompile": "Декомпілювати",
     "shader_asset_format_decompile_description": "Експорт шейдеру в ShaderLab. Дуже експериментально та майже завжди буде мати помилки. Підтримує тільки DX11, не DX9.",
     "sprite_format_yaml_description": "Експортуйте як ассети yaml, які можна переглядати в редакторі. Це єдиний режим, що забезпечує точне відновлення усіх метаданих спрайтів.",
-    "sprite_format_yaml": "ассет Yaml"
+    "sprite_format_yaml": "Yaml",
+    "terrain_format_mesh": "3D Mesh",
+    "terrain_format_mesh_description": "Експорт рельєфу місцевості у вигляді 3D-сітки у форматі GLB, придатному для перегляду за допомогою широкого спектру 3D-редакторів."
 }
