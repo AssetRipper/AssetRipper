@@ -4,6 +4,7 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using System;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace AssetRipper.Tools.JsonSerializer;
@@ -63,7 +64,9 @@ internal static class Program
 				//Note: this assigns assetObject as the parent of Contents.
 				//Normally, this would be a cause for concern, but the asset won't be used after this.
 			}
-			System.IO.File.WriteAllText(System.IO.Path.Combine(outputDirectory, $"{file.NameFixed}.json"), root.ToJsonString(new() { WriteIndented = true }));
+
+			using System.IO.FileStream stream = System.IO.File.Create(System.IO.Path.Combine(outputDirectory, $"{file.NameFixed}.json"));
+			System.Text.Json.JsonSerializer.Serialize(stream, root, new JsonSerializerOptions() { WriteIndented = true });
 		}
 #if !DEBUG
 		catch (Exception ex)
