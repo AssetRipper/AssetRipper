@@ -8,7 +8,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 		{
 			Offset = reader.ReadInt64();
 			Size = reader.ReadInt64();
-			BlobIndex = reader.ReadInt32();
+			Flags = (NodeFlags)reader.ReadInt32();
 			Path = reader.ReadStringZeroTerm();
 		}
 
@@ -16,10 +16,10 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 		{
 			writer.Write(Offset);
 			writer.Write(Size);
-			writer.Write(BlobIndex);
+			writer.Write((int)Flags);
 			writer.WriteStringZeroTerm(Path);
 		}
 
-		public int BlobIndex { get; set; }
+		public NodeFlags Flags { get; set; }
 	}
 }

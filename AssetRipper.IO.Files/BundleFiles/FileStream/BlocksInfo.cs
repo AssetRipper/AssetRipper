@@ -6,17 +6,17 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 	{
 		public void Read(EndianReader reader)
 		{
-			Hash.Read(reader);
+			UncompressedDataHash.Read(reader);
 			StorageBlocks = reader.ReadEndianArray<StorageBlock>();
 		}
 
 		public void Write(EndianWriter writer)
 		{
-			Hash.Write(writer);
+			UncompressedDataHash.Write(writer);
 			writer.WriteEndianArray(StorageBlocks);
 		}
 
-		public Hash128 Hash { get; } = new();
+		public Hash128 UncompressedDataHash { get; } = new();
 		public StorageBlock[] StorageBlocks { get; set; } = Array.Empty<StorageBlock>();
 	}
 }

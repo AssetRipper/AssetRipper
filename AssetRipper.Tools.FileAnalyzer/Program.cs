@@ -98,18 +98,17 @@ namespace AssetRipper.Tools.FileAnalyzer
 			if (assetsFile.Metadata.Externals.Length > 0)
 			{
 				Logger.Info($"{indentionString}Shared files:");
-			}
-
-			for (int i = 0; i < assetsFile.Metadata.Externals.Length; i++)
-			{
-				FileIdentifier sharedFile = assetsFile.Metadata.Externals[i];
-				if (i != 0)
+				for (int i = 0; i < assetsFile.Metadata.Externals.Length; i++)
 				{
-					Logger.BlankLine();
+					FileIdentifier sharedFile = assetsFile.Metadata.Externals[i];
+					if (i != 0)
+					{
+						Logger.BlankLine();
+					}
+					Logger.Info($"{indentionString}\t{sharedFile.PathNameOrigin}");
+					Logger.Info($"{indentionString}\tGUID: {sharedFile.Guid}");
+					Logger.Info($"{indentionString}\tType: {sharedFile.Type}");
 				}
-				Logger.Info($"{indentionString}\t{sharedFile.PathNameOrigin}");
-				Logger.Info($"{indentionString}\tGUID: {sharedFile.Guid}");
-				Logger.Info($"{indentionString}\tType: {sharedFile.Type}");
 			}
 		}
 
@@ -138,6 +137,14 @@ namespace AssetRipper.Tools.FileAnalyzer
 			Logger.Info($"{indentionString}Bundle version: {(int)header.Version}");
 			Logger.Info($"{indentionString}Unity version: {header.UnityWebMinimumRevision}");
 			Logger.Info($"{indentionString}Compression type: {header.CompressionType}");
+			if (file.DirectoryInfo.Nodes.Length > 0)
+			{
+				Logger.Info($"{indentionString}Nodes:");
+				foreach (FileStreamNode node in file.DirectoryInfo.Nodes)
+				{
+					Logger.Info($"{indentionString}\tFlags: {node.Flags,-14} Path: {node.Path}");
+				}
+			}
 			LogFileListInfo(file, indent);
 		}
 
