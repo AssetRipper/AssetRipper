@@ -142,5 +142,9 @@
     "script_export_format_decompiled_description": "ILSpy 디컴파일러는 CS 스크립트를 생성하는 데 사용됩니다. 이것은 신뢰할 수 있습니다. 그러나 시간이 많이 걸리고 많은 컴파일 오류가 포함되어 있습니다.",
     "script_export_format_hybrid": "하이브리드",
     "script_export_format_dll_with_renaming": "이름을 변경하여 DLL 내보내기",
-    "script_export_format_dll_without_renaming": "이름을 변경하지 않고 DLL 내보내기"
+    "script_export_format_dll_without_renaming": "이름을 변경하지 않고 DLL 내보내기",
+    "bundled_assets_export_title": "번들 에셋 추출 모드",
+    "bundled_assets_export_group_by_asset_type": "그룹 에셋 방식",
+    "bundled_assets_export_group_by_asset_type_description": "번들 에셋은 다른 파일의 에셋과 동일하게 취급됩니다.",
+    "bundled_assets_export_group_by_bundle_name": "번들 이름으로 그룹화"
 }
