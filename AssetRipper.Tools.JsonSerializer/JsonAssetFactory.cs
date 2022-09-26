@@ -3,6 +3,7 @@ using AssetRipper.Assets.Exceptions;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
+using System;
 
 namespace AssetRipper.Tools.JsonSerializer;
 
@@ -21,6 +22,7 @@ public sealed class JsonAssetFactory : AssetFactory
 		}
 		else
 		{
+			Console.WriteLine($"Asset could not be read because it has no type tree. ClassID: {assetInfo.ClassID} PathID: {assetInfo.PathID}");
 			return null;
 		}
 	}
