@@ -133,20 +133,17 @@ namespace AssetRipper.Core.Classes.Misc
 
 		public static bool IsAsset<T>(this IPPtr<T> pptr, IAssetContainer file, IUnityObjectBase asset) where T : IUnityObjectBase
 		{
-			if (pptr.FileIndex == 0)
+			if (asset.PathID != pptr.PathIndex)
 			{
-				if (file == asset.SerializedFile)
-				{
-					return asset.PathID == pptr.PathIndex;
-				}
-				else
-				{
-					return false;
-				}
+				return false;
+			}
+			else if (pptr.FileIndex == 0)
+			{
+				return file == asset.SerializedFile;
 			}
 			else
 			{
-				return asset.PathID == pptr.PathIndex && file.Dependencies[pptr.FileIndex - 1].IsFile(asset.SerializedFile);
+				return file.Dependencies[pptr.FileIndex - 1].IsFile(asset.SerializedFile);
 			}
 		}
 

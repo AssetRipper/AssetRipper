@@ -11,8 +11,8 @@ namespace AssetRipper.Core.Classes.Meta
 		public MetaPtr(long fileID)
 		{
 			FileID = fileID;
-			GUID = new();
-			AssetType = new();
+			GUID = UnityGUID.Zero;
+			AssetType = AssetType.Serialized;
 		}
 
 		public MetaPtr(long fileID, UnityGUID guid, AssetType assetType)
