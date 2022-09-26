@@ -7,11 +7,17 @@
 		/// <summary>
 		/// Should we convert PPtrs into pathID, fileID using the PerisistentManager or should we just store the memory InstanceID in the fileID?
 		/// </summary>
+		/// <remarks>
+		/// Also called ReadWriteFromSerializedFile
+		/// </remarks>
 		NeedsInstanceIDRemapping = 0x1,
 		/// <summary>
 		/// Only serialize data needed for .meta files
 		/// </summary>
 		AssetMetaDataOnly = 0x2,
+		/// <summary>
+		/// Also called HandleDrivenProperties
+		/// </summary>
 		YamlGlobalPPtrReference = 0x4,
 		LoadAndUnloadAssetsDuringBuild = 0x8,
 		/// <summary>
@@ -26,6 +32,9 @@
 		/// Used by the build player to make materials cull any properties that aren't used anymore.
 		/// </summary>
 		BuildPlayerOnlySerializeBuildProperties = 0x40,
+		/// <summary>
+		/// Also called IsCloningObject
+		/// </summary>
 		Workaround35MeshSerializationFuckup = 0x80,
 		/// <summary>
 		/// Is this a game or a project file?
@@ -38,6 +47,9 @@
 		/// <summary>
 		/// Should global managers be saved when writing the game build?
 		/// </summary>
+		/// <remarks>
+		/// Also called ResolveStreamedResourceSources
+		/// </remarks>
 		SaveGlobalManagers = 0x400,
 		DontReadObjectsFromDiskBeforeWriting = 0x800,
 		/// <summary>
@@ -49,9 +61,18 @@
 		/// </summary>
 		DontRequireAllMetaFlags = 0x2000,
 		SerializeForPrefabSystem = 0x4000,
+		/// <summary>
+		/// Also called SerializeForSlimPlayer
+		/// </summary>
 		WarnAboutLeakedObjects = 0x8000,
+		LoadPrefabAsScene = 0x10000,
+		SerializeCopyPasteTransfer = 0x20000,
+		/// <summary>
+		/// Also called SkipSerializeToTempFile
+		/// </summary>
 		EditorPlayMode = 0x40000,
 		BuildResourceImage = 0x80000,
+		DontWriteUnityVersion = 0x100000,
 		/// <summary>
 		/// Binary scene files in the Editor.
 		/// </summary>
