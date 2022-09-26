@@ -13,7 +13,7 @@ namespace AssetRipper.IO.Files.Converters
 			}
 			for (int i = 0; i < origin.Types.Length; i++)
 			{
-				SerializedTypeConverter.CombineFormats(generation, origin.Types[i]);
+				origin.Types[i].OldType.MaybeSetNamesFromBuffer();
 			}
 			if (generation >= FormatVersion.RefactorTypeData)
 			{
