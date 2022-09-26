@@ -1,32 +1,20 @@
-﻿using AssetRipper.Core.Utils;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
 
 namespace AssetRipper.Core.Logging
 {
-	public class FileLogger : ILogger
+	public class FileLogger : FileLoggerBase
 	{
-		private readonly string filePath;
+		private readonly StringBuilder stringBuilder = new();
 
-		public FileLogger() : this(ExecutingDirectory.Combine("AssetRipper.log")) { }
+		public FileLogger() : base() { }
 
 		/// <param name="filePath">The absolute path to the log file</param>
-		public FileLogger(string filePath)
+		public FileLogger(string filePath) : base(filePath) { }
+
+		public sealed override void Log(LogType type, LogCategory category, string message)
 		{
-			if (string.IsNullOrWhiteSpace(filePath))
-			{
-				throw new ArgumentException("Invalid path", nameof(filePath));
-			}
-
-			this.filePath = filePath;
-
-			File.Create(this.filePath).Close();
-		}
-
-		public void Log(LogType type, LogCategory category, string message)
-		{
-			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.Clear();
 
 			if (category != LogCategory.None)
 			{
@@ -47,19 +35,7 @@ namespace AssetRipper.Core.Logging
 			{
 				File.AppendAllText(filePath, stringBuilder.ToString());
 			}
-			catch (System.IO.IOException)
-			{
-				//Could not log to file
-			}
-		}
-
-		public void BlankLine(int numLines)
-		{
-			try
-			{
-				File.AppendAllLines(filePath, Enumerable.Repeat("", 5).ToArray());
-			}
-			catch (System.IO.IOException)
+			catch (IOException)
 			{
 				//Could not log to file
 			}
