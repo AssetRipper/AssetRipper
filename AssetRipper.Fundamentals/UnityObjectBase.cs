@@ -79,7 +79,7 @@ namespace AssetRipper.Core
 			}
 		}
 		/// <summary>
-		/// Including the period
+		/// Not including the period
 		/// </summary>
 		public string? OriginalExtension
 		{
@@ -88,12 +88,17 @@ namespace AssetRipper.Core
 			{
 				if (originalPathDetails is not null)
 				{
-					originalPathDetails.Extension = value;
+					originalPathDetails.Extension = RemovePeriod(value);
 				}
 				else if (value is not null)
 				{
 					originalPathDetails = new();
-					originalPathDetails.Extension = value;
+					originalPathDetails.Extension = RemovePeriod(value);
+				}
+
+				static string? RemovePeriod(string? str)
+				{
+					return string.IsNullOrEmpty(str) || str[0] != '.' ? str : str.Substring(1);
 				}
 			}
 		}
@@ -124,10 +129,10 @@ namespace AssetRipper.Core
 			public string? Directory { get; set; }
 			public string? Name { get; set; }
 			/// <summary>
-			/// Including the period
+			/// Not including the period
 			/// </summary>
 			public string? Extension { get; set; }
-			public string NameWithExtension => $"{Name}{Extension}";
+			public string NameWithExtension => string.IsNullOrEmpty(Extension) ? Name ?? "" : $"{Name}.{Extension}";
 
 			public override string? ToString()
 			{
