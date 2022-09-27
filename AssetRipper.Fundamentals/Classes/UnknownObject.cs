@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Parser.Asset;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
 namespace AssetRipper.Core.Classes
 {
@@ -10,13 +8,6 @@ namespace AssetRipper.Core.Classes
 		public string NameString
 		{
 			get => $"Unknown{AssetClassName}_{RawDataHash:X}";
-			set { }
-		}
-
-		[NotNull]
-		public override string? OriginalAssetPath
-		{
-			get => Path.Combine("AssetRipper", "UnknownAssets", AssetClassName, NameString);
 			set { }
 		}
 

@@ -38,7 +38,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
-			string resourcePath = Path.Combine(projectDirectory, $"{Asset.OriginalAssetPath}.{GetExportExtension(Asset)}");
+			string resourcePath = Path.Combine(projectDirectory, "AssetRipper", "UnknownAssets", Asset.AssetClassName, $"{Asset.NameString}.unknown");
 			string subPath = Path.GetDirectoryName(resourcePath)!;
 			Directory.CreateDirectory(subPath);
 			string resFileName = Path.GetFileName(resourcePath);
@@ -56,7 +56,5 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			return asset == Asset;
 		}
-
-		protected override string GetExportExtension(IUnityObjectBase asset) => "unknown";
 	}
 }

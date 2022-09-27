@@ -14,6 +14,7 @@ namespace AssetRipper.Core
 	/// </summary>
 	public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	{
+		private OriginalPathDetails? originalPathDetails;
 		public AssetInfo AssetInfo { get; set; }
 		public ISerializedFile SerializedFile => AssetInfo.File;
 		public virtual ClassIDType ClassID => AssetInfo.ClassID;
@@ -27,7 +28,75 @@ namespace AssetRipper.Core
 				AssetInfo.GUID = value;
 			}
 		}
-		public virtual string? OriginalAssetPath { get; set; }
+		public string? OriginalPath 
+		{
+			get => originalPathDetails?.ToString();
+			set
+			{
+				if (value is null)
+				{
+					originalPathDetails = null;
+				}
+				else
+				{
+					originalPathDetails ??= new();
+					originalPathDetails.Directory = Path.GetDirectoryName(value);
+					originalPathDetails.Name = Path.GetFileNameWithoutExtension(value);
+					originalPathDetails.Extension = Path.GetExtension(value);
+				}
+			}
+		}
+		public string? OriginalDirectory
+		{
+			get => originalPathDetails?.Directory;
+			set
+			{
+				if (originalPathDetails is not null)
+				{
+					originalPathDetails.Directory = value;
+				}
+				else if (value is not null)
+				{
+					originalPathDetails = new();
+					originalPathDetails.Directory = value;
+				}
+			}
+		}
+		public string? OriginalName
+		{
+			get => originalPathDetails?.Name;
+			set
+			{
+				if (originalPathDetails is not null)
+				{
+					originalPathDetails.Name = value;
+				}
+				else if (value is not null)
+				{
+					originalPathDetails = new();
+					originalPathDetails.Name = value;
+				}
+			}
+		}
+		/// <summary>
+		/// Including the period
+		/// </summary>
+		public string? OriginalExtension
+		{
+			get => originalPathDetails?.Extension;
+			set
+			{
+				if (originalPathDetails is not null)
+				{
+					originalPathDetails.Extension = value;
+				}
+				else if (value is not null)
+				{
+					originalPathDetails = new();
+					originalPathDetails.Extension = value;
+				}
+			}
+		}
 		public string? AssetBundleName { get; set; }
 
 		public UnityObjectBase() : this(AssetInfo.MakeDummyAssetInfo())
@@ -48,6 +117,25 @@ namespace AssetRipper.Core
 			YamlNode node = ExportYaml(container);
 			root.Add(AssetClassName, node);
 			return document;
+		}
+
+		private sealed class OriginalPathDetails
+		{
+			public string? Directory { get; set; }
+			public string? Name { get; set; }
+			/// <summary>
+			/// Including the period
+			/// </summary>
+			public string? Extension { get; set; }
+			public string NameWithExtension => $"{Name}{Extension}";
+
+			public override string? ToString()
+			{
+				string result = Directory is null 
+					? NameWithExtension
+					: Path.Combine(Directory, NameWithExtension);
+				return string.IsNullOrEmpty(result) ? null : result;
+			}
 		}
 	}
 }

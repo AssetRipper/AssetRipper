@@ -121,7 +121,9 @@ namespace AssetRipper.Core.Project.Collections
 					}
 				}
 				instance.AssetBundleName = root.AssetBundleName;
-				instance.OriginalAssetPath = root.OriginalAssetPath;
+				instance.OriginalDirectory = root.OriginalDirectory;
+				instance.OriginalName = root.OriginalName;
+				instance.OriginalExtension = root.OriginalExtension;
 				return instance;
 			}
 		}

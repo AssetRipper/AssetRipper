@@ -1,3 +1,4 @@
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Meta;
 using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Classes.TagManager;
@@ -22,7 +23,6 @@ using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Object_;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 
@@ -259,21 +259,21 @@ namespace AssetRipper.Core.Project
 			foreach (NullableKeyValuePair<Utf8String, IPPtr_Object_> kvp in manager.Container_C147)
 			{
 				IUnityObjectBase? asset = kvp.Value.TryGetAsset(manager.SerializedFile);
-				if (asset == null)
+				if (asset is null)
 				{
 					continue;
 				}
 
 				string resourcePath = Path.Combine(ResourceFullPath, kvp.Key.String);
-				if (asset.OriginalAssetPath is null)
+				if (asset.OriginalPath is null)
 				{
-					asset.OriginalAssetPath = resourcePath;
+					asset.OriginalPath = resourcePath;
 				}
-				else if (asset.OriginalAssetPath.Length < resourcePath.Length)
+				else if (asset.OriginalPath.Length < resourcePath.Length)
 				{
 					// for paths like "Resources/inner/resources/extra/file" engine creates 2 resource entries
 					// "inner/resources/extra/file" and "extra/file"
-					asset.OriginalAssetPath = resourcePath;
+					asset.OriginalPath = resourcePath;
 				}
 			}
 		}
@@ -302,28 +302,19 @@ namespace AssetRipper.Core.Project
 				}
 
 				UnityObjectBase? asset = kvp.Value.Asset.TryGetAsset(bundle.SerializedFile);
-				if (asset == null)
+				if (asset is null)
 				{
 					continue;
 				}
 
 				string assetPath = kvp.Key.String;
-				if (bundle.HasPathExtension())
-				{
-					// custom names may not have extensions
-					int extensionIndex = assetPath.LastIndexOf('.');
-					if (extensionIndex != -1)
-					{
-						assetPath = assetPath.Substring(0, extensionIndex);
-					}
-				}
 
 				asset.AssetBundleName = bundleName;
 
 				switch (m_BundledAssetsExportMode)
 				{
 					case BundledAssetsExportMode.DirectExport:
-						asset.OriginalAssetPath = assetPath;
+						asset.OriginalPath = assetPath;
 						break;
 					case BundledAssetsExportMode.GroupByBundleName:
 						if (assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
@@ -334,8 +325,7 @@ namespace AssetRipper.Core.Project
 						{
 							assetPath = assetPath.Substring(bundleDirectory.Length);
 						}
-						asset.OriginalAssetPath = Path.Combine(directory, assetPath);
-						//TryAdd because Unity sometimes includes duplicates (issue #378)
+						asset.OriginalPath = Path.Combine(directory, assetPath);
 						break;
 					case BundledAssetsExportMode.GroupByAssetType:
 						break;

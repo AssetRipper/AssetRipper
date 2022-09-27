@@ -20,9 +20,9 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			string subPath;
 			string fileName;
-			if (Asset.OriginalAssetPath is not null)
+			if (Asset.OriginalName is not null)
 			{
-				string resourcePath = Path.Combine(projectDirectory, $"{Asset.OriginalAssetPath}.{GetExportExtension(Asset)}");
+				string resourcePath = Path.Combine(projectDirectory, Asset.OriginalDirectory ?? "", $"{Asset.OriginalName}.{GetExportExtension(Asset)}");
 				subPath = Path.GetDirectoryName(resourcePath)!;
 				string resFileName = Path.GetFileName(resourcePath);
 				fileName = GetUniqueFileName(subPath, resFileName);
