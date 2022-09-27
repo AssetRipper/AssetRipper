@@ -19,6 +19,10 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
+			if (!string.IsNullOrEmpty(asset.OriginalExtension))
+			{
+				return asset.OriginalExtension;
+			}
 			return ((TextAssetExporter)AssetExporter).ExportMode switch
 			{
 				TextExportMode.Txt => TxtExtension,
