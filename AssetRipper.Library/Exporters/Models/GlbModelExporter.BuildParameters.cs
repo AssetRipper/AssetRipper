@@ -7,6 +7,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Subclasses.UnityTexEnv;
+using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using SharpGLTF.Materials;
 using SharpGLTF.Memory;
 using System.Collections.Generic;
@@ -76,31 +77,56 @@ namespace AssetRipper.Library.Exporters.Models
 			private MaterialBuilder MakeMaterialBuilder(IMaterial material)
 			{
 				MaterialBuilder materialBuilder = new MaterialBuilder(material.NameString);
-				if (TryGetMainTexture(material, out ITexture2D? texture) && TryGetOrMakeImage(texture, out MemoryImage image))
+				GetTextures(material, out ITexture2D? mainTexture, out ITexture2D? normalTexture);
+				if (mainTexture is not null && TryGetOrMakeImage(mainTexture, out MemoryImage mainImage))
 				{
-					materialBuilder.WithBaseColor(image);
+					materialBuilder.WithBaseColor(mainImage);
 				}
-				//materialBuilder.WithNormal() //For _Normal
+				if (normalTexture is not null && TryGetOrMakeImage(normalTexture, out MemoryImage normalImage))
+				{
+					materialBuilder.WithNormal(normalImage);
+				}
 				return materialBuilder;
 			}
 
-			private static bool TryGetMainTexture(IMaterial material, [NotNullWhen(true)] out ITexture2D? texture)
+			private static void GetTextures(IMaterial material, out ITexture2D? mainTexture, out ITexture2D? normalTexture)
 			{
-				if (material.TryGetTextureProperty("_MainTex", out IUnityTexEnv? unityTexEnv))
+				mainTexture = null;
+				normalTexture = null;
+				ITexture2D? mainReplacement = null;
+				foreach ((Utf8String utf8Name, IUnityTexEnv textureParameter) in material.GetTextureProperties())
 				{
-					texture = unityTexEnv.Texture.TryGetAsset(material.SerializedFile) as ITexture2D;
+					string name = utf8Name.String;
+					if (IsMainTexture(name))
+					{
+						mainTexture ??= textureParameter.Texture.TryGetAsset(material.SerializedFile) as ITexture2D;
+					}
+					else if (IsNormalTexture(name))
+					{
+						normalTexture ??= textureParameter.Texture.TryGetAsset(material.SerializedFile) as ITexture2D;
+					}
+					else
+					{
+						mainReplacement ??= textureParameter.Texture.TryGetAsset(material.SerializedFile) as ITexture2D;
+					}
 				}
-				else
-				{
-					texture = null;
-				}
-				return texture is not null;
+				mainTexture ??= mainReplacement;
 			}
 
 			private static bool TryConvertToBitmap(ITexture2D texture, [NotNullWhen(true)] out DirectBitmap? bitmap)
 			{
 				bitmap = TextureAssetExporter.ConvertToBitmap(texture);
 				return bitmap is not null;
+			}
+
+			private static bool IsMainTexture(string textureName)
+			{
+				return textureName is "_MainTex" or "texture" or "Texture" or "_Texture";
+			}
+
+			private static bool IsNormalTexture(string textureName)
+			{
+				return textureName is "_Normal" or "Normal" or "normal";
 			}
 		}
 	}
