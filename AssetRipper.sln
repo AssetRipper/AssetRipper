@@ -16,7 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Licenses\AsmResolver.md = Licenses\AsmResolver.md
 		Licenses\AssetStudio.md = Licenses\AssetStudio.md
 		Licenses\Avalonia.md = Licenses\Avalonia.md
-		Licenses\CommandLineParser.md = Licenses\CommandLineParser.md
 		Licenses\Cpp2IL.md = Licenses\Cpp2IL.md
 		Licenses\Crunch.md = Licenses\Crunch.md
 		Licenses\darkfx.md = Licenses\darkfx.md
@@ -118,11 +117,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.FileAnaly
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.SystemTester", "AssetRipper.Tools.SystemTester\AssetRipper.Tools.SystemTester.csproj", "{8F4FDC30-EDEA-4FB1-A12B-FD47650C51F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Tools.TypeTreeExtractor", "AssetRipper.Tools.TypeTreeExtractor\AssetRipper.Tools.TypeTreeExtractor.csproj", "{441FAA30-1347-4334-B8B2-6CBC793B7D8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.TypeTreeExtractor", "AssetRipper.Tools.TypeTreeExtractor\AssetRipper.Tools.TypeTreeExtractor.csproj", "{441FAA30-1347-4334-B8B2-6CBC793B7D8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Tools.FileExtractor", "AssetRipper.Tools.FileExtractor\AssetRipper.Tools.FileExtractor.csproj", "{89FAE22A-C59F-477B-A5F5-2E19CB1366C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.FileExtractor", "AssetRipper.Tools.FileExtractor\AssetRipper.Tools.FileExtractor.csproj", "{89FAE22A-C59F-477B-A5F5-2E19CB1366C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Tools.JsonSerializer", "AssetRipper.Tools.JsonSerializer\AssetRipper.Tools.JsonSerializer.csproj", "{1C4A071F-1C20-4842-B3C2-B973C775C403}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.JsonSerializer", "AssetRipper.Tools.JsonSerializer\AssetRipper.Tools.JsonSerializer.csproj", "{1C4A071F-1C20-4842-B3C2-B973C775C403}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

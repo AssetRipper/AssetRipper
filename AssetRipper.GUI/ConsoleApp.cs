@@ -2,8 +2,8 @@
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Utils;
 using AssetRipper.Library;
-using CommandLine;
 using System.Collections.Generic;
+using System.CommandLine;
 using System.IO;
 
 namespace AssetRipper.GUI
@@ -11,101 +11,16 @@ namespace AssetRipper.GUI
 	internal static class ConsoleApp
 	{
 		private const string DefaultLogFileName = "AssetRipper.log";
-
-		internal class Options
-		{
-			[Value(0, Required = true, HelpText = "Input files or directory to export.")]
-			public IReadOnlyList<string> FilesToExport { get; set; }
-
-			[Option('o', "output", HelpText = "Directory to export to. Will be cleared if already exists.")]
-			public DirectoryInfo OutputDirectory { get; set; }
-
-			[Option("logFile", HelpText = "(Default: " + DefaultLogFileName + ") File to log to.")]
-			public FileInfo LogFile { get; set; }
-
-			[Option('v', "verbose", Default = false, HelpText = "Verbose logging output.")]
-			public bool Verbose { get; set; }
-
-			[Option('q', "quit", Default = false, HelpText = "Close console after export.")]
-			public bool Quit { get; set; }
-		}
+		private static bool Quit { get; set; }
 
 		public static void ParseArgumentsAndRun(string[] args)
 		{
-			Parser.Default.ParseArguments<Options>(args)
-				.WithParsed(options =>
-				{
-					if (ValidateOptions(options))
-					{
-						Run(options);
-					}
-					else
-					{
-						Environment.ExitCode = 1;
-					}
-
-					if (!options.Quit)
-					{
-						System.Console.ReadKey();
-					}
-				})
-				.WithNotParsed((errors) =>
-				{
-					System.Console.ReadKey();
-				});
-		}
-
-		private static bool ValidateOptions(Options options)
-		{
-			foreach (string arg in options.FilesToExport)
-			{
-				if (MultiFileStream.Exists(arg))
-				{
-					continue;
-				}
-
-				if (Directory.Exists(arg))
-				{
-					continue;
-				}
-
-				System.Console.WriteLine(MultiFileStream.IsMultiFile(arg)
-					? $"File '{arg}' doesn't have all parts for combining"
-					: $"Neither file nor directory with path '{arg}' exists");
-
-				return false;
-			}
-
-			try
-			{
-				options.LogFile ??= new FileInfo(ExecutingDirectory.Combine(DefaultLogFileName));
-				options.OutputDirectory ??= new DirectoryInfo(ExecutingDirectory.Combine("Ripped"));
-			}
-			catch (Exception ex)
-			{
-				System.Console.WriteLine($"Failed to initialize the output and log paths.");
-				System.Console.WriteLine(ex.ToString());
-				return false;
-			}
-
-			return true;
-		}
-
-		private static void Run(Options options)
-		{
-			Logger.AllowVerbose = options.Verbose;
 			Logger.Add(new ConsoleLogger(false));
-			Logger.Add(new FileLogger(options.LogFile.FullName));
-			Logger.LogSystemInformation("AssetRipper Console Version");
 #if !DEBUG
 			try
 #endif
 			{
-				Ripper ripper = new();
-				ripper.Settings.LogConfigurationValues();
-				ripper.Load(options.FilesToExport);
-				PrepareExportDirectory(options.OutputDirectory.FullName);
-				ripper.ExportProject(options.OutputDirectory.FullName);
+				Parse(args);
 			}
 #if !DEBUG
 			catch (Exception ex)
@@ -113,6 +28,87 @@ namespace AssetRipper.GUI
 				Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
 			}
 #endif
+			if (!Quit)
+			{
+				Console.ReadKey();
+			}
+		}
+
+		private static void Parse(string[] args)
+		{
+			RootCommand rootCommand = new() { Description = "AssetRipper Console" };
+
+			Argument<List<string>> filesToExportOption = new();
+			rootCommand.AddArgument(filesToExportOption);
+
+			Option<DirectoryInfo?> outputOption = new Option<DirectoryInfo?>(
+							aliases: new[] { "-o", "--output" },
+							description: "",
+							getDefaultValue: () => null);
+			rootCommand.AddOption(outputOption);
+
+			Option<FileInfo?> logFileOption = new Option<FileInfo?>(
+							name: "--log-file",
+							description: "",
+							getDefaultValue: () => null);
+			rootCommand.AddOption(logFileOption);
+
+			Option<bool> verboseOption = new Option<bool>(
+							aliases: new[] { "-v", "--verbose" },
+							description: "",
+							getDefaultValue: () => false);
+			rootCommand.AddOption(verboseOption);
+
+			Option<bool> quitOption = new Option<bool>(
+							aliases: new[] { "-q", "--quit" },
+							description: "",
+							getDefaultValue: () => false);
+			rootCommand.AddOption(quitOption);
+
+			rootCommand.SetHandler((List<string> filesToExport, DirectoryInfo? outputDirectory, FileInfo? logFile, bool verbose, bool quit) =>
+			{
+				Quit = quit;
+				if (!ValidatePaths(filesToExport))
+				{
+					Environment.ExitCode = 1;
+				}
+				else
+				{
+					Logger.AllowVerbose = verbose;
+					Logger.Add(new FileLogger(logFile?.FullName ?? ExecutingDirectory.Combine(DefaultLogFileName)));
+					Run(filesToExport, outputDirectory?.FullName ?? ExecutingDirectory.Combine("Ripped"));
+				}
+			},
+			filesToExportOption, outputOption, logFileOption, verboseOption, quitOption);
+
+			rootCommand.Invoke(args);
+		}
+
+		private static bool ValidatePaths(IReadOnlyList<string> paths)
+		{
+			foreach (string path in paths)
+			{
+				if (!MultiFileStream.Exists(path) && !Directory.Exists(path))
+				{
+					Console.WriteLine(MultiFileStream.IsMultiFile(path)
+						? $"File '{path}' doesn't have all parts for combining"
+						: $"Neither file nor directory with path '{path}' exists");
+
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private static void Run(IReadOnlyList<string> filesToExport, string outputDirectory)
+		{
+			Logger.LogSystemInformation("AssetRipper Console Version");
+
+			Ripper ripper = new();
+			ripper.Settings.LogConfigurationValues();
+			ripper.Load(filesToExport);
+			PrepareExportDirectory(outputDirectory);
+			ripper.ExportProject(outputDirectory);
 		}
 
 		private static void PrepareExportDirectory(string path)
