@@ -59,8 +59,6 @@ jobs:
       uses: actions/setup-dotnet@v3.0.0
       with:
         dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: nuget restore
     - name: Build
       run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipper.GUI/
