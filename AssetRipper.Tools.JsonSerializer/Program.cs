@@ -4,6 +4,7 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using System;
+using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -44,29 +45,23 @@ internal static class Program
 		try
 #endif
 		{
-			GameBundle bundle = new();
-			SerializedFile file = (SerializedFile)SchemeReader.LoadFile(fullName);
-			SerializedAssetCollection collection = bundle.AddCollectionFromSerializedFile(file, new JsonAssetFactory());
-			bundle.InitializeAllDependencyLists();
-			JsonArray array = new();
-			JsonObject root = new()
+			var file = SchemeReader.LoadFile(fullName);
+			if (file is SerializedFile serializedFile)
 			{
-				{ "Version", file.Version.ToString() },
-				{ "Assets", array }
-			};
-			foreach ((_, IUnityObjectBase asset) in collection.Assets)
-			{
-				JsonObject assetObject = new();
-				array.Add(assetObject);
-				assetObject.Add("PathID", asset.PathID);
-				assetObject.Add("ClassID", asset.ClassID);
-				assetObject.Add("Fields", ((JsonAsset)asset).Contents);
-				//Note: this assigns assetObject as the parent of Contents.
-				//Normally, this would be a cause for concern, but the asset won't be used after this.
+				ExtractJson(serializedFile);
 			}
-
-			using System.IO.FileStream stream = System.IO.File.Create(System.IO.Path.Combine(outputDirectory, $"{file.NameFixed}.json"));
-			System.Text.Json.JsonSerializer.Serialize(stream, root, new JsonSerializerOptions() { WriteIndented = true });
+			else if (file is FileContainer container)
+			{
+				file.ReadContents();
+				foreach (SerializedFile serializedFile1 in container.FetchSerializedFiles())
+				{
+					ExtractJson(serializedFile1);
+				}
+			}
+			else
+			{
+				Console.WriteLine($"File is {file.GetType()}");
+			}
 		}
 #if !DEBUG
 		catch (Exception ex)
@@ -74,5 +69,35 @@ internal static class Program
 			Console.WriteLine(ex.ToString());
 		}
 #endif
+	}
+
+	private static void ExtractJson(SerializedFile file)
+	{
+		GameBundle bundle = new();
+		SerializedAssetCollection collection = bundle.AddCollectionFromSerializedFile(file, new JsonAssetFactory());
+		bundle.InitializeAllDependencyLists();
+		ExtractJson(file, collection);
+	}
+
+	private static void ExtractJson(SerializedFile file, SerializedAssetCollection collection)
+	{
+		JsonArray array = new();
+		JsonObject root = new()
+			{
+				{ "Version", file.Version.ToString() },
+				{ "Assets", array }
+			};
+		foreach ((_, IUnityObjectBase asset) in collection.Assets)
+		{
+			JsonObject assetObject = new();
+			array.Add(assetObject);
+			assetObject.Add("PathID", asset.PathID);
+			assetObject.Add("ClassID", asset.ClassID);
+			assetObject.Add("Fields", ((JsonAsset)asset).Contents);
+			//Note: this assigns assetObject as the parent of Contents.
+			//Normally, this would be a cause for concern, but the asset won't be used after this.
+		}
+		using FileStream stream = System.IO.File.Create(System.IO.Path.Combine(outputDirectory, $"{file.NameFixed}.json"));
+		System.Text.Json.JsonSerializer.Serialize(stream, root, new JsonSerializerOptions() { WriteIndented = true });
 	}
 }
