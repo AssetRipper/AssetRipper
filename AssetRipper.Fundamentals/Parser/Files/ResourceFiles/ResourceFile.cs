@@ -59,7 +59,7 @@ namespace AssetRipper.Core.Parser.Files.ResourceFiles
 		}
 
 		public string Name { get; }
-		public Stream Stream { get; }
+		public SmartStream Stream { get; }
 
 		public const string ResourceFileExtension = ".resource";
 		public const string StreamingFileExtension = ".ress";
