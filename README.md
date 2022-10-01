@@ -23,7 +23,7 @@ Thank you for considering to support me. I have normal expenses like food, elect
 
 Limited support: `3.0.0` to `3.3.0`
 
-Full support: `3.4.0` to `2022.1.X`
+Full support: `3.4.0` to `2022.2.X`
 
 # Release Schedule
 

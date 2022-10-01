@@ -46,7 +46,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			sb.Append("SerializedFileException:");
 			sb.Append(" v:").Append(Version.ToString());
 			sb.Append(" p:").Append(Platform.ToString());
-			sb.Append(" t:").Append(ClassIdType.ToString());
+			sb.Append(" t:").Append(ClassIdType);
 			sb.Append(" n:").Append(FileName).AppendLine();
 			sb.Append("Path:").Append(FilePath).AppendLine();
 			sb.Append("Message: ").Append(Message).AppendLine();
