@@ -2,8 +2,6 @@
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Smart;
 using AssetRipper.Core.Parser.Files.ResourceFiles;
-using AssetRipper.Core.Project;
-using AssetRipper.Yaml;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -29,11 +27,6 @@ namespace AssetRipper.GUI
 		{
 			AssociatedFile = associatedFile;
 			smartStream = AssociatedFile.Stream.CreateReference();
-		}
-
-		public override YamlNode ExportYaml(IExportContainer container)
-		{
-			throw new NotSupportedException();
 		}
 
 		public void SaveToFile(string path)

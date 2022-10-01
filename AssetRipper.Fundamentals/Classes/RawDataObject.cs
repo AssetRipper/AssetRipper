@@ -16,11 +16,6 @@ namespace AssetRipper.Core.Classes
 
 		public RawDataObject(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public sealed override void Read(AssetReader reader)
-		{
-			throw new NotSupportedException();
-		}
-
 		public void Read(AssetReader reader, int byteSize)
 		{
 			if (byteSize > 0)
@@ -33,9 +28,8 @@ namespace AssetRipper.Core.Classes
 			}
 		}
 
-		public sealed override void Write(AssetWriter writer)
-		{
-			writer.Write(RawData);
-		}
+		public sealed override void WriteEditor(AssetWriter writer) => writer.Write(RawData);
+
+		public sealed override void WriteRelease(AssetWriter writer) => writer.Write(RawData);
 	}
 }

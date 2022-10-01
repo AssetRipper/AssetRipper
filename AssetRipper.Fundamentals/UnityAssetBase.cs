@@ -20,7 +20,7 @@ namespace AssetRipper.Core
 
 		public virtual void ReadRelease(AssetReader reader) => throw new NotSupportedException();
 
-		public virtual void Read(AssetReader reader)
+		public void Read(AssetReader reader)
 		{
 			if (reader.Flags.IsRelease())
 			{
@@ -36,7 +36,7 @@ namespace AssetRipper.Core
 
 		public virtual void WriteRelease(AssetWriter writer) => throw new NotSupportedException();
 
-		public virtual void Write(AssetWriter writer)
+		public void Write(AssetWriter writer)
 		{
 			if (writer.Flags.IsRelease())
 			{
@@ -52,7 +52,7 @@ namespace AssetRipper.Core
 
 		public virtual YamlNode ExportYamlRelease(IExportContainer container) => throw new NotSupportedException($"Release yaml export is not supported for {GetType().FullName}");
 
-		public virtual YamlNode ExportYaml(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			if (container.ExportFlags.IsRelease())
 			{
