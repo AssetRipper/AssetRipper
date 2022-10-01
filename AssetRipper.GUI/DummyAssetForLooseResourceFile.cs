@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AssetRipper.GUI
 {
-	public class DummyAssetForLooseResourceFile : UnityObjectBase, IDisposable, IHasNameString
+	public sealed class DummyAssetForLooseResourceFile : UnityObjectBase, IDisposable, IHasNameString
 	{
 		private bool disposedValue;
 
@@ -28,8 +28,7 @@ namespace AssetRipper.GUI
 		public DummyAssetForLooseResourceFile(ResourceFile associatedFile)
 		{
 			AssociatedFile = associatedFile;
-			smartStream = SmartStream.CreateTemp();
-			AssociatedFile.Stream.CopyTo(smartStream);
+			smartStream = AssociatedFile.Stream.CreateReference();
 		}
 
 		public override YamlNode ExportYaml(IExportContainer container)
@@ -39,19 +38,20 @@ namespace AssetRipper.GUI
 
 		public void SaveToFile(string path)
 		{
-			using FileStream fileStream = System.IO.File.Create(path);
+			using FileStream fileStream = File.Create(path);
 			smartStream.Position = 0;
 			smartStream.CopyTo(fileStream);
 		}
 
 		public async Task SaveToFileAsync(string path)
 		{
-			FileStream fileStream = System.IO.File.Create(path);
+			FileStream fileStream = File.Create(path);
 			smartStream.Position = 0;
 			await smartStream.CopyToAsync(fileStream);
+			await fileStream.FlushAsync();
 		}
 
-		protected virtual void Dispose(bool disposing)
+		private void Dispose(bool disposing)
 		{
 			if (!disposedValue)
 			{
