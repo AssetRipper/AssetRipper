@@ -113,7 +113,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 					stream.Align(16);
 				}
 			}
-			if (Header.Flags.GetAlignAfterBlocksInfo())
+			if (Header.Flags.GetBlockInfoNeedPaddingAtStart())
 			{
 				stream.Align(16);
 			}

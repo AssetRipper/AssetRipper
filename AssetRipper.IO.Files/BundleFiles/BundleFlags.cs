@@ -25,7 +25,7 @@
 		/// <see href="https://issuetracker.unity3d.com/issues/files-within-assetbundles-do-not-start-on-aligned-boundaries-breaking-patching-on-nintendo-switch"/><br/>
 		/// This fix implies that loading newly generated AssetBundles will require using this new Unity editor/runtime combination. It is not backwards compatible.
 		/// </remarks>
-		AlignAfterBlocksInfo = 0x200,
+		BlockInfoNeedPaddingAtStart = 0x200,
 	}
 
 	public static class BundleFlagsExtensions
@@ -63,11 +63,11 @@
 		}
 
 		/// <summary>
-		/// The 0x200 bit: <see cref="BundleFlags.AlignAfterBlocksInfo"/>
+		/// The 0x200 bit: <see cref="BundleFlags.BlockInfoNeedPaddingAtStart"/>
 		/// </summary>
-		public static bool GetAlignAfterBlocksInfo(this BundleFlags _this)
+		public static bool GetBlockInfoNeedPaddingAtStart(this BundleFlags _this)
 		{
-			return (_this & BundleFlags.AlignAfterBlocksInfo) != 0;
+			return (_this & BundleFlags.BlockInfoNeedPaddingAtStart) != 0;
 		}
 	}
 }
