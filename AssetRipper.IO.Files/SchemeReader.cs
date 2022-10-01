@@ -55,7 +55,7 @@ namespace AssetRipper.IO.Files
 
 		public static File ReadFile(ResourceFile file)
 		{
-			return ReadFile(file.Stream, file.FilePath, file.Name);
+			return ReadFile(file.Stream.CreateReference(), file.FilePath, file.Name);
 		}
 
 		/// <summary>
