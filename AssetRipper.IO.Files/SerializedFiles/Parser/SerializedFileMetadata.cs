@@ -82,14 +82,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 				TargetPlatform = (BuildTarget)reader.ReadUInt32();
 			}
 
-			if (HasEnableTypeTree(reader.Generation))
-			{
-				EnableTypeTree = reader.ReadBoolean();
-			}
-			else
-			{
-				EnableTypeTree = true;
-			}
+			EnableTypeTree = ReadEnableTypeTree(reader);
 
 			Types = reader.ReadSerializedTypeArray<SerializedType>(EnableTypeTree);
 
@@ -115,6 +108,18 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			if (HasUserInformation(reader.Generation))
 			{
 				UserInformation = reader.ReadStringZeroTerm();
+			}
+		}
+
+		private static bool ReadEnableTypeTree(SerializedReader reader)
+		{
+			if (HasEnableTypeTree(reader.Generation))
+			{
+				return reader.ReadBoolean();
+			}
+			else
+			{
+				return true;
 			}
 		}
 
