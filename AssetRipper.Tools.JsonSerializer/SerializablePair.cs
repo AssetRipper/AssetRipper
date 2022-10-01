@@ -31,10 +31,8 @@ public sealed class SerializablePair : SerializableEntry
 	{
 		index++;
 		ThrowIfIncorrectName(list[index], "first");
-		index++;
 		SerializableEntry first = SerializableEntry.FromTypeTreeNodes(list, ref index);
 		ThrowIfIncorrectName(list[index], "second");
-		index++;
 		SerializableEntry second = SerializableEntry.FromTypeTreeNodes(list, ref index);
 		return new SerializablePair(first, second);
 	}
