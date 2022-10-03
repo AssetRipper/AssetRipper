@@ -54,7 +54,8 @@ public sealed class SerializablePrimitive : SerializableEntry
 
 	public static bool TryMakeFromTypeTreeNodes(List<TypeTreeNode> list, ref int index, [NotNullWhen(true)] out SerializablePrimitive? primitive)
 	{
-		string typeName = list[index].Type;
+		TypeTreeNode node = list[index];
+		string typeName = node.Type;
 		if (typeName == "string")
 		{
 			TransferMetaFlags metaFlags = list[index].MetaFlag;
@@ -73,12 +74,16 @@ public sealed class SerializablePrimitive : SerializableEntry
 		primitive = typeName switch
 		{
 			"bool" => new SerializablePrimitive(PrimitiveType.Boolean),
-			"char" => new SerializablePrimitive(PrimitiveType.Character),
+			"char" => node.ByteSize == 2 
+				? new SerializablePrimitive(PrimitiveType.Character) //I don't think this can happen, but just to be safe.
+				: new SerializablePrimitive(PrimitiveType.U1),
 			"SInt8" => new SerializablePrimitive(PrimitiveType.I1),
 			"UInt8" => new SerializablePrimitive(PrimitiveType.U1),
 			"short" or "SInt16" => new SerializablePrimitive(PrimitiveType.I2),
-			"ushort" or "UInt16" or "unsigned short" => new SerializablePrimitive(PrimitiveType.U2),
-			"int" or "SInt32" => new SerializablePrimitive(PrimitiveType.I4),
+			"ushort" or "UInt16" or "unsigned short" => node.MetaFlag.IsCharPropertyMask()
+				? new SerializablePrimitive(PrimitiveType.Character)
+				: new SerializablePrimitive(PrimitiveType.U2),
+			"int" or "SInt32" or "Type*" => new SerializablePrimitive(PrimitiveType.I4),
 			"uint" or "UInt32" or "unsigned int" => new SerializablePrimitive(PrimitiveType.U4),
 			"SInt64" or "long long" => new SerializablePrimitive(PrimitiveType.I8),
 			"UInt64" or "FileSize" or "unsigned long long" => new SerializablePrimitive(PrimitiveType.U8),
