@@ -35,18 +35,9 @@ namespace AssetRipper.Library.Exporters.Textures
 			// Otherwise, if a SpriteAtlas reference is serialized into this sprite,
 			// we must recover the m_RD field of the sprite from the SpriteAtlas.
 			ISprite sprite = (ISprite)asset;
-			if (sprite.Has_SpriteAtlas_C213() && sprite.SpriteAtlas_C213.TryGetAsset(sprite.SerializedFile) is { } atlas)
+			ISpriteAtlas? atlas = null;
+			if (sprite.Has_SpriteAtlas_C213() && (atlas = sprite.SpriteAtlas_C213.TryGetAsset(sprite.SerializedFile)) != null)
 			{
-				sprite.GetSpriteCoordinatesInAtlas(atlas, out Rectf _, out Vector2f_3_5_0_f5 pivot, out Vector4f_3_5_0_f5 border);
-				if (sprite.Has_Pivot_C213())
-				{
-					sprite.Pivot_C213.CopyValues(pivot);
-				}
-				if (sprite.Has_Border_C213())
-				{
-					sprite.Border_C213.CopyValues(border);
-				}
-
 				if (sprite.Has_RenderDataKey_C213() &&
 				    atlas.RenderDataMap_C687078895.TryGetValue(sprite.RenderDataKey_C213, out ISpriteAtlasData? spriteData))
 				{
@@ -57,7 +48,6 @@ namespace AssetRipper.Library.Exporters.Textures
 						m_RD.AlphaTexture.CopyValues(ConvertPPtr(spriteData.AlphaTexture, atlas, sprite));
 					}
 					m_RD.TextureRect.CopyValues(spriteData.TextureRect);
-					m_RD.TextureRectOffset.CopyValues(spriteData.TextureRectOffset);
 					if (m_RD.Has_AtlasRectOffset() && spriteData.Has_AtlasRectOffset())
 					{
 						m_RD.AtlasRectOffset.CopyValues(spriteData.AtlasRectOffset);
@@ -85,11 +75,25 @@ namespace AssetRipper.Library.Exporters.Textures
 				sprite.AtlasTags_C213?.Clear();
 			}
 
-			// The m_Rect field is the rect of the sprite in the original texture, which should never be used.
-			// Prior to Unity 5, this value in the exported project is used to sample the sprite in the packed atlas.
-			// Thus we must fill it with the actual rect in the atlas.
-			sprite.Rect_C213.CopyValues(sprite.RD_C213.TextureRect);
-			sprite.Offset_C213.CopyValues(sprite.RD_C213.TextureRectOffset);
+			// Some sprite properties must be recalculated with regard to SpriteAtlas. See the comments inside the following method.
+			sprite.GetSpriteCoordinatesInAtlas(atlas, out Rectf rect, out Vector2f_3_5_0_f5 pivot, out Vector4f_3_5_0_f5 border);
+			sprite.Rect_C213.CopyValues(rect);
+			if (sprite.Has_Pivot_C213())
+			{
+				sprite.Pivot_C213.CopyValues(pivot);
+			}
+			if (sprite.Has_Border_C213())
+			{
+				sprite.Border_C213.CopyValues(border);
+			}
+			
+			// Calculate and overwrite Offset. It is the offset in pixels of the pivot to the center of Rect.
+			sprite.Offset_C213.X = (pivot.X - 0.5f) * rect.Width;
+			sprite.Offset_C213.Y = (pivot.Y - 0.5f) * rect.Height;
+			
+			// Calculate and overwrite TextureRectOffset. It is the offset in pixels of m_RD.TextureRect to Rect.
+			sprite.RD_C213.TextureRectOffset.X = sprite.RD_C213.TextureRect.X - rect.X;
+			sprite.RD_C213.TextureRectOffset.Y = sprite.RD_C213.TextureRect.Y - rect.Y;
 
 			return new AssetExportCollection(this, asset);
 		}
