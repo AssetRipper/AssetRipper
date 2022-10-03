@@ -214,7 +214,7 @@ namespace AssetRipper.Core.Project
 
 				if (options.ExportDependencies && asset is IDependent dependent)
 				{
-					DependencyContext context = new DependencyContext(exportLayout, true);
+					DependencyContext context = new DependencyContext(true);
 					foreach (PPtr<IUnityObjectBase> pointer in dependent.FetchDependencies(context))
 					{
 						if (pointer.IsNull)

@@ -1,26 +1,20 @@
 ﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout;
-using AssetRipper.Core.Parser.Files;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AssetRipper.Core.Parser.Asset
 {
 	public sealed class DependencyContext
 	{
-		public DependencyContext(LayoutInfo layout, bool log)
+		public DependencyContext(bool log)
 		{
-			Info = layout;
 			m_hierarchy = log ? new Stack<string>() : null;
 		}
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesFromDependent<T>(T dependent, string name) where T : IDependent
 		{
-			if (m_hierarchy is not null)
-			{
-				m_hierarchy.Push(name);
-			}
+			m_hierarchy?.Push(name);
 			foreach (PPtr<IUnityObjectBase> pointer in dependent.FetchDependencies(this))
 			{
 				if (!pointer.IsNull)
@@ -28,18 +22,12 @@ namespace AssetRipper.Core.Parser.Asset
 					yield return pointer;
 				}
 			}
-			if (m_hierarchy is not null)
-			{
-				m_hierarchy.Pop();
-			}
+			m_hierarchy?.Pop();
 		}
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesFromArray<T>(IEnumerable<T> dependents, string name) where T : IDependent
 		{
-			if (m_hierarchy is not null)
-			{
-				m_hierarchy.Push(name);
-			}
+			m_hierarchy?.Push(name);
 			foreach (T dependent in dependents)
 			{
 				foreach (PPtr<IUnityObjectBase> pointer in dependent.FetchDependencies(this))
@@ -50,10 +38,7 @@ namespace AssetRipper.Core.Parser.Asset
 					}
 				}
 			}
-			if (m_hierarchy is not null)
-			{
-				m_hierarchy.Pop();
-			}
+			m_hierarchy?.Pop();
 		}
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependenciesFromArrayArray<T>(IEnumerable<T> dependents, string name) where T : IEnumerable<IDependent>
@@ -70,24 +55,12 @@ namespace AssetRipper.Core.Parser.Asset
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies<T>(IEnumerable<PPtr<T>> pointers, string name) where T : IUnityObjectBase
 		{
-			foreach (PPtr<T> pointer in pointers)
-			{
-				if (!pointer.IsNull)
-				{
-					yield return FetchDependency(pointer, name);
-				}
-			}
+			return pointers.Where(pointer => !pointer.IsNull).Select(pointer => FetchDependency(pointer, name));
 		}
 
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies<T1, T2>(IDictionary<T1, PPtr<T2>> pointers, string name) where T2 : IUnityObjectBase
 		{
-			foreach (KeyValuePair<T1, PPtr<T2>> pointerPair in pointers)
-			{
-				if (!pointerPair.Value.IsNull)
-				{
-					yield return FetchDependency(pointerPair.Value, name);
-				}
-			}
+			return pointers.Where(pointerPair => !pointerPair.Value.IsNull).Select(pointerPair => FetchDependency(pointerPair.Value, name));
 		}
 
 		public PPtr<IUnityObjectBase> FetchDependency<T>(PPtr<T> pointer, string name) where T : IUnityObjectBase
@@ -106,27 +79,9 @@ namespace AssetRipper.Core.Parser.Asset
 				return string.Empty;
 			}
 
-			string hierarchy = string.Empty;
-			int i = 0;
-			foreach (string sub in m_hierarchy)
-			{
-				if (i == 0)
-				{
-					hierarchy = sub;
-				}
-				else
-				{
-					hierarchy = sub + "." + hierarchy;
-				}
-				i++;
-			}
-			return hierarchy;
+			return string.Join('.', m_hierarchy.Reverse());
 		}
 
-		public LayoutInfo Info { get; }
-		public UnityVersion Version => Info.Version;
-		public BuildTarget Platform => Info.Platform;
-		public TransferInstructionFlags Flags => Info.Flags;
 		public string PointerName { get; private set; } = "";
 
 		private readonly Stack<string>? m_hierarchy;
