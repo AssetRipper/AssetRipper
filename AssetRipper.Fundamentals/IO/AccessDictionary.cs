@@ -36,7 +36,7 @@ namespace AssetRipper.Core.IO
 		public override void Add(TKeyBase key, TValueBase value) => referenceDictionary.Add((TKey)key, (TValue)value);
 
 		/// <inheritdoc/>
-		public override void Add(NullableKeyValuePair<TKeyBase, TValueBase> pair) => Add(pair.Key, pair.Value);
+		public override void Add(AccessPairBase<TKeyBase, TValueBase> pair) => Add(pair.Key, pair.Value);
 
 		/// <inheritdoc/>
 		public override void AddNew() => referenceDictionary.AddNew();
@@ -53,13 +53,13 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void SetValue(int index, TValueBase newValue) => referenceDictionary.SetValue(index, (TValue)newValue);
 
-		public override NullableKeyValuePair<TKeyBase, TValueBase> GetPair(int index) => CastPair(referenceDictionary.GetPair(index));
+		public override AccessPairBase<TKeyBase, TValueBase> GetPair(int index) => CastPair(referenceDictionary.GetPair(index));
 
 		/// <inheritdoc/>
-		public override int IndexOf(NullableKeyValuePair<TKeyBase, TValueBase> item) => referenceDictionary.IndexOf(CastPair(item));
+		public override int IndexOf(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.IndexOf(CastPair(item));
 
 		/// <inheritdoc/>
-		public override void Insert(int index, NullableKeyValuePair<TKeyBase, TValueBase> item) => referenceDictionary.Insert(index, CastPair(item));
+		public override void Insert(int index, AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Insert(index, CastPair(item));
 
 		/// <inheritdoc/>
 		public override void RemoveAt(int index) => referenceDictionary.RemoveAt(index);
@@ -68,10 +68,10 @@ namespace AssetRipper.Core.IO
 		public override void Clear() => referenceDictionary.Clear();
 
 		/// <inheritdoc/>
-		public override bool Contains(NullableKeyValuePair<TKeyBase, TValueBase> item) => referenceDictionary.Contains(CastPair(item));
+		public override bool Contains(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Contains(CastPair(item));
 
 		/// <inheritdoc/>
-		public override void CopyTo(NullableKeyValuePair<TKeyBase, TValueBase>[] array, int arrayIndex)
+		public override void CopyTo(AccessPairBase<TKeyBase, TValueBase>[] array, int arrayIndex)
 		{
 			if (array == null)
 			{
@@ -90,9 +90,9 @@ namespace AssetRipper.Core.IO
 		}
 
 		/// <inheritdoc/>
-		public override bool Remove(NullableKeyValuePair<TKeyBase, TValueBase> item) => referenceDictionary.Remove(CastPair(item));
+		public override bool Remove(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Remove(CastPair(item));
 
-		protected override bool TryGetSinglePairForKey(TKeyBase key, [NotNullWhen(true)] out NullableKeyValuePair<TKeyBase, TValueBase>? pair)
+		protected override bool TryGetSinglePairForKey(TKeyBase key, [NotNullWhen(true)] out AccessPairBase<TKeyBase, TValueBase>? pair)
 		{
 			if (key is null)
 			{
@@ -104,7 +104,7 @@ namespace AssetRipper.Core.IO
 			pair = null;
 			for (int i = Count - 1; i > -1; i--)
 			{
-				NullableKeyValuePair<TKey, TValue> p = referenceDictionary.GetPair(i);
+				AccessPairBase<TKey, TValue> p = referenceDictionary.GetPair(i);
 				if (p.Key.GetHashCode() == hash && key.Equals(p.Key))
 				{
 					if (found)
@@ -121,14 +121,14 @@ namespace AssetRipper.Core.IO
 			return found;
 		}
 
-		private static NullableKeyValuePair<TKey, TValue> CastPair(NullableKeyValuePair<TKeyBase, TValueBase> pair)
+		private static AccessPairBase<TKey, TValue> CastPair(AccessPairBase<TKeyBase, TValueBase> pair)
 		{
-			return new NullableKeyValuePair<TKey, TValue>((TKey)pair.Key, (TValue)pair.Value);
+			return new AssetPair<TKey, TValue>((TKey)pair.Key, (TValue)pair.Value);
 		}
 
-		private static NullableKeyValuePair<TKeyBase, TValueBase> CastPair(NullableKeyValuePair<TKey, TValue> pair)
+		private static AccessPairBase<TKeyBase, TValueBase> CastPair(AccessPairBase<TKey, TValue> pair)
 		{
-			return new NullableKeyValuePair<TKeyBase, TValueBase>(pair.Key, pair.Value);
+			return new AccessPair<TKey, TValue, TKeyBase, TValueBase>(pair);
 		}
 	}
 }

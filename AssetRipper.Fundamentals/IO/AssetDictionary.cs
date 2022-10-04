@@ -11,37 +11,19 @@ namespace AssetRipper.Core.IO
 	/// </summary>
 	/// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
 	/// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
-	public sealed class AssetDictionary<TKey, TValue> : AccessDictionaryBase<TKey, TValue>, IDependent
+	public sealed class AssetDictionary<TKey, TValue> : AccessDictionaryBase<TKey, TValue>
 		where TKey : notnull, new()
 		where TValue : notnull, new()
 	{
-		private static readonly bool isDependentType = NullableKeyValuePair<TKey, TValue>.IsDependentType;
 		private const int DefaultCapacity = 4;
-		private NullableKeyValuePair<TKey, TValue>[] pairs;
+		private AccessPairBase<TKey, TValue>[] pairs;
 		private int count = 0;
 
 		public AssetDictionary() : this(DefaultCapacity) { }
 
 		public AssetDictionary(int capacity)
 		{
-			pairs = capacity == 0 ? Array.Empty<NullableKeyValuePair<TKey, TValue>>() : new NullableKeyValuePair<TKey, TValue>[capacity];
-		}
-
-		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
-		{
-			if (isDependentType)
-			{
-				foreach (NullableKeyValuePair<TKey, TValue> keyValuePair in this)
-				{
-					if (keyValuePair != null)
-					{
-						foreach (PPtr<IUnityObjectBase> dependency in keyValuePair.FetchDependencies(context))
-						{
-							yield return dependency;
-						}
-					}
-				}
-			}
+			pairs = capacity == 0 ? Array.Empty<AccessPairBase<TKey, TValue>>() : new AccessPairBase<TKey, TValue>[capacity];
 		}
 
 		/// <inheritdoc/>
@@ -62,7 +44,7 @@ namespace AssetRipper.Core.IO
 				{
 					if (value > 0)
 					{
-						NullableKeyValuePair<TKey, TValue>[] newPairs = new NullableKeyValuePair<TKey, TValue>[value];
+						AccessPairBase<TKey, TValue>[] newPairs = new AccessPairBase<TKey, TValue>[value];
 						if (count > 0)
 						{
 							Array.Copy(pairs, newPairs, count);
@@ -71,7 +53,7 @@ namespace AssetRipper.Core.IO
 					}
 					else
 					{
-						pairs = Array.Empty<NullableKeyValuePair<TKey, TValue>>();
+						pairs = Array.Empty<AccessPairBase<TKey, TValue>>();
 					}
 				}
 			}
@@ -80,11 +62,11 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void Add(TKey key, TValue value)
 		{
-			Add(new NullableKeyValuePair<TKey, TValue>(key, value));
+			Add(new AssetPair<TKey, TValue>(key, value));
 		}
 
 		/// <inheritdoc/>
-		public override void Add(NullableKeyValuePair<TKey, TValue> pair)
+		public override void Add(AccessPairBase<TKey, TValue> pair)
 		{
 			if (count == Capacity)
 			{
@@ -98,9 +80,9 @@ namespace AssetRipper.Core.IO
 		/// <inheritdoc/>
 		public override void AddNew() => Add(new TKey(), new TValue());
 
-		public void AddRange(IEnumerable<NullableKeyValuePair<TKey, TValue>> range)
+		public void AddRange(IEnumerable<AccessPairBase<TKey, TValue>> range)
 		{
-			foreach (NullableKeyValuePair<TKey, TValue> pair in range)
+			foreach (AccessPairBase<TKey, TValue> pair in range)
 			{
 				Add(pair);
 			}
@@ -125,7 +107,7 @@ namespace AssetRipper.Core.IO
 				throw new ArgumentOutOfRangeException(nameof(index));
 			}
 
-			pairs[index] = new NullableKeyValuePair<TKey, TValue>(newKey, pairs[index].Value);
+			pairs[index].Key = newKey;
 		}
 
 		/// <inheritdoc/>
@@ -147,10 +129,10 @@ namespace AssetRipper.Core.IO
 				throw new ArgumentOutOfRangeException(nameof(index));
 			}
 
-			pairs[index] = new KeyValuePair<TKey, TValue>(pairs[index].Key, newValue);
+			pairs[index].Value = newValue;
 		}
 
-		public override NullableKeyValuePair<TKey, TValue> GetPair(int index)
+		public override AccessPairBase<TKey, TValue> GetPair(int index)
 		{
 			if ((uint)index >= (uint)count)
 			{
@@ -161,10 +143,10 @@ namespace AssetRipper.Core.IO
 		}
 
 		/// <inheritdoc/>
-		public override int IndexOf(NullableKeyValuePair<TKey, TValue> item) => Array.IndexOf(pairs, item, 0, count);
+		public override int IndexOf(AccessPairBase<TKey, TValue> item) => Array.IndexOf(pairs, item, 0, count);
 
 		/// <inheritdoc/>
-		public override void Insert(int index, NullableKeyValuePair<TKey, TValue> item)
+		public override void Insert(int index, AccessPairBase<TKey, TValue> item)
 		{
 			// Note that insertions at the end are legal.
 			if ((uint)index > (uint)count)
@@ -215,13 +197,13 @@ namespace AssetRipper.Core.IO
 		}
 
 		/// <inheritdoc/>
-		public override bool Contains(NullableKeyValuePair<TKey, TValue> item)
+		public override bool Contains(AccessPairBase<TKey, TValue> item)
 		{
 			return IndexOf(item) >= 0;
 		}
 
 		/// <inheritdoc/>
-		public override void CopyTo(NullableKeyValuePair<TKey, TValue>[] array, int arrayIndex)
+		public override void CopyTo(AccessPairBase<TKey, TValue>[] array, int arrayIndex)
 		{
 			if (array == null)
 			{
@@ -237,7 +219,7 @@ namespace AssetRipper.Core.IO
 		}
 
 		/// <inheritdoc/>
-		public override bool Remove(NullableKeyValuePair<TKey, TValue> item)
+		public override bool Remove(AccessPairBase<TKey, TValue> item)
 		{
 			int index = IndexOf(item);
 			if (index >= 0)
@@ -248,7 +230,7 @@ namespace AssetRipper.Core.IO
 			return false;
 		}
 
-		protected override bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out NullableKeyValuePair<TKey, TValue>? pair)
+		protected override bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair)
 		{
 			if (key is null)
 			{
@@ -260,7 +242,7 @@ namespace AssetRipper.Core.IO
 			pair = null;
 			for (int i = Count - 1; i > -1; i--)
 			{
-				NullableKeyValuePair<TKey, TValue> p = pairs[i];
+				AccessPairBase<TKey, TValue> p = pairs[i];
 				if (p.Key.GetHashCode() == hash && key.Equals(p.Key))
 				{
 					if (found)

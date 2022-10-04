@@ -45,13 +45,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				return gameObject.Component_C1_AssetList_ComponentPair.Select(pair => pair.m_Component);
 			}
-			else if (gameObject.Component_C1_AssetList_NullableKeyValuePair_Int32_PPtr_Component__3_0_0_f5 is not null)
+			else if (gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5 is not null)
 			{
-				return gameObject.Component_C1_AssetList_NullableKeyValuePair_Int32_PPtr_Component__3_0_0_f5.Select(pair => pair.Value);
+				return gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5.Select(pair => pair.Value);
 			}
-			else if (gameObject.Component_C1_AssetList_NullableKeyValuePair_Int32_PPtr_Component__5_0_0_f4 is not null)
+			else if (gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4 is not null)
 			{
-				return gameObject.Component_C1_AssetList_NullableKeyValuePair_Int32_PPtr_Component__5_0_0_f4.Select(pair => pair.Value);
+				return gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4.Select(pair => pair.Value);
 			}
 			else
 			{

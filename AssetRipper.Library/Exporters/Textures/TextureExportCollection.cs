@@ -14,6 +14,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Sprite_;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
+using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -235,8 +236,10 @@ namespace AssetRipper.Library.Exporters.Textures
 						long exportID = GetExportID(sprite);
 						ISpriteMetaData smeta = importer.SpriteSheet_C1006.GetSpriteMetaData(sprite.NameString);
 						smeta.InternalID = exportID;
-						NullableKeyValuePair<int, long> key = new NullableKeyValuePair<int, long>((int)ClassIDType.Sprite, exportID);
-						importer.InternalIDToNameTable_C1006.Add(new(key, sprite.Name));
+						AssetPair<AssetPair<int, long>, Utf8String> pair = importer.InternalIDToNameTable_C1006.AddNew();
+						pair.Key.Key = (int)ClassIDType.Sprite;
+						pair.Key.Value = exportID;
+						pair.Value.CopyValues(sprite.Name);
 					}
 				}
 				else

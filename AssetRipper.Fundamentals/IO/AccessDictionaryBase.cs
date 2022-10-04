@@ -10,7 +10,7 @@ namespace AssetRipper.Core.IO
 	/// </summary>
 	/// <typeparam name="TKey">The exposed key type, such as an interface, base type, or primitive type</typeparam>
 	/// <typeparam name="TValue">The exposed value type, such as an interface, base type, or primitive type</typeparam>
-	public abstract class AccessDictionaryBase<TKey, TValue> : IEnumerable<NullableKeyValuePair<TKey, TValue>>
+	public abstract class AccessDictionaryBase<TKey, TValue> : IEnumerable<AccessPairBase<TKey, TValue>>
 		where TKey : notnull
 		where TValue : notnull
 	{
@@ -55,7 +55,7 @@ namespace AssetRipper.Core.IO
 		/// It could throw exceptions if used improperly.
 		/// </remarks>
 		/// <param name="pair">The pair to be added</param>
-		public abstract void Add(NullableKeyValuePair<TKey, TValue> pair);
+		public abstract void Add(AccessPairBase<TKey, TValue> pair);
 
 		/// <summary>
 		/// Add a new pair to the dictionary
@@ -83,7 +83,7 @@ namespace AssetRipper.Core.IO
 		/// </summary>
 		/// <param name="index">The index to access</param>
 		/// <returns>The pair at the specified index</returns>
-		public abstract NullableKeyValuePair<TKey, TValue> GetPair(int index);
+		public abstract AccessPairBase<TKey, TValue> GetPair(int index);
 
 		/// <summary>
 		/// Set a key in the dictionary
@@ -111,10 +111,10 @@ namespace AssetRipper.Core.IO
 		public bool IsReadOnly => false;
 
 		/// <inheritdoc/>
-		public abstract int IndexOf(NullableKeyValuePair<TKey, TValue> item);
+		public abstract int IndexOf(AccessPairBase<TKey, TValue> item);
 
 		/// <inheritdoc/>
-		public abstract void Insert(int index, NullableKeyValuePair<TKey, TValue> item);
+		public abstract void Insert(int index, AccessPairBase<TKey, TValue> item);
 
 		/// <inheritdoc/>
 		public abstract void RemoveAt(int index);
@@ -123,17 +123,17 @@ namespace AssetRipper.Core.IO
 		public abstract void Clear();
 
 		/// <inheritdoc/>
-		public abstract bool Contains(NullableKeyValuePair<TKey, TValue> item);
+		public abstract bool Contains(AccessPairBase<TKey, TValue> item);
 
 		/// <inheritdoc/>
-		public abstract void CopyTo(NullableKeyValuePair<TKey, TValue>[] array, int arrayIndex);
+		public abstract void CopyTo(AccessPairBase<TKey, TValue>[] array, int arrayIndex);
 
 		/// <inheritdoc/>
-		public abstract bool Remove(NullableKeyValuePair<TKey, TValue> item);
+		public abstract bool Remove(AccessPairBase<TKey, TValue> item);
 
-		protected NullableKeyValuePair<TKey, TValue> GetSinglePairForKey(TKey key)
+		protected AccessPairBase<TKey, TValue> GetSinglePairForKey(TKey key)
 		{
-			if (TryGetSinglePairForKey(key, out NullableKeyValuePair<TKey, TValue>? pair))
+			if (TryGetSinglePairForKey(key, out AccessPairBase<TKey, TValue>? pair))
 			{
 				return pair;
 			}
@@ -143,7 +143,7 @@ namespace AssetRipper.Core.IO
 			}
 		}
 
-		protected abstract bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out NullableKeyValuePair<TKey, TValue>? pair);
+		protected abstract bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair);
 
 		/// <summary>
 		/// Access a value in the dictionary
@@ -159,7 +159,7 @@ namespace AssetRipper.Core.IO
 			get => GetSinglePairForKey(key).Value;
 			set
 			{
-				if (TryGetSinglePairForKey(key, out NullableKeyValuePair<TKey, TValue>? pair))
+				if (TryGetSinglePairForKey(key, out AccessPairBase<TKey, TValue>? pair))
 				{
 					pair.Value = value;
 				}
@@ -172,7 +172,7 @@ namespace AssetRipper.Core.IO
 
 		public bool TryGetValue(TKey key, [NotNullWhen(true)] out TValue? value)
 		{
-			if (TryGetSinglePairForKey(key, out NullableKeyValuePair<TKey, TValue>? pair))
+			if (TryGetSinglePairForKey(key, out AccessPairBase<TKey, TValue>? pair))
 			{
 				value = pair.Value;
 				return value is not null;
@@ -185,7 +185,7 @@ namespace AssetRipper.Core.IO
 		}
 
 		/// <inheritdoc/>
-		public IEnumerator<NullableKeyValuePair<TKey, TValue>> GetEnumerator()
+		public IEnumerator<AccessPairBase<TKey, TValue>> GetEnumerator()
 		{
 			for (int i = 0; i < Count; i++)
 			{

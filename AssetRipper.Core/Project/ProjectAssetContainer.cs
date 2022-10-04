@@ -256,7 +256,7 @@ namespace AssetRipper.Core.Project
 
 		private void AddResources(IResourceManager manager)
 		{
-			foreach (NullableKeyValuePair<Utf8String, IPPtr_Object_> kvp in manager.Container_C147)
+			foreach (AccessPairBase<Utf8String, IPPtr_Object_> kvp in manager.Container_C147)
 			{
 				IUnityObjectBase? asset = kvp.Value.TryGetAsset(manager.SerializedFile);
 				if (asset is null)
@@ -293,7 +293,7 @@ namespace AssetRipper.Core.Project
 			string bundleName = bundle.GetAssetBundleName();
 			string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
 			string directory = Path.Combine(AssetBundleFullPath, bundleName);
-			foreach (NullableKeyValuePair<Utf8String, IAssetInfo> kvp in bundle.Container_C142)
+			foreach (AccessPairBase<Utf8String, IAssetInfo> kvp in bundle.Container_C142)
 			{
 				// skip shared bundle assets, because we need to export them in their bundle directory
 				if (kvp.Value.Asset.FileIndex != 0)
