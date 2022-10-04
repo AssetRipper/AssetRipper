@@ -64,7 +64,8 @@ public abstract class SerializableEntry
 						index++;
 						ThrowIfIncorrectName(list[index], "data");
 						index++;
-						return new SerializableArray(new SerializablePrimitive(PrimitiveType.U1));
+						result = new SerializableTypelessData();
+						break;
 					}
 				default:
 					result = SerializableType.FromTypeTreeNodes(list, ref index);
