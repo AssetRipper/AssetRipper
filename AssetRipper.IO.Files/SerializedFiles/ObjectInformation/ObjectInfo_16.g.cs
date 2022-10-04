@@ -88,19 +88,13 @@ public partial record class ObjectInfo_16 : IObjectInfo
 	partial void OnByteSizeAssignment(int value);
 	
 	/// <summary>
-	/// New versions: Type index in <see cref="SerializedFileMetadata.Types"/> array.
+	/// Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/>. Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
 	/// </summary>
-	/// <remarks>
-	/// Old versions: Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/>. Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
-	/// </remarks>
 	private int m_TypeID = new();
 	
 	/// <summary>
-	/// New versions: Type index in <see cref="SerializedFileMetadata.Types"/> array.
+	/// Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/>. Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
 	/// </summary>
-	/// <remarks>
-	/// Old versions: Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/>. Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
-	/// </remarks>
 	public int TypeID
 	{
 		get => m_TypeID;
@@ -155,13 +149,22 @@ public partial record class ObjectInfo_16 : IObjectInfo
 	/// </summary>
 	public short ClassID
 	{
-		get => default;
-		set { }
+		get => (short)TypeID;
+		set => TypeID = value;
 	}
 	
 	public ushort IsDestroyed
 	{
 		get => default;
+		set { }
+	}
+	
+	/// <summary>
+	/// Type index in <see cref="SerializedFileMetadata.Types"/> array.
+	/// </summary>
+	public int SerializedTypeIndex
+	{
+		get => -1;
 		set { }
 	}
 	

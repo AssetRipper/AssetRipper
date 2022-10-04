@@ -28,11 +28,8 @@ public partial interface IObjectInfo : IEndianReadable, IEndianWritable
 	public int ByteSize { get; set; }
 	
 	/// <summary>
-	/// New versions: Type index in <see cref="SerializedFileMetadata.Types"/> array.
+	/// Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/>. Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
 	/// </summary>
-	/// <remarks>
-	/// Old versions: Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/>. Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
-	/// </remarks>
 	public int TypeID { get; set; }
 	
 	/// <summary>
@@ -45,5 +42,10 @@ public partial interface IObjectInfo : IEndianReadable, IEndianWritable
 	public short ScriptTypeIndex { get; set; }
 	
 	public bool Stripped { get; set; }
+	
+	/// <summary>
+	/// Type index in <see cref="SerializedFileMetadata.Types"/> array.
+	/// </summary>
+	public int SerializedTypeIndex { get; set; }
 	
 }

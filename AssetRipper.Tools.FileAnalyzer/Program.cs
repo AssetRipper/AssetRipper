@@ -21,6 +21,7 @@ namespace AssetRipper.Tools.FileAnalyzer
 			else
 			{
 				Logger.Add(new ConsoleLogger(true));
+				Logger.Add(new CleanFileLogger());
 				LoadFiles(args);
 			}
 			Console.ReadKey();
@@ -39,16 +40,20 @@ namespace AssetRipper.Tools.FileAnalyzer
 		{
 			Logger.Info(fullName);
 			Logger.BlankLine();
+#if !DEBUG
 			try
+#endif
 			{
 				File file = SchemeReader.LoadFile(fullName);
 				file.ReadContentsRecursively();
 				LogFileInfo(file);
 			}
+#if !DEBUG
 			catch (Exception ex)
 			{
 				Logger.Error(ex);
 			}
+#endif
 		}
 
 		private static void LogFileInfo(File file, int indent = 0)
@@ -94,6 +99,60 @@ namespace AssetRipper.Tools.FileAnalyzer
 
 			Logger.Info($"{indentionString}Serialied version: {(int)assetsFile.Header.Version}");
 			Logger.Info($"{indentionString}Endianess: {(assetsFile.EndianType)}");
+
+			if (assetsFile.Metadata.Types.Length > 0)
+			{
+				Logger.Info($"{indentionString}Types:");
+				for (int i = 0; i < assetsFile.Metadata.Types.Length; i++)
+				{
+					SerializedType type = assetsFile.Metadata.Types[i];
+					if (i != 0)
+					{
+						Logger.BlankLine();
+					}
+					Logger.Info($"{indentionString}\tRaw TypeID: {type.RawTypeID}");
+					Logger.Info($"{indentionString}\tScript Type Index: {type.ScriptTypeIndex}");
+					Logger.Info($"{indentionString}\tStripped: {type.IsStrippedType}");
+					Logger.Info($"{indentionString}\tDependencies: {string.Join(", ", type.TypeDependencies)}");
+				}
+			}
+
+			if (assetsFile.Metadata.RefTypes.Length > 0)
+			{
+				Logger.Info($"{indentionString}Reference Types:");
+				for (int i = 0; i < assetsFile.Metadata.RefTypes.Length; i++)
+				{
+					SerializedTypeReference type = assetsFile.Metadata.RefTypes[i];
+					if (i != 0)
+					{
+						Logger.BlankLine();
+					}
+					Logger.Info($"{indentionString}\tRaw TypeID: {type.RawTypeID}");
+					Logger.Info($"{indentionString}\tScript Type Index: {type.ScriptTypeIndex}");
+					Logger.Info($"{indentionString}\tStripped: {type.IsStrippedType}");
+					Logger.Info($"{indentionString}\tAssembly Name: {type.AsmName}");
+					Logger.Info($"{indentionString}\tFull Name: {type.FullName}");
+				}
+			}
+
+			if (assetsFile.Metadata.Object.Length > 0)
+			{
+				Logger.Info($"{indentionString}Object Information:");
+				for (int i = 0; i < assetsFile.Metadata.Object.Length; i++)
+				{
+					ObjectInfo info = assetsFile.Metadata.Object[i];
+					if (i != 0)
+					{
+						Logger.BlankLine();
+					}
+					Logger.Info($"{indentionString}\tTypeID: {info.TypeID}");
+					Logger.Info($"{indentionString}\tClassID: {info.ClassID}");
+					Logger.Info($"{indentionString}\tScript Type Index: {info.ScriptTypeIndex}");
+					Logger.Info($"{indentionString}\tStripped: {info.Stripped}");
+					Logger.Info($"{indentionString}\tDestroyed: {info.IsDestroyed}");
+					Logger.Info($"{indentionString}\tFileID: {info.FileID}");
+				}
+			}
 
 			if (assetsFile.Metadata.Externals.Length > 0)
 			{

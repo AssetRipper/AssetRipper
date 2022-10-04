@@ -88,41 +88,44 @@ public partial record class ObjectInfo_22 : IObjectInfo
 	partial void OnByteSizeAssignment(int value);
 	
 	/// <summary>
-	/// New versions: Type index in <see cref="SerializedFileMetadata.Types"/> array.
+	/// Type index in <see cref="SerializedFileMetadata.Types"/> array.
 	/// </summary>
-	/// <remarks>
-	/// Old versions: Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/>. Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
-	/// </remarks>
-	private int m_TypeID = new();
+	private int m_SerializedTypeIndex = new();
 	
 	/// <summary>
-	/// New versions: Type index in <see cref="SerializedFileMetadata.Types"/> array.
+	/// Type index in <see cref="SerializedFileMetadata.Types"/> array.
 	/// </summary>
-	/// <remarks>
-	/// Old versions: Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/>. Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
-	/// </remarks>
-	public int TypeID
+	public int SerializedTypeIndex
 	{
-		get => m_TypeID;
+		get => m_SerializedTypeIndex;
 		set
 		{
-			m_TypeID = value;
-			OnTypeIDAssignment(value);
+			m_SerializedTypeIndex = value;
+			OnSerializedTypeIndexAssignment(value);
 		}
 	}
 	
 	/// <summary>
-	/// Called when <see cref="TypeID"/> is set.
+	/// Called when <see cref="SerializedTypeIndex"/> is set.
 	/// </summary>
-	partial void OnTypeIDAssignment(int value);
+	partial void OnSerializedTypeIndexAssignment(int value);
+	
+	/// <summary>
+	/// Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/>. Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
+	/// </summary>
+	public int TypeID
+	{
+		get => -1;
+		set { }
+	}
 	
 	/// <summary>
 	/// Class ID of the object.
 	/// </summary>
 	public short ClassID
 	{
-		get => default;
-		set { }
+		get => (short)TypeID;
+		set => TypeID = value;
 	}
 	
 	public ushort IsDestroyed
@@ -139,7 +142,7 @@ public partial record class ObjectInfo_22 : IObjectInfo
 	
 	public bool Stripped
 	{
-		get => default;
+		get => false;
 		set { }
 	}
 	
@@ -149,7 +152,7 @@ public partial record class ObjectInfo_22 : IObjectInfo
 		m_FileID = reader.ReadInt64();
 		m_ByteStart = reader.ReadInt64();
 		m_ByteSize = reader.ReadInt32();
-		m_TypeID = reader.ReadInt32();
+		m_SerializedTypeIndex = reader.ReadInt32();
 		OnReadFinished(reader);
 	}
 	
@@ -164,7 +167,7 @@ public partial record class ObjectInfo_22 : IObjectInfo
 		writer.Write(m_FileID);
 		writer.Write(m_ByteStart);
 		writer.Write(m_ByteSize);
-		writer.Write(m_TypeID);
+		writer.Write(m_SerializedTypeIndex);
 		OnWriteFinished(writer);
 	}
 	

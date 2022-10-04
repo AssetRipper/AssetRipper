@@ -97,7 +97,7 @@ public class SerializedAssetCollection : AssetCollection
 		AssetInfo assetInfo = new AssetInfo(collection, info.FileID, info.ClassID);
 		long offset = file.Header.DataOffset + info.ByteStart;
 		int size = info.ByteSize;
-		SerializedType type = file.Metadata.Types[info.TypeID];
+		SerializedType type = info.GetSerializedType(file.Metadata.Types);
 		using PartialStream partialStream = new PartialStream(file.Stream, offset, size, true);
 		using EndianReader reader = new EndianReader(partialStream, file.EndianType);
 		IUnityObjectBase? asset = factory.ReadAsset(assetInfo, reader, size, type);

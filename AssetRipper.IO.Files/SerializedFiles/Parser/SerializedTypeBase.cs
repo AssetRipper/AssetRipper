@@ -4,7 +4,33 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 {
 	public abstract class SerializedTypeBase
 	{
-		public int TypeID { get; set; }
+		public int TypeID
+		{
+			get
+			{
+				return RawTypeID;
+			}
+			set
+			{
+				RawTypeID = value;
+			}
+		}
+
+		/// <summary>
+		/// For versions less than 17, it specifies <see cref="TypeID"/> or -<see cref="ScriptTypeIndex"/> -1 for MonoBehaviour
+		/// </summary>
+		public int OriginalTypeID
+		{
+			get
+			{
+				return RawTypeID;
+			}
+			set
+			{
+				RawTypeID = value;
+			}
+		}
+		public int RawTypeID { get; set; }
 		public bool IsStrippedType { get; set; }
 		/// <summary>
 		/// For <see cref="ClassIDType.MonoBehaviour"/> specifies script type
@@ -20,73 +46,63 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 		public byte[] ScriptID { get; set; } = Array.Empty<byte>();
 		public byte[] OldTypeHash { get; set; } = Array.Empty<byte>();
 
-		public virtual void Read(SerializedReader reader, bool hasTypeTree)
+		public void Read(SerializedReader reader, bool hasTypeTree)
 		{
-			if (HasScriptTypeIndex(reader.Generation))
+			RawTypeID = reader.ReadInt32();
+			int typeIdLocal;
+			if (reader.Generation < FormatVersion.RefactoredClassId)
 			{
-				TypeID = reader.ReadInt32();
+				typeIdLocal = RawTypeID < 0 ? -1 : RawTypeID;
+				IsStrippedType = false;
+				ScriptTypeIndex = -1;
 			}
 			else
 			{
-				OriginalTypeID = reader.ReadInt32();
-			}
-			if (HasIsStrippedType(reader.Generation))
-			{
+				typeIdLocal = RawTypeID;
 				IsStrippedType = reader.ReadBoolean();
 			}
-			if (HasScriptTypeIndex(reader.Generation))
+
+			if (reader.Generation >= FormatVersion.RefactorTypeData)
 			{
 				ScriptTypeIndex = reader.ReadInt16();
 			}
+
+			if (reader.Generation >= FormatVersion.HasTypeTreeHashes)
+			{
+				bool useScriptTypeIndex = UseScriptTypeIndex(reader.Generation, default);
+				bool readScriptID = (typeIdLocal == -1) || (typeIdLocal == 114) || (!useScriptTypeIndex && ScriptTypeIndex < 0);
+				if (readScriptID)
+				{
+					ScriptID = reader.ReadBytes(16);//actually read as 4 uint
+				}
+				OldTypeHash = reader.ReadBytes(16);//actually read as 4 uint
+			}
+
+			if (hasTypeTree)
+			{
+				OldType.Read(reader);
+				if (reader.Generation < FormatVersion.HasTypeTreeHashes)
+				{
+					//OldTypeHash gets recalculated here in a complicated way on 2023.
+				}
+				else if (reader.Generation >= FormatVersion.StoresTypeDependencies)
+				{
+					ReadTypeDependencies(reader);
+				}
+			}
 		}
 
-		public virtual void Write(SerializedWriter writer, bool hasTypeTree)
+		protected abstract void ReadTypeDependencies(SerializedReader reader);
+
+		protected abstract bool UseScriptTypeIndex(FormatVersion formatVersion, UnityVersion unityVersion);
+
+		public void Write(SerializedWriter writer, bool hasTypeTree)
 		{
-			if (HasScriptTypeIndex(writer.Generation))
-			{
-				writer.Write(TypeID);
-			}
-			else
-			{
-				writer.Write(OriginalTypeID);
-			}
-			if (HasIsStrippedType(writer.Generation))
-			{
-				writer.Write(IsStrippedType);
-			}
-			if (HasScriptTypeIndex(writer.Generation))
-			{
-				writer.Write(ScriptTypeIndex);
-			}
 		}
 
 		public override string ToString()
 		{
 			return TypeID.ToString();
-		}
-
-		/// <summary>
-		/// For versions less than 17, it specifies <see cref="TypeID"/> or -<see cref="ScriptTypeIndex"/> -1 for MonoBehaviour
-		/// </summary>
-		public int OriginalTypeID
-		{
-			get
-			{
-				return TypeID == 114 ? -(ScriptTypeIndex + 1) : TypeID;
-			}
-			set
-			{
-				if (value >= 0)
-				{
-					TypeID = value;
-					ScriptTypeIndex = -1;
-				}
-				else
-				{
-					TypeID = 114; //MonoBehaviour
-					ScriptTypeIndex = (short)(-value - 1);
-				}
-			}
 		}
 
 		/// <summary>

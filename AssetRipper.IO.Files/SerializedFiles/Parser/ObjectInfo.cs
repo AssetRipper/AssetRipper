@@ -1,4 +1,5 @@
 using AssetRipper.IO.Files.SerializedFiles.IO;
+using System.Linq;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser
 {
@@ -54,7 +55,15 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 
 			ByteSize = reader.ReadInt32();
-			TypeID = reader.ReadInt32();
+			if (reader.Generation >= FormatVersion.RefactorTypeData)
+			{
+				SerializedTypeIndex = reader.ReadInt32();
+			}
+			else
+			{
+				SerializedTypeIndex = -1;
+				TypeID = reader.ReadInt32();
+			}
 			if (HasClassID(reader.Generation))
 			{
 				ClassID = reader.ReadInt16();
@@ -95,7 +104,14 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 
 			writer.Write(ByteSize);
-			writer.Write(TypeID);
+			if (writer.Generation >= FormatVersion.RefactorTypeData)
+			{
+				writer.Write(SerializedTypeIndex);
+			}
+			else
+			{
+				writer.Write(TypeID);
+			}
 			if (HasClassID(writer.Generation))
 			{
 				writer.Write(ClassID);
@@ -119,6 +135,30 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			return $"{ClassID}[{FileID}]";
 		}
 
+		public SerializedType GetSerializedType(SerializedType[] types)
+		{
+			if (SerializedTypeIndex >= 0)
+			{
+				return types[SerializedTypeIndex];
+			}
+			else
+			{
+				return types.Single(t => t.TypeID == TypeID && t.IsStrippedType == Stripped);
+			}
+		}
+
+		public void Initialize(SerializedType[] types)
+		{
+			if (SerializedTypeIndex >= 0)
+			{
+				SerializedType type = types[SerializedTypeIndex];
+				TypeID = type.TypeID;
+				ClassID = (short)type.TypeID;
+				ScriptTypeIndex = type.ScriptTypeIndex;
+				Stripped = type.IsStrippedType;
+			}
+		}
+
 		/// <summary>
 		/// ObjectID<br/>
 		/// Unique ID that identifies the object. Can be used as a key for a map.
@@ -134,13 +174,14 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 		/// </summary>
 		public int ByteSize { get; set; }
 		/// <summary>
-		/// New versions:<br/>
-		///		Type index in <see cref="SerializedFileMetadata.Types"/> array<br/>
-		/// Old versions:<br/>
-		///		Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/><br/>
-		///		Equals to classID if the object is not <see cref="ClassIDType.MonoBehaviour"/>
+		/// Type ID of the object, which is mapped to <see cref="SerializedType.TypeID"/><br/>
+		/// Equals to classID if the object is not MonoBehaviour"/>
 		/// </summary>
 		public int TypeID { get; set; }
+		/// <summary>
+		/// Type index in <see cref="SerializedFileMetadata.Types"/> array<br/>
+		/// </summary>
+		public int SerializedTypeIndex { get; set; }
 		/// <summary>
 		/// Class ID of the object.
 		/// </summary>

@@ -7,35 +7,57 @@
 	"Properties": {
 		"FileID": {
 			"Summary": "ObjectID",
-			"Remarks": "Unique ID that identifies the object. Can be used as a key for a map."
+			"Remarks": "Unique ID that identifies the object. Can be used as a key for a map.",
+			"GetExpression": "",
+			"SetExpression": ""
 		},
 		"ByteStart": {
 			"Summary": "Offset to the object data.",
-			"Remarks": "Add to <see cref=\"SerializedFileHeader.DataOffset\"/> to get the absolute offset within the serialized file."
+			"Remarks": "Add to <see cref=\"SerializedFileHeader.DataOffset\"/> to get the absolute offset within the serialized file.",
+			"GetExpression": "-1",
+			"SetExpression": ""
 		},
 		"ByteSize": {
 			"Summary": "Size of the object data.",
-			"Remarks": ""
+			"Remarks": "",
+			"GetExpression": "-1",
+			"SetExpression": ""
 		},
 		"TypeID": {
-			"Summary": "New versions: Type index in <see cref=\"SerializedFileMetadata.Types\"/> array.",
-			"Remarks": "Old versions: Type ID of the object, which is mapped to <see cref=\"SerializedType.TypeID\"/>. Equals to classID if the object is not <see cref=\"ClassIDType.MonoBehaviour\"/>"
+			"Summary": "Type ID of the object, which is mapped to <see cref=\"SerializedType.TypeID\"/>. Equals to classID if the object is not <see cref=\"ClassIDType.MonoBehaviour\"/>",
+			"Remarks": "",
+			"GetExpression": "-1",
+			"SetExpression": ""
+		},
+		"SerializedTypeIndex": {
+			"Summary": "Type index in <see cref=\"SerializedFileMetadata.Types\"/> array.",
+			"Remarks": "",
+			"GetExpression": "-1",
+			"SetExpression": ""
 		},
 		"ClassID": {
 			"Summary": "Class ID of the object.",
-			"Remarks": ""
+			"Remarks": "",
+			"GetExpression": "(short)TypeID",
+			"SetExpression": "TypeID = value"
 		},
 		"IsDestroyed": {
 			"Summary": "",
-			"Remarks": ""
+			"Remarks": "",
+			"GetExpression": "",
+			"SetExpression": ""
 		},
 		"ScriptTypeIndex": {
 			"Summary": "",
-			"Remarks": ""
+			"Remarks": "",
+			"GetExpression": "",
+			"SetExpression": ""
 		},
 		"Stripped": {
 			"Summary": "",
-			"Remarks": ""
+			"Remarks": "",
+			"GetExpression": "false",
+			"SetExpression": ""
 		}
 	}
 }

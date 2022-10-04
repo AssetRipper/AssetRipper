@@ -32,9 +32,9 @@ public static class Generator
 			{
 				if (!properties.Contains(propertyName))
 				{
-					declaration.TryGetPropertyDocumentation(propertyName, out string? summary, out string? remarks);
-					MaybeWriteDocumentation(writer, summary, remarks);
-					WriteDefaultProperty(writer, isReadOnly, propertyName, propertyType);
+					declaration.Properties.TryGetValue(propertyName, out PropertyDocumentation? documentation);
+					MaybeWriteDocumentation(writer, documentation?.Summary, documentation?.Remarks);
+					WriteDefaultProperty(writer, isReadOnly, propertyName, propertyType, documentation);
 				}
 			}
 			WriteReadMethod(writer, definition);
@@ -42,15 +42,30 @@ public static class Generator
 		}
 	}
 
-	private static void WriteDefaultProperty(IndentedTextWriter writer, bool isReadOnly, string propertyName, string propertyType)
+	private static void WriteDefaultProperty(IndentedTextWriter writer, bool isReadOnly, string propertyName, string propertyType, PropertyDocumentation? documentation)
 	{
 		writer.WriteLine($"public {propertyType} {propertyName}");
 		using (new CurlyBrackets(writer))
 		{
-			writer.WriteLine("get => default;");
+			if (string.IsNullOrEmpty(documentation?.GetExpression))
+			{
+				writer.WriteLine("get => default;");
+			}
+			else
+			{
+				writer.WriteLine($"get => {documentation.GetExpression};");
+			}
+
 			if (!isReadOnly)
 			{
-				writer.WriteLine("set { }");
+				if (string.IsNullOrEmpty(documentation?.SetExpression))
+				{
+					writer.WriteLine("set { }");
+				}
+				else
+				{
+					writer.WriteLine($"set => {documentation.SetExpression};");
+				}
 			}
 		}
 		writer.WriteLine();

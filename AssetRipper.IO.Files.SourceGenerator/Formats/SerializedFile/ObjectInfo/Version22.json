@@ -24,7 +24,7 @@
 		},
 		{
 			"TypeName": "int",
-			"FieldName": "TypeID",
+			"FieldName": "SerializedTypeIndex",
 			"Special": null
 		}
 	],

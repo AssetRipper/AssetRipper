@@ -5,67 +5,29 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 	public sealed class SerializedTypeReference : SerializedTypeBase
 	{
 		public string ClassName { get; set; } = "";
-		public string NameSpace { get; set; } = "";
+		public string Namespace { get; set; } = "";
 		public string AsmName { get; set; } = "";
 
-		public override void Read(SerializedReader reader, bool hasTypeTree)
+		public string FullName
 		{
-			base.Read(reader, hasTypeTree);
-
-			if (HasHash(reader.Generation))
+			get
 			{
-				if (HasScriptID(ScriptTypeIndex, reader.Generation, TypeID))
-				{
-					ScriptID = reader.ReadBytes(16);
-				}
-				OldTypeHash = reader.ReadBytes(16);
-			}
-
-			if (hasTypeTree)
-			{
-				OldType.Read(reader);
-				if (HasTypeDependencies(reader.Generation))
-				{
-					ClassName = reader.ReadStringZeroTerm();
-					NameSpace = reader.ReadStringZeroTerm();
-					AsmName = reader.ReadStringZeroTerm();
-				}
+				return string.IsNullOrEmpty(Namespace)
+					? ClassName
+					: $"{Namespace}.{ClassName}";
 			}
 		}
 
-		public override void Write(SerializedWriter writer, bool hasTypeTree)
+		protected override bool UseScriptTypeIndex(FormatVersion formatVersion, UnityVersion unityVersion)
 		{
-			base.Write(writer, hasTypeTree);
-
-			if (HasHash(writer.Generation))
-			{
-				if (HasScriptID(ScriptTypeIndex, writer.Generation, TypeID))
-				{
-					writer.Write(ScriptID);
-				}
-				writer.Write(OldTypeHash);
-			}
-
-			if (hasTypeTree)
-			{
-				OldType.Write(writer);
-				if (HasTypeDependencies(writer.Generation))
-				{
-					writer.WriteStringZeroTerm(ClassName);
-					writer.WriteStringZeroTerm(NameSpace);
-					writer.WriteStringZeroTerm(AsmName);
-				}
-			}
+			return false;
 		}
 
-		private static bool HasScriptID(short scriptTypeIndex, FormatVersion generation, int typeID)
+		protected override void ReadTypeDependencies(SerializedReader reader)
 		{
-			//Temporary solution to #296
-			return scriptTypeIndex >= 0 || typeID == 114;//MonoBehaviour
-														 //Previous code:
-														 //(scriptTypeIndex >= 0)
-														 //|| (generation < FormatVersion.RefactoredClassId && typeID < 0)
-														 //|| (generation >= FormatVersion.RefactoredClassId && typeID == ClassIDType.MonoBehaviour);
+			ClassName = reader.ReadStringZeroTerm();
+			Namespace = reader.ReadStringZeroTerm();
+			AsmName = reader.ReadStringZeroTerm();
 		}
 	}
 }

@@ -6,59 +6,23 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 	{
 		public int[] TypeDependencies { get; set; } = Array.Empty<int>();
 
-		private static bool HasScriptID(FormatVersion generation, int typeID)
+		protected override bool UseScriptTypeIndex(FormatVersion formatVersion, UnityVersion unityVersion)
 		{
-			//Temporary solution to #296
-			return typeID == 114;//MonoBehaviour
-								 //Previous code:
-								 //(generation < FormatVersion.RefactoredClassId && typeID < 0)
-								 //|| (generation >= FormatVersion.RefactoredClassId && typeID == ClassIDType.MonoBehaviour);
+			//This code is wrong
+			//Needs unit-tested
+			//Might depend on whether or not the version was stripped
+			//return unityVersion < WriteIDHashForScriptTypeVersion;
+			return true;
 		}
 
-		public override void Read(SerializedReader reader, bool hasTypeTree)
+		protected override void ReadTypeDependencies(SerializedReader reader)
 		{
-			base.Read(reader, hasTypeTree);
-
-			if (HasHash(reader.Generation))
-			{
-				if (HasScriptID(reader.Generation, TypeID))
-				{
-					ScriptID = reader.ReadBytes(16);
-				}
-				OldTypeHash = reader.ReadBytes(16);
-			}
-
-			if (hasTypeTree)
-			{
-				OldType.Read(reader);
-				if (HasTypeDependencies(reader.Generation))
-				{
-					TypeDependencies = reader.ReadInt32Array();
-				}
-			}
+			TypeDependencies = reader.ReadInt32Array();
 		}
 
-		public override void Write(SerializedWriter writer, bool hasTypeTree)
-		{
-			base.Write(writer, hasTypeTree);
-
-			if (HasHash(writer.Generation))
-			{
-				if (HasScriptID(writer.Generation, TypeID))
-				{
-					writer.Write(ScriptID);
-				}
-				writer.Write(OldTypeHash);
-			}
-
-			if (hasTypeTree)
-			{
-				OldType.Write(writer);
-				if (HasTypeDependencies(writer.Generation))
-				{
-					writer.WriteArray(TypeDependencies);
-				}
-			}
-		}
+		/// <summary>
+		/// Unknown
+		/// </summary>
+		private static UnityVersion WriteIDHashForScriptTypeVersion => default;
 	}
 }
