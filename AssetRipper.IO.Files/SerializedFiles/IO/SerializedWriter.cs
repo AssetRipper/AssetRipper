@@ -6,9 +6,10 @@ namespace AssetRipper.IO.Files.SerializedFiles.IO
 {
 	public sealed class SerializedWriter : EndianWriter
 	{
-		public SerializedWriter(Stream stream, EndianType endianess, FormatVersion generation) : base(stream, endianess)
+		public SerializedWriter(Stream stream, EndianType endianess, FormatVersion generation, UnityVersion version) : base(stream, endianess)
 		{
 			Generation = generation;
+			Version = version;
 		}
 
 		public void WriteSerialized<T>(T value) where T : ISerializedWritable
@@ -39,5 +40,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.IO
 		}
 
 		public FormatVersion Generation { get; }
+
+		public UnityVersion Version { get; }
 	}
 }

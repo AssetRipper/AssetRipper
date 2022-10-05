@@ -66,7 +66,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 				swapEndianess = SwapEndianess;
 			}
 			EndianType endianess = swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
-			using SerializedWriter writer = new SerializedWriter(stream, endianess, header.Version);
+			using SerializedWriter writer = new SerializedWriter(stream, endianess, header.Version, UnityVersion);
 			Write(writer);
 		}
 
@@ -76,6 +76,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			{
 				string signature = reader.ReadStringZeroTerm();
 				UnityVersion = UnityVersion.Parse(signature);
+				reader.Version = UnityVersion;
 			}
 			if (HasPlatform(reader.Generation))
 			{

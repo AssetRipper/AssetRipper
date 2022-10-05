@@ -69,8 +69,9 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 
 			if (reader.Generation >= FormatVersion.HasTypeTreeHashes)
 			{
-				bool useScriptTypeIndex = UseScriptTypeIndex(reader.Generation, default);
-				bool readScriptID = (typeIdLocal == -1) || (typeIdLocal == 114) || (!useScriptTypeIndex && ScriptTypeIndex < 0);
+				bool readScriptID = (typeIdLocal == -1) 
+					|| (typeIdLocal == 114) 
+					|| (!IgnoreScriptTypeForHash(reader.Generation, reader.Version) && ScriptTypeIndex >= 0);
 				if (readScriptID)
 				{
 					ScriptID = reader.ReadBytes(16);//actually read as 4 uint
@@ -94,7 +95,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 
 		protected abstract void ReadTypeDependencies(SerializedReader reader);
 
-		protected abstract bool UseScriptTypeIndex(FormatVersion formatVersion, UnityVersion unityVersion);
+		protected abstract bool IgnoreScriptTypeForHash(FormatVersion formatVersion, UnityVersion unityVersion);
 
 		public void Write(SerializedWriter writer, bool hasTypeTree)
 		{

@@ -45,5 +45,10 @@ namespace AssetRipper.IO.Files.SerializedFiles.IO
 		}
 
 		public FormatVersion Generation { get; }
+
+		/// <summary>
+		/// Gets set after reading the metadata version
+		/// </summary>
+		public UnityVersion Version { get; set; }
 	}
 }

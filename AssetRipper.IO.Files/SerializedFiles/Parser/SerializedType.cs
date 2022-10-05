@@ -6,13 +6,11 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 	{
 		public int[] TypeDependencies { get; set; } = Array.Empty<int>();
 
-		protected override bool UseScriptTypeIndex(FormatVersion formatVersion, UnityVersion unityVersion)
+		protected override bool IgnoreScriptTypeForHash(FormatVersion formatVersion, UnityVersion unityVersion)
 		{
-			//This code is wrong
-			//Needs unit-tested
-			//Might depend on whether or not the version was stripped
-			//return unityVersion < WriteIDHashForScriptTypeVersion;
-			return true;
+			//This code is most likely correct, but not guaranteed.
+			//Reverse engineering it was painful, and it's possible that mistakes were made.
+			return !unityVersion.IsEqual(0, 0, 0) && unityVersion < WriteIDHashForScriptTypeVersion;
 		}
 
 		protected override void ReadTypeDependencies(SerializedReader reader)
@@ -20,9 +18,6 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			TypeDependencies = reader.ReadInt32Array();
 		}
 
-		/// <summary>
-		/// Unknown
-		/// </summary>
-		private static UnityVersion WriteIDHashForScriptTypeVersion => default;
+		private static UnityVersion WriteIDHashForScriptTypeVersion { get; } = new UnityVersion(2018, 3, 0, UnityVersionType.Alpha, 1);
 	}
 }

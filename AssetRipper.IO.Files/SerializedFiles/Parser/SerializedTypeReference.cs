@@ -18,7 +18,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 		}
 
-		protected override bool UseScriptTypeIndex(FormatVersion formatVersion, UnityVersion unityVersion)
+		protected override bool IgnoreScriptTypeForHash(FormatVersion formatVersion, UnityVersion unityVersion)
 		{
 			return false;
 		}
