@@ -314,7 +314,14 @@ namespace AssetRipper.Core.Project
 				switch (m_BundledAssetsExportMode)
 				{
 					case BundledAssetsExportMode.DirectExport:
-						asset.OriginalPath = assetPath;
+						if (!assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
+						{
+							asset.OriginalPath = AssetsDirectory + assetPath;
+						}
+						else
+						{
+							asset.OriginalPath = assetPath;
+						}
 						break;
 					case BundledAssetsExportMode.GroupByBundleName:
 						if (assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
