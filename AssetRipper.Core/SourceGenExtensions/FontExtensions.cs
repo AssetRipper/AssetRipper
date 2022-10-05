@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.Font;
-using AssetRipper.SourceGenerated.Classes.ClassID_128;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_128;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
