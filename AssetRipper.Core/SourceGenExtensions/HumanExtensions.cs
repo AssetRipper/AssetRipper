@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.Misc.Bones;
+﻿using AssetRipper.Core.Classes.AnimationClip.Bones;
 using AssetRipper.SourceGenerated.Subclasses.Human;
 
 namespace AssetRipper.Core.SourceGenExtensions

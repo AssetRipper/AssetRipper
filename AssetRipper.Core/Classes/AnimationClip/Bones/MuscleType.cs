@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Core.Classes.Misc.Bones
+﻿namespace AssetRipper.Core.Classes.AnimationClip.Bones
 {
 	public enum MuscleType
 	{
