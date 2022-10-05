@@ -289,16 +289,28 @@ namespace AssetRipper.Core.Parser.Files.SerializedFiles
 				}
 				catch (Exception ex)
 				{
-					replaceWithUnreadableObject = true;
 					Logger.Error($"Error during reading of asset type {assetInfo.ClassID}. V: {Version} P: {Platform} N: {Name} Path: {FilePath}", ex);
+					if (asset is IMonoBehaviourBase monoBehaviour)
+					{
+						monoBehaviour.Structure = null;
+					}
+					else
+					{
+						replaceWithUnreadableObject = true;
+					}
 				}
 			}
 
 			long read = reader.BaseStream.Position - offset;
 			if (!replaceWithUnreadableObject && read != size)
 			{
-				if (asset is IMonoBehaviourBase monoBehaviour && monoBehaviour.Structure == null)
+				if (asset is IMonoBehaviourBase monoBehaviour)
 				{
+					if (monoBehaviour.Structure is not null)
+					{
+						Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {monoBehaviour}, because script layout mismatched binary content.");
+						monoBehaviour.Structure = null;
+					}
 					reader.BaseStream.Position = offset + size;
 				}
 				else
