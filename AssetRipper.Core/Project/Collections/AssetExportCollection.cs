@@ -22,7 +22,13 @@ namespace AssetRipper.Core.Project.Collections
 			string fileName;
 			if (Asset.OriginalName is not null)
 			{
-				string resourcePath = Path.Combine(projectDirectory, Asset.OriginalDirectory ?? "", $"{Asset.OriginalName}.{GetExportExtension(Asset)}");
+				string? deserializedName = (Asset as IHasNameString)?.NameString;
+				string assetName = !string.IsNullOrEmpty(deserializedName)
+					? deserializedName
+					: Asset.OriginalName.Length > 0
+						? Asset.OriginalName
+						: Asset.AssetClassName;
+				string resourcePath = Path.Combine(projectDirectory, Asset.OriginalDirectory ?? "", $"{assetName}.{GetExportExtension(Asset)}");
 				subPath = Path.GetDirectoryName(resourcePath)!;
 				string resFileName = Path.GetFileName(resourcePath);
 				fileName = GetUniqueFileName(subPath, resFileName);
