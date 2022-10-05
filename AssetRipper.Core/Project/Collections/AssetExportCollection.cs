@@ -29,7 +29,8 @@ namespace AssetRipper.Core.Project.Collections
 					: Asset.OriginalName.Length > 0
 						? Asset.OriginalName
 						: Asset.AssetClassName;
-				string resourcePath = FileUtils.FixInvalidNameCharacters(Path.Combine(projectDirectory, Asset.OriginalDirectory ?? "", $"{assetName}.{GetExportExtension(Asset)}"));
+				string resourcePath = Path.GetFullPath(FileUtils.FixInvalidNameCharacters(
+					Path.Combine(projectDirectory, Asset.OriginalDirectory ?? "", $"{assetName}.{GetExportExtension(Asset)}")));
 				subPath = Path.GetDirectoryName(resourcePath)!;
 				string resFileName = Path.GetFileName(resourcePath);
 				fileName = GetUniqueFileName(subPath, resFileName);
