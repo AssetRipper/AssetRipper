@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Camera;
 using AssetRipper.Core.Classes.GraphicsSettings;
-using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_30;
 
 namespace AssetRipper.Core.SourceGenExtensions

@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.QualitySettings;
+﻿using AssetRipper.Core.Classes.QualitySettings;
 using AssetRipper.Core.IO;
 using AssetRipper.SourceGenerated.Classes.ClassID_47;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;

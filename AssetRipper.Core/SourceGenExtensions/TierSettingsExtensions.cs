@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.GraphicsSettings;
-using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Subclasses.TierGraphicsSettings;
 using AssetRipper.SourceGenerated.Subclasses.TierGraphicsSettingsEditor;
 using AssetRipper.SourceGenerated.Subclasses.TierSettings;
