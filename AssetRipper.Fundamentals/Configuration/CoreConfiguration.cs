@@ -89,7 +89,7 @@ namespace AssetRipper.Core.Configuration
 			StreamingAssetsMode = StreamingAssetsMode.Extract;
 			ExportRootPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
-			BundledAssetsExportMode = BundledAssetsExportMode.GroupByBundleName;
+			BundledAssetsExportMode = BundledAssetsExportMode.DirectExport;
 			Filter = DefaultFilter;
 		}
 
