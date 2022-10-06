@@ -6,25 +6,15 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Meta
 {
-	public sealed class MetaPtr : IYamlExportable
+	public readonly record struct MetaPtr(long FileID, UnityGUID GUID, AssetType AssetType) : IYamlExportable
 	{
-		public MetaPtr(long fileID)
+		public MetaPtr(long fileID) : this(fileID, UnityGUID.Zero, AssetType.Serialized)
 		{
-			FileID = fileID;
-			GUID = UnityGUID.Zero;
-			AssetType = AssetType.Serialized;
-		}
-
-		public MetaPtr(long fileID, UnityGUID guid, AssetType assetType)
-		{
-			FileID = fileID;
-			GUID = guid;
-			AssetType = assetType;
 		}
 
 		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YamlMappingNode node = new YamlMappingNode();
+			YamlMappingNode node = new();
 			node.Style = MappingStyle.Flow;
 			node.Add(FileIDName, FileID);
 			if (!GUID.IsZero)
@@ -42,12 +32,8 @@ namespace AssetRipper.Core.Classes.Meta
 			return new MetaPtr(ExportIdHandler.GetMainExportID((uint)classID), UnityGUID.MissingReference, assetType);
 		}
 
-		public long FileID { get; }
-		public UnityGUID GUID { get; }
-		public AssetType AssetType { get; }
-
-		public const string FileIDName = "fileID";
-		public const string GuidName = "guid";
-		public const string TypeName = "type";
+		private const string FileIDName = "fileID";
+		private const string GuidName = "guid";
+		private const string TypeName = "type";
 	}
 }
