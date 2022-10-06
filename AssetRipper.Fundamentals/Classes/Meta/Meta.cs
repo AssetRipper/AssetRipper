@@ -2,18 +2,17 @@
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Project;
 using AssetRipper.Yaml;
-using DateTime = System.DateTime;
 
 
 namespace AssetRipper.Core.Classes.Meta
 {
-	public class Meta
+	public sealed class Meta
 	{
-		public Meta(UnityGUID guid, IUnityObjectBase importer) : this(guid, true, importer) { }
+		public Meta(UnityGUID guid, IUnityObjectBase importer) : this(guid, importer, true) { }
 
-		public Meta(UnityGUID guid, bool hasLicense, IUnityObjectBase importer) : this(guid, hasLicense, false, importer) { }
+		public Meta(UnityGUID guid, IUnityObjectBase importer, bool hasLicense) : this(guid, importer, hasLicense, false) { }
 
-		public Meta(UnityGUID guid, bool hasLicense, bool isFolder, IUnityObjectBase importer)
+		public Meta(UnityGUID guid, IUnityObjectBase importer, bool hasLicense, bool isFolder)
 		{
 			if (guid.IsZero)
 			{
@@ -28,13 +27,14 @@ namespace AssetRipper.Core.Classes.Meta
 
 		public static int ToFileFormatVersion(UnityVersion version)
 		{
-#warning TODO:
+			//This has been 2 for a long time, but probably not forever.
+			//If Unity 3 usesd version 1, we need to find out when 2 started.
 			return 2;
 		}
 
 		public YamlDocument ExportYamlDocument(IExportContainer container)
 		{
-			YamlDocument document = new YamlDocument();
+			YamlDocument document = new();
 			YamlMappingNode root = document.CreateMappingRoot();
 			root.Add(FileFormatVersionName, ToFileFormatVersion(container.ExportVersion));
 			root.Add(GuidName, GUID.ExportYaml(container));
@@ -49,7 +49,7 @@ namespace AssetRipper.Core.Classes.Meta
 			}
 			//if (Importer.IncludesImporter(container.ExportVersion)) //For now, assume true
 			{
-				root.Add(Importer.ClassID.ToString(), Importer.ExportYaml(container));
+				root.Add(Importer.AssetClassName, Importer.ExportYaml(container));
 			}
 			return document;
 		}
@@ -59,7 +59,7 @@ namespace AssetRipper.Core.Classes.Meta
 		public bool HasLicenseData { get; }
 		public IUnityObjectBase Importer { get; }
 
-		private long CurrentTick => (DateTime.Now.Ticks - 0x089f7ff5f7b58000) / 10000000;
+		private static long CurrentTick => (DateTime.Now.Ticks - 0x089f7ff5f7b58000) / 10000000;
 
 		public const string FileFormatVersionName = "fileFormatVersion";
 		public const string GuidName = "guid";

@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Interfaces;
+using System.Diagnostics;
 
 namespace AssetRipper.Core.Project
 {
@@ -30,12 +31,7 @@ namespace AssetRipper.Core.Project
 				return classID;
 			}
 
-#if DEBUG
-			if (value >= 100000)
-			{
-				throw new ArgumentException($"Value {value} for main export ID must have no more than 5 digits");
-			}
-#endif
+			Debug.Assert(value < 100000, $"Value {value} for main export ID must have no more than 5 digits");
 			return (classID * 100000) + value;
 		}
 	}
