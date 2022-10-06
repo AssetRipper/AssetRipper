@@ -1,5 +1,7 @@
-﻿namespace AssetRipper.Assets;
+﻿using AssetRipper.Assets.IO;
 
-public interface IUnityAssetBase
+namespace AssetRipper.Assets;
+
+public interface IUnityAssetBase : IAsset
 {
 }
