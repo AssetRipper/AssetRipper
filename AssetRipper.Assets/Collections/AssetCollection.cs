@@ -1,6 +1,9 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.VersionUtilities;
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -21,7 +24,6 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 
 	public Bundle Bundle { get; }
 	public string Name { get; protected set; } = string.Empty;
-
 	/// <summary>
 	/// The list of dependencies for this collection.
 	/// </summary>
