@@ -74,9 +74,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		private void DecompileWholeProject(WholeAssemblyDecompiler decompiler, AssemblyDefinition assembly, string outputFolder)
 		{
-			decompiler.DecompileProject(
-				 assemblyResolver.Resolve(assembly) ?? throw new Exception($"Could not resolve {assembly.FullName}"),
-				 outputFolder);
+			decompiler.DecompileProject(assemblyResolver.Resolve(assembly), outputFolder);
 		}
 	}
 }
