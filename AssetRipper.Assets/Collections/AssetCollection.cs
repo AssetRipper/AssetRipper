@@ -80,25 +80,25 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 
 	protected virtual bool IsCompatibleDependency(AssetCollection dependency) => true;
 
-	public PPtr CreatePPtr(IUnityObjectBase asset)
+	public PPtr<T> CreatePPtr<T>(T asset) where T : IUnityObjectBase
 	{
 		int fileIndex = dependencies.IndexOf(asset.Collection);
 		if (fileIndex < 0)
 		{
 			throw new Exception($"Asset doesn't belong to this {nameof(AssetCollection)} or any of its dependencies");
 		}
-		return new PPtr(fileIndex, asset.PathID);
+		return new PPtr<T>(fileIndex, asset.PathID);
 	}
 
-	public PPtr ForceCreatePPtr(IUnityObjectBase asset)
+	public PPtr<T> ForceCreatePPtr<T>(T asset) where T : IUnityObjectBase
 	{
 		int fileIndex = AddDependency(asset.Collection);
-		return new PPtr(fileIndex, asset.PathID);
+		return new PPtr<T>(fileIndex, asset.PathID);
 	}
 
 	private protected void AddAsset(IUnityObjectBase asset)
 	{
-		Debug.Assert(asset.Collection == this, "Asset info must marked this as its collection");
+		Debug.Assert(asset.Collection == this, "Asset info must marked this as its collection.");
 		assets.Add(asset.PathID, asset);
 	}
 
@@ -112,7 +112,15 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 	{
 		return TryGetAsset(pathID, out IUnityObjectBase? asset)
 			? asset
-			: throw new Exception($"Object with path ID {pathID} wasn't found");
+			: throw new ArgumentException($"Object with path ID {pathID} wasn't found.", nameof(pathID));
+	}
+
+	public T GetAsset<T>(long pathID) where T : IUnityObjectBase
+	{
+		IUnityObjectBase asset = GetAsset(pathID);
+		return asset is T castedAsset
+			? castedAsset
+			: throw new ArgumentException($"Object with type {asset.GetType()} could not be assigned to type {typeof(T)}.", nameof(T));
 	}
 
 	public IUnityObjectBase? TryGetAsset(long pathID)
@@ -121,21 +129,59 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 		return asset;
 	}
 
+	public T? TryGetAsset<T>(long pathID) where T : IUnityObjectBase
+	{
+		TryGetAsset(pathID, out T? asset);
+		return asset;
+	}
+
 	public bool TryGetAsset(long pathID, [NotNullWhen(true)] out IUnityObjectBase? asset)
 	{
 		return assets.TryGetValue(pathID, out asset);
 	}
 
+	public bool TryGetAsset<T>(long pathID, [NotNullWhen(true)] out T? asset) where T : IUnityObjectBase
+	{
+		IUnityObjectBase? @object = TryGetAsset(pathID);
+		switch (@object)
+		{
+			case null:
+				asset = default;
+				return false;
+			case T t:
+				asset = t;
+				return true;
+			case NullObject:
+				asset = default;
+				return false;
+			default:
+				throw new Exception($"Object's type {@object.GetType().Name} isn't assignable from {typeof(T).Name}");
+		}
+	}
+
 	public IUnityObjectBase GetAsset(int fileIndex, long pathID)
 	{
 		ThrowIfFileIndexOutOfRange(fileIndex);
-		AssetCollection file = Dependencies[fileIndex] ?? throw new Exception($"Dependency collection with index {fileIndex} was not found.");
+		AssetCollection file = Dependencies[fileIndex] ?? throw new ArgumentException($"Dependency collection with index {fileIndex} was not found.", nameof(fileIndex));
 		return file.GetAsset(pathID);
+	}
+
+	public T GetAsset<T>(int fileIndex, long pathID) where T : IUnityObjectBase
+	{
+		ThrowIfFileIndexOutOfRange(fileIndex);
+		AssetCollection file = Dependencies[fileIndex] ?? throw new ArgumentException($"Dependency collection with index {fileIndex} was not found.", nameof(fileIndex));
+		return file.GetAsset<T>(pathID);
 	}
 
 	public IUnityObjectBase? TryGetAsset(int fileIndex, long pathID)
 	{
 		TryGetAsset(fileIndex, pathID, out IUnityObjectBase? asset);
+		return asset;
+	}
+
+	public T? TryGetAsset<T>(int fileIndex, long pathID) where T : IUnityObjectBase
+	{
+		TryGetAsset(fileIndex, pathID, out T? asset);
 		return asset;
 	}
 
@@ -154,11 +200,41 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 		}
 	}
 
+	public bool TryGetAsset<T>(int fileIndex, long pathID, [NotNullWhen(true)] out T? asset) where T : IUnityObjectBase
+	{
+		ThrowIfFileIndexOutOfRange(fileIndex);
+		AssetCollection? file = Dependencies[fileIndex];
+		if (file is not null)
+		{
+			return file.TryGetAsset(pathID, out asset);
+		}
+		else
+		{
+			asset = default;
+			return false;
+		}
+	}
+
 	public IUnityObjectBase GetAsset(PPtr pptr) => GetAsset(pptr.FileID, pptr.PathID);
+
+	public T GetAsset<T>(PPtr<T> pptr) where T : IUnityObjectBase
+	{
+		return GetAsset<T>(pptr.FileID, pptr.PathID);
+	}
 
 	public IUnityObjectBase? TryGetAsset(PPtr pptr) => TryGetAsset(pptr.FileID, pptr.PathID);
 
+	public T? TryGetAsset<T>(PPtr<T> pptr) where T : IUnityObjectBase
+	{
+		return TryGetAsset<T>(pptr.FileID, pptr.PathID);
+	}
+
 	public bool TryGetAsset(PPtr pptr, [NotNullWhen(true)] out IUnityObjectBase? asset) => TryGetAsset(pptr.FileID, pptr.PathID, out asset);
+
+	public bool TryGetAsset<T>(PPtr<T> pptr, [NotNullWhen(true)] out T? asset) where T : IUnityObjectBase
+	{
+		return TryGetAsset(pptr.FileID, pptr.PathID, out asset);
+	}
 
 	private void ThrowIfFileIndexOutOfRange(int fileIndex)
 	{
