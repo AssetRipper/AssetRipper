@@ -33,6 +33,9 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 	private readonly List<AssetCollection?> dependencies = new();
 	public IReadOnlyDictionary<long, IUnityObjectBase> Assets => assets;
 	private readonly Dictionary<long, IUnityObjectBase> assets = new();
+	public UnityVersion Version { get; protected set; }
+	public BuildTarget Platform { get; protected set; }
+	public TransferInstructionFlags Flags { get; protected set; }
 	public EndianType EndianType { get; protected set; }
 
 	public int AddDependency(AssetCollection dependency)

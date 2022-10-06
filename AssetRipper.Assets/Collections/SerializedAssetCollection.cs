@@ -13,7 +13,6 @@ namespace AssetRipper.Assets.Collections;
 /// </summary>
 public class SerializedAssetCollection : AssetCollection
 {
-	public UnityVersion Version { get; private set; }
 	private FileIdentifier[] DependencyIdentifiers { get; set; } = Array.Empty<FileIdentifier>();
 
 	protected SerializedAssetCollection(Bundle bundle) : base(bundle)
@@ -41,9 +40,14 @@ public class SerializedAssetCollection : AssetCollection
 
 	internal static SerializedAssetCollection FromSerializedFile(Bundle bundle, SerializedFile file, AssetFactory factory)
 	{
-		SerializedAssetCollection collection = new SerializedAssetCollection(bundle);
-		collection.Name = file.NameFixed;
-		collection.Version = file.Version;
+		SerializedAssetCollection collection = new SerializedAssetCollection(bundle)
+		{
+			Name = file.NameFixed,
+			Version = file.Version,
+			Platform = file.Platform,
+			Flags = file.Flags,
+			EndianType = file.EndianType,
+		};
 		FileIdentifier[] fileDependencies = file.Metadata.Externals;
 		if (fileDependencies.Length > 0)
 		{
