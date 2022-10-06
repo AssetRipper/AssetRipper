@@ -64,31 +64,7 @@ namespace AssetRipper.Core.IO.Extensions
 			ArrayWriteEndianExtensions.Write(_this, writer);
 		}
 
-		public static void Write<T>(this Tuple<string, T>[] _this, AssetWriter writer) where T : IAssetWritable
-		{
-			writer.Write(_this.Length);
-			for (int i = 0; i < _this.Length; i++)
-			{
-				writer.Write(_this[i]);
-			}
-		}
-
-		public static void Write<T1, T2>(this Tuple<T1, T2>[] _this, AssetWriter writer, Func<T1, int> converter) where T2 : IAssetWritable
-		{
-			writer.Write(_this.Length);
-			for (int i = 0; i < _this.Length; i++)
-			{
-				writer.Write(_this[i], converter);
-			}
-		}
-
 		public static void Write<T>(this T[] _this, AssetWriter writer)
-			   where T : IAssetWritable
-		{
-			writer.WriteAssetArray(_this);
-		}
-
-		public static void Write<T>(this T[][] _this, AssetWriter writer)
 			   where T : IAssetWritable
 		{
 			writer.WriteAssetArray(_this);
