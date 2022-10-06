@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.Meta.Importers.Texture;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
 
 namespace AssetRipper.Core.SourceGenExtensions

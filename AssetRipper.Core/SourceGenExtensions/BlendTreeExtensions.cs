@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.BlendTree;
-using AssetRipper.SourceGenerated.Classes.ClassID_206;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_206;
+using BlendTreeType = AssetRipper.SourceGenerated.Enums.BlendTreeType_1;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

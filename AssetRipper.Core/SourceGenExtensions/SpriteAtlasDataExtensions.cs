@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.Sprite;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 
 namespace AssetRipper.Core.SourceGenExtensions

@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Classes.Meta.Importers.Texture;
-using AssetRipper.Core.Classes.Texture2D;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.TextureSettings;
+using FilterMode = AssetRipper.SourceGenerated.Enums.FilterMode_0;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

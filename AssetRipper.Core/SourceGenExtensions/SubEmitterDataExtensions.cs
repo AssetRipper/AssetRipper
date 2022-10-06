@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.ParticleSystem.SubEmitter;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Classes.ClassID_198;
 using AssetRipper.SourceGenerated.Subclasses.SubEmitterData;
 

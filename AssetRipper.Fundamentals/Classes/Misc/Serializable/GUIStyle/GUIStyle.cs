@@ -1,5 +1,3 @@
-using AssetRipper.Core.Classes.Font;
-using AssetRipper.Core.Classes.GUIText;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;

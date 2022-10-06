@@ -1,8 +1,7 @@
-﻿using AssetRipper.Core.Classes.Animation;
-using AssetRipper.Core.Classes.AnimationClip;
-using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip_;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -21,11 +20,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return false;
 		}
 
-		public static WrapMode GetWrapMode(this IAnimation animation)
-		{
-			return (WrapMode)animation.WrapMode_C111;
-		}
-
 		public static bool GetAnimateOnlyIfVisible(this IAnimation animation)
 		{
 			// 2.6.0 to 3.4.0 exclusive
@@ -34,9 +28,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 				return animation.AnimateOnlyIfVisible_C111;
 			}
 			//else if (animation.Has_CullingType_C111())
-			//{
-			return (AnimationCullingType)animation.CullingType_C111 != AnimationCullingType.AlwaysAnimate;
-			//}
+			{
+				return animation.CullingType_C111E != AnimationCullingType.AlwaysAnimate;
+			}
 			//else
 			//{
 			//	return false;
@@ -51,9 +45,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 				return animation.AnimateOnlyIfVisible_C111 ? AnimationCullingType.BasedOnRenderers : AnimationCullingType.AlwaysAnimate;
 			}
 			//else if (animation.Has_CullingType_C111())
-			//{
-			return (AnimationCullingType)animation.CullingType_C111;
-			//}
+			{
+				return animation.CullingType_C111E;
+			}
 			//else
 			//{
 			//	return default;

@@ -1,7 +1,4 @@
-﻿using AssetRipper.Core.Classes.Meta.Importers.Texture;
-using AssetRipper.Core.Classes.Sprite;
-using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.Core.Logging;
+﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
@@ -9,6 +6,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 using AssetRipper.SourceGenerated.Classes.ClassID_1055;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_89;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.TextureImporterPlatformSettings;
 
 namespace AssetRipper.Library.Exporters.Textures
@@ -52,7 +50,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			platformSettings.BuildTarget.String = "DefaultTexturePlatform";
 			platformSettings.MaxTextureSize = instance.MaxTextureSize_C1006;
 			platformSettings.ResizeAlgorithm = (int)TextureResizeAlgorithm.Mitchell;
-			platformSettings.FormatE = SourceGenerated.Enums.TextureImporterFormat.Automatic;
+			platformSettings.Format = (int)TextureImporterFormat.Automatic;
 			platformSettings.TextureCompression = (int)TextureImporterCompression.Compressed;//Uncompressed results in a significantly larger Library folder
 			platformSettings.CompressionQuality = 50;
 			platformSettings.CrunchedCompression = false;

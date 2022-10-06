@@ -1,11 +1,11 @@
-﻿using AssetRipper.Core.Classes.Mesh;
-using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
+﻿using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;

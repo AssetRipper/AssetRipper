@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.UV;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.UVModule;
 
 namespace AssetRipper.Core.SourceGenExtensions

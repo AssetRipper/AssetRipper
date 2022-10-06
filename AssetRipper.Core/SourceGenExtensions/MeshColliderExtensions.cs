@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.MeshCollider;
-using AssetRipper.SourceGenerated.Classes.ClassID_64;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_64;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

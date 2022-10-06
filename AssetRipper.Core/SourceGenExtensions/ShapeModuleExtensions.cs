@@ -1,10 +1,22 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.Shape;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.ShapeModule;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class ShapeModuleExtensions
 	{
+		public enum PlacementMode
+		{
+			BoxVolume = 0,
+			ConeBase = 0,
+			MeshVertex = 0,
+			BoxShell = 1,
+			ConeVolume = 1,
+			MeshEdge = 1,
+			BoxEdge = 2,
+			MeshTriangle = 2,
+		}
+
 		public static ParticleSystemShapeType GetShapeType(this IShapeModule module)
 		{
 			return (ParticleSystemShapeType)module.Type;

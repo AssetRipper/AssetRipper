@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.ShaderVariantCollection;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.VariantInfo;
 
 namespace AssetRipper.Core.SourceGenExtensions

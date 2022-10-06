@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.EditorSettings;
 using AssetRipper.SourceGenerated.Classes.ClassID_159;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -16,7 +16,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			settings.ExternalVersionControlSupport_C159_Utf8String.TrySet(VisibleMeta);
 			settings.ExternalVersionControlSupport_C159_Int32 = (int)ExternalVersionControl.Generic;
 
-			settings.SerializationMode_C159 = (int)SerializationMode.ForceText;
+			settings.SerializationMode_C159E = SerializationMode.ForceText;
 			settings.SerializeInlineMappingsOnOneLine_C159 = true;
 			settings.SpritePackerPaddingPower_C159 = 1;
 			settings.EtcTextureCompressorBehavior_C159 = 1;
@@ -37,9 +37,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			//Version 2 is the default whenever this property is available.
 			//Similarly, version 1 is marked obsolete in those versions.
 			//https://docs.unity3d.com/Manual/AssetDatabase.html
-			settings.AssetPipelineMode_C159 = (int)AssetPipelineMode.Version2;
+			settings.AssetPipelineMode_C159E = AssetPipelineMode_1.Version2;
 
-			settings.CacheServerMode_C159 = (int)CacheServerMode.AsPreferences;
+			settings.CacheServerMode_C159E = CacheServerMode_2.AsPreferences;
 			settings.CacheServerEndpoint_C159.TrySet(string.Empty);
 			settings.CacheServerNamespacePrefix_C159.TrySet("default");
 			settings.CacheServerEnableDownload_C159 = true;
@@ -47,7 +47,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			settings.ShowLightmapResolutionOverlay_C159 = true;
 			settings.UseLegacyProbeSampleCount_C159 = true;
-			settings.EnterPlayModeOptions_C159 = (int)(EnterPlayModeOptions.DisableDomainReload | EnterPlayModeOptions.DisableSceneReload);
+			settings.EnterPlayModeOptions_C159E = EnterPlayModeOptions.DisableDomainReload | EnterPlayModeOptions.DisableSceneReload;
 		}
 
 		private static void TrySet(this Utf8StringBase? utf8String, string str)
@@ -56,26 +56,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				utf8String.String = str;
 			}
-		}
-
-		public static SerializationMode GetSerializationMode(this IEditorSettings settings)
-		{
-			return (SerializationMode)settings.SerializationMode_C159;
-		}
-
-		public static AssetPipelineMode GetAssetPipelineMode(this IEditorSettings settings)
-		{
-			return (AssetPipelineMode)settings.AssetPipelineMode_C159;
-		}
-
-		public static CacheServerMode GetCacheServerMode(this IEditorSettings settings)
-		{
-			return (CacheServerMode)settings.CacheServerMode_C159;
-		}
-
-		public static EnterPlayModeOptions GetEnterPlayModeOptions(this IEditorSettings settings)
-		{
-			return (EnterPlayModeOptions)settings.EnterPlayModeOptions_C159;
 		}
 	}
 }

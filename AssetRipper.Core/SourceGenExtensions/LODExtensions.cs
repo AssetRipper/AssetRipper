@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.LODGroup;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.LOD;
 
 namespace AssetRipper.Core.SourceGenExtensions

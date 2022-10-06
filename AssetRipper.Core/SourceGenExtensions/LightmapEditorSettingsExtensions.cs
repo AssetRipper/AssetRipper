@@ -1,6 +1,10 @@
-﻿using AssetRipper.Core.Classes.Light;
-using AssetRipper.Core.Classes.LightmapSettings;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.LightmapEditorSettings;
+using DenoiserType = AssetRipper.SourceGenerated.Enums.DenoiserType_0;
+using FilterMode = AssetRipper.SourceGenerated.Enums.FilterMode_2;
+using FilterType = AssetRipper.SourceGenerated.Enums.FilterType_0;
+using Lightmapper = AssetRipper.SourceGenerated.Enums.Lightmapper_0;
+using Sampling = AssetRipper.SourceGenerated.Enums.Sampling_0;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

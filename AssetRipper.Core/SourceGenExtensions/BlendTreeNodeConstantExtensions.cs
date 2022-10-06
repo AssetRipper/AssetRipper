@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Classes.BlendTree;
-using AssetRipper.SourceGenerated.Classes.ClassID_91;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip_;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using System.Linq;
+using BlendTreeType = AssetRipper.SourceGenerated.Enums.BlendTreeType_1;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.Shape;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.MultiModeParameter;
 using AssetRipper.SourceGenerated.Subclasses.MultiModeParameter_MeshSpawn;
 

@@ -1,6 +1,5 @@
 using AssetRipper.Core;
 using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -12,6 +11,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_241;
 using AssetRipper.SourceGenerated.Classes.ClassID_243;
 using AssetRipper.SourceGenerated.Classes.ClassID_244;
 using AssetRipper.SourceGenerated.Classes.ClassID_245;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.AudioMixerConstant;
 using AssetRipper.SourceGenerated.Subclasses.AudioMixerGroupView;
 using AssetRipper.SourceGenerated.Subclasses.EffectConstant;

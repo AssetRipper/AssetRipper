@@ -1,10 +1,16 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.Trigger;
-using AssetRipper.SourceGenerated.Subclasses.TriggerModule;
+﻿using AssetRipper.SourceGenerated.Subclasses.TriggerModule;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class TriggerModuleExtensions
 	{
+		public enum TriggerAction
+		{
+			Ignore = 0,
+			Kill = 1,
+			Callback = 2,
+		}
+
 		public static void SetToDefault(this ITriggerModule module)
 		{
 			module.Inside = (int)TriggerAction.Kill;

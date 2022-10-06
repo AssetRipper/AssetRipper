@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.Rigidbody2D;
-using AssetRipper.SourceGenerated.Classes.ClassID_50;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_50;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -13,7 +13,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else
 			{
-				return (RigidbodyType2D)body.BodyType_C50;
+				return body.BodyType_C50E;
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else
 			{
-				return (RigidbodyConstraints2D)body.Constraints_C50;
+				return body.Constraints_C50E;
 			}
 		}
 	}

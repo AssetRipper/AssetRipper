@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Classes.AnimatorController.Constants;
-using AssetRipper.Core.Classes.AnimatorTransition;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_ConditionConstant;
 using AssetRipper.SourceGenerated.Subclasses.TransitionConstant;
 

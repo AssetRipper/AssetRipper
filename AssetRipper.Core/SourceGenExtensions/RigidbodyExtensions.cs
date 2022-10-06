@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.Rigidbody;
-using AssetRipper.SourceGenerated.Classes.ClassID_54;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_54;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

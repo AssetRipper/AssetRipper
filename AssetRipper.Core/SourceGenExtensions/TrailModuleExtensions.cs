@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.TrailModule;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.TrailModule;
 
 namespace AssetRipper.Core.SourceGenExtensions

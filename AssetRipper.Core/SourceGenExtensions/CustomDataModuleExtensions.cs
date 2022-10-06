@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.CustomDataModule;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.CustomDataModule;
 
 namespace AssetRipper.Core.SourceGenExtensions

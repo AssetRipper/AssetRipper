@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerParameter;
-using AssetRipper.SourceGenerated.Subclasses.ValueConstant;
+﻿using AssetRipper.SourceGenerated.Subclasses.ValueConstant;
+using AnimatorControllerParameterType = AssetRipper.SourceGenerated.Enums.AnimatorControllerParameterType_1;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

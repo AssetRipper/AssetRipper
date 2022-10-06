@@ -1,5 +1,4 @@
 using AssetRipper.Core;
-using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
@@ -47,7 +46,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			ITexture2D texture = (ITexture2D)asset;
 			if (!texture.CheckAssetIntegrity())
 			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.NameString}' because resources file '{texture.StreamData_C28.Path}' hasn't been found");
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.NameString}' because resources file '{texture.StreamData_C28?.Path}' hasn't been found");
 				return false;
 			}
 
@@ -100,7 +99,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 
 			// despite the name, this packing works for different formats
-			if (texture.LightmapFormat_C28 == (int)Core.Classes.Texture2D.TextureUsageMode.NormalmapDXT5nm)
+			if (texture.LightmapFormat_C28 == (int)TextureUsageMode.NormalmapDXT5nm)
 			{
 				TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
 			}

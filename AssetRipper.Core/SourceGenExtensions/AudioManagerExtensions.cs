@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.AudioManager;
-using AssetRipper.SourceGenerated.Classes.ClassID_11;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_11;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

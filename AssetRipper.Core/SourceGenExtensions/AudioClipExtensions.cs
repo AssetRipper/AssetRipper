@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Extensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

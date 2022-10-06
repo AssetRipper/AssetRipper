@@ -1,10 +1,36 @@
-﻿using AssetRipper.Core.Classes.QualitySettings;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.QualitySetting;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class QualitySettingExtensions
 	{
+		public enum AntiAliasing
+		{
+			Disabled = 0,
+			_2X = 2,
+			_4X = 4,
+			_8X = 8,
+		}
+		public enum ShadowCascades
+		{
+			NoCascades = 1,
+			TwoCascades = 2,
+			FourCascades = 4,
+		}
+		public enum TextureQuality
+		{
+			FullRes = 0,
+			HalfRes = 1,
+			QuarterRes = 2,
+			EighthRes = 3,
+		}
+		public enum VSyncCount
+		{
+			DontSync = 0,
+			EveryVBlank = 1,
+			EverySecondVBlank = 2,
+		}
 		public static void ConvertToEditorFormat(this IQualitySetting setting)
 		{
 			setting.ShadowProjection = (int)ShadowProjection.StableFit;

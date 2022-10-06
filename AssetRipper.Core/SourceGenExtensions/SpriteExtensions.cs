@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Sprite;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.Rectf;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteBone;
@@ -26,7 +26,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			ISpriteMetaData instance = SpriteMetaDataFactory.CreateAsset(container.ExportVersion);
 			instance.NameString = sprite.NameString;
 			instance.Rect.CopyValues(rect);
-			instance.Alignment = (int)Classes.Meta.Importers.Texture.SpriteAlignment.Custom;
+			instance.Alignment = (int)SpriteAlignment.Custom;
 			instance.Pivot.CopyValues(pivot);
 			instance.Border?.CopyValues(border);
 			if (instance.Has_Outline())
@@ -256,12 +256,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 		private static void FixRotation(this ISprite sprite, ISpriteAtlas? atlas, AssetList<AssetList<Vector2f_3_5_0_f5>> outlines)
 		{
 			bool isPacked = sprite.RD_C213.IsPacked();
-			SpritePackingRotation rotation = sprite.RD_C213.GetPackingRotation();
+			SpritePackingRotation rotation = (SpritePackingRotation)sprite.RD_C213.GetPackingRotation();
 			if (atlas is not null && sprite.Has_RenderDataKey_C213())
 			{
 				ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
 				isPacked = atlasData.IsPacked();
-				rotation = atlasData.GetPackingRotation();
+				rotation = (SpritePackingRotation)atlasData.GetPackingRotation();
 			}
 
 			if (isPacked)

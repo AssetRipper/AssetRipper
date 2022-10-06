@@ -1,10 +1,10 @@
-﻿using AssetRipper.Core.Classes.Animator;
-using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Classes.ClassID_93;
 using AssetRipper.SourceGenerated.Classes.ClassID_95;
+using AssetRipper.SourceGenerated.Enums;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -55,14 +55,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static AnimatorCullingMode GetCullingMode(this IAnimator animator)
-		{
-			return (AnimatorCullingMode)animator.CullingMode_C95;
-		}
-
 		public static AnimatorUpdateMode GetUpdateMode(this IAnimator animator)
 		{
-			return animator.Has_UpdateMode_C95() ? (AnimatorUpdateMode)animator.UpdateMode_C95 : AnimatorUpdateMode.Normal;
+			return animator.Has_UpdateMode_C95() ? animator.UpdateMode_C95E : AnimatorUpdateMode.Normal;
 		}
 	}
 }

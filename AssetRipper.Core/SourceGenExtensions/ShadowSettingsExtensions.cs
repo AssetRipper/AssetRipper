@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.Light;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.ShadowSettings;
 
 namespace AssetRipper.Core.SourceGenExtensions

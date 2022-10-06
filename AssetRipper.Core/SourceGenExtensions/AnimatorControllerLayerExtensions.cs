@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Classes.AnimatorController.Editor.AnimatorControllerLayer;
-using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorControllerLayer;
@@ -36,11 +35,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			animatorControllerLayer.IKPass = layer.IKPass;
 			animatorControllerLayer.SyncedLayerAffectsTiming = layer.SyncedLayerAffectsTiming;
 			animatorControllerLayer.Controller?.CopyValues(controller.SerializedFile.CreatePPtr(controller));
-		}
-
-		public static AnimatorLayerBlendingMode GetBlendingMode(this IAnimatorControllerLayer animatorControllerLayer)
-		{
-			return (AnimatorLayerBlendingMode)animatorControllerLayer.BlendingMode;
 		}
 	}
 }

@@ -1,10 +1,18 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.MinMaxGradient;
-using AssetRipper.SourceGenerated.Subclasses.MinMaxGradient;
+﻿using AssetRipper.SourceGenerated.Subclasses.MinMaxGradient;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class MinMaxGradientExtensions
 	{
+		public enum MinMaxGradientState : ushort
+		{
+			Color = 0,
+			Gradient = 1,
+			RandomBetweenTwoColors = 2,
+			RandomBetweenTwoGradients = 3,
+			RandomColor = 4,
+		}
+
 		public static MinMaxGradientState GetMinMaxState(this IMinMaxGradient gradient)
 		{
 			return gradient.Has_MinMaxState_Int16()

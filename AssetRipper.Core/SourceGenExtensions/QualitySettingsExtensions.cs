@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Classes.QualitySettings;
-using AssetRipper.Core.IO;
+﻿using AssetRipper.Core.IO;
 using AssetRipper.SourceGenerated.Classes.ClassID_47;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
 namespace AssetRipper.Core.SourceGenExtensions

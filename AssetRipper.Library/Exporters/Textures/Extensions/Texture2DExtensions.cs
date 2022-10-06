@@ -1,4 +1,3 @@
-using AssetRipper.Core.Classes.Texture2D;
 using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.SourceGenerated.Enums;
 

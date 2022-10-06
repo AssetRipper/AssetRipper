@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem;
-using AssetRipper.SourceGenerated.Classes.ClassID_198;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_198;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -30,11 +30,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				return (ParticleSystemSimulationSpace)system.MoveWithTransform_C198_Int32;
 			}
-		}
-
-		public static ParticleSystemScalingMode GetScalingMode(this IParticleSystem system)
-		{
-			return (ParticleSystemScalingMode)system.ScalingMode_C198;
 		}
 	}
 }

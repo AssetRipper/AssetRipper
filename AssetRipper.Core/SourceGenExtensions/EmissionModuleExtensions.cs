@@ -1,11 +1,16 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.Emission;
-using AssetRipper.SourceGenerated.Subclasses.EmissionModule;
+﻿using AssetRipper.SourceGenerated.Subclasses.EmissionModule;
 using AssetRipper.SourceGenerated.Subclasses.MinMaxCurve;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class EmissionModuleExtensions
 	{
+		public enum EmissionType
+		{
+			Time = 0,
+			Distance = 1,
+		}
+
 		public static IMinMaxCurve? GetRateOverTime(this IEmissionModule module)
 		{
 			if (module.Has_RateOverTime())

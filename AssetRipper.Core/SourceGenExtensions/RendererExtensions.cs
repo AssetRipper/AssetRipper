@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Renderer;
 using AssetRipper.SourceGenerated.Classes.ClassID_120;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_161;
@@ -15,6 +14,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_331;
 using AssetRipper.SourceGenerated.Classes.ClassID_483693784;
 using AssetRipper.SourceGenerated.Classes.ClassID_73398921;
 using AssetRipper.SourceGenerated.Classes.ClassID_96;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Material_;
 using System.Collections.Generic;
 using System.Linq;
@@ -141,49 +141,49 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return renderer switch
 			{
 				IMeshRenderer meshRenderer => meshRenderer.Has_LightProbeUsage_C23()
-					? (LightProbeUsage)meshRenderer.LightProbeUsage_C23
+					? meshRenderer.LightProbeUsage_C23E
 					: meshRenderer.UseLightProbes_C23
 						? LightProbeUsage.BlendProbes
 						: LightProbeUsage.Off,
 				IParticleRenderer particleRenderer => particleRenderer.Has_LightProbeUsage_C26()
-					? (LightProbeUsage)particleRenderer.LightProbeUsage_C26
+					? particleRenderer.LightProbeUsage_C26E
 					: particleRenderer.UseLightProbes_C26
 						? LightProbeUsage.BlendProbes
 						: LightProbeUsage.Off,
 				ITrailRenderer trailRenderer => trailRenderer.Has_LightProbeUsage_C96()
-					? (LightProbeUsage)trailRenderer.LightProbeUsage_C96
+					? trailRenderer.LightProbeUsage_C96E
 					: trailRenderer.UseLightProbes_C96
 						? LightProbeUsage.BlendProbes
 						: LightProbeUsage.Off,
 				ILineRenderer lineRenderer => lineRenderer.Has_LightProbeUsage_C120()
-					? (LightProbeUsage)lineRenderer.LightProbeUsage_C120
+					? lineRenderer.LightProbeUsage_C120E
 					: lineRenderer.UseLightProbes_C120
 						? LightProbeUsage.BlendProbes
 						: LightProbeUsage.Off,
 				ISkinnedMeshRenderer skinnedMeshRenderer => skinnedMeshRenderer.Has_LightProbeUsage_C137()
-					? (LightProbeUsage)skinnedMeshRenderer.LightProbeUsage_C137
+					? skinnedMeshRenderer.LightProbeUsage_C137E
 					: skinnedMeshRenderer.UseLightProbes_C137
 						? LightProbeUsage.BlendProbes
 						: LightProbeUsage.Off,
 				IClothRenderer => default,
 				IParticleSystemRenderer particleSystemRenderer => particleSystemRenderer.Has_LightProbeUsage_C199()
-					? (LightProbeUsage)particleSystemRenderer.LightProbeUsage_C199
+					? particleSystemRenderer.LightProbeUsage_C199E
 					: particleSystemRenderer.UseLightProbes_C199
 						? LightProbeUsage.BlendProbes
 						: LightProbeUsage.Off,
 				ISpriteRenderer spriteRenderer => spriteRenderer.Has_LightProbeUsage_C212()
-					? (LightProbeUsage)spriteRenderer.LightProbeUsage_C212
+					? spriteRenderer.LightProbeUsage_C212E
 					: spriteRenderer.UseLightProbes_C212
 						? LightProbeUsage.BlendProbes
 						: LightProbeUsage.Off,
 				IBillboardRenderer billboardRenderer => billboardRenderer.Has_LightProbeUsage_C227()
-					? (LightProbeUsage)billboardRenderer.LightProbeUsage_C227
+					? billboardRenderer.LightProbeUsage_C227E
 					: billboardRenderer.UseLightProbes_C227
 						? LightProbeUsage.BlendProbes
 						: LightProbeUsage.Off,
-				ISpriteMask spriteMask => (LightProbeUsage)spriteMask.LightProbeUsage_C331,
-				ITilemapRenderer tilemapRenderer => (LightProbeUsage)tilemapRenderer.LightProbeUsage_C483693784,
-				ISpriteShapeRenderer spriteShapeRenderer => (LightProbeUsage)spriteShapeRenderer.LightProbeUsage_C1971053207,
+				ISpriteMask spriteMask => spriteMask.LightProbeUsage_C331E,
+				ITilemapRenderer tilemapRenderer => tilemapRenderer.LightProbeUsage_C483693784E,
+				ISpriteShapeRenderer spriteShapeRenderer => spriteShapeRenderer.LightProbeUsage_C1971053207E,
 				IVFXRenderer vfxRenderer => (LightProbeUsage)vfxRenderer.LightProbeUsage_C73398921,
 				_ => throw new NotSupportedException(renderer.GetType().FullName)
 			};
@@ -194,33 +194,33 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return renderer switch
 			{
 				IMeshRenderer meshRenderer => meshRenderer.Has_ReflectionProbeUsage_C23_Int32()
-					? (ReflectionProbeUsage)meshRenderer.ReflectionProbeUsage_C23_Int32
-					: (ReflectionProbeUsage)meshRenderer.ReflectionProbeUsage_C23_Byte,
+					? meshRenderer.ReflectionProbeUsage_C23_Int32E
+					: meshRenderer.ReflectionProbeUsage_C23_ByteE,
 				IParticleRenderer particleRenderer => particleRenderer.Has_ReflectionProbeUsage_C26_Int32()
-					? (ReflectionProbeUsage)particleRenderer.ReflectionProbeUsage_C26_Int32
-					: (ReflectionProbeUsage)particleRenderer.ReflectionProbeUsage_C26_Byte,
+					? particleRenderer.ReflectionProbeUsage_C26_Int32E
+					: particleRenderer.ReflectionProbeUsage_C26_ByteE,
 				ITrailRenderer trailRenderer => trailRenderer.Has_ReflectionProbeUsage_C96_Int32()
-					? (ReflectionProbeUsage)trailRenderer.ReflectionProbeUsage_C96_Int32
-					: (ReflectionProbeUsage)trailRenderer.ReflectionProbeUsage_C96_Byte,
+					? trailRenderer.ReflectionProbeUsage_C96_Int32E
+					: trailRenderer.ReflectionProbeUsage_C96_ByteE,
 				ILineRenderer lineRenderer => lineRenderer.Has_ReflectionProbeUsage_C120_Int32()
-					? (ReflectionProbeUsage)lineRenderer.ReflectionProbeUsage_C120_Int32
-					: (ReflectionProbeUsage)lineRenderer.ReflectionProbeUsage_C120_Byte,
+					? lineRenderer.ReflectionProbeUsage_C120_Int32E
+					: lineRenderer.ReflectionProbeUsage_C120_ByteE,
 				ISkinnedMeshRenderer skinnedMeshRenderer => skinnedMeshRenderer.Has_ReflectionProbeUsage_C137_Int32()
-					? (ReflectionProbeUsage)skinnedMeshRenderer.ReflectionProbeUsage_C137_Int32
-					: (ReflectionProbeUsage)skinnedMeshRenderer.ReflectionProbeUsage_C137_Byte,
+					? skinnedMeshRenderer.ReflectionProbeUsage_C137_Int32E
+					: skinnedMeshRenderer.ReflectionProbeUsage_C137_ByteE,
 				IClothRenderer => default,
 				IParticleSystemRenderer particleSystemRenderer => particleSystemRenderer.Has_ReflectionProbeUsage_C199_Int32()
-					? (ReflectionProbeUsage)particleSystemRenderer.ReflectionProbeUsage_C199_Int32
-					: (ReflectionProbeUsage)particleSystemRenderer.ReflectionProbeUsage_C199_Byte,
+					? particleSystemRenderer.ReflectionProbeUsage_C199_Int32E
+					: particleSystemRenderer.ReflectionProbeUsage_C199_ByteE,
 				ISpriteRenderer spriteRenderer => spriteRenderer.Has_ReflectionProbeUsage_C212_Int32()
-					? (ReflectionProbeUsage)spriteRenderer.ReflectionProbeUsage_C212_Int32
-					: (ReflectionProbeUsage)spriteRenderer.ReflectionProbeUsage_C212_Byte,
+					? spriteRenderer.ReflectionProbeUsage_C212_Int32E
+					: spriteRenderer.ReflectionProbeUsage_C212_ByteE,
 				IBillboardRenderer billboardRenderer => billboardRenderer.Has_ReflectionProbeUsage_C227_Int32()
-					? (ReflectionProbeUsage)billboardRenderer.ReflectionProbeUsage_C227_Int32
-					: (ReflectionProbeUsage)billboardRenderer.ReflectionProbeUsage_C227_Byte,
-				ISpriteMask spriteMask => (ReflectionProbeUsage)spriteMask.ReflectionProbeUsage_C331,
-				ITilemapRenderer tilemapRenderer => (ReflectionProbeUsage)tilemapRenderer.ReflectionProbeUsage_C483693784,
-				ISpriteShapeRenderer spriteShapeRenderer => (ReflectionProbeUsage)spriteShapeRenderer.ReflectionProbeUsage_C1971053207,
+					? billboardRenderer.ReflectionProbeUsage_C227_Int32E
+					: billboardRenderer.ReflectionProbeUsage_C227_ByteE,
+				ISpriteMask spriteMask => spriteMask.ReflectionProbeUsage_C331E,
+				ITilemapRenderer tilemapRenderer => tilemapRenderer.ReflectionProbeUsage_C483693784E,
+				ISpriteShapeRenderer spriteShapeRenderer => spriteShapeRenderer.ReflectionProbeUsage_C1971053207E,
 				IVFXRenderer vfxRenderer => (ReflectionProbeUsage)vfxRenderer.ReflectionProbeUsage_C73398921,
 				_ => throw new NotSupportedException(renderer.GetType().FullName)
 			};
@@ -230,18 +230,18 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			return renderer switch
 			{
-				IMeshRenderer meshRenderer => (RayTracingMode)meshRenderer.RayTracingMode_C23,
+				IMeshRenderer meshRenderer => meshRenderer.RayTracingMode_C23E,
 				IParticleRenderer particleRenderer => default,
-				ITrailRenderer trailRenderer => (RayTracingMode)trailRenderer.RayTracingMode_C96,
-				ILineRenderer lineRenderer => (RayTracingMode)lineRenderer.RayTracingMode_C120,
-				ISkinnedMeshRenderer skinnedMeshRenderer => (RayTracingMode)skinnedMeshRenderer.RayTracingMode_C137,
+				ITrailRenderer trailRenderer => trailRenderer.RayTracingMode_C96E,
+				ILineRenderer lineRenderer => lineRenderer.RayTracingMode_C120E,
+				ISkinnedMeshRenderer skinnedMeshRenderer => skinnedMeshRenderer.RayTracingMode_C137E,
 				IClothRenderer => default,
-				IParticleSystemRenderer particleSystemRenderer => (RayTracingMode)particleSystemRenderer.RayTracingMode_C199,
-				ISpriteRenderer spriteRenderer => (RayTracingMode)spriteRenderer.RayTracingMode_C212,
-				IBillboardRenderer billboardRenderer => (RayTracingMode)billboardRenderer.RayTracingMode_C227,
-				ISpriteMask spriteMask => (RayTracingMode)spriteMask.RayTracingMode_C331,
-				ITilemapRenderer tilemapRenderer => (RayTracingMode)tilemapRenderer.RayTracingMode_C483693784,
-				ISpriteShapeRenderer spriteShapeRenderer => (RayTracingMode)spriteShapeRenderer.RayTracingMode_C1971053207,
+				IParticleSystemRenderer particleSystemRenderer => particleSystemRenderer.RayTracingMode_C199E,
+				ISpriteRenderer spriteRenderer => spriteRenderer.RayTracingMode_C212E,
+				IBillboardRenderer billboardRenderer => billboardRenderer.RayTracingMode_C227E,
+				ISpriteMask spriteMask => spriteMask.RayTracingMode_C331E,
+				ITilemapRenderer tilemapRenderer => tilemapRenderer.RayTracingMode_C483693784E,
+				ISpriteShapeRenderer spriteShapeRenderer => spriteShapeRenderer.RayTracingMode_C1971053207E,
 				IVFXRenderer vfxRenderer => (RayTracingMode)vfxRenderer.RayTracingMode_C73398921,
 				_ => throw new NotSupportedException(renderer.GetType().FullName)
 			};

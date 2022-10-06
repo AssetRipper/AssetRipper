@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.Classes.Mesh;
-using AssetRipper.Core.Logging;
+﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math.Transformations;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;

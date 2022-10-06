@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Classes.Object;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_1101;
@@ -8,6 +7,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1107;
 using AssetRipper.SourceGenerated.Classes.ClassID_1109;
 using AssetRipper.SourceGenerated.Classes.ClassID_206;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorCondition;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorState;
@@ -287,10 +287,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 			for (int i = 0; i < Transition.ConditionConstantArray.Count; i++)
 			{
 				ConditionConstant conditionConstant = Transition.ConditionConstantArray[i].Data;
-				if (conditionConstant.ConditionMode != (int)Classes.AnimatorTransition.AnimatorConditionMode.ExitTime)
+				if (conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
 				{
 					IAnimatorCondition condition = animatorStateTransition.Conditions_C1101.AddNew();
-					condition.ConditionMode = (int)(Classes.AnimatorTransition.AnimatorConditionMode)conditionConstant.ConditionMode;
+					condition.ConditionMode = (int)conditionConstant.GetConditionMode();
 					condition.ConditionEvent.CopyValues(TOS[conditionConstant.EventID]);
 					condition.EventTreshold = conditionConstant.EventThreshold;
 				}
@@ -317,7 +317,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			animatorStateTransition.ExitTime_C1101 = Transition.GetExitTime();
 			animatorStateTransition.HasExitTime_C1101 = Transition.GetHasExitTime();
 			animatorStateTransition.HasFixedDuration_C1101 = Transition.GetHasFixedDuration();
-			animatorStateTransition.InterruptionSource_C1101 = (int)Transition.GetInterruptionSource();
+			animatorStateTransition.InterruptionSource_C1101E = Transition.GetInterruptionSource();
 			animatorStateTransition.OrderedInterruption_C1101 = Transition.OrderedInterruption;
 			animatorStateTransition.CanTransitionToSelf_C1101 = Transition.CanTransitionToSelf;
 
@@ -338,10 +338,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 			for (int i = 0; i < Transition.ConditionConstantArray.Count; i++)
 			{
 				ConditionConstant conditionConstant = Transition.ConditionConstantArray[i].Data;
-				if (conditionConstant.ConditionMode != (int)Classes.AnimatorTransition.AnimatorConditionMode.ExitTime)
+				if (conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
 				{
 					IAnimatorCondition condition = animatorTransition.Conditions_C1109.AddNew();
-					condition.ConditionMode = (int)(Classes.AnimatorTransition.AnimatorConditionMode)conditionConstant.ConditionMode;
+					condition.ConditionMode = (int)conditionConstant.GetConditionMode();
 					condition.ConditionEvent.CopyValues(TOS[conditionConstant.EventID]);
 					condition.EventTreshold = conditionConstant.EventThreshold;
 				}

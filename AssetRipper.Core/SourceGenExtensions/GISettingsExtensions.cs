@@ -1,10 +1,15 @@
-﻿using AssetRipper.Core.Classes.LightmapSettings.GISettings;
-using AssetRipper.SourceGenerated.Subclasses.GISettings;
+﻿using AssetRipper.SourceGenerated.Subclasses.GISettings;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class GISettingsExtensions
 	{
+		public enum EnvironmentAmbientMode
+		{
+			Realtime = 0,
+			Baked = 1,
+		}
+
 		public static void Initialize(this IGISettings settings)
 		{
 			settings.BounceScale = 1.0f;

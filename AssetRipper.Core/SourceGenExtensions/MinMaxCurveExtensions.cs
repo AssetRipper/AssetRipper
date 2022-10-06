@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.Curve;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.MinMaxCurve;
 
 namespace AssetRipper.Core.SourceGenExtensions

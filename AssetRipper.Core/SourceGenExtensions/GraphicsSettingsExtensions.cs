@@ -1,11 +1,23 @@
-﻿using AssetRipper.Core.Classes.Camera;
-using AssetRipper.Core.Classes.GraphicsSettings;
-using AssetRipper.SourceGenerated.Classes.ClassID_30;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_30;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class GraphicsSettingsExtensions
 	{
+		public enum LightmapStrippingMode
+		{
+			Automatic = 0,
+			Custom = 1,
+		}
+
+		public enum InstancingStrippingVariant
+		{
+			StripUnused = 0,
+			StripAll = 1,
+			KeepAll = 2,
+		}
+
 		public static void ConvertToEditorFormat(this IGraphicsSettings settings)
 		{
 			settings.DefaultMobileRenderingPath_C30 = (int)RenderingPath.Forward;

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.TrailRenderer;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.LineParameters;
 
 namespace AssetRipper.Core.SourceGenExtensions

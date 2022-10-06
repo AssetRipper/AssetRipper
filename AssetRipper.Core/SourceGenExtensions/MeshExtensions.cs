@@ -4,11 +4,10 @@ using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.MeshBlendShape;
-using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using System.Buffers;
 using System.Buffers.Binary;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
@@ -18,6 +17,30 @@ namespace AssetRipper.Core.SourceGenExtensions
 	public static class MeshExtensions
 	{
 		private static readonly Regex combinedMeshRegex = new Regex(@"^Combined Mesh \(root scene\)( [0-9]+)?$", RegexOptions.Compiled);
+
+		/// <summary>
+		/// Compressing meshes saves space in the built game, but more compression introduces more artifacts in vertex data.
+		/// </summary>
+		public enum MeshCompression : byte
+		{
+			/// <summary>
+			/// No mesh compression (default).
+			/// </summary>
+			Off = 0,
+			/// <summary>
+			/// Low amount of mesh compression.
+			/// </summary>
+			Low = 1,
+			/// <summary>
+			/// Medium amount of mesh compression.
+			/// </summary>
+			Med = 2,
+			/// <summary>
+			/// High amount of mesh compression.
+			/// </summary>
+			High = 3,
+			Count,
+		}
 
 		public static bool IsCombinedMesh(this IMesh mesh) => combinedMeshRegex.IsMatch(mesh.NameString); 
 

@@ -1,6 +1,5 @@
-﻿using AssetRipper.Core.Classes.Renderer;
-using AssetRipper.Core.Classes.Terrain;
-using AssetRipper.SourceGenerated.Classes.ClassID_218;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_218;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -15,7 +14,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (terrain.Has_ShadowCastingMode_C218())
 			{
-				return (ShadowCastingMode)terrain.ShadowCastingMode_C218;
+				return terrain.ShadowCastingMode_C218E;
 			}
 			else
 			{
@@ -31,23 +30,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else
 			{
-				return terrain.ShadowCastingMode_C218 != (int)ShadowCastingMode.Off;
+				return terrain.ShadowCastingMode_C218E != ShadowCastingMode.Off;
 			}
-		}
-
-		public static MaterialType GetMaterialType(this ITerrain terrain)
-		{
-			//if (ToSerializedVersion(version) > 2)
-			//{
-			//	return MaterialType;
-			//}
-			//return MaterialType == MaterialType.BuiltInStandard ? MaterialType.BuiltInLegacyDiffuse : MaterialType.Custom;
-			return (MaterialType)terrain.MaterialType_C218;
-		}
-
-		public static ReflectionProbeUsage GetReflectionProbeUsage(this ITerrain terrain)
-		{
-			return (ReflectionProbeUsage)terrain.ReflectionProbeUsage_C218;
 		}
 	}
 }

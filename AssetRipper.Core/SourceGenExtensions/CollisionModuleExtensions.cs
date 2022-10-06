@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.CollisionModule;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.CollisionModule;
 
 namespace AssetRipper.Core.SourceGenExtensions

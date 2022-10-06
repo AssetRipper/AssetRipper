@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Classes.Sprite;
-using AssetRipper.Core.IO;
+﻿using AssetRipper.Core.IO;
 using AssetRipper.Core.Math.Vectors;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;

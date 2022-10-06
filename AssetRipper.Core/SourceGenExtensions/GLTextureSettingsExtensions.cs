@@ -1,4 +1,6 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.GLTextureSettings;
+﻿using AssetRipper.SourceGenerated.Enums;
+using AssetRipper.SourceGenerated.Subclasses.GLTextureSettings;
+using FilterMode = AssetRipper.SourceGenerated.Enums.FilterMode_0;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -6,13 +8,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void SetToDefault(this IGLTextureSettings settings)
 		{
-			settings.FilterMode = (int)(Classes.Texture2D.FilterMode)(-1);
+			settings.FilterMode = (int)(FilterMode)(-1);
 			settings.Aniso = -1;
 			settings.MipBias = -100;
-			settings.WrapMode = (int)(Classes.Texture2D.TextureWrapMode)(-1);
-			settings.WrapU = (int)(Classes.Texture2D.TextureWrapMode)(-1);
-			settings.WrapV = (int)(Classes.Texture2D.TextureWrapMode)(-1);
-			settings.WrapW = (int)(Classes.Texture2D.TextureWrapMode)(-1);
+			settings.WrapMode = (int)(TextureWrapMode)(-1);
+			settings.WrapU = (int)(TextureWrapMode)(-1);
+			settings.WrapV = (int)(TextureWrapMode)(-1);
+			settings.WrapW = (int)(TextureWrapMode)(-1);
 		}
 
 		public static void CopyValues(this IGLTextureSettings destination, IGLTextureSettings source)

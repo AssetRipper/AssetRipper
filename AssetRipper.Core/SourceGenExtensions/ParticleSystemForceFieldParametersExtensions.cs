@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.ParticleSystemForceField;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.ParticleSystemForceFieldParameters;
 
 namespace AssetRipper.Core.SourceGenExtensions

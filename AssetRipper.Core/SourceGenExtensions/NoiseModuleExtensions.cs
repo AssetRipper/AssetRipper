@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.ParticleSystem.NoiseModule;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.NoiseModule;
 
 namespace AssetRipper.Core.SourceGenExtensions

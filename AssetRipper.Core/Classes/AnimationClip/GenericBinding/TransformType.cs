@@ -8,7 +8,7 @@
 		EulerRotation = 4,
 	}
 
-	public static class BindingTypeExtensions
+	public static class TransformTypeExtensions
 	{
 		public static bool IsValid(this TransformType _this)
 		{

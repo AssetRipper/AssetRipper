@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.Texture2D;
-using AssetRipper.SourceGenerated.Classes.ClassID_117;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_117;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

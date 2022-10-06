@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Classes.Camera;
-using AssetRipper.Core.Classes.GraphicsSettings;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.TierGraphicsSettings;
 using AssetRipper.SourceGenerated.Subclasses.TierGraphicsSettingsEditor;
 

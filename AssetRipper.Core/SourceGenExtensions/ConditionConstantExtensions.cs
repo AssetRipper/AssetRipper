@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.AnimatorTransition;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.ConditionConstant;
 
 namespace AssetRipper.Core.SourceGenExtensions

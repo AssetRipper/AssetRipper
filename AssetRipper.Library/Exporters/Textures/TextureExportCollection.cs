@@ -11,7 +11,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Sprite_;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
@@ -133,10 +133,10 @@ namespace AssetRipper.Library.Exporters.Textures
 		{
 			if (m_sprites.Count == 0)
 			{
-				importer.SpriteMode_C1006 = (int)Core.Classes.Meta.Importers.Texture.SpriteImportMode.Single;
+				importer.SpriteMode_C1006E = SpriteImportMode.Single;
 				importer.SpriteExtrude_C1006 = 1;
-				importer.SpriteMeshType_C1006 = (int)Core.Classes.Sprite.SpriteMeshType.FullRect;//See pull request #306
-				importer.Alignment_C1006 = (int)Core.Classes.Meta.Importers.Texture.SpriteAlignment.Center;
+				importer.SpriteMeshType_C1006 = (int)SpriteMeshType.FullRect;//See pull request #306
+				importer.Alignment_C1006 = (int)SpriteAlignment.Center;
 				if (importer.Has_SpritePivot_C1006())
 				{
 					importer.SpritePivot_C1006.SetValues(0.5f, 0.5f);
@@ -149,16 +149,16 @@ namespace AssetRipper.Library.Exporters.Textures
 				ITexture2D texture = (ITexture2D)Asset;
 				if (sprite.Rect_C213 == sprite.RD_C213.TextureRect && sprite.NameString == texture.NameString)
 				{
-					importer.SpriteMode_C1006 = (int)Core.Classes.Meta.Importers.Texture.SpriteImportMode.Single;
+					importer.SpriteMode_C1006E = SpriteImportMode.Single;
 				}
 				else
 				{
-					importer.SpriteMode_C1006 = (int)Core.Classes.Meta.Importers.Texture.SpriteImportMode.Multiple;
-					importer.TextureType_C1006 = (int)Core.Classes.Meta.Importers.Texture.TextureImporterType.Sprite;
+					importer.SpriteMode_C1006E = SpriteImportMode.Multiple;
+					importer.TextureType_C1006E = TextureImporterType.Sprite;
 				}
 				importer.SpriteExtrude_C1006 = sprite.Extrude_C213;
 				importer.SpriteMeshType_C1006 = (int)sprite.RD_C213.GetMeshType();
-				importer.Alignment_C1006 = (int)Core.Classes.Meta.Importers.Texture.SpriteAlignment.Custom;
+				importer.Alignment_C1006 = (int)SpriteAlignment.Custom;
 				if (importer.Has_SpritePivot_C1006() && sprite.Has_Pivot_C213())
 				{
 					importer.SpritePivot_C1006.CopyValues(sprite.Pivot_C213);
@@ -168,7 +168,7 @@ namespace AssetRipper.Library.Exporters.Textures
 					importer.SpriteBorder_C1006.CopyValues(sprite.Border_C213);
 				}
 				importer.SpritePixelsToUnits_C1006 = sprite.PixelsToUnits_C213;
-				importer.TextureType_C1006 = (int)Core.Classes.Meta.Importers.Texture.TextureImporterType.Sprite;
+				importer.TextureType_C1006E = TextureImporterType.Sprite;
 				if (m_exportSprites)
 				{
 					AddSpriteSheet(container, importer);
@@ -178,17 +178,17 @@ namespace AssetRipper.Library.Exporters.Textures
 			else
 			{
 				ISprite sprite = m_sprites.Keys.First();
-				importer.TextureType_C1006 = (int)Core.Classes.Meta.Importers.Texture.TextureImporterType.Sprite;
-				importer.SpriteMode_C1006 = (int)Core.Classes.Meta.Importers.Texture.SpriteImportMode.Multiple;
+				importer.TextureType_C1006E = TextureImporterType.Sprite;
+				importer.SpriteMode_C1006E = SpriteImportMode.Multiple;
 				importer.SpriteExtrude_C1006 = sprite.Extrude_C213;
 				importer.SpriteMeshType_C1006 = (int)sprite.RD_C213.GetMeshType();
-				importer.Alignment_C1006 = (int)Core.Classes.Meta.Importers.Texture.SpriteAlignment.Center;
+				importer.Alignment_C1006 = (int)SpriteAlignment.Center;
 				if (importer.Has_SpritePivot_C1006())
 				{
 					importer.SpritePivot_C1006.SetValues(0.5f, 0.5f);
 				}
 				importer.SpritePixelsToUnits_C1006 = sprite.PixelsToUnits_C213;
-				importer.TextureType_C1006 = (int)Core.Classes.Meta.Importers.Texture.TextureImporterType.Sprite;
+				importer.TextureType_C1006E = TextureImporterType.Sprite;
 				if (m_exportSprites)
 				{
 					AddSpriteSheet(container, importer);
@@ -202,7 +202,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			if (!importer.Has_SpriteSheet_C1006())
 			{
 			}
-			else if (importer.SpriteMode_C1006 == (int)Core.Classes.Meta.Importers.Texture.SpriteImportMode.Single)
+			else if (importer.SpriteMode_C1006E == SpriteImportMode.Single)
 			{
 				KeyValuePair<ISprite, ISpriteAtlas?> kvp = m_sprites.First();
 				ISpriteMetaData smeta = kvp.Key.GenerateSpriteMetaData(container, kvp.Value);
@@ -226,7 +226,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private void AddIDToName(ITextureImporter importer)
 		{
-			if (importer.SpriteMode_C1006 == (int)Core.Classes.Meta.Importers.Texture.SpriteImportMode.Multiple)
+			if (importer.SpriteMode_C1006E == SpriteImportMode.Multiple)
 			{
 				if (importer.Has_InternalIDToNameTable_C1006())
 				{
@@ -262,7 +262,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public string? FileExtension { get; set; }
 
-		private readonly Dictionary<ISprite, ISpriteAtlas?> m_sprites = new Dictionary<ISprite, ISpriteAtlas?>();
+		private readonly Dictionary<ISprite, ISpriteAtlas?> m_sprites = new();
 		private readonly bool m_exportSprites;
 
 		private readonly bool m_convert;
