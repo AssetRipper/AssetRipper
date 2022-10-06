@@ -1,7 +1,6 @@
-﻿using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
+﻿using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 
-namespace AssetRipper.Core.Converters.Files
+namespace AssetRipper.Core.Parser.Files.SerializedFiles
 {
 	public static class SerializedFileMetadataConverter
 	{

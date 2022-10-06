@@ -1,4 +1,3 @@
-using AssetRipper.Core.Converters.Files;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.IO.Smart;
