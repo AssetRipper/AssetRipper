@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
@@ -103,7 +104,7 @@ public class SerializedAssetCollection : AssetCollection
 		int size = info.ByteSize;
 		SerializedType type = info.GetSerializedType(file.Metadata.Types);
 		using PartialStream partialStream = new PartialStream(file.Stream, offset, size, true);
-		using EndianReader reader = new EndianReader(partialStream, file.EndianType);
+		using AssetReader reader = new AssetReader(partialStream, collection);
 		IUnityObjectBase? asset = factory.ReadAsset(assetInfo, reader, size, type);
 		if (asset is not null)
 		{
