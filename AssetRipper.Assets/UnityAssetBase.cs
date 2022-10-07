@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Collections;
+﻿using AssetRipper.Assets.Export;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.IO.Files.SerializedFiles;
@@ -11,9 +11,15 @@ namespace AssetRipper.Assets;
 /// </summary>
 public abstract class UnityAssetBase : IUnityAssetBase
 {
-	public virtual void ReadEditor(AssetReader reader) => throw new NotSupportedException();
+	public virtual void ReadEditor(AssetReader reader)
+	{
+		throw new NotSupportedException($"Editor reading is not supported for {GetType().FullName}");
+	}
 
-	public virtual void ReadRelease(AssetReader reader) => throw new NotSupportedException();
+	public virtual void ReadRelease(AssetReader reader)
+	{
+		throw new NotSupportedException($"Release reading is not supported for {GetType().FullName}");
+	}
 
 	public void Read(AssetReader reader)
 	{
@@ -27,9 +33,15 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		}
 	}
 
-	public virtual void WriteEditor(AssetWriter writer) => throw new NotSupportedException();
+	public virtual void WriteEditor(AssetWriter writer)
+	{
+		throw new NotSupportedException($"Editor writing is not supported for {GetType().FullName}");
+	}
 
-	public virtual void WriteRelease(AssetWriter writer) => throw new NotSupportedException();
+	public virtual void WriteRelease(AssetWriter writer)
+	{
+		throw new NotSupportedException($"Release writing is not supported for {GetType().FullName}");
+	}
 
 	public void Write(AssetWriter writer)
 	{
@@ -43,13 +55,19 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		}
 	}
 
-	public virtual YamlNode ExportYamlEditor(AssetCollection container) => throw new NotSupportedException($"Editor yaml export is not supported for {GetType().FullName}");
-
-	public virtual YamlNode ExportYamlRelease(AssetCollection container) => throw new NotSupportedException($"Release yaml export is not supported for {GetType().FullName}");
-
-	public YamlNode ExportYaml(AssetCollection container)
+	public virtual YamlNode ExportYamlEditor(IExportContainer container)
 	{
-		if (container.Flags.IsRelease())
+		throw new NotSupportedException($"Editor yaml export is not supported for {GetType().FullName}");
+	}
+
+	public virtual YamlNode ExportYamlRelease(IExportContainer container)
+	{
+		throw new NotSupportedException($"Release yaml export is not supported for {GetType().FullName}");
+	}
+
+	public YamlNode ExportYaml(IExportContainer container)
+	{
+		if (container.ExportFlags.IsRelease())
 		{
 			return ExportYamlRelease(container);
 		}
