@@ -16,6 +16,11 @@ public readonly record struct PPtr<T>(int FileID, long PathID) where T : IUnityO
 {
 	public PPtr(long PathID) : this(0, PathID) { }
 
+	public PPtr<TCast> Cast<TCast>() where TCast : IUnityObjectBase
+	{
+		return new PPtr<TCast>(FileID, PathID);
+	}
+
 	/// <summary>
 	/// PathID == 0
 	/// </summary>
