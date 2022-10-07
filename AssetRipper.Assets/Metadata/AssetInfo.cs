@@ -7,7 +7,7 @@ public readonly record struct AssetInfo(AssetCollection Collection, long PathID,
 {
 	public static AssetInfo MakeDummyAssetInfo(int classID)
 	{
-		return new AssetInfo(dummyBundle.Collection, -1, classID);
+		return new AssetInfo(dummyBundle.Collection, 0, classID);
 	}
 
 	private static readonly DummyBundle dummyBundle = new();
