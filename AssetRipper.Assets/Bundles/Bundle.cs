@@ -35,15 +35,21 @@ public abstract class Bundle
 		}
 	}
 
-	public AssetCollection? Resolve(FileIdentifier identifier)
+	public AssetCollection? ResolveCollection(FileIdentifier identifier)
 	{
-		return Resolve(identifier.GetFilePath());
+		return ResolveCollection(identifier.GetFilePath());
 	}
 
-	public virtual AssetCollection? Resolve(string name)
+	public virtual AssetCollection? ResolveCollection(string name)
 	{
 		//Uniqueness is not guaranteed because of asset bundle variants
-		return Collections.FirstOrDefault(c => c.Name == name) ?? Parent?.Resolve(name);
+		return Collections.FirstOrDefault(c => c.Name == name) ?? Parent?.ResolveCollection(name);
+	}
+
+	public virtual ResourceFile? ResolveResource(string name)
+	{
+		//Uniqueness is not guaranteed because of asset bundle variants
+		return Resources.FirstOrDefault(c => c.Name == name) ?? Parent?.ResolveResource(name);
 	}
 
 	public void AddResource(ResourceFile resource)

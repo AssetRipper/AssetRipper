@@ -35,7 +35,7 @@ public class SerializedAssetCollection : AssetCollection
 		for (int i = 0; i < DependencyIdentifiers.Length; i++)
 		{
 			FileIdentifier identifier = DependencyIdentifiers[i];
-			SetDependency(i + 1, Bundle.Resolve(identifier));
+			SetDependency(i + 1, Bundle.ResolveCollection(identifier));
 		}
 		DependencyIdentifiers = Array.Empty<FileIdentifier>();
 	}
