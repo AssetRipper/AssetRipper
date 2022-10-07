@@ -3,7 +3,6 @@ using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.VersionHandling;
 using System.Collections.Generic;
 using System.Linq;
-using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable
 {
@@ -87,11 +86,11 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 
 		public bool IsEnginePointer()
 		{
-			if (IsObject(Namespace, Name))
+			if (MonoUtils.IsObject(Namespace, Name))
 			{
 				return false;
 			}
-			if (IsMonoPrime(Namespace, Name))
+			if (MonoUtils.IsMonoPrime(Namespace, Name))
 			{
 				return true;
 			}

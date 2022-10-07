@@ -150,20 +150,7 @@ namespace AssetRipper.IO.Files
 	{
 		public static bool IsCompatible(this BuildTarget _this, BuildTarget comp)
 		{
-			if (_this == comp)
-			{
-				return true;
-			}
-
-			if (_this.IsStandalone())
-			{
-				if (comp.IsStandalone())
-				{
-					return true;
-				}
-			}
-
-			return false;
+			return _this == comp || (_this.IsStandalone() && comp.IsStandalone());
 		}
 
 		public static bool IsStandalone(this BuildTarget _this)
