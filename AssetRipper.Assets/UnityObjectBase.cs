@@ -1,5 +1,7 @@
 ﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Yaml;
 
 namespace AssetRipper.Assets;
 
@@ -18,4 +20,14 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	public int ClassID => AssetInfo.ClassID;
 	public long PathID => AssetInfo.PathID;
 	public virtual string ClassName => GetType().Name;
+
+	public YamlDocument ExportYamlDocument(IExportContainer container)
+	{
+		YamlDocument document = new();
+		YamlMappingNode root = document.CreateMappingRoot();
+		root.Tag = ClassID.ToString();
+		root.Anchor = container.GetExportID(this).ToString();
+		root.Add(ClassName, ExportYaml(container));
+		return document;
+	}
 }
