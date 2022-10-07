@@ -1,6 +1,8 @@
 ﻿using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Yaml;
 
@@ -75,5 +77,10 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		{
 			return ExportYamlEditor(container);
 		}
+	}
+
+	public virtual IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
+	{
+		return Enumerable.Empty<PPtr<IUnityObjectBase>>();
 	}
 }
