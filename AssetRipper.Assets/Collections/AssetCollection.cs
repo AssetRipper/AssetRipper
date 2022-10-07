@@ -13,7 +13,7 @@ namespace AssetRipper.Assets.Collections;
 /// <summary>
 /// A collection of <see cref="IUnityObjectBase"/> assets.
 /// </summary>
-public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
+public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, IAssetContainer
 {
 	protected AssetCollection(Bundle bundle)
 	{
@@ -137,6 +137,12 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 
 	public bool TryGetAsset(long pathID, [NotNullWhen(true)] out IUnityObjectBase? asset)
 	{
+		if (pathID is 0)
+		{
+			asset = default;
+			return false;
+		}
+
 		return assets.TryGetValue(pathID, out asset);
 	}
 
