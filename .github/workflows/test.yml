@@ -1,0 +1,53 @@
+name: Test
+
+on:
+   push:
+    branches: [ master ]
+   pull_request:
+    branches: [ master ]
+
+jobs:
+   build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3.0.1
+      with:
+        dotnet-version: 6.0.x
+        
+    - name: Build AssetRipper.IO.Files.Tests
+      run: dotnet build /p:Configuration=Release
+      working-directory: ./AssetRipper.IO.Files.Tests/
+      
+    - name: Run AssetRipper.IO.Files.Tests
+      run: dotnet test
+      working-directory: ./AssetRipper.IO.Files.Tests/
+        
+
+    - name: Build AssetRipper.Numerics.Tests
+      run: dotnet build /p:Configuration=Release
+      working-directory: ./AssetRipper.Numerics.Tests/
+      
+    - name: Run AssetRipper.Numerics.Tests
+      run: dotnet test
+      working-directory: ./AssetRipper.Numerics.Tests/
+        
+
+    - name: Build AssetRipper.Tests
+      run: dotnet build /p:Configuration=Release
+      working-directory: ./AssetRipper.Tests/
+      
+    - name: Run AssetRipper.Tests
+      run: dotnet test
+      working-directory: ./AssetRipper.Tests/
+        
+
+    - name: Build AssetRipper.Yaml.Tests
+      run: dotnet build /p:Configuration=Release
+      working-directory: ./AssetRipper.Yaml.Tests/
+      
+    - name: Run AssetRipper.Yaml.Tests
+      run: dotnet test
+      working-directory: ./AssetRipper.Yaml.Tests/

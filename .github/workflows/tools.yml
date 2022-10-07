@@ -1,4 +1,4 @@
-name: Auxiliary
+name: Tools
 
 on:
    push:
@@ -37,10 +37,3 @@ jobs:
       run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipper.Tools.TypeTreeExtractor/
       
-    - name: Build Tests
-      run: dotnet build /p:Configuration=Release
-      working-directory: ./AssetRipper.Tests/
-      
-    - name: Run Tests
-      run: dotnet test
-      working-directory: ./AssetRipper.Tests/
