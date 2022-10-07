@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Yaml;
 
-namespace AssetRipper.Assets.IO.Yaml
+namespace AssetRipper.Assets.Export.Yaml
 {
 	public static class YamlSerializedVersionExtensions
 	{

@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;

@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Assets.Export;
-using AssetRipper.Assets.IO.Yaml;
+using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
 

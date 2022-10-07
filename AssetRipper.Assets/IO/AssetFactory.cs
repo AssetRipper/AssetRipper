@@ -2,7 +2,7 @@
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 
-namespace AssetRipper.Assets;
+namespace AssetRipper.Assets.IO;
 
 public abstract class AssetFactory
 {

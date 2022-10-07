@@ -1,6 +1,6 @@
-﻿using AssetRipper.Assets.IO.Reading;
+﻿using AssetRipper.Assets.Export.Yaml;
+using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
-using AssetRipper.Assets.IO.Yaml;
 
 namespace AssetRipper.Assets.IO
 {

@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets.Export;
 using AssetRipper.Yaml;
 
-namespace AssetRipper.Assets.IO.Yaml
+namespace AssetRipper.Assets.Export.Yaml
 {
 	public interface IYamlExportable
 	{
