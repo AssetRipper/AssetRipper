@@ -190,3 +190,4 @@ jobs:
         name: AssetRipper_mac_arm64
         path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_arm64/*
         if-no-files-found: error
+
