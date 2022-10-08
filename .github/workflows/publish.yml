@@ -172,7 +172,7 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Publish AssetRipper Mac arm64
-      run: dotnet publish /p:PublishProfile=mac_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+      run: dotnet publish /p:PublishProfile=mac_arm64 /p:Configuration=Release
       working-directory: ./AssetRipper.GUI/
         
     - name: List Files
