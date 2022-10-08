@@ -130,7 +130,7 @@ jobs:
 
 
    publish_mac_x64:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -162,7 +162,7 @@ jobs:
 
 
    publish_mac_arm64:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
