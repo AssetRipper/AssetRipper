@@ -130,7 +130,7 @@ jobs:
 
 
    publish_mac_x64:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -156,13 +156,13 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: AssetRipper_mac_x64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_x64/*
+        path: /Users/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_x64/*
         if-no-files-found: error
         
 
 
    publish_mac_arm64:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -172,7 +172,7 @@ jobs:
         dotnet-version: 6.0.x
         
     - name: Publish AssetRipper Mac arm64
-      run: dotnet publish /p:PublishProfile=mac_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+      run: dotnet publish /p:PublishProfile=mac_arm64 /p:Configuration=Release
       working-directory: ./AssetRipper.GUI/
         
     - name: List Files
@@ -188,5 +188,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: AssetRipper_mac_arm64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_arm64/*
+        path: /Users/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_arm64/*
         if-no-files-found: error
