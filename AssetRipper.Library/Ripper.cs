@@ -64,6 +64,7 @@ namespace AssetRipper.Library
 		private List<IPostExporter> PostExporters { get; } = new();
 		private List<IAssetProcessor> AssetProcessors { get; } = new()
 		{
+			new LightingDataProcessor(),
 			new EditorFormatProcessor(),
 		};
 

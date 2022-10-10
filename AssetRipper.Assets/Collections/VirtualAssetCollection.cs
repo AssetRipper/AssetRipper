@@ -15,6 +15,12 @@ public abstract class VirtualAssetCollection : AssetCollection
 	{
 	}
 
+	public new string Name
+	{
+		get => base.Name;
+		set => base.Name = value;
+	}
+
 	public void SetLayout(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 	{
 		Version = version;
