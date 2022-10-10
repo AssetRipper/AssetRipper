@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;

@@ -1,7 +1,7 @@
 using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.IO;
-using AssetRipper.Core.Parser.Files;
+using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.VersionUtilities;
 using ShaderTextRestorer.Exporters;
@@ -36,14 +36,14 @@ namespace ShaderTextRestorer.IO
 		{
 			ShaderGpuProgramType programType = subProgram.GetProgramType(Version);
 			GPUPlatform graphicApi = programType.ToGPUPlatform(Platform);
-			ShaderTextExporter exporter = m_exporterInstantiator.Invoke(Shader.SerializedFile.Version, graphicApi);
+			ShaderTextExporter exporter = m_exporterInstantiator.Invoke(Shader.Collection.Version, graphicApi);
 			exporter.Export(this, ref subProgram);
 		}
 
 		public IShader Shader { get; }
 		public ShaderSubProgramBlob[] Blobs { get; }
-		public UnityVersion Version => Shader.SerializedFile.Version;
-		public BuildTarget Platform => Shader.SerializedFile.Platform;
+		public UnityVersion Version => Shader.Collection.Version;
+		public BuildTarget Platform => Shader.Collection.Platform;
 
 		public bool WriteQuotesAroundProgram { get; set; } = true;
 

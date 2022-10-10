@@ -12,6 +12,20 @@ namespace AssetRipper.Core.SourceGenExtensions
 			vector.Z *= scalar;
 		}
 
+		public static void CopyValues(this IVector3f vector, Vector3 source)
+		{
+			vector.X = source.X;
+			vector.Y = source.Y;
+			vector.Z = source.Z;
+		}
+
+		public static void Reset(this IVector3f vector)
+		{
+			vector.X = 0;
+			vector.Y = 0;
+			vector.Z = 0;
+		}
+
 		public static Vector3 CastToStruct(this IVector3f vector)
 		{
 			return new Vector3(vector.X, vector.Y, vector.Z);

@@ -1,8 +1,9 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Parser.Utils;
 using AssetRipper.Core.Structure.Assembly;
+using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Serializable;
+using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using Mono.Cecil;
 
@@ -35,14 +36,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return FilenameUtils.FixAssemblyName(monoScript.AssemblyName_C115.String);
 		}
 
-		public static SerializableType? GetBehaviourType(this IMonoScript monoScript)
+		public static SerializableType? GetBehaviourType(this IMonoScript monoScript, IAssemblyManager assemblyManager)
 		{
-			ScriptIdentifier scriptID = HasNamespace(monoScript.SerializedFile.Version) ?
-				monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace_C115.String, monoScript.ClassName_C115.String) :
-				monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName_C115.String);
-			if (monoScript.SerializedFile.Collection.AssemblyManager.IsValid(scriptID))
+			ScriptIdentifier scriptID = HasNamespace(monoScript.Collection.Version) ?
+				assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace_C115.String, monoScript.ClassName_C115.String) :
+				assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName_C115.String);
+			if (assemblyManager.IsValid(scriptID))
 			{
-				return monoScript.SerializedFile.Collection.AssemblyManager.GetSerializableType(scriptID);
+				return assemblyManager.GetSerializableType(scriptID, monoScript.Collection.Version);
 			}
 			return null;
 		}
@@ -59,32 +60,36 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript, bool includeNamespace)
+		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript, IAssemblyManager assemblyManager, bool includeNamespace)
 		{
 			bool useNamespace = includeNamespace; //&& monoScript.Namespace_C115 is not null;
-			return useNamespace ? monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace_C115.String, monoScript.ClassName_C115.String)
-				: monoScript.SerializedFile.Collection.AssemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName_C115.String);
+			return useNamespace ? assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace_C115.String, monoScript.ClassName_C115.String)
+				: assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.ClassName_C115.String);
 		}
 
-		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript) => monoScript.GetScriptID(false);
-
-		public static TypeDefinition GetTypeDefinition(this IMonoScript monoScript)
+		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript, IAssemblyManager assemblyManager)
 		{
-			ScriptIdentifier scriptID = monoScript.GetScriptID(true);
-			return monoScript.SerializedFile.Collection.AssemblyManager.GetTypeDefinition(scriptID);
+			return monoScript.GetScriptID(assemblyManager, false);
 		}
 
-		public static bool IsScriptPresents(this IMonoScript monoScript)
+		public static TypeDefinition GetTypeDefinition(this IMonoScript monoScript, IAssemblyManager assemblyManager)
 		{
-			ScriptIdentifier scriptID = monoScript.GetScriptID(true);
-			return monoScript.SerializedFile.Collection.AssemblyManager.IsPresent(scriptID);
+			ScriptIdentifier scriptID = monoScript.GetScriptID(assemblyManager, true);
+			return assemblyManager.GetTypeDefinition(scriptID);
+		}
+
+		public static bool IsScriptPresents(this IMonoScript monoScript, IAssemblyManager assemblyManager)
+		{
+			ScriptIdentifier scriptID = monoScript.GetScriptID(assemblyManager, true);
+			return assemblyManager.IsPresent(scriptID);
 		}
 
 		public static Hash128 GetPropertiesHash(this IMonoScript monoScript)
 		{
-			return monoScript.Has_PropertiesHash_C115_Hash128()
+			return new();
+			/*return monoScript.Has_PropertiesHash_C115_Hash128()
 				? (Hash128)monoScript.PropertiesHash_C115_Hash128
-				: new Hash128(monoScript.PropertiesHash_C115_UInt32);
+				: new Hash128(monoScript.PropertiesHash_C115_UInt32);*/
 		}
 	}
 }

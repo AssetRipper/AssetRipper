@@ -1,12 +1,15 @@
-using AssetRipper.Core;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Utils;
+using AssetRipper.Core.Linq;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
+using AssetRipper.IO.Files;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_241;
 using AssetRipper.SourceGenerated.Classes.ClassID_243;
 using AssetRipper.SourceGenerated.Classes.ClassID_244;
@@ -30,7 +33,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 {
 	public class AudioMixerExportCollection : AssetsExportCollection
 	{
-		public AudioMixerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile,
+		public AudioMixerExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile,
 			IAudioMixerController mixer) : base(assetExporter, mixer)
 		{
 			AssetsProcessingContext context = new(mixer, virtualFile);
@@ -38,10 +41,10 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 		}
 
 		private readonly record struct AssetsProcessingContext(IAudioMixerController Mixer,
-			IAudioMixerConstant Constants, VirtualSerializedFile VirtualFile, Dictionary<uint, GUID> IndexToGuid,
+			IAudioMixerConstant Constants, TemporaryAssetCollection VirtualFile, Dictionary<uint, GUID> IndexToGuid,
 			List<IAudioMixerGroupController> Groups)
 		{
-			public AssetsProcessingContext(IAudioMixerController mixer, VirtualSerializedFile virtualFile) : this(mixer,
+			public AssetsProcessingContext(IAudioMixerController mixer, TemporaryAssetCollection virtualFile) : this(mixer,
 				mixer.MixerConstant_C241, virtualFile, new Dictionary<uint, GUID>(), new List<IAudioMixerGroupController>()) { }
 		}
 
@@ -57,9 +60,9 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 		{
 			Dictionary<GUID, IAudioMixerGroupController> groupGuidMap = new();
 			
-			foreach (IAudioMixerGroupController group in context.Mixer.SerializedFile.Collection.FetchAssetsOfType<IAudioMixerGroupController>())
+			foreach (IAudioMixerGroupController group in context.Mixer.Collection.Bundle.FetchAssetsInHierarchy().SelectType<IUnityObjectBase, IAudioMixerGroupController>())
 			{
-				if (group.AudioMixer_C243.IsAsset(context.Mixer.SerializedFile, context.Mixer))
+				if (group.AudioMixer_C243.IsAsset(context.Mixer.Collection, context.Mixer))
 				{
 					AddAsset(group);
 					groupGuidMap.Add(group.GroupID_C243, group);
@@ -103,10 +106,10 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			
 			for (int i = 0; i < effects.Length; i++)
 			{
-				IAudioMixerEffectController effect = context.VirtualFile.CreateAsset<IAudioMixerEffectController>(ClassIDType.AudioMixerEffectController);
+				IAudioMixerEffectController effect = context.VirtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
 				effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 				PPtr_AudioMixerEffectController_ effectPPtr = new();
-				effectPPtr.CopyValues(effect.SerializedFile.CreatePPtr(effect));
+				effectPPtr.CopyValues(effect.Collection.ForceCreatePPtr(effect));
 				effects[i] = (effect, effectPPtr);
 				AddAsset(effect);
 			}
@@ -166,10 +169,10 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			{
 				if (!groupsWithAttenuation.Contains(group))
 				{
-					IAudioMixerEffectController effect = context.VirtualFile.CreateAsset<IAudioMixerEffectController>(ClassIDType.AudioMixerEffectController);
+					IAudioMixerEffectController effect = context.VirtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
 					effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 					PPtr_AudioMixerEffectController_ effectPPtr = new();
-					effectPPtr.CopyValues(effect.SerializedFile.CreatePPtr(effect));
+					effectPPtr.CopyValues(effect.Collection.ForceCreatePPtr(effect));
 					group.Effects_C243.Add(effectPPtr);
 					AddAsset(effect);
 					
@@ -184,7 +187,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			for (int i = 0; i < context.Mixer.Snapshots_C241.Count; i++)
 			{
 				PPtr_AudioMixerSnapshot_ snapshotPPtr = context.Mixer.Snapshots_C241[i];
-				IAudioMixerSnapshotController snapshot = (IAudioMixerSnapshotController)snapshotPPtr.GetAsset(context.Mixer.SerializedFile);
+				IAudioMixerSnapshotController snapshot = (IAudioMixerSnapshotController)snapshotPPtr.GetAsset(context.Mixer.Collection);
 				AddAsset(snapshot);
 				
 				SnapshotConstant snapshotConstant = context.Constants.Snapshots[i];

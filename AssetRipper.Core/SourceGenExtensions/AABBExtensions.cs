@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Subclasses.AABB;
+using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -7,14 +8,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void CopyValuesFrom(this IAABB instance, IAABB source)
 		{
-			instance.Center.CopyValuesFrom(source.Center);
-			instance.Extent.CopyValuesFrom(source.Extent);
+			instance.Center.CopyValues(source.Center);
+			instance.Extent.CopyValues(source.Extent);
 		}
 
-		public static void CopyValuesFrom(this IAABB instance, IVector3f center, IVector3f extent)
+		public static void CopyValuesFrom(this IAABB instance, Vector3 center, Vector3 extent)
 		{
-			instance.Center.CopyValuesFrom(center);
-			instance.Extent.CopyValuesFrom(extent);
+			instance.Center.CopyValues(center);
+			instance.Extent.CopyValues(extent);
 		}
 
 		public static void Reset(this IAABB instance)

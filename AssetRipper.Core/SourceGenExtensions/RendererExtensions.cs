@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_120;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_161;
@@ -27,7 +28,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			foreach (IPPtr_Material_ materialPtr in renderer.GetMaterials())
 			{
-				IMaterial? material = materialPtr.TryGetAsset(renderer.SerializedFile);
+				IMaterial? material = materialPtr.TryGetAsset(renderer.Collection);
 				if (material == null)
 				{
 					continue;

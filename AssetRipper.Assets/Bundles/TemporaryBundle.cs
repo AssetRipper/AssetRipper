@@ -8,4 +8,6 @@ namespace AssetRipper.Assets.Bundles;
 public class TemporaryBundle : VirtualBundle<TemporaryAssetCollection>
 {
 	public override string Name => nameof(TemporaryBundle);
+
+	public TemporaryAssetCollection AddNew() => new TemporaryAssetCollection(this);
 }

@@ -1,6 +1,8 @@
-using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1034;
@@ -28,7 +30,7 @@ namespace AssetRipper.Core.Project.Collections
 					? deserializedName
 					: Asset.OriginalName.Length > 0
 						? Asset.OriginalName
-						: Asset.AssetClassName;
+						: Asset.ClassName;
 				string resourcePath = Path.Combine(projectDirectory, DirectoryUtils.FixInvalidPathCharacters(
 					Path.Combine(Asset.OriginalDirectory ?? "", $"{assetName}.{GetExportExtension(Asset)}")));
 				subPath = Path.GetDirectoryName(resourcePath)!;
@@ -37,7 +39,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else
 			{
-				string subFolder = Path.Combine(AssetsKeyword, Asset.AssetClassName);
+				string subFolder = Path.Combine(AssetsKeyword, Asset.ClassName);
 				subPath = Path.Combine(projectDirectory, subFolder);
 				fileName = GetUniqueFileName(container.File, Asset, subPath);
 			}
@@ -101,7 +103,7 @@ namespace AssetRipper.Core.Project.Collections
 		}
 
 		public override IAssetExporter AssetExporter { get; }
-		public override ISerializedFile File => Asset.SerializedFile;
+		public override AssetCollection File => Asset.Collection;
 		public override IEnumerable<IUnityObjectBase> Assets
 		{
 			get { yield return Asset; }
@@ -116,7 +118,7 @@ namespace AssetRipper.Core.Project.Collections
 				}
 				else
 				{
-					return Asset.AssetClassName;
+					return Asset.ClassName;
 				}
 			}
 		}

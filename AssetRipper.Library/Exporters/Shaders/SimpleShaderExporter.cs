@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Project;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
+using AssetRipper.Core;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;

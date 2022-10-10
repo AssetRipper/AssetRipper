@@ -1,11 +1,12 @@
-using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_1030;
 using AssetRipper.SourceGenerated.Classes.ClassID_1034;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
@@ -20,13 +21,13 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public class SceneExportCollection : ExportCollection, IComparer<IUnityObjectBase>
 	{
-		public SceneExportCollection(IAssetExporter assetExporter, ISerializedFile file)
+		public SceneExportCollection(IAssetExporter assetExporter, AssetCollection file)
 		{
 			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
 			File = file ?? throw new ArgumentNullException(nameof(file));
 
 			List<IUnityObjectBase> components = new();
-			foreach (IUnityObjectBase asset in file.FetchAssets())
+			foreach (IUnityObjectBase asset in file)
 			{
 				if (SceneExportHelpers.IsSceneCompatible(asset))
 				{
@@ -183,7 +184,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public virtual string ExportExtension => "unity";
 		public override string Name => File.Name;
-		public override ISerializedFile File { get; }
+		public override AssetCollection File { get; }
 		public IOcclusionCullingData? OcclusionCullingData { get; }
 		public UnityGUID GUID { get; }
 		private IEnumerable<IUnityObjectBase> Components => m_components;

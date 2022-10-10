@@ -1,20 +1,20 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_int;
+﻿using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Int32;
 using System.Linq;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class PackedIntVectorExtensions
 	{
-		public static bool IsSet(this PackedBitVector_int packedVector) => packedVector.NumItems > 0;
+		public static bool IsSet(this PackedBitVector_Int32 packedVector) => packedVector.NumItems > 0;
 
-		public static void CopyValuesFrom(this PackedBitVector_int instance, PackedBitVector_int source)
+		public static void CopyValuesFrom(this PackedBitVector_Int32 instance, PackedBitVector_Int32 source)
 		{
 			instance.NumItems = source.NumItems;
 			instance.Data = source.Data.ToArray();
 			instance.BitSize = source.BitSize;
 		}
 
-		public static void PackUInts(this PackedBitVector_int packedVector, uint[] data)
+		public static void PackUInts(this PackedBitVector_Int32 packedVector, uint[] data)
 		{
 			uint maxDataValue = 0;
 			for (int i = 0; i < data.Length; i++)
@@ -49,7 +49,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static void PackUShorts(this PackedBitVector_int packedVector, ushort[] data)
+		public static void PackUShorts(this PackedBitVector_Int32 packedVector, ushort[] data)
 		{
 			uint maxDataValue = 0;
 			for (int i = 0; i < data.Length; i++)
@@ -84,7 +84,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static int[] UnpackInts(this PackedBitVector_int packedVector)
+		public static int[] UnpackInts(this PackedBitVector_Int32 packedVector)
 		{
 			int bitIndex = 0;
 			int byteIndex = 0;
@@ -110,7 +110,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return buffer;
 		}
 
-		public static uint[] UnpackUInts(this PackedBitVector_int packedVector)
+		public static uint[] UnpackUInts(this PackedBitVector_Int32 packedVector)
 		{
 			int bitIndex = 0;
 			int byteIndex = 0;
@@ -136,7 +136,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return buffer;
 		}
 
-		public static ushort[] UnpackUShorts(this PackedBitVector_int packedVector)
+		public static ushort[] UnpackUShorts(this PackedBitVector_Int32 packedVector)
 		{
 			int bitIndex = 0;
 			int byteIndex = 0;

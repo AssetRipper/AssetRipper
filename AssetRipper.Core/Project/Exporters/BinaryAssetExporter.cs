@@ -1,7 +1,8 @@
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.IO.Files;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Exporters
@@ -34,7 +35,7 @@ namespace AssetRipper.Core.Project.Exporters
 			throw new NotSupportedException();
 		}
 
-		public virtual IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public virtual IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new AssetExportCollection(this, asset);
 		}

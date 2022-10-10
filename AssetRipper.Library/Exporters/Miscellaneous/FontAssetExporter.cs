@@ -1,8 +1,7 @@
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using System.IO;
@@ -16,7 +15,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			return asset is IFont font && IsValidData(font.FontData_C128);
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new FontAssetExportCollection(this, asset);
 		}

@@ -1,8 +1,8 @@
-using AssetRipper.Core.Interfaces;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.IO;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project.Collections;
+using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			using Stream fileStream = File.Create(path);
+			using Stream fileStream = System.IO.File.Create(path);
 			using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
 			YamlWriter writer = new YamlWriter();
 			YamlDocument doc = asset.ExportYamlDocument(container);
@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
 		{
-			using Stream fileStream = File.Create(path);
+			using Stream fileStream = System.IO.File.Create(path);
 			using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
 			YamlWriter writer = new YamlWriter();
 			writer.WriteHead(streamWriter);
@@ -54,7 +54,7 @@ namespace AssetRipper.Core.Project.Exporters
 			throw new NotSupportedException("Yaml supports only single file export");
 		}
 
-		public abstract IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset);
+		public abstract IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset);
 
 		public AssetType ToExportType(IUnityObjectBase asset)
 		{

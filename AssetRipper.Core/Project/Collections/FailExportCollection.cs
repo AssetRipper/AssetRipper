@@ -1,11 +1,12 @@
-﻿using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Collections
@@ -56,13 +57,13 @@ namespace AssetRipper.Core.Project.Collections
 		}
 
 		public IAssetExporter AssetExporter { get; }
-		public ISerializedFile File => m_asset.SerializedFile;
+		public AssetCollection File => m_asset.Collection;
 		public TransferInstructionFlags Flags => File.Flags;
 		public IEnumerable<IUnityObjectBase> Assets
 		{
 			get { yield return m_asset; }
 		}
-		public string Name => m_asset is IHasNameString namedAsset ? namedAsset.GetNameNotEmpty() : m_asset.AssetClassName;
+		public string Name => m_asset is IHasNameString namedAsset ? namedAsset.GetNameNotEmpty() : m_asset.ClassName;
 
 		private readonly IUnityObjectBase m_asset;
 	}

@@ -1,10 +1,15 @@
 ﻿using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files.BundleFiles.FileStream;
+using AssetRipper.IO.Files.BundleFiles.RawWeb.Raw;
+using AssetRipper.IO.Files.BundleFiles.RawWeb.Web;
+using AssetRipper.IO.Files.Streams.Smart;
 using System.Diagnostics;
 
 namespace AssetRipper.IO.Files.BundleFiles
 {
 	public abstract record class BundleHeader : IEndianReadable, IEndianWritable
 	{
+		internal BundleHeader() { }
 		protected abstract string MagicString { get; }
 		public BundleVersion Version { get; set; }
 		/// <summary>
@@ -45,6 +50,15 @@ namespace AssetRipper.IO.Files.BundleFiles
 				return isRead && signature == magicString;
 			}
 			return false;
+		}
+
+		public static bool IsBundleHeader(string path)
+		{
+			using SmartStream stream = SmartStream.OpenRead(path);
+			using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
+			return FileStreamBundleHeader.IsBundleHeader(reader)
+				|| RawBundleHeader.IsBundleHeader(reader)
+				|| WebBundleHeader.IsBundleHeader(reader);
 		}
 	}
 }

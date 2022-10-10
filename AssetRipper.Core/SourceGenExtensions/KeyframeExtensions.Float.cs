@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.Classes.Misc.KeyframeTpl;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
-using AssetRipper.SourceGenerated.Subclasses.Keyframe_float;
+using AssetRipper.SourceGenerated.Subclasses.Keyframe_Single;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -8,7 +8,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public const float DefaultFloatWeight = (float)(1.0 / 3.0);
 
-		public static void SetValues(this IKeyframe_float keyframe, UnityVersion version, float time, float value, float weight)
+		public static void SetValues(this IKeyframe_Single keyframe, UnityVersion version, float time, float value, float weight)
 		{
 			keyframe.Time = time;
 			keyframe.Value = value;
@@ -19,7 +19,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			keyframe.OutWeight = weight;
 		}
 
-		public static void SetValues(this IKeyframe_float keyframe, UnityVersion version, float time, float value, float inSlope, float outSlope, float weight)
+		public static void SetValues(this IKeyframe_Single keyframe, UnityVersion version, float time, float value, float inSlope, float outSlope, float weight)
 		{
 			keyframe.Time = time;
 			keyframe.Value = value;

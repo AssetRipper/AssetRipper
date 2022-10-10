@@ -1,6 +1,7 @@
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
@@ -22,7 +23,7 @@ namespace AssetRipper.Library.Exporters.Textures
 	{
 		public override bool IsHandle(IUnityObjectBase asset) => asset is ISprite or ISpriteAtlas;
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			if (asset is ISpriteAtlas)
 			{
@@ -36,7 +37,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			// we must recover the m_RD field of the sprite from the SpriteAtlas.
 			ISprite sprite = (ISprite)asset;
 			ISpriteAtlas? atlas = null;
-			if (sprite.Has_SpriteAtlas_C213() && (atlas = sprite.SpriteAtlas_C213.TryGetAsset(sprite.SerializedFile)) != null)
+			if (sprite.Has_SpriteAtlas_C213() && (atlas = sprite.SpriteAtlas_C213P) != null)
 			{
 				if (sprite.Has_RenderDataKey_C213() &&
 				    atlas.RenderDataMap_C687078895.TryGetValue(sprite.RenderDataKey_C213, out ISpriteAtlasData? spriteData))
@@ -98,10 +99,10 @@ namespace AssetRipper.Library.Exporters.Textures
 			return new AssetExportCollection(this, asset);
 		}
 		
-		private static IPPtr<T> ConvertPPtr<T>(IPPtr<T> pptr, ISpriteAtlas atlas, ISprite sprite) where T: IUnityObjectBase
+		private static PPtr<T> ConvertPPtr<T>(IPPtr<T> pptr, ISpriteAtlas atlas, ISprite sprite) where T: IUnityObjectBase
 		{
-			T? asset = pptr.TryGetAsset(atlas.SerializedFile);
-			return asset is not null ? sprite.SerializedFile.CreatePPtr(asset) : new PPtr<T>();
+			T? asset = pptr.TryGetAsset(atlas.Collection);
+			return asset is not null ? sprite.Collection.ForceCreatePPtr(asset) : default;
 		}
 	}
 }

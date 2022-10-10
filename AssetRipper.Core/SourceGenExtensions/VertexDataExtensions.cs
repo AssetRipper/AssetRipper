@@ -1,12 +1,10 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
 using AssetRipper.Core.Extensions;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Math.Colors;
-using AssetRipper.Core.Math.Vectors;
-using AssetRipper.Core.Project;
 using AssetRipper.IO.Endian;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.StreamInfo;
@@ -80,7 +78,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			out Vector3[]? normals,
 			out Vector4[]? tangents,
 			out ColorFloat[]? colors,
-			out BoneWeights4[]? skin,
+			out BoneWeight4[]? skin,
 			out Vector2[]? uv0,
 			out Vector2[]? uv1,
 			out Vector2[]? uv2,
@@ -112,7 +110,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				if (mesh?.StreamData_C43 is not null)
 				{
-					data = mesh.StreamData_C43.GetContent(mesh.SerializedFile);
+					data = mesh.StreamData_C43.GetContent(mesh.Collection);
 					if (data.Length == 0)
 					{
 						return;
@@ -222,22 +220,26 @@ namespace AssetRipper.Core.SourceGenExtensions
 									break;
 								//2018.2 and up
 								case 12: //kShaderChannelBlendWeight
-									skin ??= MakeInitializedArray<BoneWeights4>(vertexCount);
+									skin ??= MakeInitializedArray<BoneWeight4>(vertexCount);
 									for (int i = 0; i < vertexCount; i++)
 									{
 										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
 										{
-											skin[i].Weights[j] = componentsFloatArray[(i * m_Channel.GetDataDimension()) + j];
+											BoneWeight4 boneWeight = skin[i];
+											boneWeight.SetWeight(j, componentsFloatArray[(i * m_Channel.GetDataDimension()) + j]);
+											skin[i] = boneWeight;
 										}
 									}
 									break;
 								case 13: //kShaderChannelBlendIndices
-									skin ??= MakeInitializedArray<BoneWeights4>(vertexCount);
+									skin ??= MakeInitializedArray<BoneWeight4>(vertexCount);
 									for (int i = 0; i < vertexCount; i++)
 									{
 										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
 										{
-											skin[i].BoneIndices[j] = componentsIntArray[(i * m_Channel.GetDataDimension()) + j];
+											BoneWeight4 boneWeight = skin[i];
+											boneWeight.SetIndex(j, componentsIntArray[(i * m_Channel.GetDataDimension()) + j]);
+											skin[i] = boneWeight;
 										}
 									}
 									break;
@@ -285,16 +287,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static BoneWeights4[] GenerateSkin(this IVertexData instance, IExportContainer container)
+		public static BoneWeight4[] GenerateSkin(this IVertexData instance, IExportContainer container)
 		{
 			ChannelInfo weightChannel = instance.Channels[(int)ShaderChannel2018.SkinWeight];
 			ChannelInfo indexChannel = instance.Channels[(int)ShaderChannel2018.SkinBoneIndex];
 			if (!weightChannel.IsSet())
 			{
-				return Array.Empty<BoneWeights4>();
+				return Array.Empty<BoneWeight4>();
 			}
 
-			BoneWeights4[] skin = new BoneWeights4[instance.VertexCount];
+			BoneWeight4[] skin = new BoneWeight4[instance.VertexCount];
 			int weightStride = instance.Channels.Where(t => t.Stream == weightChannel.Stream).Sum(t => t.GetStride(container.Version));
 			int weightStreamOffset = instance.GetStreamOffset(container.Version, weightChannel.Stream);
 			int indexStride = instance.Channels.Where(t => t.Stream == indexChannel.Stream).Sum(t => t.GetStride(container.Version));
@@ -321,7 +323,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					indices[i] = reader.ReadInt32();
 				}
 
-				skin[v] = new BoneWeights4(weights[0], weights[1], weights[2], weights[3], indices[0], indices[1], indices[2], indices[3]);
+				skin[v] = new BoneWeight4(weights[0], weights[1], weights[2], weights[3], indices[0], indices[1], indices[2], indices[3]);
 			}
 			return skin;
 		}

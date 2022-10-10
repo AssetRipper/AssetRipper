@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Parser.Files;
+﻿using AssetRipper.IO.Files;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

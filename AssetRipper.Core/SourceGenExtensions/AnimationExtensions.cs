@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Enums;
@@ -12,7 +13,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			foreach (IPPtr_AnimationClip_ clipPtr in animation.Animations_C111)
 			{
-				if (clipPtr.IsAsset(animation.SerializedFile, clip))
+				if (clipPtr.IsAsset(animation.Collection, clip))
 				{
 					return true;
 				}

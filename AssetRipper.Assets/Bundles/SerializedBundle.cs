@@ -15,7 +15,7 @@ public class SerializedBundle : Bundle
 
 	public override string Name => name;
 
-	public static SerializedBundle FromFileContainer(FileContainer container, AssetFactory factory)
+	public static SerializedBundle FromFileContainer(FileContainer container, AssetFactoryBase factory)
 	{
 		SerializedBundle bundle = new();
 		bundle.name = container.NameFixed;

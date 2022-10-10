@@ -1,6 +1,6 @@
+using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using ShaderTextRestorer.Exporters;

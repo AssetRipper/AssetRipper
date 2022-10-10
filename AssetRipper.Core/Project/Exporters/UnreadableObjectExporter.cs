@@ -1,8 +1,9 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.IO.Files;
 using System.Collections.Generic;
 using System.IO;
 
@@ -10,14 +11,14 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	internal class UnreadableObjectExporter : IAssetExporter
 	{
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new UnreadableExportCollection(this, (UnreadableObject)asset);
 		}
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			using FileStream fileStream = File.Create(path);
+			using FileStream fileStream = System.IO.File.Create(path);
 			using BinaryWriter writer = new BinaryWriter(fileStream);
 			writer.Write(((UnreadableObject)asset).RawData);
 			return true;

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.GUI.Utils;

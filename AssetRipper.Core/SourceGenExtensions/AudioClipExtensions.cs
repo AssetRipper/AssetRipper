@@ -15,7 +15,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (audioClip.Has_Resource_C83())
 			{
-				return audioClip.Resource_C83.GetContent(audioClip.SerializedFile) ?? Array.Empty<byte>();
+				return audioClip.Resource_C83.GetContent(audioClip.Collection) ?? Array.Empty<byte>();
 			}
 			//else if (audioClip.StreamingInfo_C83 != null && audioClip.LoadType_C83 == (int)Classes.AudioClip.AudioClipLoadType.Streaming)
 			//{
@@ -35,7 +35,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (audioClip.Resource_C83 != null)
 			{
-				return audioClip.Resource_C83.CheckIntegrity(audioClip.SerializedFile);
+				return audioClip.Resource_C83.CheckIntegrity(audioClip.Collection);
 			}
 			//else if (audioClip.StreamingInfo != null && audioClip.LoadType_C83 == (int)Classes.AudioClip.AudioClipLoadType.Streaming)
 			//{

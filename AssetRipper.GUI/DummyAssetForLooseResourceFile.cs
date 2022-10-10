@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO.Smart;
-using AssetRipper.Core.Parser.Files.ResourceFiles;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.IO.Files.ResourceFiles;
+using AssetRipper.IO.Files.Streams.Smart;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -19,11 +19,11 @@ namespace AssetRipper.GUI
 			set => throw new NotSupportedException();
 		}
 
-		public override string AssetClassName => nameof(DummyAssetForLooseResourceFile);
+		public override string ClassName => nameof(DummyAssetForLooseResourceFile);
 
 		private readonly SmartStream smartStream;
 
-		public DummyAssetForLooseResourceFile(ResourceFile associatedFile)
+		public DummyAssetForLooseResourceFile(ResourceFile associatedFile) : base(Assets.Metadata.AssetInfo.MakeDummyAssetInfo(-1))
 		{
 			AssociatedFile = associatedFile;
 			smartStream = AssociatedFile.Stream.CreateReference();

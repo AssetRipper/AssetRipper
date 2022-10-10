@@ -1,4 +1,5 @@
-using AssetRipper.Core.IO.Asset;
+using AssetRipper.Assets.IO.Reading;
+using AssetRipper.Core.IO.Extensions;
 
 namespace AssetRipper.Library.Exporters.AnimatorControllers.Editor
 {

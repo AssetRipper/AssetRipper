@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.IO;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipBindingConstant;
 using AssetRipper.SourceGenerated.Subclasses.Clip;
 using AssetRipper.SourceGenerated.Subclasses.GenericBinding;

@@ -1,15 +1,12 @@
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Library.Configuration;
-using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_241;
 using AssetRipper.SourceGenerated.Classes.ClassID_243;
 using AssetRipper.SourceGenerated.Classes.ClassID_245;
-using AssetRipper.SourceGenerated.Classes.ClassID_28;
 
 namespace AssetRipper.Library.Exporters.AudioMixers
 {
@@ -20,7 +17,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			return asset is IAudioMixerController or IAudioMixerGroupController or IAudioMixerSnapshotController;
 		}
 		
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			// Audio mixer groups and snapshots should be serialized into the audio mixer YAML asset,
 			// precisely the same as a regular Unity project would do.
@@ -29,8 +26,8 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			IAudioMixer? audioMixer = asset switch
 			{
 				IAudioMixerController mixer => mixer,
-				IAudioMixerGroupController group => group.AudioMixer_C243.TryGetAsset(group.SerializedFile),
-				IAudioMixerSnapshotController snapshot => snapshot.AudioMixer_C245.TryGetAsset(snapshot.SerializedFile),
+				IAudioMixerGroupController group => group.AudioMixer_C243P,
+				IAudioMixerSnapshotController snapshot => snapshot.AudioMixer_C245P,
 				_ => null,
 			};
 			return audioMixer is IAudioMixerController audioMixerController

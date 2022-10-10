@@ -1,5 +1,6 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_6;
@@ -13,7 +14,7 @@ namespace AssetRipper.Core.Project.Exporters
 			return asset is GlobalGameManager && asset is not IBuildSettings;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new ManagerExportCollection(this, asset);
 		}

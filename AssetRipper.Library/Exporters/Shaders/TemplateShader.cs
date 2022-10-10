@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.IO;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Core.IO;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProperty;
 using System.Collections.Generic;

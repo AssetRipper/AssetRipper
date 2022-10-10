@@ -1,4 +1,4 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_float;
+﻿using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Single;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,9 +6,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class PackedFloatVectorExtensions
 	{
-		public static bool IsSet(this PackedBitVector_float packedVector) => packedVector.NumItems > 0;
+		public static bool IsSet(this PackedBitVector_Single packedVector) => packedVector.NumItems > 0;
 
-		public static void CopyValuesFrom(this PackedBitVector_float instance, PackedBitVector_float source)
+		public static void CopyValuesFrom(this PackedBitVector_Single instance, PackedBitVector_Single source)
 		{
 			instance.NumItems = source.NumItems;
 			instance.Range = source.Range;
@@ -17,12 +17,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			instance.BitSize = source.BitSize;
 		}
 
-		public static float[] Unpack(this PackedBitVector_float packedVector)
+		public static float[] Unpack(this PackedBitVector_Single packedVector)
 		{
 			return packedVector.Unpack(packedVector.NumItems, 0);
 		}
 
-		public static float[] Unpack(this PackedBitVector_float packedVector, uint chunkCount, int offset)
+		public static float[] Unpack(this PackedBitVector_Single packedVector, uint chunkCount, int offset)
 		{
 			int bitIndex = packedVector.BitSize * offset % 8;
 			int byteIndex = packedVector.BitSize * offset / 8;
@@ -53,12 +53,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return buffer;
 		}
 
-		public static float[] Unpack(this PackedBitVector_float packedVector, uint chunkSize, uint chunkCount, int offset)
+		public static float[] Unpack(this PackedBitVector_Single packedVector, uint chunkSize, uint chunkCount, int offset)
 		{
 			return packedVector.Unpack(chunkSize * chunkCount, offset);
 		}
 
-		public static float[] UnpackFloats(this PackedBitVector_float packedVector, int itemCountInChunk, int chunkStride, int start = 0, int numChunks = -1)
+		public static float[] UnpackFloats(this PackedBitVector_Single packedVector, int itemCountInChunk, int chunkStride, int start = 0, int numChunks = -1)
 		{
 			if (chunkStride % 4 != 0)
 			{
@@ -103,7 +103,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return data.ToArray();
 		}
 
-		public static void PackFloats(this PackedBitVector_float packedVector, float[] data, int itemCountInChunk, int chunkStride, int numChunks, int bitSize, bool adjustBitSize)
+		public static void PackFloats(this PackedBitVector_Single packedVector, float[] data, int itemCountInChunk, int chunkStride, int numChunks, int bitSize, bool adjustBitSize)
 		{
 			if (data.Length != itemCountInChunk * numChunks)
 			{
@@ -118,7 +118,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			packedVector.PackFloats(data, bitSize, adjustBitSize);
 		}
 
-		public static void PackFloats(this PackedBitVector_float packedVector, float[] data, int bitSize, bool adjustBitSize)
+		public static void PackFloats(this PackedBitVector_Single packedVector, float[] data, int bitSize, bool adjustBitSize)
 		{
 			float maxf = float.NegativeInfinity;
 			float minf = float.PositiveInfinity;

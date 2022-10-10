@@ -1,6 +1,7 @@
-﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Metadata;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1101;
 using AssetRipper.SourceGenerated.Classes.ClassID_1102;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
@@ -30,9 +31,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class VirtualAnimationFactory
 	{
-		public static IBlendTree CreateBlendTree(VirtualSerializedFile virtualFile, IAnimatorController controller, IStateConstant state, int nodeIndex)
+		public static IBlendTree CreateBlendTree(TemporaryAssetCollection virtualFile, IAnimatorController controller, IStateConstant state, int nodeIndex)
 		{
-			IBlendTree blendTree = virtualFile.CreateAsset<IBlendTree>(ClassIDType.BlendTree);
+			IBlendTree blendTree = virtualFile.CreateAsset((int)ClassIDType.BlendTree, BlendTreeFactory.CreateAsset);
 			blendTree.ObjectHideFlags = HideFlags.HideInHierarchy;
 
 			IBlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Data;
@@ -42,7 +43,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			blendTree.Childs_C206.Capacity = node.ChildIndices.Length;
 			for (int i = 0; i < node.ChildIndices.Length; i++)
 			{
-				blendTree.Childs_C206.AddNew().SetValues(virtualFile, controller, state, nodeIndex, i);
+				blendTree.AddAndInitializeNewChild(virtualFile, controller, state, nodeIndex, i);
 			}
 
 			if (node.BlendEventID != uint.MaxValue)
@@ -69,36 +70,37 @@ namespace AssetRipper.Core.SourceGenExtensions
 		}
 
 		private static void CreateEntryTransitions(
-			AssetList<PPtr_AnimatorTransition_> entryTransitionList,
+			IAnimatorStateMachine generatedStateMachine,
 			IStateMachineConstant stateMachineConstant,
-			VirtualSerializedFile file,
+			TemporaryAssetCollection file,
 			uint ID,
 			IReadOnlyList<IAnimatorState> States,
 			AssetDictionary<uint, Utf8String> TOS)
 		{
-			if (stateMachineConstant.Has_SelectorStateConstantArray())
+			AssetList<PPtr_AnimatorTransition_>? entryTransitionList = generatedStateMachine.EntryTransitions_C1107;
+			if (entryTransitionList is not null && stateMachineConstant.Has_SelectorStateConstantArray())
 			{
 				foreach (OffsetPtr_SelectorStateConstant selectorPtr in stateMachineConstant.SelectorStateConstantArray)
 				{
-					SelectorStateConstant selector = selectorPtr.Data;
+					SelectorStateConstant selector = selectorPtr;
 					if (selector.FullPathID == ID && selector.IsEntry)
 					{
 						for (int i = 0; i < selector.TransitionConstantArray.Count - 1; i++)
 						{
 							SelectorTransitionConstant selectorTrans = selector.TransitionConstantArray[i].Data;
 							IAnimatorTransition transition = CreateAnimatorTransition(file, stateMachineConstant, States, TOS, selectorTrans);
-							entryTransitionList.AddNew().CopyValues(transition.SerializedFile.CreatePPtr(transition));
+							entryTransitionList.AddNew().CopyValues(generatedStateMachine.Collection.ForceCreatePPtr(transition));
 						}
 					}
 				}
 			}
 		}
 
-		public static IAnimatorStateMachine CreateAnimatorStateMachine(VirtualSerializedFile virtualFile, IAnimatorController controller, int stateMachineIndex)
+		public static IAnimatorStateMachine CreateAnimatorStateMachine(TemporaryAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex)
 		{
 			const float StateOffset = 250.0f;
 
-			IAnimatorStateMachine generatedStateMachine = virtualFile.CreateAsset<IAnimatorStateMachine>(ClassIDType.AnimatorStateMachine);
+			IAnimatorStateMachine generatedStateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachineFactory.CreateAsset);
 			generatedStateMachine.ObjectHideFlags = HideFlags.HideInHierarchy;
 
 			int layerIndex = controller.Controller_C91.GetLayerIndexByStateMachineIndex(stateMachineIndex);
@@ -112,7 +114,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			int count = stateCount + stateMachineCount;
 			int side = (int)System.Math.Ceiling(System.Math.Sqrt(count));
 
-			List<IAnimatorState> states = new List<IAnimatorState>();
+			List<IAnimatorState> states = new();
 			if (generatedStateMachine.Has_ChildStates_C1107())
 			{
 				generatedStateMachine.ChildStates_C1107.Clear();
@@ -134,11 +136,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 					{
 						ChildAnimatorState childState = generatedStateMachine.ChildStates_C1107.AddNew();
 						childState.Position.CopyValues(position);
-						childState.State.CopyValues(state.SerializedFile.CreatePPtr(state));
+						childState.State.CopyValues(generatedStateMachine.Collection.ForceCreatePPtr(state));
 					}
 					else if (generatedStateMachine.Has_States_C1107())
 					{
-						generatedStateMachine.States_C1107.AddNew().CopyValues(state.SerializedFile.CreatePPtr(state));
+						generatedStateMachine.States_C1107.AddNew().CopyValues(generatedStateMachine.Collection.ForceCreatePPtr(state));
 					}
 
 					states.Add(state);
@@ -165,7 +167,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
 					if (state.Has_Transitions_C1102())
 					{
-						state.Transitions_C1102.AddNew().CopyValues(transition.SerializedFile.CreatePPtr(transition));
+						state.Transitions_C1102.AddNew().CopyValues(state.Collection.ForceCreatePPtr(transition));
 					}
 				}
 			}
@@ -178,14 +180,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 				{
 					ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
 					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
-					generatedStateMachine.AnyStateTransitions_C1107.AddNew().CopyValues(transition.SerializedFile.CreatePPtr(transition));
+					generatedStateMachine.AnyStateTransitions_C1107.AddNew().CopyValues(generatedStateMachine.Collection.ForceCreatePPtr(transition));
 				}
 			}
 
-			CreateEntryTransitions(generatedStateMachine.EntryTransitions_C1107, stateMachine, virtualFile, layer.Binding, states, controller.TOS_C91);
+			CreateEntryTransitions(generatedStateMachine, stateMachine, virtualFile, layer.Binding, states, controller.TOS_C91);
 
 #warning TEMP: remove comment when AnimatorStateMachine's child StateMachines has been implemented
-			//StateMachineBehaviours = controller.GetStateBehaviours(layerIndex);
+			//generatedStateMachine.StateMachineBehaviours_C1107 = controller.GetStateBehaviours(layerIndex);
 			generatedStateMachine.StateMachineBehaviours_C1107?.Clear();
 
 			generatedStateMachine.AnyStatePosition_C1107.SetValues(0.0f, -StateOffset, 0.0f);
@@ -199,7 +201,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 				if (generatedStateMachine.Has_DefaultState_C1107_PPtr_State_())
 				{
-					generatedStateMachine.DefaultState_C1107_PPtr_State_.CopyValues(defaultStatePPtr);
+					generatedStateMachine.DefaultState_C1107_PPtr_State_.CopyValues((PPtr<IAnimatorState>)defaultStatePPtr);
 				}
 				else if (generatedStateMachine.Has_DefaultState_C1107_PPtr_AnimatorState_())
 				{
@@ -210,9 +212,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return generatedStateMachine;
 		}
 
-		public static IAnimatorState CreateAnimatorState(VirtualSerializedFile virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f_3_5_0_f5 position)
+		public static IAnimatorState CreateAnimatorState(TemporaryAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f_3_5_0_f5 position)
 		{
-			IAnimatorState generatedState = virtualFile.CreateAsset<IAnimatorState>(ClassIDType.AnimatorState);
+			IAnimatorState generatedState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorStateFactory.CreateAsset);
 			generatedState.ObjectHideFlags = HideFlags.HideInHierarchy;
 
 			AssetDictionary<uint, Utf8String> TOS = controller.TOS_C91;
@@ -262,7 +264,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			generatedState.CycleOffsetParameterActive_C1102 = state.CycleOffsetParamID > 0;
 			generatedState.TimeParameterActive_C1102 = state.TimeParamID > 0;
 
-			generatedState.Motion_C1102?.CopyValues(state.CreateMotion(virtualFile, controller, 0));
+			generatedState.Motion_C1102?.CopyValues(generatedState.Collection.ForceCreatePPtr(state.CreateMotion(virtualFile, controller, 0)));
 
 			generatedState.Tag_C1102.CopyValues(TOS[state.TagID]);
 			generatedState.SpeedParameter_C1102?.CopyValues(TOS[state.SpeedParamID]);
@@ -274,13 +276,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 		}
 
 		public static IAnimatorStateTransition CreateAnimatorStateTransition(
-			VirtualSerializedFile virtualFile,
+			TemporaryAssetCollection virtualFile,
 			IStateMachineConstant StateMachine,
 			IReadOnlyList<IAnimatorState> States,
 			AssetDictionary<uint, Utf8String> TOS,
 			ITransitionConstant Transition)
 		{
-			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset<IAnimatorStateTransition>(ClassIDType.AnimatorStateTransition);
+			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateTransition, AnimatorStateTransitionFactory.CreateAsset);
 			animatorStateTransition.HideFlags_C1101 = (uint)HideFlags.HideInHierarchy;
 
 			animatorStateTransition.Conditions_C1101.Capacity = Transition.ConditionConstantArray.Count;
@@ -301,11 +303,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				if (animatorStateTransition.Has_DstState_C1101_PPtr_State_())
 				{
-					animatorStateTransition.DstState_C1101_PPtr_State_.CopyValues(state.SerializedFile.CreatePPtr(state));
+					animatorStateTransition.DstState_C1101_PPtr_State_.CopyValues(animatorStateTransition.Collection.ForceCreatePPtr(state));
 				}
 				else if (animatorStateTransition.Has_DstState_C1101_PPtr_AnimatorState_())
 				{
-					animatorStateTransition.DstState_C1101_PPtr_AnimatorState_.CopyValues(state.SerializedFile.CreatePPtr(state));
+					animatorStateTransition.DstState_C1101_PPtr_AnimatorState_.CopyValues(animatorStateTransition.Collection.ForceCreatePPtr(state));
 				}
 			}
 
@@ -325,13 +327,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 		}
 
 		public static IAnimatorTransition CreateAnimatorTransition(
-			VirtualSerializedFile virtualFile,
+			TemporaryAssetCollection virtualFile,
 			IStateMachineConstant StateMachine,
 			IReadOnlyList<IAnimatorState> States,
 			AssetDictionary<uint, Utf8String> TOS,
 			SelectorTransitionConstant Transition)
 		{
-			IAnimatorTransition animatorTransition = virtualFile.CreateAsset<IAnimatorTransition>(ClassIDType.AnimatorTransition);
+			IAnimatorTransition animatorTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorTransition, AnimatorTransitionFactory.CreateAsset);
 			animatorTransition.HideFlags_C1109 = (uint)HideFlags.HideInHierarchy;
 
 			animatorTransition.Conditions_C1109.Capacity = Transition.ConditionConstantArray.Count;
@@ -350,7 +352,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			IAnimatorState? state = GetDestinationState(Transition.Destination, StateMachine, States);
 			if (state is not null)
 			{
-				animatorTransition.DstState_C1109.CopyValues(state.SerializedFile.CreatePPtr(state));
+				animatorTransition.DstState_C1109.CopyValues(animatorTransition.Collection.ForceCreatePPtr(state));
 			}
 
 			return animatorTransition;

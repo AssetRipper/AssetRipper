@@ -1,4 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoScript_;
+﻿using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoScript_;
 using AssetRipper.SourceGenerated.Subclasses.PPtrCurve;
 
 namespace AssetRipper.Core.SourceGenExtensions

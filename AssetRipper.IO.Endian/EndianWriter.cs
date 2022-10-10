@@ -525,7 +525,7 @@ namespace AssetRipper.IO.Endian
 
 		public EndianType EndianType { get; }
 
-		protected bool IsAlignArray { get; }
+		public bool IsAlignArray { get; }
 
 		protected const int BufferSize = 4096;
 

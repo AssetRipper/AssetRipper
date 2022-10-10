@@ -1,7 +1,9 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1045;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_159;
@@ -13,9 +15,9 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{
-		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile file, IUnityObjectBase asset) : this(assetExporter, file, (IBuildSettings)asset) { }
+		public BuildSettingsExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection file, IUnityObjectBase asset) : this(assetExporter, file, (IBuildSettings)asset) { }
 
-		public BuildSettingsExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IBuildSettings asset) : base(assetExporter, asset)
+		public BuildSettingsExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IBuildSettings asset) : base(assetExporter, asset)
 		{
 			EditorBuildSettings = CreateVirtualEditorBuildSettings(virtualFile);
 			EditorSettings = CreateVirtualEditorSettings(virtualFile);
@@ -41,16 +43,16 @@ namespace AssetRipper.Core.Project.Collections
 			return true;
 		}
 
-		public static IEditorSettings CreateVirtualEditorSettings(VirtualSerializedFile virtualFile)
+		public static IEditorSettings CreateVirtualEditorSettings(TemporaryAssetCollection virtualFile)
 		{
-			IEditorSettings result = virtualFile.CreateAsset<IEditorSettings>(ClassIDType.EditorSettings);
+			IEditorSettings result = virtualFile.CreateAsset((int)ClassIDType.EditorSettings, EditorSettingsFactory.CreateAsset);
 			result.SetToDefaults();
 			return result;
 		}
 
-		public static IEditorBuildSettings CreateVirtualEditorBuildSettings(VirtualSerializedFile virtualFile)
+		public static IEditorBuildSettings CreateVirtualEditorBuildSettings(TemporaryAssetCollection virtualFile)
 		{
-			return virtualFile.CreateAsset<IEditorBuildSettings>(ClassIDType.EditorBuildSettings);
+			return virtualFile.CreateAsset((int)ClassIDType.EditorBuildSettings, EditorBuildSettingsFactory.CreateAsset);
 		}
 
 		public static void InitializeEditorBuildSettings(IEditorBuildSettings editorBuildSettings, IBuildSettings buildSettings, IProjectAssetContainer container)

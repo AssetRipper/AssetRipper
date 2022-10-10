@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.Extensions;
@@ -515,7 +516,7 @@ namespace ShaderTextRestorer.IO
 			{
 				writer.WriteIndent(indent);
 				writer.Write("Tags { ");
-				foreach (AssetRipper.Core.IO.AccessPairBase<Utf8String, Utf8String> kvp in _this.Tags)
+				foreach (AccessPairBase<Utf8String, Utf8String> kvp in _this.Tags)
 				{
 					writer.Write("\"{0}\" = \"{1}\" ", kvp.Key, kvp.Value);
 				}

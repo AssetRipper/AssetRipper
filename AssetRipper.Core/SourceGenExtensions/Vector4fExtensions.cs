@@ -17,5 +17,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			return new Vector4(vector.X, vector.Y, vector.Z, vector.W);
 		}
+
+		public static void CopyValuesFrom(this IVector4f vector, Vector4 source)
+		{
+			vector.X = source.X;
+			vector.Y = source.Y;
+			vector.Z = source.Z;
+			vector.W = source.W;
+		}
 	}
 }

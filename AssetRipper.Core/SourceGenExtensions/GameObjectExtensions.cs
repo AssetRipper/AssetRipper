@@ -1,6 +1,7 @@
-﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Utils;
+﻿using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Utils;
+using AssetRipper.Core.Extensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
@@ -24,9 +25,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static bool GetIsActive(this IGameObject gameObject)
 		{
-			if (IsActiveInherited(gameObject.SerializedFile.Version))
+			if (IsActiveInherited(gameObject.Collection.Version))
 			{
-				return gameObject.SerializedFile.Collection.IsScene(gameObject.SerializedFile) ? gameObject.IsActive() : true;
+				return gameObject.Collection.IsScene() ? gameObject.IsActive() : true;
 			}
 			return gameObject.IsActive();
 		}
@@ -64,7 +65,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			foreach (IPPtr_Component_ ptr in gameObject.FetchComponents())
 			{
 				// component could have not implemented asset type
-				IComponent? comp = ptr.TryGetAsset(gameObject.SerializedFile);
+				IComponent? comp = ptr.TryGetAsset(gameObject.Collection);
 				if (comp is T t)
 				{
 					return t;
@@ -93,7 +94,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			foreach (IPPtr_Component_ ptr in gameObject.FetchComponents())
 			{
-				IComponent? comp = ptr.TryGetAsset(gameObject.SerializedFile);
+				IComponent? comp = ptr.TryGetAsset(gameObject.Collection);
 				if (comp == null)
 				{
 					continue;
@@ -112,7 +113,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			ITransform root = gameObject.GetTransform();
 			while (true)
 			{
-				ITransform? parent = root.Father_C4.TryGetAsset(root.SerializedFile);
+				ITransform? parent = root.Father_C4.TryGetAsset(root.Collection);
 				if (parent == null)
 				{
 					break;
@@ -122,7 +123,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					root = parent;
 				}
 			}
-			return root.GameObject_C4.GetAsset(root.SerializedFile);
+			return root.GameObject_C4.GetAsset(root.Collection);
 		}
 
 		public static int GetRootDepth(this IGameObject gameObject)
@@ -131,7 +132,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			int depth = 0;
 			while (true)
 			{
-				ITransform? parent = root.Father_C4.TryGetAsset(root.SerializedFile);
+				ITransform? parent = root.Father_C4.TryGetAsset(root.Collection);
 				if (parent == null)
 				{
 					break;
@@ -150,7 +151,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			ITransform? transform = null;
 			foreach (IPPtr_Component_ ptr in root.FetchComponents())
 			{
-				IComponent? component = ptr.TryGetAsset(root.SerializedFile);
+				IComponent? component = ptr.TryGetAsset(root.Collection);
 				if (component == null)
 				{
 					continue;
@@ -170,8 +171,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			foreach (IPPtr_Transform_ pchild in transform.Children_C4)
 			{
-				ITransform child = pchild.GetAsset(transform.SerializedFile);
-				IGameObject childGO = child.GameObject_C4.GetAsset(child.SerializedFile);
+				ITransform child = pchild.GetAsset(transform.Collection);
+				IGameObject childGO = child.GameObject_C4.GetAsset(child.Collection);
 				foreach (IEditorExtension childElement in FetchHierarchy(childGO))
 				{
 					yield return childElement;
@@ -191,8 +192,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			ITransform transform = parent.GetTransform();
 			foreach (IPPtr_Transform_ childPtr in transform.Children_C4)
 			{
-				ITransform childTransform = childPtr.GetAsset(gameObject.SerializedFile);
-				IGameObject child = childTransform.GameObject_C4.GetAsset(gameObject.SerializedFile);
+				ITransform childTransform = childPtr.GetAsset(gameObject.Collection);
+				IGameObject child = childTransform.GameObject_C4.GetAsset(gameObject.Collection);
 				string path = string.IsNullOrEmpty(parentPath) ? child.NameString : $"{parentPath}/{child.NameString}";
 				uint pathHash = CrcUtils.CalculateDigestUTF8(path);
 				tos[pathHash] = path;

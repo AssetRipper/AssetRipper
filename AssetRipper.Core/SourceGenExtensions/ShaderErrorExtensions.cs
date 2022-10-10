@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Parser.Files;
+﻿using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Subclasses.ShaderError;
 
 namespace AssetRipper.Core.SourceGenExtensions

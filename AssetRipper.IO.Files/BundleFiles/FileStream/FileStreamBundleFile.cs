@@ -13,6 +13,16 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 		public BlocksInfo BlocksInfo { get; } = new();
 		public DirectoryInfo<FileStreamNode> DirectoryInfo { get; } = new();
 
+		public FileStreamBundleFile()
+		{
+		}
+
+		public FileStreamBundleFile(string filePath)
+		{
+			SmartStream stream = SmartStream.OpenRead(filePath);
+			Read(stream);
+		}
+
 		public override void Read(SmartStream stream)
 		{
 			EndianReader reader = new EndianReader(stream, EndianType.BigEndian);

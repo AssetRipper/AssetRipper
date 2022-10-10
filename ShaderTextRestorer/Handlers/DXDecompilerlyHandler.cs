@@ -3,14 +3,14 @@ using DXDecompiler;
 using DXDecompiler.Decompiler;
 using DXDecompiler.Util;
 using System;
-
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShaderTextRestorer.Handlers
 {
 	public static class DXDecompilerlyHandler
 	{
-		public static bool TryDisassemble(byte[] data, int offset, out string disassemblyText) => TryDisassemble(GetRelevantData(data, offset), out disassemblyText);
-		public static bool TryDisassemble(byte[] data, out string disassemblyText)
+		public static bool TryDisassemble(byte[] data, int offset, [NotNullWhen(true)] out string? disassemblyText) => TryDisassemble(GetRelevantData(data, offset), out disassemblyText);
+		public static bool TryDisassemble(byte[] data, [NotNullWhen(true)] out string? disassemblyText)
 		{
 			if (data == null)
 			{
@@ -46,8 +46,8 @@ namespace ShaderTextRestorer.Handlers
 			return false;
 		}
 
-		public static bool TryDecompile(byte[] data, int offset, out string decompiledText) => TryDecompile(GetRelevantData(data, offset), out decompiledText);
-		public static bool TryDecompile(byte[] data, out string decompiledText)
+		public static bool TryDecompile(byte[] data, int offset, [NotNullWhen(true)] out string? decompiledText) => TryDecompile(GetRelevantData(data, offset), out decompiledText);
+		public static bool TryDecompile(byte[] data, [NotNullWhen(true)] out string? decompiledText)
 		{
 			if (data == null)
 			{

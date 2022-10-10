@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Assets.Exceptions
+﻿using System.IO;
+
+namespace AssetRipper.Assets.Exceptions
 {
 	public sealed class IncorrectByteCountException : Exception
 	{

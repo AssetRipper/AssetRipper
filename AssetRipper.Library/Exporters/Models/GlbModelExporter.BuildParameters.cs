@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Textures;
@@ -99,15 +99,15 @@ namespace AssetRipper.Library.Exporters.Models
 					string name = utf8Name.String;
 					if (IsMainTexture(name))
 					{
-						mainTexture ??= textureParameter.Texture.TryGetAsset(material.SerializedFile) as ITexture2D;
+						mainTexture ??= textureParameter.Texture.TryGetAsset(material.Collection) as ITexture2D;
 					}
 					else if (IsNormalTexture(name))
 					{
-						normalTexture ??= textureParameter.Texture.TryGetAsset(material.SerializedFile) as ITexture2D;
+						normalTexture ??= textureParameter.Texture.TryGetAsset(material.Collection) as ITexture2D;
 					}
 					else
 					{
-						mainReplacement ??= textureParameter.Texture.TryGetAsset(material.SerializedFile) as ITexture2D;
+						mainReplacement ??= textureParameter.Texture.TryGetAsset(material.Collection) as ITexture2D;
 					}
 				}
 				mainTexture ??= mainReplacement;

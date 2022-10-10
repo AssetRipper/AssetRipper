@@ -1,8 +1,8 @@
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
@@ -30,9 +30,9 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers
 {
 	public sealed class AnimatorControllerExportCollection : AssetsExportCollection
 	{
-		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IUnityObjectBase asset) : this(assetExporter, virtualFile, (IAnimatorController)asset) { }
+		public AnimatorControllerExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IUnityObjectBase asset) : this(assetExporter, virtualFile, (IAnimatorController)asset) { }
 
-		public AnimatorControllerExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IAnimatorController asset) : base(assetExporter, asset)
+		public AnimatorControllerExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IAnimatorController asset) : base(assetExporter, asset)
 		{
 			IControllerConstant controller = asset.Controller_C91;
 			AccessListBase<IOffsetPtr_StateMachineConstant> stateMachinesConst = controller.StateMachineArray;
@@ -83,10 +83,12 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers
 							AddBehaviours(asset, state.StateMachineBehaviours_C1102);
 						}
 
-						if (state.Has_Motion_C1102() && state.Motion_C1102.IsVirtual())
+						if (state.Has_Motion_C1102() && state.Motion_C1102P is IBlendTree blendTree)
+						//if (state.Has_Motion_C1102() && state.Motion_C1102.IsVirtual())
 						{
-							Motion motion = state.Motion_C1102.GetAsset(virtualFile);
-							AddBlendTree(virtualFile, (IBlendTree)motion);
+							//Motion motion = state.Motion_C1102.GetAsset(virtualFile);
+							//AddBlendTree(virtualFile, (IBlendTree)motion);
+							AddBlendTree(virtualFile, blendTree);
 						}
 
 						if (state.Has_Transitions_C1102())
@@ -115,10 +117,12 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers
 							AddBehaviours(asset, state.StateMachineBehaviours_C1102);
 						}
 
-						if (state.Has_Motion_C1102() && state.Motion_C1102.IsVirtual())
+						if (state.Has_Motion_C1102() && state.Motion_C1102P is IBlendTree blendTree)
+						//if (state.Has_Motion_C1102() && state.Motion_C1102.IsVirtual())
 						{
-							Motion motion = state.Motion_C1102.GetAsset(virtualFile);
-							AddBlendTree(virtualFile, (IBlendTree)motion);
+							//Motion motion = state.Motion_C1102.GetAsset(virtualFile);
+							//AddBlendTree(virtualFile, (IBlendTree)motion);
+							AddBlendTree(virtualFile, blendTree);
 						}
 
 						if (state.Has_Transitions_C1102())
@@ -137,15 +141,19 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers
 			}
 		}
 
-		private void AddBlendTree(VirtualSerializedFile virtualFile, IBlendTree blendTree)
+		private void AddBlendTree(TemporaryAssetCollection virtualFile, IBlendTree blendTree)
 		{
 			AddAsset(blendTree);
 			foreach (IChildMotion childMotion in blendTree.Childs_C206)
 			{
-				if (childMotion.Motion.IsVirtual())
+				//if (childMotion.Motion.IsVirtual())
+				//{
+				//	Motion motion = childMotion.Motion.GetAsset(virtualFile);
+				//	AddBlendTree(virtualFile, (IBlendTree)motion);
+				//}
+				if (childMotion.Motion.TryGetAsset(blendTree.Collection, out Motion? motion) && motion is IBlendTree childBlendTree)
 				{
-					Motion motion = childMotion.Motion.GetAsset(virtualFile);
-					AddBlendTree(virtualFile, (IBlendTree)motion);
+					AddBlendTree(virtualFile, childBlendTree);
 				}
 			}
 		}
@@ -154,7 +162,7 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers
 		{
 			foreach (PPtr_MonoBehaviour__5_0_0_f4 pbehaviour in behaviours)
 			{
-				IMonoBehaviour? behaviour = pbehaviour.TryGetAsset(asset.SerializedFile);
+				IMonoBehaviour? behaviour = pbehaviour.TryGetAsset(asset.Collection);
 				if (behaviour != null)
 				{
 #warning HACK: skip duplicates. remove it when AnimatorStateMachine's child StateMachines has been implemented

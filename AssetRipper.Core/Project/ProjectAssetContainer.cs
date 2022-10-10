@@ -1,20 +1,18 @@
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
+using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_147;
@@ -30,13 +28,13 @@ namespace AssetRipper.Core.Project
 {
 	public class ProjectAssetContainer : IExportContainer, IProjectAssetContainer
 	{
-		public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, VirtualSerializedFile file, IEnumerable<IUnityObjectBase> assets,
+		public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, TemporaryAssetCollection file, IEnumerable<IUnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
 			m_BundledAssetsExportMode = options.BundledAssetsExportMode;
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
-			ExportLayout = file.Layout;
+			ExportLayout = new LayoutInfo(file.Version, file.Platform, file.Flags);
 
 			foreach (IUnityObjectBase asset in assets)
 			{
@@ -86,26 +84,12 @@ namespace AssetRipper.Core.Project
 
 		public virtual IUnityObjectBase? TryGetAsset(int fileIndex, long pathID)
 		{
-			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
-			{
-				return VirtualFile.TryGetAsset(pathID);
-			}
-			else
-			{
-				return File.TryGetAsset(fileIndex, pathID);
-			}
+			return File.TryGetAsset(fileIndex, pathID);
 		}
 
 		public virtual IUnityObjectBase GetAsset(int fileIndex, long pathID)
 		{
-			if (fileIndex == VirtualSerializedFile.VirtualFileIndex)
-			{
-				return VirtualFile.GetAsset(pathID);
-			}
-			else
-			{
-				return File.GetAsset(fileIndex, pathID);
-			}
+			return File.GetAsset(fileIndex, pathID);
 		}
 
 		public long GetExportID(IUnityObjectBase asset)
@@ -258,7 +242,7 @@ namespace AssetRipper.Core.Project
 		{
 			foreach (AccessPairBase<Utf8String, IPPtr_Object_> kvp in manager.Container_C147)
 			{
-				IUnityObjectBase? asset = kvp.Value.TryGetAsset(manager.SerializedFile);
+				IUnityObjectBase? asset = kvp.Value.TryGetAsset(manager.Collection);
 				if (asset is null)
 				{
 					continue;
@@ -296,12 +280,12 @@ namespace AssetRipper.Core.Project
 			foreach (AccessPairBase<Utf8String, IAssetInfo> kvp in bundle.Container_C142)
 			{
 				// skip shared bundle assets, because we need to export them in their bundle directory
-				if (kvp.Value.Asset.FileIndex != 0)
+				if (kvp.Value.Asset.FileID != 0)
 				{
 					continue;
 				}
 
-				UnityObjectBase? asset = kvp.Value.Asset.TryGetAsset(bundle.SerializedFile);
+				UnityObjectBase? asset = kvp.Value.Asset.TryGetAsset(bundle.Collection);
 				if (asset is null)
 				{
 					continue;
@@ -343,10 +327,9 @@ namespace AssetRipper.Core.Project
 		}
 
 		public IExportCollection CurrentCollection { get; set; }
-		public VirtualSerializedFile VirtualFile { get; }
-		public virtual ISerializedFile File => CurrentCollection.File;
+		public TemporaryAssetCollection VirtualFile { get; }
+		public virtual AssetCollection File => CurrentCollection.File;
 		public string Name => File.Name;
-		public LayoutInfo Layout => File.Layout;
 		public UnityVersion Version => File.Version;
 		public BuildTarget Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
@@ -354,7 +337,7 @@ namespace AssetRipper.Core.Project
 		public UnityVersion ExportVersion => ExportLayout.Version;
 		public BuildTarget ExportPlatform => ExportLayout.Platform;
 		public virtual TransferInstructionFlags ExportFlags => ExportLayout.Flags | CurrentCollection.Flags;
-		public virtual IReadOnlyList<FileIdentifier> Dependencies => File.Dependencies;
+		public virtual IReadOnlyList<AssetCollection?> Dependencies => File.Dependencies;
 
 		private const string ResourcesKeyword = "Resources";
 		private const string AssetBundleKeyword = "AssetBundles";

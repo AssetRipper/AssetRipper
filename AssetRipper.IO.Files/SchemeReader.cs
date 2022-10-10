@@ -16,7 +16,7 @@ namespace AssetRipper.IO.Files
 	{
 		private static readonly Stack<IScheme> schemes = new()
 		{
-			new SerializedFileScheme(),
+			SerializedFileScheme.Default,
 			new GZipFileScheme(),
 			new BrotliFileScheme(),
 			new WebFileScheme(),
@@ -56,6 +56,19 @@ namespace AssetRipper.IO.Files
 		public static File ReadFile(ResourceFile file)
 		{
 			return ReadFile(file.Stream.CreateReference(), file.FilePath, file.Name);
+		}
+
+		public static bool IsReadableFile(string filePath)
+		{
+			using SmartStream stream = SmartStream.OpenRead(filePath);
+			foreach (IScheme scheme in schemes)
+			{
+				if (scheme.CanRead(stream))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		/// <summary>

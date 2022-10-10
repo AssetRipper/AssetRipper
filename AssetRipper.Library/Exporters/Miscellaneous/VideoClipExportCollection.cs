@@ -1,7 +1,6 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
 using AssetRipper.Core.Project.Collections;
 using System.IO;
-
 using IVideoClip327 = AssetRipper.SourceGenerated.Classes.ClassID_327.IVideoClip;
 using IVideoClip329 = AssetRipper.SourceGenerated.Classes.ClassID_329.IVideoClip;
 

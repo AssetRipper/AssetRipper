@@ -1,4 +1,7 @@
 ﻿using AssetRipper.Assets.Bundles;
+using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Assets.Collections;
 
@@ -10,5 +13,12 @@ public class TemporaryAssetCollection : VirtualAssetCollection
 {
 	public TemporaryAssetCollection(Bundle bundle) : base(bundle)
 	{
+	}
+
+	public void SetLayout(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
+	{
+		Version = version;
+		Platform = platform;
+		Flags = flags;
 	}
 }

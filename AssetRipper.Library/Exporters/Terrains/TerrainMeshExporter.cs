@@ -1,7 +1,6 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Collections;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Exporters.Meshes;
@@ -12,7 +11,6 @@ using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using System.IO;
 using System.Numerics;
-using System.Text;
 
 namespace AssetRipper.Library.Exporters.Terrains
 {
@@ -23,7 +21,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			return asset is ITerrainData;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new GlbExportCollection(this, asset);
 		}

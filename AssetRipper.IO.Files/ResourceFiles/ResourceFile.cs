@@ -5,9 +5,16 @@ namespace AssetRipper.IO.Files.ResourceFiles
 {
 	public sealed class ResourceFile : File
 	{
-		internal ResourceFile(SmartStream stream, string filePath, string name)
+		public ResourceFile(SmartStream stream, string filePath, string name)
 		{
 			Stream = stream.CreateReference();
+			FilePath = filePath;
+			Name = name;
+		}
+
+		public ResourceFile(string filePath, string name)
+		{
+			Stream = SmartStream.OpenRead(filePath);
 			FilePath = filePath;
 			Name = name;
 		}

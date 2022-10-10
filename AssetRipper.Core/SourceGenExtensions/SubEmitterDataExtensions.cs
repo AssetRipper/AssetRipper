@@ -1,13 +1,13 @@
-﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.SourceGenerated.Enums;
+﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_198;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SubEmitterData;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class SubEmitterDataExtensions
 	{
-		public static void SetValues(this ISubEmitterData data, ParticleSystemSubEmitterType type, IPPtr<IParticleSystem> emitter)
+		public static void SetValues(this ISubEmitterData data, ParticleSystemSubEmitterType type, PPtr<IParticleSystem> emitter)
 		{
 			data.Emitter.CopyValues(emitter);
 			data.Type = (int)type;

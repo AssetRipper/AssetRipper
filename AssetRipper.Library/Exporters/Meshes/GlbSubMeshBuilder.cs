@@ -143,7 +143,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			
 			uint indexCount = subMesh.IndexCount;
 			MeshTopology topology = subMesh.GetTopology();
-			if (topology != MeshTopology.Triangles && meshData.Mesh.SerializedFile.Version.IsLess(4))
+			if (topology != MeshTopology.Triangles && meshData.Mesh.Collection.Version.IsLess(4))
 			{
 				topology = MeshTopology.TriangleStrip;
 			}

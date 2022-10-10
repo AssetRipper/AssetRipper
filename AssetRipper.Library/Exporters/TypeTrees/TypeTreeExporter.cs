@@ -1,6 +1,9 @@
-﻿using AssetRipper.Core;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Core;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Collections.Generic;
 using System.IO;
@@ -13,19 +16,19 @@ namespace AssetRipper.Library.Exporters.TypeTrees
 	{
 		public void DoPostExport(Ripper ripper)
 		{
-			string outputDirectory = Path.Combine(ripper.Settings.AuxiliaryFilesPath, "TypeTrees");
+			/*string outputDirectory = Path.Combine(ripper.Settings.AuxiliaryFilesPath, "TypeTrees");
 
 			Logger.Info(LogCategory.Export, "Exporting type trees...");
-			foreach (Core.Parser.Files.SerializedFiles.SerializedFile? serializedFile in ripper.GameStructure.FileCollection.GameSerializedFiles)
+			foreach (AssetCollection? serializedFile in ripper.GameStructure.FileCollection.FetchAssetCollections())
 			{
 				if (serializedFile.Metadata.EnableTypeTree)
 				{
 					Logger.Info(LogCategory.Export, serializedFile.Name);
 				}
 
-				List<IMonoScript> monoScripts = serializedFile.FetchAssets().Where(asset => asset is IMonoScript).Select(asset => (IMonoScript)asset).ToList();
+				List<IMonoScript> monoScripts = serializedFile.Where(asset => asset is IMonoScript).Select(asset => (IMonoScript)asset).ToList();
 				StringBuilder sb = new StringBuilder();
-				foreach (Core.Parser.Files.SerializedFiles.Parser.SerializedType? type in serializedFile.Metadata.Types)
+				foreach (SerializedType? type in serializedFile.Metadata.Types)
 				{
 					//Logger.Info(LogCategory.Export, $"\t\tID: {type.TypeID.ToString()} Node Count: {type.OldType?.Nodes?.Count ?? 0}");
 					string? typeTreeText = type.OldType?.Dump;
@@ -44,7 +47,7 @@ namespace AssetRipper.Library.Exporters.TypeTrees
 					string filePath = Path.Combine(outputDirectory, serializedFile.Name + ".txt");
 					TaskManager.AddTask(File.WriteAllTextAsync(filePath, text));
 				}
-			}
+			}*/
 		}
 	}
 }

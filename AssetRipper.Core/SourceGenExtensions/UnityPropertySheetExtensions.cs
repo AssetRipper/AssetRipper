@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Utils;
+﻿using AssetRipper.Assets.Utils;
 using AssetRipper.SourceGenerated.Subclasses.UnityPropertySheet;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Collections.Generic;

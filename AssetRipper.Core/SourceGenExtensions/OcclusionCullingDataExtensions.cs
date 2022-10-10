@@ -1,10 +1,11 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
 using AssetRipper.SourceGenerated.Classes.ClassID_363;
@@ -75,11 +76,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			// if >= 5.5.0 and Release this asset doesn't containt renderers data so we need to create it
 			List<IOcclusionCullingSettings> cullingSettings = new List<IOcclusionCullingSettings>();
-			foreach (IUnityObjectBase asset in occlusionCullingData.SerializedFile.Collection.FetchAssets())
+			foreach (IUnityObjectBase asset in occlusionCullingData.Collection.Bundle.FetchAssetsInHierarchy())
 			{
 				if (asset is IOcclusionCullingSettings cullingSetting 
 					&& cullingSetting.Has_OcclusionCullingData_C29() 
-					&& cullingSetting.OcclusionCullingData_C29.IsAsset(cullingSetting.SerializedFile, occlusionCullingData))
+					&& cullingSetting.OcclusionCullingData_C29.IsAsset(cullingSetting.Collection, occlusionCullingData))
 				{
 					cullingSettings.Add(cullingSetting);
 				}

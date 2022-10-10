@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorControllerParameter;
 using AssetRipper.SourceGenerated.Subclasses.ValueConstant;
@@ -8,6 +9,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class AnimatorControllerParameterExtensions
 	{
+		/// <summary>
+		/// Initialize a newly created parameter
+		/// </summary>
+		/// <param name="parameter">Must be a child of <paramref name="controller"/></param>
+		/// <param name="controller"></param>
+		/// <param name="paramIndex"></param>
+		/// <exception cref="NotSupportedException"></exception>
 		public static void Initialize(this IAnimatorControllerParameter parameter, IAnimatorController controller, int paramIndex)
 		{
 			IValueConstant value = controller.Controller_C91.Values.Data.ValueArray[paramIndex];
@@ -37,7 +45,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			parameter.Type = (int)type;
 			if (parameter.Has_Controller())
 			{
-				parameter.Controller.CopyValues(controller.SerializedFile.CreatePPtr(controller));
+				parameter.Controller.CopyValues(controller.Collection.CreatePPtr(controller));
 			}
 		}
 

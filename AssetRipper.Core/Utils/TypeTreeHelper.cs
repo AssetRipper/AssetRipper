@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Parser.Files.SerializedFiles.Parser;
-using AssetRipper.Core.Parser.Files.SerializedFiles.Parser.TypeTree;
+using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;

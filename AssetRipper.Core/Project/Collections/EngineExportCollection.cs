@@ -1,12 +1,13 @@
-using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Parser.Utils;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1113;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
@@ -28,11 +29,11 @@ namespace AssetRipper.Core.Project.Collections
 				throw new ArgumentNullException(nameof(asset));
 			}
 
-			File = asset.SerializedFile;
+			File = asset.Collection;
 			m_version = version;
-			if (IsEngineFile(asset.SerializedFile.Name))
+			if (IsEngineFile(asset.Collection.Name))
 			{
-				foreach (IUnityObjectBase builtInAsset in File.FetchAssets())
+				foreach (IUnityObjectBase builtInAsset in File)
 				{
 					if (IsEngineAsset(builtInAsset, version))
 					{
@@ -52,7 +53,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return false;
 			}
-			if (IsEngineFile(asset?.SerializedFile.Name))
+			if (IsEngineFile(asset?.Collection.Name))
 			{
 				return true;
 			}
@@ -63,7 +64,7 @@ namespace AssetRipper.Core.Project.Collections
 				{
 					return false;
 				}
-				IShader? shader = material.Shader_C21.TryGetAsset(material.SerializedFile);
+				IShader? shader = material.Shader_C21.TryGetAsset(material.Collection);
 				if (shader == null)
 				{
 					return true;
@@ -80,7 +81,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is ISprite sprite)
 			{
-				ITexture2D? spriteTexture = sprite.RD_C213.Texture.TryGetAsset(sprite.SerializedFile);
+				ITexture2D? spriteTexture = sprite.RD_C213.Texture.TryGetAsset(sprite.Collection);
 				if (spriteTexture == null)
 				{
 					return false;
@@ -190,19 +191,19 @@ namespace AssetRipper.Core.Project.Collections
 			GetEngineBuildInAsset(asset, m_version, out EngineBuiltInAsset engineAsset);
 			if (!engineAsset.IsValid)
 			{
-				throw new NotImplementedException($"Unknown ExportID for asset {asset.PathID} from file {asset.SerializedFile.Name}");
+				throw new NotImplementedException($"Unknown ExportID for asset {asset.PathID} from file {asset.Collection.Name}");
 			}
 			long exportID = engineAsset.ExportID;
 			UnityGUID guid = engineAsset.GUID;
 			return new MetaPtr(exportID, guid, AssetType.Internal);
 		}
 
-		public ISerializedFile File { get; }
+		public AssetCollection File { get; }
 		public TransferInstructionFlags Flags => File.Flags;
 		public IEnumerable<IUnityObjectBase> Assets => m_assets;
 		public string Name => $"Engine {m_version}";
 
-		private readonly HashSet<IUnityObjectBase> m_assets = new HashSet<IUnityObjectBase>();
+		private readonly HashSet<IUnityObjectBase> m_assets = new();
 
 		private readonly UnityVersion m_version;
 	}

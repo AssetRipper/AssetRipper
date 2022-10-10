@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Project;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Utils;
 

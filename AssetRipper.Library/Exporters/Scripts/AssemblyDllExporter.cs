@@ -1,10 +1,9 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Collections;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Collections.Generic;
 
@@ -21,7 +20,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		public bool IsHandle(IUnityObjectBase asset) => asset is IMonoScript;
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new AssemblyExportCollection(this, (IMonoScript)asset);
 		}

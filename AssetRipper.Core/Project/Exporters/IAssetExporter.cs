@@ -1,7 +1,7 @@
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project.Collections;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.IO.Files;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Exporters
@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Project.Exporters
 		bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path);
 		void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback);
 
-		IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset);
+		IExportCollection CreateCollection(TemporaryAssetCollection temporaryFile, IUnityObjectBase asset);
 		AssetType ToExportType(IUnityObjectBase asset);
 		bool ToUnknownExportType(Type type, out AssetType assetType);
 	}

@@ -1,5 +1,6 @@
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.SerializedFiles.Parser;
 using System.Collections.Generic;
 
 namespace AssetRipper.IO.Files
@@ -88,6 +89,46 @@ namespace AssetRipper.IO.Files
 		public IReadOnlyList<SerializedFile> SerializedFiles => m_serializedFiles;
 		public IReadOnlyList<FileContainer> FileLists => m_fileLists;
 		public IReadOnlyList<ResourceFile> ResourceFiles => m_resourceFiles;
+
+		public IEnumerable<File> AllFiles
+		{
+			get
+			{
+				foreach (ResourceFile resource in ResourceFiles)
+				{
+					yield return resource;
+				}
+				foreach (SerializedFile file in SerializedFiles)
+				{
+					yield return file;
+				}
+				foreach (FileContainer container in FileLists)
+				{
+					yield return container;
+				}
+			}
+		}
+
+		public override IEnumerable<FileIdentifier> Dependencies
+		{
+			get
+			{
+				foreach (SerializedFile file in SerializedFiles)
+				{
+					foreach (FileIdentifier identifier in file.Dependencies)
+					{
+						yield return identifier;
+					}
+				}
+				foreach (FileContainer container in FileLists)
+				{
+					foreach (FileIdentifier identifier in container.Dependencies)
+					{
+						yield return identifier;
+					}
+				}
+			}
+		}
 
 		private readonly List<SerializedFile> m_serializedFiles = new List<SerializedFile>(0);
 		private readonly List<FileContainer> m_fileLists = new List<FileContainer>(0);

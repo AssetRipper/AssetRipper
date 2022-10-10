@@ -1,6 +1,5 @@
-﻿using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Parser.Asset;
+﻿using AssetRipper.Assets.Metadata;
+using AssetRipper.IO.Files;
 
 namespace AssetRipper.Core.Project.Exporters.Engine
 {

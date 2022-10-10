@@ -1,7 +1,9 @@
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.IO.Files;
+using AssetRipper.SourceGenerated;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Exporters
@@ -39,9 +41,9 @@ namespace AssetRipper.Core.Project.Exporters
 			throw new NotSupportedException();
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
-			if (m_emptyTypes.TryGetValue(asset.ClassID, out bool isEmptyCollection))
+			if (m_emptyTypes.TryGetValue((ClassIDType)asset.ClassID, out bool isEmptyCollection))
 			{
 				if (isEmptyCollection)
 				{
@@ -60,7 +62,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public AssetType ToExportType(IUnityObjectBase asset)
 		{
-			ToUnknownExportType(asset.ClassID, out AssetType assetType);
+			ToUnknownExportType((ClassIDType)asset.ClassID, out AssetType assetType);
 			return assetType;
 		}
 
@@ -79,7 +81,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public bool ToUnknownExportType(Type type, out AssetType assetType)
 		{
-			ClassIDType classID = VersionHandling.VersionManager.AssetFactory.GetClassIdForType(type);
+			ClassIDType classID = ClassIDTypeMap.dictionary[type];
 			return ToUnknownExportType(classID, out assetType);
 		}
 

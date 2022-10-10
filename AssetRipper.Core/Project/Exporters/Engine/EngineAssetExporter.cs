@@ -1,8 +1,9 @@
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
+using AssetRipper.IO.Files;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Exporters.Engine
@@ -17,7 +18,7 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 			return EngineExportCollection.IsEngineAsset(asset, Version);
 		}
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new EngineExportCollection(asset, virtualFile.Version);
 		}

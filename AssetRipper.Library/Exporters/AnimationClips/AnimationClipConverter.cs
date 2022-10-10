@@ -1,12 +1,12 @@
-using AssetRipper.Core;
+using AssetRipper.Assets.IO.Reading;
+using AssetRipper.Assets.Utils;
 using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
-using AssetRipper.Core.IO.Asset;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Utils;
 using AssetRipper.IO.Endian;
 using AssetRipper.Library.Exporters.AnimatorControllers.Editor;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipBindingConstant;
 using AssetRipper.SourceGenerated.Subclasses.Clip;
@@ -14,8 +14,8 @@ using AssetRipper.SourceGenerated.Subclasses.ConstantClip;
 using AssetRipper.SourceGenerated.Subclasses.DenseClip;
 using AssetRipper.SourceGenerated.Subclasses.FloatCurve;
 using AssetRipper.SourceGenerated.Subclasses.GenericBinding;
-using AssetRipper.SourceGenerated.Subclasses.Keyframe_float;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Quaternionf;
+using AssetRipper.SourceGenerated.Subclasses.Keyframe_Single;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Object_;
 using AssetRipper.SourceGenerated.Subclasses.PPtrCurve;
@@ -60,7 +60,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 				IAnimationClipBindingConstant bindings = m_clip.ClipBindingConstant_C74;
 				IReadOnlyDictionary<uint, string> tos = m_clip.FindTOS();
 
-				IReadOnlyList<StreamedFrame> streamedFrames = GenerateFramesFromStreamedClip(clip.StreamedClip, Layout);
+				IReadOnlyList<StreamedFrame> streamedFrames = GenerateFramesFromStreamedClip(clip.StreamedClip);
 				float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
 				float lastSampleFrame = streamedFrames.Count > 1 ? streamedFrames[streamedFrames.Count - 2].Time : 0.0f;
 				float lastFrame = Math.Max(lastDenseFrame, lastSampleFrame);
@@ -230,12 +230,12 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 							time = 0.0f;
 						}
 
-						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script.FileIndex, binding.Script.PathIndex);
+						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script.FileID, binding.Script.PathID);
 						AddPPtrKeyframe(curve, bindings, time, (int)value);
 					}
 					else if (ProcessStreams_frameIndex0)
 					{
-						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script.FileIndex, binding.Script.PathIndex);
+						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script.FileID, binding.Script.PathID);
 						AddFloatKeyframe(curve, time, value);
 					}
 					break;
@@ -275,7 +275,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 						key.OutSlope.SetValues(outX, outY, outZ);
 						key.Time = time;
 						// this enum member is version agnostic
-						key.TangentMode = TangentMode.FreeFree.ToTangent(Layout.Version);
+						key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
 						key.WeightedMode = (int)Core.Classes.Misc.KeyframeTpl.WeightedMode.None;
 						key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 						key.OutWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
@@ -313,7 +313,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 						key.OutSlope.SetValues(outX, outY, outZ, outW);
 						key.Time = time;
 						// this enum member is version agnostic
-						key.TangentMode = TangentMode.FreeFree.ToTangent(Layout.Version);
+						key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
 						key.WeightedMode = (int)Core.Classes.Misc.KeyframeTpl.WeightedMode.None;
 						key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 						key.OutWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
@@ -348,7 +348,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 						key.OutSlope.SetValues(outX, outY, outZ);
 						key.Time = time;
 						// this enum member is version agnostic
-						key.TangentMode = TangentMode.FreeFree.ToTangent(Layout.Version);
+						key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
 						key.WeightedMode = (int)Core.Classes.Misc.KeyframeTpl.WeightedMode.None;
 						key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 						key.OutWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
@@ -387,7 +387,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 						key.OutSlope.SetValues(outX, outY, outZ);
 						key.Time = time;
 						// this enum member is version agnostic
-						key.TangentMode = TangentMode.FreeFree.ToTangent(Layout.Version);
+						key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
 						key.WeightedMode = (int)Core.Classes.Misc.KeyframeTpl.WeightedMode.None;
 						key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 						key.OutWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
@@ -440,7 +440,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 		private void AddScriptCurve(IGenericBinding binding, string path, float time, float value)
 		{
 #warning TODO:
-			CurveData curve = new CurveData(path, ScriptPropertyPrefix + binding.Attribute, ClassIDType.MonoBehaviour, binding.Script.FileIndex, binding.Script.PathIndex);
+			CurveData curve = new CurveData(path, ScriptPropertyPrefix + binding.Attribute, ClassIDType.MonoBehaviour, binding.Script.FileID, binding.Script.PathID);
 			AddFloatKeyframe(curve, time, value);
 		}
 
@@ -453,7 +453,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 
 		private void AddAnimatorMuscleCurve(IGenericBinding binding, float time, float value)
 		{
-			string attributeString = Core.Classes.AnimationClip.HumanoidMuscleTypeExtensions.ToAttributeString(binding.GetHumanoidMuscle(Layout.Version));
+			string attributeString = Core.Classes.AnimationClip.HumanoidMuscleTypeExtensions.ToAttributeString(binding.GetHumanoidMuscle(Version));
 			CurveData curve = new CurveData(string.Empty, attributeString, ClassIDType.Animator);
 			AddFloatKeyframe(curve, time, value);
 		}
@@ -466,14 +466,14 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 				curve.Path.String = curveData.path;
 				curve.Attribute.String = curveData.attribute;
 				curve.ClassID = (int)curveData.classId;
-				curve.Script.FileIndex = curveData.fileId;
-				curve.Script.PathIndex = curveData.pathId;
+				curve.Script.FileID = curveData.fileId;
+				curve.Script.PathID = curveData.pathId;
 				curve.Curve.SetDefaultRotationOrderAndCurveLoopType();
 				m_floats.Add(curveData, curve);
 			}
 
-			IKeyframe_float floatKey = curve.Curve.Curve.AddNew();
-			floatKey.SetValues(Layout.Version, time, value, DefaultFloatWeight);
+			IKeyframe_Single floatKey = curve.Curve.Curve.AddNew();
+			floatKey.SetValues(Version, time, value, DefaultFloatWeight);
 		}
 
 		private void AddPPtrKeyframe(CurveData curveData, IAnimationClipBindingConstant bindings, float time, int index)
@@ -488,16 +488,16 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 				curve.Path.String = curveData.path;
 				curve.Attribute.String = curveData.attribute;
 				curve.ClassID = (int)curveData.classId;
-				curve.Script.FileIndex = curveData.fileId;
-				curve.Script.PathIndex = curveData.pathId;
+				curve.Script.FileID = curveData.fileId;
+				curve.Script.PathID = curveData.pathId;
 				m_pptrs.Add(curveData, curve);
 			}
 
 			IPPtr_Object_ value = bindings.PptrCurveMapping[index];
 			IPPtrKeyframe key = curve.Curve.AddNew();
 			key.Time = time;
-			key.Value.FileIndex = value.FileIndex;
-			key.Value.PathIndex = value.PathIndex;
+			key.Value.FileID = value.FileID;
+			key.Value.PathID = value.PathID;
 		}
 
 		private void GetPreviousFrame(IReadOnlyList<StreamedFrame> streamFrames, int curveID, int currentFrame, out int frameIndex, out int curveIndex)
@@ -543,13 +543,13 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 			}
 		}
 
-		public static IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(StreamedClip clip, LayoutInfo layout)
+		public IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(StreamedClip clip)
 		{
 			List<StreamedFrame> frames = new List<StreamedFrame>();
 			byte[] memStreamBuffer = new byte[clip.Data.Length * sizeof(uint)];
 			Buffer.BlockCopy(clip.Data, 0, memStreamBuffer, 0, memStreamBuffer.Length);
 			using MemoryStream stream = new MemoryStream(memStreamBuffer);
-			using AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout);
+			using AssetReader reader = new AssetReader(stream, m_clip.Collection);
 			while (reader.BaseStream.Position < reader.BaseStream.Length)
 			{
 				StreamedFrame frame = new StreamedFrame();
@@ -559,7 +559,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 			return frames;
 		}
 
-		private LayoutInfo Layout => m_clip.SerializedFile.Layout;
+		private UnityVersion Version => m_clip.Collection.Version;
 
 		public static readonly Regex UnknownPathRegex = new Regex($@"^{UnknownPathPrefix}[0-9]{{1,10}}$", RegexOptions.Compiled);
 

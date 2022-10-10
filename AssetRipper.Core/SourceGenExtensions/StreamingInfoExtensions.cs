@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Parser.Files.ResourceFiles;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Core.Extensions;
+using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.SourceGenerated.Subclasses.StreamingInfo;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -9,18 +9,18 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static bool IsSet(this IStreamingInfo streamingInfo) => !streamingInfo.Path.Data.IsNullOrEmpty();
 
-		public static bool CheckIntegrity(this IStreamingInfo streamingInfo, ISerializedFile file)
+		public static bool CheckIntegrity(this IStreamingInfo streamingInfo, AssetCollection file)
 		{
 			if (!streamingInfo.IsSet())
 			{
 				return true;
 			}
-			return file.Collection.FindResourceFile(streamingInfo.Path.String) != null;
+			return file.Bundle.ResolveResource(streamingInfo.Path.String) != null;
 		}
 
-		public static byte[] GetContent(this IStreamingInfo streamingInfo, ISerializedFile file)
+		public static byte[] GetContent(this IStreamingInfo streamingInfo, AssetCollection file)
 		{
-			IResourceFile? res = file.Collection.FindResourceFile(streamingInfo.Path.String);
+			ResourceFile? res = file.Bundle.ResolveResource(streamingInfo.Path.String);
 			if (res == null)
 			{
 				return Array.Empty<byte>();

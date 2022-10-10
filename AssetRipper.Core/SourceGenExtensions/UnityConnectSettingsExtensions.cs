@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Parser.Files;
+﻿using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_310;
 
 namespace AssetRipper.Core.SourceGenExtensions

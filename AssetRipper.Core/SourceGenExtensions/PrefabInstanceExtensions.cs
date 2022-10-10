@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Asset;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_EditorExtension_;
@@ -21,7 +21,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				name = prefab.RootGameObject_C1001?.TryGetAsset(rootGameObjectFile)?.NameString;
 			}
-			return string.IsNullOrEmpty(name) ? prefab.AssetClassName : name;
+			return string.IsNullOrEmpty(name) ? prefab.ClassName : name;
 		}
 
 		public static IEnumerable<IEditorExtension> FetchObjects(this IPrefabInstance prefab, IAssetContainer file)

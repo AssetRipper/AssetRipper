@@ -3,6 +3,7 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Math;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using System.Numerics;
 
@@ -18,7 +19,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			out Vector3[]? normals,
 			out Vector4[]? tangents,
 			out ColorFloat[]? colors,
-			out BoneWeights4[]? skin,
+			out BoneWeight4[]? skin,
 			out Vector2[]? uv0,
 			out Vector2[]? uv1,
 			out Vector2[]? uv2,
@@ -223,10 +224,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 				int[] weights = compressedMesh.Weights.UnpackInts();
 				int[] boneIndices = compressedMesh.BoneIndices.UnpackInts();
 
-				skin = new BoneWeights4[vertexCount];
+				skin = new BoneWeight4[vertexCount];
 				for (int i = 0; i < vertexCount; i++)
 				{
-					skin[i] = new BoneWeights4();
+					skin[i] = new BoneWeight4();
 				}
 
 				int bonePos = 0;
@@ -237,8 +238,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 				for (int i = 0; i < compressedMesh.Weights.NumItems; i++)
 				{
 					//read bone index and weight.
-					skin[bonePos].Weights[j] = weights[i] / 31.0f;
-					skin[bonePos].BoneIndices[j] = boneIndices[boneIndexPos++];
+					{
+						BoneWeight4 boneWeight = skin[bonePos];
+						boneWeight.SetWeight(j, weights[i] / 31f);
+						boneWeight.SetIndex(j, boneIndices[boneIndexPos++]);
+						skin[bonePos] = boneWeight;
+					}
 					j++;
 					sum += weights[i];
 
@@ -247,8 +252,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 					{
 						for (; j < 4; j++)
 						{
-							skin[bonePos].Weights[j] = 0;
-							skin[bonePos].BoneIndices[j] = 0;
+							BoneWeight4 boneWeight = skin[bonePos];
+							boneWeight.SetWeight(j, 0);
+							boneWeight.SetIndex(j, 0);
+							skin[bonePos] = boneWeight;
 						}
 						bonePos++;
 						j = 0;
@@ -258,8 +265,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 					//missing bone index. continue with next vertex.
 					else if (j == 3)
 					{
-						skin[bonePos].Weights[j] = (31 - sum) / 31.0f;
-						skin[bonePos].BoneIndices[j] = boneIndices[boneIndexPos++];
+						BoneWeight4 boneWeight = skin[bonePos];
+						boneWeight.SetWeight(j, (31 - sum) / 31f);
+						boneWeight.SetIndex(j, boneIndices[boneIndexPos++]);
+						skin[bonePos] = boneWeight;
 						bonePos++;
 						j = 0;
 						sum = 0;

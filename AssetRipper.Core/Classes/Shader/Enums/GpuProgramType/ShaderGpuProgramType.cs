@@ -1,5 +1,4 @@
-using AssetRipper.Core.Parser.Files;
-
+using AssetRipper.IO.Files;
 
 namespace AssetRipper.Core.Classes.Shader.Enums.GpuProgramType
 {

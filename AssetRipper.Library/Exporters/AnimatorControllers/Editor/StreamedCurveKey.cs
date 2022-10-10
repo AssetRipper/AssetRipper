@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Core.Math.Vectors;
-using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_float;
-using AssetRipper.SourceGenerated.Subclasses.Keyframe_float;
+using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
+using AssetRipper.SourceGenerated.Subclasses.Keyframe_Single;
 using System.Collections.Generic;
 
 namespace AssetRipper.Library.Exporters.AnimatorControllers.Editor
@@ -16,12 +16,12 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers.Editor
 			Coefficient = coefs;
 		}
 
-		public static StreamedCurveKey CalculateStreamedFrame(IAnimationCurve_float curve, int lhsIndex, int rhsIndex, float timeOffset)
+		public static StreamedCurveKey CalculateStreamedFrame(IAnimationCurve_Single curve, int lhsIndex, int rhsIndex, float timeOffset)
 		{
-			IReadOnlyList<IKeyframe_float> keyframes = curve.Curve;
-			IKeyframe_float lhs = keyframes[lhsIndex];
+			IReadOnlyList<IKeyframe_Single> keyframes = curve.Curve;
+			IKeyframe_Single lhs = keyframes[lhsIndex];
 			int curveKeyIndex = lhsIndex;
-			IKeyframe_float rhs = keyframes[rhsIndex];
+			IKeyframe_Single rhs = keyframes[rhsIndex];
 			float frameTime = lhs.Time + timeOffset;
 			//TimeEnd = rhs.Time + timeOffset;
 			float deltaTime = rhs.Time - lhs.Time;

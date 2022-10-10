@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Utils;
+﻿using AssetRipper.Assets.Utils;
 using AssetRipper.SourceGenerated.Subclasses.MeshBlendShapeChannel;
 
 namespace AssetRipper.Core.SourceGenExtensions

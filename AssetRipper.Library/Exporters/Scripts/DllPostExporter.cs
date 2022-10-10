@@ -11,7 +11,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			string outputDirectory = Path.Combine(ripper.Settings.AuxiliaryFilesPath, "GameAssemblies");
 
 			Logger.Info(LogCategory.Export, "Saving game assemblies...");
-			AssemblyDefinition[] assemblies = ripper.GameStructure.FileCollection.AssemblyManager.GetAssemblies();
+			AssemblyDefinition[] assemblies = ripper.GameStructure.AssemblyManager.GetAssemblies();
 			if (assemblies.Length != 0)
 			{
 				Directory.CreateDirectory(outputDirectory);

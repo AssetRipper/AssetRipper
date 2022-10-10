@@ -1,7 +1,6 @@
-﻿using AssetRipper.Core.Classes.AnimationClip;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
@@ -33,20 +32,20 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static IEnumerable<IGameObject> FindRoots(this IAnimationClip clip)
 		{
-			foreach (IUnityObjectBase asset in clip.SerializedFile.Collection.FetchAssets())
+			foreach (IUnityObjectBase asset in clip.Collection.Bundle.FetchAssetsInHierarchy())
 			{
 				if (asset is IAnimator animator)
 				{
 					if (clip.IsAnimatorContainsClip(animator))
 					{
-						yield return animator.GameObject_C8.GetAsset(animator.SerializedFile);
+						yield return animator.GameObject_C8.GetAsset(animator.Collection);
 					}
 				}
 				else if (asset is IAnimation animation)
 				{
 					if (clip.IsAnimationContainsClip(animation))
 					{
-						yield return animation.GameObject_C8.GetAsset(animation.SerializedFile);
+						yield return animation.GameObject_C8.GetAsset(animation.Collection);
 					}
 				}
 			}
@@ -66,29 +65,33 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static IReadOnlyDictionary<uint, string> FindTOS(this IAnimationClip clip)
 		{
-			Dictionary<uint, string> tos = new Dictionary<uint, string>() { { 0, string.Empty } };
-
-			foreach (IAvatar avatar in clip.SerializedFile.Collection.FetchAssetsOfType<IAvatar>())
+			Dictionary<uint, string> tos = new()
 			{
-				if (clip.AddAvatarTOS(avatar, tos))
+				{ 0, string.Empty }
+			};
+
+			foreach (IUnityObjectBase asset in clip.Collection.Bundle.FetchAssetsInHierarchy())
+			{
+				if (asset is IAvatar avatar)
 				{
-					return tos;
+					if (clip.AddAvatarTOS(avatar, tos))
+					{
+						return tos;
+					}
 				}
-			}
-
-			foreach (IAnimator animator in clip.SerializedFile.Collection.FetchAssetsOfType<IAnimator>())
-			{
-				if (clip.IsAnimatorContainsClip(animator) && clip.AddAnimatorTOS(animator, tos))
+				else if (asset is IAnimator animator)
 				{
-					return tos;
+					if (clip.IsAnimatorContainsClip(animator) && clip.AddAnimatorTOS(animator, tos))
+					{
+						return tos;
+					}
 				}
-			}
-
-			foreach (IAnimation animation in clip.SerializedFile.Collection.FetchAssetsOfType<IAnimation>())
-			{
-				if (clip.IsAnimationContainsClip(animation) && clip.AddAnimationTOS(animation, tos))
+				else if (asset is IAnimation animation)
 				{
-					return tos;
+					if (clip.IsAnimationContainsClip(animation) && clip.AddAnimationTOS(animation, tos))
+					{
+						return tos;
+					}
 				}
 			}
 
@@ -114,7 +117,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static bool AddAnimationTOS(this IAnimationClip clip, IAnimation animation, Dictionary<uint, string> tos)
 		{
-			IGameObject go = animation.GameObject_C8.GetAsset(animation.SerializedFile);
+			IGameObject go = animation.GameObject_C8.GetAsset(animation.Collection);
 			IReadOnlyDictionary<uint, string> animationTOS = go.BuildTOS();
 			return clip.AddTOS(animationTOS, tos);
 		}

@@ -1,6 +1,7 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.IO.Reading;
+using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.IO.Endian;
@@ -11,6 +12,7 @@ using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.VertexData;
 using System.IO;
+using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -140,7 +142,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		private static void RecalculateSubmeshBounds(LayoutInfo layout, IMesh mesh, ISubMesh submesh)
+		private static void RecalculateSubmeshBounds(IMesh mesh, ISubMesh submesh)
 		{
 			if (submesh.VertexCount == 0)
 			{
@@ -148,13 +150,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 				return;
 			}
 
-			FindMinMaxBounds(layout, mesh, submesh, out Vector3f min, out Vector3f max);
-			Vector3f center = (min + max) / 2.0f;
-			Vector3f extent = max - center;
+			FindMinMaxBounds(mesh, submesh, out Vector3 min, out Vector3 max);
+			Vector3 center = (min + max) / 2.0f;
+			Vector3 extent = max - center;
 			submesh.LocalAABB.CopyValuesFrom(center, extent);
 		}
 
-		private static void FindMinMaxBounds(LayoutInfo layout, IMesh mesh, ISubMesh submesh, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(IMesh mesh, ISubMesh submesh, out Vector3 min, out Vector3 max)
 		{
 			//if (mesh.Has_CompressedMesh_C43())
 			{
@@ -168,7 +170,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			if (mesh.Has_VertexData_C43())
 			{
-				FindMinMaxBounds(layout, mesh.VertexData_C43, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
+				FindMinMaxBounds(mesh.Collection, mesh.VertexData_C43, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 			}
 			else if (mesh.Has_Vertices_C43())
 			{
@@ -181,11 +183,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		private static void FindMinMaxBounds(float[] vertexBuffer, int firstVertex, int vertexCount, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(float[] vertexBuffer, int firstVertex, int vertexCount, out Vector3 min, out Vector3 max)
 		{
 			int offset = firstVertex * 3;
-			min = new Vector3f(vertexBuffer[offset], vertexBuffer[offset + 1], vertexBuffer[offset + 2]);
-			max = new Vector3f(vertexBuffer[offset], vertexBuffer[offset + 1], vertexBuffer[offset + 2]);
+			min = new Vector3(vertexBuffer[offset], vertexBuffer[offset + 1], vertexBuffer[offset + 2]);
+			max = new Vector3(vertexBuffer[offset], vertexBuffer[offset + 1], vertexBuffer[offset + 2]);
 			int end = offset + (vertexCount * 3);
 			for (int i = offset; i < end;)
 			{
@@ -220,10 +222,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		private static void FindMinMaxBounds(AssetList<Vector3f_3_0_0_f5> vertices, int firstVertex, int vertexCount, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(AssetList<Vector3f_3_0_0_f5> vertices, int firstVertex, int vertexCount, out Vector3 min, out Vector3 max)
 		{
-			min = (Vector3f)vertices[firstVertex];
-			max = (Vector3f)vertices[firstVertex];
+			min = (Vector3)vertices[firstVertex];
+			max = (Vector3)vertices[firstVertex];
 			int end = firstVertex + vertexCount;
 			for (int i = firstVertex; i < end; i++)
 			{
@@ -255,16 +257,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		private static void FindMinMaxBounds(LayoutInfo layout, IVertexData vertexData, int firstVertex, int vertexCount, out Vector3f min, out Vector3f max)
+		private static void FindMinMaxBounds(AssetCollection meshCollection, IVertexData vertexData, int firstVertex, int vertexCount, out Vector3 min, out Vector3 max)
 		{
-			ChannelInfo channel = vertexData.GetChannel(layout.Version, ShaderChannel.Vertex);
-			int streamOffset = vertexData.GetStreamOffset(layout.Version, channel.Stream);
-			int streamStride = vertexData.GetStreamStride(layout.Version, channel.Stream);
-			int extraStride = streamStride - ShaderChannel.Vertex.GetStride(layout.Version);
+			ChannelInfo channel = vertexData.GetChannel(meshCollection.Version, ShaderChannel.Vertex);
+			int streamOffset = vertexData.GetStreamOffset(meshCollection.Version, channel.Stream);
+			int streamStride = vertexData.GetStreamStride(meshCollection.Version, channel.Stream);
+			int extraStride = streamStride - ShaderChannel.Vertex.GetStride(meshCollection.Version);
 			int vertexOffset = firstVertex * streamStride;
 			int begin = streamOffset + vertexOffset + channel.Offset;
 			using MemoryStream stream = new MemoryStream(vertexData.Data);
-			using AssetReader reader = new AssetReader(stream, EndianType.LittleEndian, layout);
+			using AssetReader reader = new AssetReader(stream, meshCollection);
 			stream.Position = begin;
 			Vector3f dummyVertex = reader.ReadAsset<Vector3f>();
 			min = dummyVertex;

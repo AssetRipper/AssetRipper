@@ -1,13 +1,13 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Core;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math.Colors;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Utils;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 
 namespace AssetRipper.Library.Exporters.Terrains
@@ -25,7 +25,7 @@ namespace AssetRipper.Library.Exporters.Terrains
 			return asset is ITerrainData;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new TerrainHeatmapExportCollection(this, asset);
 		}

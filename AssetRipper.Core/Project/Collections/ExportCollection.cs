@@ -1,12 +1,13 @@
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Interfaces;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.IO;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_1113;
@@ -79,7 +80,7 @@ namespace AssetRipper.Core.Project.Collections
 			ExportMeta(container, meta, filePath);
 		}
 
-		protected string GetUniqueFileName(ISerializedFile file, IUnityObjectBase asset, string dirPath)
+		protected string GetUniqueFileName(AssetCollection file, IUnityObjectBase asset, string dirPath)
 		{
 			string fileName = asset switch
 			{
@@ -90,7 +91,7 @@ namespace AssetRipper.Core.Project.Collections
 			fileName = FileUtils.RemoveCloneSuffixes(fileName);
 			if (string.IsNullOrWhiteSpace(fileName))
 			{
-				fileName = asset.AssetClassName;
+				fileName = asset.ClassName;
 			}
 			else
 			{
@@ -173,7 +174,7 @@ namespace AssetRipper.Core.Project.Collections
 		}
 
 		public abstract IAssetExporter AssetExporter { get; }
-		public abstract ISerializedFile File { get; }
+		public abstract AssetCollection File { get; }
 		public virtual TransferInstructionFlags Flags => TransferInstructionFlags.NoTransferInstructionFlags;
 		public abstract IEnumerable<IUnityObjectBase> Assets { get; }
 		public abstract string Name { get; }

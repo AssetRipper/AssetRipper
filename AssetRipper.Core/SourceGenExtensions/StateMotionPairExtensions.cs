@@ -9,16 +9,17 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void SetValues(this IStateMotionPair pair, IAnimatorState state, IMotion motion)
 		{
-			if (state == null)
-			{
-				throw new ArgumentNullException(nameof(state));
-			}
-			if (motion == null)
-			{
-				throw new ArgumentNullException(nameof(motion));
-			}
-			pair.State.CopyValues(state.SerializedFile.CreatePPtr(state));
-			pair.Motion.CopyValues(motion.SerializedFile.CreatePPtr(motion));
+			throw new NotImplementedException();
+			//if (state == null)
+			//{
+			//	throw new ArgumentNullException(nameof(state));
+			//}
+			//if (motion == null)
+			//{
+			//	throw new ArgumentNullException(nameof(motion));
+			//}
+			//pair.State.CopyValues(state.SerializedFile.CreatePPtr(state));
+			//pair.Motion.CopyValues(motion.SerializedFile.CreatePPtr(motion));
 		}
 	}
 }

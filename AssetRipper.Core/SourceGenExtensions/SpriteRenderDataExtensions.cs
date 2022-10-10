@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.IO;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Core.IO;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
@@ -6,6 +7,7 @@ using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -103,7 +105,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				instance.Add(assetList);
 				foreach (Vector2f v in vectorArray)
 				{
-					assetList.Add((Vector2f_3_5_0_f5)v);
+					assetList.Add((Vector2f_3_5_0_f5)(Vector2)v);
 				}
 			}
 		}

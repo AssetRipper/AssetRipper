@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.IO;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Math.Transformations;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -28,7 +28,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			string pre = string.Empty;
 			if (!transform.Father_C4.IsNull())
 			{
-				pre = transform.Father_C4.GetAsset(transform.SerializedFile).GetRootPath() + PathSeparator;
+				pre = transform.Father_C4.GetAsset(transform.Collection).GetRootPath() + PathSeparator;
 			}
 			return pre + transform.GetGameObject().NameString;
 		}
@@ -45,11 +45,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				return 0;
 			}
-			ITransform father = transform.Father_C4.GetAsset(transform.SerializedFile);
+			ITransform father = transform.Father_C4.GetAsset(transform.Collection);
 			for (int i = 0; i < father.Children_C4.Count; i++)
 			{
 				IPPtr_Transform_ child = father.Children_C4[i];
-				if (child.PathIndex == transform.PathID)
+				if (child.PathID == transform.PathID)
 				{
 					return i;
 				}
@@ -87,7 +87,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			foreach (IPPtr_Transform_ childPtr in transform.Children_C4)
 			{
-				yield return childPtr.GetAsset(transform.SerializedFile);
+				yield return childPtr.GetAsset(transform.Collection);
 			}
 		}
 
@@ -114,12 +114,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				return 0;
 			}
-			ITransform father = transform.Father_C4.GetAsset(transform.SerializedFile);
+			ITransform father = transform.Father_C4.GetAsset(transform.Collection);
 			AccessListBase<IPPtr_Transform_> children = father.Children_C4;
 			for (int i = 0; i < children.Count; i++)
 			{
 				IPPtr_Transform_ child = children[i];
-				if (child.PathIndex == transform.PathID)
+				if (child.PathID == transform.PathID)
 				{
 					return i;
 				}

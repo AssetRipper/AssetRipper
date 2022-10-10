@@ -1,14 +1,13 @@
-﻿using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Utils;
+using AssetRipper.IO.Files;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Scripts.AssemblyDefinitions;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -36,7 +35,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		public bool IsHandle(IUnityObjectBase asset) => asset is IMonoScript;
 
-		public IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new ScriptExportCollection(this, (IMonoScript)asset);
 		}
@@ -107,10 +106,10 @@ namespace AssetRipper.Library.Exporters.Scripts
 				GetExportSubPath(asset, out string subFolderPath, out string fileName);
 				string folderPath = Path.Combine(dirPath, subFolderPath);
 				string filePath = Path.Combine(folderPath, fileName);
-				if (!File.Exists(filePath))
+				if (!System.IO.File.Exists(filePath))
 				{
 					Directory.CreateDirectory(folderPath);
-					File.WriteAllText(filePath, GetEmptyScriptContent(asset));
+					System.IO.File.WriteAllText(filePath, GetEmptyScriptContent(asset));
 					string assemblyName = BaseManager.ToAssemblyName(asset.GetAssemblyNameFixed());
 					assemblyDefinitionDetailsDictionary.TryAdd(assemblyName,
 						new AssemblyDefinitionDetails(assemblyName, Path.Combine(dirPath, assemblyName)));
@@ -118,7 +117,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 				if (callback is not null)
 				{
-					if (File.Exists($"{filePath}.meta"))
+					if (System.IO.File.Exists($"{filePath}.meta"))
 					{
 						Logger.Error(LogCategory.Export, $"Metafile already exists at {filePath}.meta");
 						//throw new Exception($"Metafile already exists at {filePath}.meta");

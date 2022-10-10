@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_221;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_93;
@@ -12,11 +12,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			foreach (IAnimationClipOverride overClip in controller.Clips_C221)
 			{
-				if (overClip.OriginalClip.IsAsset(controller.SerializedFile, clip))
+				if (overClip.OriginalClip.IsAsset(controller.Collection, clip))
 				{
 					return true;
 				}
-				else if (overClip.OverrideClip.IsAsset(controller.SerializedFile, clip))
+				else if (overClip.OverrideClip.IsAsset(controller.Collection, clip))
 				{
 					return true;
 				}

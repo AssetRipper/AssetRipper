@@ -1,11 +1,12 @@
-﻿using AssetRipper.Core.Classes;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.ResourceFiles;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.IO.Files.ResourceFiles;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using SerializedFile = AssetRipper.Core.Parser.Files.SerializedFiles.SerializedFile;
 
 namespace AssetRipper.GUI
 {
@@ -14,18 +15,18 @@ namespace AssetRipper.GUI
 		public static List<NewUiFileListItem> GetItemsFromStructure(GameStructure structure)
 		{
 			List<NewUiFileListItem> ret = new();
-			foreach ((string name, SerializedFile resourceFile) in structure.FileCollection.GameFiles)
+			foreach (AssetCollection collection in structure.FileCollection.FetchAssetCollections())
 			{
 				//Create a top-level tree view entry for each file
-				NewUiFileListItem? topLevelEntry = new(name!, resourceFile);
+				NewUiFileListItem? topLevelEntry = new(collection.Name, collection);
 
 				//Create a dictionary to hold the sub-categories.
 				Dictionary<string, NewUiFileListItem> categories = new();
 
-				foreach (IUnityObjectBase asset in resourceFile.FetchAssets())
+				foreach (IUnityObjectBase asset in collection)
 				{
 					//Get the name of the category this asset should go in.
-					string categoryName = asset.AssetClassName;
+					string categoryName = asset.ClassName;
 
 					//Get or create the category.
 					NewUiFileListItem category;
@@ -55,12 +56,9 @@ namespace AssetRipper.GUI
 
 			//Create a top-level tree view entry for any loose resource files
 			NewUiFileListItem? looseFiles = new("Loose Resource Files");
-			foreach (ResourceFile? resourceFile in structure.FileCollection.GameResourceFiles)
+			foreach (ResourceFile resourceFile in structure.FileCollection.FetchResourceFiles())
 			{
-				if (resourceFile != null)
-				{
-					looseFiles.SubItems.Add(new(new DummyAssetForLooseResourceFile(resourceFile)));
-				}
+				looseFiles.SubItems.Add(new(new DummyAssetForLooseResourceFile(resourceFile)));
 			}
 
 			ret.Add(looseFiles);
@@ -73,7 +71,7 @@ namespace AssetRipper.GUI
 	{
 		private string _displayAs;
 		private IUnityObjectBase? _associatedObject;
-		private SerializedFile? _associatedFile;
+		private AssetCollection? _associatedFile;
 
 		//Read from UI
 		public string DisplayAs
@@ -92,10 +90,9 @@ namespace AssetRipper.GUI
 		public ObservableCollection<NewUiFileListItem> SubItems { get; } = new();
 
 		/// <summary>
-		/// Creates a top-level tree view item from a SerializedFile and the given display name.
+		/// Creates a top-level tree view item from a <see cref="AssetCollection"/> and the given display name.
 		/// </summary>
-
-		public NewUiFileListItem(string name, SerializedFile resourceFile)
+		public NewUiFileListItem(string name, AssetCollection resourceFile)
 		{
 			_displayAs = name;
 			_associatedFile = resourceFile;

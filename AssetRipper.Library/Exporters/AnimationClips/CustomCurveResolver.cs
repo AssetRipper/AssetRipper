@@ -1,6 +1,5 @@
-using AssetRipper.Core.Classes.Misc;
+using AssetRipper.Assets.Utils;
 using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
@@ -48,7 +47,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 							{
 								continue;
 							}
-							IMesh? mesh = skin.Mesh_C137.TryGetAsset(skin.SerializedFile);
+							IMesh? mesh = skin.Mesh_C137P;
 							if (mesh == null)
 							{
 								continue;

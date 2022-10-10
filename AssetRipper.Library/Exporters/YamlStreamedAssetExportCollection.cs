@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Project;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
@@ -46,7 +46,7 @@ namespace AssetRipper.Library.Exporters
 				uint size = mesh.StreamData_C43.Size;
 				if (mesh.VertexData_C43 is not null && mesh.VertexData_C43.Data.Length == 0 && mesh.StreamData_C43.IsSet())
 				{
-					mesh.VertexData_C43.Data = mesh.StreamData_C43.GetContent(mesh.SerializedFile);
+					mesh.VertexData_C43.Data = mesh.StreamData_C43.GetContent(mesh.Collection);
 					mesh.StreamData_C43.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
 					mesh.VertexData_C43.Data = Array.Empty<byte>();
@@ -81,7 +81,7 @@ namespace AssetRipper.Library.Exporters
 				uint size = texture.StreamData_C28.Size;
 				if (texture.ImageData_C28.Length == 0 && texture.StreamData_C28.IsSet())
 				{
-					texture.ImageData_C28 = texture.StreamData_C28.GetContent(texture.SerializedFile);
+					texture.ImageData_C28 = texture.StreamData_C28.GetContent(texture.Collection);
 					texture.StreamData_C28.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
 					texture.ImageData_C28 = Array.Empty<byte>();
@@ -113,7 +113,7 @@ namespace AssetRipper.Library.Exporters
 				uint size = texture.StreamData_C117.Size;
 				if (texture.ImageData_C117.Length == 0 && texture.StreamData_C117.IsSet())
 				{
-					texture.ImageData_C117 = texture.StreamData_C117.GetContent(texture.SerializedFile);
+					texture.ImageData_C117 = texture.StreamData_C117.GetContent(texture.Collection);
 					texture.StreamData_C117.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
 					texture.ImageData_C117 = Array.Empty<byte>();
@@ -145,7 +145,7 @@ namespace AssetRipper.Library.Exporters
 				uint size = texture.StreamData_C187.Size;
 				if (texture.ImageData_C187.Length == 0 && texture.StreamData_C187.IsSet())
 				{
-					texture.ImageData_C187 = texture.StreamData_C187.GetContent(texture.SerializedFile);
+					texture.ImageData_C187 = texture.StreamData_C187.GetContent(texture.Collection);
 					texture.StreamData_C187.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
 					texture.ImageData_C187 = Array.Empty<byte>();
@@ -177,7 +177,7 @@ namespace AssetRipper.Library.Exporters
 				uint size = texture.StreamData_C188.Size;
 				if (texture.ImageData_C188.Length == 0 && texture.StreamData_C188.IsSet())
 				{
-					texture.ImageData_C188 = texture.StreamData_C188.GetContent(texture.SerializedFile);
+					texture.ImageData_C188 = texture.StreamData_C188.GetContent(texture.Collection);
 					texture.StreamData_C188.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
 					texture.ImageData_C188 = Array.Empty<byte>();

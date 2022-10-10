@@ -12,6 +12,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 		/// <summary>
 		/// 5.0.0 to 5.5.0 exclusive
 		/// </summary>
-		public static bool IsBrokenCustomTags(this ITagManager tagManager) => IsBrokenCustomTags(tagManager.SerializedFile.Version);
+		public static bool IsBrokenCustomTags(this ITagManager tagManager) => IsBrokenCustomTags(tagManager.Collection.Version);
 	}
 }

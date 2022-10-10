@@ -1,6 +1,7 @@
+using AssetRipper.Assets.IO.Reading;
+using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Core.IO.Asset;
 using AssetRipper.VersionUtilities;
 using ShaderTextRestorer.ShaderBlob.Parameters;
 using System;

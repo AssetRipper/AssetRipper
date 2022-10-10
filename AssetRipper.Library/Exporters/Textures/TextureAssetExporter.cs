@@ -1,9 +1,8 @@
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core;
-using AssetRipper.Core.Interfaces;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Configuration;
@@ -13,7 +12,6 @@ using AssetRipper.Library.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Enums;
-using LogType = AssetRipper.Core.Logging.LogType;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -67,7 +65,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return true;
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			if (asset is ISprite sprite)
 			{
@@ -91,7 +89,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			int astcBlockSize = texture.ASTCBlockSize(true);
 			KTXBaseInternalFormat baseInternalFormat = texture.GetKTXBaseInternalFormat(true);
 
-			DirectBitmap? bitmap = ConvertToBitmap((TextureFormat)texture.Format_C28, texture.Width_C28, texture.Height_C28, texture.SerializedFile.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
+			DirectBitmap? bitmap = ConvertToBitmap((TextureFormat)texture.Format_C28, texture.Width_C28, texture.Height_C28, texture.Collection.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
 
 			if (bitmap == null)
 			{

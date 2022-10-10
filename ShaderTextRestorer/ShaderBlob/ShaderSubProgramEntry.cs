@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Assets.IO.Reading;
+using AssetRipper.Assets.IO.Writing;
 using AssetRipper.VersionUtilities;
 
 namespace ShaderTextRestorer.ShaderBlob

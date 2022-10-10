@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Logging;
+﻿using AssetRipper.Assets.Export;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
@@ -15,7 +16,7 @@ namespace AssetRipper.Library.Exporters.Textures
 	{
 		public static ITextureImporter GenerateTextureImporter(IExportContainer container, ITexture2D origin)
 		{
-			ITextureImporter instance = TextureImporterFactory.CreateAsset(container.ExportLayout.Version);
+			ITextureImporter instance = TextureImporterFactory.CreateAsset(container.ExportVersion);
 			instance.MipMaps_C1006.EnableMipMap = (origin.Has_MipCount_C28() && origin.MipCount_C28 > 1 || origin.Has_MipMap_C28() && origin.MipMap_C28) ? 1 : 0;
 			instance.MipMaps_C1006.SRGBTexture = origin.ColorSpace_C28 == (int)ColorSpace.Linear ? 1 : 0;
 			instance.MipMaps_C1006.AlphaTestReferenceValue = 0.5f;
@@ -76,11 +77,11 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public static IIHVImageFormatImporter GenerateIHVImporter(IExportContainer container, ITexture2D origin)
 		{
-			if (container.ExportLayout.Version.IsLess(5, 6))
+			if (container.ExportVersion.IsLess(5, 6))
 			{
 				Logger.Warning("IHVImageFormatImporter doesn't exist on versions less than 5.6. A different importer needs to be used on this version");
 			}
-			IIHVImageFormatImporter instance = IHVImageFormatImporterFactory.CreateAsset(container.ExportLayout.Version);
+			IIHVImageFormatImporter instance = IHVImageFormatImporterFactory.CreateAsset(container.ExportVersion);
 			instance.SetToDefault();
 			instance.IsReadable_C1055 = origin.IsReadable_C28;
 			instance.SRGBTexture_C1055 = origin.ColorSpace_C28 == (int)ColorSpace.Linear;

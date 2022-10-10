@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
+using AssetRipper.IO.Files;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading;

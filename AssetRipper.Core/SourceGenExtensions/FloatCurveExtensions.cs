@@ -1,4 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.FloatCurve;
+﻿using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Subclasses.FloatCurve;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoScript_;
 
 namespace AssetRipper.Core.SourceGenExtensions

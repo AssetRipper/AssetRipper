@@ -1,5 +1,7 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Core.Project.Exporters
@@ -11,11 +13,11 @@ namespace AssetRipper.Core.Project.Exporters
 			return SceneExportHelpers.IsSceneCompatible(asset);
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
-			if (asset.SerializedFile.Collection.IsScene(asset.SerializedFile))
+			if (asset.Collection.IsScene())
 			{
-				return new SceneExportCollection(this, asset.SerializedFile);
+				return new SceneExportCollection(this, asset.Collection);
 			}
 			else if (PrefabExportCollection.IsValidAsset(asset))
 			{

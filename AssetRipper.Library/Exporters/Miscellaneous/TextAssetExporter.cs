@@ -1,9 +1,8 @@
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core;
 using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
@@ -24,7 +23,7 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 			return asset is ITextAsset textAsset && !textAsset.Script_C49.Data.IsNullOrEmpty();
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new TextAssetExportCollection(this, asset);
 		}

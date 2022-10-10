@@ -1,5 +1,6 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
@@ -70,7 +71,7 @@ namespace AssetRipper.Core.Project.Collections
 			return LevelName + index.ToString();
 		}
 
-		internal static string GetSceneSubPath(IExportContainer container, ISerializedFile serializedFile, out bool isRegular)
+		internal static string GetSceneSubPath(IExportContainer container, AssetCollection serializedFile, out bool isRegular)
 		{
 			if (IsSceneName(serializedFile.Name))
 			{
@@ -107,7 +108,7 @@ namespace AssetRipper.Core.Project.Collections
 			return serializedFile.Name;
 		}
 
-		internal static bool IsDuplicate(IExportContainer container, ISerializedFile serializedFile)
+		internal static bool IsDuplicate(IExportContainer container, AssetCollection serializedFile)
 		{
 			if (IsSceneName(serializedFile.Name))
 			{

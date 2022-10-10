@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Math.Colors;
-using AssetRipper.Core.SourceGenExtensions;
+﻿using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using System.Numerics;
 using System.Runtime.CompilerServices;

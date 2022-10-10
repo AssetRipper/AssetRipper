@@ -1,7 +1,8 @@
-﻿using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.Shaders;

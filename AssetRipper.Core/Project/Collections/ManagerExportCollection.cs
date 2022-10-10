@@ -1,5 +1,6 @@
-﻿using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_6;
 using System.IO;
@@ -15,7 +16,7 @@ namespace AssetRipper.Core.Project.Collections
 		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
 			string subPath = Path.Combine(projectDirectory, ProjectSettingsName);
-			string name = GetCorrectName(Asset.AssetClassName);
+			string name = GetCorrectName(Asset.ClassName);
 			string fileName = $"{name}.asset";
 			string filePath = Path.Combine(subPath, fileName);
 

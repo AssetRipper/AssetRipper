@@ -1,7 +1,9 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO.Asset;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using System.IO;
 using System.Text;
@@ -10,7 +12,7 @@ namespace AssetRipper.Core.Project.Exporters
 {
 	public class RawAssetExporter : BinaryAssetExporter
 	{
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new RawExportCollection(this, asset);
 		}
@@ -33,10 +35,10 @@ namespace AssetRipper.Core.Project.Exporters
 			}
 			sb.AppendLine($"Asset Type: {asset.GetType().FullName}");
 			sb.AppendLine($"Path: {path}");
-			sb.AppendLine($"Unity Version: {asset.SerializedFile.Version}");
-			sb.AppendLine($"Endianess: {asset.SerializedFile.EndianType}");
+			sb.AppendLine($"Unity Version: {asset.Collection.Version}");
+			sb.AppendLine($"Endianess: {asset.Collection.EndianType}");
 			sb.AppendLine($"GUID: {asset.GUID}");
-			sb.AppendLine($"File: {asset.SerializedFile.Name}");
+			sb.AppendLine($"File: {asset.Collection.Name}");
 			sb.AppendLine($"Path ID: {asset.PathID}");
 			sb.AppendLine();
 			sb.AppendLine("Container Information:");
@@ -55,7 +57,7 @@ namespace AssetRipper.Core.Project.Exporters
 			try
 			{
 				using MemoryStream memoryStream = new MemoryStream();
-				using AssetWriter writer = new AssetWriter(memoryStream, asset.SerializedFile.EndianType, asset.SerializedFile.Layout);
+				using AssetWriter writer = new AssetWriter(memoryStream, asset.Collection);
 				asset.Write(writer);
 				File.WriteAllBytes(path, memoryStream.ToArray());
 				return true;

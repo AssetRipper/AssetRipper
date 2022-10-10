@@ -1,12 +1,13 @@
-using AssetRipper.Core;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Project;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Linq;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
@@ -30,33 +31,32 @@ namespace AssetRipper.Library.Exporters.Textures
 			m_exportSprites = exportSprites;
 			if (convert)
 			{
-				foreach (ISprite sprite in texture.SerializedFile.Collection.FetchAssetsOfType<ISprite>())
+				foreach (IUnityObjectBase asset in texture.Collection.Bundle.FetchAssetsInHierarchy())
 				{
-					if (sprite.RD_C213.Texture.IsAsset(sprite.SerializedFile, texture))
+					if (asset is ISprite sprite)
 					{
-						ISpriteAtlas? atlas = sprite.SpriteAtlas_C213?.TryGetAsset(sprite.SerializedFile);
-						AddToDictionary(sprite, atlas);
-						if (exportSprites)
+						if (sprite.RD_C213.Texture.IsAsset(sprite.Collection, texture))
 						{
-							AddAsset(sprite);
+							ISpriteAtlas? atlas = sprite.SpriteAtlas_C213P;
+							AddToDictionary(sprite, atlas);
+							if (exportSprites)
+							{
+								AddAsset(sprite);
+							}
 						}
 					}
-				}
-
-				foreach (ISpriteAtlas atlas in texture.SerializedFile.Collection.FetchAssetsOfType<ISpriteAtlas>())
-				{
-					if (atlas.RenderDataMap_C687078895.Count > 0)
+					else if (asset is ISpriteAtlas atlas && atlas.RenderDataMap_C687078895.Count > 0)
 					{
-						foreach (ISprite? sprite in atlas.PackedSprites_C687078895P)
+						foreach (ISprite? packedSprite in atlas.PackedSprites_C687078895P)
 						{
-							if (sprite is not null 
-								&& atlas.RenderDataMap_C687078895.TryGetValue(sprite.RenderDataKey_C213!, out ISpriteAtlasData? atlasData)
-								&& atlasData.Texture.IsAsset(atlas.SerializedFile, texture))
+							if (packedSprite is not null
+								&& atlas.RenderDataMap_C687078895.TryGetValue(packedSprite.RenderDataKey_C213!, out ISpriteAtlasData? atlasData)
+								&& atlasData.Texture.IsAsset(atlas.Collection, texture))
 							{
-								AddToDictionary(sprite, atlas);
+								AddToDictionary(packedSprite, atlas);
 								if (exportSprites)
 								{
-									AddAsset(sprite);
+									AddAsset(packedSprite);
 								}
 							}
 						}
@@ -86,7 +86,7 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public static IExportCollection CreateExportCollection(IAssetExporter assetExporter, ISprite asset)
 		{
-			if (asset.RD_C213.Texture.TryGetAsset(asset.SerializedFile, out ITexture2D? texture))
+			if (asset.RD_C213.Texture.TryGetAsset(asset.Collection, out ITexture2D? texture))
 			{
 				return new TextureExportCollection(assetExporter, texture, true, true);
 			}

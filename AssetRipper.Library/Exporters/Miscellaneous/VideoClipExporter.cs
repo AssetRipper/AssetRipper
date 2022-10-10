@@ -1,13 +1,11 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Project.Collections;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Core;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-
 using IVideoClip327 = AssetRipper.SourceGenerated.Classes.ClassID_327.IVideoClip;
 using IVideoClip329 = AssetRipper.SourceGenerated.Classes.ClassID_329.IVideoClip;
 
@@ -22,15 +20,15 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		private static bool IsValidVideoClip327(IUnityObjectBase asset)
 		{
-			return asset is IVideoClip327 clip && clip.ExternalResources_C327.CheckIntegrity(clip.SerializedFile);
+			return asset is IVideoClip327 clip && clip.ExternalResources_C327.CheckIntegrity(clip.Collection);
 		}
 
 		private static bool IsValidVideoClip329(IUnityObjectBase asset)
 		{
-			return asset is IVideoClip329 clip && clip.ExternalResources_C329.CheckIntegrity(clip.SerializedFile);
+			return asset is IVideoClip329 clip && clip.ExternalResources_C329.CheckIntegrity(clip.Collection);
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
 			return new VideoClipExportCollection(this, asset);
 		}
@@ -50,11 +48,11 @@ namespace AssetRipper.Library.Exporters.Miscellaneous
 
 		private static bool TryGetData(IUnityObjectBase clip, [NotNullWhen(true)] out byte[]? data)
 		{
-			if (clip is IVideoClip329 videoClip329 && videoClip329.ExternalResources_C329.TryGetContent(videoClip329.SerializedFile, out data))
+			if (clip is IVideoClip329 videoClip329 && videoClip329.ExternalResources_C329.TryGetContent(videoClip329.Collection, out data))
 			{
 				return true;
 			}
-			else if (clip is IVideoClip327 videoClip327 && videoClip327.ExternalResources_C327.TryGetContent(videoClip327.SerializedFile, out data))
+			else if (clip is IVideoClip327 videoClip327 && videoClip327.ExternalResources_C327.TryGetContent(videoClip327.Collection, out data))
 			{
 				return true;
 			}

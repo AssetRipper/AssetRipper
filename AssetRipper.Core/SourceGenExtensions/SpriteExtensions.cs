@@ -1,8 +1,11 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.IO;
 using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Project;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Enums;
@@ -72,9 +75,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 		private static void SetBoneGeometry(this ISpriteMetaData instance, ISprite origin)
 		{
 			Vector3[]? vertices = null;
-			BoneWeights4[]? skin = null;
+			BoneWeight4[]? skin = null;
 
-			origin.RD_C213.VertexData?.ReadData(origin.SerializedFile.Version, origin.SerializedFile.EndianType, null,
+			origin.RD_C213.VertexData?.ReadData(origin.Collection.Version, origin.Collection.EndianType, null,
 				out vertices,
 				out Vector3[]? _,//normals,
 				out Vector4[]? _,//tangents,
@@ -156,39 +159,39 @@ namespace AssetRipper.Core.SourceGenExtensions
 			// since atlas shuffle and crop sprite images, we need to recalculate those values.
 			// if sprite doesn't belong to an atlas, consider its image as single sprite atlas
 
-			Vector2f cropBotLeft;
-			Vector2f cropTopRight;
+			Vector2 cropBotLeft;
+			Vector2 cropTopRight;
 			if (atlas is null || !sprite.Has_RenderDataKey_C213())
 			{
 				sAtlasRect = new();
 				sAtlasRect.CopyValues(sprite.RD_C213.TextureRect);
-				cropBotLeft = (Vector2f)sprite.RD_C213.TextureRectOffset;
+				cropBotLeft = (Vector2)sprite.RD_C213.TextureRectOffset;
 			}
 			else
 			{
 				ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
 				sAtlasRect = new();
 				sAtlasRect.CopyValues(atlasData.TextureRect);
-				cropBotLeft = (Vector2f)atlasData.TextureRectOffset;
+				cropBotLeft = (Vector2)atlasData.TextureRectOffset;
 			}
 
-			Vector2f sizeDelta = sprite.Rect_C213.Size() - sAtlasRect.Size();
+			Vector2 sizeDelta = sprite.Rect_C213.Size() - sAtlasRect.Size();
 			cropTopRight = new Vector2f(sizeDelta.X - cropBotLeft.X, sizeDelta.Y - cropBotLeft.Y);
 
-			Vector2f pivot;
+			Vector2 pivot;
 			if (sprite.Has_Pivot_C213())
 			{
-				pivot = (Vector2f)sprite.Pivot_C213;
+				pivot = (Vector2)sprite.Pivot_C213;
 			}
 			else
 			{
-				Vector2f center = new Vector2f(sprite.Rect_C213.Size().X / 2.0f, sprite.Rect_C213.Size().Y / 2.0f);
-				Vector2f pivotOffset = center + (Vector2f)sprite.Offset_C213;
+				Vector2 center = new Vector2(sprite.Rect_C213.Size().X / 2.0f, sprite.Rect_C213.Size().Y / 2.0f);
+				Vector2 pivotOffset = center + (Vector2)sprite.Offset_C213;
 				pivot = new Vector2f(pivotOffset.X / sprite.Rect_C213.Size().X, pivotOffset.Y / sprite.Rect_C213.Size().Y);
 			}
 
-			Vector2f pivotPosition = new Vector2f(pivot.X * sprite.Rect_C213.Size().X, pivot.Y * sprite.Rect_C213.Size().Y);
-			Vector2f aAtlasPivotPosition = pivotPosition - cropBotLeft;
+			Vector2 pivotPosition = new Vector2(pivot.X * sprite.Rect_C213.Size().X, pivot.Y * sprite.Rect_C213.Size().Y);
+			Vector2 aAtlasPivotPosition = pivotPosition - cropBotLeft;
 			sAtlasPivot = new();
 			sAtlasPivot.SetValues(aAtlasPivotPosition.X / sAtlasRect.Size().X, aAtlasPivotPosition.Y / sAtlasRect.Size().Y);
 
@@ -214,12 +217,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			sprite.RD_C213.GenerateOutline(version, outlines);
 			float pivotShiftX = (rect.Width * pivot.X) - (rect.Width * 0.5f);
 			float pivotShiftY = (rect.Height * pivot.Y) - (rect.Height * 0.5f);
-			Vector2f pivotShift = new Vector2f(pivotShiftX, pivotShiftY);
+			Vector2 pivotShift = new Vector2(pivotShiftX, pivotShiftY);
 			foreach (AssetList<Vector2f_3_5_0_f5> outline in outlines)
 			{
 				for (int i = 0; i < outline.Count; i++)
 				{
-					Vector2f point = (Vector2f)outline[i] * sprite.PixelsToUnits_C213;
+					Vector2 point = (Vector2)outline[i] * sprite.PixelsToUnits_C213;
 					outline[i] = (Vector2f_3_5_0_f5)(point + pivotShift);
 				}
 			}
@@ -239,13 +242,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 				shape.Capacity = sprite.PhysicsShape_C213.Count;
 				float pivotShiftX = (rect.Width * pivot.X) - (rect.Width * 0.5f);
 				float pivotShiftY = (rect.Height * pivot.Y) - (rect.Height * 0.5f);
-				Vector2f pivotShift = new Vector2f(pivotShiftX, pivotShiftY);
+				Vector2 pivotShift = new Vector2(pivotShiftX, pivotShiftY);
 				for (int i = 0; i < sprite.PhysicsShape_C213.Count; i++)
 				{
 					shape.Add(new AssetList<Vector2f_3_5_0_f5>(sprite.PhysicsShape_C213[i].Count));
 					for (int j = 0; j < sprite.PhysicsShape_C213[i].Count; j++)
 					{
-						Vector2f point = (Vector2f)sprite.PhysicsShape_C213[i][j] * sprite.PixelsToUnits_C213;
+						Vector2 point = (Vector2)sprite.PhysicsShape_C213[i][j] * sprite.PixelsToUnits_C213;
 						shape[i].Add((Vector2f_3_5_0_f5)(point + pivotShift));
 					}
 				}

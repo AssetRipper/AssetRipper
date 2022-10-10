@@ -9,7 +9,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void SetValues(this IStateBehavioursPair pair, IAnimatorState state, IMonoBehaviour[] behaviours)
 		{
-			if (state == null)
+			throw new NotImplementedException();
+			/*if (state == null)
 			{
 				throw new ArgumentNullException(nameof(state));
 			}
@@ -26,7 +27,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				IMonoBehaviour behaviour = behaviours[i];
 				pair.StateMachineBehaviours.AddNew().CopyValues(behaviour.SerializedFile.CreatePPtr(behaviour));
-			}
+			}*/
 		}
 	}
 }

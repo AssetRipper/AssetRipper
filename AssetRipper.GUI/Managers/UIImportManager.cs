@@ -39,8 +39,7 @@ namespace AssetRipper.GUI.Managers
 		private static void CheckVersionsAreAllTheSame(this GameStructure structure)
 		{
 			UnityVersion[] versions = structure.FileCollection
-				.GameFiles
-				.Values
+				.FetchAssetCollections()
 				.Select(t => t.Version)
 				.Distinct()
 				.ToArray();

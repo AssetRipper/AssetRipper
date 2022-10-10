@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
 using AssetRipper.Core.Logging;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
@@ -200,7 +200,7 @@ namespace AssetRipper.GUI
 			UIImportManager.ImportFromPath(_ripper, filesDropped, gameStructure =>
 			{
 				HasLoaded = true;
-				UnityVersion = _ripper.GameStructure.FileCollection.GameFiles.Values.Max(t => t.Version).ToString();
+				UnityVersion = _ripper.GameStructure.FileCollection.FetchAssetCollections().Max(t => t.Version).ToString();
 				_assetContainer = new UIAssetContainer(_ripper);
 
 				Dispatcher.UIThread.Post(() =>

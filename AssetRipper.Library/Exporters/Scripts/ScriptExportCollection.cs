@@ -1,13 +1,13 @@
-using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
+using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Utils;
+using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_1035;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Collections.Generic;
@@ -21,11 +21,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public ScriptExportCollection(ScriptExporter assetExporter, IMonoScript script)
 		{
 			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
-			File = script.SerializedFile;
+			File = script.Collection;
 
 			// find copies in whole project and skip them
 			Dictionary<MonoScriptInfo, IMonoScript> uniqueDictionary = new();
-			foreach (IUnityObjectBase asset in script.SerializedFile.Collection.FetchAssets())
+			foreach (IUnityObjectBase asset in script.Collection.Bundle.FetchAssetsInHierarchy())
 			{
 				if (asset is not IMonoScript assetScript)
 				{
@@ -41,7 +41,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 				{
 					m_scripts.Add(assetScript, assetScript);
 					uniqueDictionary.Add(info, assetScript);
-					if (!assetExporter.AssemblyManager.IsSet || assetScript.IsScriptPresents())
+					if (!AssetExporter.AssemblyManager.IsSet || assetScript.IsScriptPresents(AssetExporter.AssemblyManager))
 					{
 						m_export.Add(assetScript);
 					}
@@ -82,14 +82,14 @@ namespace AssetRipper.Library.Exporters.Scripts
 			IMonoScript script = m_scripts[asset];
 			if (IsEngineScript(script))
 			{
-				if (MonoScriptExtensions.HasNamespace(script.SerializedFile.Version))
+				if (MonoScriptExtensions.HasNamespace(script.Collection.Version))
 				{
 					int fileID = Compute(script.Namespace_C115.String, script.ClassName_C115.String);
 					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 				}
 				else
 				{
-					ScriptIdentifier scriptInfo = script.GetScriptID();
+					ScriptIdentifier scriptInfo = script.GetScriptID(AssetExporter.AssemblyManager);
 					if (!scriptInfo.IsDefault)
 					{
 						int fileID = Compute(scriptInfo.Namespace, scriptInfo.Name);
@@ -133,8 +133,8 @@ namespace AssetRipper.Library.Exporters.Scripts
 			return ReferenceAssemblies.IsUnityEngineAssembly(script.GetAssemblyNameFixed());
 		}
 
-		public override IAssetExporter AssetExporter { get; }
-		public override ISerializedFile File { get; }
+		public override ScriptExporter AssetExporter { get; }
+		public override AssetCollection File { get; }
 		public override IEnumerable<IUnityObjectBase> Assets => m_scripts.Keys;
 		public override string Name => nameof(ScriptExportCollection);
 

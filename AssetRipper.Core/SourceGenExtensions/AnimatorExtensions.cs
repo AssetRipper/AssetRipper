@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
@@ -40,7 +41,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				if (animator.HasTransformHierarchy_C95)
 				{
-					IGameObject go = animator.GameObject_C95.GetAsset(animator.SerializedFile);
+					IGameObject go = animator.GameObject_C95.GetAsset(animator.Collection);
 					return go.BuildTOS();
 				}
 				else
@@ -50,7 +51,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else
 			{
-				IGameObject go = animator.GameObject_C95.GetAsset(animator.SerializedFile);
+				IGameObject go = animator.GameObject_C95.GetAsset(animator.Collection);
 				return go.BuildTOS();
 			}
 		}

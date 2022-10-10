@@ -16,7 +16,7 @@ namespace AssetRipper.IO.Endian
 			set => isBigEndian = value == EndianType.BigEndian;
 		}
 
-		protected bool IsAlignArray { get; }
+		public bool IsAlignArray { get; }
 
 		protected const int BufferSize = 4096;
 

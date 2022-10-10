@@ -1,7 +1,8 @@
-﻿using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Layout;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.IO.Reading;
+using AssetRipper.Assets.IO.Writing;
+using AssetRipper.Core.IO.Extensions;
 using AssetRipper.Core.Utils;
-using AssetRipper.IO.Endian;
 using K4os.Compression.LZ4;
 using System;
 using System.IO;
@@ -11,7 +12,7 @@ namespace ShaderTextRestorer.ShaderBlob
 {
 	public sealed class ShaderSubProgramBlob
 	{
-		public void Read(LayoutInfo layout, byte[] compressedBlob, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths)
+		public void Read(AssetCollection shaderCollection, byte[] compressedBlob, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths)
 		{
 			for (int i = 0; i < offsets.Length; i++)
 			{
@@ -19,17 +20,17 @@ namespace ShaderTextRestorer.ShaderBlob
 				uint compressedLength = compressedLengths[i];
 				uint decompressedLength = decompressedLengths[i];
 
-				ReadBlob(layout, compressedBlob, offset, compressedLength, decompressedLength, i);
+				ReadBlob(shaderCollection, compressedBlob, offset, compressedLength, decompressedLength, i);
 			}
 		}
 
-		private void ReadBlob(LayoutInfo layout, byte[] compressedBlob, uint offset, uint compressedLength, uint decompressedLength, int segment)
+		private void ReadBlob(AssetCollection shaderCollection, byte[] compressedBlob, uint offset, uint compressedLength, uint decompressedLength, int segment)
 		{
 			byte[] decompressedBuffer = new byte[decompressedLength];
 			LZ4Codec.Decode(compressedBlob, (int)offset, (int)compressedLength, decompressedBuffer, 0, (int)decompressedLength);
 
 			using MemoryStream blobMem = new MemoryStream(decompressedBuffer);
-			using AssetReader blobReader = new AssetReader(blobMem, EndianType.LittleEndian, layout);
+			using AssetReader blobReader = new AssetReader(blobMem, shaderCollection);
 			if (segment == 0)
 			{
 				Entries = blobReader.ReadAssetArray<ShaderSubProgramEntry>();
@@ -55,7 +56,7 @@ namespace ShaderTextRestorer.ShaderBlob
 			}
 		}
 
-		public void Write(LayoutInfo layout, MemoryStream memStream, out uint[] offsets, out uint[] compressedLengths, out uint[] decompressedLengths)
+		public void Write(AssetCollection shaderCollection, MemoryStream memStream, out uint[] offsets, out uint[] compressedLengths, out uint[] decompressedLengths)
 		{
 			int segmentCount = Entries.Length == 0 ? 0 : Entries.Max(t => t.Segment) + 1;
 			offsets = new uint[segmentCount];
@@ -64,7 +65,7 @@ namespace ShaderTextRestorer.ShaderBlob
 			for (int i = 0; i < segmentCount; i++)
 			{
 				uint offset = (uint)memStream.Position;
-				WriteBlob(layout, memStream, out uint compressedLength, out uint decompressedLength, i);
+				WriteBlob(shaderCollection, memStream, out uint compressedLength, out uint decompressedLength, i);
 
 				offsets[i] = offset;
 				compressedLengths[i] = compressedLength;
@@ -72,10 +73,10 @@ namespace ShaderTextRestorer.ShaderBlob
 			}
 		}
 
-		private void WriteBlob(LayoutInfo layout, MemoryStream memStream, out uint compressedLength, out uint decompressedLength, int segment)
+		private void WriteBlob(AssetCollection shaderCollection, MemoryStream memStream, out uint compressedLength, out uint decompressedLength, int segment)
 		{
 			using MemoryStream blobMem = new MemoryStream();
-			using (AssetWriter blobWriter = new AssetWriter(blobMem, EndianType.LittleEndian, layout))
+			using (AssetWriter blobWriter = new AssetWriter(blobMem, shaderCollection))
 			{
 				if (segment == 0)
 				{

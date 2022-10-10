@@ -87,8 +87,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smolv", "Smolv\Smolv.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpirV", "SpirV\SpirV.csproj", "{2135442C-E861-486D-A07B-0367A09177F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Fundamentals", "AssetRipper.Fundamentals\AssetRipper.Fundamentals.csproj", "{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Yaml", "AssetRipper.Yaml\AssetRipper.Yaml.csproj", "{E3458355-E654-41B9-A06C-9E2A00EA9CE2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.SerializationLogic", "AssetRipper.SerializationLogic\AssetRipper.SerializationLogic.csproj", "{0077BA34-CA1E-4A08-8B3A-49B8EA57EA40}"
@@ -151,10 +149,6 @@ Global
 		{2135442C-E861-486D-A07B-0367A09177F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2135442C-E861-486D-A07B-0367A09177F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2135442C-E861-486D-A07B-0367A09177F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC2D1259-7BFF-4960-A9B9-A5B4D4CD4F04}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E3458355-E654-41B9-A06C-9E2A00EA9CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3458355-E654-41B9-A06C-9E2A00EA9CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3458355-E654-41B9-A06C-9E2A00EA9CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU

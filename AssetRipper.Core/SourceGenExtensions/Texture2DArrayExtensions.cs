@@ -13,7 +13,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (texture.Has_StreamData_C187() && texture.StreamData_C187.IsSet())
 			{
-				return texture.StreamData_C187.GetContent(texture.SerializedFile);
+				return texture.StreamData_C187.GetContent(texture.Collection);
 			}
 			else
 			{
@@ -29,7 +29,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (texture.Has_StreamData_C187())
 			{
-				return texture.StreamData_C187.CheckIntegrity(texture.SerializedFile);
+				return texture.StreamData_C187.CheckIntegrity(texture.Collection);
 			}
 			else
 			{

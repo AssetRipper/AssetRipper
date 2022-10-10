@@ -15,7 +15,7 @@ namespace AssetRipper.Assets.Collections;
 /// </summary>
 public class SerializedAssetCollection : AssetCollection
 {
-	private FileIdentifier[] DependencyIdentifiers { get; set; } = Array.Empty<FileIdentifier>();
+	private FileIdentifier[]? DependencyIdentifiers { get; set; }
 
 	protected SerializedAssetCollection(Bundle bundle) : base(bundle)
 	{
@@ -32,15 +32,33 @@ public class SerializedAssetCollection : AssetCollection
 		{
 			throw new Exception("Dependency list has already been initialized.");
 		}
-		for (int i = 0; i < DependencyIdentifiers.Length; i++)
+		if (DependencyIdentifiers is not null)
 		{
-			FileIdentifier identifier = DependencyIdentifiers[i];
-			SetDependency(i + 1, Bundle.ResolveCollection(identifier));
+			for (int i = 0; i < DependencyIdentifiers.Length; i++)
+			{
+				FileIdentifier identifier = DependencyIdentifiers[i];
+				SetDependency(i + 1, Bundle.ResolveCollection(identifier));
+			}
+			DependencyIdentifiers = null;
 		}
-		DependencyIdentifiers = Array.Empty<FileIdentifier>();
 	}
 
-	internal static SerializedAssetCollection FromSerializedFile(Bundle bundle, SerializedFile file, AssetFactory factory)
+	public IEnumerable<FileIdentifier> GetUnresolvedDependencies()
+	{
+		if (DependencyIdentifiers is not null)
+		{
+			for (int i = 0; i < DependencyIdentifiers.Length; i++)
+			{
+				FileIdentifier identifier = DependencyIdentifiers[i];
+				if (Bundle.ResolveCollection(identifier) is null)
+				{
+					yield return identifier;
+				}
+			}
+		}
+	}
+
+	internal static SerializedAssetCollection FromSerializedFile(Bundle bundle, SerializedFile file, AssetFactoryBase factory)
 	{
 		SerializedAssetCollection collection = new SerializedAssetCollection(bundle)
 		{
@@ -60,7 +78,7 @@ public class SerializedAssetCollection : AssetCollection
 		return collection;
 	}
 
-	private static void ReadData(SerializedAssetCollection collection, SerializedFile file, AssetFactory factory)
+	private static void ReadData(SerializedAssetCollection collection, SerializedFile file, AssetFactoryBase factory)
 	{
 		if (SerializedFileMetadata.HasScriptTypes(file.Header.Version))
 		{
@@ -98,7 +116,7 @@ public class SerializedAssetCollection : AssetCollection
 		}
 	}
 
-	private static void ReadAsset(SerializedAssetCollection collection, SerializedFile file, ObjectInfo info, AssetFactory factory)
+	private static void ReadAsset(SerializedAssetCollection collection, SerializedFile file, ObjectInfo info, AssetFactoryBase factory)
 	{
 		AssetInfo assetInfo = new AssetInfo(collection, info.FileID, info.ClassID);
 		long offset = file.Header.DataOffset + info.ByteStart;

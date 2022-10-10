@@ -13,7 +13,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (texture.Has_StreamData_C117() && texture.StreamData_C117.IsSet())
 			{
-				return texture.StreamData_C117.GetContent(texture.SerializedFile);
+				return texture.StreamData_C117.GetContent(texture.Collection);
 			}
 			else
 			{

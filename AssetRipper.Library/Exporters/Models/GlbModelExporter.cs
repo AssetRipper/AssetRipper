@@ -1,9 +1,10 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math.Transformations;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
@@ -36,11 +37,11 @@ namespace AssetRipper.Library.Exporters.Models
 			return SceneExportHelpers.IsSceneCompatible(asset);
 		}
 
-		public override IExportCollection CreateCollection(VirtualSerializedFile virtualFile, IUnityObjectBase asset)
+		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
-			if (asset.SerializedFile.Collection.IsScene(asset.SerializedFile))
+			if (asset.Collection.IsScene())
 			{
-				return new GlbSceneModelExportCollection(this, asset.SerializedFile);
+				return new GlbSceneModelExportCollection(this, asset.Collection);
 			}
 			else if (PrefabExportCollection.IsValidAsset(asset))
 			{

@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Parser.Files.ResourceFiles;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Core.Extensions;
+using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.SourceGenerated.Subclasses.StreamedResource;
 using System.Diagnostics.CodeAnalysis;
 
@@ -8,7 +8,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class StreamedResourceExtensions
 	{
-		public static bool CheckIntegrity(this IStreamedResource streamedResource, ISerializedFile file)
+		public static bool CheckIntegrity(this IStreamedResource streamedResource, AssetCollection file)
 		{
 			if (!streamedResource.IsSet())
 			{
@@ -20,12 +20,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 				return false;
 			}
 
-			return file.Collection.FindResourceFile(streamedResource.Source.String) != null;
+			return file.Bundle.ResolveResource(streamedResource.Source.String) != null;
 		}
 
-		public static byte[]? GetContent(this IStreamedResource streamedResource, ISerializedFile file)
+		public static byte[]? GetContent(this IStreamedResource streamedResource, AssetCollection file)
 		{
-			IResourceFile? res = file.Collection.FindResourceFile(streamedResource.Source.String);
+			ResourceFile? res = file.Bundle.ResolveResource(streamedResource.Source.String);
 			if (res == null)
 			{
 				return null;
@@ -41,7 +41,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return data;
 		}
 
-		public static bool TryGetContent(this IStreamedResource streamedResource, ISerializedFile file, [NotNullWhen(true)] out byte[]? data)
+		public static bool TryGetContent(this IStreamedResource streamedResource, AssetCollection file, [NotNullWhen(true)] out byte[]? data)
 		{
 			data = streamedResource.GetContent(file);
 			return !data.IsNullOrEmpty();

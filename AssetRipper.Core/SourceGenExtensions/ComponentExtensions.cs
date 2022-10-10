@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 
@@ -8,7 +8,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static IGameObject GetGameObject(this IComponent component)
 		{
-			return component.GameObject_C2.GetAsset(component.SerializedFile);
+			return component.GameObject_C2.GetAsset(component.Collection);
 		}
 
 		public static IGameObject GetRoot(this IComponent component)

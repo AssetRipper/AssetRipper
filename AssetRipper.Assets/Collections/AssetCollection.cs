@@ -24,6 +24,7 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 
 	public Bundle Bundle { get; }
 	public string Name { get; protected set; } = string.Empty;
+	public string FilePath { get; set; } = string.Empty;
 	/// <summary>
 	/// The list of dependencies for this collection.
 	/// </summary>
@@ -80,8 +81,13 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 
 	protected virtual bool IsCompatibleDependency(AssetCollection dependency) => true;
 
-	public PPtr<T> CreatePPtr<T>(T asset) where T : IUnityObjectBase
+	public PPtr<T> CreatePPtr<T>(T? asset) where T : IUnityObjectBase
 	{
+		if (asset is null)
+		{
+			return default;
+		}
+
 		int fileIndex = dependencies.IndexOf(asset.Collection);
 		if (fileIndex < 0)
 		{
@@ -90,8 +96,13 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 		return new PPtr<T>(fileIndex, asset.PathID);
 	}
 
-	public PPtr<T> ForceCreatePPtr<T>(T asset) where T : IUnityObjectBase
+	public PPtr<T> ForceCreatePPtr<T>(T? asset) where T : IUnityObjectBase
 	{
+		if (asset is null)
+		{
+			return default;
+		}
+
 		int fileIndex = AddDependency(asset.Collection);
 		return new PPtr<T>(fileIndex, asset.PathID);
 	}

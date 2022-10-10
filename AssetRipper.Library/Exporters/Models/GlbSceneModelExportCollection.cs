@@ -1,12 +1,12 @@
-﻿using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.Core.Project;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Library.Exporters.Models
 {
 	public sealed class GlbSceneModelExportCollection : SceneExportCollection
 	{
-		public GlbSceneModelExportCollection(GlbModelExporter assetExporter, ISerializedFile scene) : base(assetExporter, scene)
+		public GlbSceneModelExportCollection(GlbModelExporter assetExporter, AssetCollection scene) : base(assetExporter, scene)
 		{
 		}
 

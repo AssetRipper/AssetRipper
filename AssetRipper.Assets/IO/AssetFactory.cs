@@ -4,7 +4,7 @@ using AssetRipper.IO.Files.SerializedFiles.Parser;
 
 namespace AssetRipper.Assets.IO;
 
-public abstract class AssetFactory
+public abstract class AssetFactoryBase
 {
 	public abstract IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType type);
 }

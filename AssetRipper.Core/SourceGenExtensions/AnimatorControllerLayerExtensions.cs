@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorControllerLayer;
@@ -8,6 +9,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class AnimatorControllerLayerExtensions
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="animatorControllerLayer">Must be a child of <paramref name="controller"/></param>
+		/// <param name="stateMachine"></param>
+		/// <param name="controller"></param>
+		/// <param name="layerIndex"></param>
 		public static void Initialize(this IAnimatorControllerLayer animatorControllerLayer, IAnimatorStateMachine stateMachine, IAnimatorController controller, int layerIndex)
 		{
 			ILayerConstant layer = controller.Controller_C91.LayerArray[layerIndex].Data;
@@ -19,11 +27,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			if (animatorControllerLayer.Has_StateMachine_PPtr_AnimatorStateMachine_())
 			{
-				animatorControllerLayer.StateMachine_PPtr_AnimatorStateMachine_.CopyValues(stateMachine.SerializedFile.CreatePPtr(stateMachine));
+				animatorControllerLayer.StateMachine_PPtr_AnimatorStateMachine_.CopyValues(controller.Collection.ForceCreatePPtr(stateMachine));
 			}
 			else if (animatorControllerLayer.Has_StateMachine_PPtr_StateMachine_())
 			{
-				animatorControllerLayer.StateMachine_PPtr_StateMachine_.CopyValues(stateMachine.SerializedFile.CreatePPtr(stateMachine));
+				animatorControllerLayer.StateMachine_PPtr_StateMachine_.CopyValues(controller.Collection.ForceCreatePPtr(stateMachine));
 			}
 
 #warning TODO: animator
@@ -34,7 +42,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			animatorControllerLayer.DefaultWeight = layer.DefaultWeight;
 			animatorControllerLayer.IKPass = layer.IKPass;
 			animatorControllerLayer.SyncedLayerAffectsTiming = layer.SyncedLayerAffectsTiming;
-			animatorControllerLayer.Controller?.CopyValues(controller.SerializedFile.CreatePPtr(controller));
+			animatorControllerLayer.Controller?.CopyValues(controller.Collection.CreatePPtr(controller));
 		}
 	}
 }

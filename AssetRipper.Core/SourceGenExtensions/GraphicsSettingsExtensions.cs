@@ -69,7 +69,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static BuildTargetGroup GetBuildTargetGroup(this IGraphicsSettings settings)
 		{
-			return settings.AssetInfo is not null ? settings.AssetInfo.File.Platform.PlatformToBuildGroup() : BuildTargetGroup.Standalone;
+			return settings.Collection.Platform.PlatformToBuildGroup();
 		}
 
 		public static TransparencySortMode GetTransparencySortMode(this IGraphicsSettings settings)

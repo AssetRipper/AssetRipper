@@ -6,7 +6,7 @@ namespace AssetRipper.Assets.Export
 	public interface IProjectAssetContainer : IExportContainer
 	{
 		AssetCollection File { get; }
-		TemporaryAssetCollection TemporaryCollection { get; }
+		TemporaryAssetCollection VirtualFile { get; }
 		UnityGUID SceneNameToGUID(string name);
 	}
 }

@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Project;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
@@ -23,7 +23,7 @@ namespace AssetRipper.Library.Exporters.Audio
 				byte[] originalSource = resource.Source.Data;
 				ulong originalOffset = resource.Offset;
 				ulong originalSize = resource.Size;
-				if (resource.TryGetContent(asset.SerializedFile, out byte[]? data))
+				if (resource.TryGetContent(asset.Collection, out byte[]? data))
 				{
 					string resPath = filePath + ".resS";
 					System.IO.File.WriteAllBytes(resPath, data);

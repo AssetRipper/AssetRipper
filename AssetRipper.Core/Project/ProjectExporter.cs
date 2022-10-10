@@ -1,13 +1,16 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Export.Dependencies;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Layout;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Structure;
+using AssetRipper.IO.Files;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_116;
@@ -118,7 +121,7 @@ namespace AssetRipper.Core.Project
 			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{type}'");
 		}
 
-		protected IExportCollection CreateCollection(VirtualSerializedFile file, IUnityObjectBase asset)
+		protected IExportCollection CreateCollection(TemporaryAssetCollection file, IUnityObjectBase asset)
 		{
 			Stack<IAssetExporter> exporters = GetExporterStack(asset);
 			foreach (IAssetExporter exporter in exporters)
@@ -169,14 +172,16 @@ namespace AssetRipper.Core.Project
 			OverrideExporter<T>(DummyExporter, true);
 		}
 
-		public void Export(GameCollection fileCollection, CoreConfiguration options) => Export(fileCollection, fileCollection.FetchSerializedFiles(), options);
-		public void Export(GameCollection fileCollection, SerializedFile file, CoreConfiguration options) => Export(fileCollection, new SerializedFile[] { file }, options);
-		public void Export(GameCollection fileCollection, IEnumerable<SerializedFile> files, CoreConfiguration options)
+		public void Export(GameBundle fileCollection, CoreConfiguration options) => Export(fileCollection, fileCollection.FetchAssetCollections(), options);
+		public void Export(GameBundle fileCollection, AssetCollection file, CoreConfiguration options) => Export(fileCollection, new AssetCollection[] { file }, options);
+		public void Export(GameBundle fileCollection, IEnumerable<AssetCollection> files, CoreConfiguration options)
 		{
 			EventExportPreparationStarted?.Invoke();
 
-			LayoutInfo exportLayout = new LayoutInfo(options.Version, options.Platform, options.Flags);
-			VirtualSerializedFile virtualFile = new VirtualSerializedFile(exportLayout);
+			fileCollection.ClearTemporaryBundles();
+			TemporaryAssetCollection virtualFile = fileCollection.AddNewTemporaryBundle().AddNew();
+			virtualFile.SetLayout(options.Version, options.Platform, options.Flags);
+
 			List<IExportCollection> collections = new();
 
 			// speed up fetching
@@ -184,9 +189,9 @@ namespace AssetRipper.Core.Project
 			HashSet<IUnityObjectBase> depSet = new();
 			HashSet<IUnityObjectBase> queued = new();
 
-			foreach (SerializedFile file in files)
+			foreach (AssetCollection file in files)
 			{
-				foreach (IUnityObjectBase asset in file.FetchAssets())
+				foreach (IUnityObjectBase asset in file)
 				{
 					if (!options.Filter(asset))
 					{
@@ -222,11 +227,11 @@ namespace AssetRipper.Core.Project
 							continue;
 						}
 
-						IUnityObjectBase? dependency = pointer.TryGetAsset(asset.SerializedFile);
+						IUnityObjectBase? dependency = asset.Collection.TryGetAsset(pointer);
 						if (dependency == null)
 						{
-							string hierarchy = $"[{asset.SerializedFile.Name}]" + asset.SerializedFile.GetAssetLogString(asset.PathID) + "." + context.GetPointerPath();
-							Logger.Log(LogType.Warning, LogCategory.Export, $"{hierarchy}'s dependency {context.PointerName} = {pointer.ToLogString(asset.SerializedFile)} wasn't found");
+							string hierarchy = $"[{asset.Collection.Name}]" + asset.Collection.GetAssetLogString(asset.PathID) + "." + context.GetPointerPath();
+							Logger.Log(LogType.Warning, LogCategory.Export, $"{hierarchy}'s dependency {context.PointerName} = {ToLogString(pointer, asset.Collection)} wasn't found");
 							continue;
 						}
 
@@ -261,6 +266,12 @@ namespace AssetRipper.Core.Project
 				EventExportProgressUpdated?.Invoke(i, collections.Count);
 			}
 			EventExportFinished?.Invoke();
+		}
+
+		private static string ToLogString<T>(PPtr<T> pptr, IAssetContainer container) where T : IUnityObjectBase
+		{
+			string depName = pptr.FileID == 0 ? container.Name : container.Dependencies[pptr.FileID - 1]?.Name ?? "Not Found";
+			return $"[{depName}]{typeof(T).Name}_{pptr.PathID}";
 		}
 	}
 }

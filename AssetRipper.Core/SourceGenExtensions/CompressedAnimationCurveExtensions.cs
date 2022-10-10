@@ -1,8 +1,9 @@
-﻿using AssetRipper.Core.IO;
+﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Subclasses.CompressedAnimationCurve;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
+using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -27,9 +28,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			for (int i = 0, j = 4; i < rotations.Length; i++, j += 4)
 			{
 				float time = times[i];
-				Quaternionf rotation = rotations[i];
-				Quaternionf inSlope = new Quaternionf(slopes[j - 4], slopes[j - 3], slopes[j - 2], slopes[j - 1]);
-				Quaternionf outSlope = new Quaternionf(slopes[j + 0], slopes[j + 1], slopes[j + 2], slopes[j + 3]);
+				Quaternion rotation = rotations[i];
+				Quaternion inSlope = new Quaternion(slopes[j - 4], slopes[j - 3], slopes[j - 2], slopes[j - 1]);
+				Quaternion outSlope = new Quaternion(slopes[j + 0], slopes[j + 1], slopes[j + 2], slopes[j + 3]);
 				IKeyframe_Quaternionf keyframe = keyframes.AddNew();
 				keyframe.SetValues(version, time, rotation, inSlope, outSlope, 1.0f / 3.0f);
 			}

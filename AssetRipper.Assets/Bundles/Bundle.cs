@@ -9,15 +9,17 @@ namespace AssetRipper.Assets.Bundles;
 /// <summary>
 /// A container for <see cref="AssetCollection"/>s, <see cref="ResourceFile"/>s, and other <see cref="Bundle"/>s.
 /// </summary>
-public abstract class Bundle
+public abstract class Bundle : IDisposable
 {
-	public Bundle? Parent { get; private set; }
+	public Bundle? Parent { get; internal set; }
 	public IReadOnlyList<ResourceFile> Resources => resources;
 	private readonly List<ResourceFile> resources = new();
 	public IReadOnlyList<AssetCollection> Collections => collections;
 	private readonly List<AssetCollection> collections = new();
 	public IReadOnlyList<Bundle> Bundles => bundles;
 	private readonly List<Bundle> bundles = new();
+	private bool disposedValue;
+
 	public abstract string Name { get; }
 	
 	public void InitializeAllDependencyLists()
@@ -100,13 +102,124 @@ public abstract class Bundle
 
 	protected virtual bool IsCompatibleBundle(Bundle bundle) => bundle is not GameBundle;
 
+	public Bundle GetRoot()
+	{
+		Bundle root = this;
+		while (root.Parent is not null)
+		{
+			root = root.Parent;
+		}
+		return root;
+	}
+
+	public IEnumerable<IUnityObjectBase> FetchAssetsInHierarchy()
+	{
+		return GetRoot().FetchAssets();
+	}
+
+	public IEnumerable<IUnityObjectBase> FetchAssets()
+	{
+		foreach (AssetCollection collection in collections)
+		{
+			foreach (IUnityObjectBase asset in collection)
+			{
+				yield return asset;
+			}
+		}
+		foreach (Bundle bundle in bundles)
+		{
+			foreach (IUnityObjectBase asset in bundle.FetchAssets())
+			{
+				yield return asset;
+			}
+		}
+	}
+
+	public IEnumerable<AssetCollection> FetchAssetCollections()
+	{
+		foreach (AssetCollection collection in collections)
+		{
+			yield return collection;
+		}
+		foreach (Bundle bundle in bundles)
+		{
+			foreach (AssetCollection collection in bundle.FetchAssetCollections())
+			{
+				yield return collection;
+			}
+		}
+	}
+
+	public IEnumerable<ResourceFile> FetchResourceFiles()
+	{
+		foreach (ResourceFile resource in resources)
+		{
+			yield return resource;
+		}
+		foreach (Bundle bundle in bundles)
+		{
+			foreach (ResourceFile resource in bundle.FetchResourceFiles())
+			{
+				yield return resource;
+			}
+		}
+	}
+
+	public IEnumerable<FileIdentifier> GetUnresolvedDependencies()
+	{
+		foreach (AssetCollection collection in collections)
+		{
+			if (collection is SerializedAssetCollection serializedCollection)
+			{
+				foreach (FileIdentifier identifier in serializedCollection.GetUnresolvedDependencies())
+				{
+					yield return identifier;
+				}
+			}
+		}
+		foreach (Bundle bundle in bundles)
+		{
+			foreach (FileIdentifier identifier in bundle.GetUnresolvedDependencies())
+			{
+				yield return identifier;
+			}
+		}
+	}
+
 	public override string ToString()
 	{
 		return Name;
 	}
 
-	public SerializedAssetCollection AddCollectionFromSerializedFile(SerializedFile file, AssetFactory factory)
+	public SerializedAssetCollection AddCollectionFromSerializedFile(SerializedFile file, AssetFactoryBase factory)
 	{
 		return SerializedAssetCollection.FromSerializedFile(this, file, factory);
+	}
+
+	protected virtual void Dispose(bool disposing)
+	{
+		if (!disposedValue)
+		{
+			if (disposing)
+			{
+				foreach (ResourceFile resourceFile in resources)
+				{
+					resourceFile.Dispose();
+				}
+				foreach (Bundle bundle in bundles)
+				{
+					bundle.Dispose();
+				}
+			}
+
+			disposedValue = true;
+		}
+	}
+
+	public void Dispose()
+	{
+		// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+		Dispose(disposing: true);
+		GC.SuppressFinalize(this);
 	}
 }

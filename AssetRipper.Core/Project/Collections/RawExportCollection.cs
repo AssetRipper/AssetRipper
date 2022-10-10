@@ -1,8 +1,9 @@
-﻿using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.IO.Files.SerializedFiles;
 using System.Collections.Generic;
 using System.IO;
 
@@ -19,9 +20,9 @@ namespace AssetRipper.Core.Project.Collections
 			AssetExporter = exporter;
 		}
 
-		public override ISerializedFile File => Asset.SerializedFile;
+		public override AssetCollection File => Asset.Collection;
 
-		public override TransferInstructionFlags Flags => Asset.SerializedFile.Flags;
+		public override TransferInstructionFlags Flags => Asset.Collection.Flags;
 
 		public override IEnumerable<IUnityObjectBase> Assets
 		{

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Parser.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Enums;
 
@@ -20,7 +19,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (texture.StreamData_C28 is not null)
 			{
-				return texture.StreamData_C28.CheckIntegrity(texture.SerializedFile);
+				return texture.StreamData_C28.CheckIntegrity(texture.Collection);
 			}
 			else
 			{
@@ -38,12 +37,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (texture.StreamData_C28 is not null && texture.StreamData_C28.IsSet())
 			{
-				data = texture.StreamData_C28.GetContent(texture.SerializedFile);
+				data = texture.StreamData_C28.GetContent(texture.Collection);
 			}
 
 			data ??= Array.Empty<byte>();
 
-			if (IsSwapBytes(texture.SerializedFile.Platform, texture.Format_C28E))
+			if (IsSwapBytes(texture.Collection.Platform, texture.Format_C28E))
 			{
 				for (int i = 0; i < data.Length; i += 2)
 				{
@@ -54,9 +53,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return data;
 		}
 
-		public static bool IsSwapBytes(Parser.Files.BuildTarget platform, TextureFormat format)
+		public static bool IsSwapBytes(AssetRipper.IO.Files.BuildTarget platform, TextureFormat format)
 		{
-			if (platform == Parser.Files.BuildTarget.XBox360)
+			if (platform == AssetRipper.IO.Files.BuildTarget.XBox360)
 			{
 				switch (format)
 				{

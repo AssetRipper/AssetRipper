@@ -1,7 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
-using AssetRipper.SourceGenerated.Classes.ClassID_206;
 using AssetRipper.SourceGenerated.Classes.ClassID_207;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeConstant;
@@ -13,19 +11,18 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class StateConstantExtensions
 	{
-		public static PPtr<Motion> CreateMotion(this IStateConstant stateConstant, VirtualSerializedFile file, IAnimatorController controller, int nodeIndex)
+		public static IMotion? CreateMotion(this IStateConstant stateConstant, TemporaryAssetCollection file, IAnimatorController controller, int nodeIndex)
 		{
 			if (stateConstant.BlendTreeConstantArray.Count == 0)
 			{
-				return new();
+				return default;
 			}
 			else
 			{
 				IBlendTreeNodeConstant node = stateConstant.GetBlendTree().NodeArray[nodeIndex].Data;
 				if (node.IsBlendTree())
 				{
-					IBlendTree blendTree = VirtualAnimationFactory.CreateBlendTree(file, controller, stateConstant, nodeIndex);
-					return blendTree.SerializedFile.CreatePPtr(blendTree).CastTo<Motion>();
+					return VirtualAnimationFactory.CreateBlendTree(file, controller, stateConstant, nodeIndex);
 				}
 				else
 				{
@@ -47,7 +44,15 @@ namespace AssetRipper.Core.SourceGenExtensions
 					{
 						clipIndex = unchecked((int)node.ClipID);
 					}
-					return node.CreateMotion(controller, clipIndex).CastTo<Motion>();
+
+					if (clipIndex == -1)
+					{
+						return default;
+					}
+					else
+					{
+						return controller.AnimationClips_C91P[clipIndex] as IMotion;//AnimationClip has inherited from Motion since Unity 4.
+					}
 				}
 			}
 		}

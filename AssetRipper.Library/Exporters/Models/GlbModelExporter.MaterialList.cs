@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_23;
@@ -13,17 +13,17 @@ namespace AssetRipper.Library.Exporters.Models
 		private readonly struct MaterialList
 		{
 			private readonly AccessListBase<IPPtr_Material_> materials;
-			private readonly ISerializedFile file;
+			private readonly AssetCollection file;
 
-			private MaterialList(AccessListBase<IPPtr_Material_> materials, ISerializedFile file)
+			private MaterialList(AccessListBase<IPPtr_Material_> materials, AssetCollection file)
 			{
 				this.materials = materials;
 				this.file = file;
 			}
 
-			public MaterialList(IMeshRenderer renderer) : this(renderer.Materials_C23, renderer.SerializedFile) { }
+			public MaterialList(IMeshRenderer renderer) : this(renderer.Materials_C23, renderer.Collection) { }
 
-			public MaterialList(ISkinnedMeshRenderer renderer) : this(renderer.Materials_C137, renderer.SerializedFile) { }
+			public MaterialList(ISkinnedMeshRenderer renderer) : this(renderer.Materials_C137, renderer.Collection) { }
 
 			public int Count => materials.Count;
 

@@ -1,17 +1,13 @@
-﻿using AssetRipper.Core;
-using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
+using AssetRipper.Core;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Parser.Asset;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Core.Utils;
-using AssetRipper.Core.VersionHandling;
 using AssetRipper.Library.Attributes;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters;
-using AssetRipper.Library.Exporters.AnimationClips;
-using AssetRipper.Library.Exporters.AnimatorControllers;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.AudioMixers;
 using AssetRipper.Library.Exporters.Meshes;
@@ -34,18 +30,13 @@ using AssetRipper.SourceGenerated.Classes.ClassID_188;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
-using AssetRipper.SourceGenerated.Classes.ClassID_241;
-using AssetRipper.SourceGenerated.Classes.ClassID_243;
-using AssetRipper.SourceGenerated.Classes.ClassID_245;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
-using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
-using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,11 +46,6 @@ namespace AssetRipper.Library
 {
 	public class Ripper
 	{
-		static Ripper()
-		{
-			VersionManager.AssetFactory = new AssetFactory();
-		}
-
 		public Ripper() : this(new()) { }
 
 		public Ripper(LibraryConfiguration configuration)
@@ -304,9 +290,10 @@ namespace AssetRipper.Library
 			
 			//AudioMixer exporters
 			AudioMixerExporter audioMixerExporter = new();
-			OverrideExporter<IAudioMixerController>(audioMixerExporter);
-			OverrideExporter<IAudioMixerGroupController>(audioMixerExporter);
-			OverrideExporter<IAudioMixerSnapshotController>(audioMixerExporter);
+			//OverrideExporter<IAudioMixerController>(audioMixerExporter);
+			//OverrideExporter<IAudioMixerGroupController>(audioMixerExporter);
+			//OverrideExporter<IAudioMixerSnapshotController>(audioMixerExporter);
+			//Temporarily disabled due to changes in how AssetCollections function.
 
 			//Mesh exporters
 			ConditionalOverrideExporter<IMesh>(new GlbMeshExporter(), Settings.MeshExportFormat == MeshExportFormat.Glb);
@@ -322,14 +309,16 @@ namespace AssetRipper.Library
 			ConditionalOverrideExporter<ITerrainData>(new TerrainMeshExporter(), Settings.TerrainExportMode == TerrainExportMode.Mesh);
 
 			//Script exporters
-			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.FileCollection.AssemblyManager, Settings));
-			ConditionalOverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.FileCollection.AssemblyManager), Settings.ScriptExportMode == ScriptExportMode.DllExportWithoutRenaming);
+			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.AssemblyManager, Settings));
+			ConditionalOverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.AssemblyManager), Settings.ScriptExportMode == ScriptExportMode.DllExportWithoutRenaming);
 
 			//Animator Controller
-			OverrideExporter<IAnimatorController>(new AnimatorControllerExporter());
+			//OverrideExporter<IAnimatorController>(new AnimatorControllerExporter());
+			//Temporarily disabled due to changes in how AssetCollections function.
 
 			//Animation Clip
-			OverrideExporter<IAnimationClip>(new AnimationClipExporter());
+			//OverrideExporter<IAnimationClip>(new AnimationClipExporter());
+			//Temporarily disabled due to changes in how AssetCollections function.
 
 			AddPostExporter(new ProjectVersionPostExporter());
 			AddPostExporter(new PackageManifestPostExporter());

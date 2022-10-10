@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_196;
 using AssetRipper.SourceGenerated.Classes.ClassID_238;
 
@@ -8,7 +9,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static void ConvertToEditorFormat(this INavMeshSettings settings)
 		{
-			INavMeshData? data = settings.NavMeshData_C196?.TryGetAsset(settings.SerializedFile);
+			INavMeshData? data = settings.NavMeshData_C196?.TryGetAsset(settings.Collection);
 			if (data == null)
 			{
 				settings.BuildSettings_C196.SetToDefault();

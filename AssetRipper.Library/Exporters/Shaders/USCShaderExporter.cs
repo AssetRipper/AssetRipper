@@ -1,12 +1,12 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
+using AssetRipper.Core.Classes.Shader.Enums;
 using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
 using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.Parser.Files;
-using AssetRipper.Core.Project;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.IO.Files;
 using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Subclasses.SerializedPass;
@@ -50,7 +50,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				return false;
 			}
 
-			using Stream fileStream = File.Create(path);
+			using Stream fileStream = System.IO.File.Create(path);
 			ExportBinary(shader, container, fileStream, ShaderExporterInstantiator);
 			return true;
 		}

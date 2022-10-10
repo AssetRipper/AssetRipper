@@ -1,11 +1,13 @@
-﻿using AssetRipper.Core.Classes.Meta;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Interfaces;
-using AssetRipper.Core.IO.Asset;
-using AssetRipper.Core.Parser.Asset;
-using AssetRipper.Core.Parser.Files.SerializedFiles;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Interfaces;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
@@ -17,10 +19,10 @@ namespace AssetRipper.Core.Project.Collections
 {
 	public sealed class PrefabExportCollection : AssetsExportCollection
 	{
-		public PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IUnityObjectBase asset) 
+		public PrefabExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IUnityObjectBase asset) 
 			: this(assetExporter, virtualFile, GetRootGameObject(asset)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, VirtualSerializedFile virtualFile, IGameObject root) 
+		private PrefabExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IGameObject root) 
 			: this(assetExporter, root, CreateVirtualPrefab(virtualFile, root)) { }
 
 		private PrefabExportCollection(IAssetExporter assetExporter, IGameObject root, IPrefabInstance? prefab) 
@@ -28,7 +30,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			RootGameObject = root;
 			Prefab = prefab;
-			m_file = root.SerializedFile;
+			m_file = root.Collection;
 
 			foreach (IEditorExtension asset in root.FetchHierarchy())
 			{
@@ -47,14 +49,14 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				if (gameObject.Has_PrefabAsset_C1())
 				{
-					gameObject.PrefabAsset_C1.CopyValues(prefab.SerializedFile.CreatePPtr(prefab));
+					gameObject.PrefabAsset_C1.CopyValues(gameObject.Collection.ForceCreatePPtr(prefab));
 				}
 			}
 			else if (asset is IComponent component)
 			{
 				if (component.Has_PrefabAsset_C2())
 				{
-					component.PrefabAsset_C2.CopyValues(prefab.SerializedFile.CreatePPtr(prefab));
+					component.PrefabAsset_C2.CopyValues(component.Collection.ForceCreatePPtr(prefab));
 				}
 			}
 		}
@@ -67,7 +69,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is IComponent component)
 			{
-				return component.GameObject_C2.TryGetAsset(component.SerializedFile) is not null;
+				return component.GameObject_C2P is not null;
 			}
 			return false;
 		}
@@ -89,14 +91,14 @@ namespace AssetRipper.Core.Project.Collections
 				throw new NotSupportedException();
 			}
 		}
-		public override ISerializedFile File => m_file;
-		private ISerializedFile m_file;
+		public override AssetCollection File => m_file;
+		private AssetCollection m_file;
 		public override TransferInstructionFlags Flags => base.Flags | TransferInstructionFlags.SerializeForPrefabSystem;
 		public IGameObject RootGameObject { get; }
 		public IPrefabInstance? Prefab { get; }
 		public override string Name => RootGameObject.NameString;
 
-		private static IPrefabInstance? CreateVirtualPrefab(VirtualSerializedFile virtualFile, IGameObject root)
+		private static IPrefabInstance? CreateVirtualPrefab(TemporaryAssetCollection virtualFile, IGameObject root)
 		{
 			//Prior to 2018.3, Prefab was an actual asset inside "*.prefab" files.
 			//After that, PrefabImporter and PrefabInstance were introduced as a replacement.
@@ -106,8 +108,9 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else
 			{
-				IPrefabInstance instance = virtualFile.CreateAsset<IPrefabInstance>(ClassIDType.PrefabInstance, root.SerializedFile.Version);
-				instance.RootGameObject_C1001?.CopyValues(root.SerializedFile.CreatePPtr(root));
+				IPrefabInstance instance = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance,
+					(assetInfo) => PrefabInstanceFactory.CreateAsset(root.Collection.Version, assetInfo));
+				instance.RootGameObject_C1001?.CopyValues(virtualFile.ForceCreatePPtr(root));
 				instance.IsPrefabAsset_C1001 = true;
 				if (instance is IHasNameString hasName)
 				{
@@ -117,7 +120,7 @@ namespace AssetRipper.Core.Project.Collections
 				{
 					foreach (IEditorExtension editorExtension in root.FetchHierarchy())
 					{
-						instance.Objects_C1001.AddNew().CopyValues(root.SerializedFile.CreatePPtr(editorExtension));
+						instance.Objects_C1001.AddNew().CopyValues(virtualFile.ForceCreatePPtr(editorExtension));
 					}
 				}
 				instance.AssetBundleName = root.AssetBundleName;
@@ -134,15 +137,13 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				if (Prefab is not null)
 				{
-					//Required to make Prefab.RootGameObject_C1001 or DataTemplate.Objects_C1001 export correctly
-					//because VirtualSerializedFile can't reference other files.
-					m_file = RootGameObject.SerializedFile;
+					m_file = Prefab.Collection;
 					yield return Prefab;
 				}
 
 				foreach (IUnityObjectBase asset in m_assets)
 				{
-					m_file = asset.SerializedFile;
+					m_file = asset.Collection;
 					yield return asset;
 				}
 			}

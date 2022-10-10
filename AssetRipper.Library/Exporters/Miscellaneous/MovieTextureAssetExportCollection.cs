@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Interfaces;
+﻿using AssetRipper.Assets;
 using AssetRipper.Core.Project.Collections;
 
 namespace AssetRipper.Library.Exporters.Miscellaneous
