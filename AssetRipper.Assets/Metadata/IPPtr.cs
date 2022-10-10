@@ -139,9 +139,14 @@ namespace AssetRipper.Assets.Metadata
 			return $"[{depName}]{typeof(T).Name}_{pptr.PathID}";
 		}
 
-		public static PPtr<T1> CastTo<T1>(this IPPtr pptr) where T1 : IUnityObjectBase
+		public static PPtr<T> CastTo<T>(this IPPtr pptr) where T : IUnityObjectBase
 		{
-			return new PPtr<T1>(pptr.FileID, pptr.PathID);
+			return new PPtr<T>(pptr.FileID, pptr.PathID);
+		}
+
+		public static PPtr<T> ToStruct<T>(this IPPtr<T> pptr) where T : IUnityObjectBase
+		{
+			return new PPtr<T>(pptr.FileID, pptr.PathID);
 		}
 
 		/// <summary>
