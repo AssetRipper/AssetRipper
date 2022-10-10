@@ -1,5 +1,7 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Assets.Collections;
@@ -11,6 +13,13 @@ public abstract class VirtualAssetCollection : AssetCollection
 {
 	protected VirtualAssetCollection(Bundle bundle) : base(bundle)
 	{
+	}
+
+	public void SetLayout(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
+	{
+		Version = version;
+		Platform = platform;
+		Flags = flags;
 	}
 
 	public T CreateAsset<T>(int classID, Func<AssetInfo, T> factory) where T : IUnityObjectBase
