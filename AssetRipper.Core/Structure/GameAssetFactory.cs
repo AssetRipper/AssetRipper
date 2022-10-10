@@ -29,7 +29,7 @@ namespace AssetRipper.Core.Structure
 {
 	public sealed class GameAssetFactory : AssetFactoryBase
 	{
-		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType type)
+		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType? type)
 		{
 			IUnityObjectBase? asset = SourceGenerated.AssetFactory.CreateAsset(reader.Version, assetInfo);
 

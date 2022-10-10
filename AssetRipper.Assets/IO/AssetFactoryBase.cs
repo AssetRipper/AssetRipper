@@ -6,5 +6,5 @@ namespace AssetRipper.Assets.IO;
 
 public abstract class AssetFactoryBase
 {
-	public abstract IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType type);
+	public abstract IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType? type);
 }

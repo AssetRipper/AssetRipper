@@ -2,11 +2,9 @@
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Streams;
-using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Assets.Collections;
 
@@ -15,7 +13,7 @@ namespace AssetRipper.Assets.Collections;
 /// </summary>
 public class SerializedAssetCollection : AssetCollection
 {
-	private FileIdentifier[]? DependencyIdentifiers { get; set; }
+	public FileIdentifier[]? DependencyIdentifiers { get; private set; }
 
 	protected SerializedAssetCollection(Bundle bundle) : base(bundle)
 	{
@@ -121,7 +119,7 @@ public class SerializedAssetCollection : AssetCollection
 		AssetInfo assetInfo = new AssetInfo(collection, info.FileID, info.ClassID);
 		long offset = file.Header.DataOffset + info.ByteStart;
 		int size = info.ByteSize;
-		SerializedType type = info.GetSerializedType(file.Metadata.Types);
+		SerializedType? type = info.GetSerializedType(file.Metadata.Types);
 		using PartialStream partialStream = new PartialStream(file.Stream, offset, size, true);
 		using AssetReader reader = new AssetReader(partialStream, collection);
 		IUnityObjectBase? asset = factory.ReadAsset(assetInfo, reader, size, type);
