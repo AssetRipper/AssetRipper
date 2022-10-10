@@ -6,6 +6,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
+using AssetRipper.SourceGenerated.Classes.ClassID_78;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform_;
 using System.Collections.Generic;
@@ -32,12 +33,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return gameObject.IsActive();
 		}
 
-		public static void ConvertToEditorFormat(this IGameObject gameObject, IExportContainer container)
+		public static void ConvertToEditorFormat(this IGameObject gameObject, ITagManager? tagManager)
 		{
 			bool isActive = gameObject.GetIsActive();
 			gameObject.IsActive_C1_Byte = isActive ? (byte)1 : (byte)0;
 			gameObject.IsActive_C1_Boolean = isActive;
-			gameObject.TagString_C1.String = container.TagIDToName(gameObject.Tag_C1);
+			gameObject.TagString_C1.String = tagManager.TagIDToName(gameObject.Tag_C1);
 		}
 
 		public static IEnumerable<IPPtr_Component_> FetchComponents(this IGameObject gameObject)

@@ -18,6 +18,7 @@ using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.Exporters.TypeTrees;
+using AssetRipper.Library.Processors;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -61,6 +62,10 @@ namespace AssetRipper.Library
 		public LibraryConfiguration Settings { get; }
 		private bool ExportersInitialized { get; set; }
 		private List<IPostExporter> PostExporters { get; } = new();
+		private List<IAssetProcessor> AssetProcessors { get; } = new()
+		{
+			new EditorFormatProcessor(),
+		};
 
 		public event Action? OnStartLoadingGameStructure;
 		public event Action? OnFinishLoadingGameStructure;
@@ -128,6 +133,12 @@ namespace AssetRipper.Library
 
 			OnFinishLoadingGameStructure?.Invoke();
 			TaskManager.WaitUntilAllCompleted();
+
+			Logger.Info(LogCategory.General, "Processing loaded assets...");
+			GameStructure.Process(AssetProcessors);
+			TaskManager.WaitUntilAllCompleted();
+			Logger.Info(LogCategory.General, "Finished processing assets");
+
 			return GameStructure;
 		}
 

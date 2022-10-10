@@ -88,7 +88,7 @@ namespace AssetRipper.Core.Project.Collections
 		/// <returns>True if export was successful, false otherwise</returns>
 		protected virtual bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
 		{
-			return AssetExporter.Export(container, Convert(Asset, container), filePath);
+			return AssetExporter.Export(container, Asset, filePath);
 		}
 
 		protected virtual IUnityObjectBase CreateImporter(IExportContainer container)
