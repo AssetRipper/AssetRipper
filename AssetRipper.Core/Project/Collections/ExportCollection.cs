@@ -84,7 +84,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			string fileName = asset switch
 			{
-				IPrefabInstance prefab => prefab.GetName(file),
+				IPrefabInstance prefab => prefab.GetName(),
 				IHasNameString hasName => hasName.GetNameNotEmpty(),
 				_ => "",
 			};

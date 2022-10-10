@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Interfaces;
+﻿using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
@@ -10,7 +9,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class PrefabInstanceExtensions
 	{
-		public static string GetName(this IPrefabInstance prefab, IAssetContainer rootGameObjectFile)
+		public static string GetName(this IPrefabInstance prefab)
 		{
 			string? name;
 			if (prefab is IHasNameString hasName)
@@ -19,16 +18,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else
 			{
-				name = prefab.RootGameObject_C1001?.TryGetAsset(rootGameObjectFile)?.NameString;
+				name = prefab.RootGameObject_C1001P?.NameString;
 			}
 			return string.IsNullOrEmpty(name) ? prefab.ClassName : name;
 		}
 
-		public static IEnumerable<IEditorExtension> FetchObjects(this IPrefabInstance prefab, IAssetContainer file)
+		public static IEnumerable<IEditorExtension> FetchObjects(this IPrefabInstance prefab)
 		{
 			if (prefab.Has_RootGameObject_C1001())
 			{
-				foreach (IEditorExtension asset in prefab.RootGameObject_C1001.GetAsset(file).FetchHierarchy())
+				foreach (IEditorExtension asset in prefab.RootGameObject_C1001.GetAsset(prefab.Collection).FetchHierarchy())
 				{
 					yield return asset;
 				}
@@ -37,7 +36,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				foreach (PPtr_EditorExtension__3_0_0_f5 asset in prefab.Objects_C1001)
 				{
-					yield return asset.GetAsset(file);
+					yield return asset.GetAsset(prefab.Collection);
 				}
 			}
 		}
