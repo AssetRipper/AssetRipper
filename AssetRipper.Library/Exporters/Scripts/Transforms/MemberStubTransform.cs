@@ -1,7 +1,7 @@
 ﻿using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Transforms;
 
-namespace AssetRipper.Library.Exporters.Scripts.Transform
+namespace AssetRipper.Library.Exporters.Scripts.Transforms
 {
 	/// <summary>
 	/// Converts all members to stubs. Is activated for Scripted Level 1.

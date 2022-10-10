@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
-using AssetRipper.Library.Exporters.Scripts.Transform;
 using AssetRipper.Library.Exporters.Scripts.Transforms;
 using ICSharpCode.Decompiler.CSharp;
 using Mono.Cecil;
