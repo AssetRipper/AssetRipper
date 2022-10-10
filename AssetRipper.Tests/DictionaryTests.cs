@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.IO;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Core.IO;
 using AssetRipper.SourceGenerated.Subclasses.FastPropertyName;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 

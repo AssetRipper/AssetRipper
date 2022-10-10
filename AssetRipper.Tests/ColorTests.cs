@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.Math.Colors;
+using AssetRipper.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Tests
