@@ -78,7 +78,7 @@ namespace AssetRipper.Assets.Generics
 			protected override bool IsCompatibleBundle(Bundle bundle) => false;
 			protected override bool IsCompatibleCollection(AssetCollection collection) => collection is EmptyAssetCollection;
 			public override AssetCollection? ResolveCollection(string name) => null;
-			public override ResourceFile? ResolveResource(string name) => null;
+			protected override ResourceFile? ResolveResourceInternal(string originalName, string fixedName) => null;
 		}
 	}
 }

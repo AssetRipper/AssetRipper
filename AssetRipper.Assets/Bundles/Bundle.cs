@@ -3,6 +3,7 @@ using AssetRipper.Assets.IO;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
+using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Assets.Bundles;
 
@@ -48,10 +49,16 @@ public abstract class Bundle : IDisposable
 		return Collections.FirstOrDefault(c => c.Name == name) ?? Parent?.ResolveCollection(name);
 	}
 
-	public virtual ResourceFile? ResolveResource(string name)
+	public ResourceFile? ResolveResource(string name)
+	{
+		string fixedName = FilenameUtils.FixResourcePath(name);
+		return ResolveResourceInternal(name, fixedName);
+	}
+
+	protected virtual ResourceFile? ResolveResourceInternal(string originalName, string fixedName)
 	{
 		//Uniqueness is not guaranteed because of asset bundle variants
-		return Resources.FirstOrDefault(c => c.Name == name) ?? Parent?.ResolveResource(name);
+		return Resources.FirstOrDefault(c => c.Name == fixedName) ?? Parent?.ResolveResourceInternal(originalName, fixedName);
 	}
 
 	public void AddResource(ResourceFile resource)

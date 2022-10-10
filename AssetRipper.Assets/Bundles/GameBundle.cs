@@ -29,12 +29,12 @@ public sealed class GameBundle : Bundle
 		return collection is SerializedAssetCollection or ProcessedAssetCollection;
 	}
 
-	public override ResourceFile? ResolveResource(string name)
+	protected override ResourceFile? ResolveResourceInternal(string originalName, string fixedName)
 	{
-		ResourceFile? file = base.ResolveResource(name);
+		ResourceFile? file = base.ResolveResourceInternal(originalName, fixedName);
 		if (file is null && ResourceProvider is not null)
 		{
-			ResourceFile? resourceFile = ResourceProvider.FindResource(name);
+			ResourceFile? resourceFile = ResourceProvider.FindResource(originalName);
 			if (resourceFile is not null)
 			{
 				AddResource(resourceFile);
