@@ -20,15 +20,15 @@ namespace AssetRipper.Library.Processors
 		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
 		{
 			Logger.Info(LogCategory.Processing, "Lighting Data Assets");
-			ProcessedAssetCollection processedCollection = new ProcessedAssetCollection(gameBundle);
-			processedCollection.Name = "GeneratedLightingDataAssets";
-			processedCollection.SetLayout(projectVersion, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
+			ProcessedAssetCollection? processedCollection = null;
 
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections())
 			{
 				ILightmapSettings? lightmapSettings = collection.SelectType<IUnityObjectBase, ILightmapSettings>().FirstOrDefault();
 				if (lightmapSettings is not null && lightmapSettings.Has_LightingDataAsset_C157())
 				{
+					processedCollection ??= CreateProcessedCollection(gameBundle, projectVersion);
+
 					ILightingDataAsset lightingDataAsset = CreateLightingDataAsset(processedCollection);
 					foreach (ILightmapData lightmapData in lightmapSettings.Lightmaps_C157)
 					{
@@ -53,6 +53,14 @@ namespace AssetRipper.Library.Processors
 					//should all be exported in a subfolder beside the scene. This folder has the same name as the scene.
 				}
 			}
+		}
+
+		private static ProcessedAssetCollection CreateProcessedCollection(GameBundle gameBundle, UnityVersion projectVersion)
+		{
+			ProcessedAssetCollection processedCollection = new ProcessedAssetCollection(gameBundle);
+			processedCollection.Name = "GeneratedLightingDataAssets";
+			processedCollection.SetLayout(projectVersion, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
+			return processedCollection;
 		}
 
 		private static void SetPPtr<T>(IPPtr<T>? destination, AssetCollection destinationCollection, IPPtr<T>? source, AssetCollection sourceCollection)
