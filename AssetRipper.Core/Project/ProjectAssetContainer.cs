@@ -3,7 +3,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Classes.TagManager;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Layout;
@@ -12,7 +11,6 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_147;
@@ -169,73 +167,12 @@ namespace AssetRipper.Core.Project
 
 		public string TagIDToName(int tagID)
 		{
-			switch (tagID)
-			{
-				case 0:
-					return TagManagerConstants.UntaggedTag;
-				case 1:
-					return TagManagerConstants.RespawnTag;
-				case 2:
-					return TagManagerConstants.FinishTag;
-				case 3:
-					return TagManagerConstants.EditorOnlyTag;
-				//case 4:
-				case 5:
-					return TagManagerConstants.MainCameraTag;
-				case 6:
-					return TagManagerConstants.PlayerTag;
-				case 7:
-					return TagManagerConstants.GameControllerTag;
-			}
-			if (m_tagManager != null)
-			{
-				// Unity doesn't verify tagID on export?
-				int tagIndex = tagID - 20000;
-				if (tagIndex < m_tagManager.Tags_C78.Count)
-				{
-					if (tagIndex >= 0)
-					{
-						return m_tagManager.Tags_C78[tagIndex].String;
-					}
-					else if (!m_tagManager.IsBrokenCustomTags())
-					{
-						throw new Exception($"Unknown default tag {tagID}");
-					}
-				}
-			}
-			return $"unknown_{tagID}";
+			return m_tagManager.TagIDToName(tagID);
 		}
 
 		public ushort TagNameToID(string tagName)
 		{
-			switch (tagName)
-			{
-				case TagManagerConstants.UntaggedTag:
-					return 0;
-				case TagManagerConstants.RespawnTag:
-					return 1;
-				case TagManagerConstants.FinishTag:
-					return 2;
-				case TagManagerConstants.EditorOnlyTag:
-					return 3;
-				case TagManagerConstants.MainCameraTag:
-					return 5;
-				case TagManagerConstants.PlayerTag:
-					return 6;
-				case TagManagerConstants.GameControllerTag:
-					return 7;
-			}
-			if (m_tagManager != null)
-			{
-				for (int i = 0; i < m_tagManager.Tags_C78.Count; i++)
-				{
-					if (m_tagManager.Tags_C78[i] == tagName)
-					{
-						return (ushort)(20000 + i);
-					}
-				}
-			}
-			return 0;
+			return m_tagManager.TagNameToID(tagName);
 		}
 
 		private void AddResources(IResourceManager manager)
