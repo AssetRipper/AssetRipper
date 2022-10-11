@@ -12,7 +12,6 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Mono;
-using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;

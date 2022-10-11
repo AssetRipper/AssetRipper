@@ -86,7 +86,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			out Vector2[]? uv5,
 			out Vector2[]? uv6,
 			out Vector2[]? uv7,
-			out Matrix4x4f[]? bindPose,
+			out Matrix4x4[]? bindPose,
 			out uint[] processedIndexBuffer)
 		{
 			vertices = default;
@@ -144,7 +144,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				out Vector2[]? compressed_uv5,
 				out Vector2[]? compressed_uv6,
 				out Vector2[]? compressed_uv7,
-				out Matrix4x4f[]? compressed_bindPose,
+				out Matrix4x4[]? compressed_bindPose,
 				out uint[]? compressed_processedIndexBuffer);
 
 			vertices ??= compressed_vertices;
