@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Generics;
-using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Subclasses.CompressedAnimationCurve;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
@@ -17,7 +16,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				times[i] = timesValues[i] * 0.01f;
 			}
-			Quaternionf[] rotations = compressedAnimationCurve.Values.Unpack();
+			Quaternion[] rotations = compressedAnimationCurve.Values.Unpack();
 			float[] slopes = compressedAnimationCurve.Slopes.Unpack();
 
 

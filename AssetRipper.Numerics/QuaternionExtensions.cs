@@ -14,7 +14,7 @@
 			};
 		}
 
-		public static void SetAt(this Quaternion quaternion, int index, float value)
+		public static void SetAt(this ref Quaternion quaternion, int index, float value)
 		{
 			switch (index)
 			{
@@ -35,7 +35,7 @@
 			}
 		}
 
-		public static void FlipSignAt(this Quaternion quaternion, int index)
+		public static void FlipSignAt(this ref Quaternion quaternion, int index)
 		{
 			switch (index)
 			{

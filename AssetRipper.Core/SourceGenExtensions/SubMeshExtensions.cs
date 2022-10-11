@@ -2,9 +2,7 @@
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
-using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.Vectors;
-using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;

@@ -1,7 +1,8 @@
-﻿using AssetRipper.Core.Math.Vectors;
-using AssetRipper.Core.SourceGenExtensions;
+﻿using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Quaternionf;
 using System;
+using System.Numerics;
 
 namespace AssetRipperTests.PackedBitVectorTests
 {
@@ -11,11 +12,11 @@ namespace AssetRipperTests.PackedBitVectorTests
 	public class QuatVectorTests
 	{
 		private static readonly Random random = new Random(57089);
-		private static readonly Quaternionf[] quaternions = MakeQuaternions(20);
+		private static readonly Quaternion[] quaternions = MakeQuaternions(20);
 
-		private static Quaternionf[] MakeQuaternions(int count)
+		private static Quaternion[] MakeQuaternions(int count)
 		{
-			Quaternionf[] result = new Quaternionf[count];
+			Quaternion[] result = new Quaternion[count];
 			for (int i = 0; i < count; i++)
 			{
 				result[i] = GetRandomQuaternion();
@@ -23,11 +24,11 @@ namespace AssetRipperTests.PackedBitVectorTests
 			return result;
 		}
 
-		private static Quaternionf GetRandomQuaternion() => GetRandomEuler().ToQuaternion(false);
+		private static Quaternion GetRandomQuaternion() => GetRandomEuler().ToQuaternion(false);
 
-		private static Vector3f GetRandomEuler()
+		private static Vector3 GetRandomEuler()
 		{
-			return new Vector3f(GetRandomAngle(), GetRandomAngle(), GetRandomAngle());
+			return new Vector3(GetRandomAngle(), GetRandomAngle(), GetRandomAngle());
 		}
 
 		private static float GetRandomAngle()
@@ -40,7 +41,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 		{
 			PackedBitVector_Quaternionf packedVector = new();
 			packedVector.Pack(quaternions);
-			Quaternionf[] unpackedQuaternions = packedVector.Unpack();
+			Quaternion[] unpackedQuaternions = packedVector.Unpack();
 
 			for (int i = 0; i < quaternions.Length; i++)
 			{

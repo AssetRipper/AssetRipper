@@ -1,6 +1,7 @@
-﻿using AssetRipper.Core.Math.Vectors;
+﻿using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Quaternionf;
 using System.Linq;
+using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -12,7 +13,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			instance.Data = source.Data.ToArray();
 		}
 
-		public static void Pack(this PackedBitVector_Quaternionf packedVector, IQuaternionf[] inputData)
+		public static void Pack(this PackedBitVector_Quaternionf packedVector, Quaternion[] inputData)
 		{
 			packedVector.NumItems = (uint)inputData.Length;
 			packedVector.Data = new byte[inputData.Length * 4];
@@ -22,7 +23,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			for (int i = 0; i < inputData.Length; i++)
 			{
-				IQuaternionf q = inputData[i];
+				Quaternion q = inputData[i];
 				byte flags = unchecked((byte)(q.X < 0 ? 4 : 0));
 
 				float max = System.Math.Abs(q.X);
@@ -102,11 +103,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static Quaternionf[] Unpack(this PackedBitVector_Quaternionf packedVector)
+		public static Quaternion[] Unpack(this PackedBitVector_Quaternionf packedVector)
 		{
 			int bitIndex = 0;
 			int byteIndex = 0;
-			Quaternionf[] buffer = new Quaternionf[packedVector.NumItems];
+			Quaternion[] buffer = new Quaternion[packedVector.NumItems];
 			for (int i = 0; i < packedVector.NumItems; i++)
 			{
 				uint flags = 0;
@@ -126,7 +127,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				flags &= 7;
 
 				double sum = 0;
-				Quaternionf quaternion = new Quaternionf();
+				Quaternion quaternion = default;
 				for (int j = 0; j < 4; j++)
 				{
 					if ((flags & 3) != j)
