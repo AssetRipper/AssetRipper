@@ -1,7 +1,6 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
-using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
@@ -11,7 +10,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.Core.Structure.Assembly.Serializable
 {
-	public sealed class SerializableStructure : IAsset, IDependent
+	public sealed class SerializableStructure : UnityAssetBase
 	{
 		internal SerializableStructure(SerializableType type, int depth)
 		{
@@ -20,7 +19,7 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			Fields = new SerializableField[type.FieldCount];
 		}
 
-		public void Read(AssetReader reader)
+		public new void Read(AssetReader reader)
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
@@ -31,8 +30,10 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 				}
 			}
 		}
+		public override void ReadEditor(AssetReader reader) => Read(reader);
+		public override void ReadRelease(AssetReader reader) => Read(reader);
 
-		public void Write(AssetWriter writer)
+		public new void Write(AssetWriter writer)
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
@@ -43,8 +44,10 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 				}
 			}
 		}
+		public override void WriteEditor(AssetWriter writer) => Write(writer);
+		public override void WriteRelease(AssetWriter writer) => Write(writer);
 
-		public YamlNode ExportYaml(IExportContainer container)
+		public new YamlNode ExportYaml(IExportContainer container)
 		{
 			YamlMappingNode node = new YamlMappingNode();
 			for (int i = 0; i < Fields.Length; i++)
@@ -57,8 +60,10 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 			}
 			return node;
 		}
+		public override YamlNode ExportYamlEditor(IExportContainer container) => ExportYaml(container);
+		public override YamlNode ExportYamlRelease(IExportContainer container) => ExportYaml(container);
 
-		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{

@@ -104,7 +104,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 		{
 			Logger.SendStatusChange("loading_step_create_file_collection");
 
-			GameAssetFactory assetFactory = new GameAssetFactory();
+			GameAssetFactory assetFactory = new GameAssetFactory(AssemblyManager);
 
 			IEnumerable<string> filePaths;
 			if (PlatformStructure is null || MixedStructure is null)

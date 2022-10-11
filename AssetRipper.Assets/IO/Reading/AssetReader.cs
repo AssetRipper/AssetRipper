@@ -18,11 +18,6 @@ namespace AssetRipper.Assets.IO.Reading
 
 		public override string ReadString()
 		{
-			throw new NotSupportedException();
-		}
-
-		public string ReadUnityString()
-		{
 			int length = ReadInt32();
 			if (length == 0)
 			{
@@ -30,17 +25,10 @@ namespace AssetRipper.Assets.IO.Reading
 			}
 
 			byte[] buffer = ReadStringBuffer(length);
+			AlignStream();
+			//Strings have supposedly been aligned since 2.1.0,
+			//which is earlier than the beginning of AssetRipper version support.
 			return Encoding.UTF8.GetString(buffer, 0, length);
-		}
-
-		public string ReadUnityString(bool align)
-		{
-			string result = ReadUnityString();
-			if (align)
-			{
-				AlignStream();
-			}
-			return result;
 		}
 
 		public T ReadAsset<T>() where T : IAssetReadable, new()

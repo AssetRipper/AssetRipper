@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
@@ -8,9 +9,13 @@ using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
 using AssetRipper.Core.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Mono;
+using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Subclasses.AABB;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
 using AssetRipper.SourceGenerated.Subclasses.ColorRGBA32;
@@ -29,6 +34,13 @@ namespace AssetRipper.Core.Structure
 {
 	public sealed class GameAssetFactory : AssetFactoryBase
 	{
+		public GameAssetFactory(IAssemblyManager assemblyManager)
+		{
+			AssemblyManager = assemblyManager ?? throw new ArgumentNullException(nameof(assemblyManager));
+		}
+
+		private IAssemblyManager AssemblyManager { get; }
+
 		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType? type)
 		{
 			IUnityObjectBase? asset = SourceGenerated.AssetFactory.CreateAsset(reader.Version, assetInfo);
@@ -36,7 +48,7 @@ namespace AssetRipper.Core.Structure
 			return asset switch
 			{
 				null => ReadUnknownObject(assetInfo, reader, size),
-				IMonoBehaviour monoBehaviour => ReadMonoBehaviour(monoBehaviour, reader, size),
+				IMonoBehaviour monoBehaviour => ReadMonoBehaviour(monoBehaviour, reader, size, AssemblyManager),
 				_ => ReadNormalObject(asset, reader, size)
 			};
 		}
@@ -48,12 +60,13 @@ namespace AssetRipper.Core.Structure
 			return unknownObject;
 		}
 
-		private static IMonoBehaviour ReadMonoBehaviour(IMonoBehaviour monoBehaviour, AssetReader reader, int size)
+		private static IMonoBehaviour ReadMonoBehaviour(IMonoBehaviour monoBehaviour, AssetReader reader, int size, IAssemblyManager assemblyManager)
 		{
 			try
 			{
 				monoBehaviour.Read(reader);
-				//SerializableStructure assignment
+				monoBehaviour.Structure = GetMonoScript(monoBehaviour)?.GetBehaviourType(assemblyManager)?.CreateSerializableStructure();
+				monoBehaviour.Structure?.Read(reader);
 				if (monoBehaviour.Structure is not null && reader.BaseStream.Position != size)
 				{
 					monoBehaviour.Structure = null;
@@ -66,6 +79,30 @@ namespace AssetRipper.Core.Structure
 				LogReadException(monoBehaviour, reader, ex);
 			}
 			return monoBehaviour;
+		}
+
+		private static IMonoScript? GetMonoScript(IMonoBehaviour monoBehaviour)
+		{
+			PPtr<IMonoScript> monoScriptPointer = monoBehaviour.Script_C114.ToStruct();
+			AssetCollection? monoScriptCollection;
+			if (monoScriptPointer.FileID is 0)
+			{
+				monoScriptCollection = monoBehaviour.Collection;
+			}
+			else
+			{
+				SerializedAssetCollection collection = (SerializedAssetCollection)monoBehaviour.Collection;
+				if (collection.DependencyIdentifiers is not null && collection.DependencyIdentifiers.Length > 0)
+				{
+					FileIdentifier identifier = collection.DependencyIdentifiers[monoScriptPointer.FileID - 1];
+					monoScriptCollection = collection.Bundle.ResolveCollection(identifier);
+				}
+				else
+				{
+					monoScriptCollection = null;
+				}
+			}
+			return monoScriptCollection?.TryGetAsset<IMonoScript>(monoScriptPointer.PathID);
 		}
 
 		private static IUnityObjectBase ReadNormalObject(IUnityObjectBase asset, AssetReader reader, int size)
