@@ -77,6 +77,7 @@ namespace AssetRipper.Core.Project
 			OverrideDummyExporter<IResourceManager>(ClassIDType.ResourceManager, true, false);
 			OverrideDummyExporter<IShaderNameRegistry>(ClassIDType.ShaderNameRegistry, true, false);
 
+			OverrideExporter<Classes.SceneAsset>(new SceneAssetExporter(), false);
 			OverrideExporter<Classes.UnknownObject>(new UnknownObjectExporter(), false);
 			OverrideExporter<Classes.UnreadableObject>(new UnreadableObjectExporter(), false);
 		}
