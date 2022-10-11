@@ -13,7 +13,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			instance.Data = source.Data.ToArray();
 		}
 
-		public static void Pack(this PackedBitVector_Quaternionf packedVector, Quaternion[] inputData)
+		public static void Pack(this PackedBitVector_Quaternionf packedVector, ReadOnlySpan<Quaternion> inputData)
 		{
 			packedVector.NumItems = (uint)inputData.Length;
 			packedVector.Data = new byte[inputData.Length * 4];

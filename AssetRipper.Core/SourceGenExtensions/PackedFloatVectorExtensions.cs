@@ -103,7 +103,17 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return data.ToArray();
 		}
 
-		public static void PackFloats(this PackedBitVector_Single packedVector, float[] data, int itemCountInChunk, int chunkStride, int numChunks, int bitSize, bool adjustBitSize)
+		/// <summary>
+		/// A high accuracy default packing method
+		/// </summary>
+		/// <param name="packedVector"></param>
+		/// <param name="data"></param>
+		public static void PackFloats(this PackedBitVector_Single packedVector, ReadOnlySpan<float> data)
+		{
+			packedVector.PackFloats(data, 24, false);
+		}
+
+		public static void PackFloats(this PackedBitVector_Single packedVector, ReadOnlySpan<float> data, int itemCountInChunk, int chunkStride, int numChunks, int bitSize, bool adjustBitSize)
 		{
 			if (data.Length != itemCountInChunk * numChunks)
 			{
@@ -118,7 +128,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			packedVector.PackFloats(data, bitSize, adjustBitSize);
 		}
 
-		public static void PackFloats(this PackedBitVector_Single packedVector, float[] data, int bitSize, bool adjustBitSize)
+		public static void PackFloats(this PackedBitVector_Single packedVector, ReadOnlySpan<float> data, int bitSize, bool adjustBitSize)
 		{
 			float maxf = float.NegativeInfinity;
 			float minf = float.PositiveInfinity;

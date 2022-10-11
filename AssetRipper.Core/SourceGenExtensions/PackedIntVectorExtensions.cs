@@ -14,7 +14,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			instance.BitSize = source.BitSize;
 		}
 
-		public static void PackUInts(this PackedBitVector_Int32 packedVector, uint[] data)
+		public static void PackUInts(this PackedBitVector_Int32 packedVector, ReadOnlySpan<uint> data)
 		{
 			uint maxDataValue = 0;
 			for (int i = 0; i < data.Length; i++)
@@ -49,7 +49,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static void PackUShorts(this PackedBitVector_Int32 packedVector, ushort[] data)
+		public static void PackUShorts(this PackedBitVector_Int32 packedVector, ReadOnlySpan<ushort> data)
 		{
 			uint maxDataValue = 0;
 			for (int i = 0; i < data.Length; i++)
