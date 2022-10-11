@@ -30,6 +30,7 @@ namespace AssetRipper.Library.Processors
 					processedCollection ??= CreateProcessedCollection(gameBundle, projectVersion);
 
 					ILightingDataAsset lightingDataAsset = CreateLightingDataAsset(processedCollection);
+
 					foreach (ILightmapData lightmapData in lightmapSettings.Lightmaps_C157)
 					{
 						ILightmapData newLightmapData = lightingDataAsset.Lightmaps_C1120.AddNew();
@@ -38,9 +39,17 @@ namespace AssetRipper.Library.Processors
 						SetPPtr(newLightmapData.Lightmap, processedCollection, lightmapData.Lightmap, collection);
 						SetPPtr(newLightmapData.ShadowMask, processedCollection, lightmapData.ShadowMask, collection);
 					}
+
 					SetPPtr(lightingDataAsset.LightProbes_C1120, processedCollection, lightmapSettings.LightProbes_C157, collection);
-					lightingDataAsset.EnlightenDataVersion_C1120 = -1;
-					//This must be assigned correctly. The version varies widely based on Unity version. It is unclear whether or not -1 will suffice.
+
+					lightingDataAsset.EnlightenDataVersion_C1120 = 112;
+					//This must be assigned correctly. The version varies widely based on Unity version.
+					//It seems that -1 will not suffice. 112 is the version that 2021.1 and 2021.2 use.
+					//Since Enlighten is no longer being maintained, any later version should also use 112.
+					//Supposedly, 112 has been in use since 2017 or possibly even late Unity 5.
+					//To extract the Enlighten version for each Unity version, one would have to create
+					//a test project on each version and then bake the lighting in the test project.
+					//There is no proper API to create a LightingDataAsset.
 
 					lightingDataAsset.NameString = collection.Name;
 					//Normally, the asset is called "LightingData" but we give it a more unique name here
