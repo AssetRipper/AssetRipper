@@ -29,7 +29,7 @@ namespace AssetRipper.Library.Processors
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections())
 			{
 				ILightmapSettings? lightmapSettings = collection.SelectType<IUnityObjectBase, ILightmapSettings>().FirstOrDefault();
-				if (lightmapSettings is not null && lightmapSettings.Has_LightingDataAsset_C157())
+				if (lightmapSettings is not null && (lightmapSettings.Has_LightingDataAsset_C157() || lightmapSettings.Has_LightmapSnapshot_C157()))
 				{
 					ILightingDataAsset lightingDataAsset = CreateLightingDataAsset(processedCollection);
 
@@ -61,7 +61,14 @@ namespace AssetRipper.Library.Processors
 					//Normally, the asset is called "LightingData" but we give it a more unique name here
 					//because any others will be in the same folder.
 
-					lightmapSettings.LightingDataAsset_C157.CopyValues(collection.ForceCreatePPtr(lightingDataAsset));
+					if (lightmapSettings.Has_LightingDataAsset_C157())
+					{
+						lightmapSettings.LightingDataAsset_C157.CopyValues(collection.ForceCreatePPtr(lightingDataAsset));
+					}
+					else if (lightmapSettings.Has_LightmapSnapshot_C157())
+					{
+						lightmapSettings.LightmapSnapshot_C157.CopyValues(collection.ForceCreatePPtr(lightingDataAsset));
+					}
 
 					//Todo:
 					//As described in AssetRipper#553, LightingDataAsset, LightProbes, and the lightmap textures
