@@ -2,8 +2,10 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Classes;
 using AssetRipper.Core.Linq;
 using AssetRipper.Core.Logging;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated;
@@ -45,6 +47,16 @@ namespace AssetRipper.Library.Processors
 					lightingDataAsset.LightmapsMode_C1120 = lightmapSettings.LightmapsMode_C157;
 
 					CopyEnlightenSceneMapping(lightingDataAsset, lightmapSettings);
+
+					if (lightingDataAsset.Has_Scene_C1120())
+					{
+						SceneAsset sceneAsset = CreateSceneAsset(processedCollection, collection);
+						lightingDataAsset.Scene_C1120.CopyValues(processedCollection.CreatePPtr(sceneAsset));
+					}
+					else if (lightingDataAsset.Has_SceneGUID_C1120())
+					{
+						lightingDataAsset.SceneGUID_C1120.SetValues(collection.GUID);
+					}
 
 					SetPPtr(lightingDataAsset.LightProbes_C1120, processedCollection, lightmapSettings.LightProbes_C157, collection);
 					//Note: it is possible for a LightProbes asset to be shared between multiple LightingDataAsset.
@@ -152,6 +164,11 @@ namespace AssetRipper.Library.Processors
 		private static ILightingDataAsset CreateLightingDataAsset(ProcessedAssetCollection collection)
 		{
 			return collection.CreateAsset((int)ClassIDType.LightingDataAsset, LightingDataAssetFactory.CreateAsset);
+		}
+
+		private static SceneAsset CreateSceneAsset(ProcessedAssetCollection collection, AssetCollection targetScene)
+		{
+			return collection.CreateAsset((int)ClassIDType.SceneAsset, (assetInfo) => new SceneAsset(targetScene, assetInfo));
 		}
 	}
 }
