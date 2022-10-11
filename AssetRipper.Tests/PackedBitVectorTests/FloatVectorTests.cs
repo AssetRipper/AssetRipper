@@ -1,11 +1,12 @@
 ﻿using AssetRipper.Core.Equality;
-using AssetRipper.Core.Math.PackedBitVectors;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Single;
 using System;
 
 namespace AssetRipperTests.PackedBitVectorTests
 {
 	/// <summary>
-	/// Tests for <see cref="PackedFloatVector"/>
+	/// Tests for <see cref="PackedBitVector_Single"/>
 	/// </summary>
 	public class FloatVectorTests
 	{
@@ -25,7 +26,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 		[Test]
 		public void BitSize24ProducesHighlyAccurateResults()
 		{
-			PackedFloatVector packedVector = new PackedFloatVector();
+			PackedBitVector_Single packedVector = new();
 			packedVector.PackFloats(floats, 24, false);
 			float[] unpackedValues = packedVector.Unpack();
 			AreAlmostEqual(floats, unpackedValues, 0.000001f);
@@ -34,7 +35,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 		[Test]
 		public void BitSizeAdjustmentAlsoProducesUsableResults()
 		{
-			PackedFloatVector packedVector = new PackedFloatVector();
+			PackedBitVector_Single packedVector = new();
 			packedVector.PackFloats(floats, 8, true);
 			float[] unpackedValues = packedVector.Unpack();
 			AreAlmostEqual(floats, unpackedValues, 0.01f);

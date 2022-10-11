@@ -1,11 +1,12 @@
-﻿using AssetRipper.Core.Math.PackedBitVectors;
-using AssetRipper.Core.Math.Vectors;
+﻿using AssetRipper.Core.Math.Vectors;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Quaternionf;
 using System;
 
 namespace AssetRipperTests.PackedBitVectorTests
 {
 	/// <summary>
-	/// Tests for <see cref="PackedQuatVector"/>
+	/// Tests for <see cref="PackedBitVector_Quaternionf"/>
 	/// </summary>
 	public class QuatVectorTests
 	{
@@ -31,13 +32,13 @@ namespace AssetRipperTests.PackedBitVectorTests
 
 		private static float GetRandomAngle()
 		{
-			return (float)(random.NextDouble() * 2d * System.Math.PI);
+			return (float)(random.NextDouble() * 2d * Math.PI);
 		}
 
 		[Test]
 		public void PackingAndUnpackingGiveTheSameValues()
 		{
-			PackedQuatVector packedVector = new PackedQuatVector();
+			PackedBitVector_Quaternionf packedVector = new();
 			packedVector.Pack(quaternions);
 			Quaternionf[] unpackedQuaternions = packedVector.Unpack();
 

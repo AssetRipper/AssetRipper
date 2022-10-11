@@ -1,11 +1,12 @@
-﻿using AssetRipper.Core.Math.PackedBitVectors;
+﻿using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Int32;
 using System;
 using System.Linq;
 
 namespace AssetRipperTests.PackedBitVectorTests
 {
 	/// <summary>
-	/// Tests for <see cref="PackedIntVector"/>
+	/// Tests for <see cref="PackedBitVector_Int32"/>
 	/// </summary>
 	public class IntVectorTests
 	{
@@ -16,7 +17,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 		[Test]
 		public void UnpackedIntsAreTheSameAsTheOriginals()
 		{
-			PackedIntVector packedVector = new PackedIntVector();
+			PackedBitVector_Int32 packedVector = new();
 			packedVector.PackUInts(ints);
 			uint[] unpackedInts = packedVector.UnpackUInts();
 
@@ -26,7 +27,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 		[Test]
 		public void UnpackedShortsAreTheSameAsTheOriginals()
 		{
-			PackedIntVector packedVector = new PackedIntVector();
+			PackedBitVector_Int32 packedVector = new();
 			packedVector.PackUShorts(shorts);
 			ushort[] unpackedShorts = packedVector.UnpackUShorts();
 
@@ -36,7 +37,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 		[Test]
 		public void OldUnpackMethodIsConsistent()
 		{
-			PackedIntVector packedVector = new PackedIntVector();
+			PackedBitVector_Int32 packedVector = new();
 			packedVector.PackUInts(ints);
 			uint[] unpackedInts = packedVector.UnpackInts().Select(x => unchecked((uint)x)).ToArray();
 
