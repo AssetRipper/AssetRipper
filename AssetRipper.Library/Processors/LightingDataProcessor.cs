@@ -20,15 +20,13 @@ namespace AssetRipper.Library.Processors
 		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
 		{
 			Logger.Info(LogCategory.Processing, "Lighting Data Assets");
-			ProcessedAssetCollection? processedCollection = null;
+			ProcessedAssetCollection processedCollection = CreateProcessedCollection(gameBundle, projectVersion);
 
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections())
 			{
 				ILightmapSettings? lightmapSettings = collection.SelectType<IUnityObjectBase, ILightmapSettings>().FirstOrDefault();
 				if (lightmapSettings is not null && lightmapSettings.Has_LightingDataAsset_C157())
 				{
-					processedCollection ??= CreateProcessedCollection(gameBundle, projectVersion);
-
 					ILightingDataAsset lightingDataAsset = CreateLightingDataAsset(processedCollection);
 
 					foreach (ILightmapData lightmapData in lightmapSettings.Lightmaps_C157)
