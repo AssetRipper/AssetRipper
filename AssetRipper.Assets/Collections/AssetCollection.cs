@@ -40,6 +40,10 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 	public BuildTarget Platform { get; protected set; }
 	public TransferInstructionFlags Flags { get; protected set; }
 	public EndianType EndianType { get; protected set; }
+	/// <summary>
+	/// The GUID of this collection. If this is a scene, it gets used in the scene's meta file.
+	/// </summary>
+	public UnityGUID GUID { get; set; }
 
 	public int AddDependency(AssetCollection dependency)
 	{

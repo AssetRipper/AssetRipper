@@ -37,16 +37,6 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			m_components = components.OrderBy(t => t, this).ToArray();
 
-			IOcclusionCullingSettings? sceneSettings = Components.Where(t => t is IOcclusionCullingSettings).Select(t => (IOcclusionCullingSettings)t).FirstOrDefault();
-			if (sceneSettings != null)
-			{
-				GUID = sceneSettings.GUID;
-			}
-			if (GUID.IsZero)
-			{
-				GUID = UnityGUID.NewGuid();
-			}
-
 			foreach (IUnityObjectBase comp in Components)
 			{
 				if (comp is IOcclusionCullingSettings settings)
@@ -186,7 +176,7 @@ namespace AssetRipper.Core.Project.Collections
 		public override string Name => File.Name;
 		public override AssetCollection File { get; }
 		public IOcclusionCullingData? OcclusionCullingData { get; }
-		public UnityGUID GUID { get; }
+		public UnityGUID GUID => File.GUID;
 		private IEnumerable<IUnityObjectBase> Components => m_components;
 		public override IAssetExporter AssetExporter { get; }
 
