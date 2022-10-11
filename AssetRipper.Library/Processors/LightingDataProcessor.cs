@@ -47,6 +47,10 @@ namespace AssetRipper.Library.Processors
 					CopyEnlightenSceneMapping(lightingDataAsset, lightmapSettings);
 
 					SetPPtr(lightingDataAsset.LightProbes_C1120, processedCollection, lightmapSettings.LightProbes_C157, collection);
+					//Note: it is possible for a LightProbes asset to be shared between multiple LightingDataAsset.
+					//However, that happened when multiple scenes were loaded additively and baked together.
+					//In that situation, the LightProbes asset and each LightingDataAsset were all in one binary file.
+					//A LightingDataAssetParent was also in the file and acted as the main asset in the NativeFormatImporter.
 
 					lightingDataAsset.EnlightenDataVersion_C1120 = 112;
 					//This must be assigned correctly. The version varies widely based on Unity version.
@@ -134,7 +138,7 @@ namespace AssetRipper.Library.Processors
 		private static ProcessedAssetCollection CreateProcessedCollection(GameBundle gameBundle, UnityVersion projectVersion)
 		{
 			ProcessedAssetCollection processedCollection = new ProcessedAssetCollection(gameBundle);
-			processedCollection.Name = "GeneratedLightingDataAssets";
+			processedCollection.Name = "Generated Lighting Data Assets";
 			processedCollection.SetLayout(projectVersion, IO.Files.BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			return processedCollection;
 		}
