@@ -34,15 +34,15 @@ namespace AssetRipper.Assets.Generics
 			}
 			set
 			{
-				if (value is null)
-				{
-					list[index].SetNull();
-				}
-				else
-				{
-					list[index].CopyValues(file.CreatePPtr(value));
-				}
+				list[index].CopyValues(file.ForceCreatePPtr(value));
 			}
+		}
+
+		public TPPtr AddNew()
+		{
+			return list is AccessListBase<TPPtr> accessList
+				? accessList.AddNew()
+				: throw new NotSupportedException();
 		}
 
 		public int Count => list.Count;
