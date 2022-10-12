@@ -65,6 +65,7 @@ namespace AssetRipper.Library
 		private List<IAssetProcessor> AssetProcessors { get; } = new()
 		{
 			new SceneGuidProcessor(),
+			new TerrainTextureProcessor(),
 			new LightingDataProcessor(),
 			new EditorFormatProcessor(),
 		};
@@ -318,6 +319,9 @@ namespace AssetRipper.Library
 			ConditionalOverrideExporter<ILevelGameManager>(glbModelExporter, Settings.MeshExportFormat == MeshExportFormat.Glb);
 
 			//Terrain exporters
+			TerrainYamlExporter terrainYamlExporter = new();
+			OverrideExporter<ITerrainData>(terrainYamlExporter);
+			OverrideExporter<ITexture2D>(terrainYamlExporter);
 			ConditionalOverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings), Settings.TerrainExportMode == TerrainExportMode.Heatmap);
 			ConditionalOverrideExporter<ITerrainData>(new TerrainMeshExporter(), Settings.TerrainExportMode == TerrainExportMode.Mesh);
 
