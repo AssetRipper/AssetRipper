@@ -12,6 +12,7 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1032;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_116;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
@@ -77,7 +78,7 @@ namespace AssetRipper.Core.Project
 			OverrideDummyExporter<IResourceManager>(ClassIDType.ResourceManager, true, false);
 			OverrideDummyExporter<IShaderNameRegistry>(ClassIDType.ShaderNameRegistry, true, false);
 
-			OverrideExporter<Classes.SceneAsset>(new SceneAssetExporter(), false);
+			OverrideExporter<ISceneAsset>(new SceneAssetExporter(), true);
 			OverrideExporter<Classes.UnknownObject>(new UnknownObjectExporter(), false);
 			OverrideExporter<Classes.UnreadableObject>(new UnreadableObjectExporter(), false);
 		}

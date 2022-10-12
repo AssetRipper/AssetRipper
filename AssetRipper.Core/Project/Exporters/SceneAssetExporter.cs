@@ -1,9 +1,9 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.IO.Files;
+using AssetRipper.SourceGenerated.Classes.ClassID_1032;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Exporters
@@ -12,7 +12,7 @@ namespace AssetRipper.Core.Project.Exporters
 	{
 		public IExportCollection CreateCollection(TemporaryAssetCollection temporaryFile, IUnityObjectBase asset)
 		{
-			return new SceneAssetExportCollection((SceneAsset)asset);
+			return new SceneAssetExportCollection((ISceneAsset)asset);
 		}
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -37,7 +37,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is SceneAsset;
+			return asset is ISceneAsset;
 		}
 
 		public AssetType ToExportType(IUnityObjectBase asset)

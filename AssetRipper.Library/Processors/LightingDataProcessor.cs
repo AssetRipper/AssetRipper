@@ -2,13 +2,13 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Classes;
 using AssetRipper.Core.Linq;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Classes.ClassID_1032;
 using AssetRipper.SourceGenerated.Classes.ClassID_1120;
 using AssetRipper.SourceGenerated.Classes.ClassID_157;
 using AssetRipper.SourceGenerated.Classes.ClassID_258;
@@ -51,7 +51,7 @@ namespace AssetRipper.Library.Processors
 
 					if (lightingDataAsset.Has_Scene_C1120())
 					{
-						SceneAsset sceneAsset = CreateSceneAsset(processedCollection, collection);
+						ISceneAsset sceneAsset = CreateSceneAsset(processedCollection, collection);
 						lightingDataAsset.Scene_C1120P = sceneAsset;
 					}
 					else if (lightingDataAsset.Has_SceneGUID_C1120())
@@ -167,9 +167,11 @@ namespace AssetRipper.Library.Processors
 			return collection.CreateAsset((int)ClassIDType.LightingDataAsset, LightingDataAssetFactory.CreateAsset);
 		}
 
-		private static SceneAsset CreateSceneAsset(ProcessedAssetCollection collection, AssetCollection targetScene)
+		private static ISceneAsset CreateSceneAsset(ProcessedAssetCollection collection, AssetCollection targetScene)
 		{
-			return collection.CreateAsset((int)ClassIDType.SceneAsset, (assetInfo) => new SceneAsset(targetScene, assetInfo));
+			ISceneAsset asset = collection.CreateAsset((int)ClassIDType.SceneAsset, SceneAssetFactory.CreateAsset);
+			asset.TargetScene = targetScene;
+			return asset;
 		}
 	}
 }
