@@ -67,8 +67,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 				if (mesh.CompressedMesh_C43.Triangles.IsSet())
 				{
 					int[] triangles = mesh.CompressedMesh_C43.Triangles.UnpackInts();
-					int firstByte = (int)(is16bits ? submesh.FirstByte * 2 : submesh.FirstByte);
-					FindMinMaxIndices(triangles, (int)(firstByte / sizeof(int)), (int)submesh.IndexCount, out min, out max);
+					uint offset = is16bits
+						? submesh.FirstByte / sizeof(ushort)
+						: submesh.FirstByte / sizeof(uint);
+					FindMinMaxIndices(triangles, (int)offset, (int)submesh.IndexCount, out min, out max);
 					return;
 				}
 			}

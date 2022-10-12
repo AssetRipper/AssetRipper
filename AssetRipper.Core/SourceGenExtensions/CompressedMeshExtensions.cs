@@ -223,7 +223,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static Vector3[] GetNormals(this ICompressedMesh compressedMesh)
 		{
-			float[] normalData = compressedMesh.Normals.UnpackFloats(2, 4 * 2);
+			float[] normalData = compressedMesh.Normals.UnpackFloats(2, 2 * sizeof(float));
 			int[] signs = compressedMesh.NormalSigns.UnpackInts();
 			Vector3[] normals = new Vector3[compressedMesh.Normals.NumItems / 2];
 			for (int i = 0; i < compressedMesh.Normals.NumItems / 2; ++i)
@@ -257,7 +257,22 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static void SetNormals(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector3> normals)
 		{
-			throw new NotImplementedException();
+			MakeFloatAndSignArrays(normals, out float[] floats, out uint[] signs);
+			compressedMesh.Normals.PackFloats(floats);
+			compressedMesh.NormalSigns.PackUInts(signs);
+		}
+
+		private static void MakeFloatAndSignArrays(ReadOnlySpan<Vector3> normals, out float[] floats, out uint[] signs)
+		{
+			floats = new float[normals.Length * 2];
+			signs = new uint[normals.Length];
+			for (int i = 0; i < normals.Length; i++)
+			{
+				Vector3 vector = Vector3.Normalize(normals[i]);//Normals should already be normalized, but it's better to be safe.
+				floats[2 * i] = vector.X;
+				floats[2 * i + 1] = vector.Y;
+				signs[i] = vector.Z < 0 ? 0u : 1u;
+			}
 		}
 
 		public static Vector4[] GetTangents(this ICompressedMesh compressedMesh)

@@ -48,6 +48,17 @@ namespace AssetRipper.Tests
 		}
 
 		[Test]
+		public void NormalAssignmentSymmetry()
+		{
+			CompressedMesh_5_0_0_f4 compressedMesh = new();
+			compressedMesh.SetNormals(vectors);
+			Vector3[] unpackedValues = compressedMesh.GetNormals();
+			AreAlmostEqual(vectors, unpackedValues, 0.00001f);
+			//Note: this symmetry only happens because the vectors are already normalized.
+			//This test would (and should) fail if non-normalized vectors are use.
+		}
+
+		[Test]
 		public void TriangleAssignmentSymmetry()
 		{
 			CompressedMesh_5_0_0_f4 compressedMesh = new();
