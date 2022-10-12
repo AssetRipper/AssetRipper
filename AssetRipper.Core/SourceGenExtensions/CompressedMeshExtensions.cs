@@ -3,6 +3,7 @@ using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using System.Numerics;
+using System.Runtime.InteropServices;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -28,12 +29,62 @@ namespace AssetRipper.Core.SourceGenExtensions
 			out Matrix4x4[]? bindPose,
 			out uint[]? processedIndexBuffer)
 		{
-			int vertexCount = default;
 			vertices = default;
 			normals = default;
 			tangents = default;
 			colors = default;
 			skin = default;
+			bindPose = default;
+			processedIndexBuffer = default;
+
+			//Vertex
+			if (compressedMesh.Vertices.NumItems > 0)
+			{
+				vertices = GetVertices(compressedMesh);
+			}
+			//UV
+			GetUV(compressedMesh, out uv0, out uv1, out uv2, out uv3, out uv4, out uv5, out uv6, out uv7);
+			//BindPose
+			if (compressedMesh.Has_BindPoses() && compressedMesh.BindPoses.NumItems > 0)
+			{
+				bindPose = GetBindPoses(compressedMesh);
+			}
+			//Normal
+			if (compressedMesh.Normals.NumItems > 0)
+			{
+				normals = GetNormals(compressedMesh);
+			}
+			//Tangent
+			if (compressedMesh.Tangents.NumItems > 0)
+			{
+				tangents = GetTangents(compressedMesh);
+			}
+			//FloatColor / Color
+			if ((compressedMesh.Has_FloatColors() && compressedMesh.FloatColors.NumItems > 0)
+				|| (compressedMesh.Has_Colors() && compressedMesh.Colors.NumItems > 0))
+			{
+				colors = GetFloatColors(compressedMesh);
+			}
+			//Skin
+			if (compressedMesh.Weights.NumItems > 0)
+			{
+				skin = GetWeights(compressedMesh);
+			}
+			//IndexBuffer
+			if (compressedMesh.Triangles.NumItems > 0)
+			{
+				processedIndexBuffer = GetTriangles(compressedMesh);
+			}
+		}
+
+		private static int GetVertexCount(ICompressedMesh compressedMesh)
+		{
+			return (int)compressedMesh.Vertices.NumItems / 3;
+		}
+
+		private static void GetUV(ICompressedMesh compressedMesh, out Vector2[]? uv0, out Vector2[]? uv1, out Vector2[]? uv2, out Vector2[]? uv3, out Vector2[]? uv4, out Vector2[]? uv5, out Vector2[]? uv6, out Vector2[]? uv7)
+		{
+			int vertexCount = GetVertexCount(compressedMesh);
 			uv0 = default;
 			uv1 = default;
 			uv2 = default;
@@ -42,16 +93,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			uv5 = default;
 			uv6 = default;
 			uv7 = default;
-			bindPose = default;
-			processedIndexBuffer = default;
-
-			//Vertex
-			if (compressedMesh.Vertices.NumItems > 0)
-			{
-				vertexCount = (int)compressedMesh.Vertices.NumItems / 3;
-				vertices = GetVertices(compressedMesh);
-			}
-			//UV
 			if (compressedMesh.UV.NumItems > 0)
 			{
 				uint m_UVInfo = compressedMesh.UVInfo;
@@ -70,7 +111,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 						if ((texCoordBits & kUVChannelExists) != 0)
 						{
 							int uvDim = 1 + (int)(texCoordBits & kUVDimensionMask);
-							Vector2[] m_UV = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(uvDim, uvDim * 4, uvSrcOffset, vertexCount));
+							Vector2[] m_UV = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(uvDim, uvDim * sizeof(float), uvSrcOffset, vertexCount));
 							switch (uvIndex)
 							{
 								case 0:
@@ -106,44 +147,18 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 				else
 				{
-					uv0 = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(2, 2 * 4, 0, vertexCount));
+					uv0 = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(2, 2 * sizeof(float), 0, vertexCount));
 					if (compressedMesh.UV.NumItems >= vertexCount * 4)
 					{
-						uv1 = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(2, 2 * 4, vertexCount * 2, vertexCount));
+						uv1 = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(2, 2 * sizeof(float), vertexCount * 2, vertexCount));
 					}
 				}
 			}
-			//BindPose
-			if (compressedMesh.Has_BindPoses() && compressedMesh.BindPoses.NumItems > 0)
-			{
-				bindPose = GetBindPoses(compressedMesh);
-			}
-			//Normal
-			if (compressedMesh.Normals.NumItems > 0)
-			{
-				normals = GetNormals(compressedMesh);
-			}
-			//Tangent
-			if (compressedMesh.Tangents.NumItems > 0)
-			{
-				tangents = GetTangents(compressedMesh);
-			}
-			//FloatColor / Color
-			if ((compressedMesh.Has_FloatColors() && compressedMesh.FloatColors.NumItems > 0)
-				|| (compressedMesh.Has_Colors() && compressedMesh.Colors.NumItems > 0))
-			{
-				colors = GetFloatColors(compressedMesh);
-			}
-			//Skin
-			if (compressedMesh.Weights.NumItems > 0)
-			{
-				skin = GetWeights(compressedMesh);
-			}
-			//IndexBuffer
-			if (compressedMesh.Triangles.NumItems > 0)
-			{
-				processedIndexBuffer = GetTriangles(compressedMesh);
-			}
+		}
+
+		public static void SetUV(this ICompressedMesh compressedMesh, Vector2[]? uv0, Vector2[]? uv1, Vector2[]? uv2, Vector2[]? uv3, Vector2[]? uv4, Vector2[]? uv5, Vector2[]? uv6, Vector2[]? uv7)
+		{
+			throw new NotImplementedException();
 		}
 
 		public static BoneWeight4[] GetWeights(this ICompressedMesh compressedMesh)
@@ -201,6 +216,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return skin;
 		}
 
+		public static void SetWeights(this ICompressedMesh compressedMesh, ReadOnlySpan<BoneWeight4> weights)
+		{
+			throw new NotImplementedException();
+		}
+
 		public static Vector3[] GetNormals(this ICompressedMesh compressedMesh)
 		{
 			float[] normalData = compressedMesh.Normals.UnpackFloats(2, 4 * 2);
@@ -233,6 +253,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 
 			return normals;
+		}
+
+		public static void SetNormals(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector3> normals)
+		{
+			throw new NotImplementedException();
 		}
 
 		public static Vector4[] GetTangents(this ICompressedMesh compressedMesh)
@@ -270,12 +295,17 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return tangents;
 		}
 
+		public static void SetTangents(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector4> tangents)
+		{
+			throw new NotImplementedException();
+		}
+
 		public static Matrix4x4[] GetBindPoses(this ICompressedMesh compressedMesh)
 		{
 			if (compressedMesh.Has_BindPoses())
 			{
 				Matrix4x4[]? bindPose = new Matrix4x4[compressedMesh.BindPoses.NumItems / 16];
-				float[] m_BindPoses_Unpacked = compressedMesh.BindPoses.UnpackFloats(16, 4 * 16);
+				float[] m_BindPoses_Unpacked = compressedMesh.BindPoses.UnpackFloats(16, 16 * sizeof(float));
 				float[] buffer = new float[16];
 				for (int i = 0; i < bindPose.Length; i++)
 				{
@@ -291,10 +321,20 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
+		public static void SetBindPoses(this ICompressedMesh compressedMesh, ReadOnlySpan<Matrix4x4> bindPoses)
+		{
+			throw new NotImplementedException();
+		}
+
 		public static Vector3[] GetVertices(this ICompressedMesh compressedMesh)
 		{
-			float[] verticesData = compressedMesh.Vertices.UnpackFloats(3, 3 * 4);
+			float[] verticesData = compressedMesh.Vertices.UnpackFloats(3, 3 * sizeof(float));
 			return MeshHelper.FloatArrayToVector3(verticesData);
+		}
+
+		public static void SetVertices(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector3> vertices)
+		{
+			compressedMesh.Vertices.PackFloats(MemoryMarshal.Cast<Vector3, float>(vertices));
 		}
 
 		public static ColorFloat[] GetFloatColors(this ICompressedMesh compressedMesh)
@@ -323,9 +363,19 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
+		public static void SetFloatColors(this ICompressedMesh compressedMesh, ReadOnlySpan<ColorFloat> colors)
+		{
+			throw new NotImplementedException();
+		}
+
 		public static uint[] GetTriangles(this ICompressedMesh compressedMesh)
 		{
 			return compressedMesh.Triangles.UnpackUInts();
+		}
+
+		public static void SetTriangles(this ICompressedMesh compressedMesh, ReadOnlySpan<uint> triangles)
+		{
+			compressedMesh.Triangles.PackUInts(triangles);
 		}
 
 		private static Matrix4x4 ToMatrix(float[] values)
