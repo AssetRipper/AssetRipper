@@ -121,30 +121,17 @@ namespace AssetRipper.Library.Processors
 
 			foreach (EnlightenSystemAtlasInformation atlasInfo in lightmapSettings.EnlightenSceneMapping_C157.SystemAtlases)
 			{
-				EnlightenSystemAtlasInformation dataAtlasInfo = lightingDataAsset.EnlightenSceneMapping_C1120.SystemAtlases.AddNew();
-				dataAtlasInfo.AtlasHash.CopyValues(atlasInfo.AtlasHash);
-				dataAtlasInfo.AtlasSize = atlasInfo.AtlasSize;
-				dataAtlasInfo.FirstSystemId = atlasInfo.FirstSystemId;
+				lightingDataAsset.EnlightenSceneMapping_C1120.SystemAtlases.AddNew().CopyValues(atlasInfo);
 			}
 
 			foreach (EnlightenSystemInformation systemInfo in lightmapSettings.EnlightenSceneMapping_C157.Systems)
 			{
-				EnlightenSystemInformation dataSystemInfo = lightingDataAsset.EnlightenSceneMapping_C1120.Systems.AddNew();
-				dataSystemInfo.AtlasIndex = systemInfo.AtlasIndex;
-				dataSystemInfo.AtlasOffsetX = systemInfo.AtlasOffsetX;
-				dataSystemInfo.AtlasOffsetY = systemInfo.AtlasOffsetY;
-				dataSystemInfo.InputSystemHash.CopyValues(systemInfo.InputSystemHash);
-				dataSystemInfo.RadiositySystemHash.CopyValues(systemInfo.RadiositySystemHash);
-				dataSystemInfo.RendererIndex = systemInfo.RendererIndex;
-				dataSystemInfo.RendererSize = systemInfo.RendererSize;
+				lightingDataAsset.EnlightenSceneMapping_C1120.Systems.AddNew().CopyValues(systemInfo);
 			}
 
 			foreach (EnlightenTerrainChunksInformation terrainInfo in lightmapSettings.EnlightenSceneMapping_C157.TerrainChunks)
 			{
-				EnlightenTerrainChunksInformation dataTerrainInfo = lightingDataAsset.EnlightenSceneMapping_C1120.TerrainChunks.AddNew();
-				dataTerrainInfo.FirstSystemId = terrainInfo.FirstSystemId;
-				dataTerrainInfo.NumChunksInX = terrainInfo.NumChunksInX;
-				dataTerrainInfo.NumChunksInY = terrainInfo.NumChunksInY;
+				lightingDataAsset.EnlightenSceneMapping_C1120.TerrainChunks.AddNew().CopyValues(terrainInfo);
 			}
 		}
 
