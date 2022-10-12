@@ -11,6 +11,7 @@ using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1120;
 using AssetRipper.SourceGenerated.Classes.ClassID_157;
+using AssetRipper.SourceGenerated.Classes.ClassID_258;
 using AssetRipper.SourceGenerated.Subclasses.EnlightenRendererInformation;
 using AssetRipper.SourceGenerated.Subclasses.EnlightenSystemAtlasInformation;
 using AssetRipper.SourceGenerated.Subclasses.EnlightenSystemInformation;
@@ -51,14 +52,14 @@ namespace AssetRipper.Library.Processors
 					if (lightingDataAsset.Has_Scene_C1120())
 					{
 						SceneAsset sceneAsset = CreateSceneAsset(processedCollection, collection);
-						lightingDataAsset.Scene_C1120.CopyValues(processedCollection.CreatePPtr(sceneAsset));
+						lightingDataAsset.Scene_C1120P = sceneAsset;
 					}
 					else if (lightingDataAsset.Has_SceneGUID_C1120())
 					{
 						lightingDataAsset.SceneGUID_C1120.SetValues(collection.GUID);
 					}
 
-					SetPPtr(lightingDataAsset.LightProbes_C1120, processedCollection, lightmapSettings.LightProbes_C157, collection);
+					lightingDataAsset.LightProbes_C1120P = (ILightProbes?)lightmapSettings.LightProbes_C157P;
 					//Note: it is possible for a LightProbes asset to be shared between multiple LightingDataAsset.
 					//However, that happened when multiple scenes were loaded additively and baked together.
 					//In that situation, the LightProbes asset and each LightingDataAsset were all in one binary file.
@@ -79,11 +80,11 @@ namespace AssetRipper.Library.Processors
 
 					if (lightmapSettings.Has_LightingDataAsset_C157())
 					{
-						lightmapSettings.LightingDataAsset_C157.CopyValues(collection.ForceCreatePPtr(lightingDataAsset));
+						lightmapSettings.LightingDataAsset_C157P = lightingDataAsset;
 					}
 					else if (lightmapSettings.Has_LightmapSnapshot_C157())
 					{
-						lightmapSettings.LightmapSnapshot_C157.CopyValues(collection.ForceCreatePPtr(lightingDataAsset));
+						lightmapSettings.LightmapSnapshot_C157P = lightingDataAsset;
 					}
 
 					//Todo:

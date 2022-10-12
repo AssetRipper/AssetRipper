@@ -41,10 +41,10 @@ namespace AssetRipper.Core.Classes
 		PPtr_PrefabInstance_? ISceneAsset.PrefabInstance_C1032 => throw new NotSupportedException();
 		IPPtr_Prefab_? ISceneAsset.PrefabInternal_C1032 => throw new NotSupportedException();
 		HideFlags ISceneAsset.HideFlags_C1032E { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
-		EditorExtension? ISceneAsset.CorrespondingSourceObject_C1032P => throw new NotSupportedException();
-		IPrefab? ISceneAsset.PrefabAsset_C1032P => throw new NotSupportedException();
-		IPrefabInstance? ISceneAsset.PrefabInstance_C1032P => throw new NotSupportedException();
-		IPrefabMarker? ISceneAsset.PrefabInternal_C1032P => throw new NotSupportedException();
+		EditorExtension? ISceneAsset.CorrespondingSourceObject_C1032P { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+		IPrefab? ISceneAsset.PrefabAsset_C1032P { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+		IPrefabInstance? ISceneAsset.PrefabInstance_C1032P { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+		IPrefabMarker? ISceneAsset.PrefabInternal_C1032P { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 		IPPtr_EditorExtension_? IDefaultAsset.CorrespondingSourceObject_C1029 => throw new NotSupportedException();
 		PPtr_EditorExtensionImpl_? IDefaultAsset.ExtensionPtr_C1029 => throw new NotSupportedException();
 		uint IDefaultAsset.HideFlags_C1029 { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
@@ -55,11 +55,11 @@ namespace AssetRipper.Core.Classes
 		PPtr_PrefabInstance_? IDefaultAsset.PrefabInstance_C1029 => throw new NotSupportedException();
 		IPPtr_Prefab_? IDefaultAsset.PrefabInternal_C1029 => throw new NotSupportedException();
 		HideFlags IDefaultAsset.HideFlags_C1029E { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
-		EditorExtension? IDefaultAsset.CorrespondingSourceObject_C1029P => throw new NotSupportedException();
-		IEditorExtensionImpl? IDefaultAsset.ExtensionPtr_C1029P => throw new NotSupportedException();
-		IPrefab? IDefaultAsset.PrefabAsset_C1029P => throw new NotSupportedException();
-		IPrefabInstance? IDefaultAsset.PrefabInstance_C1029P => throw new NotSupportedException();
-		IPrefabMarker? IDefaultAsset.PrefabInternal_C1029P => throw new NotSupportedException();
+		EditorExtension? IDefaultAsset.CorrespondingSourceObject_C1029P { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+		IEditorExtensionImpl? IDefaultAsset.ExtensionPtr_C1029P { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+		IPrefab? IDefaultAsset.PrefabAsset_C1029P { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+		IPrefabInstance? IDefaultAsset.PrefabInstance_C1029P { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+		IPrefabMarker? IDefaultAsset.PrefabInternal_C1029P { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 		Utf8String IHasName.Name => throw new NotSupportedException();
 		string IHasNameString.NameString { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 		HideFlags IHasHideFlags.ObjectHideFlags { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }

@@ -80,6 +80,7 @@ namespace AssetRipper.Assets.Metadata
 			}
 		}
 
+		//Called from source gen
 		public static T? TryGetAsset<T>(this IPPtr<T> pptr, IAssetContainer file) where T : IUnityObjectBase
 		{
 			pptr.TryGetAsset(file, out T? asset);
@@ -98,6 +99,12 @@ namespace AssetRipper.Assets.Metadata
 				return t;
 			}
 			throw new Exception($"Object's type {asset.GetType().Name} isn't assignable from {typeof(T).Name}");
+		}
+
+		//Called from source gen
+		public static void SetAsset<T>(this IPPtr<T> pptr, AssetCollection collection, T? asset) where T : IUnityObjectBase
+		{
+			pptr.CopyValues(collection.ForceCreatePPtr(asset));
 		}
 
 		public static bool IsAsset<T>(this IPPtr<T> pptr, IUnityObjectBase asset) where T : IUnityObjectBase
