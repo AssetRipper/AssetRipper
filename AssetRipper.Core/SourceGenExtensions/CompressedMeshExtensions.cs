@@ -49,14 +49,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 			if (compressedMesh.Vertices.NumItems > 0)
 			{
 				vertexCount = (int)compressedMesh.Vertices.NumItems / 3;
-				float[] verticesData = compressedMesh.Vertices.UnpackFloats(3, 3 * 4);
-				vertices = MeshHelper.FloatArrayToVector3(verticesData);
+				vertices = GetVertices(compressedMesh);
 			}
 			//UV
 			if (compressedMesh.UV.NumItems > 0)
 			{
 				uint m_UVInfo = compressedMesh.UVInfo;
-				if (m_UVInfo != 0)
+				if (compressedMesh.Has_UVInfo() && m_UVInfo != 0)
 				{
 					const int kInfoBitsPerUV = 4;
 					const int kUVDimensionMask = 3;
@@ -115,168 +114,218 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 			}
 			//BindPose
-			if (compressedMesh.Has_BindPoses())
+			if (compressedMesh.Has_BindPoses() && compressedMesh.BindPoses.NumItems > 0)
 			{
-				if (compressedMesh.BindPoses.NumItems > 0)
-				{
-					bindPose = new Matrix4x4[compressedMesh.BindPoses.NumItems / 16];
-					float[] m_BindPoses_Unpacked = compressedMesh.BindPoses.UnpackFloats(16, 4 * 16);
-					float[] buffer = new float[16];
-					for (int i = 0; i < bindPose.Length; i++)
-					{
-						Array.Copy(m_BindPoses_Unpacked, i * 16, buffer, 0, 16);
-						bindPose[i] = ToMatrix(buffer);
-					}
-				}
+				bindPose = GetBindPoses(compressedMesh);
 			}
 			//Normal
 			if (compressedMesh.Normals.NumItems > 0)
 			{
-				float[] normalData = compressedMesh.Normals.UnpackFloats(2, 4 * 2);
-				int[] signs = compressedMesh.NormalSigns.UnpackInts();
-				normals = new Vector3[compressedMesh.Normals.NumItems / 2];
-				for (int i = 0; i < compressedMesh.Normals.NumItems / 2; ++i)
-				{
-					float x = normalData[(i * 2) + 0];
-					float y = normalData[(i * 2) + 1];
-					float zsqr = 1 - (x * x) - (y * y);
-					float z;
-					if (zsqr >= 0f)
-					{
-						z = (float)System.Math.Sqrt(zsqr);
-					}
-					else
-					{
-						z = 0;
-						Vector3f normal = new Vector3f(x, y, z);
-						normal.Normalize();
-						x = normal.X;
-						y = normal.Y;
-						z = normal.Z;
-					}
-					if (signs[i] == 0)
-					{
-						z = -z;
-					}
-
-					normals[i] = new Vector3f(x, y, z);
-				}
+				normals = GetNormals(compressedMesh);
 			}
 			//Tangent
 			if (compressedMesh.Tangents.NumItems > 0)
 			{
-				float[] tangentData = compressedMesh.Tangents.UnpackFloats(2, 4 * 2);
-				int[] signs = compressedMesh.TangentSigns.UnpackInts();
-				tangents = new Vector4[compressedMesh.Tangents.NumItems / 2];
-				for (int i = 0; i < compressedMesh.Tangents.NumItems / 2; ++i)
-				{
-					float x = tangentData[(i * 2) + 0];
-					float y = tangentData[(i * 2) + 1];
-					float zsqr = 1 - (x * x) - (y * y);
-					float z;
-					if (zsqr >= 0f)
-					{
-						z = (float)System.Math.Sqrt(zsqr);
-					}
-					else
-					{
-						z = 0;
-						Vector3f vector3f = new Vector3f(x, y, z);
-						vector3f.Normalize();
-						x = vector3f.X;
-						y = vector3f.Y;
-						z = vector3f.Z;
-					}
-					if (signs[(i * 2) + 0] == 0)
-					{
-						z = -z;
-					}
+				tangents = GetTangents(compressedMesh);
+			}
+			//FloatColor / Color
+			if ((compressedMesh.Has_FloatColors() && compressedMesh.FloatColors.NumItems > 0)
+				|| (compressedMesh.Has_Colors() && compressedMesh.Colors.NumItems > 0))
+			{
+				colors = GetFloatColors(compressedMesh);
+			}
+			//Skin
+			if (compressedMesh.Weights.NumItems > 0)
+			{
+				skin = GetWeights(compressedMesh);
+			}
+			//IndexBuffer
+			if (compressedMesh.Triangles.NumItems > 0)
+			{
+				processedIndexBuffer = GetTriangles(compressedMesh);
+			}
+		}
 
-					float w = signs[(i * 2) + 1] > 0 ? 1.0f : -1.0f;
-					tangents[i] = new Vector4f(x, y, z, w);
+		public static BoneWeight4[] GetWeights(this ICompressedMesh compressedMesh)
+		{
+			int[] weights = compressedMesh.Weights.UnpackInts();
+			int[] boneIndices = compressedMesh.BoneIndices.UnpackInts();
+
+			BoneWeight4[] skin = new BoneWeight4[compressedMesh.Weights.NumItems];
+
+			int bonePos = 0;
+			int boneIndexPos = 0;
+			int j = 0;
+			int sum = 0;
+
+			for (int i = 0; i < compressedMesh.Weights.NumItems; i++)
+			{
+				//read bone index and weight.
+				{
+					BoneWeight4 boneWeight = skin[bonePos];
+					boneWeight.SetWeight(j, weights[i] / 31f);
+					boneWeight.SetIndex(j, boneIndices[boneIndexPos++]);
+					skin[bonePos] = boneWeight;
+				}
+				j++;
+				sum += weights[i];
+
+				//the weights add up to one. fill the rest for this vertex with zero, and continue with next one.
+				if (sum >= 31)
+				{
+					for (; j < 4; j++)
+					{
+						BoneWeight4 boneWeight = skin[bonePos];
+						boneWeight.SetWeight(j, 0);
+						boneWeight.SetIndex(j, 0);
+						skin[bonePos] = boneWeight;
+					}
+					bonePos++;
+					j = 0;
+					sum = 0;
+				}
+				//we read three weights, but they don't add up to one. calculate the fourth one, and read
+				//missing bone index. continue with next vertex.
+				else if (j == 3)
+				{
+					BoneWeight4 boneWeight = skin[bonePos];
+					boneWeight.SetWeight(j, (31 - sum) / 31f);
+					boneWeight.SetIndex(j, boneIndices[boneIndexPos++]);
+					skin[bonePos] = boneWeight;
+					bonePos++;
+					j = 0;
+					sum = 0;
 				}
 			}
-			//FloatColor
-			if (compressedMesh.Has_FloatColors() && compressedMesh.FloatColors.NumItems > 0)
+
+			return skin;
+		}
+
+		public static Vector3[] GetNormals(this ICompressedMesh compressedMesh)
+		{
+			float[] normalData = compressedMesh.Normals.UnpackFloats(2, 4 * 2);
+			int[] signs = compressedMesh.NormalSigns.UnpackInts();
+			Vector3[] normals = new Vector3[compressedMesh.Normals.NumItems / 2];
+			for (int i = 0; i < compressedMesh.Normals.NumItems / 2; ++i)
 			{
-				colors = MeshHelper.FloatArrayToColorFloat(compressedMesh.FloatColors.UnpackFloats(1, 4));
+				float x = normalData[(i * 2) + 0];
+				float y = normalData[(i * 2) + 1];
+				float zsqr = 1 - (x * x) - (y * y);
+				float z;
+				if (zsqr >= 0)
+				{
+					z = (float)System.Math.Sqrt(zsqr);
+				}
+				else
+				{
+					z = 0;
+					Vector3 normal = Vector3.Normalize(new Vector3(x, y, z));
+					x = normal.X;
+					y = normal.Y;
+					z = normal.Z;
+				}
+				if (signs[i] == 0)
+				{
+					z = -z;
+				}
+
+				normals[i] = new Vector3(x, y, z);
 			}
-			//Color
-			if (compressedMesh.Has_Colors() && compressedMesh.Colors.NumItems > 0)
+
+			return normals;
+		}
+
+		public static Vector4[] GetTangents(this ICompressedMesh compressedMesh)
+		{
+			float[] tangentData = compressedMesh.Tangents.UnpackFloats(2, 4 * 2);
+			int[] signs = compressedMesh.TangentSigns.UnpackInts();
+			Vector4[] tangents = new Vector4[compressedMesh.Tangents.NumItems / 2];
+			for (int i = 0; i < compressedMesh.Tangents.NumItems / 2; ++i)
+			{
+				float x = tangentData[(i * 2) + 0];
+				float y = tangentData[(i * 2) + 1];
+				float zsqr = 1 - (x * x) - (y * y);
+				float z;
+				if (zsqr >= 0f)
+				{
+					z = (float)System.Math.Sqrt(zsqr);
+				}
+				else
+				{
+					z = 0;
+					Vector3 tangent = Vector3.Normalize(new Vector3(x, y, z));
+					x = tangent.X;
+					y = tangent.Y;
+					z = tangent.Z;
+				}
+				if (signs[(i * 2) + 0] == 0)
+				{
+					z = -z;
+				}
+
+				float w = signs[(i * 2) + 1] > 0 ? 1.0f : -1.0f;
+				tangents[i] = new Vector4f(x, y, z, w);
+			}
+
+			return tangents;
+		}
+
+		public static Matrix4x4[] GetBindPoses(this ICompressedMesh compressedMesh)
+		{
+			if (compressedMesh.Has_BindPoses())
+			{
+				Matrix4x4[]? bindPose = new Matrix4x4[compressedMesh.BindPoses.NumItems / 16];
+				float[] m_BindPoses_Unpacked = compressedMesh.BindPoses.UnpackFloats(16, 4 * 16);
+				float[] buffer = new float[16];
+				for (int i = 0; i < bindPose.Length; i++)
+				{
+					Array.Copy(m_BindPoses_Unpacked, i * 16, buffer, 0, 16);
+					bindPose[i] = ToMatrix(buffer);
+				}
+
+				return bindPose;
+			}
+			else
+			{
+				return Array.Empty<Matrix4x4>(); 
+			}
+		}
+
+		public static Vector3[] GetVertices(this ICompressedMesh compressedMesh)
+		{
+			float[] verticesData = compressedMesh.Vertices.UnpackFloats(3, 3 * 4);
+			return MeshHelper.FloatArrayToVector3(verticesData);
+		}
+
+		public static ColorFloat[] GetFloatColors(this ICompressedMesh compressedMesh)
+		{
+			if (compressedMesh.Has_FloatColors())
+			{
+				return MeshHelper.FloatArrayToColorFloat(compressedMesh.FloatColors.UnpackFloats(1, 4));
+			}
+			else if (compressedMesh.Has_Colors())
 			{
 				compressedMesh.Colors.NumItems *= 4;
 				compressedMesh.Colors.BitSize /= 4;
 				int[] tempColors = compressedMesh.Colors.UnpackInts();
-				colors = new ColorFloat[compressedMesh.Colors.NumItems / 4];
+				ColorFloat[] colors = new ColorFloat[compressedMesh.Colors.NumItems / 4];
 				for (int v = 0; v < compressedMesh.Colors.NumItems / 4; v++)
 				{
 					colors[v] = (ColorFloat)new Color32((byte)tempColors[4 * v], (byte)tempColors[(4 * v) + 1], (byte)tempColors[(4 * v) + 2], (byte)tempColors[(4 * v) + 3]);
 				}
 				compressedMesh.Colors.NumItems /= 4;
 				compressedMesh.Colors.BitSize *= 4;
+				return colors;
 			}
-			//Skin
-			if (compressedMesh.Weights.NumItems > 0)
+			else
 			{
-				int[] weights = compressedMesh.Weights.UnpackInts();
-				int[] boneIndices = compressedMesh.BoneIndices.UnpackInts();
-
-				skin = new BoneWeight4[vertexCount];
-				for (int i = 0; i < vertexCount; i++)
-				{
-					skin[i] = new BoneWeight4();
-				}
-
-				int bonePos = 0;
-				int boneIndexPos = 0;
-				int j = 0;
-				int sum = 0;
-
-				for (int i = 0; i < compressedMesh.Weights.NumItems; i++)
-				{
-					//read bone index and weight.
-					{
-						BoneWeight4 boneWeight = skin[bonePos];
-						boneWeight.SetWeight(j, weights[i] / 31f);
-						boneWeight.SetIndex(j, boneIndices[boneIndexPos++]);
-						skin[bonePos] = boneWeight;
-					}
-					j++;
-					sum += weights[i];
-
-					//the weights add up to one. fill the rest for this vertex with zero, and continue with next one.
-					if (sum >= 31)
-					{
-						for (; j < 4; j++)
-						{
-							BoneWeight4 boneWeight = skin[bonePos];
-							boneWeight.SetWeight(j, 0);
-							boneWeight.SetIndex(j, 0);
-							skin[bonePos] = boneWeight;
-						}
-						bonePos++;
-						j = 0;
-						sum = 0;
-					}
-					//we read three weights, but they don't add up to one. calculate the fourth one, and read
-					//missing bone index. continue with next vertex.
-					else if (j == 3)
-					{
-						BoneWeight4 boneWeight = skin[bonePos];
-						boneWeight.SetWeight(j, (31 - sum) / 31f);
-						boneWeight.SetIndex(j, boneIndices[boneIndexPos++]);
-						skin[bonePos] = boneWeight;
-						bonePos++;
-						j = 0;
-						sum = 0;
-					}
-				}
+				return Array.Empty<ColorFloat>();
 			}
-			//IndexBuffer
-			if (compressedMesh.Triangles.NumItems > 0)
-			{
-				processedIndexBuffer = Array.ConvertAll(compressedMesh.Triangles.UnpackInts(), x => (uint)x);
-			}
+		}
+
+		public static uint[] GetTriangles(this ICompressedMesh compressedMesh)
+		{
+			return compressedMesh.Triangles.UnpackUInts();
 		}
 
 		private static Matrix4x4 ToMatrix(float[] values)
