@@ -351,7 +351,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static void SetBindPoses(this ICompressedMesh compressedMesh, ReadOnlySpan<Matrix4x4> bindPoses)
 		{
-			throw new NotImplementedException();
+			compressedMesh.BindPoses?.PackFloats(MemoryMarshal.Cast<Matrix4x4, float>(bindPoses));
 		}
 
 		public static Vector3[] GetVertices(this ICompressedMesh compressedMesh)
