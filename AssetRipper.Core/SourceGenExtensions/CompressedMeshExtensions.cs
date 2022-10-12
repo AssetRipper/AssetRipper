@@ -337,12 +337,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (compressedMesh.Has_BindPoses())
 			{
-				Matrix4x4[]? bindPose = new Matrix4x4[compressedMesh.BindPoses.NumItems / 16];
-				float[] m_BindPoses_Unpacked = compressedMesh.BindPoses.UnpackFloats(16, 16 * sizeof(float));
-				float[] buffer = new float[16];
+				const int MatrixFloats = 16;
+				Matrix4x4[] bindPose = new Matrix4x4[compressedMesh.BindPoses.NumItems / MatrixFloats];
+				float[] m_BindPoses_Unpacked = compressedMesh.BindPoses.UnpackFloats(MatrixFloats, MatrixFloats * sizeof(float));
 				for (int i = 0; i < bindPose.Length; i++)
 				{
-					Array.Copy(m_BindPoses_Unpacked, i * 16, buffer, 0, 16);
+					ReadOnlySpan<float> buffer = new ReadOnlySpan<float>(m_BindPoses_Unpacked, i * MatrixFloats, MatrixFloats);
 					bindPose[i] = ToMatrix(buffer);
 				}
 
@@ -411,7 +411,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			compressedMesh.Triangles.PackUInts(triangles);
 		}
 
-		private static Matrix4x4 ToMatrix(float[] values)
+		private static Matrix4x4 ToMatrix(ReadOnlySpan<float> values)
 		{
 			if (values == null)
 			{
