@@ -340,12 +340,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				const int MatrixFloats = 16;
 				Matrix4x4[] bindPose = new Matrix4x4[compressedMesh.BindPoses.NumItems / MatrixFloats];
 				float[] m_BindPoses_Unpacked = compressedMesh.BindPoses.UnpackFloats(MatrixFloats, MatrixFloats * sizeof(float));
-				for (int i = 0; i < bindPose.Length; i++)
-				{
-					ReadOnlySpan<float> buffer = new ReadOnlySpan<float>(m_BindPoses_Unpacked, i * MatrixFloats, MatrixFloats);
-					bindPose[i] = ToMatrix(buffer);
-				}
-
+				MemoryMarshal.Cast<float, Matrix4x4>(m_BindPoses_Unpacked).CopyTo(bindPose);
 				return bindPose;
 			}
 			else
@@ -409,42 +404,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static void SetTriangles(this ICompressedMesh compressedMesh, ReadOnlySpan<uint> triangles)
 		{
 			compressedMesh.Triangles.PackUInts(triangles);
-		}
-
-		private static Matrix4x4 ToMatrix(ReadOnlySpan<float> values)
-		{
-			if (values == null)
-			{
-				throw new ArgumentNullException(nameof(values));
-			}
-
-			if (values.Length != 16)
-			{
-				throw new ArgumentOutOfRangeException(nameof(values), "There must be exactly sixteen input values for Matrix.");
-			}
-
-			return new()
-			{
-				M11 = values[0],
-				M12 = values[1],
-				M13 = values[2],
-				M14 = values[3],
-
-				M21 = values[4],
-				M22 = values[5],
-				M23 = values[6],
-				M24 = values[7],
-
-				M31 = values[8],
-				M32 = values[9],
-				M33 = values[10],
-				M34 = values[11],
-
-				M41 = values[12],
-				M42 = values[13],
-				M43 = values[14],
-				M44 = values[15],
-			};
 		}
 	}
 }
