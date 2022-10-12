@@ -25,34 +25,6 @@ namespace AssetRipper.Core.Math.Vectors
 			instance.Z = 0;
 		}
 
-		public static Quaternionf ToQuaternion(this IVector3f source, bool isDegrees = true)
-		{
-			Quaternionf result = new Quaternionf();
-			source.ToQuaternion(result, isDegrees);
-			return result;
-		}
-
-		public static void ToQuaternion(this IVector3f source, IQuaternionf destination, bool isDegrees)
-		{
-			// Abbreviations for the various angular functions
-			double cy = System.Math.Cos(GetRadians(source.Z, isDegrees) * 0.5);
-			double sy = System.Math.Sin(GetRadians(source.Z, isDegrees) * 0.5);
-			double cp = System.Math.Cos(GetRadians(source.Y, isDegrees) * 0.5);
-			double sp = System.Math.Sin(GetRadians(source.Y, isDegrees) * 0.5);
-			double cr = System.Math.Cos(GetRadians(source.X, isDegrees) * 0.5);
-			double sr = System.Math.Sin(GetRadians(source.X, isDegrees) * 0.5);
-
-			destination.W = -(float)((cr * cp * cy) + (sr * sp * sy));
-			destination.X = -(float)((sr * cp * cy) - (cr * sp * sy));
-			destination.Y = (float)((cr * sp * cy) + (sr * cp * sy));
-			destination.Z = (float)((cr * cp * sy) - (sr * sp * cy));
-		}
-
-		private static double GetRadians(double angle, bool isDegrees)
-		{
-			return isDegrees ? (angle * System.Math.PI / 180.0) : angle;
-		}
-
 		public static void Normalize(this IVector3f instance)
 		{
 			float length = instance.Length();

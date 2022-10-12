@@ -2,10 +2,12 @@
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Math.Transformations;
 using AssetRipper.Core.Math.Vectors;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform_;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -99,11 +101,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			if (transform.Has_LocalEulerAnglesHint_C4())
 			{
-				Vector3f eulerHints = new Quaternionf(
+				Vector3 eulerHints = new Quaternion(
 					transform.LocalRotation_C4.X,
 					transform.LocalRotation_C4.Y,
 					transform.LocalRotation_C4.Z,
-					transform.LocalRotation_C4.W).ToEulerAngle();
+					transform.LocalRotation_C4.W).ToEulerAngle(true);
 				transform.LocalEulerAnglesHint_C4.SetValues(eulerHints.X, eulerHints.Y, eulerHints.Z);
 			}
 		}

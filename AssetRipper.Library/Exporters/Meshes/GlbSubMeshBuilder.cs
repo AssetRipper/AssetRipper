@@ -2,6 +2,7 @@
 using AssetRipper.Core.Math.Transformations;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using SharpGLTF.Geometry;

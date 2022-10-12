@@ -1,9 +1,7 @@
-using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Layout;
 using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Structure.Assembly.Serializable;

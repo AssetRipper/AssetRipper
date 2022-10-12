@@ -30,24 +30,9 @@ namespace AssetRipper.Core.Math.Colors
 			A = a;
 		}
 
-		public static explicit operator ColorRGBAf(ColorRGBA32 color32)
-		{
-			ColorRGBAf color = new();
-			color.CopyValuesFrom(color32);
-			return color;
-		}
-
 		public static explicit operator Vector4f(ColorRGBAf c) => new(c.R, c.G, c.B, c.A);
 
 		public ColorRGBAf Clone() => new ColorRGBAf(R, G, B, A);
-
-		public void CopyValuesFrom(ColorRGBA32 color32)
-		{
-			R = color32.R() / 255.0f;
-			G = color32.G() / 255.0f;
-			B = color32.B() / 255.0f;
-			A = color32.A() / 255.0f;
-		}
 
 		public void CopyValuesFrom(ColorRGBAf colorf)
 		{

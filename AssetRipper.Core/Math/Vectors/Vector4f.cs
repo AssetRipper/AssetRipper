@@ -70,7 +70,6 @@ namespace AssetRipper.Core.Math.Vectors
 		public static implicit operator Vector4f(Vector3f v3) => new(v3.X, v3.Y, v3.Z, 0.0f);
 		public static implicit operator Vector4f(Vector3i v3) => v3 is null ? new() : new(v3.X, v3.Y, v3.Z, 0.0f);
 
-		public static explicit operator Vector4f(Quaternionf q) => new(q.X, q.Y, q.Z, q.W);
 		public static explicit operator ColorRGBAf(Vector4f v) => new(v.X, v.Y, v.Z, v.W);
 
 		public static implicit operator System.Numerics.Vector4(Vector4f v4) => new(v4.X, v4.Y, v4.Z, v4.W);
