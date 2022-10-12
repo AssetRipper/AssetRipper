@@ -268,7 +268,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			signs = new uint[normals.Length];
 			for (int i = 0; i < normals.Length; i++)
 			{
-				Vector3 vector = Vector3.Normalize(normals[i]);//Normals should already be normalized, but it's better to be safe.
+				//Normals should already be normalized, but it's better to be safe.
+				Vector3 vector = Vector3.Normalize(normals[i]);
 				floats[2 * i] = vector.X;
 				floats[2 * i + 1] = vector.Y;
 				signs[i] = vector.Z < 0 ? 0u : 1u;
@@ -277,7 +278,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static Vector4[] GetTangents(this ICompressedMesh compressedMesh)
 		{
-			float[] tangentData = compressedMesh.Tangents.UnpackFloats(2, 4 * 2);
+			float[] tangentData = compressedMesh.Tangents.UnpackFloats(2, 2 * sizeof(float));
 			int[] signs = compressedMesh.TangentSigns.UnpackInts();
 			Vector4[] tangents = new Vector4[compressedMesh.Tangents.NumItems / 2];
 			for (int i = 0; i < compressedMesh.Tangents.NumItems / 2; ++i)
@@ -303,7 +304,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					z = -z;
 				}
 
-				float w = signs[(i * 2) + 1] > 0 ? 1.0f : -1.0f;
+				float w = signs[(i * 2) + 1] == 0 ? -1.0f : 1.0f;
 				tangents[i] = new Vector4f(x, y, z, w);
 			}
 
@@ -312,7 +313,24 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static void SetTangents(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector4> tangents)
 		{
-			throw new NotImplementedException();
+			MakeFloatAndSignArrays(tangents, out float[] floats, out uint[] signs);
+			compressedMesh.Tangents.PackFloats(floats);
+			compressedMesh.TangentSigns.PackUInts(signs);
+		}
+
+		private static void MakeFloatAndSignArrays(ReadOnlySpan<Vector4> tangents, out float[] floats, out uint[] signs)
+		{
+			floats = new float[tangents.Length * 2];
+			signs = new uint[tangents.Length * 2];
+			for (int i = 0; i < tangents.Length; i++)
+			{
+				//Tangents should already be normalized, but it's better to be safe.
+				Vector3 vector = Vector3.Normalize(tangents[i].AsVector3());
+				floats[2 * i] = vector.X;
+				floats[2 * i + 1] = vector.Y;
+				signs[2 * i] = vector.Z < 0 ? 0u : 1u;
+				signs[2 * i + 1] = tangents[i].W < 0 ? 0u : 1u;
+			}
 		}
 
 		public static Matrix4x4[] GetBindPoses(this ICompressedMesh compressedMesh)

@@ -13,6 +13,7 @@ namespace AssetRipper.Tests
 	{
 		private static readonly Random random = new Random(57089);
 		private static readonly Vector3[] vectors = MakeUnitVectors(20);
+		private static readonly Vector4[] tangents = MakeTangents(22);
 		private static readonly uint[] integers = MakeUInts(24);
 
 		private static Vector3[] MakeUnitVectors(int count)
@@ -24,6 +25,18 @@ namespace AssetRipper.Tests
 				float y = random.NextSingle();
 				float z = random.NextSingle();
 				result[i] = Vector3.Normalize(new Vector3(x, y, z));
+			}
+			return result;
+		}
+
+		private static Vector4[] MakeTangents(int count)
+		{
+			Vector3[] unitVectors = MakeUnitVectors(count);
+			Vector4[] result = new Vector4[unitVectors.Length];
+			for (int i = 0; i < unitVectors.Length; i++)
+			{
+				float w = random.NextSingle() < 0.5f ? -1f : 1f;
+				result[i] = new Vector4(unitVectors[i], w);
 			}
 			return result;
 		}
@@ -59,6 +72,17 @@ namespace AssetRipper.Tests
 		}
 
 		[Test]
+		public void TangentAssignmentSymmetry()
+		{
+			CompressedMesh_5_0_0_f4 compressedMesh = new();
+			compressedMesh.SetTangents(tangents);
+			Vector4[] unpackedValues = compressedMesh.GetTangents();
+			AreAlmostEqual(tangents, unpackedValues, 0.00001f);
+			//Note: this symmetry only happens because the vectors are already normalized.
+			//This test would (and should) fail if non-normalized vectors are use.
+		}
+
+		[Test]
 		public void TriangleAssignmentSymmetry()
 		{
 			CompressedMesh_5_0_0_f4 compressedMesh = new();
@@ -77,6 +101,22 @@ namespace AssetRipper.Tests
 			for (int i = 0; i < expected.Length; i++)
 			{
 				if (Vector3.Distance(expected[i], actual[i]) > maxDeviation)
+				{
+					Assert.Fail($"Values significantly differ at index {i}\nExpected: {expected[i]}\nBut was: {actual[i]}");
+				}
+			}
+		}
+
+		private static void AreAlmostEqual(Vector4[] expected, Vector4[] actual, float maxDeviation)
+		{
+			if (expected.Length != actual.Length)
+			{
+				Assert.Fail($"Lengths were inequal.\nExpected: {expected.Length}\nBut was: {actual.Length}");
+			}
+
+			for (int i = 0; i < expected.Length; i++)
+			{
+				if (Vector4.Distance(expected[i], actual[i]) > maxDeviation)
 				{
 					Assert.Fail($"Values significantly differ at index {i}\nExpected: {expected[i]}\nBut was: {actual[i]}");
 				}
