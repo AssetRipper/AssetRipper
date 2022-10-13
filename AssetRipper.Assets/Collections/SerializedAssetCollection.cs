@@ -116,10 +116,11 @@ public class SerializedAssetCollection : AssetCollection
 
 	private static void ReadAsset(SerializedAssetCollection collection, SerializedFile file, ObjectInfo info, AssetFactoryBase factory)
 	{
-		AssetInfo assetInfo = new AssetInfo(collection, info.FileID, info.ClassID);
 		long offset = file.Header.DataOffset + info.ByteStart;
 		int size = info.ByteSize;
 		SerializedType? type = info.GetSerializedType(file.Metadata.Types);
+		int classID = info.TypeID < 0 ? 114 : info.TypeID;
+		AssetInfo assetInfo = new AssetInfo(collection, info.FileID, classID);
 		using PartialStream partialStream = new PartialStream(file.Stream, offset, size, true);
 		using AssetReader reader = new AssetReader(partialStream, collection);
 		IUnityObjectBase? asset = factory.ReadAsset(assetInfo, reader, size, type);

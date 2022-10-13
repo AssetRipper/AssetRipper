@@ -137,13 +137,13 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 
 		public SerializedType? GetSerializedType(SerializedType[] types)
 		{
-			if (types.Length == 0)
-			{
-				return default; //It's common on Unity 4 and lower for the array to be empty.
-			}
-			else if (SerializedTypeIndex >= 0)
+			if (SerializedTypeIndex >= 0)
 			{
 				return types[SerializedTypeIndex];
+			}
+			else if (types.Length == 0)
+			{
+				return default; //It's common on Unity 4 and lower for the array to be empty.
 			}
 			else
 			{
