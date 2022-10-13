@@ -239,13 +239,17 @@ namespace AssetRipper.Core.Project
 				switch (m_BundledAssetsExportMode)
 				{
 					case BundledAssetsExportMode.DirectExport:
-						if (!assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
+						if (assetPath.StartsWith(AssetsDirectory, StringComparison.Ordinal))
 						{
-							asset.OriginalPath = AssetsDirectory + assetPath;
+							asset.OriginalPath = assetPath;
+						}
+						else if (assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
+						{
+							asset.OriginalPath = $"{AssetsDirectory}{assetPath.AsSpan(AssetsDirectory.Length)}";
 						}
 						else
 						{
-							asset.OriginalPath = assetPath;
+							asset.OriginalPath = AssetsDirectory + assetPath;
 						}
 						break;
 					case BundledAssetsExportMode.GroupByBundleName:
