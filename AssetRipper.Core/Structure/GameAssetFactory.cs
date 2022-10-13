@@ -13,6 +13,7 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Subclasses.AABB;
@@ -112,7 +113,7 @@ namespace AssetRipper.Core.Structure
 				asset.Read(reader);
 				if (reader.BaseStream.Position != size)
 				{
-					Logger.Error($"Read {reader.BaseStream.Position} but expected {size} for asset type {asset.ClassID}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}");
+					Logger.Error($"Read {reader.BaseStream.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}");
 					replaceWithUnreadableObject = true;
 				}
 				else
@@ -146,7 +147,7 @@ namespace AssetRipper.Core.Structure
 
 		private static void LogReadException(IUnityObjectBase asset, AssetReader reader, Exception ex)
 		{
-			Logger.Error($"Error during reading of asset type {asset.ClassID}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}", ex);
+			Logger.Error($"Error during reading of asset type {(ClassIDType)asset.ClassID}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}", ex);
 		}
 
 		public static IAsset CreateEngineAsset(string name, UnityVersion version)
