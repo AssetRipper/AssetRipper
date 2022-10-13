@@ -228,9 +228,13 @@ namespace AssetRipper.Core.Project
 					continue;
 				}
 
-				string assetPath = kvp.Key.String;
-
 				asset.AssetBundleName = bundleName;
+
+				string assetPath = EnsurePathNotRooted(kvp.Key.String);
+				if (string.IsNullOrEmpty(assetPath))
+				{
+					continue;
+				}
 
 				switch (m_BundledAssetsExportMode)
 				{
@@ -260,6 +264,27 @@ namespace AssetRipper.Core.Project
 					default:
 						throw new Exception($"Invalid {nameof(BundledAssetsExportMode)} for {nameof(m_BundledAssetsExportMode)} : {m_BundledAssetsExportMode}");
 				}
+			}
+		}
+
+		private static string EnsurePathNotRooted(string assetPath)
+		{
+			if (Path.IsPathRooted(assetPath))
+			{
+				string[] splitPath = assetPath.Split('/');
+				for (int i = 0; i < splitPath.Length; i++)
+				{
+					string pathSection = splitPath[i];
+					if (string.Equals(pathSection, ExportCollection.AssetsKeyword, StringComparison.OrdinalIgnoreCase))
+					{
+						return string.Join(ObjectUtils.DirectorySeparator, new ArraySegment<string>(splitPath, i, splitPath.Length - i));
+					}
+				}
+				return string.Empty;
+			}
+			else
+			{
+				return assetPath;
 			}
 		}
 
