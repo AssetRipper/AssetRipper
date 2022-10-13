@@ -7,6 +7,7 @@ using AssetRipper.Core.Linq;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated;
@@ -41,11 +42,11 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 		}
 
 		private readonly record struct AssetsProcessingContext(IAudioMixerController Mixer,
-			IAudioMixerConstant Constants, TemporaryAssetCollection VirtualFile, Dictionary<uint, GUID> IndexToGuid,
+			IAudioMixerConstant Constants, TemporaryAssetCollection VirtualFile, Dictionary<uint, UnityGUID> IndexToGuid,
 			List<IAudioMixerGroupController> Groups)
 		{
 			public AssetsProcessingContext(IAudioMixerController mixer, TemporaryAssetCollection virtualFile) : this(mixer,
-				mixer.MixerConstant_C241, virtualFile, new Dictionary<uint, GUID>(), new List<IAudioMixerGroupController>()) { }
+				mixer.MixerConstant_C241, virtualFile, new Dictionary<uint, UnityGUID>(), new List<IAudioMixerGroupController>()) { }
 		}
 
 		private void ProcessAssets(in AssetsProcessingContext context)
@@ -58,7 +59,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 
 		private void ProcessAudioMixerGroups(in AssetsProcessingContext context)
 		{
-			Dictionary<GUID, IAudioMixerGroupController> groupGuidMap = new();
+			Dictionary<UnityGUID, IAudioMixerGroupController> groupGuidMap = new();
 			
 			foreach (IAudioMixerGroupController group in context.Mixer.Collection.Bundle.FetchAssetsInHierarchy().SelectType<IUnityObjectBase, IAudioMixerGroupController>())
 			{
@@ -193,9 +194,9 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 				SnapshotConstant snapshotConstant = context.Constants.Snapshots[i];
 				for (int j = 0; j < snapshotConstant.Values.Length; j++)
 				{
-					if (context.IndexToGuid.TryGetValue((uint)j, out GUID? valueGuid))
+					if (context.IndexToGuid.TryGetValue((uint)j, out UnityGUID valueGuid))
 					{
-						snapshot.FloatValues_C245[valueGuid] = snapshotConstant.Values[j];
+						snapshot.FloatValues_C245[(GUID)valueGuid] = snapshotConstant.Values[j];
 					}
 					else
 					{
@@ -207,9 +208,9 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 				{
 					uint paramIndex = snapshotConstant.TransitionIndices[j];
 					int transitionType = (int)snapshotConstant.TransitionTypes[j];
-					if (context.IndexToGuid.TryGetValue(paramIndex, out GUID? paramGuid))
+					if (context.IndexToGuid.TryGetValue(paramIndex, out UnityGUID paramGuid))
 					{
-						snapshot.TransitionOverrides_C245[paramGuid] = transitionType;
+						snapshot.TransitionOverrides_C245[(GUID)paramGuid] = transitionType;
 					}
 					else
 					{
@@ -227,7 +228,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			{
 				uint paramIndex = context.Constants.ExposedParameterIndices[i];
 				uint paramNameCrc = context.Constants.ExposedParameterNames[i];
-				if (context.IndexToGuid.TryGetValue(paramIndex, out GUID? paramGuid))
+				if (context.IndexToGuid.TryGetValue(paramIndex, out UnityGUID paramGuid))
 				{
 					ExposedAudioParameter exposedParam = context.Mixer.ExposedParameters_C241.AddNew();
 					exposedParam.Guid.CopyValues(paramGuid);
@@ -251,9 +252,9 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			context.Mixer.TargetSnapshot_C241.CopyValues(context.Mixer.StartSnapshot_C241);
 		}
 		
-		private static GUID IndexingNewGuid(uint index, Dictionary<uint, GUID> table)
+		private static UnityGUID IndexingNewGuid(uint index, Dictionary<uint, UnityGUID> table)
 		{
-			GUID guid = (GUID)UnityGUID.NewGuid();
+			UnityGUID guid = UnityGUID.NewGuid();
 			if (!table.TryAdd(index, guid))
 			{
 				Logger.Warning(LogCategory.Export, $"Constant index #{index} conflicts with another one.");
