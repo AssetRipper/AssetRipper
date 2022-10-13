@@ -34,57 +34,64 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 {
 	public class AudioMixerExportCollection : AssetsExportCollection
 	{
-		public AudioMixerExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile,
+		public AudioMixerExportCollection(
+			IAssetExporter assetExporter,
+			TemporaryAssetCollection virtualFile,
 			IAudioMixerController mixer) : base(assetExporter, mixer)
 		{
-			AssetsProcessingContext context = new(mixer, virtualFile);
-			ProcessAssets(context);
+			ProcessAssets(
+				mixer,
+				mixer.MixerConstant_C241,
+				virtualFile,
+				new Dictionary<uint, UnityGUID>(),
+				new List<IAudioMixerGroupController>());
 		}
 
-		private readonly record struct AssetsProcessingContext(IAudioMixerController Mixer,
-			IAudioMixerConstant Constants, TemporaryAssetCollection VirtualFile, Dictionary<uint, UnityGUID> IndexToGuid,
-			List<IAudioMixerGroupController> Groups)
+		private void ProcessAssets(
+			IAudioMixerController mixer,
+			IAudioMixerConstant constants,
+			TemporaryAssetCollection virtualFile,
+			Dictionary<uint, UnityGUID> indexToGuid,
+			List<IAudioMixerGroupController> groups)
 		{
-			public AssetsProcessingContext(IAudioMixerController mixer, TemporaryAssetCollection virtualFile) : this(mixer,
-				mixer.MixerConstant_C241, virtualFile, new Dictionary<uint, UnityGUID>(), new List<IAudioMixerGroupController>()) { }
+			ProcessAudioMixerGroups(mixer, constants, indexToGuid, groups);
+			ProcessAudioMixerEffects(mixer, virtualFile, indexToGuid, groups);
+			ProcessAudioMixerSnapshots(mixer, constants, indexToGuid);
+			ProcessAudioMixer(mixer, constants, indexToGuid, groups);
 		}
 
-		private void ProcessAssets(in AssetsProcessingContext context)
-		{
-			ProcessAudioMixerGroups(context);
-			ProcessAudioMixerEffects(context);
-			ProcessAudioMixerSnapshots(context);
-			ProcessAudioMixer(context);
-		}
-
-		private void ProcessAudioMixerGroups(in AssetsProcessingContext context)
+		private void ProcessAudioMixerGroups(
+			IAudioMixerController mixer,
+			IAudioMixerConstant constants,
+			Dictionary<uint, UnityGUID> indexToGuid,
+			List<IAudioMixerGroupController> groups)
 		{
 			Dictionary<UnityGUID, IAudioMixerGroupController> groupGuidMap = new();
 			
-			foreach (IAudioMixerGroupController group in context.Mixer.Collection.Bundle.FetchAssetsInHierarchy().SelectType<IUnityObjectBase, IAudioMixerGroupController>())
+			foreach (IAudioMixerGroupController group in mixer.Collection.Bundle.FetchAssetsInHierarchy().SelectType<IUnityObjectBase, IAudioMixerGroupController>())
 			{
-				if (group.AudioMixer_C243.IsAsset(context.Mixer.Collection, context.Mixer))
+				if (group.AudioMixer_C243.IsAsset(mixer.Collection, mixer))
 				{
 					AddAsset(group);
 					groupGuidMap.Add(group.GroupID_C243, group);
 				}
 			}
 			
-			context.Groups.AddRange(context.Mixer.MixerConstant_C241.GroupGUIDs.Select(guid => groupGuidMap[guid]));
-			for (int i = 0; i < context.Groups.Count; i++)
+			groups.AddRange(mixer.MixerConstant_C241.GroupGUIDs.Select(guid => groupGuidMap[guid]));
+			for (int i = 0; i < groups.Count; i++)
 			{
-				IAudioMixerGroupController group = context.Groups[i];
-				IGroupConstant groupConstant = context.Constants.Groups[i];
+				IAudioMixerGroupController group = groups[i];
+				IGroupConstant groupConstant = constants.Groups[i];
 				
-				group.Volume_C243.CopyValues(IndexingNewGuid(groupConstant.VolumeIndex, context.IndexToGuid));
-				group.Pitch_C243.CopyValues(IndexingNewGuid(groupConstant.PitchIndex, context.IndexToGuid));
+				group.Volume_C243.CopyValues(IndexingNewGuid(groupConstant.VolumeIndex, indexToGuid));
+				group.Pitch_C243.CopyValues(IndexingNewGuid(groupConstant.PitchIndex, indexToGuid));
 				
 				// Different Unity versions vary in whether a "send" field is used in groups as well as in snapshots.
 				// GroupConstant.Has_SendIndex() can be used to determine its existence.
 				// If "send" does not exist in GroupConstant, it may still exist in AudioMixerGroupController, but is just ignored.
 				if (groupConstant.Has_SendIndex() && group.Has_Send_C243())
 				{
-					group.Send_C243.CopyValues(IndexingNewGuid(groupConstant.SendIndex, context.IndexToGuid));
+					group.Send_C243.CopyValues(IndexingNewGuid(groupConstant.SendIndex, indexToGuid));
 				}
 				group.Mute_C243 = groupConstant.Mute;
 				group.Solo_C243 = groupConstant.Solo;
@@ -96,9 +103,13 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			}
 		}
 
-		private void ProcessAudioMixerEffects(in AssetsProcessingContext context)
+		private void ProcessAudioMixerEffects(
+			IAudioMixerController mixer,
+			TemporaryAssetCollection virtualFile,
+			Dictionary<uint, UnityGUID> indexToGuid,
+			List<IAudioMixerGroupController> groups)
 		{
-			IAudioMixerConstant constants = context.Mixer.MixerConstant_C241;
+			IAudioMixerConstant constants = mixer.MixerConstant_C241;
 
 			(IAudioMixerEffectController, PPtr_AudioMixerEffectController_)[] effects =
 				new (IAudioMixerEffectController, PPtr_AudioMixerEffectController_)[constants.Effects.Count];
@@ -107,7 +118,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			
 			for (int i = 0; i < effects.Length; i++)
 			{
-				IAudioMixerEffectController effect = context.VirtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
+				IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
 				effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 				PPtr_AudioMixerEffectController_ effectPPtr = new();
 				effectPPtr.CopyValues(effect.Collection.ForceCreatePPtr(effect));
@@ -122,7 +133,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 				EffectConstant effectConstant = constants.Effects[i];
 				(IAudioMixerEffectController effect, PPtr_AudioMixerEffectController_ effectPPtr) = effects[i];
 
-				IAudioMixerGroupController group = context.Groups[(int)effectConstant.GroupConstantIndex];
+				IAudioMixerGroupController group = groups[(int)effectConstant.GroupConstantIndex];
 				group.Effects_C243.Add(effectPPtr);
 
 				effect.EffectID_C244.CopyValues(constants.EffectGUIDs[i]);
@@ -144,7 +155,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 				bool enableWetMix = (int)effectConstant.WetMixLevelIndex != -1;
 				if (enableWetMix || effect.EffectName_C244 == "Send")
 				{
-					effect.MixLevel_C244.CopyValues(IndexingNewGuid(effectConstant.WetMixLevelIndex, context.IndexToGuid));
+					effect.MixLevel_C244.CopyValues(IndexingNewGuid(effectConstant.WetMixLevelIndex, indexToGuid));
 				}
 
 				for (int j = 0; j < effectConstant.ParameterIndices.Length; j++)
@@ -153,7 +164,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 					// Use a dummy name here. The actual name will be recovered by AssetRipperAudioMixerPostprocessor.
 					param.ParameterName.String = $"Param_{j}";
 					HasAnyEffectParameterNameToRecover = true;
-					param.GUID.CopyValues(IndexingNewGuid(effectConstant.ParameterIndices[j], context.IndexToGuid));
+					param.GUID.CopyValues(IndexingNewGuid(effectConstant.ParameterIndices[j], indexToGuid));
 				}
 				
 				if ((int)effectConstant.SendTargetEffectIndex != -1)
@@ -166,11 +177,11 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			
 			// Append an Attenuation effect to a group if it has not yet got one,
 			// as Unity doesn't store Attenuation effect if it is the last.
-			foreach (IAudioMixerGroupController group in context.Groups)
+			foreach (IAudioMixerGroupController group in groups)
 			{
 				if (!groupsWithAttenuation.Contains(group))
 				{
-					IAudioMixerEffectController effect = context.VirtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
+					IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
 					effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 					PPtr_AudioMixerEffectController_ effectPPtr = new();
 					effectPPtr.CopyValues(effect.Collection.ForceCreatePPtr(effect));
@@ -183,18 +194,21 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			}
 		}
 
-		private void ProcessAudioMixerSnapshots(in AssetsProcessingContext context)
+		private void ProcessAudioMixerSnapshots(
+			IAudioMixerController mixer,
+			IAudioMixerConstant constants,
+			Dictionary<uint, UnityGUID> indexToGuid)
 		{
-			for (int i = 0; i < context.Mixer.Snapshots_C241.Count; i++)
+			for (int i = 0; i < mixer.Snapshots_C241.Count; i++)
 			{
-				PPtr_AudioMixerSnapshot_ snapshotPPtr = context.Mixer.Snapshots_C241[i];
-				IAudioMixerSnapshotController snapshot = (IAudioMixerSnapshotController)snapshotPPtr.GetAsset(context.Mixer.Collection);
+				PPtr_AudioMixerSnapshot_ snapshotPPtr = mixer.Snapshots_C241[i];
+				IAudioMixerSnapshotController snapshot = (IAudioMixerSnapshotController)snapshotPPtr.GetAsset(mixer.Collection);
 				AddAsset(snapshot);
 				
-				SnapshotConstant snapshotConstant = context.Constants.Snapshots[i];
+				SnapshotConstant snapshotConstant = constants.Snapshots[i];
 				for (int j = 0; j < snapshotConstant.Values.Length; j++)
 				{
-					if (context.IndexToGuid.TryGetValue((uint)j, out UnityGUID valueGuid))
+					if (indexToGuid.TryGetValue((uint)j, out UnityGUID valueGuid))
 					{
 						snapshot.FloatValues_C245[(GUID)valueGuid] = snapshotConstant.Values[j];
 					}
@@ -208,7 +222,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 				{
 					uint paramIndex = snapshotConstant.TransitionIndices[j];
 					int transitionType = (int)snapshotConstant.TransitionTypes[j];
-					if (context.IndexToGuid.TryGetValue(paramIndex, out UnityGUID paramGuid))
+					if (indexToGuid.TryGetValue(paramIndex, out UnityGUID paramGuid))
 					{
 						snapshot.TransitionOverrides_C245[(GUID)paramGuid] = transitionType;
 					}
@@ -220,17 +234,21 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			}
 		}
 
-		private void ProcessAudioMixer(in AssetsProcessingContext context)
+		private static void ProcessAudioMixer(
+			IAudioMixerController mixer,
+			IAudioMixerConstant constants,
+			Dictionary<uint, UnityGUID> indexToGuid,
+			List<IAudioMixerGroupController> groups)
 		{
 			// generate exposed parameters
-			context.Mixer.ExposedParameters_C241.Clear();
-			for (int i = 0; i < context.Constants.ExposedParameterIndices.Length; i++)
+			mixer.ExposedParameters_C241.Clear();
+			for (int i = 0; i < constants.ExposedParameterIndices.Length; i++)
 			{
-				uint paramIndex = context.Constants.ExposedParameterIndices[i];
-				uint paramNameCrc = context.Constants.ExposedParameterNames[i];
-				if (context.IndexToGuid.TryGetValue(paramIndex, out UnityGUID paramGuid))
+				uint paramIndex = constants.ExposedParameterIndices[i];
+				uint paramNameCrc = constants.ExposedParameterNames[i];
+				if (indexToGuid.TryGetValue(paramIndex, out UnityGUID paramGuid))
 				{
-					ExposedAudioParameter exposedParam = context.Mixer.ExposedParameters_C241.AddNew();
+					ExposedAudioParameter exposedParam = mixer.ExposedParameters_C241.AddNew();
 					exposedParam.Guid.CopyValues(paramGuid);
 					exposedParam.NameString = $"{CrcUtils.ReverseDigestAscii(paramNameCrc)}";
 				}
@@ -241,15 +259,15 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			}
 			
 			// complete mixer controller
-			context.Mixer.AudioMixerGroupViews_C241.Clear();
-			IAudioMixerGroupView groupView = context.Mixer.AudioMixerGroupViews_C241.AddNew();
+			mixer.AudioMixerGroupViews_C241.Clear();
+			IAudioMixerGroupView groupView = mixer.AudioMixerGroupViews_C241.AddNew();
 			groupView.NameString = "View";
-			foreach (IAudioMixerGroupController group in context.Groups)
+			foreach (IAudioMixerGroupController group in groups)
 			{
 				groupView.Guids.Add(group.GroupID_C243);
 			}
-			context.Mixer.CurrentViewIndex_C241 = 0;
-			context.Mixer.TargetSnapshot_C241.CopyValues(context.Mixer.StartSnapshot_C241);
+			mixer.CurrentViewIndex_C241 = 0;
+			mixer.TargetSnapshot_C241.CopyValues(mixer.StartSnapshot_C241);
 		}
 		
 		private static UnityGUID IndexingNewGuid(uint index, Dictionary<uint, UnityGUID> table)
