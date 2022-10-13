@@ -241,7 +241,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				PvrtcDecoder.DecompressPVRTC(data, width, height, bitmap.Bits, bitCount == 2);
+				PvrtcDecoder.DecompressPVRTC(data, width, height, bitCount == 2, bitmap.Bits);
 				bitmap.FlipY();
 				return bitmap;
 			}
