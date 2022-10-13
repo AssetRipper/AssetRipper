@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Export;
+﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
 using AssetRipper.Core.Extensions;
@@ -7,8 +7,8 @@ using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_78;
+using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform_;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -61,30 +61,55 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
+		public static AccessListBase<IPPtr_Component_> GetComponentPPtrList(this IGameObject gameObject)
+		{
+			if (gameObject.Component_C1_AssetList_ComponentPair is not null)
+			{
+				return new ComponentPairAccessList(gameObject.Component_C1_AssetList_ComponentPair);
+			}
+			else if (gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5 is not null)
+			{
+				return new AssetPairAccessList<PPtr_Component__3_0_0_f5>(gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5);
+			}
+			else if (gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4 is not null)
+			{
+				return new AssetPairAccessList<PPtr_Component__5_0_0_f4>(gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4);
+			}
+			else
+			{
+				throw new Exception("All three component properties returned null");
+			}
+		}
+
+		public static PPtrAccessList<IPPtr_Component_, IComponent> GetComponentAccessList(this IGameObject gameObject)
+		{
+			return new PPtrAccessList<IPPtr_Component_, IComponent>(gameObject.GetComponentPPtrList(), gameObject.Collection);
+		}
+
 		public static T? TryGetComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
-			foreach (IPPtr_Component_ ptr in gameObject.FetchComponents())
-			{
-				// component could have not implemented asset type
-				IComponent? comp = ptr.TryGetAsset(gameObject.Collection);
-				if (comp is T t)
-				{
-					return t;
-				}
-			}
-			return default;
+			gameObject.TryGetComponent(out T? component);
+			return component;
 		}
 		
 		public static bool TryGetComponent<T>(this IGameObject gameObject, [NotNullWhen(true)] out T? component) where T : IComponent
 		{
-			component = gameObject.TryGetComponent<T>();
-			return component is not null;
+			foreach (IComponent? comp in gameObject.GetComponentAccessList())
+			{
+				// component could have not implemented asset type
+				if (comp is T t)
+				{
+					component = t;
+					return true;
+				}
+			}
+			component = default;
+			return false;
 		}
 
 		public static T GetComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
-			T? component = gameObject.TryGetComponent<T>();
-			if (component is null)
+			if (!gameObject.TryGetComponent(out T? component))
 			{
 				throw new Exception($"Component of type {typeof(T)} hasn't been found");
 			}
@@ -93,15 +118,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 		
 		public static ITransform GetTransform(this IGameObject gameObject)
 		{
-			foreach (IPPtr_Component_ ptr in gameObject.FetchComponents())
+			foreach (IComponent? component in gameObject.GetComponentAccessList())
 			{
-				IComponent? comp = ptr.TryGetAsset(gameObject.Collection);
-				if (comp == null)
-				{
-					continue;
-				}
-
-				if (comp is ITransform transform)
+				if (component is ITransform transform)
 				{
 					return transform;
 				}
@@ -114,7 +133,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			ITransform root = gameObject.GetTransform();
 			while (true)
 			{
-				ITransform? parent = root.Father_C4.TryGetAsset(root.Collection);
+				ITransform? parent = root.Father_C4P;
 				if (parent == null)
 				{
 					break;
@@ -133,7 +152,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			int depth = 0;
 			while (true)
 			{
-				ITransform? parent = root.Father_C4.TryGetAsset(root.Collection);
+				ITransform? parent = root.Father_C4P;
 				if (parent == null)
 				{
 					break;
@@ -150,9 +169,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			yield return root;
 
 			ITransform? transform = null;
-			foreach (IPPtr_Component_ ptr in root.FetchComponents())
+			foreach (IComponent? component in root.GetComponentAccessList())
 			{
-				IComponent? component = ptr.TryGetAsset(root.Collection);
 				if (component == null)
 				{
 					continue;
@@ -170,10 +188,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 				throw new Exception("GameObject has no transform");
 			}
 
-			foreach (IPPtr_Transform_ pchild in transform.Children_C4)
+			foreach (ITransform? child in transform.Children_C4P)
 			{
-				ITransform child = pchild.GetAsset(transform.Collection);
-				IGameObject childGO = child.GameObject_C4.GetAsset(child.Collection);
+				_ = child ?? throw new NullReferenceException();
+				IGameObject childGO = child.GameObject_C4P ?? throw new NullReferenceException();
 				foreach (IEditorExtension childElement in FetchHierarchy(childGO))
 				{
 					yield return childElement;
@@ -191,15 +209,184 @@ namespace AssetRipper.Core.SourceGenExtensions
 		private static void BuildTOS(this IGameObject gameObject, IGameObject parent, string parentPath, Dictionary<uint, string> tos)
 		{
 			ITransform transform = parent.GetTransform();
-			foreach (IPPtr_Transform_ childPtr in transform.Children_C4)
+			foreach (ITransform? childTransform in transform.Children_C4P)
 			{
-				ITransform childTransform = childPtr.GetAsset(gameObject.Collection);
-				IGameObject child = childTransform.GameObject_C4.GetAsset(gameObject.Collection);
+				_ = childTransform ?? throw new NullReferenceException();
+				IGameObject child = childTransform.GameObject_C4P ?? throw new NullReferenceException();
 				string path = string.IsNullOrEmpty(parentPath) ? child.NameString : $"{parentPath}/{child.NameString}";
 				uint pathHash = CrcUtils.CalculateDigestUTF8(path);
 				tos[pathHash] = path;
 
 				gameObject.BuildTOS(child, path, tos);
+			}
+		}
+
+		private sealed class ComponentPairAccessList : AccessListBase<IPPtr_Component_>
+		{
+			private readonly AssetList<ComponentPair> referenceList;
+
+			public ComponentPairAccessList(AssetList<ComponentPair> referenceList)
+			{
+				this.referenceList = referenceList;
+			}
+
+			public override IPPtr_Component_ this[int index] { get => referenceList[index].Component; set => referenceList[index].Component.CopyValues(value); }
+
+			public override int Count => referenceList.Count;
+
+			public override int Capacity { get => referenceList.Capacity; set => referenceList.Capacity = value; }
+
+			public override void Add(IPPtr_Component_ item)
+			{
+				ComponentPair pair = Convert(item);
+				referenceList.Add(pair);
+			}
+
+			private static ComponentPair Convert(IPPtr_Component_ item)
+			{
+				ComponentPair pair = new();
+				pair.Component.CopyValues(item);
+				return pair;
+			}
+
+			public override IPPtr_Component_ AddNew()
+			{
+				return referenceList.AddNew().Component;
+			}
+
+			public override void Clear()
+			{
+				referenceList.Clear();
+			}
+
+			public override bool Contains(IPPtr_Component_ item)
+			{
+				return referenceList.Contains(Convert(item));
+			}
+
+			public override void CopyTo(IPPtr_Component_[] array, int arrayIndex)
+			{
+				for (int i = 0; i < referenceList.Count; i++)
+				{
+					array[i + arrayIndex] = referenceList[i].Component;
+				}
+			}
+
+			public override int EnsureCapacity(int capacity)
+			{
+				return referenceList.EnsureCapacity(capacity);
+			}
+
+			public override int IndexOf(IPPtr_Component_ item)
+			{
+				return referenceList.IndexOf(Convert(item));
+			}
+
+			public override void Insert(int index, IPPtr_Component_ item)
+			{
+				referenceList.Insert(index, Convert(item));
+			}
+
+			public override bool Remove(IPPtr_Component_ item)
+			{
+				return referenceList.Remove(Convert(item));
+			}
+
+			public override void RemoveAt(int index)
+			{
+				referenceList.RemoveAt(index);
+			}
+		}
+
+		private sealed class AssetPairAccessList<T> : AccessListBase<IPPtr_Component_> where T : IPPtr_Component_, new()
+		{
+			private readonly AssetList<AssetPair<int, T>> referenceList;
+
+			public AssetPairAccessList(AssetList<AssetPair<int, T>> referenceList)
+			{
+				this.referenceList = referenceList;
+			}
+
+			public override IPPtr_Component_ this[int index]
+			{
+				get => referenceList[index].Value;
+				set => referenceList[index].Value.CopyValues(value);
+			}
+
+			public override int Count => referenceList.Count;
+
+			public override int Capacity { get => referenceList.Capacity; set => referenceList.Capacity = value; }
+
+			public override void Add(IPPtr_Component_ item)
+			{
+				referenceList.Add(CreateNewPair(item));
+			}
+
+			private static AssetPair<int, T> CreateNewPair(IPPtr_Component_ item)
+			{
+				AssetPair<int, T> pair = new();
+				pair.Key = 2;
+				pair.Value.CopyValues(item);
+				return pair;
+			}
+
+			public override IPPtr_Component_ AddNew()
+			{
+				AssetPair<int, T> pair = referenceList.AddNew();
+				pair.Key = 2;
+				return pair.Value;
+			}
+
+			public override void Clear()
+			{
+				referenceList.Clear();
+			}
+
+			public override bool Contains(IPPtr_Component_ item)
+			{
+				return referenceList.Any(ptr => ptr.Value.Equals(item));
+			}
+
+			public override void CopyTo(IPPtr_Component_[] array, int arrayIndex)
+			{
+				for (int i = 0; i < referenceList.Count; i++)
+				{
+					array[i + arrayIndex] = referenceList[i].Value;
+				}
+			}
+
+			public override int EnsureCapacity(int capacity)
+			{
+				return referenceList.EnsureCapacity(capacity);
+			}
+
+			public override int IndexOf(IPPtr_Component_ item)
+			{
+				return referenceList.IndexOf(pair => pair.Value.Equals(item));
+			}
+
+			public override void Insert(int index, IPPtr_Component_ item)
+			{
+				referenceList.Insert(index, CreateNewPair(item));
+			}
+
+			public override bool Remove(IPPtr_Component_ item)
+			{
+				int index = IndexOf(item);
+				if (index < 0)
+				{
+					return false;
+				}
+				else
+				{
+					RemoveAt(index);
+					return true;
+				}
+			}
+
+			public override void RemoveAt(int index)
+			{
+				referenceList.RemoveAt(index);
 			}
 		}
 	}

@@ -15,6 +15,18 @@ namespace AssetRipper.Core.Linq
 			}
 		}
 
+		public static IEnumerable<T> ThrowIfNull<T>(this IEnumerable<T?> enumerable) where T : notnull
+		{
+			foreach (T? item in enumerable)
+			{
+				if (item is null)
+				{
+					throw new NullReferenceException();
+				}
+				yield return item;
+			}
+		}
+
 		public static IEnumerable<S> SelectType<T, S>(this IEnumerable<T> enumerable) where S : notnull
 		{
 			foreach (T item in enumerable)
