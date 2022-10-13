@@ -67,7 +67,7 @@ namespace AssetRipper.Core.Project.Collections
 				scene.Path.String = scenePath;
 				if (scene.Has_Guid())
 				{
-					scene.Guid.SetValues(container.SceneNameToGUID(scenePath));
+					scene.Guid.CopyValues(container.SceneNameToGUID(scenePath));
 				}
 			}
 		}

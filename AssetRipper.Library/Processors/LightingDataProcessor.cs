@@ -56,7 +56,7 @@ namespace AssetRipper.Library.Processors
 					}
 					else if (lightingDataAsset.Has_SceneGUID_C1120())
 					{
-						lightingDataAsset.SceneGUID_C1120.SetValues(collection.GUID);
+						lightingDataAsset.SceneGUID_C1120.CopyValues(collection.GUID);
 					}
 
 					lightingDataAsset.LightProbes_C1120P = (ILightProbes?)lightmapSettings.LightProbes_C157P;
