@@ -2,9 +2,7 @@ using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Utils;
 using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
-using AssetRipper.Core.Layout;
 using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.IO.Endian;
 using AssetRipper.Library.Exporters.AnimatorControllers.Editor;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
@@ -27,13 +25,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.Library.Exporters.AnimationClips
+namespace AssetRipper.Library.Processors.AnimationClips
 {
-#warning to resolve
-	/// <summary>
-	/// This class permanently alters the asset and will cause issues if ripping is done twice without reloading
-	/// </summary>
-	public class AnimationClipConverter
+	public sealed partial class AnimationClipConverter
 	{
 		private AnimationClipConverter(IAnimationClip clip)
 		{
@@ -45,11 +39,10 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 			m_customCurveResolver = new CustomCurveResolver(clip);
 		}
 
-		public static AnimationClipConverter Process(IAnimationClip clip)
+		public static void Process(IAnimationClip clip)
 		{
 			AnimationClipConverter converter = new AnimationClipConverter(clip);
 			converter.ProcessInner();
-			return converter;
 		}
 
 		private void ProcessInner()
@@ -500,7 +493,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 			key.Value.PathID = value.PathID;
 		}
 
-		private void GetPreviousFrame(IReadOnlyList<StreamedFrame> streamFrames, int curveID, int currentFrame, out int frameIndex, out int curveIndex)
+		private static void GetPreviousFrame(IReadOnlyList<StreamedFrame> streamFrames, int curveID, int currentFrame, out int frameIndex, out int curveIndex)
 		{
 			for (frameIndex = currentFrame - 1; frameIndex >= 0; frameIndex--)
 			{
@@ -517,7 +510,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 			throw new Exception($"There is no curve with index {curveID} in any of previous frames");
 		}
 
-		private int GetNextCurve(StreamedFrame frame, int currentCurve)
+		private static int GetNextCurve(StreamedFrame frame, int currentCurve)
 		{
 			StreamedCurveKey curve = frame.Curves[currentCurve];
 			int i = currentCurve + 1;
@@ -583,32 +576,5 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 		private readonly IAnimationClip m_clip;
 		private readonly CustomCurveResolver m_customCurveResolver;
 		private const float DefaultFloatWeight = 1.0f / 3.0f;
-		//default vector3 is 1/3, 1/3, 1/3
-		//default quaternion is 1/3, 1/3, 1/3, 1/3
-
-		private readonly struct CurveData
-		{
-			public readonly string path;
-			public readonly string attribute;
-			public readonly ClassIDType classId;
-			public readonly int fileId;
-			public readonly long pathId;
-
-			public CurveData(string path, string attribute, ClassIDType classId) : this()
-			{
-				this.path = path;
-				this.attribute = attribute;
-				this.classId = classId;
-			}
-
-			public CurveData(string path, string attribute, ClassIDType classId, int fileId, long pathId)
-			{
-				this.path = path;
-				this.attribute = attribute;
-				this.classId = classId;
-				this.fileId = fileId;
-				this.pathId = pathId;
-			}
-		}
 	}
 }

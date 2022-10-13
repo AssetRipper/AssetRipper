@@ -333,10 +333,6 @@ namespace AssetRipper.Library
 			//OverrideExporter<IAnimatorController>(new AnimatorControllerExporter());
 			//Temporarily disabled due to changes in how AssetCollections function.
 
-			//Animation Clip
-			//OverrideExporter<IAnimationClip>(new AnimationClipExporter());
-			//Temporarily disabled due to changes in how AssetCollections function.
-
 			AddPostExporter(new ProjectVersionPostExporter());
 			AddPostExporter(new PackageManifestPostExporter());
 			AddPostExporter(new StreamingAssetsPostExporter());

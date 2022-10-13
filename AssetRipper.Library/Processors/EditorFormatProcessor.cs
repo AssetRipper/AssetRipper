@@ -6,6 +6,7 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.Library.Processors.AnimationClips;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_157;
 using AssetRipper.SourceGenerated.Classes.ClassID_19;
@@ -17,6 +18,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_47;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
+using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_78;
 using System.Linq;
 
@@ -58,6 +60,9 @@ namespace AssetRipper.Library.Processors
 					break;
 				case ISpriteAtlas spriteAtlas:
 					spriteAtlas.ConvertToEditorFormat();
+					break;
+				case IAnimationClip animationClip:
+					AnimationClipConverter.Process(animationClip);
 					break;
 				case ITerrain terrain:
 					terrain.ConvertToEditorFormat();

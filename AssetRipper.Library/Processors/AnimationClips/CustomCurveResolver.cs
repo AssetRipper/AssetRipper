@@ -1,4 +1,5 @@
 using AssetRipper.Assets.Utils;
+using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
@@ -7,9 +8,8 @@ using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using System.Linq;
-using BindingCustomType = AssetRipper.Core.Classes.AnimationClip.GenericBinding.BindingCustomType;
 
-namespace AssetRipper.Library.Exporters.AnimationClips
+namespace AssetRipper.Library.Processors.AnimationClips
 {
 	public sealed class CustomCurveResolver
 	{
@@ -103,7 +103,7 @@ namespace AssetRipper.Library.Exporters.AnimationClips
 								return Prefix + property;
 							}
 
-							uint subPropIndex = (attribute >> 28) & 3;
+							uint subPropIndex = attribute >> 28 & 3;
 							bool isRgba = (attribute & 0x40000000) != 0;
 							char subProperty = subPropIndex switch
 							{
