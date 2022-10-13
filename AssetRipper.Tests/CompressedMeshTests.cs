@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using System;
 using System.Collections.Generic;
@@ -111,6 +112,17 @@ namespace AssetRipper.Tests
 		}
 
 		[Test]
+		public void FloatColorsNormalAssignmentSymmetry()
+		{
+			CompressedMesh_5_0_0_f4 compressedMesh = new();
+			//These are technically invalid colors since they have values outside [0,1] but it doesn't matter for the test.
+			ReadOnlySpan<ColorFloat> colors = MemoryMarshal.Cast<Vector4, ColorFloat>(tangents);
+			compressedMesh.SetFloatColors(colors);
+			ColorFloat[] unpackedValues = compressedMesh.GetFloatColors();
+			AreAlmostEqual(MemoryMarshal.Cast<ColorFloat, Vector4>(colors), MemoryMarshal.Cast<ColorFloat, Vector4>(unpackedValues), 0.00001f);
+		}
+
+		[Test]
 		public void BindPoseAssignmentSymmetry()
 		{
 			CompressedMesh_3_0_0_f5 compressedMesh = new();//BindPoses is only on versions before Unity 5
@@ -128,7 +140,7 @@ namespace AssetRipper.Tests
 			Assert.AreEqual(integers, unpackedValues);
 		}
 
-		private static void AreAlmostEqual(Vector3[] expected, Vector3[] actual, float maxDeviation)
+		private static void AreAlmostEqual(ReadOnlySpan<Vector3> expected, ReadOnlySpan<Vector3> actual, float maxDeviation)
 		{
 			if (expected.Length != actual.Length)
 			{
@@ -144,7 +156,7 @@ namespace AssetRipper.Tests
 			}
 		}
 
-		private static void AreAlmostEqual(Vector4[] expected, Vector4[] actual, float maxDeviation)
+		private static void AreAlmostEqual(ReadOnlySpan<Vector4> expected, ReadOnlySpan<Vector4> actual, float maxDeviation)
 		{
 			if (expected.Length != actual.Length)
 			{

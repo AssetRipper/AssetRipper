@@ -34,17 +34,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		/*
-		/// <summary>
-		/// Offset in index buffer
-		/// </summary>
-		uint FirstByte { get; set; }
-		/// <summary>
-		/// Offset in Vertices
-		/// </summary>
-		uint FirstVertex { get; set; }
-		 */
-
 		private static void UpdateSubMeshVertexRange(UnityVersion version, IMesh mesh, ISubMesh submesh)
 		{
 			if (submesh.IndexCount == 0)

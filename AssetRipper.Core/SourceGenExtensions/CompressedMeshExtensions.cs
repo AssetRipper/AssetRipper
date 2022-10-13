@@ -333,6 +333,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
+		/// <summary>
+		/// Only available before Unity 5
+		/// </summary>
+		/// <param name="compressedMesh"></param>
+		/// <returns></returns>
 		public static Matrix4x4[] GetBindPoses(this ICompressedMesh compressedMesh)
 		{
 			if (compressedMesh.Has_BindPoses())
@@ -349,6 +354,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
+		/// <summary>
+		/// Only available before Unity 5
+		/// </summary>
+		/// <param name="compressedMesh"></param>
+		/// <param name="bindPoses"></param>
 		public static void SetBindPoses(this ICompressedMesh compressedMesh, ReadOnlySpan<Matrix4x4> bindPoses)
 		{
 			compressedMesh.BindPoses?.PackFloats(MemoryMarshal.Cast<Matrix4x4, float>(bindPoses));
@@ -393,7 +403,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static void SetFloatColors(this ICompressedMesh compressedMesh, ReadOnlySpan<ColorFloat> colors)
 		{
-			throw new NotImplementedException();
+			if (compressedMesh.Has_FloatColors())
+			{
+				compressedMesh.FloatColors.PackFloats(MemoryMarshal.Cast<ColorFloat, float>(colors));
+			}
+			else if (compressedMesh.Has_Colors())
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		public static uint[] GetTriangles(this ICompressedMesh compressedMesh)
