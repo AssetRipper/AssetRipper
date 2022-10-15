@@ -188,7 +188,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 					group.Effects_C243.Add(effectPPtr);
 					AddAsset(effect);
 					
-					effect.EffectID_C244.CopyValues((GUID)UnityGUID.NewGuid());
+					effect.EffectID_C244.CopyValues(UnityGUID.NewGuid());
 					effect.EffectName_C244.String = "Attenuation";
 				}
 			}

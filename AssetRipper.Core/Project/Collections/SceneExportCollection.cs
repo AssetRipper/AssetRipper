@@ -181,7 +181,7 @@ namespace AssetRipper.Core.Project.Collections
 		public override IAssetExporter AssetExporter { get; }
 
 		private readonly IUnityObjectBase[] m_components;
-		private readonly Dictionary<AssetInfo, long> m_exportIDs = new Dictionary<AssetInfo, long>();
+		private readonly Dictionary<AssetInfo, long> m_exportIDs = new();
 		private readonly IOcclusionCullingSettings? m_occlusionCullingSettings;
 	}
 }

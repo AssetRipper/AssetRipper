@@ -28,13 +28,11 @@ namespace AssetRipper.Core.Project.Collections
 					return 0;
 				}
 
-				string indexStr = name.Substring(LevelName.Length);
-				return int.Parse(indexStr) + 1;
+				return int.Parse(name.AsSpan(LevelName.Length)) + 1;
 			}
 			else
 			{
-				string indexStr = name.Substring(LevelName.Length);
-				return int.Parse(indexStr);
+				return int.Parse(name.AsSpan(LevelName.Length));
 			}
 		}
 
@@ -66,9 +64,9 @@ namespace AssetRipper.Core.Project.Collections
 				{
 					return MainSceneName;
 				}
-				return LevelName + (index - 1).ToString();
+				return $"{LevelName}{index - 1}";
 			}
-			return LevelName + index.ToString();
+			return $"{LevelName}{index}";
 		}
 
 		internal static string GetSceneSubPath(IExportContainer container, AssetCollection serializedFile, out bool isRegular)
