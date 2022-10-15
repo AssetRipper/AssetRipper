@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
+using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
@@ -88,4 +89,9 @@ public abstract class UnityAssetBase : IUnityAssetBase
 	public virtual List<TypeTreeNode> MakeReleaseTypeTreeNodes(int depth, int startingIndex) => throw new NotSupportedException();
 
 	public virtual List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex) => throw new NotSupportedException();
+
+	public override string? ToString()
+	{
+		return this is IHasNameString hasName ? hasName.NameString : base.ToString();
+	}
 }
