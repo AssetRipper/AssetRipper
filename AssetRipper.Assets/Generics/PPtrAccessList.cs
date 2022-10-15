@@ -45,6 +45,18 @@ namespace AssetRipper.Assets.Generics
 				: throw new NotSupportedException();
 		}
 
+		public void Add(TTarget? value)
+		{
+			if (list is AccessListBase<TPPtr> accessList)
+			{
+				accessList.AddNew().SetAsset(file, value);
+			}
+			else
+			{
+				throw new NotSupportedException();
+			}
+		}
+
 		public int Count => list.Count;
 
 		public IEnumerator<TTarget?> GetEnumerator()
