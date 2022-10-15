@@ -6,7 +6,6 @@ using AssetRipper.Core.Linq;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.GameStructure;
-using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
 using AssetRipper.SourceGenerated.Classes.ClassID_1120;
@@ -139,7 +138,7 @@ namespace AssetRipper.Library.Processors
 		{
 			ProcessedAssetCollection processedCollection = new ProcessedAssetCollection(gameBundle);
 			processedCollection.Name = "Generated Lighting Data Assets";
-			processedCollection.SetLayout(projectVersion, IO.Files.BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
+			processedCollection.SetLayout(projectVersion);
 			return processedCollection;
 		}
 
