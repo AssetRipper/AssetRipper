@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
 using AssetRipper.Core.Extensions;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
@@ -20,38 +21,45 @@ namespace AssetRipper.Core.SourceGenExtensions
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		public static bool IsActiveInherited(UnityVersion version) => version.IsLess(4);
+		private static bool IsActiveInherited(UnityVersion version) => version.IsLess(4);
 
-		private static bool IsActive(this IGameObject gameObject) => gameObject.IsActive_C1_Boolean || gameObject.IsActive_C1_Byte > 0;
+		public static bool GetIsActive(this IGameObject gameObject)
+		{
+			return gameObject.IsActive_C1_Boolean || gameObject.IsActive_C1_Byte > 0;
+		}
 
-		private static bool GetIsActive(this IGameObject gameObject)
+		public static void SetIsActive(this IGameObject gameObject, bool active)
+		{
+			gameObject.IsActive_C1_Byte = active ? (byte)1 : (byte)0;
+			gameObject.IsActive_C1_Boolean = active;
+		}
+
+		private static bool ShouldBeActive(this IGameObject gameObject)
 		{
 			if (IsActiveInherited(gameObject.Collection.Version))
 			{
-				return gameObject.Collection.IsScene() ? gameObject.IsActive() : true;
+				return gameObject.Collection.IsScene() ? gameObject.GetIsActive() : true;
 			}
-			return gameObject.IsActive();
+			return gameObject.GetIsActive();
 		}
 
 		public static void ConvertToEditorFormat(this IGameObject gameObject, ITagManager? tagManager)
 		{
-			bool isActive = gameObject.GetIsActive();
-			gameObject.IsActive_C1_Byte = isActive ? (byte)1 : (byte)0;
-			gameObject.IsActive_C1_Boolean = isActive;
+			gameObject.SetIsActive(gameObject.ShouldBeActive());
 			gameObject.TagString_C1.String = tagManager.TagIDToName(gameObject.Tag_C1);
 		}
 
 		public static IEnumerable<IPPtr_Component_> FetchComponents(this IGameObject gameObject)
 		{
-			if (gameObject.Component_C1_AssetList_ComponentPair is not null)
+			if (gameObject.Has_Component_C1_AssetList_ComponentPair())
 			{
 				return gameObject.Component_C1_AssetList_ComponentPair.Select(pair => pair.m_Component);
 			}
-			else if (gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5 is not null)
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5())
 			{
 				return gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5.Select(pair => pair.Value);
 			}
-			else if (gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4 is not null)
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4())
 			{
 				return gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4.Select(pair => pair.Value);
 			}
@@ -63,17 +71,41 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static AccessListBase<IPPtr_Component_> GetComponentPPtrList(this IGameObject gameObject)
 		{
-			if (gameObject.Component_C1_AssetList_ComponentPair is not null)
+			if (gameObject.Has_Component_C1_AssetList_ComponentPair())
 			{
 				return new ComponentPairAccessList(gameObject.Component_C1_AssetList_ComponentPair);
 			}
-			else if (gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5 is not null)
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5())
 			{
 				return new AssetPairAccessList<PPtr_Component__3_0_0_f5>(gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5);
 			}
-			else if (gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4 is not null)
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4())
 			{
 				return new AssetPairAccessList<PPtr_Component__5_0_0_f4>(gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4);
+			}
+			else
+			{
+				throw new Exception("All three component properties returned null");
+			}
+		}
+
+		public static void AddComponent(this IGameObject gameObject, ClassIDType classID, IComponent component)
+		{
+			if (gameObject.Has_Component_C1_AssetList_ComponentPair())
+			{
+				gameObject.Component_C1_AssetList_ComponentPair.AddNew().Component.SetAsset(gameObject.Collection, component);
+			}
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5())
+			{
+				AssetPair<int, PPtr_Component__3_0_0_f5> pair = gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5.AddNew();
+				pair.Key = (int)classID;
+				pair.Value.SetAsset(gameObject.Collection, component);
+			}
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4())
+			{
+				AssetPair<int, PPtr_Component__5_0_0_f4> pair = gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4.AddNew();
+				pair.Key = (int)classID;
+				pair.Value.SetAsset(gameObject.Collection, component);
 			}
 			else
 			{
@@ -126,6 +158,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 			}
 			throw new Exception("Can't find transform component");
+		}
+
+		public static bool IsRoot(this IGameObject gameObject)
+		{
+			return gameObject.TryGetComponent<ITransform>()?.Father_C4P is null;
 		}
 
 		public static IGameObject GetRoot(this IGameObject gameObject)
@@ -319,7 +356,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			public override void Add(IPPtr_Component_ item)
 			{
-				referenceList.Add(CreateNewPair(item));
+				//referenceList.Add(CreateNewPair(item));
+				throw new NotSupportedException();
 			}
 
 			private static AssetPair<int, T> CreateNewPair(IPPtr_Component_ item)
@@ -332,9 +370,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			public override IPPtr_Component_ AddNew()
 			{
-				AssetPair<int, T> pair = referenceList.AddNew();
-				pair.Key = 2;
-				return pair.Value;
+				//AssetPair<int, T> pair = referenceList.AddNew();
+				//pair.Key = 2;
+				//return pair.Value;
+				throw new NotSupportedException();
+				//Not sure the above code is safe since Unity might rely on the class id being correct.
 			}
 
 			public override void Clear()
@@ -367,7 +407,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			public override void Insert(int index, IPPtr_Component_ item)
 			{
-				referenceList.Insert(index, CreateNewPair(item));
+				//referenceList.Insert(index, CreateNewPair(item));
+				throw new NotSupportedException();
 			}
 
 			public override bool Remove(IPPtr_Component_ item)
