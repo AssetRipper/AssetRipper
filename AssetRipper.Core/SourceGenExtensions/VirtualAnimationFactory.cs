@@ -205,7 +205,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 				else if (generatedStateMachine.Has_DefaultState_C1107_PPtr_AnimatorState_())
 				{
-					generatedStateMachine.DefaultState_C1107_PPtr_AnimatorState_.CopyValues(defaultStatePPtr);
+					generatedStateMachine.DefaultState_C1107_PPtr_AnimatorState_.CopyValues((PPtr<IAnimatorState>)defaultStatePPtr);
 				}
 			}
 

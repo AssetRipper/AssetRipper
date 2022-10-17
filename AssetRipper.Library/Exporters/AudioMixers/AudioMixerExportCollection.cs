@@ -111,8 +111,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 		{
 			IAudioMixerConstant constants = mixer.MixerConstant_C241;
 
-			(IAudioMixerEffectController, PPtr_AudioMixerEffectController_)[] effects =
-				new (IAudioMixerEffectController, PPtr_AudioMixerEffectController_)[constants.Effects.Count];
+			IAudioMixerEffectController[] effects = new IAudioMixerEffectController[constants.Effects.Count];
 			
 			HashSet<IAudioMixerGroupController> groupsWithAttenuation = new();
 			
@@ -120,9 +119,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			{
 				IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
 				effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-				PPtr_AudioMixerEffectController_ effectPPtr = new();
-				effectPPtr.CopyValues(effect.Collection.ForceCreatePPtr(effect));
-				effects[i] = (effect, effectPPtr);
+				effects[i] = effect;
 				AddAsset(effect);
 			}
 			
@@ -131,10 +128,10 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 			for (int i = 0; i < constants.Effects.Count; i++)
 			{
 				EffectConstant effectConstant = constants.Effects[i];
-				(IAudioMixerEffectController effect, PPtr_AudioMixerEffectController_ effectPPtr) = effects[i];
+				IAudioMixerEffectController effect = effects[i];
 
 				IAudioMixerGroupController group = groups[(int)effectConstant.GroupConstantIndex];
-				group.Effects_C243.Add(effectPPtr);
+				group.Effects_C243.AddNew().SetAsset(group.Collection, effect);
 
 				effect.EffectID_C244.CopyValues(constants.EffectGUIDs[i]);
 
@@ -169,7 +166,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 				
 				if ((int)effectConstant.SendTargetEffectIndex != -1)
 				{
-					effect.SendTarget_C244.CopyValues(effects[effectConstant.SendTargetEffectIndex].Item2);
+					effect.SendTarget_C244P = effects[effectConstant.SendTargetEffectIndex];
 				}
 				effect.EnableWetMix_C244 = enableWetMix;
 				effect.Bypass_C244 = effectConstant.Bypass;
@@ -267,7 +264,7 @@ namespace AssetRipper.Library.Exporters.AudioMixers
 				groupView.Guids.Add(group.GroupID_C243);
 			}
 			mixer.CurrentViewIndex_C241 = 0;
-			mixer.TargetSnapshot_C241.CopyValues(mixer.StartSnapshot_C241);
+			mixer.TargetSnapshot_C241P = mixer.StartSnapshot_C241P;
 		}
 		
 		private static UnityGUID IndexingNewGuid(uint index, Dictionary<uint, UnityGUID> table)

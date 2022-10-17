@@ -267,7 +267,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				this.referenceList = referenceList;
 			}
 
-			public override IPPtr_Component_ this[int index] { get => referenceList[index].Component; set => referenceList[index].Component.CopyValues(value); }
+			public override IPPtr_Component_ this[int index] { get => referenceList[index].Component; set => referenceList[index].Component.CopyValues(value.ToStruct()); }
 
 			public override int Count => referenceList.Count;
 
@@ -282,7 +282,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			private static ComponentPair Convert(IPPtr_Component_ item)
 			{
 				ComponentPair pair = new();
-				pair.Component.CopyValues(item);
+				pair.Component.CopyValues(item.ToStruct());
 				return pair;
 			}
 
@@ -347,7 +347,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			public override IPPtr_Component_ this[int index]
 			{
 				get => referenceList[index].Value;
-				set => referenceList[index].Value.CopyValues(value);
+				set => referenceList[index].Value.CopyValues(value.ToStruct());
 			}
 
 			public override int Count => referenceList.Count;
@@ -364,7 +364,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				AssetPair<int, T> pair = new();
 				pair.Key = 2;
-				pair.Value.CopyValues(item);
+				pair.Value.CopyValues(item.ToStruct());
 				return pair;
 			}
 

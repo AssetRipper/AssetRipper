@@ -151,6 +151,12 @@ namespace AssetRipper.Assets.Metadata
 			return new PPtr<T>(pptr.FileID, pptr.PathID);
 		}
 
+		//Called from source gen
+		public static PPtr ToStruct(this IPPtr pptr)
+		{
+			return new PPtr(pptr.FileID, pptr.PathID);
+		}
+
 		public static PPtr<T> ToStruct<T>(this IPPtr<T> pptr) where T : IUnityObjectBase
 		{
 			return new PPtr<T>(pptr.FileID, pptr.PathID);

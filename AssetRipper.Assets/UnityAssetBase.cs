@@ -1,4 +1,5 @@
-﻿using AssetRipper.Assets.Export;
+﻿using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO.Reading;
@@ -15,15 +16,9 @@ namespace AssetRipper.Assets;
 /// </summary>
 public abstract class UnityAssetBase : IUnityAssetBase
 {
-	public virtual void ReadEditor(AssetReader reader)
-	{
-		throw new NotSupportedException($"Editor reading is not supported for {GetType().FullName}");
-	}
+	public virtual void ReadEditor(AssetReader reader) => throw MethodNotSupported(nameof(ReadEditor));
 
-	public virtual void ReadRelease(AssetReader reader)
-	{
-		throw new NotSupportedException($"Release reading is not supported for {GetType().FullName}");
-	}
+	public virtual void ReadRelease(AssetReader reader) => throw MethodNotSupported(nameof(ReadRelease));
 
 	public void Read(AssetReader reader)
 	{
@@ -37,15 +32,9 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		}
 	}
 
-	public virtual void WriteEditor(AssetWriter writer)
-	{
-		throw new NotSupportedException($"Editor writing is not supported for {GetType().FullName}");
-	}
+	public virtual void WriteEditor(AssetWriter writer) => throw MethodNotSupported(nameof(WriteEditor));
 
-	public virtual void WriteRelease(AssetWriter writer)
-	{
-		throw new NotSupportedException($"Release writing is not supported for {GetType().FullName}");
-	}
+	public virtual void WriteRelease(AssetWriter writer) => throw MethodNotSupported(nameof(WriteRelease));
 
 	public void Write(AssetWriter writer)
 	{
@@ -59,15 +48,9 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		}
 	}
 
-	public virtual YamlNode ExportYamlEditor(IExportContainer container)
-	{
-		throw new NotSupportedException($"Editor yaml export is not supported for {GetType().FullName}");
-	}
+	public virtual YamlNode ExportYamlEditor(IExportContainer container) => throw MethodNotSupported(nameof(ExportYamlEditor));
 
-	public virtual YamlNode ExportYamlRelease(IExportContainer container)
-	{
-		throw new NotSupportedException($"Release yaml export is not supported for {GetType().FullName}");
-	}
+	public virtual YamlNode ExportYamlRelease(IExportContainer container) => throw MethodNotSupported(nameof(ExportYamlRelease));
 
 	public YamlNode ExportYaml(IExportContainer container)
 	{
@@ -86,12 +69,23 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		return Enumerable.Empty<PPtr<IUnityObjectBase>>();
 	}
 
-	public virtual List<TypeTreeNode> MakeReleaseTypeTreeNodes(int depth, int startingIndex) => throw new NotSupportedException();
+	public virtual List<TypeTreeNode> MakeReleaseTypeTreeNodes(int depth, int startingIndex) => throw MethodNotSupported(nameof(MakeEditorTypeTreeNodes));
 
-	public virtual List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex) => throw new NotSupportedException();
+	public virtual List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex) => throw MethodNotSupported(nameof(MakeReleaseTypeTreeNodes));
 
 	public override string? ToString()
 	{
 		return this is IHasNameString hasName ? hasName.NameString : base.ToString();
+	}
+
+	public virtual void Reset() => throw MethodNotSupported(nameof(Reset));
+
+	public virtual void CopyValues(IUnityAssetBase? source, PPtrConverter converter)
+	{
+	}
+
+	private Exception MethodNotSupported(string methodName)
+	{
+		return new NotSupportedException($"{methodName} is not supported for {GetType().FullName}");
 	}
 }
