@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Interfaces;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project;

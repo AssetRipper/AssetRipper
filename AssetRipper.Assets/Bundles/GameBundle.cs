@@ -1,5 +1,7 @@
 ﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO;
+using AssetRipper.Assets.Utils;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.CompressedFiles;
 using AssetRipper.IO.Files.ResourceFiles;
@@ -145,23 +147,5 @@ public sealed class GameBundle : Bundle
 		processedCollection.Name = name;
 		processedCollection.SetLayout(version);
 		return processedCollection;
-	}
-}
-public interface IDependencyProvider
-{
-	File? FindDependency(FileIdentifier identifier);
-}
-public interface IResourceProvider
-{
-	ResourceFile? FindResource(string identifier);
-}
-internal static class HashSetExtensions
-{
-	public static void AddRange<T>(this HashSet<T> set, IEnumerable<T> values)
-	{
-		foreach (T value in values)
-		{
-			set.Add(value);
-		}
 	}
 }
