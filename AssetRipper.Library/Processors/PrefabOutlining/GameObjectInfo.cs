@@ -9,21 +9,20 @@ using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component_;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform_;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace AssetRipper.Library.Processors.PrefabOutlining
 {
-	internal sealed class GameObjectInfo : IEquatable<GameObjectInfo>
+	internal readonly struct GameObjectInfo : IEquatable<GameObjectInfo>
 	{
-		public GameObjectInfo(ImmutableArray<GameObjectInfo?> children, ImmutableArray<int> components)
+		public GameObjectInfo(GameObjectInfo?[] children, int[] components)
 		{
 			Children = children;
 			Components = components;
 			Hash = CalculateHash(children, components);
 		}
 
-		public ImmutableArray<GameObjectInfo?> Children { get; }
-		public ImmutableArray<int> Components { get; }
+		private GameObjectInfo?[] Children { get; }
+		private int[] Components { get; }
 		private int Hash { get; }
 
 		public override string ToString()
@@ -36,14 +35,11 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 			return obj is GameObjectInfo info && Equals(info);
 		}
 
-		public bool Equals(GameObjectInfo? other)
+		public bool Equals(GameObjectInfo other)
 		{
-#pragma warning disable CS8631 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match constraint type.
-			return other is not null
-				&& Hash == other.Hash
+			return Hash == other.Hash
 				&& Components.AsSpan().SequenceEqual(other.Components.AsSpan())
 				&& Children.AsSpan().SequenceEqual(other.Children.AsSpan());
-#pragma warning restore CS8631 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match constraint type.
 		}
 
 		public override int GetHashCode()
@@ -61,7 +57,7 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 			return !(left == right);
 		}
 
-		private static int CalculateHash(ImmutableArray<GameObjectInfo?> children, ImmutableArray<int> components)
+		private static int CalculateHash(GameObjectInfo?[] children, int[] components)
 		{
 			HashCode hashCode = new();
 			for (int i = 0; i < components.Length; i++)
@@ -102,7 +98,7 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 				}
 			}
 
-			return new GameObjectInfo(ImmutableArray.Create(children), ImmutableArray.Create(components));
+			return new GameObjectInfo(children, components);
 		}
 
 		public static void AddCollectionToDictionary(AssetCollection collection, Dictionary<IGameObject, GameObjectInfo> dictionary)
@@ -115,7 +111,7 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 
 		public static GameObjectInfo AddHierarchyToDictionary(IGameObject root, Dictionary<IGameObject, GameObjectInfo> dictionary)
 		{
-			if (dictionary.TryGetValue(root, out GameObjectInfo? info))
+			if (dictionary.TryGetValue(root, out GameObjectInfo info))
 			{
 				return info;
 			}
@@ -145,7 +141,7 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 				}
 			}
 
-			info = new GameObjectInfo(ImmutableArray.Create(children), ImmutableArray.Create(components));
+			info = new GameObjectInfo(children, components);
 			dictionary.Add(root, info);
 			return info;
 		}
