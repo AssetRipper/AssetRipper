@@ -68,8 +68,8 @@ namespace AssetRipper.Library
 			new SceneGuidProcessor(),
 			new TerrainTextureProcessor(),
 			new LightingDataProcessor(),
-			new PrefabOutliningProcessor(),
 			new EditorFormatProcessor(),
+			new PrefabOutliningProcessor(),
 		};
 
 		public event Action? OnStartLoadingGameStructure;

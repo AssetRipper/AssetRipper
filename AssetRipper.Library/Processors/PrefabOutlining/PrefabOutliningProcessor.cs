@@ -50,7 +50,23 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 
 		private static void AddCopyToCollection(string name, IGameObject source, ProcessedAssetCollection collection)
 		{
-			AddPrefabPlaceHolder(name, collection);
+			//AddPrefabPlaceHolder(name, collection);
+			AddNewPrefab(name, source, collection);
+		}
+
+		private static void AddNewPrefab(string name, IGameObject source, ProcessedAssetCollection collection)
+		{
+			IGameObject root = GameObjectCloner.Clone(source, collection);
+			root.NameString = name;
+			root.SetIsActive(true);
+
+			ITransform transform = root.GetTransform();
+			transform.LocalPosition_C4.Reset();
+			transform.LocalRotation_C4.Reset();
+			transform.LocalScale_C4.SetValues(1, 1, 1);
+			transform.LocalEulerAnglesHint_C4?.Reset();
+			transform.RootOrder_C4 = 0;
+			transform.Father_C4.Reset();
 		}
 
 		private static void AddPrefabPlaceHolder(string name, ProcessedAssetCollection collection)
