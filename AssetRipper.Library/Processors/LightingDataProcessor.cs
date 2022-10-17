@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Linq;
@@ -8,15 +9,15 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
+using AssetRipper.SourceGenerated.Classes.ClassID_108;
 using AssetRipper.SourceGenerated.Classes.ClassID_1120;
 using AssetRipper.SourceGenerated.Classes.ClassID_157;
+using AssetRipper.SourceGenerated.Classes.ClassID_218;
+using AssetRipper.SourceGenerated.Classes.ClassID_23;
 using AssetRipper.SourceGenerated.Classes.ClassID_258;
-using AssetRipper.SourceGenerated.Subclasses.EnlightenRendererInformation;
-using AssetRipper.SourceGenerated.Subclasses.EnlightenSystemAtlasInformation;
-using AssetRipper.SourceGenerated.Subclasses.EnlightenSystemInformation;
-using AssetRipper.SourceGenerated.Subclasses.EnlightenTerrainChunksInformation;
-using AssetRipper.SourceGenerated.Subclasses.Hash128;
 using AssetRipper.SourceGenerated.Subclasses.LightmapData;
+using AssetRipper.SourceGenerated.Subclasses.RendererData;
+using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
 using System.Linq;
 
 namespace AssetRipper.Library.Processors
@@ -26,7 +27,7 @@ namespace AssetRipper.Library.Processors
 		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
 		{
 			Logger.Info(LogCategory.Processing, "Lighting Data Assets");
-			ProcessedAssetCollection processedCollection = CreateProcessedCollection(gameBundle, projectVersion);
+			ProcessedAssetCollection processedCollection = gameBundle.AddNewProcessedCollection("Generated Lighting Data Assets", projectVersion);
 
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections())
 			{
@@ -35,18 +36,16 @@ namespace AssetRipper.Library.Processors
 				{
 					ILightingDataAsset lightingDataAsset = CreateLightingDataAsset(processedCollection);
 
+					PPtrConverter converter = new PPtrConverter(lightmapSettings, lightingDataAsset);
+
 					foreach (ILightmapData lightmapData in lightmapSettings.Lightmaps_C157)
 					{
-						ILightmapData newLightmapData = lightingDataAsset.Lightmaps_C1120.AddNew();
-						SetPPtr(newLightmapData.DirLightmap, processedCollection, lightmapData.DirLightmap, collection);
-						SetPPtr(newLightmapData.IndirectLightmap, processedCollection, lightmapData.IndirectLightmap, collection);
-						SetPPtr(newLightmapData.Lightmap, processedCollection, lightmapData.Lightmap, collection);
-						SetPPtr(newLightmapData.ShadowMask, processedCollection, lightmapData.ShadowMask, collection);
+						lightingDataAsset.Lightmaps_C1120.AddNew().CopyValues(lightmapData, converter);
 					}
 
 					lightingDataAsset.LightmapsMode_C1120 = lightmapSettings.LightmapsMode_C157;
 
-					CopyEnlightenSceneMapping(lightingDataAsset, lightmapSettings);
+					lightingDataAsset.EnlightenSceneMapping_C1120.CopyValues(lightmapSettings.EnlightenSceneMapping_C157, converter);
 
 					if (lightingDataAsset.Has_Scene_C1120())
 					{
@@ -86,66 +85,71 @@ namespace AssetRipper.Library.Processors
 						lightmapSettings.LightmapSnapshot_C157P = lightingDataAsset;
 					}
 
+					foreach (IUnityObjectBase asset in collection)
+					{
+						if (asset is IMeshRenderer meshRenderer) //Need to do all renderer types
+						{
+							if ((meshRenderer.LightmapIndex_C23_Byte == byte.MaxValue || meshRenderer.LightmapIndex_C23_UInt16 == ushort.MaxValue)
+								&& meshRenderer.LightmapIndexDynamic_C23 == ushort.MaxValue)
+							{
+								// No lightmap data associated with renderer
+								continue;
+							}
+
+							//Scene object identifiers for the renderer associated with each value in the lightmapped renderer data array
+							SceneObjectIdentifier identifier = lightingDataAsset.LightmappedRendererDataIDs_C1120.AddNew();
+							identifier.TargetObjectReference = asset;
+
+							//The lightmap index, lightmap uv scale/offset value, etc
+							IRendererData rendererData = lightingDataAsset.LightmappedRendererData_C1120.AddNew();
+							rendererData.LightmapIndex = Math.Max(meshRenderer.LightmapIndex_C23_Byte, meshRenderer.LightmapIndex_C23_UInt16);
+							rendererData.LightmapIndexDynamic = meshRenderer.LightmapIndexDynamic_C23;
+							rendererData.LightmapST.CopyValues(meshRenderer.LightmapTilingOffset_C23);
+							if (meshRenderer.Has_LightmapTilingOffsetDynamic_C23())
+							{
+								rendererData.LightmapSTDynamic.CopyValues(meshRenderer.LightmapTilingOffsetDynamic_C23);
+							}
+						}
+						else if (asset is ITerrain terrain)
+						{
+							if (terrain.LightmapIndex_C218 == ushort.MaxValue && terrain.LightmapIndexDynamic_C218 == ushort.MaxValue)
+							{
+								// No lightmap data associated with the terrain
+								continue;
+							}
+
+							//Scene object identifiers for the terrain associated with each value in the lightmapped renderer data array
+							SceneObjectIdentifier identifier = lightingDataAsset.LightmappedRendererDataIDs_C1120.AddNew();
+							identifier.TargetObjectReference = asset;
+
+							//The lightmap index, lightmap uv scale/offset value, etc
+							IRendererData rendererData = lightingDataAsset.LightmappedRendererData_C1120.AddNew();
+							rendererData.LightmapIndex = terrain.LightmapIndex_C218;
+							rendererData.LightmapIndexDynamic = terrain.LightmapIndexDynamic_C218;
+							rendererData.LightmapST.CopyValues(terrain.LightmapTilingOffset_C218);
+							rendererData.LightmapSTDynamic.CopyValues(terrain.LightmapTilingOffsetDynamic_C218);
+
+							rendererData.TerrainDynamicUVST.CopyValues(terrain.DynamicUVST_C218);
+							rendererData.TerrainChunkDynamicUVST.CopyValues(terrain.ChunkDynamicUVST_C218);
+							rendererData.ExplicitProbeSetHash?.CopyValues(terrain.ExplicitProbeSetHash_C218);
+						}
+						else if (asset is ILight light)
+						{
+							// We're not sure what the most appropriate way to check if a light belongs
+							// in these arrays or not is, but just including all of them is harmless.
+
+							SceneObjectIdentifier identifier = lightingDataAsset.Lights_C1120.AddNew();
+							identifier.TargetObjectReference = asset;
+
+							lightingDataAsset.LightBakingOutputs_C1120?.AddNew().CopyValues(light.BakingOutput_C108);
+						}
+					}
+
 					//Todo:
 					//As described in AssetRipper#553, LightingDataAsset, LightProbes, and the lightmap textures
 					//should all be exported in a subfolder beside the scene. This folder has the same name as the scene.
 				}
 			}
-		}
-
-		private static void CopyEnlightenSceneMapping(ILightingDataAsset lightingDataAsset, ILightmapSettings lightmapSettings)
-		{
-			if (!lightmapSettings.Has_EnlightenSceneMapping_C157())
-			{
-				return;
-			}
-
-			if (lightingDataAsset.EnlightenSceneMapping_C1120.Has_Probesets() && lightmapSettings.EnlightenSceneMapping_C157.Has_Probesets())
-			{
-				foreach (Hash128 hash in lightmapSettings.EnlightenSceneMapping_C157.Probesets)
-				{
-					lightingDataAsset.EnlightenSceneMapping_C1120.Probesets.AddNew().CopyValues(hash);
-				}
-			}
-
-			foreach (EnlightenRendererInformation renderInfo in lightmapSettings.EnlightenSceneMapping_C157.Renderers)
-			{
-				EnlightenRendererInformation dataRenderInfo = lightingDataAsset.EnlightenSceneMapping_C1120.Renderers.AddNew();
-				dataRenderInfo.DynamicLightmapSTInSystem.CopyValues(renderInfo.DynamicLightmapSTInSystem);
-				dataRenderInfo.GeometryHash.CopyValues(renderInfo.GeometryHash);
-				dataRenderInfo.InstanceHash.CopyValues(renderInfo.InstanceHash);
-				SetPPtr(dataRenderInfo.Renderer, lightingDataAsset.Collection, renderInfo.Renderer, lightmapSettings.Collection);
-				dataRenderInfo.SystemId = renderInfo.SystemId;
-			}
-
-			foreach (EnlightenSystemAtlasInformation atlasInfo in lightmapSettings.EnlightenSceneMapping_C157.SystemAtlases)
-			{
-				lightingDataAsset.EnlightenSceneMapping_C1120.SystemAtlases.AddNew().CopyValues(atlasInfo);
-			}
-
-			foreach (EnlightenSystemInformation systemInfo in lightmapSettings.EnlightenSceneMapping_C157.Systems)
-			{
-				lightingDataAsset.EnlightenSceneMapping_C1120.Systems.AddNew().CopyValues(systemInfo);
-			}
-
-			foreach (EnlightenTerrainChunksInformation terrainInfo in lightmapSettings.EnlightenSceneMapping_C157.TerrainChunks)
-			{
-				lightingDataAsset.EnlightenSceneMapping_C1120.TerrainChunks.AddNew().CopyValues(terrainInfo);
-			}
-		}
-
-		private static ProcessedAssetCollection CreateProcessedCollection(GameBundle gameBundle, UnityVersion projectVersion)
-		{
-			ProcessedAssetCollection processedCollection = new ProcessedAssetCollection(gameBundle);
-			processedCollection.Name = "Generated Lighting Data Assets";
-			processedCollection.SetLayout(projectVersion);
-			return processedCollection;
-		}
-
-		private static void SetPPtr<T>(IPPtr<T>? destination, AssetCollection destinationCollection, IPPtr<T>? source, AssetCollection sourceCollection)
-			where T : IUnityObjectBase
-		{
-			destination?.CopyValues(destinationCollection.ForceCreatePPtr(sourceCollection.TryGetAsset(source?.ToStruct() ?? default)));
 		}
 
 		private static ILightingDataAsset CreateLightingDataAsset(ProcessedAssetCollection collection)

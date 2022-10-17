@@ -5,6 +5,7 @@ using AssetRipper.IO.Files.CompressedFiles;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
+using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Assets.Bundles;
 
@@ -136,6 +137,14 @@ public sealed class GameBundle : Bundle
 	public bool HasAnyAssetCollections()
 	{
 		return FetchAssetCollections().Any();
+	}
+
+	public ProcessedAssetCollection AddNewProcessedCollection(string name, UnityVersion version)
+	{
+		ProcessedAssetCollection processedCollection = new ProcessedAssetCollection(this);
+		processedCollection.Name = name;
+		processedCollection.SetLayout(version);
+		return processedCollection;
 	}
 }
 public interface IDependencyProvider
