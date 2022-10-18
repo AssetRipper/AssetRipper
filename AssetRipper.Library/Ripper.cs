@@ -13,6 +13,7 @@ using AssetRipper.Library.Exporters.AudioMixers;
 using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Miscellaneous;
 using AssetRipper.Library.Exporters.Models;
+using AssetRipper.Library.Exporters.NavMeshes;
 using AssetRipper.Library.Exporters.Scripts;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
@@ -32,6 +33,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_188;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
+using AssetRipper.SourceGenerated.Classes.ClassID_238;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
@@ -326,6 +328,9 @@ namespace AssetRipper.Library
 			OverrideExporter<ITexture2D>(terrainYamlExporter);
 			ConditionalOverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings), Settings.TerrainExportMode == TerrainExportMode.Heatmap);
 			ConditionalOverrideExporter<ITerrainData>(new TerrainMeshExporter(), Settings.TerrainExportMode == TerrainExportMode.Mesh);
+
+			//NavMeshData
+			ConditionalOverrideExporter<INavMeshData>(new GlbNavMeshExporter(), Settings.TerrainExportMode == TerrainExportMode.Mesh);
 
 			//Script exporters
 			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.AssemblyManager, Settings));
