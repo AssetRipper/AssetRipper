@@ -6,7 +6,6 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Configuration;
-using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Exporters.Textures.Extensions;
 using AssetRipper.Library.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
@@ -87,9 +86,8 @@ namespace AssetRipper.Library.Exporters.Textures
 
 			int pvrtcBitCount = texture.PVRTCBitCount(true);
 			int astcBlockSize = texture.ASTCBlockSize(true);
-			KTXBaseInternalFormat baseInternalFormat = texture.GetKTXBaseInternalFormat(true);
 
-			DirectBitmap? bitmap = ConvertToBitmap((TextureFormat)texture.Format_C28, texture.Width_C28, texture.Height_C28, texture.Collection.Version, buffer, pvrtcBitCount, astcBlockSize, baseInternalFormat);
+			DirectBitmap? bitmap = ConvertToBitmap((TextureFormat)texture.Format_C28, texture.Width_C28, texture.Height_C28, texture.Collection.Version, buffer, pvrtcBitCount, astcBlockSize);
 
 			if (bitmap == null)
 			{
@@ -105,7 +103,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return bitmap;
 		}
 
-		public static DirectBitmap? ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data, int pvrtcBitCount, int astcBlockSize, KTXBaseInternalFormat ktxBaseInternalFormat)
+		public static DirectBitmap? ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data, int pvrtcBitCount, int astcBlockSize)
 		{
 			if (width == 0 || height == 0)
 			{
@@ -182,7 +180,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				case TextureFormat.BC5:
 				case TextureFormat.BC6H:
 				case TextureFormat.BC7:
-					return TextureConverter.TexgenpackTextureToBitmap(ktxBaseInternalFormat, textureFormat, width, height, data);
+					return TextureConverter.BcTextureToBitmap(textureFormat, width, height, data);
 
 				case TextureFormat.DXT1Crunched:
 				case TextureFormat.DXT5Crunched:

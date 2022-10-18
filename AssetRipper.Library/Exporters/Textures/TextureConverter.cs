@@ -1,9 +1,9 @@
 using AssetRipper.Core.Logging;
-using AssetRipper.Library.Exporters.Textures.Enums;
 using AssetRipper.Library.Utils;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.TextureDecoder.Astc;
 using AssetRipper.TextureDecoder.Atc;
+using AssetRipper.TextureDecoder.Bc;
 using AssetRipper.TextureDecoder.Dxt;
 using AssetRipper.TextureDecoder.Etc;
 using AssetRipper.TextureDecoder.Pvrtc;
@@ -268,24 +268,13 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static DirectBitmap TexgenpackTextureToBitmap(KTXBaseInternalFormat baseInternalFormat, TextureFormat textureFormat, int width, int height, byte[] data)
+		public static DirectBitmap BcTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
 		{
-			Logger.Verbose("Uses texgenpack!");
-			Logger.Verbose($"KTXBaseInternalFormat: {baseInternalFormat}");
-			bool fixAlpha = baseInternalFormat is KTXBaseInternalFormat.RED or KTXBaseInternalFormat.RG;
-			Logger.Verbose($"Fix alpha: {fixAlpha}");
+			Logger.Info(LogCategory.Export, "Uses Bc Decoding!");
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
-				if (TexGenPackHandler.Decode(textureFormat, data, width, height, bitmap.BitsPtr, fixAlpha))
-				{
-					Logger.Verbose($"Byte array length: {bitmap.Bits.Length} Width: {width} Height: {height}");
-					CheckEqual(DecodeBC(data, textureFormat, width, height), bitmap.Bits);
-				}
-				else
-				{
-					DecodeBC(data, textureFormat, width, height, bitmap.Bits);
-				}
+				DecodeBC(data, textureFormat, width, height, bitmap.Bits);
 				bitmap.FlipY();
 				return bitmap;
 			}
@@ -296,16 +285,23 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		private static byte[] DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height)
+		private static byte[] DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
 		{
 			byte[] result = new byte[4 * width * height];
-			DecodeBC(inputData, textureFormat, width, height, result);
+			if (width % 4 != 0 || height % 4 != 0) //Managed code doesn't currently handle partial block sizes well.
+			{
+				NativeDecodeBC(inputData, textureFormat, width, height, result);
+			}
+			else
+			{
+				ManagedDecodeBC(inputData, textureFormat, width, height, result);
+			}
 			return result;
 		}
 
-		private static bool DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
+		private static bool NativeDecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
 		{
-			Logger.Verbose($"Performing alternate decoding for {textureFormat}");
+			Logger.Info(LogCategory.Export, $"Performing alternate decoding for {textureFormat}");
 
 			switch (textureFormat)
 			{
@@ -326,41 +322,24 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		private static void CheckEqual(byte[] left, byte[] right)
+		private static bool ManagedDecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
 		{
-			if (left == null)
+			switch (textureFormat)
 			{
-				Logger.Verbose("In byte array comparison, left was null");
-				return;
-			}
-			if (right == null)
-			{
-				Logger.Verbose("In byte array comparison, left was null");
-				return;
-			}
-			if (left.Length != right.Length)
-			{
-				Logger.Verbose("In byte array comparison, lengths were inequal");
-				Logger.Verbose($"Left: {left.Length}");
-				Logger.Verbose($"Right: {right.Length}");
-				return;
-			}
-			int length = left.Length;
-			int count = 0;
-			for (int i = 0; i < length; i++)
-			{
-				if (left[i] != right[i])
-				{
-					count++;
-				}
-			}
-			if (count == 0)
-			{
-				Logger.Verbose("Byte arrays were equal at all indices!");
-			}
-			else
-			{
-				Logger.Verbose($"Byte arrays were inequal in {count}/{length} places!");
+				case TextureFormat.BC4:
+					BcDecoder.DecompressBC4(inputData, width, height, outputData);
+					return true;
+				case TextureFormat.BC5:
+					BcDecoder.DecompressBC5(inputData, width, height, outputData);
+					return true;
+				case TextureFormat.BC6H:
+					BcDecoder.DecompressBC6H(inputData, width, height, false, outputData);
+					return true;
+				case TextureFormat.BC7:
+					BcDecoder.DecompressBC7(inputData, width, height, outputData);
+					return true;
+				default:
+					return false;
 			}
 		}
 
