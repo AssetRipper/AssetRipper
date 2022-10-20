@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
@@ -33,6 +34,11 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 		root.Anchor = container.GetExportID(this).ToString();
 		root.Add(ClassName, ExportYaml(container));
 		return document;
+	}
+
+	public IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies()
+	{
+		return FetchDependencies((FieldName?)null);
 	}
 
 	public string? OriginalPath

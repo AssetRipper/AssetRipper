@@ -69,6 +69,11 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		return Enumerable.Empty<PPtr<IUnityObjectBase>>();
 	}
 
+	public virtual IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies(FieldName? parent)
+	{
+		return Enumerable.Empty<(FieldName, PPtr<IUnityObjectBase>)>();
+	}
+
 	public virtual List<TypeTreeNode> MakeReleaseTypeTreeNodes(int depth, int startingIndex) => throw MethodNotSupported(nameof(MakeEditorTypeTreeNodes));
 
 	public virtual List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex) => throw MethodNotSupported(nameof(MakeReleaseTypeTreeNodes));

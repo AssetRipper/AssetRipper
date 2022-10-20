@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
@@ -21,4 +22,5 @@ public interface IUnityObjectBase : IUnityAssetBase
 	string? AssetBundleName { get; set; }
 
 	YamlDocument ExportYamlDocument(IExportContainer container);
+	IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies();
 }

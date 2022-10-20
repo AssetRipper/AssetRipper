@@ -62,6 +62,11 @@ namespace AssetRipper.Core.Structure.Assembly.Serializable
 
 		public SerializablePointer<T> Clone() => new SerializablePointer<T>(FileID, PathID);
 
+		public IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies(FieldName? parent)
+		{
+			yield return (FieldName.Empty, Pointer);
+		}
+
 		public int FileID { get; set; }
 		public long PathID { get; set; }
 		public PPtr<T> Pointer => new PPtr<T>(FileID, PathID);
