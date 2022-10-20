@@ -83,7 +83,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 				}
 				using FileStream stream = System.IO.File.Create(outputFile);
 				using TextWriter writer = new StreamWriter(stream);
-				LoadFiles(filesToExport, writer, filters, verbose);
+				LoadFiles(GetAllFilePaths(filesToExport), writer, filters, verbose);
 				writer.Flush();
 				Console.WriteLine("Done!");
 			},
@@ -92,7 +92,29 @@ namespace AssetRipper.Tools.DependenceGrapher
 			rootCommand.Invoke(args);
 		}
 
-		private static void LoadFiles(IReadOnlyList<string> files, TextWriter writer, List<IAssetFilter> filters, bool verbose)
+		private static IEnumerable<string> GetAllFilePaths(IEnumerable<string> paths)
+		{
+			foreach (string path in paths)
+			{
+				if (System.IO.File.Exists(path))
+				{
+					yield return path;
+				}
+				else if (Directory.Exists(path))
+				{
+					foreach (string filePath in Directory.EnumerateFiles(path))
+					{
+						yield return filePath;
+					}
+				}
+				else
+				{
+					Console.WriteLine($"No file or directory exists at {path}");
+				}
+			}
+		}
+
+		private static void LoadFiles(IEnumerable<string> files, TextWriter writer, List<IAssetFilter> filters, bool verbose)
 		{
 			GameAssetFactory factory = new GameAssetFactory(new BaseManager(s => { }));
 			foreach (string file in files)
