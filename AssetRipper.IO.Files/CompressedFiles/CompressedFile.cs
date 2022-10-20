@@ -22,13 +22,5 @@ namespace AssetRipper.IO.Files.CompressedFiles
 			ReadContents();
 			UncompressedFile?.ReadContentsRecursively();
 		}
-
-		public override IEnumerable<FileIdentifier> Dependencies
-		{
-			get
-			{
-				return UncompressedFile?.Dependencies ?? Enumerable.Empty<FileIdentifier>();
-			}
-		}
 	}
 }

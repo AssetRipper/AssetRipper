@@ -25,7 +25,6 @@ namespace AssetRipper.IO.Files
 		}
 		public string NameFixed { get; private set; } = string.Empty;
 		private string name = string.Empty;
-		public virtual IEnumerable<FileIdentifier> Dependencies => Enumerable.Empty<FileIdentifier>();
 		public abstract void Read(SmartStream stream);
 		public abstract void Write(System.IO.Stream stream);
 		public virtual void ReadContents() { }

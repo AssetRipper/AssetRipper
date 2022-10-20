@@ -38,7 +38,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		}
 		public SmartStream Stream { get; private set; } = SmartStream.Null;
 
-		public override IEnumerable<FileIdentifier> Dependencies => Metadata.Externals;
+		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
 		private readonly Dictionary<long, int> m_assetEntryLookup = new();
 		public IReadOnlyDictionary<long, int> AssetEntryLookup => m_assetEntryLookup;
 
