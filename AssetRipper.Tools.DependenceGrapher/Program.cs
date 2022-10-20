@@ -11,6 +11,7 @@ using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.Tools.DependenceGrapher.Filters;
 using System.CommandLine;
+using System.Text.Json;
 
 namespace AssetRipper.Tools.DependenceGrapher
 {
@@ -37,6 +38,12 @@ namespace AssetRipper.Tools.DependenceGrapher
 							description: "The output file to save the information. If not specified, it will be called \"output.txt\".",
 							getDefaultValue: () => null);
 			rootCommand.AddOption(outputOption);
+
+			Option<string?> cabMapOption = new Option<string?>(
+							name: "--cab-map",
+							description: "If provided, a cab map json file will be used to list bundle names for referenced files.",
+							getDefaultValue: () => null);
+			rootCommand.AddOption(cabMapOption);
 
 			Option<string?> nameOption = new Option<string?>(
 							name: "--name",
@@ -68,12 +75,23 @@ namespace AssetRipper.Tools.DependenceGrapher
 							getDefaultValue: () => false);
 			rootCommand.AddOption(verboseOption);
 
-			rootCommand.SetHandler((List<string> filesToExport, string? outputFile, string? name, string? className, int classID, long pathID, bool verbose) =>
+			rootCommand.SetHandler((List<string> filesToExport, string? outputFile, string? cabMapPath, string? name, string? className, int classID, long pathID, bool verbose) =>
 			{
 				if (filesToExport.Count == 0)
 				{
 					Console.WriteLine("No files were specified for analysis.");
 					return;
+				}
+
+				Dictionary<string, string> cabMap;
+				if (System.IO.File.Exists(cabMapPath))
+				{
+					using FileStream cabMapStream = System.IO.File.OpenRead(cabMapPath);
+					cabMap = JsonSerializer.Deserialize<Dictionary<string, string>>(cabMapPath) ?? new();
+				}
+				else
+				{
+					cabMap = new();
 				}
 
 				List<IAssetFilter> filters = CreateFilterList(name, className, classID, pathID);
@@ -83,11 +101,11 @@ namespace AssetRipper.Tools.DependenceGrapher
 				}
 				using FileStream stream = System.IO.File.Create(outputFile);
 				using TextWriter writer = new StreamWriter(stream);
-				LoadFiles(GetAllFilePaths(filesToExport), writer, filters, verbose);
+				LoadFiles(GetAllFilePaths(filesToExport), writer, filters, verbose, cabMap);
 				writer.Flush();
 				Console.WriteLine("Done!");
 			},
-			filesToExportOption, outputOption, nameOption, classNameOption, classIDOption, pathIDOption, verboseOption);
+			filesToExportOption, outputOption, cabMapOption, nameOption, classNameOption, classIDOption, pathIDOption, verboseOption);
 
 			rootCommand.Invoke(args);
 		}
@@ -114,16 +132,16 @@ namespace AssetRipper.Tools.DependenceGrapher
 			}
 		}
 
-		private static void LoadFiles(IEnumerable<string> files, TextWriter writer, List<IAssetFilter> filters, bool verbose)
+		private static void LoadFiles(IEnumerable<string> files, TextWriter writer, List<IAssetFilter> filters, bool verbose, Dictionary<string, string> cabMap)
 		{
 			GameAssetFactory factory = new GameAssetFactory(new BaseManager(s => { }));
 			foreach (string file in files)
 			{
-				LoadFile(file, factory, writer, filters, verbose);
+				LoadFile(file, factory, writer, filters, verbose, cabMap);
 			}
 		}
 
-		private static void LoadFile(string fullName, GameAssetFactory factory, TextWriter writer, List<IAssetFilter> filters, bool verbose)
+		private static void LoadFile(string fullName, GameAssetFactory factory, TextWriter writer, List<IAssetFilter> filters, bool verbose, Dictionary<string, string> cabMap)
 		{
 #if !DEBUG
 			try
@@ -134,7 +152,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 				{
 					writer.WriteLine($"Dependencies of serialized file [{serializedFile.NameFixed}]:");
 					writer.WriteLine();
-					ExtractDependencies(serializedFile, factory, writer, filters, verbose);
+					ExtractDependencies(serializedFile, factory, writer, filters, verbose, cabMap);
 				}
 				else if (file is FileContainer container)
 				{
@@ -143,7 +161,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 					{
 						writer.WriteLine($"Dependencies of serialized file [{serializedFile1.NameFixed}] in bundle [{container.NameFixed}]:");
 						writer.WriteLine();
-						ExtractDependencies(serializedFile1, factory, writer, filters, verbose);
+						ExtractDependencies(serializedFile1, factory, writer, filters, verbose, cabMap);
 					}
 				}
 				else
@@ -183,16 +201,16 @@ namespace AssetRipper.Tools.DependenceGrapher
 			return filters;
 		}
 
-		private static void ExtractDependencies(SerializedFile file, GameAssetFactory factory, TextWriter writer, List<IAssetFilter> filters, bool verbose)
+		private static void ExtractDependencies(SerializedFile file, GameAssetFactory factory, TextWriter writer, List<IAssetFilter> filters, bool verbose, Dictionary<string, string> cabMap)
 		{
 			GameBundle bundle = new();
 			
 			SerializedAssetCollection collection = bundle.AddCollectionFromSerializedFile(file, factory);
 			bundle.InitializeAllDependencyLists();
-			ExtractDependencies(file, collection, writer, filters, verbose);
+			ExtractDependencies(file, collection, writer, filters, verbose, cabMap);
 		}
 
-		private static void ExtractDependencies(SerializedFile file, SerializedAssetCollection collection, TextWriter writer, List<IAssetFilter> filters, bool verbose)
+		private static void ExtractDependencies(SerializedFile file, SerializedAssetCollection collection, TextWriter writer, List<IAssetFilter> filters, bool verbose, Dictionary<string, string> cabMap)
 		{
 			Dictionary<string, LinkedList<(string, IUnityObjectBase)>> results = new();
 			foreach (IUnityObjectBase asset in collection)
@@ -211,7 +229,15 @@ namespace AssetRipper.Tools.DependenceGrapher
 			}
 			foreach ((string referenceFileName, LinkedList<(string, IUnityObjectBase)> list) in results)
 			{
-				writer.WriteLine($"* {referenceFileName}:");
+				if (cabMap.TryGetValue(referenceFileName, out string? bundleName))
+				{
+					writer.WriteLine($"* {referenceFileName} in {bundleName}:");
+				}
+				else
+				{
+					writer.WriteLine($"* {referenceFileName}:");
+				}
+
 				foreach ((string fieldName, IUnityObjectBase asset) in list)
 				{
 					if (verbose)
