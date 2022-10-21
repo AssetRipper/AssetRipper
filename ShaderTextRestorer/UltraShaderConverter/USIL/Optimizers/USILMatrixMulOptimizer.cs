@@ -4,48 +4,44 @@ using static ShaderLabConvert.USILOptimizerUtil;
 
 namespace ShaderLabConvert
 {
-	// note: cbuffers must be converted to matrix type by this point
-	// it's a miracle when this works. there's so many issues with how this works fundamentally.
 	/// <summary>
 	/// Converts multiple multiply operations into a single matrix one
 	/// "instruction"
 	/// </summary>
+	/// <remarks>
+	/// Note: cbuffers must be converted to matrix type by this point.
+	/// It's a miracle when this works. There's so many issues with how this works fundamentally.
+	/// </remarks>
 	public class USILMatrixMulOptimizer : IUSILOptimizer
 	{
-		UShaderProgram _shader;
-		ShaderSubProgram _shaderData;
+		private static readonly int[] XYZW_MASK = new int[] { 0, 1, 2, 3 };
+		private static readonly int[] XXXX_MASK = new int[] { 0, 0, 0, 0 };
+		private static readonly int[] YYYY_MASK = new int[] { 1, 1, 1, 1 };
+		private static readonly int[] ZZZZ_MASK = new int[] { 2, 2, 2, 2 };
+		private static readonly int[] WWWW_MASK = new int[] { 3, 3, 3, 3 };
 
-		private readonly int[] XYZW_MASK = new int[] { 0, 1, 2, 3 };
-		private readonly int[] XXXX_MASK = new int[] { 0, 0, 0, 0 };
-		private readonly int[] YYYY_MASK = new int[] { 1, 1, 1, 1 };
-		private readonly int[] ZZZZ_MASK = new int[] { 2, 2, 2, 2 };
-		private readonly int[] WWWW_MASK = new int[] { 3, 3, 3, 3 };
-
-		private readonly int[] XYZ_MASK = new int[] { 0, 1, 2 };
-		private readonly int[] XXX_MASK = new int[] { 0, 0, 0 };
-		private readonly int[] YYY_MASK = new int[] { 1, 1, 1 };
-		private readonly int[] ZZZ_MASK = new int[] { 2, 2, 2 };
+		private static readonly int[] XYZ_MASK = new int[] { 0, 1, 2 };
+		private static readonly int[] XXX_MASK = new int[] { 0, 0, 0 };
+		private static readonly int[] YYY_MASK = new int[] { 1, 1, 1 };
+		private static readonly int[] ZZZ_MASK = new int[] { 2, 2, 2 };
 
 		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
 		{
-			_shader = shader;
-			_shaderData = shaderData;
-
 			bool changes = false;
 
-			changes |= ReplaceMulMatrixVec4W1();
-			changes |= ReplaceMulMatrixVec4();
-			changes |= ReplaceMulMatrixVec3();
+			changes |= ReplaceMulMatrixVec4W1(shader);
+			changes |= ReplaceMulMatrixVec4(shader);
+			changes |= ReplaceMulMatrixVec3(shader);
 
 			return changes;
 		}
 
 		// mat4x4 * vec4(vec3, 1)
-		private bool ReplaceMulMatrixVec4W1()
+		private static bool ReplaceMulMatrixVec4W1(UShaderProgram shader)
 		{
 			bool changes = false;
 
-			List<USILInstruction> insts = _shader.instructions;
+			List<USILInstruction> insts = shader.instructions;
 			for (int i = 0; i < insts.Count - 3; i++)
 			{
 				// do detection
@@ -170,11 +166,11 @@ namespace ShaderLabConvert
 		}
 
 		// mat4x4 * vec4
-		private bool ReplaceMulMatrixVec4()
+		private static bool ReplaceMulMatrixVec4(UShaderProgram shader)
 		{
 			bool changes = false;
 
-			List<USILInstruction> insts = _shader.instructions;
+			List<USILInstruction> insts = shader.instructions;
 			for (int i = 0; i < insts.Count - 3; i++)
 			{
 				// do detection
@@ -292,12 +288,12 @@ namespace ShaderLabConvert
 		}
 
 		// mat3x3 * vec3
-		private bool ReplaceMulMatrixVec3()
+		private static bool ReplaceMulMatrixVec3(UShaderProgram shader)
 		{
 
 			bool changes = false;
 
-			List<USILInstruction> insts = _shader.instructions;
+			List<USILInstruction> insts = shader.instructions;
 			for (int i = 0; i < insts.Count - 3; i++)
 			{
 				// do detection

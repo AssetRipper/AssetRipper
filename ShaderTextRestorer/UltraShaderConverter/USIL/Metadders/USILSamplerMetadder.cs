@@ -8,14 +8,8 @@ namespace ShaderLabConvert
 {
 	public class USILSamplerMetadder : IUSILOptimizer
 	{
-		private UShaderProgram _shader;
-		private ShaderSubProgram _shaderData;
-
 		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
 		{
-			_shader = shader;
-			_shaderData = shaderData;
-
 			List<USILInstruction> instructions = shader.instructions;
 			foreach (USILInstruction instruction in instructions)
 			{
@@ -23,7 +17,7 @@ namespace ShaderLabConvert
 				{
 					if (operand.operandType == USILOperandType.SamplerRegister)
 					{
-						TextureParameter texParam = _shaderData.TextureParameters.FirstOrDefault(
+						TextureParameter? texParam = shaderData.TextureParameters.FirstOrDefault(
 							p => p.SamplerIndex == operand.registerIndex
 						);
 
@@ -62,7 +56,7 @@ namespace ShaderLabConvert
 					}
 					else if (operand.operandType == USILOperandType.ResourceRegister)
 					{
-						TextureParameter texParam = _shaderData.TextureParameters.FirstOrDefault(
+						TextureParameter? texParam = shaderData.TextureParameters.FirstOrDefault(
 							p => p.Index == operand.registerIndex
 						);
 

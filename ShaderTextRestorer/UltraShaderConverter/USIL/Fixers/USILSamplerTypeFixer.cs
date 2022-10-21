@@ -8,11 +8,8 @@ namespace ShaderLabConvert
 	/// </summary>
 	public class USILSamplerTypeFixer : IUSILOptimizer
 	{
-		private UShaderProgram _shader;
-		private ShaderSubProgram _shaderData;
-
 		// There's most likely a better way to handle this, but I don't care right now.
-		public static readonly HashSet<string> BUILTIN_SAMPLER_TEXTURE_NAMES = new HashSet<string>()
+		public static readonly HashSet<string?> BUILTIN_SAMPLER_TEXTURE_NAMES = new()
 		{
 			"unity_Lightmap",
 			"unity_ShadowMask",
@@ -24,9 +21,6 @@ namespace ShaderLabConvert
 
 		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
 		{
-			_shader = shader;
-			_shaderData = shaderData;
-
 			bool changes = false;
 
 			List<USILInstruction> instructions = shader.instructions;
@@ -62,7 +56,7 @@ namespace ShaderLabConvert
 			return changes; // any changes made?
 		}
 
-		private int GetSamplerTypeIdx(USILInstructionType type)
+		private static int GetSamplerTypeIdx(USILInstructionType type)
 		{
 			return type switch
 			{

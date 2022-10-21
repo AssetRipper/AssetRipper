@@ -8,13 +8,11 @@ namespace ShaderLabConvert
 	/// </summary>
 	public class USILAndOptimizer : IUSILOptimizer
 	{
-		private HashSet<string> _comparisonResultRegisters;
-
 		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
 		{
 			bool changes = false;
 
-			_comparisonResultRegisters = new HashSet<string>();
+			HashSet<string> _comparisonResultRegisters = new();
 
 			List<USILInstruction> instructions = shader.instructions;
 			foreach (USILInstruction instruction in instructions)
@@ -26,7 +24,7 @@ namespace ShaderLabConvert
 				{
 					if (destOperand != null)
 					{
-						SetRegisterIsComparison(destOperand, true);
+						SetRegisterIsComparison(destOperand, true, _comparisonResultRegisters);
 					}
 				}
 				else if (instruction.instructionType == USILInstructionType.And)
@@ -37,52 +35,56 @@ namespace ShaderLabConvert
 						rightOperand.immValueFloat[0] == 1)
 					{
 						instruction.instructionType = USILInstructionType.MoveConditional;
-						instruction.srcOperands = new List<USILOperand>();
-						instruction.srcOperands.Add(leftOperand);
-						instruction.srcOperands.Add(new USILOperand()
+						instruction.srcOperands = new List<USILOperand>
 						{
-							operandType = USILOperandType.ImmediateFloat,
-							immValueFloat = new float[1] { 1f }
-						});
-						instruction.srcOperands.Add(new USILOperand()
-						{
-							operandType = USILOperandType.ImmediateFloat,
-							immValueFloat = new float[1] { 0f }
-						});
+							leftOperand,
+							new USILOperand()
+							{
+								operandType = USILOperandType.ImmediateFloat,
+								immValueFloat = new float[1] { 1f }
+							},
+							new USILOperand()
+							{
+								operandType = USILOperandType.ImmediateFloat,
+								immValueFloat = new float[1] { 0f }
+							}
+						};
 
 						if (destOperand != null)
 						{
-							SetRegisterIsComparison(destOperand, false);
+							SetRegisterIsComparison(destOperand, false, _comparisonResultRegisters);
 						}
 					}
 					else
 					{
-						bool leftIsComparison = IsRegisterComparison(leftOperand);
-						bool rightIsComparison = IsRegisterComparison(rightOperand);
+						bool leftIsComparison = IsRegisterComparison(leftOperand, _comparisonResultRegisters);
+						bool rightIsComparison = IsRegisterComparison(rightOperand, _comparisonResultRegisters);
 						if (leftIsComparison || rightIsComparison)
 						{
 							USILOperand cmpOperand = leftIsComparison ? leftOperand : rightOperand;
 							USILOperand resOperand = leftIsComparison ? rightOperand : leftOperand;
 
 							instruction.instructionType = USILInstructionType.MoveConditional;
-							instruction.srcOperands = new List<USILOperand>();
-							instruction.srcOperands.Add(cmpOperand);
-							instruction.srcOperands.Add(resOperand);
-							instruction.srcOperands.Add(new USILOperand()
+							instruction.srcOperands = new List<USILOperand>
 							{
-								operandType = USILOperandType.ImmediateFloat,
-								immValueFloat = new float[1] { 0f }
-							});
+								cmpOperand,
+								resOperand,
+								new USILOperand()
+								{
+									operandType = USILOperandType.ImmediateFloat,
+									immValueFloat = new float[1] { 0f }
+								}
+							};
 						}
 
 						// output is comparison if both are comparison (because result is also comparison)
 						if (leftIsComparison && rightIsComparison)
 						{
-							SetRegisterIsComparison(destOperand, true);
+							SetRegisterIsComparison(destOperand, true, _comparisonResultRegisters);
 						}
 						else
 						{
-							SetRegisterIsComparison(destOperand, false);
+							SetRegisterIsComparison(destOperand, false, _comparisonResultRegisters);
 						}
 					}
 				}
@@ -90,7 +92,7 @@ namespace ShaderLabConvert
 			return changes; // any changes made?
 		}
 
-		private void SetRegisterIsComparison(USILOperand operand, bool isComparison)
+		private static void SetRegisterIsComparison(USILOperand operand, bool isComparison, HashSet<string> _comparisonResultRegisters)
 		{
 			foreach (int maskIdx in operand.mask)
 			{
@@ -107,7 +109,7 @@ namespace ShaderLabConvert
 		}
 
 		// 3dmigoto checked if any match, here we check if they all match
-		private bool IsRegisterComparison(USILOperand operand)
+		private static bool IsRegisterComparison(USILOperand operand, HashSet<string> _comparisonResultRegisters)
 		{
 			foreach (int maskIdx in operand.mask)
 			{
@@ -119,7 +121,7 @@ namespace ShaderLabConvert
 			return true;
 		}
 
-		private bool IsComparisonOrBooleanOp(USILInstruction instruction)
+		private static bool IsComparisonOrBooleanOp(USILInstruction instruction)
 		{
 			// non-exhaustive list obviously
 			return instruction.IsComparisonType() || instruction.instructionType == USILInstructionType.Not;

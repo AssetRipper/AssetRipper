@@ -38,71 +38,89 @@ namespace ShaderLabConvert
 			return changes; // any changes made?
 		}
 
-		private bool IsTrulyNegative(USILOperand operand)
+		private static bool IsTrulyNegative(USILOperand operand)
 		{
-			if (operand.operandType == USILOperandType.ImmediateInt)
+			switch (operand.operandType)
 			{
-				foreach (int imm in operand.immValueInt)
-				{
-					// this includes 0 as being ok for negative. hopefully there are no +/- 0 instructions?
-					if (imm > 0)
+				case USILOperandType.ImmediateInt:
 					{
-						return false;
+						foreach (int imm in operand.immValueInt)
+						{
+							// this includes 0 as being ok for negative. hopefully there are no +/- 0 instructions?
+							if (imm > 0)
+							{
+								return false;
+							}
+						}
+						return true;
 					}
-				}
-				return true;
-			}
-			else if (operand.operandType == USILOperandType.ImmediateFloat)
-			{
-				foreach (float imm in operand.immValueFloat)
-				{
-					if (imm > 0)
+
+				case USILOperandType.ImmediateFloat:
 					{
-						return false;
+						foreach (float imm in operand.immValueFloat)
+						{
+							if (imm > 0)
+							{
+								return false;
+							}
+						}
+						return true;
 					}
-				}
-				return true;
-			}
-			else if (operand.operandType == USILOperandType.Multiple)
-			{
-				foreach (USILOperand child in operand.children)
-				{
-					if (!IsTrulyNegative(child))
+
+				case USILOperandType.Multiple:
 					{
-						return false;
+						foreach (USILOperand child in operand.children)
+						{
+							if (!IsTrulyNegative(child))
+							{
+								return false;
+							}
+						}
+						return true;
 					}
-				}
-				return true;
+
+				default:
+					return operand.negative;
 			}
-			return operand.negative;
 		}
 
-		private void NegateOperand(USILOperand operand)
+		private static void NegateOperand(USILOperand operand)
 		{
-			if (operand.operandType == USILOperandType.ImmediateInt)
+			switch (operand.operandType)
 			{
-				for (int i = 0; i < operand.immValueInt.Length; i++)
-				{
-					operand.immValueInt[i] = -operand.immValueInt[i];
-				}
-			}
-			else if (operand.operandType == USILOperandType.ImmediateFloat)
-			{
-				for (int i = 0; i < operand.immValueFloat.Length; i++)
-				{
-					operand.immValueFloat[i] = -operand.immValueFloat[i];
-				}
-			}
-			else if (operand.operandType == USILOperandType.Multiple)
-			{
-				foreach (USILOperand child in operand.children)
-				{
-					NegateOperand(child);
-				}
-			}
-			else
-			{
-				operand.negative = !operand.negative;
+				case USILOperandType.ImmediateInt:
+					{
+						for (int i = 0; i < operand.immValueInt.Length; i++)
+						{
+							operand.immValueInt[i] = -operand.immValueInt[i];
+						}
+
+						break;
+					}
+
+				case USILOperandType.ImmediateFloat:
+					{
+						for (int i = 0; i < operand.immValueFloat.Length; i++)
+						{
+							operand.immValueFloat[i] = -operand.immValueFloat[i];
+						}
+
+						break;
+					}
+
+				case USILOperandType.Multiple:
+					{
+						foreach (USILOperand child in operand.children)
+						{
+							NegateOperand(child);
+						}
+
+						break;
+					}
+
+				default:
+					operand.negative = !operand.negative;
+					break;
 			}
 		}
 	}

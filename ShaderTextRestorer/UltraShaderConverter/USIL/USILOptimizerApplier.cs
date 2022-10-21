@@ -1,42 +1,42 @@
 ﻿using ShaderTextRestorer.ShaderBlob;
-using System;
-using System.Collections.Generic;
 
 namespace ShaderLabConvert
 {
 	public static class USILOptimizerApplier
 	{
-		// order is important
-		// they should probably be separated into different lists in the future
-		// when I work out what categories there will be
-		private static readonly List<Type> OPTIMIZER_TYPES = new()
+		/// <summary>
+		/// An array of optimizers to apply.
+		/// </summary>
+		/// <remarks>
+		/// Order is important. Calling <see cref="IUSILOptimizer.Run(UShaderProgram, ShaderSubProgram)"/> should not modify
+		/// the state of the optimizer.
+		/// </remarks>
+		private static readonly IUSILOptimizer[] OPTIMIZER_TYPES = new IUSILOptimizer[]
 		{
-            // do metadders first
-            typeof(USILCBufferMetadder),
-			typeof(USILSamplerMetadder),
-			typeof(USILInputOutputMetadder),
+			// do metadders first
+			new USILCBufferMetadder(),
+			new USILSamplerMetadder(),
+			new USILInputOutputMetadder(),
 			
 			// do fixes (you really should have these enabled!)
-			typeof(USILSamplerTypeFixer),
-			typeof(USILGetDimensionsFixer),
+			new USILSamplerTypeFixer(),
+			new USILGetDimensionsFixer(),
 
-            // do detection optimizers which usually depend on metadders
-            //typeof(USILMatrixMulOptimizer), // I don't trust this code so it's commented for now
+			// do detection optimizers which usually depend on metadders
+			//new USILMatrixMulOptimizer(), // I don't trust this code so it's commented for now
 			
-            // do simplification optimizers last when detection has been finished
-            typeof(USILCompareOrderOptimizer),
-			typeof(USILAddNegativeOptimizer),
-			typeof(USILAndOptimizer),
-			typeof(USILForLoopOptimizer)
+			// do simplification optimizers last when detection has been finished
+			new USILCompareOrderOptimizer(),
+			new USILAddNegativeOptimizer(),
+			new USILAndOptimizer(),
+			new USILForLoopOptimizer(),
 		};
 
 		public static void Apply(UShaderProgram shader, ShaderSubProgram shaderData)
 		{
-			foreach (Type optimizerType in OPTIMIZER_TYPES)
+			for (int i = 0; i < OPTIMIZER_TYPES.Length; i++)
 			{
-				IUSILOptimizer optimizer = (IUSILOptimizer?)Activator.CreateInstance(optimizerType)
-					?? throw new NullReferenceException($"Could not create an instance of type {optimizerType}");
-				optimizer.Run(shader, shaderData);
+				OPTIMIZER_TYPES[i].Run(shader, shaderData);
 			}
 		}
 	}

@@ -33,14 +33,13 @@ namespace ShaderLabConvert
 			return changes; // any changes made?
 		}
 
-		private bool IsOperandFullyConstant(USILOperand operand)
+		private static bool IsOperandFullyConstant(USILOperand operand)
 		{
-			if (operand.operandType == USILOperandType.ImmediateInt ||
-				operand.operandType == USILOperandType.ImmediateFloat)
+			if (operand.operandType is USILOperandType.ImmediateInt or USILOperandType.ImmediateFloat)
 			{
 				return true;
 			}
-			else if (operand.operandType == USILOperandType.Multiple)
+			else if (operand.operandType is USILOperandType.Multiple)
 			{
 				bool fullyConstant = true;
 				foreach (USILOperand child in operand.children)
@@ -51,21 +50,16 @@ namespace ShaderLabConvert
 			return false;
 		}
 
-		private USILInstructionType FlipCompareType(USILInstructionType type)
+		private static USILInstructionType FlipCompareType(USILInstructionType type)
 		{
-			switch (type)
+			return type switch
 			{
-				case USILInstructionType.LessThan:
-					return USILInstructionType.GreaterThan;
-				case USILInstructionType.GreaterThan:
-					return USILInstructionType.LessThan;
-				case USILInstructionType.LessThanOrEqual:
-					return USILInstructionType.GreaterThanOrEqual;
-				case USILInstructionType.GreaterThanOrEqual:
-					return USILInstructionType.LessThanOrEqual;
-				default:
-					return type;
-			}
+				USILInstructionType.LessThan => USILInstructionType.GreaterThan,
+				USILInstructionType.GreaterThan => USILInstructionType.LessThan,
+				USILInstructionType.LessThanOrEqual => USILInstructionType.GreaterThanOrEqual,
+				USILInstructionType.GreaterThanOrEqual => USILInstructionType.LessThanOrEqual,
+				_ => type,
+			};
 		}
 	}
 }

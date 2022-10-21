@@ -7,38 +7,32 @@ namespace ShaderLabConvert
 {
 	public class USILCBufferMetadder : IUSILOptimizer
 	{
-		private UShaderProgram _shader;
-		private ShaderSubProgram _shaderData;
-
 		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
 		{
-			_shader = shader;
-			_shaderData = shaderData;
-
 			List<USILInstruction> instructions = shader.instructions;
 			foreach (USILInstruction instruction in instructions)
 			{
 				if (instruction.destOperand != null)
 				{
-					UseMetadata(instruction.destOperand);
+					UseMetadata(instruction.destOperand, shaderData);
 				}
 
 				foreach (USILOperand operand in instruction.srcOperands)
 				{
-					UseMetadata(operand);
+					UseMetadata(operand, shaderData);
 				}
 			}
 			return true; // any changes made?
 		}
 
-		private void UseMetadata(USILOperand operand)
+		private static void UseMetadata(USILOperand operand, ShaderSubProgram shaderData)
 		{
 			if (operand.operandType == USILOperandType.ConstantBuffer)
 			{
 				int cbRegIdx = operand.registerIndex;
 				int cbArrIdx = operand.arrayIndex;
 
-				List<int> operandMaskAddresses = new List<int>();
+				List<int> operandMaskAddresses = new();
 				foreach (int operandMask in operand.mask)
 				{
 					operandMaskAddresses.Add((cbArrIdx * 16) + (operandMask * 4));
@@ -47,8 +41,8 @@ namespace ShaderLabConvert
 				HashSet<NumericShaderParameter> cbParams = new HashSet<NumericShaderParameter>();
 				List<int> cbMasks = new List<int>();
 
-				BufferBinding binding = _shaderData.ConstantBufferBindings.First(b => b.Index == cbRegIdx);
-				ConstantBuffer constantBuffer = _shaderData.ConstantBuffers.First(b => b.Name == binding.Name);
+				BufferBinding binding = shaderData.ConstantBufferBindings.First(b => b.Index == cbRegIdx);
+				ConstantBuffer constantBuffer = shaderData.ConstantBuffers.First(b => b.Name == binding.Name);
 
 				// Search children fields
 				foreach (NumericShaderParameter param in constantBuffer.AllNumericParams)
@@ -153,7 +147,7 @@ namespace ShaderLabConvert
 			}
 		}
 
-		private int[] MatchMaskToConstantBuffer(int[] mask, int pos, int size)
+		private static int[] MatchMaskToConstantBuffer(int[] mask, int pos, int size)
 		{
 			// Mask is aligned (x, xy, xyz, xyzw)
 			// todo: bad opto breaks things lol keep this out

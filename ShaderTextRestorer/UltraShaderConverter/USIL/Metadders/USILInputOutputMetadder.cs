@@ -6,48 +6,42 @@ namespace ShaderLabConvert
 {
 	public class USILInputOutputMetadder : IUSILOptimizer
 	{
-		private UShaderProgram _shader;
-		private ShaderSubProgram _shaderData;
-
 		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
 		{
-			_shader = shader;
-			_shaderData = shaderData;
-
 			List<USILInstruction> instructions = shader.instructions;
 			foreach (USILInstruction instruction in instructions)
 			{
 				if (instruction.destOperand != null)
 				{
-					UseMetadata(instruction.destOperand);
+					UseMetadata(instruction.destOperand, shader);
 				}
 				foreach (USILOperand operand in instruction.srcOperands)
 				{
-					UseMetadata(operand);
+					UseMetadata(operand, shader);
 				}
 			}
 			return true; // any changes made?
 		}
 
-		private void UseMetadata(USILOperand operand)
+		private static void UseMetadata(USILOperand operand, UShaderProgram shader)
 		{
 			if (operand.operandType == USILOperandType.InputRegister)
 			{
 				int searchMask = (operand.mask.Length != 0) ? (1 << operand.mask[0]) : 0;
-				USILInputOutput input = _shader.inputs.First(
+				USILInputOutput input = shader.inputs.First(
 					i => i.register == operand.registerIndex && ((searchMask & i.mask) == searchMask)
 				);
 
 				// correct mask
 				operand.mask = MatchMaskToInputOutput(operand.mask, input.mask, true);
 
-				if (_shader.shaderFunctionType == UShaderFunctionType.Fragment && input.type == "SV_IsFrontFace")
+				if (shader.shaderFunctionType == UShaderFunctionType.Fragment && input.type == "SV_IsFrontFace")
 				{
 					operand.metadataName = input.name;
 				}
 				else
 				{
-					operand.metadataName = _shader.shaderFunctionType switch
+					operand.metadataName = shader.shaderFunctionType switch
 					{
 						UShaderFunctionType.Vertex => $"{USILConstants.VERT_INPUT_NAME}.{input.name}",
 						UShaderFunctionType.Fragment => $"{USILConstants.FRAG_INPUT_NAME}.{input.name}",
@@ -65,7 +59,7 @@ namespace ShaderLabConvert
 					searchMask |= 1 << operand.mask[i];
 				}
 
-				List<USILInputOutput> outputs = _shader.outputs.Where(
+				List<USILInputOutput> outputs = shader.outputs.Where(
 					o => o.register == operand.registerIndex && ((searchMask & o.mask) != 0)
 				).ToList();
 
@@ -76,7 +70,7 @@ namespace ShaderLabConvert
 					int[] realMatchedMask = MatchMaskToInputOutput(operand.mask, output.mask, false);
 					operand.mask = matchedMask;
 
-					operand.metadataName = _shader.shaderFunctionType switch
+					operand.metadataName = shader.shaderFunctionType switch
 					{
 						UShaderFunctionType.Vertex => $"{USILConstants.VERT_OUTPUT_LOCAL_NAME}.{output.name}",
 						UShaderFunctionType.Fragment => $"{USILConstants.FRAG_OUTPUT_LOCAL_NAME}.{output.name}",
@@ -89,7 +83,7 @@ namespace ShaderLabConvert
 			{
 				string name = DXShaderNamingUtils.GetSpecialInputOutputName(operand.operandType);
 
-				operand.metadataName = _shader.shaderFunctionType switch
+				operand.metadataName = shader.shaderFunctionType switch
 				{
 					UShaderFunctionType.Vertex => $"{USILConstants.VERT_OUTPUT_LOCAL_NAME}.{name}",
 					UShaderFunctionType.Fragment => $"{USILConstants.FRAG_OUTPUT_LOCAL_NAME}.{name}",
@@ -99,7 +93,7 @@ namespace ShaderLabConvert
 			}
 		}
 
-		private int[] MatchMaskToInputOutput(int[] mask, int maskTest, bool moveSwizzles)
+		private static int[] MatchMaskToInputOutput(int[] mask, int maskTest, bool moveSwizzles)
 		{
 			// Move swizzles (for example, .zw -> .xy) based on first letter
 			int moveCount = 0;

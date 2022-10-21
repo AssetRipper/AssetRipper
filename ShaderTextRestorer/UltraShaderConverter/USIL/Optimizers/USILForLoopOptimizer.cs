@@ -8,17 +8,11 @@ namespace ShaderLabConvert
 	/// </summary>
 	public class USILForLoopOptimizer : IUSILOptimizer
 	{
-		UShaderProgram _shader;
-		ShaderSubProgram _shaderData;
-
 		public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
 		{
-			_shader = shader;
-			_shaderData = shaderData;
-
 			bool changes = false;
 
-			changes |= ReplaceForLoop();
+			changes |= ReplaceForLoop(shader);
 
 			return changes;
 		}
@@ -32,14 +26,14 @@ namespace ShaderLabConvert
 		// ForLoop
 		// ...
 		// EndLoop
-		private bool ReplaceForLoop()
+		private bool ReplaceForLoop(UShaderProgram shader)
 		{
 			bool changes = false;
 			Stack<LoopInstanceInfo> loopInfos = new Stack<LoopInstanceInfo>();
 
 			int loopDepth = 0;
 
-			List<USILInstruction> insts = _shader.instructions;
+			List<USILInstruction> insts = shader.instructions;
 			for (int i = 0; i < insts.Count - 5; i++)
 			{
 				// do detection
