@@ -4,8 +4,6 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
-using AssetRipper.Core.Utils;
-using AssetRipper.Library.Attributes;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters;
 using AssetRipper.Library.Exporters.Audio;
@@ -42,9 +40,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace AssetRipper.Library
 {
@@ -55,7 +51,7 @@ namespace AssetRipper.Library
 		public Ripper(LibraryConfiguration configuration)
 		{
 			Settings = configuration;
-			LoadPlugins();
+			PluginLoader.LoadPlugins(this);
 		}
 
 		public GameStructure GameStructure { get; private set; }
@@ -79,45 +75,6 @@ namespace AssetRipper.Library
 		public event Action? OnInitializingExporters;
 		public event Action? OnStartExporting;
 		public event Action? OnFinishExporting;
-
-		private void LoadPlugins()
-		{
-			Logger.Info(LogCategory.Plugin, "Loading plugins...");
-			string pluginsDirectory = ExecutingDirectory.Combine("Plugins");
-			Directory.CreateDirectory(pluginsDirectory);
-			List<Type> pluginTypes = new();
-			foreach (string dllFile in Directory.GetFiles(pluginsDirectory, "*.dll"))
-			{
-				try
-				{
-					Logger.Info(LogCategory.Plugin, $"Found assembly at {dllFile}");
-					Assembly assembly = Assembly.LoadFile(dllFile);
-					foreach (RegisterPluginAttribute pluginAttr in assembly.GetCustomAttributes<RegisterPluginAttribute>())
-					{
-						pluginTypes.Add(pluginAttr.PluginType);
-					}
-				}
-				catch (Exception ex)
-				{
-					Logger.Error(LogCategory.Plugin, $"Exception thrown while loading plugin assembly: {dllFile}", ex);
-				}
-			}
-			foreach (Type type in pluginTypes)
-			{
-				try
-				{
-					PluginBase plugin = (PluginBase)Activator.CreateInstance(type);
-					plugin.CurrentRipper = this;
-					plugin.Initialize();
-					Logger.Info(LogCategory.Plugin, $"Initialized plugin: {plugin.Name}");
-				}
-				catch (Exception ex)
-				{
-					Logger.Error(LogCategory.Plugin, $"Exception thrown while initializing plugin: {type?.FullName ?? "<null>"}", ex);
-				}
-			}
-			Logger.Info(LogCategory.Plugin, "Finished loading plugins.");
-		}
 
 		public GameStructure Load(IReadOnlyList<string> paths)
 		{
