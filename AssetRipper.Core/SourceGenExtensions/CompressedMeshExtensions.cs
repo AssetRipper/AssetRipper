@@ -157,7 +157,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static void SetUV(this ICompressedMesh compressedMesh, Vector2[]? uv0, Vector2[]? uv1, Vector2[]? uv2, Vector2[]? uv3, Vector2[]? uv4, Vector2[]? uv5, Vector2[]? uv6, Vector2[]? uv7)
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
 		}
 
 		public static BoneWeight4[] GetWeights(this ICompressedMesh compressedMesh)
@@ -217,7 +217,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static void SetWeights(this ICompressedMesh compressedMesh, ReadOnlySpan<BoneWeight4> weights)
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
 		}
 
 		public static Vector3[] GetNormals(this ICompressedMesh compressedMesh)
@@ -408,7 +408,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (compressedMesh.Has_Colors())
 			{
-				throw new NotImplementedException();
+				//throw new NotImplementedException();
 			}
 		}
 

@@ -2,6 +2,7 @@
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Enums;
+using AssetRipper.SourceGenerated.Subclasses.ColorRGBA32;
 using AssetRipper.SourceGenerated.Subclasses.MeshBlendShape;
 using System.Buffers;
 using System.Buffers.Binary;
@@ -160,9 +161,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			processedIndexBuffer = compressed_processedIndexBuffer ?? mesh.GetProcessedIndexBuffer();
 		}
 
-		private static ColorFloat ConvertToColorFloat(this SourceGenerated.Subclasses.ColorRGBA32.ColorRGBA32 c)
+		private static ColorFloat ConvertToColorFloat(this ColorRGBA32 c)
 		{
-			return (ColorFloat)new Color32(c.GetR(), c.GetG(), c.GetB(), c.GetA());
+			return (ColorFloat)Color32.FromRgba(c.Rgba);
 		}
 
 		public static byte[] GetChannelsData(this IMesh mesh)
@@ -198,15 +199,40 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static bool Is16BitIndices(this IMesh mesh)
 		{
+			return mesh.GetIndexFormat() == IndexFormat.UInt16;
+		}
+
+		public static IndexFormat GetIndexFormat(this IMesh mesh)
+		{
 			if (mesh.Has_Use16BitIndices_C43())
 			{
-				return mesh.Use16BitIndices_C43 != 0;
+				return mesh.Use16BitIndices_C43 != 0 ? IndexFormat.UInt16 : IndexFormat.UInt32;
 			}
 			else if (mesh.Has_IndexFormat_C43())
 			{
-				return mesh.IndexFormat_C43 == (int)IndexFormat.UInt16;
+				return mesh.IndexFormat_C43E;
 			}
-			return true;//Never gets run right now, but really old versions used 16 bit exclusively
+			else
+			{
+				return IndexFormat.UInt16;//Versions between 3.5 and 2017.3 used 16 bit exclusively
+			}
+		}
+
+		public static void SetIndexFormat(this IMesh mesh, IndexFormat indexFormat)
+		{
+			if (mesh.Has_Use16BitIndices_C43())
+			{
+				mesh.Use16BitIndices_C43 = (indexFormat == IndexFormat.UInt16 ? 1 : 0);
+			}
+			else if (mesh.Has_IndexFormat_C43())
+			{
+				mesh.IndexFormat_C43E = indexFormat;
+			}
+			else if (indexFormat != IndexFormat.UInt16)
+			{
+				//Versions between 3.5 and 2017.3 used 16 bit exclusively
+				throw new NotSupportedException($"Only 16 bit vertex indices are supported on {mesh.Collection.Version}.");
+			}
 		}
 
 		public static MeshOptimizationFlags GetMeshOptimizationFlags(this IMesh mesh)

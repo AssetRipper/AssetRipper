@@ -19,6 +19,7 @@ using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.Exporters.TypeTrees;
 using AssetRipper.Library.Processors;
 using AssetRipper.Library.Processors.PrefabOutlining;
+using AssetRipper.Library.Processors.StaticMeshes;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -67,6 +68,7 @@ namespace AssetRipper.Library
 			new TerrainTextureProcessor(),
 			new LightingDataProcessor(),
 			new EditorFormatProcessor(),
+			new StaticMeshProcessor(),
 			new PrefabOutliningProcessor(),
 		};
 

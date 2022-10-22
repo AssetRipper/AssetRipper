@@ -1,0 +1,894 @@
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Extensions;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Numerics;
+using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_137;
+using AssetRipper.SourceGenerated.Classes.ClassID_2;
+using AssetRipper.SourceGenerated.Classes.ClassID_23;
+using AssetRipper.SourceGenerated.Classes.ClassID_33;
+using AssetRipper.SourceGenerated.Classes.ClassID_4;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Enums;
+using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
+using AssetRipper.SourceGenerated.Subclasses.SubMesh;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+
+namespace AssetRipper.Library.Processors.StaticMeshes
+{
+	public class StaticMeshProcessor : IAssetProcessor
+	{
+		private const double MaxMeshDeviation = 0.1;
+		private readonly Dictionary<IMesh, MeshData> combinedMeshDictionary = new();
+		private readonly HashSet<IMesh> badMeshSet = new();
+		private readonly Dictionary<string, LinkedList<IMesh>> meshNameDictionary = new();
+		private readonly Dictionary<string, List<(IMesh, IComponent, IMeshFilter, ITransform)>> cleanNameToParts = new();
+
+		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
+		{
+			Logger.Info(LogCategory.Processing, "Separate Static Meshes");
+			ProcessedAssetCollection processedCollection = gameBundle.AddNewProcessedCollection("Separated Static Meshes", projectVersion);
+
+			foreach (IUnityObjectBase asset in gameBundle.FetchAssets())
+			{
+				if (asset is IMesh mesh)
+				{
+					LinkedList<IMesh> meshList = meshNameDictionary.GetOrAdd(mesh.NameString);
+					meshList.AddLast(mesh);
+				}
+				else if (TryGetStaticMeshInformation(asset, out string? cleanName, out (IMesh, IComponent, IMeshFilter, ITransform) parts))
+				{
+					cleanNameToParts.GetOrAdd(cleanName).Add(parts);
+				}
+			}
+
+			Logger.Info(LogCategory.Processing, $"Found {cleanNameToParts.Count} meshes combined into static batches");
+			foreach ((string cleanName, List<(IMesh, IComponent, IMeshFilter, ITransform)> list) in cleanNameToParts)
+			{
+				Logger.Info(LogCategory.Processing, $"Attempting to recreate {cleanName} from {list.Count} instances");
+				LinkedList<LinkedList<(MeshData, IComponent, IMeshFilter)>> boxes = new();
+				foreach ((IMesh combinedMesh, IComponent renderer, IMeshFilter meshFilter, ITransform transform) in list)
+				{
+					if (TryGetOrMakeCombinedMeshData(combinedMesh, out MeshData combinedMeshData))
+					{
+						MeshData instanceMeshData = MakeMeshDataFromSubMeshes(renderer, combinedMeshData);
+						CreateTranformations(transform, out Transformation transformation, out Transformation inverseTransformation);
+						ApplyTransformationToMeshData(instanceMeshData, transformation, inverseTransformation);
+						bool addedToABox = false;
+						foreach (LinkedList<(MeshData, IComponent, IMeshFilter)> box in boxes)
+						{
+							bool shouldGoInTheBox = true;
+							foreach ((MeshData otherMeshData, _, _) in box)
+							{
+								if (!AreApproximatelyEqual(instanceMeshData, otherMeshData))
+								{
+									shouldGoInTheBox = false;
+									break;
+								}
+							}
+							if (shouldGoInTheBox)
+							{
+								box.AddFirst((instanceMeshData, renderer, meshFilter));
+								addedToABox = true;
+								break;
+							}
+						}
+						if (!addedToABox)
+						{
+							LinkedList<(MeshData, IComponent, IMeshFilter)> box = new();
+							box.AddFirst((instanceMeshData, renderer, meshFilter));
+							boxes.AddLast(box);
+						}
+					}
+				}
+				Logger.Info(LogCategory.Processing, $"Separated instances of {cleanName} into {boxes.Count} boxes");
+				foreach (LinkedList<(MeshData, IComponent, IMeshFilter)> box in boxes)
+				{
+					IMesh? separatedMesh = null;
+					if (meshNameDictionary.TryGetValue(cleanName, out LinkedList<IMesh>? originalMeshes))
+					{
+						foreach (IMesh existingMesh in originalMeshes)
+						{
+							if (MeshData.TryMakeFromMesh(existingMesh, out MeshData existingMeshData))
+							{
+								existingMeshData = existingMeshData.MakeComparableMeshData();
+								if (box.Select(t => t.Item1).All(meshData => AreApproximatelyEqual(meshData, existingMeshData)))
+								{
+									separatedMesh = existingMesh;
+									break;
+								}
+							}
+						}
+					}
+					if (separatedMesh is null)
+					{
+						MeshData averageMeshData = box.Count == 1 ? box.First!.Value.Item1 : Average(box.Select(t => t.Item1));
+						separatedMesh = MakeMeshFromData(cleanName, averageMeshData, processedCollection);
+					}
+
+					foreach ((_, IComponent renderer, IMeshFilter meshFilter) in box)
+					{
+						ApplyMeshToRendererAndFilter(separatedMesh, renderer, meshFilter);
+					}
+				}
+			}
+
+			meshNameDictionary.Clear();
+			cleanNameToParts.Clear();
+		}
+
+		#region Average MeshData
+		private static MeshData Average(IEnumerable<MeshData> enumerable)
+		{
+			MeshData result = default;
+			int count = 0;
+			foreach (MeshData meshData in enumerable)
+			{
+				if (count is 0)
+				{
+					result = meshData.DeepClone();
+				}
+				else
+				{
+					double proportion = (double)count / (count + 1);
+					UpdateAverage(result, meshData, proportion);
+				}
+				count++;
+			}
+			return result;
+		}
+
+		private static void UpdateAverage(MeshData previousAverage, MeshData data, double proportion)
+		{
+			double otherProportion = 1 - proportion;
+
+			UpdateArray(previousAverage.Vertices, proportion, data.Vertices, otherProportion);
+			if (previousAverage.Normals is not null)
+			{
+				UpdateArray(previousAverage.Normals, proportion, data.Normals!, otherProportion);
+			}
+			if (previousAverage.Tangents is not null)
+			{
+				UpdateArray(previousAverage.Tangents, proportion, data.Tangents!, otherProportion);
+			}
+			if (previousAverage.Colors is not null)
+			{
+				UpdateArray(previousAverage.Colors, proportion, data.Colors!, otherProportion);
+			}
+			if (previousAverage.Skin is not null)
+			{
+				UpdateArray(previousAverage.Skin, proportion, data.Skin!, otherProportion);
+			}
+			if (previousAverage.UV0 is not null)
+			{
+				UpdateArray(previousAverage.UV0, proportion, data.UV0!, otherProportion);
+			}
+			if (previousAverage.UV1 is not null)
+			{
+				UpdateArray(previousAverage.UV1, proportion, data.UV1!, otherProportion);
+			}
+			if (previousAverage.UV2 is not null)
+			{
+				UpdateArray(previousAverage.UV2, proportion, data.UV2!, otherProportion);
+			}
+			if (previousAverage.UV3 is not null)
+			{
+				UpdateArray(previousAverage.UV3, proportion, data.UV3!, otherProportion);
+			}
+			if (previousAverage.UV4 is not null)
+			{
+				UpdateArray(previousAverage.UV4, proportion, data.UV4!, otherProportion);
+			}
+			if (previousAverage.UV5 is not null)
+			{
+				UpdateArray(previousAverage.UV5, proportion, data.UV5!, otherProportion);
+			}
+			if (previousAverage.UV6 is not null)
+			{
+				UpdateArray(previousAverage.UV6, proportion, data.UV6!, otherProportion);
+			}
+			if (previousAverage.UV7 is not null)
+			{
+				UpdateArray(previousAverage.UV7, proportion, data.UV7!, otherProportion);
+			}
+			if (previousAverage.BindPose is not null)
+			{
+				UpdateArray(previousAverage.BindPose, proportion, data.BindPose!, otherProportion);
+			}
+		}
+
+		private static void UpdateArray(Vector2[] array1, double proportion1, Vector2[] array2, double proportion2)
+		{
+			for (int i = array1.Length - 1; i >= 0; i--)
+			{
+				array1[i] = WeightedSum(array1[i], proportion1, array2[i], proportion2);
+			}
+		}
+
+		private static Vector2 WeightedSum(Vector2 vector1, double proportion1, Vector2 vector2, double proportion2)
+		{
+			return new Vector2(
+				WeightedSum(vector1.X, proportion1, vector2.X, proportion2),
+				WeightedSum(vector1.Y, proportion1, vector2.Y, proportion2));
+		}
+
+		private static void UpdateArray(Vector3[] array1, double proportion1, Vector3[] array2, double proportion2)
+		{
+			for (int i = array1.Length - 1; i >= 0; i--)
+			{
+				array1[i] = WeightedSum(array1[i], proportion1, array2[i], proportion2);
+			}
+		}
+
+		private static Vector3 WeightedSum(Vector3 vector1, double proportion1, Vector3 vector2, double proportion2)
+		{
+			return new Vector3(
+				WeightedSum(vector1.X, proportion1, vector2.X, proportion2),
+				WeightedSum(vector1.Y, proportion1, vector2.Y, proportion2),
+				WeightedSum(vector1.Z, proportion1, vector2.Z, proportion2));
+		}
+
+		private static void UpdateArray(Vector4[] array1, double proportion1, Vector4[] array2, double proportion2)
+		{
+			for (int i = array1.Length - 1; i >= 0; i--)
+			{
+				array1[i] = WeightedSum(array1[i], proportion1, array2[i], proportion2);
+			}
+		}
+
+		private static Vector4 WeightedSum(Vector4 vector1, double proportion1, Vector4 vector2, double proportion2)
+		{
+			return new Vector4(
+				WeightedSum(vector1.X, proportion1, vector2.X, proportion2),
+				WeightedSum(vector1.Y, proportion1, vector2.Y, proportion2),
+				WeightedSum(vector1.Z, proportion1, vector2.Z, proportion2),
+				WeightedSum(vector1.W, proportion1, vector2.W, proportion2));
+		}
+
+		private static void UpdateArray(ColorFloat[] array1, double proportion1, ColorFloat[] array2, double proportion2)
+		{
+			for (int i = array1.Length - 1; i >= 0; i--)
+			{
+				array1[i] = new ColorFloat(WeightedSum(array1[i].Vector, proportion1, array2[i].Vector, proportion2));
+			}
+		}
+
+		private static void UpdateArray(BoneWeight4[] array1, double proportion1, BoneWeight4[] array2, double proportion2)
+		{
+			for (int i = array1.Length - 1; i >= 0; i--)
+			{
+				array1[i] = WeightedSum(array1[i], proportion1, array2[i], proportion2);
+			}
+		}
+
+		private static BoneWeight4 WeightedSum(BoneWeight4 vector1, double proportion1, BoneWeight4 vector2, double proportion2)
+		{
+			return new BoneWeight4(
+				WeightedSum(vector1.Weight0, proportion1, vector2.Weight0, proportion2),
+				WeightedSum(vector1.Weight1, proportion1, vector2.Weight1, proportion2),
+				WeightedSum(vector1.Weight2, proportion1, vector2.Weight2, proportion2),
+				WeightedSum(vector1.Weight3, proportion1, vector2.Weight3, proportion2),
+				vector1.Index0,
+				vector1.Index1,
+				vector1.Index2,
+				vector1.Index3);
+		}
+
+		private static void UpdateArray(Matrix4x4[] array1, double proportion1, Matrix4x4[] array2, double proportion2)
+		{
+			for (int i = array1.Length - 1; i >= 0; i--)
+			{
+				array1[i] = WeightedSum(array1[i], proportion1, array2[i], proportion2);
+			}
+		}
+
+		private static Matrix4x4 WeightedSum(Matrix4x4 matrix1, double proportion1, Matrix4x4 matrix2, double proportion2)
+		{
+			return new Matrix4x4(
+				WeightedSum(matrix1.M11, proportion1, matrix2.M11, proportion2),
+				WeightedSum(matrix1.M12, proportion1, matrix2.M12, proportion2),
+				WeightedSum(matrix1.M13, proportion1, matrix2.M13, proportion2),
+				WeightedSum(matrix1.M14, proportion1, matrix2.M14, proportion2),
+				WeightedSum(matrix1.M21, proportion1, matrix2.M21, proportion2),
+				WeightedSum(matrix1.M22, proportion1, matrix2.M22, proportion2),
+				WeightedSum(matrix1.M23, proportion1, matrix2.M23, proportion2),
+				WeightedSum(matrix1.M24, proportion1, matrix2.M24, proportion2),
+				WeightedSum(matrix1.M31, proportion1, matrix2.M31, proportion2),
+				WeightedSum(matrix1.M32, proportion1, matrix2.M32, proportion2),
+				WeightedSum(matrix1.M33, proportion1, matrix2.M33, proportion2),
+				WeightedSum(matrix1.M34, proportion1, matrix2.M34, proportion2),
+				WeightedSum(matrix1.M41, proportion1, matrix2.M41, proportion2),
+				WeightedSum(matrix1.M42, proportion1, matrix2.M42, proportion2),
+				WeightedSum(matrix1.M43, proportion1, matrix2.M43, proportion2),
+				WeightedSum(matrix1.M44, proportion1, matrix2.M44, proportion2));
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+		private static float WeightedSum(float value1, double proportion1, float value2, double proportion2)
+		{
+			return (float)(value1 * proportion1 + value2 * proportion2);
+		}
+		#endregion
+
+		private static void ApplyMeshToRendererAndFilter(IMesh mesh, IComponent renderer, IMeshFilter meshFilter)
+		{
+			meshFilter.Mesh_C33.CopyValues(meshFilter.Collection.ForceCreatePPtr(mesh));
+			renderer.ClearStaticBatchInfo();
+		}
+
+		private static IMesh MakeMeshFromData(string cleanName, MeshData instanceMeshData, ProcessedAssetCollection processedCollection)
+		{
+			IMesh newMesh = CreateMesh(processedCollection);
+			newMesh.NameString = cleanName;
+
+			newMesh.SetIndexFormat(IndexFormat.UInt32);
+
+			ICompressedMesh compressedMesh = newMesh.CompressedMesh_C43;
+			compressedMesh.SetVertices(instanceMeshData.Vertices);
+			compressedMesh.SetNormals(instanceMeshData.Normals);
+			compressedMesh.SetTangents(instanceMeshData.Tangents);
+			compressedMesh.SetFloatColors(instanceMeshData.Colors);
+			compressedMesh.SetWeights(instanceMeshData.Skin);
+			compressedMesh.SetUV(
+				instanceMeshData.UV0,
+				instanceMeshData.UV1,
+				instanceMeshData.UV2,
+				instanceMeshData.UV3,
+				instanceMeshData.UV4,
+				instanceMeshData.UV5,
+				instanceMeshData.UV6,
+				instanceMeshData.UV7);
+			compressedMesh.SetBindPoses(instanceMeshData.BindPose);
+			compressedMesh.SetTriangles(instanceMeshData.ProcessedIndexBuffer);
+
+			AccessListBase<ISubMesh> subMeshList = newMesh.SubMeshes_C43;
+			foreach (ISubMesh subMesh in instanceMeshData.SubMeshes)
+			{
+				subMeshList.AddNew().CopyValues(subMesh);
+			}
+
+			newMesh.LocalAABB_C43.CalculateFromVertexArray(instanceMeshData.Vertices);
+
+			return newMesh;
+		}
+
+		private static void ApplyTransformationToMeshData(MeshData instanceMeshData, Transformation transformation, Transformation inverseTransformation)
+		{
+			//We need to apply the inverse transform to reverse the static batching.
+			Transformation positionTransform = inverseTransformation;
+			Transformation tangentTransform = positionTransform.RemoveTranslation();
+			Transformation normalTransform = transformation.Transpose();
+
+			for (int i = instanceMeshData.Vertices.Length - 1; i >= 0; i--)
+			{
+				instanceMeshData.Vertices[i] = instanceMeshData.Vertices[i] * positionTransform;
+			}
+
+			if (instanceMeshData.Normals is not null)
+			{
+				for (int i = instanceMeshData.Normals.Length - 1; i >= 0; i--)
+				{
+					instanceMeshData.Normals[i] = instanceMeshData.Normals[i] * normalTransform;
+				}
+			}
+
+			if (instanceMeshData.Tangents is not null)
+			{
+				for (int i = instanceMeshData.Tangents.Length - 1; i >= 0; i--)
+				{
+					Vector4 originalTangent = instanceMeshData.Tangents[i];
+					Vector3 transformedTangent = Vector3.Normalize(originalTangent.AsVector3() * tangentTransform);
+					//Unity documentation claims W should always be 1 or -1, but it's not always the case.
+					float w = originalTangent.W < 0 ? -1 : 1;
+					instanceMeshData.Tangents[i] = new Vector4(transformedTangent, w);
+				}
+			}
+		}
+
+		private static void CreateTranformations(ITransform transform, out Transformation globalTransform, out Transformation globalInverseTransform)
+		{
+			globalTransform = Transformation.Identity;
+			globalInverseTransform = Transformation.Identity;
+
+			ITransform? currentTransform = transform;
+			while (currentTransform is not null)
+			{
+				Transformation localTransform = currentTransform.ToTransformation();
+				Transformation localInverseTransform = currentTransform.ToInverseTransformation();
+
+				//GlbModelExporter uses a top->down calculation of these transforms.
+				//Because this is bottom->up, the multiplication order is reversed.
+#pragma warning disable IDE0054 // Use compound assignment
+				globalTransform = globalTransform * localTransform;
+#pragma warning restore IDE0054 // Use compound assignment
+				globalInverseTransform = localInverseTransform * globalInverseTransform;
+
+				currentTransform = currentTransform.Father_C4P;
+			}
+		}
+
+		private static MeshData MakeMeshDataFromSubMeshes(IComponent renderer, MeshData combinedMeshData)
+		{
+			IReadOnlyList<uint> subMeshIndicies = renderer.GetSubmeshIndices();
+
+			uint count = 0;
+			for (int i = 0; i < subMeshIndicies.Count; i++)
+			{
+				count += combinedMeshData.SubMeshes[(int)subMeshIndicies[i]].IndexCount;
+			}
+
+			Vector3[] vertices = new Vector3[count];
+			Vector3[]? normals = combinedMeshData.Normals.IsNullOrEmpty() ? null : new Vector3[count];
+			Vector4[]? tangents = combinedMeshData.Tangents.IsNullOrEmpty() ? null : new Vector4[count];
+			ColorFloat[]? colors = combinedMeshData.Colors.IsNullOrEmpty() ? null : new ColorFloat[count];
+			BoneWeight4[]? skin = combinedMeshData.Skin.IsNullOrEmpty() ? null : new BoneWeight4[count];
+			Vector2[]? uv0 = combinedMeshData.UV0.IsNullOrEmpty() ? null : new Vector2[count];
+			Vector2[]? uv1 = combinedMeshData.UV1.IsNullOrEmpty() ? null : new Vector2[count];
+			Vector2[]? uv2 = combinedMeshData.UV2.IsNullOrEmpty() ? null : new Vector2[count];
+			Vector2[]? uv3 = combinedMeshData.UV3.IsNullOrEmpty() ? null : new Vector2[count];
+			Vector2[]? uv4 = combinedMeshData.UV4.IsNullOrEmpty() ? null : new Vector2[count];
+			Vector2[]? uv5 = combinedMeshData.UV5.IsNullOrEmpty() ? null : new Vector2[count];
+			Vector2[]? uv6 = combinedMeshData.UV6.IsNullOrEmpty() ? null : new Vector2[count];
+			Vector2[]? uv7 = combinedMeshData.UV7.IsNullOrEmpty() ? null : new Vector2[count];
+			Matrix4x4[]? bindpose = combinedMeshData.BindPose.IsNullOrEmpty() ? null : new Matrix4x4[count];
+			uint[] processedIndexBuffer = new uint[count];
+			ISubMesh[] subMeshes = new ISubMesh[subMeshIndicies.Count];
+
+			uint offset = 0;
+			for (int k = 0; k < subMeshIndicies.Count; k++)
+			{
+				ISubMesh combinedSubMesh = combinedMeshData.SubMeshes[(int)subMeshIndicies[k]];
+				int combinedIndexStart = (int)(combinedSubMesh.FirstByte / sizeof(uint));//FirstByte is standardized
+				for (int j = 0; j < combinedSubMesh.IndexCount; j++)
+				{
+					int newIndex = j + (int)offset;
+					int combinedIndex = (int)combinedMeshData.ProcessedIndexBuffer[j + combinedIndexStart];
+					vertices[newIndex] = combinedMeshData.Vertices[combinedIndex];
+					SetUnlessNull(normals, newIndex, combinedMeshData.Normals, combinedIndex);
+					SetUnlessNull(tangents, newIndex, combinedMeshData.Tangents, combinedIndex);
+					SetUnlessNull(colors, newIndex, combinedMeshData.Colors, combinedIndex);
+					SetUnlessNull(skin, newIndex, combinedMeshData.Skin, combinedIndex);
+					SetUnlessNull(uv1, newIndex, combinedMeshData.UV1, combinedIndex);
+					SetUnlessNull(uv2, newIndex, combinedMeshData.UV2, combinedIndex);
+					SetUnlessNull(uv3, newIndex, combinedMeshData.UV3, combinedIndex);
+					SetUnlessNull(uv4, newIndex, combinedMeshData.UV4, combinedIndex);
+					SetUnlessNull(uv5, newIndex, combinedMeshData.UV5, combinedIndex);
+					SetUnlessNull(uv6, newIndex, combinedMeshData.UV6, combinedIndex);
+					SetUnlessNull(uv7, newIndex, combinedMeshData.UV7, combinedIndex);
+					SetUnlessNull(bindpose, newIndex, combinedMeshData.BindPose, combinedIndex);
+					processedIndexBuffer[newIndex] = (uint)newIndex;
+				}
+				ISubMesh newSubMesh = combinedSubMesh.DeepClone();
+				newSubMesh.FirstByte = offset * sizeof(uint);
+				newSubMesh.FirstVertex = offset;
+				newSubMesh.VertexCount = newSubMesh.IndexCount;
+				//newSubMesh.BaseVertex //Might need set
+				newSubMesh.LocalAABB.CalculateFromVertexArray(new ReadOnlySpan<Vector3>(vertices, (int)offset, (int)newSubMesh.IndexCount));
+				subMeshes[k] = newSubMesh;
+
+				offset += combinedSubMesh.IndexCount;
+			}
+
+			return new MeshData(vertices, normals, tangents, colors, skin, uv0, uv1, uv2, uv3, uv4, uv5, uv6, uv7, bindpose, processedIndexBuffer, subMeshes);
+		}
+
+		private static void SetUnlessNull<T>(T[]? array1, int index1, T[]? array2, int index2)
+		{
+			if (array1 is not null)
+			{
+				array1[index1] = array2![index2];//array2 must have the same nullability as array1
+			}
+		}
+
+		private bool TryGetOrMakeCombinedMeshData(IMesh combinedMesh, out MeshData combinedMeshData)
+		{
+			if (badMeshSet.Contains(combinedMesh))
+			{
+				combinedMeshData = default;
+				return false;
+			}
+			else if (combinedMeshDictionary.TryGetValue(combinedMesh, out combinedMeshData)
+				|| MeshData.TryMakeFromMesh(combinedMesh, out combinedMeshData))
+			{
+				return true;
+			}
+			else
+			{
+				badMeshSet.Add(combinedMesh);
+				combinedMeshData = default;
+				return false;
+			}
+		}
+
+		private static bool TryGetStaticMeshInformation(
+			IUnityObjectBase component,
+			[NotNullWhen(true)] out string? cleanName,
+			out (IMesh, IComponent, IMeshFilter, ITransform) parts)
+		{
+			if (!component.IsStaticMeshRenderer(out IComponent? renderer))
+			{
+				cleanName = null;
+				parts = default;
+				return false;
+			}
+
+			IGameObject? gameObject = renderer.GameObject_C2P;
+			if (gameObject is null)
+			{
+				cleanName = null;
+				parts = default;
+				return false;
+			}
+
+			string cleanedName = GameObjectNameCleaner.CleanName(gameObject.NameString);
+			if (string.IsNullOrEmpty(cleanedName))
+			{
+				cleanName = null;
+				parts = default;
+				return false;
+			}
+
+			IMeshFilter? meshFilter = gameObject.TryGetComponent<IMeshFilter>();
+			if (meshFilter is null)
+			{
+				cleanName = null;
+				parts = default;
+				return false;
+			}
+
+			IMesh? mesh = meshFilter.Mesh_C33P;
+			if (mesh is null)
+			{
+				cleanName = null;
+				parts = default;
+				return false;
+			}
+
+			ITransform? transform = gameObject.TryGetComponent<ITransform>();
+			if (transform is null)
+			{
+				cleanName = null;
+				parts = default;
+				return false;
+			}
+
+			cleanName = cleanedName;
+			parts = (mesh, renderer, meshFilter, transform);
+			return true;
+		}
+
+		private static IMesh CreateMesh(ProcessedAssetCollection processedCollection)
+		{
+			return processedCollection.CreateAsset((int)ClassIDType.Mesh, MeshFactory.CreateAsset);
+		}
+
+		#region Approximate Equality
+		private static bool AreApproximatelyEqual(MeshData instanceMeshData, MeshData otherMeshData)
+		{
+			if (!AreSameLength(instanceMeshData.Vertices, otherMeshData.Vertices)
+				|| !AreSameLength(instanceMeshData.Normals, otherMeshData.Normals)
+				|| !AreSameLength(instanceMeshData.Tangents, otherMeshData.Tangents)
+				|| !AreSameLength(instanceMeshData.Colors, otherMeshData.Colors)
+				|| !AreIndicesEqual(instanceMeshData.Skin, otherMeshData.Skin)
+				|| !AreSameLength(instanceMeshData.UV0, otherMeshData.UV0)
+				|| !AreSameLength(instanceMeshData.UV1, otherMeshData.UV1)
+				|| !AreSameLength(instanceMeshData.UV2, otherMeshData.UV2)
+				|| !AreSameLength(instanceMeshData.UV3, otherMeshData.UV3)
+				|| !AreSameLength(instanceMeshData.UV4, otherMeshData.UV4)
+				|| !AreSameLength(instanceMeshData.UV5, otherMeshData.UV5)
+				|| !AreSameLength(instanceMeshData.UV6, otherMeshData.UV6)
+				|| !AreSameLength(instanceMeshData.UV7, otherMeshData.UV7)
+				|| !AreSameLength(instanceMeshData.BindPose, otherMeshData.BindPose)
+				|| !AreSequenceEqual(instanceMeshData.ProcessedIndexBuffer, otherMeshData.ProcessedIndexBuffer))
+			{
+				return false;
+			}
+
+			double totalSum = 0;
+			long totalCount = 0;
+
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.Vertices, otherMeshData.Vertices, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.Normals is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.Normals, otherMeshData.Normals!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.Tangents is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.Tangents, otherMeshData.Tangents!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.Colors is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.Colors, otherMeshData.Colors!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.Skin is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.Skin, otherMeshData.Skin!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.UV0 is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.UV0, otherMeshData.UV0!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.UV1 is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.UV1, otherMeshData.UV1!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.UV2 is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.UV2, otherMeshData.UV2!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.UV3 is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.UV3, otherMeshData.UV3!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.UV4 is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.UV4, otherMeshData.UV4!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.UV5 is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.UV5, otherMeshData.UV5!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.UV6 is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.UV6, otherMeshData.UV6!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.UV7 is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.UV7, otherMeshData.UV7!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			if (instanceMeshData.BindPose is not null)
+			{
+				RelativeDistanceMethods.RelativeDistance(instanceMeshData.BindPose, otherMeshData.BindPose!, out float sum, out int count);
+				totalSum += sum;
+				totalCount += count;
+			}
+
+			//lots of distance calculations
+			double averageRelativeDistance = totalSum / totalCount;
+			return averageRelativeDistance < MaxMeshDeviation / 2;
+		}
+
+		private static bool AreSameLength<T>(T[]? array1, T[]? array2)
+		{
+			if (array1 is null || array2 is null)
+			{
+				return array1 is null && array2 is null;
+			}
+			else
+			{
+				return array1.Length == array2.Length;
+			}
+		}
+
+		private static bool AreSequenceEqual<T>(T[]? array1, T[]? array2)
+		{
+			if (array1 is null || array2 is null)
+			{
+				return array1 is null && array2 is null;
+			}
+			else
+			{
+				return ((ReadOnlySpan<T>)array1).SequenceEqual(array2);
+			}
+		}
+
+		private static bool AreIndicesEqual(BoneWeight4[]? array1, BoneWeight4[]? array2)
+		{
+			if (array1 is null || array2 is null)
+			{
+				return array1 is null && array2 is null;
+			}
+			else if (array1.Length != array2.Length)
+			{
+				return false;
+			}
+			else
+			{
+				for (int i = array1.Length - 1; i >= 0; i--)
+				{
+					if (!AreIndicesEqual(array1[i], array2[i]))
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+
+		private static bool AreIndicesEqual(BoneWeight4 value1, BoneWeight4 value2)
+		{
+			return value1.Index0 == value2.Index0
+				&& value1.Index1 == value2.Index1
+				&& value1.Index2 == value2.Index2
+				&& value1.Index3 == value2.Index3;
+		}
+		#endregion
+	}
+	internal static class StaticMeshSeparationExtensions
+	{
+		public static bool IsStaticMeshRenderer(this IUnityObjectBase asset, [NotNullWhen(true)] out IComponent? renderer)
+		{
+			if (asset is IMeshRenderer meshRenderer)
+			{
+				renderer = meshRenderer;
+				return !meshRenderer.ReferencesDynamicMesh();
+			}
+			else if (asset is ISkinnedMeshRenderer skinnedMeshRenderer)
+			{
+				renderer = skinnedMeshRenderer;
+				return !skinnedMeshRenderer.ReferencesDynamicMesh();
+			}
+			else
+			{
+				renderer = null;
+				return false;
+			}
+		}
+
+		private static bool ReferencesDynamicMesh(this IMeshRenderer renderer)
+		{
+			return renderer.Has_StaticBatchInfo_C23() && renderer.StaticBatchInfo_C23.SubMeshCount == 0
+				|| renderer.Has_SubsetIndices_C23() && renderer.SubsetIndices_C23.Length == 0;
+		}
+
+		private static bool ReferencesDynamicMesh(this ISkinnedMeshRenderer renderer)
+		{
+			return renderer.Has_StaticBatchInfo_C137() && renderer.StaticBatchInfo_C137.SubMeshCount == 0
+				|| renderer.Has_SubsetIndices_C137() && renderer.SubsetIndices_C137.Length == 0;
+		}
+
+		public static IReadOnlyList<uint> GetSubmeshIndices(this IComponent renderer)
+		{
+			return renderer switch
+			{
+				IMeshRenderer meshRenderer => meshRenderer.GetSubmeshIndices(),
+				ISkinnedMeshRenderer skinnedMeshRenderer => skinnedMeshRenderer.GetSubmeshIndices(),
+				_ => Array.Empty<uint>()
+			};
+		}
+
+		private static IReadOnlyList<uint> GetSubmeshIndices(this IMeshRenderer renderer)
+		{
+			return renderer.Has_StaticBatchInfo_C23()
+				? new RangeList(renderer.StaticBatchInfo_C23.FirstSubMesh, renderer.StaticBatchInfo_C23.SubMeshCount)
+				: renderer.SubsetIndices_C23;
+		}
+
+		private static IReadOnlyList<uint> GetSubmeshIndices(this ISkinnedMeshRenderer renderer)
+		{
+			return renderer.Has_StaticBatchInfo_C137()
+				? new RangeList(renderer.StaticBatchInfo_C137.FirstSubMesh, renderer.StaticBatchInfo_C137.SubMeshCount)
+				: renderer.SubsetIndices_C137;
+		}
+
+		private sealed class RangeList : IReadOnlyList<uint>
+		{
+			private readonly uint start;
+			private readonly uint count;
+
+			public RangeList(uint start, uint count)
+			{
+				this.start = start;
+				this.count = count;
+			}
+
+			public uint this[int index]
+			{
+				get
+				{
+					if (index < 0 || index >= count)
+					{
+						throw new ArgumentOutOfRangeException(nameof(index));
+					}
+					else
+					{
+						return start + (uint)index;
+					}
+				}
+			}
+
+			public int Count => (int)count;
+
+			public IEnumerator<uint> GetEnumerator()
+			{
+				for (uint i = 0; i < count; i++)
+				{
+					yield return start + i;
+				}
+			}
+
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+		}
+
+		public static void ClearStaticBatchInfo(this IComponent renderer)
+		{
+			if (renderer is IMeshRenderer meshRenderer)
+			{
+				meshRenderer.ClearStaticBatchInfo();
+			}
+			else if (renderer is ISkinnedMeshRenderer skinnedMeshRenderer)
+			{
+				skinnedMeshRenderer.ClearStaticBatchInfo();
+			}
+		}
+
+		private static void ClearStaticBatchInfo(this IMeshRenderer renderer)
+		{
+			if (renderer.Has_StaticBatchInfo_C23())
+			{
+				renderer.StaticBatchInfo_C23.FirstSubMesh = 0;
+				renderer.StaticBatchInfo_C23.SubMeshCount = 0;
+			}
+			else if (renderer.Has_SubsetIndices_C23())
+			{
+				renderer.SubsetIndices_C23 = Array.Empty<uint>();
+			}
+		}
+
+		private static void ClearStaticBatchInfo(this ISkinnedMeshRenderer renderer)
+		{
+			if (renderer.Has_StaticBatchInfo_C137())
+			{
+				renderer.StaticBatchInfo_C137.FirstSubMesh = 0;
+				renderer.StaticBatchInfo_C137.SubMeshCount = 0;
+			}
+			else if (renderer.Has_SubsetIndices_C137())
+			{
+				renderer.SubsetIndices_C137 = Array.Empty<uint>();
+			}
+		}
+	}
+}
