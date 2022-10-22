@@ -1,9 +1,9 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.Math.Transformations;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using SharpGLTF.Geometry;

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Logging;
-using AssetRipper.Core.Math.Transformations;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Enums;

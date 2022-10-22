@@ -1,7 +1,6 @@
-﻿using AssetRipper.Numerics;
-using System.Numerics;
+﻿using System.Numerics;
 
-namespace AssetRipper.Core.Math.Transformations
+namespace AssetRipper.Numerics
 {
 	public readonly record struct Transformation(Matrix4x4 Matrix)
 	{
@@ -16,7 +15,7 @@ namespace AssetRipper.Core.Math.Transformations
 		{
 			return Vector3.Transform(position, transform.Matrix);
 		}
-		
+
 		public static Transformation operator *(Transformation left, Transformation right)
 		{
 			return new Transformation(left.Matrix * right.Matrix);
@@ -69,7 +68,7 @@ namespace AssetRipper.Core.Math.Transformations
 		{
 			return new Transformation(Matrix4x4.Transpose(Matrix));
 		}
-		
+
 		public Transformation RemoveTranslation()
 		{
 			return new Transformation(ResetFourthRow(Matrix));

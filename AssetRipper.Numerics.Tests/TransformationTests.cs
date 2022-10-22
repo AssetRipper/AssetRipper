@@ -1,8 +1,7 @@
-﻿using AssetRipper.Core.Math.Transformations;
-using System;
+﻿using System;
 using System.Numerics;
 
-namespace AssetRipper.Tests
+namespace AssetRipper.Numerics.Tests
 {
 	internal class TransformationTests
 	{
@@ -14,7 +13,7 @@ namespace AssetRipper.Tests
 			Transformation expectedResult = new Transformation(new Vector3(0, 1, 0), Quaternion.Identity, new Vector3(1, 2, 1));
 			Assert.That(transformation1 * transformation2, Is.EqualTo(expectedResult));
 		}
-		
+
 		[Test]
 		public void MoveAndRotateThenScale()
 		{
@@ -135,7 +134,7 @@ namespace AssetRipper.Tests
 				Assert.Fail($"{name}\nExpected: {expected}\nActual: {actual}");
 			}
 		}
-		
+
 		private static bool ApproximatelyEqual(Transformation actual, Transformation expected, float maxDeviation)
 		{
 			return ApproximatelyEqual(actual.Matrix, expected.Matrix, maxDeviation);
