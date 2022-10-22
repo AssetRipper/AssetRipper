@@ -129,6 +129,11 @@
 			return ((a.X * a.X) + (a.Y * a.Y) + (a.Z * a.Z) + (a.W * a.W)) > 1d - kEpsilon;
 		}
 
+		public static bool IsZero(this Quaternion a)
+		{
+			return a.X == 0 && a.Y == 0 && a.Z == 0 && a.W == 0;
+		}
+
 		public static bool IsEqualUsingDot(this Quaternion a, Quaternion b)
 		{
 			return a.Dot(b) > 1.0f - kEpsilon;
