@@ -14,7 +14,7 @@ namespace AssetRipper.Numerics
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 		public static float RelativeDistance(float x1, float x2)
 		{
-			return MathF.Abs(x1 - x2) / (MathF.Abs(x1) + MathF.Abs(x2));
+			return x1 == x2 ? 0 : MathF.Abs(x1 - x2) / (MathF.Abs(x1) + MathF.Abs(x2));
 		}
 
 		//between zero and positive infinity
@@ -26,7 +26,7 @@ namespace AssetRipper.Numerics
 
 		public static float RelativeDistance(Vector2 v1, Vector2 v2)
 		{
-			return Vector2.Distance(v1, v2) / (v1.Length() + v2.Length());
+			return v1 == v2 ? 0 : Vector2.Distance(v1, v2) / (v1.Length() + v2.Length());
 		}
 
 		public static float RelativeDistance2(Vector2 v1, Vector2 v2)
@@ -36,12 +36,12 @@ namespace AssetRipper.Numerics
 
 		public static float RelativeDistance(Vector3 v1, Vector3 v2)
 		{
-			return Vector3.Distance(v1, v2) / (v1.Length() + v2.Length());
+			return v1 == v2 ? 0 : Vector3.Distance(v1, v2) / (v1.Length() + v2.Length());
 		}
 
 		public static float RelativeDistance(Vector4 v1, Vector4 v2)
 		{
-			return Vector4.Distance(v1, v2) / (v1.Length() + v2.Length());
+			return v1 == v2 ? 0 : Vector4.Distance(v1, v2) / (v1.Length() + v2.Length());
 		}
 
 		public static void RelativeDistance(float[] x1, float[] x2, out float sum, out int count)

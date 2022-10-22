@@ -111,5 +111,17 @@
 				});
 			}
 		}
+
+		[Test]
+		public void ComparingZeroWithItselfIsZero()
+		{
+			Assert.Multiple(() =>
+			{
+				Assert.That(RelativeDistanceMethods.RelativeDistance(0f, 0f), Is.EqualTo(0f), () => $"1D distance between zero was not zero.");
+				Assert.That(RelativeDistanceMethods.RelativeDistance(Vector2.Zero, Vector2.Zero), Is.EqualTo(0f), () => $"2D distance between zero was not zero.");
+				Assert.That(RelativeDistanceMethods.RelativeDistance(Vector3.Zero, Vector3.Zero), Is.EqualTo(0f), () => $"3D distance between zero was not zero.");
+				Assert.That(RelativeDistanceMethods.RelativeDistance(Vector4.Zero, Vector4.Zero), Is.EqualTo(0f), () => $"4D distance between zero was not zero.");
+			});
+		}
 	}
 }
