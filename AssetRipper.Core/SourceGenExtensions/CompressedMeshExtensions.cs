@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Core.Classes.Mesh;
-using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using System.Numerics;
@@ -305,7 +304,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 
 				float w = signs[(i * 2) + 1] == 0 ? -1.0f : 1.0f;
-				tangents[i] = new Vector4f(x, y, z, w);
+				tangents[i] = new Vector4(x, y, z, w);
 			}
 
 			return tangents;

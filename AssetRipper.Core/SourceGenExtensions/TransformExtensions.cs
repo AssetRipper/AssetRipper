@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Math.Transformations;
-using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;

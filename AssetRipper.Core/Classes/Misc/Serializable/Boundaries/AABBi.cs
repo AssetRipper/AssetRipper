@@ -2,20 +2,13 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
-using AssetRipper.Core.Math.Vectors;
+using AssetRipper.SourceGenerated.Subclasses.Vector3Int;
 using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 {
 	public sealed class AABBi : IAsset, IAABBi
 	{
-		public AABBi() : this(new Vector3i(), new Vector3i()) { }
-		public AABBi(Vector3i center, Vector3i extent)
-		{
-			m_Center = center;
-			m_Extent = extent;
-		}
-
 		public void Read(AssetReader reader)
 		{
 			m_Center.Read(reader);
@@ -30,16 +23,16 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.Boundaries
 
 		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YamlMappingNode node = new YamlMappingNode();
+			YamlMappingNode node = new();
 			node.Add(CenterName, m_Center.ExportYaml(container));
 			node.Add(ExtentName, m_Extent.ExportYaml(container));
 			return node;
 		}
 
-		private Vector3i m_Center;
-		private Vector3i m_Extent;
-		public IVector3i Center => m_Center;
-		public IVector3i Extent => m_Extent;
+		private readonly Vector3Int m_Center = new();
+		private readonly Vector3Int m_Extent = new();
+		public IVector3Int Center => m_Center;
+		public IVector3Int Extent => m_Extent;
 
 		public const string CenterName = "m_Center";
 		public const string ExtentName = "m_Extent";

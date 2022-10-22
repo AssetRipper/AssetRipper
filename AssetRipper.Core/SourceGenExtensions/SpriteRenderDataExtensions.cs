@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets.Generics;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Math.Vectors;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
@@ -50,19 +49,19 @@ namespace AssetRipper.Core.SourceGenExtensions
 				for (int i = 0; i < spriteRenderData.SubMeshes.Count; i++)
 				{
 					Vector3f_3_5_0_f5[] vertices = spriteRenderData.VertexData.GenerateVertices(version, spriteRenderData.SubMeshes[i]);
-					List<Vector2f[]> vectorArrayList = spriteRenderData.VertexDataToOutline(vertices, spriteRenderData.SubMeshes[i]);
+					List<Vector2[]> vectorArrayList = spriteRenderData.VertexDataToOutline(vertices, spriteRenderData.SubMeshes[i]);
 					outlines.AddRanges(vectorArrayList);
 				}
 			}
 			else if (spriteRenderData.Has_Vertices() && spriteRenderData.Vertices.Count != 0)
 			{
-				List<Vector2f[]> vectorArrayList = spriteRenderData.VerticesToOutline();
+				List<Vector2[]> vectorArrayList = spriteRenderData.VerticesToOutline();
 				outlines.Capacity = vectorArrayList.Count;
 				outlines.AddRanges(vectorArrayList);
 			}
 		}
 
-		private static List<Vector2f[]> VerticesToOutline(this ISpriteRenderData spriteRenderData)
+		private static List<Vector2[]> VerticesToOutline(this ISpriteRenderData spriteRenderData)
 		{
 			Vector3f_3_5_0_f5[] vertices = new Vector3f_3_5_0_f5[spriteRenderData.Vertices.Count];
 			for (int i = 0; i < vertices.Length; i++)
@@ -83,7 +82,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return outlineGenerator.GenerateOutlines();
 		}
 
-		private static List<Vector2f[]> VertexDataToOutline(this ISpriteRenderData spriteRenderData, Vector3f_3_5_0_f5[] vertices, ISubMesh submesh)
+		private static List<Vector2[]> VertexDataToOutline(this ISpriteRenderData spriteRenderData, Vector3f_3_5_0_f5[] vertices, ISubMesh submesh)
 		{
 			Vector3i[] triangles = new Vector3i[submesh.IndexCount / 3];
 			for (int o = (int)submesh.FirstByte, ti = 0; ti < triangles.Length; o += 6, ti++)
@@ -97,15 +96,15 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return outlineGenerator.GenerateOutlines();
 		}
 
-		private static void AddRanges(this AssetList<AssetList<Vector2f_3_5_0_f5>> instance, List<Vector2f[]> vectorArrayList)
+		private static void AddRanges(this AssetList<AssetList<Vector2f_3_5_0_f5>> instance, List<Vector2[]> vectorArrayList)
 		{
-			foreach (Vector2f[] vectorArray in vectorArrayList)
+			foreach (Vector2[] vectorArray in vectorArrayList)
 			{
 				AssetList<Vector2f_3_5_0_f5> assetList = new AssetList<Vector2f_3_5_0_f5>(vectorArray.Length);
 				instance.Add(assetList);
-				foreach (Vector2f v in vectorArray)
+				foreach (Vector2 v in vectorArray)
 				{
-					assetList.Add((Vector2f_3_5_0_f5)(Vector2)v);
+					assetList.Add((Vector2f_3_5_0_f5)v);
 				}
 			}
 		}

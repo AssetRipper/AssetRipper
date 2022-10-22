@@ -3,9 +3,9 @@ using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Core.Layout;
-using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
+using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
@@ -272,8 +272,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public RectOffset Padding { get; set; } = new();
 		public RectOffset Overflow { get; set; } = new();
 		public SerializablePointer<IFont> Font { get; set; } = new();
-		public Vector2f ContentOffset { get; set; } = new();
-		public Vector2f ClipOffset { get; set; } = new();
+		public Vector2f_3_5_0_f5 ContentOffset { get; set; } = new();
+		public Vector2f_3_5_0_f5 ClipOffset { get; set; } = new();
 
 		public const string NameName = "m_Name";
 		public const string NormalName = "m_Normal";

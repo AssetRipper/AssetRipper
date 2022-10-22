@@ -1,7 +1,8 @@
-﻿using AssetRipper.Core.Math.Vectors;
+﻿using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -258,7 +259,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				return false;
 			}
 
-			private bool GetNextNeighbor(Vector3i tri, int vertex, [NotNullWhen(true)] out Vector3i? result)
+			private bool GetNextNeighbor(Vector3i tri, int vertex, out Vector3i result)
 			{
 				int member = tri.GetMemberByValue(vertex);
 				int nextVertex = tri.GetValueByMember(member + 1);
@@ -285,7 +286,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					return true;
 				}
 
-				Vector3i? next = tri1;
+				Vector3i next = tri1;
 				while (GetNextNeighbor(next, vertex, out next))
 				{
 					if (next == tri2)
@@ -324,7 +325,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public List<Vector2f[]> GenerateOutlines()
+		public List<Vector2[]> GenerateOutlines()
 		{
 			List<Outline> outlines = new List<Outline>();
 			for (int i = 0; i < m_triangles.Count; i++)
@@ -348,8 +349,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 				outlines.Add(outline);
 			}
 
-			List<Vector2f[]> result = new List<Vector2f[]>();
-			List<Vector2f> resultLine = new List<Vector2f>();
+			List<Vector2[]> result = new();
+			List<Vector2> resultLine = new();
 			for (int i = 0; i < outlines.Count; i++)
 			{
 				resultLine.Clear();
@@ -385,7 +386,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return result;
 		}
 
-		private static Vector2f ConvertToVector2f(Vector3f_3_5_0_f5 v3) => new Vector2f(v3.X, v3.Y);
+		private static Vector2 ConvertToVector2f(Vector3f_3_5_0_f5 v3) => new Vector2(v3.X, v3.Y);
 
 		private static bool IsValidTriangle(Vector3i triangle)
 		{

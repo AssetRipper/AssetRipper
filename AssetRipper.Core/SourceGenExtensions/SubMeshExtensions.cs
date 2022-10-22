@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
-using AssetRipper.Core.Math.Vectors;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
@@ -167,8 +166,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else
 			{
-				min = Vector3f.Zero;
-				max = Vector3f.Zero;
+				min = Vector3.Zero;
+				max = Vector3.Zero;
 			}
 		}
 
@@ -257,14 +256,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 			using MemoryStream stream = new MemoryStream(vertexData.Data);
 			using AssetReader reader = new AssetReader(stream, meshCollection);
 			stream.Position = begin;
-			Vector3f dummyVertex = reader.ReadAsset<Vector3f>();
+			Vector3 dummyVertex = reader.ReadVector3();
 			min = dummyVertex;
 			max = dummyVertex;
 
 			stream.Position = begin;
 			for (int i = 0; i < vertexCount; i++)
 			{
-				Vector3f vertex = reader.ReadAsset<Vector3f>();
+				Vector3 vertex = reader.ReadVector3();
 				if (vertex.X > max.X)
 				{
 					max.X = vertex.X;
@@ -291,6 +290,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 				stream.Position += extraStride;
 			}
+		}
+
+		private static Vector3 ReadVector3(this AssetReader reader)
+		{
+			return new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 		}
 	}
 }

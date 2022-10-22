@@ -2,9 +2,9 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
-using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Yaml;
 using System.Globalization;
+using System.Numerics;
 
 namespace AssetRipper.Core.Math.Colors
 {
@@ -30,7 +30,7 @@ namespace AssetRipper.Core.Math.Colors
 			A = a;
 		}
 
-		public static explicit operator Vector4f(ColorRGBAf c) => new(c.R, c.G, c.B, c.A);
+		public static explicit operator Vector4(ColorRGBAf c) => new(c.R, c.G, c.B, c.A);
 
 		public ColorRGBAf Clone() => new ColorRGBAf(R, G, B, A);
 
@@ -76,7 +76,7 @@ namespace AssetRipper.Core.Math.Colors
 
 		public override int GetHashCode()
 		{
-			return ((Vector4f)this).GetHashCode();
+			return ((Vector4)this).GetHashCode();
 		}
 
 		public override bool Equals(object? other)
@@ -128,7 +128,7 @@ namespace AssetRipper.Core.Math.Colors
 
 		public static bool operator ==(ColorRGBAf lhs, ColorRGBAf rhs)
 		{
-			return (Vector4f)lhs == (Vector4f)rhs;
+			return (Vector4)lhs == (Vector4)rhs;
 		}
 
 		public static bool operator !=(ColorRGBAf lhs, ColorRGBAf rhs)

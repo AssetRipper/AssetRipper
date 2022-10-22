@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Math.Transformations;
-using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Enums;
@@ -140,7 +139,7 @@ namespace AssetRipper.Library.Exporters.Meshes
 			where TvM : unmanaged, IVertexMaterial
 			where TvS : unmanaged, IVertexSkinning
 		{
-			uint firstIndex = meshData.Mesh.Is16BitIndices() ? subMesh.FirstByte / 2 : subMesh.FirstByte / 4;
+			uint firstIndex = meshData.Mesh.Is16BitIndices() ? subMesh.FirstByte / sizeof(ushort) : subMesh.FirstByte / sizeof(uint);
 			
 			uint indexCount = subMesh.IndexCount;
 			MeshTopology topology = subMesh.GetTopology();

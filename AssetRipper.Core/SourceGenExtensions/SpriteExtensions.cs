@@ -1,10 +1,5 @@
 ﻿using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Math.Colors;
-using AssetRipper.Core.Math.Vectors;
-using AssetRipper.Core.Project;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
@@ -176,7 +171,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 
 			Vector2 sizeDelta = sprite.Rect_C213.Size() - sAtlasRect.Size();
-			cropTopRight = new Vector2f(sizeDelta.X - cropBotLeft.X, sizeDelta.Y - cropBotLeft.Y);
+			cropTopRight = new Vector2(sizeDelta.X - cropBotLeft.X, sizeDelta.Y - cropBotLeft.Y);
 
 			Vector2 pivot;
 			if (sprite.Has_Pivot_C213())
@@ -187,7 +182,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				Vector2 center = new Vector2(sprite.Rect_C213.Size().X / 2.0f, sprite.Rect_C213.Size().Y / 2.0f);
 				Vector2 pivotOffset = center + (Vector2)sprite.Offset_C213;
-				pivot = new Vector2f(pivotOffset.X / sprite.Rect_C213.Size().X, pivotOffset.Y / sprite.Rect_C213.Size().Y);
+				pivot = new Vector2(pivotOffset.X / sprite.Rect_C213.Size().X, pivotOffset.Y / sprite.Rect_C213.Size().Y);
 			}
 
 			Vector2 pivotPosition = new Vector2(pivot.X * sprite.Rect_C213.Size().X, pivot.Y * sprite.Rect_C213.Size().Y);
