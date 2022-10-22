@@ -1,8 +1,4 @@
-﻿using AssetRipper.Core.Classes.Mesh;
-using AssetRipper.Core.Classes.Misc;
-using AssetRipper.Core.Math;
-using AssetRipper.Core.Math.Colors;
-using AssetRipper.IO.Endian;
+﻿using AssetRipper.IO.Endian;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Enums;

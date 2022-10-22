@@ -1,4 +1,3 @@
-using AssetRipper.Core.Math.Vectors;
 using AssetRipper.Core.Utils;
 using System;
 using System.Numerics;

@@ -3,7 +3,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Core;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Math.Colors;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Utils;

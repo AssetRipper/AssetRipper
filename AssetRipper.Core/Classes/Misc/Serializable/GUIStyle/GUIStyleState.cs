@@ -4,10 +4,11 @@ using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Math.Colors;
+using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Subclasses.ColorRGBAf;
 using AssetRipper.Yaml;
 
 namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
@@ -21,18 +22,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		{
 			Background = new();
 			ScaledBackgrounds = Array.Empty<SerializablePointer<ITexture2D>>();
-			TextColor = ColorRGBAf.Black;
-		}
-
-		public GUIStyleState(GUIStyleState copy)
-		{
-			Background = copy.Background.Clone();
-			TextColor = copy.TextColor.Clone();
-			ScaledBackgrounds = new SerializablePointer<ITexture2D>[copy.ScaledBackgrounds.Length];
-			for (int i = 0; i < copy.ScaledBackgrounds.Length; i++)
-			{
-				ScaledBackgrounds[i] = copy.ScaledBackgrounds[i].Clone();
-			}
+			TextColor.SetAsBlack();
 		}
 
 		public void Read(AssetReader reader)
@@ -61,7 +51,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public YamlNode ExportYaml(IExportContainer container)
 		{
-			YamlMappingNode node = new YamlMappingNode();
+			YamlMappingNode node = new();
 			node.Add(BackgroundName, Background.ExportYaml(container));
 			if (HasScaledBackgrounds(container.ExportVersion, container.ExportFlags))
 			{
@@ -80,7 +70,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public SerializablePointer<ITexture2D> Background { get; set; }
 
-		public ColorRGBAf TextColor { get; set; } = new();
+		public ColorRGBAf_3_5_0_f5 TextColor { get; } = new();
 
 		public const string BackgroundName = "m_Background";
 		public const string ScaledBackgroundsName = "m_ScaledBackgrounds";

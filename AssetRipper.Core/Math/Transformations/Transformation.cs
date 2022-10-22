@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using AssetRipper.Numerics;
+using System.Numerics;
 
 namespace AssetRipper.Core.Math.Transformations
 {
@@ -33,8 +34,23 @@ namespace AssetRipper.Core.Math.Transformations
 
 		public static Transformation CreateInverse(Vector3 translation, Quaternion rotation, Vector3 scale)
 		{
-			Matrix4x4 matrix = Matrix4x4.CreateTranslation(Vector3.Negate(translation)) * Matrix4x4.CreateFromQuaternion(Quaternion.Inverse(rotation)) * Matrix4x4.CreateScale(Vector3.One / scale);
+			Vector3 inverseTranslation = Vector3.Negate(translation);
+			Quaternion inverseRotation = InvertQuaternion(rotation);
+			Vector3 inverseScale = Vector3.One / scale;
+			Matrix4x4 matrix = Matrix4x4.CreateTranslation(inverseTranslation) * Matrix4x4.CreateFromQuaternion(inverseRotation) * Matrix4x4.CreateScale(inverseScale);
 			return new Transformation(matrix);
+		}
+
+		private static Quaternion InvertQuaternion(Quaternion rotation)
+		{
+			if (rotation.IsZero())
+			{
+				return Quaternion.Identity;
+			}
+			else
+			{
+				return Quaternion.Inverse(rotation);
+			}
 		}
 
 		public Transformation Invert()
