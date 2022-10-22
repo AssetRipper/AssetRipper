@@ -1,6 +1,8 @@
 ﻿using AssetRipper.Core.Classes.Mesh;
+using AssetRipper.Core.Extensions;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
+using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Single;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
@@ -78,86 +80,145 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static int GetVertexCount(ICompressedMesh compressedMesh)
 		{
-			return (int)compressedMesh.Vertices.NumItems / 3;
+			return (int)compressedMesh.Vertices.NumItems / 3;//3 floats in a Vector3
 		}
 
-		private static void GetUV(ICompressedMesh compressedMesh, out Vector2[]? uv0, out Vector2[]? uv1, out Vector2[]? uv2, out Vector2[]? uv3, out Vector2[]? uv4, out Vector2[]? uv5, out Vector2[]? uv6, out Vector2[]? uv7)
+		public static void GetUV(this ICompressedMesh compressedMesh, out Vector2[]? uv0, out Vector2[]? uv1, out Vector2[]? uv2, out Vector2[]? uv3, out Vector2[]? uv4, out Vector2[]? uv5, out Vector2[]? uv6, out Vector2[]? uv7)
 		{
 			int vertexCount = GetVertexCount(compressedMesh);
-			uv0 = default;
-			uv1 = default;
-			uv2 = default;
-			uv3 = default;
-			uv4 = default;
-			uv5 = default;
-			uv6 = default;
-			uv7 = default;
 			if (compressedMesh.UV.NumItems > 0)
 			{
 				uint m_UVInfo = compressedMesh.UVInfo;
 				if (compressedMesh.Has_UVInfo() && m_UVInfo != 0)
 				{
-					const int kInfoBitsPerUV = 4;
-					const int kUVDimensionMask = 3;
-					const int kUVChannelExists = 4;
-					const int kMaxTexCoordShaderChannels = 8;
-
 					int uvSrcOffset = 0;
-					for (int uvIndex = 0; uvIndex < kMaxTexCoordShaderChannels; uvIndex++)
-					{
-						uint texCoordBits = m_UVInfo >> (uvIndex * kInfoBitsPerUV);
-						texCoordBits &= (1u << kInfoBitsPerUV) - 1u;
-						if ((texCoordBits & kUVChannelExists) != 0)
-						{
-							int uvDim = 1 + (int)(texCoordBits & kUVDimensionMask);
-							Vector2[] m_UV = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(uvDim, uvDim * sizeof(float), uvSrcOffset, vertexCount));
-							switch (uvIndex)
-							{
-								case 0:
-									uv0 = m_UV;
-									break;
-								case 1:
-									uv1 = m_UV;
-									break;
-								case 2:
-									uv2 = m_UV;
-									break;
-								case 3:
-									uv3 = m_UV;
-									break;
-								case 4:
-									uv4 = m_UV;
-									break;
-								case 5:
-									uv5 = m_UV;
-									break;
-								case 6:
-									uv6 = m_UV;
-									break;
-								case 7:
-									uv7 = m_UV;
-									break;
-								default:
-									throw new IndexOutOfRangeException();
-							}
-							uvSrcOffset += uvDim * vertexCount;
-						}
-					}
+					uv0 = ReadChannel(compressedMesh.UV, m_UVInfo, 0, vertexCount, ref uvSrcOffset);
+					uv1 = ReadChannel(compressedMesh.UV, m_UVInfo, 1, vertexCount, ref uvSrcOffset);
+					uv2 = ReadChannel(compressedMesh.UV, m_UVInfo, 2, vertexCount, ref uvSrcOffset);
+					uv3 = ReadChannel(compressedMesh.UV, m_UVInfo, 3, vertexCount, ref uvSrcOffset);
+					uv4 = ReadChannel(compressedMesh.UV, m_UVInfo, 4, vertexCount, ref uvSrcOffset);
+					uv5 = ReadChannel(compressedMesh.UV, m_UVInfo, 5, vertexCount, ref uvSrcOffset);
+					uv6 = ReadChannel(compressedMesh.UV, m_UVInfo, 6, vertexCount, ref uvSrcOffset);
+					uv7 = ReadChannel(compressedMesh.UV, m_UVInfo, 7, vertexCount, ref uvSrcOffset);
 				}
 				else
 				{
 					uv0 = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(2, 2 * sizeof(float), 0, vertexCount));
-					if (compressedMesh.UV.NumItems >= vertexCount * 4)
+					if (compressedMesh.UV.NumItems >= vertexCount * sizeof(float))
 					{
 						uv1 = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(2, 2 * sizeof(float), vertexCount * 2, vertexCount));
 					}
+					else
+					{
+						uv1 = default;
+					}
+					uv2 = default;
+					uv3 = default;
+					uv4 = default;
+					uv5 = default;
+					uv6 = default;
+					uv7 = default;
 				}
 			}
+			else
+			{
+				uv0 = default;
+				uv1 = default;
+				uv2 = default;
+				uv3 = default;
+				uv4 = default;
+				uv5 = default;
+				uv6 = default;
+				uv7 = default;
+			}
+		}
+
+		private static Vector2[]? ReadChannel(PackedBitVector_Single packedVector, uint uvInfo, int channelIndex, int vertexCount, ref int currentOffset)
+		{
+			GetChannelInfo(uvInfo, channelIndex, out bool exists, out int uvDim);
+			if (exists)
+			{
+				Vector2[] m_UV = MeshHelper.FloatArrayToVector2(packedVector.UnpackFloats(uvDim, uvDim * sizeof(float), currentOffset, vertexCount));
+				currentOffset += uvDim * vertexCount;
+				return m_UV;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		private static void GetChannelInfo(uint uvInfo, int index, out bool exists, out int dimension)
+		{
+			const int kInfoBitsPerUV = 4;
+			const int kUVDimensionMask = 3;
+			const int kUVChannelExists = 4;
+			const uint uvChannelMask = (1u << kInfoBitsPerUV) - 1u;
+			const int kMaxTexCoordShaderChannels = 8;
+
+			if (index < 0 || index >= kMaxTexCoordShaderChannels)
+			{
+				throw new ArgumentOutOfRangeException(nameof(index));
+			}
+
+			int bitOffset = index * kInfoBitsPerUV;
+			uint texCoordBits = (uvInfo >> bitOffset) & uvChannelMask;
+			exists = (texCoordBits & kUVChannelExists) != 0;
+			dimension = 1 + (int)(texCoordBits & kUVDimensionMask);
+		}
+
+		private static uint SetChannelInfo(uint uvInfo, int index, bool exists, int dimension)
+		{
+			const int kInfoBitsPerUV = 4;
+			const int kUVDimensionMask = 3;
+			const int kUVChannelExists = 4;
+			const uint uvChannelMask = (1u << kInfoBitsPerUV) - 1u;
+			const int kMaxTexCoordShaderChannels = 8;
+
+			if (index < 0 || index >= kMaxTexCoordShaderChannels)
+			{
+				throw new ArgumentOutOfRangeException(nameof(index));
+			}
+
+			if (dimension < 1 || dimension > 1 + kUVDimensionMask)
+			{
+				throw new ArgumentOutOfRangeException(nameof(dimension));
+			}
+
+			int bitOffset = index * kInfoBitsPerUV;
+			uint texCoordBits = (exists ? kUVChannelExists : 0u) | (uint)(dimension - 1);
+			return (uvInfo & (uvChannelMask << bitOffset)) | (texCoordBits << bitOffset);
 		}
 
 		public static void SetUV(this ICompressedMesh compressedMesh, Vector2[]? uv0, Vector2[]? uv1, Vector2[]? uv2, Vector2[]? uv3, Vector2[]? uv4, Vector2[]? uv5, Vector2[]? uv6, Vector2[]? uv7)
 		{
-			//throw new NotImplementedException();
+			if (compressedMesh.Has_UVInfo() && !(uv2.IsNullOrEmpty() && uv3.IsNullOrEmpty() && uv4.IsNullOrEmpty() && uv5.IsNullOrEmpty() && uv6.IsNullOrEmpty() && uv7.IsNullOrEmpty()))
+			{
+				//throw new NotImplementedException();
+			}
+			else
+			{
+				compressedMesh.UVInfo = 0;
+				if (uv0.IsNullOrEmpty())
+				{
+					compressedMesh.UV.PackFloats(Array.Empty<float>());
+				}
+				else if (uv1.IsNullOrEmpty())
+				{
+					compressedMesh.UV.Pack<Vector2>(uv0);
+				}
+				else if (uv0.Length != uv1.Length)
+				{
+					throw new ArgumentException("UV arrays must be the same length.");
+				}
+				else
+				{
+					Vector2[] concatenated = new Vector2[uv0.Length + uv1.Length];
+					Array.Copy(uv0, 0, concatenated, 0, uv0.Length);
+					Array.Copy(uv1, 0, concatenated, uv0.Length, uv1.Length);
+					compressedMesh.UV.Pack<Vector2>(concatenated);
+				}
+			}
 		}
 
 		public static BoneWeight4[] GetWeights(this ICompressedMesh compressedMesh)

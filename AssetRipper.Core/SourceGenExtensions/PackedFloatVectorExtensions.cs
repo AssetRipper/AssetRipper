@@ -1,6 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Single;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -101,6 +102,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 			}
 			return data.ToArray();
+		}
+
+		/// <summary>
+		/// A high accuracy default packing method for any <see langword="unmanaged""/> type.
+		/// </summary>
+		/// <param name="packedVector"></param>
+		/// <param name="data"></param>
+		public static void Pack<T>(this PackedBitVector_Single packedVector, ReadOnlySpan<T> data) where T : unmanaged
+		{
+			packedVector.PackFloats(MemoryMarshal.Cast<T, float>(data));
 		}
 
 		/// <summary>

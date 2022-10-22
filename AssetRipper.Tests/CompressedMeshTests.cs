@@ -2,22 +2,21 @@
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetRipper.Tests
 {
 	internal class CompressedMeshTests
 	{
+		private const int VertexCount = 20;
 		private static readonly Random random = new Random(57089);
-		private static readonly Vector3[] vectors = MakeUnitVectors(20);
+		private static readonly Vector3[] vectors = MakeUnitVectors(VertexCount);
 		private static readonly Vector4[] tangents = MakeTangents(22);
 		private static readonly Matrix4x4[] matrices = MakeMatrices(11);
 		private static readonly uint[] integers = MakeUInts(24);
+		private static readonly Vector2[] uv0 = MakeUV(VertexCount);
+		private static readonly Vector2[] uv1 = MakeUV(VertexCount);
 
 		private static Vector3[] MakeUnitVectors(int count)
 		{
@@ -40,6 +39,16 @@ namespace AssetRipper.Tests
 			{
 				float w = random.NextSingle() < 0.5f ? -1f : 1f;
 				result[i] = new Vector4(unitVectors[i], w);
+			}
+			return result;
+		}
+
+		private static Vector2[] MakeUV(int count)
+		{
+			Vector2[] result = new Vector2[count];
+			for (int i = 0; i < count; i++)
+			{
+				result[i] = new Vector2(random.NextSingle(), random.NextSingle());
 			}
 			return result;
 		}
@@ -125,7 +134,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void BindPoseAssignmentSymmetry()
 		{
-			CompressedMesh_3_0_0_f5 compressedMesh = new();//BindPoses is only on versions before Unity 5
+			CompressedMesh_3_0_0_f5 compressedMesh = new();//BindPoses only exists on versions before Unity 5.
 			compressedMesh.SetBindPoses(matrices);
 			Matrix4x4[] unpackedValues = compressedMesh.GetBindPoses();
 			AreAlmostEqual(matrices, unpackedValues, 0.000001f);
@@ -138,6 +147,64 @@ namespace AssetRipper.Tests
 			compressedMesh.SetTriangles(integers);
 			uint[] unpackedValues = compressedMesh.GetTriangles();
 			Assert.AreEqual(integers, unpackedValues);
+		}
+
+		[Test]
+		public void OldUV()
+		{
+			CompressedMesh_3_0_0_f5 compressedMesh = new();//UV is structured differently on versions before Unity 5.
+			compressedMesh.SetVertices(vectors);//Need to set the correct vertex count by filling the vertex buffer.
+			compressedMesh.SetUV(uv0, uv1, null, null, null, null, null, null);
+			compressedMesh.GetUV(out Vector2[]? unpackedUV0, out Vector2[]? unpackedUV1, out Vector2[]? unpackedUV2, out Vector2[]? unpackedUV3, out Vector2[]? unpackedUV4, out Vector2[]? unpackedUV5, out Vector2[]? unpackedUV6, out Vector2[]? unpackedUV7);
+			Assert.Multiple(() =>
+			{
+				//These UV channels did not exist on versions before Unity 5.
+				Assert.That(unpackedUV2, Is.EqualTo(null));
+				Assert.That(unpackedUV3, Is.EqualTo(null));
+				Assert.That(unpackedUV4, Is.EqualTo(null));
+				Assert.That(unpackedUV5, Is.EqualTo(null));
+				Assert.That(unpackedUV6, Is.EqualTo(null));
+				Assert.That(unpackedUV7, Is.EqualTo(null));
+			});
+			AreAlmostEqual(uv0, unpackedUV0, 0.000001f);
+			AreAlmostEqual(uv1, unpackedUV1, 0.000001f);
+		}
+
+		[Test]
+		public void NewUVWithOnly2Channels()
+		{
+			CompressedMesh_5_0_0_f4 compressedMesh = new();//UV is structured differently on versions before Unity 5.
+			compressedMesh.SetVertices(vectors);//Need to set the correct vertex count by filling the vertex buffer.
+			compressedMesh.SetUV(uv0, uv1, null, null, null, null, null, null);
+			compressedMesh.GetUV(out Vector2[]? unpackedUV0, out Vector2[]? unpackedUV1, out Vector2[]? unpackedUV2, out Vector2[]? unpackedUV3, out Vector2[]? unpackedUV4, out Vector2[]? unpackedUV5, out Vector2[]? unpackedUV6, out Vector2[]? unpackedUV7);
+			Assert.Multiple(() =>
+			{
+				//These UV channels did not exist on versions before Unity 5.
+				Assert.That(unpackedUV2, Is.EqualTo(null));
+				Assert.That(unpackedUV3, Is.EqualTo(null));
+				Assert.That(unpackedUV4, Is.EqualTo(null));
+				Assert.That(unpackedUV5, Is.EqualTo(null));
+				Assert.That(unpackedUV6, Is.EqualTo(null));
+				Assert.That(unpackedUV7, Is.EqualTo(null));
+			});
+			AreAlmostEqual(uv0, unpackedUV0, 0.000001f);
+			AreAlmostEqual(uv1, unpackedUV1, 0.000001f);
+		}
+
+		private static void AreAlmostEqual(ReadOnlySpan<Vector2> expected, ReadOnlySpan<Vector2> actual, float maxDeviation)
+		{
+			if (expected.Length != actual.Length)
+			{
+				Assert.Fail($"Lengths were inequal.\nExpected: {expected.Length}\nBut was: {actual.Length}");
+			}
+
+			for (int i = 0; i < expected.Length; i++)
+			{
+				if (Vector2.Distance(expected[i], actual[i]) > maxDeviation)
+				{
+					Assert.Fail($"Values significantly differ at index {i}\nExpected: {expected[i]}\nBut was: {actual[i]}");
+				}
+			}
 		}
 
 		private static void AreAlmostEqual(ReadOnlySpan<Vector3> expected, ReadOnlySpan<Vector3> actual, float maxDeviation)
