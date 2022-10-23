@@ -494,11 +494,17 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (compressedMesh.Has_FloatColors())
 			{
-				compressedMesh.FloatColors.PackFloats(MemoryMarshal.Cast<ColorFloat, float>(colors));
+				compressedMesh.FloatColors.Pack(colors);
 			}
 			else if (compressedMesh.Has_Colors())
 			{
-				//throw new NotImplementedException();
+				Color32[] buffer = ArrayPool<Color32>.Shared.Rent(colors.Length);
+				for (int i = 0; i < colors.Length; i++)
+				{
+					buffer[i] = (Color32)colors[i];
+				}
+				compressedMesh.Colors.PackUInts(MemoryMarshal.Cast<Color32, uint>(new ReadOnlySpan<Color32>(buffer, 0, colors.Length)));
+				ArrayPool<Color32>.Shared.Return(buffer);
 			}
 		}
 
