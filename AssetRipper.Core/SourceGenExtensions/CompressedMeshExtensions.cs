@@ -307,7 +307,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static void SetWeights(this ICompressedMesh compressedMesh, ReadOnlySpan<BoneWeight4> weights)
 		{
-			//throw new NotImplementedException();
+			if (weights.Length > 0)
+			{
+				throw new NotImplementedException();
+			}
+			else
+			{
+				compressedMesh.Weights.Reset();
+			}
 		}
 
 		public static Vector3[] GetNormals(this ICompressedMesh compressedMesh)
