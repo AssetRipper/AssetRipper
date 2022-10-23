@@ -361,6 +361,7 @@ namespace AssetRipper.Library.Processors.StaticMeshes
 			newMesh.MeshMetrics_0__C43 = 1;
 			newMesh.MeshMetrics_1__C43 = 1;
 			newMesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
+			newMesh.SetMeshCompression(MeshExtensions.MeshCompression.Low);
 
 			AccessListBase<ISubMesh> subMeshList = newMesh.SubMeshes_C43;
 			foreach (ISubMesh subMesh in instanceMeshData.SubMeshes)

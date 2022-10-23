@@ -268,6 +268,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return (MeshCompression)mesh.MeshCompression_C43;
 		}
 
+		public static void SetMeshCompression(this IMesh mesh, MeshCompression meshCompression)
+		{
+			mesh.MeshCompression_C43 = (byte)meshCompression;
+		}
+
 		public static uint[] GetProcessedIndexBuffer(this IMesh mesh)
 		{
 			uint[] result;
