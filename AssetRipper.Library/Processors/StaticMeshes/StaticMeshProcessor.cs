@@ -353,6 +353,15 @@ namespace AssetRipper.Library.Processors.StaticMeshes
 			compressedMesh.SetBindPoses(instanceMeshData.BindPose);
 			compressedMesh.SetTriangles(instanceMeshData.ProcessedIndexBuffer);
 
+			if (newMesh.Has_VertexData_C43())
+			{
+				newMesh.VertexData_C43.VertexCount = (uint)instanceMeshData.Vertices.Length;
+			}
+			newMesh.IsReadable_C43 = true;
+			newMesh.MeshMetrics_0__C43 = 1;
+			newMesh.MeshMetrics_1__C43 = 1;
+			newMesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
+
 			AccessListBase<ISubMesh> subMeshList = newMesh.SubMeshes_C43;
 			foreach (ISubMesh subMesh in instanceMeshData.SubMeshes)
 			{
