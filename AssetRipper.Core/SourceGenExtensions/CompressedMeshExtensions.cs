@@ -3,6 +3,7 @@ using AssetRipper.Core.Extensions;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Single;
+using System.Buffers;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
@@ -187,16 +188,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			int bitOffset = index * kInfoBitsPerUV;
 			uint texCoordBits = (exists ? kUVChannelExists : 0u) | (uint)(dimension - 1);
-			return (uvInfo & (uvChannelMask << bitOffset)) | (texCoordBits << bitOffset);
+			return (uvInfo & ~(uvChannelMask << bitOffset)) | (texCoordBits << bitOffset);
 		}
 
 		public static void SetUV(this ICompressedMesh compressedMesh, Vector2[]? uv0, Vector2[]? uv1, Vector2[]? uv2, Vector2[]? uv3, Vector2[]? uv4, Vector2[]? uv5, Vector2[]? uv6, Vector2[]? uv7)
 		{
-			if (compressedMesh.Has_UVInfo() && !(uv2.IsNullOrEmpty() && uv3.IsNullOrEmpty() && uv4.IsNullOrEmpty() && uv5.IsNullOrEmpty() && uv6.IsNullOrEmpty() && uv7.IsNullOrEmpty()))
-			{
-				//throw new NotImplementedException();
-			}
-			else
+			if (!compressedMesh.Has_UVInfo() || (uv2.IsNullOrEmpty() && uv3.IsNullOrEmpty() && uv4.IsNullOrEmpty() && uv5.IsNullOrEmpty() && uv6.IsNullOrEmpty() && uv7.IsNullOrEmpty()))
 			{
 				compressedMesh.UVInfo = 0;
 				if (uv0.IsNullOrEmpty())
@@ -213,10 +210,42 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 				else
 				{
-					Vector2[] concatenated = new Vector2[uv0.Length + uv1.Length];
+					int length = uv0.Length + uv1.Length;
+					Vector2[] concatenated = ArrayPool<Vector2>.Shared.Rent(length);
 					Array.Copy(uv0, 0, concatenated, 0, uv0.Length);
 					Array.Copy(uv1, 0, concatenated, uv0.Length, uv1.Length);
-					compressedMesh.UV.Pack<Vector2>(concatenated);
+					compressedMesh.UV.Pack(new ReadOnlySpan<Vector2>(concatenated, 0, length));
+					ArrayPool<Vector2>.Shared.Return(concatenated);
+				}
+			}
+			else
+			{
+				int totalLength = GetLength(uv0) + GetLength(uv1) + GetLength(uv2) + GetLength(uv3) + GetLength(uv4) + GetLength(uv5) + GetLength(uv6) + GetLength(uv7);
+				Vector2[] buffer = ArrayPool<Vector2>.Shared.Rent(totalLength);
+				int currentOffset = 0;
+				uint uvInfo = default;
+				UpdateBuffer(uv0, 0, buffer, ref currentOffset, ref uvInfo);
+				UpdateBuffer(uv1, 1, buffer, ref currentOffset, ref uvInfo);
+				UpdateBuffer(uv2, 2, buffer, ref currentOffset, ref uvInfo);
+				UpdateBuffer(uv3, 3, buffer, ref currentOffset, ref uvInfo);
+				UpdateBuffer(uv4, 4, buffer, ref currentOffset, ref uvInfo);
+				UpdateBuffer(uv5, 5, buffer, ref currentOffset, ref uvInfo);
+				UpdateBuffer(uv6, 6, buffer, ref currentOffset, ref uvInfo);
+				UpdateBuffer(uv7, 7, buffer, ref currentOffset, ref uvInfo);
+				compressedMesh.UV.Pack(new ReadOnlySpan<Vector2>(buffer, 0, totalLength));
+				compressedMesh.UVInfo = uvInfo;
+				ArrayPool<Vector2>.Shared.Return(buffer);
+			}
+
+			static int GetLength(Vector2[]? array) => array?.Length ?? 0;
+
+			static void UpdateBuffer(Vector2[]? uv, int uvIndex, Vector2[] buffer, ref int currentOffset, ref uint uvInfo)
+			{
+				if (!uv.IsNullOrEmpty())
+				{
+					uvInfo = SetChannelInfo(uvInfo, uvIndex, true, 2);
+					Array.Copy(uv, 0, buffer, currentOffset, uv.Length);
+					currentOffset += uv.Length;
 				}
 			}
 		}
