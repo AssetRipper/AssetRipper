@@ -1,6 +1,7 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -43,6 +44,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees
 					StringBuffer = new byte[stringBufferSize];
 					reader.Read(StringBuffer, 0, StringBuffer.Length);
 				}
+				SetNamesFromBuffer();
 			}
 			else
 			{
@@ -148,27 +150,25 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees
 			}
 		}
 
-		public void MaybeSetNamesFromBuffer()
+		private void SetNamesFromBuffer()
 		{
-			if (IsFormat5)
+			Debug.Assert(IsFormat5);
+			Dictionary<uint, string> customTypes = new Dictionary<uint, string>();
+			using (MemoryStream stream = new MemoryStream(StringBuffer))
 			{
-				Dictionary<uint, string> customTypes = new Dictionary<uint, string>();
-				using (MemoryStream stream = new MemoryStream(StringBuffer))
+				using EndianReader reader = new EndianReader(stream, EndianType.LittleEndian);
+				while (stream.Position < stream.Length)
 				{
-					using EndianReader reader = new EndianReader(stream, EndianType.LittleEndian);
-					while (stream.Position < stream.Length)
-					{
-						uint position = (uint)stream.Position;
-						string name = reader.ReadStringZeroTerm();
-						customTypes.Add(position, name);
-					}
+					uint position = (uint)stream.Position;
+					string name = reader.ReadStringZeroTerm();
+					customTypes.Add(position, name);
 				}
+			}
 
-				foreach (TypeTreeNode node in Nodes)
-				{
-					node.Type = GetTypeName(customTypes, node.TypeStrOffset);
-					node.Name = GetTypeName(customTypes, node.NameStrOffset);
-				}
+			foreach (TypeTreeNode node in Nodes)
+			{
+				node.Type = GetTypeName(customTypes, node.TypeStrOffset);
+				node.Name = GetTypeName(customTypes, node.NameStrOffset);
 			}
 		}
 

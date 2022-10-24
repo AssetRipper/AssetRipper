@@ -11,10 +11,6 @@ namespace AssetRipper.IO.Files.Converters
 			{
 				origin.EnableTypeTree = true;
 			}
-			for (int i = 0; i < origin.Types.Length; i++)
-			{
-				origin.Types[i].OldType.MaybeSetNamesFromBuffer();
-			}
 			if (generation >= FormatVersion.RefactorTypeData)
 			{
 				for (int i = 0; i < origin.Object.Length; i++)
