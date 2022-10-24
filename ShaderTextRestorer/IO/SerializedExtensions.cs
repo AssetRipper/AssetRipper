@@ -484,7 +484,7 @@ namespace ShaderTextRestorer.IO
 			writer.Write("\" {\n");
 			writer.WriteIndent(5);
 
-			int platformIndex = writer.Shader.Platforms_C48.IndexOf((uint)graphicApi);
+			int platformIndex = writer.Shader.Platforms_C48!.IndexOf((uint)graphicApi);//ISerializedSubProgram and Platforms_C48 both only exist on 5.5+
 			writer.Blobs[platformIndex].SubPrograms[_this.BlobIndex].Export(writer, type);
 
 			writer.Write('\n');

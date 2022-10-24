@@ -61,7 +61,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			}
 		}
 
-		private void ExportBinary(IShader shader, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
+		private static void ExportBinary(IShader shader, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
 		{
 			if (shader.Has_ParsedForm_C48())
 			{
@@ -71,7 +71,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			else if (shader.Has_SubProgramBlob_C48())
 			{
 				using ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator);
-				string? header = shader.Script_C48?.String;
+				string header = shader.Script_C48.String;
 				if (writer.Blobs.Length == 0)
 				{
 					writer.Write(header);
@@ -84,7 +84,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			else
 			{
 				using BinaryWriter writer = new BinaryWriter(stream);
-				writer.Write(shader.Script_C48?.Data ?? Array.Empty<byte>());
+				writer.Write(shader.Script_C48.Data);
 			}
 		}
 	}

@@ -19,7 +19,7 @@ namespace ShaderTextRestorer.Exporters
 		}
 
 		protected static void ExportText(TextWriter writer, BinaryReader reader) => ExportText(writer, reader, null);
-		protected static void ExportText(TextWriter writer, BinaryReader reader, string name)
+		protected static void ExportText(TextWriter writer, BinaryReader reader, string? name)
 		{
 			List<char> characters = new List<char>();
 			if (!string.IsNullOrEmpty(name))

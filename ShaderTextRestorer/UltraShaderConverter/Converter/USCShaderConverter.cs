@@ -22,7 +22,7 @@ namespace UltraShaderConverter
 		{
 			if (DxShader == null)
 			{
-				throw new Exception("You need to call LoadDirectXCopmiledShader first!");
+				throw new Exception($"You need to call {nameof(LoadDirectXCompiledShader)} first!");
 			}
 
 			DirectXProgramToUSIL dx2UsilConverter = new DirectXProgramToUSIL(DxShader);
@@ -35,7 +35,7 @@ namespace UltraShaderConverter
 		{
 			if (ShaderProgram == null)
 			{
-				throw new Exception("You need to call ConvertShaderToUShaderProgram first!");
+				throw new Exception($"You need to call {nameof(ConvertShaderToUShaderProgram)} first!");
 			}
 
 			ShaderGpuProgramType shaderProgramType = subProgram.GetProgramType(version);

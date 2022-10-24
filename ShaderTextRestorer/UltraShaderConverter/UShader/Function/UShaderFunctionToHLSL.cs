@@ -7,7 +7,7 @@ namespace ShaderLabConvert
 	public class UShaderFunctionToHLSL
 	{
 		private UShaderProgram _shader;
-		private StringBuilder _stringBuilder;
+		private readonly StringBuilder _stringBuilder = new();
 		private string _baseIndent;
 		private string _indent;
 		private int _indentLevel;
@@ -97,7 +97,7 @@ namespace ShaderLabConvert
 			_baseIndent = new string(' ', indentDepth * 4);
 			_indent = new string(' ', 4);
 
-			_stringBuilder = new StringBuilder();
+			_stringBuilder.Clear();
 
 			WriteLocals();
 

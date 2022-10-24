@@ -4,7 +4,7 @@ namespace ShaderTextRestorer.ShaderBlob.Parameters
 {
 	public class NumericShaderParameter
 	{
-		public string Name { get; set; }
+		public string? Name { get; set; }
 		public int NameIndex { get; set; }
 		public int Index { get; set; }
 		public int ArraySize { get; set; }

@@ -2,6 +2,7 @@
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
+using AssetRipper.SourceGenerated.Subclasses.SpriteVertex;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
@@ -49,32 +50,32 @@ namespace AssetRipper.Core.SourceGenExtensions
 				for (int i = 0; i < spriteRenderData.SubMeshes.Count; i++)
 				{
 					Vector3f_3_5_0_f5[] vertices = spriteRenderData.VertexData.GenerateVertices(version, spriteRenderData.SubMeshes[i]);
-					List<Vector2[]> vectorArrayList = spriteRenderData.VertexDataToOutline(vertices, spriteRenderData.SubMeshes[i]);
+					List<Vector2[]> vectorArrayList = VertexDataToOutline(spriteRenderData.IndexBuffer, vertices, spriteRenderData.SubMeshes[i]);
 					outlines.AddRanges(vectorArrayList);
 				}
 			}
 			else if (spriteRenderData.Has_Vertices() && spriteRenderData.Vertices.Count != 0)
 			{
-				List<Vector2[]> vectorArrayList = spriteRenderData.VerticesToOutline();
+				List<Vector2[]> vectorArrayList = VerticesToOutline(spriteRenderData.Vertices, spriteRenderData.Indices);
 				outlines.Capacity = vectorArrayList.Count;
 				outlines.AddRanges(vectorArrayList);
 			}
 		}
 
-		private static List<Vector2[]> VerticesToOutline(this ISpriteRenderData spriteRenderData)
+		private static List<Vector2[]> VerticesToOutline(AccessListBase<ISpriteVertex> spriteVertexList, ushort[] spriteIndexArray)
 		{
-			Vector3f_3_5_0_f5[] vertices = new Vector3f_3_5_0_f5[spriteRenderData.Vertices.Count];
+			Vector3f_3_5_0_f5[] vertices = new Vector3f_3_5_0_f5[spriteVertexList.Count];
 			for (int i = 0; i < vertices.Length; i++)
 			{
-				vertices[i] = spriteRenderData.Vertices[i].Pos;
+				vertices[i] = spriteVertexList[i].Pos;
 			}
 
-			Vector3i[] triangles = new Vector3i[spriteRenderData.Indices.Length / 3];
+			Vector3i[] triangles = new Vector3i[spriteIndexArray.Length / 3];
 			for (int i = 0, j = 0; i < triangles.Length; i++)
 			{
-				int x = spriteRenderData.Indices[j++];
-				int y = spriteRenderData.Indices[j++];
-				int z = spriteRenderData.Indices[j++];
+				int x = spriteIndexArray[j++];
+				int y = spriteIndexArray[j++];
+				int z = spriteIndexArray[j++];
 				triangles[i] = new Vector3i(x, y, z);
 			}
 
@@ -82,14 +83,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return outlineGenerator.GenerateOutlines();
 		}
 
-		private static List<Vector2[]> VertexDataToOutline(this ISpriteRenderData spriteRenderData, Vector3f_3_5_0_f5[] vertices, ISubMesh submesh)
+		private static List<Vector2[]> VertexDataToOutline(byte[] indexBuffer, Vector3f_3_5_0_f5[] vertices, ISubMesh submesh)
 		{
 			Vector3i[] triangles = new Vector3i[submesh.IndexCount / 3];
 			for (int o = (int)submesh.FirstByte, ti = 0; ti < triangles.Length; o += 6, ti++)
 			{
-				int x = BitConverter.ToUInt16(spriteRenderData.IndexBuffer, o + 0);
-				int y = BitConverter.ToUInt16(spriteRenderData.IndexBuffer, o + 2);
-				int z = BitConverter.ToUInt16(spriteRenderData.IndexBuffer, o + 4);
+				int x = BitConverter.ToUInt16(indexBuffer, o + 0);
+				int y = BitConverter.ToUInt16(indexBuffer, o + 2);
+				int z = BitConverter.ToUInt16(indexBuffer, o + 4);
 				triangles[ti] = new Vector3i(x, y, z);
 			}
 			MeshOutlineGenerator outlineGenerator = new MeshOutlineGenerator(vertices, triangles);

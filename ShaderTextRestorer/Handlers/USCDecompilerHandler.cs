@@ -6,15 +6,16 @@ using DXDecompiler.Util;
 using ShaderLabConvert;
 using ShaderTextRestorer.ShaderBlob;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace ShaderTextRestorer.Handlers
 {
 	public static class USCDecompilerHandler
 	{
-		public static bool TryDecompile(byte[] data, int offset, ShaderSubProgram subProgram, out string decompiledText, out UShaderProgram uShaderProgram) =>
+		public static bool TryDecompile(byte[] data, int offset, ShaderSubProgram subProgram, [NotNullWhen(true)] out string? decompiledText, out UShaderProgram? uShaderProgram) =>
 			TryDecompile(GetRelevantData(data, offset), subProgram, out decompiledText, out uShaderProgram);
-		public static bool TryDecompile(byte[] data, ShaderSubProgram subProgram, out string decompiledText, out UShaderProgram uShaderProgram)
+		public static bool TryDecompile(byte[] data, ShaderSubProgram subProgram, [NotNullWhen(true)] out string? decompiledText, out UShaderProgram? uShaderProgram)
 		{
 			if (data == null)
 			{

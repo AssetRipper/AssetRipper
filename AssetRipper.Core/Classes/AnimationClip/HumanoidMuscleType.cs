@@ -67,9 +67,9 @@ namespace AssetRipper.Core.Classes.AnimationClip
 				const int dofSize = (int)FingerDoFType.Last;
 				int delta = _this - HumanoidMuscleType.Fingers;
 				ArmType arm = (ArmType)(delta / armSize);
-				delta = delta % armSize;
+				delta %= armSize;
 				FingerType finger = (FingerType)(delta / dofSize);
-				delta = delta % dofSize;
+				delta %= dofSize;
 				FingerDoFType dof = (FingerDoFType)delta;
 				return $"{arm.ToBoneType().ToAttributeString()}.{finger.ToAttributeString()}.{dof.ToAttributeString()}";
 			}

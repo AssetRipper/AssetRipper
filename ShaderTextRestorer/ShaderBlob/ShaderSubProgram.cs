@@ -291,12 +291,12 @@ namespace ShaderTextRestorer.ShaderBlob
 					BufferBinding buffer = new BufferBinding(name, index);
 					buffers.Add(buffer);
 				}
-				else if (type == 3 && HasUAVParameters(reader.Version))
+				else if (type == 3 && uavs is not null)
 				{
 					UAVParameter uav = new UAVParameter(name, index, extraValue);
 					uavs.Add(uav);
 				}
-				else if (type == 4 && HasSamplerParameters(reader.Version))
+				else if (type == 4 && samplers is not null)
 				{
 					SamplerParameter sampler = new SamplerParameter((uint)extraValue, index);
 					samplers.Add(sampler);
@@ -308,12 +308,12 @@ namespace ShaderTextRestorer.ShaderBlob
 			}
 			TextureParameters = textures.ToArray();
 			BufferParameters = buffers.ToArray();
-			if (HasUAVParameters(reader.Version))
+			if (uavs is not null)
 			{
 				UAVParameters = uavs.ToArray();
 			}
 
-			if (HasSamplerParameters(reader.Version))
+			if (samplers is not null)
 			{
 				SamplerParameters = samplers.ToArray();
 			}

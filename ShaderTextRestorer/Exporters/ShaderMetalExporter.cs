@@ -35,7 +35,7 @@ namespace ShaderTextRestorer.Exporters
 			ExportText(writer, reader);
 		}
 
-		public string EntryName { get; private set; }
+		public string? EntryName { get; private set; }
 
 		private const uint MetalFourCC = 0xf00dcafe;
 	}

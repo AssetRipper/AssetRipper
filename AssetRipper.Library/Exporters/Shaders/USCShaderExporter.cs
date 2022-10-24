@@ -226,7 +226,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 					if (hasVertex)
 					{
-						vertexSubProgram = vertexSubPrograms[0];
+						vertexSubProgram = vertexSubPrograms![0];
 
 						byte[] trimmedProgramData = TrimShaderBytes(vertexSubProgram, writer.Version, writer.Platform);
 
@@ -235,7 +235,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 					}
 					if (hasFragment)
 					{
-						fragmentSubProgram = fragmentSubPrograms[0];
+						fragmentSubProgram = fragmentSubPrograms![0];
 
 						byte[] trimmedProgramData = TrimShaderBytes(fragmentSubProgram, writer.Version, writer.Platform);
 
@@ -273,7 +273,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("{");
 
-						DirectXCompiledShader dxShader = vertexConverter.DxShader;
+						DirectXCompiledShader dxShader = vertexConverter!.DxShader;
 						foreach (OSGN.Output output in dxShader.Osgn.outputs)
 						{
 							string format = DXShaderNamingUtils.GetOSGNFormatName(output);
@@ -295,7 +295,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("{");
 
-						DirectXCompiledShader dxShader = fragmentConverter.DxShader;
+						DirectXCompiledShader dxShader = fragmentConverter!.DxShader;
 						foreach (OSGN.Output output in dxShader.Osgn.outputs)
 						{
 							string format = DXShaderNamingUtils.GetOSGNFormatName(output);
@@ -317,7 +317,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("// $Globals ConstantBuffers for Vertex Shader");
 
-						ExportPassConstantBufferDefinitions(vertexSubProgram, writer, declaredBufs, "$Globals", 3);
+						ExportPassConstantBufferDefinitions(vertexSubProgram!, writer, declaredBufs, "$Globals", 3);
 					}
 
 					if (hasFragment)
@@ -325,7 +325,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("// $Globals ConstantBuffers for Fragment Shader");
 
-						ExportPassConstantBufferDefinitions(fragmentSubProgram, writer, declaredBufs, "$Globals", 3);
+						ExportPassConstantBufferDefinitions(fragmentSubProgram!, writer, declaredBufs, "$Globals", 3);
 					}
 
 					if (hasVertex)
@@ -333,7 +333,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("// Custom ConstantBuffers for Vertex Shader");
 
-						foreach (ConstantBuffer cbuffer in vertexSubProgram.ConstantBuffers)
+						foreach (ConstantBuffer cbuffer in vertexSubProgram!.ConstantBuffers)
 						{
 							if (UnityShaderConstants.BUILTIN_CBUFFER_NAMES.Contains(cbuffer.Name))
 							{
@@ -349,7 +349,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("// Custom ConstantBuffers for Fragment Shader");
 
-						foreach (ConstantBuffer cbuffer in fragmentSubProgram.ConstantBuffers)
+						foreach (ConstantBuffer cbuffer in fragmentSubProgram!.ConstantBuffers)
 						{
 							if (UnityShaderConstants.BUILTIN_CBUFFER_NAMES.Contains(cbuffer.Name))
 							{
@@ -365,7 +365,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("// Texture params for Vertex Shader");
 
-						ExportPassTextureParamDefinitions(vertexSubProgram, writer, declaredBufs, 3);
+						ExportPassTextureParamDefinitions(vertexSubProgram!, writer, declaredBufs, 3);
 					}
 
 					if (hasFragment)
@@ -373,7 +373,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("// Texture params for Fragment Shader");
 
-						ExportPassTextureParamDefinitions(fragmentSubProgram, writer, declaredBufs, 3);
+						ExportPassTextureParamDefinitions(fragmentSubProgram!, writer, declaredBufs, 3);
 					}
 
 					writer.WriteIndent(3);
@@ -381,7 +381,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 					if (hasVertex)
 					{
-						string keywordsList = string.Join(' ', vertexSubProgram.LocalKeywords.Concat(vertexSubProgram.GlobalKeywords));
+						string keywordsList = string.Join(' ', vertexSubProgram!.LocalKeywords.Concat(vertexSubProgram.GlobalKeywords));
 
 						writer.WriteIndent(3);
 						writer.WriteLine($"// Keywords: {keywordsList}");
@@ -391,7 +391,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("{");
 
-						vertexConverter.ConvertShaderToUShaderProgram();
+						vertexConverter!.ConvertShaderToUShaderProgram();
 						vertexConverter.ApplyMetadataToProgram(vertexSubProgram, writer.Version);
 						string progamText = vertexConverter.CovnertUShaderProgramToHLSL(4);
 						writer.Write(progamText);
@@ -402,13 +402,13 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 					if (hasFragment)
 					{
-						string keywordsList = string.Join(' ', fragmentSubProgram.LocalKeywords.Concat(fragmentSubProgram.GlobalKeywords));
+						string keywordsList = string.Join(' ', fragmentSubProgram!.LocalKeywords.Concat(fragmentSubProgram.GlobalKeywords));
 
 						writer.WriteIndent(3);
 						writer.WriteLine($"// Keywords: {keywordsList}");
 
 						// needs to move somewhere else...
-						DirectXCompiledShader dxShader = fragmentConverter.DxShader;
+						DirectXCompiledShader dxShader = fragmentConverter!.DxShader;
 						bool hasFrontFace = dxShader.Isgn.inputs.Any(i => i.name == "SV_IsFrontFace");
 
 						writer.WriteIndent(3);
@@ -449,14 +449,14 @@ namespace AssetRipper.Library.Exporters.Shaders
 			ShaderSubProgram _this, ShaderWriter writer, HashSet<string> declaredBufs,
 			string cbufferName, int depth)
 		{
-			ConstantBuffer cbuffer = _this.ConstantBuffers.FirstOrDefault(cb => cb.Name == cbufferName);
+			ConstantBuffer? cbuffer = _this.ConstantBuffers.FirstOrDefault(cb => cb.Name == cbufferName);
 
 			ExportPassConstantBufferDefinitions(_this, writer, declaredBufs, cbuffer, depth);
 		}
 
 		private static void ExportPassConstantBufferDefinitions(
 			ShaderSubProgram _this, ShaderWriter writer, HashSet<string> declaredBufs,
-			ConstantBuffer cbuffer, int depth)
+			ConstantBuffer? cbuffer, int depth)
 		{
 			if (cbuffer != null)
 			{
@@ -563,7 +563,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 		private static List<ShaderSubProgram> GetSubPrograms(IShader shader, ShaderSubProgramBlob[] blobs, ISerializedProgram program, UnityVersion version, BuildTarget platform, ShaderType shaderType, ISerializedPass pass)
 		{
-			List<ShaderSubProgram> matchingPrograms = new List<ShaderSubProgram>();
+			List<ShaderSubProgram> matchingPrograms = new();
 			ShaderSubProgram? fallbackProgram = null;
 			for (int i = 0; i < program.SubPrograms.Count; i++)
 			{
@@ -599,7 +599,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				}
 
 				ShaderSubProgram? matchedProgram = null;
-				if (matched)
+				if (matched && shader.Has_Platforms_C48())
 				{
 					int platformIndex = shader.Platforms_C48.IndexOf((uint)graphicApi);
 					matchedProgram = blobs[platformIndex].SubPrograms[subProgram.BlobIndex];

@@ -18,7 +18,7 @@ namespace ShaderLabConvert
 			foreach (USILInstruction instruction in instructions)
 			{
 				// track if a register (and its masks) come from comparison results or not
-				USILOperand destOperand = instruction.destOperand;
+				USILOperand? destOperand = instruction.destOperand;
 
 				if (IsComparisonOrBooleanOp(instruction))
 				{
