@@ -102,12 +102,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		#endregion
 
 		#region Assemblies
-
-		public static string ToFullName(string module, string fullname)
-		{
-			return $"[{module}]{fullname}";
-		}
-
 		public static bool IsBuiltinLibrary(string module)
 		{
 			if (IsFrameworkLibrary(module))
@@ -243,37 +237,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			return firstPart + ToCleanName(secondPart);
 		}
 
-		public static string GetSimpleName(TypeReference type)
-		{
-			string name = type.Name;
-			int index = name.IndexOf('`');
-			if (index == -1)
-			{
-				return name;
-			}
-
-			bool strip = false;
-			StringBuilder sb = new StringBuilder(name.Length);
-			foreach (char c in name)
-			{
-				if (c == '`')
-				{
-					strip = true;
-				}
-				else if (!char.IsDigit(c))
-				{
-					strip = false;
-				}
-
-				if (!strip)
-				{
-					sb.Append(c);
-				}
-			}
-
-			return sb.ToString();
-		}
-
 		public static string GetTypeName(TypeReference type)
 		{
 			if (IsCPrimitive(type))
@@ -296,19 +259,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				return GetTypeName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
 			}
 			return type.Name;
-		}
-
-		public static string GetFullName(TypeReference type)
-		{
-			string module = GetModuleName(type);
-			return GetFullName(type, module);
-		}
-
-		public static string GetFullName(TypeReference type, string module)
-		{
-			string name = GetNestedName(type);
-			string fullName = $"{type.Namespace}.{name}";
-			return ToFullName(module, fullName);
 		}
 
 		public static string GetModuleName(TypeReference type)
@@ -503,16 +453,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		#endregion
 
 		#region Generics
-		public static GenericInstanceType CreateGenericInstance(TypeReference genericTemplate, IEnumerable<TypeReference> arguments)
-		{
-			GenericInstanceType genericInstance = new GenericInstanceType(genericTemplate);
-			foreach (TypeReference argument in arguments)
-			{
-				genericInstance.GenericArguments.Add(argument);
-			}
-			return genericInstance;
-		}
-
 		public static int GetGenericArgumentCount(GenericInstanceType genericInstance)
 		{
 			int count = genericInstance.GenericArguments.Count;
@@ -539,91 +479,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				}
 			}
 			return count;
-		}
-		#endregion
-
-		#region AreSame
-		public static bool AreSame(TypeReference type, MonoTypeContext checkContext, TypeReference checkType)
-		{
-			if (ReferenceEquals(type, checkType))
-			{
-				return true;
-			}
-			else if (type == null || checkType == null)
-			{
-				return false;
-			}
-
-			MonoTypeContext context = new MonoTypeContext(checkType, checkContext);
-			MonoTypeContext resolvedContext = context.Resolve();
-			return MetadataResolverExtensions.AreSame(type, resolvedContext.Type);
-		}
-
-		public static bool AreSame(MethodDefinition method, MonoTypeContext checkContext, MethodDefinition checkMethod)
-		{
-			if (method.Name != checkMethod.Name)
-			{
-				return false;
-			}
-			if (method.HasGenericParameters)
-			{
-				if (!checkMethod.HasGenericParameters)
-				{
-					return false;
-				}
-
-				if (method.GenericParameters.Count != checkMethod.GenericParameters.Count)
-				{
-					return false;
-				}
-
-				checkContext = checkContext.Merge(checkMethod);
-			}
-			if (!AreSame(method.ReturnType, checkContext, checkMethod.ReturnType))
-			{
-				return false;
-			}
-
-			if (method.IsVarArg())
-			{
-				if (!checkMethod.IsVarArg())
-				{
-					return false;
-				}
-
-				if (method.Parameters.Count >= checkMethod.Parameters.Count)
-				{
-					return false;
-				}
-
-				if (checkMethod.GetSentinelPosition() != method.Parameters.Count)
-				{
-					return false;
-				}
-			}
-
-			if (method.HasParameters)
-			{
-				if (!checkMethod.HasParameters)
-				{
-					return false;
-				}
-
-				if (method.Parameters.Count != checkMethod.Parameters.Count)
-				{
-					return false;
-				}
-
-				for (int i = 0; i < method.Parameters.Count; i++)
-				{
-					if (!AreSame(method.Parameters[i].ParameterType, checkContext, checkMethod.Parameters[i].ParameterType))
-					{
-						return false;
-					}
-				}
-			}
-
-			return true;
 		}
 		#endregion
 
@@ -681,22 +536,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			}
 
 			if (IsObject(@namespace, name))
-			{
-				return true;
-			}
-
-			return false;
-		}
-
-		public static bool IsBasic(TypeReference type) => IsBasic(type.Namespace, type.Name);
-		public static bool IsBasic(string @namespace, string name)
-		{
-			if (IsObject(@namespace, name))
-			{
-				return true;
-			}
-
-			if (@namespace == SystemNamespace && name == ValueType)
 			{
 				return true;
 			}
@@ -865,33 +704,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				case ElementType.R8:
 				case ElementType.String:
 					return true;
-				default:
-					return false;
-			}
-		}
-
-		public static bool IsCPrimitive_EType(TypeReference type)
-		{
-			switch (type.GetEType())
-			{
-				case ElementType.Boolean:
-				case ElementType.Char:
-				case ElementType.I:
-				case ElementType.U:
-				case ElementType.I1:
-				case ElementType.U1:
-				case ElementType.I2:
-				case ElementType.U2:
-				case ElementType.I4:
-				case ElementType.U4:
-				case ElementType.I8:
-				case ElementType.U8:
-				case ElementType.R4:
-				case ElementType.R8:
-				case ElementType.String:
-				case ElementType.Object:
-					return true;
-
 				default:
 					return false;
 			}
