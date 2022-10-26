@@ -55,7 +55,7 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 				originalPathDetails ??= new();
 				originalPathDetails.Directory = Path.GetDirectoryName(value);
 				originalPathDetails.Name = Path.GetFileNameWithoutExtension(value);
-				originalPathDetails.Extension = Path.GetExtension(value);
+				originalPathDetails.Extension = RemovePeriod(Path.GetExtension(value));
 			}
 		}
 	}
@@ -108,14 +108,15 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 				originalPathDetails = new();
 				originalPathDetails.Extension = RemovePeriod(value);
 			}
-
-			static string? RemovePeriod(string? str)
-			{
-				return string.IsNullOrEmpty(str) || str[0] != '.' ? str : str.Substring(1);
-			}
 		}
 	}
+
 	public string? AssetBundleName { get; set; }
+
+	private static string? RemovePeriod(string? str)
+	{
+		return string.IsNullOrEmpty(str) || str[0] != '.' ? str : str.Substring(1);
+	}
 
 	private sealed class OriginalPathDetails
 	{
