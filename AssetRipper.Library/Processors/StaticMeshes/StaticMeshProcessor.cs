@@ -353,13 +353,9 @@ namespace AssetRipper.Library.Processors.StaticMeshes
 			compressedMesh.SetBindPoses(instanceMeshData.BindPose);
 			compressedMesh.SetTriangles(instanceMeshData.ProcessedIndexBuffer);
 
-			if (newMesh.Has_VertexData_C43())
-			{
-				newMesh.VertexData_C43.VertexCount = (uint)instanceMeshData.Vertices.Length;
-			}
-			newMesh.IsReadable_C43 = true;
 			newMesh.MeshMetrics_0__C43 = 1;
 			newMesh.MeshMetrics_1__C43 = 1;
+			newMesh.CookingOptions_C43 = 30;//No idea why 30. I just copied it from a vanilla compressed mesh (with MeshCompression.Low).
 			newMesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
 			newMesh.SetMeshCompression(MeshExtensions.MeshCompression.Low);
 
