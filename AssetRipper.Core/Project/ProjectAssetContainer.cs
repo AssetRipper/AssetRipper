@@ -143,27 +143,7 @@ namespace AssetRipper.Core.Project
 			return m_buildSettings == null ? $"level{sceneIndex}" : m_buildSettings.Scenes_C141[sceneIndex].String;
 		}
 
-		public bool IsSceneDuplicate(int sceneIndex) => IsSceneDuplicate(sceneIndex, m_buildSettings);
-		private static bool IsSceneDuplicate(int sceneIndex, IBuildSettings? buildSettings)
-		{
-			if (buildSettings == null)
-			{
-				return false;
-			}
-
-			string sceneName = buildSettings.Scenes_C141[sceneIndex].String;
-			for (int i = 0; i < buildSettings.Scenes_C141.Count; i++)
-			{
-				if (buildSettings.Scenes_C141[i] == sceneName)
-				{
-					if (i != sceneIndex)
-					{
-						return true;
-					}
-				}
-			}
-			return false;
-		}
+		public bool IsSceneDuplicate(int sceneIndex) => SceneExportHelpers.IsSceneDuplicate(sceneIndex, m_buildSettings);
 
 		public string TagIDToName(int tagID)
 		{

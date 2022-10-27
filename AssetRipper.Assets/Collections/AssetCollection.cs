@@ -44,6 +44,18 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 	/// The GUID of this collection. If this is a scene, it gets used in the scene's meta file.
 	/// </summary>
 	public UnityGUID GUID { get; set; }
+	/// <summary>
+	/// The relative path of the scene without any file extension.
+	/// </summary>
+	/// <remarks>
+	/// If the collection is not a scene, this represents nothing.
+	/// </remarks>
+	public string ScenePath
+	{
+		get => sceneName ?? $"Assets/Scenes/{Name}";
+		set => sceneName = value;
+	}
+	private string? sceneName;
 
 	public int AddDependency(AssetCollection dependency)
 	{

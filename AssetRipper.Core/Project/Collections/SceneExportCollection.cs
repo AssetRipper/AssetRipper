@@ -52,10 +52,8 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
-			string sceneSubPath = SceneExportHelpers.GetSceneSubPath(container, File, out bool isRegular);
-			string filePath = isRegular
-				? Path.Combine(projectDirectory, AssetsKeyword, $"{sceneSubPath}.{ExportExtension}")
-				: Path.Combine(projectDirectory, AssetsKeyword, "Scenes", $"{sceneSubPath}.{ExportExtension}");
+			string sceneSubPath = File.ScenePath;
+			string filePath = Path.Combine(projectDirectory, $"{sceneSubPath}.{ExportExtension}");
 			string folderPath = Path.GetDirectoryName(filePath)!;
 			string sceneName = Path.GetFileName(sceneSubPath);
 

@@ -4,8 +4,10 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -69,17 +71,17 @@ namespace AssetRipper.Core.Project.Collections
 			return $"{LevelName}{index}";
 		}
 
-		internal static string GetSceneSubPath(IExportContainer container, AssetCollection serializedFile, out bool isRegular)
+		public static bool TryGetScenePath(AssetCollection serializedFile, [NotNullWhen(true)] IBuildSettings? buildSettings, [NotNullWhen(true)] out string? result)
 		{
-			if (IsSceneName(serializedFile.Name))
+			if (buildSettings is not null && IsSceneName(serializedFile.Name))
 			{
 				int index = FileNameToSceneIndex(serializedFile.Name, serializedFile.Version);
-				string scenePath = container.SceneIndexToName(index);
+				string scenePath = buildSettings.Scenes_C141[index].String;
 				if (scenePath.StartsWith(AssetsName, StringComparison.Ordinal))
 				{
 					string extension = Path.GetExtension(scenePath);
-					isRegular = true;
-					return scenePath.Substring(AssetsName.Length, scenePath.Length - AssetsName.Length - extension.Length);
+					result = scenePath[..^extension.Length];
+					return true;
 				}
 				else if (Path.IsPathRooted(scenePath))
 				{
@@ -87,23 +89,44 @@ namespace AssetRipper.Core.Project.Collections
 					// NOTE: absolute project path may contain Assets/ in its name so in this case we get incorrect scene path, but there is no way to bypass this issue
 					int assetIndex = scenePath.IndexOf(AssetsName);
 					string extension = Path.GetExtension(scenePath);
-					isRegular = true;
-					return scenePath.Substring(assetIndex + AssetsName.Length, scenePath.Length - assetIndex - AssetsName.Length - extension.Length);
+					result = scenePath.Substring(assetIndex, scenePath.Length - assetIndex - extension.Length);
+					return true;
 				}
 				else if (scenePath.Length == 0)
 				{
 					// if you build a game without included scenes, Unity create one with empty name
-					isRegular = false;
-					return serializedFile.Name;
+					result = null;
+					return false;
 				}
 				else
 				{
-					isRegular = false;
-					return scenePath;
+					result = Path.Combine("Assets/Scenes", scenePath);
+					return true;
 				}
 			}
-			isRegular = false;
-			return serializedFile.Name;
+			result = null;
+			return false;
+		}
+
+		internal static bool IsSceneDuplicate(int sceneIndex, IBuildSettings? buildSettings)
+		{
+			if (buildSettings == null)
+			{
+				return false;
+			}
+
+			string sceneName = buildSettings.Scenes_C141[sceneIndex].String;
+			for (int i = 0; i < buildSettings.Scenes_C141.Count; i++)
+			{
+				if (buildSettings.Scenes_C141[i] == sceneName)
+				{
+					if (i != sceneIndex)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		internal static bool IsDuplicate(IExportContainer container, AssetCollection serializedFile)
