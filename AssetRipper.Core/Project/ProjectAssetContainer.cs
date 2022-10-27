@@ -30,7 +30,6 @@ namespace AssetRipper.Core.Project
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
-			m_BundledAssetsExportMode = options.BundledAssetsExportMode;
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			ExportLayout = new LayoutInfo(file.Version, file.Platform, file.Flags);
 
@@ -46,7 +45,7 @@ namespace AssetRipper.Core.Project
 				}
 				else if (asset is IAssetBundle assetBundle)
 				{
-					AddBundleAssets(assetBundle);
+					AddBundleAssets(assetBundle, options.BundledAssetsExportMode);
 				}
 				else if (asset is IResourceManager resourceManager)
 				{
@@ -144,17 +143,18 @@ namespace AssetRipper.Core.Project
 			return m_buildSettings == null ? $"level{sceneIndex}" : m_buildSettings.Scenes_C141[sceneIndex].String;
 		}
 
-		public bool IsSceneDuplicate(int sceneIndex)
+		public bool IsSceneDuplicate(int sceneIndex) => IsSceneDuplicate(sceneIndex, m_buildSettings);
+		private static bool IsSceneDuplicate(int sceneIndex, IBuildSettings? buildSettings)
 		{
-			if (m_buildSettings == null)
+			if (buildSettings == null)
 			{
 				return false;
 			}
 
-			string sceneName = m_buildSettings.Scenes_C141[sceneIndex].String;
-			for (int i = 0; i < m_buildSettings.Scenes_C141.Count; i++)
+			string sceneName = buildSettings.Scenes_C141[sceneIndex].String;
+			for (int i = 0; i < buildSettings.Scenes_C141.Count; i++)
 			{
-				if (m_buildSettings.Scenes_C141[i] == sceneName)
+				if (buildSettings.Scenes_C141[i] == sceneName)
 				{
 					if (i != sceneIndex)
 					{
@@ -175,7 +175,7 @@ namespace AssetRipper.Core.Project
 			return m_tagManager.TagNameToID(tagName);
 		}
 
-		private void AddResources(IResourceManager manager)
+		private static void AddResources(IResourceManager manager)
 		{
 			foreach (AccessPairBase<Utf8String, IPPtr_Object_> kvp in manager.Container_C147)
 			{
@@ -209,7 +209,7 @@ namespace AssetRipper.Core.Project
 		/// </remarks>
 		/// <param name="bundle"></param>
 		/// <exception cref="Exception"></exception>
-		private void AddBundleAssets(IAssetBundle bundle)
+		private static void AddBundleAssets(IAssetBundle bundle, BundledAssetsExportMode bundledAssetsExportMode)
 		{
 			string bundleName = bundle.GetAssetBundleName();
 			string bundleDirectory = bundleName + ObjectUtils.DirectorySeparator;
@@ -236,7 +236,7 @@ namespace AssetRipper.Core.Project
 					continue;
 				}
 
-				switch (m_BundledAssetsExportMode)
+				switch (bundledAssetsExportMode)
 				{
 					case BundledAssetsExportMode.DirectExport:
 						if (assetPath.StartsWith(AssetsDirectory, StringComparison.Ordinal))
@@ -266,7 +266,7 @@ namespace AssetRipper.Core.Project
 					case BundledAssetsExportMode.GroupByAssetType:
 						break;
 					default:
-						throw new Exception($"Invalid {nameof(BundledAssetsExportMode)} for {nameof(m_BundledAssetsExportMode)} : {m_BundledAssetsExportMode}");
+						throw new ArgumentOutOfRangeException(nameof(bundledAssetsExportMode), $"Invalid {nameof(BundledAssetsExportMode)} : {bundledAssetsExportMode}");
 				}
 			}
 		}
@@ -313,7 +313,6 @@ namespace AssetRipper.Core.Project
 		private const string AssetBundleFullPath = AssetsDirectory + "Asset_Bundles";
 
 		private readonly ProjectExporter m_exporter;
-		private readonly BundledAssetsExportMode m_BundledAssetsExportMode;
 		private readonly Dictionary<AssetInfo, IExportCollection> m_assetCollections = new();
 
 		private readonly IBuildSettings? m_buildSettings;
