@@ -13,6 +13,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_468431735;
+using AssetRipper.SourceGenerated.MarkerInterfaces;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.Project.Collections
@@ -47,16 +48,16 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			if (asset is IGameObject gameObject)
 			{
-				if (gameObject.Has_PrefabAsset_C1())
+				if (gameObject.Has_PrefabInternal_C1())
 				{
-					gameObject.PrefabAsset_C1.CopyValues(gameObject.Collection.ForceCreatePPtr(prefab));
+					gameObject.PrefabInternal_C1P = (IPrefabMarker)prefab;
 				}
 			}
 			else if (asset is IComponent component)
 			{
-				if (component.Has_PrefabAsset_C2())
+				if (component.Has_PrefabInternal_C2())
 				{
-					component.PrefabAsset_C2.CopyValues(component.Collection.ForceCreatePPtr(prefab));
+					component.PrefabInternal_C2P = (IPrefabMarker)prefab;
 				}
 			}
 		}
