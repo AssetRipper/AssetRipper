@@ -4,7 +4,6 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Utils;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AssetRipper.Core.Project.Collections
 {
@@ -55,11 +54,20 @@ namespace AssetRipper.Core.Project.Collections
 			return ObjectUtils.GenerateExportID(asset, ContainsID);
 		}
 
-		protected void AddAsset(IUnityObjectBase asset)
+		/// <summary>
+		/// Add an asset to this export collection.
+		/// </summary>
+		/// <param name="asset">The asset to be added to this export collection.</param>
+		/// <returns>True if the <paramref name="asset"/> was added or false if the <paramref name="asset"/> was already present.</returns>
+		protected bool AddAsset(IUnityObjectBase asset)
 		{
-			long exportID = GenerateExportID(asset);
-			m_assets.Add(asset);
-			m_exportIDs.Add(asset.AssetInfo, exportID);
+			if (m_assets.Add(asset))
+			{
+				long exportID = GenerateExportID(asset);
+				m_exportIDs.Add(asset.AssetInfo, exportID);
+				return true;
+			}
+			return false;
 		}
 
 		private bool ContainsID(long id)
@@ -67,7 +75,10 @@ namespace AssetRipper.Core.Project.Collections
 			return m_exportIDs.ContainsValue(id);
 		}
 
-		protected readonly List<IUnityObjectBase> m_assets = new();
+		protected readonly HashSet<IUnityObjectBase> m_assets = new();
+		/// <summary>
+		/// A one-to-one dictionary of export id's
+		/// </summary>
 		protected readonly Dictionary<AssetInfo, long> m_exportIDs = new();
 	}
 }
