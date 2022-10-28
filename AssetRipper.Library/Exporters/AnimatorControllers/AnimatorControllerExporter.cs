@@ -10,12 +10,12 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers
 	{
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return asset is IAnimatorController;
+			return asset.MainAsset is IAnimatorController;
 		}
 
 		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
-			return new AnimatorControllerExportCollection(this, virtualFile, asset);
+			return new AnimatorControllerExportCollection(this, asset);
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class StateConstantExtensions
 	{
-		public static IMotion? CreateMotion(this IStateConstant stateConstant, TemporaryAssetCollection file, IAnimatorController controller, int nodeIndex)
+		public static IMotion? CreateMotion(this IStateConstant stateConstant, ProcessedAssetCollection file, IAnimatorController controller, int nodeIndex)
 		{
 			if (stateConstant.BlendTreeConstantArray.Count == 0)
 			{

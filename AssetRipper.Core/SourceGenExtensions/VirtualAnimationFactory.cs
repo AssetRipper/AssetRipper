@@ -6,7 +6,9 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1101;
 using AssetRipper.SourceGenerated.Classes.ClassID_1102;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
 using AssetRipper.SourceGenerated.Classes.ClassID_1109;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_206;
+using AssetRipper.SourceGenerated.Classes.ClassID_207;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorCondition;
@@ -31,7 +33,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class VirtualAnimationFactory
 	{
-		public static IBlendTree CreateBlendTree(TemporaryAssetCollection virtualFile, IAnimatorController controller, IStateConstant state, int nodeIndex)
+		public static IBlendTree CreateBlendTree(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant state, int nodeIndex)
 		{
 			IBlendTree blendTree = virtualFile.CreateAsset((int)ClassIDType.BlendTree, BlendTreeFactory.CreateAsset);
 			blendTree.ObjectHideFlags = HideFlags.HideInHierarchy;
@@ -72,7 +74,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		private static void CreateEntryTransitions(
 			IAnimatorStateMachine generatedStateMachine,
 			IStateMachineConstant stateMachineConstant,
-			TemporaryAssetCollection file,
+			ProcessedAssetCollection file,
 			uint ID,
 			IReadOnlyList<IAnimatorState> States,
 			AssetDictionary<uint, Utf8String> TOS)
@@ -96,7 +98,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static IAnimatorStateMachine CreateAnimatorStateMachine(TemporaryAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex)
+		public static IAnimatorStateMachine CreateAnimatorStateMachine(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex)
 		{
 			const float StateOffset = 250.0f;
 
@@ -212,7 +214,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return generatedStateMachine;
 		}
 
-		public static IAnimatorState CreateAnimatorState(TemporaryAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f_3_5_0_f5 position)
+		public static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f_3_5_0_f5 position)
 		{
 			IAnimatorState generatedState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorStateFactory.CreateAsset);
 			generatedState.ObjectHideFlags = HideFlags.HideInHierarchy;
@@ -250,9 +252,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 				//	behaviours.Add(ptr);
 				//}
 				//}
-				generatedState.StateMachineBehaviours_C1102.Clear();
-				generatedState.StateMachineBehaviours_C1102.AddRange(behaviours);
-				//generatedState.StateMachineBehaviours_C1102.AddRange(behaviours.ToArray());
+
+
+				PPtrAccessList<PPtr_MonoBehaviour__5_0_0_f4, IMonoBehaviour> stateMachineBehaviours = generatedState.StateMachineBehaviours_C1102P;
+				foreach (IMonoBehaviour? behaviour in new PPtrAccessList<PPtr_MonoBehaviour__5_0_0_f4, IMonoBehaviour>(behaviours, controller))
+				{
+					stateMachineBehaviours.Add(behaviour);
+				}
 			}
 
 			generatedState.Position_C1102.CopyValues(position);
@@ -264,7 +270,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			generatedState.CycleOffsetParameterActive_C1102 = state.CycleOffsetParamID > 0;
 			generatedState.TimeParameterActive_C1102 = state.TimeParamID > 0;
 
-			generatedState.Motion_C1102?.CopyValues(generatedState.Collection.ForceCreatePPtr(state.CreateMotion(virtualFile, controller, 0)));
+			generatedState.Motion_C1102P = (Motion?)state.CreateMotion(virtualFile, controller, 0);
 
 			generatedState.Tag_C1102.CopyValues(TOS[state.TagID]);
 			generatedState.SpeedParameter_C1102?.CopyValues(TOS[state.SpeedParamID]);
@@ -276,7 +282,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		}
 
 		public static IAnimatorStateTransition CreateAnimatorStateTransition(
-			TemporaryAssetCollection virtualFile,
+			ProcessedAssetCollection virtualFile,
 			IStateMachineConstant StateMachine,
 			IReadOnlyList<IAnimatorState> States,
 			AssetDictionary<uint, Utf8String> TOS,
@@ -299,17 +305,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 
 			IAnimatorState? state = GetDestinationState(Transition.DestinationState, StateMachine, States);
-			if (state is not null)
-			{
-				if (animatorStateTransition.Has_DstState_C1101_PPtr_State_())
-				{
-					animatorStateTransition.DstState_C1101_PPtr_State_.CopyValues(animatorStateTransition.Collection.ForceCreatePPtr(state));
-				}
-				else if (animatorStateTransition.Has_DstState_C1101_PPtr_AnimatorState_())
-				{
-					animatorStateTransition.DstState_C1101_PPtr_AnimatorState_.CopyValues(animatorStateTransition.Collection.ForceCreatePPtr(state));
-				}
-			}
+			animatorStateTransition.DstState_C1101_PPtr_State_P = state;
+			animatorStateTransition.DstState_C1101_PPtr_AnimatorState_P = state;
 
 			animatorStateTransition.Name.CopyValues(TOS[Transition.UserID]);
 			animatorStateTransition.IsExit_C1101 = Transition.IsExit();
@@ -327,7 +324,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		}
 
 		public static IAnimatorTransition CreateAnimatorTransition(
-			TemporaryAssetCollection virtualFile,
+			ProcessedAssetCollection virtualFile,
 			IStateMachineConstant StateMachine,
 			IReadOnlyList<IAnimatorState> States,
 			AssetDictionary<uint, Utf8String> TOS,
@@ -349,11 +346,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 			}
 
-			IAnimatorState? state = GetDestinationState(Transition.Destination, StateMachine, States);
-			if (state is not null)
-			{
-				animatorTransition.DstState_C1109.CopyValues(animatorTransition.Collection.ForceCreatePPtr(state));
-			}
+			animatorTransition.DstState_C1109P = GetDestinationState(Transition.Destination, StateMachine, States);
 
 			return animatorTransition;
 		}

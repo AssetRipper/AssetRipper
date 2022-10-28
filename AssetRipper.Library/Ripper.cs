@@ -6,6 +6,7 @@ using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.Structure.GameStructure;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters;
+using AssetRipper.Library.Exporters.AnimatorControllers;
 using AssetRipper.Library.Exporters.Audio;
 using AssetRipper.Library.Exporters.AudioMixers;
 using AssetRipper.Library.Exporters.Meshes;
@@ -18,6 +19,7 @@ using AssetRipper.Library.Exporters.Terrains;
 using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.Exporters.TypeTrees;
 using AssetRipper.Library.Processors;
+using AssetRipper.Library.Processors.AnimatorControllers;
 using AssetRipper.Library.Processors.PrefabOutlining;
 using AssetRipper.Library.Processors.StaticMeshes;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -97,6 +99,7 @@ namespace AssetRipper.Library
 				new SceneGuidProcessor(),
 				new TerrainTextureProcessor(),
 				new LightingDataProcessor(),
+				new AnimatorControllerProcessor(),
 				new EditorFormatProcessor(Settings.BundledAssetsExportMode),
 				new StaticMeshProcessor(),
 				new PrefabOutliningProcessor(),
@@ -296,8 +299,7 @@ namespace AssetRipper.Library
 			ConditionalOverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.AssemblyManager), Settings.ScriptExportMode == ScriptExportMode.DllExportWithoutRenaming);
 
 			//Animator Controller
-			//OverrideExporter<IAnimatorController>(new AnimatorControllerExporter());
-			//Temporarily disabled due to changes in how AssetCollections function.
+			OverrideExporter<IUnityObjectBase>(new AnimatorControllerExporter());
 
 			AddPostExporter(new ProjectVersionPostExporter());
 			AddPostExporter(new PackageManifestPostExporter());

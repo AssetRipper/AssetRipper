@@ -18,7 +18,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return tree.Has_BlendType_C206_Int32() ? (BlendTreeType)tree.BlendType_C206_Int32 : (BlendTreeType)tree.BlendType_C206_UInt32;
 		}
 
-		public static IChildMotion AddAndInitializeNewChild(this IBlendTree tree, TemporaryAssetCollection file, IAnimatorController controller, IStateConstant state, int nodeIndex, int childIndex)
+		public static IChildMotion AddAndInitializeNewChild(this IBlendTree tree, ProcessedAssetCollection file, IAnimatorController controller, IStateConstant state, int nodeIndex, int childIndex)
 		{
 			IChildMotion childMotion = tree.Childs_C206.AddNew();
 			IBlendTreeConstant treeConstant = state.GetBlendTree();
