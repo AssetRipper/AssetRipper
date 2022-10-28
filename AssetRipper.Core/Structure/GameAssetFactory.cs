@@ -10,9 +10,13 @@ using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
 using AssetRipper.Core.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Mono;
+using AssetRipper.Core.Structure.Assembly.Serializable;
+using AssetRipper.IO.Files.SerializedFiles.IO;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
+using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -22,6 +26,7 @@ using AssetRipper.SourceGenerated.Subclasses.ColorRGBA32;
 using AssetRipper.SourceGenerated.Subclasses.ColorRGBAf;
 using AssetRipper.SourceGenerated.Subclasses.Gradient;
 using AssetRipper.SourceGenerated.Subclasses.Matrix4x4f;
+using AssetRipper.SourceGenerated.Subclasses.Node;
 using AssetRipper.SourceGenerated.Subclasses.Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.Rectf;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
@@ -48,7 +53,7 @@ namespace AssetRipper.Core.Structure
 			return asset switch
 			{
 				null => ReadUnknownObject(assetInfo, reader, size),
-				IMonoBehaviour monoBehaviour => ReadMonoBehaviour(monoBehaviour, reader, size, AssemblyManager),
+				IMonoBehaviour monoBehaviour => ReadMonoBehaviour(monoBehaviour, reader, size, AssemblyManager, type),
 				_ => ReadNormalObject(asset, reader, size)
 			};
 		}
@@ -60,12 +65,20 @@ namespace AssetRipper.Core.Structure
 			return unknownObject;
 		}
 
-		private static IMonoBehaviour ReadMonoBehaviour(IMonoBehaviour monoBehaviour, AssetReader reader, int size, IAssemblyManager assemblyManager)
+		private static IMonoBehaviour? ReadMonoBehaviour(IMonoBehaviour monoBehaviour, AssetReader reader, int size, IAssemblyManager assemblyManager, SerializedType? type)
 		{
 			try
 			{
 				monoBehaviour.Read(reader);
-				monoBehaviour.Structure = GetMonoScript(monoBehaviour)?.GetBehaviourType(assemblyManager)?.CreateSerializableStructure();
+				if (type is not null && type.OldType.Nodes.Count > 0)
+				{
+					SerializableTreeType serializableTreeType = new(type.OldType.Nodes[0].Name, PrimitiveType.Complex);
+					monoBehaviour.Structure = serializableTreeType.FromTypeTree(type.OldType).CreateSerializableStructure();
+				}
+				else
+				{
+					monoBehaviour.Structure = GetMonoScript(monoBehaviour)?.GetBehaviourType(assemblyManager)?.CreateSerializableStructure();
+				}
 				monoBehaviour.Structure?.Read(reader);
 				if (monoBehaviour.Structure is not null && reader.BaseStream.Position != size)
 				{
