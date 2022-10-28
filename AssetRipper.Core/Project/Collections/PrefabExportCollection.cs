@@ -46,18 +46,19 @@ namespace AssetRipper.Core.Project.Collections
 
 		private static void SetPrefabInternal(IEditorExtension asset, IPrefabInstance prefab)
 		{
+			//To do: move prefab creation to a processor
 			if (asset is IGameObject gameObject)
 			{
 				if (gameObject.Has_PrefabInternal_C1())
 				{
-					gameObject.PrefabInternal_C1P = (IPrefabMarker)prefab;
+					//gameObject.PrefabInternal_C1P = (IPrefabMarker)prefab;
 				}
 			}
 			else if (asset is IComponent component)
 			{
 				if (component.Has_PrefabInternal_C2())
 				{
-					component.PrefabInternal_C2P = (IPrefabMarker)prefab;
+					//component.PrefabInternal_C2P = (IPrefabMarker)prefab;
 				}
 			}
 		}
