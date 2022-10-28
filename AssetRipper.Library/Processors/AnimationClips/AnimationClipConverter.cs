@@ -3,7 +3,7 @@ using AssetRipper.Assets.Utils;
 using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
 using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Library.Exporters.AnimatorControllers.Editor;
+using AssetRipper.Library.Processors.AnimationClips.Editor;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipBindingConstant;

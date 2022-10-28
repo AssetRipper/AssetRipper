@@ -6,7 +6,7 @@ using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace AssetRipper.Library.Exporters.AnimatorControllers.Editor
+namespace AssetRipper.Library.Processors.AnimationClips.Editor
 {
 	public sealed class StreamedCurveKey : IAssetReadable
 	{
@@ -78,10 +78,10 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers.Editor
 			float ttt = tt * deltaTimeFraction;
 			float tttx2 = ttt * 2.0f;
 			float ttx3 = tt * 3.0f;
-			float v1 = ((deltaTimeFraction + ttt - (2.0f * tt)) * leftTangent) + ((tttx2 - ttx3 + 1.0f) * leftValue);
+			float v1 = (deltaTimeFraction + ttt - 2.0f * tt) * leftTangent + (tttx2 - ttx3 + 1.0f) * leftValue;
 			float v2 = (ttt - tt) * rightTangent;
 			float v3 = ttx3 - tttx2;
-			return v1 + v2 + (v3 * rightValue);
+			return v1 + v2 + v3 * rightValue;
 		}
 
 		public float CalculateNextInSlope(float deltaTime, float nextValue)
@@ -97,7 +97,7 @@ namespace AssetRipper.Library.Exporters.AnimatorControllers.Editor
 			float deltaValue = nextValue - Value;
 			float inverseTime = 1.0f / (deltaTime * deltaTime);
 			float outTangent = OutSlope * deltaTime;
-			float inTangent = deltaValue + deltaValue + deltaValue - outTangent - outTangent - (Coefficient.Y / inverseTime);
+			float inTangent = deltaValue + deltaValue + deltaValue - outTangent - outTangent - Coefficient.Y / inverseTime;
 			return inTangent / deltaTime;
 		}
 
