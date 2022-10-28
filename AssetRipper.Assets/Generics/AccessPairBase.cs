@@ -42,5 +42,11 @@
 		}
 
 		public static implicit operator KeyValuePair<TKey, TValue>(AccessPairBase<TKey, TValue> pair) => pair.ToSystemPair();
+
+		public void Deconstruct(out TKey key, out TValue value)
+		{
+			key = Key;
+			value = Value;
+		}
 	}
 }
