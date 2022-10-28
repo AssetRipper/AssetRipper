@@ -62,15 +62,6 @@ namespace AssetRipper.Library
 		public LibraryConfiguration Settings { get; }
 		private bool ExportersInitialized { get; set; }
 		private List<IPostExporter> PostExporters { get; } = new();
-		private List<IAssetProcessor> AssetProcessors { get; } = new()
-		{
-			new SceneGuidProcessor(),
-			new TerrainTextureProcessor(),
-			new LightingDataProcessor(),
-			new EditorFormatProcessor(),
-			new StaticMeshProcessor(),
-			new PrefabOutliningProcessor(),
-		};
 
 		public event Action? OnStartLoadingGameStructure;
 		public event Action? OnFinishLoadingGameStructure;
@@ -101,6 +92,15 @@ namespace AssetRipper.Library
 			TaskManager.WaitUntilAllCompleted();
 
 			Logger.Info(LogCategory.General, "Processing loaded assets...");
+			List<IAssetProcessor> AssetProcessors = new()
+			{
+				new SceneGuidProcessor(),
+				new TerrainTextureProcessor(),
+				new LightingDataProcessor(),
+				new EditorFormatProcessor(Settings.BundledAssetsExportMode),
+				new StaticMeshProcessor(),
+				new PrefabOutliningProcessor(),
+			};
 			GameStructure.Process(AssetProcessors);
 			TaskManager.WaitUntilAllCompleted();
 			Logger.Info(LogCategory.General, "Finished processing assets");
