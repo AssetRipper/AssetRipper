@@ -353,9 +353,13 @@ namespace AssetRipper.Library.Processors.StaticMeshes
 			compressedMesh.SetBindPoses(instanceMeshData.BindPose);
 			compressedMesh.SetTriangles(instanceMeshData.ProcessedIndexBuffer);
 
+			newMesh.KeepIndices_C43 = true;//Not sure about this. Seems to be for animated meshes
+			newMesh.KeepVertices_C43 = true;//Not sure about this. Seems to be for animated meshes
 			newMesh.MeshMetrics_0__C43 = 1;
 			newMesh.MeshMetrics_1__C43 = 1;
-			newMesh.CookingOptions_C43 = 30;//No idea why 30. I just copied it from a vanilla compressed mesh (with MeshCompression.Low).
+			newMesh.MeshUsageFlags_C43 = (int)SourceGenerated.NativeEnums.Global.MeshUsageFlags.MeshUsageFlagNone;
+			newMesh.CookingOptions_C43 = (int)SourceGenerated.NativeEnums.Global.MeshColliderCookingOptions.DefaultCookingFlags;
+			//I copied 30 from a vanilla compressed mesh (with MeshCompression.Low), and it aligned with this enum.
 			newMesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
 			newMesh.SetMeshCompression(MeshExtensions.MeshCompression.Low);
 

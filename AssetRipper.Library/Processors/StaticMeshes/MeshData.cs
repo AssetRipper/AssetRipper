@@ -214,6 +214,11 @@ namespace AssetRipper.Library.Processors.StaticMeshes
 				ISubMesh subMesh = subMeshes[i];
 				subMesh.VertexCount = subMesh.IndexCount;
 				subMesh.FirstVertex = subMesh.FirstByte / sizeof(uint);
+
+				subMesh.BaseVertex = 0;//I'm concerned about this. This always seems to be 0 in static meshes,
+				//but that doesn't mean 0 is an appropriate value here. Given that this method is used primarily on
+				//dynamic meshes, their base vertex might not be 0. However, I have not seen a submesh holding a non-zero value
+				//for that, even in dynamic meshes, so setting it to zero might actually be fine.
 			}
 
 			return new MeshData(vertices, normals, tangents, colors, skin, uv0, uv1, uv2, uv3, uv4, uv5, uv6, uv7, bindpose, processedIndexBuffer, subMeshes);
