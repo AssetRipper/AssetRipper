@@ -20,6 +20,7 @@ public interface IUnityObjectBase : IUnityAssetBase
 	string? OriginalName { get; set; }
 	string? OriginalExtension { get; set; }
 	string? AssetBundleName { get; set; }
+	IUnityObjectBase? MainAsset { get; set; }
 
 	YamlDocument ExportYamlDocument(IExportContainer container);
 	IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies();
