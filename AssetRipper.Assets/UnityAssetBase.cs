@@ -80,7 +80,8 @@ public abstract class UnityAssetBase : IUnityAssetBase
 
 	public override string? ToString()
 	{
-		return this is IHasNameString hasName ? hasName.NameString : base.ToString();
+		string? name = (this as IHasNameString)?.NameString;
+		return string.IsNullOrEmpty(name) ? base.ToString() : name;
 	}
 
 	public virtual void Reset() => throw MethodNotSupported(nameof(Reset));
