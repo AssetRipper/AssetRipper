@@ -49,8 +49,13 @@ public abstract class Bundle : IDisposable
 		return Collections.FirstOrDefault(c => c.Name == name) ?? Parent?.ResolveCollection(name);
 	}
 
-	public ResourceFile? ResolveResource(string name)
+	public ResourceFile? ResolveResource([NotNullWhen(true)] string? name)
 	{
+		if (string.IsNullOrEmpty(name))
+		{
+			return null;
+		}
+
 		string fixedName = FilenameUtils.FixResourcePath(name);
 		return ResolveResourceInternal(name, fixedName);
 	}

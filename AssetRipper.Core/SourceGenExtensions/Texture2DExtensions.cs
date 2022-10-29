@@ -8,7 +8,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static long GetCompleteImageSize(this ITexture2D texture)
 		{
-			return System.Math.Max(texture.CompleteImageSize_C28_Int32, texture.CompleteImageSize_C28_UInt32);
+			return Math.Max(texture.CompleteImageSize_C28_Int32, texture.CompleteImageSize_C28_UInt32);
+		}
+
+		public static bool GetMips(this ITexture2D texture)
+		{
+			return texture.MipMap_C28 || texture.MipCount_C28 > 0;
 		}
 
 		public static bool CheckAssetIntegrity(this ITexture2D texture)
@@ -31,7 +36,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			byte[] data = texture.ImageData_C28;
 
-			if (!data.IsNullOrEmpty())
+			if (data.Length != 0)
 			{
 				return texture.ImageData_C28;
 			}
@@ -39,8 +44,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				data = texture.StreamData_C28.GetContent(texture.Collection);
 			}
-
-			data ??= Array.Empty<byte>();
 
 			if (IsSwapBytes(texture.Collection.Platform, texture.Format_C28E))
 			{

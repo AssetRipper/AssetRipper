@@ -37,6 +37,10 @@ jobs:
       run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipper.Tools.JsonSerializer/
       
+    - name: Build RawTextureExtractor
+      run: dotnet build /p:Configuration=Release
+      working-directory: ./AssetRipper.Tools.RawTextureExtractor/
+      
     - name: Build SystemTester
       run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipper.Tools.SystemTester/

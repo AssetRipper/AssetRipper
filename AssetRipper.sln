@@ -129,7 +129,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Numerics.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.DependenceGrapher", "AssetRipper.Tools.DependenceGrapher\AssetRipper.Tools.DependenceGrapher.csproj", "{A704EECB-5408-4B77-B80C-47AB25A051FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Tools.CabMapGenerator", "AssetRipper.Tools.CabMapGenerator\AssetRipper.Tools.CabMapGenerator.csproj", "{3620A2D1-69DB-48EB-A209-F546577CD8C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.CabMapGenerator", "AssetRipper.Tools.CabMapGenerator\AssetRipper.Tools.CabMapGenerator.csproj", "{3620A2D1-69DB-48EB-A209-F546577CD8C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Tools.RawTextureExtractor", "AssetRipper.Tools.RawTextureExtractor\AssetRipper.Tools.RawTextureExtractor.csproj", "{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -241,6 +243,10 @@ Global
 		{3620A2D1-69DB-48EB-A209-F546577CD8C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3620A2D1-69DB-48EB-A209-F546577CD8C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3620A2D1-69DB-48EB-A209-F546577CD8C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
