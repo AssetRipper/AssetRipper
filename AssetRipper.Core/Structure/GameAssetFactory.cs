@@ -10,11 +10,9 @@ using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
 using AssetRipper.Core.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Mono;
-using AssetRipper.Core.Structure.Assembly.Serializable;
-using AssetRipper.IO.Files.SerializedFiles.IO;
+using AssetRipper.Core.Structure.Assembly.TypeTrees;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 using AssetRipper.SourceGenerated;
@@ -26,7 +24,6 @@ using AssetRipper.SourceGenerated.Subclasses.ColorRGBA32;
 using AssetRipper.SourceGenerated.Subclasses.ColorRGBAf;
 using AssetRipper.SourceGenerated.Subclasses.Gradient;
 using AssetRipper.SourceGenerated.Subclasses.Matrix4x4f;
-using AssetRipper.SourceGenerated.Subclasses.Node;
 using AssetRipper.SourceGenerated.Subclasses.Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.Rectf;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
@@ -48,7 +45,7 @@ namespace AssetRipper.Core.Structure
 
 		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType? type)
 		{
-			IUnityObjectBase? asset = SourceGenerated.AssetFactory.CreateAsset(reader.Version, assetInfo);
+			IUnityObjectBase? asset = AssetFactory.CreateAsset(reader.Version, assetInfo);
 
 			return asset switch
 			{
@@ -70,10 +67,9 @@ namespace AssetRipper.Core.Structure
 			try
 			{
 				monoBehaviour.Read(reader);
-				if (type is not null && type.OldType.Nodes.Count > 0)
+				if (type is not null && TypeTreeNodeStruct.TryMakeFromTypeTree(type.OldType, out TypeTreeNodeStruct rootNode))
 				{
-					SerializableTreeType serializableTreeType = new(type.OldType.Nodes[0].Name, PrimitiveType.Complex);
-					monoBehaviour.Structure = serializableTreeType.FromTypeTree(type.OldType).CreateSerializableStructure();
+					monoBehaviour.Structure = SerializableTreeType.FromRootNode(rootNode).CreateSerializableStructure();
 				}
 				else
 				{

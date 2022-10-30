@@ -15,6 +15,53 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees
 
 		private readonly TypeTreeNodeStruct[] subNodes;
 
+		public bool IsArray
+		{
+			get
+			{
+				if (TypeName == "Array" && SubNodes.Count == 2)
+				{
+					TypeTreeNodeStruct sizeNode = SubNodes[0];
+					return sizeNode.Name == "size" && sizeNode.SubNodes.Count == 0 && SubNodes[1].Name == "data";
+				}
+				return false;
+			}
+		}
+
+		public bool IsVector
+		{
+			get
+			{
+				return TypeName is "vector" or "staticvector" or "set" && SubNodes.Count == 1 && SubNodes[0].IsArray;
+			}
+		}
+
+		public bool IsPPtr
+		{
+			get
+			{
+				if (SubNodes.Count != 2)
+				{
+					return false;
+				}
+
+				TypeTreeNodeStruct fileIdNode = SubNodes[0];
+				if (fileIdNode.Name is not "m_FileID" || fileIdNode.SubNodes.Count > 0)
+				{
+					return false;
+				}
+
+				TypeTreeNodeStruct pathIdNode = SubNodes[1];
+				if (pathIdNode.Name is not "m_PathID" || pathIdNode.SubNodes.Count > 0)
+				{
+					return false;
+				}
+
+				//Note: custom MonoBehaviour fields have a '$' after the '<', eg PPtr<$GameObject>
+				return TypeName.StartsWith("PPtr<", StringComparison.Ordinal) && TypeName.EndsWith('>');
+			}
+		}
+
 		private TypeTreeNodeStruct(TypeTreeNode node, TypeTreeNodeStruct[] subNodes)
 		{
 			TypeName = node.Type;
