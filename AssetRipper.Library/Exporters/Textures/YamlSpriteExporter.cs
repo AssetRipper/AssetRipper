@@ -13,6 +13,8 @@ using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.SourceGenerated.Subclasses.Vector4f;
+using System.Drawing;
+using System.Numerics;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -36,11 +38,11 @@ namespace AssetRipper.Library.Exporters.Textures
 			// Otherwise, if a SpriteAtlas reference is serialized into this sprite,
 			// we must recover the m_RD field of the sprite from the SpriteAtlas.
 			ISprite sprite = (ISprite)asset;
-			ISpriteAtlas? atlas = null;
-			if (sprite.Has_SpriteAtlas_C213() && (atlas = sprite.SpriteAtlas_C213P) != null)
+			ISpriteAtlas? atlas = sprite.SpriteAtlas_C213P;
+			if (atlas is not null)
 			{
 				if (sprite.Has_RenderDataKey_C213() &&
-				    atlas.RenderDataMap_C687078895.TryGetValue(sprite.RenderDataKey_C213, out ISpriteAtlasData? spriteData))
+					atlas.RenderDataMap_C687078895.TryGetValue(sprite.RenderDataKey_C213, out ISpriteAtlasData? spriteData))
 				{
 					ISpriteRenderData m_RD = sprite.RD_C213;
 					m_RD.Texture.CopyValues(ConvertPPtr(spriteData.Texture, atlas, sprite));
@@ -72,12 +74,12 @@ namespace AssetRipper.Library.Exporters.Textures
 				}
 
 				// Must clear the reference to SpriteAtlas, since Unity Editor will crash trying to pack an already-packed sprite otherwise.
-				sprite.SpriteAtlas_C213.SetValues(0, 0);
+				sprite.SpriteAtlas_C213?.SetNull();
 				sprite.AtlasTags_C213?.Clear();
 			}
 
 			// Some sprite properties must be recalculated with regard to SpriteAtlas. See the comments inside the following method.
-			sprite.GetSpriteCoordinatesInAtlas(atlas, out Rectf rect, out Vector2f_3_5_0_f5 pivot, out Vector4f_3_5_0_f5 border);
+			sprite.GetSpriteCoordinatesInAtlas(atlas, out RectangleF rect, out Vector2 pivot, out Vector4 border);
 			sprite.Rect_C213.CopyValues(rect);
 			if (sprite.Has_Pivot_C213())
 			{

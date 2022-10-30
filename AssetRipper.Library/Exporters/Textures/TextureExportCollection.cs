@@ -67,11 +67,16 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		private void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas)
 		{
-			if (m_sprites.TryGetValue(sprite, out ISpriteAtlas? mappedAtlas))
+			AddToDictionary(sprite, atlas, m_sprites);
+		}
+
+		private static void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas, Dictionary<ISprite, ISpriteAtlas?> spriteDictionary)
+		{
+			if (spriteDictionary.TryGetValue(sprite, out ISpriteAtlas? mappedAtlas))
 			{
 				if (mappedAtlas is null)
 				{
-					m_sprites[sprite] = atlas;
+					spriteDictionary[sprite] = atlas;
 				}
 				else if (atlas is not null && atlas != mappedAtlas)
 				{
@@ -80,7 +85,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 			else
 			{
-				m_sprites.Add(sprite, atlas);
+				spriteDictionary.Add(sprite, atlas);
 			}
 		}
 

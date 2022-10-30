@@ -4,13 +4,12 @@ using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Subclasses.Rectf;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteBone;
 using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
-using AssetRipper.SourceGenerated.Subclasses.Vector4f;
 using System.Buffers.Binary;
+using System.Drawing;
 using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -19,7 +18,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static ISpriteMetaData GenerateSpriteMetaData(this ISprite sprite, IExportContainer container, ISpriteAtlas? atlas)
 		{
-			sprite.GetSpriteCoordinatesInAtlas(atlas, out Rectf rect, out Vector2f_3_5_0_f5 pivot, out Vector4f_3_5_0_f5 border);
+			sprite.GetSpriteCoordinatesInAtlas(atlas, out RectangleF rect, out Vector2 pivot, out Vector4 border);
 
 			ISpriteMetaData instance = SpriteMetaDataFactory.CreateAsset(container.ExportVersion);
 			instance.NameString = sprite.NameString;
@@ -148,7 +147,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		public static void GetSpriteCoordinatesInAtlas(this ISprite sprite, ISpriteAtlas? atlas, out Rectf sAtlasRect, out Vector2f_3_5_0_f5 sAtlasPivot, out Vector4f_3_5_0_f5 sAtlasBorder)
+		public static void GetSpriteCoordinatesInAtlas(this ISprite sprite, ISpriteAtlas? atlas, out RectangleF sAtlasRect, out Vector2 sAtlasPivot, out Vector4 sAtlasBorder)
 		{
 			// sprite values are relative to original image (image, it was created from).
 			// since atlas shuffle and crop sprite images, we need to recalculate those values.
@@ -158,15 +157,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 			Vector2 cropTopRight;
 			if (atlas is null || !sprite.Has_RenderDataKey_C213())
 			{
-				sAtlasRect = new();
-				sAtlasRect.CopyValues(sprite.RD_C213.TextureRect);
+				sAtlasRect = sprite.RD_C213.TextureRect.CastToStruct();
 				cropBotLeft = (Vector2)sprite.RD_C213.TextureRectOffset;
 			}
 			else
 			{
 				ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
-				sAtlasRect = new();
-				sAtlasRect.CopyValues(atlasData.TextureRect);
+				sAtlasRect = atlasData.TextureRect.CastToStruct();
 				cropBotLeft = (Vector2)atlasData.TextureRectOffset;
 			}
 
@@ -187,17 +184,19 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			Vector2 pivotPosition = new Vector2(pivot.X * sprite.Rect_C213.Size().X, pivot.Y * sprite.Rect_C213.Size().Y);
 			Vector2 aAtlasPivotPosition = pivotPosition - cropBotLeft;
-			sAtlasPivot = new();
-			sAtlasPivot.SetValues(aAtlasPivotPosition.X / sAtlasRect.Size().X, aAtlasPivotPosition.Y / sAtlasRect.Size().Y);
+			sAtlasPivot = new Vector2(aAtlasPivotPosition.X / sAtlasRect.Size().X, aAtlasPivotPosition.Y / sAtlasRect.Size().Y);
 
-			sAtlasBorder = new();
 			if (sprite.Has_Border_C213())
 			{
 				float borderL = sprite.Border_C213.X == 0.0f ? 0.0f : sprite.Border_C213.X - cropBotLeft.X;
 				float borderB = sprite.Border_C213.Y == 0.0f ? 0.0f : sprite.Border_C213.Y - cropBotLeft.Y;
 				float borderR = sprite.Border_C213.Z == 0.0f ? 0.0f : sprite.Border_C213.Z - cropTopRight.X;
 				float borderT = sprite.Border_C213.W == 0.0f ? 0.0f : sprite.Border_C213.W - cropTopRight.Y;
-				sAtlasBorder.SetValues(borderL, borderB, borderR, borderT);
+				sAtlasBorder = new Vector4(borderL, borderB, borderR, borderT);
+			}
+			else
+			{
+				sAtlasBorder = default;
 			}
 		}
 
@@ -205,8 +204,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			this ISprite sprite,
 			UnityVersion version,
 			ISpriteAtlas? atlas,
-			Rectf rect,
-			Vector2f_3_5_0_f5 pivot,
+			RectangleF rect,
+			Vector2 pivot,
 			AssetList<AssetList<Vector2f_3_5_0_f5>> outlines)
 		{
 			sprite.RD_C213.GenerateOutline(version, outlines);
@@ -227,8 +226,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static void GeneratePhysicsShape(
 			this ISprite sprite,
 			ISpriteAtlas? atlas,
-			Rectf rect,
-			Vector2f_3_5_0_f5 pivot,
+			RectangleF rect,
+			Vector2 pivot,
 			AssetList<AssetList<Vector2f_3_5_0_f5>> shape)
 		{
 			if (sprite.Has_PhysicsShape_C213() && sprite.PhysicsShape_C213.Count > 0)
