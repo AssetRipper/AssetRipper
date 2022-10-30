@@ -7,7 +7,10 @@
 		private int count = 0;
 		private T[] items;
 
-		public AssetList() : this(DefaultCapacity) { }
+		public AssetList()
+		{
+			items = Array.Empty<T>();
+		}
 
 		public AssetList(int capacity)
 		{

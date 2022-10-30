@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace AssetRipper.Assets.Generics
+﻿namespace AssetRipper.Assets.Generics
 {
 	/// <summary>
 	/// A dictionary class supporting non-unique keys
@@ -15,7 +13,10 @@ namespace AssetRipper.Assets.Generics
 		private AccessPairBase<TKey, TValue>[] pairs;
 		private int count = 0;
 
-		public AssetDictionary() : this(DefaultCapacity) { }
+		public AssetDictionary()
+		{
+			pairs = Array.Empty<AccessPairBase<TKey, TValue>>();
+		}
 
 		public AssetDictionary(int capacity)
 		{
