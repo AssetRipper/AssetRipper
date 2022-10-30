@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_120;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_161;
@@ -308,7 +307,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			vfxRenderer.MinimumChartSize_C73398921 = 4;
 			vfxRenderer.AutoUVMaxDistance_C73398921 = 0.5f;
 			vfxRenderer.AutoUVMaxAngle_C73398921 = 89.0f;
-			vfxRenderer.LightmapParameters_C73398921?.SetValues(0, 0);
+			vfxRenderer.LightmapParameters_C73398921P = null;
 		}
 
 		private static void ConvertToEditorFormat(ISpriteShapeRenderer spriteShapeRenderer)
@@ -323,7 +322,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			spriteShapeRenderer.MinimumChartSize_C1971053207 = 4;
 			spriteShapeRenderer.AutoUVMaxDistance_C1971053207 = 0.5f;
 			spriteShapeRenderer.AutoUVMaxAngle_C1971053207 = 89.0f;
-			spriteShapeRenderer.LightmapParameters_C1971053207?.SetValues(0, 0);
+			spriteShapeRenderer.LightmapParameters_C1971053207P = null;
 		}
 
 		private static void ConvertToEditorFormat(ITilemapRenderer tilemapRenderer)
@@ -338,7 +337,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			tilemapRenderer.MinimumChartSize_C483693784 = 4;
 			tilemapRenderer.AutoUVMaxDistance_C483693784 = 0.5f;
 			tilemapRenderer.AutoUVMaxAngle_C483693784 = 89.0f;
-			tilemapRenderer.LightmapParameters_C483693784?.SetValues(0, 0);
+			tilemapRenderer.LightmapParameters_C483693784P = null;
 		}
 
 		private static void ConvertToEditorFormat(ISpriteMask spriteMask)
@@ -353,7 +352,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			spriteMask.MinimumChartSize_C331 = 4;
 			spriteMask.AutoUVMaxDistance_C331 = 0.5f;
 			spriteMask.AutoUVMaxAngle_C331 = 89.0f;
-			spriteMask.LightmapParameters_C331?.SetValues(0, 0);
+			spriteMask.LightmapParameters_C331P = null;
 		}
 
 		private static void ConvertToEditorFormat(IBillboardRenderer billboardRenderer)
@@ -368,7 +367,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			billboardRenderer.MinimumChartSize_C227 = 4;
 			billboardRenderer.AutoUVMaxDistance_C227 = 0.5f;
 			billboardRenderer.AutoUVMaxAngle_C227 = 89.0f;
-			billboardRenderer.LightmapParameters_C227?.SetValues(0, 0);
+			billboardRenderer.LightmapParameters_C227P = null;
 		}
 
 		private static void ConvertToEditorFormat(ISpriteRenderer spriteRenderer)
@@ -383,7 +382,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			spriteRenderer.MinimumChartSize_C212 = 4;
 			spriteRenderer.AutoUVMaxDistance_C212 = 0.5f;
 			spriteRenderer.AutoUVMaxAngle_C212 = 89.0f;
-			spriteRenderer.LightmapParameters_C212?.SetValues(0, 0);
+			spriteRenderer.LightmapParameters_C212P = null;
 		}
 
 		private static void ConvertToEditorFormat(IParticleSystemRenderer particleSystemRenderer)
@@ -398,7 +397,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			particleSystemRenderer.MinimumChartSize_C199 = 4;
 			particleSystemRenderer.AutoUVMaxDistance_C199 = 0.5f;
 			particleSystemRenderer.AutoUVMaxAngle_C199 = 89.0f;
-			particleSystemRenderer.LightmapParameters_C199?.SetValues(0, 0);
+			particleSystemRenderer.LightmapParameters_C199P = null;
 		}
 
 		private static void ConvertToEditorFormat(IClothRenderer clothRenderer)
@@ -419,7 +418,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			skinnedMeshRenderer.MinimumChartSize_C137 = 4;
 			skinnedMeshRenderer.AutoUVMaxDistance_C137 = 0.5f;
 			skinnedMeshRenderer.AutoUVMaxAngle_C137 = 89.0f;
-			skinnedMeshRenderer.LightmapParameters_C137?.SetValues(0, 0);
+			skinnedMeshRenderer.LightmapParameters_C137P = null;
 		}
 
 		private static void ConvertToEditorFormat(ILineRenderer lineRenderer)
@@ -434,7 +433,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			lineRenderer.MinimumChartSize_C120 = 4;
 			lineRenderer.AutoUVMaxDistance_C120 = 0.5f;
 			lineRenderer.AutoUVMaxAngle_C120 = 89.0f;
-			lineRenderer.LightmapParameters_C120?.SetValues(0, 0);
+			lineRenderer.LightmapParameters_C120P = null;
 		}
 
 		private static void ConvertToEditorFormat(ITrailRenderer trailRenderer)
@@ -449,7 +448,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			trailRenderer.MinimumChartSize_C96 = 4;
 			trailRenderer.AutoUVMaxDistance_C96 = 0.5f;
 			trailRenderer.AutoUVMaxAngle_C96 = 89.0f;
-			trailRenderer.LightmapParameters_C96?.SetValues(0, 0);
+			trailRenderer.LightmapParameters_C96P = null;
 		}
 
 		private static void ConvertToEditorFormat(IParticleRenderer particleRenderer)
@@ -464,7 +463,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			particleRenderer.MinimumChartSize_C26 = 4;
 			particleRenderer.AutoUVMaxDistance_C26 = 0.5f;
 			particleRenderer.AutoUVMaxAngle_C26 = 89.0f;
-			particleRenderer.LightmapParameters_C26?.SetValues(0, 0);
+			particleRenderer.LightmapParameters_C26P = null;
 		}
 
 		private static void ConvertToEditorFormat(IMeshRenderer meshRenderer)
@@ -479,7 +478,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			meshRenderer.MinimumChartSize_C23 = 4;
 			meshRenderer.AutoUVMaxDistance_C23 = 0.5f;
 			meshRenderer.AutoUVMaxAngle_C23 = 89.0f;
-			meshRenderer.LightmapParameters_C23?.SetValues(0, 0);
+			meshRenderer.LightmapParameters_C23P = null;
 		}
 	}
 }

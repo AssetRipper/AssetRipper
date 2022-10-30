@@ -4,7 +4,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Linq;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.SourceGenExtensions;
@@ -35,6 +34,29 @@ using System.Linq;
 
 namespace AssetRipper.Library.Processors
 {
+	/// <summary>
+	/// <para>
+	/// This processor primarily handles "editor-only" fields.
+	/// These fields exist in the Unity Editor, but not in compiled game files.
+	/// Without this processing, those fields would have C# default values of zero.
+	/// </para>
+	/// <para>
+	/// For most fields, this is just setting the field to the Unity default.
+	/// However for some fields, there can be a calculation to recover an appropriate
+	/// value for the field. For example, <see cref="ITransform.LocalEulerAnglesHint_C4"/>
+	/// is set using <see cref="ITransform.LocalRotation_C4"/> with a Quaternion to
+	/// Euler angle conversion. Similarly, <see cref="ITransform.RootOrder_C4"/> is
+	/// calculated from <see cref="ITransform.Father_C4P"/> and <see cref="ITransform.Children_C4P"/>.
+	/// </para>
+	/// <para>
+	/// Compiled game files can be identified from binary editor files by the 
+	/// <see cref="TransferInstructionFlags.SerializeGameRelease"/> flag.
+	/// However, those binary editor files are not commonly ripped with AssetRipper.
+	/// More often, generated <see cref="ProcessedAssetCollection"/>s are given editor flags
+	/// so as to exclude them from unnecessary processing. This is the default for
+	/// <see cref="GameBundle.AddNewProcessedCollection(string, UnityVersion)"/>.
+	/// </para>
+	/// </summary>
 	public class EditorFormatProcessor : IAssetProcessor
 	{
 		private ITagManager? tagManager;
@@ -48,7 +70,7 @@ namespace AssetRipper.Library.Processors
 		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
 		{
 			Logger.Info(LogCategory.Processing, "Editor Format Conversion");
-			tagManager = gameBundle.FetchAssets().SelectType<IUnityObjectBase, ITagManager>().FirstOrDefault();
+			tagManager = gameBundle.FetchAssets().OfType<ITagManager>().FirstOrDefault();
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections().Where(c => c.Flags.IsRelease()))
 			{
 				foreach (IUnityObjectBase asset in collection)
