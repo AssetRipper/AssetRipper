@@ -8,7 +8,20 @@ namespace AssetRipper.Core.Utils
 	{
 		public static string FixInvalidPathCharacters(string path)
 		{
-			return PathRegex.Replace(path, "_");
+			return PathRegex.Replace(path, "_").TrimEntries();
+		}
+
+		private static string TrimEntries(this string path)
+		{
+			if (path.Contains(" /", StringComparison.Ordinal) || path.Contains("/ ", StringComparison.Ordinal))
+			{
+				string[] entries = path.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+				return string.Join('/', entries);
+			}
+			else
+			{
+				return path.Trim();
+			}
 		}
 
 		private static Regex GeneratePathRegex()
