@@ -78,5 +78,10 @@ namespace AssetRipper.Assets.Generics
 
 		/// <inheritdoc/>
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+		public override string ToString()
+		{
+			return $"{nameof(Count)} = {Count}";
+		}
 	}
 }

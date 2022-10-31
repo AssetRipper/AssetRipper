@@ -196,6 +196,11 @@ namespace AssetRipper.Assets.Generics
 		/// <inheritdoc/>
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+		public override string ToString()
+		{
+			return $"{nameof(Count)} = {Count}";
+		}
+
 		private class KeyEnumerable : IEnumerable<TKey>
 		{
 			private readonly AccessDictionaryBase<TKey, TValue> dictionary;

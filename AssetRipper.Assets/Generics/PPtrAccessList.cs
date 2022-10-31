@@ -69,6 +69,11 @@ namespace AssetRipper.Assets.Generics
 
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+		public override string ToString()
+		{
+			return $"{nameof(Count)} = {Count}";
+		}
+
 		public static PPtrAccessList<TPPtr, TTarget> Empty => new PPtrAccessList<TPPtr, TTarget>(emptyList, emptyCollection);
 
 		private sealed class EmptyAssetCollection : AssetCollection

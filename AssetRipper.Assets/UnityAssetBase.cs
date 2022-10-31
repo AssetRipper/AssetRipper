@@ -78,10 +78,10 @@ public abstract class UnityAssetBase : IUnityAssetBase
 
 	public virtual List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex) => throw MethodNotSupported(nameof(MakeReleaseTypeTreeNodes));
 
-	public override string? ToString()
+	public override string ToString()
 	{
 		string? name = (this as IHasNameString)?.NameString;
-		return string.IsNullOrEmpty(name) ? base.ToString() : name;
+		return string.IsNullOrEmpty(name) ? GetType().Name : name;
 	}
 
 	public virtual void Reset() => throw MethodNotSupported(nameof(Reset));
