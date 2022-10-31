@@ -178,7 +178,7 @@ namespace AssetRipper.Library.Processors
 					continue;
 				}
 
-				UnityObjectBase? asset = kvp.Value.Asset.TryGetAsset(bundle.Collection);
+				IUnityObjectBase? asset = kvp.Value.Asset.TryGetAsset(bundle.Collection);
 				if (asset is null)
 				{
 					continue;

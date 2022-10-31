@@ -297,7 +297,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			if (state.Has_Motions_C1102())
 			{
-				foreach (Motion? motion in state.Motions_C1102P)
+				foreach (IMotion? motion in state.Motions_C1102P)
 				{
 					if (motion is IBlendTree blendTree)
 					{

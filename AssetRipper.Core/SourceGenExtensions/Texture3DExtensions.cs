@@ -26,7 +26,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return (ColorSpace)texture.ColorSpace_C117;
 		}
 
-		public static SourceGenerated.Enums.TextureFormat GetTextureFormat(this ITexture3D texture)
+		public static TextureFormat GetTextureFormat(this ITexture3D texture)
 		{
 			if (texture.Has_Format_C117_Int32())
 			{

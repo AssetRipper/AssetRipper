@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Project.Exporters;
@@ -14,6 +15,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_468431735;
 using AssetRipper.SourceGenerated.MarkerInterfaces;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_EditorExtension_;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -55,19 +57,9 @@ namespace AssetRipper.Core.Project.Collections
 		private static void SetPrefabInternal(IEditorExtension asset, IPrefabInstance prefab)
 		{
 			//To do: move prefab creation to a processor
-			if (asset is IGameObject gameObject)
+			if (asset.Has_PrefabInternal_C18())
 			{
-				if (gameObject.Has_PrefabInternal_C1())
-				{
-					gameObject.PrefabInternal_C1P = (IPrefabMarker)prefab;
-				}
-			}
-			else if (asset is IComponent component)
-			{
-				if (component.Has_PrefabInternal_C2())
-				{
-					component.PrefabInternal_C2P = (IPrefabMarker)prefab;
-				}
+				asset.PrefabInternal_C18P = (IPrefabMarker)prefab;
 			}
 		}
 
@@ -110,7 +102,7 @@ namespace AssetRipper.Core.Project.Collections
 		{
 			IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance,
 					(assetInfo) => PrefabInstanceFactory.CreateAsset(root.Collection.Version, assetInfo));
-			prefab.RootGameObject_C1001?.CopyValues(virtualFile.ForceCreatePPtr(root));
+			prefab.RootGameObject_C1001P = root;
 			prefab.IsPrefabAsset_C1001 = true;
 			if (prefab is IHasNameString hasName)
 			{
@@ -118,9 +110,10 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			if (prefab.Has_Objects_C1001())
 			{
+				PPtrAccessList<PPtr_EditorExtension__3_0_0_f5, IEditorExtension> objects = prefab.Objects_C1001P;
 				foreach (IEditorExtension editorExtension in root.FetchHierarchy())
 				{
-					prefab.Objects_C1001.AddNew().CopyValues(virtualFile.ForceCreatePPtr(editorExtension));
+					objects.Add(editorExtension);
 				}
 			}
 			prefab.AssetBundleName = root.AssetBundleName;

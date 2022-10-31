@@ -114,7 +114,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			int stateCount = stateMachine.StateConstantArray.Count;
 			int stateMachineCount = 0;
 			int count = stateCount + stateMachineCount;
-			int side = (int)System.Math.Ceiling(System.Math.Sqrt(count));
+			int side = (int)Math.Ceiling(Math.Sqrt(count));
 
 			List<IAnimatorState> states = new();
 			if (generatedStateMachine.Has_ChildStates_C1107())
@@ -131,7 +131,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				for (int x = 0; x < side && stateIndex < stateCount; x++, stateIndex++)
 				{
-					Vector3f_3_5_0_f5 position = new Vector3f_3_5_0_f5() { X = x * StateOffset, Y = y * StateOffset };
+					Vector3f_3_5_0_f5 position = new() { X = x * StateOffset, Y = y * StateOffset };
 					IAnimatorState state = CreateAnimatorState(virtualFile, controller, stateMachineIndex, stateIndex, position);
 
 					if (generatedStateMachine.Has_ChildStates_C1107())
@@ -270,7 +270,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			generatedState.CycleOffsetParameterActive_C1102 = state.CycleOffsetParamID > 0;
 			generatedState.TimeParameterActive_C1102 = state.TimeParamID > 0;
 
-			generatedState.Motion_C1102P = (Motion?)state.CreateMotion(virtualFile, controller, 0);
+			generatedState.Motion_C1102P = state.CreateMotion(virtualFile, controller, 0);
 
 			generatedState.Tag_C1102.CopyValues(TOS[state.TagID]);
 			generatedState.SpeedParameter_C1102?.CopyValues(TOS[state.SpeedParamID]);
@@ -370,7 +370,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				{
 					SelectorStateConstant selectorState = stateMachine.SelectorStateConstantArray[(int)stateIndex].Data;
 #warning		HACK: take default Entry destination. TODO: child StateMachines
-					SelectorTransitionConstant selectorTransition = selectorState.TransitionConstantArray[selectorState.TransitionConstantArray.Count - 1].Data;
+					SelectorTransitionConstant selectorTransition = selectorState.TransitionConstantArray[^1].Data;
 					return GetDestinationState(selectorTransition.Destination, stateMachine, states);
 				}
 				else
