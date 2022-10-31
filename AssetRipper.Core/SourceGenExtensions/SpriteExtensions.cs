@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Generics;
+﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
@@ -16,11 +15,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class SpriteExtensions
 	{
-		public static ISpriteMetaData GenerateSpriteMetaData(this ISprite sprite, IExportContainer container, ISpriteAtlas? atlas)
+		public static void FillSpriteMetaData(this ISprite sprite, ISpriteAtlas? atlas, ISpriteMetaData instance)
 		{
 			sprite.GetSpriteCoordinatesInAtlas(atlas, out RectangleF rect, out Vector2 pivot, out Vector4 border);
-
-			ISpriteMetaData instance = SpriteMetaDataFactory.CreateAsset(container.ExportVersion);
 			instance.NameString = sprite.NameString;
 			instance.Rect.CopyValues(rect);
 			instance.Alignment = (int)SpriteAlignment.Custom;
@@ -28,7 +25,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			instance.Border?.CopyValues(border);
 			if (instance.Has_Outline())
 			{
-				sprite.GenerateOutline(container.Version, atlas, rect, pivot, instance.Outline);
+				sprite.GenerateOutline(sprite.Collection.Version, atlas, rect, pivot, instance.Outline);
 			}
 			if (instance.Has_PhysicsShape() && sprite.Has_PhysicsShape_C213())
 			{
@@ -63,7 +60,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 				instance.SetBoneGeometry(sprite);
 			}
-			return instance;
 		}
 
 		private static void SetBoneGeometry(this ISpriteMetaData instance, ISprite origin)

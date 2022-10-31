@@ -104,7 +104,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			if (m_convert)
 			{
 				ITextureImporter importer = ImporterFactory.GenerateTextureImporter(container, texture);
-				AddSprites(container, importer);
+				AddSprites(importer);
 				return importer;
 			}
 			else
@@ -134,7 +134,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			return exportID;
 		}
 
-		private void AddSprites(IExportContainer container, ITextureImporter importer)
+		private void AddSprites(ITextureImporter importer)
 		{
 			if (m_sprites.Count == 0)
 			{
@@ -176,7 +176,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				importer.TextureType_C1006E = TextureImporterType.Sprite;
 				if (m_exportSprites)
 				{
-					AddSpriteSheet(container, importer);
+					AddSpriteSheet(importer);
 					AddIDToName(importer);
 				}
 			}
@@ -196,13 +196,13 @@ namespace AssetRipper.Library.Exporters.Textures
 				importer.TextureType_C1006E = TextureImporterType.Sprite;
 				if (m_exportSprites)
 				{
-					AddSpriteSheet(container, importer);
+					AddSpriteSheet(importer);
 					AddIDToName(importer);
 				}
 			}
 		}
 
-		private void AddSpriteSheet(IExportContainer container, ITextureImporter importer)
+		private void AddSpriteSheet(ITextureImporter importer)
 		{
 			if (!importer.Has_SpriteSheet_C1006())
 			{
@@ -210,22 +210,22 @@ namespace AssetRipper.Library.Exporters.Textures
 			else if (importer.SpriteMode_C1006E == SpriteImportMode.Single)
 			{
 				KeyValuePair<ISprite, ISpriteAtlas?> kvp = m_sprites.First();
-				ISpriteMetaData smeta = kvp.Key.GenerateSpriteMetaData(container, kvp.Value);
+				ISpriteMetaData smeta = SpriteMetaDataFactory.CreateAsset(kvp.Key.Collection.Version);
+				kvp.Key.FillSpriteMetaData(kvp.Value, smeta);
 				importer.SpriteSheet_C1006.CopyFromSpriteMetaData(smeta);
 			}
 			else
 			{
-				List<ISpriteMetaData> metadata = new List<ISpriteMetaData>(m_sprites.Count);
+				AccessListBase<ISpriteMetaData> spriteSheetSprites = importer.SpriteSheet_C1006.Sprites;
 				foreach (KeyValuePair<ISprite, ISpriteAtlas?> kvp in m_sprites)
 				{
-					ISpriteMetaData smeta = kvp.Key.GenerateSpriteMetaData(container, kvp.Value);
+					ISpriteMetaData smeta = spriteSheetSprites.AddNew();
+					kvp.Key.FillSpriteMetaData(kvp.Value, smeta);
 					if (smeta.Has_InternalID())
 					{
 						smeta.InternalID = ObjectUtils.GenerateInternalID();
 					}
-					metadata.Add(smeta);
 				}
-				importer.SpriteSheet_C1006.Sprites.AddRange(metadata);
 			}
 		}
 

@@ -7,12 +7,9 @@ using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
-using AssetRipper.SourceGenerated.Subclasses.Rectf;
 using AssetRipper.SourceGenerated.Subclasses.SecondarySpriteTexture;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
-using AssetRipper.SourceGenerated.Subclasses.Vector2f;
-using AssetRipper.SourceGenerated.Subclasses.Vector4f;
 using System.Drawing;
 using System.Numerics;
 
