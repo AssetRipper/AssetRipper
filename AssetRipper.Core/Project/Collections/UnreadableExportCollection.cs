@@ -4,6 +4,7 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Core.Utils;
 using AssetRipper.IO.Files.SerializedFiles;
 using System.Collections.Generic;
 using System.IO;
@@ -39,7 +40,8 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
-			string resourcePath = Path.Combine(projectDirectory, "AssetRipper", "UnreadableAssets", Asset.ClassName, $"{Asset.NameString}.unreadable");
+			string name = DirectoryUtils.FixInvalidPathCharacters(Asset.NameString);
+			string resourcePath = Path.Combine(projectDirectory, "AssetRipper", "UnreadableAssets", Asset.ClassName, $"{name}.unreadable");
 			string subPath = Path.GetDirectoryName(resourcePath)!;
 			Directory.CreateDirectory(subPath);
 			string resFileName = Path.GetFileName(resourcePath);
