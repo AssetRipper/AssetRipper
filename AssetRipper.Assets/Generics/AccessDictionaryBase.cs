@@ -1,7 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace AssetRipper.Assets.Generics
 {
@@ -182,6 +179,12 @@ namespace AssetRipper.Assets.Generics
 				value = default;
 				return false;
 			}
+		}
+
+		public TValue? TryGetValue(TKey key)
+		{
+			TryGetValue(key, out TValue? value);
+			return value;
 		}
 
 		/// <inheritdoc/>
