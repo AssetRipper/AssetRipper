@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace AssetRipper.Assets.Generics
+﻿namespace AssetRipper.Assets.Generics
 {
 	/// <summary>
 	/// A wrapper for accessing the elements of an <see cref="AccessDictionaryBase{TKey, TValue}"/>
@@ -53,13 +51,13 @@ namespace AssetRipper.Assets.Generics
 		/// <inheritdoc/>
 		public override void SetValue(int index, TValueBase newValue) => referenceDictionary.SetValue(index, (TValue)newValue);
 
-		public override AccessPairBase<TKeyBase, TValueBase> GetPair(int index) => CastPair(referenceDictionary.GetPair(index));
+		public override AccessPairBase<TKeyBase, TValueBase> GetPair(int index) => AsAccessPair(referenceDictionary.GetPair(index));
 
 		/// <inheritdoc/>
-		public override int IndexOf(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.IndexOf(CastPair(item));
+		public override int IndexOf(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.IndexOf(AsAssetPair(item));
 
 		/// <inheritdoc/>
-		public override void Insert(int index, AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Insert(index, CastPair(item));
+		public override void Insert(int index, AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Insert(index, AsAssetPair(item));
 
 		/// <inheritdoc/>
 		public override void RemoveAt(int index) => referenceDictionary.RemoveAt(index);
@@ -68,7 +66,7 @@ namespace AssetRipper.Assets.Generics
 		public override void Clear() => referenceDictionary.Clear();
 
 		/// <inheritdoc/>
-		public override bool Contains(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Contains(CastPair(item));
+		public override bool Contains(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Contains(AsAssetPair(item));
 
 		/// <inheritdoc/>
 		public override void CopyTo(AccessPairBase<TKeyBase, TValueBase>[] array, int arrayIndex)
@@ -90,7 +88,7 @@ namespace AssetRipper.Assets.Generics
 		}
 
 		/// <inheritdoc/>
-		public override bool Remove(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Remove(CastPair(item));
+		public override bool Remove(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Remove(AsAssetPair(item));
 
 		protected override bool TryGetSinglePairForKey(TKeyBase key, [NotNullWhen(true)] out AccessPairBase<TKeyBase, TValueBase>? pair)
 		{
@@ -114,19 +112,19 @@ namespace AssetRipper.Assets.Generics
 					else
 					{
 						found = true;
-						pair = CastPair(p);
+						pair = AsAccessPair(p);
 					}
 				}
 			}
 			return found;
 		}
 
-		private static AccessPairBase<TKey, TValue> CastPair(AccessPairBase<TKeyBase, TValueBase> pair)
+		private static AccessPairBase<TKey, TValue> AsAssetPair(AccessPairBase<TKeyBase, TValueBase> pair)
 		{
 			return new AssetPair<TKey, TValue>((TKey)pair.Key, (TValue)pair.Value);
 		}
 
-		private static AccessPairBase<TKeyBase, TValueBase> CastPair(AccessPairBase<TKey, TValue> pair)
+		private static AccessPairBase<TKeyBase, TValueBase> AsAccessPair(AccessPairBase<TKey, TValue> pair)
 		{
 			return new AccessPair<TKey, TValue, TKeyBase, TValueBase>(pair);
 		}
