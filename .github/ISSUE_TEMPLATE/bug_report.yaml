@@ -25,12 +25,12 @@ body:
       label: Which release are you using?
       description: Please select your environment for AssetRipper.
       options:
-        - GUI Version Windows x64
-        - GUI Version MacOS x64
-        - GUI Version Linux x64
-        - Console Version Windows x64
-        - Console Version MacOS x64
-        - Console Version Linux x64
+        - Windows x64
+        - Windows Arm64
+        - MacOS x64
+        - MacOS Arm64
+        - Linux x64
+        - Linux Arm64
     validations:
       required: true
   - type: textarea
@@ -71,8 +71,6 @@ body:
     attributes:
       label: Relevant log output
       description: |
-        Please drag and drop your relevant log here. It is located in the same folder as the `exe` file. A screenshot is not normally sufficient.
-        * GUI version: `AssetRipper.log`
-        * Console version: `AssetRipperConsole.log`
+        Please drag and drop your relevant `AssetRipper.log` here. It is located in the same folder as the `exe` file. A screenshot is not normally sufficient.
     validations:
       required: false
