@@ -1,6 +1,6 @@
+using AsmResolver.DotNet;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
-using Mono.Cecil;
 using System.IO;
 
 namespace AssetRipper.Core.Structure.Assembly.Managers
@@ -20,6 +20,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		AssemblyDefinition[] GetAssemblies();
 		ScriptIdentifier GetScriptID(string assembly, string name);
 		ScriptIdentifier GetScriptID(string assembly, string @namespace, string name);
+		Stream GetStreamForAssembly(AssemblyDefinition assembly);
 
 		bool IsSet { get; }
 		ScriptingBackend ScriptingBackend { get; }

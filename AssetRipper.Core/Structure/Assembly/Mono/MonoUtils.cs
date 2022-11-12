@@ -1,10 +1,4 @@
-using AssetRipper.Core.Structure.Assembly.Managers;
-using AssetRipper.Core.Structure.Assembly.Mono.Extensions;
-using Mono.Cecil;
-using Mono.Collections.Generic;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using AsmResolver.DotNet;
 
 namespace AssetRipper.Core.Structure.Assembly.Mono
 {
@@ -154,7 +148,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		#endregion
 
 		#region Attributes
-		public static bool IsCompilerGeneratedAttrribute(string @namespace, string name)
+		public static bool IsCompilerGeneratedAttrribute(string? @namespace, string? name)
 		{
 			if (@namespace == CompilerServicesNamespace)
 			{
@@ -166,7 +160,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			}
 		}
 
-		public static bool IsSerializeFieldAttrribute(string @namespace, string name)
+		public static bool IsSerializeFieldAttrribute(string? @namespace, string? name)
 		{
 			if (@namespace == UnityEngineNamespace)
 			{
@@ -180,50 +174,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		#endregion
 
 		#region Naming
-		public static string GetNestedName(TypeReference type)
-		{
-			string typeName = GetTypeName(type);
-			return GetNestedName(type, typeName);
-		}
-
-		public static string GetNestedName(TypeReference type, string typeName)
-		{
-			if (type.IsGenericParameter)
-			{
-				return typeName;
-			}
-			if (type.IsArray)
-			{
-				return GetNestedName(type.GetElementType(), typeName);
-			}
-			if (type.IsNested)
-			{
-				string declaringName;
-				if (type.IsGenericInstance)
-				{
-					GenericInstanceType generic = (GenericInstanceType)type;
-					int argumentCount = MonoUtils.GetGenericArgumentCount(generic);
-					List<TypeReference> genericArguments = new List<TypeReference>(generic.GenericArguments.Count - argumentCount);
-					for (int i = 0; i < generic.GenericArguments.Count - argumentCount; i++)
-					{
-						genericArguments.Add(generic.GenericArguments[i]);
-					}
-					declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
-				}
-				else if (type.HasGenericParameters)
-				{
-					List<TypeReference> genericArguments = new List<TypeReference>(type.GenericParameters);
-					declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
-				}
-				else
-				{
-					declaringName = GetNestedName(type.DeclaringType);
-				}
-				return $"{declaringName}.{typeName}";
-			}
-			return typeName;
-		}
-
 		public static string ToCleanName(string name)
 		{
 			int openIndex = name.IndexOf('<');
@@ -237,59 +187,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			return firstPart + ToCleanName(secondPart);
 		}
 
-		public static string GetTypeName(TypeReference type)
-		{
-			if (IsCPrimitive(type))
-			{
-				return ToCPrimitiveString(type.Name);
-			}
-
-			if (type.IsGenericInstance)
-			{
-				GenericInstanceType generic = (GenericInstanceType)type;
-				return GetGenericInstanceName(generic);
-			}
-			else if (type.HasGenericParameters)
-			{
-				return GetGenericTypeName(type);
-			}
-			else if (type.IsArray)
-			{
-				ArrayType array = (ArrayType)type;
-				return GetTypeName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
-			}
-			return type.Name;
-		}
-
-		public static string GetModuleName(TypeReference type)
-		{
-			// reference and definition may has differrent module, so to avoid duplicates we need try to get defition
-			TypeReference definition = type.ResolveOrDefault();
-			definition = definition == null ? type : definition;
-			return BaseManager.ToAssemblyName(definition.Scope.Name);
-		}
-
-		private static string GetNestedGenericName(TypeReference type, List<TypeReference> genericArguments)
-		{
-			string name = type.Name;
-			if (type.HasGenericParameters)
-			{
-				name = GetGenericTypeName(type, genericArguments);
-				int argumentCount = MonoUtils.GetGenericParameterCount(type);
-				genericArguments.RemoveRange(genericArguments.Count - argumentCount, argumentCount);
-			}
-			if (type.IsNested)
-			{
-				string declaringName = GetNestedGenericName(type.DeclaringType, genericArguments);
-				return $"{declaringName}.{name}";
-			}
-			else
-			{
-				return name;
-			}
-		}
-
-		public static bool HasMember(TypeReference type, string name)
+		public static bool HasMember(ITypeDefOrRef? type, string name)
 		{
 			if (type == null)
 			{
@@ -299,7 +197,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			{
 				return false;
 			}
-			TypeDefinition definition = type.Resolve();
+			TypeDefinition? definition = type.Resolve();
 			if (definition == null)
 			{
 				return false;
@@ -356,135 +254,11 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			};
 		}
 
-		public static string GetName(TypeReference type)
-		{
-			if (IsCPrimitive(type))
-			{
-				return ToCPrimitiveString(type.Name);
-			}
-			else if (type.IsGenericInstance)
-			{
-				GenericInstanceType generic = (GenericInstanceType)type;
-				return GetGenericInstanceName(generic);
-			}
-			else if (type.HasGenericParameters)
-			{
-				return GetGenericTypeName(type);
-			}
-			else if (type.IsArray)
-			{
-				ArrayType array = (ArrayType)type;
-				return GetName(array.ElementType) + $"[{new string(',', array.Dimensions.Count - 1)}]";
-			}
-			return type.Name;
-		}
-
-		internal static string GetGenericTypeName(TypeReference genericType)
-		{
-			// TypeReference contain parameters with "<!0,!1> (!index)" name but TypeDefinition's name is "<T1,T2> (RealParameterName)"
-			genericType = genericType.ResolveOrDefault();
-			return GetGenericName(genericType, genericType.GenericParameters);
-		}
-
-		internal static string GetGenericTypeName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
-		{
-			genericType = genericType.ResolveOrDefault();
-			return GetGenericName(genericType, genericArguments);
-		}
-
-		internal static string GetGenericInstanceName(GenericInstanceType genericInstance)
-		{
-			return GetGenericName(genericInstance.ElementType, genericInstance.GenericArguments);
-		}
-
-		internal static string GetGenericName(TypeReference genericType, IReadOnlyList<TypeReference> genericArguments)
-		{
-			string name = genericType.Name;
-			int argumentCount = GetGenericParameterCount(genericType);
-			int index = name.IndexOf('`');
-			if (argumentCount == 0 || index < 0)
-			{
-				// nested class/enum (of generic class) is generic instance but it doesn't have '`' symbol in its name
-				return name;
-			}
-
-			StringBuilder sb = new StringBuilder(genericType.Name, 0, index, 50 + index);
-			sb.Append('<');
-			for (int i = genericArguments.Count - argumentCount; i < genericArguments.Count; i++)
-			{
-				TypeReference arg = genericArguments[i];
-				string argumentName = GetName(arg);
-				sb.Append(argumentName);
-				if (i < genericArguments.Count - 1)
-				{
-					sb.Append(", ");
-				}
-			}
-			sb.Append('>');
-			return sb.ToString();
-		}
-
-		internal static string GetGenericName<T>(TypeReference genericType, Collection<T> genericArguments) where T : TypeReference
-		{
-			string name = genericType.Name;
-			int argumentCount = GetGenericParameterCount(genericType);
-			int index = name.IndexOf('`');
-			if (argumentCount == 0 || index < 0)
-			{
-				// nested class/enum (of generic class) is generic instance but it doesn't have '`' symbol in its name
-				return name;
-			}
-
-			StringBuilder sb = new StringBuilder(genericType.Name, 0, index, 50 + index);
-			sb.Append('<');
-			for (int i = genericArguments.Count - argumentCount; i < genericArguments.Count; i++)
-			{
-				TypeReference arg = genericArguments[i];
-				string argumentName = GetName(arg);
-				sb.Append(argumentName);
-				if (i < genericArguments.Count - 1)
-				{
-					sb.Append(", ");
-				}
-			}
-			sb.Append('>');
-			return sb.ToString();
-		}
 		#endregion
 
-		#region Generics
-		public static int GetGenericArgumentCount(GenericInstanceType genericInstance)
-		{
-			int count = genericInstance.GenericArguments.Count;
-			if (genericInstance.IsNested)
-			{
-				TypeReference declaring = genericInstance.DeclaringType;
-				if (declaring.HasGenericParameters)
-				{
-					count -= declaring.GenericParameters.Count;
-				}
-			}
-			return count;
-		}
-
-		public static int GetGenericParameterCount(TypeReference genericType)
-		{
-			int count = genericType.GenericParameters.Count;
-			if (genericType.IsNested)
-			{
-				TypeReference declaring = genericType.DeclaringType;
-				if (declaring.HasGenericParameters)
-				{
-					count -= declaring.GenericParameters.Count;
-				}
-			}
-			return count;
-		}
-		#endregion
-
-		#region Boolean TypeReference Methods
-		public static bool IsPrimitive(TypeReference type) => IsPrimitive(type.Namespace, type.Name);
-		public static bool IsPrimitive(string @namespace, string name)
+		#region Boolean ITypeDefOrRef Methods
+		public static bool IsPrimitive(ITypeDefOrRef type) => IsPrimitive(type.Namespace, type.Name);
+		public static bool IsPrimitive(string? @namespace, string? name)
 		{
 			if (@namespace == SystemNamespace)
 			{
@@ -522,8 +296,8 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			return false;
 		}
 
-		public static bool IsCPrimitive(TypeReference type) => IsCPrimitive(type.Namespace, type.Name);
-		public static bool IsCPrimitive(string @namespace, string name)
+		public static bool IsCPrimitive(ITypeDefOrRef type) => IsCPrimitive(type.Namespace, type.Name);
+		public static bool IsCPrimitive(string? @namespace, string? name)
 		{
 			if (IsPrimitive(@namespace, name))
 			{
@@ -543,62 +317,62 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			return false;
 		}
 
-		public static bool IsDelegate(TypeReference type) => IsDelegate(type.Namespace, type.Name);
-		public static bool IsDelegate(string @namespace, string name)
+		public static bool IsDelegate(ITypeDefOrRef type) => IsDelegate(type.Namespace, type.Name);
+		public static bool IsDelegate(string? @namespace, string? name)
 		{
 			return @namespace == SystemNamespace && name == MulticastDelegateName;
 		}
 
-		public static bool IsObject(TypeReference type) => IsObject(type.Namespace, type.Name);
-		public static bool IsObject(string @namespace, string name)
+		public static bool IsObject(ITypeDefOrRef type) => IsObject(type.Namespace, type.Name);
+		public static bool IsObject(string? @namespace, string? name)
 		{
 			return @namespace == SystemNamespace && (name == ObjectName || name == CObjectName);
 		}
 
-		public static bool IsString(TypeReference type) => IsString(type.Namespace, type.Name);
-		public static bool IsString(string @namespace, string name)
+		public static bool IsString(ITypeDefOrRef type) => IsString(type.Namespace, type.Name);
+		public static bool IsString(string? @namespace, string? name)
 		{
 			return @namespace == SystemNamespace && (name == StringName || name == CStringName);
 		}
 
-		public static bool IsList(TypeReference type) => IsList(type.Namespace, type.Name);
-		public static bool IsList(string @namespace, string name)
+		public static bool IsList(ITypeDefOrRef type) => IsList(type.Namespace, type.Name);
+		public static bool IsList(string? @namespace, string? name)
 		{
 			return @namespace == SystemCollectionGenericNamespace && name == ListName;
 		}
 
-		public static bool IsEngineObject(TypeReference type) => IsEngineObject(type.Namespace, type.Name);
-		public static bool IsEngineObject(string @namespace, string name)
+		public static bool IsEngineObject(ITypeDefOrRef type) => IsEngineObject(type.Namespace, type.Name);
+		public static bool IsEngineObject(string? @namespace, string? name)
 		{
 			return @namespace == UnityEngineNamespace && name == ObjectName;
 		}
 
-		public static bool IsScriptableObject(TypeReference type) => IsScriptableObject(type.Namespace, type.Name);
-		public static bool IsScriptableObject(string @namespace, string name)
+		public static bool IsScriptableObject(ITypeDefOrRef type) => IsScriptableObject(type.Namespace, type.Name);
+		public static bool IsScriptableObject(string? @namespace, string? name)
 		{
 			return @namespace == UnityEngineNamespace && name == ScriptableObjectName;
 		}
 
-		public static bool IsComponent(TypeReference type) => IsComponent(type.Namespace, type.Name);
-		public static bool IsComponent(string @namespace, string name)
+		public static bool IsComponent(ITypeDefOrRef type) => IsComponent(type.Namespace, type.Name);
+		public static bool IsComponent(string? @namespace, string? name)
 		{
 			return @namespace == UnityEngineNamespace && name == ComponentName;
 		}
 
-		public static bool IsBehaviour(TypeReference type) => IsBehaviour(type.Namespace, type.Name);
-		public static bool IsBehaviour(string @namespace, string name)
+		public static bool IsBehaviour(ITypeDefOrRef type) => IsBehaviour(type.Namespace, type.Name);
+		public static bool IsBehaviour(string? @namespace, string? name)
 		{
 			return @namespace == UnityEngineNamespace && name == BehaviourName;
 		}
 
-		public static bool IsMonoBehaviour(TypeReference type) => IsMonoBehaviour(type.Namespace, type.Name);
-		public static bool IsMonoBehaviour(string @namespace, string name)
+		public static bool IsMonoBehaviour(ITypeDefOrRef type) => IsMonoBehaviour(type.Namespace, type.Name);
+		public static bool IsMonoBehaviour(string? @namespace, string? name)
 		{
 			return @namespace == UnityEngineNamespace && name == MonoBehaviourName;
 		}
 
-		public static bool IsEngineStruct(TypeReference type) => IsEngineStruct(type.Namespace, type.Name);
-		public static bool IsEngineStruct(string @namespace, string name)
+		public static bool IsEngineStruct(ITypeDefOrRef type) => IsEngineStruct(type.Namespace, type.Name);
+		public static bool IsEngineStruct(string? @namespace, string? name)
 		{
 			if (@namespace == UnityEngineNamespace)
 			{
@@ -630,14 +404,14 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			return false;
 		}
 
-		public static bool IsExposedReference(TypeReference type) => IsExposedReference(type.Namespace, type.Name);
-		public static bool IsExposedReference(string @namespace, string name)
+		public static bool IsExposedReference(ITypeDefOrRef type) => IsExposedReference(type.Namespace, type.Name);
+		public static bool IsExposedReference(string? @namespace, string? name)
 		{
 			return @namespace == UnityEngineNamespace && name == ExposedReferenceName;
 		}
 
-		public static bool IsPrime(TypeReference type) => IsPrime(type.Namespace, type.Name);
-		public static bool IsPrime(string @namespace, string name)
+		public static bool IsPrime(ITypeDefOrRef type) => IsPrime(type.Namespace, type.Name);
+		public static bool IsPrime(string? @namespace, string? name)
 		{
 			if (IsObject(@namespace, name))
 			{
@@ -652,8 +426,8 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			return false;
 		}
 
-		public static bool IsMonoPrime(TypeReference type) => IsMonoPrime(type.Namespace, type.Name);
-		public static bool IsMonoPrime(string @namespace, string name)
+		public static bool IsMonoPrime(ITypeDefOrRef type) => IsMonoPrime(type.Namespace, type.Name);
+		public static bool IsMonoPrime(string? @namespace, string? name)
 		{
 			if (IsMonoBehaviour(@namespace, name))
 			{
@@ -678,144 +452,33 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			return false;
 		}
 
-		public static bool IsBuiltinGeneric(TypeReference type) => IsBuiltinGeneric(type.Namespace, type.Name);
-		public static bool IsBuiltinGeneric(string @namespace, string name)
+		public static bool IsBuiltinGeneric(ITypeDefOrRef type) => IsBuiltinGeneric(type.Namespace, type.Name);
+		public static bool IsBuiltinGeneric(string? @namespace, string? name)
 		{
 			return IsList(@namespace, name) || IsExposedReference(@namespace, name);
 		}
 		#endregion
 
 		#region Helpers
-		public static bool IsSerializablePrimitive_EType(TypeReference type)
+		public static PrimitiveType ToPrimitiveType(ITypeDefOrRef? type)
 		{
-			switch (type.GetEType())
-			{
-				case ElementType.Boolean:
-				case ElementType.Char:
-				case ElementType.I1:
-				case ElementType.U1:
-				case ElementType.I2:
-				case ElementType.U2:
-				case ElementType.I4:
-				case ElementType.U4:
-				case ElementType.I8:
-				case ElementType.U8:
-				case ElementType.R4:
-				case ElementType.R8:
-				case ElementType.String:
-					return true;
-				default:
-					return false;
-			}
-		}
-
-		public static bool IsSerializableArray(TypeReference type)
-		{
-			return type.IsArray || IsList(type);
-		}
-
-		public static bool IsSerializableGeneric(TypeReference type, IReadOnlyDictionary<GenericParameter, TypeReference> arguments)
-		{
-			if (type.IsGenericInstance)
-			{
-				if (IsBuiltinGeneric(type))
-				{
-					return true;
-				}
-
-				TypeDefinition definition = type.Resolve();
-				if (definition.IsEnum)
-				{
-					return true;
-				}
-
-				if (definition.IsSerializable && type is GenericInstanceType git)
-				{
-					bool allSerializableArgs = git.GenericArguments.All(t =>
-					{
-						if (t is GenericParameter p && arguments.TryGetValue(p, out TypeReference? resolved))
-						{
-							t = resolved;
-						}
-
-						if (t.IsGenericInstance)
-						{
-							return IsSerializableGeneric(t, arguments);
-						}
-
-						TypeDefinition resolvedType = t.Resolve();
-
-						if (resolvedType == null)
-						{
-							return false;
-						}
-
-						if (resolvedType.IsSerializable)
-						{
-							return true;
-						}
-
-						if (resolvedType.BaseType?.Resolve()?.IsSerializable == true)
-						{
-							return true;
-						}
-
-						return false;
-					});
-
-					return allSerializableArgs;
-				}
-			}
-			return false;
-		}
-
-		public static bool IsMonoDerived(TypeReference type)
-		{
-			while (type != null)
-			{
-				if (IsMonoPrime(type))
-				{
-					return true;
-				}
-
-				TypeDefinition definition = type.Resolve();
-				type = definition.BaseType;
-			}
-			return false;
-		}
-
-		public static bool HasSerializeFieldAttribute(FieldDefinition field)
-		{
-			foreach (CustomAttribute attribute in field.CustomAttributes)
-			{
-				TypeReference type = attribute.AttributeType;
-				if (IsSerializeFieldAttrribute(type.Namespace, type.Name))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		public static PrimitiveType ToPrimitiveType(TypeReference type)
-		{
-			TypeDefinition definition = type.Resolve();
-			if (definition.IsEnum)
+			TypeDefinition? definition = type?.Resolve();
+			if (definition?.IsEnum ?? false)
 			{
 				foreach (FieldDefinition field in definition.Fields)
 				{
 					if (field.Name == EnumValueFieldName)
 					{
-						type = field.FieldType;
+						type = field.Signature?.FieldType.ToTypeDefOrRef().Resolve();
 						break;
 					}
 				}
 			}
 
-			return ToPrimitiveType(type.Namespace, type.Name);
+			return ToPrimitiveType(type?.Namespace, type?.Name);
 		}
 
-		public static PrimitiveType ToPrimitiveType(string @namespace, string name)
+		public static PrimitiveType ToPrimitiveType(string? @namespace, string? name)
 		{
 			if (@namespace == SystemNamespace)
 			{
@@ -840,224 +503,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 				};
 			}
 			return PrimitiveType.Complex;
-		}
-
-		public static bool IsCompilerGenerated(TypeDefinition type)
-		{
-			foreach (CustomAttribute attr in type.CustomAttributes)
-			{
-				if (IsCompilerGeneratedAttrribute(attr.AttributeType.Namespace, attr.AttributeType.Name))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		public static bool IsCompilerGenerated(FieldDefinition field)
-		{
-			foreach (CustomAttribute attr in field.CustomAttributes)
-			{
-				if (IsCompilerGeneratedAttrribute(attr.AttributeType.Namespace, attr.AttributeType.Name))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-		#endregion
-
-		#region Serialization
-		public static bool IsSerializable(in MonoFieldContext context)
-		{
-			if (IsSerializableModifier(context.Definition))
-			{
-				return IsFieldTypeSerializable(context);
-			}
-			return false;
-		}
-
-		public static bool IsSerializableModifier(FieldDefinition field)
-		{
-			if (field.HasConstant)
-			{
-				return false;
-			}
-			else if (field.IsStatic)
-			{
-				return false;
-			}
-			else if (field.IsInitOnly)
-			{
-				return false;
-			}
-			else if (IsCompilerGenerated(field))
-			{
-				return false;
-			}
-			else if (field.IsPublic)
-			{
-				if (field.IsNotSerialized)
-				{
-					return false;
-				}
-				return true;
-			}
-			else
-			{
-				return HasSerializeFieldAttribute(field);
-			}
-		}
-
-		public static bool IsFieldTypeSerializable(in MonoFieldContext context)
-		{
-			TypeReference fieldType = context.ElementType;
-
-			// if it's generic parameter then get its real type
-			if (fieldType.IsGenericParameter)
-			{
-				GenericParameter parameter = (GenericParameter)fieldType;
-				fieldType = context.Arguments?[parameter] ?? throw new Exception();
-			}
-
-			if (fieldType.IsArray)
-			{
-				ArrayType array = (ArrayType)fieldType;
-				// one dimention array only
-				if (!array.IsVector)
-				{
-					return false;
-				}
-
-				// if it's generic parameter then get its real type
-				TypeReference elementType = array.ElementType;
-				if (elementType.IsGenericParameter)
-				{
-					GenericParameter parameter = (GenericParameter)elementType;
-					elementType = context.Arguments?[parameter] ?? throw new Exception();
-				}
-
-				// array of arrays isn't serializable
-				if (elementType.IsArray)
-				{
-					return false;
-				}
-				// array of serializable generics is serializable
-				if (IsSerializableGeneric(elementType, context.Arguments ?? throw new Exception()))
-				{
-					return true;
-				}
-				// check if array element is serializable
-				MonoFieldContext elementScope = new MonoFieldContext(context, elementType, true);
-				return IsFieldTypeSerializable(elementScope);
-			}
-
-			if (IsList(fieldType))
-			{
-				// list is serialized same way as array, so check its argument
-				GenericInstanceType list = (GenericInstanceType)fieldType;
-				TypeReference listElement = list.GenericArguments[0];
-
-				// if it's generic parameter then get its real type
-				if (listElement.IsGenericParameter)
-				{
-					GenericParameter parameter = (GenericParameter)listElement;
-					listElement = context.Arguments?[parameter] ?? throw new Exception();
-				}
-
-				// list of arrays isn't serializable
-				if (listElement.IsArray)
-				{
-					return false;
-				}
-				// list of buildin generics isn't serializable
-				if (IsBuiltinGeneric(listElement))
-				{
-					return false;
-				}
-				// check if list element is serializable
-				MonoFieldContext elementScope = new MonoFieldContext(context, listElement, true);
-				return IsFieldTypeSerializable(elementScope);
-			}
-
-			if (IsSerializablePrimitive_EType(fieldType))
-			{
-				return true;
-			}
-			if (IsObject(fieldType))
-			{
-				return false;
-			}
-
-			if (IsEngineStruct(fieldType))
-			{
-				return true;
-			}
-			if (fieldType.IsGenericInstance)
-			{
-				// even monobehaviour derived generic instances aren't serialiable
-				return IsSerializableGeneric(fieldType, context.Arguments ?? throw new Exception());
-			}
-			if (IsMonoDerived(fieldType))
-			{
-				if (fieldType.ContainsGenericParameter)
-				{
-					return false;
-				}
-				return true;
-			}
-
-			if (IsRecursive(context.DeclaringType, fieldType))
-			{
-				return context.IsArray;
-			}
-
-			TypeDefinition definition = fieldType.Resolve();
-			if (definition.IsInterface)
-			{
-				return false;
-			}
-			if (definition.IsAbstract)
-			{
-				return false;
-			}
-			if (IsCompilerGenerated(definition))
-			{
-				return false;
-			}
-			if (definition.IsEnum)
-			{
-				return true;
-			}
-			if (definition.IsSerializable)
-			{
-				if (IsFrameworkLibrary(GetModuleName(definition)))
-				{
-					return false;
-				}
-				if (definition.IsValueType && !context.IsStructSerializable)
-				{
-					return false;
-				}
-				return true;
-			}
-
-			return false;
-		}
-
-		private static bool IsRecursive(TypeReference declaringType, TypeReference fieldType)
-		{
-			// "built in" primitive .NET types are placed into itself... it is so stupid
-			// field.FieldType.IsPrimitive || MonoType.IsString(field.FieldType) || MonoType.IsEnginePointer(field.FieldType) => return false
-			if (IsDelegate(fieldType))
-			{
-				return false;
-			}
-			if (declaringType == fieldType)
-			{
-				return true;
-			}
-			return false;
 		}
 		#endregion
 	}

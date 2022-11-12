@@ -31,7 +31,8 @@ namespace AssetRipper.SerializationLogic
 
 		public static bool IsGenericList(ITypeDescriptor type)
 		{
-			return type.Name == "List`1" && type.SafeNamespace() == "System.Collections.Generic";
+			return (type.ToTypeSignature() as GenericInstanceTypeSignature)?.GenericType.Name == "List`1"
+				&& type.SafeNamespace() == "System.Collections.Generic";
 		}
 
 		public static bool IsGenericDictionary(ITypeDescriptor type)
@@ -61,7 +62,7 @@ namespace AssetRipper.SerializationLogic
 				return ((GenericInstanceTypeSignature)type).TypeArguments.Single();
 			}
 
-			throw new ArgumentException("", nameof(type));
+			throw new ArgumentException(null, nameof(type));
 		}
 	}
 }

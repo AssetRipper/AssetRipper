@@ -1,4 +1,5 @@
-﻿using AssetRipper.Assets;
+﻿using AsmResolver.DotNet;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Core.Configuration;
@@ -11,7 +12,6 @@ using AssetRipper.IO.Files;
 using AssetRipper.Library.Configuration;
 using AssetRipper.Library.Exporters.Scripts.AssemblyDefinitions;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
-using Mono.Cecil;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -82,17 +82,18 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 				foreach (AssemblyDefinition assembly in AssemblyManager.GetAssemblies())
 				{
-					if (ReferenceAssemblies.IsReferenceAssembly(assembly.Name.Name))
+					string assemblyName = assembly.Name!;
+					if (ReferenceAssemblies.IsReferenceAssembly(assemblyName))
 					{
 						continue;
 					}
 
-					Logger.Info(LogCategory.Export, $"Decompiling {assembly.Name.Name}");
-					string outputDirectory = Path.Combine(dirPath, assembly.Name.Name);
+					Logger.Info(LogCategory.Export, $"Decompiling {assemblyName}");
+					string outputDirectory = Path.Combine(dirPath, assemblyName);
 					Directory.CreateDirectory(outputDirectory);
 					Decompiler.DecompileWholeProject(assembly, outputDirectory);
 
-					assemblyDefinitionDetailsDictionary.TryAdd(assembly.Name.Name, new AssemblyDefinitionDetails(assembly, outputDirectory));
+					assemblyDefinitionDetailsDictionary.TryAdd(assemblyName, new AssemblyDefinitionDetails(assembly, outputDirectory));
 				}
 			}
 

@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+﻿using AsmResolver.DotNet;
 using System.IO;
 using System.Text.Json;
 
@@ -11,11 +11,12 @@ namespace AssetRipper.Library.Exporters.Scripts.AssemblyDefinitions
 			string assetPath = Path.Combine(details.OutputFolder, $"{details.AssemblyName}.asmdef");
 
 			AssemblyDefinitionAsset asset = new AssemblyDefinitionAsset(details.AssemblyName);
-			if (details.Assembly is not null)
+			ModuleDefinition? module = details.Assembly?.ManifestModule;
+			if (module is not null)
 			{
-				foreach (AssemblyNameReference reference in details.Assembly.MainModule.AssemblyReferences)
+				foreach (AssemblyReference reference in module.AssemblyReferences)
 				{
-					if (ReferenceAssemblies.IsReferenceAssembly(reference.Name))
+					if (reference.Name is null || ReferenceAssemblies.IsReferenceAssembly(reference.Name))
 					{
 						continue;
 					}

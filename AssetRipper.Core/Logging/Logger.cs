@@ -16,10 +16,10 @@ namespace AssetRipper.Core.Logging
 
 		static Logger()
 		{
-			Cpp2IL.Core.Logger.InfoLog += (string message, string source) => LogCpp2IL(LogType.Info, message);
-			Cpp2IL.Core.Logger.WarningLog += (string message, string source) => LogCpp2IL(LogType.Verbose, message);
-			Cpp2IL.Core.Logger.ErrorLog += (string message, string source) => LogCpp2IL(LogType.Error, message);
-			Cpp2IL.Core.Logger.VerboseLog += (string message, string source) => LogCpp2IL(LogType.Verbose, message);
+			Cpp2IL.Core.Logging.Logger.InfoLog += (string message, string source) => LogCpp2IL(LogType.Info, message);
+			Cpp2IL.Core.Logging.Logger.WarningLog += (string message, string source) => LogCpp2IL(LogType.Verbose, message);
+			Cpp2IL.Core.Logging.Logger.ErrorLog += (string message, string source) => LogCpp2IL(LogType.Error, message);
+			Cpp2IL.Core.Logging.Logger.VerboseLog += (string message, string source) => LogCpp2IL(LogType.Verbose, message);
 		}
 
 		private static void LogCpp2IL(LogType logType, string message)
@@ -187,5 +187,23 @@ namespace AssetRipper.Core.Logging
 		public static void Clear() => loggers.Clear();
 
 		public static void SendStatusChange(string newStatus, object? context = null) => OnStatusChanged(newStatus, context);
+	}
+	public enum UnityVersionType : byte
+	{
+		Experimental = 0x40,
+		Alpha = 0x60,
+		Beta = 0x80,
+		Final = 0xA0,
+		Patch = 0xC0,
+	}
+	public enum UnityBranch : byte
+	{
+		China = 0x2,//Maybe reversed with Global
+		Global = 0x8,
+	}
+	public enum UnityVersionFlags : byte
+	{
+		BranchMask = 0x0F,
+		TypeMask = 0xF0,
 	}
 }

@@ -31,5 +31,11 @@ namespace AssetRipper.Core.Extensions
 			}
 			return value;
 		}
+
+		public static TValue? TryGetValue<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> _this, TKey key) where TKey : notnull
+		{
+			_this.TryGetValue(key, out TValue? value);
+			return value;
+		}
 	}
 }

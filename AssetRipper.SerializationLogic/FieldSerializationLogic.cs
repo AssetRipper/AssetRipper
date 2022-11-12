@@ -269,7 +269,7 @@ namespace AssetRipper.SerializationLogic
 			return false;
 		}
 
-		private static bool IsTypeSerializable(ITypeDescriptor typeReference)
+		public static bool IsTypeSerializable(ITypeDescriptor typeReference)
 		{
 			if (typeReference.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature && corLibTypeSignature.ElementType == ElementType.String)
 			{

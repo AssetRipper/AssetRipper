@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Configuration;
+﻿using AsmResolver.DotNet;
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Library.Exporters.Scripts.Transforms;
 using ICSharpCode.Decompiler.CSharp;
-using Mono.Cecil;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {
@@ -15,8 +15,6 @@ namespace AssetRipper.Library.Exporters.Scripts
 		public ScriptingBackend ScriptingBackend { get; set; } = ScriptingBackend.Unknown;
 
 		public ScriptDecompiler(IAssemblyManager assemblyManager) : this(new CecilAssemblyResolver(assemblyManager), assemblyManager.ScriptingBackend) { }
-		public ScriptDecompiler(AssemblyDefinition assembly, ScriptingBackend scriptingBackend) : this(new CecilAssemblyResolver(assembly), scriptingBackend) { }
-		public ScriptDecompiler(AssemblyDefinition[] assemblies, ScriptingBackend scriptingBackend) : this(new CecilAssemblyResolver(assemblies), scriptingBackend) { }
 		private ScriptDecompiler(CecilAssemblyResolver cecilAssemblyResolver, ScriptingBackend scriptingBackend)
 		{
 			assemblyResolver = cecilAssemblyResolver;

@@ -1,11 +1,11 @@
-﻿using AssetRipper.Core.Classes.Misc;
+﻿using AsmResolver.DotNet;
+using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
-using Mono.Cecil;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {

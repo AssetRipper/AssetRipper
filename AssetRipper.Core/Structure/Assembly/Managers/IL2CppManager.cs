@@ -1,20 +1,46 @@
+using AsmResolver.DotNet;
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
-using Mono.Cecil;
+using Cpp2IL.Core.Api;
+using Cpp2IL.Core.CorePlugin;
+using Cpp2IL.Core.Model.Contexts;
+using LibCpp2IL;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Cpp2IlApi = Cpp2IL.Core.Cpp2IlApi;
 
 namespace AssetRipper.Core.Structure.Assembly.Managers
 {
 	public sealed class IL2CppManager : BaseManager
 	{
+		static IL2CppManager()
+		{
+			InstructionSetRegistry.RegisterInstructionSet<X86InstructionSet>(DefaultInstructionSets.X86_32);
+			InstructionSetRegistry.RegisterInstructionSet<X86InstructionSet>(DefaultInstructionSets.X86_64);
+			InstructionSetRegistry.RegisterInstructionSet<WasmInstructionSet>(DefaultInstructionSets.WASM);
+			InstructionSetRegistry.RegisterInstructionSet<ArmV7InstructionSet>(DefaultInstructionSets.ARM_V7);
+			bool useNewArm64 = true;
+			if (useNewArm64)
+			{
+				InstructionSetRegistry.RegisterInstructionSet<NewArmV8InstructionSet>(DefaultInstructionSets.ARM_V8);
+			}
+			else
+			{
+				InstructionSetRegistry.RegisterInstructionSet<Arm64InstructionSet>(DefaultInstructionSets.ARM_V8);
+			}
+
+			LibCpp2IlBinaryRegistry.RegisterBuiltInBinarySupport();
+		}
+
 		public string? GameAssemblyPath { get; private set; }
 		public string? UnityPlayerPath { get; private set; }
 		public string? GameDataPath { get; private set; }
 		public string? MetaDataPath { get; private set; }
-		public int[]? UnityVersion { get; private set; }
+		public UnityVersion UnityVersion { get; private set; }
+		/// <summary>
+		/// For when analysis is reimplimented in Cpp2IL.
+		/// </summary>
 		private readonly ScriptContentLevel contentLevel;
 
 		public IL2CppManager(Action<string> requestAssemblyCallback, ScriptContentLevel level) : base(requestAssemblyCallback)
@@ -37,22 +63,22 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			UnityPlayerPath = gameStructure.UnityPlayerPath;
 			MetaDataPath = gameStructure.Il2CppMetaDataPath;
 
-			if (gameStructure.Version != null)
+			if (gameStructure.Version is not null)
 			{
-				UnityVersion = gameStructure.Version;
+				UnityVersion = new UnityVersion((ushort)gameStructure.Version[0], (ushort)gameStructure.Version[1], (ushort)gameStructure.Version[2]);
 			}
 			else
 			{
 				UnityVersion = Cpp2IlApi.DetermineUnityVersion(UnityPlayerPath!, GameDataPath);
 			}
 
-			if (UnityVersion == null)
+			if (UnityVersion == default)
 			{
 				throw new NullReferenceException("Could not determine the unity version");
 			}
 			else
 			{
-				Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {MakeVersionString(UnityVersion)}");
+				Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found Unity version: {UnityVersion}");
 			}
 
 			Logger.SendStatusChange("loading_step_parse_il2cpp_metadata");
@@ -61,37 +87,34 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 			Logger.SendStatusChange("loading_step_generate_dummy_dll");
 
-			Cpp2IlApi.MakeDummyDLLs(true);
-
-			LibCpp2IL.InstructionSet instructionSet = LibCpp2IL.LibCpp2IlMain.Binary?.InstructionSet ?? throw new Exception("Null binary");
-			Logger.Info(LogCategory.Import, $"During Il2Cpp initialization, found {instructionSet} instruction set.");
-
-			Cpp2IL.Core.BaseKeyFunctionAddresses? keyFunctionAddresses = null;
-			if (IsAddressScanSupported(instructionSet))
+			List<Cpp2IlProcessingLayer> processingLayers = new()
 			{
-				Logger.SendStatusChange("loading_step_locate_key_functions");
-				keyFunctionAddresses = Cpp2IlApi.ScanForKeyFunctionAddresses();
+				new AttributeAnalysisProcessingLayer(),
+				new AttributeInjectorProcessingLayer(),
+			};
+
+			foreach (Cpp2IlProcessingLayer cpp2IlProcessingLayer in processingLayers)
+			{
+				cpp2IlProcessingLayer.PreProcess(GetCurrentAppContext(), processingLayers);
 			}
 
-			if (IsAttributeRestorationSupported(instructionSet))
+			foreach (Cpp2IlProcessingLayer cpp2IlProcessingLayer in processingLayers)
 			{
-				Logger.SendStatusChange("loading_step_restore_attributes");
-				Cpp2IlApi.RunAttributeRestorationForAllAssemblies(keyFunctionAddresses);
+				cpp2IlProcessingLayer.Process(GetCurrentAppContext());
 			}
 
-			if (contentLevel >= ScriptContentLevel.Level3)
-			{
-				bool unsafeAnalysis = contentLevel == ScriptContentLevel.Level4;
-				foreach (AssemblyDefinition assembly in Cpp2IlApi.GeneratedAssemblies)
-				{
-					Cpp2IlApi.AnalyseAssembly(Cpp2IL.Core.AnalysisLevel.IL_ONLY, assembly, keyFunctionAddresses!, null, true, unsafeAnalysis);
-				}
-			}
+			List<AssemblyDefinition> assemblies = new AsmResolverDummyDllOutputFormat().BuildAssemblies(GetCurrentAppContext());
 
-			foreach (AssemblyDefinition assembly in Cpp2IlApi.GeneratedAssemblies)
+			foreach (AssemblyDefinition assembly in assemblies)
 			{
-				m_assemblies.Add(assembly.Name.Name, assembly);
+				assembly.InitializeResolvers(this);
+				m_assemblies.Add(assembly.Name ?? throw new NullReferenceException(), assembly);
 			}
+		}
+
+		private static ApplicationAnalysisContext GetCurrentAppContext()
+		{
+			return Cpp2IlApi.CurrentAppContext ?? throw new NullReferenceException();
 		}
 
 		public override void Load(string filePath)
@@ -103,45 +126,6 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		{
 			throw new NotSupportedException();
 		}
-
-		private static string MakeVersionString(int[] version)
-		{
-			if (version == null || version.Length == 0)
-			{
-				return "";
-			}
-
-			StringBuilder builder = new StringBuilder();
-			builder.Append(version[0]);
-			for (int i = 1; i < version.Length; i++)
-			{
-				builder.Append('.');
-				builder.Append(version[i]);
-			}
-			return builder.ToString();
-		}
-
-		private static bool IsAddressScanSupported(LibCpp2IL.InstructionSet set) => set switch
-		{
-			LibCpp2IL.InstructionSet.X86_32 => true,
-			LibCpp2IL.InstructionSet.X86_64 => true,
-			LibCpp2IL.InstructionSet.ARM64 => true,
-			_ => false,
-		};
-
-		private static bool IsAttributeRestorationSupported(LibCpp2IL.InstructionSet set) => set switch
-		{
-			LibCpp2IL.InstructionSet.X86_32 => true,
-			LibCpp2IL.InstructionSet.X86_64 => true,
-			LibCpp2IL.InstructionSet.WASM => true,
-
-			//Arm32 and Arm64 were excluded before for performance reasons.
-			//However, the community requested that they be enabled anyway.
-			LibCpp2IL.InstructionSet.ARM32 => true,
-			LibCpp2IL.InstructionSet.ARM64 => true,
-
-			_ => false,
-		};
 
 		~IL2CppManager()
 		{

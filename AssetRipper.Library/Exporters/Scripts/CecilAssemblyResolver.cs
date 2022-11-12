@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Logging;
+﻿using AsmResolver.DotNet;
+using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using ICSharpCode.Decompiler.Metadata;
-using Mono.Cecil;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
@@ -28,39 +28,18 @@ namespace AssetRipper.Library.Exporters.Scripts
 		/// </remarks>
 		private readonly ConcurrentDictionary<string, PEFile> peAssemblies = new();
 		private readonly UniversalAssemblyResolver backupResolver = new UniversalAssemblyResolver(null, false, null);
-		public CecilAssemblyResolver(IAssemblyManager manager) : this(manager.GetAssemblies()) { }
-		public CecilAssemblyResolver(ReadOnlySpan<AssemblyDefinition> assemblies)
+		public CecilAssemblyResolver(IAssemblyManager manager)
 		{
-			foreach (AssemblyDefinition assembly in assemblies)
+			foreach (AssemblyDefinition assembly in manager.GetAssemblies())
 			{
-				PEFile peFile = CreatePEFile(assembly);
-				if (!peAssemblies.TryAdd(assembly.Name.Name, peFile))
+				Stream stream = manager.GetStreamForAssembly(assembly);
+				stream.Position = 0;
+				PEFile peFile = new PEFile(assembly.Name!, stream);
+				if (!peAssemblies.TryAdd(assembly.Name!, peFile))
 				{
-					throw new Exception($"Could not add pe assembly: {assembly.Name.Name} to name dictionary!");
+					throw new Exception($"Could not add pe assembly: {assembly.Name} to name dictionary!");
 				}
 			}
-		}
-		public CecilAssemblyResolver(AssemblyDefinition loneAssembly)
-		{
-			PEFile peFile = CreatePEFile(loneAssembly);
-			if (!peAssemblies.TryAdd(loneAssembly.Name.Name, peFile))
-			{
-				throw new Exception($"Could not add pe assembly: {loneAssembly.Name.Name} to name dictionary!");
-			}
-		}
-
-		private static PEFile CreatePEFile(AssemblyDefinition assembly)
-		{
-			if (assembly == null)
-			{
-				throw new ArgumentNullException(nameof(assembly));
-			}
-
-			MemoryStream memoryStream = new MemoryStream();
-			assembly.Write(memoryStream);
-			memoryStream.Position = 0;
-
-			return new PEFile(assembly.Name.Name, memoryStream);
 		}
 
 		public PEFile? Resolve(IAssemblyReference reference)
@@ -81,7 +60,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			}
 		}
 
-		public PEFile Resolve(AssemblyDefinition assembly) => peAssemblies[assembly.Name.Name];
+		public PEFile Resolve(AssemblyDefinition assembly) => peAssemblies[assembly.Name!];
 
 		public Task<PEFile?> ResolveAsync(IAssemblyReference reference)
 		{

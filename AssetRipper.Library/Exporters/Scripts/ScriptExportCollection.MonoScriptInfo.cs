@@ -5,7 +5,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 {
 	public partial class ScriptExportCollection
 	{
-		private struct MonoScriptInfo : IEquatable<MonoScriptInfo>
+		private readonly struct MonoScriptInfo : IEquatable<MonoScriptInfo>
 		{
 			public readonly string @class;
 			public readonly string @namespace;

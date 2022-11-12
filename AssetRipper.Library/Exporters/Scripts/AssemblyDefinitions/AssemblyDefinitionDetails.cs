@@ -1,4 +1,4 @@
-﻿using Mono.Cecil;
+﻿using AsmResolver.DotNet;
 using System.Collections.Generic;
 
 namespace AssetRipper.Library.Exporters.Scripts.AssemblyDefinitions
@@ -11,7 +11,7 @@ namespace AssetRipper.Library.Exporters.Scripts.AssemblyDefinitions
 
 		public AssemblyDefinitionDetails(AssemblyDefinition assembly, string outputFolder)
 		{
-			AssemblyName = assembly.Name.Name;
+			AssemblyName = assembly.Name!;
 			OutputFolder = outputFolder;
 			Assembly = assembly;
 		}

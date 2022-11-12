@@ -1,5 +1,6 @@
-﻿using AssetRipper.Core.Logging;
-using Mono.Cecil;
+﻿using AsmResolver.DotNet;
+using AssetRipper.Core.Logging;
+using AssetRipper.Core.Structure.Assembly.Managers;
 using System.IO;
 
 namespace AssetRipper.Library.Exporters.Scripts
@@ -11,19 +12,23 @@ namespace AssetRipper.Library.Exporters.Scripts
 			string outputDirectory = Path.Combine(ripper.Settings.AuxiliaryFilesPath, "GameAssemblies");
 
 			Logger.Info(LogCategory.Export, "Saving game assemblies...");
-			AssemblyDefinition[] assemblies = ripper.GameStructure.AssemblyManager.GetAssemblies();
+			IAssemblyManager assemblyManager = ripper.GameStructure.AssemblyManager;
+			AssemblyDefinition[] assemblies = assemblyManager.GetAssemblies();
 			if (assemblies.Length != 0)
 			{
 				Directory.CreateDirectory(outputDirectory);
 				foreach (AssemblyDefinition? assembly in assemblies)
 				{
-					string filepath = Path.Combine(outputDirectory, assembly.Name.Name);
+					string filepath = Path.Combine(outputDirectory, assembly.Name!);
 					if (!filepath.EndsWith(".dll"))
 					{
 						filepath += ".dll";
 					}
 
-					assembly.Write(filepath);
+					Stream readStream = assemblyManager.GetStreamForAssembly(assembly);
+					using FileStream writeStream = File.Create(filepath);
+					readStream.Position = 0;
+					readStream.CopyTo(writeStream);
 				}
 			}
 		}

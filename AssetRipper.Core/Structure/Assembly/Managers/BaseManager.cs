@@ -1,8 +1,9 @@
-﻿using AssetRipper.Core.Structure.Assembly.Mono;
+﻿using AsmResolver.DotNet;
+using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.Core.Structure.GameStructure.Platforms;
 using AssetRipper.IO.Files.Utils;
-using Mono.Cecil;
+using AssetRipper.SerializationLogic;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -10,20 +11,25 @@ using System.Linq;
 
 namespace AssetRipper.Core.Structure.Assembly.Managers
 {
-	public class BaseManager : IAssemblyManager, IAssemblyResolver
+
+	public partial class BaseManager : IAssemblyManager
 	{
 		public bool IsSet => ScriptingBackend != ScriptingBackend.Unknown;
 		public virtual ScriptingBackend ScriptingBackend => ScriptingBackend.Unknown;
 
 		protected readonly Dictionary<string, AssemblyDefinition?> m_assemblies = new();
+		protected readonly Dictionary<AssemblyDefinition, Stream> m_assemblyStreams = new();
 		protected readonly Dictionary<string, bool> m_validTypes = new();
 
 		private event Action<string> m_requestAssemblyCallback;
 		private readonly Dictionary<string, SerializableType> m_serializableTypes = new();
+		private readonly Resolver assemblyResolver;
+		public IAssemblyResolver AssemblyResolver => assemblyResolver;
 
 		public BaseManager(Action<string> requestAssemblyCallback)
 		{
 			m_requestAssemblyCallback = requestAssemblyCallback ?? throw new ArgumentNullException(nameof(requestAssemblyCallback));
+			assemblyResolver = new Resolver(this);
 		}
 
 		public virtual void Initialize(PlatformGameStructure gameStructure) { }
@@ -37,46 +43,61 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			return scopeName;
 		}
 
-		protected static string GetUniqueName(TypeReference type)
+		protected static string GetUniqueName(ITypeDefOrRef type)
 		{
-			string assembly = FilenameUtils.FixAssemblyEndian(type.Scope.Name);
+			string assembly = FilenameUtils.FixAssemblyEndian(type.Scope?.Name ?? "");
 			return ScriptIdentifier.ToUniqueName(assembly, type.FullName);
 		}
 
 		public virtual void Load(string filePath)
 		{
-			ReaderParameters parameters = new ReaderParameters(ReadingMode.Deferred)
-			{
-				InMemory = false,
-				ReadWrite = false,
-				AssemblyResolver = this,
-			};
 			AssemblyDefinition assembly;
 			try
 			{
-				assembly = AssemblyDefinition.ReadAssembly(filePath, parameters);
+				assembly = AssemblyDefinition.FromFile(filePath);
 			}
 			catch (BadImageFormatException badImageFormatException)
 			{
 				throw new BadImageFormatException($"Could not read {filePath}", badImageFormatException);
 			}
+			assembly.InitializeResolvers(this);
 			string fileName = Path.GetFileNameWithoutExtension(filePath);
-			string assemblyName = ToAssemblyName(assembly.Name.Name);
+			string assemblyName = ToAssemblyName(assembly);
 			m_assemblies.Add(fileName, assembly);
 			m_assemblies[assemblyName] = assembly;
+			FileStream stream = File.OpenRead(filePath);
+			m_assemblyStreams.Add(assembly, stream);
+		}
+
+		public Stream GetStreamForAssembly(AssemblyDefinition assembly)
+		{
+			if (m_assemblyStreams.TryGetValue(assembly, out Stream? result))
+			{
+				return result;
+			}
+			else
+			{
+				MemoryStream memoryStream = new();
+				assembly.WriteManifest(memoryStream);
+				m_assemblyStreams.Add(assembly, memoryStream);
+				return memoryStream;
+			}
+		}
+
+		private static string ToAssemblyName(AssemblyDefinition assembly)
+		{
+			return ToAssemblyName(assembly.Name?.ToString() ?? "");
 		}
 
 		public virtual void Read(Stream stream, string fileName)
 		{
-			ReaderParameters parameters = new ReaderParameters(ReadingMode.Immediate)
-			{
-				InMemory = true,
-				ReadWrite = false,
-				AssemblyResolver = this,
-			};
-			AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(stream, parameters);
+			MemoryStream memoryStream = new();
+			stream.CopyTo(memoryStream);
+			AssemblyDefinition assembly = AssemblyDefinition.FromBytes(memoryStream.ToArray());
+			//AssemblyDefinition assembly = AssemblyDefinition.FromImage(stream);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			assembly.InitializeResolvers(this);
 			fileName = Path.GetFileNameWithoutExtension(fileName);
-			string assemblyName = ToAssemblyName(assembly.Name.Name);
+			string assemblyName = ToAssemblyName(assembly);
 			m_assemblies.Add(fileName, assembly);
 			m_assemblies[assemblyName] = assembly;
 		}
@@ -85,8 +106,12 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		{
 			if (m_assemblies.TryGetValue(fileName, out AssemblyDefinition? assembly))
 			{
-				assembly?.Dispose();
 				m_assemblies.Remove(fileName);
+				if (assembly is not null && m_assemblyStreams.TryGetValue(assembly, out Stream? stream))
+				{
+					m_assemblyStreams.Remove(assembly);
+					stream.Dispose();
+				}
 			}
 		}
 
@@ -135,28 +160,12 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 				return false;
 			}
 
-			MonoTypeContext context = new MonoTypeContext(type);
-			if (!IsTypeValid(context))
-			{
-				return false;
-			}
-
-			if (!IsInheritanceValid(type))
-			{
-				return false;
-			}
-
-			return true;
+			return FieldSerializationLogic.IsTypeSerializable(type);
 		}
 
 		public virtual TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID)
 		{
-			TypeDefinition? type = FindType(scriptID);
-			if (type == null)
-			{
-				throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
-			}
-			return type;
+			return FindType(scriptID) ?? throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
 		}
 
 		public virtual ScriptIdentifier GetScriptID(string assembly, string name)
@@ -171,7 +180,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			{
 				return default;
 			}
-			return new ScriptIdentifier(type.Scope.Name, type.Namespace, type.Name);
+			return new ScriptIdentifier(type.Module?.Name ?? "", type.Namespace ?? "", type.Name ?? "");
 		}
 
 		public virtual ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
@@ -186,18 +195,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			{
 				return default;
 			}
-			return new ScriptIdentifier(assembly, type.Namespace, type.Name);
-		}
-
-		public virtual AssemblyDefinition? Resolve(AssemblyNameReference assemblyReference)
-		{
-			string assemblyName = ToAssemblyName(assemblyReference.Name);
-			return FindAssembly(assemblyName);
-		}
-
-		public virtual AssemblyDefinition? Resolve(AssemblyNameReference name, ReaderParameters parameters)
-		{
-			return Resolve(name);
+			return new ScriptIdentifier(assembly, type.Namespace ?? "", type.Name ?? "");
 		}
 
 		public virtual SerializableType GetSerializableType(ScriptIdentifier scriptID, UnityVersion version)
@@ -212,32 +210,10 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			{
 				throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
 			}
-			return new MonoType(this, type, version);
+			return new MonoType(type);
 		}
 
-		public SerializableType GetSerializableType(MonoTypeContext context, UnityVersion version)
-		{
-			if (context.Type.ContainsGenericParameter)
-			{
-				throw new ArgumentException($"{context.Type.FullName} contains a geneneric parameter", nameof(context));
-			}
-			if (MonoUtils.IsSerializableArray(context.Type))
-			{
-				throw new ArgumentException($"{context.Type.FullName} is a serializable array", nameof(context));
-			}
-
-			string uniqueName = GetUniqueName(context.Type);
-			if (TryGetSerializableType(uniqueName, out SerializableType? serializableType))
-			{
-				return serializableType;
-			}
-			else
-			{
-				return new MonoType(this, context, version);
-			}
-		}
-
-		internal void AddSerializableType(TypeReference type, SerializableType scriptType)
+		internal void AddSerializableType(ITypeDefOrRef type, SerializableType scriptType)
 		{
 			string uniqueName = GetUniqueName(type);
 			AddSerializableType(uniqueName, scriptType);
@@ -278,7 +254,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 			foreach (ModuleDefinition module in definition.Modules)
 			{
-				foreach (TypeDefinition type in module.Types)
+				foreach (TypeDefinition type in module.TopLevelTypes)
 				{
 					if (type.Name == name)
 					{
@@ -299,7 +275,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 			foreach (ModuleDefinition module in definition.Modules)
 			{
-				TypeDefinition type = module.GetType(@namespace, name);
+				TypeDefinition? type = module.GetType(@namespace, name);
 				if (type != null)
 				{
 					return type;
@@ -311,120 +287,6 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 		protected TypeDefinition? FindType(ScriptIdentifier scriptID)
 		{
 			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name);
-		}
-
-		/// <summary>
-		/// Is it possible to properly restore serializable layout for specified type
-		/// </summary>
-		/// <param name="type">Type to check</param>
-		/// <param name="arguments">Generic arguments for checking type</param>
-		/// <returns>Is type valid for serialization</returns>
-		protected bool IsTypeValid(MonoTypeContext context)
-		{
-			if (context.Type.IsGenericParameter)
-			{
-				MonoTypeContext parameterContext = context.Resolve();
-				return IsTypeValid(parameterContext);
-			}
-			if (context.Type.IsArray)
-			{
-				ArrayType array = (ArrayType)context.Type;
-				MonoTypeContext arrayContext = new MonoTypeContext(array.ElementType, context);
-				return IsTypeValid(arrayContext);
-			}
-			if (MonoUtils.IsBuiltinGeneric(context.Type))
-			{
-				GenericInstanceType generic = (GenericInstanceType)context.Type;
-				TypeReference element = generic.GenericArguments[0];
-				MonoTypeContext genericContext = new MonoTypeContext(element, context);
-				return IsTypeValid(genericContext);
-			}
-
-			if (MonoUtils.IsPrime(context.Type))
-			{
-				return true;
-			}
-			if (context.Type.Module == null)
-			{
-				return false;
-			}
-
-			if (m_validTypes.TryGetValue(context.Type.FullName, out bool isValid))
-			{
-				return isValid;
-			}
-
-			// set value right here to prevent recursion
-			m_validTypes[context.Type.FullName] = true;
-
-			// Resolve method for generic instance returns template definition, so we need to check module for template first
-			if (context.Type.IsGenericInstance)
-			{
-				GenericInstanceType instance = (GenericInstanceType)context.Type;
-				if (instance.ElementType.Module == null)
-				{
-					m_validTypes[context.Type.FullName] = false;
-					return false;
-				}
-			}
-
-			TypeDefinition definition = context.Type.Resolve();
-			if (definition == null)
-			{
-				m_validTypes[context.Type.FullName] = false;
-				return false;
-			}
-			if (definition.IsInterface)
-			{
-				return true;
-			}
-
-			MonoTypeContext baseContext = context.GetBase();
-			if (!IsTypeValid(baseContext))
-			{
-				m_validTypes[context.Type.FullName] = false;
-				return false;
-			}
-
-			IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
-			foreach (FieldDefinition field in definition.Fields)
-			{
-				if (!MonoUtils.IsSerializableModifier(field))
-				{
-					continue;
-				}
-
-				MonoTypeContext fieldContext = new MonoTypeContext(field.FieldType, arguments);
-				if (!IsTypeValid(fieldContext))
-				{
-					m_validTypes[context.Type.FullName] = false;
-					return false;
-				}
-			}
-			return true;
-		}
-
-		protected bool IsInheritanceValid(TypeReference type)
-		{
-			while (type != null)
-			{
-				if (type.Module == null)
-				{
-					return false;
-				}
-				TypeDefinition definition = type.Resolve();
-				if (definition == null)
-				{
-					return false;
-				}
-
-				if (MonoUtils.IsMonoBehaviour(definition) || MonoUtils.IsScriptableObject(definition))
-				{
-					return true;
-				}
-				type = definition.BaseType;
-			}
-			return false;
 		}
 
 		public virtual AssemblyDefinition[] GetAssemblies()
@@ -440,13 +302,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		protected void Dispose(bool disposing)
 		{
-			foreach (AssemblyDefinition? assembly in m_assemblies.Values)
-			{
-				if (assembly != null)
-				{
-					assembly.Dispose();
-				}
-			}
+			
 		}
 
 		~BaseManager()
@@ -454,5 +310,23 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			Dispose(false);
 		}
 
+	}
+	internal static class ModuleExtensions
+	{
+		public static TypeDefinition? GetType(this ModuleDefinition module, string @namespace, string name)
+		{
+			return module.TopLevelTypes.FirstOrDefault(x => x.Namespace == @namespace && x.Name == name);
+		}
+		public static void SetResolver(this ModuleDefinition module, IAssemblyResolver assemblyResolver)
+		{
+			module.MetadataResolver = new DefaultMetadataResolver(assemblyResolver);
+		}
+		public static void InitializeResolvers(this AssemblyDefinition assembly, BaseManager assemblyManager)
+		{
+			for (int i = 0; i < assembly.Modules.Count; i++)
+			{
+				assembly.Modules[i].SetResolver(assemblyManager.AssemblyResolver);
+			}
+		}
 	}
 }

@@ -1,3 +1,6 @@
+using AsmResolver.DotNet.Signatures.Types;
+using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
+
 namespace AssetRipper.Core.Structure.Assembly
 {
 	public enum PrimitiveType
@@ -52,8 +55,51 @@ namespace AssetRipper.Core.Structure.Assembly
 					return -1;
 
 				default:
-					throw new NotImplementedException();
+					throw new NotSupportedException();
 			}
+		}
+
+		public static string ToSystemTypeName(this PrimitiveType _this)
+		{
+			return _this switch
+			{
+				PrimitiveType.Bool => nameof(Boolean),
+				PrimitiveType.Char => nameof(Char),
+				PrimitiveType.Byte => nameof(Byte),
+				PrimitiveType.SByte => nameof(SByte),
+				PrimitiveType.Short => nameof(Int16),
+				PrimitiveType.UShort => nameof(UInt16),
+				PrimitiveType.Half => nameof(Half),
+				PrimitiveType.Int => nameof(Int32),
+				PrimitiveType.UInt => nameof(UInt32),
+				PrimitiveType.Long => nameof(Int64),
+				PrimitiveType.ULong => nameof(UInt64),
+				PrimitiveType.Single => nameof(Single),
+				PrimitiveType.Double => nameof(Double),
+				PrimitiveType.String => nameof(String),
+				_ => throw new NotSupportedException(),
+			};
+		}
+
+		public static PrimitiveType ToPrimitiveType(this CorLibTypeSignature type)
+		{
+			return type.ElementType switch
+			{
+				ElementType.Boolean => PrimitiveType.Bool,
+				ElementType.Char => PrimitiveType.Char,
+				ElementType.I1 => PrimitiveType.SByte,
+				ElementType.U1 => PrimitiveType.Byte,
+				ElementType.I2 => PrimitiveType.Short,
+				ElementType.U2 => PrimitiveType.UShort,
+				ElementType.I4 => PrimitiveType.Int,
+				ElementType.U4 => PrimitiveType.UInt,
+				ElementType.I8 => PrimitiveType.Long,
+				ElementType.U8 => PrimitiveType.ULong,
+				ElementType.R4 => PrimitiveType.Single,
+				ElementType.R8 => PrimitiveType.Double,
+				ElementType.String => PrimitiveType.String,
+				_ => throw new NotSupportedException(),
+			};
 		}
 	}
 }

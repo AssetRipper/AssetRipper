@@ -1,83 +1,165 @@
-using AssetRipper.Core.Structure.Assembly.Managers;
+﻿using AsmResolver.DotNet;
+using AsmResolver.DotNet.Signatures.Types;
+using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 using AssetRipper.Core.Structure.Assembly.Serializable;
-using Mono.Cecil;
+using AssetRipper.SerializationLogic;
 using System.Collections.Generic;
-using static AssetRipper.Core.Structure.Assembly.Mono.MonoUtils;
+using System.Linq;
 
 namespace AssetRipper.Core.Structure.Assembly.Mono
 {
-	public sealed class MonoType : SerializableType
+	internal class MonoType : SerializableType
 	{
-		internal MonoType(BaseManager manager, TypeReference type, UnityVersion version) : this(manager, new MonoTypeContext(type), version) { }
+		//From the deleted MonoFieldContext: structs are only serializable on 4.5.0 and greater.
 
-		internal MonoType(BaseManager manager, MonoTypeContext context, UnityVersion version) : base(context.Type.Namespace, ToPrimitiveType(context.Type), MonoUtils.GetName(context.Type))
+		public MonoType(TypeDefinition typeDefinition) : base(typeDefinition.Namespace ?? "", PrimitiveType.Complex, typeDefinition.Name ?? "")
 		{
-			if (context.Type.ContainsGenericParameter)
+			List<Field> fields = new();
+			foreach (FieldDefinition fieldDefinition in GetFieldDefinitionsInTypeAndBase(typeDefinition))
 			{
-				throw new ArgumentException("Context type contains a generic parameter", nameof(context));
-			}
-			if (IsSerializableArray(context.Type))
-			{
-				throw new ArgumentException("Arrays are not valid Mono Types", nameof(context));
-			}
-
-			manager.AddSerializableType(context.Type, this);
-			Base = GetBaseType(manager, context, version);
-			Fields = CreateFields(manager, context, version);
-		}
-
-		private static SerializableType? GetBaseType(BaseManager manager, MonoTypeContext context, UnityVersion version)
-		{
-			MonoTypeContext baseContext = context.GetBase();
-			MonoTypeContext resolvedContext = baseContext.Resolve();
-			if (IsObject(resolvedContext.Type))
-			{
-				return null;
-			}
-			return manager.GetSerializableType(resolvedContext, version);
-		}
-
-		private static Field[] CreateFields(BaseManager manager, MonoTypeContext context, UnityVersion version)
-		{
-			List<Field> fields = new List<Field>();
-			TypeDefinition definition = context.Type.Resolve();
-			IReadOnlyDictionary<GenericParameter, TypeReference> arguments = context.GetContextArguments();
-			foreach (FieldDefinition field in definition.Fields)
-			{
-				MonoFieldContext fieldContext = new MonoFieldContext(field, arguments, version);
-				if (IsSerializable(fieldContext))
+				if (FieldSerializationLogic.WillUnitySerialize(fieldDefinition))
 				{
-					MonoTypeContext typeContext = new MonoTypeContext(field.FieldType, arguments);
-					MonoTypeContext resolvedContext = typeContext.Resolve();
-					int depth = 0;
-					MonoTypeContext serFieldContext = GetSerializedElementContext(resolvedContext, ref depth);
-					if (depth > 1)
-					{
-						continue;
-					}
-					SerializableType scriptType = manager.GetSerializableType(serFieldContext, version);
-					Field fieldStruc = new Field(scriptType, depth, field.Name);
-					fields.Add(fieldStruc);
+					fields.Add(MakeSerializableField(fieldDefinition));
 				}
 			}
-			return fields.ToArray();
+			Fields = fields;
 		}
 
-		private static MonoTypeContext GetSerializedElementContext(MonoTypeContext context, ref int depth)
+		private static Field MakeSerializableField(FieldDefinition fieldDefinition)
 		{
-			if (context.Type.IsArray)
+			return MakeSerializableField(
+				fieldDefinition.Name ?? throw new NullReferenceException(),
+				fieldDefinition.Signature?.FieldType ?? throw new NullReferenceException(),
+				0);
+		}
+
+		private static Field MakeSerializableField(string name, TypeSignature typeSignature, int arrayDepth)
+		{
+			switch(typeSignature)
 			{
-				ArrayType array = (ArrayType)context.Type;
-				depth++;
-				return GetSerializedElementContext(new MonoTypeContext(array.ElementType), ref depth);
-			}
-			if (IsList(context.Type))
+				case TypeDefOrRefSignature typeDefOrRefSignature:
+					TypeDefinition typeDefinition = typeDefOrRefSignature.ToTypeDefinition();
+					SerializableType fieldType;
+					if (typeDefinition.IsEnum)
+					{
+						TypeSignature enumValueType = typeDefinition.Fields.Single(f => !f.IsStatic).Signature!.FieldType;
+						PrimitiveType primitiveType = ((CorLibTypeSignature)enumValueType).ToPrimitiveType();
+						fieldType = new SerializablePrimitiveType(primitiveType);
+					}
+					else if (typeDefinition.InheritsFromObject())
+					{
+						fieldType = new SerializablePointerType();
+					}
+					else
+					{
+						fieldType = new MonoType(typeDefinition);
+					}
+
+					return new Field(fieldType, arrayDepth, name);
+
+				case CorLibTypeSignature corLibTypeSignature:
+					return new Field(new SerializablePrimitiveType(corLibTypeSignature.ElementType.ToPrimitiveType()), arrayDepth, name);
+				
+				case SzArrayTypeSignature szArrayTypeSignature:
+					return MakeSerializableField(name, szArrayTypeSignature.BaseType, arrayDepth + 1);
+				
+				case GenericInstanceTypeSignature genericInstanceTypeSignature:
+					return MakeSerializableField(name, genericInstanceTypeSignature, arrayDepth);
+				
+				default:
+					throw new NotSupportedException(typeSignature.FullName);
+			};
+		}
+
+		private static Field MakeSerializableField(string name, GenericInstanceTypeSignature typeSignature, int arrayDepth)
+		{
+			if (typeSignature.GenericType.FullName is "System.Collections.Generic.List`1")
 			{
-				GenericInstanceType generic = (GenericInstanceType)context.Type;
-				depth++;
-				return GetSerializedElementContext(new MonoTypeContext(generic.GenericArguments[0]), ref depth);
+				return MakeSerializableField(name, typeSignature.TypeArguments[0], arrayDepth + 1);
 			}
-			return context;
+			else
+			{
+				throw new NotSupportedException(typeSignature.FullName);
+			}
+		}
+
+		private static IEnumerable<FieldDefinition> GetFieldDefinitionsInTypeAndBase(TypeDefinition typeDefinition)
+		{
+			Stack<TypeDefinition> hierarchy = new();
+			
+			TypeDefinition? current = typeDefinition;
+			while (current is not null)
+			{
+				hierarchy.Push(current);
+				current = current.TryGetBaseClass();
+			}
+
+			foreach (TypeDefinition type in hierarchy)
+			{
+				foreach (FieldDefinition fieldDefinition in type.Fields)
+				{
+					if (!fieldDefinition.IsStatic)
+					{
+						yield return fieldDefinition;
+					}
+				}
+			}
+		}
+
+	}
+
+	internal class SerializablePrimitiveType : SerializableType
+	{
+		public SerializablePrimitiveType(PrimitiveType primitiveType) : base("System", primitiveType, primitiveType.ToSystemTypeName())
+		{
+		}
+	}
+
+	internal class SerializablePointerType : SerializableType
+	{
+		public SerializablePointerType() : base("UnityEngine", PrimitiveType.Complex, "Object")
+		{
+		}
+	}
+
+	internal static class TypeDefinitionExtensions
+	{
+		public static TypeDefinition ToTypeDefinition(this TypeDefOrRefSignature typeDefOrRefSignature)
+		{
+			return typeDefOrRefSignature.Type.Resolve()
+				?? throw new NullReferenceException($"Could not resolve {typeDefOrRefSignature.FullName}");
+		}
+		public static bool InheritsFromMonoBehaviour(this TypeDefinition type)
+		{
+			return type.InheritsFrom("UnityEngine.MonoBehaviour");
+		}
+		public static bool InheritsFromObject(this TypeDefinition type)
+		{
+			return type.InheritsFrom("UnityEngine.Object");
+		}
+		public static TypeDefinition? TryGetBaseClass(this TypeDefinition current)
+		{
+			return current.BaseType?.Resolve();
+		}
+		public static PrimitiveType ToPrimitiveType(this ElementType elementType)
+		{
+			return elementType switch
+			{
+				ElementType.Boolean => PrimitiveType.Bool,
+				ElementType.Char => PrimitiveType.Char,
+				ElementType.I1 => PrimitiveType.SByte,
+				ElementType.U1 => PrimitiveType.Byte,
+				ElementType.I2 => PrimitiveType.Short,
+				ElementType.U2 => PrimitiveType.UShort,
+				ElementType.I4 => PrimitiveType.Int,
+				ElementType.U4 => PrimitiveType.UInt,
+				ElementType.I8 => PrimitiveType.Long,
+				ElementType.U8 => PrimitiveType.ULong,
+				ElementType.R4 => PrimitiveType.Single,
+				ElementType.R8 => PrimitiveType.Double,
+				ElementType.String => PrimitiveType.String,
+				_ => throw new ArgumentOutOfRangeException(nameof(elementType)),
+			};
 		}
 	}
 }

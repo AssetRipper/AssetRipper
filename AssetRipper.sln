@@ -131,7 +131,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.Dependenc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.CabMapGenerator", "AssetRipper.Tools.CabMapGenerator\AssetRipper.Tools.CabMapGenerator.csproj", "{3620A2D1-69DB-48EB-A209-F546577CD8C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Tools.RawTextureExtractor", "AssetRipper.Tools.RawTextureExtractor\AssetRipper.Tools.RawTextureExtractor.csproj", "{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.RawTextureExtractor", "AssetRipper.Tools.RawTextureExtractor\AssetRipper.Tools.RawTextureExtractor.csproj", "{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
