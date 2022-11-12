@@ -17,8 +17,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Restore Packages
-      run: dotnet restore
+    - name: Add Package Source
+      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
         
     - name: Publish AssetRipper Windows x64
       run: dotnet publish /p:PublishProfile=windows_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
@@ -50,8 +50,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Restore Packages
-      run: dotnet restore
+    - name: Add Package Source
+      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
         
     - name: Publish AssetRipper Windows arm64
       run: dotnet publish /p:PublishProfile=windows_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
@@ -83,8 +83,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Restore Packages
-      run: dotnet restore
+    - name: Add Package Source
+      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
         
     - name: Publish AssetRipper Linux x64
       run: dotnet publish /p:PublishProfile=linux_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
@@ -117,8 +117,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Restore Packages
-      run: dotnet restore
+    - name: Add Package Source
+      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
         
     - name: Publish AssetRipper Linux arm64
       run: dotnet publish /p:PublishProfile=linux_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
@@ -151,8 +151,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Restore Packages
-      run: dotnet restore
+    - name: Add Package Source
+      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
         
     - name: Publish AssetRipper Mac x64
       run: dotnet publish /p:PublishProfile=mac_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
@@ -186,8 +186,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    - name: Restore Packages
-      run: dotnet restore
+    - name: Add Package Source
+      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
         
     - name: Publish AssetRipper Mac arm64
       run: dotnet publish /p:PublishProfile=mac_arm64 /p:Configuration=Release
