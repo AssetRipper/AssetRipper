@@ -285,18 +285,16 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		private static byte[] DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
+		private static bool DecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
 		{
-			byte[] result = new byte[4 * width * height];
 			if (width % 4 != 0 || height % 4 != 0) //Managed code doesn't currently handle partial block sizes well.
 			{
-				NativeDecodeBC(inputData, textureFormat, width, height, result);
+				return NativeDecodeBC(inputData, textureFormat, width, height, outputData);
 			}
 			else
 			{
-				ManagedDecodeBC(inputData, textureFormat, width, height, result);
+				return ManagedDecodeBC(inputData, textureFormat, width, height, outputData);
 			}
-			return result;
 		}
 
 		private static bool NativeDecodeBC(byte[] inputData, TextureFormat textureFormat, int width, int height, byte[] outputData)
