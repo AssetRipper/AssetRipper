@@ -97,7 +97,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			// despite the name, this packing works for different formats
 			if (texture.LightmapFormat_C28 == (int)TextureUsageMode.NormalmapDXT5nm)
 			{
-				TextureConverter.UnpackNormal(bitmap.BitsPtr, bitmap.Bits.Length);
+				TextureConverter.UnpackNormal(bitmap.Bits);
 			}
 
 			return bitmap;

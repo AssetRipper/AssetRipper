@@ -341,25 +341,23 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public unsafe static void UnpackNormal(IntPtr inputOutput, int length)
+		public static void UnpackNormal(Span<byte> data)
 		{
-			byte* dataPtr = (byte*)inputOutput;
-			int count = length / 4;
-			for (int i = 0; i < count; i++, dataPtr += 4)
+			for (int i = 0; i < data.Length; i += 4)
 			{
-				byte r = dataPtr[3];
-				byte g = dataPtr[1];
-				byte a = dataPtr[2];
-				dataPtr[2] = r;
-				dataPtr[3] = a;
+				Span<byte> pixelSpan = data.Slice(i, 4);
+				byte r = pixelSpan[3];
+				byte g = pixelSpan[1];
+				byte a = pixelSpan[2];
+				pixelSpan[2] = r;
+				pixelSpan[3] = a;
 
-				const double MagnitudeSqr = 255.0 * 255.0;
+				const double MagnitudeSqr = 255 * 255;
 				double vr = (r * 2.0) - 255.0;
 				double vg = (g * 2.0) - 255.0;
-				double hypotenuseSqr = (vr * vr) + (vg * vg);
-				hypotenuseSqr = hypotenuseSqr > MagnitudeSqr ? MagnitudeSqr : hypotenuseSqr;
+				double hypotenuseSqr = Math.Min((vr * vr) + (vg * vg), MagnitudeSqr);
 				double b = (Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
-				dataPtr[0] = (byte)b;
+				pixelSpan[0] = (byte)b;
 			}
 		}
 	}
