@@ -17,6 +17,9 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
+    - name: Add Package Source
+      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
+        
     - name: Build Cab Map Generator
       run: dotnet build /p:Configuration=Release
       working-directory: ./AssetRipper.Tools.CabMapGenerator/

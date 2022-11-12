@@ -36,16 +36,23 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 6.0.x
+
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
+
       - name: Setup DocFX
         uses: crazy-max/ghaction-chocolatey@v1
         with:
           args: install docfx
+
       - name: Install dependencies
         run: dotnet restore
+
       - name: DocFX Build
         working-directory: docs
         run: docfx docfx.json
         continue-on-error: false
+
       - name: Publish
         if: ${{ ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' ) && github.repository == 'AssetRipper/AssetRipper' }}
         uses: peaceiris/actions-gh-pages@v3
