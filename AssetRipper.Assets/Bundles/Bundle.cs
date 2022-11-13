@@ -69,7 +69,10 @@ public abstract class Bundle : IDisposable
 
 		static AssetCollection? TryResolveFromChildBundles(Bundle currentBundle, string name, Bundle? bundleToExclude)
 		{
-			return currentBundle.Bundles.Where(b => b != bundleToExclude).Select(b => b.ResolveCollection(name)).FirstOrDefault();
+			return currentBundle.Bundles
+				.Where(b => b != bundleToExclude)
+				.Select(b => TryResolveFromCollections(b, name))//This completely ignores that b might have overrided resolution
+				.FirstOrDefault(c => c is not null);
 		}
 	}
 
@@ -110,7 +113,10 @@ public abstract class Bundle : IDisposable
 
 		static ResourceFile? TryResolveFromChildBundles(Bundle currentBundle, string originalName, string fixedName, Bundle? bundleToExclude)
 		{
-			return currentBundle.Bundles.Where(b => b != bundleToExclude).Select(b => b.ResolveResourceInternal(originalName, fixedName)).FirstOrDefault();
+			return currentBundle.Bundles
+				.Where(b => b != bundleToExclude)
+				.Select(b => TryResolveFromResources(b, fixedName))//This completely ignores that b might have overrided resolution
+				.FirstOrDefault(r => r is not null);
 		}
 	}
 
