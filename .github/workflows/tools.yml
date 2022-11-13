@@ -1,54 +1,53 @@
 name: Tools
 
 on:
-   push:
-    branches: [ master ]
-   pull_request:
-    branches: [ master ]
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
-   build:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3.0.3
-      with:
-        dotnet-version: 6.0.x
-        
-    - name: Add Package Source
-      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
-        
-    - name: Build Cab Map Generator
-      run: dotnet build /p:Configuration=Release
-      working-directory: ./AssetRipper.Tools.CabMapGenerator/
-        
-    - name: Build DependenceGrapher
-      run: dotnet build /p:Configuration=Release
-      working-directory: ./AssetRipper.Tools.DependenceGrapher/
-        
-    - name: Build FileAnalyzer
-      run: dotnet build /p:Configuration=Release
-      working-directory: ./AssetRipper.Tools.FileAnalyzer/
-        
-    - name: Build FileExtractor
-      run: dotnet build /p:Configuration=Release
-      working-directory: ./AssetRipper.Tools.FileExtractor/
-        
-    - name: Build JsonSerializer
-      run: dotnet build /p:Configuration=Release
-      working-directory: ./AssetRipper.Tools.JsonSerializer/
-      
-    - name: Build RawTextureExtractor
-      run: dotnet build /p:Configuration=Release
-      working-directory: ./AssetRipper.Tools.RawTextureExtractor/
-      
-    - name: Build SystemTester
-      run: dotnet build /p:Configuration=Release
-      working-directory: ./AssetRipper.Tools.SystemTester/
-      
-    - name: Build TypeTreeExtractor
-      run: dotnet build /p:Configuration=Release
-      working-directory: ./AssetRipper.Tools.TypeTreeExtractor/
-      
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
+
+      - name: Build Cab Map Generator
+        run: dotnet build /p:Configuration=Release
+        working-directory: ./AssetRipper.Tools.CabMapGenerator/
+
+      - name: Build DependenceGrapher
+        run: dotnet build /p:Configuration=Release
+        working-directory: ./AssetRipper.Tools.DependenceGrapher/
+
+      - name: Build FileAnalyzer
+        run: dotnet build /p:Configuration=Release
+        working-directory: ./AssetRipper.Tools.FileAnalyzer/
+
+      - name: Build FileExtractor
+        run: dotnet build /p:Configuration=Release
+        working-directory: ./AssetRipper.Tools.FileExtractor/
+
+      - name: Build JsonSerializer
+        run: dotnet build /p:Configuration=Release
+        working-directory: ./AssetRipper.Tools.JsonSerializer/
+
+      - name: Build RawTextureExtractor
+        run: dotnet build /p:Configuration=Release
+        working-directory: ./AssetRipper.Tools.RawTextureExtractor/
+
+      - name: Build SystemTester
+        run: dotnet build /p:Configuration=Release
+        working-directory: ./AssetRipper.Tools.SystemTester/
+
+      - name: Build TypeTreeExtractor
+        run: dotnet build /p:Configuration=Release
+        working-directory: ./AssetRipper.Tools.TypeTreeExtractor/

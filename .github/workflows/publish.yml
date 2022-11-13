@@ -1,210 +1,204 @@
 name: Publish
 
 on:
-   push:
-    branches: [ master ]
-   pull_request:
-    branches: [ master ]
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
-   publish_windows_x64:
+  publish_windows_x64:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3.0.3
-      with:
-        dotnet-version: 6.0.x
-        
-    - name: Add Package Source
-      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
-        
-    - name: Publish AssetRipper Windows x64
-      run: dotnet publish /p:PublishProfile=windows_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipper.GUI/
-      
-    - name: List Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipper_win_x64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_win_x64/Licenses/
-        date -u > ./Bins/Publish/AssetRipper_win_x64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipper_win_x64
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Upload AssetRipper Windows x64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipper_win_x64
-        path: ./Bins/Publish/AssetRipper_win_x64/*
-        if-no-files-found: error
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
-        
-   publish_windows_arm64:
+      - name: Publish AssetRipper Windows x64
+        run: dotnet publish /p:PublishProfile=windows_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+        working-directory: ./AssetRipper.GUI/
+
+      - name: List Files
+        shell: bash
+        run: |
+          mkdir -p ./Bins/Publish/AssetRipper_win_x64/Licenses
+          cp ./Licenses/*.md ./Bins/Publish/AssetRipper_win_x64/Licenses/
+          date -u > ./Bins/Publish/AssetRipper_win_x64/compile_time.txt
+          ls -R ./Bins/Publish/AssetRipper_win_x64
+
+      - name: Upload AssetRipper Windows x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: AssetRipper_win_x64
+          path: ./Bins/Publish/AssetRipper_win_x64/*
+          if-no-files-found: error
+
+  publish_windows_arm64:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3.0.3
-      with:
-        dotnet-version: 6.0.x
-        
-    - name: Add Package Source
-      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
-        
-    - name: Publish AssetRipper Windows arm64
-      run: dotnet publish /p:PublishProfile=windows_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipper.GUI/
-      
-    - name: List Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipper_win_arm64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_win_arm64/Licenses/
-        date -u > ./Bins/Publish/AssetRipper_win_arm64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipper_win_arm64
-        
-    - name: Upload AssetRipper Windows arm64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipper_win_arm64
-        path: ./Bins/Publish/AssetRipper_win_arm64/*
-        if-no-files-found: error
-      
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: 6.0.x
 
-   publish_linux_x64:
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
+
+      - name: Publish AssetRipper Windows arm64
+        run: dotnet publish /p:PublishProfile=windows_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+        working-directory: ./AssetRipper.GUI/
+
+      - name: List Files
+        shell: bash
+        run: |
+          mkdir -p ./Bins/Publish/AssetRipper_win_arm64/Licenses
+          cp ./Licenses/*.md ./Bins/Publish/AssetRipper_win_arm64/Licenses/
+          date -u > ./Bins/Publish/AssetRipper_win_arm64/compile_time.txt
+          ls -R ./Bins/Publish/AssetRipper_win_arm64
+
+      - name: Upload AssetRipper Windows arm64
+        uses: actions/upload-artifact@v3
+        with:
+          name: AssetRipper_win_arm64
+          path: ./Bins/Publish/AssetRipper_win_arm64/*
+          if-no-files-found: error
+
+  publish_linux_x64:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3.0.3
-      with:
-        dotnet-version: 6.0.x
-        
-    - name: Add Package Source
-      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
-        
-    - name: Publish AssetRipper Linux x64
-      run: dotnet publish /p:PublishProfile=linux_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipper.GUI/
-        
-    - name: List Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipper_linux_x64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_linux_x64/Licenses/
-        date -u > ./Bins/Publish/AssetRipper_linux_x64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipper_linux_x64
-        chmod +x ./Bins/Publish/AssetRipper_linux_x64/AssetRipper
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Upload AssetRipper Linux x64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipper_linux_x64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_linux_x64/*
-        if-no-files-found: error
-      
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
-   publish_linux_arm64:
+      - name: Publish AssetRipper Linux x64
+        run: dotnet publish /p:PublishProfile=linux_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+        working-directory: ./AssetRipper.GUI/
+
+      - name: List Files
+        shell: bash
+        run: |
+          mkdir -p ./Bins/Publish/AssetRipper_linux_x64/Licenses
+          cp ./Licenses/*.md ./Bins/Publish/AssetRipper_linux_x64/Licenses/
+          date -u > ./Bins/Publish/AssetRipper_linux_x64/compile_time.txt
+          ls -R ./Bins/Publish/AssetRipper_linux_x64
+          chmod +x ./Bins/Publish/AssetRipper_linux_x64/AssetRipper
+
+      - name: Upload AssetRipper Linux x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: AssetRipper_linux_x64
+          path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_linux_x64/*
+          if-no-files-found: error
+
+  publish_linux_arm64:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3.0.3
-      with:
-        dotnet-version: 6.0.x
-        
-    - name: Add Package Source
-      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
-        
-    - name: Publish AssetRipper Linux arm64
-      run: dotnet publish /p:PublishProfile=linux_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipper.GUI/
-        
-    - name: List Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipper_linux_arm64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_linux_arm64/Licenses/
-        date -u > ./Bins/Publish/AssetRipper_linux_arm64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipper_linux_arm64
-        chmod +x ./Bins/Publish/AssetRipper_linux_arm64/AssetRipper
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Upload AssetRipper Linux arm64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipper_linux_arm64
-        path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_linux_arm64/*
-        if-no-files-found: error
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
+      - name: Publish AssetRipper Linux arm64
+        run: dotnet publish /p:PublishProfile=linux_arm64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+        working-directory: ./AssetRipper.GUI/
 
-   publish_mac_x64:
+      - name: List Files
+        shell: bash
+        run: |
+          mkdir -p ./Bins/Publish/AssetRipper_linux_arm64/Licenses
+          cp ./Licenses/*.md ./Bins/Publish/AssetRipper_linux_arm64/Licenses/
+          date -u > ./Bins/Publish/AssetRipper_linux_arm64/compile_time.txt
+          ls -R ./Bins/Publish/AssetRipper_linux_arm64
+          chmod +x ./Bins/Publish/AssetRipper_linux_arm64/AssetRipper
+
+      - name: Upload AssetRipper Linux arm64
+        uses: actions/upload-artifact@v3
+        with:
+          name: AssetRipper_linux_arm64
+          path: /home/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_linux_arm64/*
+          if-no-files-found: error
+
+  publish_mac_x64:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3.0.3
-      with:
-        dotnet-version: 6.0.x
-        
-    - name: Add Package Source
-      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
-        
-    - name: Publish AssetRipper Mac x64
-      run: dotnet publish /p:PublishProfile=mac_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-      working-directory: ./AssetRipper.GUI/
-        
-    - name: List Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipper_mac_x64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_mac_x64/Licenses/
-        date -u > ./Bins/Publish/AssetRipper_mac_x64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipper_mac_x64
-        chmod +x ./Bins/Publish/AssetRipper_mac_x64/AssetRipper
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Upload AssetRipper Mac x64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipper_mac_x64
-        path: /Users/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_x64/*
-        if-no-files-found: error
-        
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
+      - name: Publish AssetRipper Mac x64
+        run: dotnet publish /p:PublishProfile=mac_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
+        working-directory: ./AssetRipper.GUI/
 
-   publish_mac_arm64:
+      - name: List Files
+        shell: bash
+        run: |
+          mkdir -p ./Bins/Publish/AssetRipper_mac_x64/Licenses
+          cp ./Licenses/*.md ./Bins/Publish/AssetRipper_mac_x64/Licenses/
+          date -u > ./Bins/Publish/AssetRipper_mac_x64/compile_time.txt
+          ls -R ./Bins/Publish/AssetRipper_mac_x64
+          chmod +x ./Bins/Publish/AssetRipper_mac_x64/AssetRipper
+
+      - name: Upload AssetRipper Mac x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: AssetRipper_mac_x64
+          path: /Users/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_x64/*
+          if-no-files-found: error
+
+  publish_mac_arm64:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3.0.3
-      with:
-        dotnet-version: 6.0.x
-        
-    - name: Add Package Source
-      run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
-        
-    - name: Publish AssetRipper Mac arm64
-      run: dotnet publish /p:PublishProfile=mac_arm64 /p:Configuration=Release
-      working-directory: ./AssetRipper.GUI/
-        
-    - name: List Files
-      shell: bash
-      run: |
-        mkdir -p ./Bins/Publish/AssetRipper_mac_arm64/Licenses
-        cp ./Licenses/*.md ./Bins/Publish/AssetRipper_mac_arm64/Licenses/
-        date -u > ./Bins/Publish/AssetRipper_mac_arm64/compile_time.txt
-        ls -R ./Bins/Publish/AssetRipper_mac_arm64
-        chmod +x ./Bins/Publish/AssetRipper_mac_arm64/AssetRipper
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Upload AssetRipper Mac arm64
-      uses: actions/upload-artifact@v3
-      with:
-        name: AssetRipper_mac_arm64
-        path: /Users/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_arm64/*
-        if-no-files-found: error
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
+
+      - name: Publish AssetRipper Mac arm64
+        run: dotnet publish /p:PublishProfile=mac_arm64 /p:Configuration=Release
+        working-directory: ./AssetRipper.GUI/
+
+      - name: List Files
+        shell: bash
+        run: |
+          mkdir -p ./Bins/Publish/AssetRipper_mac_arm64/Licenses
+          cp ./Licenses/*.md ./Bins/Publish/AssetRipper_mac_arm64/Licenses/
+          date -u > ./Bins/Publish/AssetRipper_mac_arm64/compile_time.txt
+          ls -R ./Bins/Publish/AssetRipper_mac_arm64
+          chmod +x ./Bins/Publish/AssetRipper_mac_arm64/AssetRipper
+
+      - name: Upload AssetRipper Mac arm64
+        uses: actions/upload-artifact@v3
+        with:
+          name: AssetRipper_mac_arm64
+          path: /Users/runner/work/AssetRipper/AssetRipper/Bins/Publish/AssetRipper_mac_arm64/*
+          if-no-files-found: error

@@ -3,16 +3,16 @@
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [master]
     paths:
-      - 'docs/**'
+      - "docs/**"
   pull_request:
-    branches: [ master ]
+    branches: [master]
     paths:
-      - 'docs/**'
+      - "docs/**"
   schedule:
-    - cron: '0 0 * * 0' #once per week
-   
+    - cron: "0 0 * * 0" #once per week
+
 # The schedule event can be delayed during periods of high loads of GitHub Actions workflow runs
 #
 # ┌───────────── minute (0 - 59)
