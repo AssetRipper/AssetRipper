@@ -133,6 +133,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.CabMapGen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.RawTextureExtractor", "AssetRipper.Tools.RawTextureExtractor\AssetRipper.Tools.RawTextureExtractor.csproj", "{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityEngine", "UnityEngine\UnityEngine.csproj", "{3DE1FC3E-3B72-4B6C-8B19-657C6A32AA47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.SerializationLogic.Tests", "AssetRipper.SerializationLogic.Tests\AssetRipper.SerializationLogic.Tests.csproj", "{C7C57290-5E63-40E1-96B9-EB14A4D08F8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -247,6 +251,14 @@ Global
 		{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DE1FC3E-3B72-4B6C-8B19-657C6A32AA47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DE1FC3E-3B72-4B6C-8B19-657C6A32AA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DE1FC3E-3B72-4B6C-8B19-657C6A32AA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DE1FC3E-3B72-4B6C-8B19-657C6A32AA47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7C57290-5E63-40E1-96B9-EB14A4D08F8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7C57290-5E63-40E1-96B9-EB14A4D08F8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7C57290-5E63-40E1-96B9-EB14A4D08F8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7C57290-5E63-40E1-96B9-EB14A4D08F8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,7 +21,7 @@ jobs:
       run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
         
     - name: Build AssetRipper.IO.Files.Tests
-      run: dotnet build /p:Configuration=Release
+      run: dotnet build
       working-directory: ./AssetRipper.IO.Files.Tests/
       
     - name: Run AssetRipper.IO.Files.Tests
@@ -30,7 +30,7 @@ jobs:
         
 
     - name: Build AssetRipper.Numerics.Tests
-      run: dotnet build /p:Configuration=Release
+      run: dotnet build
       working-directory: ./AssetRipper.Numerics.Tests/
       
     - name: Run AssetRipper.Numerics.Tests
@@ -38,8 +38,17 @@ jobs:
       working-directory: ./AssetRipper.Numerics.Tests/
         
 
+    - name: Build AssetRipper.SerializationLogic.Tests
+      run: dotnet build
+      working-directory: ./AssetRipper.SerializationLogic.Tests/
+      
+    - name: Run AssetRipper.SerializationLogic.Tests
+      run: dotnet test
+      working-directory: ./AssetRipper.SerializationLogic.Tests/
+        
+
     - name: Build AssetRipper.Tests
-      run: dotnet build /p:Configuration=Release
+      run: dotnet build
       working-directory: ./AssetRipper.Tests/
       
     - name: Run AssetRipper.Tests
@@ -48,7 +57,7 @@ jobs:
         
 
     - name: Build AssetRipper.Yaml.Tests
-      run: dotnet build /p:Configuration=Release
+      run: dotnet build
       working-directory: ./AssetRipper.Yaml.Tests/
       
     - name: Run AssetRipper.Yaml.Tests
