@@ -45,8 +45,32 @@ public abstract class Bundle : IDisposable
 
 	public virtual AssetCollection? ResolveCollection(string name)
 	{
-		//Uniqueness is not guaranteed because of asset bundle variants
-		return Collections.FirstOrDefault(c => c.Name == name) ?? Parent?.ResolveCollection(name);
+		Bundle? bundleToExclude = null;
+		Bundle? currentBundle = this;
+		while (currentBundle is not null)
+		{
+			AssetCollection? result = TryResolveFromCollections(currentBundle, name) ?? TryResolveFromChildBundles(currentBundle, name, bundleToExclude);
+			if (result is not null)
+			{
+				return result;
+			}
+
+			bundleToExclude = currentBundle;
+			currentBundle = currentBundle.Parent;
+		}
+
+		return null;
+
+		static AssetCollection? TryResolveFromCollections(Bundle currentBundle, string name)
+		{
+			//Uniqueness is not guaranteed because of asset bundle variants
+			return currentBundle.Collections.FirstOrDefault(c => c.Name == name);
+		}
+
+		static AssetCollection? TryResolveFromChildBundles(Bundle currentBundle, string name, Bundle? bundleToExclude)
+		{
+			return currentBundle.Bundles.Where(b => b != bundleToExclude).Select(b => b.ResolveCollection(name)).FirstOrDefault();
+		}
 	}
 
 	public ResourceFile? ResolveResource([NotNullWhen(true)] string? name)
@@ -62,8 +86,32 @@ public abstract class Bundle : IDisposable
 
 	protected virtual ResourceFile? ResolveResourceInternal(string originalName, string fixedName)
 	{
-		//Uniqueness is not guaranteed because of asset bundle variants
-		return Resources.FirstOrDefault(c => c.Name == fixedName) ?? Parent?.ResolveResourceInternal(originalName, fixedName);
+		Bundle? bundleToExclude = null;
+		Bundle? currentBundle = this;
+		while (currentBundle is not null)
+		{
+			ResourceFile? result = TryResolveFromResources(currentBundle, fixedName) ?? TryResolveFromChildBundles(currentBundle, originalName, fixedName, bundleToExclude);
+			if (result is not null)
+			{
+				return result;
+			}
+
+			bundleToExclude = currentBundle;
+			currentBundle = currentBundle.Parent;
+		}
+
+		return null;
+
+		static ResourceFile? TryResolveFromResources(Bundle currentBundle, string fixedName)
+		{
+			//Uniqueness is not guaranteed because of asset bundle variants
+			return currentBundle.Resources.FirstOrDefault(c => c.Name == fixedName);
+		}
+
+		static ResourceFile? TryResolveFromChildBundles(Bundle currentBundle, string originalName, string fixedName, Bundle? bundleToExclude)
+		{
+			return currentBundle.Bundles.Where(b => b != bundleToExclude).Select(b => b.ResolveResourceInternal(originalName, fixedName)).FirstOrDefault();
+		}
 	}
 
 	public void AddResource(ResourceFile resource)
