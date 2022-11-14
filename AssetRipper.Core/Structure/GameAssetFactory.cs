@@ -73,7 +73,8 @@ namespace AssetRipper.Core.Structure
 				}
 				else
 				{
-					monoBehaviour.Structure = GetMonoScript(monoBehaviour)?.GetBehaviourType(assemblyManager)?.CreateSerializableStructure();
+					IMonoScript? monoScript = GetMonoScript(monoBehaviour);
+					monoBehaviour.Structure = monoScript?.GetBehaviourType(assemblyManager)?.CreateSerializableStructure();
 				}
 				monoBehaviour.Structure?.Read(reader);
 				if (monoBehaviour.Structure is not null && reader.BaseStream.Position != size)
