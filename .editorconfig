@@ -209,6 +209,7 @@ csharp_style_prefer_parameter_null_checking = true:suggestion
 csharp_style_prefer_pattern_matching = true:silent
 csharp_style_prefer_not_pattern = true:suggestion
 csharp_style_prefer_extended_property_pattern = true:suggestion
+csharp_style_prefer_top_level_statements = false:silent
 
 [*.{cs,vb}]
 dotnet_style_coalesce_expression = true:suggestion
@@ -221,7 +222,7 @@ dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4
 indent_size = 4
-end_of_line = crlf
+end_of_line = lf
 dotnet_style_prefer_conditional_expression_over_assignment = false:silent
 dotnet_style_prefer_conditional_expression_over_return = false:silent
 dotnet_style_explicit_tuple_names = true:suggestion
