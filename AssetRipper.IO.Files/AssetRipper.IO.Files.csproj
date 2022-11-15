@@ -3,21 +3,17 @@
 	<PropertyGroup>
 		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
-		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<DebugType>embedded</DebugType>
-		<DebugSymbols>true</DebugSymbols>
 		<IsTrimmable>true</IsTrimmable>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" />
-	  <PackageReference Include="K4os.Compression.LZ4" Version="1.2.16" />
-	  <PackageReference Include="SharpCompress" Version="0.32.2" />
+		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" />
+		<PackageReference Include="K4os.Compression.LZ4" Version="1.2.16" />
+		<PackageReference Include="SharpCompress" Version="0.32.2" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AssetRipper.IO.Endian\AssetRipper.IO.Endian.csproj" />
+		<ProjectReference Include="..\AssetRipper.IO.Endian\AssetRipper.IO.Endian.csproj" />
 	</ItemGroup>
 
 </Project>

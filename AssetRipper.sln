@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
@@ -133,11 +134,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.CabMapGen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.RawTextureExtractor", "AssetRipper.Tools.RawTextureExtractor\AssetRipper.Tools.RawTextureExtractor.csproj", "{3FDBC557-D797-40B5-A33D-7E3BDBC39C50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityEngine", "UnityEngine\UnityEngine.csproj", "{3DE1FC3E-3B72-4B6C-8B19-657C6A32AA47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnityEngine", "UnityEngine\UnityEngine.csproj", "{3DE1FC3E-3B72-4B6C-8B19-657C6A32AA47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.SerializationLogic.Tests", "AssetRipper.SerializationLogic.Tests\AssetRipper.SerializationLogic.Tests.csproj", "{C7C57290-5E63-40E1-96B9-EB14A4D08F8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.SerializationLogic.Tests", "AssetRipper.SerializationLogic.Tests\AssetRipper.SerializationLogic.Tests.csproj", "{C7C57290-5E63-40E1-96B9-EB14A4D08F8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Assets.Tests", "AssetRipper.Assets.Tests\AssetRipper.Assets.Tests.csproj", "{CD86DE37-F673-423F-B0B3-BC9614DAA688}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Assets.Tests", "AssetRipper.Assets.Tests\AssetRipper.Assets.Tests.csproj", "{CD86DE37-F673-423F-B0B3-BC9614DAA688}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

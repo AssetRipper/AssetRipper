@@ -1,14 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>enable</Nullable>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
-		<DebugType>embedded</DebugType>
-		<DebugSymbols>true</DebugSymbols>
 		<IsTrimmable>true</IsTrimmable>
 
 		<RestoreAdditionalProjectSources>
