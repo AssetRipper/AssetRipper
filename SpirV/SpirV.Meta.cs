@@ -17,7 +17,7 @@ namespace SpirV
 				Name = name;
 			}
 
-			public string Name { get; }
+			public string? Name { get; }
 			public string Vendor { get; }
 		}
 

@@ -42,7 +42,7 @@ namespace SpirV
 
 		public T GetBitEnumValue<T>() where T : Enum
 		{
-			IBitEnumOperandValue v = Value as IBitEnumOperandValue;
+			IBitEnumOperandValue v = (IBitEnumOperandValue)Value;
 
 			uint result = 0;
 			foreach (uint k in v.Values.Keys)
@@ -67,7 +67,7 @@ namespace SpirV
 
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new();
 			ToString(sb);
 			return sb.ToString();
 		}
@@ -160,7 +160,7 @@ namespace SpirV
 		}
 
 		public uint Id { get; }
-		public ParsedInstruction Reference { get; private set; }
+		public ParsedInstruction? Reference { get; private set; }
 	}
 
 	public class ParsedInstruction
@@ -182,9 +182,9 @@ namespace SpirV
 			// Word 0 describes this instruction so we can ignore it
 			int currentWord = 1;
 			int currentOperand = 0;
-			List<object> varyingOperandValues = new List<object>();
+			List<object> varyingOperandValues = new();
 			int varyingWordStart = 0;
-			Operand varyingOperand = null;
+			Operand? varyingOperand = null;
 
 			while (currentWord < Words.Count)
 			{
@@ -257,7 +257,7 @@ namespace SpirV
 		public IReadOnlyList<uint> Words { get; }
 		public Instruction Instruction { get; }
 		public IList<ParsedOperand> Operands { get; } = new List<ParsedOperand>();
-		public string Name { get; set; }
-		public object Value { get; set; }
+		public string? Name { get; set; }
+		public object? Value { get; set; }
 	}
 }

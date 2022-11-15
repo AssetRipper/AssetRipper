@@ -374,16 +374,13 @@ namespace SpirV
 		public override StringBuilder ToString(StringBuilder sb)
 		{
 			sb.Append(StorageClass.ToString()).Append(' ');
-			if (Type != null)
-			{
-				Type.ToString(sb);
-			}
+			Type?.ToString(sb);
 			sb.Append('*');
 			return sb;
 		}
 
 		public StorageClass StorageClass { get; }
-		public Type Type { get; private set; }
+		public Type? Type { get; private set; }
 	}
 
 	public class FunctionType : Type

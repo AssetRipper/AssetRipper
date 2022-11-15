@@ -126,14 +126,14 @@ namespace SpirV
 		}
 	}
 
-	public class Parameter
+	public abstract class Parameter
 	{
-		public virtual IReadOnlyList<OperandType> OperandTypes { get; }
+		public abstract IReadOnlyList<OperandType> OperandTypes { get; }
 	}
 
 	public class ParameterFactory
 	{
-		public virtual Parameter CreateParameter(object value)
+		public virtual Parameter? CreateParameter(object value)
 		{
 			return null;
 		}
@@ -160,7 +160,7 @@ namespace SpirV
 					// bit == 0 and words[0] == 0 handles the 0x0 = None cases
 					if ((words[index] & bit) != 0 || (bit == 0 && words[index] == 0))
 					{
-						Parameter p = parameterFactory_.CreateParameter(bit);
+						Parameter? p = parameterFactory_.CreateParameter(bit);
 						if (p == null)
 						{
 							result.Add(bit, Array.Empty<object>());
@@ -183,7 +183,7 @@ namespace SpirV
 			else
 			{
 				object[] resultItems;
-				Parameter p = parameterFactory_.CreateParameter(words[index]);
+				Parameter? p = parameterFactory_.CreateParameter(words[index]);
 				if (p == null)
 				{
 					resultItems = Array.Empty<object>();

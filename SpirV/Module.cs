@@ -62,7 +62,7 @@ namespace SpirV
 					continue;
 				}
 
-				if (instruction.Instruction.Name.StartsWith("OpType", StringComparison.Ordinal))
+				if (instruction.Instruction.Name?.StartsWith("OpType", StringComparison.Ordinal) ?? false)
 				{
 					ProcessTypeInstruction(instruction, objects);
 				}
@@ -76,14 +76,15 @@ namespace SpirV
 				switch (instruction.Instruction)
 				{
 					// Constants require that the result type has been resolved
-					case OpSpecConstant sc:
-					case OpConstant oc:
+					case OpSpecConstant:
+					case OpConstant:
+
 						{
-							Type t = instruction.ResultType;
+							Type? t = instruction.ResultType;
 							Debug.Assert(t != null);
 							Debug.Assert(t is ScalarType);
 
-							object constant = ConvertConstant(instruction.ResultType as ScalarType, instruction.Words, 3);
+							object? constant = ConvertConstant(t as ScalarType, instruction.Words, 3);
 							instruction.Operands[2].Value = constant;
 							instruction.Value = constant;
 						}
@@ -95,14 +96,16 @@ namespace SpirV
 			{
 				switch (instruction.Instruction)
 				{
-					case OpMemberName mn:
+					case OpMemberName:
+
 						{
-							StructType t = (StructType)objects[instruction.Words[1]].ResultType;
+							StructType t = (StructType?)objects[instruction.Words[1]].ResultType ?? throw new NullReferenceException();
 							t.SetMemberName((uint)instruction.Operands[1].Value, (string)instruction.Operands[2].Value);
 						}
 						break;
 
-					case OpName n:
+					case OpName:
+
 						{
 							// We skip naming objects we don't know about
 							ParsedInstruction t = objects[instruction.Words[1]];
@@ -131,7 +134,7 @@ namespace SpirV
 			uint generatorMagicNumber = reader.ReadDWord();
 			int generatorToolId = (int)(generatorMagicNumber >> 16);
 			string generatorVendor = "unknown";
-			string generatorName = null;
+			string? generatorName = null;
 
 			if (Meta.Tools.ContainsKey(generatorToolId))
 			{
@@ -144,7 +147,7 @@ namespace SpirV
 			}
 
 			// Read header
-			ModuleHeader header = new ModuleHeader();
+			ModuleHeader header = new();
 			header.Version = version;
 			header.GeneratorName = generatorName;
 			header.GeneratorVendor = generatorVendor;
@@ -152,7 +155,7 @@ namespace SpirV
 			header.Bound = reader.ReadDWord();
 			header.Reserved = reader.ReadDWord();
 
-			List<ParsedInstruction> instructions = new List<ParsedInstruction>();
+			List<ParsedInstruction> instructions = new();
 			while (!reader.EndOfStream)
 			{
 				uint instructionStart = reader.ReadDWord();
@@ -180,33 +183,33 @@ namespace SpirV
 		{
 			switch (i.Instruction)
 			{
-				case OpTypeInt t:
+				case OpTypeInt:
 					{
 						i.ResultType = new IntegerType((int)i.Words[2], i.Words[3] == 1u);
 					}
 					break;
 
-				case OpTypeFloat t:
+				case OpTypeFloat:
 					{
 						i.ResultType = new FloatingPointType((int)i.Words[2]);
 					}
 					break;
 
-				case OpTypeVector t:
+				case OpTypeVector:
 					{
 						i.ResultType = new VectorType((ScalarType)objects[i.Words[2]].ResultType, (int)i.Words[3]);
 					}
 					break;
 
-				case OpTypeMatrix t:
+				case OpTypeMatrix:
 					{
 						i.ResultType = new MatrixType((VectorType)objects[i.Words[2]].ResultType, (int)i.Words[3]);
 					}
 					break;
 
-				case OpTypeArray t:
+				case OpTypeArray:
 					{
-						object constant = objects[i.Words[3]].Value;
+						object? constant = objects[i.Words[3]].Value;
 						int size = 0;
 
 						switch (constant)
@@ -240,31 +243,31 @@ namespace SpirV
 					}
 					break;
 
-				case OpTypeRuntimeArray t:
+				case OpTypeRuntimeArray:
 					{
 						i.ResultType = new RuntimeArrayType((Type)objects[i.Words[2]].ResultType);
 					}
 					break;
 
-				case OpTypeBool t:
+				case OpTypeBool:
 					{
 						i.ResultType = new BoolType();
 					}
 					break;
 
-				case OpTypeOpaque t:
+				case OpTypeOpaque:
 					{
 						i.ResultType = new OpaqueType();
 					}
 					break;
 
-				case OpTypeVoid t:
+				case OpTypeVoid:
 					{
 						i.ResultType = new VoidType();
 					}
 					break;
 
-				case OpTypeImage t:
+				case OpTypeImage:
 					{
 						Type sampledType = objects[i.Operands[1].GetId()].ResultType;
 						Dim dim = i.Operands[2].GetSingleEnumValue<Dim>();
@@ -282,19 +285,19 @@ namespace SpirV
 					}
 					break;
 
-				case OpTypeSampler st:
+				case OpTypeSampler:
 					{
 						i.ResultType = new SamplerType();
 						break;
 					}
 
-				case OpTypeSampledImage t:
+				case OpTypeSampledImage:
 					{
 						i.ResultType = new SampledImageType((ImageType)objects[i.Words[2]].ResultType);
 					}
 					break;
 
-				case OpTypeFunction t:
+				case OpTypeFunction:
 					{
 						List<Type> parameterTypes = new List<Type>();
 						for (int j = 3; j < i.Words.Count; ++j)
@@ -305,7 +308,7 @@ namespace SpirV
 					}
 					break;
 
-				case OpTypeForwardPointer t:
+				case OpTypeForwardPointer:
 					{
 						// We create a normal pointer, but with unspecified type
 						// This will get resolved later on
@@ -313,7 +316,7 @@ namespace SpirV
 					}
 					break;
 
-				case OpTypePointer t:
+				case OpTypePointer:
 					{
 						if (objects.ContainsKey(i.Words[1]))
 						{
@@ -332,7 +335,7 @@ namespace SpirV
 					}
 					break;
 
-				case OpTypeStruct t:
+				case OpTypeStruct:
 					{
 						List<Type> memberTypes = new List<Type>();
 						for (int j = 2; j < i.Words.Count; ++j)
@@ -345,7 +348,7 @@ namespace SpirV
 			}
 		}
 
-		private static object ConvertConstant(ScalarType type, IReadOnlyList<uint> words, int index)
+		private static object? ConvertConstant(ScalarType? type, IReadOnlyList<uint> words, int index)
 		{
 			switch (type)
 			{
@@ -408,7 +411,7 @@ namespace SpirV
 		public ModuleHeader Header { get; }
 		public IReadOnlyList<ParsedInstruction> Instructions { get; }
 
-		private static HashSet<string> debugInstructions_ = new HashSet<string>
+		private static readonly HashSet<string?> debugInstructions_ = new()
 		{
 			"OpSourceContinued",
 			"OpSource",
