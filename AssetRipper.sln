@@ -140,6 +140,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.SerializationLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Assets.Tests", "AssetRipper.Assets.Tests\AssetRipper.Assets.Tests.csproj", "{CD86DE37-F673-423F-B0B3-BC9614DAA688}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.IO.Endian.SourceGenerator", "AssetRipper.IO.Endian.SourceGenerator\AssetRipper.IO.Endian.SourceGenerator.csproj", "{85615C32-8A7C-421A-AC31-D6A5344344DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -266,6 +268,10 @@ Global
 		{CD86DE37-F673-423F-B0B3-BC9614DAA688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD86DE37-F673-423F-B0B3-BC9614DAA688}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD86DE37-F673-423F-B0B3-BC9614DAA688}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85615C32-8A7C-421A-AC31-D6A5344344DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85615C32-8A7C-421A-AC31-D6A5344344DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85615C32-8A7C-421A-AC31-D6A5344344DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85615C32-8A7C-421A-AC31-D6A5344344DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
