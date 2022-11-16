@@ -27,13 +27,14 @@ namespace AssetRipper.IO.Files.SourceGenerator
 
 			string destination = GetDestinationDirectory(declaration);
 
+			Directory.CreateDirectory(destination);
 			{
-				using IndentedTextWriter writer = OpenWrite($"{destination}I{declaration.Name}.g.cs");
+				using IndentedTextWriter writer = IndentedTextWriterFactory.Create(destination, $"I{declaration.Name}");
 				Generator.MakeInterface(writer, declaration, propertyTypeDictionary);
 			}
 			foreach (TypeDefinition version in versions)
 			{
-				using IndentedTextWriter writer = OpenWrite($"{destination}{declaration.Name}_{version.Version}.g.cs");
+				using IndentedTextWriter writer = IndentedTextWriterFactory.Create(destination, $"{declaration.Name}_{version.Version}");
 				Generator.MakeType(writer, declaration, version, propertyTypeDictionary);
 			}
 		}
@@ -83,12 +84,6 @@ namespace AssetRipper.IO.Files.SourceGenerator
 			{
 				throw new NullReferenceException();
 			}
-		}
-
-		private static IndentedTextWriter OpenWrite(string path)
-		{
-			Directory.CreateDirectory(Path.GetDirectoryName(path) ?? throw new NullReferenceException());
-			return new IndentedTextWriter(new StreamWriter(path, false) { AutoFlush = true }, "\t");
 		}
 
 		private static string GetDestinationDirectory(TypeDeclaration declaration)

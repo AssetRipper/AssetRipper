@@ -13,9 +13,10 @@ public static class LocalizationSourceGenerator
 	public static string MakeLocalizationClass(string repositoryPath)
 	{
 		using StringWriter stringWriter = new();
-		using IndentedTextWriter writer = new IndentedTextWriter(stringWriter);
+		stringWriter.NewLine = "\n";
+		using IndentedTextWriter writer = new IndentedTextWriter(stringWriter, "\t");
 
-		writer.WriteComment("Auto-generated code");
+		writer.WriteGeneratedCodeWarning();
 		writer.WriteUsing("System.Collections.Generic");
 		writer.WriteLine();
 		

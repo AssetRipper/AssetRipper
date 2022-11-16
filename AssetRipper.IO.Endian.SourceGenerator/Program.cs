@@ -38,10 +38,8 @@ internal class Program
 
 	private static void DoReaderStruct()
 	{
-		using FileStream stream = File.Create($"{PathToTargetDirectory}{ReaderStructName}.g.cs");
-		using StreamWriter streamWriter = new StreamWriter(stream);
-		using IndentedTextWriter indentedWriter = new IndentedTextWriter(streamWriter, "\t");
-		DoReaderStruct(indentedWriter);
+		using IndentedTextWriter writer = IndentedTextWriterFactory.Create(PathToTargetDirectory, ReaderStructName);
+		DoReaderStruct(writer);
 	}
 
 	private static void DoReaderStruct(IndentedTextWriter writer)
@@ -65,10 +63,8 @@ internal class Program
 
 	private static void DoWriterStruct()
 	{
-		using FileStream stream = File.Create($"{PathToTargetDirectory}{WriterStructName}.g.cs");
-		using StreamWriter streamWriter = new StreamWriter(stream);
-		using IndentedTextWriter indentedWriter = new IndentedTextWriter(streamWriter, "\t");
-		DoWriterStruct(indentedWriter);
+		using IndentedTextWriter writer = IndentedTextWriterFactory.Create(PathToTargetDirectory, WriterStructName);
+		DoWriterStruct(writer);
 	}
 
 	private static void DoWriterStruct(IndentedTextWriter writer)
