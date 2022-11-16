@@ -4,8 +4,9 @@ public partial struct EndianSpanReader
 {
 	public EndianSpanReader(ReadOnlySpan<byte> data, EndianType type)
 	{
+		offset = 0;
 		this.data = data;
-		Type = type;
+		bigEndian = type == EndianType.BigEndian;
 	}
 
 	public EndianType Type
