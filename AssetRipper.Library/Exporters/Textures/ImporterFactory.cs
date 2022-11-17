@@ -1,14 +1,13 @@
 ﻿using AssetRipper.Assets.Export;
 using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project;
 using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 using AssetRipper.SourceGenerated.Classes.ClassID_1055;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_89;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.TextureImporterPlatformSettings;
+using System.Numerics;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
@@ -28,7 +27,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			instance.StreamingMipmapsPriority_C1006 = origin.StreamingMipmapsPriority_C28;
 			instance.IsReadable_C1006 = origin.IsReadable_C28 ? 1 : 0;
 			instance.Format_C1006 = origin.Format_C28;
-			instance.MaxTextureSize_C1006 = (int)Math.Max(2048, MathUtils.NextPowerOfTwo((uint)Math.Max(origin.Width_C28, origin.Height_C28)));
+			instance.MaxTextureSize_C1006 = CalculateMaxTextureSize(origin.Width_C28, origin.Height_C28);
 			instance.TextureSettings_C1006.CopyValues(origin.TextureSettings_C28);
 			instance.NPOTScale_C1006 = (int)TextureImporterNPOTScale.None;
 			instance.CompressionQuality_C1006 = 50;
@@ -66,13 +65,19 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 
 			return instance;
-		}
 
-		private static int GetTextureTypeFromLightmapFormat(ITexture2D origin)
-		{
-			return ((TextureUsageMode)origin.LightmapFormat_C28).IsNormalmap()
-				? (int)TextureImporterType.NormalMap
-				: (int)TextureImporterType.Default;
+			static int CalculateMaxTextureSize(int width, int height)
+			{
+				uint maxSideLength = (uint)Math.Max(width, height);
+				return Math.Max(2048, (int)BitOperations.RoundUpToPowerOf2(maxSideLength));
+			}
+
+			static int GetTextureTypeFromLightmapFormat(ITexture2D origin)
+			{
+				return ((TextureUsageMode)origin.LightmapFormat_C28).IsNormalmap()
+					? (int)TextureImporterType.NormalMap
+					: (int)TextureImporterType.Default;
+			}
 		}
 
 		public static IIHVImageFormatImporter GenerateIHVImporter(IExportContainer container, ITexture2D origin)
