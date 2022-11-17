@@ -13,11 +13,14 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Mono;
 using AssetRipper.Core.Structure.Assembly.TypeTrees;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Classes.ClassID_27;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Subclasses.AABB;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
 using AssetRipper.SourceGenerated.Subclasses.ColorRGBA32;
@@ -123,8 +126,17 @@ namespace AssetRipper.Core.Structure
 				asset.Read(reader);
 				if (reader.BaseStream.Position != size)
 				{
-					Logger.Error($"Read {reader.BaseStream.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}");
-					replaceWithUnreadableObject = true;
+					//Some Chinese Unity versions have extra fields appended to the global type trees.
+					if (size - reader.BaseStream.Position == 24 && asset is ITexture2D texture)
+					{
+						ReadExtraTextureFields(texture, reader);
+						replaceWithUnreadableObject = false;
+					}
+					else
+					{
+						LogIncorrectNumberOfBytesRead(asset, reader, size);
+						replaceWithUnreadableObject = true;
+					}
 				}
 				else
 				{
@@ -148,6 +160,33 @@ namespace AssetRipper.Core.Structure
 			{
 				return asset;
 			}
+		}
+
+		private static void LogIncorrectNumberOfBytesRead(IUnityObjectBase asset, AssetReader reader, int size)
+		{
+			Logger.Error($"Read {reader.BaseStream.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}");
+		}
+
+		/// <summary>
+		/// A special case for Chinese textures containing an extra 24 bytes at the end.
+		/// </summary>
+		/// <param name="reader"></param>
+		private static void ReadExtraTextureFields(ITexture2D texture, AssetReader reader)
+		{
+			//int m_OriginalWidth // ByteSize{4}, Index{26}, Version{1}, IsArray{0}, MetaFlag{10}
+			//int m_OriginalHeight // ByteSize{4}, Index{27}, Version{1}, IsArray{0}, MetaFlag{10}
+			//GUID m_OriginalAssetGuid // ByteSize{10}, Index{28}, Version{1}, IsArray{0}, MetaFlag{10}
+			//unsigned int data[0] // ByteSize{4}, Index{29}, Version{1}, IsArray{0}, MetaFlag{10}
+			//unsigned int data[1] // ByteSize{4}, Index{2a}, Version{1}, IsArray{0}, MetaFlag{10}
+			//unsigned int data[2] // ByteSize{4}, Index{2b}, Version{1}, IsArray{0}, MetaFlag{10}
+			//unsigned int data[3] // ByteSize{4}, Index{2c}, Version{1}, IsArray{0}, MetaFlag{10}
+			reader.ReadInt32();
+			reader.ReadInt32();
+			reader.ReadUInt32();
+			reader.ReadUInt32();
+			reader.ReadUInt32();
+			reader.ReadUInt32();
+			Logger.Warning($"Texture {texture.Name} had an extra 24 bytes, which were assumed to be non-standard Chinese fields.");
 		}
 
 		private static void LogMonoBehaviourMismatch(IMonoBehaviour monoBehaviour)
