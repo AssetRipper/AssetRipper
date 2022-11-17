@@ -11,10 +11,9 @@ namespace AssetRipper.Assets.Bundles;
 
 partial class GameBundle
 {
-	public static GameBundle FromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, IDependencyProvider dependencyProvider, IResourceProvider resourceProvider)
+	public void InitializeFromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, IDependencyProvider dependencyProvider, IResourceProvider resourceProvider)
 	{
-		GameBundle gameBundle = new();
-		gameBundle.ResourceProvider = resourceProvider;
+		ResourceProvider = resourceProvider;
 		Stack<File> fileStack = LoadAndSortFiles(paths, dependencyProvider);
 
 		while (fileStack.Count > 0)
@@ -23,20 +22,18 @@ partial class GameBundle
 			if (file is SerializedFile serializedFile)
 			{
 				//Collection is added to this automatically
-				SerializedAssetCollection.FromSerializedFile(gameBundle, serializedFile, assetFactory);
+				SerializedAssetCollection.FromSerializedFile(this, serializedFile, assetFactory);
 			}
 			else if (file is FileContainer container)
 			{
 				SerializedBundle bundle = SerializedBundle.FromFileContainer(container, assetFactory);
-				gameBundle.AddBundle(bundle);
+				AddBundle(bundle);
 			}
 			else if (file is ResourceFile resourceFile)
 			{
-				gameBundle.AddResource(resourceFile);
+				AddResource(resourceFile);
 			}
 		}
-
-		return gameBundle;
 	}
 
 	private static Stack<File> LoadAndSortFiles(IEnumerable<string> paths, IDependencyProvider dependencyProvider)

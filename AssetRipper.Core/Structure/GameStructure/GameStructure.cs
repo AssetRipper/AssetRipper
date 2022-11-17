@@ -117,7 +117,8 @@ namespace AssetRipper.Core.Structure.GameStructure
 				filePaths = PlatformStructure.Files.Values.Union(MixedStructure.Files.Values);
 			}
 
-			FileCollection = GameBundle.FromPaths(
+			FileCollection = new();
+			FileCollection.InitializeFromPaths(
 				filePaths,
 				assetFactory,
 				new StructureDependencyProvider(PlatformStructure, MixedStructure),
