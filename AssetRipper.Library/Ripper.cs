@@ -13,6 +13,7 @@ using AssetRipper.Library.Exporters.Meshes;
 using AssetRipper.Library.Exporters.Miscellaneous;
 using AssetRipper.Library.Exporters.Models;
 using AssetRipper.Library.Exporters.NavMeshes;
+using AssetRipper.Library.Exporters.PathIdMapping;
 using AssetRipper.Library.Exporters.Scripts;
 using AssetRipper.Library.Exporters.Shaders;
 using AssetRipper.Library.Exporters.Terrains;
@@ -306,6 +307,7 @@ namespace AssetRipper.Library
 			AddPostExporter(new StreamingAssetsPostExporter());
 			AddPostExporter(new TypeTreeExporter());
 			AddPostExporter(new DllPostExporter());
+			AddPostExporter(new PathIdMapExporter());
 		}
 
 		private void OverrideEngineExporters()
