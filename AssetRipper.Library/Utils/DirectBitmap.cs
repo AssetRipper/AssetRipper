@@ -1,5 +1,7 @@
 using AssetRipper.Library.Configuration;
+using AssetRipper.TextureDecoder.Rgb.Formats;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -15,13 +17,14 @@ namespace AssetRipper.Library.Utils
 
 		private readonly GCHandle m_bitsHandle;
 		private bool m_disposed;
+		private static int PixelSize => Unsafe.SizeOf<ColorBGRA32>();
 
 		/// <summary>
 		/// Make a new bitmap
 		/// </summary>
 		/// <param name="width">The width of the image</param>
 		/// <param name="height">The height of the image</param>
-		public DirectBitmap(int width, int height) : this(width, height, new byte[width * height * 4]) { }
+		public DirectBitmap(int width, int height) : this(width, height, new byte[width * height * PixelSize]) { }
 
 		/// <summary>
 		/// Make a bitmap from existing BGRA32 data
@@ -36,9 +39,9 @@ namespace AssetRipper.Library.Utils
 				throw new ArgumentNullException(nameof(bgra32Data));
 			}
 
-			if (bgra32Data.Length != width * height * 4)
+			if (bgra32Data.Length != width * height * PixelSize)
 			{
-				throw new ArgumentException($"Invalid length: expected {width * height * 4} but was actually {bgra32Data.Length}", nameof(bgra32Data));
+				throw new ArgumentException($"Invalid length: expected {width * height * PixelSize} but was actually {bgra32Data.Length}", nameof(bgra32Data));
 			}
 
 			Width = width;

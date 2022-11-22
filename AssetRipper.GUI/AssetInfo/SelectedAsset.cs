@@ -163,7 +163,7 @@ namespace AssetRipper.GUI.AssetInfo
 				{
 					case ITexture2D texture:
 						{
-							DirectBitmap? directBitmap = TextureAssetExporter.ConvertToBitmap(texture);
+							DirectBitmap? directBitmap = TextureConverter.ConvertToBitmap(texture);
 							return directBitmap is null ? null : AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
 						}
 					case ITerrainData terrain:

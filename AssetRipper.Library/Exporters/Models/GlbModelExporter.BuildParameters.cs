@@ -115,7 +115,7 @@ namespace AssetRipper.Library.Exporters.Models
 
 			private static bool TryConvertToBitmap(ITexture2D texture, [NotNullWhen(true)] out DirectBitmap? bitmap)
 			{
-				bitmap = TextureAssetExporter.ConvertToBitmap(texture);
+				bitmap = TextureConverter.ConvertToBitmap(texture);
 				return bitmap is not null;
 			}
 
