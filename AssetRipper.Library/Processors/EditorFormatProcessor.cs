@@ -73,10 +73,13 @@ namespace AssetRipper.Library.Processors
 			tagManager = gameBundle.FetchAssets().OfType<ITagManager>().FirstOrDefault();
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections().Where(c => c.Flags.IsRelease()))
 			{
+				//Cache relevant assets in this collection's bundle
+				AnimationClipExtensions.CacheAssets(collection.Bundle);
 				foreach (IUnityObjectBase asset in collection)
 				{
 					Convert(asset);
 				}
+				AnimationClipExtensions.ClearCachedAssets();
 			}
 			tagManager = null;
 		}
