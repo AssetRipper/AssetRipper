@@ -26,10 +26,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				return null;
 			}
 
-			int pvrtcBitCount = texture.PVRTCBitCount(true);
-			int astcBlockSize = texture.ASTCBlockSize(true);
-
-			DirectBitmap? bitmap = ConvertToBitmap(texture.Format_C28E, texture.Width_C28, texture.Height_C28, texture.Collection.Version, buffer, pvrtcBitCount, astcBlockSize);
+			DirectBitmap? bitmap = ConvertToBitmap(texture.Format_C28E, texture.Width_C28, texture.Height_C28, texture.Collection.Version, buffer);
 
 			if (bitmap == null)
 			{
@@ -45,101 +42,22 @@ namespace AssetRipper.Library.Exporters.Textures
 			return bitmap;
 		}
 
-		private static DirectBitmap? ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data, int pvrtcBitCount, int astcBlockSize)
+		private static DirectBitmap? ConvertToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion version, byte[] data)
 		{
 			if (width == 0 || height == 0)
 			{
 				return new DirectBitmap(1, 1);
 			}
 
-			switch (textureFormat)
+			if (textureFormat
+				is TextureFormat.DXT1Crunched
+				or TextureFormat.DXT5Crunched
+				or TextureFormat.ETC_RGB4Crunched
+				or TextureFormat.ETC2_RGBA8Crunched)
 			{
-				case TextureFormat.DXT1:
-				case TextureFormat.DXT3:
-				case TextureFormat.DXT5:
-					return DXTTextureToBitmap(textureFormat, width, height, data);
-
-				case TextureFormat.Alpha8:
-				case TextureFormat.ARGB4444:
-				case TextureFormat.RGB24:
-				case TextureFormat.RGBA32:
-				case TextureFormat.ARGB32:
-				case TextureFormat.RGB565:
-				case TextureFormat.R16:
-				case TextureFormat.RGBA4444:
-				case TextureFormat.BGRA32_14:
-				case TextureFormat.RHalf:
-				case TextureFormat.RGHalf:
-				case TextureFormat.RGBAHalf:
-				case TextureFormat.RFloat:
-				case TextureFormat.RGFloat:
-				case TextureFormat.RGBAFloat:
-				case TextureFormat.RGB9e5Float:
-				case TextureFormat.RG16:
-				case TextureFormat.R8:
-					return RGBTextureToBitmap(textureFormat, width, height, data);
-
-				case TextureFormat.YUY2:
-					return YUY2TextureToBitmap(textureFormat, width, height, data);
-
-				case TextureFormat.PVRTC_RGB2:
-				case TextureFormat.PVRTC_RGBA2:
-				case TextureFormat.PVRTC_RGB4:
-				case TextureFormat.PVRTC_RGBA4:
-					return PVRTCTextureToBitmap(pvrtcBitCount, textureFormat, width, height, data);
-
-				case TextureFormat.ETC_RGB4:
-				case TextureFormat.EAC_R:
-				case TextureFormat.EAC_R_SIGNED:
-				case TextureFormat.EAC_RG:
-				case TextureFormat.EAC_RG_SIGNED:
-				case TextureFormat.ETC2_RGB:
-				case TextureFormat.ETC2_RGBA1:
-				case TextureFormat.ETC2_RGBA8:
-				case TextureFormat.ETC_RGB4_3DS:
-				case TextureFormat.ETC_RGBA8_3DS:
-					return ETCTextureToBitmap(textureFormat, width, height, data);
-
-				case TextureFormat.ATC_RGB4_35:
-				case TextureFormat.ATC_RGBA8_36:
-					return ATCTextureToBitmap(textureFormat, width, height, data);
-
-				case TextureFormat.ASTC_RGB_4x4:
-				case TextureFormat.ASTC_RGB_5x5:
-				case TextureFormat.ASTC_RGB_6x6:
-				case TextureFormat.ASTC_RGB_8x8:
-				case TextureFormat.ASTC_RGB_10x10:
-				case TextureFormat.ASTC_RGB_12x12:
-				case TextureFormat.ASTC_RGBA_4x4:
-				case TextureFormat.ASTC_RGBA_5x5:
-				case TextureFormat.ASTC_RGBA_6x6:
-				case TextureFormat.ASTC_RGBA_8x8:
-				case TextureFormat.ASTC_RGBA_10x10:
-				case TextureFormat.ASTC_RGBA_12x12:
-					return ASTCTextureToBitmap(astcBlockSize, width, height, data);
-
-				case TextureFormat.BC4:
-				case TextureFormat.BC5:
-				case TextureFormat.BC6H:
-				case TextureFormat.BC7:
-					return BcTextureToBitmap(textureFormat, width, height, data);
-
-				case TextureFormat.DXT1Crunched:
-				case TextureFormat.DXT5Crunched:
-					return DXTCrunchedTextureToBitmap(textureFormat, width, height, version, data);
-
-				case TextureFormat.ETC_RGB4Crunched:
-				case TextureFormat.ETC2_RGBA8Crunched:
-					return ETCCrunchedTextureToBitmap(textureFormat, width, height, version, data);
-
-				default:
-					Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{textureFormat}'");
-					return null;
+				data = CrunchHandler.DecompressCrunch(textureFormat, width, height, version, data);
 			}
-		}
 
-		private static DirectBitmap DXTTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
-		{
 			DirectBitmap bitmap = new DirectBitmap(width, height);
 			try
 			{
@@ -159,109 +77,92 @@ namespace AssetRipper.Library.Exporters.Textures
 						DxtDecoder.DecompressDXT5(data, width, height, bitmap.Bits);
 						break;
 
-					default:
-						throw new Exception(textureFormat.ToString());
-
-				}
-				bitmap.FlipY();
-				return bitmap;
-			}
-			catch
-			{
-				bitmap.Dispose();
-				throw;
-			}
-		}
-
-		private static DirectBitmap DXTCrunchedTextureToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
-		{
-			byte[] decompressed = CrunchHandler.DecompressCrunch(textureFormat, width, height, unityVersion, data);
-			return DXTTextureToBitmap(textureFormat, width, height, decompressed);
-		}
-
-		private static DirectBitmap RGBTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
-		{
-			DirectBitmap bitmap = new DirectBitmap(width, height);
-			try
-			{
-				switch (textureFormat)
-				{
 					case TextureFormat.Alpha8:
 						RgbConverter.A8ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.ARGB4444:
 						RgbConverter.ARGB16ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RGB24:
 						RgbConverter.RGB24ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RGBA32:
 						RgbConverter.RGBA32ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.ARGB32:
 						RgbConverter.ARGB32ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RGB565:
 						RgbConverter.RGB16ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.R16:
 						RgbConverter.R16ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RGBA4444:
 						RgbConverter.RGBA16ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.BGRA32_14:
 						Buffer.BlockCopy(data, 0, bitmap.Bits, 0, bitmap.Bits.Length);
 						break;
+
 					case TextureFormat.RG16:
 						RgbConverter.RG16ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.R8:
 						RgbConverter.R8ToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RHalf:
 						RgbConverter.RHalfToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RGHalf:
 						RgbConverter.RGHalfToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RGBAHalf:
 						RgbConverter.RGBAHalfToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RFloat:
 						RgbConverter.RFloatToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RGFloat:
 						RgbConverter.RGFloatToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RGBAFloat:
 						RgbConverter.RGBAFloatToBGRA32(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.RGB9e5Float:
 						RgbConverter.RGB9e5FloatToBGRA32(data, width, height, bitmap.Bits);
 						break;
 
-					default:
-						throw new Exception(textureFormat.ToString());
+					case TextureFormat.YUY2:
+						Yuy2Decoder.DecompressYUY2(data, width, height, bitmap.Bits);
+						break;
 
-				}
-				bitmap.FlipY();
-				return bitmap;
-			}
-			catch
-			{
-				bitmap.Dispose();
-				throw;
-			}
-		}
+					case TextureFormat.PVRTC_RGB2:
+					case TextureFormat.PVRTC_RGBA2:
+						PvrtcDecoder.DecompressPVRTC(data, width, height, true, bitmap.Bits);
+						break;
 
-		private static DirectBitmap ETCTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
-		{
-			DirectBitmap bitmap = new DirectBitmap(width, height);
-			try
-			{
-				switch (textureFormat)
-				{
+					case TextureFormat.PVRTC_RGB4:
+					case TextureFormat.PVRTC_RGBA4:
+						PvrtcDecoder.DecompressPVRTC(data, width, height, false, bitmap.Bits);
+						break;
+
 					case TextureFormat.ETC_RGB4:
 					case TextureFormat.ETC_RGB4_3DS:
 					case TextureFormat.ETC_RGB4Crunched:
@@ -271,12 +172,15 @@ namespace AssetRipper.Library.Exporters.Textures
 					case TextureFormat.EAC_R:
 						EtcDecoder.DecompressEACRUnsigned(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.EAC_R_SIGNED:
 						EtcDecoder.DecompressEACRSigned(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.EAC_RG:
 						EtcDecoder.DecompressEACRGUnsigned(data, width, height, bitmap.Bits);
 						break;
+
 					case TextureFormat.EAC_RG_SIGNED:
 						EtcDecoder.DecompressEACRGSigned(data, width, height, bitmap.Bits);
 						break;
@@ -295,33 +199,6 @@ namespace AssetRipper.Library.Exporters.Textures
 						EtcDecoder.DecompressETC2A8(data, width, height, bitmap.Bits);
 						break;
 
-					default:
-						throw new Exception(textureFormat.ToString());
-
-				}
-				bitmap.FlipY();
-				return bitmap;
-			}
-			catch
-			{
-				bitmap.Dispose();
-				throw;
-			}
-		}
-
-		private static DirectBitmap ETCCrunchedTextureToBitmap(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
-		{
-			byte[] decompressed = CrunchHandler.DecompressCrunch(textureFormat, width, height, unityVersion, data);
-			return ETCTextureToBitmap(textureFormat, width, height, decompressed);
-		}
-
-		private static DirectBitmap ATCTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
-		{
-			DirectBitmap bitmap = new DirectBitmap(width, height);
-			try
-			{
-				switch (textureFormat)
-				{
 					case TextureFormat.ATC_RGB4_35:
 						AtcDecoder.DecompressAtcRgb4(data, width, height, bitmap.Bits);
 						break;
@@ -330,74 +207,48 @@ namespace AssetRipper.Library.Exporters.Textures
 						AtcDecoder.DecompressAtcRgba8(data, width, height, bitmap.Bits);
 						break;
 
+					case TextureFormat.ASTC_RGB_4x4:
+					case TextureFormat.ASTC_RGBA_4x4:
+						AstcDecoder.DecodeASTC(data, width, height, 4, 4, bitmap.Bits);
+						break;
+
+					case TextureFormat.ASTC_RGB_5x5:
+					case TextureFormat.ASTC_RGBA_5x5:
+						AstcDecoder.DecodeASTC(data, width, height, 5, 5, bitmap.Bits);
+						break;
+
+					case TextureFormat.ASTC_RGB_6x6:
+					case TextureFormat.ASTC_RGBA_6x6:
+						AstcDecoder.DecodeASTC(data, width, height, 6, 6, bitmap.Bits);
+						break;
+
+					case TextureFormat.ASTC_RGB_8x8:
+					case TextureFormat.ASTC_RGBA_8x8:
+						AstcDecoder.DecodeASTC(data, width, height, 8, 8, bitmap.Bits);
+						break;
+
+					case TextureFormat.ASTC_RGB_10x10:
+					case TextureFormat.ASTC_RGBA_10x10:
+						AstcDecoder.DecodeASTC(data, width, height, 10, 10, bitmap.Bits);
+						break;
+
+					case TextureFormat.ASTC_RGB_12x12:
+					case TextureFormat.ASTC_RGBA_12x12:
+						AstcDecoder.DecodeASTC(data, width, height, 12, 12, bitmap.Bits);
+						break;
+
+					case TextureFormat.BC4:
+					case TextureFormat.BC5:
+					case TextureFormat.BC6H:
+					case TextureFormat.BC7:
+						DecodeBC(data, textureFormat, width, height, bitmap.Bits);
+						break;
+
 					default:
-						throw new Exception(textureFormat.ToString());
-
+						Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{textureFormat}'");
+						bitmap.Dispose();
+						return null;
 				}
-				bitmap.FlipY();
-				return bitmap;
-			}
-			catch
-			{
-				bitmap.Dispose();
-				throw;
-			}
-		}
-
-		private static DirectBitmap YUY2TextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
-		{
-			DirectBitmap bitmap = new DirectBitmap(width, height);
-			try
-			{
-				Yuy2Decoder.DecompressYUY2(data, width, height, bitmap.Bits);
-				return bitmap;
-			}
-			catch
-			{
-				bitmap.Dispose();
-				throw;
-			}
-		}
-
-		private static DirectBitmap PVRTCTextureToBitmap(int bitCount, TextureFormat textureFormat, int width, int height, byte[] data)
-		{
-			DirectBitmap bitmap = new DirectBitmap(width, height);
-			try
-			{
-				PvrtcDecoder.DecompressPVRTC(data, width, height, bitCount == 2, bitmap.Bits);
-				bitmap.FlipY();
-				return bitmap;
-			}
-			catch
-			{
-				bitmap.Dispose();
-				throw;
-			}
-		}
-
-		private static DirectBitmap ASTCTextureToBitmap(int blockSize, int width, int height, byte[] data)
-		{
-			DirectBitmap bitmap = new DirectBitmap(width, height);
-			try
-			{
-				AstcDecoder.DecodeASTC(data, width, height, blockSize, blockSize, bitmap.Bits);
-				bitmap.FlipY();
-				return bitmap;
-			}
-			catch
-			{
-				bitmap.Dispose();
-				throw;
-			}
-		}
-
-		private static DirectBitmap BcTextureToBitmap(TextureFormat textureFormat, int width, int height, byte[] data)
-		{
-			Logger.Info(LogCategory.Export, "Uses Bc Decoding!");
-			DirectBitmap bitmap = new DirectBitmap(width, height);
-			try
-			{
-				DecodeBC(data, textureFormat, width, height, bitmap.Bits);
 				bitmap.FlipY();
 				return bitmap;
 			}

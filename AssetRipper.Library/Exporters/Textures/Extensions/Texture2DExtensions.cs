@@ -14,7 +14,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 		/// <exception cref="NotSupportedException">if not safe and not an pvrtc texture</exception>
 		public static KTXBaseInternalFormat GetKTXBaseInternalFormat(this SourceGenerated.Classes.ClassID_28.ITexture2D _this, bool safe)
 		{
-			switch ((TextureFormat)_this.Format_C28)
+			switch (_this.Format_C28E)
 			{
 				case TextureFormat.RHalf:
 				case TextureFormat.RFloat:
@@ -60,89 +60,7 @@ namespace AssetRipper.Library.Exporters.Textures.Extensions
 						}
 						else
 						{
-							throw new NotSupportedException(((TextureFormat)_this.Format_C28).ToString());
-						}
-					}
-			}
-		}
-
-		/// <summary>
-		/// Get the cooresponding PVRTC bit count for a texture
-		/// </summary>
-		/// <param name="_this">The texture</param>
-		/// <param name="safe">If true, this method will return zero rather than throwing an exception.</param>
-		/// <returns>The bit count</returns>
-		/// <exception cref="NotSupportedException">if not safe and not an pvrtc texture</exception>
-		public static int PVRTCBitCount(this SourceGenerated.Classes.ClassID_28.ITexture2D _this, bool safe)
-		{
-			switch ((TextureFormat)_this.Format_C28)
-			{
-				case TextureFormat.PVRTC_RGB2:
-				case TextureFormat.PVRTC_RGBA2:
-					return 2;
-
-				case TextureFormat.PVRTC_RGB4:
-				case TextureFormat.PVRTC_RGBA4:
-					return 4;
-
-				default:
-					{
-						if (safe)
-						{
-							return 0;
-						}
-						else
-						{
-							throw new NotSupportedException(((TextureFormat)_this.Format_C28).ToString());
-						}
-					}
-			}
-		}
-
-		/// <summary>
-		/// Get the cooresponding ASTC block size for a texture
-		/// </summary>
-		/// <param name="_this">The texture</param>
-		/// <param name="safe">If true, this method will return zero rather than throwing an exception.</param>
-		/// <returns>The length of one side of the block</returns>
-		/// <exception cref="NotSupportedException">if not safe and not an astc texture</exception>
-		public static int ASTCBlockSize(this SourceGenerated.Classes.ClassID_28.ITexture2D _this, bool safe)
-		{
-			switch ((TextureFormat)_this.Format_C28)
-			{
-				case TextureFormat.ASTC_RGB_4x4:
-				case TextureFormat.ASTC_RGBA_4x4:
-					return 4;
-
-				case TextureFormat.ASTC_RGB_5x5:
-				case TextureFormat.ASTC_RGBA_5x5:
-					return 5;
-
-				case TextureFormat.ASTC_RGB_6x6:
-				case TextureFormat.ASTC_RGBA_6x6:
-					return 6;
-
-				case TextureFormat.ASTC_RGB_8x8:
-				case TextureFormat.ASTC_RGBA_8x8:
-					return 8;
-
-				case TextureFormat.ASTC_RGB_10x10:
-				case TextureFormat.ASTC_RGBA_10x10:
-					return 10;
-
-				case TextureFormat.ASTC_RGB_12x12:
-				case TextureFormat.ASTC_RGBA_12x12:
-					return 12;
-
-				default:
-					{
-						if (safe)
-						{
-							return 0;
-						}
-						else
-						{
-							throw new NotSupportedException(((TextureFormat)_this.Format_C28).ToString());
+							throw new NotSupportedException(_this.Format_C28E.ToString());
 						}
 					}
 			}
