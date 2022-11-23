@@ -3,7 +3,7 @@
     "config_options": "配置选项",
     "disable_scripts": "禁用脚本处理",
     "skip_streaming_assets": "跳过 StreamingAssets 文件夹",
-    "mesh_export_title": "网格导出格式",
+    "mesh_export_title": "网格(Mesh)导出格式",
     "audio_export_title": "音频导出格式",
     "image_export_title": "图像导出格式",
     "sprite_export_title": "Sprite 导出格式",
