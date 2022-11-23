@@ -11,6 +11,7 @@ using AssetRipper.TextureDecoder.Dxt;
 using AssetRipper.TextureDecoder.Etc;
 using AssetRipper.TextureDecoder.Pvrtc;
 using AssetRipper.TextureDecoder.Rgb;
+using AssetRipper.TextureDecoder.Rgb.Formats;
 using AssetRipper.TextureDecoder.Yuy2;
 
 
@@ -63,6 +64,55 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				switch (textureFormat)
 				{
+					//ASTC
+					case TextureFormat.ASTC_RGB_4x4:
+					case TextureFormat.ASTC_RGBA_4x4:
+						AstcDecoder.DecodeASTC(data, width, height, 4, 4, bitmap.Bits);
+						break;
+
+					case TextureFormat.ASTC_RGB_5x5:
+					case TextureFormat.ASTC_RGBA_5x5:
+						AstcDecoder.DecodeASTC(data, width, height, 5, 5, bitmap.Bits);
+						break;
+
+					case TextureFormat.ASTC_RGB_6x6:
+					case TextureFormat.ASTC_RGBA_6x6:
+						AstcDecoder.DecodeASTC(data, width, height, 6, 6, bitmap.Bits);
+						break;
+
+					case TextureFormat.ASTC_RGB_8x8:
+					case TextureFormat.ASTC_RGBA_8x8:
+						AstcDecoder.DecodeASTC(data, width, height, 8, 8, bitmap.Bits);
+						break;
+
+					case TextureFormat.ASTC_RGB_10x10:
+					case TextureFormat.ASTC_RGBA_10x10:
+						AstcDecoder.DecodeASTC(data, width, height, 10, 10, bitmap.Bits);
+						break;
+
+					case TextureFormat.ASTC_RGB_12x12:
+					case TextureFormat.ASTC_RGBA_12x12:
+						AstcDecoder.DecodeASTC(data, width, height, 12, 12, bitmap.Bits);
+						break;
+
+					//ATC
+					case TextureFormat.ATC_RGB4_35:
+						AtcDecoder.DecompressAtcRgb4(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.ATC_RGBA8_36:
+						AtcDecoder.DecompressAtcRgba8(data, width, height, bitmap.Bits);
+						break;
+
+					//BC
+					case TextureFormat.BC4:
+					case TextureFormat.BC5:
+					case TextureFormat.BC6H:
+					case TextureFormat.BC7:
+						DecodeBC(data, textureFormat, width, height, bitmap.Bits);
+						break;
+
+					//DXT
 					case TextureFormat.DXT1:
 					case TextureFormat.DXT1Crunched:
 						DxtDecoder.DecompressDXT1(data, width, height, bitmap.Bits);
@@ -77,92 +127,7 @@ namespace AssetRipper.Library.Exporters.Textures
 						DxtDecoder.DecompressDXT5(data, width, height, bitmap.Bits);
 						break;
 
-					case TextureFormat.Alpha8:
-						RgbConverter.A8ToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.ARGB4444:
-						RgbConverter.ARGB16ToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RGB24:
-						RgbConverter.RGB24ToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RGBA32:
-						RgbConverter.RGBA32ToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.ARGB32:
-						RgbConverter.ARGB32ToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RGB565:
-						RgbConverter.RGB16ToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.R16:
-						RgbConverter.R16ToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RGBA4444:
-						RgbConverter.RGBA16ToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.BGRA32_14:
-						Buffer.BlockCopy(data, 0, bitmap.Bits, 0, bitmap.Bits.Length);
-						break;
-
-					case TextureFormat.RG16:
-						RgbConverter.RG16ToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.R8:
-						RgbConverter.R8ToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RHalf:
-						RgbConverter.RHalfToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RGHalf:
-						RgbConverter.RGHalfToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RGBAHalf:
-						RgbConverter.RGBAHalfToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RFloat:
-						RgbConverter.RFloatToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RGFloat:
-						RgbConverter.RGFloatToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RGBAFloat:
-						RgbConverter.RGBAFloatToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.RGB9e5Float:
-						RgbConverter.RGB9e5FloatToBGRA32(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.YUY2:
-						Yuy2Decoder.DecompressYUY2(data, width, height, bitmap.Bits);
-						break;
-
-					case TextureFormat.PVRTC_RGB2:
-					case TextureFormat.PVRTC_RGBA2:
-						PvrtcDecoder.DecompressPVRTC(data, width, height, true, bitmap.Bits);
-						break;
-
-					case TextureFormat.PVRTC_RGB4:
-					case TextureFormat.PVRTC_RGBA4:
-						PvrtcDecoder.DecompressPVRTC(data, width, height, false, bitmap.Bits);
-						break;
-
+					//ETC
 					case TextureFormat.ETC_RGB4:
 					case TextureFormat.ETC_RGB4_3DS:
 					case TextureFormat.ETC_RGB4Crunched:
@@ -199,49 +164,106 @@ namespace AssetRipper.Library.Exporters.Textures
 						EtcDecoder.DecompressETC2A8(data, width, height, bitmap.Bits);
 						break;
 
-					case TextureFormat.ATC_RGB4_35:
-						AtcDecoder.DecompressAtcRgb4(data, width, height, bitmap.Bits);
+					//PVRTC
+					case TextureFormat.PVRTC_RGB2:
+					case TextureFormat.PVRTC_RGBA2:
+						PvrtcDecoder.DecompressPVRTC(data, width, height, true, bitmap.Bits);
 						break;
 
-					case TextureFormat.ATC_RGBA8_36:
-						AtcDecoder.DecompressAtcRgba8(data, width, height, bitmap.Bits);
+					case TextureFormat.PVRTC_RGB4:
+					case TextureFormat.PVRTC_RGBA4:
+						PvrtcDecoder.DecompressPVRTC(data, width, height, false, bitmap.Bits);
 						break;
 
-					case TextureFormat.ASTC_RGB_4x4:
-					case TextureFormat.ASTC_RGBA_4x4:
-						AstcDecoder.DecodeASTC(data, width, height, 4, 4, bitmap.Bits);
+					//YUY2
+					case TextureFormat.YUY2:
+						Yuy2Decoder.DecompressYUY2(data, width, height, bitmap.Bits);
 						break;
 
-					case TextureFormat.ASTC_RGB_5x5:
-					case TextureFormat.ASTC_RGBA_5x5:
-						AstcDecoder.DecodeASTC(data, width, height, 5, 5, bitmap.Bits);
+					//RGB
+					case TextureFormat.Alpha8:
+						RgbConverter.Convert<ColorA8, byte, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
 						break;
 
-					case TextureFormat.ASTC_RGB_6x6:
-					case TextureFormat.ASTC_RGBA_6x6:
-						AstcDecoder.DecodeASTC(data, width, height, 6, 6, bitmap.Bits);
+					case TextureFormat.ARGB4444:
+						RgbConverter.Convert<ColorARGB16, byte, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
 						break;
 
-					case TextureFormat.ASTC_RGB_8x8:
-					case TextureFormat.ASTC_RGBA_8x8:
-						AstcDecoder.DecodeASTC(data, width, height, 8, 8, bitmap.Bits);
+					case TextureFormat.RGBA4444:
+						RgbConverter.Convert<ColorRGBA16, byte, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
 						break;
 
-					case TextureFormat.ASTC_RGB_10x10:
-					case TextureFormat.ASTC_RGBA_10x10:
-						AstcDecoder.DecodeASTC(data, width, height, 10, 10, bitmap.Bits);
+					case TextureFormat.RGB565:
+						RgbConverter.Convert<ColorRGB16, byte, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
 						break;
 
-					case TextureFormat.ASTC_RGB_12x12:
-					case TextureFormat.ASTC_RGBA_12x12:
-						AstcDecoder.DecodeASTC(data, width, height, 12, 12, bitmap.Bits);
+					case TextureFormat.R8:
+						RgbConverter.Convert<ColorR8, byte, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
 						break;
 
-					case TextureFormat.BC4:
-					case TextureFormat.BC5:
-					case TextureFormat.BC6H:
-					case TextureFormat.BC7:
-						DecodeBC(data, textureFormat, width, height, bitmap.Bits);
+					case TextureFormat.RG16:
+						RgbConverter.Convert<ColorRG16, byte, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RGB24:
+						RgbConverter.Convert<ColorRGB24, byte, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RGBA32:
+						RgbConverter.Convert<ColorRGBA32, byte, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.ARGB32:
+						RgbConverter.Convert<ColorARGB32, byte, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.BGRA32_14:
+					case TextureFormat.BGRA32_37:
+						Buffer.BlockCopy(data, 0, bitmap.Bits, 0, bitmap.Bits.Length);
+						break;
+
+					case TextureFormat.R16:
+						RgbConverter.Convert<ColorR16, ushort, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RG32:
+						RgbConverter.Convert<ColorRG32, ushort, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RGB48:
+						RgbConverter.Convert<ColorRGB48, ushort, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RGBA64:
+						RgbConverter.Convert<ColorRGBA64, ushort, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RHalf:
+						RgbConverter.Convert<ColorRHalf, Half, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RGHalf:
+						RgbConverter.Convert<ColorRGHalf, Half, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RGBAHalf:
+						RgbConverter.Convert<ColorRGBAHalf, Half, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RFloat:
+						RgbConverter.Convert<ColorRSingle, float, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RGFloat:
+						RgbConverter.Convert<ColorRGSingle, float, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RGBAFloat:
+						RgbConverter.Convert<ColorRGBASingle, float, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
+						break;
+
+					case TextureFormat.RGB9e5Float:
+						RgbConverter.Convert<ColorRGB9e5, double, ColorBGRA32, byte>(data, width, height, bitmap.Bits);
 						break;
 
 					default:
