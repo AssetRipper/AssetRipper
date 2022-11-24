@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
@@ -15,10 +16,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class AnimationClipExtensions
 	{
-		private static List<IAvatar> _cachedAvatars = new();
-		private static List<IAnimator> _cachedAnimators = new();
-		private static List<IAnimation> _cachedAnimations = new();
-		
+
 		public enum AnimationType
 		{
 			Legacy = 1,
@@ -33,34 +31,6 @@ namespace AssetRipper.Core.SourceGenExtensions
 				return clip.Legacy_C74;
 			}
 			return clip.AnimationType_C74 == (int)AnimationType.Legacy;
-		}
-
-		public static void ClearCachedAssets()
-		{
-			_cachedAnimations.Clear();
-			_cachedAnimators.Clear();
-			_cachedAvatars.Clear();
-		}
-		
-		public static void CacheAssets(Bundle bundle)
-		{
-			ClearCachedAssets();
-			
-			foreach (IUnityObjectBase asset in bundle.FetchAssetsInHierarchy())
-			{
-				switch (asset)
-				{
-					case IAvatar avatar:
-						_cachedAvatars.Add(avatar);
-						break;
-					case IAnimator animator:
-						_cachedAnimators.Add(animator);
-						break;
-					case IAnimation animation:
-						_cachedAnimations.Add(animation);
-						break;
-				}
-			}
 		}
 
 		public static IEnumerable<IGameObject> FindRoots(this IAnimationClip clip)
@@ -96,30 +66,27 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return animation.IsContainsAnimationClip(clip);
 		}
 
-		public static IReadOnlyDictionary<uint, string> FindTOS(this IAnimationClip clip)
+		public static IReadOnlyDictionary<uint, string> FindTOS(this IAnimationClip clip, AnimationCache cache)
 		{
-			Dictionary<uint, string> tos = new()
-			{
-				{ 0, string.Empty }
-			};
-			
-			foreach (IAvatar avatar in _cachedAvatars)
+			Dictionary<uint, string> tos = new() { { 0, string.Empty } };
+
+			foreach (IAvatar avatar in cache.CachedAvatars)
 			{
 				if (clip.AddAvatarTOS(avatar, tos))
 				{
 					return tos;
 				}
 			}
-			
-			foreach (IAnimator animator in _cachedAnimators)
+
+			foreach (IAnimator animator in cache.CachedAnimators)
 			{
 				if (clip.IsAnimatorContainsClip(animator) && clip.AddAnimatorTOS(animator, tos))
 				{
 					return tos;
 				}
 			}
-			
-			foreach (IAnimation animation in _cachedAnimations)
+
+			foreach (IAnimation animation in cache.CachedAnimations)
 			{
 				if (clip.IsAnimationContainsClip(animation) && clip.AddAnimationTOS(animation, tos))
 				{

@@ -61,6 +61,7 @@ namespace AssetRipper.Library.Processors
 	{
 		private ITagManager? tagManager;
 		private readonly BundledAssetsExportMode bundledAssetsExportMode;
+		private AnimationCache? currentAnimationCache;
 
 		public EditorFormatProcessor(BundledAssetsExportMode bundledAssetsExportMode)
 		{
@@ -74,12 +75,14 @@ namespace AssetRipper.Library.Processors
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections().Where(c => c.Flags.IsRelease()))
 			{
 				//Cache relevant assets in this collection's bundle
-				AnimationClipExtensions.CacheAssets(collection.Bundle);
+				currentAnimationCache = AnimationCache.CreateCache(collection.Bundle);
+				
 				foreach (IUnityObjectBase asset in collection)
 				{
 					Convert(asset);
 				}
-				AnimationClipExtensions.ClearCachedAssets();
+
+				currentAnimationCache = null;
 			}
 			tagManager = null;
 		}
@@ -105,7 +108,7 @@ namespace AssetRipper.Library.Processors
 					spriteAtlas.ConvertToEditorFormat();
 					break;
 				case IAnimationClip animationClip:
-					AnimationClipConverter.Process(animationClip);
+					AnimationClipConverter.Process(animationClip, currentAnimationCache!);
 					break;
 				case ITerrain terrain:
 					terrain.ConvertToEditorFormat();

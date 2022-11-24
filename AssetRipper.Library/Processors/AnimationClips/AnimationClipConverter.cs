@@ -3,6 +3,7 @@ using AssetRipper.Assets.Utils;
 using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
 using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Core.Utils;
 using AssetRipper.Library.Processors.AnimationClips.Editor;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
@@ -39,19 +40,19 @@ namespace AssetRipper.Library.Processors.AnimationClips
 			m_customCurveResolver = new CustomCurveResolver(clip);
 		}
 
-		public static void Process(IAnimationClip clip)
+		public static void Process(IAnimationClip clip, AnimationCache cache)
 		{
 			AnimationClipConverter converter = new AnimationClipConverter(clip);
-			converter.ProcessInner();
+			converter.ProcessInner(cache);
 		}
 
-		private void ProcessInner()
+		private void ProcessInner(AnimationCache animationCache)
 		{
 			if (m_clip.Has_MuscleClip_C74() && m_clip.Has_ClipBindingConstant_C74())
 			{
 				IClip clip = m_clip.MuscleClip_C74.Clip.Data;
 				IAnimationClipBindingConstant bindings = m_clip.ClipBindingConstant_C74;
-				IReadOnlyDictionary<uint, string> tos = m_clip.FindTOS();
+				IReadOnlyDictionary<uint, string> tos = m_clip.FindTOS(animationCache);
 
 				IReadOnlyList<StreamedFrame> streamedFrames = GenerateFramesFromStreamedClip(clip.StreamedClip);
 				float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
