@@ -1,6 +1,8 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Core.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
@@ -14,6 +16,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class AnimationClipExtensions
 	{
+
 		public enum AnimationType
 		{
 			Legacy = 1,
@@ -63,35 +66,31 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return animation.IsContainsAnimationClip(clip);
 		}
 
-		public static IReadOnlyDictionary<uint, string> FindTOS(this IAnimationClip clip)
+		public static IReadOnlyDictionary<uint, string> FindTOS(this IAnimationClip clip, AnimationCache cache)
 		{
-			Dictionary<uint, string> tos = new()
-			{
-				{ 0, string.Empty }
-			};
+			Dictionary<uint, string> tos = new() { { 0, string.Empty } };
 
-			foreach (IUnityObjectBase asset in clip.Collection.Bundle.FetchAssetsInHierarchy())
+			foreach (IAvatar avatar in cache.CachedAvatars)
 			{
-				if (asset is IAvatar avatar)
+				if (clip.AddAvatarTOS(avatar, tos))
 				{
-					if (clip.AddAvatarTOS(avatar, tos))
-					{
-						return tos;
-					}
+					return tos;
 				}
-				else if (asset is IAnimator animator)
+			}
+
+			foreach (IAnimator animator in cache.CachedAnimators)
+			{
+				if (clip.IsAnimatorContainsClip(animator) && clip.AddAnimatorTOS(animator, tos))
 				{
-					if (clip.IsAnimatorContainsClip(animator) && clip.AddAnimatorTOS(animator, tos))
-					{
-						return tos;
-					}
+					return tos;
 				}
-				else if (asset is IAnimation animation)
+			}
+
+			foreach (IAnimation animation in cache.CachedAnimations)
+			{
+				if (clip.IsAnimationContainsClip(animation) && clip.AddAnimationTOS(animation, tos))
 				{
-					if (clip.IsAnimationContainsClip(animation) && clip.AddAnimationTOS(animation, tos))
-					{
-						return tos;
-					}
+					return tos;
 				}
 			}
 
