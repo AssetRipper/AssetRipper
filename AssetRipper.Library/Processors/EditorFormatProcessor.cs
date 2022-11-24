@@ -72,18 +72,15 @@ namespace AssetRipper.Library.Processors
 		{
 			Logger.Info(LogCategory.Processing, "Editor Format Conversion");
 			tagManager = gameBundle.FetchAssets().OfType<ITagManager>().FirstOrDefault();
+			currentAnimationCache = AnimationCache.CreateCache(gameBundle);
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections().Where(c => c.Flags.IsRelease()))
 			{
-				//Cache relevant assets in this collection's bundle
-				currentAnimationCache = AnimationCache.CreateCache(collection.Bundle);
-				
 				foreach (IUnityObjectBase asset in collection)
 				{
 					Convert(asset);
 				}
-
-				currentAnimationCache = null;
 			}
+			currentAnimationCache = null;
 			tagManager = null;
 		}
 
