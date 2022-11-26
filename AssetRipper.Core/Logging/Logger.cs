@@ -113,7 +113,7 @@ namespace AssetRipper.Core.Logging
 		{
 			return File.Exists(ExecutingDirectory.Combine("AssetRipper.Core.dll")) ? "Compiled" : "Published";
 		}
-
+		
 		private static void LogOperatingSystemInformation()
 		{
 			Log(LogType.Info, LogCategory.System, $"System Version: {Environment.OSVersion.VersionString}");
@@ -127,8 +127,58 @@ namespace AssetRipper.Core.Logging
 			LogOperatingSystemInformation();
 			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {BuildInfo.Version}");
 			LogReleaseInformation();
-			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)}");
+			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {GetCurrentTime()}");
 			Log(LogType.Info, LogCategory.System, $"UTC Compile Time: {GetCompileTime()}");
+		}
+		
+		/// <summary>
+		/// Get the current time.
+		/// </summary>
+		/// <remarks>
+		/// This format matches the format used in <see cref="GetCompileTime"/>
+		/// </remarks>
+		/// <returns>A string like "Thu Nov 24 18:39:37 UTC 2022"</returns>
+		private static string GetCurrentTime()
+		{
+			DateTime now = DateTime.UtcNow;
+			StringBuilder sb = new();
+			sb.Append(now.DayOfWeek switch
+			{
+				DayOfWeek.Sunday => "Sun",
+				DayOfWeek.Monday => "Mon",
+				DayOfWeek.Tuesday => "Tue",
+				DayOfWeek.Wednesday => "Wed",
+				DayOfWeek.Thursday => "Thu",
+				DayOfWeek.Friday => "Fri",
+				DayOfWeek.Saturday => "Sat",
+				_ => throw new NotSupportedException(),
+			});
+			sb.Append(' ');
+			sb.Append(now.Month switch
+			{
+				1 => "Jan",
+				2 => "Feb",
+				3 => "Mar",
+				4 => "Apr",
+				5 => "May",
+				6 => "Jun",
+				7 => "Jul",
+				8 => "Aug",
+				9 => "Sep",
+				10 => "Oct",
+				11 => "Nov",
+				12 => "Dec",
+				_ => throw new NotSupportedException(),
+			});
+			sb.Append(' ');
+			sb.Append(now.TimeOfDay.Hours);
+			sb.Append(':');
+			sb.Append(now.TimeOfDay.Minutes);
+			sb.Append(':');
+			sb.Append(now.TimeOfDay.Seconds);
+			sb.Append(" UTC ");
+			sb.Append(now.Year);
+			return sb.ToString();
 		}
 
 		private static string GetCompileTime()
