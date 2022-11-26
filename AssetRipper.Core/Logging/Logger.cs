@@ -121,10 +121,19 @@ namespace AssetRipper.Core.Logging
 			Log(LogType.Info, LogCategory.System, $"Operating System: {GetOsName()} {architecture}");
 		}
 
+		private static void ErrorIfBigEndian()
+		{
+			if (!BitConverter.IsLittleEndian)
+			{
+				Error("Big Endian processors are not supported!");
+			}
+		}
+
 		public static void LogSystemInformation(string programName)
 		{
 			Log(LogType.Info, LogCategory.System, programName);
 			LogOperatingSystemInformation();
+			ErrorIfBigEndian();
 			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {BuildInfo.Version}");
 			LogReleaseInformation();
 			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {GetCurrentTime()}");
@@ -237,23 +246,5 @@ namespace AssetRipper.Core.Logging
 		public static void Clear() => loggers.Clear();
 
 		public static void SendStatusChange(string newStatus, object? context = null) => OnStatusChanged(newStatus, context);
-	}
-	public enum UnityVersionType : byte
-	{
-		Experimental = 0x40,
-		Alpha = 0x60,
-		Beta = 0x80,
-		Final = 0xA0,
-		Patch = 0xC0,
-	}
-	public enum UnityBranch : byte
-	{
-		China = 0x2,//Maybe reversed with Global
-		Global = 0x8,
-	}
-	public enum UnityVersionFlags : byte
-	{
-		BranchMask = 0x0F,
-		TypeMask = 0xF0,
 	}
 }
