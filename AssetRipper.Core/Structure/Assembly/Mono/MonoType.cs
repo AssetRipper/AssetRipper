@@ -12,10 +12,28 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 	{
 		//From the deleted MonoFieldContext: structs are only serializable on 4.5.0 and greater.
 
-		public MonoType(TypeDefinition typeDefinition) : base(typeDefinition.Namespace ?? "", PrimitiveType.Complex, typeDefinition.Name ?? "")
+		private MonoType(ITypeDefOrRef type) : base(type.Namespace ?? "", PrimitiveType.Complex, type.Name ?? "")
+		{
+			
+		}
+
+		public MonoType(TypeDefinition typeDefinition) : this((ITypeDefOrRef) typeDefinition)
 		{
 			List<Field> fields = new();
 			foreach ((FieldDefinition fieldDefinition, TypeSignature fieldType) in FieldQuery.GetFieldsInTypeAndBase(typeDefinition))
+			{
+				if (FieldSerializationLogic.WillUnitySerialize(fieldDefinition, fieldType))
+				{
+					fields.Add(MakeSerializableField(fieldDefinition, fieldType));
+				}
+			}
+			Fields = fields;
+		}
+
+		public MonoType(GenericInstanceTypeSignature genericInst) : this(genericInst.GenericType)
+		{
+			List<Field> fields = new();
+			foreach ((FieldDefinition fieldDefinition, TypeSignature fieldType) in FieldQuery.GetFieldsInTypeAndBase(genericInst))
 			{
 				if (FieldSerializationLogic.WillUnitySerialize(fieldDefinition, fieldType))
 				{
@@ -78,10 +96,8 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			{
 				return MakeSerializableField(name, typeSignature.TypeArguments[0], arrayDepth + 1);
 			}
-			else
-			{
-				throw new NotSupportedException(typeSignature.FullName);
-			}
+
+			return new(new MonoType(typeSignature), arrayDepth, name);
 		}
 	}
 }

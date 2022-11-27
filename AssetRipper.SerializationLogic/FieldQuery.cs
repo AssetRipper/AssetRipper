@@ -19,6 +19,28 @@ public static class FieldQuery
 			currentType = currentType.BaseType?.Resolve();
 		}
 
+		return IterateFields(hierarchy);
+	}
+	
+	public static IEnumerable<(FieldDefinition, TypeSignature)> GetFieldsInTypeAndBase(GenericInstanceTypeSignature genericInst)
+	{
+		Stack<(TypeDefinition, GenericContext)> hierarchy = new();
+
+		IList<TypeSignature> currentTypeArguments = genericInst.TypeArguments;
+		TypeDefinition? currentType = genericInst.Resolve();
+		while (currentType is not null)
+		{
+			GenericContext genericContext = new GenericContext(new GenericArgumentsProvider(currentTypeArguments), null);
+			hierarchy.Push((currentType, genericContext));
+			currentTypeArguments = ApplyTypeArgumentsToBaseTypeArguments(currentTypeArguments, GetTypeArgumentsForBaseType(currentType));
+			currentType = currentType.BaseType?.Resolve();
+		}
+
+		return IterateFields(hierarchy);
+	}
+
+	private static IEnumerable<(FieldDefinition, TypeSignature)> IterateFields(Stack<(TypeDefinition, GenericContext)> hierarchy)
+	{
 		foreach ((TypeDefinition type, GenericContext genericContext) in hierarchy)
 		{
 			foreach (FieldDefinition field in type.Fields)
