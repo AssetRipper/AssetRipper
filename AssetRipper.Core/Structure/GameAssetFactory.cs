@@ -82,14 +82,14 @@ namespace AssetRipper.Core.Structure
 				monoBehaviour.Structure?.Read(reader);
 				if (monoBehaviour.Structure is not null && reader.BaseStream.Position != size)
 				{
+					LogMonoBehaviourMismatch(monoBehaviour, reader.BaseStream.Position, size);
 					monoBehaviour.Structure = null;
-					LogMonoBehaviourMismatch(monoBehaviour);
 				}
 			}
 			catch (Exception ex)
 			{
+				LogMonoBehaviorReadException(monoBehaviour, reader, ex);
 				monoBehaviour.Structure = null;
-				LogReadException(monoBehaviour, reader, ex);
 			}
 			return monoBehaviour;
 		}
@@ -189,9 +189,14 @@ namespace AssetRipper.Core.Structure
 			Logger.Warning($"Texture {texture.Name} had an extra 24 bytes, which were assumed to be non-standard Chinese fields.");
 		}
 
-		private static void LogMonoBehaviourMismatch(IMonoBehaviour monoBehaviour)
+		private static void LogMonoBehaviourMismatch(IMonoBehaviour monoBehaviour, long actual, int expected)
 		{
-			Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {monoBehaviour}, because script layout mismatched binary content.");
+			Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {monoBehaviour}, because script {monoBehaviour.Structure} layout mismatched binary content (read {actual} bytes, expected {expected} bytes).");
+		}
+		
+		private static void LogMonoBehaviorReadException(IMonoBehaviour asset, AssetReader reader, Exception ex)
+		{
+			Logger.Error($"Error during reading of MonoBehavior {GetMonoScript(asset)}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}", ex);
 		}
 
 		private static void LogReadException(IUnityObjectBase asset, AssetReader reader, Exception ex)
