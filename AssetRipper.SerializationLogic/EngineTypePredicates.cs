@@ -1,4 +1,3 @@
-using AsmResolver.DotNet;
 using AssetRipper.SerializationLogic.Extensions;
 using System.Collections.Generic;
 

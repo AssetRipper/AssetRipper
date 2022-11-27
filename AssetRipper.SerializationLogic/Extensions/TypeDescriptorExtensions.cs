@@ -1,6 +1,3 @@
-using AsmResolver.DotNet;
-using AsmResolver.DotNet.Signatures.Types;
-
 namespace AssetRipper.SerializationLogic.Extensions
 {
 	public static class TypeDescriptorExtensions

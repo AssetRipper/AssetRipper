@@ -1,6 +1,4 @@
-﻿using AsmResolver.DotNet;
-using AsmResolver.DotNet.Signatures.Types;
-using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
+﻿using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 using System;
 using System.Collections.Generic;
 using System.Linq;

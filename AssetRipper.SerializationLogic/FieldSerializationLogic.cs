@@ -1,6 +1,3 @@
-using AsmResolver.DotNet;
-using AsmResolver.DotNet.Signatures;
-using AsmResolver.DotNet.Signatures.Types;
 using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 using AssetRipper.SerializationLogic.Extensions;
 using System;
@@ -14,6 +11,11 @@ namespace AssetRipper.SerializationLogic
 		private static readonly SignatureComparer signatureComparer = new();
 
 		public static bool WillUnitySerialize(FieldDefinition fieldDefinition)
+		{
+			return WillUnitySerialize(fieldDefinition, fieldDefinition.Signature!.FieldType);
+		}
+
+		public static bool WillUnitySerialize(FieldDefinition fieldDefinition, TypeSignature fieldType)
 		{
 			if (fieldDefinition == null)
 			{
@@ -49,35 +51,34 @@ namespace AssetRipper.SerializationLogic
 
 			// Resolving types is more complex and slower than checking their names or attributes,
 			// thus keep those checks below
-			TypeSignature? typeReference = fieldDefinition.Signature!.FieldType;
 
 			//the type of the field must be serializable in the first place.
 
-			if (typeReference is CorLibTypeSignature corLibTypeSignature && corLibTypeSignature.ElementType == ElementType.String)
+			if (fieldType is CorLibTypeSignature corLibTypeSignature && corLibTypeSignature.ElementType == ElementType.String)
 			{
 				return true;
 			}
 
-			if (typeReference.IsValueType)
+			if (fieldType.IsValueType)
 			{
-				return IsValueTypeSerializable(typeReference);
+				return IsValueTypeSerializable(fieldType);
 			}
 
-			if (typeReference is SzArrayTypeSignature || AsmUtils.IsGenericList(typeReference))
+			if (fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType))
 			{
 				if (!HasSerializeReferenceAttribute(fieldDefinition))
 				{
-					return IsSupportedCollection(typeReference);
+					return IsSupportedCollection(fieldType);
 				}
 			}
 
 
-			if (!IsReferenceTypeSerializable(typeReference) && !HasSerializeReferenceAttribute(fieldDefinition))
+			if (!IsReferenceTypeSerializable(fieldType) && !HasSerializeReferenceAttribute(fieldDefinition))
 			{
 				return false;
 			}
 
-			if (IsDelegate(typeReference))
+			if (IsDelegate(fieldType))
 			{
 				return false;
 			}
@@ -389,7 +390,7 @@ namespace AssetRipper.SerializationLogic
 				return true;
 			}
 
-			if (typeDeclaration.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature && corLibTypeSignature.ElementType == ElementType.Object)
+			if (typeDeclaration.ToTypeSignature() is CorLibTypeSignature {ElementType: ElementType.Object})
 			{
 				return true;
 			}
@@ -435,27 +436,20 @@ namespace AssetRipper.SerializationLogic
 				return false;
 			}
 
-			try
+			if (EngineTypePredicates.ShouldHaveHadSerializableAttribute(typeDeclaration))
 			{
-				if (EngineTypePredicates.ShouldHaveHadSerializableAttribute(typeDeclaration))
-				{
-					return true;
-				}
-
-				TypeDefinition resolvedTypeDeclaration = typeDeclaration.CheckedResolve();
-				if (resolvedTypeDeclaration.IsValueType)
-				{
-					return resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor?.DeclaringType?.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated") ?? false);
-				}
-				else
-				{
-					return (resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor?.DeclaringType?.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated") ?? false))
-						|| resolvedTypeDeclaration.IsSubclassOf(EngineTypePredicates.MonoBehaviour, EngineTypePredicates.ScriptableObject);
-				}
+				return true;
 			}
-			catch (Exception)
+
+			TypeDefinition resolvedTypeDeclaration = typeDeclaration.CheckedResolve();
+			if (resolvedTypeDeclaration.IsValueType)
 			{
-				return false;
+				return resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor?.DeclaringType?.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated") ?? false);
+			}
+			else
+			{
+				return (resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor?.DeclaringType?.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated") ?? false))
+					|| resolvedTypeDeclaration.IsSubclassOf(EngineTypePredicates.MonoBehaviour, EngineTypePredicates.ScriptableObject);
 			}
 		}
 	}

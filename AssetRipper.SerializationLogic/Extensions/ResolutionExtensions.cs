@@ -1,5 +1,3 @@
-using AsmResolver.DotNet;
-
 namespace AssetRipper.SerializationLogic.Extensions
 {
 	public static class ResolutionExtensions

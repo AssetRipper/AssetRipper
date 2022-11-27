@@ -1,8 +1,8 @@
 ﻿using AsmResolver.DotNet;
 using AsmResolver.DotNet.Signatures.Types;
-using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.SerializationLogic;
+using AssetRipper.SerializationLogic.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,21 +15,21 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 		public MonoType(TypeDefinition typeDefinition) : base(typeDefinition.Namespace ?? "", PrimitiveType.Complex, typeDefinition.Name ?? "")
 		{
 			List<Field> fields = new();
-			foreach (FieldDefinition fieldDefinition in GetFieldDefinitionsInTypeAndBase(typeDefinition))
+			foreach ((FieldDefinition fieldDefinition, TypeSignature fieldType) in FieldQuery.GetFieldsInTypeAndBase(typeDefinition))
 			{
-				if (FieldSerializationLogic.WillUnitySerialize(fieldDefinition))
+				if (FieldSerializationLogic.WillUnitySerialize(fieldDefinition, fieldType))
 				{
-					fields.Add(MakeSerializableField(fieldDefinition));
+					fields.Add(MakeSerializableField(fieldDefinition, fieldType));
 				}
 			}
 			Fields = fields;
 		}
 
-		private static Field MakeSerializableField(FieldDefinition fieldDefinition)
+		private static Field MakeSerializableField(FieldDefinition fieldDefinition, TypeSignature fieldType)
 		{
 			return MakeSerializableField(
 				fieldDefinition.Name ?? throw new NullReferenceException(),
-				fieldDefinition.Signature?.FieldType ?? throw new NullReferenceException(),
+				fieldType,
 				0);
 		}
 
@@ -38,7 +38,8 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			switch(typeSignature)
 			{
 				case TypeDefOrRefSignature typeDefOrRefSignature:
-					TypeDefinition typeDefinition = typeDefOrRefSignature.ToTypeDefinition();
+					TypeDefinition typeDefinition = typeDefOrRefSignature.Type.Resolve()
+						?? throw new NullReferenceException($"Could not resolve {typeDefOrRefSignature.FullName}");
 					SerializableType fieldType;
 					if (typeDefinition.IsEnum)
 					{
@@ -58,7 +59,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 					return new Field(fieldType, arrayDepth, name);
 
 				case CorLibTypeSignature corLibTypeSignature:
-					return new Field(new SerializablePrimitiveType(corLibTypeSignature.ElementType.ToPrimitiveType()), arrayDepth, name);
+					return new Field(new SerializablePrimitiveType(corLibTypeSignature.ToPrimitiveType()), arrayDepth, name);
 				
 				case SzArrayTypeSignature szArrayTypeSignature:
 					return MakeSerializableField(name, szArrayTypeSignature.BaseType, arrayDepth + 1);
@@ -81,85 +82,6 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 			{
 				throw new NotSupportedException(typeSignature.FullName);
 			}
-		}
-
-		private static IEnumerable<FieldDefinition> GetFieldDefinitionsInTypeAndBase(TypeDefinition typeDefinition)
-		{
-			Stack<TypeDefinition> hierarchy = new();
-			
-			TypeDefinition? current = typeDefinition;
-			while (current is not null)
-			{
-				hierarchy.Push(current);
-				current = current.TryGetBaseClass();
-			}
-
-			foreach (TypeDefinition type in hierarchy)
-			{
-				foreach (FieldDefinition fieldDefinition in type.Fields)
-				{
-					if (!fieldDefinition.IsStatic)
-					{
-						yield return fieldDefinition;
-					}
-				}
-			}
-		}
-
-	}
-
-	internal class SerializablePrimitiveType : SerializableType
-	{
-		public SerializablePrimitiveType(PrimitiveType primitiveType) : base("System", primitiveType, primitiveType.ToSystemTypeName())
-		{
-		}
-	}
-
-	internal class SerializablePointerType : SerializableType
-	{
-		public SerializablePointerType() : base("UnityEngine", PrimitiveType.Complex, "Object")
-		{
-		}
-	}
-
-	internal static class TypeDefinitionExtensions
-	{
-		public static TypeDefinition ToTypeDefinition(this TypeDefOrRefSignature typeDefOrRefSignature)
-		{
-			return typeDefOrRefSignature.Type.Resolve()
-				?? throw new NullReferenceException($"Could not resolve {typeDefOrRefSignature.FullName}");
-		}
-		public static bool InheritsFromMonoBehaviour(this TypeDefinition type)
-		{
-			return type.InheritsFrom("UnityEngine.MonoBehaviour");
-		}
-		public static bool InheritsFromObject(this TypeDefinition type)
-		{
-			return type.InheritsFrom("UnityEngine.Object");
-		}
-		public static TypeDefinition? TryGetBaseClass(this TypeDefinition current)
-		{
-			return current.BaseType?.Resolve();
-		}
-		public static PrimitiveType ToPrimitiveType(this ElementType elementType)
-		{
-			return elementType switch
-			{
-				ElementType.Boolean => PrimitiveType.Bool,
-				ElementType.Char => PrimitiveType.Char,
-				ElementType.I1 => PrimitiveType.SByte,
-				ElementType.U1 => PrimitiveType.Byte,
-				ElementType.I2 => PrimitiveType.Short,
-				ElementType.U2 => PrimitiveType.UShort,
-				ElementType.I4 => PrimitiveType.Int,
-				ElementType.U4 => PrimitiveType.UInt,
-				ElementType.I8 => PrimitiveType.Long,
-				ElementType.U8 => PrimitiveType.ULong,
-				ElementType.R4 => PrimitiveType.Single,
-				ElementType.R8 => PrimitiveType.Double,
-				ElementType.String => PrimitiveType.String,
-				_ => throw new ArgumentOutOfRangeException(nameof(elementType)),
-			};
 		}
 	}
 }

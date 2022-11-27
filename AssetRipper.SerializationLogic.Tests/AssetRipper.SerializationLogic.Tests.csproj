@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
+		<NoWarn>CS0169</NoWarn><!--Unused field-->
 	</PropertyGroup>
 
 	<ItemGroup>

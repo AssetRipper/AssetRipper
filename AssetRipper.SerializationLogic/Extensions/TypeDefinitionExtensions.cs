@@ -1,5 +1,3 @@
-using AsmResolver.DotNet;
-
 namespace AssetRipper.SerializationLogic.Extensions
 {
 	public static class TypeDefinitionExtensions
@@ -49,6 +47,21 @@ namespace AssetRipper.SerializationLogic.Extensions
 			}
 
 			return baseTypeDef.IsSubclassOf(baseTypeNames);
+		}
+
+		public static bool InheritsFromMonoBehaviour(this TypeDefinition type)
+		{
+			return type.InheritsFrom("UnityEngine.MonoBehaviour");
+		}
+
+		public static bool InheritsFromObject(this TypeDefinition type)
+		{
+			return type.InheritsFrom("UnityEngine.Object");
+		}
+
+		public static TypeDefinition? TryGetBaseClass(this TypeDefinition current)
+		{
+			return current.BaseType?.Resolve();
 		}
 	}
 }

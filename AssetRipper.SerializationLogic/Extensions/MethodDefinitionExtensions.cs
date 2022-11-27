@@ -1,4 +1,3 @@
-using AsmResolver.DotNet;
 using System;
 
 namespace AssetRipper.SerializationLogic.Extensions

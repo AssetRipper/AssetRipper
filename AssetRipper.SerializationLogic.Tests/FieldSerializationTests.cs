@@ -3,8 +3,6 @@ using System.Linq;
 
 namespace AssetRipper.SerializationLogic.Tests;
 
-#pragma warning disable IDE0051 // Remove unused private members
-#pragma warning disable IDE0044 // Add readonly modifier
 public class FieldSerializationTests
 {
 	[Test]
@@ -22,8 +20,8 @@ public class FieldSerializationTests
 	private class CustomMonoBehaviourWithListField : UnityEngine.MonoBehaviour
 	{
 		[UnityEngine.SerializeField]
+		[SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Required for unit tests")]
+		[SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Required for unit tests")]
 		private List<string>? listOfStrings;
 	}
 }
-#pragma warning restore IDE0044 // Add readonly modifier
-#pragma warning restore IDE0051 // Remove unused private members

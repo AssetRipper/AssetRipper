@@ -83,7 +83,12 @@ namespace AssetRipper.Core.Structure.Assembly
 
 		public static PrimitiveType ToPrimitiveType(this CorLibTypeSignature type)
 		{
-			return type.ElementType switch
+			return type.ElementType.ToPrimitiveType();
+		}
+
+		public static PrimitiveType ToPrimitiveType(this ElementType elementType)
+		{
+			return elementType switch
 			{
 				ElementType.Boolean => PrimitiveType.Bool,
 				ElementType.Char => PrimitiveType.Char,
@@ -98,7 +103,7 @@ namespace AssetRipper.Core.Structure.Assembly
 				ElementType.R4 => PrimitiveType.Single,
 				ElementType.R8 => PrimitiveType.Double,
 				ElementType.String => PrimitiveType.String,
-				_ => throw new NotSupportedException(),
+				_ => throw new ArgumentOutOfRangeException(nameof(elementType)),
 			};
 		}
 	}
