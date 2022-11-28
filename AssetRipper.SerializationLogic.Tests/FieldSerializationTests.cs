@@ -39,11 +39,11 @@ public class FieldSerializationTests
 	[Serializable]
 	private class TestGenericClass<T>
 	{
-		public List<T> ListOfT;
+		public List<T>? listOfT;
 	}
 
 	private class CustomMonoBehaviourWithGenericField : UnityEngine.MonoBehaviour
 	{
-		public TestGenericClass<string> testGenericClass;
+		public TestGenericClass<string>? testGenericClass;
 	}
 }

@@ -12,11 +12,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static RigidbodyConstraints GetConstraints(this IRigidbody body)
 		{
-			if (body.Has_FreezeRotation_C54())
+			//if (body.Has_FreezeRotation_C54())
 			{
-				return body.FreezeRotation_C54 ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.None;
+				//return body.FreezeRotation_C54 ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.None;
 			}
-			else
+			//else
 			{
 				return (RigidbodyConstraints)body.Constraints_C54;
 			}

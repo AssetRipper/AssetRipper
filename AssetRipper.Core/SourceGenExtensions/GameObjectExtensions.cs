@@ -55,9 +55,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				return gameObject.Component_C1_AssetList_ComponentPair.Select(pair => pair.m_Component);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5())
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_4_0_f5())
 			{
-				return gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5.Select(pair => pair.Value);
+				return gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_4_0_f5.Select(pair => pair.Value);
 			}
 			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4())
 			{
@@ -75,9 +75,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				return new ComponentPairAccessList(gameObject.Component_C1_AssetList_ComponentPair);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5())
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_4_0_f5())
 			{
-				return new AssetPairAccessList<PPtr_Component__3_0_0_f5>(gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5);
+				return new AssetPairAccessList<PPtr_Component__3_4_0_f5>(gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_4_0_f5);
 			}
 			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__5_0_0_f4())
 			{
@@ -95,9 +95,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				gameObject.Component_C1_AssetList_ComponentPair.AddNew().Component.SetAsset(gameObject.Collection, component);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5())
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_4_0_f5())
 			{
-				AssetPair<int, PPtr_Component__3_0_0_f5> pair = gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_0_0_f5.AddNew();
+				AssetPair<int, PPtr_Component__3_4_0_f5> pair = gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component__3_4_0_f5.AddNew();
 				pair.Key = (int)classID;
 				pair.Value.SetAsset(gameObject.Collection, component);
 			}

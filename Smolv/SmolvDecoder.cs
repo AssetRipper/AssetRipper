@@ -44,7 +44,7 @@ namespace Smolv
 			return size;
 		}
 
-		public static byte[] Decode(byte[] data)
+		public static byte[]? Decode(byte[] data)
 		{
 			if (data == null)
 			{

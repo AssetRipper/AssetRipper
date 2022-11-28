@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			if (prefab.Has_Objects_C1001())
 			{
-				PPtrAccessList<PPtr_EditorExtension__3_0_0_f5, IEditorExtension> objects = prefab.Objects_C1001P;
+				PPtrAccessList<PPtr_EditorExtension__3_4_0_f5, IEditorExtension> objects = prefab.Objects_C1001P;
 				foreach (IEditorExtension editorExtension in root.FetchHierarchy())
 				{
 					objects.Add(editorExtension);

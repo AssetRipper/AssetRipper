@@ -59,9 +59,8 @@ public class GetFieldsInTypeAndBaseTests
 	private class Gamma : Beta<string, int>
 	{
 	}
-
 	private class Delta
 	{
-		public Alpha<int> alphaField;
+		public Alpha<int>? alphaField;
 	}
 }

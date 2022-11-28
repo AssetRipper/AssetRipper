@@ -56,9 +56,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Remove="C:\**\Humanizer\LICENSE" />
-		<Content Remove="C:\**\Pattern Matching.html" />
-		<None Remove="C:\**\naudio.vorbis\**\README.md" />
+		<Content Remove="C:\Users\**\.nuget\packages\icsharpcode.decompiler\**\Humanizer\LICENSE" />
+		<Content Remove="C:\Users\**\.nuget\packages\icsharpcode.decompiler\**\Pattern Matching.html" />
+		<None Remove="C:\Users\**\.nuget\packages\naudio.vorbis\**\README.md" />
 	</ItemGroup>
 
 </Project>

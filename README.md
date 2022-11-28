@@ -21,9 +21,7 @@ Thank you for considering to support me. I have normal expenses like food, elect
 
 # Supported Versions
 
-Limited support: `3.0.0` to `3.3.0`
-
-Full support: `3.4.0` to `2022.2.X`
+Unity `3.4.0` to `2022.2.X`
 
 # Release Schedule
 

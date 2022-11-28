@@ -24,9 +24,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static bool GetAnimateOnlyIfVisible(this IAnimation animation)
 		{
 			// 2.6.0 to 3.4.0 exclusive
-			if (animation.Has_AnimateOnlyIfVisible_C111())
+			//if (animation.Has_AnimateOnlyIfVisible_C111())
 			{
-				return animation.AnimateOnlyIfVisible_C111;
+				//return animation.AnimateOnlyIfVisible_C111;
 			}
 			//else if (animation.Has_CullingType_C111())
 			{
@@ -41,9 +41,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static AnimationCullingType GetAnimationCullingType(this IAnimation animation)
 		{
 			// 2.6.0 to 3.4.0 exclusive
-			if (animation.Has_AnimateOnlyIfVisible_C111())
+			//if (animation.Has_AnimateOnlyIfVisible_C111())
 			{
-				return animation.AnimateOnlyIfVisible_C111 ? AnimationCullingType.BasedOnRenderers : AnimationCullingType.AlwaysAnimate;
+				//return animation.AnimateOnlyIfVisible_C111 ? AnimationCullingType.BasedOnRenderers : AnimationCullingType.AlwaysAnimate;
 			}
 			//else if (animation.Has_CullingType_C111())
 			{
