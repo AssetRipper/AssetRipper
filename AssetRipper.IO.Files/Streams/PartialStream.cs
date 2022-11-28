@@ -5,7 +5,7 @@ namespace AssetRipper.IO.Files.Streams
 	/// <summary>
 	/// A stream implementation for accessing a subset of another stream
 	/// </summary>
-	public class PartialStream : Stream
+	public sealed class PartialStream : Stream
 	{
 		public PartialStream(Stream baseStream, long offset, long length) : this(baseStream, offset, length, true) { }
 

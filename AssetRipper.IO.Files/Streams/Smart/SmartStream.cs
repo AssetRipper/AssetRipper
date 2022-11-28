@@ -4,7 +4,7 @@ using System.IO;
 
 namespace AssetRipper.IO.Files.Streams.Smart
 {
-	public partial class SmartStream : Stream
+	public sealed partial class SmartStream : Stream
 	{
 		public static new SmartStream Null { get; } = new();
 
@@ -106,14 +106,8 @@ namespace AssetRipper.IO.Files.Streams.Smart
 			{
 				throw new ObjectDisposedException(null);
 			}
-			else if (IsNull)
-			{
-				throw new NullReferenceException(nameof(m_stream));
-			}
-			else
-			{
-				return m_stream.Read(buffer, offset, count);
-			}
+
+			return m_stream!.Read(buffer, offset, count);
 		}
 
 		public override int Read(Span<byte> buffer)
@@ -123,12 +117,7 @@ namespace AssetRipper.IO.Files.Streams.Smart
 				throw new ObjectDisposedException(null);
 			}
 
-			if (IsNull)
-			{
-				throw new NullReferenceException(nameof(m_stream));
-			}
-			
-			return m_stream.Read(buffer);
+			return m_stream!.Read(buffer);
 		}
 
 		public override int ReadByte()
@@ -138,12 +127,7 @@ namespace AssetRipper.IO.Files.Streams.Smart
 				throw new ObjectDisposedException(null);
 			}
 
-			if (IsNull)
-			{
-				throw new NullReferenceException(nameof(m_stream));
-			}
-			
-			return m_stream.ReadByte();
+			return m_stream!.ReadByte();
 		}
 
 		public override long Seek(long offset, SeekOrigin origin)
