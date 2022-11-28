@@ -1,4 +1,5 @@
-﻿using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipBindingConstant;
 using AssetRipper.SourceGenerated.Subclasses.GenericBinding;
@@ -10,9 +11,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static IGenericBinding FindBinding(this IAnimationClipBindingConstant constant, int index)
 		{
 			int curves = 0;
-			for (int i = 0; i < constant.GenericBindings.Count; i++)
+			AccessListBase<IGenericBinding> bindings = constant.GenericBindings;
+			
+			for (int i = 0; i < bindings.Count; i++)
 			{
-				IGenericBinding gb = constant.GenericBindings[i];
+				IGenericBinding gb = bindings[i];
 				if (gb.GetClassID() == ClassIDType.Transform)
 				{
 					curves += gb.TransformType().GetDimension();
