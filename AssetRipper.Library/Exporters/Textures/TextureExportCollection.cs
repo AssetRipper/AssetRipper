@@ -211,7 +211,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				KeyValuePair<ISprite, ISpriteAtlas?> kvp = m_sprites.First();
 				ISpriteMetaData smeta = SpriteMetaDataFactory.CreateAsset(kvp.Key.Collection.Version);
-				kvp.Key.FillSpriteMetaData(kvp.Value, smeta);
+				smeta.FillSpriteMetaData(kvp.Key, kvp.Value);
 				importer.SpriteSheet_C1006.CopyFromSpriteMetaData(smeta);
 			}
 			else
@@ -220,7 +220,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				foreach (KeyValuePair<ISprite, ISpriteAtlas?> kvp in m_sprites)
 				{
 					ISpriteMetaData smeta = spriteSheetSprites.AddNew();
-					kvp.Key.FillSpriteMetaData(kvp.Value, smeta);
+					smeta.FillSpriteMetaData(kvp.Key, kvp.Value);
 					if (smeta.Has_InternalID())
 					{
 						smeta.InternalID = ObjectUtils.GenerateInternalID();

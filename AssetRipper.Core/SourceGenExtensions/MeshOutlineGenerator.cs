@@ -1,16 +1,14 @@
 ﻿using AssetRipper.Numerics;
-using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
-	public class MeshOutlineGenerator
+	public sealed class MeshOutlineGenerator
 	{
-		private class Outline
+		private sealed class Outline
 		{
-			private struct Outside
+			private readonly struct Outside
 			{
 				public Outside(int triIndex, int vertex)
 				{
@@ -29,11 +27,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			public Outline(IReadOnlyList<Vector3i> triangles, int startTriangle)
 			{
-				if (triangles == null)
-				{
-					throw new ArgumentNullException(nameof(triangles));
-				}
-				m_triangles = triangles;
+				m_triangles = triangles ?? throw new ArgumentNullException(nameof(triangles));
 
 				GenerateIndexes(startTriangle);
 				GenerateOutsiders();
@@ -41,7 +35,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			public void GenerateOutline()
 			{
-				List<int> outline = new List<int>();
+				List<int> outline = new();
 				Outside outsider = m_outsiders[0];
 				Vector3i tri = m_triangles[outsider.Triangle];
 				int first = tri.GetValueByMember(outsider.Member);
@@ -301,11 +295,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 			public IReadOnlyList<int> GeneratedOutline { get; private set; } = Array.Empty<int>();
 
 			private readonly IReadOnlyList<Vector3i> m_triangles;
-			private readonly HashSet<int> m_indexes = new HashSet<int>();
-			private readonly List<Outside> m_outsiders = new List<Outside>();
+			private readonly HashSet<int> m_indexes = new();
+			private readonly List<Outside> m_outsiders = new();
 		}
 
-		public MeshOutlineGenerator(IReadOnlyList<Vector3f_3_5_0_f5> vertices, IReadOnlyList<Vector3i> triangles)
+		public MeshOutlineGenerator(IReadOnlyList<Vector3> vertices, IReadOnlyList<Vector3i> triangles)
 		{
 			if (vertices == null)
 			{
@@ -358,6 +352,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				for (int j = 0; j < outline.GeneratedOutline.Count; j++)
 				{
 					int vertex = outline.GeneratedOutline[j];
+					// commented out by mafaca
 					// include outlines that has common vertex with current outline
 					/*for (int k = i + 1; k < outlines.Count; k++)
 					{
@@ -386,14 +381,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return result;
 		}
 
-		private static Vector2 ConvertToVector2f(Vector3f_3_5_0_f5 v3) => new Vector2(v3.X, v3.Y);
+		private static Vector2 ConvertToVector2f(Vector3 v3) => new Vector2(v3.X, v3.Y);
 
 		private static bool IsValidTriangle(Vector3i triangle)
 		{
 			return triangle.X != triangle.Y && triangle.X != triangle.Z && triangle.Y != triangle.Z;
 		}
 
-		private readonly IReadOnlyList<Vector3f_3_5_0_f5> m_vertices;
+		private readonly IReadOnlyList<Vector3> m_vertices;
 		private readonly List<Vector3i> m_triangles = new List<Vector3i>();
 	}
 }

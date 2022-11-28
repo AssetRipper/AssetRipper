@@ -328,14 +328,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return skin;
 		}
 
-		public static Vector3f_3_5_0_f5[] GenerateVertices(this IVertexData instance, UnityVersion version, ISubMesh submesh)
+		public static Vector3[] GenerateVertices(this IVertexData instance, UnityVersion version, ISubMesh submesh)
 		{
 			IChannelInfo channel = instance.GetChannel(version, ShaderChannel.Vertex);
 			if (!channel.IsSet())
 			{
 				if (AllowUnsetVertexChannel(version))
 				{
-					return Array.Empty<Vector3f_3_5_0_f5>();
+					return Array.Empty<Vector3>();
 				}
 				else
 				{
@@ -343,7 +343,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 			}
 
-			Vector3f_3_5_0_f5[] verts = new Vector3f_3_5_0_f5[submesh.VertexCount];
+			Vector3[] verts = new Vector3[submesh.VertexCount];
 			int streamStride = instance.Channels.Where(t => t.Stream == channel.Stream).Sum(t => t.GetStride(version));
 			int streamOffset = instance.GetStreamOffset(version, channel.Stream);
 			using (MemoryStream memStream = new MemoryStream(instance.Data))
@@ -355,8 +355,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					float x = reader.ReadSingle();
 					float y = reader.ReadSingle();
 					float z = reader.ReadSingle();
-					verts[v] = new();
-					verts[v].SetValues(x, y, z);
+					verts[v] = new Vector3(x, y, z);
 					memStream.Position += streamStride - 12;
 				}
 			}
