@@ -11,6 +11,8 @@
 		<Copyright>Copyright © 2022</Copyright>
 		<Authors>ds5678</Authors>
 		<ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
+		<ServerGarbageCollection>true</ServerGarbageCollection>
+		<TargetFramework>net6.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
