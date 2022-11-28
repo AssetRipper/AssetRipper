@@ -315,11 +315,18 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 	{
 		public static TypeDefinition? GetType(this ModuleDefinition module, string @namespace, string name)
 		{
-			return module.TopLevelTypes.FirstOrDefault(x =>
+			IList<TypeDefinition> types = module.TopLevelTypes;
+			foreach (TypeDefinition type in types)
 			{
-				return (x.Namespace?.ToString() ?? "") == @namespace && (x.Name?.ToString() ?? "") == name;
-			});
+				if (type.Namespace == @namespace && type.Name == name)
+				{
+					return type;
+				}
+			}
+
+			return null;
 		}
+		
 		public static void SetResolver(this ModuleDefinition module, IAssemblyResolver assemblyResolver)
 		{
 			module.MetadataResolver = new DefaultMetadataResolver(assemblyResolver);

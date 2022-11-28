@@ -88,7 +88,7 @@ namespace AssetRipper.SerializationLogic
 
 		private static bool IsDelegate(ITypeDescriptor typeReference)
 		{
-			return typeReference.IsAssignableTo("System.Delegate");
+			return typeReference.IsAssignableTo("System" , "Delegate");
 		}
 
 		public static bool ShouldFieldBePPtrRemapped(FieldDefinition fieldDefinition)
@@ -181,14 +181,10 @@ namespace AssetRipper.SerializationLogic
 
 		public static bool HasSerializeFieldAttribute(FieldDefinition field)
 		{
-			return FieldAttributes(field).Any(EngineTypePredicates.IsSerializeFieldAttribute);
-		}
-
-		public static bool HasSerializeReferenceAttribute(FieldDefinition field)
-		{
-			foreach (ITypeDefOrRef attribute in FieldAttributes(field))
+			foreach (CustomAttribute ca in field.CustomAttributes)
 			{
-				if (EngineTypePredicates.IsSerializeReferenceAttribute(attribute))
+				ITypeDefOrRef type = ca.Constructor!.DeclaringType!;
+				if (EngineTypePredicates.IsSerializeFieldAttribute(type))
 				{
 					return true;
 				}
@@ -197,13 +193,28 @@ namespace AssetRipper.SerializationLogic
 			return false;
 		}
 
-		private static IEnumerable<ITypeDefOrRef> FieldAttributes(FieldDefinition field)
+		public static bool HasSerializeReferenceAttribute(FieldDefinition field)
 		{
-			return field.CustomAttributes.Select(c => c.Constructor!.DeclaringType!);
+			foreach (CustomAttribute ca in field.CustomAttributes)
+			{
+				ITypeDefOrRef type = ca.Constructor!.DeclaringType!;
+				if (EngineTypePredicates.IsSerializeReferenceAttribute(type))
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		public static bool ShouldNotTryToResolve(ITypeDescriptor typeReference)
 		{
+			if (typeReference is TypeDefinition)
+			{
+				//Early-out if we're already resolved.
+				return false;
+			}
+			
 			string? typeReferenceScopeName = typeReference.Scope?.Name;
 			if (typeReferenceScopeName == "Windows")
 			{
@@ -243,9 +254,9 @@ namespace AssetRipper.SerializationLogic
 				return IsSerializablePrimitive((CorLibTypeSignature)typeReference);
 			}
 
-			return EngineTypePredicates.IsSerializableUnityStruct(typeReference) ||
-				typeReference.IsEnum() ||
-				ShouldImplementIDeserializable(typeReference);
+			return typeReference.IsEnum() ||
+				ShouldImplementIDeserializable(typeReference) ||
+				EngineTypePredicates.IsSerializableUnityStruct(typeReference);
 		}
 
 		private static bool IsReferenceTypeSerializable(ITypeDescriptor typeReference)
@@ -261,8 +272,8 @@ namespace AssetRipper.SerializationLogic
 			}
 
 			if (IsUnityEngineObject(typeReference) ||
-				ShouldImplementIDeserializable(typeReference) ||
-				EngineTypePredicates.IsSerializableUnityClass(typeReference))
+				EngineTypePredicates.IsSerializableUnityClass(typeReference) ||
+				ShouldImplementIDeserializable(typeReference))
 			{
 				return true;
 			}
@@ -294,11 +305,17 @@ namespace AssetRipper.SerializationLogic
 
 		public static CustomAttribute? GetFixedBufferAttribute(FieldDefinition fieldDefinition)
 		{
-			return fieldDefinition.CustomAttributes.Count switch
+			IList<CustomAttribute> attrs = fieldDefinition.CustomAttributes;
+			foreach (CustomAttribute ca in attrs)
 			{
-				0 => null,
-				_ => fieldDefinition.CustomAttributes.SingleOrDefault(a => a.Constructor?.DeclaringType?.FullName == "System.Runtime.CompilerServices.FixedBufferAttribute")
-			};
+				ITypeDefOrRef type = ca.Constructor!.DeclaringType!;
+				if (type is { Namespace.Value: "System.Runtime.CompilerServices", Name.Value: "FixedBufferAttribute" })
+				{
+					return ca;
+				}
+			}
+
+			return null;
 		}
 
 		public static int GetFixedBufferLength(FieldDefinition fieldDefinition)
@@ -394,39 +411,30 @@ namespace AssetRipper.SerializationLogic
 			{
 				return true;
 			}
-
-			string fullName = typeDeclaration.FullName;
-			if (fullName.StartsWith("System.")) //can this be done better?
-			{
-				return true;
-			}
-
+			
 			if (typeDeclaration.IsArray())
 			{
 				return true;
 			}
-
-			if (fullName == EngineTypePredicates.MonoBehaviour)
-			{
-				return true;
-			}
-
-			if (fullName == EngineTypePredicates.ScriptableObject)
-			{
-				return true;
-			}
-
+			
 			if (typeDeclaration.IsEnum())
 			{
 				return true;
 			}
 
-			return false;
+			//MB and SO are not serializable
+			if (typeDeclaration is { Namespace: EngineTypePredicates.UnityEngineNamespace, Name: EngineTypePredicates.MonoBehaviour or EngineTypePredicates.ScriptableObject })
+			{
+				return true;
+			}
+
+			//Fullname is slow, do it last
+			return typeDeclaration.FullName.StartsWith("System."); //can this be done better?
 		}
 
 		public static bool ShouldImplementIDeserializable(ITypeDescriptor typeDeclaration)
 		{
-			if (typeDeclaration.FullName == "UnityEngine.ExposedReference`1")
+			if (typeDeclaration is { Namespace: EngineTypePredicates.UnityEngineNamespace, Name: "ExposedReference`1" })
 			{
 				return true;
 			}
@@ -442,15 +450,19 @@ namespace AssetRipper.SerializationLogic
 			}
 
 			TypeDefinition resolvedTypeDeclaration = typeDeclaration.CheckedResolve();
-			if (resolvedTypeDeclaration.IsValueType)
+
+			bool isSerializable = resolvedTypeDeclaration.IsSerializable;
+			
+			//If serializable, also check we're not compiler generated
+			isSerializable &= resolvedTypeDeclaration.CustomAttributes.All(a => a.Constructor?.DeclaringType is not {} type || type.Namespace != "System.Runtime.CompilerServices" || !type.Name!.Value.StartsWith("CompilerGenerated"));
+			
+			if (typeDeclaration.IsValueType)
 			{
-				return resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor?.DeclaringType?.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated") ?? false);
+				return isSerializable;
 			}
-			else
-			{
-				return (resolvedTypeDeclaration.IsSerializable && !resolvedTypeDeclaration.CustomAttributes.Any(a => a.Constructor?.DeclaringType?.FullName.Contains("System.Runtime.CompilerServices.CompilerGenerated") ?? false))
-					|| resolvedTypeDeclaration.IsSubclassOf(EngineTypePredicates.MonoBehaviour, EngineTypePredicates.ScriptableObject);
-			}
+
+			//Reference types can be serializable, or they can be MB/SO.
+			return isSerializable || resolvedTypeDeclaration.IsSubclassOfAny(EngineTypePredicates.MonoBehaviourFullName, EngineTypePredicates.ScriptableObjectFullName);
 		}
 	}
 }

@@ -19,16 +19,17 @@ namespace AssetRipper.Assets.IO.Reading
 		public override string ReadString()
 		{
 			int length = ReadInt32();
+
 			if (length == 0)
 			{
 				return string.Empty;
 			}
 
-			byte[] buffer = ReadStringBuffer(length);
+			string ret = base.ReadString(length);
 			AlignStream();
 			//Strings have supposedly been aligned since 2.1.0,
 			//which is earlier than the beginning of AssetRipper version support.
-			return Encoding.UTF8.GetString(buffer, 0, length);
+			return ret;
 		}
 
 		public T ReadAsset<T>() where T : IAssetReadable, new()
