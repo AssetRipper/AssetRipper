@@ -107,6 +107,7 @@ namespace AssetRipper.IO.Files.Streams.Smart
 				throw new ObjectDisposedException(null);
 			}
 
+			//If this is null (it can be) it's less confusing to the JIT to just let it throw an NRE than to manually check it
 			return m_stream!.Read(buffer, offset, count);
 		}
 
@@ -117,6 +118,7 @@ namespace AssetRipper.IO.Files.Streams.Smart
 				throw new ObjectDisposedException(null);
 			}
 
+			//If this is null (it can be) it's less confusing to the JIT to just let it throw an NRE than to manually check it
 			return m_stream!.Read(buffer);
 		}
 
@@ -127,6 +129,7 @@ namespace AssetRipper.IO.Files.Streams.Smart
 				throw new ObjectDisposedException(null);
 			}
 
+			//If this is null (it can be) it's less confusing to the JIT to just let it throw an NRE than to manually check it
 			return m_stream!.ReadByte();
 		}
 
