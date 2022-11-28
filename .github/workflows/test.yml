@@ -28,6 +28,14 @@ jobs:
         run: dotnet test
         working-directory: ./AssetRipper.Assets.Tests/
 
+      - name: Build AssetRipper.IO.Endian.Tests
+        run: dotnet build
+        working-directory: ./AssetRipper.IO.Endian.Tests/
+
+      - name: Run AssetRipper.IO.Endian.Tests
+        run: dotnet test
+        working-directory: ./AssetRipper.IO.Endian.Tests/
+
       - name: Build AssetRipper.IO.Files.Tests
         run: dotnet build
         working-directory: ./AssetRipper.IO.Files.Tests/

@@ -17,8 +17,7 @@ public partial struct EndianSpanWriter
 
 	public void Write(bool value)
 	{
-		byte integer = value ? (byte)1 : (byte)0;
-		data[offset] = integer;
+		Write(value ? (byte)1 : (byte)0);
 	}
 
 	public void Write(byte value)
@@ -35,5 +34,11 @@ public partial struct EndianSpanWriter
 	public void Write(char value)
 	{
 		Write((ushort)value);
+	}
+
+	public void Write(ReadOnlySpan<byte> value)
+	{
+		value.CopyTo(data.Slice(Position));
+		offset += value.Length;
 	}
 }

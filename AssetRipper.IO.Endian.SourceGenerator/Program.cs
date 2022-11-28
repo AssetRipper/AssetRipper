@@ -7,10 +7,13 @@ namespace AssetRipper.IO.Endian.SourceGenerator;
 internal class Program
 {
 	private const string PathToTargetDirectory = "../../../../AssetRipper.IO.Endian/";
+	private const string PathToTestsDirectory = "../../../../AssetRipper.IO.Endian.Tests/";
 	private const string ReaderStructName = "EndianSpanReader";
 	private const string WriterStructName = "EndianSpanWriter";
+	private const string TestsClassName = "EndianSpanTests";
 	private const string BinaryPrimitivesNamespace = "System.Buffers.Binary";
 	private const string TargetNamespace = "AssetRipper.IO.Endian";
+	private const string TestsNamespace = TargetNamespace + ".Tests";
 	private const string BigEndianField = "bigEndian";
 	private const string OffsetField = "offset";
 	private const string DataField = "data";
@@ -29,10 +32,19 @@ internal class Program
 		(nameof(Double), "double"),
 	};
 
+	private static readonly List<(string, string)> otherList = new()
+	{
+		(nameof(Boolean), "bool"),
+		(nameof(Byte), "byte"),
+		(nameof(SByte), "sbyte"),
+		(nameof(Char), "char"),
+	};
+
 	private static void Main()
 	{
 		DoReaderStruct();
 		DoWriterStruct();
+		DoTests();
 		Console.WriteLine("Done!");
 	}
 
@@ -82,6 +94,38 @@ internal class Program
 			{
 				writer.WriteLineNoTabs();
 				AddWriteMethod(writer, typeName, keyword);
+			}
+		}
+	}
+
+	private static void DoTests()
+	{
+		using IndentedTextWriter writer = IndentedTextWriterFactory.Create(PathToTestsDirectory, TestsClassName);
+		DoTests(writer);
+	}
+
+	private static void DoTests(IndentedTextWriter writer)
+	{
+		writer.WriteGeneratedCodeWarning();
+		writer.WriteFileScopedNamespace(TestsNamespace);
+		writer.WriteLine();
+		writer.WriteLine($"public partial class {TestsClassName}");
+		using (new CurlyBrackets(writer))
+		{
+			bool first = true;
+			foreach ((string typeName, string keyWord) in list.Union(otherList))
+			{
+				if (first)
+				{
+					first = false;
+				}
+				else
+				{
+					writer.WriteLineNoTabs();
+				}
+				AddTestMethod(writer, typeName, keyWord, false);
+				writer.WriteLineNoTabs();
+				AddTestMethod(writer, typeName, keyWord, true);
 			}
 		}
 	}
@@ -137,8 +181,7 @@ internal class Program
 				writer.WriteLine($"? {GetBinaryPrimitivesMethodName(typeName, true, true)}({DataField}.{SliceMethod}({OffsetField}))");
 				writer.WriteLine($": {GetBinaryPrimitivesMethodName(typeName, false, true)}({DataField}.{SliceMethod}({OffsetField}));");
 			}
-			string sizeOfParameter = returnType is nameof(Half) ? "ushort" : returnType;
-			writer.WriteLine($"{OffsetField} += sizeof({sizeOfParameter});");
+			writer.WriteLine($"{OffsetField} += {SizeOfExpression(returnType)};");
 			writer.WriteLine($"return {ResultVariable};");
 		}
 	}
@@ -180,8 +223,7 @@ internal class Program
 				string methodName = GetBinaryPrimitivesMethodName(typeName, false, false);
 				writer.WriteLine($"{methodName}({DataField}.{SliceMethod}({OffsetField}), {ValueParameter});");
 			}
-			string sizeOfParameter = parameterType is nameof(Half) ? "ushort" : parameterType;
-			writer.WriteLine($"{OffsetField} += sizeof({sizeOfParameter});");
+			writer.WriteLine($"{OffsetField} += {SizeOfExpression(parameterType)};");
 		}
 	}
 
@@ -194,5 +236,54 @@ internal class Program
 			(true, false) => $"{nameof(BinaryPrimitives)}.Write{typeName}BigEndian",
 			(false, false) => $"{nameof(BinaryPrimitives)}.Write{typeName}LittleEndian",
 		};
+	}
+	
+	/// <summary>
+	/// <code>
+	/// [Test]
+	/// public void BooleanBigEndian()
+	/// {
+	///     byte[] data = new byte[sizeof(bool)];
+	///     bool value1 = RandomData.NextBoolean();
+	/// 
+	///     EndianSpanWriter writer = new EndianSpanWriter(data, EndianType.BigEndian);
+	///     writer.Write(value1);
+	///     Assert.That(writer.Position, Is.EqualTo(sizeof(bool)));
+	/// 
+	///     EndianSpanReader reader = new EndianSpanReader(data, EndianType.BigEndian);
+	///     bool value2 = reader.ReadBoolean();
+	///     Assert.That(reader.Position, Is.EqualTo(sizeof(bool)));
+	///     Assert.That(value2, Is.EqualTo(value1));
+	/// }
+	/// </code>
+	/// </summary>
+	/// <param name="writer"></param>
+	/// <param name="typeName"></param>
+	/// <param name="parameterType"></param>
+	/// <param name="bigEndian"></param>
+	private static void AddTestMethod(IndentedTextWriter writer, string typeName, string parameterType, bool bigEndian)
+	{
+		string endianName = bigEndian ? "BigEndian" : "LittleEndian";
+		writer.WriteLine("[Test]");
+		writer.WriteLine($"public void {typeName}{endianName}()");
+		using (new CurlyBrackets(writer))
+		{
+			writer.WriteLine($"byte[] data = new byte[{SizeOfExpression(parameterType)}];");
+			writer.WriteLine($"{parameterType} value1 = RandomData.Next{typeName}();");
+			writer.WriteLineNoTabs();
+			writer.WriteLine($"{WriterStructName} writer = new {WriterStructName}(data, EndianType.{endianName});");
+			writer.WriteLine("writer.Write(value1);");
+			writer.WriteLine($"Assert.That(writer.Position, Is.EqualTo({SizeOfExpression(parameterType)}));");
+			writer.WriteLineNoTabs();
+			writer.WriteLine($"{ReaderStructName} reader = new {ReaderStructName}(data, EndianType.{endianName});");
+			writer.WriteLine($"{parameterType} value2 = reader.Read{typeName}();");
+			writer.WriteLine($"Assert.That(reader.Position, Is.EqualTo({SizeOfExpression(parameterType)}));");
+			writer.WriteLine("Assert.That(value2, Is.EqualTo(value1));");
+		}
+	}
+
+	private static string SizeOfExpression(string type)
+	{
+		return type is nameof(Half) ? "sizeof(ushort)" : $"sizeof({type})";
 	}
 }
