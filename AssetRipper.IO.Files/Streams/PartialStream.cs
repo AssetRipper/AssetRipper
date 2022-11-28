@@ -39,6 +39,16 @@ namespace AssetRipper.IO.Files.Streams
 			return read;
 		}
 
+		public override int Read(Span<byte> buffer)
+		{
+			int count = buffer.Length;
+			count = (int)Math.Max(Math.Min(count, Length - Position), 0);
+			return m_stream.Read(buffer[..count]);
+		}
+
+		public override int ReadByte() 
+			=> m_stream.ReadByte();
+
 		/// <inheritdoc/>
 		public override long Seek(long offset, SeekOrigin origin)
 		{
