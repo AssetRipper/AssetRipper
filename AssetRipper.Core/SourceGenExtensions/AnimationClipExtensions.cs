@@ -146,10 +146,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (clip.Has_ClipBindingConstant_C74())
 			{
-				int tosCount = clip.ClipBindingConstant_C74.GenericBindings.Count;
+				AccessListBase<IGenericBinding> bindings = clip.ClipBindingConstant_C74.GenericBindings;
+				int tosCount = bindings.Count;
 				for (int i = 0; i < tosCount; i++)
 				{
-					IGenericBinding binding = clip.ClipBindingConstant_C74.GenericBindings[i];
+					IGenericBinding binding = bindings[i];
 					if (src.TryGetValue(binding.Path, out Utf8String? path))
 					{
 						dest[binding.Path] = path.String;
