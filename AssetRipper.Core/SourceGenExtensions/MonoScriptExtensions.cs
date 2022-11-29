@@ -1,11 +1,12 @@
 ﻿using AsmResolver.DotNet;
-using AssetRipper.Core.Classes.Misc;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.Core.Structure.Assembly.Serializable;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Subclasses.Hash128;
+using System.Buffers.Binary;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -86,10 +87,24 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static Hash128 GetPropertiesHash(this IMonoScript monoScript)
 		{
-			return new();
-			/*return monoScript.Has_PropertiesHash_C115_Hash128()
-				? (Hash128)monoScript.PropertiesHash_C115_Hash128
-				: new Hash128(monoScript.PropertiesHash_C115_UInt32);*/
+			if (monoScript.Has_PropertiesHash_C115_Hash128())
+			{
+				return monoScript.PropertiesHash_C115_Hash128;
+			}
+			else
+			{
+				Span<byte> hash = stackalloc byte[4];
+				BinaryPrimitives.WriteUInt32LittleEndian(hash, monoScript.PropertiesHash_C115_UInt32);
+				//I have reason to believe that this depends on the endianness of the file containing the MonoScript
+				//Might need to have a special case for big endian files, so that the hash matches SerializedType
+				return new()
+				{
+					Bytes__0 = hash[0],
+					Bytes__1 = hash[1],
+					Bytes__2 = hash[2],
+					Bytes__3 = hash[3],
+				};
+			}
 		}
 	}
 }
