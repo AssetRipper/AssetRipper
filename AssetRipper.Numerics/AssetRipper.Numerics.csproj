@@ -3,6 +3,8 @@
 	<PropertyGroup>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<IsTrimmable>true</IsTrimmable>
+		<OutputPath>..\Bins\Other\AssetRipper.Numerics\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Numerics\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 </Project>

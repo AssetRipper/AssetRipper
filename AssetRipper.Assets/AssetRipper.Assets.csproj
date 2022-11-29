@@ -5,6 +5,8 @@
 		<Authors>ds5678</Authors>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<IsTrimmable>true</IsTrimmable>
+		<OutputPath>..\Bins\Other\AssetRipper.Assets\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Assets\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

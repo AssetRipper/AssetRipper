@@ -5,6 +5,8 @@
 		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
 		<IsTrimmable>true</IsTrimmable>
+		<OutputPath>..\Bins\Other\AssetRipper.Yaml\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Yaml\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 </Project>

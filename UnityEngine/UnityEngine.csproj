@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
+		<OutputPath>..\Bins\Other\UnityEngine\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\UnityEngine\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 </Project>

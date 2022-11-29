@@ -3,6 +3,8 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<OutputPath>..\Bins\AssetRipper.Tools.MonoBehaviourTester\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Tools.MonoBehaviourTester\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

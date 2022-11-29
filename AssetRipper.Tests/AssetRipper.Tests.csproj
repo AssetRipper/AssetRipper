@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
+		<OutputPath>..\Bins\Other\AssetRipper.Tests\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Tests\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

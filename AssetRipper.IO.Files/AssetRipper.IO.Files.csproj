@@ -4,6 +4,8 @@
 		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
 		<IsTrimmable>true</IsTrimmable>
+		<OutputPath>..\Bins\Other\AssetRipper.IO.Files\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.IO.Files\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

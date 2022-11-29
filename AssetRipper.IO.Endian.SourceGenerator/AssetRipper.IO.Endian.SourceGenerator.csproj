@@ -3,6 +3,8 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<OutputPath>..\Bins\Other\AssetRipper.IO.Endian.SourceGenerator\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.IO.Endian.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

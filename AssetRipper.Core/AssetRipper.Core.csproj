@@ -6,6 +6,8 @@
 		<Copyright>Copyright ©  2022</Copyright>
 		<Authors>ds5678</Authors>
 		<IsTrimmable>true</IsTrimmable>
+		<OutputPath>..\Bins\Other\AssetRipper.Core\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Core\$(Configuration)\</IntermediateOutputPath>
 
 		<RestoreAdditionalProjectSources>
 			https://nuget.samboy.dev/v3/index.json
