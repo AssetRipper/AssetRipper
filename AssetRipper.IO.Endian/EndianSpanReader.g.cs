@@ -8,10 +8,10 @@ ref partial struct EndianSpanReader
 	private readonly ReadOnlySpan<byte> data;
 	private int offset;
 	private bool bigEndian;
-	public int Length => data.Length;
+	public readonly int Length => data.Length;
 	public int Position
 	{
-		get => offset;
+		readonly get => offset;
 		set => offset = value;
 	}
 

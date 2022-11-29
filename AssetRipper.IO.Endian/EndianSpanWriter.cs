@@ -11,7 +11,7 @@ public partial struct EndianSpanWriter
 
 	public EndianType Type
 	{
-		get => bigEndian ? EndianType.BigEndian : EndianType.LittleEndian;
+		readonly get => bigEndian ? EndianType.BigEndian : EndianType.LittleEndian;
 		set => bigEndian = value == EndianType.BigEndian;
 	}
 

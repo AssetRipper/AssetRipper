@@ -141,7 +141,7 @@ internal class Program
 
 	private static void AddLengthProperty(IndentedTextWriter writer)
 	{
-		writer.WriteLine($"public int Length => {DataField}.{nameof(ReadOnlySpan<byte>.Length)};");
+		writer.WriteLine($"public readonly int Length => {DataField}.{nameof(ReadOnlySpan<byte>.Length)};");
 	}
 
 	private static void AddPositionProperty(IndentedTextWriter writer)
@@ -149,7 +149,7 @@ internal class Program
 		writer.WriteLine("public int Position");
 		using (new CurlyBrackets(writer))
 		{
-			writer.WriteLine($"get => {OffsetField};");
+			writer.WriteLine($"readonly get => {OffsetField};");
 			writer.WriteLine($"set => {OffsetField} = value;");
 		}
 	}
