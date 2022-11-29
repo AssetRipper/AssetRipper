@@ -2,6 +2,21 @@ namespace AssetRipper.SerializationLogic.Extensions
 {
 	public static class TypeDefinitionExtensions
 	{
+		public static bool IsSubclassOf(this TypeDefinition type, string ns, string name)
+		{
+			ITypeDefOrRef? baseType = type.BaseType;
+			while (baseType != null)
+			{
+				if (baseType.Namespace == ns && baseType.Name == name)
+				{
+					return true;
+				}
+				baseType = baseType.Resolve()?.BaseType;
+			}
+
+			return false;
+		}
+		
 		public static bool IsSubclassOf(this TypeDefinition type, string baseTypeName)
 		{
 			ITypeDefOrRef? baseType = type.BaseType;
@@ -24,7 +39,7 @@ namespace AssetRipper.SerializationLogic.Extensions
 			return baseTypeDef.IsSubclassOf(baseTypeName);
 		}
 
-		public static bool IsSubclassOf(this TypeDefinition type, params string[] baseTypeNames)
+		public static bool IsSubclassOfAny(this TypeDefinition type, params string[] baseTypeNames)
 		{
 			ITypeDefOrRef? baseType = type.BaseType;
 			if (baseType == null)
@@ -46,7 +61,7 @@ namespace AssetRipper.SerializationLogic.Extensions
 				return false;
 			}
 
-			return baseTypeDef.IsSubclassOf(baseTypeNames);
+			return baseTypeDef.IsSubclassOfAny(baseTypeNames);
 		}
 
 		public static bool InheritsFromMonoBehaviour(this TypeDefinition type)

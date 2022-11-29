@@ -1,4 +1,5 @@
 using AssetRipper.SerializationLogic.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace AssetRipper.SerializationLogic
@@ -27,19 +28,25 @@ namespace AssetRipper.SerializationLogic
 		private const string GUIStyle = "UnityEngine.GUIStyle";
 		private const string RectOffset = "UnityEngine.RectOffset";
 		protected const string UnityEngineObject = "UnityEngine.Object";
-		public const string MonoBehaviour = "UnityEngine.MonoBehaviour";
-		public const string ScriptableObject = "UnityEngine.ScriptableObject";
+		
+		public const string MonoBehaviour = "MonoBehaviour";
+		public const string ScriptableObject = "ScriptableObject";
+		
+		public const string MonoBehaviourFullName = $"{UnityEngineNamespace}.{MonoBehaviour}";
+		public const string ScriptableObjectFullName = $"{UnityEngineNamespace}.{ScriptableObject}";
 		protected const string Matrix4x4 = "UnityEngine.Matrix4x4";
 		protected const string Color32 = "UnityEngine.Color32";
-		private const string SerializeFieldAttribute = "UnityEngine.SerializeField";
-		private const string SerializeReferenceAttribute = "UnityEngine.SerializeReference";
+		
+		public const string UnityEngineNamespace = "UnityEngine";
+		private const string SerializeFieldAttribute = "SerializeField";
+		private const string SerializeReferenceAttribute = "SerializeReference";
 
 		private static readonly string[] serializableClasses = new[]
 		{
-			"UnityEngine.AnimationCurve",
-			"UnityEngine.Gradient",
-			"UnityEngine.GUIStyle",
-			"UnityEngine.RectOffset"
+			"AnimationCurve",
+			"Gradient",
+			"GUIStyle",
+			"RectOffset"
 		};
 
 		private static readonly string[] serializableStructs = new[]
@@ -58,7 +65,7 @@ namespace AssetRipper.SerializationLogic
 
 		private static bool IsMonoBehaviour(TypeDefinition typeDefinition)
 		{
-			return typeDefinition.IsSubclassOf(MonoBehaviour);
+			return typeDefinition.IsSubclassOf(MonoBehaviourFullName);
 		}
 
 		public static bool IsScriptableObject(ITypeDescriptor type)
@@ -68,7 +75,7 @@ namespace AssetRipper.SerializationLogic
 
 		private static bool IsScriptableObject(TypeDefinition temp)
 		{
-			return temp.IsSubclassOf(ScriptableObject);
+			return temp.IsSubclassOf(ScriptableObjectFullName);
 		}
 
 		public static bool IsColor32(ITypeDescriptor type)
@@ -101,7 +108,7 @@ namespace AssetRipper.SerializationLogic
 		{
 			foreach (string unityClasses in serializableClasses)
 			{
-				if (type.IsAssignableTo(unityClasses))
+				if (type.IsAssignableTo(UnityEngineNamespace, unityClasses))
 				{
 					return true;
 				}
@@ -138,7 +145,7 @@ namespace AssetRipper.SerializationLogic
 				return false;
 			}
 
-			if (type.FullName == UnityEngineObject)
+			if (type is { Namespace: UnityEngineNamespace, Name: nameof(Object) })
 			{
 				return true;
 			}
@@ -149,7 +156,7 @@ namespace AssetRipper.SerializationLogic
 				return false;
 			}
 
-			return typeDefinition.IsSubclassOf(UnityEngineObject);
+			return typeDefinition.IsSubclassOf(UnityEngineNamespace, nameof(Object));
 		}
 
 		public static bool ShouldHaveHadSerializableAttribute(ITypeDescriptor type)
@@ -164,12 +171,12 @@ namespace AssetRipper.SerializationLogic
 
 		public static bool IsSerializeFieldAttribute(ITypeDescriptor attributeType)
 		{
-			return attributeType.FullName == SerializeFieldAttribute;
+			return attributeType is { Namespace: UnityEngineNamespace, Name: SerializeFieldAttribute };
 		}
 
 		public static bool IsSerializeReferenceAttribute(ITypeDescriptor attributeType)
 		{
-			return attributeType.FullName == SerializeReferenceAttribute;
+			return attributeType is { Namespace: UnityEngineNamespace, Name: SerializeReferenceAttribute };
 		}
 	}
 }

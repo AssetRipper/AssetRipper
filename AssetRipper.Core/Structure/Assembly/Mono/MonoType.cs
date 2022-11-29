@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 
 		public MonoType(TypeDefinition typeDefinition) : this((ITypeDefOrRef) typeDefinition)
 		{
-			List<Field> fields = new();
+			List<Field> fields = new(typeDefinition.Fields.Count); //Ensure we allocate some initial space so that we have less chance of needing to resize the list.
 			foreach ((FieldDefinition fieldDefinition, TypeSignature fieldType) in FieldQuery.GetFieldsInTypeAndBase(typeDefinition))
 			{
 				if (FieldSerializationLogic.WillUnitySerialize(fieldDefinition, fieldType))

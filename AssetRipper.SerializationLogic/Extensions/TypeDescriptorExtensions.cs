@@ -4,17 +4,34 @@ namespace AssetRipper.SerializationLogic.Extensions
 	{
 		public static string? SafeNamespace(this ITypeDescriptor type)
 		{
-			if (type.ToTypeSignature() is GenericInstanceTypeSignature genericInstanceTypeSignature)
+			//We want to avoid calling ToTypeSignature where possible because it's expensive, so check each case manually.
+			return type switch
 			{
-				return genericInstanceTypeSignature.GenericType.SafeNamespace();
+				TypeDefinition td => td.Namespace,
+				TypeReference tr => tr.Namespace,
+				TypeSpecification { Signature: GenericInstanceTypeSignature gts } => gts.GenericType.SafeNamespace(),
+				TypeSpecification ts => ts.Namespace,
+				GenericInstanceTypeSignature gts => gts.GenericType.SafeNamespace(),
+				TypeSignature sig => sig.Namespace,
+				_ => type.Namespace,
+			};
+		}
+		
+		public static bool IsAssignableTo(this ITypeDescriptor typeRef, string ns, string name)
+		{
+			if (typeRef.ToTypeSignature() is GenericInstanceTypeSignature genericInstanceTypeSignature)
+			{
+				return genericInstanceTypeSignature.GenericType.IsAssignableTo(ns, name);
 			}
 
-			if (type.DeclaringType is not null)
+			if (typeRef.Namespace == ns && typeRef.Name == name)
 			{
-				return type.DeclaringType.SafeNamespace();
+				return true;
 			}
-
-			return type.Namespace;
+			
+			return typeRef.Resolve()?.IsSubclassOf(ns, name) ?? false;
+			// If we can't resolve our typeref or one of its base types,
+			// let's assume it is not assignable to our target type
 		}
 
 		public static bool IsAssignableTo(this ITypeDescriptor typeRef, string typeName)
@@ -51,6 +68,12 @@ namespace AssetRipper.SerializationLogic.Extensions
 
 		public static bool IsArray(this ITypeDescriptor type)
 		{
+			if (type is TypeDefinition or TypeReference)
+			{
+				//Easy out without having to work out the type sig, which is slow
+				return false;
+			}
+
 			return type.ToTypeSignature() is SzArrayTypeSignature or ArrayTypeSignature;
 		}
 

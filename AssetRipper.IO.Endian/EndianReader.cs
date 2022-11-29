@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Buffers.Binary;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
@@ -18,7 +19,7 @@ namespace AssetRipper.IO.Endian
 
 		protected const int BufferSize = 4096;
 
-		private readonly byte[] m_buffer = new byte[BufferSize];
+		// private readonly byte[] m_buffer = new byte[BufferSize];
 
 		protected long RemainingStreamBytes => BaseStream.Length - BaseStream.Position;
 
@@ -172,14 +173,45 @@ namespace AssetRipper.IO.Endian
 		public override string ReadString()
 		{
 			int length = ReadInt32();
-			byte[] buffer = ReadStringBuffer(length);
-			return Encoding.UTF8.GetString(buffer, 0, length);
+			return ReadString(length);
 		}
 
 		public string ReadString(int length)
 		{
-			byte[] buffer = ReadStringBuffer(length);
-			return Encoding.UTF8.GetString(buffer, 0, length);
+			if (length > RemainingStreamBytes)
+			{
+				throw new EndOfStreamException($"Can't read {length}-byte string because there are only {RemainingStreamBytes} bytes left in the stream");
+			}
+			
+			scoped Span<byte> buffer;
+			byte[]? backingArray = null;
+			if (length > 4096)
+			{
+				backingArray = ArrayPool<byte>.Shared.Rent(length);
+				buffer = backingArray.AsSpan(0, length);
+			}
+			else
+			{
+				buffer = (stackalloc byte[length]); 
+			}
+
+			int read = Read(buffer);
+			if (read != length)
+			{
+				throw new EndOfStreamException($"End of stream. Expected to read {length} bytes, but only read {read} bytes.");
+			}
+
+			try
+			{
+				return Encoding.UTF8.GetString(buffer);
+			}
+			finally
+			{
+				if(backingArray != null)
+				{
+					ArrayPool<byte>.Shared.Return(backingArray);
+				}
+			}
 		}
 
 		/// <summary>
@@ -188,7 +220,7 @@ namespace AssetRipper.IO.Endian
 		/// <returns>Read string</returns>
 		public string ReadStringZeroTerm()
 		{
-			if (ReadStringZeroTerm(m_buffer.Length, out string? result))
+			if (ReadStringZeroTerm(BufferSize, out string? result))
 			{
 				return result;
 			}
@@ -203,16 +235,17 @@ namespace AssetRipper.IO.Endian
 		/// <returns>Whether zero term has been found</returns>
 		public bool ReadStringZeroTerm(int maxLength, [NotNullWhen(true)] out string? result)
 		{
-			maxLength = Math.Min(maxLength, m_buffer.Length);
+			// maxLength = Math.Min(maxLength, m_buffer.Length);
+			Span<byte> buffer = (stackalloc byte[maxLength]);
 			for (int i = 0; i < maxLength; i++)
 			{
 				byte bt = ReadByte();
 				if (bt == 0)
 				{
-					result = Encoding.UTF8.GetString(m_buffer, 0, i);
+					result = Encoding.UTF8.GetString(buffer[..i]);
 					return true;
 				}
-				m_buffer[i] = bt;
+				buffer[i] = bt;
 			}
 
 			result = null;
@@ -591,49 +624,6 @@ namespace AssetRipper.IO.Endian
 		public void AlignStream()
 		{
 			BaseStream.Position = (BaseStream.Position + 3) & ~3;
-		}
-
-		protected byte[] ReadStringBuffer(int size)
-		{
-			if (m_buffer.Length >= size)
-			{
-				FillInnerBuffer(size);
-				return m_buffer;
-			}
-			else
-			{
-				byte[] buffer = new byte[size];
-				int offset = 0;
-				int count = size;
-				while (count > 0)
-				{
-					int read = Read(buffer, offset, count);
-					if (read == 0)
-					{
-						throw new Exception($"End of stream. Read {offset}, expected {size} bytes");
-					}
-					offset += read;
-					count -= read;
-				}
-				return buffer;
-			}
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		protected void FillInnerBuffer(int size)
-		{
-			int offset = 0;
-			int count = size;
-			while (count > 0)
-			{
-				int read = Read(m_buffer, offset, count);
-				if (read == 0)
-				{
-					throw new Exception($"End of stream. Read {offset}, expected {size} bytes");
-				}
-				offset += read;
-				count -= read;
-			}
 		}
 
 		protected void ThrowIfNotEnoughSpaceForArray(int elementNumberToRead, int elementSize)
