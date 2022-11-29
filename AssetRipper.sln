@@ -47,6 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueTemplates", "IssueTemp
 		.github\ISSUE_TEMPLATE\config.yaml = .github\ISSUE_TEMPLATE\config.yaml
 		.github\ISSUE_TEMPLATE\enhancement.yaml = .github\ISSUE_TEMPLATE\enhancement.yaml
 		.github\ISSUE_TEMPLATE\other.yaml = .github\ISSUE_TEMPLATE\other.yaml
+		.github\ISSUE_TEMPLATE\question.yaml = .github\ISSUE_TEMPLATE\question.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{88179FFC-0863-4C4F-9860-68EB1471E59F}"
@@ -75,12 +76,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tests", "AssetRipper.Tests\AssetRipper.Tests.csproj", "{365C791E-431B-40E5-B724-BE375126AA11}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShellScripts", "ShellScripts", "{06FFA747-F995-4696-A09E-7559161EBA42}"
-	ProjectSection(SolutionItems) = preProject
-		generate_all.sh = generate_all.sh
-		get_names.sh = get_names.sh
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShaderTextRestorer", "ShaderTextRestorer\ShaderTextRestorer.csproj", "{38B51E0B-9F05-4BFA-B6B4-49DEAAA876A3}"
 EndProject
@@ -144,7 +139,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Endian.Sourc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.MonoBehaviourTester", "AssetRipper.Tools.MonoBehaviourTester\AssetRipper.Tools.MonoBehaviourTester.csproj", "{85DC8AB1-4B53-41EA-AD5B-1D0C178D3A21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.IO.Endian.Tests", "AssetRipper.IO.Endian.Tests\AssetRipper.IO.Endian.Tests.csproj", "{18AF6498-0CCC-4D41-B2B4-4DB4A94BD386}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Endian.Tests", "AssetRipper.IO.Endian.Tests\AssetRipper.IO.Endian.Tests.csproj", "{18AF6498-0CCC-4D41-B2B4-4DB4A94BD386}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -293,7 +288,6 @@ Global
 		{38C0DDA2-6C7D-41F1-90F6-0B1DDA86C0EC} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 		{88179FFC-0863-4C4F-9860-68EB1471E59F} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 		{E3A52FDC-1C4D-430F-A1BA-BFC5671181D4} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
-		{06FFA747-F995-4696-A09E-7559161EBA42} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED4FF66B-4A6D-4440-8721-23C5ED09791C}

@@ -1,0 +1,13 @@
+name: Question
+description: Ask a question
+title: "[Question]: "
+labels: [Question]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Question
+      description: |
+        Issues are not for asking questions. Please post your inquiry at https://github.com/AssetRipper/AssetRipper/discussions instead.
+    validations:
+      required: true
