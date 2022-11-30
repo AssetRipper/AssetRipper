@@ -1,4 +1,4 @@
-using AssetRipper.Core.IO;
+using AssetRipper.IO.Files.Streams;
 using AssetRipper.VersionUtilities;
 using ShaderTextRestorer.IO;
 using ShaderTextRestorer.ShaderBlob;

@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.IO.MultiFile;
-using AssetRipper.Core.Logging;
+﻿using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.Assembly.Managers;
+using AssetRipper.IO.Files.Streams.MultiFile;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

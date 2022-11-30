@@ -1,10 +1,10 @@
-using AssetRipper.Core.IO.MultiFile;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using AssetRipper.IO.Files.BundleFiles;
 using AssetRipper.IO.Files.BundleFiles.FileStream;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Utils;
 using System.Collections.Generic;
 using System.IO;
