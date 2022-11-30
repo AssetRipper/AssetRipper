@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Classes.AudioClip;
-using AssetRipper.Core.Extensions;
+﻿using AssetRipper.Core.Extensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using AssetRipper.SourceGenerated.Enums;
+using AssetRipper.SourceGenerated.NativeEnums.Fmod;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -60,11 +60,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 		/// <summary>
 		/// Only present when <see cref="IAudioClip.Has_Format_C83"/> is true.
 		/// </summary>
-		public static FMODSoundFormat GetSoundFormat(this IAudioClip audioClip) => (FMODSoundFormat)audioClip.Format_C83;
+		public static FmodSoundFormat GetSoundFormat(this IAudioClip audioClip) => (FmodSoundFormat)audioClip.Format_C83;
 
 		/// <summary>
 		/// Only present when <see cref="IAudioClip.Has_Type_C83"/> is true.
 		/// </summary>
-		public static FMODSoundType GetSoundType(this IAudioClip audioClip) => (FMODSoundType)audioClip.Type_C83;
+		public static FmodSoundType GetSoundType(this IAudioClip audioClip) => (FmodSoundType)audioClip.Type_C83;
 	}
 }

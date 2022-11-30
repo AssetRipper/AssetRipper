@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Core.Classes.AudioClip;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
