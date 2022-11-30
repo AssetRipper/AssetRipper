@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace AssetRipper.Library.Exporters.Shaders
 {
-	public class TemplateShader
+	public sealed class TemplateShader
 	{
 		public string TemplateName { get; set; } = string.Empty;
 		public List<RequiredProperty> RequiredProperties { get; set; } = new();

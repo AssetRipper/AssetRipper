@@ -8,6 +8,9 @@ using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
+using AssetRipper.SourceGenerated.Subclasses.SerializedProperties;
+using AssetRipper.SourceGenerated.Subclasses.SerializedProperty;
+using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Globalization;
 using System.IO;
 
@@ -15,26 +18,28 @@ namespace AssetRipper.Library.Exporters.Shaders
 {
 	public class DummyShaderTextExporter : BinaryAssetExporter
 	{
-		private const string FALLBACK_DUMMY_SHADER = @"
-	SubShader{
-		Tags { ""RenderType"" = ""Opaque"" }
-		LOD 200
-		CGPROGRAM
-#pragma surface surf Standard fullforwardshadows
-#pragma target 3.0
-		sampler2D _MainTex;
-		struct Input
-		{
-			float2 uv_MainTex;
-		};
-		void surf(Input IN, inout SurfaceOutputStandard o)
-		{
-			fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
-			o.Albedo = c.rgb;
-		}
-		ENDCG
-	}
-";
+		private static string FallbackDummyShader { get; } = """
+
+				SubShader{
+					Tags { "RenderType" = "Opaque" }
+					LOD 200
+					CGPROGRAM
+			#pragma surface surf Standard fullforwardshadows
+			#pragma target 3.0
+					sampler2D _MainTex;
+					struct Input
+					{
+						float2 uv_MainTex;
+					};
+					void surf(Input IN, inout SurfaceOutputStandard o)
+					{
+						fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
+						o.Albedo = c.rgb;
+					}
+					ENDCG
+				}
+
+			""".Replace("\r", "");
 
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
@@ -68,7 +73,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 			if (shader.Has_ParsedForm_C48())
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
-				writer.Write("Shader \"{0}\" {{\n", shader.ParsedForm_C48.NameString);
+				writer.Write($"Shader \"{shader.ParsedForm_C48.Name}\" {{\n");
 				Export(shader.ParsedForm_C48.PropInfo, writer);
 
 				TemplateShader templateShader = TemplateList.GetBestTemplate(shader);
@@ -80,19 +85,19 @@ namespace AssetRipper.Library.Exporters.Shaders
 				else
 				{
 					writer.WriteIndent(1);
-					writer.Write(FALLBACK_DUMMY_SHADER.Replace("\r", ""));
+					writer.Write(FallbackDummyShader);
 				}
 				writer.Write('\n');
 
 				if (shader.ParsedForm_C48.FallbackName != string.Empty)
 				{
 					writer.WriteIndent(1);
-					writer.Write("Fallback \"{0}\"\n", shader.ParsedForm_C48.FallbackName);
+					writer.Write($"Fallback \"{shader.ParsedForm_C48.FallbackName}\"\n");
 				}
 				if (shader.ParsedForm_C48.CustomEditorName != string.Empty)
 				{
 					writer.WriteIndent(1);
-					writer.Write("//CustomEditor \"{0}\"\n", shader.ParsedForm_C48.CustomEditorName);
+					writer.Write($"//CustomEditor \"{shader.ParsedForm_C48.CustomEditorName}\"\n");
 				}
 				writer.Write('}');
 			}
@@ -105,7 +110,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 				writer.Write("\t//DummyShaderTextExporter\n");
 				writer.WriteIndent(1);
-				writer.Write(FALLBACK_DUMMY_SHADER.Replace("\r", ""));
+				writer.Write(FallbackDummyShader);
 
 				writer.Write('}');
 			}
@@ -115,11 +120,11 @@ namespace AssetRipper.Library.Exporters.Shaders
 			}
 		}
 
-		private static void Export(SourceGenerated.Subclasses.SerializedProperties.ISerializedProperties _this, TextWriter writer)
+		private static void Export(ISerializedProperties _this, TextWriter writer)
 		{
 			writer.WriteIndent(1);
 			writer.Write("Properties {\n");
-			foreach (SourceGenerated.Subclasses.SerializedProperty.ISerializedProperty prop in _this.Props)
+			foreach (ISerializedProperty prop in _this.Props)
 			{
 				Export(prop, writer);
 			}
@@ -127,12 +132,12 @@ namespace AssetRipper.Library.Exporters.Shaders
 			writer.Write("}\n");
 		}
 
-		private static void Export(SourceGenerated.Subclasses.SerializedProperty.ISerializedProperty _this, TextWriter writer)
+		private static void Export(ISerializedProperty _this, TextWriter writer)
 		{
 			writer.WriteIndent(2);
-			foreach (SourceGenerated.Subclasses.Utf8String.Utf8String? attribute in _this.Attributes)
+			foreach (Utf8String attribute in _this.Attributes)
 			{
-				writer.Write("[{0}] ", attribute);
+				writer.Write($"[{attribute}] ");
 			}
 			SerializedPropertyFlag flags = (SerializedPropertyFlag)_this.Flags;
 			if (flags.IsHideInInspector())
@@ -160,7 +165,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				writer.Write("[Gamma] ");
 			}
 
-			writer.Write("{0} (\"{1}\", ", _this.NameString, _this.Description);
+			writer.Write($"{_this.NameString} (\"{_this.Description}\", ");
 
 			switch ((SerializedPropertyType)_this.Type)
 			{
@@ -175,10 +180,10 @@ namespace AssetRipper.Library.Exporters.Shaders
 					break;
 
 				case SerializedPropertyType.Range:
-					writer.Write("{0}({1}, {2})",
-						nameof(SerializedPropertyType.Range),
-						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture));
+					writer.Write($"{
+						nameof(SerializedPropertyType.Range)}({
+						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture)}, {
+						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture)})");
 					break;
 
 				case SerializedPropertyType._2D:
@@ -219,11 +224,11 @@ namespace AssetRipper.Library.Exporters.Shaders
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
-					writer.Write("({0},{1},{2},{3})",
-						_this.DefValue_0_.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue_3_.ToString(CultureInfo.InvariantCulture));
+					writer.Write($"({
+						_this.DefValue_0_.ToString(CultureInfo.InvariantCulture)},{
+						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture)},{
+						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture)},{
+						_this.DefValue_3_.ToString(CultureInfo.InvariantCulture)})");
 					break;
 
 				case SerializedPropertyType.Int:
@@ -235,7 +240,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				case SerializedPropertyType._2D:
 					//case SerializedPropertyType._3D:
 					//case SerializedPropertyType.Cube:
-					writer.Write("\"{0}\" {{}}", _this.DefTexture.DefaultName);
+					writer.Write($"\"{_this.DefTexture.DefaultName}\" {{}}");
 					break;
 
 				default:

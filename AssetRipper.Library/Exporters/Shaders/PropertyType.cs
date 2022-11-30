@@ -1,5 +1,7 @@
 ﻿using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
 
+namespace AssetRipper.Library.Exporters.Shaders;
+
 public enum PropertyType
 {
 	Color = 0,
