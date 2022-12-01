@@ -73,6 +73,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				long exportID = GenerateExportID(asset);
 				m_exportIDs.Add(asset.AssetInfo, exportID);
+				m_exportAssetIds.Add(exportID);
 				return true;
 			}
 			return false;
@@ -80,7 +81,8 @@ namespace AssetRipper.Core.Project.Collections
 
 		private bool ContainsID(long id)
 		{
-			return m_exportIDs.ContainsValue(id);
+			return m_exportAssetIds.Contains(id);
+			// return m_exportIDs.ContainsValue(id);
 		}
 
 		public override AssetCollection File => m_file;
@@ -91,5 +93,7 @@ namespace AssetRipper.Core.Project.Collections
 		/// A one-to-one dictionary of export id's
 		/// </summary>
 		protected readonly Dictionary<AssetInfo, long> m_exportIDs = new();
+
+		private readonly HashSet<long> m_exportAssetIds = new();
 	}
 }
