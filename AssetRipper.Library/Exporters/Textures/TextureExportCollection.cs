@@ -2,7 +2,6 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Linq;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
@@ -13,10 +12,10 @@ using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace AssetRipper.Library.Exporters.Textures
@@ -34,10 +33,8 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				foreach ((ISprite? sprite, ISpriteAtlas? _) in texture.SpriteInformation)
 				{
-					if (sprite.RD_C213.Texture.IsAsset(sprite.Collection, texture))
-					{
-						AddAsset(sprite);
-					}
+					Debug.Assert(sprite.RD_C213.Texture.IsAsset(sprite.Collection, texture));
+					AddAsset(sprite);
 				}
 			}
 		}
