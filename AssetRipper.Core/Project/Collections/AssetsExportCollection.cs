@@ -22,7 +22,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return true;
 			}
-			return m_exportIDs.ContainsKey(asset.AssetInfo);
+			return m_exportIDs.ContainsKey(asset);
 		}
 
 		public override long GetExportID(IUnityObjectBase asset)
@@ -31,7 +31,7 @@ namespace AssetRipper.Core.Project.Collections
 			{
 				return base.GetExportID(asset);
 			}
-			return m_exportIDs[asset.AssetInfo];
+			return m_exportIDs[asset];
 		}
 
 		protected override bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
@@ -48,7 +48,7 @@ namespace AssetRipper.Core.Project.Collections
 					m_file = asset.Collection;
 					yield return asset;
 				}
-				foreach (IUnityObjectBase asset in m_assets)
+				foreach ((IUnityObjectBase asset, long _) in m_exportIDs)
 				{
 					m_file = asset.Collection;
 					yield return asset;
@@ -66,33 +66,26 @@ namespace AssetRipper.Core.Project.Collections
 		/// </summary>
 		/// <param name="asset">The asset to be added to this export collection.</param>
 		/// <returns>True if the <paramref name="asset"/> was added or false if the <paramref name="asset"/> was already present.</returns>
-		protected bool AddAsset(IUnityObjectBase asset)
+		protected void AddAsset(IUnityObjectBase asset)
 		{
 			Debug.Assert(asset != Asset);
-			if (m_assets.Add(asset))
-			{
-				long exportID = GenerateExportID(asset);
-				m_exportIDs.Add(asset.AssetInfo, exportID);
-				m_exportAssetIds.Add(exportID);
-				return true;
-			}
-			return false;
+			long exportID = GenerateExportID(asset);
+			m_exportIDs.Add(asset, exportID);
+			m_exportAssetIds.Add(exportID);
 		}
 
 		private bool ContainsID(long id)
 		{
 			return m_exportAssetIds.Contains(id);
-			// return m_exportIDs.ContainsValue(id);
 		}
 
 		public override AssetCollection File => m_file;
 		private AssetCollection m_file;
-
-		protected readonly HashSet<IUnityObjectBase> m_assets = new();
+		
 		/// <summary>
 		/// A one-to-one dictionary of export id's
 		/// </summary>
-		protected readonly Dictionary<AssetInfo, long> m_exportIDs = new();
+		private readonly Dictionary<IUnityObjectBase, long> m_exportIDs = new();
 
 		private readonly HashSet<long> m_exportAssetIds = new();
 	}
