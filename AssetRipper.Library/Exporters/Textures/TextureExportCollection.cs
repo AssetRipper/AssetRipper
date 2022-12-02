@@ -40,67 +40,7 @@ namespace AssetRipper.Library.Exporters.Textures
 					}
 				}
 			}
-
-			//This has moved to the SpriteProcessor
-			// if (convert)
-			// {
-				// foreach (IUnityObjectBase asset in texture.Collection.Bundle.FetchAssetsInHierarchy())
-				// {
-				// 	if (asset is ISprite sprite)
-				// 	{
-				// 		if (sprite.RD_C213.Texture.IsAsset(sprite.Collection, texture))
-				// 		{
-				// 			ISpriteAtlas? atlas = sprite.SpriteAtlas_C213P;
-				// 			AddToDictionary(sprite, atlas);
-				// 			if (exportSprites)
-				// 			{
-				// 				AddAsset(sprite);
-				// 			}
-				// 		}
-				// 	}
-				// 	else if (asset is ISpriteAtlas atlas && atlas.RenderDataMap_C687078895.Count > 0)
-				// 	{
-				// 		foreach (ISprite? packedSprite in atlas.PackedSprites_C687078895P)
-				// 		{
-				// 			if (packedSprite is not null
-				// 				&& atlas.RenderDataMap_C687078895.TryGetValue(packedSprite.RenderDataKey_C213!, out ISpriteAtlasData? atlasData)
-				// 				&& atlasData.Texture.IsAsset(atlas.Collection, texture))
-				// 			{
-				// 				AddToDictionary(packedSprite, atlas);
-				// 				if (exportSprites)
-				// 				{
-				// 					AddAsset(packedSprite);
-				// 				}
-				// 			}
-				// 		}
-				// 	}
-				// }
-			// }
 		}
-
-		// private void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas)
-		// {
-		// 	AddToDictionary(sprite, atlas, m_sprites);
-		// }
-
-		// private static void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas, Dictionary<ISprite, ISpriteAtlas?> spriteDictionary)
-		// {
-		// 	if (spriteDictionary.TryGetValue(sprite, out ISpriteAtlas? mappedAtlas))
-		// 	{
-		// 		if (mappedAtlas is null)
-		// 		{
-		// 			spriteDictionary[sprite] = atlas;
-		// 		}
-		// 		else if (atlas is not null && atlas != mappedAtlas)
-		// 		{
-		// 			throw new Exception($"{nameof(atlas)} is not the same as {nameof(mappedAtlas)}");
-		// 		}
-		// 	}
-		// 	else
-		// 	{
-		// 		spriteDictionary.Add(sprite, atlas);
-		// 	}
-		// }
 
 		public static IExportCollection CreateExportCollection(IAssetExporter assetExporter, ISprite asset)
 		{
@@ -280,7 +220,6 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public string? FileExtension { get; set; }
 
-		// private readonly Dictionary<ISprite, ISpriteAtlas?> m_sprites = new();
 		private readonly bool m_exportSprites;
 
 		private readonly bool m_convert;
