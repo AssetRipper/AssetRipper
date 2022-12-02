@@ -132,7 +132,7 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 			sceneInfo = new();
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections())
 			{
-				sceneInfo.Add(collection, collection.IsScene());
+				sceneInfo.Add(collection, collection.IsScene);
 				GameObjectInfo.AddCollectionToDictionary(collection, infoDictionary);
 			}
 		}
