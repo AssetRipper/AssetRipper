@@ -23,6 +23,7 @@ using AssetRipper.Library.Processors;
 using AssetRipper.Library.Processors.AnimatorControllers;
 using AssetRipper.Library.Processors.PrefabOutlining;
 using AssetRipper.Library.Processors.StaticMeshes;
+using AssetRipper.Library.Processors.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -104,6 +105,7 @@ namespace AssetRipper.Library
 				new EditorFormatProcessor(Settings.BundledAssetsExportMode),
 				new StaticMeshProcessor(),
 				new PrefabOutliningProcessor(),
+				new SpriteProcessor(),
 			};
 			GameStructure.Process(AssetProcessors);
 			TaskManager.WaitUntilAllCompleted();

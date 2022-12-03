@@ -39,7 +39,7 @@ namespace AssetRipper.Library.Exporters.Models
 
 		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
-			if (asset.Collection.IsScene())
+			if (asset.Collection.IsScene)
 			{
 				return new GlbSceneModelExportCollection(this, asset.Collection);
 			}

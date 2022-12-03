@@ -55,6 +55,7 @@ namespace AssetRipper.Library.Processors
 			}
 			foreach (AssetCollection scene in scenes)
 			{
+				scene.IsScene = true;
 				if (SceneExportHelpers.TryGetScenePath(scene, buildSettings, out string? scenePath))
 				{
 					scene.ScenePath = scenePath;

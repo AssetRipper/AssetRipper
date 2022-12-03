@@ -2,7 +2,6 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Linq;
 using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
@@ -13,10 +12,10 @@ using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace AssetRipper.Library.Exporters.Textures
@@ -29,63 +28,14 @@ namespace AssetRipper.Library.Exporters.Textures
 			// If exportSprites is false, we do not generate sprite sheet into texture importer,
 			// yet we still collect sprites into m_sprites to properly set other texture importer settings.
 			m_exportSprites = exportSprites;
-			if (convert)
-			{
-				foreach (IUnityObjectBase asset in texture.Collection.Bundle.FetchAssetsInHierarchy())
-				{
-					if (asset is ISprite sprite)
-					{
-						if (sprite.RD_C213.Texture.IsAsset(sprite.Collection, texture))
-						{
-							ISpriteAtlas? atlas = sprite.SpriteAtlas_C213P;
-							AddToDictionary(sprite, atlas);
-							if (exportSprites)
-							{
-								AddAsset(sprite);
-							}
-						}
-					}
-					else if (asset is ISpriteAtlas atlas && atlas.RenderDataMap_C687078895.Count > 0)
-					{
-						foreach (ISprite? packedSprite in atlas.PackedSprites_C687078895P)
-						{
-							if (packedSprite is not null
-								&& atlas.RenderDataMap_C687078895.TryGetValue(packedSprite.RenderDataKey_C213!, out ISpriteAtlasData? atlasData)
-								&& atlasData.Texture.IsAsset(atlas.Collection, texture))
-							{
-								AddToDictionary(packedSprite, atlas);
-								if (exportSprites)
-								{
-									AddAsset(packedSprite);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
 
-		private void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas)
-		{
-			AddToDictionary(sprite, atlas, m_sprites);
-		}
-
-		private static void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas, Dictionary<ISprite, ISpriteAtlas?> spriteDictionary)
-		{
-			if (spriteDictionary.TryGetValue(sprite, out ISpriteAtlas? mappedAtlas))
+			if (exportSprites && texture.SpriteInformation != null)
 			{
-				if (mappedAtlas is null)
+				foreach ((ISprite? sprite, ISpriteAtlas? _) in texture.SpriteInformation)
 				{
-					spriteDictionary[sprite] = atlas;
+					Debug.Assert(sprite.RD_C213.Texture.IsAsset(sprite.Collection, texture));
+					AddAsset(sprite);
 				}
-				else if (atlas is not null && atlas != mappedAtlas)
-				{
-					throw new Exception($"{nameof(atlas)} is not the same as {nameof(mappedAtlas)}");
-				}
-			}
-			else
-			{
-				spriteDictionary.Add(sprite, atlas);
 			}
 		}
 
@@ -104,7 +54,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			if (m_convert)
 			{
 				ITextureImporter importer = ImporterFactory.GenerateTextureImporter(container, texture);
-				AddSprites(importer);
+				AddSprites(importer, texture.SpriteInformation);
 				return importer;
 			}
 			else
@@ -134,9 +84,9 @@ namespace AssetRipper.Library.Exporters.Textures
 			return exportID;
 		}
 
-		private void AddSprites(ITextureImporter importer)
+		private void AddSprites(ITextureImporter importer, Dictionary<ISprite, ISpriteAtlas?>? textureSpriteInformation)
 		{
-			if (m_sprites.Count == 0)
+			if (textureSpriteInformation == null || textureSpriteInformation.Count == 0)
 			{
 				importer.SpriteMode_C1006E = SpriteImportMode.Single;
 				importer.SpriteExtrude_C1006 = 1;
@@ -148,9 +98,9 @@ namespace AssetRipper.Library.Exporters.Textures
 				}
 				importer.SpritePixelsToUnits_C1006 = 100.0f;
 			}
-			else if (m_sprites.Count == 1)
+			else if (textureSpriteInformation.Count == 1)
 			{
-				ISprite sprite = m_sprites.Keys.First();
+				ISprite sprite = textureSpriteInformation.Keys.First();
 				ITexture2D texture = (ITexture2D)Asset;
 				if (sprite.Rect_C213 == sprite.RD_C213.TextureRect && sprite.NameString == texture.NameString)
 				{
@@ -176,13 +126,13 @@ namespace AssetRipper.Library.Exporters.Textures
 				importer.TextureType_C1006E = TextureImporterType.Sprite;
 				if (m_exportSprites)
 				{
-					AddSpriteSheet(importer);
-					AddIDToName(importer);
+					AddSpriteSheet(importer, textureSpriteInformation);
+					AddIDToName(importer, textureSpriteInformation);
 				}
 			}
 			else
 			{
-				ISprite sprite = m_sprites.Keys.First();
+				ISprite sprite = textureSpriteInformation.Keys.First();
 				importer.TextureType_C1006E = TextureImporterType.Sprite;
 				importer.SpriteMode_C1006E = SpriteImportMode.Multiple;
 				importer.SpriteExtrude_C1006 = sprite.Extrude_C213;
@@ -196,20 +146,20 @@ namespace AssetRipper.Library.Exporters.Textures
 				importer.TextureType_C1006E = TextureImporterType.Sprite;
 				if (m_exportSprites)
 				{
-					AddSpriteSheet(importer);
-					AddIDToName(importer);
+					AddSpriteSheet(importer, textureSpriteInformation);
+					AddIDToName(importer, textureSpriteInformation);
 				}
 			}
 		}
 
-		private void AddSpriteSheet(ITextureImporter importer)
+		private void AddSpriteSheet(ITextureImporter importer, Dictionary<ISprite, ISpriteAtlas?> textureSpriteInformation)
 		{
 			if (!importer.Has_SpriteSheet_C1006())
 			{
 			}
 			else if (importer.SpriteMode_C1006E == SpriteImportMode.Single)
 			{
-				KeyValuePair<ISprite, ISpriteAtlas?> kvp = m_sprites.First();
+				KeyValuePair<ISprite, ISpriteAtlas?> kvp = textureSpriteInformation.First();
 				ISpriteMetaData smeta = SpriteMetaDataFactory.CreateAsset(kvp.Key.Collection.Version);
 				smeta.FillSpriteMetaData(kvp.Key, kvp.Value);
 				importer.SpriteSheet_C1006.CopyFromSpriteMetaData(smeta);
@@ -217,7 +167,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			else
 			{
 				AccessListBase<ISpriteMetaData> spriteSheetSprites = importer.SpriteSheet_C1006.Sprites;
-				foreach (KeyValuePair<ISprite, ISpriteAtlas?> kvp in m_sprites)
+				foreach (KeyValuePair<ISprite, ISpriteAtlas?> kvp in textureSpriteInformation)
 				{
 					ISpriteMetaData smeta = spriteSheetSprites.AddNew();
 					smeta.FillSpriteMetaData(kvp.Key, kvp.Value);
@@ -229,13 +179,13 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		private void AddIDToName(ITextureImporter importer)
+		private void AddIDToName(ITextureImporter importer, Dictionary<ISprite, ISpriteAtlas?> textureSpriteInformation)
 		{
 			if (importer.SpriteMode_C1006E == SpriteImportMode.Multiple)
 			{
 				if (importer.Has_InternalIDToNameTable_C1006())
 				{
-					foreach (ISprite sprite in m_sprites.Keys)
+					foreach (ISprite sprite in textureSpriteInformation.Keys)
 					{
 #warning TODO: TEMP:
 						long exportID = GetExportID(sprite);
@@ -249,7 +199,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				}
 				else
 				{
-					foreach (ISprite sprite in m_sprites.Keys)
+					foreach (ISprite sprite in textureSpriteInformation.Keys)
 					{
 						long exportID = GetExportID(sprite);
 						if (importer.Has_FileIDToRecycleName_C1006_AssetDictionary_Int32_Utf8String())
@@ -267,7 +217,6 @@ namespace AssetRipper.Library.Exporters.Textures
 
 		public string? FileExtension { get; set; }
 
-		private readonly Dictionary<ISprite, ISpriteAtlas?> m_sprites = new();
 		private readonly bool m_exportSprites;
 
 		private readonly bool m_convert;

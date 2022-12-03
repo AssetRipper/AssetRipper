@@ -38,7 +38,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (IsActiveInherited(gameObject.Collection.Version))
 			{
-				return gameObject.Collection.IsScene() ? gameObject.GetIsActive() : true;
+				return gameObject.Collection.IsScene ? gameObject.GetIsActive() : true;
 			}
 			return gameObject.GetIsActive();
 		}

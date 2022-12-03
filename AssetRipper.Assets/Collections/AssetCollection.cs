@@ -56,6 +56,8 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 		set => sceneName = value;
 	}
 	private string? sceneName;
+	
+	public bool IsScene { get; set; }
 
 	public int AddDependency(AssetCollection dependency)
 	{

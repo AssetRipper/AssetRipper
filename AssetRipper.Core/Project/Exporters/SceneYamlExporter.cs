@@ -15,7 +15,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 		{
-			if (asset.Collection.IsScene())
+			if (asset.Collection.IsScene)
 			{
 				return new SceneExportCollection(this, asset.Collection);
 			}
