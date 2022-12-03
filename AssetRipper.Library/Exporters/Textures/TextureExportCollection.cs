@@ -6,6 +6,7 @@ using AssetRipper.Core.Project.Collections;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Utils;
+using AssetRipper.Library.Configuration;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
@@ -22,11 +23,8 @@ namespace AssetRipper.Library.Exporters.Textures
 {
 	public class TextureExportCollection : AssetsExportCollection
 	{
-		public TextureExportCollection(IAssetExporter assetExporter, ITexture2D texture, bool convert, bool exportSprites) : base(assetExporter, texture)
+		public TextureExportCollection(TextureAssetExporter assetExporter, ITexture2D texture, bool exportSprites) : base(assetExporter, texture)
 		{
-			m_convert = convert;
-			// If exportSprites is false, we do not generate sprite sheet into texture importer,
-			// yet we still collect sprites into m_sprites to properly set other texture importer settings.
 			m_exportSprites = exportSprites;
 
 			if (exportSprites && texture.SpriteInformation != null)
@@ -39,11 +37,11 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		public static IExportCollection CreateExportCollection(IAssetExporter assetExporter, ISprite asset)
+		public static IExportCollection CreateExportCollection(TextureAssetExporter assetExporter, ISprite asset)
 		{
 			if (asset.RD_C213.Texture.TryGetAsset(asset.Collection, out ITexture2D? texture))
 			{
-				return new TextureExportCollection(assetExporter, texture, true, true);
+				return new TextureExportCollection(assetExporter, texture, true);
 			}
 			return new FailExportCollection(assetExporter, asset);
 		}
@@ -72,7 +70,7 @@ namespace AssetRipper.Library.Exporters.Textures
 		{
 			if (m_convert)
 			{
-				return FileExtension ?? "png";
+				return ((TextureAssetExporter)AssetExporter).ImageExportFormat.GetFileExtension();
 			}
 			return base.GetExportExtension(asset);
 		}
@@ -152,7 +150,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		private void AddSpriteSheet(ITextureImporter importer, Dictionary<ISprite, ISpriteAtlas?> textureSpriteInformation)
+		private static void AddSpriteSheet(ITextureImporter importer, Dictionary<ISprite, ISpriteAtlas?> textureSpriteInformation)
 		{
 			if (!importer.Has_SpriteSheet_C1006())
 			{
@@ -192,34 +190,35 @@ namespace AssetRipper.Library.Exporters.Textures
 						ISpriteMetaData smeta = importer.SpriteSheet_C1006.GetSpriteMetaData(sprite.NameString);
 						smeta.InternalID = exportID;
 						AssetPair<AssetPair<int, long>, Utf8String> pair = importer.InternalIDToNameTable_C1006.AddNew();
-						pair.Key.Key = (int)ClassIDType.Sprite;
-						pair.Key.Value = exportID;
+						pair.Key.Set((int)ClassIDType.Sprite, exportID);
 						pair.Value.CopyValues(sprite.Name);
 					}
 				}
-				else
+				else if (importer.Has_FileIDToRecycleName_C1006_AssetDictionary_Int64_Utf8String())
 				{
 					foreach (ISprite sprite in textureSpriteInformation.Keys)
 					{
 						long exportID = GetExportID(sprite);
-						if (importer.Has_FileIDToRecycleName_C1006_AssetDictionary_Int32_Utf8String())
-						{
-							importer.FileIDToRecycleName_C1006_AssetDictionary_Int32_Utf8String.Add((int)exportID, sprite.Name);
-						}
-						else if (importer.Has_FileIDToRecycleName_C1006_AssetDictionary_Int64_Utf8String())
-						{
-							importer.FileIDToRecycleName_C1006_AssetDictionary_Int64_Utf8String.Add(exportID, sprite.Name);
-						}
+						importer.FileIDToRecycleName_C1006_AssetDictionary_Int64_Utf8String.Add(exportID, sprite.Name);
+					}
+				}
+				else if (importer.Has_FileIDToRecycleName_C1006_AssetDictionary_Int32_Utf8String())
+				{
+					foreach (ISprite sprite in textureSpriteInformation.Keys)
+					{
+						long exportID = GetExportID(sprite);
+						importer.FileIDToRecycleName_C1006_AssetDictionary_Int32_Utf8String.Add((int)exportID, sprite.Name);
 					}
 				}
 			}
 		}
 
-		public string? FileExtension { get; set; }
-
+		/// <summary>
+		/// If exportSprites is false, we do not generate sprite sheet into texture importer,
+		/// yet we still need the sprites to properly set other texture importer settings.
+		/// </summary>
 		private readonly bool m_exportSprites;
-
-		private readonly bool m_convert;
+		private readonly bool m_convert = true;
 		private uint m_nextExportID = 0;
 	}
 }

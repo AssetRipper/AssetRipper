@@ -48,5 +48,11 @@
 			key = Key;
 			value = Value;
 		}
+
+		public void Set(TKey key, TValue value)
+		{
+			Key = key;
+			Value = value;
+		}
 	}
 }

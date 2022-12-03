@@ -16,8 +16,8 @@ namespace AssetRipper.Library.Exporters.Textures
 {
 	public class TextureAssetExporter : BinaryAssetExporter
 	{
-		private ImageExportFormat ImageExportFormat { get; set; }
-		private SpriteExportMode SpriteExportMode { get; set; }
+		public ImageExportFormat ImageExportFormat { get; private set; }
+		public SpriteExportMode SpriteExportMode { get; private set; }
 
 		public TextureAssetExporter(LibraryConfiguration configuration)
 		{
@@ -68,8 +68,7 @@ namespace AssetRipper.Library.Exporters.Textures
 				return TextureExportCollection.CreateExportCollection(this, sprite);
 			}
 
-			TextureExportCollection collection = new TextureExportCollection(this, (ITexture2D)asset, true, SpriteExportMode != SpriteExportMode.Yaml);
-			collection.FileExtension = ImageExportFormat.GetFileExtension();
+			TextureExportCollection collection = new TextureExportCollection(this, (ITexture2D)asset, SpriteExportMode != SpriteExportMode.Yaml);
 			return collection;
 		}
 	}

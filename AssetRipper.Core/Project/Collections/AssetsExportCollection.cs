@@ -18,11 +18,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override bool IsContains(IUnityObjectBase asset)
 		{
-			if (base.IsContains(asset))
-			{
-				return true;
-			}
-			return m_exportIDs.ContainsKey(asset);
+			return base.IsContains(asset) || m_exportIDs.ContainsKey(asset);
 		}
 
 		public override long GetExportID(IUnityObjectBase asset)
