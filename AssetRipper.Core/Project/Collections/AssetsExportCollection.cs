@@ -65,7 +65,6 @@ namespace AssetRipper.Core.Project.Collections
 		/// Add an asset to this export collection.
 		/// </summary>
 		/// <param name="asset">The asset to be added to this export collection.</param>
-		/// <returns>True if the <paramref name="asset"/> was added or false if the <paramref name="asset"/> was already present.</returns>
 		protected void AddAsset(IUnityObjectBase asset)
 		{
 			Debug.Assert(asset != Asset);
