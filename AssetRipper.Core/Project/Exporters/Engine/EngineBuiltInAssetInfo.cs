@@ -3,13 +3,14 @@
 
 namespace AssetRipper.Core.Project.Exporters.Engine
 {
-	internal struct EngineBuiltInAssetInfo
+	internal readonly struct EngineBuiltInAssetInfo
 	{
 		public EngineBuiltInAssetInfo(UnityVersion version, EngineBuiltInAsset asset)
 		{
-			KeyValuePair<UnityVersion, EngineBuiltInAsset> kvp = new KeyValuePair<UnityVersion, EngineBuiltInAsset>(version, asset);
-			m_variations = new List<KeyValuePair<UnityVersion, EngineBuiltInAsset>>(1);
-			m_variations.Add(kvp);
+			m_variations = new List<KeyValuePair<UnityVersion, EngineBuiltInAsset>>(1)
+			{
+				new KeyValuePair<UnityVersion, EngineBuiltInAsset>(version, asset)
+			};
 		}
 
 		public void AddVariation(UnityVersion version, EngineBuiltInAsset asset)
@@ -29,9 +30,9 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 
 		public bool ContainsAsset(UnityVersion version)
 		{
-			foreach (KeyValuePair<UnityVersion, EngineBuiltInAsset> kvp in m_variations)
+			foreach ((UnityVersion variationVersion, _) in m_variations)
 			{
-				if (version >= kvp.Key)
+				if (version >= variationVersion)
 				{
 					return true;
 				}
@@ -53,11 +54,11 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 
 		public bool TryGetAsset(UnityVersion version, out EngineBuiltInAsset asset)
 		{
-			foreach (KeyValuePair<UnityVersion, EngineBuiltInAsset> kvp in m_variations)
+			foreach ((UnityVersion variationVersion, EngineBuiltInAsset variationAsset) in m_variations)
 			{
-				if (version >= kvp.Key)
+				if (version >= variationVersion)
 				{
-					asset = kvp.Value;
+					asset = variationAsset;
 					return true;
 				}
 			}

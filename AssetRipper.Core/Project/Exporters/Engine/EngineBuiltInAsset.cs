@@ -3,7 +3,7 @@ using AssetRipper.IO.Files;
 
 namespace AssetRipper.Core.Project.Exporters.Engine
 {
-	public struct EngineBuiltInAsset
+	public readonly struct EngineBuiltInAsset
 	{
 		public EngineBuiltInAsset(uint exportID, uint parameter, bool isF)
 		{

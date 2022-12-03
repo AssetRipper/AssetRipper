@@ -723,8 +723,6 @@ namespace AssetRipper.Core.Project.Exporters.Engine
 		public const string CubeBlur = "Hidden/CubeBlur";
 		public const string CubeCopy = "Hidden/CubeCopy";
 		public const string CubeBlend = "Hidden/CubeBlend";
-		public const string TerrainVertexLit = "Hidden/TerrainEngine/Details/Vertexlit";
-		public const string TerrainWavingDoublePass = "Hidden/TerrainEngine/Details/WavingDoublePass";
 		public const string TerrainBillboardWavingDoublePass = "Hidden/TerrainEngine/Details/BillboardWavingDoublePass";
 
 		public static readonly UnityGUID DGUID = new UnityGUID(0x00000000, 0x00000000, 0x0000000D, 0x00000000);

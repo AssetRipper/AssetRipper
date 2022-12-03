@@ -9,6 +9,7 @@ using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1113;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
@@ -64,7 +65,7 @@ namespace AssetRipper.Core.Project.Collections
 				{
 					return false;
 				}
-				IShader? shader = material.Shader_C21.TryGetAsset(material.Collection);
+				IShader? shader = material.Shader_C21P;
 				if (shader == null)
 				{
 					return true;
@@ -125,7 +126,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			else if (asset is IShader shader)
 			{
-				if (EngineBuiltInAssets.TryGetShader(shader.TryGetName() ?? "", version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetShader(shader.NameString, version, out engineAsset))
 				{
 					return true;
 				}
@@ -151,9 +152,9 @@ namespace AssetRipper.Core.Project.Collections
 					return true;
 				}
 			}
-			else if (asset is SourceGenerated.Classes.ClassID_114.IMonoBehaviour behaviour)
+			else if (asset is IMonoBehaviour behaviour)
 			{
-				if (behaviour.NameString != string.Empty)
+				if (!behaviour.Name.IsEmpty)
 				{
 					if (EngineBuiltInAssets.TryGetBehaviour(behaviour.NameString, version, out engineAsset))
 					{

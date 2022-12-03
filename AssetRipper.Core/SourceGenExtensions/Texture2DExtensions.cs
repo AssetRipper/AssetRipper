@@ -6,9 +6,16 @@ namespace AssetRipper.Core.SourceGenExtensions
 {
 	public static class Texture2DExtensions
 	{
-		public static long GetCompleteImageSize(this ITexture2D texture)
+		public static int GetCompleteImageSize(this ITexture2D texture)
 		{
-			return Math.Max(texture.CompleteImageSize_C28_Int32, texture.CompleteImageSize_C28_UInt32);
+			if (texture.Has_CompleteImageSize_C28_UInt32())
+			{
+				return (int)texture.CompleteImageSize_C28_UInt32;//No texture is larger than 2GB
+			}
+			else
+			{
+				return texture.CompleteImageSize_C28_Int32;
+			}
 		}
 
 		public static bool GetMips(this ITexture2D texture)

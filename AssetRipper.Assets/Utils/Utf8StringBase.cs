@@ -14,6 +14,8 @@ namespace AssetRipper.Assets.Utils
 			set => Data = Encoding.UTF8.GetBytes(value);
 		}
 
+		public bool IsEmpty => Data.Length == 0;
+
 		public static bool operator ==(Utf8StringBase? utf8String, string? str) => utf8String?.String == str;
 		public static bool operator !=(Utf8StringBase? utf8String, string? str) => utf8String?.String != str;
 		public static bool operator ==(string? str, Utf8StringBase? utf8String) => utf8String?.String == str;
@@ -58,7 +60,7 @@ namespace AssetRipper.Assets.Utils
 
 		public bool CopyIfNullOrEmpty(Utf8StringBase? other)
 		{
-			if (Data is null || Data.Length == 0)
+			if (Data.Length == 0)
 			{
 				Data = CopyData(other?.Data);
 				return true;
