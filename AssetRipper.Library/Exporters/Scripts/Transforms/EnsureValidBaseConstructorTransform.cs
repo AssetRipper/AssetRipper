@@ -155,6 +155,13 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 						ConstructorInitializerType = isBaseConstructor ? ConstructorInitializerType.Base : ConstructorInitializerType.This
 					};
 
+					if (initializer.ConstructorInitializerType == ConstructorInitializerType.This &&
+					    bestConstructor.Parameters.Count == 0)
+					{
+						// fix for error CS0768: Constructor '<name>' cannot call itself through another constructor
+						continue;
+					}
+					
 					foreach (IParameter parameter in bestConstructor.Parameters)
 					{
 						bool hasParameterMatch = false;
