@@ -46,6 +46,12 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 				}
 				else if (member is MethodDeclaration method)
 				{
+					// Abstract and extern methods does not have a body
+					if (method.Modifiers.HasFlag(Modifiers.Abstract) || method.Modifiers.HasFlag(Modifiers.Extern))
+					{
+						continue;
+					}
+
 					method.Body = new BlockStatement();
 					if (method.ReturnType is not PrimitiveType returnType || returnType.Keyword != "void")
 					{
