@@ -21,7 +21,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			ScriptingBackend = scriptingBackend;
 		}
 
-		public void DecompileWholeProject(AssemblyDefinition assembly, string outputFolder)
+		public void DecompileWholeProject(AssemblyDefinition assembly, string outputFolder, UnityVersion unityVersion)
 		{
 			WholeAssemblyDecompiler decompiler = new(assemblyResolver);
 			// these settings may need to be changed later because
@@ -39,7 +39,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 			if (ScriptContentLevel == ScriptContentLevel.Level1)
 			{
-				decompiler.CustomTransforms.Add(new MemberStubTransform());
+				decompiler.CustomTransforms.Add(new MemberStubTransform(unityVersion));
 			}
 
 			// code quality

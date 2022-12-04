@@ -8,6 +8,13 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 	/// </summary>
 	internal class MemberStubTransform : DepthFirstAstVisitor, IAstTransform
 	{
+		private bool SupportsDefaultInterfaceImplementations { get; }
+		
+		public MemberStubTransform(UnityVersion unityVersion)
+		{
+			SupportsDefaultInterfaceImplementations = unityVersion.IsGreaterEqual("2021.2");
+		}
+		
 		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			foreach (EntityDeclaration? member in typeDeclaration.Members)
@@ -48,6 +55,11 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 				{
 					// Abstract and extern methods does not have a body
 					if (method.Modifiers.HasFlag(Modifiers.Abstract) || method.Modifiers.HasFlag(Modifiers.Extern))
+					{
+						continue;
+					}
+
+					if (!SupportsDefaultInterfaceImplementations && typeDeclaration.ClassType == ClassType.Interface)
 					{
 						continue;
 					}

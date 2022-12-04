@@ -24,11 +24,13 @@ namespace AssetRipper.Library.Exporters.Scripts
 		{
 			AssemblyManager = assemblyManager;
 			Decompiler = new ScriptDecompiler(AssemblyManager);
+			UnityVersion = configuration.Version;
 			LanguageVersion = configuration.ScriptLanguageVersion.ToCSharpLanguageVersion(configuration.Version);
 			ScriptContentLevel = configuration.ScriptContentLevel;
 		}
 
 		public IAssemblyManager AssemblyManager { get; }
+		private UnityVersion UnityVersion { get; }
 		private ICSharpCode.Decompiler.CSharp.LanguageVersion LanguageVersion { get; }
 		private ScriptContentLevel ScriptContentLevel { get; }
 		private ScriptDecompiler Decompiler { get; set; }
@@ -91,7 +93,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 					Logger.Info(LogCategory.Export, $"Decompiling {assemblyName}");
 					string outputDirectory = Path.Combine(dirPath, assemblyName);
 					Directory.CreateDirectory(outputDirectory);
-					Decompiler.DecompileWholeProject(assembly, outputDirectory);
+					Decompiler.DecompileWholeProject(assembly, outputDirectory, UnityVersion);
 
 					assemblyDefinitionDetailsDictionary.TryAdd(assemblyName, new AssemblyDefinitionDetails(assembly, outputDirectory));
 				}
