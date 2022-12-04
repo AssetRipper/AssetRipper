@@ -36,6 +36,9 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 			decompiler.Settings.SetLanguageVersion(LanguageVersion);
 			decompiler.Settings.UseNestedDirectoriesForNamespaces = true;
+			
+			// Use explicit namespaces (next to types) to avoid ambiguity
+			decompiler.Settings.UsingDeclarations = false;
 
 			if (ScriptContentLevel == ScriptContentLevel.Level1)
 			{
