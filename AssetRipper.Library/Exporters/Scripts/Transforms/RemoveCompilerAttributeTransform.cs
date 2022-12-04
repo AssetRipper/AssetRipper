@@ -17,20 +17,18 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 		{
 			RemoveCompilerGeneratedAttributes(entity.Attributes);
 		}
+
 		private static void RemoveCompilerGeneratedAttributes(AstNodeCollection<AttributeSection> attributes)
 		{
 			foreach (AttributeSection attributeSection in attributes)
 			{
 				foreach (Attribute attribute in attributeSection.Attributes)
 				{
-					if (attribute.Type is SimpleType simpleType)
+					if (attribute.Type
+					    is SimpleType { Identifier: "AsyncStateMachine" or "IteratorStateMachine" or "IsReadOnly" }
+					    or MemberType { MemberName: "AsyncStateMachine" or "IteratorStateMachine" or "IsReadOnly" })
 					{
-						if (simpleType.Identifier == "AsyncStateMachine" ||
-							simpleType.Identifier == "IteratorStateMachine" ||
-							simpleType.Identifier == "IsReadOnly")
-						{
-							attribute.Remove();
-						}
+						attribute.Remove();
 					}
 				}
 
