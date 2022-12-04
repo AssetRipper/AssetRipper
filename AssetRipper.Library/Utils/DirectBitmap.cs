@@ -1,5 +1,6 @@
 using AssetRipper.Library.Configuration;
 using AssetRipper.TextureDecoder.Rgb.Formats;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -50,17 +51,23 @@ namespace AssetRipper.Library.Utils
 			m_bitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
 		}
 
-		public unsafe void FlipY()
+		public void FlipY(int depth = 1)
 		{
-			uint* top = (uint*)BitsPtr;
-			for (int row = 0, irow = Height - 1; row < irow; row++, irow--)
+			int actualHeight = Height / depth;
+			Debug.Assert(Height % depth == 0);
+
+			Span<ColorBGRA32> pixels = MemoryMarshal.Cast<byte, ColorBGRA32>(Bits);
+			for (int startingRow = 0; startingRow < Height; startingRow += actualHeight)
 			{
-				uint* bottom = (uint*)(BitsPtr + (irow * Stride));
-				for (int i = 0; i < Width; i++, bottom++, top++)
+				int endingRow = startingRow + actualHeight - 1;
+				for (int row = startingRow, irow = endingRow; row < irow; row++, irow--)
 				{
-					uint pixel = *bottom;
-					*bottom = *top;
-					*top = pixel;
+					Span<ColorBGRA32> rowTop = pixels.Slice(row * Width, Width);
+					Span<ColorBGRA32> rowBottom = pixels.Slice(irow * Width, Width);
+					for (int i = 0; i < Width; i++)
+					{
+						(rowTop[i], rowBottom[i]) = (rowBottom[i], rowTop[i]);
+					}
 				}
 			}
 		}
