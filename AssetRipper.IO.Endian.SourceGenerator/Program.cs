@@ -6,8 +6,9 @@ namespace AssetRipper.IO.Endian.SourceGenerator;
 
 internal class Program
 {
-	private const string PathToTargetDirectory = "../../../../AssetRipper.IO.Endian/";
-	private const string PathToTestsDirectory = "../../../../AssetRipper.IO.Endian.Tests/";
+	private const string PathToRepository = "../../../../../";
+	private const string PathToTargetDirectory = PathToRepository + "AssetRipper.IO.Endian/";
+	private const string PathToTestsDirectory = PathToRepository + "AssetRipper.IO.Endian.Tests/";
 	private const string ReaderStructName = "EndianSpanReader";
 	private const string WriterStructName = "EndianSpanWriter";
 	private const string TestsClassName = "EndianSpanTests";
@@ -123,9 +124,7 @@ internal class Program
 				{
 					writer.WriteLineNoTabs();
 				}
-				AddTestMethod(writer, typeName, keyWord, false);
-				writer.WriteLineNoTabs();
-				AddTestMethod(writer, typeName, keyWord, true);
+				AddTestMethod(writer, typeName, keyWord);
 			}
 		}
 	}
@@ -237,20 +236,22 @@ internal class Program
 			(false, false) => $"{nameof(BinaryPrimitives)}.Write{typeName}LittleEndian",
 		};
 	}
-	
+
 	/// <summary>
 	/// <code>
-	/// [Test]
-	/// public void BooleanBigEndian()
+	/// [Theory]
+	/// public void BooleanTest(EndianType endianType)
 	/// {
 	///     byte[] data = new byte[sizeof(bool)];
 	///     bool value1 = RandomData.NextBoolean();
 	/// 
-	///     EndianSpanWriter writer = new EndianSpanWriter(data, EndianType.BigEndian);
+	///     EndianSpanWriter writer = new EndianSpanWriter(data, endianType);
+	///     Assert.That(writer.Length, Is.EqualTo(sizeof(bool));
 	///     writer.Write(value1);
 	///     Assert.That(writer.Position, Is.EqualTo(sizeof(bool)));
 	/// 
-	///     EndianSpanReader reader = new EndianSpanReader(data, EndianType.BigEndian);
+	///     EndianSpanReader reader = new EndianSpanReader(data, endianType);
+	///     Assert.That(reader.Length, Is.EqualTo(sizeof(bool));
 	///     bool value2 = reader.ReadBoolean();
 	///     Assert.That(reader.Position, Is.EqualTo(sizeof(bool)));
 	///     Assert.That(value2, Is.EqualTo(value1));
@@ -261,21 +262,23 @@ internal class Program
 	/// <param name="typeName"></param>
 	/// <param name="parameterType"></param>
 	/// <param name="bigEndian"></param>
-	private static void AddTestMethod(IndentedTextWriter writer, string typeName, string parameterType, bool bigEndian)
+	private static void AddTestMethod(IndentedTextWriter writer, string typeName, string parameterType)
 	{
-		string endianName = bigEndian ? "BigEndian" : "LittleEndian";
-		writer.WriteLine("[Test]");
-		writer.WriteLine($"public void {typeName}{endianName}()");
+		const string endianArgumentName = "endianType";
+		writer.WriteLine("[Theory]");
+		writer.WriteLine($"public void {typeName}Test(EndianType {endianArgumentName})");
 		using (new CurlyBrackets(writer))
 		{
 			writer.WriteLine($"byte[] data = new byte[{SizeOfExpression(parameterType)}];");
 			writer.WriteLine($"{parameterType} value1 = RandomData.Next{typeName}();");
 			writer.WriteLineNoTabs();
-			writer.WriteLine($"{WriterStructName} writer = new {WriterStructName}(data, EndianType.{endianName});");
+			writer.WriteLine($"{WriterStructName} writer = new {WriterStructName}(data, {endianArgumentName});");
+			writer.WriteLine($"Assert.That(writer.Length, Is.EqualTo({SizeOfExpression(parameterType)}));");
 			writer.WriteLine("writer.Write(value1);");
 			writer.WriteLine($"Assert.That(writer.Position, Is.EqualTo({SizeOfExpression(parameterType)}));");
 			writer.WriteLineNoTabs();
-			writer.WriteLine($"{ReaderStructName} reader = new {ReaderStructName}(data, EndianType.{endianName});");
+			writer.WriteLine($"{ReaderStructName} reader = new {ReaderStructName}(data, {endianArgumentName});");
+			writer.WriteLine($"Assert.That(reader.Length, Is.EqualTo({SizeOfExpression(parameterType)}));");
 			writer.WriteLine($"{parameterType} value2 = reader.Read{typeName}();");
 			writer.WriteLine($"Assert.That(reader.Position, Is.EqualTo({SizeOfExpression(parameterType)}));");
 			writer.WriteLine("Assert.That(value2, Is.EqualTo(value1));");
