@@ -4,6 +4,8 @@ using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.Library;
 using System.Collections.Generic;
 using System.CommandLine;
+using System.CommandLine.Builder;
+using System.CommandLine.Parsing;
 using System.IO;
 
 namespace AssetRipper.GUI
@@ -81,7 +83,19 @@ namespace AssetRipper.GUI
 			},
 			filesToExportOption, outputOption, logFileOption, verboseOption, quitOption);
 
-			rootCommand.Invoke(args);
+			new CommandLineBuilder(rootCommand)
+				.UseVersionOption()
+				.UseHelp()
+				//.UseEnvironmentVariableDirective()
+				.UseParseDirective()
+				//.UseSuggestDirective()
+				.RegisterWithDotnetSuggest()
+				.UseTypoCorrections()
+				.UseParseErrorReporting()
+				//.UseExceptionHandler()
+				.CancelOnProcessTermination()
+				.Build()
+				.Invoke(args);
 		}
 
 		private static bool ValidatePaths(IReadOnlyList<string> paths)
