@@ -150,18 +150,17 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 
 				if (TryGetBestConstructor(type, constructorDeclaration, out bestConstructor, out bool isBaseConstructor))
 				{
+					// fix for error CS0768: Constructor '<name>' cannot call itself through another constructor
+					if (!isBaseConstructor)
+					{
+						continue;
+					}
+
 					ConstructorInitializer initializer = new()
 					{
 						ConstructorInitializerType = isBaseConstructor ? ConstructorInitializerType.Base : ConstructorInitializerType.This
 					};
 
-					if (initializer.ConstructorInitializerType == ConstructorInitializerType.This &&
-					    bestConstructor.Parameters.Count == 0)
-					{
-						// fix for error CS0768: Constructor '<name>' cannot call itself through another constructor
-						continue;
-					}
-					
 					foreach (IParameter parameter in bestConstructor.Parameters)
 					{
 						bool hasParameterMatch = false;
@@ -206,7 +205,8 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			}
 
 			bestConstructor = baseType.GetConstructors()
-				.OrderBy((ctor) => GetConstructorCost(ctor, null, true)).FirstOrDefault();
+				.MinBy((ctor) => GetConstructorCost(ctor, null, true));
+
 			if (bestConstructor != null)
 			{
 				ConstructorInitializer initializer = new()
@@ -218,7 +218,6 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 				{
 					initializer.Arguments.Add(new DefaultValueExpression(ScriptUtilities.ConvertType(context.TypeSystemAstBuilder, parameter.Type)));
 				}
-
 
 				ConstructorDeclaration constructorDeclaration = new()
 				{
