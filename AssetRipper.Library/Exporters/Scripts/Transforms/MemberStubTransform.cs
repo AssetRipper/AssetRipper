@@ -38,7 +38,6 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 					{
 						property.Setter.Body = new BlockStatement();
 					}
-					member.Remove();
 				}
 				else if (member is CustomEventDeclaration ev)
 				{
