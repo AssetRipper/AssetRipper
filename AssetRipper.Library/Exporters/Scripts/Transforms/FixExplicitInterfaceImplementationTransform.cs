@@ -5,7 +5,7 @@ using Attribute = ICSharpCode.Decompiler.CSharp.Syntax.Attribute;
 namespace AssetRipper.Library.Exporters.Scripts.Transforms
 {
 	/// <summary>
-	/// Fixes implicit interface implementations as ILSpy sometimes exports properties as seperate
+	/// Fixes implicit interface implementations as ILSpy sometimes exports properties as separate
 	/// methods which won't compile.
 	/// </summary>
 	internal class FixExplicitInterfaceImplementationTransform : DepthFirstAstVisitor, IAstTransform
@@ -22,7 +22,7 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 			{
 				foreach (Attribute attribute in attributeSection.Attributes)
 				{
-					if (attribute.Type is SimpleType attributeType && attributeType.Identifier == "SpecialName")
+					if (attribute.Type is SimpleType { Identifier: "SpecialName" } or MemberType { MemberName: "SpecialName" })
 					{
 						isSpecialName = true;
 						attribute.Remove();
