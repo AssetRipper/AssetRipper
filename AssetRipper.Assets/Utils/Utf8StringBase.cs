@@ -46,7 +46,7 @@ namespace AssetRipper.Assets.Utils
 
 		public bool Equals(Utf8StringBase? other) => this == other;
 
-		public bool Equals(string? other) => String.Equals(other);
+		public bool Equals(string? other) => String.Equals(other, StringComparison.Ordinal);
 
 		public override YamlNode ExportYamlEditor(IExportContainer container)
 		{

@@ -210,6 +210,9 @@ csharp_style_prefer_pattern_matching = true:silent
 csharp_style_prefer_not_pattern = true:suggestion
 csharp_style_prefer_extended_property_pattern = true:suggestion
 csharp_style_prefer_top_level_statements = false:silent
+dotnet_diagnostic.CA1309.severity = error
+dotnet_diagnostic.CA1311.severity = suggestion
+dotnet_diagnostic.SYSLIB1054.severity = warning
 
 [*.{cs,vb}]
 dotnet_style_coalesce_expression = true:suggestion

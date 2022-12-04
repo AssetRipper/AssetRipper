@@ -5,9 +5,9 @@ using System.Runtime.Versioning;
 
 namespace AssetRipper.Library.Exporters.Textures
 {
-	internal static class CrunchHandler
+	internal static partial class CrunchHandler
 	{
-		public static byte[] DecompressCrunch(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
+		public static byte[] DecompressCrunch(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, ReadOnlySpan<byte> data)
 		{
 			if (OperatingSystem.IsWindows())
 			{
@@ -25,19 +25,23 @@ namespace AssetRipper.Library.Exporters.Textures
 			{
 				return true;
 			}
-			return format == TextureFormat.ETC_RGB4Crunched || format == TextureFormat.ETC2_RGBA8Crunched;
+			return format is TextureFormat.ETC_RGB4Crunched or TextureFormat.ETC2_RGBA8Crunched;
 		}
 
 		[SupportedOSPlatform("windows")]
-		[DllImport("crunch", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool DecompressCRN(byte[] pSrcFileData, int srcFileSize, out IntPtr uncompressedData, out int uncompressedSize);
+		[LibraryImport("crunch")]
+		[UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		private static partial bool DecompressCRN(ReadOnlySpan<byte> pSrcFileData, int srcFileSize, out IntPtr uncompressedData, out int uncompressedSize);
 
 		[SupportedOSPlatform("windows")]
-		[DllImport("crunchunity", CallingConvention = CallingConvention.Cdecl)]
-		private static extern bool DecompressUnityCRN(byte[] pSrc_file_data, int src_file_size, out IntPtr uncompressedData, out int uncompressedSize);
+		[LibraryImport("crunchunity")]
+		[UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		private static partial bool DecompressUnityCRN(ReadOnlySpan<byte> pSrcFileData, int srcFileSize, out IntPtr uncompressedData, out int uncompressedSize);
 
 		[SupportedOSPlatform("windows")]
-		private static byte[] DecompressCrunchWithUtinyDecoder(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
+		private static byte[] DecompressCrunchWithUtinyDecoder(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, ReadOnlySpan<byte> data)
 		{
 			IntPtr uncompressedData = default;
 			try
@@ -62,7 +66,7 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		private static byte[] DecompressCrunchWithStudioDecoder(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, byte[] data)
+		private static byte[] DecompressCrunchWithStudioDecoder(TextureFormat textureFormat, int width, int height, UnityVersion unityVersion, ReadOnlySpan<byte> data)
 		{
 			bool result = IsUseUnityCrunch(unityVersion, textureFormat) ?
 					DecompressUnityCrunchWithStudioDecoder(data, out byte[] uncompressedBytes) :
@@ -77,13 +81,8 @@ namespace AssetRipper.Library.Exporters.Textures
 			}
 		}
 
-		private static bool DecompressNormalCrunchWithStudioDecoder(byte[] data, out byte[] uncompressedBytes)
+		private static bool DecompressNormalCrunchWithStudioDecoder(ReadOnlySpan<byte> data, out byte[] uncompressedBytes)
 		{
-			if (data is null)
-			{
-				throw new ArgumentNullException(nameof(data));
-			}
-
 			if (data.Length == 0)
 			{
 				throw new ArgumentException(null, nameof(data));
@@ -94,13 +93,8 @@ namespace AssetRipper.Library.Exporters.Textures
 			return uncompressedBytes != null;
 		}
 
-		private static bool DecompressUnityCrunchWithStudioDecoder(byte[] data, out byte[] uncompressedBytes)
+		private static bool DecompressUnityCrunchWithStudioDecoder(ReadOnlySpan<byte> data, out byte[] uncompressedBytes)
 		{
-			if (data is null)
-			{
-				throw new ArgumentNullException(nameof(data));
-			}
-
 			if (data.Length == 0)
 			{
 				throw new ArgumentException(null, nameof(data));
