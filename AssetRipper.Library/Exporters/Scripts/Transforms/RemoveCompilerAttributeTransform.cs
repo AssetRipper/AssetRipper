@@ -74,6 +74,8 @@ namespace AssetRipper.Library.Exporters.Scripts.Transforms
 		{
 			base.VisitPropertyDeclaration(propertyDeclaration);
 			RemoveCompilerGeneratedAttributes(propertyDeclaration);
+			RemoveCompilerGeneratedAttributes(propertyDeclaration.Getter);
+			RemoveCompilerGeneratedAttributes(propertyDeclaration.Setter);
 		}
 
 		public override void VisitEnumMemberDeclaration(EnumMemberDeclaration enumMemberDeclaration)
