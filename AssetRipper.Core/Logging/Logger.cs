@@ -180,11 +180,13 @@ namespace AssetRipper.Core.Logging
 				_ => throw new NotSupportedException(),
 			});
 			sb.Append(' ');
-			sb.Append(now.TimeOfDay.Hours);
+			sb.Append($"{now.Day,2}");
+			sb.Append(' ');
+			sb.Append(now.TimeOfDay.Hours.ToString("00", CultureInfo.InvariantCulture));
 			sb.Append(':');
-			sb.Append(now.TimeOfDay.Minutes);
+			sb.Append(now.TimeOfDay.Minutes.ToString("00", CultureInfo.InvariantCulture));
 			sb.Append(':');
-			sb.Append(now.TimeOfDay.Seconds);
+			sb.Append(now.TimeOfDay.Seconds.ToString("00", CultureInfo.InvariantCulture));
 			sb.Append(" UTC ");
 			sb.Append(now.Year);
 			return sb.ToString();
