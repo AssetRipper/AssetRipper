@@ -103,7 +103,7 @@ namespace AssetRipper.Library
 				new LightingDataProcessor(),
 				new AnimatorControllerProcessor(),
 				new EditorFormatProcessor(Settings.BundledAssetsExportMode),
-				new StaticMeshProcessor(),
+				//new StaticMeshProcessor(),
 				new PrefabOutliningProcessor(),
 				new SpriteProcessor(),
 			};
