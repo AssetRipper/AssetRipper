@@ -61,12 +61,20 @@ namespace AssetRipper.Core.Project.Collections
 		/// Add an asset to this export collection.
 		/// </summary>
 		/// <param name="asset">The asset to be added to this export collection.</param>
-		protected void AddAsset(IUnityObjectBase asset)
+		/// <returns><see langword="true"/> if the <paramref name="asset"/> is added to the <see cref="AssetsExportCollection"/> object; <see langword="false"/> if the <paramref name="asset"/> is already present.</returns>
+		protected bool AddAsset(IUnityObjectBase asset)
 		{
 			Debug.Assert(asset != Asset);
 			long exportID = GenerateExportID(asset);
-			m_exportIDs.Add(asset, exportID);
-			m_exportAssetIds.Add(exportID);
+			if (m_exportIDs.TryAdd(asset, exportID))
+			{
+				m_exportAssetIds.Add(exportID);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		private bool ContainsID(long id)
