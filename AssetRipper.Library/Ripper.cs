@@ -96,7 +96,7 @@ namespace AssetRipper.Library
 			TaskManager.WaitUntilAllCompleted();
 
 			Logger.Info(LogCategory.General, "Processing loaded assets...");
-			List<IAssetProcessor> AssetProcessors = new()
+			List<IAssetProcessor> assetProcessors = new()
 			{
 				new SceneGuidProcessor(),
 				new TerrainTextureProcessor(),
@@ -106,8 +106,9 @@ namespace AssetRipper.Library
 				new StaticMeshProcessor(),
 				new PrefabOutliningProcessor(),
 				new SpriteProcessor(),
+				new PlayerSettingsProcessor(),
 			};
-			GameStructure.Process(AssetProcessors);
+			GameStructure.Process(assetProcessors);
 			TaskManager.WaitUntilAllCompleted();
 			Logger.Info(LogCategory.General, "Finished processing assets");
 
