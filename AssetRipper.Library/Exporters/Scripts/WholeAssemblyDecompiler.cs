@@ -171,7 +171,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 			{
 				throw new DecompilerException(module, $"Error decompiling for '{file.Key}'", innerException);
 			}
-			progress?.Report(new DecompilationProgress(total, file.Key));
+			progress?.Report(new DecompilationProgress() { TotalUnits = total, UnitsCompleted = -1, Status = file.Key });
 		}
 
 		private CSharpDecompiler CreateDecompiler(DecompilerTypeSystem ts)
