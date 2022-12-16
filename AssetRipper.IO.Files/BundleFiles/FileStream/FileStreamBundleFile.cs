@@ -138,11 +138,87 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 
 		private void WriteFileStreamMetadata(Stream stream, long basePosition)
 		{
-			throw new NotImplementedException();
+			if (Header.Version >= BundleVersion.BF_LargeFilesSupport)
+			{
+				stream.Align(16);
+			}
+			if (Header.Flags.GetBlocksInfoAtTheEnd())
+			{
+				stream.Position = basePosition + (Header.Size - Header.CompressedBlocksInfoSize);
+			}
+
+			CompressionType metaCompression = Header.Flags.GetCompression();
+			switch (metaCompression)
+			{
+				case CompressionType.None:
+					{
+						WriteMetadata(stream, Header.UncompressedBlocksInfoSize);
+					}
+					break;
+
+				case CompressionType.Lzma:
+					throw new NotImplementedException(nameof(CompressionType.Lzma));
+
+				//These cases will likely need to be separated.
+				case CompressionType.Lz4:
+				case CompressionType.Lz4HC:
+					{
+						//These should be set after doing this calculation instead of before
+						int uncompressedSize = Header.UncompressedBlocksInfoSize;
+						int compressedSize = Header.CompressedBlocksInfoSize;
+
+						byte[] uncompressedBytes = new byte[uncompressedSize];
+						WriteMetadata(new MemoryStream(uncompressedBytes), uncompressedSize);
+						byte[] compressedBytes = new byte[compressedSize];
+						int bytesWritten = LZ4Codec.Encode(uncompressedBytes, compressedBytes, LZ4Level.L00_FAST);
+						if (bytesWritten != compressedSize)
+						{
+							throw new Exception($"Incorrect number of bytes written. {bytesWritten} instead of {compressedSize} for {compressedBytes.Length} compressed bytes");
+						}
+						new BinaryWriter(stream).Write(compressedBytes);
+					}
+					break;
+
+				default:
+					throw new NotSupportedException($"Bundle compression '{metaCompression}' isn't supported");
+			}
+		}
+
+		private void WriteMetadata(Stream stream, int metadataSize)
+		{
+			long metadataPosition = stream.Position;
+			using (EndianWriter writer = new EndianWriter(stream, EndianType.BigEndian))
+			{
+				BlocksInfo.Write(writer);
+				if (Header.Flags.GetBlocksAndDirectoryInfoCombined())
+				{
+					DirectoryInfo.Write(writer);
+				}
+			}
+			if (metadataSize > 0)
+			{
+				if (stream.Position - metadataPosition != metadataSize)
+				{
+					throw new Exception($"Wrote {stream.Position - metadataPosition} but expected {metadataSize} while writing bundle metadata");
+				}
+			}
 		}
 
 		private void WriteFileStreamData(Stream stream, long basePosition, long headerSize)
 		{
+			if (Header.Flags.GetBlocksInfoAtTheEnd())
+			{
+				stream.Position = basePosition + headerSize;
+				if (Header.Version >= BundleVersion.BF_LargeFilesSupport)
+				{
+					stream.Align(16);
+				}
+			}
+			if (Header.Flags.GetBlockInfoNeedPaddingAtStart())
+			{
+				stream.Align(16);
+			}
+
 			throw new NotImplementedException();
 		}
 	}

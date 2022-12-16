@@ -129,7 +129,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			m_cachedBlockStream.Dispose();
 		}
 
-		private SmartStream CreateStream(long decompressedSize)
+		private static SmartStream CreateStream(long decompressedSize)
 		{
 			return decompressedSize > int.MaxValue ? SmartStream.CreateTemp() : SmartStream.CreateMemory(new byte[decompressedSize]);
 		}
