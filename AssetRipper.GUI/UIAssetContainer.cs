@@ -22,9 +22,9 @@ namespace AssetRipper.GUI
 		}
 		public override IReadOnlyList<AssetCollection?> Dependencies => Array.Empty<AssetCollection?>();
 
-		internal IUnityObjectBase LastAccessedAsset { get; set; }
+		internal IUnityObjectBase? LastAccessedAsset { get; set; }
 
-		public override AssetCollection File => LastAccessedAsset.Collection;
+		public override AssetCollection File => LastAccessedAsset?.Collection ?? throw new NullReferenceException(nameof(LastAccessedAsset));
 
 		public override TransferInstructionFlags ExportFlags => ExportLayout.Flags;
 	}

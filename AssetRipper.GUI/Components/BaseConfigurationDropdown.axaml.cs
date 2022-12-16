@@ -50,7 +50,7 @@ namespace AssetRipper.GUI.Components
 				BaseConfigurationDropdown<T>.ItemWrapper? oldValue = _selectedValue;
 				_selectedValue = value;
 				OnPropertyChanged();
-				RaisePropertyChanged(RawSelectedValueProperty, oldValue, value);
+				RaisePropertyChanged(RawSelectedValueProperty, oldValue ?? Optional<ItemWrapper>.Empty, value);
 				RaisePropertyChanged(SelectedValueProperty, oldValue == null ? Optional<T>.Empty : oldValue.Item, value.Item);
 				SelectedValueDescription = GetValueDescription(value.Item);
 			}

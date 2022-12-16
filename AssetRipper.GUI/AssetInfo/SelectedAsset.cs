@@ -323,10 +323,10 @@ namespace AssetRipper.GUI.AssetInfo
 			PositionString = $"{TimeSpan.FromSeconds(AudioPositionSeconds):hh\\:mm\\:ss}/{TimeSpan.FromSeconds(AudioLengthSeconds):g}";
 		}
 
-		private string DumpShaderDataAsText(IShader shader)
+		private static string DumpShaderDataAsText(IShader shader)
 		{
 			using MemoryStream stream = new();
-			DummyShaderTextExporter.ExportShader(shader, _uiAssetContainer, stream);
+			DummyShaderTextExporter.ExportShader(shader, stream);
 
 			return Encoding.UTF8.GetString(stream.GetBuffer());
 		}

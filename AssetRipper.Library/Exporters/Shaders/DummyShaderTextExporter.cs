@@ -63,12 +63,12 @@ namespace AssetRipper.Library.Exporters.Shaders
 
 			using (FileStream fileStream = File.Create(path))
 			{
-				ExportShader(shader, container, fileStream);
+				ExportShader(shader, fileStream);
 			}
 			return true;
 		}
 
-		public static void ExportShader(IShader shader, IExportContainer container, Stream stream)
+		public static void ExportShader(IShader shader, Stream stream)
 		{
 			if (shader.Has_ParsedForm_C48())
 			{
