@@ -8,7 +8,7 @@ namespace ShaderTextRestorer.Types
 		public ShaderTypeMember(MatrixParameter param, ShaderGpuProgramType programType)
 		{
 			ProgramType = programType;
-			Name = param.Name;
+			Name = param.Name ?? "";
 			ShaderType = new ShaderType(param, programType);
 			Index = (uint)param.Index;
 		}
@@ -16,7 +16,7 @@ namespace ShaderTextRestorer.Types
 		public ShaderTypeMember(VectorParameter param, ShaderGpuProgramType programType)
 		{
 			ProgramType = programType;
-			Name = param.Name;
+			Name = param.Name ?? "";
 			ShaderType = new ShaderType(param, programType);
 			Index = (uint)param.Index;
 		}

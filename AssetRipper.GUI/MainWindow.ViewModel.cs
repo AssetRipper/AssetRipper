@@ -5,7 +5,6 @@ using AssetRipper.GUI.Exceptions;
 using AssetRipper.GUI.Extensions;
 using AssetRipper.GUI.Managers;
 using AssetRipper.Library;
-using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;

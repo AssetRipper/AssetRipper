@@ -403,9 +403,9 @@ namespace SpirV
 							throw new Exception("Cannot construct floating point literal.");
 						}
 					}
+				default:
+					return null;
 			}
-
-			return null;
 		}
 
 		public ModuleHeader Header { get; }

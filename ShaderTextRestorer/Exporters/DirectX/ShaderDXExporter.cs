@@ -17,11 +17,11 @@ namespace ShaderTextRestorer.Exporters.DirectX
 		{
 			byte[] exportData = subProgram.ProgramData;
 
-			if (DXShaderTextExtractor.TryDecompileText(exportData, writer.Version, m_graphicApi, out string decompiledText))
+			if (DXShaderTextExtractor.TryDecompileText(exportData, writer.Version, m_graphicApi, out string? decompiledText))
 			{
 				ExportListing(writer, "//ShaderDXExporter_Decompiler\n" + (decompiledText ?? ""));
 			}
-			else if (DXShaderTextExtractor.TryGetShaderText(exportData, writer.Version, m_graphicApi, out string disassemblyText))
+			else if (DXShaderTextExtractor.TryGetShaderText(exportData, writer.Version, m_graphicApi, out string? disassemblyText))
 			{
 				ExportListing(writer, "//ShaderDXExporter_Disassembler\n" + (disassemblyText ?? ""));
 			}
