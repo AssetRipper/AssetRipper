@@ -318,7 +318,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			IList<TypeDefinition> types = module.TopLevelTypes;
 			foreach (TypeDefinition type in types)
 			{
-				if (type.Namespace == @namespace && type.Name == name)
+				if ((type.Namespace ?? "") == @namespace && type.Name == name)
 				{
 					return type;
 				}
