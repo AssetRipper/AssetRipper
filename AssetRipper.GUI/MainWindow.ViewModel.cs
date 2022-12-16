@@ -7,6 +7,7 @@ using AssetRipper.GUI.Managers;
 using AssetRipper.Library;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -234,11 +235,9 @@ namespace AssetRipper.GUI
 				return;
 			}
 
-			OpenFolderDialog openFolderDialog = new();
-
-			string? chosenFolder = await openFolderDialog.ShowAsync(MainWindow.Instance);
-
-			if (string.IsNullOrEmpty(chosenFolder))
+			FolderPickerOpenOptions options = new() { AllowMultiple = false };
+			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
+			if (!folderList[0].TryGetUri(out Uri? chosenFolder))
 			{
 				return;
 			}
@@ -246,7 +245,7 @@ namespace AssetRipper.GUI
 			IsExporting = true;
 			ExportingText = "Clearing out existing files...";
 
-			string exportPath = Path.Combine(chosenFolder, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			string exportPath = Path.Combine(chosenFolder.AbsolutePath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
 			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
@@ -279,30 +278,30 @@ namespace AssetRipper.GUI
 
 			if (SelectedAsset.Asset is DummyAssetForLooseResourceFile da)
 			{
-				SaveFileDialog saveFileDialog = new();
 				string fileName = Path.GetFileName(da.AssociatedFile.Name);
-				saveFileDialog.DefaultExtension = Path.GetExtension(fileName);
-				saveFileDialog.InitialFileName = fileName;
 
-				string? saveLoc = await saveFileDialog.ShowAsync(MainWindow.Instance);
+				FilePickerSaveOptions saveOptions = new()
+				{
+					DefaultExtension = Path.GetExtension(fileName),
+					SuggestedFileName = fileName,
+				};
+				IStorageFile? storageFile = await MainWindow.Instance.StorageProvider.SaveFilePickerAsync(saveOptions);
 
-				if (saveLoc == null)
+				if (storageFile is null || !storageFile.TryGetUri(out Uri? saveLocation))
 				{
 					return;
 				}
 
-				await da.SaveToFileAsync(saveLoc);
+				await da.SaveToFileAsync(saveLocation.AbsolutePath);
 
-				Logger.Info(LogCategory.ExportedFile, $"Loose file saved at: {saveLoc}");
+				Logger.Info(LogCategory.ExportedFile, $"Loose file saved at: {saveLocation.AbsolutePath}");
 
 				return;
 			}
 
-			OpenFolderDialog openFolderDialog = new();
-
-			string? chosenFolder = await openFolderDialog.ShowAsync(MainWindow.Instance);
-
-			if (string.IsNullOrEmpty(chosenFolder))
+			FolderPickerOpenOptions options = new() { AllowMultiple = false };
+			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
+			if (!folderList[0].TryGetUri(out Uri? chosenFolder))
 			{
 				return;
 			}
@@ -310,7 +309,7 @@ namespace AssetRipper.GUI
 			IsExporting = true;
 			ExportingText = MainWindow.Instance.LocalizationManager["export_deleting_old_files"];
 
-			string exportPath = Path.Combine(chosenFolder, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			string exportPath = Path.Combine(chosenFolder.AbsolutePath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
 			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
@@ -340,11 +339,9 @@ namespace AssetRipper.GUI
 				return;
 			}
 
-			OpenFolderDialog openFolderDialog = new();
-
-			string? chosenFolder = await openFolderDialog.ShowAsync(MainWindow.Instance);
-
-			if (string.IsNullOrEmpty(chosenFolder))
+			FolderPickerOpenOptions options = new() { AllowMultiple = false };
+			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
+			if (!folderList[0].TryGetUri(out Uri? chosenFolder))
 			{
 				return;
 			}
@@ -352,7 +349,7 @@ namespace AssetRipper.GUI
 			IsExporting = true;
 			ExportingText = MainWindow.Instance.LocalizationManager["export_deleting_old_files"];
 
-			string exportPath = Path.Combine(chosenFolder, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			string exportPath = Path.Combine(chosenFolder.AbsolutePath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
 			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
@@ -396,30 +393,34 @@ namespace AssetRipper.GUI
 		//Called from UI
 		public async void ShowOpenFileDialog()
 		{
-			OpenFileDialog openFileDialog = new();
-			openFileDialog.AllowMultiple = true;
-			string[]? result = await openFileDialog.ShowAsync(MainWindow.Instance);
+			FilePickerOpenOptions options = new() { AllowMultiple = false };
+			IReadOnlyList<IStorageFile> fileList = await MainWindow.Instance.StorageProvider.OpenFilePickerAsync(options);
 
-			if (result == null)
+			string[] result = fileList.Select(f =>
 			{
-				return;
-			}
+				f.TryGetUri(out Uri? uri);
+				return uri?.AbsolutePath ?? "";
+			})
+				.Where(s => !string.IsNullOrEmpty(s))
+				.ToArray();
 
-			DoLoad(result);
+			if (result.Length > 0)
+			{
+				DoLoad(result);
+			}
 		}
 
 		//Called from UI
 		public async void ShowOpenFolderDialog()
 		{
-			OpenFolderDialog openFolderDialog = new();
-			string? result = await openFolderDialog.ShowAsync(MainWindow.Instance);
-
-			if (string.IsNullOrEmpty(result))
+			FolderPickerOpenOptions options = new() { AllowMultiple = false };
+			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
+			if (!folderList[0].TryGetUri(out Uri? chosenFolder))
 			{
 				return;
 			}
 
-			DoLoad(new[] { result });
+			DoLoad(new[] { chosenFolder.AbsolutePath });
 		}
 
 		//Called from UI
