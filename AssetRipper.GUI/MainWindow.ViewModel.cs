@@ -244,7 +244,7 @@ namespace AssetRipper.GUI
 			IsExporting = true;
 			ExportingText = "Clearing out existing files...";
 
-			string exportPath = Path.Combine(chosenFolder.AbsolutePath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			string exportPath = Path.Combine(chosenFolder.LocalPath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
 			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
@@ -291,9 +291,9 @@ namespace AssetRipper.GUI
 					return;
 				}
 
-				await da.SaveToFileAsync(saveLocation.AbsolutePath);
+				await da.SaveToFileAsync(saveLocation.LocalPath);
 
-				Logger.Info(LogCategory.ExportedFile, $"Loose file saved at: {saveLocation.AbsolutePath}");
+				Logger.Info(LogCategory.ExportedFile, $"Loose file saved at: {saveLocation.LocalPath}");
 
 				return;
 			}
@@ -308,7 +308,7 @@ namespace AssetRipper.GUI
 			IsExporting = true;
 			ExportingText = MainWindow.Instance.LocalizationManager["export_deleting_old_files"];
 
-			string exportPath = Path.Combine(chosenFolder.AbsolutePath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			string exportPath = Path.Combine(chosenFolder.LocalPath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
 			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
@@ -348,7 +348,7 @@ namespace AssetRipper.GUI
 			IsExporting = true;
 			ExportingText = MainWindow.Instance.LocalizationManager["export_deleting_old_files"];
 
-			string exportPath = Path.Combine(chosenFolder.AbsolutePath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			string exportPath = Path.Combine(chosenFolder.LocalPath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
 			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
@@ -398,7 +398,7 @@ namespace AssetRipper.GUI
 			string[] result = fileList.Select(f =>
 			{
 				f.TryGetUri(out Uri? uri);
-				return uri?.AbsolutePath ?? "";
+				return uri?.LocalPath ?? "";
 			})
 				.Where(s => !string.IsNullOrEmpty(s))
 				.ToArray();
@@ -419,7 +419,7 @@ namespace AssetRipper.GUI
 				return;
 			}
 
-			DoLoad(new[] { chosenFolder.AbsolutePath });
+			DoLoad(new[] { chosenFolder.LocalPath });
 		}
 
 		//Called from UI
