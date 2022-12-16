@@ -21,7 +21,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 			packedVector.PackUInts(ints);
 			uint[] unpackedInts = packedVector.UnpackUInts();
 
-			Assert.AreEqual(ints, unpackedInts);
+			Assert.That(unpackedInts, Is.EqualTo(ints));
 		}
 
 		[Test]
@@ -31,7 +31,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 			packedVector.PackUShorts(shorts);
 			ushort[] unpackedShorts = packedVector.UnpackUShorts();
 
-			Assert.AreEqual(shorts, unpackedShorts);
+			Assert.That(unpackedShorts, Is.EqualTo(shorts));
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 			packedVector.PackUInts(ints);
 			uint[] unpackedInts = packedVector.UnpackInts().Select(x => unchecked((uint)x)).ToArray();
 
-			Assert.AreEqual(ints, unpackedInts);
+			Assert.That(unpackedInts, Is.EqualTo(ints));
 		}
 
 		private static uint[] MakeInts(int count)

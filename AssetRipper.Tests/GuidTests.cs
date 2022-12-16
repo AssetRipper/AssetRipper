@@ -13,7 +13,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void MissingReferenceSerializedCorrectly()
 		{
-			Assert.AreEqual("0000000deadbeef15deadf00d0000000", UnityGUID.MissingReference.ToString());
+			Assert.That(UnityGUID.MissingReference.ToString(), Is.EqualTo("0000000deadbeef15deadf00d0000000"));
 		}
 
 		[Test]
@@ -22,8 +22,8 @@ namespace AssetRipper.Tests
 			UnityGUID guid = UnityGUID.NewGuid();
 			byte[] bytes = guid.ToByteArray();
 			UnityGUID fromBytes = new UnityGUID(bytes);
-			Assert.AreEqual(guid, fromBytes);
-			Assert.AreEqual(guid.ToString(), fromBytes.ToString());
+			Assert.That(fromBytes, Is.EqualTo(guid));
+			Assert.That(fromBytes.ToString(), Is.EqualTo(guid.ToString()));
 		}
 
 		[Test]
@@ -31,7 +31,7 @@ namespace AssetRipper.Tests
 		{
 			Guid systemGuid = Guid.NewGuid();
 			UnityGUID unityGUID = new UnityGUID(systemGuid);
-			Assert.AreEqual(systemGuid.ToString().Replace("-", ""), unityGUID.ToString());
+			Assert.That(unityGUID.ToString(), Is.EqualTo(systemGuid.ToString().Replace("-", "")));
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ namespace AssetRipper.Tests
 		{
 			UnityGUID parsedGUID = UnityGUID.Parse(randomGuidString);
 			string outputedString = parsedGUID.ToString();
-			Assert.AreEqual(randomGuidString, outputedString);
+			Assert.That(outputedString, Is.EqualTo(randomGuidString));
 		}
 
 		[Test]
@@ -61,7 +61,7 @@ namespace AssetRipper.Tests
 		{
 			UnityGUID unityGuid = UnityGUID.NewGuid();
 			Guid systemGuid = (Guid)unityGuid;
-			Assert.AreEqual(unityGuid, (UnityGUID)systemGuid);
+			Assert.That((UnityGUID)systemGuid, Is.EqualTo(unityGuid));
 		}
 
 		[Test]
@@ -70,7 +70,7 @@ namespace AssetRipper.Tests
 			UnityGUID originalGuid = UnityGUID.NewGuid();
 			UnityGUID inverseGuid = new UnityGUID(originalGuid.ToByteArray());
 			UnityGUID equivalentGuid = new UnityGUID(inverseGuid.ToByteArray());
-			Assert.AreEqual(originalGuid, equivalentGuid);
+			Assert.That(equivalentGuid, Is.EqualTo(originalGuid));
 		}
 
 		private static string GetLongRandomString(int numSetsOf32Characters = 4)

@@ -14,7 +14,7 @@ namespace AssetRipper.Yaml.Tests
 			mappingNode.Add("y", 3);
 			mappingNode.Emit(emitter);
 			string output = writer.ToString();
-			Assert.AreEqual("{x: 2, y: 3}", output);
+			Assert.That(output, Is.EqualTo("{x: 2, y: 3}"));
 		}
 	}
 }

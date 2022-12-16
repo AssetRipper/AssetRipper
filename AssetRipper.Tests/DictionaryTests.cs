@@ -41,7 +41,9 @@ namespace AssetRipper.Tests
 				Assert.IsTrue(dictionary.ContainsKey(Cast("One")));
 				Assert.IsTrue(dictionary.ContainsKey(Cast("Three")));
 				Assert.IsFalse(dictionary.ContainsKey(Cast("Four")));
+#pragma warning disable NUnit2009 // The same value has been provided as both the actual and the expected argument
 				Assert.That(Cast("Three").GetHashCode(), Is.EqualTo(Cast("Three").GetHashCode()));
+#pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
 				Assert.That(Cast("Three").Equals(Cast("Three")));
 				Assert.That(dictionary[Cast("Three")], Is.EqualTo(3));
 			});
@@ -52,10 +54,12 @@ namespace AssetRipper.Tests
 		{
 			Assert.Multiple(() =>
 			{
+#pragma warning disable NUnit2009 // The same value has been provided as both the actual and the expected argument
 				Assert.That(Cast(""), Is.EqualTo(Cast("")));
 				Assert.That(Cast("One"), Is.EqualTo(Cast("One")));
 				Assert.That(Cast("Two"), Is.EqualTo(Cast("Two")));
 				Assert.That(Cast("Three"), Is.EqualTo(Cast("Three")));
+#pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
 			});
 		}
 
@@ -76,11 +80,13 @@ namespace AssetRipper.Tests
 
 			Assert.Multiple(() =>
 			{
-				Assert.That(dictionary.Count, Is.EqualTo(3));
+				Assert.That(dictionary, Has.Count.EqualTo(3));
 				Assert.IsTrue(dictionary.ContainsKey(MakeFastPropertyName("One")));
 				Assert.IsTrue(dictionary.ContainsKey(MakeFastPropertyName("Three")));
 				Assert.IsFalse(dictionary.ContainsKey(MakeFastPropertyName("Four")));
+#pragma warning disable NUnit2009 // The same value has been provided as both the actual and the expected argument
 				Assert.That(MakeFastPropertyName("Three").GetHashCode(), Is.EqualTo(MakeFastPropertyName("Three").GetHashCode()));
+#pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
 				Assert.That(MakeFastPropertyName("Three").Equals(MakeFastPropertyName("Three")));
 				Assert.That(dictionary[MakeFastPropertyName("Three")], Is.EqualTo(3));
 			});

@@ -146,7 +146,7 @@ namespace AssetRipper.Tests
 			CompressedMesh_5_0_0_f4 compressedMesh = new();
 			compressedMesh.SetTriangles(integers);
 			uint[] unpackedValues = compressedMesh.GetTriangles();
-			Assert.AreEqual(integers, unpackedValues);
+			Assert.That(unpackedValues, Is.EqualTo(integers));
 		}
 
 		[Test]
