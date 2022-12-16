@@ -3,6 +3,7 @@ using AssetRipper.Core.Logging;
 using System;
 using System.IO;
 
+
 namespace AssetAnalyzer
 {
 	public static class Analyzer
