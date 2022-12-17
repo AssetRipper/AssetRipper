@@ -90,7 +90,6 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			List<Cpp2IlProcessingLayer> processingLayers = new()
 			{
 				new AttributeAnalysisProcessingLayer(),
-				new AttributeInjectorProcessingLayer(),
 			};
 
 			foreach (Cpp2IlProcessingLayer cpp2IlProcessingLayer in processingLayers)
