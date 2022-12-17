@@ -141,6 +141,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.MonoBehav
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Endian.Tests", "AssetRipper.IO.Endian.Tests\AssetRipper.IO.Endian.Tests.csproj", "{18AF6498-0CCC-4D41-B2B4-4DB4A94BD386}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Addressables", "AssetRipper.Addressables\AssetRipper.Addressables.csproj", "{3FDC7CE4-5787-4F8A-9E20-22C468F17B4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Addressables.Tests", "AssetRipper.Addressables.Tests\AssetRipper.Addressables.Tests.csproj", "{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -279,6 +283,14 @@ Global
 		{18AF6498-0CCC-4D41-B2B4-4DB4A94BD386}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18AF6498-0CCC-4D41-B2B4-4DB4A94BD386}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18AF6498-0CCC-4D41-B2B4-4DB4A94BD386}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FDC7CE4-5787-4F8A-9E20-22C468F17B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FDC7CE4-5787-4F8A-9E20-22C468F17B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FDC7CE4-5787-4F8A-9E20-22C468F17B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FDC7CE4-5787-4F8A-9E20-22C468F17B4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
