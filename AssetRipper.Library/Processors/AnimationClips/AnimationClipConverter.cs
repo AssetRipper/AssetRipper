@@ -16,7 +16,7 @@ using AssetRipper.SourceGenerated.Subclasses.GenericBinding;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Single;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Vector3f;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Object_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Object;
 using AssetRipper.SourceGenerated.Subclasses.PPtrCurve;
 using AssetRipper.SourceGenerated.Subclasses.PPtrKeyframe;
 using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
@@ -487,7 +487,7 @@ namespace AssetRipper.Library.Processors.AnimationClips
 				m_pptrs.Add(curveData, curve);
 			}
 
-			IPPtr_Object_ value = bindings.PptrCurveMapping[index];
+			IPPtr_Object value = bindings.PptrCurveMapping[index];
 			IPPtrKeyframe key = curve.Curve.AddNew();
 			key.Time = time;
 			key.Value.FileID = value.FileID;

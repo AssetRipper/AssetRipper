@@ -30,12 +30,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 				if (lineParameters.ColorGradient.Has_Key0_ColorRGBA32())
 				{
 					lineParameters.ColorGradient.Key0_ColorRGBA32.SetAsWhite();
-					lineParameters.ColorGradient.Key1_ColorRGBA32!.SetAsWhite();
+					lineParameters.ColorGradient.Key1_ColorRGBA32.SetAsWhite();
 				}
 				else
 				{
-					lineParameters.ColorGradient.Key0_ColorRGBAf_3_5_0_f5!.SetAsWhite();
-					lineParameters.ColorGradient.Key1_ColorRGBAf_3_5_0_f5!.SetAsWhite();
+					lineParameters.ColorGradient.Key0_ColorRGBAf_3_5_0.SetAsWhite();
+					lineParameters.ColorGradient.Key1_ColorRGBAf_3_5_0.SetAsWhite();
 				}
 			}
 			else if (lineParameters.Has_EndColor() && lineParameters.Has_StartColor())

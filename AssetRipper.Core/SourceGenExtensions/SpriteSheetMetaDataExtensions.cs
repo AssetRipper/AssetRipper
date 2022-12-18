@@ -51,7 +51,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				instance.Vertices.Clear();
 				instance.Vertices.Capacity = spriteMetaData.Vertices.Count;
-				foreach (Vector2f_3_5_0_f5 vertex in spriteMetaData.Vertices)
+				foreach (Vector2f_3_5_0 vertex in spriteMetaData.Vertices)
 				{
 					instance.Vertices.AddNew().CopyValues(vertex);
 				}

@@ -210,14 +210,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 		}
 
-		private static void FindMinMaxBounds(AssetList<Vector3f_3_4_0_f5> vertices, int firstVertex, int vertexCount, out Vector3 min, out Vector3 max)
+		private static void FindMinMaxBounds(AssetList<Vector3f_3_4_0> vertices, int firstVertex, int vertexCount, out Vector3 min, out Vector3 max)
 		{
 			min = (Vector3)vertices[firstVertex];
 			max = (Vector3)vertices[firstVertex];
 			int end = firstVertex + vertexCount;
 			for (int i = firstVertex; i < end; i++)
 			{
-				Vector3f_3_4_0_f5 vertex = vertices[i];
+				Vector3f_3_4_0 vertex = vertices[i];
 				if (vertex.X > max.X)
 				{
 					max.X = vertex.X;

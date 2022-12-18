@@ -15,7 +15,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_468431735;
 using AssetRipper.SourceGenerated.MarkerInterfaces;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_EditorExtension_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_EditorExtension;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -110,7 +110,7 @@ namespace AssetRipper.Core.Project.Collections
 			}
 			if (prefab.Has_Objects_C1001())
 			{
-				PPtrAccessList<PPtr_EditorExtension__3_4_0_f5, IEditorExtension> objects = prefab.Objects_C1001P;
+				PPtrAccessList<PPtr_EditorExtension_3_4_0, IEditorExtension> objects = prefab.Objects_C1001P;
 				foreach (IEditorExtension editorExtension in root.FetchHierarchy())
 				{
 					objects.Add(editorExtension);

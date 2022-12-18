@@ -70,7 +70,7 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 
 		public SerializablePointer<ITexture2D> Background { get; set; }
 
-		public ColorRGBAf_3_5_0_f5 TextColor { get; } = new();
+		public ColorRGBAf_3_5_0 TextColor { get; } = new();
 
 		public const string BackgroundName = "m_Background";
 		public const string ScaledBackgroundsName = "m_ScaledBackgrounds";

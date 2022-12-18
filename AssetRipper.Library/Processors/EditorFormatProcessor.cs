@@ -27,7 +27,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_78;
 using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Object_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Object;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.IO;
 using System.Linq;
@@ -136,7 +136,7 @@ namespace AssetRipper.Library.Processors
 
 		private static void SetOriginalPaths(IResourceManager manager)
 		{
-			foreach (AccessPairBase<Utf8String, IPPtr_Object_> kvp in manager.Container_C147)
+			foreach (AccessPairBase<Utf8String, IPPtr_Object> kvp in manager.Container_C147)
 			{
 				IUnityObjectBase? asset = kvp.Value.TryGetAsset(manager.Collection);
 				if (asset is null)

@@ -272,8 +272,8 @@ namespace AssetRipper.Core.Classes.Misc.Serializable.GUIStyle
 		public RectOffset Padding { get; set; } = new();
 		public RectOffset Overflow { get; set; } = new();
 		public SerializablePointer<IFont> Font { get; set; } = new();
-		public Vector2f_3_5_0_f5 ContentOffset { get; set; } = new();
-		public Vector2f_3_5_0_f5 ClipOffset { get; set; } = new();
+		public Vector2f_3_5_0 ContentOffset { get; set; } = new();
+		public Vector2f_3_5_0 ClipOffset { get; set; } = new();
 
 		public const string NameName = "m_Name";
 		public const string NormalName = "m_Normal";

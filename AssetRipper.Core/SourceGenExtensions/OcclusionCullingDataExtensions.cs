@@ -12,8 +12,8 @@ using AssetRipper.SourceGenerated.Classes.ClassID_363;
 using AssetRipper.SourceGenerated.Classes.ClassID_41;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.OcclusionScene;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_OcclusionPortal_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Renderer_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_OcclusionPortal;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Renderer;
 using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
 using System.Collections.Generic;
 using System.Linq;
@@ -120,14 +120,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static void SetIDs(this IOcclusionCullingData occlusionCullingData, IExportContainer container, IOcclusionCullingSettings cullingSetting, IOcclusionScene scene)
 		{
-			PPtrAccessList<PPtr_Renderer__5_0_0_f4, IRenderer> renderers = cullingSetting.StaticRenderers_C29P;
+			PPtrAccessList<PPtr_Renderer_5_0_0, IRenderer> renderers = cullingSetting.StaticRenderers_C29P;
 			for (int i = 0; i < renderers.Count; i++)
 			{
 				IRenderer? renderer = renderers[i];
 				occlusionCullingData.StaticRenderers_C363[scene.IndexRenderers + i].SetObjectID(container, renderer);
 			}
 
-			PPtrAccessList<PPtr_OcclusionPortal__5_5_0_f3, IOcclusionPortal> portals = cullingSetting.Portals_C29P;
+			PPtrAccessList<PPtr_OcclusionPortal_5_5_0, IOcclusionPortal> portals = cullingSetting.Portals_C29P;
 			for (int i = 0; i < portals.Count; i++)
 			{
 				IOcclusionPortal? portal = portals[i];

@@ -2,7 +2,7 @@
 using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_EditorExtension_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_EditorExtension;
 using System.Collections.Generic;
 
 namespace AssetRipper.Core.SourceGenExtensions
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			else if (prefab.Has_Objects_C1001())//DataTemplate
 			{
-				foreach (PPtr_EditorExtension__3_4_0_f5 asset in prefab.Objects_C1001)
+				foreach (PPtr_EditorExtension_3_4_0 asset in prefab.Objects_C1001)
 				{
 					yield return asset.GetAsset(prefab.Collection);
 				}

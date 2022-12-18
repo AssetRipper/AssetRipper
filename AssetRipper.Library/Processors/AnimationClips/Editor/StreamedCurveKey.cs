@@ -105,6 +105,6 @@ namespace AssetRipper.Library.Processors.AnimationClips.Editor
 
 		public int Index { get; set; }
 		public float Value { get; set; }
-		public Vector3f_3_5_0_f5 Coefficient { get; } = new();
+		public Vector3f_3_5_0 Coefficient { get; } = new();
 	}
 }

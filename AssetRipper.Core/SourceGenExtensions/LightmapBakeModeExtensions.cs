@@ -9,9 +9,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			return (LightmapBakeType)light.LightmapBakeType;
 		}
-		public static MixedLightingMode GetMixedLightingMode(this ILightmapBakeMode light)
+		public static SourceGenerated.NativeEnums.Global.MixedLightingMode GetMixedLightingMode(this ILightmapBakeMode light)
 		{
-			return (MixedLightingMode)light.MixedLightingMode;
+			return (SourceGenerated.NativeEnums.Global.MixedLightingMode)light.MixedLightingMode;
 		}
 	}
 }

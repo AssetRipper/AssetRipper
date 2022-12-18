@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Sprite_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Sprite;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasEditorData;
 using System.Collections.Generic;
 

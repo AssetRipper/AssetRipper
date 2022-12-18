@@ -22,8 +22,8 @@ using AssetRipper.SourceGenerated.Subclasses.ExposedAudioParameter;
 using AssetRipper.SourceGenerated.Subclasses.GroupConstant;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.Parameter;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerEffectController_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerSnapshot_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerEffectController;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerSnapshot;
 using AssetRipper.SourceGenerated.Subclasses.SnapshotConstant;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Collections.Generic;
@@ -197,7 +197,7 @@ namespace AssetRipper.Library.Processors.AudioMixers
 				{
 					IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
 					effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-					PPtr_AudioMixerEffectController_ effectPPtr = new();
+					PPtr_AudioMixerEffectController effectPPtr = new();
 					effectPPtr.CopyValues(effect.Collection.ForceCreatePPtr(effect));
 					group.Effects_C243.Add(effectPPtr);
 					//AddAsset(effect);
@@ -215,7 +215,7 @@ namespace AssetRipper.Library.Processors.AudioMixers
 		{
 			for (int i = 0; i < mixer.Snapshots_C241.Count; i++)
 			{
-				PPtr_AudioMixerSnapshot_ snapshotPPtr = mixer.Snapshots_C241[i];
+				PPtr_AudioMixerSnapshot snapshotPPtr = mixer.Snapshots_C241[i];
 				IAudioMixerSnapshotController snapshot = (IAudioMixerSnapshotController)snapshotPPtr.GetAsset(mixer.Collection);
 				//AddAsset(snapshot);
 

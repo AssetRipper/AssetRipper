@@ -14,11 +14,11 @@ using AssetRipper.SourceGenerated.Subclasses.AnimatorControllerLayer;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorState;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorStateMachine;
 using AssetRipper.SourceGenerated.Subclasses.ChildMotion;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorTransition_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_State_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Transition_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorTransition;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_State;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Transition;
 using AssetRipper.SourceGenerated.Subclasses.StateBehavioursPair;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateKey;
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static bool IsContainsAnimationClip(this IAnimatorController controller, IAnimationClip clip)
 		{
-			foreach (IPPtr_AnimationClip_ clipPtr in controller.AnimationClips_C91)
+			foreach (IPPtr_AnimationClip clipPtr in controller.AnimationClips_C91)
 			{
 				if (clipPtr.IsAsset(controller.Collection, clip))
 				{
@@ -44,7 +44,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return false;
 		}
 
-		public static PPtr_MonoBehaviour__5_0_0_f4[] GetStateBehaviours(this IAnimatorController controller, int layerIndex)
+		public static PPtr_MonoBehaviour_5_0_0[] GetStateBehaviours(this IAnimatorController controller, int layerIndex)
 		{
 			if (controller.Has_StateMachineBehaviourVectorDescription_C91())
 			{
@@ -56,10 +56,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription_C91, controller.StateMachineBehaviours_C91!, range);
 				}
 			}
-			return Array.Empty<PPtr_MonoBehaviour__5_0_0_f4>();
+			return Array.Empty<PPtr_MonoBehaviour_5_0_0>();
 		}
 
-		public static PPtr_MonoBehaviour__5_0_0_f4[] GetStateBehaviours(this IAnimatorController controller, int stateMachineIndex, int stateIndex)
+		public static PPtr_MonoBehaviour_5_0_0[] GetStateBehaviours(this IAnimatorController controller, int stateMachineIndex, int stateIndex)
 		{
 			if (controller.Has_StateMachineBehaviourVectorDescription_C91())
 			{
@@ -74,15 +74,15 @@ namespace AssetRipper.Core.SourceGenExtensions
 					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription_C91, controller.StateMachineBehaviours_C91!, range);
 				}
 			}
-			return Array.Empty<PPtr_MonoBehaviour__5_0_0_f4>();
+			return Array.Empty<PPtr_MonoBehaviour_5_0_0>();
 		}
 
-		private static PPtr_MonoBehaviour__5_0_0_f4[] GetStateBehaviours(
+		private static PPtr_MonoBehaviour_5_0_0[] GetStateBehaviours(
 			IStateMachineBehaviourVectorDescription controllerStateMachineBehaviourVectorDescription,
-			AssetList<PPtr_MonoBehaviour__5_0_0_f4> controllerStateMachineBehaviours,
+			AssetList<PPtr_MonoBehaviour_5_0_0> controllerStateMachineBehaviours,
 			StateRange range)
 		{
-			PPtr_MonoBehaviour__5_0_0_f4[] stateMachineBehaviours = new PPtr_MonoBehaviour__5_0_0_f4[range.Count];
+			PPtr_MonoBehaviour_5_0_0[] stateMachineBehaviours = new PPtr_MonoBehaviour_5_0_0[range.Count];
 			for (int i = 0; i < range.Count; i++)
 			{
 				int index = (int)controllerStateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[range.StartIndex + i];
@@ -126,7 +126,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 								yield return reference;
 							}
 						}
-						foreach (PPtr_MonoBehaviour__5_0_0_f4 stateMachineBehaviour in pair.StateMachineBehaviours)
+						foreach (PPtr_MonoBehaviour_5_0_0 stateMachineBehaviour in pair.StateMachineBehaviours)
 						{
 							yield return stateMachineBehaviour.TryGetAsset(animatorController.Collection);
 						}
@@ -153,8 +153,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 						}
 					}
 				}
-				IAnimatorStateMachine? stateMachine = layer.StateMachine_PPtr_StateMachine_?.TryGetAsset(animatorController.Collection)
-					?? layer.StateMachine_PPtr_AnimatorStateMachine_?.TryGetAsset(animatorController.Collection);
+				IAnimatorStateMachine? stateMachine = layer.StateMachine_PPtr_StateMachine?.TryGetAsset(animatorController.Collection)
+					?? layer.StateMachine_PPtr_AnimatorStateMachine?.TryGetAsset(animatorController.Collection);
 				if (stateMachine is not null)
 				{
 					foreach (IUnityObjectBase? reference in stateMachine.FetchEditorHierarchy())
@@ -206,10 +206,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 				{
 					yield return behaviour;
 				}
-				foreach (AssetList<PPtr_AnimatorTransition_> list in stateMachine.StateMachineTransitions_C1107.Values)
+				foreach (AssetList<PPtr_AnimatorTransition> list in stateMachine.StateMachineTransitions_C1107.Values)
 				{
 					//Skipping keys because they're IAnimatorStateMachine
-					foreach (PPtr_AnimatorTransition_ transition in list)
+					foreach (PPtr_AnimatorTransition transition in list)
 					{
 						yield return transition.TryGetAsset(stateMachine.Collection);
 					}
@@ -229,7 +229,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 				if (stateMachine.Has_LocalTransitions_C1107())
 				{
-					foreach ((PPtr_State_ statePPtr, AssetList<PPtr_Transition_> list) in stateMachine.LocalTransitions_C1107)
+					foreach ((PPtr_State statePPtr, AssetList<PPtr_Transition> list) in stateMachine.LocalTransitions_C1107)
 					{
 						IAnimatorState? state = statePPtr.TryGetAsset(stateMachine.Collection);
 						if (state is not null)
@@ -239,13 +239,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 								yield return reference;
 							}
 						}
-						foreach (PPtr_Transition_ transition in list)
+						foreach (PPtr_Transition transition in list)
 						{
 							yield return transition.TryGetAsset(stateMachine.Collection);
 						}
 					}
 				}
-				foreach ((PPtr_State_ statePPtr, AssetList<PPtr_Transition_> list) in stateMachine.OrderedTransitions_C1107)
+				foreach ((PPtr_State statePPtr, AssetList<PPtr_Transition> list) in stateMachine.OrderedTransitions_C1107)
 				{
 					IAnimatorState? state = statePPtr.TryGetAsset(stateMachine.Collection);
 					if (state is not null)
@@ -255,7 +255,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 							yield return reference;
 						}
 					}
-					foreach (PPtr_Transition_ transition in list)
+					foreach (PPtr_Transition transition in list)
 					{
 						yield return transition.TryGetAsset(stateMachine.Collection);
 					}

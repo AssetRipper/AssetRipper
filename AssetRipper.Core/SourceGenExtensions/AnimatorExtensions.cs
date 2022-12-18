@@ -14,19 +14,19 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static bool IsContainsAnimationClip(this IAnimator animator, IAnimationClip clip)
 		{
-			if (animator.Has_Controller_C95_PPtr_AnimatorController__4_0_0_f7())
+			if (animator.Has_Controller_C95_PPtr_AnimatorController_4_0_0())
 			{
-				IAnimatorController? controller = animator.Controller_C95_PPtr_AnimatorController__4_0_0_f7P;
+				IAnimatorController? controller = animator.Controller_C95_PPtr_AnimatorController_4_0_0P;
 				return controller is not null && controller.IsContainsAnimationClip(clip);
 			}
-			else if (animator.Has_Controller_C95_PPtr_RuntimeAnimatorController__4_3_0_f4())
+			else if (animator.Has_Controller_C95_PPtr_RuntimeAnimatorController_4_3_0())
 			{
-				IRuntimeAnimatorController? controller = animator.Controller_C95_PPtr_RuntimeAnimatorController__4_3_0_f4P;
+				IRuntimeAnimatorController? controller = animator.Controller_C95_PPtr_RuntimeAnimatorController_4_3_0P;
 				return controller is not null && controller.IsContainsAnimationClip(clip);
 			}
-			else if (animator.Has_Controller_C95_PPtr_RuntimeAnimatorController__5_0_0_f4())
+			else if (animator.Has_Controller_C95_PPtr_RuntimeAnimatorController_5_0_0())
 			{
-				IRuntimeAnimatorController? controller = animator.Controller_C95_PPtr_RuntimeAnimatorController__5_0_0_f4P;
+				IRuntimeAnimatorController? controller = animator.Controller_C95_PPtr_RuntimeAnimatorController_5_0_0P;
 				return controller is not null && controller.IsContainsAnimationClip(clip);
 			}
 			else

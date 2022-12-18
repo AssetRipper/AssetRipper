@@ -34,18 +34,18 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				gradient.MinColor_ColorRGBA32.SetAsWhite();
 			}
-			else if (gradient.Has_MinColor_ColorRGBAf_3_5_0_f5())
+			else
 			{
-				gradient.MinColor_ColorRGBAf_3_5_0_f5.SetAsWhite();
+				gradient.MinColor_ColorRGBAf_3_5_0.SetAsWhite();
 			}
 
 			if (gradient.Has_MaxColor_ColorRGBA32())
 			{
 				gradient.MaxColor_ColorRGBA32.SetAsWhite();
 			}
-			else if (gradient.Has_MaxColor_ColorRGBAf_3_5_0_f5())
+			else
 			{
-				gradient.MaxColor_ColorRGBAf_3_5_0_f5.SetAsWhite();
+				gradient.MaxColor_ColorRGBAf_3_5_0.SetAsWhite();
 			}
 
 			//gradient.MaxGradient = new Gradient(ColorRGBAf.White, ColorRGBAf.White);

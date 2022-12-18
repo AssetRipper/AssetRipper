@@ -25,13 +25,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 			animatorControllerLayer.Name.CopyValues(controller.TOS_C91[layer.Binding]);
 
 
-			if (animatorControllerLayer.Has_StateMachine_PPtr_AnimatorStateMachine_())
+			if (animatorControllerLayer.Has_StateMachine_PPtr_AnimatorStateMachine())
 			{
-				animatorControllerLayer.StateMachine_PPtr_AnimatorStateMachine_.CopyValues(controller.Collection.ForceCreatePPtr(stateMachine));
+				animatorControllerLayer.StateMachine_PPtr_AnimatorStateMachine.CopyValues(controller.Collection.ForceCreatePPtr(stateMachine));
 			}
-			else if (animatorControllerLayer.Has_StateMachine_PPtr_StateMachine_())
+			else if (animatorControllerLayer.Has_StateMachine_PPtr_StateMachine())
 			{
-				animatorControllerLayer.StateMachine_PPtr_StateMachine_.CopyValues(controller.Collection.ForceCreatePPtr(stateMachine));
+				animatorControllerLayer.StateMachine_PPtr_StateMachine.CopyValues(controller.Collection.ForceCreatePPtr(stateMachine));
 			}
 
 #warning TODO: animator

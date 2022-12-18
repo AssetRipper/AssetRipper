@@ -60,7 +60,7 @@ namespace AssetRipper.Library.Exporters.NavMeshes
 					throw new Exception("Height mesh must be triangles.");
 				}
 
-				AssetList<Vector3f_3_5_0_f5> vertices = heightMeshData.Vertices;
+				AssetList<Vector3f_3_5_0> vertices = heightMeshData.Vertices;
 
 				for (int i = 0; i < indices.Length; i += 3)
 				{
@@ -75,7 +75,7 @@ namespace AssetRipper.Library.Exporters.NavMeshes
 			sceneBuilder.AddRigidMesh(meshBuilder, nodeBuilder);
 		}
 
-		private static VertexBuilder<VertexPosition, VertexEmpty, VertexEmpty> FromVector(Vector3f_3_5_0_f5 vector)
+		private static VertexBuilder<VertexPosition, VertexEmpty, VertexEmpty> FromVector(Vector3f_3_5_0 vector)
 		{
 			return new VertexBuilder<VertexPosition, VertexEmpty, VertexEmpty>(new Vector3(-vector.X, vector.Y, vector.Z));
 		}

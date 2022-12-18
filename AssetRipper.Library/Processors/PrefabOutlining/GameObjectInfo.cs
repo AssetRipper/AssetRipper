@@ -6,8 +6,8 @@ using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Component_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Component;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform;
 using System.Collections.Generic;
 
 namespace AssetRipper.Library.Processors.PrefabOutlining
@@ -82,7 +82,7 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 			}
 			else
 			{
-				PPtrAccessList<IPPtr_Transform_, ITransform> childList = transform.Children_C4P;
+				PPtrAccessList<IPPtr_Transform, ITransform> childList = transform.Children_C4P;
 				if (childList.Count == 0)
 				{
 					children = Array.Empty<GameObjectInfo?>();
@@ -125,7 +125,7 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 			}
 			else
 			{
-				PPtrAccessList<IPPtr_Transform_, ITransform> childList = transform.Children_C4P;
+				PPtrAccessList<IPPtr_Transform, ITransform> childList = transform.Children_C4P;
 				if (childList.Count == 0)
 				{
 					children = Array.Empty<GameObjectInfo?>();
@@ -149,7 +149,7 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 		private static void GetTransformAndComponentArray(IGameObject root, out ITransform? transform, out int[] components)
 		{
 			transform = null;
-			PPtrAccessList<IPPtr_Component_, IComponent> componentList = root.GetComponentAccessList();
+			PPtrAccessList<IPPtr_Component, IComponent> componentList = root.GetComponentAccessList();
 			if (componentList.Count == 0)
 			{
 				components = Array.Empty<int>();

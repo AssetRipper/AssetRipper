@@ -3,7 +3,7 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -48,7 +48,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			ITransform father = transform.Father_C4.GetAsset(transform.Collection);
 			for (int i = 0; i < father.Children_C4.Count; i++)
 			{
-				IPPtr_Transform_ child = father.Children_C4[i];
+				IPPtr_Transform child = father.Children_C4[i];
 				if (child.PathID == transform.PathID)
 				{
 					return i;
@@ -85,7 +85,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static IEnumerable<ITransform> GetChildren(this ITransform transform)
 		{
-			foreach (IPPtr_Transform_ childPtr in transform.Children_C4)
+			foreach (IPPtr_Transform childPtr in transform.Children_C4)
 			{
 				yield return childPtr.GetAsset(transform.Collection);
 			}
@@ -115,10 +115,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 				return 0;
 			}
 			ITransform father = transform.Father_C4.GetAsset(transform.Collection);
-			AccessListBase<IPPtr_Transform_> children = father.Children_C4;
+			AccessListBase<IPPtr_Transform> children = father.Children_C4;
 			for (int i = 0; i < children.Count; i++)
 			{
-				IPPtr_Transform_ child = children[i];
+				IPPtr_Transform child = children[i];
 				if (child.PathID == transform.PathID)
 				{
 					return i;

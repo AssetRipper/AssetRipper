@@ -15,11 +15,12 @@ using AssetRipper.SourceGenerated.Subclasses.AnimatorCondition;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorState;
 using AssetRipper.SourceGenerated.Subclasses.ConditionConstant;
+using AssetRipper.SourceGenerated.Subclasses.ControllerConstant;
 using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_SelectorStateConstant;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorState_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorTransition_;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorState;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorTransition;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour;
 using AssetRipper.SourceGenerated.Subclasses.SelectorStateConstant;
 using AssetRipper.SourceGenerated.Subclasses.SelectorTransitionConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
@@ -79,7 +80,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			IReadOnlyList<IAnimatorState> States,
 			AssetDictionary<uint, Utf8String> TOS)
 		{
-			AssetList<PPtr_AnimatorTransition_>? entryTransitionList = generatedStateMachine.EntryTransitions_C1107;
+			AssetList<PPtr_AnimatorTransition>? entryTransitionList = generatedStateMachine.EntryTransitions_C1107;
 			if (entryTransitionList is not null && stateMachineConstant.Has_SelectorStateConstantArray())
 			{
 				foreach (OffsetPtr_SelectorStateConstant selectorPtr in stateMachineConstant.SelectorStateConstantArray)
@@ -131,7 +132,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				for (int x = 0; x < side && stateIndex < stateCount; x++, stateIndex++)
 				{
-					Vector3f_3_5_0_f5 position = new() { X = x * StateOffset, Y = y * StateOffset };
+					Vector3f_3_5_0 position = new() { X = x * StateOffset, Y = y * StateOffset };
 					IAnimatorState state = CreateAnimatorState(virtualFile, controller, stateMachineIndex, stateIndex, position);
 
 					if (generatedStateMachine.Has_ChildStates_C1107())
@@ -199,22 +200,22 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			if (generatedStateMachine.Has_ChildStates_C1107() && generatedStateMachine.ChildStates_C1107.Count > 0)
 			{
-				PPtr_AnimatorState_ defaultStatePPtr = generatedStateMachine.ChildStates_C1107[(int)stateMachine.DefaultState].State;
+				PPtr_AnimatorState defaultStatePPtr = generatedStateMachine.ChildStates_C1107[(int)stateMachine.DefaultState].State;
 
-				if (generatedStateMachine.Has_DefaultState_C1107_PPtr_State_())
+				if (generatedStateMachine.Has_DefaultState_C1107_PPtr_State())
 				{
-					generatedStateMachine.DefaultState_C1107_PPtr_State_.CopyValues((PPtr<IAnimatorState>)defaultStatePPtr);
+					generatedStateMachine.DefaultState_C1107_PPtr_State.CopyValues((PPtr<IAnimatorState>)defaultStatePPtr);
 				}
-				else if (generatedStateMachine.Has_DefaultState_C1107_PPtr_AnimatorState_())
+				else if (generatedStateMachine.Has_DefaultState_C1107_PPtr_AnimatorState())
 				{
-					generatedStateMachine.DefaultState_C1107_PPtr_AnimatorState_.CopyValues((PPtr<IAnimatorState>)defaultStatePPtr);
+					generatedStateMachine.DefaultState_C1107_PPtr_AnimatorState.CopyValues((PPtr<IAnimatorState>)defaultStatePPtr);
 				}
 			}
 
 			return generatedStateMachine;
 		}
 
-		public static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f_3_5_0_f5 position)
+		public static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f_3_5_0 position)
 		{
 			IAnimatorState generatedState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorStateFactory.CreateAsset);
 			generatedState.ObjectHideFlags = HideFlags.HideInHierarchy;
@@ -240,12 +241,12 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				// exclude StateMachine's behaviours
 				int layerIndex = controller.Controller_C91.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-				PPtr_MonoBehaviour__5_0_0_f4[] machineBehaviours = controller.GetStateBehaviours(layerIndex);
-				PPtr_MonoBehaviour__5_0_0_f4[] stateBehaviours = controller.GetStateBehaviours(stateMachineIndex, stateIndex);
-				PPtr_MonoBehaviour__5_0_0_f4[] behaviours = stateBehaviours;
+				PPtr_MonoBehaviour_5_0_0[] machineBehaviours = controller.GetStateBehaviours(layerIndex);
+				PPtr_MonoBehaviour_5_0_0[] stateBehaviours = controller.GetStateBehaviours(stateMachineIndex, stateIndex);
+				PPtr_MonoBehaviour_5_0_0[] behaviours = stateBehaviours;
 #warning TEMP: remove comment when AnimatorStateMachine's child StateMachines has been implemented
-				//List<PPtr_MonoBehaviour__5_0_0_f4> behaviours = new List<PPtr_MonoBehaviour__5_0_0_f4>(stateBehaviours.Length);
-				//foreach (PPtr_MonoBehaviour__5_0_0_f4 ptr in stateBehaviours)
+				//List<PPtr_MonoBehaviour_5_0_0> behaviours = new List<PPtr_MonoBehaviour_5_0_0>(stateBehaviours.Length);
+				//foreach (PPtr_MonoBehaviour_5_0_0 ptr in stateBehaviours)
 				//{
 				//if (!machineBehaviours.Contains(ptr))
 				//{
@@ -254,8 +255,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 				//}
 
 
-				PPtrAccessList<PPtr_MonoBehaviour__5_0_0_f4, IMonoBehaviour> stateMachineBehaviours = generatedState.StateMachineBehaviours_C1102P;
-				foreach (IMonoBehaviour? behaviour in new PPtrAccessList<PPtr_MonoBehaviour__5_0_0_f4, IMonoBehaviour>(behaviours, controller))
+				PPtrAccessList<PPtr_MonoBehaviour_5_0_0, IMonoBehaviour> stateMachineBehaviours = generatedState.StateMachineBehaviours_C1102P;
+				foreach (IMonoBehaviour? behaviour in new PPtrAccessList<PPtr_MonoBehaviour_5_0_0, IMonoBehaviour>(behaviours, controller))
 				{
 					stateMachineBehaviours.Add(behaviour);
 				}
@@ -305,8 +306,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 
 			IAnimatorState? state = GetDestinationState(Transition.DestinationState, StateMachine, States);
-			animatorStateTransition.DstState_C1101_PPtr_State_P = state;
-			animatorStateTransition.DstState_C1101_PPtr_AnimatorState_P = state;
+			animatorStateTransition.DstState_C1101_PPtr_StateP = state;
+			animatorStateTransition.DstState_C1101_PPtr_AnimatorStateP = state;
 
 			animatorStateTransition.Name.CopyValues(TOS[Transition.UserID]);
 			animatorStateTransition.IsExit_C1101 = Transition.IsExit();

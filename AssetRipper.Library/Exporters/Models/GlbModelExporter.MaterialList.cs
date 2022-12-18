@@ -4,7 +4,7 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_23;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Material_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Material;
 
 namespace AssetRipper.Library.Exporters.Models
 {
@@ -12,10 +12,10 @@ namespace AssetRipper.Library.Exporters.Models
 	{
 		private readonly struct MaterialList
 		{
-			private readonly AccessListBase<IPPtr_Material_> materials;
+			private readonly AccessListBase<IPPtr_Material> materials;
 			private readonly AssetCollection file;
 
-			private MaterialList(AccessListBase<IPPtr_Material_> materials, AssetCollection file)
+			private MaterialList(AccessListBase<IPPtr_Material> materials, AssetCollection file)
 			{
 				this.materials = materials;
 				this.file = file;

@@ -3,7 +3,7 @@ using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -11,7 +11,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static bool IsContainsAnimationClip(this IAnimation animation, IAnimationClip clip)
 		{
-			foreach (IPPtr_AnimationClip_ clipPtr in animation.Animations_C111)
+			foreach (IPPtr_AnimationClip clipPtr in animation.Animations_C111)
 			{
 				if (clipPtr.IsAsset(animation.Collection, clip))
 				{

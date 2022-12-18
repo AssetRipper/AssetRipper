@@ -23,7 +23,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return 0.0f;
 		}
 
-		public static Vector2f_3_5_0_f5 GetPosition(this IBlendTreeNodeConstant constant, int index)
+		public static Vector2f_3_5_0 GetPosition(this IBlendTreeNodeConstant constant, int index)
 		{
 			if (constant.Has_Blend2dData() && constant.GetBlendType() != BlendTreeType.Simple1D && constant.GetBlendType() != BlendTreeType.Direct)
 			{

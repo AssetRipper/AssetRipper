@@ -18,7 +18,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_33;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Material_;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Material;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using SharpGLTF.Geometry;
 using SharpGLTF.Materials;
@@ -211,7 +211,7 @@ namespace AssetRipper.Library.Exporters.Models
 
 		private static int[] GetSubsetIndices(IMeshRenderer renderer)
 		{
-			AccessListBase<IPPtr_Material_> materials = renderer.Materials_C23;
+			AccessListBase<IPPtr_Material> materials = renderer.Materials_C23;
 			if (renderer.Has_SubsetIndices_C23())
 			{
 				return renderer.SubsetIndices_C23.Select(i => (int)i).ToArray();
