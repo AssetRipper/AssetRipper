@@ -92,7 +92,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void VertexAssignmentSymmetry()
 		{
-			CompressedMesh_5_0_0_f4 compressedMesh = new();
+			CompressedMesh_5_0_0 compressedMesh = new();
 			compressedMesh.SetVertices(vectors);
 			Vector3[] unpackedValues = compressedMesh.GetVertices();
 			AreAlmostEqual(vectors, unpackedValues, 0.000001f);
@@ -101,7 +101,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void NormalAssignmentSymmetry()
 		{
-			CompressedMesh_5_0_0_f4 compressedMesh = new();
+			CompressedMesh_5_0_0 compressedMesh = new();
 			compressedMesh.SetNormals(vectors);
 			Vector3[] unpackedValues = compressedMesh.GetNormals();
 			AreAlmostEqual(vectors, unpackedValues, 0.00001f);
@@ -112,7 +112,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void TangentAssignmentSymmetry()
 		{
-			CompressedMesh_5_0_0_f4 compressedMesh = new();
+			CompressedMesh_5_0_0 compressedMesh = new();
 			compressedMesh.SetTangents(tangents);
 			Vector4[] unpackedValues = compressedMesh.GetTangents();
 			AreAlmostEqual(tangents, unpackedValues, 0.00001f);
@@ -123,7 +123,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void FloatColorsNormalAssignmentSymmetry()
 		{
-			CompressedMesh_5_0_0_f4 compressedMesh = new();
+			CompressedMesh_5_0_0 compressedMesh = new();
 			//These are technically invalid colors since they have values outside [0,1] but it doesn't matter for the test.
 			ReadOnlySpan<ColorFloat> colors = MemoryMarshal.Cast<Vector4, ColorFloat>(tangents);
 			compressedMesh.SetFloatColors(colors);
@@ -134,7 +134,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void BindPoseAssignmentSymmetry()
 		{
-			CompressedMesh_3_4_0_f5 compressedMesh = new();//BindPoses only exists on versions before Unity 5.
+			CompressedMesh_3_4_0 compressedMesh = new();//BindPoses only exists on versions before Unity 5.
 			compressedMesh.SetBindPoses(matrices);
 			Matrix4x4[] unpackedValues = compressedMesh.GetBindPoses();
 			AreAlmostEqual(matrices, unpackedValues, 0.000001f);
@@ -143,7 +143,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void TriangleAssignmentSymmetry()
 		{
-			CompressedMesh_5_0_0_f4 compressedMesh = new();
+			CompressedMesh_5_0_0 compressedMesh = new();
 			compressedMesh.SetTriangles(integers);
 			uint[] unpackedValues = compressedMesh.GetTriangles();
 			Assert.That(unpackedValues, Is.EqualTo(integers));
@@ -152,7 +152,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void OldUV()
 		{
-			CompressedMesh_3_4_0_f5 compressedMesh = new();//UV is structured differently on versions before Unity 5.
+			CompressedMesh_3_4_0 compressedMesh = new();//UV is structured differently on versions before Unity 5.
 			compressedMesh.SetVertices(vectors);//Need to set the correct vertex count by filling the vertex buffer.
 			compressedMesh.SetUV(uv0, uv1, null, null, null, null, null, null);
 			compressedMesh.GetUV(out Vector2[]? unpackedUV0, out Vector2[]? unpackedUV1, out Vector2[]? unpackedUV2, out Vector2[]? unpackedUV3, out Vector2[]? unpackedUV4, out Vector2[]? unpackedUV5, out Vector2[]? unpackedUV6, out Vector2[]? unpackedUV7);
@@ -173,7 +173,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void NewUVWith2Channels()
 		{
-			CompressedMesh_5_0_0_f4 compressedMesh = new();//UV is structured differently on versions before Unity 5.
+			CompressedMesh_5_0_0 compressedMesh = new();//UV is structured differently on versions before Unity 5.
 			compressedMesh.SetVertices(vectors);//Need to set the correct vertex count by filling the vertex buffer.
 			compressedMesh.SetUV(uv0, uv1, null, null, null, null, null, null);
 			compressedMesh.GetUV(out Vector2[]? unpackedUV0, out Vector2[]? unpackedUV1, out Vector2[]? unpackedUV2, out Vector2[]? unpackedUV3, out Vector2[]? unpackedUV4, out Vector2[]? unpackedUV5, out Vector2[]? unpackedUV6, out Vector2[]? unpackedUV7);
@@ -195,7 +195,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void NewUVWith4Channels()
 		{
-			CompressedMesh_5_0_0_f4 compressedMesh = new();//UV only supports more channels after Unity 5.
+			CompressedMesh_5_0_0 compressedMesh = new();//UV only supports more channels after Unity 5.
 			compressedMesh.SetVertices(vectors);//Need to set the correct vertex count by filling the vertex buffer.
 			compressedMesh.SetUV(uv0, uv1, null, uv1, null, null, uv0, null);
 			Assert.That(compressedMesh.UVInfo, Is.GreaterThan(0));
