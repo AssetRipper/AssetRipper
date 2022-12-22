@@ -1,7 +1,9 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Interfaces;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
+using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Assets.Tests;
 
@@ -81,8 +83,6 @@ public class ResolutionTests
 			Assert.That(processedBundle.ResolveResource(name1), Is.EqualTo(resource1));
 			Assert.That(processedBundle.ResolveResource(name2), Is.EqualTo(resource2));
 		});
-
-		static ResourceFile CreateNewResourceFile(string name) => new ResourceFile(SmartStream.CreateMemory(), name, name);
 	}
 
 	[Test]
@@ -109,7 +109,58 @@ public class ResolutionTests
 			Assert.That(gameBundle.ResolveResource(name1), Is.EqualTo(resource1));
 			Assert.That(gameBundle.ResolveResource(name2), Is.EqualTo(resource2));
 		});
-
-		static ResourceFile CreateNewResourceFile(string name) => new ResourceFile(SmartStream.CreateMemory(), name, name);
 	}
+
+	[Test]
+	public void ResourceResolutionIsAbleToFindAnArchiveFile()
+	{
+		const string name = "archive:/name1";
+		GameBundle gameBundle = new();
+
+		ProcessedBundle processedBundle = new();
+		gameBundle.AddBundle(processedBundle);
+
+		ResourceFile resource = CreateNewResourceFile(name);
+		processedBundle.AddResource(resource);
+
+		Assert.That(gameBundle.ResolveResource(name), Is.EqualTo(resource));
+	}
+
+	[Test]
+	public void ResourceResolutionIsAbleToFindExternalFilesFromParentBundles()
+	{
+		const string resourceName = "resources.resource";
+		GameBundle gameBundle = new();
+
+		ProcessedBundle processedBundle = new();
+		gameBundle.AddBundle(processedBundle);
+
+		ResourceFile resource = CreateNewResourceFile(resourceName);
+		gameBundle.ResourceProvider = new SingleResourceProvider(resource);
+
+		Assert.That(processedBundle.ResolveResource(resourceName), Is.EqualTo(resource));
+	}
+
+	[Test]
+	public void ResourceResolutionIsAbleToFindExternalFilesFromGameBundles()
+	{
+		const string resourceName = "resources.resource";
+		GameBundle gameBundle = new();
+
+		ResourceFile resource = CreateNewResourceFile(resourceName);
+		gameBundle.ResourceProvider = new SingleResourceProvider(resource);
+
+		Assert.That(gameBundle.ResolveResource(resourceName), Is.EqualTo(resource));
+	}
+
+	private sealed record class SingleResourceProvider(ResourceFile Resource) : IResourceProvider
+	{
+		public ResourceFile? FindResource(string identifier)
+		{
+			string fixedName = FilenameUtils.FixResourcePath(identifier);
+			return fixedName == Resource.NameFixed ? Resource : null;
+		}
+	}
+
+	private static ResourceFile CreateNewResourceFile(string name) => new ResourceFile(SmartStream.CreateMemory(), name, name);
 }

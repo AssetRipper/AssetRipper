@@ -83,17 +83,16 @@ public abstract class Bundle : IDisposable
 			return null;
 		}
 
+		string originalName = name;
 		string fixedName = FilenameUtils.FixResourcePath(name);
-		return ResolveResourceInternal(name, fixedName);
-	}
 
-	protected virtual ResourceFile? ResolveResourceInternal(string originalName, string fixedName)
-	{
 		Bundle? bundleToExclude = null;
 		Bundle? currentBundle = this;
 		while (currentBundle is not null)
 		{
-			ResourceFile? result = TryResolveFromResources(currentBundle, fixedName) ?? TryResolveFromChildBundles(currentBundle, originalName, fixedName, bundleToExclude);
+			ResourceFile? result = TryResolveFromResources(currentBundle, fixedName) 
+				?? TryResolveFromChildBundles(currentBundle, originalName, fixedName, bundleToExclude)
+				?? currentBundle.ResolveExternalResource(originalName, fixedName);
 			if (result is not null)
 			{
 				return result;
@@ -108,7 +107,7 @@ public abstract class Bundle : IDisposable
 		static ResourceFile? TryResolveFromResources(Bundle currentBundle, string fixedName)
 		{
 			//Uniqueness is not guaranteed because of asset bundle variants
-			return currentBundle.Resources.FirstOrDefault(c => c.Name == fixedName);
+			return currentBundle.Resources.FirstOrDefault(c => c.NameFixed == fixedName);
 		}
 
 		static ResourceFile? TryResolveFromChildBundles(Bundle currentBundle, string originalName, string fixedName, Bundle? bundleToExclude)
@@ -119,6 +118,8 @@ public abstract class Bundle : IDisposable
 				.FirstOrDefault(r => r is not null);
 		}
 	}
+
+	protected virtual ResourceFile? ResolveExternalResource(string originalName, string fixedName) => null;
 
 	public void AddResource(ResourceFile resource)
 	{

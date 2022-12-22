@@ -26,10 +26,9 @@ public sealed partial class GameBundle : Bundle
 		return collection is SerializedAssetCollection or ProcessedAssetCollection;
 	}
 
-	protected override ResourceFile? ResolveResourceInternal(string originalName, string fixedName)
+	protected override ResourceFile? ResolveExternalResource(string originalName, string fixedName)
 	{
-		ResourceFile? file = base.ResolveResourceInternal(originalName, fixedName);
-		if (file is null && ResourceProvider is not null)
+		if (ResourceProvider is not null)
 		{
 			ResourceFile? resourceFile = ResourceProvider.FindResource(originalName);
 			if (resourceFile is not null)
@@ -40,7 +39,7 @@ public sealed partial class GameBundle : Bundle
 		}
 		else
 		{
-			return file;
+			return base.ResolveExternalResource(originalName, fixedName);
 		}
 	}
 
