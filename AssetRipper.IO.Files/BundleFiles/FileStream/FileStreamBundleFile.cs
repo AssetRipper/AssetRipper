@@ -66,7 +66,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 				case CompressionType.Lzma:
 					{
 						using MemoryStream uncompressedStream = new MemoryStream(new byte[Header.UncompressedBlocksInfoSize]);
-						SevenZipHelper.DecompressLZMAStream(stream, Header.CompressedBlocksInfoSize, uncompressedStream, Header.UncompressedBlocksInfoSize);
+						LzmaCompression.DecompressLzmaStream(stream, Header.CompressedBlocksInfoSize, uncompressedStream, Header.UncompressedBlocksInfoSize);
 
 						uncompressedStream.Position = 0;
 						ReadMetadata(uncompressedStream, Header.UncompressedBlocksInfoSize);

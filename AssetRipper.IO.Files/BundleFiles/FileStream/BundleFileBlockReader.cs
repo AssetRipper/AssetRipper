@@ -63,8 +63,8 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 				}
 				else
 				{
-					CompressionType compressType = block.Flags.GetCompression();
-					if (compressType == CompressionType.None)
+					CompressionType compressType = block.CompressionType;
+					if (compressType is CompressionType.None)
 					{
 						blockStreamOffset = m_dataOffset + blockCompressedOffset;
 						blockStream = m_stream;
@@ -77,7 +77,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 						switch (compressType)
 						{
 							case CompressionType.Lzma:
-								SevenZipHelper.DecompressLZMAStream(m_stream, block.CompressedSize, m_cachedBlockStream, block.UncompressedSize);
+								LzmaCompression.DecompressLzmaStream(m_stream, block.CompressedSize, m_cachedBlockStream, block.UncompressedSize);
 								break;
 
 							case CompressionType.Lz4:

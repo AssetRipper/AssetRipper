@@ -50,7 +50,7 @@ namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 				// read only last chunk
 				BundleScene chunkInfo = Header.Scenes[^1];
 				dataStream = new MemoryStream(new byte[chunkInfo.DecompressedSize]);
-				SevenZipHelper.DecompressLZMASizeStream(stream, chunkInfo.CompressedSize, dataStream);
+				LzmaCompression.DecompressLzmaSizeStream(stream, chunkInfo.CompressedSize, dataStream);
 				metadataOffset = 0;
 
 				dataStream.Position = 0;
