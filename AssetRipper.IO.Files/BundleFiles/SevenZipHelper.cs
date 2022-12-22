@@ -1,5 +1,6 @@
 ﻿using AssetRipper.IO.Files.Extensions;
 using SharpCompress.Compressors.LZMA;
+using System.Buffers;
 using System.IO;
 
 namespace AssetRipper.IO.Files.BundleFiles
@@ -64,13 +65,12 @@ namespace AssetRipper.IO.Files.BundleFiles
 		{
 			LzmaStream lzmaStream = new LzmaStream(properties, compressedStream, headlessSize, -1, null, false);
 
-			byte[] buffer = GetBuffer();
-			int read;
+			byte[] buffer = ArrayPool<byte>.Shared.Rent(1024);
 			long totalRead = 0;
 			while (totalRead < decompressedSize)
 			{
 				int toRead = (int)Math.Min(buffer.Length, decompressedSize - totalRead);
-				read = lzmaStream.Read(buffer, 0, toRead);
+				int read = lzmaStream.Read(buffer, 0, toRead);
 				if (read > 0)
 				{
 					decompressedStream.Write(buffer, 0, read);
@@ -81,21 +81,10 @@ namespace AssetRipper.IO.Files.BundleFiles
 					break;
 				}
 			}
-		}
-
-		private static byte[] GetBuffer()
-		{
-			if (s_buffer == null)
-			{
-				s_buffer = new byte[1024];
-			}
-			return s_buffer;
+			ArrayPool<byte>.Shared.Return(buffer);
 		}
 
 		private const int PropertiesSize = 5;
 		private const int UncompressedSize = 8;
-
-		[ThreadStatic]
-		private static byte[]? s_buffer;
 	}
 }
