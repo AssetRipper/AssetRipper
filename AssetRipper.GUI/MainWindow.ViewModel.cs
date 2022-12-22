@@ -236,7 +236,7 @@ namespace AssetRipper.GUI
 
 			FolderPickerOpenOptions options = new() { AllowMultiple = false };
 			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
-			if (!folderList[0].TryGetUri(out Uri? chosenFolder))
+			if (folderList.Count == 0 || !folderList[0].TryGetUri(out Uri? chosenFolder))
 			{
 				return;
 			}
@@ -300,7 +300,7 @@ namespace AssetRipper.GUI
 
 			FolderPickerOpenOptions options = new() { AllowMultiple = false };
 			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
-			if (!folderList[0].TryGetUri(out Uri? chosenFolder))
+			if (folderList.Count == 0 || !folderList[0].TryGetUri(out Uri? chosenFolder))
 			{
 				return;
 			}
@@ -340,7 +340,7 @@ namespace AssetRipper.GUI
 
 			FolderPickerOpenOptions options = new() { AllowMultiple = false };
 			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
-			if (!folderList[0].TryGetUri(out Uri? chosenFolder))
+			if (folderList.Count == 0 || !folderList[0].TryGetUri(out Uri? chosenFolder))
 			{
 				return;
 			}
@@ -414,7 +414,7 @@ namespace AssetRipper.GUI
 		{
 			FolderPickerOpenOptions options = new() { AllowMultiple = false };
 			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
-			if (!folderList[0].TryGetUri(out Uri? chosenFolder))
+			if (folderList.Count == 0 || !folderList[0].TryGetUri(out Uri? chosenFolder))
 			{
 				return;
 			}
