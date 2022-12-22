@@ -4,7 +4,7 @@ namespace AssetRipper.GUI.SourceGenerator;
 
 public static class Program
 {
-	const string RepositoryPath = "../../../../";
+	const string RepositoryPath = "../../../../../";
 	const string GuiProjectPath = RepositoryPath + "AssetRipper.GUI/";
 
 	public static void Main()
