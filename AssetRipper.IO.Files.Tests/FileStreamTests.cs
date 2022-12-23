@@ -11,8 +11,8 @@ namespace AssetRipper.IO.Files.Tests
 		{
 		}
 
-		//Write not yet implemented
-		//[Test]
+		[Test]
+		[Ignore("Write not yet implemented")]
 		public void ReadIsSymmetricToWrite()
 		{
 			FileStreamBundleScheme scheme = new();

@@ -84,7 +84,61 @@ namespace AssetRipper.IO.Files.BundleFiles
 			ArrayPool<byte>.Shared.Return(buffer);
 		}
 
+		/// <summary>
+		/// Compress some data with LZMA.
+		/// </summary>
+		/// <param name="uncompressedStream">The source stream with uncompressed data.</param>
+		/// <param name="uncompressedSize">The number of bytes to read from <paramref name="uncompressedSize"/>.</param>
+		/// <param name="compressedStream">The stream in which to write the compressed data.</param>
+		/// <returns>The number of compressed bytes written to <paramref name="compressedStream"/> including the 5 property bytes.</returns>
+		public static long CompressLzmaStream(Stream uncompressedStream, long uncompressedSize, Stream compressedStream)
+		{
+			long basePosition = compressedStream.Position;
+			LzmaStream lzmaStream = new LzmaStream(new(), false, compressedStream);
+			compressedStream.Write(lzmaStream.Properties);
+			CopyToLzma(uncompressedStream, lzmaStream, uncompressedSize);
+			lzmaStream.Close();
+			return compressedStream.Position - basePosition;
+		}
+
+		/// <summary>
+		/// Compress some data with LZMA.
+		/// </summary>
+		/// <param name="uncompressedStream">The source stream with uncompressed data.</param>
+		/// <param name="uncompressedSize">The number of bytes to read from <paramref name="uncompressedSize"/>.</param>
+		/// <param name="compressedStream">The stream in which to write the compressed data.</param>
+		/// <returns>
+		/// The number of compressed bytes written to <paramref name="compressedStream"/> including the 5 property bytes
+		/// and <see langword="long"/> uncompressed size value.
+		/// </returns>
+		public static long CompressLzmaSizeStream(Stream uncompressedStream, long uncompressedSize, Stream compressedStream)
+		{
+			long basePosition = compressedStream.Position;
+			LzmaStream lzmaStream = new LzmaStream(new(), false, compressedStream);
+			compressedStream.Write(lzmaStream.Properties);
+			new BinaryWriter(compressedStream).Write(uncompressedSize);
+			CopyToLzma(uncompressedStream, lzmaStream, uncompressedSize);
+			lzmaStream.Close();
+			return compressedStream.Position - basePosition;
+		}
+
+		private static void CopyToLzma(Stream inputStream, LzmaStream lzmaStream, long uncompressedSize)
+		{
+			byte[] buffer = ArrayPool<byte>.Shared.Rent(1024);
+			long totalCopied = 0;
+			while (totalCopied < uncompressedSize)
+			{
+				int read = inputStream.Read(buffer, 0, (int)Math.Min(buffer.Length, uncompressedSize - totalCopied));
+				if (read == 0)
+				{
+					throw new EndOfStreamException();
+				}
+				lzmaStream.Write(buffer, 0, read);
+				totalCopied += read;
+			}
+		}
+
 		private const int PropertiesSize = 5;
-		private const int UncompressedSize = 8;
+		private const int UncompressedSize = sizeof(long);
 	}
 }
