@@ -240,7 +240,7 @@ namespace AssetRipper.Core.Structure.GameStructure
 			PlatformGameStructure? MixedStructure)
 			: IDependencyProvider
 		{
-			public File? FindDependency(FileIdentifier identifier)
+			public FileBase? FindDependency(FileIdentifier identifier)
 			{
 				string? systemFilePath = RequestDependency(identifier.PathName);
 				if (systemFilePath is null)

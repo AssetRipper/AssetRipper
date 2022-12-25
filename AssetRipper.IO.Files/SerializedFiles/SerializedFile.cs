@@ -13,7 +13,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 	/// Serialized files contain binary serialized objects and optional run-time type information.
 	/// They have file name extensions like .asset, .assets, .sharedAssets but may also have no extension at all
 	/// </summary>
-	public sealed class SerializedFile : File
+	public sealed class SerializedFile : FileBase
 	{
 		public SerializedFileHeader Header { get; } = new();
 		public SerializedFileMetadata Metadata { get; } = new();

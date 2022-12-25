@@ -54,7 +54,7 @@ namespace AssetRipper.IO.Files.SourceGenerator
 			declaration = null;
 			foreach (FileInfo fileInfo in directoryInfo.EnumerateFiles("*.json"))
 			{
-				string text = System.IO.File.ReadAllText(fileInfo.FullName);
+				string text = File.ReadAllText(fileInfo.FullName);
 				if (fileInfo.Name == declarationFileName)
 				{
 					declaration = JsonSerializer.Deserialize<TypeDeclaration>(text);

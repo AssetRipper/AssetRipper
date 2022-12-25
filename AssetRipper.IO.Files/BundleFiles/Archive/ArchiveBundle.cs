@@ -2,7 +2,7 @@ using AssetRipper.IO.Files.Streams.Smart;
 
 namespace AssetRipper.IO.Files.BundleFiles.Archive
 {
-	public sealed class ArchiveBundleFile : File
+	public sealed class ArchiveBundleFile : FileBase
 	{
 		public ArchiveBundleHeader Header { get; } = new();
 

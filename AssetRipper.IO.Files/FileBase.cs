@@ -1,12 +1,12 @@
-using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.Utils;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AssetRipper.IO.Files
 {
-	public abstract class File : IDisposable
+	/// <summary>
+	/// The base class for files.
+	/// </summary>
+	public abstract class FileBase : IDisposable
 	{
 		public override string? ToString()
 		{
@@ -30,7 +30,7 @@ namespace AssetRipper.IO.Files
 		public virtual void ReadContents() { }
 		public virtual void ReadContentsRecursively() => ReadContents();
 
-		~File() => Dispose(false);
+		~FileBase() => Dispose(false);
 
 		protected virtual void Dispose(bool disposing) { }
 

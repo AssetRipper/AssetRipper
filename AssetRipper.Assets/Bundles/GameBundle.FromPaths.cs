@@ -14,11 +14,11 @@ partial class GameBundle
 	public void InitializeFromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, IDependencyProvider dependencyProvider, IResourceProvider resourceProvider)
 	{
 		ResourceProvider = resourceProvider;
-		Stack<File> fileStack = LoadAndSortFiles(paths, dependencyProvider);
+		Stack<FileBase> fileStack = LoadAndSortFiles(paths, dependencyProvider);
 
 		while (fileStack.Count > 0)
 		{
-			File file = fileStack.Pop();
+			FileBase file = fileStack.Pop();
 			if (file is SerializedFile serializedFile)
 			{
 				//Collection is added to this automatically
@@ -36,13 +36,13 @@ partial class GameBundle
 		}
 	}
 
-	private static Stack<File> LoadAndSortFiles(IEnumerable<string> paths, IDependencyProvider dependencyProvider)
+	private static Stack<FileBase> LoadAndSortFiles(IEnumerable<string> paths, IDependencyProvider dependencyProvider)
 	{
-		List<File> files = new();
+		List<FileBase> files = new();
 		HashSet<string> serializedFileNames = new();
 		foreach (string path in paths)
 		{
-			File? file = SchemeReader.LoadFile(path);
+			FileBase? file = SchemeReader.LoadFile(path);
 			file?.ReadContentsRecursively();
 			while (file is CompressedFile compressedFile)
 			{
@@ -69,7 +69,7 @@ partial class GameBundle
 
 		for (int i = 0; i < files.Count; i++)
 		{
-			File file = files[i];
+			FileBase file = files[i];
 			if (file is SerializedFile serializedFile)
 			{
 				LoadDependencies(serializedFile, files, serializedFileNames, dependencyProvider);
@@ -83,8 +83,8 @@ partial class GameBundle
 			}
 		}
 
-		Stack<File> fileStack = new();
-		foreach (File file in files.OrderByDescending(f => f, FileComparer.Shared))
+		Stack<FileBase> fileStack = new();
+		foreach (FileBase file in files.OrderByDescending(f => f, FileComparer.Shared))
 		{
 			fileStack.Push(file);
 		}
@@ -92,7 +92,7 @@ partial class GameBundle
 		return fileStack;
 	}
 
-	private static void LoadDependencies(SerializedFile serializedFile, List<File> files, HashSet<string> serializedFileNames, IDependencyProvider dependencyProvider)
+	private static void LoadDependencies(SerializedFile serializedFile, List<FileBase> files, HashSet<string> serializedFileNames, IDependencyProvider dependencyProvider)
 	{
 		for (int j = 0; j < serializedFile.Dependencies.Count; j++)
 		{
@@ -100,7 +100,7 @@ partial class GameBundle
 			string name = fileIdentifier.GetFilePath();
 			if (serializedFileNames.Add(name))
 			{
-				File? dependency = dependencyProvider.FindDependency(fileIdentifier);
+				FileBase? dependency = dependencyProvider.FindDependency(fileIdentifier);
 				if (dependency is not null)
 				{
 					files.Add(dependency);
@@ -145,11 +145,11 @@ partial class GameBundle
 		}
 	}
 
-	private sealed class FileComparer : NotNullComparer<File>
+	private sealed class FileComparer : NotNullComparer<FileBase>
 	{
 		public static FileComparer Shared { get; } = new();
 
-		protected override int CompareNotNull(File x, File y)
+		protected override int CompareNotNull(FileBase x, FileBase y)
 		{
 			if (x is ResourceFile)
 			{

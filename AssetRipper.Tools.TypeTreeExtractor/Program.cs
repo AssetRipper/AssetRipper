@@ -9,7 +9,7 @@ namespace AssetRipper.Tools.TypeTreeExtractor
 {
 	internal class Program
 	{
-		private static readonly string outputDirectory = System.IO.Path.Combine(System.AppContext.BaseDirectory, "Output");
+		private static readonly string outputDirectory = System.IO.Path.Combine(AppContext.BaseDirectory, "Output");
 
 		static void Main(string[] args)
 		{
@@ -39,7 +39,7 @@ namespace AssetRipper.Tools.TypeTreeExtractor
 			Console.WriteLine(fullName);
 			try
 			{
-				File file = SchemeReader.LoadFile(fullName);
+				FileBase file = SchemeReader.LoadFile(fullName);
 				file.ReadContentsRecursively();
 				SaveTypeTrees(file);
 			}
@@ -49,7 +49,7 @@ namespace AssetRipper.Tools.TypeTreeExtractor
 			}
 		}
 
-		private static void SaveTypeTrees(File file)
+		private static void SaveTypeTrees(FileBase file)
 		{
 			if (file is SerializedFile serializedFile)
 			{

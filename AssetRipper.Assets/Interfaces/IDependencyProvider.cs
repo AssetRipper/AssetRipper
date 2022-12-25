@@ -5,5 +5,5 @@ namespace AssetRipper.Assets.Interfaces;
 
 public interface IDependencyProvider
 {
-	File? FindDependency(FileIdentifier identifier);
+	FileBase? FindDependency(FileIdentifier identifier);
 }

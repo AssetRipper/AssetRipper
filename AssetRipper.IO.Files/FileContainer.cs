@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.IO.Files
 {
-	public abstract class FileContainer : File
+	public abstract class FileContainer : FileBase
 	{
 		public IEnumerable<SerializedFile> FetchSerializedFiles()
 		{
@@ -22,7 +22,7 @@ namespace AssetRipper.IO.Files
 			}
 		}
 
-		public void AddFile(File file)
+		public void AddFile(FileBase file)
 		{
 			switch (file)
 			{
@@ -90,7 +90,7 @@ namespace AssetRipper.IO.Files
 		public IReadOnlyList<FileContainer> FileLists => m_fileLists;
 		public IReadOnlyList<ResourceFile> ResourceFiles => m_resourceFiles;
 
-		public IEnumerable<File> AllFiles
+		public IEnumerable<FileBase> AllFiles
 		{
 			get
 			{

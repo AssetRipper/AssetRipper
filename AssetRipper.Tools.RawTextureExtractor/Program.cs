@@ -60,7 +60,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 		try
 #endif
 			{
-				IO.Files.File file = SchemeReader.LoadFile(fullName);
+				FileBase file = SchemeReader.LoadFile(fullName);
 				if (file is SerializedFile serializedFile)
 				{
 					GameBundle bundle = new();
@@ -109,7 +109,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 					string uniqueName = FileUtils.GetUniqueName(collectionOutputPath, name, FileUtils.MaxFilePathLength - txtExtension.Length);
 					string dataFilePath = Path.Combine(collectionOutputPath, uniqueName);
 					string infoFilePath = dataFilePath + txtExtension;
-					System.IO.File.WriteAllBytes(dataFilePath, data);
+					File.WriteAllBytes(dataFilePath, data);
 					StringBuilder sb = new();
 					sb.AppendLine($"Original Name: {originalName}");
 					sb.AppendLine($"Type: {texture.ClassName}");
@@ -120,7 +120,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 					sb.AppendLine($"Complete Image Size: {texture.GetCompleteImageSize()}");
 					sb.AppendLine($"Width: {texture.Width_C28}");
 					sb.AppendLine($"Height: {texture.Height_C28}");
-					System.IO.File.WriteAllText(infoFilePath, sb.ToString());
+					File.WriteAllText(infoFilePath, sb.ToString());
 				}
 			}
 		}

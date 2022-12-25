@@ -2,7 +2,7 @@
 
 namespace AssetRipper.IO.Files
 {
-	public abstract class Scheme<T> : IScheme where T : File, new()
+	public abstract class Scheme<T> : IScheme where T : FileBase, new()
 	{
 		public abstract bool CanRead(SmartStream stream);
 
@@ -15,6 +15,6 @@ namespace AssetRipper.IO.Files
 			return file;
 		}
 
-		File IScheme.Read(SmartStream stream, string filePath, string fileName) => Read(stream, filePath, fileName);
+		FileBase IScheme.Read(SmartStream stream, string filePath, string fileName) => Read(stream, filePath, fileName);
 	}
 }

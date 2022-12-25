@@ -44,7 +44,7 @@ namespace AssetRipper.Tools.FileAnalyzer
 			try
 #endif
 			{
-				File file = SchemeReader.LoadFile(fullName);
+				FileBase file = SchemeReader.LoadFile(fullName);
 				file.ReadContentsRecursively();
 				LogFileInfo(file);
 			}
@@ -56,7 +56,7 @@ namespace AssetRipper.Tools.FileAnalyzer
 #endif
 		}
 
-		private static void LogFileInfo(File file, int indent = 0)
+		private static void LogFileInfo(FileBase file, int indent = 0)
 		{
 			string indentionString = new string('\t', indent);
 			Logger.Info($"{indentionString}{file.GetType().Name}");
@@ -213,7 +213,7 @@ namespace AssetRipper.Tools.FileAnalyzer
 			if (fileList.SerializedFiles.Count > 0)
 			{
 				Logger.Info($"{indentionString}Serialized Files:");
-				foreach (File file in fileList.SerializedFiles)
+				foreach (FileBase file in fileList.SerializedFiles)
 				{
 					LogFileInfo(file, indent + 1);
 					Logger.BlankLine();

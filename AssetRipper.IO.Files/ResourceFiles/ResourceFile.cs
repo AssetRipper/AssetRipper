@@ -3,7 +3,7 @@ using System.IO;
 
 namespace AssetRipper.IO.Files.ResourceFiles
 {
-	public sealed class ResourceFile : File
+	public sealed class ResourceFile : FileBase
 	{
 		public ResourceFile(SmartStream stream, string filePath, string name)
 		{

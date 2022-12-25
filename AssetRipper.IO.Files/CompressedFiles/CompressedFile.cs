@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace AssetRipper.IO.Files.CompressedFiles
 {
-	public abstract class CompressedFile : File
+	public abstract class CompressedFile : FileBase
 	{
-		public File? UncompressedFile { get; set; }
+		public FileBase? UncompressedFile { get; set; }
 
 		public override void ReadContents()
 		{

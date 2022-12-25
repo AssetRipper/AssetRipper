@@ -17,17 +17,7 @@ namespace AssetRipper.IO.Files.Extensions
 
 		public static void ReadBuffer(this Stream _this, byte[] buffer, int offset, int count)
 		{
-			do
-			{
-				int read = _this.Read(buffer, offset, count);
-				if (read == 0)
-				{
-					throw new Exception($"No data left");
-				}
-				offset += read;
-				count -= read;
-			}
-			while (count > 0);
+			_this.ReadExactly(buffer, offset, count);
 		}
 
 		public static void CopyStream(this Stream _this, Stream dstStream)

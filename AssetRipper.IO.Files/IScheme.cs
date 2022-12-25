@@ -5,6 +5,6 @@ namespace AssetRipper.IO.Files
 	public interface IScheme
 	{
 		bool CanRead(SmartStream stream);
-		File Read(SmartStream stream, string filePath, string fileName);
+		FileBase Read(SmartStream stream, string filePath, string fileName);
 	}
 }

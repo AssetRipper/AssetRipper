@@ -26,21 +26,21 @@ namespace AssetRipper.IO.Files
 			new FileStreamBundleScheme(),
 		};
 
-		public static File LoadFile(string filePath) => LoadFile(filePath, System.IO.Path.GetFileName(filePath));
+		public static FileBase LoadFile(string filePath) => LoadFile(filePath, System.IO.Path.GetFileName(filePath));
 
-		public static File LoadFile(string filePath, string fileName)
+		public static FileBase LoadFile(string filePath, string fileName)
 		{
 			SmartStream stream = SmartStream.OpenRead(filePath);
 			return ReadFile(stream, filePath, fileName);
 		}
 
-		public static File ReadFile(byte[] buffer, string filePath, string fileName)
+		public static FileBase ReadFile(byte[] buffer, string filePath, string fileName)
 		{
 			SmartStream smartStream = SmartStream.CreateMemory(buffer, 0, buffer.Length, false);
 			return ReadFile(smartStream, filePath, fileName);
 		}
 
-		public static File ReadFile(SmartStream stream, string filePath, string fileName)
+		public static FileBase ReadFile(SmartStream stream, string filePath, string fileName)
 		{
 			foreach (IScheme scheme in schemes)
 			{
@@ -53,7 +53,7 @@ namespace AssetRipper.IO.Files
 			return new ResourceFile(stream, filePath, fileName);
 		}
 
-		public static File ReadFile(ResourceFile file)
+		public static FileBase ReadFile(ResourceFile file)
 		{
 			return ReadFile(file.Stream.CreateReference(), file.FilePath, file.Name);
 		}

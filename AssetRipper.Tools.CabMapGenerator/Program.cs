@@ -32,7 +32,7 @@ namespace AssetRipper.Tools.CabMapGenerator
 				{
 					outputFile = Path.Combine(AppContext.BaseDirectory, "cabmap.json");
 				}
-				using FileStream stream = System.IO.File.Create(outputFile);
+				using FileStream stream = File.Create(outputFile);
 				Dictionary<string, string> map = new();
 				LoadFiles(GetAllFilePaths(filesToExport), map);
 				JsonSerializer.Serialize(stream, map, new JsonSerializerOptions() { WriteIndented = true });
@@ -47,7 +47,7 @@ namespace AssetRipper.Tools.CabMapGenerator
 		{
 			foreach (string path in paths)
 			{
-				if (System.IO.File.Exists(path))
+				if (File.Exists(path))
 				{
 					yield return path;
 				}
@@ -79,7 +79,7 @@ namespace AssetRipper.Tools.CabMapGenerator
 			try
 #endif
 			{
-				IO.Files.File file = SchemeReader.LoadFile(fullName);
+				FileBase file = SchemeReader.LoadFile(fullName);
 				if (file is SerializedFile serializedFile)
 				{
 					Console.WriteLine($"Skipping non-bundled serialized file [{serializedFile.NameFixed}]");

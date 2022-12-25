@@ -3,7 +3,7 @@ using AssetRipper.IO.Files.CompressedFiles;
 using AssetRipper.IO.Files.ResourceFiles;
 using System;
 using System.IO;
-using File = AssetRipper.IO.Files.File;
+using FileBase = AssetRipper.IO.Files.FileBase;
 
 namespace AssetRipper.Tools.FileExtractor
 {
@@ -40,7 +40,7 @@ namespace AssetRipper.Tools.FileExtractor
 			Console.WriteLine(fullName);
 			try
 			{
-				File file = SchemeReader.LoadFile(fullName);
+				FileBase file = SchemeReader.LoadFile(fullName);
 				SaveContents(file);
 			}
 			catch (Exception ex)
@@ -49,14 +49,14 @@ namespace AssetRipper.Tools.FileExtractor
 			}
 		}
 
-		private static void SaveContents(File file)
+		private static void SaveContents(FileBase file)
 		{
 			if (file is FileContainer container && container.ResourceFiles.Count > 0)
 			{
 				foreach (ResourceFile resourceFile in container.ResourceFiles)
 				{
 					string path = Path.Combine(outputDirectory, resourceFile.NameFixed);
-					using FileStream fileStream = System.IO.File.OpenWrite(path);
+					using FileStream fileStream = File.OpenWrite(path);
 					resourceFile.Write(fileStream);
 					Console.WriteLine($"\t{path}");
 				}
@@ -64,7 +64,7 @@ namespace AssetRipper.Tools.FileExtractor
 			else if (file is CompressedFile compressedFile && compressedFile.UncompressedFile is ResourceFile uncompressedFile)
 			{
 				string path = Path.Combine(outputDirectory, uncompressedFile.NameFixed);
-				using FileStream fileStream = System.IO.File.OpenWrite(path);
+				using FileStream fileStream = File.OpenWrite(path);
 				uncompressedFile.Write(fileStream);
 				Console.WriteLine($"\t{path}");
 			}

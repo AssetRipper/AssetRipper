@@ -84,9 +84,9 @@ namespace AssetRipper.Tools.DependenceGrapher
 				}
 
 				Dictionary<string, string> cabMap;
-				if (System.IO.File.Exists(cabMapPath))
+				if (File.Exists(cabMapPath))
 				{
-					using FileStream cabMapStream = System.IO.File.OpenRead(cabMapPath);
+					using FileStream cabMapStream = File.OpenRead(cabMapPath);
 					cabMap = JsonSerializer.Deserialize<Dictionary<string, string>>(cabMapPath) ?? new();
 				}
 				else
@@ -99,7 +99,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 				{
 					outputFile = Path.Combine(AppContext.BaseDirectory, "output.txt");
 				}
-				using FileStream stream = System.IO.File.Create(outputFile);
+				using FileStream stream = File.Create(outputFile);
 				using TextWriter writer = new StreamWriter(stream);
 				LoadFiles(GetAllFilePaths(filesToExport), writer, filters, verbose, cabMap);
 				writer.Flush();
@@ -114,7 +114,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 		{
 			foreach (string path in paths)
 			{
-				if (System.IO.File.Exists(path))
+				if (File.Exists(path))
 				{
 					yield return path;
 				}
@@ -147,7 +147,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 			try
 #endif
 			{
-				IO.Files.File file = SchemeReader.LoadFile(fullName);
+				FileBase file = SchemeReader.LoadFile(fullName);
 				if (file is SerializedFile serializedFile)
 				{
 					writer.WriteLine($"Dependencies of serialized file [{serializedFile.NameFixed}]:");
