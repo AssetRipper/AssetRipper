@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.Utils.SourceGeneration;
 
-public readonly struct CurlyBrackets : IDisposable
+public readonly ref struct CurlyBrackets
 {
 	private readonly IndentedTextWriter writer;
 

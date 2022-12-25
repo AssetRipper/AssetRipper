@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.Utils.SourceGeneration;
 
-public readonly struct Namespace : IDisposable
+public readonly ref struct Namespace
 {
 	private readonly CurlyBrackets curlyBrackets;
 

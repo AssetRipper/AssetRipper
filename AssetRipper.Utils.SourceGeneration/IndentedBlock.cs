@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.Utils.SourceGeneration;
 
-public readonly struct IndentedBlock : IDisposable
+public readonly ref struct IndentedBlock
 {
 	private readonly IndentedTextWriter writer;
 
