@@ -1,7 +1,4 @@
-﻿using System;
-using System.CodeDom.Compiler;
-
-namespace AssetRipper.Utils.SourceGeneration;
+﻿namespace AssetRipper.Utils.SourceGeneration;
 
 public readonly struct CurlyBracketsWithSemicolon : IDisposable
 {

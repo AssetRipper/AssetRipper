@@ -1,7 +1,4 @@
 ﻿using AssetRipper.IO.Files.ResourceFiles;
-using AssetRipper.IO.Files.SerializedFiles.Parser;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AssetRipper.IO.Files.CompressedFiles
 {

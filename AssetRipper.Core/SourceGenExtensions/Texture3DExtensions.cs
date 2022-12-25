@@ -70,8 +70,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				if (texture.MipMap_C117)
 				{
-					int maxSide = System.Math.Max(texture.Width_C117, texture.Height_C117);
-					return Convert.ToInt32(System.Math.Log(maxSide) / System.Math.Log(2));
+					int maxSide = Math.Max(texture.Width_C117, texture.Height_C117);
+					return Convert.ToInt32(Math.Log(maxSide) / Math.Log(2));
 				}
 				else
 				{

@@ -18,7 +18,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			using FileStream fileStream = System.IO.File.Create(path);
+			using FileStream fileStream = File.Create(path);
 			using BinaryWriter writer = new BinaryWriter(fileStream);
 			writer.Write(((UnknownObject)asset).RawData);
 			return true;

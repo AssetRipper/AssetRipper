@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Export;
-using AssetRipper.Yaml;
+﻿using AssetRipper.Yaml;
 
 namespace AssetRipper.Assets.Export.Yaml
 {

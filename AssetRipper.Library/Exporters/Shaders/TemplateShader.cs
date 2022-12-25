@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Generics;
-using AssetRipper.Core.IO;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProperty;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 		{
 			if (RequiredProperties == null)
 			{
-				throw new System.NullReferenceException("requiredProperties cannot be null");
+				throw new NullReferenceException("requiredProperties cannot be null");
 			}
 
 			if (RequiredProperties.Count == 0)

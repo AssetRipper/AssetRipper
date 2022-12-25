@@ -1,7 +1,4 @@
-﻿using System;
-using System.Numerics;
-
-namespace AssetRipper.Numerics.Tests
+﻿namespace AssetRipper.Numerics.Tests
 {
 	internal class TransformationTests
 	{

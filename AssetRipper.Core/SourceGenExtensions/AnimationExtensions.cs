@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Classes.Misc;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Enums;

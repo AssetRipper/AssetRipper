@@ -6,11 +6,9 @@ using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Configuration;
-using AssetRipper.Library.Exporters.Textures.Extensions;
 using AssetRipper.Library.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
-using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.Library.Exporters.Textures
 {

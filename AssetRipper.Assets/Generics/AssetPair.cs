@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AssetRipper.Assets.Generics
+﻿namespace AssetRipper.Assets.Generics
 {
 	public sealed class AssetPair<TKey, TValue> : AccessPairBase<TKey, TValue>
 		where TKey : notnull, new()

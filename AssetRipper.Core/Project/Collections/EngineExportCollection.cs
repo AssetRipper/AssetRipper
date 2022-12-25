@@ -2,7 +2,6 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Extensions;
 using AssetRipper.Core.Project.Exporters.Engine;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.IO.Files;

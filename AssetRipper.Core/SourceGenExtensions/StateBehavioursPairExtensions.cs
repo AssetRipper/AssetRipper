@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Classes.Misc;
-using AssetRipper.SourceGenerated.Classes.ClassID_1102;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_1102;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Subclasses.StateBehavioursPair;
 

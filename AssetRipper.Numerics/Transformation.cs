@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace AssetRipper.Numerics
+﻿namespace AssetRipper.Numerics
 {
 	public readonly record struct Transformation(Matrix4x4 Matrix)
 	{

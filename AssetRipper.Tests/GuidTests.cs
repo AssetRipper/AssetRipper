@@ -1,4 +1,3 @@
-using AssetRipper.Core.Classes.Misc;
 using AssetRipper.IO.Files;
 using System;
 using System.Text;

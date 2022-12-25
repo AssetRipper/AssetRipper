@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Core.Layout;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using ShaderTextRestorer.ShaderBlob;
 using System;

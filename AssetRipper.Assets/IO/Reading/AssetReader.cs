@@ -4,7 +4,6 @@ using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.VersionUtilities;
 using System.IO;
-using System.Text;
 
 
 namespace AssetRipper.Assets.IO.Reading
@@ -25,7 +24,7 @@ namespace AssetRipper.Assets.IO.Reading
 				return string.Empty;
 			}
 
-			string ret = base.ReadString(length);
+			string ret = ReadString(length);
 			AlignStream();
 			//Strings have supposedly been aligned since 2.1.0,
 			//which is earlier than the beginning of AssetRipper version support.

@@ -50,7 +50,7 @@ namespace AssetRipper.Library.Exporters.Shaders
 				return false;
 			}
 
-			using Stream fileStream = System.IO.File.Create(path);
+			using Stream fileStream = File.Create(path);
 			ExportBinary(shader, container, fileStream, ShaderExporterInstantiator);
 			return true;
 		}

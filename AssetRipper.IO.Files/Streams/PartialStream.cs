@@ -34,7 +34,7 @@ namespace AssetRipper.IO.Files.Streams
 		/// <inheritdoc/>
 		public override int Read(byte[] buffer, int offset, int count)
 		{
-			count = (int)System.Math.Max(System.Math.Min(count, Length - Position), 0);
+			count = (int)Math.Max(Math.Min(count, Length - Position), 0);
 			int read = m_stream.Read(buffer, offset, count);
 			return read;
 		}

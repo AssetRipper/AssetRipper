@@ -26,28 +26,28 @@ namespace AssetRipper.Core.SourceGenExtensions
 				Quaternion q = inputData[i];
 				byte flags = unchecked((byte)(q.X < 0 ? 4 : 0));
 
-				float max = System.Math.Abs(q.X);
-				if (System.Math.Abs(q.Y) > max)
+				float max = Math.Abs(q.X);
+				if (Math.Abs(q.Y) > max)
 				{
-					max = System.Math.Abs(q.Y);
+					max = Math.Abs(q.Y);
 					flags = 1;
 					if (q.Y < 0)
 					{
 						flags |= 4;
 					}
 				}
-				if (System.Math.Abs(q.Z) > max)
+				if (Math.Abs(q.Z) > max)
 				{
-					max = System.Math.Abs(q.Z);
+					max = Math.Abs(q.Z);
 					flags = 2;
 					if (q.Z < 0)
 					{
 						flags |= 4;
 					}
 				}
-				if (System.Math.Abs(q.W) > max)
+				if (Math.Abs(q.W) > max)
 				{
-					max = System.Math.Abs(q.W);
+					max = Math.Abs(q.W);
 					flags = 3;
 					if (q.W < 0)
 					{
@@ -58,7 +58,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				while (bitOffset < 3)
 				{
 					packedVector.Data[byteIndex] |= unchecked((byte)((flags >> bitOffset) << bitIndex));
-					int num = System.Math.Min(3 - bitOffset, 8 - bitIndex);
+					int num = Math.Min(3 - bitOffset, 8 - bitIndex);
 					bitIndex += num;
 					bitOffset += num;
 					if (bitIndex == 8)
@@ -89,7 +89,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 						while (bitOffset < bitSize)
 						{
 							packedVector.Data[byteIndex] |= unchecked((byte)((x >> bitOffset) << bitIndex));
-							int read = System.Math.Min(bitSize - bitOffset, 8 - bitIndex);
+							int read = Math.Min(bitSize - bitOffset, 8 - bitIndex);
 							bitIndex += read;
 							bitOffset += read;
 							if (bitIndex == 8)
@@ -115,7 +115,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				while (bitOffset < 3)
 				{
 					flags |= unchecked((uint)(packedVector.Data[byteIndex] >> bitIndex << bitOffset));
-					int read = System.Math.Min(3 - bitOffset, 8 - bitIndex);
+					int read = Math.Min(3 - bitOffset, 8 - bitIndex);
 					bitIndex += read;
 					bitOffset += read;
 					if (bitIndex == 8)
@@ -139,7 +139,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 						while (bitOffset < bitSize)
 						{
 							value |= unchecked((uint)(packedVector.Data[byteIndex] >> bitIndex << bitOffset));
-							int num = System.Math.Min(bitSize - bitOffset, 8 - bitIndex);
+							int num = Math.Min(bitSize - bitOffset, 8 - bitIndex);
 							bitIndex += num;
 							bitOffset += num;
 							if (bitIndex == 8)
@@ -159,7 +159,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				}
 
 				int lastComponent = unchecked((int)(flags & 3));
-				quaternion.SetAt(lastComponent, (float)System.Math.Sqrt(1.0d - sum));
+				quaternion.SetAt(lastComponent, (float)Math.Sqrt(1.0d - sum));
 				if ((flags & 4) != 0)
 				{
 					quaternion.FlipSignAt(lastComponent);

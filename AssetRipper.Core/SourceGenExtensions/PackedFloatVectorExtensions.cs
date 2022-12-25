@@ -39,7 +39,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				while (bits < packedVector.BitSize)
 				{
 					value |= packedVector.Data[byteIndex] >> bitIndex << bits;
-					int num = System.Math.Min(packedVector.BitSize - bits, 8 - bitIndex);
+					int num = Math.Min(packedVector.BitSize - bits, 8 - bitIndex);
 					bitIndex += num;
 					bits += num;
 					if (bitIndex == 8)
@@ -88,7 +88,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					while (bits < packedVector.BitSize)
 					{
 						x |= unchecked((uint)(packedVector.Data[byteIndex] >> bitIndex << bits));
-						int read = System.Math.Min(packedVector.BitSize - bits, 8 - bitIndex);
+						int read = Math.Min(packedVector.BitSize - bits, 8 - bitIndex);
 						bitIndex += read;
 						bits += read;
 						if (bitIndex == 8)
@@ -199,7 +199,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				while (bits < packedVector.BitSize)
 				{
 					packedVector.Data[byteIndex] |= unchecked((byte)((x >> bits) << bitIndex));
-					int read = System.Math.Min(packedVector.BitSize - bits, 8 - bitIndex);
+					int read = Math.Min(packedVector.BitSize - bits, 8 - bitIndex);
 					bitIndex += read;
 					bits += read;
 					if (bitIndex == 8)
@@ -213,8 +213,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		private static int GetBitCount(double value)
 		{
-			double log = System.Math.Log2(value);
-			return (int)System.Math.Ceiling(log);
+			double log = Math.Log2(value);
+			return (int)Math.Ceiling(log);
 		}
 	}
 }

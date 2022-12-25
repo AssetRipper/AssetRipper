@@ -330,7 +330,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				float z;
 				if (zsqr >= 0)
 				{
-					z = (float)System.Math.Sqrt(zsqr);
+					z = (float)Math.Sqrt(zsqr);
 				}
 				else
 				{
@@ -385,7 +385,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				float z;
 				if (zsqr >= 0f)
 				{
-					z = (float)System.Math.Sqrt(zsqr);
+					z = (float)Math.Sqrt(zsqr);
 				}
 				else
 				{

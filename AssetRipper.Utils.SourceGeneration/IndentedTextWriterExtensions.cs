@@ -1,6 +1,4 @@
-﻿using System.CodeDom.Compiler;
-
-namespace AssetRipper.Utils.SourceGeneration;
+﻿namespace AssetRipper.Utils.SourceGeneration;
 
 public static class IndentedTextWriterExtensions
 {

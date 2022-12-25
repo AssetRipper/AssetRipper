@@ -107,10 +107,10 @@ namespace AssetRipper.Library.Exporters.Scripts
 				GetExportSubPath(asset, out string subFolderPath, out string fileName);
 				string folderPath = Path.Combine(dirPath, subFolderPath);
 				string filePath = Path.Combine(folderPath, fileName);
-				if (!System.IO.File.Exists(filePath))
+				if (!File.Exists(filePath))
 				{
 					Directory.CreateDirectory(folderPath);
-					System.IO.File.WriteAllText(filePath, GetEmptyScriptContent(asset));
+					File.WriteAllText(filePath, GetEmptyScriptContent(asset));
 					string assemblyName = BaseManager.ToAssemblyName(asset.GetAssemblyNameFixed());
 					assemblyDefinitionDetailsDictionary.TryAdd(assemblyName,
 						new AssemblyDefinitionDetails(assemblyName, Path.Combine(dirPath, assemblyName)));
@@ -118,7 +118,7 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 				if (callback is not null)
 				{
-					if (System.IO.File.Exists($"{filePath}.meta"))
+					if (File.Exists($"{filePath}.meta"))
 					{
 						Logger.Error(LogCategory.Export, $"Metafile already exists at {filePath}.meta");
 						//throw new Exception($"Metafile already exists at {filePath}.meta");

@@ -1,16 +1,4 @@
-﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Core;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.IO.Files.SerializedFiles.Parser;
-using AssetRipper.SourceGenerated.Classes.ClassID_115;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-namespace AssetRipper.Library.Exporters.TypeTrees
+﻿namespace AssetRipper.Library.Exporters.TypeTrees
 {
 	public class TypeTreeExporter : IPostExporter
 	{

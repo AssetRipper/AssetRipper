@@ -4,7 +4,7 @@
 	{
 		static ExecutingDirectory()
 		{
-			Info = new System.IO.DirectoryInfo(System.AppContext.BaseDirectory);
+			Info = new System.IO.DirectoryInfo(AppContext.BaseDirectory);
 		}
 
 		public static System.IO.DirectoryInfo Info { get; }

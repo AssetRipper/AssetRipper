@@ -10,7 +10,6 @@ using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.StreamInfo;
 using AssetRipper.SourceGenerated.Subclasses.StreamingInfo;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
-using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.VertexData;
 using System.Collections;
 using System.Collections.Generic;
@@ -305,10 +304,10 @@ namespace AssetRipper.Core.SourceGenExtensions
 			using MemoryStream memStream = new MemoryStream(instance.Data);
 			using BinaryReader reader = new BinaryReader(memStream);
 
-			int weightCount = System.Math.Min((int)weightChannel.GetDataDimension(), 4);
-			int indexCount = System.Math.Min((int)indexChannel.GetDataDimension(), 4);
-			float[] weights = new float[System.Math.Max(weightCount, 4)];
-			int[] indices = new int[System.Math.Max(indexCount, 4)];
+			int weightCount = Math.Min((int)weightChannel.GetDataDimension(), 4);
+			int indexCount = Math.Min((int)indexChannel.GetDataDimension(), 4);
+			float[] weights = new float[Math.Max(weightCount, 4)];
+			int[] indices = new int[Math.Max(indexCount, 4)];
 			for (int v = 0; v < instance.VertexCount; v++)
 			{
 				memStream.Position = weightStreamOffset + (v * weightStride) + weightChannel.Offset;

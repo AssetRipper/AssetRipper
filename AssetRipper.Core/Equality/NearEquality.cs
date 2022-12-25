@@ -46,7 +46,7 @@
 				return float.IsNegativeInfinity(value1) && float.IsNegativeInfinity(value2);
 			}
 
-			float deviation = System.Math.Abs(value1 - value2);
+			float deviation = Math.Abs(value1 - value2);
 
 			return deviation <= maximumDeviation;
 		}
@@ -95,7 +95,7 @@
 				return double.IsNegativeInfinity(value1) && double.IsNegativeInfinity(value2);
 			}
 
-			double deviation = System.Math.Abs(value1 - value2);
+			double deviation = Math.Abs(value1 - value2);
 
 			return deviation <= maximumDeviation;
 		}

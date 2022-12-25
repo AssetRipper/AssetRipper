@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Utils;
-using AssetRipper.Core.Utils;
 using System.Text.RegularExpressions;
 
 namespace AssetRipper.Tests

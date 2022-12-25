@@ -1,7 +1,5 @@
 ﻿using AssetRipper.IO.Files.SourceGenerator.Json;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 
 namespace AssetRipper.IO.Files.SourceGenerator
 {

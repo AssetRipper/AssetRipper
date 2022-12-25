@@ -19,7 +19,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			using Stream fileStream = System.IO.File.Create(path);
+			using Stream fileStream = File.Create(path);
 			using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
 			YamlWriter writer = new YamlWriter();
 			YamlDocument doc = asset.ExportYamlDocument(container);
@@ -36,7 +36,7 @@ namespace AssetRipper.Core.Project.Exporters
 
 		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
 		{
-			using Stream fileStream = System.IO.File.Create(path);
+			using Stream fileStream = File.Create(path);
 			using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
 			YamlWriter writer = new YamlWriter();
 			writer.WriteHead(streamWriter);

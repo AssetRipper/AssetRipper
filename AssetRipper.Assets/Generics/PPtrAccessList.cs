@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.IO.Files.ResourceFiles;
 using System.Collections;
 
 namespace AssetRipper.Assets.Generics

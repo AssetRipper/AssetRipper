@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace AssetRipper.IO.Files.SourceGenerator;
+﻿namespace AssetRipper.IO.Files.SourceGenerator;
 
 internal static class PrimitiveHandler
 {
