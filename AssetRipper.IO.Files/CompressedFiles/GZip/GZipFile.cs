@@ -13,7 +13,7 @@ namespace AssetRipper.IO.Files.CompressedFiles.GZip
 		public override void Read(SmartStream stream)
 		{
 			byte[] buffer = ReadGZip(stream);
-			UncompressedFile = new ResourceFile(SmartStream.CreateMemory(buffer, 0, buffer.Length, false), FilePath, Name);
+			UncompressedFile = new ResourceFile(buffer, FilePath, Name);
 		}
 
 		internal static bool IsGZipFile(EndianReader reader)

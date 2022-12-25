@@ -13,7 +13,7 @@ namespace AssetRipper.IO.Files.CompressedFiles.Brotli
 		public override void Read(SmartStream stream)
 		{
 			byte[] buffer = ReadBrotli(stream);
-			UncompressedFile = new ResourceFile(SmartStream.CreateMemory(buffer, 0, buffer.Length, false), FilePath, Name);
+			UncompressedFile = new ResourceFile(buffer, FilePath, Name);
 		}
 
 		internal static bool IsBrotliFile(EndianReader reader)

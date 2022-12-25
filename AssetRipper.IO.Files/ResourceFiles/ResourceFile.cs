@@ -12,6 +12,13 @@ namespace AssetRipper.IO.Files.ResourceFiles
 			Name = name;
 		}
 
+		public ResourceFile(byte[] data, string filePath, string name, bool writable = true)
+		{
+			Stream = SmartStream.CreateMemory(data, 0, data.Length, writable);
+			FilePath = filePath;
+			Name = name;
+		}
+
 		public ResourceFile(string filePath, string name)
 		{
 			Stream = SmartStream.OpenRead(filePath);

@@ -50,7 +50,7 @@ namespace AssetRipper.IO.Files.WebFiles
 				byte[] buffer = new byte[entry.Size];
 				stream.Position = entry.Offset + basePosition;
 				stream.ReadBuffer(buffer, 0, buffer.Length);
-				ResourceFile file = new ResourceFile(SmartStream.CreateMemory(buffer, 0, buffer.Length, false), FilePath, entry.NameOrigin);
+				ResourceFile file = new ResourceFile(buffer, FilePath, entry.NameOrigin);
 				AddResourceFile(file);
 			}
 		}
