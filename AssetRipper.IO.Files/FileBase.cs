@@ -1,5 +1,6 @@
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.Utils;
+using System.IO;
 
 namespace AssetRipper.IO.Files
 {
@@ -26,9 +27,15 @@ namespace AssetRipper.IO.Files
 		public string NameFixed { get; private set; } = string.Empty;
 		private string name = string.Empty;
 		public abstract void Read(SmartStream stream);
-		public abstract void Write(System.IO.Stream stream);
+		public abstract void Write(Stream stream);
 		public virtual void ReadContents() { }
 		public virtual void ReadContentsRecursively() => ReadContents();
+		public virtual byte[] ToByteArray()
+		{
+			MemoryStream memoryStream = new();
+			Write(memoryStream);
+			return memoryStream.ToArray();
+		}
 
 		~FileBase() => Dispose(false);
 

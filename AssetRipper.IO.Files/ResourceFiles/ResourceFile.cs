@@ -52,6 +52,11 @@ namespace AssetRipper.IO.Files.ResourceFiles
 			Stream.CopyTo(stream);
 		}
 
+		public override byte[] ToByteArray()
+		{
+			return Stream.ToArray();
+		}
+
 		public SmartStream Stream { get; }
 
 		public const string ResourceFileExtension = ".resource";
