@@ -11,25 +11,20 @@ namespace AssetRipper.IO.Files.Streams.Smart
 		private SmartStream()
 		{
 			m_isDisposed = true;
-			m_refCount = new SmartRefCount();
+			m_refCount = new();
 		}
 
 		private SmartStream(Stream baseStream, SmartStreamType type)
 		{
 			m_stream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
 			m_streamType = type;
-			m_refCount = new SmartRefCount();
+			m_refCount = new();
 			m_refCount++;
 		}
 
 		private SmartStream(SmartStream copy)
 		{
 			Assign(copy);
-		}
-
-		~SmartStream()
-		{
-			Dispose(false);
 		}
 
 		public static SmartStream OpenRead(string path)
@@ -93,92 +88,56 @@ namespace AssetRipper.IO.Files.Streams.Smart
 
 		public override void Flush()
 		{
-			if (m_isDisposed)
-			{
-				throw new ObjectDisposedException(null);
-			}
+			ThrowIfDisposed();
 			m_stream?.Flush();
 		}
 
+		[MemberNotNull(nameof(m_stream))]
 		public override int Read(byte[] buffer, int offset, int count)
 		{
-			if (m_isDisposed)
-			{
-				throw new ObjectDisposedException(null);
-			}
-
-			//If this is null (it can be) it's less confusing to the JIT to just let it throw an NRE than to manually check it
-			return m_stream!.Read(buffer, offset, count);
+			ThrowIfDisposed();
+			ThrowIfNull();
+			return m_stream.Read(buffer, offset, count);
 		}
 
+		[MemberNotNull(nameof(m_stream))]
 		public override int Read(Span<byte> buffer)
 		{
-			if (m_isDisposed)
-			{
-				throw new ObjectDisposedException(null);
-			}
-
-			//If this is null (it can be) it's less confusing to the JIT to just let it throw an NRE than to manually check it
-			return m_stream!.Read(buffer);
+			ThrowIfDisposed();
+			ThrowIfNull();
+			return m_stream.Read(buffer);
 		}
 
+		[MemberNotNull(nameof(m_stream))]
 		public override int ReadByte()
 		{
-			if (m_isDisposed)
-			{
-				throw new ObjectDisposedException(null);
-			}
-
-			//If this is null (it can be) it's less confusing to the JIT to just let it throw an NRE than to manually check it
-			return m_stream!.ReadByte();
+			ThrowIfDisposed();
+			ThrowIfNull();
+			return m_stream.ReadByte();
 		}
 
+		[MemberNotNull(nameof(m_stream))]
 		public override long Seek(long offset, SeekOrigin origin)
 		{
-			if (m_isDisposed)
-			{
-				throw new ObjectDisposedException(null);
-			}
-			else if (IsNull)
-			{
-				throw new NullReferenceException(nameof(m_stream));
-			}
-			else
-			{
-				return m_stream.Seek(offset, origin);
-			}
+			ThrowIfDisposed();
+			ThrowIfNull();
+			return m_stream.Seek(offset, origin);
 		}
 
+		[MemberNotNull(nameof(m_stream))]
 		public override void SetLength(long value)
 		{
-			if (m_isDisposed)
-			{
-				throw new ObjectDisposedException(null);
-			}
-			else if (IsNull)
-			{
-				throw new NullReferenceException(nameof(m_stream));
-			}
-			else
-			{
-				m_stream.SetLength(value);
-			}
+			ThrowIfDisposed();
+			ThrowIfNull();
+			m_stream.SetLength(value);
 		}
 
+		[MemberNotNull(nameof(m_stream))]
 		public override void Write(byte[] buffer, int offset, int count)
 		{
-			if (m_isDisposed)
-			{
-				throw new ObjectDisposedException(null);
-			}
-			else if (IsNull)
-			{
-				throw new NullReferenceException(nameof(m_stream));
-			}
-			else
-			{
-				m_stream.Write(buffer, offset, count);
-			}
+			ThrowIfDisposed();
+			ThrowIfNull();
+			m_stream.Write(buffer, offset, count);
 		}
 
 		protected override void Dispose(bool disposing)
@@ -195,36 +154,32 @@ namespace AssetRipper.IO.Files.Streams.Smart
 			base.Dispose(disposing);
 		}
 
+		[MemberNotNullWhen(true, nameof(m_stream))]
 		public override bool CanRead
 		{
 			get
 			{
-				if (m_isDisposed)
-				{
-					throw new ObjectDisposedException(null);
-				}
+				ThrowIfDisposed();
 				return m_stream?.CanRead ?? false;
 			}
 		}
+
+		[MemberNotNullWhen(true, nameof(m_stream))]
 		public override bool CanSeek
 		{
 			get
 			{
-				if (m_isDisposed)
-				{
-					throw new ObjectDisposedException(null);
-				}
+				ThrowIfDisposed();
 				return m_stream?.CanSeek ?? false;
 			}
 		}
+
+		[MemberNotNullWhen(true, nameof(m_stream))]
 		public override bool CanWrite
 		{
 			get
 			{
-				if (m_isDisposed)
-				{
-					throw new ObjectDisposedException(null);
-				}
+				ThrowIfDisposed();
 				return m_stream?.CanWrite ?? false;
 			}
 		}
@@ -233,26 +188,15 @@ namespace AssetRipper.IO.Files.Streams.Smart
 		{
 			get
 			{
-				if (m_isDisposed)
-				{
-					throw new ObjectDisposedException(null);
-				}
+				ThrowIfDisposed();
 				return m_stream?.Position ?? 0;
 			}
+			[MemberNotNull(nameof(m_stream))]
 			set
 			{
-				if (m_isDisposed)
-				{
-					throw new ObjectDisposedException(null);
-				}
-				else if (IsNull)
-				{
-					throw new NullReferenceException(nameof(m_stream));
-				}
-				else
-				{
-					m_stream.Position = value;
-				}
+				ThrowIfDisposed();
+				ThrowIfNull();
+				m_stream.Position = value;
 			}
 		}
 
@@ -260,10 +204,7 @@ namespace AssetRipper.IO.Files.Streams.Smart
 		{
 			get
 			{
-				if (m_isDisposed)
-				{
-					throw new ObjectDisposedException(null);
-				}
+				ThrowIfDisposed();
 				return m_stream?.Length ?? 0;
 			}
 		}
@@ -272,11 +213,25 @@ namespace AssetRipper.IO.Files.Streams.Smart
 		{
 			get
 			{
-				if (m_isDisposed)
-				{
-					throw new ObjectDisposedException(null);
-				}
+				ThrowIfDisposed();
 				return m_streamType;
+			}
+		}
+
+		[MemberNotNull(nameof(m_stream))]
+		private void ThrowIfNull()
+		{
+			if (IsNull)
+			{
+				throw new NullReferenceException(nameof(m_stream));
+			}
+		}
+
+		private void ThrowIfDisposed()
+		{
+			if (m_isDisposed)
+			{
+				throw new ObjectDisposedException(null);
 			}
 		}
 
