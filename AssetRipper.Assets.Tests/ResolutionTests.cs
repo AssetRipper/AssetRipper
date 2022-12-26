@@ -127,6 +127,21 @@ public class ResolutionTests
 	}
 
 	[Test]
+	public void ResourceResolutionIsAbleToFindFilesWithCapitalLetters()
+	{
+		const string name = "ResourceName.resS";
+		GameBundle gameBundle = new();
+
+		ProcessedBundle processedBundle = new();
+		gameBundle.AddBundle(processedBundle);
+
+		ResourceFile resource = CreateNewResourceFile(name);
+		processedBundle.AddResource(resource);
+
+		Assert.That(gameBundle.ResolveResource(name), Is.EqualTo(resource));
+	}
+
+	[Test]
 	public void ResourceResolutionIsAbleToFindExternalFilesFromParentBundles()
 	{
 		const string resourceName = "resources.resource";

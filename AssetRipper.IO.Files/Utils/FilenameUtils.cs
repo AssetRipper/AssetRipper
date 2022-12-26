@@ -31,7 +31,7 @@ namespace AssetRipper.IO.Files.Utils
 
 		public static string FixFileIdentifier(string name)
 		{
-			name = name.ToLower();
+			name = name.ToLowerInvariant();
 			name = FixDependencyName(name);
 			name = FixResourcePath(name);
 			if (IsDefaultResource(name))
@@ -82,7 +82,7 @@ namespace AssetRipper.IO.Files.Utils
 		{
 			if (assembly.EndsWith(AssemblyExtension, StringComparison.Ordinal))
 			{
-				return assembly.Substring(0, assembly.Length - AssemblyExtension.Length);
+				return assembly[..^AssemblyExtension.Length];
 			}
 			return assembly;
 		}

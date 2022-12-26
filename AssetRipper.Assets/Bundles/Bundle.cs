@@ -84,7 +84,7 @@ public abstract class Bundle : IDisposable
 		}
 
 		string originalName = name;
-		string fixedName = FilenameUtils.FixResourcePath(name);
+		string fixedName = FilenameUtils.FixFileIdentifier(name);
 
 		Bundle? bundleToExclude = null;
 		Bundle? currentBundle = this;
