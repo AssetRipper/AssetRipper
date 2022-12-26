@@ -36,7 +36,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 				return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 			}
 		}
-		public SmartStream Stream { get; private set; } = SmartStream.Null;
+		public SmartStream Stream { get; private set; } = SmartStream.CreateNull();
 
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
 		private readonly Dictionary<long, int> m_assetEntryLookup = new();

@@ -126,7 +126,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 		private void Dispose(bool disposing)
 		{
 			m_isDisposed = true;
-			m_cachedBlockStream.Dispose();
+			m_cachedBlockStream.FreeReference();
 		}
 
 		private static SmartStream CreateStream(long decompressedSize)
@@ -138,7 +138,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 		private readonly BlocksInfo m_blocksInfo = new();
 		private readonly long m_dataOffset;
 
-		private readonly SmartStream m_cachedBlockStream = SmartStream.Null;
+		private readonly SmartStream m_cachedBlockStream = SmartStream.CreateNull();
 		private int m_cachedBlockIndex = -1;
 
 		private bool m_isDisposed = false;

@@ -6,20 +6,16 @@ namespace AssetRipper.IO.Files.Streams.Smart
 {
 	public sealed partial class SmartStream : Stream
 	{
-		public static new SmartStream Null { get; } = new();
-
 		private SmartStream()
 		{
-			m_isDisposed = true;
-			m_refCount = new();
+			RefCounter = new();
 		}
 
-		private SmartStream(Stream baseStream, SmartStreamType type)
+		private SmartStream(Stream baseStream)
 		{
-			m_stream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
-			m_streamType = type;
-			m_refCount = new();
-			m_refCount++;
+			Stream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
+			RefCounter = new();
+			RefCounter++;
 		}
 
 		private SmartStream(SmartStream copy)
@@ -29,58 +25,70 @@ namespace AssetRipper.IO.Files.Streams.Smart
 
 		public static SmartStream OpenRead(string path)
 		{
-			return new SmartStream(MultiFileStream.OpenRead(path), SmartStreamType.File);
+			return new SmartStream(MultiFileStream.OpenRead(path));
 		}
 
 		public static SmartStream CreateTemp()
 		{
 			string tempFile = Path.GetTempFileName();
-			return new SmartStream(new FileStream(tempFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose), SmartStreamType.File);
+			return new SmartStream(new FileStream(tempFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose));
 		}
 
 		public static SmartStream CreateMemory()
 		{
-			return new SmartStream(new MemoryStream(), SmartStreamType.Memory);
+			return new SmartStream(new MemoryStream());
 		}
 
 		public static SmartStream CreateMemory(byte[] buffer)
 		{
-			return new SmartStream(new MemoryStream(buffer), SmartStreamType.Memory);
+			return new SmartStream(new MemoryStream(buffer));
 		}
 
 		public static SmartStream CreateMemory(byte[] buffer, int offset, int size, bool writable = true)
 		{
-			return new SmartStream(new MemoryStream(buffer, offset, size, writable), SmartStreamType.Memory);
+			return new SmartStream(new MemoryStream(buffer, offset, size, writable));
 		}
 
-		[MemberNotNull(nameof(m_refCount))]
+		/// <summary>
+		/// Create a <see cref="SmartStream"/> with no backing stream.
+		/// </summary>
+		/// <returns>A new <see cref="SmartStream"/> for which <see cref="IsNull"/> is true.</returns>
+		public static SmartStream CreateNull() => new();
+
+		/// <summary>
+		/// Copy the reference from another <see cref="SmartStream"/>.
+		/// </summary>
+		/// <param name="source">The <see cref="SmartStream"/> to copy a reference from.</param>
+		[MemberNotNull(nameof(RefCounter))]
 		public void Assign(SmartStream source)
 		{
-			Dispose();
+			FreeReference();
 
-			m_stream = source.m_stream;
-			m_streamType = source.m_streamType;
-			m_refCount = source.m_refCount;
-			m_isDisposed = source.m_isDisposed;
-			if (m_isDisposed)
+			Stream = source.Stream;
+			RefCounter = source.RefCounter;
+			if (!IsNull)
 			{
-				if (!IsNull)
-				{
-					throw new ObjectDisposedException(nameof(source));
-				}
-			}
-			else
-			{
-				m_refCount++;
+				RefCounter++;
 			}
 		}
 
+		/// <summary>
+		/// Move the reference from another <see cref="SmartStream"/> to <see langword="this"/>.
+		/// </summary>
+		/// <remarks>
+		/// The reference for <paramref name="source"/> is freed.
+		/// </remarks>
+		/// <param name="source">The <see cref="SmartStream"/> from which to move the reference.</param>
 		public void Move(SmartStream source)
 		{
 			Assign(source);
-			source.Dispose();
+			source.FreeReference();
 		}
 
+		/// <summary>
+		/// Create a new reference to the backing stream.
+		/// </summary>
+		/// <returns>A new <see cref="SmartStream"/> that references the same stream as <see langword="this"/>.</returns>
 		public SmartStream CreateReference()
 		{
 			return new SmartStream(this);
@@ -88,159 +96,163 @@ namespace AssetRipper.IO.Files.Streams.Smart
 
 		public override void Flush()
 		{
-			ThrowIfDisposed();
-			m_stream?.Flush();
+			Stream?.Flush();
 		}
 
-		[MemberNotNull(nameof(m_stream))]
+		[MemberNotNull(nameof(Stream))]
 		public override int Read(byte[] buffer, int offset, int count)
 		{
-			ThrowIfDisposed();
 			ThrowIfNull();
-			return m_stream.Read(buffer, offset, count);
+			return Stream.Read(buffer, offset, count);
 		}
 
-		[MemberNotNull(nameof(m_stream))]
+		[MemberNotNull(nameof(Stream))]
 		public override int Read(Span<byte> buffer)
 		{
-			ThrowIfDisposed();
 			ThrowIfNull();
-			return m_stream.Read(buffer);
+			return Stream.Read(buffer);
 		}
 
-		[MemberNotNull(nameof(m_stream))]
+		[MemberNotNull(nameof(Stream))]
 		public override int ReadByte()
 		{
-			ThrowIfDisposed();
 			ThrowIfNull();
-			return m_stream.ReadByte();
+			return Stream.ReadByte();
 		}
 
-		[MemberNotNull(nameof(m_stream))]
+		[MemberNotNull(nameof(Stream))]
 		public override long Seek(long offset, SeekOrigin origin)
 		{
-			ThrowIfDisposed();
 			ThrowIfNull();
-			return m_stream.Seek(offset, origin);
+			return Stream.Seek(offset, origin);
 		}
 
-		[MemberNotNull(nameof(m_stream))]
+		[MemberNotNull(nameof(Stream))]
 		public override void SetLength(long value)
 		{
-			ThrowIfDisposed();
 			ThrowIfNull();
-			m_stream.SetLength(value);
+			Stream.SetLength(value);
 		}
 
-		[MemberNotNull(nameof(m_stream))]
+		[MemberNotNull(nameof(Stream))]
 		public override void Write(byte[] buffer, int offset, int count)
 		{
-			ThrowIfDisposed();
 			ThrowIfNull();
-			m_stream.Write(buffer, offset, count);
+			Stream.Write(buffer, offset, count);
+		}
+
+		/// <summary>
+		/// Free the reference to the backing stream and become null.
+		/// </summary>
+		public void FreeReference()
+		{
+			if (!IsNull)
+			{
+				RefCounter--;
+				if (RefCounter.IsZero)
+				{
+					Stream.Dispose();
+				}
+				Stream = null;
+			}
 		}
 
 		protected override void Dispose(bool disposing)
 		{
-			if (!IsNull && !m_isDisposed)
-			{
-				m_refCount--;
-				if (m_refCount.IsZero)
-				{
-					m_stream.Dispose();
-				}
-				m_isDisposed = true;
-			}
+			FreeReference();
 			base.Dispose(disposing);
 		}
 
-		[MemberNotNullWhen(true, nameof(m_stream))]
-		public override bool CanRead
-		{
-			get
-			{
-				ThrowIfDisposed();
-				return m_stream?.CanRead ?? false;
-			}
-		}
+		[MemberNotNullWhen(true, nameof(Stream))]
+		public override bool CanRead => Stream?.CanRead ?? false;
 
-		[MemberNotNullWhen(true, nameof(m_stream))]
-		public override bool CanSeek
-		{
-			get
-			{
-				ThrowIfDisposed();
-				return m_stream?.CanSeek ?? false;
-			}
-		}
+		[MemberNotNullWhen(true, nameof(Stream))]
+		public override bool CanSeek => Stream?.CanSeek ?? false;
 
-		[MemberNotNullWhen(true, nameof(m_stream))]
-		public override bool CanWrite
-		{
-			get
-			{
-				ThrowIfDisposed();
-				return m_stream?.CanWrite ?? false;
-			}
-		}
+		[MemberNotNullWhen(true, nameof(Stream))]
+		public override bool CanWrite => Stream?.CanWrite ?? false;
 
 		public override long Position
 		{
-			get
-			{
-				ThrowIfDisposed();
-				return m_stream?.Position ?? 0;
-			}
-			[MemberNotNull(nameof(m_stream))]
+			get => Stream?.Position ?? 0;
+			[MemberNotNull(nameof(Stream))]
 			set
 			{
-				ThrowIfDisposed();
 				ThrowIfNull();
-				m_stream.Position = value;
+				Stream.Position = value;
 			}
 		}
 
-		public override long Length
+		public override long Length => Stream?.Length ?? 0;
+
+		/// <summary>
+		/// The type of stream backing this <see cref="SmartStream"/>.
+		/// </summary>
+		public SmartStreamType StreamType => Stream switch
 		{
-			get
-			{
-				ThrowIfDisposed();
-				return m_stream?.Length ?? 0;
-			}
-		}
+			null => SmartStreamType.Null,
+			MemoryStream => SmartStreamType.Memory,
+			FileStream or MultiFileStream => SmartStreamType.File,
+			_ => throw new InvalidOperationException(),
+		};
 
-		public SmartStreamType StreamType
+		/// <summary>
+		/// Write the contents to a byte array, regardless of the <see cref="Position"/> property.
+		/// </summary>
+		/// <returns>A new byte array.</returns>
+		[MemberNotNull(nameof(Stream))]
+		public byte[] ToArray()
 		{
-			get
+			ThrowIfNull();
+			return Stream switch
 			{
-				ThrowIfDisposed();
-				return m_streamType;
+				MemoryStream memoryStream => memoryStream.ToArray(),
+				_ => StreamToByteArray(Stream),
+			};
+
+			static byte[] StreamToByteArray(Stream stream)
+			{
+				long initialPosition = stream.Position;
+				stream.Position = 0;
+				byte[] data = new byte[stream.Length];
+				stream.CopyTo(new MemoryStream(data));
+				stream.Position = initialPosition;
+				return data;
 			}
 		}
 
-		[MemberNotNull(nameof(m_stream))]
+		/// <summary>
+		/// Throw if <see cref="Stream"/> is null.
+		/// </summary>
+		/// <exception cref="NullReferenceException"><see cref="Stream"/> is null.</exception>
+		[MemberNotNull(nameof(Stream))]
 		private void ThrowIfNull()
 		{
 			if (IsNull)
 			{
-				throw new NullReferenceException(nameof(m_stream));
+				throw new NullReferenceException(nameof(Stream));
 			}
 		}
 
-		private void ThrowIfDisposed()
-		{
-			if (m_isDisposed)
-			{
-				throw new ObjectDisposedException(null);
-			}
-		}
+		/// <summary>
+		/// If true, this has no backing stream.
+		/// </summary>
+		[MemberNotNullWhen(false, nameof(Stream))]
+		public bool IsNull => Stream == null;
 
-		[MemberNotNullWhen(false, nameof(m_stream))]
-		public bool IsNull => m_stream == null;
+		/// <summary>
+		/// The number of references to the backing stream.
+		/// </summary>
+		public int RefCount => RefCounter.RefCount;
 
-		private SmartRefCount m_refCount;
-		private Stream? m_stream;
-		private SmartStreamType m_streamType;
-		private bool m_isDisposed;
+		/// <summary>
+		/// The shared reference counter for the backing stream.
+		/// </summary>
+		private SmartRefCount RefCounter { get; set; }
+
+		/// <summary>
+		/// The backing stream. It is shared with the other <see cref="SmartStream"/>s that reference it.
+		/// </summary>
+		private Stream? Stream { get; set; }
 	}
 }

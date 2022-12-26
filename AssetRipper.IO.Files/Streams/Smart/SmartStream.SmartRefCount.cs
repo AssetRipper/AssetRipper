@@ -9,6 +9,7 @@
 				_this.RefCount++;
 				return _this;
 			}
+
 			public static SmartRefCount operator --(SmartRefCount _this)
 			{
 				_this.RefCount--;
@@ -32,10 +33,10 @@
 
 			public bool IsZero => RefCount == 0;
 
-			private int RefCount
+			public int RefCount
 			{
 				get => m_refCount;
-				set
+				private set
 				{
 					if (value < 0)
 					{
