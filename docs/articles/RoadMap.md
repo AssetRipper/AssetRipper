@@ -1,52 +1,37 @@
 # Development Roadmap
 
-## 0.2.5.0
-This release will be primarily focused on dependencies.
+## 0.3.0.2
+This release will be primarily focused on final preparations and will be the first official release in the 0.3.X.X series.
 
-* Replace texgenpack with a managed library
-* Overhaul file reading
+* Experimental features option
+* Remove Sprite drop down option
 
-## 0.2.X.0
+## 0.3.1.0
+This release will be primarily focused on refactoring the project and making the UI prettier.
+
+* Convert to the material theme
+* Refactor the project structure to remove AssetRipper.Core and AssetRipper.Library
+
+## 0.3.X.0
 These releases will likely focus on preparing for the next major milestone.
 
 * Remove native dependencies
-  * Port essential texture decoding code to C#
+  * Replace crunch with managed code
+  * Implement support for decoding Bc textures with managed code for non-multiples of 4
 * Make all dependencies trimmable
-* Nuget feed for source generated code and forked dependencies
-* Switch to AsmResolver and the Cpp2IL rewrite
-* Segregating the codebase into more distinct layers
-
-## 0.3.0.0 / 1.0.0.0
-This release will focus on improving the user experience by overhauling the GUI
-
-* Improved UI performance
-* Improved Asset previews
-  * Preview decompiled script
-  * Add a Mesh preview
-  * Add a Material preview
-  * Add a TypeTree Viewer
-  * Improve the Audio preview
-    * Fast-forward and rewind
-    * Seek-bar for selecting playback position
-* Preferences window
-  * Adjustable background color/theme
-* Window for licensed works
+* Nuget feed for forked dependencies
 * NativeAOT compilation for better performance while loading and extracting
+
+## 0.4.0.0 / 1.0.0.0
+This release will focus on improving the user experience by overhauling the GUI
 
 ## Planned But Unscheduled
 * Import
   * Script Import
-    * Use type trees for deserialization when available
+    * Use type trees for assembly reconstruction
   * Asset Loading
     * Extract assets and save to disk for lower ram usage
 * Export
-  * Model Export
-    * FBX (full)
-    * GLB (full)
-    * PMX (maybe)
-    * DAE (aka Collada)
-    * Split combined meshes back into the original set of static meshes
-    * Use submeshes for mesh export
   * Script Export
     * Hybrid script export
     * Assembly renaming
@@ -60,13 +45,22 @@ This release will focus on improving the user experience by overhauling the GUI
     * Export Selected object to folder
     * Export Selected object to compressed zip file
 * UI
-  * Audio preview
-    * Visual wave form display
-  * Asset preview
-    * Add a Hex Viewer
-  * Scene preview
-  * Font preview
-  * Asset editing
+  * Improved Asset previews
+    * Preview decompiled scripts
+    * Add a Mesh preview
+    * Scene preview
+    * Font preview
+    * Add a Material preview
+    * Add a TypeTree Viewer
+    * Improve the Audio preview
+      * Fast-forward and rewind
+      * Seek-bar for selecting playback position
+      * Visual wave form display
+    * Generic asset preview
+      * Add a Hex Viewer
+  * Preferences window
+  * Window for licensed works
+* Asset editing
 
 ## Concept Ideas
 > Note: This is just a collection of ideas. These might not be desirable or feasible, so many of them might never be implemented. Do not interpret their inclusion here as any form of commitment.
