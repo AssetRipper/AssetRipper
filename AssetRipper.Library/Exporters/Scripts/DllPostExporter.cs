@@ -2,6 +2,7 @@
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Structure.Assembly.Managers;
 using System.IO;
+using System.Linq;
 
 namespace AssetRipper.Library.Exporters.Scripts
 {
@@ -13,11 +14,11 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 			Logger.Info(LogCategory.Export, "Saving game assemblies...");
 			IAssemblyManager assemblyManager = ripper.GameStructure.AssemblyManager;
-			AssemblyDefinition[] assemblies = assemblyManager.GetAssemblies();
+			AssemblyDefinition[] assemblies = assemblyManager.GetAssemblies().ToArray();
 			if (assemblies.Length != 0)
 			{
 				Directory.CreateDirectory(outputDirectory);
-				foreach (AssemblyDefinition? assembly in assemblies)
+				foreach (AssemblyDefinition assembly in assemblies)
 				{
 					string filepath = Path.Combine(outputDirectory, assembly.Name!);
 					if (!filepath.EndsWith(".dll"))

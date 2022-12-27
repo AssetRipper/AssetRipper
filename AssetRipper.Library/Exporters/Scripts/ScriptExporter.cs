@@ -168,24 +168,28 @@ namespace AssetRipper.Library.Exporters.Scripts
 		{
 			if (string.IsNullOrEmpty(@namespace))
 			{
-				return $@"using UnityEngine;
+				return $$"""
+					using UnityEngine;
 
-public class {name} : MonoBehaviour
-{{
-	//Dummy class. Use different settings or provide .NET dll files for better decompilation output
-}}";
+					public class {{name}} : MonoBehaviour
+					{
+						//Dummy class. Use different settings or provide .NET dll files for better decompilation output
+					}
+					""";
 			}
 			else
 			{
-				return $@"using UnityEngine;
+				return $$"""
+					using UnityEngine;
 
-namespace {@namespace}
-{{
-	public class {name} : MonoBehaviour
-	{{
-		//Dummy class. Use different settings or provide .NET dll files for better decompilation output
-	}}
-}}";
+					namespace {{@namespace}}
+					{
+						public class {{name}} : MonoBehaviour
+						{
+							//Dummy class. Use different settings or provide .NET dll files for better decompilation output
+						}
+					}
+					""";
 			}
 		}
 	}

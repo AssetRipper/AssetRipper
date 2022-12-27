@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Core;
+using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.Project.Exporters;
 using AssetRipper.Core.Project.Exporters.Engine;
@@ -21,6 +22,7 @@ using AssetRipper.Library.Exporters.Textures;
 using AssetRipper.Library.Exporters.TypeTrees;
 using AssetRipper.Library.Processors;
 using AssetRipper.Library.Processors.AnimatorControllers;
+using AssetRipper.Library.Processors.Assemblies;
 using AssetRipper.Library.Processors.PrefabOutlining;
 using AssetRipper.Library.Processors.StaticMeshes;
 using AssetRipper.Library.Processors.Textures;
@@ -94,6 +96,13 @@ namespace AssetRipper.Library
 
 			OnFinishLoadingGameStructure?.Invoke();
 			TaskManager.WaitUntilAllCompleted();
+
+			Logger.Info(LogCategory.General, "Processing assemblies...");
+
+			if (Settings.ScriptContentLevel == ScriptContentLevel.Level1)
+			{
+				new MethodStubbingProcessor().Process(GameStructure.AssemblyManager);
+			}
 
 			Logger.Info(LogCategory.General, "Processing loaded assets...");
 			List<IAssetProcessor> AssetProcessors = new()
@@ -177,7 +186,7 @@ namespace AssetRipper.Library
 		{
 			if (assets == null || !assets.Any())
 			{
-				return LibraryConfiguration.DefaultFilter;
+				return CoreConfiguration.DefaultFilter;
 			}
 			else
 			{
@@ -196,7 +205,7 @@ namespace AssetRipper.Library
 		{
 			if (types == null || !types.Any())
 			{
-				return LibraryConfiguration.DefaultFilter;
+				return CoreConfiguration.DefaultFilter;
 			}
 			else
 			{

@@ -11,7 +11,6 @@ using System.Linq;
 
 namespace AssetRipper.Core.Structure.Assembly.Managers
 {
-
 	public partial class BaseManager : IAssemblyManager
 	{
 		public bool IsSet => ScriptingBackend != ScriptingBackend.Unknown;
@@ -84,6 +83,11 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			}
 		}
 
+		public void ClearStreamCache()
+		{
+			m_assemblyStreams.Clear();
+		}
+
 		private static string ToAssemblyName(AssemblyDefinition assembly)
 		{
 			return ToAssemblyName(assembly.Name?.ToString() ?? "");
@@ -100,6 +104,7 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			string assemblyName = ToAssemblyName(assembly);
 			m_assemblies.Add(fileName, assembly);
 			m_assemblies[assemblyName] = assembly;
+			m_assemblyStreams.Add(assembly, memoryStream);
 		}
 
 		public virtual void Unload(string fileName)
@@ -289,9 +294,9 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name);
 		}
 
-		public virtual AssemblyDefinition[] GetAssemblies()
+		public virtual IEnumerable<AssemblyDefinition> GetAssemblies()
 		{
-			return m_assemblies.Values.Where(x => x is not null).Distinct().ToArray()!;
+			return m_assemblies.Values.Where(x => x is not null).Distinct()!;
 		}
 
 		public void Dispose()
@@ -302,41 +307,12 @@ namespace AssetRipper.Core.Structure.Assembly.Managers
 
 		protected void Dispose(bool disposing)
 		{
-			
-		}
-
-		~BaseManager()
-		{
-			Dispose(false);
-		}
-
-	}
-	internal static class ModuleExtensions
-	{
-		public static TypeDefinition? GetType(this ModuleDefinition module, string @namespace, string name)
-		{
-			IList<TypeDefinition> types = module.TopLevelTypes;
-			foreach (TypeDefinition type in types)
+			if (disposing)
 			{
-				if ((type.Namespace ?? "") == @namespace && type.Name == name)
-				{
-					return type;
-				}
-			}
-
-			return null;
-		}
-		
-		public static void SetResolver(this ModuleDefinition module, IAssemblyResolver assemblyResolver)
-		{
-			module.MetadataResolver = new DefaultMetadataResolver(assemblyResolver);
-		}
-		public static void InitializeResolvers(this AssemblyDefinition assembly, BaseManager assemblyManager)
-		{
-			for (int i = 0; i < assembly.Modules.Count; i++)
-			{
-				assembly.Modules[i].SetResolver(assemblyManager.AssemblyResolver);
+				ClearStreamCache();
 			}
 		}
+
+		~BaseManager() => Dispose(false);
 	}
 }
