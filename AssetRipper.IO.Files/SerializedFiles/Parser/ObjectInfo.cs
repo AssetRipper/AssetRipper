@@ -193,5 +193,9 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 		public ushort IsDestroyed { get; set; }
 		public short ScriptTypeIndex { get; set; }
 		public bool Stripped { get; set; }
+		/// <summary>
+		/// The data referenced by <see cref="ByteStart"/> and <see cref="ByteSize"/>.
+		/// </summary>
+		public byte[] ObjectData { get; set; } = Array.Empty<byte>();
 	}
 }

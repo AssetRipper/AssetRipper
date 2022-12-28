@@ -67,7 +67,6 @@ namespace AssetRipper.IO.Files.SerializedFiles
 				return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 			}
 		}
-		public SmartStream Stream { get; private set; } = SmartStream.CreateNull();
 
 		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
 		private readonly Dictionary<long, int> m_assetEntryLookup = new();
@@ -105,8 +104,6 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		{
 			m_assetEntryLookup.Clear();
 
-			Stream = stream;
-
 			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
 				Header.Read(reader);
@@ -121,7 +118,13 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 			for (int i = 0; i < Metadata.Object.Length; i++)
 			{
-				m_assetEntryLookup.Add(Metadata.Object[i].FileID, i);
+				ObjectInfo objectInfo = Metadata.Object[i];
+				m_assetEntryLookup.Add(objectInfo.FileID, i);
+
+				stream.Position = Header.DataOffset + objectInfo.ByteStart;
+				byte[] objectData = new byte[objectInfo.ByteSize];
+				stream.ReadExactly(objectData);
+				objectInfo.ObjectData = objectData;
 			}
 		}
 

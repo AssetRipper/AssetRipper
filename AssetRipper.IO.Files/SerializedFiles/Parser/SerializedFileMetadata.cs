@@ -1,5 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles.IO;
+using AssetRipper.IO.Files.Streams.Smart;
 using System.IO;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser
@@ -44,30 +45,50 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 		/// </summary>
 		public static bool HasRefTypes(FormatVersion generation) => generation >= FormatVersion.SupportsRefObject;
 
-		public void Read(Stream stream, SerializedFileHeader header)
+		public void Read(SmartStream stream, SerializedFileHeader header)
 		{
-			bool swapEndianess = header.Endianess;
-			if (HasEndian(header.Version))
-			{
-				SwapEndianess = stream.ReadByte() != 0;
-				swapEndianess = SwapEndianess;
-			}
+			bool swapEndianess = ReadSwapEndianess(stream, header);
 			EndianType endianess = swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 			using SerializedReader reader = new SerializedReader(stream, endianess, header.Version);
 			Read(reader);
 		}
 
-		public void Write(Stream stream, SerializedFileHeader header)
+		private bool ReadSwapEndianess(SmartStream stream, SerializedFileHeader header)
 		{
-			bool swapEndianess = header.Endianess;
 			if (HasEndian(header.Version))
 			{
-				stream.WriteByte((byte)(SwapEndianess ? 1 : 0));
-				swapEndianess = SwapEndianess;
+				int num = stream.ReadByte();
+				return num switch
+				{
+					< 0 => throw new EndOfStreamException(),
+					_ => SwapEndianess = num != 0,
+				};
 			}
+			else
+			{
+				return header.Endianess;
+			}
+		}
+
+		public void Write(Stream stream, SerializedFileHeader header)
+		{
+			bool swapEndianess = WriteSwapEndianess(stream, header);
 			EndianType endianess = swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 			using SerializedWriter writer = new SerializedWriter(stream, endianess, header.Version, UnityVersion);
 			Write(writer);
+		}
+
+		private bool WriteSwapEndianess(Stream stream, SerializedFileHeader header)
+		{
+			if (HasEndian(header.Version))
+			{
+				stream.WriteByte(SwapEndianess ? (byte)1 : (byte)0);
+				return SwapEndianess;
+			}
+			else
+			{
+				return header.Endianess;
+			}
 		}
 
 		private void Read(SerializedReader reader)
@@ -92,7 +113,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 				LongFileID = reader.ReadUInt32();
 			}
 
-#warning TODO: pass LongFileID to ObjectInfo
+			//TODO: pass LongFileID to ObjectInfo
 			Object = reader.ReadSerializedArray<ObjectInfo>();
 
 			if (HasScriptTypes(reader.Generation))

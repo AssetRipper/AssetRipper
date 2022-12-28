@@ -13,7 +13,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.IO
 
 		public T ReadSerialized<T>() where T : ISerializedReadable, new()
 		{
-			T t = new T();
+			T t = new();
 			t.Read(this);
 			return t;
 		}
@@ -24,7 +24,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.IO
 			T[] array = new T[count];
 			for (int i = 0; i < count; i++)
 			{
-				T instance = new T();
+				T instance = new();
 				instance.Read(this);
 				array[i] = instance;
 			}
