@@ -6,8 +6,6 @@ using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Classes;
 using AssetRipper.Core.Classes.Misc.Serializable;
-using AssetRipper.Core.Classes.Misc.Serializable.Boundaries;
-using AssetRipper.Core.Classes.Misc.Serializable.GUIStyle;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly.Managers;
@@ -20,13 +18,17 @@ using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Subclasses.AABB;
+using AssetRipper.SourceGenerated.Subclasses.AABBInt;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
 using AssetRipper.SourceGenerated.Subclasses.ColorRGBA32;
 using AssetRipper.SourceGenerated.Subclasses.ColorRGBAf;
 using AssetRipper.SourceGenerated.Subclasses.Gradient;
+using AssetRipper.SourceGenerated.Subclasses.GUIStyle;
+using AssetRipper.SourceGenerated.Subclasses.LayerMask;
 using AssetRipper.SourceGenerated.Subclasses.Matrix4x4f;
 using AssetRipper.SourceGenerated.Subclasses.Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.Rectf;
+using AssetRipper.SourceGenerated.Subclasses.RectOffset;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.SourceGenerated.Subclasses.Vector2Int;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
@@ -213,16 +215,16 @@ namespace AssetRipper.Core.Structure
 				MonoUtils.Vector4Name => Vector4fFactory.CreateAsset(version),
 				MonoUtils.RectName => RectfFactory.CreateAsset(),
 				MonoUtils.BoundsName => AABBFactory.CreateAsset(version),
-				MonoUtils.BoundsIntName => new AABBi(),
+				MonoUtils.BoundsIntName => AABBIntFactory.CreateAsset(),
 				MonoUtils.QuaternionName => QuaternionfFactory.CreateAsset(version),
 				MonoUtils.Matrix4x4Name => Matrix4x4fFactory.CreateAsset(),
 				MonoUtils.ColorName => ColorRGBAfFactory.CreateAsset(version),
 				MonoUtils.Color32Name => ColorRGBA32Factory.CreateAsset(),
-				MonoUtils.LayerMaskName => new LayerMask(),
+				MonoUtils.LayerMaskName => LayerMaskFactory.CreateAsset(),
 				MonoUtils.AnimationCurveName => AnimationCurve_SingleFactory.CreateAsset(version),
 				MonoUtils.GradientName => GradientFactory.CreateAsset(version),//This is the new Gradient. The old one was (most likely) not exposed to user code.
-				MonoUtils.RectOffsetName => new RectOffset(),
-				MonoUtils.GUIStyleName => new GUIStyle(),
+				MonoUtils.RectOffsetName => RectOffsetFactory.CreateAsset(),
+				MonoUtils.GUIStyleName => GUIStyleFactory.CreateAsset(version),
 				MonoUtils.PropertyNameName => new PropertyName(),
 				_ => throw new NotImplementedException(name),
 			};
