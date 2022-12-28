@@ -8,7 +8,7 @@ namespace AssetRipper.IO.Files.Tests
 		public static void LzmaStreamSymmetryTest()
 		{
 			const int UncompressedSize = 4075;
-			byte[] randomData = MakeRandomData(UncompressedSize);
+			byte[] randomData = RandomData.MakeRandomData(UncompressedSize);
 
 			MemoryStream uncompressedStream = new MemoryStream(randomData);
 			MemoryStream compressedStream = new();
@@ -29,7 +29,7 @@ namespace AssetRipper.IO.Files.Tests
 			const int UncompressedSize = 4077;
 			const int InitialOffset = 34;
 			const int TrailingCount = 50;
-			byte[] randomData = MakeRandomData(InitialOffset + UncompressedSize + TrailingCount);
+			byte[] randomData = RandomData.MakeRandomData(InitialOffset + UncompressedSize + TrailingCount);
 
 			MemoryStream uncompressedStream = new MemoryStream(randomData);
 			uncompressedStream.Position += InitialOffset;
@@ -50,7 +50,7 @@ namespace AssetRipper.IO.Files.Tests
 		public static void LzmaSizeStreamSymmetryTest()
 		{
 			const int UncompressedSize = 4067;
-			byte[] randomData = MakeRandomData(UncompressedSize);
+			byte[] randomData = RandomData.MakeRandomData(UncompressedSize);
 
 			MemoryStream uncompressedStream = new MemoryStream(randomData);
 			MemoryStream compressedStream = new();
@@ -71,7 +71,7 @@ namespace AssetRipper.IO.Files.Tests
 			const int UncompressedSize = 4087;
 			const int InitialOffset = 44;
 			const int TrailingCount = 40;
-			byte[] randomData = MakeRandomData(InitialOffset + UncompressedSize + TrailingCount);
+			byte[] randomData = RandomData.MakeRandomData(InitialOffset + UncompressedSize + TrailingCount);
 
 			MemoryStream uncompressedStream = new MemoryStream(randomData);
 			uncompressedStream.Position += InitialOffset;
@@ -86,13 +86,6 @@ namespace AssetRipper.IO.Files.Tests
 			byte[] decompressedData = decompressedStream.ToArray();
 
 			Assert.That((ArraySegment<byte>)decompressedData, Is.EqualTo(new ArraySegment<byte>(randomData, InitialOffset, UncompressedSize)));
-		}
-
-		private static byte[] MakeRandomData(int size)
-		{
-			byte[] data = new byte[size];
-			new Random(57).NextBytes(data);
-			return data;
 		}
 	}
 }

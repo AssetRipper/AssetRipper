@@ -12,8 +12,22 @@ namespace AssetRipper.IO.Files.CompressedFiles.GZip
 
 		public override void Read(SmartStream stream)
 		{
-			byte[] buffer = ReadGZip(stream);
-			UncompressedFile = new ResourceFile(buffer, FilePath, Name);
+			using SmartStream memoryStream = SmartStream.CreateMemory();
+			using (GZipStream gzipStream = new GZipStream(stream, CompressionMode.Decompress, true))
+			{
+				gzipStream.CopyTo(memoryStream);
+			}
+			memoryStream.Position = 0;
+			UncompressedFile = new ResourceFile(memoryStream, FilePath, Name);
+		}
+
+		public override void Write(Stream stream)
+		{
+			using MemoryStream memoryStream = new();
+			UncompressedFile?.Write(memoryStream);
+			memoryStream.Position = 0;
+			using GZipStream gzipStream = new GZipStream(stream, CompressionMode.Compress, true);
+			memoryStream.CopyTo(gzipStream);
 		}
 
 		internal static bool IsGZipFile(EndianReader reader)
@@ -32,19 +46,6 @@ namespace AssetRipper.IO.Files.CompressedFiles.GZip
 				return reader.ReadUInt16();
 			}
 			return 0;
-		}
-
-		private static byte[] ReadGZip(Stream stream)
-		{
-			using MemoryStream memoryStream = new MemoryStream();
-			using GZipStream gzipStream = new GZipStream(stream, CompressionMode.Decompress);
-			gzipStream.CopyTo(memoryStream);
-			return memoryStream.ToArray();
-		}
-
-		public override void Write(Stream stream)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }
