@@ -27,7 +27,38 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			get => Metadata.TargetPlatform;
 			set => Metadata.TargetPlatform = value;
 		}
-		public TransferInstructionFlags Flags { get; private set; }
+		public TransferInstructionFlags Flags
+		{
+			get
+			{
+				TransferInstructionFlags flags;
+				if (SerializedFileMetadata.HasPlatform(Header.Version) && Metadata.TargetPlatform == BuildTarget.NoTarget)
+				{
+					if (FilePath.EndsWith(".unity", StringComparison.Ordinal))
+					{
+						flags = TransferInstructionFlags.SerializeEditorMinimalScene;
+					}
+					else
+					{
+						flags = TransferInstructionFlags.NoTransferInstructionFlags;
+					}
+				}
+				else
+				{
+					flags = TransferInstructionFlags.SerializeGameRelease;
+				}
+
+				if (FilenameUtils.IsEngineResource(Name) || (Header.Version < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(Name)))
+				{
+					flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
+				}
+				if (Header.Endianess || Metadata.SwapEndianess)
+				{
+					flags |= TransferInstructionFlags.SwapEndianess;
+				}
+				return flags;
+			}
+		}
 		public EndianType EndianType
 		{
 			get
@@ -91,33 +122,6 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			for (int i = 0; i < Metadata.Object.Length; i++)
 			{
 				m_assetEntryLookup.Add(Metadata.Object[i].FileID, i);
-			}
-
-			UpdateFlags();
-		}
-
-		private void UpdateFlags()
-		{
-			Flags = TransferInstructionFlags.SerializeGameRelease;
-			if (SerializedFileMetadata.HasPlatform(Header.Version))
-			{
-				if (Metadata.TargetPlatform == BuildTarget.NoTarget)
-				{
-					Flags = TransferInstructionFlags.NoTransferInstructionFlags;
-					if (FilePath.EndsWith(".unity", StringComparison.Ordinal))
-					{
-						Flags |= TransferInstructionFlags.SerializeEditorMinimalScene;
-					}
-				}
-			}
-
-			if (FilenameUtils.IsEngineResource(Name) || (Header.Version < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(Name)))
-			{
-				Flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
-			}
-			if (Header.Endianess || Metadata.SwapEndianess)
-			{
-				Flags |= TransferInstructionFlags.SwapEndianess;
 			}
 		}
 
