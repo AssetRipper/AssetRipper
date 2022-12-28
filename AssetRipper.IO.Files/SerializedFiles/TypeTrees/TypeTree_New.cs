@@ -4,9 +4,13 @@ using System.IO;
 
 namespace AssetRipper.IO.Files.SerializedFiles.TypeTrees;
 
-public partial class TypeTree<T>
+/// <summary>
+/// The base class for <see cref="ITypeTree"/>s using the new format, ie <see cref="FormatVersion.Unknown_10"/> and higher.
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public abstract class TypeTree_New<T> : TypeTree<T> where T : ITypeTreeNode, new()
 {
-	protected void ReadVersion10Plus(EndianReader reader)
+	public sealed override void Read(EndianReader reader)
 	{
 		int nodesCount = reader.ReadInt32();
 		if (nodesCount < 0)
@@ -41,7 +45,7 @@ public partial class TypeTree<T>
 		SetNamesFromBuffer();
 	}
 
-	protected void WriteVersion10Plus(EndianWriter writer)
+	public sealed override void Write(EndianWriter writer)
 	{
 		writer.Write(Nodes.Count);
 		writer.Write(StringBuffer.Length);

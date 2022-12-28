@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AssetRipper.IO.Files.SerializedFiles.TypeTrees;
 
-public abstract partial class TypeTree<T> : ITypeTree where T : ITypeTreeNode, new()
+public abstract class TypeTree<T> : ITypeTree where T : ITypeTreeNode, new()
 {
 	public List<T> Nodes { get; } = new();
 	public byte[] StringBuffer { get; set; } = Array.Empty<byte>();
