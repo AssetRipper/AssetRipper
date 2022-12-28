@@ -5,7 +5,6 @@ using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Classes;
-using AssetRipper.Core.Classes.Misc.Serializable;
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Core.Structure.Assembly.Managers;
@@ -29,6 +28,7 @@ using AssetRipper.SourceGenerated.Subclasses.Matrix4x4f;
 using AssetRipper.SourceGenerated.Subclasses.Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.Rectf;
 using AssetRipper.SourceGenerated.Subclasses.RectOffset;
+using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.SourceGenerated.Subclasses.Vector2Int;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
@@ -222,11 +222,15 @@ namespace AssetRipper.Core.Structure
 				MonoUtils.Color32Name => ColorRGBA32Factory.CreateAsset(),
 				MonoUtils.LayerMaskName => LayerMaskFactory.CreateAsset(),
 				MonoUtils.AnimationCurveName => AnimationCurve_SingleFactory.CreateAsset(version),
-				MonoUtils.GradientName => GradientFactory.CreateAsset(version),//This is the new Gradient. The old one was (most likely) not exposed to user code.
+				//This is the new Gradient. The old one was (most likely) not exposed to user code.
+				MonoUtils.GradientName => GradientFactory.CreateAsset(version),
 				MonoUtils.RectOffsetName => RectOffsetFactory.CreateAsset(),
 				MonoUtils.GUIStyleName => GUIStyleFactory.CreateAsset(version),
-				MonoUtils.PropertyNameName => new PropertyName(),
-				_ => throw new NotImplementedException(name),
+				//In the managed editor code, PropertyName is only backed by an int ID field.
+				//However, in yaml and release binaries, it appears identical to Utf8String.
+				//Presumably, editor binaries are the same, but this was not verified.
+				MonoUtils.PropertyNameName => Utf8StringFactory.CreateAsset(),
+				_ => throw new NotSupportedException(name),
 			};
 		}
 	}
