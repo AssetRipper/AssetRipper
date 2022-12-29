@@ -5,7 +5,7 @@
         xmlns:ar="using:AssetRipper.GUI"
         xmlns:cc="using:AssetRipper.GUI.Components"
         xmlns:i18n="clr-namespace:AssetRipper.GUI" 
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="800"
         x:Class="AssetRipper.GUI.MainWindow"
         Icon="/Resources/GUI_Icon.ico"
         Title="AssetRipper"
@@ -35,6 +35,7 @@
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <Grid RowDefinitions="35,20,*">
+            <!--Title-->
             <TextBlock Grid.Row="0"
                        IsHitTestVisible="False"
                        FontSize="18"
@@ -159,15 +160,8 @@
                         SelectedValue="{Binding ImageExportFormat, Mode=TwoWay}"
                         Margin="0, 0, 10, 0">
                     </cc:ImageExportConfigDropdown>
-                    <cc:SpriteExportConfigDropdown
-                        Grid.Column="2"
-                        Grid.Row="2"
-                        OptionTitle="{i18n:Localize sprite_export_title}"
-                        SelectedValue="{Binding SpriteExportMode, Mode=TwoWay}"
-                        Margin="10, 0, 10, 0">
-                    </cc:SpriteExportConfigDropdown>
                     <cc:BundledAssetsExportConfigDropdown
-                        Grid.Column="3"
+                        Grid.Column="2"
                         Grid.Row="2"
                         OptionTitle="{i18n:Localize bundled_assets_export_title}"
                         SelectedValue="{Binding BundledAssetsExportMode, Mode=TwoWay}"
