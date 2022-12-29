@@ -52,9 +52,9 @@ namespace AssetRipper.Library.Exporters.Terrains
 		public static DirectBitmap GetBitmap(ITerrainData terrain)
 		{
 			DirectBitmap bitmap = new DirectBitmap(
+				GetBGRA32Data(terrain),
 				Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution),
-				Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution),
-				GetBGRA32Data(terrain));
+				Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution));
 			bitmap.FlipY();
 			return bitmap;
 		}
