@@ -3,43 +3,40 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace AssetRipper.GUI.Components
 {
 	public abstract class BaseConfigurationDropdown<T> : UserControlWithPropChange where T : struct, Enum
 	{
-		private string _optionTitle = $"<Missing Title##{typeof(T).Name}>";
 		private ItemWrapper? _selectedValue;
-		private string? _selectedValueDesc;
 
-		public static DirectProperty<BaseConfigurationDropdown<T>, List<ItemWrapper>> ValuesProperty =
-			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, List<ItemWrapper>>(nameof(Values), obj => obj.Values);
+		public static readonly StyledProperty<List<ItemWrapper>> ValuesProperty =
+			AvaloniaProperty.Register<BaseConfigurationDropdown<T>, List<ItemWrapper>>(nameof(Values));
 
 		public static DirectProperty<BaseConfigurationDropdown<T>, ItemWrapper> RawSelectedValueProperty =
 			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, ItemWrapper>(nameof(RawSelectedValue), obj => obj.RawSelectedValue, (obj, val) => obj.RawSelectedValue = val);
 
-		public static DirectProperty<BaseConfigurationDropdown<T>, T> SelectedValueProperty =
+		public static readonly DirectProperty<BaseConfigurationDropdown<T>, T> SelectedValueProperty =
 			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, T>(nameof(SelectedValue), obj => obj.SelectedValue, (obj, val) => obj.SelectedValue = val);
 
-		public static DirectProperty<BaseConfigurationDropdown<T>, string> OptionTitleProperty =
-			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, string>(nameof(OptionTitle), obj => obj.OptionTitle, (obj, val) => obj.OptionTitle = val);
+		public static readonly StyledProperty<string> OptionTitleProperty =
+			AvaloniaProperty.Register<BaseConfigurationDropdown<T>, string>(nameof(OptionTitle), defaultValue: $"<Missing Title##{typeof(T).Name}>");
 
-		public static DirectProperty<BaseConfigurationDropdown<T>, string?> SelectedValueDescriptionProperty =
-			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, string?>(nameof(SelectedValueDescription), obj => obj.SelectedValueDescription, (obj, val) => obj.SelectedValueDescription = val);
+		public static readonly StyledProperty<string?> SelectedValueDescriptionProperty =
+			AvaloniaProperty.Register<BaseConfigurationDropdown<T>, string?>(nameof(SelectedValueDescription));
 
-		public List<ItemWrapper> Values { get; }
+		public List<ItemWrapper> Values
+		{
+			get => GetValue(ValuesProperty);
+			init => SetValue(ValuesProperty, value);
+		}
 
 		public string OptionTitle
 		{
-			get => _optionTitle;
-			set
-			{
-				string oldValue = _optionTitle;
-				_optionTitle = value;
-				OnPropertyChanged();
-				RaisePropertyChanged(OptionTitleProperty, oldValue, value);
-			}
+			get => GetValue(OptionTitleProperty);
+			set => SetValue(OptionTitleProperty, value);
 		}
 
 		public ItemWrapper RawSelectedValue
@@ -58,14 +55,8 @@ namespace AssetRipper.GUI.Components
 
 		public string? SelectedValueDescription
 		{
-			get => _selectedValueDesc;
-			set
-			{
-				string? oldValue = _selectedValueDesc;
-				_selectedValueDesc = value;
-				OnPropertyChanged();
-				RaisePropertyChanged(SelectedValueDescriptionProperty, oldValue, value);
-			}
+			get => GetValue(SelectedValueDescriptionProperty);
+			set => SetValue(SelectedValueDescriptionProperty, value);
 		}
 
 		public T SelectedValue
@@ -99,10 +90,10 @@ namespace AssetRipper.GUI.Components
 
 		protected virtual string? GetValueDescription(T value) => null;
 
-		public class ItemWrapper
+		public sealed record class ItemWrapper
 		{
-			public T Item;
-			public string DisplayName;
+			public T Item { get; set; }
+			public string DisplayName { get; set; }
 
 			public ItemWrapper(T item, string displayName)
 			{
@@ -111,36 +102,6 @@ namespace AssetRipper.GUI.Components
 			}
 
 			public override string ToString() => DisplayName;
-
-			protected bool Equals(ItemWrapper other)
-			{
-				return Item.Equals(other.Item) && DisplayName == other.DisplayName;
-			}
-
-			public override bool Equals(object? obj)
-			{
-				if (ReferenceEquals(null, obj))
-				{
-					return false;
-				}
-
-				if (ReferenceEquals(this, obj))
-				{
-					return true;
-				}
-
-				if (obj.GetType() != this.GetType())
-				{
-					return false;
-				}
-
-				return Equals((ItemWrapper)obj);
-			}
-
-			public override int GetHashCode()
-			{
-				return HashCode.Combine(Item, DisplayName);
-			}
 		}
 	}
 }
