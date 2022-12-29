@@ -58,16 +58,15 @@ namespace AssetRipper.Library.Exporters.Textures
 			UnityVersion version,
 			byte[] data)
 		{
-			if (width == 0 || height == 0)
+			if (width <= 0 || height <= 0 || depth <= 0)
 			{
 				return new DirectBitmap(1, 1);
 			}
 
-
-			DirectBitmap bitmap = new DirectBitmap(width, height * depth);
+			DirectBitmap bitmap = new DirectBitmap(width, height, depth);
 			try
 			{
-				int outputSize = width * height * Unsafe.SizeOf<ColorBGRA32>();
+				int outputSize = width * height * DirectBitmap.PixelSize;
 				for (int i = 0; i < depth; i++)
 				{
 					ReadOnlySpan<byte> inputSpan = new ReadOnlySpan<byte>(data, i * imageSize, imageSize);
@@ -88,7 +87,7 @@ namespace AssetRipper.Library.Exporters.Textures
 						return null;
 					}
 				}
-				bitmap.FlipY(depth);
+				bitmap.FlipY();
 				return bitmap;
 			}
 			catch

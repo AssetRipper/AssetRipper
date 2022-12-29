@@ -165,12 +165,12 @@ namespace AssetRipper.Library.Utils
 		[SupportedOSPlatform("windows")]
 		private Bitmap ToSystemBitmap()
 		{
-			return new Bitmap(Width, Height, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
+			return new Bitmap(Width, Height * Depth, Stride, PixelFormat.Format32bppArgb, m_bitsHandle.AddrOfPinnedObject());
 		}
 
 		private Image<Bgra32> ToImageSharp()
 		{
-			return SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height);
+			return SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Bits, Width, Height * Depth);
 		}
 	}
 }
