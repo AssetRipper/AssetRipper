@@ -53,27 +53,22 @@ namespace AssetRipper.Library
 {
 	public class Ripper
 	{
+		private GameStructure? gameStructure;
+
 		public Ripper() : this(new()) { }
 
 		public Ripper(LibraryConfiguration configuration)
 		{
 			Settings = configuration;
-			PluginLoader.LoadPlugins(this);
 		}
 
-		public GameStructure GameStructure { get; private set; }
+		public GameStructure GameStructure => gameStructure ?? throw new NullReferenceException(nameof(GameStructure));
 		/// <summary>
 		/// Needs to be set before loading assets to ensure predictable behavior
 		/// </summary>
 		public LibraryConfiguration Settings { get; }
 		private bool ExportersInitialized { get; set; }
 		private List<IPostExporter> PostExporters { get; } = new();
-
-		public event Action? OnStartLoadingGameStructure;
-		public event Action? OnFinishLoadingGameStructure;
-		public event Action? OnInitializingExporters;
-		public event Action? OnStartExporting;
-		public event Action? OnFinishExporting;
 
 		public GameStructure Load(IReadOnlyList<string> paths)
 		{
@@ -87,14 +82,12 @@ namespace AssetRipper.Library
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths.Count} paths...");
 			}
 
-			OnStartLoadingGameStructure?.Invoke();
 			TaskManager.WaitUntilAllCompleted();
 
-			GameStructure = GameStructure.Load(paths, Settings);
+			gameStructure = GameStructure.Load(paths, Settings);
 			TaskManager.WaitUntilAllCompleted();
 			Logger.Info(LogCategory.General, "Finished reading files");
 
-			OnFinishLoadingGameStructure?.Invoke();
 			TaskManager.WaitUntilAllCompleted();
 
 			Logger.Info(LogCategory.General, "Processing assemblies...");
@@ -153,7 +146,6 @@ namespace AssetRipper.Library
 			TaskManager.WaitUntilAllCompleted();
 
 			Logger.Info(LogCategory.Export, "Starting pre-export");
-			OnStartExporting?.Invoke();
 			TaskManager.WaitUntilAllCompleted();
 
 			Logger.Info(LogCategory.Export, "Starting export");
@@ -161,7 +153,6 @@ namespace AssetRipper.Library
 			TaskManager.WaitUntilAllCompleted();
 
 			Logger.Info(LogCategory.Export, "Finished exporting assets");
-			OnFinishExporting?.Invoke();
 			TaskManager.WaitUntilAllCompleted();
 
 			foreach (IPostExporter postExporter in PostExporters)
@@ -176,8 +167,8 @@ namespace AssetRipper.Library
 		{
 			PostExporters.Clear();
 			ExportersInitialized = false;
-			GameStructure?.Dispose();
-			GameStructure = null;
+			gameStructure?.Dispose();
+			gameStructure = null;
 		}
 
 		public void ResetSettings() => Settings.ResetToDefaultValues();
@@ -215,28 +206,12 @@ namespace AssetRipper.Library
 
 		private void InitializeExporters()
 		{
-			if (GameStructure == null)
-			{
-				throw new NullReferenceException("GameStructure cannot be null");
-			}
-
-			if (GameStructure.FileCollection == null)
-			{
-				throw new NullReferenceException("FileCollection cannot be null");
-			}
-
-			if (GameStructure.Exporter == null)
-			{
-				throw new NullReferenceException("Project Exporter cannot be null");
-			}
-
 			if (ExportersInitialized)
 			{
 				return;
 			}
 
 			OverrideNormalExporters();
-			OnInitializingExporters?.Invoke();
 			OverrideEngineExporters();
 
 			ExportersInitialized = true;
