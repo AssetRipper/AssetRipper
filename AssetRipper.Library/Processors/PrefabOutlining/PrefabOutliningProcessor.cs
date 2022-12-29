@@ -15,6 +15,10 @@ namespace AssetRipper.Library.Processors.PrefabOutlining
 {
 	public sealed class PrefabOutliningProcessor : IAssetProcessor
 	{
+		//Documentation note: prefab variants were introduced in 2018.3.
+		//That does not affect this processor currently, but it may have an impact on future improvements.
+		//https://blog.unity.com/technology/introducing-unity-2018-3
+
 		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
 		{
 			Logger.Info(LogCategory.Processing, "Prefab Outlining");
