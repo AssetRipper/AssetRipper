@@ -3,6 +3,8 @@
   "config_options": "Configuration Options",
   "bundled_assets_export_title": "Bundled Assets Export Mode",
   "skip_streaming_assets": "Skip StreamingAssets Folder",
+  "enable_prefab_outlining": "Enable Prefab Outlining",
+  "enable_static_mesh_separation": "Enable Static Mesh Separation",
   "mesh_export_title": "Mesh Export Format",
   "audio_export_title": "Audio Export Format",
   "image_export_title": "Image Export Format",

@@ -26,6 +26,26 @@ namespace AssetRipper.GUI
 			}
 		}
 
+		public bool EnablePrefabOutlining
+		{
+			get => _ripper.Settings.EnablePrefabOutlining;
+			set
+			{
+				_ripper.Settings.EnablePrefabOutlining = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool EnableStaticMeshSeparation
+		{
+			get => _ripper.Settings.EnableStaticMeshSeparation;
+			set
+			{
+				_ripper.Settings.EnableStaticMeshSeparation = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public AudioExportFormat AudioExportFormat
 		{
 			get => _ripper.Settings.AudioExportFormat;

@@ -41,6 +41,8 @@ namespace AssetRipper.Library.Configuration
 		/// How are text assets exported?
 		/// </summary>
 		public TextExportMode TextExportMode { get; set; }
+		public bool EnablePrefabOutlining { get; set; }
+		public bool EnableStaticMeshSeparation { get; set; }
 
 		public override void ResetToDefaultValues()
 		{
@@ -54,6 +56,8 @@ namespace AssetRipper.Library.Configuration
 			SpriteExportMode = SpriteExportMode.Yaml;
 			TerrainExportMode = TerrainExportMode.Yaml;
 			TextExportMode = TextExportMode.Parse;
+			EnablePrefabOutlining = false;
+			EnableStaticMeshSeparation = false;
 		}
 
 		public override void LogConfigurationValues()
@@ -68,6 +72,8 @@ namespace AssetRipper.Library.Configuration
 			Logger.Info(LogCategory.General, $"{nameof(SpriteExportMode)}: {SpriteExportMode}");
 			Logger.Info(LogCategory.General, $"{nameof(TerrainExportMode)}: {TerrainExportMode}");
 			Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
+			Logger.Info(LogCategory.General, $"{nameof(EnablePrefabOutlining)}: {EnablePrefabOutlining}");
+			Logger.Info(LogCategory.General, $"{nameof(EnableStaticMeshSeparation)}: {EnableStaticMeshSeparation}");
 		}
 	}
 }

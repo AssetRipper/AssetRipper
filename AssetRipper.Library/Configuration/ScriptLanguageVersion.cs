@@ -86,15 +86,15 @@ namespace AssetRipper.Library.Configuration
 		/// Added in 2021.2.0b6 and 2022.1.0a3
 		/// </summary>
 		/// <remarks>
-		/// These are also the versions that introduced .NET Standard 2.1 support and .<br/>
-		/// <see href="https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-1#net-standard-versions"/><br/>
-		/// <see href="https://forum.unity.com/threads/unity-future-net-development-status.1092205/"/><br/>
+		/// These are also the versions that introduced .NET Standard 2.1 support.<br/>
 		/// Despite being part of C# 8, support for
 		/// <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/default-interface-methods">default interface methods</see>
 		/// was added in this language support expansion. It was unavailable prior to these versions.<br/>
 		/// Despite being part of C# 9, support for
 		/// <see href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-9.0/covariant-returns">covariant return types</see>
-		/// was not included in this language support expansion, nor any other C# 9 features requiring runtime support.
+		/// was not included in this language support expansion, nor any other C# 9 features requiring runtime support.<br/>
+		/// <see href="https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-1#net-standard-versions"/><br/>
+		/// <see href="https://forum.unity.com/threads/unity-future-net-development-status.1092205/"/>
 		/// </remarks>
 		/// <param name="unityVersion"></param>
 		/// <returns></returns>
