@@ -26,10 +26,12 @@ namespace AssetRipper.Library.Exporters.Scripts
 		{
 			WholeProjectDecompiler decompiler = new(assemblyResolver);
 
+			decompiler.Settings.SetLanguageVersion(LanguageVersion);
+
 			decompiler.Settings.AlwaysShowEnumMemberValues = true;
 			decompiler.Settings.ShowXmlDocumentation = true;
 
-			decompiler.Settings.SetLanguageVersion(LanguageVersion);
+			decompiler.Settings.UseSdkStyleProjectFormat = false;//sdk style can throw and we don't use the csproj file at all
 			decompiler.Settings.UseNestedDirectoriesForNamespaces = true;
 
 			DecompileWholeProject(decompiler, assembly, outputFolder);
