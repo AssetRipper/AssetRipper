@@ -98,22 +98,29 @@ namespace AssetRipper.Library
 			}
 
 			Logger.Info(LogCategory.General, "Processing loaded assets...");
-			List<IAssetProcessor> AssetProcessors = new()
-			{
-				new SceneGuidProcessor(),
-				new TerrainTextureProcessor(),
-				new LightingDataProcessor(),
-				new AnimatorControllerProcessor(),
-				new EditorFormatProcessor(Settings.BundledAssetsExportMode),
-				//new StaticMeshProcessor(),
-				new PrefabOutliningProcessor(),
-				new SpriteProcessor(),
-			};
-			GameStructure.Process(AssetProcessors);
+			GameStructure.Process(GetProcessors());
 			TaskManager.WaitUntilAllCompleted();
 			Logger.Info(LogCategory.General, "Finished processing assets");
 
 			return GameStructure;
+
+			IEnumerable<IAssetProcessor> GetProcessors()
+			{
+				yield return new SceneGuidProcessor();
+				yield return new TerrainTextureProcessor();
+				yield return new LightingDataProcessor();
+				yield return new AnimatorControllerProcessor();
+				yield return new EditorFormatProcessor(Settings.BundledAssetsExportMode);
+				if (Settings.EnableStaticMeshSeparation)
+				{
+					yield return new StaticMeshProcessor();
+				}
+				if (Settings.EnablePrefabOutlining)
+				{
+					yield return new PrefabOutliningProcessor();
+				}
+				yield return new SpriteProcessor();
+			}
 		}
 
 		public IEnumerable<IUnityObjectBase> FetchLoadedAssets()
@@ -254,7 +261,7 @@ namespace AssetRipper.Library
 			OverrideExporter<IAudioClip>(new YamlAudioExporter());
 			ConditionalOverrideExporter<IAudioClip>(new NativeAudioExporter(), Settings.AudioExportFormat == AudioExportFormat.Native);
 			ConditionalOverrideExporter<IAudioClip>(new AudioClipExporter(Settings), AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat));
-			
+
 			//AudioMixer exporters
 			AudioMixerExporter audioMixerExporter = new();
 			//OverrideExporter<IAudioMixerController>(audioMixerExporter);
