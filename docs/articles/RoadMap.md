@@ -1,15 +1,8 @@
 # Development Roadmap
 
-## 0.3.0.2
-This release will be primarily focused on final preparations and will be the first official release in the 0.3.X.X series.
+## 0.3.0.3
+This release will be primarily focused on refactoring the project and fixing any reported bugs.
 
-* Experimental features option
-* Remove Sprite drop down option
-
-## 0.3.1.0
-This release will be primarily focused on refactoring the project and making the UI prettier.
-
-* Convert to the material theme
 * Refactor the project structure to remove AssetRipper.Core and AssetRipper.Library
 
 ## 0.3.X.0
@@ -21,9 +14,11 @@ These releases will likely focus on preparing for the next major milestone.
 * Make all dependencies trimmable
 * Nuget feed for forked dependencies
 * NativeAOT compilation for better performance while loading and extracting
+* Use Span readers and writers for more efficient asset reading and writing
+* Add donation information to the user interface
 
 ## 0.4.0.0 / 1.0.0.0
-This release will focus on improving the user experience by overhauling the GUI
+This release might focus on improving the user experience in the GUI.
 
 ## Planned But Unscheduled
 * Import
@@ -44,6 +39,9 @@ This release will focus on improving the user experience by overhauling the GUI
   * Selective Export
     * Export Selected object to folder
     * Export Selected object to compressed zip file
+  * Primary Content Extraction
+  * Binary Export
+    * SerializeFile writing as an alternative to yaml export.
 * UI
   * Improved Asset previews
     * Preview decompiled scripts

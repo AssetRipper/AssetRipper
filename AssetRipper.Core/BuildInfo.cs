@@ -10,6 +10,6 @@
 		public const string Author = "ds5678";
 		public const string CopyRight = "Copyright © 2022";
 
-		public const string Version = "0.3.0.1";
+		public const string Version = "0.3.0.2";
 	}
 }
