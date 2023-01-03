@@ -41,4 +41,28 @@ public partial struct EndianSpanWriter
 		value.CopyTo(data.Slice(Position));
 		offset += value.Length;
 	}
+
+	/// <summary>
+	/// Read a <see cref="Utf8String"/> from the data.
+	/// </summary>
+	/// <remarks>
+	/// The binary format is a 4-byte integer length, followed by length bytes.
+	/// This method does not call <see cref="Align"/>.
+	/// </remarks>
+	public void Write(Utf8String value)
+	{
+		Write(value.Data.Length);
+		Write(value.Data);
+	}
+
+	/// <summary>
+	/// Align the <see cref="Position"/> to a next multiple of 4.
+	/// </summary>
+	/// <remarks>
+	/// If the <see cref="Position"/> is not divisible by 4, this will move it to the next multiple of 4.
+	/// </remarks>
+	public void Align()
+	{
+		Position = (Position + 3) & ~3;
+	}
 }

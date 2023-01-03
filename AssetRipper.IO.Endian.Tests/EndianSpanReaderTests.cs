@@ -83,4 +83,27 @@ public partial class EndianSpanReaderTests
 			reader.ReadBytesExact(-1);
 		});
 	}
+
+	[Theory]
+	public void AlignDoesNotThrowForZeroLength(EndianType endianType)
+	{
+		Assert.DoesNotThrow(() =>
+		{
+			EndianSpanReader reader = new EndianSpanReader(default, endianType);
+			reader.Align();
+		});
+	}
+
+	[Theory]
+	public void AlignMovesPositionToMultipleOfFour(EndianType endianType)
+	{
+		Span<byte> data = stackalloc byte[6];
+		EndianSpanReader reader = new EndianSpanReader(data, endianType);
+		for (int i = 1; i <= 4; i++)
+		{
+			reader.Position = i;
+			reader.Align();
+			Assert.That(reader.Position, Is.EqualTo(4));
+		}
+	}
 }

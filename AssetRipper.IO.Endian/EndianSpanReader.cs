@@ -85,7 +85,33 @@ public partial struct EndianSpanReader
 	{
 		if (count < 0)
 		{
-			throw new ArgumentOutOfRangeException(nameof(count), "Value cannot be negative.");
+			throw new ArgumentOutOfRangeException(nameof(count), count, "Value cannot be negative.");
 		}
+	}
+
+	/// <summary>
+	/// Read a <see cref="Utf8String"/> from the data.
+	/// </summary>
+	/// <remarks>
+	/// The binary format is a 4-byte integer length, followed by length bytes.
+	/// This method does not call <see cref="Align"/>.
+	/// </remarks>
+	/// <returns></returns>
+	public Utf8String ReadUtf8String()
+	{
+		int length = ReadInt32();
+		byte[] data = ReadBytesExact(length);
+		return new Utf8String(data);
+	}
+
+	/// <summary>
+	/// Align the <see cref="Position"/> to a next multiple of 4.
+	/// </summary>
+	/// <remarks>
+	/// If the <see cref="Position"/> is not divisible by 4, this will move it to the next multiple of 4.
+	/// </remarks>
+	public void Align()
+	{
+		Position = (Position + 3) & ~3;
 	}
 }

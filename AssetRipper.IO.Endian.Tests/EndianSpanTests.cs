@@ -45,4 +45,43 @@ public partial class EndianSpanTests
 		reader.Position = newPosition;
 		Assert.That(reader.Position, Is.EqualTo(newPosition));
 	}
+
+	[Theory]
+	public void Utf8StringTest(EndianType endianType)
+	{
+		const string Content = "Ascii Characters";
+		int length = sizeof(int) + Content.Length;
+		byte[] data = new byte[length];
+		Utf8String value1 = Content;
+
+		EndianSpanWriter writer = new EndianSpanWriter(data, endianType);
+		Assert.That(writer.Length, Is.EqualTo(length));
+		writer.Write(value1);
+		Assert.That(writer.Position, Is.EqualTo(length));
+
+		EndianSpanReader reader = new EndianSpanReader(data, endianType);
+		Assert.That(reader.Length, Is.EqualTo(length));
+		Utf8String value2 = reader.ReadUtf8String();
+		Assert.That(reader.Position, Is.EqualTo(length));
+		Assert.That(value2, Is.EqualTo(value1));
+	}
+
+	[Theory]
+	public void Utf8StringEmptyTest(EndianType endianType)
+	{
+		int length = sizeof(int);
+		byte[] data = new byte[length];
+		Utf8String value1 = Utf8String.Empty;
+
+		EndianSpanWriter writer = new EndianSpanWriter(data, endianType);
+		Assert.That(writer.Length, Is.EqualTo(length));
+		writer.Write(value1);
+		Assert.That(writer.Position, Is.EqualTo(length));
+
+		EndianSpanReader reader = new EndianSpanReader(data, endianType);
+		Assert.That(reader.Length, Is.EqualTo(length));
+		Utf8String value2 = reader.ReadUtf8String();
+		Assert.That(reader.Position, Is.EqualTo(length));
+		Assert.That(value2, Is.EqualTo(value1));
+	}
 }
