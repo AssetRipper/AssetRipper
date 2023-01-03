@@ -2,6 +2,7 @@
 using AssetRipper.Core.Configuration;
 using AssetRipper.Core.Structure.Assembly;
 using AssetRipper.Core.Structure.Assembly.Managers;
+using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
 using System.IO;
@@ -24,15 +25,17 @@ namespace AssetRipper.Library.Exporters.Scripts
 
 		public void DecompileWholeProject(AssemblyDefinition assembly, string outputFolder)
 		{
-			WholeProjectDecompiler decompiler = new(assemblyResolver);
+			DecompilerSettings settings = new();
 
-			decompiler.Settings.SetLanguageVersion(LanguageVersion);
+			settings.SetLanguageVersion(LanguageVersion);
 
-			decompiler.Settings.AlwaysShowEnumMemberValues = true;
-			decompiler.Settings.ShowXmlDocumentation = true;
+			settings.AlwaysShowEnumMemberValues = true;
+			settings.ShowXmlDocumentation = true;
 
-			decompiler.Settings.UseSdkStyleProjectFormat = false;//sdk style can throw and we don't use the csproj file at all
-			decompiler.Settings.UseNestedDirectoriesForNamespaces = true;
+			settings.UseSdkStyleProjectFormat = false;//sdk style can throw and we don't use the csproj file at all
+			settings.UseNestedDirectoriesForNamespaces = true;
+
+			WholeProjectDecompiler decompiler = new(settings, assemblyResolver, null, null);
 
 			DecompileWholeProject(decompiler, assembly, outputFolder);
 		}
