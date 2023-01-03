@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AssetRipper.Core\AssetRipper.Core.csproj" />
+		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
 	</ItemGroup>
 
 </Project>

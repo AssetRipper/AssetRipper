@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<IsTrimmable>true</IsTrimmable>
+		<OutputPath>..\Bins\Other\AssetRipper.Export.Modules.Audio\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Export.Modules.Audio\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="AssetRipper.SourceGenerated">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>../Libraries/AssetRipper.SourceGenerated.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+</Project>

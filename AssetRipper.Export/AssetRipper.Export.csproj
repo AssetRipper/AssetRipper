@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<IsTrimmable>true</IsTrimmable>
+		<OutputPath>..\Bins\Other\AssetRipper.Export\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Export\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.Export.PrimaryContent\AssetRipper.Export.PrimaryContent.csproj" />
+		<ProjectReference Include="..\AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="AssetRipper.SourceGenerated">
+			<SpecificVersion>False</SpecificVersion>
+			<HintPath>../Libraries/AssetRipper.SourceGenerated.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+</Project>

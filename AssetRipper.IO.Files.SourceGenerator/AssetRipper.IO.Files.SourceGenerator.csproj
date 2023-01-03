@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<OutputPath>..\Bins\Other\AssetRipper.IO.Files.SourceGenerator\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.IO.Files.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\Bins\Other\AssetRipper.SerializationLogic\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.SerializationLogic\$(Configuration)\</IntermediateOutputPath>

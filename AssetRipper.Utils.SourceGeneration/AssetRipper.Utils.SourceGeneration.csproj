@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<OutputPath>..\Bins\Other\AssetRipper.Utils.SourceGeneration\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Utils.SourceGeneration\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>

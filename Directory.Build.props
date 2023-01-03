@@ -3,7 +3,12 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<LangVersion>Latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+		<Copyright>Copyright ©  2023</Copyright>
+		<Authors>ds5678</Authors>
 	</PropertyGroup>
 </Project>

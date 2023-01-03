@@ -38,7 +38,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AssetRipper.Library\AssetRipper.Library.csproj" />
+		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

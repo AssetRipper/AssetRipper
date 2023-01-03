@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<ImplicitUsings>true</ImplicitUsings>
 		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\Bins\Other\AssetRipper.IO.Endian\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.IO.Endian\$(Configuration)\</IntermediateOutputPath>

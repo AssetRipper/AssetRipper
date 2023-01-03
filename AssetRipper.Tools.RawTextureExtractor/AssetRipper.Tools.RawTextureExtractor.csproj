@@ -2,14 +2,9 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>..\Bins\AssetRipper.Tools.RawTextureExtractor\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Tools.RawTextureExtractor\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\AssetRipper.Core\AssetRipper.Core.csproj" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="AssetRipper.SourceGenerated">
@@ -19,6 +14,10 @@
 
 	<ItemGroup>
 		<RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
 	</ItemGroup>
 
 </Project>

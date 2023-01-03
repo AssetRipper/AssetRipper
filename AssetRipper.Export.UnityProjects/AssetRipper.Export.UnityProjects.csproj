@@ -5,8 +5,8 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<IsTrimmable>true</IsTrimmable>
-		<OutputPath>..\Bins\Other\AssetRipper.Library\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Library\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\Bins\Other\AssetRipper.Export.UnityProjects\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Export.UnityProjects\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -33,8 +33,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AssetRipper.Core\AssetRipper.Core.csproj" />
-		<ProjectReference Include="..\ShaderTextRestorer\ShaderTextRestorer.csproj" />
+		<ProjectReference Include="..\AssetRipper.Export.Modules.Audio\AssetRipper.Export.Modules.Audio.csproj" />
+		<ProjectReference Include="..\AssetRipper.Export.Modules.Shader\AssetRipper.Export.Modules.Shaders.csproj" />
+		<ProjectReference Include="..\AssetRipper.Export.Modules.Textures\AssetRipper.Export.Modules.Textures.csproj" />
+		<ProjectReference Include="..\AssetRipper.Import\AssetRipper.Import.csproj" />
+		<ProjectReference Include="..\AssetRipper.Processing\AssetRipper.Processing.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

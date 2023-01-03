@@ -1,6 +1,8 @@
 using AssetRipper.Core.Logging;
 using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.Library.Utils;
+using AssetRipper.SourceGenerated.Classes.ClassID_117;
+using AssetRipper.SourceGenerated.Classes.ClassID_187;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.TextureDecoder.Astc;
@@ -18,6 +20,55 @@ namespace AssetRipper.Library.Exporters.Textures
 {
 	public static class TextureConverter
 	{
+		public static DirectBitmap? ConvertToBitmap(ITexture3D texture)
+		{
+			byte[] buffer = texture.GetImageData();
+			if (buffer.Length == 0)
+			{
+				return null;
+			}
+
+			DirectBitmap? bitmap = ConvertToBitmap(
+				texture.GetTextureFormat(),
+				texture.Width_C117,
+				texture.Height_C117,
+				texture.ImageCount_C117,
+				texture.GetCompleteImageSize(),
+				texture.Collection.Version,
+				buffer);
+
+			if (bitmap == null)
+			{
+				return null;
+			}
+
+			// despite the name, this packing works for different formats
+			if (texture.LightmapFormat_C117 == (int)TextureUsageMode.NormalmapDXT5nm)
+			{
+				UnpackNormal(bitmap.Bits);
+			}
+
+			return bitmap;
+		}
+
+		public static DirectBitmap? ConvertToBitmap(ITexture2DArray texture)
+		{
+			byte[] buffer = texture.GetImageData();
+			if (buffer.Length == 0)
+			{
+				return null;
+			}
+
+			return ConvertToBitmap(
+				texture.Format_C187E,
+				texture.Width_C187,
+				texture.Height_C187,
+				texture.Depth_C187,
+				(int)texture.DataSize_C187,
+				texture.Collection.Version,
+				buffer);
+		}
+
 		public static DirectBitmap? ConvertToBitmap(ITexture2D texture)
 		{
 			byte[] buffer = texture.GetImageData();

@@ -1,9 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Copyright>Copyright ©  2022</Copyright>
-		<Authors>ds5678</Authors>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\Bins\Other\AssetRipper.Addressables\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Addressables\$(Configuration)\</IntermediateOutputPath>

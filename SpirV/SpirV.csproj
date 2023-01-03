@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\Bins\Other\SpirV\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\SpriV\$(Configuration)\</IntermediateOutputPath>

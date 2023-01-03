@@ -1,14 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<IsTrimmable>true</IsTrimmable>
-		<OutputPath>..\Bins\Other\ShaderTextRestorer\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\ShaderTextRestorer\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\Bins\Other\AssetRipper.Export.Modules.Shaders\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Export.Modules.Shaders\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AssetRipper.Core\AssetRipper.Core.csproj" />
+		<ProjectReference Include="..\AssetRipper.Import\AssetRipper.Import.csproj" />
 		<ProjectReference Include="..\Smolv\Smolv.csproj" />
 		<ProjectReference Include="..\SpirV\SpirV.csproj" />
 	</ItemGroup>
