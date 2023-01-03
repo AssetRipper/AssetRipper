@@ -4,6 +4,7 @@ using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Single;
 using System.Buffers;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.InteropServices;
 

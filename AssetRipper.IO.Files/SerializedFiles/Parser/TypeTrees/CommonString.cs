@@ -4,7 +4,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees
 {
 	public static class CommonString
 	{
-		public static readonly Dictionary<uint, string> StringBuffer = new Dictionary<uint, string>
+		public static IReadOnlyDictionary<uint, string> StringBuffer { get; } = new Dictionary<uint, string>
 		{
 			{0, "AABB"},
 			{5, "AnimationClip"},

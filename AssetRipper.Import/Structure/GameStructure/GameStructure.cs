@@ -66,25 +66,16 @@ namespace AssetRipper.Core.Structure.GameStructure
 			return new GameStructure(toProcess, configuration);
 		}
 
-		public void Process(IEnumerable<IAssetProcessor> processors)
-		{
-			UnityVersion version = GetUnityVersion();
-			foreach (IAssetProcessor processor in processors)
-			{
-				processor.Process(FileCollection, version);
-			}
-		}
-
 		public void Export(CoreConfiguration options)
 		{
 			Logger.Info(LogCategory.Export, $"Game files have these Unity versions:{GetListOfVersions()}");
-			UnityVersion version = GetUnityVersion();
+			UnityVersion version = GetMaxUnityVersion();
 			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
 			options.SetProjectSettings(version, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 			Exporter.Export(FileCollection, options);
 		}
 
-		private UnityVersion GetUnityVersion()
+		public UnityVersion GetMaxUnityVersion()
 		{
 			return FileCollection.FetchAssetCollections().Select(t => t.Version).Append(UnityVersion.MinVersion).Max();
 		}

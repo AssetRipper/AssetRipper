@@ -98,7 +98,11 @@ namespace AssetRipper.Library
 			}
 
 			Logger.Info(LogCategory.General, "Processing loaded assets...");
-			GameStructure.Process(GetProcessors());
+			UnityVersion version = GameStructure.GetMaxUnityVersion();
+			foreach (IAssetProcessor processor in GetProcessors())
+			{
+				processor.Process(GameStructure.FileCollection, version);
+			}
 			TaskManager.WaitUntilAllCompleted();
 			Logger.Info(LogCategory.General, "Finished processing assets");
 

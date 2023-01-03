@@ -4,7 +4,6 @@ using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Logging;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
@@ -15,8 +14,6 @@ using AssetRipper.SourceGenerated.Subclasses.OcclusionScene;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_OcclusionPortal;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Renderer;
 using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AssetRipper.Core.SourceGenExtensions
 {
@@ -101,8 +98,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 				int sceneIndex = occlusionCullingData.Scenes_C363.IndexOf(t => t.Scene == cullingSetting.SceneGUID_C29);
 				if (sceneIndex == -1)
 				{
-					Logger.Log(LogType.Error, LogCategory.Export, $"Unable to find scene data with GUID {cullingSetting.SceneGUID_C29} in {occlusionCullingData.GetNameNotEmpty()}");
-					continue;
+					//Previously a logged error
+					throw new Exception($"Unable to find scene data with GUID {cullingSetting.SceneGUID_C29} in {occlusionCullingData.GetNameNotEmpty()}");
 				}
 
 				IOcclusionScene scene = occlusionCullingData.Scenes_C363[sceneIndex];

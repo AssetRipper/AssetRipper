@@ -1,5 +1,4 @@
-﻿using AssetRipper.Core.Extensions;
-using AssetRipper.SourceGenerated.Classes.ClassID_83;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.NativeEnums.Fmod;
 
@@ -9,7 +8,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 	{
 		public static byte[] GetAudioData(this IAudioClip audioClip)
 		{
-			if (!audioClip.AudioData_C83.IsNullOrEmpty())
+			if (audioClip.Has_AudioData_C83() && audioClip.AudioData_C83.Length > 0)
 			{
 				return audioClip.AudioData_C83;
 			}
@@ -29,7 +28,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static bool CheckAssetIntegrity(this IAudioClip audioClip)
 		{
-			if (!audioClip.AudioData_C83.IsNullOrEmpty())
+			if (audioClip.Has_AudioData_C83() && audioClip.AudioData_C83.Length > 0)
 			{
 				return true;
 			}
