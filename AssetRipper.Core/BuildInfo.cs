@@ -8,8 +8,8 @@
 		public const string LibraryName = Name + ".Library";
 
 		public const string Author = "ds5678";
-		public const string CopyRight = "Copyright © 2022";
+		public const string CopyRight = "Copyright © 2023";
 
-		public const string Version = "0.3.0.2";
+		public const string Version = "0.3.0.3";
 	}
 }

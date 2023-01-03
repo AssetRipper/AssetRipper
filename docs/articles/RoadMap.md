@@ -1,6 +1,6 @@
 # Development Roadmap
 
-## 0.3.0.3
+## 0.3.0.4
 This release will be primarily focused on refactoring the project and fixing any reported bugs.
 
 * Refactor the project structure to remove AssetRipper.Core and AssetRipper.Library
