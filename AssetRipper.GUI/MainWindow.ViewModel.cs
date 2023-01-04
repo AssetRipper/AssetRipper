@@ -226,7 +226,7 @@ namespace AssetRipper.GUI
 
 		public async void ExportAll()
 		{
-			if (_ripper.GameStructure == null)
+			if (!_ripper.IsLoaded)
 			{
 				return;
 			}
@@ -267,7 +267,7 @@ namespace AssetRipper.GUI
 
 		public async void ExportSelectedAssetToProject()
 		{
-			if (_ripper.GameStructure == null || SelectedAsset == null)
+			if (!_ripper.IsLoaded || SelectedAsset == null)
 			{
 				return;
 			}
@@ -330,7 +330,7 @@ namespace AssetRipper.GUI
 
 		public async void ExportSelectedAssetTypeToProject()
 		{
-			if (_ripper.GameStructure == null || SelectedAsset == null || SelectedAsset.Asset is DummyAssetForLooseResourceFile)
+			if (!_ripper.IsLoaded || SelectedAsset == null || SelectedAsset.Asset is DummyAssetForLooseResourceFile)
 			{
 				return;
 			}

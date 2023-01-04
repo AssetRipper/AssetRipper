@@ -59,6 +59,8 @@ namespace AssetRipper.Export.UnityProjects
 			Settings = configuration;
 		}
 
+		public bool IsLoaded => gameStructure != null;
+
 		public GameStructure GameStructure => gameStructure ?? throw new NullReferenceException(nameof(GameStructure));
 		/// <summary>
 		/// Needs to be set before loading assets to ensure predictable behavior
