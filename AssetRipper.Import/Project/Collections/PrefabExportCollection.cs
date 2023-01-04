@@ -61,6 +61,11 @@ namespace AssetRipper.Import.Project.Collections
 			}
 		}
 
+		/// <summary>
+		/// GameObject or Component attached to a GameObject
+		/// </summary>
+		/// <param name="asset">The asset being assessed.</param>
+		/// <returns>True if the asset can be used.</returns>
 		public static bool IsValidAsset(IUnityObjectBase asset)
 		{
 			if (asset is IGameObject)

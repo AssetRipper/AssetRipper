@@ -37,7 +37,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 		{
 			if (asset.Collection.IsScene)
 			{
-				return new GlbSceneModelExportCollection(this, asset.Collection);
+				return new GlbSceneModelExportCollection(this, asset.Collection.Scene);
 			}
 			else if (PrefabExportCollection.IsValidAsset(asset))
 			{

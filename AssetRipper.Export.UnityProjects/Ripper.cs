@@ -107,7 +107,7 @@ namespace AssetRipper.Export.UnityProjects
 
 			IEnumerable<IAssetProcessor> GetProcessors()
 			{
-				yield return new SceneGuidProcessor();
+				yield return new SceneDefinitionProcessor();
 				yield return new TerrainTextureProcessor();
 				yield return new LightingDataProcessor();
 				yield return new AnimatorControllerProcessor();

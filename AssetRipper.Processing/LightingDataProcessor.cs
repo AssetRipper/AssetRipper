@@ -16,7 +16,6 @@ using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.LightmapData;
 using AssetRipper.SourceGenerated.Subclasses.RendererData;
 using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
-using System.Linq;
 
 namespace AssetRipper.Processing
 {
@@ -29,7 +28,13 @@ namespace AssetRipper.Processing
 
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections())
 			{
-				ILightmapSettings? lightmapSettings = collection.SelectType<IUnityObjectBase, ILightmapSettings>().FirstOrDefault();
+				if (!collection.IsScene)
+				{
+					//Only scenes can contain a LightmapSettings asset.
+					continue;
+				}
+
+				ILightmapSettings? lightmapSettings = collection.OfType<ILightmapSettings>().FirstOrDefault();
 				if (lightmapSettings is not null && (lightmapSettings.Has_LightingDataAsset_C157() || lightmapSettings.Has_LightmapSnapshot_C157()))
 				{
 					ILightingDataAsset lightingDataAsset = CreateLightingDataAsset(processedCollection);
@@ -52,7 +57,7 @@ namespace AssetRipper.Processing
 					}
 					else if (lightingDataAsset.Has_SceneGUID_C1120())
 					{
-						lightingDataAsset.SceneGUID_C1120.CopyValues(collection.GUID);
+						lightingDataAsset.SceneGUID_C1120.CopyValues(collection.Scene.GUID);
 					}
 
 					lightingDataAsset.LightProbes_C1120P = (ILightProbes?)lightmapSettings.LightProbes_C157P;
@@ -70,7 +75,7 @@ namespace AssetRipper.Processing
 					//a test project on each version and then bake the lighting in the test project.
 					//There is no proper API to create a LightingDataAsset.
 
-					lightingDataAsset.NameString = collection.Name;
+					lightingDataAsset.NameString = collection.Scene.Name;
 					//Normally, the asset is called "LightingData" but we give it a more unique name here
 					//because any others will be in the same folder.
 

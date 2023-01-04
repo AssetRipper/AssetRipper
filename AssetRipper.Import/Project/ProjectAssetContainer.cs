@@ -112,7 +112,7 @@ namespace AssetRipper.Import.Project
 			string fileName = SceneExportHelpers.SceneIndexToFileName(index, Version);
 			foreach (SceneExportCollection scene in m_scenes)
 			{
-				if (scene.Name == fileName)
+				if (scene.FileName == fileName)
 				{
 					return scene.GUID;
 				}

@@ -11,8 +11,9 @@ namespace AssetRipper.Import.Project.Collections
 {
 	public sealed class SceneAssetExportCollection : IExportCollection
 	{
+		//Todo: ISceneAsset.TargetScene should be SceneDefinition instead of AssetCollection.
 		public ISceneAsset Asset { get; }
-		public AssetCollection TargetScene => Asset.TargetScene ?? throw new NullReferenceException();
+		public SceneDefinition TargetScene => Asset.TargetScene?.Scene ?? throw new NullReferenceException();
 
 		public SceneAssetExportCollection(ISceneAsset asset)
 		{

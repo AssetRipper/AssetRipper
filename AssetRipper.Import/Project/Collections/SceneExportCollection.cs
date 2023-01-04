@@ -13,18 +13,18 @@ using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_363;
 using AssetRipper.SourceGenerated.Extensions;
 
-
 namespace AssetRipper.Import.Project.Collections
 {
 	public class SceneExportCollection : ExportCollection, IComparer<IUnityObjectBase>
 	{
-		public SceneExportCollection(IAssetExporter assetExporter, AssetCollection file)
+		public SceneExportCollection(IAssetExporter assetExporter, SceneDefinition scene)
 		{
 			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
-			File = file ?? throw new ArgumentNullException(nameof(file));
+			Scene = scene ?? throw new ArgumentNullException(nameof(scene));
+			CurrentFile = scene.Collections[0];//Have to set it to something.
 
 			List<IUnityObjectBase> components = new();
-			foreach (IUnityObjectBase asset in file)
+			foreach (IUnityObjectBase asset in Scene.Collections.SelectMany(c => c))
 			{
 				if (SceneExportHelpers.IsSceneCompatible(asset))
 				{
@@ -49,22 +49,20 @@ namespace AssetRipper.Import.Project.Collections
 
 		public override bool Export(IProjectAssetContainer container, string projectDirectory)
 		{
-			string sceneSubPath = File.ScenePath;
-			string filePath = Path.Combine(projectDirectory, $"{sceneSubPath}.{ExportExtension}");
+			string filePath = Path.Combine(projectDirectory, $"{Scene.Path}.{ExportExtension}");
 			string folderPath = Path.GetDirectoryName(filePath)!;
-			string sceneName = Path.GetFileName(sceneSubPath);
 
 			if (SceneExportHelpers.IsDuplicate(container, File))
 			{
 				if (System.IO.File.Exists(filePath))
 				{
-					Logger.Log(LogType.Warning, LogCategory.Export, $"Duplicate scene '{sceneSubPath}' has been found. Skipping");
+					Logger.Log(LogType.Warning, LogCategory.Export, $"Duplicate scene '{Scene.Path}' has been found. Skipping");
 					return false;
 				}
 			}
 
 			Directory.CreateDirectory(folderPath);
-			return ExportScene(container, folderPath, filePath, sceneName);
+			return ExportScene(container, folderPath, filePath, Scene.Name);
 		}
 
 		protected virtual bool ExportScene(IProjectAssetContainer container, string folderPath, string filePath, string sceneName)
@@ -156,24 +154,48 @@ namespace AssetRipper.Import.Project.Collections
 		{
 			get
 			{
-				foreach (IUnityObjectBase asset in Components)
+				foreach (IUnityObjectBase asset in m_components)
 				{
+					CurrentFile = asset.Collection;
 					yield return asset;
 				}
 				if (OcclusionCullingData != null)
 				{
+					CurrentFile = OcclusionCullingData.Collection;
 					yield return OcclusionCullingData;
 				}
 			}
 		}
 
 		public virtual string ExportExtension => "unity";
-		public override string Name => File.Name;
-		public override AssetCollection File { get; }
+
+		/// <summary>
+		/// The <see cref="SceneDefinition.Name"/> of <see cref="Scene"/>.
+		/// </summary>
+		public override string Name => Scene.Name;
+
+		/// <summary>
+		/// The <see cref="AssetCollection.Name"/> of the first <see cref="SerializedAssetCollection"/> in <see cref="SceneDefinition.Collections"/>.
+		/// </summary>
+		public string? FileName => Scene.Collections.FirstOrDefault(c => c is SerializedAssetCollection)?.Name;
+
+		public override AssetCollection File => CurrentFile;
 		public IOcclusionCullingData? OcclusionCullingData { get; }
-		public UnityGUID GUID => File.GUID;
-		private IEnumerable<IUnityObjectBase> Components => m_components;
+		public UnityGUID GUID => Scene.GUID;
+		private IEnumerable<IUnityObjectBase> Components
+		{
+			get
+			{
+				foreach (IUnityObjectBase asset in m_components)
+				{
+					CurrentFile = asset.Collection;
+					yield return asset;
+				}
+			}
+		}
 		public override IAssetExporter AssetExporter { get; }
+		public SceneDefinition Scene { get; }
+		private AssetCollection CurrentFile { get; set; }
 
 		private readonly IUnityObjectBase[] m_components;
 		private readonly Dictionary<AssetInfo, long> m_exportIDs = new();

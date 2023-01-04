@@ -17,5 +17,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			vector.Z = source.Z;
 			vector.W = source.W;
 		}
+
+		public static void SetIdentity(this IQuaternionf vector) => vector.CopyValues(Quaternion.Identity);
 	}
 }

@@ -6,7 +6,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 {
 	public sealed class GlbSceneModelExportCollection : SceneExportCollection
 	{
-		public GlbSceneModelExportCollection(GlbModelExporter assetExporter, AssetCollection scene) : base(assetExporter, scene)
+		public GlbSceneModelExportCollection(GlbModelExporter assetExporter, SceneDefinition scene) : base(assetExporter, scene)
 		{
 		}
 

@@ -38,24 +38,11 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 	public BuildTarget Platform { get; protected set; }
 	public TransferInstructionFlags Flags { get; protected set; }
 	public EndianType EndianType { get; protected set; }
-	/// <summary>
-	/// The GUID of this collection. If this is a scene, it gets used in the scene's meta file.
-	/// </summary>
-	public UnityGUID GUID { get; set; }
-	/// <summary>
-	/// The relative path of the scene without any file extension.
-	/// </summary>
-	/// <remarks>
-	/// If the collection is not a scene, this represents nothing.
-	/// </remarks>
-	public string ScenePath
-	{
-		get => sceneName ?? $"Assets/Scenes/{Name}";
-		set => sceneName = value;
-	}
-	private string? sceneName;
-	
-	public bool IsScene { get; set; }
+
+	[MemberNotNullWhen(true, nameof(Scene))]
+	public bool IsScene => Scene is not null;
+
+	public SceneDefinition? Scene { get; internal set; }
 
 	public int AddDependency(AssetCollection dependency)
 	{

@@ -33,6 +33,19 @@ namespace AssetRipper.SourceGenerated.Extensions
 		}
 
 		/// <summary>
+		/// Initialize an injected Transform with some sensible default values.
+		/// </summary>
+		/// <param name="transform"></param>
+		public static void InitializeDefault(this ITransform transform)
+		{
+			transform.LocalPosition_C4.SetZero();
+			transform.LocalRotation_C4.SetIdentity();
+			transform.LocalScale_C4.SetOne();
+			transform.RootOrder_C4 = 0;
+			transform.LocalEulerAnglesHint_C4?.SetZero();
+		}
+
+		/// <summary>
 		/// Find the sibling index (aka the root order) of the transform
 		/// </summary>
 		/// <param name="transform">The relevant transform</param>

@@ -19,12 +19,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			vector.Z = source.Z;
 		}
 
-		public static void Reset(this IVector3f vector)
-		{
-			vector.X = 0;
-			vector.Y = 0;
-			vector.Z = 0;
-		}
+		public static void SetZero(this IVector3f vector) => vector.CopyValues(Vector3.Zero);
+
+		public static void SetOne(this IVector3f vector) => vector.CopyValues(Vector3.One);
 
 		public static Vector3 CastToStruct(this IVector3f vector)
 		{

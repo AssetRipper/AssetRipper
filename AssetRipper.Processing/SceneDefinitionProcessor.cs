@@ -12,30 +12,32 @@ using AssetRipper.SourceGenerated.Classes.ClassID_29;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 
 namespace AssetRipper.Processing
 {
-	public sealed class SceneGuidProcessor : IAssetProcessor
+	public sealed class SceneDefinitionProcessor : IAssetProcessor
 	{
 		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
 		{
-			Logger.Info(LogCategory.Processing, "Scene GUID Assignment");
+			Logger.Info(LogCategory.Processing, "Creating Scene Definitions");
 			IBuildSettings? buildSettings = null;
-			List<AssetCollection> scenes = new();
+			HashSet<AssetCollection> sceneCollections = new();
+			Dictionary<AssetCollection, string> scenePaths = new();
+			Dictionary<AssetCollection, UnityGUID> sceneGuids = new();
 			List<IAssetBundle> sceneAssetBundles = new();
+
+			//Find the relevant assets in this single pass over all the assets.
 			foreach (AssetCollection collection in gameBundle.FetchAssetCollections())
 			{
 				foreach (IUnityObjectBase asset in collection)
 				{
 					if (asset is ILevelGameManager)
 					{
-						scenes.Add(collection);
+						sceneCollections.Add(collection);
 						if (asset is IOcclusionCullingSettings sceneSettings && sceneSettings.Has_SceneGUID_C29())
 						{
-							collection.GUID = sceneSettings.SceneGUID_C29;
+							sceneGuids[collection] = sceneSettings.SceneGUID_C29;
 						}
 					}
 					else if (asset is IBuildSettings buildSettings1)
@@ -47,19 +49,18 @@ namespace AssetRipper.Processing
 						sceneAssetBundles.Add(assetBundle);
 					}
 				}
-				if (collection.GUID.IsZero)
-				{
-					collection.GUID = UnityGUID.NewGuid();
-				}
 			}
-			foreach (AssetCollection scene in scenes)
+
+			//Currently, these paths are treated as lower precedent than paths defined in asset bundles, but they should never conflict.
+			foreach (AssetCollection sceneCollection in sceneCollections)
 			{
-				scene.IsScene = true;
-				if (SceneExportHelpers.TryGetScenePath(scene, buildSettings, out string? scenePath))
+				if (SceneExportHelpers.TryGetScenePath(sceneCollection, buildSettings, out string? scenePath))
 				{
-					scene.ScenePath = scenePath;
+					scenePaths[sceneCollection] = scenePath;
 				}
 			}
+
+			//Extract scene paths from asset bundles.
 			foreach (IAssetBundle assetBundleAsset in sceneAssetBundles)
 			{
 				Bundle bundle = assetBundleAsset.Collection.Bundle;
@@ -74,21 +75,40 @@ namespace AssetRipper.Processing
 					{
 						Debug.Assert(pair.Value.Asset.IsNull(), "Scene pointer is not null");
 
-						string name = Path.ChangeExtension(pair.Key.String, null);
-						Debug.Assert(name.StartsWith("Assets/", StringComparison.Ordinal), "Scene path is not relative to the project directory.");
-						int index = IndexOf(bundle.Collections, scenes, startingIndex);
+						string path = Path.ChangeExtension(pair.Key.String, null);
+						Debug.Assert(path.StartsWith("Assets/", StringComparison.Ordinal), "Scene path is not relative to the project directory.");
+						int index = IndexOf(bundle.Collections, sceneCollections, startingIndex);
 						if (index < 0)
 						{
 							throw new Exception($"Scene collection not found in {bundle.Name} at or after index {startingIndex}");
 						}
-						bundle.Collections[index].ScenePath = name;
+
+						AssetCollection sceneCollection = bundle.Collections[index];
+						sceneCollections.Add(sceneCollection);//Just to be safe
+						scenePaths[sceneCollection] = path;
 						startingIndex = index + 1;
 					}
 				}
 			}
+
+			//Make the scene definitions
+			foreach (AssetCollection sceneCollection in sceneCollections)
+			{
+				SceneDefinition sceneDefinition;
+				UnityGUID guid = sceneGuids.TryGetValue(sceneCollection, out UnityGUID sceneGuid) ? sceneGuid : default;
+				if (scenePaths.TryGetValue(sceneCollection, out string? path))
+				{
+					sceneDefinition = SceneDefinition.FromPath(path, guid);
+				}
+				else
+				{
+					sceneDefinition = SceneDefinition.FromName(sceneCollection.Name, guid);
+				}
+				sceneDefinition.AddCollection(sceneCollection);
+			}
 		}
 
-		private static int IndexOf(IReadOnlyList<AssetCollection> list, List<AssetCollection> containingSet, int startingIndex)
+		private static int IndexOf(IReadOnlyList<AssetCollection> list, HashSet<AssetCollection> containingSet, int startingIndex)
 		{
 			for (int i = startingIndex; i < list.Count; i++)
 			{

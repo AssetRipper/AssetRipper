@@ -16,7 +16,7 @@ namespace AssetRipper.Import.Project.Exporters
 		{
 			if (asset.Collection.IsScene)
 			{
-				return new SceneExportCollection(this, asset.Collection);
+				return new SceneExportCollection(this, asset.Collection.Scene);
 			}
 			else if (PrefabExportCollection.IsValidAsset(asset))
 			{
