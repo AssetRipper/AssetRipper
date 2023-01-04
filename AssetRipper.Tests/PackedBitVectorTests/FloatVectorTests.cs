@@ -1,7 +1,5 @@
-﻿using AssetRipper.Core.Equality;
-using AssetRipper.Core.SourceGenExtensions;
+﻿using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Single;
-using System;
 
 namespace AssetRipperTests.PackedBitVectorTests
 {
@@ -29,7 +27,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 			PackedBitVector_Single packedVector = new();
 			packedVector.PackFloats(floats, 24, false);
 			float[] unpackedValues = packedVector.Unpack();
-			AreAlmostEqual(floats, unpackedValues, 0.000001f);
+			Assert.That(unpackedValues, Is.EqualTo(floats).Within(0.000001f));
 		}
 
 		[Test]
@@ -38,23 +36,7 @@ namespace AssetRipperTests.PackedBitVectorTests
 			PackedBitVector_Single packedVector = new();
 			packedVector.PackFloats(floats, 8, true);
 			float[] unpackedValues = packedVector.Unpack();
-			AreAlmostEqual(floats, unpackedValues, 0.01f);
-		}
-
-		private static void AreAlmostEqual(float[] expected, float[] actual, float maxDeviation)
-		{
-			if (expected.Length != actual.Length)
-			{
-				Assert.Fail($"Lengths were inequal.\nExpected: {expected.Length}\nBut was: {actual.Length}");
-			}
-
-			for (int i = 0; i < expected.Length; i++)
-			{
-				if (!NearEquality.AlmostEqualByDeviation(expected[i], actual[i], maxDeviation))
-				{
-					Assert.Fail($"Values significantly differ at index {i}\nExpected: {expected[i]}\nBut was: {actual[i]}");
-				}
-			}
+			Assert.That(unpackedValues, Is.EqualTo(floats).Within(0.01f));
 		}
 	}
 }
