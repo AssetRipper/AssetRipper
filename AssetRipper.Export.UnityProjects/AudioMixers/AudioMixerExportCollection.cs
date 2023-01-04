@@ -320,6 +320,6 @@ namespace AssetRipper.Export.UnityProjects.AudioMixers
 			return base.ExportInner(container, filePath, dirPath);
 		}
 		
-		private const string UnityPatchName = "AssetRipper.Library.Exporters.AudioMixers.UnityPatch.AudioMixerPostprocessor.txt";
+		private const string UnityPatchName = "AssetRipper.Export.UnityProjects.AudioMixers.UnityPatch.AudioMixerPostprocessor.txt";
 	}
 }

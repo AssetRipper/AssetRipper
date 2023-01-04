@@ -28,7 +28,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			return base.ExportInner(container, filePath, dirPath);
 		}
 
-		private const string RegisterShaderUnityPatchName = "AssetRipper.Library.Exporters.Shaders.UnityPatch.YamlShaderPostprocessor.txt";
-		private const string FileLockerUnityPatchName = "AssetRipper.Library.Exporters.Shaders.UnityPatch.YamlShaderLocker.txt";
+		private const string RegisterShaderUnityPatchName = "AssetRipper.Export.UnityProjects.Shaders.UnityPatch.YamlShaderPostprocessor.txt";
+		private const string FileLockerUnityPatchName = "AssetRipper.Export.UnityProjects.Shaders.UnityPatch.YamlShaderLocker.txt";
 	}
 }

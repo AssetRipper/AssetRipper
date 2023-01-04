@@ -7,7 +7,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 {
 	public static class TemplateList
 	{
-		public const string ShaderTemplatePrefix = "AssetRipper.Library.Exporters.Shaders.Templates.";
+		public const string ShaderTemplatePrefix = "AssetRipper.Export.UnityProjects.Shaders.Templates.";
 		public const string ShaderTemplateExtension = ".txt";
 		public const string TemplatesJsonPath = ShaderTemplatePrefix + "Templates.json";
 		public static List<TemplateShader> Templates { get; }
