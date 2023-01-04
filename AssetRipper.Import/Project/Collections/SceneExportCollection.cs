@@ -1,17 +1,12 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Project.Exporters;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_1030;
-using AssetRipper.SourceGenerated.Classes.ClassID_1034;
-using AssetRipper.SourceGenerated.Classes.ClassID_29;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
-using AssetRipper.SourceGenerated.Classes.ClassID_363;
-using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Import.Project.Collections
 {
@@ -32,19 +27,8 @@ namespace AssetRipper.Import.Project.Collections
 					m_exportIDs.Add(asset.AssetInfo, asset.PathID);
 				}
 			}
-			m_components = components.OrderBy(t => t, this).ToArray();
-
-			foreach (IUnityObjectBase comp in Components)
-			{
-				if (comp is IOcclusionCullingSettings settings)
-				{
-					if (settings.PVSData_C29?.Length > 0)
-					{
-						m_occlusionCullingSettings = settings;
-						break;
-					}
-				}
-			}
+			components.Sort(this);
+			componentArray = components.ToArray();
 		}
 
 		public override bool Export(IProjectAssetContainer container, string projectDirectory)
@@ -67,46 +51,33 @@ namespace AssetRipper.Import.Project.Collections
 
 		protected virtual bool ExportScene(IProjectAssetContainer container, string folderPath, string filePath, string sceneName)
 		{
-			AssetExporter.Export(container, Components, filePath);
+			AssetExporter.Export(container, Assets, filePath);
 			IDefaultImporter sceneImporter = DefaultImporterFactory.CreateAsset(container.ExportVersion);
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);
-
-			string subFolderPath = Path.Combine(folderPath, sceneName);
-			if (OcclusionCullingData is not null && m_occlusionCullingSettings is not null)
-			{
-				OcclusionCullingData.Initialize(container, m_occlusionCullingSettings);
-				ExportAsset(container, OcclusionCullingData, subFolderPath);
-			}
-
 			return true;
 		}
 
 		public override bool IsContains(IUnityObjectBase asset)
 		{
-			if (asset == OcclusionCullingData)
-			{
-				return true;
-			}
 			return m_exportIDs.ContainsKey(asset.AssetInfo);
 		}
 
 		public override long GetExportID(IUnityObjectBase asset)
 		{
-			return IsComponent(asset) ? m_exportIDs[asset.AssetInfo] : ExportIdHandler.GetMainExportID(asset);
+			return m_exportIDs[asset.AssetInfo];
 		}
 
 		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
 			long exportID = GetExportID(asset);
-			if (isLocal && IsComponent(asset))
+			if (isLocal)
 			{
 				return new MetaPtr(exportID);
 			}
 			else
 			{
-				UnityGUID guid = IsComponent(asset) ? GUID : asset.GUID;
-				return new MetaPtr(exportID, guid, AssetType.Serialized);
+				return new MetaPtr(exportID, GUID, AssetType.Serialized);
 			}
 		}
 
@@ -138,31 +109,14 @@ namespace AssetRipper.Import.Project.Collections
 			}
 		}
 
-		private void ExportAsset(IProjectAssetContainer container, IHasNameString asset, string path)
-		{
-			INativeFormatImporter importer = NativeFormatImporterFactory.CreateAsset(container.ExportVersion);
-			importer.MainObjectFileID_C1034 = GetExportID((IUnityObjectBase)asset);
-			ExportAsset(container, importer, (IUnityObjectBase)asset, path, asset.NameString);
-		}
-
-		private bool IsComponent(IUnityObjectBase asset)
-		{
-			return asset != OcclusionCullingData;
-		}
-
 		public override IEnumerable<IUnityObjectBase> Assets
 		{
 			get
 			{
-				foreach (IUnityObjectBase asset in m_components)
+				foreach (IUnityObjectBase asset in componentArray)
 				{
 					CurrentFile = asset.Collection;
 					yield return asset;
-				}
-				if (OcclusionCullingData != null)
-				{
-					CurrentFile = OcclusionCullingData.Collection;
-					yield return OcclusionCullingData;
 				}
 			}
 		}
@@ -180,25 +134,12 @@ namespace AssetRipper.Import.Project.Collections
 		public string? FileName => Scene.Collections.FirstOrDefault(c => c is SerializedAssetCollection)?.Name;
 
 		public override AssetCollection File => CurrentFile;
-		public IOcclusionCullingData? OcclusionCullingData { get; }
 		public UnityGUID GUID => Scene.GUID;
-		private IEnumerable<IUnityObjectBase> Components
-		{
-			get
-			{
-				foreach (IUnityObjectBase asset in m_components)
-				{
-					CurrentFile = asset.Collection;
-					yield return asset;
-				}
-			}
-		}
 		public override IAssetExporter AssetExporter { get; }
 		public SceneDefinition Scene { get; }
 		private AssetCollection CurrentFile { get; set; }
 
-		private readonly IUnityObjectBase[] m_components;
+		private readonly IUnityObjectBase[] componentArray;
 		private readonly Dictionary<AssetInfo, long> m_exportIDs = new();
-		private readonly IOcclusionCullingSettings? m_occlusionCullingSettings;
 	}
 }
