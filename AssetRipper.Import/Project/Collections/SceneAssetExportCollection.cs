@@ -6,9 +6,8 @@ using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public sealed class SceneAssetExportCollection : IExportCollection
 	{

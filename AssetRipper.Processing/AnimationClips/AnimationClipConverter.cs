@@ -1,12 +1,13 @@
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Utils;
-using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
-using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Utils;
-using AssetRipper.Library.Processors.AnimationClips.Editor;
+using AssetRipper.Processing.AnimationClips.Editor;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
+using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip;
+using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.GenericBinding;
+using AssetRipper.SourceGenerated.Extensions.Enums.Keyframe;
+using AssetRipper.SourceGenerated.Extensions.Enums.Keyframe.TangentMode;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipBindingConstant;
 using AssetRipper.SourceGenerated.Subclasses.Clip;
 using AssetRipper.SourceGenerated.Subclasses.ConstantClip;
@@ -22,11 +23,9 @@ using AssetRipper.SourceGenerated.Subclasses.PPtrKeyframe;
 using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
 using AssetRipper.SourceGenerated.Subclasses.StreamedClip;
 using AssetRipper.SourceGenerated.Subclasses.Vector3Curve;
-using System.Collections.Generic;
-using System.IO;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.Library.Processors.AnimationClips
+namespace AssetRipper.Processing.AnimationClips
 {
 	public sealed partial class AnimationClipConverter
 	{
@@ -270,7 +269,7 @@ namespace AssetRipper.Library.Processors.AnimationClips
 						key.Time = time;
 						// this enum member is version agnostic
 						key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
-						key.WeightedMode = (int)Core.Classes.Misc.KeyframeTpl.WeightedMode.None;
+						key.WeightedMode = (int)WeightedMode.None;
 						key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 						key.OutWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 					}
@@ -308,7 +307,7 @@ namespace AssetRipper.Library.Processors.AnimationClips
 						key.Time = time;
 						// this enum member is version agnostic
 						key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
-						key.WeightedMode = (int)Core.Classes.Misc.KeyframeTpl.WeightedMode.None;
+						key.WeightedMode = (int)WeightedMode.None;
 						key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 						key.OutWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 					}
@@ -343,7 +342,7 @@ namespace AssetRipper.Library.Processors.AnimationClips
 						key.Time = time;
 						// this enum member is version agnostic
 						key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
-						key.WeightedMode = (int)Core.Classes.Misc.KeyframeTpl.WeightedMode.None;
+						key.WeightedMode = (int)WeightedMode.None;
 						key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 						key.OutWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 					}
@@ -382,7 +381,7 @@ namespace AssetRipper.Library.Processors.AnimationClips
 						key.Time = time;
 						// this enum member is version agnostic
 						key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
-						key.WeightedMode = (int)Core.Classes.Misc.KeyframeTpl.WeightedMode.None;
+						key.WeightedMode = (int)WeightedMode.None;
 						key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 						key.OutWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
 					}
@@ -447,7 +446,7 @@ namespace AssetRipper.Library.Processors.AnimationClips
 
 		private void AddAnimatorMuscleCurve(IGenericBinding binding, float time, float value)
 		{
-			string attributeString = Core.Classes.AnimationClip.HumanoidMuscleTypeExtensions.ToAttributeString(binding.GetHumanoidMuscle(Version));
+			string attributeString = HumanoidMuscleTypeExtensions.ToAttributeString(binding.GetHumanoidMuscle(Version));
 			CurveData curve = new CurveData(string.Empty, attributeString, ClassIDType.Animator);
 			AddFloatKeyframe(curve, time, value);
 		}

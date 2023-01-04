@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function
 {
 	public class UShaderProgram
 	{

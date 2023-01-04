@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Core.Classes.AnimationClip.Bones
+﻿namespace AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.Bones
 {
 	public enum PhalangeType
 	{

@@ -1,7 +1,7 @@
+using AssetRipper.Import.Structure.Assembly;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
-namespace AssetRipper.Core.Structure.GameStructure.Platforms
+namespace AssetRipper.Import.Structure.GameStructure.Platforms
 {
 	internal sealed class WebPlayerGameStructure : PlatformGameStructure
 	{
@@ -32,7 +32,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Il2CppGameAssemblyPath = null;
 			Il2CppMetaDataPath = null;
 			Version = null;
-			Backend = Assembly.ScriptingBackend.Unknown;
+			Backend = ScriptingBackend.Unknown;
 
 			DataPaths = new string[] { rootPath };
 

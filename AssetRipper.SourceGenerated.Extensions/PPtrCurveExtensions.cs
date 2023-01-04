@@ -1,10 +1,9 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Subclasses.PPtrCurve;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class PPtrCurveExtensions
 	{

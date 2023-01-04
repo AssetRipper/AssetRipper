@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Core.Logging
+﻿namespace AssetRipper.Import.Logging
 {
 	public interface ILogger
 	{

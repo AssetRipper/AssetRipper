@@ -1,8 +1,6 @@
-﻿using AssetRipper.Core.Utils;
-using System.IO;
-using System.Linq;
+﻿using AssetRipper.Import.Utils;
 
-namespace AssetRipper.Core.Logging
+namespace AssetRipper.Import.Logging
 {
 	public abstract class FileLoggerBase : ILogger
 	{

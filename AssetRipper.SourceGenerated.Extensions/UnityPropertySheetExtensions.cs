@@ -1,10 +1,8 @@
 ﻿using AssetRipper.Assets.Utils;
 using AssetRipper.SourceGenerated.Subclasses.UnityPropertySheet;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class UnityPropertySheetExtensions
 	{

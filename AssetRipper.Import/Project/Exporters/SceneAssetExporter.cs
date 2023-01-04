@@ -1,12 +1,11 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.Project.Collections;
+using AssetRipper.Import.Project.Collections;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Project.Exporters
+namespace AssetRipper.Import.Project.Exporters
 {
 	public sealed class SceneAssetExporter : IAssetExporter
 	{

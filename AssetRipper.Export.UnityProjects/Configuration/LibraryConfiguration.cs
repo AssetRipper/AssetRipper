@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Logging;
+﻿using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Logging;
 
-namespace AssetRipper.Library.Configuration
+namespace AssetRipper.Export.UnityProjects.Configuration
 {
 	public class LibraryConfiguration : CoreConfiguration
 	{

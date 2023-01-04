@@ -1,11 +1,10 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Import.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_6;
-using System.IO;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public class ManagerExportCollection : AssetExportCollection
 	{

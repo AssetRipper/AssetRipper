@@ -1,12 +1,11 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
-using System.Collections.Generic;
+using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Import.Utils;
 using System.Diagnostics;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public abstract class AssetsExportCollection : AssetExportCollection
 	{
@@ -83,7 +82,7 @@ namespace AssetRipper.Core.Project.Collections
 
 		public override AssetCollection File => m_file;
 		private AssetCollection m_file;
-		
+
 		/// <summary>
 		/// A one-to-one dictionary of export id's
 		/// </summary>

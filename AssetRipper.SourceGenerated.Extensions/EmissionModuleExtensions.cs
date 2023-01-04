@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.EmissionModule;
 using AssetRipper.SourceGenerated.Subclasses.MinMaxCurve;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class EmissionModuleExtensions
 	{

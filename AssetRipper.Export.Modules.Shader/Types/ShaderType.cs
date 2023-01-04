@@ -1,12 +1,9 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using ShaderTextRestorer.Extensions;
-using ShaderTextRestorer.ShaderBlob.Parameters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AssetRipper.Export.Modules.Shaders.Extensions;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 
-namespace ShaderTextRestorer.Types
+namespace AssetRipper.Export.Modules.Shaders.Types
 {
 	internal class ShaderType
 	{

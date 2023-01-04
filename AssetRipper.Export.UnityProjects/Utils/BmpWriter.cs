@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace AssetRipper.Library.Utils
+﻿namespace AssetRipper.Export.UnityProjects.Utils
 {
 	/// <summary>
 	/// This is really fast, even in comparison to System.Drawing<br/>

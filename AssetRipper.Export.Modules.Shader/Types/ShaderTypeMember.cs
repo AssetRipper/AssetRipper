@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using ShaderTextRestorer.ShaderBlob.Parameters;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 
-namespace ShaderTextRestorer.Types
+namespace AssetRipper.Export.Modules.Shaders.Types
 {
 	class ShaderTypeMember
 	{

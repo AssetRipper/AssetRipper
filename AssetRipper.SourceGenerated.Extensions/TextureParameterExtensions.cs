@@ -1,6 +1,6 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.TextureParameter;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class TextureParameterExtensions
 	{

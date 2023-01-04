@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AssetRipper.Core.Linq
+﻿namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class EnumerableExtensions
 	{

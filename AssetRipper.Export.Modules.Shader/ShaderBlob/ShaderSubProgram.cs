@@ -1,14 +1,12 @@
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
-using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using AssetRipper.VersionUtilities;
-using ShaderTextRestorer.ShaderBlob.Parameters;
-using System;
-using System.Collections.Generic;
 
 
-namespace ShaderTextRestorer.ShaderBlob
+namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 {
 	public sealed class ShaderSubProgram : IAssetReadable, IAssetWritable
 	{

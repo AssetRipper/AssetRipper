@@ -1,7 +1,7 @@
-﻿using ShaderTextRestorer.ShaderBlob;
-using System.Collections.Generic;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizers
 {
 	/// <summary>
 	/// Replaces XXX & YYY with XXX ? YYY : 0 if XXX holds a comparison value

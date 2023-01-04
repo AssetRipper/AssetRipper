@@ -3,9 +3,8 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project.Collections;
-using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Project.Collections;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
@@ -17,7 +16,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace AssetRipper.Library.Processors
+namespace AssetRipper.Processing
 {
 	public sealed class SceneGuidProcessor : IAssetProcessor
 	{
@@ -74,7 +73,7 @@ namespace AssetRipper.Library.Processors
 					foreach (AccessPairBase<Utf8String, IAssetInfo> pair in assetBundleAsset.Container_C142)
 					{
 						Debug.Assert(pair.Value.Asset.IsNull(), "Scene pointer is not null");
-						
+
 						string name = Path.ChangeExtension(pair.Key.String, null);
 						Debug.Assert(name.StartsWith("Assets/", StringComparison.Ordinal), "Scene path is not relative to the project directory.");
 						int index = IndexOf(bundle.Collections, scenes, startingIndex);

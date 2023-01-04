@@ -1,6 +1,6 @@
 ﻿using ICSharpCode.Decompiler.CSharp;
 
-namespace AssetRipper.Library.Configuration
+namespace AssetRipper.Export.UnityProjects.Configuration
 {
 	public enum ScriptLanguageVersion
 	{

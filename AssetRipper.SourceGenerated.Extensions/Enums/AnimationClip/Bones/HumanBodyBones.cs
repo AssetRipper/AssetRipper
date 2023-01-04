@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Core.Classes.AnimationClip.Bones
+﻿namespace AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.Bones
 {
 	/// <summary>
 	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Modules/Animation/ScriptBindings/Avatar.bindings.cs"/>

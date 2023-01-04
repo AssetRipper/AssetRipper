@@ -1,9 +1,7 @@
-﻿using AssetRipper.Core.Logging;
-using AssetRipper.Core.Structure.GameStructure;
+﻿using AssetRipper.Export.UnityProjects;
 using AssetRipper.GUI.Exceptions;
-using AssetRipper.Library;
-using System.Linq;
-using System.Threading;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.GameStructure;
 
 namespace AssetRipper.GUI.Managers
 {

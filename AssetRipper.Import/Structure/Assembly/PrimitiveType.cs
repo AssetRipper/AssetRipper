@@ -1,7 +1,7 @@
 using AsmResolver.DotNet.Signatures.Types;
 using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 
-namespace AssetRipper.Core.Structure.Assembly
+namespace AssetRipper.Import.Structure.Assembly
 {
 	public enum PrimitiveType
 	{

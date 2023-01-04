@@ -1,6 +1,4 @@
-using System;
-
-namespace ShaderTextRestorer.Resources
+namespace AssetRipper.Export.Modules.Shaders.Resources
 {
 	[Flags]
 	internal enum ShaderInputFlags

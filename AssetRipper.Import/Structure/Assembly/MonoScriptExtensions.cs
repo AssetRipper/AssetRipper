@@ -1,14 +1,13 @@
 ﻿using AsmResolver.DotNet;
-using AssetRipper.Core.Structure.Assembly;
-using AssetRipper.Core.Structure.Assembly.Managers;
-using AssetRipper.Core.Structure.Assembly.Serializable;
+using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Subclasses.Hash128;
 using System.Buffers.Binary;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.Import.Structure.Assembly
 {
 	public static class MonoScriptExtensions
 	{

@@ -2,9 +2,8 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.IO.Files;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Project.Exporters
+namespace AssetRipper.Import.Project.Exporters
 {
 	public interface IAssetExporter
 	{

@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-namespace AssetRipper.Core.Structure.GameStructure.Platforms
+﻿namespace AssetRipper.Import.Structure.GameStructure.Platforms
 {
 	internal sealed class AndroidGameStructure : PlatformGameStructure
 	{

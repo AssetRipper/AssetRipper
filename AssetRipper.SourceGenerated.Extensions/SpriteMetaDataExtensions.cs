@@ -11,11 +11,10 @@ using AssetRipper.SourceGenerated.Subclasses.SpriteVertex;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using System.Buffers.Binary;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class SpriteMetaDataExtensions
 	{
@@ -138,7 +137,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					instance.Weights.EnsureCapacity(skin.Length);
 					for (int i = 0; i < skin.Length; i++)
 					{
-						instance.Weights.Add((SourceGenerated.Subclasses.BoneWeights4.BoneWeights4_2017_1_0)skin[i]);
+						instance.Weights.Add((Subclasses.BoneWeights4.BoneWeights4_2017_1_0)skin[i]);
 					}
 				}
 			}
@@ -155,8 +154,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				shape.Clear();
 				shape.Capacity = sprite.PhysicsShape_C213.Count;
-				float pivotShiftX = (rect.Width * pivot.X) - (rect.Width * 0.5f);
-				float pivotShiftY = (rect.Height * pivot.Y) - (rect.Height * 0.5f);
+				float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
+				float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
 				Vector2 pivotShift = new Vector2(pivotShiftX, pivotShiftY);
 				for (int i = 0; i < sprite.PhysicsShape_C213.Count; i++)
 				{
@@ -264,8 +263,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			AssetList<AssetList<Vector2f_3_5_0>> outlines)
 		{
 			GenerateOutline(sprite.RD_C213, sprite.Collection.Version, outlines);
-			float pivotShiftX = (rect.Width * pivot.X) - (rect.Width * 0.5f);
-			float pivotShiftY = (rect.Height * pivot.Y) - (rect.Height * 0.5f);
+			float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
+			float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
 			Vector2 pivotShift = new Vector2(pivotShiftX, pivotShiftY);
 			foreach (AssetList<Vector2f_3_5_0> outline in outlines)
 			{

@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
-using ShaderLabConvert;
-using ShaderTextRestorer.IO;
-using ShaderTextRestorer.ShaderBlob;
+﻿using AssetRipper.Export.Modules.Shaders.IO;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 
-namespace ShaderTextRestorer.Exporters.USCDirectX
+namespace AssetRipper.Export.Modules.Shaders.Exporters.USCDirectX
 {
 	public class USCShaderDXExporter : ShaderTextExporter
 	{

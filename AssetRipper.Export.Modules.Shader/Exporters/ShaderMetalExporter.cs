@@ -1,10 +1,9 @@
-﻿using AssetRipper.IO.Endian;
+﻿using AssetRipper.Export.Modules.Shaders.IO;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.IO.Endian;
 using AssetRipper.VersionUtilities;
-using ShaderTextRestorer.IO;
-using ShaderTextRestorer.ShaderBlob;
-using System.IO;
 
-namespace ShaderTextRestorer.Exporters
+namespace AssetRipper.Export.Modules.Shaders.Exporters
 {
 	public class ShaderMetalExporter : ShaderTextExporter
 	{

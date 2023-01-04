@@ -1,4 +1,4 @@
-namespace ShaderTextRestorer.Resources
+namespace AssetRipper.Export.Modules.Shaders.Resources
 {
 	public enum DXProgramType
 	{

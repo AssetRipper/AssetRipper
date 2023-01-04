@@ -1,10 +1,11 @@
 ﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorControllerLayer;
 using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimatorControllerLayerExtensions
 	{

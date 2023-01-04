@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Logging;
+﻿using AssetRipper.Import.Logging;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;

@@ -1,6 +1,6 @@
-using AssetRipper.Core.Classes.Shader.Enums;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 
-namespace ShaderTextRestorer.ShaderBlob
+namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 {
 	public sealed class ShaderBindChannel
 	{

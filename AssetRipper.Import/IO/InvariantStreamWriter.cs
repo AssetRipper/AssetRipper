@@ -1,8 +1,7 @@
 ﻿using System.Globalization;
-using System.IO;
 using System.Text;
 
-namespace AssetRipper.Core.IO
+namespace AssetRipper.Import.IO
 {
 	public class InvariantStreamWriter : StreamWriter
 	{

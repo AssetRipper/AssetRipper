@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 
-namespace AssetRipper.Core.Classes
+namespace AssetRipper.Import.Classes
 {
 	public sealed class UnreadableObject : RawDataObject, IHasNameString
 	{

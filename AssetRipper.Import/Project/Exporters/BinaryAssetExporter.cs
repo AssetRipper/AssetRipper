@@ -1,11 +1,10 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.Project.Collections;
+using AssetRipper.Import.Project.Collections;
 using AssetRipper.IO.Files;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Project.Exporters
+namespace AssetRipper.Import.Project.Exporters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{

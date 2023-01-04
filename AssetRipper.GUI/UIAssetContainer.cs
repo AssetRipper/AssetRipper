@@ -1,10 +1,9 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.Project;
+using AssetRipper.Export.UnityProjects;
+using AssetRipper.Import.Project;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.Library;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace AssetRipper.GUI

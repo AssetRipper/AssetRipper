@@ -1,6 +1,6 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_19;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class Physics2DSettings
 	{

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL
 {
 	public class USILInstruction
 	{

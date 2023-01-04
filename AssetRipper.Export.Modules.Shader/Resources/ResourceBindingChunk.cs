@@ -1,10 +1,8 @@
-﻿using AssetRipper.IO.Endian;
-using ShaderTextRestorer.ShaderBlob;
-using ShaderTextRestorer.ShaderBlob.Parameters;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.IO.Endian;
 
-namespace ShaderTextRestorer.Resources
+namespace AssetRipper.Export.Modules.Shaders.Resources
 {
 	internal class ResourceBindingChunk
 	{
@@ -14,7 +12,7 @@ namespace ShaderTextRestorer.Resources
 			m_nameLookup = nameLookup;
 			m_Samplers = CreateSamplers(ref shaderSubprogram);
 			const uint bindingHeaderSize = 32;
-			uint nameOffset = resourceBindingOffset + (bindingHeaderSize * Count);
+			uint nameOffset = resourceBindingOffset + bindingHeaderSize * Count;
 			foreach (BufferBinding bufferParam in shaderSubprogram.BufferParameters)
 			{
 				nameLookup[bufferParam.Name] = nameOffset;
@@ -77,9 +75,9 @@ namespace ShaderTextRestorer.Resources
 			foreach (SamplerParameter samplerParam in shaderSubprogram.SamplerParameters)
 			{
 				SamplerFilterMode filterMode = (SamplerFilterMode)(samplerParam.Sampler & 0x3);
-				SamplerWrapMode wrapU = (SamplerWrapMode)((samplerParam.Sampler >> 2) & 0x3);
-				SamplerWrapMode wrapV = (SamplerWrapMode)((samplerParam.Sampler >> 4) & 0x3);
-				SamplerWrapMode wrapW = (SamplerWrapMode)((samplerParam.Sampler >> 6) & 0x3);
+				SamplerWrapMode wrapU = (SamplerWrapMode)(samplerParam.Sampler >> 2 & 0x3);
+				SamplerWrapMode wrapV = (SamplerWrapMode)(samplerParam.Sampler >> 4 & 0x3);
+				SamplerWrapMode wrapW = (SamplerWrapMode)(samplerParam.Sampler >> 6 & 0x3);
 				bool isComparisonSampler = (samplerParam.Sampler & 0x100) != 0;
 				string samplerName;
 				if (wrapU == wrapV && wrapU == wrapW)

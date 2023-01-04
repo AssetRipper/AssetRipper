@@ -2,7 +2,7 @@
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.VersionUtilities;
 
-namespace ShaderTextRestorer.ShaderBlob
+namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 {
 	public sealed class ShaderSubProgramEntry : IAssetReadable, IAssetWritable
 	{

@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Import.Structure.Assembly;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
-namespace AssetRipper.Core.Structure.GameStructure.Platforms
+namespace AssetRipper.Import.Structure.GameStructure.Platforms
 {
 	internal sealed class iOSGameStructure : PlatformGameStructure
 	{
@@ -36,15 +35,15 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			if (HasIl2CppFiles())
 			{
-				Backend = Assembly.ScriptingBackend.IL2Cpp;
+				Backend = ScriptingBackend.IL2Cpp;
 			}
 			else if (HasMonoAssemblies(ManagedPath))
 			{
-				Backend = Assembly.ScriptingBackend.Mono;
+				Backend = ScriptingBackend.Mono;
 			}
 			else
 			{
-				Backend = Assembly.ScriptingBackend.Unknown;
+				Backend = ScriptingBackend.Unknown;
 			}
 
 			DataPaths = new string[] { dataPath };

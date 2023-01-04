@@ -1,9 +1,10 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
-using DirectXDisassembler;
-using DirectXDisassembler.Blocks;
-using ShaderTextRestorer.ShaderBlob.Parameters;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler.Blocks;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX
 {
 	public static class DXShaderNamingUtils
 	{
@@ -212,7 +213,7 @@ namespace ShaderLabConvert
 			int p = 0;
 			for (int i = 0; i < 4; i++)
 			{
-				if (((mask >> i) & 1) == 1)
+				if ((mask >> i & 1) == 1)
 				{
 					p++;
 				}

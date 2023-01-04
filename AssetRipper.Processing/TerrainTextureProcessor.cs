@@ -1,13 +1,12 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Linq;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Extensions;
 using System.Linq;
 
-namespace AssetRipper.Library.Processors
+namespace AssetRipper.Processing
 {
 	public class TerrainTextureProcessor : IAssetProcessor
 	{

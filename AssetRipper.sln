@@ -139,23 +139,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Addressables", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Addressables.Tests", "AssetRipper.Addressables.Tests\AssetRipper.Addressables.Tests.csproj", "{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.SourceGenerated.Extensions", "AssetRipper.SourceGenerated.Extensions\AssetRipper.SourceGenerated.Extensions.csproj", "{AE122333-DB76-4EF5-BDD8-E94986B05F69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.SourceGenerated.Extensions", "AssetRipper.SourceGenerated.Extensions\AssetRipper.SourceGenerated.Extensions.csproj", "{AE122333-DB76-4EF5-BDD8-E94986B05F69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Processing", "AssetRipper.Processing\AssetRipper.Processing.csproj", "{5563B4F0-1E2C-46A2-A80F-5488C780C5C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Processing", "AssetRipper.Processing\AssetRipper.Processing.csproj", "{5563B4F0-1E2C-46A2-A80F-5488C780C5C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Export", "AssetRipper.Export\AssetRipper.Export.csproj", "{00261294-9974-40DD-962B-532C596A2222}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export", "AssetRipper.Export\AssetRipper.Export.csproj", "{00261294-9974-40DD-962B-532C596A2222}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Export.PrimaryContent", "AssetRipper.Export.PrimaryContent\AssetRipper.Export.PrimaryContent.csproj", "{C9D15026-FDA7-41E0-9F07-76F4A244F3DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.PrimaryContent", "AssetRipper.Export.PrimaryContent\AssetRipper.Export.PrimaryContent.csproj", "{C9D15026-FDA7-41E0-9F07-76F4A244F3DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Export.Modules.Audio", "AssetRipper.Export.Modules.Audio\AssetRipper.Export.Modules.Audio.csproj", "{AFA5C013-0BA3-4E80-9FD3-C3C827E3EFA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.Modules.Audio", "AssetRipper.Export.Modules.Audio\AssetRipper.Export.Modules.Audio.csproj", "{AFA5C013-0BA3-4E80-9FD3-C3C827E3EFA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Export.Modules.Textures", "AssetRipper.Export.Modules.Textures\AssetRipper.Export.Modules.Textures.csproj", "{F5D07C87-ADEE-44E3-995E-7DCD6463E4E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.Modules.Textures", "AssetRipper.Export.Modules.Textures\AssetRipper.Export.Modules.Textures.csproj", "{F5D07C87-ADEE-44E3-995E-7DCD6463E4E3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Import", "AssetRipper.Import\AssetRipper.Import.csproj", "{A1ACC369-4E2E-4E58-8BA6-034609B54E6A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.Modules.Shaders", "AssetRipper.Export.Modules.Shader\AssetRipper.Export.Modules.Shaders.csproj", "{680FA140-1836-45D8-BE5C-1885BB657864}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.UnityProjects", "AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj", "{BE942376-B767-4404-AE06-09DE4C047C2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.UnityProjects", "AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj", "{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -323,10 +323,10 @@ Global
 		{680FA140-1836-45D8-BE5C-1885BB657864}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{680FA140-1836-45D8-BE5C-1885BB657864}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{680FA140-1836-45D8-BE5C-1885BB657864}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE942376-B767-4404-AE06-09DE4C047C2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE942376-B767-4404-AE06-09DE4C047C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE942376-B767-4404-AE06-09DE4C047C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE942376-B767-4404-AE06-09DE4C047C2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

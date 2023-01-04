@@ -3,11 +3,10 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.IO;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Utils;
+using AssetRipper.Import.IO;
+using AssetRipper.Import.Project.Exporters;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_1113;
 using AssetRipper.SourceGenerated.Classes.ClassID_121;
@@ -24,13 +23,12 @@ using AssetRipper.SourceGenerated.Classes.ClassID_84;
 using AssetRipper.SourceGenerated.Classes.ClassID_850595691;
 using AssetRipper.SourceGenerated.Classes.ClassID_89;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.MarkerInterfaces;
 using AssetRipper.Yaml;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public abstract class ExportCollection : IExportCollection
 	{

@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Structure.Assembly;
-using AssetRipper.Core.Structure.Assembly.Managers;
-using AssetRipper.Core.Structure.Assembly.Serializable;
-using AssetRipper.Core.Structure.GameStructure.Platforms;
+﻿using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Import.Structure.Assembly.Serializable;
+using AssetRipper.Import.Structure.GameStructure.Platforms;
 
 namespace AssetRipper.Tools.MonoBehaviourTester;
 

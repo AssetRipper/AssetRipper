@@ -1,11 +1,9 @@
-﻿using AssetRipper.Core.Logging;
-using AssetRipper.Core.Structure.Assembly.Managers;
+﻿using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files.Streams.MultiFile;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
-namespace AssetRipper.Core.Structure.GameStructure.Platforms
+namespace AssetRipper.Import.Structure.GameStructure.Platforms
 {
 	public sealed class MixedGameStructure : PlatformGameStructure
 	{
@@ -41,7 +39,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Version = null;
 			Il2CppGameAssemblyPath = null;
 			Il2CppMetaDataPath = null;
-			Backend = Assemblies.Count > 0 ? Assembly.ScriptingBackend.Mono : Assembly.ScriptingBackend.Unknown;
+			Backend = Assemblies.Count > 0 ? ScriptingBackend.Mono : ScriptingBackend.Unknown;
 		}
 
 		private IEnumerable<string> SelectUniquePaths(IEnumerable<string> paths)

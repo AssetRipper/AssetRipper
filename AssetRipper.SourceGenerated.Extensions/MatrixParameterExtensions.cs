@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 using AssetRipper.SourceGenerated.Subclasses.MatrixParameter;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class MatrixParameterExtensions
 	{

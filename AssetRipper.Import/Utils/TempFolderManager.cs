@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace AssetRipper.Core.Utils
+﻿namespace AssetRipper.Import.Utils
 {
 	public static class TempFolderManager
 	{

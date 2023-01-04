@@ -1,12 +1,12 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
+﻿using AssetRipper.Export.Modules.Shaders.Exporters.DirectX;
+using AssetRipper.Export.Modules.Shaders.Handlers;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 using AssetRipper.VersionUtilities;
-using ShaderLabConvert;
-using ShaderTextRestorer.Exporters.DirectX;
-using ShaderTextRestorer.Handlers;
-using ShaderTextRestorer.ShaderBlob;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ShaderTextRestorer.Exporters.USCDirectX
+namespace AssetRipper.Export.Modules.Shaders.Exporters.USCDirectX
 {
 	public static class USCDXShaderTextExtractor
 	{

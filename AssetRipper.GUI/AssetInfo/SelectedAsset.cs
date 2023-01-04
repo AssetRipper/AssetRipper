@@ -1,25 +1,22 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Interfaces;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Library.Exporters.Audio;
-using AssetRipper.Library.Exporters.Shaders;
-using AssetRipper.Library.Exporters.Terrains;
-using AssetRipper.Library.Exporters.Textures;
-using AssetRipper.Library.Utils;
+using AssetRipper.Export.UnityProjects.Audio;
+using AssetRipper.Export.UnityProjects.Shaders;
+using AssetRipper.Export.UnityProjects.Terrains;
+using AssetRipper.Export.UnityProjects.Textures;
+using AssetRipper.Export.UnityProjects.Utils;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.Yaml;
 using Avalonia.Media;
 using LibVLCSharp.Shared;
-using System.IO;
 using System.Text;
-using System.Threading;
 
 namespace AssetRipper.GUI.AssetInfo
 {

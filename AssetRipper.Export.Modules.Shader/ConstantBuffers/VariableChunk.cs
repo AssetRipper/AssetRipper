@@ -1,13 +1,10 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+﻿using AssetRipper.Export.Modules.Shaders.Extensions;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.Export.Modules.Shaders.Types;
 using AssetRipper.IO.Endian;
-using ShaderTextRestorer.Extensions;
-using ShaderTextRestorer.ShaderBlob.Parameters;
-using ShaderTextRestorer.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 
-namespace ShaderTextRestorer.ConstantBuffers
+namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers
 {
 	internal class VariableChunk
 	{
@@ -33,7 +30,7 @@ namespace ShaderTextRestorer.ConstantBuffers
 			const int memberSize = 12;
 			uint variableSize = majorVersion >= 5 ? 40 : (uint)24;
 			uint variableCount = (uint)m_variables.Length;
-			uint dataOffset = variableOffset + (variableCount * variableSize);
+			uint dataOffset = variableOffset + variableCount * variableSize;
 			foreach (Variable variable in m_variables)
 			{
 				m_variableNameLookup[variable.Name] = dataOffset;

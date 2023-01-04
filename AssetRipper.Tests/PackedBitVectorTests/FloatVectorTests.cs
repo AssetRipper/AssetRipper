@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.SourceGenExtensions;
+﻿using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Single;
 
-namespace AssetRipperTests.PackedBitVectorTests
+namespace AssetRipper.Tests.PackedBitVectorTests
 {
 	/// <summary>
 	/// Tests for <see cref="PackedBitVector_Single"/>

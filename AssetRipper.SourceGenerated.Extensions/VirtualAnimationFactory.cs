@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1101;
 using AssetRipper.SourceGenerated.Classes.ClassID_1102;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
@@ -10,6 +9,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_206;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Enums;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorCondition;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorState;
@@ -26,9 +26,8 @@ using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.TransitionConstant;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class VirtualAnimationFactory
 	{

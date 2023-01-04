@@ -1,13 +1,12 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+﻿using AssetRipper.Export.Modules.Shaders.ConstantBuffers;
+using AssetRipper.Export.Modules.Shaders.Extensions;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.IO.Endian;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using AssetRipper.VersionUtilities;
-using ShaderTextRestorer.ConstantBuffers;
-using ShaderTextRestorer.Extensions;
-using ShaderTextRestorer.ShaderBlob;
-using System.Collections.Generic;
 using System.Text;
 
-namespace ShaderTextRestorer.Resources
+namespace AssetRipper.Export.Modules.Shaders.Resources
 {
 	internal class ResourceChunk
 	{

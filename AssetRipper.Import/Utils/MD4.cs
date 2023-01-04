@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
-namespace AssetRipper.Core.Utils
+namespace AssetRipper.Import.Utils
 {
 	public sealed class MD4 : HashAlgorithm
 	{
@@ -50,7 +48,7 @@ namespace AssetRipper.Core.Utils
 				int i = c >> 2;
 				int s = (c & 3) << 3;
 
-				_x[i] = (_x[i] & ~((uint)255 << s)) | ((uint)b << s);
+				_x[i] = _x[i] & ~((uint)255 << s) | (uint)b << s;
 
 				if (c == 63)
 				{
@@ -72,9 +70,9 @@ namespace AssetRipper.Core.Utils
 		private IEnumerable<byte> Bytes(uint word)
 		{
 			yield return (byte)(word & 255);
-			yield return (byte)((word >> 8) & 255);
-			yield return (byte)((word >> 16) & 255);
-			yield return (byte)((word >> 24) & 255);
+			yield return (byte)(word >> 8 & 255);
+			yield return (byte)(word >> 16 & 255);
+			yield return (byte)(word >> 24 & 255);
 		}
 
 		private IEnumerable<byte> Repeat(byte value, int count)
@@ -88,7 +86,7 @@ namespace AssetRipper.Core.Utils
 		private IEnumerable<byte> Padding()
 		{
 			return Repeat(128, 1)
-			   .Concat(Repeat(0, ((_bytesProcessed + 8) & 0x7fffffc0) + 55 - _bytesProcessed))
+			   .Concat(Repeat(0, (_bytesProcessed + 8 & 0x7fffffc0) + 55 - _bytesProcessed))
 			   .Concat(Bytes((uint)_bytesProcessed << 3))
 			   .Concat(Repeat(0, 4));
 		}
@@ -135,14 +133,14 @@ namespace AssetRipper.Core.Utils
 
 		private static uint ROL(uint value, int numberOfBits)
 		{
-			return (value << numberOfBits) | (value >> (32 - numberOfBits));
+			return value << numberOfBits | value >> 32 - numberOfBits;
 		}
 
 		private static uint Round1Operation(uint a, uint b, uint c, uint d, uint xk, int s)
 		{
 			unchecked
 			{
-				return ROL(a + ((b & c) | (~b & d)) + xk, s);
+				return ROL(a + (b & c | ~b & d) + xk, s);
 			}
 		}
 
@@ -150,7 +148,7 @@ namespace AssetRipper.Core.Utils
 		{
 			unchecked
 			{
-				return ROL(a + ((b & c) | (b & d) | (c & d)) + xk + 0x5a827999, s);
+				return ROL(a + (b & c | b & d | c & d) + xk + 0x5a827999, s);
 			}
 		}
 

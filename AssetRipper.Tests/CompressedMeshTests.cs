@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Numerics;
+﻿using AssetRipper.Numerics;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using System;
 using System.Numerics;

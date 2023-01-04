@@ -1,7 +1,7 @@
 ﻿using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class GuidExtensions
 	{

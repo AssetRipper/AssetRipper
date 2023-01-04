@@ -1,16 +1,14 @@
 using AsmResolver.DotNet;
-using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Structure.GameStructure.Platforms;
+using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.GameStructure.Platforms;
 using Cpp2IL.Core.Api;
 using Cpp2IL.Core.CorePlugin;
 using Cpp2IL.Core.Model.Contexts;
 using LibCpp2IL;
-using System.Collections.Generic;
-using System.IO;
 using Cpp2IlApi = Cpp2IL.Core.Cpp2IlApi;
 
-namespace AssetRipper.Core.Structure.Assembly.Managers
+namespace AssetRipper.Import.Structure.Assembly.Managers
 {
 	public sealed class IL2CppManager : BaseManager
 	{

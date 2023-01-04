@@ -1,12 +1,12 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Extensions;
 using System.Collections.Generic;
 
-namespace AssetRipper.Library.Processors.PrefabOutlining
+namespace AssetRipper.Processing.PrefabOutlining
 {
 	public static class GameObjectCloner
 	{

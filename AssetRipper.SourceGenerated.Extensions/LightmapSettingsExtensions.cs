@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_157;
 using GIWorkflowMode = AssetRipper.SourceGenerated.Enums.GIWorkflowMode_0;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class LightmapSettingsExtensions
 	{

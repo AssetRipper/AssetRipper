@@ -1,9 +1,10 @@
 ﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_198;
 using AssetRipper.SourceGenerated.Enums;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.SubEmitterData;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class SubEmitterDataExtensions
 	{

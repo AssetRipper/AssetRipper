@@ -1,11 +1,10 @@
 ﻿using AssetRipper.Assets.Generics;
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipBindingConstant;
 using AssetRipper.SourceGenerated.Subclasses.Clip;
 using AssetRipper.SourceGenerated.Subclasses.GenericBinding;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_ValueArrayConstant;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class ClipExtensions
 	{
@@ -13,7 +12,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			return clip.StreamedClip.IsSet()
 				|| clip.DenseClip.IsSet()
-				|| (clip.Has_ConstantClip() && clip.ConstantClip.IsSet());
+				|| clip.Has_ConstantClip() && clip.ConstantClip.IsSet();
 		}
 
 		public static void ConvertValueArrayToGenericBinding(this IClip clip, IAnimationClipBindingConstant bindings)

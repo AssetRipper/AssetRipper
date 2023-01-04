@@ -1,6 +1,6 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_55;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class PhysicsManagerExtensions
 	{

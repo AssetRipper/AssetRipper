@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
@@ -9,9 +8,8 @@ using AssetRipper.SourceGenerated.Classes.ClassID_90;
 using AssetRipper.SourceGenerated.Classes.ClassID_95;
 using AssetRipper.SourceGenerated.Subclasses.GenericBinding;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimationClipExtensions
 	{

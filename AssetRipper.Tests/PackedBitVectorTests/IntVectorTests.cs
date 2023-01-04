@@ -1,9 +1,7 @@
-﻿using AssetRipper.Core.SourceGenExtensions;
+﻿using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Int32;
-using System;
-using System.Linq;
 
-namespace AssetRipperTests.PackedBitVectorTests
+namespace AssetRipper.Tests.PackedBitVectorTests
 {
 	/// <summary>
 	/// Tests for <see cref="PackedBitVector_Int32"/>

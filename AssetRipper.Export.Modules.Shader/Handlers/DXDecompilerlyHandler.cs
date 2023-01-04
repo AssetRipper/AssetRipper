@@ -1,11 +1,10 @@
-﻿using AssetRipper.Core.Logging;
+﻿using AssetRipper.Import.Logging;
 using DXDecompiler;
 using DXDecompiler.Decompiler;
 using DXDecompiler.Util;
-using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ShaderTextRestorer.Handlers
+namespace AssetRipper.Export.Modules.Shaders.Handlers
 {
 	public static class DXDecompilerlyHandler
 	{

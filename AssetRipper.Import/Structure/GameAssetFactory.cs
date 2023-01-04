@@ -4,12 +4,12 @@ using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Structure.Assembly.Managers;
-using AssetRipper.Core.Structure.Assembly.Mono;
-using AssetRipper.Core.Structure.Assembly.TypeTrees;
+using AssetRipper.Import.Classes;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Import.Structure.Assembly.Mono;
+using AssetRipper.Import.Structure.Assembly.TypeTrees;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 using AssetRipper.SourceGenerated;
@@ -35,7 +35,7 @@ using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.Vector3Int;
 using AssetRipper.SourceGenerated.Subclasses.Vector4f;
 
-namespace AssetRipper.Core.Structure
+namespace AssetRipper.Import.Structure
 {
 	public sealed class GameAssetFactory : AssetFactoryBase
 	{
@@ -193,7 +193,7 @@ namespace AssetRipper.Core.Structure
 		{
 			Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {monoBehaviour}, because script {monoBehaviour.Structure} layout mismatched binary content (read {actual} bytes, expected {expected} bytes).");
 		}
-		
+
 		private static void LogMonoBehaviorReadException(IMonoBehaviour asset, AssetReader reader, Exception ex)
 		{
 			Logger.Error($"Error during reading of MonoBehavior {GetMonoScript(asset)}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}", ex);

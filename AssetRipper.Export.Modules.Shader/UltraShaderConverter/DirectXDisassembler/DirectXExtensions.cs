@@ -1,13 +1,11 @@
-﻿using System.IO;
-
-namespace DirectXDisassembler
+﻿namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler
 {
 	public static class DirectXExtensions
 	{
 		public static long Align(this BinaryReader reader, int bytes)
 		{
 			long position = reader.BaseStream.Position;
-			return position + ((bytes - (position % bytes)) % bytes);
+			return position + (bytes - position % bytes) % bytes;
 		}
 		public static string ReadNullString(this BinaryReader reader)
 		{

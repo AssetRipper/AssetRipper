@@ -1,11 +1,9 @@
+using AssetRipper.Export.Modules.Shaders.Resources;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.IO.Endian;
 using AssetRipper.VersionUtilities;
-using ShaderTextRestorer.Resources;
-using ShaderTextRestorer.ShaderBlob;
-using System.Collections.Generic;
-using System.IO;
 
-namespace ShaderTextRestorer
+namespace AssetRipper.Export.Modules.Shaders
 {
 	public static class DXShaderProgramRestorer
 	{

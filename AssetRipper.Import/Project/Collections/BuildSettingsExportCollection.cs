@@ -1,17 +1,15 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Import.Project.Exporters;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1045;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_159;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.Scene;
-using System.Collections.Generic;
-using System.IO;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{

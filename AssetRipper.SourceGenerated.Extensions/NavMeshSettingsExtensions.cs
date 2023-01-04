@@ -2,7 +2,7 @@
 using AssetRipper.SourceGenerated.Classes.ClassID_196;
 using AssetRipper.SourceGenerated.Classes.ClassID_238;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class NavMeshSettingsExtensions
 	{

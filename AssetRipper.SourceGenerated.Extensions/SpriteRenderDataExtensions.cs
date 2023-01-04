@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class SpriteRenderDataExtensions
 	{
@@ -9,17 +9,17 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static SpritePackingMode GetPackingMode(this ISpriteRenderData spriteRenderData)
 		{
-			return (SpritePackingMode)((spriteRenderData.SettingsRaw >> 1) & 1);
+			return (SpritePackingMode)(spriteRenderData.SettingsRaw >> 1 & 1);
 		}
 
 		public static SpritePackingRotation GetPackingRotation(this ISpriteRenderData spriteRenderData)
 		{
-			return (SpritePackingRotation)((spriteRenderData.SettingsRaw >> 2) & 0xF);
+			return (SpritePackingRotation)(spriteRenderData.SettingsRaw >> 2 & 0xF);
 		}
 
 		public static SpriteMeshType GetMeshType(this ISpriteRenderData spriteRenderData)
 		{
-			return (SpriteMeshType)((spriteRenderData.SettingsRaw >> 6) & 0x1);
+			return (SpriteMeshType)(spriteRenderData.SettingsRaw >> 6 & 0x1);
 		}
 	}
 }

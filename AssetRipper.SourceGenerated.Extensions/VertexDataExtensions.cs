@@ -1,24 +1,20 @@
 ﻿using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
-using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
-using AssetRipper.Core.Extensions;
 using AssetRipper.IO.Endian;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.ShaderChannel;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.VertexFormat;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.StreamInfo;
 using AssetRipper.SourceGenerated.Subclasses.StreamingInfo;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.VertexData;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Numerics;
-using MeshHelper = AssetRipper.Core.Classes.Mesh.MeshHelper;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class VertexDataExtensions
 	{
@@ -27,7 +23,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static bool IsSet(this IVertexData instance, IStreamingInfo? streamingInfo)
 		{
-			return instance.VertexCount > 0 && (instance.Data.Length > 0 || (streamingInfo is not null && streamingInfo.IsSet()));
+			return instance.VertexCount > 0 && (instance.Data.Length > 0 || streamingInfo is not null && streamingInfo.IsSet());
 		}
 
 		/// <summary>
@@ -147,11 +143,11 @@ namespace AssetRipper.Core.SourceGenExtensions
 						byte[] componentBytes = new byte[vertexCount * m_Channel.GetDataDimension() * componentByteSize];
 						for (int v = 0; v < vertexCount; v++)
 						{
-							int vertexOffset = (int)m_Stream.Offset + m_Channel.Offset + ((int)m_Stream.GetStride() * v);
+							int vertexOffset = (int)m_Stream.Offset + m_Channel.Offset + (int)m_Stream.GetStride() * v;
 							for (int d = 0; d < m_Channel.GetDataDimension(); d++)
 							{
-								int componentOffset = vertexOffset + (componentByteSize * d);
-								Buffer.BlockCopy(data, componentOffset, componentBytes, componentByteSize * ((v * m_Channel.GetDataDimension()) + d), componentByteSize);
+								int componentOffset = vertexOffset + componentByteSize * d;
+								Buffer.BlockCopy(data, componentOffset, componentBytes, componentByteSize * (v * m_Channel.GetDataDimension() + d), componentByteSize);
 							}
 						}
 
@@ -225,7 +221,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
 										{
 											BoneWeight4 boneWeight = skin[i];
-											boneWeight.SetWeight(j, componentsFloatArray[(i * m_Channel.GetDataDimension()) + j]);
+											boneWeight.SetWeight(j, componentsFloatArray[i * m_Channel.GetDataDimension() + j]);
 											skin[i] = boneWeight;
 										}
 									}
@@ -237,7 +233,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
 										{
 											BoneWeight4 boneWeight = skin[i];
-											boneWeight.SetIndex(j, componentsIntArray[(i * m_Channel.GetDataDimension()) + j]);
+											boneWeight.SetIndex(j, componentsIntArray[i * m_Channel.GetDataDimension() + j]);
 											skin[i] = boneWeight;
 										}
 									}
@@ -310,13 +306,13 @@ namespace AssetRipper.Core.SourceGenExtensions
 			int[] indices = new int[Math.Max(indexCount, 4)];
 			for (int v = 0; v < instance.VertexCount; v++)
 			{
-				memStream.Position = weightStreamOffset + (v * weightStride) + weightChannel.Offset;
+				memStream.Position = weightStreamOffset + v * weightStride + weightChannel.Offset;
 				for (int i = 0; i < weightCount; i++)
 				{
 					weights[i] = reader.ReadSingle();
 				}
 
-				memStream.Position = indexStreamOffset + (v * indexStride) + indexChannel.Offset;
+				memStream.Position = indexStreamOffset + v * indexStride + indexChannel.Offset;
 				for (int i = 0; i < indexCount; i++)
 				{
 					indices[i] = reader.ReadInt32();
@@ -348,7 +344,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			using (MemoryStream memStream = new MemoryStream(instance.Data))
 			{
 				using BinaryReader reader = new BinaryReader(memStream);
-				memStream.Position = streamOffset + (submesh.FirstVertex * streamStride) + channel.Offset;
+				memStream.Position = streamOffset + submesh.FirstVertex * streamStride + channel.Offset;
 				for (int v = 0; v < submesh.VertexCount; v++)
 				{
 					float x = reader.ReadSingle();
@@ -378,7 +374,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			for (int i = 0; i < stream; i++)
 			{
 				offset += instance.GetStreamSize(version, i);
-				offset = (offset + (VertexStreamAlign - 1)) & ~(VertexStreamAlign - 1);
+				offset = offset + (VertexStreamAlign - 1) & ~(VertexStreamAlign - 1);
 			}
 			return offset;
 		}
@@ -421,7 +417,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 				offset += instance.VertexCount * stride;
 				//static size_t AlignStreamSize (size_t size) { return (size + (kVertexStreamAlign-1)) & ~(kVertexStreamAlign-1); }
-				offset = (offset + (16u - 1u)) & ~(16u - 1u);
+				offset = offset + (16u - 1u) & ~(16u - 1u);
 			}
 			return streams;
 		}

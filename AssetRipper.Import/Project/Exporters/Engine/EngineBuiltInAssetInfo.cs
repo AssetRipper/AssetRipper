@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-
-
-namespace AssetRipper.Core.Project.Exporters.Engine
+﻿namespace AssetRipper.Import.Project.Exporters.Engine
 {
 	internal readonly struct EngineBuiltInAssetInfo
 	{

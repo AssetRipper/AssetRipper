@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using System.Numerics;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class Vector2fExtensions
 	{

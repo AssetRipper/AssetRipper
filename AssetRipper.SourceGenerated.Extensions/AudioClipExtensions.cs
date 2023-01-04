@@ -2,7 +2,7 @@
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.NativeEnums.Fmod;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AudioClipExtensions
 	{

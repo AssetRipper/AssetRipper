@@ -1,8 +1,8 @@
-﻿using ShaderTextRestorer.ShaderBlob;
-using System.Collections.Generic;
-using static ShaderLabConvert.USILOptimizerUtil;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using static AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.USILOptimizerUtil;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizers
 {
 	/// <summary>
 	/// Converts multiple multiply operations into a single matrix one

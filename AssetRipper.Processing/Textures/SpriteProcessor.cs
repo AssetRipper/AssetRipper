@@ -2,11 +2,11 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.SecondarySpriteTexture;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 
-namespace AssetRipper.Library.Processors.Textures
+namespace AssetRipper.Processing.Textures
 {
 	public sealed class SpriteProcessor : IAssetProcessor
 	{

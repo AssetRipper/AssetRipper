@@ -2,8 +2,7 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Project.Exporters.Engine;
-using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Import.Project.Exporters.Engine;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.Utils;
@@ -15,10 +14,10 @@ using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
-using System.Collections.Generic;
+using AssetRipper.SourceGenerated.Extensions;
 
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public class EngineExportCollection : IExportCollection
 	{

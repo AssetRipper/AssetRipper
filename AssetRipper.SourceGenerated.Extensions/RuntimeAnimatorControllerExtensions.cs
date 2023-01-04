@@ -3,7 +3,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Classes.ClassID_93;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class RuntimeAnimatorControllerExtensions
 	{

@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Numerics;
 using System.Numerics;
 
-namespace AssetRipper.Core.Classes.Mesh
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class MeshHelper
 	{
@@ -210,7 +210,7 @@ namespace AssetRipper.Core.Classes.Mesh
 				result[i] = dimension switch
 				{
 					1 => new Vector2(input[dimension * i], 0),
-					_ => new Vector2(input[dimension * i], input[(dimension * i) + 1]),
+					_ => new Vector2(input[dimension * i], input[dimension * i + 1]),
 				};
 			}
 			return result;
@@ -239,10 +239,10 @@ namespace AssetRipper.Core.Classes.Mesh
 			{
 				result[i] = dimension switch
 				{
-					1 => new Vector3(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2]),
-					2 => new Vector3(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2]),
-					_ => new Vector3(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2]), //In the four dimensional case for Normals, the fourth dimension was always zero
-																													//This is seemingly intended to maintain data alignment
+					1 => new Vector3(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]),
+					2 => new Vector3(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]),
+					_ => new Vector3(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]), //In the four dimensional case for Normals, the fourth dimension was always zero
+																												//This is seemingly intended to maintain data alignment
 				};
 			}
 			return result;
@@ -272,9 +272,9 @@ namespace AssetRipper.Core.Classes.Mesh
 				result[i] = dimension switch
 				{
 					1 => new Vector4(input[dimension * i], 0, 0, 0),
-					2 => new Vector4(input[dimension * i], input[(dimension * i) + 1], 0, 0),
-					3 => new Vector4(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2], 0),
-					_ => new Vector4(input[dimension * i], input[(dimension * i) + 1], input[(dimension * i) + 2], input[(dimension * i) + 3]),
+					2 => new Vector4(input[dimension * i], input[dimension * i + 1], 0, 0),
+					3 => new Vector4(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2], 0),
+					_ => new Vector4(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2], input[dimension * i + 3]),
 				};
 			}
 			return result;
@@ -295,7 +295,7 @@ namespace AssetRipper.Core.Classes.Mesh
 			ColorFloat[] result = new ColorFloat[input.Length / 4];
 			for (int i = 0; i < result.Length; i++)
 			{
-				result[i] = new ColorFloat(input[4 * i], input[(4 * i) + 1], input[(4 * i) + 2], input[(4 * i) + 3]);
+				result[i] = new ColorFloat(input[4 * i], input[4 * i + 1], input[4 * i + 2], input[4 * i + 3]);
 			}
 			return result;
 		}

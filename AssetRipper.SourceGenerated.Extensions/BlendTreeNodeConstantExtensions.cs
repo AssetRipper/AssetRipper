@@ -1,9 +1,8 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
-using System.Linq;
 using BlendTreeType = AssetRipper.SourceGenerated.Enums.BlendTreeType_1;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class BlendTreeNodeConstantExtensions
 	{

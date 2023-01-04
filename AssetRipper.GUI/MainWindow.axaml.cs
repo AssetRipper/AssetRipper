@@ -1,9 +1,9 @@
-using AssetRipper.Core.Logging;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System.Linq;
+using AssetRipper.Import.Logging;
 #if DEBUG
 using Avalonia;
 #endif

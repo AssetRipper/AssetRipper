@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace DirectXDisassembler.Blocks
+﻿namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler.Blocks
 {
 	public sealed class ISGN : ShaderBlock
 	{

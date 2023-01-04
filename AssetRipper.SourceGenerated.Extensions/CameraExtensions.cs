@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_20;
 using AssetRipper.SourceGenerated.Enums;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class CameraExtensions
 	{

@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using AssetRipper.Import.Structure.Assembly;
 
-namespace AssetRipper.Core.Structure.GameStructure.Platforms
+namespace AssetRipper.Import.Structure.GameStructure.Platforms
 {
 	internal sealed class WebGLGameStructure : PlatformGameStructure
 	{
@@ -82,7 +82,7 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 			Version = null;
 			Il2CppGameAssemblyPath = null;
 			Il2CppMetaDataPath = null;
-			Backend = Assembly.ScriptingBackend.Unknown;
+			Backend = ScriptingBackend.Unknown;
 
 			if (Files.Count == 0)
 			{

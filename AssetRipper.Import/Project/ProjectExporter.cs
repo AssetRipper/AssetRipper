@@ -4,11 +4,11 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project.Collections;
-using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Import.Classes;
+using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Project.Collections;
+using AssetRipper.Import.Project.Exporters;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -24,9 +24,9 @@ using AssetRipper.SourceGenerated.Classes.ClassID_290;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_6;
 using AssetRipper.SourceGenerated.Classes.ClassID_94;
-using System.Collections.Generic;
+using AssetRipper.SourceGenerated.Extensions;
 
-namespace AssetRipper.Core.Project
+namespace AssetRipper.Import.Project
 {
 	public class ProjectExporter
 	{
@@ -79,8 +79,8 @@ namespace AssetRipper.Core.Project
 			OverrideDummyExporter<IShaderNameRegistry>(ClassIDType.ShaderNameRegistry, true, false);
 
 			OverrideExporter<ISceneAsset>(new SceneAssetExporter(), true);
-			OverrideExporter<Classes.UnknownObject>(new UnknownObjectExporter(), false);
-			OverrideExporter<Classes.UnreadableObject>(new UnreadableObjectExporter(), false);
+			OverrideExporter<UnknownObject>(new UnknownObjectExporter(), false);
+			OverrideExporter<UnreadableObject>(new UnreadableObjectExporter(), false);
 		}
 
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
@@ -160,7 +160,7 @@ namespace AssetRipper.Core.Project
 			Stack<IAssetExporter> result = new Stack<IAssetExporter>();
 			foreach ((Type baseType, IAssetExporter exporter, bool allowInheritance) in registeredExporters)
 			{
-				if (type == baseType || (allowInheritance && type.IsAssignableTo(baseType)))
+				if (type == baseType || allowInheritance && type.IsAssignableTo(baseType))
 				{
 					result.Push(exporter);
 				}

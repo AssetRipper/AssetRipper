@@ -1,31 +1,30 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Core;
-using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Project.Exporters.Engine;
-using AssetRipper.Core.Structure.GameStructure;
-using AssetRipper.Library.Configuration;
-using AssetRipper.Library.Exporters;
-using AssetRipper.Library.Exporters.AnimatorControllers;
-using AssetRipper.Library.Exporters.Audio;
-using AssetRipper.Library.Exporters.AudioMixers;
-using AssetRipper.Library.Exporters.Meshes;
-using AssetRipper.Library.Exporters.Miscellaneous;
-using AssetRipper.Library.Exporters.Models;
-using AssetRipper.Library.Exporters.NavMeshes;
-using AssetRipper.Library.Exporters.PathIdMapping;
-using AssetRipper.Library.Exporters.Scripts;
-using AssetRipper.Library.Exporters.Shaders;
-using AssetRipper.Library.Exporters.Terrains;
-using AssetRipper.Library.Exporters.Textures;
-using AssetRipper.Library.Exporters.TypeTrees;
-using AssetRipper.Library.Processors;
-using AssetRipper.Library.Processors.AnimatorControllers;
-using AssetRipper.Library.Processors.Assemblies;
-using AssetRipper.Library.Processors.PrefabOutlining;
-using AssetRipper.Library.Processors.StaticMeshes;
-using AssetRipper.Library.Processors.Textures;
+using AssetRipper.Export.UnityProjects.AnimatorControllers;
+using AssetRipper.Export.UnityProjects.Audio;
+using AssetRipper.Export.UnityProjects.AudioMixers;
+using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.UnityProjects.Meshes;
+using AssetRipper.Export.UnityProjects.Miscellaneous;
+using AssetRipper.Export.UnityProjects.Models;
+using AssetRipper.Export.UnityProjects.NavMeshes;
+using AssetRipper.Export.UnityProjects.PathIdMapping;
+using AssetRipper.Export.UnityProjects.Scripts;
+using AssetRipper.Export.UnityProjects.Shaders;
+using AssetRipper.Export.UnityProjects.Terrains;
+using AssetRipper.Export.UnityProjects.Textures;
+using AssetRipper.Export.UnityProjects.TypeTrees;
+using AssetRipper.Import;
+using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Import.Project.Exporters.Engine;
+using AssetRipper.Import.Structure.GameStructure;
+using AssetRipper.Processing;
+using AssetRipper.Processing.AnimatorControllers;
+using AssetRipper.Processing.Assemblies;
+using AssetRipper.Processing.PrefabOutlining;
+using AssetRipper.Processing.StaticMeshes;
+using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -46,10 +45,8 @@ using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace AssetRipper.Library
+namespace AssetRipper.Export.UnityProjects
 {
 	public class Ripper
 	{
@@ -142,7 +139,7 @@ namespace AssetRipper.Library
 			return GameStructure.FileCollection.FetchAssets();
 		}
 
-		public void ExportProject(string exportPath) => ExportProject(exportPath, Core.Configuration.CoreConfiguration.DefaultFilter);
+		public void ExportProject(string exportPath) => ExportProject(exportPath, CoreConfiguration.DefaultFilter);
 		public void ExportProject(string exportPath, IUnityObjectBase asset) => ExportProject(exportPath, new IUnityObjectBase[] { asset });
 		public void ExportProject(string exportPath, IEnumerable<IUnityObjectBase> assets) => ExportProject(exportPath, GetFilter(assets));
 		public void ExportProject<T>(string exportPath) => ExportProject(exportPath, GetFilter<T>());

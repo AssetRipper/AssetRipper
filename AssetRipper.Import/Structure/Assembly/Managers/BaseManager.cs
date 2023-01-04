@@ -1,15 +1,12 @@
 ﻿using AsmResolver.DotNet;
-using AssetRipper.Core.Structure.Assembly.Mono;
-using AssetRipper.Core.Structure.Assembly.Serializable;
-using AssetRipper.Core.Structure.GameStructure.Platforms;
+using AssetRipper.Import.Structure.Assembly.Mono;
+using AssetRipper.Import.Structure.Assembly.Serializable;
+using AssetRipper.Import.Structure.GameStructure.Platforms;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.SerializationLogic;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
 
-namespace AssetRipper.Core.Structure.Assembly.Managers
+namespace AssetRipper.Import.Structure.Assembly.Managers
 {
 	public partial class BaseManager : IAssemblyManager
 	{

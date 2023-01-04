@@ -1,6 +1,6 @@
 using AssetRipper.SourceGenerated.NativeEnums.Fmod;
 
-namespace AssetRipper.Library.Exporters.AudioMixers
+namespace AssetRipper.Processing.AudioMixers
 {
 	public static class AudioEffectDefinitions
 	{

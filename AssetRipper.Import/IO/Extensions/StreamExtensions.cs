@@ -1,12 +1,10 @@
-﻿using System.IO;
-
-namespace AssetRipper.Core.IO.Extensions
+﻿namespace AssetRipper.Import.IO.Extensions
 {
 	public static class StreamExtensions
 	{
 		private const int BufferSize = 81920;
 
-		public static void Align(this Stream _this) => Align(_this, 4);
+		public static void Align(this Stream _this) => _this.Align(4);
 		public static void Align(this Stream _this, int alignment)
 		{
 			long pos = _this.Position;

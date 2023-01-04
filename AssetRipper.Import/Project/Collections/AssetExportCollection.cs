@@ -3,13 +3,11 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
+using AssetRipper.Import.Project.Exporters;
+using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1034;
-using System.Collections.Generic;
-using System.IO;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public class AssetExportCollection : ExportCollection
 	{

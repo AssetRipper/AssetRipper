@@ -3,7 +3,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_33;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using System.Diagnostics.CodeAnalysis;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class MeshFilterExtensions
 	{

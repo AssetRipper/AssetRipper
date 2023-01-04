@@ -1,9 +1,7 @@
-﻿using DirectXDisassembler.Blocks;
-using System.IO;
-using System.Linq;
+﻿using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler.Blocks;
 using System.Text;
 
-namespace DirectXDisassembler
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler
 {
 	public class DirectXCompiledShader
 	{

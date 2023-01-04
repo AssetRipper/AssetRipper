@@ -6,9 +6,8 @@ using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Yaml;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Structure.Assembly.Serializable
+namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
 	public sealed class SerializablePointer<T> : IAsset, IDependent, IPPtr<T> where T : IUnityObjectBase
 	{

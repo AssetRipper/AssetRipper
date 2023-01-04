@@ -1,8 +1,7 @@
-﻿using ShaderTextRestorer.ShaderBlob;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Fixers
 {
 	/// <summary>
 	/// Combines ResourceDimensionInfo and SampleCountInfo into a single GetDimensions call

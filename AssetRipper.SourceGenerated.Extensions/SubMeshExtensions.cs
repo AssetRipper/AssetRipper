@@ -1,17 +1,17 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Reading;
-using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Enums;
+using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.ShaderChannel;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.VertexData;
-using System.IO;
 using System.Numerics;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class SubMeshExtensions
 	{
@@ -96,7 +96,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			min = BitConverter.ToUInt16(indexBuffer, offset);
 			max = BitConverter.ToUInt16(indexBuffer, offset);
-			int end = offset + (indexCount * sizeof(ushort));
+			int end = offset + indexCount * sizeof(ushort);
 			for (int i = offset; i < end; i += sizeof(ushort))
 			{
 				int index = BitConverter.ToUInt16(indexBuffer, i);
@@ -115,7 +115,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			min = BitConverter.ToInt32(indexBuffer, offset);
 			max = BitConverter.ToInt32(indexBuffer, offset);
-			int end = offset + (indexCount * sizeof(int));
+			int end = offset + indexCount * sizeof(int);
 			for (int i = offset; i < end; i += sizeof(int))
 			{
 				int index = BitConverter.ToInt32(indexBuffer, i);
@@ -176,7 +176,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			int offset = firstVertex * 3;
 			min = new Vector3(vertexBuffer[offset], vertexBuffer[offset + 1], vertexBuffer[offset + 2]);
 			max = new Vector3(vertexBuffer[offset], vertexBuffer[offset + 1], vertexBuffer[offset + 2]);
-			int end = offset + (vertexCount * 3);
+			int end = offset + vertexCount * 3;
 			for (int i = offset; i < end;)
 			{
 				float x = vertexBuffer[i++];

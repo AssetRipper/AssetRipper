@@ -1,18 +1,15 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Core.Logging;
+using AssetRipper.Export.UnityProjects;
 using AssetRipper.GUI.AssetInfo;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.GUI.Extensions;
 using AssetRipper.GUI.Managers;
-using AssetRipper.Library;
+using AssetRipper.Import.Logging;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
 namespace AssetRipper.GUI
 {

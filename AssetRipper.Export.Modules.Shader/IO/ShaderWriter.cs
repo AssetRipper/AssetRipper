@@ -1,18 +1,16 @@
-using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Core.IO;
+using AssetRipper.Export.Modules.Shaders.Exporters;
+using AssetRipper.Export.Modules.Shaders.Extensions;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Import.IO;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using AssetRipper.VersionUtilities;
-using ShaderTextRestorer.Exporters;
-using ShaderTextRestorer.Extensions;
-using ShaderTextRestorer.ShaderBlob;
-using System;
-using System.IO;
 using System.Text;
 
 
-namespace ShaderTextRestorer.IO
+namespace AssetRipper.Export.Modules.Shaders.IO
 {
 	public class ShaderWriter : InvariantStreamWriter
 	{

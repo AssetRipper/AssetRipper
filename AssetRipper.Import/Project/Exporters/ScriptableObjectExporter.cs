@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.Project.Collections;
-using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Import.Project.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Extensions;
 
-namespace AssetRipper.Core.Project.Exporters
+namespace AssetRipper.Import.Project.Exporters
 {
 	public class ScriptableObjectExporter : YamlExporterBase
 	{

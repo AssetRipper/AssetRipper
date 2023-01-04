@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Configuration;
+﻿using AssetRipper.Import.Configuration;
 
 namespace AssetRipper.GUI.Components
 {

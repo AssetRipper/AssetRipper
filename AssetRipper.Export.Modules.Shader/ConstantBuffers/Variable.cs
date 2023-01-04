@@ -1,9 +1,8 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using ShaderTextRestorer.ShaderBlob.Parameters;
-using System;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 
-namespace ShaderTextRestorer.ConstantBuffers
+namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers
 {
 	internal class Variable
 	{

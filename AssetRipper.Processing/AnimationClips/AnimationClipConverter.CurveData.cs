@@ -1,6 +1,6 @@
 ﻿using AssetRipper.SourceGenerated;
 
-namespace AssetRipper.Library.Processors.AnimationClips
+namespace AssetRipper.Processing.AnimationClips
 {
 	public sealed partial class AnimationClipConverter
 	{

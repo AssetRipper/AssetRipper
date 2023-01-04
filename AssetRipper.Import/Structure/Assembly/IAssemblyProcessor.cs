@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Structure.Assembly.Managers;
+﻿using AssetRipper.Import.Structure.Assembly.Managers;
 
-namespace AssetRipper.Core.Structure.Assembly;
+namespace AssetRipper.Import.Structure.Assembly;
 
 public interface IAssemblyProcessor
 {

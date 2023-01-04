@@ -1,9 +1,8 @@
 ﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Core.Extensions;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.SourceGenerated.Subclasses.StreamingInfo;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class StreamingInfoExtensions
 	{

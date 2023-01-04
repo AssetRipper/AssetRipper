@@ -1,10 +1,9 @@
-﻿using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Numerics;
+﻿using AssetRipper.Numerics;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Quaternionf;
-using System;
 using System.Numerics;
 
-namespace AssetRipperTests.PackedBitVectorTests
+namespace AssetRipper.Tests.PackedBitVectorTests
 {
 	/// <summary>
 	/// Tests for <see cref="PackedBitVector_Quaternionf"/>

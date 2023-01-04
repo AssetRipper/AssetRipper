@@ -1,14 +1,11 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
-using AssetRipper.Core.IO.Extensions;
-using AssetRipper.Core.Utils;
+using AssetRipper.Import.IO.Extensions;
+using AssetRipper.Import.Utils;
 using K4os.Compression.LZ4;
-using System;
-using System.IO;
-using System.Linq;
 
-namespace ShaderTextRestorer.ShaderBlob
+namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 {
 	public sealed class ShaderSubProgramBlob
 	{

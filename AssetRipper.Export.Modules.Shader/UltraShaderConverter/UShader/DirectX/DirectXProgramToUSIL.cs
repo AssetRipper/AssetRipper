@@ -1,10 +1,10 @@
-﻿using DirectXDisassembler;
-using DirectXDisassembler.Blocks;
-using System;
-using System.Collections.Generic;
+﻿using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler.Blocks;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
 using System.Text;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX
 {
 	public class DirectXProgramToUSIL
 	{
@@ -245,8 +245,8 @@ namespace ShaderLabConvert
 		{
 			usilOperand.mask = mask;
 
-			usilOperand.negative = ((dxOperand.extendedData & 0x40) >> 6) == 1;
-			usilOperand.absoluteValue = ((dxOperand.extendedData & 0x80) >> 7) == 1;
+			usilOperand.negative = (dxOperand.extendedData & 0x40) >> 6 == 1;
+			usilOperand.absoluteValue = (dxOperand.extendedData & 0x80) >> 7 == 1;
 
 			switch (dxOperand.operand)
 			{

@@ -1,9 +1,9 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Utils;
-using System.IO;
+using AssetRipper.Import.Utils;
+using AssetRipper.IO.Files.Utils;
+using AssetRipper.SourceGenerated.Extensions;
 
-namespace AssetRipper.Core.Project
+namespace AssetRipper.Import.Project
 {
 	public readonly record struct ProjectAssetPath(string Root, string AssetPath)
 	{

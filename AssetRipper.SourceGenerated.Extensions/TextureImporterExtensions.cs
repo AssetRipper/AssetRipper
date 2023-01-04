@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 using AssetRipper.SourceGenerated.Enums;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class TextureImporterExtensions
 	{

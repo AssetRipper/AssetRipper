@@ -5,13 +5,11 @@ using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Import.IO.Extensions;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace AssetRipper.Core.Structure.Assembly.Serializable
+namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
 	public struct SerializableField
 	{

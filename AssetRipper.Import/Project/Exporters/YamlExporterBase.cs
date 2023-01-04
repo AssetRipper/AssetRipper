@@ -1,14 +1,12 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.IO;
+using AssetRipper.Import.IO;
 using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
-namespace AssetRipper.Core.Project.Exporters
+namespace AssetRipper.Import.Project.Exporters
 {
 	public abstract class YamlExporterBase : IAssetExporter
 	{

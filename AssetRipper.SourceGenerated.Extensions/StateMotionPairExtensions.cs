@@ -2,7 +2,7 @@
 using AssetRipper.SourceGenerated.Classes.ClassID_207;
 using AssetRipper.SourceGenerated.Subclasses.StateMotionPair;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class StateMotionPairExtensions
 	{

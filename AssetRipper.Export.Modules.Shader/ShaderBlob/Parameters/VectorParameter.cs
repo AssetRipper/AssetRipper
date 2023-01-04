@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 
-namespace ShaderTextRestorer.ShaderBlob.Parameters
+namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 {
 	public sealed class VectorParameter : NumericShaderParameter
 	{

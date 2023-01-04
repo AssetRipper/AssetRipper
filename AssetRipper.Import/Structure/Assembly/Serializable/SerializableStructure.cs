@@ -4,11 +4,10 @@ using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Structure.Assembly.Mono;
+using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.Yaml;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Structure.Assembly.Serializable
+namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
 	public sealed class SerializableStructure : UnityAssetBase
 	{

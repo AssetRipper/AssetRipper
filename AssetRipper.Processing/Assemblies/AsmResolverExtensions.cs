@@ -2,7 +2,7 @@
 using AsmResolver.DotNet.Code.Cil;
 using AsmResolver.DotNet.Signatures.Types;
 
-namespace AssetRipper.Library.Processors.Assemblies;
+namespace AssetRipper.Processing.Assemblies;
 
 internal static class AsmResolverExtensions
 {

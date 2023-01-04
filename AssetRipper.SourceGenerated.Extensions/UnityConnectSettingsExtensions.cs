@@ -2,7 +2,7 @@
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_310;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class UnityConnectSettingsExtensions
 	{

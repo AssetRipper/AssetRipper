@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Classes.AnimationClip.Bones;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.Bones;
 using AssetRipper.SourceGenerated.Subclasses.Human;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class HumanExtensions
 	{

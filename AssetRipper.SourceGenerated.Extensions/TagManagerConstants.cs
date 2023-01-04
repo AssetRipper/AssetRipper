@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Core.Classes.TagManager
+﻿namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class TagManagerConstants
 	{

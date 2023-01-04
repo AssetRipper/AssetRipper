@@ -3,7 +3,6 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Extensions;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
@@ -15,7 +14,7 @@ using AssetRipper.SourceGenerated.Subclasses.PPtr_OcclusionPortal;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Renderer;
 using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class OcclusionCullingDataExtensions
 	{
@@ -75,8 +74,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 			List<IOcclusionCullingSettings> cullingSettings = new List<IOcclusionCullingSettings>();
 			foreach (IUnityObjectBase asset in occlusionCullingData.Collection.Bundle.FetchAssetsInHierarchy())
 			{
-				if (asset is IOcclusionCullingSettings cullingSetting 
-					&& cullingSetting.Has_OcclusionCullingData_C29() 
+				if (asset is IOcclusionCullingSettings cullingSetting
+					&& cullingSetting.Has_OcclusionCullingData_C29()
 					&& cullingSetting.OcclusionCullingData_C29.IsAsset(cullingSetting.Collection, occlusionCullingData))
 				{
 					cullingSettings.Add(cullingSetting);
@@ -111,7 +110,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				{
 					throw new Exception($"Scene portal count {scene.SizePortals} doesn't match with given {cullingSetting.Portals_C29.Count}");
 				}
-				SetIDs(occlusionCullingData, container, cullingSetting, scene);
+				occlusionCullingData.SetIDs(container, cullingSetting, scene);
 			}
 		}
 

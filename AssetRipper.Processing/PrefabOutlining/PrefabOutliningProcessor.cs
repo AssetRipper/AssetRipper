@@ -1,17 +1,15 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Core.Classes.TagManager;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Import.Logging;
+using AssetRipper.Processing;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
+using AssetRipper.SourceGenerated.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Library.Processors.PrefabOutlining
+namespace AssetRipper.Processing.PrefabOutlining
 {
 	public sealed class PrefabOutliningProcessor : IAssetProcessor
 	{

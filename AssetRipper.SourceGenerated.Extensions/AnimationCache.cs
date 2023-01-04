@@ -3,16 +3,15 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_90;
 using AssetRipper.SourceGenerated.Classes.ClassID_95;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Utils
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public class AnimationCache
 	{
 		public List<IAvatar> CachedAvatars = new();
 		public List<IAnimator> CachedAnimators = new();
 		public List<IAnimation> CachedAnimations = new();
-		
+
 		private void CacheAssets(Bundle bundle)
 		{
 			foreach (IUnityObjectBase asset in bundle.FetchAssetsInHierarchy())
@@ -31,7 +30,7 @@ namespace AssetRipper.Core.Utils
 				}
 			}
 		}
-		
+
 		public static AnimationCache CreateCache(Bundle bundle)
 		{
 			AnimationCache cache = new();

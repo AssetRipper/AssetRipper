@@ -1,9 +1,8 @@
 ﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
-using ShaderTextRestorer.ShaderBlob;
-using System;
 
-namespace ShaderTextRestorer.Extensions
+namespace AssetRipper.Export.Modules.Shaders.Extensions
 {
 	public static class ShaderExtensions
 	{

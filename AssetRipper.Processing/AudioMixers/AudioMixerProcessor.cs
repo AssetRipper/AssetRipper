@@ -3,18 +3,16 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
-using AssetRipper.Core.Linq;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
-using AssetRipper.Library.Exporters.AudioMixers;
+using AssetRipper.Processing;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_241;
 using AssetRipper.SourceGenerated.Classes.ClassID_243;
 using AssetRipper.SourceGenerated.Classes.ClassID_244;
 using AssetRipper.SourceGenerated.Classes.ClassID_245;
 using AssetRipper.SourceGenerated.Enums;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AudioMixerConstant;
 using AssetRipper.SourceGenerated.Subclasses.AudioMixerGroupView;
 using AssetRipper.SourceGenerated.Subclasses.EffectConstant;
@@ -29,7 +27,7 @@ using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetRipper.Library.Processors.AudioMixers
+namespace AssetRipper.Processing.AudioMixers
 {
 	public sealed class AudioMixerProcessor : IAssetProcessor
 	{

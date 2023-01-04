@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using AssetRipper.Import.Structure.Assembly;
 
-namespace AssetRipper.Core.Structure.GameStructure.Platforms
+namespace AssetRipper.Import.Structure.GameStructure.Platforms
 {
 	internal sealed class WiiUGameStructure : PlatformGameStructure
 	{
@@ -35,11 +35,11 @@ namespace AssetRipper.Core.Structure.GameStructure.Platforms
 
 			if (HasMonoAssemblies(ManagedPath))
 			{
-				Backend = Assembly.ScriptingBackend.Mono;
+				Backend = ScriptingBackend.Mono;
 			}
 			else
 			{
-				Backend = Assembly.ScriptingBackend.Unknown;
+				Backend = ScriptingBackend.Unknown;
 			}
 
 			DataPaths = new string[] { GameDataPath };

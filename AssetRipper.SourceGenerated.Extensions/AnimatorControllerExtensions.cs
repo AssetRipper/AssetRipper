@@ -26,9 +26,8 @@ using AssetRipper.SourceGenerated.Subclasses.StateMachineBehaviourVectorDescript
 using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateMotionPair;
 using AssetRipper.SourceGenerated.Subclasses.StateRange;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimatorControllerExtensions
 	{

@@ -1,6 +1,4 @@
-﻿using AssetRipper.SourceGenerated;
-
-namespace AssetRipper.Core
+﻿namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class ClassIDTypeExtention
 	{

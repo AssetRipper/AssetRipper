@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class MonoBehaviourExtensions
 	{

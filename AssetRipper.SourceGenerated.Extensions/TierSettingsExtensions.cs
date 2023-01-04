@@ -3,7 +3,7 @@ using AssetRipper.SourceGenerated.Subclasses.TierGraphicsSettings;
 using AssetRipper.SourceGenerated.Subclasses.TierGraphicsSettingsEditor;
 using AssetRipper.SourceGenerated.Subclasses.TierSettings;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class TierSettingsExtensions
 	{

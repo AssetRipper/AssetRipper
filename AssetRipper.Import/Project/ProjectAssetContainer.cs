@@ -2,19 +2,17 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Layout;
-using AssetRipper.Core.Project.Collections;
-using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Layout;
+using AssetRipper.Import.Project.Collections;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_78;
-using System.Collections.Generic;
+using AssetRipper.SourceGenerated.Extensions;
 
 
-namespace AssetRipper.Core.Project
+namespace AssetRipper.Import.Project
 {
 	public class ProjectAssetContainer : IExportContainer, IProjectAssetContainer
 	{

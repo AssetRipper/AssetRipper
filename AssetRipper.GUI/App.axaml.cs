@@ -1,5 +1,5 @@
-using AssetRipper.Core.Logging;
 using AssetRipper.GUI.Logging;
+using AssetRipper.Import.Logging;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;

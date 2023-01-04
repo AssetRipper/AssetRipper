@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ShaderTextRestorer.ConstantBuffers
+﻿namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers
 {
 	[Flags]
 	internal enum ShaderVariableFlags

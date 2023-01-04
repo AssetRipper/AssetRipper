@@ -1,10 +1,9 @@
 ﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Core.Extensions;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.SourceGenerated.Subclasses.StreamedResource;
 using System.Diagnostics.CodeAnalysis;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class StreamedResourceExtensions
 	{

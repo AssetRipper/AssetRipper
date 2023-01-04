@@ -1,12 +1,10 @@
 ﻿using AsmResolver.DotNet;
 using AsmResolver.DotNet.Signatures.Types;
-using AssetRipper.Core.Structure.Assembly.Serializable;
+using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.SerializationLogic;
 using AssetRipper.SerializationLogic.Extensions;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace AssetRipper.Core.Structure.Assembly.Mono
+namespace AssetRipper.Import.Structure.Assembly.Mono
 {
 	internal class MonoType : SerializableType
 	{
@@ -14,10 +12,10 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 
 		private MonoType(ITypeDefOrRef type) : base(type.Namespace ?? "", PrimitiveType.Complex, type.Name ?? "")
 		{
-			
+
 		}
 
-		public MonoType(TypeDefinition typeDefinition) : this((ITypeDefOrRef) typeDefinition)
+		public MonoType(TypeDefinition typeDefinition) : this((ITypeDefOrRef)typeDefinition)
 		{
 			List<Field> fields = new(typeDefinition.Fields.Count); //Ensure we allocate some initial space so that we have less chance of needing to resize the list.
 			foreach ((FieldDefinition fieldDefinition, TypeSignature fieldType) in FieldQuery.GetFieldsInTypeAndBase(typeDefinition))
@@ -53,7 +51,7 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 
 		private static Field MakeSerializableField(string name, TypeSignature typeSignature, int arrayDepth)
 		{
-			switch(typeSignature)
+			switch (typeSignature)
 			{
 				case TypeDefOrRefSignature typeDefOrRefSignature:
 					TypeDefinition typeDefinition = typeDefOrRefSignature.Type.Resolve()
@@ -78,13 +76,13 @@ namespace AssetRipper.Core.Structure.Assembly.Mono
 
 				case CorLibTypeSignature corLibTypeSignature:
 					return new Field(new SerializablePrimitiveType(corLibTypeSignature.ToPrimitiveType()), arrayDepth, name);
-				
+
 				case SzArrayTypeSignature szArrayTypeSignature:
 					return MakeSerializableField(name, szArrayTypeSignature.BaseType, arrayDepth + 1);
-				
+
 				case GenericInstanceTypeSignature genericInstanceTypeSignature:
 					return MakeSerializableField(name, genericInstanceTypeSignature, arrayDepth);
-				
+
 				default:
 					throw new NotSupportedException(typeSignature.FullName);
 			};

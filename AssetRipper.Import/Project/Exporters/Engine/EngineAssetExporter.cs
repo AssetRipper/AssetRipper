@@ -1,12 +1,11 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Project.Collections;
+using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Project.Collections;
 using AssetRipper.IO.Files;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Project.Exporters.Engine
+namespace AssetRipper.Import.Project.Exporters.Engine
 {
 	public class EngineAssetExporter : IAssetExporter
 	{

@@ -1,4 +1,4 @@
-﻿namespace ShaderTextRestorer.Exporters.DirectX
+﻿namespace AssetRipper.Export.Modules.Shaders.Exporters.DirectX
 {
 	public enum DXInputPrimitive
 	{

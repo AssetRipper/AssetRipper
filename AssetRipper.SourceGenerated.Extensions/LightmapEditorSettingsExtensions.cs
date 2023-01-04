@@ -8,7 +8,7 @@ using Lightmapper = AssetRipper.SourceGenerated.Enums.Lightmapper_0;
 using LightmapsMode = AssetRipper.SourceGenerated.Enums.LightmapsMode;
 using Sampling = AssetRipper.SourceGenerated.Enums.Sampling_0;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class LightmapEditorSettingsExtensions
 	{

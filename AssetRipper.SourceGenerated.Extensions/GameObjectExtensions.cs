@@ -1,20 +1,17 @@
 ﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
-using AssetRipper.Core.Extensions;
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_78;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class GameObjectExtensions
 	{
@@ -123,7 +120,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			gameObject.TryGetComponent(out T? component);
 			return component;
 		}
-		
+
 		public static bool TryGetComponent<T>(this IGameObject gameObject, [NotNullWhen(true)] out T? component) where T : IComponent
 		{
 			foreach (IComponent? comp in gameObject.GetComponentAccessList())
@@ -147,7 +144,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			}
 			return component;
 		}
-		
+
 		public static ITransform GetTransform(this IGameObject gameObject)
 		{
 			foreach (IComponent? component in gameObject.GetComponentAccessList())
@@ -229,7 +226,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				_ = child ?? throw new NullReferenceException();
 				IGameObject childGO = child.GameObject_C4P ?? throw new NullReferenceException();
-				foreach (IEditorExtension childElement in FetchHierarchy(childGO))
+				foreach (IEditorExtension childElement in childGO.FetchHierarchy())
 				{
 					yield return childElement;
 				}

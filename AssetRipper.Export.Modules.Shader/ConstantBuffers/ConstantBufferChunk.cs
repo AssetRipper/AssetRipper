@@ -1,11 +1,10 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
 using AssetRipper.IO.Endian;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using AssetRipper.VersionUtilities;
-using ShaderTextRestorer.ShaderBlob;
-using ShaderTextRestorer.ShaderBlob.Parameters;
-using System.Collections.Generic;
 
-namespace ShaderTextRestorer.ConstantBuffers
+namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers
 {
 	internal class ConstantBufferChunk
 	{

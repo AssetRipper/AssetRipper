@@ -4,10 +4,9 @@ using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform;
-using System.Collections.Generic;
 using System.Numerics;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class TransformExtensions
 	{
@@ -63,7 +62,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			{
 				return transform;
 			}
-			return FindChild(transform, path, 0);
+			return transform.FindChild(path, 0);
 		}
 
 		private static ITransform? FindChild(this ITransform transform, string path, int startIndex)

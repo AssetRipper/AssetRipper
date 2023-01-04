@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.MuscleClipConstant;
 using AssetRipper.SourceGenerated.Subclasses.MuscleClipInfo;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class MuscleClipInfoExtensions
 	{

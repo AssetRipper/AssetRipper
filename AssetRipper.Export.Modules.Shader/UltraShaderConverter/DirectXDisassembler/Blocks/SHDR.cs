@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace DirectXDisassembler.Blocks
+﻿namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler.Blocks
 {
 	public sealed class SHDR : ShaderBlock
 	{
@@ -25,7 +21,7 @@ namespace DirectXDisassembler.Blocks
 			shaderType = (Type)reader.ReadInt16();
 			instructionSize = reader.ReadInt32();
 			shaderInstructions = new List<SHDRInstruction>();
-			while (reader.BaseStream.Position < (instructionSize * 4))
+			while (reader.BaseStream.Position < instructionSize * 4)
 			{
 				SHDRInstruction inst = new SHDRInstruction(reader, this);
 				shaderInstructions.Add(inst);
@@ -99,13 +95,13 @@ namespace DirectXDisassembler.Blocks
 			opcodeExtraData = (instData & 0xfff800) >> 11;
 			operands = new List<SHDRInstructionOperand>();
 
-			long endPos = startPos + (length * 4);
+			long endPos = startPos + length * 4;
 			if (IsDeclaration(opcode))
 			{
 				reader.BaseStream.Position = startPos + 4;
 				declData = new SHDRDeclData(reader, this, instData);
 
-				reader.BaseStream.Position = startPos + (length * 4);
+				reader.BaseStream.Position = startPos + length * 4;
 			}
 			else
 			{
@@ -127,7 +123,7 @@ namespace DirectXDisassembler.Blocks
 
 			if (opcode == Opcode.customdata)
 			{
-				reader.BaseStream.Position = startPos + (declData!.customDataArray.Length * 16) + 8;
+				reader.BaseStream.Position = startPos + declData!.customDataArray.Length * 16 + 8;
 			}
 			else
 			{
@@ -443,7 +439,7 @@ namespace DirectXDisassembler.Blocks
 					// Count bits (pretty bad but works)
 					for (int i = 0; i < 4; i++)
 					{
-						if (((mask >> i) & 1) == 1)
+						if ((mask >> i & 1) == 1)
 						{
 							p++;
 						}
@@ -452,7 +448,7 @@ namespace DirectXDisassembler.Blocks
 					p = 0;
 					for (int i = 0; i < 4; i++)
 					{
-						if (((mask >> i) & 1) == 1)
+						if ((mask >> i & 1) == 1)
 						{
 							swizzle[p] = i;
 							p++;
@@ -464,7 +460,7 @@ namespace DirectXDisassembler.Blocks
 					swizzle = new int[4];
 					for (int i = 0; i < 4; i++)
 					{
-						swizzle[i] = (operandData >> (4 + (2 * (i & 3)))) & 3;
+						swizzle[i] = operandData >> 4 + 2 * (i & 3) & 3;
 					}
 				}
 				else if (componentMode == 2)
@@ -496,7 +492,7 @@ namespace DirectXDisassembler.Blocks
 			subOperands = new SHDRInstructionOperand[indexDims];
 			for (int i = 0; i < indexDims; i++)
 			{
-				OperandIndex opIndex = (OperandIndex)((operandData & (3 << (22 + (3 * ((i) & 3))))) >> (22 + (3 * ((i) & 3))));
+				OperandIndex opIndex = (OperandIndex)((operandData & 3 << 22 + 3 * (i & 3)) >> 22 + 3 * (i & 3));
 				switch (opIndex)
 				{
 					case OperandIndex.Immediate32:

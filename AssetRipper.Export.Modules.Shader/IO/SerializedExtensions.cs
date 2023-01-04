@@ -1,9 +1,9 @@
 ﻿using AssetRipper.Assets.Generics;
-using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedPass;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProperties;
@@ -16,12 +16,9 @@ using AssetRipper.SourceGenerated.Subclasses.SerializedSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedTagMap;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
-using ShaderTextRestorer.ShaderBlob;
-using System;
 using System.Globalization;
-using System.IO;
 
-namespace ShaderTextRestorer.IO
+namespace AssetRipper.Export.Modules.Shaders.IO
 {
 	public static class SerializedExtensions
 	{

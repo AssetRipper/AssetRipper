@@ -1,10 +1,8 @@
-﻿using AssetRipper.Core.Logging;
-using AssetRipper.Core.Utils;
+﻿using AssetRipper.Import.Logging;
+using AssetRipper.Import.Utils;
 using ICSharpCode.SharpZipLib.Zip;
-using System.Collections.Generic;
-using System.IO;
 
-namespace AssetRipper.Core.Structure.GameStructure
+namespace AssetRipper.Import.Structure.GameStructure
 {
 	public static class Preprocessor
 	{

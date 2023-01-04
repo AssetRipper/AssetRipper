@@ -1,11 +1,11 @@
-﻿using AssetRipper.Core.Classes.Misc.Serializable.AnimationCurveTpl;
-using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
+﻿using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.Extensions.Enums.AnimationCurve;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Quaternionf;
+using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Single;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimationCurveExtensions
 	{

@@ -2,11 +2,9 @@
 using AssetRipper.SourceGenerated.Subclasses.UnityPropertySheet;
 using AssetRipper.SourceGenerated.Subclasses.UnityTexEnv;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class MaterialExtensions
 	{

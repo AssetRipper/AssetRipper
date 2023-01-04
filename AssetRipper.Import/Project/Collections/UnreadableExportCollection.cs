@@ -2,14 +2,12 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Classes;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.Utils;
+using AssetRipper.Import.Classes;
+using AssetRipper.Import.Project.Exporters;
 using AssetRipper.IO.Files.SerializedFiles;
-using System.Collections.Generic;
-using System.IO;
+using AssetRipper.IO.Files.Utils;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public sealed class UnreadableExportCollection : ExportCollection
 	{

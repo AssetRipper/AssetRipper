@@ -1,9 +1,8 @@
-﻿using AssetRipper.Core.Classes.AnimationClip;
-using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
-using AssetRipper.SourceGenerated;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip;
+using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.GenericBinding;
 using AssetRipper.SourceGenerated.Subclasses.GenericBinding;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class GenericBindingExtensions
 	{
@@ -15,8 +14,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 		public static bool IsTransform(this IGenericBinding binding)
 		{
 			return binding.GetClassID() == ClassIDType.Transform
-				|| (binding.GetClassID() == ClassIDType.RectTransform
-				&& binding.TransformType().IsValid());
+				|| binding.GetClassID() == ClassIDType.RectTransform
+				&& binding.TransformType().IsValid();
 		}
 
 		public static TransformType TransformType(this IGenericBinding binding)

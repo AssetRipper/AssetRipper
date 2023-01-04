@@ -1,8 +1,7 @@
 using AssetRipper.IO.Files;
-using System.Collections.Generic;
 
 
-namespace AssetRipper.Core.Project.Exporters.Engine
+namespace AssetRipper.Import.Project.Exporters.Engine
 {
 	public static class EngineBuiltInAssets
 	{

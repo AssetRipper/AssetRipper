@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Library.Configuration
+﻿namespace AssetRipper.Export.UnityProjects.Configuration
 {
 	public enum SpriteExportMode
 	{

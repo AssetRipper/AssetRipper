@@ -1,8 +1,7 @@
-﻿using AssetRipper.Core.Logging;
-using System.Collections.Generic;
+﻿using AssetRipper.Import.Logging;
 using System.Diagnostics.CodeAnalysis;
 
-namespace AssetRipper.Core.Structure.GameStructure.Platforms
+namespace AssetRipper.Import.Structure.GameStructure.Platforms
 {
 	public static class PlatformChecker
 	{

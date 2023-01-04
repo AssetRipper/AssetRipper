@@ -2,7 +2,7 @@
 using AssetRipper.SourceGenerated.Subclasses.MultiModeParameter;
 using AssetRipper.SourceGenerated.Subclasses.MultiModeParameter_MeshSpawn;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class MultiModeParameterExtensions
 	{

@@ -1,4 +1,4 @@
-using AssetRipper.Library.Configuration;
+using AssetRipper.Export.UnityProjects.Configuration;
 
 namespace AssetRipper.GUI.Components
 {

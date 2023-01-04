@@ -1,8 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_205;
 using AssetRipper.SourceGenerated.Enums;
-using System.Linq;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class LODGroupExtensions
 	{

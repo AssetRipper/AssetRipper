@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets.Bundles;
 
-namespace AssetRipper.Core.Structure.GameStructure
+namespace AssetRipper.Processing
 {
 	public interface IAssetProcessor
 	{

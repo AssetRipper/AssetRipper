@@ -1,7 +1,6 @@
 ﻿using AsmResolver.DotNet;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Structure.Assembly.Managers;
+namespace AssetRipper.Import.Structure.Assembly.Managers;
 
 internal static class ModuleExtensions
 {
@@ -18,7 +17,7 @@ internal static class ModuleExtensions
 
 		return null;
 	}
-	
+
 	public static void SetResolver(this ModuleDefinition module, IAssemblyResolver assemblyResolver)
 	{
 		module.MetadataResolver = new DefaultMetadataResolver(assemblyResolver);

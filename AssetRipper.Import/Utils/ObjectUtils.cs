@@ -1,10 +1,8 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.IO.Files;
-using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Threading;
 
-namespace AssetRipper.Core.Utils
+namespace AssetRipper.Import.Utils
 {
 	public static class ObjectUtils
 	{

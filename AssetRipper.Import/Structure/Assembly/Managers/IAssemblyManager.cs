@@ -1,10 +1,8 @@
 using AsmResolver.DotNet;
-using AssetRipper.Core.Structure.Assembly.Serializable;
-using AssetRipper.Core.Structure.GameStructure.Platforms;
-using System.Collections.Generic;
-using System.IO;
+using AssetRipper.Import.Structure.Assembly.Serializable;
+using AssetRipper.Import.Structure.GameStructure.Platforms;
 
-namespace AssetRipper.Core.Structure.Assembly.Managers
+namespace AssetRipper.Import.Structure.Assembly.Managers
 {
 	public interface IAssemblyManager : IDisposable
 	{

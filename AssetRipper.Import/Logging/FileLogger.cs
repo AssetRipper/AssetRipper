@@ -1,7 +1,6 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Text;
 
-namespace AssetRipper.Core.Logging
+namespace AssetRipper.Import.Logging
 {
 	public class FileLogger : FileLoggerBase
 	{

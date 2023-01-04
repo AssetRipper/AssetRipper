@@ -1,13 +1,10 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project;
+using AssetRipper.Export.UnityProjects;
 using AssetRipper.GUI.Utils;
-using AssetRipper.Library;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Project;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace AssetRipper.GUI.Managers
 {

@@ -4,7 +4,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimationExtensions
 	{

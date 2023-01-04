@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Reading;
 
-namespace AssetRipper.Core.IO.Extensions
+namespace AssetRipper.Import.IO.Extensions
 {
 	public static class AssetReaderExtensions
 	{

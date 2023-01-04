@@ -3,14 +3,12 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project.Collections;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Structure.GameStructure;
-using AssetRipper.Core.Utils;
+using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Project.Collections;
+using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.Library.Processors.AnimationClips;
+using AssetRipper.Processing.AnimationClips;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_147;
@@ -26,13 +24,14 @@ using AssetRipper.SourceGenerated.Classes.ClassID_47;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_78;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Object;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.IO;
 using System.Linq;
 
-namespace AssetRipper.Library.Processors
+namespace AssetRipper.Processing
 {
 	/// <summary>
 	/// <para>

@@ -1,7 +1,6 @@
-﻿using AssetRipper.Core.Classes.TagManager;
-using AssetRipper.SourceGenerated.Classes.ClassID_78;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_78;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class TagManagerExtensions
 	{

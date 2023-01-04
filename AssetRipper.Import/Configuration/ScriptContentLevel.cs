@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Core.Configuration
+﻿namespace AssetRipper.Import.Configuration
 {
 	public enum ScriptContentLevel
 	{

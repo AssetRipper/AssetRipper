@@ -3,7 +3,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_47;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class QualitySettingsExtensions
 	{

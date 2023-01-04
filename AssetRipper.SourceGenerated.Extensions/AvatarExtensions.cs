@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_90;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AvatarExtensions
 	{

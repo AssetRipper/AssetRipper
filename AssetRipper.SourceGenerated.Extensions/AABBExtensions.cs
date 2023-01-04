@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.AABB;
 using System.Numerics;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AABBExtensions
 	{
@@ -68,8 +68,8 @@ namespace AssetRipper.Core.SourceGenExtensions
 						maxZ = vertex.Z;
 					}
 				}
-				Vector3 center = new Vector3((maxX + minX)/2, (maxY + minY)/2, (maxZ + minZ)/2);
-				Vector3 extent = new Vector3((maxX - minX)/2, (maxY - minY)/2, (maxZ - minZ)/2);
+				Vector3 center = new Vector3((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
+				Vector3 extent = new Vector3((maxX - minX) / 2, (maxY - minY) / 2, (maxZ - minZ) / 2);
 				instance.CopyValuesFrom(center, extent);
 			}
 		}

@@ -4,10 +4,8 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public sealed class EmptyExportCollection : IExportCollection
 	{

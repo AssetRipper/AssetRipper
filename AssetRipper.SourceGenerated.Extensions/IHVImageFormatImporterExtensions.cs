@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_1055;
 using FilterMode = AssetRipper.SourceGenerated.Enums.FilterMode_0;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class IHVImageFormatImporterExtensions
 	{

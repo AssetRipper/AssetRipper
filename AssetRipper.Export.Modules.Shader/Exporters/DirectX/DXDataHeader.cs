@@ -1,8 +1,7 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 using AssetRipper.VersionUtilities;
-using System.IO;
 
-namespace ShaderTextRestorer.Exporters.DirectX
+namespace AssetRipper.Export.Modules.Shaders.Exporters.DirectX
 {
 	public struct DXDataHeader
 	{

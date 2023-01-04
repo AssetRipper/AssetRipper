@@ -1,8 +1,7 @@
-﻿using AssetRipper.Core.Extensions;
-using AssetRipper.SourceGenerated.Classes.ClassID_28;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Enums;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class Texture2DExtensions
 	{
@@ -63,9 +62,9 @@ namespace AssetRipper.Core.SourceGenExtensions
 			return data;
 		}
 
-		public static bool IsSwapBytes(AssetRipper.IO.Files.BuildTarget platform, TextureFormat format)
+		public static bool IsSwapBytes(IO.Files.BuildTarget platform, TextureFormat format)
 		{
-			if (platform == AssetRipper.IO.Files.BuildTarget.XBox360)
+			if (platform == IO.Files.BuildTarget.XBox360)
 			{
 				switch (format)
 				{

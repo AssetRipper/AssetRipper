@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
+﻿using AssetRipper.Export.Modules.Shaders.Handlers;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 using AssetRipper.VersionUtilities;
-using ShaderTextRestorer.Handlers;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ShaderTextRestorer.Exporters.DirectX
+namespace AssetRipper.Export.Modules.Shaders.Exporters.DirectX
 {
 	public static class DXShaderTextExtractor
 	{

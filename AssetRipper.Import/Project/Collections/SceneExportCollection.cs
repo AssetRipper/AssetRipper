@@ -3,21 +3,18 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Project.Exporters;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_1030;
 using AssetRipper.SourceGenerated.Classes.ClassID_1034;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_363;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using AssetRipper.SourceGenerated.Extensions;
 
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public class SceneExportCollection : ExportCollection, IComparer<IUnityObjectBase>
 	{

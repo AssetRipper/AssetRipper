@@ -1,4 +1,4 @@
-﻿namespace ShaderTextRestorer.ConstantBuffers
+﻿namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers
 {
 	internal class VariableHeader
 	{

@@ -1,8 +1,7 @@
-﻿using System;
+﻿using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
 using System.Globalization;
-using System.Linq;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL
 {
 	public class USILOperand
 	{
@@ -328,7 +327,7 @@ namespace ShaderLabConvert
 					string[] charArray = transposeMatrix ? USILConstants.TMATRIX_MASK_CHARS : USILConstants.MATRIX_MASK_CHARS;
 					for (int i = 0; i < mask.Length; i++)
 					{
-						suffix += charArray[(arrayIndex * 4) + mask[i]];
+						suffix += charArray[arrayIndex * 4 + mask[i]];
 					}
 				}
 				else

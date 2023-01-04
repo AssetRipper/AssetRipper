@@ -1,15 +1,15 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
-using AssetRipper.Core.Logging;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
+using AssetRipper.Import.Logging;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using AssetRipper.VersionUtilities;
-using DirectXDisassembler;
 using DXDecompiler.Util;
-using ShaderLabConvert;
-using ShaderTextRestorer.ShaderBlob;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
-namespace ShaderTextRestorer.Handlers
+namespace AssetRipper.Export.Modules.Shaders.Handlers
 {
 	public static class USCDecompilerHandler
 	{

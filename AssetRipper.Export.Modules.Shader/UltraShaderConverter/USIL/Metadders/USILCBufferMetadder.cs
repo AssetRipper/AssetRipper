@@ -1,9 +1,8 @@
-﻿using ShaderTextRestorer.ShaderBlob;
-using ShaderTextRestorer.ShaderBlob.Parameters;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Metadders
 {
 	public class USILCBufferMetadder : IUSILOptimizer
 	{
@@ -35,7 +34,7 @@ namespace ShaderLabConvert
 				List<int> operandMaskAddresses = new();
 				foreach (int operandMask in operand.mask)
 				{
-					operandMaskAddresses.Add((cbArrIdx * 16) + (operandMask * 4));
+					operandMaskAddresses.Add(cbArrIdx * 16 + operandMask * 4);
 				}
 
 				HashSet<NumericShaderParameter> cbParams = new HashSet<NumericShaderParameter>();

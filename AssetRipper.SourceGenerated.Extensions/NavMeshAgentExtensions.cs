@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_195;
 using ObstacleAvoidanceType = AssetRipper.SourceGenerated.Enums.ObstacleAvoidanceType_1;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class NavMeshAgentExtensions
 	{

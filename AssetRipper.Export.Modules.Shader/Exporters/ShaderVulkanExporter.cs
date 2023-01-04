@@ -1,13 +1,11 @@
+using AssetRipper.Export.Modules.Shaders.IO;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.IO.Files.Streams;
 using AssetRipper.VersionUtilities;
-using ShaderTextRestorer.IO;
-using ShaderTextRestorer.ShaderBlob;
 using Smolv;
 using SpirV;
-using System;
-using System.IO;
 
-namespace ShaderTextRestorer.Exporters
+namespace AssetRipper.Export.Modules.Shaders.Exporters
 {
 	public class ShaderVulkanExporter : ShaderTextExporter
 	{

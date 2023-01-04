@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.BuiltinShaderSettings;
 using BuiltinShaderMode = AssetRipper.SourceGenerated.Enums.BuiltinShaderMode_1;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class BuiltinShaderSettingsExtensions
 	{

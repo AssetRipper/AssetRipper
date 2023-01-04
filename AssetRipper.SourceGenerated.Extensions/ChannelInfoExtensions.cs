@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums.VertexFormat;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.Shader.VertexFormat;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	/*
 		/// <summary>
@@ -41,7 +41,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		/// </summary>
 		public static void SetDataDimension(this IChannelInfo channelInfo, byte value)
 		{
-			channelInfo.Dimension = (byte)((channelInfo.Dimension & 0b11110000) | (value & 0b00001111));
+			channelInfo.Dimension = (byte)(channelInfo.Dimension & 0b11110000 | value & 0b00001111);
 		}
 
 		public static byte GetStride(this IChannelInfo channelInfo, UnityVersion version)

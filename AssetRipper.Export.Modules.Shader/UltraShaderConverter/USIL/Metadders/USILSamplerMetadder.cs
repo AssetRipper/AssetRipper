@@ -1,10 +1,9 @@
-﻿using AssetRipper.Core.Logging;
-using ShaderTextRestorer.ShaderBlob;
-using ShaderTextRestorer.ShaderBlob.Parameters;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using AssetRipper.Import.Logging;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Metadders
 {
 	public class USILSamplerMetadder : IUSILOptimizer
 	{

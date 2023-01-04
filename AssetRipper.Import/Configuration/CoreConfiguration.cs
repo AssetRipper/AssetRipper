@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Utils;
+using AssetRipper.Import.Layout;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using System.IO;
 
-namespace AssetRipper.Core.Configuration
+namespace AssetRipper.Import.Configuration
 {
 	public class CoreConfiguration
 	{
@@ -75,7 +75,7 @@ namespace AssetRipper.Core.Configuration
 
 		public CoreConfiguration() => ResetToDefaultValues();
 
-		public void SetProjectSettings(Layout.LayoutInfo info) => SetProjectSettings(info.Version, info.Platform, info.Flags);
+		public void SetProjectSettings(LayoutInfo info) => SetProjectSettings(info.Version, info.Platform, info.Flags);
 		public void SetProjectSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			Version = version;

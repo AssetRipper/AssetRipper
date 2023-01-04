@@ -1,9 +1,7 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums;
-using AssetRipper.SourceGenerated.Classes.ClassID_48;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class ShaderExtensions
 	{

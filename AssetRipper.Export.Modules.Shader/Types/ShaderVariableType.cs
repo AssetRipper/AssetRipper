@@ -1,4 +1,4 @@
-﻿namespace ShaderTextRestorer.Types
+﻿namespace AssetRipper.Export.Modules.Shaders.Types
 {
 	internal enum ShaderVariableType
 	{

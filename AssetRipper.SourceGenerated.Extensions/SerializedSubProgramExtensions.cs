@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums.GpuProgramType;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubProgram;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class SerializedSubProgramExtensions
 	{

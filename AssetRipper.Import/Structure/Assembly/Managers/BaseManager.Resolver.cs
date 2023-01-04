@@ -1,8 +1,7 @@
 ﻿using AsmResolver.DotNet;
 using AsmResolver.DotNet.Signatures;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Structure.Assembly.Managers
+namespace AssetRipper.Import.Structure.Assembly.Managers
 {
 
 	public partial class BaseManager

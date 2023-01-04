@@ -1,10 +1,11 @@
 ﻿using AssetRipper.Assets.Generics;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.CompressedAnimationCurve;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
 using System.Numerics;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class CompressedAnimationCurveExtensions
 	{

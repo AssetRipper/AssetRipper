@@ -1,6 +1,6 @@
 using AsmResolver.DotNet;
 
-namespace AssetRipper.Core.Structure.Assembly.Mono
+namespace AssetRipper.Import.Structure.Assembly.Mono
 {
 	public static class MonoUtils
 	{

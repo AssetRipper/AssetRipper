@@ -1,4 +1,4 @@
-﻿namespace ShaderLabConvert
+﻿namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL
 {
 	// Should be renamed UConstants probably?
 	public static class USILConstants

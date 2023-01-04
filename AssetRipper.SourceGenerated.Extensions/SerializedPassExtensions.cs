@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Classes.Shader.SerializedShader.Enum;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.Shader.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedPass;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class SerializedPassExtensions
 	{

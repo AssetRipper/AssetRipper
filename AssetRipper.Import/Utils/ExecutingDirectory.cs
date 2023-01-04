@@ -1,13 +1,13 @@
-﻿namespace AssetRipper.Core.Utils
+﻿namespace AssetRipper.Import.Utils
 {
 	public static class ExecutingDirectory
 	{
 		static ExecutingDirectory()
 		{
-			Info = new System.IO.DirectoryInfo(AppContext.BaseDirectory);
+			Info = new DirectoryInfo(AppContext.BaseDirectory);
 		}
 
-		public static System.IO.DirectoryInfo Info { get; }
+		public static DirectoryInfo Info { get; }
 		public static string Name => Info.Name;
 		public static string Path => Info.FullName;
 

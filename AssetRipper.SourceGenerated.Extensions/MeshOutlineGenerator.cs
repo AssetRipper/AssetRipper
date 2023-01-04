@@ -1,8 +1,7 @@
 ﻿using AssetRipper.Numerics;
-using System.Collections.Generic;
 using System.Numerics;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public sealed class MeshOutlineGenerator
 	{

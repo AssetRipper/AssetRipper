@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Core.Extensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_207;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeConstant;
@@ -7,7 +6,7 @@ using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
 using AssetRipper.SourceGenerated.Subclasses.LeafInfoConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class StateConstantExtensions
 	{

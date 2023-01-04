@@ -1,4 +1,4 @@
-namespace AssetRipper.Core.Structure.Assembly
+namespace AssetRipper.Import.Structure.Assembly
 {
 	public enum ScriptingBackend
 	{

@@ -1,8 +1,8 @@
-﻿using AssetRipper.Core.Logging;
+﻿using AssetRipper.Import.Logging;
 using Avalonia.Logging;
 using Avalonia.Utilities;
 using System.Text;
-using Logger = AssetRipper.Core.Logging.Logger;
+using Logger = AssetRipper.Import.Logging.Logger;
 
 namespace AssetRipper.GUI.Logging
 {

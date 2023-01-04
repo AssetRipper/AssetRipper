@@ -1,7 +1,6 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Int32;
-using System.Linq;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class PackedIntVectorExtensions
 	{
@@ -27,7 +26,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			packedVector.NumItems = (uint)data.Length;
 			packedVector.BitSize = maxDataValue == 0xFFFFFFFF ? (byte)32 : GetBitCount(maxDataValue + 1U);
-			packedVector.Data = new byte[((data.Length * packedVector.BitSize) + 7) / 8];
+			packedVector.Data = new byte[(data.Length * packedVector.BitSize + 7) / 8];
 
 			int bitIndex = 0;
 			int byteIndex = 0;
@@ -36,7 +35,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				int bitOffset = 0;
 				while (bitOffset < packedVector.BitSize)
 				{
-					packedVector.Data[byteIndex] |= unchecked((byte)((data[i] >> bitOffset) << bitIndex));
+					packedVector.Data[byteIndex] |= unchecked((byte)(data[i] >> bitOffset << bitIndex));
 					int read = Math.Min(packedVector.BitSize - bitOffset, 8 - bitIndex);
 					bitIndex += read;
 					bitOffset += read;
@@ -62,7 +61,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 			packedVector.NumItems = (uint)data.Length;
 			packedVector.BitSize = maxDataValue == 0xFFFFFFFF ? (byte)32 : GetBitCount(maxDataValue + 1U);
-			packedVector.Data = new byte[((data.Length * packedVector.BitSize) + 7) / 8];
+			packedVector.Data = new byte[(data.Length * packedVector.BitSize + 7) / 8];
 
 			int bitIndex = 0;
 			int byteIndex = 0;
@@ -71,7 +70,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				int bitOffset = 0;
 				while (bitOffset < packedVector.BitSize)
 				{
-					packedVector.Data[byteIndex] |= unchecked((byte)((data[i] >> bitOffset) << bitIndex));
+					packedVector.Data[byteIndex] |= unchecked((byte)(data[i] >> bitOffset << bitIndex));
 					int read = Math.Min(packedVector.BitSize - bitOffset, 8 - bitIndex);
 					bitIndex += read;
 					bitOffset += read;
@@ -121,7 +120,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				buffer[i] = 0;
 				while (bitOffset < packedVector.BitSize)
 				{
-					buffer[i] |= unchecked((uint)((packedVector.Data[byteIndex] >> bitIndex) << bitOffset));
+					buffer[i] |= unchecked((uint)(packedVector.Data[byteIndex] >> bitIndex << bitOffset));
 					int read = Math.Min(packedVector.BitSize - bitOffset, 8 - bitIndex);
 					bitIndex += read;
 					bitOffset += read;
@@ -147,7 +146,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				buffer[i] = 0;
 				while (bitOffset < packedVector.BitSize)
 				{
-					buffer[i] |= unchecked((ushort)((packedVector.Data[byteIndex] >> bitIndex) << bitOffset));
+					buffer[i] |= unchecked((ushort)(packedVector.Data[byteIndex] >> bitIndex << bitOffset));
 					int read = Math.Min(packedVector.BitSize - bitOffset, 8 - bitIndex);
 					bitIndex += read;
 					bitOffset += read;

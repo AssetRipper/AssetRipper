@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.NavMeshBuildSettings;
 using AssetRipper.SourceGenerated.Subclasses.NavMeshParams;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class NavMeshBuildSettingsExtensions
 	{

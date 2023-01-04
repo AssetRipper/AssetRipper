@@ -2,7 +2,7 @@
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Subclasses.StateBehavioursPair;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class StateBehavioursPairExtensions
 	{

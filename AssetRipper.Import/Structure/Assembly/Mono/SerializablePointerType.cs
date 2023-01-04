@@ -1,6 +1,6 @@
-﻿using AssetRipper.Core.Structure.Assembly.Serializable;
+﻿using AssetRipper.Import.Structure.Assembly.Serializable;
 
-namespace AssetRipper.Core.Structure.Assembly.Mono;
+namespace AssetRipper.Import.Structure.Assembly.Mono;
 
 internal sealed class SerializablePointerType : SerializableType
 {

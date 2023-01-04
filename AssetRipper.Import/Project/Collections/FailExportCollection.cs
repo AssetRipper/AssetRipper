@@ -3,13 +3,12 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project.Exporters;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Project.Exporters;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public class FailExportCollection : IExportCollection
 	{

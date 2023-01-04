@@ -1,9 +1,8 @@
 ﻿using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Quaternionf;
-using System.Linq;
 using System.Numerics;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class PackedQuatVectorExtensions
 	{
@@ -57,7 +56,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				int bitOffset = 0;
 				while (bitOffset < 3)
 				{
-					packedVector.Data[byteIndex] |= unchecked((byte)((flags >> bitOffset) << bitIndex));
+					packedVector.Data[byteIndex] |= unchecked((byte)(flags >> bitOffset << bitIndex));
 					int num = Math.Min(3 - bitOffset, 8 - bitIndex);
 					bitIndex += num;
 					bitOffset += num;
@@ -71,7 +70,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				{
 					if ((flags & 3) != j)
 					{
-						int bitSize = (((flags & 3) + 1) % 4 == j) ? 9 : 10;
+						int bitSize = ((flags & 3) + 1) % 4 == j ? 9 : 10;
 						double scaled = (q.GetAt(j) + 1d) * 0.5d;
 						if (scaled < 0)
 						{
@@ -88,7 +87,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 						bitOffset = 0;
 						while (bitOffset < bitSize)
 						{
-							packedVector.Data[byteIndex] |= unchecked((byte)((x >> bitOffset) << bitIndex));
+							packedVector.Data[byteIndex] |= unchecked((byte)(x >> bitOffset << bitIndex));
 							int read = Math.Min(bitSize - bitOffset, 8 - bitIndex);
 							bitIndex += read;
 							bitOffset += read;
@@ -132,7 +131,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				{
 					if ((flags & 3) != j)
 					{
-						int bitSize = (((flags & 3) + 1) % 4 == j) ? 9 : 10;
+						int bitSize = ((flags & 3) + 1) % 4 == j ? 9 : 10;
 
 						uint value = 0;
 						bitOffset = 0;
@@ -152,7 +151,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 						// final value's range is [-1.0f : 1.0f]
 						double halfMaxValue = 0.5d * ((1 << bitSize) - 1);
-						double quaternion_j = (value / halfMaxValue) - 1.0d;
+						double quaternion_j = value / halfMaxValue - 1.0d;
 						quaternion.SetAt(j, (float)quaternion_j);
 						sum += quaternion_j * quaternion_j;
 					}

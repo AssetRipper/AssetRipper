@@ -1,12 +1,12 @@
 ﻿using AssetRipper.Assets.IO.Reading;
-using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Single;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace AssetRipper.Library.Processors.AnimationClips.Editor
+namespace AssetRipper.Processing.AnimationClips.Editor
 {
 	public sealed class StreamedCurveKey : IAssetReadable
 	{

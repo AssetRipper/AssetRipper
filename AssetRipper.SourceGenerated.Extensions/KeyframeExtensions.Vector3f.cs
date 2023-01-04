@@ -1,9 +1,9 @@
-﻿using AssetRipper.Core.Classes.Misc.KeyframeTpl;
-using AssetRipper.Core.Classes.Misc.KeyframeTpl.TangentMode;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.Keyframe;
+using AssetRipper.SourceGenerated.Extensions.Enums.Keyframe.TangentMode;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static partial class KeyframeExtensions
 	{

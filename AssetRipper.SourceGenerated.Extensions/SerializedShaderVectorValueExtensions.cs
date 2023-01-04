@@ -1,6 +1,6 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.SerializedShaderVectorValue;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class SerializedShaderVectorValueExtensions
 	{

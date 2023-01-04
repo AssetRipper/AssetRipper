@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
 using System.Globalization;
 using System.Text;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function
 {
 	public class UShaderFunctionToHLSL
 	{

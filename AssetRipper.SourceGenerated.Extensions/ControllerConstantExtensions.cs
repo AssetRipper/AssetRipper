@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.ControllerConstant;
 using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class ControllerConstantExtensions
 	{

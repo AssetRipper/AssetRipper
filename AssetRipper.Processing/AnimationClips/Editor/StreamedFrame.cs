@@ -1,7 +1,7 @@
 using AssetRipper.Assets.IO.Reading;
-using AssetRipper.Core.IO.Extensions;
+using AssetRipper.Import.IO.Extensions;
 
-namespace AssetRipper.Library.Processors.AnimationClips.Editor
+namespace AssetRipper.Processing.AnimationClips.Editor
 {
 	public sealed class StreamedFrame : IAssetReadable
 	{

@@ -1,9 +1,9 @@
 using AsmResolver.PE.File;
 using AsmResolver.PE.File.Headers;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Structure.GameStructure.Platforms;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.GameStructure.Platforms;
 
-namespace AssetRipper.Core.Structure.Assembly.Managers
+namespace AssetRipper.Import.Structure.Assembly.Managers
 {
 	public sealed class MonoManager : BaseManager
 	{

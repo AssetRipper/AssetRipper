@@ -3,9 +3,8 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_EditorExtension;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class PrefabInstanceExtensions
 	{

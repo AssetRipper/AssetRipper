@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Core.Project.Collections;
+using AssetRipper.Import.Project.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 
-namespace AssetRipper.Core.Project.Exporters
+namespace AssetRipper.Import.Project.Exporters
 {
 	public class BuildSettingsExporter : YamlExporterBase
 	{

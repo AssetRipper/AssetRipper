@@ -1,10 +1,8 @@
-using AssetRipper.Core.Extensions;
-using ShaderTextRestorer.IO;
-using ShaderTextRestorer.ShaderBlob;
-using System.Collections.Generic;
-using System.IO;
+using AssetRipper.Export.Modules.Shaders.IO;
+using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.SourceGenerated.Extensions;
 
-namespace ShaderTextRestorer.Exporters
+namespace AssetRipper.Export.Modules.Shaders.Exporters
 {
 	public class ShaderTextExporter
 	{

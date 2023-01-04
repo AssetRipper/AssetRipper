@@ -1,4 +1,4 @@
-﻿namespace DirectXDisassembler
+﻿namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler
 {
 	//tokens.h
 	public enum Opcode

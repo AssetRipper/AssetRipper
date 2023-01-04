@@ -1,17 +1,18 @@
-﻿using AssetRipper.Core.Classes.AnimationClip.Bones;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip;
+using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.Bones;
 
-namespace AssetRipper.Core.Classes.AnimationClip
+namespace AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip
 {
 	public enum HumanoidMuscleType
 	{
 		Motion = 0,
 		Root = Motion + 7,
 		Limbs = Root + 7,
-		Muscles = Limbs + (LimbType.Last * 7),
+		Muscles = Limbs + LimbType.Last * 7,
 		Fingers = Muscles + MuscleType.Last,
-		TDoFBones = Fingers + (ArmType.Last * FingerType.Last * FingerDoFType.Last),
+		TDoFBones = Fingers + ArmType.Last * FingerType.Last * FingerDoFType.Last,
 
-		Last = TDoFBones + (TDoFBoneType.Last * 3),
+		Last = TDoFBones + TDoFBoneType.Last * 3,
 	}
 
 	public static class HumanoidMuscleTypeExtensions

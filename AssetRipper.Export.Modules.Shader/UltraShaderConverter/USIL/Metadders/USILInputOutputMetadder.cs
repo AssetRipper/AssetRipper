@@ -1,8 +1,8 @@
-﻿using ShaderTextRestorer.ShaderBlob;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Metadders
 {
 	public class USILInputOutputMetadder : IUSILOptimizer
 	{
@@ -27,9 +27,9 @@ namespace ShaderLabConvert
 		{
 			if (operand.operandType == USILOperandType.InputRegister)
 			{
-				int searchMask = (operand.mask.Length != 0) ? (1 << operand.mask[0]) : 0;
+				int searchMask = operand.mask.Length != 0 ? 1 << operand.mask[0] : 0;
 				USILInputOutput input = shader.inputs.First(
-					i => i.register == operand.registerIndex && ((searchMask & i.mask) == searchMask)
+					i => i.register == operand.registerIndex && (searchMask & i.mask) == searchMask
 				);
 
 				// correct mask
@@ -60,7 +60,7 @@ namespace ShaderLabConvert
 				}
 
 				List<USILInputOutput> outputs = shader.outputs.Where(
-					o => o.register == operand.registerIndex && ((searchMask & o.mask) != 0)
+					o => o.register == operand.registerIndex && (searchMask & o.mask) != 0
 				).ToList();
 
 				foreach (USILInputOutput output in outputs)

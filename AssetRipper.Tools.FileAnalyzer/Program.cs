@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Logging;
+﻿using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.BundleFiles.FileStream;
 using AssetRipper.IO.Files.BundleFiles.RawWeb.Raw;
@@ -6,7 +6,6 @@ using AssetRipper.IO.Files.BundleFiles.RawWeb.Web;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using System;
 
 namespace AssetRipper.Tools.FileAnalyzer
 {

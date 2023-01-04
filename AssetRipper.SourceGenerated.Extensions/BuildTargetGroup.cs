@@ -1,6 +1,6 @@
 ﻿using AssetRipper.IO.Files;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public enum BuildTargetGroup
 	{

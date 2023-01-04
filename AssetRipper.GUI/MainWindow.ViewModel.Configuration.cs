@@ -1,5 +1,5 @@
-﻿using AssetRipper.Core.Configuration;
-using AssetRipper.Library.Configuration;
+﻿using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Import.Configuration;
 using Avalonia.Data;
 
 namespace AssetRipper.GUI

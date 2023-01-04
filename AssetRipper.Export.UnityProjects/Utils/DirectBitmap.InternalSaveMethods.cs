@@ -2,11 +2,9 @@
 using SixLabors.ImageSharp.PixelFormats;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Runtime.Versioning;
-using System.Threading.Tasks;
 
-namespace AssetRipper.Library.Utils
+namespace AssetRipper.Export.UnityProjects.Utils
 {
 	public partial class DirectBitmap
 	{

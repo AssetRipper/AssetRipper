@@ -1,11 +1,11 @@
 ﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Sprite;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasEditorData;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class SpriteAtlasExtensions
 	{

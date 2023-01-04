@@ -1,12 +1,10 @@
-﻿using AssetRipper.Core.Logging;
-using AssetRipper.Core.Utils;
+﻿using AssetRipper.Export.UnityProjects;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files.Streams.MultiFile;
-using AssetRipper.Library;
-using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
-using System.IO;
 
 namespace AssetRipper.GUI
 {

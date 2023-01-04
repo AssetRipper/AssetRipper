@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Core
+﻿namespace AssetRipper.Import
 {
 	public static class BuildInfo
 	{

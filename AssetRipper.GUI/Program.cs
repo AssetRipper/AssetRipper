@@ -1,4 +1,4 @@
-﻿using AssetRipper.Core.Logging;
+﻿using AssetRipper.Import.Logging;
 using Avalonia;
 
 namespace AssetRipper.GUI

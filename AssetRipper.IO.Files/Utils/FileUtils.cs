@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.Core.Utils
+namespace AssetRipper.IO.Files.Utils
 {
 	public static class FileUtils
 	{

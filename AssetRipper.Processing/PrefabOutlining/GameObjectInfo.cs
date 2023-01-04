@@ -1,16 +1,15 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Core.Linq;
-using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform;
 using System.Collections.Generic;
 
-namespace AssetRipper.Library.Processors.PrefabOutlining
+namespace AssetRipper.Processing.PrefabOutlining
 {
 	internal readonly struct GameObjectInfo : IEquatable<GameObjectInfo>
 	{

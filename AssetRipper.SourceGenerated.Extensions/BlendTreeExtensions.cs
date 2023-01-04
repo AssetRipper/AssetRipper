@@ -3,13 +3,14 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_206;
 using AssetRipper.SourceGenerated.Classes.ClassID_207;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeConstant;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
 using AssetRipper.SourceGenerated.Subclasses.ChildMotion;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using BlendTreeType = AssetRipper.SourceGenerated.Enums.BlendTreeType_1;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class BlendTreeExtensions
 	{

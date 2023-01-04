@@ -1,7 +1,6 @@
-using System.IO;
 using System.Text;
 
-namespace AssetRipper.Core.IO.Extensions
+namespace AssetRipper.Import.IO.Extensions
 {
 	public static class BinaryReaderExtensions
 	{

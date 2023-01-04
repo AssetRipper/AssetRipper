@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.BlendShapeData;
 using AssetRipper.SourceGenerated.Subclasses.MeshBlendShapeChannel;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class BlendShapeDataExtensions
 	{

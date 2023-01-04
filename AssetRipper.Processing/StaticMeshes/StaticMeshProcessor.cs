@@ -3,11 +3,9 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Import.Logging;
 using AssetRipper.Numerics;
+using AssetRipper.Processing;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
@@ -17,6 +15,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_33;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Enums;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using System.Collections;
@@ -26,7 +25,7 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
-namespace AssetRipper.Library.Processors.StaticMeshes
+namespace AssetRipper.Processing.StaticMeshes
 {
 	public class StaticMeshProcessor : IAssetProcessor
 	{

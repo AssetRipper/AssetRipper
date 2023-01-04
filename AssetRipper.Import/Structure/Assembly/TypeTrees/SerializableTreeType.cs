@@ -1,9 +1,8 @@
-﻿using AssetRipper.Core.Extensions;
-using AssetRipper.Core.Structure.Assembly.Serializable;
+﻿using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
-using System.Collections.Generic;
+using AssetRipper.SourceGenerated.Extensions;
 
-namespace AssetRipper.Core.Structure.Assembly.TypeTrees
+namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 {
 	public sealed class SerializableTreeType : SerializableType
 	{

@@ -1,8 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\Bins\Other\AssetRipper.Export.UnityProjects\$(Configuration)\</OutputPath>
@@ -52,12 +50,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Exporters\Shaders\Templates\*" />
-		<EmbeddedResource Include="Exporters\Shaders\Templates\*" />
-		<None Remove="Exporters\AudioMixers\UnityPatch\*" />
-		<EmbeddedResource Include="Exporters\AudioMixers\UnityPatch\*" />
-		<None Remove="Exporters\Shaders\UnityPatch\*" />
-		<EmbeddedResource Include="Exporters\Shaders\UnityPatch\*" />
+		<None Remove="Shaders\Templates\*" />
+		<EmbeddedResource Include="Shaders\Templates\*" />
+		<None Remove="AudioMixers\UnityPatch\*" />
+		<EmbeddedResource Include="AudioMixers\UnityPatch\*" />
+		<None Remove="Shaders\UnityPatch\*" />
+		<EmbeddedResource Include="Shaders\UnityPatch\*" />
 	</ItemGroup>
 
 	<ItemGroup>

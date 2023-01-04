@@ -1,12 +1,10 @@
-﻿using AssetRipper.Core.IO.Extensions;
+﻿using AssetRipper.Import.IO.Extensions;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.IO;
 using System.Text;
 
-namespace AssetRipper.Core.Utils
+namespace AssetRipper.Import.Utils
 {
 	public static class TypeTreeHelper
 	{

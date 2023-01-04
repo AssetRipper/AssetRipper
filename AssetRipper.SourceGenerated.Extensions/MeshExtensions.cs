@@ -6,11 +6,10 @@ using AssetRipper.SourceGenerated.Subclasses.ColorRGBA32;
 using AssetRipper.SourceGenerated.Subclasses.MeshBlendShape;
 using System.Buffers;
 using System.Buffers.Binary;
-using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class MeshExtensions
 	{
@@ -40,7 +39,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			Count,
 		}
 
-		public static bool IsCombinedMesh(this IMesh mesh) => combinedMeshRegex.IsMatch(mesh.NameString); 
+		public static bool IsCombinedMesh(this IMesh mesh) => combinedMeshRegex.IsMatch(mesh.NameString);
 
 		public static bool IsSet(this IMesh mesh)
 		{
@@ -222,7 +221,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			if (mesh.Has_Use16BitIndices_C43())
 			{
-				mesh.Use16BitIndices_C43 = (indexFormat == IndexFormat.UInt16 ? 1 : 0);
+				mesh.Use16BitIndices_C43 = indexFormat == IndexFormat.UInt16 ? 1 : 0;
 			}
 			else if (mesh.Has_IndexFormat_C43())
 			{
@@ -316,7 +315,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 						result[i] = BinaryPrimitives.ReadUInt32LittleEndian(indexBuffer.Slice(i * sizeof(uint)));
 					}
 				}
-				else if(BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.BigEndian)
+				else if (BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.BigEndian)
 				{
 					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer_C43;
 					for (int i = 0; i < indexCount; i++)
@@ -339,7 +338,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 				mesh.IndexBuffer_C43 = new byte[indices.Length * sizeof(ushort)];
 				ushort[] rentedBuffer = ArrayPool<ushort>.Shared.Rent(indices.Length);
 				UIntToUShort(indices, rentedBuffer, indices.Length);
-				
+
 				if (!BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.LittleEndian)
 				{
 					Span<byte> indexBuffer = mesh.IndexBuffer_C43;

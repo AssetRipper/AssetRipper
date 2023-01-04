@@ -3,12 +3,11 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO.Writing;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project.Collections;
-using System.IO;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Project.Collections;
 using System.Text;
 
-namespace AssetRipper.Core.Project.Exporters
+namespace AssetRipper.Import.Project.Exporters
 {
 	public class RawAssetExporter : BinaryAssetExporter
 	{

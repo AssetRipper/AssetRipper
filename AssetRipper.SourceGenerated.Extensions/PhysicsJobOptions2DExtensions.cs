@@ -1,6 +1,6 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.PhysicsJobOptions2D;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class PhysicsJobOptions2DExtensions
 	{

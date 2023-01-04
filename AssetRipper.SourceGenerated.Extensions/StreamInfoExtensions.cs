@@ -1,7 +1,7 @@
-﻿using AssetRipper.Core.Classes.Shader.Enums.ShaderChannel;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.Shader.ShaderChannel;
 using AssetRipper.SourceGenerated.Subclasses.StreamInfo;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class StreamInfoExtensions
 	{
@@ -34,7 +34,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 
 		public static bool IsMatch(this IStreamInfo streamInfo, ShaderChannel4 channel)
 		{
-			return (streamInfo.ChannelMask & (1 << (int)channel)) != 0;
+			return (streamInfo.ChannelMask & 1 << (int)channel) != 0;
 		}
 	}
 }

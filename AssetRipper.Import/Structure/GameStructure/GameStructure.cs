@@ -1,22 +1,20 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Interfaces;
-using AssetRipper.Core.Configuration;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.Project;
-using AssetRipper.Core.Structure.Assembly;
-using AssetRipper.Core.Structure.Assembly.Managers;
-using AssetRipper.Core.Structure.GameStructure.Platforms;
+using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Project;
+using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Import.Structure.GameStructure.Platforms;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Utils;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Text;
 
-namespace AssetRipper.Core.Structure.GameStructure
+namespace AssetRipper.Import.Structure.GameStructure
 {
 	public sealed class GameStructure : IDisposable
 	{

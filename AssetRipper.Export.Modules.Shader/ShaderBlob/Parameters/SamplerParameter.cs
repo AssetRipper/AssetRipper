@@ -1,4 +1,4 @@
-﻿namespace ShaderTextRestorer.ShaderBlob.Parameters
+﻿namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 {
 	public sealed class SamplerParameter
 	{

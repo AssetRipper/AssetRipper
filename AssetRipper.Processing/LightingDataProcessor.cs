@@ -3,10 +3,7 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Linq;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
 using AssetRipper.SourceGenerated.Classes.ClassID_108;
@@ -15,12 +12,13 @@ using AssetRipper.SourceGenerated.Classes.ClassID_157;
 using AssetRipper.SourceGenerated.Classes.ClassID_218;
 using AssetRipper.SourceGenerated.Classes.ClassID_23;
 using AssetRipper.SourceGenerated.Classes.ClassID_258;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.LightmapData;
 using AssetRipper.SourceGenerated.Subclasses.RendererData;
 using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
 using System.Linq;
 
-namespace AssetRipper.Library.Processors
+namespace AssetRipper.Processing
 {
 	public class LightingDataProcessor : IAssetProcessor
 	{

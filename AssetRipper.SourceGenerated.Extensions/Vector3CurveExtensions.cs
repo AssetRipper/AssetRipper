@@ -1,6 +1,6 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.Vector3Curve;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class Vector3CurveExtensions
 	{

@@ -1,6 +1,10 @@
-﻿using ShaderTextRestorer.ShaderBlob;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Fixers;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Metadders;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizers;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL
 {
 	public static class USILOptimizerApplier
 	{

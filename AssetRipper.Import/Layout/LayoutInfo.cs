@@ -1,8 +1,7 @@
 ﻿using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.Layout
+namespace AssetRipper.Import.Layout
 {
 	/// <summary>
 	/// A class for holding the Version, Platform, and Transfer Instruction Flags

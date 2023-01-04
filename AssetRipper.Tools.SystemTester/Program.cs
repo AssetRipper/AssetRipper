@@ -1,10 +1,7 @@
-﻿using AssetRipper.Core.Logging;
-using AssetRipper.Core.Structure.GameStructure;
-using AssetRipper.Core.Utils;
-using AssetRipper.Library;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using AssetRipper.Export.UnityProjects;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.GameStructure;
+using AssetRipper.Import.Utils;
 
 namespace AssetRipper.Tools.SystemTester
 {

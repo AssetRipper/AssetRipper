@@ -1,6 +1,7 @@
-﻿using ShaderTextRestorer.ShaderBlob;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL
 {
 	public interface IUSILOptimizer
 	{

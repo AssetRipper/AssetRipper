@@ -1,10 +1,8 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.IO;
-using AssetRipper.Core.Structure.Assembly.Mono;
-using System.Collections.Generic;
-using System.Linq;
+using AssetRipper.Import.Structure.Assembly.Mono;
 
-namespace AssetRipper.Core.Structure.Assembly.Serializable
+namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
 	public abstract class SerializableType
 	{

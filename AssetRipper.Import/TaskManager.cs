@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace AssetRipper.Core
+﻿namespace AssetRipper.Import
 {
 	public static class TaskManager
 	{

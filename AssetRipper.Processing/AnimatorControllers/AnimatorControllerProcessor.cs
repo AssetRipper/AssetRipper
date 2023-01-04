@@ -2,17 +2,17 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Core.Logging;
-using AssetRipper.Core.SourceGenExtensions;
-using AssetRipper.Core.Structure.GameStructure;
+using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.ControllerConstant;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_StateMachineConstant;
 using System.Linq;
 
-namespace AssetRipper.Library.Processors.AnimatorControllers
+namespace AssetRipper.Processing.AnimatorControllers
 {
 	public sealed class AnimatorControllerProcessor : IAssetProcessor
 	{

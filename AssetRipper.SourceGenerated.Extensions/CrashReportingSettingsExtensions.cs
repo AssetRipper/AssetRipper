@@ -1,6 +1,6 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.CrashReportingSettings;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class CrashReportingSettingsExtensions
 	{

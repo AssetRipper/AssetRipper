@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace AssetRipper.Core.Logging
+﻿namespace AssetRipper.Import.Logging
 {
 	/// <summary>
 	/// A file logger that doesn't include log types in the output.

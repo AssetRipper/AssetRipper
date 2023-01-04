@@ -1,4 +1,4 @@
-namespace ShaderTextRestorer.ShaderBlob
+namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 {
 	public sealed class ParserBindChannels
 	{
@@ -10,7 +10,7 @@ namespace ShaderTextRestorer.ShaderBlob
 			SourceMap = sourceMap;
 		}
 
-		public ShaderBindChannel[] Channels { get; set; } = System.Array.Empty<ShaderBindChannel>();
+		public ShaderBindChannel[] Channels { get; set; } = Array.Empty<ShaderBindChannel>();
 		public int SourceMap { get; set; }
 	}
 }

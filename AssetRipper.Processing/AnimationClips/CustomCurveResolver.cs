@@ -1,15 +1,15 @@
 using AssetRipper.Assets.Utils;
-using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
-using AssetRipper.Core.SourceGenExtensions;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
+using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.GenericBinding;
 using System.Linq;
 
-namespace AssetRipper.Library.Processors.AnimationClips
+namespace AssetRipper.Processing.AnimationClips
 {
 	public sealed class CustomCurveResolver
 	{

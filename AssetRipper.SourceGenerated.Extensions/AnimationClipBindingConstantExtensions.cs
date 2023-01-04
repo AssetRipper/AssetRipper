@@ -1,10 +1,9 @@
 ﻿using AssetRipper.Assets.Generics;
-using AssetRipper.Core.Classes.AnimationClip.GenericBinding;
-using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.GenericBinding;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipBindingConstant;
 using AssetRipper.SourceGenerated.Subclasses.GenericBinding;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimationClipBindingConstantExtensions
 	{
@@ -12,7 +11,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 		{
 			int curves = 0;
 			AccessListBase<IGenericBinding> bindings = constant.GenericBindings;
-			
+
 			for (int i = 0; i < bindings.Count; i++)
 			{
 				IGenericBinding gb = bindings[i];

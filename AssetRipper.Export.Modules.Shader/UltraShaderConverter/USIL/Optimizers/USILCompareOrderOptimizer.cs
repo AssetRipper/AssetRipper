@@ -1,7 +1,7 @@
-﻿using ShaderTextRestorer.ShaderBlob;
-using System.Collections.Generic;
+﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
 
-namespace ShaderLabConvert
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizers
 {
 	/// <summary>
 	/// Moves constant values to the right in comparison instructions

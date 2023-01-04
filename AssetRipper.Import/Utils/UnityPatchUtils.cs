@@ -1,13 +1,12 @@
-using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace AssetRipper.Core.Utils
+namespace AssetRipper.Import.Utils
 {
 	public static class UnityPatchUtils
 	{
 		private const string PatchesDirPath = "Assets/Editor/AssetRipperPatches/";
-		
+
 		/// <summary>
 		/// For some asset types, the complete recovery must be assisted by scripts that run in the Unity Editor.
 		/// This method copies a script file from an embedded resource to the exported project.

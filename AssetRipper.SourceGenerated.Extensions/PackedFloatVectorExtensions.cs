@@ -1,9 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Single;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class PackedFloatVectorExtensions
 	{
@@ -49,7 +47,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 					}
 				}
 				value &= (1 << packedVector.BitSize) - 1;
-				buffer[i] = packedVector.Start + (value / halfMaxValue);
+				buffer[i] = packedVector.Start + value / halfMaxValue;
 			}
 			return buffer;
 		}
@@ -98,7 +96,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 						}
 					}
 					x &= unchecked((uint)(1 << packedVector.BitSize) - 1u);
-					data.Add((x / (scale * ((1 << packedVector.BitSize) - 1))) + packedVector.Start);
+					data.Add(x / (scale * ((1 << packedVector.BitSize) - 1)) + packedVector.Start);
 				}
 			}
 			return data.ToArray();
@@ -171,7 +169,7 @@ namespace AssetRipper.Core.SourceGenExtensions
 			packedVector.Start = minf;
 			packedVector.NumItems = (uint)data.Length;
 			packedVector.BitSize = (byte)bitSize;
-			packedVector.Data = new byte[((packedVector.NumItems * bitSize) + 7) / 8];
+			packedVector.Data = new byte[(packedVector.NumItems * bitSize + 7) / 8];
 
 
 			double scale = 1.0d / packedVector.Range;
@@ -191,14 +189,14 @@ namespace AssetRipper.Core.SourceGenExtensions
 					scaled = 1d;
 				}
 
-				float f = BitConverter.Int32BitsToSingle((1 << (packedVector.BitSize)) - 1);
+				float f = BitConverter.Int32BitsToSingle((1 << packedVector.BitSize) - 1);
 				double d = scaled * f;
 				uint x = BitConverter.SingleToUInt32Bits((float)d);
 
 				int bits = 0;
 				while (bits < packedVector.BitSize)
 				{
-					packedVector.Data[byteIndex] |= unchecked((byte)((x >> bits) << bitIndex));
+					packedVector.Data[byteIndex] |= unchecked((byte)(x >> bits << bitIndex));
 					int read = Math.Min(packedVector.BitSize - bits, 8 - bitIndex);
 					bitIndex += read;
 					bits += read;

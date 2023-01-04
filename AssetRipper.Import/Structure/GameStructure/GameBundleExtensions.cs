@@ -1,12 +1,11 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Core.Layout;
-using AssetRipper.Core.Structure.GameStructure.Platforms;
+using AssetRipper.Import.Layout;
+using AssetRipper.Import.Structure.GameStructure.Platforms;
 using AssetRipper.IO.Files.SerializedFiles;
-using System.Linq;
 
 
-namespace AssetRipper.Core.Structure.GameStructure
+namespace AssetRipper.Import.Structure.GameStructure
 {
 	public static class GameBundleExtensions
 	{

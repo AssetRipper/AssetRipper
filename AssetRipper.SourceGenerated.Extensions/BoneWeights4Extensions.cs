@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Subclasses.BoneWeights4;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class BoneWeights4Extensions
 	{

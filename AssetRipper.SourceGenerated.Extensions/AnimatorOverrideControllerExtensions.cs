@@ -4,7 +4,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_93;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipOverride;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimatorOverrideControllerExtensions
 	{

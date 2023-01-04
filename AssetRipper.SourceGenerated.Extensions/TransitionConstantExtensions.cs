@@ -2,7 +2,7 @@
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_ConditionConstant;
 using AssetRipper.SourceGenerated.Subclasses.TransitionConstant;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class TransitionConstantExtensions
 	{

@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 
-namespace AssetRipper.Core.Project.Exporters.Engine
+namespace AssetRipper.Import.Project.Exporters.Engine
 {
 	public readonly struct EngineBuiltInAsset
 	{

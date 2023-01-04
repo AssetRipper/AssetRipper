@@ -5,9 +5,8 @@ using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Classes.ClassID_93;
 using AssetRipper.SourceGenerated.Classes.ClassID_95;
 using AssetRipper.SourceGenerated.Enums;
-using System.Collections.Generic;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimatorExtensions
 	{

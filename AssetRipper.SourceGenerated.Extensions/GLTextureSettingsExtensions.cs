@@ -2,7 +2,7 @@
 using AssetRipper.SourceGenerated.Subclasses.GLTextureSettings;
 using FilterMode = AssetRipper.SourceGenerated.Enums.FilterMode_0;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class GLTextureSettingsExtensions
 	{

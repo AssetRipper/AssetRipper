@@ -1,10 +1,8 @@
-﻿using AssetRipper.Core.Utils;
-using System.Collections.Generic;
+﻿using AssetRipper.Import.Utils;
 using System.Globalization;
-using System.IO;
 using System.Text;
 
-namespace AssetRipper.Core.Logging
+namespace AssetRipper.Import.Logging
 {
 	public static class Logger
 	{
@@ -16,10 +14,10 @@ namespace AssetRipper.Core.Logging
 
 		static Logger()
 		{
-			Cpp2IL.Core.Logging.Logger.InfoLog += (string message, string source) => LogCpp2IL(LogType.Info, message);
-			Cpp2IL.Core.Logging.Logger.WarningLog += (string message, string source) => LogCpp2IL(LogType.Verbose, message);
-			Cpp2IL.Core.Logging.Logger.ErrorLog += (string message, string source) => LogCpp2IL(LogType.Error, message);
-			Cpp2IL.Core.Logging.Logger.VerboseLog += (string message, string source) => LogCpp2IL(LogType.Verbose, message);
+			Cpp2IL.Core.Logging.Logger.InfoLog += (message, source) => LogCpp2IL(LogType.Info, message);
+			Cpp2IL.Core.Logging.Logger.WarningLog += (message, source) => LogCpp2IL(LogType.Verbose, message);
+			Cpp2IL.Core.Logging.Logger.ErrorLog += (message, source) => LogCpp2IL(LogType.Error, message);
+			Cpp2IL.Core.Logging.Logger.VerboseLog += (message, source) => LogCpp2IL(LogType.Verbose, message);
 		}
 
 		private static void LogCpp2IL(LogType logType, string message)
@@ -113,7 +111,7 @@ namespace AssetRipper.Core.Logging
 		{
 			return File.Exists(ExecutingDirectory.Combine("AssetRipper.Core.dll")) ? "Compiled" : "Published";
 		}
-		
+
 		private static void LogOperatingSystemInformation()
 		{
 			Log(LogType.Info, LogCategory.System, $"System Version: {Environment.OSVersion.VersionString}");
@@ -139,7 +137,7 @@ namespace AssetRipper.Core.Logging
 			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {GetCurrentTime()}");
 			Log(LogType.Info, LogCategory.System, $"UTC Compile Time: {GetCompileTime()}");
 		}
-		
+
 		/// <summary>
 		/// Get the current time.
 		/// </summary>

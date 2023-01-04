@@ -4,8 +4,7 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Core.Project.Exporters;
-using AssetRipper.Core.SourceGenExtensions;
+using AssetRipper.Import.Project.Exporters;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated;
@@ -14,23 +13,22 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_468431735;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.MarkerInterfaces;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_EditorExtension;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
-namespace AssetRipper.Core.Project.Collections
+namespace AssetRipper.Import.Project.Collections
 {
 	public sealed class PrefabExportCollection : AssetsExportCollection
 	{
-		public PrefabExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IUnityObjectBase asset) 
+		public PrefabExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
 			: this(assetExporter, virtualFile, GetRootGameObject(asset)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IGameObject root) 
+		private PrefabExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IGameObject root)
 			: this(assetExporter, root, CreateVirtualPrefab(virtualFile, root)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, IGameObject root, IPrefabInstance prefab) 
+		private PrefabExportCollection(IAssetExporter assetExporter, IGameObject root, IPrefabInstance prefab)
 			: base(assetExporter, prefab)
 		{
 			RootGameObject = root;
@@ -163,8 +161,8 @@ namespace AssetRipper.Core.Project.Collections
 		public MetaPtr GenerateMetaPtrForPrefab()
 		{
 			return new MetaPtr(
-				ExportIdHandler.GetMainExportID((uint)ClassIDType.PrefabInstance), 
-				Asset.GUID, 
+				ExportIdHandler.GetMainExportID((uint)ClassIDType.PrefabInstance),
+				Asset.GUID,
 				Prefab is null ? AssetType.Meta : AssetType.Serialized);
 		}
 

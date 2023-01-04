@@ -1,7 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.AvatarConstant;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_SkeletonPose;
 
-namespace AssetRipper.Core.SourceGenExtensions
+namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AvatarConstantExtensions
 	{

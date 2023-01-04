@@ -1,13 +1,10 @@
-using AssetRipper.Library.Configuration;
+using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.TextureDecoder.Rgb.Formats;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
-namespace AssetRipper.Library.Utils
+namespace AssetRipper.Export.UnityProjects.Utils
 {
 	public sealed partial class DirectBitmap : IDisposable
 	{
