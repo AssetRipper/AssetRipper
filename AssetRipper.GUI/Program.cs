@@ -41,6 +41,12 @@ namespace AssetRipper.GUI
 		{
 			return AppBuilder.Configure<App>()
 						.UsePlatformDetect()
+						.With(new X11PlatformOptions
+						{
+							UseDBusFilePicker = false
+							//Disable FreeDesktop file picker
+							//https://github.com/AvaloniaUI/Avalonia/issues/9383
+						})
 						.LogToTrace();
 		}
 	}
