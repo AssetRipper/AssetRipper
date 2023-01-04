@@ -25,3 +25,7 @@ public interface IUnityObjectBase : IUnityAssetBase
 	YamlDocument ExportYamlDocument(IExportContainer container);
 	IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies();
 }
+public static class UnityObjectBaseExtensions
+{
+	public static void Delete(this IUnityObjectBase asset, bool throwIfReferenced) => asset.Collection.DeleteAsset(asset, throwIfReferenced);
+}
