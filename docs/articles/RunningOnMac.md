@@ -1,5 +1,8 @@
-# Running on mac
-In order to run Asset Ripper on mac, you'll first need to have everything listed in the [requirements](https://assetripper.github.io/AssetRipper/articles/Requirements.html) tab.
+# Running on Mac
+
+> Disclaimer: The project developer does not have access to a Mac. This guide is community contributed.
+
+In order to run AssetRipper on mac, you'll first need to have everything listed in the [requirements](https://assetripper.github.io/AssetRipper/articles/Requirements.html) tab.
 
 ## Running the GUI version
 If you're done with the requirements, lets see how to run the GUI version.
