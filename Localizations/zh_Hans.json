@@ -143,5 +143,17 @@
     "script_export_format_dll_without_renaming": "导出未重命名的Dll",
     "script_export_format_dll_without_renaming_description": "程序集以编译的 Dll 形式导出。 实验性功能，可能完全不起作用。",
     "script_export_format_hybrid": "Hybrid",
-    "not_implemented_yet": "尚未实现"
+    "not_implemented_yet": "尚未实现",
+    "bundled_assets_export_title": "捆绑资产导出模式",
+    "bundled_assets_export_group_by_asset_type": "按资产类型分组",
+    "bundled_assets_export_group_by_asset_type_description": "捆绑资产的处理方式与其他文件中的资产相同。",
+    "bundled_assets_export_group_by_bundle_name": "按包名称分组",
+    "bundled_assets_export_group_by_bundle_name_description": "捆绑资产按其资产包名称分组。",
+    "bundled_assets_export_direct_export": "直接导出",
+    "bundled_assets_export_direct_export_description": "捆绑资产在不分组的情况下导出。",
+    "audio_format_yaml_description": "导出为 yaml 资产和 resS 文件。 这是一个安全的选择，是出现问题时的备份。",
+    "enable_prefab_outlining": "启用预制件大纲",
+    "enable_static_mesh_separation": "启用静态网格体分离",
+    "terrain_format_mesh_description": "将地形导出为 GLB 格式的 3D 网格，适合使用各种 3D 编辑器查看。",
+    "shader_asset_format_decompile_description": "将着色器导出到 ShaderLab。 非常实验性，几乎肯定会有错误。 仅支持 DX11，不支持 DX9。"
 }
