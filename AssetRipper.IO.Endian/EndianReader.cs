@@ -177,7 +177,15 @@ namespace AssetRipper.IO.Endian
 
 		public string ReadString(int length)
 		{
-			if (length > RemainingStreamBytes)
+			if (length < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(length), length, "Length cannot be negative.");
+			}
+			else if (length == 0)
+			{
+				return "";
+			}
+			else if (length > RemainingStreamBytes)
 			{
 				throw new EndOfStreamException($"Can't read {length}-byte string because there are only {RemainingStreamBytes} bytes left in the stream");
 			}
