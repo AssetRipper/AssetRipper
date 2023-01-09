@@ -131,9 +131,16 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 
 		private static SmartStream CreateStream(long decompressedSize)
 		{
-			return decompressedSize > int.MaxValue ? SmartStream.CreateTemp() : SmartStream.CreateMemory(new byte[decompressedSize]);
+			return decompressedSize > MaxMemoryStreamLength ? SmartStream.CreateTemp() : SmartStream.CreateMemory(new byte[decompressedSize]);
 		}
 
+		/// <summary>
+		/// The arbitrary maximum size of a decompressed stream to be stored in RAM. 1 MB
+		/// </summary>
+		/// <remarks>
+		/// This number can be set to any integer value, including <see cref="int.MaxValue"/>.
+		/// </remarks>
+		private const int MaxMemoryStreamLength = 1024 * 1024;
 		private readonly Stream m_stream;
 		private readonly BlocksInfo m_blocksInfo = new();
 		private readonly long m_dataOffset;
