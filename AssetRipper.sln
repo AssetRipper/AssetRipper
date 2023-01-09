@@ -157,6 +157,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.Modules.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.UnityProjects", "AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj", "{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Localizations", "Localizations", "{DC747214-80C3-46A0-B971-D24009AAD24A}"
+	ProjectSection(SolutionItems) = preProject
+		Localizations\en_US.json = Localizations\en_US.json
+		Localizations\LICENSE = Localizations\LICENSE
+		Localizations\README.md = Localizations\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -336,6 +343,7 @@ Global
 		{38C0DDA2-6C7D-41F1-90F6-0B1DDA86C0EC} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 		{88179FFC-0863-4C4F-9860-68EB1471E59F} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 		{E3A52FDC-1C4D-430F-A1BA-BFC5671181D4} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
+		{DC747214-80C3-46A0-B971-D24009AAD24A} = {825F97E7-5A2D-4D93-81AD-292F54FE2AC7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED4FF66B-4A6D-4440-8721-23C5ED09791C}
