@@ -1,9 +1,10 @@
 # Development Roadmap
 
-## 0.3.0.4
-This release will be primarily focused on refactoring the project and fixing any reported bugs.
+## 0.3.1.0
+This release will be primarily focused on improving the user interface.
 
-* Refactor the project structure to remove AssetRipper.Core and AssetRipper.Library
+* Add a settings window
+* Add donation information
 
 ## 0.3.X.0
 These releases will likely focus on preparing for the next major milestone.
@@ -15,7 +16,6 @@ These releases will likely focus on preparing for the next major milestone.
 * Nuget feed for forked dependencies
 * NativeAOT compilation for better performance while loading and extracting
 * Use Span readers and writers for more efficient asset reading and writing
-* Add donation information to the user interface
 
 ## 0.4.0.0 / 1.0.0.0
 This release might focus on improving the user experience in the GUI.

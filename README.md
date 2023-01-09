@@ -11,7 +11,7 @@ AssetRipper is a tool for extracting assets from serialized files (*CAB-*\*, *\*
 
 # Donations
 
-Thank you for considering to support me. I have normal expenses like food, electric, internet, and rent. Your donations help to ensure that I can continue to afford developing this project. Anyone with a positive lifetime contribution is entitled to the Donator role on the [Discord server](https://discord.gg/XqXa53W2Yh).
+Thank you for considering to support me. I have normal expenses like food, electric, internet, and rent. Your donations help to ensure that I can continue to afford developing this project. Anyone currently donating is entitled to the Donator role on the [Discord server](https://discord.gg/XqXa53W2Yh).
 
 [GitHub Sponsors](https://github.com/sponsors/ds5678)
 
@@ -37,8 +37,7 @@ Unity `3.4.0` to `2022.2.X`
 
 # Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
 
-The development of this project has a dedicated [Discord server](https://discord.gg/XqXa53W2Yh). Feel free to come say hi. This is also an alternative location for people to post issues.
-
+The development of this project has a dedicated [Discord server](https://discord.gg/XqXa53W2Yh).
 
 # Legal Disclaimers
 
