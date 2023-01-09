@@ -1,0 +1,60 @@
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
+using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Classes.ClassID_1032;
+
+namespace AssetRipper.Export.UnityProjects.Project.Collections
+{
+	public sealed class SceneAssetExportCollection : IExportCollection
+	{
+		//Todo: ISceneAsset.TargetScene should be SceneDefinition instead of AssetCollection.
+		public ISceneAsset Asset { get; }
+		public SceneDefinition TargetScene => Asset.TargetScene?.Scene ?? throw new NullReferenceException();
+
+		public SceneAssetExportCollection(ISceneAsset asset)
+		{
+			Asset = asset;
+		}
+
+		public AssetCollection File => Asset.Collection;
+		public TransferInstructionFlags Flags => File.Flags;
+		public IEnumerable<IUnityObjectBase> Assets
+		{
+			get
+			{
+				yield return Asset;
+			}
+		}
+
+		public string Name => $"{TargetScene.Name} (SceneAsset)";
+
+		public MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
+		{
+			return new MetaPtr(GetExportID(), TargetScene.GUID, AssetType.Meta);
+		}
+
+		private static long GetExportID()
+		{
+			return ExportIdHandler.GetMainExportID((uint)ClassIDType.DefaultAsset);
+		}
+
+		public bool Export(IProjectAssetContainer container, string projectDirectory)
+		{
+			return true;
+		}
+
+		public long GetExportID(IUnityObjectBase asset)
+		{
+			return GetExportID();
+		}
+
+		public bool IsContains(IUnityObjectBase asset)
+		{
+			return asset == Asset;
+		}
+	}
+}

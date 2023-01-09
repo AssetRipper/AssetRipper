@@ -1,8 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Import;
-using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using IVideoClip327 = AssetRipper.SourceGenerated.Classes.ClassID_327.IVideoClip;
@@ -36,7 +35,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 		{
 			if (TryGetData(asset, out byte[]? data))
 			{
-				TaskManager.AddTask(File.WriteAllBytesAsync(path, data));
+				File.WriteAllBytes(path, data);
 				return true;
 			}
 			else

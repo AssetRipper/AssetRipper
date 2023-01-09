@@ -2,8 +2,7 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Import;
-using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using AssetRipper.SourceGenerated.Extensions;
 
@@ -47,7 +46,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 				return false;
 			}
 
-			TaskManager.AddTask(File.WriteAllBytesAsync(path, decodedData));
+			File.WriteAllBytes(path, decodedData);
 			return true;
 		}
 	}

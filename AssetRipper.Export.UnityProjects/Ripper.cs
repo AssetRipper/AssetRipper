@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.UnityProjects.AnimatorControllers;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.AudioMixers;
@@ -8,21 +9,23 @@ using AssetRipper.Export.UnityProjects.Miscellaneous;
 using AssetRipper.Export.UnityProjects.Models;
 using AssetRipper.Export.UnityProjects.NavMeshes;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
+using AssetRipper.Export.UnityProjects.Project;
+using AssetRipper.Export.UnityProjects.Project.Exporters.Engine;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Export.UnityProjects.TypeTrees;
-using AssetRipper.Import;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Project.Exporters;
-using AssetRipper.Import.Project.Exporters.Engine;
 using AssetRipper.Import.Structure.GameStructure;
+using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Processing;
 using AssetRipper.Processing.AnimatorControllers;
 using AssetRipper.Processing.Assemblies;
 using AssetRipper.Processing.PrefabOutlining;
+using AssetRipper.Processing.Scenes;
 using AssetRipper.Processing.StaticMeshes;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -45,6 +48,8 @@ using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace AssetRipper.Export.UnityProjects
 {
@@ -61,13 +66,26 @@ namespace AssetRipper.Export.UnityProjects
 
 		public bool IsLoaded => gameStructure != null;
 
-		public GameStructure GameStructure => gameStructure ?? throw new NullReferenceException(nameof(GameStructure));
+		public GameStructure GameStructure
+		{
+			[MemberNotNull(nameof(gameStructure))]
+			get
+			{
+				ThrowIfGameStructureIsNull();
+				return gameStructure;
+			}
+		}
+
 		/// <summary>
 		/// Needs to be set before loading assets to ensure predictable behavior
 		/// </summary>
 		public LibraryConfiguration Settings { get; }
-		private bool ExportersInitialized { get; set; }
-		private List<IPostExporter> PostExporters { get; } = new();
+
+		public void ResetData()
+		{
+			gameStructure?.Dispose();
+			gameStructure = null;
+		}
 
 		public GameStructure Load(IReadOnlyList<string> paths)
 		{
@@ -81,28 +99,21 @@ namespace AssetRipper.Export.UnityProjects
 				Logger.Info(LogCategory.General, $"Attempting to read files from {paths.Count} paths...");
 			}
 
-			TaskManager.WaitUntilAllCompleted();
-
 			gameStructure = GameStructure.Load(paths, Settings);
-			TaskManager.WaitUntilAllCompleted();
 			Logger.Info(LogCategory.General, "Finished reading files");
 
-			TaskManager.WaitUntilAllCompleted();
-
 			Logger.Info(LogCategory.General, "Processing assemblies...");
-
 			if (Settings.ScriptContentLevel == ScriptContentLevel.Level1)
 			{
 				new MethodStubbingProcessor().Process(GameStructure.AssemblyManager);
 			}
 
 			Logger.Info(LogCategory.General, "Processing loaded assets...");
-			UnityVersion version = GameStructure.GetMaxUnityVersion();
+			UnityVersion version = gameStructure.FileCollection.GetMaxUnityVersion();
 			foreach (IAssetProcessor processor in GetProcessors())
 			{
 				processor.Process(GameStructure.FileCollection, version);
 			}
-			TaskManager.WaitUntilAllCompleted();
 			Logger.Info(LogCategory.General, "Finished processing assets");
 
 			return GameStructure;
@@ -128,204 +139,180 @@ namespace AssetRipper.Export.UnityProjects
 
 		public IEnumerable<IUnityObjectBase> FetchLoadedAssets()
 		{
-			if (GameStructure == null)
-			{
-				throw new NullReferenceException("GameStructure cannot be null");
-			}
-
-			if (GameStructure.FileCollection == null)
-			{
-				throw new NullReferenceException("FileCollection cannot be null");
-			}
-
 			return GameStructure.FileCollection.FetchAssets();
 		}
 
-		public void ExportProject(string exportPath) => ExportProject(exportPath, CoreConfiguration.DefaultFilter);
-		public void ExportProject(string exportPath, IUnityObjectBase asset) => ExportProject(exportPath, new IUnityObjectBase[] { asset });
-		public void ExportProject(string exportPath, IEnumerable<IUnityObjectBase> assets) => ExportProject(exportPath, GetFilter(assets));
-		public void ExportProject<T>(string exportPath) => ExportProject(exportPath, GetFilter<T>());
-		public void ExportProject(string exportPath, Type type) => ExportProject(exportPath, GetFilter(type));
-		public void ExportProject(string exportPath, IEnumerable<Type> types) => ExportProject(exportPath, GetFilter(types));
-		private void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter)
+		[MemberNotNull(nameof(gameStructure))]
+		private void ThrowIfGameStructureIsNull()
+		{
+			if (gameStructure == null)
+			{
+				throw new NullReferenceException("GameStructure cannot be null");
+			}
+		}
+
+		public void ExportProject(string exportPath, Action<ProjectExporter>? onBeforeExport = null) => ExportProject(exportPath, CoreConfiguration.DefaultFilter, onBeforeExport);
+		public void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter, Action<ProjectExporter>? onBeforeExport)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			Settings.ExportRootPath = exportPath;
-			Settings.Filter = filter;
-			InitializeExporters();
-			TaskManager.WaitUntilAllCompleted();
-
-			Logger.Info(LogCategory.Export, "Starting pre-export");
-			TaskManager.WaitUntilAllCompleted();
+			ThrowIfGameStructureIsNull();
 
 			Logger.Info(LogCategory.Export, "Starting export");
-			GameStructure.Export(Settings);
-			TaskManager.WaitUntilAllCompleted();
+			Logger.Info(LogCategory.Export, $"Game files have these Unity versions:{GetListOfVersions(gameStructure.FileCollection)}");
+			UnityVersion version = gameStructure.FileCollection.GetMaxUnityVersion();
+			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
 
+			Settings.ExportRootPath = exportPath;
+			Settings.Filter = filter;
+			Settings.SetProjectSettings(version, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
+
+			{
+				ProjectExporter projectExporter = new();
+				onBeforeExport?.Invoke(projectExporter);
+				InitializeExporters(projectExporter);
+				projectExporter.Export(gameStructure.FileCollection, Settings);
+			}
 			Logger.Info(LogCategory.Export, "Finished exporting assets");
-			TaskManager.WaitUntilAllCompleted();
 
-			foreach (IPostExporter postExporter in PostExporters)
+			foreach (IPostExporter postExporter in GetPostExporters())
 			{
 				postExporter.DoPostExport(this);
 			}
-			TaskManager.WaitUntilAllCompleted();
 			Logger.Info(LogCategory.Export, "Finished post-export");
-		}
 
-		public void ResetData()
-		{
-			PostExporters.Clear();
-			ExportersInitialized = false;
-			gameStructure?.Dispose();
-			gameStructure = null;
-		}
+			static string GetListOfVersions(GameBundle gameBundle)
+			{
+				StringBuilder sb = new();
+				foreach (UnityVersion version in gameBundle.FetchAssetCollections().Select(s => s.Version).Distinct())
+				{
+					sb.Append(' ');
+					sb.Append(version.ToString());
+				}
+				return sb.ToString();
+			}
 
-		public void ResetSettings() => Settings.ResetToDefaultValues();
-
-		private static Func<IUnityObjectBase, bool> GetFilter(IEnumerable<IUnityObjectBase> assets)
-		{
-			if (assets == null || !assets.Any())
+			static IEnumerable<IPostExporter> GetPostExporters()
 			{
-				return CoreConfiguration.DefaultFilter;
-			}
-			else
-			{
-				return assets.Contains;
-			}
-		}
-		private static Func<IUnityObjectBase, bool> GetFilter<T>()
-		{
-			return asset => asset is T;
-		}
-		private static Func<IUnityObjectBase, bool> GetFilter(Type type)
-		{
-			return asset => asset.GetType().IsAssignableTo(type);
-		}
-		private static Func<IUnityObjectBase, bool> GetFilter(IEnumerable<Type> types)
-		{
-			if (types == null || !types.Any())
-			{
-				return CoreConfiguration.DefaultFilter;
-			}
-			else
-			{
-				return asset => types.Any(t => asset.GetType().IsAssignableTo(t));
+				yield return new ProjectVersionPostExporter();
+				yield return new PackageManifestPostExporter();
+				yield return new StreamingAssetsPostExporter();
+				yield return new TypeTreeExporter();
+				yield return new DllPostExporter();
+				yield return new PathIdMapExporter();
 			}
 		}
 
-		private void InitializeExporters()
+		private void InitializeExporters(ProjectExporter projectExporter)
 		{
-			if (ExportersInitialized)
-			{
-				return;
-			}
-
-			OverrideNormalExporters();
-			OverrideEngineExporters();
-
-			ExportersInitialized = true;
+			OverrideNormalExporters(projectExporter);
+			OverrideEngineExporters(projectExporter);
 		}
 
-		private void OverrideNormalExporters()
+		private void OverrideNormalExporters(ProjectExporter projectExporter)
 		{
 			//Yaml Exporters
 			YamlStreamedAssetExporter streamedAssetExporter = new();
-			OverrideExporter<IMesh>(streamedAssetExporter);
-			OverrideExporter<ITexture2D>(streamedAssetExporter);//ICubemap also by inheritance
-			OverrideExporter<ITexture3D>(streamedAssetExporter);
-			OverrideExporter<ITexture2DArray>(streamedAssetExporter);
-			OverrideExporter<ICubemapArray>(streamedAssetExporter);
+			projectExporter.OverrideExporter<IMesh>(streamedAssetExporter);
+			projectExporter.OverrideExporter<ITexture2D>(streamedAssetExporter);//ICubemap also by inheritance
+			projectExporter.OverrideExporter<ITexture3D>(streamedAssetExporter);
+			projectExporter.OverrideExporter<ITexture2DArray>(streamedAssetExporter);
+			projectExporter.OverrideExporter<ICubemapArray>(streamedAssetExporter);
 
 			//Miscellaneous exporters
-			OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
-			OverrideExporter<IFont>(new FontAssetExporter());
-			OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
+			projectExporter.OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
+			projectExporter.OverrideExporter<IFont>(new FontAssetExporter());
+			projectExporter.OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
 			VideoClipExporter videoClipExporter = new();
-			OverrideExporter<SourceGenerated.Classes.ClassID_327.IVideoClip>(videoClipExporter);
-			OverrideExporter<SourceGenerated.Classes.ClassID_329.IVideoClip>(videoClipExporter);
+			projectExporter.OverrideExporter<SourceGenerated.Classes.ClassID_327.IVideoClip>(videoClipExporter);
+			projectExporter.OverrideExporter<SourceGenerated.Classes.ClassID_329.IVideoClip>(videoClipExporter);
 
 			//Texture exporters
 			TextureAssetExporter textureExporter = new(Settings);
-			OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
-			OverrideExporter<ISprite>(textureExporter);
-			YamlSpriteExporter spriteExporter = new();
-			ConditionalOverrideExporter<ISprite>(spriteExporter, Settings.SpriteExportMode == SpriteExportMode.Yaml);
-			ConditionalOverrideExporter<ISpriteAtlas>(spriteExporter, Settings.SpriteExportMode == SpriteExportMode.Yaml);
+			projectExporter.OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
+			projectExporter.OverrideExporter<ISprite>(textureExporter);
+			if (Settings.SpriteExportMode == SpriteExportMode.Yaml)
+			{
+				YamlSpriteExporter spriteExporter = new();
+				projectExporter.OverrideExporter<ISprite>(spriteExporter);
+				projectExporter.OverrideExporter<ISpriteAtlas>(spriteExporter);
+			}
 
 			//Shader exporters
-			OverrideExporter<IShader>(new DummyShaderTextExporter());
-			ConditionalOverrideExporter<IShader>(new YamlShaderExporter(), Settings.ShaderExportMode == ShaderExportMode.Yaml);
-			ConditionalOverrideExporter<IShader>(new ShaderDisassemblyExporter(), Settings.ShaderExportMode == ShaderExportMode.Disassembly);
-			ConditionalOverrideExporter<IShader>(new USCShaderExporter(), Settings.ShaderExportMode == ShaderExportMode.Decompile);
-			OverrideExporter<IShader>(new SimpleShaderExporter());
+			projectExporter.OverrideExporter<IShader>(Settings.ShaderExportMode switch
+			{
+				ShaderExportMode.Yaml => new YamlShaderExporter(),
+				ShaderExportMode.Disassembly => new ShaderDisassemblyExporter(),
+				ShaderExportMode.Decompile => new USCShaderExporter(),
+				_ => new DummyShaderTextExporter(),
+			});
+			projectExporter.OverrideExporter<IShader>(new SimpleShaderExporter());
 
 			//Audio exporters
-			OverrideExporter<IAudioClip>(new YamlAudioExporter());
-			ConditionalOverrideExporter<IAudioClip>(new NativeAudioExporter(), Settings.AudioExportFormat == AudioExportFormat.Native);
-			ConditionalOverrideExporter<IAudioClip>(new AudioClipExporter(Settings), AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat));
+			projectExporter.OverrideExporter<IAudioClip>(new YamlAudioExporter());
+			if (Settings.AudioExportFormat == AudioExportFormat.Native)
+			{
+				projectExporter.OverrideExporter<IAudioClip>(new NativeAudioExporter());
+			}
+			if (AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat))
+			{
+				projectExporter.OverrideExporter<IAudioClip>(new AudioClipExporter(Settings));
+			}
 
 			//AudioMixer exporters
 			AudioMixerExporter audioMixerExporter = new();
-			//OverrideExporter<IAudioMixerController>(audioMixerExporter);
-			//OverrideExporter<IAudioMixerGroupController>(audioMixerExporter);
-			//OverrideExporter<IAudioMixerSnapshotController>(audioMixerExporter);
+			//projectExporter.OverrideExporter<IAudioMixerController>(audioMixerExporter);
+			//projectExporter.OverrideExporter<IAudioMixerGroupController>(audioMixerExporter);
+			//projectExporter.OverrideExporter<IAudioMixerSnapshotController>(audioMixerExporter);
 			//Temporarily disabled due to changes in how AssetCollections function.
 
-			//Mesh exporters
-			ConditionalOverrideExporter<IMesh>(new GlbMeshExporter(), Settings.MeshExportFormat == MeshExportFormat.Glb);
+			//Mesh and Model exporters
+			if (Settings.MeshExportFormat == MeshExportFormat.Glb)
+			{
+				projectExporter.OverrideExporter<IMesh>(new GlbMeshExporter());
+				GlbModelExporter glbModelExporter = new();
+				projectExporter.OverrideExporter<IComponent>(glbModelExporter);
+				projectExporter.OverrideExporter<IGameObject>(glbModelExporter);
+				projectExporter.OverrideExporter<ILevelGameManager>(glbModelExporter);
+			}
 
-			//Model exporters
-			GlbModelExporter glbModelExporter = new();
-			ConditionalOverrideExporter<IComponent>(glbModelExporter, Settings.MeshExportFormat == MeshExportFormat.Glb);
-			ConditionalOverrideExporter<IGameObject>(glbModelExporter, Settings.MeshExportFormat == MeshExportFormat.Glb);
-			ConditionalOverrideExporter<ILevelGameManager>(glbModelExporter, Settings.MeshExportFormat == MeshExportFormat.Glb);
-
-			//Terrain exporters
-			TerrainYamlExporter terrainYamlExporter = new();
-			OverrideExporter<ITerrainData>(terrainYamlExporter);
-			OverrideExporter<ITexture2D>(terrainYamlExporter);
-			ConditionalOverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings), Settings.TerrainExportMode == TerrainExportMode.Heatmap);
-			ConditionalOverrideExporter<ITerrainData>(new TerrainMeshExporter(), Settings.TerrainExportMode == TerrainExportMode.Mesh);
-
-			//NavMeshData
-			ConditionalOverrideExporter<INavMeshData>(new GlbNavMeshExporter(), Settings.TerrainExportMode == TerrainExportMode.Mesh);
+			//Terrain and NavMesh exporters
+			switch (Settings.TerrainExportMode)
+			{
+				case TerrainExportMode.Heatmap:
+					projectExporter.OverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings));
+					break;
+				case TerrainExportMode.Mesh:
+					projectExporter.OverrideExporter<ITerrainData>(new TerrainMeshExporter());
+					projectExporter.OverrideExporter<INavMeshData>(new GlbNavMeshExporter());
+					break;
+				default:
+					TerrainYamlExporter terrainYamlExporter = new();
+					projectExporter.OverrideExporter<ITerrainData>(terrainYamlExporter);
+					projectExporter.OverrideExporter<ITexture2D>(terrainYamlExporter);
+					break;
+			}
 
 			//Script exporters
-			OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.AssemblyManager, Settings));
-			ConditionalOverrideExporter<IMonoScript>(new AssemblyDllExporter(GameStructure.AssemblyManager), Settings.ScriptExportMode == ScriptExportMode.DllExportWithoutRenaming);
+			projectExporter.OverrideExporter<IMonoScript>(Settings.ScriptExportMode switch
+			{
+				ScriptExportMode.DllExportWithoutRenaming => new AssemblyDllExporter(GameStructure.AssemblyManager),
+				_ => new ScriptExporter(GameStructure.AssemblyManager, Settings),
+			});
 
 			//Animator Controller
-			OverrideExporter<IUnityObjectBase>(new AnimatorControllerExporter());
-
-			AddPostExporter(new ProjectVersionPostExporter());
-			AddPostExporter(new PackageManifestPostExporter());
-			AddPostExporter(new StreamingAssetsPostExporter());
-			AddPostExporter(new TypeTreeExporter());
-			AddPostExporter(new DllPostExporter());
-			AddPostExporter(new PathIdMapExporter());
+			projectExporter.OverrideExporter<IUnityObjectBase>(new AnimatorControllerExporter());
 		}
 
-		private void OverrideEngineExporters()
+		private void OverrideEngineExporters(ProjectExporter projectExporter)
 		{
 			EngineAssetExporter engineExporter = new(Settings);
-			OverrideExporter<IMaterial>(engineExporter);
-			OverrideExporter<ITexture2D>(engineExporter);
-			OverrideExporter<IMesh>(engineExporter);
-			OverrideExporter<IShader>(engineExporter);
-			OverrideExporter<IFont>(engineExporter);
-			OverrideExporter<ISprite>(engineExporter);
-			OverrideExporter<IMonoBehaviour>(engineExporter);
+			projectExporter.OverrideExporter<IMaterial>(engineExporter);
+			projectExporter.OverrideExporter<ITexture2D>(engineExporter);
+			projectExporter.OverrideExporter<IMesh>(engineExporter);
+			projectExporter.OverrideExporter<IShader>(engineExporter);
+			projectExporter.OverrideExporter<IFont>(engineExporter);
+			projectExporter.OverrideExporter<ISprite>(engineExporter);
+			projectExporter.OverrideExporter<IMonoBehaviour>(engineExporter);
 		}
-
-		private void ConditionalOverrideExporter<T>(IAssetExporter exporter, bool shouldOverride)
-		{
-			if (shouldOverride)
-			{
-				OverrideExporter<T>(exporter);
-			}
-		}
-		public void OverrideExporter<T>(IAssetExporter exporter) => GameStructure.Exporter.OverrideExporter<T>(exporter, true);
-		public void AddPostExporter(IPostExporter exporter) => PostExporters.Add(exporter);
 	}
 }

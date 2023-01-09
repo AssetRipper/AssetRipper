@@ -1,8 +1,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Import;
-using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_152;
 
 namespace AssetRipper.Export.UnityProjects.Miscellaneous
@@ -21,7 +20,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((IMovieTexture)asset).MovieData_C152!));
+			File.WriteAllBytes(path, ((IMovieTexture)asset).MovieData_C152!);
 			return true;
 		}
 	}

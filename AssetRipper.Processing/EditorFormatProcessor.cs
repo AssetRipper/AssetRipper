@@ -5,7 +5,6 @@ using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Project.Collections;
 using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Processing.AnimationClips;
@@ -28,8 +27,6 @@ using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Object;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
-using System.IO;
-using System.Linq;
 
 namespace AssetRipper.Processing
 {
@@ -237,7 +234,7 @@ namespace AssetRipper.Processing
 				for (int i = 0; i < splitPath.Length; i++)
 				{
 					string pathSection = splitPath[i];
-					if (string.Equals(pathSection, ExportCollection.AssetsKeyword, StringComparison.OrdinalIgnoreCase))
+					if (string.Equals(pathSection, AssetsKeyword, StringComparison.OrdinalIgnoreCase))
 					{
 						return string.Join(ObjectUtils.DirectorySeparator, new ArraySegment<string>(splitPath, i, splitPath.Length - i));
 					}
@@ -252,9 +249,10 @@ namespace AssetRipper.Processing
 
 		private const string ResourcesKeyword = "Resources";
 		private const string AssetBundleKeyword = "AssetBundles";
-		private const string AssetsDirectory = ExportCollection.AssetsKeyword + ObjectUtils.DirectorySeparator;
+		private const string AssetsDirectory = AssetsKeyword + ObjectUtils.DirectorySeparator;
 		private const string ResourceFullPath = AssetsDirectory + ResourcesKeyword;
 		//private const string AssetBundleFullPath = AssetsDirectory + AssetBundleKeyword;
 		private const string AssetBundleFullPath = AssetsDirectory + "Asset_Bundles";
+		private const string AssetsKeyword = "Assets";
 	}
 }

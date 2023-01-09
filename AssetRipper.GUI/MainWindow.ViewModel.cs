@@ -249,9 +249,8 @@ namespace AssetRipper.GUI
 			Logger.Info(LogCategory.General, $"Removing any files from a previous export...");
 
 			await UIExportManager.PrepareExportDirectory(exportPath);
-			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.Exporter, this);
 
-			UIExportManager.Export(_ripper, exportPath, () =>
+			UIExportManager.Export(_ripper, this, exportPath, () =>
 			{
 				IsExporting = false;
 				this.ShowPopup(MainWindow.Instance.LocalizationManager["export_complete"], MainWindow.Instance.LocalizationManager["success"]);
@@ -313,9 +312,8 @@ namespace AssetRipper.GUI
 			Logger.Info(LogCategory.General, $"Removing any files from a previous export...");
 
 			await UIExportManager.PrepareExportDirectory(exportPath);
-			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.Exporter, this);
 
-			UIExportManager.Export(_ripper, exportPath, SelectedAsset.Asset, () =>
+			UIExportManager.Export(_ripper, this, exportPath, SelectedAsset.Asset, () =>
 			{
 				IsExporting = false;
 				this.ShowPopup(MainWindow.Instance.LocalizationManager["export_complete"], MainWindow.Instance.LocalizationManager["success"]);
@@ -353,9 +351,8 @@ namespace AssetRipper.GUI
 			Logger.Info(LogCategory.General, $"Removing any files from a previous export...");
 
 			await UIExportManager.PrepareExportDirectory(exportPath);
-			UIExportManager.ConfigureExportEvents(_ripper.GameStructure.Exporter, this);
 
-			UIExportManager.Export(_ripper, exportPath, SelectedAsset.Asset.GetType(), () =>
+			UIExportManager.Export(_ripper, this, exportPath, SelectedAsset.Asset.GetType(), () =>
 			{
 				IsExporting = false;
 				this.ShowPopup(MainWindow.Instance.LocalizationManager["export_complete"], MainWindow.Instance.LocalizationManager["success"]);

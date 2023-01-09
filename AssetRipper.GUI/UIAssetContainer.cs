@@ -2,7 +2,7 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects;
-using AssetRipper.Import.Project;
+using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.IO.Files.SerializedFiles;
 using System.Collections.ObjectModel;
 
@@ -12,7 +12,7 @@ namespace AssetRipper.GUI
 	{
 
 		public UIAssetContainer(Ripper ripper) : base(
-			ripper.GameStructure.Exporter,
+			new ProjectExporter(),
 			ripper.Settings,
 			ripper.GameStructure.FileCollection.AddNewTemporaryBundle().AddNew(),
 			ripper.GameStructure.FileCollection.FetchAssets(),

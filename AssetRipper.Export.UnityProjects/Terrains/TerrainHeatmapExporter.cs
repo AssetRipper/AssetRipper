@@ -2,10 +2,9 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.Export.UnityProjects.Utils;
-using AssetRipper.Import;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Project.Exporters;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 
@@ -38,15 +37,7 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{terrain.NameString}' to bitmap");
 				return false;
 			}
-			if (OperatingSystem.IsWindows())
-			{
-				bitmap.Save(path, ImageFormat);
-			}
-			else
-			{
-				TaskManager.AddTask(bitmap.SaveAsync(path, ImageFormat));
-			}
-			return true;
+			return bitmap.Save(path, ImageFormat);
 		}
 
 		public static DirectBitmap GetBitmap(ITerrainData terrain)

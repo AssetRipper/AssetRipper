@@ -3,10 +3,11 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Export.UnityProjects.Meshes;
+using AssetRipper.Export.UnityProjects.Project.Collections;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Project.Collections;
-using AssetRipper.Import.Project.Exporters;
 using AssetRipper.Numerics;
+using AssetRipper.Processing.Scenes;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
@@ -30,7 +31,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 	{
 		public override bool IsHandle(IUnityObjectBase asset)
 		{
-			return SceneExportHelpers.IsSceneCompatible(asset);
+			return SceneHelpers.IsSceneCompatible(asset);
 		}
 
 		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)

@@ -3,7 +3,7 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Export.UnityProjects.Meshes;
-using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_238;
 using AssetRipper.SourceGenerated.Subclasses.HeightMeshData;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;

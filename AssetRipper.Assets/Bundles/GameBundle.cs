@@ -84,4 +84,9 @@ public sealed partial class GameBundle : Bundle
 		processedCollection.SetLayout(version);
 		return processedCollection;
 	}
+
+	public UnityVersion GetMaxUnityVersion()
+	{
+		return FetchAssetCollections().Select(t => t.Version).Append(UnityVersion.MinVersion).Max();
+	}
 }

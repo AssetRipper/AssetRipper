@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Import.Project.Collections;
+using AssetRipper.Export.UnityProjects.Project.Collections;
 using IVideoClip327 = AssetRipper.SourceGenerated.Classes.ClassID_327.IVideoClip;
 using IVideoClip329 = AssetRipper.SourceGenerated.Classes.ClassID_329.IVideoClip;
 

@@ -2,8 +2,7 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Import;
-using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Extensions;
 
@@ -29,7 +28,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).Script_C49.Data));
+			File.WriteAllBytes(path, ((ITextAsset)asset).Script_C49.Data);
 			return true;
 		}
 	}

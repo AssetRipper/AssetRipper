@@ -2,10 +2,9 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.Export.UnityProjects.Utils;
-using AssetRipper.Import;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
@@ -48,15 +47,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.NameString}' to bitmap");
 				return false;
 			}
-			if (OperatingSystem.IsWindows())
-			{
-				bitmap.Save(path, ImageExportFormat);
-			}
-			else
-			{
-				TaskManager.AddTask(bitmap.SaveAsync(path, ImageExportFormat));
-			}
-			return true;
+			return bitmap.Save(path, ImageExportFormat);
 		}
 
 		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)

@@ -2,24 +2,20 @@
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Project;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Import.Structure.GameStructure.Platforms;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
-using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Utils;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace AssetRipper.Import.Structure.GameStructure
 {
 	public sealed class GameStructure : IDisposable
 	{
 		public GameBundle FileCollection { get; private set; }
-		public ProjectExporter Exporter { get; } = new();
 		public PlatformGameStructure? PlatformStructure { get; private set; }
 		public PlatformGameStructure? MixedStructure { get; private set; }
 		public IAssemblyManager AssemblyManager { get; set; }
@@ -62,31 +58,6 @@ namespace AssetRipper.Import.Structure.GameStructure
 			}
 
 			return new GameStructure(toProcess, configuration);
-		}
-
-		public void Export(CoreConfiguration options)
-		{
-			Logger.Info(LogCategory.Export, $"Game files have these Unity versions:{GetListOfVersions()}");
-			UnityVersion version = GetMaxUnityVersion();
-			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
-			options.SetProjectSettings(version, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
-			Exporter.Export(FileCollection, options);
-		}
-
-		public UnityVersion GetMaxUnityVersion()
-		{
-			return FileCollection.FetchAssetCollections().Select(t => t.Version).Append(UnityVersion.MinVersion).Max();
-		}
-
-		private string GetListOfVersions()
-		{
-			StringBuilder sb = new();
-			foreach (UnityVersion version in FileCollection.FetchAssetCollections().Select(s => s.Version).Distinct())
-			{
-				sb.Append(' ');
-				sb.Append(version.ToString());
-			}
-			return sb.ToString();
 		}
 
 		[MemberNotNull(nameof(FileCollection))]

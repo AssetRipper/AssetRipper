@@ -12,7 +12,7 @@ using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassemble
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Extensions;

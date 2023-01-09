@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
-using AssetRipper.Import.Project.Collections;
+using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_1042;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Enums;

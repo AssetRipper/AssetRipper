@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
-using AssetRipper.Import.Project.Collections;
-using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Export.UnityProjects.Project.Collections;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
 using AssetRipper.SourceGenerated.Classes.ClassID_188;

@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.UnityProjects;
+using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.GUI.Utils;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Project;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 
@@ -24,29 +24,29 @@ namespace AssetRipper.GUI.Managers
 			}
 		}
 
-		public static void Export(Ripper ripper, string toRoot, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, onSuccess, onError))
+		public static void Export(Ripper ripper, MainWindowViewModel vm, string toRoot, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, vm, toRoot, onSuccess, onError))
 		{
 			Name = "Background Game Export Thread",
 			IsBackground = true
 		}.Start();
 
-		public static void Export(Ripper ripper, string toRoot, IUnityObjectBase asset, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, asset, onSuccess, onError))
+		public static void Export(Ripper ripper, MainWindowViewModel vm, string toRoot, IUnityObjectBase asset, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, vm, toRoot, asset, onSuccess, onError))
 		{
 			Name = "Background Game Export Thread",
 			IsBackground = true
 		}.Start();
 
-		public static void Export(Ripper ripper, string toRoot, Type assetType, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, toRoot, assetType, onSuccess, onError))
+		public static void Export(Ripper ripper, MainWindowViewModel vm, string toRoot, Type assetType, Action onSuccess, Action<Exception> onError) => new Thread(() => ExportInternal(ripper, vm, toRoot, assetType, onSuccess, onError))
 		{
 			Name = "Background Game Export Thread",
 			IsBackground = true
 		}.Start();
 
-		private static void ExportInternal(Ripper ripper, string toRoot, Action onSuccess, Action<Exception> onError)
+		private static void ExportInternal(Ripper ripper, MainWindowViewModel vm, string toRoot, Action onSuccess, Action<Exception> onError)
 		{
 			try
 			{
-				ripper.ExportProject(toRoot);
+				ripper.ExportProject(toRoot, e => ConfigureExportEvents(e, vm));
 			}
 			catch (Exception ex)
 			{
@@ -57,11 +57,11 @@ namespace AssetRipper.GUI.Managers
 			onSuccess();
 		}
 
-		private static void ExportInternal(Ripper ripper, string toRoot, IUnityObjectBase asset, Action onSuccess, Action<Exception> onError)
+		private static void ExportInternal(Ripper ripper, MainWindowViewModel vm, string toRoot, IUnityObjectBase asset, Action onSuccess, Action<Exception> onError)
 		{
 			try
 			{
-				ripper.ExportProject(toRoot, asset);
+				ripper.ExportProject(toRoot, a => a == asset, e => ConfigureExportEvents(e, vm));
 			}
 			catch (Exception ex)
 			{
@@ -72,16 +72,11 @@ namespace AssetRipper.GUI.Managers
 			onSuccess();
 		}
 
-		private static void ExportInternal(Ripper ripper, string toRoot, Type assetType, Action onSuccess, Action<Exception> onError)
+		private static void ExportInternal(Ripper ripper, MainWindowViewModel vm, string toRoot, Type assetType, Action onSuccess, Action<Exception> onError)
 		{
 			try
 			{
-				if (assetType.IsAssignableTo(typeof(ISprite))) // Sprite wont be exported as it's a form of Texture2D
-				{
-					assetType = typeof(ITexture2D);
-				}
-
-				ripper.ExportProject(toRoot, assetType);
+				ripper.ExportProject(toRoot, a => a.GetType().IsAssignableTo(assetType), e => ConfigureExportEvents(e, vm));
 			}
 			catch (Exception ex)
 			{

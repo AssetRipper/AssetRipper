@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
-using AssetRipper.Import.Project.Collections;
+using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Import.Utils;
 
 namespace AssetRipper.Export.UnityProjects.Shaders

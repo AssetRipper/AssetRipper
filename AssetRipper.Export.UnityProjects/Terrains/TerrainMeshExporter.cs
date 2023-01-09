@@ -2,7 +2,7 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Meshes;
-using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Extensions;
 using SharpGLTF.Geometry;

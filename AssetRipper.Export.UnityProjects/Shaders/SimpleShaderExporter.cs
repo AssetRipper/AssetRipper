@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
-using AssetRipper.Import;
-using AssetRipper.Import.Project.Exporters;
+using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 
@@ -19,7 +18,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			TaskManager.AddTask(File.WriteAllBytesAsync(path, ((ITextAsset)asset).Script_C49.Data));
+			File.WriteAllBytes(path, ((ITextAsset)asset).Script_C49.Data);
 			return true;
 		}
 

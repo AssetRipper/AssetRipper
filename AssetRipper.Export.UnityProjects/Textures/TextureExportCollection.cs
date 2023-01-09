@@ -3,7 +3,7 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Import.Project.Collections;
+using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Import.Utils;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;
