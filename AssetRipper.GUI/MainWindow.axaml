@@ -5,7 +5,7 @@
         xmlns:ar="using:AssetRipper.GUI"
         xmlns:cc="using:AssetRipper.GUI.Components"
         xmlns:i18n="clr-namespace:AssetRipper.GUI" 
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="800"
         x:Class="AssetRipper.GUI.MainWindow"
         Icon="/Resources/GUI_Icon.ico"
         Title="AssetRipper"
@@ -34,7 +34,7 @@
                     MaterialOpacity="0.65" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
-        <Grid RowDefinitions="35,20,*">
+        <Grid RowDefinitions="30,30,*">
             <TextBlock Grid.Row="0"
                        IsHitTestVisible="False"
                        FontSize="18"
