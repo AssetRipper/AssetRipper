@@ -25,15 +25,7 @@
         <ar:MainWindowViewModel />
     </Design.DataContext>
     <Panel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
-                    TintColor="Black"
-                    TintOpacity="1"
-                    MaterialOpacity="0.65" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
+        <ar:Background />
         <Grid RowDefinitions="30,30,*">
             <TextBlock Grid.Row="0"
                        IsHitTestVisible="False"
