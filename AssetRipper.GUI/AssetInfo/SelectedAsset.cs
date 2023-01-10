@@ -7,6 +7,9 @@ using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
@@ -263,20 +266,26 @@ namespace AssetRipper.GUI.AssetInfo
 			get
 			{
 				StringBuilder builder = new StringBuilder();
-				builder.Append($"Asset Class: {Asset.GetType()}\n");
+				builder.AppendLine($"Asset Class: {Asset.GetType()}");
 
-				builder.Append($"Asset Type ID: {Asset.ClassID}\n");
+				builder.AppendLine($"Asset Type ID: {Asset.ClassID}");
 
 				if (HasName)
 				{
-					builder.Append($"Name: {Name}\n");
+					builder.AppendLine($"Name: {Name}");
 				}
 
 				if (HasImageData)
 				{
-					builder.Append($"Image Format: {TextureFormat}\n");
-					builder.Append($"Image Dimensions (width x height): {ImageWidth} x {ImageHeight} pixels");
-					builder.Append($"Image Size: {ImageSize} bytes");
+					builder.AppendLine($"Image Format: {TextureFormat}");
+					builder.AppendLine($"Image Dimensions (width x height): {ImageWidth} x {ImageHeight} pixels");
+					builder.AppendLine($"Image Size: {ImageSize} bytes");
+				}
+
+				IMonoScript? monoScript = (Asset as IMonoScript) ?? (Asset as IMonoBehaviour)?.Script_C114P;
+				if (monoScript is not null)
+				{
+					builder.AppendLine($"Script: {monoScript.AssemblyName_C115}, {monoScript.GetFullName()}");
 				}
 
 				return builder.ToString();
