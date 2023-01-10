@@ -82,7 +82,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 					arrayDepth++;
 					node = node.SubNodes[1];
 				}
-				else if (node.IsVector)
+				else if (node.IsVector || node.IsNamedVector)
 				{
 					arrayDepth++;
 					node = node.SubNodes[0].SubNodes[1];

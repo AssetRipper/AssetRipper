@@ -19,7 +19,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees
 		{
 			get
 			{
-				if (TypeName == "Array" && SubNodes.Count == 2)
+				if (TypeName is "Array" && SubNodes.Count == 2)
 				{
 					TypeTreeNodeStruct sizeNode = SubNodes[0];
 					return sizeNode.Name == "size" && sizeNode.SubNodes.Count == 0 && SubNodes[1].Name == "data";
@@ -33,6 +33,21 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees
 			get
 			{
 				return TypeName is "vector" or "staticvector" or "set" && SubNodes.Count == 1 && SubNodes[0].IsArray;
+			}
+		}
+
+		/// <summary>
+		/// This is the same as a vector, except the <see cref="TypeName"/> of the element type node is used
+		/// instead of "vector" or any of the other predefined type names for arrays and lists.
+		/// </summary>
+		/// <remarks>
+		/// This was first noticed in a scriptable object where the field was a <see cref="List{T}"/> of a serializable class.
+		/// </remarks>
+		public bool IsNamedVector
+		{
+			get
+			{
+				return SubNodes.Count == 1 && SubNodes[0].IsArray && SubNodes[0].Name is "Array" && TypeName == SubNodes[0].SubNodes[1].TypeName;
 			}
 		}
 
