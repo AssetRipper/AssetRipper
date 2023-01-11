@@ -1,8 +1,7 @@
 ﻿using AssetRipper.Assets.Interfaces;
-using AssetRipper.Assets.Metadata;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_EditorExtension;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -22,22 +21,33 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return string.IsNullOrEmpty(name) ? prefab.ClassName : name;
 		}
 
-		public static IEnumerable<IEditorExtension> FetchObjects(this IPrefabInstance prefab)
+		public static IEnumerable<IEditorExtension> GetObjects(this IPrefabInstance prefab)
+		{
+			if (prefab.Has_Objects_C1001())
+			{
+				return prefab.Objects_C1001P;
+			}
+			else
+			{
+				return prefab.RootGameObject_C1001P?.FetchHierarchy() ?? Enumerable.Empty<IEditorExtension>();
+			}
+		}
+
+		public static IGameObject? TryGetRootGameObject(this IPrefabInstance prefab)
 		{
 			if (prefab.Has_RootGameObject_C1001())
 			{
-				foreach (IEditorExtension asset in prefab.RootGameObject_C1001.GetAsset(prefab.Collection).FetchHierarchy())
-				{
-					yield return asset;
-				}
+				return prefab.RootGameObject_C1001P;
 			}
-			else if (prefab.Has_Objects_C1001())//DataTemplate
+			else
 			{
-				foreach (PPtr_EditorExtension_3_4_0 asset in prefab.Objects_C1001)
-				{
-					yield return asset.GetAsset(prefab.Collection);
-				}
+				return prefab.Objects_C1001P.OfType<IGameObject>().FirstOrDefault()?.GetRoot();
 			}
+		}
+
+		public static IGameObject GetRootGameObject(this IPrefabInstance prefab)
+		{
+			return prefab.TryGetRootGameObject() ?? throw new ArgumentException("Prefab has no root GameObject.", nameof(prefab));
 		}
 	}
 }

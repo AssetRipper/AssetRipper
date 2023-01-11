@@ -133,6 +133,7 @@ namespace AssetRipper.Export.UnityProjects
 				{
 					yield return new PrefabOutliningProcessor();
 				}
+				yield return new PrefabProcessor();
 				yield return new SpriteProcessor();
 			}
 		}

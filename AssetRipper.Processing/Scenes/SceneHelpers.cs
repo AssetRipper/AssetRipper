@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
@@ -43,7 +44,7 @@ namespace AssetRipper.Processing.Scenes
 		public static bool HasMainData(UnityVersion version) => version.IsLess(5, 3);
 
 		/// <summary>
-		/// GameObject, Classes Inherited From Level Game Manager, Monobehaviours with GameObjects, Components
+		/// GameObjects, Classes inheriting from LevelGameManager, MonoBehaviours with GameObjects, Components, and PrefabInstances
 		/// </summary>
 		public static bool IsSceneCompatible(IUnityObjectBase asset)
 		{
@@ -53,7 +54,8 @@ namespace AssetRipper.Processing.Scenes
 				ILevelGameManager => true,
 				IMonoBehaviour monoBeh => monoBeh.IsSceneObject(),
 				IComponent => true,
-				_ => false
+				IPrefabInstance => true,
+				_ => false,
 			};
 		}
 

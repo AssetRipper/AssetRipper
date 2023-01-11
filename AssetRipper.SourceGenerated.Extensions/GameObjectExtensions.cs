@@ -198,18 +198,22 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return depth;
 		}
 
+		/// <summary>
+		/// Fetch all the assets in the hierarchy for this <see cref="IGameObject"/>.
+		/// </summary>
+		/// <remarks>
+		/// This includes the <paramref name="root"/>.
+		/// </remarks>
+		/// <param name="root"></param>
+		/// <returns></returns>
+		/// <exception cref="NullReferenceException">A referenced asset wasn't found.</exception>
 		public static IEnumerable<IEditorExtension> FetchHierarchy(this IGameObject root)
 		{
 			yield return root;
 
 			ITransform? transform = null;
-			foreach (IComponent? component in root.GetComponentAccessList())
+			foreach (IComponent component in root.GetComponentAccessList().WhereNotNull())
 			{
-				if (component == null)
-				{
-					continue;
-				}
-
 				yield return component;
 				if (component is ITransform trfm)
 				{
@@ -219,13 +223,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			if (transform is null)
 			{
-				throw new Exception("GameObject has no transform");
+				throw new NullReferenceException("GameObject has no Transform.");
 			}
 
-			foreach (ITransform? child in transform.Children_C4P)
+			foreach (ITransform? child in transform.Children_C4P.ThrowIfNull())
 			{
-				_ = child ?? throw new NullReferenceException();
-				IGameObject childGO = child.GameObject_C4P ?? throw new NullReferenceException();
+				IGameObject childGO = child.GameObject_C4P ?? throw new NullReferenceException("GameObject for Transform cannot be null.");
 				foreach (IEditorExtension childElement in childGO.FetchHierarchy())
 				{
 					yield return childElement;

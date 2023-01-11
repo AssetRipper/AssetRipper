@@ -6,10 +6,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 	public static class MonoBehaviourExtensions
 	{
 		/// <summary>
-		/// Whether this MonoBehaviour belongs to scene/prefab hierarchy or not<br/>
-		/// TODO: find out why GameObject may have a value like PPtr(0, 894) even though such game object doesn't exist
+		/// Does this MonoBehaviour belongs to scene/prefab hierarchy? In other words, is <see cref="IMonoBehaviour.GameObject_C114"/> a non-null pptr?
 		/// </summary>
 		public static bool IsSceneObject(this IMonoBehaviour monoBehaviour) => !monoBehaviour.GameObject_C114.IsNull();
-		public static bool IsScriptableObject(this IMonoBehaviour monoBehaviour) => monoBehaviour.NameString.Length > 0;
+		/// <summary>
+		/// Does this MonoBehaviour have a name?
+		/// </summary>
+		public static bool IsScriptableObject(this IMonoBehaviour monoBehaviour) => monoBehaviour.Name.Data.Length > 0;
 	}
 }

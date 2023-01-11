@@ -1,12 +1,11 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.Processing;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
@@ -15,7 +14,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_468431735;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.MarkerInterfaces;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_EditorExtension;
 using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Project.Collections
@@ -23,102 +21,93 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 	public sealed class PrefabExportCollection : AssetsExportCollection
 	{
 		public PrefabExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-			: this(assetExporter, virtualFile, GetRootGameObject(asset)) { }
+			: this(assetExporter, virtualFile, GetRootGameObjectAndPrefab(asset)) { }
 
-		private PrefabExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IGameObject root)
-			: this(assetExporter, root, CreateVirtualPrefab(virtualFile, root)) { }
-
-		private PrefabExportCollection(IAssetExporter assetExporter, IGameObject root, IPrefabInstance prefab)
-			: base(assetExporter, prefab)
+		private PrefabExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, (IGameObject, IPrefabInstance?) rootPrefabPair)
+			: base(assetExporter, rootPrefabPair.Item2 ?? CreateVirtualPrefab(virtualFile, rootPrefabPair.Item1))
 		{
-			RootGameObject = root;
+			RootGameObject = rootPrefabPair.Item1;
 
 			//Prior to 2018.3, Prefab was an actual asset inside "*.prefab" files.
 			//After that, PrefabImporter and PrefabInstance were introduced as a replacement.
-			Prefab = NotPrefabInstance(prefab);
+			Prefab = rootPrefabPair.Item2;
+			Debug.Assert(Prefab is null or IDataTemplateMarker or IPrefabMarker);
 
-			foreach (IEditorExtension asset in root.FetchHierarchy())
+			foreach (IEditorExtension asset in RootGameObject.FetchHierarchy())
 			{
 				AddAsset(asset);
-				if (Prefab is not null)
-				{
-					//SetPrefabInternal(asset, Prefab);
-				}
-			}
-		}
-
-		private static IPrefabInstance? NotPrefabInstance(IPrefabInstance prefab)
-		{
-			return prefab is IPrefabMarker or IDataTemplateMarker ? prefab : null;
-		}
-
-		private static void SetPrefabInternal(IEditorExtension asset, IPrefabInstance prefab)
-		{
-			//To do: move prefab creation to a processor
-			if (asset.Has_PrefabInternal_C18())
-			{
-				asset.PrefabInternal_C18P = (IPrefabMarker)prefab;
 			}
 		}
 
 		/// <summary>
-		/// GameObject or Component attached to a GameObject
+		/// <list>
+		/// <listheader>Valid Assets:</listheader>
+		/// <item>GameObject</item>
+		/// <item>Component attached to a GameObject</item>
+		/// <item>Prefab</item>
+		/// </list>
 		/// </summary>
 		/// <param name="asset">The asset being assessed.</param>
 		/// <returns>True if the asset can be used.</returns>
 		public static bool IsValidAsset(IUnityObjectBase asset)
 		{
-			if (asset is IGameObject)
+			return asset switch
 			{
-				return true;
-			}
-			else if (asset is IComponent component)
-			{
-				return component.GameObject_C2P is not null;
-			}
-			return false;
+				IComponent component => component.GameObject_C2P is not null,
+				IGameObject => true,
+				IPrefabInstance => true,
+				_ => false,
+			};
 		}
 
 		protected override string GetExportExtension(IUnityObjectBase asset) => PrefabKeyword;
 
-		private static IGameObject GetRootGameObject(IUnityObjectBase asset)
+		private static (IGameObject, IPrefabInstance?) GetRootGameObjectAndPrefab(IUnityObjectBase asset)
 		{
-			if (asset is IGameObject gameObject)
+			switch (asset)
 			{
-				return gameObject.GetRoot();
-			}
-			else if (asset is IComponent component)
-			{
-				return component.GetGameObject().GetRoot();
-			}
-			else
-			{
-				throw new NotSupportedException();
+				case IGameObject gameObject:
+					{
+						IGameObject root = gameObject.GetRoot();
+						return (root, (IPrefabInstance?)root.MainAsset);
+					}
+
+				case IComponent component:
+					{
+						IGameObject root = component.GetGameObject().GetRoot();
+						return (root, (IPrefabInstance?)root.MainAsset);
+					}
+
+				case IPrefabInstance prefab:
+					return (prefab.GetRootGameObject(), prefab);
+				default:
+					throw new NotSupportedException();
 			}
 		}
+
 		public override TransferInstructionFlags Flags => base.Flags | TransferInstructionFlags.SerializeForPrefabSystem;
 		public IGameObject RootGameObject { get; }
+		/// <summary>
+		/// Null on 2018.3 and higher
+		/// </summary>
 		public IPrefabInstance? Prefab { get; }
 		public override string Name => RootGameObject.NameString;
 
+		/// <summary>
+		/// Prior to 2018.3, Prefab was an actual asset inside "*.prefab" files.
+		/// After that, PrefabImporter and PrefabInstance were introduced as a replacement.
+		/// This code is only for creating a fake <see cref="IPrefabInstanceMarker"/>.
+		/// <see cref="IDataTemplateMarker"/> and <see cref="IPrefabMarker"/> assets are created inside <see cref="PrefabProcessor"/>.
+		/// </summary>
+		/// <param name="virtualFile"></param>
+		/// <param name="root"></param>
+		/// <returns></returns>
 		private static IPrefabInstance CreateVirtualPrefab(TemporaryAssetCollection virtualFile, IGameObject root)
 		{
-			IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance,
-					(assetInfo) => PrefabInstanceFactory.CreateAsset(root.Collection.Version, assetInfo));
+			UnityVersion version = UnityVersion.Max(virtualFile.Version, new UnityVersion(2018, 3, 0));
+			IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance, (assetInfo) => PrefabInstanceFactory.CreateAsset(version, assetInfo));
+			Debug.Assert(prefab is IPrefabInstanceMarker);
 			prefab.RootGameObject_C1001P = root;
-			prefab.IsPrefabAsset_C1001 = true;
-			if (prefab is IHasNameString hasName)
-			{
-				hasName.NameString = root.NameString;
-			}
-			if (prefab.Has_Objects_C1001())
-			{
-				PPtrAccessList<PPtr_EditorExtension_3_4_0, IEditorExtension> objects = prefab.Objects_C1001P;
-				foreach (IEditorExtension editorExtension in root.FetchHierarchy())
-				{
-					objects.Add(editorExtension);
-				}
-			}
 			prefab.AssetBundleName = root.AssetBundleName;
 			prefab.OriginalDirectory = root.OriginalDirectory;
 			prefab.OriginalName = root.OriginalName;
