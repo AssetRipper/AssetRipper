@@ -132,7 +132,7 @@ namespace AssetRipper.Import.Logging
 			Log(LogType.Info, LogCategory.System, programName);
 			LogOperatingSystemInformation();
 			ErrorIfBigEndian();
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {BuildInfo.Version}");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {typeof(Logger).Assembly.GetName().Version}");
 			LogReleaseInformation();
 			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {GetCurrentTime()}");
 			Log(LogType.Info, LogCategory.System, $"UTC Compile Time: {GetCompileTime()}");

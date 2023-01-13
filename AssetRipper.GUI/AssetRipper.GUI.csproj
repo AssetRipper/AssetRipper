@@ -1,15 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>..\Bins\AssetRipper\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper\$(Configuration)\</IntermediateOutputPath>
 		<AssemblyName>AssetRipper</AssemblyName>
 		<RootNamespace>AssetRipper.GUI</RootNamespace>
-		<Copyright>Copyright © 2022</Copyright>
-		<Authors>ds5678</Authors>
 		<ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 	</PropertyGroup>
