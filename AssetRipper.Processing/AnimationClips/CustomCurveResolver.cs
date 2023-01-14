@@ -7,7 +7,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.GenericBinding;
-using System.Linq;
 
 namespace AssetRipper.Processing.AnimationClips
 {

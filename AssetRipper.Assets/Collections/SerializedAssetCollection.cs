@@ -4,7 +4,6 @@ using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using System.IO;
 
 namespace AssetRipper.Assets.Collections;
 

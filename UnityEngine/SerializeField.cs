@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UnityEngine;
+﻿namespace UnityEngine;
 
 /// <summary>
 /// Instruct Unity to serialize a non-public field.

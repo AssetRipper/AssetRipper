@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
@@ -10,7 +9,6 @@ using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.SecondarySpriteTexture;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 

@@ -4,13 +4,11 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.ControllerConstant;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_StateMachineConstant;
-using System.Linq;
 
 namespace AssetRipper.Processing.AnimatorControllers
 {

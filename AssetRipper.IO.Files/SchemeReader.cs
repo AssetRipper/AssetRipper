@@ -26,7 +26,7 @@ namespace AssetRipper.IO.Files
 			new FileStreamBundleScheme(),
 		};
 
-		public static FileBase LoadFile(string filePath) => LoadFile(filePath, System.IO.Path.GetFileName(filePath));
+		public static FileBase LoadFile(string filePath) => LoadFile(filePath, Path.GetFileName(filePath));
 
 		public static FileBase LoadFile(string filePath, string fileName)
 		{

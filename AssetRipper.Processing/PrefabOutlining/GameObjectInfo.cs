@@ -7,7 +7,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform;
-using System.Collections.Generic;
 
 namespace AssetRipper.Processing.PrefabOutlining
 {

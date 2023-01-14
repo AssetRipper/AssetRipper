@@ -4,7 +4,6 @@ using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
-using System.Linq;
 
 namespace AssetRipper.Processing
 {

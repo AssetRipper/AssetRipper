@@ -4,7 +4,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Extensions;
-using System.Collections.Generic;
 
 namespace AssetRipper.Processing.PrefabOutlining
 {

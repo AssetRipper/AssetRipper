@@ -11,7 +11,7 @@ namespace AssetRipper.IO.Files.BundleFiles.Archive
 			throw new NotSupportedException();
 		}
 
-		public override void Write(System.IO.Stream stream)
+		public override void Write(Stream stream)
 		{
 			throw new NotSupportedException();
 		}

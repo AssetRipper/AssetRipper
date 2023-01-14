@@ -4,7 +4,6 @@ using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
-using System.IO;
 
 namespace AssetRipper.Assets;
 

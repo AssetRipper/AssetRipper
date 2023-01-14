@@ -35,5 +35,19 @@
 			_this.TryGetValue(key, out TValue? value);
 			return value;
 		}
+
+		/// <remarks>
+		/// .NET Core 3.0+ only. <see href="https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2.getenumerator?view=net-7.0#remarks"/>
+		/// </remarks>
+		public static void RemoveAll<TKey, TValue>(this Dictionary<TKey, TValue> source, Predicate<KeyValuePair<TKey, TValue>> predicate) where TKey : notnull
+		{
+			foreach (KeyValuePair<TKey, TValue> pair in source)
+			{
+				if (predicate(pair))
+				{
+					source.Remove(pair.Key);
+				}
+			}
+		}
 	}
 }

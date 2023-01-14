@@ -3,7 +3,6 @@ using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Single;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
-using System.Collections.Generic;
 using System.Numerics;
 
 namespace AssetRipper.Processing.AnimationClips.Editor

@@ -5,7 +5,6 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
-using AssetRipper.Processing;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_241;
 using AssetRipper.SourceGenerated.Classes.ClassID_243;
@@ -24,8 +23,6 @@ using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerEffectController;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerSnapshot;
 using AssetRipper.SourceGenerated.Subclasses.SnapshotConstant;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AssetRipper.Processing.AudioMixers
 {

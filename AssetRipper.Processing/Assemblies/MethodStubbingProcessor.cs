@@ -6,7 +6,6 @@ using AsmResolver.PE.DotNet.Cil;
 using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
-using System.Linq;
 
 namespace AssetRipper.Processing.Assemblies;
 public sealed class MethodStubbingProcessor : IAssemblyProcessor

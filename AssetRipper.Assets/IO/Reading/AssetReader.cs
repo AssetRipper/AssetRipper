@@ -3,7 +3,6 @@ using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.VersionUtilities;
-using System.IO;
 
 
 namespace AssetRipper.Assets.IO.Reading

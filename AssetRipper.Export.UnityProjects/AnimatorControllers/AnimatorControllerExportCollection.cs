@@ -10,13 +10,18 @@ namespace AssetRipper.Export.UnityProjects.AnimatorControllers
 	{
 		public AnimatorControllerExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset.MainAsset!)
 		{
-			IAnimatorController controller = (IAnimatorController?)asset.MainAsset ?? throw new NullReferenceException();
+			IAnimatorController controller = GetMainAsset(asset);
 			foreach (IUnityObjectBase? dependency in controller.FetchEditorHierarchy())
 			{
 				if (dependency is not null && dependency != controller)
 				{
 					AddAsset(dependency);
 				}
+			}
+
+			static IAnimatorController GetMainAsset(IUnityObjectBase asset)
+			{
+				return (IAnimatorController?)asset.MainAsset ?? throw new NullReferenceException();
 			}
 		}
 	}
