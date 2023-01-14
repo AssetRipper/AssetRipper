@@ -164,6 +164,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Localizations", "Localizati
 		Localizations\README.md = Localizations\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.GUI.Localizations", "AssetRipper.GUI.Localizations\AssetRipper.GUI.Localizations.csproj", "{1EF29A1D-A170-4167-830B-17DCC679CA59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -334,6 +336,10 @@ Global
 		{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EF29A1D-A170-4167-830B-17DCC679CA59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EF29A1D-A170-4167-830B-17DCC679CA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EF29A1D-A170-4167-830B-17DCC679CA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EF29A1D-A170-4167-830B-17DCC679CA59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,16 +7,17 @@ public static class Program
 	const string RepositoryPath = "../../../../";
 	const string LocalizationsPath = RepositoryPath + "Localizations/";
 	const string GuiProjectPath = RepositoryPath + "AssetRipper.GUI/";
+	const string LocalizationsProjectPath = RepositoryPath + "AssetRipper.GUI.Localizations/";
 
 	public static void Main()
 	{
-		GenerateLocalizationManagerFile();
+		GenerateLocalizationLoaderFile();
 		//CleanJsonLocalizationFiles();
 	}
 
-	private static void GenerateLocalizationManagerFile()
+	private static void GenerateLocalizationLoaderFile()
 	{
-		const string outputPath = GuiProjectPath + "LocalizationManager.g.cs";
+		const string outputPath = LocalizationsProjectPath + "LocalizationLoader.g.cs";
 		string source = LocalizationSourceGenerator.MakeLocalizationClass(RepositoryPath);
 		File.WriteAllText(outputPath, source);
 	}

@@ -35,11 +35,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Remove="..\Localizations\*.json" />
-		<EmbeddedResource Include="..\Localizations\*.json" />
+		<ProjectReference Include="..\AssetRipper.GUI.Localizations\AssetRipper.GUI.Localizations.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

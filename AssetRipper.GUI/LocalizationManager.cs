@@ -1,16 +1,11 @@
-﻿using AssetRipper.Import.Logging;
-using System.Collections.Generic;
+﻿using AssetRipper.GUI.Localizations;
+using AssetRipper.Import.Logging;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Reflection;
-using System.Text.Json;
 
 namespace AssetRipper.GUI
 {
-	public sealed partial class LocalizationManager : BaseViewModel
+	public sealed class LocalizationManager : BaseViewModel
 	{
-		private const string LocalizationFilePrefix = "AssetRipper.GUI.";
-
 		// ReSharper disable once MemberInitializerValueIgnored
 		private Dictionary<string, string> CurrentLocale; //To suppress warning as it's initialized indirectly in constructor
 		private readonly Dictionary<string, string> FallbackLocale;
@@ -24,17 +19,7 @@ namespace AssetRipper.GUI
 			LoadLanguage("en_US");
 			FallbackLocale = CurrentLocale;
 
-			string[] supportedLanguageCodes = Assembly.GetExecutingAssembly()
-				.GetManifestResourceNames()
-				.Where(l => l.StartsWith(LocalizationFilePrefix))
-				.Select(l => l[LocalizationFilePrefix.Length..^5])
-				.ToArray();
-
-			SupportedLanguages = new SupportedLanguage[supportedLanguageCodes.Length];
-			for (int i = 0; i < supportedLanguageCodes.Length; i++)
-			{
-				SupportedLanguages[i] = new SupportedLanguage(this, LanguageNameDictionary[supportedLanguageCodes[i]], supportedLanguageCodes[i]);
-			}
+			SupportedLanguages = LocalizationLoader.LanguageNameDictionary.Select(pair => new SupportedLanguage(this, pair.Value, pair.Key)).ToArray();
 		}
 
 		[MemberNotNull(nameof(CurrentLocale), nameof(CurrentLang))]
@@ -42,10 +27,7 @@ namespace AssetRipper.GUI
 		{
 			CurrentLang = code;
 			Logger.Info(LogCategory.System, $"Loading locale {code}.json");
-			using System.IO.Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(LocalizationFilePrefix + code + ".json") ?? throw new Exception($"Could not load language file {code}.json");
-
-			CurrentLocale = JsonSerializer.Deserialize<Dictionary<string, string>>(stream) ?? throw new Exception($"Could not parse language file {code}.json");
-
+			CurrentLocale = LocalizationLoader.LoadLanguage(code);
 			OnPropertyChanged("Item");
 			OnPropertyChanged("Item[]");
 			OnLanguageChanged();

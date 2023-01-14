@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Utils.SourceGeneration;
 using System.CodeDom.Compiler;
 using System.Globalization;
-using System.IO;
 using System.Text.RegularExpressions;
 
 namespace AssetRipper.GUI.SourceGenerator;
@@ -17,16 +16,13 @@ public static class LocalizationSourceGenerator
 		using IndentedTextWriter writer = new IndentedTextWriter(stringWriter, "\t");
 
 		writer.WriteGeneratedCodeWarning();
-		writer.WriteUsing("System.Collections.Generic");
 		writer.WriteLine();
-		
-		using (new Namespace(writer, "AssetRipper.GUI"))
+
+		writer.WriteFileScopedNamespace("AssetRipper.GUI.Localizations");
+		writer.WriteLine("partial class LocalizationLoader");
+		using (new CurlyBrackets(writer))
 		{
-			writer.WriteLine("public partial class LocalizationManager");
-			using (new CurlyBrackets(writer))
-			{
-				AddLocalizationDictionary(writer, repositoryPath);
-			}
+			AddLocalizationDictionary(writer, repositoryPath);
 		}
 
 		writer.Flush();
@@ -39,7 +35,7 @@ public static class LocalizationSourceGenerator
 		string[] localizationFiles = Directory.GetFiles(Path.Combine(repositoryPath, "Localizations"), "*.json");
 
 		writer.WriteSummaryDocumentation("Dictionary of Language codes to Language names");
-		writer.WriteLine("private static Dictionary<string, string> LanguageNameDictionary { get; } = new()");
+		writer.WriteLine("public static IReadOnlyDictionary<string, string> LanguageNameDictionary { get; } = new Dictionary<string, string>");
 		
 		using (new CurlyBracketsWithSemicolon(writer))
 		{
