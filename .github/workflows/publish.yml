@@ -152,7 +152,7 @@ jobs:
 
       - name: Publish AssetRipper Mac x64
         run: dotnet publish /p:PublishProfile=mac_x64 /p:EnableCompressionInSingleFile=true /p:Configuration=Release
-        working-directory: ./AssetRipper.GUI/
+        working-directory: ./Source/AssetRipper.GUI/
 
       - name: List Files
         shell: bash
