@@ -20,58 +20,8 @@ jobs:
       - name: Add Package Source
         run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
-      - name: Build AssetRipper.Assets.Tests
+      - name: Build Project
         run: dotnet build
-        working-directory: ./AssetRipper.Assets.Tests/
 
-      - name: Run AssetRipper.Assets.Tests
+      - name: Run Tests
         run: dotnet test
-        working-directory: ./AssetRipper.Assets.Tests/
-
-      - name: Build AssetRipper.IO.Endian.Tests
-        run: dotnet build
-        working-directory: ./AssetRipper.IO.Endian.Tests/
-
-      - name: Run AssetRipper.IO.Endian.Tests
-        run: dotnet test
-        working-directory: ./AssetRipper.IO.Endian.Tests/
-
-      - name: Build AssetRipper.IO.Files.Tests
-        run: dotnet build
-        working-directory: ./AssetRipper.IO.Files.Tests/
-
-      - name: Run AssetRipper.IO.Files.Tests
-        run: dotnet test
-        working-directory: ./AssetRipper.IO.Files.Tests/
-
-      - name: Build AssetRipper.Numerics.Tests
-        run: dotnet build
-        working-directory: ./AssetRipper.Numerics.Tests/
-
-      - name: Run AssetRipper.Numerics.Tests
-        run: dotnet test
-        working-directory: ./AssetRipper.Numerics.Tests/
-
-      - name: Build AssetRipper.SerializationLogic.Tests
-        run: dotnet build
-        working-directory: ./AssetRipper.SerializationLogic.Tests/
-
-      - name: Run AssetRipper.SerializationLogic.Tests
-        run: dotnet test
-        working-directory: ./AssetRipper.SerializationLogic.Tests/
-
-      - name: Build AssetRipper.Tests
-        run: dotnet build
-        working-directory: ./AssetRipper.Tests/
-
-      - name: Run AssetRipper.Tests
-        run: dotnet test
-        working-directory: ./AssetRipper.Tests/
-
-      - name: Build AssetRipper.Yaml.Tests
-        run: dotnet build
-        working-directory: ./AssetRipper.Yaml.Tests/
-
-      - name: Run AssetRipper.Yaml.Tests
-        run: dotnet test
-        working-directory: ./AssetRipper.Yaml.Tests/
