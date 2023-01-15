@@ -3,8 +3,10 @@ using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.GameStructure.Platforms;
 using Cpp2IL.Core.Api;
-using Cpp2IL.Core.CorePlugin;
+using Cpp2IL.Core.InstructionSets;
 using Cpp2IL.Core.Model.Contexts;
+using Cpp2IL.Core.OutputFormats;
+using Cpp2IL.Core.ProcessingLayers;
 using LibCpp2IL;
 using Cpp2IlApi = Cpp2IL.Core.Cpp2IlApi;
 
@@ -18,7 +20,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			InstructionSetRegistry.RegisterInstructionSet<X86InstructionSet>(DefaultInstructionSets.X86_64);
 			InstructionSetRegistry.RegisterInstructionSet<WasmInstructionSet>(DefaultInstructionSets.WASM);
 			InstructionSetRegistry.RegisterInstructionSet<ArmV7InstructionSet>(DefaultInstructionSets.ARM_V7);
-			bool useNewArm64 = true;
+			bool useNewArm64 = false;
 			if (useNewArm64)
 			{
 				InstructionSetRegistry.RegisterInstructionSet<NewArmV8InstructionSet>(DefaultInstructionSets.ARM_V8);
