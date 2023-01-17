@@ -192,9 +192,9 @@ namespace AssetRipper.Yaml
 
 		internal Emitter ToString(Emitter emitter)
 		{
-			if (Style == ScalarStyle.Hex)
+			return Style switch
 			{
-				return m_objectType switch
+				ScalarStyle.Hex => m_objectType switch
 				{
 					ScalarType.Byte => emitter.WriteHex((byte)m_value),
 					ScalarType.SByte => emitter.WriteHex(unchecked((sbyte)m_value)),
@@ -207,24 +207,23 @@ namespace AssetRipper.Yaml
 					ScalarType.Single => emitter.WriteHex((uint)m_value),
 					ScalarType.Double => emitter.WriteHex(m_value),
 					_ => throw new NotImplementedException(m_objectType.ToString()),
-				};
-			}
-
-			return m_objectType switch
-			{
-				ScalarType.Boolean => emitter.Write(m_value),
-				ScalarType.Byte => emitter.Write(m_value),
-				ScalarType.SByte => emitter.Write(unchecked((sbyte)m_value)),
-				ScalarType.Int16 => emitter.Write(unchecked((short)m_value)),
-				ScalarType.UInt16 => emitter.Write(m_value),
-				ScalarType.Int32 => emitter.Write(unchecked((int)m_value)),
-				ScalarType.UInt32 => emitter.Write(m_value),
-				ScalarType.Int64 => emitter.Write(unchecked((long)m_value)),
-				ScalarType.UInt64 => emitter.Write(m_value),
-				ScalarType.Single => emitter.Write(BitConverter.UInt32BitsToSingle((uint)m_value)),
-				ScalarType.Double => emitter.Write(BitConverter.UInt64BitsToDouble(m_value)),
-				ScalarType.String => WriteString(emitter),
-				_ => throw new NotImplementedException(m_objectType.ToString()),
+				},
+				_ => m_objectType switch
+				{
+					ScalarType.Boolean => emitter.Write(m_value),
+					ScalarType.Byte => emitter.Write(m_value),
+					ScalarType.SByte => emitter.Write(unchecked((sbyte)m_value)),
+					ScalarType.Int16 => emitter.Write(unchecked((short)m_value)),
+					ScalarType.UInt16 => emitter.Write(m_value),
+					ScalarType.Int32 => emitter.Write(unchecked((int)m_value)),
+					ScalarType.UInt32 => emitter.Write(m_value),
+					ScalarType.Int64 => emitter.Write(unchecked((long)m_value)),
+					ScalarType.UInt64 => emitter.Write(m_value),
+					ScalarType.Single => emitter.Write(BitConverter.UInt32BitsToSingle((uint)m_value)),
+					ScalarType.Double => emitter.Write(BitConverter.UInt64BitsToDouble(m_value)),
+					ScalarType.String => WriteString(emitter),
+					_ => throw new NotImplementedException(m_objectType.ToString()),
+				},
 			};
 		}
 
@@ -258,67 +257,74 @@ namespace AssetRipper.Yaml
 
 		private Emitter WriteString(Emitter emitter)
 		{
-			if (Style == ScalarStyle.Plain)
+			switch (Style)
 			{
-				if (emitter.IsFormatKeys && emitter.IsKey)
-				{
-					emitter.WriteFormat(m_string);
-				}
-				else
-				{
-					emitter.Write(m_string);
-				}
-			}
-			else if (Style == ScalarStyle.SingleQuoted)
-			{
-				emitter.WriteDelayed();
-				for (int i = 0; i < m_string.Length; i++)
-				{
-					char c = m_string[i];
-					emitter.WriteRaw(c);
-					if (c == '\'')
+				case ScalarStyle.Plain:
+					if (emitter.IsFormatKeys && emitter.IsKey)
 					{
-						emitter.WriteRaw(c);
+						emitter.WriteFormat(m_string);
 					}
-					else if (c == '\n')
+					else
 					{
-						emitter.WriteRaw("\n	");
+						emitter.Write(m_string);
 					}
-				}
-			}
-			else if (Style == ScalarStyle.DoubleQuoted)
-			{
-				emitter.WriteDelayed();
-				for (int i = 0; i < m_string.Length; i++)
-				{
-					char c = m_string[i];
-					switch (c)
+					break;
+				case ScalarStyle.SingleQuoted:
 					{
-						case '\\':
-							emitter.WriteRaw('\\').WriteRaw('\\');
-							break;
-						case '\n':
-							emitter.WriteRaw('\\').WriteRaw('n');
-							break;
-						case '\r':
-							emitter.WriteRaw('\\').WriteRaw('r');
-							break;
-						case '\t':
-							emitter.WriteRaw('\\').WriteRaw('t');
-							break;
-						case '"':
-							emitter.WriteRaw('\\').WriteRaw('"');
-							break;
-
-						default:
+						emitter.WriteDelayed();
+						for (int i = 0; i < m_string.Length; i++)
+						{
+							char c = m_string[i];
 							emitter.WriteRaw(c);
-							break;
+							switch (c)
+							{
+								case '\'':
+									emitter.WriteRaw(c);
+									break;
+								case '\n':
+									emitter.WriteRaw("\n	");
+									break;
+							}
+						}
+
+						break;
 					}
-				}
-			}
-			else
-			{
-				throw new NotSupportedException(Style.ToString());
+
+				case ScalarStyle.DoubleQuoted:
+					{
+						emitter.WriteDelayed();
+						for (int i = 0; i < m_string.Length; i++)
+						{
+							char c = m_string[i];
+							switch (c)
+							{
+								case '\\':
+									emitter.WriteRaw('\\').WriteRaw('\\');
+									break;
+								case '\n':
+									emitter.WriteRaw('\\').WriteRaw('n');
+									break;
+								case '\r':
+									emitter.WriteRaw('\\').WriteRaw('r');
+									break;
+								case '\t':
+									emitter.WriteRaw('\\').WriteRaw('t');
+									break;
+								case '"':
+									emitter.WriteRaw('\\').WriteRaw('"');
+									break;
+
+								default:
+									emitter.WriteRaw(c);
+									break;
+							}
+						}
+
+						break;
+					}
+
+				default:
+					throw new NotSupportedException(Style.ToString());
 			}
 
 			return emitter;
@@ -344,9 +350,9 @@ namespace AssetRipper.Yaml
 		{
 			get
 			{
-				if (Style == ScalarStyle.Hex)
+				return Style switch
 				{
-					return m_objectType switch
+					ScalarStyle.Hex => m_objectType switch
 					{
 						ScalarType.Byte => unchecked((byte)m_value).ToHexString(),
 						ScalarType.SByte => unchecked((sbyte)m_value).ToHexString(),
@@ -359,24 +365,23 @@ namespace AssetRipper.Yaml
 						ScalarType.Single => BitConverter.UInt32BitsToSingle((uint)m_value).ToHexString(),
 						ScalarType.Double => BitConverter.UInt64BitsToDouble(m_value).ToHexString(),
 						_ => throw new NotImplementedException(m_objectType.ToString()),
-					};
-				}
-
-				return m_objectType switch
-				{
-					ScalarType.Boolean => m_value == 1 ? "true" : "false",
-					ScalarType.Byte => m_value.ToString(),
-					ScalarType.SByte => unchecked((sbyte)m_value).ToString(),
-					ScalarType.Int16 => unchecked((short)m_value).ToString(),
-					ScalarType.UInt16 => m_value.ToString(),
-					ScalarType.Int32 => unchecked((int)m_value).ToString(),
-					ScalarType.UInt32 => m_value.ToString(),
-					ScalarType.Int64 => unchecked((long)m_value).ToString(),
-					ScalarType.UInt64 => m_value.ToString(),
-					ScalarType.Single => BitConverter.UInt32BitsToSingle((uint)m_value).ToString(CultureInfo.InvariantCulture),
-					ScalarType.Double => BitConverter.UInt64BitsToDouble(m_value).ToString(CultureInfo.InvariantCulture),
-					ScalarType.String => m_string,
-					_ => throw new NotImplementedException(m_objectType.ToString()),
+					},
+					_ => m_objectType switch
+					{
+						ScalarType.Boolean => m_value == 1 ? "true" : "false",
+						ScalarType.Byte => m_value.ToString(),
+						ScalarType.SByte => unchecked((sbyte)m_value).ToString(),
+						ScalarType.Int16 => unchecked((short)m_value).ToString(),
+						ScalarType.UInt16 => m_value.ToString(),
+						ScalarType.Int32 => unchecked((int)m_value).ToString(),
+						ScalarType.UInt32 => m_value.ToString(),
+						ScalarType.Int64 => unchecked((long)m_value).ToString(),
+						ScalarType.UInt64 => m_value.ToString(),
+						ScalarType.Single => BitConverter.UInt32BitsToSingle((uint)m_value).ToString(CultureInfo.InvariantCulture),
+						ScalarType.Double => BitConverter.UInt64BitsToDouble(m_value).ToString(CultureInfo.InvariantCulture),
+						ScalarType.String => m_string,
+						_ => throw new NotImplementedException(m_objectType.ToString()),
+					},
 				};
 			}
 			set => m_string = value;
