@@ -1,2 +1,17 @@
 {
+    "mesh_format_native": "Yaml",
+    "config_options": "配置選項",
+    "bundled_assets_export_group_by_asset_type_description": "Bundled assets 的處理方式與其他文件中的assets相同。",
+    "bundled_assets_export_group_by_bundle_name": "按Bundle名稱分組",
+    "bundled_assets_export_group_by_bundle_name_description": "Bundled asset按其asset名稱分組。",
+    "bundled_assets_export_direct_export": "直接匯出",
+    "bundled_assets_export_direct_export_description": "Bundled assets在不分組的情況下導出。",
+    "mesh_format_glb_primitive": "普通的 GLB",
+    "welcome_title": "歡迎來到 AssetRipper",
+    "enable_prefab_outlining": "啟用預設大綱",
+    "enable_static_mesh_separation": "啟用靜態網格體分離",
+    "mesh_format_native_description": "在編輯器中使用網格的強大格式。 可以通過各種unity包轉換成其他格式。",
+    "audio_format_yaml_description": "導出為 yaml 資產和 resS 文件。 這是一個安全的選擇，問題出現時也可以當備份。",
+    "bundled_assets_export_title": "Bundled Assets 導出模式",
+    "bundled_assets_export_group_by_asset_type": "按Asset分組"
 }
