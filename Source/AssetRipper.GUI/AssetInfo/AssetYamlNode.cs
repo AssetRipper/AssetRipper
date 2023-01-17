@@ -55,7 +55,7 @@ namespace AssetRipper.GUI.AssetInfo
 		{
 			DisplayName = key;
 			int i = 0;
-			foreach (YamlNode valueNode in value.m_children)
+			foreach (YamlNode valueNode in value.Children)
 			{
 				string subKey = $"[{i}]";
 
@@ -64,13 +64,13 @@ namespace AssetRipper.GUI.AssetInfo
 				i++;
 			}
 
-			if (value.m_children.Count == 0)
+			if (value.Children.Count == 0)
 			{
 				DisplayName += ": <Empty Array>";
 			}
 			else
 			{
-				DisplayName += $" (Array of size {value.m_children.Count})";
+				DisplayName += $" (Array of size {value.Children.Count})";
 			}
 		}
 

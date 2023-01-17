@@ -79,7 +79,7 @@ namespace AssetRipper.Yaml
 
 		public void Add(YamlNode child)
 		{
-			m_children.Add(child);
+			Children.Add(child);
 		}
 
 		internal override void Emit(Emitter emitter)
@@ -87,7 +87,7 @@ namespace AssetRipper.Yaml
 			base.Emit(emitter);
 
 			StartChildren(emitter);
-			foreach (YamlNode child in m_children)
+			foreach (YamlNode child in Children)
 			{
 				StartChild(emitter, child);
 				child.Emit(emitter);
@@ -101,7 +101,7 @@ namespace AssetRipper.Yaml
 			switch (Style)
 			{
 				case SequenceStyle.Block:
-					if (m_children.Count == 0)
+					if (Children.Count == 0)
 					{
 						emitter.Write('[');
 					}
@@ -109,7 +109,7 @@ namespace AssetRipper.Yaml
 					break;
 
 				case SequenceStyle.BlockCurve:
-					if (m_children.Count == 0)
+					if (Children.Count == 0)
 					{
 						emitter.Write('{');
 					}
@@ -121,7 +121,7 @@ namespace AssetRipper.Yaml
 					break;
 
 				case SequenceStyle.Raw:
-					if (m_children.Count == 0)
+					if (Children.Count == 0)
 					{
 						emitter.Write('[');
 					}
@@ -135,7 +135,7 @@ namespace AssetRipper.Yaml
 			switch (Style)
 			{
 				case SequenceStyle.Block:
-					if (m_children.Count == 0)
+					if (Children.Count == 0)
 					{
 						emitter.Write(']');
 					}
@@ -144,7 +144,7 @@ namespace AssetRipper.Yaml
 					break;
 
 				case SequenceStyle.BlockCurve:
-					if (m_children.Count == 0)
+					if (Children.Count == 0)
 					{
 						emitter.WriteClose('}');
 					}
@@ -157,7 +157,7 @@ namespace AssetRipper.Yaml
 					break;
 
 				case SequenceStyle.Raw:
-					if (m_children.Count == 0)
+					if (Children.Count == 0)
 					{
 						emitter.Write(']');
 					}
@@ -205,14 +205,12 @@ namespace AssetRipper.Yaml
 			}
 		}
 
-		public static YamlSequenceNode Empty { get; } = new YamlSequenceNode();
-
 		public override YamlNodeType NodeType => YamlNodeType.Sequence;
-		public override bool IsMultiline => Style.IsAnyBlock() && m_children.Count > 0;
+		public override bool IsMultiline => Style.IsAnyBlock() && Children.Count > 0;
 		public override bool IsIndent => false;
 
 		public SequenceStyle Style { get; }
 
-		public readonly List<YamlNode> m_children = new List<YamlNode>();
+		public List<YamlNode> Children { get; } = new();
 	}
 }
