@@ -8,9 +8,9 @@
 		<DebugSymbols>true</DebugSymbols>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 
-		<Version>0.3.0.4</Version>
+		<Version>0.3.0.5</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
-		<Copyright>Copyright © 2023</Copyright>
+		<Copyright>Copyright © ds5678</Copyright>
 		<Authors>ds5678</Authors>
 	</PropertyGroup>
 </Project>
