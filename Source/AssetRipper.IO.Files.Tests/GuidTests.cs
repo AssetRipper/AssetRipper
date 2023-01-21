@@ -1,8 +1,8 @@
-using AssetRipper.IO.Files;
-using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
-namespace AssetRipper.Tests
+namespace AssetRipper.IO.Files.Tests
 {
 	public class GuidTests
 	{
@@ -70,6 +70,21 @@ namespace AssetRipper.Tests
 			UnityGUID inverseGuid = new UnityGUID(originalGuid.ToByteArray());
 			UnityGUID equivalentGuid = new UnityGUID(inverseGuid.ToByteArray());
 			Assert.That(equivalentGuid, Is.EqualTo(originalGuid));
+		}
+
+		[Test]
+		public void UnityGuidIsTheSameSizeAsSystemGuid()
+		{
+			Assert.That(Unsafe.SizeOf<UnityGUID>(), Is.EqualTo(Unsafe.SizeOf<Guid>()));
+		}
+
+		[Test]
+		public void ToBytesMethod()
+		{
+			Guid originalGuid = Guid.NewGuid();
+			UnityGUID tobyteArrayGuid = new UnityGUID(originalGuid.ToByteArray());
+			UnityGUID memoryMarshallGuid = new UnityGUID(MemoryMarshal.Cast<Guid, byte>(new ReadOnlySpan<Guid>(in originalGuid)));
+			Assert.That(memoryMarshallGuid, Is.EqualTo(tobyteArrayGuid));
 		}
 
 		private static string GetLongRandomString(int numSetsOf32Characters = 4)

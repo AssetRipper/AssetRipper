@@ -21,13 +21,8 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 			// find copies in whole project and skip them
 			Dictionary<MonoScriptInfo, IMonoScript> uniqueDictionary = new();
-			foreach (IUnityObjectBase asset in script.Collection.Bundle.FetchAssetsInHierarchy())
+			foreach (IMonoScript assetScript in script.Collection.Bundle.FetchAssetsInHierarchy().OfType<IMonoScript>())
 			{
-				if (asset is not IMonoScript assetScript)
-				{
-					continue;
-				}
-
 				MonoScriptInfo info = MonoScriptInfo.From(assetScript);
 				if (uniqueDictionary.TryGetValue(info, out IMonoScript? uniqueScript))
 				{
@@ -80,7 +75,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			{
 				if (MonoScriptExtensions.HasNamespace(script.Collection.Version))
 				{
-					int fileID = Compute(script.Namespace_C115.String, script.ClassName_C115.String);
+					int fileID = ComputeScriptFileID(script.Namespace_C115.String, script.ClassName_C115.String);
 					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 				}
 				else
@@ -88,18 +83,37 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 					ScriptIdentifier scriptInfo = script.GetScriptID(AssetExporter.AssemblyManager);
 					if (!scriptInfo.IsDefault)
 					{
-						int fileID = Compute(scriptInfo.Namespace, scriptInfo.Name);
+						int fileID = ComputeScriptFileID(scriptInfo.Namespace, scriptInfo.Name);
 						return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 					}
 				}
 			}
 
 			long exportID = GetExportID(asset);
-			UnityGUID uniqueGUID = script.GUID;
+			UnityGUID uniqueGUID = ComputeScriptGuid(script);
 			return new MetaPtr(exportID, uniqueGUID, AssetExporter.ToExportType(asset));
 		}
 
-		private static int Compute(string @namespace, string name)
+		/// <summary>
+		/// Compute a unique hash of a script and use that as the Guid for the script.
+		/// </summary>
+		/// <remarks>
+		/// This is for consistency. Script guid's are random when created in Unity.
+		/// </remarks>
+		private static UnityGUID ComputeScriptGuid(IMonoScript script)
+		{
+			//The assembly file name without any extension.
+			ReadOnlySpan<byte> assemblyName = Encoding.UTF8.GetBytes(script.GetAssemblyNameFixed());
+			return UnityGUID.Md5Hash(assemblyName, script.Namespace_C115.Data, script.ClassName_C115.Data);
+		}
+
+		/// <summary>
+		/// Compute the FileID of a script inside an assembly.
+		/// </summary>
+		/// <remarks>
+		/// This is a Unity algorithm.
+		/// </remarks>
+		private static int ComputeScriptFileID(string @namespace, string name)
 		{
 			string toBeHashed = $"s\0\0\0{@namespace}{name}";
 			using MD4 hash = new();
@@ -120,7 +134,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			IMonoScript script = (IMonoScript)asset;
 			IMonoImporter importer = MonoImporterFactory.CreateAsset(container.ExportVersion);
 			importer.ExecutionOrder_C1035 = (short)script.ExecutionOrder_C115;
-			Meta meta = new Meta(script.GUID, importer);
+			Meta meta = new Meta(ComputeScriptGuid(script), importer);
 			ExportMeta(container, meta, path);
 		}
 

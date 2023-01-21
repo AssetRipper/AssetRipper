@@ -143,12 +143,22 @@ namespace AssetRipper.IO.Files
 		/// <remarks>
 		/// The returned guid is most likely not "valid" by official standards. However, Unity doesn't seem to care.
 		/// </remarks>
-		/// <param name="inputBytes">Input byte array. Can be any length</param>
-		/// <returns>A stable guid corresponding to the input bytes</returns>
-		public static UnityGUID Md5Hash(byte[] inputBytes)
+		/// <param name="input">Input data. Can be any length</param>
+		/// <returns>A stable guid corresponding to the <paramref name="input"/>.</returns>
+		public static UnityGUID Md5Hash(ReadOnlySpan<byte> input)
 		{
-			byte[] hashBytes = MD5.HashData(inputBytes);
+			byte[] hashBytes = MD5.HashData(input);
 			return new UnityGUID(ConvertSystemOrUnityBytes(hashBytes));
+		}
+
+		public static UnityGUID Md5Hash(ReadOnlySpan<byte> assemblyName, ReadOnlySpan<byte> @namespace, ReadOnlySpan<byte> className)
+		{
+			int length = assemblyName.Length + @namespace.Length + className.Length;
+			Span<byte> input = length < 1024 ? stackalloc byte[length] : GC.AllocateUninitializedArray<byte>(length);
+			assemblyName.CopyTo(input);
+			@namespace.CopyTo(input.Slice(assemblyName.Length));
+			className.CopyTo(input.Slice(assemblyName.Length + @namespace.Length));
+			return Md5Hash(input);
 		}
 
 		public bool IsZero => Data0 == 0 && Data1 == 0 && Data2 == 0 && Data3 == 0;
@@ -166,7 +176,7 @@ namespace AssetRipper.IO.Files
 		public static UnityGUID Zero => default;
 
 		[ThreadStatic]
-		private static StringBuilder? s_sb = null;
+		private static StringBuilder? s_sb;
 
 		private static StringBuilder GetStringBuilder()
 		{
