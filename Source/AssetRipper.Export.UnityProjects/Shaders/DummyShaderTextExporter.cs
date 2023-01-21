@@ -166,28 +166,24 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 			writer.Write($"{_this.NameString} (\"{_this.Description}\", ");
 
-			switch ((SerializedPropertyType)_this.Type)
+			switch (_this.GetType_())
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
-					writer.Write(nameof(SerializedPropertyType.Vector));
+					writer.Write("Vector");
 					break;
 
-				case SerializedPropertyType.Int:
-					//case SerializedPropertyType.Float:
-					writer.Write(nameof(SerializedPropertyType.Float));
+				case SerializedPropertyType.Float:
+					writer.Write("Float");
 					break;
 
 				case SerializedPropertyType.Range:
-					writer.Write($"{
-						nameof(SerializedPropertyType.Range)}({
+					writer.Write($"Range({
 						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture)}, {
 						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture)})");
 					break;
 
-				case SerializedPropertyType._2D:
-					//case SerializedPropertyType._3D:
-					//case SerializedPropertyType.Cube:
+				case SerializedPropertyType.Texture:
 					switch (_this.DefTexture.TexDim)
 					{
 						case 1:
@@ -214,12 +210,16 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					}
 					break;
 
+				case SerializedPropertyType.Int:
+					writer.Write("Int");
+					break;
+
 				default:
 					throw new NotSupportedException($"Serialized property type {_this.Type} isn't supported");
 			}
 			writer.Write(") = ");
 
-			switch ((SerializedPropertyType)_this.Type)
+			switch (_this.GetType_())
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
@@ -230,15 +230,13 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 						_this.DefValue_3_.ToString(CultureInfo.InvariantCulture)})");
 					break;
 
-				case SerializedPropertyType.Int:
-				//case SerializedPropertyType.Float:
+				case SerializedPropertyType.Float:
 				case SerializedPropertyType.Range:
+				case SerializedPropertyType.Int:
 					writer.Write(_this.DefValue_0_.ToString(CultureInfo.InvariantCulture));
 					break;
 
-				case SerializedPropertyType._2D:
-					//case SerializedPropertyType._3D:
-					//case SerializedPropertyType.Cube:
+				case SerializedPropertyType.Texture:
 					writer.Write($"\"{_this.DefTexture.DefaultName}\" {{}}");
 					break;
 

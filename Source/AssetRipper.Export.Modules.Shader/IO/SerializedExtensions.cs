@@ -149,28 +149,25 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 
 			writer.Write("{0} (\"{1}\", ", _this.NameString, _this.Description);
 
-			switch ((SerializedPropertyType)_this.Type)
+			switch (_this.GetType_())
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
-					writer.Write(nameof(SerializedPropertyType.Vector));
+					writer.Write("Vector");
 					break;
 
-				case SerializedPropertyType.Int:
-					//case SerializedPropertyType.Float:
-					writer.Write(nameof(SerializedPropertyType.Float));
+				case SerializedPropertyType.Float:
+					writer.Write("Float");
 					break;
 
 				case SerializedPropertyType.Range:
 					writer.Write("{0}({1}, {2})",
-						nameof(SerializedPropertyType.Range),
+						"Range",
 						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture),
 						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture));
 					break;
 
-				case SerializedPropertyType._2D:
-					//case SerializedPropertyType._3D:
-					//case SerializedPropertyType.Cube:
+				case SerializedPropertyType.Texture:
 					switch (_this.DefTexture.TexDim)
 					{
 						case 1:
@@ -183,13 +180,13 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 							writer.Write("3D");
 							break;
 						case 4:
-							writer.Write(nameof(SerializedPropertyType.Cube));
+							writer.Write("Cube");
 							break;
 						case 5:
 							writer.Write("2DArray");
 							break;
 						case 6:
-							writer.Write(nameof(SerializedPropertyType.CubeArray));
+							writer.Write("CubeArray");
 							break;
 						default:
 							throw new NotSupportedException("Texture dimension isn't supported");
@@ -197,12 +194,16 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 					}
 					break;
 
+				case SerializedPropertyType.Int:
+					writer.Write("Int");
+					break;
+
 				default:
 					throw new NotSupportedException($"Serialized property type {_this.Type} isn't supported");
 			}
 			writer.Write(") = ");
 
-			switch ((SerializedPropertyType)_this.Type)
+			switch (_this.GetType_())
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
@@ -213,15 +214,13 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 						_this.DefValue_3_.ToString(CultureInfo.InvariantCulture));
 					break;
 
-				case SerializedPropertyType.Int:
-				//case SerializedPropertyType.Float:
+				case SerializedPropertyType.Float:
 				case SerializedPropertyType.Range:
+				case SerializedPropertyType.Int:
 					writer.Write(_this.DefValue_0_.ToString(CultureInfo.InvariantCulture));
 					break;
 
-				case SerializedPropertyType._2D:
-					//case SerializedPropertyType._3D:
-					//case SerializedPropertyType.Cube:
+				case SerializedPropertyType.Texture:
 					writer.Write("\"{0}\" {{}}", _this.DefTexture.DefaultName);
 					break;
 
