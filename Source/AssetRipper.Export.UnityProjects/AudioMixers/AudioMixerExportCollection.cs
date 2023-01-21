@@ -311,7 +311,7 @@ namespace AssetRipper.Export.UnityProjects.AudioMixers
 
 		private bool HasAnyEffectParameterNameToRecover { get; set; }
 		
-		protected override bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
 		{
 			if (HasAnyEffectParameterNameToRecover)
 			{

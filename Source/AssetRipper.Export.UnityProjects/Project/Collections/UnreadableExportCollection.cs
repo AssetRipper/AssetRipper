@@ -36,7 +36,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			return MetaPtr.NullPtr;
 		}
 
-		public override bool Export(IProjectAssetContainer container, string projectDirectory)
+		public override bool Export(IExportContainer container, string projectDirectory)
 		{
 			string name = DirectoryUtils.FixInvalidPathCharacters(Asset.NameString);
 			string resourcePath = Path.Combine(projectDirectory, "AssetRipper", "UnreadableAssets", Asset.ClassName, $"{name}.unreadable");

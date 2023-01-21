@@ -9,7 +9,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 {
 	public sealed class EmptyExportCollection : IExportCollection
 	{
-		public bool Export(IProjectAssetContainer container, string projectDirectory)
+		public bool Export(IExportContainer container, string projectDirectory)
 		{
 			return false;
 		}

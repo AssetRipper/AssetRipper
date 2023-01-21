@@ -40,7 +40,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			}
 		}
 
-		public override bool Export(IProjectAssetContainer container, string projectDirectory)
+		public override bool Export(IExportContainer container, string projectDirectory)
 		{
 			if (m_export.Count == 0)
 			{

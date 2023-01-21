@@ -32,7 +32,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			componentArray = components.ToArray();
 		}
 
-		public override bool Export(IProjectAssetContainer container, string projectDirectory)
+		public override bool Export(IExportContainer container, string projectDirectory)
 		{
 			string filePath = Path.Combine(projectDirectory, $"{Scene.Path}.{ExportExtension}");
 			string folderPath = Path.GetDirectoryName(filePath)!;
@@ -50,7 +50,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			return ExportScene(container, folderPath, filePath, Scene.Name);
 		}
 
-		protected virtual bool ExportScene(IProjectAssetContainer container, string folderPath, string filePath, string sceneName)
+		protected virtual bool ExportScene(IExportContainer container, string folderPath, string filePath, string sceneName)
 		{
 			AssetExporter.Export(container, Assets, filePath);
 			IDefaultImporter sceneImporter = DefaultImporterFactory.CreateAsset(container.ExportVersion);

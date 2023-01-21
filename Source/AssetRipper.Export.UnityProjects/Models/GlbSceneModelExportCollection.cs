@@ -10,7 +10,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 		{
 		}
 
-		protected override bool ExportScene(IProjectAssetContainer container, string folderPath, string filePath, string sceneName)
+		protected override bool ExportScene(IExportContainer container, string folderPath, string filePath, string sceneName)
 		{
 			return ((GlbModelExporter)AssetExporter).ExportModel(Assets, filePath, true);
 		}

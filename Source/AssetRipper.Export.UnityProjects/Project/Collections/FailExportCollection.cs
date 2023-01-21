@@ -18,7 +18,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			m_asset = asset ?? throw new ArgumentNullException(nameof(asset));
 		}
 
-		public bool Export(IProjectAssetContainer container, string projectDirectory)
+		public bool Export(IExportContainer container, string projectDirectory)
 		{
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to export asset {Name}");
 			return false;

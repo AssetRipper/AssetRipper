@@ -17,7 +17,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			Asset = asset ?? throw new ArgumentNullException(nameof(asset));
 		}
 
-		public override bool Export(IProjectAssetContainer container, string projectDirectory)
+		public override bool Export(IExportContainer container, string projectDirectory)
 		{
 			string subPath;
 			string fileName;
@@ -84,7 +84,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		/// <param name="filePath">The full path to the exported asset destination</param>
 		/// <param name="dirPath">The full path to the project export directory</param>
 		/// <returns>True if export was successful, false otherwise</returns>
-		protected virtual bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
+		protected virtual bool ExportInner(IExportContainer container, string filePath, string dirPath)
 		{
 			return AssetExporter.Export(container, Asset, filePath);
 		}

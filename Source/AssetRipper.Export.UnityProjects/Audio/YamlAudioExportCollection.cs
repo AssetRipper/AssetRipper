@@ -14,7 +14,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 		{
 		}
 
-		protected override bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
 		{
 			IAudioClip asset = (IAudioClip)Asset;
 			IStreamedResource? resource = asset.Resource_C83;

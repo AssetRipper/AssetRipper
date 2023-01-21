@@ -15,7 +15,7 @@ using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects.Project
 {
-	public class ProjectAssetContainer : IExportContainer, IProjectAssetContainer
+	public class ProjectAssetContainer : IExportContainer
 	{
 		public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, TemporaryAssetCollection file, IEnumerable<IUnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)

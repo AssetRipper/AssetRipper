@@ -42,7 +42,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			return ExportIdHandler.GetMainExportID((uint)ClassIDType.DefaultAsset);
 		}
 
-		public bool Export(IProjectAssetContainer container, string projectDirectory)
+		public bool Export(IExportContainer container, string projectDirectory)
 		{
 			return true;
 		}

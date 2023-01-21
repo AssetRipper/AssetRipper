@@ -28,7 +28,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			return m_exportIDs[asset];
 		}
 
-		protected override bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
 		{
 			return AssetExporter.Export(container, Assets, filePath);
 		}

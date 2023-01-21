@@ -18,7 +18,7 @@ namespace AssetRipper.Export.UnityProjects
 		{
 		}
 
-		protected override bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
 		{
 			//Possible improvement:
 			//
@@ -36,7 +36,7 @@ namespace AssetRipper.Export.UnityProjects
 			};
 		}
 
-		private bool ExportMesh(IProjectAssetContainer container, string filePath, string dirPath, IMesh mesh)
+		private bool ExportMesh(IExportContainer container, string filePath, string dirPath, IMesh mesh)
 		{
 			bool result;
 			if (mesh.Has_StreamData_C43())
@@ -71,7 +71,7 @@ namespace AssetRipper.Export.UnityProjects
 		/// <summary>
 		/// Also handles <see cref="ICubemap"/> by inheritance
 		/// </summary>
-		private bool ExportTexture2D(IProjectAssetContainer container, string filePath, string dirPath, ITexture2D texture)
+		private bool ExportTexture2D(IExportContainer container, string filePath, string dirPath, ITexture2D texture)
 		{
 			bool result;
 			if (texture.Has_StreamData_C28())
@@ -103,7 +103,7 @@ namespace AssetRipper.Export.UnityProjects
 			return result;
 		}
 
-		private bool ExportTexture3D(IProjectAssetContainer container, string filePath, string dirPath, ITexture3D texture)
+		private bool ExportTexture3D(IExportContainer container, string filePath, string dirPath, ITexture3D texture)
 		{
 			bool result;
 			if (texture.Has_StreamData_C117())
@@ -135,7 +135,7 @@ namespace AssetRipper.Export.UnityProjects
 			return result;
 		}
 
-		private bool ExportTexture2DArray(IProjectAssetContainer container, string filePath, string dirPath, ITexture2DArray texture)
+		private bool ExportTexture2DArray(IExportContainer container, string filePath, string dirPath, ITexture2DArray texture)
 		{
 			bool result;
 			if (texture.Has_StreamData_C187())
@@ -167,7 +167,7 @@ namespace AssetRipper.Export.UnityProjects
 			return result;
 		}
 
-		private bool ExportCubemapArray(IProjectAssetContainer container, string filePath, string dirPath, ICubemapArray texture)
+		private bool ExportCubemapArray(IExportContainer container, string filePath, string dirPath, ICubemapArray texture)
 		{
 			bool result;
 			if (texture.Has_StreamData_C188())

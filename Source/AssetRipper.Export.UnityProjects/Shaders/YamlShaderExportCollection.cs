@@ -13,7 +13,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 		protected override string GetExportExtension(IUnityObjectBase asset) => "asset";
 		
-		protected override bool ExportInner(IProjectAssetContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
 		{
 			// This patch uses ShaderUtil.RegisterShader(), which is only available start from Unity 2018.
 			if (container.ExportVersion.IsGreaterEqual(2018, 1, 0))
