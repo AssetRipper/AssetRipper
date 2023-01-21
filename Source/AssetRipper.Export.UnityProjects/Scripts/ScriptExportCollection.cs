@@ -47,9 +47,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 				return false;
 			}
 
-			string scriptsFolder = Path.Combine(projectDirectory, AssetsKeyword, "Scripts");
-
-			AssetExporter.Export(container, m_export, scriptsFolder, OnScriptExported);
+			AssetExporter.Export(container, m_export, Path.Combine(projectDirectory, AssetsKeyword), OnScriptExported);
 			return true;
 		}
 

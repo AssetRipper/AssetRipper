@@ -12,6 +12,7 @@ using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Scripts
 {
@@ -61,14 +62,10 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			return true;
 		}
 
-		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string dirPath, Action<IExportContainer, IUnityObjectBase, string>? callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string assetsDirectoryPath, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			Logger.Info(LogCategory.Export, "Exporting scripts...");
-
-			if (string.IsNullOrEmpty(dirPath))
-			{
-				throw new ArgumentNullException(nameof(dirPath));
-			}
+			ArgumentException.ThrowIfNullOrEmpty(assetsDirectoryPath, nameof(assetsDirectoryPath));
 
 			Dictionary<string, AssemblyDefinitionDetails> assemblyDefinitionDetailsDictionary = new();
 
@@ -86,7 +83,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 					}
 
 					Logger.Info(LogCategory.Export, $"Decompiling {assemblyName}");
-					string outputDirectory = Path.Combine(dirPath, assemblyName);
+					string outputDirectory = Path.Combine(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
 					Directory.CreateDirectory(outputDirectory);
 					Decompiler.DecompileWholeProject(assembly, outputDirectory);
 
@@ -102,15 +99,20 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 				}
 
 				GetExportSubPath(asset, out string subFolderPath, out string fileName);
-				string folderPath = Path.Combine(dirPath, subFolderPath);
+				string folderPath = Path.Combine(assetsDirectoryPath, subFolderPath);
 				string filePath = Path.Combine(folderPath, fileName);
 				if (!File.Exists(filePath))
 				{
 					Directory.CreateDirectory(folderPath);
 					File.WriteAllText(filePath, GetEmptyScriptContent(asset));
 					string assemblyName = BaseManager.ToAssemblyName(asset.GetAssemblyNameFixed());
-					assemblyDefinitionDetailsDictionary.TryAdd(assemblyName,
-						new AssemblyDefinitionDetails(assemblyName, Path.Combine(dirPath, assemblyName)));
+					if (!assemblyDefinitionDetailsDictionary.ContainsKey(assemblyName))
+					{
+						Debug.Assert(GetScriptsFolderName(assemblyName) is "Scripts");
+						string assemblyDirectoryPath = Path.Combine(assetsDirectoryPath, "Scripts", assemblyName);
+						AssemblyDefinitionDetails details = new AssemblyDefinitionDetails(assemblyName, assemblyDirectoryPath);
+						assemblyDefinitionDetailsDictionary.Add(assemblyName, details);
+					}
 				}
 
 				if (callback is not null)
@@ -143,11 +145,17 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			}
 		}
 
+		private static string GetScriptsFolderName(string assemblyName)
+		{
+			return assemblyName is "Assembly-CSharp-firstpass" or "Assembly - CSharp - firstpass" ? "Plugins" : "Scripts";
+		}
+
 		private static void GetExportSubPath(string assembly, string @namespace, string @class, out string folderPath, out string fileName)
 		{
 			string assemblyFolder = BaseManager.ToAssemblyName(assembly);
+			string scriptsFolder = GetScriptsFolderName(assemblyFolder);
 			string namespaceFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
-			folderPath = DirectoryUtils.FixInvalidPathCharacters(Path.Combine(assemblyFolder, namespaceFolder));
+			folderPath = DirectoryUtils.FixInvalidPathCharacters(Path.Combine(scriptsFolder, assemblyFolder, namespaceFolder));
 			fileName = $"{DirectoryUtils.FixInvalidPathCharacters(@class)}.cs";
 		}
 
