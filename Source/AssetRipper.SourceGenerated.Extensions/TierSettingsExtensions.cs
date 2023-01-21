@@ -23,11 +23,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			settings.Tier = (int)tier;
 		}
 
-		public static GraphicsTier GetTier(this ITierSettings settings)
-		{
-			return (GraphicsTier)settings.Tier;
-		}
-
 		public static BuildTargetGroup GetBuildTargetAsEnum(this ITierSettings settings)
 		{
 			if (settings.Has_BuildTarget_Utf8String())

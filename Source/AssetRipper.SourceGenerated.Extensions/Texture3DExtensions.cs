@@ -21,11 +21,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static ColorSpace GetColorSpace(this ITexture3D texture)
-		{
-			return (ColorSpace)texture.ColorSpace_C117;
-		}
-
 		public static TextureFormat GetTextureFormat(this ITexture3D texture)
 		{
 			if (texture.Has_Format_C117_Int32())
@@ -36,16 +31,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return texture.Format_C117_UInt32E;
 			}
-		}
-
-		public static TextureDimension GetTextureDimension(this ITexture3D texture)
-		{
-			return (TextureDimension)texture.Dimension_C117;
-		}
-
-		public static TextureUsageMode GetLightmapFormat(this ITexture3D texture)
-		{
-			return (TextureUsageMode)texture.LightmapFormat_C117;
 		}
 
 		public static int GetCompleteImageSize(this ITexture3D texture)

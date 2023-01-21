@@ -33,7 +33,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				foreach (OffsetPtr_ConditionConstant conditionPtr in transitionConstant.ConditionConstantArray)
 				{
-					if (conditionPtr.Data.ConditionMode == (int)AnimatorConditionMode.ExitTime)
+					if (conditionPtr.Data.GetConditionMode() == AnimatorConditionMode.ExitTime)
 					{
 						return conditionPtr.Data.ExitTime;
 					}
@@ -52,7 +52,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				foreach (OffsetPtr_ConditionConstant conditionPtr in transitionConstant.ConditionConstantArray)
 				{
-					if (conditionPtr.Data.ConditionMode == (int)AnimatorConditionMode.ExitTime)
+					if (conditionPtr.Data.GetConditionMode() == AnimatorConditionMode.ExitTime)
 					{
 						return true;
 					}

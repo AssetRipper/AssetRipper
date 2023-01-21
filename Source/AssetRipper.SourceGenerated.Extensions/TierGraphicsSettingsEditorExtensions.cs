@@ -41,25 +41,5 @@ namespace AssetRipper.SourceGenerated.Extensions
 			settings.EnableLPPV = !tierGraphicsSettings.Has_EnableLPPV() || tierGraphicsSettings.EnableLPPV;
 			settings.UseDitherMaskForAlphaBlendedShadows = true;
 		}
-
-		public static ShaderQuality GetStandardShaderQuality(this ITierGraphicsSettingsEditor settings)
-		{
-			return (ShaderQuality)settings.StandardShaderQuality;
-		}
-
-		public static RenderingPath GetRenderingPath(this ITierGraphicsSettingsEditor settings)
-		{
-			return (RenderingPath)settings.RenderingPath;
-		}
-
-		public static CameraHDRMode GetHdrMode(this ITierGraphicsSettingsEditor settings)
-		{
-			return (CameraHDRMode)settings.HdrMode;
-		}
-
-		public static RealtimeGICPUUsage GetRealtimeGICPUUsage(this ITierGraphicsSettingsEditor settings)
-		{
-			return (RealtimeGICPUUsage)settings.RealtimeGICPUUsage;
-		}
 	}
 }

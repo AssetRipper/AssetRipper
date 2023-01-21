@@ -5,21 +5,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class UVModuleExtensions
 	{
-		public static ParticleSystemAnimationMode GetMode(this IUVModule module)
-		{
-			return (ParticleSystemAnimationMode)module.Mode;
-		}
-
-		public static ParticleSystemAnimationTimeMode GetTimeMode(this IUVModule module)
-		{
-			return (ParticleSystemAnimationTimeMode)module.TimeMode;
-		}
-
-		public static ParticleSystemAnimationType GetAnimationType(this IUVModule module)
-		{
-			return (ParticleSystemAnimationType)module.AnimationType;
-		}
-
 		public static ParticleSystemAnimationRowMode GetRowMode(this IUVModule module)
 		{
 			if (module.Has_RowMode())

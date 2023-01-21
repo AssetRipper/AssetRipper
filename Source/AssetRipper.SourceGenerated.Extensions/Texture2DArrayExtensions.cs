@@ -1,5 +1,4 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_187;
-using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -35,11 +34,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return false;
 			}
-		}
-
-		public static ColorSpace GetColorSpace(this ITexture2DArray texture)
-		{
-			return (ColorSpace)texture.ColorSpace_C187;
 		}
 	}
 }

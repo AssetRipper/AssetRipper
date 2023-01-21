@@ -18,15 +18,5 @@ namespace AssetRipper.SourceGenerated.Extensions
 			module.WidthOverTrail.SetValues(version, 1.0f);
 			module.ColorOverTrail.SetToDefault();
 		}
-
-		public static ParticleSystemTrailMode GetMode(this ITrailModule module)
-		{
-			return (ParticleSystemTrailMode)module.Mode;
-		}
-
-		public static ParticleSystemTrailTextureMode GetTextureMode(this ITrailModule module)
-		{
-			return (ParticleSystemTrailTextureMode)module.TextureMode;
-		}
 	}
 }
