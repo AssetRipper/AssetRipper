@@ -157,7 +157,10 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			{
 				SerializedType type = types[SerializedTypeIndex];
 				TypeID = type.TypeID;
-				ClassID = (short)type.TypeID;
+				if (type.TypeID < short.MaxValue)
+				{
+					ClassID = (short)type.TypeID;
+				}
 				ScriptTypeIndex = type.ScriptTypeIndex;
 				Stripped = type.IsStrippedType;
 			}

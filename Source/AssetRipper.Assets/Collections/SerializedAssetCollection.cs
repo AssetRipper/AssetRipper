@@ -94,7 +94,7 @@ public class SerializedAssetCollection : AssetCollection
 		for (int i = 0; i < file.Metadata.Object.Length; i++)
 		{
 			ObjectInfo objectInfo = file.Metadata.Object[i];
-			if (objectInfo.ClassID == 115)//MonoScript
+			if (objectInfo.TypeID == 115)//MonoScript
 			{
 				if (!collection.Assets.ContainsKey(objectInfo.FileID))
 				{

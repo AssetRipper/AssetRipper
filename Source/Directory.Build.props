@@ -7,6 +7,7 @@
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
 
 		<Version>0.3.0.5</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
