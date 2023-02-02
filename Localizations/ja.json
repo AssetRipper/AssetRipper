@@ -1,2 +1,21 @@
 {
+    "mesh_format_glb_description": "FBXに代わる高品質なオープンソースフォーマット。GLTFのバイナリ版。メッシュデータのみ。※エラーが発生する可能性があります。Unityはこのタイプのアセットをインポートできません。",
+    "sprite_format_texture": "テクスチャ",
+    "audio_format_default": "デフォルト",
+    "menu_file_reset": "リセット",
+    "menu_file_open_folder": "フォルダを開く",
+    "image_format_description": "エクスポートされたすべての画像に影響します",
+    "menu_export_all": "全てのファイルをエクスポートする",
+    "menu_export_selected": "選択したファイルをエクスポートする",
+    "loading_step_load_assets_from_file": "{0}からアセットをロード中",
+    "error": "エラー",
+    "sprite_format_texture_description": "画像をスプライトシートとしてエクスポートします。Unity以外でも表示することができるが、エクスポートに時間がかかります。",
+    "audio_format_force_wav": "WAV形式に変換する",
+    "welcome_title": "AssetRipperへようこそ！",
+    "menu_file_open_file": "ファイルを開く",
+    "sprite_format_yaml_description": "エディタで表示可能な yaml アセットとしてエクスポートします。スプライトの全メタデータを正確に復元できる唯一のモードです。",
+    "mesh_format_native_description": "メッシュをエディターで使用できるようにするための強力なフォーマットです。様々なUnityパッケージによって他のフォーマットへ変換することができます。",
+    "export_complete": "エクスポートが完了しました！",
+    "success": "成功！",
+    "sprite_format_native_description": "Unityのスプライトフォーマットで書き出します。Unity以外では表示することができません。"
 }
