@@ -174,7 +174,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						long remainingBytes = reader.BaseStream.Length - reader.BaseStream.Position;
 						if (remainingBytes < count)
 						{
-							throw new Exception($"When reading field {etalon.Name}, Stream only has {remainingBytes} bytes remaining, so {count} complex elements of type {etalon.Type.Name} cannot be read.");
+							throw new EndOfStreamException($"When reading field {etalon.Name}, Stream only has {remainingBytes} bytes remaining, so {count} complex elements of type {etalon.Type.Name} cannot be read.");
 						}
 
 						IAsset[] structures = new IAsset[count];
