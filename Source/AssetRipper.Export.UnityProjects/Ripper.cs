@@ -214,7 +214,7 @@ namespace AssetRipper.Export.UnityProjects
 		private void InitializeExporters(ProjectExporter projectExporter)
 		{
 			OverrideNormalExporters(projectExporter);
-			OverrideEngineExporters(projectExporter);
+			// OverrideEngineExporters(projectExporter);
 		}
 
 		private void OverrideNormalExporters(ProjectExporter projectExporter)
