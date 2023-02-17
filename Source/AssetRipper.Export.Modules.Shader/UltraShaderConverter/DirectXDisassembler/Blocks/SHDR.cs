@@ -423,7 +423,7 @@
 					components = 4;
 					break;
 			}
-			extended = ((uint)operandData & 0x80000000) >> 31 == 1;
+			extended = (unchecked((uint)operandData) & 0x80000000) >> 31 == 1;
 			if (extended)
 			{
 				extendedData = reader.ReadInt32();
