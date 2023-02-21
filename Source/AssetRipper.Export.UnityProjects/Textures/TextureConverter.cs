@@ -123,7 +123,15 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					ReadOnlySpan<byte> uncompressedSpan;
 					if (textureFormat.IsCrunched())
 					{
-						uncompressedSpan = CrunchHandler.DecompressCrunch(textureFormat, width, height, version, inputSpan);
+						if (CrunchHandler.DecompressCrunch(textureFormat, version, inputSpan, out byte[]? decompressedData))
+						{
+							uncompressedSpan = decompressedData;
+						}
+						else
+						{
+							bitmap.Dispose();
+							return null;
+						}
 					}
 					else
 					{
