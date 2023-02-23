@@ -49,5 +49,17 @@
     "audio_format_force_wav_description": "将所有音频文件转换为 WAV 文件。 不推荐在导入unity 时使用，以避免重新压缩造成的品质损失。",
     "sprite_format_yaml_description": "导出成能够在文字编辑器中查看的 Yaml 资源格式。这是确保能精准恢复所有 Sprites Metadata 的唯一模式。",
     "terrain_format_native_description": "导出为原生的 Unity Terrain 格式。如果您计划重新导入 Unity，此选项最适合使用。",
-    "text_asset_format_text_description": "导出为纯文本文件 (.txt)"
+    "text_asset_format_text_description": "导出为纯文本文件 (.txt)",
+    "shader_asset_format_yaml": "Yaml 资源",
+    "shader_asset_format_disassembly_description": "将 Shader 反汇编并导出。 此选项为实验性且容易损坏。这不会在 Unity Editor 中编译。",
+    "script_export_format_decompiled": "反编译",
+    "text_asset_format_parse_description": "导出为纯文本文件，并尝试猜测正确的文件扩展名 (例如 JSON 文件将使用 .json 扩展名)",
+    "shader_asset_format_dummy": "虚拟 Shader",
+    "script_export_format_decompiled_description": "ILSpy 反编译器用于生成 C# 源码。 这是可靠的，但非常耗时并且可能会包含许多编译错误。",
+    "text_asset_format_text": "纯文本",
+    "shader_asset_format_decompile_description": "将 Shader 导出为 ShaderLab。非常实验性，几乎肯定会有错误。 仅支持 DX11，不支持 DX9。",
+    "shader_asset_format_decompile": "反编译",
+    "shader_asset_format_yaml_description": "将 Shader 导出为 Yaml 资源。实验性功能，仅可用于在 Unity Editor 中查看。Editor 的预设行为可能会损坏这些文件。",
+    "shader_asset_format_disassembly": "反汇编",
+    "script_export_format_hybrid": "Hybrid"
 }
