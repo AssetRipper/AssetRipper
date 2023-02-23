@@ -74,7 +74,7 @@ namespace AssetRipper.GUI.Components
 			{
 				//Reload all localized strings
 				Values.ForEach(v => v.DisplayName = GetValueDisplayName(v.Item));
-				RaisePropertyChanged(ValuesProperty, Optional<List<ItemWrapper>>.Empty, Values);
+				OnPropertyChanged(nameof(Values));
 
 				RawSelectedValue = new(RawSelectedValue.Item, GetValueDisplayName(RawSelectedValue.Item));
 			};

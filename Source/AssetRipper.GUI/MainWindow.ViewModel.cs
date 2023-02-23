@@ -233,7 +233,7 @@ namespace AssetRipper.GUI
 
 			FolderPickerOpenOptions options = new() { AllowMultiple = false };
 			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
-			if (folderList.Count == 0 || !folderList[0].TryGetUri(out Uri? chosenFolder))
+			if (folderList.Count == 0)
 			{
 				return;
 			}
@@ -241,7 +241,7 @@ namespace AssetRipper.GUI
 			IsExporting = true;
 			ExportingText = "Clearing out existing files...";
 
-			string exportPath = Path.Combine(chosenFolder.LocalPath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			string exportPath = Path.Combine(folderList[0].Path.LocalPath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
 			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
@@ -282,21 +282,21 @@ namespace AssetRipper.GUI
 				};
 				IStorageFile? storageFile = await MainWindow.Instance.StorageProvider.SaveFilePickerAsync(saveOptions);
 
-				if (storageFile is null || !storageFile.TryGetUri(out Uri? saveLocation))
+				if (storageFile is null)
 				{
 					return;
 				}
 
-				await da.SaveToFileAsync(saveLocation.LocalPath);
+				await da.SaveToFileAsync(storageFile.Path.LocalPath);
 
-				Logger.Info(LogCategory.ExportedFile, $"Loose file saved at: {saveLocation.LocalPath}");
+				Logger.Info(LogCategory.ExportedFile, $"Loose file saved at: {storageFile.Path.LocalPath}");
 
 				return;
 			}
 
 			FolderPickerOpenOptions options = new() { AllowMultiple = false };
 			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
-			if (folderList.Count == 0 || !folderList[0].TryGetUri(out Uri? chosenFolder))
+			if (folderList.Count == 0)
 			{
 				return;
 			}
@@ -304,7 +304,7 @@ namespace AssetRipper.GUI
 			IsExporting = true;
 			ExportingText = MainWindow.Instance.LocalizationManager["export_deleting_old_files"];
 
-			string exportPath = Path.Combine(chosenFolder.LocalPath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			string exportPath = Path.Combine(folderList[0].Path.LocalPath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
 			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
@@ -335,7 +335,7 @@ namespace AssetRipper.GUI
 
 			FolderPickerOpenOptions options = new() { AllowMultiple = false };
 			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
-			if (folderList.Count == 0 || !folderList[0].TryGetUri(out Uri? chosenFolder))
+			if (folderList.Count == 0)
 			{
 				return;
 			}
@@ -343,7 +343,7 @@ namespace AssetRipper.GUI
 			IsExporting = true;
 			ExportingText = MainWindow.Instance.LocalizationManager["export_deleting_old_files"];
 
-			string exportPath = Path.Combine(chosenFolder.LocalPath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
+			string exportPath = Path.Combine(folderList[0].Path.LocalPath, _ripper.GameStructure.Name ?? ("AssetRipperExport" + DateTime.Now.Ticks));
 			_lastExportPath = exportPath;
 
 			Logger.Info(LogCategory.General, $"About to begin export to {exportPath}");
@@ -389,11 +389,7 @@ namespace AssetRipper.GUI
 			FilePickerOpenOptions options = new() { AllowMultiple = false };
 			IReadOnlyList<IStorageFile> fileList = await MainWindow.Instance.StorageProvider.OpenFilePickerAsync(options);
 
-			string[] result = fileList.Select(f =>
-			{
-				f.TryGetUri(out Uri? uri);
-				return uri?.LocalPath ?? "";
-			})
+			string[] result = fileList.Select(f => f.Path.LocalPath)
 				.Where(s => !string.IsNullOrEmpty(s))
 				.ToArray();
 
@@ -408,12 +404,12 @@ namespace AssetRipper.GUI
 		{
 			FolderPickerOpenOptions options = new() { AllowMultiple = false };
 			IReadOnlyList<IStorageFolder> folderList = await MainWindow.Instance.StorageProvider.OpenFolderPickerAsync(options);
-			if (folderList.Count == 0 || !folderList[0].TryGetUri(out Uri? chosenFolder))
+			if (folderList.Count == 0)
 			{
 				return;
 			}
 
-			DoLoad(new[] { chosenFolder.LocalPath });
+			DoLoad(new[] { folderList[0].Path.LocalPath });
 		}
 
 		//Called from UI
