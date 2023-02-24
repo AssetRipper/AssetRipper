@@ -88,7 +88,7 @@ namespace AssetRipper.Import.Structure
 			}
 			catch (Exception ex)
 			{
-				LogMonoBehaviorReadException(monoBehaviour, reader, ex);
+				LogMonoBehaviorReadException(monoBehaviour, ex);
 				monoBehaviour.Structure = null;
 			}
 			return monoBehaviour;
@@ -191,12 +191,12 @@ namespace AssetRipper.Import.Structure
 
 		private static void LogMonoBehaviourMismatch(IMonoBehaviour monoBehaviour, long actual, int expected)
 		{
-			Logger.Log(LogType.Error, LogCategory.Import, $"Unable to read {monoBehaviour}, because script {monoBehaviour.Structure} layout mismatched binary content (read {actual} bytes, expected {expected} bytes).");
+			Logger.Error(LogCategory.Import, $"Unable to read {monoBehaviour}, because script {monoBehaviour.Structure} layout mismatched binary content (read {actual} bytes, expected {expected} bytes).");
 		}
 
-		private static void LogMonoBehaviorReadException(IMonoBehaviour asset, AssetReader reader, Exception ex)
+		private static void LogMonoBehaviorReadException(IMonoBehaviour monoBehaviour, Exception ex)
 		{
-			Logger.Error($"Error during reading of MonoBehavior {GetMonoScript(asset)}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}", ex);
+			Logger.Error(LogCategory.Import, $"Unable to read {monoBehaviour}, because script {monoBehaviour.Structure} layout mismatched binary content ({ex.GetType().Name}).");
 		}
 
 		private static void LogReadException(IUnityObjectBase asset, AssetReader reader, Exception ex)
