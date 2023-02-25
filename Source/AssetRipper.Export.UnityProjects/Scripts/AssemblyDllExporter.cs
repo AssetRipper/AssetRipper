@@ -17,11 +17,18 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			AssemblyManager = assemblyManager;
 		}
 
-		public bool IsHandle(IUnityObjectBase asset) => asset is IMonoScript;
-
-		public IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
+		public bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return new AssemblyExportCollection(this, (IMonoScript)asset);
+			if (asset is IMonoScript script)
+			{
+				exportCollection = new AssemblyExportCollection(this, script);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -29,7 +36,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			throw new NotSupportedException("Need to export all scripts at once");
 		}
 
-		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException("Need to export all scripts at once");
 		}
@@ -39,7 +46,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			throw new NotSupportedException("Assemblies are exported inside the export collection");
 		}
 
-		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string dirPath, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string dirPath, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException("Assemblies are exported inside the export collection");
 		}

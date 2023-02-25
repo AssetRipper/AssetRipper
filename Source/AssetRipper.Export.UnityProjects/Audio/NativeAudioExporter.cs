@@ -11,14 +11,18 @@ namespace AssetRipper.Export.UnityProjects.Audio
 {
 	public class NativeAudioExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is IAudioClip;
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new NativeAudioExportCollection(this, asset);
+			if (asset is IAudioClip)
+			{
+				exportCollection = new NativeAudioExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

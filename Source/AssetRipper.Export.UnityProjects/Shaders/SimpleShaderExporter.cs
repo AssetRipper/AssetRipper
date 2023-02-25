@@ -1,5 +1,7 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
+using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
@@ -11,9 +13,18 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 	/// </summary>
 	public class SimpleShaderExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is IShader && asset is ITextAsset textAsset && HasDecompiledShaderText(textAsset.Script_C49.String);
+			if (asset is IShader and ITextAsset textAsset && HasDecompiledShaderText(textAsset.Script_C49.String))
+			{
+				exportCollection = new AssetExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

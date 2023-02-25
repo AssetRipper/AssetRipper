@@ -12,15 +12,19 @@ namespace AssetRipper.Export.UnityProjects
 {
 	public sealed class YamlStreamedAssetExporter : YamlExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is IMesh or ITexture2D or ITexture3D or ITexture2DArray or ICubemapArray;
 			//Note: ICubeMap inherits from ITexture2D
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new YamlStreamedAssetExportCollection(this, asset);
+			if (asset is IMesh or ITexture2D or ITexture3D or ITexture2DArray or ICubemapArray)
+			{
+				exportCollection = new YamlStreamedAssetExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 	}
 }

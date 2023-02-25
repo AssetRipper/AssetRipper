@@ -1,24 +1,26 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
+using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 
 namespace AssetRipper.Export.UnityProjects.Shaders
 {
-	/// <summary>
-	/// An exporter for exporting shaders as unity assets. Shader.Find will not work in the Unity Editor with this exporter.
-	/// </summary>
-	public sealed class YamlShaderExporter : YamlExporterBase
+	public abstract class ShaderExporterBase : BinaryAssetExporter
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			exportCollection = asset switch
+			if (asset is IShader)
 			{
-				IShader => new YamlShaderExportCollection(this, asset),
-				_ => null,
-			};
-			return exportCollection is not null;
+				exportCollection = new AssetExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 	}
 }

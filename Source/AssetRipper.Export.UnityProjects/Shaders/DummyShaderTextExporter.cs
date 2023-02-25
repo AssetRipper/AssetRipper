@@ -1,8 +1,5 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Export.UnityProjects.Project.Collections;
-using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.Import.IO;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
@@ -15,7 +12,7 @@ using System.Globalization;
 
 namespace AssetRipper.Export.UnityProjects.Shaders
 {
-	public class DummyShaderTextExporter : BinaryAssetExporter
+	public sealed class DummyShaderTextExporter : ShaderExporterBase
 	{
 		private static string FallbackDummyShader { get; } = """
 
@@ -39,16 +36,6 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				}
 
 			""".Replace("\r", "");
-
-		public override bool IsHandle(IUnityObjectBase asset)
-		{
-			return asset is IShader;
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new AssetExportCollection(this, asset);
-		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{

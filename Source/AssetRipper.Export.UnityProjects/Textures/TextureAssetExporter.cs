@@ -2,6 +2,7 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.Logging;
@@ -22,14 +23,20 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			SpriteExportMode = configuration.SpriteExportMode;
 		}
 
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset switch
+			switch (asset)
 			{
-				ITexture2D texture => texture.CheckAssetIntegrity(),
-				ISprite => SpriteExportMode == SpriteExportMode.Texture2D,
-				_ => false
-			};
+				case ITexture2D texture when texture.CheckAssetIntegrity():
+					exportCollection = new TextureExportCollection(this, texture, SpriteExportMode != SpriteExportMode.Yaml);
+					return true;
+				case ISprite sprite when SpriteExportMode == SpriteExportMode.Texture2D:
+					exportCollection = TextureExportCollection.CreateExportCollection(this, sprite);
+					return true;
+				default:
+					exportCollection = null;
+					return false;
+			}
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -48,17 +55,6 @@ namespace AssetRipper.Export.UnityProjects.Textures
 				return false;
 			}
 			return bitmap.Save(path, ImageExportFormat);
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			if (asset is ISprite sprite)
-			{
-				return TextureExportCollection.CreateExportCollection(this, sprite);
-			}
-
-			TextureExportCollection collection = new TextureExportCollection(this, (ITexture2D)asset, SpriteExportMode != SpriteExportMode.Yaml);
-			return collection;
 		}
 	}
 }

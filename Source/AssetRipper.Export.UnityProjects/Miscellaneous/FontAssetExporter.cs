@@ -8,14 +8,18 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
 	public sealed class FontAssetExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is IFont font && IsValidData(font.FontData_C128);
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new FontAssetExportCollection(this, asset);
+			if (asset is IFont font && IsValidData(font.FontData_C128))
+			{
+				exportCollection = new FontAssetExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

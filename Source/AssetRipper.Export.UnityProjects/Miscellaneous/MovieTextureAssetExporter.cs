@@ -8,14 +8,18 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
 	public sealed class MovieTextureAssetExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is IMovieTexture texture && IsValidData(texture.MovieData_C152);
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new MovieTextureAssetExportCollection(this, asset);
+			if (asset is IMovieTexture texture && IsValidData(texture.MovieData_C152))
+			{
+				exportCollection = new MovieTextureAssetExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

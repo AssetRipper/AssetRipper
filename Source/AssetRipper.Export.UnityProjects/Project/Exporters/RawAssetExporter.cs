@@ -9,11 +9,12 @@ using System.Text;
 
 namespace AssetRipper.Export.UnityProjects.Project.Exporters
 {
-	public class RawAssetExporter : BinaryAssetExporter
+	public sealed class RawAssetExporter : BinaryAssetExporter
 	{
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return new RawExportCollection(this, asset);
+			exportCollection = new RawExportCollection(this, asset);
+			return true;
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

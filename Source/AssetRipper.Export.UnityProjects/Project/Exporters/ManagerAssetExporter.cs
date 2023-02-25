@@ -9,14 +9,14 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 {
 	public class ManagerAssetExporter : YamlExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is GlobalGameManager && asset is not IBuildSettings;
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new ManagerExportCollection(this, asset);
+			exportCollection = asset switch
+			{
+				GlobalGameManager and not IBuildSettings => new ManagerExportCollection(this, asset),
+				_ => null,
+			};
+			return exportCollection is not null;
 		}
 	}
 }

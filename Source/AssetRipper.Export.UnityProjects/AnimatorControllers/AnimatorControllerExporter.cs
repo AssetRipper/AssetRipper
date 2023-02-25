@@ -8,14 +8,14 @@ namespace AssetRipper.Export.UnityProjects.AnimatorControllers
 {
 	public sealed class AnimatorControllerExporter : YamlExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset.MainAsset is IAnimatorController;
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new AnimatorControllerExportCollection(this, asset);
+			exportCollection = asset.MainAsset switch
+			{
+				IAnimatorController controller => new AnimatorControllerExportCollection(this, controller),
+				_ => null,
+			};
+			return exportCollection is not null;
 		}
 	}
 }

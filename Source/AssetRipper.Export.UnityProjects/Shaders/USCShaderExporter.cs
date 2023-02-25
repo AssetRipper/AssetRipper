@@ -28,13 +28,8 @@ using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
 namespace AssetRipper.Export.UnityProjects.Shaders
 {
-	public sealed class USCShaderExporter : BinaryAssetExporter
+	public sealed class USCShaderExporter : ShaderExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
-		{
-			return asset is IShader;
-		}
-
 		public static bool IsDX11ExportMode(ShaderExportMode mode) => mode == ShaderExportMode.Disassembly;
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

@@ -12,14 +12,18 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters.Engine
 		private UnityVersion Version { get; }
 		public EngineAssetExporter(CoreConfiguration configuration) => Version = configuration.Version;
 
-		public bool IsHandle(IUnityObjectBase asset)
+		public bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return EngineExportCollection.IsEngineAsset(asset, Version);
-		}
-
-		public IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new EngineExportCollection(asset, virtualFile.Version);
+			if (EngineExportCollection.IsEngineAsset(asset, Version))
+			{
+				exportCollection = new EngineExportCollection(asset, temporaryFile.Version);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -27,7 +31,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters.Engine
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException();
 		}
@@ -37,7 +41,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters.Engine
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException();
 		}

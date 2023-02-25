@@ -15,8 +15,23 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			m_metaTypes[classType] = isMetaType;
 		}
 
-		public bool IsHandle(IUnityObjectBase asset)
+		public bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
+			if (m_emptyTypes.TryGetValue((ClassIDType)asset.ClassID, out bool isEmptyCollection))
+			{
+				if (isEmptyCollection)
+				{
+					exportCollection = new EmptyExportCollection();
+				}
+				else
+				{
+					exportCollection = new SkipExportCollection(this, asset);
+				}
+			}
+			else
+			{
+				throw new NotSupportedException(asset.ClassID.ToString());
+			}
 			return true;
 		}
 
@@ -25,7 +40,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException();
 		}
@@ -35,28 +50,9 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException();
-		}
-
-		public IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			if (m_emptyTypes.TryGetValue((ClassIDType)asset.ClassID, out bool isEmptyCollection))
-			{
-				if (isEmptyCollection)
-				{
-					return new EmptyExportCollection();
-				}
-				else
-				{
-					return new SkipExportCollection(this, asset);
-				}
-			}
-			else
-			{
-				throw new NotSupportedException(asset.ClassID.ToString());
-			}
 		}
 
 		public AssetType ToExportType(IUnityObjectBase asset)
@@ -84,7 +80,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			return ToUnknownExportType(classID, out assetType);
 		}
 
-		private readonly Dictionary<ClassIDType, bool> m_emptyTypes = new Dictionary<ClassIDType, bool>();
-		private readonly Dictionary<ClassIDType, bool> m_metaTypes = new Dictionary<ClassIDType, bool>();
+		private readonly Dictionary<ClassIDType, bool> m_emptyTypes = new();
+		private readonly Dictionary<ClassIDType, bool> m_metaTypes = new();
 	}
 }

@@ -16,14 +16,18 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			ExportMode = configuration.TextExportMode;
 		}
 
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is ITextAsset textAsset && !textAsset.Script_C49.Data.IsNullOrEmpty();
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new TextAssetExportCollection(this, asset);
+			if (asset is ITextAsset textAsset && !textAsset.Script_C49.Data.IsNullOrEmpty())
+			{
+				exportCollection = new TextAssetExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

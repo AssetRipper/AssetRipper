@@ -7,9 +7,10 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 {
 	public class DefaultYamlExporter : YamlExporterBase
 	{
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return new AssetExportCollection(this, asset);
+			exportCollection = new AssetExportCollection(this, asset);
+			return true;
 		}
 	}
 }

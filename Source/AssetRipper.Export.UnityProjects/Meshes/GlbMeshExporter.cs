@@ -14,16 +14,18 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 {
 	public sealed class GlbMeshExporter : BinaryAssetExporter
 	{
-		public GlbMeshExporter() : base() { }
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return new GlbExportCollection(this, asset);
-		}
-
-		public override bool IsHandle(IUnityObjectBase asset)
-		{
-			return asset is IMesh mesh && mesh.IsSet();
+			if (asset is IMesh mesh && mesh.IsSet())
+			{
+				exportCollection = new GlbExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

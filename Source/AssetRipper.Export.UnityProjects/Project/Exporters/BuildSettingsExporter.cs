@@ -8,14 +8,14 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 {
 	public class BuildSettingsExporter : YamlExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is IBuildSettings;
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new BuildSettingsExportCollection(this, virtualFile, asset);
+			exportCollection = asset switch
+			{
+				IBuildSettings => new BuildSettingsExportCollection(this, temporaryFile, asset),
+				_ => null,
+			};
+			return exportCollection is not null;
 		}
 	}
 }

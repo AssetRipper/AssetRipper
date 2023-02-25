@@ -8,15 +8,14 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 {
 	public sealed class TerrainYamlExporter : YamlExporterBase
 	{
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			ITerrainData terrainData = (ITerrainData?)asset.MainAsset ?? throw new NullReferenceException();
-			return new TerrainYamlExportCollection(this, terrainData);
-		}
-
-		public override bool IsHandle(IUnityObjectBase asset)
-		{
-			return asset.MainAsset is ITerrainData;
+			exportCollection = asset.MainAsset switch
+			{
+				ITerrainData terrainData => new TerrainYamlExportCollection(this, terrainData),
+				_ => null,
+			};
+			return exportCollection is not null;
 		}
 	}
 }

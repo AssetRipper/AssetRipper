@@ -18,14 +18,18 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 			ImageFormat = configuration.ImageExportFormat;
 		}
 
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is ITerrainData;
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new TerrainHeatmapExportCollection(this, asset);
+			if (asset is ITerrainData)
+			{
+				exportCollection = new TerrainHeatmapExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

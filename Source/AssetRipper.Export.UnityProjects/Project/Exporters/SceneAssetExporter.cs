@@ -9,9 +9,18 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 {
 	public sealed class SceneAssetExporter : IAssetExporter
 	{
-		public IExportCollection CreateCollection(TemporaryAssetCollection temporaryFile, IUnityObjectBase asset)
+		public bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return new SceneAssetExportCollection((ISceneAsset)asset);
+			if (asset is ISceneAsset sceneAsset)
+			{
+				exportCollection = new SceneAssetExportCollection(sceneAsset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -19,7 +28,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException();
 		}
@@ -29,14 +38,9 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			throw new NotSupportedException();
 		}
 
-		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException();
-		}
-
-		public bool IsHandle(IUnityObjectBase asset)
-		{
-			return asset is ISceneAsset;
 		}
 
 		public AssetType ToExportType(IUnityObjectBase asset)

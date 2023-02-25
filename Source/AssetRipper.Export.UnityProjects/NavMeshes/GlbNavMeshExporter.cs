@@ -17,14 +17,18 @@ namespace AssetRipper.Export.UnityProjects.NavMeshes
 {
 	public sealed class GlbNavMeshExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is INavMeshData;
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new GlbExportCollection(this, asset);
+			if (asset is INavMeshData)
+			{
+				exportCollection = new GlbExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

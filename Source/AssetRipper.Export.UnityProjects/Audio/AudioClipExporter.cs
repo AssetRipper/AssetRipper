@@ -13,20 +13,24 @@ namespace AssetRipper.Export.UnityProjects.Audio
 		public AudioExportFormat AudioFormat { get; }
 		public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.AudioExportFormat;
 
-		public override bool IsHandle(IUnityObjectBase asset)
-		{
-			return asset is IAudioClip audio && AudioClipDecoder.CanDecode(audio);
-		}
-
 		public static bool IsSupportedExportFormat(AudioExportFormat format) => format switch
 		{
 			AudioExportFormat.Default or AudioExportFormat.PreferWav => true,
 			_ => false,
 		};
 
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return new AudioClipExportCollection(this, asset);
+			if (asset is IAudioClip audio && AudioClipDecoder.CanDecode(audio))
+			{
+				exportCollection = new AudioClipExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

@@ -13,16 +13,15 @@ namespace AssetRipper.Export.UnityProjects.Textures
 	/// </summary>
 	public sealed class YamlSpriteExporter : YamlExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset) => asset is ISprite or ISpriteAtlas;
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset is ISpriteAtlas)
+			exportCollection = asset switch
 			{
-				return new EmptyExportCollection();
-			}
-
-			return new AssetExportCollection(this, asset);
+				ISprite => new AssetExportCollection(this, asset),
+				ISpriteAtlas => new EmptyExportCollection(),
+				_ => null,
+			};
+			return exportCollection is not null;
 		}
 	}
 }

@@ -3,19 +3,13 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Export.Modules.Shaders.Exporters;
 using AssetRipper.Export.Modules.Shaders.Exporters.DirectX;
 using AssetRipper.Export.Modules.Shaders.IO;
-using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 
 namespace AssetRipper.Export.UnityProjects.Shaders
 {
-	public sealed class ShaderDisassemblyExporter : BinaryAssetExporter
+	public sealed class ShaderDisassemblyExporter : ShaderExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
-		{
-			return asset is IShader;
-		}
-
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			IShader shader = (IShader)asset;

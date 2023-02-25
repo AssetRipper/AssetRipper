@@ -3,7 +3,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Extensions;
-using System.Diagnostics.CodeAnalysis;
 using IVideoClip327 = AssetRipper.SourceGenerated.Classes.ClassID_327.IVideoClip;
 using IVideoClip329 = AssetRipper.SourceGenerated.Classes.ClassID_329.IVideoClip;
 
@@ -11,9 +10,18 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
 	public sealed class VideoClipExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return IsValidVideoClip329(asset) || IsValidVideoClip327(asset);
+			if (IsValidVideoClip329(asset) || IsValidVideoClip327(asset))
+			{
+				exportCollection = new VideoClipExportCollection(this, asset);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		private static bool IsValidVideoClip327(IUnityObjectBase asset)
@@ -24,11 +32,6 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 		private static bool IsValidVideoClip329(IUnityObjectBase asset)
 		{
 			return asset is IVideoClip329 clip && clip.ExternalResources_C329.CheckIntegrity(clip.Collection);
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new VideoClipExportCollection(this, asset);
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)

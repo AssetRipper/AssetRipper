@@ -10,23 +10,20 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 {
 	public abstract class YamlExporterBase : IAssetExporter
 	{
-		public virtual bool IsHandle(IUnityObjectBase asset)
-		{
-			return true;
-		}
+		public abstract bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection);
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			using Stream fileStream = File.Create(path);
 			using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
-			YamlWriter writer = new YamlWriter();
+			YamlWriter writer = new();
 			YamlDocument doc = asset.ExportYamlDocument(container);
 			writer.AddDocument(doc);
 			writer.Write(streamWriter);
 			return true;
 		}
 
-		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
@@ -36,7 +33,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 		{
 			using Stream fileStream = File.Create(path);
 			using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
-			YamlWriter writer = new YamlWriter();
+			YamlWriter writer = new();
 			writer.WriteHead(streamWriter);
 			foreach (IUnityObjectBase asset in assets)
 			{
@@ -47,12 +44,10 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			return true;
 		}
 
-		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException("Yaml supports only single file export");
 		}
-
-		public abstract IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset);
 
 		public AssetType ToExportType(IUnityObjectBase asset)
 		{

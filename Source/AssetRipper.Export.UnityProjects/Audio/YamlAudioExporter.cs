@@ -8,14 +8,14 @@ namespace AssetRipper.Export.UnityProjects.Audio
 {
 	public sealed class YamlAudioExporter : YamlExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return asset is IAudioClip;
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			return new YamlAudioExportCollection(this, (IAudioClip)asset);
+			exportCollection = asset switch
+			{
+				IAudioClip audioClip => new YamlAudioExportCollection(this, audioClip),
+				_ => null,
+			};
+			return exportCollection is not null;
 		}
 	}
 }

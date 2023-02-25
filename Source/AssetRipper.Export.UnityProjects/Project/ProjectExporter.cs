@@ -28,7 +28,7 @@ using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects.Project
 {
-	public class ProjectExporter
+	public sealed class ProjectExporter
 	{
 		public event Action? EventExportPreparationStarted;
 		public event Action? EventExportPreparationFinished;
@@ -39,22 +39,22 @@ namespace AssetRipper.Export.UnityProjects.Project
 		/// <summary>
 		/// Exact type to the exporters that handle that type
 		/// </summary>
-		private readonly Dictionary<Type, Stack<IAssetExporter>> typeMap = new Dictionary<Type, Stack<IAssetExporter>>();
+		private readonly Dictionary<Type, Stack<IAssetExporter>> typeMap = new();
 		/// <summary>
 		/// List of type-exporter-allow pairs<br/>
 		/// Type: the asset type<br/>
 		/// IAssetExporter: the exporter that can handle that asset type<br/>
 		/// Bool: allow the exporter to apply on inherited asset types?
 		/// </summary>
-		private readonly List<(Type, IAssetExporter, bool)> registeredExporters = new List<(Type, IAssetExporter, bool)>();
+		private readonly List<(Type, IAssetExporter, bool)> registeredExporters = new();
 
 		//Exporters
-		protected DefaultYamlExporter DefaultExporter { get; } = new DefaultYamlExporter();
-		protected SceneYamlExporter SceneExporter { get; } = new SceneYamlExporter();
-		protected ManagerAssetExporter ManagerExporter { get; } = new ManagerAssetExporter();
-		protected BuildSettingsExporter BuildSettingsExporter { get; } = new BuildSettingsExporter();
-		protected ScriptableObjectExporter ScriptableExporter { get; } = new ScriptableObjectExporter();
-		protected DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
+		private DefaultYamlExporter DefaultExporter { get; } = new DefaultYamlExporter();
+		private SceneYamlExporter SceneExporter { get; } = new SceneYamlExporter();
+		private ManagerAssetExporter ManagerExporter { get; } = new ManagerAssetExporter();
+		private BuildSettingsExporter BuildSettingsExporter { get; } = new BuildSettingsExporter();
+		private ScriptableObjectExporter ScriptableExporter { get; } = new ScriptableObjectExporter();
+		private DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
 
 		public ProjectExporter()
 		{
@@ -123,14 +123,14 @@ namespace AssetRipper.Export.UnityProjects.Project
 			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{type}'");
 		}
 
-		protected IExportCollection CreateCollection(TemporaryAssetCollection file, IUnityObjectBase asset)
+		private IExportCollection CreateCollection(TemporaryAssetCollection file, IUnityObjectBase asset)
 		{
 			Stack<IAssetExporter> exporters = GetExporterStack(asset);
 			foreach (IAssetExporter exporter in exporters)
 			{
-				if (exporter.IsHandle(asset))
+				if (exporter.TryCreateCollection(asset, file, out IExportCollection? collection))
 				{
-					return exporter.CreateCollection(file, asset);
+					return collection;
 				}
 			}
 			throw new Exception($"There is no exporter that can handle '{asset}'");
@@ -168,7 +168,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return result;
 		}
 
-		protected void OverrideDummyExporter<T>(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
+		private void OverrideDummyExporter<T>(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
 		{
 			DummyExporter.SetUpClassType(classType, isEmptyCollection, isMetaType);
 			OverrideExporter<T>(DummyExporter, true);

@@ -8,17 +8,12 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{
-		public virtual bool IsHandle(IUnityObjectBase asset)
-		{
-			return true;
-		}
-
 		public virtual bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			throw new NotSupportedException();
 		}
 
-		public virtual void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public virtual void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			Export(container, asset, path);
 			callback?.Invoke(container, asset, path);
@@ -29,14 +24,15 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			throw new NotSupportedException();
 		}
 
-		public virtual void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public virtual void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException();
 		}
 
-		public virtual IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
+		public virtual bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return new AssetExportCollection(this, asset);
+			exportCollection = new AssetExportCollection(this, asset);
+			return true;
 		}
 
 		public AssetType ToExportType(IUnityObjectBase asset)

@@ -29,24 +29,28 @@ namespace AssetRipper.Export.UnityProjects.Models
 {
 	public partial class GlbModelExporter : BinaryAssetExporter
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return SceneHelpers.IsSceneCompatible(asset);
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			if (asset.Collection.IsScene)
+			if (SceneHelpers.IsSceneCompatible(asset))
 			{
-				return new GlbSceneModelExportCollection(this, asset.Collection.Scene);
-			}
-			else if (PrefabExportCollection.IsValidAsset(asset))
-			{
-				return new GlbPrefabModelExportCollection(this, GetRoot(asset));
+				if (asset.Collection.IsScene)
+				{
+					exportCollection = new GlbSceneModelExportCollection(this, asset.Collection.Scene);
+				}
+				else if (PrefabExportCollection.IsValidAsset(asset))
+				{
+					exportCollection = new GlbPrefabModelExportCollection(this, GetRoot(asset));
+				}
+				else
+				{
+					exportCollection = new FailExportCollection(this, asset);
+				}
+				return true;
 			}
 			else
 			{
-				return new FailExportCollection(this, asset);
+				exportCollection = null;
+				return false;
 			}
 		}
 

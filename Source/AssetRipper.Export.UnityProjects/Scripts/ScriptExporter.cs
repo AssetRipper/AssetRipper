@@ -31,11 +31,18 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		private ScriptContentLevel ScriptContentLevel { get; }
 		private ScriptDecompiler Decompiler { get; set; }
 
-		public bool IsHandle(IUnityObjectBase asset) => asset is IMonoScript;
-
-		public IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
+		public bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return new ScriptExportCollection(this, (IMonoScript)asset);
+			if (asset is IMonoScript script)
+			{
+				exportCollection = new ScriptExportCollection(this, script);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
@@ -43,7 +50,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			throw new NotSupportedException("Need to export all scripts at once");
 		}
 
-		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			throw new NotSupportedException("Need to export all scripts at once");
 		}

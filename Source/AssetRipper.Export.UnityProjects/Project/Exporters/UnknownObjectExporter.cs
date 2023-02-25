@@ -9,20 +9,27 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 {
 	public sealed class UnknownObjectExporter : IAssetExporter
 	{
-		public IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
+		public bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			return new UnknownExportCollection(this, (UnknownObject)asset);
+			if (asset is UnknownObject @object)
+			{
+				exportCollection = new UnknownExportCollection(this, @object);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
+			}
 		}
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			using FileStream fileStream = File.Create(path);
-			using BinaryWriter writer = new BinaryWriter(fileStream);
-			writer.Write(((UnknownObject)asset).RawData);
+			File.WriteAllBytes(path, ((UnknownObject)asset).RawData);
 			return true;
 		}
 
-		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			if (Export(container, asset, path))
 			{
@@ -40,17 +47,12 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			return success;
 		}
 
-		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string> callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
 		{
 			foreach (IUnityObjectBase asset in assets)
 			{
 				Export(container, asset, path, callback);
 			}
-		}
-
-		public bool IsHandle(IUnityObjectBase asset)
-		{
-			return asset is UnknownObject;
 		}
 
 		public AssetType ToExportType(IUnityObjectBase asset)

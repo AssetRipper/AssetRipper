@@ -9,23 +9,27 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 {
 	public class ScriptableObjectExporter : YamlExporterBase
 	{
-		public override bool IsHandle(IUnityObjectBase asset)
+		private IExportCollection CreateCollection(IMonoBehaviour monoBehaviour)
 		{
-			return asset is IMonoBehaviour;
-		}
-
-		public override IExportCollection CreateCollection(TemporaryAssetCollection virtualFile, IUnityObjectBase asset)
-		{
-			IMonoBehaviour monoBehaviour = (IMonoBehaviour)asset;
 			if (monoBehaviour.IsScriptableObject())
 			{
-				return new AssetExportCollection(this, asset);
+				return new AssetExportCollection(this, monoBehaviour);
 			}
 			else
 			{
 				// such MonoBehaviours as StateMachineBehaviour in AnimatorController
 				return new EmptyExportCollection();
 			}
+		}
+
+		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		{
+			exportCollection = asset switch
+			{
+				IMonoBehaviour monoBehaviour => CreateCollection(monoBehaviour),
+				_ => null,
+			};
+			return exportCollection is not null;
 		}
 	}
 }
