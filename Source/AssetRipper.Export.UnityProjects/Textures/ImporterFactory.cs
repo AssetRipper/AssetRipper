@@ -32,6 +32,8 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			instance.NPOTScale_C1006 = (int)TextureImporterNPOTScale.None;
 			instance.CompressionQuality_C1006 = 50;
 
+			instance.SetSwizzle(TextureImporterSwizzle.R, TextureImporterSwizzle.G, TextureImporterSwizzle.B, TextureImporterSwizzle.A);
+
 			instance.SpriteMode_C1006 = (int)SpriteImportMode.Single;
 			instance.SpriteExtrude_C1006 = 1;
 			instance.SpriteMeshType_C1006 = (int)SpriteMeshType.Tight;
