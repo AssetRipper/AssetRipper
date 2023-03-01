@@ -109,7 +109,7 @@ namespace AssetRipper.Import.Logging
 
 		private static string GetBuildType()
 		{
-			return File.Exists(ExecutingDirectory.Combine("AssetRipper.Core.dll")) ? "Compiled" : "Published";
+			return File.Exists(ExecutingDirectory.Combine("AssetRipper.Assets.dll")) ? "Compiled" : "Published";
 		}
 
 		private static void LogOperatingSystemInformation()
