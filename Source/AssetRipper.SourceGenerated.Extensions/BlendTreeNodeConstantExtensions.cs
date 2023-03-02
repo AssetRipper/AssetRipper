@@ -49,13 +49,15 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return 1.0f;
 		}
 
-		public static uint GetDirectBlendParameter(this IBlendTreeNodeConstant constant, int index)
+		public static bool TryGetDirectBlendParameter(this IBlendTreeNodeConstant constant, int index, out uint parameter)
 		{
 			if (constant.Has_BlendDirectData() && constant.GetBlendType() == BlendTreeType.Direct)
 			{
-				return constant.BlendDirectData.Data.m_ChildBlendEventIDArray[index];
+				parameter = constant.BlendDirectData.Data.m_ChildBlendEventIDArray[index];
+				return true;
 			}
-			return 0;
+			parameter = default;
+			return false;
 		}
 
 		public static bool IsBlendTree(this IBlendTreeNodeConstant constant) => constant.ChildIndices.Length > 0;

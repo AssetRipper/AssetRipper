@@ -33,8 +33,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 			childMotion.TimeScale = 1.0f;
 			childMotion.CycleOffset = node.CycleOffset;
 
-			uint directID = node.GetDirectBlendParameter(childIndex);
-			childMotion.DirectBlendParameter?.CopyValues(controller.TOS_C91[directID]);
+			if(node.TryGetDirectBlendParameter(childIndex, out uint directID))
+			{
+				childMotion.DirectBlendParameter?.CopyValues(controller.TOS_C91[directID]);
+			}
 
 			childMotion.Mirror = node.Mirror;
 
