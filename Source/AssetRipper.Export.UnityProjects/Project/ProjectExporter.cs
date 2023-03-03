@@ -12,6 +12,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_116;
@@ -67,6 +68,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 			OverrideExporter<IMonoBehaviour>(ScriptableExporter, true);
 
+			OverrideExporter<IPrefabInstance>(SceneExporter, true);
 			OverrideExporter<IGameObject>(SceneExporter, true);
 			OverrideExporter<IComponent>(SceneExporter, true);
 			OverrideExporter<ILevelGameManager>(SceneExporter, true);
