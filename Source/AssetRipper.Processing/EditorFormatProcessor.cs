@@ -9,6 +9,7 @@ using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Processing.AnimationClips;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_129;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_147;
 using AssetRipper.SourceGenerated.Classes.ClassID_157;
@@ -126,6 +127,9 @@ namespace AssetRipper.Processing
 					break;
 				case IResourceManager resourceManager:
 					SetOriginalPaths(resourceManager);
+					break;
+				case IPlayerSettings playerSettings:
+					playerSettings.AllowUnsafeCode_C129 = true;
 					break;
 			}
 		}
