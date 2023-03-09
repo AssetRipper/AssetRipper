@@ -19,8 +19,8 @@ namespace AssetRipper.GUI.Components
 			ScriptContentLevel.Level0 => MainWindow.Instance.LocalizationManager["script_content_level_0_description"],
 			ScriptContentLevel.Level1 => MainWindow.Instance.LocalizationManager["script_content_level_1_description"],
 			ScriptContentLevel.Level2 => MainWindow.Instance.LocalizationManager["script_content_level_2_description"],
-			ScriptContentLevel.Level3 => MainWindow.Instance.LocalizationManager["script_content_level_3_description"],
-			ScriptContentLevel.Level4 => MainWindow.Instance.LocalizationManager["script_content_level_4_description"],
+			ScriptContentLevel.Level3 => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
+			ScriptContentLevel.Level4 => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
 			_ => null,
 		};
 	}
