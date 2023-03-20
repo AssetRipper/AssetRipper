@@ -2,11 +2,14 @@
 
 namespace AssetRipper.IO.Files.BundleFiles
 {
-	public sealed record class DirectoryInfo<T> : IEndianReadable, IEndianWritable where T : Node, new()
+	public sealed record class DirectoryInfo<T> : IEndianReadable<DirectoryInfo<T>>, IEndianWritable where T : Node, IEndianReadable<T>
 	{
-		public void Read(EndianReader reader)
+		public static DirectoryInfo<T> Read(EndianReader reader)
 		{
-			Nodes = reader.ReadEndianArray<T>();
+			return new()
+			{
+				Nodes = reader.ReadEndianArray<T>()
+			};
 		}
 
 		public void Write(EndianWriter writer)

@@ -6,12 +6,15 @@ namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 	/// Contains compression information about chunk
 	/// Chunk is a structure (optionaly LZMA compressed) that contains file entries and data blob
 	/// </summary>
-	public sealed record class BundleScene : IEndianReadable, IEndianWritable
+	public sealed record class BundleScene : IEndianReadable<BundleScene>, IEndianWritable
 	{
-		public void Read(EndianReader reader)
+		public static BundleScene Read(EndianReader reader)
 		{
-			CompressedSize = reader.ReadUInt32();
-			DecompressedSize = reader.ReadUInt32();
+			return new()
+			{
+				CompressedSize = reader.ReadUInt32(),
+				DecompressedSize = reader.ReadUInt32()
+			};
 		}
 
 		public void Write(EndianWriter writer)

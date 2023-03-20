@@ -8,7 +8,7 @@ using System.Text;
 
 namespace AssetRipper.IO.Files
 {
-	public record struct UnityGUID : IEndianReadable, IEndianWritable
+	public readonly record struct UnityGUID : IEndianReadable<UnityGUID>, IEndianWritable
 	{
 		public UnityGUID(Guid guid)
 		{
@@ -59,12 +59,13 @@ namespace AssetRipper.IO.Files
 			return new Guid(span);
 		}
 
-		public void Read(EndianReader reader)
+		public static UnityGUID Read(EndianReader reader)
 		{
-			Data0 = reader.ReadUInt32();
-			Data1 = reader.ReadUInt32();
-			Data2 = reader.ReadUInt32();
-			Data3 = reader.ReadUInt32();
+			return new UnityGUID(
+				reader.ReadUInt32(),
+				reader.ReadUInt32(),
+				reader.ReadUInt32(),
+				reader.ReadUInt32());
 		}
 
 		public void Write(EndianWriter writer)
@@ -195,10 +196,10 @@ namespace AssetRipper.IO.Files
 
 		public bool IsZero => Data0 == 0 && Data1 == 0 && Data2 == 0 && Data3 == 0;
 
-		public uint Data0 { get; set; }
-		public uint Data1 { get; set; }
-		public uint Data2 { get; set; }
-		public uint Data3 { get; set; }
+		public uint Data0 { get; }
+		public uint Data1 { get; }
+		public uint Data2 { get; }
+		public uint Data3 { get; }
 
 		/// <summary>
 		/// 0x0000000DEADBEEF15DEADF00D0000000

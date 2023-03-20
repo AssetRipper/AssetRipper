@@ -1,7 +1,7 @@
 // Auto-generated code. Do not modify manually.
 using AssetRipper.IO.Endian;
 namespace AssetRipper.IO.Files.SerializedFiles.TypeTrees;
-public partial interface ITypeTreeNode : IEndianReadable, IEndianWritable
+public partial interface ITypeTreeNode : IEndianWritable
 {
 	/// <summary>
 	/// Name of the data type. This can be the name of any substructure or a static predefined type.

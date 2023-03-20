@@ -2,14 +2,17 @@
 
 namespace AssetRipper.IO.Files.BundleFiles.FileStream
 {
-	public sealed record class FileStreamNode : Node
+	public sealed record class FileStreamNode : Node, IEndianReadable<FileStreamNode>
 	{
-		public override void Read(EndianReader reader)
+		public static FileStreamNode Read(EndianReader reader)
 		{
-			Offset = reader.ReadInt64();
-			Size = reader.ReadInt64();
-			Flags = (NodeFlags)reader.ReadInt32();
-			Path = reader.ReadStringZeroTerm();
+			return new()
+			{
+				Offset = reader.ReadInt64(),
+				Size = reader.ReadInt64(),
+				Flags = (NodeFlags)reader.ReadInt32(),
+				Path = reader.ReadStringZeroTerm(),
+			};
 		}
 
 		public override void Write(EndianWriter writer)

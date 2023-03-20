@@ -6,13 +6,16 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 	/// Contains compression information about a block<br/>
 	/// Blocks are similar to chunk structure in that it contains a data blob but without file entries
 	/// </summary>
-	public sealed record class StorageBlock : IEndianReadable, IEndianWritable
+	public sealed record class StorageBlock : IEndianReadable<StorageBlock>, IEndianWritable
 	{
-		public void Read(EndianReader reader)
+		public static StorageBlock Read(EndianReader reader)
 		{
-			UncompressedSize = reader.ReadUInt32();
-			CompressedSize = reader.ReadUInt32();
-			Flags = (StorageBlockFlags)reader.ReadUInt16();
+			return new()
+			{
+				UncompressedSize = reader.ReadUInt32(),
+				CompressedSize = reader.ReadUInt32(),
+				Flags = (StorageBlockFlags)reader.ReadUInt16()
+			};
 		}
 
 		public void Write(EndianWriter writer)

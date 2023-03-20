@@ -2,12 +2,23 @@
 
 namespace AssetRipper.IO.Files.BundleFiles.FileStream
 {
-	public sealed record class BlocksInfo : IEndianReadable, IEndianWritable
+	public sealed record class BlocksInfo : IEndianReadable<BlocksInfo>, IEndianWritable
 	{
-		public void Read(EndianReader reader)
+		public BlocksInfo()
 		{
-			UncompressedDataHash.Read(reader);
-			StorageBlocks = reader.ReadEndianArray<StorageBlock>();
+			UncompressedDataHash = new();
+			StorageBlocks = Array.Empty<StorageBlock>();
+		}
+
+		public BlocksInfo(Hash128 uncompressedDataHash, StorageBlock[] storageBlocks)
+		{
+			UncompressedDataHash = uncompressedDataHash;
+			StorageBlocks = storageBlocks;
+		}
+
+		public static BlocksInfo Read(EndianReader reader)
+		{
+			return new BlocksInfo(reader.ReadEndian<Hash128>(), reader.ReadEndianArray<StorageBlock>());
 		}
 
 		public void Write(EndianWriter writer)
@@ -16,7 +27,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			writer.WriteEndianArray(StorageBlocks);
 		}
 
-		public Hash128 UncompressedDataHash { get; } = new();
-		public StorageBlock[] StorageBlocks { get; set; } = Array.Empty<StorageBlock>();
+		public Hash128 UncompressedDataHash { get; }
+		public StorageBlock[] StorageBlocks { get; set; }
 	}
 }

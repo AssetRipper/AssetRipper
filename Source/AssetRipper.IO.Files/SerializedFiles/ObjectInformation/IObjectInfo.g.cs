@@ -4,7 +4,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.ObjectInformation;
 /// <summary>
 /// Contains information for a block of raw serialized object data.
 /// </summary>
-public partial interface IObjectInfo : IEndianReadable, IEndianWritable
+public partial interface IObjectInfo : IEndianWritable
 {
 	/// <summary>
 	/// ObjectID

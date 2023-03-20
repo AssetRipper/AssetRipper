@@ -11,7 +11,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 	{
 		public FileStreamBundleHeader Header { get; } = new();
 		public BlocksInfo BlocksInfo { get; } = new();
-		public DirectoryInfo<FileStreamNode> DirectoryInfo { get; } = new();
+		public DirectoryInfo<FileStreamNode> DirectoryInfo { get; set; } = new();
 
 		public FileStreamBundleFile()
 		{
@@ -101,7 +101,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 				BlocksInfo.Read(reader);
 				if (Header.Flags.GetBlocksAndDirectoryInfoCombined())
 				{
-					DirectoryInfo.Read(reader);
+					DirectoryInfo = DirectoryInfo<FileStreamNode>.Read(reader);
 				}
 			}
 			if (metadataSize > 0)

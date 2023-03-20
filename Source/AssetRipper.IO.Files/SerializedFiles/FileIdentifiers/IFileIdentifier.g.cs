@@ -4,7 +4,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
 /// <summary>
 /// A serialized file may be linked with other serialized files to create shared dependencies.
 /// </summary>
-public partial interface IFileIdentifier : IEndianReadable, IEndianWritable
+public partial interface IFileIdentifier : IEndianWritable
 {
 	/// <summary>
 	/// Actual file path. This path is relative to the path of the current file.

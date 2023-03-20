@@ -37,9 +37,7 @@ namespace AssetRipper.IO.Files.WebFiles
 				int headerLength = reader.ReadInt32(); //total size of the header including the signature and all the entries.
 				while (reader.BaseStream.Position - basePosition < headerLength)
 				{
-					WebFileEntry entry = new();
-					entry.Read(reader);
-					entries.Add(entry);
+					entries.Add(WebFileEntry.Read(reader));
 				}
 			}
 

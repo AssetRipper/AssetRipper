@@ -4,7 +4,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Header;
 /// <summary>
 /// The file header is found at the beginning of an asset file. The header is always using big endian byte order.
 /// </summary>
-public partial interface ISerializedFileHeader : IEndianReadable, IEndianWritable
+public partial interface ISerializedFileHeader : IEndianWritable
 {
 	/// <summary>
 	/// Size of the metadata section in the file

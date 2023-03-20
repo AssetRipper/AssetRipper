@@ -2,26 +2,29 @@
 
 namespace AssetRipper.IO.Files
 {
-	public sealed record class Hash128 : IEndianReadable, IEndianWritable
+	public sealed record class Hash128 : IEndianReadable<Hash128>, IEndianWritable
 	{
-		public void Read(EndianReader reader)
+		public static Hash128 Read(EndianReader reader)
 		{
-			Byte0 = reader.ReadByte();
-			Byte1 = reader.ReadByte();
-			Byte2 = reader.ReadByte();
-			Byte3 = reader.ReadByte();
-			Byte4 = reader.ReadByte();
-			Byte5 = reader.ReadByte();
-			Byte6 = reader.ReadByte();
-			Byte7 = reader.ReadByte();
-			Byte8 = reader.ReadByte();
-			Byte9 = reader.ReadByte();
-			Byte10 = reader.ReadByte();
-			Byte11 = reader.ReadByte();
-			Byte12 = reader.ReadByte();
-			Byte13 = reader.ReadByte();
-			Byte14 = reader.ReadByte();
-			Byte15 = reader.ReadByte();
+			return new()
+			{
+				Byte0 = reader.ReadByte(),
+				Byte1 = reader.ReadByte(),
+				Byte2 = reader.ReadByte(),
+				Byte3 = reader.ReadByte(),
+				Byte4 = reader.ReadByte(),
+				Byte5 = reader.ReadByte(),
+				Byte6 = reader.ReadByte(),
+				Byte7 = reader.ReadByte(),
+				Byte8 = reader.ReadByte(),
+				Byte9 = reader.ReadByte(),
+				Byte10 = reader.ReadByte(),
+				Byte11 = reader.ReadByte(),
+				Byte12 = reader.ReadByte(),
+				Byte13 = reader.ReadByte(),
+				Byte14 = reader.ReadByte(),
+				Byte15 = reader.ReadByte(),
+			};
 		}
 
 		public void Write(EndianWriter writer)

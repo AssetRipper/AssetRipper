@@ -3,13 +3,16 @@ using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.IO.Files.WebFiles
 {
-	public sealed class WebFileEntry : IEndianReadable, IEndianWritable
+	public sealed class WebFileEntry : IEndianReadable<WebFileEntry>, IEndianWritable
 	{
-		public void Read(EndianReader reader)
+		public static WebFileEntry Read(EndianReader reader)
 		{
-			Offset = reader.ReadInt32();
-			Size = reader.ReadInt32();
-			Name = reader.ReadString();
+			return new()
+			{
+				Offset = reader.ReadInt32(),
+				Size = reader.ReadInt32(),
+				Name = reader.ReadString()
+			};
 		}
 
 		public void Write(EndianWriter writer)

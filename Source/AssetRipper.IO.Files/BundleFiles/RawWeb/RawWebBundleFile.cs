@@ -11,7 +11,7 @@ namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 	public abstract class RawWebBundleFile<THeader> : FileContainer where THeader : RawWebBundleHeader, new()
 	{
 		public THeader Header { get; } = new();
-		public DirectoryInfo<RawWebNode> DirectoryInfo { get; } = new();
+		public DirectoryInfo<RawWebNode>? DirectoryInfo { get; set; } = new();
 
 		public override void Read(SmartStream stream)
 		{
@@ -67,7 +67,7 @@ namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 			long metadataPosition = stream.Position;
 			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
-				DirectoryInfo.Read(reader);
+				DirectoryInfo = DirectoryInfo<RawWebNode>.Read(reader);
 				reader.AlignStream();
 			}
 			if (metadataSize > 0)

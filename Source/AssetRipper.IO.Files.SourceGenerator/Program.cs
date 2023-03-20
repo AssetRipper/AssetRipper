@@ -5,9 +5,9 @@ namespace AssetRipper.IO.Files.SourceGenerator
 {
 	internal class Program
 	{
-		const string GeneratorProjectDirectory = "../../../";
-		const string RepositoryDirectory = GeneratorProjectDirectory + "../";
-		const string OutputDirectory = RepositoryDirectory + "AssetRipper.IO.Files/";
+		const string SourceDirectory = "../../../../";
+		const string GeneratorProjectDirectory = SourceDirectory + "AssetRipper.IO.Files.SourceGenerator/";
+		const string OutputDirectory = SourceDirectory + "AssetRipper.IO.Files/";
 		static void Main(string[] args)
 		{
 			GenerateForDirectory(GeneratorProjectDirectory + "Formats/SerializedFile/LocalSerializedObjectIdentifier/");

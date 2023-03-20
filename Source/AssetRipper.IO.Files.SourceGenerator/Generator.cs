@@ -147,9 +147,14 @@ public static class Generator
 		}
 	}
 
+	private sealed class DummyReadable : IEndianReadable<DummyReadable>
+	{
+		static DummyReadable IEndianReadable<DummyReadable>.Read(EndianReader reader) => new();
+	}
+
 	private static void WriteReadMethod(IndentedTextWriter writer, TypeDefinition definition)
 	{
-		const string readMethodName = nameof(IEndianReadable.Read);
+		const string readMethodName = nameof(IEndianReadable<DummyReadable>.Read);
 		const string postReadMethodName = $"On{readMethodName}Finished";
 
 		writer.WriteLine($"public void {readMethodName}({nameof(EndianReader)} reader)");
@@ -253,7 +258,7 @@ public static class Generator
 		writer.WriteUsing("AssetRipper.IO.Endian");
 		writer.WriteFileScopedNamespace(declaration.Namespace);
 		MaybeWriteDocumentation(writer, declaration.Summary, declaration.Remarks);
-		writer.WriteLine($"public partial interface I{declaration.Name} : {nameof(IEndianReadable)}, {nameof(IEndianWritable)}");
+		writer.WriteLine($"public partial interface I{declaration.Name} : {nameof(IEndianWritable)}");
 		using (new CurlyBrackets(writer))
 		{
 			foreach ((string propertyName, string propertyType) in propertyTypeDictionary)

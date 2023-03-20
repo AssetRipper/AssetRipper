@@ -1,7 +1,7 @@
 ﻿namespace AssetRipper.IO.Endian
 {
-	public interface IEndianReadable
+	public interface IEndianReadable<TSelf> where TSelf : IEndianReadable<TSelf>
 	{
-		void Read(EndianReader reader);
+		static abstract TSelf Read(EndianReader reader);
 	}
 }

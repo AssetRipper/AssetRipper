@@ -2,13 +2,16 @@
 
 namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 {
-	public sealed record class RawWebNode : Node
+	public sealed record class RawWebNode : Node, IEndianReadable<RawWebNode>
 	{
-		public override void Read(EndianReader reader)
+		public static RawWebNode Read(EndianReader reader)
 		{
-			Path = reader.ReadStringZeroTerm();
-			Offset = reader.ReadInt32();
-			Size = reader.ReadInt32();
+			return new()
+			{
+				Path = reader.ReadStringZeroTerm(),
+				Offset = reader.ReadInt32(),
+				Size = reader.ReadInt32(),
+			};
 		}
 
 		public override void Write(EndianWriter writer)

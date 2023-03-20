@@ -4,7 +4,7 @@ namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 {
 	public abstract record class RawWebBundleHeader : BundleHeader
 	{
-		public Hash128 Hash { get; } = new();
+		public Hash128? Hash { get; set; }
 		public uint Crc { get; set; }
 		/// <summary>
 		/// Minimum number of bytes to read for streamed bundles, equal to BundleSize for normal bundles
@@ -27,7 +27,7 @@ namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 			base.Read(reader);
 			if (HasHash(Version))
 			{
-				Hash.Read(reader);
+				Hash = reader.ReadEndian<Hash128>();
 				Crc = reader.ReadUInt32();
 			}
 			MinimumStreamedBytes = reader.ReadUInt32();

@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace AssetRipper.IO.Files.BundleFiles
 {
-	public abstract record class BundleHeader : IEndianReadable, IEndianWritable
+	public abstract record class BundleHeader : IEndianWritable
 	{
 		internal BundleHeader() { }
 		protected abstract string MagicString { get; }

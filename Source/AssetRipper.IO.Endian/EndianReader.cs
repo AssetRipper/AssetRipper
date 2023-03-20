@@ -586,23 +586,19 @@ namespace AssetRipper.IO.Endian
 			return array;
 		}
 
-		public T ReadEndian<T>() where T : IEndianReadable, new()
+		public T ReadEndian<T>() where T : IEndianReadable<T>
 		{
-			T t = new T();
-			t.Read(this);
-			return t;
+			return T.Read(this);
 		}
 
-		public T[] ReadEndianArray<T>() where T : IEndianReadable, new()
+		public T[] ReadEndianArray<T>() where T : IEndianReadable<T>
 		{
 			int count = ReadInt32();
 			ThrowIfNotEnoughSpaceForArray(count, sizeof(byte));
 			T[] array = count == 0 ? Array.Empty<T>() : new T[count];
 			for (int i = 0; i < count; i++)
 			{
-				T t = new T();
-				t.Read(this);
-				array[i] = t;
+				array[i] = T.Read(this);
 			}
 			if (IsAlignArray)
 			{
@@ -611,7 +607,7 @@ namespace AssetRipper.IO.Endian
 			return array;
 		}
 
-		public T[][] ReadEndianArrayArray<T>() where T : IEndianReadable, new()
+		public T[][] ReadEndianArrayArray<T>() where T : IEndianReadable<T>
 		{
 			int count = ReadInt32();
 			ThrowIfNotEnoughSpaceForArray(count, sizeof(int));
