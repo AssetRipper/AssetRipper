@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.UnityProjects;
-using AssetRipper.GUI.AssetInfo;
+using AssetRipper.GUI.AssetInformation;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.GUI.Extensions;
 using AssetRipper.GUI.Managers;
@@ -369,6 +369,11 @@ namespace AssetRipper.GUI
 		public void OpenUnityDownloadPage()
 		{
 			string url = "https://unity3d.com/unity/whats-new/" + UnityVersion;
+			OpenUrl(url);
+		}
+
+		private static void OpenUrl(string url)
+		{
 			if (OperatingSystem.IsWindows())
 			{
 				Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });

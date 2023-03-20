@@ -21,7 +21,7 @@ using Avalonia.Media;
 using LibVLCSharp.Shared;
 using System.Text;
 
-namespace AssetRipper.GUI.AssetInfo
+namespace AssetRipper.GUI.AssetInformation
 {
 	public sealed class SelectedAsset : BaseViewModel, IDisposable
 	{

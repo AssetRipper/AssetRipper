@@ -1,9 +1,10 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Interfaces;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace AssetRipper.GUI
 {
@@ -23,7 +24,7 @@ namespace AssetRipper.GUI
 
 		private readonly SmartStream smartStream;
 
-		public DummyAssetForLooseResourceFile(ResourceFile associatedFile) : base(Assets.Metadata.AssetInfo.MakeDummyAssetInfo(-1))
+		public DummyAssetForLooseResourceFile(ResourceFile associatedFile) : base(MakeDummyAssetInfo())
 		{
 			AssociatedFile = associatedFile;
 			smartStream = AssociatedFile.Stream.CreateReference();
@@ -63,6 +64,30 @@ namespace AssetRipper.GUI
 			// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
 			Dispose(disposing: true);
 			GC.SuppressFinalize(this);
+		}
+
+		private static AssetInfo MakeDummyAssetInfo()
+		{
+			return new AssetInfo(dummyBundle.Collection, 0, -1);
+		}
+
+		private static readonly DummyBundle dummyBundle = new();
+
+		private sealed class DummyAssetCollection : AssetCollection
+		{
+			public DummyAssetCollection(Bundle bundle) : base(bundle)
+			{
+			}
+		}
+
+		private sealed class DummyBundle : Bundle
+		{
+			public DummyAssetCollection Collection { get; }
+			public override string Name => nameof(DummyBundle);
+			public DummyBundle()
+			{
+				Collection = new DummyAssetCollection(this);
+			}
 		}
 	}
 }

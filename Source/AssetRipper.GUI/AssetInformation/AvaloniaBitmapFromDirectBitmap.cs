@@ -3,7 +3,7 @@ using AssetRipper.Export.UnityProjects.Utils;
 using Avalonia.Media.Imaging;
 using System.IO;
 
-namespace AssetRipper.GUI.AssetInfo
+namespace AssetRipper.GUI.AssetInformation
 {
 	public static class AvaloniaBitmapFromDirectBitmap
 	{

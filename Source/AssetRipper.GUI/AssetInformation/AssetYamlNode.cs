@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Yaml;
 using System.Collections.Generic;
 
-namespace AssetRipper.GUI.AssetInfo
+namespace AssetRipper.GUI.AssetInformation
 {
 	public class AssetYamlNode
 	{
