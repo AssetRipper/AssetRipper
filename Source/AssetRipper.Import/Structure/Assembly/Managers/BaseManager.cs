@@ -16,6 +16,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		protected readonly Dictionary<string, AssemblyDefinition?> m_assemblies = new();
 		protected readonly Dictionary<AssemblyDefinition, Stream> m_assemblyStreams = new();
 		protected readonly Dictionary<string, bool> m_validTypes = new();
+		private readonly Dictionary<TypeDefinition, MonoType> monoTypeCache = new();
 
 		private event Action<string> m_requestAssemblyCallback;
 		private readonly Dictionary<string, SerializableType> m_serializableTypes = new();
@@ -212,7 +213,11 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			{
 				throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
 			}
-			return new MonoType(type);
+			if (monoTypeCache.TryGetValue(type, out MonoType? monoType))
+			{
+				return monoType;
+			}
+			return new MonoType(type, monoTypeCache);
 		}
 
 		internal void AddSerializableType(ITypeDefOrRef type, SerializableType scriptType)

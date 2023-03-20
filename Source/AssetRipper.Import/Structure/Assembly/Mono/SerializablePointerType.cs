@@ -4,7 +4,9 @@ namespace AssetRipper.Import.Structure.Assembly.Mono;
 
 internal sealed class SerializablePointerType : SerializableType
 {
-	public SerializablePointerType() : base("UnityEngine", PrimitiveType.Complex, "Object")
+	public static SerializablePointerType Shared { get; } = new();
+
+	private SerializablePointerType() : base("UnityEngine", PrimitiveType.Complex, "Object")
 	{
 	}
 }
