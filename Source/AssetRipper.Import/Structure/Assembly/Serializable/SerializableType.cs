@@ -1,6 +1,6 @@
-using AssetRipper.Assets;
 using AssetRipper.Assets.IO;
 using AssetRipper.Import.Structure.Assembly.Mono;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_Object;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
@@ -53,7 +53,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 			if (IsEnginePointer())
 			{
-				return new SerializablePointer<IUnityObjectBase>();
+				return PPtr_ObjectFactory.CreateAsset(version);
 			}
 			return new SerializableStructure(this, depth);
 		}
