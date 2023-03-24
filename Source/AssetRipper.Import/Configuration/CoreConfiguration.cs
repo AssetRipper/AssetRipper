@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Import.Layout;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files;
@@ -75,7 +74,6 @@ namespace AssetRipper.Import.Configuration
 
 		public CoreConfiguration() => ResetToDefaultValues();
 
-		public void SetProjectSettings(LayoutInfo info) => SetProjectSettings(info.Version, info.Platform, info.Flags);
 		public void SetProjectSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
 			Version = version;

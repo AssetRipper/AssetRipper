@@ -1,15 +1,14 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Import.Layout;
 using AssetRipper.Import.Structure.GameStructure.Platforms;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-
 
 namespace AssetRipper.Import.Structure.GameStructure
 {
 	public static class GameBundleExtensions
 	{
-		public static LayoutInfo GetLayoutInfo(this GameBundle gameBundle)
+		public static (UnityVersion, BuildTarget, TransferInstructionFlags) GetLayoutInfo(this GameBundle gameBundle)
 		{
 			AssetCollection? prime = gameBundle.GetPrimaryFile();
 			if (prime != null)
@@ -38,11 +37,11 @@ namespace AssetRipper.Import.Structure.GameStructure
 			};
 		}
 
-		private static LayoutInfo GetLayoutInfo(this GameBundle gameBundle, AssetCollection collection)
+		private static (UnityVersion, BuildTarget, TransferInstructionFlags) GetLayoutInfo(this GameBundle gameBundle, AssetCollection collection)
 		{
 			//if (SerializedFileMetadata.HasPlatform(serialized.Header.Version))
 			{
-				return new LayoutInfo(collection.Version, collection.Platform, collection.Flags);
+				return (collection.Version, collection.Platform, collection.Flags);
 			}
 			/*else
 			{
@@ -55,13 +54,13 @@ namespace AssetRipper.Import.Structure.GameStructure
 				if (versionString is not null)
 				{
 					Logger.Log(LogType.Warning, LogCategory.Import, "Unable to precisly determine layout for provided files. Trying default one");
-					return new LayoutInfo(UnityVersion.Parse(versionString), DefaultPlatform, DefaultFlags);
+					return (UnityVersion.Parse(versionString), DefaultPlatform, DefaultFlags);
 				}
 				else
 				{
 					Logger.Log(LogType.Warning, LogCategory.Import, "Unable to determine layout for provided files. Trying default one");
 					UnityVersion version = GetDefaultGenerationVersions(serialized.Header.Version);
-					return new LayoutInfo(version, DefaultPlatform, DefaultFlags);
+					return (version, DefaultPlatform, DefaultFlags);
 				}
 			}*/
 		}

@@ -4,7 +4,6 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Import.Configuration;
-using AssetRipper.Import.Layout;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Processing.Scenes;
@@ -22,7 +21,6 @@ namespace AssetRipper.Export.UnityProjects.Project
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
-			ExportLayout = new LayoutInfo(file.Version, file.Platform, file.Flags);
 
 			foreach (IUnityObjectBase asset in assets)
 			{
@@ -145,10 +143,9 @@ namespace AssetRipper.Export.UnityProjects.Project
 		public UnityVersion Version => File.Version;
 		public BuildTarget Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
-		public LayoutInfo ExportLayout { get; }
-		public UnityVersion ExportVersion => ExportLayout.Version;
-		public BuildTarget ExportPlatform => ExportLayout.Platform;
-		public virtual TransferInstructionFlags ExportFlags => ExportLayout.Flags | CurrentCollection.Flags;
+		public UnityVersion ExportVersion => VirtualFile.Version;
+		public BuildTarget ExportPlatform => VirtualFile.Platform;
+		public virtual TransferInstructionFlags ExportFlags => VirtualFile.Flags | CurrentCollection.Flags;
 		public virtual IReadOnlyList<AssetCollection?> Dependencies => File.Dependencies;
 
 		private readonly ProjectExporter m_exporter;

@@ -8,9 +8,8 @@ using System.Collections.ObjectModel;
 
 namespace AssetRipper.GUI
 {
-	public class UIAssetContainer : ProjectAssetContainer
+	public sealed class UIAssetContainer : ProjectAssetContainer
 	{
-
 		public UIAssetContainer(Ripper ripper) : base(
 			new ProjectExporter(),
 			ripper.Settings,
@@ -19,13 +18,14 @@ namespace AssetRipper.GUI
 			new Collection<IExportCollection>())
 		{
 		}
+
 		public override IReadOnlyList<AssetCollection?> Dependencies => Array.Empty<AssetCollection?>();
 
 		internal IUnityObjectBase? LastAccessedAsset { get; set; }
 
 		public override AssetCollection File => LastAccessedAsset?.Collection ?? throw new NullReferenceException(nameof(LastAccessedAsset));
 
-		public override TransferInstructionFlags ExportFlags => ExportLayout.Flags;
+		public override TransferInstructionFlags ExportFlags => VirtualFile.Flags;
 	}
 
 }
