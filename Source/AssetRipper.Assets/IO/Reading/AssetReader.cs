@@ -30,13 +30,6 @@ namespace AssetRipper.Assets.IO.Reading
 			return ret;
 		}
 
-		public T ReadAsset<T>() where T : IAssetReadable, new()
-		{
-			T t = new();
-			t.Read(this);
-			return t;
-		}
-
 		public override string ToString()
 		{
 			return $"{nameof(AssetReader)} ({Platform} {Version})";

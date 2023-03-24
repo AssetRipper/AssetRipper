@@ -324,5 +324,32 @@ namespace AssetRipper.Import.Utils
 			}
 			return nodes;
 		}
+
+		private static void AlignStream(this BinaryReader reader) => reader.BaseStream.Align();
+		private static void AlignStream(this BinaryReader reader, int alignment) => reader.BaseStream.Align(alignment);
+
+		private static string ReadAlignedString(this BinaryReader reader)
+		{
+			int length = reader.ReadInt32();
+			if (length > 0 && length <= reader.BaseStream.Length - reader.BaseStream.Position)
+			{
+				byte[] stringData = reader.ReadBytes(length);
+				string result = Encoding.UTF8.GetString(stringData);
+				reader.AlignStream(4);
+				return result;
+			}
+			return "";
+		}
+
+		private static void Align(this Stream _this) => _this.Align(4);
+		private static void Align(this Stream _this, int alignment)
+		{
+			long pos = _this.Position;
+			long mod = pos % alignment;
+			if (mod != 0)
+			{
+				_this.Position += alignment - mod;
+			}
+		}
 	}
 }

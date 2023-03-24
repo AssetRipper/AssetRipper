@@ -30,7 +30,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			using AssetReader blobReader = new AssetReader(blobMem, shaderCollection);
 			if (segment == 0)
 			{
-				Entries = blobReader.ReadAssetArray<ShaderSubProgramEntry>();
+				Entries = ReadAssetArray<ShaderSubProgramEntry>(blobReader);
 				SubPrograms = ArrayUtils.CreateAndInitializeArray<ShaderSubProgram>(Entries.Length);
 			}
 			ReadSegment(blobReader, segment);
@@ -111,6 +111,28 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 					SubPrograms[i].Write(writer);
 				}
 			}
+		}
+
+		private static T[] ReadAssetArray<T>(AssetReader reader) where T : IAssetReadable, new()
+		{
+			int count = reader.ReadInt32();
+			if (count < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
+			}
+
+			T[] array = count == 0 ? Array.Empty<T>() : new T[count];
+			for (int i = 0; i < count; i++)
+			{
+				T instance = new T();
+				instance.Read(reader);
+				array[i] = instance;
+			}
+			if (reader.IsAlignArray)
+			{
+				reader.AlignStream();
+			}
+			return array;
 		}
 
 		public ShaderSubProgramEntry[] Entries { get; set; } = Array.Empty<ShaderSubProgramEntry>();
