@@ -1,20 +1,18 @@
 ﻿using AssetRipper.Assets.IO.Reading;
-using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Single;
-using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using System.Numerics;
 
 namespace AssetRipper.Processing.AnimationClips.Editor
 {
-	public sealed class StreamedCurveKey : IAssetReadable
+	public sealed record class StreamedCurveKey : IAssetReadable
 	{
 		public StreamedCurveKey() { }
-		public StreamedCurveKey(int index, float value, Vector3 coefs)
+		public StreamedCurveKey(int index, Vector3 coefficient, float value)
 		{
 			Index = index;
+			Coefficient = coefficient;
 			Value = value;
-			Coefficient.CopyValues(coefs);
 		}
 
 		public static StreamedCurveKey CalculateStreamedFrame(IAnimationCurve_Single curve, int lhsIndex, int rhsIndex, float timeOffset)
@@ -46,14 +44,14 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 				curveKeyValue = lhs.Value;
 			}
 			Vector3 curveKeyCoef = new Vector3(curveKeyCoefX, curveKeyCoefY, curveKeyCoefZ);
-			StreamedCurveKey curveKey = new StreamedCurveKey(curveKeyIndex, curveKeyValue, curveKeyCoef);
+			StreamedCurveKey curveKey = new StreamedCurveKey(curveKeyIndex, curveKeyCoef, curveKeyValue);
 			return curveKey;
 		}
 
 		public void Read(AssetReader reader)
 		{
 			Index = reader.ReadInt32();
-			Coefficient.Read(reader);
+			Coefficient = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 			Value = reader.ReadSingle();
 		}
 
@@ -103,7 +101,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 		public float OutSlope => Coefficient.Z;
 
 		public int Index { get; set; }
+		public Vector3 Coefficient { get; set; }
 		public float Value { get; set; }
-		public Vector3f_3_5_0 Coefficient { get; } = new();
 	}
 }
