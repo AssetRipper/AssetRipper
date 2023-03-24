@@ -96,12 +96,28 @@ public partial struct EndianSpanReader
 	/// The binary format is a 4-byte integer length, followed by length bytes.
 	/// This method does not call <see cref="Align"/>.
 	/// </remarks>
-	/// <returns></returns>
+	/// <returns>A new <see cref="Utf8String"/> containing the text.</returns>
 	public Utf8String ReadUtf8String()
 	{
 		int length = ReadInt32();
-		byte[] data = ReadBytesExact(length);
-		return new Utf8String(data);
+		byte[] byteArray = ReadBytesExact(length);
+		return new Utf8String(byteArray);
+	}
+
+	/// <summary>
+	/// Read C-like, UTF8-format, zero-terminated string
+	/// </summary>
+	/// <remarks>
+	/// The binary format is a series of UTF8 bytes followed with a zero byte.
+	/// This method does not call <see cref="Align"/>.
+	/// </remarks>
+	/// <returns>A new <see cref="Utf8String"/> containing the text.</returns>
+	public Utf8String ReadNullTerminatedString()
+	{
+		int length = data.Slice(Position).IndexOf((byte)'\0');
+		byte[] byteArray = ReadBytesExact(length);
+		Position += 1;
+		return new Utf8String(byteArray);
 	}
 
 	/// <summary>

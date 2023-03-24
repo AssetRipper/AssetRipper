@@ -56,7 +56,7 @@ public partial class EndianSpanTests
 
 		EndianSpanWriter writer = new EndianSpanWriter(data, endianType);
 		Assert.That(writer.Length, Is.EqualTo(length));
-		writer.Write(value1);
+		writer.WriteUtf8String(value1);
 		Assert.That(writer.Position, Is.EqualTo(length));
 
 		EndianSpanReader reader = new EndianSpanReader(data, endianType);
@@ -75,12 +75,35 @@ public partial class EndianSpanTests
 
 		EndianSpanWriter writer = new EndianSpanWriter(data, endianType);
 		Assert.That(writer.Length, Is.EqualTo(length));
-		writer.Write(value1);
+		writer.WriteUtf8String(value1);
 		Assert.That(writer.Position, Is.EqualTo(length));
 
 		EndianSpanReader reader = new EndianSpanReader(data, endianType);
 		Assert.That(reader.Length, Is.EqualTo(length));
 		Utf8String value2 = reader.ReadUtf8String();
+		Assert.That(reader.Position, Is.EqualTo(length));
+		Assert.That(value2, Is.EqualTo(value1));
+	}
+
+	[Theory]
+	public void NullTerminatedStringTest(EndianType endianType)
+	{
+		const string Content = "Ascii Characters";
+		const int Offset = 5;//Arbitrary offset so that the string isn't positioned at index 0.
+		int length = sizeof(byte) + Content.Length + Offset;
+		byte[] data = new byte[length];
+		Utf8String value1 = Content;
+
+		EndianSpanWriter writer = new EndianSpanWriter(data, endianType);
+		Assert.That(writer.Length, Is.EqualTo(length));
+		writer.Position = Offset;
+		writer.WriteNullTerminatedString(value1);
+		Assert.That(writer.Position, Is.EqualTo(length));
+
+		EndianSpanReader reader = new EndianSpanReader(data, endianType);
+		Assert.That(reader.Length, Is.EqualTo(length));
+		reader.Position = Offset;
+		Utf8String value2 = reader.ReadNullTerminatedString();
 		Assert.That(reader.Position, Is.EqualTo(length));
 		Assert.That(value2, Is.EqualTo(value1));
 	}

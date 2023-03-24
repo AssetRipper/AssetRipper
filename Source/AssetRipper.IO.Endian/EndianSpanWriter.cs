@@ -43,16 +43,29 @@ public partial struct EndianSpanWriter
 	}
 
 	/// <summary>
-	/// Read a <see cref="Utf8String"/> from the data.
+	/// Write a <see cref="Utf8String"/> to the data.
 	/// </summary>
 	/// <remarks>
 	/// The binary format is a 4-byte integer length, followed by length bytes.
 	/// This method does not call <see cref="Align"/>.
 	/// </remarks>
-	public void Write(Utf8String value)
+	public void WriteUtf8String(Utf8String value)
 	{
 		Write(value.Data.Length);
 		Write(value.Data);
+	}
+
+	/// <summary>
+	/// Write C-like, UTF8-format, zero-terminated string.
+	/// </summary>
+	/// <remarks>
+	/// The binary format is a series of UTF8 bytes followed with a zero byte.
+	/// This method does not call <see cref="Align"/>.
+	/// </remarks>
+	public void WriteNullTerminatedString(Utf8String value)
+	{
+		Write(value.Data);
+		Write((byte)'\0');
 	}
 
 	/// <summary>
