@@ -81,4 +81,18 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		/// </summary>
 		LargeFilesSupport = 22,
 	}
+	internal static class FormatVersionExtensions
+	{
+		private static UnityVersion ToDefaultUnityVersion(this FormatVersion generation)
+		{
+			return generation switch
+			{
+				< FormatVersion.Unknown_5 => new UnityVersion(1, 2, 2),
+				FormatVersion.Unknown_5 => new UnityVersion(1, 6),
+				FormatVersion.Unknown_6 => new UnityVersion(2, 5),
+				FormatVersion.Unknown_7 => new UnityVersion(3, 0, 0, UnityVersionType.Beta, 1),
+				_ => throw new ArgumentOutOfRangeException(nameof(generation)),
+			};
+		}
+	}
 }

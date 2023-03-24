@@ -4,8 +4,6 @@ using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.Utils;
-using System.Collections.Generic;
-using System.IO;
 
 namespace AssetRipper.IO.Files.SerializedFiles
 {
