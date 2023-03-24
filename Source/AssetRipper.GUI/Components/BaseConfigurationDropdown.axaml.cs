@@ -15,8 +15,8 @@ namespace AssetRipper.GUI.Components
 		public static readonly StyledProperty<List<ItemWrapper>> ValuesProperty =
 			AvaloniaProperty.Register<BaseConfigurationDropdown<T>, List<ItemWrapper>>(nameof(Values));
 
-		public static DirectProperty<BaseConfigurationDropdown<T>, ItemWrapper> RawSelectedValueProperty =
-			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, ItemWrapper>(nameof(RawSelectedValue), obj => obj.RawSelectedValue, (obj, val) => obj.RawSelectedValue = val);
+		public static DirectProperty<BaseConfigurationDropdown<T>, ItemWrapper?> RawSelectedValueProperty =
+			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, ItemWrapper?>(nameof(RawSelectedValue), obj => obj.RawSelectedValue, (obj, val) => obj.RawSelectedValue = val);
 
 		public static readonly DirectProperty<BaseConfigurationDropdown<T>, T> SelectedValueProperty =
 			AvaloniaProperty.RegisterDirect<BaseConfigurationDropdown<T>, T>(nameof(SelectedValue), obj => obj.SelectedValue, (obj, val) => obj.SelectedValue = val);
@@ -39,7 +39,7 @@ namespace AssetRipper.GUI.Components
 			set => SetValue(OptionTitleProperty, value);
 		}
 
-		public ItemWrapper RawSelectedValue
+		public ItemWrapper? RawSelectedValue
 		{
 			get => _selectedValue!;
 			set
@@ -47,9 +47,9 @@ namespace AssetRipper.GUI.Components
 				BaseConfigurationDropdown<T>.ItemWrapper? oldValue = _selectedValue;
 				_selectedValue = value;
 				OnPropertyChanged();
-				RaisePropertyChanged(RawSelectedValueProperty, oldValue ?? Optional<ItemWrapper>.Empty, value);
-				RaisePropertyChanged(SelectedValueProperty, oldValue == null ? Optional<T>.Empty : oldValue.Item, value.Item);
-				SelectedValueDescription = GetValueDescription(value.Item);
+				RaisePropertyChanged(RawSelectedValueProperty, oldValue, value);
+				RaisePropertyChanged(SelectedValueProperty, oldValue?.Item ?? default, value?.Item ?? default);
+				SelectedValueDescription = GetValueDescription(value?.Item ?? default);
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace AssetRipper.GUI.Components
 
 		public T SelectedValue
 		{
-			get => RawSelectedValue.Item;
+			get => RawSelectedValue?.Item ?? default;
 			set => RawSelectedValue = new(value, GetValueDisplayName(value));
 		}
 
@@ -74,9 +74,10 @@ namespace AssetRipper.GUI.Components
 			{
 				//Reload all localized strings
 				Values.ForEach(v => v.DisplayName = GetValueDisplayName(v.Item));
-				OnPropertyChanged(nameof(Values));
+				base.OnPropertyChanged(nameof(BaseConfigurationDropdown<T>.Values));
 
-				RawSelectedValue = new(RawSelectedValue.Item, GetValueDisplayName(RawSelectedValue.Item));
+				T selectedValue = RawSelectedValue?.Item ?? default;
+				RawSelectedValue = new(selectedValue, GetValueDisplayName(selectedValue));
 			};
 		}
 
