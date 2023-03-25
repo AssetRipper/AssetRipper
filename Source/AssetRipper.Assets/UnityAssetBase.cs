@@ -7,6 +7,7 @@ using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Yaml;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Assets;
 
@@ -15,9 +16,9 @@ namespace AssetRipper.Assets;
 /// </summary>
 public abstract class UnityAssetBase : IUnityAssetBase
 {
-	public virtual void ReadEditor(AssetReader reader) => throw MethodNotSupported(nameof(ReadEditor));
+	public virtual void ReadEditor(AssetReader reader) => throw MethodNotSupported();
 
-	public virtual void ReadRelease(AssetReader reader) => throw MethodNotSupported(nameof(ReadRelease));
+	public virtual void ReadRelease(AssetReader reader) => throw MethodNotSupported();
 
 	public void Read(AssetReader reader)
 	{
@@ -31,9 +32,9 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		}
 	}
 
-	public virtual void WriteEditor(AssetWriter writer) => throw MethodNotSupported(nameof(WriteEditor));
+	public virtual void WriteEditor(AssetWriter writer) => throw MethodNotSupported();
 
-	public virtual void WriteRelease(AssetWriter writer) => throw MethodNotSupported(nameof(WriteRelease));
+	public virtual void WriteRelease(AssetWriter writer) => throw MethodNotSupported();
 
 	public void Write(AssetWriter writer)
 	{
@@ -47,9 +48,9 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		}
 	}
 
-	public virtual YamlNode ExportYamlEditor(IExportContainer container) => throw MethodNotSupported(nameof(ExportYamlEditor));
+	public virtual YamlNode ExportYamlEditor(IExportContainer container) => throw MethodNotSupported();
 
-	public virtual YamlNode ExportYamlRelease(IExportContainer container) => throw MethodNotSupported(nameof(ExportYamlRelease));
+	public virtual YamlNode ExportYamlRelease(IExportContainer container) => throw MethodNotSupported();
 
 	public YamlNode ExportYaml(IExportContainer container)
 	{
@@ -79,13 +80,13 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		return string.IsNullOrEmpty(name) ? GetType().Name : name;
 	}
 
-	public virtual void Reset() => throw MethodNotSupported(nameof(Reset));
+	public virtual void Reset() => throw MethodNotSupported();
 
 	public virtual void CopyValues(IUnityAssetBase? source, PPtrConverter converter)
 	{
 	}
 
-	private Exception MethodNotSupported(string methodName)
+	private Exception MethodNotSupported([CallerMemberName] string? methodName = null)
 	{
 		return new NotSupportedException($"{methodName} is not supported for {GetType().FullName}");
 	}
