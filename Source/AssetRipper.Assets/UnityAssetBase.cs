@@ -6,7 +6,6 @@ using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 using AssetRipper.Yaml;
 
 namespace AssetRipper.Assets;
@@ -73,10 +72,6 @@ public abstract class UnityAssetBase : IUnityAssetBase
 	{
 		return Enumerable.Empty<(FieldName, PPtr<IUnityObjectBase>)>();
 	}
-
-	public virtual List<TypeTreeNode> MakeReleaseTypeTreeNodes(int depth, int startingIndex) => throw MethodNotSupported(nameof(MakeEditorTypeTreeNodes));
-
-	public virtual List<TypeTreeNode> MakeEditorTypeTreeNodes(int depth, int startingIndex) => throw MethodNotSupported(nameof(MakeReleaseTypeTreeNodes));
 
 	public override string ToString()
 	{
