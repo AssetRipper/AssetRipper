@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace AssetRipper.Processing.AnimationClips.Editor
 {
-	public sealed record class StreamedCurveKey : IAssetReadable
+	public sealed record class StreamedCurveKey
 	{
 		public StreamedCurveKey() { }
 		public StreamedCurveKey(int index, Vector3 coefficient, float value)

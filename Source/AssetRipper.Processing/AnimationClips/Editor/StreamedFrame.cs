@@ -2,18 +2,18 @@ using AssetRipper.Assets.IO.Reading;
 
 namespace AssetRipper.Processing.AnimationClips.Editor
 {
-	public sealed class StreamedFrame : IAssetReadable
+	public sealed class StreamedFrame
 	{
 		public void Read(AssetReader reader)
 		{
 			Time = reader.ReadSingle();
-			Curves = ReadAssetArray<StreamedCurveKey>(reader);
+			Curves = ReadAssetArray(reader);
 		}
 
 		public float Time { get; set; }
 		public StreamedCurveKey[] Curves { get; set; } = Array.Empty<StreamedCurveKey>();
 
-		private static T[] ReadAssetArray<T>(AssetReader reader) where T : IAssetReadable, new()
+		private static StreamedCurveKey[] ReadAssetArray(AssetReader reader)
 		{
 			int count = reader.ReadInt32();
 			if (count < 0)
@@ -21,10 +21,10 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
 			}
 
-			T[] array = count == 0 ? Array.Empty<T>() : new T[count];
+			StreamedCurveKey[] array = count == 0 ? Array.Empty<StreamedCurveKey>() : new StreamedCurveKey[count];
 			for (int i = 0; i < count; i++)
 			{
-				T instance = new T();
+				StreamedCurveKey instance = new();
 				instance.Read(reader);
 				array[i] = instance;
 			}

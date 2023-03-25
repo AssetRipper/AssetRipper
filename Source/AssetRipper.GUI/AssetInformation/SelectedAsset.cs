@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.Shaders;

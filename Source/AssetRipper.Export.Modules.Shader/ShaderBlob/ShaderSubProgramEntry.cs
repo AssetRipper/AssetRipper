@@ -4,7 +4,7 @@ using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 {
-	public sealed class ShaderSubProgramEntry : IAssetReadable, IAssetWritable
+	public sealed class ShaderSubProgramEntry
 	{
 		/// <summary>
 		/// 2019.3 and greater
@@ -15,7 +15,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		{
 			Offset = reader.ReadInt32();
 			Length = reader.ReadInt32();
-			if (HasSegment(reader.Version))
+			if (HasSegment(reader.AssetCollection.Version))
 			{
 				Segment = reader.ReadInt32();
 			}
@@ -25,7 +25,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		{
 			writer.Write(Offset);
 			writer.Write(Length);
-			if (HasSegment(writer.Version))
+			if (HasSegment(writer.AssetCollection.Version))
 			{
 				writer.Write(Segment);
 			}

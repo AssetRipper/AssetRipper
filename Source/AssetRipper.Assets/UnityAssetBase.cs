@@ -5,7 +5,6 @@ using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Yaml;
 using System.Runtime.CompilerServices;
 
@@ -20,49 +19,13 @@ public abstract class UnityAssetBase : IUnityAssetBase
 
 	public virtual void ReadRelease(AssetReader reader) => throw MethodNotSupported();
 
-	public void Read(AssetReader reader)
-	{
-		if (reader.Flags.IsRelease())
-		{
-			ReadRelease(reader);
-		}
-		else
-		{
-			ReadEditor(reader);
-		}
-	}
-
 	public virtual void WriteEditor(AssetWriter writer) => throw MethodNotSupported();
 
 	public virtual void WriteRelease(AssetWriter writer) => throw MethodNotSupported();
 
-	public void Write(AssetWriter writer)
-	{
-		if (writer.Flags.IsRelease())
-		{
-			WriteRelease(writer);
-		}
-		else
-		{
-			WriteEditor(writer);
-		}
-	}
-
 	public virtual YamlNode ExportYamlEditor(IExportContainer container) => throw MethodNotSupported();
 
 	public virtual YamlNode ExportYamlRelease(IExportContainer container) => throw MethodNotSupported();
-
-	public YamlNode ExportYaml(IExportContainer container)
-	{
-		if (container.ExportFlags.IsRelease())
-		{
-			return ExportYamlRelease(container);
-		}
-		else
-		{
-			return ExportYamlEditor(container);
-		}
-	}
 
 	public virtual IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
 	{

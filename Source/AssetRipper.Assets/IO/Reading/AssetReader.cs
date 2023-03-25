@@ -1,9 +1,5 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.IO.Endian;
-using AssetRipper.IO.Files;
-using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.VersionUtilities;
-
 
 namespace AssetRipper.Assets.IO.Reading
 {
@@ -30,14 +26,6 @@ namespace AssetRipper.Assets.IO.Reading
 			return ret;
 		}
 
-		public override string ToString()
-		{
-			return $"{nameof(AssetReader)} ({Platform} {Version})";
-		}
-
-		public UnityVersion Version => AssetCollection.Version;
-		public BuildTarget Platform => AssetCollection.Platform;
-		public TransferInstructionFlags Flags => AssetCollection.Flags;
 		public AssetCollection AssetCollection { get; }
 	}
 }

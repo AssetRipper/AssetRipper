@@ -1,6 +1,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
+using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
@@ -180,7 +181,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						IAsset[] structures = new IAsset[count];
 						for (int i = 0; i < count; i++)
 						{
-							IAsset structure = etalon.Type.CreateInstance(depth + 1, reader.Version);
+							IAsset structure = etalon.Type.CreateInstance(depth + 1, reader.AssetCollection.Version);
 							structure.Read(reader);
 							structures[i] = structure;
 						}
@@ -188,7 +189,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					}
 					else
 					{
-						IAsset structure = etalon.Type.CreateInstance(depth + 1, reader.Version);
+						IAsset structure = etalon.Type.CreateInstance(depth + 1, reader.AssetCollection.Version);
 						structure.Read(reader);
 						CValue = structure;
 					}

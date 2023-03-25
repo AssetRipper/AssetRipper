@@ -157,16 +157,16 @@ namespace AssetRipper.Tools.RawTextureExtractor
 		{
 			public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType? type)
 			{
-				IUnityObjectBase? asset = CreateAsset(assetInfo, reader);
+				IUnityObjectBase? asset = CreateAsset(assetInfo);
 				return asset is not null ? TryReadAsset(reader, size, asset) : null;
 			}
 
-			private static IUnityObjectBase? CreateAsset(AssetInfo assetInfo, AssetReader reader)
+			private static IUnityObjectBase? CreateAsset(AssetInfo assetInfo)
 			{
 				return (ClassIDType)assetInfo.ClassID switch
 				{
-					ClassIDType.Texture2D => Texture2DFactory.CreateAsset(reader.Version, assetInfo),
-					ClassIDType.Cubemap => CubemapFactory.CreateAsset(reader.Version, assetInfo),
+					ClassIDType.Texture2D => Texture2DFactory.CreateAsset(assetInfo.Collection.Version, assetInfo),
+					ClassIDType.Cubemap => CubemapFactory.CreateAsset(assetInfo.Collection.Version, assetInfo),
 					_ => null
 				};
 			}
@@ -178,7 +178,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 					asset.Read(reader);
 					if (reader.BaseStream.Position != size)
 					{
-						Console.WriteLine($"Read {reader.BaseStream.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}");
+						Console.WriteLine($"Read {reader.BaseStream.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}");
 						return null;
 					}
 					else
@@ -188,7 +188,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 				}
 				catch (Exception ex)
 				{
-					Console.WriteLine($"Error during reading of asset type {(ClassIDType)asset.ClassID}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}\n{ex}");
+					Console.WriteLine($"Error during reading of asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}\n{ex}");
 					return null;
 				}
 			}

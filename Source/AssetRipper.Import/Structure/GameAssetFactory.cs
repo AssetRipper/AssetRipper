@@ -48,7 +48,7 @@ namespace AssetRipper.Import.Structure
 
 		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType? type)
 		{
-			IUnityObjectBase? asset = AssetFactory.CreateAsset(reader.Version, assetInfo);
+			IUnityObjectBase? asset = AssetFactory.CreateAsset(assetInfo.Collection.Version, assetInfo);
 
 			return asset switch
 			{
@@ -146,7 +146,7 @@ namespace AssetRipper.Import.Structure
 			catch (Exception ex)
 			{
 				replaceWithUnreadableObject = false;
-				LogReadException(asset, reader, ex);
+				LogReadException(asset, ex);
 			}
 			if (replaceWithUnreadableObject)
 			{
@@ -164,7 +164,7 @@ namespace AssetRipper.Import.Structure
 
 		private static void LogIncorrectNumberOfBytesRead(IUnityObjectBase asset, AssetReader reader, int size)
 		{
-			Logger.Error($"Read {reader.BaseStream.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}");
+			Logger.Error($"Read {reader.BaseStream.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}");
 		}
 
 		/// <summary>
@@ -199,9 +199,9 @@ namespace AssetRipper.Import.Structure
 			Logger.Error(LogCategory.Import, $"Unable to read {monoBehaviour}, because script {monoBehaviour.Structure} layout mismatched binary content ({ex.GetType().Name}).");
 		}
 
-		private static void LogReadException(IUnityObjectBase asset, AssetReader reader, Exception ex)
+		private static void LogReadException(IUnityObjectBase asset, Exception ex)
 		{
-			Logger.Error($"Error during reading of asset type {(ClassIDType)asset.ClassID}. V: {reader.Version} P: {reader.Platform} N: {reader.AssetCollection.Name} Path: {reader.AssetCollection.FilePath}", ex);
+			Logger.Error($"Error during reading of asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}", ex);
 		}
 
 		public static IAsset CreateEngineAsset(string name, UnityVersion version)

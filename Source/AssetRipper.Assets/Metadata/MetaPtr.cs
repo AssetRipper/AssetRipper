@@ -11,7 +11,7 @@ namespace AssetRipper.Assets.Metadata
 		{
 		}
 
-		public YamlNode ExportYaml(IExportContainer container)
+		public YamlNode ExportYaml()
 		{
 			YamlMappingNode node = new();
 			node.Style = MappingStyle.Flow;
@@ -30,6 +30,10 @@ namespace AssetRipper.Assets.Metadata
 		{
 			return new MetaPtr(ExportIdHandler.GetMainExportID((uint)classID), UnityGUID.MissingReference, assetType);
 		}
+
+		YamlNode IYamlExportable.ExportYamlEditor(IExportContainer container) => ExportYaml();
+
+		YamlNode IYamlExportable.ExportYamlRelease(IExportContainer container) => ExportYaml();
 
 		private const string FileIDName = "fileID";
 		private const string GuidName = "guid";

@@ -1,8 +1,5 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.IO.Endian;
-using AssetRipper.IO.Files;
-using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Assets.IO.Writing
 {
@@ -18,14 +15,6 @@ namespace AssetRipper.Assets.IO.Writing
 			throw new NotSupportedException();
 		}
 
-		public void WriteAsset<T>(T value) where T : IAssetWritable
-		{
-			value.Write(this);
-		}
-
-		public UnityVersion Version => AssetCollection.Version;
-		public BuildTarget Platform => AssetCollection.Platform;
-		public TransferInstructionFlags Flags => AssetCollection.Flags;
 		public AssetCollection AssetCollection { get; }
 	}
 }

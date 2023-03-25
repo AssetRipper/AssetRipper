@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
-using AssetRipper.Import.IO.Extensions;
 using AssetRipper.Import.Utils;
 using K4os.Compression.LZ4;
 
@@ -30,7 +29,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			using AssetReader blobReader = new AssetReader(blobMem, shaderCollection);
 			if (segment == 0)
 			{
-				Entries = ReadAssetArray<ShaderSubProgramEntry>(blobReader);
+				Entries = ReadAssetArray(blobReader);
 				SubPrograms = ArrayUtils.CreateAndInitializeArray<ShaderSubProgram>(Entries.Length);
 			}
 			ReadSegment(blobReader, segment);
@@ -77,7 +76,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			{
 				if (segment == 0)
 				{
-					blobWriter.WriteAssetArray(Entries);
+					WriteAssetArray(blobWriter, Entries);
 				}
 
 				WriteSegment(blobWriter, segment);
@@ -113,7 +112,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			}
 		}
 
-		private static T[] ReadAssetArray<T>(AssetReader reader) where T : IAssetReadable, new()
+		private static ShaderSubProgramEntry[] ReadAssetArray(AssetReader reader)
 		{
 			int count = reader.ReadInt32();
 			if (count < 0)
@@ -121,10 +120,10 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
 			}
 
-			T[] array = count == 0 ? Array.Empty<T>() : new T[count];
+			ShaderSubProgramEntry[] array = count == 0 ? Array.Empty<ShaderSubProgramEntry>() : new ShaderSubProgramEntry[count];
 			for (int i = 0; i < count; i++)
 			{
-				T instance = new T();
+				ShaderSubProgramEntry instance = new();
 				instance.Read(reader);
 				array[i] = instance;
 			}
@@ -133,6 +132,21 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 				reader.AlignStream();
 			}
 			return array;
+		}
+
+		private static void WriteAssetArray(AssetWriter writer, ShaderSubProgramEntry[] buffer)
+		{
+			writer.Write(buffer.Length);
+
+			for (int i = 0; i < buffer.Length; i++)
+			{
+				buffer[i].Write(writer);
+			}
+
+			if (writer.IsAlignArray)
+			{
+				writer.AlignStream();
+			}
 		}
 
 		public ShaderSubProgramEntry[] Entries { get; set; } = Array.Empty<ShaderSubProgramEntry>();

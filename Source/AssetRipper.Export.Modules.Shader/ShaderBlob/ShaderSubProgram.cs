@@ -8,7 +8,7 @@ using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 {
-	public sealed class ShaderSubProgram : IAssetReadable, IAssetWritable
+	public sealed class ShaderSubProgram
 	{
 		/// <summary>
 		/// 2019.1 and greater
@@ -48,44 +48,24 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		public static bool HasMergedKeywords(UnityVersion version) => version.IsGreaterEqual(2021, 2);
 		private static int GetExpectedProgramVersion(UnityVersion version)
 		{
-			if (version.IsEqual(5, 3))
+			return version switch
 			{
-				return 201509030;
-			}
-			else if (version.IsEqual(5, 4))
-			{
-				return 201510240;
-			}
-			else if (version.IsEqual(5, 5))
-			{
-				return 201608170;
-			}
-			else if (version.IsLess(2017, 3))
-			{
-				return 201609010;
-			}
-			else if (version.IsLess(2018, 2))
-			{
-				return 201708220;
-			}
-			else if (version.IsLess(2019))
-			{
-				return 201802150;
-			}
-			else if (version.IsLess(2021, 2))
-			{
-				return 201806140;
-			}
-			else
-			{
-				return 202012090;
-			}
+				_ when version.IsEqual(5, 3) => 201509030,
+				_ when version.IsEqual(5, 4) => 201510240,
+				_ when version.IsEqual(5, 5) => 201608170,
+				_ when version.IsLess(2017, 3) => 201609010,
+				_ when version.IsLess(2018, 2) => 201708220,
+				_ when version.IsLess(2019) => 201802150,
+				_ when version.IsLess(2021, 2) => 201806140,
+				_ => 202012090,
+			};
 		}
 
 		public void Read(AssetReader reader)
 		{
+			UnityVersion unityVersion = reader.AssetCollection.Version;
 			int version = reader.ReadInt32();
-			if (version != GetExpectedProgramVersion(reader.Version))
+			if (version != GetExpectedProgramVersion(unityVersion))
 			{
 				throw new Exception($"Shader program version {version} doesn't match");
 			}
@@ -94,19 +74,19 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			StatsALU = reader.ReadInt32();
 			StatsTEX = reader.ReadInt32();
 			StatsFlow = reader.ReadInt32();
-			if (HasStatsTempRegister(reader.Version))
+			if (HasStatsTempRegister(unityVersion))
 			{
 				StatsTempRegister = reader.ReadInt32();
 			}
 
-			if (HasMergedKeywords(reader.Version))
+			if (HasMergedKeywords(unityVersion))
 			{
 				reader.ReadStringArray();
 			}
 			else
 			{
 				GlobalKeywords = reader.ReadStringArray();
-				if (HasLocalKeywords(reader.Version))
+				if (HasLocalKeywords(unityVersion))
 				{
 					LocalKeywords = reader.ReadStringArray();
 				}
@@ -134,8 +114,8 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			List<VectorParameter> structVectors = new List<VectorParameter>();
 			List<MatrixParameter> structMatrices = new List<MatrixParameter>();
 			List<BufferBinding> buffers = new List<BufferBinding>();
-			List<UAVParameter>? uavs = HasUAVParameters(reader.Version) ? new List<UAVParameter>() : null;
-			List<SamplerParameter>? samplers = HasSamplerParameters(reader.Version) ? new List<SamplerParameter>() : null;
+			List<UAVParameter>? uavs = HasUAVParameters(unityVersion) ? new List<UAVParameter>() : null;
+			List<SamplerParameter>? samplers = HasSamplerParameters(unityVersion) ? new List<SamplerParameter>() : null;
 			List<BufferBinding> constBindings = new List<BufferBinding>();
 			List<StructParameter> structs = new List<StructParameter>();
 
@@ -162,21 +142,21 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 
 					if (isMatrix)
 					{
-						MatrixParameter matrix = IsAllParamArgs(reader.Version)
+						MatrixParameter matrix = IsAllParamArgs(unityVersion)
 							? new MatrixParameter(paramName, paramType, index, arraySize, rows, columns)
 							: new MatrixParameter(paramName, paramType, index, rows, columns);
 						matrices.Add(matrix);
 					}
 					else
 					{
-						VectorParameter vector = IsAllParamArgs(reader.Version)
+						VectorParameter vector = IsAllParamArgs(unityVersion)
 							? new VectorParameter(paramName, paramType, index, arraySize, columns)
 							: new VectorParameter(paramName, paramType, index, columns);
 						vectors.Add(vector);
 					}
 				}
 
-				if (HasStructParameters(reader.Version))
+				if (HasStructParameters(unityVersion))
 				{
 					int structCount = reader.ReadInt32();
 					for (int j = 0; j < structCount; j++)
@@ -203,14 +183,14 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 
 							if (isMatrix)
 							{
-								MatrixParameter matrix = IsAllParamArgs(reader.Version)
+								MatrixParameter matrix = IsAllParamArgs(unityVersion)
 									? new MatrixParameter(paramName, paramType, paramIndex, vectorArraySize, rows, columns)
 									: new MatrixParameter(paramName, paramType, paramIndex, rows, columns);
 								structMatrices.Add(matrix);
 							}
 							else
 							{
-								VectorParameter vector = IsAllParamArgs(reader.Version)
+								VectorParameter vector = IsAllParamArgs(unityVersion)
 									? new VectorParameter(paramName, paramType, paramIndex, vectorArraySize, columns)
 									: new VectorParameter(paramName, paramType, paramIndex, columns);
 								structVectors.Add(vector);
@@ -245,7 +225,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 				if (type == 0)
 				{
 					TextureParameter texture;
-					if (HasNewTextureParams(reader.Version))
+					if (HasNewTextureParams(unityVersion))
 					{
 						uint textureExtraValue = reader.ReadUInt32();
 						bool isMultiSampled = (textureExtraValue & 1) == 1;
@@ -253,7 +233,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 						int samplerIndex = extraValue;
 						texture = new TextureParameter(name, index, dimension, samplerIndex, isMultiSampled);
 					}
-					else if (HasMultiSampled(reader.Version))
+					else if (HasMultiSampled(unityVersion))
 					{
 						uint textureExtraValue = reader.ReadUInt32();
 						bool isMultiSampled = textureExtraValue == 1;
@@ -317,17 +297,13 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			}
 
 			ConstantBufferBindings = constBindings.ToArray();
-			if (HasStructParameters(reader.Version))
+			if (HasStructParameters(unityVersion))
 			{
 				StructParameters = structs.ToArray();
 			}
 		}
 
-		public void Write(AssetWriter writer)
-		{
-#warning TODO:
-			throw new NotImplementedException();
-		}
+		public void Write(AssetWriter writer) => throw new NotImplementedException();
 
 		public ShaderGpuProgramType GetProgramType(UnityVersion version)
 		{
