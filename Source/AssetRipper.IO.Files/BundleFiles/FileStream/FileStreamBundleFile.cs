@@ -10,7 +10,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 	public sealed class FileStreamBundleFile : FileContainer
 	{
 		public FileStreamBundleHeader Header { get; } = new();
-		public BlocksInfo BlocksInfo { get; } = new();
+		public BlocksInfo BlocksInfo { get; private set; } = new();
 		public DirectoryInfo<FileStreamNode> DirectoryInfo { get; set; } = new();
 
 		public FileStreamBundleFile()
@@ -98,7 +98,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			long metadataPosition = stream.Position;
 			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
-				BlocksInfo.Read(reader);
+				BlocksInfo = BlocksInfo.Read(reader);
 				if (Header.Flags.GetBlocksAndDirectoryInfoCombined())
 				{
 					DirectoryInfo = DirectoryInfo<FileStreamNode>.Read(reader);
