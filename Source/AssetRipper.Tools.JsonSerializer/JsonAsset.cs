@@ -13,8 +13,8 @@ public sealed class JsonAsset : UnityObjectBase
 	{
 	}
 
-	public void Read(EndianReader reader, SerializableEntry serializableType)
+	public void Read(ref EndianSpanReader reader, SerializableEntry serializableType)
 	{
-		Contents = serializableType.Read(reader);
+		Contents = serializableType.Read(ref reader);
 	}
 }

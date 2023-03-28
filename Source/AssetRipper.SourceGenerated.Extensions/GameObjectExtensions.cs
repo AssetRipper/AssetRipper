@@ -50,7 +50,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			if (gameObject.Has_Component_C1_AssetList_ComponentPair())
 			{
-				return gameObject.Component_C1_AssetList_ComponentPair.Select(pair => pair.m_Component);
+				return gameObject.Component_C1_AssetList_ComponentPair.Select(pair => pair.Component);
 			}
 			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_4_0())
 			{

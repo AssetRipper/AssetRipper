@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.IO;
-using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 
@@ -118,9 +118,8 @@ public class SerializedAssetCollection : AssetCollection
 		SerializedType? type = info.GetSerializedType(file.Metadata.Types);
 		int classID = info.TypeID < 0 ? 114 : info.TypeID;
 		AssetInfo assetInfo = new AssetInfo(collection, info.FileID, classID);
-		using MemoryStream memoryStream = new MemoryStream(info.ObjectData, false);
-		using AssetReader reader = new AssetReader(memoryStream, collection);
-		IUnityObjectBase? asset = factory.ReadAsset(assetInfo, reader, info.ObjectData.Length, type);
+		EndianSpanReader reader = new EndianSpanReader(info.ObjectData, collection.EndianType);
+		IUnityObjectBase? asset = factory.ReadAsset(assetInfo, ref reader, collection.Flags, info.ObjectData.Length, type);
 		if (asset is not null)
 		{
 			collection.AddAsset(asset);

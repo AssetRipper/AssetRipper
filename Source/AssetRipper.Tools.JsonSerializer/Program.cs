@@ -3,8 +3,6 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using System;
-using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 

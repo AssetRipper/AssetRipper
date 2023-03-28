@@ -41,14 +41,6 @@ public abstract class VirtualAssetCollection : AssetCollection
 		return asset;
 	}
 
-	public T CreateAsset<T>(int classID, Func<UnityVersion, AssetInfo, T> factory) where T : IUnityObjectBase
-	{
-		AssetInfo assetInfo = CreateAssetInfo(classID);
-		T asset = factory(Version, assetInfo);
-		AddAsset(asset);
-		return asset;
-	}
-
 	private AssetInfo CreateAssetInfo(int classID)
 	{
 		return new AssetInfo(this, ++m_nextId, classID);

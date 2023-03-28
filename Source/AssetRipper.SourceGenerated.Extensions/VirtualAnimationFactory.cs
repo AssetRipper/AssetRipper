@@ -57,7 +57,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			blendTree.MinThreshold_C206 = node.GetMinThreshold();
 			blendTree.MaxThreshold_C206 = node.GetMaxThreshold();
 			blendTree.UseAutomaticThresholds_C206 = false;
-			blendTree.NormalizedBlendValues_C206 = node.BlendDirectData?.Data.m_NormalizedBlendValues ?? false;
+			blendTree.NormalizedBlendValues_C206 = node.BlendDirectData?.Data.NormalizedBlendValues ?? false;
 			if (blendTree.Has_BlendType_C206_Int32())
 			{
 				blendTree.BlendType_C206_Int32 = (int)node.BlendType;

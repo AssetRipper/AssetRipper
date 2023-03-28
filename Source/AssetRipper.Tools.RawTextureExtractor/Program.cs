@@ -4,6 +4,7 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
@@ -155,10 +156,10 @@ namespace AssetRipper.Tools.RawTextureExtractor
 
 		private sealed class TextureAssetFactory : AssetFactoryBase
 		{
-			public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType? type)
+			public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ref EndianSpanReader reader, TransferInstructionFlags flags, int size, SerializedType? type)
 			{
 				IUnityObjectBase? asset = CreateAsset(assetInfo);
-				return asset is not null ? TryReadAsset(reader, size, asset) : null;
+				return asset is not null ? TryReadAsset(ref reader, flags, size, asset) : null;
 			}
 
 			private static IUnityObjectBase? CreateAsset(AssetInfo assetInfo)
@@ -171,14 +172,14 @@ namespace AssetRipper.Tools.RawTextureExtractor
 				};
 			}
 
-			private static IUnityObjectBase? TryReadAsset(AssetReader reader, int size, IUnityObjectBase asset)
+			private static IUnityObjectBase? TryReadAsset(ref EndianSpanReader reader, TransferInstructionFlags flags, int size, IUnityObjectBase asset)
 			{
 				try
 				{
-					asset.Read(reader);
-					if (reader.BaseStream.Position != size)
+					asset.Read(ref reader, flags);
+					if (reader.Position != size)
 					{
-						Console.WriteLine($"Read {reader.BaseStream.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}");
+						Console.WriteLine($"Read {reader.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}");
 						return null;
 					}
 					else

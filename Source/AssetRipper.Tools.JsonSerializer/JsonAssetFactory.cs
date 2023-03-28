@@ -1,24 +1,23 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Exceptions;
 using AssetRipper.Assets.IO;
-using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using System;
 
 namespace AssetRipper.Tools.JsonSerializer;
 
 public sealed class JsonAssetFactory : AssetFactoryBase
 {
-	public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, AssetReader reader, int size, SerializedType? type)
+	public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ref EndianSpanReader reader, TransferInstructionFlags flags, int size, SerializedType? type)
 	{
 		if (type?.OldType.Nodes.Count > 0)
 		{
-			long basePosition = reader.BaseStream.Position;
 			SerializableEntry entry = SerializableEntry.FromTypeTree(type.OldType);
 			JsonAsset asset = new JsonAsset(assetInfo);
-			asset.Read(reader, entry);
-			IncorrectByteCountException.ThrowIf(reader.BaseStream, basePosition, size);
+			asset.Read(ref reader, entry);
+			IncorrectByteCountException.ThrowIf(in reader);
 			return asset;
 		}
 		else

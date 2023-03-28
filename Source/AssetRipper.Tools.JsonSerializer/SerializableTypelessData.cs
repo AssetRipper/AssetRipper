@@ -1,13 +1,11 @@
 ﻿using AssetRipper.IO.Endian;
-using System;
-using System.IO;
 using System.Text.Json.Nodes;
 
 namespace AssetRipper.Tools.JsonSerializer;
 
 public sealed class SerializableTypelessData : SerializableEntry
 {
-	public override JsonNode? Read(EndianReader reader)
+	public override JsonNode? Read(ref EndianSpanReader reader)
 	{
 		int size = reader.ReadInt32();
 		byte[] data = reader.ReadBytes(size);
@@ -15,7 +13,7 @@ public sealed class SerializableTypelessData : SerializableEntry
 		{
 			throw new EndOfStreamException();
 		}
-		MaybeAlign(reader);
+		MaybeAlign(ref reader);
 		return JsonValue.Create(Convert.ToBase64String(data));
 	}
 }

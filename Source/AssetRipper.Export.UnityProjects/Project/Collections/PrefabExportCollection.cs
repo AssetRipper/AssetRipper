@@ -119,7 +119,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		{
 			if (Prefab is null)
 			{
-				IPrefabImporter importer = PrefabImporterFactory.CreateAsset(container.ExportVersion);
+				IPrefabImporter importer = PrefabImporterFactory.CreateAsset(container.ExportVersion, container.File);
 				if (RootGameObject.AssetBundleName is not null)
 				{
 					importer.AssetBundleName_C468431735.String = RootGameObject.AssetBundleName;

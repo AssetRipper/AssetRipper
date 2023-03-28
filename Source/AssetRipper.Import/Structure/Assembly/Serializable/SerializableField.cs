@@ -7,6 +7,8 @@ using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.IO.Extensions;
+using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
 
@@ -14,86 +16,86 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
 	public struct SerializableField
 	{
-		public void Read(AssetReader reader, int depth, in SerializableType.Field etalon)
+		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon)
 		{
 			switch (etalon.Type.Type)
 			{
 				case PrimitiveType.Bool:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadBooleanArray();
+						CValue = reader.ReadPrimitiveArray<bool>(version);
 					}
 					else
 					{
 						PValue = reader.ReadBoolean() ? 1U : 0U;
 					}
-					reader.AlignStream();
+					reader.Align();
 					break;
 
 				case PrimitiveType.Char:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadCharArray();
+						CValue = reader.ReadPrimitiveArray<char>(version);
 					}
 					else
 					{
 						PValue = reader.ReadChar();
 					}
-					reader.AlignStream();
+					reader.Align();
 					break;
 
 				case PrimitiveType.SByte:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadByteArray();
+						CValue = reader.ReadPrimitiveArray<sbyte>(version);
 					}
 					else
 					{
 						PValue = unchecked((byte)reader.ReadSByte());
 					}
-					reader.AlignStream();
+					reader.Align();
 					break;
 
 				case PrimitiveType.Byte:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadByteArray();
+						CValue = reader.ReadPrimitiveArray<byte>(version);
 					}
 					else
 					{
 						PValue = reader.ReadByte();
 					}
-					reader.AlignStream();
+					reader.Align();
 					break;
 
 				case PrimitiveType.Short:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadInt16Array();
+						CValue = reader.ReadPrimitiveArray<short>(version);
 					}
 					else
 					{
 						PValue = unchecked((ushort)reader.ReadInt16());
 					}
-					reader.AlignStream();
+					reader.Align();
 					break;
 
 				case PrimitiveType.UShort:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadUInt16Array();
+						CValue = reader.ReadPrimitiveArray<ushort>(version);
 					}
 					else
 					{
 						PValue = reader.ReadUInt16();
 					}
-					reader.AlignStream();
+					reader.Align();
 					break;
 
 				case PrimitiveType.Int:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadInt32Array();
+						CValue = reader.ReadPrimitiveArray<int>(version);
 					}
 					else
 					{
@@ -104,7 +106,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.UInt:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadUInt32Array();
+						CValue = reader.ReadPrimitiveArray<uint>(version);
 					}
 					else
 					{
@@ -115,7 +117,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Long:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadInt64Array();
+						CValue = reader.ReadPrimitiveArray<long>(version);
 					}
 					else
 					{
@@ -126,7 +128,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.ULong:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadUInt64Array();
+						CValue = reader.ReadPrimitiveArray<ulong>(version);
 					}
 					else
 					{
@@ -137,7 +139,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Single:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadSingleArray();
+						CValue = reader.ReadPrimitiveArray<float>(version);
 					}
 					else
 					{
@@ -148,7 +150,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Double:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadDoubleArray();
+						CValue = reader.ReadPrimitiveArray<double>(version);
 					}
 					else
 					{
@@ -159,11 +161,11 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.String:
 					if (etalon.IsArray)
 					{
-						CValue = reader.ReadStringArray();
+						CValue = reader.ReadStringArray(version);
 					}
 					else
 					{
-						CValue = reader.ReadString();
+						CValue = reader.ReadUtf8StringAligned().String;
 					}
 					break;
 
@@ -172,7 +174,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					{
 						int count = reader.ReadInt32();
 
-						long remainingBytes = reader.BaseStream.Length - reader.BaseStream.Position;
+						long remainingBytes = reader.Length - reader.Position;
 						if (remainingBytes < count)
 						{
 							throw new EndOfStreamException($"When reading field {etalon.Name}, Stream only has {remainingBytes} bytes remaining, so {count} complex elements of type {etalon.Type.Name} cannot be read.");
@@ -181,22 +183,33 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						IAsset[] structures = new IAsset[count];
 						for (int i = 0; i < count; i++)
 						{
-							IAsset structure = etalon.Type.CreateInstance(depth + 1, reader.AssetCollection.Version);
-							structure.Read(reader);
-							structures[i] = structure;
+							structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
 						}
 						CValue = structures;
 					}
 					else
 					{
-						IAsset structure = etalon.Type.CreateInstance(depth + 1, reader.AssetCollection.Version);
-						structure.Read(reader);
-						CValue = structure;
+						CValue = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
 					}
 					break;
 
 				default:
 					throw new NotSupportedException(etalon.Type.Type.ToString());
+			}
+
+			static IAsset CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon)
+			{
+				IAsset asset = etalon.Type.CreateInstance(depth + 1, version);
+				if (asset is SerializableStructure structure)
+				{
+					structure.Read(ref reader, version, flags);
+				}
+				else
+				{
+					asset.Read(ref reader, flags);
+				}
+
+				return asset;
 			}
 		}
 

@@ -1,10 +1,7 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Text;
 using System.Text.Json.Nodes;
 
@@ -18,7 +15,7 @@ public sealed class SerializablePrimitive : SerializableEntry
 	}
 
 	public PrimitiveType Type { get; }
-	public override JsonNode? Read(EndianReader reader)
+	public override JsonNode? Read(ref EndianSpanReader reader)
 	{
 		JsonValue? result = Type switch
 		{
@@ -34,14 +31,14 @@ public sealed class SerializablePrimitive : SerializableEntry
 			PrimitiveType.Double => JsonValue.Create(Clamp(reader.ReadDouble())),
 			PrimitiveType.Boolean => JsonValue.Create(reader.ReadBoolean()),
 			PrimitiveType.Character => JsonValue.Create(reader.ReadChar()),
-			PrimitiveType.String => JsonValue.Create(ReadString(reader)),
+			PrimitiveType.String => JsonValue.Create(ReadString(ref reader)),
 			_ => throw new NotSupportedException()
 		};
-		MaybeAlign(reader);
+		MaybeAlign(ref reader);
 		return result;
 	}
 
-	private static string ReadString(EndianReader reader)
+	private static string ReadString(ref EndianSpanReader reader)
 	{
 		int size = reader.ReadInt32();
 		byte[] data = reader.ReadBytes(size);

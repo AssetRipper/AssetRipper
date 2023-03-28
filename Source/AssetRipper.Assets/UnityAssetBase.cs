@@ -5,6 +5,7 @@ using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.IO.Endian;
 using AssetRipper.Yaml;
 using System.Runtime.CompilerServices;
 
@@ -13,11 +14,15 @@ namespace AssetRipper.Assets;
 /// <summary>
 /// The artificial base class for all generated Unity classes
 /// </summary>
-public abstract class UnityAssetBase : IUnityAssetBase
+public abstract class UnityAssetBase : IUnityAssetBase, IAssetReadable
 {
 	public virtual void ReadEditor(AssetReader reader) => throw MethodNotSupported();
 
 	public virtual void ReadRelease(AssetReader reader) => throw MethodNotSupported();
+
+	public virtual void ReadEditor(ref EndianSpanReader reader) => throw MethodNotSupported();
+
+	public virtual void ReadRelease(ref EndianSpanReader reader) => throw MethodNotSupported();
 
 	public virtual void WriteEditor(AssetWriter writer) => throw MethodNotSupported();
 

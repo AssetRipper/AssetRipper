@@ -1,9 +1,9 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Interfaces;
-using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
+using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated;
 
 namespace AssetRipper.Import.Classes
@@ -19,16 +19,9 @@ namespace AssetRipper.Import.Classes
 
 		public RawDataObject(AssetInfo assetInfo) : base(assetInfo) { }
 
-		public void Read(AssetReader reader, int byteSize)
+		public void Read(ref EndianSpanReader reader, int byteSize)
 		{
-			if (byteSize > 0)
-			{
-				RawData = reader.ReadBytes(byteSize);
-			}
-			else
-			{
-				RawData = Array.Empty<byte>();
-			}
+			RawData = reader.ReadBytesExact(byteSize);
 		}
 
 		public sealed override void WriteEditor(AssetWriter writer) => writer.Write(RawData);

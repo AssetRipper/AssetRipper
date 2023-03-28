@@ -53,7 +53,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		protected virtual bool ExportScene(IExportContainer container, string folderPath, string filePath, string sceneName)
 		{
 			AssetExporter.Export(container, Assets, filePath);
-			IDefaultImporter sceneImporter = DefaultImporterFactory.CreateAsset(container.ExportVersion);
+			IDefaultImporter sceneImporter = DefaultImporterFactory.CreateAsset(container.ExportVersion, container.File);
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);
 			return true;

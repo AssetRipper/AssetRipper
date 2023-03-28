@@ -31,10 +31,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 						for (int i = 0; i < stateConstant.LeafInfoArray.Count; i++)
 						{
 							LeafInfoConstant leafInfo = stateConstant.LeafInfoArray[i];
-							int index = leafInfo.m_IDArray.IndexOf(node.ClipID);
+							int index = leafInfo.IDArray.IndexOf(node.ClipID);
 							if (index >= 0)
 							{
-								clipIndex = (int)leafInfo.m_IndexOffset + index;
+								clipIndex = (int)leafInfo.IndexOffset + index;
 								break;
 							}
 						}

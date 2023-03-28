@@ -7,10 +7,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void CopyValues(this GUID destination, UnityGUID source)
 		{
-			destination.m_Data_0_ = source.Data0;
-			destination.m_Data_1_ = source.Data1;
-			destination.m_Data_2_ = source.Data2;
-			destination.m_Data_3_ = source.Data3;
+			destination.Data_0_ = source.Data0;
+			destination.Data_1_ = source.Data1;
+			destination.Data_2_ = source.Data2;
+			destination.Data_3_ = source.Data3;
 		}
 	}
 }

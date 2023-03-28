@@ -14,14 +14,12 @@ internal static class AssetCreator
 		return MakeCollection(version).CreateAsset<T>((int)classID, factory);
 	}
 
-	public static T CreateAsset<T>(ClassIDType classID, UnityVersion version, Func<UnityVersion, AssetInfo, T> factory) where T : IUnityObjectBase
-	{
-		return MakeCollection(version).CreateAsset<T>((int)classID, factory);
-	}
-
 	public static T CreateAsset<T>(ClassIDType classID, UnityVersion version) where T : IUnityObjectBase
 	{
-		return MakeCollection(version).CreateAsset<T>((int)classID, CreateAssetInternal<T>);
+		return MakeCollection(version).CreateAsset((int)classID, (assetInfo) =>
+		{
+			return (T)AssetFactory.CreateAsset(assetInfo);
+		});
 	}
 
 	private static ProcessedAssetCollection MakeCollection(UnityVersion version)
@@ -29,10 +27,5 @@ internal static class AssetCreator
 		GameBundle gameBundle = new();
 		ProcessedAssetCollection collection = gameBundle.AddNewProcessedCollection(nameof(AssetCreator), version);
 		return collection;
-	}
-
-	private static T CreateAssetInternal<T>(UnityVersion version, AssetInfo assetInfo) where T : IUnityObjectBase
-	{
-		return (T)AssetFactory.CreateAsset(version, assetInfo);
 	}
 }

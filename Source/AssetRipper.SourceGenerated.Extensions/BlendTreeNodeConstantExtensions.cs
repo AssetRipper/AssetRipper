@@ -26,7 +26,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			if (constant.Has_Blend2dData() && constant.GetBlendType() != BlendTreeType.Simple1D && constant.GetBlendType() != BlendTreeType.Direct)
 			{
-				return constant.Blend2dData.Data.m_ChildPositionArray[index];
+				return constant.Blend2dData.Data.ChildPositionArray[index];
 			}
 			return new();
 		}
@@ -53,7 +53,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			if (constant.Has_BlendDirectData() && constant.GetBlendType() == BlendTreeType.Direct)
 			{
-				parameter = constant.BlendDirectData.Data.m_ChildBlendEventIDArray[index];
+				parameter = constant.BlendDirectData.Data.ChildBlendEventIDArray[index];
 				return true;
 			}
 			parameter = default;

@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Assets.Exceptions;
+﻿using AssetRipper.IO.Endian;
+
+namespace AssetRipper.Assets.Exceptions;
 
 public sealed class IncorrectByteCountException : Exception
 {
@@ -16,6 +18,14 @@ public sealed class IncorrectByteCountException : Exception
 		if (stream.Position - basePosition != size)
 		{
 			throw new IncorrectByteCountException(stream.Position - basePosition, size);
+		}
+	}
+
+	public static void ThrowIf(in EndianSpanReader reader)
+	{
+		if (reader.Position != reader.Length)
+		{
+			throw new IncorrectByteCountException(reader.Position, reader.Length);
 		}
 	}
 }

@@ -1,8 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
 namespace AssetRipper.Tools.JsonSerializer;
@@ -10,12 +8,12 @@ namespace AssetRipper.Tools.JsonSerializer;
 public abstract class SerializableEntry
 {
 	public bool Align { get; set; }
-	public abstract JsonNode? Read(EndianReader reader);
-	protected void MaybeAlign(EndianReader reader)
+	public abstract JsonNode? Read(ref EndianSpanReader reader);
+	protected void MaybeAlign(ref EndianSpanReader reader)
 	{
 		if (Align)
 		{
-			reader.AlignStream();
+			reader.Align();
 		}
 	}
 	public static SerializableEntry FromTypeTree(TypeTree typeTree)

@@ -1,10 +1,11 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
-using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Structure.Assembly.Mono;
+using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Yaml;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable
@@ -18,21 +19,19 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			Fields = new SerializableField[type.FieldCount];
 		}
 
-		public new void Read(AssetReader reader)
+		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.GetField(i);
 				if (IsAvailable(etalon))
 				{
-					Fields[i].Read(reader, Depth, etalon);
+					Fields[i].Read(ref reader, version, flags, Depth, etalon);
 				}
 			}
 		}
-		public override void ReadEditor(AssetReader reader) => Read(reader);
-		public override void ReadRelease(AssetReader reader) => Read(reader);
 
-		public new void Write(AssetWriter writer)
+		public void Write(AssetWriter writer)
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
@@ -46,7 +45,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public override void WriteEditor(AssetWriter writer) => Write(writer);
 		public override void WriteRelease(AssetWriter writer) => Write(writer);
 
-		public new YamlNode ExportYaml(IExportContainer container)
+		public YamlNode ExportYaml(IExportContainer container)
 		{
 			YamlMappingNode node = new YamlMappingNode();
 			for (int i = 0; i < Fields.Length; i++)
