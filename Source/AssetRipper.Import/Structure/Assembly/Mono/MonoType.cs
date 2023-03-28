@@ -16,7 +16,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 
 		public MonoType(TypeDefinition typeDefinition, Dictionary<TypeDefinition, MonoType> typeCache) : this(typeDefinition)
 		{
-			typeCache[typeDefinition] = this;
+			typeCache.Add(typeDefinition, this);
 			List<Field> fields = new(typeDefinition.Fields.Count); //Ensure we allocate some initial space so that we have less chance of needing to resize the list.
 			foreach ((FieldDefinition fieldDefinition, TypeSignature fieldType) in FieldQuery.GetFieldsInTypeAndBase(typeDefinition))
 			{
@@ -58,11 +58,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 					TypeDefinition typeDefinition = typeDefOrRefSignature.Type.Resolve()
 						?? throw new NullReferenceException($"Could not resolve {typeDefOrRefSignature.FullName}");
 					SerializableType fieldType;
-					if (typeCache.TryGetValue(typeDefinition, out MonoType? cachedMonoType))
-					{
-						fieldType = cachedMonoType;
-					}
-					else if (typeDefinition.IsEnum)
+					if (typeDefinition.IsEnum)
 					{
 						TypeSignature enumValueType = typeDefinition.Fields.Single(f => !f.IsStatic).Signature!.FieldType;
 						PrimitiveType primitiveType = ((CorLibTypeSignature)enumValueType).ToPrimitiveType();
@@ -71,6 +67,11 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 					else if (typeDefinition.InheritsFromObject())
 					{
 						fieldType = SerializablePointerType.Shared;
+					}
+					else if (typeCache.TryGetValue(typeDefinition, out MonoType? cachedMonoType))
+					{
+						//This needs to come after the InheritsFromObject check so that those fields get properly converted into PPtr assets.
+						fieldType = cachedMonoType;
 					}
 					else
 					{

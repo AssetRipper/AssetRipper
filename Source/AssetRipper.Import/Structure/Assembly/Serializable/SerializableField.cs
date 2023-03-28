@@ -526,5 +526,10 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		public ulong PValue { get; set; }
 		public object CValue { get; set; }
+
+		public override string ToString()
+		{
+			return CValue?.ToString() ?? PValue.ToString();
+		}
 	}
 }

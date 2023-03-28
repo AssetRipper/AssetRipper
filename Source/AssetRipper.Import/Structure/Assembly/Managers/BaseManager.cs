@@ -208,11 +208,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			{
 				return sType;
 			}
-			TypeDefinition? type = FindType(scriptID);
-			if (type == null)
-			{
-				throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
-			}
+			TypeDefinition type = FindType(scriptID) ?? throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
 			if (monoTypeCache.TryGetValue(type, out MonoType? monoType))
 			{
 				return monoType;
