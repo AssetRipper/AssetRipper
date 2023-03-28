@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.IO.Endian.Tests;
+﻿using System.Runtime.CompilerServices;
+
+namespace AssetRipper.IO.Endian.Tests;
 
 public partial class EndianSpanTests
 {
@@ -105,6 +107,25 @@ public partial class EndianSpanTests
 		reader.Position = Offset;
 		Utf8String value2 = reader.ReadNullTerminatedString();
 		Assert.That(reader.Position, Is.EqualTo(length));
+		Assert.That(value2, Is.EqualTo(value1));
+	}
+
+	public partial void TestGenericReadWrite<T>(EndianType endianType) where T : unmanaged
+	{
+		int sizeOfT = Unsafe.SizeOf<T>();
+		byte[] data = new byte[sizeOfT];
+
+		T value1 = RandomData.NextPrimitive<T>();
+
+		EndianSpanWriter writer = new EndianSpanWriter(data, endianType);
+		Assert.That(writer.Length, Is.EqualTo(sizeOfT));
+		writer.WritePrimitive<T>(value1);
+		Assert.That(writer.Position, Is.EqualTo(sizeOfT));
+
+		EndianSpanReader reader = new EndianSpanReader(data, endianType);
+		Assert.That(reader.Length, Is.EqualTo(sizeOfT));
+		T value2 = reader.ReadPrimitive<T>();
+		Assert.That(reader.Position, Is.EqualTo(sizeOfT));
 		Assert.That(value2, Is.EqualTo(value1));
 	}
 }

@@ -1,5 +1,6 @@
 // Auto-generated code. Do not modify manually.
 using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.IO.Endian;
 
@@ -94,5 +95,78 @@ ref partial struct EndianSpanReader
 			: BinaryPrimitives.ReadDoubleLittleEndian(data.Slice(offset));
 		offset += sizeof(double);
 		return result;
+	}
+
+	/// <summary>
+	/// Read a C# primitive type. JIT optimizations should make this as efficient as normal method calls.
+	/// </summary>
+	public T ReadPrimitive<T>() where T : unmanaged
+	{
+		if (typeof(T) == typeof(short))
+		{
+			short value = ReadInt16();
+			return Unsafe.As<short, T>(ref value);
+		}
+		else if (typeof(T) == typeof(ushort))
+		{
+			ushort value = ReadUInt16();
+			return Unsafe.As<ushort, T>(ref value);
+		}
+		else if (typeof(T) == typeof(int))
+		{
+			int value = ReadInt32();
+			return Unsafe.As<int, T>(ref value);
+		}
+		else if (typeof(T) == typeof(uint))
+		{
+			uint value = ReadUInt32();
+			return Unsafe.As<uint, T>(ref value);
+		}
+		else if (typeof(T) == typeof(long))
+		{
+			long value = ReadInt64();
+			return Unsafe.As<long, T>(ref value);
+		}
+		else if (typeof(T) == typeof(ulong))
+		{
+			ulong value = ReadUInt64();
+			return Unsafe.As<ulong, T>(ref value);
+		}
+		else if (typeof(T) == typeof(Half))
+		{
+			Half value = ReadHalf();
+			return Unsafe.As<Half, T>(ref value);
+		}
+		else if (typeof(T) == typeof(float))
+		{
+			float value = ReadSingle();
+			return Unsafe.As<float, T>(ref value);
+		}
+		else if (typeof(T) == typeof(double))
+		{
+			double value = ReadDouble();
+			return Unsafe.As<double, T>(ref value);
+		}
+		else if (typeof(T) == typeof(bool))
+		{
+			bool value = ReadBoolean();
+			return Unsafe.As<bool, T>(ref value);
+		}
+		else if (typeof(T) == typeof(byte))
+		{
+			byte value = ReadByte();
+			return Unsafe.As<byte, T>(ref value);
+		}
+		else if (typeof(T) == typeof(sbyte))
+		{
+			sbyte value = ReadSByte();
+			return Unsafe.As<sbyte, T>(ref value);
+		}
+		else if (typeof(T) == typeof(char))
+		{
+			char value = ReadChar();
+			return Unsafe.As<char, T>(ref value);
+		}
+		return default;//Throwing an exception prevents method inlining.
 	}
 }

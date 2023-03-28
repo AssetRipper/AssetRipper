@@ -7,12 +7,11 @@ namespace AssetRipper.IO.Endian.SourceGenerator;
 internal class Program
 {
 	private const string PathToRepository = "../../../../../";
-	private const string PathToTargetDirectory = PathToRepository + "AssetRipper.IO.Endian/";
-	private const string PathToTestsDirectory = PathToRepository + "AssetRipper.IO.Endian.Tests/";
+	private const string PathToTargetDirectory = PathToRepository + "Source/AssetRipper.IO.Endian/";
+	private const string PathToTestsDirectory = PathToRepository + "Source/AssetRipper.IO.Endian.Tests/";
 	private const string ReaderStructName = "EndianSpanReader";
 	private const string WriterStructName = "EndianSpanWriter";
 	private const string TestsClassName = "EndianSpanTests";
-	private const string BinaryPrimitivesNamespace = "System.Buffers.Binary";
 	private const string TargetNamespace = "AssetRipper.IO.Endian";
 	private const string TestsNamespace = TargetNamespace + ".Tests";
 	private const string BigEndianField = "bigEndian";
@@ -71,6 +70,8 @@ internal class Program
 				writer.WriteLineNoTabs();
 				AddReadMethod(writer, typeName, keyword);
 			}
+			writer.WriteLineNoTabs();
+			AddGenericReadMethod(writer);
 		}
 	}
 
@@ -96,6 +97,8 @@ internal class Program
 				writer.WriteLineNoTabs();
 				AddWriteMethod(writer, typeName, keyword);
 			}
+			writer.WriteLineNoTabs();
+			AddGenericWriteMethod(writer);
 		}
 	}
 
@@ -126,13 +129,15 @@ internal class Program
 				}
 				AddTestMethod(writer, typeName, keyWord);
 			}
+			AddGenericTestMethod(writer);
 		}
 	}
 
 	private static void AddHeaderLines(IndentedTextWriter writer)
 	{
 		writer.WriteGeneratedCodeWarning();
-		writer.WriteUsing(BinaryPrimitivesNamespace);
+		writer.WriteUsing("System.Buffers.Binary");
+		writer.WriteUsing("System.Runtime.CompilerServices");
 		writer.WriteLine();
 		writer.WriteFileScopedNamespace(TargetNamespace);
 		writer.WriteLine();
@@ -185,6 +190,27 @@ internal class Program
 		}
 	}
 
+	private static void AddGenericReadMethod(IndentedTextWriter writer)
+	{
+		writer.WriteSummaryDocumentation("Read a C# primitive type. JIT optimizations should make this as efficient as normal method calls.");
+		writer.WriteLine("public T ReadPrimitive<T>() where T : unmanaged");
+		using (new CurlyBrackets(writer))
+		{
+			string elsePrefix = "";
+			foreach ((string typeName, string keyword) in list.Union(otherList))
+			{
+				writer.WriteLine($"{elsePrefix}if (typeof(T) == typeof({keyword}))");
+				using (new CurlyBrackets(writer))
+				{
+					writer.WriteLine($"{keyword} value = Read{typeName}();");
+					writer.WriteLine($"return Unsafe.As<{keyword}, T>(ref value);");
+				}
+				elsePrefix = "else ";
+			}
+			writer.WriteLine("return default;//Throwing an exception prevents method inlining.");
+		}
+	}
+
 	/// <summary>
 	/// <code>
 	/// public void Write(int value)
@@ -223,6 +249,25 @@ internal class Program
 				writer.WriteLine($"{methodName}({DataField}.{SliceMethod}({OffsetField}), {ValueParameter});");
 			}
 			writer.WriteLine($"{OffsetField} += {SizeOfExpression(parameterType)};");
+		}
+	}
+
+	private static void AddGenericWriteMethod(IndentedTextWriter writer)
+	{
+		writer.WriteSummaryDocumentation("Write a C# primitive type. JIT optimizations should make this as efficient as normal method calls.");
+		writer.WriteLine("public void WritePrimitive<T>(T value) where T : unmanaged");
+		using (new CurlyBrackets(writer))
+		{
+			string elsePrefix = "";
+			foreach ((string typeName, string keyword) in list.Union(otherList))
+			{
+				writer.WriteLine($"{elsePrefix}if (typeof(T) == typeof({keyword}))");
+				using (new CurlyBrackets(writer))
+				{
+					writer.WriteLine($"Write(Unsafe.As<T, {keyword}>(ref value));");
+				}
+				elsePrefix = "else ";
+			}
 		}
 	}
 
@@ -283,6 +328,17 @@ internal class Program
 			writer.WriteLine($"Assert.That(reader.Position, Is.EqualTo({SizeOfExpression(parameterType)}));");
 			writer.WriteLine("Assert.That(value2, Is.EqualTo(value1));");
 		}
+	}
+
+	private static void AddGenericTestMethod(IndentedTextWriter writer)
+	{
+		writer.WriteLineNoTabs();
+		foreach ((_, string keyWord) in list.Union(otherList))
+		{
+			writer.WriteLine($"[TestCase<{keyWord}>(EndianType.LittleEndian)]");
+			writer.WriteLine($"[TestCase<{keyWord}>(EndianType.BigEndian)]");
+		}
+		writer.WriteLine("public partial void TestGenericReadWrite<T>(EndianType endianType) where T : unmanaged;");
 	}
 
 	private static string SizeOfExpression(string type)

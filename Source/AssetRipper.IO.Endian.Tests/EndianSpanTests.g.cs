@@ -236,4 +236,32 @@ public partial class EndianSpanTests
 		Assert.That(reader.Position, Is.EqualTo(sizeof(char)));
 		Assert.That(value2, Is.EqualTo(value1));
 	}
+
+	[TestCase<short>(EndianType.LittleEndian)]
+	[TestCase<short>(EndianType.BigEndian)]
+	[TestCase<ushort>(EndianType.LittleEndian)]
+	[TestCase<ushort>(EndianType.BigEndian)]
+	[TestCase<int>(EndianType.LittleEndian)]
+	[TestCase<int>(EndianType.BigEndian)]
+	[TestCase<uint>(EndianType.LittleEndian)]
+	[TestCase<uint>(EndianType.BigEndian)]
+	[TestCase<long>(EndianType.LittleEndian)]
+	[TestCase<long>(EndianType.BigEndian)]
+	[TestCase<ulong>(EndianType.LittleEndian)]
+	[TestCase<ulong>(EndianType.BigEndian)]
+	[TestCase<Half>(EndianType.LittleEndian)]
+	[TestCase<Half>(EndianType.BigEndian)]
+	[TestCase<float>(EndianType.LittleEndian)]
+	[TestCase<float>(EndianType.BigEndian)]
+	[TestCase<double>(EndianType.LittleEndian)]
+	[TestCase<double>(EndianType.BigEndian)]
+	[TestCase<bool>(EndianType.LittleEndian)]
+	[TestCase<bool>(EndianType.BigEndian)]
+	[TestCase<byte>(EndianType.LittleEndian)]
+	[TestCase<byte>(EndianType.BigEndian)]
+	[TestCase<sbyte>(EndianType.LittleEndian)]
+	[TestCase<sbyte>(EndianType.BigEndian)]
+	[TestCase<char>(EndianType.LittleEndian)]
+	[TestCase<char>(EndianType.BigEndian)]
+	public partial void TestGenericReadWrite<T>(EndianType endianType) where T : unmanaged;
 }

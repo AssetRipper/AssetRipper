@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.IO.Endian.Tests;
+﻿using System.Runtime.CompilerServices;
+
+namespace AssetRipper.IO.Endian.Tests;
 
 public static class RandomData
 {
@@ -29,6 +31,21 @@ public static class RandomData
 	public static bool NextBoolean() => (random.Next() & 1) != 0;
 
 	public static char NextChar() => (char)NextUInt16();
+
+	public static T NextPrimitive<T>() where T : unmanaged
+	{
+		if (typeof(T) == typeof(bool))
+		{
+			bool value = NextBoolean();
+			return Unsafe.As<bool, T>(ref value);
+		}
+		else
+		{
+			Assert.That(Unsafe.SizeOf<T>(), Is.LessThanOrEqualTo(sizeof(ulong)));
+			ulong value = NextUInt64();
+			return Unsafe.As<ulong, T>(ref value);
+		}
+	}
 
 	public static byte[] NextBytes(int count)
 	{
