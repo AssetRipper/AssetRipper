@@ -7,9 +7,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
-using AssetRipper.SourceGenerated.Classes.ClassID_137;
-using AssetRipper.SourceGenerated.Classes.ClassID_2;
-using AssetRipper.SourceGenerated.Classes.ClassID_23;
+using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_33;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
@@ -17,7 +15,6 @@ using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
-using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -30,7 +27,7 @@ namespace AssetRipper.Processing.StaticMeshes
 		private readonly Dictionary<IMesh, MeshData> combinedMeshDictionary = new();
 		private readonly HashSet<IMesh> badMeshSet = new();
 		private readonly Dictionary<string, LinkedList<IMesh>> meshNameDictionary = new();
-		private readonly Dictionary<string, List<(IMesh, IComponent, IMeshFilter, ITransform)>> cleanNameToParts = new();
+		private readonly Dictionary<string, List<(IMesh, IRenderer, IMeshFilter, ITransform)>> cleanNameToParts = new();
 
 		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
 		{
@@ -44,18 +41,18 @@ namespace AssetRipper.Processing.StaticMeshes
 					LinkedList<IMesh> meshList = meshNameDictionary.GetOrAdd(mesh.NameString);
 					meshList.AddLast(mesh);
 				}
-				else if (TryGetStaticMeshInformation(asset, out string? cleanName, out (IMesh, IComponent, IMeshFilter, ITransform) parts))
+				else if (TryGetStaticMeshInformation(asset, out string? cleanName, out (IMesh, IRenderer, IMeshFilter, ITransform) parts))
 				{
 					cleanNameToParts.GetOrAdd(cleanName).Add(parts);
 				}
 			}
 
 			Logger.Info(LogCategory.Processing, $"Found {cleanNameToParts.Count} meshes combined into static batches");
-			foreach ((string cleanName, List<(IMesh, IComponent, IMeshFilter, ITransform)> list) in cleanNameToParts)
+			foreach ((string cleanName, List<(IMesh, IRenderer, IMeshFilter, ITransform)> list) in cleanNameToParts)
 			{
 				Logger.Info(LogCategory.Processing, $"Attempting to recreate {cleanName} from {list.Count} instances");
-				LinkedList<LinkedList<(MeshData, IComponent, IMeshFilter)>> boxes = new();
-				foreach ((IMesh combinedMesh, IComponent renderer, IMeshFilter meshFilter, ITransform transform) in list)
+				LinkedList<LinkedList<(MeshData, IRenderer, IMeshFilter)>> boxes = new();
+				foreach ((IMesh combinedMesh, IRenderer renderer, IMeshFilter meshFilter, ITransform transform) in list)
 				{
 					if (TryGetOrMakeCombinedMeshData(combinedMesh, out MeshData combinedMeshData))
 					{
@@ -63,7 +60,7 @@ namespace AssetRipper.Processing.StaticMeshes
 						CreateTranformations(transform, out Transformation transformation, out Transformation inverseTransformation);
 						ApplyTransformationToMeshData(instanceMeshData, transformation, inverseTransformation);
 						bool addedToABox = false;
-						foreach (LinkedList<(MeshData, IComponent, IMeshFilter)> box in boxes)
+						foreach (LinkedList<(MeshData, IRenderer, IMeshFilter)> box in boxes)
 						{
 							bool shouldGoInTheBox = true;
 							foreach ((MeshData otherMeshData, _, _) in box)
@@ -83,14 +80,14 @@ namespace AssetRipper.Processing.StaticMeshes
 						}
 						if (!addedToABox)
 						{
-							LinkedList<(MeshData, IComponent, IMeshFilter)> box = new();
+							LinkedList<(MeshData, IRenderer, IMeshFilter)> box = new();
 							box.AddFirst((instanceMeshData, renderer, meshFilter));
 							boxes.AddLast(box);
 						}
 					}
 				}
 				Logger.Info(LogCategory.Processing, $"Separated instances of {cleanName} into {boxes.Count} boxes");
-				foreach (LinkedList<(MeshData, IComponent, IMeshFilter)> box in boxes)
+				foreach (LinkedList<(MeshData, IRenderer, IMeshFilter)> box in boxes)
 				{
 					IMesh? separatedMesh = null;
 					if (meshNameDictionary.TryGetValue(cleanName, out LinkedList<IMesh>? originalMeshes))
@@ -114,7 +111,7 @@ namespace AssetRipper.Processing.StaticMeshes
 						separatedMesh = MakeMeshFromData(cleanName, averageMeshData, processedCollection);
 					}
 
-					foreach ((_, IComponent renderer, IMeshFilter meshFilter) in box)
+					foreach ((_, IRenderer renderer, IMeshFilter meshFilter) in box)
 					{
 						ApplyMeshToRendererAndFilter(separatedMesh, renderer, meshFilter);
 					}
@@ -318,10 +315,11 @@ namespace AssetRipper.Processing.StaticMeshes
 		}
 		#endregion
 
-		private static void ApplyMeshToRendererAndFilter(IMesh mesh, IComponent renderer, IMeshFilter meshFilter)
+		private static void ApplyMeshToRendererAndFilter(IMesh mesh, IRenderer renderer, IMeshFilter meshFilter)
 		{
 			meshFilter.Mesh_C33.CopyValues(meshFilter.Collection.ForceCreatePPtr(mesh));
 			renderer.ClearStaticBatchInfo();
+			renderer.SetStaticEditorFlagsOnGameObject();
 		}
 
 		private static IMesh MakeMeshFromData(string cleanName, MeshData instanceMeshData, ProcessedAssetCollection processedCollection)
@@ -425,7 +423,7 @@ namespace AssetRipper.Processing.StaticMeshes
 			}
 		}
 
-		private static MeshData MakeMeshDataFromSubMeshes(IComponent renderer, MeshData combinedMeshData)
+		private static MeshData MakeMeshDataFromSubMeshes(IRenderer renderer, MeshData combinedMeshData)
 		{
 			IReadOnlyList<uint> subMeshIndicies = renderer.GetSubmeshIndices();
 
@@ -521,9 +519,9 @@ namespace AssetRipper.Processing.StaticMeshes
 		private static bool TryGetStaticMeshInformation(
 			IUnityObjectBase component,
 			[NotNullWhen(true)] out string? cleanName,
-			out (IMesh, IComponent, IMeshFilter, ITransform) parts)
+			out (IMesh, IRenderer, IMeshFilter, ITransform) parts)
 		{
-			if (!component.IsStaticMeshRenderer(out IComponent? renderer))
+			if (!component.IsStaticMeshRenderer(out IRenderer? renderer))
 			{
 				cleanName = null;
 				parts = default;
@@ -762,139 +760,5 @@ namespace AssetRipper.Processing.StaticMeshes
 				&& value1.Index3 == value2.Index3;
 		}
 		#endregion
-	}
-	internal static class StaticMeshSeparationExtensions
-	{
-		public static bool IsStaticMeshRenderer(this IUnityObjectBase asset, [NotNullWhen(true)] out IComponent? renderer)
-		{
-			if (asset is IMeshRenderer meshRenderer)
-			{
-				renderer = meshRenderer;
-				return !meshRenderer.ReferencesDynamicMesh();
-			}
-			else if (asset is ISkinnedMeshRenderer skinnedMeshRenderer)
-			{
-				renderer = skinnedMeshRenderer;
-				return !skinnedMeshRenderer.ReferencesDynamicMesh();
-			}
-			else
-			{
-				renderer = null;
-				return false;
-			}
-		}
-
-		private static bool ReferencesDynamicMesh(this IMeshRenderer renderer)
-		{
-			return renderer.Has_StaticBatchInfo_C23() && renderer.StaticBatchInfo_C23.SubMeshCount == 0
-				|| renderer.Has_SubsetIndices_C23() && renderer.SubsetIndices_C23.Length == 0;
-		}
-
-		private static bool ReferencesDynamicMesh(this ISkinnedMeshRenderer renderer)
-		{
-			return renderer.Has_StaticBatchInfo_C137() && renderer.StaticBatchInfo_C137.SubMeshCount == 0
-				|| renderer.Has_SubsetIndices_C137() && renderer.SubsetIndices_C137.Length == 0;
-		}
-
-		public static IReadOnlyList<uint> GetSubmeshIndices(this IComponent renderer)
-		{
-			return renderer switch
-			{
-				IMeshRenderer meshRenderer => meshRenderer.GetSubmeshIndices(),
-				ISkinnedMeshRenderer skinnedMeshRenderer => skinnedMeshRenderer.GetSubmeshIndices(),
-				_ => Array.Empty<uint>()
-			};
-		}
-
-		private static IReadOnlyList<uint> GetSubmeshIndices(this IMeshRenderer renderer)
-		{
-			return renderer.Has_StaticBatchInfo_C23()
-				? new RangeList(renderer.StaticBatchInfo_C23.FirstSubMesh, renderer.StaticBatchInfo_C23.SubMeshCount)
-				: renderer.SubsetIndices_C23;
-		}
-
-		private static IReadOnlyList<uint> GetSubmeshIndices(this ISkinnedMeshRenderer renderer)
-		{
-			return renderer.Has_StaticBatchInfo_C137()
-				? new RangeList(renderer.StaticBatchInfo_C137.FirstSubMesh, renderer.StaticBatchInfo_C137.SubMeshCount)
-				: renderer.SubsetIndices_C137;
-		}
-
-		private sealed class RangeList : IReadOnlyList<uint>
-		{
-			private readonly uint start;
-			private readonly uint count;
-
-			public RangeList(uint start, uint count)
-			{
-				this.start = start;
-				this.count = count;
-			}
-
-			public uint this[int index]
-			{
-				get
-				{
-					if (index < 0 || index >= count)
-					{
-						throw new ArgumentOutOfRangeException(nameof(index));
-					}
-					else
-					{
-						return start + (uint)index;
-					}
-				}
-			}
-
-			public int Count => (int)count;
-
-			public IEnumerator<uint> GetEnumerator()
-			{
-				for (uint i = 0; i < count; i++)
-				{
-					yield return start + i;
-				}
-			}
-
-			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-		}
-
-		public static void ClearStaticBatchInfo(this IComponent renderer)
-		{
-			if (renderer is IMeshRenderer meshRenderer)
-			{
-				meshRenderer.ClearStaticBatchInfo();
-			}
-			else if (renderer is ISkinnedMeshRenderer skinnedMeshRenderer)
-			{
-				skinnedMeshRenderer.ClearStaticBatchInfo();
-			}
-		}
-
-		private static void ClearStaticBatchInfo(this IMeshRenderer renderer)
-		{
-			if (renderer.Has_StaticBatchInfo_C23())
-			{
-				renderer.StaticBatchInfo_C23.FirstSubMesh = 0;
-				renderer.StaticBatchInfo_C23.SubMeshCount = 0;
-			}
-			else if (renderer.Has_SubsetIndices_C23())
-			{
-				renderer.SubsetIndices_C23 = Array.Empty<uint>();
-			}
-		}
-
-		private static void ClearStaticBatchInfo(this ISkinnedMeshRenderer renderer)
-		{
-			if (renderer.Has_StaticBatchInfo_C137())
-			{
-				renderer.StaticBatchInfo_C137.FirstSubMesh = 0;
-				renderer.StaticBatchInfo_C137.SubMeshCount = 0;
-			}
-			else if (renderer.Has_SubsetIndices_C137())
-			{
-				renderer.SubsetIndices_C137 = Array.Empty<uint>();
-			}
-		}
 	}
 }
