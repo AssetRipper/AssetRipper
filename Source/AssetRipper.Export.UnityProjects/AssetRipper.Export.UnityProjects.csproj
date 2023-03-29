@@ -20,7 +20,7 @@
 		<PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0028" />
 		<PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0028" />
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-		<PackageReference Include="SixLabors.ImageSharp" Version="3.0.0" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
