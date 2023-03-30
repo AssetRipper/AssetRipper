@@ -8,6 +8,9 @@
 		<RootNamespace>AssetRipper.GUI</RootNamespace>
 		<ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>
 		<ServerGarbageCollection>true</ServerGarbageCollection>
+		
+		<!-- Because 'av_libglesv2.dll' is not being included, we need to set the runtime identifier to Windows 7 -->
+		<RuntimeIdentifier>win7-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
 	<ItemGroup>
