@@ -1,20 +1,28 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_1042;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
+using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Font;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
+using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
-	public sealed class FontAssetExportCollection : AssetExportCollection
+	public sealed class FontAssetExportCollection : AssetsExportCollection
 	{
-		public FontAssetExportCollection(FontAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
+		public FontAssetExportCollection(FontAssetExporter assetExporter, IFont font) : base(assetExporter, font)
 		{
+			if (font.TryGetFontMaterial(out IMaterial? fontMaterial))
+			{
+				Debug.Assert(fontMaterial.MainAsset == font);
+				AddAsset(fontMaterial);
+			}
 		}
 
 		protected override IUnityObjectBase CreateImporter(IExportContainer container)
@@ -34,7 +42,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			}
 			if (origin.Has_FallbackFonts_C128() && instance.Has_FallbackFontReferences_C1042())
 			{
-				PPtrConverter ptrConverter = new(origin, origin);
+				PPtrConverter ptrConverter = new(origin, instance);
 				foreach (IPPtr_Font ptrFont in origin.FallbackFonts_C128)
 				{
 					instance.FallbackFontReferences_C1042.AddNew().CopyValues(ptrFont, ptrConverter);
@@ -59,6 +67,12 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			byte[] fontData = ((IFont)asset).FontData_C128;
 			uint type = BitConverter.ToUInt32(fontData, 0);
 			return type == OttoAsciiFourCC ? "otf" : "ttf";
+		}
+
+		protected override long GenerateExportID(IUnityObjectBase asset)
+		{
+			Debug.Assert(asset is IMaterial);
+			return ExportIdHandler.GetMainExportID(asset);//The font material always has the same id: 2100000
 		}
 
 		/// <summary>

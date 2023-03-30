@@ -121,7 +121,7 @@ namespace AssetRipper.Export.UnityProjects
 			IEnumerable<IAssetProcessor> GetProcessors()
 			{
 				yield return new SceneDefinitionProcessor();
-				yield return new TerrainTextureProcessor();
+				yield return new MainAssetProcessor();
 				yield return new LightingDataProcessor();
 				yield return new AnimatorControllerProcessor();
 				yield return new EditorFormatProcessor(Settings.BundledAssetsExportMode);
@@ -221,7 +221,9 @@ namespace AssetRipper.Export.UnityProjects
 
 			//Miscellaneous exporters
 			projectExporter.OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
-			projectExporter.OverrideExporter<IFont>(new FontAssetExporter());
+			FontAssetExporter fontAssetExporter = new FontAssetExporter();
+			projectExporter.OverrideExporter<IFont>(fontAssetExporter);
+			projectExporter.OverrideExporter<IMaterial>(fontAssetExporter);
 			projectExporter.OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
 			VideoClipExporter videoClipExporter = new();
 			projectExporter.OverrideExporter<SourceGenerated.Classes.ClassID_327.IVideoClip>(videoClipExporter);

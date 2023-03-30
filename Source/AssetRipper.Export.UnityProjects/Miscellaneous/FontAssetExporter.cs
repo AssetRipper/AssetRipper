@@ -10,9 +10,9 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset is IFont font && IsValidData(font.FontData_C128))
+			if (asset.MainAsset is IFont font && IsValidData(font.FontData_C128))
 			{
-				exportCollection = new FontAssetExportCollection(this, asset);
+				exportCollection = new FontAssetExportCollection(this, font);
 				return true;
 			}
 			else
@@ -22,9 +22,10 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			}
 		}
 
-		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
 		{
-			File.WriteAllBytes(path, ((IFont)asset).FontData_C128);
+			IFont font = assets.OfType<IFont>().Single();
+			File.WriteAllBytes(path, font.FontData_C128);
 			return true;
 		}
 	}
