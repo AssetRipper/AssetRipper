@@ -1,4 +1,4 @@
-﻿name: DocFX Build and Publish
+name: DocFX Build and Publish
 
 on:
   workflow_dispatch:
@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
 
