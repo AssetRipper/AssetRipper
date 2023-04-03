@@ -11,3 +11,14 @@ body:
         Issues are not for asking questions. Please post your inquiry at https://github.com/AssetRipper/AssetRipper/discussions instead.
     validations:
       required: true
+  - type: dropdown
+    id: areyousure
+    attributes:
+      label: Are you sure you want to clutter the issues section?
+      description: |
+        Issues are not for asking questions. Please post your inquiry at https://github.com/AssetRipper/AssetRipper/discussions instead.
+      options:
+        - Yes, I acknowledge that my question may be ignored because I am not following directions.
+        - No, I need to use the discussions tab. I will recieve better support there.
+    validations:
+      required: true

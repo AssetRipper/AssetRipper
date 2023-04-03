@@ -5,6 +5,7 @@ This release will be primarily focused on improving the user interface.
 
 * Add a settings window
 * Add donation information
+* ~~Use Span readers for more efficient asset reading~~
 
 ## 0.3.X.0
 These releases will likely focus on preparing for the next major milestone.
@@ -15,7 +16,6 @@ These releases will likely focus on preparing for the next major milestone.
 * Make all dependencies trimmable
 * Nuget feed for forked dependencies
 * NativeAOT compilation for better performance while loading and extracting
-* Use Span readers and writers for more efficient asset reading and writing
 
 ## 0.4.0.0 / 1.0.0.0
 This release might focus on improving the user experience in the GUI.

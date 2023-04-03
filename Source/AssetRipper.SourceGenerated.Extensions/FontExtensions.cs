@@ -18,7 +18,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		}
 
 		/// <summary>
-		/// Font Material is an automatically generated material for fonts.
+		/// Font Material is an automatically generated material for each font.
 		/// </summary>
 		/// <param name="font"></param>
 		/// <param name="fontMaterial"></param>
