@@ -1,4 +1,4 @@
-﻿name: DocFX Build and Publish
+name: DocFX Build and Publish
 
 on:
   workflow_dispatch:
@@ -41,7 +41,7 @@ jobs:
         run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
       - name: Setup DocFX
-        uses: crazy-max/ghaction-chocolatey@v1
+        uses: crazy-max/ghaction-chocolatey@v2
         with:
           args: install docfx
 
