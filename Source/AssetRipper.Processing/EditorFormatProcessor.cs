@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
@@ -148,12 +149,14 @@ namespace AssetRipper.Processing
 				if (asset.OriginalPath is null)
 				{
 					asset.OriginalPath = resourcePath;
+					UndoPathLowercasing(asset);
 				}
 				else if (asset.OriginalPath.Length < resourcePath.Length)
 				{
 					// for paths like "Resources/inner/resources/extra/file" engine creates 2 resource entries
 					// "inner/resources/extra/file" and "extra/file"
 					asset.OriginalPath = resourcePath;
+					UndoPathLowercasing(asset);
 				}
 			}
 		}
@@ -227,6 +230,24 @@ namespace AssetRipper.Processing
 					default:
 						throw new ArgumentOutOfRangeException(nameof(bundledAssetsExportMode), $"Invalid {nameof(BundledAssetsExportMode)} : {bundledAssetsExportMode}");
 				}
+				UndoPathLowercasing(asset);
+			}
+		}
+
+		/// <summary>
+		/// During compilation, Unity often lowers all the characters in a path. This restores the proper capitalization for asset names.
+		/// </summary>
+		/// <param name="asset"></param>
+		private static void UndoPathLowercasing(IUnityObjectBase asset)
+		{
+			string? assetName = (asset as IHasNameString)?.NameString;
+			string? originalName = asset.OriginalName;
+			if (assetName is not null
+				&& originalName is not null
+				&& assetName.Length == originalName.Length
+				&& originalName == assetName.ToLowerInvariant())
+			{
+				asset.OriginalName = assetName;
 			}
 		}
 
