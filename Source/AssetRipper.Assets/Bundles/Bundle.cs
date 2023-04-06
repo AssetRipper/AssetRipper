@@ -23,7 +23,7 @@ public abstract class Bundle : IDisposable
 
 	public abstract string Name { get; }
 	
-	public void InitializeAllDependencyLists()
+	internal void InitializeAllDependencyLists()
 	{
 		foreach (AssetCollection collection in Collections)
 		{
@@ -228,27 +228,6 @@ public abstract class Bundle : IDisposable
 			foreach (ResourceFile resource in bundle.FetchResourceFiles())
 			{
 				yield return resource;
-			}
-		}
-	}
-
-	public IEnumerable<FileIdentifier> GetUnresolvedDependencies()
-	{
-		foreach (AssetCollection collection in collections)
-		{
-			if (collection is SerializedAssetCollection serializedCollection)
-			{
-				foreach (FileIdentifier identifier in serializedCollection.GetUnresolvedDependencies())
-				{
-					yield return identifier;
-				}
-			}
-		}
-		foreach (Bundle bundle in bundles)
-		{
-			foreach (FileIdentifier identifier in bundle.GetUnresolvedDependencies())
-			{
-				yield return identifier;
 			}
 		}
 	}

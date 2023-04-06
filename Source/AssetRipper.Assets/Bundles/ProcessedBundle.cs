@@ -6,7 +6,7 @@ namespace AssetRipper.Assets.Bundles;
 /// <summary>
 /// A <see cref="Bundle"/> containing <see cref="ProcessedAssetCollection"/>s.
 /// </summary>
-public class ProcessedBundle : VirtualBundle<ProcessedAssetCollection>
+public sealed class ProcessedBundle : VirtualBundle<ProcessedAssetCollection>
 {
 	public override string Name { get; }
 

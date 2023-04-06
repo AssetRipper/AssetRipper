@@ -9,11 +9,11 @@ namespace AssetRipper.Assets.Collections;
 /// <summary>
 /// A collection of assets read from a <see cref="SerializedFile"/>.
 /// </summary>
-public class SerializedAssetCollection : AssetCollection
+public sealed class SerializedAssetCollection : AssetCollection
 {
 	public FileIdentifier[]? DependencyIdentifiers { get; private set; }
 
-	protected SerializedAssetCollection(Bundle bundle) : base(bundle)
+	private SerializedAssetCollection(Bundle bundle) : base(bundle)
 	{
 	}
 
@@ -22,7 +22,7 @@ public class SerializedAssetCollection : AssetCollection
 		return dependency is SerializedAssetCollection or ProcessedAssetCollection;
 	}
 
-	public void InitializeDependencyList()
+	internal void InitializeDependencyList()
 	{
 		if (Dependencies.Count > 1)
 		{
@@ -36,21 +36,6 @@ public class SerializedAssetCollection : AssetCollection
 				SetDependency(i + 1, Bundle.ResolveCollection(identifier));
 			}
 			DependencyIdentifiers = null;
-		}
-	}
-
-	public IEnumerable<FileIdentifier> GetUnresolvedDependencies()
-	{
-		if (DependencyIdentifiers is not null)
-		{
-			for (int i = 0; i < DependencyIdentifiers.Length; i++)
-			{
-				FileIdentifier identifier = DependencyIdentifiers[i];
-				if (Bundle.ResolveCollection(identifier) is null)
-				{
-					yield return identifier;
-				}
-			}
 		}
 	}
 

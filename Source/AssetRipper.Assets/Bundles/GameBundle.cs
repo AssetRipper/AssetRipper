@@ -43,6 +43,8 @@ public sealed partial class GameBundle : Bundle
 		}
 	}
 
+	public new void InitializeAllDependencyLists() => base.InitializeAllDependencyLists();
+
 	public void ClearTemporaryBundles()
 	{
 		temporaryBundles.Clear();
