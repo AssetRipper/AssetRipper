@@ -137,5 +137,27 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			SmartStream stream = SmartStream.OpenRead(filePath);
 			return SerializedFileScheme.Default.Read(stream, filePath, fileName);
 		}
+
+		/// <summary>
+		/// Check if <see langword="this"/> references another <see cref="SerializedFile"/>.
+		/// </summary>
+		/// <remarks>
+		/// This does not resolve intermediate references.
+		/// If <see langword="this"/> only references <paramref name="other"/> transiently, it will return <see langword="false"/>.
+		/// </remarks>
+		/// <param name="other">Another <see cref="SerializedFile"/></param>
+		/// <returns>True if <see langword="this"/> directly references <paramref name="other"/>.</returns>
+		public bool References(SerializedFile other)
+		{
+			foreach (FileIdentifier dependency in Dependencies)
+			{
+				if (dependency.GetFilePath() == other.NameFixed)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
 	}
 }

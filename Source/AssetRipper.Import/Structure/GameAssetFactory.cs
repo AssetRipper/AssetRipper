@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
@@ -49,48 +50,39 @@ namespace AssetRipper.Import.Structure
 
 		private IAssemblyManager AssemblyManager { get; }
 
-		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ref EndianSpanReader reader, TransferInstructionFlags flags, int size, SerializedType? type)
+		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType)
 		{
 			IUnityObjectBase? asset = AssetFactory.CreateAsset(assetInfo.Collection.Version, assetInfo);
-
 			return asset switch
 			{
-				null => ReadUnknownObject(assetInfo, ref reader, size),
-				IMonoBehaviour monoBehaviour => ReadMonoBehaviour(monoBehaviour, ref reader, flags, size, AssemblyManager, type),
-				_ => ReadNormalObject(asset, ref reader, flags, size)
+				null => new UnknownObject(assetInfo, assetData.ToArray()),
+				IMonoBehaviour monoBehaviour => ReadMonoBehaviour(monoBehaviour, assetData, AssemblyManager, assetType),
+				_ => ReadNormalObject(asset, assetData)
 			};
 		}
 
-		private static IUnityObjectBase ReadUnknownObject(AssetInfo assetInfo, ref EndianSpanReader reader, int size)
+		private static IMonoBehaviour? ReadMonoBehaviour(IMonoBehaviour monoBehaviour, ReadOnlyArraySegment<byte> assetData, IAssemblyManager assemblyManager, SerializedType? type)
 		{
-			UnknownObject unknownObject = new UnknownObject(assetInfo);
-			unknownObject.Read(ref reader, size);
-			return unknownObject;
-		}
-
-		private static IMonoBehaviour? ReadMonoBehaviour(IMonoBehaviour monoBehaviour, ref EndianSpanReader reader, TransferInstructionFlags flags, int size, IAssemblyManager assemblyManager, SerializedType? type)
-		{
+			EndianSpanReader reader = new EndianSpanReader(assetData, monoBehaviour.Collection.EndianType);
 			try
 			{
-				monoBehaviour.Read(ref reader, flags);
+				monoBehaviour.Read(ref reader);
 				SerializableStructure? structure;
 				if (type is not null && TypeTreeNodeStruct.TryMakeFromTypeTree(type.OldType, out TypeTreeNodeStruct rootNode))
 				{
 					structure = SerializableTreeType.FromRootNode(rootNode).CreateSerializableStructure();
+					if (structure.TryRead(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags))
+					{
+						monoBehaviour.Structure = structure;
+					}
+					else
+					{
+						monoBehaviour.Structure = null;
+					}
 				}
 				else
 				{
-					IMonoScript? monoScript = GetMonoScript(monoBehaviour);
-					structure = monoScript?.GetBehaviourType(assemblyManager)?.CreateSerializableStructure();
-				}
-				structure?.Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags);
-				if (structure is not null && reader.Position != size)
-				{
-					LogMonoBehaviourMismatch(monoBehaviour, reader.Position, size);
-				}
-				else
-				{
-					monoBehaviour.Structure = structure;
+					monoBehaviour.Structure = new UnloadedStructure(monoBehaviour, assemblyManager, assetData.Slice(reader.Position));
 				}
 			}
 			catch (Exception ex)
@@ -100,47 +92,24 @@ namespace AssetRipper.Import.Structure
 			return monoBehaviour;
 		}
 
-		private static IMonoScript? GetMonoScript(IMonoBehaviour monoBehaviour)
+		private static IUnityObjectBase ReadNormalObject(IUnityObjectBase asset, ReadOnlyArraySegment<byte> assetData)
 		{
-			PPtr<IMonoScript> monoScriptPointer = monoBehaviour.Script_C114.ToStruct();
-			AssetCollection? monoScriptCollection;
-			if (monoScriptPointer.FileID is 0)
-			{
-				monoScriptCollection = monoBehaviour.Collection;
-			}
-			else
-			{
-				SerializedAssetCollection collection = (SerializedAssetCollection)monoBehaviour.Collection;
-				if (collection.DependencyIdentifiers is not null && collection.DependencyIdentifiers.Length > 0)
-				{
-					FileIdentifier identifier = collection.DependencyIdentifiers[monoScriptPointer.FileID - 1];
-					monoScriptCollection = collection.Bundle.ResolveCollection(identifier);
-				}
-				else
-				{
-					monoScriptCollection = null;
-				}
-			}
-			return monoScriptCollection?.TryGetAsset<IMonoScript>(monoScriptPointer.PathID);
-		}
-
-		private static IUnityObjectBase ReadNormalObject(IUnityObjectBase asset, ref EndianSpanReader reader, TransferInstructionFlags flags, int size)
-		{
+			EndianSpanReader reader = new EndianSpanReader(assetData, asset.Collection.EndianType);
 			bool replaceWithUnreadableObject;
 			try
 			{
-				asset.Read(ref reader, flags);
-				if (reader.Position != size)
+				asset.Read(ref reader);
+				if (reader.Position != reader.Length)
 				{
 					//Some Chinese Unity versions have extra fields appended to the global type trees.
-					if (size - reader.Position == 24 && asset is ITexture2D texture)
+					if (reader.Length - reader.Position == 24 && asset is ITexture2D texture)
 					{
 						ReadExtraTextureFields(texture, ref reader);
 						replaceWithUnreadableObject = false;
 					}
 					else
 					{
-						LogIncorrectNumberOfBytesRead(asset, ref reader, size);
+						LogIncorrectNumberOfBytesRead(asset, ref reader);
 						replaceWithUnreadableObject = true;
 					}
 				}
@@ -156,9 +125,7 @@ namespace AssetRipper.Import.Structure
 			}
 			if (replaceWithUnreadableObject)
 			{
-				reader.Position = 0;
-				UnreadableObject unreadable = new UnreadableObject(asset.AssetInfo);
-				unreadable.Read(ref reader, size);
+				UnreadableObject unreadable = new UnreadableObject(asset.AssetInfo, assetData.ToArray());
 				unreadable.NameString = (asset as IHasNameString)?.NameString ?? "";
 				return unreadable;
 			}
@@ -168,9 +135,9 @@ namespace AssetRipper.Import.Structure
 			}
 		}
 
-		private static void LogIncorrectNumberOfBytesRead(IUnityObjectBase asset, ref EndianSpanReader reader, int size)
+		private static void LogIncorrectNumberOfBytesRead(IUnityObjectBase asset, ref EndianSpanReader reader)
 		{
-			Logger.Error($"Read {reader.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}");
+			Logger.Error($"Read {reader.Position} but expected {reader.Length} for asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}");
 		}
 
 		/// <summary>
@@ -193,11 +160,6 @@ namespace AssetRipper.Import.Structure
 			reader.ReadUInt32();
 			reader.ReadUInt32();
 			Logger.Warning($"Texture {texture.Name} had an extra 24 bytes, which were assumed to be non-standard Chinese fields.");
-		}
-
-		private static void LogMonoBehaviourMismatch(IMonoBehaviour monoBehaviour, long actual, int expected)
-		{
-			Logger.Error(LogCategory.Import, $"Unable to read {monoBehaviour}, because script {monoBehaviour.Structure} layout mismatched binary content (read {actual} bytes, expected {expected} bytes).");
 		}
 
 		private static void LogMonoBehaviorReadException(IMonoBehaviour monoBehaviour, Exception ex)

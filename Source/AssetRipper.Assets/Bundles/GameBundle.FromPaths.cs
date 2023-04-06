@@ -14,11 +14,11 @@ partial class GameBundle
 	public void InitializeFromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, IDependencyProvider dependencyProvider, IResourceProvider resourceProvider)
 	{
 		ResourceProvider = resourceProvider;
-		Stack<FileBase> fileStack = LoadAndSortFiles(paths, dependencyProvider);
+		List<FileBase> fileStack = LoadFilesAndDependencies(paths, dependencyProvider);
 
 		while (fileStack.Count > 0)
 		{
-			FileBase file = fileStack.Pop();
+			FileBase file = RemoveLastItem(fileStack);
 			if (file is SerializedFile serializedFile)
 			{
 				//Collection is added to this automatically
@@ -36,10 +36,18 @@ partial class GameBundle
 		}
 	}
 
-	private static Stack<FileBase> LoadAndSortFiles(IEnumerable<string> paths, IDependencyProvider dependencyProvider)
+	private static FileBase RemoveLastItem(List<FileBase> list)
+	{
+		int index = list.Count - 1;
+		FileBase file = list[index];
+		list.RemoveAt(index);
+		return file;
+	}
+
+	private static List<FileBase> LoadFilesAndDependencies(IEnumerable<string> paths, IDependencyProvider dependencyProvider)
 	{
 		List<FileBase> files = new();
-		HashSet<string> serializedFileNames = new();
+		HashSet<string> serializedFileNames = new();//Includes missing dependencies
 		foreach (string path in paths)
 		{
 			FileBase? file = SchemeReader.LoadFile(path);
@@ -60,7 +68,7 @@ partial class GameBundle
 			else if (file is FileContainer container)
 			{
 				files.Add(file);
-				foreach (SerializedFile serializedFileInContainer in container.AllFiles.OfType<SerializedFile>())
+				foreach (SerializedFile serializedFileInContainer in container.FetchSerializedFiles())
 				{
 					serializedFileNames.Add(serializedFileInContainer.NameFixed);
 				}
@@ -76,20 +84,14 @@ partial class GameBundle
 			}
 			else if (file is FileContainer container)
 			{
-				foreach (SerializedFile serializedFileInContainer in container.AllFiles.OfType<SerializedFile>())
+				foreach (SerializedFile serializedFileInContainer in container.FetchSerializedFiles())
 				{
 					LoadDependencies(serializedFileInContainer, files, serializedFileNames, dependencyProvider);
 				}
 			}
 		}
 
-		Stack<FileBase> fileStack = new();
-		foreach (FileBase file in files.OrderByDescending(f => f, FileComparer.Shared))
-		{
-			fileStack.Push(file);
-		}
-
-		return fileStack;
+		return files;
 	}
 
 	private static void LoadDependencies(SerializedFile serializedFile, List<FileBase> files, HashSet<string> serializedFileNames, IDependencyProvider dependencyProvider)
@@ -107,170 +109,5 @@ partial class GameBundle
 				}
 			}
 		}
-	}
-
-	private sealed class SerializedFileComparer : NotNullComparer<SerializedFile>
-	{
-		public static SerializedFileComparer Shared { get; } = new();
-
-		protected override int CompareNotNull(SerializedFile x, SerializedFile y)
-		{
-			bool xReferencesY = References(x, y);
-			bool xReferencedByY = References(y, x);
-			if (xReferencesY && !xReferencedByY)
-			{
-				return 1;
-			}
-			else if (xReferencedByY && !xReferencesY)
-			{
-				return -1;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-
-		private static bool References(SerializedFile referencingFile, SerializedFile referencedFile)
-		{
-			for (int i = 0; i < referencingFile.Dependencies.Count; i++)
-			{
-				if (referencingFile.Dependencies[i].GetFilePath() == referencedFile.NameFixed)
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-	}
-
-	private sealed class FileComparer : NotNullComparer<FileBase>
-	{
-		public static FileComparer Shared { get; } = new();
-
-		protected override int CompareNotNull(FileBase x, FileBase y)
-		{
-			if (x is ResourceFile)
-			{
-				return y is ResourceFile ? 0 : -1;
-			}
-			else if (y is ResourceFile)
-			{
-				return 1;
-			}
-			else if (x is SerializedFile serializedFileX)
-			{
-				if (y is SerializedFile serializedFileY)
-				{
-					return SerializedFileComparer.Shared.Compare(serializedFileX, serializedFileY);
-				}
-				else if (y is FileContainer containerY)
-				{
-					return Compare(serializedFileX, containerY);
-				}
-				else
-				{
-					return -1;
-				}
-			}
-			else if (x is FileContainer containerX)
-			{
-				if (y is SerializedFile serializedFileY)
-				{
-					return Compare(containerX, serializedFileY);
-				}
-				else if (y is FileContainer containerY)
-				{
-					return Compare(containerX, containerY);
-				}
-				else
-				{
-					return -1;
-				}
-			}
-			else
-			{
-				return y is SerializedFile or FileContainer ? 1 : 0;
-			}
-		}
-
-		private static int Compare(FileContainer containerX, FileContainer containerY)
-		{
-			bool xLessThanY = false;
-			bool xGreaterThanY = false;
-			foreach (SerializedFile serializedFile in containerX.AllFiles.OfType<SerializedFile>())
-			{
-				int comparison = Compare(serializedFile, containerY);
-				if (comparison < 0)
-				{
-					xLessThanY = true;
-				}
-				else if (comparison > 0)
-				{
-					xGreaterThanY = true;
-				}
-			}
-			return MakeComparisonValue(xLessThanY, xGreaterThanY);
-		}
-
-		private static int Compare(FileContainer containerX, SerializedFile serializedFileY)
-		{
-			return -Compare(serializedFileY, containerX);
-		}
-
-		private static int Compare(SerializedFile serializedFileX, FileContainer containerY)
-		{
-			bool xLessThanY = false;
-			bool xGreaterThanY = false;
-			foreach (SerializedFile serializedFile in containerY.AllFiles.OfType<SerializedFile>())
-			{
-				int comparison = SerializedFileComparer.Shared.Compare(serializedFileX, serializedFile);
-				if (comparison < 0)
-				{
-					xLessThanY = true;
-				}
-				else if (comparison > 0)
-				{
-					xGreaterThanY = true;
-				}
-			}
-			return MakeComparisonValue(xLessThanY, xGreaterThanY);
-		}
-
-		private static int MakeComparisonValue(bool xLessThanY, bool xGreaterThanY)
-		{
-			if (xLessThanY && !xGreaterThanY)
-			{
-				return -1;
-			}
-			else if (xGreaterThanY && !xLessThanY)
-			{
-				return 1;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-	}
-
-	private abstract class NotNullComparer<T> : IComparer<T> where T : class
-	{
-		public int Compare(T? x, T? y)
-		{
-			if (x is null)
-			{
-				return y is null ? 0 : -1;
-			}
-			else if (y is null)
-			{
-				return 1;
-			}
-
-			return CompareNotNull(x, y);
-		}
-
-		protected abstract int CompareNotNull(T x, T y);
 	}
 }

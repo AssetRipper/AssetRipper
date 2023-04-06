@@ -20,6 +20,7 @@ namespace AssetRipper.Processing.PrefabOutlining
 			ClonedAssetResolver resolver = new ClonedAssetResolver(clonedAssetDictionary);
 			foreach ((IUnityObjectBase asset, IUnityObjectBase clonedAsset) in clonedAssetDictionary)
 			{
+				//Warning: this doesn't clone IMonoBehaviour.Structure
 				clonedAsset.CopyValues(asset, new PPtrConverter(asset.Collection, clonedAsset.Collection, resolver));
 			}
 			return (IGameObject)clonedAssetDictionary[source];

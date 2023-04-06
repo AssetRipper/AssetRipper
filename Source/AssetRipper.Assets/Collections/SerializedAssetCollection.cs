@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 
@@ -77,52 +76,17 @@ public class SerializedAssetCollection : AssetCollection
 
 	private static void ReadData(SerializedAssetCollection collection, SerializedFile file, AssetFactoryBase factory)
 	{
-		if (SerializedFileMetadata.HasScriptTypes(file.Header.Version))
-		{
-			for (int i = 0; i < file.Metadata.ScriptTypes.Length; i++)
-			{
-				LocalSerializedObjectIdentifier ptr = file.Metadata.ScriptTypes[i];
-				if (ptr.LocalSerializedFileIndex == 0)
-				{
-					int index = file.AssetEntryLookup[ptr.LocalIdentifierInFile];
-					ObjectInfo objectInfo = file.Metadata.Object[index];
-					ReadAsset(collection, file, objectInfo, factory);
-				}
-			}
-		}
-
 		for (int i = 0; i < file.Metadata.Object.Length; i++)
 		{
 			ObjectInfo objectInfo = file.Metadata.Object[i];
-			if (objectInfo.TypeID == 115)//MonoScript
+			SerializedType? type = objectInfo.GetSerializedType(file.Metadata.Types);
+			int classID = objectInfo.TypeID < 0 ? 114 : objectInfo.TypeID;
+			AssetInfo assetInfo = new AssetInfo(collection, objectInfo.FileID, classID);
+			IUnityObjectBase? asset = factory.ReadAsset(assetInfo, objectInfo.ObjectData, type);
+			if (asset is not null)
 			{
-				if (!collection.Assets.ContainsKey(objectInfo.FileID))
-				{
-					ReadAsset(collection, file, objectInfo, factory);
-				}
+				collection.AddAsset(asset);
 			}
-		}
-
-		for (int i = 0; i < file.Metadata.Object.Length; i++)
-		{
-			ObjectInfo objectInfo = file.Metadata.Object[i];
-			if (!collection.Assets.ContainsKey(objectInfo.FileID))
-			{
-				ReadAsset(collection, file, objectInfo, factory);
-			}
-		}
-	}
-
-	private static void ReadAsset(SerializedAssetCollection collection, SerializedFile file, ObjectInfo info, AssetFactoryBase factory)
-	{
-		SerializedType? type = info.GetSerializedType(file.Metadata.Types);
-		int classID = info.TypeID < 0 ? 114 : info.TypeID;
-		AssetInfo assetInfo = new AssetInfo(collection, info.FileID, classID);
-		EndianSpanReader reader = new EndianSpanReader(info.ObjectData, collection.EndianType);
-		IUnityObjectBase? asset = factory.ReadAsset(assetInfo, ref reader, collection.Flags, info.ObjectData.Length, type);
-		if (asset is not null)
-		{
-			collection.AddAsset(asset);
 		}
 	}
 }

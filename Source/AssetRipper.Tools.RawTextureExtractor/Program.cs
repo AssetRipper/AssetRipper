@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
@@ -13,11 +14,7 @@ using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_89;
 using AssetRipper.SourceGenerated.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace AssetRipper.Tools.RawTextureExtractor
@@ -156,10 +153,18 @@ namespace AssetRipper.Tools.RawTextureExtractor
 
 		private sealed class TextureAssetFactory : AssetFactoryBase
 		{
-			public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ref EndianSpanReader reader, TransferInstructionFlags flags, int size, SerializedType? type)
+			public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType)
 			{
 				IUnityObjectBase? asset = CreateAsset(assetInfo);
-				return asset is not null ? TryReadAsset(ref reader, flags, size, asset) : null;
+				if (asset is not null)
+				{
+					EndianSpanReader reader = new EndianSpanReader(assetData, asset.Collection.EndianType);
+					return TryReadAsset(ref reader, asset.Collection.Flags, asset);
+				}
+				else
+				{
+					return null;
+				}
 			}
 
 			private static IUnityObjectBase? CreateAsset(AssetInfo assetInfo)
@@ -172,14 +177,14 @@ namespace AssetRipper.Tools.RawTextureExtractor
 				};
 			}
 
-			private static IUnityObjectBase? TryReadAsset(ref EndianSpanReader reader, TransferInstructionFlags flags, int size, IUnityObjectBase asset)
+			private static IUnityObjectBase? TryReadAsset(ref EndianSpanReader reader, TransferInstructionFlags flags, IUnityObjectBase asset)
 			{
 				try
 				{
 					asset.Read(ref reader, flags);
-					if (reader.Position != size)
+					if (reader.Position != reader.Length)
 					{
-						Console.WriteLine($"Read {reader.Position} but expected {size} for asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}");
+						Console.WriteLine($"Read {reader.Position} but expected {reader.Length} for asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}");
 						return null;
 					}
 					else

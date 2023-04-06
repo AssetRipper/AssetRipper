@@ -11,6 +11,6 @@ namespace AssetRipper.Import.Classes
 			set { }
 		}
 
-		public UnknownObject(AssetInfo assetInfo) : base(assetInfo) { }
+		public UnknownObject(AssetInfo assetInfo, byte[] data) : base(assetInfo, data) { }
 	}
 }

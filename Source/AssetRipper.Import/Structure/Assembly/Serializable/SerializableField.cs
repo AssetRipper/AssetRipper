@@ -11,10 +11,12 @@ using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
+using System.Diagnostics;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
-	public struct SerializableField
+	[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
+	public record struct SerializableField(ulong PValue, object CValue)
 	{
 		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon)
 		{
@@ -524,10 +526,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 		}
 
-		public ulong PValue { get; set; }
-		public object CValue { get; set; }
-
-		public override string ToString()
+		private string GetDebuggerDisplay()
 		{
 			return CValue?.ToString() ?? PValue.ToString();
 		}

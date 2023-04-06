@@ -19,6 +19,6 @@ namespace AssetRipper.Import.Classes
 			set => nameString = value;
 		}
 
-		public UnreadableObject(AssetInfo assetInfo) : base(assetInfo) { }
+		public UnreadableObject(AssetInfo assetInfo, byte[] data) : base(assetInfo, data) { }
 	}
 }
