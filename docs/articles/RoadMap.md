@@ -1,11 +1,10 @@
 # Development Roadmap
 
-## 0.3.1.0
+## 0.3.2.0
 This release will be primarily focused on improving the user interface.
 
 * Add a settings window
 * Add donation information
-* ~~Use Span readers for more efficient asset reading~~
 
 ## 0.3.X.0
 These releases will likely focus on preparing for the next major milestone.
