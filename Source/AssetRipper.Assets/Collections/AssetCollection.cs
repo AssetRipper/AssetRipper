@@ -85,6 +85,11 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 		}
 	}
 
+	/// <summary>
+	/// Determines if the given dependency collection is referencable from this collection.
+	/// </summary>
+	/// <param name="dependency"></param>
+	/// <returns></returns>
 	protected virtual bool IsCompatibleDependency(AssetCollection dependency) => true;
 
 	public PPtr<T> CreatePPtr<T>(T? asset) where T : IUnityObjectBase

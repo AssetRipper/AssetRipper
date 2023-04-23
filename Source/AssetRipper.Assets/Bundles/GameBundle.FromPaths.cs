@@ -18,20 +18,18 @@ partial class GameBundle
 
 		while (fileStack.Count > 0)
 		{
-			FileBase file = RemoveLastItem(fileStack);
-			if (file is SerializedFile serializedFile)
+			switch (RemoveLastItem(fileStack))
 			{
-				//Collection is added to this automatically
-				SerializedAssetCollection.FromSerializedFile(this, serializedFile, assetFactory);
-			}
-			else if (file is FileContainer container)
-			{
-				SerializedBundle bundle = SerializedBundle.FromFileContainer(container, assetFactory);
-				AddBundle(bundle);
-			}
-			else if (file is ResourceFile resourceFile)
-			{
-				AddResource(resourceFile);
+				case SerializedFile serializedFile:
+					SerializedAssetCollection.FromSerializedFile(this, serializedFile, assetFactory);
+					break;
+				case FileContainer container:
+					SerializedBundle serializedBundle = SerializedBundle.FromFileContainer(container, assetFactory);
+					AddBundle(serializedBundle);
+					break;
+				case ResourceFile resourceFile:
+					AddResource(resourceFile);
+					break;
 			}
 		}
 	}
@@ -96,17 +94,12 @@ partial class GameBundle
 
 	private static void LoadDependencies(SerializedFile serializedFile, List<FileBase> files, HashSet<string> serializedFileNames, IDependencyProvider dependencyProvider)
 	{
-		for (int j = 0; j < serializedFile.Dependencies.Count; j++)
+		foreach (FileIdentifier fileIdentifier in serializedFile.Dependencies)
 		{
-			FileIdentifier fileIdentifier = serializedFile.Dependencies[j];
 			string name = fileIdentifier.GetFilePath();
-			if (serializedFileNames.Add(name))
+			if (serializedFileNames.Add(name) && dependencyProvider.FindDependency(fileIdentifier) is { } dependency)
 			{
-				FileBase? dependency = dependencyProvider.FindDependency(fileIdentifier);
-				if (dependency is not null)
-				{
-					files.Add(dependency);
-				}
+				files.Add(dependency);
 			}
 		}
 	}

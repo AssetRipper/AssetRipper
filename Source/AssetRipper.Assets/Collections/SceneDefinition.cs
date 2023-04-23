@@ -10,6 +10,12 @@ public sealed class SceneDefinition
 	{
 	}
 
+	/// <summary>
+	/// Creates a new <see cref="SceneDefinition"/> from the given name and guid.
+	/// </summary>
+	/// <param name="name">The name of the scene.</param>
+	/// <param name="guid">The predefined <see cref="UnityGUID"/> for the scene. If default, a random one is assigned.</param>
+	/// <returns></returns>
 	public static SceneDefinition FromName(string name, UnityGUID guid = default)
 	{
 		return new()
@@ -20,6 +26,12 @@ public sealed class SceneDefinition
 		};
 	}
 
+	/// <summary>
+	/// Creates a new <see cref="SceneDefinition"/> from the given path and guid.
+	/// </summary>
+	/// <param name="path">The relative path to the scene.</param>
+	/// <param name="guid">The predefined <see cref="UnityGUID"/> for the scene. If default, a random one is assigned.</param>
+	/// <returns></returns>
 	public static SceneDefinition FromPath(string path, UnityGUID guid = default)
 	{
 		return new()

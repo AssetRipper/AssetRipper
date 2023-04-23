@@ -11,12 +11,13 @@ namespace AssetRipper.Assets.Collections;
 /// </summary>
 public sealed class SerializedAssetCollection : AssetCollection
 {
-	public FileIdentifier[]? DependencyIdentifiers { get; private set; }
+	private FileIdentifier[]? DependencyIdentifiers { get; set; }
 
 	private SerializedAssetCollection(Bundle bundle) : base(bundle)
 	{
 	}
 
+	/// <inheritdoc/>
 	protected override bool IsCompatibleDependency(AssetCollection dependency)
 	{
 		return dependency is SerializedAssetCollection or ProcessedAssetCollection;
@@ -39,6 +40,16 @@ public sealed class SerializedAssetCollection : AssetCollection
 		}
 	}
 
+	/// <summary>
+	/// Creates a <see cref="SerializedAssetCollection"/> from a <see cref="SerializedFile"/>.
+	/// </summary>
+	/// <remarks>
+	/// The new <see cref="SerializedAssetCollection"/> is automatically added to the <paramref name="bundle"/>.
+	/// </remarks>
+	/// <param name="bundle">The <see cref="Bundle"/> to add this collection to.</param>
+	/// <param name="file">The <see cref="SerializedFile"/> from which to make this collection.</param>
+	/// <param name="factory">A factory for creating assets.</param>
+	/// <returns>The new collection.</returns>
 	internal static SerializedAssetCollection FromSerializedFile(Bundle bundle, SerializedFile file, AssetFactoryBase factory)
 	{
 		SerializedAssetCollection collection = new SerializedAssetCollection(bundle)

@@ -9,7 +9,7 @@ namespace AssetRipper.Assets.Bundles;
 /// <summary>
 /// A <see cref="Bundle"/> created from serialized assets.
 /// </summary>
-public class SerializedBundle : Bundle
+public sealed class SerializedBundle : Bundle
 {
 	private string name = string.Empty;
 
@@ -35,13 +35,7 @@ public class SerializedBundle : Bundle
 		return bundle;
 	}
 
-	protected override bool IsCompatibleBundle(Bundle bundle)
-	{
-		return bundle is SerializedBundle;
-	}
+	protected override bool IsCompatibleBundle(Bundle bundle) => bundle is SerializedBundle;
 
-	protected override bool IsCompatibleCollection(AssetCollection collection)
-	{
-		return collection is SerializedAssetCollection;
-	}
+	protected override bool IsCompatibleCollection(AssetCollection collection) => collection is SerializedAssetCollection;
 }
