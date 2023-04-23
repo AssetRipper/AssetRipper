@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.SourceGenerated.Subclasses.StreamedResource;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

@@ -1,6 +1,5 @@
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.TextureDecoder.Rgb.Formats;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

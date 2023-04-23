@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace AssetRipper.SourceGenerated.Extensions
+﻿namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class ArrayExtensions
 	{

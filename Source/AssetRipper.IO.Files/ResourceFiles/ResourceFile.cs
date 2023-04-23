@@ -1,5 +1,4 @@
 using AssetRipper.IO.Files.Streams.Smart;
-using System.IO;
 
 namespace AssetRipper.IO.Files.ResourceFiles
 {

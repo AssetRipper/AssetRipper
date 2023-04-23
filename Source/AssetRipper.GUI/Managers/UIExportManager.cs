@@ -3,8 +3,6 @@ using AssetRipper.Export.UnityProjects;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.GUI.Utils;
 using AssetRipper.Import.Logging;
-using AssetRipper.SourceGenerated.Classes.ClassID_213;
-using AssetRipper.SourceGenerated.Classes.ClassID_28;
 
 namespace AssetRipper.GUI.Managers
 {

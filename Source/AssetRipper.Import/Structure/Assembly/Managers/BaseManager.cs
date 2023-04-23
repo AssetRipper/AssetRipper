@@ -4,7 +4,6 @@ using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.GameStructure.Platforms;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.SerializationLogic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Import.Structure.Assembly.Managers
 {

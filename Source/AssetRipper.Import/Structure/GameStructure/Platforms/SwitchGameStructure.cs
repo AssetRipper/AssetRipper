@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace AssetRipper.Import.Structure.GameStructure.Platforms
+﻿namespace AssetRipper.Import.Structure.GameStructure.Platforms
 {
 	internal sealed class SwitchGameStructure : PlatformGameStructure
 	{

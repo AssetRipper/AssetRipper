@@ -1,6 +1,5 @@
 ﻿using AssetRipper.GUI.Localizations;
 using AssetRipper.Import.Logging;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.GUI
 {

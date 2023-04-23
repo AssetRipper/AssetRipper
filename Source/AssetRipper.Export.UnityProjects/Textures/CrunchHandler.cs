@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Enums;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 

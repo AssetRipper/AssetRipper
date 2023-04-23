@@ -9,7 +9,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_78;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

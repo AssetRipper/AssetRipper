@@ -4,7 +4,6 @@ using AssetRipper.SourceGenerated.Extensions;
 using Fmod5Sharp;
 using Fmod5Sharp.FmodTypes;
 using Fmod5Sharp.Util;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Export.UnityProjects.Audio
 {

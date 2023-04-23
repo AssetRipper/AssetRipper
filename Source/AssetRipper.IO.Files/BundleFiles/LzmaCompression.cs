@@ -1,7 +1,6 @@
 ﻿using AssetRipper.IO.Files.Extensions;
 using SharpCompress.Compressors.LZMA;
 using System.Buffers;
-using System.IO;
 
 namespace AssetRipper.IO.Files.BundleFiles
 {

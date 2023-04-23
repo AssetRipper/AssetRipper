@@ -9,7 +9,6 @@ using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Utils;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Import.Structure.GameStructure
 {

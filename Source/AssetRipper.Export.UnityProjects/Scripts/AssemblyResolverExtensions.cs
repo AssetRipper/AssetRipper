@@ -1,5 +1,4 @@
 ﻿using ICSharpCode.Decompiler.Metadata;
-using System.Diagnostics.CodeAnalysis;
 using IAssemblyResolver = ICSharpCode.Decompiler.Metadata.IAssemblyResolver;
 
 namespace AssetRipper.Export.UnityProjects.Scripts

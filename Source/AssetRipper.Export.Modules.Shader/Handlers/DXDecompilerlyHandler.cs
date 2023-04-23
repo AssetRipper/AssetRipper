@@ -2,7 +2,6 @@
 using DXDecompiler;
 using DXDecompiler.Decompiler;
 using DXDecompiler.Util;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Export.Modules.Shaders.Handlers
 {

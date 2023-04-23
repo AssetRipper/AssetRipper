@@ -2,7 +2,6 @@
 using AssetRipper.SourceGenerated.Subclasses.UnityPropertySheet;
 using AssetRipper.SourceGenerated.Subclasses.UnityTexEnv;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

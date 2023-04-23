@@ -1,5 +1,3 @@
-using System;
-
 namespace AssetRipper.Yaml
 {
 	internal enum MetaType

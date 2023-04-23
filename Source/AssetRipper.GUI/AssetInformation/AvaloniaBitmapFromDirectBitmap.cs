@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.Utils;
 using Avalonia.Media.Imaging;
-using System.IO;
 
 namespace AssetRipper.GUI.AssetInformation
 {

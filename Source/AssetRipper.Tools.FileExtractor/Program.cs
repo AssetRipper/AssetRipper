@@ -1,8 +1,6 @@
 ﻿using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.CompressedFiles;
 using AssetRipper.IO.Files.ResourceFiles;
-using System;
-using System.IO;
 using FileBase = AssetRipper.IO.Files.FileBase;
 
 namespace AssetRipper.Tools.FileExtractor

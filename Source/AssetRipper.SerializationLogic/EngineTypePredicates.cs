@@ -1,6 +1,4 @@
 using AssetRipper.SerializationLogic.Extensions;
-using System;
-using System.Collections.Generic;
 
 namespace AssetRipper.SerializationLogic
 {

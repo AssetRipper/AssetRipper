@@ -1,7 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
-using System.IO;
 using System.IO.Compression;
 
 namespace AssetRipper.IO.Files.CompressedFiles.GZip

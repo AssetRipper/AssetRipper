@@ -4,7 +4,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_23;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Processing.StaticMeshes
 {

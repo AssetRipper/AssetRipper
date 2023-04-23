@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Yaml.Extensions
+﻿namespace AssetRipper.Yaml.Extensions
 {
 	internal static class PrimitiveExtensions
 	{

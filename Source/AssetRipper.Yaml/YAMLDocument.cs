@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.Yaml
+﻿namespace AssetRipper.Yaml
 {
 	public sealed class YamlDocument
 	{

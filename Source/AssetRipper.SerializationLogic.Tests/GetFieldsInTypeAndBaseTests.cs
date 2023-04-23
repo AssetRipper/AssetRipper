@@ -1,6 +1,4 @@
 ﻿using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AssetRipper.SerializationLogic.Tests;
 

@@ -3,7 +3,6 @@ using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
-using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace AssetRipper.Processing.StaticMeshes

@@ -1,8 +1,6 @@
 ﻿using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using System;
-using System.Linq;
 using System.Text;
 
 namespace AssetRipper.Tools.TypeTreeExtractor

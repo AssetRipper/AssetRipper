@@ -1,5 +1,4 @@
-﻿using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Subclasses.TrailModule;
+﻿using AssetRipper.SourceGenerated.Subclasses.TrailModule;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

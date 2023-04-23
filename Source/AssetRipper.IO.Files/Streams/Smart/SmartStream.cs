@@ -1,6 +1,4 @@
 ﻿using AssetRipper.IO.Files.Streams.MultiFile;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
 namespace AssetRipper.IO.Files.Streams.Smart
 {

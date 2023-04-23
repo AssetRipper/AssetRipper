@@ -10,7 +10,6 @@ using AssetRipper.SourceGenerated.Subclasses.UnityTexEnv;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using SharpGLTF.Materials;
 using SharpGLTF.Memory;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Export.UnityProjects.Models
 {

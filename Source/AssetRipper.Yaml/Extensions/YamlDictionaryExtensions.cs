@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace AssetRipper.Yaml.Extensions
 {
 	public static class YamlDictionaryExtensions

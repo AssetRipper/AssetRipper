@@ -1,5 +1,4 @@
-﻿using AssetRipper.SourceGenerated.Extensions;
-using AssetRipper.SourceGenerated.Extensions.Enums.AnimationCurve;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.AnimationCurve;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Vector3f;

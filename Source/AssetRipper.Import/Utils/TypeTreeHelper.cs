@@ -1,5 +1,4 @@
-﻿using AssetRipper.Import.IO.Extensions;
-using AssetRipper.IO.Files.SerializedFiles;
+﻿using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 using System.Collections.Specialized;
 using System.Text;

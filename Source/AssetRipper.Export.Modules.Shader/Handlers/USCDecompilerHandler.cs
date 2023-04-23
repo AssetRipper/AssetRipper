@@ -7,7 +7,6 @@ using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using AssetRipper.VersionUtilities;
 using DXDecompiler.Util;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Export.Modules.Shaders.Handlers
 {

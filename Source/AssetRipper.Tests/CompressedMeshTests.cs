@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
-using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 

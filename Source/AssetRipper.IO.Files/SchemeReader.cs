@@ -8,7 +8,6 @@ using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.WebFiles;
-using System.Collections.Generic;
 
 namespace AssetRipper.IO.Files
 {

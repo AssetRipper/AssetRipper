@@ -1,7 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles.IO;
 using AssetRipper.IO.Files.Streams.Smart;
-using System.IO;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser
 {

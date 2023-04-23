@@ -1,5 +1,3 @@
-using System;
-
 namespace AssetRipper.SerializationLogic.Extensions
 {
 	static class MethodDefinitionExtensions

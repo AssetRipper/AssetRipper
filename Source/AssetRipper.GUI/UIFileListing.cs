@@ -4,9 +4,7 @@ using AssetRipper.Assets.Interfaces;
 using AssetRipper.Import.Classes;
 using AssetRipper.Import.Structure.GameStructure;
 using AssetRipper.IO.Files.ResourceFiles;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace AssetRipper.GUI
 {

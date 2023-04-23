@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AssetRipper.SerializationLogic
+﻿namespace AssetRipper.SerializationLogic
 {
 	internal class ResolutionException : Exception
 	{

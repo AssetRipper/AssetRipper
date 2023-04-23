@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Export.Modules.Shaders.Handlers;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 using AssetRipper.VersionUtilities;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Export.Modules.Shaders.Exporters.DirectX
 {

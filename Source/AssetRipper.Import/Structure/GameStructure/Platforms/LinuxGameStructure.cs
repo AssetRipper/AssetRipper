@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Import.Structure.GameStructure.Platforms
 {

@@ -1,6 +1,4 @@
 ﻿using AssetRipper.IO.Endian;
-using System.Collections.Generic;
-using System.IO;
 
 namespace AssetRipper.IO.Files.SerializedFiles.TypeTrees;
 

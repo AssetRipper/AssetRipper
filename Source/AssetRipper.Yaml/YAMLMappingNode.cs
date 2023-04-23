@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace AssetRipper.Yaml
 {
 	public sealed class YamlMappingNode : YamlNode

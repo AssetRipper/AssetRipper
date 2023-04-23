@@ -4,7 +4,6 @@ using AssetRipper.IO.Files.BundleFiles.RawWeb.Web;
 using AssetRipper.IO.Files.Extensions;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
-using System.IO;
 
 namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 {

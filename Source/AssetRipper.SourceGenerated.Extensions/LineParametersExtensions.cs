@@ -1,5 +1,4 @@
 ﻿using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.LineParameters;
 
 namespace AssetRipper.SourceGenerated.Extensions

@@ -1,6 +1,5 @@
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.Utils;
-using System.IO;
 
 namespace AssetRipper.IO.Files
 {

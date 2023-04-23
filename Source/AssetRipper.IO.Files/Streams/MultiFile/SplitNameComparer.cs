@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AssetRipper.IO.Files.Streams.MultiFile
+﻿namespace AssetRipper.IO.Files.Streams.MultiFile
 {
 	public class SplitNameComparer : IComparer<string>
 	{

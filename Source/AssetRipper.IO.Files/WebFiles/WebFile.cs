@@ -2,10 +2,7 @@
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Streams.Smart;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
 namespace AssetRipper.IO.Files.WebFiles
 {

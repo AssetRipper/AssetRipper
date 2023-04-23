@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace AssetRipper.IO.Files.Streams
 {
 	/// <summary>

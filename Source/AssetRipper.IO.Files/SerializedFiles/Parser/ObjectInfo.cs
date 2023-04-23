@@ -1,5 +1,4 @@
 using AssetRipper.IO.Files.SerializedFiles.IO;
-using System.Linq;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser
 {

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace SpirV
 {
 	internal class Meta

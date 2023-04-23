@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees
+﻿namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees
 {
 	public static class CommonString
 	{

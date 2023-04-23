@@ -1,6 +1,5 @@
 ﻿//#define USE_HEX_FLOAT
 using AssetRipper.Yaml.Extensions;
-using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 

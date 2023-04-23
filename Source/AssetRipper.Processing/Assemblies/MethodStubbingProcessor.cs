@@ -5,7 +5,6 @@ using AsmResolver.DotNet.Signatures.Types;
 using AsmResolver.PE.DotNet.Cil;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Processing.Assemblies;
 public sealed class MethodStubbingProcessor : IAssemblyProcessor
