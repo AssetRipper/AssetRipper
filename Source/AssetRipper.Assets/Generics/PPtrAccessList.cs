@@ -80,6 +80,8 @@ namespace AssetRipper.Assets.Generics
 			public EmptyAssetCollection(Bundle bundle) : base(bundle)
 			{
 			}
+
+			protected override bool IsCompatibleDependency(AssetCollection dependency) => false;
 		}
 
 		private sealed class EmptyBundle : Bundle
