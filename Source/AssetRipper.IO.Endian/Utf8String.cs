@@ -14,7 +14,16 @@ public sealed class Utf8String : IEquatable<Utf8String>
 	private readonly byte[] data;
 	private string? cachedString;
 
-	public static Utf8String Empty { get; } = new Utf8String(Array.Empty<byte>());
+	public static Utf8String Empty { get; } = new();
+
+	/// <summary>
+	/// The empty string. A shared instance is available in <see cref="Empty"/>.
+	/// </summary>
+	public Utf8String()
+	{
+		data = Array.Empty<byte>();
+		cachedString = "";
+	}
 
 	/// <summary>
 	/// An internal constructor that uses a preallocated array.
