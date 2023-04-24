@@ -176,13 +176,11 @@ namespace AssetRipper.Processing.AudioMixers
 				{
 					IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
 					effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-					PPtr_AudioMixerEffectController effectPPtr = new();
-					effectPPtr.CopyValues(effect.Collection.ForceCreatePPtr(effect));
-					group.Effects_C243.Add(effectPPtr);
-					effect.MainAsset = mixer;
-
 					effect.EffectID_C244.CopyValues(UnityGUID.NewGuid());
 					effect.EffectName_C244.String = "Attenuation";
+					effect.MainAsset = mixer;
+
+					group.Effects_C243P.Add(effect);
 				}
 			}
 		}
