@@ -171,14 +171,16 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 		public UnityGUID GetAssemblyGuid(string assemblyName)
 		{
-			if (AssemblyHash.TryGetValue(assemblyName, out UnityGUID result))
+			//MonoScripts don't always have the .dll extension.
+			string assemblyNameWithExtension = assemblyName.EndsWith(".dll", StringComparison.Ordinal) ? assemblyName : assemblyName + ".dll";
+			if (AssemblyHash.TryGetValue(assemblyNameWithExtension, out UnityGUID result))
 			{
 				return result;
 			}
 			else
 			{
-				UnityGUID guid = CalculateAssemblyHashGuid(assemblyName);
-				AssemblyHash[assemblyName] = guid;
+				UnityGUID guid = CalculateAssemblyHashGuid(assemblyNameWithExtension);
+				AssemblyHash[assemblyNameWithExtension] = guid;
 				return guid;
 			}
 		}
