@@ -5,12 +5,12 @@ using System.Collections;
 
 namespace AssetRipper.Assets.Generics
 {
+	[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 	public readonly struct PPtrAccessList<TPPtr, TTarget> : IReadOnlyList<TTarget?>
 		where TPPtr : IPPtr<TTarget>
 		where TTarget : IUnityObjectBase
 	{
-		private static readonly IReadOnlyList<TPPtr> emptyList = Array.Empty<TPPtr>();
-		private static readonly EmptyAssetCollection emptyCollection = new EmptyBundle().Collection;
+		public static PPtrAccessList<TPPtr, TTarget> Empty => new PPtrAccessList<TPPtr, TTarget>(Array.Empty<TPPtr>(), EmptyBundle.Instance.Collection);
 
 		private readonly IReadOnlyList<TPPtr> list;
 		private readonly AssetCollection file;
@@ -68,27 +68,34 @@ namespace AssetRipper.Assets.Generics
 
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-		public override string ToString()
+		public IEnumerable<TTarget> WhereNotNull()
+		{
+			return Count == 0 ? Enumerable.Empty<TTarget>() : InternalNotNull(this);
+
+			static IEnumerable<TTarget> InternalNotNull(PPtrAccessList<TPPtr, TTarget> list)
+			{
+				for (int i = 0; i < list.Count; i++)
+				{
+					TTarget? asset = list[i];
+					if (asset is not null)
+					{
+						yield return asset;
+					}
+				}
+			}
+		}
+
+		private string GetDebuggerDisplay()
 		{
 			return $"{nameof(Count)} = {Count}";
 		}
 
-		public static PPtrAccessList<TPPtr, TTarget> Empty => new PPtrAccessList<TPPtr, TTarget>(emptyList, emptyCollection);
-
-		private sealed class EmptyAssetCollection : AssetCollection
-		{
-			public EmptyAssetCollection(Bundle bundle) : base(bundle)
-			{
-			}
-
-			protected override bool IsCompatibleDependency(AssetCollection dependency) => false;
-		}
-
 		private sealed class EmptyBundle : Bundle
 		{
-			public EmptyAssetCollection Collection { get; }
+			public static EmptyBundle Instance { get; } = new();
+			public AssetCollection Collection { get; }
 			public override string Name => nameof(EmptyBundle);
-			public EmptyBundle()
+			private EmptyBundle()
 			{
 				Collection = new EmptyAssetCollection(this);
 			}
@@ -96,6 +103,15 @@ namespace AssetRipper.Assets.Generics
 			protected override bool IsCompatibleBundle(Bundle bundle) => false;
 			protected override bool IsCompatibleCollection(AssetCollection collection) => collection is EmptyAssetCollection;
 			public override AssetCollection? ResolveCollection(string name) => null;
+
+			private sealed class EmptyAssetCollection : AssetCollection
+			{
+				public EmptyAssetCollection(Bundle bundle) : base(bundle)
+				{
+				}
+
+				protected override bool IsCompatibleDependency(AssetCollection dependency) => false;
+			}
 		}
 	}
 }
