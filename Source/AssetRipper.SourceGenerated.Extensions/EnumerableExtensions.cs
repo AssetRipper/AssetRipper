@@ -24,16 +24,5 @@
 				yield return item;
 			}
 		}
-
-		public static IEnumerable<S> SelectType<T, S>(this IEnumerable<T> enumerable) where S : notnull
-		{
-			foreach (T item in enumerable)
-			{
-				if (item is S s)
-				{
-					yield return s;
-				}
-			}
-		}
 	}
 }

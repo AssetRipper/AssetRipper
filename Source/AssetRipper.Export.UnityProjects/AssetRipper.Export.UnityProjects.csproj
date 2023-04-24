@@ -52,10 +52,6 @@
 	<ItemGroup>
 		<None Remove="Shaders\Templates\*" />
 		<EmbeddedResource Include="Shaders\Templates\*" />
-		<None Remove="AudioMixers\UnityPatch\*" />
-		<EmbeddedResource Include="AudioMixers\UnityPatch\*" />
-		<None Remove="Shaders\UnityPatch\*" />
-		<EmbeddedResource Include="Shaders\UnityPatch\*" />
 	</ItemGroup>
 
 	<ItemGroup>

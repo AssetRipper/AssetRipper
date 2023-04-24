@@ -101,7 +101,7 @@ namespace AssetRipper.Processing.PrefabOutlining
 
 		public static void AddCollectionToDictionary(AssetCollection collection, Dictionary<IGameObject, GameObjectInfo> dictionary)
 		{
-			foreach (IGameObject gameObject in collection.SelectType<IUnityObjectBase, IGameObject>())
+			foreach (IGameObject gameObject in collection.OfType<IGameObject>())
 			{
 				AddHierarchyToDictionary(gameObject, dictionary);
 			}

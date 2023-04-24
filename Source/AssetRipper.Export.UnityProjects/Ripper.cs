@@ -24,6 +24,7 @@ using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Processing;
 using AssetRipper.Processing.AnimatorControllers;
 using AssetRipper.Processing.Assemblies;
+using AssetRipper.Processing.AudioMixers;
 using AssetRipper.Processing.PrefabOutlining;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.Processing.StaticMeshes;
@@ -41,6 +42,10 @@ using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_238;
+using AssetRipper.SourceGenerated.Classes.ClassID_240;
+using AssetRipper.SourceGenerated.Classes.ClassID_244;
+using AssetRipper.SourceGenerated.Classes.ClassID_272;
+using AssetRipper.SourceGenerated.Classes.ClassID_273;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
@@ -48,7 +53,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace AssetRipper.Export.UnityProjects
@@ -87,6 +91,7 @@ namespace AssetRipper.Export.UnityProjects
 			gameStructure = null;
 		}
 
+		[MemberNotNull(nameof(gameStructure))]
 		public GameStructure Load(IReadOnlyList<string> paths)
 		{
 			ResetData();
@@ -124,6 +129,7 @@ namespace AssetRipper.Export.UnityProjects
 				yield return new MainAssetProcessor();
 				yield return new LightingDataProcessor();
 				yield return new AnimatorControllerProcessor();
+				yield return new AudioMixerProcessor();
 				yield return new EditorFormatProcessor(Settings.BundledAssetsExportMode);
 				if (Settings.EnableStaticMeshSeparation)
 				{
@@ -152,7 +158,9 @@ namespace AssetRipper.Export.UnityProjects
 			}
 		}
 
+		[MemberNotNull(nameof(gameStructure))]
 		public void ExportProject(string exportPath, Action<ProjectExporter>? onBeforeExport = null) => ExportProject(exportPath, CoreConfiguration.DefaultFilter, onBeforeExport);
+		[MemberNotNull(nameof(gameStructure))]
 		public void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter, Action<ProjectExporter>? onBeforeExport)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
@@ -263,10 +271,10 @@ namespace AssetRipper.Export.UnityProjects
 
 			//AudioMixer exporters
 			AudioMixerExporter audioMixerExporter = new();
-			//projectExporter.OverrideExporter<IAudioMixerController>(audioMixerExporter);
-			//projectExporter.OverrideExporter<IAudioMixerGroupController>(audioMixerExporter);
-			//projectExporter.OverrideExporter<IAudioMixerSnapshotController>(audioMixerExporter);
-			//Temporarily disabled due to changes in how AssetCollections function.
+			projectExporter.OverrideExporter<IAudioMixer>(audioMixerExporter);
+			projectExporter.OverrideExporter<IAudioMixerEffectController>(audioMixerExporter);
+			projectExporter.OverrideExporter<IAudioMixerGroup>(audioMixerExporter);
+			projectExporter.OverrideExporter<IAudioMixerSnapshot>(audioMixerExporter);
 
 			//Mesh and Model exporters
 			if (Settings.MeshExportFormat == MeshExportFormat.Glb)

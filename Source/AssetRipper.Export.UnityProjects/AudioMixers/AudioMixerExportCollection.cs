@@ -1,306 +1,51 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Assets.Utils;
 using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
-using AssetRipper.Import.Logging;
-using AssetRipper.Import.Utils;
-using AssetRipper.IO.Files;
-using AssetRipper.Processing.AudioMixers;
-using AssetRipper.SourceGenerated;
-using AssetRipper.SourceGenerated.Classes.ClassID_241;
+using AssetRipper.Export.UnityProjects.Utils;
+using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_243;
 using AssetRipper.SourceGenerated.Classes.ClassID_244;
-using AssetRipper.SourceGenerated.Classes.ClassID_245;
-using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Extensions;
-using AssetRipper.SourceGenerated.Subclasses.AudioMixerConstant;
-using AssetRipper.SourceGenerated.Subclasses.AudioMixerGroupView;
-using AssetRipper.SourceGenerated.Subclasses.EffectConstant;
-using AssetRipper.SourceGenerated.Subclasses.ExposedAudioParameter;
-using AssetRipper.SourceGenerated.Subclasses.GroupConstant;
-using AssetRipper.SourceGenerated.Subclasses.GUID;
-using AssetRipper.SourceGenerated.Subclasses.Parameter;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerEffectController;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerSnapshot;
-using AssetRipper.SourceGenerated.Subclasses.SnapshotConstant;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
+using AssetRipper.SourceGenerated.Classes.ClassID_272;
+using AssetRipper.SourceGenerated.Classes.ClassID_273;
 
 namespace AssetRipper.Export.UnityProjects.AudioMixers
 {
 	public class AudioMixerExportCollection : AssetsExportCollection
 	{
-		public AudioMixerExportCollection(
-			IAssetExporter assetExporter,
-			TemporaryAssetCollection virtualFile,
-			IAudioMixerController mixer) : base(assetExporter, mixer)
+		public AudioMixerExportCollection(IAssetExporter assetExporter, IAudioMixer mixer) : base(assetExporter, mixer)
 		{
-			ProcessAssets(
-				mixer,
-				mixer.MixerConstant_C241,
-				virtualFile,
-				new Dictionary<uint, UnityGUID>(),
-				new List<IAudioMixerGroupController>());
-		}
-
-		private void ProcessAssets(
-			IAudioMixerController mixer,
-			IAudioMixerConstant constants,
-			TemporaryAssetCollection virtualFile,
-			Dictionary<uint, UnityGUID> indexToGuid,
-			List<IAudioMixerGroupController> groups)
-		{
-			ProcessAudioMixerGroups(mixer, constants, indexToGuid, groups);
-			ProcessAudioMixerEffects(mixer, virtualFile, indexToGuid, groups);
-			ProcessAudioMixerSnapshots(mixer, constants, indexToGuid);
-			ProcessAudioMixer(mixer, constants, indexToGuid, groups);
-		}
-
-		private void ProcessAudioMixerGroups(
-			IAudioMixerController mixer,
-			IAudioMixerConstant constants,
-			Dictionary<uint, UnityGUID> indexToGuid,
-			List<IAudioMixerGroupController> groups)
-		{
-			Dictionary<UnityGUID, IAudioMixerGroupController> groupGuidMap = new();
-			
-			foreach (IAudioMixerGroupController group in mixer.Collection.Bundle.FetchAssetsInHierarchy().SelectType<IUnityObjectBase, IAudioMixerGroupController>())
+			foreach (IAudioMixerGroup group in FindChildren(mixer))
 			{
-				if (group.AudioMixer_C243.IsAsset(mixer.Collection, mixer))
+				AddAsset(group);
+				if (group is IAudioMixerGroupController controller)
 				{
-					AddAsset(group);
-					groupGuidMap.Add(group.GroupID_C243, group);
-				}
-			}
-			
-			groups.AddRange(mixer.MixerConstant_C241.GroupGUIDs.Select(guid => groupGuidMap[guid]));
-			for (int i = 0; i < groups.Count; i++)
-			{
-				IAudioMixerGroupController group = groups[i];
-				IGroupConstant groupConstant = constants.Groups[i];
-				
-				group.Volume_C243.CopyValues(IndexingNewGuid(groupConstant.VolumeIndex, indexToGuid));
-				group.Pitch_C243.CopyValues(IndexingNewGuid(groupConstant.PitchIndex, indexToGuid));
-				
-				// Different Unity versions vary in whether a "send" field is used in groups as well as in snapshots.
-				// GroupConstant.Has_SendIndex() can be used to determine its existence.
-				// If "send" does not exist in GroupConstant, it may still exist in AudioMixerGroupController, but is just ignored.
-				if (groupConstant.Has_SendIndex() && group.Has_Send_C243())
-				{
-					group.Send_C243.CopyValues(IndexingNewGuid(groupConstant.SendIndex, indexToGuid));
-				}
-				group.Mute_C243 = groupConstant.Mute;
-				group.Solo_C243 = groupConstant.Solo;
-				group.BypassEffects_C243 = groupConstant.BypassEffects;
-				
-				// Protect against exporting multiple times in the same session.
-				// Effects are created and added to groups during ProcessAudioMixerEffects.
-				group.Effects_C243.Clear();
-			}
-		}
-
-		private void ProcessAudioMixerEffects(
-			IAudioMixerController mixer,
-			TemporaryAssetCollection virtualFile,
-			Dictionary<uint, UnityGUID> indexToGuid,
-			List<IAudioMixerGroupController> groups)
-		{
-			IAudioMixerConstant constants = mixer.MixerConstant_C241;
-
-			IAudioMixerEffectController[] effects = new IAudioMixerEffectController[constants.Effects.Count];
-			
-			HashSet<IAudioMixerGroupController> groupsWithAttenuation = new();
-			
-			for (int i = 0; i < effects.Length; i++)
-			{
-				IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
-				effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-				effects[i] = effect;
-				AddAsset(effect);
-			}
-			
-			List<Utf8String> pluginEffectNames = ParseNameBuffer(constants.PluginEffectNameBuffer);
-			int pluginEffectIndex = 0;
-			for (int i = 0; i < constants.Effects.Count; i++)
-			{
-				EffectConstant effectConstant = constants.Effects[i];
-				IAudioMixerEffectController effect = effects[i];
-
-				IAudioMixerGroupController group = groups[(int)effectConstant.GroupConstantIndex];
-				group.Effects_C243.AddNew().SetAsset(group.Collection, effect);
-
-				effect.EffectID_C244.CopyValues(constants.EffectGUIDs[i]);
-
-				if (AudioEffectDefinitions.IsPluginEffect(effectConstant.Type))
-				{
-					effect.EffectName_C244.CopyValues(pluginEffectNames[pluginEffectIndex++]);
-				}
-				else
-				{
-					string name = AudioEffectDefinitions.EffectTypeToName(effectConstant.Type) ?? "Unknown";
-					effect.EffectName_C244.String = name;
-					if (name == "Attenuation")
+					foreach (IAudioMixerEffectController? effect in controller.Effects_C243P.WhereNotNull())
 					{
-						groupsWithAttenuation.Add(group);
+						AddAsset(effect);
 					}
 				}
-
-				bool enableWetMix = (int)effectConstant.WetMixLevelIndex != -1;
-				if (enableWetMix || effect.EffectName_C244 == "Send")
-				{
-					effect.MixLevel_C244.CopyValues(IndexingNewGuid(effectConstant.WetMixLevelIndex, indexToGuid));
-				}
-
-				for (int j = 0; j < effectConstant.ParameterIndices.Length; j++)
-				{
-					Parameter param = effect.Parameters_C244.AddNew();
-					// Use a dummy name here. The actual name will be recovered by AssetRipperAudioMixerPostprocessor.
-					param.ParameterName.String = $"Param_{j}";
-					HasAnyEffectParameterNameToRecover = true;
-					param.GUID.CopyValues(IndexingNewGuid(effectConstant.ParameterIndices[j], indexToGuid));
-				}
-				
-				if ((int)effectConstant.SendTargetEffectIndex != -1)
-				{
-					effect.SendTarget_C244P = effects[effectConstant.SendTargetEffectIndex];
-				}
-				effect.EnableWetMix_C244 = enableWetMix;
-				effect.Bypass_C244 = effectConstant.Bypass;
 			}
-			
-			// Append an Attenuation effect to a group if it has not yet got one,
-			// as Unity doesn't store Attenuation effect if it is the last.
-			foreach (IAudioMixerGroupController group in groups)
+			foreach (IAudioMixerSnapshot snapshot in mixer.Snapshots_C240P.WhereNotNull())
 			{
-				if (!groupsWithAttenuation.Contains(group))
-				{
-					IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
-					effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-					PPtr_AudioMixerEffectController effectPPtr = new();
-					effectPPtr.CopyValues(effect.Collection.ForceCreatePPtr(effect));
-					group.Effects_C243.Add(effectPPtr);
-					AddAsset(effect);
-					
-					effect.EffectID_C244.CopyValues(UnityGUID.NewGuid());
-					effect.EffectName_C244.String = "Attenuation";
-				}
-			}
-		}
-
-		private void ProcessAudioMixerSnapshots(
-			IAudioMixerController mixer,
-			IAudioMixerConstant constants,
-			Dictionary<uint, UnityGUID> indexToGuid)
-		{
-			for (int i = 0; i < mixer.Snapshots_C241.Count; i++)
-			{
-				PPtr_AudioMixerSnapshot snapshotPPtr = mixer.Snapshots_C241[i];
-				IAudioMixerSnapshotController snapshot = (IAudioMixerSnapshotController)snapshotPPtr.GetAsset(mixer.Collection);
 				AddAsset(snapshot);
-				
-				SnapshotConstant snapshotConstant = constants.Snapshots[i];
-				for (int j = 0; j < snapshotConstant.Values.Length; j++)
-				{
-					if (indexToGuid.TryGetValue((uint)j, out UnityGUID valueGuid))
-					{
-						snapshot.FloatValues_C245[(GUID)valueGuid] = snapshotConstant.Values[j];
-					}
-					else
-					{
-						Logger.Warning(LogCategory.Export, $"Snapshot({snapshot.Name_C245}) value #{j} has no binding parameter");
-					}
-				}
-
-				for (int j = 0; j < snapshotConstant.TransitionIndices.Length; j++)
-				{
-					uint paramIndex = snapshotConstant.TransitionIndices[j];
-					int transitionType = (int)snapshotConstant.TransitionTypes[j];
-					if (indexToGuid.TryGetValue(paramIndex, out UnityGUID paramGuid))
-					{
-						snapshot.TransitionOverrides_C245[(GUID)paramGuid] = transitionType;
-					}
-					else
-					{
-						Logger.Warning(LogCategory.Export, $"Snapshot({snapshot.Name_C245}) transition #{paramIndex} has no binding parameter");
-					}
-				}
 			}
 		}
 
-		private static void ProcessAudioMixer(
-			IAudioMixerController mixer,
-			IAudioMixerConstant constants,
-			Dictionary<uint, UnityGUID> indexToGuid,
-			List<IAudioMixerGroupController> groups)
+		private static IEnumerable<IAudioMixerGroup> FindChildren(IAudioMixer mixer)
 		{
-			// generate exposed parameters
-			mixer.ExposedParameters_C241.Clear();
-			for (int i = 0; i < constants.ExposedParameterIndices.Length; i++)
+			//IAudioMixerController.Children might give the same information and be way more efficient.
+			foreach (IAudioMixerGroup group in mixer.Collection.Bundle.FetchAssetsInHierarchy().OfType<IAudioMixerGroup>())
 			{
-				uint paramIndex = constants.ExposedParameterIndices[i];
-				uint paramNameCrc = constants.ExposedParameterNames[i];
-				if (indexToGuid.TryGetValue(paramIndex, out UnityGUID paramGuid))
+				if (group.AudioMixer_C273P == mixer)
 				{
-					ExposedAudioParameter exposedParam = mixer.ExposedParameters_C241.AddNew();
-					exposedParam.Guid.CopyValues(paramGuid);
-					exposedParam.NameString = $"{CrcUtils.ReverseDigestAscii(paramNameCrc)}";
-				}
-				else
-				{
-					Logger.Warning(LogCategory.Export, $"Exposed parameter #{paramIndex} has no binding parameter");
+					yield return group;
 				}
 			}
-			
-			// complete mixer controller
-			mixer.AudioMixerGroupViews_C241.Clear();
-			IAudioMixerGroupView groupView = mixer.AudioMixerGroupViews_C241.AddNew();
-			groupView.NameString = "View";
-			foreach (IAudioMixerGroupController group in groups)
-			{
-				groupView.Guids.Add(group.GroupID_C243);
-			}
-			mixer.CurrentViewIndex_C241 = 0;
-			mixer.TargetSnapshot_C241P = mixer.StartSnapshot_C241P;
-		}
-		
-		private static UnityGUID IndexingNewGuid(uint index, Dictionary<uint, UnityGUID> table)
-		{
-			UnityGUID guid = UnityGUID.NewGuid();
-			if (!table.TryAdd(index, guid))
-			{
-				Logger.Warning(LogCategory.Export, $"Constant index #{index} conflicts with another one.");
-			}
-			return guid;
-		}
-
-		private static List<Utf8String> ParseNameBuffer(byte[] buffer)
-		{
-			List<Utf8String> names = new();
-			int offset = 0;
-			while (buffer[offset] != 0)
-			{
-				int start = offset;
-				while (buffer[++offset] != 0) { }
-
-				byte[] utf8Data = SubArray(buffer, start, offset - start);
-				names.Add(new Utf8String { Data = utf8Data });
-
-				offset++;
-			}
-
-			return names;
 		}
 
 		private uint m_nextExportID;
-
-		private static byte[] SubArray(byte[] data, int index, int length)
-		{
-			byte[] subArray = new byte[length];
-			Array.Copy(data, index, subArray, 0, length);
-			return subArray;
-		}
 
 		protected override long GenerateExportID(IUnityObjectBase asset)
 		{
@@ -309,17 +54,80 @@ namespace AssetRipper.Export.UnityProjects.AudioMixers
 			return exportID;
 		}
 
-		private bool HasAnyEffectParameterNameToRecover { get; set; }
-		
 		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
 		{
-			if (HasAnyEffectParameterNameToRecover)
-			{
-				UnityPatchUtils.ApplyPatchFromManifestResource(typeof(AudioMixerExporter).Assembly, UnityPatchName, dirPath);
-			}
+			UnityPatchUtils.ApplyPatchFromText(AudioMixerPatchText, "AudioMixerPostprocessor", dirPath);
 			return base.ExportInner(container, filePath, dirPath);
 		}
-		
-		private const string UnityPatchName = "AssetRipper.Export.UnityProjects.AudioMixers.UnityPatch.AudioMixerPostprocessor.txt";
+
+		private const string AudioMixerPatchText = """
+			using System;
+			using System.Reflection;
+			using UnityEditor;
+			using UnityEngine;
+			using Object = UnityEngine.Object;
+
+			namespace AssetRipperPatches.Editor
+			{
+				/// <summary>
+				/// This script is AssetRipper's patch for exported audio effects to recover effect parameter names when Unity imports each audio mixer.
+				/// Unity does not serialize the parameter names in a release asset, so it is impossible to recover them by AssetRipper.
+				/// Fortunately, there is an internal function <c>AudioMixerEffectController.PreallocateGUIDs</c> in UnityEditor.dll, which can help us.
+				/// This function is used by Unity Editor when creating a new audio effect. It collects a list of runtime audio effects,
+				/// retrieves parameter definitions for each, and updates the parameter names and GUIDs in the caller AudioMixerEffectController.
+				/// Moreover, this function won't update the GUID for a parameter if it already has a non-empty GUID,
+				/// which is the case in exported audio effects, perfectly matching our needs.
+				/// </summary>
+				public class AudioMixerPostprocessor : AssetPostprocessor
+				{
+					private static readonly Type AudioMixerEffectControllerType;
+					private static readonly MethodInfo PreallocateGUIDsMethod;
+					private static readonly MethodInfo GetAudioEffectNamesMethod;
+
+					static AudioMixerPostprocessor()
+					{
+						Assembly editorAssembly = typeof(AssetPostprocessor).Assembly;
+						AudioMixerEffectControllerType = editorAssembly.GetType("UnityEditor.Audio.AudioMixerEffectController", true);
+						PreallocateGUIDsMethod = AudioMixerEffectControllerType.GetMethod("PreallocateGUIDs", BindingFlags.Public | BindingFlags.Instance);
+						if (PreallocateGUIDsMethod == null)
+						{
+							Debug.LogError("AudioMixerEffectController.PreallocateGUIDs() method is missing in this version of Unity. Audio effect parameter values will be reset to default.");
+						}
+
+						Type mixerEffectDefinitionsType = editorAssembly.GetType("UnityEditor.Audio.MixerEffectDefinitions", true);
+						GetAudioEffectNamesMethod = mixerEffectDefinitionsType.GetMethod("GetAudioEffectNames", BindingFlags.Public | BindingFlags.Static);
+					}
+
+					static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
+					{
+						if (PreallocateGUIDsMethod == null) return;
+
+						bool printEffectNames = GetAudioEffectNamesMethod != null;
+
+						foreach (string importedAsset in importedAssets)
+						{
+							if (importedAsset.EndsWith(".mixer"))
+							{
+								foreach (Object asset in AssetDatabase.LoadAllAssetsAtPath(importedAsset))
+								{
+									if (asset.GetType() == AudioMixerEffectControllerType)
+									{
+										if (printEffectNames)
+										{
+											printEffectNames = false;
+											string[] effectNames = (string[])GetAudioEffectNamesMethod.Invoke(null, new object[0]);
+											Debug.LogFormat("MixerEffectDefinitions.GetAudioEffectNames returns [{0}]", String.Join(", ", effectNames));
+										}
+										PreallocateGUIDsMethod.Invoke(asset, new object[0]);
+										Debug.LogFormat("AudioMixerEffectController.PreallocateGUIDs has been called on {0}", asset);
+										EditorUtility.SetDirty(asset);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			""";
 	}
 }
