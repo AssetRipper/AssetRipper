@@ -12,7 +12,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.0.0-preview6" />
-		<PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview6" />
+		<PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview7" />
 		<PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview6" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview6" />
 		<PackageReference Include="LibVLCSharp" Version="3.7.0" />
