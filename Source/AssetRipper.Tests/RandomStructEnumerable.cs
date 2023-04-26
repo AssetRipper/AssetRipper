@@ -19,7 +19,7 @@ namespace AssetRipper.Tests
 		{
 			for (int i = Count; i > 0; i--)
 			{
-				Random.Shared.NextBytes(Data);
+				TestContext.CurrentContext.Random.NextBytes(Data);
 				yield return MemoryMarshal.Read<T>(Data);
 			}
 		}

@@ -8,6 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AssetRipper.HashAlgorithms" Version="1.0.0" />
 		<PackageReference Include="AssetRipper.TextureDecoder" Version="1.2.0" />
 		<PackageReference Include="Fmod5Sharp" Version="3.0.1" />
 		<PackageReference Include="ICSharpCode.Decompiler" Version="8.0.0.7246-preview3" />

@@ -130,7 +130,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			{
 				if (MonoScriptExtensions.HasNamespace(script.Collection.Version))
 				{
-					int fileID = Compute(script.Namespace_C115.String, script.ClassName_C115.String);
+					int fileID = ScriptHashing.CalculateScriptFileID(script.Namespace_C115.Data, script.ClassName_C115.Data);
 					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 				}
 				else
@@ -138,7 +138,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 					ScriptIdentifier scriptInfo = script.GetScriptID(AssetExporter.AssemblyManager);
 					if (!scriptInfo.IsDefault)
 					{
-						int fileID = Compute(scriptInfo.Namespace, scriptInfo.Name);
+						int fileID = ScriptHashing.CalculateScriptFileID(scriptInfo.Namespace, scriptInfo.Name);
 						return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 					}
 				}
@@ -147,26 +147,10 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			string? scriptKey = $"{script.AssemblyName_C115.String}{script.Namespace_C115.String}{script.ClassName_C115.String}";
 			if (!ScriptId.ContainsKey(scriptKey))
 			{
-				ScriptId[scriptKey] = Compute(script.Namespace_C115.String, script.ClassName_C115.String);
+				ScriptId[scriptKey] = ScriptHashing.CalculateScriptFileID(script.Namespace_C115.Data, script.ClassName_C115.Data);
 			}
 
 			return new MetaPtr(ScriptId[scriptKey], GetAssemblyGuid(script.AssemblyName_C115.String), AssetExporter.ToExportType(asset));
-		}
-
-		private static int Compute(string @namespace, string name)
-		{
-			string toBeHashed = $"s\0\0\0{@namespace}{name}";
-			using MD4 hash = new();
-			byte[] hashed = hash.ComputeHash(Encoding.UTF8.GetBytes(toBeHashed));
-
-			int result = 0;
-			for (int i = 3; i >= 0; --i)
-			{
-				result <<= 8;
-				result |= hashed[i];
-			}
-
-			return result;
 		}
 
 		public UnityGUID GetAssemblyGuid(string assemblyName)

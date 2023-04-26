@@ -73,7 +73,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			{
 				if (MonoScriptExtensions.HasNamespace(script.Collection.Version))
 				{
-					int fileID = ComputeScriptFileID(script.Namespace_C115.String, script.ClassName_C115.String);
+					int fileID = ScriptHashing.CalculateScriptFileID(script.Namespace_C115.Data, script.ClassName_C115.Data);
 					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 				}
 				else
@@ -81,7 +81,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 					ScriptIdentifier scriptInfo = script.GetScriptID(AssetExporter.AssemblyManager);
 					if (!scriptInfo.IsDefault)
 					{
-						int fileID = ComputeScriptFileID(scriptInfo.Namespace, scriptInfo.Name);
+						int fileID = ScriptHashing.CalculateScriptFileID(scriptInfo.Namespace, scriptInfo.Name);
 						return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 					}
 				}
@@ -103,28 +103,6 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			//The assembly file name without any extension.
 			ReadOnlySpan<byte> assemblyName = Encoding.UTF8.GetBytes(script.GetAssemblyNameFixed());
 			return UnityGUID.Md5Hash(assemblyName, script.Namespace_C115.Data, script.ClassName_C115.Data);
-		}
-
-		/// <summary>
-		/// Compute the FileID of a script inside an assembly.
-		/// </summary>
-		/// <remarks>
-		/// This is a Unity algorithm.
-		/// </remarks>
-		private static int ComputeScriptFileID(string @namespace, string name)
-		{
-			string toBeHashed = $"s\0\0\0{@namespace}{name}";
-			using MD4 hash = new();
-			byte[] hashed = hash.ComputeHash(Encoding.UTF8.GetBytes(toBeHashed));
-
-			int result = 0;
-			for (int i = 3; i >= 0; --i)
-			{
-				result <<= 8;
-				result |= hashed[i];
-			}
-
-			return result;
 		}
 
 		private void OnScriptExported(IExportContainer container, IUnityObjectBase asset, string path)
