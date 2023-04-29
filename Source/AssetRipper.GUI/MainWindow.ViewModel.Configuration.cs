@@ -46,12 +46,12 @@ namespace AssetRipper.GUI
 			}
 		}
 		
-		public bool DontUseBuiltInAssets
+		public bool IgnoreEngineAssets
 		{
-			get => _ripper.Settings.DontUseBuiltInAssets;
+			get => _ripper.Settings.IgnoreEngineAssets;
 			set
 			{
-				_ripper.Settings.DontUseBuiltInAssets = value;
+				_ripper.Settings.IgnoreEngineAssets = value;
 				OnPropertyChanged();
 			}
 		}

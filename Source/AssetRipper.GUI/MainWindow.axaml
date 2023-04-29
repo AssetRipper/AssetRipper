@@ -133,8 +133,8 @@
                         <TextBlock Text="{i18n:Localize enable_static_mesh_separation}" Margin="0, 7, 0, 10" />
                     </WrapPanel>
                     <WrapPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="20, 0">
-                        <CheckBox IsChecked="{Binding DontUseBuiltInAssets, Mode=TwoWay}" />
-                        <TextBlock Text="{i18n:Localize dont_use_built_in_assets}" Margin="0, 7, 0, 10" />
+                        <CheckBox IsChecked="{Binding IgnoreEngineAssets, Mode=TwoWay}" />
+                        <TextBlock Text="{i18n:Localize ignore_engine_assets}" Margin="0, 7, 0, 10" />
                     </WrapPanel>
                     <cc:MeshExportConfigDropdown
                         Grid.Column="1"
