@@ -76,6 +76,7 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 			Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 			Logger.Info(LogCategory.General, $"{nameof(EnablePrefabOutlining)}: {EnablePrefabOutlining}");
 			Logger.Info(LogCategory.General, $"{nameof(EnableStaticMeshSeparation)}: {EnableStaticMeshSeparation}");
+			Logger.Info(LogCategory.General, $"{nameof(IgnoreEngineAssets)}: {IgnoreEngineAssets}");
 		}
 	}
 }
