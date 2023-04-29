@@ -45,7 +45,7 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
-		
+
 		public bool IgnoreEngineAssets
 		{
 			get => _ripper.Settings.IgnoreEngineAssets;
