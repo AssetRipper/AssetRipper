@@ -160,6 +160,7 @@ namespace AssetRipper.Export.UnityProjects
 
 		[MemberNotNull(nameof(gameStructure))]
 		public void ExportProject(string exportPath, Action<ProjectExporter>? onBeforeExport = null) => ExportProject(exportPath, CoreConfiguration.DefaultFilter, onBeforeExport);
+
 		[MemberNotNull(nameof(gameStructure))]
 		public void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter, Action<ProjectExporter>? onBeforeExport)
 		{
@@ -214,7 +215,10 @@ namespace AssetRipper.Export.UnityProjects
 		private void InitializeExporters(ProjectExporter projectExporter)
 		{
 			OverrideNormalExporters(projectExporter);
-			OverrideEngineExporters(projectExporter);
+			if (!Settings.IgnoreEngineAssets)
+			{
+				OverrideEngineExporters(projectExporter);
+			}
 		}
 
 		private void OverrideNormalExporters(ProjectExporter projectExporter)

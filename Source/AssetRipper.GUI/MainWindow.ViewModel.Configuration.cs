@@ -46,6 +46,16 @@ namespace AssetRipper.GUI
 			}
 		}
 
+		public bool IgnoreEngineAssets
+		{
+			get => _ripper.Settings.IgnoreEngineAssets;
+			set
+			{
+				_ripper.Settings.IgnoreEngineAssets = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public AudioExportFormat AudioExportFormat
 		{
 			get => _ripper.Settings.AudioExportFormat;

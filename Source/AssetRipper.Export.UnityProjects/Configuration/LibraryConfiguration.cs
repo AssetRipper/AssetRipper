@@ -43,6 +43,7 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 		public TextExportMode TextExportMode { get; set; }
 		public bool EnablePrefabOutlining { get; set; }
 		public bool EnableStaticMeshSeparation { get; set; }
+		public bool IgnoreEngineAssets { get; set; }
 
 		public override void ResetToDefaultValues()
 		{
@@ -58,6 +59,7 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 			TextExportMode = TextExportMode.Parse;
 			EnablePrefabOutlining = false;
 			EnableStaticMeshSeparation = false;
+			IgnoreEngineAssets = false;
 		}
 
 		public override void LogConfigurationValues()
@@ -74,6 +76,7 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 			Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 			Logger.Info(LogCategory.General, $"{nameof(EnablePrefabOutlining)}: {EnablePrefabOutlining}");
 			Logger.Info(LogCategory.General, $"{nameof(EnableStaticMeshSeparation)}: {EnableStaticMeshSeparation}");
+			Logger.Info(LogCategory.General, $"{nameof(IgnoreEngineAssets)}: {IgnoreEngineAssets}");
 		}
 	}
 }
