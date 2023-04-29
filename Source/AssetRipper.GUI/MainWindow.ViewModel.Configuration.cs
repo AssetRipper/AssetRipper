@@ -45,6 +45,16 @@ namespace AssetRipper.GUI
 				OnPropertyChanged();
 			}
 		}
+		
+		public bool DontUseBuiltinAssets
+		{
+			get => _ripper.Settings.DontUseBuiltinAssets;
+			set
+			{
+				_ripper.Settings.DontUseBuiltinAssets = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public AudioExportFormat AudioExportFormat
 		{
