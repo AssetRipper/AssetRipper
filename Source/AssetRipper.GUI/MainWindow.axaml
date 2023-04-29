@@ -118,7 +118,7 @@
                            TextAlignment="Center"
                            VerticalAlignment="Center" />
 
-                <Grid Grid.Row="1" RowDefinitions="50, 50, 140, 140, 140, 140" ColumnDefinitions="*, 400, 400, 400, *" Margin="100, 0, 100, 0">
+                <Grid Grid.Row="1" RowDefinitions="30, 50, 140, 140, 140, 140" ColumnDefinitions="*, 400, 400, 400, *" Margin="100, 0, 100, 0">
                     <WrapPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="20, 0">
                         <CheckBox IsChecked="{Binding IgnoreStreamingAssets, Mode=TwoWay}" />
                         <TextBlock Text="{i18n:Localize skip_streaming_assets}" Margin="0, 7, 0, 10" />
