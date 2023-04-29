@@ -5,7 +5,7 @@
   "skip_streaming_assets": "Skip StreamingAssets Folder",
   "enable_prefab_outlining": "Enable Prefab Outlining",
   "enable_static_mesh_separation": "Enable Static Mesh Separation",
-  "dont_use_builtin_assets": "Don't Use Builtin Assets",
+  "ignore_built_in_assets": "Ignore Built In Assets",
   "mesh_export_title": "Mesh Export Format",
   "audio_export_title": "Audio Export Format",
   "image_export_title": "Image Export Format",

@@ -43,7 +43,7 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 		public TextExportMode TextExportMode { get; set; }
 		public bool EnablePrefabOutlining { get; set; }
 		public bool EnableStaticMeshSeparation { get; set; }
-		public bool DontUseBuiltinAssets { get; set; }
+		public bool IgnoreBuiltInAssets { get; set; }
 
 		public override void ResetToDefaultValues()
 		{
