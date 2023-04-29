@@ -16,12 +16,12 @@ namespace AssetRipper.Export.UnityProjects
 
 				Directory.CreateDirectory(outputDirectory);
 
-				foreach (string directory in Directory.EnumerateDirectories(inputDirectory))
+				foreach (string directory in Directory.EnumerateDirectories(inputDirectory, "*", SearchOption.AllDirectories))
 				{
 					Directory.CreateDirectory(Path.Combine(outputDirectory, Path.GetRelativePath(inputDirectory, directory)));
 				}
 
-				foreach (string file in Directory.EnumerateFiles(inputDirectory))
+				foreach (string file in Directory.EnumerateFiles(inputDirectory, "*", SearchOption.AllDirectories))
 				{
 					string newFile = Path.Combine(outputDirectory, Path.GetRelativePath(inputDirectory, file));
 					File.Copy(file, newFile, true);
