@@ -59,6 +59,7 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 			TextExportMode = TextExportMode.Parse;
 			EnablePrefabOutlining = false;
 			EnableStaticMeshSeparation = false;
+			IgnoreEngineAssets = false;
 		}
 
 		public override void LogConfigurationValues()
