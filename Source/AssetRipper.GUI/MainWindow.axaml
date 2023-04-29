@@ -118,7 +118,8 @@
                            TextAlignment="Center"
                            VerticalAlignment="Center" />
 
-                <Grid Grid.Row="1" RowDefinitions="30, 50, 140, 140, 140, 140" ColumnDefinitions="*, 400, 400, 400, *" Margin="100, 0, 100, 0">
+                <!--todo: add margin instead of dividing 50 by 2-->
+                <Grid Grid.Row="1" RowDefinitions="25, 25, 140, 140, 140, 140" ColumnDefinitions="*, 400, 400, 400, *" Margin="100, 0, 100, 0">
                     <WrapPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="20, 0">
                         <CheckBox IsChecked="{Binding IgnoreStreamingAssets, Mode=TwoWay}" />
                         <TextBlock Text="{i18n:Localize skip_streaming_assets}" Margin="0, 7, 0, 10" />
@@ -133,6 +134,7 @@
                     </WrapPanel>
                     <WrapPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="20, 0">
                         <CheckBox IsChecked="{Binding IgnoreBuiltInAssets, Mode=TwoWay}" />
+                        <!--probably a bad name, also localization will be painful-->
                         <TextBlock Text="{i18n:Localize ignore_built_in_assets}" Margin="0, 7, 0, 10" />
                     </WrapPanel>
                     <cc:MeshExportConfigDropdown
