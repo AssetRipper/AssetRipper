@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO.Files.Extensions;
+﻿using AssetRipper.IO.Files.Exceptions;
+using AssetRipper.IO.Files.Extensions;
 using AssetRipper.IO.Files.Streams.Smart;
 using K4os.Compression.LZ4;
 
@@ -85,15 +86,19 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 								byte[] uncompressedBytes = new byte[uncompressedSize];
 								byte[] compressedBytes = new BinaryReader(m_stream).ReadBytes((int)block.CompressedSize);
 								int bytesWritten = LZ4Codec.Decode(compressedBytes, uncompressedBytes);
-								if (bytesWritten != uncompressedSize)
+								if (bytesWritten < 0)
 								{
-									throw new Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize}");
+									EncryptedFileException.Throw(entry.PathFixed);
+								}
+								else if (bytesWritten != uncompressedSize)
+								{
+									DecompressionFailedException.ThrowIncorrectNumberBytesWritten(uncompressedSize, bytesWritten);
 								}
 								new MemoryStream(uncompressedBytes).CopyTo(m_cachedBlockStream);
 								break;
 
 							default:
-								throw new NotImplementedException($"Bundle compression '{compressType}' isn't supported");
+								throw new NotSupportedException($"Bundle compression '{compressType}' isn't supported");
 						}
 						blockStream = m_cachedBlockStream;
 					}
@@ -116,7 +121,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			}
 			if (left < 0)
 			{
-				throw new Exception($"Read more than expected");
+				DecompressionFailedException.ThrowReadMoreThanExpected(entry.Size, entry.Size - left);
 			}
 			entryStream.Position = 0;
 			return entryStream.CreateReference();
