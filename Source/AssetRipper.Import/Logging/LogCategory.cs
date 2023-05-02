@@ -5,7 +5,7 @@
 		General,
 		Import,
 		Export,
-		ExportedFile,
+		ExportProgress,
 		Cpp2IL,
 		System,
 		LibVlc,

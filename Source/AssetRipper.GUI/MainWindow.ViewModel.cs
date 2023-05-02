@@ -289,7 +289,7 @@ namespace AssetRipper.GUI
 
 				await da.SaveToFileAsync(storageFile.Path.LocalPath);
 
-				Logger.Info(LogCategory.ExportedFile, $"Loose file saved at: {storageFile.Path.LocalPath}");
+				Logger.Info(LogCategory.ExportProgress, $"Loose file saved at: {storageFile.Path.LocalPath}");
 
 				return;
 			}
