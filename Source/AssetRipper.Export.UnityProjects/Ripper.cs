@@ -132,7 +132,7 @@ namespace AssetRipper.Export.UnityProjects
 				yield return new LightingDataProcessor();
 				yield return new AnimatorControllerProcessor();
 				yield return new AudioMixerProcessor();
-				yield return new EditorFormatProcessor(Settings.BundledAssetsExportMode);
+				yield return new EditorFormatProcessor(Settings.BundledAssetsExportMode, GameStructure.AssemblyManager);
 				if (Settings.EnableStaticMeshSeparation)
 				{
 					yield return new StaticMeshProcessor();

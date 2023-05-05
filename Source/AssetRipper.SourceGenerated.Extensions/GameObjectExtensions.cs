@@ -214,6 +214,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			foreach (IComponent component in root.GetComponentAccessList().WhereNotNull())
 			{
 				yield return component;
+
 				if (component is ITransform trfm)
 				{
 					transform = trfm;
@@ -228,6 +229,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			foreach (ITransform? child in transform.Children_C4P.ThrowIfNull())
 			{
 				IGameObject childGO = child.GameObject_C4P ?? throw new NullReferenceException("GameObject for Transform cannot be null.");
+
 				foreach (IEditorExtension childElement in childGO.FetchHierarchy())
 				{
 					yield return childElement;
@@ -245,11 +247,15 @@ namespace AssetRipper.SourceGenerated.Extensions
 		private static void BuildTOS(this IGameObject gameObject, IGameObject parent, string parentPath, Dictionary<uint, string> tos)
 		{
 			ITransform transform = parent.GetTransform();
+
 			foreach (ITransform? childTransform in transform.Children_C4P)
 			{
-				_ = childTransform ?? throw new NullReferenceException();
-				IGameObject child = childTransform.GameObject_C4P ?? throw new NullReferenceException();
-				string path = string.IsNullOrEmpty(parentPath) ? child.NameString : $"{parentPath}/{child.NameString}";
+				IGameObject child = childTransform?.GameObject_C4P ?? throw new NullReferenceException();
+
+				string path = string.IsNullOrEmpty(parentPath)
+					? child.NameString
+					: $"{parentPath}/{child.NameString}";
+
 				uint pathHash = CrcUtils.CalculateDigestUTF8(path);
 				tos[pathHash] = path;
 

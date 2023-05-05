@@ -35,23 +35,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static IReadOnlyDictionary<uint, string> BuildTOS(this IAnimator animator)
 		{
-			if (animator.Has_HasTransformHierarchy_C95())
+			if (animator.Has_HasTransformHierarchy_C95() && !animator.HasTransformHierarchy_C95)
 			{
-				if (animator.HasTransformHierarchy_C95)
-				{
-					IGameObject go = animator.GameObject_C95.GetAsset(animator.Collection);
-					return go.BuildTOS();
-				}
-				else
-				{
-					return new Dictionary<uint, string>() { { 0, string.Empty } };
-				}
+				return new Dictionary<uint, string>() { { 0, string.Empty } };
 			}
-			else
-			{
-				IGameObject go = animator.GameObject_C95.GetAsset(animator.Collection);
-				return go.BuildTOS();
-			}
+
+			return animator.GameObject_C95.GetAsset(animator.Collection).BuildTOS();
 		}
 
 		public static AnimatorUpdateMode GetUpdateMode(this IAnimator animator)
