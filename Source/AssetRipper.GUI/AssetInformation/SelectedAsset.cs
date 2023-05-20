@@ -7,6 +7,7 @@ using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Export.UnityProjects.Utils;
+using AssetRipper.Import.Classes;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
@@ -142,7 +143,7 @@ namespace AssetRipper.GUI.AssetInformation
 		{
 			IShader => true,
 			ITextAsset txt => txt.Script_C49.Data.Length > 0,
-			IHasRawData rawDataAsset => rawDataAsset.RawData.Length > 0,
+			RawDataObject rawDataAsset => rawDataAsset.RawData.Length > 0,
 			_ => false,
 		};
 
@@ -151,7 +152,7 @@ namespace AssetRipper.GUI.AssetInformation
 		{
 			IShader shader => DumpShaderDataAsText(shader),
 			ITextAsset txt => txt.Script_C49.String,
-			IHasRawData rawDataAsset => rawDataAsset.RawData.ToFormattedHex(),
+			RawDataObject rawDataAsset => rawDataAsset.RawData.ToFormattedHex(),
 			_ => null
 		})?.Replace("\t", "    ");
 

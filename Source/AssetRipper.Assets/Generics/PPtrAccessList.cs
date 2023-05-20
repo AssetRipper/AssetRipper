@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using System.Collections;
+using System.Diagnostics;
 
 namespace AssetRipper.Assets.Generics
 {

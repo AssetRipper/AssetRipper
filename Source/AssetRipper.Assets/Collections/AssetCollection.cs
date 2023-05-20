@@ -6,6 +6,7 @@ using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.VersionUtilities;
 using System.Collections;
+using System.Diagnostics;
 
 namespace AssetRipper.Assets.Collections;
 

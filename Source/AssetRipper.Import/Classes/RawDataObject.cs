@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
@@ -7,7 +6,7 @@ using AssetRipper.SourceGenerated;
 
 namespace AssetRipper.Import.Classes
 {
-	public abstract class RawDataObject : NullObject, IHasRawData
+	public abstract class RawDataObject : NullObject
 	{
 		public sealed override string ClassName => ((ClassIDType)ClassID).ToString();
 		public byte[] RawData { get; }
