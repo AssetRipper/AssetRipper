@@ -161,5 +161,120 @@
 		{
 			return MathF.Abs(actual - expected) > maxDeviation;
 		}
+
+		[Test]
+		public void VectorMultiplicationTest()
+		{
+			//Arrange
+			Vector3 vector = new Vector3(2, 4, 6);
+			Transformation transformation = new Transformation(
+				new Matrix4x4(2, 3, 4, 5,
+							 6, 7, 8, 9,
+							10, 11, 12, 13,
+							14, 15, 16, 17));
+
+			//Act
+			Vector3 expected = Vector3.Transform(vector, transformation.Matrix);
+			Vector3 actual = vector * transformation;
+
+			//Assert
+			Assert.That(actual, Is.EqualTo(expected));
+		}
+
+		[Test]
+		public void MultiplyTransformationsTest()
+		{
+			//Arrange
+			Transformation t1 = Transformation.Identity;
+			Transformation t2 = Transformation.Create(
+						new Vector3(5, 5, 5),
+						new Quaternion(1, 1, 1, 1),
+						new Vector3(2, 2, 2));
+
+			//Act
+			Transformation expected = new Transformation(
+							new Matrix4x4(-6, 8, 0, 0,
+										 0, -6, 8, 0,
+										 8, 0, -6, 0,
+										 5, 5, 5, 1));
+			Transformation actual = t1 * t2;
+
+			//Assert
+			Assert.That(actual, Is.EqualTo(expected));
+		}
+
+		[Test]
+		public void CreateInverseTest()
+		{
+			//Arrange
+			Vector3 translation = new Vector3(1, 2, 3);
+			Quaternion rotation = new Quaternion(0.5f, 0.5f, 0.5f, 0.5f);
+			Vector3 scale = new Vector3(2, 2, 2);
+
+			//Act
+			Transformation transform = Transformation.Create(translation, rotation, scale);
+			Transformation inverse = transform.Invert();
+			Matrix4x4 expected = Invert(transform.Matrix);
+			Matrix4x4 actual = inverse.Matrix;
+
+			//Assert
+			Assert.That(actual, Is.EqualTo(expected));
+
+			static Matrix4x4 Invert(Matrix4x4 matrix)
+			{
+				return Matrix4x4.Invert(matrix, out Matrix4x4 result) ? result : throw new System.Exception("Failed to invert matrix.");
+			}
+		}
+
+		[Test]
+		public void TransposeTest()
+		{
+			//Arrange
+			Matrix4x4 matrix = new Matrix4x4(1, 2, 3, 4,
+									   5, 6, 7, 8,
+									   9, 10, 11, 12,
+									   13, 14, 15, 16);
+			Transformation transformation = new Transformation(matrix);
+
+			//Act
+			Transformation expected = new Transformation(Matrix4x4.Transpose(matrix));
+			Transformation actual = transformation.Transpose();
+
+			//Assert
+			Assert.That(actual.Matrix, Is.EqualTo(expected.Matrix));
+		}
+
+		[Test]
+		public void RemoveTranslationTest()
+		{
+			//Arrange
+			Vector3 translation = new Vector3(1, 2, 3);
+			Quaternion rotation = Quaternion.Identity;
+			Vector3 scale = new Vector3(2, 2, 2);
+
+			//Act
+			Transformation transform = Transformation.Create(translation, rotation, scale);
+			Transformation expected = new Transformation(Matrix4x4.CreateScale(scale) * Matrix4x4.CreateFromQuaternion(rotation));
+			Transformation actual = transform.RemoveTranslation();
+
+			//Assert
+			Assert.That(actual.Matrix, Is.EqualTo(expected.Matrix));
+		}
+
+		[Test]
+		public void ConvertToMatrixTest()
+		{
+			//Arrange
+			Vector3 translation = new Vector3(1, 2, 3);
+			Quaternion rotation = new Quaternion(1, 2, 3, 4);
+			Vector3 scale = new Vector3(2, 2, 2);
+
+			//Act
+			Transformation expected = Matrix4x4.CreateScale(scale) * Matrix4x4.CreateFromQuaternion(rotation) * Matrix4x4.CreateTranslation(translation);
+			Transformation actual = new Transformation(translation, rotation, scale);
+
+			//Assert
+			Assert.That(actual, Is.EqualTo(expected));
+		}
 	}
 }

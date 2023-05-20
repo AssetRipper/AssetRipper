@@ -22,7 +22,6 @@ using AssetRipper.SourceGenerated.Subclasses.ExposedAudioParameter;
 using AssetRipper.SourceGenerated.Subclasses.GroupConstant;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.Parameter;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerEffectController;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerSnapshot;
 using AssetRipper.SourceGenerated.Subclasses.SnapshotConstant;
 using AssetRipper.SourceGenerated.Subclasses.Utf8String;

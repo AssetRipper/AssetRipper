@@ -10,7 +10,7 @@ namespace AssetRipper.Export.UnityProjects.Utils
 	{
 		public bool SaveAsBmp(Stream stream)
 		{
-			//BmpWriter.WriteBmp(Bits, Width, Height, stream);
+			//BmpWriter.WriteBmp(Bits, Width, Height * Depth, stream);
 			//return true;
 			if (OperatingSystem.IsWindows())
 			{
@@ -28,7 +28,7 @@ namespace AssetRipper.Export.UnityProjects.Utils
 
 		public async Task SaveAsBmpAsync(Stream stream)
 		{
-			//await Task.Run(() => BmpWriter.WriteBmp(Bits, Width, Height, stream));
+			//await Task.Run(() => BmpWriter.WriteBmp(Bits, Width, Height * Depth, stream));
 			using Image<Bgra32> image = ToImageSharp();
 			await image.SaveAsBmpAsync(stream);
 		}
