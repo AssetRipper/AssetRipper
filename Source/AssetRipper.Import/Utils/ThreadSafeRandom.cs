@@ -1,23 +1,23 @@
 ﻿namespace AssetRipper.Import.Utils
 {
-	public class ThreadSafeRandom
+	public static class ThreadSafeRandom
 	{
-		public int Next()
+		public static int Next()
 		{
 			return GetLocal().Next();
 		}
 
-		public int Next(int maxValue)
+		public static int Next(int maxValue)
 		{
 			return GetLocal().Next(maxValue);
 		}
 
-		public int Next(int minValue, int maxValue)
+		public static int Next(int minValue, int maxValue)
 		{
 			return GetLocal().Next(minValue, maxValue);
 		}
 
-		public void NextBytes(byte[] buffer)
+		public static void NextBytes(byte[] buffer)
 		{
 			GetLocal().NextBytes(buffer);
 		}

@@ -52,13 +52,13 @@ namespace AssetRipper.Import.Utils
 
 		public static long GenerateInternalID()
 		{
-			s_random.NextBytes(s_idBuffer.Value!);
+			ThreadSafeRandom.NextBytes(s_idBuffer.Value!);
 			return BitConverter.ToInt64(s_idBuffer.Value!, 0);
 		}
 
 		public static UnityGUID CalculateAssetsGUID(IEnumerable<IUnityObjectBase> assets)
 		{
-			List<uint> hashList = new List<uint>();
+			List<uint> hashList = new();
 			foreach (IUnityObjectBase asset in assets)
 			{
 				hashList.Add(asset.GUID.Data0);
@@ -75,15 +75,13 @@ namespace AssetRipper.Import.Utils
 			uint[] hashArray = hashList.ToArray();
 			byte[] buffer = new byte[hashArray.Length * sizeof(uint)];
 			Buffer.BlockCopy(hashArray, 0, buffer, 0, buffer.Length);
-			using MD5 md5 = MD5.Create();
-			byte[] hash = md5.ComputeHash(buffer);
+			byte[] hash = MD5.HashData(buffer);
 			return new UnityGUID(hash);
 		}
 
 		public const char DirectorySeparatorChar = '/';
 		public const string DirectorySeparator = "/";
 
-		private static readonly ThreadSafeRandom s_random = new ThreadSafeRandom();
 		private static readonly ThreadLocal<byte[]> s_idBuffer = new ThreadLocal<byte[]>(() => new byte[8]);
 	}
 }
