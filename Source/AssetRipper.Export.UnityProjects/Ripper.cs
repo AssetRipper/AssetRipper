@@ -30,6 +30,7 @@ using AssetRipper.Processing.Scenes;
 using AssetRipper.Processing.StaticMeshes;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1113;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
@@ -52,6 +53,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
+using AssetRipper.SourceGenerated.Classes.ClassID_72;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using System.Text;
 
@@ -325,9 +327,12 @@ namespace AssetRipper.Export.UnityProjects
 			projectExporter.OverrideExporter<ITexture2D>(engineExporter);
 			projectExporter.OverrideExporter<IMesh>(engineExporter);
 			projectExporter.OverrideExporter<IShader>(engineExporter);
+			projectExporter.OverrideExporter<IComputeShader>(engineExporter);
+			projectExporter.OverrideExporter<IMonoBehaviour>(engineExporter);
+			projectExporter.OverrideExporter<IMonoScript>(engineExporter);
 			projectExporter.OverrideExporter<IFont>(engineExporter);
 			projectExporter.OverrideExporter<ISprite>(engineExporter);
-			projectExporter.OverrideExporter<IMonoBehaviour>(engineExporter);
+			projectExporter.OverrideExporter<ILightmapParameters>(engineExporter);
 		}
 	}
 }
