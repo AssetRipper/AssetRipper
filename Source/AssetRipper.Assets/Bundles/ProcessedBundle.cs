@@ -8,13 +8,21 @@ namespace AssetRipper.Assets.Bundles;
 /// </summary>
 public sealed class ProcessedBundle : VirtualBundle<ProcessedAssetCollection>
 {
+	/// <inheritdoc/>
 	public override string Name { get; }
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ProcessedBundle"/> class with a generated name.
+	/// </summary>
 	public ProcessedBundle()
 	{
 		Name = $"{nameof(ProcessedBundle)}_{UnityGUID.NewGuid()}";
 	}
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ProcessedBundle"/> class with the specified name.
+	/// </summary>
+	/// <param name="name">The name of the bundle.</param>
 	public ProcessedBundle(string name)
 	{
 		ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));

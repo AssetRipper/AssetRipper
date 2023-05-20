@@ -12,17 +12,35 @@ namespace AssetRipper.Assets.Bundles;
 /// </summary>
 public abstract class Bundle : IDisposable
 {
+	/// <summary>
+	/// The parent <see cref="Bundle"/> of this Bundle.
+	/// </summary>
 	public Bundle? Parent { get; internal set; }
+	/// <summary>
+	/// The list of <see cref="ResourceFile"/>s in this Bundle.
+	/// </summary>
 	public IReadOnlyList<ResourceFile> Resources => resources;
 	private readonly List<ResourceFile> resources = new();
+	/// <summary>
+	/// The list of <see cref="AssetCollection"/>s in this Bundle.
+	/// </summary>
 	public IReadOnlyList<AssetCollection> Collections => collections;
 	private readonly List<AssetCollection> collections = new();
+	/// <summary>
+	/// The list of child <see cref="Bundle"/>s in this Bundle.
+	/// </summary>
 	public IReadOnlyList<Bundle> Bundles => bundles;
 	private readonly List<Bundle> bundles = new();
 	private bool disposedValue;
 
+	/// <summary>
+	/// The name of this Bundle.
+	/// </summary>
 	public abstract string Name { get; }
-	
+
+	/// <summary>
+	/// Initializes the dependency list for each SerializedAssetCollection in this Bundle and its children Bundles.
+	/// </summary>
 	internal void InitializeAllDependencyLists()
 	{
 		foreach (AssetCollection collection in Collections)
@@ -38,11 +56,21 @@ public abstract class Bundle : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Resolves an <see cref="AssetCollection"/> with the specified name in this Bundle and its ascendants.
+	/// </summary>
+	/// <param name="identifier">The identifier of the file of the <see cref="AssetCollection"/>.</param>
+	/// <returns>The resolved <see cref="AssetCollection"/> if it exists, else null.</returns>
 	public AssetCollection? ResolveCollection(FileIdentifier identifier)
 	{
 		return ResolveCollection(identifier.GetFilePath());
 	}
 
+	/// <summary>
+	/// Resolves an <see cref="AssetCollection"/> with the specified name in this Bundle and its ascendants.
+	/// </summary>
+	/// <param name="name">The name of the <see cref="AssetCollection"/>.</param>
+	/// <returns>The resolved <see cref="AssetCollection"/> if it exists, else null.</returns>
 	public virtual AssetCollection? ResolveCollection(string name)
 	{
 		Bundle? bundleToExclude = null;
@@ -61,21 +89,39 @@ public abstract class Bundle : IDisposable
 
 		return null;
 
+		/// <summary>
+		/// Attempts to resolve an <see cref="AssetCollection"/> with the specified name in the specified Bundle's collections.
+		/// </summary>
+		/// <param name="currentBundle">The Bundle to attempt to resolve the <see cref="AssetCollection"/> from.</param>
+		/// <param name="name">The name of the <see cref="AssetCollection"/>.</param>
+		/// <returns>The resolved <see cref="AssetCollection"/> if it exists, else null.</returns>
 		static AssetCollection? TryResolveFromCollections(Bundle currentBundle, string name)
 		{
 			//Uniqueness is not guaranteed because of asset bundle variants
 			return currentBundle.Collections.FirstOrDefault(c => c.Name == name);
 		}
 
+		/// <summary>
+		/// Attempts to resolve an <see cref="AssetCollection"/> with the specified name in the specified Bundle's child Bundles.
+		/// </summary>
+		/// <param name="currentBundle">The Bundle to attempt to resolve the <see cref="AssetCollection"/> from.</param>
+		/// <param name="name">The name of the <see cref="AssetCollection"/>.</param>
+		/// <param name="bundleToExclude">The <see cref="Bundle"/> to exclude from the search.</param>
+		/// <returns>The resolved <see cref="AssetCollection"/> if it exists, else null.</returns>
 		static AssetCollection? TryResolveFromChildBundles(Bundle currentBundle, string name, Bundle? bundleToExclude)
 		{
 			return currentBundle.Bundles
 				.Where(b => b != bundleToExclude)
-				.Select(b => TryResolveFromCollections(b, name))//This completely ignores that b might have overrided resolution
+				.Select(b => TryResolveFromCollections(b, name))//This completely ignores that b might have overridden resolution
 				.FirstOrDefault(c => c is not null);
 		}
 	}
 
+	/// <summary>
+	/// Resolves a ResourceFile with the specified name in this Bundle and its ascendants.
+	/// </summary>
+	/// <param name="name">The name of the ResourceFile.</param>
+	/// <returns>The resolved ResourceFile if it exists, else null.</returns>
 	public ResourceFile? ResolveResource([NotNullWhen(true)] string? name)
 	{
 		if (string.IsNullOrEmpty(name))
@@ -90,7 +136,7 @@ public abstract class Bundle : IDisposable
 		Bundle? currentBundle = this;
 		while (currentBundle is not null)
 		{
-			ResourceFile? result = TryResolveFromResources(currentBundle, fixedName) 
+			ResourceFile? result = TryResolveFromResources(currentBundle, fixedName)
 				?? TryResolveFromChildBundles(currentBundle, originalName, fixedName, bundleToExclude)
 				?? currentBundle.ResolveExternalResource(originalName, fixedName);
 			if (result is not null)
@@ -104,28 +150,51 @@ public abstract class Bundle : IDisposable
 
 		return null;
 
+		/// <summary>
+		/// Attempts to resolve a ResourceFile with the specified name in the specified Bundle's Resources.
+		/// </summary>
+		/// <param name="currentBundle">The Bundle to attempt to resolve the ResourceFile from.</param>
+		/// <param name="fixedName">The name of the ResourceFile with invalid characters and path separators fixed.</param>
+		/// <returns>The resolved ResourceFile if it exists, else null.</returns>
 		static ResourceFile? TryResolveFromResources(Bundle currentBundle, string fixedName)
 		{
 			//Uniqueness is not guaranteed because of asset bundle variants
 			return currentBundle.Resources.FirstOrDefault(c => c.NameFixed == fixedName);
 		}
 
+		/// <summary>
+		/// Attempts to resolve a ResourceFile with the specified name in the specified Bundle's child Bundles.
+		/// </summary>
+		/// <param name="currentBundle">The Bundle to attempt to resolve the ResourceFile from.</param>
+		/// <param name="originalName">The original name of the ResourceFile.</param>
+		/// <param name="fixedName">The name of the ResourceFile with invalid characters and path separators fixed.</param>
+		/// <param name="bundleToExclude">The Bundle to exclude from the search.</param>
+		/// <returns>The resolved ResourceFile if it exists, else null.</returns>
 		static ResourceFile? TryResolveFromChildBundles(Bundle currentBundle, string originalName, string fixedName, Bundle? bundleToExclude)
 		{
 			return currentBundle.Bundles
 				.Where(b => b != bundleToExclude)
-				.Select(b => TryResolveFromResources(b, fixedName))//This completely ignores that b might have overrided resolution
+				.Select(b => TryResolveFromResources(b, fixedName))//This completely ignores that b might have overridden resolution
 				.FirstOrDefault(r => r is not null);
 		}
 	}
 
 	protected virtual ResourceFile? ResolveExternalResource(string originalName, string fixedName) => null;
 
+
+	/// <summary>
+	/// Adds a ResourceFile to this Bundle.
+	/// </summary>
+	/// <param name="resource">The ResourceFile to add.</param>
 	public void AddResource(ResourceFile resource)
 	{
 		resources.Add(resource);
 	}
 
+	/// <summary>
+	/// Adds an <see cref="AssetCollection"/> to this Bundle.
+	/// </summary>
+	/// <param name="collection">The <see cref="AssetCollection"/> to add.</param>
 	public void AddCollection(AssetCollection collection)
 	{
 		if (collection.Bundle != this)
@@ -142,6 +211,10 @@ public abstract class Bundle : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Adds a child Bundle to this Bundle.
+	/// </summary>
+	/// <param name="bundle">The Bundle to add.</param>
 	public void AddBundle(Bundle bundle)
 	{
 		if (bundle.Parent is null)
@@ -165,10 +238,24 @@ public abstract class Bundle : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Indicates if the specified <see cref="AssetCollection"/> is compatible with this Bundle.
+	/// </summary>
+	/// <param name="collection">The <see cref="AssetCollection"/> to check.</param>
+	/// <returns>True if the <see cref="AssetCollection"/> is compatible, else false.</returns>
 	protected virtual bool IsCompatibleCollection(AssetCollection collection) => true;
 
+	/// <summary>
+	/// Indicates if the specified Bundle is compatible with this Bundle.
+	/// </summary>
+	/// <param name="bundle">The Bundle to check.</param>
+	/// <returns>True if the Bundle is compatible, else false.</returns>
 	protected virtual bool IsCompatibleBundle(Bundle bundle) => bundle is not GameBundle;
 
+	/// <summary>
+	/// Gets the root Bundle of this Bundle.
+	/// </summary>
+	/// <returns>The root Bundle of this Bundle.</returns>
 	public Bundle GetRoot()
 	{
 		Bundle root = this;
@@ -179,11 +266,19 @@ public abstract class Bundle : IDisposable
 		return root;
 	}
 
+	/// <summary>
+	/// Fetches all <see cref="IUnityObjectBase"/>s in the hierarchy of this Bundle.
+	/// </summary>
+	/// <returns>An IEnumerable of all <see cref="IUnityObjectBase"/>s in the hierarchy.</returns>
 	public IEnumerable<IUnityObjectBase> FetchAssetsInHierarchy()
 	{
 		return GetRoot().FetchAssets();
 	}
 
+	/// <summary>
+	/// Fetches all <see cref="IUnityObjectBase"/>s in this Bundle.
+	/// </summary>
+	/// <returns>An IEnumerable of all <see cref="IUnityObjectBase"/>s in this Bundle.</returns>
 	public IEnumerable<IUnityObjectBase> FetchAssets()
 	{
 		foreach (AssetCollection collection in collections)
@@ -202,6 +297,10 @@ public abstract class Bundle : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Fetches all AssetCollections in the hierarchy of this Bundle.
+	/// </summary>
+	/// <returns>An IEnumerable of all AssetCollections in the hierarchy.</returns>
 	public IEnumerable<AssetCollection> FetchAssetCollections()
 	{
 		foreach (AssetCollection collection in collections)
@@ -235,13 +334,14 @@ public abstract class Bundle : IDisposable
 	public override string ToString()
 	{
 		return Name;
-	}
+		}
 
 	public SerializedAssetCollection AddCollectionFromSerializedFile(SerializedFile file, AssetFactoryBase factory)
 	{
 		return SerializedAssetCollection.FromSerializedFile(this, file, factory);
 	}
 
+	#region IDisposable Support
 	protected virtual void Dispose(bool disposing)
 	{
 		if (!disposedValue)
@@ -262,10 +362,12 @@ public abstract class Bundle : IDisposable
 		}
 	}
 
+	// This code added to correctly implement the disposable pattern.
 	public void Dispose()
 	{
 		// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
 		Dispose(disposing: true);
 		GC.SuppressFinalize(this);
 	}
+	#endregion
 }

@@ -2,10 +2,16 @@
 
 namespace AssetRipper.Numerics
 {
+	/// <summary>
+	/// A struct that represents a color with 32 bits.
+	/// </summary>
 	public readonly record struct Color32(byte R, byte G, byte B, byte A)
 	{
 		private const float ByteMaxValue = byte.MaxValue;
 
+		/// <summary>
+		/// Gets the color represented as a 32 bit unsigned integer.
+		/// </summary>
 		public uint Rgba
 		{
 			get
@@ -15,16 +21,29 @@ namespace AssetRipper.Numerics
 			}
 		}
 
+		/// <summary>
+		/// Converts a 32 bit unsigned integer into a color.
+		/// </summary>
+		/// <param name="rgba">The value to convert</param>
+		/// <returns>The resulting color.</returns>
 		public static Color32 FromRgba(uint rgba)
 		{
 			return Unsafe.As<uint, Color32>(ref rgba);
 		}
 
+		/// <summary>
+		/// Converts the color to a floating-point representation.
+		/// </summary>
+		/// <param name="color">The color to convert.</param>
 		public static explicit operator ColorFloat(Color32 color)
 		{
 			return new ColorFloat(color.R / ByteMaxValue, color.G / ByteMaxValue, color.B / ByteMaxValue, color.A / ByteMaxValue);
 		}
 
+		/// <summary>
+		/// Converts the floating-point representation to a color.
+		/// </summary>
+		/// <param name="color">The floating-point representation to convert.</param>
 		public static explicit operator Color32(ColorFloat color)
 		{
 			byte r = ConvertFloatToByte(color.R);
@@ -56,9 +75,20 @@ namespace AssetRipper.Numerics
 			}
 		}
 
+		/// <summary>
+		/// Gets the color black.
+		/// </summary>
 		public static Color32 Black => new Color32(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
+
+		/// <summary>
+		/// Gets the color white.
+		/// </summary>
 		public static Color32 White => new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
+		/// <summary>
+		/// Gets the string representation of the color.
+		/// </summary>
+		/// <returns>The string representation of the color.</returns>
 		public override string ToString()
 		{
 			return $"[R:{R} G:{G} B:{B} A:{A}]";

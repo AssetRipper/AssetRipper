@@ -1,7 +1,16 @@
 ﻿namespace AssetRipper.Numerics
 {
+	/// <summary>
+	/// Provides extension methods for the Quaternion struct.
+	/// </summary>
 	public static class QuaternionExtensions
 	{
+		/// <summary>
+		/// Returns the value of the specified index of the Quaternion.
+		/// </summary>
+		/// <param name="quaternion">The Quaternion instance.</param>
+		/// <param name="index">The index of the Quaternion.</param>
+		/// <returns>The value of the specified index of the Quaternion.</returns>
 		public static float GetAt(this Quaternion quaternion, int index)
 		{
 			return index switch
@@ -14,6 +23,12 @@
 			};
 		}
 
+		/// <summary>
+		/// Sets the value of the specified index of the Quaternion.
+		/// </summary>
+		/// <param name="quaternion">The Quaternion instance.</param>
+		/// <param name="index">The index of the Quaternion.</param>
+		/// <param name="value">The value to be set.</param>
 		public static void SetAt(this ref Quaternion quaternion, int index, float value)
 		{
 			switch (index)
@@ -35,6 +50,11 @@
 			}
 		}
 
+		/// <summary>
+		/// Flips the sign of the value of the specified index of the Quaternion.
+		/// </summary>
+		/// <param name="quaternion">The Quaternion instance.</param>
+		/// <param name="index">The index of the Quaternion.</param>
 		public static void FlipSignAt(this ref Quaternion quaternion, int index)
 		{
 			switch (index)
@@ -57,11 +77,15 @@
 		}
 
 		/// <summary>
-		/// Converts 
+		/// Converts a quaternion to Euler angles.
 		/// </summary>
-		/// <param name="quaternion">The source quaternion</param>
-		/// <param name="destination">The destination vector for the Euler values to</param>
-		/// <param name="asDegrees">Convert the result to degrees? If false, radians are used.</param>
+		/// <param name="quaternion">The Quaternion instance.</param>
+		/// <param name="asDegrees">
+		/// If true, the Euler angles will be in degrees. If false, radians are used.
+		/// </param>
+		/// <returns>
+		/// A Vector3 containing the Euler angles of the Quaternion.
+		/// </returns>
 		public static Vector3 ToEulerAngle(this Quaternion quaternion, bool asDegrees)
 		{
 			double eax;
@@ -119,21 +143,45 @@
 			return radians * 180.0 / Math.PI;
 		}
 
+		/// <summary>
+		/// Returns the dot product of two Quaternions.
+		/// </summary>
+		/// <param name="a">The first Quaternion.</param>
+		/// <param name="b">The second Quaternion.</param>
+		/// <returns>The dot product of two Quaternions.</returns>
 		public static double Dot(this Quaternion a, Quaternion b)
 		{
 			return ((double)a.X * b.X) + ((double)a.Y * b.Y) + ((double)a.Z * b.Z) + ((double)a.W * b.W);
 		}
 
+		/// <summary>
+		/// Returns a value indicating if this Quaternion is an unit quaternion.
+		/// </summary>
+		/// <param name="a">The Quaternion instance.</param>
+		/// <returns>
+		/// True if this Quaternion is an unit quaternion.
+		/// </returns>
 		public static bool IsUnitQuaternion(this Quaternion a)
 		{
 			return ((a.X * a.X) + (a.Y * a.Y) + (a.Z * a.Z) + (a.W * a.W)) > 1d - kEpsilon;
 		}
 
+		/// <summary>
+		/// Returns a value indicating if this Quaternion is the zero Quaternion.
+		/// </summary>
+		/// <param name="a">The Quaternion instance.</param>
+		/// <returns>True if this Quaternion is the zero Quaternion.</returns>
 		public static bool IsZero(this Quaternion a)
 		{
 			return a.X == 0 && a.Y == 0 && a.Z == 0 && a.W == 0;
 		}
 
+		/// <summary>
+		/// Returns a value indicating if this Quaternion is nearly equal to another using dot product.
+		/// </summary>
+		/// <param name="a">The first Quaternion.</param>
+		/// <param name="b">The second Quaternion.</param>
+		/// <returns>True if they are nearly equal.</returns>
 		public static bool IsEqualUsingDot(this Quaternion a, Quaternion b)
 		{
 			return a.Dot(b) > 1.0f - kEpsilon;

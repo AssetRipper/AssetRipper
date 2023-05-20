@@ -73,6 +73,18 @@ public sealed class SceneDefinition
 		collection.Scene = this;
 	}
 
+	public void RemoveCollection(AssetCollection collection)
+	{
+		if (collections.Remove(collection))
+		{
+			collection.Scene = null;
+		}
+		else
+		{
+			throw new ArgumentException($"{collection} is not part of this scene.", nameof(collection));
+		}
+	}
+
 	private static void ThrowIfAlreadyPartOfAScene(AssetCollection collection)
 	{
 		if (collection.Scene is not null)
