@@ -176,15 +176,16 @@ namespace AssetRipper.Assets.Utils
 			x01 ^= x02 ^ x03 ^ x05 ^ x06 ^ x13 ^ x15 ^ x16 ^ x17 ^ x20 ^ x25 ^ x28 ^ x32;
 			x00 ^= x04 ^ x05 ^ x07 ^ x08 ^ x09 ^ x14 ^ x15 ^ x17 ^ x19 ^ x20 ^ x21 ^ x22 ^ x27 ^ x31;
 
-			reverseBuffer ??= new char[7];
-
-			reverseBuffer[0] = (char)(72 ^ 1 & x00 ^ 2 & x01 ^ 4 & x02 ^ 24 & x03 ^ 32 & x04);
-			reverseBuffer[1] = (char)(72 ^ 1 & x05 ^ 2 & x06 ^ 4 & x07 ^ 24 & x08 ^ 32 & x09);
-			reverseBuffer[2] = (char)(72 ^ 1 & x10 ^ 2 & x11 ^ 4 & x12 ^ 24 & x13 ^ 32 & x14);
-			reverseBuffer[3] = (char)(72 ^ 1 & x15 ^ 2 & x16 ^ 4 & x17 ^ 24 & x18 ^ 32 & x19);
-			reverseBuffer[4] = (char)(72 ^ 1 & x20 ^ 2 & x21 ^ 4 & x22 ^ 24 & x23 ^ 32 & x24);
-			reverseBuffer[5] = (char)(72 ^ 1 & x25 ^ 2 & x26 ^ 4 & x27 ^ 24 & x28 ^ 32 & x29);
-			reverseBuffer[6] = (char)(72 ^ 2 & x31 ^ 4 & x32);
+			ReadOnlySpan<char> reverseBuffer = stackalloc char[7]
+			{
+				(char)(72 ^ 1 & x00 ^ 2 & x01 ^ 4 & x02 ^ 24 & x03 ^ 32 & x04),
+				(char)(72 ^ 1 & x05 ^ 2 & x06 ^ 4 & x07 ^ 24 & x08 ^ 32 & x09),
+				(char)(72 ^ 1 & x10 ^ 2 & x11 ^ 4 & x12 ^ 24 & x13 ^ 32 & x14),
+				(char)(72 ^ 1 & x15 ^ 2 & x16 ^ 4 & x17 ^ 24 & x18 ^ 32 & x19),
+				(char)(72 ^ 1 & x20 ^ 2 & x21 ^ 4 & x22 ^ 24 & x23 ^ 32 & x24),
+				(char)(72 ^ 1 & x25 ^ 2 & x26 ^ 4 & x27 ^ 24 & x28 ^ 32 & x29),
+				(char)(72 ^ 2 & x31 ^ 4 & x32)
+			};
 
 			return new string(reverseBuffer);
 		}
@@ -200,9 +201,6 @@ namespace AssetRipper.Assets.Utils
 		{
 			return unchecked(~(value >> bitOffset & 1u) + 1u);
 		}
-
-		[ThreadStatic]
-		private static char[]? reverseBuffer;
 
 		/// <summary>
 		/// Ascii digest of HHHHHHH
