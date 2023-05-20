@@ -88,7 +88,7 @@
                 </MenuItem>
 
                 <!--Language Menu-->
-                <MenuItem Header="{i18n:Localize menu_language}" Items="{Binding LocalizationManager.SupportedLanguages}" Click="LanguageMenuItemClicked">
+                <MenuItem Header="{i18n:Localize menu_language}" ItemsSource="{Binding LocalizationManager.SupportedLanguages}" Click="LanguageMenuItemClicked">
                     <MenuItem.ItemTemplate>
                         <DataTemplate>
                             <MenuItem Command="{Binding Apply}" CommandParameter="{Binding}" Header="{Binding DisplayName}">
@@ -245,7 +245,7 @@
 
 
                 <!--File browser-->
-                <TreeView Grid.Column="0" Items="{Binding AssetFiles}"
+                <TreeView Grid.Column="0" ItemsSource="{Binding AssetFiles}"
                           SelectionMode="Single"
                           SelectionChanged="OnAssetSelected">
                     <TreeView.ItemTemplate>
@@ -330,7 +330,7 @@
                             <!--Yaml Tab-->
                             <TabItem Header="{i18n:Localize asset_tab_yaml}"
                                      IsVisible="{Binding SelectedAsset.YamlTreeIsSupported, FallbackValue=False}">
-                                <TreeView Items="{Binding SelectedAsset.YamlTree, FallbackValue=[]}">
+                                <TreeView ItemsSource="{Binding SelectedAsset.YamlTree, FallbackValue=[]}">
                                     <TreeView.ItemTemplate>
                                         <TreeDataTemplate ItemsSource="{Binding Children}">
                                             <TextBlock Text="{Binding DisplayName}" />

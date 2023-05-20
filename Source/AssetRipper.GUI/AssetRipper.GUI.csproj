@@ -11,13 +11,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="11.0.0-preview6" />
-		<PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview6" />
-		<PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview6" />
-		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview6" />
+		<PackageReference Include="Avalonia" Version="11.0.0-preview8" />
+		<PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview8" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview8" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview8" />
 		<PackageReference Include="LibVLCSharp" Version="3.7.0" />
 		<PackageReference Include="LibVLCSharp.Avalonia" Version="3.7.0" />
-		<PackageReference Include="MessageBox.Avalonia" Version="2.3.1-prev6" />
+		<PackageReference Include="MessageBox.Avalonia" Version="2.3.1-prev7.0" />
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
 		<PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
 		<PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
