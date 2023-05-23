@@ -1,6 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Enums;
+using System.Diagnostics;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -62,6 +63,20 @@ namespace AssetRipper.SourceGenerated.Extensions
 			renderer.AutoUVMaxDistance_C25 = 0.5f;
 			renderer.AutoUVMaxAngle_C25 = 89.0f;
 			renderer.LightmapParameters_C25P = null;
+		}
+
+		public static ushort GetLightmapIndex(this IRenderer renderer)
+		{
+			if (renderer.Has_LightmapIndex_C25_UInt16())
+			{
+				return renderer.LightmapIndex_C25_UInt16;
+			}
+			else
+			{
+				Debug.Assert(renderer.Has_LightmapIndex_C25_Byte());
+				byte value = renderer.LightmapIndex_C25_Byte;
+				return value == byte.MaxValue ? ushort.MaxValue : value;
+			}
 		}
 	}
 }

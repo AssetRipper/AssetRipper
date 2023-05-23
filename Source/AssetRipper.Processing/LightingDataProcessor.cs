@@ -10,7 +10,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_108;
 using AssetRipper.SourceGenerated.Classes.ClassID_1120;
 using AssetRipper.SourceGenerated.Classes.ClassID_157;
 using AssetRipper.SourceGenerated.Classes.ClassID_218;
-using AssetRipper.SourceGenerated.Classes.ClassID_23;
+using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_258;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.LightmapData;
@@ -90,10 +90,10 @@ namespace AssetRipper.Processing
 
 					foreach (IUnityObjectBase asset in collection)
 					{
-						if (asset is IMeshRenderer meshRenderer) //Need to do all renderer types
+						if (asset is IRenderer renderer) //Need to do all renderer types
 						{
-							if ((meshRenderer.LightmapIndex_C23_Byte == byte.MaxValue || meshRenderer.LightmapIndex_C23_UInt16 == ushort.MaxValue)
-								&& meshRenderer.LightmapIndexDynamic_C23 == ushort.MaxValue)
+							ushort lightmapIndex = renderer.GetLightmapIndex();
+							if (lightmapIndex == ushort.MaxValue && renderer.LightmapIndexDynamic_C25 == ushort.MaxValue)
 							{
 								// No lightmap data associated with renderer
 								continue;
@@ -105,12 +105,12 @@ namespace AssetRipper.Processing
 
 							//The lightmap index, lightmap uv scale/offset value, etc
 							IRendererData rendererData = lightingDataAsset.LightmappedRendererData_C1120.AddNew();
-							rendererData.LightmapIndex = Math.Max(meshRenderer.LightmapIndex_C23_Byte, meshRenderer.LightmapIndex_C23_UInt16);
-							rendererData.LightmapIndexDynamic = meshRenderer.LightmapIndexDynamic_C23;
-							rendererData.LightmapST.CopyValues(meshRenderer.LightmapTilingOffset_C23);
-							if (meshRenderer.Has_LightmapTilingOffsetDynamic_C23())
+							rendererData.LightmapIndex = lightmapIndex;
+							rendererData.LightmapIndexDynamic = renderer.LightmapIndexDynamic_C25;
+							rendererData.LightmapST.CopyValues(renderer.LightmapTilingOffset_C25);
+							if (renderer.Has_LightmapTilingOffsetDynamic_C25())
 							{
-								rendererData.LightmapSTDynamic.CopyValues(meshRenderer.LightmapTilingOffsetDynamic_C23);
+								rendererData.LightmapSTDynamic.CopyValues(renderer.LightmapTilingOffsetDynamic_C25);
 							}
 						}
 						else if (asset is ITerrain terrain)
