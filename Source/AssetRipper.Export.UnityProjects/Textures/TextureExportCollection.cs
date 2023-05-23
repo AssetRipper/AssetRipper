@@ -4,7 +4,6 @@ using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.Project.Collections;
-using AssetRipper.Import.Utils;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
@@ -168,7 +167,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					smeta.FillSpriteMetaData(kvp.Key, kvp.Value);
 					if (smeta.Has_InternalID())
 					{
-						smeta.InternalID = ObjectUtils.GenerateInternalID();
+						smeta.InternalID = ExportIdHandler.GetInternalId();
 					}
 				}
 			}

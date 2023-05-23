@@ -1,8 +1,8 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
-using AssetRipper.Import.Utils;
 using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Project.Collections
@@ -52,7 +52,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 
 		protected virtual long GenerateExportID(IUnityObjectBase asset)
 		{
-			return ObjectUtils.GenerateExportID(asset, ContainsID);
+			return ExportIdHandler.GetRandomExportId(asset, ContainsID);
 		}
 
 		/// <summary>
