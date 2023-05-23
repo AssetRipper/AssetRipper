@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Export.UnityProjects;
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Structure.GameStructure;
+using AssetRipper.Import.Structure;
 
 namespace AssetRipper.GUI.Managers
 {

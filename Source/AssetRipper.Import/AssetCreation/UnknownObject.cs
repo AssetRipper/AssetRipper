@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 
-namespace AssetRipper.Import.Classes
+namespace AssetRipper.Import.AssetCreation
 {
 	public sealed class UnknownObject : RawDataObject, IHasNameString
 	{

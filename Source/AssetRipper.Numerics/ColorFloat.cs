@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace AssetRipper.Numerics
+﻿namespace AssetRipper.Numerics
 {
 	/// <summary>
 	/// Represents an RGBA color value as four single precision floating point values.

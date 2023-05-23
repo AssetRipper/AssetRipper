@@ -18,7 +18,7 @@ using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Export.UnityProjects.TypeTrees;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Structure.GameStructure;
+using AssetRipper.Import.Structure;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Processing;

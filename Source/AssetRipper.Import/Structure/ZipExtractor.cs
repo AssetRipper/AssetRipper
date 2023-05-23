@@ -2,9 +2,9 @@
 using AssetRipper.Import.Utils;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace AssetRipper.Import.Structure.GameStructure
+namespace AssetRipper.Import.Structure
 {
-	public static class Preprocessor
+	public static class ZipExtractor
 	{
 		private const string ZipExtension = ".zip";
 		private const string ApkExtension = ".apk";
@@ -18,7 +18,7 @@ namespace AssetRipper.Import.Structure.GameStructure
 
 		public static List<string> Process(IEnumerable<string> paths)
 		{
-			List<string> result = new List<string>();
+			List<string> result = new();
 			foreach (string path in paths)
 			{
 				switch (GetFileExtension(path))

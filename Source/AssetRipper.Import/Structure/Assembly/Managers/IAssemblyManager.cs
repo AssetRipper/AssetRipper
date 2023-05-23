@@ -1,6 +1,6 @@
 using AsmResolver.DotNet;
 using AssetRipper.Import.Structure.Assembly.Serializable;
-using AssetRipper.Import.Structure.GameStructure.Platforms;
+using AssetRipper.Import.Structure.Platforms;
 
 namespace AssetRipper.Import.Structure.Assembly.Managers
 {

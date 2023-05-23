@@ -2,7 +2,7 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Project.Collections;
-using AssetRipper.Import.Classes;
+using AssetRipper.Import.AssetCreation;
 using AssetRipper.IO.Files;
 
 namespace AssetRipper.Export.UnityProjects.Project.Exporters

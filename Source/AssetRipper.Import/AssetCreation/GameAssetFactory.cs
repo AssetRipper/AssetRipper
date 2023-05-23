@@ -4,7 +4,6 @@ using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Import.Classes;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Import.Structure.Assembly.Mono;
@@ -35,7 +34,7 @@ using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.Vector3Int;
 using AssetRipper.SourceGenerated.Subclasses.Vector4f;
 
-namespace AssetRipper.Import.Structure
+namespace AssetRipper.Import.AssetCreation
 {
 	public sealed class GameAssetFactory : AssetFactoryBase
 	{

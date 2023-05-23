@@ -3,7 +3,7 @@ using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files.Streams.MultiFile;
 
-namespace AssetRipper.Import.Structure.GameStructure.Platforms
+namespace AssetRipper.Import.Structure.Platforms
 {
 	public sealed class MixedGameStructure : PlatformGameStructure
 	{

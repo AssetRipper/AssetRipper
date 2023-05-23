@@ -6,7 +6,6 @@ using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Import.IO.Extensions;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Yaml;
@@ -222,7 +221,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Bool:
 					if (etalon.IsArray)
 					{
-						((bool[])CValue).Write(writer);
+						writer.WriteArray((bool[])CValue);
 					}
 					else
 					{
@@ -234,7 +233,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Char:
 					if (etalon.IsArray)
 					{
-						((char[])CValue).Write(writer);
+						writer.WriteArray((char[])CValue);
 					}
 					else
 					{
@@ -246,7 +245,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.SByte:
 					if (etalon.IsArray)
 					{
-						((byte[])CValue).Write(writer);
+						writer.WriteArray((byte[])CValue);
 					}
 					else
 					{
@@ -258,7 +257,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Byte:
 					if (etalon.IsArray)
 					{
-						((byte[])CValue).Write(writer);
+						writer.WriteArray((byte[])CValue);
 					}
 					else
 					{
@@ -270,7 +269,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Short:
 					if (etalon.IsArray)
 					{
-						((short[])CValue).Write(writer);
+						writer.WriteArray((short[])CValue);
 					}
 					else
 					{
@@ -282,7 +281,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.UShort:
 					if (etalon.IsArray)
 					{
-						((ushort[])CValue).Write(writer);
+						writer.WriteArray((ushort[])CValue);
 					}
 					else
 					{
@@ -294,7 +293,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Int:
 					if (etalon.IsArray)
 					{
-						((int[])CValue).Write(writer);
+						writer.WriteArray((int[])CValue);
 					}
 					else
 					{
@@ -305,7 +304,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.UInt:
 					if (etalon.IsArray)
 					{
-						((uint[])CValue).Write(writer);
+						writer.WriteArray((uint[])CValue);
 					}
 					else
 					{
@@ -316,7 +315,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Long:
 					if (etalon.IsArray)
 					{
-						((long[])CValue).Write(writer);
+						writer.WriteArray((long[])CValue);
 					}
 					else
 					{
@@ -327,7 +326,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.ULong:
 					if (etalon.IsArray)
 					{
-						((ulong[])CValue).Write(writer);
+						writer.WriteArray((ulong[])CValue);
 					}
 					else
 					{
@@ -338,7 +337,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Single:
 					if (etalon.IsArray)
 					{
-						((float[])CValue).Write(writer);
+						writer.WriteArray((float[])CValue);
 					}
 					else
 					{
@@ -349,7 +348,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Double:
 					if (etalon.IsArray)
 					{
-						((double[])CValue).Write(writer);
+						writer.WriteArray((double[])CValue);
 					}
 					else
 					{
@@ -360,7 +359,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.String:
 					if (etalon.IsArray)
 					{
-						((string[])CValue).Write(writer);
+						writer.WriteArray((string[])CValue);
 					}
 					else
 					{
@@ -371,7 +370,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Complex:
 					if (etalon.IsArray)
 					{
-						((IAsset[])CValue).Write(writer);
+						writer.WriteAssetArray((IAsset[])CValue);
 					}
 					else
 					{
@@ -391,7 +390,12 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
 					IAsset[] structures = (IAsset[])CValue;
-					return structures.ExportYaml(container);
+					YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
+					foreach (IAsset structure in structures)
+					{
+						node.Add(structure.ExportYaml(container));
+					}
+					return node;
 				}
 				else
 				{

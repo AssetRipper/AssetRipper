@@ -4,7 +4,7 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
 using AssetRipper.SourceGenerated;
 
-namespace AssetRipper.Import.Classes
+namespace AssetRipper.Import.AssetCreation
 {
 	public abstract class RawDataObject : NullObject
 	{

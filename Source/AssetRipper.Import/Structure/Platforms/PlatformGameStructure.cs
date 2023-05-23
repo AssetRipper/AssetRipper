@@ -8,7 +8,7 @@ using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Utils;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.Import.Structure.GameStructure.Platforms
+namespace AssetRipper.Import.Structure.Platforms
 {
 	public abstract class PlatformGameStructure
 	{

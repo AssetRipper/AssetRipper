@@ -1,16 +1,17 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Interfaces;
+using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
-using AssetRipper.Import.Structure.GameStructure.Platforms;
+using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Utils;
 
-namespace AssetRipper.Import.Structure.GameStructure
+namespace AssetRipper.Import.Structure
 {
 	public sealed class GameStructure : IDisposable
 	{
@@ -50,7 +51,7 @@ namespace AssetRipper.Import.Structure.GameStructure
 
 		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration)
 		{
-			List<string> toProcess = Preprocessor.Process(paths);
+			List<string> toProcess = ZipExtractor.Process(paths);
 			if (toProcess.Count == 0)
 			{
 				throw new ArgumentException("Game files not found", nameof(paths));

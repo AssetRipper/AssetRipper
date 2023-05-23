@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Import.Logging;
 
-namespace AssetRipper.Import.Structure.GameStructure.Platforms
+namespace AssetRipper.Import.Structure.Platforms
 {
 	public static class PlatformChecker
 	{

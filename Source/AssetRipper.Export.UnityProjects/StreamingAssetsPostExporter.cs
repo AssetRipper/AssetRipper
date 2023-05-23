@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Import.Logging;
-using AssetRipper.Import.Structure.GameStructure.Platforms;
+using AssetRipper.Import.Structure.Platforms;
 
 namespace AssetRipper.Export.UnityProjects
 {

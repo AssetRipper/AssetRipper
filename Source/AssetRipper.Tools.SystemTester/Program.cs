@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Export.UnityProjects;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Structure.GameStructure;
-using AssetRipper.Import.Utils;
+using AssetRipper.Import.Structure;
 
 namespace AssetRipper.Tools.SystemTester
 {
@@ -64,7 +63,7 @@ namespace AssetRipper.Tools.SystemTester
 						{
 							string[] inputFiles = Directory.GetFiles(inputPath);
 							string[] inputDirectories = Directory.GetDirectories(inputPath);
-							string[] inputPaths = ArrayUtils.Combine(inputFiles, inputDirectories);
+							string[] inputPaths = Combine(inputFiles, inputDirectories);
 							string outputPath = Path.Combine(testPath, "Output");
 
 							Ripper ripper = new Ripper();
@@ -112,6 +111,30 @@ namespace AssetRipper.Tools.SystemTester
 				Logger.Info(LogCategory.Export, "Clearing export directory...");
 				Directory.Delete(path, true);
 			}
+		}
+
+		private static T[] Combine<T>(T[] array1, T[] array2)
+		{
+			if (array1 == null)
+			{
+				throw new ArgumentNullException(nameof(array1));
+			}
+
+			if (array2 == null)
+			{
+				throw new ArgumentNullException(nameof(array2));
+			}
+
+			T[] result = new T[array1.Length + array2.Length];
+			for (int i = 0; i < array1.Length; i++)
+			{
+				result[i] = array1[i];
+			}
+			for (int j = 0; j < array2.Length; j++)
+			{
+				result[j + array1.Length] = array2[j];
+			}
+			return result;
 		}
 	}
 }

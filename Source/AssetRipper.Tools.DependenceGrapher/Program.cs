@@ -3,7 +3,7 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Import.Structure;
+using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;

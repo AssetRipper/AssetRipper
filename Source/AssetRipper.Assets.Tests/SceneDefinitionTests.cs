@@ -1,6 +1,6 @@
-using AssetRipper.IO.Files;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Collections;
+using AssetRipper.IO.Files;
 using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Assets.Tests;

@@ -15,6 +15,21 @@ namespace AssetRipper.Assets.IO.Writing
 			throw new NotSupportedException();
 		}
 
+		public void WriteAssetArray<T>(T[] buffer) where T : IAssetWritable
+		{
+			Write(buffer.Length);
+
+			for (int i = 0; i < buffer.Length; i++)
+			{
+				buffer[i].Write(this);
+			}
+
+			if (IsAlignArray)
+			{
+				AlignStream();
+			}
+		}
+
 		public AssetCollection AssetCollection { get; }
 	}
 }

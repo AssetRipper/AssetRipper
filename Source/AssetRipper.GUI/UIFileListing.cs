@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Interfaces;
-using AssetRipper.Import.Classes;
-using AssetRipper.Import.Structure.GameStructure;
+using AssetRipper.Import.AssetCreation;
+using AssetRipper.Import.Structure;
 using AssetRipper.IO.Files.ResourceFiles;
 using System.Collections.ObjectModel;
 

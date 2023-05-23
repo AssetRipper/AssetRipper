@@ -5,11 +5,9 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
-using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_1030;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
-using System.Text;
 
 namespace AssetRipper.Export.UnityProjects.Scripts
 {

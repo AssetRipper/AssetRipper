@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
-using AssetRipper.Import.Utils;
 using K4os.Compression.LZ4;
 
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
@@ -30,7 +29,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			if (segment == 0)
 			{
 				Entries = ReadAssetArray(blobReader);
-				SubPrograms = ArrayUtils.CreateAndInitializeArray<ShaderSubProgram>(Entries.Length);
+				SubPrograms = CreateAndInitializeArray<ShaderSubProgram>(Entries.Length);
 			}
 			ReadSegment(blobReader, segment);
 		}
@@ -147,6 +146,33 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			{
 				writer.AlignStream();
 			}
+		}
+
+		/// <summary>
+		/// Creates an array with non-null elements
+		/// </summary>
+		/// <typeparam name="T">The type of the array elements</typeparam>
+		/// <param name="length">The length of the array</param>
+		/// <returns>A new array of the specified length and type</returns>
+		/// <exception cref="ArgumentOutOfRangeException">Length less than zero</exception>
+		private static T[] CreateAndInitializeArray<T>(int length) where T : new()
+		{
+			if (length < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(length));
+			}
+
+			if (length == 0)
+			{
+				return Array.Empty<T>();
+			}
+
+			T[] array = new T[length];
+			for (int i = 0; i < length; i++)
+			{
+				array[i] = new();
+			}
+			return array;
 		}
 
 		public ShaderSubProgramEntry[] Entries { get; set; } = Array.Empty<ShaderSubProgramEntry>();

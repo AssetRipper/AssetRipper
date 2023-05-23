@@ -1,4 +1,5 @@
 using AssetRipper.Assets.IO;
+using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Object;
 

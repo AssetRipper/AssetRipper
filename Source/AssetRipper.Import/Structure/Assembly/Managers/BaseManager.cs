@@ -1,7 +1,7 @@
 ﻿using AsmResolver.DotNet;
 using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.Import.Structure.Assembly.Serializable;
-using AssetRipper.Import.Structure.GameStructure.Platforms;
+using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.SerializationLogic;
 

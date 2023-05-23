@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 
-namespace AssetRipper.Import.IO
+namespace AssetRipper.Export.Modules.Shaders.IO
 {
 	public class InvariantStreamWriter : StreamWriter
 	{

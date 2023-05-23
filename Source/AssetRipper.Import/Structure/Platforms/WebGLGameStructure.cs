@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Import.Structure.Assembly;
 
-namespace AssetRipper.Import.Structure.GameStructure.Platforms
+namespace AssetRipper.Import.Structure.Platforms
 {
 	internal sealed class WebGLGameStructure : PlatformGameStructure
 	{

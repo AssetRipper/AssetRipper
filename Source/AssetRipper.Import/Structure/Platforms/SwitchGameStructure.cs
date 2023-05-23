@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Import.Structure.GameStructure.Platforms
+﻿namespace AssetRipper.Import.Structure.Platforms
 {
 	internal sealed class SwitchGameStructure : PlatformGameStructure
 	{
