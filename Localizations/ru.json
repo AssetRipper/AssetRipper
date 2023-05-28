@@ -143,5 +143,6 @@
     "menu_language": "Язык",
     "terrain_format_native_description": "Экспорт в собственный формат ландшафта Unity.  Самый полезный вариант, если вы планируете повторно импортировать обратно в Unity.",
     "terrain_format_heatmap_description": "Экспортируйте тепловую карту высоты местности в каждом месте.  Только действительно полезно, если вы не заботитесь о деталях или о местности в 3D.",
-    "text_asset_format_binary": "Байты"
+    "text_asset_format_binary": "Байты",
+    "ignore_engine_assets": "Игнорировать ассеты движка"
 }
