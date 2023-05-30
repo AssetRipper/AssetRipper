@@ -39,6 +39,25 @@ public abstract class Bundle : IDisposable
 	public abstract string Name { get; }
 
 	/// <summary>
+	/// All the <see cref="SceneDefinition"/>s in this bundle.
+	/// </summary>
+	public IEnumerable<SceneDefinition> Scenes
+	{
+		get
+		{
+			HashSet<SceneDefinition> scenes = new();
+			foreach (AssetCollection collection in FetchAssetCollections())
+			{
+				SceneDefinition? scene = collection.Scene;
+				if (scene is not null && scenes.Add(scene))
+				{
+					yield return scene;
+				}
+			}
+		}
+	}
+
+	/// <summary>
 	/// Initializes the dependency list for each SerializedAssetCollection in this Bundle and its children Bundles.
 	/// </summary>
 	internal void InitializeAllDependencyLists()
