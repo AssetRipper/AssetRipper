@@ -31,7 +31,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			ITrueTypeFontImporter instance = TrueTypeFontImporterFactory.CreateAsset(container.ExportVersion, container.File);
 			instance.FontSize_C1042 = (int)origin.FontSize_C128;
 			instance.IncludeFontData_C1042 = true;
-			instance.Style_C1042E = origin.GetDefaultStyle();
+			instance.Style_C1042 = (int)origin.GetDefaultStyle();
 			if (origin.FontNames_C128.Count > 0)
 			{
 				instance.FontName_C1042?.CopyValues(origin.FontNames_C128[0]);

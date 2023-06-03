@@ -46,11 +46,8 @@ public sealed class PrefabProcessor : IAssetProcessor
 					IPrefabMarker? prefabMarker = prefab as IPrefabMarker;
 					Debug.Assert(prefab is not IPrefabInstanceMarker);
 
-					PPtrAccessList<PPtr_EditorExtension_3_4_0, IEditorExtension>? objects = prefab.Has_Objects_C1001() ? prefab.Objects_C1001P : null;
-
 					foreach (IEditorExtension editorExtension in root.FetchHierarchy())
 					{
-						objects?.Add(editorExtension);
 						editorExtension.PrefabInternal_C18P = prefabMarker;
 					}
 				}
@@ -64,7 +61,6 @@ public sealed class PrefabProcessor : IAssetProcessor
 
 		prefab.RootGameObject_C1001P = root;
 		prefab.IsPrefabAsset_C1001 = true;
-		prefab.Name_C1001?.CopyValues(root.Name_C1);
 		prefab.AssetBundleName = root.AssetBundleName;
 		prefab.OriginalDirectory = root.OriginalDirectory;
 		prefab.OriginalName = root.OriginalName;

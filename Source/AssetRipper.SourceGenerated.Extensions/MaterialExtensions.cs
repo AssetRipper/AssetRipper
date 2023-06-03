@@ -30,11 +30,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 				savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0.TryGetValue(new() { NameString = propertyName }, out UnityTexEnv_3_5_0? texEnv);
 				property = texEnv;
 			}
-			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_4_0())
-			{
-				savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_4_0.TryGetValue(new() { NameString = propertyName }, out UnityTexEnv_3_4_0? texEnv);
-				property = texEnv;
-			}
 			else
 			{
 				property = null;
@@ -61,12 +56,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return savedProperties
 					.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0
-					.Select(pair => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key.Name, pair.Value));
-			}
-			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_4_0())
-			{
-				return savedProperties
-					.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_4_0
 					.Select(pair => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key.Name, pair.Value));
 			}
 			else

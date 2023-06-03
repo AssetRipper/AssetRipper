@@ -32,7 +32,7 @@ namespace AssetRipper.Processing
 				//Only scenes can contain a LightmapSettings asset.
 				ILightmapSettings? lightmapSettings = scene.Assets.OfType<ILightmapSettings>().FirstOrDefault();
 				if (lightmapSettings is null
-					|| (!lightmapSettings.Has_LightingDataAsset_C157() && !lightmapSettings.Has_LightmapSnapshot_C157())
+					|| !lightmapSettings.Has_LightingDataAsset_C157()
 					|| !HasLightingData(lightmapSettings))
 				{
 					continue;
@@ -41,7 +41,6 @@ namespace AssetRipper.Processing
 				ILightingDataAsset lightingDataAsset = CreateLightingDataAsset(processedCollection);
 
 				lightmapSettings.LightingDataAsset_C157P = lightingDataAsset;
-				lightmapSettings.LightmapSnapshot_C157P = lightingDataAsset;
 
 				PPtrConverter converter = new PPtrConverter(lightmapSettings, lightingDataAsset);
 
@@ -231,7 +230,7 @@ namespace AssetRipper.Processing
 		private static ISceneAsset CreateSceneAsset(ProcessedAssetCollection collection, SceneDefinition targetScene)
 		{
 			ISceneAsset asset = collection.CreateAsset((int)ClassIDType.SceneAsset, SceneAssetFactory.CreateAsset);
-			asset.TargetScene = targetScene.Collections[0];
+			asset.TargetScene = targetScene;
 			return asset;
 		}
 	}

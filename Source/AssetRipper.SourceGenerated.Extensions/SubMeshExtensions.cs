@@ -156,19 +156,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 			}
 
-			if (mesh.Has_VertexData_C43())
-			{
-				FindMinMaxBounds(mesh.Collection, mesh.VertexData_C43, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
-			}
-			else if (mesh.Has_Vertices_C43())
-			{
-				FindMinMaxBounds(mesh.Vertices_C43, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
-			}
-			else
-			{
-				min = Vector3.Zero;
-				max = Vector3.Zero;
-			}
+			FindMinMaxBounds(mesh.Collection, mesh.VertexData_C43, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 		}
 
 		private static void FindMinMaxBounds(float[] vertexBuffer, int firstVertex, int vertexCount, out Vector3 min, out Vector3 max)
@@ -206,41 +194,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 				else if (z < min.Z)
 				{
 					min.Z = z;
-				}
-			}
-		}
-
-		private static void FindMinMaxBounds(AssetList<Vector3f_3_4_0> vertices, int firstVertex, int vertexCount, out Vector3 min, out Vector3 max)
-		{
-			min = (Vector3)vertices[firstVertex];
-			max = (Vector3)vertices[firstVertex];
-			int end = firstVertex + vertexCount;
-			for (int i = firstVertex; i < end; i++)
-			{
-				Vector3f_3_4_0 vertex = vertices[i];
-				if (vertex.X > max.X)
-				{
-					max.X = vertex.X;
-				}
-				else if (vertex.X < min.X)
-				{
-					min.X = vertex.X;
-				}
-				if (vertex.Y > max.Y)
-				{
-					max.Y = vertex.Y;
-				}
-				else if (vertex.Y < min.Y)
-				{
-					min.Y = vertex.Y;
-				}
-				if (vertex.Z > max.Z)
-				{
-					max.Z = vertex.Z;
-				}
-				else if (vertex.Z < min.Z)
-				{
-					min.Z = vertex.Z;
 				}
 			}
 		}

@@ -50,9 +50,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return gameObject.Component_C1_AssetList_ComponentPair.Select(pair => pair.Component);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_4_0())
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
 			{
-				return gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_4_0.Select(pair => pair.Value);
+				return gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.Select(pair => pair.Value);
 			}
 			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
 			{
@@ -70,9 +70,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return new ComponentPairAccessList(gameObject.Component_C1_AssetList_ComponentPair);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_4_0())
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
 			{
-				return new AssetPairAccessList<PPtr_Component_3_4_0>(gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_4_0);
+				return new AssetPairAccessList<PPtr_Component_3_5_0>(gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0);
 			}
 			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
 			{
@@ -90,9 +90,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				gameObject.Component_C1_AssetList_ComponentPair.AddNew().Component.SetAsset(gameObject.Collection, component);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_4_0())
+			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
 			{
-				AssetPair<int, PPtr_Component_3_4_0> pair = gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_4_0.AddNew();
+				AssetPair<int, PPtr_Component_3_5_0> pair = gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.AddNew();
 				pair.Key = (int)classID;
 				pair.Value.SetAsset(gameObject.Collection, component);
 			}

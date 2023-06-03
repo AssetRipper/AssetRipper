@@ -36,7 +36,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else
 			{
-				gradient.MinColor_ColorRGBAf_3_5_0.SetAsWhite();
+				gradient.MinColor_ColorRGBAf.SetAsWhite();
 			}
 
 			if (gradient.Has_MaxColor_ColorRGBA32())
@@ -45,7 +45,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else
 			{
-				gradient.MaxColor_ColorRGBAf_3_5_0.SetAsWhite();
+				gradient.MaxColor_ColorRGBAf.SetAsWhite();
 			}
 
 			//gradient.MaxGradient = new Gradient(ColorRGBAf.White, ColorRGBAf.White);

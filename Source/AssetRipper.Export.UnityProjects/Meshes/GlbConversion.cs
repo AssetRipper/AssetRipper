@@ -1,7 +1,4 @@
-﻿using AssetRipper.SourceGenerated.Extensions;
-using AssetRipper.SourceGenerated.Subclasses.Quaternionf;
-using AssetRipper.SourceGenerated.Subclasses.Vector3f;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace AssetRipper.Export.UnityProjects.Meshes
 {
@@ -32,21 +29,11 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		/// </summary>
 		/// <param name="unityQuaternion">unity quaternion</param>
 		/// <returns>gltf quaternion</returns>
-		public static Quaternion ToGltfQuaternionConvert(IQuaternionf unityQuaternion)
+		public static Quaternion ToGltfQuaternionConvert(Quaternion unityQuaternion)
 		{
 			Vector3 fromAxisOfRotation = new Vector3(unityQuaternion.X, unityQuaternion.Y, unityQuaternion.Z);
 			Vector3 toAxisOfRotation = axisFlipScale * fromAxisOfRotation * CoordinateSpaceConversionScale;
 			return new Quaternion(toAxisOfRotation.X, toAxisOfRotation.Y, toAxisOfRotation.Z, unityQuaternion.W);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="unityVector"></param>
-		/// <returns></returns>
-		public static Vector3 ToGltfVector3Convert(IVector3f unityVector)
-		{
-			return ToGltfVector3Convert(unityVector.CastToStruct());
 		}
 
 		public static Vector3 ToGltfVector3Convert(Vector3 unityVector)

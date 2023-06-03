@@ -39,25 +39,5 @@ namespace AssetRipper.SourceGenerated.Extensions
 			str.String = buildTargetGroup.ToExportString();
 			dictionary.Add(str, (int)qualityLevel);
 		}
-
-		public static QualityLevel GetDefaultMobileQuality(this IQualitySettings settings)
-		{
-			return (QualityLevel)settings.DefaultMobileQuality_C47;
-		}
-
-		public static QualityLevel GetDefaultStandaloneQuality(this IQualitySettings settings)
-		{
-			return (QualityLevel)settings.DefaultStandaloneQuality_C47;
-		}
-
-		public static QualityLevel GetDefaultWebPlayerQuality(this IQualitySettings settings)
-		{
-			return (QualityLevel)settings.DefaultWebPlayerQuality_C47;
-		}
-
-		public static QualityLevel GetEditorQuality(this IQualitySettings settings)
-		{
-			return (QualityLevel)settings.EditorQuality_C47;
-		}
 	}
 }

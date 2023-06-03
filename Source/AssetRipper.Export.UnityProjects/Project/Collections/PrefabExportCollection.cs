@@ -31,7 +31,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			//Prior to 2018.3, Prefab was an actual asset inside "*.prefab" files.
 			//After that, PrefabImporter and PrefabInstance were introduced as a replacement.
 			Prefab = rootPrefabPair.Item2;
-			Debug.Assert(Prefab is null or IDataTemplateMarker or IPrefabMarker);
+			Debug.Assert(Prefab is null or IPrefabMarker);
 
 			foreach (IEditorExtension asset in RootGameObject.FetchHierarchy())
 			{

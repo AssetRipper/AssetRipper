@@ -133,7 +133,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void BindPoseAssignmentSymmetry()
 		{
-			CompressedMesh_3_4_0 compressedMesh = new();//BindPoses only exists on versions before Unity 5.
+			CompressedMesh_3_5_0 compressedMesh = new();//BindPoses only exists on versions before Unity 5.
 			compressedMesh.SetBindPoses(matrices);
 			Matrix4x4[] unpackedValues = compressedMesh.GetBindPoses();
 			AreAlmostEqual(matrices, unpackedValues, 0.000001f);
@@ -151,7 +151,7 @@ namespace AssetRipper.Tests
 		[Test]
 		public void OldUV()
 		{
-			CompressedMesh_3_4_0 compressedMesh = new();//UV is structured differently on versions before Unity 5.
+			CompressedMesh_3_5_0 compressedMesh = new();//UV is structured differently on versions before Unity 5.
 			compressedMesh.SetVertices(vectors);//Need to set the correct vertex count by filling the vertex buffer.
 			compressedMesh.SetUV(uv0, uv1, null, null, null, null, null, null);
 			compressedMesh.GetUV(out Vector2[]? unpackedUV0, out Vector2[]? unpackedUV1, out Vector2[]? unpackedUV2, out Vector2[]? unpackedUV3, out Vector2[]? unpackedUV4, out Vector2[]? unpackedUV5, out Vector2[]? unpackedUV6, out Vector2[]? unpackedUV7);

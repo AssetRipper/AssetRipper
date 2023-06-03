@@ -104,7 +104,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					instance.Vertices.Capacity = vertices.Length;
 					for (int i = 0; i < vertices.Length; i++)
 					{
-						Vector2f_3_5_0 vertex = instance.Vertices.AddNew();
+						Vector2f vertex = instance.Vertices.AddNew();
 
 						// Scale and translate vertices properly
 						vertex.X = vertices[i].X * origin.PixelsToUnits_C213 + origin.Rect_C213.Width / 2;
@@ -148,7 +148,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			ISpriteAtlas? atlas,
 			RectangleF rect,
 			Vector2 pivot,
-			AssetList<AssetList<Vector2f_3_5_0>> shape)
+			AssetList<AssetList<Vector2f>> shape)
 		{
 			if (sprite.Has_PhysicsShape_C213() && sprite.PhysicsShape_C213.Count > 0)
 			{
@@ -159,18 +159,18 @@ namespace AssetRipper.SourceGenerated.Extensions
 				Vector2 pivotShift = new Vector2(pivotShiftX, pivotShiftY);
 				for (int i = 0; i < sprite.PhysicsShape_C213.Count; i++)
 				{
-					shape.Add(new AssetList<Vector2f_3_5_0>(sprite.PhysicsShape_C213[i].Count));
+					shape.Add(new AssetList<Vector2f>(sprite.PhysicsShape_C213[i].Count));
 					for (int j = 0; j < sprite.PhysicsShape_C213[i].Count; j++)
 					{
 						Vector2 point = (Vector2)sprite.PhysicsShape_C213[i][j] * sprite.PixelsToUnits_C213;
-						shape[i].Add((Vector2f_3_5_0)(point + pivotShift));
+						shape[i].Add((Vector2f)(point + pivotShift));
 					}
 				}
 				FixRotation(sprite, atlas, shape);
 			}
 		}
 
-		private static void FixRotation(ISprite sprite, ISpriteAtlas? atlas, AssetList<AssetList<Vector2f_3_5_0>> outlines)
+		private static void FixRotation(ISprite sprite, ISpriteAtlas? atlas, AssetList<AssetList<Vector2f>> outlines)
 		{
 			GetPacking(sprite, atlas, out bool isPacked, out SpritePackingRotation rotation);
 
@@ -180,11 +180,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 				{
 					case SpritePackingRotation.FlipHorizontal:
 						{
-							foreach (AssetList<Vector2f_3_5_0> outline in outlines)
+							foreach (AssetList<Vector2f> outline in outlines)
 							{
 								for (int i = 0; i < outline.Count; i++)
 								{
-									Vector2f_3_5_0 vertex = outline[i];
+									Vector2f vertex = outline[i];
 									outline[i].SetValues(-vertex.X, vertex.Y);
 								}
 							}
@@ -193,11 +193,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 					case SpritePackingRotation.FlipVertical:
 						{
-							foreach (AssetList<Vector2f_3_5_0> outline in outlines)
+							foreach (AssetList<Vector2f> outline in outlines)
 							{
 								for (int i = 0; i < outline.Count; i++)
 								{
-									Vector2f_3_5_0 vertex = outline[i];
+									Vector2f vertex = outline[i];
 									outline[i].SetValues(vertex.X, -vertex.Y);
 								}
 							}
@@ -206,11 +206,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 					case SpritePackingRotation.Rotate90:
 						{
-							foreach (AssetList<Vector2f_3_5_0> outline in outlines)
+							foreach (AssetList<Vector2f> outline in outlines)
 							{
 								for (int i = 0; i < outline.Count; i++)
 								{
-									Vector2f_3_5_0 vertex = outline[i];
+									Vector2f vertex = outline[i];
 									outline[i].SetValues(vertex.Y, vertex.X);
 								}
 							}
@@ -219,11 +219,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 					case SpritePackingRotation.Rotate180:
 						{
-							foreach (AssetList<Vector2f_3_5_0> outline in outlines)
+							foreach (AssetList<Vector2f> outline in outlines)
 							{
 								for (int i = 0; i < outline.Count; i++)
 								{
-									Vector2f_3_5_0 vertex = outline[i];
+									Vector2f vertex = outline[i];
 									outline[i].SetValues(-vertex.X, -vertex.Y);
 								}
 							}
@@ -260,13 +260,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			ISpriteAtlas? atlas,
 			RectangleF rect,
 			Vector2 pivot,
-			AssetList<AssetList<Vector2f_3_5_0>> outlines)
+			AssetList<AssetList<Vector2f>> outlines)
 		{
 			GenerateOutline(sprite.RD_C213, sprite.Collection.Version, outlines);
 			float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
 			float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
 			Vector2 pivotShift = new Vector2(pivotShiftX, pivotShiftY);
-			foreach (AssetList<Vector2f_3_5_0> outline in outlines)
+			foreach (AssetList<Vector2f> outline in outlines)
 			{
 				for (int i = 0; i < outline.Count; i++)
 				{
@@ -280,7 +280,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		private static void GenerateOutline(
 			ISpriteRenderData spriteRenderData,
 			UnityVersion version,
-			AssetList<AssetList<Vector2f_3_5_0>> outlines)
+			AssetList<AssetList<Vector2f>> outlines)
 		{
 			outlines.Clear();
 			if (spriteRenderData.Has_VertexData() && spriteRenderData.SubMeshes!.Count != 0)
@@ -335,15 +335,15 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return outlineGenerator.GenerateOutlines();
 		}
 
-		private static void AddRanges(this AssetList<AssetList<Vector2f_3_5_0>> instance, List<Vector2[]> vectorArrayList)
+		private static void AddRanges(this AssetList<AssetList<Vector2f>> instance, List<Vector2[]> vectorArrayList)
 		{
 			foreach (Vector2[] vectorArray in vectorArrayList)
 			{
-				AssetList<Vector2f_3_5_0> assetList = new AssetList<Vector2f_3_5_0>(vectorArray.Length);
+				AssetList<Vector2f> assetList = new AssetList<Vector2f>(vectorArray.Length);
 				instance.Add(assetList);
 				foreach (Vector2 v in vectorArray)
 				{
-					assetList.Add((Vector2f_3_5_0)v);
+					assetList.Add((Vector2f)v);
 				}
 			}
 		}

@@ -76,7 +76,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 
 		public bool ToUnknownExportType(Type type, out AssetType assetType)
 		{
-			ClassIDType classID = ClassIDTypeMap.dictionary[type];
+			ClassIDType classID = ClassIDTypeMap.Dictionary[type];
 			return ToUnknownExportType(classID, out assetType);
 		}
 

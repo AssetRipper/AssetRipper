@@ -43,14 +43,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static bool IsSet(this IMesh mesh)
 		{
-			if (mesh.Has_VertexData_C43())
-			{
-				return mesh.CompressedMesh_C43.IsSet() || mesh.VertexData_C43.IsSet(mesh.StreamData_C43);
-			}
-			else
-			{
-				return mesh.CompressedMesh_C43.IsSet() || mesh.Vertices_C43!.Count > 0;
-			}
+			return mesh.CompressedMesh_C43.IsSet() || mesh.VertexData_C43.IsSet(mesh.StreamData_C43);
 		}
 
 		public static void ConvertToEditorFormat(this IMesh mesh)
@@ -60,7 +53,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static bool CheckAssetIntegrity(this IMesh mesh)
 		{
-			if (mesh.Has_StreamData_C43() && mesh.Has_VertexData_C43() && mesh.VertexData_C43.IsSet(mesh.StreamData_C43))
+			if (mesh.Has_StreamData_C43() && mesh.VertexData_C43.IsSet(mesh.StreamData_C43))
 			{
 				return mesh.StreamData_C43.CheckIntegrity(mesh.Collection);
 			}
@@ -99,32 +92,20 @@ namespace AssetRipper.SourceGenerated.Extensions
 			uv6 = default;
 			uv7 = default;
 
-			if (mesh.Has_VertexData_C43())
-			{
-				mesh.VertexData_C43?.ReadData(mesh.Collection.Version, mesh.Collection.EndianType, mesh,
-					out vertices,
-					out normals,
-					out tangents,
-					out colors,
-					out skin,
-					out uv0,
-					out uv1,
-					out uv2,
-					out uv3,
-					out uv4,
-					out uv5,
-					out uv6,
-					out uv7);
-			}
-			else
-			{
-				vertices = mesh.Vertices_C43!.Select(v => v.CastToStruct()).ToArray();
-				normals = mesh.Normals_C43!.Select(n => n.CastToStruct()).ToArray();
-				tangents = mesh.Tangents_C43!.Select(t => t.CastToStruct()).ToArray();
-				colors = mesh.Colors_C43!.Select(c => c.ConvertToColorFloat()).ToArray();
-				uv0 = mesh.UV_C43!.Select(v => v.CastToStruct()).ToArray();
-				uv1 = mesh.UV1_C43!.Select(v => v.CastToStruct()).ToArray();
-			}
+			mesh.VertexData_C43?.ReadData(mesh.Collection.Version, mesh.Collection.EndianType, mesh,
+				out vertices,
+				out normals,
+				out tangents,
+				out colors,
+				out skin,
+				out uv0,
+				out uv1,
+				out uv2,
+				out uv3,
+				out uv4,
+				out uv5,
+				out uv6,
+				out uv7);
 
 			mesh.CompressedMesh_C43.DecompressCompressedMesh(mesh.Collection.Version,
 				out Vector3[]? compressed_vertices,
@@ -203,11 +184,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static IndexFormat GetIndexFormat(this IMesh mesh)
 		{
-			if (mesh.Has_Use16BitIndices_C43())
-			{
-				return mesh.Use16BitIndices_C43 != 0 ? IndexFormat.UInt16 : IndexFormat.UInt32;
-			}
-			else if (mesh.Has_IndexFormat_C43())
+			if (mesh.Has_IndexFormat_C43())
 			{
 				return mesh.IndexFormat_C43E;
 			}
@@ -219,11 +196,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void SetIndexFormat(this IMesh mesh, IndexFormat indexFormat)
 		{
-			if (mesh.Has_Use16BitIndices_C43())
-			{
-				mesh.Use16BitIndices_C43 = indexFormat == IndexFormat.UInt16 ? 1 : 0;
-			}
-			else if (mesh.Has_IndexFormat_C43())
+			if (mesh.Has_IndexFormat_C43())
 			{
 				mesh.IndexFormat_C43E = indexFormat;
 			}

@@ -171,17 +171,17 @@ namespace AssetRipper.Import.AssetCreation
 		{
 			return name switch
 			{
-				MonoUtils.Vector2Name => Vector2fFactory.CreateAsset(version),
+				MonoUtils.Vector2Name => Vector2fFactory.CreateAsset(),
 				MonoUtils.Vector2IntName => Vector2IntFactory.CreateAsset(),
-				MonoUtils.Vector3Name => Vector3fFactory.CreateAsset(version),
+				MonoUtils.Vector3Name => Vector3fFactory.CreateAsset(),
 				MonoUtils.Vector3IntName => Vector3IntFactory.CreateAsset(),
-				MonoUtils.Vector4Name => Vector4fFactory.CreateAsset(version),
+				MonoUtils.Vector4Name => Vector4fFactory.CreateAsset(),
 				MonoUtils.RectName => RectfFactory.CreateAsset(),
-				MonoUtils.BoundsName => AABBFactory.CreateAsset(version),
+				MonoUtils.BoundsName => AABBFactory.CreateAsset(),
 				MonoUtils.BoundsIntName => AABBIntFactory.CreateAsset(),
-				MonoUtils.QuaternionName => QuaternionfFactory.CreateAsset(version),
+				MonoUtils.QuaternionName => QuaternionfFactory.CreateAsset(),
 				MonoUtils.Matrix4x4Name => Matrix4x4fFactory.CreateAsset(),
-				MonoUtils.ColorName => ColorRGBAfFactory.CreateAsset(version),
+				MonoUtils.ColorName => ColorRGBAfFactory.CreateAsset(),
 				MonoUtils.Color32Name => ColorRGBA32Factory.CreateAsset(),
 				MonoUtils.LayerMaskName => LayerMaskFactory.CreateAsset(),
 				MonoUtils.AnimationCurveName => AnimationCurve_SingleFactory.CreateAsset(version),

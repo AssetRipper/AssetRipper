@@ -34,8 +34,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				else
 				{
-					lineParameters.ColorGradient.Key0_ColorRGBAf_3_5_0.SetAsWhite();
-					lineParameters.ColorGradient.Key1_ColorRGBAf_3_5_0.SetAsWhite();
+					lineParameters.ColorGradient.Key0_ColorRGBAf.SetAsWhite();
+					lineParameters.ColorGradient.Key1_ColorRGBAf.SetAsWhite();
 				}
 			}
 			else if (lineParameters.Has_EndColor() && lineParameters.Has_StartColor())
