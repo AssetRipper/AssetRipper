@@ -120,45 +120,57 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static bool AddTOS(this IAnimationClip clip, IReadOnlyDictionary<uint, string> src, Dictionary<uint, string> dest)
 		{
-			if (clip.Has_ClipBindingConstant_C74())
+			if (!clip.Has_ClipBindingConstant_C74())
 			{
-				int tosCount = clip.ClipBindingConstant_C74.GenericBindings.Count;
-				for (int i = 0; i < tosCount; i++)
+				return false;
+			}
+
+			AccessListBase<IGenericBinding> bindings = clip.ClipBindingConstant_C74.GenericBindings;
+
+			bool allFound = true;
+
+			for (int i = 0; i < bindings.Count; i++)
+			{
+				uint bindingPath = bindings[i].Path;
+
+				if (src.TryGetValue(bindingPath, out string? path))
 				{
-					IGenericBinding binding = clip.ClipBindingConstant_C74.GenericBindings[i];
-					if (src.TryGetValue(binding.Path, out string? path))
-					{
-						dest[binding.Path] = path;
-						if (dest.Count == tosCount)
-						{
-							return true;
-						}
-					}
+					dest[bindingPath] = path;
+				}
+				else if (bindingPath != 0)
+				{
+					allFound = false;
 				}
 			}
-			return false;
+
+			return allFound;
 		}
 
 		private static bool AddTOS(this IAnimationClip clip, AssetDictionary<uint, Utf8String> src, Dictionary<uint, string> dest)
 		{
-			if (clip.Has_ClipBindingConstant_C74())
+			if (!clip.Has_ClipBindingConstant_C74())
 			{
-				AccessListBase<IGenericBinding> bindings = clip.ClipBindingConstant_C74.GenericBindings;
-				int tosCount = bindings.Count;
-				for (int i = 0; i < tosCount; i++)
+				return false;
+			}
+
+			AccessListBase<IGenericBinding> bindings = clip.ClipBindingConstant_C74.GenericBindings;
+			bool allFound = true;
+
+			for (int i = 0; i < bindings.Count; i++)
+			{
+				uint bindingPath = bindings[i].Path;
+
+				if (src.TryGetValue(bindingPath, out Utf8String? path))
 				{
-					IGenericBinding binding = bindings[i];
-					if (src.TryGetValue(binding.Path, out Utf8String? path))
-					{
-						dest[binding.Path] = path.String;
-						if (dest.Count == tosCount)
-						{
-							return true;
-						}
-					}
+					dest[bindingPath] = path.String;
+				}
+				else if (bindingPath != 0)
+				{
+					allFound = false;
 				}
 			}
-			return false;
+
+			return allFound;
 		}
 	}
 }

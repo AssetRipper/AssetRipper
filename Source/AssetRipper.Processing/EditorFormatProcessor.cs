@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
@@ -6,8 +6,11 @@ using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Processing.AnimationClips;
+using AssetRipper.Processing.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_129;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
@@ -58,11 +61,13 @@ namespace AssetRipper.Processing
 	{
 		private ITagManager? tagManager;
 		private readonly BundledAssetsExportMode bundledAssetsExportMode;
+		private readonly PathProcessor propertyNameProcessor;
 		private AnimationCache? currentAnimationCache;
 
-		public EditorFormatProcessor(BundledAssetsExportMode bundledAssetsExportMode)
+		public EditorFormatProcessor(BundledAssetsExportMode bundledAssetsExportMode, IAssemblyManager assemblyManager)
 		{
 			this.bundledAssetsExportMode = bundledAssetsExportMode;
+			propertyNameProcessor = new PathProcessor(assemblyManager);
 		}
 
 		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
@@ -102,7 +107,7 @@ namespace AssetRipper.Processing
 					spriteAtlas.ConvertToEditorFormat();
 					break;
 				case IAnimationClip animationClip:
-					AnimationClipConverter.Process(animationClip, currentAnimationCache!);
+					AnimationClipConverter.Process(animationClip, currentAnimationCache!, propertyNameProcessor);
 					break;
 				case ITerrain terrain:
 					terrain.ConvertToEditorFormat();

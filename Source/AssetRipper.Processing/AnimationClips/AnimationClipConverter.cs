@@ -1,7 +1,11 @@
 using AssetRipper.Assets.IO.Reading;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
+using AssetRipper.Import.Logging;
 using AssetRipper.Processing.AnimationClips.Editor;
+using AssetRipper.Processing.Utils;
 using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip;
@@ -29,19 +33,16 @@ namespace AssetRipper.Processing.AnimationClips
 {
 	public sealed partial class AnimationClipConverter
 	{
-		private AnimationClipConverter(IAnimationClip clip)
+		private AnimationClipConverter(IAnimationClip clip, PathProcessor propertyNameProcessor)
 		{
-			if (clip == null)
-			{
-				throw new ArgumentNullException(nameof(clip));
-			}
 			m_clip = clip;
 			m_customCurveResolver = new CustomCurveResolver(clip);
+			m_pathProcessor = propertyNameProcessor;
 		}
 
-		public static void Process(IAnimationClip clip, AnimationCache cache)
+		public static void Process(IAnimationClip clip, AnimationCache cache, PathProcessor propertyNameProcessor)
 		{
-			AnimationClipConverter converter = new AnimationClipConverter(clip);
+			AnimationClipConverter converter = new AnimationClipConverter(clip, propertyNameProcessor);
 			converter.ProcessInner(cache);
 		}
 
@@ -432,14 +433,27 @@ namespace AssetRipper.Processing.AnimationClips
 
 		private void AddScriptCurve(IGenericBinding binding, string path, float time, float value)
 		{
-#warning TODO:
-			CurveData curve = new CurveData(path, ScriptPropertyPrefix + binding.Attribute, ClassIDType.MonoBehaviour, binding.Script.FileID, binding.Script.PathID);
+			if (binding.Script.TryGetAsset(m_clip.Collection) is IMonoScript script)
+			{
+				m_pathProcessor.Add(script);
+			}
+
+			if (!m_pathProcessor.TryGetPath(binding.Attribute, out string? propertyName))
+			{
+				propertyName = ScriptPropertyPrefix + binding.Attribute;
+			}
+
+			CurveData curve = new CurveData(path, propertyName, ClassIDType.MonoBehaviour, binding.Script.FileID, binding.Script.PathID);
+
 			AddFloatKeyframe(curve, time, value);
 		}
 
 		private void AddEngineCurve(IGenericBinding binding, string path, float time, float value)
 		{
 #warning TODO:
+			// We need a way to access unity object fields
+			// by classid.
+
 			CurveData curve = new CurveData(path, TypeTreePropertyPrefix + binding.Attribute, binding.GetClassID());
 			AddFloatKeyframe(curve, time, value);
 		}
@@ -573,6 +587,7 @@ namespace AssetRipper.Processing.AnimationClips
 		private readonly Dictionary<CurveData, IFloatCurve> m_floats = new();
 		private readonly Dictionary<CurveData, IPPtrCurve> m_pptrs = new();
 
+		private readonly PathProcessor m_pathProcessor;
 		private readonly IAnimationClip m_clip;
 		private readonly CustomCurveResolver m_customCurveResolver;
 		private const float DefaultFloatWeight = 1.0f / 3.0f;
