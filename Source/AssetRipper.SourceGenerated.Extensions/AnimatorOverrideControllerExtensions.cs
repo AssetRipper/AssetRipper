@@ -8,7 +8,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimatorOverrideControllerExtensions
 	{
-		public static bool IsContainsAnimationClip(this IAnimatorOverrideController controller, IAnimationClip clip)
+		public static bool ContainsAnimationClip(this IAnimatorOverrideController controller, IAnimationClip clip)
 		{
 			foreach (IAnimationClipOverride overClip in controller.Clips_C221)
 			{
@@ -24,7 +24,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			IRuntimeAnimatorController? baseController = controller.Controller_C221P;
 			if (baseController != null)
 			{
-				return baseController.IsContainsAnimationClip(clip);
+				return baseController.ContainsAnimationClip(clip);
 			}
 			return false;
 		}

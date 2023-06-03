@@ -31,7 +31,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimatorControllerExtensions
 	{
-		public static bool IsContainsAnimationClip(this IAnimatorController controller, IAnimationClip clip)
+		public static bool ContainsAnimationClip(this IAnimatorController controller, IAnimationClip clip)
 		{
 			foreach (IPPtr_AnimationClip clipPtr in controller.AnimationClips_C91)
 			{

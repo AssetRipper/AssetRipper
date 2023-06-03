@@ -8,7 +8,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimationExtensions
 	{
-		public static bool IsContainsAnimationClip(this IAnimation animation, IAnimationClip clip)
+		public static bool ContainsAnimationClip(this IAnimation animation, IAnimationClip clip)
 		{
 			foreach (IPPtr_AnimationClip clipPtr in animation.Animations_C111)
 			{
