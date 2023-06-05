@@ -7,18 +7,15 @@ using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.GenericBinding;
+using System.Text.RegularExpressions;
 
 namespace AssetRipper.Processing.AnimationClips
 {
-	public sealed class CustomCurveResolver
+	public sealed partial class CustomCurveResolver
 	{
 		public CustomCurveResolver(IAnimationClip clip)
 		{
-			if (clip == null)
-			{
-				throw new ArgumentNullException(nameof(clip));
-			}
-			m_clip = clip;
+			m_clip = clip ?? throw new ArgumentNullException(nameof(clip));
 		}
 
 		public string ToAttributeName(BindingCustomType type, uint attribute, string path)
@@ -28,7 +25,7 @@ namespace AssetRipper.Processing.AnimationClips
 				case BindingCustomType.BlendShape:
 					{
 						const string Prefix = "blendShape.";
-						if (AnimationClipConverter.UnknownPathRegex.IsMatch(path))
+						if (UnknownPathRegex().IsMatch(path))
 						{
 							return Prefix + attribute;
 						}
@@ -71,7 +68,7 @@ namespace AssetRipper.Processing.AnimationClips
 				case BindingCustomType.RendererMaterial:
 					{
 						const string Prefix = "material.";
-						if (AnimationClipConverter.UnknownPathRegex.IsMatch(path))
+						if (UnknownPathRegex().IsMatch(path))
 						{
 							return Prefix + attribute;
 						}
@@ -544,17 +541,15 @@ namespace AssetRipper.Processing.AnimationClips
 		{
 			get
 			{
-				if (!m_rootInited)
-				{
-					m_roots = m_clip.FindRoots().ToArray();
-					m_rootInited = true;
-				}
+				m_roots ??= m_clip.FindRoots().ToArray();
 				return m_roots;
 			}
 		}
 
 		private readonly IAnimationClip m_clip;
-		private IGameObject[] m_roots = Array.Empty<IGameObject>();
-		private bool m_rootInited = false;
+		private IGameObject[]? m_roots;
+
+		[GeneratedRegex("^path_[0-9]{1,10}$", RegexOptions.Compiled)]
+		private static partial Regex UnknownPathRegex();
 	}
 }

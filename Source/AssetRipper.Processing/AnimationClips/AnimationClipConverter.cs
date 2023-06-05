@@ -27,7 +27,6 @@ using AssetRipper.SourceGenerated.Subclasses.PPtrKeyframe;
 using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
 using AssetRipper.SourceGenerated.Subclasses.StreamedClip;
 using AssetRipper.SourceGenerated.Subclasses.Vector3Curve;
-using System.Text.RegularExpressions;
 
 namespace AssetRipper.Processing.AnimationClips
 {
@@ -567,8 +566,6 @@ namespace AssetRipper.Processing.AnimationClips
 		}
 
 		private UnityVersion Version => m_clip.Collection.Version;
-
-		public static readonly Regex UnknownPathRegex = new Regex($@"^{UnknownPathPrefix}[0-9]{{1,10}}$", RegexOptions.Compiled);
 
 		private const string UnknownPathPrefix = "path_";
 		private const string MissedPropertyPrefix = "missed_";
