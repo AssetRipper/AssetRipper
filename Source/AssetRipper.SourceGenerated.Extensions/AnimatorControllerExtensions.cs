@@ -43,7 +43,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return false;
 		}
 
-		public static PPtr_MonoBehaviour_5_0_0[] GetStateBehaviours(this IAnimatorController controller, int layerIndex)
+		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int layerIndex)
 		{
 			if (controller.Has_StateMachineBehaviourVectorDescription_C91())
 			{
@@ -52,13 +52,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 				key.SetValues(layerIndex, layerID);
 				if (controller.StateMachineBehaviourVectorDescription_C91.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
 				{
-					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription_C91, controller.StateMachineBehaviours_C91!, range);
+					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription_C91, controller.StateMachineBehaviours_C91P, range);
 				}
 			}
-			return Array.Empty<PPtr_MonoBehaviour_5_0_0>();
+			return Array.Empty<IMonoBehaviour>();
 		}
 
-		public static PPtr_MonoBehaviour_5_0_0[] GetStateBehaviours(this IAnimatorController controller, int stateMachineIndex, int stateIndex)
+		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int stateMachineIndex, int stateIndex)
 		{
 			if (controller.Has_StateMachineBehaviourVectorDescription_C91())
 			{
@@ -70,18 +70,18 @@ namespace AssetRipper.SourceGenerated.Extensions
 				key.SetValues(layerIndex, stateID);
 				if (controller.StateMachineBehaviourVectorDescription_C91.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
 				{
-					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription_C91, controller.StateMachineBehaviours_C91!, range);
+					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription_C91, controller.StateMachineBehaviours_C91P, range);
 				}
 			}
-			return Array.Empty<PPtr_MonoBehaviour_5_0_0>();
+			return Array.Empty<IMonoBehaviour>();
 		}
 
-		private static PPtr_MonoBehaviour_5_0_0[] GetStateBehaviours(
+		private static IMonoBehaviour?[] GetStateBehaviours(
 			IStateMachineBehaviourVectorDescription controllerStateMachineBehaviourVectorDescription,
-			AssetList<PPtr_MonoBehaviour_5_0_0> controllerStateMachineBehaviours,
+			PPtrAccessList<PPtr_MonoBehaviour_5_0_0, IMonoBehaviour> controllerStateMachineBehaviours,
 			StateRange range)
 		{
-			PPtr_MonoBehaviour_5_0_0[] stateMachineBehaviours = new PPtr_MonoBehaviour_5_0_0[range.Count];
+			IMonoBehaviour?[] stateMachineBehaviours = new IMonoBehaviour?[range.Count];
 			for (int i = 0; i < range.Count; i++)
 			{
 				int index = (int)controllerStateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[range.StartIndex + i];

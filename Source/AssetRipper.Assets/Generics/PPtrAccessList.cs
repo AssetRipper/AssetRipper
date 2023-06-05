@@ -40,21 +40,39 @@ namespace AssetRipper.Assets.Generics
 
 		public TPPtr AddNew()
 		{
-			return list is AccessListBase<TPPtr> accessList
-				? accessList.AddNew()
-				: throw new NotSupportedException();
+			return GetAccessList().AddNew();
 		}
 
-		public void Add(TTarget? value)
+		public void Add(TTarget? item)
 		{
-			if (list is AccessListBase<TPPtr> accessList)
+			GetAccessList().AddNew().SetAsset(file, item);
+		}
+
+		public void AddRange(IEnumerable<TTarget?> items)
+		{
+			AccessListBase<TPPtr> accessList = GetAccessList();
+			foreach (TTarget? value in items)
 			{
 				accessList.AddNew().SetAsset(file, value);
 			}
-			else
+		}
+
+		public void AddRange<TPPtrSource, TTargetSource>(PPtrAccessList<TPPtrSource, TTargetSource> items)
+			where TPPtrSource : IPPtr<TTargetSource>
+			where TTargetSource : TTarget
+		{
+			AccessListBase<TPPtr> accessList = GetAccessList();
+			foreach (TTargetSource? value in items)
 			{
-				throw new NotSupportedException();
+				accessList.AddNew().SetAsset(file, value);
 			}
+		}
+
+		private AccessListBase<TPPtr> GetAccessList()
+		{
+			return list is AccessListBase<TPPtr> accessList
+				? accessList
+				: throw new NotSupportedException();
 		}
 
 		public int Count => list.Count;

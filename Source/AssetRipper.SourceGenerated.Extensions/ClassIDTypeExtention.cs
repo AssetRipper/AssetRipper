@@ -12,7 +12,7 @@
 		/// </summary>
 		public static bool IsTransform(this ClassIDType _this)
 		{
-			return _this == ClassIDType.Transform || _this == ClassIDType.RectTransform;
+			return _this is ClassIDType.Transform or ClassIDType.RectTransform;
 		}
 
 		/// <summary>
@@ -20,15 +20,7 @@
 		/// </summary>
 		public static bool IsSceneSettings(this ClassIDType _this)
 		{
-			switch (_this)
-			{
-				case ClassIDType.OcclusionCullingSettings:
-				case ClassIDType.RenderSettings:
-				case ClassIDType.LightmapSettings:
-				case ClassIDType.NavMeshSettings:
-					return true;
-			}
-			return false;
+			return _this is ClassIDType.OcclusionCullingSettings or ClassIDType.RenderSettings or ClassIDType.LightmapSettings or ClassIDType.NavMeshSettings;
 		}
 	}
 }

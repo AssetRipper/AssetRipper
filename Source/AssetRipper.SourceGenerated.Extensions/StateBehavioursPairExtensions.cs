@@ -1,15 +1,18 @@
-﻿using AssetRipper.SourceGenerated.Classes.ClassID_1102;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Metadata;
+using AssetRipper.SourceGenerated.Classes.ClassID_1102;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_91;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour;
 using AssetRipper.SourceGenerated.Subclasses.StateBehavioursPair;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class StateBehavioursPairExtensions
 	{
-		public static void SetValues(this IStateBehavioursPair pair, IAnimatorState state, IMonoBehaviour[] behaviours)
+		public static void SetValues(this IStateBehavioursPair pair, IAnimatorController controller, IAnimatorState state, IMonoBehaviour?[] behaviours)
 		{
-			throw new NotImplementedException();
-			/*if (state == null)
+			if (state == null)
 			{
 				throw new ArgumentNullException(nameof(state));
 			}
@@ -18,15 +21,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 				throw new ArgumentNullException(nameof(behaviours));
 			}
 
-			pair.State.CopyValues(state.SerializedFile.CreatePPtr(state));
+			pair.State.SetAsset(controller.Collection, state);
 
 			pair.StateMachineBehaviours.Clear();
 			pair.StateMachineBehaviours.Capacity = behaviours.Length;
-			for (int i = 0; i < behaviours.Length; i++)
-			{
-				IMonoBehaviour behaviour = behaviours[i];
-				pair.StateMachineBehaviours.AddNew().CopyValues(behaviour.SerializedFile.CreatePPtr(behaviour));
-			}*/
+			new PPtrAccessList<PPtr_MonoBehaviour_5_0_0, IMonoBehaviour>(pair.StateMachineBehaviours, controller.Collection).AddRange(behaviours);
 		}
 	}
 }
