@@ -5,7 +5,7 @@ using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 
-namespace AssetRipper.Processing.Utils;
+namespace AssetRipper.Processing.AnimationClips;
 
 /// <summary>
 /// Attempts to recover field paths from <see cref="uint"/> hash values.
@@ -13,18 +13,16 @@ namespace AssetRipper.Processing.Utils;
 /// <remarks>
 /// Replicates Unity CRC32 checksum usage for field names and paths.
 /// </remarks>
-public readonly struct PathProcessor
+public readonly struct PathChecksumCache
 {
-	public PathProcessor(IAssemblyManager assemblyManager)
+	public PathChecksumCache(IAssemblyManager assemblyManager)
 	{
 		this.assemblyManager = assemblyManager;
 	}
 
 	private readonly Dictionary<string, uint> cachedPropertyNames = new();
 	private readonly Dictionary<uint, string> cachedChecksums = new();
-
 	private readonly HashSet<AssetInfo> processedAssets = new();
-
 	private readonly IAssemblyManager assemblyManager;
 
 	public uint Add(string path)

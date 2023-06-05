@@ -1,12 +1,15 @@
-﻿using AssetRipper.SourceGenerated;
+﻿using AssetRipper.Assets.Metadata;
+using AssetRipper.SourceGenerated;
 
 namespace AssetRipper.Processing.AnimationClips
 {
-	public sealed partial class AnimationClipConverter
+	public partial struct AnimationClipConverter
 	{
-		//default vector3 is 1/3, 1/3, 1/3
-		//default quaternion is 1/3, 1/3, 1/3, 1/3
-
-		private sealed record class CurveData(string path, string attribute, ClassIDType classId, int fileId = 0, long pathId = 0);
+		private readonly record struct CurveData(string Path, string Attribute, ClassIDType ClassID, PPtr Script = default)
+		{
+			public CurveData(string Path, string Attribute, ClassIDType ClassID, IPPtr Script) : this(Path, Attribute, ClassID, Script.ToStruct())
+			{
+			}
+		}
 	}
 }
