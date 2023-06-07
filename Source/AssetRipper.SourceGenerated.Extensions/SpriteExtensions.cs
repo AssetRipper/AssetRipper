@@ -1,5 +1,7 @@
-﻿using AssetRipper.Numerics;
+﻿using AssetRipper.Assets.Metadata;
+using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.SpriteAtlasData;
@@ -68,6 +70,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				sAtlasBorder = default;
 			}
+		}
+
+		public static ITexture2D? TryGetTexture(this ISprite sprite)
+		{
+			return sprite.RD_C213.Texture.TryGetAsset(sprite.Collection);
 		}
 	}
 }

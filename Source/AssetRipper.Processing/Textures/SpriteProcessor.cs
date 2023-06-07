@@ -22,7 +22,7 @@ namespace AssetRipper.Processing.Textures
 			{
 				if (asset is ISprite sprite)
 				{
-					ITexture2D? texture = sprite.RD_C213.Texture.TryGetAsset(sprite.Collection);
+					ITexture2D? texture = sprite.TryGetTexture();
 					if (texture is not null)
 					{
 						texture.SpriteInformation ??= new();
