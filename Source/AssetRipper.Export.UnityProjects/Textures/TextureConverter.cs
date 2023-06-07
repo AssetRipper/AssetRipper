@@ -61,7 +61,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 				return null;
 			}
 
-			var bitmap = ConvertToBitmap(
+			DirectBitmap? bitmap = ConvertToBitmap(
 				texture.Format_C187E,
 				texture.Width_C187,
 				texture.Height_C187,
