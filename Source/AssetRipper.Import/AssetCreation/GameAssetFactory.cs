@@ -47,16 +47,38 @@ namespace AssetRipper.Import.AssetCreation
 
 		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType)
 		{
-			IUnityObjectBase? asset = AssetFactory.CreateAsset(assetInfo.Collection.Version, assetInfo);
-			return asset switch
+			if (assetInfo.ClassID == (int)ClassIDType.MonoBehaviour)
 			{
-				null => new UnknownObject(assetInfo, assetData.ToArray()),
-				IMonoBehaviour monoBehaviour => ReadMonoBehaviour(monoBehaviour, assetData, AssemblyManager, assetType),
-				_ => ReadNormalObject(asset, assetData)
-			};
+				return ReadMonoBehaviour(MonoBehaviourFactory.CreateAsset(assetInfo), assetData, AssemblyManager, assetType);
+			}
+			IUnityObjectBase? asset = AssetFactory.CreateAsset(assetInfo);
+			if (asset is null)
+			{
+				return new UnknownObject(assetInfo, assetData.ToArray());
+			}
+			else
+			{
+				IUnityObjectBase readAsset = ReadNormalObject(asset, assetData);
+				if (readAsset is UnreadableObject && assetInfo.Collection.Version.Type == UnityVersionType.Patch)
+				{
+					UnityVersion oldVersion = assetInfo.Collection.Version;
+					UnityVersion newVersion = new UnityVersion(oldVersion.Major, oldVersion.Minor, unchecked((ushort)(oldVersion.Build + 1u)));
+					IUnityObjectBase? newAsset = AssetFactory.CreateAsset(newVersion, assetInfo);
+					if (newAsset is not null)
+					{
+						IUnityObjectBase newReadAsset = ReadNormalObject(newAsset, assetData);
+						if (newReadAsset is not UnreadableObject)
+						{
+							Logger.Warning(LogCategory.Import, $"The asset with a patch version could not be read. It was successfully read on subsequent build number.");
+							return newReadAsset;
+						}
+					}
+				}
+				return readAsset;
+			}
 		}
 
-		private static IMonoBehaviour? ReadMonoBehaviour(IMonoBehaviour monoBehaviour, ReadOnlyArraySegment<byte> assetData, IAssemblyManager assemblyManager, SerializedType? type)
+		private static IMonoBehaviour ReadMonoBehaviour(IMonoBehaviour monoBehaviour, ReadOnlyArraySegment<byte> assetData, IAssemblyManager assemblyManager, SerializedType? type)
 		{
 			EndianSpanReader reader = new EndianSpanReader(assetData, monoBehaviour.Collection.EndianType);
 			try
@@ -154,7 +176,7 @@ namespace AssetRipper.Import.AssetCreation
 			reader.ReadUInt32();
 			reader.ReadUInt32();
 			reader.ReadUInt32();
-			Logger.Warning($"Texture {texture.Name} had an extra 24 bytes, which were assumed to be non-standard Chinese fields.");
+			Logger.Warning(LogCategory.Import, $"Texture {texture.Name} had an extra 24 bytes, which were assumed to be non-standard Chinese fields.");
 		}
 
 		private static void LogMonoBehaviorReadException(IMonoBehaviour monoBehaviour, Exception ex)
@@ -164,7 +186,7 @@ namespace AssetRipper.Import.AssetCreation
 
 		private static void LogReadException(IUnityObjectBase asset, Exception ex)
 		{
-			Logger.Error($"Error during reading of asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}", ex);
+			Logger.Error(LogCategory.Import, $"Error during reading of asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}", ex);
 		}
 
 		public static IAsset CreateEngineAsset(string name, UnityVersion version)
