@@ -71,9 +71,9 @@ namespace AssetRipper.Processing.AnimationClips
 
 		private void ProcessStreams(IReadOnlyList<StreamedFrame> streamFrames, IAnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos, float sampleRate)
 		{
-			float[] curveValues = new float[4];
-			float[] inSlopeValues = new float[4];
-			float[] outSlopeValues = new float[4];
+			Span<float> curveValues = stackalloc float[4] { 0, 0, 0, 0 };
+			Span<float> inSlopeValues = stackalloc float[4] { 0, 0, 0, 0 };
+			Span<float> outSlopeValues = stackalloc float[4] { 0, 0, 0, 0 };
 			float interval = 1.0f / sampleRate;
 
 			// first (index [0]) stream frame is for slope calculation for the first real frame (index [1])
@@ -114,7 +114,11 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					else if (binding.CustomType == (byte)BindingCustomType.None)
 					{
-						if (frameIndex0) { curveIndex = GetNextCurve(frame, curveIndex); continue; }
+						if (frameIndex0)
+						{
+							curveIndex = GetNextCurve(frame, curveIndex);
+							continue;
+						}
 						AddDefaultCurve(binding, path, frame.Time, frame.Curves[curveIndex].Value);
 						curveIndex = GetNextCurve(frame, curveIndex);
 					}
@@ -135,7 +139,7 @@ namespace AssetRipper.Processing.AnimationClips
 		{
 			DenseClip dense = clip.DenseClip;
 			int streamCount = (int)clip.StreamedClip.CurveCount;
-			float[] slopeValues = new float[4]; // no slopes - 0 values
+			ReadOnlySpan<float> slopeValues = stackalloc float[4] { 0, 0, 0, 0 }; // no slopes - 0 values
 			for (int frameIndex = 0; frameIndex < dense.FrameCount; frameIndex++)
 			{
 				float time = frameIndex / dense.SampleRate;
@@ -169,7 +173,7 @@ namespace AssetRipper.Processing.AnimationClips
 		{
 			int streamCount = (int)clip.StreamedClip.CurveCount;
 			int denseCount = (int)clip.DenseClip.CurveCount;
-			float[] slopeValues = new float[4]; // no slopes - 0 values
+			ReadOnlySpan<float> slopeValues = stackalloc float[4] { 0, 0, 0, 0 }; // no slopes - 0 values
 
 			// only first and last frames
 			float time = 0.0f;
@@ -233,8 +237,8 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 		}
 
-		private void AddTransformCurve(float time, TransformType transType, IReadOnlyList<float> curveValues,
-			IReadOnlyList<float> inSlopeValues, IReadOnlyList<float> outSlopeValues, int offset, string path)
+		private void AddTransformCurve(float time, TransformType transType, ReadOnlySpan<float> curveValues,
+			ReadOnlySpan<float> inSlopeValues, ReadOnlySpan<float> outSlopeValues, int offset, string path)
 		{
 			switch (transType)
 			{

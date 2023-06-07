@@ -1,5 +1,5 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
-using AssetRipper.SourceGenerated.Subclasses.Vector2f;
+using System.Numerics;
 using BlendTreeType = AssetRipper.SourceGenerated.Enums.BlendTreeType_1;
 
 namespace AssetRipper.SourceGenerated.Extensions
@@ -22,13 +22,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return 0.0f;
 		}
 
-		public static Vector2f GetPosition(this IBlendTreeNodeConstant constant, int index)
+		public static Vector2 GetPosition(this IBlendTreeNodeConstant constant, int index)
 		{
 			if (constant.Has_Blend2dData() && constant.GetBlendType() != BlendTreeType.Simple1D && constant.GetBlendType() != BlendTreeType.Direct)
 			{
 				return constant.Blend2dData.Data.ChildPositionArray[index];
 			}
-			return new();
+			return default;
 		}
 
 		public static float GetMinThreshold(this IBlendTreeNodeConstant constant)
