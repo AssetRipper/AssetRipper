@@ -190,7 +190,7 @@ namespace AssetRipper.IO.Endian
 			}
 			
 			scoped Span<byte> buffer;
-			byte[]? backingArray = null;
+			byte[]? backingArray;
 			if (length > 4096)
 			{
 				backingArray = ArrayPool<byte>.Shared.Rent(length);
@@ -198,26 +198,36 @@ namespace AssetRipper.IO.Endian
 			}
 			else
 			{
+				backingArray = null;
 				buffer = (stackalloc byte[length]); 
-			}
-
-			int read = Read(buffer);
-			if (read != length)
-			{
-				throw new EndOfStreamException($"End of stream. Expected to read {length} bytes, but only read {read} bytes.");
 			}
 
 			try
 			{
+				ReadExactly(buffer);
 				return Encoding.UTF8.GetString(buffer);
 			}
 			finally
 			{
-				if(backingArray != null)
+				if(backingArray is not null)
 				{
 					ArrayPool<byte>.Shared.Return(backingArray);
 				}
 			}
+		}
+
+		public void ReadExactly(Span<byte> buffer)
+		{
+			Span<byte> bufferSegment = buffer;
+			do
+			{
+				int read = Read(bufferSegment);
+				if (read == 0)
+				{
+					throw new EndOfStreamException($"End of stream. Expected to read {buffer.Length} bytes, but only read {buffer.Length - bufferSegment.Length} bytes.");
+				}
+				bufferSegment = bufferSegment.Slice(read);
+			} while (bufferSegment.Length > 0);
 		}
 
 		/// <summary>
