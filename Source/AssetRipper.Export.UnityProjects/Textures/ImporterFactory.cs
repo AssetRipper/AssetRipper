@@ -29,7 +29,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			instance.Format_C1006 = origin.Format_C28;
 			instance.MaxTextureSize_C1006 = CalculateMaxTextureSize(origin.Width_C28, origin.Height_C28);
 			instance.TextureSettings_C1006.CopyValues(origin.TextureSettings_C28);
-			instance.NPOTScale_C1006 = (int)TextureImporterNPOTScale.None;
+			instance.NPOTScale_C1006 = (int)TextureImporterNPOTScale.ToNearest; // Default texture importer settings uses this value, and cubemaps appear to not work when it's None
 			instance.CompressionQuality_C1006 = 50;
 
 			instance.SetSwizzle(TextureImporterSwizzle.R, TextureImporterSwizzle.G, TextureImporterSwizzle.B, TextureImporterSwizzle.A);

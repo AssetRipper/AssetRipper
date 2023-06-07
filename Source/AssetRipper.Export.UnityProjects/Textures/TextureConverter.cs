@@ -3,6 +3,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_89;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.TextureDecoder.Astc;
@@ -41,6 +42,8 @@ namespace AssetRipper.Export.UnityProjects.Textures
 				return null;
 			}
 
+			bitmap.FlipY();
+
 			// despite the name, this packing works for different formats
 			if (texture.LightmapFormat_C117 == (int)TextureUsageMode.NormalmapDXT5nm)
 			{
@@ -58,7 +61,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 				return null;
 			}
 
-			return ConvertToBitmap(
+			DirectBitmap? bitmap = ConvertToBitmap(
 				texture.Format_C187E,
 				texture.Width_C187,
 				texture.Height_C187,
@@ -66,6 +69,15 @@ namespace AssetRipper.Export.UnityProjects.Textures
 				(int)texture.DataSize_C187,
 				texture.Collection.Version,
 				buffer);
+
+			if (bitmap == null)
+			{
+				return null;
+			}
+
+			bitmap.FlipY();
+
+			return bitmap;
 		}
 
 		public static DirectBitmap? ConvertToBitmap(ITexture2D texture)
@@ -88,6 +100,12 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			if (bitmap == null)
 			{
 				return null;
+			}
+
+			// cubemaps dont need flipping, for some reason
+			if (texture is not ICubemap)
+			{
+				bitmap.FlipY();
 			}
 
 			// despite the name, this packing works for different formats
@@ -145,7 +163,6 @@ namespace AssetRipper.Export.UnityProjects.Textures
 						return null;
 					}
 				}
-				bitmap.FlipY();
 				return bitmap;
 			}
 			catch
