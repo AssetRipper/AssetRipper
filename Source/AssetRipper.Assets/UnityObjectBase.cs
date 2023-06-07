@@ -5,6 +5,7 @@ using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
+using System.Diagnostics;
 
 namespace AssetRipper.Assets;
 
@@ -18,6 +19,7 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 		AssetInfo = assetInfo;
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private OriginalPathDetails? originalPathDetails;
 	public AssetInfo AssetInfo { get; }
 	public AssetCollection Collection => AssetInfo.Collection;
