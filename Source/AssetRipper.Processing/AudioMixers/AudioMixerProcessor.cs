@@ -38,17 +38,21 @@ namespace AssetRipper.Processing.AudioMixers
 
 			ProcessedAssetCollection processedCollection = gameBundle.AddNewProcessedCollection("Generated Audio Mixer Effects", projectVersion);
 
-			Dictionary<UnityGUID, IAudioMixerGroup> groupGuidMap = new();
+			Dictionary<IAudioMixer, Dictionary<UnityGUID, IAudioMixerGroup >> groupGuidMixerMap = new();
 			foreach (IAudioMixerGroup group in gameBundle.FetchAssets().OfType<IAudioMixerGroup>())
 			{
-				group.MainAsset = group.AudioMixer_C273P;
-				groupGuidMap.Add(group.GroupID_C273, group);
+				IAudioMixer? mixer = group.AudioMixer_C273P;
+				if (mixer is not null)
+				{
+					group.MainAsset = mixer;
+					groupGuidMixerMap.GetOrAdd(mixer).Add(group.GroupID_C273, group);
+				}
 			}
 
 			foreach (IAudioMixer mixer in gameBundle.FetchAssets().OfType<IAudioMixer>())
 			{
 				mixer.MainAsset = mixer;
-				ProcessAssets(mixer, processedCollection, groupGuidMap);
+				ProcessAssets(mixer, processedCollection, groupGuidMixerMap.GetOrAdd(mixer));
 			}
 		}
 
@@ -57,7 +61,7 @@ namespace AssetRipper.Processing.AudioMixers
 			ProcessedAssetCollection virtualFile,
 			IReadOnlyDictionary<UnityGUID, IAudioMixerGroup> groupGuidMap)
 		{
-			Dictionary<uint, UnityGUID> indexToGuid = new();
+			GuidIndexTable indexToGuid = new();
 			List<IAudioMixerGroupController> groups = new();
 
 			ProcessAudioMixerGroups(mixer, indexToGuid, groups, groupGuidMap);
@@ -71,7 +75,7 @@ namespace AssetRipper.Processing.AudioMixers
 
 		private static void ProcessAudioMixerGroups(
 			IAudioMixer mixer,
-			Dictionary<uint, UnityGUID> indexToGuid,
+			GuidIndexTable indexToGuid,
 			List<IAudioMixerGroupController> groups,
 			IReadOnlyDictionary<UnityGUID, IAudioMixerGroup> groupGuidMap)
 		{
@@ -83,15 +87,15 @@ namespace AssetRipper.Processing.AudioMixers
 				IAudioMixerGroupController group = groups[i];
 				IGroupConstant groupConstant = constants.Groups[i];
 
-				group.Volume_C243.CopyValues(IndexNewGuid(indexToGuid, groupConstant.VolumeIndex));
-				group.Pitch_C243.CopyValues(IndexNewGuid(indexToGuid, groupConstant.PitchIndex));
+				group.Volume_C243.CopyValues(indexToGuid.IndexNewGuid(groupConstant.VolumeIndex));
+				group.Pitch_C243.CopyValues(indexToGuid.IndexNewGuid(groupConstant.PitchIndex));
 
 				// Different Unity versions vary in whether a "send" field is used in groups as well as in snapshots.
 				// GroupConstant.Has_SendIndex() can be used to determine its existence.
 				// If "send" does not exist in GroupConstant, it may still exist in AudioMixerGroupController, but is just ignored.
 				if (groupConstant.Has_SendIndex() && group.Has_Send_C243())
 				{
-					group.Send_C243.CopyValues(IndexNewGuid(indexToGuid, groupConstant.SendIndex));
+					group.Send_C243.CopyValues(indexToGuid.IndexNewGuid(groupConstant.SendIndex));
 				}
 				group.Mute_C243 = groupConstant.Mute;
 				group.Solo_C243 = groupConstant.Solo;
@@ -101,7 +105,7 @@ namespace AssetRipper.Processing.AudioMixers
 
 		private static void ProcessAudioMixerEffects(
 			IAudioMixer mixer,
-			Dictionary<uint, UnityGUID> indexToGuid,
+			GuidIndexTable indexToGuid,
 			IReadOnlyList<IAudioMixerGroupController> groups,
 			ProcessedAssetCollection virtualFile)
 		{
@@ -119,7 +123,7 @@ namespace AssetRipper.Processing.AudioMixers
 				effect.MainAsset = mixer;
 			}
 
-			List<Utf8String> pluginEffectNames = ParseNameBuffer(constants.PluginEffectNameBuffer);
+			Utf8String[] pluginEffectNames = ParseNameBuffer(constants.PluginEffectNameBuffer);
 			int pluginEffectIndex = 0;
 			for (int i = 0; i < constants.Effects.Count; i++)
 			{
@@ -148,7 +152,7 @@ namespace AssetRipper.Processing.AudioMixers
 				bool enableWetMix = effectConstant.WetMixLevelIndex != uint.MaxValue;
 				if (enableWetMix || effect.EffectName_C244 == "Send")
 				{
-					effect.MixLevel_C244.CopyValues(IndexNewGuid(indexToGuid, effectConstant.WetMixLevelIndex));
+					effect.MixLevel_C244.CopyValues(indexToGuid.IndexNewGuid(effectConstant.WetMixLevelIndex));
 				}
 
 				for (int j = 0; j < effectConstant.ParameterIndices.Length; j++)
@@ -156,7 +160,7 @@ namespace AssetRipper.Processing.AudioMixers
 					Parameter param = effect.Parameters_C244.AddNew();
 					// Use a dummy name here. The actual name will be recovered by AssetRipperAudioMixerPostprocessor.
 					param.ParameterName.String = $"Param_{j}";
-					param.GUID.CopyValues(IndexNewGuid(indexToGuid, effectConstant.ParameterIndices[j]));
+					param.GUID.CopyValues(indexToGuid.IndexNewGuid(effectConstant.ParameterIndices[j]));
 				}
 
 				if (effectConstant.SendTargetEffectIndex != uint.MaxValue)
@@ -186,7 +190,7 @@ namespace AssetRipper.Processing.AudioMixers
 
 		private static void ProcessAudioMixerSnapshots(
 			IAudioMixer mixer,
-			IReadOnlyDictionary<uint, UnityGUID> indexToGuid)
+			GuidIndexTable indexToGuid)
 		{
 			IAudioMixerConstant constants = mixer.MixerConstant_C240;
 			PPtrAccessList<PPtr_AudioMixerSnapshot, IAudioMixerSnapshot> snapshots = mixer.Snapshots_C240P;
@@ -234,7 +238,7 @@ namespace AssetRipper.Processing.AudioMixers
 
 		private static void ProcessAudioMixer(
 			IAudioMixerController mixer,
-			IReadOnlyDictionary<uint, UnityGUID> indexToGuid,
+			GuidIndexTable indexToGuid,
 			IReadOnlyList<IAudioMixerGroupController> groups)
 		{
 			IAudioMixerConstant constants = mixer.MixerConstant_C240;
@@ -268,39 +272,41 @@ namespace AssetRipper.Processing.AudioMixers
 			mixer.TargetSnapshot_C241P = mixer.StartSnapshot_C241P;
 		}
 
-		private static UnityGUID IndexNewGuid(Dictionary<uint, UnityGUID> table, uint index)
+		private static Utf8String[] ParseNameBuffer(ReadOnlySpan<byte> buffer)
 		{
-			UnityGUID guid = UnityGUID.NewGuid();
-			if (!table.TryAdd(index, guid))
-			{
-				Logger.Warning(LogCategory.Processing, $"Constant index #{index} conflicts with another one.");
-			}
-			return guid;
-		}
-
-		private static List<Utf8String> ParseNameBuffer(byte[] buffer)
-		{
-			List<Utf8String> names = new();
+			Utf8String[] names = new Utf8String[CountStrings(buffer)];
+			int index = 0;
 			int offset = 0;
 			while (buffer[offset] != 0)
 			{
 				int start = offset;
 				while (buffer[++offset] != 0) { }
 
-				byte[] utf8Data = SubArray(buffer, start, offset - start);
-				names.Add(new Utf8String { Data = utf8Data });
+				byte[] utf8Data = buffer[start..offset].ToArray();
+				names[index] = new Utf8String { Data = utf8Data };
 
+				index++;
 				offset++;
 			}
 
 			return names;
-		}
 
-		private static byte[] SubArray(byte[] data, int index, int length)
-		{
-			byte[] subArray = new byte[length];
-			Array.Copy(data, index, subArray, 0, length);
-			return subArray;
+			static int CountStrings(ReadOnlySpan<byte> buffer)
+			{
+				int count = 0;
+				for (int i = 0; i < buffer.Length; i++)
+				{
+					if (buffer[i] == 0)
+					{
+						count++;
+					}
+				}
+				if (buffer[^1] != 0)
+				{
+					count++;
+				}
+				return count;
+			}
 		}
 	}
 }
