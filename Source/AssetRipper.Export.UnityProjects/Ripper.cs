@@ -254,6 +254,15 @@ namespace AssetRipper.Export.UnityProjects
 				projectExporter.OverrideExporter<ISpriteAtlas>(spriteExporter);
 			}
 
+			//Texture Array exporters
+			if (Settings.Version.IsGreaterEqual(2020, 2))
+			{
+				TextureArrayAssetExporter textureArrayExporter = new(Settings);
+				projectExporter.OverrideExporter<ICubemapArray>(textureArrayExporter);
+				projectExporter.OverrideExporter<ITexture2DArray>(textureArrayExporter);
+				projectExporter.OverrideExporter<ITexture3D>(textureArrayExporter);
+			}
+
 			//Shader exporters
 			projectExporter.OverrideExporter<IShader>(Settings.ShaderExportMode switch
 			{

@@ -21,6 +21,22 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
+		public static bool CheckAssetIntegrity(this ITexture3D texture)
+		{
+			if (texture.ImageData_C117.Length > 0)
+			{
+				return true;
+			}
+			else if (texture.Has_StreamData_C117())
+			{
+				return texture.StreamData_C117.CheckIntegrity(texture.Collection);
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 		public static TextureFormat GetTextureFormat(this ITexture3D texture)
 		{
 			if (texture.Has_Format_C117_Int32())
@@ -30,6 +46,18 @@ namespace AssetRipper.SourceGenerated.Extensions
 			else
 			{
 				return texture.Format_C117_UInt32E;
+			}
+		}
+
+		public static TextureUsageMode GetLightmapFormat(this ITexture3D texture)
+		{
+			if (texture.Has_LightmapFormat_C117())
+			{
+				return texture.LightmapFormat_C117E;
+			}
+			else
+			{
+				return (TextureUsageMode)texture.UsageMode_C117;
 			}
 		}
 
@@ -56,7 +84,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				if (texture.MipMap_C117)
 				{
 					int maxSide = Math.Max(texture.Width_C117, texture.Height_C117);
-					return Convert.ToInt32(Math.Log(maxSide) / Math.Log(2));
+					return Convert.ToInt32(Math.Log2(maxSide));
 				}
 				else
 				{

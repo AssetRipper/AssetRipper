@@ -78,7 +78,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			return exportID;
 		}
 
-		private void AddSprites(ITextureImporter importer, Dictionary<ISprite, ISpriteAtlas?>? textureSpriteInformation)
+		private void AddSprites(ITextureImporter importer, IReadOnlyDictionary<ISprite, ISpriteAtlas?>? textureSpriteInformation)
 		{
 			if (textureSpriteInformation == null || textureSpriteInformation.Count == 0)
 			{
@@ -146,7 +146,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			}
 		}
 
-		private static void AddSpriteSheet(ITextureImporter importer, Dictionary<ISprite, ISpriteAtlas?> textureSpriteInformation)
+		private static void AddSpriteSheet(ITextureImporter importer, IReadOnlyDictionary<ISprite, ISpriteAtlas?> textureSpriteInformation)
 		{
 			if (!importer.Has_SpriteSheet_C1006())
 			{
@@ -173,7 +173,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			}
 		}
 
-		private void AddIDToName(ITextureImporter importer, Dictionary<ISprite, ISpriteAtlas?> textureSpriteInformation)
+		private void AddIDToName(ITextureImporter importer, IReadOnlyDictionary<ISprite, ISpriteAtlas?> textureSpriteInformation)
 		{
 			if (importer.SpriteMode_C1006E == SpriteImportMode.Multiple)
 			{
