@@ -5,6 +5,7 @@ using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.Logging;
+using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
@@ -24,17 +25,15 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			switch (asset)
+			if (asset.MainAsset is SpriteInformationObject spriteInformationObject)
 			{
-				case ITexture2D texture when texture.CheckAssetIntegrity():
-					exportCollection = new TextureExportCollection(this, texture, SpriteExportMode != SpriteExportMode.Yaml);
-					return true;
-				case ISprite sprite when SpriteExportMode == SpriteExportMode.Texture2D:
-					exportCollection = TextureExportCollection.CreateExportCollection(this, sprite);
-					return true;
-				default:
-					exportCollection = null;
-					return false;
+				exportCollection = new TextureExportCollection(this, spriteInformationObject, SpriteExportMode != SpriteExportMode.Yaml);
+				return true;
+			}
+			else
+			{
+				exportCollection = null;
+				return false;
 			}
 		}
 

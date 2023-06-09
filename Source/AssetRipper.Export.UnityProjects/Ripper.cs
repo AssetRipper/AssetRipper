@@ -247,6 +247,7 @@ namespace AssetRipper.Export.UnityProjects
 			TextureAssetExporter textureExporter = new(Settings);
 			projectExporter.OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
 			projectExporter.OverrideExporter<ISprite>(textureExporter);
+			projectExporter.OverrideExporter<SpriteInformationObject>(textureExporter);
 			if (Settings.SpriteExportMode == SpriteExportMode.Yaml)
 			{
 				YamlSpriteExporter spriteExporter = new();

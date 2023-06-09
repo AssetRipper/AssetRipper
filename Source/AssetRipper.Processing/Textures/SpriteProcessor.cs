@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
@@ -18,56 +19,57 @@ namespace AssetRipper.Processing.Textures
 	{
 		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
 		{
+			ObjectFactory factory = new ObjectFactory(gameBundle, projectVersion);
 			foreach (IUnityObjectBase asset in gameBundle.FetchAssets())
 			{
-				if (asset is ISprite sprite)
+				if (asset is ITexture2D texture)
 				{
-					ITexture2D? texture = sprite.TryGetTexture();
-					if (texture is not null)
+					if (texture.MainAsset is null)
 					{
-						texture.SpriteInformation ??= new();
+						factory.GetOrCreate(texture);
+					}
+				}
+				else if (asset is ISprite sprite)
+				{
+					ITexture2D? spriteTexture = sprite.TryGetTexture();
+					if (spriteTexture is not null)
+					{
+						SpriteInformationObject spriteInformationObject = factory.GetOrCreate(spriteTexture);
 						ISpriteAtlas? atlas = sprite.SpriteAtlas_C213P;
-						AddToDictionary(sprite, atlas, texture.SpriteInformation);
+						spriteInformationObject.AddToDictionary(sprite, atlas);
 					}
 
 					ProcessSprite(sprite);
 				}
 				else if (asset is ISpriteAtlas atlas && atlas.RenderDataMap_C687078895.Count > 0)
 				{
-					foreach (ISprite? packedSprite in atlas.PackedSprites_C687078895P)
+					foreach (ISprite packedSprite in atlas.PackedSprites_C687078895P.WhereNotNull())
 					{
-						if (packedSprite is not null
-							&& atlas.RenderDataMap_C687078895.TryGetValue(packedSprite.RenderDataKey_C213!, out ISpriteAtlasData? atlasData))
+						if (TryGetPackedSpriteTexture(atlas, packedSprite, out ITexture2D? spriteTexture))
 						{
-							ITexture2D? texture = atlasData.Texture.TryGetAsset(atlas.Collection);
-							if (texture is not null)
-							{
-								texture.SpriteInformation ??= new();
-								AddToDictionary(packedSprite, atlas, texture.SpriteInformation);
-							}
+							SpriteInformationObject spriteInformationObject = factory.GetOrCreate(spriteTexture);
+							spriteInformationObject.AddToDictionary(packedSprite, atlas);
 						}
 					}
 				}
 			}
+			foreach (SpriteInformationObject asset in factory.Assets)
+			{
+				asset.SetMainAsset();
+			}
 		}
 
-		private static void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas, Dictionary<ISprite, ISpriteAtlas?> spriteDictionary)
+		private static bool TryGetPackedSpriteTexture(ISpriteAtlas atlas, ISprite packedSprite, [NotNullWhen(true)] out ITexture2D? spriteTexture)
 		{
-			if (spriteDictionary.TryGetValue(sprite, out ISpriteAtlas? mappedAtlas))
+			if (packedSprite.Has_RenderDataKey_C213() && atlas.RenderDataMap_C687078895.TryGetValue(packedSprite.RenderDataKey_C213, out ISpriteAtlasData? atlasData))
 			{
-				if (mappedAtlas is null)
-				{
-					spriteDictionary[sprite] = atlas;
-				}
-				else if (atlas is not null && atlas != mappedAtlas)
-				{
-					throw new Exception($"{nameof(atlas)} is not the same as {nameof(mappedAtlas)}");
-				}
+				spriteTexture = atlasData.Texture.TryGetAsset(atlas.Collection);
 			}
 			else
 			{
-				spriteDictionary.Add(sprite, atlas);
+				spriteTexture = null;
 			}
+			return spriteTexture is not null;
 		}
 
 		private static void ProcessSprite(ISprite sprite)
@@ -114,21 +116,15 @@ namespace AssetRipper.Processing.Textures
 				}
 
 				// Must clear the reference to SpriteAtlas, since Unity Editor will crash trying to pack an already-packed sprite otherwise.
-				sprite.SpriteAtlas_C213.SetNull();
-				sprite.AtlasTags_C213.Clear();
+				sprite.SpriteAtlas_C213P = null;
+				sprite.AtlasTags_C213?.Clear();
 			}
 
 			// Some sprite properties must be recalculated with regard to SpriteAtlas. See the comments inside the following method.
 			sprite.GetSpriteCoordinatesInAtlas(atlas, out RectangleF rect, out Vector2 pivot, out Vector4 border);
 			sprite.Rect_C213.CopyValues(rect);
-			if (sprite.Has_Pivot_C213())
-			{
-				sprite.Pivot_C213.CopyValues(pivot);
-			}
-			if (sprite.Has_Border_C213())
-			{
-				sprite.Border_C213.CopyValues(border);
-			}
+			sprite.Pivot_C213?.CopyValues(pivot);
+			sprite.Border_C213?.CopyValues(border);
 
 			// Calculate and overwrite Offset. It is the offset in pixels of the pivot to the center of Rect.
 			sprite.Offset_C213.X = (pivot.X - 0.5f) * rect.Width;
@@ -137,6 +133,34 @@ namespace AssetRipper.Processing.Textures
 			// Calculate and overwrite TextureRectOffset. It is the offset in pixels of m_RD.TextureRect to Rect.
 			sprite.RD_C213.TextureRectOffset.X = sprite.RD_C213.TextureRect.X - rect.X;
 			sprite.RD_C213.TextureRectOffset.Y = sprite.RD_C213.TextureRect.Y - rect.Y;
+		}
+
+		private readonly struct ObjectFactory
+		{
+			private readonly ProcessedAssetCollection processedCollection;
+			private readonly Dictionary<ITexture2D, SpriteInformationObject> dictionary = new();
+
+			public IEnumerable<SpriteInformationObject> Assets => dictionary.Values;
+
+			public ObjectFactory(GameBundle gameBundle, UnityVersion projectVersion)
+			{
+				processedCollection = gameBundle.AddNewProcessedCollection("Sprite Data Storage", projectVersion);
+			}
+
+			public SpriteInformationObject GetOrCreate(ITexture2D texture)
+			{
+				if (!dictionary.TryGetValue(texture, out SpriteInformationObject? result))
+				{
+					result = MakeSpriteInformationObject(texture);
+					dictionary.Add(texture, result);
+				}
+				return result;
+			}
+
+			SpriteInformationObject MakeSpriteInformationObject(ITexture2D texture)
+			{
+				return processedCollection.CreateAsset(-1, texture, static (assetInfo, texture) => new SpriteInformationObject(assetInfo, texture));
+			}
 		}
 	}
 }

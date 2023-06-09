@@ -41,6 +41,14 @@ public abstract class VirtualAssetCollection : AssetCollection
 		return asset;
 	}
 
+	public TAsset CreateAsset<TData, TAsset>(int classID, TData data, Func<AssetInfo, TData, TAsset> factory) where TAsset : IUnityObjectBase
+	{
+		AssetInfo assetInfo = CreateAssetInfo(classID);
+		TAsset asset = factory(assetInfo, data);
+		AddAsset(asset);
+		return asset;
+	}
+
 	private AssetInfo CreateAssetInfo(int classID)
 	{
 		return new AssetInfo(this, ++m_nextId, classID);
