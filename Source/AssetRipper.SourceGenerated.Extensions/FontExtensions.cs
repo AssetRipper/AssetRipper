@@ -1,5 +1,7 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
+using AssetRipper.SourceGenerated.Classes.ClassID_27;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.SourceGenerated.Extensions
@@ -32,6 +34,26 @@ namespace AssetRipper.SourceGenerated.Extensions
 			else
 			{
 				fontMaterial = null;
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Font Texture is an automatically generated texture for each font.
+		/// </summary>
+		/// <param name="font"></param>
+		/// <param name="fontTexture"></param>
+		/// <returns></returns>
+		public static bool TryGetFontTexture(this IFont font, [NotNullWhen(true)] out ITexture? fontTexture)
+		{
+			if (font.Texture_C128P is { NameString: "Font Texture" } texture)
+			{
+				fontTexture = texture;
+				return true;
+			}
+			else
+			{
+				fontTexture = null;
 				return false;
 			}
 		}

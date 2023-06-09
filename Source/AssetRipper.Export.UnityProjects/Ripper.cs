@@ -45,6 +45,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_238;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_244;
+using AssetRipper.SourceGenerated.Classes.ClassID_27;
 using AssetRipper.SourceGenerated.Classes.ClassID_272;
 using AssetRipper.SourceGenerated.Classes.ClassID_273;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
@@ -235,9 +236,6 @@ namespace AssetRipper.Export.UnityProjects
 
 			//Miscellaneous exporters
 			projectExporter.OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
-			FontAssetExporter fontAssetExporter = new FontAssetExporter();
-			projectExporter.OverrideExporter<IFont>(fontAssetExporter);
-			projectExporter.OverrideExporter<IMaterial>(fontAssetExporter);
 			projectExporter.OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
 			VideoClipExporter videoClipExporter = new();
 			projectExporter.OverrideExporter<SourceGenerated.Classes.ClassID_327.IVideoClip>(videoClipExporter);
@@ -263,6 +261,12 @@ namespace AssetRipper.Export.UnityProjects
 				projectExporter.OverrideExporter<ITexture2DArray>(textureArrayExporter);
 				projectExporter.OverrideExporter<ITexture3D>(textureArrayExporter);
 			}
+
+			//Font exporter
+			FontAssetExporter fontAssetExporter = new FontAssetExporter();
+			projectExporter.OverrideExporter<IFont>(fontAssetExporter);
+			projectExporter.OverrideExporter<IMaterial>(fontAssetExporter);
+			projectExporter.OverrideExporter<ITexture>(fontAssetExporter);
 
 			//Shader exporters
 			projectExporter.OverrideExporter<IShader>(Settings.ShaderExportMode switch

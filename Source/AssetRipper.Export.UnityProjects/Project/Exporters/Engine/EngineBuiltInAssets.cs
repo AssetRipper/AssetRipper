@@ -36,7 +36,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters.Engine
 			AddMaterial("FrameDebuggerRenderTargetDisplay", 10756, true);
 
 			AddTexture("Soft", 10001, false);
-			AddTexture("Font Texture", 10103, false);
+			AddTexture(FontTextureName, 10103, false);
 			AddTexture("UnityWatermark-small", 10400, false);
 			AddTexture("EscToExit_back", 10401, false);
 			AddTexture("EscToExit_Text", 10402, false);
@@ -711,6 +711,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters.Engine
 		}
 
 		public const string FontMaterialName = "Font Material";
+		public const string FontTextureName = "Font Texture";
 		public const string DefaultTerrainDiffuseName = "Default-Terrain-Diffuse";
 		public const string DefaultTerrainSpecularName = "Default-Terrain-Specular";
 		public const string DefaultTerrainStandardName = "Default-Terrain-Standard";

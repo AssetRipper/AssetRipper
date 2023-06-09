@@ -6,6 +6,7 @@ using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_1042;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
+using AssetRipper.SourceGenerated.Classes.ClassID_27;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Font;
@@ -22,6 +23,11 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			{
 				Debug.Assert(fontMaterial.MainAsset == font);
 				AddAsset(fontMaterial);
+			}
+			if (font.TryGetFontTexture(out ITexture? fontTexture))
+			{
+				Debug.Assert(fontTexture.MainAsset == font);
+				AddAsset(fontTexture);
 			}
 		}
 
@@ -71,8 +77,12 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		protected override long GenerateExportID(IUnityObjectBase asset)
 		{
-			Debug.Assert(asset is IMaterial);
-			return ExportIdHandler.GetMainExportID(asset);//The font material always has the same id: 2100000
+			Debug.Assert(asset is IMaterial or ITexture);
+			return ExportIdHandler.GetMainExportID(asset);
+			//The font material always has the same id: 2100000
+			//Source: https://github.com/AssetRipper/TestProjects/blob/b19ddf4550504790d9da266d4fb4ec457859076e/2018/4/FontExportTest/Assets/Scenes/SampleScene.unity#LL172C14-L172C21
+
+			//The font texture is assumed to be 2800000, but has not been verified.
 		}
 
 		/// <summary>

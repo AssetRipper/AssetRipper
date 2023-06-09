@@ -23,10 +23,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 	{
 		public EngineExportCollection(IUnityObjectBase asset, UnityVersion version)
 		{
-			if (asset == null)
-			{
-				throw new ArgumentNullException(nameof(asset));
-			}
+			ArgumentNullException.ThrowIfNull(asset);
 
 			File = asset.Collection;
 			m_version = version;
@@ -76,11 +73,15 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			}
 			else if (asset is ITexture2D texture)
 			{
+				if (texture.NameString == EngineBuiltInAssets.FontTextureName)
+				{
+					return false;
+				}
 				return builtinAsset.Parameter == texture.GetCompleteImageSize();
 			}
 			else if (asset is ISprite sprite)
 			{
-				ITexture2D? spriteTexture = sprite.RD_C213.Texture.TryGetAsset(sprite.Collection);
+				ITexture2D? spriteTexture = sprite.TryGetTexture();
 				if (spriteTexture == null)
 				{
 					return false;
