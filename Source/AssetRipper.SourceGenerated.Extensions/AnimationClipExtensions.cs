@@ -4,19 +4,12 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_95;
+using AssetRipper.SourceGenerated.NativeEnums.Global;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class AnimationClipExtensions
 	{
-
-		public enum AnimationType
-		{
-			Legacy = 1,
-			Mecanim = 2,
-			Human = 3,
-		}
-
 		public static bool GetLegacy(this IAnimationClip clip)
 		{
 			if (clip.Has_Legacy_C74())

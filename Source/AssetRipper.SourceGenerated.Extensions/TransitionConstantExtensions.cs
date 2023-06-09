@@ -15,7 +15,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			if (transitionConstant.Has_InterruptionSource())
 			{
-				return (TransitionInterruptionSource)transitionConstant.InterruptionSource;
+				return transitionConstant.InterruptionSourceE;
 			}
 			else
 			{

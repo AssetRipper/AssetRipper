@@ -1,4 +1,4 @@
-﻿using AssetRipper.SourceGenerated.Extensions.Enums.Keyframe;
+﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions.Enums.Keyframe.TangentMode;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
