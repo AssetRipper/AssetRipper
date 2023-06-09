@@ -41,7 +41,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			if (m_convert)
 			{
 				ITextureImporter importer = ImporterFactory.GenerateTextureImporter(container, texture);
-				AddSprites(importer, texture.SpriteInformation);
+				AddSprites(importer, ((SpriteInformationObject?)Asset.MainAsset)!.Sprites);
 				return importer;
 			}
 			else
