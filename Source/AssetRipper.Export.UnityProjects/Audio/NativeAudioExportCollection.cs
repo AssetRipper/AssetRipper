@@ -20,7 +20,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 			}
 			else
 			{
-				return audioClip.GetCompressionFormat().ToRawExtension();
+				return audioClip.CompressionFormat_C83E.ToRawExtension();
 			}
 		}
 	}

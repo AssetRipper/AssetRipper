@@ -362,7 +362,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 				if (conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
 				{
 					IAnimatorCondition condition = animatorStateTransition.Conditions_C1101.AddNew();
-					condition.ConditionMode = (int)conditionConstant.GetConditionMode();
+					condition.ConditionMode = (int)conditionConstant.ConditionModeE;
 					condition.ConditionEvent.CopyValues(TOS[conditionConstant.EventID]);
 					condition.EventTreshold = conditionConstant.EventThreshold;
 				}
@@ -402,7 +402,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 				if (conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
 				{
 					IAnimatorCondition condition = animatorTransition.Conditions_C1109.AddNew();
-					condition.ConditionMode = (int)conditionConstant.GetConditionMode();
+					condition.ConditionMode = (int)conditionConstant.ConditionModeE;
 					condition.ConditionEvent.CopyValues(TOS[conditionConstant.EventID]);
 					condition.EventTreshold = conditionConstant.EventThreshold;
 				}

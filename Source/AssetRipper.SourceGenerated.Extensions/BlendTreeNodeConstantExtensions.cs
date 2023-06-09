@@ -10,7 +10,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			if (constant.Has_Blend1dData())
 			{
-				if (constant.GetBlendType() == BlendTreeType.Simple1D)
+				if (constant.BlendTypeE == BlendTreeType.Simple1D)
 				{
 					return constant.Blend1dData.Data.ChildThresholdArray[index];
 				}
@@ -24,7 +24,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static Vector2 GetPosition(this IBlendTreeNodeConstant constant, int index)
 		{
-			if (constant.Has_Blend2dData() && constant.GetBlendType() != BlendTreeType.Simple1D && constant.GetBlendType() != BlendTreeType.Direct)
+			if (constant.Has_Blend2dData() && constant.BlendTypeE != BlendTreeType.Simple1D && constant.BlendTypeE != BlendTreeType.Direct)
 			{
 				return constant.Blend2dData.Data.ChildPositionArray[index];
 			}
@@ -33,7 +33,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static float GetMinThreshold(this IBlendTreeNodeConstant constant)
 		{
-			if (constant.Has_Blend1dData() && constant.GetBlendType() == BlendTreeType.Simple1D)
+			if (constant.Has_Blend1dData() && constant.BlendTypeE == BlendTreeType.Simple1D)
 			{
 				return constant.Blend1dData.Data.ChildThresholdArray.Min();
 			}
@@ -42,7 +42,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static float GetMaxThreshold(this IBlendTreeNodeConstant constant)
 		{
-			if (constant.Has_Blend1dData() && constant.GetBlendType() == BlendTreeType.Simple1D)
+			if (constant.Has_Blend1dData() && constant.BlendTypeE == BlendTreeType.Simple1D)
 			{
 				return constant.Blend1dData.Data.ChildThresholdArray.Max();
 			}
@@ -51,7 +51,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static bool TryGetDirectBlendParameter(this IBlendTreeNodeConstant constant, int index, out uint parameter)
 		{
-			if (constant.Has_BlendDirectData() && constant.GetBlendType() == BlendTreeType.Direct)
+			if (constant.Has_BlendDirectData() && constant.BlendTypeE == BlendTreeType.Direct)
 			{
 				parameter = constant.BlendDirectData.Data.ChildBlendEventIDArray[index];
 				return true;
@@ -61,6 +61,5 @@ namespace AssetRipper.SourceGenerated.Extensions
 		}
 
 		public static bool IsBlendTree(this IBlendTreeNodeConstant constant) => constant.ChildIndices.Length > 0;
-		public static BlendTreeType GetBlendType(this IBlendTreeNodeConstant constant) => (BlendTreeType)constant.BlendType;
 	}
 }

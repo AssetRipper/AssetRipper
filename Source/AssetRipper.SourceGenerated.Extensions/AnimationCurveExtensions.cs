@@ -1,5 +1,4 @@
 ﻿using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Extensions.Enums.AnimationCurve;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Vector3f;
@@ -11,9 +10,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void SetDefaultRotationOrderAndCurveLoopType(this IAnimationCurve_Single animationCurve)
 		{
-			animationCurve.PreInfinity = (int)CurveLoopTypes.CycleWithOffset;
-			animationCurve.PostInfinity = (int)CurveLoopTypes.CycleWithOffset;
-			animationCurve.RotationOrder = (int)RotationOrder.OrderZXY;
+			animationCurve.PreInfinityE = CurveLoopTypes.CycleWithOffset;
+			animationCurve.PostInfinityE = CurveLoopTypes.CycleWithOffset;
+			animationCurve.RotationOrderE = RotationOrder.OrderZXY;
 		}
 
 		public static void SetValues(this IAnimationCurve_Single animationCurve, UnityVersion version, float defaultValue, float defaultWeight)
@@ -67,9 +66,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void SetValues(this IAnimationCurve_Single animationCurve, UnityVersion version, IReadOnlyList<IKeyframe_Single> keyframes, CurveLoopTypes preInfinity, CurveLoopTypes postInfinity)
 		{
-			animationCurve.PreInfinity = (int)preInfinity;
-			animationCurve.PostInfinity = (int)postInfinity;
-			animationCurve.RotationOrder = (int)RotationOrder.OrderZXY;
+			animationCurve.PreInfinityE = preInfinity;
+			animationCurve.PostInfinityE = postInfinity;
+			animationCurve.RotationOrderE = RotationOrder.OrderZXY;
 			animationCurve.Curve.Capacity = keyframes.Count;
 			for (int i = 0; i < keyframes.Count; i++)
 			{
@@ -79,16 +78,16 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void SetDefaultRotationOrderAndCurveLoopType(this IAnimationCurve_Vector3f animationCurve)
 		{
-			animationCurve.PreInfinity = (int)CurveLoopTypes.CycleWithOffset;
-			animationCurve.PostInfinity = (int)CurveLoopTypes.CycleWithOffset;
-			animationCurve.RotationOrder = (int)RotationOrder.OrderZXY;
+			animationCurve.PreInfinityE = CurveLoopTypes.CycleWithOffset;
+			animationCurve.PostInfinityE = CurveLoopTypes.CycleWithOffset;
+			animationCurve.RotationOrderE = RotationOrder.OrderZXY;
 		}
 
 		public static void SetDefaultRotationOrderAndCurveLoopType(this IAnimationCurve_Quaternionf animationCurve)
 		{
-			animationCurve.PreInfinity = (int)CurveLoopTypes.CycleWithOffset;
-			animationCurve.PostInfinity = (int)CurveLoopTypes.CycleWithOffset;
-			animationCurve.RotationOrder = (int)RotationOrder.OrderZXY;
+			animationCurve.PreInfinityE = CurveLoopTypes.CycleWithOffset;
+			animationCurve.PostInfinityE = CurveLoopTypes.CycleWithOffset;
+			animationCurve.RotationOrderE = RotationOrder.OrderZXY;
 		}
 	}
 }

@@ -46,7 +46,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			bitmap.FlipY();
 
 			// despite the name, this packing works for different formats
-			if (texture.LightmapFormat_C117 == (int)TextureUsageMode.NormalmapDXT5nm)
+			if (texture.LightmapFormat_C117E == TextureUsageMode.NormalmapDXT5nm)
 			{
 				UnpackNormal(bitmap.Bits);
 			}
@@ -137,7 +137,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			}
 
 			// despite the name, this packing works for different formats
-			if (texture.LightmapFormat_C28 == (int)TextureUsageMode.NormalmapDXT5nm)
+			if (texture.LightmapFormat_C28E == TextureUsageMode.NormalmapDXT5nm)
 			{
 				UnpackNormal(bitmap.Bits);
 			}

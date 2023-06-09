@@ -57,7 +57,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else
 			{
-				return (TextureUsageMode)texture.UsageMode_C117;
+				return texture.UsageMode_C117E;
 			}
 		}
 

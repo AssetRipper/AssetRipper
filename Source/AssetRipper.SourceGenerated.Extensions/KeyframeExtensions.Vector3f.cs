@@ -13,7 +13,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			keyframe.Value.CopyValues(value);
 			// this enum member is version agnostic
 			keyframe.TangentMode = TangentMode.FreeSmooth.ToTangent(version);
-			keyframe.WeightedMode = (int)WeightedMode.None;
+			keyframe.WeightedModeE = WeightedMode.None;
 			keyframe.InWeight?.CopyValues(weight);
 			keyframe.OutWeight?.CopyValues(weight);
 		}
@@ -26,7 +26,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			keyframe.OutSlope.CopyValues(outSlope);
 			// this enum member is version agnostic
 			keyframe.TangentMode = TangentMode.FreeFree.ToTangent(version);
-			keyframe.WeightedMode = (int)WeightedMode.None;
+			keyframe.WeightedModeE = WeightedMode.None;
 			keyframe.InWeight?.CopyValues(weight);
 			keyframe.OutWeight?.CopyValues(weight);
 		}

@@ -99,14 +99,14 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					case ITexture2D texture2D:
 						{
 							EnableMipMap = texture2D.Has_MipCount_C28() && texture2D.MipCount_C28 > 1 || texture2D.Has_MipMap_C28() && texture2D.MipMap_C28;
-							SRGBTexture = texture2D.ColorSpace_C28 == (int)ColorSpace.Linear;
+							SRGBTexture = texture2D.ColorSpace_C28E == ColorSpace.Linear;
 							StreamingMipmaps = texture2D.StreamingMipmaps_C28;
 							StreamingMipmapsPriority = texture2D.StreamingMipmapsPriority_C28;
 							IsReadable = texture2D.IsReadable_C28;
 							Format = texture2D.Format_C28E;
 							MaxTextureSize = CalculateMaxTextureSize(texture2D.Width_C28, texture2D.Height_C28);
 							TextureSettings = texture2D.TextureSettings_C28;
-							TextureType = ((TextureUsageMode)texture2D.LightmapFormat_C28).IsNormalmap()
+							TextureType = texture2D.LightmapFormat_C28E.IsNormalmap()
 								? TextureImporterType.NormalMap
 								: TextureImporterType.Default;
 							TextureShape = texture2D is ICubemap
@@ -124,7 +124,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 							Format = texture2DArray.Format_C187E;
 							MaxTextureSize = CalculateMaxTextureSize(texture2DArray.Width_C187, texture2DArray.Height_C187);
 							TextureSettings = texture2DArray.TextureSettings_C187;
-							TextureType = texture2DArray.Has_UsageMode_C187() && ((TextureUsageMode)texture2DArray.UsageMode_C187).IsNormalmap()
+							TextureType = texture2DArray.Has_UsageMode_C187() && texture2DArray.UsageMode_C187E.IsNormalmap()
 								? TextureImporterType.NormalMap
 								: TextureImporterType.Default;
 							TextureShape = TextureImporterShape.Texture2DArray;
@@ -133,14 +133,14 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					case ICubemapArray cubemapArray:
 						{
 							EnableMipMap = cubemapArray.MipCount_C188 > 1;
-							SRGBTexture = cubemapArray.ColorSpace_C188 == (int)ColorSpace.Linear;
+							SRGBTexture = cubemapArray.ColorSpace_C188E == ColorSpace.Linear;
 							StreamingMipmaps = false;
 							StreamingMipmapsPriority = default;
 							IsReadable = cubemapArray.IsReadable_C188;
 							Format = cubemapArray.Format_C188E;
 							MaxTextureSize = CalculateMaxTextureSize(cubemapArray.Width_C188, cubemapArray.Width_C188);
 							TextureSettings = cubemapArray.TextureSettings_C188;
-							TextureType = cubemapArray.Has_UsageMode_C188() && ((TextureUsageMode)cubemapArray.UsageMode_C188).IsNormalmap()
+							TextureType = cubemapArray.Has_UsageMode_C188() && cubemapArray.UsageMode_C188E.IsNormalmap()
 								? TextureImporterType.NormalMap
 								: TextureImporterType.Default;
 							TextureShape = TextureImporterShape.Texture2DArray;//Maybe this should be TextureCube
@@ -149,7 +149,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					case ITexture3D texture3D:
 						{
 							EnableMipMap = texture3D.Has_MipCount_C117() && texture3D.MipCount_C117 > 1 || texture3D.Has_MipMap_C117() && texture3D.MipMap_C117;
-							SRGBTexture = texture3D.ColorSpace_C117 == (int)ColorSpace.Linear;
+							SRGBTexture = texture3D.ColorSpace_C117E == ColorSpace.Linear;
 							StreamingMipmaps = false;
 							StreamingMipmapsPriority = default;
 							IsReadable = texture3D.IsReadable_C117;
@@ -177,7 +177,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			IIHVImageFormatImporter instance = IHVImageFormatImporterFactory.CreateAsset(container.ExportVersion, container.File);
 			instance.SetToDefault();
 			instance.IsReadable_C1055 = origin.IsReadable_C28;
-			instance.SRGBTexture_C1055 = origin.ColorSpace_C28 == (int)ColorSpace.Linear;
+			instance.SRGBTexture_C1055 = origin.ColorSpace_C28E == ColorSpace.Linear;
 			instance.StreamingMipmaps_C1055 = origin.StreamingMipmaps_C28;
 			instance.StreamingMipmapsPriority_C1055 = origin.StreamingMipmapsPriority_C28;
 			if (origin.AssetBundleName is not null)
