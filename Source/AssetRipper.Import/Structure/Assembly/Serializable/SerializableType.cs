@@ -1,3 +1,4 @@
+using AssetRipper.Assets;
 using AssetRipper.Assets.IO;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly.Mono;
@@ -46,7 +47,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			return new SerializableStructure(this, 0);
 		}
 
-		public IAsset CreateInstance(int depth, UnityVersion version)
+		public IUnityAssetBase CreateInstance(int depth, UnityVersion version)
 		{
 			if (MonoUtils.IsEngineStruct(Namespace, Name))
 			{

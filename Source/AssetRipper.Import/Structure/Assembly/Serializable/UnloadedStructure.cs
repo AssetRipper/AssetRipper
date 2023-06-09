@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Generics;
@@ -15,7 +16,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable;
 /// This is a placeholder asset that lazily reads the actual structure sometime after all the assets have been loaded.
 /// This allows MonoBehaviours to be loaded before their referenced MonoScript.
 /// </summary>
-internal sealed class UnloadedStructure : UnityAssetBase
+public sealed class UnloadedStructure : UnityAssetBase
 {
 	/// <summary>
 	/// The <see cref="IMonoBehaviour"/> that <see langword="this"/> is the <see cref="IMonoBehaviour.Structure"/> for.
@@ -44,7 +45,7 @@ internal sealed class UnloadedStructure : UnityAssetBase
 		}
 	}
 
-	private SerializableStructure? LoadStructure()
+	public SerializableStructure? LoadStructure()
 	{
 		ThrowIfNotStructure();
 		SerializableStructure? structure = monoBehaviour.Script_C114P?.GetBehaviourType(assemblyManager)?.CreateSerializableStructure();
@@ -97,6 +98,18 @@ internal sealed class UnloadedStructure : UnityAssetBase
 	{
 		IUnityAssetBase? structure = LoadStructure();
 		structure?.WriteRelease(writer);
+	}
+
+	public override void CopyValues(IUnityAssetBase? source, PPtrConverter converter)
+	{
+		IUnityAssetBase? structure = LoadStructure();
+		structure?.CopyValues(source, converter);
+	}
+
+	public override void Reset()
+	{
+		IUnityAssetBase? structure = LoadStructure();
+		structure?.Reset();
 	}
 	#endregion
 }

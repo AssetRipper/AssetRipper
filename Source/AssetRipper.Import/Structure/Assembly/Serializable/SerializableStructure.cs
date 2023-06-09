@@ -1,4 +1,5 @@
 using AssetRipper.Assets;
+using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.IO.Writing;
@@ -138,6 +139,54 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public int Depth { get; }
 		public SerializableType Type { get; }
 		public SerializableField[] Fields { get; }
+
+		public override void CopyValues(IUnityAssetBase? source, PPtrConverter converter)
+		{
+			if (source is null)
+			{
+				Reset();
+			}
+			else
+			{
+				CopyValues((SerializableStructure)source, converter);
+			}
+		}
+
+		public void CopyValues(SerializableStructure source, PPtrConverter converter)
+		{
+			if (source.Type != Type)
+			{
+				throw new ArgumentException($"Type {source.Type} doesn't match with {Type}", nameof(source));
+			}
+			if (source.Depth != Depth)
+			{
+				throw new ArgumentException($"Depth {source.Depth} doesn't match with {Depth}", nameof(source));
+			}
+			for (int i = 0; i < Fields.Length; i++)
+			{
+				SerializableField sourceField = source.Fields[i];
+				if (sourceField.CValue is null)
+				{
+					Fields[i] = sourceField;
+				}
+				else
+				{
+					Fields[i].CopyValues(sourceField, converter.TargetCollection.Version, Depth, Type.Fields[i], converter);
+				}
+			}
+		}
+
+		public SerializableStructure DeepClone(PPtrConverter converter)
+		{
+			SerializableStructure clone = new(Type, Depth);
+			clone.CopyValues(this, converter);
+			return clone;
+		}
+
+		public override void Reset()
+		{
+			((Span<SerializableField>)Fields).Clear();
+		}
 
 		/// <summary>
 		/// 8 might have been an arbitrarily chosen number, but I think it's because the limit was supposedly 7 when mafaca made uTinyRipper.

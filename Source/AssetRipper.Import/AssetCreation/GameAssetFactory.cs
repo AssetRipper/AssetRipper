@@ -189,7 +189,7 @@ namespace AssetRipper.Import.AssetCreation
 			Logger.Error(LogCategory.Import, $"Error during reading of asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}", ex);
 		}
 
-		public static IAsset CreateEngineAsset(string name, UnityVersion version)
+		public static IUnityAssetBase CreateEngineAsset(string name, UnityVersion version)
 		{
 			return name switch
 			{

@@ -1,8 +1,10 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
+using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Processing.PrefabOutlining
@@ -20,8 +22,20 @@ namespace AssetRipper.Processing.PrefabOutlining
 			ClonedAssetResolver resolver = new ClonedAssetResolver(clonedAssetDictionary);
 			foreach ((IUnityObjectBase asset, IUnityObjectBase clonedAsset) in clonedAssetDictionary)
 			{
-				//Warning: this doesn't clone IMonoBehaviour.Structure
-				clonedAsset.CopyValues(asset, new PPtrConverter(asset.Collection, clonedAsset.Collection, resolver));
+				PPtrConverter converter = new PPtrConverter(asset.Collection, clonedAsset.Collection, resolver);
+				clonedAsset.CopyValues(asset, converter);
+				//Ideally, IMonoBehaviour.Structure would be cloned in IMonoBehaviour.CopyValues, but that isn't currently feasible.
+				if (asset is IMonoBehaviour monoBehaviour)
+				{
+					SerializableStructure? structure = monoBehaviour.Structure is UnloadedStructure unloadedStructure
+						? unloadedStructure.LoadStructure()
+						: (SerializableStructure?)monoBehaviour.Structure;
+					if (structure is not null)
+					{
+						IMonoBehaviour clonedMonobehaviour = (IMonoBehaviour)clonedAsset;
+						clonedMonobehaviour.Structure = structure.DeepClone(converter);
+					}
+				}
 			}
 			return (IGameObject)clonedAssetDictionary[source];
 		}

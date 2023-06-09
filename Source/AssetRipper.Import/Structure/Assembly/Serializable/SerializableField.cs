@@ -1,4 +1,5 @@
 using AssetRipper.Assets;
+using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Export.Yaml;
@@ -181,7 +182,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 							throw new EndOfStreamException($"When reading field {etalon.Name}, Stream only has {remainingBytes} bytes remaining, so {count} complex elements of type {etalon.Type.Name} cannot be read.");
 						}
 
-						IAsset[] structures = new IAsset[count];
+						IUnityAssetBase[] structures = new IUnityAssetBase[count];
 						for (int i = 0; i < count; i++)
 						{
 							structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
@@ -198,9 +199,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					throw new NotSupportedException(etalon.Type.Type.ToString());
 			}
 
-			static IAsset CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon)
+			static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon)
 			{
-				IAsset asset = etalon.Type.CreateInstance(depth + 1, version);
+				IUnityAssetBase asset = etalon.Type.CreateInstance(depth + 1, version);
 				if (asset is SerializableStructure structure)
 				{
 					structure.Read(ref reader, version, flags);
@@ -370,11 +371,11 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case PrimitiveType.Complex:
 					if (etalon.IsArray)
 					{
-						writer.WriteAssetArray((IAsset[])CValue);
+						writer.WriteAssetArray((IUnityAssetBase[])CValue);
 					}
 					else
 					{
-						((IAsset)CValue).Write(writer);
+						((IUnityAssetBase)CValue).Write(writer);
 					}
 					break;
 
@@ -389,9 +390,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			{
 				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
-					IAsset[] structures = (IAsset[])CValue;
+					IUnityAssetBase[] structures = (IUnityAssetBase[])CValue;
 					YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
-					foreach (IAsset structure in structures)
+					foreach (IUnityAssetBase structure in structures)
 					{
 						node.Add(structure.ExportYaml(container));
 					}
@@ -475,7 +476,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			{
 				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
-					IAsset structure = (IAsset)CValue;
+					IUnityAssetBase structure = (IUnityAssetBase)CValue;
 					return structure.ExportYaml(container);
 				}
 				else
@@ -501,13 +502,139 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 		}
 
+		internal void CopyValues(SerializableField source, UnityVersion version, int depth, in SerializableType.Field etalon, PPtrConverter converter)
+		{
+			if (etalon.IsArray)
+			{
+				PValue = default;
+				if (etalon.Type.Type == PrimitiveType.Complex)
+				{
+					IUnityAssetBase[] sourceStructures = (IUnityAssetBase[])source.CValue;
+					IUnityAssetBase[] thisStructures = new IUnityAssetBase[sourceStructures.Length];
+					for (int i = 0; i < sourceStructures.Length; i++)
+					{
+						IUnityAssetBase sourceStructure = sourceStructures[i];
+						IUnityAssetBase thisStructure = etalon.Type.CreateInstance(depth + 1, version);
+						thisStructure.CopyValues(sourceStructure, converter);
+						thisStructures[i] = thisStructure;
+					}
+					CValue = thisStructures;
+				}
+				else
+				{
+					switch (etalon.Type.Type)
+					{
+						case PrimitiveType.Bool:
+							{
+								ReadOnlySpan<bool> span = (bool[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.Char:
+							{
+								ReadOnlySpan<char> span = (char[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.SByte:
+							{
+								ReadOnlySpan<byte> span = (byte[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.Byte:
+							{
+								ReadOnlySpan<byte> span = (byte[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.Short:
+							{
+								ReadOnlySpan<short> span = (short[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.UShort:
+							{
+								ReadOnlySpan<ushort> span = (ushort[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.Int:
+							{
+								ReadOnlySpan<int> span = (int[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.UInt:
+							{
+								ReadOnlySpan<uint> span = (uint[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.Long:
+							{
+								ReadOnlySpan<long> span = (long[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.ULong:
+							{
+								ReadOnlySpan<ulong> span = (ulong[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.Single:
+							{
+								ReadOnlySpan<float> span = (float[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.Double:
+							{
+								ReadOnlySpan<double> span = (double[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						case PrimitiveType.String:
+							{
+								ReadOnlySpan<string> span = (string[])source.CValue;
+								CValue = span.ToArray();
+							}
+							break;
+						default:
+							throw new NotSupportedException(etalon.Type.Type.ToString());
+					}
+				}
+			}
+			else if (etalon.Type.Type == PrimitiveType.Complex)
+			{
+				IUnityAssetBase sourceStructure = (IUnityAssetBase)source.CValue;
+				IUnityAssetBase thisStructure = etalon.Type.CreateInstance(depth + 1, version);
+				thisStructure.CopyValues(sourceStructure, converter);
+				PValue = default;
+				CValue = thisStructure;
+			}
+			else if (etalon.Type.Type is PrimitiveType.String)
+			{
+				string value = (string)source.CValue;
+				PValue = default;
+				CValue = value;
+			}
+			else
+			{
+				PValue = source.PValue;
+				CValue = default!;
+			}
+		}
+
 		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context, SerializableType.Field etalon)
 		{
 			if (etalon.Type.Type == PrimitiveType.Complex)
 			{
 				if (etalon.IsArray)
 				{
-					IAsset[] structures = (IAsset[])CValue;
+					IUnityAssetBase[] structures = (IUnityAssetBase[])CValue;
 					if (structures.Length > 0 && structures[0] is IDependent)
 					{
 						foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(structures.Cast<IDependent>(), etalon.Name))
@@ -518,7 +645,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				}
 				else
 				{
-					IAsset structure = (IAsset)CValue;
+					IUnityAssetBase structure = (IUnityAssetBase)CValue;
 					if (structure is IDependent dependent)
 					{
 						foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(dependent, etalon.Name))
