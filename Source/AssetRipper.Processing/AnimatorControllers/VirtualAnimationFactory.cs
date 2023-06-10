@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1101;
 using AssetRipper.SourceGenerated.Classes.ClassID_1102;
@@ -22,8 +23,8 @@ using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
 using AssetRipper.SourceGenerated.Subclasses.LeafInfoConstant;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_SelectorStateConstant;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorState;
+using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorStateTransition;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorTransition;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour;
 using AssetRipper.SourceGenerated.Subclasses.SelectorStateConstant;
 using AssetRipper.SourceGenerated.Subclasses.SelectorTransitionConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
@@ -225,15 +226,33 @@ namespace AssetRipper.Processing.AnimatorControllers
 #warning TODO: child StateMachines
 			//generatedStateMachine.ChildStateMachines_C1107 = new ChildAnimatorStateMachine[stateMachineCount];
 
-			// set destination state for transitions here because all states has become valid only now
+			// set destination state for transitions here because all states have only become valid now
 			for (int i = 0; i < stateMachine.StateConstantArray.Count; i++)
 			{
 				IAnimatorState state = states[i];
 				IStateConstant stateConstant = stateMachine.StateConstantArray[i].Data;
 
+				AssetList<PPtr_AnimatorStateTransition_4_0_0>? transitionList;
 				if (state.Has_Transitions_C1102())
 				{
 					state.Transitions_C1102.EnsureCapacity(state.Transitions_C1102.Count + stateConstant.TransitionConstantArray.Count);
+					transitionList = null;
+				}
+				else if (generatedStateMachine.Has_OrderedTransitions_C1107())
+				{
+					//I'm not sure if this is correct, but it seems to be the only logical way to store the transitions before Unity 5.
+					//IAnimatorStateMachine.LocalTransitions only exists until Unity 4.2.0, so by process of elimination, this is the only option.
+
+					PPtr_AnimatorState_4_0_0 statePPtr = new();
+					statePPtr.SetAsset(generatedStateMachine.Collection, state);
+					transitionList = new();
+					generatedStateMachine.OrderedTransitions_C1107.Add(statePPtr, transitionList);
+				}
+				else
+				{
+					//This should never happen.
+					Logger.Error(LogCategory.Processing, "Loose Transitions will be created. This can only happen when the AnimatorState and AnimatorStateMachine have different Unity versions, specifically on opposite sides of Unity 5.");
+					transitionList = null;
 				}
 
 				for (int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
@@ -242,11 +261,18 @@ namespace AssetRipper.Processing.AnimatorControllers
 					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
 					if (state.Has_Transitions_C1102())
 					{
-						state.Transitions_C1102.AddNew().CopyValues(state.Collection.ForceCreatePPtr(transition));
+						state.Transitions_C1102P.Add(transition);
+					}
+					else if (transitionList is not null)
+					{
+						transitionList.AddNew().SetAsset(generatedStateMachine.Collection, transition);
 					}
 				}
 			}
 
+			//This code only works for Unity 5 and newer.
+			//However, IStateMachineConstant.AnyStateTransitionConstantArray is available on all versions.
+			//So, transitions in that array are not currently recovered on Unity 4 and earlier.
 			if (generatedStateMachine.Has_AnyStateTransitions_C1107())
 			{
 				generatedStateMachine.AnyStateTransitions_C1107.Clear();
@@ -334,7 +360,15 @@ namespace AssetRipper.Processing.AnimatorControllers
 			generatedState.CycleOffsetParameterActive_C1102 = state.CycleOffsetParamID > 0;
 			generatedState.TimeParameterActive_C1102 = state.TimeParamID > 0;
 
-			generatedState.Motion_C1102P = state.CreateMotion(virtualFile, controller, 0);
+			IMotion? motion = state.CreateMotion(virtualFile, controller, 0);
+			if (generatedState.Has_Motion_C1102())
+			{
+				generatedState.Motion_C1102P = motion;
+			}
+			else
+			{
+				generatedState.Motions_C1102P.Add(motion);
+			}
 
 			generatedState.Tag_C1102.CopyValues(TOS[state.TagID]);
 			generatedState.SpeedParameter_C1102?.CopyValues(TOS[state.SpeedParamID]);

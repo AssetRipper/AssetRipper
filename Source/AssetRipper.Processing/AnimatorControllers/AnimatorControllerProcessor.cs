@@ -61,12 +61,9 @@ namespace AssetRipper.Processing.AnimatorControllers
 				InitializeLayer(newLayer, stateMachine, controller, i);
 			}
 
-			foreach (IUnityObjectBase? dependency in controller.FetchEditorHierarchy())
+			foreach (IUnityObjectBase dependency in controller.FetchEditorHierarchy().WhereNotNull())
 			{
-				if (dependency is not null)
-				{
-					dependency.MainAsset = controller;
-				}
+				dependency.MainAsset = controller;
 			}
 		}
 
