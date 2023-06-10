@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Metadata;
+using System.Collections;
 
 namespace AssetRipper.Assets.Generics
 {
@@ -82,6 +84,15 @@ namespace AssetRipper.Assets.Generics
 		public override string ToString()
 		{
 			return $"{nameof(Count)} = {Count}";
+		}
+	}
+	public static class AccessListBaseExtensions
+	{
+		public static PPtrAccessList<TPPtr, TAsset> ToPPtrAccessList<TPPtr, TAsset>(this AccessListBase<TPPtr> list, AssetCollection collection)
+			where TPPtr : IPPtr<TAsset>
+			where TAsset : IUnityObjectBase
+		{
+			return new PPtrAccessList<TPPtr, TAsset>(list, collection);
 		}
 	}
 }
