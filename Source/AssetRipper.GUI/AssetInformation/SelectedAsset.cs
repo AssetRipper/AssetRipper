@@ -290,6 +290,11 @@ namespace AssetRipper.GUI.AssetInformation
 					builder.AppendLine($"Script: {monoScript.AssemblyName_C115}, {monoScript.GetFullName()}");
 				}
 
+				if (Asset.MainAsset is { } mainAsset)
+				{
+					builder.AppendLine($"Main Asset: {mainAsset}");
+				}
+
 				return builder.ToString();
 			}
 		}
