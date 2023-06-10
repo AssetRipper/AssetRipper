@@ -45,14 +45,11 @@
 		/// <inheritdoc/>
 		public override void CopyTo(TBase[] array, int arrayIndex)
 		{
-			if (array == null)
-			{
-				throw new ArgumentNullException(nameof(array));
-			}
+			ArgumentNullException.ThrowIfNull(array);
 
-			if (arrayIndex < 0 || arrayIndex >= array.Length - Count)
+			if (arrayIndex < 0 || arrayIndex > array.Length - Count)
 			{
-				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+				throw new ArgumentOutOfRangeException(nameof(arrayIndex), arrayIndex, null);
 			}
 
 			for (int i = 0; i < Count; i++)

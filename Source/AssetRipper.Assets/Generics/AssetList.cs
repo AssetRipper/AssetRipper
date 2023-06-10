@@ -114,9 +114,9 @@
 				throw new ArgumentNullException(nameof(array));
 			}
 
-			if (arrayIndex < 0 || arrayIndex >= array.Length - count)
+			if (arrayIndex < 0 || arrayIndex > array.Length - count)
 			{
-				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+				throw new ArgumentOutOfRangeException(nameof(arrayIndex), arrayIndex, null);
 			}
 
 			Array.Copy(items, 0, array, arrayIndex, count);
