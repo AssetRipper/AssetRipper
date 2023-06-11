@@ -6,6 +6,7 @@ using AssetRipper.Export.UnityProjects.Project.Exporters.Engine;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.Utils;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_1113;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;

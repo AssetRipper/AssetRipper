@@ -5,6 +5,7 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_241;
@@ -24,7 +25,7 @@ using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.Parameter;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerSnapshot;
 using AssetRipper.SourceGenerated.Subclasses.SnapshotConstant;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
+using Utf8String = AssetRipper.SourceGenerated.Subclasses.Utf8String.Utf8String;
 
 namespace AssetRipper.Processing.AudioMixers
 {

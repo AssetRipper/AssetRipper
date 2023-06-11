@@ -1,4 +1,5 @@
 ﻿using AssetRipper.IO.Files;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 
 namespace AssetRipper.SourceGenerated.Extensions

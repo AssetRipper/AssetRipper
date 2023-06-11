@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using AssetRipper.Primitives;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace AssetRipper.IO.Endian
@@ -74,6 +75,12 @@ namespace AssetRipper.IO.Endian
 			FillInnerBuffer(buffer.Length);
 			Write(m_buffer, 0, sizeof(int));
 			Write(buffer, 0, buffer.Length);
+		}
+
+		public void Write(Utf8String value)
+		{
+			Write(value.Data.Length);
+			OutStream.Write(value.Data);
 		}
 
 		public void WriteStringZeroTerm(string value)

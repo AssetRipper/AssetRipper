@@ -1,8 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace AssetRipper.IO.Files.Tests
+namespace AssetRipper.Primitives.Tests
 {
 	public class GuidTests
 	{

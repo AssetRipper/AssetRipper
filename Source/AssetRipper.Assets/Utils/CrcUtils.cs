@@ -30,11 +30,6 @@ namespace AssetRipper.Assets.Utils
 			return CalculateDigest(Encoding.UTF8.GetBytes(data));
 		}
 
-		public static uint CalculateDigestUTF8(Utf8StringBase data)
-		{
-			return CalculateDigest(data.Data);
-		}
-
 		public static uint CalculateDigest(byte[] data, int offset, int size)
 		{
 			Crc32 crc = new();
@@ -48,17 +43,7 @@ namespace AssetRipper.Assets.Utils
 			return CalculateDigestUTF8(data) == digest;
 		}
 
-		public static bool VerifyDigestUTF8(Utf8StringBase data, uint digest)
-		{
-			return CalculateDigestUTF8(data) == digest;
-		}
-
 		public static bool Verify28DigestUTF8(string data, uint digest)
-		{
-			return (CalculateDigestUTF8(data) & 0xFFFFFFF) == digest;
-		}
-
-		public static bool Verify28DigestUTF8(Utf8StringBase data, uint digest)
 		{
 			return (CalculateDigestUTF8(data) & 0xFFFFFFF) == digest;
 		}

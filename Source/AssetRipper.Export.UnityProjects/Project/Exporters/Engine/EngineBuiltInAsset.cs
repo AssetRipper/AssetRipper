@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
+using AssetRipper.Primitives;
 
 namespace AssetRipper.Export.UnityProjects.Project.Exporters.Engine
 {

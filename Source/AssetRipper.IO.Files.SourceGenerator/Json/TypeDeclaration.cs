@@ -39,6 +39,10 @@ internal sealed class TypeDeclaration
 	/// The magic bytes identifying this format.
 	/// </summary>
 	public Dictionary<string, PropertyDocumentation?> Properties { get; set; } = new();
+	/// <summary>
+	/// The additional usings required for this type.
+	/// </summary>
+	public string[] Usings { get; set; } = Array.Empty<string>();
 
 	public override string ToString()
 	{

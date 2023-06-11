@@ -2,6 +2,7 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.Primitives;
 using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Assets.Export

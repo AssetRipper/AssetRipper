@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.IO.Files.SourceGenerator;
+﻿using AssetRipper.Primitives;
+
+namespace AssetRipper.IO.Files.SourceGenerator;
 
 internal static class PrimitiveHandler
 {
@@ -101,6 +103,7 @@ internal static class PrimitiveHandler
 			"double" => nameof(Double),
 			"decimal" => nameof(Decimal),
 			"string" => nameof(String),
+			nameof(UnityGUID) => nameof(UnityGUID),
 			_ => null
 		};
 		return typeName is not null;

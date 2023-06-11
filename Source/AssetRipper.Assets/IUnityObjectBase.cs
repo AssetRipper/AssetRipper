@@ -5,6 +5,7 @@ using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files;
+using AssetRipper.Primitives;
 using AssetRipper.Yaml;
 
 namespace AssetRipper.Assets;

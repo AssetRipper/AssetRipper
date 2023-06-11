@@ -1,5 +1,6 @@
 // Auto-generated code. Do not modify manually.
 using AssetRipper.IO.Endian;
+using AssetRipper.Primitives;
 namespace AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
 /// <summary>
 /// A serialized file may be linked with other serialized files to create shared dependencies.
@@ -95,7 +96,7 @@ public partial record class FileIdentifier_5 : IFileIdentifier
 	
 	public void Read(EndianReader reader)
 	{
-		m_Guid = reader.ReadEndian<UnityGUID>();
+		m_Guid = reader.ReadUnityGUID();
 		m_Type = reader.ReadInt32();
 		m_PathName = reader.ReadStringZeroTerm();
 		OnReadFinished(reader);
@@ -108,7 +109,7 @@ public partial record class FileIdentifier_5 : IFileIdentifier
 	
 	public void Write(EndianWriter writer)
 	{
-		writer.WriteEndian(m_Guid);
+		writer.Write(m_Guid);
 		writer.Write(m_Type);
 		writer.WriteStringZeroTerm(m_PathName);
 		OnWriteFinished(writer);

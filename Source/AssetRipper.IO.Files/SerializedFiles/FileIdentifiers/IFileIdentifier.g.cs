@@ -1,5 +1,6 @@
 // Auto-generated code. Do not modify manually.
 using AssetRipper.IO.Endian;
+using AssetRipper.Primitives;
 namespace AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
 /// <summary>
 /// A serialized file may be linked with other serialized files to create shared dependencies.

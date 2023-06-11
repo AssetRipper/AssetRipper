@@ -5,6 +5,7 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.Primitives;
 
 namespace AssetRipper.Export.UnityProjects.Project.Collections
 {

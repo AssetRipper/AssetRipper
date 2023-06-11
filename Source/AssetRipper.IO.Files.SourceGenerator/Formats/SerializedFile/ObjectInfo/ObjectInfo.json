@@ -59,5 +59,6 @@
 			"GetExpression": "false",
 			"SetExpression": ""
 		}
-	}
+	},
+	"Usings": []
 }

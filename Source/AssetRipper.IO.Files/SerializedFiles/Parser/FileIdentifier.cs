@@ -1,5 +1,7 @@
-﻿using AssetRipper.IO.Files.SerializedFiles.IO;
+﻿using AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
+using AssetRipper.IO.Files.SerializedFiles.IO;
 using AssetRipper.IO.Files.Utils;
+using AssetRipper.Primitives;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser
 {
@@ -30,7 +32,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 			if (HasHash(reader.Generation))
 			{
-				Guid = reader.ReadEndian<UnityGUID>();
+				Guid = reader.ReadUnityGUID();
 				Type = (AssetType)reader.ReadInt32();
 			}
 			PathNameOrigin = reader.ReadStringZeroTerm();
@@ -45,7 +47,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 			if (HasHash(writer.Generation))
 			{
-				Guid.Write(writer);
+				writer.Write(Guid);
 				writer.Write((int)Type);
 			}
 			writer.WriteStringZeroTerm(PathNameOrigin);

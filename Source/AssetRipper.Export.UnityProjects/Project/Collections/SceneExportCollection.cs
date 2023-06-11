@@ -5,6 +5,7 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
+using AssetRipper.Primitives;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.SourceGenerated.Classes.ClassID_1030;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;

@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.IO.Files;
+using AssetRipper.Primitives;
 using AssetRipper.VersionUtilities;
 using AssetRipper.Yaml;
 

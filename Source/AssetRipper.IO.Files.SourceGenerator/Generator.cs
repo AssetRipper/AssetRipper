@@ -11,7 +11,10 @@ public static class Generator
 		bool isStruct = declaration.ContainsModifier("struct");
 		bool isRecord = declaration.ContainsModifier("record");
 		writer.WriteGeneratedCodeWarning();
-		writer.WriteUsing("AssetRipper.IO.Endian");
+		foreach (string @using in declaration.Usings.Append("AssetRipper.IO.Endian").Order())
+		{
+			writer.WriteUsing(@using);
+		}
 		writer.WriteFileScopedNamespace(declaration.Namespace);
 		MaybeWriteDocumentation(writer, declaration.Summary, declaration.Remarks);
 		writer.WriteLine($"public partial {declaration.ClassType} {declaration.Name}_{definition.Version} : I{declaration.Name}");
@@ -255,7 +258,10 @@ public static class Generator
 	{
 		bool isReadOnly = declaration.ContainsModifier("readonly");
 		writer.WriteGeneratedCodeWarning();
-		writer.WriteUsing("AssetRipper.IO.Endian");
+		foreach (string @using in declaration.Usings.Append("AssetRipper.IO.Endian").Order())
+		{
+			writer.WriteUsing(@using);
+		}
 		writer.WriteFileScopedNamespace(declaration.Namespace);
 		MaybeWriteDocumentation(writer, declaration.Summary, declaration.Remarks);
 		writer.WriteLine($"public partial interface I{declaration.Name} : {nameof(IEndianWritable)}");

@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
+using AssetRipper.Primitives;
 
 namespace AssetRipper.Processing.AudioMixers;
 

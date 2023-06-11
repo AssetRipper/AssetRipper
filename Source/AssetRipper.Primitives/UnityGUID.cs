@@ -1,14 +1,13 @@
-﻿using AssetRipper.IO.Endian;
-using AssetRipper.IO.Files.Extensions;
-using System.Buffers.Binary;
+﻿using System.Buffers.Binary;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace AssetRipper.IO.Files
+namespace AssetRipper.Primitives
 {
-	public readonly record struct UnityGUID : IEndianReadable<UnityGUID>, IEndianWritable
+	public readonly record struct UnityGUID
 	{
 		public UnityGUID(Guid guid)
 		{
@@ -59,23 +58,6 @@ namespace AssetRipper.IO.Files
 			return new Guid(span);
 		}
 
-		public static UnityGUID Read(EndianReader reader)
-		{
-			return new UnityGUID(
-				reader.ReadUInt32(),
-				reader.ReadUInt32(),
-				reader.ReadUInt32(),
-				reader.ReadUInt32());
-		}
-
-		public void Write(EndianWriter writer)
-		{
-			writer.Write(Data0);
-			writer.Write(Data1);
-			writer.Write(Data2);
-			writer.Write(Data3);
-		}
-
 		private void Write(Span<byte> span)
 		{
 			BinaryPrimitives.WriteUInt32LittleEndian(span.Slice(0 * sizeof(uint), sizeof(uint)), Data0);
@@ -93,27 +75,49 @@ namespace AssetRipper.IO.Files
 
 		public override string ToString()
 		{
-			StringBuilder sb = GetStringBuilder();
-			try
+			Span<char> span = stackalloc char[32]
 			{
-				Append(sb, Data0);
-				Append(sb, Data1);
-				Append(sb, Data2);
-				Append(sb, Data3);
-				return sb.ToString();
-			}
-			finally
-			{
-				sb.Clear();
-			}
-		}
+				GetHexChar(Data0, 0),
+				GetHexChar(Data0, 4),
+				GetHexChar(Data0, 8),
+				GetHexChar(Data0, 12),
+				GetHexChar(Data0, 16),
+				GetHexChar(Data0, 20),
+				GetHexChar(Data0, 24),
+				GetHexChar(Data0, 28),
+				GetHexChar(Data1, 0),
+				GetHexChar(Data1, 4),
+				GetHexChar(Data1, 8),
+				GetHexChar(Data1, 12),
+				GetHexChar(Data1, 16),
+				GetHexChar(Data1, 20),
+				GetHexChar(Data1, 24),
+				GetHexChar(Data1, 28),
+				GetHexChar(Data2, 0),
+				GetHexChar(Data2, 4),
+				GetHexChar(Data2, 8),
+				GetHexChar(Data2, 12),
+				GetHexChar(Data2, 16),
+				GetHexChar(Data2, 20),
+				GetHexChar(Data2, 24),
+				GetHexChar(Data2, 28),
+				GetHexChar(Data3, 0),
+				GetHexChar(Data3, 4),
+				GetHexChar(Data3, 8),
+				GetHexChar(Data3, 12),
+				GetHexChar(Data3, 16),
+				GetHexChar(Data3, 20),
+				GetHexChar(Data3, 24),
+				GetHexChar(Data3, 28),
+			};
 
-		private static void Append(StringBuilder sb, uint value)
-		{
-			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value << 4) & 0xF0) | unchecked((int)(value >> 4) & 0xF)]);
-			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value >> 4) & 0xF0) | unchecked((int)(value >> 12) & 0xF)]);
-			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value >> 12) & 0xF0) | unchecked((int)(value >> 20) & 0xF)]);
-			sb.Append(StringBuilderExtensions.ByteHexRepresentations[unchecked((int)(value >> 20) & 0xF0) | unchecked((int)(value >> 28) & 0xF)]);
+			return new string(span);
+
+			static char GetHexChar(uint value, int offset)
+			{
+				int index = unchecked((int)((value >> offset) & 0xF));
+				return "0123456789abcdef"[index];
+			}
 		}
 
 		/// <summary>
@@ -153,7 +157,7 @@ namespace AssetRipper.IO.Files
 			{
 				//AB becomes BA
 				uint value = output[i];
-				output[i] = (byte)(unchecked((value << 4) & 0xF0) | unchecked((value >> 4) & 0xF));
+				output[i] = (byte)(unchecked(value << 4 & 0xF0) | unchecked(value >> 4 & 0xF));
 			}
 		}
 
