@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.Yaml
 {
-	public sealed class YamlScalarNode : YamlNode
+	public sealed partial class YamlScalarNode : YamlNode
 	{
 		public YamlScalarNode() { }
 
@@ -331,7 +331,7 @@ namespace AssetRipper.Yaml
 
 		private static ScalarStyle GetStringStyle(string value)
 		{
-			if (!string.IsNullOrEmpty(value) && s_illegal.IsMatch(value))
+			if (!string.IsNullOrEmpty(value) && IllegalStringsRegex().IsMatch(value))
 			{
 				return value.Contains("\n ") ? ScalarStyle.DoubleQuoted : ScalarStyle.SingleQuoted;
 			}
@@ -385,10 +385,11 @@ namespace AssetRipper.Yaml
 		}
 		public ScalarStyle Style { get; }
 
-		private static readonly Regex s_illegal = new("(^\\s)|(^-\\s)|(^-$)|(^[\\:\\[\\]'\"*&!@#%{}?<>,\\`])|([:@]\\s)|([\\n\\r])|([:\\s]$)", RegexOptions.Compiled);
-
 		private ScalarType m_objectType = ScalarType.String;
 		private string m_string = string.Empty;
 		private ulong m_value = 0;
+
+		[GeneratedRegex("(^\\s)|(^-\\s)|(^-$)|(^[\\:\\[\\]'\"*&!@#%{}?<>,\\`])|([:@]\\s)|([\\n\\r])|([:\\s]$)", RegexOptions.Compiled)]
+		private static partial Regex IllegalStringsRegex();
 	}
 }
