@@ -1,4 +1,5 @@
 ﻿//#define USE_HEX_FLOAT
+using AssetRipper.Primitives;
 using AssetRipper.Yaml.Extensions;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -107,6 +108,10 @@ namespace AssetRipper.Yaml
 		{
 			SetValue(value);
 			Style = ScalarStyle.Plain;
+		}
+
+		public YamlScalarNode(Utf8String value) : this(value.String)
+		{
 		}
 
 		public void SetValue(bool value)
