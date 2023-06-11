@@ -24,17 +24,9 @@ public sealed class Utf8String : IEquatable<Utf8String>
 		cachedString = "";
 	}
 
-	/// <summary>
-	/// An internal constructor that uses a preallocated array.
-	/// </summary>
-	/// <param name="data">An array of UTF8 data. Must not be accessed after being used in this constructor.</param>
-	internal Utf8String(byte[] data)
+	public Utf8String(ReadOnlySpan<byte> data)
 	{
-		this.data = data;
-	}
-
-	public Utf8String(ReadOnlySpan<byte> data) : this (data.ToArray())
-	{
+		this.data = data.ToArray();
 	}
 
 	public Utf8String(string @string)
