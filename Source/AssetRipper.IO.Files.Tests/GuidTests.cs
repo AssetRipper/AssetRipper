@@ -37,14 +37,14 @@ namespace AssetRipper.IO.Files.Tests
 		public void IsZeroReturnsTrueForTheZeroGuid()
 		{
 			UnityGUID unityGUID = new UnityGUID(0, 0, 0, 0);
-			Assert.IsTrue(unityGUID.IsZero);
+			Assert.That(unityGUID.IsZero, Is.True);
 		}
 
 		[Test]
 		public void IsZeroReturnsFalseForRandomGuid()
 		{
 			UnityGUID unityGUID = UnityGUID.NewGuid();
-			Assert.IsFalse(unityGUID.IsZero);
+			Assert.That(unityGUID.IsZero, Is.False);
 		}
 
 		[Test]
@@ -85,16 +85,6 @@ namespace AssetRipper.IO.Files.Tests
 			UnityGUID tobyteArrayGuid = new UnityGUID(originalGuid.ToByteArray());
 			UnityGUID memoryMarshallGuid = new UnityGUID(MemoryMarshal.Cast<Guid, byte>(new ReadOnlySpan<Guid>(in originalGuid)));
 			Assert.That(memoryMarshallGuid, Is.EqualTo(tobyteArrayGuid));
-		}
-
-		private static string GetLongRandomString(int numSetsOf32Characters = 4)
-		{
-			StringBuilder sb = new(numSetsOf32Characters * 32);
-			for (int i = 0; i < numSetsOf32Characters; i++)
-			{
-				sb.Append(Guid.NewGuid().ToString());
-			}
-			return sb.ToString();
 		}
 	}
 }

@@ -44,8 +44,8 @@ namespace AssetRipper.IO.Files
 			//We only do it this way to efficiently get 16 random bytes.
 			//We don't care about official Guid validity because Unity does not care either.
 			Guid guid = Guid.NewGuid();
-			ReadOnlySpan<Guid> guidSpan = MemoryMarshal.CreateReadOnlySpan(ref guid, 1);
-			ReadOnlySpan<byte> byteSpan = MemoryMarshal.Cast<Guid, byte>(guidSpan);
+			ReadOnlySpan<Guid> guidSpan = new ReadOnlySpan<Guid>(in guid);
+			ReadOnlySpan<byte> byteSpan = MemoryMarshal.AsBytes(guidSpan);
 			return new UnityGUID(byteSpan);
 		}
 
