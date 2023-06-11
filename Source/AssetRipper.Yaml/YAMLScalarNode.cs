@@ -339,8 +339,6 @@ namespace AssetRipper.Yaml
 			return ScalarStyle.Plain;
 		}
 
-		public static YamlScalarNode Empty { get; } = new YamlScalarNode();
-
 		public override YamlNodeType NodeType => YamlNodeType.Scalar;
 		public override bool IsMultiline => false;
 		public override bool IsIndent => false;

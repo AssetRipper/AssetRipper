@@ -127,7 +127,7 @@ namespace AssetRipper.GUI.AssetInformation
 		}
 
 		//Read from UI
-		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", YamlScalarNode.Empty) };
+		public AssetYamlNode[] YamlTree { get; private set; } = { new("Tree loading...", new YamlScalarNode()) };
 
 		//Read from UI
 		public bool HasImageData => Asset is ITexture2D or ITerrainData;
