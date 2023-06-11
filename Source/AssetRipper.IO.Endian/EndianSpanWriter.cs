@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.IO.Endian;
+﻿using AssetRipper.Primitives;
+
+namespace AssetRipper.IO.Endian;
 
 public partial struct EndianSpanWriter
 {

@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.IO.Endian.Tests;
+﻿namespace AssetRipper.Primitives.Tests;
 
 public class Utf8StringTests
 {

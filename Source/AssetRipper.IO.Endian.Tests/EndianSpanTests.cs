@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using AssetRipper.Primitives;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.IO.Endian.Tests;
 

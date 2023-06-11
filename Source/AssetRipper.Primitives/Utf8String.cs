@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace AssetRipper.IO.Endian;
+namespace AssetRipper.Primitives;
 
 /// <summary>
 /// An immutable, thread-safe, representation of UTF8 text data.

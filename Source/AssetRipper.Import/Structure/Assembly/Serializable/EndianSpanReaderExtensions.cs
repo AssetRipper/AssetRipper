@@ -1,4 +1,5 @@
 ﻿using AssetRipper.IO.Endian;
+using AssetRipper.Primitives;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable;

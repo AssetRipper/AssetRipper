@@ -6,4 +6,8 @@
 		<IntermediateOutputPath>..\Bins\obj\AssetRipper.IO.Endian\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\AssetRipper.Primitives\AssetRipper.Primitives.csproj" />
+	</ItemGroup>
+
 </Project>
