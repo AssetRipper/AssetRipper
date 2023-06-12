@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
 
@@ -9,11 +8,11 @@ namespace AssetRipper.Assets.Metadata
 	public interface IPPtr
 	{
 		/// <summary>
-		/// 0 means current file
+		/// Zero means the asset is located within the current file.
 		/// </summary>
 		int FileID { get; set; }
 		/// <summary>
-		/// It is acts more like a hash in some cases
+		/// It is sometimes sequential and sometimes more like a hash. Zero signifies a null reference.
 		/// </summary>
 		long PathID { get; set; }
 	}
@@ -24,11 +23,12 @@ namespace AssetRipper.Assets.Metadata
 
 	public static class PPtrExtensions
 	{
+		//To do: move to source generation as an injected helper.
 		public static YamlNode ExportYaml<T>(this IPPtr<T> pptr, IExportContainer container, int classID) where T : IUnityObjectBase
 		{
 			if (pptr.IsNull())
 			{
-				return MetaPtr.NullPtr.ExportYaml(container);
+				return MetaPtr.NullPtr.ExportYaml();
 			}
 
 			T? asset = pptr.TryGetAsset(container);
@@ -36,12 +36,12 @@ namespace AssetRipper.Assets.Metadata
 			{
 				AssetType assetType = container.ToExportType(typeof(T));
 				MetaPtr pointer = MetaPtr.CreateMissingReference(classID, assetType);
-				return pointer.ExportYaml(container);
+				return pointer.ExportYaml();
 			}
 			else
 			{
 				MetaPtr exPointer = container.CreateExportPointer(asset);
-				return exPointer.ExportYaml(container);
+				return exPointer.ExportYaml();
 			}
 		}
 

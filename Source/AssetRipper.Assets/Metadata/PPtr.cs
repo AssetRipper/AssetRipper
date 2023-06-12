@@ -1,5 +1,10 @@
 ﻿namespace AssetRipper.Assets.Metadata;
 
+/// <summary>
+/// A Unity pointer to any type of object.
+/// </summary>
+/// <param name="FileID">Zero means the asset is located within the current file.</param>
+/// <param name="PathID">It is sometimes sequential and sometimes more like a hash. Zero signifies a null reference.</param>
 public readonly record struct PPtr(int FileID, long PathID)
 {
 	public PPtr(long PathID) : this(0, PathID) { }
@@ -12,6 +17,12 @@ public readonly record struct PPtr(int FileID, long PathID)
 	public static implicit operator PPtr<IUnityObjectBase>(PPtr pptr) => new PPtr<IUnityObjectBase>(pptr.FileID, pptr.PathID);
 }
 
+/// <summary>
+/// A Unity pointer to a specific type of object.
+/// </summary>
+/// <typeparam name="T">The type of object this references.</typeparam>
+/// <param name="FileID">Zero means the asset is located within the current file.</param>
+/// <param name="PathID">It is sometimes sequential and sometimes more like a hash. Zero signifies a null reference.</param>
 public readonly record struct PPtr<T>(int FileID, long PathID) where T : IUnityObjectBase
 {
 	public PPtr(long PathID) : this(0, PathID) { }

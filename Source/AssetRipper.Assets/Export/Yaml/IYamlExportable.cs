@@ -12,11 +12,7 @@ namespace AssetRipper.Assets.Export.Yaml
 	{
 		public static YamlNode ExportYaml(this IYamlExportable @this, IExportContainer container)
 		{
-			return @this.ExportYaml(container, container.ExportFlags);
-		}
-		public static YamlNode ExportYaml(this IYamlExportable @this, IExportContainer container, TransferInstructionFlags flags)
-		{
-			if (flags.IsRelease())
+			if (container.ExportFlags.IsRelease())
 			{
 				return @this.ExportYamlRelease(container);
 			}
