@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Subclasses.FastPropertyName;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
 namespace AssetRipper.Tests
 {
@@ -62,10 +62,7 @@ namespace AssetRipper.Tests
 			});
 		}
 
-		private static Utf8String Cast(string str)
-		{
-			return new() { String = str };
-		}
+		private static Utf8String Cast(string str) => str;
 
 		[Test]
 		public void FastPropertyNameDictionaryTests()
