@@ -51,7 +51,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			if (settings.Has_BuildTarget_Utf8String())
 			{
-				settings.BuildTarget_Utf8String.String = BuildGroupToString(buildTarget);
+				settings.BuildTarget_Utf8String = BuildGroupToString(buildTarget);
 			}
 			else
 			{

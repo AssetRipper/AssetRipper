@@ -2,12 +2,12 @@
 using AssetRipper.Export.UnityProjects.Meshes;
 using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Export.UnityProjects.Utils;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.UnityTexEnv;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using SharpGLTF.Materials;
 using SharpGLTF.Memory;
 

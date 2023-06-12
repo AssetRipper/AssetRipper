@@ -3,6 +3,7 @@ using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project.Collections;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_1042;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
@@ -10,7 +11,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_27;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Font;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Miscellaneous
@@ -40,10 +40,10 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			instance.Style_C1042 = (int)origin.GetDefaultStyle();
 			if (origin.FontNames_C128.Count > 0)
 			{
-				instance.FontName_C1042?.CopyValues(origin.FontNames_C128[0]);
+				instance.FontName_C1042 = origin.FontNames_C128[0];
 				foreach (Utf8String name in origin.FontNames_C128)
 				{
-					instance.FontNames_C1042.AddNew().CopyValues(name);
+					instance.FontNames_C1042.Add(name);
 				}
 			}
 			if (origin.Has_FallbackFonts_C128() && instance.Has_FallbackFontReferences_C1042())
@@ -63,7 +63,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			instance.ShouldRoundAdvanceValue_C1042 = origin.ShouldRoundAdvanceValue_C128;
 			if (instance.Has_AssetBundleName_C1042() && origin.AssetBundleName is not null)
 			{
-				instance.AssetBundleName_C1042.String = origin.AssetBundleName;
+				instance.AssetBundleName_C1042 = origin.AssetBundleName;
 			}
 			return instance;
 		}

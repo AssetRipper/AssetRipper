@@ -4,14 +4,12 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
-using AssetRipper.IO.Files;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Diagnostics;
 
 namespace AssetRipper.Processing.Scenes

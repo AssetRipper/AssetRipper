@@ -8,6 +8,7 @@ using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.Primitives;
 using AssetRipper.Processing.AnimationClips;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_129;
@@ -28,7 +29,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_78;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Object;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
 namespace AssetRipper.Processing
 {

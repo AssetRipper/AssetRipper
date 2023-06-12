@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
 using AssetRipper.SourceGenerated.Classes.ClassID_188;
@@ -42,7 +43,7 @@ namespace AssetRipper.Export.UnityProjects
 			if (mesh.Has_StreamData_C43())
 			{
 				ulong offset = mesh.StreamData_C43.GetOffset();
-				byte[] path = mesh.StreamData_C43.Path.Data;
+				Utf8String path = mesh.StreamData_C43.Path;
 				uint size = mesh.StreamData_C43.Size;
 				if (mesh.VertexData_C43 is not null && mesh.VertexData_C43.Data.Length == 0 && mesh.StreamData_C43.IsSet())
 				{
@@ -57,7 +58,7 @@ namespace AssetRipper.Export.UnityProjects
 					result = base.ExportInner(container, filePath, dirPath);
 				}
 				mesh.StreamData_C43.SetOffset(offset);
-				mesh.StreamData_C43.Path.Data = path;
+				mesh.StreamData_C43.Path = path;
 				mesh.StreamData_C43.Size = size;
 			}
 			else
@@ -77,7 +78,7 @@ namespace AssetRipper.Export.UnityProjects
 			if (texture.Has_StreamData_C28())
 			{
 				ulong offset = texture.StreamData_C28.GetOffset();
-				byte[] path = texture.StreamData_C28.Path.Data;
+				Utf8String path = texture.StreamData_C28.Path;
 				uint size = texture.StreamData_C28.Size;
 				if (texture.ImageData_C28.Length == 0 && texture.StreamData_C28.IsSet())
 				{
@@ -92,7 +93,7 @@ namespace AssetRipper.Export.UnityProjects
 					result = base.ExportInner(container, filePath, dirPath);
 				}
 				texture.StreamData_C28.SetOffset(offset);
-				texture.StreamData_C28.Path.Data = path;
+				texture.StreamData_C28.Path = path;
 				texture.StreamData_C28.Size = size;
 			}
 			else
@@ -109,7 +110,7 @@ namespace AssetRipper.Export.UnityProjects
 			if (texture.Has_StreamData_C117())
 			{
 				ulong offset = texture.StreamData_C117.GetOffset();
-				byte[] path = texture.StreamData_C117.Path.Data;
+				Utf8String path = texture.StreamData_C117.Path;
 				uint size = texture.StreamData_C117.Size;
 				if (texture.ImageData_C117.Length == 0 && texture.StreamData_C117.IsSet())
 				{
@@ -124,7 +125,7 @@ namespace AssetRipper.Export.UnityProjects
 					result = base.ExportInner(container, filePath, dirPath);
 				}
 				texture.StreamData_C117.SetOffset(offset);
-				texture.StreamData_C117.Path.Data = path;
+				texture.StreamData_C117.Path = path;
 				texture.StreamData_C117.Size = size;
 			}
 			else
@@ -141,7 +142,7 @@ namespace AssetRipper.Export.UnityProjects
 			if (texture.Has_StreamData_C187())
 			{
 				ulong offset = texture.StreamData_C187.GetOffset();
-				byte[] path = texture.StreamData_C187.Path.Data;
+				Utf8String path = texture.StreamData_C187.Path;
 				uint size = texture.StreamData_C187.Size;
 				if (texture.ImageData_C187.Length == 0 && texture.StreamData_C187.IsSet())
 				{
@@ -156,7 +157,7 @@ namespace AssetRipper.Export.UnityProjects
 					result = base.ExportInner(container, filePath, dirPath);
 				}
 				texture.StreamData_C187.SetOffset(offset);
-				texture.StreamData_C187.Path.Data = path;
+				texture.StreamData_C187.Path = path;
 				texture.StreamData_C187.Size = size;
 			}
 			else
@@ -173,7 +174,7 @@ namespace AssetRipper.Export.UnityProjects
 			if (texture.Has_StreamData_C188())
 			{
 				ulong offset = texture.StreamData_C188.GetOffset();
-				byte[] path = texture.StreamData_C188.Path.Data;
+				Utf8String path = texture.StreamData_C188.Path;
 				uint size = texture.StreamData_C188.Size;
 				if (texture.ImageData_C188.Length == 0 && texture.StreamData_C188.IsSet())
 				{
@@ -188,7 +189,7 @@ namespace AssetRipper.Export.UnityProjects
 					result = base.ExportInner(container, filePath, dirPath);
 				}
 				texture.StreamData_C188.SetOffset(offset);
-				texture.StreamData_C188.Path.Data = path;
+				texture.StreamData_C188.Path = path;
 				texture.StreamData_C188.Size = size;
 			}
 			else

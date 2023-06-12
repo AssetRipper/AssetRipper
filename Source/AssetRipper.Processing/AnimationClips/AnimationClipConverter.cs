@@ -25,6 +25,7 @@ using AssetRipper.SourceGenerated.Subclasses.PPtrKeyframe;
 using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
 using AssetRipper.SourceGenerated.Subclasses.StreamedClip;
 using AssetRipper.SourceGenerated.Subclasses.Vector3Curve;
+using System.Runtime.InteropServices;
 
 namespace AssetRipper.Processing.AnimationClips
 {
@@ -152,7 +153,7 @@ namespace AssetRipper.Processing.AnimationClips
 					int framePosition = frameOffset + curveIndex;
 					if (binding.IsTransform())
 					{
-						AddTransformCurve(time, binding.TransformType(), dense.SampleArray, slopeValues, slopeValues, framePosition, path);
+						AddTransformCurve(time, binding.TransformType(), dense.SampleArray.ToArray(), slopeValues, slopeValues, framePosition, path);
 						curveIndex += binding.TransformType().GetDimension();
 					}
 					else if (binding.CustomType == (byte)BindingCustomType.None)
@@ -179,14 +180,14 @@ namespace AssetRipper.Processing.AnimationClips
 			float time = 0.0f;
 			for (int i = 0; i < 2; i++, time += lastFrame)
 			{
-				for (int curveIndex = 0; curveIndex < constant.Data.Length;)
+				for (int curveIndex = 0; curveIndex < constant.Data.Count;)
 				{
 					int index = streamCount + denseCount + curveIndex;
 					IGenericBinding binding = bindings.FindBinding(index);
 					string path = GetCurvePath(tos, binding.Path);
 					if (binding.IsTransform())
 					{
-						AddTransformCurve(time, binding.TransformType(), constant.Data, slopeValues, slopeValues, curveIndex, path);
+						AddTransformCurve(time, binding.TransformType(), constant.Data.ToArray(), slopeValues, slopeValues, curveIndex, path);
 						curveIndex += binding.TransformType().GetDimension();
 					}
 					else if (binding.CustomType == (byte)BindingCustomType.None)
@@ -471,8 +472,8 @@ namespace AssetRipper.Processing.AnimationClips
 			if (!m_floats.TryGetValue(curveData, out IFloatCurve? curve))
 			{
 				curve = m_clip.FloatCurves_C74.AddNew();
-				curve.Path.String = curveData.Path;
-				curve.Attribute.String = curveData.Attribute;
+				curve.Path = curveData.Path;
+				curve.Attribute = curveData.Attribute;
 				curve.ClassID = (int)curveData.ClassID;
 				curve.Script.CopyValues(curveData.Script);
 				curve.Curve.SetDefaultRotationOrderAndCurveLoopType();
@@ -492,8 +493,8 @@ namespace AssetRipper.Processing.AnimationClips
 					return;
 				}
 				curve = m_clip.PPtrCurves_C74.AddNew();
-				curve.Path.String = curveData.Path;
-				curve.Attribute.String = curveData.Attribute;
+				curve.Path = curveData.Path;
+				curve.Attribute = curveData.Attribute;
 				curve.ClassID = (int)curveData.ClassID;
 				curve.Script.CopyValues(curveData.Script);
 				m_pptrs.Add(curveData, curve);
@@ -552,8 +553,12 @@ namespace AssetRipper.Processing.AnimationClips
 		public IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(StreamedClip clip)
 		{
 			List<StreamedFrame> frames = new List<StreamedFrame>();
-			byte[] memStreamBuffer = new byte[clip.Data.Length * sizeof(uint)];
-			Buffer.BlockCopy(clip.Data, 0, memStreamBuffer, 0, memStreamBuffer.Length);
+			byte[] memStreamBuffer = new byte[clip.Data.Count * sizeof(uint)];
+			{
+				Span<uint> span = MemoryMarshal.Cast<byte, uint>(memStreamBuffer);
+				clip.Data.CopyTo(span);
+			}
+
 			using MemoryStream stream = new MemoryStream(memStreamBuffer);
 			using AssetReader reader = new AssetReader(stream, m_clip.Collection);
 			while (reader.BaseStream.Position < reader.BaseStream.Length)

@@ -73,7 +73,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			stateMachine.ParentStateMachinePosition_C1107.SetValues(800.0f, 20.0f, 0.0f);//not sure why this happens here
 
-			animatorControllerLayer.Name.CopyValues(controller.TOS_C91[layer.Binding]);
+			animatorControllerLayer.Name = controller.TOS_C91[layer.Binding];
 
 			animatorControllerLayer.StateMachine.SetAsset(controller.Collection, stateMachine);
 
@@ -91,24 +91,24 @@ namespace AssetRipper.Processing.AnimatorControllers
 		private static void InitializeParameter(IAnimatorControllerParameter parameter, IAnimatorController controller, int paramIndex)
 		{
 			IValueConstant value = controller.Controller_C91.Values.Data.ValueArray[paramIndex];
-			parameter.Name.CopyValues(controller.TOS_C91[value.ID]);
+			parameter.Name = controller.TOS_C91[value.ID];
 			AnimatorControllerParameterType type = value.GetTypeValue();
 			switch (type)
 			{
 				case AnimatorControllerParameterType.Trigger:
-					parameter.DefaultBool = controller.Controller_C91.DefaultValues.Data.BoolValues[value.Index];
+					parameter.DefaultBool = controller.Controller_C91.DefaultValues.Data.BoolValues[(int)value.Index];
 					break;
 
 				case AnimatorControllerParameterType.Bool:
-					parameter.DefaultBool = controller.Controller_C91.DefaultValues.Data.BoolValues[value.Index];
+					parameter.DefaultBool = controller.Controller_C91.DefaultValues.Data.BoolValues[(int)value.Index];
 					break;
 
 				case AnimatorControllerParameterType.Int:
-					parameter.DefaultInt = controller.Controller_C91.DefaultValues.Data.IntValues[value.Index];
+					parameter.DefaultInt = controller.Controller_C91.DefaultValues.Data.IntValues[(int)value.Index];
 					break;
 
 				case AnimatorControllerParameterType.Float:
-					parameter.DefaultFloat = controller.Controller_C91.DefaultValues.Data.FloatValues[value.Index];
+					parameter.DefaultFloat = controller.Controller_C91.DefaultValues.Data.FloatValues[(int)value.Index];
 					break;
 
 				default:

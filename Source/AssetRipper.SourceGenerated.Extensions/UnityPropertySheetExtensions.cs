@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets.Utils;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Subclasses.UnityPropertySheet;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

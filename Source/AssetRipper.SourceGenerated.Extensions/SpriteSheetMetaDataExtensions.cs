@@ -44,7 +44,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			if (instance.Has_SpriteID() && spriteMetaData.Has_SpriteID())
 			{
-				instance.SpriteID.CopyValues(instance.SpriteID);
+				instance.SpriteID = spriteMetaData.SpriteID;
 			}
 			if (instance.Has_Vertices() && spriteMetaData.Has_Vertices())
 			{
@@ -57,7 +57,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			if (instance.Has_Indices() && spriteMetaData.Has_Indices())
 			{
-				instance.Indices = spriteMetaData.Indices.ToArray();
+				instance.Indices.Clear();
+				instance.Indices.AddRange(spriteMetaData.Indices);
 			}
 			if (instance.Has_Edges() && spriteMetaData.Has_Edges())
 			{

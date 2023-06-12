@@ -75,7 +75,7 @@ namespace AssetRipper.Processing.PrefabOutlining
 			IGameObject root = CreateNewGameObject(collection);
 			root.NameString = name;
 			root.SetIsActive(true);
-			root.TagString_C1.String = TagManagerConstants.UntaggedTag;
+			root.TagString_C1 = TagManagerConstants.UntaggedTag;
 
 			ITransform rootTransform = CreateNewTransform(collection);
 			rootTransform.GameObject_C4P = root;
@@ -87,7 +87,7 @@ namespace AssetRipper.Processing.PrefabOutlining
 			IGameObject child = CreateNewGameObject(collection);
 			child.NameString = "This prefab is a placeholder until AssetRipper improves.";
 			child.SetIsActive(true);
-			child.TagString_C1.String = TagManagerConstants.UntaggedTag;
+			child.TagString_C1 = TagManagerConstants.UntaggedTag;
 
 			ITransform childTransform = CreateNewTransform(collection);
 			childTransform.GameObject_C4P = child;

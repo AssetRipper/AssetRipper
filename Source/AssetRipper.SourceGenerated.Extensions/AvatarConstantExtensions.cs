@@ -1,4 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.AvatarConstant;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.SourceGenerated.Subclasses.AvatarConstant;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_SkeletonPose;
 
 namespace AssetRipper.SourceGenerated.Extensions
@@ -10,14 +11,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return constant.Has_DefaultPose() ? constant.DefaultPose : constant.SkeletonPose;
 		}
 
-		public static uint[] GetSkeletonNameIDArray(this IAvatarConstant constant)
+		public static AssetList<uint> GetSkeletonNameIDArray(this IAvatarConstant constant)
 		{
 			return constant.Has_SkeletonNameIDArray() ? constant.SkeletonNameIDArray : constant.Skeleton.Data.ID;
-		}
-
-		public static int[] GetRootMotionSkeletonIndexArray(this IAvatarConstant constant)
-		{
-			return constant.RootMotionSkeletonIndexArray ?? Array.Empty<int>();
 		}
 	}
 }

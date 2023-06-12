@@ -53,7 +53,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			instance.TextureShape_C1006E = data.TextureShape;
 
 			ITextureImporterPlatformSettings platformSettings = instance.PlatformSettings_C1006.AddNew();
-			platformSettings.BuildTarget.String = "DefaultTexturePlatform";
+			platformSettings.BuildTarget = "DefaultTexturePlatform";
 			platformSettings.MaxTextureSize = instance.MaxTextureSize_C1006;
 			platformSettings.ResizeAlgorithm = (int)TextureResizeAlgorithm.Mitchell;
 			platformSettings.Format = (int)TextureImporterFormat.Automatic;
@@ -67,7 +67,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 			if (instance.Has_AssetBundleName_C1006() && origin.AssetBundleName is not null)
 			{
-				instance.AssetBundleName_C1006.String = origin.AssetBundleName;
+				instance.AssetBundleName_C1006 = origin.AssetBundleName;
 			}
 
 			return instance;
@@ -182,7 +182,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			instance.StreamingMipmapsPriority_C1055 = origin.StreamingMipmapsPriority_C28;
 			if (origin.AssetBundleName is not null)
 			{
-				instance.AssetBundleName_C1055.String = origin.AssetBundleName;
+				instance.AssetBundleName_C1055 = origin.AssetBundleName;
 			}
 			return instance;
 		}

@@ -12,10 +12,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			if (destination.Has_Guid() && source.Has_Guid())
 			{
-				destination.Guid.CopyValues(source.Guid);
+				destination.Guid = source.Guid;
 			}
 			destination.Length = source.Length;
-			destination.Name_R.CopyValues(source.Name_R);
+			destination.Name = source.Name;
 			destination.ParentId = source.ParentId;
 			destination.Position.CopyValues(source.Position);
 			destination.Rotation.CopyValues(source.Rotation);

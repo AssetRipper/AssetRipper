@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.Export.UnityProjects.Utils;
@@ -56,9 +57,9 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 
 		public static byte[] GetBGRA32Data(ITerrainData terrain)
 		{
-			short[] heights = terrain.Heightmap_C156.Heights;
-			byte[] result = new byte[heights.Length * 4];
-			for (int y = 0; y < heights.Length; y++)
+			AssetList<short> heights = terrain.Heightmap_C156.Heights;
+			byte[] result = new byte[heights.Count * 4];
+			for (int y = 0; y < heights.Count; y++)
 			{
 				Color32 color = (Color32)ConvertToColor((float)heights[y] / short.MaxValue);
 				result[4 * y] = color.B;

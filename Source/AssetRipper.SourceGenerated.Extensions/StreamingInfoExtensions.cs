@@ -1,12 +1,13 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.IO.Files.ResourceFiles;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Subclasses.StreamingInfo;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class StreamingInfoExtensions
 	{
-		public static bool IsSet(this IStreamingInfo streamingInfo) => !streamingInfo.Path.Data.IsNullOrEmpty();
+		public static bool IsSet(this IStreamingInfo streamingInfo) => streamingInfo.Path.Data.Length > 0;
 
 		public static bool CheckIntegrity(this IStreamingInfo streamingInfo, AssetCollection file)
 		{
@@ -52,14 +53,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			destination.SetOffset(source.GetOffset());
 			destination.Size = source.Size;
-			destination.Path.String = source.Path.String;
+			destination.Path = source.Path;
 		}
 
 		public static void ClearValues(this IStreamingInfo streamingInfo)
 		{
 			streamingInfo.Offset_UInt32 = default;
 			streamingInfo.Offset_UInt64 = default;
-			streamingInfo.Path.Data = Array.Empty<byte>();
+			streamingInfo.Path = Utf8String.Empty;
 			streamingInfo.Size = default;
 		}
 	}

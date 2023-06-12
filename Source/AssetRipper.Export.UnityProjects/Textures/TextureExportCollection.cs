@@ -4,6 +4,7 @@ using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.Project.Collections;
+using AssetRipper.Primitives;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;
@@ -13,7 +14,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Textures
@@ -180,7 +180,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 						smeta.InternalID = exportID;
 						AssetPair<AssetPair<int, long>, Utf8String> pair = importer.InternalIDToNameTable_C1006.AddNew();
 						pair.Key.Set((int)ClassIDType.Sprite, exportID);
-						pair.Value.CopyValues(sprite.Name);
+						pair.Value = sprite.Name;
 					}
 				}
 				else if (importer.Has_FileIDToRecycleName_C1006_AssetDictionary_Int64_Utf8String())

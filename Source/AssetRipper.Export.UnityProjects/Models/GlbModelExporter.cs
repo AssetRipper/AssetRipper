@@ -201,13 +201,13 @@ namespace AssetRipper.Export.UnityProjects.Models
 		private static bool ReferencesDynamicMesh(IMeshRenderer renderer)
 		{
 			return (renderer.Has_StaticBatchInfo_C23() && renderer.StaticBatchInfo_C23.SubMeshCount == 0)
-				|| (renderer.Has_SubsetIndices_C23() && renderer.SubsetIndices_C23.Length == 0);
+				|| (renderer.Has_SubsetIndices_C23() && renderer.SubsetIndices_C23.Count == 0);
 		}
 
 		private static bool ReferencesDynamicMesh(ISkinnedMeshRenderer renderer)
 		{
 			return (renderer.Has_StaticBatchInfo_C137() && renderer.StaticBatchInfo_C137.SubMeshCount == 0)
-				|| (renderer.Has_SubsetIndices_C137() && renderer.SubsetIndices_C137.Length == 0);
+				|| (renderer.Has_SubsetIndices_C137() && renderer.SubsetIndices_C137.Count == 0);
 		}
 
 		private static int[] GetSubsetIndices(IMeshRenderer renderer)

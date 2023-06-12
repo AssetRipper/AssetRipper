@@ -41,7 +41,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		public static void ConvertToEditorFormat(this IGameObject gameObject, ITagManager? tagManager)
 		{
 			gameObject.SetIsActive(gameObject.ShouldBeActive());
-			gameObject.TagString_C1.String = tagManager.TagIDToName(gameObject.Tag_C1);
+			gameObject.TagString_C1 = tagManager.TagIDToName(gameObject.Tag_C1);
 		}
 
 		public static IEnumerable<IPPtr_Component> FetchComponents(this IGameObject gameObject)

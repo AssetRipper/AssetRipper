@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Export.UnityProjects.Meshes;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
@@ -101,7 +102,7 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 		{
 			int width = Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution);
 			int height = Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution);
-			short[] heights = terrain.Heightmap_C156.Heights;
+			AssetList<short> heights = terrain.Heightmap_C156.Heights;
 			float[,] result = new float[width, height];
 			for (int y = 0; y < height; y++)
 			{

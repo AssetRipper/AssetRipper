@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_47;
 using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -35,8 +35,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static void Add(this AssetDictionary<Utf8String, int> dictionary, BuildTargetGroup buildTargetGroup, QualityLevel qualityLevel)
 		{
-			Utf8String str = new();
-			str.String = buildTargetGroup.ToExportString();
+			Utf8String str = buildTargetGroup.ToExportString();
 			dictionary.Add(str, (int)qualityLevel);
 		}
 	}

@@ -57,7 +57,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			settings.ExportTrainingData = false;
 			if (settings.Has_TrainingDataDestination())
 			{
-				settings.TrainingDataDestination.String = "TrainingData";
+				settings.TrainingDataDestination = "TrainingData";
 			}
 			settings.LightProbeSampleCountMultiplier = 4.0f;
 		}

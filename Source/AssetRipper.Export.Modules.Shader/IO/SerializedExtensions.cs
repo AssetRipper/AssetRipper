@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
@@ -15,7 +16,6 @@ using AssetRipper.SourceGenerated.Subclasses.SerializedStencilOp;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedTagMap;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Globalization;
 
 namespace AssetRipper.Export.Modules.Shaders.IO

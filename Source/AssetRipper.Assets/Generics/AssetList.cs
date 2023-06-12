@@ -122,6 +122,11 @@
 			Array.Copy(items, 0, array, arrayIndex, count);
 		}
 
+		public void CopyTo(Span<T> destination)
+		{
+			new ReadOnlySpan<T>(items, 0, count).CopyTo(destination);
+		}
+
 		/// <inheritdoc/>
 		public override int IndexOf(T item) => Array.IndexOf(items, item, 0, count);
 
@@ -175,8 +180,6 @@
 			}
 			items[count] = default!;
 		}
-
-		public Span<T> AsSpan() => items.AsSpan(0, count);
 
 		/// <summary>
 		/// Ensures that the capacity of this list is at least the specified <paramref name="capacity"/>.

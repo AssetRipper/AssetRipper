@@ -25,7 +25,6 @@ using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.Parameter;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AudioMixerSnapshot;
 using AssetRipper.SourceGenerated.Subclasses.SnapshotConstant;
-using Utf8String = AssetRipper.SourceGenerated.Subclasses.Utf8String.Utf8String;
 
 namespace AssetRipper.Processing.AudioMixers
 {
@@ -138,12 +137,12 @@ namespace AssetRipper.Processing.AudioMixers
 
 				if (AudioEffectDefinitions.IsPluginEffect(effectConstant.Type))
 				{
-					effect.EffectName_C244.CopyValues(pluginEffectNames[pluginEffectIndex++]);
+					effect.EffectName_C244 = pluginEffectNames[pluginEffectIndex++];
 				}
 				else
 				{
 					string name = AudioEffectDefinitions.EffectTypeToName(effectConstant.Type) ?? "Unknown";
-					effect.EffectName_C244.String = name;
+					effect.EffectName_C244 = name;
 					if (name == "Attenuation")
 					{
 						groupsWithAttenuation.Add(group);
@@ -156,11 +155,11 @@ namespace AssetRipper.Processing.AudioMixers
 					effect.MixLevel_C244.CopyValues(indexToGuid.IndexNewGuid(effectConstant.WetMixLevelIndex));
 				}
 
-				for (int j = 0; j < effectConstant.ParameterIndices.Length; j++)
+				for (int j = 0; j < effectConstant.ParameterIndices.Count; j++)
 				{
 					Parameter param = effect.Parameters_C244.AddNew();
 					// Use a dummy name here. The actual name will be recovered by AssetRipperAudioMixerPostprocessor.
-					param.ParameterName.String = $"Param_{j}";
+					param.ParameterName = $"Param_{j}";
 					param.GUID.CopyValues(indexToGuid.IndexNewGuid(effectConstant.ParameterIndices[j]));
 				}
 
@@ -181,7 +180,7 @@ namespace AssetRipper.Processing.AudioMixers
 					IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
 					effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 					effect.EffectID_C244.CopyValues(UnityGUID.NewGuid());
-					effect.EffectName_C244.String = "Attenuation";
+					effect.EffectName_C244 = "Attenuation";
 					effect.MainAsset = mixer;
 
 					group.Effects_C243P.Add(effect);
@@ -208,9 +207,9 @@ namespace AssetRipper.Processing.AudioMixers
 				if (snapshot is IAudioMixerSnapshotController snapshotController)
 				{
 					SnapshotConstant snapshotConstant = constants.Snapshots[i];
-					for (uint j = 0; j < snapshotConstant.Values.Length; j++)
+					for (int j = 0; j < snapshotConstant.Values.Count; j++)
 					{
-						if (indexToGuid.TryGetValue(j, out UnityGUID valueGuid))
+						if (indexToGuid.TryGetValue((uint)j, out UnityGUID valueGuid))
 						{
 							snapshotController.FloatValues_C245[(GUID)valueGuid] = snapshotConstant.Values[j];
 						}
@@ -220,7 +219,7 @@ namespace AssetRipper.Processing.AudioMixers
 						}
 					}
 
-					for (int j = 0; j < snapshotConstant.TransitionIndices.Length; j++)
+					for (int j = 0; j < snapshotConstant.TransitionIndices.Count; j++)
 					{
 						uint paramIndex = snapshotConstant.TransitionIndices[j];
 						int transitionType = (int)snapshotConstant.TransitionTypes[j];
@@ -245,7 +244,7 @@ namespace AssetRipper.Processing.AudioMixers
 			IAudioMixerConstant constants = mixer.MixerConstant_C240;
 			// generate exposed parameters
 			mixer.ExposedParameters_C241.Clear();
-			for (int i = 0; i < constants.ExposedParameterIndices.Length; i++)
+			for (int i = 0; i < constants.ExposedParameterIndices.Count; i++)
 			{
 				uint paramIndex = constants.ExposedParameterIndices[i];
 				uint paramNameCrc = constants.ExposedParameterNames[i];
@@ -283,8 +282,7 @@ namespace AssetRipper.Processing.AudioMixers
 				int start = offset;
 				while (buffer[++offset] != 0) { }
 
-				byte[] utf8Data = buffer[start..offset].ToArray();
-				names[index] = new Utf8String { Data = utf8Data };
+				names[index] = new Utf8String(buffer[start..offset]);
 
 				index++;
 				offset++;

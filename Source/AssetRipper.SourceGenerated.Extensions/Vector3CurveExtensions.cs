@@ -6,7 +6,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void SetValues(this IVector3Curve curve, string path)
 		{
-			curve.Path.String = path;
+			curve.Path = path;
 			curve.Curve.SetDefaultRotationOrderAndCurveLoopType();
 		}
 	}

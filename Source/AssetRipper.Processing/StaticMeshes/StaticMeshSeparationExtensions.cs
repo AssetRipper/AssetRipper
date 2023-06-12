@@ -18,7 +18,7 @@ namespace AssetRipper.Processing.StaticMeshes
 		private static bool ReferencesDynamicMesh(this IRenderer renderer)
 		{
 			return renderer.Has_StaticBatchInfo_C25() && renderer.StaticBatchInfo_C25.SubMeshCount == 0
-				|| renderer.Has_SubsetIndices_C25() && renderer.SubsetIndices_C25.Length == 0;
+				|| renderer.Has_SubsetIndices_C25() && renderer.SubsetIndices_C25.Count == 0;
 		}
 
 		public static IReadOnlyList<uint> GetSubmeshIndices(this IRenderer renderer)
@@ -51,7 +51,7 @@ namespace AssetRipper.Processing.StaticMeshes
 			}
 			else if (renderer.Has_SubsetIndices_C25())
 			{
-				renderer.SubsetIndices_C25 = Array.Empty<uint>();
+				renderer.SubsetIndices_C25.Clear();
 			}
 			renderer.StaticBatchRoot_C25P = null;
 		}

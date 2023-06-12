@@ -95,7 +95,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			importer.MainObjectFileID_C1034 = GetExportID(Asset);
 			if (importer.Has_AssetBundleName_C1034() && Asset.AssetBundleName is not null)
 			{
-				importer.AssetBundleName_C1034.String = Asset.AssetBundleName;
+				importer.AssetBundleName_C1034 = Asset.AssetBundleName;
 			}
 			return importer;
 		}

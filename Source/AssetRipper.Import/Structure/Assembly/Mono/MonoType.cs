@@ -68,6 +68,13 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 					{
 						fieldType = SerializablePointerType.Shared;
 					}
+					else if (MonoUtils.IsPropertyName(typeDefinition))
+					{
+						//In the managed editor code, PropertyName is only backed by an int ID field.
+						//However, in yaml and release binaries, it appears identical to Utf8String.
+						//Presumably, editor binaries are the same, but this was not verified.
+						fieldType = SerializablePrimitiveType.GetOrCreate(PrimitiveType.String);
+					}
 					else if (typeCache.TryGetValue(typeDefinition, out MonoType? cachedMonoType))
 					{
 						//This needs to come after the InheritsFromObject check so that those fields get properly converted into PPtr assets.

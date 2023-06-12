@@ -109,7 +109,7 @@ namespace AssetRipper.Processing.Textures
 						foreach (SecondarySpriteTexture spt in spriteData.SecondaryTextures)
 						{
 							SecondarySpriteTexture newSpt = m_RD.SecondaryTextures.AddNew();
-							newSpt.Name.CopyValues(spt.Name);
+							newSpt.Name = spt.Name;
 							newSpt.Texture.CopyValues(spt.Texture, converter);
 						}
 					}

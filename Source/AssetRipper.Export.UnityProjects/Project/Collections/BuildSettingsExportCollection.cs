@@ -62,7 +62,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 				string scenePath = buildSettings.Scenes_C141[i].String;
 				IScene scene = editorBuildSettings.Scenes_C1045.AddNew();
 				scene.Enabled = true;
-				scene.Path.String = scenePath;
+				scene.Path = scenePath;
 				if (scene.Has_Guid())
 				{
 					scene.Guid.CopyValues(container.SceneNameToGUID(scenePath));

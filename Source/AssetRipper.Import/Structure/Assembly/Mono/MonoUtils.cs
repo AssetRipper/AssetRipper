@@ -404,6 +404,13 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			return false;
 		}
 
+
+		public static bool IsPropertyName(ITypeDefOrRef type) => IsPropertyName(type.Namespace, type.Name);
+		public static bool IsPropertyName(string? @namespace, string? name)
+		{
+			return @namespace is UnityEngineNamespace && name is PropertyNameName;
+		}
+
 		public static bool IsExposedReference(ITypeDefOrRef type) => IsExposedReference(type.Namespace, type.Name);
 		public static bool IsExposedReference(string? @namespace, string? name)
 		{

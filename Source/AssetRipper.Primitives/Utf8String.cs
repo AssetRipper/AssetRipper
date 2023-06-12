@@ -49,6 +49,8 @@ public sealed class Utf8String : IEquatable<Utf8String>
 		}
 	}
 
+	public bool IsEmpty => data.Length == 0;
+
 	public override string ToString() => String;
 
 	public override int GetHashCode()

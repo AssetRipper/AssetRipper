@@ -9,8 +9,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void SetValues(this IPPtrCurve curve, AssetCollection collection, string path, string attribute, ClassIDType classID, IMonoScript script)
 		{
-			curve.Path.String = path;
-			curve.Attribute.String = attribute;
+			curve.Path = path;
+			curve.Attribute = attribute;
 			curve.ClassID = (int)classID;
 			curve.Script.SetAsset(collection, script);
 		}

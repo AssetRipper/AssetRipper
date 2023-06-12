@@ -27,7 +27,6 @@ using AssetRipper.SourceGenerated.Subclasses.Matrix4x4f;
 using AssetRipper.SourceGenerated.Subclasses.Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.Rectf;
 using AssetRipper.SourceGenerated.Subclasses.RectOffset;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.SourceGenerated.Subclasses.Vector2Int;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
@@ -211,10 +210,7 @@ namespace AssetRipper.Import.AssetCreation
 				MonoUtils.GradientName => GradientFactory.CreateAsset(version),
 				MonoUtils.RectOffsetName => RectOffsetFactory.CreateAsset(),
 				MonoUtils.GUIStyleName => GUIStyleFactory.CreateAsset(version),
-				//In the managed editor code, PropertyName is only backed by an int ID field.
-				//However, in yaml and release binaries, it appears identical to Utf8String.
-				//Presumably, editor binaries are the same, but this was not verified.
-				MonoUtils.PropertyNameName => Utf8StringFactory.CreateAsset(),
+				MonoUtils.PropertyNameName => throw new NotSupportedException("PropertyName should be treated as a normal string elsewhere in the codebase, currently MonoType."),
 				_ => throw new NotSupportedException(name),
 			};
 		}

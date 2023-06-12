@@ -18,7 +18,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset is ITextAsset textAsset && !textAsset.Script_C49.Data.IsNullOrEmpty())
+			if (asset is ITextAsset textAsset && !textAsset.Script_C49.IsEmpty)
 			{
 				exportCollection = new TextAssetExportCollection(this, asset);
 				return true;
@@ -32,7 +32,9 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			File.WriteAllBytes(path, ((ITextAsset)asset).Script_C49.Data);
+			using FileStream stream = File.OpenWrite(path);
+			stream.Write(((ITextAsset)asset).Script_C49.Data);
+			stream.Flush();
 			return true;
 		}
 	}

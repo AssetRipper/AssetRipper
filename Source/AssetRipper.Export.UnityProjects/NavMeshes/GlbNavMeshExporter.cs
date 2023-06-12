@@ -57,15 +57,15 @@ namespace AssetRipper.Export.UnityProjects.NavMeshes
 			
 			foreach (IHeightMeshData heightMeshData in asset.HeightMeshes_C238)
 			{
-				int[] indices = heightMeshData.Indices;
-				if (indices.Length % 3 != 0)
+				AssetList<int> indices = heightMeshData.Indices;
+				if (indices.Count % 3 != 0)
 				{
 					throw new Exception("Height mesh must be triangles.");
 				}
 
 				AssetList<Vector3f> vertices = heightMeshData.Vertices;
 
-				for (int i = 0; i < indices.Length; i += 3)
+				for (int i = 0; i < indices.Count; i += 3)
 				{
 					primitiveBuilder.AddTriangle(
 						FromVector(vertices[indices[i + 2]]),

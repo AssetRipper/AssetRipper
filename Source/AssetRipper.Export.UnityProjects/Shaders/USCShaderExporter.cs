@@ -13,6 +13,7 @@ using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.IO.Files;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
@@ -23,7 +24,6 @@ using AssetRipper.SourceGenerated.Subclasses.SerializedProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubShader;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
 namespace AssetRipper.Export.UnityProjects.Shaders
 {
@@ -597,12 +597,12 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				}
 
 				// skip instanced shaders
-				Utf8String INSTANCING_ON = (Utf8String)"INSTANCING_ON";
+				Utf8String INSTANCING_ON = "INSTANCING_ON"u8;
 				if (pass.NameIndices.ContainsKey(INSTANCING_ON))
 				{
 					if (subProgram.GlobalKeywordIndices != null)
 					{
-						for (int j = 0; j < subProgram.GlobalKeywordIndices.Length; j++)
+						for (int j = 0; j < subProgram.GlobalKeywordIndices.Count; j++)
 						{
 							if (pass.NameIndices[INSTANCING_ON] == subProgram.GlobalKeywordIndices[j])
 							{
@@ -612,7 +612,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					}
 					if (subProgram.LocalKeywordIndices != null)
 					{
-						for (int j = 0; j < subProgram.LocalKeywordIndices.Length; j++)
+						for (int j = 0; j < subProgram.LocalKeywordIndices.Count; j++)
 						{
 							if (pass.NameIndices[INSTANCING_ON] == subProgram.LocalKeywordIndices[j])
 							{
@@ -630,7 +630,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					hasDirectional = true;
 					if (subProgram.GlobalKeywordIndices != null)
 					{
-						for (int j = 0; j < subProgram.GlobalKeywordIndices.Length; j++)
+						for (int j = 0; j < subProgram.GlobalKeywordIndices.Count; j++)
 						{
 							if (pass.NameIndices[DIRECTIONAL] == subProgram.GlobalKeywordIndices[j])
 							{
@@ -640,7 +640,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					}
 					if (subProgram.LocalKeywordIndices != null)
 					{
-						for (int j = 0; j < subProgram.LocalKeywordIndices.Length; j++)
+						for (int j = 0; j < subProgram.LocalKeywordIndices.Count; j++)
 						{
 							if (pass.NameIndices[DIRECTIONAL] == subProgram.LocalKeywordIndices[j])
 							{
@@ -658,7 +658,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					hasPoint = true;
 					if (subProgram.GlobalKeywordIndices != null)
 					{
-						for (int j = 0; j < subProgram.GlobalKeywordIndices.Length; j++)
+						for (int j = 0; j < subProgram.GlobalKeywordIndices.Count; j++)
 						{
 							if (pass.NameIndices[POINT] == subProgram.GlobalKeywordIndices[j])
 							{
@@ -668,7 +668,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					}
 					if (subProgram.LocalKeywordIndices != null)
 					{
-						for (int j = 0; j < subProgram.LocalKeywordIndices.Length; j++)
+						for (int j = 0; j < subProgram.LocalKeywordIndices.Count; j++)
 						{
 							if (pass.NameIndices[POINT] == subProgram.LocalKeywordIndices[j])
 							{

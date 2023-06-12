@@ -84,7 +84,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			IMonoBehaviour?[] stateMachineBehaviours = new IMonoBehaviour?[range.Count];
 			for (int i = 0; i < range.Count; i++)
 			{
-				int index = (int)controllerStateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[range.StartIndex + i];
+				int index = (int)controllerStateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[(int)range.StartIndex + i];
 				stateMachineBehaviours[i] = controllerStateMachineBehaviours[index];
 			}
 			return stateMachineBehaviours;

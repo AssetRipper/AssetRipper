@@ -8,7 +8,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			if (settings.Has_NativeEventUrl() && settings.NativeEventUrl.Data.Length == 0)
 			{
-				settings.NativeEventUrl.String = "https://perf-events.cloud.unity3d.com/symbolicate"; //not sure where this url came from
+				settings.NativeEventUrl = "https://perf-events.cloud.unity3d.com/symbolicate"; //not sure where this url came from
 			}
 
 			// NOTE: editor has different value than player

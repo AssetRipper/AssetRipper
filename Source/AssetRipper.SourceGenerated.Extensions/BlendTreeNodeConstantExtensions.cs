@@ -60,6 +60,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return false;
 		}
 
-		public static bool IsBlendTree(this IBlendTreeNodeConstant constant) => constant.ChildIndices.Length > 0;
+		public static bool IsBlendTree(this IBlendTreeNodeConstant constant) => constant.ChildIndices.Count > 0;
 	}
 }

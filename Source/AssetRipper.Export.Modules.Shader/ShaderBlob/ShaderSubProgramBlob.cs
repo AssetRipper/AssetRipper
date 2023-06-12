@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using K4os.Compression.LZ4;
@@ -10,6 +11,18 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		public void Read(AssetCollection shaderCollection, byte[] compressedBlob, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths)
 		{
 			for (int i = 0; i < offsets.Length; i++)
+			{
+				uint offset = offsets[i];
+				uint compressedLength = compressedLengths[i];
+				uint decompressedLength = decompressedLengths[i];
+
+				ReadBlob(shaderCollection, compressedBlob, offset, compressedLength, decompressedLength, i);
+			}
+		}
+
+		public void Read(AssetCollection shaderCollection, byte[] compressedBlob, AssetList<uint> offsets, AssetList<uint> compressedLengths, AssetList<uint> decompressedLengths)
+		{
+			for (int i = 0; i < offsets.Count; i++)
 			{
 				uint offset = offsets[i];
 				uint compressedLength = compressedLengths[i];

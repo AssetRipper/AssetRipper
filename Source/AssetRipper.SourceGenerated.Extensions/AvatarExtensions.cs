@@ -1,5 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Classes.ClassID_90;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
+﻿using AssetRipper.Primitives;
+using AssetRipper.SourceGenerated.Classes.ClassID_90;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

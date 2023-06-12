@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
@@ -9,7 +10,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_90;
 using AssetRipper.SourceGenerated.Classes.ClassID_95;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.GenericBinding;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 
 namespace AssetRipper.Processing.AnimationClips;
 

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Utils;
+﻿using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_159;
 using AssetRipper.SourceGenerated.Enums;
 
@@ -13,7 +13,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void SetToDefaults(this IEditorSettings settings)
 		{
-			settings.ExternalVersionControlSupport_C159_Utf8String.TrySet(VisibleMeta);
+			settings.ExternalVersionControlSupport_C159_Utf8String = VisibleMeta;
 			settings.ExternalVersionControlSupport_C159_Int32 = (int)ExternalVersionControl.Generic;
 
 			settings.SerializationMode_C159E = SerializationMode.ForceText;
@@ -23,13 +23,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			settings.EtcTextureFastCompressor_C159 = 1;
 			settings.EtcTextureNormalCompressor_C159 = 2;
 			settings.EtcTextureBestCompressor_C159 = 4;
-			settings.ProjectGenerationIncludedExtensions_C159.TrySet(DefaultExtensions);
-			settings.ProjectGenerationRootNamespace_C159.TrySet(string.Empty);
+			settings.ProjectGenerationIncludedExtensions_C159 = DefaultExtensions;
+			settings.ProjectGenerationRootNamespace_C159 = Utf8String.Empty;
 			if (settings.Has_CollabEditorSettings_C159())
 			{
 				settings.CollabEditorSettings_C159.InProgressEnabled = true;
 			}
-			settings.UserGeneratedProjectSuffix_C159.TrySet(string.Empty);
+			settings.UserGeneratedProjectSuffix_C159 = Utf8String.Empty;
 			settings.EnableTextureStreamingInEditMode_C159 = true;
 			settings.EnableTextureStreamingInPlayMode_C159 = true;
 			settings.AsyncShaderCompilation_C159 = true;
@@ -40,22 +40,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 			settings.AssetPipelineMode_C159E = AssetPipelineMode_1.Version2;
 
 			settings.CacheServerMode_C159E = CacheServerMode_2.AsPreferences;
-			settings.CacheServerEndpoint_C159.TrySet(string.Empty);
-			settings.CacheServerNamespacePrefix_C159.TrySet("default");
+			settings.CacheServerEndpoint_C159 = Utf8String.Empty;
+			settings.CacheServerNamespacePrefix_C159 = "default"u8;
 			settings.CacheServerEnableDownload_C159 = true;
 			settings.CacheServerEnableUpload_C159 = true;
 
 			settings.ShowLightmapResolutionOverlay_C159 = true;
 			settings.UseLegacyProbeSampleCount_C159 = true;
 			settings.EnterPlayModeOptions_C159E = EnterPlayModeOptions.DisableDomainReload | EnterPlayModeOptions.DisableSceneReload;
-		}
-
-		private static void TrySet(this Utf8StringBase? utf8String, string str)
-		{
-			if (utf8String is not null)
-			{
-				utf8String.String = str;
-			}
 		}
 	}
 }

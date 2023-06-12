@@ -81,9 +81,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void Initialize(this IInputAxis input, string name, string positive, string altPositive)
 		{
-			input.Name.String = name;
-			input.PositiveButton.String = positive;
-			input.AltPositiveButton.String = altPositive;
+			input.Name = name;
+			input.PositiveButton = positive;
+			input.AltPositiveButton = altPositive;
 			input.Gravity = 1000.0f;
 			input.Dead = 0.001f;
 			input.Sensitivity = 1000.0f;

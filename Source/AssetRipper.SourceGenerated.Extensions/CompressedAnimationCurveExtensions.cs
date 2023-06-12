@@ -33,7 +33,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				IKeyframe_Quaternionf keyframe = keyframes.AddNew();
 				keyframe.SetValues(version, time, rotation, inSlope, outSlope, 1.0f / 3.0f);
 			}
-			destinationCurve.Path.CopyValues(compressedAnimationCurve.Path);
+			destinationCurve.Path = compressedAnimationCurve.Path;
 			destinationCurve.Curve.SetDefaultRotationOrderAndCurveLoopType();
 			destinationCurve.Curve.PreInfinity = compressedAnimationCurve.PreInfinity;
 			destinationCurve.Curve.PostInfinity = compressedAnimationCurve.PostInfinity;

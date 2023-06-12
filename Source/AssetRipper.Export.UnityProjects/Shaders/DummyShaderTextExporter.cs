@@ -1,13 +1,13 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.Modules.Shaders.IO;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProperties;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProperty;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using System.Globalization;
 
 namespace AssetRipper.Export.UnityProjects.Shaders

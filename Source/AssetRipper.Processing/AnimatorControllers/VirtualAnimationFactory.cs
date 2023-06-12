@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1101;
 using AssetRipper.SourceGenerated.Classes.ClassID_1102;
@@ -30,7 +31,6 @@ using AssetRipper.SourceGenerated.Subclasses.SelectorTransitionConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.TransitionConstant;
-using AssetRipper.SourceGenerated.Subclasses.Utf8String;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 
 namespace AssetRipper.Processing.AnimatorControllers
@@ -92,19 +92,19 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			blendTree.NameString = "BlendTree";
 
-			blendTree.Childs_C206.Capacity = node.ChildIndices.Length;
-			for (int i = 0; i < node.ChildIndices.Length; i++)
+			blendTree.Childs_C206.Capacity = node.ChildIndices.Count;
+			for (int i = 0; i < node.ChildIndices.Count; i++)
 			{
 				blendTree.AddAndInitializeNewChild(virtualFile, controller, state, nodeIndex, i);
 			}
 
 			if (node.BlendEventID != uint.MaxValue)
 			{
-				blendTree.BlendParameter_C206.CopyValues(controller.TOS_C91[node.BlendEventID]);
+				blendTree.BlendParameter_C206 = controller.TOS_C91[node.BlendEventID];
 			}
 			if (node.BlendEventYID != uint.MaxValue)
 			{
-				blendTree.BlendParameterY_C206?.CopyValues(controller.TOS_C91[node.BlendEventYID]);
+				blendTree.BlendParameterY_C206 = controller.TOS_C91[node.BlendEventYID];
 			}
 			blendTree.MinThreshold_C206 = node.GetMinThreshold();
 			blendTree.MaxThreshold_C206 = node.GetMaxThreshold();
@@ -137,7 +137,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			if (node.TryGetDirectBlendParameter(childIndex, out uint directID))
 			{
-				childMotion.DirectBlendParameter?.CopyValues(controller.TOS_C91[directID]);
+				childMotion.DirectBlendParameter = controller.TOS_C91[directID];
 			}
 
 			childMotion.Mirror = node.Mirror;
@@ -181,7 +181,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			int layerIndex = controller.Controller_C91.GetLayerIndexByStateMachineIndex(stateMachineIndex);
 			ILayerConstant layer = controller.Controller_C91.LayerArray[layerIndex].Data;
-			generatedStateMachine.Name.CopyValues(controller.TOS_C91[layer.Binding]);
+			generatedStateMachine.Name = controller.TOS_C91[layer.Binding];
 
 			IStateMachineConstant stateMachine = controller.Controller_C91.StateMachineArray[stateMachineIndex].Data;
 
@@ -324,7 +324,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			IStateMachineConstant stateMachine = controller.Controller_C91.StateMachineArray[stateMachineIndex].Data;
 			IStateConstant state = stateMachine.StateConstantArray[stateIndex].Data;
 
-			generatedState.Name.CopyValues(TOS[state.NameID]);
+			generatedState.Name = TOS[state.NameID];
 
 			generatedState.Speed_C1102 = state.Speed;
 			generatedState.CycleOffset_C1102 = state.CycleOffset;
@@ -370,11 +370,11 @@ namespace AssetRipper.Processing.AnimatorControllers
 				generatedState.Motions_C1102P.Add(motion);
 			}
 
-			generatedState.Tag_C1102.CopyValues(TOS[state.TagID]);
-			generatedState.SpeedParameter_C1102?.CopyValues(TOS[state.SpeedParamID]);
-			generatedState.MirrorParameter_C1102?.CopyValues(TOS[state.MirrorParamID]);
-			generatedState.CycleOffsetParameter_C1102?.CopyValues(TOS[state.CycleOffsetParamID]);
-			generatedState.TimeParameter_C1102?.CopyValues(TOS[state.TimeParamID]);
+			generatedState.Tag_C1102 = TOS[state.TagID];
+			generatedState.SpeedParameter_C1102 = TOS[state.SpeedParamID];
+			generatedState.MirrorParameter_C1102 = TOS[state.MirrorParamID];
+			generatedState.CycleOffsetParameter_C1102 = TOS[state.CycleOffsetParamID];
+			generatedState.TimeParameter_C1102 = TOS[state.TimeParamID];
 
 			return generatedState;
 		}
@@ -397,14 +397,14 @@ namespace AssetRipper.Processing.AnimatorControllers
 				{
 					IAnimatorCondition condition = animatorStateTransition.Conditions_C1101.AddNew();
 					condition.ConditionMode = (int)conditionConstant.ConditionModeE;
-					condition.ConditionEvent.CopyValues(TOS[conditionConstant.EventID]);
+					condition.ConditionEvent = TOS[conditionConstant.EventID];
 					condition.EventTreshold = conditionConstant.EventThreshold;
 				}
 			}
 
 			animatorStateTransition.DstState_C1101P = GetDestinationState(Transition.DestinationState, StateMachine, States);
 
-			animatorStateTransition.Name.CopyValues(TOS[Transition.UserID]);
+			animatorStateTransition.Name = TOS[Transition.UserID];
 			animatorStateTransition.IsExit_C1101 = Transition.IsExit();
 
 			animatorStateTransition.TransitionDuration_C1101 = Transition.TransitionDuration;
@@ -437,7 +437,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 				{
 					IAnimatorCondition condition = animatorTransition.Conditions_C1109.AddNew();
 					condition.ConditionMode = (int)conditionConstant.ConditionModeE;
-					condition.ConditionEvent.CopyValues(TOS[conditionConstant.EventID]);
+					condition.ConditionEvent = TOS[conditionConstant.EventID];
 					condition.EventTreshold = conditionConstant.EventThreshold;
 				}
 			}
