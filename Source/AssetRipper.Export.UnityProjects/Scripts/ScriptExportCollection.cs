@@ -2,6 +2,7 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.IO.Files;

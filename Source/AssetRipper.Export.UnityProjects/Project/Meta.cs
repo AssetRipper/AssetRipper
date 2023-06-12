@@ -1,14 +1,14 @@
-﻿using AssetRipper.Assets.Export;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Yaml;
-using AssetRipper.IO.Files;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Primitives;
-using AssetRipper.VersionUtilities;
 using AssetRipper.Yaml;
 
 
-namespace AssetRipper.Assets.Metadata
+namespace AssetRipper.Export.UnityProjects.Project
 {
-	public sealed class Meta
+	public readonly struct Meta
 	{
 		public Meta(UnityGUID guid, IUnityObjectBase importer) : this(guid, importer, true) { }
 
@@ -27,7 +27,7 @@ namespace AssetRipper.Assets.Metadata
 			Importer = importer ?? throw new ArgumentNullException(nameof(importer));
 		}
 
-		public static int ToFileFormatVersion(UnityVersion version)
+		private static int ToFileFormatVersion()
 		{
 			//This has been 2 for a long time, but probably not forever.
 			//If Unity 3 usesd version 1, we need to find out when 2 started.
@@ -38,7 +38,7 @@ namespace AssetRipper.Assets.Metadata
 		{
 			YamlDocument document = new();
 			YamlMappingNode root = document.CreateMappingRoot();
-			root.Add(FileFormatVersionName, ToFileFormatVersion(container.ExportVersion));
+			root.Add(FileFormatVersionName, ToFileFormatVersion());
 			root.Add(GuidName, GUID.ToString());
 			if (IsFolderAsset)
 			{
