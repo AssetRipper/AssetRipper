@@ -8,9 +8,9 @@ namespace AssetRipper.Processing.AnimationClips;
 
 public sealed class AnimationCache
 {
-	public IReadOnlyList<IAvatar> CachedAvatars { get; }
-	public IReadOnlyList<IAnimator> CachedAnimators { get; }
-	public IReadOnlyList<IAnimation> CachedAnimations { get; }
+	public IAvatar[] CachedAvatars { get; }
+	public IAnimator[] CachedAnimators { get; }
+	public IAnimation[] CachedAnimations { get; }
 
 	private AnimationCache(Bundle bundle)
 	{
@@ -32,9 +32,9 @@ public sealed class AnimationCache
 					break;
 			}
 		}
-		CachedAvatars = cachedAvatars;
-		CachedAnimators = cachedAnimators;
-		CachedAnimations = cachedAnimations;
+		CachedAvatars = cachedAvatars.ToArray();
+		CachedAnimators = cachedAnimators.ToArray();
+		CachedAnimations = cachedAnimations.ToArray();
 	}
 
 	public static AnimationCache CreateCache(Bundle bundle)

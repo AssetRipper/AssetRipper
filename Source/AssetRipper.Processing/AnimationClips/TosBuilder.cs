@@ -33,29 +33,49 @@ internal static class TosBuilder
 
 	public static IReadOnlyDictionary<uint, string> FindTOS(this IAnimationClip clip, AnimationCache cache)
 	{
+		//
+		// We don't stop adding
+		// after a match is found.
+		//
+		// This may be more performance intensive.
+		// However, it ensures a more precise
+		// recovery of all TOS data.
+		//
+		// Sometimes TOS data that is needed isnt
+		// in the specified avatar, animator, or animation even
+		// if it contains the specified animationclip.
+		//
+		// By adding all of them, we reduce
+		// the potential of missing anything.
+		//
+
 		Dictionary<uint, string> tos = MakeNewDictionary();
 
-		foreach (IAvatar avatar in cache.CachedAvatars)
-		{
-			if (clip.AddAvatarTOS(avatar, tos))
-			{
-				return tos;
-			}
-		}
+		Span<IAvatar> avatars = cache.CachedAvatars.AsSpan();
+		Span<IAnimator> animators = cache.CachedAnimators.AsSpan();
+		Span<IAnimation> animations = cache.CachedAnimations.AsSpan();
 
-		foreach (IAnimator animator in cache.CachedAnimators)
-		{
-			if (animator.ContainsAnimationClip(clip) && clip.AddAnimatorTOS(animator, tos))
-			{
-				return tos;
-			}
-		}
+		int avatarsCount = cache.CachedAvatars.Length;
+		int animatorsCount = cache.CachedAnimators.Length;
+		int animationsCount = cache.CachedAnimations.Length;
 
-		foreach (IAnimation animation in cache.CachedAnimations)
+		int maxCount = Math.Max(Math.Max(avatarsCount, animatorsCount), animationsCount);
+
+		for (int i = 0; i < maxCount; i++)
 		{
-			if (animation.ContainsAnimationClip(clip) && clip.AddAnimationTOS(animation, tos))
+			if (i < avatarsCount)
 			{
-				return tos;
+				clip.AddAvatarTOS(avatars[i], tos);
+			}
+
+			if (i < animatorsCount)
+			{
+				clip.AddAnimatorTOS(animators[i], tos);
+			}
+
+			if (i < animationsCount)
+			{
+				clip.AddAnimationTOS(animations[i], tos);
 			}
 		}
 
@@ -135,7 +155,7 @@ internal static class TosBuilder
 
 			if (src.TryGetValue(bindingPath, out Utf8String? path))
 			{
-				dest[bindingPath] = path.String;
+				dest[bindingPath] = path;
 			}
 			else if (bindingPath != 0)
 			{

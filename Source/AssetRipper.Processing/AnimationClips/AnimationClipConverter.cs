@@ -1,6 +1,5 @@
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Assets.Utils;
 using AssetRipper.Processing.AnimationClips.Editor;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -40,7 +39,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 		public static void Process(IAnimationClip clip, AnimationCache cache, PathChecksumCache checksumCache)
 		{
-			AnimationClipConverter converter = new AnimationClipConverter(clip, checksumCache);
+			AnimationClipConverter converter = new(clip, checksumCache);
 			converter.ProcessInner(cache);
 		}
 
@@ -226,12 +225,12 @@ namespace AssetRipper.Processing.AnimationClips
 							time = 0.0f;
 						}
 
-						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script);
+						CurveData curve = new(path, attribute, binding.GetClassID(), binding.Script);
 						AddPPtrKeyframe(curve, bindings, time, (int)value);
 					}
 					else if (ProcessStreams_frameIndex0)
 					{
-						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script);
+						CurveData curve = new(path, attribute, binding.GetClassID(), binding.Script);
 						AddFloatKeyframe(curve, time, value);
 					}
 					break;
@@ -419,16 +418,15 @@ namespace AssetRipper.Processing.AnimationClips
 
 		private void AddGameObjectCurve(IGenericBinding binding, string path, float time, float value)
 		{
-			if (binding.Attribute == CrcUtils.CalculateDigestAscii("m_IsActive"))
+			if (FieldHashes.TryGetPath(ClassIDType.GameObject, binding.Attribute, out string? propertyName))
 			{
-				CurveData curve = new CurveData(path, "m_IsActive", ClassIDType.GameObject);
+				CurveData curve = new(path, propertyName, ClassIDType.GameObject);
 				AddFloatKeyframe(curve, time, value);
-				return;
 			}
 			else
 			{
-				// that means that dev exported animation clip with missing component
-				CurveData curve = new CurveData(path, MissedPropertyPrefix + binding.Attribute, ClassIDType.GameObject);
+				// This means that the developer exported the animation clip with a missing component.
+				CurveData curve = new(path, MissedPropertyPrefix + binding.Attribute, ClassIDType.GameObject);
 				AddFloatKeyframe(curve, time, value);
 			}
 		}
@@ -445,25 +443,29 @@ namespace AssetRipper.Processing.AnimationClips
 				propertyName = ScriptPropertyPrefix + binding.Attribute;
 			}
 
-			CurveData curve = new CurveData(path, propertyName, ClassIDType.MonoBehaviour, binding.Script);
+			CurveData curve = new(path, propertyName, ClassIDType.MonoBehaviour, binding.Script);
 
 			AddFloatKeyframe(curve, time, value);
 		}
 
 		private void AddEngineCurve(IGenericBinding binding, string path, float time, float value)
 		{
-#warning TODO:
-			// We need a way to access unity object fields
-			// by classid.
-
-			CurveData curve = new CurveData(path, TypeTreePropertyPrefix + binding.Attribute, binding.GetClassID());
-			AddFloatKeyframe(curve, time, value);
+			if (!FieldHashes.TryGetPath(binding.GetClassID(), binding.Attribute, out string? propertyName))
+			{
+				CurveData curve = new(path, TypeTreePropertyPrefix + binding.Attribute, binding.GetClassID());
+				AddFloatKeyframe(curve, time, value);
+			}
+			else
+			{
+				CurveData curve = new(path, propertyName, binding.GetClassID());
+				AddFloatKeyframe(curve, time, value);
+			}
 		}
 
 		private void AddAnimatorMuscleCurve(IGenericBinding binding, float time, float value)
 		{
 			string attributeString = HumanoidMuscleTypeExtensions.ToAttributeString(binding.GetHumanoidMuscle(Version));
-			CurveData curve = new CurveData(string.Empty, attributeString, ClassIDType.Animator);
+			CurveData curve = new(string.Empty, attributeString, ClassIDType.Animator);
 			AddFloatKeyframe(curve, time, value);
 		}
 
@@ -552,18 +554,18 @@ namespace AssetRipper.Processing.AnimationClips
 
 		public IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(StreamedClip clip)
 		{
-			List<StreamedFrame> frames = new List<StreamedFrame>();
+			List<StreamedFrame> frames = new();
 			byte[] memStreamBuffer = new byte[clip.Data.Count * sizeof(uint)];
 			{
 				Span<uint> span = MemoryMarshal.Cast<byte, uint>(memStreamBuffer);
 				clip.Data.CopyTo(span);
 			}
 
-			using MemoryStream stream = new MemoryStream(memStreamBuffer);
-			using AssetReader reader = new AssetReader(stream, m_clip.Collection);
+			using MemoryStream stream = new(memStreamBuffer);
+			using AssetReader reader = new(stream, m_clip.Collection);
 			while (reader.BaseStream.Position < reader.BaseStream.Length)
 			{
-				StreamedFrame frame = new StreamedFrame();
+				StreamedFrame frame = new();
 				frame.Read(reader);
 				frames.Add(frame);
 			}
