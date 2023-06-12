@@ -1,8 +1,7 @@
-using AssetRipper.Assets.Utils;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
-using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Extensions;
@@ -20,505 +19,328 @@ namespace AssetRipper.Processing.AnimationClips
 
 		public string ToAttributeName(BindingCustomType type, uint attribute, string path)
 		{
+			int i;
+			string? foundPath;
+
 			switch (type)
 			{
 				case BindingCustomType.BlendShape:
 					{
 						const string Prefix = "blendShape.";
+
 						if (UnknownPathRegex().IsMatch(path))
 						{
 							return Prefix + attribute;
 						}
 
-						foreach (IGameObject root in Roots)
+						for (i = 0; i < Roots.Length; i++)
 						{
-							ITransform rootTransform = root.GetTransform();
-							ITransform? child = rootTransform.FindChild(path);
-							if (child == null)
+							if (!Roots[i].TryGetChildComponent(path, out ISkinnedMeshRenderer? skin))
 							{
 								continue;
 							}
-							ISkinnedMeshRenderer? skin = child.GetGameObject().TryGetComponent<ISkinnedMeshRenderer>();
-							if (skin == null)
+
+							if (skin.Mesh_C137P is not IMesh mesh)
 							{
 								continue;
 							}
-							IMesh? mesh = skin.Mesh_C137P;
-							if (mesh == null)
-							{
-								continue;
-							}
-							string? shapeName = mesh.FindBlendShapeNameByCRC(attribute);
-							if (shapeName == null)
+
+							if (mesh.FindBlendShapeNameByCRC(attribute) is not string shapeName)
 							{
 								continue;
 							}
 
 							return Prefix + shapeName;
 						}
+
 						return Prefix + attribute;
 					}
 
 				case BindingCustomType.Renderer:
-					return "m_Materials"
-						+ "." + "Array" //from the common string
-						+ "." + "data" //from the common string
-						+ $"[{attribute}]";
+					return $"m_Materials.Array.data[{attribute}]"; //from the common string
 
 				case BindingCustomType.RendererMaterial:
 					{
 						const string Prefix = "material.";
+
 						if (UnknownPathRegex().IsMatch(path))
 						{
 							return Prefix + attribute;
 						}
 
-						foreach (IGameObject root in Roots)
+						uint crc28 = attribute & 0xFFFFFFF;
+						bool usesRgba = (attribute & (1 << 30)) != 0;
+						bool hasNoSubProperty = (attribute & (1 << 31)) != 0;
+						uint subPropetyIndex = (attribute >> 28) & 3;
+
+						for (i = 0; i < Roots.Length; i++)
 						{
-							ITransform rootTransform = root.GetTransform();
-							ITransform? child = rootTransform.FindChild(path);
-							if (child == null)
+							if (!Roots[i].TryGetChildComponent(path, out IRenderer? renderer))
 							{
 								continue;
 							}
 
-							uint crc28 = attribute & 0xFFFFFFF;
-							IRenderer? renderer = child.GetGameObject().TryGetComponent<IRenderer>();
-							if (renderer == null)
-							{
-								continue;
-							}
-							string? property = renderer.FindMaterialPropertyNameByCRC28(crc28);
-							if (property == null)
+							if (renderer.FindMaterialPropertyNameByCRC28(crc28) is not string property)
 							{
 								continue;
 							}
 
-							if ((attribute & 0x80000000) != 0)
+							if (hasNoSubProperty)
 							{
 								return Prefix + property;
 							}
 
-							uint subPropIndex = attribute >> 28 & 3;
-							bool isRgba = (attribute & 0x40000000) != 0;
-							char subProperty = subPropIndex switch
+							char subProperty = subPropetyIndex switch
 							{
-								0 => isRgba ? 'r' : 'x',
-								1 => isRgba ? 'g' : 'y',
-								2 => isRgba ? 'b' : 'z',
-								_ => isRgba ? 'a' : 'w',
+								0 => usesRgba ? 'r' : 'x',
+								1 => usesRgba ? 'g' : 'y',
+								2 => usesRgba ? 'b' : 'z',
+								_ => usesRgba ? 'a' : 'w',
 							};
+
 							return Prefix + property + "." + subProperty;
 						}
+
 						return Prefix + attribute;
 					}
 
 				case BindingCustomType.SpriteRenderer:
 					{
-						if (attribute == 0)
+						// Not Crc
+						return attribute switch
 						{
-							return "m_Sprite";
-						}
+							0 => "m_Sprite",
+							
+							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}"),
+						};
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
-
+					
 				case BindingCustomType.MonoBehaviour:
 					{
-						if (attribute == CrcUtils.CalculateDigestAscii("m_Enabled"))
+						if (!FieldHashes.TryGetPath(ClassIDType.MonoBehaviour, attribute, out foundPath))
 						{
-							return "m_Enabled";
+							throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 						}
+
+						return foundPath;
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
 				case BindingCustomType.Light:
 					{
-						const string ColorR = "m_Color" + "." + "r";
-						if (attribute == CrcUtils.CalculateDigestAscii(ColorR))
+						if (!FieldHashes.TryGetPath(ClassIDType.Light, attribute, out foundPath))
 						{
-							return ColorR;
+							throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 						}
-						const string ColorG = "m_Color" + "." + "g";
-						if (attribute == CrcUtils.CalculateDigestAscii(ColorG))
-						{
-							return ColorG;
-						}
-						const string ColorB = "m_Color" + "." + "b";
-						if (attribute == CrcUtils.CalculateDigestAscii(ColorB))
-						{
-							return ColorB;
-						}
-						const string ColorA = "m_Color" + "." + "a";
-						if (attribute == CrcUtils.CalculateDigestAscii(ColorA))
-						{
-							return ColorA;
-						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_CookieSize"))
-						{
-							return "m_CookieSize";
-						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_DrawHalo"))
-						{
-							return "m_DrawHalo";
-						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_Intensity"))
-						{
-							return "m_Intensity";
-						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_Range"))
-						{
-							return "m_Range";
-						}
-						const string ShadowsStrength = "m_Shadows" + "." + "m_Strength";
-						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsStrength))
-						{
-							return ShadowsStrength;
-						}
-						const string ShadowsBias = "m_Shadows" + "." + "m_Bias";
-						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsBias))
-						{
-							return ShadowsBias;
-						}
-						const string ShadowsNormalBias = "m_Shadows" + "." + "m_NormalBias";
-						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsNormalBias))
-						{
-							return ShadowsNormalBias;
-						}
-						const string ShadowsNearPlane = "m_Shadows" + "." + "m_NearPlane";
-						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsNearPlane))
-						{
-							return ShadowsNearPlane;
-						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_SpotAngle"))
-						{
-							return "m_SpotAngle";
-						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_InnerSpotAngle"))
-						{
-							return "m_InnerSpotAngle";
-						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_ColorTemperature"))
-						{
-							return "m_ColorTemperature";
-						}
+
+						return foundPath;
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
 				case BindingCustomType.RendererShadows:
 					{
-						if (attribute == CrcUtils.CalculateDigestAscii("m_ReceiveShadows"))
+						if (!FieldHashes.TryGetPath(ClassIDType.Renderer, attribute, out foundPath))
 						{
-							return "m_ReceiveShadows";
+							throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_SortingOrder"))
-						{
-							return "m_SortingOrder";
-						}
-					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
-#warning TODO:
+						return foundPath;
+					}
+
 				case BindingCustomType.ParticleSystem:
-					return "ParticleSystem_" + attribute;
-				/*{
-#warning TODO: ordinal propertyName
-				}
-				throw new ArgumentException($"Unknown attribute {attribute} for {_this}");*/
+					{
+						if (!FieldHashes.TryGetPath(ClassIDType.ParticleSystem, attribute, out foundPath))
+						{
+							throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+						}
+
+						return foundPath;
+					}
 
 				case BindingCustomType.RectTransform:
 					{
-						string LocalPositionZ = "m_LocalPosition" + "." + "z";
-						if (attribute == CrcUtils.CalculateDigestAscii(LocalPositionZ))
+						if (!FieldHashes.TryGetPath(ClassIDType.RectTransform, attribute, out foundPath))
 						{
-							return LocalPositionZ;
+							throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 						}
-						string AnchoredPositionX = "m_AnchoredPosition" + "." + "x";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchoredPositionX))
-						{
-							return AnchoredPositionX;
-						}
-						string AnchoredPositionY = "m_AnchoredPosition" + "." + "y";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchoredPositionY))
-						{
-							return AnchoredPositionY;
-						}
-						string AnchorMinX = "m_AnchorMin" + "." + "x";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMinX))
-						{
-							return AnchorMinX;
-						}
-						string AnchorMinY = "m_AnchorMin" + "." + "y";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMinY))
-						{
-							return AnchorMinY;
-						}
-						string AnchorMaxX = "m_AnchorMax" + "." + "x";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMaxX))
-						{
-							return AnchorMaxX;
-						}
-						string AnchorMaxY = "m_AnchorMax" + "." + "y";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMaxY))
-						{
-							return AnchorMaxY;
-						}
-						string SizeDeltaX = "m_SizeDelta" + "." + "x";
-						if (attribute == CrcUtils.CalculateDigestAscii(SizeDeltaX))
-						{
-							return SizeDeltaX;
-						}
-						string SizeDeltaY = "m_SizeDelta" + "." + "y";
-						if (attribute == CrcUtils.CalculateDigestAscii(SizeDeltaY))
-						{
-							return SizeDeltaY;
-						}
-						string PivotX = "m_Pivot" + "." + "x";
-						if (attribute == CrcUtils.CalculateDigestAscii(PivotX))
-						{
-							return PivotX;
-						}
-						string PivotY = "m_Pivot" + "." + "y";
-						if (attribute == CrcUtils.CalculateDigestAscii(PivotY))
-						{
-							return PivotY;
-						}
-					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
-#warning TODO:
+						return foundPath;
+					}
+
 				case BindingCustomType.LineRenderer:
 					{
-						const string ParametersWidthMultiplier = "m_Parameters" + "." + "widthMultiplier";
-						if (attribute == CrcUtils.CalculateDigestAscii(ParametersWidthMultiplier))
+						if (!FieldHashes.TryGetPath(ClassIDType.LineRenderer, attribute, out foundPath))
 						{
-							return ParametersWidthMultiplier;
+							throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 						}
-					}
-#warning TODO: old versions animate all properties as custom curves
-					return "LineRenderer_" + attribute;
 
-#warning TODO:
+						return foundPath;
+					}
+
 				case BindingCustomType.TrailRenderer:
 					{
-						const string ParametersWidthMultiplier = "m_Parameters" + "." + "widthMultiplier";
-						if (attribute == CrcUtils.CalculateDigestAscii(ParametersWidthMultiplier))
+						if (!FieldHashes.TryGetPath(ClassIDType.TrailRenderer, attribute, out foundPath))
 						{
-							return ParametersWidthMultiplier;
+							throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 						}
-					}
-#warning TODO: old versions animate all properties as custom curves
-					return "TrailRenderer_" + attribute;
 
-#warning TODO:
+						return foundPath;
+					}
+
 				case BindingCustomType.PositionConstraint:
 					{
-						uint property = attribute & 0xF;
-						switch (property)
-						{
-							case 0:
-								return "m_RestTranslation.x";
-							case 1:
-								return "m_RestTranslation.y";
-							case 2:
-								return "m_RestTranslation.z";
-							case 3:
-								return "m_Weight";
-							case 4:
-								return "m_TranslationOffset.x";
-							case 5:
-								return "m_TranslationOffset.y";
-							case 6:
-								return "m_TranslationOffset.z";
-							case 7:
-								return "m_AffectTranslationX";
-							case 8:
-								return "m_AffectTranslationY";
-							case 9:
-								return "m_AffectTranslationZ";
-							case 10:
-								return "m_Active";
-							case 11:
-								return $"m_Sources.Array.data[{attribute >> 8}].sourceTransform";
-							case 12:
-								return $"m_Sources.Array.data[{attribute >> 8}].weight";
-						}
-					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+						// Not Crc
 
-#warning TODO:
+						uint property = attribute & 0xF; // 0...1111 (max 15)
+
+						return property switch
+						{
+							0u  => "m_RestTranslation.x",
+							1u  => "m_RestTranslation.y",
+							2u  => "m_RestTranslation.z",
+							3u  => "m_Weight",
+							4u  => "m_TranslationOffset.x",
+							5u  => "m_TranslationOffset.y",
+							6u  => "m_TranslationOffset.z",
+							7u  => "m_AffectTranslationX",
+							8u  => "m_AffectTranslationY",
+							9u  => "m_AffectTranslationZ",
+							10u => "m_Active",
+							11u => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
+							12u => $"m_Sources.Array.data[{attribute >> 8}].weight",
+
+							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}"),
+						};
+					}
+
 				case BindingCustomType.RotationConstraint:
 					{
-						uint property = attribute & 0xF;
-						switch (property)
-						{
-							case 0:
-								return "m_RestRotation.x";
-							case 1:
-								return "m_RestRotation.y";
-							case 2:
-								return "m_RestRotation.z";
-							case 3:
-								return "m_Weight";
-							case 4:
-								return "m_RotationOffset.x";
-							case 5:
-								return "m_RotationOffset.y";
-							case 6:
-								return "m_RotationOffset.z";
-							case 7:
-								return "m_AffectRotationX";
-							case 8:
-								return "m_AffectRotationY";
-							case 9:
-								return "m_AffectRotationZ";
-							case 10:
-								return "m_Active";
-							case 11:
-								return $"m_Sources.Array.data[{attribute >> 8}].sourceTransform";
-							case 12:
-								return $"m_Sources.Array.data[{attribute >> 8}].weight";
-						}
-					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+						// Not Crc
 
-#warning TODO:
+						uint property = attribute & 0xF; // 0...1111 (max 15)
+
+						return property switch
+						{
+							0u  => "m_RestRotation.x",
+							1u  => "m_RestRotation.y",
+							2u  => "m_RestRotation.z",
+							3u  => "m_Weight",
+							4u  => "m_RotationOffset.x",
+							5u  => "m_RotationOffset.y",
+							6u  => "m_RotationOffset.z",
+							7u  => "m_AffectRotationX",
+							8u  => "m_AffectRotationY",
+							9u  => "m_AffectRotationZ",
+							10u => "m_Active",
+							11u => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
+							12u => $"m_Sources.Array.data[{attribute >> 8}].weight",
+
+							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}"),
+						};
+					}
+
 				case BindingCustomType.ScaleConstraint:
 					{
-						uint property = attribute & 0xF;
-						switch (property)
-						{
-							case 0:
-								return "m_ScaleAtRest.x";
-							case 1:
-								return "m_ScaleAtRest.y";
-							case 2:
-								return "m_ScaleAtRest.z";
-							case 3:
-								return "m_Weight";
-							case 4:
-								return "m_ScalingOffset.x";
-							case 5:
-								return "m_ScalingOffset.y";
-							case 6:
-								return "m_ScalingOffset.z";
-							case 7:
-								return "m_AffectScalingX";
-							case 8:
-								return "m_AffectScalingY";
-							case 9:
-								return "m_AffectScalingZ";
-							case 10:
-								return "m_Active";
-							case 11:
-								return $"m_Sources.Array.data[{attribute >> 8}].sourceTransform";
-							case 12:
-								return $"m_Sources.Array.data[{attribute >> 8}].weight";
-						}
-					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+						// Not Crc
 
-#warning TODO:
+						uint property = attribute & 0xF; // 0...1111 (max 15)
+
+						return property switch
+						{
+							0u  => "m_ScaleAtRest.x",
+							1u  => "m_ScaleAtRest.y",
+							2u  => "m_ScaleAtRest.z",
+							3u  => "m_Weight",
+							4u  => "m_ScalingOffset.x",
+							5u  => "m_ScalingOffset.y",
+							6u  => "m_ScalingOffset.z",
+							7u  => "m_AffectScalingX",
+							8u  => "m_AffectScalingY",
+							9u  => "m_AffectScalingZ",
+							10u => "m_Active",
+							11u => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
+							12u => $"m_Sources.Array.data[{attribute >> 8}].weight",
+
+							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}"),
+						};
+					}
+
 				case BindingCustomType.AimConstraint:
 					{
-						uint property = attribute & 0xF;
-						switch (property)
-						{
-							case 0:
-								return "m_Weight";
-							case 1:
-								return "m_AffectRotationX";
-							case 2:
-								return "m_AffectRotationY";
-							case 3:
-								return "m_AffectRotationZ";
-							case 4:
-								return "m_Active";
-							case 5:
-								return "m_WorldUpObject";
-							case 6:
-								return $"m_Sources.Array.data[{attribute >> 8}].sourceTransform";
-							case 7:
-								return $"m_Sources.Array.data[{attribute >> 8}].weight";
-						}
-					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+						// Not Crc
 
-#warning TODO:
+						uint property = attribute & 0xF; // 0...1111 (max 15)
+
+						return property switch
+						{
+							0u => "m_Weight",
+							1u => "m_AffectRotationX",
+							2u => "m_AffectRotationY",
+							3u => "m_AffectRotationZ",
+							4u => "m_Active",
+							5u => "m_WorldUpObject",
+							6u => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
+							7u => $"m_Sources.Array.data[{attribute >> 8}].weight",
+
+							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}"),
+						};
+					}
+
 				case BindingCustomType.ParentConstraint:
 					{
-						uint property = attribute & 0xF;
-						switch (property)
-						{
-							case 0:
-								return "m_Weight";
-							case 1:
-								return "m_AffectTranslationX";
-							case 2:
-								return "m_AffectTranslationY";
-							case 3:
-								return "m_AffectTranslationZ";
-							case 4:
-								return "m_AffectRotationX";
-							case 5:
-								return "m_AffectRotationY";
-							case 6:
-								return "m_AffectRotationZ";
-							case 7:
-								return "m_Active";
-							case 8:
-								return $"m_TranslationOffsets.Array.data[{attribute >> 8}].x";
-							case 9:
-								return $"m_TranslationOffsets.Array.data[{attribute >> 8}].y";
-							case 10:
-								return $"m_TranslationOffsets.Array.data[{attribute >> 8}].z";
-							case 11:
-								return $"m_RotationOffsets.Array.data[{attribute >> 8}].x";
-							case 12:
-								return $"m_RotationOffsets.Array.data[{attribute >> 8}].y";
-							case 13:
-								return $"m_RotationOffsets.Array.data[{attribute >> 8}].z";
-							case 14:
-								return $"m_Sources.Array.data[{attribute >> 8}].sourceTransform";
-							case 15:
-								return $"m_Sources.Array.data[{attribute >> 8}].weight";
-						}
-					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+						// Not Crc
 
-#warning TODO:
+						uint property = attribute & 0xF; // 0...1111 (max 15)
+
+						return property switch
+						{
+							0u  => "m_Weight",
+							1u  => "m_AffectTranslationX",
+							2u  => "m_AffectTranslationY",
+							3u  => "m_AffectTranslationZ",
+							4u  => "m_AffectRotationX",
+							5u  => "m_AffectRotationY",
+							6u  => "m_AffectRotationZ",
+							7u  => "m_Active",
+							8u  => $"m_TranslationOffsets.Array.data[{attribute >> 8}].x",
+							9u  => $"m_TranslationOffsets.Array.data[{attribute >> 8}].y",
+							10u => $"m_TranslationOffsets.Array.data[{attribute >> 8}].z",
+							11u => $"m_RotationOffsets.Array.data[{attribute >> 8}].x",
+							12u => $"m_RotationOffsets.Array.data[{attribute >> 8}].y",
+							13u => $"m_RotationOffsets.Array.data[{attribute >> 8}].z",
+							14u => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
+							15u => $"m_Sources.Array.data[{attribute >> 8}].weight",
+
+							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}"),
+						};
+					}
+
 				case BindingCustomType.LookAtConstraint:
 					{
+						// Not Crc
+
 						uint property = attribute & 0xF;
-						switch (property)
+
+						return property switch
 						{
-							case 0:
-								return "m_Weight";
-							case 1:
-								return "m_Active";
-							case 2:
-								return "m_WorldUpObject";
-							case 3:
-								return $"m_Sources.Array.data[{attribute >> 8}].sourceTransform";
-							case 4:
-								return $"m_Sources.Array.data[{attribute >> 8}].weight";
-							case 5:
-								return "m_Roll";
-						}
+							0u => "m_Weight",
+							1u => "m_Active",
+							2u => "m_WorldUpObject",
+							3u => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
+							4u => $"m_Sources.Array.data[{attribute >> 8}].weight",
+							5u => "m_Roll",
+
+							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}"),
+						};
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
 				case BindingCustomType.Camera:
 					{
-						if (attribute == CrcUtils.CalculateDigestAscii("field of view"))
+						if (!FieldHashes.TryGetPath(ClassIDType.Camera, attribute, out foundPath))
 						{
-							return "field of view";
+							throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_FocalLength"))
-						{
-							return "m_FocalLength";
-						}
+
+						return foundPath;
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
 				case BindingCustomType.VisualEffect:
 					return "VisualEffect_" + attribute;
@@ -541,8 +363,7 @@ namespace AssetRipper.Processing.AnimationClips
 		{
 			get
 			{
-				m_roots ??= m_clip.FindRoots().ToArray();
-				return m_roots;
+				return m_roots ??= m_clip.FindRoots().ToArray();
 			}
 		}
 

@@ -134,6 +134,20 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return false;
 		}
 
+		public static bool TryGetChildComponent<T>(this IGameObject root, string childPath, [NotNullWhen(true)] out T? component)
+			where T : IComponent
+		{
+			IGameObject? child = root.GetTransform().FindChild(childPath)?.GetGameObject();
+
+			if (child is not null && child.TryGetComponent(out component))
+			{
+				return true;
+			}
+
+			component = default;
+			return false;
+		}
+
 		public static T GetComponent<T>(this IGameObject gameObject) where T : IComponent
 		{
 			if (!gameObject.TryGetComponent(out T? component))
