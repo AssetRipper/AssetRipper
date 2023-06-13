@@ -98,7 +98,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				if (sceneIndex == -1)
 				{
 					//Previously a logged error
-					throw new Exception($"Unable to find scene data with GUID {cullingSetting.SceneGUID_C29} in {occlusionCullingData.GetNameNotEmpty()}");
+					throw new Exception($"Unable to find scene data with GUID {cullingSetting.SceneGUID_C29} in {occlusionCullingData.GetBestName()}");
 				}
 
 				IOcclusionScene scene = occlusionCullingData.Scenes_C363[sceneIndex];

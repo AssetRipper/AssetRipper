@@ -11,7 +11,7 @@ namespace AssetRipper.Import.AssetCreation
 		{
 			get
 			{
-				return string.IsNullOrWhiteSpace(nameString)
+				return string.IsNullOrEmpty(nameString)
 					? $"Unreadable{ClassName}_{RawDataHash:X}"
 					: nameString;
 			}

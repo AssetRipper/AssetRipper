@@ -1,7 +1,6 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
@@ -67,13 +66,12 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			ExportMeta(container, meta, filePath);
 		}
 
-		protected string GetUniqueFileName(AssetCollection file, IUnityObjectBase asset, string dirPath)
+		protected string GetUniqueFileName(IUnityObjectBase asset, string dirPath)
 		{
 			string fileName = asset switch
 			{
 				IPrefabInstance prefab => prefab.GetName(),
-				IHasNameString hasName => hasName.GetNameNotEmpty(),
-				_ => "",
+				_ => asset.GetBestName(),
 			};
 			fileName = FileUtils.RemoveCloneSuffixes(fileName);
 			if (string.IsNullOrWhiteSpace(fileName))

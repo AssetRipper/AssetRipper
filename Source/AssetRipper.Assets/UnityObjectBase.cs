@@ -2,8 +2,8 @@
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Export.Yaml;
+using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.IO.Files;
 using AssetRipper.Primitives;
 using AssetRipper.Yaml;
 using System.Diagnostics;
@@ -43,6 +43,29 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	public IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies()
 	{
 		return FetchDependencies((FieldName?)null);
+	}
+
+	/// <summary>
+	/// Get the best name for this object.
+	/// </summary>
+	/// <remarks>
+	/// In order of preference:<br/>
+	/// 1. <see cref="OriginalName"/><br/>
+	/// 2. <see cref="IHasNameString.NameString"/><br/>
+	/// 3. <see cref="ClassName"/>
+	/// </remarks>
+	/// <returns>A nonempty string.</returns>
+	public string GetBestName()
+	{
+		if (!string.IsNullOrEmpty(OriginalName))
+		{
+			return OriginalName;
+		}
+		else
+		{
+			string? name = (this as IHasNameString)?.NameString;
+			return string.IsNullOrEmpty(name) ? ClassName : name;
+		}
 	}
 
 	public string? OriginalPath

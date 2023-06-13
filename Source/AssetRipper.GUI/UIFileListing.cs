@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Interfaces;
-using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure;
 using AssetRipper.IO.Files.ResourceFiles;
 using System.Collections.ObjectModel;
@@ -103,22 +101,7 @@ namespace AssetRipper.GUI
 		public NewUiFileListItem(IUnityObjectBase asset)
 		{
 			_associatedObject = asset;
-
-			if (_associatedObject is IHasNameString hasName)
-			{
-				_displayAs = hasName.GetNameNotEmpty();
-			}
-
-			if (_associatedObject is UnknownObject)
-			{
-				_displayAs = asset.ClassID.ToString();
-			}
-
-			if (string.IsNullOrEmpty(_displayAs))
-			{
-				_displayAs = _associatedObject.GetType().Name;
-			}
-
+			_displayAs = asset.GetBestName();
 		}
 
 		/// <summary>

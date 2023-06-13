@@ -8,15 +8,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static string GetName(this IPrefabInstance prefab)
 		{
-			string? name;
-			if (prefab is IHasNameString hasName)
-			{
-				name = hasName.NameString;
-			}
-			else
-			{
-				name = prefab.RootGameObject_C1001P?.NameString;
-			}
+			string? name = prefab.RootGameObject_C1001P?.NameString;
 			return string.IsNullOrEmpty(name) ? prefab.ClassName : name;
 		}
 

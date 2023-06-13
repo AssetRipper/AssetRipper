@@ -42,7 +42,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		{
 			string subPath = Path.Combine(projectDirectory, "AssetRipper", "RawData", AssetTypeName);
 			Directory.CreateDirectory(subPath);
-			string fileName = GetUniqueFileName(container.File, Asset, subPath);
+			string fileName = GetUniqueFileName(Asset, subPath);
 			string filePath = Path.Combine(subPath, fileName);
 			return AssetExporter.Export(container, Asset, filePath);
 		}

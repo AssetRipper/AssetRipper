@@ -27,6 +27,7 @@ public interface IUnityObjectBase : IUnityAssetBase
 
 	YamlDocument ExportYamlDocument(IExportContainer container);
 	IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies();
+	string GetBestName();
 }
 public static class UnityObjectBaseExtensions
 {

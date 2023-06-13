@@ -13,11 +13,12 @@ namespace AssetRipper.Import.AssetCreation
 		/// <summary>
 		/// A Crc32 hash of <see cref="RawData"/>
 		/// </summary>
-		public uint RawDataHash => CrcUtils.CalculateDigest(RawData);
+		public uint RawDataHash { get; }
 
 		public RawDataObject(AssetInfo assetInfo, byte[] data) : base(assetInfo)
 		{
 			RawData = data;
+			RawDataHash = CrcUtils.CalculateDigest(data);
 		}
 
 		public sealed override void WriteEditor(AssetWriter writer) => writer.Write(RawData);
