@@ -117,6 +117,7 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 
 	public string? AssetBundleName { get; set; }
 
+	[return: NotNullIfNotNull(nameof(str))]
 	private static string? RemovePeriod(string? str)
 	{
 		return string.IsNullOrEmpty(str) || str[0] != '.' ? str : str.Substring(1);

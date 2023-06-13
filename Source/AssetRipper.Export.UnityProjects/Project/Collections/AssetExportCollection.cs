@@ -21,14 +21,11 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		{
 			string subPath;
 			string fileName;
-			if (Asset.OriginalName is not null)
+			if (Asset.OriginalName is not null || Asset.OriginalDirectory is not null)
 			{
-				string? deserializedName = (Asset as IHasNameString)?.NameString;
-				string assetName = !string.IsNullOrEmpty(deserializedName)
-					? deserializedName
-					: Asset.OriginalName.Length > 0
-						? Asset.OriginalName
-						: Asset.ClassName;
+				string assetName = string.IsNullOrEmpty(Asset.OriginalName)
+					? (Asset as IHasNameString)?.NameString ?? Asset.ClassName
+					: Asset.OriginalName;
 				string resourcePath = Path.Combine(projectDirectory, DirectoryUtils.FixInvalidPathCharacters(
 					Path.Combine(Asset.OriginalDirectory ?? "", $"{assetName}.{GetExportExtension(Asset)}")));
 				subPath = Path.GetDirectoryName(resourcePath)!;
