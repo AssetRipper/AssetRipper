@@ -19,20 +19,20 @@ namespace AssetRipper.Assets.Metadata
 
 		public static long GetMainExportID(IUnityObjectBase asset)
 		{
-			return GetMainExportID((uint)asset.ClassID, 0);
+			return GetMainExportID(asset.ClassID, 0);
 		}
 
-		public static long GetMainExportID(uint classID)
+		public static long GetMainExportID(int classID)
 		{
 			return GetMainExportID(classID, 0);
 		}
 
 		public static long GetMainExportID(IUnityObjectBase asset, uint value)
 		{
-			return GetMainExportID((uint)asset.ClassID, value);
+			return GetMainExportID(asset.ClassID, value);
 		}
 
-		public static long GetMainExportID(uint classID, uint value)
+		public static long GetMainExportID(int classID, uint value)
 		{
 			if (classID > 100100)
 			{
@@ -44,7 +44,7 @@ namespace AssetRipper.Assets.Metadata
 			}
 
 			Debug.Assert(value < 100000, $"Value {value} for main export ID must have no more than 5 digits");
-			return classID * 100000 + value;
+			return classID * 100000L + value;
 		}
 
 		/// <summary>

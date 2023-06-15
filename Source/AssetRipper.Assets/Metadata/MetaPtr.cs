@@ -29,7 +29,7 @@ namespace AssetRipper.Assets.Metadata
 
 		public static MetaPtr CreateMissingReference(int classID, AssetType assetType)
 		{
-			return new MetaPtr(ExportIdHandler.GetMainExportID((uint)classID), UnityGUID.MissingReference, assetType);
+			return new MetaPtr(ExportIdHandler.GetMainExportID(classID), UnityGUID.MissingReference, assetType);
 		}
 
 		YamlNode IYamlExportable.ExportYamlEditor(IExportContainer container) => ExportYaml();

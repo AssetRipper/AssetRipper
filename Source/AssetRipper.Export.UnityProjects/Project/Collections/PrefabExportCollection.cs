@@ -155,7 +155,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		public MetaPtr GenerateMetaPtrForPrefab()
 		{
 			return new MetaPtr(
-				ExportIdHandler.GetMainExportID((uint)ClassIDType.PrefabInstance),
+				ExportIdHandler.GetMainExportID((int)ClassIDType.PrefabInstance),
 				Asset.GUID,
 				Prefab is null ? AssetType.Meta : AssetType.Serialized);
 		}
