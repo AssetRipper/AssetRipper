@@ -33,6 +33,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					AddAsset(sprite);
 				}
 			}
+			AddAsset(spriteInformationObject);
 		}
 
 		protected override IUnityObjectBase CreateImporter(IExportContainer container)
