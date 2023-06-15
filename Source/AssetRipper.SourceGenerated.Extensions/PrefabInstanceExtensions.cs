@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Interfaces;
-using AssetRipper.SourceGenerated.Classes.ClassID_1;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 
 namespace AssetRipper.SourceGenerated.Extensions
