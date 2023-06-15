@@ -171,8 +171,8 @@ namespace AssetRipper.Tools.RawTextureExtractor
 			{
 				return (ClassIDType)assetInfo.ClassID switch
 				{
-					ClassIDType.Texture2D => Texture2DFactory.CreateAsset(assetInfo.Collection.Version, assetInfo),
-					ClassIDType.Cubemap => CubemapFactory.CreateAsset(assetInfo.Collection.Version, assetInfo),
+					ClassIDType.Texture2D => Texture2DFactory.CreateAsset(assetInfo),
+					ClassIDType.Cubemap => CubemapFactory.CreateAsset(assetInfo),
 					_ => null
 				};
 			}

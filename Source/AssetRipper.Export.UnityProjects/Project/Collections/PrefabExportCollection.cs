@@ -97,7 +97,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		/// Prior to 2018.3, Prefab was an actual asset inside "*.prefab" files.
 		/// After that, PrefabImporter and PrefabInstance were introduced as a replacement.
 		/// This code is only for creating a fake <see cref="IPrefabInstanceMarker"/>.
-		/// <see cref="IDataTemplateMarker"/> and <see cref="IPrefabMarker"/> assets are created inside <see cref="PrefabProcessor"/>.
+		/// <see cref="IPrefabMarker"/> assets are created inside <see cref="PrefabProcessor"/>.
 		/// </summary>
 		/// <param name="virtualFile"></param>
 		/// <param name="root"></param>
@@ -105,7 +105,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		private static IPrefabInstance CreateVirtualPrefab(TemporaryAssetCollection virtualFile, IGameObject root)
 		{
 			UnityVersion version = UnityVersion.Max(virtualFile.Version, new UnityVersion(2018, 3, 0));
-			IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance, (assetInfo) => PrefabInstanceFactory.CreateAsset(version, assetInfo));
+			IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance, version, PrefabInstanceFactory.CreateAsset);
 			Debug.Assert(prefab is IPrefabInstanceMarker);
 			prefab.RootGameObject_C1001P = root;
 			prefab.AssetBundleName = root.AssetBundleName;
@@ -119,7 +119,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		{
 			if (Prefab is null)
 			{
-				IPrefabImporter importer = PrefabImporterFactory.CreateAsset(container.ExportVersion, container.File);
+				IPrefabImporter importer = PrefabImporterFactory.CreateAsset(container.File, container.ExportVersion);
 				if (RootGameObject.AssetBundleName is not null)
 				{
 					importer.AssetBundleName_C468431735 = RootGameObject.AssetBundleName;

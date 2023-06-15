@@ -179,7 +179,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		private void OnAssemblyExported(IExportContainer container, string path)
 		{
 			UnityGUID guid = GetAssemblyGuid(Path.GetFileName(path));
-			IDefaultImporter importer = DefaultImporterFactory.CreateAsset(container.ExportVersion, container.File);//Might need to use PluginImporter
+			IDefaultImporter importer = DefaultImporterFactory.CreateAsset(container.File, container.ExportVersion);//Might need to use PluginImporter
 			Meta meta = new Meta(guid, importer);
 			ExportMeta(container, meta, path);
 		}

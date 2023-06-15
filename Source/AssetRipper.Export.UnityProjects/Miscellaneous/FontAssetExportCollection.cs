@@ -34,7 +34,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 		protected override IUnityObjectBase CreateImporter(IExportContainer container)
 		{
 			IFont origin = (IFont)Asset;
-			ITrueTypeFontImporter instance = TrueTypeFontImporterFactory.CreateAsset(container.ExportVersion, container.File);
+			ITrueTypeFontImporter instance = TrueTypeFontImporterFactory.CreateAsset(container.File, container.ExportVersion);
 			instance.FontSize_C1042 = (int)origin.FontSize_C128;
 			instance.IncludeFontData_C1042 = true;
 			instance.Style_C1042 = (int)origin.GetDefaultStyle();

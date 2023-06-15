@@ -84,7 +84,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 														 //((SerializedShader)shader.ParsedForm).Export(writer);
 				ExportSerializedShaderDecomp(shader.ParsedForm_C48, writer);
 			}
-			else if (shader.Has_SubProgramBlob_C48())
+			else if (shader.Has_CompressedBlob_C48())
 			{
 				using ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator);
 				writer.WriteQuotesAroundProgram = false;

@@ -109,7 +109,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		private void OnScriptExported(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			IMonoScript script = (IMonoScript)asset;
-			IMonoImporter importer = MonoImporterFactory.CreateAsset(container.ExportVersion, container.File);
+			IMonoImporter importer = MonoImporterFactory.CreateAsset(container.File, container.ExportVersion);
 			importer.ExecutionOrder_C1035 = (short)script.ExecutionOrder_C115;
 			Meta meta = new Meta(ComputeScriptGuid(script), importer);
 			ExportMeta(container, meta, path);

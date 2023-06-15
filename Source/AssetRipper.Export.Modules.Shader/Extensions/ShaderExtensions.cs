@@ -9,37 +9,37 @@ namespace AssetRipper.Export.Modules.Shaders.Extensions
 	{
 		public static ShaderSubProgramBlob[] ReadBlobs(this IShader shader)
 		{
-			if (shader.Has_CompressedBlob_C48())
+			if (shader.Has_CompressedLengths_C48_AssetList_AssetList_UInt32())
 			{
-				if (shader.Has_CompressedLengths_C48_AssetList_UInt32())
-				{
-					return UnpackSubProgramBlobs(
-						shader.Collection,
-						shader.Offsets_C48_AssetList_UInt32,
-						shader.CompressedLengths_C48_AssetList_UInt32,
-						shader.DecompressedLengths_C48_AssetList_UInt32,
-						shader.CompressedBlob_C48);
-				}
-				else if (shader.Has_CompressedLengths_C48_AssetList_AssetList_UInt32())
-				{
-					return UnpackSubProgramBlobs(
-						shader.Collection,
-						shader.Offsets_C48_AssetList_AssetList_UInt32,
-						shader.CompressedLengths_C48_AssetList_AssetList_UInt32,
-						shader.DecompressedLengths_C48_AssetList_AssetList_UInt32,
-						shader.CompressedBlob_C48);
-				}
+				return UnpackSubProgramBlobs(
+					shader.Collection,
+					shader.Offsets_C48_AssetList_AssetList_UInt32,
+					shader.CompressedLengths_C48_AssetList_AssetList_UInt32,
+					shader.DecompressedLengths_C48_AssetList_AssetList_UInt32,
+					shader.CompressedBlob_C48);
 			}
-			else if (shader.Has_SubProgramBlob_C48())//todo: rename to CompressedBlob
+			else if (shader.Has_CompressedLengths_C48_AssetList_UInt32())
+			{
+				return UnpackSubProgramBlobs(
+					shader.Collection,
+					shader.Offsets_C48_AssetList_UInt32,
+					shader.CompressedLengths_C48_AssetList_UInt32,
+					shader.DecompressedLengths_C48_AssetList_UInt32,
+					shader.CompressedBlob_C48);
+			}
+			else if (shader.Has_CompressedBlob_C48())
 			{
 				return UnpackSubProgramBlobs(
 					shader.Collection,
 					0,
-					(uint)shader.SubProgramBlob_C48.Length,
+					(uint)shader.CompressedBlob_C48.Length,
 					shader.DecompressedSize_C48,
-					shader.SubProgramBlob_C48);
+					shader.CompressedBlob_C48);
 			}
-			return Array.Empty<ShaderSubProgramBlob>();
+			else
+			{
+				return Array.Empty<ShaderSubProgramBlob>();
+			}
 		}
 
 		private static ShaderSubProgramBlob[] UnpackSubProgramBlobs(AssetCollection shaderCollection, uint offset, uint compressedLength, uint decompressedLength, byte[] compressedBlob)

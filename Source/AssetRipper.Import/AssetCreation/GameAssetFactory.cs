@@ -62,7 +62,7 @@ namespace AssetRipper.Import.AssetCreation
 				{
 					UnityVersion oldVersion = assetInfo.Collection.Version;
 					UnityVersion newVersion = new UnityVersion(oldVersion.Major, oldVersion.Minor, unchecked((ushort)(oldVersion.Build + 1u)));
-					IUnityObjectBase? newAsset = AssetFactory.CreateAsset(newVersion, assetInfo);
+					IUnityObjectBase? newAsset = AssetFactory.CreateAsset(assetInfo, newVersion);
 					if (newAsset is not null)
 					{
 						IUnityObjectBase newReadAsset = ReadNormalObject(newAsset, assetData);
