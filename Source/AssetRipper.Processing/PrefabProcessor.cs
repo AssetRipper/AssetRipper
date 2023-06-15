@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
@@ -30,6 +31,12 @@ public sealed class PrefabProcessor : IAssetProcessor
 
 		foreach (IGameObject asset in gameBundle.FetchAssets().OfType<IGameObject>())
 		{
+			if (asset.OriginalName is not null && asset.OriginalName != asset.Name)
+			{
+				Logger.Warning($"GameObject {asset.Name} has different original name {asset.OriginalName}");
+				asset.OriginalName = null;
+			}
+
 			if (gameObjects.Contains(asset))
 			{
 				continue;
