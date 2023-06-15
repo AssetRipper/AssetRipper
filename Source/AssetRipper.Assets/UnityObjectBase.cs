@@ -50,24 +50,32 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	/// </summary>
 	/// <remarks>
 	/// In order of preference:<br/>
-	/// 1. <see cref="OriginalName"/><br/>
-	/// 2. <see cref="IHasNameString.NameString"/><br/>
-	/// 3. <see cref="ClassName"/>
+	/// 1. <see cref="IHasNameString.NameString"/><br/>
+	/// 2. <see cref="OriginalName"/><br/>
+	/// 3. <see cref="ClassName"/><br/>
+	/// <see cref="OriginalName"/> has secondary preference because file importers can create assets with a different name from the file.
 	/// </remarks>
 	/// <returns>A nonempty string.</returns>
 	public string GetBestName()
 	{
-		if (!string.IsNullOrEmpty(OriginalName))
+		string? name = (this as IHasNameString)?.NameString;
+		if (!string.IsNullOrEmpty(name))
+		{
+			return name;
+		}
+		else if (!string.IsNullOrEmpty(OriginalName))
 		{
 			return OriginalName;
 		}
 		else
 		{
-			string? name = (this as IHasNameString)?.NameString;
-			return string.IsNullOrEmpty(name) ? ClassName : name;
+			return ClassName;
 		}
 	}
 
+	/// <summary>
+	/// The original path of the asset's file, relative to the project root.
+	/// </summary>
 	public string? OriginalPath
 	{
 		get => originalPathDetails?.ToString();
@@ -86,6 +94,10 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 			}
 		}
 	}
+
+	/// <summary>
+	/// The original directory containing the asset's file, relative to the project root.
+	/// </summary>
 	public string? OriginalDirectory
 	{
 		get => originalPathDetails?.Directory;
@@ -102,6 +114,10 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 			}
 		}
 	}
+
+	/// <summary>
+	/// The original name of the asset's file.
+	/// </summary>
 	public string? OriginalName
 	{
 		get => originalPathDetails?.Name;
@@ -118,8 +134,9 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 			}
 		}
 	}
+
 	/// <summary>
-	/// Not including the period
+	/// The original extension of the asset's file, not including the period.
 	/// </summary>
 	public string? OriginalExtension
 	{
@@ -138,6 +155,9 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 		}
 	}
 
+	/// <summary>
+	/// The name of the asset bundle containing this asset.
+	/// </summary>
 	public string? AssetBundleName { get; set; }
 
 	[return: NotNullIfNotNull(nameof(str))]
