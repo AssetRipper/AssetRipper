@@ -162,7 +162,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static IGameObject GetRoot(this IGameObject gameObject)
 		{
-			ITransform root = gameObject.GetTransform();
+			if (!gameObject.TryGetComponent(out ITransform? root))
+			{
+				return gameObject;
+			}
+
 			while (true)
 			{
 				ITransform? parent = root.Father_C4P;
@@ -180,7 +184,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static int GetRootDepth(this IGameObject gameObject)
 		{
-			ITransform root = gameObject.GetTransform();
+			if (!gameObject.TryGetComponent(out ITransform? root))
+			{
+				return 0;
+			}
+
 			int depth = 0;
 			while (true)
 			{
@@ -227,9 +235,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			foreach (ITransform? child in transform.Children_C4P.ThrowIfNull())
 			{
-				IGameObject childGO = child.GameObject_C4P ?? throw new NullReferenceException("GameObject for Transform cannot be null.");
-
-				foreach (IEditorExtension childElement in childGO.FetchHierarchy())
+				foreach (IEditorExtension childElement in child.GetGameObject().FetchHierarchy())
 				{
 					yield return childElement;
 				}

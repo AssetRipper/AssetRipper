@@ -35,6 +35,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// <summary>
 		/// Initialize an injected Transform with some sensible default values.
 		/// </summary>
+		/// <remarks>
+		/// Since this Transform is assumed to have no <see cref="ITransform.Father_C4"/>, its <see cref="ITransform.RootOrder_C4"/> is zero.
+		/// </remarks>
 		/// <param name="transform"></param>
 		public static void InitializeDefault(this ITransform transform)
 		{
@@ -43,30 +46,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			transform.LocalScale_C4.SetOne();
 			transform.RootOrder_C4 = 0;
 			transform.LocalEulerAnglesHint_C4?.SetZero();
-		}
-
-		/// <summary>
-		/// Find the sibling index (aka the root order) of the transform
-		/// </summary>
-		/// <param name="transform">The relevant transform</param>
-		/// <returns>The sibling index of the transform</returns>
-		/// <exception cref="Exception">if the transform cannot be found among the father's children</exception>
-		public static int GetSiblingIndex(this ITransform transform)
-		{
-			if (transform.Father_C4.IsNull())
-			{
-				return 0;
-			}
-			ITransform father = transform.Father_C4.GetAsset(transform.Collection);
-			for (int i = 0; i < father.Children_C4.Count; i++)
-			{
-				IPPtr_Transform child = father.Children_C4[i];
-				if (child.PathID == transform.PathID)
-				{
-					return i;
-				}
-			}
-			throw new Exception("Transform hasn't been found among father's children");
 		}
 
 		public static ITransform? FindChild(this ITransform transform, string path)
@@ -120,18 +99,22 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
+		/// <summary>
+		/// Find the sibling index (aka the root order) of the transform
+		/// </summary>
+		/// <param name="transform">The relevant transform</param>
+		/// <returns>The sibling index of the transform</returns>
+		/// <exception cref="Exception">if the transform cannot be found among the father's children</exception>
 		private static int CalculateRootOrder(this ITransform transform)
 		{
-			if (transform.Father_C4.IsNull())
+			ITransform? father = transform.Father_C4P;
+			if (father is null)
 			{
 				return 0;
 			}
-			ITransform father = transform.Father_C4.GetAsset(transform.Collection);
-			AccessListBase<IPPtr_Transform> children = father.Children_C4;
-			for (int i = 0; i < children.Count; i++)
+			for (int i = 0; i < father.Children_C4P.Count; i++)
 			{
-				IPPtr_Transform child = children[i];
-				if (child.PathID == transform.PathID)
+				if (father.Children_C4P[i] == transform)
 				{
 					return i;
 				}

@@ -1,9 +1,12 @@
-﻿using AssetRipper.Assets.Bundles;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
+using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.MarkerInterfaces;
 using System.Diagnostics;
@@ -16,27 +19,50 @@ public sealed class PrefabProcessor : IAssetProcessor
 	{
 		ProcessedAssetCollection processedCollection = gameBundle.AddNewProcessedCollection("Generated Prefab Assets", projectVersion);
 
-		HashSet<IGameObject> gameObjects = new();
-		foreach (IPrefabInstance prefab in gameBundle.FetchAssets().OfType<IPrefabInstance>())
+		HashSet<IGameObject> gameObjectsAlreadyProcessed = new();
+		List<IGameObject> gameObjectsWithNoTransform = new();
+		foreach (IUnityObjectBase asset in gameBundle.FetchAssets())
 		{
-			IGameObject? root = prefab.RootGameObject_C1001P;
-			if (root is not null)
+			switch (asset)
 			{
-				gameObjects.Add(root);
+				case IGameObject gameObject:
+					if (!gameObject.TryGetComponent<ITransform>(out _))
+					{
+						gameObjectsWithNoTransform.Add(gameObject);
+					}
+					break;
+				case IPrefabInstance prefab:
+					if (prefab.RootGameObject_C1001P is { } root)
+					{
+						gameObjectsAlreadyProcessed.Add(root);
+					}
+					break;
 			}
+		}
+
+		foreach (IGameObject gameObject in gameObjectsWithNoTransform)
+		{
+			Logger.Warning(LogCategory.Processing, $"GameObject {gameObject.Name} has no Transform. Adding one.");
+
+			ITransform transform = processedCollection.CreateAsset((int)ClassIDType.Transform, TransformFactory.CreateAsset);
+
+			transform.InitializeDefault();
+
+			transform.GameObject_C4P = gameObject;
+			gameObject.AddComponent(ClassIDType.Transform, transform);
 		}
 
 		foreach (IGameObject asset in gameBundle.FetchAssets().OfType<IGameObject>())
 		{
-			if (gameObjects.Contains(asset))
+			if (gameObjectsAlreadyProcessed.Contains(asset))
 			{
 				continue;
 			}
 
 			IGameObject root = asset.GetRoot();
-			if (gameObjects.Add(root))
+			if (gameObjectsAlreadyProcessed.Add(root))
 			{
-				gameObjects.AddRange(root.FetchHierarchy().OfType<IGameObject>());
+				gameObjectsAlreadyProcessed.AddRange(root.FetchHierarchy().OfType<IGameObject>());
 
 				if (!root.Collection.IsScene && processedCollection.Version.IsLess(2018, 3))
 				{
