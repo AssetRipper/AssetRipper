@@ -74,7 +74,9 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 				_ => asset.GetBestName(),
 			};
 			fileName = FileUtils.RemoveCloneSuffixes(fileName);
-			if (string.IsNullOrWhiteSpace(fileName))
+			fileName = FileUtils.RemoveInstanceSuffixes(fileName);
+			fileName = fileName.Trim();
+			if (string.IsNullOrEmpty(fileName))
 			{
 				fileName = asset.ClassName;
 			}

@@ -28,6 +28,11 @@ namespace AssetRipper.IO.Files.Utils
 			return path.Replace("(Clone)", string.Empty);
 		}
 
+		public static string RemoveInstanceSuffixes(string path)
+		{
+			return path.Replace("(Instance)", string.Empty);
+		}
+
 		public static string GetUniqueName(string dirPath, string fileName, int maxNameLength)
 		{
 			string? ext = null;
