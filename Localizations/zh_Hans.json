@@ -143,5 +143,6 @@
     "script_content_level_3_description": "尽可能安全地恢复 IL2Cpp 方法。",
     "c_sharp_langage_version_config_1": "C# 1",
     "c_sharp_langage_version_config_7_2": "C# 7.2",
-    "c_sharp_langage_version_config_7_3": "C# 7.3"
+    "c_sharp_langage_version_config_7_3": "C# 7.3",
+    "ignore_engine_assets": "忽略引擎资产"
 }
