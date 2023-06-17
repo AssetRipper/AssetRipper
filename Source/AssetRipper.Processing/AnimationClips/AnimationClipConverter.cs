@@ -139,6 +139,7 @@ namespace AssetRipper.Processing.AnimationClips
 		private void ProcessDenses(IClip clip, IAnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos)
 		{
 			DenseClip dense = clip.DenseClip;
+			float[] denseSampleArray = dense.SampleArray.ToArray();
 			int streamCount = (int)clip.StreamedClip.CurveCount;
 			ReadOnlySpan<float> slopeValues = stackalloc float[4] { 0, 0, 0, 0 }; // no slopes - 0 values
 			for (int frameIndex = 0; frameIndex < dense.FrameCount; frameIndex++)
@@ -153,7 +154,7 @@ namespace AssetRipper.Processing.AnimationClips
 					int framePosition = frameOffset + curveIndex;
 					if (binding.IsTransform())
 					{
-						AddTransformCurve(time, binding.TransformType(), dense.SampleArray.ToArray(), slopeValues, slopeValues, framePosition, path);
+						AddTransformCurve(time, binding.TransformType(), denseSampleArray, slopeValues, slopeValues, framePosition, path);
 						curveIndex += binding.TransformType().GetDimension();
 					}
 					else if (binding.CustomType == (byte)BindingCustomType.None)
