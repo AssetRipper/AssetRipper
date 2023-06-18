@@ -25,6 +25,7 @@ using AssetRipper.SourceGenerated.Subclasses.PPtrKeyframe;
 using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
 using AssetRipper.SourceGenerated.Subclasses.StreamedClip;
 using AssetRipper.SourceGenerated.Subclasses.Vector3Curve;
+using System.Buffers;
 using System.Runtime.InteropServices;
 
 namespace AssetRipper.Processing.AnimationClips
@@ -139,9 +140,14 @@ namespace AssetRipper.Processing.AnimationClips
 		private void ProcessDenses(IClip clip, IAnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos)
 		{
 			DenseClip dense = clip.DenseClip;
-			float[] denseSampleArray = dense.SampleArray.ToArray();
-			int streamCount = (int)clip.StreamedClip.CurveCount;
+
+			float[] rentedArray = ArrayPool<float>.Shared.Rent(dense.SampleArray.Count);
+			dense.SampleArray.CopyTo(rentedArray);
+			ReadOnlySpan<float> curveValues = new ReadOnlySpan<float>(rentedArray, 0, dense.SampleArray.Count);
+
 			ReadOnlySpan<float> slopeValues = stackalloc float[4] { 0, 0, 0, 0 }; // no slopes - 0 values
+
+			int streamCount = (int)clip.StreamedClip.CurveCount;
 			for (int frameIndex = 0; frameIndex < dense.FrameCount; frameIndex++)
 			{
 				float time = frameIndex / dense.SampleRate;
@@ -154,7 +160,7 @@ namespace AssetRipper.Processing.AnimationClips
 					int framePosition = frameOffset + curveIndex;
 					if (binding.IsTransform())
 					{
-						AddTransformCurve(time, binding.TransformType(), denseSampleArray, slopeValues, slopeValues, framePosition, path);
+						AddTransformCurve(time, binding.TransformType(), curveValues, slopeValues, slopeValues, framePosition, path);
 						curveIndex += binding.TransformType().GetDimension();
 					}
 					else if (binding.CustomType == (byte)BindingCustomType.None)
@@ -169,13 +175,19 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 				}
 			}
+			ArrayPool<float>.Shared.Return(rentedArray);
 		}
 
 		private void ProcessConstant(IClip clip, IConstantClip constant, IAnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos, float lastFrame)
 		{
+			float[] rentedArray = ArrayPool<float>.Shared.Rent(constant.Data.Count);
+			constant.Data.CopyTo(rentedArray);
+			ReadOnlySpan<float> curveValues = new ReadOnlySpan<float>(rentedArray, 0, constant.Data.Count);
+
+			ReadOnlySpan<float> slopeValues = stackalloc float[4] { 0, 0, 0, 0 }; // no slopes - 0 values
+
 			int streamCount = (int)clip.StreamedClip.CurveCount;
 			int denseCount = (int)clip.DenseClip.CurveCount;
-			ReadOnlySpan<float> slopeValues = stackalloc float[4] { 0, 0, 0, 0 }; // no slopes - 0 values
 
 			// only first and last frames
 			float time = 0.0f;
@@ -188,7 +200,7 @@ namespace AssetRipper.Processing.AnimationClips
 					string path = GetCurvePath(tos, binding.Path);
 					if (binding.IsTransform())
 					{
-						AddTransformCurve(time, binding.TransformType(), constant.Data.ToArray(), slopeValues, slopeValues, curveIndex, path);
+						AddTransformCurve(time, binding.TransformType(), curveValues, slopeValues, slopeValues, curveIndex, path);
 						curveIndex += binding.TransformType().GetDimension();
 					}
 					else if (binding.CustomType == (byte)BindingCustomType.None)
@@ -203,6 +215,7 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 				}
 			}
+			ArrayPool<float>.Shared.Return(rentedArray);
 		}
 
 		private void AddCustomCurve(IAnimationClipBindingConstant bindings, IGenericBinding binding, string path, float time, float value)
@@ -553,7 +566,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 		public IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(StreamedClip clip)
 		{
-			List<StreamedFrame> frames = new List<StreamedFrame>();
+			List<StreamedFrame> frames = new();
 			byte[] memStreamBuffer = new byte[clip.Data.Count * sizeof(uint)];
 			{
 				Span<uint> span = MemoryMarshal.Cast<byte, uint>(memStreamBuffer);
@@ -564,7 +577,7 @@ namespace AssetRipper.Processing.AnimationClips
 			using AssetReader reader = new AssetReader(stream, m_clip.Collection);
 			while (reader.BaseStream.Position < reader.BaseStream.Length)
 			{
-				StreamedFrame frame = new StreamedFrame();
+				StreamedFrame frame = new();
 				frame.Read(reader);
 				frames.Add(frame);
 			}
