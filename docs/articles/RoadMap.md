@@ -1,6 +1,6 @@
 # Development Roadmap
 
-## 0.3.2.0
+## 0.3.3.0
 This release will be primarily focused on improving the user interface.
 
 * Add a settings window
