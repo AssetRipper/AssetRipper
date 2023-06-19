@@ -13,7 +13,9 @@ using AssetRipper.SourceGenerated.Classes.ClassID_157;
 using AssetRipper.SourceGenerated.Classes.ClassID_218;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_258;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.MarkerInterfaces;
 using AssetRipper.SourceGenerated.Subclasses.LightmapData;
 using AssetRipper.SourceGenerated.Subclasses.RendererData;
 using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
@@ -27,13 +29,25 @@ namespace AssetRipper.Processing
 			Logger.Info(LogCategory.Processing, "Lighting Data Assets");
 			ProcessedAssetCollection processedCollection = gameBundle.AddNewProcessedCollection("Generated Lighting Data Assets", projectVersion);
 
+			Dictionary<ILightmapSettings, SceneDefinition> lightmapSettingsDictionary = new();
+			Dictionary<ILightProbesMarker, SceneDefinition?> lightProbeDictionary = new();
+
 			foreach (SceneDefinition scene in gameBundle.Scenes)
 			{
 				//Only scenes can contain a LightmapSettings asset.
 				ILightmapSettings? lightmapSettings = scene.Assets.OfType<ILightmapSettings>().FirstOrDefault();
-				if (lightmapSettings is null
-					|| !lightmapSettings.Has_LightingDataAsset_C157()
-					|| !HasLightingData(lightmapSettings))
+				if (lightmapSettings is null)
+				{
+					continue;
+				}
+
+				lightmapSettingsDictionary.Add(lightmapSettings, scene);
+				if (lightmapSettings.LightProbes_C157P is { } lightProbes && !lightProbeDictionary.TryAdd(lightProbes, scene))
+				{
+					lightProbeDictionary[lightProbes] = null;//This set of light probes is shared between scenes.
+				}
+
+				if (!lightmapSettings.Has_LightingDataAsset_C157() || !HasLightingData(lightmapSettings))
 				{
 					continue;
 				}
@@ -51,7 +65,6 @@ namespace AssetRipper.Processing
 				SetScene(lightingDataAsset, scene, processedCollection);
 				SetLightProbes(lightingDataAsset, lightmapSettings);
 				SetEnlightenDataVersion(lightingDataAsset);
-				SetPaths(lightingDataAsset, scene);
 
 				foreach (IUnityObjectBase asset in scene.Assets)
 				{
@@ -68,6 +81,16 @@ namespace AssetRipper.Processing
 							break;
 					}
 				}
+			}
+
+			foreach ((ILightmapSettings lightmapSettings, SceneDefinition scene) in lightmapSettingsDictionary)
+			{
+				ILightProbesMarker? lightProbes = lightmapSettings.LightProbes_C157P;
+				if (lightProbes is not null && lightProbeDictionary[lightProbes] is null)
+				{
+					lightProbes = null;//Shared light probes should not have their path set.
+				}
+				SetPaths(lightmapSettings, lightProbes, scene);
 			}
 		}
 
@@ -150,12 +173,8 @@ namespace AssetRipper.Processing
 			}
 		}
 
-		private static void SetPaths(ILightingDataAsset lightingDataAsset, SceneDefinition scene)
+		private static void SetPaths(ILightmapSettings lightmapSettings, ILightProbesMarker? lightProbes, SceneDefinition scene)
 		{
-			//This name is purely for the UI.
-			//The OriginalName and OriginalDirectory are used for exporting the asset.
-			lightingDataAsset.NameString = scene.Name;
-
 			//Several assets should all be exported in a subfolder beside the scene.
 			//Example:
 			//Scenes
@@ -164,9 +183,46 @@ namespace AssetRipper.Processing
 			//    LightingData.asset //This is the default name from Unity.
 			//    LightProbes.asset //optional; this can be anywhere
 			//    <a bunch of lightmap textures> //optional; the textures can be anywhere
-			lightingDataAsset.OriginalDirectory = scene.Path;
-			lightingDataAsset.OriginalName = "LightingData";
-			//Todo: Set name and directory for the LightProbes asset and the lightmap texture assets.
+
+			ILightingDataAsset? lightingDataAsset = lightmapSettings.LightingDataAsset_C157P;
+			if (lightingDataAsset is not null)
+			{
+				lightingDataAsset.OriginalDirectory ??= scene.Path;
+				if (lightingDataAsset.Name.IsEmpty)
+				{
+					lightingDataAsset.Name = "LightingData"u8;
+				}
+
+				//This OriginalName is purely for the UI. Name is used for exporting the asset.
+				lightingDataAsset.OriginalName ??= scene.Name;
+			}
+
+			//Move the light probes to the scene subfolder if it exists and is not shared with other scenes.
+			if (lightProbes is not null)
+			{
+				lightProbes.OriginalDirectory ??= scene.Path;
+			}
+
+			//Move the lightmap textures to the scene subfolder.
+			foreach (ILightmapData lightmapData in lightmapSettings.Lightmaps_C157)
+			{
+				if (lightmapData.DirLightmap?.TryGetAsset(lightmapSettings.Collection, out ITexture2D? dirLightmap) ?? false)
+				{
+					dirLightmap.OriginalDirectory ??= scene.Path;
+				}
+				if (lightmapData.IndirectLightmap?.TryGetAsset(lightmapSettings.Collection, out ITexture2D? indirectLightmap) ?? false)
+				{
+					indirectLightmap.OriginalDirectory ??= scene.Path;
+				}
+				if (lightmapData.Lightmap.TryGetAsset(lightmapSettings.Collection, out ITexture2D? lightmap))
+				{
+					lightmap.OriginalDirectory ??= scene.Path;
+				}
+				if (lightmapData.ShadowMask?.TryGetAsset(lightmapSettings.Collection, out ITexture2D? shadowMask) ?? false)
+				{
+					shadowMask.OriginalDirectory ??= scene.Path;
+				}
+			}
 		}
 
 		/// <summary>
@@ -182,7 +238,7 @@ namespace AssetRipper.Processing
 		/// <param name="lightmapSettings"></param>
 		private static void SetLightProbes(ILightingDataAsset lightingDataAsset, ILightmapSettings lightmapSettings)
 		{
-			lightingDataAsset.LightProbes_C1120P = (ILightProbes?)lightmapSettings.LightProbes_C157P;
+			lightingDataAsset.LightProbes_C1120P = lightmapSettings.LightProbes_C157P as ILightProbes;
 		}
 
 		/// <summary>
@@ -222,6 +278,11 @@ namespace AssetRipper.Processing
 			lightingDataAsset.EnlightenDataVersion_C1120 = 112;
 		}
 
+		/// <summary>
+		/// Create a new, empty <see cref="ILightingDataAsset"/>.
+		/// </summary>
+		/// <param name="collection"></param>
+		/// <returns></returns>
 		private static ILightingDataAsset CreateLightingDataAsset(ProcessedAssetCollection collection)
 		{
 			return collection.CreateAsset((int)ClassIDType.LightingDataAsset, LightingDataAssetFactory.CreateAsset);
