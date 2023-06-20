@@ -35,7 +35,11 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			instance.Format_C1006 = (int)data.Format;
 			instance.MaxTextureSize_C1006 = data.MaxTextureSize;
 			instance.TextureSettings_C1006.CopyValues(data.TextureSettings);
-			instance.NPOTScale_C1006E = TextureImporterNPOTScale.ToNearest; // Default texture importer settings uses this value, and cubemaps appear to not work when it's None
+			// cubemaps break when they aren't scaled, while sprites break if they ARE scaled
+			// everything else works with no scaling, so we just only scale for cubemaps
+			instance.NPOTScale_C1006E = origin is ICubemap
+				? TextureImporterNPOTScale.ToNearest
+				: TextureImporterNPOTScale.None;
 			instance.CompressionQuality_C1006 = 50;
 
 			instance.SetSwizzle(TextureImporterSwizzle.R, TextureImporterSwizzle.G, TextureImporterSwizzle.B, TextureImporterSwizzle.A);
