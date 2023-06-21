@@ -258,7 +258,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			{
 				IExportCollection collection = collections[i];
 				container.CurrentCollection = collection;
-				if (collection is not EmptyExportCollection)
+				if (collection is not EmptyExportCollection && collection.Name != "Shader")
 				{
 					Logger.Info(LogCategory.ExportProgress, $"Exporting '{collection.Name}'");
 					bool exportedSuccessfully = collection.Export(container, options.ProjectRootPath);
