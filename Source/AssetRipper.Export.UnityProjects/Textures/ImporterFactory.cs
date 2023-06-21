@@ -46,7 +46,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 			instance.SpriteMode_C1006E = SpriteImportMode.Single;
 			instance.SpriteExtrude_C1006 = 1;
-			instance.SpriteMeshType_C1006E = SpriteMeshType.Tight;
+			instance.SpriteMeshType_C1006E = SpriteMeshType.FullRect;
 			instance.SpritePivot_C1006?.SetValues(0.5f, 0.5f);
 			instance.SpritePixelsToUnits_C1006 = 100.0f;
 			instance.SpriteGenerateFallbackPhysicsShape_C1006 = 1;
