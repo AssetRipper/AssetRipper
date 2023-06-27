@@ -143,5 +143,6 @@
     "asset_tab_audio_play": "再生",
     "audio_format_yaml_description": "yamlとresSファイルとしてエクスポートします。安定したオプションです。",
     "audio_format_native_description": "生のFSBファイルをエクスポートします。",
-    "audio_format_yaml": "Yaml"
+    "audio_format_yaml": "Yaml",
+    "ignore_engine_assets": "Engine Assetsを無視する"
 }
