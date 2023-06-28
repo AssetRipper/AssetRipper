@@ -136,8 +136,8 @@ namespace AssetRipper.Import.AssetCreation
 			}
 			catch (Exception ex)
 			{
-				replaceWithUnreadableObject = false;
 				LogReadException(asset, ex);
+				replaceWithUnreadableObject = true;
 			}
 			if (replaceWithUnreadableObject)
 			{
