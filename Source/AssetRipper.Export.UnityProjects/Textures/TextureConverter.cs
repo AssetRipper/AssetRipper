@@ -378,27 +378,27 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					return true;
 
 				case TextureFormat.RHalf:
-					RgbConverter.Convert<ColorRHalf, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorR16Half, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGHalf:
-					RgbConverter.Convert<ColorRGHalf, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRG32Half, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGBAHalf:
-					RgbConverter.Convert<ColorRGBAHalf, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGBA64Half, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RFloat:
-					RgbConverter.Convert<ColorRSingle, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorR32Single, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGFloat:
-					RgbConverter.Convert<ColorRGSingle, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRG64Single, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGBAFloat:
-					RgbConverter.Convert<ColorRGBASingle, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGBA128Single, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGB9e5Float:
@@ -442,16 +442,16 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			switch (textureFormat)
 			{
 				case TextureFormat.BC4:
-					BcDecoder.DecompressBC4(inputData, width, height, outputData);
+					Bc4.Decompress(inputData, width, height, outputData);
 					return true;
 				case TextureFormat.BC5:
-					BcDecoder.DecompressBC5(inputData, width, height, outputData);
+					Bc5.Decompress(inputData, width, height, outputData);
 					return true;
 				case TextureFormat.BC6H:
-					BcDecoder.DecompressBC6H(inputData, width, height, false, outputData);
+					Bc6h.Decompress(inputData, width, height, false, outputData);
 					return true;
 				case TextureFormat.BC7:
-					BcDecoder.DecompressBC7(inputData, width, height, outputData);
+					Bc7.Decompress(inputData, width, height, outputData);
 					return true;
 				default:
 					return false;
