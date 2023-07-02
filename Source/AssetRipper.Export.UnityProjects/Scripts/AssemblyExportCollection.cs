@@ -6,9 +6,8 @@ using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
-using AssetRipper.IO.Files;
 using AssetRipper.Primitives;
-using AssetRipper.SourceGenerated.Classes.ClassID_1030;
+using AssetRipper.SourceGenerated.Classes.ClassID_1050;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 
 namespace AssetRipper.Export.UnityProjects.Scripts
@@ -179,7 +178,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		private void OnAssemblyExported(IExportContainer container, string path)
 		{
 			UnityGUID guid = GetAssemblyGuid(Path.GetFileName(path));
-			IDefaultImporter importer = DefaultImporterFactory.CreateAsset(container.File, container.ExportVersion);//Might need to use PluginImporter
+			IPluginImporter importer = PluginImporterFactory.CreateAsset(container.File, container.ExportVersion);
 			Meta meta = new Meta(guid, importer);
 			ExportMeta(container, meta, path);
 		}

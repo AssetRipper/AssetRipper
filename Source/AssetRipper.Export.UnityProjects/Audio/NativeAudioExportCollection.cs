@@ -1,11 +1,10 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects.Audio
 {
-	public sealed class NativeAudioExportCollection : AssetExportCollection
+	public sealed class NativeAudioExportCollection : AudioExportCollection
 	{
 		public NativeAudioExportCollection(NativeAudioExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
 		{

@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 
@@ -13,7 +12,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		{
 			if (asset is IShader)
 			{
-				exportCollection = new AssetExportCollection(this, asset);
+				exportCollection = new ShaderExportCollection(this, asset);
 				return true;
 			}
 			else
