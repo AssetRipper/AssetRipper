@@ -5,6 +5,7 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
 using AssetRipper.SourceGenerated.Classes.ClassID_108;
@@ -24,6 +25,11 @@ namespace AssetRipper.Processing
 {
 	public class LightingDataProcessor : IAssetProcessor
 	{
+		/// <summary>
+		/// The default name of newly created <see cref="ILightingDataAsset"/>s.
+		/// </summary>
+		private static Utf8String LightingDataName { get; } = new("LightingData");
+
 		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
 		{
 			Logger.Info(LogCategory.Processing, "Lighting Data Assets");
@@ -190,7 +196,7 @@ namespace AssetRipper.Processing
 				lightingDataAsset.OriginalDirectory ??= scene.Path;
 				if (lightingDataAsset.Name.IsEmpty)
 				{
-					lightingDataAsset.Name = "LightingData"u8;
+					lightingDataAsset.Name = LightingDataName;
 				}
 
 				//This OriginalName is purely for the UI. Name is used for exporting the asset.

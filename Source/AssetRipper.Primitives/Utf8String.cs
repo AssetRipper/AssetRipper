@@ -41,10 +41,7 @@ public sealed class Utf8String : IEquatable<Utf8String>
 	{
 		get
 		{
-			if (cachedString is null)
-			{
-				Interlocked.Exchange(ref cachedString, Encoding.UTF8.GetString(data));
-			}
+			cachedString ??= Encoding.UTF8.GetString(data);
 			return cachedString;
 		}
 	}
