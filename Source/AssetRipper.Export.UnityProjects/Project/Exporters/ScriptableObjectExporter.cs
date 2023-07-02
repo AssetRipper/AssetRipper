@@ -13,7 +13,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 		{
 			if (monoBehaviour.IsScriptableObject())
 			{
-				return new AssetExportCollection(this, monoBehaviour);
+				return new AssetExportCollection<IMonoBehaviour>(this, monoBehaviour);
 			}
 			else
 			{

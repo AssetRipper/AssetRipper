@@ -4,7 +4,7 @@ using AssetRipper.Export.UnityProjects.Project.Exporters;
 
 namespace AssetRipper.Export.UnityProjects.Meshes
 {
-	public sealed class GlbExportCollection : AssetExportCollection
+	public sealed class GlbExportCollection : AssetExportCollection<IUnityObjectBase>
 	{
 		public GlbExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
 		{

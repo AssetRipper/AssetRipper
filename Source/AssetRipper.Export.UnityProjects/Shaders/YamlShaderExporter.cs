@@ -15,7 +15,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		{
 			exportCollection = asset switch
 			{
-				IShader => new YamlShaderExportCollection(this, asset),
+				IShader shader => new YamlShaderExportCollection(this, shader),
 				_ => null,
 			};
 			return exportCollection is not null;

@@ -21,9 +21,9 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset is ITerrainData)
+			if (asset is ITerrainData terrainData)
 			{
-				exportCollection = new TerrainHeatmapExportCollection(this, asset);
+				exportCollection = new TerrainHeatmapExportCollection(this, terrainData);
 				return true;
 			}
 			else

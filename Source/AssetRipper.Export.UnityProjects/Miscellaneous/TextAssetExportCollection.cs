@@ -8,13 +8,13 @@ using System.Text.Json;
 
 namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
-	public sealed class TextAssetExportCollection : AssetExportCollection
+	public sealed class TextAssetExportCollection : AssetExportCollection<ITextAsset>
 	{
 		private const string JsonExtension = "json";
 		private const string TxtExtension = "txt";
 		private const string BytesExtension = "bytes";
 
-		public TextAssetExportCollection(TextAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
+		public TextAssetExportCollection(TextAssetExporter assetExporter, ITextAsset asset) : base(assetExporter, asset)
 		{
 		}
 
@@ -64,7 +64,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		private static bool IsPlainText(string text) => text.All(c => !char.IsControl(c) || char.IsWhiteSpace(c));
 
-		protected override IUnityObjectBase CreateImporter(IExportContainer container)
+		protected override ITextScriptImporter CreateImporter(IExportContainer container)
 		{
 			ITextScriptImporter importer = TextScriptImporterFactory.CreateAsset(container.File, container.ExportVersion);
 			if (importer.Has_AssetBundleName_C1031() && Asset.AssetBundleName is not null)

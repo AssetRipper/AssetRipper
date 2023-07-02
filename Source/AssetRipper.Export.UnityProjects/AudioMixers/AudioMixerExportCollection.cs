@@ -12,7 +12,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_273;
 
 namespace AssetRipper.Export.UnityProjects.AudioMixers
 {
-	public class AudioMixerExportCollection : AssetsExportCollection
+	public class AudioMixerExportCollection : AssetsExportCollection<IAudioMixer>
 	{
 		public AudioMixerExportCollection(IAssetExporter assetExporter, IAudioMixer mixer) : base(assetExporter, mixer)
 		{

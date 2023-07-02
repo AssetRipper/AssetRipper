@@ -31,7 +31,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 
 		public virtual bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			exportCollection = new AssetExportCollection(this, asset);
+			exportCollection = new AssetExportCollection<IUnityObjectBase>(this, asset);
 			return true;
 		}
 

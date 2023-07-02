@@ -6,7 +6,7 @@ using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects.Models
 {
-	public sealed class GlbPrefabModelExportCollection : AssetsExportCollection
+	public sealed class GlbPrefabModelExportCollection : AssetsExportCollection<IGameObject>
 	{
 		public GlbPrefabModelExportCollection(GlbModelExporter assetExporter, IGameObject root) : base(assetExporter, root)
 		{

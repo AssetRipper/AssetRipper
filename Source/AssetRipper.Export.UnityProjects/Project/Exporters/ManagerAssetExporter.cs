@@ -11,12 +11,13 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			exportCollection = asset switch
+			if (asset is IGlobalGameManager manager && manager is not IBuildSettings)
 			{
-				GlobalGameManager and not IBuildSettings => new ManagerExportCollection(this, asset),
-				_ => null,
-			};
-			return exportCollection is not null;
+				exportCollection = new ManagerExportCollection(this, manager);
+				return true;
+			}
+			exportCollection = null;
+			return false;
 		}
 	}
 }

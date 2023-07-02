@@ -8,9 +8,9 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1034;
 
 namespace AssetRipper.Export.UnityProjects.Project.Collections
 {
-	public class AssetExportCollection : ExportCollection
+	public class AssetExportCollection<T> : ExportCollection where T : IUnityObjectBase
 	{
-		public AssetExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset)
+		public AssetExportCollection(IAssetExporter assetExporter, T asset)
 		{
 			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
 			Asset = asset ?? throw new ArgumentNullException(nameof(asset));
@@ -88,6 +88,6 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			get { yield return Asset; }
 		}
 		public override string Name => Asset.GetBestName();
-		public IUnityObjectBase Asset { get; }
+		public T Asset { get; }
 	}
 }

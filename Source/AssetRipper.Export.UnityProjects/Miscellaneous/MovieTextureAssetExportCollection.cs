@@ -1,11 +1,12 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.UnityProjects.Project.Collections;
+using AssetRipper.SourceGenerated.Classes.ClassID_152;
 
 namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
-	public sealed class MovieTextureAssetExportCollection : AssetExportCollection
+	public sealed class MovieTextureAssetExportCollection : AssetExportCollection<IMovieTexture>
 	{
-		public MovieTextureAssetExportCollection(MovieTextureAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
+		public MovieTextureAssetExportCollection(MovieTextureAssetExporter assetExporter, IMovieTexture asset) : base(assetExporter, asset)
 		{
 		}
 

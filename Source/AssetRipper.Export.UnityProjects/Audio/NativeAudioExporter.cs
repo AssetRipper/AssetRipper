@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
@@ -13,9 +12,9 @@ namespace AssetRipper.Export.UnityProjects.Audio
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset is IAudioClip)
+			if (asset is IAudioClip clip)
 			{
-				exportCollection = new NativeAudioExportCollection(this, asset);
+				exportCollection = new NativeAudioExportCollection(this, clip);
 				return true;
 			}
 			else

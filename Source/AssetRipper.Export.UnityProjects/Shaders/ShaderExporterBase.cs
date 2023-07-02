@@ -10,9 +10,9 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset is IShader)
+			if (asset is IShader shader)
 			{
-				exportCollection = new ShaderExportCollection(this, asset);
+				exportCollection = new ShaderExportCollection(this, shader);
 				return true;
 			}
 			else

@@ -12,7 +12,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 		{
 			exportCollection = asset switch
 			{
-				IBuildSettings => new BuildSettingsExportCollection(this, temporaryFile, asset),
+				IBuildSettings settings => new BuildSettingsExportCollection(this, temporaryFile, settings),
 				_ => null,
 			};
 			return exportCollection is not null;

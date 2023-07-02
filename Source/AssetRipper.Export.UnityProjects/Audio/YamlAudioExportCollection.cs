@@ -9,7 +9,7 @@ using AssetRipper.SourceGenerated.Subclasses.StreamedResource;
 
 namespace AssetRipper.Export.UnityProjects.Audio
 {
-	public sealed class YamlAudioExportCollection : AssetExportCollection
+	public sealed class YamlAudioExportCollection : AssetExportCollection<IAudioClip>
 	{
 		public YamlAudioExportCollection(IAssetExporter assetExporter, IAudioClip asset) : base(assetExporter, asset)
 		{
@@ -17,14 +17,13 @@ namespace AssetRipper.Export.UnityProjects.Audio
 
 		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
 		{
-			IAudioClip asset = (IAudioClip)Asset;
-			IStreamedResource? resource = asset.Resource_C83;
+			IStreamedResource? resource = Asset.Resource_C83;
 			if (resource is not null)
 			{
 				Utf8String originalSource = resource.Source;
 				ulong originalOffset = resource.Offset;
 				ulong originalSize = resource.Size;
-				if (resource.TryGetContent(asset.Collection, out byte[]? data))
+				if (resource.TryGetContent(Asset.Collection, out byte[]? data))
 				{
 					string resPath = filePath + ".resS";
 					System.IO.File.WriteAllBytes(resPath, data);

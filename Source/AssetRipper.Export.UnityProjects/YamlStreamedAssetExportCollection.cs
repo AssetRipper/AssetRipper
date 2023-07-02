@@ -13,7 +13,7 @@ using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects
 {
-	public sealed class YamlStreamedAssetExportCollection : AssetExportCollection
+	public sealed class YamlStreamedAssetExportCollection : AssetExportCollection<IUnityObjectBase>
 	{
 		public YamlStreamedAssetExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
 		{

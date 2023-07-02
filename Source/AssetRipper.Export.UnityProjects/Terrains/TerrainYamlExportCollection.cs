@@ -6,7 +6,7 @@ using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects.Terrains
 {
-	public sealed class TerrainYamlExportCollection : AssetsExportCollection
+	public sealed class TerrainYamlExportCollection : AssetsExportCollection<ITerrainData>
 	{
 		public TerrainYamlExportCollection(IAssetExporter assetExporter, ITerrainData terrainData) : base(assetExporter, terrainData)
 		{

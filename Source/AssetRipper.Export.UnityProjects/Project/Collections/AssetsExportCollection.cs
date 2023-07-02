@@ -7,9 +7,9 @@ using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Project.Collections
 {
-	public abstract class AssetsExportCollection : AssetExportCollection
+	public abstract class AssetsExportCollection<T> : AssetExportCollection<T> where T : IUnityObjectBase
 	{
-		public AssetsExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
+		public AssetsExportCollection(IAssetExporter assetExporter, T asset) : base(assetExporter, asset)
 		{
 			m_file = asset.Collection;
 		}
@@ -62,7 +62,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		/// <returns><see langword="true"/> if the <paramref name="asset"/> is added to the <see cref="AssetsExportCollection"/> object; <see langword="false"/> if the <paramref name="asset"/> is already present.</returns>
 		protected bool AddAsset(IUnityObjectBase asset)
 		{
-			Debug.Assert(asset != Asset);
+			Debug.Assert(asset != (IUnityObjectBase)Asset);
 			long exportID = GenerateExportID(asset);
 			if (m_exportIDs.TryAdd(asset, exportID))
 			{

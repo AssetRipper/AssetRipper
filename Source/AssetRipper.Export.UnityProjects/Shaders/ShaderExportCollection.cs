@@ -10,20 +10,19 @@ using AssetRipper.SourceGenerated.Subclasses.PPtr_Texture;
 
 namespace AssetRipper.Export.UnityProjects.Shaders;
 
-public class ShaderExportCollection : AssetExportCollection
+public class ShaderExportCollection : AssetExportCollection<IShader>
 {
-	public ShaderExportCollection(ShaderExporterBase assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
+	public ShaderExportCollection(ShaderExporterBase assetExporter, IShader asset) : base(assetExporter, asset)
 	{
 	}
 
 	protected override IUnityObjectBase CreateImporter(IExportContainer container)
 	{
-		IShader shader = (IShader)Asset;
 		IShaderImporter importer = ShaderImporterFactory.CreateAsset(container.File, container.ExportVersion);
-		if (importer.Has_NonModifiableTextures_C1007() && shader.Has_NonModifiableTextures_C48())
+		if (importer.Has_NonModifiableTextures_C1007() && Asset.Has_NonModifiableTextures_C48())
 		{
-			PPtrConverter converter = new(shader, importer);
-			foreach ((Utf8String name, PPtr_Texture_5_0_0 pptr) in shader.NonModifiableTextures_C48)
+			PPtrConverter converter = new(Asset, importer);
+			foreach ((Utf8String name, PPtr_Texture_5_0_0 pptr) in Asset.NonModifiableTextures_C48)
 			{
 				AssetPair<Utf8String, PPtr_Texture_5_0_0> pair = importer.NonModifiableTextures_C1007.AddNew();
 				pair.Key = name;

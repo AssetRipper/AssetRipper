@@ -6,7 +6,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 {
 	public sealed class AudioClipExportCollection : AudioExportCollection
 	{
-		public AudioClipExportCollection(AudioClipExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
+		public AudioClipExportCollection(AudioClipExporter assetExporter, IAudioClip asset) : base(assetExporter, asset)
 		{
 		}
 

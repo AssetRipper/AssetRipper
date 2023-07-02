@@ -6,11 +6,9 @@ using AssetRipper.SourceGenerated.Classes.ClassID_6;
 
 namespace AssetRipper.Export.UnityProjects.Project.Collections
 {
-	public class ManagerExportCollection : AssetExportCollection
+	public class ManagerExportCollection : AssetExportCollection<IGlobalGameManager>
 	{
-		public ManagerExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : this(assetExporter, (GlobalGameManager)asset) { }
-
-		public ManagerExportCollection(IAssetExporter assetExporter, GlobalGameManager asset) : base(assetExporter, asset) { }
+		public ManagerExportCollection(IAssetExporter assetExporter, IGlobalGameManager asset) : base(assetExporter, asset) { }
 
 		public override bool Export(IExportContainer container, string projectDirectory)
 		{

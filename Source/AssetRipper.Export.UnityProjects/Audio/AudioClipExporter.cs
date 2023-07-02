@@ -23,7 +23,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 		{
 			if (asset is IAudioClip audio && AudioClipDecoder.CanDecode(audio))
 			{
-				exportCollection = new AudioClipExportCollection(this, asset);
+				exportCollection = new AudioClipExportCollection(this, audio);
 				return true;
 			}
 			else

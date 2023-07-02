@@ -20,7 +20,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 		{
 			if (asset is ITextAsset textAsset && !textAsset.Script_C49.IsEmpty)
 			{
-				exportCollection = new TextAssetExportCollection(this, asset);
+				exportCollection = new TextAssetExportCollection(this, textAsset);
 				return true;
 			}
 			else

@@ -13,8 +13,6 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 {
 	public sealed class BuildSettingsExportCollection : ManagerExportCollection
 	{
-		public BuildSettingsExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection file, IUnityObjectBase asset) : this(assetExporter, file, (IBuildSettings)asset) { }
-
 		public BuildSettingsExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IBuildSettings asset) : base(assetExporter, asset)
 		{
 			EditorBuildSettings = CreateVirtualEditorBuildSettings(virtualFile);

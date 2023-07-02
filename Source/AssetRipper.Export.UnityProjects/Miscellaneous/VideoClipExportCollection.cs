@@ -5,7 +5,7 @@ using IVideoClip329 = AssetRipper.SourceGenerated.Classes.ClassID_329.IVideoClip
 
 namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
-	public sealed class VideoClipExportCollection : AssetExportCollection
+	public sealed class VideoClipExportCollection : AssetExportCollection<IUnityObjectBase>
 	{
 		public VideoClipExportCollection(VideoClipExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset)
 		{

@@ -17,7 +17,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 		{
 			exportCollection = asset switch
 			{
-				ISprite => new AssetExportCollection(this, asset),
+				ISprite sprite => new AssetExportCollection<ISprite>(this, sprite),
 				ISpriteAtlas => new EmptyExportCollection(),
 				_ => null,
 			};
