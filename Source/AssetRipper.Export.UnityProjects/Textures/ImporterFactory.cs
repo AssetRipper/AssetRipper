@@ -61,7 +61,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			platformSettings.MaxTextureSize = instance.MaxTextureSize_C1006;
 			platformSettings.ResizeAlgorithm = (int)TextureResizeAlgorithm.Mitchell;
 			platformSettings.Format = (int)TextureImporterFormat.Automatic;
-			platformSettings.TextureCompression = (int)TextureImporterCompression.Compressed;//Uncompressed results in a significantly larger Library folder
+			platformSettings.TextureCompression = (int)TextureImporterCompression.CompressedHQ;//Uncompressed results in a significantly larger Library folder
 			platformSettings.CompressionQuality = 50;
 			platformSettings.CrunchedCompression = false;
 			platformSettings.AllowsAlphaSplitting = false;
