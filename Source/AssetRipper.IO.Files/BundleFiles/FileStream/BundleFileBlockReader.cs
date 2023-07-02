@@ -92,7 +92,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 								}
 								else if (bytesWritten != uncompressedSize)
 								{
-									DecompressionFailedException.ThrowIncorrectNumberBytesWritten(uncompressedSize, bytesWritten);
+									DecompressionFailedException.ThrowIncorrectNumberBytesWritten(entry.PathFixed, uncompressedSize, bytesWritten);
 								}
 								new MemoryStream(uncompressedBytes).CopyTo(m_cachedBlockStream);
 								break;

@@ -1,4 +1,5 @@
 using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files.Exceptions;
 using AssetRipper.IO.Files.Extensions;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
@@ -79,9 +80,13 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 						byte[] uncompressedBytes = new byte[uncompressedSize];
 						byte[] compressedBytes = new BinaryReader(stream).ReadBytes(Header.CompressedBlocksInfoSize);
 						int bytesWritten = LZ4Codec.Decode(compressedBytes, uncompressedBytes);
-						if (bytesWritten != uncompressedSize)
+						if (bytesWritten < 0)
 						{
-							throw new Exception($"Incorrect number of bytes written. {bytesWritten} instead of {uncompressedSize} for {compressedBytes.Length} compressed bytes");
+							EncryptedFileException.Throw(NameFixed);
+						}
+						else if (bytesWritten != uncompressedSize)
+						{
+							DecompressionFailedException.ThrowIncorrectNumberBytesWritten(NameFixed, uncompressedSize, bytesWritten);
 						}
 						ReadMetadata(new MemoryStream(uncompressedBytes), uncompressedSize);
 					}

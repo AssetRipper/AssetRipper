@@ -11,8 +11,8 @@ public sealed class DecompressionFailedException : Exception
 	}
 
 	[DoesNotReturn]
-	internal static void ThrowIncorrectNumberBytesWritten(long expected, long actual)
+	internal static void ThrowIncorrectNumberBytesWritten(string fileName, long expected, long actual)
 	{
-		throw new DecompressionFailedException($"Incorrect number of bytes written. Expected {expected}, but was {actual}.");
+		throw new DecompressionFailedException($"Incorrect number of bytes written for '{fileName}' while decompressing. Expected {expected}, but was {actual}.");
 	}
 }
