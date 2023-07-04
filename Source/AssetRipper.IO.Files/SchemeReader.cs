@@ -6,6 +6,7 @@ using AssetRipper.IO.Files.CompressedFiles.Brotli;
 using AssetRipper.IO.Files.CompressedFiles.GZip;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.WebFiles;
 
@@ -25,12 +26,10 @@ namespace AssetRipper.IO.Files
 			new FileStreamBundleScheme(),
 		};
 
-		public static FileBase LoadFile(string filePath) => LoadFile(filePath, Path.GetFileName(filePath));
-
-		public static FileBase LoadFile(string filePath, string fileName)
+		public static FileBase LoadFile(string filePath)
 		{
 			SmartStream stream = SmartStream.OpenRead(filePath);
-			return ReadFile(stream, filePath, fileName);
+			return ReadFile(stream, MultiFileStream.GetFilePath(filePath), MultiFileStream.GetFileName(filePath));
 		}
 
 		public static FileBase ReadFile(byte[] buffer, string filePath, string fileName)

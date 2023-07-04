@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.IO.Files.Streams.MultiFile
 {
-	public class SplitNameComparer : IComparer<string>
+	internal sealed class SplitNameComparer : IComparer<string>
 	{
 		public int Compare(string? x, string? y)
 		{

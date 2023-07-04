@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.Import.Structure.Platforms
 {
-	public abstract class PlatformGameStructure
+	public abstract partial class PlatformGameStructure
 	{
 		public string? Name { get; protected set; }
 		public string? RootPath { get; protected set; }
@@ -33,8 +33,8 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		protected DirectoryInfo m_root { get; set; }
 
-		protected static readonly Regex s_levelTemplate = new Regex($@"^level(0|[1-9][0-9]*)({MultiFileStream.MultifileRegPostfix}0)?$", RegexOptions.Compiled);
-		protected static readonly Regex s_sharedAssetTemplate = new Regex(@"^sharedassets[0-9]+\.assets", RegexOptions.Compiled);
+		protected static readonly Regex s_levelTemplate = LevelTemplateRegex();
+		protected static readonly Regex s_sharedAssetTemplate = SharedAssetTemplateRegex();
 
 		protected const string DataFolderName = "Data";
 		protected const string ManagedName = "Managed";
@@ -368,5 +368,11 @@ namespace AssetRipper.Import.Structure.Platforms
 				File.Exists(Il2CppGameAssemblyPath) &&
 				File.Exists(Il2CppMetaDataPath);
 		}
+
+		[GeneratedRegex("^level(0|[1-9][0-9]*)(\\.split0)?$", RegexOptions.Compiled)]
+		private static partial Regex LevelTemplateRegex();
+
+		[GeneratedRegex("^sharedassets[0-9]+\\.assets", RegexOptions.Compiled)]
+		private static partial Regex SharedAssetTemplateRegex();
 	}
 }

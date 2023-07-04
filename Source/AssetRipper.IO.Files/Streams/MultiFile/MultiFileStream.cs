@@ -1,34 +1,27 @@
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace AssetRipper.IO.Files.Streams.MultiFile
 {
-	public sealed class MultiFileStream : Stream
+	public sealed partial class MultiFileStream : Stream
 	{
-		public MultiFileStream(IEnumerable<Stream> streams)
+		private MultiFileStream(IEnumerable<Stream> streams)
 		{
-			if (streams == null)
+			m_streams = streams.ToArray();
+			if (m_streams.Count == 0)
 			{
-				throw new ArgumentNullException(nameof(streams));
+				throw new ArgumentException("No streams were provided.", nameof(streams));
 			}
-			foreach (Stream stream in streams)
+
+			foreach (Stream stream in m_streams)
 			{
-				if (stream == null)
-				{
-					throw new ArgumentNullException();
-				}
 				if (!stream.CanSeek)
 				{
 					throw new Exception($"Stream {stream} isn't seekable");
 				}
 			}
 
-			m_streams = streams.ToArray();
-			if (m_streams.Count == 0)
-			{
-				throw new ArgumentException(null, nameof(streams));
-			}
-
-			Length = streams.Sum(t => t.Length);
+			Length = m_streams.Sum(t => t.Length);
 			CanRead = m_streams.All(t => t.CanRead);
 			CanWrite = m_streams.All(t => t.CanWrite);
 			UpdateCurrentStream();
@@ -46,7 +39,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 		/// <returns>True if the path matches the multi file regex</returns>
 		public static bool IsMultiFile(string path)
 		{
-			return s_splitCheck.IsMatch(path);
+			return SplitFileRegex().IsMatch(path);
 		}
 
 		public static bool Exists(string path)
@@ -56,11 +49,11 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 				SplitPathWithoutExtension(path, out string directory, out string file);
 				return Exists(directory, file);
 			}
-			if (File.Exists(path))
+			else if (File.Exists(path))
 			{
 				return true;
 			}
-
+			else
 			{
 				SplitPath(path, out string directory, out string file, true);
 				if (string.IsNullOrEmpty(file))
@@ -81,11 +74,11 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 				SplitPathWithoutExtension(path, out string directory, out string file);
 				return OpenRead(directory, file);
 			}
-			if (File.Exists(path))
+			else if (File.Exists(path))
 			{
 				return File.OpenRead(path);
 			}
-
+			else
 			{
 				SplitPath(path, out string directory, out string file);
 				return OpenRead(directory, file);
@@ -97,7 +90,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 			if (IsMultiFile(path))
 			{
 				int index = path.LastIndexOf('.');
-				return path.Substring(0, index);
+				return path[..index];
 			}
 			return path;
 		}
@@ -388,10 +381,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 		public override bool CanWrite { get; }
 		public override bool CanSeek => true;
 
-		private static readonly Regex s_splitCheck = new Regex($@".+{MultifileRegPostfix}[0-9]+$", RegexOptions.Compiled);
-		private static readonly SplitNameComparer s_splitNameComparer = new SplitNameComparer();
-
-		public const string MultifileRegPostfix = @"\.split";
+		private static readonly SplitNameComparer s_splitNameComparer = new();
 
 		/// <summary>
 		/// Always has at least one element.
@@ -403,5 +393,8 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 		private long m_position;
 		private long m_currentBegin;
 		private long m_currentEnd;
+
+		[GeneratedRegex(@".+\.split[0-9]+$", RegexOptions.Compiled)]
+		private static partial Regex SplitFileRegex();
 	}
 }
