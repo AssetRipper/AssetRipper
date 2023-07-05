@@ -95,7 +95,7 @@ namespace AssetRipper.Processing
 				{
 					lightProbes = null;//Shared light probes should not have their path set.
 				}
-				SetPaths(lightmapSettings, lightProbes, scene);
+				SetPathsAndMainAsset(lightmapSettings, lightProbes, scene);
 			}
 		}
 
@@ -178,7 +178,7 @@ namespace AssetRipper.Processing
 			}
 		}
 
-		private static void SetPaths(ILightmapSettings lightmapSettings, ILightProbesMarker? lightProbes, SceneDefinition scene)
+		private static void SetPathsAndMainAsset(ILightmapSettings lightmapSettings, ILightProbesMarker? lightProbes, SceneDefinition scene)
 		{
 			//Several assets should all be exported in a subfolder beside the scene.
 			//Example:
@@ -192,6 +192,8 @@ namespace AssetRipper.Processing
 			ILightingDataAsset? lightingDataAsset = lightmapSettings.LightingDataAsset_C157P;
 			if (lightingDataAsset is not null)
 			{
+				lightingDataAsset.MainAsset = lightingDataAsset;
+
 				lightingDataAsset.OriginalDirectory ??= scene.Path;
 				if (lightingDataAsset.Name.IsEmpty)
 				{
@@ -214,18 +216,22 @@ namespace AssetRipper.Processing
 				if (lightmapData.DirLightmap?.TryGetAsset(lightmapSettings.Collection, out ITexture2D? dirLightmap) ?? false)
 				{
 					dirLightmap.OriginalDirectory ??= scene.Path;
+					dirLightmap.MainAsset = lightingDataAsset;
 				}
 				if (lightmapData.IndirectLightmap?.TryGetAsset(lightmapSettings.Collection, out ITexture2D? indirectLightmap) ?? false)
 				{
 					indirectLightmap.OriginalDirectory ??= scene.Path;
+					indirectLightmap.MainAsset = lightingDataAsset;
 				}
 				if (lightmapData.Lightmap.TryGetAsset(lightmapSettings.Collection, out ITexture2D? lightmap))
 				{
 					lightmap.OriginalDirectory ??= scene.Path;
+					lightmap.MainAsset = lightingDataAsset;
 				}
 				if (lightmapData.ShadowMask?.TryGetAsset(lightmapSettings.Collection, out ITexture2D? shadowMask) ?? false)
 				{
 					shadowMask.OriginalDirectory ??= scene.Path;
+					shadowMask.MainAsset = lightingDataAsset;
 				}
 			}
 		}
