@@ -74,6 +74,9 @@ namespace AssetRipper.GUI
 				}
 				else
 				{
+					if (logFile is not null) {
+						Directory.CreateDirectory(logFile.Directory.FullName);
+					}
 					Logger.AllowVerbose = verbose;
 					Logger.Add(new FileLogger(logFile?.FullName ?? ExecutingDirectory.Combine(DefaultLogFileName)));
 					Run(filesToExport, outputDirectory?.FullName ?? ExecutingDirectory.Combine("Ripped"));
