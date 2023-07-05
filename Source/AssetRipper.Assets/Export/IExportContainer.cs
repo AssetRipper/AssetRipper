@@ -14,10 +14,7 @@ namespace AssetRipper.Assets.Export
 		MetaPtr CreateExportPointer(IUnityObjectBase asset);
 
 		UnityGUID SceneNameToGUID(string name);
-		string SceneIndexToName(int sceneID);
 		bool IsSceneDuplicate(int sceneID);
-		string TagIDToName(int tagID);
-		ushort TagNameToID(string tagName);
 
 		AssetCollection File { get; }
 		TemporaryAssetCollection VirtualFile { get; }

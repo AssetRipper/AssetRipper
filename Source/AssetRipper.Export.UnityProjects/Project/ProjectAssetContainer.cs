@@ -22,6 +22,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
+			CurrentCollection = null!;
 
 			foreach (IUnityObjectBase asset in assets)
 			{
@@ -120,22 +121,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return default;
 		}
 
-		public string SceneIndexToName(int sceneIndex)
-		{
-			return m_buildSettings == null ? $"level{sceneIndex}" : m_buildSettings.Scenes_C141[sceneIndex].String;
-		}
-
 		public bool IsSceneDuplicate(int sceneIndex) => SceneHelpers.IsSceneDuplicate(sceneIndex, m_buildSettings);
-
-		public string TagIDToName(int tagID)
-		{
-			return m_tagManager.TagIDToName(tagID);
-		}
-
-		public ushort TagNameToID(string tagName)
-		{
-			return m_tagManager.TagNameToID(tagName);
-		}
 
 		public IExportCollection CurrentCollection { get; set; }
 		public TemporaryAssetCollection VirtualFile { get; }

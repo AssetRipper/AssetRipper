@@ -31,9 +31,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static bool ShouldBeActive(this IGameObject gameObject)
 		{
-			if (IsActiveInherited(gameObject.Collection.Version))
+			if (IsActiveInherited(gameObject.Collection.Version) && !gameObject.Collection.IsScene)
 			{
-				return gameObject.Collection.IsScene ? gameObject.GetIsActive() : true;
+				return true;
 			}
 			return gameObject.GetIsActive();
 		}
