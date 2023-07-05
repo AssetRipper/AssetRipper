@@ -16,7 +16,7 @@ namespace AssetRipper.Processing.Scenes
 {
 	public sealed class SceneDefinitionProcessor : IAssetProcessor
 	{
-		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
+		public void Process(GameData gameData)
 		{
 			Logger.Info(LogCategory.Processing, "Creating Scene Definitions");
 			IBuildSettings? buildSettings = null;
@@ -26,7 +26,7 @@ namespace AssetRipper.Processing.Scenes
 			List<IAssetBundle> sceneAssetBundles = new();
 
 			//Find the relevant assets in this single pass over all the assets.
-			foreach (AssetCollection collection in gameBundle.FetchAssetCollections())
+			foreach (AssetCollection collection in gameData.GameBundle.FetchAssetCollections())
 			{
 				foreach (IUnityObjectBase asset in collection)
 				{

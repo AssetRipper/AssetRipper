@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Bundles;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
@@ -12,10 +11,10 @@ namespace AssetRipper.Processing
 {
 	public class MainAssetProcessor : IAssetProcessor
 	{
-		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
+		public void Process(GameData gameData)
 		{
 			Logger.Info(LogCategory.Processing, "Main Asset Pairing");
-			foreach (IUnityObjectBase asset in gameBundle.FetchAssetsInHierarchy())
+			foreach (IUnityObjectBase asset in gameData.GameBundle.FetchAssets())
 			{
 				switch (asset)
 				{

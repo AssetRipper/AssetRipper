@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
@@ -30,15 +29,15 @@ namespace AssetRipper.Processing
 		/// </summary>
 		private static Utf8String LightingDataName { get; } = new("LightingData");
 
-		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
+		public void Process(GameData gameData)
 		{
 			Logger.Info(LogCategory.Processing, "Lighting Data Assets");
-			ProcessedAssetCollection processedCollection = gameBundle.AddNewProcessedCollection("Generated Lighting Data Assets", projectVersion);
+			ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Generated Lighting Data Assets");
 
 			Dictionary<ILightmapSettings, SceneDefinition> lightmapSettingsDictionary = new();
 			Dictionary<ILightProbesMarker, SceneDefinition?> lightProbeDictionary = new();
 
-			foreach (SceneDefinition scene in gameBundle.Scenes)
+			foreach (SceneDefinition scene in gameData.GameBundle.Scenes)
 			{
 				//Only scenes can contain a LightmapSettings asset.
 				ILightmapSettings? lightmapSettings = scene.Assets.OfType<ILightmapSettings>().FirstOrDefault();

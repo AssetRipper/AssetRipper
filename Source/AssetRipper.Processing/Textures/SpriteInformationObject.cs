@@ -1,14 +1,16 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
+using AssetRipper.SourceGenerated.Interfaces;
 using System.Diagnostics;
 
 namespace AssetRipper.Processing.Textures;
 
-public sealed class SpriteInformationObject : UnityObjectBase, IHasNameString
+public sealed class SpriteInformationObject : UnityObjectBase, IHasName
 {
 	public SpriteInformationObject(AssetInfo assetInfo, ITexture2D texture) : base(assetInfo)
 	{
@@ -18,13 +20,18 @@ public sealed class SpriteInformationObject : UnityObjectBase, IHasNameString
 	public ITexture2D Texture { get; }
 	public IReadOnlyDictionary<ISprite, ISpriteAtlas?> Sprites => dictionary;
 	private readonly Dictionary<ISprite, ISpriteAtlas?> dictionary = new();
-	public string NameString
+	string IHasNameString.NameString
 	{
 		get => Texture.NameString;
 		set { }
 	}
+	Utf8String IHasName.Name
+	{
+		get => Texture.Name;
+		set { }
+	}
 
-	public void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas)
+	internal void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas)
 	{
 		if (dictionary.TryGetValue(sprite, out ISpriteAtlas? mappedAtlas))
 		{
@@ -43,7 +50,7 @@ public sealed class SpriteInformationObject : UnityObjectBase, IHasNameString
 		}
 	}
 
-	public void SetMainAsset()
+	internal void SetMainAsset()
 	{
 		Debug.Assert(Texture.MainAsset is null);
 		MainAsset = this;

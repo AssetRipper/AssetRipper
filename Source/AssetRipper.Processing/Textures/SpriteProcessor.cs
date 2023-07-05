@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Cloning;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
@@ -15,12 +14,12 @@ using System.Numerics;
 
 namespace AssetRipper.Processing.Textures
 {
-	public sealed class SpriteProcessor : IAssetProcessor
+	public sealed partial class SpriteProcessor : IAssetProcessor
 	{
-		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
+		public void Process(GameData gameData)
 		{
-			ObjectFactory factory = new ObjectFactory(gameBundle, projectVersion);
-			foreach (IUnityObjectBase asset in gameBundle.FetchAssets())
+			ObjectFactory factory = new ObjectFactory(gameData);
+			foreach (IUnityObjectBase asset in gameData.GameBundle.FetchAssets())
 			{
 				if (asset is ITexture2D texture)
 				{
@@ -133,34 +132,6 @@ namespace AssetRipper.Processing.Textures
 			// Calculate and overwrite TextureRectOffset. It is the offset in pixels of m_RD.TextureRect to Rect.
 			sprite.RD_C213.TextureRectOffset.X = sprite.RD_C213.TextureRect.X - rect.X;
 			sprite.RD_C213.TextureRectOffset.Y = sprite.RD_C213.TextureRect.Y - rect.Y;
-		}
-
-		private readonly struct ObjectFactory
-		{
-			private readonly ProcessedAssetCollection processedCollection;
-			private readonly Dictionary<ITexture2D, SpriteInformationObject> dictionary = new();
-
-			public IEnumerable<SpriteInformationObject> Assets => dictionary.Values;
-
-			public ObjectFactory(GameBundle gameBundle, UnityVersion projectVersion)
-			{
-				processedCollection = gameBundle.AddNewProcessedCollection("Sprite Data Storage", projectVersion);
-			}
-
-			public SpriteInformationObject GetOrCreate(ITexture2D texture)
-			{
-				if (!dictionary.TryGetValue(texture, out SpriteInformationObject? result))
-				{
-					result = MakeSpriteInformationObject(texture);
-					dictionary.Add(texture, result);
-				}
-				return result;
-			}
-
-			SpriteInformationObject MakeSpriteInformationObject(ITexture2D texture)
-			{
-				return processedCollection.CreateAsset(-1, texture, static (assetInfo, texture) => new SpriteInformationObject(assetInfo, texture));
-			}
 		}
 	}
 }

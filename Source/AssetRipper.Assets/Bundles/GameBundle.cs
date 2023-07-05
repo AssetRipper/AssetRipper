@@ -66,6 +66,9 @@ public sealed partial class GameBundle : Bundle
 		}
 	}
 
+	[Obsolete($"{nameof(GameBundle)} has no {nameof(Parent)}. Use {nameof(FetchAssets)} instead.", true)]
+	public new IEnumerable<IUnityObjectBase> FetchAssetsInHierarchy() => base.FetchAssetsInHierarchy();
+
 	/// <summary>
 	/// Initializes all dependency lists.
 	/// </summary>

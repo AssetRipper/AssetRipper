@@ -7,9 +7,11 @@ using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 
 namespace AssetRipper.Processing.Assemblies;
-public sealed class MethodStubbingProcessor : IAssemblyProcessor
+public sealed class MethodStubbingProcessor : IAssetProcessor
 {
-	public void Process(IAssemblyManager manager)
+	public void Process(GameData gameData) => Process(gameData.AssemblyManager);
+
+	private static void Process(IAssemblyManager manager)
 	{
 		if (manager.ScriptingBackend == ScriptingBackend.IL2Cpp)
 		{

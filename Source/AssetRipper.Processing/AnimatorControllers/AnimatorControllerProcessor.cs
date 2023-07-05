@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
@@ -18,13 +17,11 @@ namespace AssetRipper.Processing.AnimatorControllers
 {
 	public sealed class AnimatorControllerProcessor : IAssetProcessor
 	{
-		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
+		public void Process(GameData gameData)
 		{
 			Logger.Info(LogCategory.Processing, "Reconstruct AnimatorController Assets");
-			ProcessedAssetCollection processedCollection = gameBundle.AddNewProcessedCollection(
-				"Generated AnimatorController Dependencies",
-				projectVersion);
-			foreach (AssetCollection collection in gameBundle.FetchAssetCollections().Where(c => c.Flags.IsRelease()))
+			ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Generated AnimatorController Dependencies");
+			foreach (AssetCollection collection in gameData.GameBundle.FetchAssetCollections().Where(c => c.Flags.IsRelease()))
 			{
 				foreach (IAnimatorController asset in collection.OfType<IAnimatorController>())
 				{

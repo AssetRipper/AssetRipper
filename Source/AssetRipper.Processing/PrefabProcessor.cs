@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
@@ -15,13 +14,13 @@ namespace AssetRipper.Processing;
 
 public sealed class PrefabProcessor : IAssetProcessor
 {
-	public void Process(GameBundle gameBundle, UnityVersion projectVersion)
+	public void Process(GameData gameData)
 	{
-		ProcessedAssetCollection processedCollection = gameBundle.AddNewProcessedCollection("Generated Prefab Assets", projectVersion);
+		ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Generated Prefab Assets");
 
 		HashSet<IGameObject> gameObjectsAlreadyProcessed = new();
 		List<IGameObject> gameObjectsWithNoTransform = new();
-		foreach (IUnityObjectBase asset in gameBundle.FetchAssets())
+		foreach (IUnityObjectBase asset in gameData.GameBundle.FetchAssets())
 		{
 			switch (asset)
 			{
@@ -52,7 +51,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 			gameObject.AddComponent(ClassIDType.Transform, transform);
 		}
 
-		foreach (IGameObject asset in gameBundle.FetchAssets().OfType<IGameObject>())
+		foreach (IGameObject asset in gameData.GameBundle.FetchAssets().OfType<IGameObject>())
 		{
 			if (gameObjectsAlreadyProcessed.Contains(asset))
 			{

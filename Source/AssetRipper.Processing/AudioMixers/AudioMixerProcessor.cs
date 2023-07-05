@@ -1,10 +1,8 @@
-﻿using AssetRipper.Assets.Bundles;
-using AssetRipper.Assets.Collections;
+﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
 using AssetRipper.Import.Logging;
-using AssetRipper.IO.Files;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
@@ -32,14 +30,14 @@ namespace AssetRipper.Processing.AudioMixers
 	{
 		//Many uses of IAudioMixerGroupController should be IAudioMixerGroup.
 
-		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
+		public void Process(GameData gameData)
 		{
 			Logger.Info(LogCategory.Processing, "Reconstruct AudioMixer Assets");
 
-			ProcessedAssetCollection processedCollection = gameBundle.AddNewProcessedCollection("Generated Audio Mixer Effects", projectVersion);
+			ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Generated Audio Mixer Effects");
 
 			Dictionary<IAudioMixer, Dictionary<UnityGUID, IAudioMixerGroup >> groupGuidMixerMap = new();
-			foreach (IAudioMixerGroup group in gameBundle.FetchAssets().OfType<IAudioMixerGroup>())
+			foreach (IAudioMixerGroup group in gameData.GameBundle.FetchAssets().OfType<IAudioMixerGroup>())
 			{
 				IAudioMixer? mixer = group.AudioMixer_C273P;
 				if (mixer is not null)
@@ -49,7 +47,7 @@ namespace AssetRipper.Processing.AudioMixers
 				}
 			}
 
-			foreach (IAudioMixer mixer in gameBundle.FetchAssets().OfType<IAudioMixer>())
+			foreach (IAudioMixer mixer in gameData.GameBundle.FetchAssets().OfType<IAudioMixer>())
 			{
 				mixer.MainAsset = mixer;
 				ProcessAssets(mixer, processedCollection, groupGuidMixerMap.GetOrAdd(mixer));

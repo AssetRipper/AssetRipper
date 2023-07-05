@@ -110,17 +110,11 @@ namespace AssetRipper.Export.UnityProjects
 			gameStructure = GameStructure.Load(paths, Settings);
 			Logger.Info(LogCategory.General, "Finished reading files");
 
-			Logger.Info(LogCategory.General, "Processing assemblies...");
-			if (Settings.ScriptContentLevel == ScriptContentLevel.Level1)
-			{
-				new MethodStubbingProcessor().Process(GameStructure.AssemblyManager);
-			}
-
 			Logger.Info(LogCategory.General, "Processing loaded assets...");
-			UnityVersion version = gameStructure.FileCollection.GetMaxUnityVersion();
+			GameData gameData = GameData.FromGameStructure(gameStructure);
 			foreach (IAssetProcessor processor in GetProcessors())
 			{
-				processor.Process(GameStructure.FileCollection, version);
+				processor.Process(gameData);
 			}
 			Logger.Info(LogCategory.General, "Finished processing assets");
 
@@ -128,12 +122,16 @@ namespace AssetRipper.Export.UnityProjects
 
 			IEnumerable<IAssetProcessor> GetProcessors()
 			{
+				if (Settings.ScriptContentLevel == ScriptContentLevel.Level1)
+				{
+					yield return new MethodStubbingProcessor();
+				}
 				yield return new SceneDefinitionProcessor();
 				yield return new MainAssetProcessor();
 				yield return new LightingDataProcessor();
 				yield return new AnimatorControllerProcessor();
 				yield return new AudioMixerProcessor();
-				yield return new EditorFormatProcessor(Settings.BundledAssetsExportMode, GameStructure.AssemblyManager);
+				yield return new EditorFormatProcessor(Settings.BundledAssetsExportMode);
 				if (Settings.EnableStaticMeshSeparation)
 				{
 					yield return new StaticMeshProcessor();

@@ -6,7 +6,6 @@ using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Primitives;
 using AssetRipper.Processing.AnimationClips;
@@ -59,27 +58,28 @@ namespace AssetRipper.Processing
 	{
 		private ITagManager? tagManager;
 		private readonly BundledAssetsExportMode bundledAssetsExportMode;
-		private readonly PathChecksumCache checksumCache;
+		private PathChecksumCache? checksumCache;
 		private AnimationCache? currentAnimationCache;
 
-		public EditorFormatProcessor(BundledAssetsExportMode bundledAssetsExportMode, IAssemblyManager assemblyManager)
+		public EditorFormatProcessor(BundledAssetsExportMode bundledAssetsExportMode)
 		{
 			this.bundledAssetsExportMode = bundledAssetsExportMode;
-			checksumCache = new PathChecksumCache(assemblyManager);
 		}
 
-		public void Process(GameBundle gameBundle, UnityVersion projectVersion)
+		public void Process(GameData gameData)
 		{
 			Logger.Info(LogCategory.Processing, "Editor Format Conversion");
-			tagManager = gameBundle.FetchAssets().OfType<ITagManager>().FirstOrDefault();
-			currentAnimationCache = AnimationCache.CreateCache(gameBundle);
-			foreach (AssetCollection collection in gameBundle.FetchAssetCollections().Where(c => c.Flags.IsRelease()))
+			tagManager = gameData.GameBundle.FetchAssets().OfType<ITagManager>().FirstOrDefault();
+			currentAnimationCache = AnimationCache.CreateCache(gameData.GameBundle);
+			checksumCache = new PathChecksumCache(gameData.AssemblyManager);
+			foreach (AssetCollection collection in gameData.GameBundle.FetchAssetCollections().Where(c => c.Flags.IsRelease()))
 			{
 				foreach (IUnityObjectBase asset in collection)
 				{
 					Convert(asset);
 				}
 			}
+			checksumCache = null;
 			currentAnimationCache = null;
 			tagManager = null;
 		}
@@ -105,7 +105,7 @@ namespace AssetRipper.Processing
 					spriteAtlas.ConvertToEditorFormat();
 					break;
 				case IAnimationClip animationClip:
-					AnimationClipConverter.Process(animationClip, currentAnimationCache!, checksumCache);
+					AnimationClipConverter.Process(animationClip, currentAnimationCache!, checksumCache!.Value);
 					break;
 				case ITerrain terrain:
 					terrain.ConvertToEditorFormat();

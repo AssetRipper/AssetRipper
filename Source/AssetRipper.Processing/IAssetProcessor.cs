@@ -1,9 +1,6 @@
-﻿using AssetRipper.Assets.Bundles;
+﻿namespace AssetRipper.Processing;
 
-namespace AssetRipper.Processing
+public interface IAssetProcessor
 {
-	public interface IAssetProcessor
-	{
-		void Process(GameBundle gameBundle, UnityVersion projectVersion);
-	}
+	void Process(GameData gameData);
 }
