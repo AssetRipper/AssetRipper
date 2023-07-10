@@ -211,14 +211,5 @@ namespace AssetRipper.Primitives
 		public static UnityGUID MissingReference { get; } = new UnityGUID(0xD0000000, 0x1FEEBDAE, 0x00FDAED5, 0x0000000D);
 
 		public static UnityGUID Zero => default;
-
-		[ThreadStatic]
-		private static StringBuilder? s_sb;
-
-		private static StringBuilder GetStringBuilder()
-		{
-			s_sb ??= new StringBuilder(32, 32);
-			return s_sb;
-		}
 	}
 }
