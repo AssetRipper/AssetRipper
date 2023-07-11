@@ -3,13 +3,11 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project.Collections;
-using AssetRipper.Import.Configuration;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Primitives;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
-using AssetRipper.SourceGenerated.Classes.ClassID_78;
 using AssetRipper.SourceGenerated.Extensions;
 
 
@@ -17,32 +15,22 @@ namespace AssetRipper.Export.UnityProjects.Project
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
-		public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, TemporaryAssetCollection file, IEnumerable<IUnityObjectBase> assets,
+		public ProjectAssetContainer(ProjectExporter exporter, TemporaryAssetCollection file, IEnumerable<IUnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
 			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			CurrentCollection = null!;
 
-			foreach (IUnityObjectBase asset in assets)
-			{
-				if (asset is IBuildSettings buildSettings)
-				{
-					m_buildSettings = buildSettings;
-				}
-				else if (asset is ITagManager tagManager)
-				{
-					m_tagManager = tagManager;
-				}
-			}
+			m_buildSettings = assets.OfType<IBuildSettings>().FirstOrDefault();
 
-			List<SceneExportCollection> scenes = new List<SceneExportCollection>();
+			List<SceneExportCollection> scenes = new();
 			foreach (IExportCollection collection in collections)
 			{
 				foreach (IUnityObjectBase asset in collection.Assets)
 				{
 #warning TODO: unique asset:collection (m_assetCollections.Add)
-					m_assetCollections[asset.AssetInfo] = collection;
+					m_assetCollections[asset] = collection;
 				}
 				if (collection is SceneExportCollection scene)
 				{
@@ -74,7 +62,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		public long GetExportID(IUnityObjectBase asset)
 		{
-			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection? collection))
+			if (m_assetCollections.TryGetValue(asset, out IExportCollection? collection))
 			{
 				return collection.GetExportID(asset);
 			}
@@ -89,7 +77,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		public MetaPtr CreateExportPointer(IUnityObjectBase asset)
 		{
-			if (m_assetCollections.TryGetValue(asset.AssetInfo, out IExportCollection? collection))
+			if (m_assetCollections.TryGetValue(asset, out IExportCollection? collection))
 			{
 				return collection.CreateExportPointer(asset, collection == CurrentCollection);
 			}
@@ -136,10 +124,9 @@ namespace AssetRipper.Export.UnityProjects.Project
 		public virtual IReadOnlyList<AssetCollection?> Dependencies => File.Dependencies;
 
 		private readonly ProjectExporter m_exporter;
-		private readonly Dictionary<AssetInfo, IExportCollection> m_assetCollections = new();
+		private readonly Dictionary<IUnityObjectBase, IExportCollection> m_assetCollections = new();
 
 		private readonly IBuildSettings? m_buildSettings;
-		private readonly ITagManager? m_tagManager;
 		private readonly SceneExportCollection[] m_scenes;
 	}
 }

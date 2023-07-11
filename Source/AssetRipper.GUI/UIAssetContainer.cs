@@ -12,7 +12,6 @@ namespace AssetRipper.GUI
 	{
 		public UIAssetContainer(Ripper ripper) : base(
 			new ProjectExporter(),
-			ripper.Settings,
 			ripper.GameStructure.FileCollection.AddNewTemporaryBundle().AddNew(),
 			ripper.GameStructure.FileCollection.FetchAssets(),
 			new Collection<IExportCollection>())

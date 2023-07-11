@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Primitives;
 
@@ -10,6 +9,12 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 {
 	public sealed class EmptyExportCollection : IExportCollection
 	{
+		public static EmptyExportCollection Instance { get; } = new();
+
+		private EmptyExportCollection()
+		{
+		}
+
 		public bool Export(IExportContainer container, string projectDirectory)
 		{
 			return false;

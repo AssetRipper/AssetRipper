@@ -9,10 +9,19 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 {
 	public class DummyAssetExporter : IAssetExporter
 	{
+		/// <summary>
+		/// Setup exporting of the specified class type.
+		/// </summary>
+		/// <param name="classType">The class id of assets we are setting these parameters for.</param>
+		/// <param name="isEmptyCollection">
+		/// True: an exception will be thrown if the asset is referenced by another asset.<br/>
+		/// False: any references to this asset will be replaced with a missing reference.
+		/// </param>
+		/// <param name="isMetaType"><see cref="AssetType.Meta"/> or <see cref="AssetType.Serialized"/>?</param>
 		public void SetUpClassType(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
 		{
-			m_emptyTypes[classType] = isEmptyCollection;
-			m_metaTypes[classType] = isMetaType;
+			m_emptyTypes.Add(classType, isEmptyCollection);
+			m_metaTypes.Add(classType, isMetaType);
 		}
 
 		public bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
@@ -21,7 +30,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			{
 				if (isEmptyCollection)
 				{
-					exportCollection = new EmptyExportCollection();
+					exportCollection = EmptyExportCollection.Instance;
 				}
 				else
 				{
@@ -33,26 +42,6 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 				throw new NotSupportedException(asset.ClassID.ToString());
 			}
 			return true;
-		}
-
-		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
-		{
-			throw new NotSupportedException();
-		}
-
-		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
-		{
-			throw new NotSupportedException();
-		}
-
-		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
-		{
-			throw new NotSupportedException();
-		}
-
-		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
-		{
-			throw new NotSupportedException();
 		}
 
 		public AssetType ToExportType(IUnityObjectBase asset)

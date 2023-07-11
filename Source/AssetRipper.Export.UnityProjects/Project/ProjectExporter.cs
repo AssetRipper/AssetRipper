@@ -50,28 +50,23 @@ namespace AssetRipper.Export.UnityProjects.Project
 		private readonly List<(Type, IAssetExporter, bool)> registeredExporters = new();
 
 		//Exporters
-		private DefaultYamlExporter DefaultExporter { get; } = new DefaultYamlExporter();
-		private SceneYamlExporter SceneExporter { get; } = new SceneYamlExporter();
-		private ManagerAssetExporter ManagerExporter { get; } = new ManagerAssetExporter();
-		private BuildSettingsExporter BuildSettingsExporter { get; } = new BuildSettingsExporter();
-		private ScriptableObjectExporter ScriptableExporter { get; } = new ScriptableObjectExporter();
 		private DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
 
 		public ProjectExporter()
 		{
-			OverrideExporter<IUnityObjectBase>(new RawAssetExporter(), true);
-			OverrideExporter<IUnityObjectBase>(DefaultExporter, true);
+			OverrideExporter<IUnityObjectBase>(new DefaultYamlExporter(), true);
 
-			OverrideExporter<IGlobalGameManager>(ManagerExporter, true);
+			OverrideExporter<IGlobalGameManager>(new ManagerAssetExporter(), true);
 
-			OverrideExporter<IBuildSettings>(BuildSettingsExporter, true);
+			OverrideExporter<IBuildSettings>(new BuildSettingsExporter(), true);
 
-			OverrideExporter<IMonoBehaviour>(ScriptableExporter, true);
+			OverrideExporter<IMonoBehaviour>(new ScriptableObjectExporter(), true);
 
-			OverrideExporter<IPrefabInstance>(SceneExporter, true);
-			OverrideExporter<IGameObject>(SceneExporter, true);
-			OverrideExporter<IComponent>(SceneExporter, true);
-			OverrideExporter<ILevelGameManager>(SceneExporter, true);
+			SceneYamlExporter sceneExporter = new();
+			OverrideExporter<IPrefabInstance>(sceneExporter, true);
+			OverrideExporter<IGameObject>(sceneExporter, true);
+			OverrideExporter<IComponent>(sceneExporter, true);
+			OverrideExporter<ILevelGameManager>(sceneExporter, true);
 
 			OverrideDummyExporter<IPreloadData>(ClassIDType.PreloadData, true, false);
 			OverrideDummyExporter<IAssetBundle>(ClassIDType.AssetBundle, true, false);
@@ -127,8 +122,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		private IExportCollection CreateCollection(TemporaryAssetCollection file, IUnityObjectBase asset)
 		{
-			Stack<IAssetExporter> exporters = GetExporterStack(asset);
-			foreach (IAssetExporter exporter in exporters)
+			foreach (IAssetExporter exporter in GetExporterStack(asset))
 			{
 				if (exporter.TryCreateCollection(asset, file, out IExportCollection? collection))
 				{
@@ -159,7 +153,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		private Stack<IAssetExporter> CalculateAssetExporterStack(Type type)
 		{
-			Stack<IAssetExporter> result = new Stack<IAssetExporter>();
+			Stack<IAssetExporter> result = new();
 			foreach ((Type baseType, IAssetExporter exporter, bool allowInheritance) in registeredExporters)
 			{
 				if (type == baseType || allowInheritance && type.IsAssignableTo(baseType))
@@ -170,6 +164,16 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return result;
 		}
 
+		/// <summary>
+		/// Use the <see cref="DummyExporter"/> for the specified class type.
+		/// </summary>
+		/// <typeparam name="T">The base type for assets of that <paramref name="classType"/>.</typeparam>
+		/// <param name="classType">The class id of assets we are using the <see cref="DummyExporter"/> for.</param>
+		/// <param name="isEmptyCollection">
+		/// True: an exception will be thrown if the asset is referenced by another asset.<br/>
+		/// False: any references to this asset will be replaced with a missing reference.
+		/// </param>
+		/// <param name="isMetaType"><see cref="AssetType.Meta"/> or <see cref="AssetType.Serialized"/>?</param>
 		private void OverrideDummyExporter<T>(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
 		{
 			DummyExporter.SetUpClassType(classType, isEmptyCollection, isMetaType);
@@ -253,7 +257,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			EventExportPreparationFinished?.Invoke();
 
 			EventExportStarted?.Invoke();
-			ProjectAssetContainer container = new ProjectAssetContainer(this, options, virtualFile, fileCollection.FetchAssets(), collections);
+			ProjectAssetContainer container = new ProjectAssetContainer(this, virtualFile, fileCollection.FetchAssets(), collections);
 			for (int i = 0; i < collections.Count; i++)
 			{
 				IExportCollection collection = collections[i];

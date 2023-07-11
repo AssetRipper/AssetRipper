@@ -36,11 +36,6 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			throw new ArgumentException(null, nameof(asset));
 		}
 
-		public UnityGUID GetExportGUID(IUnityObjectBase _)
-		{
-			throw new NotSupportedException();
-		}
-
 		public MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
 			if (isLocal)

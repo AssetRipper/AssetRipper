@@ -18,7 +18,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 			else
 			{
 				// such MonoBehaviours as StateMachineBehaviour in AnimatorController
-				return new EmptyExportCollection();
+				return EmptyExportCollection.Instance;
 			}
 		}
 
