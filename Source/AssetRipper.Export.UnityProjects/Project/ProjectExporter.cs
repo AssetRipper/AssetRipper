@@ -221,10 +221,10 @@ namespace AssetRipper.Export.UnityProjects.Project
 					collections.Add(collection);
 				}
 
-				if (options.ExportDependencies && asset is IDependent dependent)
+				if (options.ExportDependencies)
 				{
 					DependencyContext context = new DependencyContext(true);
-					foreach (PPtr<IUnityObjectBase> pointer in dependent.FetchDependencies(context))
+					foreach (PPtr<IUnityObjectBase> pointer in asset.FetchDependencies(context))
 					{
 						if (pointer.IsNull)
 						{

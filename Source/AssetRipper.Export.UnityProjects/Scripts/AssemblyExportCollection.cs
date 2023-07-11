@@ -6,6 +6,7 @@ using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.IO.Files.Utils;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_1050;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -125,25 +126,13 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			}
 
 			IMonoScript script = m_scripts[asset];
-			if (!MonoScriptExtensions.HasAssemblyName(script.Collection.Version, script.Collection.Flags) || ReferenceAssemblies.IsUnityEngineAssembly(script.GetAssemblyNameFixed()))
+			if (!script.HasAssemblyName() || ReferenceAssemblies.IsUnityEngineAssembly(script.GetAssemblyNameFixed()))
 			{
-				if (MonoScriptExtensions.HasNamespace(script.Collection.Version))
-				{
-					int fileID = ScriptHashing.CalculateScriptFileID(script.Namespace_C115.Data, script.ClassName_C115.Data);
-					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
-				}
-				else
-				{
-					ScriptIdentifier scriptInfo = script.GetScriptID(AssetExporter.AssemblyManager);
-					if (!scriptInfo.IsDefault)
-					{
-						int fileID = ScriptHashing.CalculateScriptFileID(scriptInfo.Namespace, scriptInfo.Name);
-						return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
-					}
-				}
+				int fileID = ScriptHashing.CalculateScriptFileID(script.Namespace_C115.Data, script.ClassName_C115.Data);
+				return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 			}
 
-			string? scriptKey = $"{script.AssemblyName_C115.String}{script.Namespace_C115.String}{script.ClassName_C115.String}";
+			string? scriptKey = $"{script.AssemblyName_C115}{script.Namespace_C115}{script.ClassName_C115}";
 			if (!ScriptId.ContainsKey(scriptKey))
 			{
 				ScriptId[scriptKey] = ScriptHashing.CalculateScriptFileID(script.Namespace_C115.Data, script.ClassName_C115.Data);
@@ -161,7 +150,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			else
 			{
 				//MonoScripts don't always have the .dll extension.
-				string assemblyNameWithExtension = assemblyName.EndsWith(".dll", StringComparison.Ordinal) ? assemblyName : assemblyName + ".dll";
+				string assemblyNameWithExtension = FilenameUtils.AddAssemblyFileExtension(assemblyName);
 				UnityGUID guid = CalculateAssemblyHashGuid(assemblyNameWithExtension);
 				AssemblyHash[assemblyName] = guid;
 				AssemblyHash[assemblyNameWithExtension] = guid;

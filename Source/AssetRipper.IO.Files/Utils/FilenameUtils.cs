@@ -9,22 +9,22 @@ namespace AssetRipper.IO.Files.Utils
 
 		public static bool IsDefaultResource(string fileName)
 		{
-			return fileName == DefaultResourceName1 || fileName == DefaultResourceName2;
+			return fileName is DefaultResourceName1 or DefaultResourceName2;
 		}
 
 		public static bool IsEditorResource(string fileName)
 		{
-			return fileName == EditorResourceName;
+			return fileName is EditorResourceName;
 		}
 
 		public static bool IsBuiltinExtra(string fileName)
 		{
-			return fileName == BuiltinExtraName1 || fileName == BuiltinExtraName2;
+			return fileName is BuiltinExtraName1 or BuiltinExtraName2;
 		}
 
 		public static bool IsEngineGeneratedF(string fileName)
 		{
-			return fileName == EngineGeneratedF;
+			return fileName is EngineGeneratedF;
 		}
 
 		public static string FixFileIdentifier(string name)
@@ -34,13 +34,16 @@ namespace AssetRipper.IO.Files.Utils
 			name = FixResourcePath(name);
 			if (IsDefaultResource(name))
 			{
-				name = DefaultResourceName1;
+				return DefaultResourceName1;
 			}
 			else if (IsBuiltinExtra(name))
 			{
-				name = BuiltinExtraName1;
+				return BuiltinExtraName1;
 			}
-			return name;
+			else
+			{
+				return name;
+			}
 		}
 
 		public static string FixDependencyName(string dependency)
@@ -61,28 +64,37 @@ namespace AssetRipper.IO.Files.Utils
 			const string archivePrefix = "archive:/";
 			if (resourcePath.StartsWith(archivePrefix, StringComparison.Ordinal))
 			{
-				resourcePath = Path.GetFileName(resourcePath);
+				return Path.GetFileName(resourcePath);
 			}
-			return resourcePath;
+			else
+			{
+				return resourcePath;
+			}
 		}
 
+		/// <summary>
+		/// Remove .dll extension from the assembly name and add the "Assembly - " prefix if appropriate.
+		/// </summary>
+		/// <param name="assembly">An assembly name.</param>
+		/// <returns>A new string if changed, otherwise the original string.</returns>
 		public static string FixAssemblyName(string assembly)
 		{
-			if (IsAssemblyIdentifier(assembly))
-			{
-				assembly = $"Assembly - {assembly}";
-			}
-			assembly = FixAssemblyEndian(assembly);
-			return assembly;
+			return RemoveAssemblyFileExtension(IsAssemblyIdentifier(assembly) ? $"Assembly - {assembly}" : assembly);
 		}
 
-		public static string FixAssemblyEndian(string assembly)
+		/// <summary>
+		/// Remove .dll extension from the assembly name.
+		/// </summary>
+		/// <param name="assembly">An assembly name.</param>
+		/// <returns>A new string if changed, otherwise the original string.</returns>
+		public static string RemoveAssemblyFileExtension(string assembly)
 		{
-			if (assembly.EndsWith(AssemblyExtension, StringComparison.Ordinal))
-			{
-				return assembly[..^AssemblyExtension.Length];
-			}
-			return assembly;
+			return assembly.EndsWith(AssemblyExtension, StringComparison.Ordinal) ? assembly[..^AssemblyExtension.Length] : assembly;
+		}
+
+		public static string AddAssemblyFileExtension(string assembly)
+		{
+			return assembly.EndsWith(AssemblyExtension, StringComparison.Ordinal) ? assembly : assembly + AssemblyExtension;
 		}
 
 		public static bool IsProjectAssembly(string assembly)

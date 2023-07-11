@@ -41,7 +41,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		protected static string GetUniqueName(ITypeDefOrRef type)
 		{
-			string assembly = FilenameUtils.FixAssemblyEndian(type.Scope?.Name ?? "");
+			string assembly = FilenameUtils.RemoveAssemblyFileExtension(type.Scope?.Name ?? "");
 			return ScriptIdentifier.ToUniqueName(assembly, type.FullName);
 		}
 
@@ -170,21 +170,6 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			return FindType(scriptID) ?? throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
 		}
 
-		public virtual ScriptIdentifier GetScriptID(string assembly, string name)
-		{
-			if (!IsSet)
-			{
-				return default;
-			}
-
-			TypeDefinition? type = FindType(assembly, name);
-			if (type == null)
-			{
-				return default;
-			}
-			return new ScriptIdentifier(type.Module?.Name ?? "", type.Namespace ?? "", type.Name ?? "");
-		}
-
 		public virtual ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
 		{
 			if (!IsSet)
@@ -243,27 +228,6 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 				return assembly;
 			}
 			m_assemblies.Add(name, null);
-			return null;
-		}
-
-		protected TypeDefinition? FindType(string assembly, string name)
-		{
-			AssemblyDefinition? definition = FindAssembly(assembly);
-			if (definition == null)
-			{
-				return null;
-			}
-
-			foreach (ModuleDefinition module in definition.Modules)
-			{
-				foreach (TypeDefinition type in module.TopLevelTypes)
-				{
-					if (type.Name == name)
-					{
-						return type;
-					}
-				}
-			}
 			return null;
 		}
 

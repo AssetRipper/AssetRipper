@@ -72,20 +72,8 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			IMonoScript script = m_scripts[asset];
 			if (IsEngineScript(script))
 			{
-				if (MonoScriptExtensions.HasNamespace(script.Collection.Version))
-				{
-					int fileID = ScriptHashing.CalculateScriptFileID(script.Namespace_C115.Data, script.ClassName_C115.Data);
-					return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
-				}
-				else
-				{
-					ScriptIdentifier scriptInfo = script.GetScriptID(AssetExporter.AssemblyManager);
-					if (!scriptInfo.IsDefault)
-					{
-						int fileID = ScriptHashing.CalculateScriptFileID(scriptInfo.Namespace, scriptInfo.Name);
-						return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
-					}
-				}
+				int fileID = ScriptHashing.CalculateScriptFileID(script.Namespace_C115.Data, script.ClassName_C115.Data);
+				return new MetaPtr(fileID, UnityEngineGUID, AssetExporter.ToExportType(asset));
 			}
 
 			long exportID = GetExportID(asset);

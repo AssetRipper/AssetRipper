@@ -17,7 +17,6 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		SerializableType GetSerializableType(ScriptIdentifier scriptID, UnityVersion version);
 		TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID);
 		IEnumerable<AssemblyDefinition> GetAssemblies();
-		ScriptIdentifier GetScriptID(string assembly, string name);
 		ScriptIdentifier GetScriptID(string assembly, string @namespace, string name);
 		Stream GetStreamForAssembly(AssemblyDefinition assembly);
 		void ClearStreamCache();
