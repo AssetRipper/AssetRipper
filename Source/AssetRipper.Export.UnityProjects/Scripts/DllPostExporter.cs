@@ -1,6 +1,7 @@
 ﻿using AsmResolver.DotNet;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Export.UnityProjects.Scripts
 {
@@ -18,16 +19,8 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 				Directory.CreateDirectory(outputDirectory);
 				foreach (AssemblyDefinition assembly in assemblies)
 				{
-					string filepath = Path.Combine(outputDirectory, assembly.Name!);
-					if (!filepath.EndsWith(".dll"))
-					{
-						filepath += ".dll";
-					}
-
-					Stream readStream = assemblyManager.GetStreamForAssembly(assembly);
-					using FileStream writeStream = File.Create(filepath);
-					readStream.Position = 0;
-					readStream.CopyTo(writeStream);
+					string filepath = Path.Combine(outputDirectory, FilenameUtils.AddAssemblyFileExtension(assembly.Name!));
+					assemblyManager.SaveAssembly(assembly, filepath);
 				}
 			}
 		}

@@ -9,10 +9,24 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters
 	{
 		bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection);
 
-		bool Export(IExportContainer container, IUnityObjectBase asset, string path);
-		void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback);
-		bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path);
-		void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback);
+		bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		{
+			Export(container, asset, path, null);
+			return true;
+		}
+		void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
+		{
+			throw new NotSupportedException();
+		}
+		bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
+		{
+			Export(container, assets, path, null);
+			return true;
+		}
+		void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
+		{
+			throw new NotSupportedException();
+		}
 
 		AssetType ToExportType(IUnityObjectBase asset);
 		bool ToUnknownExportType(Type type, out AssetType assetType);

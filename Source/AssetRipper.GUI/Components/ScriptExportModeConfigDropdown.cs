@@ -16,7 +16,7 @@ namespace AssetRipper.GUI.Components
 		protected override string? GetValueDescription(ScriptExportMode value) => value switch
 		{
 			ScriptExportMode.Decompiled => MainWindow.Instance.LocalizationManager["script_export_format_decompiled_description"],
-			ScriptExportMode.Hybrid => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
+			ScriptExportMode.Hybrid => MainWindow.Instance.LocalizationManager["script_export_format_hybrid_description"],
 			ScriptExportMode.DllExportWithRenaming => MainWindow.Instance.LocalizationManager["not_implemented_yet"],
 			ScriptExportMode.DllExportWithoutRenaming => MainWindow.Instance.LocalizationManager["script_export_format_dll_without_renaming_description"],
 			_ => null,

@@ -188,16 +188,6 @@ namespace AssetRipper.Primitives
 			return new UnityGUID(hashBytes);
 		}
 
-		public static UnityGUID Md5Hash(scoped ReadOnlySpan<byte> assemblyName, scoped ReadOnlySpan<byte> @namespace, scoped ReadOnlySpan<byte> className)
-		{
-			int length = assemblyName.Length + @namespace.Length + className.Length;
-			Span<byte> input = length < 1024 ? stackalloc byte[length] : GC.AllocateUninitializedArray<byte>(length);
-			assemblyName.CopyTo(input);
-			@namespace.CopyTo(input.Slice(assemblyName.Length));
-			className.CopyTo(input.Slice(assemblyName.Length + @namespace.Length));
-			return Md5Hash(input);
-		}
-
 		public bool IsZero => Data0 == 0 && Data1 == 0 && Data2 == 0 && Data3 == 0;
 
 		public uint Data0 { get; }

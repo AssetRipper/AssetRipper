@@ -1,4 +1,8 @@
 ﻿using AssetRipper.HashAlgorithms;
+using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.IO.Files.Utils;
+using AssetRipper.Primitives;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Buffers.Binary;
 using System.Text;
 
@@ -57,5 +61,59 @@ public static class ScriptHashing
 		MD4.HashData(source, destination);
 
 		return BinaryPrimitives.ReadInt32LittleEndian(destination);
+	}
+
+	/// <summary>
+	/// Compute the FileID of a script inside a compiled assembly.
+	/// </summary>
+	/// <remarks>
+	/// This replicates a Unity algorithm.
+	/// </remarks>
+	public static int CalculateScriptFileID(IMonoScript script)
+	{
+		return CalculateScriptFileID(script.Namespace_C115.Data, script.ClassName_C115.Data);
+	}
+
+	/// <summary>
+	/// Compute a unique hash of a script and use that as the Guid for the script.
+	/// </summary>
+	/// <remarks>
+	/// This is for consistency. Script guid's are random when created in Unity.
+	/// </remarks>
+	/// <param name="assemblyName">The name of the assembly (without any file extension) encoded as UTF8.</param>
+	/// <param name="namespace">The namespace of the script encoded as UTF8.</param>
+	/// <param name="className">The name of the script encoded as UTF8.</param>
+	public static UnityGUID ComputeScriptGuid(ReadOnlySpan<byte> assemblyName, ReadOnlySpan<byte> @namespace, ReadOnlySpan<byte> className)
+	{
+		int length = assemblyName.Length + @namespace.Length + className.Length;
+		Span<byte> input = length < 1024 ? stackalloc byte[length] : GC.AllocateUninitializedArray<byte>(length);
+		assemblyName.CopyTo(input);
+		@namespace.CopyTo(input.Slice(assemblyName.Length));
+		className.CopyTo(input.Slice(assemblyName.Length + @namespace.Length));
+		return UnityGUID.Md5Hash(input);
+	}
+
+	/// <summary>
+	/// Compute a unique hash of a script and use that as the Guid for the script.
+	/// </summary>
+	/// <remarks>
+	/// This is for consistency. Script guid's are random when created in Unity.
+	/// </remarks>
+	public static UnityGUID ComputeScriptGuid(IMonoScript script)
+	{
+		//The assembly file name without any extension.
+		ReadOnlySpan<byte> assemblyName = Encoding.UTF8.GetBytes(script.GetAssemblyNameFixed());
+		return ComputeScriptGuid(assemblyName, script.Namespace_C115.Data, script.ClassName_C115.Data);
+	}
+
+	/// <summary>
+	/// Compute a unique hash of an assembly name and use that as the Guid for the assembly.
+	/// </summary>
+	/// <remarks>
+	/// This is for consistency. Assembly guid's are random when created in Unity.
+	/// </remarks>
+	public static UnityGUID CalculateAssemblyGuid(string assemblyName)
+	{
+		return UnityGUID.Md5Hash(FilenameUtils.RemoveAssemblyFileExtension(assemblyName));
 	}
 }

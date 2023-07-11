@@ -322,12 +322,8 @@ namespace AssetRipper.Export.UnityProjects
 					break;
 			}
 
-			//Script exporters
-			projectExporter.OverrideExporter<IMonoScript>(Settings.ScriptExportMode switch
-			{
-				ScriptExportMode.DllExportWithoutRenaming => new AssemblyDllExporter(GameStructure.AssemblyManager),
-				_ => new ScriptExporter(GameStructure.AssemblyManager, Settings),
-			});
+			//Script exporter
+			projectExporter.OverrideExporter<IMonoScript>(new ScriptExporter(GameStructure.AssemblyManager, Settings));
 
 			//Animator Controller
 			projectExporter.OverrideExporter<IUnityObjectBase>(new AnimatorControllerExporter());

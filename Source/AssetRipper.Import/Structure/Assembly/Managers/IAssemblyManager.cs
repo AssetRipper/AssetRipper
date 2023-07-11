@@ -24,4 +24,14 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		bool IsSet { get; }
 		ScriptingBackend ScriptingBackend { get; }
 	}
+	public static class AssemblyManagerExtensions
+	{
+		public static void SaveAssembly(this IAssemblyManager manager, AssemblyDefinition assembly, string path)
+		{
+			Stream readStream = manager.GetStreamForAssembly(assembly);
+			using FileStream writeStream = File.Create(path);
+			readStream.Position = 0;
+			readStream.CopyTo(writeStream);
+		}
+	}
 }
