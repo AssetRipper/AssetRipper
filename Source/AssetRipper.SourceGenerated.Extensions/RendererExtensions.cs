@@ -50,21 +50,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 				: renderer.ReflectionProbeUsage_C25_ByteE;
 		}
 
-		public static void ConvertToEditorFormat(this IRenderer renderer)
-		{
-			renderer.ScaleInLightmap_C25 = 1.0f;
-			renderer.ReceiveGI_C25 = (int)ReceiveGI.Lightmaps;
-			renderer.PreserveUVs_C25 = false;
-			renderer.IgnoreNormalsForChartDetection_C25 = false;
-			renderer.ImportantGI_C25 = false;
-			renderer.StitchLightmapSeams_C25 = false;
-			renderer.SelectedEditorRenderState_C25 = (int)(EditorSelectedRenderState)3;
-			renderer.MinimumChartSize_C25 = 4;
-			renderer.AutoUVMaxDistance_C25 = 0.5f;
-			renderer.AutoUVMaxAngle_C25 = 89.0f;
-			renderer.LightmapParameters_C25P = null;
-		}
-
 		public static ushort GetLightmapIndex(this IRenderer renderer)
 		{
 			if (renderer.Has_LightmapIndex_C25_UInt16())

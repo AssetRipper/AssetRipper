@@ -25,6 +25,7 @@ using AssetRipper.Processing;
 using AssetRipper.Processing.AnimatorControllers;
 using AssetRipper.Processing.Assemblies;
 using AssetRipper.Processing.AudioMixers;
+using AssetRipper.Processing.Editor;
 using AssetRipper.Processing.PrefabOutlining;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.Processing.StaticMeshes;

@@ -1,10 +1,8 @@
-﻿using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
+﻿using AssetRipper.Assets.Metadata;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform;
-using System.Numerics;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -82,30 +80,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static void ConvertToEditorFormat(this ITransform transform)
-		{
-			if (transform.Has_RootOrder_C4())
-			{
-				transform.RootOrder_C4 = transform.CalculateRootOrder();
-			}
-			if (transform.Has_LocalEulerAnglesHint_C4())
-			{
-				Vector3 eulerHints = new Quaternion(
-					transform.LocalRotation_C4.X,
-					transform.LocalRotation_C4.Y,
-					transform.LocalRotation_C4.Z,
-					transform.LocalRotation_C4.W).ToEulerAngle(true);
-				transform.LocalEulerAnglesHint_C4.SetValues(eulerHints.X, eulerHints.Y, eulerHints.Z);
-			}
-		}
-
 		/// <summary>
 		/// Find the sibling index (aka the root order) of the transform
 		/// </summary>
 		/// <param name="transform">The relevant transform</param>
 		/// <returns>The sibling index of the transform</returns>
 		/// <exception cref="Exception">if the transform cannot be found among the father's children</exception>
-		private static int CalculateRootOrder(this ITransform transform)
+		public static int CalculateRootOrder(this ITransform transform)
 		{
 			ITransform? father = transform.Father_C4P;
 			if (father is null)

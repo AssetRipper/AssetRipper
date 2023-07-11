@@ -11,10 +11,8 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
-	public static class MeshExtensions
+	public static partial class MeshExtensions
 	{
-		private static readonly Regex combinedMeshRegex = new Regex(@"^Combined Mesh \(root scene\)( [0-9]+)?$", RegexOptions.Compiled);
-
 		/// <summary>
 		/// Compressing meshes saves space in the built game, but more compression introduces more artifacts in vertex data.
 		/// </summary>
@@ -39,16 +37,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 			Count,
 		}
 
-		public static bool IsCombinedMesh(this IMesh mesh) => combinedMeshRegex.IsMatch(mesh.NameString);
+		[GeneratedRegex("^Combined Mesh \\(root scene\\)( [0-9]+)?$", RegexOptions.Compiled)]
+		private static partial Regex CombinedMeshRegex();
+
+		public static bool IsCombinedMesh(this IMesh mesh) => CombinedMeshRegex().IsMatch(mesh.NameString);
 
 		public static bool IsSet(this IMesh mesh)
 		{
 			return mesh.CompressedMesh_C43.IsSet() || mesh.VertexData_C43.IsSet(mesh.StreamData_C43);
-		}
-
-		public static void ConvertToEditorFormat(this IMesh mesh)
-		{
-			mesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
 		}
 
 		public static bool CheckAssetIntegrity(this IMesh mesh)

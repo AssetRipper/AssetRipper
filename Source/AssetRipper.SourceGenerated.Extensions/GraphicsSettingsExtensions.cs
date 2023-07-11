@@ -72,11 +72,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return settings.Collection.Platform.PlatformToBuildGroup();
 		}
 
-		public static TransparencySortMode GetTransparencySortMode(this IGraphicsSettings settings)
-		{
-			return (TransparencySortMode)settings.TransparencySortMode_C30;
-		}
-
 		/// <summary>
 		/// Default: <see cref="RenderingPath.Forward"/>
 		/// </summary>

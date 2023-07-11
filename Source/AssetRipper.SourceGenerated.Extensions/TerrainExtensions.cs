@@ -5,11 +5,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class TerrainExtensions
 	{
-		public static void ConvertToEditorFormat(this ITerrain terrain)
-		{
-			terrain.ScaleInLightmap_C218 = 0.0512f;
-		}
-
 		public static ShadowCastingMode GetShadowCastingMode(this ITerrain terrain)
 		{
 			if (terrain.Has_ShadowCastingMode_C218())
