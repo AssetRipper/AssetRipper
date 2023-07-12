@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Exceptions;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
-using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Assets.Tests;
 
@@ -15,7 +15,7 @@ public class AssetDeletionTests
 		GameBundle gameBundle = new();
 		ProcessedAssetCollection collection1 = gameBundle.AddNewProcessedCollection("Collection 1", projectVersion);
 		ProcessedAssetCollection collection2 = gameBundle.AddNewProcessedCollection("Collection 2", projectVersion);
-		IGameObject gameObject = collection1.CreateAsset(1, GameObjectFactory.CreateAsset);
+		IGameObject gameObject = collection1.CreateAsset(1, GameObject.Create);
 
 		Assert.Throws<ArgumentException>(() => collection2.DeleteAsset(gameObject, false));
 		Assert.Throws<ArgumentException>(() => collection2.DeleteAsset(gameObject, true));
@@ -26,7 +26,7 @@ public class AssetDeletionTests
 	public void TestDeletingWithTheIntentionToThrow()
 	{
 		ProcessedAssetCollection collection = new GameBundle().AddNewProcessedCollection("Collection", new UnityVersion(2022, 1));
-		IGameObject gameObject = collection.CreateAsset(1, GameObjectFactory.CreateAsset);
+		IGameObject gameObject = collection.CreateAsset(1, GameObject.Create);
 
 		Assert.That(collection.GetAsset(gameObject.PathID), Is.EqualTo(gameObject));
 
@@ -49,7 +49,7 @@ public class AssetDeletionTests
 	public void TestDeletingWithTheIntentionNotToThrow()
 	{
 		ProcessedAssetCollection collection = new GameBundle().AddNewProcessedCollection("Collection", new UnityVersion(2022, 1));
-		IGameObject gameObject = collection.CreateAsset(1, GameObjectFactory.CreateAsset);
+		IGameObject gameObject = collection.CreateAsset(1, GameObject.Create);
 
 		Assert.That(collection.GetAsset(gameObject.PathID), Is.EqualTo(gameObject));
 

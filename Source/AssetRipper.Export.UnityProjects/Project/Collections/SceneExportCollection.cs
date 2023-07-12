@@ -54,7 +54,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		protected virtual bool ExportScene(IExportContainer container, string folderPath, string filePath, string sceneName)
 		{
 			AssetExporter.Export(container, Assets, filePath);
-			IDefaultImporter sceneImporter = DefaultImporterFactory.CreateAsset(container.File, container.ExportVersion);
+			IDefaultImporter sceneImporter = DefaultImporter.Create(container.File, container.ExportVersion);
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);
 			return true;
@@ -136,7 +136,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		public string? FileName => Scene.Collections.FirstOrDefault(c => c is SerializedAssetCollection)?.Name;
 
 		public override AssetCollection File => CurrentFile;
-		public UnityGUID GUID => Scene.GUID;
+		public UnityGuid GUID => Scene.GUID;
 		public override IAssetExporter AssetExporter { get; }
 		public SceneDefinition Scene { get; }
 		private AssetCollection CurrentFile { get; set; }

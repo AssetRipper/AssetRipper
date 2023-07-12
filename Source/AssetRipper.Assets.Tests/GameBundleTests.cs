@@ -1,5 +1,5 @@
 using AssetRipper.Assets.Bundles;
-using AssetRipper.VersionUtilities;
+using AssetRipper.Primitives;
 
 namespace AssetRipper.Assets.Tests;
 

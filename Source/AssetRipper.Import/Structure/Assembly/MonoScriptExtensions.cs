@@ -15,17 +15,9 @@ namespace AssetRipper.Import.Structure.Assembly
 		/// <summary>
 		/// Before 2018.2 or Release or after 2022.2
 		/// </summary>
-		public static bool HasAssemblyName(UnityVersion version, TransferInstructionFlags flags)
-		{
-			return flags.IsRelease() || version.IsLess(2018, 2) || version.IsGreaterEqual(2022, 2);
-		}
-
-		/// <summary>
-		/// Before 2018.2 or Release or after 2022.2
-		/// </summary>
 		public static bool HasAssemblyName(this IMonoScript monoScript)
 		{
-			return HasAssemblyName(monoScript.Collection.Version, monoScript.Collection.Flags);
+			return monoScript.Collection.Flags.IsRelease() || !monoScript.IsReleaseOnly_AssemblyName_C115();
 		}
 
 		public static string GetValidAssemblyName(this IMonoScript monoScript)

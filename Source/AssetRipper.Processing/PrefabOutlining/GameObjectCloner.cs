@@ -16,7 +16,7 @@ namespace AssetRipper.Processing.PrefabOutlining
 			Dictionary<IUnityObjectBase, IUnityObjectBase> clonedAssetDictionary = new();
 			foreach (IUnityObjectBase asset in source.FetchHierarchy())
 			{
-				IUnityObjectBase clonedAsset = processedCollection.CreateAsset(asset.ClassID, AssetFactory.CreateAsset);
+				IUnityObjectBase clonedAsset = processedCollection.CreateAsset(asset.ClassID, AssetFactory.Create);
 				clonedAssetDictionary.Add(asset, clonedAsset);
 			}
 			ClonedAssetResolver resolver = new ClonedAssetResolver(clonedAssetDictionary);

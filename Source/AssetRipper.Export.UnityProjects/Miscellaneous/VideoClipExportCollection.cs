@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.UnityProjects.Project.Collections;
-using IVideoClip327 = AssetRipper.SourceGenerated.Classes.ClassID_327.IVideoClip;
-using IVideoClip329 = AssetRipper.SourceGenerated.Classes.ClassID_329.IVideoClip;
+using AssetRipper.SourceGenerated.Classes.ClassID_329;
 
 namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
@@ -13,13 +12,9 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			if (asset is IVideoClip329 videoClip329)
+			if (asset is IVideoClip videoClip)
 			{
-				return GetExtensionFromPath(videoClip329.OriginalPath_C329.String);
-			}
-			else if (asset is IVideoClip327 videoClip327)
-			{
-				return GetExtensionFromPath(videoClip327.OriginalPath_C327.String);
+				return GetExtensionFromPath(videoClip.OriginalPath_C329.String);
 			}
 			else
 			{

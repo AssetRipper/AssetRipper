@@ -6,27 +6,27 @@ namespace AssetRipper.Processing.AudioMixers;
 
 internal readonly struct GuidIndexTable
 {
-	private readonly Dictionary<uint, UnityGUID> table = new();
+	private readonly Dictionary<uint, UnityGuid> table = new();
 
 	public GuidIndexTable()
 	{
 	}
 
-	public UnityGUID this[uint index] => table[index];
+	public UnityGuid this[uint index] => table[index];
 
 	public bool ContainsKey(uint index) => table.ContainsKey(index);
 
-	public bool TryGetValue(uint index, out UnityGUID guid) => table.TryGetValue(index, out guid);
+	public bool TryGetValue(uint index, out UnityGuid guid) => table.TryGetValue(index, out guid);
 
-	public UnityGUID IndexNewGuid(uint index)
+	public UnityGuid IndexNewGuid(uint index)
 	{
-		if (table.TryGetValue(index, out UnityGUID guid))
+		if (table.TryGetValue(index, out UnityGuid guid))
 		{
 			Logger.Warning(LogCategory.Processing, $"Constant index #{index} conflicts with another one.");
 		}
 		else
 		{
-			guid = UnityGUID.NewGuid();
+			guid = UnityGuid.NewGuid();
 			table.Add(index, guid);
 		}
 		return guid;

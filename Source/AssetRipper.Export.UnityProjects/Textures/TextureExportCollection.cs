@@ -148,7 +148,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			else if (importer.SpriteMode_C1006E == SpriteImportMode.Single)
 			{
 				KeyValuePair<ISprite, ISpriteAtlas?> kvp = textureSpriteInformation.First();
-				ISpriteMetaData smeta = SpriteMetaDataFactory.CreateAsset(kvp.Key.Collection.Version);
+				ISpriteMetaData smeta = SpriteMetaData.Create(kvp.Key.Collection.Version);
 				smeta.FillSpriteMetaData(kvp.Key, kvp.Value);
 				importer.SpriteSheet_C1006.CopyFromSpriteMetaData(smeta);
 			}

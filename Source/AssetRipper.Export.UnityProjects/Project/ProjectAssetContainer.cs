@@ -85,7 +85,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return MetaPtr.CreateMissingReference(asset.ClassID, AssetType.Meta);
 		}
 
-		public UnityGUID SceneNameToGUID(string name)
+		public UnityGuid SceneNameToGUID(string name)
 		{
 			if (m_buildSettings == null)
 			{

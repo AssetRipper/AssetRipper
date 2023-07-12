@@ -85,7 +85,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		private static IBlendTree CreateBlendTree(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant state, int nodeIndex)
 		{
-			IBlendTree blendTree = virtualFile.CreateAsset((int)ClassIDType.BlendTree, BlendTreeFactory.CreateAsset);
+			IBlendTree blendTree = virtualFile.CreateAsset((int)ClassIDType.BlendTree, BlendTree.Create);
 			blendTree.ObjectHideFlags = HideFlags.HideInHierarchy;
 
 			IBlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Data;
@@ -176,7 +176,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 		{
 			const float StateOffset = 250.0f;
 
-			IAnimatorStateMachine generatedStateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachineFactory.CreateAsset);
+			IAnimatorStateMachine generatedStateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachine.Create);
 			generatedStateMachine.ObjectHideFlags = HideFlags.HideInHierarchy;
 
 			int layerIndex = controller.Controller_C91.GetLayerIndexByStateMachineIndex(stateMachineIndex);
@@ -311,20 +311,26 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		private static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position)
 		{
-			IAnimatorState generatedState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorStateFactory.CreateAsset);
+			IAnimatorState generatedState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
 			generatedState.ObjectHideFlags = HideFlags.HideInHierarchy;
 
-			AssetDictionary<uint, Utf8String> TOS = controller.TOS_C91;
-			if (!TOS.ContainsKey(0))
+			AssetDictionary<uint, Utf8String> tos;
+			if (controller.TOS_C91.ContainsKey(0))
 			{
-				AssetDictionary<uint, Utf8String> tos = new AssetDictionary<uint, Utf8String>() { { 0, new Utf8String() } };
-				tos.AddRange(controller.TOS_C91);
-				TOS = tos;
+				tos = controller.TOS_C91;
+			}
+			else
+			{
+				tos = new AssetDictionary<uint, Utf8String>() { { 0, new Utf8String() } };
+				foreach ((uint hash, Utf8String str) in controller.TOS_C91)
+				{
+					tos.Add(hash, str);
+				}
 			}
 			IStateMachineConstant stateMachine = controller.Controller_C91.StateMachineArray[stateMachineIndex].Data;
 			IStateConstant state = stateMachine.StateConstantArray[stateIndex].Data;
 
-			generatedState.Name = TOS[state.NameID];
+			generatedState.Name = tos[state.NameID];
 
 			generatedState.Speed_C1102 = state.Speed;
 			generatedState.CycleOffset_C1102 = state.CycleOffset;
@@ -370,11 +376,11 @@ namespace AssetRipper.Processing.AnimatorControllers
 				generatedState.Motions_C1102P.Add(motion);
 			}
 
-			generatedState.Tag_C1102 = TOS[state.TagID];
-			generatedState.SpeedParameter_C1102 = TOS[state.SpeedParamID];
-			generatedState.MirrorParameter_C1102 = TOS[state.MirrorParamID];
-			generatedState.CycleOffsetParameter_C1102 = TOS[state.CycleOffsetParamID];
-			generatedState.TimeParameter_C1102 = TOS[state.TimeParamID];
+			generatedState.Tag_C1102 = tos[state.TagID];
+			generatedState.SpeedParameter_C1102 = tos[state.SpeedParamID];
+			generatedState.MirrorParameter_C1102 = tos[state.MirrorParamID];
+			generatedState.CycleOffsetParameter_C1102 = tos[state.CycleOffsetParamID];
+			generatedState.TimeParameter_C1102 = tos[state.TimeParamID];
 
 			return generatedState;
 		}
@@ -386,7 +392,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			AssetDictionary<uint, Utf8String> TOS,
 			ITransitionConstant Transition)
 		{
-			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateTransition, AnimatorStateTransitionFactory.CreateAsset);
+			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateTransition, AnimatorStateTransition.Create);
 			animatorStateTransition.HideFlags_C1101 = (uint)HideFlags.HideInHierarchy;
 
 			animatorStateTransition.Conditions_C1101.Capacity = Transition.ConditionConstantArray.Count;
@@ -426,7 +432,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			AssetDictionary<uint, Utf8String> TOS,
 			SelectorTransitionConstant Transition)
 		{
-			IAnimatorTransition animatorTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorTransition, AnimatorTransitionFactory.CreateAsset);
+			IAnimatorTransition animatorTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorTransition, AnimatorTransition.Create);
 			animatorTransition.HideFlags_C1109 = (uint)HideFlags.HideInHierarchy;
 
 			animatorTransition.Conditions_C1109.Capacity = Transition.ConditionConstantArray.Count;

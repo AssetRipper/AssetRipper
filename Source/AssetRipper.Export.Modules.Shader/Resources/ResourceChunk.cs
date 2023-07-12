@@ -2,8 +2,8 @@
 using AssetRipper.Export.Modules.Shaders.Extensions;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.IO.Endian;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
-using AssetRipper.VersionUtilities;
 using System.Text;
 
 namespace AssetRipper.Export.Modules.Shaders.Resources

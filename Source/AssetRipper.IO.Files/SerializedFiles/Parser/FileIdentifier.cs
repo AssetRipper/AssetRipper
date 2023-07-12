@@ -32,7 +32,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 			if (HasHash(reader.Generation))
 			{
-				Guid = reader.ReadUnityGUID();
+				Guid = reader.ReadUnityGuid();
 				Type = (AssetType)reader.ReadInt32();
 			}
 			PathNameOrigin = reader.ReadStringZeroTerm();
@@ -91,6 +91,6 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 		/// </summary>
 		public string PathNameOrigin { get; set; }
 
-		public UnityGUID Guid { get; set; }
+		public UnityGuid Guid { get; set; }
 	}
 }

@@ -161,10 +161,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Localizations", "Localizati
 		Localizations\README.md = Localizations\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Primitives", "Source\AssetRipper.Primitives\AssetRipper.Primitives.csproj", "{7D85A552-7634-4588-A66F-C594716F38BB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Primitives.Tests", "Source\AssetRipper.Primitives.Tests\AssetRipper.Primitives.Tests.csproj", "{671B9C08-6450-47A7-A51C-C84603B48CC1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -339,14 +335,6 @@ Global
 		{1EF29A1D-A170-4167-830B-17DCC679CA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EF29A1D-A170-4167-830B-17DCC679CA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EF29A1D-A170-4167-830B-17DCC679CA59}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D85A552-7634-4588-A66F-C594716F38BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D85A552-7634-4588-A66F-C594716F38BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D85A552-7634-4588-A66F-C594716F38BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D85A552-7634-4588-A66F-C594716F38BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{671B9C08-6450-47A7-A51C-C84603B48CC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{671B9C08-6450-47A7-A51C-C84603B48CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{671B9C08-6450-47A7-A51C-C84603B48CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{671B9C08-6450-47A7-A51C-C84603B48CC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

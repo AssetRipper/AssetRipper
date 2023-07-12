@@ -50,7 +50,7 @@ namespace AssetRipper.IO.Files
 
 		public override string ToString()
 		{
-			return new UnityGUID(ToArray()).ToString();
+			return new UnityGuid(ToArray()).ToString();
 		}
 
 		public byte[] ToArray()

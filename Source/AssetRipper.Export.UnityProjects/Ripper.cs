@@ -51,6 +51,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_272;
 using AssetRipper.SourceGenerated.Classes.ClassID_273;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
+using AssetRipper.SourceGenerated.Classes.ClassID_329;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
@@ -236,9 +237,7 @@ namespace AssetRipper.Export.UnityProjects
 			//Miscellaneous exporters
 			projectExporter.OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
 			projectExporter.OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
-			VideoClipExporter videoClipExporter = new();
-			projectExporter.OverrideExporter<SourceGenerated.Classes.ClassID_327.IVideoClip>(videoClipExporter);
-			projectExporter.OverrideExporter<SourceGenerated.Classes.ClassID_329.IVideoClip>(videoClipExporter);
+			projectExporter.OverrideExporter<IVideoClip>(new VideoClipExporter());
 
 			//Texture exporters
 			TextureAssetExporter textureExporter = new(Settings);

@@ -1,5 +1,5 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_157;
-using GIWorkflowMode = AssetRipper.SourceGenerated.Enums.GIWorkflowMode_0;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

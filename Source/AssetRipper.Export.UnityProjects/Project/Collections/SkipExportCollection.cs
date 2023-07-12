@@ -45,7 +45,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 
 			long exportId = GetExportID(asset);
 			AssetType type = AssetExporter.ToExportType(asset);
-			return new MetaPtr(exportId, UnityGUID.MissingReference, type);
+			return new MetaPtr(exportId, UnityGuid.MissingReference, type);
 		}
 
 		public IAssetExporter AssetExporter { get; }

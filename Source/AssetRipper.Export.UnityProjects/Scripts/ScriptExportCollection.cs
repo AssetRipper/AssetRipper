@@ -164,13 +164,13 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			if (AssetExporter.GetExportType(script.GetAssemblyNameFixed()) is AssemblyExportType.Decompile)
 			{
 				long exportID = GetExportID(asset);
-				UnityGUID uniqueGUID = ScriptHashing.ComputeScriptGuid(script);
+				UnityGuid uniqueGUID = ScriptHashing.ComputeScriptGuid(script);
 				return new MetaPtr(exportID, uniqueGUID, AssetExporter.ToExportType(asset));
 			}
 			else
 			{
 				int fileID;
-				UnityGUID guid;
+				UnityGuid guid;
 				if (!script.HasAssemblyName() || ReferenceAssemblies.IsUnityEngineAssembly(script.GetAssemblyNameFixed()))
 				{
 					fileID = ScriptHashing.CalculateScriptFileID(script);
@@ -194,7 +194,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		private static void OnScriptExported(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			IMonoScript script = (IMonoScript)asset;
-			IMonoImporter importer = MonoImporterFactory.CreateAsset(asset.Collection, container.ExportVersion);
+			IMonoImporter importer = MonoImporter.Create(asset.Collection, container.ExportVersion);
 			importer.ExecutionOrder_C1035 = (short)script.ExecutionOrder_C115;
 			Meta meta = new Meta(ScriptHashing.ComputeScriptGuid(script), importer);
 			ExportMeta(container, meta, path);
@@ -202,8 +202,8 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 		private void OnAssemblyExported(IExportContainer container, string path)
 		{
-			UnityGUID guid = GetAssemblyGuid(Path.GetFileName(path));
-			IPluginImporter importer = PluginImporterFactory.CreateAsset(container.VirtualFile, container.ExportVersion);
+			UnityGuid guid = GetAssemblyGuid(Path.GetFileName(path));
+			IPluginImporter importer = PluginImporter.Create(container.VirtualFile, container.ExportVersion);
 			Meta meta = new Meta(guid, importer);
 			ExportMeta(container, meta, path);
 		}
@@ -227,15 +227,15 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			GetExportSubPath(script.GetAssemblyNameFixed(), script.Namespace_C115.String, script.ClassName_C115.String, out folderPath, out fileName);
 		}
 
-		private UnityGUID GetAssemblyGuid(string assemblyName)
+		private UnityGuid GetAssemblyGuid(string assemblyName)
 		{
-			if (AssemblyHash.TryGetValue(assemblyName, out UnityGUID result))
+			if (AssemblyHash.TryGetValue(assemblyName, out UnityGuid result))
 			{
 				return result;
 			}
 			else
 			{
-				UnityGUID guid = ScriptHashing.CalculateAssemblyGuid(assemblyName);
+				UnityGuid guid = ScriptHashing.CalculateAssemblyGuid(assemblyName);
 				AssemblyHash[assemblyName] = guid;
 				//MonoScripts don't always have the .dll extension.
 				AssemblyHash[FilenameUtils.AddAssemblyFileExtension(assemblyName)] = guid;
@@ -248,11 +248,11 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		public override IEnumerable<IUnityObjectBase> Assets => m_scripts.Keys;
 		public override string Name => nameof(ScriptExportCollection);
 
-		private static readonly UnityGUID UnityEngineGUID = new UnityGUID(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
+		private static readonly UnityGuid UnityEngineGUID = new UnityGuid(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
 
 		private readonly List<IMonoScript> m_export = new();
 		private readonly Dictionary<IUnityObjectBase, IMonoScript> m_scripts = new();
 		private readonly Dictionary<string, int> ScriptId = new();
-		private readonly Dictionary<string, UnityGUID> AssemblyHash = new();
+		private readonly Dictionary<string, UnityGuid> AssemblyHash = new();
 	}
 }

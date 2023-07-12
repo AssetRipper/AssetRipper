@@ -30,7 +30,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			throw new NotSupportedException();
 		}
 
-		public UnityGUID GetExportGUID(IUnityObjectBase asset)
+		public UnityGuid GetExportGUID(IUnityObjectBase asset)
 		{
 			throw new NotSupportedException();
 		}

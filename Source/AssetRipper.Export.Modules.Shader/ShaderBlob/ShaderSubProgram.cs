@@ -1,9 +1,9 @@
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
-using AssetRipper.VersionUtilities;
 
 
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob

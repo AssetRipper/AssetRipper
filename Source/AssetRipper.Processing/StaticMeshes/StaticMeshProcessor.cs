@@ -573,7 +573,7 @@ namespace AssetRipper.Processing.StaticMeshes
 
 		private static IMesh CreateMesh(ProcessedAssetCollection processedCollection)
 		{
-			return processedCollection.CreateAsset((int)ClassIDType.Mesh, MeshFactory.CreateAsset);
+			return processedCollection.CreateAsset((int)ClassIDType.Mesh, Mesh.Create);
 		}
 
 		#region Approximate Equality

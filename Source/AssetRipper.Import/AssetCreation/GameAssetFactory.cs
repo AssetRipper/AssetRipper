@@ -48,9 +48,9 @@ namespace AssetRipper.Import.AssetCreation
 		{
 			if (assetInfo.ClassID == (int)ClassIDType.MonoBehaviour)
 			{
-				return ReadMonoBehaviour(MonoBehaviourFactory.CreateAsset(assetInfo), assetData, AssemblyManager, assetType);
+				return ReadMonoBehaviour(MonoBehaviour.Create(assetInfo), assetData, AssemblyManager, assetType);
 			}
-			IUnityObjectBase? asset = AssetFactory.CreateAsset(assetInfo);
+			IUnityObjectBase? asset = AssetFactory.Create(assetInfo);
 			if (asset is null)
 			{
 				return new UnknownObject(assetInfo, assetData.ToArray());
@@ -62,7 +62,7 @@ namespace AssetRipper.Import.AssetCreation
 				{
 					UnityVersion oldVersion = assetInfo.Collection.Version;
 					UnityVersion newVersion = new UnityVersion(oldVersion.Major, oldVersion.Minor, unchecked((ushort)(oldVersion.Build + 1u)));
-					IUnityObjectBase? newAsset = AssetFactory.CreateAsset(assetInfo, newVersion);
+					IUnityObjectBase? newAsset = AssetFactory.Create(assetInfo, newVersion);
 					if (newAsset is not null)
 					{
 						IUnityObjectBase newReadAsset = ReadNormalObject(newAsset, assetData);
@@ -192,24 +192,24 @@ namespace AssetRipper.Import.AssetCreation
 		{
 			return name switch
 			{
-				MonoUtils.Vector2Name => Vector2fFactory.CreateAsset(),
-				MonoUtils.Vector2IntName => Vector2IntFactory.CreateAsset(),
-				MonoUtils.Vector3Name => Vector3fFactory.CreateAsset(),
-				MonoUtils.Vector3IntName => Vector3IntFactory.CreateAsset(),
-				MonoUtils.Vector4Name => Vector4fFactory.CreateAsset(),
-				MonoUtils.RectName => RectfFactory.CreateAsset(),
-				MonoUtils.BoundsName => AABBFactory.CreateAsset(),
-				MonoUtils.BoundsIntName => AABBIntFactory.CreateAsset(),
-				MonoUtils.QuaternionName => QuaternionfFactory.CreateAsset(),
-				MonoUtils.Matrix4x4Name => Matrix4x4fFactory.CreateAsset(),
-				MonoUtils.ColorName => ColorRGBAfFactory.CreateAsset(),
-				MonoUtils.Color32Name => ColorRGBA32Factory.CreateAsset(),
-				MonoUtils.LayerMaskName => LayerMaskFactory.CreateAsset(),
-				MonoUtils.AnimationCurveName => AnimationCurve_SingleFactory.CreateAsset(version),
+				MonoUtils.Vector2Name => Vector2f.Create(),
+				MonoUtils.Vector2IntName => Vector2Int.Create(),
+				MonoUtils.Vector3Name => Vector3f.Create(),
+				MonoUtils.Vector3IntName => Vector3Int.Create(),
+				MonoUtils.Vector4Name => Vector4f.Create(),
+				MonoUtils.RectName => Rectf.Create(),
+				MonoUtils.BoundsName => AABB.Create(),
+				MonoUtils.BoundsIntName => AABBInt.Create(),
+				MonoUtils.QuaternionName => Quaternionf.Create(),
+				MonoUtils.Matrix4x4Name => Matrix4x4f.Create(),
+				MonoUtils.ColorName => ColorRGBAf.Create(),
+				MonoUtils.Color32Name => ColorRGBA32.Create(),
+				MonoUtils.LayerMaskName => LayerMask.Create(),
+				MonoUtils.AnimationCurveName => AnimationCurve_Single.Create(version),
 				//This is the new Gradient. The old one was (most likely) not exposed to user code.
-				MonoUtils.GradientName => GradientFactory.CreateAsset(version),
-				MonoUtils.RectOffsetName => RectOffsetFactory.CreateAsset(),
-				MonoUtils.GUIStyleName => GUIStyleFactory.CreateAsset(version),
+				MonoUtils.GradientName => Gradient.Create(version),
+				MonoUtils.RectOffsetName => RectOffset.Create(),
+				MonoUtils.GUIStyleName => GUIStyle.Create(version),
 				MonoUtils.PropertyNameName => throw new NotSupportedException("PropertyName should be treated as a normal string elsewhere in the codebase, currently MonoType."),
 				_ => throw new NotSupportedException(name),
 			};

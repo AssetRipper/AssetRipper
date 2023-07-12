@@ -37,9 +37,9 @@ public partial record class FileIdentifier_1 : IFileIdentifier
 	partial void OnPathNameAssignment(string value);
 	
 	/// <summary>
-	/// Actually UnityGUID
+	/// Actually UnityGuid
 	/// </summary>
-	public UnityGUID Guid
+	public UnityGuid Guid
 	{
 		get => default;
 		set { }

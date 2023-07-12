@@ -22,7 +22,7 @@ namespace AssetRipper.Processing.Scenes
 			IBuildSettings? buildSettings = null;
 			HashSet<AssetCollection> sceneCollections = new();
 			Dictionary<AssetCollection, string> scenePaths = new();
-			Dictionary<AssetCollection, UnityGUID> sceneGuids = new();
+			Dictionary<AssetCollection, UnityGuid> sceneGuids = new();
 			List<IAssetBundle> sceneAssetBundles = new();
 
 			//Find the relevant assets in this single pass over all the assets.
@@ -93,7 +93,7 @@ namespace AssetRipper.Processing.Scenes
 			foreach (AssetCollection sceneCollection in sceneCollections)
 			{
 				SceneDefinition sceneDefinition;
-				UnityGUID guid = sceneGuids.TryGetValue(sceneCollection, out UnityGUID sceneGuid) ? sceneGuid : default;
+				UnityGuid guid = sceneGuids.TryGetValue(sceneCollection, out UnityGuid sceneGuid) ? sceneGuid : default;
 				if (scenePaths.TryGetValue(sceneCollection, out string? path))
 				{
 					sceneDefinition = SceneDefinition.FromPath(path, guid);

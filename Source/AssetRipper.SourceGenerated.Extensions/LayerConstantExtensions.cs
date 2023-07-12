@@ -1,5 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
-using AnimatorLayerBlendingMode = AssetRipper.SourceGenerated.Enums.AnimatorLayerBlendingMode_0;
+﻿using AssetRipper.SourceGenerated.Enums;
+using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

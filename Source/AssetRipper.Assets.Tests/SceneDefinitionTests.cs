@@ -1,8 +1,6 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
-using AssetRipper.IO.Files;
 using AssetRipper.Primitives;
-using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Assets.Tests;
 
@@ -19,7 +17,7 @@ public class SceneDefinitionTests
 	public void FromName_CreatesSceneDefinitionWithGuid()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromName("testScene");
-		Assert.That(sceneDefinition.GUID, Is.Not.EqualTo(UnityGUID.Zero));
+		Assert.That(sceneDefinition.GUID, Is.Not.EqualTo(UnityGuid.Zero));
 	}
 
 	[Test]
@@ -33,7 +31,7 @@ public class SceneDefinitionTests
 	public void FromPath_CreatesSceneDefinitionWithGuid()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromPath("Assets/Scenes/testScene");
-		Assert.That(sceneDefinition.GUID, Is.Not.EqualTo(UnityGUID.Zero));
+		Assert.That(sceneDefinition.GUID, Is.Not.EqualTo(UnityGuid.Zero));
 	}
 
 	[Test]
@@ -102,6 +100,6 @@ public class SceneDefinitionTests
 	private static AssetCollection CreateCollection()
 	{
 		GameBundle gameBundle = new();
-		return gameBundle.AddNewProcessedCollection(UnityGUID.NewGuid().ToString(), UnityVersion.MinVersion);
+		return gameBundle.AddNewProcessedCollection(UnityGuid.NewGuid().ToString(), UnityVersion.MinVersion);
 	}
 }

@@ -21,7 +21,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 		public static ITextureImporter GenerateTextureImporter(IExportContainer container, IUnityObjectBase origin)
 		{
 			TextureImporterData data = new TextureImporterData(origin);
-			ITextureImporter instance = TextureImporterFactory.CreateAsset(container.File, container.ExportVersion);
+			ITextureImporter instance = TextureImporter.Create(container.File, container.ExportVersion);
 			instance.MipMaps_C1006.EnableMipMap = data.EnableMipMap ? 1 : 0;
 			instance.MipMaps_C1006.SRGBTexture = data.SRGBTexture ? 1 : 0;
 			instance.MipMaps_C1006.AlphaTestReferenceValue = 0.5f;
@@ -178,7 +178,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			{
 				Logger.Warning("IHVImageFormatImporter doesn't exist on versions less than 5.6. A different importer needs to be used on this version");
 			}
-			IIHVImageFormatImporter instance = IHVImageFormatImporterFactory.CreateAsset(container.File, container.ExportVersion);
+			IIHVImageFormatImporter instance = IHVImageFormatImporter.Create(container.File, container.ExportVersion);
 			instance.SetToDefault();
 			instance.IsReadable_C1055 = origin.IsReadable_C28;
 			instance.SRGBTexture_C1055 = origin.ColorSpace_C28E == ColorSpace.Linear;

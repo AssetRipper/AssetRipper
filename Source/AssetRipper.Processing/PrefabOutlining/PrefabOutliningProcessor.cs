@@ -102,12 +102,12 @@ namespace AssetRipper.Processing.PrefabOutlining
 
 		private static IGameObject CreateNewGameObject(ProcessedAssetCollection collection)
 		{
-			return collection.CreateAsset((int)ClassIDType.GameObject, GameObjectFactory.CreateAsset);
+			return collection.CreateAsset((int)ClassIDType.GameObject, GameObject.Create);
 		}
 
 		private static ITransform CreateNewTransform(ProcessedAssetCollection collection)
 		{
-			return collection.CreateAsset((int)ClassIDType.Transform, TransformFactory.CreateAsset);
+			return collection.CreateAsset((int)ClassIDType.Transform, Transform.Create);
 		}
 
 		private static void MakeBoxes(Dictionary<IGameObject, GameObjectInfo> infoDictionary, Dictionary<AssetCollection, bool> sceneInfo, out Dictionary<string, Dictionary<GameObjectInfo, List<IGameObject>>> boxes, out HashSet<IGameObject> prefabRoots)

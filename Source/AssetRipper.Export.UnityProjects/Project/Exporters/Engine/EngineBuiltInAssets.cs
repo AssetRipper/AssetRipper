@@ -724,9 +724,9 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters.Engine
 		public const string CubeBlend = "Hidden/CubeBlend";
 		public const string TerrainBillboardWavingDoublePass = "Hidden/TerrainEngine/Details/BillboardWavingDoublePass";
 
-		public static readonly UnityGUID DGUID = new UnityGUID(0x00000000, 0x00000000, 0x0000000D, 0x00000000);
-		public static readonly UnityGUID EGUID = new UnityGUID(0x00000000, 0x00000000, 0x0000000E, 0x00000000);
-		public static readonly UnityGUID FGUID = new UnityGUID(0x00000000, 0x00000000, 0x0000000F, 0x00000000);
+		public static readonly UnityGuid DGUID = new UnityGuid(0x00000000, 0x00000000, 0x0000000D, 0x00000000);
+		public static readonly UnityGuid EGUID = new UnityGuid(0x00000000, 0x00000000, 0x0000000E, 0x00000000);
+		public static readonly UnityGuid FGUID = new UnityGuid(0x00000000, 0x00000000, 0x0000000F, 0x00000000);
 
 		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_materials = new Dictionary<string, EngineBuiltInAssetInfo>();
 		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_textures = new Dictionary<string, EngineBuiltInAssetInfo>();

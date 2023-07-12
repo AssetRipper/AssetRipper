@@ -15,15 +15,15 @@ public sealed class SceneDefinition
 	/// Creates a new <see cref="SceneDefinition"/> from the given name and guid.
 	/// </summary>
 	/// <param name="name">The name of the scene.</param>
-	/// <param name="guid">The predefined <see cref="UnityGUID"/> for the scene. If default, a random one is assigned.</param>
+	/// <param name="guid">The predefined <see cref="UnityGuid"/> for the scene. If default, a random one is assigned.</param>
 	/// <returns></returns>
-	public static SceneDefinition FromName(string name, UnityGUID guid = default)
+	public static SceneDefinition FromName(string name, UnityGuid guid = default)
 	{
 		return new()
 		{
 			Name = name,
 			Path = $"Assets/Scenes/{name}",
-			GUID = guid.IsZero ? UnityGUID.NewGuid() : guid,
+			GUID = guid.IsZero ? UnityGuid.NewGuid() : guid,
 		};
 	}
 
@@ -31,15 +31,15 @@ public sealed class SceneDefinition
 	/// Creates a new <see cref="SceneDefinition"/> from the given path and guid.
 	/// </summary>
 	/// <param name="path">The relative path to the scene.</param>
-	/// <param name="guid">The predefined <see cref="UnityGUID"/> for the scene. If default, a random one is assigned.</param>
+	/// <param name="guid">The predefined <see cref="UnityGuid"/> for the scene. If default, a random one is assigned.</param>
 	/// <returns></returns>
-	public static SceneDefinition FromPath(string path, UnityGUID guid = default)
+	public static SceneDefinition FromPath(string path, UnityGuid guid = default)
 	{
 		return new()
 		{
 			Name = System.IO.Path.GetFileName(path),
 			Path = path,
-			GUID = guid.IsZero ? UnityGUID.NewGuid() : guid,
+			GUID = guid.IsZero ? UnityGuid.NewGuid() : guid,
 		};
 	}
 
@@ -54,9 +54,9 @@ public sealed class SceneDefinition
 	public required string Path { get; init; }
 
 	/// <summary>
-	/// The GUID of this scene. It gets used in the scene's meta file. This will not be <see cref="UnityGUID.Zero"/>.
+	/// The GUID of this scene. It gets used in the scene's meta file. This will not be <see cref="UnityGuid.Zero"/>.
 	/// </summary>
-	public required UnityGUID GUID { get; init; }
+	public required UnityGuid GUID { get; init; }
 
 	/// <summary>
 	/// All the <see cref="AssetCollection"/>s that make up this scene.

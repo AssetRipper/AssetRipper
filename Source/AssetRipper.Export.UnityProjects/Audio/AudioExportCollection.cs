@@ -15,7 +15,7 @@ public class AudioExportCollection : AssetExportCollection<IAudioClip>
 
 	protected override IAudioImporter CreateImporter(IExportContainer container)
 	{
-		IAudioImporter importer = AudioImporterFactory.CreateAsset(container.File, container.ExportVersion);
+		IAudioImporter importer = AudioImporter.Create(container.File, container.ExportVersion);
 		importer.P_3D_C1020 = Asset.P_3D_C83;
 		importer.Ambisonic_C1020 = Asset.Ambisonic_C83;
 		if (importer.Has_DefaultSettings_C1020())

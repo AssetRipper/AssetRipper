@@ -4,7 +4,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
 using AssetRipper.SourceGenerated.Classes.ClassID_108;
@@ -15,7 +14,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_258;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
-using AssetRipper.SourceGenerated.MarkerInterfaces;
 using AssetRipper.SourceGenerated.Subclasses.LightmapData;
 using AssetRipper.SourceGenerated.Subclasses.RendererData;
 using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
@@ -35,7 +33,7 @@ namespace AssetRipper.Processing
 			ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Generated Lighting Data Assets");
 
 			Dictionary<ILightmapSettings, SceneDefinition> lightmapSettingsDictionary = new();
-			Dictionary<ILightProbesMarker, SceneDefinition?> lightProbeDictionary = new();
+			Dictionary<ILightProbes, SceneDefinition?> lightProbeDictionary = new();
 
 			foreach (SceneDefinition scene in gameData.GameBundle.Scenes)
 			{
@@ -90,7 +88,7 @@ namespace AssetRipper.Processing
 
 			foreach ((ILightmapSettings lightmapSettings, SceneDefinition scene) in lightmapSettingsDictionary)
 			{
-				ILightProbesMarker? lightProbes = lightmapSettings.LightProbes_C157P;
+				ILightProbes? lightProbes = lightmapSettings.LightProbes_C157P;
 				if (lightProbes is not null && lightProbeDictionary[lightProbes] is null)
 				{
 					lightProbes = null;//Shared light probes should not have their path set.
@@ -178,7 +176,7 @@ namespace AssetRipper.Processing
 			}
 		}
 
-		private static void SetPathsAndMainAsset(ILightmapSettings lightmapSettings, ILightProbesMarker? lightProbes, SceneDefinition scene)
+		private static void SetPathsAndMainAsset(ILightmapSettings lightmapSettings, ILightProbes? lightProbes, SceneDefinition scene)
 		{
 			//Several assets should all be exported in a subfolder beside the scene.
 			//Example:
@@ -296,12 +294,12 @@ namespace AssetRipper.Processing
 		/// <returns></returns>
 		private static ILightingDataAsset CreateLightingDataAsset(ProcessedAssetCollection collection)
 		{
-			return collection.CreateAsset((int)ClassIDType.LightingDataAsset, LightingDataAssetFactory.CreateAsset);
+			return collection.CreateAsset((int)ClassIDType.LightingDataAsset, LightingDataAsset.Create);
 		}
 
 		private static ISceneAsset CreateSceneAsset(ProcessedAssetCollection collection, SceneDefinition targetScene)
 		{
-			ISceneAsset asset = collection.CreateAsset((int)ClassIDType.SceneAsset, SceneAssetFactory.CreateAsset);
+			ISceneAsset asset = collection.CreateAsset((int)ClassIDType.SceneAsset, SceneAsset.Create);
 			asset.TargetScene = targetScene;
 			return asset;
 		}

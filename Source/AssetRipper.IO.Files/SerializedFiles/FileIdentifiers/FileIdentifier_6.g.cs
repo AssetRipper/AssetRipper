@@ -37,14 +37,14 @@ public partial record class FileIdentifier_6 : IFileIdentifier
 	partial void OnAssetPathAssignment(string value);
 	
 	/// <summary>
-	/// Actually UnityGUID
+	/// Actually UnityGuid
 	/// </summary>
-	private UnityGUID m_Guid = new();
+	private UnityGuid m_Guid = new();
 	
 	/// <summary>
-	/// Actually UnityGUID
+	/// Actually UnityGuid
 	/// </summary>
-	public UnityGUID Guid
+	public UnityGuid Guid
 	{
 		get => m_Guid;
 		set
@@ -57,7 +57,7 @@ public partial record class FileIdentifier_6 : IFileIdentifier
 	/// <summary>
 	/// Called when <see cref="Guid"/> is set.
 	/// </summary>
-	partial void OnGuidAssignment(UnityGUID value);
+	partial void OnGuidAssignment(UnityGuid value);
 	
 	/// <summary>
 	/// The type of the file
@@ -114,7 +114,7 @@ public partial record class FileIdentifier_6 : IFileIdentifier
 	public void Read(EndianReader reader)
 	{
 		m_AssetPath = reader.ReadStringZeroTerm();
-		m_Guid = reader.ReadUnityGUID();
+		m_Guid = reader.ReadUnityGuid();
 		m_Type = reader.ReadInt32();
 		m_PathName = reader.ReadStringZeroTerm();
 		OnReadFinished(reader);

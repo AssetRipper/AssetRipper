@@ -17,7 +17,7 @@ public sealed class ProcessedBundle : VirtualBundle<ProcessedAssetCollection>
 	/// </summary>
 	public ProcessedBundle()
 	{
-		Name = $"{nameof(ProcessedBundle)}_{UnityGUID.NewGuid()}";
+		Name = $"{nameof(ProcessedBundle)}_{UnityGuid.NewGuid()}";
 	}
 
 	/// <summary>

@@ -1,1 +1,1 @@
-﻿global using AssetRipper.VersionUtilities;
+﻿global using AssetRipper.Primitives;

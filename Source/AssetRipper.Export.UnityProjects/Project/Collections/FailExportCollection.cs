@@ -39,7 +39,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			throw new ArgumentException(null, nameof(asset));
 		}
 
-		public UnityGUID GetExportGUID(IUnityObjectBase _)
+		public UnityGuid GetExportGUID(IUnityObjectBase _)
 		{
 			throw new NotSupportedException();
 		}
@@ -53,7 +53,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 
 			long exportId = GetExportID(asset);
 			AssetType type = AssetExporter.ToExportType(asset);
-			return new MetaPtr(exportId, UnityGUID.MissingReference, type);
+			return new MetaPtr(exportId, UnityGuid.MissingReference, type);
 		}
 
 		public IAssetExporter AssetExporter { get; }

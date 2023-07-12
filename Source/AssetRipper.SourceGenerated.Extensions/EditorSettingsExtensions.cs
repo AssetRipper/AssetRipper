@@ -37,9 +37,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			//Version 2 is the default whenever this property is available.
 			//Similarly, version 1 is marked obsolete in those versions.
 			//https://docs.unity3d.com/Manual/AssetDatabase.html
-			settings.AssetPipelineMode_C159E = AssetPipelineMode_1.Version2;
+			settings.AssetPipelineMode_C159E = AssetPipelineMode.Version2;
 
-			settings.CacheServerMode_C159E = CacheServerMode_2.AsPreferences;
+			settings.CacheServerMode_C159E = CacheServerMode_1.AsPreferences;
 			settings.CacheServerEndpoint_C159 = Utf8String.Empty;
 			settings.CacheServerNamespacePrefix_C159 = "default"u8;
 			settings.CacheServerEnableDownload_C159 = true;

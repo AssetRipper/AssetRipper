@@ -43,7 +43,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 		{
 			Logger.Warning(LogCategory.Processing, $"GameObject {gameObject.Name} has no Transform. Adding one.");
 
-			ITransform transform = processedCollection.CreateAsset((int)ClassIDType.Transform, TransformFactory.CreateAsset);
+			ITransform transform = processedCollection.CreateAsset((int)ClassIDType.Transform, Transform.Create);
 
 			transform.InitializeDefault();
 
@@ -80,7 +80,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 
 	private static IPrefabInstance CreatePrefab(ProcessedAssetCollection virtualFile, IGameObject root)
 	{
-		IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance, PrefabInstanceFactory.CreateAsset);
+		IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance, PrefabInstance.Create);
 
 		prefab.RootGameObject_C1001P = root;
 		prefab.IsPrefabAsset_C1001 = true;

@@ -1,5 +1,5 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_208;
-using NavMeshObstacleShape = AssetRipper.SourceGenerated.Enums.NavMeshObstacleShape_1;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

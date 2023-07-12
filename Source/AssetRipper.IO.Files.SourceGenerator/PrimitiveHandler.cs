@@ -103,7 +103,7 @@ internal static class PrimitiveHandler
 			"double" => nameof(Double),
 			"decimal" => nameof(Decimal),
 			"string" => nameof(String),
-			nameof(UnityGUID) => nameof(UnityGUID),
+			nameof(UnityGuid) => nameof(UnityGuid),
 			_ => null
 		};
 		return typeName is not null;

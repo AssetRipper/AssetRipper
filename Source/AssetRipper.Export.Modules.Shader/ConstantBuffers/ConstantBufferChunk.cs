@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
 using AssetRipper.IO.Endian;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
-using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers
 {

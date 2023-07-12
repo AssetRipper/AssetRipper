@@ -83,14 +83,14 @@ public static class ScriptHashing
 	/// <param name="assemblyName">The name of the assembly (without any file extension) encoded as UTF8.</param>
 	/// <param name="namespace">The namespace of the script encoded as UTF8.</param>
 	/// <param name="className">The name of the script encoded as UTF8.</param>
-	public static UnityGUID ComputeScriptGuid(ReadOnlySpan<byte> assemblyName, ReadOnlySpan<byte> @namespace, ReadOnlySpan<byte> className)
+	public static UnityGuid ComputeScriptGuid(ReadOnlySpan<byte> assemblyName, ReadOnlySpan<byte> @namespace, ReadOnlySpan<byte> className)
 	{
 		int length = assemblyName.Length + @namespace.Length + className.Length;
 		Span<byte> input = length < 1024 ? stackalloc byte[length] : GC.AllocateUninitializedArray<byte>(length);
 		assemblyName.CopyTo(input);
 		@namespace.CopyTo(input.Slice(assemblyName.Length));
 		className.CopyTo(input.Slice(assemblyName.Length + @namespace.Length));
-		return UnityGUID.Md5Hash(input);
+		return UnityGuid.Md5Hash(input);
 	}
 
 	/// <summary>
@@ -99,7 +99,7 @@ public static class ScriptHashing
 	/// <remarks>
 	/// This is for consistency. Script guid's are random when created in Unity.
 	/// </remarks>
-	public static UnityGUID ComputeScriptGuid(IMonoScript script)
+	public static UnityGuid ComputeScriptGuid(IMonoScript script)
 	{
 		//The assembly file name without any extension.
 		ReadOnlySpan<byte> assemblyName = Encoding.UTF8.GetBytes(script.GetAssemblyNameFixed());
@@ -112,8 +112,8 @@ public static class ScriptHashing
 	/// <remarks>
 	/// This is for consistency. Assembly guid's are random when created in Unity.
 	/// </remarks>
-	public static UnityGUID CalculateAssemblyGuid(string assemblyName)
+	public static UnityGuid CalculateAssemblyGuid(string assemblyName)
 	{
-		return UnityGUID.Md5Hash(FilenameUtils.RemoveAssemblyFileExtension(assemblyName));
+		return UnityGuid.Md5Hash(FilenameUtils.RemoveAssemblyFileExtension(assemblyName));
 	}
 }

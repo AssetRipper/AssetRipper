@@ -16,9 +16,9 @@ public partial interface IFileIdentifier : IEndianWritable
 	public string PathName { get; set; }
 	
 	/// <summary>
-	/// Actually UnityGUID
+	/// Actually UnityGuid
 	/// </summary>
-	public UnityGUID Guid { get; set; }
+	public UnityGuid Guid { get; set; }
 	
 	/// <summary>
 	/// The type of the file

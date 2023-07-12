@@ -34,9 +34,9 @@ namespace AssetRipper.Export.UnityProjects.Textures.Extensions
 				case TextureFormat.PVRTC_RGB2:
 				case TextureFormat.PVRTC_RGB4:
 				case TextureFormat.ETC_RGB4Crunched:
-				case TextureFormat.ETC_RGB4_3DS_60:
+				case TextureFormat.ETC_RGB4_3DS:
 				case TextureFormat.ETC_RGB4:
-				case TextureFormat.ATC_RGB4_35:
+				case TextureFormat.ATC_RGB4:
 				case TextureFormat.ETC2_RGB:
 					return KTXBaseInternalFormat.RGB;
 
@@ -45,9 +45,9 @@ namespace AssetRipper.Export.UnityProjects.Textures.Extensions
 				case TextureFormat.BC7:
 				case TextureFormat.PVRTC_RGBA2:
 				case TextureFormat.PVRTC_RGBA4:
-				case TextureFormat.ATC_RGBA8_36:
+				case TextureFormat.ATC_RGBA8:
 				case TextureFormat.ETC2_RGBA8Crunched:
-				case TextureFormat.ETC_RGBA8_3DS_61:
+				case TextureFormat.ETC_RGBA8_3DS:
 				case TextureFormat.ETC2_RGBA8:
 				case TextureFormat.ETC2_RGBA1:
 					return KTXBaseInternalFormat.RGBA;

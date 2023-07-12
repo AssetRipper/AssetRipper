@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.IO.Endian;
-using AssetRipper.VersionUtilities;
+using AssetRipper.Primitives;
 
 namespace AssetRipper.Export.Modules.Shaders.Exporters
 {

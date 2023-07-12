@@ -1,5 +1,5 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_195;
-using ObstacleAvoidanceType = AssetRipper.SourceGenerated.Enums.ObstacleAvoidanceType_1;
+using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

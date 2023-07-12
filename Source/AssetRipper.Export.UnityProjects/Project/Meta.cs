@@ -10,11 +10,11 @@ namespace AssetRipper.Export.UnityProjects.Project
 {
 	public readonly struct Meta
 	{
-		public Meta(UnityGUID guid, IUnityObjectBase importer) : this(guid, importer, true) { }
+		public Meta(UnityGuid guid, IUnityObjectBase importer) : this(guid, importer, true) { }
 
-		public Meta(UnityGUID guid, IUnityObjectBase importer, bool hasLicense) : this(guid, importer, hasLicense, false) { }
+		public Meta(UnityGuid guid, IUnityObjectBase importer, bool hasLicense) : this(guid, importer, hasLicense, false) { }
 
-		public Meta(UnityGUID guid, IUnityObjectBase importer, bool hasLicense, bool isFolder)
+		public Meta(UnityGuid guid, IUnityObjectBase importer, bool hasLicense, bool isFolder)
 		{
 			if (guid.IsZero)
 			{
@@ -56,7 +56,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return document;
 		}
 
-		public UnityGUID GUID { get; }
+		public UnityGuid GUID { get; }
 		public bool IsFolderAsset { get; }
 		public bool HasLicenseData { get; }
 		public IUnityObjectBase Importer { get; }

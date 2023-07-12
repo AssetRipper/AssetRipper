@@ -1,7 +1,7 @@
 using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.IO.Files.Streams;
-using AssetRipper.VersionUtilities;
+using AssetRipper.Primitives;
 using Smolv;
 using SpirV;
 

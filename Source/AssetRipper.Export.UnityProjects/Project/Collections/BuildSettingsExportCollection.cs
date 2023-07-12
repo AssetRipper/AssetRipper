@@ -15,8 +15,8 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 	{
 		public BuildSettingsExportCollection(IAssetExporter assetExporter, TemporaryAssetCollection virtualFile, IBuildSettings asset) : base(assetExporter, asset)
 		{
-			EditorBuildSettings = CreateVirtualEditorBuildSettings(virtualFile);
-			EditorSettings = CreateVirtualEditorSettings(virtualFile);
+			EditorBuildSettingsAsset = CreateVirtualEditorBuildSettings(virtualFile);
+			EditorSettingsAsset = CreateVirtualEditorSettings(virtualFile);
 		}
 
 		public override bool Export(IExportContainer container, string projectDirectory)
@@ -28,27 +28,27 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			Directory.CreateDirectory(subPath);
 
 			IBuildSettings buildSettings = (IBuildSettings)Asset;
-			InitializeEditorBuildSettings(EditorBuildSettings, buildSettings, container);
-			AssetExporter.Export(container, EditorBuildSettings, filePath);
+			InitializeEditorBuildSettings(EditorBuildSettingsAsset, buildSettings, container);
+			AssetExporter.Export(container, EditorBuildSettingsAsset, filePath);
 
 			fileName = "EditorSettings.asset";
 			filePath = Path.Combine(subPath, fileName);
 
-			AssetExporter.Export(container, EditorSettings, filePath);
+			AssetExporter.Export(container, EditorSettingsAsset, filePath);
 
 			return true;
 		}
 
 		public static IEditorSettings CreateVirtualEditorSettings(TemporaryAssetCollection virtualFile)
 		{
-			IEditorSettings result = virtualFile.CreateAsset((int)ClassIDType.EditorSettings, EditorSettingsFactory.CreateAsset);
+			IEditorSettings result = virtualFile.CreateAsset((int)ClassIDType.EditorSettings, EditorSettings.Create);
 			result.SetToDefaults();
 			return result;
 		}
 
 		public static IEditorBuildSettings CreateVirtualEditorBuildSettings(TemporaryAssetCollection virtualFile)
 		{
-			return virtualFile.CreateAsset((int)ClassIDType.EditorBuildSettings, EditorBuildSettingsFactory.CreateAsset);
+			return virtualFile.CreateAsset((int)ClassIDType.EditorBuildSettings, EditorBuildSettings.Create);
 		}
 
 		public static void InitializeEditorBuildSettings(IEditorBuildSettings editorBuildSettings, IBuildSettings buildSettings, IExportContainer container)
@@ -72,11 +72,11 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		{
 			if (asset is IEditorBuildSettings)
 			{
-				return asset == EditorBuildSettings;
+				return asset == EditorBuildSettingsAsset;
 			}
 			else if (asset is IEditorSettings)
 			{
-				return asset == EditorSettings;
+				return asset == EditorSettingsAsset;
 			}
 			else
 			{
@@ -94,12 +94,12 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 			get
 			{
 				yield return Asset;
-				yield return EditorBuildSettings;
-				yield return EditorSettings;
+				yield return EditorBuildSettingsAsset;
+				yield return EditorSettingsAsset;
 			}
 		}
 
-		public IEditorBuildSettings EditorBuildSettings { get; }
-		public IEditorSettings EditorSettings { get; }
+		public IEditorBuildSettings EditorBuildSettingsAsset { get; }
+		public IEditorSettings EditorSettingsAsset { get; }
 	}
 }

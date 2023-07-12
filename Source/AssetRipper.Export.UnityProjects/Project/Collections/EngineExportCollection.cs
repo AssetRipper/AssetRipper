@@ -195,7 +195,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 				throw new NotImplementedException($"Unknown ExportID for asset {asset.PathID} from file {asset.Collection.Name}");
 			}
 			long exportID = engineAsset.ExportID;
-			UnityGUID guid = engineAsset.GUID;
+			UnityGuid guid = engineAsset.GUID;
 			return new MetaPtr(exportID, guid, AssetType.Internal);
 		}
 

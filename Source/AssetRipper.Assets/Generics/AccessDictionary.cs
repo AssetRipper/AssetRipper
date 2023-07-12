@@ -34,10 +34,7 @@
 		public override void Add(TKeyBase key, TValueBase value) => referenceDictionary.Add((TKey)key, (TValue)value);
 
 		/// <inheritdoc/>
-		public override void Add(AccessPairBase<TKeyBase, TValueBase> pair) => Add(pair.Key, pair.Value);
-
-		/// <inheritdoc/>
-		public override void AddNew() => referenceDictionary.AddNew();
+		public override AccessPair<TKey, TValue, TKeyBase, TValueBase> AddNew() => new(referenceDictionary.AddNew());
 
 		/// <inheritdoc/>
 		public override TKeyBase GetKey(int index) => referenceDictionary.GetKey(index);
@@ -51,44 +48,13 @@
 		/// <inheritdoc/>
 		public override void SetValue(int index, TValueBase newValue) => referenceDictionary.SetValue(index, (TValue)newValue);
 
-		public override AccessPairBase<TKeyBase, TValueBase> GetPair(int index) => AsAccessPair(referenceDictionary.GetPair(index));
-
-		/// <inheritdoc/>
-		public override int IndexOf(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.IndexOf(AsAssetPair(item));
-
-		/// <inheritdoc/>
-		public override void Insert(int index, AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Insert(index, AsAssetPair(item));
+		public override AccessPair<TKey, TValue, TKeyBase, TValueBase> GetPair(int index) => new(referenceDictionary.GetPair(index));
 
 		/// <inheritdoc/>
 		public override void RemoveAt(int index) => referenceDictionary.RemoveAt(index);
 
 		/// <inheritdoc/>
 		public override void Clear() => referenceDictionary.Clear();
-
-		/// <inheritdoc/>
-		public override bool Contains(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Contains(AsAssetPair(item));
-
-		/// <inheritdoc/>
-		public override void CopyTo(AccessPairBase<TKeyBase, TValueBase>[] array, int arrayIndex)
-		{
-			if (array == null)
-			{
-				throw new ArgumentNullException(nameof(array));
-			}
-
-			if (arrayIndex < 0 || arrayIndex >= array.Length - Count)
-			{
-				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
-			}
-
-			for (int i = 0; i < Count; i++)
-			{
-				array[i + arrayIndex] = GetPair(i);
-			}
-		}
-
-		/// <inheritdoc/>
-		public override bool Remove(AccessPairBase<TKeyBase, TValueBase> item) => referenceDictionary.Remove(AsAssetPair(item));
 
 		protected override bool TryGetSinglePairForKey(TKeyBase key, [NotNullWhen(true)] out AccessPairBase<TKeyBase, TValueBase>? pair)
 		{
@@ -112,21 +78,11 @@
 					else
 					{
 						found = true;
-						pair = AsAccessPair(p);
+						pair = new AccessPair<TKey, TValue, TKeyBase, TValueBase>(p);
 					}
 				}
 			}
 			return found;
-		}
-
-		private static AccessPairBase<TKey, TValue> AsAssetPair(AccessPairBase<TKeyBase, TValueBase> pair)
-		{
-			return new AssetPair<TKey, TValue>((TKey)pair.Key, (TValue)pair.Value);
-		}
-
-		private static AccessPairBase<TKeyBase, TValueBase> AsAccessPair(AccessPairBase<TKey, TValue> pair)
-		{
-			return new AccessPair<TKey, TValue, TKeyBase, TValueBase>(pair);
 		}
 	}
 }

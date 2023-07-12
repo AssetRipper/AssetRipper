@@ -55,7 +55,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 			if (IsEnginePointer())
 			{
-				return PPtr_ObjectFactory.CreateAsset(version);
+				return PPtr_Object.Create(version);
 			}
 			return new SerializableStructure(this, depth);
 		}

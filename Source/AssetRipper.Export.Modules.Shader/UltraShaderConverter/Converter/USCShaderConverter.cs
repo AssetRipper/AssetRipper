@@ -3,8 +3,8 @@ using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassemble
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
-using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.Converter
 {

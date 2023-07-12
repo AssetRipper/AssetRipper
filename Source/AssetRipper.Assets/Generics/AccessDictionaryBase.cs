@@ -7,7 +7,7 @@ namespace AssetRipper.Assets.Generics
 	/// </summary>
 	/// <typeparam name="TKey">The exposed key type, such as an interface, base type, or primitive type</typeparam>
 	/// <typeparam name="TValue">The exposed value type, such as an interface, base type, or primitive type</typeparam>
-	public abstract class AccessDictionaryBase<TKey, TValue> : IEnumerable<AccessPairBase<TKey, TValue>>
+	public abstract class AccessDictionaryBase<TKey, TValue> : IReadOnlyCollection<AccessPairBase<TKey, TValue>>
 		where TKey : notnull
 		where TValue : notnull
 	{
@@ -45,19 +45,9 @@ namespace AssetRipper.Assets.Generics
 		public abstract void Add(TKey key, TValue value);
 
 		/// <summary>
-		/// Add a pair to the dictionary
-		/// </summary>
-		/// <remarks>
-		/// This method is not necessarily type safe. 
-		/// It could throw exceptions if used improperly.
-		/// </remarks>
-		/// <param name="pair">The pair to be added</param>
-		public abstract void Add(AccessPairBase<TKey, TValue> pair);
-
-		/// <summary>
 		/// Add a new pair to the dictionary
 		/// </summary>
-		public abstract void AddNew();
+		public abstract AccessPairBase<TKey, TValue> AddNew();
 
 		public bool ContainsKey(TKey key) => Keys.Contains(key);
 
@@ -105,28 +95,10 @@ namespace AssetRipper.Assets.Generics
 		public abstract void SetValue(int index, TValue newValue);
 
 		/// <inheritdoc/>
-		public bool IsReadOnly => false;
-
-		/// <inheritdoc/>
-		public abstract int IndexOf(AccessPairBase<TKey, TValue> item);
-
-		/// <inheritdoc/>
-		public abstract void Insert(int index, AccessPairBase<TKey, TValue> item);
-
-		/// <inheritdoc/>
 		public abstract void RemoveAt(int index);
 
 		/// <inheritdoc/>
 		public abstract void Clear();
-
-		/// <inheritdoc/>
-		public abstract bool Contains(AccessPairBase<TKey, TValue> item);
-
-		/// <inheritdoc/>
-		public abstract void CopyTo(AccessPairBase<TKey, TValue>[] array, int arrayIndex);
-
-		/// <inheritdoc/>
-		public abstract bool Remove(AccessPairBase<TKey, TValue> item);
 
 		protected AccessPairBase<TKey, TValue> GetSinglePairForKey(TKey key)
 		{

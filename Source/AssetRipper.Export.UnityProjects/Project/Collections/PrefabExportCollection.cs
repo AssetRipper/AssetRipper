@@ -105,7 +105,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		private static IPrefabInstance CreateVirtualPrefab(TemporaryAssetCollection virtualFile, IGameObject root)
 		{
 			UnityVersion version = UnityVersion.Max(virtualFile.Version, new UnityVersion(2018, 3, 0));
-			IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance, version, PrefabInstanceFactory.CreateAsset);
+			IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance, version, PrefabInstance.Create);
 			Debug.Assert(prefab is IPrefabInstanceMarker);
 			prefab.RootGameObject_C1001P = root;
 			prefab.AssetBundleName = root.AssetBundleName;
@@ -119,7 +119,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Collections
 		{
 			if (Prefab is null)
 			{
-				IPrefabImporter importer = PrefabImporterFactory.CreateAsset(container.File, container.ExportVersion);
+				IPrefabImporter importer = PrefabImporter.Create(container.File, container.ExportVersion);
 				if (RootGameObject.AssetBundleName is not null)
 				{
 					importer.AssetBundleName_C468431735 = RootGameObject.AssetBundleName;

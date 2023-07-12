@@ -2,10 +2,10 @@ using AssetRipper.Export.Modules.Shaders.Exporters;
 using AssetRipper.Export.Modules.Shaders.Extensions;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.IO.Files;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
-using AssetRipper.VersionUtilities;
 using System.Text;
 
 

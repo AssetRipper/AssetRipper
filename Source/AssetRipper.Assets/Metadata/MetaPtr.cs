@@ -6,9 +6,9 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Assets.Metadata
 {
-	public readonly record struct MetaPtr(long FileID, UnityGUID GUID, AssetType AssetType) : IYamlExportable
+	public readonly record struct MetaPtr(long FileID, UnityGuid GUID, AssetType AssetType) : IYamlExportable
 	{
-		public MetaPtr(long fileID) : this(fileID, UnityGUID.Zero, AssetType.Serialized)
+		public MetaPtr(long fileID) : this(fileID, UnityGuid.Zero, AssetType.Serialized)
 		{
 		}
 
@@ -29,7 +29,7 @@ namespace AssetRipper.Assets.Metadata
 
 		public static MetaPtr CreateMissingReference(int classID, AssetType assetType)
 		{
-			return new MetaPtr(ExportIdHandler.GetMainExportID(classID), UnityGUID.MissingReference, assetType);
+			return new MetaPtr(ExportIdHandler.GetMainExportID(classID), UnityGuid.MissingReference, assetType);
 		}
 
 		YamlNode IYamlExportable.ExportYamlEditor(IExportContainer container) => ExportYaml();

@@ -1,7 +1,7 @@
-﻿using AssetRipper.SourceGenerated;
+﻿using AssetRipper.Primitives;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 using AssetRipper.SourceGenerated.Extensions;
-using AssetRipper.VersionUtilities;
 using NUnit.Framework.Internal;
 using Swizzle = AssetRipper.SourceGenerated.Enums.TextureImporterSwizzle;
 

@@ -4,7 +4,6 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.VersionUtilities;
 using System.Collections;
 using System.Diagnostics;
 

@@ -10,17 +10,17 @@
 		where TValue : notnull, new()
 	{
 		private const int DefaultCapacity = 4;
-		private AccessPairBase<TKey, TValue>[] pairs;
+		private AssetPair<TKey, TValue>[] pairs;
 		private int count = 0;
 
 		public AssetDictionary()
 		{
-			pairs = Array.Empty<AccessPairBase<TKey, TValue>>();
+			pairs = Array.Empty<AssetPair<TKey, TValue>>();
 		}
 
 		public AssetDictionary(int capacity)
 		{
-			pairs = capacity == 0 ? Array.Empty<AccessPairBase<TKey, TValue>>() : new AccessPairBase<TKey, TValue>[capacity];
+			pairs = capacity == 0 ? Array.Empty<AssetPair<TKey, TValue>>() : new AssetPair<TKey, TValue>[capacity];
 		}
 
 		/// <inheritdoc/>
@@ -41,7 +41,7 @@
 				{
 					if (value > 0)
 					{
-						AccessPairBase<TKey, TValue>[] newPairs = new AccessPairBase<TKey, TValue>[value];
+						AssetPair<TKey, TValue>[] newPairs = new AssetPair<TKey, TValue>[value];
 						if (count > 0)
 						{
 							Array.Copy(pairs, newPairs, count);
@@ -50,7 +50,7 @@
 					}
 					else
 					{
-						pairs = Array.Empty<AccessPairBase<TKey, TValue>>();
+						pairs = Array.Empty<AssetPair<TKey, TValue>>();
 					}
 				}
 			}
@@ -63,7 +63,7 @@
 		}
 
 		/// <inheritdoc/>
-		public override void Add(AccessPairBase<TKey, TValue> pair)
+		private void Add(AssetPair<TKey, TValue> pair)
 		{
 			if (count == Capacity)
 			{
@@ -75,14 +75,11 @@
 		}
 
 		/// <inheritdoc/>
-		public override void AddNew() => Add(new TKey(), new TValue());
-
-		public void AddRange(IEnumerable<AccessPairBase<TKey, TValue>> range)
+		public override AssetPair<TKey, TValue> AddNew()
 		{
-			foreach (AccessPairBase<TKey, TValue> pair in range)
-			{
-				Add(pair);
-			}
+			AssetPair<TKey, TValue> pair = new();
+			Add(pair);
+			return pair;
 		}
 
 		/// <inheritdoc/>
@@ -129,7 +126,7 @@
 			pairs[index].Value = newValue;
 		}
 
-		public override AccessPairBase<TKey, TValue> GetPair(int index)
+		public override AssetPair<TKey, TValue> GetPair(int index)
 		{
 			if ((uint)index >= (uint)count)
 			{
@@ -137,32 +134,6 @@
 			}
 
 			return pairs[index];
-		}
-
-		/// <inheritdoc/>
-		public override int IndexOf(AccessPairBase<TKey, TValue> item) => Array.IndexOf(pairs, item, 0, count);
-
-		/// <inheritdoc/>
-		public override void Insert(int index, AccessPairBase<TKey, TValue> item)
-		{
-			// Note that insertions at the end are legal.
-			if ((uint)index > (uint)count)
-			{
-				throw new ArgumentOutOfRangeException(nameof(index));
-			}
-
-			if (count == pairs.Length)
-			{
-				Grow(count + 1);
-			}
-
-			if (index < count)
-			{
-				Array.Copy(pairs, index, pairs, index + 1, count - index);
-			}
-
-			pairs[index] = item;
-			count++;
 		}
 
 		/// <inheritdoc/>
@@ -193,40 +164,6 @@
 			count = 0;
 		}
 
-		/// <inheritdoc/>
-		public override bool Contains(AccessPairBase<TKey, TValue> item)
-		{
-			return IndexOf(item) >= 0;
-		}
-
-		/// <inheritdoc/>
-		public override void CopyTo(AccessPairBase<TKey, TValue>[] array, int arrayIndex)
-		{
-			if (array == null)
-			{
-				throw new ArgumentNullException(nameof(array));
-			}
-
-			if (arrayIndex < 0 || arrayIndex >= array.Length - count)
-			{
-				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
-			}
-
-			Array.Copy(pairs, 0, array, arrayIndex, count);
-		}
-
-		/// <inheritdoc/>
-		public override bool Remove(AccessPairBase<TKey, TValue> item)
-		{
-			int index = IndexOf(item);
-			if (index >= 0)
-			{
-				RemoveAt(index);
-				return true;
-			}
-			return false;
-		}
-
 		protected override bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair)
 		{
 			if (key is null)
@@ -239,7 +176,7 @@
 			pair = null;
 			for (int i = Count - 1; i > -1; i--)
 			{
-				AccessPairBase<TKey, TValue> p = pairs[i];
+				AssetPair<TKey, TValue> p = pairs[i];
 				if (p.Key.GetHashCode() == hash && key.Equals(p.Key))
 				{
 					if (found)

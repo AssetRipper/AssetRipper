@@ -2,8 +2,8 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated;
-using AssetRipper.VersionUtilities;
 
 namespace AssetRipper.Tests;
 
@@ -18,7 +18,7 @@ internal static class AssetCreator
 	{
 		return MakeCollection(version).CreateAsset((int)classID, (assetInfo) =>
 		{
-			return (T)AssetFactory.CreateAsset(assetInfo);
+			return (T)AssetFactory.Create(assetInfo);
 		});
 	}
 

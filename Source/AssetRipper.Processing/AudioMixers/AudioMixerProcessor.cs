@@ -36,7 +36,7 @@ namespace AssetRipper.Processing.AudioMixers
 
 			ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Generated Audio Mixer Effects");
 
-			Dictionary<IAudioMixer, Dictionary<UnityGUID, IAudioMixerGroup >> groupGuidMixerMap = new();
+			Dictionary<IAudioMixer, Dictionary<UnityGuid, IAudioMixerGroup >> groupGuidMixerMap = new();
 			foreach (IAudioMixerGroup group in gameData.GameBundle.FetchAssets().OfType<IAudioMixerGroup>())
 			{
 				IAudioMixer? mixer = group.AudioMixer_C273P;
@@ -57,7 +57,7 @@ namespace AssetRipper.Processing.AudioMixers
 		private static void ProcessAssets(
 			IAudioMixer mixer,
 			ProcessedAssetCollection virtualFile,
-			IReadOnlyDictionary<UnityGUID, IAudioMixerGroup> groupGuidMap)
+			IReadOnlyDictionary<UnityGuid, IAudioMixerGroup> groupGuidMap)
 		{
 			GuidIndexTable indexToGuid = new();
 			List<IAudioMixerGroupController> groups = new();
@@ -75,7 +75,7 @@ namespace AssetRipper.Processing.AudioMixers
 			IAudioMixer mixer,
 			GuidIndexTable indexToGuid,
 			List<IAudioMixerGroupController> groups,
-			IReadOnlyDictionary<UnityGUID, IAudioMixerGroup> groupGuidMap)
+			IReadOnlyDictionary<UnityGuid, IAudioMixerGroup> groupGuidMap)
 		{
 			IAudioMixerConstant constants = mixer.MixerConstant_C240;
 
@@ -115,7 +115,7 @@ namespace AssetRipper.Processing.AudioMixers
 
 			for (int i = 0; i < effects.Length; i++)
 			{
-				IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
+				IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectController.Create);
 				effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 				effects[i] = effect;
 				effect.MainAsset = mixer;
@@ -175,9 +175,9 @@ namespace AssetRipper.Processing.AudioMixers
 			{
 				if (!groupsWithAttenuation.Contains(group))
 				{
-					IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectControllerFactory.CreateAsset);
+					IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectController.Create);
 					effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-					effect.EffectID_C244.CopyValues(UnityGUID.NewGuid());
+					effect.EffectID_C244.CopyValues(UnityGuid.NewGuid());
 					effect.EffectName_C244 = "Attenuation";
 					effect.MainAsset = mixer;
 
@@ -207,7 +207,7 @@ namespace AssetRipper.Processing.AudioMixers
 					SnapshotConstant snapshotConstant = constants.Snapshots[i];
 					for (int j = 0; j < snapshotConstant.Values.Count; j++)
 					{
-						if (indexToGuid.TryGetValue((uint)j, out UnityGUID valueGuid))
+						if (indexToGuid.TryGetValue((uint)j, out UnityGuid valueGuid))
 						{
 							snapshotController.FloatValues_C245[(GUID)valueGuid] = snapshotConstant.Values[j];
 						}
@@ -221,7 +221,7 @@ namespace AssetRipper.Processing.AudioMixers
 					{
 						uint paramIndex = snapshotConstant.TransitionIndices[j];
 						int transitionType = (int)snapshotConstant.TransitionTypes[j];
-						if (indexToGuid.TryGetValue(paramIndex, out UnityGUID paramGuid))
+						if (indexToGuid.TryGetValue(paramIndex, out UnityGuid paramGuid))
 						{
 							snapshotController.TransitionOverrides_C245[(GUID)paramGuid] = transitionType;
 						}
@@ -246,7 +246,7 @@ namespace AssetRipper.Processing.AudioMixers
 			{
 				uint paramIndex = constants.ExposedParameterIndices[i];
 				uint paramNameCrc = constants.ExposedParameterNames[i];
-				if (indexToGuid.TryGetValue(paramIndex, out UnityGUID paramGuid))
+				if (indexToGuid.TryGetValue(paramIndex, out UnityGuid paramGuid))
 				{
 					ExposedAudioParameter exposedParam = mixer.ExposedParameters_C241.AddNew();
 					exposedParam.Guid.CopyValues(paramGuid);

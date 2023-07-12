@@ -18,7 +18,7 @@ public class ShaderExportCollection : AssetExportCollection<IShader>
 
 	protected override IUnityObjectBase CreateImporter(IExportContainer container)
 	{
-		IShaderImporter importer = ShaderImporterFactory.CreateAsset(container.File, container.ExportVersion);
+		IShaderImporter importer = ShaderImporter.Create(container.File, container.ExportVersion);
 		if (importer.Has_NonModifiableTextures_C1007() && Asset.Has_NonModifiableTextures_C48())
 		{
 			PPtrConverter converter = new(Asset, importer);

@@ -18,7 +18,7 @@ namespace AssetRipper.Export.UnityProjects.Project.Exporters.Engine
 			return new MetaPtr(ExportID, GUID, AssetType.Internal);
 		}
 
-		public UnityGUID GUID => m_isF ? EngineBuiltInAssets.FGUID : EngineBuiltInAssets.EGUID;
+		public UnityGuid GUID => m_isF ? EngineBuiltInAssets.FGUID : EngineBuiltInAssets.EGUID;
 
 		public bool IsValid => ExportID != 0;
 		public uint ExportID { get; }
