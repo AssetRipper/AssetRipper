@@ -11,9 +11,9 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (IsValidVideoClip(asset))
+			if (asset is IVideoClip clip && clip.ExternalResources_C329.CheckIntegrity(clip.Collection))
 			{
-				exportCollection = new VideoClipExportCollection(this, asset);
+				exportCollection = new VideoClipExportCollection(this, clip);
 				return true;
 			}
 			else
@@ -21,11 +21,6 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 				exportCollection = null;
 				return false;
 			}
-		}
-
-		private static bool IsValidVideoClip(IUnityObjectBase asset)
-		{
-			return asset is IVideoClip clip && clip.ExternalResources_C329.CheckIntegrity(clip.Collection);
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
