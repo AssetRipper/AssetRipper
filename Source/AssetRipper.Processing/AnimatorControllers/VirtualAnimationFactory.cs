@@ -243,10 +243,9 @@ namespace AssetRipper.Processing.AnimatorControllers
 					//I'm not sure if this is correct, but it seems to be the only logical way to store the transitions before Unity 5.
 					//IAnimatorStateMachine.LocalTransitions only exists until Unity 4.2.0, so by process of elimination, this is the only option.
 
-					PPtr_AnimatorState_4_0_0 statePPtr = new();
-					statePPtr.SetAsset(generatedStateMachine.Collection, state);
-					transitionList = new();
-					generatedStateMachine.OrderedTransitions_C1107.Add(statePPtr, transitionList);
+					AssetPair<PPtr_AnimatorState_4_0_0, AssetList<PPtr_AnimatorStateTransition_4_0_0>> pair = generatedStateMachine.OrderedTransitions_C1107.AddNew();
+					pair.Key.SetAsset(generatedStateMachine.Collection, state);
+					transitionList = pair.Value;
 				}
 				else
 				{
@@ -321,7 +320,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			}
 			else
 			{
-				tos = new AssetDictionary<uint, Utf8String>() { { 0, new Utf8String() } };
+				tos = new AssetDictionary<uint, Utf8String>() { { 0, Utf8String.Empty } };
 				foreach ((uint hash, Utf8String str) in controller.TOS_C91)
 				{
 					tos.Add(hash, str);

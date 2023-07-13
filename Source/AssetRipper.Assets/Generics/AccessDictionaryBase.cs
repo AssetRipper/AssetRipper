@@ -100,7 +100,7 @@ namespace AssetRipper.Assets.Generics
 		/// <inheritdoc/>
 		public abstract void Clear();
 
-		protected AccessPairBase<TKey, TValue> GetSinglePairForKey(TKey key)
+		public AccessPairBase<TKey, TValue> GetSinglePairForKey(TKey key)
 		{
 			if (TryGetSinglePairForKey(key, out AccessPairBase<TKey, TValue>? pair))
 			{
@@ -112,7 +112,7 @@ namespace AssetRipper.Assets.Generics
 			}
 		}
 
-		protected abstract bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair);
+		public abstract bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair);
 
 		/// <summary>
 		/// Access a value in the dictionary

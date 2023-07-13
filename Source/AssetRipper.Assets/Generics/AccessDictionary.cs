@@ -56,7 +56,7 @@
 		/// <inheritdoc/>
 		public override void Clear() => referenceDictionary.Clear();
 
-		protected override bool TryGetSinglePairForKey(TKeyBase key, [NotNullWhen(true)] out AccessPairBase<TKeyBase, TValueBase>? pair)
+		public override bool TryGetSinglePairForKey(TKeyBase key, [NotNullWhen(true)] out AccessPairBase<TKeyBase, TValueBase>? pair)
 		{
 			if (key is null)
 			{

@@ -64,6 +64,8 @@
 			}
 			set
 			{
+				ThrowIfElementsNotImmutable();
+
 				if ((uint)index >= (uint)count)
 				{
 					throw new ArgumentOutOfRangeException(nameof(index));
@@ -75,6 +77,12 @@
 
 		/// <inheritdoc/>
 		public override void Add(T item)
+		{
+			ThrowIfElementsNotImmutable();
+			AddInternal(item);
+		}
+
+		private void AddInternal(T item)
 		{
 			if (count == Capacity)
 			{
@@ -89,7 +97,7 @@
 		public override T AddNew()
 		{
 			T newItem = new();
-			Add(newItem);
+			AddInternal(newItem);
 			return newItem;
 		}
 
@@ -133,6 +141,8 @@
 		/// <inheritdoc/>
 		public override void Insert(int index, T item)
 		{
+			ThrowIfElementsNotImmutable();
+
 			// Note that insertions at the end are legal.
 			if ((uint)index > (uint)count)
 			{
@@ -221,6 +231,14 @@
 			}
 
 			Capacity = (int)newcapacity;
+		}
+
+		private static void ThrowIfElementsNotImmutable()
+		{
+			if (!typeof(T).IsValueType && typeof(T) != typeof(string) && typeof(T) != typeof(Utf8String))
+			{
+				throw new NotSupportedException($"Only immutable elements can be used in {nameof(Add)}, {nameof(Insert)}, and the setter for this[int].");
+			}
 		}
 	}
 }

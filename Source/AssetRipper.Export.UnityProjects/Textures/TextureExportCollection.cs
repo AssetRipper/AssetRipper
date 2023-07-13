@@ -180,7 +180,8 @@ namespace AssetRipper.Export.UnityProjects.Textures
 						ISpriteMetaData smeta = importer.SpriteSheet_C1006.GetSpriteMetaData(sprite.NameString);
 						smeta.InternalID = exportID;
 						AssetPair<AssetPair<int, long>, Utf8String> pair = importer.InternalIDToNameTable_C1006.AddNew();
-						pair.Key.Set((int)ClassIDType.Sprite, exportID);
+						pair.Key.Key = (int)ClassIDType.Sprite;
+						pair.Key.Value = exportID;
 						pair.Value = sprite.Name;
 					}
 				}

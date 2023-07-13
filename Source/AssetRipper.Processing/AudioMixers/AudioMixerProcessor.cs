@@ -209,7 +209,13 @@ namespace AssetRipper.Processing.AudioMixers
 					{
 						if (indexToGuid.TryGetValue((uint)j, out UnityGuid valueGuid))
 						{
-							snapshotController.FloatValues_C245[(GUID)valueGuid] = snapshotConstant.Values[j];
+							GUID guid = (GUID)valueGuid;
+							if (!snapshotController.FloatValues_C245.TryGetSinglePairForKey(guid, out AccessPairBase<GUID, float>? pair))
+							{
+								pair = snapshotController.FloatValues_C245.AddNew();
+								pair.Key.CopyValues(guid);
+							}
+							pair.Value = snapshotConstant.Values[j];
 						}
 						else
 						{
@@ -264,7 +270,7 @@ namespace AssetRipper.Processing.AudioMixers
 			groupView.NameString = "View";
 			foreach (IAudioMixerGroupController group in groups)
 			{
-				groupView.Guids.Add(group.GroupID_C243);
+				groupView.Guids.AddNew().CopyValues(group.GroupID_C243);
 			}
 			mixer.CurrentViewIndex_C241 = 0;
 			mixer.TargetSnapshot_C241P = mixer.StartSnapshot_C241P;

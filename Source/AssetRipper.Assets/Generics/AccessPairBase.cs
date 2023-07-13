@@ -29,8 +29,6 @@
 			return $"{Key} : {Value}";
 		}
 
-		public KeyValuePair<TKey, TValue> ToSystemPair() => new KeyValuePair<TKey, TValue>(Key, Value);
-
 		public static bool operator ==(AccessPairBase<TKey, TValue>? left, AccessPairBase<TKey, TValue>? right)
 		{
 			return EqualityComparer<AccessPairBase<TKey, TValue>>.Default.Equals(left, right);
@@ -41,18 +39,14 @@
 			return !(left == right);
 		}
 
-		public static implicit operator KeyValuePair<TKey, TValue>(AccessPairBase<TKey, TValue> pair) => pair.ToSystemPair();
+		public static implicit operator KeyValuePair<TKey, TValue>(AccessPairBase<TKey, TValue> pair) => new KeyValuePair<TKey, TValue>(pair.Key, pair.Value);
+
+		public static implicit operator ValueTuple<TKey, TValue>(AccessPairBase<TKey, TValue> pair) => (pair.Key, pair.Value);
 
 		public void Deconstruct(out TKey key, out TValue value)
 		{
 			key = Key;
 			value = Value;
-		}
-
-		public void Set(TKey key, TValue value)
-		{
-			Key = key;
-			Value = value;
 		}
 	}
 }

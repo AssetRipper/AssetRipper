@@ -59,7 +59,9 @@
 		/// <inheritdoc/>
 		public override void Add(TKey key, TValue value)
 		{
-			Add(new AssetPair<TKey, TValue>(key, value));
+			AssetPair<TKey, TValue> pair = AddNew();
+			pair.Key = key;
+			pair.Value = value;
 		}
 
 		/// <inheritdoc/>
@@ -164,7 +166,7 @@
 			count = 0;
 		}
 
-		protected override bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair)
+		public override bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair)
 		{
 			if (key is null)
 			{
