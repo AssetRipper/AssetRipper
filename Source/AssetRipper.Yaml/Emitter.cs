@@ -44,6 +44,20 @@ namespace AssetRipper.Yaml
 			return this;
 		}
 
+		/// <summary>
+		/// Write a unicode character in the format \uXXXX.
+		/// </summary>
+		/// <remarks>
+		/// Only used in <see cref="ScalarStyle.DoubleQuoted"/> strings.
+		/// </remarks>
+		/// <param name="value">The character to write.</param>
+		/// <returns><see langword="this"/></returns>
+		public Emitter WriteRawUnicode(char value)
+		{
+			m_stream.Write($"\\u{(ushort)value:X4}");
+			return this;
+		}
+
 		public Emitter Write(byte value)
 		{
 			WriteDelayed();

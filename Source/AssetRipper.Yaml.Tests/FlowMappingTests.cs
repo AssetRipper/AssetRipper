@@ -7,7 +7,7 @@ namespace AssetRipper.Yaml.Tests
 		[Test]
 		public static void Vector2FlowMappingTest()
 		{
-			MemoryTextWriter writer = new MemoryTextWriter();
+			StringWriter writer = new();
 			Emitter emitter = new Emitter(writer, false);
 			YamlMappingNode mappingNode = new YamlMappingNode(MappingStyle.Flow);
 			mappingNode.Add("x", 2);

@@ -319,7 +319,14 @@ namespace AssetRipper.Yaml
 									break;
 
 								default:
-									emitter.WriteRaw(c);
+									if (char.IsControl(c))
+									{
+										emitter.WriteRawUnicode(c);
+									}
+									else
+									{
+										emitter.WriteRaw(c);
+									}
 									break;
 							}
 						}
@@ -336,12 +343,32 @@ namespace AssetRipper.Yaml
 
 		private static ScalarStyle GetStringStyle(string value)
 		{
-			if (!string.IsNullOrEmpty(value) && IllegalStringsRegex().IsMatch(value))
+			if (string.IsNullOrEmpty(value))
+			{
+				return ScalarStyle.Plain;
+			}
+			else if (ContainsControlCharacter(value))
+			{
+				return ScalarStyle.DoubleQuoted;
+			}
+			else if (IllegalStringsRegex().IsMatch(value))
 			{
 				return value.Contains("\n ") ? ScalarStyle.DoubleQuoted : ScalarStyle.SingleQuoted;
 			}
 
 			return ScalarStyle.Plain;
+		}
+
+		private static bool ContainsControlCharacter(ReadOnlySpan<char> span)
+		{
+			foreach (char c in span)
+			{
+				if (char.IsControl(c))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		public override YamlNodeType NodeType => YamlNodeType.Scalar;
