@@ -1,4 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.BoneWeights4;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.SourceGenerated.Subclasses.BoneWeights4;
 using AssetRipper.SourceGenerated.Subclasses.SpriteBone;
 using AssetRipper.SourceGenerated.Subclasses.SpriteMetaData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteSheetMetaData;
@@ -25,13 +26,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			if (instance.Has_Outline() && spriteMetaData.Has_Outline())
 			{
-				instance.Outline.Clear();
-				instance.Outline.AddRange(spriteMetaData.Outline);
+				instance.Outline.CopyValues(spriteMetaData.Outline);
 			}
 			if (instance.Has_PhysicsShape() && spriteMetaData.Has_PhysicsShape())
 			{
 				instance.PhysicsShape.Clear();
-				instance.PhysicsShape.AddRange(spriteMetaData.PhysicsShape);
+				instance.PhysicsShape.CopyValues(spriteMetaData.PhysicsShape);
 			}
 			if (instance.Has_Bones() && spriteMetaData.Has_Bones())
 			{
@@ -58,7 +58,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			if (instance.Has_Indices() && spriteMetaData.Has_Indices())
 			{
 				instance.Indices.Clear();
-				instance.Indices.AddRange(spriteMetaData.Indices);
+				instance.Indices.Capacity = spriteMetaData.Indices.Count;
+				foreach (int index in spriteMetaData.Indices)
+				{
+					instance.Indices.Add(index);
+				}
 			}
 			if (instance.Has_Edges() && spriteMetaData.Has_Edges())
 			{
@@ -76,6 +80,21 @@ namespace AssetRipper.SourceGenerated.Extensions
 				foreach (IBoneWeights4 weight in spriteMetaData.Weights)
 				{
 					instance.Weights.AddNew().CopyValues(weight);
+				}
+			}
+		}
+
+		private static void CopyValues(this AssetList<AssetList<Vector2f>> target, AssetList<AssetList<Vector2f>> source)
+		{
+			target.Clear();
+			target.Capacity = source.Count;
+			foreach (AssetList<Vector2f> sourceList in source)
+			{
+				AssetList<Vector2f> targetList = target.AddNew();
+				targetList.Capacity = sourceList.Count;
+				foreach (Vector2f item in sourceList)
+				{
+					targetList.AddNew().CopyValues(item);
 				}
 			}
 		}
