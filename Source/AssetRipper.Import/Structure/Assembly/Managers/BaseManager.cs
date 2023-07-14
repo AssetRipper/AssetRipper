@@ -30,15 +30,6 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		public virtual void Initialize(PlatformGameStructure gameStructure) { }
 
-		public static string ToAssemblyName(string scopeName)
-		{
-			if (scopeName.EndsWith(MonoManager.AssemblyExtension, StringComparison.Ordinal))
-			{
-				return scopeName.Substring(0, scopeName.Length - MonoManager.AssemblyExtension.Length);
-			}
-			return scopeName;
-		}
-
 		protected static string GetUniqueName(ITypeDefOrRef type)
 		{
 			string assembly = FilenameUtils.RemoveAssemblyFileExtension(type.Scope?.Name ?? "");
@@ -87,7 +78,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		private static string ToAssemblyName(AssemblyDefinition assembly)
 		{
-			return ToAssemblyName(assembly.Name?.ToString() ?? "");
+			return FilenameUtils.RemoveAssemblyFileExtension(assembly.Name?.ToString() ?? "");
 		}
 
 		public virtual void Read(Stream stream, string fileName)
