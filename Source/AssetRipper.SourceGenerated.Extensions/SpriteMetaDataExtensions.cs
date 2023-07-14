@@ -137,7 +137,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					instance.Weights.EnsureCapacity(skin.Length);
 					for (int i = 0; i < skin.Length; i++)
 					{
-						instance.Weights.Add((Subclasses.BoneWeights4.BoneWeights4_2017_1_0)skin[i]);
+						instance.Weights.AddNew().CopyValues(skin[i]);
 					}
 				}
 			}
@@ -159,11 +159,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 				Vector2 pivotShift = new Vector2(pivotShiftX, pivotShiftY);
 				for (int i = 0; i < sprite.PhysicsShape_C213.Count; i++)
 				{
-					shape.Add(new AssetList<Vector2f>(sprite.PhysicsShape_C213[i].Count));
+					AssetList<Vector2f> sourceList = sprite.PhysicsShape_C213[i];
+					AssetList<Vector2f> targetList = shape.AddNew();
+					targetList.Capacity = sourceList.Count;
 					for (int j = 0; j < sprite.PhysicsShape_C213[i].Count; j++)
 					{
-						Vector2 point = (Vector2)sprite.PhysicsShape_C213[i][j] * sprite.PixelsToUnits_C213;
-						shape[i].AddNew().CopyValues(point + pivotShift);
+						Vector2 point = (Vector2)sourceList[j] * sprite.PixelsToUnits_C213;
+						targetList.AddNew().CopyValues(point + pivotShift);
 					}
 				}
 				FixRotation(sprite, atlas, shape);
