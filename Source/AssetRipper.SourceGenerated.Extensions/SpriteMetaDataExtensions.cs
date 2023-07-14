@@ -339,11 +339,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			foreach (Vector2[] vectorArray in vectorArrayList)
 			{
-				AssetList<Vector2f> assetList = new AssetList<Vector2f>(vectorArray.Length);
-				instance.Add(assetList);
+				AssetList<Vector2f> assetList = instance.AddNew();
+				assetList.Capacity = vectorArray.Length;
 				foreach (Vector2 v in vectorArray)
 				{
-					assetList.Add((Vector2f)v);
+					assetList.AddNew().CopyValues(v);
 				}
 			}
 		}
