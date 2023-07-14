@@ -163,7 +163,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					for (int j = 0; j < sprite.PhysicsShape_C213[i].Count; j++)
 					{
 						Vector2 point = (Vector2)sprite.PhysicsShape_C213[i][j] * sprite.PixelsToUnits_C213;
-						shape[i].Add((Vector2f)(point + pivotShift));
+						shape[i].AddNew().CopyValues(point + pivotShift);
 					}
 				}
 				FixRotation(sprite, atlas, shape);
