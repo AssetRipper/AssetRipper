@@ -3,6 +3,7 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Project.Collections;
@@ -15,6 +16,7 @@ using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_1035;
 using AssetRipper.SourceGenerated.Classes.ClassID_1050;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Subclasses.PlatformSettingsData_Plugin;
 using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Scripts
@@ -201,10 +203,51 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 		private void OnAssemblyExported(IExportContainer container, string path)
 		{
+			Span<bool> test = stackalloc bool[1];
 			UnityGuid guid = GetAssemblyGuid(Path.GetFileName(path));
 			IPluginImporter importer = PluginImporter.Create(container.VirtualFile, container.ExportVersion);
+			if (HasPlatformData(importer))
+			{
+				PlatformSettingsData_Plugin anyPlatformSettings = AddPlatformSettings(importer, "Any", Utf8String.Empty);
+				anyPlatformSettings.Enabled = true;
+
+				PlatformSettingsData_Plugin editorPlatformSettings = AddPlatformSettings(importer, "Editor", "Editor");
+				editorPlatformSettings.Enabled = false;
+				editorPlatformSettings.Settings.Add("DefaultValueInitialized", "true");
+			}
+			
 			Meta meta = new Meta(guid, importer);
 			ExportMeta(container, meta, path);
+
+			static bool HasPlatformData(IPluginImporter importer)
+			{
+				return importer.Has_PlatformData_C1050_AssetDictionary_AssetPair_Utf8String_Utf8String_PlatformSettingsData_Plugin()
+					|| importer.Has_PlatformData_C1050_AssetDictionary_Utf8String_PlatformSettingsData_Plugin();
+			}
+
+			static PlatformSettingsData_Plugin AddPlatformSettings(IPluginImporter importer, Utf8String platformKey, Utf8String platformValue)
+			{
+				if (importer.Has_PlatformData_C1050_AssetDictionary_AssetPair_Utf8String_Utf8String_PlatformSettingsData_Plugin())
+				{
+					(AssetPair<Utf8String, Utf8String> pair, PlatformSettingsData_Plugin data)
+						= importer.PlatformData_C1050_AssetDictionary_AssetPair_Utf8String_Utf8String_PlatformSettingsData_Plugin.AddNew();
+					pair.Key = platformKey;
+					pair.Value = platformValue;
+					return data;
+				}
+				else if (importer.Has_PlatformData_C1050_AssetDictionary_Utf8String_PlatformSettingsData_Plugin())
+				{
+					AssetPair<Utf8String, PlatformSettingsData_Plugin> pair
+						= importer.PlatformData_C1050_AssetDictionary_Utf8String_PlatformSettingsData_Plugin.AddNew();
+
+					pair.Key = platformKey;
+					return pair.Value;
+				}
+				else
+				{
+					throw new InvalidOperationException();
+				}
+			}
 		}
 
 		private static string GetScriptsFolderName(string assemblyName)
