@@ -24,23 +24,6 @@ namespace AssetRipper.Assets.Generics
 		/// <inheritdoc/>
 		public abstract void Add(T item);
 
-		public void AddRange(IEnumerable<T> range)
-		{
-			foreach (T item in range)
-			{
-				Add(item);
-			}
-		}
-
-		public void AddRange(T[] array)
-		{
-			EnsureCapacity(Count + array.Length);
-			for (int i = 0; i < array.Length; i++)
-			{
-				Add(array[i]);
-			}
-		}
-
 		/// <summary>
 		/// Add a new element to the list
 		/// </summary>
