@@ -1,3 +1,4 @@
+using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
@@ -240,12 +241,12 @@ namespace AssetRipper.Processing.AnimationClips
 							time = 0.0f;
 						}
 
-						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script);
+						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script.TryGetAsset(m_clip.Collection));
 						AddPPtrKeyframe(curve, bindings, time, (int)value);
 					}
 					else if (ProcessStreams_frameIndex0)
 					{
-						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script);
+						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script.TryGetAsset(m_clip.Collection));
 						AddFloatKeyframe(curve, time, value);
 					}
 					break;
@@ -459,7 +460,7 @@ namespace AssetRipper.Processing.AnimationClips
 				propertyName = ScriptPropertyPrefix + binding.Attribute;
 			}
 
-			CurveData curve = new CurveData(path, propertyName, ClassIDType.MonoBehaviour, binding.Script);
+			CurveData curve = new CurveData(path, propertyName, ClassIDType.MonoBehaviour, binding.Script.TryGetAsset(m_clip.Collection));
 
 			AddFloatKeyframe(curve, time, value);
 		}
@@ -489,7 +490,7 @@ namespace AssetRipper.Processing.AnimationClips
 				curve.Path = curveData.Path;
 				curve.Attribute = curveData.Attribute;
 				curve.ClassID = (int)curveData.ClassID;
-				curve.Script.CopyValues(curveData.Script);
+				curve.Script.SetAsset(m_clip.Collection, curveData.Script as IMonoScript);
 				curve.Curve.SetDefaultRotationOrderAndCurveLoopType();
 				m_floats.Add(curveData, curve);
 			}
@@ -510,15 +511,14 @@ namespace AssetRipper.Processing.AnimationClips
 				curve.Path = curveData.Path;
 				curve.Attribute = curveData.Attribute;
 				curve.ClassID = (int)curveData.ClassID;
-				curve.Script.CopyValues(curveData.Script);
+				curve.Script.SetAsset(m_clip.Collection, curveData.Script as IMonoScript);
 				m_pptrs.Add(curveData, curve);
 			}
 
 			IPPtr_Object value = bindings.PptrCurveMapping[index];
 			IPPtrKeyframe key = curve.Curve.AddNew();
 			key.Time = time;
-			key.Value.FileID = value.FileID;
-			key.Value.PathID = value.PathID;
+			key.Value.CopyValues(value, new PPtrConverter(m_clip));
 		}
 
 		private static void GetPreviousFrame(IReadOnlyList<StreamedFrame> streamFrames, int curveID, int currentFrame, out int frameIndex, out int curveIndex)

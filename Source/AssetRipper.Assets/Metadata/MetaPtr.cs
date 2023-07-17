@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.IO.Files;
-using AssetRipper.Primitives;
 using AssetRipper.Yaml;
+using System.Text.Json.Nodes;
 
 namespace AssetRipper.Assets.Metadata
 {
@@ -23,6 +23,28 @@ namespace AssetRipper.Assets.Metadata
 				node.Add(TypeName, (int)AssetType);
 			}
 			return node;
+		}
+
+		public JsonObject Serialize()
+		{
+			if (GUID.IsZero)
+			{
+				return new()
+				{
+					{ "@style", "Flow" },
+					{ FileIDName, FileID }
+				};
+			}
+			else
+			{
+				return new()
+				{
+					{ "@style", "Flow" },
+					{ FileIDName, FileID },
+					{ GuidName, GUID.ToString() },
+					{ TypeName, (int)AssetType }
+				};
+			}
 		}
 
 		public static MetaPtr NullPtr { get; } = new MetaPtr(0);

@@ -1,4 +1,5 @@
-﻿using AssetRipper.Assets.Collections;
+﻿using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
@@ -128,7 +129,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			IBlendTreeNodeConstant node = treeConstant.NodeArray[nodeIndex].Data;
 			int childNodeIndex = (int)node.ChildIndices[childIndex];
 			IMotion? motion = state.CreateMotion(file, controller, childNodeIndex);
-			childMotion.Motion.CopyValues(tree.Collection.ForceCreatePPtr(motion));
+			childMotion.Motion.SetAsset(tree.Collection, motion);
 
 			childMotion.Threshold = node.GetThreshold(childIndex);
 			childMotion.Position?.CopyValues(node.GetPosition(childIndex));
@@ -153,8 +154,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			IReadOnlyList<IAnimatorState> States,
 			AssetDictionary<uint, Utf8String> TOS)
 		{
-			AssetList<PPtr_AnimatorTransition>? entryTransitionList = generatedStateMachine.EntryTransitions_C1107;
-			if (entryTransitionList is not null && stateMachineConstant.Has_SelectorStateConstantArray())
+			if (generatedStateMachine.Has_EntryTransitions_C1107() && stateMachineConstant.Has_SelectorStateConstantArray())
 			{
 				foreach (OffsetPtr_SelectorStateConstant selectorPtr in stateMachineConstant.SelectorStateConstantArray)
 				{
@@ -165,7 +165,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 						{
 							SelectorTransitionConstant selectorTrans = selector.TransitionConstantArray[i].Data;
 							IAnimatorTransition transition = CreateAnimatorTransition(file, stateMachineConstant, States, TOS, selectorTrans);
-							entryTransitionList.AddNew().CopyValues(generatedStateMachine.Collection.ForceCreatePPtr(transition));
+							generatedStateMachine.EntryTransitions_C1107P.Add(transition);
 						}
 					}
 				}
@@ -212,11 +212,11 @@ namespace AssetRipper.Processing.AnimatorControllers
 					{
 						ChildAnimatorState childState = generatedStateMachine.ChildStates_C1107.AddNew();
 						childState.Position.CopyValues(position);
-						childState.State.CopyValues(generatedStateMachine.Collection.ForceCreatePPtr(state));
+						childState.State.SetAsset(generatedStateMachine.Collection, state);
 					}
 					else if (generatedStateMachine.Has_States_C1107())
 					{
-						generatedStateMachine.States_C1107.AddNew().CopyValues(generatedStateMachine.Collection.ForceCreatePPtr(state));
+						generatedStateMachine.States_C1107P.Add(state);
 					}
 
 					states.Add(state);
@@ -280,7 +280,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 				{
 					ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
 					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
-					generatedStateMachine.AnyStateTransitions_C1107.AddNew().CopyValues(generatedStateMachine.Collection.ForceCreatePPtr(transition));
+					generatedStateMachine.AnyStateTransitions_C1107P.Add(transition);
 				}
 			}
 
@@ -302,7 +302,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			{
 				PPtr_AnimatorState_5_0_0 defaultStatePPtr = generatedStateMachine.ChildStates_C1107[(int)stateMachine.DefaultState].State;
 
-				generatedStateMachine.DefaultState_C1107.CopyValues((PPtr<IAnimatorState>)defaultStatePPtr);
+				generatedStateMachine.DefaultState_C1107.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
 			}
 
 			return generatedStateMachine;

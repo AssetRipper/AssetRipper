@@ -82,7 +82,10 @@ namespace AssetRipper.Processing.AnimatorControllers
 			animatorControllerLayer.DefaultWeight = layer.DefaultWeight;
 			animatorControllerLayer.IKPass = layer.IKPass;
 			animatorControllerLayer.SyncedLayerAffectsTiming = layer.SyncedLayerAffectsTiming;
-			animatorControllerLayer.Controller?.CopyValues(controller.Collection.CreatePPtr(controller));
+			if (animatorControllerLayer.Has_Controller())
+			{
+				animatorControllerLayer.Controller.SetAsset(controller.Collection, controller);
+			}
 		}
 
 		private static void InitializeParameter(IAnimatorControllerParameter parameter, IAnimatorController controller, int paramIndex)
@@ -114,7 +117,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			parameter.Type = (int)type;
 			if (parameter.Has_Controller())
 			{
-				parameter.Controller.CopyValues(controller.Collection.CreatePPtr(controller));
+				parameter.Controller.SetAsset(controller.Collection, controller);
 			}
 		}
 	}

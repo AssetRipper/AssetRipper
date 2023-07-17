@@ -30,11 +30,12 @@ namespace AssetRipper.Assets.Generics
 		{
 			get
 			{
-				return list[index].TryGetAsset(file);
+				list[index].TryGetAsset(file, out TTarget? result);
+				return result;
 			}
 			set
 			{
-				list[index].CopyValues(file.ForceCreatePPtr(value));
+				list[index].SetAsset(file, value);
 			}
 		}
 

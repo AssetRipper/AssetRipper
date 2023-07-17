@@ -14,6 +14,14 @@ namespace AssetRipper.Assets.Cloning
 		{
 		}
 
+		/// <summary>
+		/// A constructor for when an asset is both the source and the target.
+		/// </summary>
+		/// <param name="asset"></param>
+		public PPtrConverter(IUnityObjectBase asset) : this(asset, asset)
+		{
+		}
+
 		public PPtr<T> Convert<T>(PPtr sourcePPtr) where T : IUnityObjectBase
 		{
 			IUnityObjectBase? asset = SourceCollection.TryGetAsset(sourcePPtr);

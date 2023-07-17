@@ -9,6 +9,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
 using System.Diagnostics;
 

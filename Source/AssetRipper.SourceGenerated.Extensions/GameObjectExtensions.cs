@@ -251,7 +251,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 				this.referenceList = referenceList;
 			}
 
-			public override IPPtr_Component this[int index] { get => referenceList[index].Component; set => referenceList[index].Component.CopyValues(value.ToStruct()); }
+			public override IPPtr_Component this[int index]
+			{
+				get => referenceList[index].Component;
+				set => throw new NotSupportedException();
+			}
 
 			public override int Count => referenceList.Count;
 
@@ -259,15 +263,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			public override void Add(IPPtr_Component item)
 			{
-				ComponentPair pair = Convert(item);
-				referenceList.Add(pair);
-			}
-
-			private static ComponentPair Convert(IPPtr_Component item)
-			{
-				ComponentPair pair = new();
-				pair.Component.CopyValues(item.ToStruct());
-				return pair;
+				throw new NotSupportedException();
 			}
 
 			public override IPPtr_Component AddNew()
@@ -282,7 +278,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			public override bool Contains(IPPtr_Component item)
 			{
-				return referenceList.Contains(Convert(item));
+				return referenceList.Any(ptr => ptr.Component.Equals(item));
 			}
 
 			public override void CopyTo(IPPtr_Component[] array, int arrayIndex)
@@ -300,17 +296,26 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			public override int IndexOf(IPPtr_Component item)
 			{
-				return referenceList.IndexOf(Convert(item));
+				return referenceList.IndexOf(pair => pair.Component.Equals(item));
 			}
 
 			public override void Insert(int index, IPPtr_Component item)
 			{
-				referenceList.Insert(index, Convert(item));
+				throw new NotSupportedException();
 			}
 
 			public override bool Remove(IPPtr_Component item)
 			{
-				return referenceList.Remove(Convert(item));
+				int index = IndexOf(item);
+				if (index < 0)
+				{
+					return false;
+				}
+				else
+				{
+					RemoveAt(index);
+					return true;
+				}
 			}
 
 			public override void RemoveAt(int index)
@@ -331,7 +336,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			public override IPPtr_Component this[int index]
 			{
 				get => referenceList[index].Value;
-				set => referenceList[index].Value.CopyValues(value.ToStruct());
+				set => throw new NotSupportedException();
 			}
 
 			public override int Count => referenceList.Count;
@@ -340,16 +345,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			public override void Add(IPPtr_Component item)
 			{
-				//referenceList.Add(CreateNewPair(item));
 				throw new NotSupportedException();
-			}
-
-			private static AssetPair<int, T> CreateNewPair(IPPtr_Component item)
-			{
-				AssetPair<int, T> pair = new();
-				pair.Key = 2;
-				pair.Value.CopyValues(item.ToStruct());
-				return pair;
 			}
 
 			public override IPPtr_Component AddNew()
@@ -391,7 +387,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			public override void Insert(int index, IPPtr_Component item)
 			{
-				//referenceList.Insert(index, CreateNewPair(item));
 				throw new NotSupportedException();
 			}
 

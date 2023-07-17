@@ -315,7 +315,7 @@ namespace AssetRipper.Processing.StaticMeshes
 
 		private static void ApplyMeshToRendererAndFilter(IMesh mesh, IRenderer renderer, IMeshFilter meshFilter)
 		{
-			meshFilter.Mesh_C33.CopyValues(meshFilter.Collection.ForceCreatePPtr(mesh));
+			meshFilter.Mesh_C33P = mesh;
 			renderer.ClearStaticBatchInfo();
 			renderer.SetStaticEditorFlagsOnGameObject();
 		}
