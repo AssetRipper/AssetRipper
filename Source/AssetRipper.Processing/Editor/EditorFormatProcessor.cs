@@ -100,6 +100,9 @@ namespace AssetRipper.Processing.Editor
 				case IGameObject gameObject:
 					gameObject.ConvertToEditorFormat(tagManager);
 					break;
+				case IRenderer renderer:
+					EditorFormatConverter.Convert(renderer);
+					break;
 				case ISpriteAtlas spriteAtlas:
 					spriteAtlas.ConvertToEditorFormat();
 					break;
@@ -124,10 +127,7 @@ namespace AssetRipper.Processing.Editor
 			{
 				//ordered by approximate frequency
 				case ITransform transform:
-					EditorFormatConverter.Convert(transform);
-					break;
-				case IRenderer renderer:
-					EditorFormatConverter.Convert(renderer);
+					EditorFormatConverterAsync.Convert(transform);
 					break;
 				case IMesh mesh:
 					mesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);

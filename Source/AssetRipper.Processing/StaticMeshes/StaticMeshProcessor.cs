@@ -317,7 +317,7 @@ namespace AssetRipper.Processing.StaticMeshes
 		{
 			meshFilter.Mesh_C33P = mesh;
 			renderer.ClearStaticBatchInfo();
-			renderer.SetStaticEditorFlagsOnGameObject();
+			renderer.MarkGameObjectAsStatic();
 		}
 
 		private static IMesh MakeMeshFromData(string cleanName, MeshData instanceMeshData, ProcessedAssetCollection processedCollection)

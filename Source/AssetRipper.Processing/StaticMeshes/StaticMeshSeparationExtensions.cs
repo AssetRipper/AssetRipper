@@ -3,6 +3,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_23;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
+using AssetRipper.SourceGenerated.Extensions;
 using System.Collections;
 
 namespace AssetRipper.Processing.StaticMeshes
@@ -11,13 +12,13 @@ namespace AssetRipper.Processing.StaticMeshes
 	{
 		public static bool IsStaticMeshRenderer(this IUnityObjectBase asset, [NotNullWhen(true)] out IRenderer? renderer)
 		{
-			renderer = (IRenderer?)(asset as IMeshRenderer) ?? (asset as ISkinnedMeshRenderer);
+			renderer = asset as IRenderer;
 			return renderer is not null && !renderer.ReferencesDynamicMesh();
 		}
 
 		private static bool ReferencesDynamicMesh(this IRenderer renderer)
 		{
-			return renderer.Has_StaticBatchInfo_C25() && renderer.StaticBatchInfo_C25.SubMeshCount == 0
+			return renderer.Has_StaticBatchInfo_C25() && renderer.StaticBatchInfo_C25.IsDefault()
 				|| renderer.Has_SubsetIndices_C25() && renderer.SubsetIndices_C25.Count == 0;
 		}
 
@@ -28,26 +29,11 @@ namespace AssetRipper.Processing.StaticMeshes
 				: renderer.SubsetIndices_C25;
 		}
 
-		public static void SetStaticEditorFlagsOnGameObject(this IRenderer renderer)
-		{
-			//https://github.com/AssetRipper/AssetRipper/issues/702
-			IGameObject? gameObject = renderer.GameObject_C25P;
-			if (gameObject is not null)
-			{
-				//When enabling Everything, Unity sets all bits even though it only uses the first 7 bits.
-				//In the yaml, this appropriately uint.MaxValue
-				//If ContributeGI is disabled, it does not set the reserved bits and displays 126 in the yaml.
-				gameObject.StaticEditorFlags_C1 = uint.MaxValue;
-			}
-			//Should this be done even if the static meshes aren't separated?
-		}
-
 		public static void ClearStaticBatchInfo(this IRenderer renderer)
 		{
 			if (renderer.Has_StaticBatchInfo_C25())
 			{
-				renderer.StaticBatchInfo_C25.FirstSubMesh = 0;
-				renderer.StaticBatchInfo_C25.SubMeshCount = 0;
+				renderer.StaticBatchInfo_C25.Reset();
 			}
 			else if (renderer.Has_SubsetIndices_C25())
 			{

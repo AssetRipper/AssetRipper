@@ -24,5 +24,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 			}
 		}
+
+		public static bool IsDefault(this IStaticBatchInfo staticBatchInfo)
+		{
+			return staticBatchInfo.FirstSubMesh == 0 && staticBatchInfo.SubMeshCount == 0;
+		}
 	}
 }

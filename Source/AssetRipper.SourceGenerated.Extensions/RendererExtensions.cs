@@ -1,4 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Classes.ClassID_21;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Enums;
 using System.Diagnostics;
@@ -18,6 +19,23 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// Set <see cref="IGameObject.StaticEditorFlags_C1"/> on <see cref="IRenderer.GameObject_C25P"/> to indicate that the object is static.
+		/// </summary>
+		/// <param name="renderer">The renderer attached to a static gameobject.</param>
+		public static void MarkGameObjectAsStatic(this IRenderer renderer)
+		{
+			//https://github.com/AssetRipper/AssetRipper/issues/702
+			IGameObject? gameObject = renderer.GameObject_C25P;
+			if (gameObject is not null)
+			{
+				//When enabling Everything, Unity sets all bits even though it only uses the first 7 bits.
+				//In the yaml, this appropriately uint.MaxValue
+				//If ContributeGI is disabled, it does not set the reserved bits and displays 126 in the yaml.
+				gameObject.StaticEditorFlags_C1 = uint.MaxValue;
+			}
 		}
 
 		public static ShadowCastingMode GetShadowCastingMode(this IRenderer renderer)
