@@ -1,6 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Export.UnityProjects.Project.Collections;
-using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 
 namespace AssetRipper.Export.UnityProjects.Textures

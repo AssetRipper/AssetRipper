@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Export.UnityProjects.Project.Collections;
+using AssetRipper.Export.UnityProjects.Project;
 
 namespace AssetRipper.Export.UnityProjects.Models
 {

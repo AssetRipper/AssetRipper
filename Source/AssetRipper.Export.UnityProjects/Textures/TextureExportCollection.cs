@@ -3,7 +3,7 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Export.UnityProjects.Project.Collections;
+using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Primitives;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated;

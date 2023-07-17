@@ -1,6 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Export.UnityProjects.Project.Collections;
-using AssetRipper.Export.UnityProjects.Project.Exporters;
 
 namespace AssetRipper.Export.UnityProjects.Meshes
 {

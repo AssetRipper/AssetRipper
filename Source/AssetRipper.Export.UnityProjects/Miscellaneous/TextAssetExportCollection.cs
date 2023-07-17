@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_1031;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using System.Text.Json;

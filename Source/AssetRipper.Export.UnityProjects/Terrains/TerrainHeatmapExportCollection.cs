@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 
 namespace AssetRipper.Export.UnityProjects.Terrains

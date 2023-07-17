@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects;
-using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.IO.Files.SerializedFiles;
 using System.Collections.ObjectModel;
 

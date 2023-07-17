@@ -5,8 +5,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Export.UnityProjects.Project;
-using AssetRipper.Export.UnityProjects.Project.Collections;
 using AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;

@@ -3,7 +3,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Export.UnityProjects.Project.Exporters;
 using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.Logging;
 using AssetRipper.Numerics;

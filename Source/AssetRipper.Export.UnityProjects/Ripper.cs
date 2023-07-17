@@ -4,18 +4,17 @@ using AssetRipper.Export.UnityProjects.AnimatorControllers;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.AudioMixers;
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.UnityProjects.EngineAssets;
 using AssetRipper.Export.UnityProjects.Meshes;
 using AssetRipper.Export.UnityProjects.Miscellaneous;
 using AssetRipper.Export.UnityProjects.Models;
 using AssetRipper.Export.UnityProjects.NavMeshes;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
-using AssetRipper.Export.UnityProjects.Project.Exporters.Engine;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
-using AssetRipper.Export.UnityProjects.TypeTrees;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure;
@@ -209,7 +208,6 @@ namespace AssetRipper.Export.UnityProjects
 				yield return new ProjectVersionPostExporter();
 				yield return new PackageManifestPostExporter();
 				yield return new StreamingAssetsPostExporter();
-				yield return new TypeTreeExporter();
 				yield return new DllPostExporter();
 				yield return new PathIdMapExporter();
 			}
