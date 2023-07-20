@@ -47,8 +47,7 @@ public sealed partial class GameBundle : Bundle
 	/// Resolves an external ResourceFile, or returns null if it cannot be found.
 	/// </summary>
 	/// <param name="originalName">The original name of the ResourceFile.</param>
-	/// <param name="fixedName">The fixed name of the ResourceFile.</param>
-	protected override ResourceFile? ResolveExternalResource(string originalName, string fixedName)
+	protected override ResourceFile? ResolveExternalResource(string originalName)
 	{
 		if (ResourceProvider is not null)
 		{
@@ -61,7 +60,7 @@ public sealed partial class GameBundle : Bundle
 		}
 		else
 		{
-			return base.ResolveExternalResource(originalName, fixedName);
+			return base.ResolveExternalResource(originalName);
 		}
 	}
 

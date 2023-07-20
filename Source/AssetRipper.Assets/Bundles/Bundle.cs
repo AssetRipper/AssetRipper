@@ -90,7 +90,7 @@ public abstract class Bundle : IDisposable
 	/// </summary>
 	/// <param name="name">The name of the <see cref="AssetCollection"/>.</param>
 	/// <returns>The resolved <see cref="AssetCollection"/> if it exists, else null.</returns>
-	public virtual AssetCollection? ResolveCollection(string name)
+	public AssetCollection? ResolveCollection(string name)
 	{
 		Bundle? bundleToExclude = null;
 		Bundle? currentBundle = this;
@@ -131,7 +131,7 @@ public abstract class Bundle : IDisposable
 		{
 			return currentBundle.Bundles
 				.Where(b => b != bundleToExclude)
-				.Select(b => TryResolveFromCollections(b, name))//This completely ignores that b might have overridden resolution
+				.Select(b => TryResolveFromCollections(b, name))
 				.FirstOrDefault(c => c is not null);
 		}
 	}
@@ -157,7 +157,7 @@ public abstract class Bundle : IDisposable
 		{
 			ResourceFile? result = TryResolveFromResources(currentBundle, fixedName)
 				?? TryResolveFromChildBundles(currentBundle, originalName, fixedName, bundleToExclude)
-				?? currentBundle.ResolveExternalResource(originalName, fixedName);
+				?? currentBundle.ResolveExternalResource(originalName);
 			if (result is not null)
 			{
 				return result;
@@ -193,13 +193,12 @@ public abstract class Bundle : IDisposable
 		{
 			return currentBundle.Bundles
 				.Where(b => b != bundleToExclude)
-				.Select(b => TryResolveFromResources(b, fixedName))//This completely ignores that b might have overridden resolution
+				.Select(b => TryResolveFromResources(b, fixedName))
 				.FirstOrDefault(r => r is not null);
 		}
 	}
 
-	protected virtual ResourceFile? ResolveExternalResource(string originalName, string fixedName) => null;
-
+	protected virtual ResourceFile? ResolveExternalResource(string originalName) => null;
 
 	/// <summary>
 	/// Adds a ResourceFile to this Bundle.
