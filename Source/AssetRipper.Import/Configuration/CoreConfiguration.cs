@@ -32,6 +32,10 @@ namespace AssetRipper.Import.Configuration
 		/// How the StreamingAssets folder is handled
 		/// </summary>
 		public StreamingAssetsMode StreamingAssetsMode { get; set; }
+		/// <summary>
+		/// The default version used when no version is specified, ie when the version has been stripped.
+		/// </summary>
+		public UnityVersion DefaultVersion { get; set; }
 		#endregion
 
 		#region Export Settings
@@ -85,6 +89,7 @@ namespace AssetRipper.Import.Configuration
 		{
 			ScriptContentLevel = ScriptContentLevel.Level2;
 			StreamingAssetsMode = StreamingAssetsMode.Extract;
+			DefaultVersion = default;
 			ExportRootPath = ExecutingDirectory.Combine("Ripped");
 			ExportDependencies = false;
 			BundledAssetsExportMode = BundledAssetsExportMode.DirectExport;
@@ -96,6 +101,7 @@ namespace AssetRipper.Import.Configuration
 			Logger.Info(LogCategory.General, $"Configuration Settings:");
 			Logger.Info(LogCategory.General, $"{nameof(ScriptContentLevel)}: {ScriptContentLevel}");
 			Logger.Info(LogCategory.General, $"{nameof(StreamingAssetsMode)}: {StreamingAssetsMode}");
+			Logger.Info(LogCategory.General, $"{nameof(DefaultVersion)}: {DefaultVersion}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportRootPath)}: {ExportRootPath}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportDependencies)}: {ExportDependencies}");
 			Logger.Info(LogCategory.General, $"{nameof(BundledAssetsExportMode)}: {BundledAssetsExportMode}");

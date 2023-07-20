@@ -36,7 +36,7 @@ namespace AssetRipper.Import.Structure
 
 			Logger.SendStatusChange("loading_step_begin_scheme_processing");
 
-			InitializeGameCollection();
+			InitializeGameCollection(configuration.DefaultVersion);
 
 			if (!FileCollection.HasAnyAssetCollections())
 			{
@@ -60,7 +60,7 @@ namespace AssetRipper.Import.Structure
 		}
 
 		[MemberNotNull(nameof(FileCollection))]
-		private void InitializeGameCollection()
+		private void InitializeGameCollection(UnityVersion defaultVersion)
 		{
 			Logger.SendStatusChange("loading_step_create_file_collection");
 
@@ -80,7 +80,8 @@ namespace AssetRipper.Import.Structure
 				filePaths,
 				assetFactory,
 				new StructureDependencyProvider(PlatformStructure, MixedStructure),
-				new CustomResourceProvider(PlatformStructure, MixedStructure));
+				new CustomResourceProvider(PlatformStructure, MixedStructure),
+				defaultVersion);
 		}
 
 		[MemberNotNull(nameof(AssemblyManager))]
