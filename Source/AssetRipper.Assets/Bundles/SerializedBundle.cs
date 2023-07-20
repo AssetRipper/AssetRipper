@@ -15,7 +15,7 @@ public sealed class SerializedBundle : Bundle
 
 	public override string Name => name;
 
-	public static SerializedBundle FromFileContainer(FileContainer container, AssetFactoryBase factory)
+	public static SerializedBundle FromFileContainer(FileContainer container, AssetFactoryBase factory, UnityVersion defaultVersion = default)
 	{
 		SerializedBundle bundle = new();
 		bundle.name = container.NameFixed;
@@ -25,11 +25,11 @@ public sealed class SerializedBundle : Bundle
 		}
 		foreach (SerializedFile serializedFile in container.SerializedFiles)
 		{
-			bundle.AddCollectionFromSerializedFile(serializedFile, factory);
+			bundle.AddCollectionFromSerializedFile(serializedFile, factory, defaultVersion);
 		}
 		foreach (FileContainer childContainer in container.FileLists)
 		{
-			SerializedBundle childBundle = FromFileContainer(childContainer, factory);
+			SerializedBundle childBundle = FromFileContainer(childContainer, factory, defaultVersion);
 			bundle.AddBundle(childBundle);
 		}
 		return bundle;

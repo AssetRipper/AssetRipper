@@ -49,13 +49,14 @@ public sealed class SerializedAssetCollection : AssetCollection
 	/// <param name="bundle">The <see cref="Bundle"/> to add this collection to.</param>
 	/// <param name="file">The <see cref="SerializedFile"/> from which to make this collection.</param>
 	/// <param name="factory">A factory for creating assets.</param>
+	/// <param name="defaultVersion">The default version to use if the file does not have a version, ie the version has been stripped.</param>
 	/// <returns>The new collection.</returns>
-	internal static SerializedAssetCollection FromSerializedFile(Bundle bundle, SerializedFile file, AssetFactoryBase factory)
+	internal static SerializedAssetCollection FromSerializedFile(Bundle bundle, SerializedFile file, AssetFactoryBase factory, UnityVersion defaultVersion = default)
 	{
 		SerializedAssetCollection collection = new SerializedAssetCollection(bundle)
 		{
 			Name = file.NameFixed,
-			Version = file.Version,
+			Version = file.Version.IsEqual(0, 0, 0) ? defaultVersion : file.Version,
 			Platform = file.Platform,
 			Flags = file.Flags,
 			EndianType = file.EndianType,

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.CompressedFiles;
@@ -11,7 +10,23 @@ namespace AssetRipper.Assets.Bundles;
 
 partial class GameBundle
 {
-	public void InitializeFromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, IDependencyProvider dependencyProvider, IResourceProvider resourceProvider)
+	/// <summary>
+	/// Create and initialize a <see cref="GameBundle"/> from a set of paths.
+	/// </summary>
+	/// <param name="paths">The set of paths to load.</param>
+	/// <param name="assetFactory">The factory for reading assets.</param>
+	/// <param name="dependencyProvider"></param>
+	/// <param name="resourceProvider"></param>
+	/// <param name="defaultVersion">The default version to use if a file does not have a version, ie the version has been stripped.</param>
+	public static GameBundle FromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, IDependencyProvider? dependencyProvider, IResourceProvider? resourceProvider, UnityVersion defaultVersion = default)
+	{
+		GameBundle gameBundle = new();
+		gameBundle.InitializeFromPaths(paths, assetFactory, dependencyProvider, resourceProvider, defaultVersion);
+		gameBundle.InitializeAllDependencyLists();
+		return gameBundle;
+	}
+
+	private void InitializeFromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, IDependencyProvider? dependencyProvider, IResourceProvider? resourceProvider, UnityVersion defaultVersion = default)
 	{
 		ResourceProvider = resourceProvider;
 		List<FileBase> fileStack = LoadFilesAndDependencies(paths, dependencyProvider);
@@ -21,10 +36,10 @@ partial class GameBundle
 			switch (RemoveLastItem(fileStack))
 			{
 				case SerializedFile serializedFile:
-					SerializedAssetCollection.FromSerializedFile(this, serializedFile, assetFactory);
+					SerializedAssetCollection.FromSerializedFile(this, serializedFile, assetFactory, defaultVersion);
 					break;
 				case FileContainer container:
-					SerializedBundle serializedBundle = SerializedBundle.FromFileContainer(container, assetFactory);
+					SerializedBundle serializedBundle = SerializedBundle.FromFileContainer(container, assetFactory, defaultVersion);
 					AddBundle(serializedBundle);
 					break;
 				case ResourceFile resourceFile:
@@ -42,7 +57,7 @@ partial class GameBundle
 		return file;
 	}
 
-	private static List<FileBase> LoadFilesAndDependencies(IEnumerable<string> paths, IDependencyProvider dependencyProvider)
+	private static List<FileBase> LoadFilesAndDependencies(IEnumerable<string> paths, IDependencyProvider? dependencyProvider)
 	{
 		List<FileBase> files = new();
 		HashSet<string> serializedFileNames = new();//Includes missing dependencies
@@ -92,12 +107,12 @@ partial class GameBundle
 		return files;
 	}
 
-	private static void LoadDependencies(SerializedFile serializedFile, List<FileBase> files, HashSet<string> serializedFileNames, IDependencyProvider dependencyProvider)
+	private static void LoadDependencies(SerializedFile serializedFile, List<FileBase> files, HashSet<string> serializedFileNames, IDependencyProvider? dependencyProvider)
 	{
 		foreach (FileIdentifier fileIdentifier in serializedFile.Dependencies)
 		{
 			string name = fileIdentifier.GetFilePath();
-			if (serializedFileNames.Add(name) && dependencyProvider.FindDependency(fileIdentifier) is { } dependency)
+			if (serializedFileNames.Add(name) && dependencyProvider?.FindDependency(fileIdentifier) is { } dependency)
 			{
 				files.Add(dependency);
 			}

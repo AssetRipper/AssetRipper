@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Bundles;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
@@ -77,13 +76,11 @@ namespace AssetRipper.Import.Structure
 				filePaths = PlatformStructure.Files.Values.Union(MixedStructure.Files.Values);
 			}
 
-			FileCollection = new();
-			FileCollection.InitializeFromPaths(
+			FileCollection = GameBundle.FromPaths(
 				filePaths,
 				assetFactory,
 				new StructureDependencyProvider(PlatformStructure, MixedStructure),
 				new CustomResourceProvider(PlatformStructure, MixedStructure));
-			FileCollection.InitializeAllDependencyLists();
 		}
 
 		[MemberNotNull(nameof(AssemblyManager))]

@@ -352,11 +352,11 @@ public abstract class Bundle : IDisposable
 	public override string ToString()
 	{
 		return Name;
-		}
+	}
 
-	public SerializedAssetCollection AddCollectionFromSerializedFile(SerializedFile file, AssetFactoryBase factory)
+	public SerializedAssetCollection AddCollectionFromSerializedFile(SerializedFile file, AssetFactoryBase factory, UnityVersion defaultVersion = default)
 	{
-		return SerializedAssetCollection.FromSerializedFile(this, file, factory);
+		return SerializedAssetCollection.FromSerializedFile(this, file, factory, defaultVersion);
 	}
 
 	#region IDisposable Support

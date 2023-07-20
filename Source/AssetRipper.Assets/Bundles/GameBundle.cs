@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.IO.Files.ResourceFiles;
 
 namespace AssetRipper.Assets.Bundles;

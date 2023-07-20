@@ -1,6 +1,6 @@
 ﻿using AssetRipper.IO.Files.ResourceFiles;
 
-namespace AssetRipper.Assets.Interfaces;
+namespace AssetRipper.Assets.Bundles;
 
 public interface IResourceProvider
 {

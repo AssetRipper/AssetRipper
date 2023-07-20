@@ -1,7 +1,7 @@
 ﻿using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 
-namespace AssetRipper.Assets.Interfaces;
+namespace AssetRipper.Assets.Bundles;
 
 public interface IDependencyProvider
 {

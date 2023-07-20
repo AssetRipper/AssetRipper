@@ -1,6 +1,5 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.Utils;
