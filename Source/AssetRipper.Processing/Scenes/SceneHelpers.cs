@@ -71,11 +71,22 @@ namespace AssetRipper.Processing.Scenes
 			return $"{LevelName}{index}";
 		}
 
-		public static bool TryGetScenePath(AssetCollection serializedFile, [NotNullWhen(true)] IBuildSettings? buildSettings, [NotNullWhen(true)] out string? result)
+		public static bool TryGetScenePath(AssetCollection collection, [NotNullWhen(true)] IBuildSettings? buildSettings, [NotNullWhen(true)] out string? result)
 		{
-			if (buildSettings is not null && IsSceneName(serializedFile.Name))
+			if (buildSettings is not null && IsSceneName(collection.Name))
 			{
-				int index = FileNameToSceneIndex(serializedFile.Name, serializedFile.Version);
+				int index = FileNameToSceneIndex(collection.Name, collection.Version);
+				if (buildSettings.Scenes_C141.Count >= index)
+				{
+					//This can happen in the following situation:
+					//1. A game is built with N scenes and published to a distribution platform.
+					//2. One of the scenes is removed from the project, for whatever reason.
+					//3. The game is built again, with the new scene list.
+					//4. When updating the game, the developer forgets to delete the Nth scene file.
+					//5. Now, there are N-1 scenes in the BuildSettings, but N scene files for AssetRipper to find.
+					result = null;
+					return false;
+				}
 				string scenePath = buildSettings.Scenes_C141[index].String;
 				if (scenePath.StartsWith(AssetsName, StringComparison.Ordinal))
 				{
@@ -94,13 +105,13 @@ namespace AssetRipper.Processing.Scenes
 				}
 				else if (scenePath.Length == 0)
 				{
-					// if you build a game without included scenes, Unity create one with empty name
+					// If a game is built without included scenes, Unity creates one with empty name.
 					result = null;
 					return false;
 				}
 				else
 				{
-					result = Path.Combine("Assets/Scenes", scenePath);
+					result = Path.Combine("Assets", "Scenes", scenePath);
 					return true;
 				}
 			}
