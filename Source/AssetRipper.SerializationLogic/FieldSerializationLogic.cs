@@ -317,12 +317,8 @@ namespace AssetRipper.SerializationLogic
 
 		public static int GetFixedBufferLength(FieldDefinition fieldDefinition)
 		{
-			CustomAttribute? fixedBufferAttribute = GetFixedBufferAttribute(fieldDefinition);
-
-			if (fixedBufferAttribute == null)
-			{
-				throw new ArgumentException(string.Format("Field '{0}' is not a fixed buffer field.", fieldDefinition.FullName));
-			}
+			CustomAttribute fixedBufferAttribute = GetFixedBufferAttribute(fieldDefinition)
+				?? throw new ArgumentException($"Field '{fieldDefinition.FullName}' is not a fixed buffer field.");
 
 			int size = (int)(fixedBufferAttribute.Signature?.FixedArguments[1].Element ?? 0);
 
@@ -391,7 +387,7 @@ namespace AssetRipper.SerializationLogic
 			return EngineTypePredicates.IsUnityEngineObject(typeReference);
 		}
 
-		public static bool IsNonSerialized(ITypeDescriptor typeDeclaration)
+		public static bool IsNonSerialized([NotNullWhen(false)] ITypeDescriptor? typeDeclaration)
 		{
 			if (typeDeclaration == null)
 			{
@@ -429,7 +425,7 @@ namespace AssetRipper.SerializationLogic
 			return typeDeclaration.FullName.StartsWith("System."); //can this be done better?
 		}
 
-		public static bool ShouldImplementIDeserializable(ITypeDescriptor typeDeclaration)
+		public static bool ShouldImplementIDeserializable([NotNullWhen(true)] ITypeDescriptor? typeDeclaration)
 		{
 			if (typeDeclaration is { Namespace: EngineTypePredicates.UnityEngineNamespace, Name: "ExposedReference`1" })
 			{
