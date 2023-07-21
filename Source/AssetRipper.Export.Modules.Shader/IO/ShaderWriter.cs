@@ -13,27 +13,18 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 {
 	public class ShaderWriter : InvariantStreamWriter
 	{
-		public ShaderWriter(Stream stream, IShader shader, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator) : base(stream, new UTF8Encoding(false), 4096, true)
+		public ShaderWriter(Stream stream, IShader shader, Func<GPUPlatform, ShaderTextExporter> exporterInstantiator) : base(stream, new UTF8Encoding(false), 4096, true)
 		{
-			if (shader == null)
-			{
-				throw new ArgumentNullException(nameof(shader));
-			}
-			if (exporterInstantiator == null)
-			{
-				throw new ArgumentNullException(nameof(exporterInstantiator));
-			}
-
-			Shader = shader;
+			Shader = shader ?? throw new ArgumentNullException(nameof(shader));
 			Blobs = shader.ReadBlobs();
-			m_exporterInstantiator = exporterInstantiator;
+			m_exporterInstantiator = exporterInstantiator ?? throw new ArgumentNullException(nameof(exporterInstantiator));
 		}
 
 		public void WriteShaderData(ref ShaderSubProgram subProgram)
 		{
 			ShaderGpuProgramType programType = subProgram.GetProgramType(Version);
 			GPUPlatform graphicApi = programType.ToGPUPlatform(Platform);
-			ShaderTextExporter exporter = m_exporterInstantiator.Invoke(Shader.Collection.Version, graphicApi);
+			ShaderTextExporter exporter = m_exporterInstantiator(graphicApi);
 			exporter.Export(this, ref subProgram);
 		}
 
@@ -44,6 +35,6 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 
 		public bool WriteQuotesAroundProgram { get; set; } = true;
 
-		private readonly Func<UnityVersion, GPUPlatform, ShaderTextExporter> m_exporterInstantiator;
+		private readonly Func<GPUPlatform, ShaderTextExporter> m_exporterInstantiator;
 	}
 }

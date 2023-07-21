@@ -36,17 +36,17 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			IShader shader = (IShader)asset;
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-			if (shader.ParsedForm_C48?.NameString?.StartsWith("Hidden/Internal") ?? false)
+			if (shader.ParsedForm_C48?.NameString.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
 			{
 				return false;
 			}
 
 			using Stream fileStream = File.Create(path);
-			ExportBinary(shader, container, fileStream, ShaderExporterInstantiator);
+			ExportBinary(shader, fileStream, ShaderExporterInstantiator);
 			return true;
 		}
 
-		private ShaderTextExporter ShaderExporterInstantiator(UnityVersion version, GPUPlatform graphicApi)
+		private static ShaderTextExporter ShaderExporterInstantiator(GPUPlatform graphicApi)
 		{
 			switch (graphicApi)
 			{
@@ -75,7 +75,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			}
 		}
 
-		public void ExportBinary(IShader shader, IExportContainer container, Stream stream, Func<UnityVersion, GPUPlatform, ShaderTextExporter> exporterInstantiator)
+		private static void ExportBinary(IShader shader, Stream stream, Func<GPUPlatform, ShaderTextExporter> exporterInstantiator)
 		{
 			if (shader.Has_ParsedForm_C48())
 			{
