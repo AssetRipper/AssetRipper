@@ -2,8 +2,8 @@
 {
 	public class USILInputOutput
 	{
-		public string type;
-		public string name;
+		public required string type;
+		public required string name;
 		public int register;
 		public int mask;
 		public bool isOutput;
