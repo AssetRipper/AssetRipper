@@ -76,7 +76,7 @@ namespace AssetRipper.Processing.Scenes
 			if (buildSettings is not null && IsSceneName(collection.Name))
 			{
 				int index = FileNameToSceneIndex(collection.Name, collection.Version);
-				if (buildSettings.Scenes_C141.Count >= index)
+				if (index >= buildSettings.Scenes_C141.Count)
 				{
 					//This can happen in the following situation:
 					//1. A game is built with N scenes and published to a distribution platform.
