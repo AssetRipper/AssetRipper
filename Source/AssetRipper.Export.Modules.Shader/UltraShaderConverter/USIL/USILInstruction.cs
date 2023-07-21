@@ -4,14 +4,14 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL
 {
 	public class USILInstruction
 	{
-		public USILInstructionType instructionType;
-		public USILOperand destOperand;
-		public List<USILOperand> srcOperands;
-		public bool saturate;
-		public bool commented;
+		public USILInstructionType instructionType { get; set; }
+		public USILOperand? destOperand { get; set; }
+		public required List<USILOperand> srcOperands { get; set; }
+		public bool saturate { get; set; }
+		public bool commented { get; set; }
 
-		public bool isIntVariant;
-		public bool isIntUnsigned;
+		public bool isIntVariant { get; set; }
+		public bool isIntUnsigned { get; set; }
 
 		public override string ToString()
 		{

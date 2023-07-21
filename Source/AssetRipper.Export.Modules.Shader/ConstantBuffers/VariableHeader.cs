@@ -2,9 +2,9 @@
 {
 	internal class VariableHeader
 	{
-		public uint NameOffset { get; set; }
-		public uint StartOffset { get; set; }
-		public uint TypeOffset { get; set; }
-		public Variable Variable { get; set; }
+		public uint NameOffset { get; init; }
+		public uint StartOffset { get; init; }
+		public uint TypeOffset { get; init; }
+		public required Variable Variable { get; init; }
 	}
 }

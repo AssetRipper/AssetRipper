@@ -10,14 +10,16 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.Converter
 {
 	public class USCShaderConverter
 	{
-		public DirectXCompiledShader DxShader { get; set; }
-		public UShaderProgram ShaderProgram { get; set; }
+		public DirectXCompiledShader? DxShader { get; set; }
+		public UShaderProgram? ShaderProgram { get; set; }
 
+		[MemberNotNull(nameof(DxShader))]
 		public void LoadDirectXCompiledShader(Stream data)
 		{
 			DxShader = new DirectXCompiledShader(data);
 		}
 
+		[MemberNotNull(nameof(ShaderProgram))]
 		public void ConvertShaderToUShaderProgram()
 		{
 			if (DxShader == null)
@@ -55,6 +57,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.Converter
 
 		public string CovnertUShaderProgramToHLSL(int depth)
 		{
+			if (ShaderProgram == null)
+			{
+				throw new Exception($"You need to call {nameof(ConvertShaderToUShaderProgram)} first!");
+			}
+
 			UShaderFunctionToHLSL hlslConverter = new UShaderFunctionToHLSL(ShaderProgram);
 			return hlslConverter.Convert(depth);
 		}

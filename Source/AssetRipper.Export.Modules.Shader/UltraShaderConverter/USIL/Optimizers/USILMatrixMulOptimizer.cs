@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using System.Diagnostics;
 using static AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.USILOptimizerUtil;
 
 namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizers
@@ -84,6 +85,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 				{
 					continue;
 				}
+
+				Debug.Assert(inst0.destOperand is not null);
+				Debug.Assert(inst1.destOperand is not null);
+				Debug.Assert(inst2.destOperand is not null);
+				Debug.Assert(inst3.destOperand is not null);
 
 				int tmp0Index = inst0.destOperand.registerIndex;
 				int tmp1Index = inst1.destOperand.registerIndex;
@@ -214,6 +220,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 					continue;
 				}
 
+				Debug.Assert(inst0.destOperand is not null);
+				Debug.Assert(inst1.destOperand is not null);
+				Debug.Assert(inst2.destOperand is not null);
+				Debug.Assert(inst3.destOperand is not null);
+
 				int tmp0Index = inst0.destOperand.registerIndex;
 				int tmp1Index = inst1.destOperand.registerIndex;
 				int tmp2Index = inst2.destOperand.registerIndex;
@@ -336,6 +347,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 				{
 					continue;
 				}
+
+				Debug.Assert(inst0.destOperand is not null);
+				Debug.Assert(inst1.destOperand is not null);
+				Debug.Assert(inst2.destOperand is not null);
+				Debug.Assert(inst3.destOperand is not null);
 
 				int tmp0Index = inst0.destOperand.registerIndex;
 				int tmp1Index = inst1.destOperand.registerIndex;

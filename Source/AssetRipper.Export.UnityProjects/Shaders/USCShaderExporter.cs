@@ -13,7 +13,6 @@ using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.IO.Files;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
@@ -24,6 +23,7 @@ using AssetRipper.SourceGenerated.Subclasses.SerializedProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubShader;
+using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Shaders
 {
@@ -264,7 +264,8 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("{");
 
-						DirectXCompiledShader dxShader = vertexConverter!.DxShader;
+						DirectXCompiledShader? dxShader = vertexConverter!.DxShader;
+						Debug.Assert(dxShader != null);
 						foreach (OSGN.Output output in dxShader.Osgn.outputs)
 						{
 							string format = DXShaderNamingUtils.GetOSGNFormatName(output);
@@ -286,7 +287,8 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 						writer.WriteIndent(3);
 						writer.WriteLine("{");
 
-						DirectXCompiledShader dxShader = fragmentConverter!.DxShader;
+						DirectXCompiledShader? dxShader = fragmentConverter!.DxShader;
+						Debug.Assert(dxShader != null);
 						foreach (OSGN.Output output in dxShader.Osgn.outputs)
 						{
 							string format = DXShaderNamingUtils.GetOSGNFormatName(output);
@@ -301,7 +303,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 						writer.WriteLine("};");
 					}
 
-					HashSet<string> declaredBufs = new HashSet<string>();
+					HashSet<string?> declaredBufs = new();
 
 					if (hasVertex)
 					{
@@ -399,7 +401,8 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 						writer.WriteLine($"// Keywords: {keywordsList}");
 
 						// needs to move somewhere else...
-						DirectXCompiledShader dxShader = fragmentConverter!.DxShader;
+						DirectXCompiledShader? dxShader = fragmentConverter!.DxShader;
+						Debug.Assert(dxShader != null);
 						bool hasFrontFace = dxShader.Isgn.inputs.Any(i => i.name == "SV_IsFrontFace");
 
 						writer.WriteIndent(3);
@@ -437,7 +440,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		}
 
 		private static void ExportPassConstantBufferDefinitions(
-			ShaderSubProgram _this, ShaderWriter writer, HashSet<string> declaredBufs,
+			ShaderSubProgram _this, ShaderWriter writer, HashSet<string?> declaredBufs,
 			string cbufferName, int depth)
 		{
 			ConstantBuffer? cbuffer = _this.ConstantBuffers.FirstOrDefault(cb => cb.Name == cbufferName);
@@ -446,7 +449,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		}
 
 		private static void ExportPassConstantBufferDefinitions(
-			ShaderSubProgram _this, ShaderWriter writer, HashSet<string> declaredBufs,
+			ShaderSubProgram _this, ShaderWriter writer, HashSet<string?> declaredBufs,
 			ConstantBuffer? cbuffer, int depth)
 		{
 			if (cbuffer != null)
@@ -464,7 +467,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				foreach (NumericShaderParameter param in allParams)
 				{
 					string typeName = DXShaderNamingUtils.GetConstantBufferParamTypeName(param);
-					string name = param.Name;
+					string? name = param.Name;
 
 					// skip things like unity_MatrixVP if they show up in $Globals
 					if (UnityShaderConstants.INCLUDED_UNITY_PROP_NAMES.Contains(name))
@@ -497,7 +500,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			}
 		}
 
-		private static void ExportPassTextureParamDefinitions(ShaderSubProgram _this, ShaderWriter writer, HashSet<string> declaredBufs, int depth)
+		private static void ExportPassTextureParamDefinitions(ShaderSubProgram _this, ShaderWriter writer, HashSet<string?> declaredBufs, int depth)
 		{
 			foreach (TextureParameter param in _this.TextureParameters)
 			{

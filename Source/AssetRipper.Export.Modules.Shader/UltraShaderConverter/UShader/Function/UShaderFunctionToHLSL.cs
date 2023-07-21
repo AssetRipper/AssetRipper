@@ -6,14 +6,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Functi
 {
 	public class UShaderFunctionToHLSL
 	{
-		private UShaderProgram _shader;
+		private readonly UShaderProgram _shader;
 		private readonly StringBuilder _stringBuilder = new();
-		private string _baseIndent;
-		private string _indent;
+		private string _baseIndent = "";
+		/// <summary>
+		/// Each indent level is 4 spaces.
+		/// </summary>
+		private const string _indent = "    ";
 		private int _indentLevel;
 
 		private delegate void InstHandler(USILInstruction inst);
-		private Dictionary<USILInstructionType, InstHandler> _instructionHandlers;
+		private readonly Dictionary<USILInstructionType, InstHandler> _instructionHandlers;
 
 		public UShaderFunctionToHLSL(UShaderProgram shader)
 		{
@@ -86,16 +89,15 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Functi
 				{ USILInstructionType.GreaterThan, new InstHandler(HandleGreaterThan) },
 				{ USILInstructionType.GreaterThanOrEqual, new InstHandler(HandleGreaterThanOrEqual) },
 				{ USILInstructionType.Return, new InstHandler(HandleReturn) },
-                // extra
-                { USILInstructionType.MultiplyMatrixByVector, new InstHandler(MultiplyMatrixByVector) },
+				// extra
+				{ USILInstructionType.MultiplyMatrixByVector, new InstHandler(MultiplyMatrixByVector) },
 				{ USILInstructionType.Comment, new InstHandler(HandleComment) }
 			};
 		}
 
 		public string Convert(int indentDepth)
 		{
-			_baseIndent = new string(' ', indentDepth * 4);
-			_indent = new string(' ', 4);
+			_baseIndent = new string(' ', indentDepth * _indent.Length);
 
 			_stringBuilder.Clear();
 
@@ -811,10 +813,10 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Functi
 
 		private void HandleComment(USILInstruction inst)
 		{
-			AppendLine($"//{inst.destOperand.comment};");
+			AppendLine($"//{inst.destOperand?.comment};");
 		}
 
-		private string WrapSaturate(USILInstruction inst, string str)
+		private static string WrapSaturate(USILInstruction inst, string str)
 		{
 			if (inst.saturate)
 			{
@@ -836,7 +838,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Functi
 		}
 
 		// this is awful
-		private string CommentString(USILInstruction inst)
+		private static string CommentString(USILInstruction inst)
 		{
 			return inst.commented ? "//" : "";
 		}

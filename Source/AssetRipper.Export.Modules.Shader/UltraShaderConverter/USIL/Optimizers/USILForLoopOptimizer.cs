@@ -29,7 +29,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 		private bool ReplaceForLoop(UShaderProgram shader)
 		{
 			bool changes = false;
-			Stack<LoopInstanceInfo> loopInfos = new Stack<LoopInstanceInfo>();
+			Stack<LoopInstanceInfo> loopInfos = new();
 
 			int loopDepth = 0;
 
@@ -62,7 +62,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 
 					// todo doesn't check for iterator in other side of comparison
 					bool breakcUsesComp =
-						compInst.destOperand.registerIndex == ifInst.srcOperands[0].registerIndex &&
+						compInst.destOperand!.registerIndex == ifInst.srcOperands[0].registerIndex &&
 						DoMasksMatch(compInst.destOperand.mask, ifInst.srcOperands[0].mask);
 
 					if (breakcUsesComp)
@@ -178,7 +178,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 			return changes;
 		}
 
-		private bool IsComparisonInstruction(USILInstruction instruction)
+		private static bool IsComparisonInstruction(USILInstruction instruction)
 		{
 			switch (instruction.instructionType)
 			{
@@ -194,7 +194,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 			}
 		}
 
-		private bool IsIfInstruction(USILInstruction instruction)
+		private static bool IsIfInstruction(USILInstruction instruction)
 		{
 			switch (instruction.instructionType)
 			{
@@ -206,7 +206,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 			}
 		}
 
-		private bool IsAddInstruction(USILInstruction instruction)
+		private static bool IsAddInstruction(USILInstruction instruction)
 		{
 			switch (instruction.instructionType)
 			{
@@ -218,7 +218,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 			}
 		}
 
-		private USILInstructionType InvertCompareType(USILInstructionType type)
+		private static USILInstructionType InvertCompareType(USILInstructionType type)
 		{
 			switch (type)
 			{
@@ -235,7 +235,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 			}
 		}
 
-		private bool DoOpcodesMatch(List<USILInstruction> insts, int startIndex, USILInstructionType[] instTypes)
+		private static bool DoOpcodesMatch(List<USILInstruction> insts, int startIndex, USILInstructionType[] instTypes)
 		{
 			if (startIndex + instTypes.Length > insts.Count)
 			{
@@ -252,7 +252,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 			return true;
 		}
 
-		private bool DoMasksMatch(int[] maskA, int[] maskB)
+		private static bool DoMasksMatch(int[] maskA, int[] maskB)
 		{
 			if (maskA.Length != maskB.Length)
 			{
@@ -296,9 +296,10 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 				return new List<USILOperand> { operand };
 			}
 
-			List<USILOperand> operands = new List<USILOperand>();
-
-			operands.Add(operand);
+			List<USILOperand> operands = new()
+			{
+				operand
+			};
 
 			if (operand.arrayRelative != null)
 			{

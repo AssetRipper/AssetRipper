@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler.Blocks
+﻿using System.Diagnostics;
+
+namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler.Blocks
 {
 	public sealed class SHDR : ShaderBlock
 	{
@@ -10,7 +12,7 @@
 
 		public override string FourCC => "SHDR";
 
-		private ShaderBlock[] blocks;
+		private readonly ShaderBlock[] blocks;
 		public SHDR(Stream stream, ShaderBlock[] blocks)
 		{
 			this.blocks = blocks;
@@ -46,7 +48,7 @@
 		public int operandType;
 		public int operandComponents;
 
-		public SHDRDeclData declData;
+		public SHDRDeclData? declData;
 		public List<SHDRInstructionOperand> operands;
 		public SHDR shader;
 		public SHDRInstruction(BinaryReader reader, SHDR shader)
@@ -123,7 +125,8 @@
 
 			if (opcode == Opcode.customdata)
 			{
-				reader.BaseStream.Position = startPos + declData!.customDataArray.Length * 16 + 8;
+				Debug.Assert(declData != null);
+				reader.BaseStream.Position = startPos + declData.customDataArray.Length * 16 + 8;
 			}
 			else
 			{

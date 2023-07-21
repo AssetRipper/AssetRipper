@@ -34,11 +34,13 @@ namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers
 			foreach (Variable variable in m_variables)
 			{
 				m_variableNameLookup[variable.Name] = dataOffset;
-				VariableHeader header = new VariableHeader();
-				header.NameOffset = dataOffset;
+				VariableHeader header = new()
+				{
+					NameOffset = dataOffset,
+					StartOffset = (uint)variable.Index,
+					Variable = variable,
+				};
 				dataOffset += (uint)variable.Name.Length + 1;
-				header.StartOffset = (uint)variable.Index;
-				header.Variable = variable;
 
 				m_typeLookup[variable.ShaderType] = dataOffset;
 				dataOffset += variable.ShaderType.Size();

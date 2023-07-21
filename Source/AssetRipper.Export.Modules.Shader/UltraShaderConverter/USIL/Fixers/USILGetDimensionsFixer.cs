@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using System.Diagnostics;
 
 namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Fixers
 {
@@ -43,6 +44,8 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Fixers
 				{
 					continue;
 				}
+
+				Debug.Assert(sampleinfoInst.destOperand != null);
 
 				resinfoInst.srcOperands[5] = sampleinfoInst.destOperand;
 

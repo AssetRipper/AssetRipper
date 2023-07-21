@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+using System.Diagnostics;
 
 namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizers
 {
@@ -76,6 +77,8 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 								}
 							};
 						}
+
+						Debug.Assert(destOperand != null);
 
 						// output is comparison if both are comparison (because result is also comparison)
 						if (leftIsComparison && rightIsComparison)

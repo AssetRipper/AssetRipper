@@ -2,13 +2,14 @@
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassembler.Blocks;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
+using System.Diagnostics;
 using System.Text;
 
 namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX
 {
 	public class DirectXProgramToUSIL
 	{
-		private DirectXCompiledShader _dxShader;
+		private readonly DirectXCompiledShader _dxShader;
 
 		public UShaderProgram shader;
 
@@ -18,9 +19,9 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 		private List<USILInputOutput> Outputs => shader.outputs;
 
 		private delegate void InstHandler(SHDRInstruction inst);
-		private Dictionary<Opcode, InstHandler> _instructionHandlers;
+		private readonly Dictionary<Opcode, InstHandler> _instructionHandlers;
 
-		private Dictionary<int, ResourceDimension> _resourceToDimension;
+		private readonly Dictionary<int, ResourceDimension> _resourceToDimension;
 
 		public DirectXProgramToUSIL(DirectXCompiledShader dxShader)
 		{
@@ -149,7 +150,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 							comment = $"unsupported_{inst.opcode}",
 							operandType = USILOperandType.Comment
 						},
-						srcOperands = new List<USILOperand>()
+						srcOperands = new()
 					});
 				}
 			}
@@ -169,7 +170,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 				int register = dxInput.register;
 				int mask = dxInput.mask;
 
-				USILInputOutput usilInput = new USILInputOutput()
+				USILInputOutput usilInput = new()
 				{
 					type = inputType,
 					name = inputName,
@@ -196,7 +197,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 				int register = dxOutput.register;
 				int mask = dxOutput.mask;
 
-				USILInputOutput usilOutput = new USILInputOutput()
+				USILInputOutput usilOutput = new()
 				{
 					type = outputType,
 					name = outputName,
@@ -211,14 +212,14 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new();
 
 			int depth = 4;
 			foreach (USILInstruction instruction in Instructions)
 			{
-				if (instruction.instructionType == USILInstructionType.EndIf ||
-					instruction.instructionType == USILInstructionType.EndLoop ||
-					instruction.instructionType == USILInstructionType.Else)
+				if (instruction.instructionType is USILInstructionType.EndIf or
+					USILInstructionType.EndLoop or
+					USILInstructionType.Else)
 				{
 					depth--;
 				}
@@ -226,10 +227,10 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 				sb.Append(new string(' ', depth * 4));
 				sb.AppendLine(instruction.ToString());
 
-				if (instruction.instructionType == USILInstructionType.IfFalse ||
-					instruction.instructionType == USILInstructionType.IfTrue ||
-					instruction.instructionType == USILInstructionType.Else ||
-					instruction.instructionType == USILInstructionType.Loop)
+				if (instruction.instructionType is USILInstructionType.IfFalse or
+					USILInstructionType.IfTrue or
+					USILInstructionType.Else or
+					USILInstructionType.Loop)
 				{
 					depth++;
 				}
@@ -455,7 +456,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 		}
 
 		// there is a better way to check this, but this works too
-		private int[] MapMask(int[] destMask, int[] srcMask)
+		private static int[] MapMask(int[] destMask, int[] srcMask)
 		{
 			if (srcMask == null || srcMask.Length == 0)
 			{
@@ -490,20 +491,19 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0];
 			SHDRInstructionOperand src0 = inst.operands[1];
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Move;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Move,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 },
+				saturate = inst.saturated
 			};
-			usilInst.saturate = inst.saturated;
 
 			Instructions.Add(usilInst);
 		}
@@ -515,26 +515,28 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src1 = inst.operands[2]; // The components to move. 
 			SHDRInstructionOperand src2 = inst.operands[3]; // The components to move. 
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
-			USILOperand usilSrc2 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
+			USILOperand usilSrc2 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), false);
 			FillUSILOperand(src2, usilSrc2, MapMask(dest.swizzle, src2.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.MoveConditional;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1,
-				usilSrc2
+				instructionType = USILInstructionType.MoveConditional,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1,
+					usilSrc2,
+				},
+				saturate = inst.saturated,
 			};
-			usilInst.saturate = inst.saturated;
 
 			Instructions.Add(usilInst);
 		}
@@ -545,10 +547,9 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The (vector/number) to add to src1.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The (vector/number) to add to src0.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			bool isInt = inst.opcode == Opcode.iadd;
 
@@ -556,15 +557,18 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), isInt);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), isInt);
 
-			usilInst.instructionType = USILInstructionType.Add;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.Add,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				saturate = inst.saturated,
+				isIntVariant = isInt
 			};
-			usilInst.saturate = inst.saturated;
-			usilInst.isIntVariant = isInt;
 
 			Instructions.Add(usilInst);
 		}
@@ -575,27 +579,29 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The multiplicand.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The multiplier.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
-			bool isInt = inst.opcode == Opcode.imul || inst.opcode == Opcode.umul;
+			bool isInt = inst.opcode is Opcode.imul or Opcode.umul;
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, isInt);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), isInt);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), isInt);
 
-			usilInst.instructionType = USILInstructionType.Multiply;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.Multiply,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				saturate = inst.saturated,
+				isIntVariant = isInt,
+				isIntUnsigned = inst.opcode == Opcode.umul
 			};
-			usilInst.saturate = inst.saturated;
-			usilInst.isIntVariant = isInt;
-			usilInst.isIntUnsigned = inst.opcode == Opcode.umul;
 
 			Instructions.Add(usilInst);
 		}
@@ -607,26 +613,24 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[2]; // The value to multiply with src1.
 			SHDRInstructionOperand src1 = inst.operands[3]; // The value to multiply with src0.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			// todo, hi isn't handled
 			FillUSILOperand(destLO, usilDest, destLO.swizzle, true);
 			FillUSILOperand(src0, usilSrc0, MapMask(destLO.swizzle, src0.swizzle), true);
 			FillUSILOperand(src1, usilSrc1, MapMask(destLO.swizzle, src1.swizzle), true);
 
-			usilInst.instructionType = USILInstructionType.Multiply;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.Multiply,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0, usilSrc1 },
+				saturate = inst.saturated,
+				isIntVariant = true,
+				isIntUnsigned = inst.opcode == Opcode.umul
 			};
-			usilInst.saturate = inst.saturated;
-			usilInst.isIntVariant = true;
-			usilInst.isIntUnsigned = inst.opcode == Opcode.umul;
 
 			Instructions.Add(usilInst);
 		}
@@ -637,10 +641,9 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The dividend.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The divisor.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			bool isInt = inst.opcode == Opcode.udiv;
 
@@ -648,16 +651,20 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), isInt);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), isInt);
 
-			usilInst.instructionType = USILInstructionType.Divide;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.Divide,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				saturate = inst.saturated,
+				isIntVariant = isInt,
+				isIntUnsigned = inst.opcode == Opcode.udiv,
 			};
-			usilInst.saturate = inst.saturated;
-			usilInst.isIntVariant = isInt;
-			usilInst.isIntUnsigned = inst.opcode == Opcode.udiv;
+
 
 			Instructions.Add(usilInst);
 		}
@@ -669,30 +676,32 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src1 = inst.operands[2]; // The multiplier.
 			SHDRInstructionOperand src2 = inst.operands[3]; // The addend.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
-			USILOperand usilSrc2 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
+			USILOperand usilSrc2 = new();
 
-			bool isInt = inst.opcode == Opcode.imad || inst.opcode == Opcode.umad;
+			bool isInt = inst.opcode is Opcode.imad or Opcode.umad;
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, isInt);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), isInt);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), isInt);
 			FillUSILOperand(src2, usilSrc2, MapMask(dest.swizzle, src2.swizzle), isInt);
 
-			usilInst.instructionType = USILInstructionType.MultiplyAdd;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1,
-				usilSrc2
+				instructionType = USILInstructionType.MultiplyAdd,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1,
+					usilSrc2
+				},
+				saturate = inst.saturated,
+				isIntVariant = isInt,
+				isIntUnsigned = inst.opcode == Opcode.umad
 			};
-			usilInst.saturate = inst.saturated;
-			usilInst.isIntVariant = isInt;
-			usilInst.isIntUnsigned = inst.opcode == Opcode.umad;
 
 			Instructions.Add(usilInst);
 		}
@@ -703,21 +712,23 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The 32-bit value to AND with src1.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The 32-bit value to AND with src0.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.And;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.And,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1,
+				},
 			};
 
 			Instructions.Add(usilInst);
@@ -729,21 +740,23 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components to OR with src1.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The components to OR with src0.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Or;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.Or,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1,
+				},
 			};
 
 			Instructions.Add(usilInst);
@@ -754,18 +767,20 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the result of the operation.
 			SHDRInstructionOperand src0 = inst.operands[1]; // The original components.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Not;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Not,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0
+				},
 			};
 
 			Instructions.Add(usilInst);
@@ -776,26 +791,25 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the result of the operation. dest = round_z(src0)
 			SHDRInstructionOperand src0 = inst.operands[1]; // The component to convert.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			if (inst.opcode == Opcode.ftoi)
+			USILInstruction usilInst = new()
 			{
-				usilInst.instructionType = USILInstructionType.FloatToInt;
-			}
-			else // if (inst.opcode == Opcode.ftoi)
-			{
-				usilInst.instructionType = USILInstructionType.FloatToUInt;
-			}
-
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
-			{
-				usilSrc0
+				instructionType = inst.opcode switch
+				{
+					Opcode.ftoi => USILInstructionType.FloatToInt,
+					Opcode.ftou => USILInstructionType.FloatToUInt,
+					_ => USILInstructionType.FloatToUInt,//Throw exception?
+				},
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0
+				},
 			};
 
 			Instructions.Add(usilInst);
@@ -806,26 +820,25 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // Contains the result of the operation.
 			SHDRInstructionOperand src0 = inst.operands[1]; // Contains the value to convert.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			if (inst.opcode == Opcode.itof)
+			USILInstruction usilInst = new()
 			{
-				usilInst.instructionType = USILInstructionType.IntToFloat;
-			}
-			else // if (inst.opcode == Opcode.utof)
-			{
-				usilInst.instructionType = USILInstructionType.UIntToFloat;
-			}
-
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
-			{
-				usilSrc0
+				instructionType = inst.opcode switch
+				{
+					Opcode.itof => USILInstructionType.IntToFloat,
+					Opcode.utof => USILInstructionType.UIntToFloat,
+					_ => USILInstructionType.UIntToFloat,//Throw exception?
+				},
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0
+				},
 			};
 
 			Instructions.Add(usilInst);
@@ -837,26 +850,28 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components to compare to src1.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The components to compare to src0.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
-			bool isInt = inst.opcode == Opcode.imin || inst.opcode == Opcode.umin;
+			bool isInt = inst.opcode is Opcode.imin or Opcode.umin;
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, isInt);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), isInt);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), isInt);
 
-			usilInst.instructionType = USILInstructionType.Minimum;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.Minimum,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				isIntVariant = isInt,
+				isIntUnsigned = inst.opcode == Opcode.umin
 			};
-			usilInst.isIntVariant = isInt;
-			usilInst.isIntUnsigned = inst.opcode == Opcode.umin;
 
 			Instructions.Add(usilInst);
 		}
@@ -867,26 +882,28 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components to compare to src1.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The components to compare to src0.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
-			bool isInt = inst.opcode == Opcode.imax || inst.opcode == Opcode.umax;
+			bool isInt = inst.opcode is Opcode.imax or Opcode.umax;
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, isInt);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), isInt);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), isInt);
 
-			usilInst.instructionType = USILInstructionType.Maximum;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.Maximum,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				isIntVariant = isInt,
+				isIntUnsigned = inst.opcode == Opcode.umax
 			};
-			usilInst.isIntVariant = isInt;
-			usilInst.isIntUnsigned = inst.opcode == Opcode.umax;
 
 			Instructions.Add(usilInst);
 		}
@@ -896,18 +913,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The result of the operation. dest = sqrt(src0)
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components for which to take the square root.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.SquareRoot;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.SquareRoot,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			Instructions.Add(usilInst);
@@ -918,18 +934,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // Contains the results of the operation. dest = 1.0f / sqrt(src0)
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components for the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.SquareRootReciprocal;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.SquareRootReciprocal,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			Instructions.Add(usilInst);
@@ -940,18 +955,20 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the result of the operation. dest = log2(src0)
 			SHDRInstructionOperand src0 = inst.operands[1]; // The value for the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Logarithm2;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Logarithm2,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0
+				}
 			};
 
 			Instructions.Add(usilInst);
@@ -962,18 +979,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The result of the operation. dest = 2src0
 			SHDRInstructionOperand src0 = inst.operands[1]; // The exponent.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Exponential;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Exponential,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			Instructions.Add(usilInst);
@@ -984,18 +1000,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the results dest = 1.0f / src0.
 			SHDRInstructionOperand src0 = inst.operands[1]; // The number to take the reciprocal of.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Reciprocal;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Reciprocal,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			Instructions.Add(usilInst);
@@ -1006,18 +1021,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the result of the operation. dest = src0 - round_ni(src0)
 			SHDRInstructionOperand src0 = inst.operands[1]; // The component in the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Fractional;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Fractional,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			Instructions.Add(usilInst);
@@ -1028,18 +1042,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the results of the operation.
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components in the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Floor;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Floor,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			Instructions.Add(usilInst);
@@ -1050,18 +1063,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the results of the operation.
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components in the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Ceiling;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Ceiling,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			Instructions.Add(usilInst);
@@ -1072,18 +1084,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the results of the operation.
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components in the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Round;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Round,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			Instructions.Add(usilInst);
@@ -1094,18 +1105,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the results of the operation.
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components in the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = USILInstructionType.Truncate;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Truncate,
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			Instructions.Add(usilInst);
@@ -1121,18 +1131,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 
 			if (dest0.operand != Operand.Null)
 			{
-				USILInstruction usilSinInst = new USILInstruction();
-				USILOperand usilSinDest = new USILOperand();
-				USILOperand usilSinSrc = new USILOperand();
+				USILOperand usilSinDest = new();
+				USILOperand usilSinSrc = new();
 
 				FillUSILOperand(dest0, usilSinDest, dest0.swizzle, false);
 				FillUSILOperand(src, usilSinSrc, MapMask(dest0.swizzle, src.swizzle), false);
 
-				usilSinInst.instructionType = USILInstructionType.Sine;
-				usilSinInst.destOperand = usilSinDest;
-				usilSinInst.srcOperands = new List<USILOperand>
+				USILInstruction usilSinInst = new()
 				{
-					usilSinSrc
+					instructionType = USILInstructionType.Sine,
+					destOperand = usilSinDest,
+					srcOperands = new() { usilSinSrc }
 				};
 
 				Instructions.Add(usilSinInst);
@@ -1140,18 +1149,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 
 			if (dest1.operand != Operand.Null)
 			{
-				USILInstruction usilCosInst = new USILInstruction();
-				USILOperand usilCosDest = new USILOperand();
-				USILOperand usilCosSrc = new USILOperand();
+				USILOperand usilCosDest = new();
+				USILOperand usilCosSrc = new();
 
 				FillUSILOperand(dest1, usilCosDest, dest1.swizzle, false);
 				FillUSILOperand(src, usilCosSrc, MapMask(dest1.swizzle, src.swizzle), false);
 
-				usilCosInst.instructionType = USILInstructionType.Cosine;
-				usilCosInst.destOperand = usilCosDest;
-				usilCosInst.srcOperands = new List<USILOperand>
+				USILInstruction usilCosInst = new()
 				{
-					usilCosSrc
+					instructionType = USILInstructionType.Cosine,
+					destOperand = usilCosDest,
+					srcOperands = new() { usilCosSrc }
 				};
 
 				Instructions.Add(usilCosInst);
@@ -1164,23 +1172,25 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // Contains the values to be shifted.
 			SHDRInstructionOperand src1 = inst.operands[2]; // Contains the shift amount.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, true);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), true);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), true);
 
-			usilInst.instructionType = USILInstructionType.ShiftLeft;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.ShiftLeft,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				isIntVariant = true
 			};
-			usilInst.isIntVariant = true;
 
 			Instructions.Add(usilInst);
 		}
@@ -1191,23 +1201,25 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // Contains the value to be shifted.
 			SHDRInstructionOperand src1 = inst.operands[2]; // Contains the shift amount.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, true);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), true);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), true);
 
-			usilInst.instructionType = USILInstructionType.ShiftRight;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.ShiftRight,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				isIntVariant = true
 			};
-			usilInst.isIntVariant = true;
 
 			Instructions.Add(usilInst);
 		}
@@ -1218,24 +1230,26 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components in the operation.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The components in the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			int[] mask = new int[] { 0, 1 };
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, mask, false);
 			FillUSILOperand(src1, usilSrc1, mask, false);
 
-			usilInst.instructionType = USILInstructionType.DotProduct2;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.DotProduct2,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				saturate = inst.saturated
 			};
-			usilInst.saturate = inst.saturated;
 
 			Instructions.Add(usilInst);
 		}
@@ -1246,24 +1260,26 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components in the operation.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The components in the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			int[] mask = new int[] { 0, 1, 2 };
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, mask, false);
 			FillUSILOperand(src1, usilSrc1, mask, false);
 
-			usilInst.instructionType = USILInstructionType.DotProduct3;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.DotProduct3,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				saturate = inst.saturated
 			};
-			usilInst.saturate = inst.saturated;
 
 			Instructions.Add(usilInst);
 		}
@@ -1274,24 +1290,26 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components in the operation.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The components in the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			int[] mask = new int[] { 0, 1, 2, 3 };
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, mask, false);
 			FillUSILOperand(src1, usilSrc1, mask, false);
 
-			usilInst.instructionType = USILInstructionType.DotProduct4;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.DotProduct4,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				saturate = inst.saturated
 			};
-			usilInst.saturate = inst.saturated;
 
 			Instructions.Add(usilInst);
 		}
@@ -1303,12 +1321,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand srcResource = inst.operands[2]; // A texture register. For more information, see the Remarks section.
 			SHDRInstructionOperand srcSampler = inst.operands[3]; // A sampler register. For more information, see the Remarks section.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrcAddress = new USILOperand();
-			USILOperand usilSrcResource = new USILOperand();
-			USILOperand usilSrcSampler = new USILOperand();
-			USILOperand usilSamplerType = new USILOperand(0); // i.e. unity_ProbeVolumeSH (handled by USILSamplerTypeFixer)
+			USILOperand usilDest = new();
+			USILOperand usilSrcAddress = new();
+			USILOperand usilSrcResource = new();
+			USILOperand usilSrcSampler = new();
+			USILOperand usilSamplerType = new(0); // i.e. unity_ProbeVolumeSH (handled by USILSamplerTypeFixer)
 
 			int[] mask = new int[] { 0, 1, 2, 3 };
 
@@ -1320,14 +1337,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			FillUSILOperand(srcResource, usilSrcResource, MapMask(dest.swizzle, srcResource.swizzle), false);
 			FillUSILOperand(srcSampler, usilSrcSampler, mask, false);
 
-			usilInst.instructionType = USILInstructionType.Sample;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrcAddress,
-				usilSrcResource,
-				usilSrcSampler,
-				usilSamplerType
+				instructionType = USILInstructionType.Sample,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrcAddress,
+					usilSrcResource,
+					usilSrcSampler,
+					usilSamplerType
+				}
 			};
 
 			Instructions.Add(usilInst);
@@ -1341,13 +1361,12 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand srcSampler = inst.operands[3]; // A sampler register. For more information see the sample instruction.
 			SHDRInstructionOperand srcReferenceValue = inst.operands[4]; // A register with a single component selected, which is used in the comparison.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrcAddress = new USILOperand();
-			USILOperand usilSrcResource = new USILOperand();
-			USILOperand usilSrcSampler = new USILOperand();
-			USILOperand usilSrcReferenceValue = new USILOperand();
-			USILOperand usilSamplerType = new USILOperand(0); // i.e. unity_ProbeVolumeSH (handled by USILSamplerTypeFixer)
+			USILOperand usilDest = new();
+			USILOperand usilSrcAddress = new();
+			USILOperand usilSrcResource = new();
+			USILOperand usilSrcSampler = new();
+			USILOperand usilSrcReferenceValue = new();
+			USILOperand usilSamplerType = new(0); // i.e. unity_ProbeVolumeSH (handled by USILSamplerTypeFixer)
 
 			int[] mask = new int[] { 0, 1, 2, 3 };
 
@@ -1360,23 +1379,23 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			FillUSILOperand(srcSampler, usilSrcSampler, mask, false);
 			FillUSILOperand(srcReferenceValue, usilSrcReferenceValue, mask, false);
 
-			if (inst.opcode == Opcode.sample_c)
+			USILInstruction usilInst = new()
 			{
-				usilInst.instructionType = USILInstructionType.SampleComparison;
-			}
-			else //if (inst.opcode == Opcode.sample_c_lz)
-			{
-				usilInst.instructionType = USILInstructionType.SampleComparisonLODZero;
-			}
-
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
-			{
-				usilSrcAddress,
-				usilSrcResource,
-				usilSrcSampler,
-				usilSrcReferenceValue,
-				usilSamplerType
+				instructionType = inst.opcode switch
+				{
+					Opcode.sample_c => USILInstructionType.SampleComparison,
+					Opcode.sample_c_lz => USILInstructionType.SampleComparisonLODZero,
+					_ => USILInstructionType.SampleComparisonLODZero,//Throw exception?
+				},
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrcAddress,
+					usilSrcResource,
+					usilSrcSampler,
+					usilSrcReferenceValue,
+					usilSamplerType
+				}
 			};
 
 			Instructions.Add(usilInst);
@@ -1390,13 +1409,12 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand srcSampler = inst.operands[3]; // A sampler register. For more information, see the Remarks section.
 			SHDRInstructionOperand srcLOD = inst.operands[4]; // The LOD.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrcAddress = new USILOperand();
-			USILOperand usilSrcResource = new USILOperand();
-			USILOperand usilSrcSampler = new USILOperand();
-			USILOperand usilSrcLOD = new USILOperand();
-			USILOperand usilSamplerType = new USILOperand(0); // i.e. unity_ProbeVolumeSH (handled by USILSamplerTypeFixer)
+			USILOperand usilDest = new();
+			USILOperand usilSrcAddress = new();
+			USILOperand usilSrcResource = new();
+			USILOperand usilSrcSampler = new();
+			USILOperand usilSrcLOD = new();
+			USILOperand usilSamplerType = new(0); // i.e. unity_ProbeVolumeSH (handled by USILSamplerTypeFixer)
 
 			int[] mask = new int[] { 0, 1, 2, 3 };
 
@@ -1409,23 +1427,23 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			FillUSILOperand(srcSampler, usilSrcSampler, mask, false);
 			FillUSILOperand(srcLOD, usilSrcLOD, srcLOD.swizzle, false);
 
-			if (inst.opcode == Opcode.sample_b)
+			USILInstruction usilInst = new()
 			{
-				usilInst.instructionType = USILInstructionType.SampleLODBias;
-			}
-			else //if (inst.opcode == Opcode.sample_l)
-			{
-				usilInst.instructionType = USILInstructionType.SampleLOD;
-			}
-
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
-			{
-				usilSrcAddress,
-				usilSrcResource,
-				usilSrcSampler,
-				usilSrcLOD,
-				usilSamplerType
+				instructionType = inst.opcode switch
+				{
+					Opcode.sample_b => USILInstructionType.SampleLODBias,
+					Opcode.sample_l => USILInstructionType.SampleLOD,
+					_ => USILInstructionType.SampleLOD, //Throw exception?
+				},
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrcAddress,
+					usilSrcResource,
+					usilSrcSampler,
+					usilSrcLOD,
+					usilSamplerType
+				}
 			};
 
 			Instructions.Add(usilInst);
@@ -1440,13 +1458,12 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand srcXDerivatives = inst.operands[4]; // The derivatives for the source address in the x direction. For more information, see the Remarks section.
 			SHDRInstructionOperand srcYDerivatives = inst.operands[5]; // The derivatives for the source address in the y direction. For more information, see the Remarks section.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrcAddress = new USILOperand();
-			USILOperand usilSrcResource = new USILOperand();
-			USILOperand usilSrcSampler = new USILOperand();
-			USILOperand usilSrcXDerivatives = new USILOperand();
-			USILOperand usilSrcYDerivatives = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrcAddress = new();
+			USILOperand usilSrcResource = new();
+			USILOperand usilSrcSampler = new();
+			USILOperand usilSrcXDerivatives = new();
+			USILOperand usilSrcYDerivatives = new();
 
 			int[] mask = new int[] { 0, 1, 2, 3 };
 
@@ -1460,16 +1477,18 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			FillUSILOperand(srcXDerivatives, usilSrcXDerivatives, srcXDerivatives.swizzle, false);
 			FillUSILOperand(srcYDerivatives, usilSrcYDerivatives, srcYDerivatives.swizzle, false);
 
-			usilInst.instructionType = USILInstructionType.SampleDerivative;
-
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrcAddress,
-				usilSrcResource,
-				usilSrcSampler,
-				usilSrcXDerivatives,
-				usilSrcYDerivatives
+				instructionType = USILInstructionType.SampleDerivative,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrcAddress,
+					usilSrcResource,
+					usilSrcSampler,
+					usilSrcXDerivatives,
+					usilSrcYDerivatives
+				}
 			};
 
 			Instructions.Add(usilInst);
@@ -1481,10 +1500,9 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand srcAddress = inst.operands[1]; // The texture coordinates needed to perform the sample.
 			SHDRInstructionOperand srcResource = inst.operands[2]; // A texture register (t#) which must have been declared identifying which Texture or Buffer to fetch from.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrcAddress = new USILOperand();
-			USILOperand usilSrcResource = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrcAddress = new();
+			USILOperand usilSrcResource = new();
 
 			ResourceDimension dimension = _resourceToDimension[srcResource.arraySizes[0]];
 			int[] uvMask = GetLoadLocationMask(dimension);
@@ -1493,20 +1511,16 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			FillUSILOperand(srcAddress, usilSrcAddress, MapMask(uvMask, srcAddress.swizzle), false);
 			FillUSILOperand(srcResource, usilSrcResource, MapMask(dest.swizzle, srcResource.swizzle), false);
 
-			if (inst.opcode == Opcode.ld)
+			USILInstruction usilInst = new()
 			{
-				usilInst.instructionType = USILInstructionType.LoadResource;
-			}
-			else //(inst.opcode == Opcode.ldms)
-			{
-				usilInst.instructionType = USILInstructionType.LoadResourceMultisampled;
-			}
-
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
-			{
-				usilSrcAddress,
-				usilSrcResource
+				instructionType = inst.opcode switch
+				{
+					Opcode.ld => USILInstructionType.LoadResource,
+					Opcode.ldms => USILInstructionType.LoadResourceMultisampled,
+					_ => USILInstructionType.LoadResourceMultisampled,//Throw exception?
+				},
+				destOperand = usilDest,
+				srcOperands = new() { usilSrcAddress, usilSrcResource },
 			};
 
 			Instructions.Add(usilInst);
@@ -1519,11 +1533,10 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand srcByteOffset = inst.operands[2]; // Specifies the byte offset in the structure to start reading from. 
 			SHDRInstructionOperand src0 = inst.operands[3]; // The buffer to read from. This parameter must be a SRV (t#), UAV (u#). In the compute shader it can also be thread group shared memory (g#). 
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrcAddress = new USILOperand();
-			USILOperand usilSrcByteOffset = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrcAddress = new();
+			USILOperand usilSrcByteOffset = new();
+			USILOperand usilSrc0 = new();
 
 			if (src0.operand == Operand.UnorderedAccessView)
 			{
@@ -1539,14 +1552,16 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			FillUSILOperand(srcByteOffset, usilSrcByteOffset, srcByteOffset.swizzle, true);
 			FillUSILOperand(src0, usilSrc0, src0.swizzle, false);
 
-			usilInst.instructionType = USILInstructionType.LoadResourceStructured;
-
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrcAddress,
-				usilSrcByteOffset,
-				usilSrc0
+				instructionType = USILInstructionType.LoadResourceStructured,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrcAddress,
+					usilSrcByteOffset,
+					usilSrc0
+				}
 			};
 
 			Instructions.Add(usilInst);
@@ -1556,16 +1571,18 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 		{
 			SHDRInstructionOperand src0 = inst.operands[0]; // The value that determines whether to discard the current pixel being processed.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(src0, usilSrc0, src0.swizzle, false);
 
-			usilInst.instructionType = USILInstructionType.Discard;
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Discard,
+				destOperand = null,
+				srcOperands = new()
+				{
+					usilSrc0
+				}
 			};
 
 			// if works the same way, so we can pretend the discard is an if
@@ -1580,13 +1597,12 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The mip level.
 			SHDRInstructionOperand src1 = inst.operands[2]; // A t# or u# input texture for which the dimensions are being queried. 
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilResource = new USILOperand();
-			USILOperand usilMipLevel = new USILOperand();
-			USILOperand usilWidth = new USILOperand();
-			USILOperand usilHeight = new USILOperand();
-			USILOperand usilDepthOrArraySize = new USILOperand();
-			USILOperand usilMipCount = new USILOperand();
+			USILOperand usilResource = new();
+			USILOperand usilMipLevel = new();
+			USILOperand usilWidth = new();
+			USILOperand usilHeight = new();
+			USILOperand usilDepthOrArraySize = new();
+			USILOperand usilMipCount = new();
 
 			bool hasWidth = false;
 			bool hasHeight = false;
@@ -1645,16 +1661,19 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 				usilMipCount.operandType = USILOperandType.Null;
 			}
 
-			usilInst.instructionType = USILInstructionType.ResourceDimensionInfo;
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilResource,
-				usilMipLevel,
-				usilWidth,
-				usilHeight,
-				usilDepthOrArraySize,
-				usilMipCount
+				instructionType = USILInstructionType.ResourceDimensionInfo,
+				destOperand = null,
+				srcOperands = new()
+				{
+					usilResource,
+					usilMipLevel,
+					usilWidth,
+					usilHeight,
+					usilDepthOrArraySize,
+					usilMipCount
+				}
 			};
 
 			Instructions.Add(usilInst);
@@ -1665,18 +1684,20 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the results of the operation.
 			SHDRInstructionOperand src0 = inst.operands[1]; // The shader resource.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, src0.swizzle, false);
 
-			usilInst.instructionType = USILInstructionType.SampleCountInfo;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.SampleCountInfo,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0
+				}
 			};
 
 			Instructions.Add(usilInst);
@@ -1687,27 +1708,26 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand dest = inst.operands[0]; // The address of the result of the operation.
 			SHDRInstructionOperand src0 = inst.operands[1]; // The component in the operation.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, false);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), false);
 
-			usilInst.instructionType = inst.opcode switch
+			USILInstruction usilInst = new()
 			{
-				Opcode.deriv_rtx => USILInstructionType.DerivativeRenderTargetX,
-				Opcode.deriv_rty => USILInstructionType.DerivativeRenderTargetY,
-				Opcode.deriv_rtx_coarse => USILInstructionType.DerivativeRenderTargetXCoarse,
-				Opcode.deriv_rty_coarse => USILInstructionType.DerivativeRenderTargetYCoarse,
-				Opcode.deriv_rtx_fine => USILInstructionType.DerivativeRenderTargetXFine,
-				Opcode.deriv_rty_fine => USILInstructionType.DerivativeRenderTargetYFine,
-				_ => USILInstructionType.DerivativeRenderTargetX
-			};
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
-			{
-				usilSrc0
+				instructionType = inst.opcode switch
+				{
+					Opcode.deriv_rtx => USILInstructionType.DerivativeRenderTargetX,
+					Opcode.deriv_rty => USILInstructionType.DerivativeRenderTargetY,
+					Opcode.deriv_rtx_coarse => USILInstructionType.DerivativeRenderTargetXCoarse,
+					Opcode.deriv_rty_coarse => USILInstructionType.DerivativeRenderTargetYCoarse,
+					Opcode.deriv_rtx_fine => USILInstructionType.DerivativeRenderTargetXFine,
+					Opcode.deriv_rty_fine => USILInstructionType.DerivativeRenderTargetYFine,
+					_ => USILInstructionType.DerivativeRenderTargetX
+				},
+				destOperand = usilDest,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			Instructions.Add(usilInst);
@@ -1717,25 +1737,18 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 		{
 			SHDRInstructionOperand src0 = inst.operands[0]; // The value that determines whether to discard the current pixel being processed.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(src0, usilSrc0, src0.swizzle, false);
 
-			int testType = (inst.instData & 0x40000) >> 18;
-			if (testType == 0)
+			USILInstruction usilInst = new()
 			{
-				usilInst.instructionType = USILInstructionType.IfFalse;
-			}
-			else if (testType == 1)
-			{
-				usilInst.instructionType = USILInstructionType.IfTrue;
-			}
-
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
-			{
-				usilSrc0
+				instructionType = (inst.instData & 0x40000) != 0 ? USILInstructionType.IfTrue : USILInstructionType.IfFalse,
+				destOperand = null,
+				srcOperands = new()
+				{
+					usilSrc0
+				}
 			};
 
 			Instructions.Add(usilInst);
@@ -1743,12 +1756,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 
 		private void HandleElse(SHDRInstruction inst)
 		{
-			USILInstruction usilInst = new USILInstruction();
-
-			usilInst.instructionType = USILInstructionType.Else;
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
+				instructionType = USILInstructionType.Else,
+				destOperand = null,
+				srcOperands = new()
 			};
 
 			Instructions.Add(usilInst);
@@ -1756,12 +1768,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 
 		private void HandleEndIf(SHDRInstruction inst)
 		{
-			USILInstruction usilInst = new USILInstruction();
-
-			usilInst.instructionType = USILInstructionType.EndIf;
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
+				instructionType = USILInstructionType.EndIf,
+				destOperand = null,
+				srcOperands = new()
 			};
 
 			Instructions.Add(usilInst);
@@ -1769,12 +1780,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 
 		private void HandleLoop(SHDRInstruction inst)
 		{
-			USILInstruction usilInst = new USILInstruction();
-
-			usilInst.instructionType = USILInstructionType.Loop;
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
+				instructionType = USILInstructionType.Loop,
+				destOperand = null,
+				srcOperands = new()
 			};
 
 			Instructions.Add(usilInst);
@@ -1782,12 +1792,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 
 		private void HandleEndLoop(SHDRInstruction inst)
 		{
-			USILInstruction usilInst = new USILInstruction();
-
-			usilInst.instructionType = USILInstructionType.EndLoop;
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
+				instructionType = USILInstructionType.EndLoop,
+				destOperand = null,
+				srcOperands = new()
 			};
 
 			Instructions.Add(usilInst);
@@ -1795,12 +1804,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 
 		private void HandleBreak(SHDRInstruction inst)
 		{
-			USILInstruction usilInst = new USILInstruction();
-
-			usilInst.instructionType = USILInstructionType.Break;
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
+				instructionType = USILInstructionType.Break,
+				destOperand = null,
+				srcOperands = new()
 			};
 
 			Instructions.Add(usilInst);
@@ -1810,16 +1818,15 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 		{
 			SHDRInstructionOperand src0 = inst.operands[0];
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilSrc0 = new USILOperand();
+			USILOperand usilSrc0 = new();
 
 			FillUSILOperand(src0, usilSrc0, src0.swizzle, false);
 
-			usilInst.instructionType = USILInstructionType.Break;
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Break,
+				destOperand = null,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			// if works the same way, so we can pretend the discard is an if
@@ -1828,14 +1835,14 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			HandleEndIf(inst);
 		}
 
+
 		private void HandleContinue(SHDRInstruction inst)
 		{
-			USILInstruction usilInst = new USILInstruction();
-
-			usilInst.instructionType = USILInstructionType.Continue;
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
+				instructionType = USILInstructionType.Continue,
+				destOperand = null,
+				srcOperands = new()
 			};
 
 			Instructions.Add(usilInst);
@@ -1845,16 +1852,14 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 		{
 			SHDRInstructionOperand src0 = inst.operands[0];
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilSrc0 = new USILOperand();
-
+			USILOperand usilSrc0 = new();
 			FillUSILOperand(src0, usilSrc0, src0.swizzle, false);
 
-			usilInst.instructionType = USILInstructionType.Continue;
-			usilInst.destOperand = null;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0
+				instructionType = USILInstructionType.Continue,
+				destOperand = null,
+				srcOperands = new() { usilSrc0 }
 			};
 
 			// if works the same way, so we can pretend the discard is an if
@@ -1869,10 +1874,9 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The component to comapre to src1.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The component to comapre to src0.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			bool isInt = inst.opcode == Opcode.ieq;
 
@@ -1880,14 +1884,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), isInt);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), isInt);
 
-			usilInst.instructionType = USILInstructionType.Equal;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.Equal,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				isIntVariant = isInt
 			};
-			usilInst.isIntVariant = isInt;
 
 			Instructions.Add(usilInst);
 		}
@@ -1898,10 +1905,9 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The components to compare to src1.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The components to compare to src0.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
 			bool isInt = inst.opcode == Opcode.ine;
 
@@ -1909,14 +1915,17 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), isInt);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), isInt);
 
-			usilInst.instructionType = USILInstructionType.NotEqual;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.NotEqual,
+				destOperand = usilDest,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				},
+				isIntVariant = isInt
 			};
-			usilInst.isIntVariant = isInt;
 
 			Instructions.Add(usilInst);
 		}
@@ -1927,26 +1936,28 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The value to compare to src1.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The value to compare to src0.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
-			bool isInt = inst.opcode == Opcode.ilt || inst.opcode == Opcode.ult;
+			bool isInt = inst.opcode is Opcode.ilt or Opcode.ult;
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, isInt);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), isInt);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), isInt);
 
-			usilInst.instructionType = USILInstructionType.LessThan;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.LessThan,
+				destOperand = usilDest,
+				isIntVariant = isInt,
+				isIntUnsigned = inst.opcode == Opcode.ult,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				}
 			};
-			usilInst.isIntVariant = isInt;
-			usilInst.isIntUnsigned = inst.opcode == Opcode.ult;
 
 			Instructions.Add(usilInst);
 		}
@@ -1957,51 +1968,59 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			SHDRInstructionOperand src0 = inst.operands[1]; // The value to compare to src1.
 			SHDRInstructionOperand src1 = inst.operands[2]; // The value to compare to src0.
 
-			USILInstruction usilInst = new USILInstruction();
-			USILOperand usilDest = new USILOperand();
-			USILOperand usilSrc0 = new USILOperand();
-			USILOperand usilSrc1 = new USILOperand();
+			USILOperand usilDest = new();
+			USILOperand usilSrc0 = new();
+			USILOperand usilSrc1 = new();
 
-			bool isInt = inst.opcode == Opcode.ige || inst.opcode == Opcode.uge;
+			bool isInt = inst.opcode is Opcode.ige or Opcode.uge;
 
 			FillUSILOperand(dest, usilDest, dest.swizzle, isInt);
 			FillUSILOperand(src0, usilSrc0, MapMask(dest.swizzle, src0.swizzle), isInt);
 			FillUSILOperand(src1, usilSrc1, MapMask(dest.swizzle, src1.swizzle), isInt);
 
-			usilInst.instructionType = USILInstructionType.GreaterThanOrEqual;
-			usilInst.destOperand = usilDest;
-			usilInst.srcOperands = new List<USILOperand>
+			USILInstruction usilInst = new()
 			{
-				usilSrc0,
-				usilSrc1
+				instructionType = USILInstructionType.GreaterThanOrEqual,
+				destOperand = usilDest,
+				isIntVariant = isInt,
+				isIntUnsigned = inst.opcode == Opcode.uge,
+				srcOperands = new()
+				{
+					usilSrc0,
+					usilSrc1
+				}
 			};
-			usilInst.isIntVariant = isInt;
-			usilInst.isIntUnsigned = inst.opcode == Opcode.uge;
 
 			Instructions.Add(usilInst);
 		}
+
 
 		private void HandleRet(SHDRInstruction inst)
 		{
-			USILInstruction usilInst = new USILInstruction();
-			usilInst.instructionType = USILInstructionType.Return;
-			usilInst.srcOperands = new List<USILOperand>();
+			USILInstruction usilInst = new()
+			{
+				instructionType = USILInstructionType.Return,
+				srcOperands = new()
+			};
 			Instructions.Add(usilInst);
 		}
 
+
 		private void HandleTemps(SHDRInstruction inst)
 		{
+			Debug.Assert(inst.declData is not null);
 			int tempCount = inst.declData.numTemps;
 			for (int i = 0; i < tempCount; i++)
 			{
 				string tmpString = USILOperand.GetTypeShortForm(USILOperandType.TempRegister) + i;
-				USILLocal local = new USILLocal("float4", tmpString, USILLocalType.Vector4);
+				USILLocal local = new("float4", tmpString, USILLocalType.Vector4);
 				Locals.Add(local);
 			}
 		}
 
 		private void HandleResource(SHDRInstruction inst)
 		{
+			Debug.Assert(inst.declData is not null);
 			ResourceDimension dimension = inst.declData.resourceDimension;
 			int regIndex = inst.declData.operands[0].arraySizes[0]; // todo: not always tX
 			_resourceToDimension[regIndex] = dimension;
@@ -2009,10 +2028,11 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 
 		private void HandleCustomData(SHDRInstruction inst)
 		{
-			USILLocal local = new USILLocal("const float4", "icb", USILLocalType.Vector4, true);
+			USILLocal local = new("const float4", "icb", USILLocalType.Vector4, true);
+			Debug.Assert(inst.declData is not null);
 			foreach (float[] vector in inst.declData.customDataArray)
 			{
-				USILOperand vectorOperand = new USILOperand();
+				USILOperand vectorOperand = new();
 				vectorOperand.operandType = USILOperandType.ImmediateFloat;
 				vectorOperand.immValueFloat = vector;
 				vectorOperand.mask = USILConstants.XYZW_MASK;
@@ -2039,7 +2059,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			Locals.Add(new USILLocal(outputStructName, outputName, USILLocalType.Vector4));
 		}
 
-		private int[] GetSampleLocationMask(ResourceDimension dimension)
+		private static int[] GetSampleLocationMask(ResourceDimension dimension)
 		{
 			switch (dimension)
 			{
@@ -2059,7 +2079,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			}
 		}
 
-		private int[] GetSampleOffsetMask(ResourceDimension dimension)
+		private static int[] GetSampleOffsetMask(ResourceDimension dimension)
 		{
 			switch (dimension)
 			{
@@ -2079,7 +2099,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			}
 		}
 
-		private int[] GetLoadLocationMask(ResourceDimension dimension)
+		private static int[] GetLoadLocationMask(ResourceDimension dimension)
 		{
 			switch (dimension)
 			{
@@ -2100,7 +2120,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			}
 		}
 
-		private int[] GetLoadSampleIndexMask(ResourceDimension dimension)
+		private static int[] GetLoadSampleIndexMask(ResourceDimension dimension)
 		{
 			switch (dimension)
 			{
@@ -2112,7 +2132,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			}
 		}
 
-		private int[] GetLoadOffsetMask(ResourceDimension dimension)
+		private static int[] GetLoadOffsetMask(ResourceDimension dimension)
 		{
 			switch (dimension)
 			{
@@ -2131,29 +2151,20 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Direct
 			}
 		}
 
-		public int[] GetMaskOfSize(int size)
+		public static int[] GetMaskOfSize(int size) => size switch
 		{
-			switch (size)
-			{
-				case 0:
-					return Array.Empty<int>();
-				case 1:
-					return new[] { 0 };
-				case 2:
-					return new[] { 0, 1 };
-				case 3:
-					return new[] { 0, 1, 2 };
-				case 4:
-					return new[] { 0, 1, 2, 3 };
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
+			0 => Array.Empty<int>(),
+			1 => new[] { 0 },
+			2 => new[] { 0, 1 },
+			3 => new[] { 0, 1, 2 },
+			4 => new[] { 0, 1, 2, 3 },
+			_ => throw new ArgumentOutOfRangeException(nameof(size)),
+		};
 
 		///////////////////////
 		// stuff to be moved to other classes
 
-		private int ConvertFloatToInt(float f)
+		private static int ConvertFloatToInt(float f)
 		{
 			return BitConverter.SingleToInt32Bits(f);
 		}
