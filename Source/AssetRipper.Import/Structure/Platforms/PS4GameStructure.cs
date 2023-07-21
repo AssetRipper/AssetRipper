@@ -68,7 +68,7 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		private static bool IsRootPS4Directory(DirectoryInfo rootDiectory)
 		{
-			return GetDataDirectory(rootDiectory, out string _);
+			return GetDataDirectory(rootDiectory, out _);
 		}
 
 		private static bool GetDataDirectory(DirectoryInfo rootDiectory, [NotNullWhen(true)] out string? dataPath)

@@ -50,7 +50,7 @@
 				return false;
 			}
 
-			return GetDataSwitchDirectory(rootInfo, out string _);
+			return GetDataSwitchDirectory(rootInfo, out _);
 		}
 
 		private static bool GetDataSwitchDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath)

@@ -47,7 +47,7 @@ namespace AssetRipper.Import.Structure.Platforms
 				return false;
 			}
 
-			return GetWebPlayerName(dinfo, out string _);
+			return GetWebPlayerName(dinfo, out _);
 		}
 
 		public static bool GetWebPlayerName(DirectoryInfo root, [NotNullWhen(true)] out string? name)
@@ -56,7 +56,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			{
 				if (fi.Extension == HtmlExtension)
 				{
-					name = fi.Name.Substring(0, fi.Name.Length - HtmlExtension.Length);
+					name = fi.Name[..^HtmlExtension.Length];
 					string abPath = Path.Combine(root.FullName, name + AssetBundleExtension);
 					if (File.Exists(abPath))
 					{

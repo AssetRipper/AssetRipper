@@ -126,7 +126,7 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		private static bool IsRootLinuxDirectory(DirectoryInfo rootDiectory)
 		{
-			return GetDataLinuxDirectory(rootDiectory, out string _, out string _);
+			return GetDataLinuxDirectory(rootDiectory, out _, out _);
 		}
 
 		private static bool GetDataLinuxDirectory(DirectoryInfo rootDiectory, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? name)

@@ -56,7 +56,7 @@ namespace AssetRipper.Import.Structure.Platforms
 				return false;
 			}
 
-			return GetDataiOSDirectory(root, out string _, out string _, out string _);
+			return GetDataiOSDirectory(root, out _, out _, out _);
 		}
 
 		private static bool GetDataiOSDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? appPath, [NotNullWhen(true)] out string? appName)
@@ -77,7 +77,7 @@ namespace AssetRipper.Import.Structure.Platforms
 				if (dinfo.Name.EndsWith(AppExtension, StringComparison.Ordinal))
 				{
 					appPath = dinfo.FullName;
-					appName = dinfo.Name.Substring(0, dinfo.Name.Length - AppExtension.Length);
+					appName = dinfo.Name[..^AppExtension.Length];
 					dataPath = Path.Combine(dinfo.FullName, DataFolderName);
 					if (Directory.Exists(dataPath))
 					{
