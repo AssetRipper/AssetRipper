@@ -8,6 +8,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.UnityTexEnv;
+using AssetRipper.TextureDecoder.Rgb.Formats;
 using SharpGLTF.Materials;
 using SharpGLTF.Memory;
 
@@ -55,7 +56,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 			{
 				if (!ImageCache.TryGetValue(texture, out image))
 				{
-					if (TryConvertToBitmap(texture, out DirectBitmap? bitmap))
+					if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap<ColorBGRA32, byte> bitmap))
 					{
 						using MemoryStream memoryStream = new();
 						bitmap.SaveAsPng(memoryStream);
@@ -108,12 +109,6 @@ namespace AssetRipper.Export.UnityProjects.Models
 					}
 				}
 				mainTexture ??= mainReplacement;
-			}
-
-			private static bool TryConvertToBitmap(ITexture2D texture, [NotNullWhen(true)] out DirectBitmap? bitmap)
-			{
-				bitmap = TextureConverter.ConvertToBitmap(texture);
-				return bitmap is not null;
 			}
 
 			private static bool IsMainTexture(string textureName)

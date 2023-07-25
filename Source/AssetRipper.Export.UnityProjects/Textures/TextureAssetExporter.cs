@@ -2,12 +2,11 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.Logging;
 using AssetRipper.Processing.Textures;
-using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
+using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.Export.UnityProjects.Textures
 {
@@ -45,13 +44,16 @@ namespace AssetRipper.Export.UnityProjects.Textures
 				return false;
 			}
 
-			using DirectBitmap? bitmap = TextureConverter.ConvertToBitmap(texture);
-			if (bitmap is null)
+			if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap))
+			{
+				bitmap.Save(File.Create(path), ImageExportFormat);
+				return true;
+			}
+			else
 			{
 				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
 				return false;
 			}
-			return bitmap.Save(path, ImageExportFormat);
 		}
 	}
 }

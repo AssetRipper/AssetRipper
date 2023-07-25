@@ -3,10 +3,10 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.Logging;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
+using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.Export.UnityProjects.Terrains
 {
@@ -35,21 +35,18 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			ITerrainData terrain = (ITerrainData)asset;
-			using DirectBitmap bitmap = GetBitmap(terrain);
-			if (bitmap == null)
-			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{terrain.Name}' to bitmap");
-				return false;
-			}
-			return bitmap.Save(path, ImageFormat);
+			DirectBitmap bitmap = GetBitmap(terrain);
+			bitmap.Save(File.Create(path), ImageFormat);
+			return true;
 		}
 
 		public static DirectBitmap GetBitmap(ITerrainData terrain)
 		{
 			DirectBitmap bitmap = new DirectBitmap(
-				GetBGRA32Data(terrain),
 				Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution),
-				Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution));
+				Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution),
+				1,
+				GetBGRA32Data(terrain));
 			bitmap.FlipY();
 			return bitmap;
 		}

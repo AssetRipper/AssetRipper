@@ -1,166 +1,231 @@
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Rgb.Formats;
+using StbImageWriteSharp;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
-namespace AssetRipper.Export.UnityProjects.Utils
+namespace AssetRipper.Export.UnityProjects.Utils;
+
+public readonly struct DirectBitmap<TColor, TColorArg>
+	where TColorArg : unmanaged
+	where TColor : unmanaged, IColor<TColorArg>
 {
-	public sealed partial class DirectBitmap : IDisposable
+	public DirectBitmap(int width, int height, int depth = 1)
 	{
-		public int Width { get; }
-		public int Height { get; }
-		public int Depth { get; }
-		public int Stride => Width * PixelSize;
-		public byte[] Bits { get; }
-		public IntPtr BitsPtr => m_bitsHandle.AddrOfPinnedObject();
+		Width = width;
+		Height = height;
+		Data = new byte[CalculateByteSize(width, height, depth)];
+	}
 
-		private readonly GCHandle m_bitsHandle;
-		private bool m_disposed;
-		/// <summary>
-		/// The byte size of each pixel.
-		/// </summary>
-		public static int PixelSize => Unsafe.SizeOf<ColorBGRA32>();
-
-		/// <summary>
-		/// Make a new bitmap of BGRA32 pixels.
-		/// </summary>
-		/// <param name="width">The width of the image.</param>
-		/// <param name="height">The height of the image.</param>
-		/// <param name="depth">The depth of the image.</param>
-		public DirectBitmap(int width, int height, int depth = 1)
+	public DirectBitmap(int width, int height, int depth, byte[] data)
+	{
+		if (data.Length < CalculateByteSize(width, height, depth))
 		{
-			ValidateDimensions(width, height, depth);
-			Width = width;
-			Height = height;
-			Depth = depth;
-			Bits = new byte[width * height * depth * PixelSize];
-			m_bitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
+			throw new ArgumentException("Data does not have enough space.", nameof(data));
 		}
 
-		/// <summary>
-		/// Make a bitmap from existing BGRA32 data.
-		/// </summary>
-		/// <param name="imageData">The BGRA32 image data, 4 bytes per pixel. Will get pinned.</param>
-		/// <param name="width">The width of the image.</param>
-		/// <param name="height">The height of the image.</param>
-		/// <param name="depth">The depth of the image.</param>
-		public DirectBitmap(byte[] imageData, int width, int height, int depth = 1)
-		{
-			ValidateImageData(imageData, width, height, depth);
-			Width = width;
-			Height = height;
-			Depth = depth;
-			Bits = imageData;
-			m_bitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
-		}
+		Width = width;
+		Height = height;
+		Data = data;
+	}
 
-		private static void ValidateDimensions(int width, int height, int depth)
+	public void FlipY()
+	{
+		int totalRows = Height * Depth;
+		Span<TColor> pixels = Pixels;
+		for (int startingRow = 0; startingRow < totalRows; startingRow += Height)
 		{
-			if (width <= 0)
+			int endingRow = startingRow + Height - 1;
+			for (int row = startingRow, irow = endingRow; row < irow; row++, irow--)
 			{
-				throw new ArgumentOutOfRangeException(nameof(width), width, null);
-			}
-			if (height <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(height), height, null);
-			}
-			if (depth <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(depth), depth, null);
-			}
-		}
-
-		private static void ValidateImageData([NotNull] byte[]? imageData, int width, int height, int depth)
-		{
-			ArgumentNullException.ThrowIfNull(imageData, nameof(imageData));
-
-			if (imageData.Length != width * height * depth * PixelSize)
-			{
-				throw new ArgumentException($"Invalid length: expected {width * height * depth * PixelSize} but was actually {imageData.Length}", nameof(imageData));
-			}
-		}
-
-		public void FlipY()
-		{
-			int totalRows = Height * Depth;
-			Span<ColorBGRA32> pixels = MemoryMarshal.Cast<byte, ColorBGRA32>(Bits);
-			for (int startingRow = 0; startingRow < totalRows; startingRow += Height)
-			{
-				int endingRow = startingRow + Height - 1;
-				for (int row = startingRow, irow = endingRow; row < irow; row++, irow--)
+				Span<TColor> rowTop = pixels.Slice(row * Width, Width);
+				Span<TColor> rowBottom = pixels.Slice(irow * Width, Width);
+				for (int i = 0; i < Width; i++)
 				{
-					Span<ColorBGRA32> rowTop = pixels.Slice(row * Width, Width);
-					Span<ColorBGRA32> rowBottom = pixels.Slice(irow * Width, Width);
-					for (int i = 0; i < Width; i++)
-					{
-						(rowTop[i], rowBottom[i]) = (rowBottom[i], rowTop[i]);
-					}
+					(rowTop[i], rowBottom[i]) = (rowBottom[i], rowTop[i]);
 				}
 			}
 		}
+	}
 
-		public bool Save(Stream stream, ImageExportFormat format)
+	public void Save(Stream stream, ImageExportFormat format)
+	{
+		switch (format)
 		{
-			return format switch
+			case ImageExportFormat.Bmp:
+				SaveAsBmp(stream);
+				break;
+			case ImageExportFormat.Hdr:
+				SaveAsHdr(stream);
+				break;
+			case ImageExportFormat.Jpeg:
+				SaveAsJpeg(stream);
+				break;
+			case ImageExportFormat.Png:
+				SaveAsPng(stream);
+				break;
+			case ImageExportFormat.Tga:
+				SaveAsTga(stream);
+				break;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(format));
+		}
+	}
+
+	public void SaveAsBmp(Stream stream)
+	{
+		if (OperatingSystem.IsWindows())
+		{
+			SaveUsingSystemDrawing(stream, ImageFormat.Bmp);
+		}
+		else
+		{
+			ImageWriter writer = new();
+			if (typeof(TColor) == typeof(ColorRGBA32))
 			{
-				ImageExportFormat.Bmp => SaveAsBmp(stream),
-				ImageExportFormat.Gif => SaveAsGif(stream),
-				ImageExportFormat.Jpeg => SaveAsJpeg(stream),
-				ImageExportFormat.Pbm => SaveAsPbm(stream),
-				ImageExportFormat.Png => SaveAsPng(stream),
-				ImageExportFormat.Tga => SaveAsTga(stream),
-				ImageExportFormat.Tiff => SaveAsTiff(stream),
-				ImageExportFormat.Webp => SaveAsWebp(stream),
-				_ => throw new ArgumentOutOfRangeException(nameof(format)),
-			};
-		}
-
-		public bool Save(string path, ImageExportFormat format)
-		{
-			using FileStream stream = File.Create(path);
-			return Save(stream, format);
-		}
-
-		public Task SaveAsync(Stream stream, ImageExportFormat format)
-		{
-			return format switch
+				writer.WriteBmp(Data, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+			}
+			else if (typeof(TColor) == typeof(ColorRGB24))
 			{
-				ImageExportFormat.Bmp => SaveAsBmpAsync(stream),
-				ImageExportFormat.Gif => SaveAsGifAsync(stream),
-				ImageExportFormat.Jpeg => SaveAsJpegAsync(stream),
-				ImageExportFormat.Pbm => SaveAsPbmAsync(stream),
-				ImageExportFormat.Png => SaveAsPngAsync(stream),
-				ImageExportFormat.Tga => SaveAsTgaAsync(stream),
-				ImageExportFormat.Tiff => SaveAsTiffAsync(stream),
-				ImageExportFormat.Webp => SaveAsWebpAsync(stream),
-				_ => throw new ArgumentOutOfRangeException(nameof(format)),
-			};
-		}
-
-		public async Task SaveAsync(string path, ImageExportFormat format)
-		{
-			using FileStream stream = File.Create(path);
-			await SaveAsync(stream, format);
-		}
-
-		public void Dispose()
-		{
-			GC.SuppressFinalize(this);
-			Dispose(true);
-		}
-
-		private void Dispose(bool _)
-		{
-			if (!m_disposed)
+				writer.WriteBmp(Data, Width, Height, ColorComponents.RedGreenBlue, stream);
+			}
+			else
 			{
-				m_bitsHandle.Free();
-				m_disposed = true;
+				RgbConverter.Convert<TColor, TColorArg, ColorRGBA32, byte>(Bits, Width, Height, out byte[] output);
+				writer.WriteBmp(output, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
 			}
 		}
+	}
 
-		~DirectBitmap()
+	public void SaveAsHdr(Stream stream)
+	{
+		ImageWriter writer = new();
+		if (typeof(TColor) == typeof(ColorRGBA32))
 		{
-			Dispose(false);
+			writer.WriteHdr(Data, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
 		}
+		else if (typeof(TColor) == typeof(ColorRGB24))
+		{
+			writer.WriteHdr(Data, Width, Height, ColorComponents.RedGreenBlue, stream);
+		}
+		else
+		{
+			RgbConverter.Convert<TColor, TColorArg, ColorRGBA32, byte>(Bits, Width, Height, out byte[] output);
+			writer.WriteHdr(output, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+		}
+	}
+
+	public void SaveAsJpeg(Stream stream)
+	{
+		if (OperatingSystem.IsWindows())
+		{
+			SaveUsingSystemDrawing(stream, ImageFormat.Jpeg);
+		}
+		else
+		{
+			ImageWriter writer = new();
+			if (typeof(TColor) == typeof(ColorRGBA32))
+			{
+				writer.WriteJpg(Data, Width, Height, ColorComponents.RedGreenBlueAlpha, stream, default);
+			}
+			else if (typeof(TColor) == typeof(ColorRGB24))
+			{
+				writer.WriteJpg(Data, Width, Height, ColorComponents.RedGreenBlue, stream, default);
+			}
+			else
+			{
+				RgbConverter.Convert<TColor, TColorArg, ColorRGBA32, byte>(Bits, Width, Height, out byte[] output);
+				writer.WriteJpg(output, Width, Height, ColorComponents.RedGreenBlueAlpha, stream, default);
+			}
+		}
+	}
+
+	public void SaveAsPng(Stream stream)
+	{
+		if (OperatingSystem.IsWindows())
+		{
+			SaveUsingSystemDrawing(stream, ImageFormat.Png);
+		}
+		else
+		{
+			ImageWriter writer = new();
+			if (typeof(TColor) == typeof(ColorRGBA32))
+			{
+				writer.WritePng(Data, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+			}
+			else if (typeof(TColor) == typeof(ColorRGB24))
+			{
+				writer.WritePng(Data, Width, Height, ColorComponents.RedGreenBlue, stream);
+			}
+			else
+			{
+				RgbConverter.Convert<TColor, TColorArg, ColorRGBA32, byte>(Bits, Width, Height, out byte[] output);
+				writer.WritePng(output, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+			}
+		}
+	}
+
+	public void SaveAsTga(Stream stream)
+	{
+		ImageWriter writer = new();
+		if (typeof(TColor) == typeof(ColorRGBA32))
+		{
+			writer.WriteTga(Data, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+		}
+		else if (typeof(TColor) == typeof(ColorRGB24))
+		{
+			writer.WriteTga(Data, Width, Height, ColorComponents.RedGreenBlue, stream);
+		}
+		else
+		{
+			RgbConverter.Convert<TColor, TColorArg, ColorRGBA32, byte>(Bits, Width, Height, out byte[] output);
+			writer.WriteTga(output, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+		}
+	}
+
+	[SupportedOSPlatform("windows")]
+	private void SaveUsingSystemDrawing(Stream stream, ImageFormat format)
+	{
+		GetData(this, out byte[] data, out int pixelSize, out PixelFormat pixelFormat);
+		GCHandle bitsHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+		using (Bitmap bitmap = new Bitmap(Width, Height * Depth, Width * pixelSize, pixelFormat, bitsHandle.AddrOfPinnedObject()))
+		{
+			bitmap.Save(stream, format);
+		}
+		bitsHandle.Free();
+
+		static void GetData(DirectBitmap<TColor, TColorArg> @this, out byte[] data, out int pixelSize, out PixelFormat pixelFormat)
+		{
+			if (typeof(TColor) == typeof(ColorBGRA32))
+			{
+				data = @this.Data;
+				pixelSize = 4;
+				pixelFormat = PixelFormat.Format32bppArgb;
+			}
+			else
+			{
+				RgbConverter.Convert<TColor, TColorArg, ColorBGRA32, byte>(@this.Bits, @this.Width, @this.Height, out data);
+				pixelSize = 4;
+				pixelFormat = PixelFormat.Format32bppArgb;
+			}
+		}
+	}
+
+	public int Height { get; }
+	public int Width { get; }
+	public int Depth { get; }
+	public int ByteSize => CalculateByteSize(Width, Height, Depth);
+	public Span<byte> Bits => new Span<byte>(Data, 0, ByteSize);
+	public Span<TColor> Pixels => MemoryMarshal.Cast<byte, TColor>(Bits);
+	public static int PixelSize => Unsafe.SizeOf<TColor>();
+	private byte[] Data { get; }
+
+	private static int CalculateByteSize(int width, int height, int depth)
+	{
+		return width * height * depth * Unsafe.SizeOf<TColor>();
 	}
 }

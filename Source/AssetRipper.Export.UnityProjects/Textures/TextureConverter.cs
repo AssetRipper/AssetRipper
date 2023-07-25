@@ -1,4 +1,3 @@
-using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
@@ -16,31 +15,32 @@ using AssetRipper.TextureDecoder.Pvrtc;
 using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Rgb.Formats;
 using AssetRipper.TextureDecoder.Yuy2;
+using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.Export.UnityProjects.Textures
 {
 	public static class TextureConverter
 	{
-		public static DirectBitmap? ConvertToBitmap(ITexture3D texture)
+		public static bool TryConvertToBitmap(ITexture3D texture, out DirectBitmap bitmap)
 		{
 			byte[] buffer = texture.GetImageData();
 			if (buffer.Length == 0)
 			{
-				return null;
+				bitmap = default;
+				return false;
 			}
 
-			DirectBitmap? bitmap = ConvertToBitmap(
+			if (!TryConvertToBitmap(
 				texture.GetTextureFormat(),
 				texture.Width_C117,
 				texture.Height_C117,
 				texture.ImageCount_C117,
 				texture.GetCompleteImageSize(),
 				texture.Collection.Version,
-				buffer);
-
-			if (bitmap == null)
+				buffer,
+				out bitmap))
 			{
-				return null;
+				return false;
 			}
 
 			bitmap.FlipY();
@@ -51,83 +51,83 @@ namespace AssetRipper.Export.UnityProjects.Textures
 				UnpackNormal(bitmap.Bits);
 			}
 
-			return bitmap;
+			return true;
 		}
 
-		public static DirectBitmap? ConvertToBitmap(ITexture2DArray texture)
+		public static bool TryConvertToBitmap(ITexture2DArray texture, out DirectBitmap bitmap)
 		{
 			byte[] buffer = texture.GetImageData();
 			if (buffer.Length == 0)
 			{
-				return null;
+				bitmap = default;
+				return false;
 			}
 
-			DirectBitmap? bitmap = ConvertToBitmap(
+			if (!TryConvertToBitmap(
 				texture.Format_C187E,
 				texture.Width_C187,
 				texture.Height_C187,
 				texture.Depth_C187,
 				(int)texture.DataSize_C187,
 				texture.Collection.Version,
-				buffer);
-
-			if (bitmap == null)
+				buffer,
+				out bitmap))
 			{
-				return null;
+				return false;
 			}
 
 			bitmap.FlipY();
 
-			return bitmap;
+			return true;
 		}
 
-		public static DirectBitmap? ConvertToBitmap(ICubemapArray texture)
+		public static bool TryConvertToBitmap(ICubemapArray texture, out DirectBitmap bitmap)
 		{
 			byte[] buffer = texture.GetImageData();
 			if (buffer.Length == 0)
 			{
-				return null;
+				bitmap = default;
+				return false;
 			}
 
-			DirectBitmap? bitmap = ConvertToBitmap(
+			if (!TryConvertToBitmap(
 				texture.Format_C188E,
 				texture.Width_C188,
 				texture.Width_C188,//Not sure if this is correct
 				texture.CubemapCount_C188 * 6,//Not sure if this is correct
 				(int)texture.DataSize_C188,
 				texture.Collection.Version,
-				buffer);
-
-			if (bitmap == null)
+				buffer,
+				out bitmap))
 			{
-				return null;
+				return false;
 			}
 
 			bitmap.FlipY();
 
-			return bitmap;
+			return true;
 		}
 
-		public static DirectBitmap? ConvertToBitmap(ITexture2D texture)
+		public static bool TryConvertToBitmap(ITexture2D texture, out DirectBitmap bitmap)
 		{
 			byte[] buffer = texture.GetImageData();
 			if (buffer.Length == 0)
 			{
-				return null;
+				bitmap = default;
+				return false;
 			}
 
-			DirectBitmap? bitmap = ConvertToBitmap(
+			if (!TryConvertToBitmap(
 				texture.Format_C28E,
 				texture.Width_C28,
 				texture.Height_C28,
 				texture.ImageCount_C28,
 				texture.GetCompleteImageSize(),
 				texture.Collection.Version,
-				buffer);
-
-			if (bitmap == null)
+				buffer,
+				out bitmap))
 			{
-				return null;
+				return false;
 			}
 
 			// cubemaps dont need flipping, for some reason
@@ -142,65 +142,59 @@ namespace AssetRipper.Export.UnityProjects.Textures
 				UnpackNormal(bitmap.Bits);
 			}
 
-			return bitmap;
+			return true;
 		}
 
-		private static DirectBitmap? ConvertToBitmap(
+		private static bool TryConvertToBitmap(
 			TextureFormat textureFormat,
 			int width,
 			int height,
 			int depth,
 			int imageSize,
 			UnityVersion version,
-			byte[] data)
+			byte[] data,
+			out DirectBitmap bitmap)
 		{
 			if (width <= 0 || height <= 0 || depth <= 0)
 			{
-				return new DirectBitmap(1, 1);
+				bitmap = default;
+				return false;
 			}
 
-			DirectBitmap bitmap = new DirectBitmap(width, height, depth);
-			try
+			bitmap = new DirectBitmap(width, height, depth);
+			int outputSize = width * height * DirectBitmap.PixelSize;
+			for (int i = 0; i < depth; i++)
 			{
-				int outputSize = width * height * DirectBitmap.PixelSize;
-				for (int i = 0; i < depth; i++)
+				ReadOnlySpan<byte> inputSpan = new ReadOnlySpan<byte>(data, i * imageSize, imageSize);
+				ReadOnlySpan<byte> uncompressedSpan;
+				if (textureFormat.IsCrunched())
 				{
-					ReadOnlySpan<byte> inputSpan = new ReadOnlySpan<byte>(data, i * imageSize, imageSize);
-					ReadOnlySpan<byte> uncompressedSpan;
-					if (textureFormat.IsCrunched())
+					if (CrunchHandler.DecompressCrunch(textureFormat, version, inputSpan, out byte[]? decompressedData))
 					{
-						if (CrunchHandler.DecompressCrunch(textureFormat, version, inputSpan, out byte[]? decompressedData))
-						{
-							uncompressedSpan = decompressedData;
-						}
-						else
-						{
-							bitmap.Dispose();
-							return null;
-						}
+						uncompressedSpan = decompressedData;
 					}
 					else
 					{
-						uncompressedSpan = inputSpan;
-					}
-					Span<byte> outputSpan = new Span<byte>(bitmap.Bits, i * outputSize, outputSize);
-
-					if (!DecodeTexture(textureFormat, width, height, uncompressedSpan, outputSpan))
-					{
-						bitmap.Dispose();
-						return null;
+						bitmap = default;
+						return false;
 					}
 				}
-				return bitmap;
+				else
+				{
+					uncompressedSpan = inputSpan;
+				}
+				Span<byte> outputSpan = bitmap.Bits.Slice(i * outputSize, outputSize);
+
+				if (!TryDecodeTexture(textureFormat, width, height, uncompressedSpan, outputSpan))
+				{
+					bitmap = default;
+					return false;
+				}
 			}
-			catch
-			{
-				bitmap.Dispose();
-				throw;
-			}
+			return true;
 		}
 
-		private static bool DecodeTexture(TextureFormat textureFormat, int width, int height, ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan)
+		private static bool TryDecodeTexture(TextureFormat textureFormat, int width, int height, ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan)
 		{
 			switch (textureFormat)
 			{

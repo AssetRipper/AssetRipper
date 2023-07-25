@@ -8,20 +8,15 @@
 		/// </summary>
 		Bmp,
 		/// <summary>
-		/// Lossy. Graphics Interchange Format<br/>
-		/// <see href="https://en.wikipedia.org/wiki/GIF"/>
+		/// Lossless. Radiance HDR<br/>
+		/// <see href="https://en.wikipedia.org/wiki/RGBE_image_format"/>
 		/// </summary>
-		Gif,
+		Hdr,
 		/// <summary>
 		/// Lossy. Joint Photographic Experts Group<br/>
 		/// <see href="https://en.wikipedia.org/wiki/JPEG"/>
 		/// </summary>
 		Jpeg,
-		/// <summary>
-		/// Lossless. Portable Bitmap<br/>
-		/// <see href="https://en.wikipedia.org/wiki/Netpbm"/>
-		/// </summary>
-		Pbm,
 		/// <summary>
 		/// Lossless. Portable Network Graphics<br/>
 		/// <see href="https://en.wikipedia.org/wiki/Portable_Network_Graphics"/>
@@ -32,16 +27,6 @@
 		/// <see href="https://en.wikipedia.org/wiki/Truevision_TGA"/>
 		/// </summary>
 		Tga,
-		/// <summary>
-		/// Lossless. Tag Image File Format<br/>
-		/// <see href="https://en.wikipedia.org/wiki/TIFF"/>
-		/// </summary>
-		Tiff,
-		/// <summary>
-		/// Lossy. Google's WebP format<br/>
-		/// <see href="https://en.wikipedia.org/wiki/WebP"/>
-		/// </summary>
-		Webp,
 	}
 
 	public static class ImageExportFormatExtensions
@@ -51,13 +36,10 @@
 			return _this switch
 			{
 				ImageExportFormat.Bmp => "bmp",
-				ImageExportFormat.Gif => "gif",
+				ImageExportFormat.Hdr => "hdr",
 				ImageExportFormat.Jpeg => "jpeg",
-				ImageExportFormat.Pbm => "pbm",
 				ImageExportFormat.Png => "png",
 				ImageExportFormat.Tga => "tga",
-				ImageExportFormat.Tiff => "tiff",
-				ImageExportFormat.Webp => "webp",
 				_ => throw new ArgumentOutOfRangeException(nameof(_this)),
 			};
 		}

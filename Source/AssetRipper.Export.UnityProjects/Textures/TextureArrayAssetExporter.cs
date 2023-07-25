@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
@@ -10,6 +9,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_188;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.StreamingInfo;
+using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.Export.UnityProjects.Textures;
 
@@ -34,7 +34,8 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 
 	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 	{
-		DirectBitmap? bitmap;
+		bool success;
+		DirectBitmap bitmap;
 		switch (asset)
 		{
 			case ICubemapArray cubemapArray:
@@ -44,7 +45,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 						WarnResourceFileNotFound(cubemapArray.Name, cubemapArray.StreamData_C188);
 						return false;
 					}
-					bitmap = TextureConverter.ConvertToBitmap(cubemapArray);
+					success = TextureConverter.TryConvertToBitmap(cubemapArray, out bitmap);
 				}
 				break;
 			case ITexture2DArray texture2DArray:
@@ -54,7 +55,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 						WarnResourceFileNotFound(texture2DArray.Name, texture2DArray.StreamData_C187);
 						return false;
 					}
-					bitmap = TextureConverter.ConvertToBitmap(texture2DArray);
+					success = TextureConverter.TryConvertToBitmap(texture2DArray, out bitmap);
 				}
 				break;
 			case ITexture3D texture3D:
@@ -64,7 +65,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 						WarnResourceFileNotFound(texture3D.Name, texture3D.StreamData_C117);
 						return false;
 					}
-					bitmap = TextureConverter.ConvertToBitmap(texture3D);
+					success = TextureConverter.TryConvertToBitmap(texture3D, out bitmap);
 				}
 				break;
 			default:
@@ -74,12 +75,16 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 				return false;
 		}
 
-		if (bitmap is null)
+		if (success)
+		{
+			bitmap.Save(File.Create(path), ImageExportFormat);
+			return true;
+		}
+		else
 		{
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{asset}' to bitmap");
 			return false;
 		}
-		return bitmap.Save(path, ImageExportFormat);
 
 		static void WarnResourceFileNotFound(Utf8String assetName, IStreamingInfo? streamingInfo)
 		{

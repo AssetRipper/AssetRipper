@@ -6,7 +6,6 @@ using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
-using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
@@ -22,6 +21,7 @@ using AssetRipper.Yaml;
 using Avalonia.Media;
 using LibVLCSharp.Shared;
 using System.Text;
+using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.GUI.AssetInformation
 {
@@ -165,12 +165,18 @@ namespace AssetRipper.GUI.AssetInformation
 				{
 					case ITexture2D texture:
 						{
-							DirectBitmap? directBitmap = TextureConverter.ConvertToBitmap(texture);
-							return directBitmap is null ? null : AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
+							if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap directBitmap))
+							{
+								return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
+							}
+							else
+							{
+								return null;
+							}
 						}
 					case ITerrainData terrain:
 						{
-							DirectBitmap? directBitmap = TerrainHeatmapExporter.GetBitmap(terrain);
+							DirectBitmap directBitmap = TerrainHeatmapExporter.GetBitmap(terrain);
 							return AvaloniaBitmapFromDirectBitmap.Make(directBitmap);
 						}
 					default:

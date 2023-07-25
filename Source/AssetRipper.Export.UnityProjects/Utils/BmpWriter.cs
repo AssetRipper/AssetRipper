@@ -4,6 +4,9 @@
 	/// This is really fast, even in comparison to System.Drawing<br/>
 	/// It could be even faster if it didn't have to flip the pixels in the y direction
 	/// </summary>
+	/// <remarks>
+	/// This has bugs right now. <see href="https://github.com/AssetRipper/AssetRipper/issues/630"/>
+	/// </remarks>
 	internal static class BmpWriter
 	{
 		/*
