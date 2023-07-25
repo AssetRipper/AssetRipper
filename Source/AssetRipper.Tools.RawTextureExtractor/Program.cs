@@ -99,7 +99,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 				byte[] data = texture.GetImageData();
 				if (data.Length > 0)
 				{
-					string originalName = texture.NameString;
+					string originalName = texture.Name;
 					string name = originalName.Length > 0
 						? FileUtils.FixInvalidNameCharacters(originalName)
 						: $"{texture.ClassName}_{ToValidString(texture.PathID)}";

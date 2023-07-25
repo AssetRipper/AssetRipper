@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated;
@@ -36,7 +35,7 @@ namespace AssetRipper.Processing.StaticMeshes
 			{
 				if (asset is IMesh mesh)
 				{
-					LinkedList<IMesh> meshList = meshNameDictionary.GetOrAdd(mesh.NameString);
+					LinkedList<IMesh> meshList = meshNameDictionary.GetOrAdd(mesh.Name);
 					meshList.AddLast(mesh);
 				}
 				else if (TryGetStaticMeshInformation(asset, out string? cleanName, out (IMesh, IRenderer, IMeshFilter, ITransform) parts))
@@ -323,7 +322,7 @@ namespace AssetRipper.Processing.StaticMeshes
 		private static IMesh MakeMeshFromData(string cleanName, MeshData instanceMeshData, ProcessedAssetCollection processedCollection)
 		{
 			IMesh newMesh = CreateMesh(processedCollection);
-			newMesh.NameString = cleanName;
+			newMesh.Name = cleanName;
 
 			newMesh.SetIndexFormat(IndexFormat.UInt32);
 
@@ -534,7 +533,7 @@ namespace AssetRipper.Processing.StaticMeshes
 				return false;
 			}
 
-			string cleanedName = GameObjectNameCleaner.CleanName(gameObject.NameString);
+			string cleanedName = GameObjectNameCleaner.CleanName(gameObject.Name);
 			if (string.IsNullOrEmpty(cleanedName))
 			{
 				cleanName = null;

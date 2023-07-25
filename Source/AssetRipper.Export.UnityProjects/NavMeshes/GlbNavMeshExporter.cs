@@ -73,7 +73,7 @@ namespace AssetRipper.Export.UnityProjects.NavMeshes
 				}
 			}
 
-			NodeBuilder nodeBuilder = new NodeBuilder(asset.NameString);
+			NodeBuilder nodeBuilder = new NodeBuilder(asset.Name);
 			sceneBuilder.AddRigidMesh(meshBuilder, nodeBuilder);
 		}
 

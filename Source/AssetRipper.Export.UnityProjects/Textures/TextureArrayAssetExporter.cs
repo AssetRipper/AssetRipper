@@ -41,7 +41,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 				{
 					if (!cubemapArray.CheckAssetIntegrity())
 					{
-						WarnResourceFileNotFound(cubemapArray.NameString, cubemapArray.StreamData_C188);
+						WarnResourceFileNotFound(cubemapArray.Name, cubemapArray.StreamData_C188);
 						return false;
 					}
 					bitmap = TextureConverter.ConvertToBitmap(cubemapArray);
@@ -51,7 +51,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 				{
 					if (!texture2DArray.CheckAssetIntegrity())
 					{
-						WarnResourceFileNotFound(texture2DArray.NameString, texture2DArray.StreamData_C187);
+						WarnResourceFileNotFound(texture2DArray.Name, texture2DArray.StreamData_C187);
 						return false;
 					}
 					bitmap = TextureConverter.ConvertToBitmap(texture2DArray);
@@ -61,7 +61,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 				{
 					if (!texture3D.CheckAssetIntegrity())
 					{
-						WarnResourceFileNotFound(texture3D.NameString, texture3D.StreamData_C117);
+						WarnResourceFileNotFound(texture3D.Name, texture3D.StreamData_C117);
 						return false;
 					}
 					bitmap = TextureConverter.ConvertToBitmap(texture3D);
@@ -81,7 +81,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 		}
 		return bitmap.Save(path, ImageExportFormat);
 
-		static void WarnResourceFileNotFound(string assetName, IStreamingInfo? streamingInfo)
+		static void WarnResourceFileNotFound(Utf8String assetName, IStreamingInfo? streamingInfo)
 		{
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{assetName}' because resources file '{streamingInfo?.Path}' hasn't been found");
 		}

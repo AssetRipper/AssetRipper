@@ -90,7 +90,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 		/// Null on 2018.3 and higher
 		/// </summary>
 		public IPrefabInstance? Prefab { get; }
-		public override string Name => RootGameObject.NameString;
+		public override string Name => RootGameObject.Name;
 
 		/// <summary>
 		/// Prior to 2018.3, Prefab was an actual asset inside "*.prefab" files.

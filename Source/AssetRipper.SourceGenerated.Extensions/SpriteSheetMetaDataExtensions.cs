@@ -10,7 +10,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class SpriteSheetMetaDataExtensions
 	{
-		public static ISpriteMetaData GetSpriteMetaData(this ISpriteSheetMetaData data, string name)
+		public static ISpriteMetaData GetSpriteMetaData(this ISpriteSheetMetaData data, Utf8String name)
 		{
 			for (int i = 0; i < data.Sprites.Count; i++)
 			{

@@ -14,7 +14,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 			byte[] rawData = audioClip.GetAudioData();
 			if (rawData.Length == 0)
 			{
-				Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.NameString}' with default decoder because its audio data could not be found.");
+				Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.Name}' with default decoder because its audio data could not be found.");
 				return false;
 			}
 
@@ -26,13 +26,13 @@ namespace AssetRipper.Export.UnityProjects.Audio
 				}
 				else
 				{
-					Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.NameString}' with default decoder because it's '{audioType}' encoded.");
+					Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.Name}' with default decoder because it's '{audioType}' encoded.");
 					return false;
 				}
 			}
 			else
 			{
-				Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.NameString}' with default decoder because its {nameof(audioType)} could not be determined.");
+				Logger.Info(LogCategory.Export, $"Can't decode audio clip '{audioClip.Name}' with default decoder because its {nameof(audioType)} could not be determined.");
 				return false;
 			}
 		}

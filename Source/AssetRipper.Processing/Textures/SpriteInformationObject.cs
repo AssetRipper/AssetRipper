@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
@@ -22,7 +21,7 @@ public sealed class SpriteInformationObject : UnityObjectBase, IHasName
 	private readonly Dictionary<ISprite, ISpriteAtlas?> dictionary = new();
 	string IHasNameString.NameString
 	{
-		get => Texture.NameString;
+		get => Texture.Name;
 		set { }
 	}
 	Utf8String IHasName.Name

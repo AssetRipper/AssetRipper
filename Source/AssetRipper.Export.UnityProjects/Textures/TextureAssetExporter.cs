@@ -41,14 +41,14 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			ITexture2D texture = (ITexture2D)asset;
 			if (!texture.CheckAssetIntegrity())
 			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.NameString}' because resources file '{texture.StreamData_C28?.Path}' hasn't been found");
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Can't export '{texture.Name}' because resources file '{texture.StreamData_C28?.Path}' hasn't been found");
 				return false;
 			}
 
 			using DirectBitmap? bitmap = TextureConverter.ConvertToBitmap(texture);
 			if (bitmap is null)
 			{
-				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.NameString}' to bitmap");
+				Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
 				return false;
 			}
 			return bitmap.Save(path, ImageExportFormat);

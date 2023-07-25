@@ -73,7 +73,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 
 			private MaterialBuilder MakeMaterialBuilder(IMaterial material)
 			{
-				MaterialBuilder materialBuilder = new MaterialBuilder(material.NameString);
+				MaterialBuilder materialBuilder = new MaterialBuilder(material.Name);
 				GetTextures(material, out ITexture2D? mainTexture, out ITexture2D? normalTexture);
 				if (mainTexture is not null && TryGetOrMakeImage(mainTexture, out MemoryImage mainImage))
 				{

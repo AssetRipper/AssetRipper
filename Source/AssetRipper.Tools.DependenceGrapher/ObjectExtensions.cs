@@ -8,7 +8,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 	{
 		public static string? GetName(this IUnityObjectBase _this)
 		{
-			string? gameObjectName = (_this as IComponent)?.GameObject_C2P?.NameString;
+			string? gameObjectName = (_this as IComponent)?.GameObject_C2P?.Name;
 			if (!string.IsNullOrEmpty(gameObjectName))
 			{
 				return gameObjectName;

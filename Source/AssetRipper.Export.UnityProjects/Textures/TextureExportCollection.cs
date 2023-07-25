@@ -90,7 +90,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			{
 				ISprite sprite = textureSpriteInformation.Keys.First();
 				ITexture2D texture = Asset;
-				if (sprite.Rect_C213 == sprite.RD_C213.TextureRect && sprite.NameString == texture.NameString)
+				if (sprite.Rect_C213 == sprite.RD_C213.TextureRect && sprite.Name == texture.Name)
 				{
 					importer.SpriteMode_C1006E = SpriteImportMode.Single;
 				}
@@ -177,7 +177,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					{
 #warning TODO: TEMP:
 						long exportID = GetExportID(sprite);
-						ISpriteMetaData smeta = importer.SpriteSheet_C1006.GetSpriteMetaData(sprite.NameString);
+						ISpriteMetaData smeta = importer.SpriteSheet_C1006.GetSpriteMetaData(sprite.Name);
 						smeta.InternalID = exportID;
 						AssetPair<AssetPair<int, long>, Utf8String> pair = importer.InternalIDToNameTable_C1006.AddNew();
 						pair.Key.Key = (int)ClassIDType.Sprite;

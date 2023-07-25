@@ -1,9 +1,7 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
 using AssetRipper.Import.Logging;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_241;
@@ -28,6 +26,8 @@ namespace AssetRipper.Processing.AudioMixers
 {
 	public sealed class AudioMixerProcessor : IAssetProcessor
 	{
+		private static Utf8String ViewName { get; } = new("View");
+
 		//Many uses of IAudioMixerGroupController should be IAudioMixerGroup.
 
 		public void Process(GameData gameData)
@@ -267,7 +267,7 @@ namespace AssetRipper.Processing.AudioMixers
 			// complete mixer controller
 			mixer.AudioMixerGroupViews_C241.Clear();
 			IAudioMixerGroupView groupView = mixer.AudioMixerGroupViews_C241.AddNew();
-			groupView.NameString = "View";
+			groupView.Name = ViewName;
 			foreach (IAudioMixerGroupController group in groups)
 			{
 				groupView.Guids.AddNew().CopyValues(group.GroupID_C243);

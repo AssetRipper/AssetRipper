@@ -56,7 +56,7 @@ namespace AssetRipper.Processing.PrefabOutlining
 		private static void AddNewPrefab(string name, IGameObject source, ProcessedAssetCollection collection)
 		{
 			IGameObject root = GameObjectCloner.Clone(source, collection);
-			root.NameString = name;
+			root.Name = name;
 			root.SetIsActive(true);
 
 			ITransform transform = root.GetTransform();
@@ -73,7 +73,7 @@ namespace AssetRipper.Processing.PrefabOutlining
 			//Place holder code until source gen improves
 
 			IGameObject root = CreateNewGameObject(collection);
-			root.NameString = name;
+			root.Name = name;
 			root.SetIsActive(true);
 			root.TagString_C1 = TagManagerConstants.UntaggedTag;
 
@@ -85,7 +85,7 @@ namespace AssetRipper.Processing.PrefabOutlining
 			root.AddComponent(ClassIDType.Transform, rootTransform);
 
 			IGameObject child = CreateNewGameObject(collection);
-			child.NameString = "This prefab is a placeholder until AssetRipper improves.";
+			child.Name = "This prefab is a placeholder until AssetRipper improves.";
 			child.SetIsActive(true);
 			child.TagString_C1 = TagManagerConstants.UntaggedTag;
 
@@ -116,7 +116,7 @@ namespace AssetRipper.Processing.PrefabOutlining
 			prefabRoots = new();
 			foreach ((IGameObject gameObject, GameObjectInfo info) in infoDictionary)
 			{
-				string name = GameObjectNameCleaner.CleanName(gameObject.NameString);
+				string name = GameObjectNameCleaner.CleanName(gameObject.Name);
 				boxes.GetOrAdd(name).GetOrAdd(info).Add(gameObject);
 				if (!sceneInfo[gameObject.Collection] && gameObject.IsRoot())
 				{

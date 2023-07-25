@@ -503,181 +503,181 @@ namespace AssetRipper.Export.UnityProjects.EngineAssets
 			AddShader("CubeBlend", 15106, false);
 		}
 
-		public static bool ContainsMaterial(string name, UnityVersion version)
+		public static bool ContainsMaterial(Utf8String name, UnityVersion version)
 		{
 			return ContainsAsset(m_materials, name, version);
 		}
-		public static bool ContainsTexture(string name, UnityVersion version)
+		public static bool ContainsTexture(Utf8String name, UnityVersion version)
 		{
 			return ContainsAsset(m_textures, name, version);
 		}
-		public static bool ContainsMesh(string name, UnityVersion version)
+		public static bool ContainsMesh(Utf8String name, UnityVersion version)
 		{
 			return ContainsAsset(m_meshes, name, version);
 		}
-		public static bool ContainsFont(string name, UnityVersion version)
+		public static bool ContainsFont(Utf8String name, UnityVersion version)
 		{
 			return ContainsAsset(m_fonts, name, version);
 		}
-		public static bool ContainsShader(string name, UnityVersion version)
+		public static bool ContainsShader(Utf8String name, UnityVersion version)
 		{
 			return ContainsAsset(m_shaders, name, version);
 		}
-		public static bool ContainsSprite(string name, UnityVersion version)
+		public static bool ContainsSprite(Utf8String name, UnityVersion version)
 		{
 			return ContainsAsset(m_sprites, name, version);
 		}
-		public static bool ContainsLightmapParams(string name, UnityVersion version)
+		public static bool ContainsLightmapParams(Utf8String name, UnityVersion version)
 		{
 			return ContainsAsset(m_lightmapParams, name, version);
 		}
-		public static bool ContainsBehaviour(string name, UnityVersion version)
+		public static bool ContainsBehaviour(Utf8String name, UnityVersion version)
 		{
 			return ContainsAsset(m_behaviours, name, version);
 		}
 
-		public static EngineBuiltInAsset GetMaterial(string name, UnityVersion version)
+		public static EngineBuiltInAsset GetMaterial(Utf8String name, UnityVersion version)
 		{
 			return m_materials[name].GetAsset(version);
 		}
-		public static bool TryGetMaterial(string name, UnityVersion version, out EngineBuiltInAsset asset)
+		public static bool TryGetMaterial(Utf8String name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_materials, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetTexture(string name, UnityVersion version)
+		public static EngineBuiltInAsset GetTexture(Utf8String name, UnityVersion version)
 		{
 			return m_textures[name].GetAsset(version);
 		}
-		public static bool TryGetTexture(string name, UnityVersion version, out EngineBuiltInAsset asset)
+		public static bool TryGetTexture(Utf8String name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_textures, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetMesh(string name, UnityVersion version)
+		public static EngineBuiltInAsset GetMesh(Utf8String name, UnityVersion version)
 		{
 			return m_meshes[name].GetAsset(version);
 		}
-		public static bool TryGetMesh(string name, UnityVersion version, out EngineBuiltInAsset asset)
+		public static bool TryGetMesh(Utf8String name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_meshes, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetFont(string name, UnityVersion version)
+		public static EngineBuiltInAsset GetFont(Utf8String name, UnityVersion version)
 		{
 			return m_fonts[name].GetAsset(version);
 		}
-		public static bool TryGetFont(string name, UnityVersion version, out EngineBuiltInAsset asset)
+		public static bool TryGetFont(Utf8String name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_fonts, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetShader(string name, UnityVersion version)
+		public static EngineBuiltInAsset GetShader(Utf8String name, UnityVersion version)
 		{
 			return m_shaders[name].GetAsset(version);
 		}
-		public static bool TryGetShader(string name, UnityVersion version, out EngineBuiltInAsset asset)
+		public static bool TryGetShader(Utf8String name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_shaders, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetSprite(string name, UnityVersion version)
+		public static EngineBuiltInAsset GetSprite(Utf8String name, UnityVersion version)
 		{
 			return m_sprites[name].GetAsset(version);
 		}
-		public static bool TryGetSprite(string name, UnityVersion version, out EngineBuiltInAsset asset)
+		public static bool TryGetSprite(Utf8String name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_sprites, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetLightmapParams(string name, UnityVersion version)
+		public static EngineBuiltInAsset GetLightmapParams(Utf8String name, UnityVersion version)
 		{
 			return m_lightmapParams[name].GetAsset(version);
 		}
-		public static bool TryGetLightmapParams(string name, UnityVersion version, out EngineBuiltInAsset asset)
+		public static bool TryGetLightmapParams(Utf8String name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_lightmapParams, name, version, out asset);
 		}
-		public static EngineBuiltInAsset GetBehaviour(string name, UnityVersion version)
+		public static EngineBuiltInAsset GetBehaviour(Utf8String name, UnityVersion version)
 		{
 			return m_behaviours[name].GetAsset(version);
 		}
-		public static bool TryGetBehaviour(string name, UnityVersion version, out EngineBuiltInAsset asset)
+		public static bool TryGetBehaviour(Utf8String name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			return TryGetAsset(m_behaviours, name, version, out asset);
 		}
 
-		private static void AddMaterial(string name, uint exportID, bool isF)
+		private static void AddMaterial(Utf8String name, uint exportID, bool isF)
 		{
 			AddMaterial(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddMaterial(string name, UnityVersion version, uint exportID, bool isF)
+		private static void AddMaterial(Utf8String name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_materials, name, version, exportID, 0, isF);
 		}
 
-		private static void AddTexture(string name, uint exportID, bool isF)
+		private static void AddTexture(Utf8String name, uint exportID, bool isF)
 		{
 			AddTexture(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddTexture(string name, UnityVersion version, uint exportID, bool isF)
+		private static void AddTexture(Utf8String name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_textures, name, version, exportID, 0, isF);
 		}
-		private static void AddTexture(string name, UnityVersion version, uint exportID, uint param, bool isF)
+		private static void AddTexture(Utf8String name, UnityVersion version, uint exportID, uint param, bool isF)
 		{
 			AddAsset(m_textures, name, version, exportID, param, isF);
 		}
 
-		private static void AddMesh(string name, uint exportID, bool isF)
+		private static void AddMesh(Utf8String name, uint exportID, bool isF)
 		{
 			AddMesh(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddMesh(string name, UnityVersion version, uint exportID, bool isF)
+		private static void AddMesh(Utf8String name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_meshes, name, version, exportID, 0, isF);
 		}
 
-		private static void AddFont(string name, uint exportID, bool isF)
+		private static void AddFont(Utf8String name, uint exportID, bool isF)
 		{
 			AddFont(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddFont(string name, UnityVersion version, uint exportID, bool isF)
+		private static void AddFont(Utf8String name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_fonts, name, version, exportID, 0, isF);
 		}
 
-		private static void AddShader(string name, uint exportID, bool isF)
+		private static void AddShader(Utf8String name, uint exportID, bool isF)
 		{
 			AddShader(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddShader(string name, UnityVersion version, uint exportID, bool isF)
+		private static void AddShader(Utf8String name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_shaders, name, version, exportID, 0, isF);
 		}
 
-		private static void AddSprite(string name, uint exportID, bool isF)
+		private static void AddSprite(Utf8String name, uint exportID, bool isF)
 		{
 			AddSprite(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddSprite(string name, UnityVersion version, uint exportID, bool isF)
+		private static void AddSprite(Utf8String name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_sprites, name, version, exportID, 0, isF);
 		}
 
-		private static void AddLightmapParams(string name, uint exportID, bool isF)
+		private static void AddLightmapParams(Utf8String name, uint exportID, bool isF)
 		{
 			AddLightmapParams(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddLightmapParams(string name, UnityVersion version, uint exportID, bool isF)
+		private static void AddLightmapParams(Utf8String name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_lightmapParams, name, version, exportID, 0, isF);
 		}
 
-		private static void AddBehaviour(string name, uint exportID, bool isF)
+		private static void AddBehaviour(Utf8String name, uint exportID, bool isF)
 		{
 			AddBehaviour(name, UnityVersion.MinVersion, exportID, isF);
 		}
-		private static void AddBehaviour(string name, UnityVersion version, uint exportID, bool isF)
+		private static void AddBehaviour(Utf8String name, UnityVersion version, uint exportID, bool isF)
 		{
 			AddAsset(m_behaviours, name, version, exportID, 0, isF);
 		}
 
-		private static bool ContainsAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, UnityVersion version)
+		private static bool ContainsAsset(Dictionary<Utf8String, EngineBuiltInAssetInfo> lookup, Utf8String name, UnityVersion version)
 		{
 			if (lookup.TryGetValue(name, out EngineBuiltInAssetInfo info))
 			{
@@ -686,7 +686,7 @@ namespace AssetRipper.Export.UnityProjects.EngineAssets
 			return false;
 		}
 
-		private static bool TryGetAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, UnityVersion version, out EngineBuiltInAsset asset)
+		private static bool TryGetAsset(Dictionary<Utf8String, EngineBuiltInAssetInfo> lookup, Utf8String name, UnityVersion version, out EngineBuiltInAsset asset)
 		{
 			if (lookup.TryGetValue(name, out EngineBuiltInAssetInfo info))
 			{
@@ -696,7 +696,7 @@ namespace AssetRipper.Export.UnityProjects.EngineAssets
 			return false;
 		}
 
-		private static void AddAsset(Dictionary<string, EngineBuiltInAssetInfo> lookup, string name, UnityVersion version, uint exportID, uint param, bool isF)
+		private static void AddAsset(Dictionary<Utf8String, EngineBuiltInAssetInfo> lookup, Utf8String name, UnityVersion version, uint exportID, uint param, bool isF)
 		{
 			EngineBuiltInAsset asset = new EngineBuiltInAsset(exportID, param, isF);
 			if (lookup.TryGetValue(name, out EngineBuiltInAssetInfo assetInfo))
@@ -710,31 +710,31 @@ namespace AssetRipper.Export.UnityProjects.EngineAssets
 			}
 		}
 
-		public const string FontMaterialName = "Font Material";
-		public const string FontTextureName = "Font Texture";
-		public const string DefaultTerrainDiffuseName = "Default-Terrain-Diffuse";
-		public const string DefaultTerrainSpecularName = "Default-Terrain-Specular";
-		public const string DefaultTerrainStandardName = "Default-Terrain-Standard";
+		public static readonly Utf8String FontMaterialName = "Font Material"u8;
+		public static readonly Utf8String FontTextureName = "Font Texture"u8;
+		public static readonly Utf8String DefaultTerrainDiffuseName = "Default-Terrain-Diffuse"u8;
+		public static readonly Utf8String DefaultTerrainSpecularName = "Default-Terrain-Specular"u8;
+		public static readonly Utf8String DefaultTerrainStandardName = "Default-Terrain-Standard"u8;
 
-		public const string LegacyDiffuse = "Legacy Shaders/Diffuse";
-		public const string SpriteDefault = "Sprites/Default";
-		public const string UIDefault = "UI/Default";
-		public const string CubeBlur = "Hidden/CubeBlur";
-		public const string CubeCopy = "Hidden/CubeCopy";
-		public const string CubeBlend = "Hidden/CubeBlend";
-		public const string TerrainBillboardWavingDoublePass = "Hidden/TerrainEngine/Details/BillboardWavingDoublePass";
+		public static readonly Utf8String LegacyDiffuse = "Legacy Shaders/Diffuse"u8;
+		public static readonly Utf8String SpriteDefault = "Sprites/Default"u8;
+		public static readonly Utf8String UIDefault = "UI/Default"u8;
+		public static readonly Utf8String CubeBlur = "Hidden/CubeBlur"u8;
+		public static readonly Utf8String CubeCopy = "Hidden/CubeCopy"u8;
+		public static readonly Utf8String CubeBlend = "Hidden/CubeBlend"u8;
+		public static readonly Utf8String TerrainBillboardWavingDoublePass = "Hidden/TerrainEngine/Details/BillboardWavingDoublePass"u8;
 
 		public static readonly UnityGuid DGUID = new UnityGuid(0x00000000, 0x00000000, 0x0000000D, 0x00000000);
 		public static readonly UnityGuid EGUID = new UnityGuid(0x00000000, 0x00000000, 0x0000000E, 0x00000000);
 		public static readonly UnityGuid FGUID = new UnityGuid(0x00000000, 0x00000000, 0x0000000F, 0x00000000);
 
-		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_materials = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_textures = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_meshes = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_shaders = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_fonts = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_sprites = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_lightmapParams = new Dictionary<string, EngineBuiltInAssetInfo>();
-		private static readonly Dictionary<string, EngineBuiltInAssetInfo> m_behaviours = new Dictionary<string, EngineBuiltInAssetInfo>();
+		private static readonly Dictionary<Utf8String, EngineBuiltInAssetInfo> m_materials = new();
+		private static readonly Dictionary<Utf8String, EngineBuiltInAssetInfo> m_textures = new();
+		private static readonly Dictionary<Utf8String, EngineBuiltInAssetInfo> m_meshes = new();
+		private static readonly Dictionary<Utf8String, EngineBuiltInAssetInfo> m_shaders = new();
+		private static readonly Dictionary<Utf8String, EngineBuiltInAssetInfo> m_fonts = new();
+		private static readonly Dictionary<Utf8String, EngineBuiltInAssetInfo> m_sprites = new();
+		private static readonly Dictionary<Utf8String, EngineBuiltInAssetInfo> m_lightmapParams = new();
+		private static readonly Dictionary<Utf8String, EngineBuiltInAssetInfo> m_behaviours = new();
 	}
 }

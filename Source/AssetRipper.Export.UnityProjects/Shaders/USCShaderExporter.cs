@@ -36,7 +36,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			IShader shader = (IShader)asset;
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-			if (shader.ParsedForm_C48?.NameString.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
+			if (shader.ParsedForm_C48?.Name.String.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
 			{
 				return false;
 			}
@@ -112,7 +112,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 		private static void ExportSerializedShaderDecomp(ISerializedShader _this, ShaderWriter writer)
 		{
-			writer.Write("Shader \"{0}\" {{\n", _this.Name.String);
+			writer.Write($"Shader \"{_this.Name.String}\" {{\n");
 
 			_this.PropInfo.Export(writer);
 
@@ -124,13 +124,13 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			if (_this.FallbackName.String.Length != 0)
 			{
 				writer.WriteIndent(1);
-				writer.Write("Fallback \"{0}\"\n", _this.FallbackName.String);
+				writer.Write($"Fallback \"{_this.FallbackName.String}\"\n");
 			}
 
 			if (_this.CustomEditorName.String.Length != 0)
 			{
 				writer.WriteIndent(1);
-				writer.Write("CustomEditor \"{0}\"\n", _this.CustomEditorName.String);
+				writer.Write($"CustomEditor \"{_this.CustomEditorName.String}\"\n");
 			}
 
 			writer.Write('}');
@@ -143,7 +143,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			if (_this.LOD != 0)
 			{
 				writer.WriteIndent(2);
-				writer.Write("LOD {0}\n", _this.LOD);
+				writer.Write($"LOD {_this.LOD}\n");
 			}
 			_this.Tags.Export(writer, 2);
 			for (int i = 0; i < _this.Passes.Count; i++)
@@ -157,11 +157,11 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		private static void ExportPassDecomp(ISerializedPass _this, ShaderWriter writer)
 		{
 			writer.WriteIndent(2);
-			writer.Write("{0} ", (SerializedPassType)_this.Type);
+			writer.Write($"{(SerializedPassType)_this.Type} ");
 
 			if ((SerializedPassType)_this.Type == SerializedPassType.UsePass)
 			{
-				writer.Write("\"{0}\"\n", _this.UseName.String);
+				writer.Write($"\"{_this.UseName}\"\n");
 			}
 			else
 			{
@@ -169,10 +169,10 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 				if ((SerializedPassType)_this.Type == SerializedPassType.GrabPass)
 				{
-					if (_this.TextureName.String.Length > 0)
+					if (_this.TextureName.Data.Length > 0)
 					{
 						writer.WriteIndent(3);
-						writer.Write("\"{0}\"\n", _this.TextureName.String);
+						writer.Write($"\"{_this.TextureName}\"\n");
 					}
 				}
 				else if ((SerializedPassType)_this.Type == SerializedPassType.Pass)
@@ -545,7 +545,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			}
 
 			writer.WriteIndent(3);
-			writer.Write("Program \"{0}\" {{\n", type.ToProgramTypeString());
+			writer.Write($"Program \"{type.ToProgramTypeString()}\" {{\n");
 			int tierCount = _this.GetTierCount();
 			for (int i = 0; i < _this.SubPrograms.Count; i++)
 			{

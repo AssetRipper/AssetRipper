@@ -40,7 +40,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		[GeneratedRegex("^Combined Mesh \\(root scene\\)( [0-9]+)?$", RegexOptions.Compiled)]
 		private static partial Regex CombinedMeshRegex();
 
-		public static bool IsCombinedMesh(this IMesh mesh) => CombinedMeshRegex().IsMatch(mesh.NameString);
+		public static bool IsCombinedMesh(this IMesh mesh) => CombinedMeshRegex().IsMatch(mesh.Name);
 
 		public static bool IsSet(this IMesh mesh)
 		{

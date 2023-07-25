@@ -54,7 +54,7 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		{
 			if (MeshData.TryMakeFromMesh(mesh, out MeshData meshData))
 			{
-				NodeBuilder rootNodeForMesh = new NodeBuilder(mesh.NameString);
+				NodeBuilder rootNodeForMesh = new NodeBuilder(mesh.Name);
 				sceneBuilder.AddNode(rootNodeForMesh);
 
 				(ISubMesh, MaterialBuilder)[] subMeshes = new (ISubMesh, MaterialBuilder)[1];

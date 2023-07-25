@@ -56,7 +56,7 @@ namespace AssetRipper.Export.UnityProjects.EngineAssets
 
 			if (asset is IMaterial material)
 			{
-				if (material.NameString == EngineBuiltInAssets.FontMaterialName)
+				if (material.Name == EngineBuiltInAssets.FontMaterialName)
 				{
 					return false;
 				}
@@ -73,7 +73,7 @@ namespace AssetRipper.Export.UnityProjects.EngineAssets
 			}
 			else if (asset is ITexture2D texture)
 			{
-				if (texture.NameString == EngineBuiltInAssets.FontTextureName)
+				if (texture.Name == EngineBuiltInAssets.FontTextureName)
 				{
 					return false;
 				}
@@ -104,49 +104,49 @@ namespace AssetRipper.Export.UnityProjects.EngineAssets
 		{
 			if (asset is IMaterial material)
 			{
-				if (EngineBuiltInAssets.TryGetMaterial(material.NameString, version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetMaterial(material.Name, version, out engineAsset))
 				{
 					return true;
 				}
 			}
 			else if (asset is ITexture2D texture)
 			{
-				if (EngineBuiltInAssets.TryGetTexture(texture.NameString, version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetTexture(texture.Name, version, out engineAsset))
 				{
 					return true;
 				}
 			}
 			else if (asset is IMesh mesh)
 			{
-				if (EngineBuiltInAssets.TryGetMesh(mesh.NameString, version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetMesh(mesh.Name, version, out engineAsset))
 				{
 					return true;
 				}
 			}
 			else if (asset is IShader shader)
 			{
-				if (EngineBuiltInAssets.TryGetShader(shader.NameString, version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetShader(shader.Name, version, out engineAsset))
 				{
 					return true;
 				}
 			}
 			else if (asset is IFont font)
 			{
-				if (EngineBuiltInAssets.TryGetFont(font.NameString, version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetFont(font.Name, version, out engineAsset))
 				{
 					return true;
 				}
 			}
 			else if (asset is ISprite sprite)
 			{
-				if (EngineBuiltInAssets.TryGetSprite(sprite.NameString, version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetSprite(sprite.Name, version, out engineAsset))
 				{
 					return true;
 				}
 			}
 			else if (asset is ILightmapParameters lightParams)
 			{
-				if (EngineBuiltInAssets.TryGetLightmapParams(lightParams.NameString, version, out engineAsset))
+				if (EngineBuiltInAssets.TryGetLightmapParams(lightParams.Name, version, out engineAsset))
 				{
 					return true;
 				}
@@ -155,7 +155,7 @@ namespace AssetRipper.Export.UnityProjects.EngineAssets
 			{
 				if (!behaviour.Name.IsEmpty)
 				{
-					if (EngineBuiltInAssets.TryGetBehaviour(behaviour.NameString, version, out engineAsset))
+					if (EngineBuiltInAssets.TryGetBehaviour(behaviour.Name, version, out engineAsset))
 					{
 						return true;
 					}

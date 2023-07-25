@@ -114,7 +114,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 			Transformation globalTransform = localTransform * parentGlobalTransform;
 			Transformation globalInverseTransform = parentGlobalInverseTransform * localInverseTransform;
 
-			NodeBuilder node = parentNode is null ? new NodeBuilder(gameObject.NameString) : parentNode.CreateNode(gameObject.NameString);
+			NodeBuilder node = parentNode is null ? new NodeBuilder(gameObject.Name) : parentNode.CreateNode(gameObject.Name);
 			if (parentNode is not null || parameters.IsScene)
 			{
 				node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(

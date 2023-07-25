@@ -7,7 +7,8 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		public RequiredProperty() { }
 		public RequiredProperty(string name, PropertyType type)
 		{
-			PropertyName = name ?? throw new ArgumentNullException(nameof(name));
+			ArgumentException.ThrowIfNullOrEmpty(name);
+			PropertyName = name;
 			PropertyType = type;
 		}
 
@@ -21,7 +22,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 		public bool IsMatch(ISerializedProperty property)
 		{
-			return this.PropertyName == property.NameString && PropertyType.IsMatch(property.Type);
+			return PropertyName == property.Name && PropertyType.IsMatch(property.Type);
 		}
 	}
 }

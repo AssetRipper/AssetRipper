@@ -27,7 +27,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				pre = transform.Father_C4.GetAsset(transform.Collection).GetRootPath() + PathSeparator;
 			}
-			return pre + transform.GetGameObject().NameString;
+			return pre + transform.GetGameObject().Name;
 		}
 
 		/// <summary>
@@ -58,13 +58,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 		private static ITransform? FindChild(this ITransform transform, string path, int startIndex)
 		{
 			int separatorIndex = path.IndexOf(PathSeparator, startIndex);
-			string childName = separatorIndex == -1 ?
-				path.Substring(startIndex, path.Length - startIndex) :
-				path.Substring(startIndex, separatorIndex - startIndex);
+			string childName = separatorIndex == -1 ? path[startIndex..] : path[startIndex..separatorIndex];
 			foreach (ITransform child in transform.GetChildren())
 			{
 				IGameObject childGO = child.GetGameObject();
-				if (childGO.NameString == childName)
+				if (childGO.Name == childName)
 				{
 					return separatorIndex == -1 ? child : child.FindChild(path, separatorIndex + 1);
 				}

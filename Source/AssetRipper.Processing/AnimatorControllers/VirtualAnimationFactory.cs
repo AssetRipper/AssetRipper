@@ -1,9 +1,7 @@
 ﻿using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1101;
 using AssetRipper.SourceGenerated.Classes.ClassID_1102;
@@ -26,7 +24,6 @@ using AssetRipper.SourceGenerated.Subclasses.LeafInfoConstant;
 using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_SelectorStateConstant;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorState;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorStateTransition;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorTransition;
 using AssetRipper.SourceGenerated.Subclasses.SelectorStateConstant;
 using AssetRipper.SourceGenerated.Subclasses.SelectorTransitionConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
@@ -38,6 +35,8 @@ namespace AssetRipper.Processing.AnimatorControllers
 {
 	public static class VirtualAnimationFactory
 	{
+		private static Utf8String BlendTreeName { get; } = new Utf8String("BlendTree");
+
 		private static IMotion? CreateMotion(this IStateConstant stateConstant, ProcessedAssetCollection file, IAnimatorController controller, int nodeIndex)
 		{
 			if (stateConstant.BlendTreeConstantArray.Count == 0)
@@ -91,7 +90,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			IBlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Data;
 
-			blendTree.NameString = "BlendTree";
+			blendTree.Name = BlendTreeName;
 
 			blendTree.Childs_C206.Capacity = node.ChildIndices.Count;
 			for (int i = 0; i < node.ChildIndices.Count; i++)

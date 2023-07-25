@@ -93,7 +93,7 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 				}
 			}
 
-			NodeBuilder nodeBuilder = new NodeBuilder(terrain.NameString);
+			NodeBuilder nodeBuilder = new NodeBuilder(terrain.Name);
 			sceneBuilder.AddRigidMesh(meshBuilder, nodeBuilder);
 		}
 

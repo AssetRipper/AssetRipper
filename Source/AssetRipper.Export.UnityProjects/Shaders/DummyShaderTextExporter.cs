@@ -42,7 +42,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			IShader shader = (IShader)asset;
 
 			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-			if (shader.ParsedForm_C48?.NameString?.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
+			if (shader.ParsedForm_C48?.Name.String.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
 			{
 				return false;
 			}
@@ -151,7 +151,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				writer.Write("[Gamma] ");
 			}
 
-			writer.Write($"{_this.NameString} (\"{_this.Description}\", ");
+			writer.Write($"{_this.Name} (\"{_this.Description}\", ");
 
 			switch (_this.GetType_())
 			{

@@ -26,7 +26,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		public static void FillSpriteMetaData(this ISpriteMetaData instance, ISprite sprite, ISpriteAtlas? atlas)
 		{
 			sprite.GetSpriteCoordinatesInAtlas(atlas, out RectangleF rect, out Vector2 pivot, out Vector4 border);
-			instance.NameString = sprite.NameString;
+			instance.Name = sprite.Name;
 			instance.Rect.CopyValues(rect);
 			instance.Alignment = (int)SpriteAlignment.Custom;
 			instance.Pivot.CopyValues(pivot);
