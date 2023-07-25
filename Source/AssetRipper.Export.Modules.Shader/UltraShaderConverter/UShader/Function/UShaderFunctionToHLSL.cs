@@ -1,4 +1,5 @@
-﻿using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
+﻿using AssetRipper.Export.Modules.Shaders.Extensions;
+using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
 using System.Globalization;
 using System.Text;
 
@@ -735,7 +736,7 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Functi
 			AppendLine(
 				$"{comment}for ({numberTypeName} {iterName} = {iterRegOp}; " +
 				$"{iterName} {compText} {compOp}; " +
-				$"{iterName} += {addCount.ToString(CultureInfo.InvariantCulture)}) {{"
+				$"{iterName} += {addCount.ToStringInvariant()}) {{"
 			);
 
 			_indentLevel++;

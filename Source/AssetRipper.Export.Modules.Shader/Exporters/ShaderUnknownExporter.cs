@@ -15,7 +15,7 @@ namespace AssetRipper.Export.Modules.Shaders.Exporters
 
 		public override void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 		{
-			writer.Write("/*ShaderUnknownExporter : Can't export program data {0} as a text*/", m_graphicApi);
+			writer.Write($"/*ShaderUnknownExporter : Can't export program data {m_graphicApi} as a text*/");
 		}
 
 		private readonly GPUPlatform m_graphicApi;

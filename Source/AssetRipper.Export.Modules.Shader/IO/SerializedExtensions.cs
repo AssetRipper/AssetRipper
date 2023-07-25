@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Export.Modules.Shaders.Extensions;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions;
@@ -25,11 +26,11 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 		public static void Export(this ISerializedPass _this, ShaderWriter writer)
 		{
 			writer.WriteIndent(2);
-			writer.Write("{0} ", _this.Type.ToString());
+			writer.Write($"{_this.Type.ToString()} ");
 
 			if (_this.Type == (int)SerializedPassType.UsePass)
 			{
-				writer.Write("\"{0}\"\n", _this.UseName);
+				writer.Write($"\"{_this.UseName}\"\n");
 			}
 			else
 			{
@@ -40,7 +41,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 					if (_this.TextureName.Data.Length > 0)
 					{
 						writer.WriteIndent(3);
-						writer.Write("\"{0}\"\n", _this.TextureName);
+						writer.Write($"\"{_this.TextureName}\"\n");
 					}
 				}
 				else if (_this.Type == (int)SerializedPassType.Pass)
@@ -92,7 +93,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			}
 
 			writer.WriteIndent(3);
-			writer.Write("Program \"{0}\" {{\n", type.ToProgramTypeString());
+			writer.Write($"Program \"{type.ToProgramTypeString()}\" {{\n");
 			int tierCount = _this.GetTierCount();
 			for (int i = 0; i < _this.SubPrograms.Count; i++)
 			{
@@ -119,7 +120,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			writer.WriteIndent(2);
 			foreach (Utf8String attribute in _this.Attributes)
 			{
-				writer.Write("[{0}] ", attribute);
+				writer.Write($"[{attribute}] ");
 			}
 			SerializedPropertyFlag flags = (SerializedPropertyFlag)_this.Flags;
 			if (flags.IsHideInInspector())
@@ -147,7 +148,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 				writer.Write("[Gamma] ");
 			}
 
-			writer.Write("{0} (\"{1}\", ", _this.NameString, _this.Description);
+			writer.Write($"{_this.NameString} (\"{_this.Description}\", ");
 
 			switch (_this.GetType_())
 			{
@@ -161,10 +162,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 					break;
 
 				case SerializedPropertyType.Range:
-					writer.Write("{0}({1}, {2})",
-						"Range",
-						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture));
+					writer.Write($"{"Range"}({_this.DefValue_1_.ToStringInvariant()}, {_this.DefValue_2_.ToStringInvariant()})");
 					break;
 
 				case SerializedPropertyType.Texture:
@@ -207,21 +205,17 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
-					writer.Write("({0},{1},{2},{3})",
-						_this.DefValue_0_.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture),
-						_this.DefValue_3_.ToString(CultureInfo.InvariantCulture));
+					writer.Write($"({_this.DefValue_0_.ToStringInvariant()},{_this.DefValue_1_.ToStringInvariant()},{_this.DefValue_2_.ToStringInvariant()},{_this.DefValue_3_.ToStringInvariant()})");
 					break;
 
 				case SerializedPropertyType.Float:
 				case SerializedPropertyType.Range:
 				case SerializedPropertyType.Int:
-					writer.Write(_this.DefValue_0_.ToString(CultureInfo.InvariantCulture));
+					writer.Write(_this.DefValue_0_.ToStringInvariant());
 					break;
 
 				case SerializedPropertyType.Texture:
-					writer.Write("\"{0}\" {{}}", _this.DefTexture.DefaultName);
+					writer.Write($"\"{_this.DefTexture.DefaultName}\" {{}}");
 					break;
 
 				default:
@@ -232,7 +226,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 
 		public static void Export(this ISerializedShader _this, ShaderWriter writer)
 		{
-			writer.Write("Shader \"{0}\" {{\n", _this.NameString);
+			writer.Write($"Shader \"{_this.Name}\" {{\n");
 
 			_this.PropInfo.Export(writer);
 
@@ -244,13 +238,13 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			if (_this.FallbackName.Data.Length != 0)
 			{
 				writer.WriteIndent(1);
-				writer.Write("Fallback \"{0}\"\n", _this.FallbackName);
+				writer.Write($"Fallback \"{_this.FallbackName}\"\n");
 			}
 
 			if (_this.CustomEditorName.Data.Length != 0)
 			{
 				writer.WriteIndent(1);
-				writer.Write("CustomEditor \"{0}\"\n", _this.CustomEditorName);
+				writer.Write($"CustomEditor \"{_this.CustomEditorName}\"\n");
 			}
 
 			writer.Write('}');
@@ -264,12 +258,12 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 				writer.Write("Blend ");
 				if (index != -1)
 				{
-					writer.Write("{0} ", index);
+					writer.Write($"{index} ");
 				}
-				writer.Write("{0} {1}", _this.SrcBlendValue(), _this.DestBlendValue());
+				writer.Write($"{_this.SrcBlendValue()} {_this.DestBlendValue()}");
 				if (!_this.SrcBlendValue().IsOne() || !_this.DestBlendAlphaValue().IsZero())
 				{
-					writer.Write(", {0} {1}", _this.SrcBlendAlphaValue(), _this.DestBlendAlphaValue());
+					writer.Write($", {_this.SrcBlendAlphaValue()} {_this.DestBlendAlphaValue()}");
 				}
 				writer.Write('\n');
 			}
@@ -280,12 +274,12 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 				writer.Write("BlendOp ");
 				if (index != -1)
 				{
-					writer.Write("{0} ", index);
+					writer.Write($"{index} ");
 				}
 				writer.Write(_this.BlendOpValue().ToString());
 				if (!_this.BlendOpAlphaValue().IsAdd())
 				{
-					writer.Write(", {0}", _this.BlendOpAlphaValue());
+					writer.Write($", {_this.BlendOpAlphaValue()}");
 				}
 				writer.Write('\n');
 			}
@@ -317,7 +311,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 						writer.Write('A');
 					}
 				}
-				writer.Write(" {0}\n", index);
+				writer.Write($" {index}\n");
 			}
 		}
 
@@ -326,12 +320,12 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			if (_this.Name != string.Empty)
 			{
 				writer.WriteIndent(3);
-				writer.Write("Name \"{0}\"\n", _this.Name);
+				writer.Write($"Name \"{_this.Name}\"\n");
 			}
 			if (_this.LOD != 0)
 			{
 				writer.WriteIndent(3);
-				writer.Write("LOD {0}\n", _this.LOD);
+				writer.Write($"LOD {_this.LOD}\n");
 			}
 			_this.Tags.Export(writer, 3);
 
@@ -353,27 +347,27 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			if (!_this.ZClipValue().IsOn())
 			{
 				writer.WriteIndent(3);
-				writer.Write("ZClip {0}\n", _this.ZClipValue());
+				writer.Write($"ZClip {_this.ZClipValue()}\n");
 			}
 			if (!_this.ZTestValue().IsLEqual() && !_this.ZTestValue().IsNone())
 			{
 				writer.WriteIndent(3);
-				writer.Write("ZTest {0}\n", _this.ZTestValue());
+				writer.Write($"ZTest {_this.ZTestValue()}\n");
 			}
 			if (!_this.ZWriteValue().IsOn())
 			{
 				writer.WriteIndent(3);
-				writer.Write("ZWrite {0}\n", _this.ZWriteValue());
+				writer.Write($"ZWrite {_this.ZWriteValue()}\n");
 			}
 			if (!_this.CullingValue().IsBack())
 			{
 				writer.WriteIndent(3);
-				writer.Write("Cull {0}\n", _this.CullingValue());
+				writer.Write($"Cull {_this.CullingValue()}\n");
 			}
 			if (!_this.OffsetFactor.IsZero() || !_this.OffsetUnits.IsZero())
 			{
 				writer.WriteIndent(3);
-				writer.Write("Offset {0}, {1}\n", _this.OffsetFactor.Val, _this.OffsetUnits.Val);
+				writer.Write($"Offset {_this.OffsetFactor.Val}, {_this.OffsetUnits.Val}\n");
 			}
 
 			if (!_this.StencilRef.IsZero() || !_this.StencilReadMask.IsMax() || !_this.StencilWriteMask.IsMax() || !_this.StencilOp.IsDefault() || !_this.StencilOpFront.IsDefault() || !_this.StencilOpBack.IsDefault())
@@ -383,17 +377,17 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 				if (!_this.StencilRef.IsZero())
 				{
 					writer.WriteIndent(4);
-					writer.Write("Ref {0}\n", _this.StencilRef.Val);
+					writer.Write($"Ref {_this.StencilRef.Val}\n");
 				}
 				if (!_this.StencilReadMask.IsMax())
 				{
 					writer.WriteIndent(4);
-					writer.Write("ReadMask {0}\n", _this.StencilReadMask.Val);
+					writer.Write($"ReadMask {_this.StencilReadMask.Val}\n");
 				}
 				if (!_this.StencilWriteMask.IsMax())
 				{
 					writer.WriteIndent(4);
-					writer.Write("WriteMask {0}\n", _this.StencilWriteMask.Val);
+					writer.Write($"WriteMask {_this.StencilWriteMask.Val}\n");
 				}
 				if (!_this.StencilOp.IsDefault())
 				{
@@ -418,28 +412,22 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 				if (!_this.FogModeValue().IsUnknown())
 				{
 					writer.WriteIndent(4);
-					writer.Write("Mode {0}\n", _this.FogMode);
+					writer.Write($"Mode {_this.FogMode}\n");
 				}
 				if (!_this.FogColor.IsZero())
 				{
 					writer.WriteIndent(4);
-					writer.Write("Color ({0},{1},{2},{3})\n",
-						_this.FogColor.X.Val.ToString(CultureInfo.InvariantCulture),
-						_this.FogColor.Y.Val.ToString(CultureInfo.InvariantCulture),
-						_this.FogColor.Z.Val.ToString(CultureInfo.InvariantCulture),
-						_this.FogColor.W.Val.ToString(CultureInfo.InvariantCulture));
+					writer.Write($"Color ({_this.FogColor.X.Val.ToStringInvariant()},{_this.FogColor.Y.Val.ToStringInvariant()},{_this.FogColor.Z.Val.ToStringInvariant()},{_this.FogColor.W.Val.ToStringInvariant()})\n");
 				}
 				if (!_this.FogDensity.IsZero())
 				{
 					writer.WriteIndent(4);
-					writer.Write("Density {0}\n", _this.FogDensity.Val.ToString(CultureInfo.InvariantCulture));
+					writer.Write($"Density {_this.FogDensity.Val.ToStringInvariant()}\n");
 				}
 				if (!_this.FogStart.IsZero() || !_this.FogEnd.IsZero())
 				{
 					writer.WriteIndent(4);
-					writer.Write("Range {0}, {1}\n",
-						_this.FogStart.Val.ToString(CultureInfo.InvariantCulture),
-						_this.FogEnd.Val.ToString(CultureInfo.InvariantCulture));
+					writer.Write($"Range {_this.FogStart.Val.ToStringInvariant()}, {_this.FogEnd.Val.ToStringInvariant()}\n");
 				}
 				writer.WriteIndent(3);
 				writer.Write("}\n");
@@ -448,22 +436,22 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			if (_this.Lighting)
 			{
 				writer.WriteIndent(3);
-				writer.Write("Lighting {0}\n", _this.LightingValue());
+				writer.Write($"Lighting {_this.LightingValue()}\n");
 			}
 			writer.WriteIndent(3);
-			writer.Write("GpuProgramID {0}\n", _this.GpuProgramID);
+			writer.Write($"GpuProgramID {_this.GpuProgramID}\n");
 		}
 
 		public static void Export(this ISerializedStencilOp _this, TextWriter writer, StencilType type)
 		{
 			writer.WriteIndent(4);
-			writer.Write("Comp{0} {1}\n", type.ToSuffixString(), _this.CompValue());
+			writer.Write($"Comp{type.ToSuffixString()} {_this.CompValue()}\n");
 			writer.WriteIndent(4);
-			writer.Write("Pass{0} {1}\n", type.ToSuffixString(), _this.PassValue());
+			writer.Write($"Pass{type.ToSuffixString()} {_this.PassValue()}\n");
 			writer.WriteIndent(4);
-			writer.Write("Fail{0} {1}\n", type.ToSuffixString(), _this.FailValue());
+			writer.Write($"Fail{type.ToSuffixString()} {_this.FailValue()}\n");
 			writer.WriteIndent(4);
-			writer.Write("ZFail{0} {1}\n", type.ToSuffixString(), _this.ZFailValue());
+			writer.Write($"ZFail{type.ToSuffixString()} {_this.ZFailValue()}\n");
 		}
 
 		public static void Export(this ISerializedSubProgram _this, ShaderWriter writer, ShaderType type, bool isTier)
@@ -472,10 +460,10 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 #warning TODO: convertion (DX to HLSL)
 			ShaderGpuProgramType programType = _this.GetProgramType(writer.Version);
 			GPUPlatform graphicApi = programType.ToGPUPlatform(writer.Platform);
-			writer.Write("SubProgram \"{0} ", graphicApi);
+			writer.Write($"SubProgram \"{graphicApi} ");
 			if (isTier)
 			{
-				writer.Write("hw_tier{0} ", _this.ShaderHardwareTier.ToString("00"));
+				writer.Write($"hw_tier{_this.ShaderHardwareTier.ToString("00")} ");
 			}
 			writer.Write("\" {\n");
 			writer.WriteIndent(5);
@@ -514,7 +502,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 				writer.Write("Tags { ");
 				foreach (AccessPairBase<Utf8String, Utf8String> kvp in _this.Tags)
 				{
-					writer.Write("\"{0}\" = \"{1}\" ", kvp.Key, kvp.Value);
+					writer.Write($"\"{kvp.Key}\" = \"{kvp.Value}\" ");
 				}
 				writer.Write("}\n");
 			}
@@ -527,13 +515,13 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 				writer.Write("Keywords { ");
 				foreach (string keyword in _this.GlobalKeywords)
 				{
-					writer.Write("\"{0}\" ", keyword);
+					writer.Write($"\"{keyword}\" ");
 				}
 				if (ShaderSubProgram.HasLocalKeywords(writer.Version))
 				{
 					foreach (string keyword in _this.LocalKeywords)
 					{
-						writer.Write("\"{0}\" ", keyword);
+						writer.Write($"\"{keyword}\" ");
 					}
 				}
 				writer.Write("}\n");
@@ -544,7 +532,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 
 			if (writer.WriteQuotesAroundProgram)
 			{
-				writer.Write("\"{0}", programType.ToProgramDataKeyword(writer.Platform, type));
+				writer.Write($"\"{programType.ToProgramDataKeyword(writer.Platform, type)}");
 			}
 
 			if (_this.ProgramData.Length > 0)
