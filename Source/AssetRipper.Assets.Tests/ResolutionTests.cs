@@ -60,6 +60,19 @@ public class ResolutionTests
 	}
 
 	[Test]
+	public void CollectionResolutionIsAbleToFindUnityBuiltinExtra()
+	{
+		const string name = "unity_builtin_extra";
+		const string reference = $"resources/{name}";
+		GameBundle gameBundle = new();
+
+		ProcessedAssetCollection collection = new ProcessedAssetCollection(gameBundle);
+		collection.Name = name;
+
+		Assert.That(gameBundle.ResolveCollection(FilenameUtils.FixFileIdentifier(reference)), Is.EqualTo(collection));
+	}
+
+	[Test]
 	public void ResourceResolutionWorksAnywhereInTheHierarchy()
 	{
 		const string name1 = "name1";

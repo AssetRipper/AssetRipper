@@ -34,11 +34,15 @@ namespace AssetRipper.IO.Files.Utils
 			name = FixResourcePath(name);
 			if (IsDefaultResource(name))
 			{
-				return DefaultResourceName1;
+				//I'm not sure why uTiny was redirecting these to an alternate name.
+				//return DefaultResourceName1;
+				return name;
 			}
 			else if (IsBuiltinExtra(name))
 			{
-				return BuiltinExtraName1;
+				//I'm not sure why uTiny was redirecting these to an alternate name.
+				//return BuiltinExtraName1;
+				return name;
 			}
 			else
 			{
