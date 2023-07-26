@@ -277,6 +277,7 @@ namespace AssetRipper.GUI.AssetInformation
 				builder.AppendLine($"Asset Class: {Asset.GetType()}");
 
 				builder.AppendLine($"Asset Type ID: {Asset.ClassID}");
+				builder.AppendLine($"Asset Path ID: {Asset.PathID}");
 
 				if (HasName)
 				{
