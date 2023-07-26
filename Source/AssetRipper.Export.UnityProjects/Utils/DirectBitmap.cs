@@ -18,6 +18,7 @@ public readonly struct DirectBitmap<TColor, TColorArg>
 	{
 		Width = width;
 		Height = height;
+		Depth = depth;
 		Data = new byte[CalculateByteSize(width, height, depth)];
 	}
 
@@ -30,6 +31,7 @@ public readonly struct DirectBitmap<TColor, TColorArg>
 
 		Width = width;
 		Height = height;
+		Depth = depth;
 		Data = data;
 	}
 
@@ -226,6 +228,6 @@ public readonly struct DirectBitmap<TColor, TColorArg>
 
 	private static int CalculateByteSize(int width, int height, int depth)
 	{
-		return width * height * depth * Unsafe.SizeOf<TColor>();
+		return width * height * depth * PixelSize;
 	}
 }

@@ -22,7 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 		Source\Licenses\darkfx.md = Source\Licenses\darkfx.md
 		Source\Licenses\Fmod5Sharp.md = Source\Licenses\Fmod5Sharp.md
 		Source\Licenses\ILSpy.md = Source\Licenses\ILSpy.md
-		Source\Licenses\ImageSharp.md = Source\Licenses\ImageSharp.md
 		Source\Licenses\LibVLCSharp.md = Source\Licenses\LibVLCSharp.md
 		Source\Licenses\Lz4.md = Source\Licenses\Lz4.md
 		Source\Licenses\MessageBoxAvalonia.md = Source\Licenses\MessageBoxAvalonia.md

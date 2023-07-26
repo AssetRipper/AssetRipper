@@ -16,8 +16,6 @@ Crunch is licensed under the [MIT license](https://github.com/AssetRipper/AssetR
 
 [ICSharpCode.Decompiler](https://github.com/icsharpcode/ILSpy) is licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Source/Licenses/ILSpy.md).
 
-[ImageSharp](https://github.com/SixLabors/ImageSharp) is licensed under the [Apache 2.0 license](https://github.com/AssetRipper/AssetRipper/blob/master/Source/Licenses/ImageSharp.md).
-
 [K4os.Compression.LZ4](https://github.com/MiloszKrajewski/K4os.Compression.LZ4) is licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Source/Licenses/Lz4.md).
 
 [LibVLCSharp](https://github.com/videolan/libvlcsharp) is licensed under the [LGPL-2.1 License](https://github.com/AssetRipper/AssetRipper/blob/master/Source/Licenses/LibVLCSharp.md)
@@ -39,6 +37,8 @@ Crunch is licensed under the [MIT license](https://github.com/AssetRipper/AssetR
 Smolv is licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Source/Licenses/Smolv.md).
 
 SpirV is licensed under the [MIT license](https://github.com/AssetRipper/AssetRipper/blob/master/Source/Licenses/SpirV.md).
+
+[StbImageWriteSharp](https://github.com/StbSharp/StbImageWriteSharp) is in the public domain.
 
 ## Other
 
