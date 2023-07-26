@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<IsTrimmable>true</IsTrimmable>
@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AsmResolver.DotNet" Version="5.3.0" />
+		<PackageReference Include="AsmResolver.DotNet" Version="5.4.0" />
 	</ItemGroup>
 
 </Project>
