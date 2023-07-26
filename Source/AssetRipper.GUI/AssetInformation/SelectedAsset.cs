@@ -283,6 +283,11 @@ namespace AssetRipper.GUI.AssetInformation
 					builder.AppendLine($"Name: {Name}");
 				}
 
+				if (Asset.OriginalDirectory is not null || Asset.OriginalName is not null || Asset.OriginalExtension is not null)
+				{
+					builder.AppendLine($"Original Path: {Asset.OriginalPath}");
+				}
+
 				if (HasImageData)
 				{
 					builder.AppendLine($"Image Format: {TextureFormat}");
