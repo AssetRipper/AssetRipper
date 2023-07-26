@@ -11,23 +11,45 @@ namespace AssetRipper.GUI
 	internal static class ConsoleApp
 	{
 		private const string DefaultLogFileName = "AssetRipper.log";
+		private static List<string>? FilesToExport { get; set; }
+		private static DirectoryInfo? OutputDirectory { get; set; }
+		private static FileInfo? LogFile { get; set; }
 		private static bool Quit { get; set; }
 
 		public static void ParseArgumentsAndRun(string[] args)
 		{
-			Logger.Add(new ConsoleLogger(false));
-#if !DEBUG
-			try
-#endif
+			Parse(args);
+			if (FilesToExport is null)
 			{
-				Parse(args);
+				//This is only null if the user uses the --help or --version option.
+				return;
 			}
-#if !DEBUG
-			catch (Exception ex)
+			else if (!ValidatePaths(FilesToExport))
 			{
-				Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
+				Environment.ExitCode = 1;
 			}
+			else
+			{
+#if !DEBUG
+				try
 #endif
+				{
+					Logger.Add(new ConsoleLogger(false));
+					if (LogFile?.Directory is not null)
+					{
+						Directory.CreateDirectory(LogFile.Directory.FullName);
+					}
+					Logger.Add(new FileLogger(LogFile?.FullName ?? ExecutingDirectory.Combine(DefaultLogFileName)));
+					Run(FilesToExport, OutputDirectory?.FullName ?? ExecutingDirectory.Combine("Ripped"));
+				}
+#if !DEBUG
+				catch (Exception ex)
+				{
+					Logger.Log(LogType.Error, LogCategory.General, ex.ToString());
+				}
+#endif
+			}
+
 			if (!Quit)
 			{
 				Console.ReadKey();
@@ -67,34 +89,16 @@ namespace AssetRipper.GUI
 
 			rootCommand.SetHandler((List<string> filesToExport, DirectoryInfo? outputDirectory, FileInfo? logFile, bool verbose, bool quit) =>
 			{
+				FilesToExport = filesToExport;
+				OutputDirectory = outputDirectory;
+				LogFile = logFile;
+				Logger.AllowVerbose = verbose;
 				Quit = quit;
-				if (!ValidatePaths(filesToExport))
-				{
-					Environment.ExitCode = 1;
-				}
-				else
-				{
-					if (logFile is not null) {
-						Directory.CreateDirectory(logFile.Directory.FullName);
-					}
-					Logger.AllowVerbose = verbose;
-					Logger.Add(new FileLogger(logFile?.FullName ?? ExecutingDirectory.Combine(DefaultLogFileName)));
-					Run(filesToExport, outputDirectory?.FullName ?? ExecutingDirectory.Combine("Ripped"));
-				}
 			},
 			filesToExportOption, outputOption, logFileOption, verboseOption, quitOption);
 
 			new CommandLineBuilder(rootCommand)
-				.UseVersionOption()
-				.UseHelp()
-				//.UseEnvironmentVariableDirective()
-				.UseParseDirective()
-				//.UseSuggestDirective()
-				.RegisterWithDotnetSuggest()
-				.UseTypoCorrections()
-				.UseParseErrorReporting()
-				//.UseExceptionHandler()
-				.CancelOnProcessTermination()
+				.UseDefaults()
 				.Build()
 				.Invoke(args);
 		}
