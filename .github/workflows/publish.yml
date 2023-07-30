@@ -167,17 +167,18 @@ jobs:
           mkdir -p AssetRipper.app/Contents/Resources
           cp Source/Bins/Publish/AssetRipper_mac_x64/* AssetRipper.app/Contents/MacOS/
 
+          logo=Media/Images/LogoReimagined/LogoReimaginedTransparent.png
           mkdir AssetRipper.iconset
-          sips -z 16 16     Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_16x16.png
-          sips -z 32 32     Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_16x16@2x.png
-          sips -z 32 32     Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_32x32.png
-          sips -z 64 64     Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_32x32@2x.png
-          sips -z 128 128   Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_128x128.png
-          sips -z 256 256   Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_128x128@2x.png
-          sips -z 256 256   Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_256x256.png
-          sips -z 512 512   Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_256x256@2x.png
-          sips -z 512 512   Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_512x512.png
-          sips -z 1024 1024 Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_512x512@2x.png
+          sips -z 16 16     $logo --out AssetRipper.iconset/icon_16x16.png
+          sips -z 32 32     $logo --out AssetRipper.iconset/icon_16x16@2x.png
+          sips -z 32 32     $logo --out AssetRipper.iconset/icon_32x32.png
+          sips -z 64 64     $logo --out AssetRipper.iconset/icon_32x32@2x.png
+          sips -z 128 128   $logo --out AssetRipper.iconset/icon_128x128.png
+          sips -z 256 256   $logo --out AssetRipper.iconset/icon_128x128@2x.png
+          sips -z 256 256   $logo --out AssetRipper.iconset/icon_256x256.png
+          sips -z 512 512   $logo --out AssetRipper.iconset/icon_256x256@2x.png
+          sips -z 512 512   $logo --out AssetRipper.iconset/icon_512x512.png
+          sips -z 1024 1024 $logo --out AssetRipper.iconset/icon_512x512@2x.png
           iconutil -c icns AssetRipper.iconset
           mv AssetRipper.icns AssetRipper.app/Contents/Resources/
 
@@ -235,17 +236,18 @@ jobs:
           mkdir -p AssetRipper.app/Contents/Resources
           cp Source/Bins/Publish/AssetRipper_mac_arm64/* AssetRipper.app/Contents/MacOS/
 
+          logo=Media/Images/LogoReimagined/LogoReimaginedTransparent.png
           mkdir AssetRipper.iconset
-          sips -z 16 16     Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_16x16.png
-          sips -z 32 32     Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_16x16@2x.png
-          sips -z 32 32     Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_32x32.png
-          sips -z 64 64     Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_32x32@2x.png
-          sips -z 128 128   Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_128x128.png
-          sips -z 256 256   Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_128x128@2x.png
-          sips -z 256 256   Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_256x256.png
-          sips -z 512 512   Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_256x256@2x.png
-          sips -z 512 512   Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_512x512.png
-          sips -z 1024 1024 Media/Images/LogoReimagined/LogoReimaginedTransparent.png --out AssetRipper.iconset/icon_512x512@2x.png
+          sips -z 16 16     $logo --out AssetRipper.iconset/icon_16x16.png
+          sips -z 32 32     $logo --out AssetRipper.iconset/icon_16x16@2x.png
+          sips -z 32 32     $logo --out AssetRipper.iconset/icon_32x32.png
+          sips -z 64 64     $logo --out AssetRipper.iconset/icon_32x32@2x.png
+          sips -z 128 128   $logo --out AssetRipper.iconset/icon_128x128.png
+          sips -z 256 256   $logo --out AssetRipper.iconset/icon_128x128@2x.png
+          sips -z 256 256   $logo --out AssetRipper.iconset/icon_256x256.png
+          sips -z 512 512   $logo --out AssetRipper.iconset/icon_256x256@2x.png
+          sips -z 512 512   $logo --out AssetRipper.iconset/icon_512x512.png
+          sips -z 1024 1024 $logo --out AssetRipper.iconset/icon_512x512@2x.png
           iconutil -c icns AssetRipper.iconset
           mv AssetRipper.icns AssetRipper.app/Contents/Resources/
 
