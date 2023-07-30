@@ -6,6 +6,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.MarkerInterfaces;
 using System.Diagnostics;
@@ -82,6 +83,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 	{
 		IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance, PrefabInstance.Create);
 
+		prefab.ObjectHideFlags = HideFlags.HideInHierarchy;
 		prefab.RootGameObject_C1001P = root;
 		prefab.IsPrefabAsset_C1001 = true;
 		prefab.AssetBundleName = root.AssetBundleName;
