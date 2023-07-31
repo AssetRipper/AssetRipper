@@ -1,11 +1,5 @@
 # Development Roadmap
 
-## 0.3.3.0
-This release will be primarily focused on improving the user interface.
-
-* Add a settings window
-* Add donation information
-
 ## 0.3.X.0
 These releases will likely focus on preparing for the next major milestone.
 
@@ -42,6 +36,8 @@ This release might focus on improving the user experience in the GUI.
   * Binary Export
     * SerializeFile writing as an alternative to yaml export.
 * UI
+  * Add a settings window
+  * Add donation information
   * Improved Asset previews
     * Preview decompiled scripts
     * Add a Mesh preview
