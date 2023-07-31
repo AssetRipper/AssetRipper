@@ -163,12 +163,48 @@ jobs:
           date -u > ./Source/Bins/Publish/AssetRipper_mac_x64/compile_time.txt
           ls -R ./Source/Bins/Publish/AssetRipper_mac_x64
           chmod +x ./Source/Bins/Publish/AssetRipper_mac_x64/AssetRipper
+          mkdir -p upload/AssetRipper.app/Contents/MacOS
+          mkdir -p upload/AssetRipper.app/Contents/Resources
+          cp -r Source/Bins/Publish/AssetRipper_mac_x64/* upload/AssetRipper.app/Contents/MacOS/
+
+          logo=Media/Images/LogoReimagined/LogoReimaginedTransparent.png
+          mkdir AssetRipper.iconset
+          sips -z 16 16     $logo --out AssetRipper.iconset/icon_16x16.png
+          sips -z 32 32     $logo --out AssetRipper.iconset/icon_16x16@2x.png
+          sips -z 32 32     $logo --out AssetRipper.iconset/icon_32x32.png
+          sips -z 64 64     $logo --out AssetRipper.iconset/icon_32x32@2x.png
+          sips -z 128 128   $logo --out AssetRipper.iconset/icon_128x128.png
+          sips -z 256 256   $logo --out AssetRipper.iconset/icon_128x128@2x.png
+          sips -z 256 256   $logo --out AssetRipper.iconset/icon_256x256.png
+          sips -z 512 512   $logo --out AssetRipper.iconset/icon_256x256@2x.png
+          sips -z 512 512   $logo --out AssetRipper.iconset/icon_512x512.png
+          sips -z 1024 1024 $logo --out AssetRipper.iconset/icon_512x512@2x.png
+          iconutil -c icns AssetRipper.iconset
+          mv AssetRipper.icns upload/AssetRipper.app/Contents/Resources/
+
+          version=$(cat Source/Directory.Build.props | sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p')
+
+          cat << EOF > upload/AssetRipper.app/Contents/Info.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+              <dict>
+                  <key>CFBundleName</key>               <string>AssetRipper</string>
+                  <key>CFBundleExecutable</key>         <string>AssetRipper</string>
+                  <key>CFBundleIdentifier</key>         <string>assetripper</string>
+                  <key>CFBundleIconFile</key>           <string>AssetRipper.icns</string>
+                  <key>CFBundleVersion</key>            <string>$version</string>
+                  <key>CFBundleShortVersionString</key> <string>$version</string>
+                  <key>NSHighResolutionCapable</key>    <string>True</string>
+              </dict>
+          </plist>
+          EOF
 
       - name: Upload AssetRipper Mac x64
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_mac_x64
-          path: ./Source/Bins/Publish/AssetRipper_mac_x64/*
+          path: ./upload/
           if-no-files-found: error
 
   publish_mac_arm64:
@@ -196,10 +232,46 @@ jobs:
           date -u > ./Source/Bins/Publish/AssetRipper_mac_arm64/compile_time.txt
           ls -R ./Source/Bins/Publish/AssetRipper_mac_arm64
           chmod +x ./Source/Bins/Publish/AssetRipper_mac_arm64/AssetRipper
+          mkdir -p upload/AssetRipper.app/Contents/MacOS
+          mkdir -p upload/AssetRipper.app/Contents/Resources
+          cp -r Source/Bins/Publish/AssetRipper_mac_arm64/* upload/AssetRipper.app/Contents/MacOS/
+
+          logo=Media/Images/LogoReimagined/LogoReimaginedTransparent.png
+          mkdir AssetRipper.iconset
+          sips -z 16 16     $logo --out AssetRipper.iconset/icon_16x16.png
+          sips -z 32 32     $logo --out AssetRipper.iconset/icon_16x16@2x.png
+          sips -z 32 32     $logo --out AssetRipper.iconset/icon_32x32.png
+          sips -z 64 64     $logo --out AssetRipper.iconset/icon_32x32@2x.png
+          sips -z 128 128   $logo --out AssetRipper.iconset/icon_128x128.png
+          sips -z 256 256   $logo --out AssetRipper.iconset/icon_128x128@2x.png
+          sips -z 256 256   $logo --out AssetRipper.iconset/icon_256x256.png
+          sips -z 512 512   $logo --out AssetRipper.iconset/icon_256x256@2x.png
+          sips -z 512 512   $logo --out AssetRipper.iconset/icon_512x512.png
+          sips -z 1024 1024 $logo --out AssetRipper.iconset/icon_512x512@2x.png
+          iconutil -c icns AssetRipper.iconset
+          mv AssetRipper.icns upload/AssetRipper.app/Contents/Resources/
+
+          version=$(cat Source/Directory.Build.props | sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p')
+
+          cat << EOF > upload/AssetRipper.app/Contents/Info.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+              <dict>
+                  <key>CFBundleName</key>               <string>AssetRipper</string>
+                  <key>CFBundleExecutable</key>         <string>AssetRipper</string>
+                  <key>CFBundleIdentifier</key>         <string>assetripper</string>
+                  <key>CFBundleIconFile</key>           <string>AssetRipper.icns</string>
+                  <key>CFBundleVersion</key>            <string>$version</string>
+                  <key>CFBundleShortVersionString</key> <string>$version</string>
+                  <key>NSHighResolutionCapable</key>    <string>True</string>
+              </dict>
+          </plist>
+          EOF
 
       - name: Upload AssetRipper Mac arm64
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_mac_arm64
-          path: ./Source/Bins/Publish/AssetRipper_mac_arm64/*
+          path: ./upload/
           if-no-files-found: error
