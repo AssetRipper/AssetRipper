@@ -163,9 +163,9 @@ jobs:
           date -u > ./Source/Bins/Publish/AssetRipper_mac_x64/compile_time.txt
           ls -R ./Source/Bins/Publish/AssetRipper_mac_x64
           chmod +x ./Source/Bins/Publish/AssetRipper_mac_x64/AssetRipper
-          mkdir -p AssetRipper.app/Contents/MacOS
-          mkdir -p AssetRipper.app/Contents/Resources
-          cp -r Source/Bins/Publish/AssetRipper_mac_x64/* AssetRipper.app/Contents/MacOS/
+          mkdir -p upload/AssetRipper.app/Contents/MacOS
+          mkdir -p upload/AssetRipper.app/Contents/Resources
+          cp -r Source/Bins/Publish/AssetRipper_mac_x64/* upload/AssetRipper.app/Contents/MacOS/
 
           logo=Media/Images/LogoReimagined/LogoReimaginedTransparent.png
           mkdir AssetRipper.iconset
@@ -180,11 +180,11 @@ jobs:
           sips -z 512 512   $logo --out AssetRipper.iconset/icon_512x512.png
           sips -z 1024 1024 $logo --out AssetRipper.iconset/icon_512x512@2x.png
           iconutil -c icns AssetRipper.iconset
-          mv AssetRipper.icns AssetRipper.app/Contents/Resources/
+          mv AssetRipper.icns upload/AssetRipper.app/Contents/Resources/
 
           version=$(cat Source/Directory.Build.props | sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p')
 
-          cat << EOF > AssetRipper.app/Contents/Info.plist
+          cat << EOF > upload/AssetRipper.app/Contents/Info.plist
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
@@ -204,7 +204,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_mac_x64
-          path: ./AssetRipper.app
+          path: ./upload/
           if-no-files-found: error
 
   publish_mac_arm64:
@@ -232,9 +232,9 @@ jobs:
           date -u > ./Source/Bins/Publish/AssetRipper_mac_arm64/compile_time.txt
           ls -R ./Source/Bins/Publish/AssetRipper_mac_arm64
           chmod +x ./Source/Bins/Publish/AssetRipper_mac_arm64/AssetRipper
-          mkdir -p AssetRipper.app/Contents/MacOS
-          mkdir -p AssetRipper.app/Contents/Resources
-          cp -r Source/Bins/Publish/AssetRipper_mac_arm64/* AssetRipper.app/Contents/MacOS/
+          mkdir -p upload/AssetRipper.app/Contents/MacOS
+          mkdir -p upload/AssetRipper.app/Contents/Resources
+          cp -r Source/Bins/Publish/AssetRipper_mac_arm64/* upload/AssetRipper.app/Contents/MacOS/
 
           logo=Media/Images/LogoReimagined/LogoReimaginedTransparent.png
           mkdir AssetRipper.iconset
@@ -249,11 +249,11 @@ jobs:
           sips -z 512 512   $logo --out AssetRipper.iconset/icon_512x512.png
           sips -z 1024 1024 $logo --out AssetRipper.iconset/icon_512x512@2x.png
           iconutil -c icns AssetRipper.iconset
-          mv AssetRipper.icns AssetRipper.app/Contents/Resources/
+          mv AssetRipper.icns upload/AssetRipper.app/Contents/Resources/
 
           version=$(cat Source/Directory.Build.props | sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p')
 
-          cat << EOF > AssetRipper.app/Contents/Info.plist
+          cat << EOF > upload/AssetRipper.app/Contents/Info.plist
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
@@ -273,5 +273,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_mac_arm64
-          path: ./AssetRipper.app
+          path: ./upload/
           if-no-files-found: error
