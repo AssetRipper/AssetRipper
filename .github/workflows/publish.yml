@@ -165,7 +165,7 @@ jobs:
           chmod +x ./Source/Bins/Publish/AssetRipper_mac_x64/AssetRipper
           mkdir -p AssetRipper.app/Contents/MacOS
           mkdir -p AssetRipper.app/Contents/Resources
-          cp Source/Bins/Publish/AssetRipper_mac_x64/* AssetRipper.app/Contents/MacOS/
+          cp -r Source/Bins/Publish/AssetRipper_mac_x64/* AssetRipper.app/Contents/MacOS/
 
           logo=Media/Images/LogoReimagined/LogoReimaginedTransparent.png
           mkdir AssetRipper.iconset
@@ -234,7 +234,7 @@ jobs:
           chmod +x ./Source/Bins/Publish/AssetRipper_mac_arm64/AssetRipper
           mkdir -p AssetRipper.app/Contents/MacOS
           mkdir -p AssetRipper.app/Contents/Resources
-          cp Source/Bins/Publish/AssetRipper_mac_arm64/* AssetRipper.app/Contents/MacOS/
+          cp -r Source/Bins/Publish/AssetRipper_mac_arm64/* AssetRipper.app/Contents/MacOS/
 
           logo=Media/Images/LogoReimagined/LogoReimaginedTransparent.png
           mkdir AssetRipper.iconset
