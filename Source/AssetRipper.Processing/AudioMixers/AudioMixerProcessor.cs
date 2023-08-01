@@ -209,13 +209,7 @@ namespace AssetRipper.Processing.AudioMixers
 					{
 						if (indexToGuid.TryGetValue((uint)j, out UnityGuid valueGuid))
 						{
-							GUID guid = (GUID)valueGuid;
-							if (!snapshotController.FloatValues_C245.TryGetSinglePairForKey(guid, out AccessPairBase<GUID, float>? pair))
-							{
-								pair = snapshotController.FloatValues_C245.AddNew();
-								pair.Key.CopyValues(guid);
-							}
-							pair.Value = snapshotConstant.Values[j];
+							SetValue(snapshotController.FloatValues_C245, (GUID)valueGuid, snapshotConstant.Values[j]);
 						}
 						else
 						{
@@ -229,7 +223,7 @@ namespace AssetRipper.Processing.AudioMixers
 						int transitionType = (int)snapshotConstant.TransitionTypes[j];
 						if (indexToGuid.TryGetValue(paramIndex, out UnityGuid paramGuid))
 						{
-							snapshotController.TransitionOverrides_C245[(GUID)paramGuid] = transitionType;
+							SetValue(snapshotController.TransitionOverrides_C245, (GUID)paramGuid, transitionType);
 						}
 						else
 						{
@@ -310,6 +304,16 @@ namespace AssetRipper.Processing.AudioMixers
 				}
 				return count;
 			}
+		}
+
+		private static void SetValue<T>(AssetDictionary<GUID, T> dictionary, GUID key, T value) where T : struct
+		{
+			if (!dictionary.TryGetSinglePairForKey(key, out AccessPairBase<GUID, T>? pair))
+			{
+				pair = dictionary.AddNew();
+				pair.Key.CopyValues(key);
+			}
+			pair.Value = value;
 		}
 	}
 }
