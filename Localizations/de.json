@@ -13,7 +13,7 @@
     "asset_tab_audio": "Audio",
     "asset_tab_audio_play": "Abspielen",
     "asset_tab_audio_pause": "Pausieren",
-    "script_export_format_dll_without_renaming_description": "Assemblies werden in ihrer kompilierten DLL-Form exportiert. Experimentell. Funktioniert möglicherweise gar nicht.",
+    "script_export_format_dll_without_renaming_description": "Assemblies werden in ihrer kompilierten Dll-Form exportiert. Unity wird wahrscheinlich spezielle Assemblies wie Assembly-CSharp überschreiben.",
     "mesh_format_glb_description": "Eine hochwertige Alternative zu FBX, die Open Source ist. Binäre Version von GLTF. Enthält nur Mesh-Daten. Kann Fehler verursachen. Unity kann Assets dieses Typs nicht importieren.",
     "skip_streaming_assets": "StreamingAssets-Ordner überspringen",
     "mesh_export_title": "Mesh-Exportformat",
@@ -143,5 +143,7 @@
     "loading_step_parse_web": "Webdatei {0} wird analysiert",
     "loading_step_parse_il2cpp_metadata": "IL2CPP-Metadaten werden analysiert",
     "loading_step_load_assets_from_file": "Assets aus {0} werden geladen",
-    "audio_format_yaml_description": "Export als yaml-Asset und resS-Datei. Dies ist eine sichere Option und wird als Backup verwendet, wenn etwas schief geht."
+    "audio_format_yaml_description": "Export als yaml-Asset und resS-Datei. Dies ist eine sichere Option und wird als Backup verwendet, wenn etwas schief geht.",
+    "ignore_engine_assets": "Engine Assets ignorieren",
+    "script_export_format_hybrid_description": "Spezielle Assemblies wie Assembly-CSharp werden dekompiliert. Andere Assemblies werden in ihrer kompilierten Dll-Form exportiert."
 }
