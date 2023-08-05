@@ -194,11 +194,15 @@ public readonly struct DirectBitmap<TColor, TColorArg>
 	{
 		GetData(this, out byte[] data, out int pixelSize, out PixelFormat pixelFormat);
 		GCHandle bitsHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-		using (Bitmap bitmap = new Bitmap(Width, Height * Depth, Width * pixelSize, pixelFormat, bitsHandle.AddrOfPinnedObject()))
+		try
 		{
+			using Bitmap bitmap = new Bitmap(Width, Height * Depth, Width * pixelSize, pixelFormat, bitsHandle.AddrOfPinnedObject());
 			bitmap.Save(stream, format);
 		}
-		bitsHandle.Free();
+		finally
+		{
+			bitsHandle.Free();
+		}
 
 		static void GetData(DirectBitmap<TColor, TColorArg> @this, out byte[] data, out int pixelSize, out PixelFormat pixelFormat)
 		{
