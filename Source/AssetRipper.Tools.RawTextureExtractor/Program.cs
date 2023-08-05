@@ -15,7 +15,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_89;
 using AssetRipper.SourceGenerated.Extensions;
 using System.Diagnostics;
-using System.Text;
 
 namespace AssetRipper.Tools.RawTextureExtractor
 {
@@ -90,7 +89,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 
 		private static void Extract(AssetCollection collection)
 		{
-			const string txtExtension = ".txt";
+			const string jsonExtension = ".json";
 
 			string collectionOutputPath = Path.Combine(GetReversedName(collection).Reverse().ToArray());
 			Directory.CreateDirectory(collectionOutputPath);
@@ -104,21 +103,23 @@ namespace AssetRipper.Tools.RawTextureExtractor
 						? FileUtils.FixInvalidNameCharacters(originalName)
 						: $"{texture.ClassName}_{ToValidString(texture.PathID)}";
 					Debug.Assert(name.Length > 0);
-					string uniqueName = FileUtils.GetUniqueName(collectionOutputPath, name, FileUtils.MaxFilePathLength - txtExtension.Length);
+					string uniqueName = FileUtils.GetUniqueName(collectionOutputPath, name, FileUtils.MaxFilePathLength - jsonExtension.Length);
 					string dataFilePath = Path.Combine(collectionOutputPath, uniqueName);
-					string infoFilePath = dataFilePath + txtExtension;
+					string infoFilePath = dataFilePath + jsonExtension;
 					File.WriteAllBytes(dataFilePath, data);
-					StringBuilder sb = new();
-					sb.AppendLine($"Original Name: {originalName}");
-					sb.AppendLine($"Type: {texture.ClassName}");
-					sb.AppendLine($"Texture Format: {texture.Format_C28E}");
-					sb.AppendLine($"File Size: {data.Length}");
-					sb.AppendLine($"Image Count: {texture.ImageCount_C28}");
-					sb.AppendLine($"Mips: {texture.GetMips()}");
-					sb.AppendLine($"Complete Image Size: {texture.GetCompleteImageSize()}");
-					sb.AppendLine($"Width: {texture.Width_C28}");
-					sb.AppendLine($"Height: {texture.Height_C28}");
-					File.WriteAllText(infoFilePath, sb.ToString());
+					string text = $$"""
+						{
+							"Type" : "{{texture.ClassName}}",
+							"Format" : "{{texture.Format_C28E}}",
+							"FileSize" : {{data.Length}},
+							"ImageSize" : {{texture.GetCompleteImageSize()}},
+							"ImageCount" : {{texture.ImageCount_C28}},
+							"Mips" : {{texture.GetMips().ToJson()}},
+							"Width" : {{texture.Width_C28}},
+							"Height" : {{texture.Height_C28}}
+						}
+						""";
+					File.WriteAllText(infoFilePath, text);
 				}
 			}
 		}
@@ -149,6 +150,11 @@ namespace AssetRipper.Tools.RawTextureExtractor
 			{
 				return (-value).ToString();
 			}
+		}
+
+		private static string ToJson(this bool value)
+		{
+			return value ? "true" : "false";
 		}
 
 		private sealed class TextureAssetFactory : AssetFactoryBase
