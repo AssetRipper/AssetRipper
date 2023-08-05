@@ -46,7 +46,8 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 			if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap))
 			{
-				bitmap.Save(File.Create(path), ImageExportFormat);
+				using FileStream stream = File.Create(path);
+				bitmap.Save(stream, ImageExportFormat);
 				return true;
 			}
 			else

@@ -36,7 +36,8 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 		{
 			ITerrainData terrain = (ITerrainData)asset;
 			DirectBitmap bitmap = GetBitmap(terrain);
-			bitmap.Save(File.Create(path), ImageFormat);
+			using FileStream stream = File.Create(path);
+			bitmap.Save(stream, ImageFormat);
 			return true;
 		}
 

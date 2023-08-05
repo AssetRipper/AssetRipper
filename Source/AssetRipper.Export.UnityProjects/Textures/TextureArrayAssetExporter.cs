@@ -77,7 +77,8 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 
 		if (success)
 		{
-			bitmap.Save(File.Create(path), ImageExportFormat);
+			using FileStream stream = File.Create(path);
+			bitmap.Save(stream, ImageExportFormat);
 			return true;
 		}
 		else
