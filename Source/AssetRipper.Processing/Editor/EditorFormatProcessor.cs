@@ -67,6 +67,7 @@ namespace AssetRipper.Processing.Editor
 			tagManager = gameData.GameBundle.FetchAssets().OfType<ITagManager>().FirstOrDefault();
 			currentAnimationCache = AnimationCache.CreateCache(gameData.GameBundle);
 			checksumCache = new PathChecksumCache(gameData.AssemblyManager);
+			checksumCache.Value.BuildPathsCache(currentAnimationCache);
 
 			//Sequential processing
 			foreach (IUnityObjectBase asset in GetReleaseAssets(gameData))
