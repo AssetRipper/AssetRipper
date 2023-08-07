@@ -1,8 +1,5 @@
 ﻿using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
-using AssetRipper.Assets.Utils;
 using AssetRipper.Checksum;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
