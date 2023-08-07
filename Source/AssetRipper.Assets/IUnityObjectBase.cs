@@ -4,24 +4,68 @@ using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
-using AssetRipper.Primitives;
 using AssetRipper.Yaml;
 
 namespace AssetRipper.Assets;
 
 public interface IUnityObjectBase : IUnityAssetBase
 {
+	/// <summary>
+	/// The key information about the location of this asset.
+	/// </summary>
 	AssetInfo AssetInfo { get; }
+	/// <summary>
+	/// The native class ID number of this object.
+	/// </summary>
 	int ClassID { get; }
+	/// <summary>
+	/// The native class name of this object.
+	/// </summary>
 	string ClassName { get; }
+	/// <summary>
+	/// The <see cref="AssetCollection"/> this object belongs to.
+	/// </summary>
 	AssetCollection Collection { get; }
+	/// <summary>
+	/// The <see cref="AssetInfo.PathID"/> of this object within <see cref="Collection"/>.
+	/// </summary>
 	long PathID { get; }
+	/// <summary>
+	/// A random GUID for this object.
+	/// </summary>
+	/// <remarks>
+	/// This may be overridden by export code, eg for MonoScripts.
+	/// </remarks>
 	UnityGuid GUID { get; }
+	/// <summary>
+	/// The original path of this object, if known.
+	/// </summary>
+	/// <remarks>
+	/// The path is relative to the project root and may use forward or back slashes.
+	/// </remarks>
 	string? OriginalPath { get; set; }
+	/// <summary>
+	/// The original directory of this object, if known.
+	/// </summary>
+	/// <remarks>
+	/// The path is relative to the project root and may use forward or back slashes.
+	/// </remarks>
 	string? OriginalDirectory { get; set; }
+	/// <summary>
+	/// The original file name of this object, if known.
+	/// </summary>
 	string? OriginalName { get; set; }
+	/// <summary>
+	/// The original file extension of this object, if known.
+	/// </summary>
 	string? OriginalExtension { get; set; }
+	/// <summary>
+	/// The name of the asset bundle this object belongs to, if known.
+	/// </summary>
 	string? AssetBundleName { get; set; }
+	/// <summary>
+	/// The primary asset that this object is associated with, if any.
+	/// </summary>
 	IUnityObjectBase? MainAsset { get; set; }
 
 	YamlDocument ExportYamlDocument(IExportContainer container);
