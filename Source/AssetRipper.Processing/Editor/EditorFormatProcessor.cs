@@ -54,7 +54,6 @@ namespace AssetRipper.Processing.Editor
 		private ITagManager? tagManager;
 		private readonly BundledAssetsExportMode bundledAssetsExportMode;
 		private PathChecksumCache? checksumCache;
-		private AnimationCache? currentAnimationCache;
 
 		public EditorFormatProcessor(BundledAssetsExportMode bundledAssetsExportMode)
 		{
@@ -65,9 +64,8 @@ namespace AssetRipper.Processing.Editor
 		{
 			Logger.Info(LogCategory.Processing, "Editor Format Conversion");
 			tagManager = gameData.GameBundle.FetchAssets().OfType<ITagManager>().FirstOrDefault();
-			currentAnimationCache = AnimationCache.CreateCache(gameData.GameBundle);
 			checksumCache = new PathChecksumCache(gameData.AssemblyManager);
-			checksumCache.Value.BuildPathsCache(currentAnimationCache);
+			checksumCache.Value.BuildPathsCache(gameData.GameBundle);
 
 			//Sequential processing
 			foreach (IUnityObjectBase asset in GetReleaseAssets(gameData))
@@ -79,7 +77,6 @@ namespace AssetRipper.Processing.Editor
 			Parallel.ForEach(GetReleaseAssets(gameData), ConvertAsync);
 
 			checksumCache = null;
-			currentAnimationCache = null;
 			tagManager = null;
 		}
 
@@ -108,7 +105,7 @@ namespace AssetRipper.Processing.Editor
 					spriteAtlas.ConvertToEditorFormat();
 					break;
 				case IAnimationClip animationClip:
-					AnimationClipConverter.Process(animationClip, currentAnimationCache!, checksumCache!.Value);
+					AnimationClipConverter.Process(animationClip, checksumCache!.Value);
 					break;
 				case IAssetBundle assetBundle:
 					OriginalPathHelper.SetOriginalPaths(assetBundle, bundledAssetsExportMode);

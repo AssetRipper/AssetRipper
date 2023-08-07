@@ -1,4 +1,6 @@
-﻿using AssetRipper.Assets.Metadata;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Checksum;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
@@ -82,21 +84,22 @@ public readonly struct PathChecksumCache
 		}
 	}
 	
-	public void BuildPathsCache(AnimationCache cache)
+	public void BuildPathsCache(GameBundle bundle)
 	{
-		foreach (IAvatar avatar in cache.CachedAvatars)
+		foreach (IUnityObjectBase asset in bundle.FetchAssets())
 		{
-			AddAvatarTOS(avatar);
-		}
-
-		foreach (IAnimator animator in cache.CachedAnimators)
-		{
-			AddAnimatorPathsToCache(animator);
-		}
-
-		foreach (IAnimation animation in cache.CachedAnimations)
-		{
-			AddAnimationPathsToCache(animation);
+			switch (asset)
+			{
+				case IAvatar avatar:
+					AddAvatarTOS(avatar);
+					break;
+				case IAnimator animator:
+					AddAnimatorPathsToCache(animator);
+					break;
+				case IAnimation animation:
+					AddAnimationPathsToCache(animation);
+					break;
+			}
 		}
 	}
 	
