@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Utils;
-using AssetRipper.Primitives;
+﻿using AssetRipper.Checksum;
 using AssetRipper.SourceGenerated.Subclasses.UnityPropertySheet;
 
 namespace AssetRipper.SourceGenerated.Extensions
@@ -16,17 +15,17 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				string propertyString = property.String;
 				string hdrName = propertyString + HDRPostfixName;
-				if (CrcUtils.Verify28DigestUTF8(hdrName, crc))
+				if (Crc28Algorithm.MatchUTF8(hdrName, crc))
 				{
 					return hdrName;
 				}
 				string stName = propertyString + STPostfixName;
-				if (CrcUtils.Verify28DigestUTF8(stName, crc))
+				if (Crc28Algorithm.MatchUTF8(stName, crc))
 				{
 					return stName;
 				}
 				string texelName = propertyString + TexelSizePostfixName;
-				if (CrcUtils.Verify28DigestUTF8(texelName, crc))
+				if (Crc28Algorithm.MatchUTF8(texelName, crc))
 				{
 					return texelName;
 				}
@@ -34,7 +33,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			foreach (Utf8String property in sheet.GetFloatNames())
 			{
 				string propertyString = property.String;
-				if (CrcUtils.Verify28DigestUTF8(propertyString, crc))
+				if (Crc28Algorithm.MatchUTF8(propertyString, crc))
 				{
 					return propertyString;
 				}
@@ -42,7 +41,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			foreach (Utf8String property in sheet.GetIntNames())
 			{
 				string propertyString = property.String;
-				if (CrcUtils.Verify28DigestUTF8(propertyString, crc))
+				if (Crc28Algorithm.MatchUTF8(propertyString, crc))
 				{
 					return propertyString;
 				}
@@ -50,7 +49,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			foreach (Utf8String property in sheet.GetColorNames())
 			{
 				string propertyString = property.String;
-				if (CrcUtils.Verify28DigestUTF8(propertyString, crc))
+				if (Crc28Algorithm.MatchUTF8(propertyString, crc))
 				{
 					return propertyString;
 				}

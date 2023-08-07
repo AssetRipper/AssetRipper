@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Assets.Metadata;
-using AssetRipper.Assets.Utils;
+using AssetRipper.Checksum;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Import.Structure.Assembly.Serializable;
@@ -32,7 +32,7 @@ public readonly struct PathChecksumCache
 			return value;
 		}
 
-		uint output = CrcUtils.CalculateDigestUTF8(path);
+		uint output = Crc32Algorithm.HashUTF8(path);
 
 		AddKeys(output, path);
 		return output;

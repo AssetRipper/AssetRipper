@@ -1,4 +1,4 @@
-using AssetRipper.Assets.Utils;
+using AssetRipper.Checksum;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
@@ -124,7 +124,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.MonoBehaviour:
 					{
-						if (attribute == CrcUtils.CalculateDigestAscii("m_Enabled"))
+						if (attribute == Crc32Algorithm.HashAscii("m_Enabled"))
 						{
 							return "m_Enabled";
 						}
@@ -134,70 +134,70 @@ namespace AssetRipper.Processing.AnimationClips
 				case BindingCustomType.Light:
 					{
 						const string ColorR = "m_Color" + "." + "r";
-						if (attribute == CrcUtils.CalculateDigestAscii(ColorR))
+						if (attribute == Crc32Algorithm.HashAscii(ColorR))
 						{
 							return ColorR;
 						}
 						const string ColorG = "m_Color" + "." + "g";
-						if (attribute == CrcUtils.CalculateDigestAscii(ColorG))
+						if (attribute == Crc32Algorithm.HashAscii(ColorG))
 						{
 							return ColorG;
 						}
 						const string ColorB = "m_Color" + "." + "b";
-						if (attribute == CrcUtils.CalculateDigestAscii(ColorB))
+						if (attribute == Crc32Algorithm.HashAscii(ColorB))
 						{
 							return ColorB;
 						}
 						const string ColorA = "m_Color" + "." + "a";
-						if (attribute == CrcUtils.CalculateDigestAscii(ColorA))
+						if (attribute == Crc32Algorithm.HashAscii(ColorA))
 						{
 							return ColorA;
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_CookieSize"))
+						if (attribute == Crc32Algorithm.HashAscii("m_CookieSize"))
 						{
 							return "m_CookieSize";
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_DrawHalo"))
+						if (attribute == Crc32Algorithm.HashAscii("m_DrawHalo"))
 						{
 							return "m_DrawHalo";
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_Intensity"))
+						if (attribute == Crc32Algorithm.HashAscii("m_Intensity"))
 						{
 							return "m_Intensity";
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_Range"))
+						if (attribute == Crc32Algorithm.HashAscii("m_Range"))
 						{
 							return "m_Range";
 						}
 						const string ShadowsStrength = "m_Shadows" + "." + "m_Strength";
-						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsStrength))
+						if (attribute == Crc32Algorithm.HashAscii(ShadowsStrength))
 						{
 							return ShadowsStrength;
 						}
 						const string ShadowsBias = "m_Shadows" + "." + "m_Bias";
-						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsBias))
+						if (attribute == Crc32Algorithm.HashAscii(ShadowsBias))
 						{
 							return ShadowsBias;
 						}
 						const string ShadowsNormalBias = "m_Shadows" + "." + "m_NormalBias";
-						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsNormalBias))
+						if (attribute == Crc32Algorithm.HashAscii(ShadowsNormalBias))
 						{
 							return ShadowsNormalBias;
 						}
 						const string ShadowsNearPlane = "m_Shadows" + "." + "m_NearPlane";
-						if (attribute == CrcUtils.CalculateDigestAscii(ShadowsNearPlane))
+						if (attribute == Crc32Algorithm.HashAscii(ShadowsNearPlane))
 						{
 							return ShadowsNearPlane;
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_SpotAngle"))
+						if (attribute == Crc32Algorithm.HashAscii("m_SpotAngle"))
 						{
 							return "m_SpotAngle";
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_InnerSpotAngle"))
+						if (attribute == Crc32Algorithm.HashAscii("m_InnerSpotAngle"))
 						{
 							return "m_InnerSpotAngle";
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_ColorTemperature"))
+						if (attribute == Crc32Algorithm.HashAscii("m_ColorTemperature"))
 						{
 							return "m_ColorTemperature";
 						}
@@ -206,11 +206,11 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.RendererShadows:
 					{
-						if (attribute == CrcUtils.CalculateDigestAscii("m_ReceiveShadows"))
+						if (attribute == Crc32Algorithm.HashAscii("m_ReceiveShadows"))
 						{
 							return "m_ReceiveShadows";
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_SortingOrder"))
+						if (attribute == Crc32Algorithm.HashAscii("m_SortingOrder"))
 						{
 							return "m_SortingOrder";
 						}
@@ -228,57 +228,57 @@ namespace AssetRipper.Processing.AnimationClips
 				case BindingCustomType.RectTransform:
 					{
 						string LocalPositionZ = "m_LocalPosition" + "." + "z";
-						if (attribute == CrcUtils.CalculateDigestAscii(LocalPositionZ))
+						if (attribute == Crc32Algorithm.HashAscii(LocalPositionZ))
 						{
 							return LocalPositionZ;
 						}
 						string AnchoredPositionX = "m_AnchoredPosition" + "." + "x";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchoredPositionX))
+						if (attribute == Crc32Algorithm.HashAscii(AnchoredPositionX))
 						{
 							return AnchoredPositionX;
 						}
 						string AnchoredPositionY = "m_AnchoredPosition" + "." + "y";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchoredPositionY))
+						if (attribute == Crc32Algorithm.HashAscii(AnchoredPositionY))
 						{
 							return AnchoredPositionY;
 						}
 						string AnchorMinX = "m_AnchorMin" + "." + "x";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMinX))
+						if (attribute == Crc32Algorithm.HashAscii(AnchorMinX))
 						{
 							return AnchorMinX;
 						}
 						string AnchorMinY = "m_AnchorMin" + "." + "y";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMinY))
+						if (attribute == Crc32Algorithm.HashAscii(AnchorMinY))
 						{
 							return AnchorMinY;
 						}
 						string AnchorMaxX = "m_AnchorMax" + "." + "x";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMaxX))
+						if (attribute == Crc32Algorithm.HashAscii(AnchorMaxX))
 						{
 							return AnchorMaxX;
 						}
 						string AnchorMaxY = "m_AnchorMax" + "." + "y";
-						if (attribute == CrcUtils.CalculateDigestAscii(AnchorMaxY))
+						if (attribute == Crc32Algorithm.HashAscii(AnchorMaxY))
 						{
 							return AnchorMaxY;
 						}
 						string SizeDeltaX = "m_SizeDelta" + "." + "x";
-						if (attribute == CrcUtils.CalculateDigestAscii(SizeDeltaX))
+						if (attribute == Crc32Algorithm.HashAscii(SizeDeltaX))
 						{
 							return SizeDeltaX;
 						}
 						string SizeDeltaY = "m_SizeDelta" + "." + "y";
-						if (attribute == CrcUtils.CalculateDigestAscii(SizeDeltaY))
+						if (attribute == Crc32Algorithm.HashAscii(SizeDeltaY))
 						{
 							return SizeDeltaY;
 						}
 						string PivotX = "m_Pivot" + "." + "x";
-						if (attribute == CrcUtils.CalculateDigestAscii(PivotX))
+						if (attribute == Crc32Algorithm.HashAscii(PivotX))
 						{
 							return PivotX;
 						}
 						string PivotY = "m_Pivot" + "." + "y";
-						if (attribute == CrcUtils.CalculateDigestAscii(PivotY))
+						if (attribute == Crc32Algorithm.HashAscii(PivotY))
 						{
 							return PivotY;
 						}
@@ -289,7 +289,7 @@ namespace AssetRipper.Processing.AnimationClips
 				case BindingCustomType.LineRenderer:
 					{
 						const string ParametersWidthMultiplier = "m_Parameters" + "." + "widthMultiplier";
-						if (attribute == CrcUtils.CalculateDigestAscii(ParametersWidthMultiplier))
+						if (attribute == Crc32Algorithm.HashAscii(ParametersWidthMultiplier))
 						{
 							return ParametersWidthMultiplier;
 						}
@@ -301,7 +301,7 @@ namespace AssetRipper.Processing.AnimationClips
 				case BindingCustomType.TrailRenderer:
 					{
 						const string ParametersWidthMultiplier = "m_Parameters" + "." + "widthMultiplier";
-						if (attribute == CrcUtils.CalculateDigestAscii(ParametersWidthMultiplier))
+						if (attribute == Crc32Algorithm.HashAscii(ParametersWidthMultiplier))
 						{
 							return ParametersWidthMultiplier;
 						}
@@ -509,11 +509,11 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.Camera:
 					{
-						if (attribute == CrcUtils.CalculateDigestAscii("field of view"))
+						if (attribute == Crc32Algorithm.HashAscii("field of view"))
 						{
 							return "field of view";
 						}
-						if (attribute == CrcUtils.CalculateDigestAscii("m_FocalLength"))
+						if (attribute == Crc32Algorithm.HashAscii("m_FocalLength"))
 						{
 							return "m_FocalLength";
 						}

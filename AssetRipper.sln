@@ -160,6 +160,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Localizations", "Localizati
 		Localizations\README.md = Localizations\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Checksum", "Source\AssetRipper.Checksum\AssetRipper.Checksum.csproj", "{F713EC35-58A0-4A0A-ADF1-3B09B70C2AB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Checksum.Tests", "Source\AssetRipper.Checksum.Tests\AssetRipper.Checksum.Tests.csproj", "{964E75F2-2875-41CD-9FEA-3D002025D6DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -334,6 +338,14 @@ Global
 		{1EF29A1D-A170-4167-830B-17DCC679CA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EF29A1D-A170-4167-830B-17DCC679CA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EF29A1D-A170-4167-830B-17DCC679CA59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F713EC35-58A0-4A0A-ADF1-3B09B70C2AB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F713EC35-58A0-4A0A-ADF1-3B09B70C2AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F713EC35-58A0-4A0A-ADF1-3B09B70C2AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F713EC35-58A0-4A0A-ADF1-3B09B70C2AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{964E75F2-2875-41CD-9FEA-3D002025D6DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{964E75F2-2875-41CD-9FEA-3D002025D6DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{964E75F2-2875-41CD-9FEA-3D002025D6DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{964E75F2-2875-41CD-9FEA-3D002025D6DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

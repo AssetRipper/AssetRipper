@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Assets.Utils;
+using AssetRipper.Checksum;
 using AssetRipper.SourceGenerated;
 
 namespace AssetRipper.Import.AssetCreation
@@ -18,7 +18,7 @@ namespace AssetRipper.Import.AssetCreation
 		public RawDataObject(AssetInfo assetInfo, byte[] data) : base(assetInfo)
 		{
 			RawData = data;
-			RawDataHash = CrcUtils.CalculateDigest(data);
+			RawDataHash = Crc32Algorithm.HashData(data);
 		}
 
 		public sealed override void WriteEditor(AssetWriter writer) => writer.Write(RawData);

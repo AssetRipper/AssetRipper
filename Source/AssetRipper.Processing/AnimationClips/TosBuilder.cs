@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Utils;
+using AssetRipper.Checksum;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
@@ -165,7 +166,7 @@ internal static class TosBuilder
 				? child.NameString
 				: $"{parentPath}/{child.NameString}";
 
-			uint pathHash = CrcUtils.CalculateDigestUTF8(path);
+			uint pathHash = Crc32Algorithm.HashUTF8(path);
 			tos[pathHash] = path;
 
 			gameObject.BuildTOS(child, path, tos);

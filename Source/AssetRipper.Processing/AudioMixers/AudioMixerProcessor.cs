@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Utils;
+using AssetRipper.Checksum;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
@@ -250,7 +250,7 @@ namespace AssetRipper.Processing.AudioMixers
 				{
 					ExposedAudioParameter exposedParam = mixer.ExposedParameters_C241.AddNew();
 					exposedParam.Guid.CopyValues(paramGuid);
-					exposedParam.NameString = CrcUtils.ReverseDigestAscii(paramNameCrc);
+					exposedParam.NameString = Crc32Algorithm.ReverseAscii(paramNameCrc);
 				}
 				else
 				{

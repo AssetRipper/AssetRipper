@@ -1,7 +1,6 @@
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.IO.Reading;
-using AssetRipper.Assets.Metadata;
-using AssetRipper.Assets.Utils;
+using AssetRipper.Checksum;
 using AssetRipper.Processing.AnimationClips.Editor;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -434,7 +433,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 		private void AddGameObjectCurve(IGenericBinding binding, string path, float time, float value)
 		{
-			if (binding.Attribute == CrcUtils.CalculateDigestAscii("m_IsActive"))
+			if (binding.Attribute == Crc32Algorithm.HashAscii("m_IsActive"))
 			{
 				CurveData curve = new CurveData(path, "m_IsActive", ClassIDType.GameObject);
 				AddFloatKeyframe(curve, time, value);
