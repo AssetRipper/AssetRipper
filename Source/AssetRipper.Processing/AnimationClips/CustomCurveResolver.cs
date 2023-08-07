@@ -1,10 +1,16 @@
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_108;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_120;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
+using AssetRipper.SourceGenerated.Classes.ClassID_198;
+using AssetRipper.SourceGenerated.Classes.ClassID_20;
+using AssetRipper.SourceGenerated.Classes.ClassID_224;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
+using AssetRipper.SourceGenerated.Classes.ClassID_96;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.GenericBinding;
 using System.Text.RegularExpressions;
@@ -124,7 +130,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.MonoBehaviour:
 					{
-						if (FieldHashes.TryGetPath(ClassIDType.MonoBehaviour, attribute, out string? foundPath))
+						if (MonoBehaviour.TryGetPath(attribute, out string? foundPath))
 						{
 							return foundPath;
 						}
@@ -133,7 +139,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.Light:
 					{
-						if (FieldHashes.TryGetPath(ClassIDType.Light, attribute, out string? foundPath))
+						if (Light.TryGetPath(attribute, out string? foundPath))
 						{
 							return foundPath;
 						}
@@ -142,7 +148,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.RendererShadows:
 					{
-						if (FieldHashes.TryGetPath(ClassIDType.Renderer, attribute, out string? foundPath))
+						if (Renderer.TryGetPath(attribute, out string? foundPath))
 						{
 							return foundPath;
 						}
@@ -151,7 +157,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.ParticleSystem:
 					{
-						if (FieldHashes.TryGetPath(ClassIDType.ParticleSystem, attribute, out string? foundPath))
+						if (ParticleSystem.TryGetPath(attribute, out string? foundPath))
 						{
 							return foundPath;
 						}
@@ -160,7 +166,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.RectTransform:
 					{
-						if (FieldHashes.TryGetPath(ClassIDType.RectTransform, attribute, out string? foundPath))	
+						if (RectTransform.TryGetPath(attribute, out string? foundPath))	
 						{
 							return foundPath;
 						}
@@ -169,7 +175,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.LineRenderer:
 					{
-						if (FieldHashes.TryGetPath(ClassIDType.LineRenderer, attribute, out string? foundPath))
+						if (LineRenderer.TryGetPath(attribute, out string? foundPath))
 						{
 							return foundPath;
 						}
@@ -178,7 +184,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.TrailRenderer:
 					{
-						if (FieldHashes.TryGetPath(ClassIDType.TrailRenderer, attribute, out string? foundPath))
+						if (TrailRenderer.TryGetPath(attribute, out string? foundPath))
 						{
 							return foundPath;
 						}
@@ -268,7 +274,6 @@ namespace AssetRipper.Processing.AnimationClips
 						};
 					}
 
-#warning TODO:
 				case BindingCustomType.ParentConstraint:
 					{
 						uint property = attribute & 0xF;
@@ -311,7 +316,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.Camera:
 					{
-						if (FieldHashes.TryGetPath(ClassIDType.Camera, attribute, out string? foundPath))
+						if (Camera.TryGetPath(attribute, out string? foundPath))
 						{
 							return foundPath;
 						}
