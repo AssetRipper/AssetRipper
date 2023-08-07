@@ -87,18 +87,7 @@ internal static class OriginalPathHelper
 			switch (bundledAssetsExportMode)
 			{
 				case BundledAssetsExportMode.DirectExport:
-					if (assetPath.StartsWith(AssetsDirectory, StringComparison.Ordinal))
-					{
-						asset.OriginalPath = assetPath;
-					}
-					else if (assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
-					{
-						asset.OriginalPath = $"{AssetsDirectory}{assetPath.AsSpan(AssetsDirectory.Length)}";
-					}
-					else
-					{
-						asset.OriginalPath = AssetsDirectory + assetPath;
-					}
+					asset.OriginalPath = EnsureStartsWithAssets(assetPath);
 					break;
 				case BundledAssetsExportMode.GroupByBundleName:
 					if (assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
@@ -120,7 +109,7 @@ internal static class OriginalPathHelper
 		}
 	}
 
-	private static string EnsurePathNotRooted(string assetPath)
+	internal static string EnsurePathNotRooted(string assetPath)
 	{
 		if (Path.IsPathRooted(assetPath))
 		{
@@ -138,6 +127,22 @@ internal static class OriginalPathHelper
 		else
 		{
 			return assetPath;
+		}
+	}
+
+	internal static string EnsureStartsWithAssets(string assetPath)
+	{
+		if (assetPath.StartsWith(AssetsDirectory, StringComparison.Ordinal))
+		{
+			return assetPath;
+		}
+		else if (assetPath.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase))
+		{
+			return $"{AssetsDirectory}{assetPath.AsSpan(AssetsDirectory.Length)}";
+		}
+		else
+		{
+			return AssetsDirectory + assetPath;
 		}
 	}
 
