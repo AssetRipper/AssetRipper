@@ -201,7 +201,6 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
-				// TryGetPath may not work here
 				case BindingCustomType.PositionConstraint:
 					{
 						if (PositionConstraint.TryGetPath(attribute, out string? foundPath))
@@ -211,7 +210,6 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
-				// TryGetPath may not work here
 				case BindingCustomType.RotationConstraint:
 					{
 						if (RotationConstraint.TryGetPath(attribute, out string? foundPath))
@@ -221,7 +219,6 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
-				// TryGetPath may not work here
 				case BindingCustomType.ScaleConstraint:
 					{
 						if (ScaleConstraint.TryGetPath(attribute, out string? foundPath))
@@ -231,7 +228,6 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
-				// TryGetPath may not work here
 				case BindingCustomType.AimConstraint:
 					{
 						if (AimConstraint.TryGetPath(attribute, out string? foundPath))
@@ -241,7 +237,6 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
-				// TryGetPath may not work here
 				case BindingCustomType.ParentConstraint:
 					{
 						if (ParentConstraint.TryGetPath(attribute, out string? foundPath))
@@ -251,7 +246,6 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
-				// TryGetPath may not work here
 				case BindingCustomType.LookAtConstraint:
 					{
 						if (LookAtConstraint.TryGetPath(attribute, out string? foundPath))
@@ -270,6 +264,7 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
+				// TryGetPath may not work here
 				case BindingCustomType.VisualEffect:
 					{
 						if (VisualEffect.TryGetPath(attribute, out string? foundPath))
@@ -279,6 +274,7 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
+				// TryGetPath may not work here
 				case BindingCustomType.ParticleForceField:
 					{
 						if (ParticleSystemForceField.TryGetPath(attribute, out string? foundPath))
@@ -290,7 +286,8 @@ namespace AssetRipper.Processing.AnimationClips
 
 				case BindingCustomType.UserDefined:
 					return "UserDefined_" + Crc32Algorithm.ReverseAscii(attribute);
-
+				
+				// TryGetPath may not work here
 				case BindingCustomType.MeshFilter:
 					{
 						if (MeshFilter.TryGetPath(attribute, out string? foundPath))
