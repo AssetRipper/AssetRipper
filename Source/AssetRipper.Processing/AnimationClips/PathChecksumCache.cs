@@ -79,9 +79,9 @@ public readonly struct PathChecksumCache
 	
 	private void AddAvatarTOS(IAvatar avatar)
 	{
-		foreach (uint key in avatar.TOS_C90.Keys)
+		foreach ((uint key, Utf8String value) in avatar.TOS_C90)
 		{
-			AddKeys(key, avatar.TOS_C90[key]);
+			AddKeys(key, value);
 		}
 	}
 
