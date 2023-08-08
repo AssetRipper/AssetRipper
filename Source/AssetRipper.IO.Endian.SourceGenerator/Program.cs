@@ -1,4 +1,4 @@
-﻿using AssetRipper.Utils.SourceGeneration;
+﻿using AssetRipper.Text.SourceGeneration;
 using System.Buffers.Binary;
 using System.CodeDom.Compiler;
 

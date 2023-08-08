@@ -91,8 +91,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.GUI.SourceGener
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Assets", "Source\AssetRipper.Assets\AssetRipper.Assets.csproj", "{312FCD48-192E-4008-94F8-D79E58731AD4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Utils.SourceGeneration", "Source\AssetRipper.Utils.SourceGeneration\AssetRipper.Utils.SourceGeneration.csproj", "{DA1222EA-C847-445F-A077-03A8E53ABC1A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Files.SourceGenerator", "Source\AssetRipper.IO.Files.SourceGenerator\AssetRipper.IO.Files.SourceGenerator.csproj", "{86A3BDB8-6078-456C-A54E-B68C3916394F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Files.Tests", "Source\AssetRipper.IO.Files.Tests\AssetRipper.IO.Files.Tests.csproj", "{F295E724-B3DE-45A0-870F-237BADFD15D4}"
@@ -160,9 +158,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Localizations", "Localizati
 		Localizations\README.md = Localizations\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Checksum", "Source\AssetRipper.Checksum\AssetRipper.Checksum.csproj", "{F713EC35-58A0-4A0A-ADF1-3B09B70C2AB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Checksum", "Source\AssetRipper.Checksum\AssetRipper.Checksum.csproj", "{F713EC35-58A0-4A0A-ADF1-3B09B70C2AB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Checksum.Tests", "Source\AssetRipper.Checksum.Tests\AssetRipper.Checksum.Tests.csproj", "{964E75F2-2875-41CD-9FEA-3D002025D6DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Checksum.Tests", "Source\AssetRipper.Checksum.Tests\AssetRipper.Checksum.Tests.csproj", "{964E75F2-2875-41CD-9FEA-3D002025D6DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -214,10 +212,6 @@ Global
 		{312FCD48-192E-4008-94F8-D79E58731AD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{312FCD48-192E-4008-94F8-D79E58731AD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{312FCD48-192E-4008-94F8-D79E58731AD4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA1222EA-C847-445F-A077-03A8E53ABC1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA1222EA-C847-445F-A077-03A8E53ABC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA1222EA-C847-445F-A077-03A8E53ABC1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA1222EA-C847-445F-A077-03A8E53ABC1A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{86A3BDB8-6078-456C-A54E-B68C3916394F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{86A3BDB8-6078-456C-A54E-B68C3916394F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86A3BDB8-6078-456C-A54E-B68C3916394F}.Release|Any CPU.ActiveCfg = Release|Any CPU

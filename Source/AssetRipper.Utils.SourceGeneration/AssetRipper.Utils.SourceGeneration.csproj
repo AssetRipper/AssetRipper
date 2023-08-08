@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<OutputPath>..\0Bins\Other\AssetRipper.Utils.SourceGeneration\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Utils.SourceGeneration\$(Configuration)\</IntermediateOutputPath>
-	</PropertyGroup>
-
-</Project>
