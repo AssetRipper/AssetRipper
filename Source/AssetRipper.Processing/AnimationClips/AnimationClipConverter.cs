@@ -39,30 +39,29 @@ namespace AssetRipper.Processing.AnimationClips
 			m_checksumCache = checksumCache;
 		}
 
-		public static void Process(IAnimationClip clip, AnimationCache cache, PathChecksumCache checksumCache)
+		public static void Process(IAnimationClip clip, PathChecksumCache checksumCache)
 		{
 			AnimationClipConverter converter = new AnimationClipConverter(clip, checksumCache);
-			converter.ProcessInner(cache);
+			converter.ProcessInner();
 		}
 
-		private void ProcessInner(AnimationCache animationCache)
+		private void ProcessInner()
 		{
 			if (m_clip.Has_MuscleClip_C74() && m_clip.Has_ClipBindingConstant_C74())
 			{
 				IClip clip = m_clip.MuscleClip_C74.Clip.Data;
 				IAnimationClipBindingConstant bindings = m_clip.ClipBindingConstant_C74;
-				IReadOnlyDictionary<uint, string> tos = m_clip.FindTOS(animationCache);
 
 				IReadOnlyList<StreamedFrame> streamedFrames = GenerateFramesFromStreamedClip(clip.StreamedClip);
 				float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
 				float lastSampleFrame = streamedFrames.Count > 1 ? streamedFrames[streamedFrames.Count - 2].Time : 0.0f;
 				float lastFrame = Math.Max(lastDenseFrame, lastSampleFrame);
 
-				ProcessStreams(streamedFrames, bindings, tos, clip.DenseClip.SampleRate);
-				ProcessDenses(clip, bindings, tos);
+				ProcessStreams(streamedFrames, bindings, clip.DenseClip.SampleRate);
+				ProcessDenses(clip, bindings);
 				if (clip.Has_ConstantClip())
 				{
-					ProcessConstant(clip, clip.ConstantClip, bindings, tos, lastFrame);
+					ProcessConstant(clip, clip.ConstantClip, bindings, lastFrame);
 				}
 				if (m_clip.Has_MuscleClipInfo_C74())
 				{
@@ -71,7 +70,7 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 		}
 
-		private void ProcessStreams(IReadOnlyList<StreamedFrame> streamFrames, IAnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos, float sampleRate)
+		private void ProcessStreams(IReadOnlyList<StreamedFrame> streamFrames, IAnimationClipBindingConstant bindings, float sampleRate)
 		{
 			Span<float> curveValues = stackalloc float[4] { 0, 0, 0, 0 };
 			Span<float> inSlopeValues = stackalloc float[4] { 0, 0, 0, 0 };
@@ -90,7 +89,7 @@ namespace AssetRipper.Processing.AnimationClips
 					StreamedCurveKey curve = frame.Curves[curveIndex];
 					IGenericBinding binding = bindings.FindBinding(curve.Index);
 
-					string path = GetCurvePath(tos, binding.Path);
+					string path = GetCurvePath(binding.Path);
 					if (binding.IsTransform())
 					{
 						if (frameIndex0)
@@ -137,7 +136,7 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 		}
 
-		private void ProcessDenses(IClip clip, IAnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos)
+		private void ProcessDenses(IClip clip, IAnimationClipBindingConstant bindings)
 		{
 			DenseClip dense = clip.DenseClip;
 
@@ -156,7 +155,7 @@ namespace AssetRipper.Processing.AnimationClips
 				{
 					int index = streamCount + curveIndex;
 					IGenericBinding binding = bindings.FindBinding(index);
-					string path = GetCurvePath(tos, binding.Path);
+					string path = GetCurvePath(binding.Path);
 					int framePosition = frameOffset + curveIndex;
 					if (binding.IsTransform())
 					{
@@ -178,7 +177,7 @@ namespace AssetRipper.Processing.AnimationClips
 			ArrayPool<float>.Shared.Return(rentedArray);
 		}
 
-		private void ProcessConstant(IClip clip, IConstantClip constant, IAnimationClipBindingConstant bindings, IReadOnlyDictionary<uint, string> tos, float lastFrame)
+		private void ProcessConstant(IClip clip, IConstantClip constant, IAnimationClipBindingConstant bindings, float lastFrame)
 		{
 			float[] rentedArray = ArrayPool<float>.Shared.Rent(constant.Data.Count);
 			constant.Data.CopyTo(rentedArray);
@@ -197,7 +196,7 @@ namespace AssetRipper.Processing.AnimationClips
 				{
 					int index = streamCount + denseCount + curveIndex;
 					IGenericBinding binding = bindings.FindBinding(index);
-					string path = GetCurvePath(tos, binding.Path);
+					string path = GetCurvePath(binding.Path);
 					if (binding.IsTransform())
 					{
 						AddTransformCurve(time, binding.TransformType(), curveValues, slopeValues, slopeValues, curveIndex, path);
@@ -555,15 +554,15 @@ namespace AssetRipper.Processing.AnimationClips
 			return i;
 		}
 
-		private static string GetCurvePath(IReadOnlyDictionary<uint, string> tos, uint hash)
+		private string GetCurvePath(uint hash)
 		{
-			if (tos.TryGetValue(hash, out string? path))
+			if (m_checksumCache.TryGetPath(hash, out string? path))
 			{
 				return path;
 			}
 			else
 			{
-				return UnknownPathPrefix + hash;
+				return Crc32Algorithm.ReverseAscii(hash, $"{UnknownPathPrefix}0x{hash:X}_");
 			}
 		}
 
