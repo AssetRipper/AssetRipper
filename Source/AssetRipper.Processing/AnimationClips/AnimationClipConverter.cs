@@ -1,5 +1,6 @@
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.IO.Reading;
+using AssetRipper.Checksum;
 using AssetRipper.Processing.AnimationClips.Editor;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
