@@ -2,13 +2,8 @@ using AssetRipper.Checksum;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_108;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
-using AssetRipper.SourceGenerated.Classes.ClassID_1183024399;
 using AssetRipper.SourceGenerated.Classes.ClassID_120;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
-using AssetRipper.SourceGenerated.Classes.ClassID_1773428102;
-using AssetRipper.SourceGenerated.Classes.ClassID_1818360608;
-using AssetRipper.SourceGenerated.Classes.ClassID_1818360609;
-using AssetRipper.SourceGenerated.Classes.ClassID_1818360610;
 using AssetRipper.SourceGenerated.Classes.ClassID_198;
 using AssetRipper.SourceGenerated.Classes.ClassID_20;
 using AssetRipper.SourceGenerated.Classes.ClassID_2083052967;
@@ -19,7 +14,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_330;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
-using AssetRipper.SourceGenerated.Classes.ClassID_895512359;
 using AssetRipper.SourceGenerated.Classes.ClassID_96;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.GenericBinding;
@@ -354,7 +348,7 @@ namespace AssetRipper.Processing.AnimationClips
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
 				case BindingCustomType.UserDefined:
-					return "UserDefined_" + Crc32Algorithm.ReverseAscii(attribute);
+					return Crc32Algorithm.ReverseAscii(attribute, $"UserDefined_0x{attribute:X}_");
 				
 				// TryGetPath may not work here
 				case BindingCustomType.MeshFilter:
