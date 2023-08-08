@@ -23,12 +23,13 @@ namespace AssetRipper.Processing.AnimationClips;
 /// </remarks>
 public readonly struct PathChecksumCache
 {
-	public PathChecksumCache(IAssemblyManager assemblyManager)
+	public PathChecksumCache(GameData gameData)
 	{
-		this.assemblyManager = assemblyManager;
+		this.assemblyManager = gameData.AssemblyManager;
+		BuildPathsCache(gameData.GameBundle);
 	}
 
-	private readonly Dictionary<string, uint> cachedPropertyNames = new();
+	private readonly Dictionary<string, uint> cachedPropertyNames = new() { { string.Empty, 0 } };
 	private readonly Dictionary<uint, string> cachedChecksums = new() { { 0, string.Empty } };
 	private readonly HashSet<AssetInfo> processedAssets = new();
 	private readonly IAssemblyManager assemblyManager;
@@ -83,8 +84,8 @@ public readonly struct PathChecksumCache
 			AddKeys(key, avatar.TOS_C90[key]);
 		}
 	}
-	
-	public void BuildPathsCache(GameBundle bundle)
+
+	private void BuildPathsCache(GameBundle bundle)
 	{
 		foreach (IUnityObjectBase asset in bundle.FetchAssets())
 		{

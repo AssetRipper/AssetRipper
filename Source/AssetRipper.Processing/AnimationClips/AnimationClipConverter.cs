@@ -558,7 +558,7 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 			else
 			{
-				return Crc32Algorithm.ReverseAscii(hash, UnknownPathPrefix);
+				return Crc32Algorithm.ReverseAscii(hash, $"{UnknownPathPrefix}0x{hash:X}_");
 			}
 		}
 
