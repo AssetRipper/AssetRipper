@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<OutputPath>..\Bins\Other\AssetRipper.IO.Endian.SourceGenerator\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.IO.Endian.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\Other\AssetRipper.IO.Endian.SourceGenerator\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.IO.Endian.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

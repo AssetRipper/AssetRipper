@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<OutputPath>..\Bins\AssetRipper.Tools.CabMapGenerator\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Tools.CabMapGenerator\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\AssetRipper.Tools.CabMapGenerator\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Tools.CabMapGenerator\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

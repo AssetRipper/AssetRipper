@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<IsTrimmable>true</IsTrimmable>
-		<OutputPath>..\Bins\Other\AssetRipper.Export\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Export\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\Other\AssetRipper.Export\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Export\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

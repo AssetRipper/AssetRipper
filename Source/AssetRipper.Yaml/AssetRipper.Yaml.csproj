@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<IsTrimmable>true</IsTrimmable>
-		<OutputPath>..\Bins\Other\AssetRipper.Yaml\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Yaml\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\Other\AssetRipper.Yaml\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Yaml\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

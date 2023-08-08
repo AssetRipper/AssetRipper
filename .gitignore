@@ -3,7 +3,7 @@
 packages/
 **/packages.config
 obj
-Bins/
+0Bins/
 Test/
 bin
 *.user

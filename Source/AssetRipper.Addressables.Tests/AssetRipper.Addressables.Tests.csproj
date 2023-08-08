@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
-		<OutputPath>..\Bins\Other\AssetRipper.Addressables.Tests\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Addressables.Tests\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\Other\AssetRipper.Addressables.Tests\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Addressables.Tests\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

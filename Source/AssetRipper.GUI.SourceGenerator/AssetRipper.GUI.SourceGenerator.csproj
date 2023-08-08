@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<OutputType>exe</OutputType>
-		<OutputPath>..\Bins\Other\AssetRipper.GUI.SourceGenerator\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.GUI.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\Other\AssetRipper.GUI.SourceGenerator\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

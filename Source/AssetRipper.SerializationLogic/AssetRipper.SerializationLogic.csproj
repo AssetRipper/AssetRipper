@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<IsTrimmable>true</IsTrimmable>
-		<OutputPath>..\Bins\Other\AssetRipper.SerializationLogic\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.SerializationLogic\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\Other\AssetRipper.SerializationLogic\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.SerializationLogic\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

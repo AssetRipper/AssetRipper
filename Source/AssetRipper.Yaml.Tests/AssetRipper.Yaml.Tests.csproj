@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
-		<OutputPath>..\Bins\Other\AssetRipper.Yaml.Tests\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Yaml.Tests\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\Other\AssetRipper.Yaml.Tests\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Yaml.Tests\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

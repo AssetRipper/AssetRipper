@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<IsTrimmable>true</IsTrimmable>
-		<OutputPath>..\Bins\Other\AssetRipper.GUI.Localizations\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.GUI.Localizations\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\Other\AssetRipper.GUI.Localizations\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Localizations\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

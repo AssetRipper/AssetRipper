@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>..\Bins\AssetRipper.Tools.FileExtractor\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Tools.FileExtractor\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\AssetRipper.Tools.FileExtractor\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Tools.FileExtractor\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

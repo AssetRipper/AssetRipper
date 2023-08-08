@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<OutputPath>..\Bins\AssetRipper.Tools.RawTextureExtractor\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Tools.RawTextureExtractor\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\AssetRipper.Tools.RawTextureExtractor\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Tools.RawTextureExtractor\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
-		<OutputPath>..\Bins\Other\AssetRipper.Checksum.Tests\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Checksum.Tests\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\Other\AssetRipper.Checksum.Tests\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Checksum.Tests\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

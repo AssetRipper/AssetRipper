@@ -28,16 +28,16 @@ jobs:
       - name: List Files
         shell: bash
         run: |
-          mkdir -p ./Source/Bins/Publish/AssetRipper_win_x64/Licenses
-          cp ./Source/Licenses/*.md ./Source/Bins/Publish/AssetRipper_win_x64/Licenses/
-          date -u > ./Source/Bins/Publish/AssetRipper_win_x64/compile_time.txt
-          ls -R ./Source/Bins/Publish/AssetRipper_win_x64
+          mkdir -p ./Source/0Bins/Publish/AssetRipper_win_x64/Licenses
+          cp ./Source/Licenses/*.md ./Source/0Bins/Publish/AssetRipper_win_x64/Licenses/
+          date -u > ./Source/0Bins/Publish/AssetRipper_win_x64/compile_time.txt
+          ls -R ./Source/0Bins/Publish/AssetRipper_win_x64
 
       - name: Upload AssetRipper Windows x64
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_win_x64
-          path: ./Source/Bins/Publish/AssetRipper_win_x64/*
+          path: ./Source/0Bins/Publish/AssetRipper_win_x64/*
           if-no-files-found: error
 
   publish_windows_arm64:
@@ -60,16 +60,16 @@ jobs:
       - name: List Files
         shell: bash
         run: |
-          mkdir -p ./Source/Bins/Publish/AssetRipper_win_arm64/Licenses
-          cp ./Source/Licenses/*.md ./Source/Bins/Publish/AssetRipper_win_arm64/Licenses/
-          date -u > ./Source/Bins/Publish/AssetRipper_win_arm64/compile_time.txt
-          ls -R ./Source/Bins/Publish/AssetRipper_win_arm64
+          mkdir -p ./Source/0Bins/Publish/AssetRipper_win_arm64/Licenses
+          cp ./Source/Licenses/*.md ./Source/0Bins/Publish/AssetRipper_win_arm64/Licenses/
+          date -u > ./Source/0Bins/Publish/AssetRipper_win_arm64/compile_time.txt
+          ls -R ./Source/0Bins/Publish/AssetRipper_win_arm64
 
       - name: Upload AssetRipper Windows arm64
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_win_arm64
-          path: ./Source/Bins/Publish/AssetRipper_win_arm64/*
+          path: ./Source/0Bins/Publish/AssetRipper_win_arm64/*
           if-no-files-found: error
 
   publish_linux_x64:
@@ -92,17 +92,17 @@ jobs:
       - name: List Files
         shell: bash
         run: |
-          mkdir -p ./Source/Bins/Publish/AssetRipper_linux_x64/Licenses
-          cp ./Source/Licenses/*.md ./Source/Bins/Publish/AssetRipper_linux_x64/Licenses/
-          date -u > ./Source/Bins/Publish/AssetRipper_linux_x64/compile_time.txt
-          ls -R ./Source/Bins/Publish/AssetRipper_linux_x64
-          chmod +x ./Source/Bins/Publish/AssetRipper_linux_x64/AssetRipper
+          mkdir -p ./Source/0Bins/Publish/AssetRipper_linux_x64/Licenses
+          cp ./Source/Licenses/*.md ./Source/0Bins/Publish/AssetRipper_linux_x64/Licenses/
+          date -u > ./Source/0Bins/Publish/AssetRipper_linux_x64/compile_time.txt
+          ls -R ./Source/0Bins/Publish/AssetRipper_linux_x64
+          chmod +x ./Source/0Bins/Publish/AssetRipper_linux_x64/AssetRipper
 
       - name: Upload AssetRipper Linux x64
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_linux_x64
-          path: ./Source/Bins/Publish/AssetRipper_linux_x64/*
+          path: ./Source/0Bins/Publish/AssetRipper_linux_x64/*
           if-no-files-found: error
 
   publish_linux_arm64:
@@ -125,17 +125,17 @@ jobs:
       - name: List Files
         shell: bash
         run: |
-          mkdir -p ./Source/Bins/Publish/AssetRipper_linux_arm64/Licenses
-          cp ./Source/Licenses/*.md ./Source/Bins/Publish/AssetRipper_linux_arm64/Licenses/
-          date -u > ./Source/Bins/Publish/AssetRipper_linux_arm64/compile_time.txt
-          ls -R ./Source/Bins/Publish/AssetRipper_linux_arm64
-          chmod +x ./Source/Bins/Publish/AssetRipper_linux_arm64/AssetRipper
+          mkdir -p ./Source/0Bins/Publish/AssetRipper_linux_arm64/Licenses
+          cp ./Source/Licenses/*.md ./Source/0Bins/Publish/AssetRipper_linux_arm64/Licenses/
+          date -u > ./Source/0Bins/Publish/AssetRipper_linux_arm64/compile_time.txt
+          ls -R ./Source/0Bins/Publish/AssetRipper_linux_arm64
+          chmod +x ./Source/0Bins/Publish/AssetRipper_linux_arm64/AssetRipper
 
       - name: Upload AssetRipper Linux arm64
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_linux_arm64
-          path: ./Source/Bins/Publish/AssetRipper_linux_arm64/*
+          path: ./Source/0Bins/Publish/AssetRipper_linux_arm64/*
           if-no-files-found: error
 
   publish_mac_x64:
@@ -158,14 +158,14 @@ jobs:
       - name: List Files
         shell: bash
         run: |
-          mkdir -p ./Source/Bins/Publish/AssetRipper_mac_x64/Licenses
-          cp ./Source/Licenses/*.md ./Source/Bins/Publish/AssetRipper_mac_x64/Licenses/
-          date -u > ./Source/Bins/Publish/AssetRipper_mac_x64/compile_time.txt
-          ls -R ./Source/Bins/Publish/AssetRipper_mac_x64
-          chmod +x ./Source/Bins/Publish/AssetRipper_mac_x64/AssetRipper
+          mkdir -p ./Source/0Bins/Publish/AssetRipper_mac_x64/Licenses
+          cp ./Source/Licenses/*.md ./Source/0Bins/Publish/AssetRipper_mac_x64/Licenses/
+          date -u > ./Source/0Bins/Publish/AssetRipper_mac_x64/compile_time.txt
+          ls -R ./Source/0Bins/Publish/AssetRipper_mac_x64
+          chmod +x ./Source/0Bins/Publish/AssetRipper_mac_x64/AssetRipper
           mkdir -p upload/AssetRipper.app/Contents/MacOS
           mkdir -p upload/AssetRipper.app/Contents/Resources
-          cp -r Source/Bins/Publish/AssetRipper_mac_x64/* upload/AssetRipper.app/Contents/MacOS/
+          cp -r Source/0Bins/Publish/AssetRipper_mac_x64/* upload/AssetRipper.app/Contents/MacOS/
 
           logo=Media/Images/LogoReimagined/LogoReimaginedTransparent.png
           mkdir AssetRipper.iconset
@@ -227,14 +227,14 @@ jobs:
       - name: List Files
         shell: bash
         run: |
-          mkdir -p ./Source/Bins/Publish/AssetRipper_mac_arm64/Licenses
-          cp ./Source/Licenses/*.md ./Source/Bins/Publish/AssetRipper_mac_arm64/Licenses/
-          date -u > ./Source/Bins/Publish/AssetRipper_mac_arm64/compile_time.txt
-          ls -R ./Source/Bins/Publish/AssetRipper_mac_arm64
-          chmod +x ./Source/Bins/Publish/AssetRipper_mac_arm64/AssetRipper
+          mkdir -p ./Source/0Bins/Publish/AssetRipper_mac_arm64/Licenses
+          cp ./Source/Licenses/*.md ./Source/0Bins/Publish/AssetRipper_mac_arm64/Licenses/
+          date -u > ./Source/0Bins/Publish/AssetRipper_mac_arm64/compile_time.txt
+          ls -R ./Source/0Bins/Publish/AssetRipper_mac_arm64
+          chmod +x ./Source/0Bins/Publish/AssetRipper_mac_arm64/AssetRipper
           mkdir -p upload/AssetRipper.app/Contents/MacOS
           mkdir -p upload/AssetRipper.app/Contents/Resources
-          cp -r Source/Bins/Publish/AssetRipper_mac_arm64/* upload/AssetRipper.app/Contents/MacOS/
+          cp -r Source/0Bins/Publish/AssetRipper_mac_arm64/* upload/AssetRipper.app/Contents/MacOS/
 
           logo=Media/Images/LogoReimagined/LogoReimaginedTransparent.png
           mkdir AssetRipper.iconset

@@ -2,8 +2,8 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>..\Bins\AssetRipper\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\AssetRipper\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper\$(Configuration)\</IntermediateOutputPath>
 		<AssemblyName>AssetRipper</AssemblyName>
 		<RootNamespace>AssetRipper.GUI</RootNamespace>
 		<ApplicationIcon>Resources\GUI_Icon.ico</ApplicationIcon>

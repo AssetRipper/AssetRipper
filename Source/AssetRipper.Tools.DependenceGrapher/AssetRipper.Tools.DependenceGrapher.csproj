@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<OutputPath>..\Bins\AssetRipper.Tools.DependenceGrapher\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\Bins\obj\AssetRipper.Tools.DependenceGrapher\$(Configuration)\</IntermediateOutputPath>
+		<OutputPath>..\0Bins\AssetRipper.Tools.DependenceGrapher\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Tools.DependenceGrapher\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
