@@ -1,8 +1,8 @@
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.IO.Reading;
-using AssetRipper.Checksum;
 using AssetRipper.Processing.AnimationClips.Editor;
 using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Enums;
@@ -433,7 +433,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 		private void AddGameObjectCurve(IGenericBinding binding, string path, float time, float value)
 		{
-			if (FieldHashes.TryGetPath(ClassIDType.GameObject, binding.Attribute, out string? propertyName))
+			if (GameObject.TryGetPath(binding.Attribute, out string? propertyName))
 			{
 				CurveData curve = new CurveData(path, propertyName, ClassIDType.GameObject);
 				AddFloatKeyframe(curve, time, value);

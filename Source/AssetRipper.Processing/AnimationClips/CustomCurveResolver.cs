@@ -1,15 +1,25 @@
+using AssetRipper.Checksum;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_108;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_1183024399;
 using AssetRipper.SourceGenerated.Classes.ClassID_120;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
+using AssetRipper.SourceGenerated.Classes.ClassID_1773428102;
+using AssetRipper.SourceGenerated.Classes.ClassID_1818360608;
+using AssetRipper.SourceGenerated.Classes.ClassID_1818360609;
+using AssetRipper.SourceGenerated.Classes.ClassID_1818360610;
 using AssetRipper.SourceGenerated.Classes.ClassID_198;
 using AssetRipper.SourceGenerated.Classes.ClassID_20;
+using AssetRipper.SourceGenerated.Classes.ClassID_2083052967;
 using AssetRipper.SourceGenerated.Classes.ClassID_224;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
+using AssetRipper.SourceGenerated.Classes.ClassID_33;
+using AssetRipper.SourceGenerated.Classes.ClassID_330;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
+using AssetRipper.SourceGenerated.Classes.ClassID_895512359;
 using AssetRipper.SourceGenerated.Classes.ClassID_96;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.GenericBinding;
@@ -191,129 +201,66 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
+				// TryGetPath may not work here
 				case BindingCustomType.PositionConstraint:
 					{
-						uint property = attribute & 0xF;
-						return property switch
+						if (PositionConstraint.TryGetPath(attribute, out string? foundPath))
 						{
-							0 => "m_RestTranslation.x",
-							1 => "m_RestTranslation.y",
-							2 => "m_RestTranslation.z",
-							3 => "m_Weight",
-							4 => "m_TranslationOffset.x",
-							5 => "m_TranslationOffset.y",
-							6 => "m_TranslationOffset.z",
-							7 => "m_AffectTranslationX",
-							8 => "m_AffectTranslationY",
-							9 => "m_AffectTranslationZ",
-							10 => "m_Active",
-							11 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
-							12 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
-						};
+							return foundPath;
+						}
 					}
+					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
+				// TryGetPath may not work here
 				case BindingCustomType.RotationConstraint:
 					{
-						uint property = attribute & 0xF;
-						return property switch
+						if (RotationConstraint.TryGetPath(attribute, out string? foundPath))
 						{
-							0 => "m_RestRotation.x",
-							1 => "m_RestRotation.y",
-							2 => "m_RestRotation.z",
-							3 => "m_Weight",
-							4 => "m_RotationOffset.x",
-							5 => "m_RotationOffset.y",
-							6 => "m_RotationOffset.z",
-							7 => "m_AffectRotationX",
-							8 => "m_AffectRotationY",
-							9 => "m_AffectRotationZ",
-							10 => "m_Active",
-							11 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
-							12 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
-						};
+							return foundPath;
+						}
 					}
+					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
+				// TryGetPath may not work here
 				case BindingCustomType.ScaleConstraint:
 					{
-						uint property = attribute & 0xF;
-						return property switch
+						if (ScaleConstraint.TryGetPath(attribute, out string? foundPath))
 						{
-							0 => "m_ScaleAtRest.x",
-							1 => "m_ScaleAtRest.y",
-							2 => "m_ScaleAtRest.z",
-							3 => "m_Weight",
-							4 => "m_ScalingOffset.x",
-							5 => "m_ScalingOffset.y",
-							6 => "m_ScalingOffset.z",
-							7 => "m_AffectScalingX",
-							8 => "m_AffectScalingY",
-							9 => "m_AffectScalingZ",
-							10 => "m_Active",
-							11 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
-							12 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
-						};
+							return foundPath;
+						}
 					}
+					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
+				// TryGetPath may not work here
 				case BindingCustomType.AimConstraint:
 					{
-						uint property = attribute & 0xF;
-						return property switch
+						if (AimConstraint.TryGetPath(attribute, out string? foundPath))
 						{
-							0 => "m_Weight",
-							1 => "m_AffectRotationX",
-							2 => "m_AffectRotationY",
-							3 => "m_AffectRotationZ",
-							4 => "m_Active",
-							5 => "m_WorldUpObject",
-							6 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
-							7 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
-						};
+							return foundPath;
+						}
 					}
+					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
+				// TryGetPath may not work here
 				case BindingCustomType.ParentConstraint:
 					{
-						uint property = attribute & 0xF;
-						return property switch
+						if (ParentConstraint.TryGetPath(attribute, out string? foundPath))
 						{
-							0 => "m_Weight",
-							1 => "m_AffectTranslationX",
-							2 => "m_AffectTranslationY",
-							3 => "m_AffectTranslationZ",
-							4 => "m_AffectRotationX",
-							5 => "m_AffectRotationY",
-							6 => "m_AffectRotationZ",
-							7 => "m_Active",
-							8 => $"m_TranslationOffsets.Array.data[{attribute >> 8}].x",
-							9 => $"m_TranslationOffsets.Array.data[{attribute >> 8}].y",
-							10 => $"m_TranslationOffsets.Array.data[{attribute >> 8}].z",
-							11 => $"m_RotationOffsets.Array.data[{attribute >> 8}].x",
-							12 => $"m_RotationOffsets.Array.data[{attribute >> 8}].y",
-							13 => $"m_RotationOffsets.Array.data[{attribute >> 8}].z",
-							14 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
-							15 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
-						};
+							return foundPath;
+						}
 					}
+					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
+				// TryGetPath may not work here
 				case BindingCustomType.LookAtConstraint:
 					{
-						uint property = attribute & 0xF;
-						return property switch
+						if (LookAtConstraint.TryGetPath(attribute, out string? foundPath))
 						{
-							0 => "m_Weight",
-							1 => "m_Active",
-							2 => "m_WorldUpObject",
-							3 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
-							4 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							5 => "m_Roll",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
-						};
+							return foundPath;
+						}
 					}
-
+					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+				
 				case BindingCustomType.Camera:
 					{
 						if (Camera.TryGetPath(attribute, out string? foundPath))
@@ -324,16 +271,34 @@ namespace AssetRipper.Processing.AnimationClips
 					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
 				case BindingCustomType.VisualEffect:
-					return "VisualEffect_" + attribute;
+					{
+						if (VisualEffect.TryGetPath(attribute, out string? foundPath))
+						{
+							return foundPath;
+						}
+					}
+					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
 				case BindingCustomType.ParticleForceField:
-					return "ParticleForceField_" + attribute;
+					{
+						if (ParticleSystemForceField.TryGetPath(attribute, out string? foundPath))
+						{
+							return foundPath;
+						}
+					}
+					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
 				case BindingCustomType.UserDefined:
-					return "UserDefined_" + attribute;
+					return "UserDefined_" + Crc32Algorithm.ReverseAscii(attribute);
 
 				case BindingCustomType.MeshFilter:
-					return "MeshFilter_" + attribute;
+					{
+						if (MeshFilter.TryGetPath(attribute, out string? foundPath))
+						{
+							return foundPath;
+						}
+					}
+					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
 
 				default:
 					throw new ArgumentException($"Binding type {type} not implemented", nameof(type));
