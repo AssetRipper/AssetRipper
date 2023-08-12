@@ -2,6 +2,7 @@
 using AssetRipper.GUI.Exceptions;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure;
+using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.GUI.Managers
 {
@@ -38,6 +39,7 @@ namespace AssetRipper.GUI.Managers
 		{
 			UnityVersion[] versions = structure.FileCollection
 				.FetchAssetCollections()
+				.Where(c => !FilenameUtils.IsEngineResource(c.Name) && !FilenameUtils.IsBuiltinExtra(c.Name))//It's common for engine resources to have a slightly lower version.
 				.Select(t => t.Version)
 				.Distinct()
 				.ToArray();
