@@ -333,7 +333,7 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		private static int[] ToArray(UnityVersion version)
 		{
-			return new int[] { version.Major, version.Minor, version.Build };
+			return new int[] { version.Major, version.Minor, version.Build, (int)version.Type, version.TypeNumber };
 		}
 
 		protected static int[]? GetUnityVersionFromDataDirectory(string dataDirectoryPath)

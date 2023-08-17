@@ -36,7 +36,18 @@ namespace AssetRipper.Import.Structure
 
 			Logger.SendStatusChange("loading_step_begin_scheme_processing");
 
-			InitializeGameCollection(configuration.DefaultVersion);
+
+
+			if (platformStructure?.Version is not null)
+			{
+				UnityVersion = new UnityVersion((ushort)platformStructure.Version[0], (ushort)platformStructure.Version[1], (ushort)platformStructure.Version[2], (UnityVersionType)platformStructure.Version[3], (byte)platformStructure.Version[4]);
+			}
+			else
+			{
+				UnityVersion = default;
+			}
+
+			InitializeGameCollection(UnityVersion);
 
 			if (!FileCollection.HasAnyAssetCollections())
 			{

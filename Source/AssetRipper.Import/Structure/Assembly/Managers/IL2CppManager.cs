@@ -65,7 +65,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 			if (gameStructure.Version is not null)
 			{
-				UnityVersion = new UnityVersion((ushort)gameStructure.Version[0], (ushort)gameStructure.Version[1], (ushort)gameStructure.Version[2]);
+				UnityVersion = new UnityVersion((ushort)gameStructure.Version[0], (ushort)gameStructure.Version[1], (ushort)gameStructure.Version[2], (UnityVersionType)gameStructure.Version[3], (byte)gameStructure.Version[4]);
 			}
 			else
 			{
