@@ -23,7 +23,7 @@ public sealed class SerializedAssetCollection : AssetCollection
 		return dependency is SerializedAssetCollection or ProcessedAssetCollection;
 	}
 
-	internal void InitializeDependencyList()
+	internal void InitializeDependencyList(IDependencyProvider? dependencyProvider)
 	{
 		if (Dependencies.Count > 1)
 		{
@@ -34,7 +34,12 @@ public sealed class SerializedAssetCollection : AssetCollection
 			for (int i = 0; i < DependencyIdentifiers.Length; i++)
 			{
 				FileIdentifier identifier = DependencyIdentifiers[i];
-				SetDependency(i + 1, Bundle.ResolveCollection(identifier));
+				AssetCollection? dependency = Bundle.ResolveCollection(identifier);
+				if (dependency is null)
+				{
+					dependencyProvider?.ReportMissingDependency(identifier);
+				}
+				SetDependency(i + 1, dependency);
 			}
 			DependencyIdentifiers = null;
 		}

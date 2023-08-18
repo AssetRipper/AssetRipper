@@ -203,7 +203,6 @@ namespace AssetRipper.Import.Structure
 				string? systemFilePath = RequestDependency(identifier.PathName);
 				if (systemFilePath is null)
 				{
-					Logger.Log(LogType.Warning, LogCategory.Import, $"Dependency '{identifier}' wasn't found");
 					return null;
 				}
 				else
@@ -234,6 +233,11 @@ namespace AssetRipper.Import.Structure
 					}
 				}
 				return null;
+			}
+
+			public void ReportMissingDependency(FileIdentifier identifier)
+			{
+				Logger.Log(LogType.Warning, LogCategory.Import, $"Dependency '{identifier}' wasn't found");
 			}
 		}
 

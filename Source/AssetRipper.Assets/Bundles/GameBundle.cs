@@ -69,7 +69,7 @@ public sealed partial class GameBundle : Bundle
 	/// <summary>
 	/// Initializes all dependency lists.
 	/// </summary>
-	public new void InitializeAllDependencyLists() => base.InitializeAllDependencyLists();
+	public new void InitializeAllDependencyLists(IDependencyProvider? dependencyProvider = null) => base.InitializeAllDependencyLists(dependencyProvider);
 
 	/// <summary>
 	/// Clears the list of temporary bundles.

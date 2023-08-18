@@ -32,22 +32,7 @@ namespace AssetRipper.IO.Files.Utils
 			name = name.ToLowerInvariant();
 			name = FixDependencyName(name);
 			name = FixResourcePath(name);
-			if (IsDefaultResource(name))
-			{
-				//I'm not sure why uTiny was redirecting these to an alternate name.
-				//return DefaultResourceName1;
-				return name;
-			}
-			else if (IsBuiltinExtra(name))
-			{
-				//I'm not sure why uTiny was redirecting these to an alternate name.
-				//return BuiltinExtraName1;
-				return name;
-			}
-			else
-			{
-				return name;
-			}
+			return name;
 		}
 
 		public static string FixDependencyName(string dependency)
@@ -109,19 +94,13 @@ namespace AssetRipper.IO.Files.Utils
 
 		private static bool IsAssemblyIdentifier(string assembly)
 		{
-			switch (assembly)
-			{
-				case "Boo":
-				case "Boo - first pass":
-				case "CSharp":
-				case "CSharp - first pass":
-				case "UnityScript":
-				case "UnityScript - first pass":
-					return true;
-
-				default:
-					return false;
-			}
+			return assembly
+				is "Boo"
+				or "Boo - first pass"
+				or "CSharp"
+				or "CSharp - first pass"
+				or "UnityScript"
+				or "UnityScript - first pass";
 		}
 
 		public const string LibraryFolder = "library/";

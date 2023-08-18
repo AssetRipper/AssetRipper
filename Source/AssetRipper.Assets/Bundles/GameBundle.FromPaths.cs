@@ -22,7 +22,7 @@ partial class GameBundle
 	{
 		GameBundle gameBundle = new();
 		gameBundle.InitializeFromPaths(paths, assetFactory, dependencyProvider, resourceProvider, defaultVersion);
-		gameBundle.InitializeAllDependencyLists();
+		gameBundle.InitializeAllDependencyLists(dependencyProvider);
 		return gameBundle;
 	}
 

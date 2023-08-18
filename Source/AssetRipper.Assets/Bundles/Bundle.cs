@@ -60,18 +60,18 @@ public abstract class Bundle : IDisposable
 	/// <summary>
 	/// Initializes the dependency list for each SerializedAssetCollection in this Bundle and its children Bundles.
 	/// </summary>
-	internal void InitializeAllDependencyLists()
+	internal void InitializeAllDependencyLists(IDependencyProvider? dependencyProvider)
 	{
 		foreach (AssetCollection collection in Collections)
 		{
 			if (collection is SerializedAssetCollection serializedAssetCollection)
 			{
-				serializedAssetCollection.InitializeDependencyList();
+				serializedAssetCollection.InitializeDependencyList(dependencyProvider);
 			}
 		}
 		foreach (Bundle bundle in Bundles)
 		{
-			bundle.InitializeAllDependencyLists();
+			bundle.InitializeAllDependencyLists(dependencyProvider);
 		}
 	}
 
@@ -92,21 +92,46 @@ public abstract class Bundle : IDisposable
 	/// <returns>The resolved <see cref="AssetCollection"/> if it exists, else null.</returns>
 	public AssetCollection? ResolveCollection(string name)
 	{
-		Bundle? bundleToExclude = null;
-		Bundle? currentBundle = this;
-		while (currentBundle is not null)
+		AssetCollection? result = ResolveInternal(name);
+		if (result is not null)
 		{
-			AssetCollection? result = TryResolveFromCollections(currentBundle, name) ?? TryResolveFromChildBundles(currentBundle, name, bundleToExclude);
-			if (result is not null)
-			{
-				return result;
-			}
-
-			bundleToExclude = currentBundle;
-			currentBundle = currentBundle.Parent;
+			return result;
 		}
 
-		return null;
+		string fixedName = FilenameUtils.FixFileIdentifier(name);
+		result = ResolveInternal(fixedName);
+		if (result is not null)
+		{
+			return result;
+		}
+
+		return fixedName switch
+		{
+			FilenameUtils.DefaultResourceName1 => ResolveInternal(FilenameUtils.DefaultResourceName2),
+			FilenameUtils.DefaultResourceName2 => ResolveInternal(FilenameUtils.DefaultResourceName1),
+			FilenameUtils.BuiltinExtraName1 => ResolveInternal(FilenameUtils.BuiltinExtraName2),
+			FilenameUtils.BuiltinExtraName2 => ResolveInternal(FilenameUtils.BuiltinExtraName1),
+			_ => null,
+		};
+
+		AssetCollection? ResolveInternal(string name)
+		{
+			Bundle? bundleToExclude = null;
+			Bundle? currentBundle = this;
+			while (currentBundle is not null)
+			{
+				AssetCollection? result = TryResolveFromCollections(currentBundle, name) ?? TryResolveFromChildBundles(currentBundle, name, bundleToExclude);
+				if (result is not null)
+				{
+					return result;
+				}
+
+				bundleToExclude = currentBundle;
+				currentBundle = currentBundle.Parent;
+			}
+
+			return null;
+		}
 
 		/// <summary>
 		/// Attempts to resolve an <see cref="AssetCollection"/> with the specified name in the specified Bundle's collections.
