@@ -22,7 +22,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		public string? Il2CppGameAssemblyPath { get; protected set; }
 		public string? Il2CppMetaDataPath { get; protected set; }
 		public string? UnityPlayerPath { get; protected set; }
-		public int[]? Version { get; protected set; }
+		public UnityVersion? Version { get; protected set; }
 
 		public IReadOnlyList<string> DataPaths { get; protected set; } = Array.Empty<string>();
 
@@ -320,23 +320,18 @@ namespace AssetRipper.Import.Structure.Platforms
 			Logger.Info(LogCategory.Import, $"Asset bundle '{name}' has been found");
 		}
 
-		protected static int[] GetUnityVersionFromSerializedFile(string filePath)
+		protected static UnityVersion GetUnityVersionFromSerializedFile(string filePath)
 		{
-			return ToArray(SerializedFile.FromFile(filePath).Metadata.UnityVersion);
+			return SerializedFile.FromFile(filePath).Metadata.UnityVersion;
 		}
 
-		protected static int[] GetUnityVersionFromBundleFile(string filePath)
+		protected static UnityVersion GetUnityVersionFromBundleFile(string filePath)
 		{
 			string version = new FileStreamBundleFile(filePath).Header.UnityWebMinimumRevision ?? "";
-			return ToArray(UnityVersion.Parse(version));
+			return UnityVersion.Parse(version);
 		}
 
-		private static int[] ToArray(UnityVersion version)
-		{
-			return new int[] { version.Major, version.Minor, version.Build };
-		}
-
-		protected static int[]? GetUnityVersionFromDataDirectory(string dataDirectoryPath)
+		protected static UnityVersion? GetUnityVersionFromDataDirectory(string dataDirectoryPath)
 		{
 			string globalGameManagersPath = Path.Combine(dataDirectoryPath, GlobalGameManagersName);
 			if (File.Exists(globalGameManagersPath))
