@@ -3,6 +3,7 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Processing.AnimationClips;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -53,6 +54,7 @@ namespace AssetRipper.Processing.Editor
 	{
 		private ITagManager? tagManager;
 		private readonly BundledAssetsExportMode bundledAssetsExportMode;
+		private IAssemblyManager? assemblyManager;
 		private PathChecksumCache? checksumCache;
 
 		public EditorFormatProcessor(BundledAssetsExportMode bundledAssetsExportMode)
@@ -64,6 +66,7 @@ namespace AssetRipper.Processing.Editor
 		{
 			Logger.Info(LogCategory.Processing, "Editor Format Conversion");
 			tagManager = gameData.GameBundle.FetchAssets().OfType<ITagManager>().FirstOrDefault();
+			assemblyManager = gameData.AssemblyManager;
 			checksumCache = new PathChecksumCache(gameData);
 
 			//Sequential processing
@@ -76,6 +79,7 @@ namespace AssetRipper.Processing.Editor
 			Parallel.ForEach(GetReleaseAssets(gameData), ConvertAsync);
 
 			checksumCache = null;
+			assemblyManager = null;
 			tagManager = null;
 		}
 
@@ -115,6 +119,24 @@ namespace AssetRipper.Processing.Editor
 				case IResourceManager resourceManager:
 					OriginalPathHelper.SetOriginalPaths(resourceManager);
 					break;
+				case IPlayerSettings playerSettings:
+					playerSettings.AllowUnsafeCode_C129 = true;
+					if (HasMscorlib2())
+					{
+						playerSettings.ApiCompatibilityLevel_C129E = ApiCompatibilityLevel.NET_2_0;
+						playerSettings.ScriptingRuntimeVersion_C129E = ScriptingRuntimeVersion.Legacy;
+					}
+					else
+					{
+						playerSettings.ApiCompatibilityLevel_C129E = ApiCompatibilityLevel.NET_Unity_4_8;
+						playerSettings.ScriptingRuntimeVersion_C129E = ScriptingRuntimeVersion.Latest;
+					}
+					break;
+			}
+
+			bool HasMscorlib2()
+			{
+				return assemblyManager!.GetAssemblies().FirstOrDefault(a => a.Name == "mscorlib")?.Version.Major == 2;
 			}
 		}
 
@@ -143,9 +165,6 @@ namespace AssetRipper.Processing.Editor
 					break;
 				case ILightmapSettings lightmapSettings:
 					lightmapSettings.ConvertToEditorFormat();
-					break;
-				case IPlayerSettings playerSettings:
-					playerSettings.AllowUnsafeCode_C129 = true;
 					break;
 			}
 		}
