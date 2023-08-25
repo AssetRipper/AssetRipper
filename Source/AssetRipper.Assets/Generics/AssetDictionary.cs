@@ -236,5 +236,14 @@
 
 			Capacity = (int)newcapacity;
 		}
+
+		/// <inheritdoc/>
+		public override IEnumerator<AssetPair<TKey, TValue>> GetEnumerator()
+		{
+			for (int i = 0; i < Count; i++)
+			{
+				yield return pairs[i];
+			}
+		}
 	}
 }

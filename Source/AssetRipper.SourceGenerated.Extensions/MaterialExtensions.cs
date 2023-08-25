@@ -1,5 +1,4 @@
-﻿using AssetRipper.Primitives;
-using AssetRipper.SourceGenerated.Classes.ClassID_21;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Subclasses.UnityPropertySheet;
 using AssetRipper.SourceGenerated.Subclasses.UnityTexEnv;
 

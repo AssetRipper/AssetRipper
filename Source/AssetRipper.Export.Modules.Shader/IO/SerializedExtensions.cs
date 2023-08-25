@@ -500,7 +500,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			{
 				writer.WriteIndent(indent);
 				writer.Write("Tags { ");
-				foreach (AccessPairBase<Utf8String, Utf8String> kvp in _this.Tags)
+				foreach (AssetPair<Utf8String, Utf8String> kvp in _this.Tags)
 				{
 					writer.Write($"\"{kvp.Key}\" = \"{kvp.Value}\" ");
 				}
