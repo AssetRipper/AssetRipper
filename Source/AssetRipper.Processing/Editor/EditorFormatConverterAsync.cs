@@ -1,4 +1,6 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_320;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
@@ -53,7 +55,9 @@ internal static class EditorFormatConverterAsync
 				table.References_Editor.Capacity = table.References_Release_AssetDictionary_NestedString_PPtr_Object_5_0_0.Count;
 				foreach ((NestedString key, PPtr_Object_5_0_0 value) in table.References_Release_AssetDictionary_NestedString_PPtr_Object_5_0_0)
 				{
-					table.References_Editor.Add(key.Id, value);
+					AssetPair<Utf8String, PPtr_Object_5_0_0> pair = table.References_Editor.AddNew();
+					pair.Key = key.Id;
+					pair.Value.CopyValues(value, new PPtrConverter(playableDirector));
 				}
 			}
 			else
@@ -64,8 +68,10 @@ internal static class EditorFormatConverterAsync
 					//The release keys are int, but the editor keys are string.
 					//There may be a way to convert the keys, such as ReverseCrc32, but we don't know if they're Crc32 hashes or not.
 					//For now, we'll just generate a descriptive string.
-					string keyString = $"UnknownString_0x{key.Id:X}";
-					table.References_Editor.Add(keyString, value);
+
+					AssetPair<Utf8String, PPtr_Object_5_0_0> pair = table.References_Editor.AddNew();
+					pair.Key = $"UnknownString_0x{key.Id:X}";
+					pair.Value.CopyValues(value, new PPtrConverter(playableDirector));
 				}
 			}
 		}
