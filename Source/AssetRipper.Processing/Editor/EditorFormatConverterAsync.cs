@@ -56,7 +56,7 @@ internal static class EditorFormatConverterAsync
 				foreach ((NestedString key, PPtr_Object_5_0_0 value) in table.References_Release_AssetDictionary_NestedString_PPtr_Object_5_0_0)
 				{
 					AssetPair<Utf8String, PPtr_Object_5_0_0> pair = table.References_Editor.AddNew();
-					pair.Key = key.Id;
+					pair.Key = key.Id;//When looking at decompiled games, this seems to always be a serialized int.
 					pair.Value.CopyValues(value, new PPtrConverter(playableDirector));
 				}
 			}
@@ -66,11 +66,10 @@ internal static class EditorFormatConverterAsync
 				foreach ((IntegerString key, PPtr_Object_5_0_0 value) in table.References_Release_AssetDictionary_IntegerString_PPtr_Object_5_0_0)
 				{
 					//The release keys are int, but the editor keys are string.
-					//There may be a way to convert the keys, such as ReverseCrc32, but we don't know if they're Crc32 hashes or not.
-					//For now, we'll just generate a descriptive string.
+					//For the NestedString keys, Unity appears to have called ToString() on an int, so we'll do the same for IntegerString.
 
 					AssetPair<Utf8String, PPtr_Object_5_0_0> pair = table.References_Editor.AddNew();
-					pair.Key = $"UnknownString_0x{key.Id:X}";
+					pair.Key = key.Id.ToString();
 					pair.Value.CopyValues(value, new PPtrConverter(playableDirector));
 				}
 			}
