@@ -16,6 +16,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_196;
 using AssetRipper.SourceGenerated.Classes.ClassID_218;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_30;
+using AssetRipper.SourceGenerated.Classes.ClassID_320;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_47;
@@ -153,6 +154,9 @@ namespace AssetRipper.Processing.Editor
 					break;
 				case ITerrain terrain:
 					terrain.ScaleInLightmap_C218 = 0.0512f;
+					break;
+				case IPlayableDirector playableDirector:
+					EditorFormatConverterAsync.Convert(playableDirector);
 					break;
 				case IGraphicsSettings graphicsSettings:
 					graphicsSettings.ConvertToEditorFormat();
