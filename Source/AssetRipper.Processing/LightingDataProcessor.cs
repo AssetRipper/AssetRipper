@@ -99,9 +99,9 @@ namespace AssetRipper.Processing
 
 		private static bool HasLightingData(ILightmapSettings lightmapSettings)
 		{
-			return lightmapSettings.Lightmaps_C157.Count > 0 
-				|| !lightmapSettings.EnlightenSceneMapping_C157!.IsEmpty()
-				|| lightmapSettings.LightProbes_C157P is not null;
+			//Supposedly, a LightingDataAsset without any lightmaps causes Unity to crash.
+			//See: https://github.com/AssetRipper/AssetRipper/issues/811
+			return lightmapSettings.Lightmaps_C157.Count > 0;
 		}
 
 		private static void AddRenderer(ILightingDataAsset lightingDataAsset, IRenderer renderer)
