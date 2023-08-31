@@ -12,16 +12,20 @@ namespace AssetRipper.IO.Files.SerializedFiles
 	/// </summary>
 	public sealed class SerializedFile : FileBase
 	{
-		private SerializedFileHeader Header { get; } = new();
-		private SerializedFileMetadata Metadata { get; } = new();
-		public UnityVersion Version => Metadata.UnityVersion;
-		public BuildTarget Platform => Metadata.TargetPlatform;
-		public TransferInstructionFlags Flags => GetFlags(Header, Metadata, Name, FilePath);
-		public EndianType EndianType => GetEndianType(Header, Metadata);
-		public ReadOnlySpan<FileIdentifier> Dependencies => Metadata.Externals;
-		public ReadOnlySpan<ObjectInfo> Objects => Metadata.Object;
-		public ReadOnlySpan<SerializedType> Types => Metadata.Types;
-		public bool HasTypeTree => Metadata.EnableTypeTree;
+		private FileIdentifier[]? m_dependencies;
+		private ObjectInfo[]? m_objects;
+		private SerializedType[]? m_types;
+		private SerializedTypeReference[]? m_refTypes;
+
+		public UnityVersion Version { get; private set; }
+		public BuildTarget Platform { get; private set; }
+		public TransferInstructionFlags Flags { get; private set; }
+		public EndianType EndianType { get; private set; }
+		public ReadOnlySpan<FileIdentifier> Dependencies => m_dependencies;
+		public ReadOnlySpan<ObjectInfo> Objects => m_objects;
+		public ReadOnlySpan<SerializedType> Types => m_types;
+		public ReadOnlySpan<SerializedTypeReference> RefTypes => m_refTypes;
+		public bool HasTypeTree { get; private set; }
 
 		private static TransferInstructionFlags GetFlags(SerializedFileHeader header, SerializedFileMetadata metadata, string name, string filePath)
 		{
@@ -72,25 +76,42 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 		public override void Read(SmartStream stream)
 		{
+			SerializedFileHeader header = new();
 			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
-				Header.Read(reader);
+				header.Read(reader);
 			}
-			if (SerializedFileMetadata.IsMetadataAtTheEnd(Header.Version))
+			if (SerializedFileMetadata.IsMetadataAtTheEnd(header.Version))
 			{
-				stream.Position = Header.FileSize - Header.MetadataSize;
+				stream.Position = header.FileSize - header.MetadataSize;
 			}
-			Metadata.Read(stream, Header);
+			SerializedFileMetadata metadata = new();
+			metadata.Read(stream, header);
 
-			SerializedFileMetadataConverter.CombineFormats(Header.Version, Metadata);
+			SerializedFileMetadataConverter.CombineFormats(header.Version, metadata);
 
-			foreach (ObjectInfo objectInfo in Metadata.Object)
+			foreach (ObjectInfo objectInfo in metadata.Object)
 			{
-				stream.Position = Header.DataOffset + objectInfo.ByteStart;
+				stream.Position = header.DataOffset + objectInfo.ByteStart;
 				byte[] objectData = new byte[objectInfo.ByteSize];
 				stream.ReadExactly(objectData);
 				objectInfo.ObjectData = objectData;
 			}
+
+			SetProperties(header, metadata);
+		}
+
+		private void SetProperties(SerializedFileHeader header, SerializedFileMetadata metadata)
+		{
+			Version = metadata.UnityVersion;
+			Platform = metadata.TargetPlatform;
+			Flags = GetFlags(header, metadata, Name, FilePath);
+			EndianType = GetEndianType(header, metadata);
+			m_dependencies = metadata.Externals;
+			m_objects = metadata.Object;
+			m_types = metadata.Types;
+			m_refTypes = metadata.RefTypes;
+			HasTypeTree = metadata.EnableTypeTree;
 		}
 
 		public override void Write(Stream stream)
