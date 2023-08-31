@@ -87,13 +87,13 @@ namespace AssetRipper.Tools.FileAnalyzer
 		private static void LogFileInfo(SerializedFile assetsFile, int indent = 0)
 		{
 			string indentionString = new string('\t', indent);
-			if (assetsFile.Metadata.UnityVersion.IsEqual(0, 0, 0))
+			if (assetsFile.Version.IsEqual(0, 0, 0))
 			{
 				Logger.Info($"{indentionString}Unity version: stripped");
 			}
 			else
 			{
-				Logger.Info($"{indentionString}Unity version: {assetsFile.Metadata.UnityVersion}");
+				Logger.Info($"{indentionString}Unity version: {assetsFile.Version}");
 			}
 
 			Logger.Info($"{indentionString}Serialied version: {(int)assetsFile.Header.Version}");

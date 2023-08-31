@@ -322,7 +322,7 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		protected static UnityVersion GetUnityVersionFromSerializedFile(string filePath)
 		{
-			return SerializedFile.FromFile(filePath).Metadata.UnityVersion;
+			return SerializedFile.FromFile(filePath).Version;
 		}
 
 		protected static UnityVersion GetUnityVersionFromBundleFile(string filePath)

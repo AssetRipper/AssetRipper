@@ -1,7 +1,6 @@
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.Converters;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Files.Streams.MultiFile;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.Utils;
 
@@ -25,72 +24,50 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			get => Metadata.TargetPlatform;
 			set => Metadata.TargetPlatform = value;
 		}
-		public TransferInstructionFlags Flags
+		public TransferInstructionFlags Flags => GetFlags(Header, Metadata, Name, FilePath);
+		public EndianType EndianType => GetEndianType(Header, Metadata);
+		public ReadOnlySpan<FileIdentifier> Dependencies => Metadata.Externals;
+
+		private static TransferInstructionFlags GetFlags(SerializedFileHeader header, SerializedFileMetadata metadata, string name, string filePath)
 		{
-			get
+			TransferInstructionFlags flags;
+			if (SerializedFileMetadata.HasPlatform(header.Version) && metadata.TargetPlatform == BuildTarget.NoTarget)
 			{
-				TransferInstructionFlags flags;
-				if (SerializedFileMetadata.HasPlatform(Header.Version) && Metadata.TargetPlatform == BuildTarget.NoTarget)
+				if (filePath.EndsWith(".unity", StringComparison.Ordinal))
 				{
-					if (FilePath.EndsWith(".unity", StringComparison.Ordinal))
-					{
-						flags = TransferInstructionFlags.SerializeEditorMinimalScene;
-					}
-					else
-					{
-						flags = TransferInstructionFlags.NoTransferInstructionFlags;
-					}
+					flags = TransferInstructionFlags.SerializeEditorMinimalScene;
 				}
 				else
 				{
-					flags = TransferInstructionFlags.SerializeGameRelease;
+					flags = TransferInstructionFlags.NoTransferInstructionFlags;
 				}
-
-				if (FilenameUtils.IsEngineResource(Name) || (Header.Version < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(Name)))
-				{
-					flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
-				}
-				if (Header.Endianess || Metadata.SwapEndianess)
-				{
-					flags |= TransferInstructionFlags.SwapEndianess;
-				}
-				return flags;
 			}
-		}
-		public EndianType EndianType
-		{
-			get
+			else
 			{
-				bool swapEndianess = SerializedFileHeader.HasEndianess(Header.Version) ? Header.Endianess : Metadata.SwapEndianess;
-				return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
+				flags = TransferInstructionFlags.SerializeGameRelease;
 			}
+
+			if (FilenameUtils.IsEngineResource(name) || (header.Version < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(name)))
+			{
+				flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
+			}
+			if (header.Endianess || metadata.SwapEndianess)
+			{
+				flags |= TransferInstructionFlags.SwapEndianess;
+			}
+			return flags;
 		}
 
-		public IReadOnlyList<FileIdentifier> Dependencies => Metadata.Externals;
-		private readonly Dictionary<long, int> m_assetEntryLookup = new();
-		public IReadOnlyDictionary<long, int> AssetEntryLookup => m_assetEntryLookup;
-
-		public static bool IsSerializedFile(string filePath)
+		private static EndianType GetEndianType(SerializedFileHeader header, SerializedFileMetadata metadata)
 		{
-			using Stream stream = MultiFileStream.OpenRead(filePath);
-			return IsSerializedFile(stream);
-		}
-
-		public static bool IsSerializedFile(byte[] buffer, int offset, int size)
-		{
-			using MemoryStream stream = new MemoryStream(buffer, offset, size, false);
-			return IsSerializedFile(stream);
+			bool swapEndianess = SerializedFileHeader.HasEndianess(header.Version) ? header.Endianess : metadata.SwapEndianess;
+			return swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 		}
 
 		public static bool IsSerializedFile(Stream stream)
 		{
 			using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
 			return SerializedFileHeader.IsSerializedFileHeader(reader, stream.Length);
-		}
-
-		public ObjectInfo GetAssetEntry(long pathID)
-		{
-			return Metadata.Object[m_assetEntryLookup[pathID]];
 		}
 
 		public override string ToString()
@@ -100,8 +77,6 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 		public override void Read(SmartStream stream)
 		{
-			m_assetEntryLookup.Clear();
-
 			using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
 			{
 				Header.Read(reader);
@@ -114,11 +89,8 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 			SerializedFileMetadataConverter.CombineFormats(Header.Version, Metadata);
 
-			for (int i = 0; i < Metadata.Object.Length; i++)
+			foreach (ObjectInfo objectInfo in Metadata.Object)
 			{
-				ObjectInfo objectInfo = Metadata.Object[i];
-				m_assetEntryLookup.Add(objectInfo.FileID, i);
-
 				stream.Position = Header.DataOffset + objectInfo.ByteStart;
 				byte[] objectData = new byte[objectInfo.ByteSize];
 				stream.ReadExactly(objectData);
@@ -136,28 +108,6 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			string fileName = Path.GetFileName(filePath);
 			SmartStream stream = SmartStream.OpenRead(filePath);
 			return SerializedFileScheme.Default.Read(stream, filePath, fileName);
-		}
-
-		/// <summary>
-		/// Check if <see langword="this"/> references another <see cref="SerializedFile"/>.
-		/// </summary>
-		/// <remarks>
-		/// This does not resolve intermediate references.
-		/// If <see langword="this"/> only references <paramref name="other"/> transiently, it will return <see langword="false"/>.
-		/// </remarks>
-		/// <param name="other">Another <see cref="SerializedFile"/></param>
-		/// <returns>True if <see langword="this"/> directly references <paramref name="other"/>.</returns>
-		public bool References(SerializedFile other)
-		{
-			foreach (FileIdentifier dependency in Dependencies)
-			{
-				if (dependency.GetFilePath() == other.NameFixed)
-				{
-					return true;
-				}
-			}
-
-			return false;
 		}
 	}
 }

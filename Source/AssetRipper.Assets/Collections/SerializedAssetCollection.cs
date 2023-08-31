@@ -66,11 +66,10 @@ public sealed class SerializedAssetCollection : AssetCollection
 			Flags = file.Flags,
 			EndianType = file.EndianType,
 		};
-		FileIdentifier[] fileDependencies = file.Metadata.Externals;
+		ReadOnlySpan<FileIdentifier> fileDependencies = file.Dependencies;
 		if (fileDependencies.Length > 0)
 		{
-			collection.DependencyIdentifiers = new FileIdentifier[fileDependencies.Length];
-			Array.Copy(fileDependencies, collection.DependencyIdentifiers, fileDependencies.Length);
+			collection.DependencyIdentifiers = fileDependencies.ToArray();
 		}
 		ReadData(collection, file, factory);
 		return collection;
@@ -78,9 +77,8 @@ public sealed class SerializedAssetCollection : AssetCollection
 
 	private static void ReadData(SerializedAssetCollection collection, SerializedFile file, AssetFactoryBase factory)
 	{
-		for (int i = 0; i < file.Metadata.Object.Length; i++)
+		foreach (ObjectInfo objectInfo in file.Metadata.Object)
 		{
-			ObjectInfo objectInfo = file.Metadata.Object[i];
 			SerializedType? type = objectInfo.GetSerializedType(file.Metadata.Types);
 			int classID = objectInfo.TypeID < 0 ? 114 : objectInfo.TypeID;
 			AssetInfo assetInfo = new AssetInfo(collection, objectInfo.FileID, classID);
