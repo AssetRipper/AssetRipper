@@ -1,5 +1,6 @@
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.Converters;
+using AssetRipper.IO.Files.SerializedFiles.IO;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.Utils;
@@ -118,7 +119,111 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 		public override void Write(Stream stream)
 		{
-			throw new NotImplementedException();
+			long initialPosition = stream.Position;
+			using SerializedWriter writer = new(stream, EndianType, Generation, Version);
+			SerializedFileHeader header = new()
+			{
+				Version = Generation,
+				Endianess = EndianType == EndianType.BigEndian,
+			};
+			header.Write(writer);
+
+			SerializedFileMetadata metadata = new()
+			{
+				UnityVersion = Version,
+				TargetPlatform = Platform,
+				Externals = m_dependencies ?? Array.Empty<FileIdentifier>(),
+				Object = GetNewObjectInfoArray(m_objects),
+				Types = m_types ?? Array.Empty<SerializedType>(),
+				RefTypes = m_refTypes ?? Array.Empty<SerializedTypeReference>(),
+				EnableTypeTree = HasTypeTree,
+			};
+			long metadataPosition;
+			long metadataSize;
+			long objectDataPosition;
+			if (SerializedFileMetadata.IsMetadataAtTheEnd(Generation))
+			{
+				metadataPosition = stream.Position;
+				metadata.Write(writer);
+				metadataSize = stream.Position - metadataPosition;
+				AlignStream(writer);//Object data must always be aligned.
+				objectDataPosition = stream.Position;
+				WriteObjectData(writer, metadata.Object);
+			}
+			else
+			{
+				AlignStream(writer);//Object data must always be aligned.
+				objectDataPosition = stream.Position;
+				WriteObjectData(writer, metadata.Object);
+				metadataPosition = stream.Position;
+				metadata.Write(writer);
+				metadataSize = stream.Position - metadataPosition;
+			}
+			
+			long finalPosition = stream.Position;
+
+			stream.Position = initialPosition;
+			header.FileSize = finalPosition - initialPosition;
+			header.MetadataSize = metadataSize;
+			header.DataOffset = objectDataPosition - initialPosition;
+			header.Write(writer);
+
+			stream.Position = finalPosition;
+
+			static void WriteObjectData(SerializedWriter writer, ObjectInfo[] objects)
+			{
+				foreach (ObjectInfo objectInfo in objects)
+				{
+					writer.Write(objectInfo.ObjectData);
+					AlignStream(writer);
+				}
+			}
+
+			static ObjectInfo[] GetNewObjectInfoArray(ObjectInfo[]? objects)
+			{
+				if (objects is null)
+				{
+					return Array.Empty<ObjectInfo>();
+				}
+
+				ObjectInfo[] newObjects = new ObjectInfo[objects.Length];
+
+				//This doesn't work correctly because ObjectInfo is not a struct, but that can be fixed later.
+				Array.Copy(objects, newObjects, objects.Length);
+
+				long byteStart = 0;
+				for (int i = 0; i < newObjects.Length; i++)
+				{
+					ObjectInfo objectInfo = newObjects[i];
+					objectInfo.ByteStart = byteStart;
+					objectInfo.ByteSize = objectInfo.ObjectData.Length;
+					newObjects[i] = objectInfo;
+
+					byteStart += objectInfo.ByteSize;
+					byteStart += 3 - (byteStart % 4);//Object data must always be aligned.
+				}
+
+				return newObjects;
+			}
+
+			static void AlignStream(SerializedWriter writer)
+			{
+				switch (writer.BaseStream.Position % 4)
+				{
+					case 1:
+						writer.Write((byte)0);
+						writer.Write((byte)0);
+						writer.Write((byte)0);
+						break;
+					case 2:
+						writer.Write((byte)0);
+						writer.Write((byte)0);
+						break;
+					case 3:
+						writer.Write((byte)0);
+						break;
+				}
+			}
 		}
 
 		public static SerializedFile FromFile(string filePath)

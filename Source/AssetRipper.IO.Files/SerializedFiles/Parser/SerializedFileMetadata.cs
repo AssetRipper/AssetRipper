@@ -69,27 +69,6 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 		}
 
-		public void Write(Stream stream, SerializedFileHeader header)
-		{
-			bool swapEndianess = WriteSwapEndianess(stream, header);
-			EndianType endianess = swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
-			using SerializedWriter writer = new SerializedWriter(stream, endianess, header.Version, UnityVersion);
-			Write(writer);
-		}
-
-		private bool WriteSwapEndianess(Stream stream, SerializedFileHeader header)
-		{
-			if (HasEndian(header.Version))
-			{
-				stream.WriteByte(SwapEndianess ? (byte)1 : (byte)0);
-				return SwapEndianess;
-			}
-			else
-			{
-				return header.Endianess;
-			}
-		}
-
 		private void Read(SerializedReader reader)
 		{
 			if (HasSignature(reader.Generation))
@@ -144,8 +123,12 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 		}
 
-		private void Write(SerializedWriter writer)
+		public void Write(SerializedWriter writer)
 		{
+			if (HasEndian(writer.Generation))
+			{
+				writer.Write(writer.EndianType == EndianType.BigEndian ? (byte)1 : (byte)0);
+			}
 			if (HasSignature(writer.Generation))
 			{
 				writer.WriteStringZeroTerm(UnityVersion.ToString());
