@@ -12,7 +12,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 	/// </summary>
 	public sealed class SerializedFile : FileBase
 	{
-		public SerializedFileHeader Header { get; } = new();
+		private SerializedFileHeader Header { get; } = new();
 		public SerializedFileMetadata Metadata { get; } = new();
 		public UnityVersion Version 
 		{

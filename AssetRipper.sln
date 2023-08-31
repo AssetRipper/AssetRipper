@@ -95,8 +95,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Files.Source
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Files.Tests", "Source\AssetRipper.IO.Files.Tests\AssetRipper.IO.Files.Tests.csproj", "{F295E724-B3DE-45A0-870F-237BADFD15D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.FileAnalyzer", "Source\AssetRipper.Tools.FileAnalyzer\AssetRipper.Tools.FileAnalyzer.csproj", "{4A115327-7E89-4657-AA85-91366AFA2905}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.SystemTester", "Source\AssetRipper.Tools.SystemTester\AssetRipper.Tools.SystemTester.csproj", "{8F4FDC30-EDEA-4FB1-A12B-FD47650C51F7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.TypeTreeExtractor", "Source\AssetRipper.Tools.TypeTreeExtractor\AssetRipper.Tools.TypeTreeExtractor.csproj", "{441FAA30-1347-4334-B8B2-6CBC793B7D8C}"
@@ -222,10 +220,6 @@ Global
 		{F295E724-B3DE-45A0-870F-237BADFD15D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F295E724-B3DE-45A0-870F-237BADFD15D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F295E724-B3DE-45A0-870F-237BADFD15D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A115327-7E89-4657-AA85-91366AFA2905}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A115327-7E89-4657-AA85-91366AFA2905}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A115327-7E89-4657-AA85-91366AFA2905}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A115327-7E89-4657-AA85-91366AFA2905}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F4FDC30-EDEA-4FB1-A12B-FD47650C51F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F4FDC30-EDEA-4FB1-A12B-FD47650C51F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F4FDC30-EDEA-4FB1-A12B-FD47650C51F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
