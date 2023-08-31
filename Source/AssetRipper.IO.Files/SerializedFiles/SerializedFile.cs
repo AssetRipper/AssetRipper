@@ -17,6 +17,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		private SerializedType[]? m_types;
 		private SerializedTypeReference[]? m_refTypes;
 
+		public FormatVersion Generation { get; private set; }
 		public UnityVersion Version { get; private set; }
 		public BuildTarget Platform { get; private set; }
 		public TransferInstructionFlags Flags { get; private set; }
@@ -103,6 +104,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 		private void SetProperties(SerializedFileHeader header, SerializedFileMetadata metadata)
 		{
+			Generation = header.Version;
 			Version = metadata.UnityVersion;
 			Platform = metadata.TargetPlatform;
 			Flags = GetFlags(header, metadata, Name, FilePath);
