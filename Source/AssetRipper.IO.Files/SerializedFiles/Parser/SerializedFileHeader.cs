@@ -69,7 +69,6 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 				return false;
 			}
 
-			reader.BaseStream.Position = initialPosition;
 			if (generation >= 22)
 			{
 				//22 Format:
@@ -80,26 +79,12 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 				headerDefinedFileSize = reader.ReadUInt64();
 			}
 
-			if (metadataSize < MetadataMinSize)
-			{
-				reader.BaseStream.Position = initialPosition;
-				return false;
-			}
-
-			if (headerDefinedFileSize < HeaderMinSize + MetadataMinSize)
-			{
-				reader.BaseStream.Position = initialPosition;
-				return false;
-			}
-
-			if (fileSize < 0 || headerDefinedFileSize != (ulong)fileSize)
-			{
-				reader.BaseStream.Position = initialPosition;
-				return false;
-			}
-
 			reader.BaseStream.Position = initialPosition;
-			return true;
+
+			return metadataSize >= MetadataMinSize
+				&& headerDefinedFileSize >= HeaderMinSize + MetadataMinSize
+				&& fileSize >= 0
+				&& headerDefinedFileSize == (ulong)fileSize;
 		}
 
 		public void Read(EndianReader reader)
@@ -111,7 +96,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			//Read generation
 			Version = (FormatVersion)reader.ReadInt32();
 
-			//For gen 22+ these will be zero
+			//For gen 22+ this will be zero
 			DataOffset = reader.ReadUInt32();
 
 			if (HasEndianess(Version))
