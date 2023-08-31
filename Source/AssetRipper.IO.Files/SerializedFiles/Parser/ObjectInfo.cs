@@ -134,7 +134,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			return $"{ClassID}[{FileID}]";
 		}
 
-		public SerializedType? GetSerializedType(SerializedType[] types)
+		public SerializedType? GetSerializedType(ReadOnlySpan<SerializedType> types)
 		{
 			if (SerializedTypeIndex >= 0)
 			{
@@ -146,11 +146,26 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 			else
 			{
-				return types.Single(t => t.TypeID == TypeID && t.IsStrippedType == Stripped);
+				SerializedType? result = null;
+				foreach (SerializedType type in types)
+				{
+					if (type.TypeID == TypeID && type.IsStrippedType == Stripped)
+					{
+						if (result is null)
+						{
+							result = type;
+						}
+						else
+						{
+							throw new Exception($"Multiple types with the same ID {TypeID} and stripped {Stripped} found");
+						}
+					}
+				}
+				return result ?? throw new Exception($"Type with ID {TypeID} and stripped {Stripped} not found");
 			}
 		}
 
-		public void Initialize(SerializedType[] types)
+		public void Initialize(ReadOnlySpan<SerializedType> types)
 		{
 			if (SerializedTypeIndex >= 0)
 			{

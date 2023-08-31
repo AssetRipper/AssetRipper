@@ -77,9 +77,9 @@ public sealed class SerializedAssetCollection : AssetCollection
 
 	private static void ReadData(SerializedAssetCollection collection, SerializedFile file, AssetFactoryBase factory)
 	{
-		foreach (ObjectInfo objectInfo in file.Metadata.Object)
+		foreach (ObjectInfo objectInfo in file.Objects)
 		{
-			SerializedType? type = objectInfo.GetSerializedType(file.Metadata.Types);
+			SerializedType? type = objectInfo.GetSerializedType(file.Types);
 			int classID = objectInfo.TypeID < 0 ? 114 : objectInfo.TypeID;
 			AssetInfo assetInfo = new AssetInfo(collection, objectInfo.FileID, classID);
 			IUnityObjectBase? asset = factory.ReadAsset(assetInfo, objectInfo.ObjectData, type);

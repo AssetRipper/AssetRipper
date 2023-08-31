@@ -73,13 +73,13 @@ namespace AssetRipper.Tools.TypeTreeExtractor
 
 		private static void SaveTypeTrees(SerializedFile file)
 		{
-			if (!file.Metadata.EnableTypeTree)
+			if (!file.HasTypeTree)
 			{
 				return;
 			}
 
-			StringBuilder sb = new StringBuilder();
-			foreach (SerializedType type in file.Metadata.Types.OrderBy(t => t.TypeID))
+			StringBuilder sb = new();
+			foreach (SerializedType type in file.Types.ToArray().OrderBy(t => t.TypeID))
 			{
 				Console.WriteLine($"\tType ID: {type.TypeID,-10} Script Index: {type.ScriptTypeIndex, -5} Node Count: {type.OldType?.Nodes?.Count ?? 0}");
 				if (type.OldType is null)

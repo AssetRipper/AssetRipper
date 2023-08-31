@@ -13,20 +13,15 @@ namespace AssetRipper.IO.Files.SerializedFiles
 	public sealed class SerializedFile : FileBase
 	{
 		private SerializedFileHeader Header { get; } = new();
-		public SerializedFileMetadata Metadata { get; } = new();
-		public UnityVersion Version 
-		{
-			get => Metadata.UnityVersion;
-			set => Metadata.UnityVersion = value;
-		}
-		public BuildTarget Platform
-		{
-			get => Metadata.TargetPlatform;
-			set => Metadata.TargetPlatform = value;
-		}
+		private SerializedFileMetadata Metadata { get; } = new();
+		public UnityVersion Version => Metadata.UnityVersion;
+		public BuildTarget Platform => Metadata.TargetPlatform;
 		public TransferInstructionFlags Flags => GetFlags(Header, Metadata, Name, FilePath);
 		public EndianType EndianType => GetEndianType(Header, Metadata);
 		public ReadOnlySpan<FileIdentifier> Dependencies => Metadata.Externals;
+		public ReadOnlySpan<ObjectInfo> Objects => Metadata.Object;
+		public ReadOnlySpan<SerializedType> Types => Metadata.Types;
+		public bool HasTypeTree => Metadata.EnableTypeTree;
 
 		private static TransferInstructionFlags GetFlags(SerializedFileHeader header, SerializedFileMetadata metadata, string name, string filePath)
 		{
