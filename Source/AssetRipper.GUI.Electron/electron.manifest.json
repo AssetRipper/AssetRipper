@@ -1,0 +1,35 @@
+{
+  "executable": "AssetRipper.GUI.Electron",
+  "splashscreen": {
+    "imageFile": ""
+  },
+  "name": "AssetRipper.GUI.Electron",
+  "author": "",
+  "singleInstance": false,
+  "environment": "Production",
+  "build": {
+    "appId": "com.AssetRipper.GUI.Electron.app",
+    "productName": "AssetRipper.GUI.Electron",
+    "copyright": "Copyright © 2020",
+    "buildVersion": "1.0.0",
+    "compression": "maximum",
+    "directories": {
+      "output": "../../../bin/Desktop"
+    },
+    "extraResources": [
+      {
+        "from": "./bin",
+        "to": "bin",
+        "filter": [ "**/*" ]
+      }
+    ],
+    "files": [
+      {
+        "from": "./ElectronHostHook/node_modules",
+        "to": "ElectronHostHook/node_modules",
+        "filter": [ "**/*" ]
+      },
+      "**/*"
+    ]
+  }
+}

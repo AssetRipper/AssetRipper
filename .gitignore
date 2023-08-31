@@ -12,4 +12,5 @@ bin
 .vscode
 *.blend1
 launchSettings.json
+!*/AssetRipper.GUI.Electron/Properties/launchSettings.json
 AssetRipper.SourceGenerated.xml
