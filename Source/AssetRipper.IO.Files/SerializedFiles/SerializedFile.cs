@@ -92,8 +92,9 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 			SerializedFileMetadataConverter.CombineFormats(header.Version, metadata);
 
-			foreach (ObjectInfo objectInfo in metadata.Object)
+			for (int i = 0; i < metadata.Object.Length; i++)
 			{
+				ref ObjectInfo objectInfo = ref metadata.Object[i];
 				stream.Position = header.DataOffset + objectInfo.ByteStart;
 				byte[] objectData = new byte[objectInfo.ByteSize];
 				stream.ReadExactly(objectData);
@@ -174,7 +175,11 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			{
 				foreach (ObjectInfo objectInfo in objects)
 				{
+					if (objectInfo.ObjectData is not null)
+					{
 					writer.Write(objectInfo.ObjectData);
+					}
+
 					AlignStream(writer);
 				}
 			}
@@ -187,17 +192,14 @@ namespace AssetRipper.IO.Files.SerializedFiles
 				}
 
 				ObjectInfo[] newObjects = new ObjectInfo[objects.Length];
-
-				//This doesn't work correctly because ObjectInfo is not a struct, but that can be fixed later.
 				Array.Copy(objects, newObjects, objects.Length);
 
 				long byteStart = 0;
 				for (int i = 0; i < newObjects.Length; i++)
 				{
-					ObjectInfo objectInfo = newObjects[i];
+					ref ObjectInfo objectInfo = ref newObjects[i];
 					objectInfo.ByteStart = byteStart;
-					objectInfo.ByteSize = objectInfo.ObjectData.Length;
-					newObjects[i] = objectInfo;
+					objectInfo.ByteSize = objectInfo.ObjectData?.Length ?? 0;
 
 					byteStart += objectInfo.ByteSize;
 					byteStart += 3 - (byteStart % 4);//Object data must always be aligned.

@@ -5,7 +5,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 	/// <summary>
 	/// Contains information for a block of raw serialized object data.
 	/// </summary>
-	public sealed class ObjectInfo : ISerializedReadable, ISerializedWritable
+	public struct ObjectInfo : ISerializedReadable, ISerializedWritable
 	{
 		/// <summary>
 		/// 5.0.0unk and greater / Format Version at least 14
@@ -81,7 +81,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 		}
 
-		public void Write(SerializedWriter writer)
+		public readonly void Write(SerializedWriter writer)
 		{
 			if (IsLongID(writer.Generation))
 			{
@@ -129,12 +129,12 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 		}
 
-		public override string ToString()
+		public override readonly string ToString()
 		{
 			return $"{ClassID}[{FileID}]";
 		}
 
-		public SerializedType? GetSerializedType(ReadOnlySpan<SerializedType> types)
+		public readonly SerializedType? GetSerializedType(ReadOnlySpan<SerializedType> types)
 		{
 			if (SerializedTypeIndex >= 0)
 			{
@@ -213,6 +213,6 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 		/// <summary>
 		/// The data referenced by <see cref="ByteStart"/> and <see cref="ByteSize"/>.
 		/// </summary>
-		public byte[] ObjectData { get; set; } = Array.Empty<byte>();
+		public byte[]? ObjectData { get; set; }
 	}
 }
