@@ -18,6 +18,11 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			TypeDependencies = reader.ReadInt32Array();
 		}
 
+		protected override void WriteTypeDependencies(SerializedWriter writer)
+		{
+			writer.WriteArray(TypeDependencies);
+		}
+
 		private static UnityVersion WriteIDHashForScriptTypeVersion { get; } = new UnityVersion(2018, 3, 0, UnityVersionType.Alpha, 1);
 	}
 }

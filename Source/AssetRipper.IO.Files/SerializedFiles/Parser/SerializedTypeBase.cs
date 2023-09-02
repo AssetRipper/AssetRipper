@@ -97,8 +97,39 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 
 		protected abstract bool IgnoreScriptTypeForHash(FormatVersion formatVersion, UnityVersion unityVersion);
 
+		protected abstract void WriteTypeDependencies(SerializedWriter writer);
+
 		public void Write(SerializedWriter writer, bool hasTypeTree)
 		{
+			writer.Write(RawTypeID);
+			if (writer.Generation >= FormatVersion.RefactoredClassId)
+			{
+				writer.Write(IsStrippedType);
+			}
+			if (writer.Generation >= FormatVersion.RefactorTypeData)
+			{
+				writer.Write(ScriptTypeIndex);
+			}
+			if (writer.Generation >= FormatVersion.HasTypeTreeHashes)
+			{
+				bool writeScriptID = (RawTypeID == -1) 
+					|| (RawTypeID == 114) 
+					|| (!IgnoreScriptTypeForHash(writer.Generation, writer.Version) && ScriptTypeIndex >= 0);
+				if (writeScriptID)
+				{
+					writer.Write(ScriptID);//actually written as 4 uint
+				}
+				writer.Write(OldTypeHash);//actually written as 4 uint
+			}
+
+			if (hasTypeTree)
+			{
+				OldType.Write(writer);
+				if (writer.Generation >= FormatVersion.StoresTypeDependencies)
+				{
+					WriteTypeDependencies(writer);
+				}
+			}
 		}
 
 		public override string ToString()

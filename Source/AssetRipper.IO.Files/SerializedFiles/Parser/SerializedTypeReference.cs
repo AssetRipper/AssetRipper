@@ -29,5 +29,12 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			Namespace = reader.ReadStringZeroTerm();
 			AsmName = reader.ReadStringZeroTerm();
 		}
+
+		protected override void WriteTypeDependencies(SerializedWriter writer)
+		{
+			writer.WriteStringZeroTerm(ClassName);
+			writer.WriteStringZeroTerm(Namespace);
+			writer.WriteStringZeroTerm(AsmName);
+		}
 	}
 }
