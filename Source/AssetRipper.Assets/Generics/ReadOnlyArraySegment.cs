@@ -56,7 +56,7 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 
 	public override int GetHashCode()
 	{
-		return _array is null ? 0 : HashCode.Combine(_offset, _count, _array.GetHashCode());
+		return _array is null ? 0 : HashCode.Combine(_offset, _count, _array);
 	}
 
 	public override bool Equals([NotNullWhen(true)] object? obj)
@@ -91,12 +91,12 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 
 	public T[] ToArray()
 	{
-		ThrowInvalidOperationIfDefault();
-
 		if (_count == 0)
 		{
 			return Array.Empty<T>();
 		}
+
+		ThrowInvalidOperationIfDefault();
 
 		T[] array = new T[_count];
 		Array.Copy(_array, _offset, array, 0, _count);
@@ -106,7 +106,7 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 	public static bool operator ==(ReadOnlyArraySegment<T> a, ReadOnlyArraySegment<T> b) => a.Equals(b);
 	public static bool operator !=(ReadOnlyArraySegment<T> a, ReadOnlyArraySegment<T> b) => !(a == b);
 
-	public static implicit operator ReadOnlyArraySegment<T>(T[] array)
+	public static implicit operator ReadOnlyArraySegment<T>(T[]? array)
 	{
 		return array is not null ? new ReadOnlyArraySegment<T>(array) : default;
 	}
