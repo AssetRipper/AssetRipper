@@ -21,43 +21,44 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		public FormatVersion Generation { get; private set; }
 		public UnityVersion Version { get; private set; }
 		public BuildTarget Platform { get; private set; }
-		public TransferInstructionFlags Flags { get; private set; }
+		public TransferInstructionFlags Flags
+		{
+			get
+			{
+				TransferInstructionFlags flags;
+				if (SerializedFileMetadata.HasPlatform(Generation) && Platform == BuildTarget.NoTarget)
+				{
+					if (FilePath.EndsWith(".unity", StringComparison.Ordinal))
+					{
+						flags = TransferInstructionFlags.SerializeEditorMinimalScene;
+					}
+					else
+					{
+						flags = TransferInstructionFlags.NoTransferInstructionFlags;
+					}
+				}
+				else
+				{
+					flags = TransferInstructionFlags.SerializeGameRelease;
+				}
+
+				if (FilenameUtils.IsEngineResource(Name) || (Generation < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(Name)))
+				{
+					flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
+				}
+				if (EndianType is EndianType.BigEndian)
+				{
+					flags |= TransferInstructionFlags.SwapEndianess;
+				}
+				return flags;
+			}
+		}
 		public EndianType EndianType { get; private set; }
 		public ReadOnlySpan<FileIdentifier> Dependencies => m_dependencies;
 		public ReadOnlySpan<ObjectInfo> Objects => m_objects;
 		public ReadOnlySpan<SerializedType> Types => m_types;
 		public ReadOnlySpan<SerializedTypeReference> RefTypes => m_refTypes;
 		public bool HasTypeTree { get; private set; }
-
-		private static TransferInstructionFlags GetFlags(SerializedFileHeader header, SerializedFileMetadata metadata, string name, string filePath)
-		{
-			TransferInstructionFlags flags;
-			if (SerializedFileMetadata.HasPlatform(header.Version) && metadata.TargetPlatform == BuildTarget.NoTarget)
-			{
-				if (filePath.EndsWith(".unity", StringComparison.Ordinal))
-				{
-					flags = TransferInstructionFlags.SerializeEditorMinimalScene;
-				}
-				else
-				{
-					flags = TransferInstructionFlags.NoTransferInstructionFlags;
-				}
-			}
-			else
-			{
-				flags = TransferInstructionFlags.SerializeGameRelease;
-			}
-
-			if (FilenameUtils.IsEngineResource(name) || (header.Version < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(name)))
-			{
-				flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
-			}
-			if (header.Endianess || metadata.SwapEndianess)
-			{
-				flags |= TransferInstructionFlags.SwapEndianess;
-			}
-			return flags;
-		}
 
 		private static EndianType GetEndianType(SerializedFileHeader header, SerializedFileMetadata metadata)
 		{
@@ -109,7 +110,6 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			Generation = header.Version;
 			Version = metadata.UnityVersion;
 			Platform = metadata.TargetPlatform;
-			Flags = GetFlags(header, metadata, Name, FilePath);
 			EndianType = GetEndianType(header, metadata);
 			m_dependencies = metadata.Externals;
 			m_objects = metadata.Object;
@@ -121,14 +121,14 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		public override void Write(Stream stream)
 		{
 			long initialPosition = stream.Position;
-			using SerializedWriter writer = new(stream, EndianType, Generation, Version);
 			SerializedFileHeader header = new()
 			{
 				Version = Generation,
 				Endianess = EndianType == EndianType.BigEndian,
 			};
-			header.Write(writer);
+			header.Write(new EndianWriter(stream, EndianType.BigEndian));
 
+			using SerializedWriter writer = new(stream, EndianType, Generation, Version);
 			SerializedFileMetadata metadata = new()
 			{
 				UnityVersion = Version,
@@ -144,30 +144,30 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			long objectDataPosition;
 			if (SerializedFileMetadata.IsMetadataAtTheEnd(Generation))
 			{
-				metadataPosition = stream.Position;
-				metadata.Write(writer);
-				metadataSize = stream.Position - metadataPosition;
 				AlignStream(writer);//Object data must always be aligned.
 				objectDataPosition = stream.Position;
 				WriteObjectData(writer, metadata.Object);
+				metadataPosition = stream.Position;
+				metadata.Write(writer);
+				metadataSize = stream.Position - metadataPosition;
 			}
 			else
 			{
-				AlignStream(writer);//Object data must always be aligned.
-				objectDataPosition = stream.Position;
-				WriteObjectData(writer, metadata.Object);
 				metadataPosition = stream.Position;
 				metadata.Write(writer);
 				metadataSize = stream.Position - metadataPosition;
+				AlignStream(writer);//Object data must always be aligned.
+				objectDataPosition = stream.Position;
+				WriteObjectData(writer, metadata.Object);
 			}
-			
+
 			long finalPosition = stream.Position;
 
 			stream.Position = initialPosition;
 			header.FileSize = finalPosition - initialPosition;
 			header.MetadataSize = metadataSize;
 			header.DataOffset = objectDataPosition - initialPosition;
-			header.Write(writer);
+			header.Write(new EndianWriter(stream, EndianType.BigEndian));
 
 			stream.Position = finalPosition;
 
@@ -177,7 +177,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 				{
 					if (objectInfo.ObjectData is not null)
 					{
-					writer.Write(objectInfo.ObjectData);
+						writer.Write(objectInfo.ObjectData);
 					}
 
 					AlignStream(writer);
@@ -233,6 +233,22 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			string fileName = Path.GetFileName(filePath);
 			SmartStream stream = SmartStream.OpenRead(filePath);
 			return SerializedFileScheme.Default.Read(stream, filePath, fileName);
+		}
+
+		public static SerializedFile FromBuilder(SerializedFileBuilder builder)
+		{
+			return new()
+			{
+				Generation = builder.Generation,
+				Version = builder.Version,
+				Platform = builder.Platform,
+				EndianType = builder.EndianType,
+				m_dependencies = builder.Dependencies.ToArray(),
+				m_objects = builder.Objects.ToArray(),
+				m_types = builder.Types.ToArray(),
+				m_refTypes = builder.RefTypes.ToArray(),
+				HasTypeTree = builder.HasTypeTree,
+			};
 		}
 	}
 }

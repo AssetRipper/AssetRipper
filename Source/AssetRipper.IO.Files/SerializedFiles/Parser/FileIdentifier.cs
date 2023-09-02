@@ -39,7 +39,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			PathName = FilenameUtils.FixFileIdentifier(PathNameOrigin);
 		}
 
-		public void Write(SerializedWriter writer)
+		public readonly void Write(SerializedWriter writer)
 		{
 			if (HasAssetPath(writer.Generation))
 			{
@@ -53,7 +53,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			writer.WriteStringZeroTerm(PathNameOrigin);
 		}
 
-		public string GetFilePath()
+		public readonly string GetFilePath()
 		{
 			if (Type == AssetType.Meta)
 			{
@@ -62,7 +62,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			return PathName;
 		}
 
-		public override string? ToString()
+		public override readonly string? ToString()
 		{
 			if (Type == AssetType.Meta)
 			{

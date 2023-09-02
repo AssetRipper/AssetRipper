@@ -5,7 +5,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 	/// <summary>
 	/// The file header is found at the beginning of an asset file. The header is always using big endian byte order.
 	/// </summary>
-	public sealed class SerializedFileHeader
+	public sealed record class SerializedFileHeader
 	{
 		/// <summary>
 		/// Size of the metadata parts of the file
@@ -129,7 +129,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			if (HasLargeFilesSupport(Version))
 			{
 				writer.Write(0);
-				writer.Write(0);
+				writer.Write(0u);
 			}
 			else
 			{
@@ -143,7 +143,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			//0x0c
 			if (HasLargeFilesSupport(Version))
 			{
-				writer.Write(0);
+				writer.Write(0u);
 			}
 			else
 			{
@@ -163,7 +163,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 				writer.Write((uint)MetadataSize);
 				writer.Write(FileSize);
 				writer.Write(DataOffset);
-				writer.Write((long)0);
+				writer.Write(0L);
 			}
 		}
 	}
