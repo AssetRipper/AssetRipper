@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Primitives;
+using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -19,76 +20,88 @@ namespace AssetRipper.IO.Endian
 			Dispose(false);
 		}
 
+		public sealed override void Write(byte value)
+		{
+			base.Write(value);
+		}
+
+		public sealed override void Write(byte[] buffer)
+		{
+			base.Write(buffer);
+		}
+
+		public sealed override void Write(byte[] buffer, int index, int count)
+		{
+			base.Write(buffer, index, count);
+		}
+
+		public sealed override void Write(ReadOnlySpan<byte> buffer)
+		{
+			OutStream.Write(buffer);
+		}
+
+		public sealed override void Write(bool value)
+		{
+			base.Write(value);
+		}
+
 		public override void Write(short value)
 		{
-			FillInnerBuffer(unchecked((ushort)value));
-			Write(m_buffer, 0, sizeof(short));
+			base.Write(IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value));
 		}
 
 		public override void Write(ushort value)
 		{
-			FillInnerBuffer(value);
-			Write(m_buffer, 0, sizeof(ushort));
+			base.Write(IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value));
 		}
 
 		public override void Write(int value)
 		{
-			FillInnerBuffer(unchecked((uint)value));
-			Write(m_buffer, 0, sizeof(int));
+			base.Write(IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value));
 		}
 
 		public override void Write(uint value)
 		{
-			FillInnerBuffer(value);
-			Write(m_buffer, 0, sizeof(uint));
+			base.Write(IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value));
 		}
 
 		public override void Write(long value)
 		{
-			FillInnerBuffer(unchecked((ulong)value));
-			Write(m_buffer, 0, sizeof(long));
+			base.Write(IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value));
 		}
 
 		public override void Write(ulong value)
 		{
-			FillInnerBuffer(value);
-			Write(m_buffer, 0, sizeof(ulong));
+			base.Write(IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value));
 		}
 
 		public override void Write(float value)
 		{
-			uint value32 = BitConverter.SingleToUInt32Bits(value);
-			FillInnerBuffer(value32);
-			Write(m_buffer, 0, sizeof(float));
+			Write(BitConverter.SingleToUInt32Bits(value));
 		}
 
 		public override void Write(double value)
 		{
-			ulong value64 = BitConverter.DoubleToUInt64Bits(value);
-			FillInnerBuffer(value64);
-			Write(m_buffer, 0, sizeof(double));
+			Write(BitConverter.DoubleToUInt64Bits(value));
 		}
 
 		public override void Write(string value)
 		{
 			byte[] buffer = Encoding.UTF8.GetBytes(value);
-			FillInnerBuffer(buffer.Length);
-			Write(m_buffer, 0, sizeof(int));
-			Write(buffer, 0, buffer.Length);
+			Write(buffer.Length);
+			Write(buffer);
 		}
 
 		public void Write(Utf8String value)
 		{
 			Write(value.Data.Length);
-			OutStream.Write(value.Data);
+			Write(value.Data);
 		}
 
 		public void WriteStringZeroTerm(string value)
 		{
-			byte[] buffer = Encoding.UTF8.GetBytes(value);
-			m_buffer[0] = 0;
-			Write(buffer, 0, buffer.Length);
-			Write(m_buffer, 0, sizeof(byte));
+			Write(Encoding.UTF8.GetBytes(value));
+			Write((byte)'\0');
 		}
 
 		public void WriteArray(bool[] buffer)
@@ -98,8 +111,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(bool[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 
 			int last = index + count;
 			while (index < last)
@@ -125,8 +137,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(char[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 
 			Write(buffer, index, count);
 			if (IsAlignArray)
@@ -142,8 +153,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(byte[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 			Write(buffer, index, count);
 			if (IsAlignArray)
 			{
@@ -158,8 +168,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(short[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 
 			int byteIndex = 0;
 			int byteCount = count * sizeof(short);
@@ -188,8 +197,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(ushort[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 
 			int byteIndex = 0;
 			int byteCount = count * sizeof(ushort);
@@ -218,8 +226,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(int[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 
 			int byteIndex = 0;
 			int byteCount = count * sizeof(int);
@@ -248,8 +255,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(uint[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 
 			int byteIndex = 0;
 			int byteCount = count * sizeof(uint);
@@ -278,8 +284,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(long[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 
 			int byteIndex = 0;
 			int byteCount = count * sizeof(long);
@@ -308,8 +313,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(ulong[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 
 			int byteIndex = 0;
 			int byteCount = count * sizeof(ulong);
@@ -338,8 +342,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(float[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 
 			int byteIndex = 0;
 			int byteCount = count * sizeof(float);
@@ -368,8 +371,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(double[] buffer, int index, int count)
 		{
-			FillInnerBuffer(count);
-			Write(m_buffer, 0, sizeof(int));
+			Write(count);
 
 			int byteIndex = 0;
 			int byteCount = count * sizeof(double);
@@ -393,8 +395,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteArray(string[] buffer)
 		{
-			FillInnerBuffer(buffer.Length);
-			Write(m_buffer, 0, sizeof(int));
+			Write(buffer.Length);
 
 			for (int i = 0; i < buffer.Length; i++)
 			{
@@ -414,8 +415,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteEndianArray<T>(T[] buffer) where T : IEndianWritable
 		{
-			FillInnerBuffer(buffer.Length);
-			Write(m_buffer, 0, sizeof(int));
+			Write(buffer.Length);
 
 			for (int i = 0; i < buffer.Length; i++)
 			{
@@ -430,8 +430,7 @@ namespace AssetRipper.IO.Endian
 
 		public void WriteEndianArray<T>(T[][] buffer) where T : IEndianWritable
 		{
-			FillInnerBuffer(buffer.Length);
-			Write(m_buffer, 0, sizeof(int));
+			Write(buffer.Length);
 
 			for (int i = 0; i < buffer.GetLength(0); i++)
 			{
@@ -445,7 +444,19 @@ namespace AssetRipper.IO.Endian
 
 		public void AlignStream()
 		{
-			BaseStream.Position = (BaseStream.Position + 3) & ~3;
+			long newPosition = (BaseStream.Position + 3) & ~3;
+			if (newPosition > BaseStream.Length)
+			{
+				BaseStream.Position = BaseStream.Length;
+				while (BaseStream.Position < newPosition)
+				{
+					Write((byte)0);
+				}
+			}
+			else
+			{
+				BaseStream.Position = newPosition;
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -529,6 +540,8 @@ namespace AssetRipper.IO.Endian
 		}
 
 		public EndianType EndianType { get; }
+
+		private bool IsLittleEndian => EndianType is EndianType.LittleEndian;
 
 		public bool IsAlignArray { get; }
 
