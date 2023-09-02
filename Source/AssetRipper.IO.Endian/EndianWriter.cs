@@ -95,7 +95,7 @@ namespace AssetRipper.IO.Endian
 		public void Write(Utf8String value)
 		{
 			Write(value.Data.Length);
-			Write(value.Data);
+			OutStream.Write(value.Data);
 		}
 
 		public void WriteStringZeroTerm(string value)
