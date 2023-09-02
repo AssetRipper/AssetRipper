@@ -30,7 +30,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 
 		public const int HeaderMinSize = 16;
 
-		public const int MetadataMinSize = 16;
+		public const int MetadataMinSize = 13;
 
 
 		/// <summary>
