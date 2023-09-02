@@ -174,7 +174,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_mac_x64
-          path: ./Source/Bins/Publish/AssetRipper_mac_x64/AssetRipper.zip
+          path: ./Source/0Bins/Publish/AssetRipper_mac_x64/AssetRipper.zip
           if-no-files-found: error
 
   publish_mac_arm64:
@@ -209,5 +209,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_mac_arm64
-          path: ./Source/Bins/Publish/AssetRipper_mac_arm64/AssetRipper.zip
+          path: ./Source/0Bins/Publish/AssetRipper_mac_arm64/AssetRipper.zip
           if-no-files-found: error
