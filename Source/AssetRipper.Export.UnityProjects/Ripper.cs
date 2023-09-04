@@ -72,6 +72,7 @@ namespace AssetRipper.Export.UnityProjects
 			Settings = configuration;
 		}
 
+		[MemberNotNullWhen(true, nameof(gameStructure))]
 		public bool IsLoaded => gameStructure != null;
 
 		public GameStructure GameStructure

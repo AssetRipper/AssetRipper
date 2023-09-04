@@ -1,5 +1,8 @@
+using AssetRipper.Export.UnityProjects;
+using AssetRipper.Import.Logging;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
+using ElectronAPI = ElectronNET.API.Electron;
 
 namespace AssetRipper.GUI.Electron;
 
@@ -14,8 +17,12 @@ public static class Program
 		}
 	}
 
+	public static Ripper Ripper { get; } = new();
+
 	public static async Task Main(string[] args)
 	{
+		Logger.Add(new ConsoleLogger());
+
 		WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 		builder.WebHost.UseElectron(args);
@@ -40,7 +47,9 @@ public static class Program
 
 		CreateMenu();
 
-		_mainWindow = await ElectronNET.API.Electron.WindowManager.CreateWindowAsync();
+		LocalHost.Initialize();
+
+		_mainWindow = await ElectronAPI.WindowManager.CreateWindowAsync();
 
 		app.WaitForShutdown();
 	}
@@ -49,6 +58,81 @@ public static class Program
 	{
 		MenuItem[] fileMenu = new MenuItem[]
 		{
+			new MenuItem
+			{
+				Label = "Load File(s)",
+				Type = MenuType.normal,
+				Click = async () =>
+				{
+					OpenDialogOptions options = new()
+					{
+						Properties = new OpenDialogProperty[] { OpenDialogProperty.openFile, OpenDialogProperty.multiSelections }
+					};
+					string[] result = await ElectronAPI.Dialog.ShowOpenDialogAsync(MainWindow, options);
+					if (result.Length == 0)
+					{
+						return;
+					}
+					try
+					{
+						Ripper.Load(result);
+					}
+					catch (Exception ex)
+					{
+						Logger.Error(LogCategory.Export, null, ex);
+						Ripper.ResetData();
+						await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions(ex.Message)
+						{
+							Title = "Error",
+							Type = MessageBoxType.error
+						});
+					}
+					MainWindow.LoadURL(LocalHost.BaseUrl);
+				}
+			},
+			new MenuItem
+			{
+				Label = "Load Folder(s)",
+				Type = MenuType.normal,
+				Click = async () =>
+				{
+					OpenDialogOptions options = new()
+					{
+						Properties = new OpenDialogProperty[] { OpenDialogProperty.openDirectory, OpenDialogProperty.multiSelections }
+					};
+					string[] result = await ElectronAPI.Dialog.ShowOpenDialogAsync(MainWindow, options);
+					if (result.Length == 0)
+					{
+						return;
+					}
+					try
+					{
+						Ripper.Load(result);
+					}
+					catch (Exception ex)
+					{
+						Logger.Error(LogCategory.Export, null, ex);
+						Ripper.ResetData();
+						await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions(ex.Message)
+						{
+							Title = "Error",
+							Type = MessageBoxType.error
+						});
+					}
+					MainWindow.LoadURL(LocalHost.BaseUrl);
+				}
+			},
+			new MenuItem
+			{
+				Label = "Reset",
+				Type = MenuType.normal,
+				Click = () =>
+				{
+					Ripper.ResetData();
+					MainWindow.LoadURL(LocalHost.BaseUrl);
+				}
+			},
+			new MenuItem { Type = MenuType.separator },
 			new MenuItem { Role = OperatingSystem.IsMacOS() ? MenuRole.close : MenuRole.quit }
 		};
 
@@ -72,6 +156,89 @@ public static class Program
 			new MenuItem { Role = MenuRole.toggledevtools },
 			new MenuItem { Type = MenuType.separator },
 			new MenuItem { Role = MenuRole.togglefullscreen }
+		};
+
+		MenuItem[] exportMenu = new MenuItem[]
+		{
+			new MenuItem
+			{
+				Label = "Export All",
+				Type = MenuType.normal,
+				Click = async () =>
+				{
+					if (!Ripper.IsLoaded)
+					{
+						await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions("No files loaded")
+						{
+							Title = "Error",
+							Type = MessageBoxType.error
+						});
+						return;
+					}
+					OpenDialogOptions options = new()
+					{
+						Properties = new OpenDialogProperty[] { OpenDialogProperty.openDirectory }
+					};
+					string[] result = await ElectronAPI.Dialog.ShowOpenDialogAsync(MainWindow, options);
+					if (result.Length == 0)
+					{
+						return;
+					}
+					if (result.Length > 1)
+					{
+						await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions("Only one directory can be selected")
+						{
+							Title = "Error",
+							Type = MessageBoxType.error
+						});
+						return;
+					}
+					if (!Directory.Exists(result[0]))
+					{
+						await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions("Directory does not exist")
+						{
+							Title = "Error",
+							Type = MessageBoxType.error
+						});
+						return;
+					}
+					
+					//if directory is not empty
+					if (Directory.EnumerateFileSystemEntries(result[0]).Any())
+					{
+						MessageBoxResult confirmation = await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions("Directory is not empty. Continue?")
+						{
+							Title = "Warning",
+							Type = MessageBoxType.warning,
+							Buttons = new string[] { "Yes", "No" }
+						});
+						if (confirmation.Response == 1)
+						{
+							return;
+						}
+						else
+						{
+							Directory.Delete(result[0], true);
+						}
+					}
+
+					try
+					{
+						Ripper.ExportProject(result[0]);
+					}
+					catch (Exception ex)
+					{
+						Logger.Error(LogCategory.Export, null, ex);
+						Ripper.GameStructure.FileCollection.ClearTemporaryBundles();
+						await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions(ex.Message)
+						{
+							Title = "Error",
+							Type = MessageBoxType.error
+						});
+					}
+					MainWindow.LoadURL(LocalHost.BaseUrl);
+				}
+			},
 		};
 
 		MenuItem[] windowMenu = new MenuItem[]
@@ -102,6 +269,7 @@ public static class Program
 				new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
 				new MenuItem { Role = MenuRole.editMenu, Submenu = editMenu },
 				new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu },
+				new MenuItem { Label = "Export", Type = MenuType.submenu, Submenu = exportMenu },
 				new MenuItem { Role = MenuRole.windowMenu, Submenu = windowMenu },
 			};
 		}
@@ -112,10 +280,11 @@ public static class Program
 				new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
 				new MenuItem { Role = MenuRole.editMenu, Submenu = editMenu },
 				new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu },
+				new MenuItem { Label = "Export", Type = MenuType.submenu, Submenu = exportMenu },
 				new MenuItem { Role = MenuRole.windowMenu, Submenu = windowMenu },
 			};
 		}
 
-		ElectronNET.API.Electron.Menu.SetApplicationMenu(menu);
+		ElectronAPI.Menu.SetApplicationMenu(menu);
 	}
 }

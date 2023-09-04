@@ -9,6 +9,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Content Update="electron.manifest.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
