@@ -93,7 +93,8 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 					break;
 
 				default:
-					throw new NotSupportedException($"Bundle compression '{metaCompression}' isn't supported");
+					UnsupportedBundleDecompression.Throw(NameFixed, metaCompression);
+					break;
 			}
 		}
 
