@@ -16,7 +16,7 @@
 		<PackageReference Include="Kyaru.Texture2DDecoder.Windows" Version="0.1.0" />
 		<PackageReference Include="Kyaru.Texture2DDecoder.macOS" Version="0.1.0" />
 		<PackageReference Include="Kyaru.Texture2DDecoder.Linux" Version="0.1.0" />
-		<PackageReference Include="NAudio.Core" Version="2.2.0" />
+		<PackageReference Include="NAudio.Core" Version="2.2.1" />
 		<PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
 		<PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0030" />
 		<PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0030" />
