@@ -3,7 +3,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Import.Logging;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;

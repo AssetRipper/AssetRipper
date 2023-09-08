@@ -10,7 +10,7 @@ using System.Runtime.Versioning;
 
 namespace AssetRipper.Export.UnityProjects.Utils;
 
-public readonly struct DirectBitmap<TColor, TColorArg>
+public readonly record struct DirectBitmap<TColor, TColorArg>
 	where TColorArg : unmanaged
 	where TColor : unmanaged, IColor<TColorArg>
 {

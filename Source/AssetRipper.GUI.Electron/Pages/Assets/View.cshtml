@@ -5,7 +5,7 @@
 }
 <h1>@Model.Asset.GetBestName()</h1>
 @{
-	string imageSource = Model.TextureDataPath;
+	string imageSource = Model.ImageSource;
 	string text = Model.Text;
 
 	bool imageTabDisabled = string.IsNullOrEmpty(imageSource);

@@ -1,11 +1,12 @@
 using AssetRipper.Assets;
+using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
-using AssetRipper.Export.UnityProjects.Utils;
+using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
-using AssetRipper.TextureDecoder.Rgb.Formats;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.GUI.Electron.Pages.Assets
 {
@@ -14,18 +15,40 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 		private readonly ILogger<ViewModel> _logger;
 		public IUnityObjectBase Asset { get; private set; } = default!;
 
-		public string TextureDataPath
+		public string ImageSource
 		{
 			get
 			{
-				if (Asset is ITexture2D texture
-					&& TextureConverter.TryConvertToBitmap(texture, out DirectBitmap<ColorBGRA32, byte> bitmap))
+				DirectBitmap bitmap = Bitmap;
+				if (bitmap != default)
 				{
 					MemoryStream stream = new();
 					bitmap.SaveAsPng(stream);
 					return $"data:image/png;base64,{Convert.ToBase64String(stream.ToArray(), Base64FormattingOptions.None)}";
 				}
 				return "";
+			}
+		}
+
+		private DirectBitmap Bitmap
+		{
+			get
+			{
+				switch (Asset)
+				{
+					case ITexture2D texture:
+						{
+							if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap))
+							{
+								return bitmap;
+							}
+						}
+						goto default;
+					case ITerrainData terrainData:
+						return TerrainHeatmapExporter.GetBitmap(terrainData);
+					default:
+						return default;
+				}
 			}
 		}
 
