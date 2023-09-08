@@ -33,6 +33,9 @@
 			<button class="@textTabClassSet" id="nav-text-tab" data-bs-toggle="tab" data-bs-target="#nav-text" type="button" role="tab" aria-controls="nav-text" aria-selected="false" aria-disabled="@textTabDisabled.ToString().ToLower()">
 				Text
 			</button>
+			<button class="nav-link" id="nav-dev-tab" data-bs-toggle="tab" data-bs-target="#nav-dev" type="button" role="tab" aria-controls="nav-dev" aria-selected="false">
+				Development
+			</button>
 		</div>
 	</nav>
 
@@ -49,9 +52,31 @@
 						<td>@Model.Asset.PathID</td>
 					</tr>
 					<tr>
-						<td>Class ID Type</td>
-						<td>@Model.Asset.ClassName (@Model.Asset.ClassID)</td>
+						<td>Class ID Type Number</td>
+						<td>@Model.Asset.ClassID</td>
 					</tr>
+					<tr>
+						<td>Class ID Type Name</td>
+						<td>@Model.Asset.ClassName</td>
+					</tr>
+					<tr>
+						<td>GUID</td>
+						<td>@Model.Asset.GUID</td>
+					</tr>
+					@if (Model.Asset.OriginalDirectory is not null || Model.Asset.OriginalName is not null || Model.Asset.OriginalExtension is not null)
+					{
+						<tr>
+							<td>Original Path</td>
+							<td>@Model.Asset.OriginalPath</td>
+						</tr>
+					}
+					@if (!string.IsNullOrEmpty(Model.Asset.AssetBundleName))
+					{
+						<tr>
+							<td>AssetBundle Name</td>
+							<td>@Model.Asset.AssetBundleName</td>
+						</tr>
+					}
 					@foreach ((string key, IUnityObjectBase value) in Model.CustomReferenceProperties)
 					{
 						<tr>
@@ -94,6 +119,16 @@
 			{
 				<pre class="bg-dark-subtle rounded-3 p-2">@text</pre>
 			}
+		</div>
+		<div class="tab-pane fade" id="nav-dev" role="tabpanel" aria-labelledby="nav-dev-tab">
+			<table class="table">
+				<tbody>
+					<tr>
+						<td>C# Type</td>
+						<td>@Model.Asset.GetType().Name</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 }
