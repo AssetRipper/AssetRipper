@@ -6,10 +6,17 @@
 
 	<ItemGroup>
 		<PackageReference Include="ElectronNET.API" Version="23.6.1" />
+		<PackageReference Include="System.Text.Json" Version="8.0.0-preview.7.23375.6" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="AssetRipper.SourceGenerated">
+			<HintPath>..\Libraries\AssetRipper.SourceGenerated.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>

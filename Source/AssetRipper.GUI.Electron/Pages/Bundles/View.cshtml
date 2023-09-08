@@ -1,0 +1,45 @@
+﻿@page
+@model AssetRipper.GUI.Electron.Pages.Bundles.ViewModel
+@{
+	ViewData["Title"] = Model.Bundle.Name;
+}
+<h1>@Model.Bundle.Name</h1>
+
+@if (Model.Bundle.Parent is not null)
+{
+	<h2>Parent</h2>
+	<a asp-page="/Bundles/View" asp-route-path="@Model.Bundle.Parent.GetPath().ToJson()">@Model.Bundle.Parent.Name</a>
+}
+
+@if (Model.Bundle.Bundles.Count > 0)
+{
+	<h2>Bundles</h2>
+	<ul>
+		@foreach (var bundle in Model.Bundle.Bundles)
+		{
+			<li><a asp-page="/Bundles/View" asp-route-path="@bundle.GetPath().ToJson()">@bundle.Name</a></li>
+		}
+	</ul>
+}
+
+@if (Model.Bundle.Collections.Count > 0)
+{
+	<h2>Collections</h2>
+	<ul>
+		@foreach (var collection in Model.Bundle.Collections)
+		{
+			<li><a asp-page="/Collections/View" asp-route-path="@collection.GetPath().ToJson()">@collection.Name</a></li>
+		}
+	</ul>
+}
+
+@if (Model.Bundle.Resources.Count > 0)
+{
+	<h2>Resources</h2>
+	<ul>
+		@foreach (var resource in Model.Bundle.Resources)
+		{
+			<li>@resource.NameFixed</li>
+		}
+	</ul>
+}

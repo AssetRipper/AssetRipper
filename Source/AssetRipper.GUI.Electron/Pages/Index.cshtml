@@ -1,14 +1,16 @@
 ﻿@page
+@using AssetRipper.Assets.Bundles;
 @model IndexModel
 @{
-	ViewData["Title"] = "Home page";
+	ViewData["Title"] = "Home";
 }
 
 <div class="text-center">
 	<h1 class="display-4">Welcome</h1>
 	@if (Program.Ripper.IsLoaded)
 	{
-		<p>@Program.Ripper.GameStructure.FileCollection.FetchAssetCollections().Where(a => (a.Count > 0)).Count() asset collections.</p>
+		GameBundle gameBundle = Program.Ripper.GameStructure.FileCollection;
+		<a class="btn btn-primary" asp-page="/Bundles/View" asp-route-path="@gameBundle.GetPath().ToJson()">View Loaded Files</a>
 	}
 	else
 	{

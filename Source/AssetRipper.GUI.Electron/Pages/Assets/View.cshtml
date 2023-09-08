@@ -1,0 +1,68 @@
+﻿@page
+@model AssetRipper.GUI.Electron.Pages.Assets.ViewModel
+@{
+	ViewData["Title"] = Model.Asset.GetBestName();
+}
+<h1>@Model.Asset.GetBestName()</h1>
+@{
+	string imageSource = Model.TextureDataPath;
+	string text = Model.Text;
+
+	bool imageTabDisabled = string.IsNullOrEmpty(imageSource);
+	bool textTabDisabled = string.IsNullOrEmpty(text);
+
+	const string DefaultTabClassSet = "nav-link";
+	string imageTabClassSet = DefaultTabClassSet + (imageTabDisabled ? " disabled" : "");
+	string textTabClassSet = DefaultTabClassSet + (textTabDisabled ? " disabled" : "");
+
+	<nav>
+		<div class="nav nav-tabs" id="nav-tab" role="tablist">
+			<button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information" aria-selected="true">
+				Information
+			</button>
+			<button class="@imageTabClassSet" id="nav-image-tab" data-bs-toggle="tab" data-bs-target="#nav-image" type="button" role="tab" aria-controls="nav-image" aria-selected="false" aria-disabled="@imageTabDisabled.ToString().ToLower()">
+				Image
+			</button>
+			<button class="@textTabClassSet" id="nav-text-tab" data-bs-toggle="tab" data-bs-target="#nav-text" type="button" role="tab" aria-controls="nav-text" aria-selected="false" aria-disabled="@imageTabDisabled.ToString().ToLower()">
+				Text
+			</button>
+		</div>
+	</nav>
+
+	<div class="tab-content" id="nav-tabContent">
+		<div class="tab-pane fade show active" id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
+			<table class="table">
+				<tbody>
+					<tr>
+						<td>Collection</td>
+						<td><a asp-page="/Collections/View" asp-route-path="@Model.Asset.Collection.GetPath().ToJson()">@Model.Asset.Collection.Name</a></td>
+					</tr>
+					<tr>
+						<td>Path ID</td>
+						<td>@Model.Asset.PathID</td>
+					</tr>
+					<tr>
+						<td>Class ID</td>
+						<td>@Model.Asset.ClassID</td>
+					</tr>
+					<tr>
+						<td>Class Name</td>
+						<td>@Model.Asset.ClassName</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="tab-pane fade" id="nav-image" role="tabpanel" aria-labelledby="nav-image-tab">
+			@if (!imageTabDisabled)
+			{
+				<img src="@imageSource" />
+			}
+		</div>
+		<div class="tab-pane fade" id="nav-text" role="tabpanel" aria-labelledby="nav-text-tab">
+			@if (!textTabDisabled)
+			{
+				<pre class="bg-dark-subtle">@text</pre>
+			}
+		</div>
+	</div>
+}
