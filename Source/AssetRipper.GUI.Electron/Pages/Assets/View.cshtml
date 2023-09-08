@@ -1,4 +1,5 @@
 ﻿@page
+@using AssetRipper.Assets;
 @model AssetRipper.GUI.Electron.Pages.Assets.ViewModel
 @{
 	ViewData["Title"] = Model.Asset.GetBestName();
@@ -42,13 +43,23 @@
 						<td>@Model.Asset.PathID</td>
 					</tr>
 					<tr>
-						<td>Class ID</td>
-						<td>@Model.Asset.ClassID</td>
+						<td>Class ID Type</td>
+						<td>@Model.Asset.ClassName (@Model.Asset.ClassID)</td>
 					</tr>
-					<tr>
-						<td>Class Name</td>
-						<td>@Model.Asset.ClassName</td>
-					</tr>
+					@foreach ((string key, IUnityObjectBase value) in Model.CustomReferenceProperties)
+					{
+						<tr>
+							<td>@key</td>
+							<td><a asp-page="/Assets/View" asp-route-path="@value.GetPath().ToJson()">@value.GetBestName()</a></td>
+						</tr>
+					}
+					@foreach ((string key, string value) in Model.CustomStringProperties)
+					{
+						<tr>
+							<td>@key</td>
+							<td>@value</td>
+						</tr>
+					}
 				</tbody>
 			</table>
 		</div>
