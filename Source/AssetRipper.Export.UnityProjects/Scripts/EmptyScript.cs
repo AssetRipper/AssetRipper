@@ -2,14 +2,14 @@
 
 namespace AssetRipper.Export.UnityProjects.Scripts;
 
-internal static class EmptyScript
+public static class EmptyScript
 {
-	internal static string GetContent(IMonoScript script)
+	public static string GetContent(IMonoScript script)
 	{
 		return GetContent(script.Namespace_C115.String, script.ClassName_C115.String);
 	}
 
-	internal static string GetContent(string? @namespace, string name)
+	public static string GetContent(string? @namespace, string name)
 	{
 		if (string.IsNullOrEmpty(@namespace))
 		{

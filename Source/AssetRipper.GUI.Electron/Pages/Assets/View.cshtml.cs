@@ -1,4 +1,6 @@
 using AssetRipper.Assets;
+using AssetRipper.Export.UnityProjects.Scripts;
+using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Processing.Textures;
@@ -11,10 +13,12 @@ using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_33;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text;
 using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.GUI.Electron.Pages.Assets
@@ -67,6 +71,8 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 			{
 				return Asset switch
 				{
+					IShader shader => DumpShaderDataAsText(shader),
+					IMonoScript monoScript => DecompileMonoScript(monoScript),
 					ITextAsset textAsset => textAsset.Script_C49,
 					_ => "",
 				};
@@ -203,6 +209,31 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 			{
 				return NotFound();
 			}
+		}
+
+		private static string DumpShaderDataAsText(IShader shader)
+		{
+			MemoryStream stream = new();
+			DummyShaderTextExporter.ExportShader(shader, stream);
+
+			return Encoding.UTF8.GetString(GetStreamData(stream));
+
+			static ReadOnlySpan<byte> GetStreamData(MemoryStream stream)
+			{
+				if (stream.TryGetBuffer(out ArraySegment<byte> buffer))
+				{
+					return buffer;
+				}
+				else
+				{
+					return stream.ToArray();
+				}
+			}
+		}
+
+		private static string DecompileMonoScript(IMonoScript monoScript)
+		{
+			return EmptyScript.GetContent(monoScript);//Placeholder until actual decompilation is implemented.
 		}
 	}
 }
