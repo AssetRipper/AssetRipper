@@ -1,4 +1,5 @@
 using AssetRipper.Assets;
+using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
@@ -31,6 +32,18 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 	{
 		private readonly ILogger<ViewModel> _logger;
 		public IUnityObjectBase Asset { get; private set; } = default!;
+
+		public string AudioSource
+		{
+			get
+			{
+				if (Asset is IAudioClip clip && AudioClipDecoder.TryGetDecodedAudioClipData(clip, out byte[]? decodedAudioData, out string? extension))
+				{
+					return $"data:audio/{extension};base64,{Convert.ToBase64String(decodedAudioData, Base64FormattingOptions.None)}";
+				}
+				return "";
+			}
+		}
 
 		public string ImageSource
 		{
