@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Enums;
@@ -7,7 +6,6 @@ using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.ShaderChannel;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
-using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 using AssetRipper.SourceGenerated.Subclasses.VertexData;
 using System.Numerics;
 
@@ -23,14 +21,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// </summary>
 		public static MeshTopology GetTopology(this ISubMesh subMesh)
 		{
-			if (subMesh.Has_Topology())
-			{
-				return (MeshTopology)subMesh.Topology;
-			}
-			else
-			{
-				return (MeshTopology)subMesh.IsTriStrip;
-			}
+			return subMesh.Has_Topology() ? subMesh.TopologyE : subMesh.IsTriStripE;
 		}
 
 		private static void UpdateSubMeshVertexRange(UnityVersion version, IMesh mesh, ISubMesh submesh)
@@ -49,21 +40,16 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static void FindMinMaxIndices(UnityVersion version, IMesh mesh, ISubMesh submesh, out int min, out int max)
 		{
-			bool is16bits = mesh.Is16BitIndices();
-			//if (mesh.Has_CompressedMesh_C43())
+			if (mesh.CompressedMesh_C43.Triangles.IsSet())
 			{
-				if (mesh.CompressedMesh_C43.Triangles.IsSet())
-				{
-					int[] triangles = mesh.CompressedMesh_C43.Triangles.UnpackInts();
-					uint offset = is16bits
-						? submesh.FirstByte / sizeof(ushort)
-						: submesh.FirstByte / sizeof(uint);
-					FindMinMaxIndices(triangles, (int)offset, (int)submesh.IndexCount, out min, out max);
-					return;
-				}
+				int[] triangles = mesh.CompressedMesh_C43.Triangles.UnpackInts();
+				uint offset = mesh.Is16BitIndices()
+					? submesh.FirstByte / sizeof(ushort)
+					: submesh.FirstByte / sizeof(uint);
+				FindMinMaxIndices(triangles, (int)offset, (int)submesh.IndexCount, out min, out max);
+				return;
 			}
-
-			if (is16bits)
+			else if (mesh.Is16BitIndices())
 			{
 				FindMinMax16Indices(mesh.IndexBuffer_C43, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
 			}
