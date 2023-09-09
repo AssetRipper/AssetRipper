@@ -149,7 +149,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void SetUV(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector2> uv0, ReadOnlySpan<Vector2> uv1, ReadOnlySpan<Vector2> uv2, ReadOnlySpan<Vector2> uv3, ReadOnlySpan<Vector2> uv4, ReadOnlySpan<Vector2> uv5, ReadOnlySpan<Vector2> uv6, ReadOnlySpan<Vector2> uv7)
 		{
-			if (!compressedMesh.Has_UVInfo() || uv2.Length == 0 && uv3.Length == 0 && uv4.Length == 0 && uv5.Length == 0 && uv6.Length == 0 && uv7.Length == 0)
+			if (!compressedMesh.Has_UVInfo() || AllEmpty(uv2, uv3, uv4, uv5, uv6, uv7))
 			{
 				compressedMesh.UVInfo = 0;
 				if (uv0.Length == 0)
@@ -189,6 +189,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 				UpdateBuffer(uv7, 7, buffer, ref currentOffset, ref uvInfo);
 				compressedMesh.UV.Pack<Vector2>(buffer);
 				compressedMesh.UVInfo = uvInfo;
+			}
+
+			static bool AllEmpty(ReadOnlySpan<Vector2> uv2, ReadOnlySpan<Vector2> uv3, ReadOnlySpan<Vector2> uv4, ReadOnlySpan<Vector2> uv5, ReadOnlySpan<Vector2> uv6, ReadOnlySpan<Vector2> uv7)
+			{
+				return uv2.Length == 0 && uv3.Length == 0 && uv4.Length == 0 && uv5.Length == 0 && uv6.Length == 0 && uv7.Length == 0;
 			}
 
 			static void UpdateBuffer(ReadOnlySpan<Vector2> uv, int uvIndex, Span<Vector2> buffer, ref int currentOffset, ref UVInfo uvInfo)
