@@ -87,8 +87,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 			int vertexCount = GetVertexCount(compressedMesh);
 			if (compressedMesh.UV.NumItems > 0)
 			{
-				uint m_UVInfo = compressedMesh.UVInfo;
-				if (compressedMesh.Has_UVInfo() && m_UVInfo != 0)
+				UVInfo m_UVInfo = compressedMesh.UVInfo;
+				if (compressedMesh.Has_UVInfo() && m_UVInfo != UVInfo.Zero)
 				{
 					int uvSrcOffset = 0;
 					uv0 = ReadChannel(compressedMesh.UV, m_UVInfo, 0, vertexCount, ref uvSrcOffset);
@@ -132,9 +132,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		private static Vector2[]? ReadChannel(PackedBitVector_Single packedVector, uint uvInfo, int channelIndex, int vertexCount, ref int currentOffset)
+		private static Vector2[]? ReadChannel(PackedBitVector_Single packedVector, UVInfo uvInfo, int channelIndex, int vertexCount, ref int currentOffset)
 		{
-			GetChannelInfo(uvInfo, channelIndex, out bool exists, out int uvDim);
+			uvInfo.GetChannelInfo(channelIndex, out bool exists, out int uvDim);
 			if (exists)
 			{
 				Vector2[] m_UV = MeshHelper.FloatArrayToVector2(packedVector.UnpackFloats(uvDim, uvDim * sizeof(float), currentOffset, vertexCount));
@@ -145,25 +145,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return null;
 			}
-		}
-
-		private static void GetChannelInfo(uint uvInfo, int index, out bool exists, out int dimension)
-		{
-			const int kInfoBitsPerUV = 4;
-			const int kUVDimensionMask = 3;
-			const int kUVChannelExists = 4;
-			const uint uvChannelMask = (1u << kInfoBitsPerUV) - 1u;
-			const int kMaxTexCoordShaderChannels = 8;
-
-			if (index < 0 || index >= kMaxTexCoordShaderChannels)
-			{
-				throw new ArgumentOutOfRangeException(nameof(index));
-			}
-
-			int bitOffset = index * kInfoBitsPerUV;
-			uint texCoordBits = uvInfo >> bitOffset & uvChannelMask;
-			exists = (texCoordBits & kUVChannelExists) != 0;
-			dimension = 1 + (int)(texCoordBits & kUVDimensionMask);
 		}
 
 		public static void SetUV(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector2> uv0, ReadOnlySpan<Vector2> uv1, ReadOnlySpan<Vector2> uv2, ReadOnlySpan<Vector2> uv3, ReadOnlySpan<Vector2> uv4, ReadOnlySpan<Vector2> uv5, ReadOnlySpan<Vector2> uv6, ReadOnlySpan<Vector2> uv7)

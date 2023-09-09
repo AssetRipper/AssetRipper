@@ -52,4 +52,8 @@ public readonly record struct UVInfo(uint Value)
 	//Implicit conversions
 	public static implicit operator uint(UVInfo uvInfo) => uvInfo.Value;
 	public static implicit operator UVInfo(uint value) => new(value);
+
+	public override string ToString() => Value.ToString();
+
+	public static UVInfo Zero => default;
 }
