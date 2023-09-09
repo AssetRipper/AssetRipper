@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Source\.editorconfig = Source\.editorconfig
 		.gitignore = .gitignore
+		.github\CONTRIBUTING.md = .github\CONTRIBUTING.md
 		Source\Directory.Build.props = Source\Directory.Build.props
 		LICENSE.md = LICENSE.md
 		README.md = README.md
@@ -58,7 +59,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1C4D-430F-A1BA-BFC5671181D4}"
 	ProjectSection(SolutionItems) = preProject
 		docs\articles\CommonIssues.md = docs\articles\CommonIssues.md
-		CONTRIBUTING.md = CONTRIBUTING.md
 		docs\articles\Credits.md = docs\articles\Credits.md
 		docs\docfx.json = docs\docfx.json
 		docs\articles\Downloads.md = docs\articles\Downloads.md
