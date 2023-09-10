@@ -13,30 +13,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static partial class MeshExtensions
 	{
-		/// <summary>
-		/// Compressing meshes saves space in the built game, but more compression introduces more artifacts in vertex data.
-		/// </summary>
-		public enum MeshCompression : byte
-		{
-			/// <summary>
-			/// No mesh compression (default).
-			/// </summary>
-			Off = 0,
-			/// <summary>
-			/// Low amount of mesh compression.
-			/// </summary>
-			Low = 1,
-			/// <summary>
-			/// Medium amount of mesh compression.
-			/// </summary>
-			Med = 2,
-			/// <summary>
-			/// High amount of mesh compression.
-			/// </summary>
-			High = 3,
-			Count,
-		}
-
 		[GeneratedRegex("^Combined Mesh \\(root scene\\)( [0-9]+)?$", RegexOptions.Compiled)]
 		private static partial Regex CombinedMeshRegex();
 
@@ -231,12 +207,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static MeshCompression GetMeshCompression(this IMesh mesh)
+		public static ModelImporterMeshCompression GetMeshCompression(this IMesh mesh)
 		{
-			return (MeshCompression)mesh.MeshCompression_C43;
+			return (ModelImporterMeshCompression)mesh.MeshCompression_C43;
 		}
 
-		public static void SetMeshCompression(this IMesh mesh, MeshCompression meshCompression)
+		public static void SetMeshCompression(this IMesh mesh, ModelImporterMeshCompression meshCompression)
 		{
 			mesh.MeshCompression_C43 = (byte)meshCompression;
 		}

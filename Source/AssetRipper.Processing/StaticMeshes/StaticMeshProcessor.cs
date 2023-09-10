@@ -321,10 +321,12 @@ namespace AssetRipper.Processing.StaticMeshes
 
 		private static IMesh MakeMeshFromData(string cleanName, MeshData instanceMeshData, ProcessedAssetCollection processedCollection)
 		{
+			const IndexFormat IndexFormat32Bit = IndexFormat.UInt32;
+
 			IMesh newMesh = CreateMesh(processedCollection);
 			newMesh.Name = cleanName;
 
-			newMesh.SetIndexFormat(IndexFormat.UInt32);
+			newMesh.SetIndexFormat(IndexFormat32Bit);
 
 			ICompressedMesh compressedMesh = newMesh.CompressedMesh_C43;
 			compressedMesh.SetVertices(instanceMeshData.Vertices);
@@ -346,13 +348,13 @@ namespace AssetRipper.Processing.StaticMeshes
 
 			newMesh.KeepIndices_C43 = true;//Not sure about this. Seems to be for animated meshes
 			newMesh.KeepVertices_C43 = true;//Not sure about this. Seems to be for animated meshes
-			newMesh.MeshMetrics_0__C43 = 1;
-			newMesh.MeshMetrics_1__C43 = 1;
+			newMesh.MeshMetrics_0__C43 = CalculateMeshMetric(instanceMeshData.Vertices, instanceMeshData.UV0, instanceMeshData.ProcessedIndexBuffer, instanceMeshData.SubMeshes, IndexFormat32Bit, 0);
+			newMesh.MeshMetrics_1__C43 = CalculateMeshMetric(instanceMeshData.Vertices, instanceMeshData.UV1, instanceMeshData.ProcessedIndexBuffer, instanceMeshData.SubMeshes, IndexFormat32Bit, 1);
 			newMesh.MeshUsageFlags_C43 = (int)SourceGenerated.NativeEnums.Global.MeshUsageFlags.MeshUsageFlagNone;
 			newMesh.CookingOptions_C43 = (int)SourceGenerated.NativeEnums.Global.MeshColliderCookingOptions.DefaultCookingFlags;
 			//I copied 30 from a vanilla compressed mesh (with MeshCompression.Low), and it aligned with this enum.
 			newMesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
-			newMesh.SetMeshCompression(MeshExtensions.MeshCompression.Low);
+			newMesh.SetMeshCompression(ModelImporterMeshCompression.Low);
 
 			AccessListBase<ISubMesh> subMeshList = newMesh.SubMeshes_C43;
 			foreach (ISubMesh subMesh in instanceMeshData.SubMeshes)
@@ -363,6 +365,58 @@ namespace AssetRipper.Processing.StaticMeshes
 			newMesh.LocalAABB_C43.CalculateFromVertexArray(instanceMeshData.Vertices);
 
 			return newMesh;
+		}
+
+		private static float CalculateMeshMetric(ReadOnlySpan<Vector3> vertexBuffer, ReadOnlySpan<Vector2> uvBuffer, uint[] indexBuffer, IReadOnlyList<ISubMesh> subMeshList, IndexFormat indexFormat, int uvSetIndex, float uvAreaThreshold = 1e-9f)
+		{
+			//https://docs.unity3d.com/ScriptReference/Mesh.GetUVDistributionMetric.html
+			//https://docs.unity3d.com/ScriptReference/Mesh.RecalculateUVDistributionMetric.html
+			//https://docs.unity3d.com/ScriptReference/Mesh.RecalculateUVDistributionMetrics.html
+
+			const float DefaultMetric = 1.0f;
+			if (vertexBuffer.Length == 0 || uvBuffer.Length == 0 || uvSetIndex >= subMeshList.Count)
+			{
+				return DefaultMetric;
+			}
+
+			int n = 0;
+			float vertexAreaSum = 0.0f;
+			float uvAreaSum = 0.0f;
+			foreach ((uint ia, uint ib, uint ic) in new TriangleEnumerable(subMeshList[uvSetIndex], indexFormat, indexBuffer))
+			{
+				(Vector2 uva, Vector2 uvb, Vector2 uvc) = (uvBuffer[(int)ia], uvBuffer[(int)ib], uvBuffer[(int)ic]);
+				float uvArea = TriangleArea(uva, uvb, uvc);
+				if (uvArea < uvAreaThreshold)
+				{
+					continue;
+				}
+
+				(Vector3 va, Vector3 vb, Vector3 vc) = (vertexBuffer[(int)ia], vertexBuffer[(int)ib], vertexBuffer[(int)ic]);
+				float vertexArea = TriangleArea(va, vb, vc);
+				vertexAreaSum += vertexArea;
+				uvAreaSum += uvArea;
+				n++;
+			}
+
+			if (n is 0 || uvAreaSum == 0.0f)
+			{
+				return DefaultMetric;
+			}
+			else
+			{
+				//Average of triangle area divided by uv area.
+				return vertexAreaSum / n / uvAreaSum;
+			}
+		}
+
+		private static float TriangleArea(Vector2 a, Vector2 b, Vector2 c)
+		{
+			return TriangleArea(a.AsVector3(), b.AsVector3(), c.AsVector3());
+		}
+
+		private static float TriangleArea(Vector3 a, Vector3 b, Vector3 c)
+		{
+			return Vector3.Cross(b - a, c - a).Length() * 0.5f;
 		}
 
 		private static void ApplyTransformationToMeshData(MeshData instanceMeshData, Transformation transformation, Transformation inverseTransformation)

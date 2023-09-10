@@ -142,10 +142,6 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 			
 			uint indexCount = subMesh.IndexCount;
 			MeshTopology topology = subMesh.GetTopology();
-			if (topology != MeshTopology.Triangles && meshData.Mesh.Collection.Version.IsLess(4))
-			{
-				topology = MeshTopology.TriangleStrip;
-			}
 
 			int primitiveVertexCount = topology switch
 			{
