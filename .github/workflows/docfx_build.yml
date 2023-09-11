@@ -41,7 +41,7 @@ jobs:
         run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
       - name: Setup DocFX
-        uses: crazy-max/ghaction-chocolatey@v2
+        uses: crazy-max/ghaction-chocolatey@v3
         with:
           args: install docfx
 
