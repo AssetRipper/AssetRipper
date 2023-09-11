@@ -1,0 +1,13 @@
+﻿@model string
+@if (!string.IsNullOrEmpty(Model))
+{
+	<div>
+		<table width="100%" height="100%">
+			<tr>
+				<td align="center" valign="middle">
+					<audio controls class="mt-4" src="@Model" />
+				</td>
+			</tr>
+		</table>
+	</div>
+}

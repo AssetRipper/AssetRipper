@@ -1,5 +1,6 @@
 ﻿@page
 @using AssetRipper.Assets;
+@using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 @model AssetRipper.GUI.Electron.Pages.Assets.ViewModel
 @{
 	ViewData["Title"] = Model.Asset.GetBestName();
@@ -7,11 +8,11 @@
 <h1>@Model.Asset.GetBestName()</h1>
 @{
 	string audioSource = Model.AudioSource;
-	string imageSource = Model.ImageSource;
+	DirectBitmap imageBitmap = Model.ImageBitmap;
 	string text = Model.Text;
 
 	bool audioTabDisabled = string.IsNullOrEmpty(audioSource);
-	bool imageTabDisabled = string.IsNullOrEmpty(imageSource);
+	bool imageTabDisabled = imageBitmap == default;
 	bool textTabDisabled = string.IsNullOrEmpty(text);
 
 	const string DefaultTabClassSet = "nav-link";
@@ -41,78 +42,13 @@
 
 	<div class="tab-content" id="nav-tabContent">
 		<div class="tab-pane fade show active" id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
-			<table class="table">
-				<tbody>
-					<tr>
-						<td>Collection</td>
-						<td><a asp-page="/Collections/View" asp-route-path="@Model.Asset.Collection.GetPath().ToJson()">@Model.Asset.Collection.Name</a></td>
-					</tr>
-					<tr>
-						<td>Path ID</td>
-						<td>@Model.Asset.PathID</td>
-					</tr>
-					<tr>
-						<td>Class ID Type Number</td>
-						<td>@Model.Asset.ClassID</td>
-					</tr>
-					<tr>
-						<td>Class ID Type Name</td>
-						<td>@Model.Asset.ClassName</td>
-					</tr>
-					<tr>
-						<td>GUID</td>
-						<td>@Model.Asset.GUID</td>
-					</tr>
-					@if (Model.Asset.OriginalDirectory is not null || Model.Asset.OriginalName is not null || Model.Asset.OriginalExtension is not null)
-					{
-						<tr>
-							<td>Original Path</td>
-							<td>@Model.Asset.OriginalPath</td>
-						</tr>
-					}
-					@if (!string.IsNullOrEmpty(Model.Asset.AssetBundleName))
-					{
-						<tr>
-							<td>AssetBundle Name</td>
-							<td>@Model.Asset.AssetBundleName</td>
-						</tr>
-					}
-					@foreach ((string key, IUnityObjectBase value) in Model.CustomReferenceProperties)
-					{
-						<tr>
-							<td>@key</td>
-							<td><a asp-page="/Assets/View" asp-route-path="@value.GetPath().ToJson()">@value.GetBestName()</a></td>
-						</tr>
-					}
-					@foreach ((string key, string value) in Model.CustomStringProperties)
-					{
-						<tr>
-							<td>@key</td>
-							<td>@value</td>
-						</tr>
-					}
-				</tbody>
-			</table>
+			<partial name="InformationTabContent" model="Model.Asset" />
 		</div>
 		<div class="tab-pane fade" id="nav-audio" role="tabpanel" aria-labelledby="nav-audio-tab">
-			@if (!audioTabDisabled)
-			{
-				<div>
-					<table width="100%" height="100%">
-						<tr>
-							<td align="center" valign="middle">
-								<audio controls class="mt-4" src="@audioSource" />
-							</td>
-						</tr>
-					</table>
-				</div>
-			}
+			<partial name="AudioTabContent" model="audioSource" />
 		</div>
 		<div class="tab-pane fade" id="nav-image" role="tabpanel" aria-labelledby="nav-image-tab">
-			@if (!imageTabDisabled)
-			{
-				<img src="@imageSource" style="object-fit:contain; width:100%; height:100%" />
-			}
+			<partial name="ImageTabContent" model="imageBitmap" />
 		</div>
 		<div class="tab-pane fade" id="nav-text" role="tabpanel" aria-labelledby="nav-text-tab">
 			@if (!textTabDisabled)

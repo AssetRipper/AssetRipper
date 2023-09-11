@@ -1,0 +1,10 @@
+﻿@model AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>
+
+@if (Model != default)
+{
+	MemoryStream stream = new();
+	Model.SaveAsPng(stream);
+	string sourcePath = $"data:image/png;base64,{Convert.ToBase64String(stream.ToArray(), Base64FormattingOptions.None)}";
+
+	<img src="@sourcePath" style="object-fit:contain; width:100%; height:100%" />
+}

@@ -1,0 +1,55 @@
+﻿@using AssetRipper.Assets;
+@model AssetRipper.Assets.IUnityObjectBase
+
+<table class="table">
+	<tbody>
+		<tr>
+			<td>Collection</td>
+			<td><a asp-page="/Collections/View" asp-route-path="@Model.Collection.GetPath().ToJson()">@Model.Collection.Name</a></td>
+		</tr>
+		<tr>
+			<td>Path ID</td>
+			<td>@Model.PathID</td>
+		</tr>
+		<tr>
+			<td>Class ID Type Number</td>
+			<td>@Model.ClassID</td>
+		</tr>
+		<tr>
+			<td>Class ID Type Name</td>
+			<td>@Model.ClassName</td>
+		</tr>
+		<tr>
+			<td>GUID</td>
+			<td>@Model.GUID</td>
+		</tr>
+		@if (Model.OriginalDirectory is not null || Model.OriginalName is not null || Model.OriginalExtension is not null)
+		{
+			<tr>
+				<td>Original Path</td>
+				<td>@Model.OriginalPath</td>
+			</tr>
+		}
+		@if (!string.IsNullOrEmpty(Model.AssetBundleName))
+		{
+			<tr>
+				<td>AssetBundle Name</td>
+				<td>@Model.AssetBundleName</td>
+			</tr>
+		}
+		@foreach ((string key, IUnityObjectBase value) in Model.GetCustomReferenceProperties())
+		{
+			<tr>
+				<td>@key</td>
+				<td><a asp-page="/Assets/View" asp-route-path="@value.GetPath().ToJson()">@value.GetBestName()</a></td>
+			</tr>
+		}
+		@foreach ((string key, string value) in Model.GetCustomStringProperties())
+		{
+			<tr>
+				<td>@key</td>
+				<td>@value</td>
+			</tr>
+		}
+	</tbody>
+</table>
