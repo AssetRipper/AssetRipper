@@ -37,9 +37,9 @@
 {
 	<h2>Resources</h2>
 	<ul>
-		@foreach (var resource in Model.Bundle.Resources)
+		@for (int i = 0; i < Model.Bundle.Resources.Count; i++)
 		{
-			<li>@resource.NameFixed</li>
+			<li><a asp-page="/Resources/View" asp-route-path="@Model.BundlePath.GetResource(i).ToJson()">@Model.Bundle.Resources[i].NameFixed</a></li>
 		}
 	</ul>
 }

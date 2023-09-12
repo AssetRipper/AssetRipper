@@ -61,6 +61,11 @@ public readonly record struct BundlePath
 		return new CollectionPath(this, index);
 	}
 
+	public ResourcePath GetResource(int index)
+	{
+		return new ResourcePath(this, index);
+	}
+
 	public static implicit operator ReadOnlySpan<int>(BundlePath path) => path._path;
 
 	public string ToJson()

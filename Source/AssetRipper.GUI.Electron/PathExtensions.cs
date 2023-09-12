@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.IO.Files.ResourceFiles;
 
 namespace AssetRipper.GUI.Electron;
 
@@ -98,6 +99,22 @@ public static class PathExtensions
 	{
 		collection = gameBundle.TryGetCollection(path);
 		return collection is not null;
+	}
+
+	public static ResourceFile? TryGetResource(this GameBundle gameBundle, ResourcePath path)
+	{
+		Bundle? bundle = gameBundle.TryGetBundle(path.BundlePath);
+		if (bundle is null || path.Index < 0 || path.Index >= bundle.Resources.Count)
+		{
+			return null;
+		}
+		return bundle.Resources[path.Index];
+	}
+
+	public static bool TryGetResource(this GameBundle gameBundle, ResourcePath path, [NotNullWhen(true)] out ResourceFile? resource)
+	{
+		resource = gameBundle.TryGetResource(path);
+		return resource is not null;
 	}
 
 	public static IUnityObjectBase? TryGetAsset(this GameBundle gameBundle, AssetPath path)
