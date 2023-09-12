@@ -1,4 +1,5 @@
 using AssetRipper.Export.UnityProjects;
+using AssetRipper.GUI.Localizations;
 using AssetRipper.Import.Logging;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
@@ -241,6 +242,17 @@ public static class Program
 			},
 		};
 
+		MenuItem[] languageMenu = LocalizationLoader.LanguageNameDictionary.Select(x => new MenuItem
+		{
+			Label = x.Value,
+			Type = MenuType.normal,
+			Click = () =>
+			{
+				Localization.LoadLanguage(x.Key);
+				MainWindow.Reload();
+			}
+		}).ToArray();
+
 		MenuItem[] windowMenu = new MenuItem[]
 		{
 			new MenuItem { Role = MenuRole.minimize, Accelerator = "CmdOrCtrl+M" },
@@ -270,6 +282,7 @@ public static class Program
 				new MenuItem { Role = MenuRole.editMenu, Submenu = editMenu },
 				new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu },
 				new MenuItem { Label = "Export", Type = MenuType.submenu, Submenu = exportMenu },
+				new MenuItem { Label = "Language", Type = MenuType.submenu, Submenu = languageMenu },
 				new MenuItem { Role = MenuRole.windowMenu, Submenu = windowMenu },
 			};
 		}
@@ -281,6 +294,7 @@ public static class Program
 				new MenuItem { Role = MenuRole.editMenu, Submenu = editMenu },
 				new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu },
 				new MenuItem { Label = "Export", Type = MenuType.submenu, Submenu = exportMenu },
+				new MenuItem { Label = "Language", Type = MenuType.submenu, Submenu = languageMenu },
 				new MenuItem { Role = MenuRole.windowMenu, Submenu = windowMenu },
 			};
 		}
