@@ -10,6 +10,8 @@ namespace AssetRipper.GUI.Electron.Pages.Collections
 
 		public AssetCollection Collection { get; private set; } = default!;
 
+		public CollectionPath CollectionPath { get; private set; }
+
 		public ViewModel(ILogger<ViewModel> logger)
 		{
 			_logger = logger;
@@ -22,7 +24,9 @@ namespace AssetRipper.GUI.Electron.Pages.Collections
 				_logger.LogError("Path is null");
 				return Redirect("/");
 			}
-			else if (Program.Ripper.IsLoaded && Program.Ripper.GameStructure.FileCollection.TryGetCollection(CollectionPath.FromJson(path), out AssetCollection? collection))
+
+			CollectionPath = CollectionPath.FromJson(path);
+			if (Program.Ripper.IsLoaded && Program.Ripper.GameStructure.FileCollection.TryGetCollection(CollectionPath, out AssetCollection? collection))
 			{
 				Collection = collection;
 				return Page();

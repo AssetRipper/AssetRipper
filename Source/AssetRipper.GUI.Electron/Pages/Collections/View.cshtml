@@ -6,7 +6,7 @@
 <h1>@Model.Collection.Name</h1>
 
 <h2>Bundle</h2>
-<a asp-page="/Bundles/View" asp-route-path="@Model.Collection.Bundle.GetPath().ToJson()">@Model.Collection.Bundle.Name</a>
+<a asp-page="/Bundles/View" asp-route-path="@Model.CollectionPath.BundlePath.ToJson()">@Model.Collection.Bundle.Name</a>
 
 @if (Model.Collection.Count > 0)
 {
@@ -21,13 +21,12 @@
 		</thead>
 		<tbody>
 			@{
-				CollectionPath collectionPath = Model.Collection.GetPath();
 				foreach (var asset in Model.Collection)
 				{
 					<tr>
 						<td>@asset.PathID</td>
 						<td>@asset.ClassName</td>
-						<td><a asp-page="/Assets/View" asp-route-path="@(new AssetPath(collectionPath, asset.PathID).ToJson())">@asset.GetBestName()</a></td>
+						<td><a asp-page="/Assets/View" asp-route-path="@Model.CollectionPath.GetAsset(asset.PathID).ToJson())">@asset.GetBestName()</a></td>
 					</tr>
 				}
 			}

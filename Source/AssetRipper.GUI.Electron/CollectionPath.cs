@@ -4,6 +4,11 @@ namespace AssetRipper.GUI.Electron;
 
 public readonly record struct CollectionPath(BundlePath BundlePath, int Index)
 {
+	public AssetPath GetAsset(long pathID)
+	{
+		return new(this, pathID);
+	}
+
 	public string ToJson()
 	{
 		return JsonSerializer.Serialize(this, PathSerializerContext.Default.CollectionPath);

@@ -1,10 +1,67 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AssetRipper.GUI.Electron;
 
-public readonly record struct BundlePath(int[]? Path = null)
+public readonly record struct BundlePath
 {
-	public static implicit operator ReadOnlySpan<int>(BundlePath path) => path.Path;
+	private readonly int[]? _path;
+
+	private BundlePath(int[]? path)
+	{
+		_path = path;
+	}
+
+	public BundlePath(ReadOnlySpan<int> path)
+	{
+		_path = path.Length == 0 ? null : path.ToArray();
+	}
+
+	[JsonConstructor]
+	public BundlePath(ReadOnlyMemory<int> path)
+	{
+		_path = path.Length == 0 ? null : path.ToArray();
+	}
+
+	public ReadOnlyMemory<int> Path => _path;
+
+	[JsonIgnore]
+	public int Depth => Path.Length;
+
+	[JsonIgnore]
+	public bool IsRoot => Depth == 0;
+
+	/// <summary>
+	/// Get the path of the parent bundle.
+	/// </summary>
+	/// <remarks>
+	/// If <see cref="IsRoot"/>, then this will return <see langword="default"/>.
+	/// </remarks>
+	[JsonIgnore]
+	public BundlePath Parent => Depth > 1 ? new BundlePath(Path.Span[..^-1]) : default;
+
+	public BundlePath GetChild(int index)
+	{
+		int[] path;
+		if (_path is null)
+		{
+			path = new int[1] { index };
+		}
+		else
+		{
+			path = new int[_path.Length + 1];
+			_path.CopyTo((Span<int>)path);
+			path[^1] = index;
+		}
+		return new BundlePath(path);
+	}
+
+	public CollectionPath GetCollection(int index)
+	{
+		return new CollectionPath(this, index);
+	}
+
+	public static implicit operator ReadOnlySpan<int>(BundlePath path) => path._path;
 
 	public string ToJson()
 	{

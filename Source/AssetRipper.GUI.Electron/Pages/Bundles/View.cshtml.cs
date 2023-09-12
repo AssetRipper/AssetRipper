@@ -10,6 +10,8 @@ namespace AssetRipper.GUI.Electron.Pages.Bundles
 
 		public Bundle Bundle { get; private set; } = default!;
 
+		public BundlePath BundlePath { get; private set; }
+
 		public ViewModel(ILogger<ViewModel> logger)
 		{
 			_logger = logger;
@@ -22,7 +24,9 @@ namespace AssetRipper.GUI.Electron.Pages.Bundles
 				_logger.LogError("Path is null");
 				return Redirect("/");
 			}
-			else if (Program.Ripper.IsLoaded && Program.Ripper.GameStructure.FileCollection.TryGetBundle(BundlePath.FromJson(path), out Bundle? bundle))
+
+			BundlePath = BundlePath.FromJson(path);
+			if (Program.Ripper.IsLoaded && Program.Ripper.GameStructure.FileCollection.TryGetBundle(BundlePath, out Bundle? bundle))
 			{
 				Bundle = bundle;
 				return Page();

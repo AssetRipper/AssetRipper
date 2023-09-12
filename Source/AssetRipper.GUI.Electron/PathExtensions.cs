@@ -23,7 +23,7 @@ public static class PathExtensions
 			return new();
 		}
 
-		int[] path = new int[count];
+		Span<int> path = count < 1024 ? stackalloc int[count] : new int[count];//It should never even come close to 1024.
 		{
 			Bundle current = bundle;
 			for (int i = count - 1; ; i--)
