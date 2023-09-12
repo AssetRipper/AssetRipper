@@ -1,10 +1,14 @@
 ﻿using AssetRipper.Export.UnityProjects;
+using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files.Streams.MultiFile;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AssetRipper.GUI
 {
@@ -15,6 +19,7 @@ namespace AssetRipper.GUI
 		private static DirectoryInfo? OutputDirectory { get; set; }
 		private static FileInfo? LogFile { get; set; }
 		private static bool Quit { get; set; }
+		private static FileInfo? ConfigFile { get; set; }
 
 		public static void ParseArgumentsAndRun(string[] args)
 		{
@@ -40,7 +45,7 @@ namespace AssetRipper.GUI
 						Directory.CreateDirectory(LogFile.Directory.FullName);
 					}
 					Logger.Add(new FileLogger(LogFile?.FullName ?? ExecutingDirectory.Combine(DefaultLogFileName)));
-					Run(FilesToExport, OutputDirectory?.FullName ?? ExecutingDirectory.Combine("Ripped"));
+					Run(FilesToExport, OutputDirectory?.FullName ?? ExecutingDirectory.Combine("Ripped"), ConfigFile);
 				}
 #if !DEBUG
 				catch (Exception ex)
@@ -87,15 +92,22 @@ namespace AssetRipper.GUI
 							getDefaultValue: () => false);
 			rootCommand.AddOption(quitOption);
 
-			rootCommand.SetHandler((List<string> filesToExport, DirectoryInfo? outputDirectory, FileInfo? logFile, bool verbose, bool quit) =>
+			Option<FileInfo?> configFileOption = new Option<FileInfo?>(
+							name: "--config-file",
+							description: "Config file to use",
+							getDefaultValue: () => null);
+			rootCommand.AddOption(configFileOption);
+
+			rootCommand.SetHandler((List<string> filesToExport, DirectoryInfo? outputDirectory, FileInfo? logFile, bool verbose, bool quit, FileInfo? configFile) =>
 			{
 				FilesToExport = filesToExport;
 				OutputDirectory = outputDirectory;
 				LogFile = logFile;
 				Logger.AllowVerbose = verbose;
 				Quit = quit;
+				ConfigFile = configFile;
 			},
-			filesToExportOption, outputOption, logFileOption, verboseOption, quitOption);
+			filesToExportOption, outputOption, logFileOption, verboseOption, quitOption, configFileOption);
 
 			new CommandLineBuilder(rootCommand)
 				.UseDefaults()
@@ -119,11 +131,36 @@ namespace AssetRipper.GUI
 			return true;
 		}
 
-		private static void Run(IReadOnlyList<string> filesToExport, string outputDirectory)
+		private static void Run(IReadOnlyList<string> filesToExport, string outputDirectory, FileInfo? configFile)
 		{
 			Logger.LogSystemInformation("AssetRipper Console Version");
 
 			Ripper ripper = new();
+			if (configFile != null)
+			{
+				Logger.Info("Using config file: " + configFile.FullName);
+				string config = File.ReadAllText(configFile.FullName);
+				if (config == null)
+				{
+					Logger.Error("Failed to read config file");
+					return;
+				}
+				JsonSerializerOptions options = new JsonSerializerOptions
+				{
+					Converters = {
+						new JsonStringEnumConverter(),
+						new UnityVersionJsonConverter(),
+					}
+				};
+				LibraryConfiguration? libraryConfiguration = JsonSerializer.Deserialize<LibraryConfiguration>(config, options);
+				if (libraryConfiguration == null)
+				{
+					Logger.Error("Failed to deserialize config file");
+					return;
+				}
+				ripper = new Ripper(libraryConfiguration);
+			}
+
 			ripper.Settings.LogConfigurationValues();
 			ripper.Load(filesToExport);
 			PrepareExportDirectory(outputDirectory);
