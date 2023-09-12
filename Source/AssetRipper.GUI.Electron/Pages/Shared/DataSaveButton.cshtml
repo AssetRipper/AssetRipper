@@ -1,0 +1,6 @@
+﻿@model ValueTuple<string, byte[]>
+@{
+	string sourcePath = $"data:application/octet-stream;base64,{Convert.ToBase64String(Model.Item2, Base64FormattingOptions.None)}";
+
+	<a href="@sourcePath" download="@Model.Item1" class="btn btn-primary">Save</a>
+}

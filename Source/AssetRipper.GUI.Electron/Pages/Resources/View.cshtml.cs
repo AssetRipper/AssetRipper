@@ -11,9 +11,13 @@ public class ViewModel : PageModel
 
 	public Bundle? Bundle => Program.Ripper.GameStructure.FileCollection.TryGetBundle(ResourcePath.BundlePath);
 
+	public string Name => Resource.NameFixed;
+
 	public ResourceFile Resource { get; private set; } = default!;
 
 	public ResourcePath ResourcePath { get; private set; }
+
+	public byte[] Data => Resource.ToByteArray();
 
 	public ViewModel(ILogger<ViewModel> logger)
 	{

@@ -1,10 +1,13 @@
 ﻿@page
 @model AssetRipper.GUI.Electron.Pages.Resources.ViewModel
 @{
-	ViewData["Title"] = Model.Resource.NameFixed;
+	ViewData["Title"] = Model.Name;
 }
 
-<h1>@Model.Resource.NameFixed</h1>
+<h1>@Model.Name</h1>
 
 <h2>Bundle</h2>
 <a asp-page="/Bundles/View" asp-route-path="@Model.ResourcePath.BundlePath.ToJson()">@Model.Bundle?.Name</a>
+
+<h2>Data</h2>
+<partial name="DataSaveButton" model="(Model.Name, Model.Data)" />
