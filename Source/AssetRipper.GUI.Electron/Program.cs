@@ -23,6 +23,8 @@ public static class Program
 	public static async Task Main(string[] args)
 	{
 		Logger.Add(new ConsoleLogger());
+		Pages.ConsoleModel.RegisterLogger();
+		Logger.LogSystemInformation("AssetRipper");
 
 		WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
