@@ -1,9 +1,11 @@
 using AssetRipper.Assets;
+using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
+using AssetRipper.Import.AssetCreation;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
@@ -67,6 +69,32 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 					ITextAsset textAsset => textAsset.Script_C49,
 					_ => "",
 				};
+			}
+		}
+
+		public byte[] Data
+		{
+			get
+			{
+				if (Asset is RawDataObject rawData)
+				{
+					return rawData.RawData;
+				}
+				else
+				{
+					MemoryStream stream = new();
+					AssetWriter writer = new(stream, Asset.Collection);
+					try
+					{
+						Asset.Write(writer);
+					}
+					catch (NotSupportedException)
+					{
+						//This should never happen, but it could if an asset type is not fully implemented.
+						return Array.Empty<byte>();
+					}
+					return stream.ToArray();
+				}
 			}
 		}
 

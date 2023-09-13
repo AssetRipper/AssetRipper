@@ -1,0 +1,34 @@
+﻿@model byte[]
+
+<table class="table table-hover">
+	@{
+		for (int i = 0; i < Model.Length; i += 16)
+		{
+			<tr>
+				@{
+					int remainder = Model.Length - i;
+					int nonEmptyCells = int.Min(remainder, 16);
+					for (int j = 0; j < nonEmptyCells; j++)
+					{
+						<td>@GetHex(Model[i + j])</td>
+					}
+					int emptyCells = 16 - remainder;
+					for (int k = 0; k < emptyCells; k++)
+					{
+						<td></td>
+					}
+				}
+
+			</tr>
+		}
+
+		static string GetHex(byte value)
+		{
+			const string HexChars = "0123456789ABCDEF";
+			char c0 = HexChars[value >> 4];
+			char c1 = HexChars[value & 0xF];
+			ReadOnlySpan<char> span = stackalloc char[] { c0, c1 };
+			return new string(span);
+		}
+	}
+</table>
