@@ -26,7 +26,7 @@
 					<tr>
 						<td>@asset.PathID</td>
 						<td>@asset.ClassName</td>
-						<td><a asp-page="/Assets/View" asp-route-path="@Model.CollectionPath.GetAsset(asset.PathID).ToJson())">@asset.GetBestName()</a></td>
+						<td><a asp-page="/Assets/View" asp-route-path="@Model.CollectionPath.GetAsset(asset.PathID).ToJson()">@asset.GetBestName()</a></td>
 					</tr>
 				}
 			}
