@@ -6,6 +6,7 @@ using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Import.AssetCreation;
+using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
@@ -40,20 +41,17 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 		{
 			get
 			{
-				switch (Asset)
+				return Asset switch
 				{
-					case ITexture2D texture:
-						{
-							if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap))
-							{
-								return bitmap;
-							}
-						}
-						goto default;
-					case ITerrainData terrainData:
-						return TerrainHeatmapExporter.GetBitmap(terrainData);
-					default:
-						return default;
+					ITexture2D texture => TextureToBitmap(texture),
+					SpriteInformationObject spriteInformationObject => TextureToBitmap(spriteInformationObject.Texture),
+					ITerrainData terrainData => TerrainHeatmapExporter.GetBitmap(terrainData),
+					_ => default,
+				};
+
+				static DirectBitmap TextureToBitmap(ITexture2D texture)
+				{
+					return TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap) ? bitmap : default;
 				}
 			}
 		}
