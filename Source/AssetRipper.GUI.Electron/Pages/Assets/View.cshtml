@@ -10,31 +10,28 @@
 	string audioSource = Model.AudioSource;
 	DirectBitmap imageBitmap = Model.ImageBitmap;
 	string text = Model.Text;
+	string? yaml = Model.Asset.GetYamlString();
 
 	bool audioTabDisabled = string.IsNullOrEmpty(audioSource);
 	bool imageTabDisabled = imageBitmap == default;
 	bool textTabDisabled = string.IsNullOrEmpty(text);
-
-	const string DefaultTabClassSet = "nav-link";
-	string audioTabClassSet = DefaultTabClassSet + (audioTabDisabled ? " disabled" : "");
-	string imageTabClassSet = DefaultTabClassSet + (imageTabDisabled ? " disabled" : "");
-	string textTabClassSet = DefaultTabClassSet + (textTabDisabled ? " disabled" : "");
+	bool yamlTabDisabled = string.IsNullOrEmpty(yaml);
 
 	<nav>
 		<div class="nav nav-tabs" id="nav-tab" role="tablist">
 			<button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information" aria-selected="true">
 				Information
 			</button>
-			<button class="@audioTabClassSet" id="nav-audio-tab" data-bs-toggle="tab" data-bs-target="#nav-audio" type="button" role="tab" aria-controls="nav-audio" aria-selected="false" aria-disabled="@audioTabDisabled.ToString().ToLower()">
+			<button class="@TabHelpers.GetTabClassSet(audioTabDisabled)" id="nav-audio-tab" data-bs-toggle="tab" data-bs-target="#nav-audio" type="button" role="tab" aria-controls="nav-audio" aria-selected="false" aria-disabled="@audioTabDisabled.ToString().ToLower()">
 				Audio
 			</button>
-			<button class="@imageTabClassSet" id="nav-image-tab" data-bs-toggle="tab" data-bs-target="#nav-image" type="button" role="tab" aria-controls="nav-image" aria-selected="false" aria-disabled="@imageTabDisabled.ToString().ToLower()">
+			<button class="@TabHelpers.GetTabClassSet(imageTabDisabled)" id="nav-image-tab" data-bs-toggle="tab" data-bs-target="#nav-image" type="button" role="tab" aria-controls="nav-image" aria-selected="false" aria-disabled="@imageTabDisabled.ToString().ToLower()">
 				Image
 			</button>
-			<button class="@textTabClassSet" id="nav-text-tab" data-bs-toggle="tab" data-bs-target="#nav-text" type="button" role="tab" aria-controls="nav-text" aria-selected="false" aria-disabled="@textTabDisabled.ToString().ToLower()">
+			<button class="@TabHelpers.GetTabClassSet(textTabDisabled)" id="nav-text-tab" data-bs-toggle="tab" data-bs-target="#nav-text" type="button" role="tab" aria-controls="nav-text" aria-selected="false" aria-disabled="@textTabDisabled.ToString().ToLower()">
 				Text
 			</button>
-			<button class="nav-link" id="nav-yaml-tab" data-bs-toggle="tab" data-bs-target="#nav-yaml" type="button" role="tab" aria-controls="nav-yaml" aria-selected="false">
+			<button class="@TabHelpers.GetTabClassSet(yamlTabDisabled)" id="nav-yaml-tab" data-bs-toggle="tab" data-bs-target="#nav-yaml" type="button" role="tab" aria-controls="nav-yaml" aria-selected="false" aria-disabled="@yamlTabDisabled.ToString().ToLower()">
 				Yaml
 			</button>
 			<button class="nav-link" id="nav-hex-tab" data-bs-toggle="tab" data-bs-target="#nav-hex" type="button" role="tab" aria-controls="nav-hex" aria-selected="false">
@@ -63,7 +60,10 @@
 			}
 		</div>
 		<div class="tab-pane fade" id="nav-yaml" role="tabpanel" aria-labelledby="nav-yaml-tab">
-			<partial name="YamlTabContent" model="Model.Asset" />
+			@if (!yamlTabDisabled)
+			{
+				<pre class="bg-dark-subtle rounded-3 p-2">@yaml</pre>
+			}
 		</div>
 		<div class="tab-pane fade" id="nav-hex" role="tabpanel" aria-labelledby="nav-hex-tab">
 			<partial name="HexTable" model="Model.Data" />
