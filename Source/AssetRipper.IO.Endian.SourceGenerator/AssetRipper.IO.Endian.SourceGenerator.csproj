@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.0.0" />
+		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.1.0" />
 	</ItemGroup>
 
 </Project>

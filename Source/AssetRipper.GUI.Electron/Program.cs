@@ -250,6 +250,7 @@ public static class Program
 			Type = MenuType.normal,
 			Click = () =>
 			{
+				Logger.Info(LogCategory.System, $"Loading locale {x.Key}.json");
 				Localization.LoadLanguage(x.Key);
 				MainWindow.Reload();
 			}
