@@ -69,14 +69,7 @@
 			<partial name="HexTable" model="Model.Data" />
 		</div>
 		<div class="tab-pane fade" id="nav-dev" role="tabpanel" aria-labelledby="nav-dev-tab">
-			<table class="table">
-				<tbody>
-					<tr>
-						<td>C# Type</td>
-						<td>@Model.Asset.GetType().Name</td>
-					</tr>
-				</tbody>
-			</table>
+			<partial name="DevelopmentTabContent" model="Model.Asset" />
 		</div>
 	</div>
 }

@@ -1,0 +1,15 @@
+﻿@using AssetRipper.Assets;
+@model AssetRipper.Assets.IUnityObjectBase
+
+<table class="table">
+	<tbody>
+		<tr>
+			<td>C# Type</td>
+			<td>@Model.GetType().Name</td>
+		</tr>
+		<tr>
+			<td>GUID</td>
+			<td>@Model.GUID</td>
+		</tr>
+	</tbody>
+</table>
