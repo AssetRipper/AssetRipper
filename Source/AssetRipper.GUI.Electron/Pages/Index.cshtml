@@ -10,10 +10,16 @@
 	@if (Program.Ripper.IsLoaded)
 	{
 		GameBundle gameBundle = Program.Ripper.GameStructure.FileCollection;
-		<a class="btn btn-primary" asp-page="/Bundles/View" asp-route-path="@gameBundle.GetPath().ToJson()">View Loaded Files</a>
+		<a class="btn btn-secondary" asp-page="/Bundles/View" asp-route-path="@gameBundle.GetPath().ToJson()">View Loaded Files</a>
 	}
 	else
 	{
 		<p>No files loaded.</p>
 	}
+	<p>If you like AssetRipper, please consider donating:</p>
+	<div>
+		<p><a class="btn btn-primary" onclick="require('electron').shell.openExternal('https://patreon.com/ds5678')">Patreon</a></p>
+		<p><a class="btn btn-primary" onclick="require('electron').shell.openExternal('https://paypal.me/ds5678')">Paypal</a></p>
+		<p><a class="btn btn-primary" onclick="require('electron').shell.openExternal('https://github.com/sponsors/ds5678')">GitHub Sponsors</a></p>
+	</div>
 </div>
