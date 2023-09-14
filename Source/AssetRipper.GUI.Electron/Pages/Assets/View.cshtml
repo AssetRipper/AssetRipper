@@ -34,6 +34,9 @@
 			<button class="@textTabClassSet" id="nav-text-tab" data-bs-toggle="tab" data-bs-target="#nav-text" type="button" role="tab" aria-controls="nav-text" aria-selected="false" aria-disabled="@textTabDisabled.ToString().ToLower()">
 				Text
 			</button>
+			<button class="nav-link" id="nav-yaml-tab" data-bs-toggle="tab" data-bs-target="#nav-yaml" type="button" role="tab" aria-controls="nav-yaml" aria-selected="false">
+				Yaml
+			</button>
 			<button class="nav-link" id="nav-hex-tab" data-bs-toggle="tab" data-bs-target="#nav-hex" type="button" role="tab" aria-controls="nav-hex" aria-selected="false">
 				Hex
 			</button>
@@ -58,6 +61,9 @@
 			{
 				<pre class="bg-dark-subtle rounded-3 p-2">@text</pre>
 			}
+		</div>
+		<div class="tab-pane fade" id="nav-yaml" role="tabpanel" aria-labelledby="nav-yaml-tab">
+			<partial name="YamlTabContent" model="Model.Asset" />
 		</div>
 		<div class="tab-pane fade" id="nav-hex" role="tabpanel" aria-labelledby="nav-hex-tab">
 			<partial name="HexTable" model="Model.Data" />
