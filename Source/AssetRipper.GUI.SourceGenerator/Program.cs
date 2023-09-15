@@ -21,7 +21,6 @@ public static class Program
 			switch (fileName)
 			{
 				case "en_US.json":
-				case "en_GB.json":
 					File.WriteAllText(path, SerializeJson(englishDictionary));
 					break;
 				default:
