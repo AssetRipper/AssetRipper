@@ -1,0 +1,15 @@
+﻿@page
+@model AssetRipper.GUI.Electron.Pages.SettingsModel
+@{
+	ViewData["Title"] = "Settings";
+}
+
+<form asp-page-handler="UpdateSettings" method="post">
+	<div class="form-group">
+		@Html.LabelFor(m => m.DefaultVersion, "Default Version")
+		@Html.TextBoxFor(m => m.DefaultVersion, new {@class="form-control"})
+	</div>
+	<div class="form-group">
+		<input class="btn btn-primary" type="submit" value="Save" />
+	</div>
+</form>
