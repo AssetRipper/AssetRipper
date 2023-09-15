@@ -3,11 +3,11 @@ using AssetRipper.Primitives;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AssetRipper.GUI.Electron.Pages;
+namespace AssetRipper.GUI.Electron.Pages.Settings;
 
-public class SettingsModel : PageModel
+public class EditModel : PageModel
 {
-	private readonly ILogger<SettingsModel> _logger;
+	private readonly ILogger<EditModel> _logger;
 
 	private static LibraryConfiguration Configuration => Program.Ripper.Settings;
 
@@ -18,7 +18,7 @@ public class SettingsModel : PageModel
 		set => Configuration.DefaultVersion = TryParseUnityVersion(value);
 	}
 
-	public SettingsModel(ILogger<SettingsModel> logger)
+	public EditModel(ILogger<EditModel> logger)
 	{
 		_logger = logger;
 	}
