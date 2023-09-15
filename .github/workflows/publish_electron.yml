@@ -31,7 +31,7 @@ jobs:
 
       - name: Publish AssetRipper Windows x64
         run: electronize build /target win
-        working-directory: ./Source/AssetRipper.GUI/
+        working-directory: ./Source/AssetRipper.GUI.Electron/
         
       - name: Upload AssetRipper Windows x64
         uses: actions/upload-artifact@v3
