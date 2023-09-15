@@ -70,6 +70,24 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 			}
 		}
 
+		public string TextFileName
+		{
+			get
+			{
+				return Asset switch
+				{
+					IShader shader => $"{shader.GetBestName()}.shader",
+					IMonoScript monoScript => $"{monoScript.ClassName_C115}.cs",
+					ITextAsset textAsset => $"{textAsset.GetBestName()}.txt",
+					_ => $"{Asset.GetBestName()}.txt",
+				};
+			}
+		}
+
+		public string YamlFileName => $"{Asset.GetBestName()}.asset";
+
+		public string DataFileName => $"{Asset.GetBestName()}.dat";
+
 		public byte[] Data
 		{
 			get

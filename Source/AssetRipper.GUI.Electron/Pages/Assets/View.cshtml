@@ -57,16 +57,28 @@
 			@if (!textTabDisabled)
 			{
 				<pre class="bg-dark-subtle rounded-3 p-2">@text</pre>
+				<div class="text-center">
+					<partial name="TextSaveButton" model="(Model.TextFileName, text)" />
+				</div>
 			}
 		</div>
 		<div class="tab-pane fade" id="nav-yaml" role="tabpanel" aria-labelledby="nav-yaml-tab">
 			@if (!yamlTabDisabled)
 			{
 				<pre class="bg-dark-subtle rounded-3 p-2">@yaml</pre>
+				<div class="text-center">
+					<partial name="TextSaveButton" model="(Model.YamlFileName, yaml)" />
+				</div>
 			}
 		</div>
 		<div class="tab-pane fade" id="nav-hex" role="tabpanel" aria-labelledby="nav-hex-tab">
-			<partial name="HexTable" model="Model.Data" />
+			@{
+				byte[] data = Model.Data;
+				<partial name="HexTable" model="data" />
+				<div class="text-center">
+					<partial name="DataSaveButton" model="(Model.DataFileName, data)" />
+				</div>
+			}
 		</div>
 		<div class="tab-pane fade" id="nav-dev" role="tabpanel" aria-labelledby="nav-dev-tab">
 			<partial name="DevelopmentTabContent" model="Model.Asset" />
