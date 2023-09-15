@@ -651,6 +651,11 @@ partial class Localization
 	public static string Parent => Get("parent");
 	
 	/// <summary>
+	/// Path
+	/// </summary>
+	public static string Path => Get("path");
+	
+	/// <summary>
 	/// Path ID
 	/// </summary>
 	public static string PathId => Get("path_id");
@@ -669,6 +674,11 @@ partial class Localization
 	/// Save
 	/// </summary>
 	public static string Save => Get("save");
+	
+	/// <summary>
+	/// Scene
+	/// </summary>
+	public static string Scene => Get("scene");
 	
 	/// <summary>
 	/// Script

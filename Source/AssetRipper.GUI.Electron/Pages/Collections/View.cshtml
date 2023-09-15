@@ -8,6 +8,12 @@
 <h2>@Localization.Bundle</h2>
 <a asp-page="/Bundles/View" asp-route-path="@Model.CollectionPath.BundlePath.ToJson()">@Model.Collection.Bundle.Name</a>
 
+@if (Model.Collection.IsScene)
+{
+	<h2>@Localization.Scene</h2>
+	<a asp-page="/Scenes/View" asp-route-path="@Model.CollectionPath.ToJson()">@Model.Collection.Scene.Name</a>
+}
+
 @if (Model.Collection.Count > 0)
 {
 	<h2>@Localization.Assets</h2>
