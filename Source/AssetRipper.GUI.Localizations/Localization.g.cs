@@ -4,6 +4,16 @@ namespace AssetRipper.GUI.Localizations;
 partial class Localization
 {
 	/// <summary>
+	/// Assembly Name
+	/// </summary>
+	public static string AssemblyName => Get("assembly_name");
+	
+	/// <summary>
+	/// Asset Bundle Name
+	/// </summary>
+	public static string AssetBundleName => Get("asset_bundle_name");
+	
+	/// <summary>
 	/// Audio
 	/// </summary>
 	public static string AssetTabAudio => Get("asset_tab_audio");
@@ -29,9 +39,24 @@ partial class Localization
 	public static string AssetTabBasic => Get("asset_tab_basic");
 	
 	/// <summary>
+	/// Development
+	/// </summary>
+	public static string AssetTabDevelopment => Get("asset_tab_development");
+	
+	/// <summary>
+	/// Hex
+	/// </summary>
+	public static string AssetTabHex => Get("asset_tab_hex");
+	
+	/// <summary>
 	/// Image
 	/// </summary>
 	public static string AssetTabImage => Get("asset_tab_image");
+	
+	/// <summary>
+	/// Information
+	/// </summary>
+	public static string AssetTabInformation => Get("asset_tab_information");
 	
 	/// <summary>
 	/// Text
@@ -42,6 +67,16 @@ partial class Localization
 	/// Yaml
 	/// </summary>
 	public static string AssetTabYaml => Get("asset_tab_yaml");
+	
+	/// <summary>
+	/// Assets
+	/// </summary>
+	public static string Assets => Get("assets");
+	
+	/// <summary>
+	/// AudioClip
+	/// </summary>
+	public static string AudioClip => Get("audio_clip");
 	
 	/// <summary>
 	/// Audio Export Format
@@ -89,6 +124,11 @@ partial class Localization
 	public static string AudioFormatYamlDescription => Get("audio_format_yaml_description");
 	
 	/// <summary>
+	/// Bundle
+	/// </summary>
+	public static string Bundle => Get("bundle");
+	
+	/// <summary>
 	/// Direct Export
 	/// </summary>
 	public static string BundledAssetsExportDirectExport => Get("bundled_assets_export_direct_export");
@@ -122,6 +162,11 @@ partial class Localization
 	/// Bundled Assets Export Mode
 	/// </summary>
 	public static string BundledAssetsExportTitle => Get("bundled_assets_export_title");
+	
+	/// <summary>
+	/// Bundles
+	/// </summary>
+	public static string Bundles => Get("bundles");
 	
 	/// <summary>
 	/// C# 1
@@ -214,9 +259,44 @@ partial class Localization
 	public static string CSharpLanguageVersionConfigDescription => Get("c_sharp_language_version_config_description");
 	
 	/// <summary>
+	/// Channels
+	/// </summary>
+	public static string Channels => Get("channels");
+	
+	/// <summary>
 	/// Check log for more details
 	/// </summary>
 	public static string CheckLogForMoreDetails => Get("check_log_for_more_details");
+	
+	/// <summary>
+	/// Class
+	/// </summary>
+	public static string Class => Get("class");
+	
+	/// <summary>
+	/// Class ID Type Name
+	/// </summary>
+	public static string ClassIdTypeName => Get("class_id_type_name");
+	
+	/// <summary>
+	/// Class ID Type Number
+	/// </summary>
+	public static string ClassIdTypeNumber => Get("class_id_type_number");
+	
+	/// <summary>
+	/// Class Name
+	/// </summary>
+	public static string ClassName => Get("class_name");
+	
+	/// <summary>
+	/// Collection
+	/// </summary>
+	public static string Collection => Get("collection");
+	
+	/// <summary>
+	/// Collections
+	/// </summary>
+	public static string Collections => Get("collections");
 	
 	/// <summary>
 	/// Configuration Options
@@ -228,6 +308,26 @@ partial class Localization
 	/// Once you're ready, drag-and-drop your game file/folder onto this window, or use the menu in the upper-left to open something manually.
 	/// </summary>
 	public static string ConfigScreenDragDropPrompt => Get("config_screen_drag_drop_prompt");
+	
+	/// <summary>
+	/// Count
+	/// </summary>
+	public static string Count => Get("count");
+	
+	/// <summary>
+	/// C# Type
+	/// </summary>
+	public static string CsharpType => Get("csharp_type");
+	
+	/// <summary>
+	/// Data
+	/// </summary>
+	public static string Data => Get("data");
+	
+	/// <summary>
+	/// If you like AssetRipper, please consider donating:
+	/// </summary>
+	public static string DonationMessage => Get("donation_message");
 	
 	/// <summary>
 	/// Enable Prefab Outlining
@@ -285,6 +385,36 @@ partial class Localization
 	public static string ExportPreparing => Get("export_preparing");
 	
 	/// <summary>
+	/// Format
+	/// </summary>
+	public static string Format => Get("format");
+	
+	/// <summary>
+	/// Frequency
+	/// </summary>
+	public static string Frequency => Get("frequency");
+	
+	/// <summary>
+	/// GameObject
+	/// </summary>
+	public static string GameObject => Get("game_object");
+	
+	/// <summary>
+	/// GUID
+	/// </summary>
+	public static string Guid => Get("guid");
+	
+	/// <summary>
+	/// Height
+	/// </summary>
+	public static string Height => Get("height");
+	
+	/// <summary>
+	/// Home
+	/// </summary>
+	public static string Home => Get("home");
+	
+	/// <summary>
 	/// Ignore Engine Assets
 	/// </summary>
 	public static string IgnoreEngineAssets => Get("ignore_engine_assets");
@@ -298,6 +428,16 @@ partial class Localization
 	/// Affects all exported images
 	/// </summary>
 	public static string ImageFormatDescription => Get("image_format_description");
+	
+	/// <summary>
+	/// Json
+	/// </summary>
+	public static string Json => Get("json");
+	
+	/// <summary>
+	/// Length
+	/// </summary>
+	public static string Length => Get("length");
 	
 	/// <summary>
 	/// Loading Game Content From {0}<br />
@@ -391,6 +531,11 @@ partial class Localization
 	public static string LooseFileSavedAt => Get("loose_file_saved_at");
 	
 	/// <summary>
+	/// Main Asset
+	/// </summary>
+	public static string MainAsset => Get("main_asset");
+	
+	/// <summary>
 	/// Export
 	/// </summary>
 	public static string MenuExport => Get("menu_export");
@@ -441,6 +586,11 @@ partial class Localization
 	public static string MenuLanguage => Get("menu_language");
 	
 	/// <summary>
+	/// Mesh
+	/// </summary>
+	public static string Mesh => Get("mesh");
+	
+	/// <summary>
 	/// Mesh Export Format
 	/// </summary>
 	public static string MeshExportTitle => Get("mesh_export_title");
@@ -466,6 +616,21 @@ partial class Localization
 	public static string MeshFormatNativeDescription => Get("mesh_format_native_description");
 	
 	/// <summary>
+	/// Name
+	/// </summary>
+	public static string Name => Get("name");
+	
+	/// <summary>
+	/// Namespace
+	/// </summary>
+	public static string Namespace => Get("namespace");
+	
+	/// <summary>
+	/// No Files Loaded
+	/// </summary>
+	public static string NoFilesLoaded => Get("no_files_loaded");
+	
+	/// <summary>
 	/// No Unity game or asset bundle was found in the dropped files.
 	/// </summary>
 	public static string NoGameFilesFound => Get("no_game_files_found");
@@ -474,6 +639,41 @@ partial class Localization
 	/// Not Implemented Yet
 	/// </summary>
 	public static string NotImplementedYet => Get("not_implemented_yet");
+	
+	/// <summary>
+	/// Original Path
+	/// </summary>
+	public static string OriginalPath => Get("original_path");
+	
+	/// <summary>
+	/// Parent
+	/// </summary>
+	public static string Parent => Get("parent");
+	
+	/// <summary>
+	/// Path ID
+	/// </summary>
+	public static string PathId => Get("path_id");
+	
+	/// <summary>
+	/// Privacy
+	/// </summary>
+	public static string Privacy => Get("privacy");
+	
+	/// <summary>
+	/// Resources
+	/// </summary>
+	public static string Resources => Get("resources");
+	
+	/// <summary>
+	/// Save
+	/// </summary>
+	public static string Save => Get("save");
+	
+	/// <summary>
+	/// Script
+	/// </summary>
+	public static string Script => Get("script");
 	
 	/// <summary>
 	/// Level 0
@@ -581,6 +781,11 @@ partial class Localization
 	public static string SelectAssetToViewInfo => Get("select_asset_to_view_info");
 	
 	/// <summary>
+	/// Shader
+	/// </summary>
+	public static string Shader => Get("shader");
+	
+	/// <summary>
 	/// Shader Export Format
 	/// </summary>
 	public static string ShaderAssetExportTitle => Get("shader_asset_export_title");
@@ -666,6 +871,11 @@ partial class Localization
 	public static string SpriteFormatYamlDescription => Get("sprite_format_yaml_description");
 	
 	/// <summary>
+	/// Submesh Count
+	/// </summary>
+	public static string SubmeshCount => Get("submesh_count");
+	
+	/// <summary>
 	/// Success!
 	/// </summary>
 	public static string Success => Get("success");
@@ -741,8 +951,43 @@ partial class Localization
 	public static string TextAssetFormatTextDescription => Get("text_asset_format_text_description");
 	
 	/// <summary>
+	/// Texture
+	/// </summary>
+	public static string Texture => Get("texture");
+	
+	/// <summary>
+	/// Transform
+	/// </summary>
+	public static string Transform => Get("transform");
+	
+	/// <summary>
+	/// Vertex Count
+	/// </summary>
+	public static string VertexCount => Get("vertex_count");
+	
+	/// <summary>
+	/// View Loaded Files
+	/// </summary>
+	public static string ViewLoadedFiles => Get("view_loaded_files");
+	
+	/// <summary>
+	/// Welcome
+	/// </summary>
+	public static string Welcome => Get("welcome");
+	
+	/// <summary>
 	/// Welcome To AssetRipper
 	/// </summary>
 	public static string WelcomeTitle => Get("welcome_title");
+	
+	/// <summary>
+	/// Width
+	/// </summary>
+	public static string Width => Get("width");
+	
+	/// <summary>
+	/// Yaml
+	/// </summary>
+	public static string Yaml => Get("yaml");
 	
 }

@@ -26,7 +26,7 @@ public static class Program
 				default:
 					{
 						Dictionary<string, string> oldForeignDictionary = DeserializeJson(File.ReadAllText(path));
-						Dictionary<string, string> newForeignDictionary = new();
+						Dictionary<string, string> newForeignDictionary = new(englishDictionary.Count);
 						foreach (string key in englishDictionary.Keys.Order())
 						{
 							if (oldForeignDictionary.TryGetValue(key, out string? value))

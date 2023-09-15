@@ -7,13 +7,13 @@
 
 @if (Model.Bundle.Parent is not null)
 {
-	<h2>Parent</h2>
+	<h2>@Localization.Parent</h2>
 	<a asp-page="/Bundles/View" asp-route-path="@Model.BundlePath.Parent.ToJson()">@Model.Bundle.Parent.Name</a>
 }
 
 @if (Model.Bundle.Bundles.Count > 0)
 {
-	<h2>Bundles</h2>
+	<h2>@Localization.Bundles</h2>
 	<ul>
 		@for (int i = 0; i < Model.Bundle.Bundles.Count; i++)
 		{
@@ -24,7 +24,7 @@
 
 @if (Model.Bundle.Collections.Count > 0)
 {
-	<h2>Collections</h2>
+	<h2>@Localization.Collections</h2>
 	<ul>
 		@for (int i = 0; i < Model.Bundle.Collections.Count; i++)
 		{
@@ -35,7 +35,7 @@
 
 @if (Model.Bundle.Resources.Count > 0)
 {
-	<h2>Resources</h2>
+	<h2>@Localization.Resources</h2>
 	<ul>
 		@for (int i = 0; i < Model.Bundle.Resources.Count; i++)
 		{

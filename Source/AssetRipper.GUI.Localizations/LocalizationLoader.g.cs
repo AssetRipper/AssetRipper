@@ -10,7 +10,6 @@ partial class LocalizationLoader
 	{
 		{ "ar", "العربية" },
 		{ "de", "Deutsch" },
-		{ "en_GB", "English (United Kingdom)" },
 		{ "en_US", "English (United States)" },
 		{ "es", "español" },
 		{ "fr", "français" },
@@ -21,6 +20,7 @@ partial class LocalizationLoader
 		{ "nl", "Nederlands" },
 		{ "pl", "polski" },
 		{ "pt_BR", "português (Brasil)" },
+		{ "ro", "română" },
 		{ "ru", "русский" },
 		{ "tr", "Türkçe" },
 		{ "uk", "українська" },

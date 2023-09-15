@@ -1,4 +1,5 @@
 using AssetRipper.Assets;
+using AssetRipper.GUI.Localizations;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
@@ -24,7 +25,7 @@ internal static class InformationTabContentExtensions
 		List<(string, IUnityObjectBase)> list = new();
 		if (Asset.MainAsset is not null && Asset.MainAsset != Asset)
 		{
-			list.Add(("Main Asset", Asset.MainAsset));
+			list.Add((Localization.MainAsset, Asset.MainAsset));
 		}
 		switch (Asset)
 		{
@@ -32,23 +33,23 @@ internal static class InformationTabContentExtensions
 				{
 					if (component.GameObject_C2P is { } gameObject)
 					{
-						list.Add(("GameObject", gameObject));
+						list.Add((Localization.GameObject, gameObject));
 						if (component is IRenderer && gameObject.TryGetComponent<IMeshFilter>()?.Mesh_C33P is { } rendererMesh)
 						{
-							list.Add(("Mesh", rendererMesh));
+							list.Add((Localization.Mesh, rendererMesh));
 						}
 					}
 					if (component is IMonoBehaviour monoBehaviour && monoBehaviour.Script_C114P is { } monoScript)
 					{
-						list.Add(("Script", monoScript));
+						list.Add((Localization.Script, monoScript));
 					}
 					else if (component is IMeshFilter meshFilter && meshFilter.Mesh_C33P is { } mesh)
 					{
-						list.Add(("Mesh", mesh));
+						list.Add((Localization.Mesh, mesh));
 					}
 					else if (component is IAudioSource audioSource && audioSource.AudioClip_C82P is { } audioSourceClip)
 					{
-						list.Add(("Audio Clip", audioSourceClip));
+						list.Add((Localization.AudioClip, audioSourceClip));
 					}
 				}
 				break;
@@ -56,7 +57,7 @@ internal static class InformationTabContentExtensions
 				{
 					if (gameObject.TryGetComponent(out ITransform? transform))
 					{
-						list.Add(("Transform", transform));
+						list.Add((Localization.Transform, transform));
 					}
 				}
 				break;
@@ -64,13 +65,13 @@ internal static class InformationTabContentExtensions
 				{
 					if (material.Shader_C21P is { } shader)
 					{
-						list.Add(("Shader", shader));
+						list.Add((Localization.Shader, shader));
 					}
 				}
 				break;
 			case SpriteInformationObject spriteInformationObject:
 				{
-					list.Add(("Texture", spriteInformationObject.Texture));
+					list.Add((Localization.Texture, spriteInformationObject.Texture));
 				}
 				break;
 			default:
@@ -102,34 +103,34 @@ internal static class InformationTabContentExtensions
 				{
 					return new (string, string)[]
 					{
-						("Width", texture2D.Width_C28.ToString()),
-						("Height", texture2D.Height_C28.ToString()),
-						("Format", texture2D.Format_C28E.ToString()),
+						(Localization.Width, texture2D.Width_C28.ToString()),
+						(Localization.Height, texture2D.Height_C28.ToString()),
+						(Localization.Format, texture2D.Format_C28E.ToString()),
 					};
 				}
 			case IMesh mesh:
 				{
 					return new (string, string)[]
 					{
-						("Vertex Count", mesh.VertexData_C43.VertexCount.ToString()),
-						("Submesh Count", mesh.SubMeshes_C43.Count.ToString()),
+						(Localization.VertexCount, mesh.VertexData_C43.VertexCount.ToString()),
+						(Localization.SubmeshCount, mesh.SubMeshes_C43.Count.ToString()),
 					};
 				}
 			case IAudioClip audioClip:
 				{
 					return new (string, string)[]
 					{
-						("Channels", audioClip.Channels_C83.ToString()),
-						("Frequency", audioClip.Frequency_C83.ToString()),
-						("Length", audioClip.Length_C83.ToString()),
+						(Localization.Channels, audioClip.Channels_C83.ToString()),
+						(Localization.Frequency, audioClip.Frequency_C83.ToString()),
+						(Localization.Length, audioClip.Length_C83.ToString()),
 					};
 				}
 			case ITerrainData terrainData:
 				{
 					return new (string, string)[]
 					{
-						("Width", terrainData.Heightmap_C156.GetWidth().ToString()),
-						("Height", terrainData.Heightmap_C156.GetHeight().ToString()),
+						(Localization.Width, terrainData.Heightmap_C156.GetWidth().ToString()),
+						(Localization.Height, terrainData.Heightmap_C156.GetHeight().ToString()),
 					};
 				}
 			default:
@@ -140,9 +141,9 @@ internal static class InformationTabContentExtensions
 		{
 			return new (string, string)[]
 			{
-				("Assembly Name", monoScript.AssemblyName_C115),
-				("Namespace", monoScript.Namespace_C115),
-				("Class Name", monoScript.ClassName_C115),
+				(Localization.AssemblyName, monoScript.AssemblyName_C115),
+				(Localization.Namespace, monoScript.Namespace_C115),
+				(Localization.ClassName, monoScript.ClassName_C115),
 			};
 		}
 	}

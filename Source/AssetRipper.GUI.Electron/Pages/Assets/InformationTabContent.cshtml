@@ -8,28 +8,28 @@
 			<td><a asp-page="/Collections/View" asp-route-path="@Model.Collection.GetPath().ToJson()">@Model.Collection.Name</a></td>
 		</tr>
 		<tr>
-			<td>Path ID</td>
+			<td>@Localization.PathId</td>
 			<td>@Model.PathID</td>
 		</tr>
 		<tr>
-			<td>Class ID Type Number</td>
+			<td>@Localization.ClassIdTypeNumber</td>
 			<td>@Model.ClassID</td>
 		</tr>
 		<tr>
-			<td>Class ID Type Name</td>
+			<td>@Localization.ClassIdTypeName</td>
 			<td>@Model.ClassName</td>
 		</tr>
 		@if (Model.OriginalDirectory is not null || Model.OriginalName is not null || Model.OriginalExtension is not null)
 		{
 			<tr>
-				<td>Original Path</td>
+				<td>@Localization.OriginalPath</td>
 				<td>@Model.OriginalPath</td>
 			</tr>
 		}
 		@if (!string.IsNullOrEmpty(Model.AssetBundleName))
 		{
 			<tr>
-				<td>AssetBundle Name</td>
+				<td>@Localization.AssetBundleName</td>
 				<td>@Model.AssetBundleName</td>
 			</tr>
 		}

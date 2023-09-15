@@ -20,25 +20,25 @@
 	<nav>
 		<div class="nav nav-tabs" id="nav-tab" role="tablist">
 			<button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information" aria-selected="true">
-				Information
+				@Localization.AssetTabInformation
 			</button>
 			<button class="@TabHelpers.GetTabClassSet(audioTabDisabled)" id="nav-audio-tab" data-bs-toggle="tab" data-bs-target="#nav-audio" type="button" role="tab" aria-controls="nav-audio" aria-selected="false" aria-disabled="@audioTabDisabled.ToString().ToLower()">
-				Audio
+				@Localization.AssetTabAudio
 			</button>
 			<button class="@TabHelpers.GetTabClassSet(imageTabDisabled)" id="nav-image-tab" data-bs-toggle="tab" data-bs-target="#nav-image" type="button" role="tab" aria-controls="nav-image" aria-selected="false" aria-disabled="@imageTabDisabled.ToString().ToLower()">
-				Image
+				@Localization.AssetTabImage
 			</button>
 			<button class="@TabHelpers.GetTabClassSet(textTabDisabled)" id="nav-text-tab" data-bs-toggle="tab" data-bs-target="#nav-text" type="button" role="tab" aria-controls="nav-text" aria-selected="false" aria-disabled="@textTabDisabled.ToString().ToLower()">
-				Text
+				@Localization.AssetTabText
 			</button>
 			<button class="@TabHelpers.GetTabClassSet(yamlTabDisabled)" id="nav-yaml-tab" data-bs-toggle="tab" data-bs-target="#nav-yaml" type="button" role="tab" aria-controls="nav-yaml" aria-selected="false" aria-disabled="@yamlTabDisabled.ToString().ToLower()">
-				Yaml
+				@Localization.Yaml
 			</button>
 			<button class="nav-link" id="nav-hex-tab" data-bs-toggle="tab" data-bs-target="#nav-hex" type="button" role="tab" aria-controls="nav-hex" aria-selected="false">
-				Hex
+				@Localization.AssetTabHex
 			</button>
 			<button class="nav-link" id="nav-dev-tab" data-bs-toggle="tab" data-bs-target="#nav-dev" type="button" role="tab" aria-controls="nav-dev" aria-selected="false">
-				Development
+				@Localization.AssetTabDevelopment
 			</button>
 		</div>
 	</nav>
