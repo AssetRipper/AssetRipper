@@ -44,7 +44,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueTemplates", "IssueTemp
 		.github\ISSUE_TEMPLATE\config.yaml = .github\ISSUE_TEMPLATE\config.yaml
 		.github\ISSUE_TEMPLATE\enhancement.yaml = .github\ISSUE_TEMPLATE\enhancement.yaml
 		.github\ISSUE_TEMPLATE\other.yaml = .github\ISSUE_TEMPLATE\other.yaml
-		.github\workflows\publish_electron.yml = .github\workflows\publish_electron.yml
 		.github\ISSUE_TEMPLATE\question.yaml = .github\ISSUE_TEMPLATE\question.yaml
 	EndProjectSection
 EndProject
@@ -54,6 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\docfx_build.yml = .github\workflows\docfx_build.yml
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
 		.github\workflows\publish.yml = .github\workflows\publish.yml
+		.github\workflows\publish_electron.yml = .github\workflows\publish_electron.yml
 		.github\workflows\test.yml = .github\workflows\test.yml
 	EndProjectSection
 EndProject
