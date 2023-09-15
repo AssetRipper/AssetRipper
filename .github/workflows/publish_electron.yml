@@ -1,0 +1,39 @@
+name: Publish Electron UI
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+  workflow_dispatch:
+
+jobs:
+  publish_windows_x64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
+
+      - name: Publish AssetRipper Windows x64
+        run: electronize build /target linux
+        working-directory: ./Source/AssetRipper.GUI/
+        
+      - name: Upload AssetRipper Windows x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: AssetRipper_win_x64
+          path: ./Source/AssetRipper.GUI.Electron/bin/Desktop/*.exe
+          if-no-files-found: error
+
