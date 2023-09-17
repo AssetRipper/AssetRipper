@@ -271,25 +271,28 @@ namespace AssetRipper.Processing.AnimatorControllers
 			//AnyStateTransitions
 			{
 				int count = stateMachine.AnyStateTransitionConstantArray.Count;
-				PPtrAccessList<IPPtr_AnimatorStateTransition, IAnimatorStateTransition> anyStateTransitions;
 				if (generatedStateMachine.Has_AnyStateTransitions_C1107())
 				{
 					generatedStateMachine.AnyStateTransitions_C1107.Capacity = count;
-					anyStateTransitions = new PPtrAccessList<IPPtr_AnimatorStateTransition, IAnimatorStateTransition>(generatedStateMachine.AnyStateTransitions_C1107, generatedStateMachine.Collection);
+					for (int i = 0; i < count; i++)
+					{
+						ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
+						IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
+						generatedStateMachine.AnyStateTransitions_C1107P.Add(transition);
+					}
 				}
 				else
 				{
 					//https://github.com/AssetRipper/AssetRipper/issues/1028
 					AssetList<PPtr_AnimatorStateTransition_4_0_0> newList = generatedStateMachine.OrderedTransitions_C1107.AddNew().Value;
 					newList.Capacity = count;
-					anyStateTransitions = new PPtrAccessList<IPPtr_AnimatorStateTransition, IAnimatorStateTransition>(newList, generatedStateMachine.Collection);
-				}
-
-				for (int i = 0; i < count; i++)
-				{
-					ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
-					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
-					anyStateTransitions.Add(transition);
+					PPtrAccessList<PPtr_AnimatorStateTransition_4_0_0, IAnimatorStateTransition> anyStateTransitions = new(newList, generatedStateMachine.Collection);
+					for (int i = 0; i < count; i++)
+					{
+						ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
+						IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
+						anyStateTransitions.Add(transition);
+					}
 				}
 			}
 
