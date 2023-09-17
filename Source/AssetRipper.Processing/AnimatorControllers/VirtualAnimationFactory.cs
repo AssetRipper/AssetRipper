@@ -186,8 +186,8 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			int stateCount = stateMachine.StateConstantArray.Count;
 			int stateMachineCount = 0;
-			int count = stateCount + stateMachineCount;
-			int side = (int)Math.Ceiling(Math.Sqrt(count));
+			int stateAndStateMachineCount = stateCount + stateMachineCount;
+			int side = (int)Math.Ceiling(Math.Sqrt(stateAndStateMachineCount));
 
 			List<IAnimatorState> states = new();
 			if (generatedStateMachine.Has_ChildStates_C1107())
@@ -261,25 +261,35 @@ namespace AssetRipper.Processing.AnimatorControllers
 					{
 						state.Transitions_C1102P.Add(transition);
 					}
-					else if (transitionList is not null)
+					else
 					{
-						transitionList.AddNew().SetAsset(generatedStateMachine.Collection, transition);
+						transitionList?.AddNew().SetAsset(generatedStateMachine.Collection, transition);
 					}
 				}
 			}
 
-			//This code only works for Unity 5 and newer.
-			//However, IStateMachineConstant.AnyStateTransitionConstantArray is available on all versions.
-			//So, transitions in that array are not currently recovered on Unity 4 and earlier.
-			if (generatedStateMachine.Has_AnyStateTransitions_C1107())
+			//AnyStateTransitions
 			{
-				generatedStateMachine.AnyStateTransitions_C1107.Clear();
-				generatedStateMachine.AnyStateTransitions_C1107.Capacity = stateMachine.AnyStateTransitionConstantArray.Count;
-				for (int i = 0; i < stateMachine.AnyStateTransitionConstantArray.Count; i++)
+				int count = stateMachine.AnyStateTransitionConstantArray.Count;
+				PPtrAccessList<IPPtr_AnimatorStateTransition, IAnimatorStateTransition> anyStateTransitions;
+				if (generatedStateMachine.Has_AnyStateTransitions_C1107())
+				{
+					generatedStateMachine.AnyStateTransitions_C1107.Capacity = count;
+					anyStateTransitions = new PPtrAccessList<IPPtr_AnimatorStateTransition, IAnimatorStateTransition>(generatedStateMachine.AnyStateTransitions_C1107, generatedStateMachine.Collection);
+				}
+				else
+				{
+					//https://github.com/AssetRipper/AssetRipper/issues/1028
+					AssetList<PPtr_AnimatorStateTransition_4_0_0> newList = generatedStateMachine.OrderedTransitions_C1107.AddNew().Value;
+					newList.Capacity = count;
+					anyStateTransitions = new PPtrAccessList<IPPtr_AnimatorStateTransition, IAnimatorStateTransition>(newList, generatedStateMachine.Collection);
+				}
+
+				for (int i = 0; i < count; i++)
 				{
 					ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
 					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
-					generatedStateMachine.AnyStateTransitions_C1107P.Add(transition);
+					anyStateTransitions.Add(transition);
 				}
 			}
 
