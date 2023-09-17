@@ -316,6 +316,12 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 				generatedStateMachine.DefaultState_C1107.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
 			}
+			else if (generatedStateMachine.Has_States_C1107() && generatedStateMachine.States_C1107.Count > 0)
+			{
+				PPtr_AnimatorState_4_0_0 defaultStatePPtr = generatedStateMachine.States_C1107[(int)stateMachine.DefaultState];
+
+				generatedStateMachine.DefaultState_C1107.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
+			}
 
 			return generatedStateMachine;
 		}
