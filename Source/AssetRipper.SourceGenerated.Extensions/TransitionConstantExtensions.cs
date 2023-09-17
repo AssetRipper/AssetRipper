@@ -23,44 +23,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static float GetExitTime(this ITransitionConstant transitionConstant)
-		{
-			if (transitionConstant.Has_ExitTime())
-			{
-				return transitionConstant.ExitTime;
-			}
-			else
-			{
-				foreach (OffsetPtr_ConditionConstant conditionPtr in transitionConstant.ConditionConstantArray)
-				{
-					if (conditionPtr.Data.ConditionModeE == AnimatorConditionMode.ExitTime)
-					{
-						return conditionPtr.Data.ExitTime;
-					}
-				}
-				return 1.0f;
-			}
-		}
-
-		public static bool GetHasExitTime(this ITransitionConstant transitionConstant)
-		{
-			if (transitionConstant.Has_HasExitTime())
-			{
-				return transitionConstant.HasExitTime;
-			}
-			else
-			{
-				foreach (OffsetPtr_ConditionConstant conditionPtr in transitionConstant.ConditionConstantArray)
-				{
-					if (conditionPtr.Data.ConditionModeE == AnimatorConditionMode.ExitTime)
-					{
-						return true;
-					}
-				}
-				return false;
-			}
-		}
-
 		public static bool IsExit(this ITransitionConstant transitionConstant) => transitionConstant.DestinationState >= 30000;
 	}
 }
