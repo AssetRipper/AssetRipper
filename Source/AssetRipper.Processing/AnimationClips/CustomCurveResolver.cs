@@ -130,7 +130,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return "m_Sprite";
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.MonoBehaviour:
 					{
@@ -139,7 +139,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.Light:
 					{
@@ -148,7 +148,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.RendererShadows:
 					{
@@ -157,7 +157,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.ParticleSystem:
 					{
@@ -165,17 +165,28 @@ namespace AssetRipper.Processing.AnimationClips
 						{
 							return foundPath;
 						}
+						else
+						{
+							//This has at least one ordinal property name,
+							//So the precalculated hashes are insufficient for recovery.
+							//Binary analysis may be required.
+							//Example failed attributes:
+							//0x45ECBD03 (1173142787)
+							//0x483A8AB1 (1211796145)
+							//0x72FE5CE2 (1929272546)
+							//https://github.com/AssetRipper/AssetRipper/issues/1025
+						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					return Crc32Algorithm.ReverseAscii(attribute, $"ParticleSystem_0x{attribute:X}_");
 
 				case BindingCustomType.RectTransform:
 					{
-						if (RectTransform.TryGetPath(attribute, out string? foundPath))	
+						if (RectTransform.TryGetPath(attribute, out string? foundPath))
 						{
 							return foundPath;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.LineRenderer:
 					{
@@ -184,7 +195,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.TrailRenderer:
 					{
@@ -193,7 +204,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.PositionConstraint:
 					{
@@ -213,7 +224,7 @@ namespace AssetRipper.Processing.AnimationClips
 							10 => "m_Active",
 							11 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							12 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
+							_ => throw GetUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -235,7 +246,7 @@ namespace AssetRipper.Processing.AnimationClips
 							10 => "m_Active",
 							11 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							12 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
+							_ => throw GetUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -257,7 +268,7 @@ namespace AssetRipper.Processing.AnimationClips
 							10 => "m_Active",
 							11 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							12 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
+							_ => throw GetUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -274,7 +285,7 @@ namespace AssetRipper.Processing.AnimationClips
 							5 => "m_WorldUpObject",
 							6 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							7 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
+							_ => throw GetUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -299,7 +310,7 @@ namespace AssetRipper.Processing.AnimationClips
 							13 => $"m_RotationOffsets.Array.data[{attribute >> 8}].z",
 							14 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							15 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
+							_ => throw GetUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -314,10 +325,10 @@ namespace AssetRipper.Processing.AnimationClips
 							3 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							4 => $"m_Sources.Array.data[{attribute >> 8}].weight",
 							5 => "m_Roll",
-							_ => throw new ArgumentException($"Unknown attribute {attribute} for {type}")
+							_ => throw GetUnknownAttributeException(type, attribute)
 						};
 					}
-				
+
 				case BindingCustomType.Camera:
 					{
 						if (Camera.TryGetPath(attribute, out string? foundPath))
@@ -325,7 +336,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				// TryGetPath may not work here
 				case BindingCustomType.VisualEffect:
@@ -335,7 +346,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				// TryGetPath may not work here
 				case BindingCustomType.ParticleForceField:
@@ -345,11 +356,11 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.UserDefined:
 					return Crc32Algorithm.ReverseAscii(attribute, $"UserDefined_0x{attribute:X}_");
-				
+
 				// TryGetPath may not work here
 				case BindingCustomType.MeshFilter:
 					{
@@ -358,10 +369,15 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw new ArgumentException($"Unknown attribute {attribute} for {type}");
+					throw GetUnknownAttributeException(type, attribute);
 
 				default:
 					throw new ArgumentException($"Binding type {type} not implemented", nameof(type));
+			}
+
+			static Exception GetUnknownAttributeException(BindingCustomType type, uint attribute)
+			{
+				return new ArgumentException($"Unknown attribute 0x{attribute:X} ({attribute}) for {type}");
 			}
 		}
 
