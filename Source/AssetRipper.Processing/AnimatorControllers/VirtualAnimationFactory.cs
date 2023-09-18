@@ -416,7 +416,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			for (int i = 0; i < Transition.ConditionConstantArray.Count; i++)
 			{
 				ConditionConstant conditionConstant = Transition.ConditionConstantArray[i].Data;
-				if (!Transition.Has_ExitTime() || conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
+				if (!animatorStateTransition.Has_ExitTime_C1101() || conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
 				{
 					IAnimatorCondition condition = animatorStateTransition.Conditions_C1101.AddNew();
 					condition.ConditionMode = (int)conditionConstant.ConditionModeE;
@@ -434,8 +434,8 @@ namespace AssetRipper.Processing.AnimatorControllers
 			animatorStateTransition.Atomic_C1101 = Transition.Atomic;
 			animatorStateTransition.TransitionDuration_C1101 = Transition.TransitionDuration;
 			animatorStateTransition.TransitionOffset_C1101 = Transition.TransitionOffset;
-			animatorStateTransition.ExitTime_C1101 = Transition.ExitTime;
-			animatorStateTransition.HasExitTime_C1101 = Transition.HasExitTime;
+			animatorStateTransition.ExitTime_C1101 = Transition.GetExitTime();
+			animatorStateTransition.HasExitTime_C1101 = Transition.GetHasExitTime();
 			animatorStateTransition.HasFixedDuration_C1101 = Transition.GetHasFixedDuration();
 			animatorStateTransition.InterruptionSource_C1101E = Transition.GetInterruptionSource();
 			animatorStateTransition.OrderedInterruption_C1101 = Transition.OrderedInterruption;
