@@ -416,12 +416,13 @@ namespace AssetRipper.Processing.AnimatorControllers
 			for (int i = 0; i < Transition.ConditionConstantArray.Count; i++)
 			{
 				ConditionConstant conditionConstant = Transition.ConditionConstantArray[i].Data;
-				if (conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
+				if (!animatorStateTransition.Has_ExitTime_C1101() || conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
 				{
 					IAnimatorCondition condition = animatorStateTransition.Conditions_C1101.AddNew();
 					condition.ConditionMode = (int)conditionConstant.ConditionModeE;
 					condition.ConditionEvent = TOS[conditionConstant.EventID];
 					condition.EventTreshold = conditionConstant.EventThreshold;
+					condition.ExitTime = conditionConstant.ExitTime;
 				}
 			}
 
@@ -430,6 +431,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			animatorStateTransition.Name = TOS[Transition.UserID];
 			animatorStateTransition.IsExit_C1101 = Transition.IsExit();
 
+			animatorStateTransition.Atomic_C1101 = Transition.Atomic;
 			animatorStateTransition.TransitionDuration_C1101 = Transition.TransitionDuration;
 			animatorStateTransition.TransitionOffset_C1101 = Transition.TransitionOffset;
 			animatorStateTransition.ExitTime_C1101 = Transition.GetExitTime();
