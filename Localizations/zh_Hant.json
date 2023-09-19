@@ -63,6 +63,7 @@
     "count": "",
     "csharp_type": "",
     "data": "",
+    "default_version": "",
     "donation_message": "",
     "enable_prefab_outlining": "啟用預設大綱",
     "enable_static_mesh_separation": "啟用靜態網格體分離",

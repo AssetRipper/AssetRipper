@@ -63,6 +63,7 @@
     "count": "Count",
     "csharp_type": "C# Type",
     "data": "Data",
+    "default_version": "Default Version",
     "donation_message": "If you like AssetRipper, please consider donating:",
     "enable_prefab_outlining": "Enable Prefab Outlining",
     "enable_static_mesh_separation": "Enable Static Mesh Separation",

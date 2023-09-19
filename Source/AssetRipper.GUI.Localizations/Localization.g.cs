@@ -325,6 +325,11 @@ partial class Localization
 	public static string Data => Get("data");
 	
 	/// <summary>
+	/// Default Version
+	/// </summary>
+	public static string DefaultVersion => Get("default_version");
+	
+	/// <summary>
 	/// If you like AssetRipper, please consider donating:
 	/// </summary>
 	public static string DonationMessage => Get("donation_message");
