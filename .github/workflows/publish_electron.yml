@@ -32,7 +32,7 @@ jobs:
       - name: Publish AssetRipper Windows x64
         run: electronize build /target win
         working-directory: ./Source/AssetRipper.GUI.Electron/
-        
+
       - name: Upload AssetRipper Windows x64
         uses: actions/upload-artifact@v3
         with:
@@ -40,3 +40,64 @@ jobs:
           path: ./Source/AssetRipper.GUI.Electron/bin/Desktop/*.exe
           if-no-files-found: error
 
+  publish_linux_x64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Install ElectronNET.CLI
+        run: dotnet tool install ElectronNET.CLI -g
+
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
+
+      - name: Publish AssetRipper Linux x64
+        run: electronize build /target linux
+        working-directory: ./Source/AssetRipper.GUI.Electron/
+
+      - name: List Files
+        shell: bash
+        run: |
+          cd ./Source/AssetRipper.GUI.Electron/bin/Desktop/
+          ls
+
+  publish_mac_x64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Install ElectronNET.CLI
+        run: dotnet tool install ElectronNET.CLI -g
+
+      - name: Add Package Source
+        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
+
+      - name: Publish AssetRipper Mac x64
+        run: electronize build /target osx
+        working-directory: ./Source/AssetRipper.GUI.Electron/
+
+      - name: List Files
+        shell: bash
+        run: |
+          cd ./Source/AssetRipper.GUI.Electron/bin/Desktop/
+          ls
