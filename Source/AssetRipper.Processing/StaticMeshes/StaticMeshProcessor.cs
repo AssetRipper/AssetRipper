@@ -321,12 +321,10 @@ namespace AssetRipper.Processing.StaticMeshes
 
 		private static IMesh MakeMeshFromData(string cleanName, MeshData instanceMeshData, ProcessedAssetCollection processedCollection)
 		{
-			const IndexFormat IndexFormat32Bit = IndexFormat.UInt32;
-
 			IMesh newMesh = CreateMesh(processedCollection);
 			newMesh.Name = cleanName;
 
-			newMesh.SetIndexFormat(IndexFormat32Bit);
+			newMesh.SetIndexFormat(instanceMeshData.GetIndexFormat());
 
 			ICompressedMesh compressedMesh = newMesh.CompressedMesh_C43;
 			compressedMesh.SetVertices(instanceMeshData.Vertices);
@@ -348,8 +346,8 @@ namespace AssetRipper.Processing.StaticMeshes
 
 			newMesh.KeepIndices_C43 = true;//Not sure about this. Seems to be for animated meshes
 			newMesh.KeepVertices_C43 = true;//Not sure about this. Seems to be for animated meshes
-			newMesh.MeshMetrics_0__C43 = CalculateMeshMetric(instanceMeshData.Vertices, instanceMeshData.UV0, instanceMeshData.ProcessedIndexBuffer, instanceMeshData.SubMeshes, IndexFormat32Bit, 0);
-			newMesh.MeshMetrics_1__C43 = CalculateMeshMetric(instanceMeshData.Vertices, instanceMeshData.UV1, instanceMeshData.ProcessedIndexBuffer, instanceMeshData.SubMeshes, IndexFormat32Bit, 1);
+			newMesh.MeshMetrics_0__C43 = CalculateMeshMetric(instanceMeshData.Vertices, instanceMeshData.UV0, instanceMeshData.ProcessedIndexBuffer, instanceMeshData.SubMeshes, 0);
+			newMesh.MeshMetrics_1__C43 = CalculateMeshMetric(instanceMeshData.Vertices, instanceMeshData.UV1, instanceMeshData.ProcessedIndexBuffer, instanceMeshData.SubMeshes, 1);
 			newMesh.MeshUsageFlags_C43 = (int)SourceGenerated.NativeEnums.Global.MeshUsageFlags.MeshUsageFlagNone;
 			newMesh.CookingOptions_C43 = (int)SourceGenerated.NativeEnums.Global.MeshColliderCookingOptions.DefaultCookingFlags;
 			//I copied 30 from a vanilla compressed mesh (with MeshCompression.Low), and it aligned with this enum.
@@ -357,9 +355,9 @@ namespace AssetRipper.Processing.StaticMeshes
 			newMesh.SetMeshCompression(ModelImporterMeshCompression.Low);
 
 			AccessListBase<ISubMesh> subMeshList = newMesh.SubMeshes_C43;
-			foreach (ISubMesh subMesh in instanceMeshData.SubMeshes)
+			foreach (SubMeshData subMesh in instanceMeshData.SubMeshes)
 			{
-				subMeshList.AddNew().CopyValues(subMesh);
+				subMesh.CopyTo(subMeshList.AddNew(), newMesh.GetIndexFormat());
 			}
 
 			newMesh.LocalAABB_C43.CalculateFromVertexArray(instanceMeshData.Vertices);
@@ -367,7 +365,7 @@ namespace AssetRipper.Processing.StaticMeshes
 			return newMesh;
 		}
 
-		private static float CalculateMeshMetric(ReadOnlySpan<Vector3> vertexBuffer, ReadOnlySpan<Vector2> uvBuffer, uint[] indexBuffer, IReadOnlyList<ISubMesh> subMeshList, IndexFormat indexFormat, int uvSetIndex, float uvAreaThreshold = 1e-9f)
+		private static float CalculateMeshMetric(ReadOnlySpan<Vector3> vertexBuffer, ReadOnlySpan<Vector2> uvBuffer, uint[] indexBuffer, IReadOnlyList<SubMeshData> subMeshList, int uvSetIndex, float uvAreaThreshold = 1e-9f)
 		{
 			//https://docs.unity3d.com/ScriptReference/Mesh.GetUVDistributionMetric.html
 			//https://docs.unity3d.com/ScriptReference/Mesh.RecalculateUVDistributionMetric.html
@@ -382,7 +380,7 @@ namespace AssetRipper.Processing.StaticMeshes
 			int n = 0;
 			float vertexAreaSum = 0.0f;
 			float uvAreaSum = 0.0f;
-			foreach ((uint ia, uint ib, uint ic) in new TriangleEnumerable(subMeshList[uvSetIndex], indexFormat, indexBuffer))
+			foreach ((uint ia, uint ib, uint ic) in new TriangleEnumerable(subMeshList[uvSetIndex], indexBuffer))
 			{
 				(Vector2 uva, Vector2 uvb, Vector2 uvc) = (uvBuffer[(int)ia], uvBuffer[(int)ib], uvBuffer[(int)ic]);
 				float uvArea = TriangleArea(uva, uvb, uvc);
@@ -478,7 +476,7 @@ namespace AssetRipper.Processing.StaticMeshes
 		{
 			IReadOnlyList<uint> subMeshIndicies = renderer.GetSubmeshIndices();
 
-			uint count = 0;
+			int count = 0;
 			for (int i = 0; i < subMeshIndicies.Count; i++)
 			{
 				count += combinedMeshData.SubMeshes[(int)subMeshIndicies[i]].IndexCount;
@@ -499,16 +497,16 @@ namespace AssetRipper.Processing.StaticMeshes
 			Vector2[]? uv7 = combinedMeshData.UV7.IsNullOrEmpty() ? null : new Vector2[count];
 			Matrix4x4[]? bindpose = combinedMeshData.BindPose.IsNullOrEmpty() ? null : new Matrix4x4[count];
 			uint[] processedIndexBuffer = new uint[count];
-			ISubMesh[] subMeshes = new ISubMesh[subMeshIndicies.Count];
+			SubMeshData[] subMeshes = new SubMeshData[subMeshIndicies.Count];
 
-			uint offset = 0;
+			int offset = 0;
 			for (int k = 0; k < subMeshIndicies.Count; k++)
 			{
-				ISubMesh combinedSubMesh = combinedMeshData.SubMeshes[(int)subMeshIndicies[k]];
-				int combinedIndexStart = (int)(combinedSubMesh.FirstByte / sizeof(uint));//FirstByte is standardized
+				SubMeshData combinedSubMesh = combinedMeshData.SubMeshes[(int)subMeshIndicies[k]];
+				int combinedIndexStart = combinedSubMesh.FirstIndex;
 				for (int j = 0; j < combinedSubMesh.IndexCount; j++)
 				{
-					int newIndex = j + (int)offset;
+					int newIndex = j + offset;
 					int combinedIndex = (int)combinedMeshData.ProcessedIndexBuffer[j + combinedIndexStart];
 					vertices[newIndex] = combinedMeshData.Vertices[combinedIndex];
 					SetUnlessNull(normals, newIndex, combinedMeshData.Normals, combinedIndex);
@@ -526,12 +524,12 @@ namespace AssetRipper.Processing.StaticMeshes
 					SetUnlessNull(bindpose, newIndex, combinedMeshData.BindPose, combinedIndex);
 					processedIndexBuffer[newIndex] = (uint)newIndex;
 				}
-				ISubMesh newSubMesh = combinedSubMesh.DeepClone();
-				newSubMesh.FirstByte = offset * sizeof(uint);
+				SubMeshData newSubMesh = combinedSubMesh;
+				newSubMesh.FirstIndex = offset;
 				newSubMesh.FirstVertex = offset;
 				newSubMesh.VertexCount = newSubMesh.IndexCount;
 				//newSubMesh.BaseVertex //Might need set
-				newSubMesh.LocalAABB.CalculateFromVertexArray(new ReadOnlySpan<Vector3>(vertices, (int)offset, (int)newSubMesh.IndexCount));
+				newSubMesh.LocalBounds = Bounds.CalculateFromVertexArray(new ReadOnlySpan<Vector3>(vertices, (int)offset, (int)newSubMesh.IndexCount));
 				subMeshes[k] = newSubMesh;
 
 				offset += combinedSubMesh.IndexCount;

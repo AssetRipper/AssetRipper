@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using System.Numerics;
@@ -25,7 +26,7 @@ namespace AssetRipper.Processing.StaticMeshes
 	/// <param name="UV7"></param>
 	/// <param name="BindPose"></param>
 	/// <param name="ProcessedIndexBuffer"></param>
-	/// <param name="SubMeshes">For <see cref="ISubMesh.FirstByte"/>, the value is standardized for 32 bit indices.</param>
+	/// <param name="SubMeshes"></param>
 	internal readonly record struct MeshData(
 		Vector3[] Vertices,
 		Vector3[]? Normals,
@@ -42,7 +43,7 @@ namespace AssetRipper.Processing.StaticMeshes
 		Vector2[]? UV7,
 		Matrix4x4[]? BindPose,
 		uint[] ProcessedIndexBuffer,
-		ISubMesh[] SubMeshes)
+		SubMeshData[] SubMeshes)
 	{
 		public static bool TryMakeFromMesh(IMesh mesh, out MeshData meshData)
 		{
@@ -63,7 +64,7 @@ namespace AssetRipper.Processing.StaticMeshes
 				out Matrix4x4[]? bindpose,
 				out uint[] processedIndexBuffer);
 
-			ISubMesh[] subMeshes = GetDuplicatedSubMeshes(mesh);
+			SubMeshData[] subMeshes = GetSubMeshArray(mesh);
 
 			if (vertices is null)
 			{
@@ -100,7 +101,7 @@ namespace AssetRipper.Processing.StaticMeshes
 			};
 		}
 
-		[return: NotNullIfNotNull("array")]
+		[return: NotNullIfNotNull(nameof(array))]
 		private static T[]? DuplicateArray<T>(T[]? array)
 		{
 			if (array is null)
@@ -119,42 +120,19 @@ namespace AssetRipper.Processing.StaticMeshes
 			}
 		}
 
-		private static ISubMesh[] DuplicateArray(ISubMesh[] array)
-		{
-			if (array.Length == 0)
-			{
-				return Array.Empty<ISubMesh>();
-			}
-			else
-			{
-				ISubMesh[] arrayCopy = new ISubMesh[array.Length];
-				for (int i = 0; i < array.Length; i++)
-				{
-					arrayCopy[i] = array[i].DeepClone();
-				}
-				return arrayCopy;
-			}
-		}
-
-		private static ISubMesh[] GetDuplicatedSubMeshes(IMesh mesh)
+		private static SubMeshData[] GetSubMeshArray(IMesh mesh)
 		{
 			AccessListBase<ISubMesh> list = mesh.SubMeshes_C43;
 			if (list.Count == 0)
 			{
-				return Array.Empty<ISubMesh>();
+				return Array.Empty<SubMeshData>();
 			}
 			else
 			{
-				bool is16Bit = mesh.Is16BitIndices();
-				ISubMesh[] array = new ISubMesh[list.Count];
+				SubMeshData[] array = new SubMeshData[list.Count];
 				for (int i = 0; i < list.Count; i++)
 				{
-					ISubMesh subMesh = list[i].DeepClone();
-					if (is16Bit)
-					{
-						subMesh.FirstByte *= 2;//After this point, FirstByte is assumed to be FirstIndex * sizeof(uint)
-					}
-					array[i] = subMesh;
+					array[i] = SubMeshData.Create(list[i], mesh.IndexFormat_C43E);
 				}
 				return array;
 			}
@@ -206,12 +184,12 @@ namespace AssetRipper.Processing.StaticMeshes
 				processedIndexBuffer[i] = (uint)i;
 			}
 
-			ISubMesh[] subMeshes = DuplicateArray(SubMeshes);
+			SubMeshData[] subMeshes = DuplicateArray(SubMeshes);
 			for (int i = 0; i < subMeshes.Length; i++)
 			{
-				ISubMesh subMesh = subMeshes[i];
+				SubMeshData subMesh = subMeshes[i];
 				subMesh.VertexCount = subMesh.IndexCount;
-				subMesh.FirstVertex = subMesh.FirstByte / sizeof(uint);
+				subMesh.FirstVertex = subMesh.FirstIndex;
 
 				subMesh.BaseVertex = 0;//I'm concerned about this. This always seems to be 0 in static meshes,
 									   //but that doesn't mean 0 is an appropriate value here. Given that this method is used primarily on
@@ -246,6 +224,18 @@ namespace AssetRipper.Processing.StaticMeshes
 					}
 				}
 				return true;
+			}
+		}
+
+		public IndexFormat GetIndexFormat()
+		{
+			if (Vertices.Length > ushort.MaxValue)
+			{
+				return IndexFormat.UInt32;
+			}
+			else
+			{
+				return IndexFormat.UInt16;
 			}
 		}
 	}

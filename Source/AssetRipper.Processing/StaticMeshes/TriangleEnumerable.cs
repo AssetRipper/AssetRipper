@@ -1,15 +1,14 @@
 ﻿using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using System.Collections;
 
-namespace AssetRipper.SourceGenerated.Extensions;
+namespace AssetRipper.Processing.StaticMeshes;
 
 public readonly struct TriangleEnumerable : IEnumerable<(uint, uint, uint)>
 {
 	private readonly MeshTopology topology;
 	private readonly ArraySegment<uint> indexBuffer;
 
-	public TriangleEnumerable(ISubMesh subMesh, IndexFormat indexFormat, uint[] indexBuffer) : this(subMesh.GetTopology(), GetIndexBufferSegment(subMesh, indexFormat, indexBuffer))
+	public TriangleEnumerable(SubMeshData subMesh, uint[] indexBuffer) : this(subMesh.Topology, GetIndexBufferSegment(subMesh, indexBuffer))
 	{
 	}
 
@@ -76,16 +75,9 @@ public readonly struct TriangleEnumerable : IEnumerable<(uint, uint, uint)>
 		}
 	}
 
-	private static ArraySegment<uint> GetIndexBufferSegment(ISubMesh subMesh, IndexFormat indexFormat, uint[] indexBuffer)
+	private static ArraySegment<uint> GetIndexBufferSegment(SubMeshData subMesh, uint[] indexBuffer)
 	{
-		if (indexFormat == IndexFormat.UInt16)
-		{
-			return new ArraySegment<uint>(indexBuffer, (int)subMesh.FirstByte / sizeof(ushort), (int)subMesh.IndexCount);
-		}
-		else
-		{
-			return new ArraySegment<uint>(indexBuffer, (int)subMesh.FirstByte / sizeof(uint), (int)subMesh.IndexCount);
-		}
+		return new ArraySegment<uint>(indexBuffer, subMesh.FirstIndex, subMesh.IndexCount);
 	}
 
 	private static void ThrowIfNotSupported(MeshTopology topology)

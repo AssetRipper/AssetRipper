@@ -24,6 +24,18 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return subMesh.Has_Topology() ? subMesh.TopologyE : subMesh.IsTriStripE;
 		}
 
+		public static void SetTopology(this ISubMesh subMesh, MeshTopology topology)
+		{
+			if (subMesh.Has_Topology())
+			{
+				subMesh.TopologyE = topology;
+			}
+			else
+			{
+				subMesh.IsTriStripE = topology;
+			}
+		}
+
 		private static void UpdateSubMeshVertexRange(UnityVersion version, IMesh mesh, ISubMesh submesh)
 		{
 			if (submesh.IndexCount == 0)
