@@ -57,6 +57,9 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			if (HasEndian(header.Version))
 			{
 				int num = stream.ReadByte();
+				//This is not and should not be aligned.
+				//Aligment only happens for the endian boolean on version 9 and greater.
+				//This coincides with endianess being stored in the header on version 9 and greater.
 				return num switch
 				{
 					< 0 => throw new EndOfStreamException(),
