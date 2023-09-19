@@ -1,4 +1,5 @@
-﻿@model DropDownParameters
+﻿@using AssetRipper.GUI.Electron.Pages.Settings.DropDown;
+@model DropDownParameters
 
 @{
 	string? selectedItem = Model.Expression.Compile().Invoke(Model.ParentModel);
