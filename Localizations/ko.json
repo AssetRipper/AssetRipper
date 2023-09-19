@@ -1,1 +1,19 @@
-{}
+{
+    "welcome_title": "AssetRipper에 오신 것을 환영합니다.",
+    "image_export_title": "Image 추출 형식",
+    "shader_asset_export_title": "Shader 추출 형식",
+    "audio_format_force_wav": "WAV 확장자로 변환",
+    "text_asset_export_title": "TextAsset 추출 형식",
+    "script_content_level_title": "Script 추출 수준",
+    "script_language_version_title": "C# 언어 버전",
+    "skip_streaming_assets": "StreamingAssets 폴더를 제외",
+    "config_options": "추출 설정",
+    "mesh_export_title": "Mesh 추출 형식",
+    "sprite_export_title": "Sprite 추출 형식",
+    "audio_export_title": "Audio 추출 형식",
+    "terrain_export_title": "Terrain 추출 형식",
+    "audio_format_native": ".raw",
+    "script_export_title": "Script 추출 형식",
+    "mesh_format_glb": ".glb",
+    "audio_format_yaml": ".yaml"
+}
