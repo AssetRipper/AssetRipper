@@ -33,6 +33,12 @@ jobs:
         run: electronize build /target win
         working-directory: ./Source/AssetRipper.GUI.Electron/
 
+      - name: List Files
+        shell: bash
+        run: |
+          cd ./Source/AssetRipper.GUI.Electron/bin/Desktop/
+          ls
+
       - name: Upload AssetRipper Windows x64
         uses: actions/upload-artifact@v3
         with:
@@ -70,9 +76,16 @@ jobs:
         run: |
           cd ./Source/AssetRipper.GUI.Electron/bin/Desktop/
           ls
+        
+      - name: Upload AssetRipper Linux x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: AssetRipper_linux_x64
+          path: ./Source/AssetRipper.GUI.Electron/bin/Desktop/*.AppImage
+          if-no-files-found: error
 
   publish_mac_x64:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -101,3 +114,10 @@ jobs:
         run: |
           cd ./Source/AssetRipper.GUI.Electron/bin/Desktop/
           ls
+        
+      - name: Upload AssetRipper Mac x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: AssetRipper_mac_x64
+          path: ./Source/AssetRipper.GUI.Electron/bin/Desktop/*.AppImage
+          if-no-files-found: error
