@@ -1,21 +1,12 @@
 namespace AssetRipper.Import.Structure.Assembly
 {
-	public struct ScriptIdentifier
+	public readonly struct ScriptIdentifier
 	{
 		public ScriptIdentifier(string assembly, string @namespace, string name)
 		{
-			if (string.IsNullOrEmpty(assembly))
-			{
-				throw new ArgumentNullException(nameof(assembly));
-			}
-			if (@namespace == null)
-			{
-				throw new ArgumentNullException(nameof(@namespace));
-			}
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentNullException(nameof(name));
-			}
+			ArgumentException.ThrowIfNullOrEmpty(assembly);
+			ArgumentNullException.ThrowIfNull(@namespace);
+			ArgumentException.ThrowIfNullOrEmpty(name);
 			Assembly = assembly;
 			Namespace = @namespace;
 			Name = name;

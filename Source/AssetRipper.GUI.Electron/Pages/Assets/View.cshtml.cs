@@ -1,11 +1,15 @@
+using AsmResolver.DotNet;
 using AssetRipper.Assets;
 using AssetRipper.Assets.IO.Writing;
+using AssetRipper.Decompilation.CSharp;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Import.AssetCreation;
+using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
@@ -159,7 +163,16 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 
 		private static string DecompileMonoScript(IMonoScript monoScript)
 		{
-			return EmptyScript.GetContent(monoScript);//Placeholder until actual decompilation is implemented.
+			IAssemblyManager assemblyManager = Program.Ripper.GameStructure.AssemblyManager;
+			if (!monoScript.IsScriptPresents(assemblyManager))
+			{
+				return EmptyScript.GetContent(monoScript);
+			}
+			else
+			{
+				TypeDefinition type = monoScript.GetTypeDefinition(assemblyManager);
+				return CSharpDecompiler.Decompile(type);
+			}
 		}
 	}
 }
