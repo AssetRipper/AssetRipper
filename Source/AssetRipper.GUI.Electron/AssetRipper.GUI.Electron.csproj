@@ -11,6 +11,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
+		<ProjectReference Include="..\AssetRipper.GUI.Licensing\AssetRipper.GUI.Licensing.csproj" />
 		<ProjectReference Include="..\AssetRipper.GUI.Localizations\AssetRipper.GUI.Localizations.csproj" />
 	</ItemGroup>
 

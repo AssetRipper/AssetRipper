@@ -445,6 +445,11 @@ partial class Localization
 	public static string Length => Get("length");
 	
 	/// <summary>
+	/// Licenses
+	/// </summary>
+	public static string Licenses => Get("licenses");
+	
+	/// <summary>
 	/// Loading Game Content From {0}<br />
 	/// {1}
 	/// </summary>

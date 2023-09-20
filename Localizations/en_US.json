@@ -86,6 +86,7 @@
     "image_format_description": "Affects all exported images",
     "json": "Json",
     "length": "Length",
+    "licenses": "Licenses",
     "loading_game_content_from": "Loading Game Content From {0}\n{1}",
     "loading_step_begin_scheme_processing": "Starting Scheme Processing",
     "loading_step_create_file_collection": "Creating File Collection",

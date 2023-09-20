@@ -86,6 +86,7 @@
     "image_format_description": "全てこの形式でエクスポートされます",
     "json": "",
     "length": "",
+    "licenses": "",
     "loading_game_content_from": "{0} からゲームコンテンツを読み込んでいます\n{1}",
     "loading_step_begin_scheme_processing": "スキーム処理をしています",
     "loading_step_create_file_collection": "ファイルコレクションを作成しています",

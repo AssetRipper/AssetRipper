@@ -86,6 +86,7 @@
     "image_format_description": "影响所有导出的图片",
     "json": "",
     "length": "",
+    "licenses": "",
     "loading_game_content_from": "正在从 {0} 读取游戏内容 \n{1}",
     "loading_step_begin_scheme_processing": "开始处理方案",
     "loading_step_create_file_collection": "正在创建文件集合",

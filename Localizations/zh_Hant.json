@@ -86,6 +86,7 @@
     "image_format_description": "影響所有匯出的圖片",
     "json": "",
     "length": "",
+    "licenses": "",
     "loading_game_content_from": "正在從 {0} 讀取遊戲內容\n{1}",
     "loading_step_begin_scheme_processing": "正在啟用 Scheme Processing",
     "loading_step_create_file_collection": "正在建立檔案叢集",

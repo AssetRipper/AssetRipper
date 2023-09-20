@@ -86,6 +86,7 @@
     "image_format_description": "Wirkt sich auf alle exportierten Bilder aus",
     "json": "",
     "length": "",
+    "licenses": "",
     "loading_game_content_from": "Spielinhalte werden geladen {0}\n{1}",
     "loading_step_begin_scheme_processing": "Schema-Verarbeitung beginnt",
     "loading_step_create_file_collection": "Dateisammlung wird erstellet",

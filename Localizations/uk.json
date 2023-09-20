@@ -86,6 +86,7 @@
     "image_format_description": "",
     "json": "",
     "length": "",
+    "licenses": "",
     "loading_game_content_from": "Завантаження ігрового вмісту з {0}\n{1}",
     "loading_step_begin_scheme_processing": "Початок обробки схеми",
     "loading_step_create_file_collection": "Створення колекції файлів",
