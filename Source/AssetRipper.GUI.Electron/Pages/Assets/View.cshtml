@@ -9,11 +9,13 @@
 @{
 	string audioSource = Model.AudioSource;
 	DirectBitmap imageBitmap = Model.ImageBitmap;
+	string? fontType = Model.FontType;
 	string text = Model.Text;
 	string? yaml = Model.Asset.GetYamlString();
 
 	bool audioTabDisabled = string.IsNullOrEmpty(audioSource);
 	bool imageTabDisabled = imageBitmap == default;
+	bool fontTabDisabled = fontType is null;
 	bool textTabDisabled = string.IsNullOrEmpty(text);
 	bool yamlTabDisabled = string.IsNullOrEmpty(yaml);
 
@@ -27,6 +29,10 @@
 			</button>
 			<button class="@TabHelpers.GetTabClassSet(imageTabDisabled)" id="nav-image-tab" data-bs-toggle="tab" data-bs-target="#nav-image" type="button" role="tab" aria-controls="nav-image" aria-selected="false" aria-disabled="@imageTabDisabled.ToString().ToLower()">
 				@Localization.AssetTabImage
+			</button>
+			<button class="@TabHelpers.GetTabClassSet(fontTabDisabled)" id="nav-font-tab" data-bs-toggle="tab" data-bs-target="#nav-font" type="button" role="tab" aria-controls="nav-font" aria-selected="false" aria-disabled="@fontTabDisabled.ToString().ToLower()">
+				Font
+				@* TODO: @Localization.AssetTabFont *@
 			</button>
 			<button class="@TabHelpers.GetTabClassSet(textTabDisabled)" id="nav-text-tab" data-bs-toggle="tab" data-bs-target="#nav-text" type="button" role="tab" aria-controls="nav-text" aria-selected="false" aria-disabled="@textTabDisabled.ToString().ToLower()">
 				@Localization.AssetTabText
@@ -52,6 +58,9 @@
 		</div>
 		<div class="tab-pane fade" id="nav-image" role="tabpanel" aria-labelledby="nav-image-tab">
 			<partial name="ImageTabContent" model="imageBitmap" />
+		</div>
+		<div class="tab-pane fade" id="nav-font" role="tabpanel" aria-labelledby="nav-font-tab">
+			<partial name="FontTabContent" model="(Model.Font, fontType)" />
 		</div>
 		<div class="tab-pane fade" id="nav-text" role="tabpanel" aria-labelledby="nav-text-tab">
 			@if (!textTabDisabled)

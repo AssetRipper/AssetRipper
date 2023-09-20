@@ -1,0 +1,94 @@
+﻿@model ValueTuple<byte[], string>
+
+@if (!string.IsNullOrEmpty(Model.Item2))
+{
+    <p>This file type: @Model.Item2</p>
+
+    <script>
+        class FontPreviewer extends HTMLElement {
+            #shadowRoot;
+            #uniqName;
+            #data;
+
+            constructor() {
+                super();
+                this.#shadowRoot = this.attachShadow({ mode: "open" });
+                this.#uniqName = this.randName(10);
+            }
+
+            static get observedAttributes() {
+                return ["data"];
+            }            
+
+            connectedCallback() {
+                this.#data = Uint8Array.from(atob(this.getAttribute("data")), c => c.charCodeAt(0));
+                this.attachFont().then(() => this.attachStyle());
+                this.render();
+
+                console.log(this.#data);
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {
+                if (name === "data") {
+                    this.#data = Uint8Array.from(atob(newValue), c => c.charCodeAt(0));
+                    this.attachFont().then(() => this.attachStyle());
+                    this.render();
+
+                    console.log(this.#data);
+                }
+            }
+
+            async attachFont() {
+                const font = new FontFace(this.#uniqName, this.#data);
+                await font.load();
+                document.fonts.add(font);
+            }
+
+            async attachStyle(useCSSStyleSheet = true) {
+                const styleContent = `:host { font-family: "${this.#uniqName}"; }`;
+
+                if (!!window.StyleSheet && useCSSStyleSheet) {
+                    const sheet = new CSSStyleSheet();
+                    await sheet.replace(styleContent);
+                    this.#shadowRoot.adoptedStyleSheets = [sheet];
+                } else {
+                    const style = document.createElement("style");
+                    style.textContent = styleContent;
+                    this.#shadowRoot.appendChild(style);
+                }
+            }
+
+            render() {
+                let container = this.#shadowRoot.querySelector(".font-container");
+                    
+                if (!container) {
+                    container = document.createElement("div");
+                    container.className = "font-container";
+                    this.#shadowRoot.appendChild(container);
+                }
+
+                container.innerHTML = "<slot></slot>";
+            }
+
+            randName(length) {
+                let str = '';
+                for (let i = 0; i < length; i++) {
+                    let rand = Math.random() * (62 - 10) + 10 << 0;
+                    str += String.fromCharCode(rand += rand > 9 ? (rand < 36 ? 55 : 61) : 48);
+                }
+                return str;
+            }
+        }
+        customElements.define("font-view", FontPreviewer);
+    </script>
+
+    <font-view data="@Html.Raw(Convert.ToBase64String(Model.Item1, Base64FormattingOptions.None))">
+        <p style="font-size: 12px"><span class="label">12: </span>Preview: 1234567890</p>
+        <p style="font-size: 18px"><span class="label">18: </span>Preview: 1234567890</p>
+        <p style="font-size: 24px"><span class="label">24: </span>Preview: 1234567890</p>
+        <p style="font-size: 36px"><span class="label">36: </span>Preview: 1234567890</p>
+        <p style="font-size: 48px"><span class="label">48: </span>Preview: 1234567890</p>
+        <p style="font-size: 60px"><span class="label">60: </span>Preview: 1234567890</p>
+        <p style="font-size: 72px"><span class="label">72: </span>Preview: 1234567890</p>
+    </font-view>
+}

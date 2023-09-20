@@ -12,6 +12,7 @@ using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
@@ -27,6 +28,7 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 	public class ViewModel : PageModel
 	{
 		private readonly ILogger<ViewModel> _logger;
+
 		public IUnityObjectBase Asset { get; private set; } = default!;
 
 		public string AudioSource
@@ -57,6 +59,34 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 				{
 					return TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap) ? bitmap : default;
 				}
+			}
+		}
+
+		public byte[]? Font
+		{
+			get
+			{
+				return Asset is IFont font ? font.FontData_C128 : null;
+			}
+		}
+
+		public string? FontType
+		{
+			get
+			{
+				if (Font is { Length: >= 4 })
+				{
+					return (Font[0], Font[1], Font[2], Font[3]) switch
+					{
+						(0x4F, 0x54, 0x54, 0x4F) => "font/otf",    // "OTTO" in ASCII
+						(0x77, 0x4F, 0x46, 0x46) => "font/woff",   // "wOFF" in ASCII
+						(0x77, 0x4F, 0x46, 0x32) => "font/woff2",  // "wOF2" in ASCII
+						(0x00, 0x01, 0x00, 0x00) => "font/ttf",    // 0x00010000 as uint32
+						_ => null,
+					};
+				}
+
+				return null;
 			}
 		}
 
