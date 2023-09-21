@@ -62,31 +62,24 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 			}
 		}
 
-		public byte[]? Font
-		{
-			get
-			{
-				return Asset is IFont font ? font.FontData_C128 : null;
-			}
-		}
+		public byte[] Font => Asset is IFont font ? font.FontData_C128 : Array.Empty<byte>();
 
-		public string? FontType
+		public string FontFileName
 		{
 			get
 			{
-				if (Font is { Length: >= 4 })
+				if (Asset is IFont font && Font is { Length: >= 4 })
 				{
-					return (Font[0], Font[1], Font[2], Font[3]) switch
+					return $"{font.GetBestName()}.{(Font[0], Font[1], Font[2], Font[3]) switch
 					{
-						(0x4F, 0x54, 0x54, 0x4F) => "font/otf",    // "OTTO" in ASCII
-						(0x77, 0x4F, 0x46, 0x46) => "font/woff",   // "wOFF" in ASCII
-						(0x77, 0x4F, 0x46, 0x32) => "font/woff2",  // "wOF2" in ASCII
-						(0x00, 0x01, 0x00, 0x00) => "font/ttf",    // 0x00010000 as uint32
-						_ => null,
-					};
+						(0x4F, 0x54, 0x54, 0x4F) => "otf",
+						(0x00, 0x01, 0x00, 0x00) => "ttf",
+						(0x74, 0x74, 0x63, 0x66) => "ttc",
+						_ => "",
+					}}";
 				}
 
-				return null;
+				return "";
 			}
 		}
 

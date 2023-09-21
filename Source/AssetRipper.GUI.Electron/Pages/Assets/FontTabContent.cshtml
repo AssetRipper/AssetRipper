@@ -1,94 +1,72 @@
-﻿@model ValueTuple<byte[], string>
+﻿@model byte[]
 
-@if (!string.IsNullOrEmpty(Model.Item2))
+@if (Model.Length > 0)
 {
-    <p>This file type: @Model.Item2</p>
+    var fontSizes = Enumerable.Range(0, 5).Select(i => 12 + i * 6).ToList();
 
     <script>
-        class FontPreviewer extends HTMLElement {
+        customElements.define("font-view", class FontPreviewer extends HTMLElement {
             #shadowRoot;
             #uniqName;
             #data;
-
             constructor() {
                 super();
                 this.#shadowRoot = this.attachShadow({ mode: "open" });
                 this.#uniqName = this.randName(10);
             }
-
-            static get observedAttributes() {
-                return ["data"];
-            }            
-
             connectedCallback() {
                 this.#data = Uint8Array.from(atob(this.getAttribute("data")), c => c.charCodeAt(0));
                 this.attachFont().then(() => this.attachStyle());
-                this.render();
-
-                console.log(this.#data);
+                this.#shadowRoot.innerHTML = "<slot></slot>";
             }
-
-            attributeChangedCallback(name, oldValue, newValue) {
-                if (name === "data") {
-                    this.#data = Uint8Array.from(atob(newValue), c => c.charCodeAt(0));
-                    this.attachFont().then(() => this.attachStyle());
-                    this.render();
-
-                    console.log(this.#data);
-                }
-            }
-
             async attachFont() {
                 const font = new FontFace(this.#uniqName, this.#data);
                 await font.load();
                 document.fonts.add(font);
             }
-
-            async attachStyle(useCSSStyleSheet = true) {
-                const styleContent = `:host { font-family: "${this.#uniqName}"; }`;
-
-                if (!!window.StyleSheet && useCSSStyleSheet) {
-                    const sheet = new CSSStyleSheet();
-                    await sheet.replace(styleContent);
-                    this.#shadowRoot.adoptedStyleSheets = [sheet];
-                } else {
-                    const style = document.createElement("style");
-                    style.textContent = styleContent;
-                    this.#shadowRoot.appendChild(style);
-                }
+            async attachStyle() {
+                const sheet = new CSSStyleSheet();
+                await sheet.replace(`:host { font-family: "${this.#uniqName}"; }`);
+                this.#shadowRoot.adoptedStyleSheets = [sheet];
             }
-
-            render() {
-                let container = this.#shadowRoot.querySelector(".font-container");
-                    
-                if (!container) {
-                    container = document.createElement("div");
-                    container.className = "font-container";
-                    this.#shadowRoot.appendChild(container);
-                }
-
-                container.innerHTML = "<slot></slot>";
+            randName(length, out = '') {
+                for (let i = 0; i < length; i++)
+                    out += String.fromCharCode((Math.random() * 26 + 97) | 0);
+                return out;
             }
-
-            randName(length) {
-                let str = '';
-                for (let i = 0; i < length; i++) {
-                    let rand = Math.random() * (62 - 10) + 10 << 0;
-                    str += String.fromCharCode(rand += rand > 9 ? (rand < 36 ? 55 : 61) : 48);
-                }
-                return str;
-            }
-        }
-        customElements.define("font-view", FontPreviewer);
+        });
     </script>
 
-    <font-view data="@Html.Raw(Convert.ToBase64String(Model.Item1, Base64FormattingOptions.None))">
-        <p style="font-size: 12px"><span class="label">12: </span>Preview: 1234567890</p>
-        <p style="font-size: 18px"><span class="label">18: </span>Preview: 1234567890</p>
-        <p style="font-size: 24px"><span class="label">24: </span>Preview: 1234567890</p>
-        <p style="font-size: 36px"><span class="label">36: </span>Preview: 1234567890</p>
-        <p style="font-size: 48px"><span class="label">48: </span>Preview: 1234567890</p>
-        <p style="font-size: 60px"><span class="label">60: </span>Preview: 1234567890</p>
-        <p style="font-size: 72px"><span class="label">72: </span>Preview: 1234567890</p>
+    <div class="container my-4">
+        <div class="mb-3">
+            <label for="font-preview-input" class="form-label">Preview Text</label>
+            <input type="text" class="form-control" id="font-preview-input" placeholder="Type something..." value="Preview - 1234567890" />
+        </div>
+        <div class="mb-3">
+            <label for="font-preview-scale" class="form-label">Scale</label>
+            <input type="range" class="form-range" id="font-preview-scale" min="1.0" max="2.0" step="0.1" value="1.0" />
+        </div>
+    </div>
+
+    @* <input type="text" id="font-preview-input" placeholder="Type something..." value="Preview - 1234567890" /> *@
+    @* <input type="range" id="font-preview-scale" min="1.0" max="2.0" step="0.1" value="1.0" style="width: 100%;" /> *@
+
+    <font-view data="@Html.Raw(Convert.ToBase64String(Model, Base64FormattingOptions.None))">
+        @foreach (var fontSize in fontSizes)
+        {
+            <p style="font-size: @(fontSize)px" data-font-size="@fontSize">
+                <span>@fontSize: </span>
+                <span class="font-preview">Preview - 1234567890</span>
+            </p>
+        }
     </font-view>
+
+    <script>
+        document.getElementById("font-preview-input").addEventListener("input", event => {
+            document.querySelectorAll(".font-preview").forEach(span => span.textContent = event.target.value);
+        });
+        document.getElementById("font-preview-scale").addEventListener("input", event => {
+            document.querySelectorAll("p").forEach(p => p.style.fontSize = `${parseFloat(p.dataset.fontSize) * event.target.value}px`);
+        });
+    </script>
 }
