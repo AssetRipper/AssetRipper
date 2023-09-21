@@ -12,6 +12,7 @@ using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
@@ -27,6 +28,7 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 	public class ViewModel : PageModel
 	{
 		private readonly ILogger<ViewModel> _logger;
+
 		public IUnityObjectBase Asset { get; private set; } = default!;
 
 		public string AudioSource
@@ -57,6 +59,27 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 				{
 					return TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap) ? bitmap : default;
 				}
+			}
+		}
+
+		public byte[] Font => Asset is IFont font ? font.FontData_C128 : Array.Empty<byte>();
+
+		public string FontFileName
+		{
+			get
+			{
+				if (Asset is IFont font && Font is { Length: >= 4 })
+				{
+					return $"{font.GetBestName()}.{(Font[0], Font[1], Font[2], Font[3]) switch
+					{
+						(0x4F, 0x54, 0x54, 0x4F) => "otf",
+						(0x00, 0x01, 0x00, 0x00) => "ttf",
+						(0x74, 0x74, 0x63, 0x66) => "ttc",
+						_ => "",
+					}}";
+				}
+
+				return "";
 			}
 		}
 
