@@ -338,15 +338,23 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					throw GetUnknownAttributeException(type, attribute);
 
-				// TryGetPath may not work here
 				case BindingCustomType.VisualEffect:
 					{
 						if (VisualEffect.TryGetPath(attribute, out string? foundPath))
 						{
 							return foundPath;
 						}
+						else
+						{
+							//This has at least one ordinal property name,
+							//So the precalculated hashes are insufficient for recovery.
+							//Binary analysis may be required.
+							//Example failed attributes:
+							//0xF781B1D9 (4152472025)
+							//https://github.com/AssetRipper/AssetRipper/issues/1047
+						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return Crc32Algorithm.ReverseAscii(attribute, $"VisualEffect_0x{attribute:X}_");
 
 				// TryGetPath may not work here
 				case BindingCustomType.ParticleForceField:
