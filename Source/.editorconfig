@@ -213,6 +213,12 @@ csharp_style_prefer_top_level_statements = false:silent
 dotnet_diagnostic.CA1309.severity = error
 dotnet_diagnostic.CA1311.severity = suggestion
 dotnet_diagnostic.SYSLIB1054.severity = warning
+csharp_style_prefer_primary_constructors = false:silent
+csharp_style_prefer_utf8_string_literals = true:suggestion
+csharp_style_prefer_readonly_struct = true:suggestion
+csharp_style_prefer_readonly_struct_member = true:suggestion
+csharp_style_allow_blank_line_after_token_in_conditional_expression_experimental = true:silent
+csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental = true:silent
 
 [*.{cs,vb}]
 dotnet_style_coalesce_expression = true:suggestion
@@ -249,3 +255,4 @@ dotnet_style_qualification_for_field = false:silent
 dotnet_style_qualification_for_property = false:silent
 dotnet_style_qualification_for_method = false:silent
 dotnet_style_qualification_for_event = false:silent
+dotnet_style_prefer_collection_expression = true:suggestion
