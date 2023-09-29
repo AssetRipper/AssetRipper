@@ -14,10 +14,12 @@ using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
+using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
+using AssetRipper.SourceGenerated.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text;
@@ -51,6 +53,7 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 				{
 					ITexture2D texture => TextureToBitmap(texture),
 					SpriteInformationObject spriteInformationObject => TextureToBitmap(spriteInformationObject.Texture),
+					ISprite sprite => SpriteToBitmap(sprite),
 					ITerrainData terrainData => TerrainHeatmapExporter.GetBitmap(terrainData),
 					_ => default,
 				};
@@ -58,6 +61,11 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 				static DirectBitmap TextureToBitmap(ITexture2D texture)
 				{
 					return TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap) ? bitmap : default;
+				}
+
+				static DirectBitmap SpriteToBitmap(ISprite sprite)
+				{
+					return sprite.TryGetTexture() is { } spriteTexture ? TextureToBitmap(spriteTexture) : default;
 				}
 			}
 		}
