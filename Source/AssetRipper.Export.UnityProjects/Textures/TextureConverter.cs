@@ -315,7 +315,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 				//RGB
 				case TextureFormat.Alpha8:
-					RgbConverter.Convert<ColorA8, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorA<byte>, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.ARGB4444:
@@ -331,19 +331,19 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					return true;
 
 				case TextureFormat.R8:
-					RgbConverter.Convert<ColorR8, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorR<byte>, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RG16:
-					RgbConverter.Convert<ColorRG16, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRG<byte>, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGB24:
-					RgbConverter.Convert<ColorRGB24, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGB<byte>, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGBA32:
-					RgbConverter.Convert<ColorRGBA32, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGBA<byte>, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.ARGB32:
@@ -356,43 +356,43 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					return true;
 
 				case TextureFormat.R16:
-					RgbConverter.Convert<ColorR16, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorR<ushort>, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RG32:
-					RgbConverter.Convert<ColorRG32, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRG<ushort>, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGB48:
-					RgbConverter.Convert<ColorRGB48, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGB<ushort>, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGBA64:
-					RgbConverter.Convert<ColorRGBA64, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGBA<ushort>, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RHalf:
-					RgbConverter.Convert<ColorR16Half, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorR<Half>, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGHalf:
-					RgbConverter.Convert<ColorRG32Half, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRG<Half>, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGBAHalf:
-					RgbConverter.Convert<ColorRGBA64Half, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGBA<Half>, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RFloat:
-					RgbConverter.Convert<ColorR32Single, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorR<float>, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGFloat:
-					RgbConverter.Convert<ColorRG64Single, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRG<float>, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGBAFloat:
-					RgbConverter.Convert<ColorRGBA128Single, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGBA<float>, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGB9e5Float:
