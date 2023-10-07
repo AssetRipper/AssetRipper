@@ -69,11 +69,10 @@ public interface IUnityObjectBase : IUnityAssetBase
 	IUnityObjectBase? MainAsset { get; set; }
 
 	YamlDocument ExportYamlDocument(IExportContainer container);
-	IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies();
+	new IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies();
 	string GetBestName();
 }
 public static class UnityObjectBaseExtensions
 {
-	public static void Delete(this IUnityObjectBase asset, bool throwIfReferenced) => asset.Collection.DeleteAsset(asset, throwIfReferenced);
 	public static void Read(this IUnityObjectBase asset, ref EndianSpanReader reader) => asset.Read(ref reader, asset.Collection.Flags);
 }

@@ -35,8 +35,6 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 	private readonly List<AssetCollection?> dependencies = new();
 	public IReadOnlyDictionary<long, IUnityObjectBase> Assets => assets;
 	private readonly Dictionary<long, IUnityObjectBase> assets = new();
-	public IReadOnlyDictionary<long, bool> DeletedAssets => deletedAssets;
-	private readonly Dictionary<long, bool> deletedAssets = new();
 	public UnityVersion Version { get; protected set; }
 	public BuildTarget Platform { get; protected set; }
 	public TransferInstructionFlags Flags { get; protected set; }
@@ -121,38 +119,9 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 	private protected void AddAsset(IUnityObjectBase asset)
 	{
 		Debug.Assert(asset.Collection == this, "Asset info must marked this as its collection.");
-		Debug.Assert(!deletedAssets.ContainsKey(asset.PathID), $"Path ID {asset.PathID} in {Name} is reserved for a deleted asset.");
 		Debug.Assert(asset.PathID is not 0, "The zero path ID is reserved for null PPtr's.");
 
 		assets.Add(asset.PathID, asset);
-	}
-
-	public void DeleteAsset(IUnityObjectBase asset, bool throwIfReferenced)
-	{
-		if (asset.Collection != this)
-		{
-			throw new ArgumentException($"Asset {asset} does not belong to this collection.", nameof(asset));
-		}
-		DeleteAsset(asset.PathID, throwIfReferenced);
-	}
-
-	public void DeleteAsset(long pathID, bool throwIfReferenced)
-	{
-		if (deletedAssets.TryGetValue(pathID, out bool cachedThrowValue))
-		{
-			if (cachedThrowValue != throwIfReferenced)
-			{
-				throw new ArgumentException($"The asset at path ID {pathID} has already been deleted, so the throw decision cannot be changed.", nameof(throwIfReferenced));
-			}
-		}
-		else
-		{
-			if (!assets.Remove(pathID, out _))
-			{
-				throw new ArgumentException($"No asset found at path ID {pathID}.", nameof(pathID));
-			}
-			deletedAssets.Add(pathID, throwIfReferenced);
-		}
 	}
 
 	public override string ToString()
@@ -194,19 +163,6 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 		{
 			asset = default;
 			return false;
-		}
-
-		if (deletedAssets.TryGetValue(pathID, out bool throwException))
-		{
-			if (throwException)
-			{
-				throw new AssetDeletedException();
-			}
-			else
-			{
-				asset = default;
-				return false;
-			}
 		}
 
 		return assets.TryGetValue(pathID, out asset);
