@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Serialization;
+using AssetRipper.Assets.Metadata;
 using System.Text.Json.Nodes;
 
 namespace AssetRipper.Assets;
@@ -29,4 +30,5 @@ public interface IUnityAssetBase : IAsset, IDependent
 	/// <param name="serializer">An optional serializer for overriding serialization.</param>
 	/// <returns>A new <see cref="JsonNode"/> containing this asset's serialized data.</returns>
 	JsonNode SerializeReleaseFields(IUnityAssetSerializer serializer, SerializationOptions options);
+	IEnumerable<(string, PPtr)> FetchDependencies();
 }

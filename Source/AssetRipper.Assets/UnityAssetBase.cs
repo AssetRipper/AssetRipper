@@ -44,6 +44,11 @@ public abstract class UnityAssetBase : IUnityAssetBase, IAssetReadable
 		return Enumerable.Empty<(FieldName, PPtr<IUnityObjectBase>)>();
 	}
 
+	public virtual IEnumerable<(string, PPtr)> FetchDependencies()
+	{
+		return Enumerable.Empty<(string, PPtr)>();
+	}
+
 	public override string ToString()
 	{
 		string? name = (this as IHasNameString)?.NameString;
