@@ -6,17 +6,20 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 {
 	public sealed class SerializableTreeType : SerializableType
 	{
-		private SerializableTreeType(string? @namespace, string name, PrimitiveType type) : base(@namespace, type, name)
+		private SerializableTreeType(string? @namespace, string name, PrimitiveType type, int version) : base(@namespace, type, name)
+		{
+			Version = version;
+		}
+
+		private SerializableTreeType(string name, PrimitiveType type, int version) : this(null, name, type, version)
 		{
 		}
 
-		private SerializableTreeType(string name, PrimitiveType type) : this(null, name, type)
-		{
-		}
+		public override int Version { get; }
 
 		public static SerializableTreeType FromRootNode(TypeTreeNodeStruct rootNode)
 		{
-			SerializableTreeType serializableTreeType = new SerializableTreeType(rootNode.Name, PrimitiveType.Complex);
+			SerializableTreeType serializableTreeType = new SerializableTreeType(rootNode.Name, PrimitiveType.Complex, rootNode.Version);
 
 			List<Field> fields = new();
 			int startIndex = FindStartingIndex(rootNode);
@@ -37,7 +40,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 			{
 				if (primitiveNode.IsPPtr)
 				{
-					serializableTreeType = new SerializableTreeType("UnityEngine", "Object", primitiveType);
+					serializableTreeType = new SerializableTreeType("UnityEngine", "Object", primitiveType, primitiveNode.Version);
 				}
 				else
 				{
@@ -46,7 +49,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 			}
 			else
 			{
-				serializableTreeType = new SerializableTreeType(node.Name, primitiveType);
+				serializableTreeType = new SerializableTreeType(node.Name, primitiveType, primitiveNode.Version);
 			}
 
 			fields.Add(new Field(serializableTreeType, arrayDepth, node.Name));
@@ -54,7 +57,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 
 		private static SerializableTreeType FromComplexNode(string name, TypeTreeNodeStruct node)
 		{
-			SerializableTreeType serializableTreeType = new SerializableTreeType(name, PrimitiveType.Complex);
+			SerializableTreeType serializableTreeType = new SerializableTreeType(name, PrimitiveType.Complex, node.Version);
 			List<Field> fields = new();
 			foreach (TypeTreeNodeStruct subNode in node.SubNodes)
 			{

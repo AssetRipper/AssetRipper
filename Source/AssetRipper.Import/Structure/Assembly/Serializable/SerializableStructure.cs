@@ -2,6 +2,7 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Dependencies;
+using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
@@ -50,6 +51,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public YamlMappingNode ExportYaml(IExportContainer container)
 		{
 			YamlMappingNode node = new();
+			node.AddSerializedVersion(Type.Version);
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.GetField(i);
