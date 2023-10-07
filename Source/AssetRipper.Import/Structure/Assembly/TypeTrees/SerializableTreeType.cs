@@ -6,11 +6,11 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 {
 	public sealed class SerializableTreeType : SerializableType
 	{
-		private SerializableTreeType(string @namespace, string name, PrimitiveType type) : base(@namespace, type, name)
+		private SerializableTreeType(string? @namespace, string name, PrimitiveType type) : base(@namespace, type, name)
 		{
 		}
 
-		private SerializableTreeType(string name, PrimitiveType type) : this("", name, type)
+		private SerializableTreeType(string name, PrimitiveType type) : this(null, name, type)
 		{
 		}
 

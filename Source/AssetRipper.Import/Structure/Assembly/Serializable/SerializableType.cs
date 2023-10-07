@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.IO;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Object;
@@ -33,9 +32,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			public string Name { get; }
 		}
 
-		protected SerializableType(string @namespace, PrimitiveType type, string name)
+		protected SerializableType(string? @namespace, PrimitiveType type, string name)
 		{
-			Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
+			Namespace = @namespace;
 			Type = type;
 			Name = name ?? throw new ArgumentNullException(nameof(name));
 			// is a placeholder - Is assigned by inheriting types.
@@ -101,12 +100,11 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			return Base.IsEnginePointer();
 		}
 
-		public override string ToString()
-		{
-			return Namespace.Length == 0 ? Name : $"{Namespace}.{Name}";
-		}
+		public override string ToString() => FullName;
 
-		public string Namespace { get; }
+		public string FullName => string.IsNullOrEmpty(Namespace) ? Name : $"{Namespace}.{Name}";
+
+		public string? Namespace { get; }
 		public PrimitiveType Type { get; }
 		public string Name { get; }
 		public SerializableType? Base { get; protected set; }

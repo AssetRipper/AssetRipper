@@ -78,17 +78,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 		}
 
-		public override string ToString()
-		{
-			if (Type.Namespace.Length == 0)
-			{
-				return $"{Type.Name}";
-			}
-			else
-			{
-				return $"{Type.Namespace}.{Type.Name}";
-			}
-		}
+		public override string ToString() => Type.FullName;
 
 		private bool IsAvailable(in SerializableType.Field field)
 		{
