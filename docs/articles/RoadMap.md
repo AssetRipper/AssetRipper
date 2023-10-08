@@ -1,7 +1,10 @@
 # Development Roadmap
 
-## 0.3.X.0
-These releases will likely focus on preparing for the next major milestone.
+## 0.4.0.0
+This release will focus on improving the user experience in the GUI.
+
+## 0.4.X.0 / 1.0.0.0
+These releases will likely focus on preparing to release a premium version.
 
 * Remove native dependencies
   * Replace crunch with managed code
@@ -9,9 +12,6 @@ These releases will likely focus on preparing for the next major milestone.
 * Make all dependencies trimmable
 * Nuget feed for forked dependencies
 * NativeAOT compilation for better performance while loading and extracting
-
-## 0.4.0.0 / 1.0.0.0
-This release might focus on improving the user experience in the GUI.
 
 ## Planned But Unscheduled
 * Import
@@ -21,7 +21,6 @@ This release might focus on improving the user experience in the GUI.
     * Extract assets and save to disk for lower ram usage
 * Export
   * Script Export
-    * Hybrid script export
     * Assembly renaming
   * Audio Export
     * WWise audio extraction
@@ -36,23 +35,12 @@ This release might focus on improving the user experience in the GUI.
   * Binary Export
     * SerializeFile writing as an alternative to yaml export.
 * UI
-  * Add a settings window
-  * Add donation information
   * Improved Asset previews
     * Preview decompiled scripts
     * Add a Mesh preview
     * Scene preview
-    * Font preview
     * Add a Material preview
-    * Add a TypeTree Viewer
-    * Improve the Audio preview
-      * Fast-forward and rewind
-      * Seek-bar for selecting playback position
-      * Visual wave form display
-    * Generic asset preview
-      * Add a Hex Viewer
   * Preferences window
-  * Window for licensed works
 * Asset editing
 
 ## Concept Ideas
@@ -104,9 +92,6 @@ This release might focus on improving the user experience in the GUI.
   * Copy and paste assets
   * Prefab Creation
 * Asset Exporting
-  * Video Export (avi, mp4, etc)
-  * Allow saving any text information to a text file
-    * Alternatively, ensure that all text can be selected and copied
   * Export as Prefab
   * Export as Unitypackage
   * Node Dump
@@ -124,7 +109,6 @@ This release might focus on improving the user experience in the GUI.
     * Select the color channels to display
       * For example, disable the alpha channel
       * Or show only the blue channel
-  * Font Assets
   * Video Display
   * Animations
   * Scripts

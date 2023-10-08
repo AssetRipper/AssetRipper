@@ -17,6 +17,8 @@ Current supported versions: `3.5.0` to `2022.3.x`
 
 Thank you for considering to support me. I have normal expenses like food, electric, internet, and rent. Your donations help to ensure that I can continue to afford developing this project. Anyone with a positive lifetime contribution is entitled to the Donator role on the [Discord server](https://discord.gg/XqXa53W2Yh).
 
+[GitHub Sponsors](https://github.com/sponsors/ds5678)
+
 [Patreon](https://www.patreon.com/ds5678)
 
 [Paypal](https://paypal.me/ds5678)
