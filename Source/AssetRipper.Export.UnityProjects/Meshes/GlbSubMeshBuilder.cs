@@ -6,6 +6,7 @@ using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
+using SharpGLTF.Transforms;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
@@ -314,7 +315,11 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		{
 			if (typeof(TvS) == typeof(VertexJoints4))
 			{
-				return default;
+				BoneWeight4 skin = meshData.TryGetSkinAtIndex(index);
+				Vector4 indices = new Vector4(skin.Index0, skin.Index1, skin.Index2, skin.Index3);
+				Vector4 weights = new Vector4(skin.Weight0, skin.Weight1, skin.Weight2, skin.Weight3);
+				SparseWeight8 sparseWeight = SparseWeight8.Create(indices, weights);
+				return Cast<VertexJoints4, TvS>(new(sparseWeight));
 			}
 			else
 			{

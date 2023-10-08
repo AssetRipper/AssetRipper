@@ -13,6 +13,7 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		ColorFloat[]? Colors,
 		Vector2[]? UV0,
 		Vector2[]? UV1,
+		BoneWeight4[]? Skin,
 		uint[] ProcessedIndexBuffer,
 		IMesh Mesh)
 	{
@@ -51,6 +52,11 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 					meshType |= GlbMeshType.Color1;
 				}
 
+				if (Skin != null && Skin.Length == Vertices.Length)
+				{
+					meshType |= GlbMeshType.Joints4;
+				}
+
 				return meshType;
 			}
 		}
@@ -71,6 +77,7 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		public ColorFloat TryGetColorAtIndex(uint index) => TryGetAtIndex(Colors, index);
 		public Vector2 TryGetUV0AtIndex(uint index) => FlipY(TryGetAtIndex(UV0, index));
 		public Vector2 TryGetUV1AtIndex(uint index) => FlipY(TryGetAtIndex(UV1, index));
+		public BoneWeight4 TryGetSkinAtIndex(uint index) => TryGetAtIndex(Skin, index);
 		private static Vector2 FlipY(Vector2 uv) => new Vector2(uv.X, 1 - uv.Y);
 
 		public static bool TryMakeFromMesh(IMesh mesh, out MeshData meshData)
@@ -80,7 +87,7 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 				out Vector3[]? normals,
 				out Vector4[]? tangents,
 				out ColorFloat[]? colors,
-				out _, //skin
+				out BoneWeight4[]? skin,
 				out Vector2[]? uv0,
 				out Vector2[]? uv1,
 				out Vector2[]? _, //uv2
@@ -99,7 +106,7 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 			}
 			else
 			{
-				meshData = new MeshData(vertices, normals, tangents, colors, uv0, uv1, processedIndexBuffer, mesh);
+				meshData = new MeshData(vertices, normals, tangents, colors, uv0, uv1, skin, processedIndexBuffer, mesh);
 				return true;
 			}
 		}
