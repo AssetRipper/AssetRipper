@@ -19,6 +19,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Material;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
+using Microsoft.Win32.SafeHandles;
 using SharpGLTF.Geometry;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
@@ -70,16 +71,25 @@ namespace AssetRipper.Export.UnityProjects.Models
 
 		public bool ExportModel(IEnumerable<IUnityObjectBase> assets, string path, bool isScene)
 		{
-			byte[] data = ExportBinary(assets, isScene);
+			ReadOnlySpan<byte> data = ExportBinary(assets, isScene);
 			if (data.Length == 0)
 			{
 				return false;
 			}
-				File.WriteAllBytes(path, data);
-				return true;
-			}
 
-		private static byte[] ExportBinary(IEnumerable<IUnityObjectBase> assets, bool isScene)
+			WriteAllBytes(path, data);
+			return true;
+		}
+
+		private static void WriteAllBytes(string path, ReadOnlySpan<byte> data)
+		{
+			ArgumentException.ThrowIfNullOrEmpty(path);
+
+			using SafeFileHandle sfh = File.OpenHandle(path, FileMode.Create, FileAccess.Write, FileShare.Read);
+			RandomAccess.Write(sfh, data, 0);
+		}
+
+		private static ArraySegment<byte> ExportBinary(IEnumerable<IUnityObjectBase> assets, bool isScene)
 		{
 			SceneBuilder sceneBuilder = new();
 			BuildParameters parameters = new BuildParameters(isScene);
@@ -103,7 +113,15 @@ namespace AssetRipper.Export.UnityProjects.Models
 
 			SharpGLTF.Schema2.WriteSettings writeSettings = new();
 
-			return sceneBuilder.ToGltf2().WriteGLB(writeSettings).ToArray();
+			try
+			{
+				return sceneBuilder.ToGltf2().WriteGLB(writeSettings);
+			}
+			catch (InvalidOperationException ex) when (ex.Message == "Can't merge a buffer larger than 2Gb")
+			{
+				Logger.Error(LogCategory.Export, $"Model was too large to export as GLB.");
+				return default;
+			}
 		}
 
 		private static void AddGameObjectToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder? parentNode, Transformation parentGlobalTransform, Transformation parentGlobalInverseTransform, ITransform transform)
