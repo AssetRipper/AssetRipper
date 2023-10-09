@@ -61,5 +61,11 @@ cd ./Source/AssetRipper.GUI.Electron
 5. Launch the application.
 
 ```
-electronize start
+electronize start /PublishSingleFile false /PublishReadyToRun false
 ```
+
+There is a simple script, `start.bat`, that can replace steps 4 and 5. Double-clicking it will launch the application.
+
+6. Attach a debugger, if desired.
+
+There is a button for this in the `Window` menu.
