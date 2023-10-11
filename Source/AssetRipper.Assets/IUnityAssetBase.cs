@@ -1,13 +1,15 @@
 ﻿using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export.Dependencies;
-using AssetRipper.Assets.IO;
+using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.IO.Serialization;
+using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.IO.Endian;
 using System.Text.Json.Nodes;
 
 namespace AssetRipper.Assets;
 
-public interface IUnityAssetBase : IAsset, IDependent
+public interface IUnityAssetBase : IEndianSpanReadable, IAssetWritable, IYamlExportable
 {
 	void CopyValues(IUnityAssetBase? source, PPtrConverter converter);
 	void Deserialize(JsonNode node, IUnityAssetDeserializer deserializer, DeserializationOptions options);
@@ -30,5 +32,13 @@ public interface IUnityAssetBase : IAsset, IDependent
 	/// <param name="serializer">An optional serializer for overriding serialization.</param>
 	/// <returns>A new <see cref="JsonNode"/> containing this asset's serialized data.</returns>
 	JsonNode SerializeReleaseFields(IUnityAssetSerializer serializer, SerializationOptions options);
+	/// <summary>
+	/// To be removed.
+	/// </summary>
+	IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context);
+	/// <summary>
+	/// To be removed.
+	/// </summary>
+	IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies(FieldName? parent);
 	IEnumerable<(string, PPtr)> FetchDependencies();
 }
