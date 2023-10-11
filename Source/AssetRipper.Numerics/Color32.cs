@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Drawing;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Numerics
 {
@@ -51,6 +52,12 @@ namespace AssetRipper.Numerics
 			byte b = ConvertFloatToByte(color.B);
 			byte a = ConvertFloatToByte(color.A);
 			return new Color32(r, g, b, a);
+		}
+
+		public static explicit operator Color(Color32 color)
+		{
+			int argb = (color.A << 24) | (color.R << 16) | (color.G << 8) | color.B;
+			return Color.FromArgb(argb);
 		}
 
 		private static byte ConvertFloatToByte(float value)
