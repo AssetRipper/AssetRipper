@@ -63,10 +63,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 			}
 
-			public bool IsContain(int triIndex)
-			{
-				return m_indexes.Contains(triIndex);
-			}
+			public bool Contains(int triIndex) => m_indexes.Contains(triIndex);
 
 			private int GetEdgeMask(Vector3i triangle, IReadOnlyList<int> indexes)
 			{
@@ -304,7 +301,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				bool isKnown = false;
 				for (int j = 0; j < outlines.Count; j++)
 				{
-					if (outlines[j].IsContain(i))
+					if (outlines[j].Contains(i))
 					{
 						isKnown = true;
 						break;

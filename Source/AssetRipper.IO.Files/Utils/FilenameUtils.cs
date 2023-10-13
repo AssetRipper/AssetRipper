@@ -2,27 +2,27 @@ namespace AssetRipper.IO.Files.Utils
 {
 	public static class FilenameUtils
 	{
-		public static bool IsEngineResource(string fileName)
+		public static bool IsEngineResource(string? fileName)
 		{
 			return IsDefaultResource(fileName) || IsEditorResource(fileName);
 		}
 
-		public static bool IsDefaultResource(string fileName)
+		public static bool IsDefaultResource(string? fileName)
 		{
 			return fileName is DefaultResourceName1 or DefaultResourceName2;
 		}
 
-		public static bool IsEditorResource(string fileName)
+		public static bool IsEditorResource(string? fileName)
 		{
 			return fileName is EditorResourceName;
 		}
 
-		public static bool IsBuiltinExtra(string fileName)
+		public static bool IsBuiltinExtra(string? fileName)
 		{
 			return fileName is BuiltinExtraName1 or BuiltinExtraName2;
 		}
 
-		public static bool IsEngineGeneratedF(string fileName)
+		public static bool IsEngineGeneratedF(string? fileName)
 		{
 			return fileName is EngineGeneratedF;
 		}

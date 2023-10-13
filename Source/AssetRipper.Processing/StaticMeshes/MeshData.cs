@@ -139,9 +139,9 @@ namespace AssetRipper.Processing.StaticMeshes
 		}
 
 		/// <summary>
-		/// Makes a <see cref="MeshData"/> for which <see cref="IsComparable"/> will return true.
+		/// Makes a <see cref="MeshData"/> for which <see cref="IsComparable"/> will return <see langword="true"/>.
 		/// </summary>
-		/// <returns>This instance if it is sufficient. Otherwise, a new instance is created.</returns>
+		/// <returns>This instance, if it is sufficient. Otherwise, a new instance is created.</returns>
 		public MeshData MakeComparableMeshData()
 		{
 			if (IsComparable)

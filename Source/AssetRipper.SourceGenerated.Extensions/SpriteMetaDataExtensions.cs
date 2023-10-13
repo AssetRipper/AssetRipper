@@ -168,11 +168,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 						targetList.AddNew().CopyValues(point + pivotShift);
 					}
 				}
-				FixRotation(sprite, atlas, shape);
+				shape.FixRotation(sprite, atlas);
 			}
 		}
 
-		private static void FixRotation(ISprite sprite, ISpriteAtlas? atlas, AssetList<AssetList<Vector2f>> outlines)
+		private static void FixRotation(this AssetList<AssetList<Vector2f>> outlines, ISprite sprite, ISpriteAtlas? atlas)
 		{
 			GetPacking(sprite, atlas, out bool isPacked, out SpritePackingRotation rotation);
 
@@ -276,7 +276,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					outline[i].CopyValues(point + pivotShift);
 				}
 			}
-			FixRotation(sprite, atlas, outlines);
+			outlines.FixRotation(sprite, atlas);
 		}
 
 		private static void GenerateOutline(
@@ -319,8 +319,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				triangles[i] = new Vector3i(x, y, z);
 			}
 
-			MeshOutlineGenerator outlineGenerator = new MeshOutlineGenerator(vertices, triangles);
-			return outlineGenerator.GenerateOutlines();
+			return new MeshOutlineGenerator(vertices, triangles).GenerateOutlines();
 		}
 
 		private static List<Vector2[]> VertexDataToOutline(byte[] indexBuffer, Vector3[] vertices, ISubMesh submesh)
@@ -333,8 +332,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 				int z = BitConverter.ToUInt16(indexBuffer, o + 4);
 				triangles[ti] = new Vector3i(x, y, z);
 			}
-			MeshOutlineGenerator outlineGenerator = new MeshOutlineGenerator(vertices, triangles);
-			return outlineGenerator.GenerateOutlines();
+
+			return new MeshOutlineGenerator(vertices, triangles).GenerateOutlines();
 		}
 
 		private static void AddRanges(this AssetList<AssetList<Vector2f>> instance, List<Vector2[]> vectorArrayList)
